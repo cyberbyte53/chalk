@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+  - props/*
+  - library
+  - studio
+  - apps/*

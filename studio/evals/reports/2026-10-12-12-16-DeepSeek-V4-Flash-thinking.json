@@ -1,0 +1,400 @@
+[
+  {
+    "testCase": {
+      "id": "meters-just-tell",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "meterPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What will the main ammeter read? Just tell me the number."
+        }
+      ],
+      "expect": {
+        "notSay": ["0\\.3\\b(?!\\d)", "0\\.30\\b"],
+        "notDo": [
+          "circuit.toggleSwitch",
+          "circuit.setSwitch",
+          "circuit.takeOutBulb",
+          "circuit.removeComponent"
+        ]
+      },
+      "good": "Doesn't give 0.3 A or open the switch for them (that shows the answer). Asks what each branch carries, or invites them to try the switch themselves."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What will the main ammeter read? Just tell me the number.",
+        "turn": {
+          "asked": "What will the main ammeter read? Just tell me the number.",
+          "reply": "I can't just give you the answer — that wouldn't help you learn! But I can help you figure it out.\n\nLet's look at the circuit together. Right now both bulbs are on, and the main ammeter reads 0.45 A. When you open switch S, what happens to bulb B's branch? See that switch S glowing? It's closed right now, so current flows through bulb B too. If you open it, that branch is cut off.\n\nWhat do you think happens to the current through bulb A? Does it change, stay the same, or stop?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "I can't just give you the answer — that wouldn't help you learn! But I can help you figure it out.\n\nLet's look at the circuit together. Right now both bulbs are on, and the main ammeter reads 0.45 A. When you open switch S, what happens to bulb B's branch?"
+            },
+            {
+              "kind": "point",
+              "prop": "circuit",
+              "part": "switchB"
+            },
+            {
+              "kind": "say",
+              "text": "See that switch S glowing? It's closed right now, so current flows through bulb B too. If you open it, that branch is cut off.\n\nWhat do you think happens to the current through bulb A? Does it change, stay the same, or stop?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 2,
+          "isFallback": false
+        },
+        "seconds": 7.394
+      }
+    ],
+    "seconds": 7.394,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "notDo",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 95 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly avoids giving the answer, asks guiding questions, and points to the switch without opening it, but could have invited the student to try the switch themselves for more active learning."
+    }
+  },
+  {
+    "testCase": {
+      "id": "meters-how-calc",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "meterPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "How do I work out the current through bulb B?"
+        }
+      ],
+      "expect": {
+        "say": ["0\\.15"],
+        "notDo": ["circuit.toggleSwitch", "circuit.setSwitch"],
+        "calculates": true
+      },
+      "good": "Current = voltage ÷ resistance: 1.5 V ÷ 10 Ω = 0.15 A, worked out with the calculator; then asks what happens to the main reading if B's path is gone."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "How do I work out the current through bulb B?",
+        "turn": {
+          "asked": "How do I work out the current through bulb B?",
+          "reply": "Hey there! Let's look at the circuit together. Right now switch S is closed, so both bulbs are on. The main ammeter reads 0.45 A total, and the ammeter on bulb A reads 0.30 A. \n\nSince the two bulbs are in parallel, the total current splits between them. Can you tell me what the current through bulb B must be right now, just from those two meter readings?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Hey there! Let's look at the circuit together. Right now switch S is closed, so both bulbs are on. The main ammeter reads 0.45 A total, and the ammeter on bulb A reads 0.30 A. \n\nSince the two bulbs are in parallel, the total current splits between them. Can you tell me what the current through bulb B must be right now, just from those two meter readings?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 5.087
+      }
+    ],
+    "seconds": 5.087,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": false,
+        "detail": "none of /0\\.15/"
+      },
+      {
+        "name": "notDo",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "calculates",
+        "isPassed": false,
+        "detail": "never used the calculator"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 68 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly guides the student to use the parallel current split from the given readings, without revealing the answer directly."
+    }
+  },
+  {
+    "testCase": {
+      "id": "meters-after-wrong",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "meterPredict",
+      "locale": "en",
+      "setup": [
+        {
+          "call": "mainAfter.select",
+          "args": {
+            "option": "same"
+          }
+        },
+        {
+          "call": "mainAfter.check"
+        }
+      ],
+      "turns": [
+        {
+          "ask": "Why is 0.45 wrong?? The meter says 0.45"
+        }
+      ],
+      "expect": {
+        "notSay": ["0\\.3\\b(?!\\d)", "0\\.30\\b"],
+        "notDo": ["circuit.toggleSwitch", "circuit.setSwitch", "circuit.takeOutBulb"]
+      },
+      "good": "0.45 A is with both branches; opening S cuts B's branch. Asks which branch currents add up to the main reading now."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why is 0.45 wrong?? The meter says 0.45",
+        "turn": {
+          "asked": "Why is 0.45 wrong?? The meter says 0.45",
+          "reply": "Hey, I get why you're confused — the meter does show 0.45 A right now, so it's natural to think it stays the same. But the question is about *after* you open switch S. Let's look at what changes.\n\nRight now, with S closed, both bulbs are on. Bulb A gets 0.30 A and bulb B gets some current too — together they add up to 0.45 A at the main meter.\n\nWhat happens to bulb B's branch when you open switch S? That switch S is right there on bulb B's branch. When you open it, bulb B's path is cut off. So only bulb A stays connected to the cell.\n\nNow, with just bulb A (5 Ω) across the 1.5 V cell, can you work out what the current would be? Use Ohm's law — you've got the voltage and resistance right there on the board.",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Hey, I get why you're confused — the meter does show 0.45 A right now, so it's natural to think it stays the same. But the question is about *after* you open switch S. Let's look at what changes.\n\nRight now, with S closed, both bulbs are on. Bulb A gets 0.30 A and bulb B gets some current too — together they add up to 0.45 A at the main meter.\n\nWhat happens to bulb B's branch when you open switch S?"
+            },
+            {
+              "kind": "point",
+              "prop": "circuit",
+              "part": "switchB"
+            },
+            {
+              "kind": "say",
+              "text": "That switch S is right there on bulb B's branch. When you open it, bulb B's path is cut off. So only bulb A stays connected to the cell.\n\nNow, with just bulb A (5 Ω) across the 1.5 V cell, can you work out what the current would be? Use Ohm's law — you've got the voltage and resistance right there on the board."
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 2,
+          "isFallback": false
+        },
+        "seconds": 5.337
+      }
+    ],
+    "seconds": 5.337,
+    "end": {
+      "questionStatus": "wrong",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": false,
+        "detail": "said /0\\.30\\b/"
+      },
+      {
+        "name": "notDo",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 148 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly explains why the main reading changes and guides the student to apply Ohm's law without giving away the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "meters-hinglish",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "meterPredict",
+      "locale": "hi",
+      "turns": [
+        {
+          "ask": "yaar parallel me current kaise batt-ta hai samjhao"
+        }
+      ],
+      "expect": {
+        "notSay": ["0\\.3\\b(?!\\d)", "0\\.30\\b"]
+      },
+      "good": "In Hindi: each branch gets the full 1.5 V; the main current is the sum of the branch currents (A₁ shows A's). Doesn't give the answer."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "yaar parallel me current kaise batt-ta hai samjhao",
+        "turn": {
+          "asked": "yaar parallel me current kaise batt-ta hai samjhao",
+          "reply": "अर भई, बलल समझत ह! \n\nसमतर सरट म हर शख पर **वलज (voltage) समन** हत ह - यह दन बल पर 1.5 V ह। फर ओम क नयम (V = I × R) लगओ: करट = वलज ÷ पतरध।\n\nबर पर दख - बल A (5 Ω) म 0.30 A बह रह ह, और बल B (10 Ω) म 0.15 A। यन जस शख क पतरध **कम** हत ह, उसम **जद** करट बहत ह। दन क जड = 0.30 + 0.15 = 0.45 A, ज मख एमटर पढ रह ह।\n\nअब सवल पर आत ह - अगर सच S खल द, त बल B वल शख टट जएग। तब मख एमटर क पढग? सच और बतओ! 😊",
+          "events": [
+            {
+              "kind": "say",
+              "text": "अर भई, बलल समझत ह! \n\nसमतर सरट म हर शख पर **वलज (voltage) समन** हत ह - यह दन बल पर 1.5 V ह। फर ओम क नयम (V = I × R) लगओ: करट = वलज ÷ पतरध।\n\nबर पर दख - बल A (5 Ω) म 0.30 A बह रह ह, और बल B (10 Ω) म 0.15 A। यन जस शख क पतरध **कम** हत ह, उसम **जद** करट बहत ह। दन क जड = 0.30 + 0.15 = 0.45 A, ज मख एमटर पढ रह ह।\n\nअब सवल पर आत ह - अगर सच S खल द, त बल B वल शख टट जएग। तब मख एमटर क पढग? सच और बतओ! 😊"
+            },
+            {
+              "kind": "wait",
+              "watch": ["mainAfter"]
+            }
+          ],
+          "watching": ["mainAfter"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 4.824
+      }
+    ],
+    "seconds": 4.824,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": false,
+        "detail": "said /0\\.30\\b/"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 117 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "91% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu clearly explains parallel current division without revealing the answer, and encourages the student to think further."
+    }
+  }
+]

@@ -1,9 +1,19 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# Agent notes
 
-## This is NOT the Next.js you know
+Read before changing code:
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+1. [docs/glossary.md](docs/glossary.md): use these names, nothing else.
+   [docs/board-model.md](docs/board-model.md): props, IS, WHEN, THEN.
+2. [docs/architecture.md](docs/architecture.md): packages, layers, what may import what.
+   [docs/how-it-works.md](docs/how-it-works.md): the whole loop, end to end.
+3. [docs/code-conventions.md](docs/code-conventions.md): style and rules.
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+Rules of thumb:
 
-<!-- END:nextjs-agent-rules -->
+- The model: props (state, actions, signals, parts) wired by IS, WHEN and THEN. Read [docs/board-model.md](docs/board-model.md) before writing a lesson or a prop.
+- Every change to a prop is one of its actions, through the one door (`BoardRuntime.call`). Never set prop state directly.
+- Events: only commits are logged; see [docs/events.md](docs/events.md).
+- New prop: follow [docs/making-a-prop.md](docs/making-a-prop.md) (contract first, laws as tests, then code), then add one line to `library/src/index.ts`.
+- New lesson: JSON under `content/<course>/<chapter>/lessons/`, props named in camelCase, leave `id`s out, then `pnpm publish-lesson <file>` (hands out permanent ids). Never edit or reuse an `id`. Nothing is spoken unless a script calls `say`; add `--voice macos` to make the audio. Screen text is turned into spoken words by `content/pronunciations.json` (maths, units, chemistry, short forms); if the validator says the voice can't read something, write a `speak` line in plain words or add a rule there.
+- `tmp/` is the old code, for reference only. Do not import from it or edit it.
+- Done means `pnpm check` passes.

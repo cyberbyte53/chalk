@@ -1,0 +1,672 @@
+{
+  "id": "class9-maths/ch1/decimals-that-never-settle",
+  "version": "0.1.0",
+  "title": {
+    "en": "Decimals that never stop or repeat",
+    "hi": "दशमलव जो न रुकते, न दोहराते"
+  },
+  "concepts": [
+    "irrational-decimals",
+    "number-families"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "pattern",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "number",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "0.1010010001000010…",
+                "hi": "0.1010010001000010…"
+              },
+              "style": "title",
+              "speak": {
+                "en": "0.1 0 1 0 0 1 0 0 0 1, and so on",
+                "hi": "0.1 0 1 0 0 1 0 0 0 1, और आगे"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "isItRational",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Here each 1 is followed by one more 0 than the last. Is this number rational?",
+                "hi": "यहाँ हर 1 के बाद पिछली बार से एक 0 ज़्यादा आता है। क्या यह संख्या परिमेय है?"
+              },
+              "options": [
+                {
+                  "id": "pattern",
+                  "label": {
+                    "en": "Yes: it has a pattern",
+                    "hi": "हाँ: इसमें एक पैटर्न है"
+                  },
+                  "feedback": {
+                    "en": "Repeating means the same block of digits comes again and again. Which block repeats here?",
+                    "hi": "दोहराने का मतलब है अंकों का वही हिस्सा बार-बार आए। यहाँ कौन-सा हिस्सा दोहराता है?"
+                  },
+                  "misconception": "patternMeansRecurring"
+                },
+                {
+                  "id": "endless",
+                  "label": {
+                    "en": "Yes: it goes on for ever",
+                    "hi": "हाँ: यह हमेशा चलती रहती है"
+                  },
+                  "feedback": {
+                    "en": "1/3 = 0.333… goes on for ever too. What does 1/3 have that this number doesn't?",
+                    "hi": "1/3 = 0.333… भी हमेशा चलता है। 1/3 में ऐसा क्या है जो इस संख्या में नहीं?"
+                  },
+                  "misconception": "endlessMeansRational"
+                },
+                {
+                  "id": "no",
+                  "label": {
+                    "en": "No",
+                    "hi": "नहीं"
+                  }
+                }
+              ],
+              "answer": "no",
+              "concepts": [
+                "irrational-decimals"
+              ]
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunNoBlock",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "Every p/q terminates or repeats a fixed block, because its remainders run out. A decimal that does neither can't be p/q.",
+                "hi": "हर p/q या तो ख़त्म होती है या एक तय हिस्सा दोहराती है, क्योंकि उसके शेषफल ख़त्म हो जाते हैं। जो दशमलव इनमें से कुछ नहीं करता, वह p/q नहीं हो सकता।"
+              },
+              "speak": {
+                "en": "Every p over q terminates or repeats a fixed block, because its remainders run out. A decimal that does neither can't be p over q.",
+                "hi": "हर p बटा q या तो ख़त्म होती है या एक तय हिस्सा दोहराती है, क्योंकि उसके शेषफल ख़त्म हो जाते हैं। जो दशमलव इनमें से कुछ नहीं करता, वह p बटा q नहीं हो सकता।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "number.say"
+            },
+            {
+              "call": "isItRational.say"
+            }
+          ]
+        },
+        {
+          "on": "isItRational.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunNoBlock"
+              }
+            },
+            {
+              "call": "arjunNoBlock.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 2,
+      "name": "piAndTwentyTwoSevenths",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 3,
+              "to": 3.3,
+              "marks": [
+                {
+                  "at": 3.14159265358979,
+                  "label": "π"
+                },
+                {
+                  "at": 3.142857142857143,
+                  "label": "22/7"
+                }
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "piEquals",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "True or false: π = 22/7.",
+                "hi": "सही या ग़लत: π = 22/7।"
+              },
+              "options": [
+                {
+                  "id": "true",
+                  "label": {
+                    "en": "True",
+                    "hi": "सही"
+                  },
+                  "feedback": {
+                    "en": "Watch the line as it zooms in. Do π and 22/7 land on the same point?",
+                    "hi": "रेखा को पास से देखो। क्या π और 22/7 एक ही बिंदु पर हैं?"
+                  },
+                  "misconception": "piIsTwentyTwoSevenths"
+                },
+                {
+                  "id": "false",
+                  "label": {
+                    "en": "False",
+                    "hi": "ग़लत"
+                  }
+                }
+              ],
+              "answer": "false",
+              "concepts": [
+                "irrational-decimals"
+              ],
+              "speak": {
+                "en": "True or false: pi equals 22 over 7.",
+                "hi": "सही या ग़लत: पाई बराबर 22 बटा 7।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaApart",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "π = 3.14159… is irrational; 22/7 = 3.142857… repeats. They part at the third decimal place. Archimedes and Aryabhata found such close values, but π itself is no fraction.",
+                "hi": "π = 3.14159… अपरिमेय है; 22/7 = 3.142857… दोहराता है। तीसरे दशमलव स्थान पर दोनों अलग हो जाते हैं। आर्किमिडीज़ और आर्यभट ने ऐसे पास के मान निकाले, पर π ख़ुद कोई भिन्न नहीं है।"
+              },
+              "speak": {
+                "en": "Pi, 3.14159 and so on, is irrational; 22 over 7, 3.142857, repeats. They part at the third decimal place. Archimedes and Aryabhata found such close values, but pi itself is no fraction.",
+                "hi": "पाई, 3.14159 और आगे, अपरिमेय है; 22 बटा 7, 3.142857, दोहराता है। तीसरे दशमलव स्थान पर दोनों अलग हो जाते हैं। आर्किमिडीज़ और आर्यभट ने ऐसे पास के मान निकाले, पर पाई ख़ुद कोई भिन्न नहीं है।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "piEquals.say"
+          }
+        },
+        {
+          "on": "piEquals.checked",
+          "if": "line.from == 3",
+          "do": [
+            {
+              "call": "line.zoomTo",
+              "args": {
+                "from": 3.1,
+                "to": 3.2,
+                "over": 1.4
+              }
+            },
+            {
+              "wait": 0.6
+            },
+            {
+              "call": "line.magnify",
+              "args": {
+                "value": 3.1416
+              }
+            }
+          ]
+        },
+        {
+          "on": "piEquals.correct",
+          "do": [
+            {
+              "wait": 3.5
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaApart"
+              }
+            },
+            {
+              "call": "mayaApart.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 3,
+      "name": "irrationalBetween",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0.1,
+              "to": 0.3,
+              "marks": [
+                {
+                  "at": 0.14285714285714285,
+                  "label": "1/7"
+                },
+                {
+                  "at": 0.2857142857142857,
+                  "label": "2/7"
+                }
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "findIrrational",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "1/7 = 0.142857… and 2/7 = 0.285714… Which is an irrational number between them?",
+                "hi": "1/7 = 0.142857… और 2/7 = 0.285714… इनके बीच कौन-सी अपरिमेय संख्या है?"
+              },
+              "options": [
+                {
+                  "id": "point2",
+                  "label": {
+                    "en": "0.2",
+                    "hi": "0.2"
+                  },
+                  "feedback": {
+                    "en": "0.2 is between them, but it terminates. Can it be irrational?",
+                    "hi": "0.2 बीच में तो है, पर सांत है। क्या वह अपरिमेय हो सकती है?"
+                  },
+                  "misconception": "betweenMeansIrrational"
+                },
+                {
+                  "id": "repeat",
+                  "label": {
+                    "en": "0.151515…",
+                    "hi": "0.151515…"
+                  },
+                  "feedback": {
+                    "en": "15 repeats over and over. What kind of number repeats a block?",
+                    "hi": "15 बार-बार दोहराता है। जो संख्या एक हिस्सा दोहराए, वह किस तरह की है?"
+                  },
+                  "misconception": "patternMeansRecurring"
+                },
+                {
+                  "id": "growing",
+                  "label": {
+                    "en": "0.150150015000150…",
+                    "hi": "0.150150015000150…"
+                  }
+                },
+                {
+                  "id": "tooBig",
+                  "label": {
+                    "en": "0.3010010001…",
+                    "hi": "0.3010010001…"
+                  },
+                  "feedback": {
+                    "en": "It's irrational, but is it less than 2/7 = 0.2857…?",
+                    "hi": "यह अपरिमेय तो है, पर क्या यह 2/7 = 0.2857… से कम है?"
+                  },
+                  "misconception": "ignoresInterval"
+                }
+              ],
+              "answer": "growing",
+              "concepts": [
+                "irrational-decimals"
+              ],
+              "speak": {
+                "en": "1 seventh is 0.142857 and so on, and 2 sevenths is 0.285714 and so on. Which is an irrational number between them?",
+                "hi": "1 बटा 7 बराबर 0.142857 और आगे, और 2 बटा 7 बराबर 0.285714 और आगे। इनके बीच कौन-सी अपरिमेय संख्या है?"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunBuild",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "It starts 0.15, so it sits between them, and its 0s keep growing, so no block repeats. You can build as many as you like this way.",
+                "hi": "यह 0.15 से शुरू होती है, इसलिए दोनों के बीच है, और इसके 0 बढ़ते रहते हैं, इसलिए कोई हिस्सा नहीं दोहराता। ऐसे जितनी चाहो उतनी बना सकते हो।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "findIrrational.say"
+          }
+        },
+        {
+          "on": "findIrrational.correct",
+          "do": [
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.15015001500015,
+                "label": "0.15015…"
+              }
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunBuild"
+              }
+            },
+            {
+              "call": "arjunBuild.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 4,
+      "name": "sortDecimals",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Rational or irrational? Sort these into the rings.",
+                "hi": "परिमेय या अपरिमेय? इन्हें घेरों में छाँटो।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "sorter",
+            "kind": "prop",
+            "prop": "numberSorter",
+            "with": {
+              "names": {
+                "natural": {
+                  "en": "Natural numbers",
+                  "hi": "प्राकृत संख्याएँ"
+                },
+                "whole": {
+                  "en": "Whole numbers",
+                  "hi": "पूर्ण संख्याएँ"
+                },
+                "integer": {
+                  "en": "Integers",
+                  "hi": "पूर्णांक"
+                },
+                "rational": {
+                  "en": "Rational numbers",
+                  "hi": "परिमेय संख्याएँ"
+                },
+                "irrational": {
+                  "en": "Irrational numbers",
+                  "hi": "अपरिमेय संख्याएँ"
+                },
+                "real": {
+                  "en": "Real numbers",
+                  "hi": "वास्तविक संख्याएँ"
+                }
+              },
+              "families": [
+                "natural",
+                "rational",
+                "irrational",
+                "real"
+              ],
+              "cards": [
+                {
+                  "id": "rootTwentyThree",
+                  "label": "√23",
+                  "family": "irrational",
+                  "placedIn": null
+                },
+                {
+                  "id": "rootTwoTwentyFive",
+                  "label": "√225",
+                  "family": "natural",
+                  "placedIn": null
+                },
+                {
+                  "id": "pointThree",
+                  "label": "0.3796",
+                  "family": "rational",
+                  "placedIn": null
+                },
+                {
+                  "id": "repeating",
+                  "label": "7.478478…",
+                  "family": "rational",
+                  "placedIn": null
+                },
+                {
+                  "id": "growing",
+                  "label": "1.101001000…",
+                  "family": "irrational",
+                  "placedIn": null
+                }
+              ]
+            }
+          },
+          {
+            "id": 4,
+            "name": "sortThem",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Put each card in the smallest ring that holds it.",
+                "hi": "हर कार्ड को उस सबसे छोटे घेरे में रखो जिसमें वह आता है।"
+              },
+              "about": "sorter",
+              "concepts": [
+                "irrational-decimals",
+                "number-families"
+              ]
+            }
+          },
+          {
+            "id": 5,
+            "name": "mayaFifteen",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "√225 = 15, a natural number. 0.3796 stops and 7.478478… repeats 478, so both are p/q. √23 and 1.101001000… never stop and never repeat.",
+                "hi": "√225 = 15, एक प्राकृत संख्या। 0.3796 रुक जाती है और 7.478478… में 478 दोहराता है, इसलिए दोनों p/q हैं। √23 और 1.101001000… न रुकते हैं, न दोहराते हैं।"
+              },
+              "speak": {
+                "en": "The square root of 225 is 15, a natural number. 0.3796 stops and 7.478478 repeats 4 7 8, so both are p over q. Root 23 and 1.101001000 never stop and never repeat.",
+                "hi": "225 का वर्गमूल 15 है, एक प्राकृत संख्या। 0.3796 रुक जाती है और 7.478478 में 4 7 8 दोहराता है, इसलिए दोनों p बटा q हैं। रूट 23 और 1.101001000 न रुकते हैं, न दोहराते हैं।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "sortThem.isMet",
+          "to": "sorter.isAllRight"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "sortThem.wrong",
+          "if": "sorter.placedIn.rootTwoTwentyFive != \"natural\"",
+          "do": {
+            "call": "sortThem.giveFeedback",
+            "args": {
+              "text": {
+                "en": "What is 15 × 15?",
+                "hi": "15 × 15 कितना है?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortThem.wrong",
+          "if": "sorter.placedIn.rootTwoTwentyFive == \"natural\" and (sorter.placedIn.pointThree != \"rational\" or sorter.placedIn.repeating != \"rational\")",
+          "do": {
+            "call": "sortThem.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Does a block of digits repeat? Does it stop? Then it's p/q.",
+                "hi": "क्या कोई अंकों का हिस्सा दोहराता है? या वह रुकती है? तब वह p/q है।"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortThem.wrong",
+          "if": "sorter.placedIn.rootTwoTwentyFive == \"natural\" and sorter.placedIn.pointThree == \"rational\" and sorter.placedIn.repeating == \"rational\" and sorter.placedIn.rootTwentyThree == \"irrational\"",
+          "do": {
+            "call": "sortThem.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Repeating means the same block of digits comes again and again. Which block repeats in 1.101001000…?",
+                "hi": "दोहराने का मतलब है अंकों का वही हिस्सा बार-बार आए। 1.101001000… में कौन-सा हिस्सा दोहराता है?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortThem.wrong",
+          "if": "sorter.placedIn.rootTwoTwentyFive == \"natural\" and sorter.placedIn.pointThree == \"rational\" and sorter.placedIn.repeating == \"rational\" and sorter.placedIn.rootTwentyThree != \"irrational\"",
+          "do": {
+            "call": "sortThem.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Is 23 a perfect square (4 × 4 = 16, 5 × 5 = 25)? The square root of a whole number that isn't a perfect square is irrational.",
+                "hi": "क्या 23 किसी संख्या का वर्ग है (4 × 4 = 16, 5 × 5 = 25)? जो पूर्ण संख्या पूर्ण वर्ग नहीं, उसका वर्गमूल अपरिमेय होता है।"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortThem.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaFifteen"
+              }
+            },
+            {
+              "call": "mayaFifteen.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "sorter.pick",
+        "sorter.drop",
+        "sorter.place"
+      ],
+      "nextPieceId": 7
+    }
+  ],
+  "nextBoardId": 5
+}

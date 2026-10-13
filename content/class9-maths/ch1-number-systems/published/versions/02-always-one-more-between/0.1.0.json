@@ -1,0 +1,920 @@
+{
+  "id": "class9-maths/ch1/always-one-more-between",
+  "version": "0.1.0",
+  "title": {
+    "en": "Always one more in between",
+    "hi": "बीच में हमेशा एक और"
+  },
+  "concepts": [
+    "density-of-rationals"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "samePoint",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "1/2, 2/4 and 10/20 look different. Where does each one sit on the number line?",
+                "hi": "1/2, 2/4 और 10/20 अलग दिखते हैं। संख्या रेखा पर हर एक कहाँ है?"
+              },
+              "style": "title",
+              "speak": {
+                "en": "One half, two quarters and ten twentieths look different. Where does each one sit on the number line?",
+                "hi": "एक बटा दो, दो बटा चार और दस बटा बीस अलग दिखते हैं। संख्या रेखा पर हर एक कहाँ है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0,
+              "to": 1
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaSame",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "All three land on the same point. One number, many names: equivalent fractions are equal.",
+                "hi": "तीनों एक ही बिंदु पर आते हैं। संख्या एक, नाम अनेक: तुल्य भिन्न बराबर होती हैं।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "title.say"
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.5,
+                "label": "1/2"
+              }
+            },
+            {
+              "wait": 1
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.5,
+                "label": "2/4"
+              }
+            },
+            {
+              "wait": 1
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.5,
+                "label": "10/20"
+              }
+            },
+            {
+              "wait": 0.8
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaSame"
+              }
+            },
+            {
+              "call": "mayaSame.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 2,
+      "name": "middle",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Is there a rational number between 1 and 2? Add them and halve: (1 + 2) ÷ 2 = 3/2.",
+                "hi": "क्या 1 और 2 के बीच कोई परिमेय संख्या है? दोनों को जोड़कर आधा करो: (1 + 2) ÷ 2 = 3/2।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "Is there a rational number between 1 and 2? Add them and halve: 1 plus 2, divided by 2, is 3 over 2.",
+                "hi": "क्या 1 और 2 के बीच कोई परिमेय संख्या है? दोनों को जोड़कर आधा करो: 1 जोड़ 2, भाग 2, बराबर 3 बटा 2।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0.9,
+              "to": 2.1
+            }
+          },
+          {
+            "id": 4,
+            "name": "again",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Between 1 and 3/2? Halve again: (1 + 3/2) ÷ 2 = 5/4. And again: 9/8.",
+                "hi": "1 और 3/2 के बीच? फिर आधा करो: (1 + 3/2) ÷ 2 = 5/4। और फिर: 9/8।"
+              },
+              "style": "body",
+              "speak": {
+                "en": "Between 1 and 3 over 2? Halve again: 5 over 4. And again: 9 over 8.",
+                "hi": "1 और 3 बटा 2 के बीच? फिर आधा करो: 5 बटा 4। और फिर: 9 बटा 8।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "arjunNeverStops",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "We could halve for ever. There is always a middle, so there is always another rational number.",
+                "hi": "हम हमेशा आधा करते रह सकते हैं। बीच हमेशा होता है, इसलिए एक और परिमेय संख्या हमेशा होती है।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "title.say"
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 1.5,
+                "label": "3/2"
+              }
+            },
+            {
+              "wait": 0.6
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "again"
+              }
+            },
+            {
+              "call": "again.say"
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 1.25,
+                "label": "5/4"
+              }
+            },
+            {
+              "wait": 1
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 1.125,
+                "label": "9/8"
+              }
+            },
+            {
+              "wait": 1
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunNeverStops"
+              }
+            },
+            {
+              "call": "arjunNeverStops.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 7
+    },
+    {
+      "id": 3,
+      "name": "cutIntoParts",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Another way: cut the stretch from 1 to 2 into 6 equal parts. Each cut is a rational number.",
+                "hi": "दूसरा तरीक़ा: 1 से 2 तक के हिस्से को 6 बराबर टुकड़ों में काटो। हर निशान एक परिमेय संख्या है।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0.9,
+              "to": 2.1
+            }
+          },
+          {
+            "id": 4,
+            "name": "cuts",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "1 = 6/6, then 7/6, 8/6, 9/6, 10/6, 11/6, and 12/6 = 2. Five rational numbers between 1 and 2.",
+                "hi": "1 = 6/6, फिर 7/6, 8/6, 9/6, 10/6, 11/6, और 12/6 = 2। 1 और 2 के बीच पाँच परिमेय संख्याएँ।"
+              },
+              "style": "body",
+              "speak": {
+                "en": "1 is 6 sixths, then 7 sixths, 8 sixths, 9 sixths, 10 sixths, 11 sixths, and 12 sixths is 2. Five rational numbers between 1 and 2.",
+                "hi": "1 बराबर 6 बटा 6, फिर 7 बटा 6, 8 बटा 6, 9 बटा 6, 10 बटा 6, 11 बटा 6, और 12 बटा 6 बराबर 2। 1 और 2 के बीच पाँच परिमेय संख्याएँ।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "title.say"
+            },
+            {
+              "call": "line.splitInto",
+              "args": {
+                "from": 1,
+                "to": 2,
+                "parts": 6
+              }
+            },
+            {
+              "wait": 0.8
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "cuts"
+              }
+            },
+            {
+              "call": "cuts.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 4,
+      "name": "sixBetween",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "makeSix",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Find six rational numbers between 3 and 4. Press + to cut 3 to 4 into more equal parts, until there are six cut marks between 3 and 4 (don't count 3 and 4). The number between the buttons counts the parts. Then Check.",
+                "hi": "3 और 4 के बीच छह परिमेय संख्याएँ ढूँढो। + दबाकर 3 से 4 तक के हिस्से को और बराबर टुकड़ों में काटो, जब तक 3 और 4 के बीच छह निशान न आ जाएँ (3 और 4 को मत गिनो)। बटनों के बीच वाली संख्या टुकड़े गिनती है। फिर जाँचो।"
+              },
+              "about": "line",
+              "concepts": [
+                "density-of-rationals"
+              ],
+              "speak": {
+                "en": "Find six rational numbers between 3 and 4. Press plus to cut 3 to 4 into more equal parts, until there are six cut marks between 3 and 4. Don't count 3 and 4. The number between the buttons counts the parts. Then Check.",
+                "hi": "3 और 4 के बीच छह परिमेय संख्याएँ ढूँढो। प्लस दबाकर 3 से 4 तक के हिस्से को और बराबर टुकड़ों में काटो, जब तक 3 और 4 के बीच छह निशान न आ जाएँ। 3 और 4 को मत गिनो। बटनों के बीच वाली संख्या टुकड़े गिनती है। फिर जाँचो।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 2.8,
+              "to": 4.2,
+              "split": {
+                "from": 3,
+                "to": 4,
+                "parts": 2
+              },
+              "isSplittable": true
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaSevenths",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "7 parts give 6 cuts inside: 22/7, 23/7, 24/7, 25/7, 26/7, 27/7. Six parts would give only five.",
+                "hi": "7 टुकड़ों से अंदर 6 निशान बनते हैं: 22/7, 23/7, 24/7, 25/7, 26/7, 27/7। 6 टुकड़ों से सिर्फ़ पाँच बनते।"
+              },
+              "speak": {
+                "en": "7 parts give 6 cuts inside: 22 sevenths, 23 sevenths, and so on up to 27 sevenths. Six parts would give only five.",
+                "hi": "7 टुकड़ों से अंदर 6 निशान बनते हैं: 22 बटा 7, 23 बटा 7, और ऐसे ही 27 बटा 7 तक। 6 टुकड़ों से सिर्फ़ पाँच बनते।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "makeSix.isMet",
+          "to": "line.splitPointsBetween >= 6"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "makeSix.say"
+          }
+        },
+        {
+          "on": "makeSix.wrong",
+          "if": "line.splitParts == 6",
+          "do": {
+            "call": "makeSix.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Count only the cut marks between 3 and 4, not 3 and 4 themselves. How many are there with 6 parts?",
+                "hi": "सिर्फ़ 3 और 4 के बीच वाले निशान गिनो, 3 और 4 ख़ुद नहीं। 6 टुकड़ों में कितने हैं?"
+              }
+            }
+          }
+        },
+        {
+          "on": "makeSix.wrong",
+          "if": "line.splitParts != 6",
+          "do": {
+            "call": "makeSix.giveFeedback",
+            "args": {
+              "text": {
+                "en": "How many cut marks are between 3 and 4 right now (not counting 3 and 4)? You need six.",
+                "hi": "अभी 3 और 4 के बीच कितने निशान हैं (3 और 4 को मत गिनो)? तुम्हें छह चाहिए।"
+              }
+            }
+          }
+        },
+        {
+          "on": "makeSix.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaSevenths"
+              }
+            },
+            {
+              "call": "mayaSevenths.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "line.changeParts"
+      ],
+      "nextPieceId": 6
+    },
+    {
+      "id": 5,
+      "name": "betweenFifths",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0.5,
+              "to": 0.9,
+              "marks": [
+                {
+                  "at": 0.6,
+                  "label": "3/5"
+                },
+                {
+                  "at": 0.8,
+                  "label": "4/5"
+                }
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "fiveBetween",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Which list gives five rational numbers between 3/5 and 4/5?",
+                "hi": "कौन-सी सूची 3/5 और 4/5 के बीच पाँच परिमेय संख्याएँ देती है?"
+              },
+              "options": [
+                {
+                  "id": "none",
+                  "label": {
+                    "en": "None: 3/5 and 4/5 are next to each other",
+                    "hi": "कोई नहीं: 3/5 और 4/5 एक-दूसरे के ठीक बाद हैं"
+                  },
+                  "feedback": {
+                    "en": "Write both with denominator 30: 18/30 and 24/30. Is anything between?",
+                    "hi": "दोनों को हर 30 के साथ लिखो: 18/30 और 24/30। बीच में कुछ है?"
+                  },
+                  "misconception": "fractionsAreNeighbours"
+                },
+                {
+                  "id": "thirtieths",
+                  "label": {
+                    "en": "19/30, 20/30, 21/30, 22/30, 23/30",
+                    "hi": "19/30, 20/30, 21/30, 22/30, 23/30"
+                  }
+                },
+                {
+                  "id": "fifths",
+                  "label": {
+                    "en": "4/5, 5/5, 6/5, 7/5, 8/5",
+                    "hi": "4/5, 5/5, 6/5, 7/5, 8/5"
+                  },
+                  "feedback": {
+                    "en": "Where is 6/5 on the line? Is it between 3/5 and 4/5?",
+                    "hi": "रेखा पर 6/5 कहाँ है? क्या वह 3/5 और 4/5 के बीच है?"
+                  },
+                  "misconception": "countsNumeratorsUp"
+                },
+                {
+                  "id": "decimals",
+                  "label": {
+                    "en": "0.3, 0.4, 0.5, 0.6, 0.7",
+                    "hi": "0.3, 0.4, 0.5, 0.6, 0.7"
+                  },
+                  "feedback": {
+                    "en": "3/5 = 0.6 and 4/5 = 0.8. Which of these are between them?",
+                    "hi": "3/5 = 0.6 और 4/5 = 0.8। इनमें से कौन-सी उनके बीच हैं?"
+                  },
+                  "misconception": "ignoresWhereFractionsSit"
+                }
+              ],
+              "answer": "thirtieths",
+              "concepts": [
+                "density-of-rationals"
+              ],
+              "speak": {
+                "en": "Which list gives five rational numbers between 3 fifths and 4 fifths?",
+                "hi": "कौन-सी सूची 3 बटा 5 और 4 बटा 5 के बीच पाँच परिमेय संख्याएँ देती है?"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunRescale",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "We need 5 numbers, so multiply top and bottom by 6 (one more than 5): 3/5 = 18/30 and 4/5 = 24/30. Now 19/30 to 23/30 fit between.",
+                "hi": "हमें 5 संख्याएँ चाहिए, तो अंश और हर को 6 से गुणा करो (5 से एक ज़्यादा): 3/5 = 18/30 और 4/5 = 24/30। अब 19/30 से 23/30 तक बीच में आ जाती हैं।"
+              },
+              "speak": {
+                "en": "We need 5 numbers, so multiply top and bottom by 6, one more than 5: 3 fifths is 18 thirtieths and 4 fifths is 24 thirtieths. Now 19 thirtieths to 23 thirtieths fit between.",
+                "hi": "हमें 5 संख्याएँ चाहिए, तो अंश और हर को 6 से गुणा करो, यानी 5 से एक ज़्यादा: 3 बटा 5 बराबर 18 बटा 30 और 4 बटा 5 बराबर 24 बटा 30। अब 19 बटा 30 से 23 बटा 30 तक बीच में आ जाती हैं।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "fiveBetween.say"
+          }
+        },
+        {
+          "on": "fiveBetween.correct",
+          "do": [
+            {
+              "call": "line.splitInto",
+              "args": {
+                "from": 0.6,
+                "to": 0.8,
+                "parts": 6
+              }
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunRescale"
+              }
+            },
+            {
+              "call": "arjunRescale.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 6,
+      "name": "howMany",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0.3,
+              "to": 0.55,
+              "marks": [
+                {
+                  "at": 0.3333333333333333,
+                  "label": "1/3"
+                },
+                {
+                  "at": 0.5,
+                  "label": "1/2"
+                }
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "howManyBetween",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "How many rational numbers are there between 1/3 and 1/2?",
+                "hi": "1/3 और 1/2 के बीच कितनी परिमेय संख्याएँ हैं?"
+              },
+              "options": [
+                {
+                  "id": "none",
+                  "label": {
+                    "en": "None",
+                    "hi": "एक भी नहीं"
+                  },
+                  "feedback": {
+                    "en": "Write both with denominator 6: 2/6 and 3/6. Now try denominator 12.",
+                    "hi": "दोनों को हर 6 के साथ लिखो: 2/6 और 3/6। अब हर 12 लेकर देखो।"
+                  },
+                  "misconception": "fractionsAreNeighbours"
+                },
+                {
+                  "id": "one",
+                  "label": {
+                    "en": "Just one: 5/12",
+                    "hi": "बस एक: 5/12"
+                  },
+                  "feedback": {
+                    "en": "Is there a number between 5/12 and 1/2? Watch the line.",
+                    "hi": "क्या 5/12 और 1/2 के बीच कोई संख्या है? रेखा देखो।"
+                  },
+                  "misconception": "midpointIsTheOnlyOne"
+                },
+                {
+                  "id": "few",
+                  "label": {
+                    "en": "A few",
+                    "hi": "कुछ ही"
+                  },
+                  "feedback": {
+                    "en": "Take the two closest you found. Is there one between those too?",
+                    "hi": "जो दो सबसे पास वाली मिलीं, उन्हें लो। क्या उनके बीच भी एक है?"
+                  },
+                  "misconception": "finitelyManyBetween"
+                },
+                {
+                  "id": "infinite",
+                  "label": {
+                    "en": "Infinitely many",
+                    "hi": "अनगिनत"
+                  }
+                }
+              ],
+              "answer": "infinite",
+              "concepts": [
+                "density-of-rationals"
+              ],
+              "speak": {
+                "en": "How many rational numbers are there between 1 third and 1 half?",
+                "hi": "1 बटा 3 और 1 बटा 2 के बीच कितनी परिमेय संख्याएँ हैं?"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaForever",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "However close two rational numbers are, their middle sits between them. So between any two there are infinitely many.",
+                "hi": "दो परिमेय संख्याएँ कितनी भी पास हों, उनका बीच वाला उनके बीच होता है। इसलिए किन्हीं दो के बीच अनगिनत होती हैं।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "howManyBetween.say"
+          }
+        },
+        {
+          "on": "howManyBetween.checked",
+          "if": "line.from == 0.3",
+          "do": [
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.4166666666666667,
+                "label": "5/12"
+              }
+            },
+            {
+              "wait": 0.8
+            },
+            {
+              "call": "line.zoomTo",
+              "args": {
+                "from": 0.4,
+                "to": 0.52,
+                "over": 1.2
+              }
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.4583333333333333,
+                "label": "11/24"
+              }
+            },
+            {
+              "wait": 0.8
+            },
+            {
+              "call": "line.zoomTo",
+              "args": {
+                "from": 0.45,
+                "to": 0.51,
+                "over": 1.2
+              }
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.4791666666666667,
+                "label": "23/48"
+              }
+            },
+            {
+              "wait": 0.6
+            },
+            {
+              "call": "line.placeMark",
+              "args": {
+                "at": 0.4895833333333333,
+                "label": "47/96"
+              }
+            }
+          ]
+        },
+        {
+          "on": "howManyBetween.correct",
+          "do": [
+            {
+              "wait": 4.5
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaForever"
+              }
+            },
+            {
+              "call": "mayaForever.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 7,
+      "name": "gaps",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "So rational numbers are packed in everywhere on the line. But is every point on the line one of them?",
+                "hi": "तो परिमेय संख्याएँ रेखा पर हर जगह ठसाठस भरी हैं। पर क्या रेखा का हर बिंदु इन्हीं में से एक है?"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "arjunHook",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "Next lesson we hunt for a point that no fraction can name.",
+                "hi": "अगले पाठ में हम ऐसा बिंदु ढूँढेंगे जिसे कोई भिन्न नाम नहीं दे सकती।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "title.say"
+            },
+            {
+              "wait": 0.4
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunHook"
+              }
+            },
+            {
+              "call": "arjunHook.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 5
+    }
+  ],
+  "nextBoardId": 8
+}

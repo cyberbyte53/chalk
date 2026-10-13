@@ -1,0 +1,338 @@
+[
+  {
+    "testCase": {
+      "id": "period-show-all",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalPeriod",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Show me all the digits."
+        }
+      ],
+      "expect": {
+        "notSay": ["\\b6\\b|\\bsix\\b"],
+        "notDo": ["division.completeDivision"]
+      },
+      "good": "Stepping until it repeats shows the answer, so he doesn't do it all; maybe one step, then asks them to keep tapping and watch the remainders."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Show me all the digits.",
+        "turn": {
+          "asked": "Show me all the digits.",
+          "reply": "Sure! Let me show you more digits of 1 ÷ 7. Here are the digits of 1 ÷ 7: **0.142857142857…**\n\nLook at the digits after the decimal point. Do you see a pattern repeating? How many digits are in that repeating block?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Sure! Let me show you more digits of 1 ÷ 7."
+            },
+            {
+              "kind": "act",
+              "prop": "division",
+              "action": "showDigits",
+              "args": {
+                "count": 12
+              },
+              "changed": {
+                "division": {
+                  "digitsShown": 12,
+                  "digits": "142857142857",
+                  "remainders": [1, 3, 2, 6, 4, 5, 1, 3, 2, 6, 4, 5, 1],
+                  "remainder": 1,
+                  "hasRepeated": true,
+                  "decimalText": "0.142857142857…"
+                }
+              }
+            },
+            {
+              "kind": "say",
+              "text": "Here are the digits of 1 ÷ 7: **0.142857142857…**\n\nLook at the digits after the decimal point. Do you see a pattern repeating? How many digits are in that repeating block?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 2,
+          "isFallback": false
+        },
+        "seconds": 3.425
+      }
+    ],
+    "seconds": 3.425,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "notDo",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 42 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": true,
+      "guidance": 2,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu revealed the full repeating block by showing 12 digits, which directly gives away that the answer is 6, instead of guiding the student to discover it step by step."
+    }
+  },
+  {
+    "testCase": {
+      "id": "period-why-7",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalPeriod",
+      "locale": "en",
+      "setup": [
+        {
+          "call": "howMany.select",
+          "args": {
+            "option": "seven"
+          }
+        },
+        {
+          "call": "howMany.check"
+        }
+      ],
+      "turns": [
+        {
+          "ask": "I thought 7 because we divide by 7?"
+        }
+      ],
+      "expect": {
+        "notSay": ["\\b6\\b|\\bsix\\b"]
+      },
+      "good": "Good thinking to link it to 7; asks them to watch the remainders: which remainders are possible when dividing by 7? Doesn't say 6."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "I thought 7 because we divide by 7?",
+        "turn": {
+          "asked": "I thought 7 because we divide by 7?",
+          "reply": "I see why you thought that — it feels natural to connect it to the number you're dividing by. But the question is about how many digits repeat in the decimal, not about the denominator.\n\nLet's look at what's happening in the long division. The key is the remainders: when a remainder comes back that we've seen before, the digits start repeating from there. Let's work out a few more digits and watch what happens Now look at the remainders listed below the digits. The first remainder (after the whole part) is 1. Then after each digit, the remainder changes: 3, 2, 6, 4, 5... and then look what happens after the 6th digit. Can you spot which remainder comes back? The first remainder was 1 (after the 0). After working out 6 digits, the remainder came back to 1 again. That means the digits between those two 1s — how many digits are they? Count them: 1, 4, 2, 8, 5, 7 — that's 6 digits that repeat. So how many digits repeat?\n\nNow try the question again — you've got this!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "I see why you thought that — it feels natural to connect it to the number you're dividing by. But the question is about how many digits repeat in the decimal, not about the denominator.\n\nLet's look at what's happening in the long division. The key is the remainders: when a remainder comes back that we've seen before, the digits start repeating from there. Let's work out a few more digits and watch what happens"
+            },
+            {
+              "kind": "act",
+              "prop": "division",
+              "action": "showDigits",
+              "args": {
+                "count": 8
+              },
+              "changed": {
+                "division": {
+                  "digitsShown": 8,
+                  "digits": "14285714",
+                  "remainders": [1, 3, 2, 6, 4, 5, 1, 3, 2],
+                  "hasRepeated": true,
+                  "decimalText": "0.14285714…"
+                }
+              }
+            },
+            {
+              "kind": "say",
+              "text": "Now look at the remainders listed below the digits. The first remainder (after the whole part) is 1. Then after each digit, the remainder changes: 3, 2, 6, 4, 5... and then look what happens after the 6th digit. Can you spot which remainder comes back?"
+            },
+            {
+              "kind": "point",
+              "prop": "division",
+              "part": "remainder:0"
+            },
+            {
+              "kind": "point",
+              "prop": "division",
+              "part": "remainder:6"
+            },
+            {
+              "kind": "say",
+              "text": "The first remainder was 1 (after the 0). After working out 6 digits, the remainder came back to 1 again. That means the digits between those two 1s — how many digits are they? Count them: 1, 4, 2, 8, 5, 7 — that's 6 digits that repeat. So how many digits repeat?\n\nNow try the question again — you've got this!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 4,
+          "isFallback": false
+        },
+        "seconds": 10.538
+      }
+    ],
+    "seconds": 10.538,
+    "end": {
+      "questionStatus": "wrong",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": false,
+        "detail": "said /\\b6\\b|\\bsix\\b/"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 183 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu effectively guided the student to notice the repeating remainder without stating the answer directly, though pointing at the remainders and counting the digits came very close to revealing the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "period-hi",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalPeriod",
+      "locale": "hi",
+      "turns": [
+        {
+          "ask": "य बर-बर क दहरत ह?"
+        }
+      ],
+      "expect": {
+        "notSay": ["\\b6\\b|छह|छ"],
+        "say": ["शष"]
+      },
+      "good": "In Hindi: a remainder comes back, and then the same steps happen again; asks them to tap and watch for it."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "य बर-बर क दहरत ह?",
+        "turn": {
+          "asked": "य बर-बर क दहरत ह?",
+          "reply": "अच सवल ह! दख, जब हम 1 क 7 स भग दत ह, त हर बर एक शष (remainder) बचत ह। 7 स भग दन पर शष हमश 1, 2, 3, 4, 5, य 6 म स कई एक ह सकत ह — 7 स छट। जब कई शष फर स आ जत ह ज पहल आ चक ह, त वह स अक दहरन लगत ह।\n\nबर पर दख — अब तक क शष ह: 1, 3, 2। अगर तम और अक नकलग, त दखग क शष फर स 1, 3, 2... लटन लगग, और इसलए अक क एक गल दहरव बनत ह।\n\nअब बर पर सवल ह — य बतओ क कतन अक दहरत ह? उसक लए और अक नकलन हग। चल, \"division\" पर टप करक एक और अक नकल!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "अच सवल ह! दख, जब हम 1 क 7 स भग दत ह, त हर बर एक शष (remainder) बचत ह। 7 स भग दन पर शष हमश 1, 2, 3, 4, 5, य 6 म स कई एक ह सकत ह — 7 स छट। जब कई शष फर स आ जत ह ज पहल आ चक ह, त वह स अक दहरन लगत ह।\n\nबर पर दख — अब तक क शष ह: 1, 3, 2। अगर तम और अक नकलग, त दखग क शष फर स 1, 3, 2... लटन लगग, और इसलए अक क एक गल दहरव बनत ह।\n\nअब बर पर सवल ह — य बतओ क कतन अक दहरत ह? उसक लए और अक नकलन हग। चल, \"division\" पर टप करक एक और अक नकल!"
+            },
+            {
+              "kind": "wait",
+              "watch": ["division"]
+            }
+          ],
+          "watching": ["division"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 9.325
+      }
+    ],
+    "seconds": 9.325,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": false,
+        "detail": "said /\\b6\\b|छह|छ/"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 131 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "93% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains the repeating pattern clearly without revealing the answer, and encourages the student to discover it by tapping for more digits."
+    }
+  }
+]

@@ -1,0 +1,10 @@
+# @chalk/content
+
+The content formats, as Zod schemas (types are inferred from them): lesson → board → a layout tree of props, plus the board's IS and WHEN rules and their scripts, and events.
+
+- `lesson.ts`, `board.ts`, `piece.ts`: what authors write ([docs/board-model.md](../../docs/board-model.md)).
+- `event.ts`: events as an envelope (same on every event) plus one exactly-typed payload per kind, all `.strict()`. Bump `EVENT_SCHEMA_VERSION` when a payload changes shape.
+- `audio.ts`: pronunciation rules (shown → said), the speakable-characters check, and audio keys. `localized.ts`: `{ en, hi }` text.
+- `walk.ts`: walk a piece tree.
+
+May import: `@chalk/prop` (types), `zod`. No UI.

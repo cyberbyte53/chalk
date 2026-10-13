@@ -1,0 +1,36 @@
+{
+  "macos": {
+    "default": {
+      "en": "Rishi",
+      "hi": "Lekha"
+    }
+  },
+  "parler": {
+    "narrator": {
+      "en": "Rani speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio.",
+      "hi": "Rani speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio."
+    },
+    "maya": {
+      "en": "Divya speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio.",
+      "hi": "Divya speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio."
+    },
+    "arjun": {
+      "en": "Rohit speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio.",
+      "hi": "Rohit speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio."
+    }
+  },
+  "tone": {
+    "narrator": {
+      "en": "narrator",
+      "hi": "narrator"
+    },
+    "maya": {
+      "en": "maya",
+      "hi": "maya"
+    },
+    "arjun": {
+      "en": "arjun",
+      "hi": "arjun"
+    }
+  }
+}

@@ -1,0 +1,430 @@
+{
+  "id": "class9-maths/ch1/square-root-of-any-number",
+  "version": "0.1.0",
+  "title": {
+    "en": "The square root of any number",
+    "hi": "किसी भी संख्या का वर्गमूल"
+  },
+  "concepts": [
+    "root-of-any-number"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "rootThreePointFive",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "To find √x for any x: mark AB = x, then BC = 1. Draw a semicircle with AC as diameter. The perpendicular BD is exactly √x long. Tap the blue arrow to swing BD down.",
+                "hi": "किसी भी x का √x पाने के लिए: AB = x लो, फिर BC = 1। AC को व्यास मानकर अर्धवृत्त बनाओ। लंब BD ठीक √x लंबा है। BD को नीचे घुमाने के लिए नीले तीर पर टैप करो।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "To find the square root of any x: mark A B equal to x, then B C equal to 1. Draw a semicircle with A C as diameter. The perpendicular B D is exactly root x long. Tap the blue arrow to swing B D down.",
+                "hi": "किसी भी x का वर्गमूल पाने के लिए: A B बराबर x लो, फिर B C बराबर 1। A C को व्यास मानकर अर्धवृत्त बनाओ। लंब B D ठीक रूट x लंबा है। B D को नीचे घुमाने के लिए नीले तीर पर टैप करो।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "semicircle",
+            "kind": "prop",
+            "prop": "rootSemicircle",
+            "with": {
+              "x": 3.5
+            }
+          },
+          {
+            "id": 4,
+            "name": "why",
+            "kind": "row",
+            "children": [
+              {
+                "id": 5,
+                "name": "proof",
+                "kind": "prop",
+                "prop": "button",
+                "with": {
+                  "label": {
+                    "en": "Why does it work?",
+                    "hi": "यह क्यों काम करता है?"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": 6,
+            "name": "mayaWhy",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "O is the middle of AC, so OD = OC = (x + 1)/2. OB = OC − BC = (x + 1)/2 − 1 = (x − 1)/2. Pythagoras: BD² = OD² − OB² = ((x + 1)² − (x − 1)²)/4 = 4x/4 = x.",
+                "hi": "O, AC का मध्य-बिंदु है, इसलिए OD = OC = (x + 1)/2। OB = OC − BC = (x + 1)/2 − 1 = (x − 1)/2। पाइथागोरस से: BD² = OD² − OB² = ((x + 1)² − (x − 1)²)/4 = 4x/4 = x।"
+              },
+              "speak": {
+                "en": "O is the middle of A C, so O D equals O C, which is x plus 1 over 2. O B is O C minus B C, which is x minus 1 over 2. By Pythagoras, B D squared is O D squared minus O B squared, which works out to 4 x over 4, which is x.",
+                "hi": "O, A C का मध्य-बिंदु है, इसलिए O D बराबर O C, यानी x जोड़ 1 बटा 2। O B बराबर O C माइनस B C, यानी x माइनस 1 बटा 2। पाइथागोरस से, B D का वर्ग, O D के वर्ग माइनस O B के वर्ग, यानी 4 x बटा 4, यानी x है।"
+              }
+            }
+          },
+          {
+            "id": 7,
+            "name": "arjunLanded",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "Taking B as 0, the point E is √3.5. This works for any positive x.",
+                "hi": "B को 0 मानें तो बिंदु E, √3.5 है। यह किसी भी धनात्मक x के लिए काम करता है।"
+              },
+              "speak": {
+                "en": "Taking B as 0, the point E is the square root of 3.5. This works for any positive x.",
+                "hi": "B को 0 मानें तो बिंदु E, 3.5 का वर्गमूल है। यह किसी भी धनात्मक x के लिए काम करता है।"
+              }
+            }
+          },
+          {
+            "id": 8,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "proof.pressed",
+          "do": [
+            {
+              "call": "semicircle.showProof",
+              "args": {
+                "isShown": true
+              }
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaWhy"
+              }
+            },
+            {
+              "call": "mayaWhy.say"
+            }
+          ]
+        },
+        {
+          "on": "semicircle.landed",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunLanded"
+              }
+            },
+            {
+              "call": "arjunLanded.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 9
+    },
+    {
+      "id": 2,
+      "name": "xIsFour",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "semicircle",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "rootSemicircle",
+            "with": {
+              "x": 4
+            }
+          },
+          {
+            "id": 3,
+            "name": "predictBD",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Suppose AB = 4 (so x = 4). Without measuring: how long is BD?",
+                "hi": "मान लो AB = 4 (यानी x = 4)। बिना नापे बताओ: BD कितना लंबा है?"
+              },
+              "options": [
+                {
+                  "id": "two",
+                  "label": {
+                    "en": "2",
+                    "hi": "2"
+                  }
+                },
+                {
+                  "id": "four",
+                  "label": {
+                    "en": "4",
+                    "hi": "4"
+                  },
+                  "feedback": {
+                    "en": "The construction makes BD² = x. What number squared is 4?",
+                    "hi": "रचना से BD² = x बनता है। किस संख्या का वर्ग 4 है?"
+                  },
+                  "misconception": "constructionNotLinkedToRoot"
+                },
+                {
+                  "id": "twoAndHalf",
+                  "label": {
+                    "en": "2.5",
+                    "hi": "2.5"
+                  },
+                  "feedback": {
+                    "en": "2.5 is the radius, (4 + 1)/2. BD² = x: what number squared is 4?",
+                    "hi": "2.5 तो त्रिज्या है, (4 + 1)/2। BD² = x: किस संख्या का वर्ग 4 है?"
+                  },
+                  "misconception": "constructionNotLinkedToRoot"
+                }
+              ],
+              "answer": "two",
+              "concepts": [
+                "root-of-any-number"
+              ],
+              "speak": {
+                "en": "Suppose A B is 4, so x is 4. Without measuring: how long is B D?",
+                "hi": "मान लो A B बराबर 4, यानी x बराबर 4। बिना नापे बताओ: B D कितना लंबा है?"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaTwo",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "BD = √4 = 2: swung down, it lands exactly on 2.",
+                "hi": "BD = √4 = 2: नीचे घुमाने पर यह ठीक 2 पर आती है।"
+              },
+              "speak": {
+                "en": "B D is root 4, which is 2: swung down, it lands exactly on 2.",
+                "hi": "B D बराबर रूट 4, यानी 2: नीचे घुमाने पर यह ठीक 2 पर आती है।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "predictBD.say"
+          }
+        },
+        {
+          "on": "predictBD.checked",
+          "if": "semicircle.swing == 0",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "semicircle"
+              }
+            },
+            {
+              "wait": 0.6
+            },
+            {
+              "call": "semicircle.swing"
+            }
+          ]
+        },
+        {
+          "on": "predictBD.correct",
+          "do": [
+            {
+              "wait": 2.6
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaTwo"
+              }
+            },
+            {
+              "call": "mayaTwo.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 3,
+      "name": "rootNinePointThree",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "buildIt",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Represent √9.3 on the number line: drag A until AB = 9.3, swing BD down, then Check.",
+                "hi": "संख्या रेखा पर √9.3 दिखाओ: A को खिसकाओ जब तक AB = 9.3 न हो, BD को नीचे घुमाओ, फिर जाँचो।"
+              },
+              "about": "semicircle",
+              "concepts": [
+                "root-of-any-number"
+              ],
+              "speak": {
+                "en": "Represent the square root of 9.3 on the number line: drag A until A B is 9.3, swing B D down, then Check.",
+                "hi": "संख्या रेखा पर 9.3 का वर्गमूल दिखाओ: A को खिसकाओ जब तक A B बराबर 9.3 न हो, B D को नीचे घुमाओ, फिर जाँचो।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "semicircle",
+            "kind": "prop",
+            "prop": "rootSemicircle",
+            "with": {
+              "x": 5
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunNinePointThree",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "√9.3 is about 3.05: just past 3, because 3² = 9 is just under 9.3.",
+                "hi": "√9.3 लगभग 3.05 है: 3 से ज़रा आगे, क्योंकि 3² = 9, 9.3 से ज़रा कम है।"
+              },
+              "speak": {
+                "en": "The square root of 9.3 is about 3.05: just past 3, because 3 squared, 9, is just under 9.3.",
+                "hi": "9.3 का वर्गमूल लगभग 3.05 है: 3 से ज़रा आगे, क्योंकि 3 का वर्ग, 9, 9.3 से ज़रा कम है।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "buildIt.isMet",
+          "to": "semicircle.hasLanded and abs(semicircle.bdSquared - 9.3) < 0.01"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "buildIt.say"
+          }
+        },
+        {
+          "on": "buildIt.wrong",
+          "if": "abs(semicircle.bdSquared - 9.3) >= 0.01",
+          "do": {
+            "call": "buildIt.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Drag A until AB = 9.3. What does AB show now?",
+                "hi": "A को तब तक खिसकाओ जब तक AB = 9.3 न हो। अभी AB कितना है?"
+              }
+            }
+          }
+        },
+        {
+          "on": "buildIt.wrong",
+          "if": "abs(semicircle.bdSquared - 9.3) < 0.01 and not semicircle.hasLanded",
+          "do": {
+            "call": "buildIt.giveFeedback",
+            "args": {
+              "text": {
+                "en": "x is right. Now swing BD down onto the line.",
+                "hi": "x सही है। अब BD को रेखा पर नीचे घुमाओ।"
+              }
+            }
+          }
+        },
+        {
+          "on": "buildIt.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunNinePointThree"
+              }
+            },
+            {
+              "call": "arjunNinePointThree.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "semicircle.setX",
+        "semicircle.swing"
+      ],
+      "nextPieceId": 6
+    }
+  ],
+  "nextBoardId": 4
+}

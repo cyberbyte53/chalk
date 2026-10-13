@@ -1,0 +1,472 @@
+{
+  "id": "class9-maths/ch1/a-decimal-is-an-address",
+  "version": "0.1.0",
+  "title": {
+    "en": "A decimal is an address",
+    "hi": "दशमलव एक पता है"
+  },
+  "concepts": [
+    "successive-magnification"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "twoPointSixSixFive",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Where exactly is 2.665? Tap Zoom in: the line magnifies 10 times into the small box that has 2.665.",
+                "hi": "2.665 ठीक कहाँ है? 'ज़ूम करो' दबाओ: रेखा उस छोटे डिब्बे में 10 गुना बड़ी हो जाएगी जिसमें 2.665 है।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 2,
+              "to": 3,
+              "marks": [
+                {
+                  "at": 2.665,
+                  "label": "2.665"
+                }
+              ]
+            }
+          },
+          {
+            "id": 4,
+            "name": "controls",
+            "kind": "row",
+            "children": [
+              {
+                "id": 5,
+                "name": "zoom",
+                "kind": "prop",
+                "prop": "button",
+                "with": {
+                  "label": {
+                    "en": "Zoom in",
+                    "hi": "ज़ूम करो"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": 6,
+            "name": "mayaAddress",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "First the box 2.6 to 2.7, then 2.66 to 2.67, and now 2.665 sits right on a tick, the one marked 5. Each zoom reads one digit: a decimal is an address on the line.",
+                "hi": "पहले डिब्बा 2.6 से 2.7, फिर 2.66 से 2.67, और अब 2.665 ठीक 5 वाले निशान पर है। हर ज़ूम एक अंक पढ़ता है: दशमलव, रेखा पर एक पता है।"
+              }
+            }
+          },
+          {
+            "id": 7,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "zoom.isEnabled",
+          "to": "line.level < 3 and line.lens == null"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "zoom.pressed",
+          "do": [
+            {
+              "call": "line.showLens",
+              "args": {
+                "value": 2.665
+              }
+            },
+            {
+              "wait": 0.7
+            },
+            {
+              "call": "line.magnify",
+              "args": {
+                "value": 2.665
+              }
+            }
+          ]
+        },
+        {
+          "on": "line.zoomed",
+          "if": "line.level == 3",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaAddress"
+              }
+            },
+            {
+              "call": "mayaAddress.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 8
+    },
+    {
+      "id": 2,
+      "name": "oneThird",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 0,
+              "to": 1,
+              "marks": [
+                {
+                  "at": 0.3333333333333333,
+                  "label": "1/3"
+                }
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "everLand",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "If we keep magnifying around 1/3, will it ever land exactly on a tick?",
+                "hi": "अगर हम 1/3 के आसपास आवर्धन करते रहें, तो क्या वह कभी ठीक किसी निशान पर आएगा?"
+              },
+              "options": [
+                {
+                  "id": "yes",
+                  "label": {
+                    "en": "Yes, eventually",
+                    "hi": "हाँ, कभी न कभी"
+                  },
+                  "feedback": {
+                    "en": "What is 1/3 as a decimal? Does it ever stop?",
+                    "hi": "दशमलव में 1/3 कितना है? क्या वह कभी रुकता है?"
+                  },
+                  "misconception": "allFractionsEnd"
+                },
+                {
+                  "id": "three",
+                  "label": {
+                    "en": "Yes, after 3 zooms",
+                    "hi": "हाँ, 3 ज़ूम के बाद"
+                  },
+                  "feedback": {
+                    "en": "What is 1/3 as a decimal? Does it ever stop?",
+                    "hi": "दशमलव में 1/3 कितना है? क्या वह कभी रुकता है?"
+                  },
+                  "misconception": "allFractionsEnd"
+                },
+                {
+                  "id": "no",
+                  "label": {
+                    "en": "No, never",
+                    "hi": "नहीं, कभी नहीं"
+                  }
+                }
+              ],
+              "answer": "no",
+              "concepts": [
+                "successive-magnification"
+              ],
+              "speak": {
+                "en": "If we keep magnifying around 1 third, will it ever land exactly on a tick?",
+                "hi": "अगर हम 1 बटा 3 के आसपास आवर्धन करते रहें, तो क्या वह कभी ठीक किसी निशान पर आएगा?"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunThrees",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "Every zoom, it lands between the ticks marked 3 and 4: 0.3, 0.33, 0.333, … The address of 1/3 never ends.",
+                "hi": "हर ज़ूम पर यह 3 और 4 लिखे निशानों के बीच आता है: 0.3, 0.33, 0.333, … 1/3 का पता कभी ख़त्म नहीं होता।"
+              },
+              "speak": {
+                "en": "Every zoom, it lands between the ticks marked 3 and 4: 0.3, 0.33, 0.333, and on. The address of 1 third never ends.",
+                "hi": "हर ज़ूम पर यह 3 और 4 लिखे निशानों के बीच आता है: 0.3, 0.33, 0.333, और आगे। 1 बटा 3 का पता कभी ख़त्म नहीं होता।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "everLand.say"
+          }
+        },
+        {
+          "on": "everLand.checked",
+          "if": "line.level == 1",
+          "do": [
+            {
+              "call": "line.magnify",
+              "args": {
+                "value": 0.3333333333333333
+              }
+            },
+            {
+              "wait": 0.5
+            },
+            {
+              "call": "line.magnify",
+              "args": {
+                "value": 0.3333333333333333
+              }
+            },
+            {
+              "wait": 0.5
+            },
+            {
+              "call": "line.magnify",
+              "args": {
+                "value": 0.3333333333333333
+              }
+            }
+          ]
+        },
+        {
+          "on": "everLand.correct",
+          "do": [
+            {
+              "wait": 4.5
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunThrees"
+              }
+            },
+            {
+              "call": "arjunThrees.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 3,
+      "name": "fourPlaces",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "number",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "4.262626…",
+                "hi": "4.262626…"
+              },
+              "style": "title",
+              "speak": {
+                "en": "4.26 26 26, repeating",
+                "hi": "4.26 26 26, दोहराता हुआ"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "line",
+            "kind": "prop",
+            "prop": "numberLine",
+            "with": {
+              "from": 4,
+              "to": 5
+            }
+          },
+          {
+            "id": 4,
+            "name": "controls",
+            "kind": "row",
+            "children": [
+              {
+                "id": 5,
+                "name": "zoom",
+                "kind": "prop",
+                "prop": "button",
+                "with": {
+                  "label": {
+                    "en": "Zoom in",
+                    "hi": "ज़ूम करो"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": 6,
+            "name": "betweenTicks",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Zoom in four times. At the last zoom, between which two ticks is 4.262626…?",
+                "hi": "चार बार ज़ूम करो। आख़िरी ज़ूम पर 4.262626… किन दो निशानों के बीच है?"
+              },
+              "options": [
+                {
+                  "id": "right",
+                  "label": {
+                    "en": "4.2626 and 4.2627",
+                    "hi": "4.2626 और 4.2627"
+                  }
+                },
+                {
+                  "id": "sixes",
+                  "label": {
+                    "en": "4.2666 and 4.2667",
+                    "hi": "4.2666 और 4.2667"
+                  },
+                  "feedback": {
+                    "en": "Write out the first six digits: 4.262626. Which digit comes fourth?",
+                    "hi": "पहले छह अंक लिखो: 4.262626। चौथा अंक कौन-सा है?"
+                  },
+                  "misconception": "barOverLastDigitOnly"
+                },
+                {
+                  "id": "twoPlaces",
+                  "label": {
+                    "en": "4.26 and 4.27",
+                    "hi": "4.26 और 4.27"
+                  },
+                  "feedback": {
+                    "en": "How many zooms does 4 decimal places need?",
+                    "hi": "4 दशमलव स्थानों के लिए कितने ज़ूम चाहिए?"
+                  },
+                  "misconception": "stoppedZoomingEarly"
+                }
+              ],
+              "answer": "right",
+              "concepts": [
+                "successive-magnification"
+              ],
+              "speak": {
+                "en": "Zoom in four times. At the last zoom, between which two ticks is 4.262626?",
+                "hi": "चार बार ज़ूम करो। आख़िरी ज़ूम पर 4.262626 किन दो निशानों के बीच है?"
+              }
+            }
+          },
+          {
+            "id": 7,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "zoom.isEnabled",
+          "to": "line.level < 5 and line.lens == null"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "number.say"
+            },
+            {
+              "call": "betweenTicks.say"
+            }
+          ]
+        },
+        {
+          "on": "zoom.pressed",
+          "do": [
+            {
+              "call": "line.showLens",
+              "args": {
+                "value": 4.262626262626
+              }
+            },
+            {
+              "wait": 0.7
+            },
+            {
+              "call": "line.magnify",
+              "args": {
+                "value": 4.262626262626
+              }
+            }
+          ]
+        },
+        {
+          "on": "betweenTicks.correct",
+          "do": {
+            "call": "board.pass"
+          }
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 8
+    }
+  ],
+  "nextBoardId": 4
+}

@@ -1,0 +1,334 @@
+import { Actor, type Board, boardSchema } from "@chalk/content";
+import {
+  type AnyPropDef,
+  BOARD,
+  actionsFor,
+  asAnyProp,
+  defineProp,
+  set,
+  task,
+  tween,
+} from "@chalk/prop";
+import { describe, expect, it } from "vitest";
+import { z } from "zod";
+import { BoardRuntime, type RuntimeServices, type SignalRecord } from "./runtime";
+
+// ---- test props: a coin (instant + signals), a dial (tween), a label (IS input), a speaker (task) ----
+
+const coinState = z
+  .object({ heads: z.number().int(), count: z.number().int(), next: z.enum(["H", "T"]) })
+  .strict();
+type CoinState = z.infer<typeof coinState>;
+const coinAct = actionsFor<CoinState>();
+const coin = defineProp<CoinState>({
+  type: "coin",
+  describe: "A coin that lands on `next` (tests decide; no randomness here)",
+  state: coinState,
+  defaults: { heads: 0, count: 0, next: "H" },
+  actions: {
+    toss: coinAct({
+      describe: "Toss",
+      args: z.object({}).strict(),
+      run: (s) =>
+        set(
+          { heads: s.heads + (s.next === "H" ? 1 : 0), count: s.count + 1 },
+          { signal: "landed", payload: { face: s.next } },
+        ),
+    }),
+  },
+  signals: { landed: { describe: "Landed" } },
+});
+
+const dialState = z.object({ at: z.number().min(0).max(10) }).strict();
+type DialState = z.infer<typeof dialState>;
+const dialAct = actionsFor<DialState>();
+const dial = defineProp<DialState>({
+  type: "dial",
+  describe: "A dial",
+  state: dialState,
+  defaults: { at: 0 },
+  actions: {
+    turnTo: dialAct({
+      describe: "Turn over time",
+      args: z.object({ to: z.number(), over: z.number() }).strict(),
+      run: (_s, a) => tween(a.over, { at: a.to }),
+    }),
+    setTo: dialAct({
+      describe: "Set at once",
+      args: z.object({ to: z.number() }).strict(),
+      run: (_s, a) => set({ at: a.to }),
+    }),
+  },
+});
+
+const labelState = z.object({ text: z.record(z.string(), z.string()), value: z.number() }).strict();
+type LabelState = z.infer<typeof labelState>;
+const labelAct = actionsFor<LabelState>();
+const label = defineProp<LabelState>({
+  type: "label",
+  describe: "A label",
+  state: labelState,
+  defaults: { text: { en: "", hi: "" }, value: 0 },
+  inputs: ["text", "value"],
+  actions: {
+    setValue: labelAct({
+      describe: "Set",
+      args: z.object({ v: z.number() }).strict(),
+      run: (_s, a) => set({ value: a.v }),
+    }),
+    say: labelAct({
+      describe: "Say",
+      args: z.object({}).strict(),
+      run: () => task((c) => c.speak()),
+    }),
+  },
+  speech: (s) => ({ say: s.text }),
+});
+
+const defs: Record<string, AnyPropDef> = {
+  coin: asAnyProp(coin),
+  dial: asAnyProp(dial),
+  label: asAnyProp(label),
+};
+
+// ---- fake services: frames advance only when the test says so; speech finishes when told ----
+
+function fakeServices() {
+  let now = 0;
+  let pending: ((now: number) => void)[] = [];
+  const spoken: string[] = [];
+  const speeches: (() => void)[] = [];
+  const errors: string[] = [];
+  const services: RuntimeServices = {
+    now: () => now,
+    frame: (callback) => {
+      pending.push(callback);
+      return () => {
+        pending = pending.filter((c) => c !== callback);
+      };
+    },
+    speak: (prop) =>
+      new Promise((resolve) => {
+        spoken.push(prop.name);
+        speeches.push(resolve);
+      }),
+    onError: (message) => errors.push(message),
+  };
+  /** Moves time on by `ms`, one frame at a time. */
+  const advance = async (ms: number, step = 16) => {
+    for (let t = 0; t < ms; t += step) {
+      now += step;
+      const due = pending;
+      pending = [];
+      for (const callback of due) callback(now);
+      await Promise.resolve();
+    }
+  };
+  const finishSpeaking = async () => {
+    speeches.shift()?.();
+    await flush();
+  };
+  return { services, advance, spoken, finishSpeaking, errors };
+}
+
+const flush = async () => {
+  for (let i = 0; i < 10; i++) await Promise.resolve();
+};
+
+function boardOf(input: unknown): Board {
+  return boardSchema.parse(input);
+}
+
+const props = (...children: unknown[]) => ({ kind: "column", name: "page", children });
+
+describe("BoardRuntime", () => {
+  it("keeps IS rules true as state changes", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "score", prop: "label" },
+      ),
+      is: [
+        {
+          set: "score.text",
+          text: { en: "Heads: {coin.heads} / {coin.count}", hi: "चित: {coin.heads}" },
+        },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    expect(runtime.getView("score").text).toEqual({ en: "Heads: 0 / 0", hi: "चित: 0" });
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("score").text).toEqual({ en: "Heads: 1 / 1", hi: "चित: 1" });
+  });
+
+  it("refuses an action that would set a field an IS owns", async () => {
+    const { services, errors } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "score", prop: "label" },
+      ),
+      is: [{ set: "score.value", to: "coin.count * 10" }],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    await runtime.call("score", "setValue", { v: 5 });
+    expect(runtime.getView("score").value).toBe(0);
+    expect(errors[0]).toMatch(/set by an IS rule/);
+  });
+
+  it("answers WHEN rules in order, with conditions", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "dial", prop: "dial" },
+      ),
+      when: [
+        { on: "coin.landed", do: { call: "dial.setTo", args: { to: 1 } } },
+        { on: "coin.landed", if: "coin.count >= 3", do: { call: "dial.setTo", args: { to: 9 } } },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    const seen: SignalRecord[] = [];
+    runtime.onSignal((r) => seen.push(r));
+    void runtime.call("coin", "toss", {}, Actor.Learner);
+    expect(runtime.getView("dial").at).toBe(1);
+    void runtime.call("coin", "toss");
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("dial").at).toBe(9);
+    expect(seen.map((r) => [r.prop, r.signal, r.actor])).toEqual([
+      ["coin", "landed", Actor.Learner],
+      ["coin", "landed", Actor.Lesson],
+      ["coin", "landed", Actor.Lesson],
+    ]);
+  });
+
+  it("works out expression arguments when the action is called", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "dial", prop: "dial" },
+      ),
+      when: [
+        { on: "coin.landed", do: { call: "dial.setTo", args: { to: { expr: "coin.count * 2" } } } },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("dial").at).toBe(2);
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("dial").at).toBe(4);
+  });
+
+  it("plays a script: speech WITH a tween, THEN the next step once both finish", async () => {
+    const { services, advance, spoken, finishSpeaking } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "maya", prop: "label", with: { text: { en: "Hi", hi: "नमस्ते" } } },
+        { kind: "prop", name: "dial", prop: "dial" },
+        { kind: "prop", name: "coin", prop: "coin" },
+      ),
+      when: [
+        {
+          on: "board.started",
+          do: [
+            { par: [{ call: "maya.say" }, { call: "dial.turnTo", args: { to: 10, over: 1 } }] },
+            { call: "coin.toss" },
+          ],
+        },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    runtime.start();
+    await flush();
+    expect(spoken).toEqual(["maya"]);
+    await advance(500);
+    const midway = runtime.getView("dial").at as number;
+    expect(midway).toBeGreaterThan(2);
+    expect(midway).toBeLessThan(8);
+    await advance(600);
+    expect(runtime.getView("dial").at).toBe(10);
+    expect(runtime.getView("coin").count).toBe(0); // still waiting for Maya
+    await finishSpeaking();
+    expect(runtime.getView("coin").count).toBe(1);
+  });
+
+  it("lets the learner win: touching a prop stops the lesson's tween on it", async () => {
+    const { services, advance } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props({ kind: "prop", name: "dial", prop: "dial" }),
+      when: [{ on: "board.started", do: { call: "dial.turnTo", args: { to: 10, over: 1 } } }],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    runtime.start();
+    await advance(300);
+    await runtime.call("dial", "setTo", { to: 2 }, Actor.Learner);
+    await advance(1000);
+    expect(runtime.getView("dial").at).toBe(2);
+    expect(runtime.isTouched("dial")).toBe(true);
+  });
+
+  it("pauses everything moving, and carries on after", async () => {
+    const { services, advance } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "dial", prop: "dial" },
+        { kind: "prop", name: "coin", prop: "coin" },
+      ),
+      when: [{ on: "board.started", do: [{ wait: 1 }, { call: "coin.toss" }] }],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    runtime.start();
+    await advance(500);
+    runtime.pause();
+    await advance(2000);
+    expect(runtime.getView("coin").count).toBe(0);
+    runtime.resume();
+    await advance(600);
+    await flush();
+    expect(runtime.getView("coin").count).toBe(1);
+  });
+
+  it("shows and hides props, and passes, through the board prop", async () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props({ kind: "prop", name: "coin", prop: "coin", isHidden: true }),
+      when: [
+        {
+          on: "coin.landed",
+          do: [{ call: "board.show", args: { name: "coin" } }, { call: "board.pass" }],
+        },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    expect(runtime.isHidden("coin")).toBe(true);
+    await runtime.call("coin", "toss");
+    await flush();
+    expect(runtime.isHidden("coin")).toBe(false);
+    expect(runtime.getView(BOARD).isPassed).toBe(true);
+  });
+
+  it("stops everything when the board goes away", async () => {
+    const { services, advance } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props({ kind: "prop", name: "coin", prop: "coin" }),
+      when: [{ on: "board.started", do: [{ wait: 0.5 }, { call: "coin.toss" }] }],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    runtime.start();
+    runtime.dispose();
+    await advance(1000);
+    expect(runtime.getView("coin").count).toBe(0);
+  });
+});

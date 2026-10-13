@@ -1,0 +1,695 @@
+{
+  "id": "class9-maths/ch1/repeating-decimals-to-fractions",
+  "version": "0.1.0",
+  "title": {
+    "en": "Repeating decimals are fractions",
+    "hi": "आवर्ती दशमलव भी भिन्न हैं"
+  },
+  "concepts": [
+    "recurring-to-fraction"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "oneThird",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Going back: which p/q is x = 0.333…? Multiply by 10 and every digit slides one place left. Look at the digits after the point (the tail): they match. Tap − to subtract x from 10x.",
+                "hi": "उल्टा चलें: x = 0.333… कौन-सा p/q है? 10 से गुणा करो तो हर अंक एक जगह बाएँ खिसक जाता है। दशमलव के बाद वाले अंकों की कतार (पूँछ) देखो: दोनों एक जैसी हैं। 10x में से x घटाने के लिए − दबाओ।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "Going back: which p over q is x equals 0.333 and so on? Multiply by 10 and every digit slides one place left. Look at the digits after the point, the tail: they match. Tap minus to subtract x from 10 x.",
+                "hi": "उल्टा चलें: x बराबर 0.333 और आगे, यह कौन-सा p बटा q है? 10 से गुणा करो तो हर अंक एक जगह बाएँ खिसक जाता है। दशमलव के बाद वाले अंकों की कतार, यानी पूँछ, देखो: दोनों एक जैसी हैं। 10 x में से x घटाने के लिए माइनस दबाओ।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "tapes",
+            "kind": "prop",
+            "prop": "decimalShift",
+            "with": {
+              "whole": 0,
+              "prefix": "",
+              "block": "3",
+              "topPower": 1,
+              "bottomPower": 0,
+              "showResult": true
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaCancel",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "The tails were identical, digit for digit, so they cancelled exactly: 9x = 3, so x = 3/9 = 1/3.",
+                "hi": "पूँछें अंक-दर-अंक एक जैसी थीं, इसलिए पूरी कट गईं: 9x = 3, तो x = 3/9 = 1/3।"
+              },
+              "speak": {
+                "en": "The tails were identical, digit for digit, so they cancelled exactly: 9 x is 3, so x is 3 ninths, which is 1 third.",
+                "hi": "पूँछें अंक-दर-अंक एक जैसी थीं, इसलिए पूरी कट गईं: 9 x बराबर 3, तो x बराबर 3 बटा 9, यानी 1 बटा 3।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "tapes.subtracted",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaCancel"
+              }
+            },
+            {
+              "call": "mayaCancel.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 2,
+      "name": "twoDigitBlock",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "x = 1.272727… Now two digits repeat. Press the topmost ×10 until the repeating digits line up under each other, then press −.",
+                "hi": "x = 1.272727… अब दो अंक दोहराते हैं। सबसे ऊपर वाला ×10 दबाते रहो, जब तक दोहराने वाले अंक एक-दूसरे के नीचे न आ जाएँ, फिर − दबाओ।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "x is 1.272727 and so on. Now two digits repeat. Press the topmost times 10 until the repeating digits line up under each other, then press minus.",
+                "hi": "x बराबर 1.272727 और आगे। अब दो अंक दोहराते हैं। सबसे ऊपर वाला 10 गुणा दबाते रहो, जब तक दोहराने वाले अंक एक-दूसरे के नीचे न आ जाएँ, फिर माइनस दबाओ।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "tapes",
+            "kind": "prop",
+            "prop": "decimalShift",
+            "with": {
+              "whole": 1,
+              "prefix": "",
+              "block": "27",
+              "topPower": 0,
+              "bottomPower": 0,
+              "showResult": true
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunMisaligned",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "The tails didn't match, so they didn't cancel. Shifting by one place doesn't line up a 2-digit block. Try another shift.",
+                "hi": "पूँछें मेल नहीं खाईं, इसलिए कटी नहीं। एक जगह खिसकाने से 2 अंकों वाला हिस्सा सीध में नहीं आता। दूसरा खिसकाव आज़माओ।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "mayaHundred",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "100x − x = 99x = 126, so x = 126/99 = 14/11. Shift by as many places as the block is long.",
+                "hi": "100x − x = 99x = 126, तो x = 126/99 = 14/11। जितना लंबा हिस्सा दोहराता है, उतनी जगह खिसकाओ।"
+              },
+              "speak": {
+                "en": "100 x minus x is 99 x, which is 126, so x is 126 over 99, or 14 over 11. Shift by as many places as the block is long.",
+                "hi": "100 x माइनस x बराबर 99 x बराबर 126, तो x बराबर 126 बटा 99, यानी 14 बटा 11। जितना लंबा हिस्सा दोहराता है, उतनी जगह खिसकाओ।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "tapes.subtracted",
+          "if": "not tapes.areTailsLinedUp",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunMisaligned"
+              }
+            },
+            {
+              "call": "arjunMisaligned.say"
+            }
+          ]
+        },
+        {
+          "on": "tapes.subtracted",
+          "if": "tapes.areTailsLinedUp",
+          "do": [
+            {
+              "call": "board.hide",
+              "args": {
+                "name": "arjunMisaligned"
+              }
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaHundred"
+              }
+            },
+            {
+              "call": "mayaHundred.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 7
+    },
+    {
+      "id": 3,
+      "name": "nonRepeatingStart",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "x = 0.2353535… The 2 in front never repeats. Subtract and watch what is left.",
+                "hi": "x = 0.2353535… आगे वाला 2 कभी नहीं दोहराता। घटाओ और देखो क्या बचता है।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "x is 0.2353535 and so on. The 2 in front never repeats. Subtract and watch what is left.",
+                "hi": "x बराबर 0.2353535 और आगे। आगे वाला 2 कभी नहीं दोहराता। घटाओ और देखो क्या बचता है।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "tapes",
+            "kind": "prop",
+            "prop": "decimalShift",
+            "with": {
+              "whole": 0,
+              "prefix": "2",
+              "block": "35",
+              "topPower": 2,
+              "bottomPower": 0,
+              "showResult": true
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunLeftover",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "The tails cancelled, but the 2 in front didn't: 99x = 23.3. Then x = 23.3/99; multiply top and bottom by 10: x = 233/990.",
+                "hi": "पूँछें कट गईं, पर आगे का 2 नहीं कटा: 99x = 23.3। तब x = 23.3/99; ऊपर-नीचे 10 से गुणा करो: x = 233/990।"
+              },
+              "speak": {
+                "en": "The tails cancelled, but the 2 in front didn't: 99 x is 23.3. Then x is 23.3 over 99, which is 233 over 990.",
+                "hi": "पूँछें कट गईं, पर आगे का 2 नहीं कटा: 99 x बराबर 23.3। तब x बराबर 23.3 बटा 99, यानी 233 बटा 990।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "tapes.subtracted",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunLeftover"
+              }
+            },
+            {
+              "call": "arjunLeftover.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 4,
+      "name": "yourTurn",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "toFraction",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Write x = 0.454545… as p/q. Shift the top tape so the tails line up, subtract, then Check.",
+                "hi": "x = 0.454545… को p/q के रूप में लिखो। ऊपर की पट्टी इतनी खिसकाओ कि पूँछें सीध में आ जाएँ, घटाओ, फिर जाँचो।"
+              },
+              "about": "tapes",
+              "concepts": [
+                "recurring-to-fraction"
+              ],
+              "speak": {
+                "en": "Write x equals 0.454545 and so on as p over q. Shift the top tape so the tails line up, subtract, then Check.",
+                "hi": "x बराबर 0.454545 और आगे, इसे p बटा q के रूप में लिखो। ऊपर की पट्टी इतनी खिसकाओ कि पूँछें सीध में आ जाएँ, घटाओ, फिर जाँचो।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "tapes",
+            "kind": "prop",
+            "prop": "decimalShift",
+            "with": {
+              "whole": 0,
+              "prefix": "",
+              "block": "45",
+              "topPower": 0,
+              "bottomPower": 0
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaFiveElevenths",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "100x − x = 45, so x = 45/99 = 5/11.",
+                "hi": "100x − x = 45, तो x = 45/99 = 5/11।"
+              },
+              "speak": {
+                "en": "100 x minus x is 45, so x is 45 over 99, which is 5 over 11.",
+                "hi": "100 x माइनस x बराबर 45, तो x बराबर 45 बटा 99, यानी 5 बटा 11।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "toFraction.isMet",
+          "to": "tapes.hasSubtracted and tapes.areTailsLinedUp"
+        },
+        {
+          "set": "tapes.showResult",
+          "to": "toFraction.status == \"correct\""
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "toFraction.say"
+          }
+        },
+        {
+          "on": "toFraction.wrong",
+          "if": "not tapes.areTailsLinedUp",
+          "do": {
+            "call": "toFraction.giveFeedback",
+            "args": {
+              "text": {
+                "en": "How many digits repeat? How far must you shift so the tails line up?",
+                "hi": "कितने अंक दोहराते हैं? पूँछें सीध में लाने के लिए कितना खिसकाना होगा?"
+              }
+            }
+          }
+        },
+        {
+          "on": "toFraction.wrong",
+          "if": "tapes.areTailsLinedUp and not tapes.hasSubtracted",
+          "do": {
+            "call": "toFraction.giveFeedback",
+            "args": {
+              "text": {
+                "en": "The tails line up. Now tap − to subtract.",
+                "hi": "पूँछें सीध में हैं। अब घटाने के लिए − पर टैप करो।"
+              }
+            }
+          }
+        },
+        {
+          "on": "toFraction.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaFiveElevenths"
+              }
+            },
+            {
+              "call": "mayaFiveElevenths.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "tapes.shift",
+        "tapes.setPower",
+        "tapes.subtract"
+      ],
+      "nextPieceId": 6
+    },
+    {
+      "id": 5,
+      "name": "notHundredths",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "fortyFive",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "A friend says 0.454545… = 45/100. Is that right?",
+                "hi": "एक दोस्त कहता है 0.454545… = 45/100। क्या यह सही है?"
+              },
+              "options": [
+                {
+                  "id": "no",
+                  "label": {
+                    "en": "No, it's wrong",
+                    "hi": "नहीं, ग़लत है"
+                  }
+                },
+                {
+                  "id": "yes",
+                  "label": {
+                    "en": "Yes, it's right",
+                    "hi": "हाँ, सही है"
+                  },
+                  "feedback": {
+                    "en": "Is 45/100 equal to 0.45, or to 0.4545…?",
+                    "hi": "45/100 बराबर 0.45 है, या 0.4545…?"
+                  },
+                  "misconception": "recurringTreatedAsTerminating"
+                }
+              ],
+              "answer": "no",
+              "concepts": [
+                "recurring-to-fraction"
+              ],
+              "speak": {
+                "en": "A friend says 0.454545 and so on is 45 over 100. Is that right?",
+                "hi": "एक दोस्त कहता है 0.454545 और आगे, बराबर 45 बटा 100। क्या यह सही है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "arjunNines",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "A repeating block goes over 9s, not 100s: 0.454545… = 45/99. 0.45 = 45/100 is a different number.",
+                "hi": "दोहराने वाला हिस्सा 9 वाले हर पर जाता है, 100 पर नहीं: 0.454545… = 45/99। 0.45 = 45/100 एक अलग संख्या है।"
+              },
+              "speak": {
+                "en": "A repeating block goes over 9s, not 100s: 0.4545 repeating is 45 over 99. 0.45, which is 45 over 100, is a different number.",
+                "hi": "दोहराने वाला हिस्सा 9 वाले हर पर जाता है, 100 पर नहीं: 0.4545 दोहराता हुआ बराबर 45 बटा 99। 0.45, यानी 45 बटा 100, एक अलग संख्या है।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "fortyFive.say"
+          }
+        },
+        {
+          "on": "fortyFive.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunNines"
+              }
+            },
+            {
+              "call": "arjunNines.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 5
+    },
+    {
+      "id": 6,
+      "name": "pointNine",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "nines",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "x = 0.999… Then 10x − x = 9.999… − 0.999… = 9, so 9x = 9. What is 0.999…?",
+                "hi": "x = 0.999… तब 10x − x = 9.999… − 0.999… = 9, तो 9x = 9। 0.999… कितना है?"
+              },
+              "options": [
+                {
+                  "id": "one",
+                  "label": {
+                    "en": "Exactly 1",
+                    "hi": "ठीक 1"
+                  }
+                },
+                {
+                  "id": "below",
+                  "label": {
+                    "en": "Just under 1",
+                    "hi": "1 से ज़रा-सा कम"
+                  },
+                  "feedback": {
+                    "en": "9x = 9. What is x? If 0.999… were less than 1, what number would sit between them?",
+                    "hi": "9x = 9। x कितना है? अगर 0.999…, 1 से कम होता, तो उनके बीच कौन-सी संख्या होती?"
+                  },
+                  "misconception": "pointNineRecurringBelowOne"
+                },
+                {
+                  "id": "point9",
+                  "label": {
+                    "en": "0.9",
+                    "hi": "0.9"
+                  },
+                  "feedback": {
+                    "en": "0.9 stops after one 9. Does 0.999… stop?",
+                    "hi": "0.9 एक 9 के बाद रुक जाता है। क्या 0.999… रुकता है?"
+                  },
+                  "misconception": "recurringTreatedAsTerminating"
+                }
+              ],
+              "answer": "one",
+              "concepts": [
+                "recurring-to-fraction"
+              ],
+              "speak": {
+                "en": "x is 0.999 and so on. Then 10 x minus x is 9, so 9 x is 9. What is 0.999 and so on?",
+                "hi": "x बराबर 0.999 और आगे। तब 10 x माइनस x बराबर 9, तो 9 x बराबर 9। 0.999 और आगे, कितना है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "tapes",
+            "kind": "prop",
+            "prop": "decimalShift",
+            "with": {
+              "whole": 0,
+              "prefix": "",
+              "block": "9",
+              "topPower": 1,
+              "bottomPower": 0,
+              "showResult": true
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaEqual",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "0.999… and 1 are two names for the same point: there is no number between them.",
+                "hi": "0.999… और 1 एक ही बिंदु के दो नाम हैं: उनके बीच कोई संख्या नहीं।"
+              },
+              "speak": {
+                "en": "0.999 repeating and 1 are two names for the same point: there is no number between them.",
+                "hi": "0.999 दोहराता हुआ और 1, एक ही बिंदु के दो नाम हैं: उनके बीच कोई संख्या नहीं।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "nines.say"
+          }
+        },
+        {
+          "on": "nines.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaEqual"
+              }
+            },
+            {
+              "call": "mayaEqual.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    }
+  ],
+  "nextBoardId": 7
+}

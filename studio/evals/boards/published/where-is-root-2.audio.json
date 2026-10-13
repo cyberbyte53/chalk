@@ -1,0 +1,25 @@
+{
+  "provider": "macos",
+  "files": {
+    "1.2.en": "audio/where-is-root-2/91ebe7cf162b672c.m4a",
+    "1.2.hi": "audio/where-is-root-2/6b8dc250d8ecc835.m4a",
+    "1.3.en": "audio/where-is-root-2/9dca24b4a1d3aa60.m4a",
+    "1.3.hi": "audio/where-is-root-2/0488973aad6832df.m4a",
+    "1.5.en": "audio/where-is-root-2/8bb23d822a43e80b.m4a",
+    "1.5.hi": "audio/where-is-root-2/cc264d63b52d044c.m4a",
+    "2.2.en": "audio/where-is-root-2/7a9035c13f706f5c.m4a",
+    "2.2.hi": "audio/where-is-root-2/8375e92fb07f987a.m4a",
+    "2.4.en": "audio/where-is-root-2/ea287c2439cf0d5f.m4a",
+    "2.4.hi": "audio/where-is-root-2/4bd3b50789c6062f.m4a",
+    "3.2.en": "audio/where-is-root-2/5b5d81439bbb16c3.m4a",
+    "3.2.hi": "audio/where-is-root-2/86dd950acda1a93b.m4a",
+    "3.4.en": "audio/where-is-root-2/3f5c87ed4287b46d.m4a",
+    "3.4.hi": "audio/where-is-root-2/bb30ee8412863849.m4a",
+    "3.5.en": "audio/where-is-root-2/d3ece3eb08141b8c.m4a",
+    "3.5.hi": "audio/where-is-root-2/5b87c1d3fe68ee44.m4a",
+    "3.6.en": "audio/where-is-root-2/16eb201d301967fa.m4a",
+    "3.6.hi": "audio/where-is-root-2/7f4b28a4d34383b0.m4a",
+    "4.2.en": "audio/where-is-root-2/2a4ac04c716c7253.m4a",
+    "4.2.hi": "audio/where-is-root-2/606553615a7b6c33.m4a"
+  }
+}

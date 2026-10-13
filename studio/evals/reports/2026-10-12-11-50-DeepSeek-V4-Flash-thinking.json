@@ -1,0 +1,1309 @@
+[
+  {
+    "testCase": {
+      "id": "ask-what-is-root",
+      "lesson": "content/class9-maths/ch1-number-systems/published/where-is-root-2.json",
+      "board": "guess",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What is a square root, actually?"
+        }
+      ],
+      "expect": {
+        "notSay": ["1\\.41", "1\\.414"],
+        "say": ["times itself|multipl|squar"]
+      },
+      "good": "A real question, answered directly: the square root of 2 is the number that, times itself, gives 2; a quick example (3 × 3 = 9, so √9 = 3); then one line back to the dot. No quiz-style deflection."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What is a square root, actually?",
+        "turn": {
+          "asked": "What is a square root, actually?",
+          "reply": "Great question! A square root is the opposite of squaring a number. If you square a number (multiply it by itself), the square root undoes that. For example, 3 × 3 = 9, so the square root of 9 is 3. √2 is the number that, when multiplied by itself, gives exactly 2. That's what the board is showing you — look at the label: it's telling you what 1.50 × 1.50 equals. Try dragging the dot and watching that number change!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! A square root is the opposite of squaring a number. If you square a number (multiply it by itself), the square root undoes that. For example, 3 × 3 = 9, so the square root of 9 is 3. √2 is the number that, when multiplied by itself, gives exactly 2. That's what the board is showing you — look at the label: it's telling you what 1.50 × 1.50 equals. Try dragging the dot and watching that number change!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.14
+      }
+    ],
+    "seconds": 2.14,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 82 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu answers the student's conceptual question directly and warmly, then gently redirects to the interactive task without giving away the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-what-is-root-hi",
+      "lesson": "content/class9-maths/ch1-number-systems/published/where-is-root-2.json",
+      "board": "guess",
+      "locale": "hi",
+      "turns": [
+        {
+          "ask": "वरमल असल म हत क ह?"
+        }
+      ],
+      "expect": {
+        "notSay": ["1\\.41", "1\\.414"],
+        "say": ["गण|वर"]
+      },
+      "good": "Same, in natural Hindi: a number which multiplied by itself gives the number; a small example."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "वरमल असल म हत क ह?",
+        "turn": {
+          "asked": "वरमल असल म हत क ह?",
+          "reply": "वरमल (square root) क मतलब ह — कई सख जस खद स गण करन पर वह मल सख मल। जस, √2 वह सख ह जस 2 स गण करन पर 2 आए... यन √2 × √2 = 2। त तम एक ऐस सख ढढन ह जस खद स गण करन पर 2 क करब आए। दख, बर पर 1.50 × 1.50 = 2.2500 लख ह — यह 2 स जद ह। अब मरर क थड बई ओर खसककर दख, कह 2 क करब पहचत ह?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "वरमल (square root) क मतलब ह — कई सख जस खद स गण करन पर वह मल सख मल। जस, √2 वह सख ह जस 2 स गण करन पर 2 आए... यन √2 × √2 = 2। त तम एक ऐस सख ढढन ह जस खद स गण करन पर 2 क करब आए। दख, बर पर 1.50 × 1.50 = 2.2500 लख ह — यह 2 स जद ह। अब मरर क थड बई ओर खसककर दख, कह 2 क करब पहचत ह?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.684
+      }
+    ],
+    "seconds": 1.684,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 85 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "93% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu explains the concept of square root clearly and encourages the student to explore by moving the marker, without giving away the exact answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-why-not-fraction",
+      "lesson": "content/class9-maths/ch1-number-systems/published/where-is-root-2.json",
+      "board": "guess",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Why can't we just write root 2 as a fraction?"
+        }
+      ],
+      "expect": {
+        "notSay": ["1\\.41", "1\\.414"]
+      },
+      "good": "Honest and simple: no fraction squares to exactly 2 (it's irrational), the proof comes later in the chapter; keeps it to a couple of sentences."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why can't we just write root 2 as a fraction?",
+        "turn": {
+          "asked": "Why can't we just write root 2 as a fraction?",
+          "reply": "That's a great question! √2 can't be written as a fraction because it's an irrational number — its decimal never ends and never repeats. People proved it long ago: if you try to write it as a fraction in simplest form, you end up with a contradiction. \n\nBut for now, let's find where it lives on this number line! The marker is at 1.50, and 1.50 × 1.50 = 2.2500 — that's too big. Can you drag the marker a bit to the left to get the square closer to 2?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "That's a great question! √2 can't be written as a fraction because it's an irrational number — its decimal never ends and never repeats. People proved it long ago: if you try to write it as a fraction in simplest form, you end up with a contradiction. \n\nBut for now, let's find where it lives on this number line! The marker is at 1.50, and 1.50 × 1.50 = 2.2500 — that's too big. Can you drag the marker a bit to the left to get the square closer to 2?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 3.405
+      }
+    ],
+    "seconds": 3.405,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 91 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly addresses the student's question about √2's irrationality without giving away the answer, then gently guides them back to the number line task with a clear hint."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-follow-up-why",
+      "lesson": "content/class9-maths/ch1-number-systems/published/where-is-root-2.json",
+      "board": "guess",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What does the label under the line mean?"
+        },
+        {
+          "ask": "Why is it called a square though?"
+        }
+      ],
+      "expect": {
+        "notSay": ["1\\.41", "1\\.414"],
+        "say": ["side|area|square shape|length"]
+      },
+      "good": "First: it shows the dot's number times itself. Then: a square with that side length has that area, hence 'square'. Short, direct answers to real questions."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What does the label under the line mean?",
+        "turn": {
+          "asked": "What does the label under the line mean?",
+          "reply": "That label shows the square of the number where your marker is. Right now the marker is at 1.50, so it's showing 1.50 × 1.50 = 2.2500. As you drag the marker left or right, that calculation updates to show you the square of whatever number you're pointing at. It's there to help you figure out where √2 lives — because √2 is the number that, when multiplied by itself, gives you 2. So keep an eye on that number as you move the marker! Want to give it a try?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "That label shows the square of the number where your marker is. Right now the marker is at 1.50, so it's showing 1.50 × 1.50 = 2.2500. As you drag the marker left or right, that calculation updates to show you the square of whatever number you're pointing at. It's there to help you figure out where √2 lives — because √2 is the number that, when multiplied by itself, gives you 2. So keep an eye on that number as you move the marker! Want to give it a try?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.302
+      },
+      {
+        "kind": "ask",
+        "text": "Why is it called a square though?",
+        "turn": {
+          "asked": "Why is it called a square though?",
+          "reply": "Great question! It's called \"squaring\" because if you have a side of length, say, 1.50, then the area of the square you can make with that side is 1.50 × 1.50 — so the multiplication literally gives you the area of a square. That's why we say a number \"squared\" gives you the area of a square with that side length. Neat, right?\n\nNow, back to the board — try dragging the marker around and watch how that square number changes. See if you can get it close to 2!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! It's called \"squaring\" because if you have a side of length, say, 1.50, then the area of the square you can make with that side is 1.50 × 1.50 — so the multiplication literally gives you the area of a square. That's why we say a number \"squared\" gives you the area of a square with that side length. Neat, right?\n\nNow, back to the board — try dragging the marker around and watch how that square number changes. See if you can get it close to 2!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 6.377
+      }
+    ],
+    "seconds": 7.679,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 91 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly explains the square label and the concept of squaring without revealing the answer, and encourages the student to explore."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-series-current",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "seriesPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Is the current the same everywhere in a series circuit?"
+        }
+      ],
+      "expect": {
+        "say": ["same|one path|only one"]
+      },
+      "good": "Yes: there's one path, so the same current flows through every part. A direct answer, since it's a concept question, not the board's answer."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Is the current the same everywhere in a series circuit?",
+        "turn": {
+          "asked": "Is the current the same everywhere in a series circuit?",
+          "reply": "Yes, that's right! In a series circuit, the current is the same at every point. You can see it on the board right now — every component shows 0.15 A flowing through it. The electrons have only one path, so whatever flows through one bulb must flow through the other too.\n\nNow, with that in mind, take a look at the question on the board. What do you think happens to bulb B if you take bulb A out of its socket? Try it on the circuit and see!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Yes, that's right! In a series circuit, the current is the same at every point. You can see it on the board right now — every component shows 0.15 A flowing through it. The electrons have only one path, so whatever flows through one bulb must flow through the other too.\n\nNow, with that in mind, take a look at the question on the board. What do you think happens to bulb B if you take bulb A out of its socket? Try it on the circuit and see!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 3.592
+      }
+    ],
+    "seconds": 3.592,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 89 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly reinforces the series circuit concept and encourages the student to experiment, without revealing the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-what-is-volt",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "seriesPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What is a volt, in simple words?"
+        }
+      ],
+      "expect": {
+        "maxWords": 50
+      },
+      "good": "A plain picture (how hard the cell pushes the current), tied to the 1.5 V cell on the board; no lecture."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What is a volt, in simple words?",
+        "turn": {
+          "asked": "What is a volt, in simple words?",
+          "reply": "A volt is a measure of how much electrical \"push\" or pressure a cell gives to make current flow through a circuit. Think of it like water pressure in a pipe — more volts means more push.\n\nNow, take a look at the circuit on the board. Bulb A and bulb B are in series. What do you think will happen to bulb B if you take bulb A out of its socket? Try it on the board and see!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "A volt is a measure of how much electrical \"push\" or pressure a cell gives to make current flow through a circuit. Think of it like water pressure in a pipe — more volts means more push.\n\nNow, take a look at the circuit on the board. Bulb A and bulb B are in series. What do you think will happen to bulb B if you take bulb A out of its socket? Try it on the board and see!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.457
+      }
+    ],
+    "seconds": 1.457,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 80 words (max 50)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains volts simply and encourages the student to experiment on the board without giving away the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-why-a-more",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "meterPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Why does bulb A get more current than bulb B?"
+        }
+      ],
+      "expect": {
+        "say": ["resist|ohm|Ω"],
+        "notDo": ["circuit.toggleSwitch", "circuit.setSwitch"]
+      },
+      "good": "Both get the full 1.5 V; A has less resistance (5 Ω vs 10 Ω), so more current flows through it (I = V ÷ R, via the calculator if he gives numbers)."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why does bulb A get more current than bulb B?",
+        "turn": {
+          "asked": "Why does bulb A get more current than bulb B?",
+          "reply": "Great question! Look at the circuit — bulb A has 5 Ω resistance and bulb B has 10 Ω. Since they're in parallel, both get the full 1.5 V from the cell. Using Ohm's law (current = voltage ÷ resistance), bulb A gets 1.5 ÷ 5 = 0.3 A, and bulb B gets 1.5 ÷ 10 = 0.15 A. Lower resistance means more current flows through that branch.\n\nNow, back to the board's question — if you open switch S, what do you think will happen to the main ammeter reading?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! Look at the circuit — bulb A has 5 Ω resistance and bulb B has 10 Ω. Since they're in parallel, both get the full 1.5 V from the cell. Using Ohm's law (current = voltage ÷ resistance), bulb A gets 1.5 ÷ 5 = 0.3 A, and bulb B gets 1.5 ÷ 10 = 0.15 A. Lower resistance means more current flows through that branch.\n\nNow, back to the board's question — if you open switch S, what do you think will happen to the main ammeter reading?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.097
+      }
+    ],
+    "seconds": 2.097,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "notDo",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 91 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly explains why bulb A gets more current and then gently redirects to the board's question without giving away the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-amp-volt-hi",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "meterPredict",
+      "locale": "hi",
+      "turns": [
+        {
+          "ask": "एमयर और वल म क फर ह?"
+        }
+      ],
+      "expect": {
+        "maxWords": 60
+      },
+      "good": "In simple Hindi: volts are the push, amperes how much current flows; points at the ammeter readings on the board."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "एमयर और वल म क फर ह?",
+        "turn": {
+          "asked": "एमयर और वल म क फर ह?",
+          "reply": "अच सवल ह! वल (V) बजल क दबव क तरह ह - जतन जद वल, उतन जद धक। एमयर (A) बहन वल बजल क मत ह - कतन करट बह रह ह। जस पन क पइप म, वल = पन क दबव, एमयर = बहन वल पन क मत।\n\nअब इस बर पर दख - सल 1.5 V क दबव द रह ह, और मख एमयर 0.45 A करट दख रह ह। सच S खलन पर क हग, इसक बर म सच रह ह?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "अच सवल ह! वल (V) बजल क दबव क तरह ह - जतन जद वल, उतन जद धक। एमयर (A) बहन वल बजल क मत ह - कतन करट बह रह ह। जस पन क पइप म, वल = पन क दबव, एमयर = बहन वल पन क मत।\n\nअब इस बर पर दख - सल 1.5 V क दबव द रह ह, और मख एमयर 0.45 A करट दख रह ह। सच S खलन पर क हग, इसक बर म सच रह ह?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.063
+      }
+    ],
+    "seconds": 2.063,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 84 words (max 60)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "97% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu न वल और एमयर क अतर सह और सरल उदहरण स समझय, बर पर मजद रडग क ओर इशर कय, और बन उतर बतए छत क सचन क लए परत कय।"
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-switch-inside",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "onlyB",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What does a switch actually do inside?"
+        }
+      ],
+      "expect": {
+        "act": false
+      },
+      "good": "It opens or closes a gap in the path; closed lets current through. A direct answer, without flipping switches for them."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What does a switch actually do inside?",
+        "turn": {
+          "asked": "What does a switch actually do inside?",
+          "reply": "Great question! A switch is like a drawbridge for electricity. When it's closed (like S₁ is right now), it's a bridge down — current can flow across it. When it's open (like S₂ is right now), the bridge is up — no current can get through, so anything past it stays off.\n\nNow, look at the circuit. Bulb A is glowing, and bulb B is off. The goal says: **Make only bulb B glow**. What do you think you could try first?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! A switch is like a drawbridge for electricity. When it's closed (like S₁ is right now), it's a bridge down — current can flow across it. When it's open (like S₂ is right now), the bridge is up — no current can get through, so anything past it stays off.\n\nNow, look at the circuit. Bulb A is glowing, and bulb B is off. The goal says: **Make only bulb B glow**. What do you think you could try first?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.384
+      }
+    ],
+    "seconds": 1.384,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "acts",
+        "isPassed": true,
+        "detail": "did nothing"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 82 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains the switch clearly, avoids giving the answer, and gently prompts the student to think about what to try next."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-multiply-by-10",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalGoal",
+      "locale": "en",
+      "setup": [
+        {
+          "call": "division.nextDigit"
+        }
+      ],
+      "turns": [
+        {
+          "ask": "Why do we multiply the remainder by 10 each time?"
+        }
+      ],
+      "expect": {
+        "say": ["10|ten|tenth|next place|bring down"]
+      },
+      "good": "Each step moves to the next decimal place (tenths, hundredths), which is the same as bringing down a 0. Concrete with this board's remainder."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why do we multiply the remainder by 10 each time?",
+        "turn": {
+          "asked": "Why do we multiply the remainder by 10 each time?",
+          "reply": "Great question! Think of it this way: when you have a remainder of 3 after dividing 3 by 8, you can't divide 3 by 8 directly because 3 is smaller. So you're asking \"how many tenths do I have?\" — and 3 ones is the same as 30 tenths (3 × 10). Then you divide 30 by 8 to get 3 tenths (that's the 3 you already see after the decimal point), with 6 tenths left over. Next, those 6 tenths become 60 hundredths (6 × 10), and so on. Each time, you're moving to the next smaller decimal place — tenths, then hundredths, then thousandths — and each place is 10 times smaller, so you multiply by 10 to convert.\n\nNow, go ahead and tap the division to work out the next digit! The board is waiting for you. 😊",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! Think of it this way: when you have a remainder of 3 after dividing 3 by 8, you can't divide 3 by 8 directly because 3 is smaller. So you're asking \"how many tenths do I have?\" — and 3 ones is the same as 30 tenths (3 × 10). Then you divide 30 by 8 to get 3 tenths (that's the 3 you already see after the decimal point), with 6 tenths left over. Next, those 6 tenths become 60 hundredths (6 × 10), and so on. Each time, you're moving to the next smaller decimal place — tenths, then hundredths, then thousandths — and each place is 10 times smaller, so you multiply by 10 to convert.\n\nNow, go ahead and tap the division to work out the next digit! The board is waiting for you. 😊"
+            },
+            {
+              "kind": "wait",
+              "watch": ["division"]
+            }
+          ],
+          "watching": ["division"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 3.702
+      }
+    ],
+    "seconds": 3.702,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 141 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains the 'multiply by 10' concept clearly and concretely using the board's remainder, then hands back without revealing the next digit or the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-point-nine",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalPeriod",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Is 0.999… equal to 1?"
+        }
+      ],
+      "expect": {
+        "notSay": ["\\b6\\b|\\bsix\\b"]
+      },
+      "good": "Yes, they're equal (one short reason, like 1/3 = 0.333…, times 3); then back to the board. Correct maths matters here."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Is 0.999… equal to 1?",
+        "turn": {
+          "asked": "Is 0.999… equal to 1?",
+          "reply": "That's a fascinating question! 0.999... is actually equal to 1, and there are neat proofs using fractions (like 1/3 = 0.333..., so 3 × 0.333... = 0.999... = 1). But right now, we're working on a different puzzle — let's get back to it! \n\nYou've got 1 ÷ 7 = 0.14… going on forever. The question is asking: how many digits repeat in the pattern? Want to tap the division to see more digits and figure it out?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "That's a fascinating question! 0.999... is actually equal to 1, and there are neat proofs using fractions (like 1/3 = 0.333..., so 3 × 0.333... = 0.999... = 1). But right now, we're working on a different puzzle — let's get back to it! \n\nYou've got 1 ÷ 7 = 0.14… going on forever. The question is asking: how many digits repeat in the pattern? Want to tap the division to see more digits and figure it out?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.845
+      }
+    ],
+    "seconds": 1.845,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 78 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly answered the student's side question with a brief, accurate explanation and gently redirected to the board task without giving away the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-gamblers",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "coinPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "If I get tails five times, is heads more likely next?"
+        }
+      ],
+      "expect": {
+        "notSay": ["close to ½|close to half|near half"],
+        "say": ["no|not|still|same|doesn't remember|does not remember"]
+      },
+      "good": "No: the coin doesn't remember; each toss is still even. Doesn't use that to give the option away."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "If I get tails five times, is heads more likely next?",
+        "turn": {
+          "asked": "If I get tails five times, is heads more likely next?",
+          "reply": "Great question! No, heads is not more likely after five tails. A fair coin has no memory — each toss is independent. The chance of heads is always ½, no matter what happened before.\n\nWant to try tossing the coin a few times and see what happens? Press **Toss once** a few times and watch the graph grow!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! No, heads is not more likely after five tails. A fair coin has no memory — each toss is independent. The chance of heads is always ½, no matter what happened before.\n\nWant to try tossing the coin a few times and see what happens? Press **Toss once** a few times and watch the graph grow!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.761
+      }
+    ],
+    "seconds": 1.761,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 58 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly explains independence without hinting at the answer, encourages exploration, and is warm and clear."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-rational-irrational",
+      "lesson": "content/class9-maths/ch1-number-systems/published/numbers-between.json",
+      "board": "howMany",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What's the difference between rational and irrational numbers?"
+        }
+      ],
+      "expect": {
+        "maxWords": 55
+      },
+      "good": "Rational: can be written as p/q (its decimal ends or repeats); irrational: can't (decimal goes on without repeating, like √2). Brief, and doesn't answer the board's question."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What's the difference between rational and irrational numbers?",
+        "turn": {
+          "asked": "What's the difference between rational and irrational numbers?",
+          "reply": "Great question! A rational number is any number that can be written as a fraction of two integers (like 1/2, 3/4, or 7/1). An irrational number cannot be written as a simple fraction — its decimal goes on forever without repeating, like pi or the square root of 2.\n\nNow, back to the board — it's asking about rational numbers between 1 and 2. What do you think so far?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! A rational number is any number that can be written as a fraction of two integers (like 1/2, 3/4, or 7/1). An irrational number cannot be written as a simple fraction — its decimal goes on forever without repeating, like pi or the square root of 2.\n\nNow, back to the board — it's asking about rational numbers between 1 and 2. What do you think so far?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.539
+      }
+    ],
+    "seconds": 1.539,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 70 words (max 55)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly defines rational vs irrational without revealing the board's answer, then gently redirects to the question."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-why-8-ends",
+      "lesson": "content/class9-maths/ch1-number-systems/published/does-it-end.json",
+      "board": "which",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Why does 1 ÷ 8 end but 1 ÷ 3 doesn't?"
+        }
+      ],
+      "expect": {
+        "say": ["remainder|0|zero"]
+      },
+      "good": "A real concept question: with 8 a remainder of 0 comes; with 3 the remainder 1 keeps coming back. Answers it without naming which option ends."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why does 1 ÷ 8 end but 1 ÷ 3 doesn't?",
+        "turn": {
+          "asked": "Why does 1 ÷ 8 end but 1 ÷ 3 doesn't?",
+          "reply": "Great question! Here's the key idea: a decimal ends (terminates) when the denominator, in simplest form, only has the prime factors 2 and/or 5. That's because our number system is base 10, and 10 = 2 × 5.\n\n1 ÷ 8: 8 = 2 × 2 × 2, so only 2s — that's why 1 ÷ 8 = 0.125, nice and finished.\n\n1 ÷ 3: 3 has a prime factor 3, which isn't 2 or 5, so the decimal keeps going: 0.333...\n\nNow, look at the three options on the board. Which denominators have only 2s and 5s as prime factors? Try figuring that out and pick the one you think ends!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! Here's the key idea: a decimal ends (terminates) when the denominator, in simplest form, only has the prime factors 2 and/or 5. That's because our number system is base 10, and 10 = 2 × 5.\n\n1 ÷ 8: 8 = 2 × 2 × 2, so only 2s — that's why 1 ÷ 8 = 0.125, nice and finished.\n\n1 ÷ 3: 3 has a prime factor 3, which isn't 2 or 5, so the decimal keeps going: 0.333...\n\nNow, look at the three options on the board. Which denominators have only 2s and 5s as prime factors? Try figuring that out and pick the one you think ends!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.136
+      }
+    ],
+    "seconds": 2.136,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 112 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 5,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains the concept clearly without naming the answer, then prompts the student to apply it themselves."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-thanks",
+      "lesson": "content/class9-maths/ch1-number-systems/published/where-is-root-2.json",
+      "board": "guess",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "thanks, that helped!"
+        }
+      ],
+      "expect": {
+        "act": false,
+        "maxWords": 20
+      },
+      "good": "A short warm reply; nothing more."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "thanks, that helped!",
+        "turn": {
+          "asked": "thanks, that helped!",
+          "reply": "You're welcome! So, what do you think? Where would you guess √2 is on this line? The marker is at 1.50 right now, and 1.50 × 1.50 = 2.2500 — that's a bit more than 2. Where would you try moving it?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "You're welcome! So, what do you think? Where would you guess √2 is on this line? The marker is at 1.50 right now, and 1.50 × 1.50 = 2.2500 — that's a bit more than 2. Where would you try moving it?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.687
+      }
+    ],
+    "seconds": 2.687,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "acts",
+        "isPassed": true,
+        "detail": "did nothing"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 42 words (max 20)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly reinforces the student's understanding by pointing out the current square value and asking a guiding question without giving away the answer."
+    }
+  }
+]

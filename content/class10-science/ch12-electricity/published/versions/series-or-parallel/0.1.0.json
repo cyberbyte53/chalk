@@ -1,0 +1,475 @@
+{
+  "id": "class10-science/ch12/series-or-parallel",
+  "version": "0.1.0",
+  "title": {
+    "en": "Series or parallel?",
+    "hi": "श्रेणी या पार्श्व?"
+  },
+  "concepts": [
+    "series-circuits",
+    "parallel-circuits"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "series",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "style": "title",
+              "text": {
+                "en": "Two bulbs in a row (in series). Take one out. What happens to the other?",
+                "hi": "दो बल्ब एक के बाद एक (श्रेणी में)। एक बल्ब निकालो। दूसरे का क्या होता है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "circuit",
+            "kind": "prop",
+            "prop": "circuit",
+            "with": {
+              "nodes": [
+                {
+                  "id": "a",
+                  "x": 1,
+                  "y": 7
+                },
+                {
+                  "id": "b",
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "id": "c",
+                  "x": 5,
+                  "y": 1
+                },
+                {
+                  "id": "d",
+                  "x": 9,
+                  "y": 1
+                },
+                {
+                  "id": "e",
+                  "x": 9,
+                  "y": 7
+                },
+                {
+                  "id": "f",
+                  "x": 5,
+                  "y": 7
+                }
+              ],
+              "components": [
+                {
+                  "id": "cell",
+                  "kind": "cell",
+                  "from": "a",
+                  "to": "b",
+                  "volts": 1.5
+                },
+                {
+                  "id": "bulbA",
+                  "kind": "bulb",
+                  "from": "b",
+                  "to": "c",
+                  "ohms": 5,
+                  "label": {
+                    "en": "A",
+                    "hi": "A"
+                  }
+                },
+                {
+                  "id": "bulbB",
+                  "kind": "bulb",
+                  "from": "c",
+                  "to": "d",
+                  "ohms": 5,
+                  "label": {
+                    "en": "B",
+                    "hi": "B"
+                  }
+                },
+                {
+                  "id": "right",
+                  "kind": "wire",
+                  "from": "d",
+                  "to": "e"
+                },
+                {
+                  "id": "key",
+                  "kind": "switch",
+                  "from": "e",
+                  "to": "f",
+                  "isClosed": true
+                },
+                {
+                  "id": "bottom",
+                  "kind": "wire",
+                  "from": "f",
+                  "to": "a"
+                }
+              ]
+            }
+          },
+          {
+            "id": 4,
+            "name": "volts",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "style": "note",
+              "text": {
+                "en": "…",
+                "hi": "…"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "mayaSeries",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "Both went dark. In series there is only one path for the current. Break it anywhere and everything stops. And see how dim they were: they shared the cell's push.",
+                "hi": "दोनों बुझ गए। श्रेणी में धारा के लिए एक ही रास्ता है। कहीं भी तोड़ो, सब रुक जाता है। और देखो वे कितने धीमे जल रहे थे: दोनों ने सेल का धक्का बाँट लिया था।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "volts.text",
+          "text": {
+            "en": "Bulb A: {fixed(circuit.voltage.bulbA, 2)} V · Bulb B: {fixed(circuit.voltage.bulbB, 2)} V",
+            "hi": "बल्ब A: {fixed(circuit.voltage.bulbA, 2)} V · बल्ब B: {fixed(circuit.voltage.bulbB, 2)} V"
+          }
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "circuit.bulbTakenOut",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaSeries"
+              }
+            },
+            {
+              "call": "mayaSeries.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 2,
+      "name": "parallel",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "style": "title",
+              "text": {
+                "en": "Now side by side (in parallel). Take one out again.",
+                "hi": "अब अगल-बगल (पार्श्व में)। फिर से एक बल्ब निकालो।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "circuit",
+            "kind": "prop",
+            "prop": "circuit",
+            "with": {
+              "nodes": [
+                {
+                  "id": "a",
+                  "x": 1,
+                  "y": 7
+                },
+                {
+                  "id": "b",
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "id": "c",
+                  "x": 5,
+                  "y": 1
+                },
+                {
+                  "id": "d",
+                  "x": 9,
+                  "y": 1
+                },
+                {
+                  "id": "e",
+                  "x": 9,
+                  "y": 7
+                },
+                {
+                  "id": "f",
+                  "x": 5,
+                  "y": 7
+                },
+                {
+                  "id": "g",
+                  "x": 3,
+                  "y": 7
+                }
+              ],
+              "components": [
+                {
+                  "id": "cell",
+                  "kind": "cell",
+                  "from": "a",
+                  "to": "b",
+                  "volts": 1.5
+                },
+                {
+                  "id": "topLeft",
+                  "kind": "wire",
+                  "from": "b",
+                  "to": "c"
+                },
+                {
+                  "id": "topRight",
+                  "kind": "wire",
+                  "from": "c",
+                  "to": "d"
+                },
+                {
+                  "id": "bulbA",
+                  "kind": "bulb",
+                  "from": "c",
+                  "to": "f",
+                  "ohms": 5,
+                  "label": {
+                    "en": "A",
+                    "hi": "A"
+                  }
+                },
+                {
+                  "id": "bulbB",
+                  "kind": "bulb",
+                  "from": "d",
+                  "to": "e",
+                  "ohms": 5,
+                  "label": {
+                    "en": "B",
+                    "hi": "B"
+                  }
+                },
+                {
+                  "id": "bottomRight",
+                  "kind": "wire",
+                  "from": "e",
+                  "to": "f"
+                },
+                {
+                  "id": "key",
+                  "kind": "switch",
+                  "from": "f",
+                  "to": "g",
+                  "isClosed": true
+                },
+                {
+                  "id": "bottomLeft",
+                  "kind": "wire",
+                  "from": "g",
+                  "to": "a"
+                }
+              ]
+            }
+          },
+          {
+            "id": 4,
+            "name": "volts",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "style": "note",
+              "text": {
+                "en": "…",
+                "hi": "…"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "arjunParallel",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "The other one stays lit! Each bulb has its own path to the cell, and each gets the full 1.5 volts, so they are brighter too.",
+                "hi": "दूसरा जलता रहा! हर बल्ब का सेल तक अपना रास्ता है, और हर एक को पूरे 1.5 वोल्ट मिलते हैं, इसलिए वे ज़्यादा चमकते भी हैं।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "volts.text",
+          "text": {
+            "en": "Bulb A: {fixed(circuit.voltage.bulbA, 2)} V · Bulb B: {fixed(circuit.voltage.bulbB, 2)} V",
+            "hi": "बल्ब A: {fixed(circuit.voltage.bulbA, 2)} V · बल्ब B: {fixed(circuit.voltage.bulbB, 2)} V"
+          }
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "circuit.bulbTakenOut",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunParallel"
+              }
+            },
+            {
+              "call": "arjunParallel.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 3,
+      "name": "check",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "houseWiring",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "At home, when one bulb fuses, the fan and the other lights keep working. So the house is wired…",
+                "hi": "घर में जब एक बल्ब फ्यूज़ हो जाता है, तो पंखा और बाकी बत्तियाँ चलती रहती हैं। तो घर की वायरिंग है…"
+              },
+              "options": [
+                {
+                  "id": "series",
+                  "label": {
+                    "en": "in series",
+                    "hi": "श्रेणी में"
+                  },
+                  "feedback": {
+                    "en": "In series, one fused bulb would break the only path and switch everything off.",
+                    "hi": "श्रेणी में एक फ्यूज़ बल्ब इकलौता रास्ता तोड़ देता और सब बंद हो जाता।"
+                  },
+                  "misconception": "seriesKeepsOthersOn"
+                },
+                {
+                  "id": "parallel",
+                  "label": {
+                    "en": "in parallel",
+                    "hi": "पार्श्व में"
+                  }
+                },
+                {
+                  "id": "eitherWay",
+                  "label": {
+                    "en": "either way, it makes no difference",
+                    "hi": "किसी भी तरह, कोई फ़र्क नहीं पड़ता"
+                  },
+                  "feedback": {
+                    "en": "It does matter: you saw the series bulbs go dark together, and the parallel one stay on.",
+                    "hi": "फ़र्क पड़ता है: तुमने देखा कि श्रेणी वाले बल्ब साथ बुझे, और पार्श्व वाला जलता रहा।"
+                  },
+                  "misconception": "wiringDoesNotMatter"
+                }
+              ],
+              "answer": "parallel",
+              "concepts": [
+                "parallel-circuits"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "houseWiring.say"
+          }
+        },
+        {
+          "on": "houseWiring.correct",
+          "do": {
+            "call": "board.pass"
+          }
+        }
+      ],
+      "nextPieceId": 4
+    }
+  ],
+  "nextBoardId": 4
+}

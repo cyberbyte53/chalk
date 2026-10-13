@@ -1,0 +1,395 @@
+[
+  {
+    "testCase": {
+      "id": "goal-next-step",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalGoal",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Do the next step for me."
+        }
+      ],
+      "expect": {},
+      "good": "May do one step and explain it (remainder × 10, ÷ 8), then hands back; never the last step that ends it."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Do the next step for me.",
+        "turn": {
+          "asked": "Do the next step for me.",
+          "reply": "I can't do it for you — that's your job! But I can help you get started. \n\nThe board shows **3 ÷ 8**, and right now it says **0…** with a remainder of **3**. You need to tap on the division to work out one digit at a time, until the remainder becomes 0. Then press **Check**.\n\nWhy not try tapping the division once and see what happens Go ahead — tap on the division to work out the first digit",
+          "events": [
+            {
+              "kind": "say",
+              "text": "I can't do it for you — that's your job! But I can help you get started. \n\nThe board shows **3 ÷ 8**, and right now it says **0…** with a remainder of **3**. You need to tap on the division to work out one digit at a time, until the remainder becomes 0. Then press **Check**.\n\nWhy not try tapping the division once and see what happens"
+            },
+            {
+              "kind": "point",
+              "prop": "division"
+            },
+            {
+              "kind": "say",
+              "text": "Go ahead — tap on the division to work out the first digit"
+            },
+            {
+              "kind": "wait",
+              "watch": ["division"]
+            }
+          ],
+          "watching": ["division"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 2,
+          "isFallback": false
+        },
+        "seconds": 3.32
+      }
+    ],
+    "seconds": 3.32,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 81 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly refuses to do the step for the student, encourages a tap, and points to the right area, but could have briefly explained the process (e.g., 'multiply remainder by 10, then divide by 8') to give slightly more guidance without giving the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "goal-start-and-watch",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalGoal",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "How do I start?"
+        },
+        {
+          "student": [
+            {
+              "call": "division.nextDigit"
+            }
+          ]
+        }
+      ],
+      "expect": {
+        "handsBack": true
+      },
+      "good": "Explains the first step and hands back; after the student taps, says what came out (digit 3, remainder 6) and what to do next."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "How do I start?",
+        "turn": {
+          "asked": "How do I start?",
+          "reply": "Hey there! The board says \"Tap to divide until it ends, then press Check.\" So you need to start by tapping on the division to work out one digit at a time. Give it a tap! Go ahead and tap the division area to work out the first digit after the decimal point!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Hey there! The board says \"Tap to divide until it ends, then press Check.\" So you need to start by tapping on the division to work out one digit at a time. Give it a tap!"
+            },
+            {
+              "kind": "point",
+              "prop": "division"
+            },
+            {
+              "kind": "say",
+              "text": "Go ahead and tap the division area to work out the first digit after the decimal point!"
+            },
+            {
+              "kind": "wait",
+              "watch": ["division"]
+            }
+          ],
+          "watching": ["division"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 2,
+          "isFallback": false
+        },
+        "seconds": 2.14
+      },
+      {
+        "kind": "student",
+        "did": ["division.nextDigit"]
+      },
+      {
+        "kind": "continued",
+        "turn": {
+          "reply": "Great start! You've got the first digit: 0.3 with remainder 6. The remainder isn't 0 yet, so keep tapping to work out more digits until it ends",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great start! You've got the first digit: 0.3 with remainder 6. The remainder isn't 0 yet, so keep tapping to work out more digits until it ends"
+            },
+            {
+              "kind": "wait",
+              "watch": ["division"]
+            }
+          ],
+          "watching": ["division"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.035
+      }
+    ],
+    "seconds": 4.175000000000001,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "handsBack",
+        "isPassed": true,
+        "detail": "handed back"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 53 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly guided the first step without giving away the answer, explained the result clearly, and encouraged the student to continue."
+    }
+  },
+  {
+    "testCase": {
+      "id": "goal-why-wrong",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalGoal",
+      "locale": "en",
+      "setup": [
+        {
+          "call": "division.nextDigit"
+        },
+        {
+          "call": "untilEnd.check"
+        }
+      ],
+      "turns": [
+        {
+          "ask": "Why was that wrong?"
+        }
+      ],
+      "expect": {
+        "say": ["remainder|0"]
+      },
+      "good": "The remainder isn't 0 yet, so the division hasn't ended; keep tapping."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why was that wrong?",
+        "turn": {
+          "asked": "Why was that wrong?",
+          "reply": "Hey! No worries — it's not wrong, just not finished yet. You worked out the first digit (3) after the decimal, but the remainder is 6, not 0. That means there's still something left to divide. You need to keep tapping to get more digits until the remainder becomes 0, then press Check. Want to give it another try?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Hey! No worries — it's not wrong, just not finished yet. You worked out the first digit (3) after the decimal, but the remainder is 6, not 0. That means there's still something left to divide. You need to keep tapping to get more digits until the remainder becomes 0, then press Check. Want to give it another try?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.708
+      }
+    ],
+    "seconds": 1.708,
+    "end": {
+      "questionStatus": "wrong",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 59 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly explains the remainder is not zero and encourages further tapping without revealing the final decimal."
+    }
+  },
+  {
+    "testCase": {
+      "id": "goal-one-third-hi",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "decimalGoal",
+      "locale": "hi",
+      "turns": [
+        {
+          "ask": "1 ÷ 3 कभ खत क नह हत?"
+        }
+      ],
+      "expect": {
+        "say": ["शष"]
+      },
+      "good": "Answers the student's real question in Hindi (remainder 1 keeps coming back, so 3 repeats; it never reaches 0), then links back to 3 ÷ 8."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "1 ÷ 3 कभ खत क नह हत?",
+        "turn": {
+          "asked": "1 ÷ 3 कभ खत क नह हत?",
+          "reply": "अच सवल ह! 1 ÷ 3 खत इसलए नह हत कक 3 क गणनखड म 2 य 5 क अलव 3 भ ह। जब तम भग करत ह, शषफल 0 कभ नह आत — 1, 3, 1, 3... घमत रहत ह, इसलए दशमलव आवर (repeating) ह जत ह: 0.333...\n\nलकन अभ हमर बर पर 3 ÷ 8 ह — चल पहल इस पर कर? 8 क गणनखड सर 2 ह, त यह खत हग। भग शर करन क लए एक अक नकल!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "अच सवल ह! 1 ÷ 3 खत इसलए नह हत कक 3 क गणनखड म 2 य 5 क अलव 3 भ ह। जब तम भग करत ह, शषफल 0 कभ नह आत — 1, 3, 1, 3... घमत रहत ह, इसलए दशमलव आवर (repeating) ह जत ह: 0.333...\n\nलकन अभ हमर बर पर 3 ÷ 8 ह — चल पहल इस पर कर? 8 क गणनखड सर 2 ह, त यह खत हग। भग शर करन क लए एक अक नकल!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 15.377
+      }
+    ],
+    "seconds": 15.377,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 82 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "94% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 5,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu perfectly answers the student's tangential question about 1÷3 with clear reasoning, then gently redirects to the current problem without giving away the answer."
+    }
+  }
+]

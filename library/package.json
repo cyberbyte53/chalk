@@ -1,0 +1,30 @@
+{
+  "name": "@chalk/library",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*",
+    "@chalk/player": "workspace:*",
+    "@chalk/prop": "workspace:*",
+    "@chalk/prop-basics": "workspace:*",
+    "@chalk/prop-chance": "workspace:*",
+    "@chalk/prop-circuit": "workspace:*",
+    "@chalk/prop-decimal": "workspace:*",
+    "@chalk/prop-exponents": "workspace:*",
+    "@chalk/prop-number-line": "workspace:*",
+    "@chalk/prop-number-sets": "workspace:*",
+    "@chalk/prop-plot": "workspace:*",
+    "@chalk/prop-roots": "workspace:*",
+    "@chalk/prop-surds": "workspace:*"
+  },
+  "devDependencies": {
+    "@chalk/jugnu": "workspace:*"
+  }
+}

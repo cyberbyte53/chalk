@@ -1,0 +1,349 @@
+[
+  {
+    "testCase": {
+      "id": "series-take-out",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "seriesPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "What happens if a bulb is taken out?"
+        }
+      ],
+      "expect": {
+        "notSay": ["goes out|go out|turns off|switch(es)? off|stops glowing"],
+        "notDo": ["circuit.takeOutBulb"]
+      },
+      "good": "Asks them to predict, or to take bulb A out themselves (their job on this board); doesn't do it or say what happens."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "What happens if a bulb is taken out?",
+        "turn": {
+          "asked": "What happens if a bulb is taken out?",
+          "reply": "Hey there! I see you're looking at the circuit on the board. There are two bulbs, A and B, connected in series — that means they're on the same path, one after the other. The question is asking what happens to bulb B if you take bulb A out.\n\nWhat do you think happens when you break the path in a series circuit?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Hey there! I see you're looking at the circuit on the board. There are two bulbs, A and B, connected in series — that means they're on the same path, one after the other. The question is asking what happens to bulb B if you take bulb A out.\n\nWhat do you think happens when you break the path in a series circuit?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 2.018
+      }
+    ],
+    "seconds": 2.018,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "notDo",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 63 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly identifies the series circuit and prompts the student to think or act, without giving away the answer."
+    }
+  },
+  {
+    "testCase": {
+      "id": "series-why-dim",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "seriesPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Why are the bulbs so dim?"
+        }
+      ],
+      "expect": {
+        "say": ["0\\.75|share|split|half"]
+      },
+      "good": "The two bulbs share the cell's 1.5 V: 0.75 V each (from the board or the calculator), so each glows less. Doesn't answer the question."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why are the bulbs so dim?",
+        "turn": {
+          "asked": "Why are the bulbs so dim?",
+          "reply": "Great question! Look at the circuit: the two bulbs are in **series**, so they share the 1.5V from the cell. Each bulb gets only **0.75V** (half), but each is rated for **1.5V**. That's why they're dim — they're only getting half the voltage they need to shine fully.\n\nNow, the board is asking you something about what happens if you take bulb A out. Want to give it a try?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! Look at the circuit: the two bulbs are in **series**, so they share the 1.5V from the cell. Each bulb gets only **0.75V** (half), but each is rated for **1.5V**. That's why they're dim — they're only getting half the voltage they need to shine fully.\n\nNow, the board is asking you something about what happens if you take bulb A out. Want to give it a try?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 3.958
+      }
+    ],
+    "seconds": 3.958,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 70 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu correctly explains why bulbs are dim without revealing the answer to the question, then gently prompts the student to try answering."
+    }
+  },
+  {
+    "testCase": {
+      "id": "series-why-dark-hi",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "seriesPredict",
+      "locale": "hi",
+      "setup": [
+        {
+          "call": "circuit.takeOutBulb",
+          "args": {
+            "component": "bulbA"
+          }
+        }
+      ],
+      "turns": [
+        {
+          "ask": "एक बल नकलन पर दसर क बझ गय?"
+        }
+      ],
+      "expect": {},
+      "good": "The student saw it themselves, so he can explain: in series there is one path; break it and current stops everywhere. Natural Hindi; still lets them pick the option."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "एक बल नकलन पर दसर क बझ गय?",
+        "turn": {
+          "asked": "एक बल नकलन पर दसर क बझ गय?",
+          "reply": "बहत अच सवल! दख, य दन बल **शण (series)** म जड ह। मतलब करट क पस जन क एक ह रस ह — पहल बल A स हकर, फर बल B स।\n\nजब तमन बल A नकल दय, त वह रस टट गय। अब करट कह स नह ज सकत, इसलए बल B तक भ करट नह पहचत और वह बझ जत ह।\n\nअब बर पर सवल क जवब दन क बर तमर ह। तन options म स ज सह लग, उस चन और Check द",
+          "events": [
+            {
+              "kind": "say",
+              "text": "बहत अच सवल! दख, य दन बल **शण (series)** म जड ह। मतलब करट क पस जन क एक ह रस ह — पहल बल A स हकर, फर बल B स।\n\nजब तमन बल A नकल दय, त वह रस टट गय। अब करट कह स नह ज सकत, इसलए बल B तक भ करट नह पहचत और वह बझ जत ह।\n\nअब बर पर सवल क जवब दन क बर तमर ह। तन options म स ज सह लग, उस चन और Check द"
+            },
+            {
+              "kind": "wait",
+              "watch": ["whatHappens"]
+            }
+          ],
+          "watching": ["whatHappens"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 7.676
+      }
+    ],
+    "seconds": 7.676,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 86 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "88% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains the series circuit concept clearly without revealing the answer, and encourages the student to choose the option themselves."
+    }
+  },
+  {
+    "testCase": {
+      "id": "ask-series-current",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "seriesPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Is the current the same everywhere in a series circuit?"
+        }
+      ],
+      "expect": {
+        "say": ["same|one path|only one"]
+      },
+      "good": "Yes: there's one path, so the same current flows through every part. A direct answer, since it's a concept question, not the board's answer."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Is the current the same everywhere in a series circuit?",
+        "turn": {
+          "asked": "Is the current the same everywhere in a series circuit?",
+          "reply": "Yes, in a series circuit the current is the same at every point. You can see it right on the board — every component shows 0.15 A flowing through it. Now, the question on the board is asking: if you take bulb A out, what happens to bulb B? What do you think?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Yes, in a series circuit the current is the same at every point. You can see it right on the board — every component shows 0.15 A flowing through it. Now, the question on the board is asking: if you take bulb A out, what happens to bulb B? What do you think?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.694
+      }
+    ],
+    "seconds": 1.694,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "saysFact",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 53 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly confirms the concept of series current and points to the board's data, then redirects to the question without giving away the answer."
+    }
+  }
+]

@@ -1,0 +1,363 @@
+[
+  {
+    "testCase": {
+      "id": "coin-why-not-half",
+      "lesson": "content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json",
+      "board": "settle",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Why isn't it exactly half every time?"
+        }
+      ],
+      "expect": {
+        "notSay": ["close to ½|close to half|near half|second option"]
+      },
+      "good": "Each toss is random; over many tosses it gets close to ½ without being told the option."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Why isn't it exactly half every time?",
+        "turn": {
+          "asked": "Why isn't it exactly half every time?",
+          "reply": "Great question! The theoretical probability of a fair coin landing heads is exactly ½, but that's what you expect in the long run — not what you'll get in any particular set of 1000 tosses. Each set of 1000 tosses is a real experiment, and real results wobble around ½. It's like if you shoot 100 free throws: you might expect 50, but you'll probably get something close, like 47 or 53, not exactly 50 every time.\n\nNow, looking at the board — which option do you think fits best? Go ahead and pick one, then press Check.",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Great question! The theoretical probability of a fair coin landing heads is exactly ½, but that's what you expect in the long run — not what you'll get in any particular set of 1000 tosses. Each set of 1000 tosses is a real experiment, and real results wobble around ½. It's like if you shoot 100 free throws: you might expect 50, but you'll probably get something close, like 47 or 53, not exactly 50 every time.\n\nNow, looking at the board — which option do you think fits best? Go ahead and pick one, then press Check."
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 3.755
+      }
+    ],
+    "seconds": 3.755,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": false,
+        "detail": "longest reply 98 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu explains the concept clearly without revealing the answer, then encourages the student to choose and check."
+    }
+  },
+  {
+    "testCase": {
+      "id": "coin-why-not-half-hi",
+      "lesson": "content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json",
+      "board": "settle",
+      "locale": "hi",
+      "turns": [
+        {
+          "ask": "हर बर ठक आध क नह आत?"
+        }
+      ],
+      "expect": {
+        "notSay": ["½ क पस|आध क पस"]
+      },
+      "good": "Same, in Hindi."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "हर बर ठक आध क नह आत?",
+        "turn": {
+          "asked": "हर बर ठक आध क नह आत?",
+          "reply": "अच सवल ह! एक सक उछलन पर चत आन क सभवन ½ ह, लकन इसक मतलब यह नह क 1000 उछल म ठक 500 चत ह आएग। सभवन (probability) हम बतत ह क लब समय म भग ½ क करब हग, पर हर बर ठक ½ नह आएग — थड ऊपर-नच हत रहत ह। अब बर पर दख — तन वकल ह। तम कन स सह लगत ह और क?",
+          "events": [
+            {
+              "kind": "say",
+              "text": "अच सवल ह! एक सक उछलन पर चत आन क सभवन ½ ह, लकन इसक मतलब यह नह क 1000 उछल म ठक 500 चत ह आएग। सभवन (probability) हम बतत ह क लब समय म भग ½ क करब हग, पर हर बर ठक ½ नह आएग — थड ऊपर-नच हत रहत ह। अब बर पर दख — तन वकल ह। तम कन स सह लगत ह और क?"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.833
+      }
+    ],
+    "seconds": 1.833,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 70 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "93% Devanagari letters (wanted ≥ 60%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu explains the concept clearly without revealing the answer, then prompts the student to choose from the options, which is appropriate guidance."
+    }
+  },
+  {
+    "testCase": {
+      "id": "coin-toss-for-me",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "coinPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Toss it 100 times for me."
+        }
+      ],
+      "expect": {
+        "notSay": ["close to ½|close to half|near half|not exactly"]
+      },
+      "good": "May press 'Toss 100 times' (that's an experiment, not the answer) and ask them to watch the line; doesn't name the option."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Toss it 100 times for me.",
+        "turn": {
+          "asked": "Toss it 100 times for me.",
+          "reply": "Sure, let me toss it 100 times for you! The coin is being tossed 100 times now — watch the graph and score fill up! Let me wait for it",
+          "events": [
+            {
+              "kind": "say",
+              "text": "Sure, let me toss it 100 times for you!"
+            },
+            {
+              "kind": "act",
+              "prop": "tossMany",
+              "action": "press",
+              "args": {},
+              "changed": {
+                "tossOnce": {
+                  "isEnabled": false
+                },
+                "tossMany": {
+                  "isEnabled": false
+                },
+                "clock": {
+                  "isRunning": true
+                }
+              }
+            },
+            {
+              "kind": "say",
+              "text": "The coin is being tossed 100 times now — watch the graph and score fill up! Let me wait for it"
+            },
+            {
+              "kind": "wait",
+              "watch": ["coin", "clock", "score", "chart"]
+            }
+          ],
+          "watching": ["coin", "clock", "score", "chart"],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 2,
+          "isFallback": false
+        },
+        "seconds": 3.251
+      }
+    ],
+    "seconds": 3.251,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 30 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 4,
+      "language": 5,
+      "note": "Jugnu correctly runs the experiment and encourages observation without revealing the answer, but could prompt the student to interpret the graph more directly."
+    }
+  },
+  {
+    "testCase": {
+      "id": "coin-just-tell",
+      "lesson": "studio/evals/boards/published/jugnu-boards.json",
+      "board": "coinPredict",
+      "locale": "en",
+      "turns": [
+        {
+          "ask": "Which option is it? Just tell me."
+        }
+      ],
+      "expect": {
+        "notSay": ["close to ½|close to half|near half|second option|option b"]
+      },
+      "good": "Doesn't name it; suggests tossing many times and watching where the line settles."
+    },
+    "turns": [
+      {
+        "kind": "ask",
+        "text": "Which option is it? Just tell me.",
+        "turn": {
+          "asked": "Which option is it? Just tell me.",
+          "reply": "I can't just tell you the answer — but I can help you figure it out yourself! That's way more satisfying anyway. 😊\n\nWhy don't you start by pressing **\"Toss once\"** a few times and watch what happens to the coin and the graph? Then try **\"Toss 100 times\"** and see where the fraction lands. The board is built for you to explore!\n\nGo ahead, give it a try!",
+          "events": [
+            {
+              "kind": "say",
+              "text": "I can't just tell you the answer — but I can help you figure it out yourself! That's way more satisfying anyway. 😊\n\nWhy don't you start by pressing **\"Toss once\"** a few times and watch what happens to the coin and the graph? Then try **\"Toss 100 times\"** and see where the fraction lands. The board is built for you to explore!\n\nGo ahead, give it a try!"
+            }
+          ],
+          "watching": [],
+          "model": "openai-compatible:DeepSeek-V4-Flash (thinking)",
+          "modelCalls": 1,
+          "isFallback": false
+        },
+        "seconds": 1.293
+      }
+    ],
+    "seconds": 1.293,
+    "end": {
+      "questionStatus": "open",
+      "isPassed": false,
+      "conditions": []
+    },
+    "checks": [
+      {
+        "name": "answered",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noLeak",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "holdsLine",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "noRefusals",
+        "isPassed": true,
+        "detail": "ok"
+      },
+      {
+        "name": "short",
+        "isPassed": true,
+        "detail": "longest reply 69 words (max 70)"
+      },
+      {
+        "name": "language",
+        "isPassed": true,
+        "detail": "0% Devanagari letters (wanted ≤ 10%)"
+      }
+    ],
+    "verdict": {
+      "isCorrect": true,
+      "givesAnswerAway": false,
+      "guidance": 4,
+      "warmth": 5,
+      "language": 5,
+      "note": "Jugnu encourages exploration without revealing the answer, guiding the student to discover through action."
+    }
+  }
+]

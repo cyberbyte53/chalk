@@ -1,0 +1,1213 @@
+{
+  "id": "class9-maths/ch1/why-fractions-repeat",
+  "version": "0.1.0",
+  "title": {
+    "en": "Why fraction decimals repeat",
+    "hi": "भिन्नों के दशमलव क्यों दोहराते हैं"
+  },
+  "concepts": [
+    "decimal-expansions",
+    "remainder-argument"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "tenThirds",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Divide 10 by 3. Tap the division for each next step, and watch the remainders (in orange). The circle shows which remainder you're on.",
+                "hi": "10 को 3 से भाग दो। हर अगले कदम के लिए भाग पर टैप करो, और शेषफलों (नारंगी) पर नज़र रखो। घेरा दिखाता है कि अभी कौन-सा शेषफल है।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "division",
+            "kind": "prop",
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 10,
+              "denominator": 3,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaThrees",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "Remainder 1, then 1, then 1 again. Each step is the same as the last, so 3 repeats for ever: 10/3 = 3.333…",
+                "hi": "शेषफल 1, फिर 1, फिर से 1। हर कदम पिछले जैसा है, इसलिए 3 हमेशा दोहराता रहेगा: 10/3 = 3.333…"
+              },
+              "speak": {
+                "en": "Remainder 1, then 1, then 1 again. Each step is the same as the last, so 3 repeats for ever: 10 over 3 is 3.333 and so on.",
+                "hi": "शेषफल 1, फिर 1, फिर से 1। हर कदम पिछले जैसा है, इसलिए 3 हमेशा दोहराता रहेगा: 10 बटा 3 बराबर 3.333 और आगे भी।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "division.digitFound",
+          "if": "division.digitsShown == 3",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaThrees"
+              }
+            },
+            {
+              "call": "mayaThrees.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 2,
+      "name": "sevenEighths",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Now 7 ÷ 8. Keep tapping.",
+                "hi": "अब 7 ÷ 8। टैप करते रहो।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "division",
+            "kind": "prop",
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 7,
+              "denominator": 8,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunEnds",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "Remainder 0: nothing is left to divide, so it stops. 7/8 = 0.875. A decimal like this terminates.",
+                "hi": "शेषफल 0: भाग देने को कुछ नहीं बचा, इसलिए यह रुक गया। 7/8 = 0.875। ऐसा दशमलव सांत (terminating) कहलाता है।"
+              },
+              "speak": {
+                "en": "Remainder 0: nothing is left to divide, so it stops. 7 over 8 is 0.875. A decimal like this terminates.",
+                "hi": "शेषफल 0: भाग देने को कुछ नहीं बचा, इसलिए यह रुक गया। 7 बटा 8 बराबर 0.875। ऐसा दशमलव सांत कहलाता है।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "division.ended",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunEnds"
+              }
+            },
+            {
+              "call": "arjunEnds.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 3,
+      "name": "oneSeventh",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Now 1 ÷ 7. Dividing by 7, the only remainders possible are 0, 1, 2, 3, 4, 5 and 6. The clock has a slot for each.",
+                "hi": "अब 1 ÷ 7। 7 से भाग देने पर शेषफल सिर्फ़ 0, 1, 2, 3, 4, 5 और 6 हो सकते हैं। घड़ी में हर एक का खाना है।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "division",
+            "kind": "prop",
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 1,
+              "denominator": 7,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaLoop",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "Remainder 1 is back! From here every step happens again, so 142857 repeats for ever. We write 0.142857… with a bar over 142857.",
+                "hi": "शेषफल 1 वापस आ गया! यहाँ से हर कदम दोबारा होगा, इसलिए 142857 हमेशा दोहराएगा। इसे 0.142857… लिखते हैं, 142857 के ऊपर एक रेखा के साथ।"
+              },
+              "speak": {
+                "en": "Remainder 1 is back! From here every step happens again, so 1 4 2 8 5 7 repeats for ever. We write it with a bar over the repeating block.",
+                "hi": "शेषफल 1 वापस आ गया! यहाँ से हर कदम दोबारा होगा, इसलिए 1 4 2 8 5 7 हमेशा दोहराएगा। इसे दोहराने वाले हिस्से के ऊपर एक रेखा लगाकर लिखते हैं।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "division.repeated",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaLoop"
+              }
+            },
+            {
+              "call": "mayaLoop.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 4,
+      "name": "whyRepeat",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "division",
+            "kind": "prop",
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 1,
+              "denominator": 7,
+              "digitsShown": 7,
+              "isClockShown": false,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 3,
+            "name": "whyMust",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Dividing any number by 7, why must the digits either stop or repeat?",
+                "hi": "किसी भी संख्या को 7 से भाग देने पर अंक या तो रुकते हैं या दोहराते हैं। क्यों?"
+              },
+              "options": [
+                {
+                  "id": "slots",
+                  "label": {
+                    "en": "There are only 6 non-zero remainders, so within 6 steps one must come back (or hit 0)",
+                    "hi": "शून्य के अलावा सिर्फ़ 6 शेषफल हो सकते हैं, इसलिए 6 कदमों में कोई दोबारा आएगा (या 0 आएगा)"
+                  }
+                },
+                {
+                  "id": "prime",
+                  "label": {
+                    "en": "Because 7 is a prime number",
+                    "hi": "क्योंकि 7 अभाज्य संख्या है"
+                  },
+                  "feedback": {
+                    "en": "1 ÷ 6 = 0.1666… repeats too, and 6 isn't prime. What do all divisions share?",
+                    "hi": "1 ÷ 6 = 0.1666… भी दोहराता है, और 6 अभाज्य नहीं है। सब भागों में क्या एक जैसा है?"
+                  },
+                  "misconception": "repeatIsAboutPrimes"
+                },
+                {
+                  "id": "small",
+                  "label": {
+                    "en": "Because 1 is smaller than 7",
+                    "hi": "क्योंकि 1, 7 से छोटा है"
+                  },
+                  "feedback": {
+                    "en": "22 ÷ 7 repeats too. Look at the clock: how many slots does it have?",
+                    "hi": "22 ÷ 7 भी दोहराता है। घड़ी देखो: उसमें कितने खाने हैं?"
+                  },
+                  "misconception": "repeatIsAboutSmallNumerator"
+                }
+              ],
+              "answer": "slots",
+              "concepts": [
+                "remainder-argument"
+              ]
+            }
+          },
+          {
+            "id": 4,
+            "name": "arjunAnyQ",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "The same is true for any p/q: only q − 1 remainders besides 0. So the decimal of every rational number terminates or repeats.",
+                "hi": "किसी भी p/q के लिए यही सच है: 0 के अलावा सिर्फ़ q − 1 शेषफल। इसलिए हर परिमेय संख्या का दशमलव या तो ख़त्म होता है या दोहराता है।"
+              },
+              "speak": {
+                "en": "The same is true for any p over q: only q minus 1 remainders besides 0. So the decimal of every rational number terminates or repeats.",
+                "hi": "किसी भी p बटा q के लिए यही सच है: 0 के अलावा सिर्फ़ q माइनस 1 शेषफल। इसलिए हर परिमेय संख्या का दशमलव या तो ख़त्म होता है या दोहराता है।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "whyMust.say"
+          }
+        },
+        {
+          "on": "whyMust.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunAnyQ"
+              }
+            },
+            {
+              "call": "arjunAnyQ.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 6
+    },
+    {
+      "id": 5,
+      "name": "oneThirteenth",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "predictThirteen",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "1 ÷ 13: does it end, or repeat? And what is the longest its repeating block could be?",
+                "hi": "1 ÷ 13: यह ख़त्म होगा या दोहराएगा? और इसका दोहराने वाला हिस्सा ज़्यादा से ज़्यादा कितना लंबा हो सकता है?"
+              },
+              "options": [
+                {
+                  "id": "ends",
+                  "label": {
+                    "en": "It ends",
+                    "hi": "ख़त्म हो जाएगा"
+                  },
+                  "feedback": {
+                    "en": "Which remainders are possible when you divide by 13? Can 0 ever come here?",
+                    "hi": "13 से भाग देने पर कौन-से शेषफल हो सकते हैं? क्या यहाँ कभी 0 आएगा?"
+                  },
+                  "misconception": "allFractionsEnd"
+                },
+                {
+                  "id": "twelve",
+                  "label": {
+                    "en": "It repeats; the block is at most 12 digits",
+                    "hi": "दोहराएगा; हिस्सा ज़्यादा से ज़्यादा 12 अंकों का"
+                  }
+                },
+                {
+                  "id": "thirteen",
+                  "label": {
+                    "en": "It repeats; the block is at most 13 digits",
+                    "hi": "दोहराएगा; हिस्सा ज़्यादा से ज़्यादा 13 अंकों का"
+                  },
+                  "feedback": {
+                    "en": "If the remainder ever became 0, what would happen to the division?",
+                    "hi": "अगर शेषफल कभी 0 हो जाए, तो भाग का क्या होगा?"
+                  },
+                  "misconception": "countsZeroAsRepeatingSlot"
+                },
+                {
+                  "id": "noLimit",
+                  "label": {
+                    "en": "It could go on for ever without repeating",
+                    "hi": "बिना दोहराए हमेशा चल सकता है"
+                  },
+                  "feedback": {
+                    "en": "How many different remainders can you get when dividing by 13?",
+                    "hi": "13 से भाग देने पर कितने अलग-अलग शेषफल मिल सकते हैं?"
+                  },
+                  "misconception": "remaindersNotLinkedToDecimal"
+                }
+              ],
+              "answer": "twelve",
+              "concepts": [
+                "remainder-argument"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "division",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 1,
+              "denominator": 13,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 4,
+            "name": "clock",
+            "kind": "prop",
+            "prop": "timer",
+            "isInEvents": false
+          },
+          {
+            "id": 5,
+            "name": "mayaSix",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "At most 12, because 13 leaves at most 12 non-zero remainders. Here it repeats after only 6: 0.076923 076923…",
+                "hi": "ज़्यादा से ज़्यादा 12, क्योंकि 13 से 0 के अलावा ज़्यादा से ज़्यादा 12 शेषफल बचते हैं। यहाँ तो सिर्फ़ 6 के बाद दोहराता है: 0.076923 076923…"
+              },
+              "speak": {
+                "en": "At most 12, because 13 leaves at most 12 non-zero remainders. Here it repeats after only 6 digits.",
+                "hi": "ज़्यादा से ज़्यादा 12, क्योंकि 13 से 0 के अलावा ज़्यादा से ज़्यादा 12 शेषफल बचते हैं। यहाँ तो सिर्फ़ 6 अंकों के बाद दोहराता है।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "predictThirteen.say"
+          }
+        },
+        {
+          "on": "predictThirteen.checked",
+          "if": "division.digitsShown == 0",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "division"
+              }
+            },
+            {
+              "wait": 0.4
+            },
+            {
+              "call": "clock.start",
+              "args": {
+                "every": 0.4
+              }
+            }
+          ]
+        },
+        {
+          "on": "clock.tick",
+          "do": {
+            "call": "division.nextDigit"
+          }
+        },
+        {
+          "on": "division.repeated",
+          "do": {
+            "call": "clock.stop"
+          }
+        },
+        {
+          "on": "division.ended",
+          "do": {
+            "call": "clock.stop"
+          }
+        },
+        {
+          "on": "predictThirteen.correct",
+          "do": [
+            {
+              "wait": 3.5
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaSix"
+              }
+            },
+            {
+              "call": "mayaSix.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "division.nextDigit"
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 6,
+      "name": "threeSevenths",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "given",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "1/7 = 0.142857 142857 … Its remainders went 1 → 3 → 2 → 6 → 4 → 5 → 1.",
+                "hi": "1/7 = 0.142857 142857 … इसके शेषफल ऐसे चले: 1 → 3 → 2 → 6 → 4 → 5 → 1।"
+              },
+              "style": "body",
+              "speak": {
+                "en": "1 over 7 is 0.142857, repeating. Its remainders went 1, 3, 2, 6, 4, 5, and back to 1.",
+                "hi": "1 बटा 7 बराबर 0.142857, दोहराता हुआ। इसके शेषफल ऐसे चले: 1, 3, 2, 6, 4, 5, और वापस 1।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "predictThreeSevenths",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Without dividing: what is 3/7?",
+                "hi": "बिना भाग दिए बताओ: 3/7 कितना है?"
+              },
+              "options": [
+                {
+                  "id": "rotate",
+                  "label": {
+                    "en": "0.428571 428571 …",
+                    "hi": "0.428571 428571 …"
+                  }
+                },
+                {
+                  "id": "times",
+                  "label": {
+                    "en": "0.428571, and it stops",
+                    "hi": "0.428571, और यह रुक जाता है"
+                  },
+                  "feedback": {
+                    "en": "3/7 is 3 × 1/7, and 1/7 never stops. Does 3/7 have more digits after those six?",
+                    "hi": "3/7 = 3 × 1/7, और 1/7 कभी नहीं रुकता। क्या 3/7 में उन छह अंकों के बाद और अंक हैं?"
+                  },
+                  "misconception": "lostTheRepeat"
+                },
+                {
+                  "id": "fours",
+                  "label": {
+                    "en": "0.444 …",
+                    "hi": "0.444 …"
+                  },
+                  "feedback": {
+                    "en": "Look at 1/7's remainders. Where does remainder 3 come? Start reading the digits from there.",
+                    "hi": "1/7 के शेषफल देखो। शेषफल 3 कहाँ आता है? वहीं से अंक पढ़ना शुरू करो।"
+                  },
+                  "misconception": "newPatternForEachNumerator"
+                }
+              ],
+              "answer": "rotate",
+              "concepts": [
+                "remainder-argument"
+              ],
+              "speak": {
+                "en": "Without dividing: what is 3 over 7?",
+                "hi": "बिना भाग दिए बताओ: 3 बटा 7 कितना है?"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "division",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 3,
+              "denominator": 7,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 5,
+            "name": "clock",
+            "kind": "prop",
+            "prop": "timer",
+            "isInEvents": false
+          },
+          {
+            "id": 6,
+            "name": "arjunRotate",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "3 ÷ 7 starts at remainder 3: the same loop as 1/7, entered at a different slot. So the same six digits, starting at 4.",
+                "hi": "3 ÷ 7 शेषफल 3 से शुरू होता है: 1/7 वाला ही चक्कर, बस दूसरे खाने से शुरू। इसलिए वही छह अंक, 4 से शुरू होकर।"
+              },
+              "speak": {
+                "en": "3 divided by 7 starts at remainder 3: the same loop as 1 seventh, entered at a different slot. So the same six digits, starting at 4.",
+                "hi": "3 भाग 7 शेषफल 3 से शुरू होता है: 1 बटा 7 वाला ही चक्कर, बस दूसरे खाने से शुरू। इसलिए वही छह अंक, 4 से शुरू होकर।"
+              }
+            }
+          },
+          {
+            "id": 7,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": [
+            {
+              "call": "given.say"
+            },
+            {
+              "call": "predictThreeSevenths.say"
+            }
+          ]
+        },
+        {
+          "on": "predictThreeSevenths.checked",
+          "if": "division.digitsShown == 0",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "division"
+              }
+            },
+            {
+              "wait": 0.4
+            },
+            {
+              "call": "clock.start",
+              "args": {
+                "every": 0.4
+              }
+            }
+          ]
+        },
+        {
+          "on": "clock.tick",
+          "do": {
+            "call": "division.nextDigit"
+          }
+        },
+        {
+          "on": "division.repeated",
+          "do": {
+            "call": "clock.stop"
+          }
+        },
+        {
+          "on": "division.ended",
+          "do": {
+            "call": "clock.stop"
+          }
+        },
+        {
+          "on": "predictThreeSevenths.correct",
+          "do": [
+            {
+              "wait": 3.5
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunRotate"
+              }
+            },
+            {
+              "call": "arjunRotate.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "division.nextDigit"
+      ],
+      "nextPieceId": 8
+    },
+    {
+      "id": 7,
+      "name": "twoElevenths",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "divideYourself",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Your turn: divide 2 by 11. 11 doesn't go into 2, so bring down a 0: how many 11s fit in 20? Tap that digit. Keep going until a remainder comes back, then Check.",
+                "hi": "अब तुम्हारी बारी: 2 को 11 से भाग दो। 2 में 11 नहीं जाता, तो 0 नीचे लाओ: 20 में 11 कितनी बार जाता है? वह अंक दबाओ। ऐसे ही आगे करो, जब कोई शेषफल वापस आ जाए तो जाँचो।"
+              },
+              "about": "division",
+              "concepts": [
+                "decimal-expansions"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "division",
+            "kind": "prop",
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 2,
+              "denominator": 11,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": true
+            }
+          },
+          {
+            "id": 4,
+            "name": "mayaEleven",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "Remainders 2, 9, 2: back already. So 2/11 = 0.181818… with the bar over 18.",
+                "hi": "शेषफल 2, 9, 2: तुरंत वापस। इसलिए 2/11 = 0.181818…, 18 के ऊपर रेखा के साथ।"
+              },
+              "speak": {
+                "en": "Remainders 2, 9, 2: back already. So 2 over 11 is 0.1818 and so on, with the bar over 1 8.",
+                "hi": "शेषफल 2, 9, 2: तुरंत वापस। इसलिए 2 बटा 11 बराबर 0.1818 और आगे भी, 1 8 के ऊपर रेखा के साथ।"
+              }
+            }
+          },
+          {
+            "id": 5,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "divideYourself.isMet",
+          "to": "division.hasRepeated"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "divideYourself.say"
+          }
+        },
+        {
+          "on": "divideYourself.wrong",
+          "do": {
+            "call": "divideYourself.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Not yet. Look at the remainders in orange: has one of them come back?",
+                "hi": "अभी नहीं। नारंगी शेषफल देखो: क्या कोई वापस आया है?"
+              }
+            }
+          }
+        },
+        {
+          "on": "divideYourself.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaEleven"
+              }
+            },
+            {
+              "call": "mayaEleven.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "division.tryDigit",
+        "division.nextDigit",
+        "division.showDigits"
+      ],
+      "nextPieceId": 6
+    },
+    {
+      "id": 8,
+      "name": "seventeen",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "blockSeventeen",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "What is the most digits the repeating block of 1/17 could have?",
+                "hi": "1/17 के दोहराने वाले हिस्से में ज़्यादा से ज़्यादा कितने अंक हो सकते हैं?"
+              },
+              "options": [
+                {
+                  "id": "sixteen",
+                  "label": {
+                    "en": "16",
+                    "hi": "16"
+                  }
+                },
+                {
+                  "id": "seventeen",
+                  "label": {
+                    "en": "17",
+                    "hi": "17"
+                  },
+                  "feedback": {
+                    "en": "A remainder of 0 would end the division. How many non-zero remainders are there?",
+                    "hi": "शेषफल 0 आने पर भाग ख़त्म हो जाएगा। 0 के अलावा कितने शेषफल हैं?"
+                  },
+                  "misconception": "countsZeroAsRepeatingSlot"
+                },
+                {
+                  "id": "unlimited",
+                  "label": {
+                    "en": "There's no limit",
+                    "hi": "कोई सीमा नहीं"
+                  },
+                  "feedback": {
+                    "en": "Dividing by 17, how many slots does the remainder clock have?",
+                    "hi": "17 से भाग देने पर शेषफल घड़ी में कितने खाने होंगे?"
+                  },
+                  "misconception": "remaindersNotLinkedToDecimal"
+                }
+              ],
+              "answer": "sixteen",
+              "concepts": [
+                "remainder-argument"
+              ],
+              "speak": {
+                "en": "What is the most digits the repeating block of 1 over 17 could have?",
+                "hi": "1 बटा 17 के दोहराने वाले हिस्से में ज़्यादा से ज़्यादा कितने अंक हो सकते हैं?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "division",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "decimalExpansion",
+            "with": {
+              "numerator": 1,
+              "denominator": 17,
+              "digitsShown": 0,
+              "isClockShown": true,
+              "isAskingDigit": false
+            }
+          },
+          {
+            "id": 4,
+            "name": "clock",
+            "kind": "prop",
+            "prop": "timer",
+            "isInEvents": false
+          },
+          {
+            "id": 5,
+            "name": "arjunAllSixteen",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "16 at most, and 1/17 uses every one of its 16 slots before it repeats.",
+                "hi": "ज़्यादा से ज़्यादा 16, और 1/17 दोहराने से पहले अपने सभी 16 खाने इस्तेमाल करता है।"
+              },
+              "speak": {
+                "en": "16 at most, and 1 over 17 uses every one of its 16 slots before it repeats.",
+                "hi": "ज़्यादा से ज़्यादा 16, और 1 बटा 17 दोहराने से पहले अपने सभी 16 खाने इस्तेमाल करता है।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "blockSeventeen.say"
+          }
+        },
+        {
+          "on": "blockSeventeen.checked",
+          "if": "division.digitsShown == 0",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "division"
+              }
+            },
+            {
+              "wait": 0.4
+            },
+            {
+              "call": "clock.start",
+              "args": {
+                "every": 0.25
+              }
+            }
+          ]
+        },
+        {
+          "on": "clock.tick",
+          "do": {
+            "call": "division.nextDigit"
+          }
+        },
+        {
+          "on": "division.repeated",
+          "do": {
+            "call": "clock.stop"
+          }
+        },
+        {
+          "on": "division.ended",
+          "do": {
+            "call": "clock.stop"
+          }
+        },
+        {
+          "on": "blockSeventeen.correct",
+          "do": [
+            {
+              "wait": 4.5
+            },
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunAllSixteen"
+              }
+            },
+            {
+              "call": "arjunAllSixteen.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "division.nextDigit"
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 9,
+      "name": "whichEnds",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "endingOne",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Which of these has a decimal that terminates?",
+                "hi": "इनमें से किसका दशमलव सांत (ख़त्म होने वाला) है?"
+              },
+              "options": [
+                {
+                  "id": "third",
+                  "label": {
+                    "en": "1/3",
+                    "hi": "1/3"
+                  },
+                  "feedback": {
+                    "en": "1 ÷ 3 leaves remainder 1 at every step. Does it ever reach 0?",
+                    "hi": "1 ÷ 3 में हर कदम पर शेषफल 1 बचता है। क्या कभी 0 आता है?"
+                  },
+                  "misconception": "smallDenominatorEnds"
+                },
+                {
+                  "id": "twentieths",
+                  "label": {
+                    "en": "7/20",
+                    "hi": "7/20"
+                  }
+                },
+                {
+                  "id": "sevenths",
+                  "label": {
+                    "en": "2/7",
+                    "hi": "2/7"
+                  },
+                  "feedback": {
+                    "en": "2/7 rides the same loop as 1/7. Does that loop pass through 0?",
+                    "hi": "2/7 भी 1/7 वाले चक्कर पर चलता है। क्या वह चक्कर 0 से होकर जाता है?"
+                  },
+                  "misconception": "sevenEnds"
+                },
+                {
+                  "id": "twelfths",
+                  "label": {
+                    "en": "5/12",
+                    "hi": "5/12"
+                  },
+                  "feedback": {
+                    "en": "12 = 4 × 3. What does the 3 inside it do to the division?",
+                    "hi": "12 = 4 × 3। इसके अंदर का 3 भाग के साथ क्या करता है?"
+                  },
+                  "misconception": "evenDenominatorEnds"
+                }
+              ],
+              "answer": "twentieths",
+              "concepts": [
+                "decimal-expansions"
+              ],
+              "speak": {
+                "en": "Which of these has a decimal that terminates?",
+                "hi": "इनमें से किसका दशमलव सांत है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "mayaTwosFives",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "7/20 = 0.35. In lowest terms, a fraction terminates only when its denominator is made of 2s and 5s: 20 = 2 × 2 × 5.",
+                "hi": "7/20 = 0.35। सरलतम रूप में, भिन्न तभी सांत होती है जब उसका हर सिर्फ़ 2 और 5 से बना हो: 20 = 2 × 2 × 5।"
+              },
+              "speak": {
+                "en": "7 over 20 is 0.35. In lowest terms, a fraction terminates only when its denominator is made of 2s and 5s: 20 is 2 times 2 times 5.",
+                "hi": "7 बटा 20 बराबर 0.35। सरलतम रूप में, भिन्न तभी सांत होती है जब उसका हर सिर्फ़ 2 और 5 से बना हो: 20 बराबर 2 गुणा 2 गुणा 5।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "endingOne.say"
+          }
+        },
+        {
+          "on": "endingOne.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaTwosFives"
+              }
+            },
+            {
+              "call": "mayaTwosFives.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 5
+    }
+  ],
+  "nextBoardId": 10
+}

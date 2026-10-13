@@ -1,0 +1,1135 @@
+{
+  "id": "class9-maths/ch1/families-of-numbers",
+  "version": "0.1.0",
+  "title": {
+    "en": "Families of numbers",
+    "hi": "संख्याओं के परिवार"
+  },
+  "concepts": [
+    "number-families",
+    "rational-numbers"
+  ],
+  "boards": [
+    {
+      "id": 1,
+      "name": "counting",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Count on your fingers: 1, 2, 3, 4, … These counting numbers are the natural numbers, N.",
+                "hi": "उँगलियों पर गिनो: 1, 2, 3, 4, … ये गिनती की संख्याएँ प्राकृत संख्याएँ हैं, N।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "Count on your fingers: 1, 2, 3, 4, and so on. These counting numbers are the natural numbers, N.",
+                "hi": "उँगलियों पर गिनो: 1, 2, 3, 4, और आगे। ये गिनती की संख्याएँ प्राकृत संख्याएँ हैं, N।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "sorter",
+            "kind": "prop",
+            "prop": "numberSorter",
+            "with": {
+              "cards": [
+                {
+                  "id": "seven",
+                  "label": "7",
+                  "family": "natural",
+                  "placedIn": null
+                },
+                {
+                  "id": "one",
+                  "label": "1",
+                  "family": "natural",
+                  "placedIn": null
+                },
+                {
+                  "id": "twenty",
+                  "label": "20",
+                  "family": "natural",
+                  "placedIn": null
+                }
+              ],
+              "families": [
+                "natural"
+              ],
+              "names": {
+                "natural": {
+                  "en": "Natural numbers",
+                  "hi": "प्राकृत संख्याएँ"
+                },
+                "whole": {
+                  "en": "Whole numbers",
+                  "hi": "पूर्ण संख्याएँ"
+                },
+                "integer": {
+                  "en": "Integers",
+                  "hi": "पूर्णांक"
+                },
+                "rational": {
+                  "en": "Rational numbers",
+                  "hi": "परिमेय संख्याएँ"
+                },
+                "irrational": {
+                  "en": "Irrational numbers",
+                  "hi": "अपरिमेय संख्याएँ"
+                },
+                "real": {
+                  "en": "Real numbers",
+                  "hi": "वास्तविक संख्याएँ"
+                }
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "putInN",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Tap a card, then tap the ring N to put it in. Do all three, then Check.",
+                "hi": "किसी कार्ड पर टैप करो, फिर N वाले घेरे पर टैप करके उसे अंदर रखो। तीनों रखो, फिर जाँचो।"
+              },
+              "about": "sorter",
+              "concepts": [
+                "number-families"
+              ]
+            }
+          },
+          {
+            "id": 5,
+            "name": "mayaN",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "N never ends: after any natural number there is always one more. But not every number fits in N.",
+                "hi": "N कभी ख़त्म नहीं होता: हर प्राकृत संख्या के बाद एक और आती है। पर हर संख्या N में नहीं आती।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "putInN.isMet",
+          "to": "sorter.isAllRight"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "putInN.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaN"
+              }
+            },
+            {
+              "call": "mayaN.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "sorter.pick",
+        "sorter.drop",
+        "sorter.place"
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 2,
+      "name": "doesntFit",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Put each card in N, or outside if it isn't a natural number.",
+                "hi": "हर कार्ड को N में रखो, या बाहर अगर वह प्राकृत संख्या नहीं है।"
+              },
+              "style": "title"
+            }
+          },
+          {
+            "id": 3,
+            "name": "sorter",
+            "kind": "prop",
+            "prop": "numberSorter",
+            "with": {
+              "cards": [
+                {
+                  "id": "four",
+                  "label": "4",
+                  "family": "natural",
+                  "placedIn": null
+                },
+                {
+                  "id": "zero",
+                  "label": "0",
+                  "family": "whole",
+                  "placedIn": null
+                },
+                {
+                  "id": "minusTwo",
+                  "label": "−2",
+                  "family": "integer",
+                  "placedIn": null
+                },
+                {
+                  "id": "nine",
+                  "label": "9",
+                  "family": "natural",
+                  "placedIn": null
+                }
+              ],
+              "families": [
+                "natural"
+              ],
+              "names": {
+                "natural": {
+                  "en": "Natural numbers",
+                  "hi": "प्राकृत संख्याएँ"
+                },
+                "whole": {
+                  "en": "Whole numbers",
+                  "hi": "पूर्ण संख्याएँ"
+                },
+                "integer": {
+                  "en": "Integers",
+                  "hi": "पूर्णांक"
+                },
+                "rational": {
+                  "en": "Rational numbers",
+                  "hi": "परिमेय संख्याएँ"
+                },
+                "irrational": {
+                  "en": "Irrational numbers",
+                  "hi": "अपरिमेय संख्याएँ"
+                },
+                "real": {
+                  "en": "Real numbers",
+                  "hi": "वास्तविक संख्याएँ"
+                }
+              },
+              "outsideName": {
+                "en": "Doesn't fit any ring yet",
+                "hi": "अभी किसी घेरे में नहीं आती"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "sortN",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Sort all four cards, then Check.",
+                "hi": "चारों कार्ड रखो, फिर जाँचो।"
+              },
+              "about": "sorter",
+              "concepts": [
+                "number-families"
+              ]
+            }
+          },
+          {
+            "id": 5,
+            "name": "arjunGrow",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "0 and −2 are numbers too, but N has no room for them. Our bag of numbers has to grow.",
+                "hi": "0 और −2 भी संख्याएँ हैं, पर N में उनकी जगह नहीं। संख्याओं का हमारा थैला बड़ा करना होगा।"
+              },
+              "speak": {
+                "en": "0 and minus 2 are numbers too, but N has no room for them. Our bag of numbers has to grow.",
+                "hi": "0 और माइनस 2 भी संख्याएँ हैं, पर N में उनकी जगह नहीं। संख्याओं का हमारा थैला बड़ा करना होगा।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "sortN.isMet",
+          "to": "sorter.isAllRight"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "sortN.wrong",
+          "if": "sorter.placedIn.zero == \"natural\"",
+          "do": {
+            "call": "sortN.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Which number do you start with when you count your fingers? Is it 0?",
+                "hi": "उँगलियाँ गिनते समय तुम किस संख्या से शुरू करते हो? क्या 0 से?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortN.wrong",
+          "if": "sorter.placedIn.zero != \"natural\" and sorter.placedIn.minusTwo == \"natural\"",
+          "do": {
+            "call": "sortN.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Can you count −2 things on your fingers?",
+                "hi": "क्या तुम उँगलियों पर −2 चीज़ें गिन सकते हो?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortN.wrong",
+          "if": "sorter.placedIn.zero != \"natural\" and sorter.placedIn.minusTwo != \"natural\"",
+          "do": {
+            "call": "sortN.giveFeedback",
+            "args": {
+              "text": {
+                "en": "4 and 9 are counting numbers. Which ring do counting numbers live in?",
+                "hi": "4 और 9 गिनती की संख्याएँ हैं। गिनती की संख्याएँ किस घेरे में रहती हैं?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortN.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunGrow"
+              }
+            },
+            {
+              "call": "arjunGrow.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "sorter.pick",
+        "sorter.drop",
+        "sorter.place"
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 3,
+      "name": "wholeAndIntegers",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "Add 0 and you get the whole numbers, W: 0, 1, 2, 3, … Add the negatives too and you get the integers, Z: …, −2, −1, 0, 1, 2, …",
+                "hi": "0 जोड़ो तो पूर्ण संख्याएँ मिलती हैं, W: 0, 1, 2, 3, … ऋण संख्याएँ भी जोड़ो तो पूर्णांक मिलते हैं, Z: …, −2, −1, 0, 1, 2, …"
+              },
+              "style": "title",
+              "speak": {
+                "en": "Add 0 and you get the whole numbers, W: 0, 1, 2, 3, and so on. Add the negatives too and you get the integers, Z.",
+                "hi": "0 जोड़ो तो पूर्ण संख्याएँ मिलती हैं, W: 0, 1, 2, 3, और आगे। माइनस संख्याएँ भी जोड़ो तो पूर्णांक मिलते हैं, Z।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "sorter",
+            "kind": "prop",
+            "prop": "numberSorter",
+            "with": {
+              "cards": [
+                {
+                  "id": "zero",
+                  "label": "0",
+                  "family": "whole",
+                  "placedIn": null
+                },
+                {
+                  "id": "minusSeven",
+                  "label": "−7",
+                  "family": "integer",
+                  "placedIn": null
+                },
+                {
+                  "id": "five",
+                  "label": "5",
+                  "family": "natural",
+                  "placedIn": null
+                },
+                {
+                  "id": "minusOne",
+                  "label": "−1",
+                  "family": "integer",
+                  "placedIn": null
+                }
+              ],
+              "families": [
+                "natural",
+                "whole",
+                "integer"
+              ],
+              "names": {
+                "natural": {
+                  "en": "Natural numbers",
+                  "hi": "प्राकृत संख्याएँ"
+                },
+                "whole": {
+                  "en": "Whole numbers",
+                  "hi": "पूर्ण संख्याएँ"
+                },
+                "integer": {
+                  "en": "Integers",
+                  "hi": "पूर्णांक"
+                },
+                "rational": {
+                  "en": "Rational numbers",
+                  "hi": "परिमेय संख्याएँ"
+                },
+                "irrational": {
+                  "en": "Irrational numbers",
+                  "hi": "अपरिमेय संख्याएँ"
+                },
+                "real": {
+                  "en": "Real numbers",
+                  "hi": "वास्तविक संख्याएँ"
+                }
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "sortZ",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Put each card in the smallest ring that holds it.",
+                "hi": "हर कार्ड को उस सबसे छोटे घेरे में रखो जिसमें वह आता है।"
+              },
+              "about": "sorter",
+              "concepts": [
+                "number-families"
+              ]
+            }
+          },
+          {
+            "id": 5,
+            "name": "mayaInside",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "See the rings: N sits inside W, and W inside Z. So 5 is natural, whole and an integer, all at once.",
+                "hi": "घेरे देखो: N, W के अंदर है, और W, Z के अंदर। इसलिए 5 प्राकृत भी है, पूर्ण भी और पूर्णांक भी, एक साथ।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "sortZ.isMet",
+          "to": "sorter.isAllRight"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "sortZ.wrong",
+          "if": "sorter.placedIn.zero == \"natural\" or sorter.placedIn.zero == \"integer\"",
+          "do": {
+            "call": "sortZ.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Is 0 a counting number? Which ring was made to hold 0?",
+                "hi": "क्या 0 गिनती की संख्या है? कौन-सा घेरा 0 के लिए बना था?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortZ.wrong",
+          "if": "sorter.placedIn.zero == \"whole\" and sorter.placedIn.five != \"natural\"",
+          "do": {
+            "call": "sortZ.giveFeedback",
+            "args": {
+              "text": {
+                "en": "5 fits in all three rings. Which is the smallest one?",
+                "hi": "5 तीनों घेरों में आता है। सबसे छोटा कौन-सा है?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortZ.wrong",
+          "if": "sorter.placedIn.zero == \"whole\" and sorter.placedIn.five == \"natural\"",
+          "do": {
+            "call": "sortZ.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Whole numbers start at 0 and go up. Are −7 and −1 whole numbers?",
+                "hi": "पूर्ण संख्याएँ 0 से शुरू होकर बढ़ती हैं। क्या −7 और −1 पूर्ण संख्याएँ हैं?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortZ.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaInside"
+              }
+            },
+            {
+              "call": "mayaInside.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "sorter.pick",
+        "sorter.drop",
+        "sorter.place"
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 4,
+      "name": "rationals",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "text": {
+                "en": "A rational number can be written as p/q, where p and q are integers and q ≠ 0. That gives the ring Q.",
+                "hi": "परिमेय संख्या को p/q लिखा जा सकता है, जहाँ p और q पूर्णांक हैं और q ≠ 0। इससे घेरा Q बनता है।"
+              },
+              "style": "title",
+              "speak": {
+                "en": "A rational number can be written as p over q, where p and q are integers and q is not 0. That gives the ring Q.",
+                "hi": "परिमेय संख्या को p बटा q लिखा जा सकता है, जहाँ p और q पूर्णांक हैं और q शून्य नहीं है। इससे घेरा Q बनता है।"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "sorter",
+            "kind": "prop",
+            "prop": "numberSorter",
+            "with": {
+              "cards": [
+                {
+                  "id": "zero",
+                  "label": "0",
+                  "family": "whole",
+                  "placedIn": null
+                },
+                {
+                  "id": "minusSeven",
+                  "label": "−7",
+                  "family": "integer",
+                  "placedIn": null
+                },
+                {
+                  "id": "threeFifths",
+                  "label": "3/5",
+                  "family": "rational",
+                  "placedIn": null
+                },
+                {
+                  "id": "twelveQuarters",
+                  "label": "12/4",
+                  "family": "natural",
+                  "placedIn": null
+                },
+                {
+                  "id": "one",
+                  "label": "1",
+                  "family": "natural",
+                  "placedIn": null
+                }
+              ],
+              "families": [
+                "natural",
+                "whole",
+                "integer",
+                "rational"
+              ],
+              "names": {
+                "natural": {
+                  "en": "Natural numbers",
+                  "hi": "प्राकृत संख्याएँ"
+                },
+                "whole": {
+                  "en": "Whole numbers",
+                  "hi": "पूर्ण संख्याएँ"
+                },
+                "integer": {
+                  "en": "Integers",
+                  "hi": "पूर्णांक"
+                },
+                "rational": {
+                  "en": "Rational numbers",
+                  "hi": "परिमेय संख्याएँ"
+                },
+                "irrational": {
+                  "en": "Irrational numbers",
+                  "hi": "अपरिमेय संख्याएँ"
+                },
+                "real": {
+                  "en": "Real numbers",
+                  "hi": "वास्तविक संख्याएँ"
+                }
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "sortQ",
+            "kind": "prop",
+            "prop": "goal",
+            "with": {
+              "prompt": {
+                "en": "Put each card in the smallest ring that holds it.",
+                "hi": "हर कार्ड को उस सबसे छोटे घेरे में रखो जिसमें वह आता है।"
+              },
+              "about": "sorter",
+              "concepts": [
+                "number-families",
+                "rational-numbers"
+              ]
+            }
+          },
+          {
+            "id": 5,
+            "name": "mayaAllAtOnce",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "12/4 is just 3 written another way, so it is natural. And every integer is rational too: 1 = 1/1, −7 = −7/1.",
+                "hi": "12/4 बस 3 को दूसरे ढंग से लिखा है, इसलिए यह प्राकृत है। और हर पूर्णांक परिमेय भी है: 1 = 1/1, −7 = −7/1।"
+              },
+              "speak": {
+                "en": "12 over 4 is just 3 written another way, so it is natural. And every integer is rational too: 1 is 1 over 1, minus 7 is minus 7 over 1.",
+                "hi": "12 बटा 4 बस 3 को दूसरे ढंग से लिखा है, इसलिए यह प्राकृत है। और हर पूर्णांक परिमेय भी है: 1 बराबर 1 बटा 1, माइनस 7 बराबर माइनस 7 बटा 1।"
+              }
+            }
+          },
+          {
+            "id": 6,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "sortQ.isMet",
+          "to": "sorter.isAllRight"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "sortQ.wrong",
+          "if": "sorter.placedIn.twelveQuarters != \"natural\"",
+          "do": {
+            "call": "sortQ.giveFeedback",
+            "args": {
+              "text": {
+                "en": "What do you get if you actually do 12 ÷ 4?",
+                "hi": "12 ÷ 4 सच में करके देखो, क्या मिलता है?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortQ.wrong",
+          "if": "sorter.placedIn.twelveQuarters == \"natural\" and sorter.placedIn.zero == \"natural\"",
+          "do": {
+            "call": "sortQ.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Which number do you start with when you count your fingers?",
+                "hi": "उँगलियाँ गिनते समय तुम किस संख्या से शुरू करते हो?"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortQ.wrong",
+          "if": "sorter.placedIn.twelveQuarters == \"natural\" and sorter.placedIn.zero != \"natural\"",
+          "do": {
+            "call": "sortQ.giveFeedback",
+            "args": {
+              "text": {
+                "en": "Go card by card: a counting number → N; 0 → W; a negative whole number → Z; a fraction that isn't a whole number → Q.",
+                "hi": "एक-एक कार्ड देखो: गिनती की संख्या → N; 0 → W; ऋण पूर्ण संख्या → Z; जो भिन्न पूर्ण संख्या न हो → Q।"
+              }
+            }
+          }
+        },
+        {
+          "on": "sortQ.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaAllAtOnce"
+              }
+            },
+            {
+              "call": "mayaAllAtOnce.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [
+        "sorter.pick",
+        "sorter.drop",
+        "sorter.place"
+      ],
+      "nextPieceId": 7
+    },
+    {
+      "id": 5,
+      "name": "whyNotZero",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "fiveOverZero",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Why must q never be 0? 10/2 = 5 because 5 × 2 = 10. So if 5/0 = x, then x × 0 would have to be 5. Which x works?",
+                "hi": "q कभी 0 क्यों नहीं हो सकता? 10/2 = 5 क्योंकि 5 × 2 = 10। तो अगर 5/0 = x, तो x × 0 को 5 होना पड़ेगा। कौन-सा x ऐसा है?"
+              },
+              "options": [
+                {
+                  "id": "zero",
+                  "label": {
+                    "en": "x = 0",
+                    "hi": "x = 0"
+                  },
+                  "feedback": {
+                    "en": "0 × 0 = 0. Is that 5?",
+                    "hi": "0 × 0 = 0। क्या यह 5 है?"
+                  },
+                  "misconception": "divideByZeroIsZero"
+                },
+                {
+                  "id": "five",
+                  "label": {
+                    "en": "x = 5",
+                    "hi": "x = 5"
+                  },
+                  "feedback": {
+                    "en": "5 × 0 = ? Is that 5?",
+                    "hi": "5 × 0 = ? क्या यह 5 है?"
+                  },
+                  "misconception": "divideByZeroIsNumerator"
+                },
+                {
+                  "id": "big",
+                  "label": {
+                    "en": "A very big number",
+                    "hi": "कोई बहुत बड़ी संख्या"
+                  },
+                  "feedback": {
+                    "en": "Take a million. A million × 0 = ?",
+                    "hi": "दस लाख लो। दस लाख × 0 = ?"
+                  },
+                  "misconception": "divideByZeroIsInfinity"
+                },
+                {
+                  "id": "none",
+                  "label": {
+                    "en": "No number works",
+                    "hi": "कोई संख्या काम नहीं करती"
+                  }
+                }
+              ],
+              "answer": "none",
+              "concepts": [
+                "rational-numbers"
+              ],
+              "speak": {
+                "en": "Why must q never be 0? 10 over 2 is 5 because 5 times 2 is 10. So if 5 over 0 is x, then x times 0 would have to be 5. Which x works?",
+                "hi": "q कभी 0 क्यों नहीं हो सकता? 10 बटा 2 बराबर 5, क्योंकि 5 गुणा 2 बराबर 10। तो अगर 5 बटा 0 बराबर x, तो x गुणा 0 को 5 होना पड़ेगा। कौन-सा x ऐसा है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "arjunNoAnswer",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "Anything × 0 is 0, never 5. So 5/0 has no answer, and that's why p/q needs q ≠ 0.",
+                "hi": "किसी भी संख्या × 0 = 0 होता है, 5 कभी नहीं। इसलिए 5/0 का कोई उत्तर नहीं, और इसीलिए p/q में q ≠ 0 चाहिए।"
+              },
+              "speak": {
+                "en": "Anything times 0 is 0, never 5. So 5 over 0 has no answer, and that's why p over q needs q not to be 0.",
+                "hi": "किसी भी संख्या गुणा 0 बराबर 0 होता है, 5 कभी नहीं। इसलिए 5 बटा 0 का कोई उत्तर नहीं, और इसीलिए p बटा q में q शून्य नहीं हो सकता।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "fiveOverZero.say"
+          }
+        },
+        {
+          "on": "fiveOverZero.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunNoAnswer"
+              }
+            },
+            {
+              "call": "arjunNoAnswer.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 5
+    },
+    {
+      "id": 6,
+      "name": "zeroRational",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "isZeroRational",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Is 0 a rational number?",
+                "hi": "क्या 0 एक परिमेय संख्या है?"
+              },
+              "options": [
+                {
+                  "id": "yes",
+                  "label": {
+                    "en": "Yes: 0 = 0/1",
+                    "hi": "हाँ: 0 = 0/1"
+                  }
+                },
+                {
+                  "id": "notFraction",
+                  "label": {
+                    "en": "No: 0 isn't a fraction",
+                    "hi": "नहीं: 0 भिन्न नहीं है"
+                  },
+                  "feedback": {
+                    "en": "The rule says p/q with q ≠ 0. Is p allowed to be 0?",
+                    "hi": "नियम है p/q जहाँ q ≠ 0। क्या p को 0 होने की छूट है?"
+                  },
+                  "misconception": "rationalMeansLooksLikeFraction"
+                },
+                {
+                  "id": "divide",
+                  "label": {
+                    "en": "No: you can't divide by 0",
+                    "hi": "नहीं: 0 से भाग नहीं दे सकते"
+                  },
+                  "feedback": {
+                    "en": "Which is the problem: 0 on top or 0 on the bottom? Try 0 ÷ 5.",
+                    "hi": "दिक़्क़त किसमें है: 0 ऊपर हो या नीचे? 0 ÷ 5 करके देखो।"
+                  },
+                  "misconception": "zeroOverQConfusedWithQOverZero"
+                }
+              ],
+              "answer": "yes",
+              "concepts": [
+                "rational-numbers"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "mayaZero",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "0 = 0/1 = 0/7 = 0/100. Zero on top is fine; only zero at the bottom is not allowed.",
+                "hi": "0 = 0/1 = 0/7 = 0/100। ऊपर शून्य चलता है; बस नीचे शून्य नहीं चलता।"
+              },
+              "speak": {
+                "en": "0 is 0 over 1, or 0 over 7, or 0 over 100. Zero on top is fine; only zero at the bottom is not allowed.",
+                "hi": "0 बराबर 0 बटा 1, या 0 बटा 7, या 0 बटा 100। ऊपर शून्य चलता है; बस नीचे शून्य नहीं चलता।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "isZeroRational.say"
+          }
+        },
+        {
+          "on": "isZeroRational.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaZero"
+              }
+            },
+            {
+              "call": "mayaZero.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 5
+    },
+    {
+      "id": 7,
+      "name": "integerWhole",
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "everyIntegerWhole",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "True or false: every integer is a whole number.",
+                "hi": "सही या ग़लत: हर पूर्णांक एक पूर्ण संख्या है।"
+              },
+              "options": [
+                {
+                  "id": "true",
+                  "label": {
+                    "en": "True",
+                    "hi": "सही"
+                  },
+                  "feedback": {
+                    "en": "Find an integer that isn't in W. Where did you put −7?",
+                    "hi": "ऐसा पूर्णांक ढूँढो जो W में नहीं है। तुमने −7 कहाँ रखा था?"
+                  },
+                  "misconception": "integersAreWhole"
+                },
+                {
+                  "id": "false",
+                  "label": {
+                    "en": "False",
+                    "hi": "ग़लत"
+                  }
+                }
+              ],
+              "answer": "false",
+              "concepts": [
+                "number-families"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "arjunOneWay",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "arjun",
+              "line": {
+                "en": "−1 is an integer but not a whole number. It works one way only: every whole number is an integer, but not every integer is whole.",
+                "hi": "−1 पूर्णांक है पर पूर्ण संख्या नहीं। यह एक ही तरफ़ सही है: हर पूर्ण संख्या पूर्णांक है, पर हर पूर्णांक पूर्ण संख्या नहीं।"
+              },
+              "speak": {
+                "en": "Minus 1 is an integer but not a whole number. It works one way only: every whole number is an integer, but not every integer is whole.",
+                "hi": "माइनस 1 पूर्णांक है पर पूर्ण संख्या नहीं। यह एक ही तरफ़ सही है: हर पूर्ण संख्या पूर्णांक है, पर हर पूर्णांक पूर्ण संख्या नहीं।"
+              }
+            }
+          },
+          {
+            "id": 4,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "everyIntegerWhole.say"
+          }
+        },
+        {
+          "on": "everyIntegerWhole.correct",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "arjunOneWay"
+              }
+            },
+            {
+              "call": "arjunOneWay.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ],
+      "studentOnly": [],
+      "nextPieceId": 5
+    }
+  ],
+  "nextBoardId": 8
+}

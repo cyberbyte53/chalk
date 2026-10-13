@@ -1,0 +1,28 @@
+{
+  "name": "@chalk/studio",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "validate": "tsx src/cli.ts ../content",
+    "publish-lesson": "tsx src/publish-cli.ts",
+    "test-jugnu": "tsx src/jugnu-eval/cli.ts"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*",
+    "@chalk/jugnu": "workspace:*",
+    "@chalk/library": "workspace:*",
+    "@chalk/player": "workspace:*",
+    "@chalk/prop": "workspace:*",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "22.10.2",
+    "tsx": "4.19.2"
+  }
+}

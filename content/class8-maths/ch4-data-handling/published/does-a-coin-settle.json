@@ -1,0 +1,295 @@
+{
+  "id": "class8-maths/ch4/does-a-coin-settle",
+  "version": "0.1.0",
+  "title": {
+    "en": "Does a coin settle?",
+    "hi": "क्या सिक्का टिकता है?"
+  },
+  "concepts": [
+    "experimental-probability"
+  ],
+  "nextBoardId": 3,
+  "boards": [
+    {
+      "id": 1,
+      "name": "tossing",
+      "nextPieceId": 12,
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "title",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "style": "title",
+              "text": {
+                "en": "Toss a coin. How often is it heads?",
+                "hi": "सिक्का उछालो। कितनी बार चित आता है?"
+              }
+            }
+          },
+          {
+            "id": 3,
+            "name": "controls",
+            "kind": "row",
+            "children": [
+              {
+                "id": 4,
+                "name": "coin",
+                "kind": "prop",
+                "prop": "coin"
+              },
+              {
+                "id": 5,
+                "name": "tossOnce",
+                "kind": "prop",
+                "prop": "button",
+                "with": {
+                  "label": {
+                    "en": "Toss once",
+                    "hi": "एक बार उछालो"
+                  }
+                }
+              },
+              {
+                "id": 6,
+                "name": "tossMany",
+                "kind": "prop",
+                "prop": "button",
+                "with": {
+                  "label": {
+                    "en": "Toss 100 times",
+                    "hi": "100 बार उछालो"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": 7,
+            "name": "score",
+            "kind": "prop",
+            "prop": "text",
+            "with": {
+              "style": "note",
+              "text": {
+                "en": "Heads: 0 of 0",
+                "hi": "चित: 0 में से 0"
+              }
+            }
+          },
+          {
+            "id": 8,
+            "name": "chart",
+            "kind": "prop",
+            "prop": "graph",
+            "with": {
+              "xMax": 100,
+              "yMin": 0,
+              "yMax": 1,
+              "guide": 0.5,
+              "guideLabel": "½",
+              "xLabel": {
+                "en": "tosses",
+                "hi": "उछाल"
+              },
+              "yLabel": {
+                "en": "fraction that were heads",
+                "hi": "चित का भाग"
+              }
+            }
+          },
+          {
+            "id": 9,
+            "name": "mayaSettles",
+            "kind": "prop",
+            "isHidden": true,
+            "prop": "line",
+            "with": {
+              "character": "maya",
+              "line": {
+                "en": "See? At first it jumps around. The more you toss, the closer it settles to ½.",
+                "hi": "देखा? शुरू में यह ऊपर-नीचे होता है। जितना ज़्यादा उछालो, उतना यह ½ के पास आता है।"
+              }
+            }
+          },
+          {
+            "id": 10,
+            "name": "clock",
+            "kind": "prop",
+            "prop": "timer"
+          },
+          {
+            "id": 11,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [
+        {
+          "set": "score.text",
+          "text": {
+            "en": "Heads: {coin.heads} of {coin.count}",
+            "hi": "चित: {coin.count} में से {coin.heads}"
+          }
+        },
+        {
+          "set": "tossOnce.isEnabled",
+          "to": "not clock.isRunning"
+        },
+        {
+          "set": "tossMany.isEnabled",
+          "to": "not clock.isRunning"
+        }
+      ],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "title.say"
+          }
+        },
+        {
+          "on": "tossOnce.pressed",
+          "do": {
+            "call": "coin.toss"
+          }
+        },
+        {
+          "on": "tossMany.pressed",
+          "do": {
+            "call": "clock.start",
+            "args": {
+              "every": 0.04,
+              "times": 100
+            }
+          }
+        },
+        {
+          "on": "clock.tick",
+          "do": {
+            "call": "coin.toss"
+          }
+        },
+        {
+          "on": "coin.landed",
+          "do": {
+            "call": "chart.addPoint",
+            "args": {
+              "x": {
+                "expr": "coin.count"
+              },
+              "y": {
+                "expr": "coin.headsFraction"
+              }
+            }
+          }
+        },
+        {
+          "on": "coin.landed",
+          "if": "coin.count == 100",
+          "do": [
+            {
+              "call": "board.show",
+              "args": {
+                "name": "mayaSettles"
+              }
+            },
+            {
+              "call": "mayaSettles.say"
+            },
+            {
+              "call": "board.pass"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "settle",
+      "nextPieceId": 4,
+      "root": {
+        "id": 1,
+        "name": "page",
+        "kind": "column",
+        "children": [
+          {
+            "id": 2,
+            "name": "howClose",
+            "kind": "prop",
+            "prop": "choice",
+            "with": {
+              "prompt": {
+                "en": "Toss a fair coin 1000 times. The fraction that are heads will be…",
+                "hi": "एक सही सिक्का 1000 बार उछालो। चित का भाग होगा…"
+              },
+              "options": [
+                {
+                  "id": "exactlyHalf",
+                  "label": {
+                    "en": "exactly ½",
+                    "hi": "ठीक ½"
+                  },
+                  "feedback": {
+                    "en": "Not exactly: it keeps wobbling. More tosses bring it closer to ½, but it rarely lands right on it.",
+                    "hi": "ठीक नहीं: यह हिलता रहता है। ज़्यादा उछाल इसे ½ के पास लाते हैं, पर ठीक ½ पर कम ही आता है।"
+                  },
+                  "misconception": "exactHalfEveryTime"
+                },
+                {
+                  "id": "nearHalf",
+                  "label": {
+                    "en": "close to ½",
+                    "hi": "½ के पास"
+                  }
+                },
+                {
+                  "id": "anything",
+                  "label": {
+                    "en": "anything: chance has no pattern",
+                    "hi": "कुछ भी: संयोग का कोई पैटर्न नहीं"
+                  },
+                  "feedback": {
+                    "en": "Each toss is random, but over many tosses the fraction settles near ½. Look at the graph again.",
+                    "hi": "हर उछाल संयोग है, पर बहुत से उछालों में भाग ½ के पास टिकता है। ग्राफ़ फिर से देखो।"
+                  },
+                  "misconception": "chanceHasNoPattern"
+                }
+              ],
+              "answer": "nearHalf",
+              "concepts": [
+                "experimental-probability"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "name": "rest",
+            "kind": "space"
+          }
+        ]
+      },
+      "is": [],
+      "when": [
+        {
+          "on": "board.started",
+          "do": {
+            "call": "howClose.say"
+          }
+        },
+        {
+          "on": "howClose.correct",
+          "do": {
+            "call": "board.pass"
+          }
+        }
+      ]
+    }
+  ]
+}
