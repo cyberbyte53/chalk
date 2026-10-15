@@ -32,6 +32,15 @@ import {
   tweenAt,
   viewOf,
 } from "@chalk/prop";
+import {
+  type ReadonlySignal,
+  type Signal,
+  batch,
+  computed,
+  effect,
+  signal,
+  untracked,
+} from "@preact/signals-core";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
@@ -65,7 +74,28 @@ export type SignalRecord = {
   actor: Actor;
 };
 
-type Instance = { name: string; id: number | undefined; def: AnyPropDef; stored: StoredState };
+/**
+ * One placed prop, live. Its stored state is a signal: whatever read it (an IS rule, its view, a
+ * prop on screen) runs again when it changes, and nothing else does.
+ */
+type Instance = {
+  name: string;
+  id: number | undefined;
+  def: AnyPropDef;
+  stored: Signal<StoredState>;
+  /** Stored plus derived, worked out again only when `stored` changes. */
+  view: ReadonlySignal<PropView>;
+};
+
+function liveInstance(
+  name: string,
+  id: number | undefined,
+  def: AnyPropDef,
+  start: StoredState,
+): Instance {
+  const stored = signal(start);
+  return { name, id, def, stored, view: computed(() => viewOf(def, stored.value)) };
+}
 
 type CompiledIs = {
   prop: string;
@@ -165,6 +195,10 @@ class Clock {
 /**
  * One board, live: its props' state, its IS rules kept true, its WHEN rules answered in order,
  * and its scripts. Every change to a prop goes through `call` (the one door).
+ *
+ * State is held in signals (@preact/signals-core). Each IS rule is an effect: it records which props
+ * it read and runs again only when one of them changes. Each prop's view is a computed value, and a
+ * prop on screen re-renders only when its own view changes (through @preact/signals in the player).
  */
 export class BoardRuntime {
   private readonly instances = new Map<string, Instance>();
@@ -172,14 +206,15 @@ export class BoardRuntime {
   private readonly whenRules: CompiledWhen[];
   /** Inputs owned by an IS, as "prop.field": no action may set them. */
   private readonly owned = new Set<string>();
-  private readonly listeners = new Set<() => void>();
+  /** Stops each IS rule's effect. */
+  private readonly stopIs: (() => void)[];
   private readonly signalListeners = new Set<(record: SignalRecord) => void>();
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
   private readonly queue: SignalRecord[] = [];
   private isDispatching = false;
   private readonly tweens = new Map<string, Running>();
   private readonly clock: Clock;
-  private readonly touchedProps = new Set<string>();
+  private readonly touchedProps = signal<ReadonlySet<string>>(new Set());
   private isDisposed = false;
 
   constructor(
@@ -196,30 +231,31 @@ export class BoardRuntime {
       const start = initialState(def, piece.with);
       if (!start.isOk)
         throw new Error(`Board ${board.name}, ${piece.name}: ${start.errors.join("; ")}`);
-      this.instances.set(piece.name, { name: piece.name, id: piece.id, def, stored: start.state });
+      this.instances.set(piece.name, liveInstance(piece.name, piece.id, def, start.state));
       if (piece.isHidden === true) hidden.push(piece.name);
     }
-    this.instances.set(BOARD, {
-      name: BOARD,
-      id: board.id,
-      def: boardProp as unknown as AnyPropDef,
-      stored: { ...boardProp.defaults, hidden },
-    });
+    this.instances.set(
+      BOARD,
+      liveInstance(BOARD, board.id, boardProp as unknown as AnyPropDef, {
+        ...boardProp.defaults,
+        hidden,
+      }),
+    );
     this.isRules = board.is.map((rule) => this.compileIs(rule));
     this.whenRules = board.when.map((rule) => this.compileWhen(rule));
-    this.applyIs();
+    // Each effect runs once now, making its IS true, then again whenever what it read changes.
+    this.stopIs = this.isRules.map((rule) => effect(() => this.keep(rule)));
   }
 
   // ---- reading ----
 
-  /** A prop's state, stored and derived. */
+  /** A prop's state, stored and derived. Read while rendering, it re-renders on change. */
   getView(name: string): PropView {
-    const instance = this.instance(name);
-    return viewOf(instance.def, instance.stored);
+    return this.instance(name).view.value;
   }
 
   getStored(name: string): StoredState {
-    return this.instance(name).stored;
+    return this.instance(name).stored.value;
   }
 
   getDef(name: string): AnyPropDef {
@@ -236,18 +272,13 @@ export class BoardRuntime {
   }
 
   isHidden(name: string): boolean {
-    const hidden = this.instance(BOARD).stored.hidden;
+    const hidden = this.instance(BOARD).stored.value.hidden;
     return Array.isArray(hidden) && hidden.includes(name);
   }
 
   /** Props the learner has acted on. */
   isTouched(name: string): boolean {
-    return this.touchedProps.has(name);
-  }
-
-  subscribe(listener: () => void): () => void {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return this.touchedProps.value.has(name);
   }
 
   /** Every action asked of the board, by anyone, taken or refused (for Jugnu's history, logs). */
@@ -258,7 +289,7 @@ export class BoardRuntime {
 
   /** Every prop's stored state right now. */
   snapshot(): BoardSnapshot {
-    return new Map([...this.instances].map(([name, instance]) => [name, instance.stored]));
+    return new Map([...this.instances].map(([name, instance]) => [name, instance.stored.peek()]));
   }
 
   /**
@@ -266,15 +297,15 @@ export class BoardRuntime {
    * question for the student. Each state still passes its prop's schema.
    */
   restore(snapshot: BoardSnapshot): void {
-    for (const [name, stored] of snapshot) {
-      const instance = this.instances.get(name);
-      if (instance === undefined) continue;
-      this.tweens.get(name)?.cancel();
-      const result = applyPatch(instance.def, instance.stored, stored);
-      if (result.isOk) instance.stored = result.state;
-    }
-    this.applyIs();
-    this.notify();
+    batch(() => {
+      for (const [name, stored] of snapshot) {
+        const instance = this.instances.get(name);
+        if (instance === undefined) continue;
+        this.tweens.get(name)?.cancel();
+        const result = applyPatch(instance.def, instance.stored.peek(), stored);
+        if (result.isOk) instance.stored.value = result.state;
+      }
+    });
   }
 
   onSignal(listener: (record: SignalRecord) => void): () => void {
@@ -326,9 +357,10 @@ export class BoardRuntime {
     }
     if (actor === Actor.Learner) {
       this.tweens.get(name)?.cancel();
-      this.touchedProps.add(name);
+      if (!this.touchedProps.peek().has(name))
+        this.touchedProps.value = new Set([...this.touchedProps.peek(), name]);
     }
-    const prepared = prepareAction(instance.def, instance.stored, action, args);
+    const prepared = prepareAction(instance.def, instance.stored.peek(), action, args);
     if (!prepared.isOk) {
       notify(prepared.errors.join("; "));
       return this.fail(`${name}.${action}: ${prepared.errors.join("; ")}`, actor);
@@ -343,7 +375,7 @@ export class BoardRuntime {
       case EffectKind.Tween:
         return this.runTween(instance, effect.duration, effect.to, actor);
       case EffectKind.Task: {
-        const spoken = instance.def.speech?.(instance.stored);
+        const spoken = instance.def.speech?.(instance.stored.peek());
         return effect
           .run({
             speak: () =>
@@ -352,7 +384,7 @@ export class BoardRuntime {
                 : this.services.speak({ name, id: instance.id }, spoken),
             wait: (seconds) => this.clock.wait(seconds),
             set: (patch) => this.change(instance, patch, actor),
-            get: () => instance.stored,
+            get: () => instance.stored.peek(),
             emit: (signal, payload) => this.emitFrom(name, { signal, payload }, actor),
           })
           .catch((error: unknown) => this.services.onError(`${name}.${action} failed`, error));
@@ -393,7 +425,7 @@ export class BoardRuntime {
     for (const running of this.tweens.values()) running.cancel();
     this.tweens.clear();
     this.clock.stop();
-    this.listeners.clear();
+    for (const stop of this.stopIs) stop();
     this.signalListeners.clear();
     this.actionListeners.clear();
   }
@@ -445,7 +477,8 @@ export class BoardRuntime {
   hasOpenQuestion(): boolean {
     return [...this.instances.values()].some(
       (instance) =>
-        instance.def.role === PropRole.Question && instance.stored.status !== AnswerStatus.Correct,
+        instance.def.role === PropRole.Question &&
+        instance.stored.value.status !== AnswerStatus.Correct,
     );
   }
 
@@ -465,14 +498,13 @@ export class BoardRuntime {
       return false;
     }
     if (Object.keys(patch).length === 0) return true;
-    const result = applyPatch(instance.def, instance.stored, patch);
+    const result = applyPatch(instance.def, instance.stored.peek(), patch);
     if (!result.isOk) {
       void this.fail(`${instance.name}: ${result.errors.join("; ")}`, actor);
       return false;
     }
-    instance.stored = result.state;
-    this.applyIs();
-    this.notify();
+    // Every IS that read this prop runs again before this returns.
+    instance.stored.value = result.state;
     return true;
   }
 
@@ -482,10 +514,10 @@ export class BoardRuntime {
     to: Readonly<Record<string, unknown>>,
     actor: Actor,
   ): Promise<void> {
-    const end = applyPatch(instance.def, instance.stored, to);
+    const end = applyPatch(instance.def, instance.stored.peek(), to);
     if (!end.isOk) return this.fail(`${instance.name}: ${end.errors.join("; ")}`, actor);
     this.tweens.get(instance.name)?.cancel();
-    const from = instance.stored;
+    const from = instance.stored.peek();
     return new Promise((resolve) => {
       let stopAnimation = () => {};
       const finish = () => {
@@ -505,10 +537,6 @@ export class BoardRuntime {
         return true;
       });
     });
-  }
-
-  private notify(): void {
-    for (const listener of this.listeners) listener();
   }
 
   private scope = (name: string): Readonly<Record<string, unknown>> => this.getView(name);
@@ -532,40 +560,37 @@ export class BoardRuntime {
     return { prop, field: member, value };
   }
 
-  /** Makes every IS true again. Rules can feed each other, but never in a loop (the validator checks). */
-  private applyIs(): void {
-    for (let round = 0; round < this.isRules.length + 1; round++) {
-      let isChanged = false;
-      for (const rule of this.isRules) {
-        const instance = this.instance(rule.prop);
-        let value: unknown;
-        try {
-          value =
-            "expression" in rule.value
-              ? rule.value.expression.evaluate(this.scope)
-              : Object.fromEntries(
-                  Object.entries(rule.value.texts).map(([locale, t]) => [
-                    locale,
-                    t.render(this.scope),
-                  ]),
-                );
-        } catch (error) {
-          this.services.onError(`Board ${this.board.name}: IS ${rule.prop}.${rule.field}`, error);
-          continue;
-        }
-        if (JSON.stringify(instance.stored[rule.field]) === JSON.stringify(value)) continue;
-        const result = applyPatch(instance.def, instance.stored, { [rule.field]: value });
-        if (!result.isOk) {
-          this.services.onError(
-            `Board ${this.board.name}: IS ${rule.prop}.${rule.field}: ${result.errors.join("; ")}`,
-          );
-          continue;
-        }
-        instance.stored = result.state;
-        isChanged = true;
-      }
-      if (!isChanged) return;
+  /**
+   * Makes one IS true. Run inside its effect: the props its expression reads are recorded, and it
+   * runs again when any of them changes. The prop it sets is only peeked at, so setting it doesn't
+   * count as reading it. Rules can feed each other, never in a loop (the validator checks).
+   */
+  private keep(rule: CompiledIs): void {
+    const instance = this.instance(rule.prop);
+    let value: unknown;
+    try {
+      value =
+        "expression" in rule.value
+          ? rule.value.expression.evaluate(this.scope)
+          : Object.fromEntries(
+              Object.entries(rule.value.texts).map(([locale, t]) => [locale, t.render(this.scope)]),
+            );
+    } catch (error) {
+      this.services.onError(`Board ${this.board.name}: IS ${rule.prop}.${rule.field}`, error);
+      return;
     }
+    untracked(() => {
+      const stored = instance.stored.value;
+      if (JSON.stringify(stored[rule.field]) === JSON.stringify(value)) return;
+      const result = applyPatch(instance.def, stored, { [rule.field]: value });
+      if (!result.isOk) {
+        this.services.onError(
+          `Board ${this.board.name}: IS ${rule.prop}.${rule.field}: ${result.errors.join("; ")}`,
+        );
+        return;
+      }
+      instance.stored.value = result.state;
+    });
   }
 
   // ---- WHEN ----

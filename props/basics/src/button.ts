@@ -2,6 +2,7 @@ import { localizedSchema } from "@chalk/content";
 import { actionsFor, defineProp, set } from "@chalk/prop";
 import { z } from "zod";
 
+export const ButtonAction = { Press: "press" } as const;
 export const ButtonSignal = { Pressed: "pressed" } as const;
 
 const buttonState = z
@@ -16,14 +17,15 @@ export type ButtonState = z.infer<typeof buttonState>;
 const act = actionsFor<ButtonState>();
 
 /** A button on the board. Pressing it only announces `pressed`; WHEN rules decide what happens. */
-export const button = defineProp<ButtonState>({
+export const button = defineProp({
   type: "button",
+  isExplainer: false,
   describe: "A button. Pressing it raises `pressed`; the lesson's rules decide what it does.",
   state: buttonState,
   defaults: { label: { en: "Go", hi: "चलो" }, isEnabled: true },
   inputs: ["label", "isEnabled"],
   actions: {
-    press: act({
+    [ButtonAction.Press]: act({
       describe: "Press it (what the learner's tap does)",
       byLearner: true,
       args: z.object({}).strict(),

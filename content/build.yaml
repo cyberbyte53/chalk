@@ -1,0 +1,3 @@
+# The books that are built, in order. A book folder not listed here stays on disk, out of the build.
+books:
+  - class9-maths

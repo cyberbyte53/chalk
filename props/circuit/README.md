@@ -70,7 +70,7 @@ Tap a switch (`toggleSwitch`); tap a bulb to take it out of its socket, tap the 
 - `src/solve.ts`: the network solver (nodal analysis with zero-resistance parts merged, Gaussian elimination with partial pivoting). Knows networks, not bulbs.
 - `src/layout.ts`: grid → pixels, shared by the view and `locate`.
 - `src/view.tsx`: the circuit diagram in textbook symbols; moving dashes show conventional current (faster for more current, still under reduced motion).
-- Styles live in the player's `styles.css`, section "circuit".
+- Styles live in `src/styles.css`, drawn with the look's tokens.
 - `src/model.test.ts`: Ohm's law, series and parallel bulbs, switches, meters, short circuits, Kirchhoff's current law and power balance over many seeded random networks, every action and refusal.
 
 May import: `@chalk/content` (`localizedSchema`, `Locale`), `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `circuitProp` (the module), `circuitDef`, `CircuitState`, `CircuitNode`, `CircuitReadings`, `Component`, `ComponentKind`, `CircuitSignal`, `measure`, `solveNetwork`.

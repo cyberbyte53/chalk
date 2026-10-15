@@ -3,8 +3,10 @@ import { type AnyPropDef, BOARD, asAnyProp, boardProp } from "@chalk/prop";
 import { basicProps } from "@chalk/prop-basics";
 import { coinProp } from "@chalk/prop-chance";
 import { circuitProp } from "@chalk/prop-circuit";
+import { collisionProp } from "@chalk/prop-collision";
 import { decimalExpansionProp, decimalShiftProp } from "@chalk/prop-decimal";
 import { exponentRoutesProp } from "@chalk/prop-exponents";
+import { gasProp } from "@chalk/prop-gas";
 import { numberLineProp } from "@chalk/prop-number-line";
 import { numberSorterProp } from "@chalk/prop-number-sets";
 import { graphProp } from "@chalk/prop-plot";
@@ -25,6 +27,8 @@ const all: readonly PropModule[] = [
   rootSpiralProp,
   surdTilesProp,
   exponentRoutesProp,
+  gasProp,
+  collisionProp,
 ];
 
 /** Every prop type a lesson can place, by type. Adding a prop = one line in `all`. */

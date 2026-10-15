@@ -117,7 +117,7 @@ On a line, AB = x and BC = 1. O is the midpoint of AC; the semicircle with centr
 - `src/geometry.ts`: the figures' coordinates in units (the swinging tip, the spiral's points, the semicircle's points) and each view's pixel layout (shared by the views and `locate`).
 - `src/glide.ts`: eases a 0–1 field frame by frame inside a task, stopping if the learner changes the prop.
 - `src/builder.ts`, `src/spiral.ts`, `src/semicircle.ts`: the definitions; `*-view.tsx`: the SVG figures. No words: only numbers, √ and point letters.
-- Styles in the player's `styles.css`, sections "roots: rootBuilder", "roots: rootSemicircle", "roots: rootSpiral".
+- Styles live in `src/styles.css`, drawn with the look's tokens.
 - Tests next to each: hypotenuses known by hand (√2, √3, √5 two ways, 2 from √4), perfect squares land on whole numbers, the spiral's lengths and right angles, BD² = x from the drawn circle for every x, every action, snapping, refusals, timed actions passing the one door at every frame.
 
 May import: `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `rootBuilderProp`, `rootSemicircleProp`, `rootSpiralProp` (the modules), `rootBuilderDef`, `rootSemicircleDef`, `rootSpiralDef`, and their `…State` types.

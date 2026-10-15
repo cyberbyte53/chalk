@@ -11,6 +11,7 @@ import {
   unspeakable,
   walkPieces,
 } from "@chalk/content";
+import { richProblems } from "@chalk/player";
 import {
   type AnyPropDef,
   BOARD,
@@ -132,11 +133,10 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
     }
   };
 
-  // Questions: at most one per board; a goal points at a prop on the board.
+  // Questions: any number per board; a goal points at a prop on the board.
   const questions = [...defs]
     .filter(([, def]) => def.role === PropRole.Question)
     .map(([name]) => name);
-  if (questions.length > 1) report(questions.join(", "), "a board can have one question");
   for (const name of questions) {
     const about = states.get(name)?.about;
     if (typeof about === "string" && !defs.has(about))
@@ -146,6 +146,8 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
   // IS: owns an input of a real prop, once; reads real fields; no loops; and gives a value the prop accepts.
   const writers = new Map<string, number>();
   const edges = new Map<string, Set<string>>();
+  /** Each IS text that compiled, with its live values as 0: its maths is checked below. */
+  const liveTexts: [where: string, skeletons: Record<string, string>][] = [];
   const scope = (name: string) => {
     const def = defs.get(name);
     const state = states.get(name);
@@ -177,6 +179,11 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
           )
         : undefined;
     if (expression === undefined && templates === undefined) return;
+    if (templates !== undefined)
+      liveTexts.push([
+        `is ${rule.set}`,
+        Object.fromEntries(templates.map(([locale, template]) => [locale, template.skeleton])),
+      ]);
     const refs = expression?.refs ?? (templates ?? []).flatMap(([, template]) => template.refs);
     checkRefs(where, refs);
     for (const [prop, field] of refs)
@@ -301,6 +308,18 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
   });
   if (!canPass) report("when", "nothing ever calls board.pass, so the learner can't move on");
 
+  // Rich text: every learner-facing string (a prop's starting words, words an IS keeps, words a
+  // script hands an action) must parse, and its maths must typeset.
+  const checkRich = (where: string, value: unknown) =>
+    forEachText(value, (path, text) => {
+      for (const problem of richProblems(text)) report(where, `${path}: ${problem}`);
+    });
+  for (const piece of propPieces(board.root)) checkRich(piece.name, piece.with ?? {});
+  for (const [where, skeletons] of liveTexts) checkRich(where, skeletons);
+  for (const rule of board.when) {
+    for (const call of callsIn(rule.do)) checkRich(`when ${rule.on} → ${call.call}`, call.args);
+  }
+
   // Voice: every line that is said must reach the voice as plain words. Anything else needs a `speak`
   // line or a pronunciation rule; unknown characters are refused, not guessed.
   for (const name of spokenProps) {
@@ -320,6 +339,22 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
     }
   }
   return problems;
+}
+
+/** Calls `visit` for every text in every language inside `value` (a `{ en, hi }` anywhere in it). */
+function forEachText(value: unknown, visit: (path: string, text: string) => void, path = ""): void {
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => forEachText(item, visit, `${path}[${i}]`));
+    return;
+  }
+  if (value === null || typeof value !== "object") return;
+  const record = value as Record<string, unknown>;
+  const isLocalized = LOCALES.every((locale) => typeof record[locale] === "string");
+  for (const [key, child] of Object.entries(record)) {
+    const at = path === "" ? key : `${path}.${key}`;
+    if (isLocalized && typeof child === "string") visit(at, child);
+    else forEachText(child, visit, at);
+  }
 }
 
 /** The props a lesson's scripts ever tell to `say`, by board: these are the lines that need audio. */

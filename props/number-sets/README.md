@@ -44,4 +44,4 @@ A card belongs in the innermost ring drawn that holds it, or outside if none doe
 - `src/view.tsx`: the rings, the tray and the outside space.
 - `src/model.test.ts`: the nesting, where a card belongs as rings are added, pick and drop, refusals.
 
-May import: `@chalk/content`, `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `numberSorterProp`, `numberSorterDef`, `NumberSorterState`, `Family`, `FamilySymbol`, `OUTSIDE`, `placeFor`, `isInside`, `NumberSorterPart`, `NumberSorterSignal`.
+May import: `@chalk/content`, `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `numberSorterProp`, `numberSorterDef`, `NumberSorterAction`, `NumberSorterDerived`, `NumberSorterState`, `Family`, `FamilySymbol`, `OUTSIDE`, `placeFor`, `isInside`, `NumberSorterPart`, `NumberSorterSignal`.

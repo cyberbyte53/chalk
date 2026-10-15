@@ -52,7 +52,7 @@ A term is `{ coefficient, radicand }`, meaning coefficient × √radicand: `{ 3,
 - `src/layout.ts`: where everything is drawn at a width (shared by the view and `locate`).
 - `src/model.ts`: the definition.
 - `src/view.tsx`: the area model. Side terms label the rows, top terms the columns; tile sizes follow |coefficient|·√radicand with a minimum. Rational tiles on the panel colour, surd tiles tinted by radicand (like terms match), negative tiles hatched. Under the tiles, the expanded sum, then the result. No words.
-- Styles live in the player's `styles.css`, section "surds: surdTiles".
+- Styles live in `src/styles.css`, drawn with the look's tokens.
 - `src/surd.test.ts`, `src/model.test.ts`: NCERT Exercise 1.5 Q2 products, conjugates (rationalising), simplification, the value of the result equals the product of the factors' values over many generated factors, every action, refusals, `combine` passing the one door at every step.
 
 May import: `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `surdTilesProp` (the module), `surdTilesDef`, `SurdTilesState`.

@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { propDefs } from "@chalk/library";
-import { loadReadings } from "./pronunciations";
+import { PRONUNCIATIONS_FILE, loadReadings } from "./pronunciations";
 import { validateLesson } from "./validate";
 
 function lessonFiles(dir: string): string[] {
@@ -14,7 +14,7 @@ function lessonFiles(dir: string): string[] {
 
 const root = process.argv[2] ?? "content";
 const files = lessonFiles(root);
-const readings = loadReadings(join(root, "pronunciations.json"));
+const readings = loadReadings(join(root, PRONUNCIATIONS_FILE));
 let problemCount = 0;
 for (const file of files) {
   const problems = validateLesson(JSON.parse(readFileSync(file, "utf8")), propDefs, readings);

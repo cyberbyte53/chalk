@@ -31,8 +31,9 @@ const act = actionsFor<GoalState>();
 const noArgs = z.object({}).strict();
 
 /** "Get the prop into this state, then Check." The lesson says what counts, as an IS on `isMet`. */
-export const goal = defineProp<GoalState>({
+export const goal = defineProp({
   type: "goal",
+  isExplainer: false,
   describe: "A question answered by getting another prop into a goal state, then pressing Check.",
   role: PropRole.Question,
   state: goalState,
@@ -41,7 +42,6 @@ export const goal = defineProp<GoalState>({
     speak: null,
     about: "unset",
     isMet: false,
-    concepts: ["unset"],
     ...questionDefaults,
   },
   inputs: ["isMet"],

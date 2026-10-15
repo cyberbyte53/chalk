@@ -8,20 +8,27 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "validate": "tsx src/cli.ts ../content",
-    "publish-lesson": "tsx src/publish-cli.ts",
-    "test-jugnu": "tsx src/jugnu-eval/cli.ts"
+    "validate": "tsx --tsconfig ../tsconfig.base.json src/cli.ts ../content",
+    "publish-lesson": "tsx --tsconfig ../tsconfig.base.json src/publish-cli.ts",
+    "test-jugnu": "tsx --tsconfig ../tsconfig.base.json src/jugnu-eval/cli.ts",
+    "content": "tsx --tsconfig ../tsconfig.base.json src/content/cli.ts"
   },
   "dependencies": {
+    "@chalk/author": "workspace:*",
     "@chalk/content": "workspace:*",
     "@chalk/jugnu": "workspace:*",
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
+    "preact": "10.29.8",
+    "preact-render-to-string": "6.5.13",
+    "yaml": "2.6.1",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@chalk/content-source": "workspace:*",
+    "@chalk/exact": "workspace:*",
     "@types/node": "22.10.2",
     "tsx": "4.19.2"
   }

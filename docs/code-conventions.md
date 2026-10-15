@@ -15,7 +15,7 @@ Rules for TypeScript in this monorepo. Must/should language. Inspired by Google 
 - The dependency graph stays acyclic and follows the layers in [architecture.md](./architecture.md).
 - `prop` and `content` must not import UI code.
 - The player must never import a specific prop; props reach it through the library.
-- A helper library (geometry, 3D, physics) lives inside one prop, never in the model or the lesson format.
+- A helper library (geometry, 3D, physics) lives inside one prop, never in the model or the lesson format. The one shared exception is drawing: d3 lives in `@chalk/draw`, and props draw with its pieces (see [drawing.md](./drawing.md)).
 
 ## Props
 
@@ -27,6 +27,7 @@ props/<name>/
   src/index.ts        exports the prop module(s): `{ def, View }`
   src/model.ts        the definition (`defineProp`) and pure logic (no UI)
   src/view.tsx        draws the prop's state; reports the learner through `call`/`signal`; owns no state
+  src/styles.css      the view's styles, drawn only with the look's tokens (`@chalk/look`)
   src/model.test.ts   the prop's laws against cases known by hand, actions, parts, and that its tweens pass the one door
 ```
 
@@ -38,9 +39,11 @@ props/<name>/
 
 ## Content
 
-- Lessons are JSON under `content/<course>/<chapter>/lessons/`: props placed in a layout, wired with IS and WHEN rules. Refer to props by `name` (camelCase: rules use it); `id`s are handed out by `pnpm publish-lesson` and never edited by hand.
+- Content is TypeScript in the folder tree [writing-content.md](./writing-content.md) describes: `build.yaml` manifests, a concept's `overview.ts`, a chapter's question bank (`questions/<family>/family.ts` + `params.yaml`). `pnpm build-content` turns it into JSON in `build/`. Nobody types an id.
+- The older lessons are JSON under `content/<course>/<chapter>/lessons/`; their `id`s come from `pnpm publish-lesson`. New content goes in the tree.
+- Props, actions, signals and derived fields are named through the prop's enums (`NumberLineAction.ZoomIn`); concepts through the chapter's generated `Concept` enum. Never a string.
 - Nothing is spoken unless a script calls `say`.
-- Every user-facing string is `{ en, hi }`. Use `speak` when screen text has maths glyphs.
+- Every user-facing string is `t(en, hi)` (JSON: `{ en, hi }`), rich text. Use `speak` when screen text has maths glyphs.
 
 ## Schemas and types
 
@@ -74,8 +77,8 @@ export type AnswerStatus = (typeof AnswerStatus)[keyof typeof AnswerStatus];
 |---|---|---|
 | Packages | `@chalk/<kebab-case>` | `@chalk/prop-number-line` |
 | Folders | `kebab-case` | `props/number-line` |
-| Source files (non-UI) | `kebab-case.ts` | `use-board-runtime.ts` |
-| Component files | `PascalCase.tsx` | `BoardPlayer.tsx` (prop views: `view.tsx`) |
+| Files | `kebab-case`, always (`.ts`, `.tsx`, `.css`) | `use-board-runtime.ts`, `board-player.tsx` |
+| A view beside its logic | `<thing>-view.tsx` | `rich-text.ts` + `rich-text-view.tsx`; a prop's `view.tsx` |
 | Tests | same base + `.test.ts` | `model.test.ts` |
 | Types, components | `PascalCase` | `PropDef` |
 | Functions, variables | `camelCase` | `applyPatch` |
@@ -86,6 +89,8 @@ export type AnswerStatus = (typeof AnswerStatus)[keyof typeof AnswerStatus];
 | Content names and keys | `camelCase` | `"guessRoot"`, `line.marker` |
 
 No `I` prefix, no `_private`. Abbreviations only if universal (`id`, `url`).
+
+Files are kebab-case even when they hold a component; the component inside is still `PascalCase` (`board-player.tsx` exports `BoardPlayer`). One case for every file means two files can't differ only in case, which on macOS and Windows would make `./rich` and `./Rich` reach the same file. Imports drop `.ts`/`.tsx`, so `rich-text.ts` and `rich-text.tsx` would clash too: name the view `rich-text-view.tsx`. A test (`studio/src/file-names.test.ts`) fails on any such clash, so Linux catches it too.
 
 ## UI (Preact)
 

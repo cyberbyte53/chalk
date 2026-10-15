@@ -1,4 +1,13 @@
-import { type Emit, type TaskContext, actionsFor, defineProp, set, task, tween } from "@chalk/prop";
+import {
+  type Emit,
+  type TaskContext,
+  actionsFor,
+  colorSchema,
+  defineProp,
+  set,
+  task,
+  tween,
+} from "@chalk/prop";
 import { z } from "zod";
 import {
   AXIS_GAP,
@@ -24,19 +33,50 @@ export const NumberLinePart = {
   SplitStepper: "splitStepper",
 } as const;
 
+export const NumberLineAction = {
+  MoveMarker: "moveMarker",
+  ShowMarker: "showMarker",
+  ZoomTo: "zoomTo",
+  ShowLens: "showLens",
+  HideLens: "hideLens",
+  Magnify: "magnify",
+  ZoomIn: "zoomIn",
+  ZoomOut: "zoomOut",
+  PlaceMark: "placeMark",
+  RemoveMark: "removeMark",
+  ClearMarks: "clearMarks",
+  PlaceDot: "placeDot",
+  ClearDots: "clearDots",
+  SplitInto: "splitInto",
+  ChangeParts: "changeParts",
+  ClearSplit: "clearSplit",
+  PanTo: "panTo",
+} as const;
+
+export const NumberLineDerived = {
+  Between: "between",
+  Level: "level",
+  SplitParts: "splitParts",
+  SplitPointsBetween: "splitPointsBetween",
+  DotCount: "dotCount",
+} as const;
+
 export const NumberLineSignal = {
   MarkerReleased: "markerReleased",
   Zoomed: "zoomed",
   Split: "split",
+  Panned: "panned",
 } as const;
 
-/** The line runs from MIN to MAX; the window shows part of it. */
-export const MIN = -10;
-export const MAX = 10;
+/** The line runs from MIN to MAX; the window shows part of it, at most MAX_SPAN wide. */
+export const MIN = -1_000_000;
+export const MAX = 1_000_000;
 /** The narrowest window: eight successive magnifications of a unit. */
 export const MIN_SPAN = 1e-8;
 export const MAX_SPAN = 20;
 export const MAX_MARKS = 16;
+/** Enough for seven rounds of halving every gap (127 points) and more. */
+export const MAX_DOTS = 256;
 export const MAX_PARTS = 24;
 /** How long one magnification glides, in seconds. */
 export const MAGNIFY_SECONDS = 1.2;
@@ -48,9 +88,20 @@ const markSchema = z
     at: value,
     /** What the point is called: maths only ("1/2", "√2", "π", "2.665"). */
     label: z.string().min(1).max(24),
+    /** Its colour; saffron when not given. */
+    color: colorSchema.optional(),
   })
   .strict();
 export type Mark = z.infer<typeof markSchema>;
+
+const dotSchema = z
+  .object({
+    at: value,
+    /** Its colour; ink when not given. */
+    color: colorSchema.optional(),
+  })
+  .strict();
+export type Dot = z.infer<typeof dotSchema>;
 
 const splitSchema = z
   .object({
@@ -64,6 +115,16 @@ export type Split = z.infer<typeof splitSchema>;
 
 const stretch = z.object({ from: value, to: value }).strict();
 
+const panSchema = z
+  .object({
+    /** The furthest left the window's left end can go. */
+    min: value,
+    /** The furthest right the window's right end can go. */
+    max: value,
+  })
+  .strict();
+export type Pan = z.infer<typeof panSchema>;
+
 const numberLineState = z
   .object({
     /** Left end of the window: the stretch of the line on screen. */
@@ -75,6 +136,8 @@ const numberLineState = z
     showMarker: z.boolean(),
     /** Labelled points on the line. Points at the same place stack their labels. */
     marks: z.array(markSchema).max(MAX_MARKS),
+    /** Points with no label, for when there are too many to name (the line filling up). */
+    dots: z.array(dotSchema).max(MAX_DOTS),
     /** A stretch cut into equal parts, or null. */
     split: splitSchema.nullable(),
     /** A tenth of the window picked out to be magnified next, or null. */
@@ -83,6 +146,12 @@ const numberLineState = z
     isZoomable: z.boolean(),
     /** Whether the learner can change how many parts the split has. */
     isSplittable: z.boolean(),
+    /** How far the learner can slide the line by dragging it, or null when it stays put. */
+    pan: panSchema.nullable(),
+    /** Whether the ticks and their numbers are drawn (off when only the marks should speak). */
+    showTicks: z.boolean(),
+    /** The colour of the tick numbers (blue for the natural numbers, say), or null for none. */
+    color: colorSchema.nullable(),
   })
   .strict();
 export type NumberLineState = z.infer<typeof numberLineState>;
@@ -140,6 +209,13 @@ async function glide(
   });
 }
 
+/** The window slid to start at `from`, keeping its width, kept inside the pan. */
+export function panned(s: Window, pan: Pan, from: number): Window {
+  const span = s.to - s.from;
+  const left = Math.min(pan.max - span, Math.max(pan.min, from));
+  return { from: left, to: left + span };
+}
+
 function canMagnify(target: Window): boolean {
   return target.to - target.from >= MIN_SPAN * 0.999;
 }
@@ -152,7 +228,7 @@ function splitSignal(split: Split): Emit {
 }
 
 /** A number line you can magnify, mark and cut into equal parts. It knows numbers on a line, nothing more. */
-export const numberLine = defineProp<NumberLineState>({
+export const numberLine = defineProp({
   type: "numberLine",
   describe:
     "A number line showing the window from `from` to `to`. It can show labelled points (marks), a stretch cut into equal parts (split), and a draggable marker. Magnifying picks the tenth of the window that holds a number and zooms into it, one decimal place per step (successive magnification).",
@@ -163,45 +239,53 @@ export const numberLine = defineProp<NumberLineState>({
     marker: 1.5,
     showMarker: false,
     marks: [],
+    dots: [],
     split: null,
     lens: null,
     isZoomable: false,
     isSplittable: false,
+    pan: null,
+    showTicks: true,
+    color: null,
   },
-  inputs: ["isZoomable", "isSplittable"],
+  inputs: ["isZoomable", "isSplittable", "showTicks"],
   derived: {
-    between: {
+    [NumberLineDerived.Between]: {
       describe: "The tenths of the window that the marker sits between",
       compute: between,
     },
-    level: {
+    [NumberLineDerived.Level]: {
       describe:
         "How many decimal places the ticks go to at this zoom (0 for whole numbers, 1 for tenths, …)",
       compute: (s) => decimalsFor((s.to - s.from) / 10),
     },
-    splitParts: {
+    [NumberLineDerived.SplitParts]: {
       describe: "How many equal parts the split has (0 when there is none)",
       compute: (s) => s.split?.parts ?? 0,
     },
-    splitPointsBetween: {
+    [NumberLineDerived.DotCount]: {
+      describe: "How many dots are on the line",
+      compute: (s) => s.dots.length,
+    },
+    [NumberLineDerived.SplitPointsBetween]: {
       describe:
         "How many cut points lie strictly between the split's two ends (one fewer than the parts)",
       compute: (s) => (s.split === null ? 0 : s.split.parts - 1),
     },
   },
   actions: {
-    moveMarker: act({
+    [NumberLineAction.MoveMarker]: act({
       describe: "Put the marker at a value (what the learner's finger does)",
       byLearner: true,
       args: z.object({ to: z.number() }).strict(),
       run: (_s, a) => set({ marker: Math.min(MAX, Math.max(MIN, a.to)) }),
     }),
-    showMarker: act({
+    [NumberLineAction.ShowMarker]: act({
       describe: "Show or hide the draggable marker",
       args: z.object({ isShown: z.boolean() }).strict(),
       run: (_s, a) => set({ showMarker: a.isShown }),
     }),
-    zoomTo: act({
+    [NumberLineAction.ZoomTo]: act({
       describe: "Show the window from `from` to `to`, gliding there over `over` seconds",
       args: z
         .object({ from: z.number(), to: z.number(), over: z.number().min(0).max(30) })
@@ -216,18 +300,18 @@ export const numberLine = defineProp<NumberLineState>({
         });
       },
     }),
-    showLens: act({
+    [NumberLineAction.ShowLens]: act({
       describe:
         "Pick out the tenth of the window that holds `value`: the stretch the next magnification zooms into",
       args: z.object({ value }).strict(),
       run: (s, a) => set({ lens: magnifyTarget(s, a.value) }),
     }),
-    hideLens: act({
+    [NumberLineAction.HideLens]: act({
       describe: "Stop picking out a tenth",
       args: z.object({}).strict(),
       run: () => set({ lens: null }),
     }),
-    magnify: act({
+    [NumberLineAction.Magnify]: act({
       describe:
         "Zoom ten times into the tenth of the window that holds `value`, gliding: one more decimal place of `value` decided (successive magnification)",
       args: z.object({ value }).strict(),
@@ -240,7 +324,7 @@ export const numberLine = defineProp<NumberLineState>({
         });
       },
     }),
-    zoomIn: act({
+    [NumberLineAction.ZoomIn]: act({
       describe:
         "Zoom ten times into the tenth that holds the marker (or the middle, with no marker), gliding: the learner's + button",
       byLearner: true,
@@ -254,7 +338,7 @@ export const numberLine = defineProp<NumberLineState>({
         });
       },
     }),
-    zoomOut: act({
+    [NumberLineAction.ZoomOut]: act({
       describe:
         "Zoom out ten times around the middle of the window, gliding: the learner's − button",
       byLearner: true,
@@ -272,7 +356,7 @@ export const numberLine = defineProp<NumberLineState>({
         });
       },
     }),
-    placeMark: act({
+    [NumberLineAction.PlaceMark]: act({
       describe:
         "Show a labelled point on the line (a mark with the same label is moved, not doubled)",
       args: markSchema,
@@ -281,22 +365,37 @@ export const numberLine = defineProp<NumberLineState>({
         return set({ marks: [...rest, a].slice(-MAX_MARKS) });
       },
     }),
-    removeMark: act({
+    [NumberLineAction.RemoveMark]: act({
       describe: "Remove the mark with this label",
       args: z.object({ label: z.string() }).strict(),
       run: (s, a) => set({ marks: s.marks.filter((m) => m.label !== a.label) }),
     }),
-    clearMarks: act({
+    [NumberLineAction.ClearMarks]: act({
       describe: "Remove every mark",
       args: z.object({}).strict(),
       run: () => set({ marks: [] }),
     }),
-    splitInto: act({
+    [NumberLineAction.PlaceDot]: act({
+      describe:
+        "Put an unlabelled dot on the line (a dot already there is recoloured, not doubled)",
+      args: dotSchema,
+      run: (s, a) => {
+        const at = s.dots.findIndex((d) => Math.abs(d.at - a.at) < 1e-12);
+        if (at >= 0) return set({ dots: s.dots.map((d, i) => (i === at ? a : d)) });
+        return s.dots.length >= MAX_DOTS ? set({}) : set({ dots: [...s.dots, a] });
+      },
+    }),
+    [NumberLineAction.ClearDots]: act({
+      describe: "Remove every dot",
+      args: z.object({}).strict(),
+      run: () => set({ dots: [] }),
+    }),
+    [NumberLineAction.SplitInto]: act({
       describe: "Cut the stretch from `from` to `to` into `parts` equal parts",
       args: splitSchema,
       run: (_s, a) => set({ split: a }, splitSignal(a)),
     }),
-    changeParts: act({
+    [NumberLineAction.ChangeParts]: act({
       describe:
         "Cut the split into one more or one fewer equal parts, keeping its ends: the learner's stepper",
       byLearner: true,
@@ -309,10 +408,20 @@ export const numberLine = defineProp<NumberLineState>({
         return set({ split }, splitSignal(split));
       },
     }),
-    clearSplit: act({
+    [NumberLineAction.ClearSplit]: act({
       describe: "Remove the split",
       args: z.object({}).strict(),
       run: () => set({ split: null }),
+    }),
+    [NumberLineAction.PanTo]: act({
+      describe:
+        "Slide the line so the window starts at `from`, keeping its width, inside `pan` (what dragging the line does)",
+      byLearner: true,
+      args: z.object({ from: z.number() }).strict(),
+      run: (s, a) => {
+        if (s.pan === null) return set({});
+        return set(panned(s, s.pan, a.from));
+      },
     }),
   },
   signals: {
@@ -325,12 +434,15 @@ export const numberLine = defineProp<NumberLineState>({
       describe:
         "The split changed: its `parts`, and how many cut points lie strictly `between` its ends",
     },
+    [NumberLineSignal.Panned]: {
+      describe: "The learner let go after sliding the line: the window `from`–`to` it rests on",
+    },
   },
   parts: (s) => {
     const view = { from: s.from, to: s.to, width: 1 };
     const out: string[] = [
       NumberLinePart.Axis,
-      ...ticks(view).map((v) => `${NumberLinePart.TickPrefix}${v}`),
+      ...(s.showTicks ? ticks(view).map((v) => `${NumberLinePart.TickPrefix}${v}`) : []),
     ];
     if (s.showMarker) out.push(NumberLinePart.Marker);
     for (const mark of s.marks) {
@@ -363,6 +475,7 @@ export const numberLine = defineProp<NumberLineState>({
       return mark !== undefined && isInView(s, mark.at) ? at(mark.at) : undefined;
     }
     if (part.startsWith(NumberLinePart.TickPrefix)) {
+      if (!s.showTicks) return undefined;
       const v = Number(part.slice(NumberLinePart.TickPrefix.length));
       const span = s.to - s.from;
       return ticks(view).some((t) => Math.abs(t - v) < span * 1e-9) ? at(v) : undefined;
@@ -387,6 +500,8 @@ export const numberLine = defineProp<NumberLineState>({
     if (span < MIN_SPAN * 0.999) return `the window must be at least ${MIN_SPAN} wide`;
     if (span > MAX_SPAN * (1 + 1e-9)) return `the window can be at most ${MAX_SPAN} wide`;
     if (s.split !== null && s.split.to <= s.split.from) return "a split must run left to right";
+    if (s.pan !== null && s.pan.max - s.pan.min < span)
+      return "the pan must be wider than the window";
     return undefined;
   },
 });

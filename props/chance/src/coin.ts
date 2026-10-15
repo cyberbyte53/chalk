@@ -22,7 +22,7 @@ export type CoinState = z.infer<typeof coinState>;
 const act = actionsFor<CoinState>();
 
 /** A fair coin. It knows chance and counting, nothing about any lesson. */
-export const coin = defineProp<CoinState>({
+export const coin = defineProp({
   type: "coin",
   describe: "A fair coin that counts its heads and tails.",
   state: coinState,

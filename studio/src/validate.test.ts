@@ -21,9 +21,20 @@ describe("validateLesson", () => {
     expect(messages(lesson)).toEqual([]);
   });
 
+  it("checks rich text everywhere: maths must typeset, in every language", () => {
+    const bad = clone();
+    bad.boards[0].root.children[0].with.text.hi = "आधा $\\frac{1}{$";
+    bad.boards[0].when.push({
+      on: "board.started",
+      do: { call: "board.show", args: { name: "line", note: { en: "$x^{2", hi: "ठीक" } } },
+    });
+    has(bad, /text\.hi: .*frac/);
+    has(bad, /note\.en: .*never closed/);
+  });
+
   it("checks a prop's starting state at its one door", () => {
     const bad = clone();
-    bad.boards[0].root.children[2].with.to = 99;
+    bad.boards[0].root.children[2].with.to = 2_000_000;
     has(bad, /line: .*to/);
   });
 

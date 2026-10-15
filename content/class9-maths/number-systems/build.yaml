@@ -1,0 +1,7 @@
+title: { en: Number Systems, hi: संख्या पद्धति }
+# Concepts in book order. Only those written in TypeScript so far.
+concepts:
+  - rational-numbers
+  - successive-magnification
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

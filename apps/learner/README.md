@@ -1,12 +1,14 @@
 # @chalk/learner-app
 
-The learner app, for now a dev shell: lists every **published** lesson in `content/**/published/`, plays it with `@chalk/player` (with its audio, if published with `--voice`), and shows the events it emits (bottom-right button).
+The learner app, for now a dev shell: lists every **published** lesson in `content/**/published/`, plays it with `@chalk/player` (silent: v1 has no audio, see `src/lessons.ts`), and shows the events it emits (bottom-right button).
+
+In development it also shows the books in `build/` as the app will: a course screen (the book's art and its chapters as tiles) and a chapter screen (its concepts, each with its art), from which a concept's lesson opens (`src/course.ts`, `src/course-screens.tsx`). Fonts (Baloo 2) are bundled; styles load in order: `@chalk/look`, the player's, the library's.
 
 `pnpm dev` from the repo root, then open the printed URL (phone-width works best).
 
 ## Jugnu
 
-The "Ask Jugnu" button shows on boards with a question. Jugnu runs on a hosted model that can call tools; DeepSeek Flash by default:
+Jugnu's button sits in every board's footer, left of Continue. Jugnu runs on a hosted model that can call tools; DeepSeek Flash by default:
 
 1. Copy `.env.example` to `.env` and put your DeepSeek key in `JUGNU_API_KEY` (or point it at a Microsoft Foundry deployment; the file shows how).
 2. `pnpm dev`.

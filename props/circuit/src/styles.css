@@ -1,0 +1,157 @@
+/* @chalk/prop-circuit: drawn only with the look's tokens (@chalk/look) and the content's --tone. */
+
+/* ---- circuit ---- */
+/* ---------- circuit ---------- */
+.cc {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cc-svg {
+  display: block;
+  overflow: visible;
+  font-family: var(--font-body);
+}
+.cc-lead,
+.cc-resistor,
+.cc-lever {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cc-plate-plus {
+  stroke: var(--color-on-surface);
+  stroke-width: 2.5;
+}
+.cc-plate-minus {
+  stroke: var(--color-on-surface);
+  stroke-width: 6;
+}
+.cc-sign {
+  fill: var(--color-on-surface);
+  font-size: 16px;
+  font-weight: 700;
+}
+.cc-component.is-shorted .cc-plate-plus,
+.cc-component.is-shorted .cc-plate-minus,
+.cc-component.is-shorted .cc-lead {
+  stroke: var(--color-wrong);
+}
+.cc-bulb-glass {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 2.5;
+}
+.cc-bulb-light {
+  fill: var(--color-secondary);
+  stroke: none;
+  transition: opacity 0.2s ease;
+}
+.cc-glow {
+  fill: var(--color-secondary);
+  stroke: none;
+  transition: opacity 0.2s ease, r 0.2s ease;
+}
+.cc-filament {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2;
+}
+.cc-filament.is-lit {
+  stroke: var(--color-on-secondary-container);
+}
+.cc-socket {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+.cc-contact {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 2;
+}
+.cc-meter {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 2.5;
+}
+.cc-meter-letter {
+  fill: var(--color-on-surface);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+.cc-reading {
+  fill: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.cc-label,
+.cc-node-label {
+  fill: var(--color-on-surface-variant);
+  font-size: 13px;
+}
+.cc-node circle {
+  fill: var(--color-on-surface);
+}
+/* Conventional current: dashes moving from + round to −; faster for more current. */
+.cc-flow {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 6 10;
+  pointer-events: none;
+  animation: cc-flow linear infinite;
+}
+@keyframes cc-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+.cc-arrow {
+  display: none;
+  fill: var(--color-on-secondary-container);
+}
+.cc-hit {
+  cursor: pointer;
+}
+.cc-hit rect {
+  fill: transparent;
+  stroke: none;
+}
+.cc-hit:focus {
+  outline: none;
+}
+.cc-hit:focus-visible rect {
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+.cc-warning {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-wrong-container);
+  color: var(--color-wrong);
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Still dashes, plus arrows on the wires to show which way the current goes. */
+  .cc-flow {
+    animation: none;
+  }
+  .cc-arrow {
+    display: inline;
+  }
+  .cc-bulb-light,
+  .cc-glow {
+    transition: none;
+  }
+}

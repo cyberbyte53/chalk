@@ -4,7 +4,7 @@ The props every lesson uses.
 
 | Prop | What | Actions | Signals |
 |---|---|---|---|
-| `text` | Words on the board; `text` is an input, so an IS can keep it live | `say` | |
+| `text` | Words on the board, styled `title`, `body`, `note` or `definition` (an outlined box, tinted from its `color`); `text` is an input, so an IS can keep it live | `say` | |
 | `line` | A cast character's speech bubble (Maya, Arjun) | `say` | |
 | `choice` | Multiple choice, answer key inside, feedback per wrong option | `select`, `check`, `giveFeedback`, `say` | `checked` (commit), `correct`, `wrong` |
 | `button` | A button; `label` and `isEnabled` are inputs, so an IS can switch it off | `press` (does nothing while off) | `pressed` |

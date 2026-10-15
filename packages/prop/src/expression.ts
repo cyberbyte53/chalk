@@ -342,28 +342,54 @@ export function compileExpression(source: string): Expression {
   return { source, refs, evaluate: (scope) => evaluate(ast, scope) };
 }
 
-/** Text with `{expressions}` in it: "Heads: {coin.heads} of {coin.count}". */
+/**
+ * Text with live values in it: "Heads: {coin.heads} of {coin.count}". Inside maths (`$…$`, `$$…$$`)
+ * braces are LaTeX's own, so a live value there is written `\live{…}`: "$x = \live{line.marker}$".
+ */
 export type Template = {
   source: string;
   refs: readonly (readonly string[])[];
   render: (scope: Scope) => string;
+  /** The text with every live value as 0: what the validator typesets to check the maths. */
+  skeleton: string;
 };
+
+/** Opens a live value inside maths. */
+const LIVE = "\\live{";
 
 export function compileTemplate(source: string): Template {
   const parts: (string | Expression)[] = [];
+  let text = "";
+  let isMath = false;
+  /** Reads the expression from `from` to the next "}", and returns where the text goes on. */
+  const slot = (from: number): number => {
+    const close = source.indexOf("}", from);
+    if (close === -1) throw new Error(`"{" at position ${from - 1} has no closing "}"`);
+    if (text !== "") parts.push(text);
+    text = "";
+    parts.push(compileExpression(source.slice(from, close)));
+    return close + 1;
+  };
   let i = 0;
   while (i < source.length) {
-    const open = source.indexOf("{", i);
-    if (open === -1) {
-      parts.push(source.slice(i));
-      break;
+    if (source.startsWith("\\$", i)) {
+      text += "\\$";
+      i += 2;
+    } else if (source[i] === "$") {
+      const marker = source.startsWith("$$", i) ? "$$" : "$";
+      text += marker;
+      i += marker.length;
+      isMath = !isMath;
+    } else if (isMath && source.startsWith(LIVE, i)) {
+      i = slot(i + LIVE.length);
+    } else if (!isMath && source[i] === "{") {
+      i = slot(i + 1);
+    } else {
+      text += source[i];
+      i++;
     }
-    const close = source.indexOf("}", open);
-    if (close === -1) throw new Error(`"{" at position ${open} has no closing "}"`);
-    if (open > i) parts.push(source.slice(i, open));
-    parts.push(compileExpression(source.slice(open + 1, close)));
-    i = close + 1;
   }
+  if (text !== "") parts.push(text);
   const refs = parts.flatMap((part) => (typeof part === "string" ? [] : part.refs));
   return {
     source,
@@ -376,5 +402,6 @@ export function compileTemplate(source: string): Template {
           return typeof value === "number" ? String(Number(value.toFixed(6))) : String(value);
         })
         .join(""),
+    skeleton: parts.map((part) => (typeof part === "string" ? part : "0")).join(""),
   };
 }

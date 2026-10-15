@@ -1,4 +1,6 @@
 export { BOARD, BoardAction, BoardSignal, boardProp } from "./board";
+export { Color, cssColor } from "@chalk/look";
+export { colorSchema } from "./color";
 export {
   actionsFor,
   asAnyProp,
@@ -10,7 +12,10 @@ export {
   task,
   tween,
   type ActionSpec,
+  type ActionOf,
   type AnyPropDef,
+  type DerivedOf,
+  type SignalOf,
   type Box,
   type DerivedSpec,
   type Effect,

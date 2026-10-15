@@ -1,0 +1,5 @@
+# Prerequisite edges between concepts, by their paths in content/.
+# Every path must be a built concept; the build refuses loops.
+#   - concept: class9-maths/number-systems/successive-magnification
+#     parents: [class9-maths/number-systems/place-value]
+edges: []

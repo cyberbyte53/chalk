@@ -260,7 +260,7 @@ const reading = (describe: string, pick: (r: CircuitReadings) => unknown) => ({
 });
 
 /** A simple DC circuit of ideal components. It knows circuits and Ohm's law, nothing about any lesson. */
-export const circuit = defineProp<CircuitState>({
+export const circuit = defineProp({
   type: "circuit",
   describe:
     "A simple electric circuit: cells, bulbs, resistors, switches, wires, ammeters and voltmeters joined at nodes on a grid, all ideal. It works out the current through and voltage across every component, how bright each bulb glows and what each meter reads. The learner can open and close switches and take bulbs out of their sockets.",

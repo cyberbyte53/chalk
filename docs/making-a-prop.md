@@ -28,11 +28,13 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 ## 3. Write the model
 
-`src/model.ts` with `defineProp`. Shape to copy: `props/number-line/src/model.ts` (timed actions) or `props/chance/src/coin.ts` (signals, seeded chance).
+`src/model.ts` with `defineProp({ … })`, no type arguments: the state type comes from `state`, and the action, signal and derived names from their keys, so content can name only what the prop has. Shape to copy: `props/number-line/src/model.ts` (timed actions) or `props/chance/src/coin.ts` (signals, seeded chance).
 
 - `state`: a strict zod object; `defaults` for every field.
 - `derived`: pure functions of stored state.
 - `actions` via `actionsFor<S>()`: `set(patch, ...signals)` for an instant change, `tween(seconds, to)` to glide, `task(async (c) => …)` for anything that takes steps.
+- Name actions, signals and derived fields once, in `as const` maps exported with the prop (`NumberLineAction`, `NumberLineSignal`, `NumberLineDerived`), and key the definition with them (`[NumberLineAction.MoveMarker]: act({ … })`). Views, lessons and content use the maps, never the strings.
+- `isExplainer: false` for props that don't explain anything (words, buttons, questions, timers), so Jugnu isn't offered them.
 - `invariant` for rules across fields the schema can't say.
 - `inputs`: only stored fields a lesson may own with an IS rule (words, an enabled flag).
 - No `Math.random`: chance is seeded and the seed is state.
@@ -42,12 +44,12 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 `src/view.tsx`: draws `view` (stored and derived) at the `width` it's given. Every touch is `call("<action>", args)`. The view owns no state. Words come from the lesson (`{ en, hi }`), not the prop.
 
-Styles go in `packages/player/src/styles.css`, in a section named after the prop. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
+Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.md) first, including the list of d3 modules to check before writing geometry by hand); draw your own SVG inside the stage only for what no piece covers. Styles go in the prop's own `src/styles.css`, exported as `@chalk/prop-<folder>/styles.css`; class names start with the prop's short prefix (`.nl-`, `.ns-`). Draw only with the look's tokens (`var(--color-on-surface)`, `var(--font-display)`, `var(--text-note)`; see `packages/look`), never a raw colour: a test checks. A colour the content picks (a `colorSchema` field) reaches the view as a role or a hex; set it as `--tone` with `cssColor` and mix tints from it. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
 
 ## 5. Wire it in
 
 - `package.json` named `@chalk/prop-<folder>`, `tsconfig.json`, `src/index.ts` exporting `<name>Prop: PropModule = { def: asAnyProp(…), View }`. Copy `props/chance/`.
-- `library/package.json`: add the dependency; `library/src/index.ts`: add the module to `all`.
+- `library/package.json`: add the dependency; `library/src/index.ts`: add the module to `all`; `library/src/styles.css`: add its `@import`.
 - `pnpm install`.
 - `library/README.md`: add it to the list.
 - If a lesson uses it, `library/src/lessons.test.ts` can play that lesson with fake time.

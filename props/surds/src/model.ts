@@ -88,7 +88,7 @@ function needsCanChange(s: SurdTilesState): void {
 }
 
 /** Two factors multiplied as an area. It knows multiplying surds, nothing about any lesson. */
-export const surdTiles = defineProp<SurdTilesState>({
+export const surdTiles = defineProp({
   type: "surdTiles",
   describe:
     "The product of two factors, each a sum of 1 or 2 terms coefficient×√radicand (radicand 1 is rational), drawn as a rectangle: `left` down the side, `right` along the top, one tile per pair of terms. Like tiles (same surd) add; equal and opposite tiles cancel. `combine` merges the tiles into the simplified result.",

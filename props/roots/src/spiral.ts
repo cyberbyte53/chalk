@@ -53,7 +53,7 @@ function locate(s: RootSpiralState, part: string, width: number): Box | undefine
  * The square-root spiral: OP1 = 1, and at each Pk a unit perpendicular to OPk gives P(k+1), so
  * OP(k+1)² = OPk² + 1. It knows right triangles, nothing about any lesson.
  */
-export const rootSpiral = defineProp<RootSpiralState>({
+export const rootSpiral = defineProp({
   type: "rootSpiral",
   describe:
     "The square-root spiral: start with OP1 = 1; at P1 a unit perpendicular to OP1 gives P2 with OP2 = √2; at P2 a unit perpendicular to OP2 gives P3 with OP3 = √3; and so on, `steps` triangles in all. Hypotenuses labelled √2, √3, 2, √5, …",

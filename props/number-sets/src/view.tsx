@@ -4,6 +4,7 @@ import {
   type Card,
   type Family,
   FamilySymbol,
+  NumberSorterAction,
   NumberSorterPart,
   type NumberSorterState,
   OUTSIDE,
@@ -57,7 +58,7 @@ export function NumberSorterView({ view, locale, call }: PropViewProps): JSX.Ele
         data-part={`${NumberSorterPart.CardPrefix}${card.id}`}
         onClick={(event) => {
           event.stopPropagation();
-          call("pick", { card: card.id });
+          call(NumberSorterAction.Pick, { card: card.id });
         }}
       >
         {card.label}
@@ -67,7 +68,7 @@ export function NumberSorterView({ view, locale, call }: PropViewProps): JSX.Ele
   const cardsIn = (place: Place | null) => s.cards.filter((c) => c.placedIn === place);
   const drop = (place: Place) => (event: JSX.TargetedMouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    if (isPicking) call("drop", { place });
+    if (isPicking) call(NumberSorterAction.Drop, { place });
   };
 
   const region = (family: Family): JSX.Element => {
@@ -83,7 +84,7 @@ export function NumberSorterView({ view, locale, call }: PropViewProps): JSX.Ele
           if (isPicking && (event.key === "Enter" || event.key === " ")) {
             event.preventDefault();
             event.stopPropagation();
-            call("drop", { place: family });
+            call(NumberSorterAction.Drop, { place: family });
           }
         }}
         // biome-ignore lint/a11y/useSemanticElements: a ring holds card buttons, so it can't be a <button>
@@ -122,7 +123,7 @@ export function NumberSorterView({ view, locale, call }: PropViewProps): JSX.Ele
           onKeyDown={(event) => {
             if (isPicking && (event.key === "Enter" || event.key === " ")) {
               event.preventDefault();
-              call("drop", { place: OUTSIDE });
+              call(NumberSorterAction.Drop, { place: OUTSIDE });
             }
           }}
           // biome-ignore lint/a11y/useSemanticElements: it holds card buttons, so it can't be a <button>

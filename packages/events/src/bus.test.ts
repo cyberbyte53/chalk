@@ -22,7 +22,7 @@ describe("createEventBus", () => {
     question(
       Actor.Learner,
       { type: "check", submitted: { kind: "choice", optionId: "a" } },
-      { status: "wrong", attempts: 1 },
+      { status: "wrong", attempts: 1, isGraded: true },
     );
     expect(seen.map((e) => e.envelope.seq)).toEqual([0, 1]);
     expect(seen[0]?.envelope).toMatchObject({
@@ -45,12 +45,12 @@ describe("createEventBus", () => {
     question(
       Actor.Learner,
       { type: "check", submitted: { kind: "choice", optionId: "a" } },
-      { status: "wrong", attempts: 0 },
+      { status: "wrong", attempts: 0, isGraded: true },
     );
     question(
       Actor.Learner,
       { type: "check", submitted: { kind: "choice", optionId: "a" } },
-      { status: "wrong", attempts: 1 },
+      { status: "wrong", attempts: 1, isGraded: true },
     );
     expect(problems).toHaveLength(1);
     expect(seen.map((e) => e.envelope.seq)).toEqual([0]);

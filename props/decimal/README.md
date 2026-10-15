@@ -66,7 +66,7 @@ Turning a fraction p/q into a decimal by long division, one digit at a time. Eac
 - `src/division.ts`: the arithmetic (long division steps, lowest terms, terminating test, repeating block).
 - `src/paper.ts`: where every digit of the written-out division goes (columns and rows), pure; `src/paper.test.ts` checks it against the notebook layout (1 ÷ 7, 10 ÷ 3, 7 ÷ 8).
 - `src/view.tsx`: the paper, the digit pad and the remainder clock. No words.
-- Styles live in the player's `styles.css`, section "decimal: decimalExpansion".
+- Styles live in `src/styles.css`, drawn with the look's tokens.
 - `src/model.test.ts`: 1/8, 1/3, 1/7, 1/6, 22/7, 7/1, 3/12 by hand; terminating iff q is 2s and 5s for every q ≤ 200; remainders < q; period ≤ q − 1 and the digits really repeat; exactly one digit fits at every step; every action; signals; refusals.
 
 May import: `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `decimalExpansionProp` (the module), `decimalExpansionDef`, `DecimalExpansionState`, `DecimalExpansionSignal`, `DecimalExpansionPart`.
@@ -128,7 +128,7 @@ May import: `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `d
 - `src/shift.ts`: the definition.
 - `src/shift-maths.ts`: the arithmetic, exact (BigInt): x as p/q, the digit at any place, each tape's digits, the difference, shortest period, decimals of a fraction.
 - `src/shift-view.tsx`: two tapes of digit cells, the decimal points in one column, each digit keyed by its place in x so ×10 slides it a cell left. Repeating blocks tinted in alternate bands; lined-up tails joined by a saffron band and struck out as `cancel` grows; under a rule the difference `99x = 23.3` and then `x = 23.3/99 = 233/990`. About 12 digits, then the tape fades out to say "forever". Only maths, no words.
-- Styles live in the player's `styles.css`, section "decimal: decimalShift".
+- Styles live in `src/styles.css`, drawn with the look's tokens.
 - `src/shift.test.ts`: NCERT Examples 7–9 (0.3̅, 1.2̅7̅, 0.23̅5̅) and 0.9̅ = 1, 0.4̅5̅, 0.47̅, 0.0̅0̅1̅ by hand; p/q checked against long division for many generated numbers; lined up iff the shift is a multiple of the period; every action; refusals; `subtract` passes the one door at every step.
 
 Exports (through `src/index.ts`): `decimalShiftProp` (the module), `decimalShiftDef`, `DecimalShiftState`.

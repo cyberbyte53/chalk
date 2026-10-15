@@ -14,7 +14,11 @@
     "check": "pnpm typecheck && pnpm test && pnpm validate && biome check .",
     "format": "biome check --write .",
     "publish-lesson": "pnpm --filter @chalk/studio publish-lesson",
-    "test-jugnu": "pnpm --filter @chalk/studio test-jugnu"
+    "test-jugnu": "pnpm --filter @chalk/studio test-jugnu",
+    "preview": "pnpm --filter @chalk/studio content preview",
+    "publish-content": "pnpm --filter @chalk/studio content publish",
+    "build-content": "pnpm --filter @chalk/studio content build",
+    "art": "pnpm --filter @chalk/studio content art"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

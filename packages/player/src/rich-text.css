@@ -1,0 +1,29 @@
+/* Rich text: KaTeX's own fonts and layout, fitted to the board's type. */
+@import "katex/dist/katex.min.css";
+
+/* KaTeX sets maths at 1.21em of the text around it; a little smaller sits better with Baloo 2. */
+.rich-math .katex,
+.rich-display-math .katex {
+  font-size: 1.1em;
+}
+
+/* A display formula gets its own line, and scrolls sideways rather than overflowing a phone. */
+.rich-display-math {
+  display: block;
+}
+.rich-display-math .katex-display {
+  margin: 0.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.1em 0;
+}
+
+/* Inline maths never breaks across lines in the middle of a formula. */
+.rich-math {
+  white-space: nowrap;
+}
+
+/* A title's maths keeps the title's weight in the words around it; the maths stays upright. */
+.text-title .katex {
+  font-weight: normal;
+}

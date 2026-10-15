@@ -1,12 +1,17 @@
 import type { Board } from "@chalk/content";
 import type { Spoken } from "@chalk/prop";
+// Makes every component re-render when a signal it read while rendering changes, and only then.
+import "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
 import type { PropRegistry } from "./prop-module";
 import { BoardRuntime } from "./runtime";
 
 export type Speak = (prop: { name: string; id: number | undefined }, line: Spoken) => Promise<void>;
 
-/** Runs one board while it is on screen, and re-renders whenever any prop's state changes. */
+/**
+ * Runs one board while it is on screen. Nothing here re-renders: each component that reads a prop's
+ * view (`runtime.getView`) re-renders when that view changes.
+ */
 export function useBoardRuntime(board: Board, registry: PropRegistry, speak: Speak): BoardRuntime {
   const speakRef = useRef(speak);
   speakRef.current = speak;
@@ -23,14 +28,9 @@ export function useBoardRuntime(board: Board, registry: PropRegistry, speak: Spe
         onError: (message, error) => console.error(message, error ?? ""),
       }),
   );
-  const [, setVersion] = useState(0);
   useEffect(() => {
-    const stop = runtime.subscribe(() => setVersion((v) => v + 1));
     runtime.start();
-    return () => {
-      stop();
-      runtime.dispose();
-    };
+    return () => runtime.dispose();
   }, [runtime]);
   return runtime;
 }

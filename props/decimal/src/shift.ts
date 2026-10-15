@@ -114,7 +114,7 @@ function xText(x: Recurring): string {
  * Subtracting takes the tails away exactly when they are lined up. It knows recurring decimals,
  * nothing about any lesson.
  */
-export const decimalShift = defineProp<DecimalShiftState>({
+export const decimalShift = defineProp({
   type: "decimalShift",
   describe:
     "A recurring decimal x = whole.prefix followed by block repeated forever, on two tapes: the top shows 10^topPower × x, the bottom 10^bottomPower × x. ×10 slides the digits one place left. Subtracting the bottom from the top cancels the infinite tails exactly when they are lined up (the shift is a whole number of repeating blocks); what is left is (10^topPower − 10^bottomPower) × x, a decimal that ends, so x = p/q.",

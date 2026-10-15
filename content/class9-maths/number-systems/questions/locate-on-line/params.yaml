@@ -1,0 +1,4 @@
+# One row = one question. Decimals are quoted: they are exact text, not floats.
+- params: { target: "2.665", from: 2, to: 3 }
+- params: { target: "7.384", from: 7, to: 8 }
+  level: hard

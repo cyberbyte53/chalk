@@ -6,6 +6,8 @@ import { NumberSorterView } from "./view";
 export {
   Family,
   FamilySymbol,
+  NumberSorterAction,
+  NumberSorterDerived,
   NumberSorterPart,
   NumberSorterSignal,
   type NumberSorterState,

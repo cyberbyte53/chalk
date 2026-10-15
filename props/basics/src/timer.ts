@@ -18,8 +18,9 @@ const act = actionsFor<TimerState>();
  * Ticks on the board's clock (so pausing the board pauses it). `start` finishes when the timer
  * stops, so a script can say "tick 100 times, then…". Nothing on screen.
  */
-export const timer = defineProp<TimerState>({
+export const timer = defineProp({
   type: "timer",
+  isExplainer: false,
   describe:
     "A timer that raises `tick` every so often, for things that repeat (toss, sample, step).",
   state: timerState,

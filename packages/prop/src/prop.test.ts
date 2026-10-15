@@ -14,7 +14,7 @@ const act = actionsFor<MirrorState>();
 const imageAt = (s: MirrorState) => 1 / (1 / s.f - 1 / s.u);
 
 const mirror = asAnyProp(
-  defineProp<MirrorState>({
+  defineProp({
     type: "mirror",
     describe: "Concave mirror (NCERT sign convention, cm)",
     state: mirrorState,
@@ -155,5 +155,14 @@ describe("expressions", () => {
       ["line", "marker"],
       ["line", "marker"],
     ]);
+  });
+
+  it("keeps LaTeX braces inside maths, and fills \\live{…} there", () => {
+    const label = compileTemplate(
+      "At {fixed(line.marker, 2)}: $\\frac{1}{3} \\ne \\live{fixed(line.marker, 2)}$, costs \\$1",
+    );
+    expect(label.render(scope)).toBe("At 1.50: $\\frac{1}{3} \\ne 1.50$, costs \\$1");
+    expect(label.skeleton).toBe("At 0: $\\frac{1}{3} \\ne 0$, costs \\$1");
+    expect(label.refs).toHaveLength(2);
   });
 });

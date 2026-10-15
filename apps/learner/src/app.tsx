@@ -1,11 +1,12 @@
 import { type ChalkEvent, Locale } from "@chalk/content";
 import { createEventBus } from "@chalk/events";
 import { propLibrary } from "@chalk/library";
-import { LessonPlayer } from "@chalk/player";
+import { LessonPlayer, RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
+import { ChapterScreen, CourseScreen } from "./course-screens";
 import { jugnuProvider } from "./jugnu";
-import { type PlayableLesson, lessons } from "./lessons";
+import { type PlayableLesson, courses, lessons } from "./lessons";
 
 /** One event backbone for the whole app session. */
 const bus = createEventBus();
@@ -38,6 +39,11 @@ function jumpFromUrl(): { lesson: PlayableLesson | undefined; board: number; loc
   };
 }
 
+type Screen =
+  | { kind: "home" }
+  | { kind: "course"; course: number }
+  | { kind: "chapter"; course: number; chapter: number };
+
 /** Dev shell: pick a lesson, play it, and watch the events it emits. */
 export function App(): JSX.Element {
   const [jump] = useState(jumpFromUrl);
@@ -45,13 +51,34 @@ export function App(): JSX.Element {
   const [playing, setPlaying] = useState<PlayableLesson | undefined>(jump.lesson);
   const [events, setEvents] = useState<readonly ChalkEvent[]>([]);
   const [isLogOpen, setIsLogOpen] = useState(false);
+  // Where the learner is outside a lesson: the list, a book, or one of its chapters.
+  const [screen, setScreen] = useState<Screen>({ kind: "home" });
+  const course = screen.kind === "home" ? undefined : courses[screen.course];
+  const chapter = screen.kind === "chapter" ? course?.chapters[screen.chapter] : undefined;
+  const play = (lessonId: string) =>
+    setPlaying(lessons.find((entry) => entry.lesson.id === lessonId));
 
   // The dev log is just one subscriber; the uploader will subscribe the same way.
   useEffect(() => bus.subscribe((event) => setEvents((prev) => [...prev, event])), []);
 
   return (
     <>
-      {playing === undefined ? (
+      {playing === undefined && screen.kind === "chapter" && chapter !== undefined ? (
+        <ChapterScreen
+          chapter={chapter}
+          number={screen.chapter + 1}
+          locale={locale}
+          onConcept={play}
+          onBack={() => setScreen({ kind: "course", course: screen.course })}
+        />
+      ) : playing === undefined && screen.kind !== "home" && course !== undefined ? (
+        <CourseScreen
+          course={course}
+          locale={locale}
+          onChapter={(i) => setScreen({ kind: "chapter", course: screen.course, chapter: i })}
+          onBack={() => setScreen({ kind: "home" })}
+        />
+      ) : playing === undefined ? (
         <div class="lesson home">
           <header class="home-header">
             <h1>Chalk</h1>
@@ -63,11 +90,22 @@ export function App(): JSX.Element {
               {locale === Locale.En ? "हिंदी" : "English"}
             </button>
           </header>
+          {courses.length > 0 && <h2 class="home-section">Courses</h2>}
+          <ul class="lesson-list">
+            {courses.map((c, i) => (
+              <li key={c.title.en}>
+                <button type="button" onClick={() => setScreen({ kind: "course", course: i })}>
+                  <RichText text={c.title[locale]} />
+                </button>
+              </li>
+            ))}
+          </ul>
+          <h2 class="home-section">All lessons</h2>
           <ul class="lesson-list">
             {lessons.map((entry) => (
               <li key={entry.lesson.id}>
                 <button type="button" onClick={() => setPlaying(entry)}>
-                  {entry.lesson.title[locale]}
+                  <RichText text={entry.lesson.title[locale]} />
                 </button>
               </li>
             ))}

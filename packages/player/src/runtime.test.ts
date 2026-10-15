@@ -9,6 +9,7 @@ import {
   task,
   tween,
 } from "@chalk/prop";
+import { effect } from "@preact/signals-core";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { BoardRuntime, type RuntimeServices, type SignalRecord } from "./runtime";
@@ -20,7 +21,7 @@ const coinState = z
   .strict();
 type CoinState = z.infer<typeof coinState>;
 const coinAct = actionsFor<CoinState>();
-const coin = defineProp<CoinState>({
+const coin = defineProp({
   type: "coin",
   describe: "A coin that lands on `next` (tests decide; no randomness here)",
   state: coinState,
@@ -42,7 +43,7 @@ const coin = defineProp<CoinState>({
 const dialState = z.object({ at: z.number().min(0).max(10) }).strict();
 type DialState = z.infer<typeof dialState>;
 const dialAct = actionsFor<DialState>();
-const dial = defineProp<DialState>({
+const dial = defineProp({
   type: "dial",
   describe: "A dial",
   state: dialState,
@@ -64,7 +65,7 @@ const dial = defineProp<DialState>({
 const labelState = z.object({ text: z.record(z.string(), z.string()), value: z.number() }).strict();
 type LabelState = z.infer<typeof labelState>;
 const labelAct = actionsFor<LabelState>();
-const label = defineProp<LabelState>({
+const label = defineProp({
   type: "label",
   describe: "A label",
   state: labelState,
@@ -161,6 +162,51 @@ describe("BoardRuntime", () => {
     expect(runtime.getView("score").text).toEqual({ en: "Heads: 0 / 0", hi: "चित: 0" });
     void runtime.call("coin", "toss");
     expect(runtime.getView("score").text).toEqual({ en: "Heads: 1 / 1", hi: "चित: 1" });
+  });
+
+  it("settles IS rules that feed each other, whatever order they are listed in", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "first", prop: "label" },
+        { kind: "prop", name: "second", prop: "label" },
+      ),
+      // second reads first, but is listed before it
+      is: [
+        { set: "second.value", to: "first.value + 1" },
+        { set: "first.value", to: "coin.count * 10" },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    expect(runtime.getView("second").value).toBe(1);
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("first").value).toBe(10);
+    expect(runtime.getView("second").value).toBe(11);
+  });
+
+  it("re-reads a prop's view only when that prop changed", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "dial", prop: "dial" },
+      ),
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    let dialReads = 0;
+    const stop = effect(() => {
+      runtime.getView("dial");
+      dialReads++;
+    });
+    void runtime.call("coin", "toss");
+    void runtime.call("coin", "toss");
+    expect(dialReads).toBe(1);
+    void runtime.call("dial", "setTo", { to: 3 });
+    expect(dialReads).toBe(2);
+    stop();
   });
 
   it("refuses an action that would set a field an IS owns", async () => {

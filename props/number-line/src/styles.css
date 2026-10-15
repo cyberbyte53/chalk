@@ -1,0 +1,174 @@
+/* @chalk/prop-number-line: drawn only with the look's tokens (@chalk/look) and the content's --tone. */
+
+.prop-numberLine {
+  padding: 4px 0;
+}
+
+/* ---- number-line: numberLine ---- */
+.nl {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nl-svg {
+  display: block;
+  overflow: visible;
+  touch-action: none;
+  user-select: none;
+}
+.nl-svg.is-draggable {
+  cursor: pointer;
+}
+.nl-svg.is-pannable {
+  cursor: grab;
+}
+/* The coach mark on a line that slides: a fingertip swiping left, until the first drag. */
+.nl-swipe {
+  position: absolute;
+  left: 50%;
+  top: 70px;
+  width: 120px;
+  height: 36px;
+  margin-left: -60px;
+  pointer-events: none;
+}
+.nl-swipe-finger {
+  position: absolute;
+  top: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  animation: nl-swipe 1.8s ease-in-out infinite;
+}
+@keyframes nl-swipe {
+  0% {
+    left: 90px;
+    opacity: 0;
+  }
+  15% {
+    left: 90px;
+    opacity: 0.85;
+  }
+  70% {
+    left: 10px;
+    opacity: 0.85;
+  }
+  100% {
+    left: 10px;
+    opacity: 0;
+  }
+}
+/* The axis, ticks, dots and marks are @chalk/draw pieces; these are the number line's own touches. */
+.nl-svg .draw-tick text {
+  fill: var(--piece-color, var(--color-on-surface-variant));
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.nl-svg .draw-tick.is-end text {
+  fill: var(--piece-color, var(--color-on-surface));
+  font-weight: 800;
+}
+.nl-svg .draw-tick.is-in-lens line {
+  stroke: var(--color-on-secondary-container);
+}
+.nl-svg .draw-tick.is-in-lens text {
+  fill: var(--color-on-secondary-container);
+  font-weight: 800;
+}
+.draw-dot.nl-dot {
+  fill: var(--piece-color, var(--color-on-surface));
+}
+.nl-lens {
+  fill: color-mix(in srgb, var(--color-secondary) 16%, transparent);
+  stroke: var(--color-secondary);
+  stroke-width: 2.5;
+  animation: rise 0.25s ease-out;
+}
+.nl-split {
+  stroke: var(--color-secondary);
+  stroke-width: 9;
+  stroke-linecap: round;
+  opacity: 0.35;
+}
+.nl-cut line {
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 2.5;
+}
+.nl-cut circle {
+  fill: var(--color-surface);
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 2.5;
+}
+.nl-cut.is-end line {
+  stroke-width: 3;
+}
+.nl-marker-hit {
+  fill: transparent;
+}
+.nl-marker-dot {
+  fill: var(--color-primary);
+  stroke: var(--color-surface);
+  stroke-width: 3;
+}
+.nl-marker:focus {
+  outline: none;
+}
+.nl-marker:focus .nl-marker-dot {
+  stroke: var(--color-secondary);
+}
+.nl-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.nl-zoom {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.nl-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nl-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 800 24px / 1 var(--font-display);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.nl-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.nl-button:disabled {
+  color: var(--color-outline-variant);
+  box-shadow: none;
+  cursor: default;
+}
+.nl-parts {
+  min-width: 34px;
+  text-align: center;
+  font: 800 26px var(--font-display);
+  color: var(--color-on-secondary-container);
+}
+.nl-magnifier {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}

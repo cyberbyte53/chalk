@@ -1,0 +1,23 @@
+/* A question's feedback, under its answer: a coloured first word, then the note in plain ink. */
+
+.feedback {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-body);
+  line-height: var(--text-body-leading);
+  animation: rise 0.2s ease-out;
+}
+.feedback strong {
+  font-weight: 800;
+}
+.feedback.is-correct strong {
+  color: var(--color-right);
+}
+.feedback.is-wrong strong {
+  color: var(--color-wrong);
+}
+.feedback span {
+  color: var(--color-on-surface);
+}

@@ -6,7 +6,9 @@
       "**/dist/**",
       "**/node_modules/**",
       "content/**/lessons/*.json",
-      "content/**/published/**"
+      "content/**/published/**",
+      "build/**",
+      "published/**"
     ]
   },
   "formatter": {
@@ -32,6 +34,39 @@
       "suspicious": {
         "noExplicitAny": "error",
         "noApproximativeNumericConstant": "off"
+      },
+      "nursery": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "d3": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-selection": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-transition": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-timer": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-drag": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-zoom": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-brush": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-axis": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-dispatch": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-color": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-fetch": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+              "d3-scale": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-shape": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-path": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-interpolate": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-array": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-hierarchy": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-polygon": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-random": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-delaunay": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-ease": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-force": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-contour": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md.",
+              "d3-geo": "d3 is used only inside @chalk/draw: draw with its pieces, or add one there. See docs/drawing.md."
+            }
+          }
+        }
       }
     }
   },
@@ -42,6 +77,33 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": ["packages/draw/**"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "d3": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-selection": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-transition": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-timer": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-drag": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-zoom": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-brush": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-axis": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-dispatch": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-color": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md.",
+                  "d3-fetch": "Never use this d3 module: it changes the page, keeps its own clock or handles touches. See docs/drawing.md."
+                }
+              }
+            }
           }
         }
       }

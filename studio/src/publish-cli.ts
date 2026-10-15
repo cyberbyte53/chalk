@@ -4,7 +4,7 @@ import { parseArgs } from "node:util";
 import { type Lesson, lessonSchema } from "@chalk/content";
 import { propDefs } from "@chalk/library";
 import { writeJsonFile } from "./json-file";
-import { findUp, loadReadings } from "./pronunciations";
+import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "./pronunciations";
 import { orderKeys, publishLesson } from "./publish";
 import { generateAudio, providers, voicesSchema } from "./voice";
 
@@ -30,7 +30,7 @@ const previous: Lesson | null = existsSync(snapshotFile)
   ? lessonSchema.parse(JSON.parse(readFileSync(snapshotFile, "utf8")))
   : null;
 
-const readings = loadReadings(findUp("pronunciations.json", dirname(file)));
+const readings = loadReadings(findUp(PRONUNCIATIONS_FILE, dirname(file)));
 const result = publishLesson(JSON.parse(readFileSync(file, "utf8")), previous, propDefs, readings);
 if (!result.isOk) {
   console.error(`✗ ${arg} can't be published:`);

@@ -1,0 +1,488 @@
+/* @chalk/prop-decimal: drawn only with the look's tokens (@chalk/look) and the content's --tone. */
+
+/* ---- decimal: decimalExpansion (long division on paper + remainder clock) ---- */
+.dx {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dx-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px 16px;
+}
+.dx-sheet {
+  flex: 0 1 auto;
+  max-width: 100%;
+  max-height: 250px;
+  overflow: auto;
+  padding: 0 14px 12px 8px;
+  border: none;
+  border-radius: 16px;
+  background: var(--color-surface-container);
+  color: inherit;
+  text-align: left;
+}
+.dx-sheet.is-tappable {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, var(--color-surface));
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+}
+.dx-sheet.is-tappable:active {
+  background: color-mix(in srgb, var(--color-outline-variant) 60%, var(--color-surface));
+}
+.dx-sheet:focus-visible {
+  outline: 3px solid var(--color-secondary);
+}
+.dx-paper {
+  display: grid;
+  position: relative;
+  font: 700 20px / 1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-surface);
+}
+.dx-paper .is-head,
+.dx-paper .is-head-2 {
+  position: sticky;
+  z-index: 2;
+}
+.dx-paper .is-head {
+  top: 10px;
+}
+.dx-paper .is-head-2 {
+  top: 35px;
+}
+.dx-head-backdrop {
+  grid-column: 1 / -1;
+  grid-row: 1 / span 2;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: -10px -14px 0 -8px;
+  padding-top: 10px;
+  border-bottom: 1px solid var(--color-outline-variant);
+  background: var(--color-surface-container);
+}
+.dx-paper {
+  padding-top: 10px;
+}
+.dx-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dx-quotient {
+  color: var(--color-on-surface);
+}
+.dx-quotient.is-newest {
+  color: var(--color-primary);
+  animation: rise 0.25s ease-out;
+}
+.dx-quotient.is-beyond {
+  color: var(--color-on-surface-variant);
+  opacity: 0.55;
+}
+.dx-quotient.is-block {
+  color: var(--color-on-secondary-container);
+}
+.dx-bar {
+  align-self: start;
+  height: 3px;
+  margin: 0 1px;
+  border-radius: 2px;
+  background: var(--color-on-secondary-container);
+  animation: rise 0.3s ease-out;
+}
+.dx-next {
+  color: var(--color-on-surface-variant);
+}
+.dx-next.is-asking {
+  margin: 1px -1px;
+  border: 2px dashed var(--color-primary);
+  border-radius: 6px;
+  color: var(--color-primary);
+  font-size: 17px;
+}
+.dx-next.is-rejected {
+  border-color: var(--color-wrong);
+  color: var(--color-wrong);
+  text-decoration: line-through;
+}
+.dx-end {
+  color: var(--color-right);
+  font-size: 18px;
+}
+.dx-divisor {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 9px;
+  font: 800 20px / 1 var(--font-display);
+}
+/* The bracket: a curved stroke on the left and the bar over the dividend. */
+.dx-bracket {
+  border-top: 2.5px solid var(--color-on-surface);
+  border-left: 2.5px solid var(--color-on-surface);
+  border-top-left-radius: 10px 22px;
+  margin-left: -7px;
+  pointer-events: none;
+}
+.dx-point {
+  position: relative;
+  pointer-events: none;
+}
+.dx-paper .is-before-point {
+  transform: translateX(-3px);
+}
+.dx-paper .is-after-point {
+  transform: translateX(3px);
+}
+.dx-point::after {
+  content: "";
+  position: absolute;
+  left: -2.5px;
+  bottom: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.dx-product {
+  color: var(--color-on-surface-variant);
+}
+.dx-rule {
+  align-self: end;
+  height: 2px;
+  margin-bottom: -1px;
+  background: var(--color-on-surface-variant);
+}
+.dx-remainder {
+  color: var(--color-on-secondary-container);
+}
+.dx-broughtDown {
+  color: var(--color-on-surface-variant);
+  font-weight: 500;
+}
+.is-newest-step {
+  animation: rise 0.3s ease-out;
+}
+.dx-remainder.is-repeat,
+.dx-dividend.is-repeat {
+  margin: 1px 0;
+  border-radius: 6px;
+  background: var(--color-secondary);
+  color: var(--color-on-primary);
+}
+.dx-remainder.is-zero {
+  border-radius: 6px;
+  background: var(--color-right-container);
+  color: var(--color-right);
+}
+.dx-ghost {
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+  font: 700 15px / 1 var(--font-display);
+  color: var(--color-wrong);
+  white-space: nowrap;
+  animation: rise 0.2s ease-out;
+}
+
+.dx-pad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.dx-key {
+  min-height: 46px;
+  border: 2px solid var(--color-primary);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font: 800 20px var(--font-display);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.dx-key:active {
+  background: var(--color-primary-container);
+}
+.dx-key.is-rejected {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-container);
+  color: var(--color-wrong);
+}
+
+.dx-clock {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+.dx-clock-ring {
+  fill: none;
+  stroke: var(--color-outline-variant);
+  stroke-width: 2;
+}
+.dx-chord {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5;
+  opacity: 0.55;
+}
+.dx-chord.is-newest {
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  opacity: 1;
+}
+.dx-chord.is-loop {
+  stroke: var(--color-secondary);
+  stroke-width: 3;
+  opacity: 1;
+}
+.dx-slot circle {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 2;
+  transition: fill 0.2s, stroke 0.2s;
+}
+.dx-slot text {
+  font: 700 12px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.dx-slot text.is-outside {
+  font-size: 11px;
+}
+.dx-slot.is-visited circle {
+  fill: var(--color-secondary-container);
+  stroke: var(--color-secondary);
+}
+.dx-slot.is-visited text {
+  fill: var(--color-on-secondary-container);
+}
+.dx-slot.is-current circle {
+  stroke: var(--color-primary);
+  stroke-width: 3;
+}
+.dx-slot.is-repeat circle {
+  fill: var(--color-secondary);
+  stroke: var(--color-on-secondary-container);
+}
+.dx-slot.is-repeat text {
+  fill: var(--color-surface);
+}
+.dx-slot-zero circle {
+  fill: var(--color-surface-container);
+}
+.dx-slot-zero.is-hit circle {
+  fill: var(--color-right-container);
+  stroke: var(--color-right);
+}
+.dx-slot-zero.is-hit text {
+  fill: var(--color-right);
+}
+
+/* ---- decimal: decimalShift ---- */
+.dsh {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+  --dsh-band: color-mix(in srgb, var(--color-secondary) 26%, var(--color-surface));
+  --dsh-band-alt: color-mix(in srgb, var(--color-secondary) 10%, var(--color-surface));
+}
+.dsh-shift {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.dsh-button {
+  min-width: 56px;
+  height: 44px;
+  padding: 0 10px;
+  border: 2px solid var(--color-primary);
+  border-radius: 22px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font: 700 17px / 1 var(--font-display);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.dsh-button:active:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+.dsh-button:disabled,
+.dsh-minus:disabled {
+  border-color: var(--color-outline-variant);
+  color: var(--color-outline-variant);
+  cursor: default;
+}
+.dsh-button:focus-visible,
+.dsh-minus:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+.dsh-tapes {
+  position: relative;
+  padding: 4px 0;
+}
+.dsh-row {
+  position: relative;
+  overflow: hidden;
+}
+.dsh-label,
+.dsh-digit,
+.dsh-point {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+.dsh-label {
+  justify-content: flex-end;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-on-surface);
+  padding-right: 0.3em;
+}
+.dsh-equals {
+  color: var(--color-on-surface-variant);
+  padding-left: 0.15em;
+}
+.dsh-digit {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--color-on-surface);
+}
+.dsh-point {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--color-on-surface);
+}
+/* Each repeat of the block gets its own bar over it, as in the book's 0.3 with a bar. */
+.dsh-digit.is-band::before,
+.dsh-digit.is-band-alt::before {
+  content: "";
+  position: absolute;
+  top: 6%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-secondary);
+}
+.dsh-digit.is-band-alt::before {
+  background: var(--color-on-secondary-container);
+  opacity: 0.55;
+}
+.dsh-digit.is-band-start::before {
+  left: 2px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+.dsh-digit.is-band-end::before {
+  right: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+/* Lined-up tails: one saffron frame around both tapes' tails, struck out as they cancel. */
+.dsh-tail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border: 2px solid var(--color-secondary);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  pointer-events: none;
+  transition: left 0.4s ease, border-color 0.3s ease;
+}
+.dsh.is-subtracted .dsh-tail {
+  border-color: var(--color-right);
+}
+.dsh-strike {
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--color-right);
+  transform-origin: left center;
+  pointer-events: none;
+}
+.dsh-digit.is-tail {
+  transition: transform 0.4s ease, opacity 0.05s linear;
+}
+.dsh-rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+.dsh-minus {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--color-primary);
+  border-radius: 22px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font: 800 28px / 1 var(--font-display);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.dsh-minus:disabled {
+  background: var(--color-surface);
+}
+.dsh-line {
+  flex: 1;
+  height: 2px;
+  background: var(--color-on-surface);
+}
+.dsh-difference .dsh-digit,
+.dsh-difference .dsh-point {
+  color: var(--color-on-surface);
+}
+.dsh-result {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: 2.6em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  flex-wrap: wrap;
+  color: var(--color-on-secondary-container);
+  animation: rise 0.3s ease-out;
+}
+.dsh-result-label {
+  flex: none;
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+.dsh-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+.dsh-numerator {
+  padding: 0 4px 2px;
+  border-bottom: 3px solid currentColor;
+}
+.dsh-denominator {
+  padding: 2px 4px 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dsh-label,
+  .dsh-digit,
+  .dsh-point,
+  .dsh-tail {
+    transition: none;
+  }
+}

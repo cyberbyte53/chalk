@@ -4,7 +4,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 
 | Name | What it is | In code |
 |---|---|---|
-| **Chapter** | Lessons grouped, as in the NCERT book | `content/<course>/<chapter>/` |
+| **Chapter** | Concepts in book order, as in the NCERT book (older: lessons grouped) | `content/<book>/<chapter>/build.yaml`, `BuiltChapter` |
 | **Lesson** | An ordered run of boards. Story, walkthrough, practice and quiz are all lessons. | `Lesson` (`@chalk/content`) |
 | **Board** | One screen: a layout tree of props, plus the IS and WHEN rules that wire them | `Board` |
 | **Piece** | A node in a board's layout tree: layout pieces (Column, Row, Overlay, Space) arrange; a prop piece places a prop | `Piece`, `PieceKind` |
@@ -28,7 +28,9 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **In events** | Whether a placed prop's state goes into the board's Continue event; yes unless the lesson says `isInEvents: false` | `isInEvents` |
 | **Board prop** | The board itself, named `board`: `pass`, `show`, `hide`; signals `started`, `continued` | `boardProp`, `BOARD` |
 | **Question** | A prop with the question role (`choice`, `goal`): status, attempts, feedback, `check` | `PropRole.Question`, `QuestionView` |
-| **Concept** | A tag on questions saying what they test | `concepts: string[]` |
+| **Concept** | The smallest thing a student can get wrong on its own: a folder with an overview (pages). Its id is what questions test and what learner counts hang on | `<concept>/build.yaml`, `BuiltConcept`, `concepts` on a question prop |
+| **Question bank** | A chapter's question families (`<chapter>/questions/`). Each family `tests` one or more of the chapter's concepts; a question is served once all of them are taught | `chapterManifestSchema.questions`, `BuiltChapter.questions`, `BankRef` |
+| **Concept enum** | A chapter's concepts as `Concept.X`, generated from its `build.yaml` into `concepts.gen.ts`, for a family's `tests` | `conceptsModule`, `ContentFile.Concepts` |
 | **Misconception** | Why a specific wrong answer is wrong; reported, not just "wrong" | `misconception` on an option |
 | **Line** | A cast character's speech bubble (Maya, Arjun) | `line` prop, `CharacterId` |
 | **Event** | One commit: an input applied to a machine, plus the machine's state after, inside a fixed envelope | `ChalkEvent`, `MachineEvent` |
@@ -50,7 +52,31 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Hand back** | Jugnu ends his turn and watches props; when the learner acts on one, he goes on | `wait_for_student`, `JugnuSession.continue` |
 | **Model provider** | The model Jugnu runs on, through its standard tool calling (any OpenAI-style API such as DeepSeek or Foundry, or Ollama); swapping it changes nothing else | `LlmProvider`, `providerFrom` |
 | **Slate** | Jugnu's own board, shown inside his chat; the same player as a board | (not built yet) |
+| **Book** | A subject for one class (Class 9 Maths): chapters in book order | `content/<book>/build.yaml`, `book.json` |
+| **Manifest** | A folder's `build.yaml`: its title and the children it includes, in order. Only what a manifest lists is built | `build.yaml`, `bookManifestSchema` … (`@chalk/author`) |
+| **Page** | One board of a concept's overview: explanation, worked example, animation or sandbox | `page()`, `overview.ts`, `BuiltPage` |
+| **Question family** | A question template: a folder with `family.ts` (params → board) and `params.yaml` (the rows) | `family()`, `BuiltFamily` |
+| **Params row** | One row of `params.yaml`: one question's params, and optionally its level, origin, exclude | `paramsRowSchema` |
+| **Question** | A family built with one params row: a board with a question prop | `BuiltQuestion` |
+| **Origin** | Who wrote a params row: authored (a person or an agent they asked) or generated (the question generator) | `Origin` |
+| **Witness** | How a learner gets a board right, as steps; played on the real props at build. A board whose witness fails is not built | `b.witness`, `Step` |
+| **Note check** | A known wrong answer and the note it should get; played like a witness | `b.noteCheck` |
+| **Board pattern** | A reusable piece of board-building shared by every concept | `content/patterns/` |
+| **Explainer prop** | A prop Jugnu may bring in to explain a concept (a number line, tiles). Words, buttons, questions and timers are not | `isExplainer` on `PropDef` |
+| **Rich text** | What every learner-facing string may hold: words, `**bold**`, `*emphasis*`, `$maths$`, `$$display maths$$` (KaTeX, with mhchem). Checked at build | `RichText`, `parseRich`, `richProblems` (`@chalk/player`) |
+| **Art** | A book's, chapter's or concept's picture, drawn in code with the pieces (`art.tsx`), built to checked SVG | `defineArt`, `ArtFrame`, `BuiltArt`, `pnpm art` |
+| **Stage** | A drawing: an SVG whose x (and y) ranges become d3 scales, plus layers for crowds and for what sits above them | `Stage`, `Space` (`@chalk/draw`) |
+| **Piece** | A shared drawing part (axis, dot, mark, curve, dots) that props and art are built from; placed in the stage's numbers, coloured by the look | `Axis`, `Dot`, `Dots` … (`@chalk/draw`) |
+| **Crowd** | Many of the same thing, drawn by a collection piece with WebGL (or canvas) once they pass a threshold | `Dots`, `CROWD_THRESHOLD` |
+| **Look** | The design tokens every screen and prop is drawn with: colour roles, fonts, the type scale. The one place a raw colour lives | `@chalk/look`, `tokens.json`, `look.css` |
+| **Colour role** | A colour by what it is for (`primary`, `on-surface`, `right`), not by its value; the theme decides the value. A colour field takes a role or any `#rrggbb` | `Color`, `--color-*`, `cssColor` |
+| **Type scale** | The four text sizes a board uses (title, body, note, caption), each with its line height | `--text-*` (`@chalk/look`) |
+| **Exact decimal** | A decimal kept as written ("7.384", "2.50"), with digit work and no float drift | `Dec`, `dec()` (`@chalk/exact`), `decimal` (params) |
+| **Item id** | 16 hex characters: a hash of the item's path in content/ (a question: plus its params). Never typed | `idOf` |
+| **Version** | A hash of an item's built JSON (not the commit); a container's includes its children's | `versionOf` |
+| **Source** | Where a built item came from: path, file, row, commit | `Source` |
+| **Build** | Everything the manifests reach, as JSON in `build/`, checked; what the app, Jugnu and the database read | `pnpm build-content`, `pnpm preview`, `pnpm publish-content` |
 | **Player** | Plays lessons and boards; one player for everything | `@chalk/player` |
-| **Runtime** | One board, live: props' state, IS kept true, WHEN answered, scripts run | `BoardRuntime` |
+| **Runtime** | One board, live: props' state (signals), IS kept true (one effect per rule, re-run only when what it read changes), WHEN answered, scripts run | `BoardRuntime` |
 | **Library** | The registry of every prop type | `@chalk/library` |
 | **Studio** | Authoring: formats + validator now, a GUI later | `@chalk/studio` |

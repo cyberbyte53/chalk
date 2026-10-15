@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@chalk/content": "workspace:*",
+    "@chalk/draw": "workspace:*",
     "@chalk/events": "workspace:*",
     "@chalk/jugnu": "workspace:*",
     "@chalk/library": "workspace:*",
+    "@chalk/look": "workspace:*",
     "@chalk/player": "workspace:*",
-    "preact": "10.24.3"
+    "@fontsource/baloo-2": "5.2.5",
+    "preact": "10.29.8"
   },
   "devDependencies": {
     "vite": "5.4.11"

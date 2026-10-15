@@ -1,8 +1,14 @@
 import { localizedSchema } from "@chalk/content";
-import { SAY, actionsFor, defineProp, task } from "@chalk/prop";
+import { SAY, actionsFor, colorSchema, defineProp, task } from "@chalk/prop";
 import { z } from "zod";
 
-export const TextStyle = { Title: "title", Body: "body", Note: "note" } as const;
+/** How words sit on the board. A definition is set apart in an outlined box. */
+export const TextStyle = {
+  Title: "title",
+  Body: "body",
+  Note: "note",
+  Definition: "definition",
+} as const;
 export type TextStyle = (typeof TextStyle)[keyof typeof TextStyle];
 
 const textState = z
@@ -11,6 +17,8 @@ const textState = z
     /** Plain words for the voice when the text has maths glyphs. */
     speak: localizedSchema.nullable(),
     style: z.nativeEnum(TextStyle),
+    /** The colour a definition is drawn in (its edge, tint and display maths), or null for none. */
+    color: colorSchema.nullable(),
   })
   .strict();
 export type TextState = z.infer<typeof textState>;
@@ -18,11 +26,12 @@ export type TextState = z.infer<typeof textState>;
 const act = actionsFor<TextState>();
 
 /** Words on the board. The lesson may own its words with an IS (e.g. a live "1.41² = 1.9881"). */
-export const text = defineProp<TextState>({
+export const text = defineProp({
   type: "text",
+  isExplainer: false,
   describe: "Words on the board, in the learner's language.",
   state: textState,
-  defaults: { text: { en: "", hi: "" }, speak: null, style: TextStyle.Body },
+  defaults: { text: { en: "", hi: "" }, speak: null, style: TextStyle.Body, color: null },
   inputs: ["text"],
   actions: {
     [SAY]: act({

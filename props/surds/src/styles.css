@@ -1,0 +1,161 @@
+/* @chalk/prop-surds: drawn only with the look's tokens (@chalk/look) and the content's --tone. */
+
+/* ---- surds: surdTiles ---- */
+.st {
+  width: 100%;
+}
+.st-svg {
+  display: block;
+  overflow: visible;
+  font-family: var(--font-display);
+  -webkit-tap-highlight-color: transparent;
+}
+.st-header {
+  text-anchor: middle;
+  font-weight: 700;
+  fill: var(--color-on-surface);
+}
+.st-header .is-changeable {
+  fill: var(--color-primary);
+}
+.st-label {
+  text-anchor: middle;
+  font-size: 20px;
+  font-weight: 700;
+  fill: var(--color-on-surface);
+}
+.st-label.is-left {
+  text-anchor: end;
+}
+.st-label.is-changeable {
+  fill: var(--color-primary);
+}
+.st-side,
+.st-side-end {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.25;
+  opacity: 0.55;
+}
+.st-hit {
+  fill: transparent;
+}
+.st-flip {
+  cursor: pointer;
+  outline: none;
+}
+.st-flip-pill {
+  fill: color-mix(in srgb, var(--color-primary) 7%, transparent);
+  stroke: var(--color-primary);
+  stroke-width: 1.5;
+  transition: fill 0.15s;
+}
+.st-flip:active .st-flip-pill,
+.st-flip:focus-visible .st-flip-pill {
+  fill: color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+.st-tile {
+  stroke-width: 1;
+}
+.st-tile.is-rational,
+.st-chip.is-rational {
+  fill: var(--color-surface-container);
+  stroke: color-mix(in srgb, var(--color-outline-variant) 85%, var(--color-on-surface-variant));
+}
+.st-tile.is-tint-0,
+.st-chip.is-tint-0 {
+  fill: color-mix(in srgb, var(--color-category-1) 15%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-1) 45%, var(--color-surface));
+}
+.st-tile.is-tint-1,
+.st-chip.is-tint-1 {
+  fill: color-mix(in srgb, var(--color-category-2) 12%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-2) 35%, var(--color-surface));
+}
+.st-tile.is-tint-2,
+.st-chip.is-tint-2 {
+  fill: color-mix(in srgb, var(--color-category-3) 13%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-3) 40%, var(--color-surface));
+}
+.st-tile.is-tint-3,
+.st-chip.is-tint-3 {
+  fill: color-mix(in srgb, var(--color-category-4) 14%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-4) 40%, var(--color-surface));
+}
+.st-negative {
+  pointer-events: none;
+}
+.st-hatch-line {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2;
+  opacity: 0.22;
+}
+.st-cancel {
+  fill: var(--color-right-container);
+  fill-opacity: 0.55;
+  stroke: var(--color-right);
+  stroke-width: 2.5;
+}
+.st-gone {
+  fill: none;
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+.st-frame {
+  fill: none;
+  stroke: none;
+}
+.st-tile-text {
+  text-anchor: middle;
+  font-weight: 800;
+  fill: var(--color-on-surface);
+}
+.st-chip {
+  stroke-width: 1;
+}
+.st-expanded text {
+  font-weight: 600;
+  fill: var(--color-on-surface-variant);
+}
+.st-expanded .is-sign {
+  font-weight: 500;
+}
+.st-strike {
+  stroke: var(--color-right);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.st-result {
+  cursor: pointer;
+  outline: none;
+}
+.st-result-line text {
+  font-weight: 800;
+  fill: var(--color-on-secondary-container);
+}
+.st-result-line .is-sign {
+  font-weight: 700;
+}
+.st-equals {
+  cursor: pointer;
+  outline: none;
+}
+.st-equals circle {
+  fill: var(--color-surface);
+  stroke: var(--color-secondary);
+  stroke-width: 2.5;
+  transition: fill 0.15s;
+}
+.st-equals text {
+  text-anchor: middle;
+  font-size: 28px;
+  font-weight: 800;
+  fill: var(--color-on-secondary-container);
+}
+.st-equals:active circle,
+.st-equals:focus-visible circle {
+  fill: color-mix(in srgb, var(--color-category-1) 15%, var(--color-surface));
+}
+.st-equals.is-busy {
+  pointer-events: none;
+}

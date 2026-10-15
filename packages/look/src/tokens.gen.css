@@ -1,0 +1,47 @@
+/* Generated from tokens.json by `pnpm --filter @chalk/look generate`. Do not edit. */
+:root {
+  --color-surface: #ffffff;
+  --color-surface-container: #f5f6f8;
+  --color-surface-press: #e6e7ec;
+  --color-on-surface: #1e2130;
+  --color-on-surface-variant: #6b7080;
+  --color-outline-variant: #e6e7ec;
+  --color-inverse-surface: #1e2130;
+  --color-on-inverse-surface: #ffffff;
+  --color-primary: #3f3bd9;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ecebfc;
+  --color-primary-press: #2b28a6;
+  --color-secondary: #f4a300;
+  --color-secondary-container: #fff4dc;
+  --color-on-secondary-container: #9a5200;
+  --color-right: #15803d;
+  --color-right-container: #e7f6ec;
+  --color-wrong: #b42318;
+  --color-wrong-container: #fdecea;
+  --color-category-1: var(--color-secondary);
+  --color-category-2: var(--color-primary);
+  --color-category-3: #7c5cc4;
+  --color-category-4: #2f9e8f;
+  --brand-jugnu: #ffd84d;
+  --brand-jugnu-glow: #ffc400;
+  --brand-jugnu-container: #fff6d6;
+  --brand-jugnu-body: #fbfbf8;
+  --brand-jugnu-curl: #f4a300;
+  --font-body: "Baloo 2", "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-display: "Baloo 2", "Noto Sans Devanagari", system-ui, sans-serif;
+  --text-title: 27px;
+  --text-title-leading: 1.15;
+  --text-body: 17px;
+  --text-body-leading: 1.45;
+  --text-note: 15px;
+  --text-note-leading: 1.4;
+  --text-caption: 13px;
+  --text-caption-leading: 1.35;
+  --shape-radius-s: 12px;
+  --shape-radius-m: 18px;
+  --shape-radius-l: 22px;
+  --shape-press: 4px;
+  --shape-stroke: 6px;
+  --shape-stroke-thin: 2.5px;
+}

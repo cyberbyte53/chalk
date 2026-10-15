@@ -38,12 +38,15 @@ const choiceState = z
   .strict();
 export type ChoiceState = z.infer<typeof choiceState>;
 
+export const ChoiceAction = { Select: "select" } as const;
+
 const act = actionsFor<ChoiceState>();
 const noArgs = z.object({}).strict();
 
 /** Pick one option, then Check. The answer key is in the prop, checked on the phone. */
-export const choice = defineProp<ChoiceState>({
+export const choice = defineProp({
   type: "choice",
+  isExplainer: false,
   describe: "A multiple-choice question.",
   role: PropRole.Question,
   state: choiceState,
@@ -56,7 +59,6 @@ export const choice = defineProp<ChoiceState>({
     ],
     answer: "a",
     selected: null,
-    concepts: ["unset"],
     ...questionDefaults,
   },
   derived: {
@@ -67,7 +69,7 @@ export const choice = defineProp<ChoiceState>({
   },
   offScreen: ["answer"],
   actions: {
-    select: act({
+    [ChoiceAction.Select]: act({
       describe: "Pick an option (what the learner's tap does)",
       byLearner: true,
       args: z.object({ option: z.string() }).strict(),

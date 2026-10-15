@@ -104,7 +104,7 @@ function landedEmit(x: number): Emit {
  * √x for any x > 0 by a semicircle (NCERT Fig 1.15–1.17): AB = x, BC = 1, the semicircle on AC
  * meets the perpendicular at B in D, and BD = √x. It knows circles and lengths, nothing about any lesson.
  */
-export const rootSemicircle = defineProp<RootSemicircleState>({
+export const rootSemicircle = defineProp({
   type: "rootSemicircle",
   describe:
     "On a line, AB = x and BC = 1. O is the midpoint of AC; the semicircle with centre O through C meets the perpendicular to the line at B in D, and BD = √x (OD = (x+1)/2, OB = (x−1)/2, so BD² = OD² − OB² = x). With B as 0, BD swings about B down onto the line, landing at E = √x.",

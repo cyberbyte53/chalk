@@ -16,8 +16,9 @@ export type LineState = z.infer<typeof lineState>;
 const act = actionsFor<LineState>();
 
 /** A cast character's speech bubble. It is said aloud only when a script calls `say`. */
-export const line = defineProp<LineState>({
+export const line = defineProp({
   type: "line",
+  isExplainer: false,
   describe: "A character's speech bubble.",
   state: lineState,
   defaults: { character: CharacterId.Maya, line: { en: "", hi: "" }, speak: null },

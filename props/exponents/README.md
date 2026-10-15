@@ -72,7 +72,7 @@ A change held at an end (n = 6, then + 1) does nothing.
 - `src/surd.ts`: the exact arithmetic (BigInt whole-number roots, values (p/q)^(1/k), the two routes, the 10¹² rule, formatting).
 - `src/layout.ts`: where everything is drawn at a width (shared by the view and `locate`).
 - `src/view.tsx`: a diamond. At the top a^(m/n) in display type with a raised fraction exponent; the root-first route runs down the left and the power-first route down the right, nodes joined by arrows carrying their operation as a pill acting on x (∛x, x², 1/x); both meet in one node at the bottom with the value in saffron-deep. An unshown node is a dashed outline with "?". When both have arrived the meeting node pulses once and the two last arrows turn saffron. Under the figure, when `canChangeNumbers`, blue − / + buttons for a, m and n. No words.
-- Styles live in the player's `styles.css`, section "exponents: exponentRoutes".
+- Styles live in `src/styles.css`, drawn with the look's tokens.
 - `src/surd.test.ts`, `src/model.test.ts`: Exercise 1.6 by hand on both routes; 4^(3/2) and 27^(2/3) with their intermediates; negative powers; √2 inexact on both routes; 4^(2/4) exact at the end of both; whole-number roots against a separate search; many generated (a, m, n) where both routes agree with each other and with Math.pow; every action; step bounds; refusals; `showBoth` through the one door at every step; parts and `locate`.
 
 May import: `@chalk/prop`, `@chalk/player` (types), `preact`, `zod`. Exports: `exponentRoutesProp` (the module), `exponentRoutesDef`, `ExponentRoutesState`, `ExponentRoutesSignal`, `ExponentRoutesPart`, `Route`.

@@ -9,6 +9,8 @@ import {
 } from "@chalk/jugnu";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { JugnuFigure, JugnuMood } from "./jugnu-figure";
+import { RichText } from "./rich-text-view";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 
@@ -32,6 +34,11 @@ export type JugnuPanelProps = {
   locale: Locale;
   /** Jugnu points at a prop, or a part of it: the board makes it glow. */
   onPoint: (prop: string, part: string | undefined) => void;
+  /** The chat is open. The board opens it from Jugnu's button in its footer. */
+  isOpen: boolean;
+  onClose: () => void;
+  /** What Jugnu is doing, so his button in the footer can show it. */
+  onMood: (mood: JugnuMood) => void;
 };
 
 /** What the chat shows for one thing he did; undefined for what the student needn't see. */
@@ -54,8 +61,10 @@ export function JugnuPanel({
   raise,
   locale,
   onPoint,
-}: JugnuPanelProps): JSX.Element {
-  const [isOpen, setIsOpen] = useState(false);
+  isOpen,
+  onClose,
+  onMood,
+}: JugnuPanelProps): JSX.Element | null {
   const [messages, setMessages] = useState<readonly Message[]>([]);
   const [draft, setDraft] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -164,18 +173,22 @@ export function JugnuPanel({
     void runTurn(text);
   };
 
+  // His face shows what he is doing: thinking, listening to what's typed, or watching the board.
+  const mood = isThinking
+    ? JugnuMood.Thinking
+    : draft.trim() !== ""
+      ? JugnuMood.Listening
+      : watching.length > 0
+        ? JugnuMood.Curious
+        : JugnuMood.Neutral;
+  useEffect(() => onMood(mood), [mood, onMood]);
+
   // In peek, only his last words show above "your turn".
   const lastWords = [...messages].reverse().find((message) => message.from === "jugnu");
   const shown = isPeek ? (lastWords === undefined ? [] : [lastWords]) : messages;
 
-  if (!isOpen) {
-    return (
-      <button type="button" class="jugnu-open" onClick={() => setIsOpen(true)}>
-        <span class="jugnu-glow" aria-hidden="true" />
-        {t(locale, "askJugnu")}
-      </button>
-    );
-  }
+  // Closed, he lives on as his button in the board's footer; the session keeps running here.
+  if (!isOpen) return null;
 
   return (
     <section
@@ -184,7 +197,7 @@ export function JugnuPanel({
       onFocusIn={() => setIsPeek(false)}
     >
       <header class="jugnu-header">
-        <span class="jugnu-glow" aria-hidden="true" />
+        <JugnuFigure mood={mood} size={44} />
         <strong>
           <button type="button" class="jugnu-title" onClick={() => setIsPeek(false)}>
             {t(locale, "jugnu")}
@@ -194,7 +207,7 @@ export function JugnuPanel({
           type="button"
           class="jugnu-close"
           aria-label={t(locale, "closeJugnu")}
-          onClick={() => setIsOpen(false)}
+          onClick={onClose}
         >
           ×
         </button>
@@ -205,7 +218,7 @@ export function JugnuPanel({
           // Messages are only ever appended, so the index is a stable key.
           // biome-ignore lint/suspicious/noArrayIndexKey: append-only list
           <p key={i} class={`jugnu-message is-${message.from}`}>
-            {message.text}
+            <RichText text={message.text} />
           </p>
         ))}
         {isThinking && <p class="jugnu-message is-thinking">{t(locale, "jugnuThinking")}</p>}

@@ -1,0 +1,292 @@
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
+import { ContentFile } from "@chalk/author";
+import {
+  BuiltFile,
+  OVERVIEW_DIR,
+  WORKING_TREE,
+  builtChapterSchema,
+  builtConceptSchema,
+  builtFamilySchema,
+  builtPageSchema,
+  builtQuestionSchema,
+} from "@chalk/content";
+import { propDefs } from "@chalk/library";
+import { afterAll, describe, expect, it } from "vitest";
+import { stringify as stringifyYaml } from "yaml";
+import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
+import { buildContent } from "./build";
+import { conceptsModule } from "./concepts";
+
+const contentDir = join(dirname(findUp("pnpm-workspace.yaml", import.meta.dirname)), "content");
+const readings = loadReadings(join(contentDir, PRONUNCIATIONS_FILE));
+const fixturesDir = join(import.meta.dirname, ".fixtures");
+const CHAPTER = "book/chapter";
+/** Named as in the real chapter: the real locate-on-line family tests it. */
+const CONCEPT = `${CHAPTER}/successive-magnification`;
+const LOCATE = join(contentDir, "class9-maths/number-systems/questions/locate-on-line/family.ts");
+const BASICS = join(contentDir, "../props/basics/src/index.ts");
+
+/** A params.yaml with one good row, for fixtures about something else. */
+const ONE_ROW = [{ params: { target: "7.384", from: 7, to: 8 } }];
+
+/** A page asking two yes/no questions; it passes once both are right. Its witness answers `answered`. */
+const twoQuestions = (answered: readonly string[]) => (basics: string) =>
+  `
+import { PassOn, column, page, t, theBoard, expr } from "@chalk/author";
+import { QuestionAction, QuestionSignal } from "@chalk/prop";
+import { ChoiceAction, choiceDef } from "${basics}";
+const options = [{ id: "yes", label: t("Yes", "हाँ") }, { id: "no", label: t("No", "नहीं") }];
+export const overview = [
+  page("two", (b) => {
+    const qs = ["first", "second"].map((name) =>
+      b.prop(choiceDef, name, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" }),
+    );
+    const bothRight = expr('first.status == "correct" and second.status == "correct"');
+    for (const q of qs) b.when(q.on(QuestionSignal.Correct), theBoard.pass(), bothRight);
+    for (const q of qs.filter((q) => ${JSON.stringify(answered)}.includes(q.name)))
+      b.witness(q.learner(ChoiceAction.Select, { option: "yes" }), q.learner(QuestionAction.Check));
+    return column(qs);
+  }, { passOn: PassOn.Rules }),
+];
+`;
+
+afterAll(() => rmSync(fixturesDir, { recursive: true, force: true }));
+
+let fixtureCount = 0;
+
+/**
+ * A small content tree: one book, one chapter with one overview-less concept, and a bank holding
+ * locate-on-line (re-exported from the real one) whose params.yaml rows are given.
+ */
+function fixture(spec: {
+  rows: unknown[];
+  /** The chapter's build.yaml after its title. */
+  chapter?: string;
+  /** Overrides concepts.gen.ts (otherwise it matches the chapter's concepts). */
+  conceptsModule?: string;
+  extraFolders?: string[];
+  graph?: string;
+  /** The concept's overview.ts, given the path to import @chalk/prop-basics from. */
+  overview?: (basics: string) => string;
+}): string {
+  const dir = join(fixturesDir, `t${++fixtureCount}`);
+  const chapter = spec.chapter ?? "concepts: [successive-magnification]\nquestions: all\n";
+  const concepts = /concepts: \[([^\]]*)\]/.exec(chapter)?.[1]?.split(", ") ?? [];
+  const familyDir = `${CHAPTER}/questions/locate`;
+  const files: Record<string, string> = {
+    "build.yaml": "books: [book]\n",
+    "book/build.yaml": "title: { en: Book, hi: पुस्तक }\nchapters: [chapter]\n",
+    [`${CHAPTER}/build.yaml`]: `title: { en: Chapter, hi: अध्याय }\n${chapter}`,
+    [`${CHAPTER}/concepts.gen.ts`]: spec.conceptsModule ?? conceptsModule(concepts),
+    [`${CONCEPT}/build.yaml`]: "title: { en: Concept, hi: अवधारणा }\n",
+    [`${CONCEPT}/overview.ts`]:
+      spec.overview?.(relative(join(dir, CONCEPT), BASICS).replace(/\.ts$/, "")) ??
+      "export const overview = [];\n",
+    [`${familyDir}/family.ts`]: `export { locateOnLine } from "${relative(join(dir, familyDir), LOCATE).replace(/\\.ts$/, "")}";\n`,
+    [`${familyDir}/${ContentFile.Params}`]: stringifyYaml(spec.rows),
+  };
+  for (const folder of spec.extraFolders ?? [])
+    files[`${folder}/build.yaml`] = "title: { en: X, hi: X }\n";
+  if (spec.graph !== undefined) files["graph.yaml"] = spec.graph;
+  for (const [path, text] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, path)), { recursive: true });
+    writeFileSync(join(dir, path), text);
+  }
+  return dir;
+}
+
+const build = (dir: string, commit = WORKING_TREE) =>
+  buildContent({ contentDir: dir, defs: propDefs, readings, commit });
+const messages = (result: Awaited<ReturnType<typeof build>>) =>
+  result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");
+
+describe("building content", () => {
+  it("the real content builds, and every witness and note works on the real props", async () => {
+    const result = await build(contentDir);
+    expect(result.problems).toEqual([]);
+    const chapter = builtChapterSchema.parse(
+      result.files.get(`class9-maths/number-systems/${BuiltFile.Chapter}`),
+    );
+    const concept = builtConceptSchema.parse(
+      result.files.get(`class9-maths/number-systems/successive-magnification/${BuiltFile.Concept}`),
+    );
+    expect(concept.overview).toHaveLength(3);
+    expect(chapter.questions).toHaveLength(3);
+    expect(chapter.questions.every((q) => q.tests.includes(concept.id))).toBe(true);
+    expect(concept.props).toEqual(["numberLine"]);
+    expect(chapter.props).toEqual(["numberLine", "numberSorter"]);
+  }, 60_000);
+
+  it("a page's questions are about its concept, ungraded; a bank question is graded", async () => {
+    const result = await build(contentDir);
+    const rational = "class9-maths/number-systems/rational-numbers";
+    const concept = builtConceptSchema.parse(result.files.get(`${rational}/${BuiltFile.Concept}`));
+    const first = builtPageSchema.parse(
+      result.files.get(`${rational}/${OVERVIEW_DIR}/numbers-you-know.json`),
+    );
+    expect(JSON.stringify(first.board)).toContain(`"concepts":["${concept.id}"],"isGraded":false`);
+  }, 60_000);
+
+  it("ids and versions are stable: the same content gives the same files, whatever the commit", async () => {
+    const a = await build(contentDir, "aaaaaaa");
+    const b = await build(contentDir, "bbbbbbb");
+    const ids = (r: typeof a) =>
+      [...r.files.values()].map((f) => {
+        const item = f as { id?: string; version?: string };
+        return `${item.id}@${item.version}`;
+      });
+    expect(ids(a)).toEqual(ids(b));
+  }, 60_000);
+
+  it("a question carries the concepts it tests, its family, level and where it came from", async () => {
+    const result = await build(
+      fixture({ rows: [{ params: { target: "7.384", from: 7, to: 8 }, level: "hard" }] }),
+    );
+    expect(result.problems).toEqual([]);
+    const file = [...result.files.keys()].find(
+      (k) => k.startsWith(`${CHAPTER}/questions/locate/`) && !k.endsWith(BuiltFile.Family),
+    );
+    const q = builtQuestionSchema.parse(result.files.get(file ?? ""));
+    expect(q.level).toBe("hard");
+    expect(q.params).toEqual({ target: "7.384", from: 7, to: 8 });
+    expect(q.source).toEqual({
+      path: `${CHAPTER}/questions/locate`,
+      file: ContentFile.Params,
+      row: 0,
+      commit: WORKING_TREE,
+    });
+    const concept = builtConceptSchema.parse(result.files.get(`${CONCEPT}/${BuiltFile.Concept}`));
+    expect(q.tests).toEqual([concept.id]);
+    expect(JSON.stringify(q.board)).toContain(`"concepts":["${concept.id}"],"isGraded":true`);
+    const family = builtFamilySchema.parse(
+      result.files.get(`${CHAPTER}/questions/locate/${BuiltFile.Family}`),
+    );
+    expect(family.tests).toEqual([concept.id]);
+    expect(concept.props).toEqual(["numberLine"]); // from the question that tests it
+  }, 60_000);
+
+  it("a board may ask several questions; its witness must answer every one", async () => {
+    const both = await build(
+      fixture({ rows: ONE_ROW, overview: twoQuestions(["first", "second"]) }),
+    );
+    expect(messages(both)).toBe("");
+    const one = await build(fixture({ rows: ONE_ROW, overview: twoQuestions(["first"]) }));
+    expect(messages(one)).toContain('doesn\'t answer "second" correctly');
+  }, 60_000);
+
+  it("a row whose 'wrong' answer is the right one is caught (7.388: swapping the last two digits changes nothing)", async () => {
+    const result = await build(
+      fixture({ rows: [{ params: { target: "7.388", from: 7, to: 8 } }] }),
+    );
+    expect(messages(result)).toMatch(/row 0: note .*a wrong answer got Continue/);
+  }, 60_000);
+
+  it("a row the family can't make, or with wrong params, is reported, and the other rows still build", async () => {
+    const result = await build(
+      fixture({
+        rows: [
+          { params: { target: "7.3", from: 7, to: 8 } },
+          { params: { target: "7.384", from: "seven", to: 8 } },
+          { params: { target: "2.665", from: 2, to: 3 } },
+        ],
+      }),
+    );
+    expect(messages(result)).toMatch(/row 0: .*fewer than 2 decimal places/);
+    expect(messages(result)).toMatch(/row 1: params\.from/);
+    const questions = [...result.files.keys()].filter(
+      (k) => k.includes("/questions/locate/") && !k.endsWith(BuiltFile.Family),
+    );
+    expect(questions).toHaveLength(1);
+  }, 60_000);
+
+  it("an unquoted decimal is refused: YAML would read a float and drop trailing zeros", async () => {
+    const result = await build(fixture({ rows: [{ params: { target: 7.3, from: 7, to: 8 } }] }));
+    expect(messages(result)).toMatch(/row 0: params\.target: write a decimal as quoted text/);
+  }, 60_000);
+
+  it("an excluded row stays in params.yaml, out of the build", async () => {
+    const result = await build(
+      fixture({
+        rows: [
+          { params: { target: "2.665", from: 2, to: 3 } },
+          { params: { target: "7.384", from: 7, to: 8 }, exclude: true },
+        ],
+      }),
+    );
+    expect(result.problems).toEqual([]);
+    expect(result.notices.join("\n")).toMatch(/excluded: .*row 1/);
+  }, 60_000);
+
+  it("the same question twice is one id, refused", async () => {
+    const row = { params: { target: "2.665", from: 2, to: 3 } };
+    const result = await build(fixture({ rows: [row, row] }));
+    expect(messages(result)).toMatch(/same id/);
+  }, 60_000);
+
+  it("manifests: a listed folder must exist, an unlisted one is reported, and exclude only goes with all", async () => {
+    const missing = await build(
+      fixture({
+        rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
+        chapter: "concepts: [successive-magnification, ghost]\nquestions: all\n",
+      }),
+    );
+    expect(messages(missing)).toMatch(/lists "ghost", but there is no folder/);
+    const unlisted = await build(
+      fixture({
+        rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
+        extraFolders: ["book/chapter/spare"],
+      }),
+    );
+    expect(unlisted.notices.join("\n")).toMatch(/not included: book\/chapter\/spare\//);
+    const both = await build(
+      fixture({
+        rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
+        chapter: "concepts: [successive-magnification]\nquestions: [locate]\nexclude: [locate]\n",
+      }),
+    );
+    expect(messages(both)).toMatch(/`exclude` only goes with `questions: all`/);
+  }, 60_000);
+
+  it("the graph: edges must join built concepts and never loop", async () => {
+    const result = await build(
+      fixture({
+        rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
+        graph: `edges:\n  - { concept: ${CONCEPT}, parents: [${CONCEPT}] }\n  - { concept: ${CONCEPT}, parents: [book/chapter/nowhere] }\n`,
+      }),
+    );
+    expect(messages(result)).toMatch(/a loop/);
+    expect(messages(result)).toMatch(/"book\/chapter\/nowhere" is not a built concept/);
+  }, 60_000);
+
+  it("concepts.gen.ts must match build.yaml", async () => {
+    const stale = await build(
+      fixture({
+        rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
+        conceptsModule: conceptsModule(["something-else"]),
+      }),
+    );
+    expect(messages(stale)).toMatch(/concepts\.gen\.ts: out of date with build\.yaml/);
+  }, 60_000);
+
+  it("a family testing a concept the chapter doesn't list is refused", async () => {
+    const dir = fixture({ rows: [{ params: { target: "2.665", from: 2, to: 3 } }] });
+    // The concept's folder is still there, but the chapter no longer lists it.
+    writeFileSync(
+      join(dir, CHAPTER, "build.yaml"),
+      "title: { en: C, hi: अ }\nconcepts: []\nquestions: all\n",
+    );
+    writeFileSync(join(dir, CHAPTER, "concepts.gen.ts"), conceptsModule([]));
+    const result = await build(dir);
+    expect(messages(result)).toMatch(
+      /tests "successive-magnification", which isn't a concept of book\/chapter/,
+    );
+  }, 60_000);
+
+  it("a question bank inside a concept is refused: banks live at the chapter", async () => {
+    const dir = fixture({ rows: [{ params: { target: "2.665", from: 2, to: 3 } }] });
+    mkdirSync(join(dir, CONCEPT, "questions"), { recursive: true });
+    const result = await build(dir);
+    expect(messages(result)).toMatch(/question families live in the chapter's questions\/ folder/);
+  }, 60_000);
+});

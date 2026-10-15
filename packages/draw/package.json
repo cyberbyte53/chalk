@@ -1,0 +1,24 @@
+{
+  "name": "@chalk/draw",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*",
+    "@chalk/look": "workspace:*",
+    "d3-scale": "4.0.2",
+    "d3-shape": "3.2.0",
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@types/d3-scale": "4.0.8",
+    "@types/d3-shape": "3.1.6"
+  }
+}

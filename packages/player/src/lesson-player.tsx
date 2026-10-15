@@ -10,9 +10,11 @@ import { type EventBus, bindRaise } from "@chalk/events";
 import type { LlmProvider } from "@chalk/jugnu";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { BoardPlayer } from "./BoardPlayer";
+import { BoardPlayer } from "./board-player";
+import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import type { AudioSource } from "./narration";
 import type { PropRegistry } from "./prop-module";
+import { RichText } from "./rich-text-view";
 import { t } from "./ui-text";
 
 export type LessonPlayerProps = {
@@ -44,6 +46,8 @@ export function LessonPlayer({
 }: LessonPlayerProps): JSX.Element {
   useMemo(() => assertPublished(lesson), [lesson]);
   const [index, setIndex] = useState(startBoard);
+  // The furthest board reached: every board before it has been passed.
+  const [furthest, setFurthest] = useState(startBoard);
   const board = lesson.boards[index];
   const isDone = index >= lesson.boards.length;
 
@@ -78,6 +82,15 @@ export function LessonPlayer({
     }
   }, [index, isDone, raiseLessonEvent]);
 
+  const back = () => {
+    raiseLessonEvent(
+      Actor.Learner,
+      { type: "back" },
+      { status: LessonStatus.Playing, boardIndex: index - 1 },
+    );
+    setIndex(index - 1);
+  };
+
   const exit = () => {
     if (!isDone)
       raiseLessonEvent(
@@ -92,22 +105,27 @@ export function LessonPlayer({
     <div class="lesson">
       <header class="lesson-header">
         <button type="button" class="icon" aria-label={t(locale, "close")} onClick={exit}>
-          ×
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 3 L13 13 M13 3 L3 13" />
+          </svg>
         </button>
         <div class="progress" aria-hidden="true">
-          {lesson.boards.map((b, i) => (
-            <span
-              key={b.name}
-              class={i < index ? "segment is-done" : i === index ? "segment is-current" : "segment"}
-            />
-          ))}
+          <div
+            class="progress-done"
+            style={{
+              width: `${(Math.min(index + 1, lesson.boards.length) / lesson.boards.length) * 100}%`,
+            }}
+          />
         </div>
         <span class="sr-only">{`${Math.min(index + 1, lesson.boards.length)} / ${lesson.boards.length}`}</span>
       </header>
       {board === undefined ? (
         <div class="lesson-complete">
+          <JugnuFigure mood={JugnuMood.Celebrate} size={150} />
           <h2>{t(locale, "lessonComplete")}</h2>
-          <p>{lesson.title[locale]}</p>
+          <p>
+            <RichText text={lesson.title[locale]} />
+          </p>
           <button type="button" class="primary" onClick={onExit}>
             {t(locale, "backToLessons")}
           </button>
@@ -120,7 +138,12 @@ export function LessonPlayer({
           locale={locale}
           raise={raise}
           audio={audio}
-          onPass={() => setIndex(index + 1)}
+          onPass={() => {
+            setIndex(index + 1);
+            setFurthest(Math.max(furthest, index + 1));
+          }}
+          onBack={index === 0 ? undefined : back}
+          wasPassed={index < furthest}
           jugnu={
             jugnu === undefined
               ? undefined

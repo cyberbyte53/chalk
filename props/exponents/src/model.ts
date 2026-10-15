@@ -157,7 +157,7 @@ function routePart(prefix: string, part: string, count: number): number | undefi
 }
 
 /** a^(m/n) of a positive whole number along two routes that meet. Knows exponents, no lesson. */
-export const exponentRoutes = defineProp<ExponentRoutesState>({
+export const exponentRoutes = defineProp({
   type: "exponentRoutes",
   describe:
     "a^(m/n) for a whole number a > 0, worked out two ways that always meet: route one (left) takes the nth root then the mth power, route two (right) the mth power then the nth root; a negative m adds a last step 1/x on both. Steps are shown one at a time; an unshown node is a '?'.",

@@ -1,0 +1,197 @@
+/* Jugnu: his button in the footer, his chat, his pointing. */
+
+/* His button: always in the footer, left of Continue; his face shows what he is doing. */
+.jugnu-button {
+  width: 58px;
+  height: 58px;
+  flex: none;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 2px;
+  cursor: pointer;
+}
+.jugnu-button:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.jugnu-button.is-open {
+  background: var(--brand-jugnu-container);
+  box-shadow: 0 var(--shape-press) 0
+    color-mix(in srgb, var(--brand-jugnu-glow) 40%, var(--color-surface));
+}
+.jugnu-button:focus-visible,
+.board-footer .back:focus-visible,
+.primary:focus-visible,
+.icon:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+@keyframes jugnu-pulse {
+  50% {
+    box-shadow: 0 0 4px 1px color-mix(in srgb, var(--brand-jugnu-glow) 35%, transparent);
+  }
+}
+/* The chat sits below the board's footer and sticks to the bottom of the screen, so Check and
+   Continue stay reachable while it's open. */
+.jugnu {
+  order: 2;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  height: 44dvh;
+  background: var(--color-surface);
+  border-radius: 26px 26px 0 0;
+  box-shadow: 0 -8px 32px color-mix(in srgb, var(--color-on-surface) 18%, transparent);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  animation: rise 0.2s ease-out;
+}
+.jugnu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px 8px 16px;
+}
+.jugnu-header strong {
+  flex: 1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+}
+.jugnu-close {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  font-size: 26px;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+}
+.jugnu-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.jugnu-message {
+  margin: 0;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: var(--shape-radius-m);
+  line-height: 1.45;
+}
+.jugnu-message p {
+  margin: 0;
+}
+.jugnu-message.is-jugnu {
+  align-self: flex-start;
+  background: var(--color-surface-container);
+  border-radius: var(--shape-radius-m) var(--shape-radius-m) var(--shape-radius-m) 4px;
+}
+.jugnu-message.is-learner {
+  align-self: flex-end;
+  background: var(--color-inverse-surface);
+  color: var(--color-on-inverse-surface);
+  border-radius: var(--shape-radius-m) var(--shape-radius-m) 4px var(--shape-radius-m);
+}
+.jugnu-message.is-problem {
+  align-self: stretch;
+  max-width: none;
+  background: var(--color-wrong-container);
+  color: var(--color-wrong);
+}
+.jugnu-message.is-thinking {
+  align-self: flex-start;
+  color: var(--color-on-surface-variant);
+  font-style: italic;
+}
+/* Something he did on the board, under his words. */
+.jugnu-message.is-did {
+  align-self: flex-start;
+  padding: 0 14px;
+  font-size: 13px;
+  color: var(--color-on-secondary-container);
+}
+.jugnu-message.is-watching {
+  align-self: flex-start;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+}
+/* His turn is over and the board is the student's: the chat shrinks to his last words. */
+.jugnu.is-peek {
+  height: auto;
+  max-height: 30dvh;
+}
+
+/* Jugnu pointing: a prop glows, or a ring sits on one part of it. */
+.piece-prop {
+  position: relative;
+}
+.piece-prop.is-pointed {
+  border-radius: 12px;
+  box-shadow: 0 0 0 3px var(--brand-jugnu), 0 0 18px 6px
+    color-mix(in srgb, var(--brand-jugnu-glow) 45%, transparent);
+  transition: box-shadow 0.3s;
+}
+.jugnu-point {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 3px solid var(--brand-jugnu-glow);
+  box-shadow: 0 0 14px 4px color-mix(in srgb, var(--brand-jugnu-glow) 55%, transparent);
+  animation: jugnu-pulse 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jugnu-point {
+    animation: none;
+  }
+}
+.jugnu-ask {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--color-outline-variant);
+}
+.jugnu-ask input {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 23px;
+  border: 1.5px solid var(--color-outline-variant);
+  background: var(--color-surface-container);
+  font: inherit;
+}
+.jugnu-ask button {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 23px;
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+.jugnu-ask button:disabled {
+  background: var(--color-outline-variant);
+  color: var(--color-on-surface-variant);
+}
+.jugnu-title {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@chalk/content-source",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The course content as TypeScript: course \u2192 chapter \u2192 concept \u2192 theory pages and question families",
+  "exports": {
+    "./patterns": "./patterns/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@chalk/author": "workspace:*",
+    "@chalk/content": "workspace:*",
+    "@chalk/draw": "workspace:*",
+    "@chalk/exact": "workspace:*",
+    "@chalk/prop": "workspace:*",
+    "@chalk/prop-basics": "workspace:*",
+    "@chalk/prop-number-line": "workspace:*",
+    "@chalk/prop-number-sets": "workspace:*",
+    "preact": "10.29.8",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2"
+  }
+}

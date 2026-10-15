@@ -9,12 +9,22 @@ import { timer } from "./timer";
 import { ButtonView, ChoiceView, GoalView, LineView, NothingView, TextView } from "./views";
 
 export { Avatar, CharacterId } from "./cast";
-export { ButtonSignal, type ButtonState } from "./button";
-export type { ChoiceState } from "./choice";
+export { ButtonAction, ButtonSignal, type ButtonState } from "./button";
+export { ChoiceAction, type ChoiceState } from "./choice";
 export type { GoalState } from "./goal";
 export type { LineState } from "./line";
 export { TextStyle, type TextState } from "./text";
 export { TimerSignal, type TimerState } from "./timer";
+
+/** The typed definitions, for content written in TypeScript (`b.prop(goalDef, ...)`). */
+export {
+  button as buttonDef,
+  choice as choiceDef,
+  goal as goalDef,
+  line as lineDef,
+  text as textDef,
+  timer as timerDef,
+};
 
 /** The props every lesson uses: words, the cast's lines, questions, buttons and a timer. */
 export const basicProps: readonly PropModule[] = [

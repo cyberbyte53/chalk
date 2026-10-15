@@ -3,6 +3,7 @@ import type { Locale, Localized } from "@chalk/content";
 /** App chrome copy. Keys are a closed set; content copy lives in lessons. */
 export const UiText = {
   continue: { en: "Continue", hi: "आगे" },
+  back: { en: "Back", hi: "पीछे" },
   check: { en: "Check", hi: "जाँचो" },
   tryAgain: { en: "Try again", hi: "फिर से करो" },
   correct: { en: "That's it!", hi: "बिल्कुल सही!" },

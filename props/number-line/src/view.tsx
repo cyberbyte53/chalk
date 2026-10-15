@@ -1,8 +1,11 @@
+import { Axis, Dots, Mark as MarkPiece, Stage, type Tick } from "@chalk/draw";
 import type { PropViewProps } from "@chalk/player";
+import { cssColor } from "@chalk/prop";
 import type { JSX } from "preact";
-import { useRef } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import {
   type Mark,
+  NumberLineAction,
   NumberLinePart,
   NumberLineSignal,
   type NumberLineState,
@@ -22,6 +25,12 @@ import {
   valueToX,
   xToValue,
 } from "./scale";
+
+/** What a finger on the line is doing: dragging the marker, or sliding the whole line. */
+type Drag = { kind: "marker" } | { kind: "pan"; startX: number; startFrom: number };
+
+/** How close (px) a touch must be to the marker to grab it rather than slide the line. */
+const MARKER_REACH = 22;
 
 /** Rough width of a label in px (display font, 16 px). */
 function labelWidth(text: string): number {
@@ -98,10 +107,13 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
   // The player hands each view its own prop's state, already checked against its schema.
   const s = props as unknown as NumberLineState;
   const svg = useRef<SVGSVGElement>(null);
+  const drag = useRef<Drag | null>(null);
+  // Only the hint's visibility lives here: where the line is lives in state, through `call`.
+  const [hasPanned, setHasPanned] = useState(false);
   const view: View = { from: s.from, to: s.to, width };
   const digits = markerPrecision(view);
   const y = AXIS_GAP;
-  const labels = tickLabels(ticks(view), view);
+  const labels = s.showTicks ? tickLabels(ticks(view), view) : [];
   const placed = placeLabels(s.marks, view);
   const x = (v: number) => valueToX(view, v);
   const clampX = (v: number) => Math.min(width - PAD + 10, Math.max(PAD - 10, x(v)));
@@ -116,29 +128,58 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
   };
   const moveTo = (clientX: number) => {
     const to = valueAt(clientX);
-    if (to !== undefined) call("moveMarker", { to });
+    if (to !== undefined) call(NumberLineAction.MoveMarker, { to });
   };
   const release = () => signal(NumberLineSignal.MarkerReleased, { at: s.marker });
 
+  /** Where a touch lands, in the SVG's own units. */
+  const svgX = (clientX: number): number | undefined => {
+    const box = svg.current?.getBoundingClientRect();
+    return box === undefined ? undefined : ((clientX - box.left) / box.width) * width;
+  };
+  const isOnMarker = (clientX: number): boolean => {
+    const at = svgX(clientX);
+    return s.showMarker && at !== undefined && Math.abs(at - x(s.marker)) <= MARKER_REACH;
+  };
+  const panBy = (clientX: number, from: Drag & { kind: "pan" }) => {
+    const box = svg.current?.getBoundingClientRect();
+    if (box === undefined) return;
+    const unitsPerPx = (width / box.width) * ((view.to - view.from) / (width - 2 * PAD));
+    call(NumberLineAction.PanTo, { from: from.startFrom - (clientX - from.startX) * unitsPerPx });
+    setHasPanned(true);
+  };
+
   const onPointerDown = (event: JSX.TargetedPointerEvent<SVGSVGElement>) => {
+    if (s.pan !== null && !isOnMarker(event.clientX)) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+      drag.current = { kind: "pan", startX: event.clientX, startFrom: s.from };
+      return;
+    }
     if (!s.showMarker) return;
     event.currentTarget.setPointerCapture(event.pointerId);
+    drag.current = { kind: "marker" };
     moveTo(event.clientX);
   };
   const onPointerMove = (event: JSX.TargetedPointerEvent<SVGSVGElement>) => {
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTo(event.clientX);
+    const now = drag.current;
+    if (now === null || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    if (now.kind === "pan") panBy(event.clientX, now);
+    else moveTo(event.clientX);
   };
   const onPointerUp = (event: JSX.TargetedPointerEvent<SVGSVGElement>) => {
-    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    const was = drag.current;
+    drag.current = null;
+    if (was === null || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
     event.currentTarget.releasePointerCapture(event.pointerId);
-    release();
+    if (was.kind === "pan") signal(NumberLineSignal.Panned, { from: s.from, to: s.to });
+    else release();
   };
   const onKeyDown = (event: JSX.TargetedKeyboardEvent<SVGGElement>) => {
     const nudge = 10 ** -digits;
     const delta = event.key === "ArrowRight" ? nudge : event.key === "ArrowLeft" ? -nudge : 0;
     if (delta === 0) return;
     event.preventDefault();
-    call("moveMarker", {
+    call(NumberLineAction.MoveMarker, {
       to: Number(Math.min(view.to, Math.max(view.from, s.marker + delta)).toFixed(digits)),
     });
     release();
@@ -148,22 +189,39 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
   const inLens = (v: number) =>
     s.lens !== null && v >= s.lens.from - slack && v <= s.lens.to + slack;
   const hasStepper = s.isSplittable && s.split !== null;
+  const axisTicks: Tick[] = labels.map((tick) => {
+    const classes = [tick.isEnd ? "is-end" : "", inLens(tick.value) ? "is-in-lens" : ""];
+    const extra = classes.filter((c) => c !== "").join(" ");
+    return extra === ""
+      ? { value: tick.value, label: tick.text }
+      : { value: tick.value, label: tick.text, class: extra };
+  });
+  const shownDots = s.dots.filter((dot) => isInView(dot.at));
+  const dotPoints = shownDots.flatMap((dot) => [dot.at, y]);
+  const dotColors = shownDots.map((dot) => dot.color);
   const lowest = formatValue(view.from, digits);
   const highest = formatValue(view.to, digits);
 
   return (
     <div class="nl">
-      <svg
-        ref={svg}
-        class={s.showMarker ? "nl-svg is-draggable" : "nl-svg"}
-        viewBox={`0 0 ${width} ${HEIGHT}`}
-        width="100%"
-        role="img"
-        aria-label={`Number line from ${lowest} to ${highest}`}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
+      <Stage
+        label={`Number line from ${lowest} to ${highest}`}
+        x={[view.from, view.to]}
+        width={width}
+        height={HEIGHT}
+        inset={{ left: PAD, right: PAD }}
+        svg={{
+          ref: svg,
+          class: [
+            "nl-svg",
+            s.showMarker ? "is-draggable" : "",
+            s.pan !== null ? "is-pannable" : "",
+          ].join(" "),
+          onPointerDown,
+          onPointerMove,
+          onPointerUp,
+          onPointerCancel: onPointerUp,
+        }}
       >
         {s.lens !== null && (
           <rect
@@ -178,28 +236,9 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
         {s.split !== null && (
           <line class="nl-split" x1={clampX(s.split.from)} y1={y} x2={clampX(s.split.to)} y2={y} />
         )}
-        <line class="nl-axis" x1={8} y1={y} x2={width - 8} y2={y} />
-        <path class="nl-arrow" d={`M 15 ${y - 7} L 7 ${y} L 15 ${y + 7}`} />
-        <path
-          class="nl-arrow"
-          d={`M ${width - 15} ${y - 7} L ${width - 7} ${y} L ${width - 15} ${y + 7}`}
-        />
-        {labels.map((tick) => (
-          <g
-            key={tick.value}
-            class={inLens(tick.value) ? "nl-tick-group is-in-lens" : "nl-tick-group"}
-          >
-            <line class="nl-tick" x1={x(tick.value)} y1={y - 8} x2={x(tick.value)} y2={y + 8} />
-            <text
-              class={tick.isEnd ? "nl-tick-label is-end" : "nl-tick-label"}
-              x={x(tick.value)}
-              y={y + 30}
-              text-anchor="middle"
-            >
-              {tick.text}
-            </text>
-          </g>
-        ))}
+        <g style={s.color === null ? undefined : { "--piece-color": cssColor(s.color) }}>
+          <Axis y={y} ticks={axisTicks} hasEnds />
+        </g>
         {cuts.map((cut, i) =>
           isInView(cut) ? (
             <g
@@ -208,32 +247,32 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
               key={i}
               class={i === 0 || i === cuts.length - 1 ? "nl-cut is-end" : "nl-cut"}
               data-part={`${NumberLinePart.SplitPointPrefix}${i}`}
+              transform={`translate(${x(cut)} ${y})`}
             >
-              <line x1={x(cut)} y1={y - 13} x2={x(cut)} y2={y + 13} />
-              {i > 0 && i < cuts.length - 1 && <circle cx={x(cut)} cy={y} r={4.5} />}
+              <line y1={-13} y2={13} />
+              {i > 0 && i < cuts.length - 1 && <circle r={4.5} />}
             </g>
           ) : null,
         )}
+        <Dots points={dotPoints} colors={dotColors} r={5} class="nl-dot" />
         {placed.map((mark) => {
-          const labelY = y - 26 - mark.row * LABEL_ROW;
           const half = labelWidth(mark.label) / 2;
           return (
-            <g key={mark.label} class="nl-mark">
-              <line x1={mark.x} y1={labelY + 5} x2={mark.x} y2={y} />
-              <circle cx={mark.x} cy={y} r={5.5} />
-              <text
-                x={Math.min(width - half, Math.max(half, mark.x))}
-                y={labelY}
-                text-anchor="middle"
-              >
-                {mark.label}
-              </text>
-            </g>
+            <MarkPiece
+              key={mark.label}
+              at={mark.at}
+              y={y}
+              label={mark.label}
+              row={mark.row}
+              labelX={Math.min(width - half, Math.max(half, mark.x))}
+              color={mark.color}
+            />
           );
         })}
         {s.showMarker && isInView(s.marker) && (
           <g
             class="nl-marker"
+            transform={`translate(${x(s.marker)} ${y})`}
             tabIndex={0}
             role="slider"
             aria-label="Marker"
@@ -242,11 +281,16 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
             aria-valuenow={s.marker}
             onKeyDown={onKeyDown}
           >
-            <circle cx={x(s.marker)} cy={y} r={22} class="nl-marker-hit" />
-            <circle cx={x(s.marker)} cy={y} r={11} class="nl-marker-dot" />
+            <circle r={22} class="nl-marker-hit" />
+            <circle r={11} class="nl-marker-dot" />
           </g>
         )}
-      </svg>
+      </Stage>
+      {s.pan !== null && !hasPanned && (
+        <div class="nl-swipe" aria-hidden="true">
+          <span class="nl-swipe-finger" />
+        </div>
+      )}
       {(s.isZoomable || hasStepper) && (
         <div class="nl-controls">
           {s.split !== null && hasStepper && (
@@ -256,7 +300,7 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
                 class="nl-button"
                 aria-label="One part fewer"
                 disabled={s.split.parts <= 1}
-                onClick={() => call("changeParts", { by: -1 })}
+                onClick={() => call(NumberLineAction.ChangeParts, { by: -1 })}
               >
                 −
               </button>
@@ -267,7 +311,7 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
                 type="button"
                 class="nl-button"
                 aria-label="One part more"
-                onClick={() => call("changeParts", { by: 1 })}
+                onClick={() => call(NumberLineAction.ChangeParts, { by: 1 })}
               >
                 +
               </button>
@@ -281,7 +325,7 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
                 aria-label="Zoom out"
                 data-part={NumberLinePart.ZoomOut}
                 disabled={view.to - view.from >= 19.99}
-                onClick={() => call("zoomOut")}
+                onClick={() => call(NumberLineAction.ZoomOut)}
               >
                 <Magnifier isIn={false} />
               </button>
@@ -291,7 +335,7 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
                 aria-label="Zoom in"
                 data-part={NumberLinePart.ZoomIn}
                 disabled={view.to - view.from <= 1.01e-8}
-                onClick={() => call("zoomIn")}
+                onClick={() => call(NumberLineAction.ZoomIn)}
               >
                 <Magnifier isIn={true} />
               </button>

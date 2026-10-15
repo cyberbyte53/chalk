@@ -1,0 +1,41 @@
+/* @chalk/prop-plot: drawn only with the look's tokens (@chalk/look) and the content's --tone. */
+
+/* ---- plot: graph ---- */
+.prop-graph {
+  background: var(--color-surface-container);
+  border-radius: 20px;
+  padding: 8px 4px 4px;
+}
+.graph {
+  display: block;
+  overflow: visible;
+}
+.graph-axis {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5;
+}
+.graph-tick,
+.graph-label,
+.graph-guide text {
+  fill: var(--color-on-surface-variant);
+  font-size: 13px;
+}
+.graph-guide line {
+  stroke: var(--color-secondary);
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+}
+.graph-guide text {
+  fill: var(--color-on-secondary-container);
+  font-weight: 700;
+}
+.graph-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.graph-dot {
+  fill: var(--color-primary);
+}

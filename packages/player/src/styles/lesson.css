@@ -1,0 +1,92 @@
+/* A lesson: its header and progress, the Continue button, the end. */
+
+.lesson {
+  max-width: 430px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+}
+.lesson-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px 4px;
+}
+.icon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: none;
+  border-radius: 14px;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+.progress {
+  flex: 1;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--color-outline-variant);
+  overflow: hidden;
+}
+.progress-done {
+  height: 100%;
+  border-radius: 6px;
+  background: var(--color-primary);
+  transition: width 0.4s ease-out;
+}
+
+.primary {
+  width: 100%;
+  height: 58px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 800;
+  font-size: 19px;
+  box-shadow: 0 5px 0 var(--color-primary-press);
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.primary:active:not(:disabled) {
+  transform: translateY(5px);
+  box-shadow: 0 0 0 var(--color-primary-press);
+}
+.primary:disabled {
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  cursor: default;
+}
+
+.lesson-complete {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+.lesson-complete h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  margin: 0;
+}
+.lesson-complete .primary {
+  margin-top: 12px;
+}

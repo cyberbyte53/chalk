@@ -110,20 +110,29 @@ export type PropRole = (typeof PropRole)[keyof typeof PropRole];
  * same: state (stored + derived), actions, signals, parts. Everything else (validation, Studio,
  * Jugnu's tools and the text he reads) is generated from this.
  */
-export type PropDef<S extends StoredState = StoredState> = {
+export type PropDef<
+  S extends StoredState = StoredState,
+  /** Its action names, kept as literals so content can't name an action the prop doesn't have. */
+  A extends string = string,
+  /** Its signal names. */
+  G extends string = string,
+  /** Its derived field names. */
+  D extends string = string,
+> = {
   type: string;
   describe: string;
   /** Stored fields: the few independent quantities. Validated on every change. */
   state: ZodType<S>;
-  defaults: S;
+  /** Not a source for inferring S: the state comes from `state` alone. */
+  defaults: NoInfer<S>;
   /** Fields computed from the stored ones: read-only, never stale. */
-  derived?: Readonly<Record<string, DerivedSpec<S>>>;
+  derived?: Readonly<Record<D, DerivedSpec<S>>>;
   /** Stored fields an IS may own (e.g. a text's words). An owned field can't be set by actions. */
   inputs?: readonly (keyof S & string)[];
   /** Fields the learner can't see on screen; Jugnu must not mention them as if they could. */
   offScreen?: readonly string[];
-  actions: Readonly<Record<string, ActionSpec<S>>>;
-  signals?: Readonly<Record<string, SignalSpec>>;
+  actions: Readonly<Record<A, ActionSpec<S>>>;
+  signals?: Readonly<Record<G, SignalSpec>>;
   /** Names of the parts that exist right now (they can come and go with the state). */
   parts?: (view: PropView & S) => readonly string[];
   /** Where a part is drawn at this width, or undefined if it isn't there. */
@@ -133,18 +142,42 @@ export type PropDef<S extends StoredState = StoredState> = {
   /** What this prop says when told to `say` (for audio generation and the voice check). */
   speech?: (state: S) => Spoken | undefined;
   role?: PropRole;
+  /**
+   * Whether Jugnu may bring this prop in to explain a concept (a number line, tiles). Words, buttons,
+   * questions and timers are not explainers. Default: true.
+   */
+  isExplainer?: boolean;
 };
 
-/** Identity helper so prop files are checked against the contract. */
-export function defineProp<S extends StoredState>(def: PropDef<S>): PropDef<S> {
+/**
+ * Identity helper so prop files are checked against the contract. Everything is inferred from the
+ * definition itself (the state from `state`, the names from the keys of `actions`, `signals` and
+ * `derived`), so write `defineProp({ ... })` with no type arguments.
+ */
+export function defineProp<
+  S extends StoredState,
+  A extends string,
+  G extends string = never,
+  D extends string = never,
+>(def: PropDef<S, A, G, D>): PropDef<S, A, G, D> {
   return def;
 }
+
+/** A prop definition's action names, signal names and derived field names, as literal unions. */
+export type ActionOf<P extends { actions: object }> = keyof P["actions"] & string;
+export type SignalOf<P extends { signals?: object }> = keyof NonNullable<P["signals"]> & string;
+export type DerivedOf<P extends { derived?: object }> = keyof NonNullable<P["derived"]> & string;
 
 /** A prop of any state type, as the registry, the player and the validator hold it. */
 export type AnyPropDef = PropDef<StoredState>;
 
 /** Erases a prop's state type for the registry. */
-export function asAnyProp<S extends StoredState>(def: PropDef<S>): AnyPropDef {
+export function asAnyProp<
+  S extends StoredState,
+  A extends string,
+  G extends string,
+  D extends string,
+>(def: PropDef<S, A, G, D>): AnyPropDef {
   // Safe: everything that touches the state goes through the def's own schema first.
   return def as unknown as AnyPropDef;
 }

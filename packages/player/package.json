@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./styles.css": "./src/styles.css"
+    "./styles.css": "./src/styles.css",
+    "./rich-text.css": "./src/rich-text.css"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"
@@ -15,9 +16,13 @@
     "@chalk/events": "workspace:*",
     "@chalk/jugnu": "workspace:*",
     "@chalk/prop": "workspace:*",
-    "preact": "10.24.3"
+    "@preact/signals": "2.11.3",
+    "@preact/signals-core": "1.14.4",
+    "katex": "0.16.22",
+    "preact": "10.29.8"
   },
   "devDependencies": {
+    "@types/katex": "0.16.7",
     "zod": "3.23.8"
   }
 }

@@ -1,0 +1,120 @@
+/* @chalk/draw: the pieces, drawn only with the look's tokens. A piece's own colour (a look role or
+   a hex from the content) arrives as --piece-color. */
+
+.draw-stage {
+  position: relative;
+}
+.draw-stage > svg {
+  display: block;
+  overflow: visible;
+}
+.draw-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.draw-top {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.draw-crowd {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.draw-axis-line {
+  stroke: var(--color-on-surface);
+  stroke-width: var(--shape-stroke);
+  stroke-linecap: round;
+}
+.draw-axis-end {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: var(--shape-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.draw-tick line {
+  stroke: var(--color-on-surface);
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.draw-tick text {
+  fill: var(--piece-color, var(--color-on-surface));
+  font: 800 var(--text-note) var(--font-display);
+}
+
+.draw-dot {
+  fill: var(--piece-color, var(--color-primary));
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+
+.draw-mark line {
+  stroke: var(--piece-color, var(--color-on-secondary-container));
+  stroke-width: 2px;
+  stroke-dasharray: 3 3;
+}
+.draw-mark circle {
+  fill: var(--piece-color, var(--color-on-secondary-container));
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.draw-mark text {
+  fill: var(--piece-color, var(--color-on-secondary-container));
+  font: 800 var(--text-body) var(--font-display);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.draw-curve {
+  fill: none;
+  stroke: var(--piece-color, var(--color-on-surface));
+  stroke-width: var(--shape-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.draw-line {
+  stroke: var(--piece-color, var(--color-on-surface));
+  stroke-width: var(--shape-stroke);
+  stroke-linecap: round;
+}
+.draw-line.is-thin {
+  stroke-width: var(--shape-stroke-thin);
+}
+.draw-label {
+  fill: var(--piece-color, var(--color-on-surface));
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.draw-label.is-small {
+  font-size: var(--text-caption);
+}
+.draw-label.is-normal {
+  font-size: var(--text-body);
+}
+.draw-label.is-large {
+  font-size: 34px;
+}
+
+.draw-trail path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.draw-trail-road {
+  stroke: var(--color-outline-variant);
+  stroke-width: 16px;
+}
+.draw-trail-done {
+  stroke: color-mix(in srgb, var(--color-primary) 30%, var(--color-surface));
+  stroke-width: 16px;
+}

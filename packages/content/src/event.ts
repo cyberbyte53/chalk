@@ -60,6 +60,10 @@ const lessonEventSchema = z
       z.object({ type: z.literal("start") }).strict(),
       z.object({ type: z.literal("complete") }).strict(),
       z.object({ type: z.literal("leave") }).strict(),
+      /** The learner went back a board; `boardIndex` is the one they went back to. */
+      z
+        .object({ type: z.literal("back") })
+        .strict(),
     ]),
     state: z
       .object({ status: z.nativeEnum(LessonStatus), boardIndex: z.number().int().min(0) })
@@ -122,6 +126,8 @@ const questionEventSchema = z
         status: z.nativeEnum(QuestionStatus),
         /** 1 on the first try at this question. */
         attempts: z.number().int().min(1),
+        /** Whether this check counts towards mastery (a bank question), or only teaches (a page's). */
+        isGraded: z.boolean(),
       })
       .strict(),
   })

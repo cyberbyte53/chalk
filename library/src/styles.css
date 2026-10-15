@@ -1,0 +1,15 @@
+/* Every prop's own styles, gathered for the app. Each prop draws only with the look's tokens,
+   so load @chalk/look's look.css first. A new prop adds its line here. */
+@import "@chalk/draw/styles.css";
+@import "@chalk/prop-basics/styles.css";
+@import "@chalk/prop-chance/styles.css";
+@import "@chalk/prop-circuit/styles.css";
+@import "@chalk/prop-collision/styles.css";
+@import "@chalk/prop-decimal/styles.css";
+@import "@chalk/prop-exponents/styles.css";
+@import "@chalk/prop-gas/styles.css";
+@import "@chalk/prop-number-line/styles.css";
+@import "@chalk/prop-number-sets/styles.css";
+@import "@chalk/prop-plot/styles.css";
+@import "@chalk/prop-roots/styles.css";
+@import "@chalk/prop-surds/styles.css";

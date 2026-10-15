@@ -20,7 +20,7 @@ const check = {
     type: "check",
     submitted: { kind: "prop", propId: 3, state: { from: 1, to: 2, marker: 1.41 } },
   },
-  state: { status: "correct", attempts: 2 },
+  state: { status: "correct", attempts: 2, isGraded: true },
 };
 
 describe("eventSchema", () => {
@@ -35,8 +35,10 @@ describe("eventSchema", () => {
   });
   it("refuses state fields that do not belong", () => {
     expect(
-      eventSchema.safeParse({ ...check, state: { status: "correct", attempts: 2, extra: 1 } })
-        .success,
+      eventSchema.safeParse({
+        ...check,
+        state: { status: "correct", attempts: 2, isGraded: true, extra: 1 },
+      }).success,
     ).toBe(false);
   });
   it("refuses a time that is not Unix ms", () => {
@@ -61,5 +63,11 @@ describe("eventSchema", () => {
     };
     expect(eventSchema.safeParse(lessonStart).success).toBe(true);
     expect(eventSchema.safeParse(boardContinue).success).toBe(true);
+    const lessonBack = {
+      ...lessonStart,
+      envelope: { ...envelope, actor: "learner" },
+      input: { type: "back" },
+    };
+    expect(eventSchema.safeParse(lessonBack).success).toBe(true);
   });
 });

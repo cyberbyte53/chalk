@@ -29,8 +29,9 @@ const act = actionsFor<BoardState>();
 const named = z.object({ name: z.string().min(1) }).strict();
 
 /** The board itself: shows and hides props, opens the way on, and says when it starts. */
-export const boardProp = defineProp<BoardState>({
+export const boardProp = defineProp({
   type: BOARD,
+  isExplainer: false,
   describe: "The board: which props are showing, and whether the learner may move on.",
   state: boardState,
   defaults: { isPassed: false, hidden: [] },

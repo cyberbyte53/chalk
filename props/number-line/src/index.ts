@@ -4,6 +4,8 @@ import { numberLine } from "./model";
 import { NumberLineView } from "./view";
 
 export {
+  NumberLineAction,
+  NumberLineDerived,
   NumberLinePart,
   NumberLineSignal,
   numberLine as numberLineDef,

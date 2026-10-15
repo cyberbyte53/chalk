@@ -4,20 +4,24 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@chalk/content": "workspace:*",
+    "@chalk/draw": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
     "@chalk/prop-chance": "workspace:*",
     "@chalk/prop-circuit": "workspace:*",
+    "@chalk/prop-collision": "workspace:*",
     "@chalk/prop-decimal": "workspace:*",
     "@chalk/prop-exponents": "workspace:*",
+    "@chalk/prop-gas": "workspace:*",
     "@chalk/prop-number-line": "workspace:*",
     "@chalk/prop-number-sets": "workspace:*",
     "@chalk/prop-plot": "workspace:*",
@@ -25,6 +29,7 @@
     "@chalk/prop-surds": "workspace:*"
   },
   "devDependencies": {
-    "@chalk/jugnu": "workspace:*"
+    "@chalk/jugnu": "workspace:*",
+    "@types/node": "22.10.2"
   }
 }

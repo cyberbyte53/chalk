@@ -68,7 +68,7 @@ Expressions: numbers, `"text"`, `true`/`false`/`null`, `prop.field`, `+ - * / ^`
 
 ### Questions
 
-A prop with the question role (`choice`, `goal`) has `status` (open / correct / wrong), `attempts`, `feedback` and `canCheck`, the action `check` and the signals `checked` (commit), `correct`, `wrong`. The player shows Check and the feedback bar for it; the lesson decides what happens next (`WHEN guessRoot.correct → board.pass`). One question per board.
+A prop with the question role (`choice`, `goal`) has `status` (open / correct / wrong), `attempts`, `feedback`, `canCheck`, and, written in by the build, `concepts` (what it is about) and `isGraded` (whether its checks count towards mastery: bank questions yes, a page's questions no), the action `check` and the signals `checked` (commit), `correct`, `wrong`. Each answers where it sits: a choice is checked the moment an option is tapped, a goal has its own Check, and both show their feedback right below. A board may ask any number of questions; the lesson decides what happens next (`WHEN guessRoot.correct → board.pass`). The footer only ever shows Continue, once the board passes.
 
 ### Student only
 

@@ -27,6 +27,9 @@ importers:
       '@chalk/content':
         specifier: workspace:*
         version: link:../../packages/content
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../../packages/draw
       '@chalk/events':
         specifier: workspace:*
         version: link:../../packages/events
@@ -36,22 +39,68 @@ importers:
       '@chalk/library':
         specifier: workspace:*
         version: link:../../library
+      '@chalk/look':
+        specifier: workspace:*
+        version: link:../../packages/look
       '@chalk/player':
         specifier: workspace:*
         version: link:../../packages/player
+      '@fontsource/baloo-2':
+        specifier: 5.2.5
+        version: 5.2.5
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
     devDependencies:
       vite:
         specifier: 5.4.11
         version: 5.4.11
+
+  content:
+    dependencies:
+      '@chalk/author':
+        specifier: workspace:*
+        version: link:../packages/author
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../packages/content
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../packages/draw
+      '@chalk/exact':
+        specifier: workspace:*
+        version: link:../packages/exact
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../packages/prop
+      '@chalk/prop-basics':
+        specifier: workspace:*
+        version: link:../props/basics
+      '@chalk/prop-number-line':
+        specifier: workspace:*
+        version: link:../props/number-line
+      '@chalk/prop-number-sets':
+        specifier: workspace:*
+        version: link:../props/number-sets
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
 
   library:
     dependencies:
       '@chalk/content':
         specifier: workspace:*
         version: link:../packages/content
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../packages/draw
       '@chalk/player':
         specifier: workspace:*
         version: link:../packages/player
@@ -67,12 +116,18 @@ importers:
       '@chalk/prop-circuit':
         specifier: workspace:*
         version: link:../props/circuit
+      '@chalk/prop-collision':
+        specifier: workspace:*
+        version: link:../props/collision
       '@chalk/prop-decimal':
         specifier: workspace:*
         version: link:../props/decimal
       '@chalk/prop-exponents':
         specifier: workspace:*
         version: link:../props/exponents
+      '@chalk/prop-gas':
+        specifier: workspace:*
+        version: link:../props/gas
       '@chalk/prop-number-line':
         specifier: workspace:*
         version: link:../props/number-line
@@ -92,6 +147,28 @@ importers:
       '@chalk/jugnu':
         specifier: workspace:*
         version: link:../packages/jugnu
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
+
+  packages/author:
+    dependencies:
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../content
+      '@chalk/exact':
+        specifier: workspace:*
+        version: link:../exact
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../prop
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
 
   packages/content:
     dependencies:
@@ -102,11 +179,38 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
 
+  packages/draw:
+    dependencies:
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../content
+      '@chalk/look':
+        specifier: workspace:*
+        version: link:../look
+      d3-scale:
+        specifier: 4.0.2
+        version: 4.0.2
+      d3-shape:
+        specifier: 3.2.0
+        version: 3.2.0
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
+    devDependencies:
+      '@types/d3-scale':
+        specifier: 4.0.8
+        version: 4.0.8
+      '@types/d3-shape':
+        specifier: 3.1.6
+        version: 3.1.6
+
   packages/events:
     dependencies:
       '@chalk/content':
         specifier: workspace:*
         version: link:../content
+
+  packages/exact: {}
 
   packages/jugnu:
     dependencies:
@@ -119,6 +223,15 @@ importers:
       zod:
         specifier: 3.23.8
         version: 3.23.8
+
+  packages/look:
+    devDependencies:
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
+      tsx:
+        specifier: 4.19.2
+        version: 4.19.2
 
   packages/player:
     dependencies:
@@ -134,16 +247,31 @@ importers:
       '@chalk/prop':
         specifier: workspace:*
         version: link:../prop
+      '@preact/signals':
+        specifier: 2.11.3
+        version: 2.11.3(preact@10.29.8)
+      '@preact/signals-core':
+        specifier: 1.14.4
+        version: 1.14.4
+      katex:
+        specifier: 0.16.22
+        version: 0.16.22
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
     devDependencies:
+      '@types/katex':
+        specifier: 0.16.7
+        version: 0.16.7
       zod:
         specifier: 3.23.8
         version: 3.23.8
 
   packages/prop:
     dependencies:
+      '@chalk/look':
+        specifier: workspace:*
+        version: link:../look
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -160,8 +288,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -178,8 +306,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -196,8 +324,26 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+
+  props/collision:
+    dependencies:
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../../packages/draw
+      '@chalk/player':
+        specifier: workspace:*
+        version: link:../../packages/player
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../../packages/prop
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -214,8 +360,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -232,14 +378,17 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
 
-  props/number-line:
+  props/gas:
     dependencies:
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../../packages/draw
       '@chalk/player':
         specifier: workspace:*
         version: link:../../packages/player
@@ -247,8 +396,26 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+
+  props/number-line:
+    dependencies:
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../../packages/draw
+      '@chalk/player':
+        specifier: workspace:*
+        version: link:../../packages/player
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../../packages/prop
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -265,8 +432,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -283,8 +450,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -301,8 +468,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -319,14 +486,17 @@ importers:
         specifier: workspace:*
         version: link:../../packages/prop
       preact:
-        specifier: 10.24.3
-        version: 10.24.3
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.23.8
         version: 3.23.8
 
   studio:
     dependencies:
+      '@chalk/author':
+        specifier: workspace:*
+        version: link:../packages/author
       '@chalk/content':
         specifier: workspace:*
         version: link:../packages/content
@@ -342,6 +512,15 @@ importers:
       '@chalk/prop':
         specifier: workspace:*
         version: link:../packages/prop
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
+      preact-render-to-string:
+        specifier: 6.5.13
+        version: 6.5.13(preact@10.29.8)
+      yaml:
+        specifier: 2.6.1
+        version: 2.6.1
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -349,6 +528,12 @@ importers:
       '@biomejs/biome':
         specifier: 1.9.4
         version: 1.9.4
+      '@chalk/content-source':
+        specifier: workspace:*
+        version: link:../content
+      '@chalk/exact':
+        specifier: workspace:*
+        version: link:../packages/exact
       '@types/node':
         specifier: 22.10.2
         version: 22.10.2
@@ -814,6 +999,10 @@ packages:
     dev: true
     optional: true
 
+  /@fontsource/baloo-2@5.2.5:
+    resolution: {integrity: sha512-55yctI7outAXc45cooKX3/udJ7EAqDcc8ZoHQZjm43nPCbNKnJvnpObWeVGlMPpY/OQHjOQ4m8U7a3v4iv4rbw==}
+    dev: false
+
   /@jridgewell/sourcemap-codec@1.6.0:
     resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
     dev: true
@@ -825,6 +1014,19 @@ packages:
     os: [linux]
     dev: true
     optional: true
+
+  /@preact/signals-core@1.14.4:
+    resolution: {integrity: sha512-HNB6HYeYKhQbJ1aKl+YRjrS4+QWHLKX6qKoUsfS/m0vqzsVaEBiZiaKbG/e+NKk2ch5ALQr/ihWaMHxiCuuWHA==}
+    dev: false
+
+  /@preact/signals@2.11.3(preact@10.29.8):
+    resolution: {integrity: sha512-mttwFM98G/JiriTgMwU+UWygL6sfVmYEiNcPSKkUnv4PxPpZhmP2ugGC4qi360+ZIHyQ8NY05bfJT3b4RUIGlw==}
+    peerDependencies:
+      preact: '>= 10.25.0 || >=11.0.0-0'
+    dependencies:
+      '@preact/signals-core': 1.14.4
+      preact: 10.29.8(preact-render-to-string@6.5.13)
+    dev: false
 
   /@rollup/rollup-android-arm-eabi@4.64.5:
     resolution: {integrity: sha512-MrfgRQSpD5hkkRg6XI16B6EDLb+6+xp8xje6bpdSwkYw+qxrBKbUVrRAQu9h82UT+QumSIVQ8HXsXjPd2dlhqw==}
@@ -1001,8 +1203,32 @@ packages:
     dev: true
     optional: true
 
+  /@types/d3-path@3.1.1:
+    resolution: {integrity: sha512-VMZBYyQvbGmWyWVea0EHs/BwLgxc+MKi1zLDCONksozI4YJMcTt8ZEuIR4Sb1MMTE8MMW49v0IwI5+b7RmfWlg==}
+    dev: true
+
+  /@types/d3-scale@4.0.8:
+    resolution: {integrity: sha512-gkK1VVTr5iNiYJ7vWDI+yUFFlszhNMtVeneJ6lUTKPjprsvLLI9/tgEGiXJOnlINJA8FyA88gfnQsHbybVZrYQ==}
+    dependencies:
+      '@types/d3-time': 3.0.4
+    dev: true
+
+  /@types/d3-shape@3.1.6:
+    resolution: {integrity: sha512-5KKk5aKGu2I+O6SONMYSNflgiP0WfZIQvVUMan50wHsLG1G94JlxEVnCpQARfTtzytuY0p/9PXXZb3I7giofIA==}
+    dependencies:
+      '@types/d3-path': 3.1.1
+    dev: true
+
+  /@types/d3-time@3.0.4:
+    resolution: {integrity: sha512-yuzZug1nkAAaBlBBikKZTgzCeA+k1uy4ZFwWANOfKw5z5LRhV0gNA7gNkKm7HoK+HRN0wX3EkxGk0fpbWhmB7g==}
+    dev: true
+
   /@types/estree@1.0.9:
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+    dev: true
+
+  /@types/katex@0.16.7:
+    resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
     dev: true
 
   /@types/node@22.10.2:
@@ -1103,6 +1329,72 @@ packages:
     resolution: {integrity: sha512-PAJdDJusoxnwm1VwW07VWwUN1sl7smmC3OKggvndJFadxxDRyFJBX/ggnu/KE4kQAB7a3Dp8f/YXC1FlUprWmA==}
     engines: {node: '>= 16'}
     dev: true
+
+  /commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
+    dev: false
+
+  /d3-array@3.2.4:
+    resolution: {integrity: sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==}
+    engines: {node: '>=12'}
+    dependencies:
+      internmap: 2.0.3
+    dev: false
+
+  /d3-color@3.1.0:
+    resolution: {integrity: sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /d3-format@3.1.2:
+    resolution: {integrity: sha512-AJDdYOdnyRDV5b6ArilzCPPwc1ejkHcoyFarqlPqT7zRYjhavcT3uSrqcMvsgh2CgoPbK3RCwyHaVyxYcP2Arg==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /d3-interpolate@3.0.1:
+    resolution: {integrity: sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-color: 3.1.0
+    dev: false
+
+  /d3-path@3.1.0:
+    resolution: {integrity: sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /d3-scale@4.0.2:
+    resolution: {integrity: sha512-GZW464g1SH7ag3Y7hXjf8RoUuAFIqklOAq3MRl4OaWabTFJY9PN/E1YklhXLh+OQ3fM9yS2nOkCoS+WLZ6kvxQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-array: 3.2.4
+      d3-format: 3.1.2
+      d3-interpolate: 3.0.1
+      d3-time: 3.1.0
+      d3-time-format: 4.1.0
+    dev: false
+
+  /d3-shape@3.2.0:
+    resolution: {integrity: sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-path: 3.1.0
+    dev: false
+
+  /d3-time-format@4.1.0:
+    resolution: {integrity: sha512-dJxPBlzC7NugB2PDLwo9Q8JiTR3M3e4/XANkreKSUxF8vvXKqm1Yfq4Q5dl8budlunRVlUUaDUgFt7eA8D6NLg==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-time: 3.1.0
+    dev: false
+
+  /d3-time@3.1.0:
+    resolution: {integrity: sha512-VqKjzBLejbSMT4IgbmVgDjpkYrNWUYJnbCGo874u7MMKIWsILRX+OpX/gTk8MqjpT1A/c6HY2dCA77ZN0lkQ2Q==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-array: 3.2.4
+    dev: false
 
   /debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -1212,6 +1504,18 @@ packages:
       resolve-pkg-maps: 1.0.0
     dev: true
 
+  /internmap@2.0.3:
+    resolution: {integrity: sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /katex@0.16.22:
+    resolution: {integrity: sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==}
+    hasBin: true
+    dependencies:
+      commander: 8.3.0
+    dev: false
+
   /loupe@3.2.1:
     resolution: {integrity: sha512-CdzqowRJCeLU72bHvWqwRBBlLcMEtIvGrlvef74kMnV2AolS9Y8xUv1I0U/MNAWMhBlKIoyuEgoJ0t/bbwHbLQ==}
     dev: true
@@ -1254,8 +1558,23 @@ packages:
       source-map-js: 1.2.2
     dev: true
 
-  /preact@10.24.3:
-    resolution: {integrity: sha512-Z2dPnBnMUfyQfSQ+GBdsGa16hz35YmLmtTLhM169uW944hYL6xzTYkJjC07j+Wosz733pMWx0fgON3JNw1jJQA==}
+  /preact-render-to-string@6.5.13(preact@10.29.8):
+    resolution: {integrity: sha512-iGPd+hKPMFKsfpR2vL4kJ6ZPcFIoWZEcBf0Dpm3zOpdVvj77aY8RlLiQji5OMrngEyaxGogeakTb54uS2FvA6w==}
+    peerDependencies:
+      preact: '>=10'
+    dependencies:
+      preact: 10.29.8(preact-render-to-string@6.5.13)
+    dev: false
+
+  /preact@10.29.8(preact-render-to-string@6.5.13):
+    resolution: {integrity: sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==}
+    peerDependencies:
+      preact-render-to-string: '>=5'
+    peerDependenciesMeta:
+      preact-render-to-string:
+        optional: true
+    dependencies:
+      preact-render-to-string: 6.5.13(preact@10.29.8)
     dev: false
 
   /resolve-pkg-maps@1.0.0:
@@ -1484,6 +1803,12 @@ packages:
       siginfo: 2.0.0
       stackback: 0.0.2
     dev: true
+
+  /yaml@2.6.1:
+    resolution: {integrity: sha512-7r0XPzioN/Q9kXBro/XPnA6kznR73DHq+GXh5ON7ZozRO6aMjbmiBuKste2wslTFkC5d1dw0GooOCepZXJ2SAg==}
+    engines: {node: '>= 14'}
+    hasBin: true
+    dev: false
 
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}

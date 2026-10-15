@@ -2,6 +2,9 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { type Readings, compileReadings } from "@chalk/content";
 
+/** Where the pronunciation rules live: content/pronunciations.json. */
+export const PRONUNCIATIONS_FILE = "pronunciations.json";
+
 /**
  * The nearest file with this name, looking up from `from`: beside it, or in a content/ folder beside
  * it (lessons sit below content/; test boards elsewhere in the repo use the same file).

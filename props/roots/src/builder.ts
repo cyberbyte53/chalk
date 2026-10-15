@@ -141,7 +141,7 @@ function locate(s: RootBuilderState, part: string, width: number): Box | undefin
  * A number line with a right triangle standing on it, and a compass at 0 that swings the
  * hypotenuse onto the line. It knows right triangles and lengths on a line, nothing about any lesson.
  */
-export const rootBuilder = defineProp<RootBuilderState>({
+export const rootBuilder = defineProp({
   type: "rootBuilder",
   describe:
     "A number line with a faint unit grid and a right triangle standing on it: the base lies along the line from 0 to √base (a whole number or a √n already landed), a perpendicular of whole-number `height` stands at its end, and the hypotenuse √(base + height²) goes from 0 to its top. A compass centred at 0 swings the hypotenuse down onto the line, giving √(base + height²) an exact point.",

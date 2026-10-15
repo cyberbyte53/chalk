@@ -87,7 +87,7 @@ function decimalText(s: DecimalExpansionState): string {
 }
 
 /** Turning p/q into a decimal by long division, one digit at a time. It knows division, nothing about any lesson. */
-export const decimalExpansion = defineProp<DecimalExpansionState>({
+export const decimalExpansion = defineProp({
   type: "decimalExpansion",
   describe:
     "The long division of numerator by denominator, worked out one digit after the decimal point at a time, with the remainder at each step. Either a remainder becomes 0 (the expansion terminates) or a remainder comes back and the digits repeat from there.",

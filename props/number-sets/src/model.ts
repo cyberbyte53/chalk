@@ -53,6 +53,27 @@ export const NumberSorterPart = {
   Outside: "region:outside",
 } as const;
 
+export const NumberSorterAction = {
+  Pick: "pick",
+  Drop: "drop",
+  Place: "place",
+  TakeBack: "takeBack",
+  PutEachRight: "putEachRight",
+  ShowFamily: "showFamily",
+  SetCards: "setCards",
+  AddCard: "addCard",
+  Mark: "mark",
+} as const;
+
+export const NumberSorterDerived = {
+  PlacedIn: "placedIn",
+  RightPlace: "rightPlace",
+  PlacedCount: "placedCount",
+  IsAllPlaced: "isAllPlaced",
+  WrongCount: "wrongCount",
+  IsAllRight: "isAllRight",
+} as const;
+
 export const NumberSorterSignal = { Placed: "placed", Picked: "picked" } as const;
 
 export const MAX_CARDS = 12;
@@ -120,7 +141,7 @@ function isPlaceable(s: NumberSorterState, place: Place): boolean {
 }
 
 /** Sorting numbers into the families of real numbers, drawn as rings inside rings. */
-export const numberSorter = defineProp<NumberSorterState>({
+export const numberSorter = defineProp({
   type: "numberSorter",
   describe:
     "Number cards to sort into the families of real numbers drawn as rings inside rings: natural (N) inside whole (W) inside integers (Z) inside rationals (Q) inside reals (R), with irrationals beside Q inside R. A card belongs in the innermost ring shown that holds it, or outside if none does.",
@@ -134,37 +155,41 @@ export const numberSorter = defineProp<NumberSorterState>({
     outsideName: null,
   },
   derived: {
-    placedIn: {
+    [NumberSorterDerived.PlacedIn]: {
       describe: 'Where each card is, by card id (a family, "outside", or null if not placed yet)',
       compute: (s) => Object.fromEntries(s.cards.map((c) => [c.id, c.placedIn])),
     },
-    rightPlace: {
+    [NumberSorterDerived.RightPlace]: {
       describe: "Where each card belongs among the rings shown, by card id",
       compute: (s) =>
         Object.fromEntries(s.cards.map((c) => [c.id, placeFor(c.family, s.families)])),
     },
-    placedCount: {
+    [NumberSorterDerived.PlacedCount]: {
       describe: "How many cards have been placed",
       compute: (s) => s.cards.filter((c) => c.placedIn !== null).length,
     },
-    isAllPlaced: {
+    [NumberSorterDerived.IsAllPlaced]: {
       describe: "Every card has been placed",
       compute: (s) => s.cards.every((c) => c.placedIn !== null),
     },
-    wrongCount: {
+    [NumberSorterDerived.WrongCount]: {
       describe: "How many placed cards are not where they belong",
       compute: (s) =>
         s.cards.filter((c) => c.placedIn !== null && c.placedIn !== placeFor(c.family, s.families))
           .length,
     },
-    isAllRight: {
+    [NumberSorterDerived.IsAllRight]: {
       describe: "Every card is placed where it belongs",
       compute: (s) => s.cards.every((c) => c.placedIn === placeFor(c.family, s.families)),
     },
   },
-  offScreen: ["rightPlace", "wrongCount", "isAllRight"],
+  offScreen: [
+    NumberSorterDerived.RightPlace,
+    NumberSorterDerived.WrongCount,
+    NumberSorterDerived.IsAllRight,
+  ],
   actions: {
-    pick: act({
+    [NumberSorterAction.Pick]: act({
       describe:
         "Pick up a card to place it (the learner's tap on a card); tap it again to put it down",
       byLearner: true,
@@ -178,7 +203,7 @@ export const numberSorter = defineProp<NumberSorterState>({
         );
       },
     }),
-    drop: act({
+    [NumberSorterAction.Drop]: act({
       describe:
         "Put the picked-up card in a ring, or outside every ring (the learner's tap on a ring)",
       byLearner: true,
@@ -192,7 +217,7 @@ export const numberSorter = defineProp<NumberSorterState>({
         );
       },
     }),
-    place: act({
+    [NumberSorterAction.Place]: act({
       describe: "Put a card in a ring, or outside every ring",
       args: z.object({ card: z.string(), place: placeSchema }).strict(),
       run: (s, a) => {
@@ -204,12 +229,12 @@ export const numberSorter = defineProp<NumberSorterState>({
         );
       },
     }),
-    takeBack: act({
+    [NumberSorterAction.TakeBack]: act({
       describe: "Return a card to the tray",
       args: z.object({ card: z.string() }).strict(),
       run: (s, a) => set({ cards: withPlace(s, a.card, null) }),
     }),
-    putEachRight: act({
+    [NumberSorterAction.PutEachRight]: act({
       describe: "Put every card where it belongs",
       reveals: true,
       args: z.object({}).strict(),
@@ -219,14 +244,14 @@ export const numberSorter = defineProp<NumberSorterState>({
           selected: null,
         }),
     }),
-    showFamily: act({
+    [NumberSorterAction.ShowFamily]: act({
       describe:
         "Draw one more family's ring. Cards already placed stay where they are (some may now belong further in).",
       args: z.object({ family: familySchema }).strict(),
       run: (s, a) =>
         s.families.includes(a.family) ? set({}) : set({ families: [...s.families, a.family] }),
     }),
-    setCards: act({
+    [NumberSorterAction.SetCards]: act({
       describe: "Replace the cards (all in the tray)",
       args: z
         .object({ cards: z.array(cardSchema.omit({ placedIn: true })).max(MAX_CARDS) })
@@ -238,7 +263,7 @@ export const numberSorter = defineProp<NumberSorterState>({
           isMarked: false,
         }),
     }),
-    addCard: act({
+    [NumberSorterAction.AddCard]: act({
       describe: "Add a card to the tray",
       args: cardSchema.omit({ placedIn: true }),
       run: (s, a) =>
@@ -246,7 +271,7 @@ export const numberSorter = defineProp<NumberSorterState>({
           ? set({})
           : set({ cards: [...s.cards, { ...a, placedIn: null }] }),
     }),
-    mark: act({
+    [NumberSorterAction.Mark]: act({
       describe: "Show (or hide) whether each placed card is in the right ring",
       reveals: true,
       args: z.object({ isMarked: z.boolean() }).strict(),

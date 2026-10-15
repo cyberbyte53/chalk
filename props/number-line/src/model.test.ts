@@ -73,11 +73,16 @@ describe("numberLine", () => {
         "level",
         "marker",
         "marks",
+        "dots",
+        "dotCount",
+        "pan",
         "showMarker",
+        "showTicks",
         "split",
         "splitParts",
         "splitPointsBetween",
         "to",
+        "color",
       ].sort(),
     );
   });
@@ -250,6 +255,7 @@ describe("refusals and parts", () => {
     expect(partsOf(start)).not.toContain("zoomIn");
     expect(partsOf({ ...start, isZoomable: true })).toContain("zoomIn");
     expect(partsOf({ ...start, lens: { from: 1.4, to: 1.5 } })).toContain("lens");
+    expect(partsOf({ ...start, showTicks: false })).not.toContain("tick:1.4");
   });
 
   it("locates parts by name, never by pixels from outside", () => {
@@ -257,6 +263,47 @@ describe("refusals and parts", () => {
     expect(locate("marker")?.x).toBeGreaterThan(0);
     expect(locate("tick:1.4")).toBeDefined();
     expect(locate("tick:1.45")).toBeUndefined();
+  });
+});
+
+describe("dots", () => {
+  it("places unlabelled dots, recolouring one already there instead of doubling it", () => {
+    const one = run(start, "placeDot", { at: 1.5 }).state;
+    const two = run(one, "placeDot", { at: 1.75, color: "#A21CAF" }).state;
+    const recoloured = run(two, "placeDot", { at: 1.75, color: "#15171C" }).state;
+    expect(recoloured.dots).toEqual([{ at: 1.5 }, { at: 1.75, color: "#15171C" }]);
+    expect(viewOf(def, recoloured).dotCount).toBe(2);
+    expect(run(recoloured, "clearDots").state.dots).toEqual([]);
+  });
+});
+
+describe("sliding the line", () => {
+  const counting: NumberLineState = {
+    ...start,
+    from: 0.5,
+    to: 10.5,
+    pan: { min: 0.5, max: 1_000_000 },
+  };
+
+  it("slides the window and keeps its width", () => {
+    const { state } = run(counting, "panTo", { from: 120.5 });
+    expect(state.from).toBe(120.5);
+    expect(state.to).toBe(130.5);
+  });
+
+  it("stops at both ends of the pan", () => {
+    expect(run(counting, "panTo", { from: -40 }).state.from).toBe(0.5);
+    const far = run(counting, "panTo", { from: 2_000_000 }).state;
+    expect(far.to).toBe(1_000_000);
+    expect(far.to - far.from).toBeCloseTo(10);
+  });
+
+  it("stays put without a pan", () => {
+    expect(run(start, "panTo", { from: 5 }).state.from).toBe(1);
+  });
+
+  it("refuses a pan narrower than the window", () => {
+    expect(applyPatch(def, start, { pan: { min: 1, max: 1.5 } }).isOk).toBe(false);
   });
 });
 

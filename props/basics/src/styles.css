@@ -1,0 +1,168 @@
+/* @chalk/prop-basics: drawn only with the look's tokens (@chalk/look) and the content's --tone. */
+
+.piece-text {
+  margin: 0;
+  line-height: var(--text-body-leading);
+  white-space: pre-line;
+  animation: rise 0.25s ease-out;
+}
+.text-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-title);
+  line-height: var(--text-title-leading);
+  letter-spacing: -0.02em;
+}
+.text-body {
+  font-size: var(--text-body);
+}
+.text-note {
+  font-size: var(--text-note);
+  line-height: var(--text-note-leading);
+  color: var(--color-on-surface-variant);
+}
+.text-definition {
+  font-size: var(--text-body);
+  padding: 14px 16px;
+  border: 1.5px solid transparent;
+  border-radius: var(--shape-radius-l);
+  background: var(--color-surface-container);
+}
+/* A coloured prop sets --tone (any #rrggbb); its edge and tint are mixed from it. */
+.text-definition.has-color {
+  border-color: color-mix(in srgb, var(--tone) 30%, var(--color-surface));
+  background: color-mix(in srgb, var(--tone) 6%, var(--color-surface));
+}
+.text-definition.has-color .katex-display {
+  color: var(--tone);
+}
+
+.piece-line {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  animation: rise 0.25s ease-out;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  flex-shrink: 0;
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.bubble {
+  margin: 0;
+  background: var(--color-surface-container);
+  border-radius: 18px 18px 18px 4px;
+  padding: 10px 14px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.piece-question {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.question-prompt {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.choices {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+.choices.is-pairs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+/* Options are raised grey cards: they sink when tapped, and turn green or red once answered. */
+.choice {
+  min-height: 58px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  font-weight: 800;
+  font-size: var(--text-body);
+  line-height: 1.3;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.choice:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.choice:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+.choice.is-selected {
+  background: var(--color-primary-container);
+  box-shadow: 0 var(--shape-press) 0
+    color-mix(in srgb, var(--color-primary) 35%, var(--color-surface));
+}
+.choice.is-selected.is-right {
+  background: var(--color-right-container);
+  color: color-mix(in srgb, var(--color-right) 70%, var(--color-on-surface));
+  box-shadow: 0 var(--shape-press) 0
+    color-mix(in srgb, var(--color-right) 40%, var(--color-surface));
+}
+.choice.is-selected.is-wrong {
+  background: var(--color-wrong-container);
+  color: color-mix(in srgb, var(--color-wrong) 70%, var(--color-on-surface));
+  box-shadow: 0 var(--shape-press) 0
+    color-mix(in srgb, var(--color-wrong) 35%, var(--color-surface));
+}
+.choice:disabled {
+  cursor: default;
+}
+/* A goal's own Check, right under its prompt. */
+.question-check {
+  align-self: flex-start;
+  height: 48px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font-weight: 800;
+  font-size: var(--text-note);
+}
+.question-check:disabled {
+  opacity: 0.45;
+}
+
+/* ---- basics: button ---- */
+.button {
+  min-height: 48px;
+  white-space: nowrap;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  font-weight: 800;
+  font-size: var(--text-note);
+  cursor: pointer;
+}
+.button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.button:disabled {
+  color: var(--color-on-surface-variant);
+  box-shadow: none;
+  cursor: default;
+}

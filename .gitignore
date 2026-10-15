@@ -16,3 +16,6 @@ coverage
 .chalk-xfer/
 _to_delete/
 .cursor/
+/published/
+/build/
+studio/src/content/.fixtures/

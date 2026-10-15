@@ -26,7 +26,7 @@ export type GraphState = z.infer<typeof graphState>;
 const act = actionsFor<GraphState>();
 
 /** A line graph that points are added to one by one. It plots; it knows nothing about what. */
-export const graph = defineProp<GraphState>({
+export const graph = defineProp({
   type: "graph",
   describe: "A line graph: points are added one at a time and joined up.",
   state: graphState,

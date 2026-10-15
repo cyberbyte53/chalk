@@ -1,0 +1,20 @@
+/* Chalk's look: the tokens every screen and prop is drawn with, and the motion they share.
+   The app loads this once, before the player's and the props' styles. */
+@import "./tokens.gen.css";
+
+/* Something new on the board: it rises into place. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+  }
+}

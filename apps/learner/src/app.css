@@ -13,7 +13,7 @@
   margin: 0;
 }
 .locale {
-  border: 1.5px solid var(--color-line);
+  border: 1.5px solid var(--color-outline-variant);
   background: none;
   border-radius: 12px;
   padding: 8px 12px;
@@ -31,7 +31,7 @@
   text-align: left;
   padding: 18px 16px;
   border-radius: 16px;
-  border: 2px solid var(--color-line);
+  border: 2px solid var(--color-outline-variant);
   background: var(--color-surface);
   font-size: 18px;
   font-weight: 700;
@@ -44,8 +44,8 @@
   border: none;
   border-radius: 10px;
   padding: 6px 10px;
-  background: var(--color-ink);
-  color: #fff;
+  background: var(--color-inverse-surface);
+  color: var(--color-on-inverse-surface);
   font-size: 12px;
   opacity: 0.6;
   cursor: pointer;
@@ -63,4 +63,170 @@
   color: #c9d1e0;
   font-size: 11px;
   line-height: 1.5;
+}
+
+/* Course and chapter screens: Calm 5, white with grey cards; art sits on its card. */
+.home-section,
+.screen-section {
+  margin: 18px 0 8px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+}
+.screen {
+  padding: 0 18px 32px;
+  gap: 12px;
+}
+.screen-header {
+  padding: 14px 0 0;
+}
+.screen-back {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  box-shadow: 0 3px 0 var(--color-surface-press);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-surface);
+  cursor: pointer;
+}
+.screen-back path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.screen-kicker {
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+.screen-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.art {
+  display: block;
+  border-radius: var(--shape-radius-l);
+  background: var(--color-surface-container);
+  overflow: hidden;
+}
+.hero .art {
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.chapter-tile,
+.concept-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 10px 14px;
+  border: none;
+  border-radius: var(--shape-radius-l);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  text-align: left;
+  cursor: pointer;
+}
+.chapter-tile:active,
+.concept-card:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.chapter-tile .art,
+.concept-card .art {
+  background: var(--color-surface);
+  margin-bottom: 6px;
+}
+.chapter-number,
+.concept-meta {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+.chapter-name,
+.concept-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.15;
+}
+/* The chapter's path: stops on a winding road, the current one with its art. */
+.path {
+  position: relative;
+  margin-top: 8px;
+}
+.path > .draw-stage {
+  position: absolute;
+  inset: 0;
+}
+.stop {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.stop-node {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border: 3px solid var(--color-surface-press);
+  border-radius: 50%;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+  font: 800 20px var(--font-display);
+  cursor: pointer;
+}
+.stop-node.is-current {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 5px 0 var(--color-primary-press);
+}
+.stop-name {
+  position: absolute;
+  width: 46%;
+  font: 800 17px var(--font-display);
+  line-height: 1.15;
+  color: var(--color-on-surface-variant);
+}
+.stop-name.is-right-of {
+  left: calc(24% + 44px);
+}
+.stop-name.is-left-of {
+  right: calc(24% + 44px);
+  text-align: right;
+}
+.stop-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 10px 14px;
+  border: none;
+  border-radius: var(--shape-radius-l);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  text-align: left;
+  cursor: pointer;
+}
+.stop-card .art {
+  background: var(--color-surface);
+  margin-bottom: 6px;
+}
+.stop-go {
+  font-weight: 800;
+  color: var(--color-primary);
 }
