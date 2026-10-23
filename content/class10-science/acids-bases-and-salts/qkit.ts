@@ -1,5 +1,5 @@
 import { type BoardKit, column, space, t } from "@chalk/author";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 
 /** Words in both languages. */
 export type Words = { en: string; hi: string };

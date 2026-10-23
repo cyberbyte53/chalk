@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t } from "@chalk/author";
-import { goalQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { goalQuestion, wordsOn } from "@chalk/patterns";
 import { CarbonScene, CovalentAction, CovalentDerived, Molecule } from "@chalk/prop-carbon";
 import { ask, dotsOn, oneByOne, sceneOn } from "../kit";
 

@@ -1,6 +1,6 @@
 import { column, decimal, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { goalQuestion, reach } from "@chalk/content-source/patterns";
+import { goalQuestion, reach } from "@chalk/patterns";
 import { NumberLineAction, numberLineDef } from "@chalk/prop-number-line";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";

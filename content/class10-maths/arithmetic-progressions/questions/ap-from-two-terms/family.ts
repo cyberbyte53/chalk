@@ -127,7 +127,7 @@ const items = {
     [
       ["7", subtract],
       [
-        `7/27`,
+        "7/27",
         t(
           "Subtract the terms: (a + 16d) − (a + 9d) = 7d = 7.",
           "पद घटाओ: (a + 16d) − (a + 9d) = 7d = 7।",

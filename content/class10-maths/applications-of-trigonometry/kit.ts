@@ -1,6 +1,6 @@
 import { type BoardKit, type PlacedOf, column, family, space, t } from "@chalk/author";
 import type { Level, Localized } from "@chalk/content";
-import { type Option, choiceQuestion, goalQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, goalQuestion, settle } from "@chalk/patterns";
 import { FigureAction, type FigureState, geoFigureDef } from "@chalk/prop-circles";
 import {
   HeightsAction,

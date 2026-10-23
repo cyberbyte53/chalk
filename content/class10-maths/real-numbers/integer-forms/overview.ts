@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { remainderShelvesDef } from "@chalk/prop-primes";
 
 const r = String.raw;

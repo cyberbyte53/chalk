@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t } from "@chalk/author";
-import { goalQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { goalQuestion, wordsOn } from "@chalk/patterns";
 import { PeriodicScene, TriadAction, TriadDerived, TriadSet } from "@chalk/prop-periodic";
 import { ask, oneByOne, sceneOn, triadOn } from "../kit";
 

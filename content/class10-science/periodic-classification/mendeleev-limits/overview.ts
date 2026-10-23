@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t } from "@chalk/author";
-import { goalQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { goalQuestion, wordsOn } from "@chalk/patterns";
 import { Anomaly, MendeleevAction, MendeleevMode, PeriodicScene } from "@chalk/prop-periodic";
 import { ask, mendeleevOn, oneByOne, sceneOn } from "../kit";
 

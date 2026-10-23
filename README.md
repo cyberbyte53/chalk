@@ -6,12 +6,18 @@ Interactive lessons built from props, and Jugnu, an AI tutor (an agent on the bo
 pnpm install
 pnpm dev        # the learner app at http://localhost:5173 (phone width), already signed in
                 # (needs .env from .env.example and Postgres at DATABASE_URL)
-pnpm check      # typecheck, tests, validate content, lint
+pnpm check      # typecheck, tests, validate content, layer boundaries, lint
 ```
 
-- The model: [docs/board-model.md](docs/board-model.md)
-- Map of the repo: [docs/architecture.md](docs/architecture.md)
-- Names: [docs/glossary.md](docs/glossary.md)
-- Conventions: [docs/code-conventions.md](docs/code-conventions.md)
+Three layers, importing one way (`pnpm boundaries`):
+
+- `content/` — the books (book → chapter → lesson), [content/principles.md](content/principles.md) is the taste
+- `library/` — props and board patterns shared across books
+- `platform/` — the fixed code: packages, apps, studio tooling, deploy, [docs](platform/docs/README.md)
+
+- The model: [platform/docs/board-model.md](platform/docs/board-model.md)
+- Map of the repo: [platform/docs/architecture.md](platform/docs/architecture.md)
+- Names: [platform/docs/glossary.md](platform/docs/glossary.md)
+- Conventions: [platform/docs/code-conventions.md](platform/docs/code-conventions.md)
 
 The previous codebase is parked in `tmp/old` (not tracked) for reference.

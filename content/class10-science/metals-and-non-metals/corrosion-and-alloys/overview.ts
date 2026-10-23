@@ -1,6 +1,6 @@
 import type { BoardKit } from "@chalk/author";
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, multiChoiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, multiChoiceQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import {
   AlloyMetal,

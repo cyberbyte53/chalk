@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, distinctOptions, settle } from "@chalk/content-source/patterns";
+import { choiceQuestion, distinctOptions, settle } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 import { linesOf, pairParams, pairTex, seedOf } from "../../kit";

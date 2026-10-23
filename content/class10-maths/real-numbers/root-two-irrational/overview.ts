@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, orderQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, orderQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { primeTowersDef } from "@chalk/prop-primes";
 

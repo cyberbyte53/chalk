@@ -1,6 +1,6 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 import { type QuadraticSceneKind, quadraticSceneDef } from "@chalk/prop-quadratics";
 
 /** A story picture for this chapter, with what it shows. */

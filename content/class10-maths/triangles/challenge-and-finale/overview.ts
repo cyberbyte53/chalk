@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { TrianglesSceneKind } from "@chalk/prop-triangles";
 import { BISECTOR, CHORDS, OBTUSE } from "../figures";

@@ -10,7 +10,7 @@ import {
   theBoard,
   wait,
 } from "@chalk/author";
-import { NumberColor } from "@chalk/content-source/patterns";
+import { NumberColor } from "@chalk/patterns";
 import { QuestionAction, QuestionSignal } from "@chalk/prop";
 import {
   ButtonAction,

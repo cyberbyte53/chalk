@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { LinearSceneKind, Method } from "@chalk/prop-linear-equations";
 import { equals, scene, working } from "../kit";

@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { BoxMode, PolyBoxAction, PolyBoxSignal, polyBoxDef } from "@chalk/prop-polynomials";
 
 const r = String.raw;

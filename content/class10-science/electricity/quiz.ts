@@ -1,6 +1,6 @@
 import { type BoardKit, column, space, t } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 
 /** One fixed question: a prompt, the right label, and wrong labels each with what it missed. */
 export type Item = {

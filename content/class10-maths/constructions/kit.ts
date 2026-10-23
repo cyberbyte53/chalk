@@ -7,7 +7,7 @@ import {
   goalQuestion,
   orderQuestion,
   settle,
-} from "@chalk/content-source/patterns";
+} from "@chalk/patterns";
 import {
   type CirclesSceneKind,
   ConstructionAction,

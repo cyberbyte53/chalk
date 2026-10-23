@@ -19,3 +19,4 @@ _to_delete/
 /published/
 /build/
 studio/src/content/.fixtures/
+.chalk-*

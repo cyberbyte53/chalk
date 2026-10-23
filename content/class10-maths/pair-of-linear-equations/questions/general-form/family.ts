@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, distinctOptions, settle } from "@chalk/content-source/patterns";
+import { choiceQuestion, distinctOptions, settle } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 import { eqTex, lineOf } from "../../kit";
@@ -48,8 +48,8 @@ export const generalForm = family({
               id: "other",
               label: t(m(ask === Letter.A ? b : a), m(ask === Letter.A ? b : a)),
               feedback: t(
-                `$a$ goes with $x$ and $b$ with $y$.`,
-                `$a$, $x$ के साथ है और $b$, $y$ के साथ।`,
+                "$a$ goes with $x$ and $b$ with $y$.",
+                "$a$, $x$ के साथ है और $b$, $y$ के साथ।",
               ),
             },
             {

@@ -1,5 +1,5 @@
 import { type BoardKit, PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { AcidSceneKind, LifeBand, PhAction, SubstanceId, phScaleDef } from "@chalk/prop-chemistry";
 import { sceneOn } from "../kit";

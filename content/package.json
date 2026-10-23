@@ -4,9 +4,6 @@
   "private": true,
   "type": "module",
   "description": "The course content as TypeScript: course \u2192 chapter \u2192 concept \u2192 theory pages and question families",
-  "exports": {
-    "./patterns": "./patterns/index.ts"
-  },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"
   },
@@ -15,6 +12,7 @@
     "@chalk/content": "workspace:*",
     "@chalk/draw": "workspace:*",
     "@chalk/exact": "workspace:*",
+    "@chalk/patterns": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-ap": "workspace:*",
     "@chalk/prop-basics": "workspace:*",

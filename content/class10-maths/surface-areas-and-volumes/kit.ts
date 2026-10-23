@@ -1,6 +1,6 @@
 import { type BoardKit, type PlacedOf, column, family, space } from "@chalk/author";
 import type { Level, Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 import {
   ComboAction,
   type ComboKind,

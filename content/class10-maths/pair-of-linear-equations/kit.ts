@@ -1,5 +1,5 @@
 import { type BoardKit, type PlacedOf, t } from "@chalk/author";
-import { choiceQuestion, distinctOptions, settle } from "@chalk/content-source/patterns";
+import { choiceQuestion, distinctOptions, settle } from "@chalk/patterns";
 import {
   EquationForm,
   LinePairAction,

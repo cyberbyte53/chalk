@@ -1,7 +1,7 @@
 import type { AnyPlaced, BoardKit, PlacedOf } from "@chalk/author";
 import { t, theBoard } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import {
   Layout,

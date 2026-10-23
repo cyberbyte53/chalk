@@ -1,6 +1,6 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { goalQuestion } from "@chalk/content-source/patterns";
+import { goalQuestion } from "@chalk/patterns";
 import {
   AcidBenchAction,
   type AcidBenchKind,

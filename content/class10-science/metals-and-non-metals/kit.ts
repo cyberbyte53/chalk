@@ -1,7 +1,7 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
 import { t } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 import {
   LabMetal,
   MetalSceneKind,

@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, frac, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, frac, settle } from "@chalk/patterns";
 import { terminatingDecimal } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";

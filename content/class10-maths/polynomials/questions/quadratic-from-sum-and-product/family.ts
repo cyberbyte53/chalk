@@ -1,12 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import {
-  choiceQuestion,
-  distinctOptions,
-  exprTex,
-  numberOf,
-  settle,
-} from "@chalk/content-source/patterns";
+import { choiceQuestion, distinctOptions, exprTex, numberOf, settle } from "@chalk/patterns";
 import { polyTex } from "@chalk/prop-polynomials";
 import nerdamer from "nerdamer";
 import { z } from "zod";

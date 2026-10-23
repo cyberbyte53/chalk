@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { goalQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { goalQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { Deed, FiveRAction, FiveRDerived, R_OF, ResScene, fiveRsDef } from "@chalk/prop-resources";
 import { ask, sceneOn } from "../kit";

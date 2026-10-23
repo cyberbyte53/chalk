@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 import { EQUATIONS, EQUATION_NAMES, type EquationName } from "@chalk/prop-chemistry";
 
 const NAMES = EQUATION_NAMES as [EquationName, ...EquationName[]];

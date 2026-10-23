@@ -1,5 +1,5 @@
 import { PassOn, after, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { textDef } from "@chalk/prop-basics";
 import { GearPairAction, GearPairSignal, gearPairDef, squareCutterDef } from "@chalk/prop-primes";
 

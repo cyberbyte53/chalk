@@ -1,6 +1,6 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { magnifier } from "@chalk/content-source/patterns";
 import { dec } from "@chalk/exact";
+import { magnifier } from "@chalk/patterns";
 import { TextStyle, textDef } from "@chalk/prop-basics";
 import { NumberLineDerived, NumberLineSignal, numberLineDef } from "@chalk/prop-number-line";
 

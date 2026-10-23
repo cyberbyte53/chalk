@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, parsePoly, settle } from "@chalk/content-source/patterns";
+import { choiceQuestion, parsePoly, settle } from "@chalk/patterns";
 import {
   BoxMode,
   divisionSteps,

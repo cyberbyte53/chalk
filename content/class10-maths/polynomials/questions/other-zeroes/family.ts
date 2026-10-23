@@ -8,7 +8,7 @@ import {
   parsePoly,
   settle,
   zeroesLabel,
-} from "@chalk/content-source/patterns";
+} from "@chalk/patterns";
 import { niceNumber, polyTex, zeroesWithRepeats } from "@chalk/prop-polynomials";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";

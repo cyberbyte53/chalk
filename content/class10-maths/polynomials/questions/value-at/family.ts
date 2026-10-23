@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, distinctOptions, settle } from "@chalk/content-source/patterns";
+import { choiceQuestion, distinctOptions, settle } from "@chalk/patterns";
 import { niceNumber, polyTex, valueAt } from "@chalk/prop-polynomials";
 
 const clean = (x: number) => Math.round(x * 1e9) / 1e9 + 0;

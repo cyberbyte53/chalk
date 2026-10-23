@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, goalQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, goalQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { ComboKind, SolidsSceneKind, Sum } from "@chalk/prop-solids";
 import { comboOn, revealAll, sceneOn, termsOf } from "../kit";

@@ -1,12 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import {
-  type Option,
-  choiceQuestion,
-  distinctOptions,
-  parsePoly,
-  settle,
-} from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, distinctOptions, parsePoly, settle } from "@chalk/patterns";
 import { PlaneForm, degreeOf, realZeroes, valueAt, zeroPlaneDef } from "@chalk/prop-polynomials";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";

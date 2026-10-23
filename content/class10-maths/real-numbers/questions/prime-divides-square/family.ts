@@ -1,6 +1,6 @@
 import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, primesTex } from "@chalk/content-source/patterns";
+import { choiceQuestion, primesTex } from "@chalk/patterns";
 import { bagOf, isPrime } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";

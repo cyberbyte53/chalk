@@ -1,6 +1,6 @@
 import { type BoardKit, column, space } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 
 /** One multiple-choice question: the right answer, the wrong ones, and why the answer is right. */
 export type Choice = {

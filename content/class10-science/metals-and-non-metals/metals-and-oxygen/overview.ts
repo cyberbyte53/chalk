@@ -1,5 +1,5 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, multiChoiceQuestion, wordsOn } from "@chalk/content-source/patterns";
+import { choiceQuestion, multiChoiceQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import { BenchAction, BenchKind, reactionBenchDef } from "@chalk/prop-chemistry";
 import { LabMetal, MetalSceneKind, Reagent, ce, labOn, sceneOn } from "../kit";

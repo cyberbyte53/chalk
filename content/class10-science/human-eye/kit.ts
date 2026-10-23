@@ -1,6 +1,6 @@
 import { type BoardKit, column, space } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/content-source/patterns";
+import { type Option, choiceQuestion, settle } from "@chalk/patterns";
 import { z } from "zod";
 
 /** One fact to ask about: the prompt, the right answer, and wrong answers that each say what was missed. */
