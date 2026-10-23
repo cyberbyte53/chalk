@@ -9,7 +9,7 @@ The plan is the one artefact the person approves before any code exists, so it c
 
 ## Inputs
 
-- The chapter folder: `content/<book>/<chapter>/` (make it, and the book's folder and `build.yaml`, if they don't exist; add the chapter to the book's `chapters:` list in the right place).
+- The chapter folder: `content/<book>/<chapter>/` (make it, and the book's folder and `build.yaml`, if they don't exist). Don't list the chapter in the book's `chapters:` yet: a listed chapter with no lessons fails the build; `build-lesson` lists it with its first lesson.
 - The source: everything in the chapter's `source/`, or the path the person gives (`content/sources/text/<file>` for the older textbooks). A PDF is read whole, including activities, examples, boxes and exercises.
 - The person's instructions (class, language, what to keep or cut, tone). Write them into `## Open questions` if any is unclear.
 
