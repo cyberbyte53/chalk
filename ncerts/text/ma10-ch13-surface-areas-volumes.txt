@@ -1,0 +1,933 @@
+SURFACE AREAS AND VOLUMES                                                            239
+
+
+
+
+                     SURFACE AREAS AND
+                              VOLUMES                                     13
+13.1 Introduction
+From Class IX, you are familiar with some of the solids like cuboid, cone, cylinder, and
+sphere (see Fig. 13.1). You have also learnt how to find their surface areas and volumes.
+
+
+
+
+                                       Fig. 13.1
+     In our day-to-day life, we come across a number of solids made up of combinations
+of two or more of the basic solids as shown above.
+     You must have seen a truck with a
+container fitted on its back (see Fig. 13.2),
+carrying oil or water from one place to
+another. Is it in the shape of any of the four
+basic solids mentioned above? You may
+guess that it is made of a cylinder with two
+hemispheres as its ends.
+
+                                                              Fig. 13.2
+
+
+
+
+                                         2020-21
+240                                                                       MATHEMATICS
+
+      Again, you may have seen an object like the
+one in Fig. 13.3. Can you name it? A test tube, right!
+You would have used one in your science laboratory.
+This tube is also a combination of a cylinder and a
+hemisphere. Similarly, while travelling, you may have
+seen some big and beautiful buildings or monuments
+made up of a combination of solids mentioned above.
+      If for some reason you wanted to find the
+surface areas, or volumes, or capacities of such
+objects, how would you do it? We cannot classify
+these under any of the solids you have already studied.          Fig. 13.3
+     In this chapter, you will see how to find surface areas and volumes of such
+objects.
+
+13.2 Surface Area of a Combination of Solids
+Let us consider the container seen in Fig. 13.2. How do we find the surface area of
+such a solid? Now, whenever we come across a new problem, we first try to see, if
+we can break it down into smaller problems, we have earlier solved. We can see that
+this solid is made up of a cylinder with two hemispheres stuck at either end. It would
+look like what we have in Fig. 13.4, after we put the pieces all together.
+
+
+
+
+                                       Fig. 13.4
+      If we consider the surface of the newly formed object, we would be able to see
+only the curved surfaces of the two hemispheres and the curved surface of the cylinder.
+     So, the total surface area of the new solid is the sum of the curved surface
+areas of each of the individual parts. This gives,
+      TSA of new solid = CSA of one hemisphere + CSA of cylinder
+                           + CSA of other hemisphere
+where TSA, CSA stand for ‘Total Surface Area’ and ‘Curved Surface Area’
+respectively.
+     Let us now consider another situation. Suppose we are making a toy by putting
+together a hemisphere and a cone. Let us see the steps that we would be going
+through.
+
+
+
+
+                                         2020-21
+SURFACE AREAS AND VOLUMES                                                          241
+
+      First, we would take a cone and a hemisphere and bring their flat faces together.
+Here, of course, we would take the base radius of the cone equal to the radius of the
+hemisphere, for the toy is to have a smooth surface. So, the steps would be as shown
+in Fig. 13.5.
+
+
+
+
+                                       Fig. 13.5
+     At the end of our trial, we have got ourselves a nice round-bottomed toy. Now if
+we want to find how much paint we would require to colour the surface of this toy,
+what would we need to know? We would need to know the surface area of the toy,
+which consists of the CSA of the hemisphere and the CSA of the cone.
+So, we can say:
+          Total surface area of the toy = CSA of hemisphere + CSA of cone
+     Now, let us consider some examples.
+
+Example 1 : Rasheed got a playing top (lattu) as his
+birthday present, which surprisingly had no colour on
+it. He wanted to colour it with his crayons. The top is
+shaped like a cone surmounted by a hemisphere
+(see Fig 13.6). The entire top is 5 cm in height and
+the diameter of the top is 3.5 cm. Find the area he
+                           22
+has to colour. (Take π =      )                                    Fig. 13.6
+                           7
+Solution : This top is exactly like the object we have discussed in Fig. 13.5. So, we
+can conveniently use the result we have arrived at there. That is :
+                  TSA of the toy = CSA of hemisphere + CSA of cone
+                                                      1
+Now, the curved surface area of the hemisphere =        (4πr 2 ) = 2πr 2
+                                                      2
+
+                                                         22 3.5 3.5     2
+                                                   = 2 ×   ×   ×     cm
+                                                         7   2   2  
+
+
+
+
+                                         2020-21
+.
+    242                                                                            MATHEMATICS
+
+    Also, the height of the cone = height of the top – height (radius) of the hemispherical part
+
+                                       3.5 
+                                 = 5 −      cm = 3.25 cm
+                                        2 
+                                                             2
+                                             2   2   3.5          2
+    So, the slant height of the cone (l ) = r + h =       + (3.25) cm = 3.7 cm (approx.)
+                                                      2  
+
+                                       22 3.5        
+    Therefore, CSA of cone = πrl =       ×     × 3.7  cm 2
+                                       7     2       
+    This gives the surface area of the top as
+                 22 3.5 3.5    2   22 3.5       
+           = 2 ×   ×   ×     cm +    ×    × 3.7  cm 2
+                 7   2   2         7   2        
+              22 3.5                       11
+           =     ×     ( 3.5 + 3.7 ) cm 2 = × (3.5 + 3.7) cm 2 = 39.6 cm2 (approx.)
+              7     2                       2
+         You may note that ‘total surface area of the top’ is not the sum of the total
+    surface areas of the cone and hemisphere.
+
+    Example 2 : The decorative block shown
+    in Fig. 13.7 is made of two solids — a cube
+    and a hemisphere. The base of the block is a
+    cube with edge 5 cm, and the hemisphere
+    fixed on the top has a diameter of 4.2 cm.
+    Find the total surface area of the block.
+                22
+    (Take π =       )
+                 7                                                 Fig. 13.7
+    Solution : The total surface area of the cube = 6 × (edge)2 = 6 × 5 × 5 cm2 = 150 cm2.
+    Note that the part of the cube where the hemisphere is attached is not included in the
+    surface area.
+    So,         the surface area of the block = TSA of cube – base area of hemisphere
+                                                 + CSA of hemisphere
+                                               = 150 – πr2 + 2 πr2 = (150 + πr2) cm2
+                                                              22 4.2 4.2 
+                                                = 150 cm2 +  ×        ×     cm 2
+                                                              7    2     2 
+                                                = (150 + 13.86) cm2 = 163.86 cm2
+
+
+
+
+                                              2020-21
+SURFACE AREAS AND VOLUMES                                                              243
+
+Example 3 : A wooden toy rocket is in the
+shape of a cone mounted on a cylinder, as
+shown in Fig. 13.8. The height of the entire
+rocket is 26 cm, while the height of the conical
+part is 6 cm. The base of the conical portion
+has a diameter of 5 cm, while the base
+diameter of the cylindrical portion is 3 cm. If
+the conical portion is to be painted orange
+and the cylindrical portion yellow, find the
+area of the rocket painted with each of these
+colours. (Take π = 3.14)
+Solution : Denote radius of cone by r, slant
+height of cone by l, height of cone by h, radius
+of cylinder by r′ and height of cylinder by h′.
+Then r = 2.5 cm, h = 6 cm, r′ = 1.5 cm,
+h′ = 26 – 6 = 20 cm and                                          Fig. 13.8
+
+                    l=     r 2 + h2 =    2.52 + 62 cm = 6.5 cm
+Here, the conical portion has its circular base resting on the base of the cylinder, but
+the base of the cone is larger than the base of the cylinder. So, a part of the base of the
+cone (a ring) is to be painted.
+So,      the area to be painted orange = CSA of the cone + base area of the cone
+                                         – base area of the cylinder
+                                          = πrl + πr2 – π(r′)2
+                                          = π[(2.5 × 6.5) + (2.5)2 – (1.5)2] cm2
+                                          = π[20.25] cm2 = 3.14 × 20.25 cm2
+                                          = 63.585 cm2
+Now,      the area to be painted yellow = CSA of the cylinder
+                                          + area of one base of the cylinder
+                                          = 2πr′h′ + π(r′)2
+                                          = πr′ (2h′ + r′)
+                                          = (3.14 × 1.5) (2 × 20 + 1.5) cm2
+                                          = 4.71 × 41.5 cm2
+                                          = 195.465 cm2
+
+
+
+
+                                          2020-21
+244                                                                              MATHEMATICS
+
+Example 4 : Mayank made a bird-bath for his garden
+in the shape of a cylinder with a hemispherical
+depression at one end (see Fig. 13.9). The height of
+the cylinder is 1.45 m and its radius is 30 cm. Find the
+                                                  22
+total surface area of the bird-bath. (Take π =        )
+                                                   7
+Solution : Let h be height of the cylinder, and r the
+common radius of the cylinder and hemisphere. Then,          Fig. 13.9
+the total surface area of the bird-bath = CSA of cylinder + CSA of hemisphere
+                                            = 2πrh + 2πr2 = 2π r (h + r)
+                                                  22
+                                            = 2×     × 30(145 + 30) cm 2
+                                                  7
+                                            = 33000 cm2 = 3.3 m2
+
+                                     EXERCISE 13.1
+                               22
+Unless stated otherwise, take π = ⋅
+                                7
+   1. 2 cubes each of volume 64 cm3 are joined end to end. Find the surface area of the
+      resulting cuboid.
+   2. A vessel is in the form of a hollow hemisphere mounted by a hollow cylinder. The
+      diameter of the hemisphere is 14 cm and the total height of the vessel is 13 cm. Find the
+      inner surface area of the vessel.
+   3. A toy is in the form of a cone of radius 3.5 cm mounted on a hemisphere of same radius.
+      The total height of the toy is 15.5 cm. Find the total surface area of the toy.
+   4. A cubical block of side 7 cm is surmounted by a hemisphere. What is the greatest
+      diameter the hemisphere can have? Find the surface area of the solid.
+   5. A hemispherical depression is cut out from one face of a cubical wooden block such
+      that the diameter l of the hemisphere is equal to the edge of the cube. Determine the
+      surface area of the remaining solid.
+   6. A medicine capsule is in the shape of a
+      cylinder with two hemispheres stuck to each
+      of its ends (see Fig. 13.10). The length of
+      the entire capsule is 14 mm and the diameter
+      of the capsule is 5 mm. Find its surface area.              Fig. 13.10
+
+
+
+
+                                            2020-21
+SURFACE AREAS AND VOLUMES                                                                    245
+
+   7. A tent is in the shape of a cylinder surmounted by a conical top. If the height and
+      diameter of the cylindrical part are 2.1 m and 4 m respectively, and the slant height of the
+      top is 2.8 m, find the area of the canvas used for making the tent. Also, find the cost of
+      the canvas of the tent at the rate of ` 500 per m2. (Note that the base of the tent will not
+      be covered with canvas.)
+   8. From a solid cylinder whose height is 2.4 cm and diameter 1.4 cm, a conical cavity of the
+      same height and same diameter is hollowed out. Find the total surface area of the
+      remaining solid to the nearest cm2.
+   9. A wooden article was made by scooping
+      out a hemisphere from each end of a solid
+      cylinder, as shown in Fig. 13.11. If the
+      height of the cylinder is 10 cm, and its
+      base is of radius 3.5 cm, find the total
+      surface area of the article.
+
+13.3 Volume of a Combination of Solids                                  Fig. 13.11
+In the previous section, we have discussed how to find the surface area of solids made
+up of a combination of two basic solids. Here, we shall see how to calculate their
+volumes. It may be noted that in calculating the surface area, we have not added the
+surface areas of the two constituents, because some part of the surface area disappeared
+in the process of joining them. However, this will not be the case when we calculate
+the volume. The volume of the solid formed by joining two basic solids will actually be
+the sum of the volumes of the constituents, as we see in the examples below.
+
+Example 5 : Shanta runs an industry in
+a shed which is in the shape of a cuboid
+surmounted by a half cylinder (see Fig.
+13.12). If the base of the shed is of
+dimension 7 m × 15 m, and the height of
+the cuboidal portion is 8 m, find the volume
+of air that the shed can hold. Further,
+suppose the machinery in the shed
+occupies a total space of 300 m3, and
+there are 20 workers, each of whom
+occupy about 0.08 m 3 space on an
+average. Then, how much air is in the
+                                                                  Fig. 13.12
+                22
+shed? (Take π =    )
+                7
+
+
+
+
+                                            2020-21
+246                                                                          MATHEMATICS
+
+Solution : The volume of air inside the shed (when there are no people or machinery)
+is given by the volume of air inside the cuboid and inside the half cylinder, taken
+together.
+Now, the length, breadth and height of the cuboid are 15 m, 7 m and 8 m, respectively.
+Also, the diameter of the half cylinder is 7 m and its height is 15 m.
+
+                                                         1
+So, the required volume = volume of the cuboid +           volume of the cylinder
+                                                         2
+
+                                            1 22 7 7    
+                              = 15 × 7 × 8 + ×  × × × 15 m3 = 1128.75 m3
+                                            2 7 2 2     
+Next, the total space occupied by the machinery = 300 m3
+And the total space occupied by the workers = 20 × 0.08 m3 = 1.6 m3
+Therefore, the volume of the air, when there are machinery and workers
+                                            = 1128.75 – (300.00 + 1.60) = 827.15 m3
+Example 6 : A juice seller was serving his
+customers using glasses as shown in Fig. 13.13.
+The inner diameter of the cylindrical glass was
+5 cm, but the bottom of the glass had a
+hemispherical raised portion which reduced the
+capacity of the glass. If the height of a glass
+was 10 cm, find the apparent capacity of the
+glass and its actual capacity. (Use π = 3.14.)                  Fig. 13.13
+Solution : Since the inner diameter of the glass = 5 cm and height = 10 cm,
+        the apparent capacity of the glass = πr 2 h
+                                            = 3.14 × 2.5 × 2.5 × 10 cm3 = 196.25 cm3
+     But the actual capacity of the glass is less by the volume of the hemisphere at the
+base of the glass.
+                                    2 3 2                             3
+i.e.,               it is less by     πr = × 3.14 × 2.5 × 2.5 × 2.5 cm = 32.71 cm3
+                                    3     3
+So, the actual capacity of the glass = apparent capacity of glass – volume of the
+                                       hemisphere
+                                     = (196.25 – 32.71) cm3
+                                         = 163.54 cm3
+
+
+
+
+                                            2020-21
+SURFACE AREAS AND VOLUMES                                                                     247
+
+Example 7 : A solid toy is in the form of a
+hemisphere surmounted by a right circular cone. The
+height of the cone is 2 cm and the diameter of the
+base is 4 cm. Determine the volume of the toy. If a
+right circular cylinder circumscribes the toy, find the
+difference of the volumes of the cylinder and the toy.
+(Take π = 3.14)
+                                                            Fig. 13.14
+Solution : Let BPC be the hemisphere and ABC be the cone standing on the base
+of the hemisphere (see Fig. 13.14). The radius BO of the hemisphere (as well as
+               1
+of the cone) =   × 4 cm = 2 cm.
+               2
+                         2 3 1 2
+So, volume of the toy = πr + πr h
+                         3       3
+                             2                1                  
+                          =  × 3.14 × (2)3 + × 3.14 × (2) 2 × 2 cm3 = 25.12 cm3
+                             3                3                  
+Now, let the right circular cylinder EFGH circumscribe the given solid. The radius of
+the base of the right circular cylinder = HP = BO = 2 cm, and its height is
+              EH = AO + OP = (2 + 2) cm = 4 cm
+So, the volume required = volume of the right circular cylinder – volume of the toy
+                        = (3.14 × 22 × 4 – 25.12) cm3
+                        = 25.12 cm3
+Hence, the required difference of the two volumes = 25.12 cm3.
+
+                                     EXERCISE 13.2
+                                   22
+Unless stated otherwise, take π =      .
+                                   7
+  1 . A solid is in the shape of a cone standing on a hemisphere with both their radii being
+      equal to 1 cm and the height of the cone is equal to its radius. Find the volume of the solid
+      in terms of π.
+   2. Rachel, an engineering student, was asked to make a model shaped like a cylinder with
+      two cones attached at its two ends by using a thin aluminium sheet. The diameter of the
+      model is 3 cm and its length is 12 cm. If each cone has a height of 2 cm, find the volume
+      of air contained in the model that Rachel made. (Assume the outer and inner dimensions
+      of the model to be nearly the same.)
+
+
+
+
+                                             2020-21
+248                                                                                  MATHEMATICS
+
+   3. A gulab jamun, contains sugar syrup up to about
+      30% of its volume. Find approximately how much
+      syrup would be found in 45 gulab jamuns, each
+      shaped like a cylinder with two hemispherical ends
+      with length 5 cm and diameter 2.8 cm (see Fig. 13.15).
+
+
+
+
+   4. A pen stand made of wood is in the shape of a                      Fig. 13.15
+      cuboid with four conical depressions to hold pens.
+      The dimensions of the cuboid are 15 cm by 10 cm by
+      3.5 cm. The radius of each of the depressions is 0.5
+      cm and the depth is 1.4 cm. Find the volume of
+      wood in the entire stand (see Fig. 13.16).
+   5. A vessel is in the form of an inverted cone. Its
+      height is 8 cm and the radius of its top, which is
+      open, is 5 cm. It is filled with water up to the brim.
+      When lead shots, each of which is a sphere of radius
+      0.5 cm are dropped into the vessel, one-fourth of
+      the water flows out. Find the number of lead shots
+      dropped in the vessel.                                             Fig. 13.16
+   6. A solid iron pole consists of a cylinder of height 220 cm and base diameter 24 cm, which
+      is surmounted by another cylinder of height 60 cm and radius 8 cm. Find the mass of the
+      pole, given that 1 cm3 of iron has approximately 8g mass. (Use π = 3.14)
+   7. A solid consisting of a right circular cone of height 120 cm and radius 60 cm standing on
+      a hemisphere of radius 60 cm is placed upright in a right circular cylinder full of water
+      such that it touches the bottom. Find the volume of water left in the cylinder, if the radius
+      of the cylinder is 60 cm and its height is 180 cm.
+   8. A spherical glass vessel has a cylindrical neck 8 cm long, 2 cm in diameter; the diameter
+      of the spherical part is 8.5 cm. By measuring the amount of water it holds, a child finds its
+      volume to be 345 cm3. Check whether she is correct, taking the above as the inside
+      measurements, and π = 3.14.
+
+13.4 Conversion of Solid from One Shape to Another
+We are sure you would have seen candles.
+Generally, they are in the shape of a cylinder.
+You may have also seen some candles
+shaped like an animal (see Fig. 13.17).
+
+                                                                   Fig. 13.17
+
+
+
+
+                                             2020-21
+SURFACE AREAS AND VOLUMES                                                             249
+
+      How are they made? If you want a candle of any special shape, you will have to
+heat the wax in a metal container till it becomes completely liquid. Then you will have to
+pour it into another container which has the special shape that you want. For example,
+take a candle in the shape of a solid cylinder, melt it and pour whole of the molten wax
+into another container shaped like a rabbit. On cooling, you will obtain a candle in the
+shape of the rabbit. The volume of the new candle will be the same as the volume of
+the earlier candle. This is what we
+have to remember when we come
+across objects which are converted
+from one shape to another, or when
+a liquid which originally filled one
+container of a particular shape is
+poured into another container of a
+different shape or size, as you see in                      Fig. 13.18
+Fig 13.18.
+      To understand what has been discussed, let us consider some examples.
+
+Example 8: A cone of height 24 cm and radius of base 6 cm is made up of modelling
+clay. A child reshapes it in the form of a sphere. Find the radius of the sphere.
+                                 1
+Solution : Volume of cone =         × π × 6 × 6 × 24 cm3
+                                 3
+                                                      4 3
+If r is the radius of the sphere, then its volume is π r .
+                                                      3
+Since, the volume of clay in the form of the cone and the sphere remains the same, we
+have
+                               4              1
+                                 × π × r 3 = × π × 6 × 6 × 24
+                               3              3
+i.e.,                                   r3 = 3 × 3 × 24 = 33 × 23
+So,                                    r= 3×2=6
+Therefore, the radius of the sphere is 6 cm.
+
+Example 9 : Selvi’s house has an overhead tank in the shape of a cylinder. This
+is filled by pumping water from a sump (an underground tank) which is in the
+shape of a cuboid. The sump has dimensions 1.57 m × 1.44 m × 95cm. The
+overhead tank has its radius 60 cm and height 95 cm. Find the height of the water
+left in the sump after the overhead tank has been completely filled with water
+from the sump which had been full. Compare the capacity of the tank with that of
+the sump. (Use π = 3.14)
+
+
+
+
+                                         2020-21
+250                                                                           MATHEMATICS
+
+Solution : The volume of water in the overhead tank equals the volume of the water
+removed from the sump.
+Now, the volume of water in the overhead tank (cylinder) = πr2h
+                                              = 3.14 × 0.6 × 0.6 × 0.95 m3
+The volume of water in the sump when full = l × b × h = 1.57 × 1.44 × 0.95 m3
+The volume of water left in the sump after filling the tank
+= [(1.57 × 1.44 × 0.95) – (3.14 × 0.6 × 0.6 × 0.95)] m3 = (1.57 × 0.6 × 0.6 × 0.95 × 2) m3
+                                                     volume of water left in the sump
+So, the height of the water left in the sump =
+                                                                 l×b
+                                                     1.57 × 0.6 × 0.6 × 0.95 × 2
+                                             =                                   m
+                                                             1.57 × 1.44
+                                             = 0.475 m = 47.5 cm
+
+                         Capacity of tank   3.14 × 0.6 × 0.6 × 0.95 1
+Also,                                     =                        =
+                         Capacity of sump     1.57 × 1.44 × 0.95     2
+Therefore, the capacity of the tank is half the capacity of the sump.
+
+Example 10 : A copper rod of diameter 1 cm and length 8 cm is drawn into a wire of
+length 18 m of uniform thickness. Find the thickness of the wire.
+                                                 2
+                                       1
+Solution : The volume of the rod = π ×   × 8 cm3 = 2 π cm3 .
+                                       2
+The length of the new wire of the same volume = 18 m = 1800 cm
+If r is the radius (in cm) of cross-section of the wire, its volume = π × r2 × 1800 cm3
+Therefore,              π × r2 × 1800 = 2π
+                                          1
+i.e.,                               r2 =
+                                         900
+                                          1
+i.e.,                                r=
+                                         30
+                                                                               1
+So, the diameter of the cross section, i.e., the thickness of the wire is          cm,
+                                                                              15
+i.e., 0.67mm (approx.).
+                                                                                      4
+Example 11 : A hemispherical tank full of water is emptied by a pipe at the rate of 3
+                                                                                      7
+litres per second. How much time will it take to empty half the tank, if it is 3m in
+                    22
+diameter? (Take π =     )
+                     7
+
+
+
+
+                                         2020-21
+SURFACE AREAS AND VOLUMES                                                                      251
+
+
+                                                        3
+Solution : Radius of the hemispherical tank =             m
+                                                        2
+                                                                   3
+                                                        2 22  3      99 3
+                             Volume of the tank =        ×  ×   m3 =    m
+                                                        3 7 2        14
+
+                                                        1 99 3 99
+So, the volume of the water to be emptied =              ×   m =    × 1000 litres
+                                                        2 14     28
+                                                        99000
+                                                   =          litres
+                                                          28
+
+
+          25                                         99000
+Since,       litres of water is emptied in 1 second,       litres of water will be emptied
+          7                                            28
+     99000 7
+in        ×    seconds, i.e., in 16.5 minutes.
+       28   25
+
+                                       EXERCISE 13.3
+            22
+Take π =       , unless stated otherwise.
+            7
+     1. A metallic sphere of radius 4.2 cm is melted and recast into the shape of a cylinder of
+        radius 6 cm. Find the height of the cylinder.
+     2. Metallic spheres of radii 6 cm, 8 cm and 10 cm, respectively, are melted to form a single
+        solid sphere. Find the radius of the resulting sphere.
+     3. A 20 m deep well with diameter 7 m is dug and the earth from digging is evenly spread out
+        to form a platform 22 m by 14 m. Find the height of the platform.
+     4. A well of diameter 3 m is dug 14 m deep. The earth taken out of it has been spread evenly
+        all around it in the shape of a circular ring of width 4 m to form an embankment. Find the
+        height of the embankment.
+     5. A container shaped like a right circular cylinder having diameter 12 cm and height 15 cm
+        is full of ice cream. The ice cream is to be filled into cones of height 12 cm and diameter
+        6 cm, having a hemispherical shape on the top. Find the number of such cones which can
+        be filled with ice cream.
+     6. How many silver coins, 1.75 cm in diameter and of thickness 2 mm, must be melted to form
+        a cuboid of dimensions 5.5 cm × 10 cm × 3.5 cm?
+
+
+
+
+                                              2020-21
+252                                                                                MATHEMATICS
+
+   7. A cylindrical bucket, 32 cm high and with radius of base 18 cm, is filled with sand. This
+      bucket is emptied on the ground and a conical heap of sand is formed. If the height of the
+      conical heap is 24 cm, find the radius and slant height of the heap.
+   8. Water in a canal, 6 m wide and 1.5 m deep, is flowing with a speed of 10 km/h. How much
+      area will it irrigate in 30 minutes, if 8 cm of standing water is needed?
+   9. A farmer connects a pipe of internal diameter 20 cm from a canal into a cylindrical tank in
+      her field, which is 10 m in diameter and 2 m deep. If water flows through the pipe at the
+      rate of 3 km/h, in how much time will the tank be filled?
+
+13.5 Frustum of a Cone
+In Section 13.2, we observed objects that are formed when two basic solids were
+joined together. Let us now do something different. We will take a right circular cone
+and remove a portion of it. There are so many ways
+in which we can do this. But one particular case that
+we are interested in is the removal of a smaller right
+circular cone by cutting the given cone by a plane
+parallel to its base. You must have observed that the
+glasses (tumblers), in general, used for drinking water,
+are of this shape. (See Fig. 13.19)                             Fig. 13.19
+Activity 1 : Take some clay, or any other such material (like plasticine, etc.) and form
+a cone. Cut it with a knife parallel to its base. Remove the smaller cone. What are you
+left with?You are left with a solid called a frustum of the cone. You can see that this
+has two circular ends with different radii.
+      So, given a cone, when we slice (or cut) through it with a plane parallel to its base
+(see Fig. 13.20) and remove the cone that is formed on one side of that plane, the part
+that is now left over on the other side of the plane is called a frustum* of the cone.
+
+
+
+
+                                           Fig. 13.20
+*‘Frustum’ is a latin word meaning ‘piece cut off’, and its plural is ‘frusta’.
+
+
+
+
+                                             2020-21
+SURFACE AREAS AND VOLUMES                                                        253
+
+     How can we find the surface area and volume of a frustum of a cone? Let
+us explain it through an example.
+
+Example 12 : The radii of the ends of a frustum
+of a cone 45 cm high are 28 cm and 7 cm
+(see Fig. 13.21). Find its volume, the curved
+surface area and the total suface area
+             22
+(Take π =       ).
+             7
+Solution : The frustum can be viewed as a dif-
+ference of two right circular cones OAB and
+OCD (see Fig. 13.21). Let the height (in cm)
+of the cone OAB be h1 and its slant height l1,
+i.e., OP = h1 and OA = OB = l1. Let h2 be the
+height of cone OCD and l2 its slant height.                       Fig. 13.21
+We have : r1 = 28 cm, r2 = 7 cm
+and the height of frustum (h) = 45 cm. Also,
+                                       h1 = 45 + h2                              (1)
+    We first need to determine the respective heights h1 and h2 of the cone OAB
+and OCD.
+     Since the triangles OPB and OQD are similar (Why?), we have
+
+                                 h1 28    4
+                                    =   =                                        (2)
+                                 h2   7   1
+From (1) and (2), we get h2 = 15 and h1 = 60.
+Now, the volume of the frustum
+              = volume of the cone OAB – volume of the cone OCD
+
+                 1 22                  1 22                
+              =  ⋅    ⋅ (28) 2 ⋅ (60) − ⋅   ⋅ (7) 2 ⋅ (15)  cm3 = 48510 cm3
+                3 7                    3 7                 
+     The respective slant height l2 and l1 of the cones OCD and OAB are given
+by
+            l2 =     (7)2 + (15) 2 = 16.55 cm (approx.)
+
+            l1 =     (28) 2 + (60) 2 = 4 (7) 2 + (15) 2 = 4 × 16.55 = 66.20 cm
+
+
+
+
+                                          2020-21
+254                                                                                     MATHEMATICS
+
+      Thus, the curved surface area of the frustum = πr1l1 – πr2l2
+                 22                22
+               =     (28)(66.20) –     (7)(16.55) = 5461.5 cm2
+                  7                 7
+      Now, the total surface area of the frustum
+
+               = the curved surface area + πr12 + πr22
+
+                              22               22 2 2
+               = 5461.5 cm2 +    (28) 2 cm 2 +   (7) cm
+                               7               7
+               = 5461.5 cm2 + 2464 cm2 + 154 cm2 = 8079.5 cm2.
+     Let h be the height, l the slant height and r1 and r2 the radii of the ends
+(r1 > r2) of the frustum of a cone. Then we can directly find the volume, the
+curved surace area and the total surface area of frustum by using the formulae
+given below :
+                                                 1
+        (i) Volume of the frustum of the cone =    πh(r12 + r22 + r1r2 ) .
+                                                 3
+       (ii) the curved surface area of the frustum of the cone = π(r1 + r2)l
+           where l =     h2 + (r1 − r2 ) 2 .
+       (iii) Total surface area of the frustum of the cone = πl (r1 + r2) + πr12 + πr22,
+
+           where l =    h2 + (r1 − r2 ) 2 .
+      These formulae can be derived using the idea of similarity of triangles but we
+shall not be doing derivations here.
+      Let us solve Example 12, using these formulae :
+
+                                           1
+        (i) Volume of the frustum =
+                                           3
+                                                   (
+                                             π h r12 + r22 + r1r2    )
+                                           1 22
+                                       =    ⋅   ⋅ 45 ⋅ (28) 2 + (7) 2 + (28)(7)  cm3
+                                           3 7
+                                       = 48510 cm3
+                                                              2
+       (ii) We have                  l=        h 2 + ( r1 − r2 ) =       (45) 2 + (28 − 7) 2 cm
+
+                                       = 3 (15) 2 + (7) 2 = 49.65 cm
+
+
+
+
+                                               2020-21
+SURFACE AREAS AND VOLUMES                                                                255
+
+           So, the curved surface area of the frustum
+
+                                         22
+                      = π(r1 + r2) l =      (28 + 7) (49.65) = 5461.5 cm2
+                                         7
+      (iii) Total surface area of the frustum
+                                                                2       2
+                                    = π ( r1 + r2 ) l + πr1 + πr2
+
+                                                       22         22 2 
+                                    = 5461.5 +            (28)2 +   (7)  cm2 = 8079.5 cm2
+                                                       7          7     
+Let us apply these formulae in some examples.
+
+Example 13 : Hanumappa and his wife Gangamma are
+busy making jaggery out of sugarcane juice. They have
+processed the sugarcane juice to make the molasses,
+which is poured into moulds in the shape of a frustum of
+a cone having the diameters of its two circular faces as
+30 cm and 35 cm and the vertical height of the mould is
+14 cm (see Fig. 13.22). If each cm3 of molasses has
+                                                                            Fig. 13.22
+mass about 1.2 g, find the mass of the molasses that can
+                                     22 
+be poured into each mould.  Take π =
+                                     7 
+Solution : Since the mould is in the shape of a frustum of a cone, the quantity (volume)
+                                              π
+of molasses that can be poured into it =        h ( r12 + r22 + r1 r2 ) ,
+                                              3
+
+where r1 is the radius of the larger base and r2 is the radius of the smaller base.
+
+                      1 22        35 2  30 2  35 30  3
+                    = 3 × 7 × 14  2  +  2  +  2 × 2  cm = 11641.7 cm3.
+                                                   
+
+It is given that 1 cm3 of molasses has mass 1.2g. So, the mass of the molasses that can
+be poured into each mould = (11641.7 × 1.2) g
+
+                            = 13970.04 g = 13.97 kg = 14 kg (approx.)
+
+
+
+
+                                             2020-21
+256                                                                               MATHEMATICS
+
+Example 14 : An open metal bucket is in the
+shape of a frustum of a cone, mounted on a
+hollow cylindrical base made of the same me-
+tallic sheet (see Fig. 13.23). The diameters of
+the two circular ends of the bucket are 45 cm
+and 25 cm, the total vertical height of the bucket
+is 40 cm and that of the cylindrical base is
+6 cm. Find the area of the metallic sheet used
+to make the bucket, where we do not take into
+account the handle of the bucket. Also, find
+the volume of water the bucket can hold.                             Fig. 13.23
+            22
+ Take π =       .
+            7
+Solution : The total height of the bucket = 40 cm, which includes the height of the
+base. So, the height of the frustum of the cone = (40 – 6) cm = 34 cm.
+
+Therefore, the slant height of the frustum, l =      h2 + (r1 − r2 ) 2 ,
+
+where r1 = 22.5 cm, r2 = 12.5 cm and h = 34 cm.
+
+So,                              l=     342 + (22.5 − 12.5) 2 cm
+
+
+                                  =     342 + 102 = 35.44 cm
+
+The area of metallic sheet used = curved surface area of frustum of cone
+                                       + area of circular base
+                                       + curved surface area of cylinder
+
+                                   = [π × 35.44 (22.5 + 12.5) + π × (12.5)2
+                                        + 2π × 12.5 × 6] cm2
+
+                                        22
+                                   =       (1240.4 + 156.25 + 150) cm2
+                                        7
+                                   = 4860.9 cm2
+
+
+
+
+                                           2020-21
+SURFACE AREAS AND VOLUMES                                                                     257
+
+      Now, the volume of water that the bucket can hold (also, known as the capacity
+of the bucket)
+
+                                         π×h
+                                     =       × ( r12 + r22 + r1r2 )
+                                          3
+
+                                         22 34
+                                     =     ×   × [(22.5) 2 + (12.5) 2 + 22.5 × 12.5] cm3
+                                         7   3
+
+                                         22 34
+                                     =     ×   × 943.75 = 33615.48 cm3
+                                         7   3
+                                     = 33.62 litres (approx.)
+
+                                     EXERCISE 13.4
+
+          22
+Use π =      unless stated otherwise.
+          7
+  1. A drinking glass is in the shape of a frustum of a
+     cone of height 14 cm. The diameters of its two
+     circular ends are 4 cm and 2 cm. Find the capacity of
+     the glass.
+  2. The slant height of a frustum of a cone is 4 cm and
+     the perimeters (circumference) of its circular ends
+     are 18 cm and 6 cm. Find the curved surface area of
+     the frustum.
+  3. A fez, the cap used by the Turks, is shaped like the
+     frustum of a cone (see Fig. 13.24). If its radius on the
+     open side is 10 cm, radius at the upper base is 4 cm
+     and its slant height is 15 cm, find the area of material           Fig. 13.24
+     used for making it.
+  4. A container, opened from the top and made up of a metal sheet, is in the form of a
+     frustum of a cone of height 16 cm with radii of its lower and upper ends as 8 cm and 20
+     cm, respectively. Find the cost of the milk which can completely fill the container, at the
+     rate of ` 20 per litre. Also find the cost of metal sheet used to make the container, if it
+     costs ` 8 per 100 cm2. (Take π = 3.14)
+  5. A metallic right circular cone 20 cm high and whose vertical angle is 60° is cut into two
+     parts at the middle of its height by a plane parallel to its base. If the frustum so obtained
+                                          1
+     be drawn into a wire of diameter       cm, find the length of the wire.
+                                         16
+
+
+
+
+                                             2020-21
+258                                                                                   MATHEMATICS
+
+                              EXERCISE 13.5 (Optional)*
+   1. A copper wire, 3 mm in diameter, is wound about a cylinder whose length is 12 cm, and
+      diameter 10 cm, so as to cover the curved surface of the cylinder. Find the length and
+      mass of the wire, assuming the density of copper to be 8.88 g per cm3.
+   2. A right triangle, whose sides are 3 cm and 4 cm (other than hypotenuse) is made to
+      revolve about its hypotenuse. Find the volume and surface area of the double cone so
+      formed. (Choose value of π as found appropriate.)
+   3. A cistern, internally measuring 150 cm × 120 cm × 110 cm, has 129600 cm3 of water in it.
+      Porous bricks are placed in the water until the cistern is full to the brim. Each brick
+      absorbs one-seventeenth of its own volume of water. How many bricks can be put in
+      without overflowing the water, each brick being 22.5 cm × 7.5 cm × 6.5 cm?
+   4. In one fortnight of a given month, there was a rainfall of 10 cm in a river valley. If the area
+      of the valley is 7280 km2, show that the total rainfall was approximately equivalent to
+      the addition to the normal water of three rivers each 1072 km long, 75 m wide and 3 m
+      deep.
+   5. An oil funnel made of tin sheet consists of a
+      10 cm long cylindrical portion attached to a
+      frustum of a cone. If the total height is 22 cm,
+      diameter of the cylindrical portion is 8 cm and
+      the diameter of the top of the funnel is 18 cm,
+      find the area of the tin sheet required to make
+      the funnel (see Fig. 13.25).
+                                                                      Fig. 13.25
+   6. Derive the formula for the curved surface area and total surface area of the frustum of a
+      cone, given to you in Section 13.5, using the symbols as explained.
+   7. Derive the formula for the volume of the frustum of a cone, given to you in Section 13.5,
+      using the symbols as explained.
+
+13.6 Summary
+In this chapter, you have studied the following points:
+   1. To determine the surface area of an object formed by combining any two of the basic
+      solids, namely, cuboid, cone, cylinder, sphere and hemisphere.
+   2. To find the volume of objects formed by combining any two of a cuboid, cone, cylinder,
+      sphere and hemisphere.
+
+
+* These exercises are not from the examination point of view.
+
+
+
+
+                                              2020-21
+SURFACE AREAS AND VOLUMES                                                                     259
+
+  3. Given a right circular cone, which is sliced through by a plane parallel to its base, when
+     the smaller conical portion is removed, the resulting solid is called a Frustum of a Right
+     Circular Cone.
+  4. The formulae involving the frustum of a cone are:
+
+                                              1
+       (i) Volume of a frustum of a cone =
+                                              3
+                                                   (               )
+                                                πh r12 + r22 + r1r2 .
+
+
+                                                                                                2
+       (ii) Curved surface area of a frustum of a cone = πl(r1 + r2) where l =   h2 + ( r1 − r2 ) .
+
+      (iii) Total surface area of frustum of a cone = πl(r1 + r2) + π(r12 + r22) where
+           h = vertical height of the frustum, l = slant height of the frustum
+           r1 and r2 are radii of the two bases (ends) of the frustum.
+
+
+
+
+                                            2020-21
+
