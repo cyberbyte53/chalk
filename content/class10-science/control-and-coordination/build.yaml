@@ -1,0 +1,11 @@
+title: { en: "Control and Coordination", hi: "नियंत्रण एवं समन्वय" }
+# Concepts in book order (NCERT Chapter 7, the full 2020-21 edition).
+concepts:
+  - responding-to-change
+  - reflex-actions
+  - brain-and-action
+  - how-plants-move
+  - plant-hormones
+  - hormones-in-animals
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

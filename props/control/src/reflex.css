@@ -1,0 +1,182 @@
+/* reflexArc */
+.cr {
+  display: flex;
+  flex-direction: column;
+}
+.cr-svg {
+  display: block;
+  overflow: hidden;
+}
+.cr-bg {
+  fill: var(--color-surface-container);
+}
+.cr-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+}
+.cr-shirt {
+  fill: color-mix(in srgb, var(--color-category-4) 35%, var(--color-surface));
+}
+.cr-arm {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+  stroke-width: 16px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cr-blister {
+  fill: var(--color-wrong);
+  opacity: 0.8;
+}
+.cr-muscle {
+  fill: color-mix(in srgb, var(--color-wrong) 55%, var(--color-surface));
+  stroke: var(--color-wrong);
+  stroke-width: 1.5px;
+}
+.cr-tawa {
+  fill: var(--color-inverse-surface);
+}
+.cr-heat {
+  fill: none;
+  stroke: var(--color-wrong);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+.cr-brain {
+  fill: color-mix(in srgb, var(--color-category-1) 40%, var(--color-surface));
+  stroke: var(--color-category-1);
+  stroke-width: 2px;
+}
+.cr-brain.is-lit {
+  fill: var(--color-primary-container);
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.cr-cord {
+  fill: color-mix(in srgb, var(--color-category-1) 25%, var(--color-surface));
+  stroke: var(--color-category-1);
+  stroke-width: 1px;
+}
+.cr-section {
+  fill: color-mix(in srgb, var(--color-category-1) 20%, var(--color-surface));
+  stroke: var(--color-category-1);
+  stroke-width: 2px;
+}
+.cr-grey {
+  fill: color-mix(in srgb, var(--color-category-1) 45%, var(--color-surface));
+}
+.cr-sensory,
+.cr-motor,
+.cr-relay,
+.cr-up,
+.cr-down {
+  fill: none;
+  stroke-width: 2.2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.45;
+}
+.cr-sensory {
+  stroke: var(--color-category-2);
+}
+.cr-motor {
+  stroke: var(--color-primary);
+}
+.cr-relay {
+  stroke: var(--color-secondary);
+}
+.cr-up,
+.cr-down {
+  stroke: var(--color-secondary);
+  stroke-dasharray: 3 3;
+}
+.cr-sensory.is-lit,
+.cr-motor.is-lit,
+.cr-relay.is-lit,
+.cr-up.is-lit,
+.cr-down.is-lit {
+  opacity: 1;
+  stroke-width: 3px;
+}
+.cr-flow {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-dasharray: 5 8;
+  animation: cr-run 0.8s linear infinite;
+}
+.cr-dot circle {
+  fill: var(--color-secondary);
+}
+.cr-dot .cr-halo {
+  opacity: 0.3;
+  animation: cr-pulse 1s ease-in-out infinite;
+}
+.cr-think {
+  font: 800 14px var(--font-display);
+  fill: var(--color-primary);
+}
+.cr-names text {
+  font: 600 10px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.cr-names .cr-name-sensory {
+  fill: var(--color-category-2);
+  font-weight: 700;
+}
+.cr-names .cr-name-motor {
+  fill: var(--color-primary);
+  font-weight: 700;
+}
+.cr-names .cr-name-also {
+  fill: var(--color-secondary);
+  font-weight: 700;
+}
+.cr-time text {
+  font: 600 10px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.cr-bar {
+  fill: var(--color-surface-press);
+}
+.cr-fill {
+  fill: var(--color-right);
+}
+.cr-fill.is-burnt {
+  fill: var(--color-wrong);
+}
+.cr-burn {
+  stroke: var(--color-wrong);
+  stroke-width: 2px;
+}
+.cr-time .cr-burn-text {
+  fill: var(--color-wrong);
+  font-weight: 700;
+}
+.cr-result {
+  font: 800 13px var(--font-display);
+  fill: var(--color-right);
+}
+.cr-result.is-burnt {
+  fill: var(--color-wrong);
+}
+@keyframes cr-run {
+  to {
+    stroke-dashoffset: -13;
+  }
+}
+@keyframes cr-pulse {
+  50% {
+    opacity: 0.08;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cr-flow,
+  .cr-dot .cr-halo {
+    animation: none;
+  }
+  .cr-flow {
+    stroke-dasharray: none;
+  }
+}

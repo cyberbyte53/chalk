@@ -1,0 +1,12 @@
+# NCERT Ex 1.4 Q3 and a few more. The decimal is LaTeX.
+- params: { decimal: "43.123456789", kind: ends }
+  firstTry: 4
+- params: { decimal: "0.120120012000120000\\ldots", kind: never }
+  level: hard
+- params: { decimal: "43.\\overline{123456789}", kind: repeats }
+- params: { decimal: "0.375", kind: ends }
+  level: easy
+- params: { decimal: "0.\\overline{142857}", kind: repeats }
+- params: { decimal: "0.1010010001\\ldots", kind: never }
+  firstTry: 5
+- params: { decimal: "0.\\overline{45}", kind: repeats }

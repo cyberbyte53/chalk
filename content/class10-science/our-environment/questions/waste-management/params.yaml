@@ -1,0 +1,8 @@
+# NCERT 15.2.2: segregation, local bodies, sewage, disposable cups, e-waste, recycling.
+- params: { case: segregate }
+  firstTry: 5
+- params: { case: kulhad }
+  firstTry: 6
+- params: { case: paperCup }
+- params: { case: ewaste }
+- params: { case: sewage }

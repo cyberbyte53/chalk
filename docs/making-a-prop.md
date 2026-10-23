@@ -11,7 +11,7 @@ Write the prop's `README.md` first. It answers:
 - **Derived state:** what follows from the stored state by the prop's laws (a bulb's brightness, the fraction of heads).
 - **Actions:** every way the state can change. For each: what it changes, what it keeps fixed, and whether it reveals an answer. If a lesson will ask the inverse question ("where must the object be for the image to be here?"), give that its own named action.
 - **Signals:** what the prop announces (pressed, landed, switched). Mark a signal a commit only if it is the learner deciding something that should be logged; most are not.
-- **Parts:** what can be pointed at by name (`marker`, `bulbA`).
+- **Observation:** what the student sees right now, as `observe` will report it: a one-line summary, each visible element with its id and value, and under `hidden` what the prop knows but the screen doesn't show (see [board-model.md](board-model.md#the-observation)). Element ids are what `point` takes.
 - **What a learner can do with a finger:** each of these is just one of the actions above, marked `byLearner: true` in the model (the test bench's simulated students use exactly these).
 
 Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`.
@@ -44,7 +44,30 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 `src/view.tsx`: draws `view` (stored and derived) at the `width` it's given. Every touch is `call("<action>", args)`. The view owns no state. Words come from the lesson (`{ en, hi }`), not the prop.
 
-Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.md) first, including the list of d3 modules to check before writing geometry by hand); draw your own SVG inside the stage only for what no piece covers. Styles go in the prop's own `src/styles.css`, exported as `@chalk/prop-<folder>/styles.css`; class names start with the prop's short prefix (`.nl-`, `.ns-`). Draw only with the look's tokens (`var(--color-on-surface)`, `var(--font-display)`, `var(--text-note)`; see `packages/look`), never a raw colour: a test checks. A colour the content picks (a `colorSchema` field) reaches the view as a role or a hex; set it as `--tone` with `cssColor` and mix tints from it. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
+Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.md) first, including the list of d3 modules to check before writing geometry by hand); draw your own SVG inside the stage only for what no piece covers. For anything on a coordinate plane use Mafs instead (see Libraries below). Styles go in the prop's own `src/styles.css`, exported as `@chalk/prop-<folder>/styles.css`; class names start with the prop's short prefix (`.nl-`, `.ns-`). Draw only with the look's tokens (`var(--color-on-surface)`, `var(--font-display)`, `var(--text-note)`; see `packages/look`), never a raw colour: a test checks. A colour the content picks (a `colorSchema` field) reaches the view as a role or a hex; set it as `--tone` with `cssColor` and mix tints from it. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
+
+## Libraries: use the toolkit, don't add to it
+
+Use what already exists before writing your own, but only from this list. One tool per kind of job keeps props consistent and the app small.
+
+| Job | Use | Notes |
+|---|---|---|
+| Pictures: apparatus, beads, trees, characters | `@chalk/draw` | Already in. Read [drawing.md](./drawing.md). |
+| Scales, ticks, curve paths | `d3-scale`, `d3-shape` | Already in, through `@chalk/draw`. |
+| Typeset maths | KaTeX | Already in, through rich text. |
+| Anything on a coordinate plane: function graphs, draggable points on an axis, lines, circles, polygons, vectors, ray diagrams, motion graphs | [Mafs](https://mafs.dev) (MIT) | React components run through `@preact/compat`, set up once per prop package. Pass `point` and `onMove` (the prop's state, our action); never `useMovablePoint`, whose state lives in Mafs. `constrain` on `MovablePoint` takes a function, `([x]) => [x, 0]`. Set its `--mafs-*` colours to look tokens in the prop's `styles.css`. Its points take no `data-part`, so give the prop a `locate` from plane to pixels. |
+| Algebra: expand, factorise, divide polynomials, exact roots (fractions and surds), read off coefficients | [nerdamer](https://github.com/jiggzson/nerdamer) (Apache-2.0) | Pin the version. It writes terms in its own order (−6+x+x²); print the textbook's order from `coeffs`. |
+| Exact fractions in a prop's own arithmetic (cells, remainders) | [fraction.js](https://github.com/rawify/Fraction.js) (MIT) | Small and stateless. `props/polynomials` keeps the box's coefficients as fractions with it. |
+| A scene to watch, many bodies, nothing measured | matter.js (MIT) | Last resort. Its numbers are approximate and its world holds state: step it with a fixed time step inside a `task` and copy positions into stored state. Never use it for anything a question checks; use closed-form laws, as `props/collision` and `props/gas` do. |
+
+A library joins this list only if it passes all four:
+
+1. **It holds no state of ours.** It draws from the prop's view or computes from its stored state; every change still goes through an action. Anything that keeps its own copy (a GeoGebra or Desmos board, a JSXGraph point) breaks `observe`, witnesses and `studentOnly`.
+2. **It imports cleanly in Node.** The content build, publish and the Jugnu eval load every prop's view in Node; importing the prop must not throw there.
+3. **Its licence allows commercial use.** MIT, Apache-2.0, ISC or similar. GeoGebra's free licence does not.
+4. **It is small enough for a phone.** Check what it adds to the learner app's gzipped bundle.
+
+Add a library to the prop's own `package.json`, not the root, so only props that use it pay for it.
 
 ## 5. Wire it in
 

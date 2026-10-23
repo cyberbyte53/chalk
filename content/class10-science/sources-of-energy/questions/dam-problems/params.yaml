@@ -1,0 +1,8 @@
+# The problems with big dams (NCERT 14.2.2; in-text Q3; Exercise 5).
+- params: { item: drown }
+  firstTry: 3
+- params: { item: methane }
+- params: { item: limit }
+  firstTry: 4
+- params: { item: people }
+  level: medium

@@ -1,0 +1,14 @@
+# NCERT Example 10.2, Ex 12, 14 (radius given), 15, and the two kinds of image from a concave mirror.
+- params: { kind: concave, distance: 30, focalLength: 10 }
+  level: easy
+  firstTry: 1
+- params: { kind: convex, distance: 10, focalLength: 15 }
+  firstTry: 2
+- params: { kind: concave, distance: 25, focalLength: 15 }
+- params: { kind: concave, distance: 5, focalLength: 10 }
+  firstTry: 3
+- params: { kind: convex, distance: 10, focalLength: 10 }
+- params: { kind: convex, distance: 20, focalLength: 15, byRadius: true }
+  level: hard
+- params: { kind: concave, distance: 27, focalLength: 18 }
+  level: hard

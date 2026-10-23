@@ -1,0 +1,260 @@
+/* @chalk/prop-environment: shared pieces (frame, buttons, arrows, labels, the family). Look tokens only. */
+.ev {
+  display: flex;
+  flex-direction: column;
+}
+.ev-svg {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  user-select: none;
+}
+.ev-bg {
+  fill: var(--color-surface-container);
+}
+.ev-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ev-button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: var(--shape-radius-m);
+  border: none;
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 700 14px / 1.1 var(--font-display);
+  cursor: pointer;
+}
+.ev-button.is-on {
+  background: var(--color-primary-container);
+  color: var(--color-primary);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.ev-button:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.ev-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.ev-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.ev-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.ev-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-outline-variant);
+}
+.ev-dot.is-on {
+  background: var(--color-primary);
+}
+.ev-caption {
+  margin: 6px 0 0;
+  min-height: 2.6em;
+  font: 600 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+  text-align: center;
+}
+.ev-arrow line {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+.ev-arrow path {
+  fill: var(--color-on-surface);
+}
+.ev-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.ev-label.is-dim {
+  fill: var(--color-on-surface-variant);
+  font-weight: 600;
+}
+.ev-label.is-big {
+  font-size: 12px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.ev-label.is-good {
+  fill: var(--color-right);
+}
+.ev-label.is-bad {
+  fill: var(--color-wrong);
+}
+/* gases and substances: one colour each, everywhere in the package */
+.ev-oxygen line {
+  stroke: var(--color-category-1);
+}
+.ev-oxygen path,
+.ev-o2 {
+  fill: var(--color-category-1);
+}
+.ev-co2 line {
+  stroke: var(--color-on-surface-variant);
+}
+.ev-co2 path,
+.ev-co2-dot {
+  fill: var(--color-on-surface-variant);
+}
+.ev-water line {
+  stroke: var(--color-primary);
+}
+.ev-water path,
+.ev-water-dot {
+  fill: var(--color-primary);
+}
+.ev-food line {
+  stroke: var(--color-secondary);
+}
+.ev-food path,
+.ev-food-dot {
+  fill: var(--color-secondary);
+}
+.ev-waste line {
+  stroke: var(--color-category-3);
+}
+.ev-waste path,
+.ev-waste-dot {
+  fill: var(--color-category-3);
+}
+/* the family */
+.ev-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.ev-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.ev-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.ev-hair-grey {
+  fill: var(--color-surface-press);
+}
+.ev-cap {
+  fill: var(--color-wrong);
+}
+.ev-face circle,
+.ev-face ellipse {
+  fill: var(--color-inverse-surface);
+}
+.ev-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.ev-sweat path {
+  fill: var(--color-primary);
+}
+.ev-specs circle,
+.ev-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.ev-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.ev-shirt-riya {
+  fill: var(--color-category-4);
+}
+.ev-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.ev-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.ev-shirt-neighbour {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-on-surface-variant));
+}
+.ev-shirt-neighbour-line {
+  stroke: color-mix(in srgb, var(--color-right) 45%, var(--color-on-surface-variant));
+}
+.ev-shirt-mom {
+  fill: var(--color-category-3);
+}
+.ev-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.ev-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.ev-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.ev-shirt-grandpa-line {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.ev-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+/* a slow flow along a path: dashes that travel. Reduced motion: still dashes. */
+.ev-flow {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-dasharray: 6 8;
+  animation: ev-flow 1.6s linear infinite;
+}
+@keyframes ev-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-flow {
+    animation: none;
+  }
+}
+.ev-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ev-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ev-stepper-label {
+  font: 600 var(--text-caption) / 1 var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.ev-stepper-value {
+  min-width: 18px;
+  text-align: center;
+  font: 800 15px / 1 var(--font-display);
+  color: var(--color-on-surface);
+}
+.ev-label.is-small {
+  font-size: 8px;
+}
+/* labels on a dark picture: light text with a dark edge */
+.is-night .ev-label {
+  fill: var(--color-surface);
+  stroke: color-mix(in srgb, var(--color-primary) 30%, var(--color-inverse-surface));
+}

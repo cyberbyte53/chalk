@@ -10,6 +10,8 @@ export const DecimalExpansionPart = {
   SlotPrefix: "slot:",
   NextDigit: "nextDigit",
   DigitPad: "digitPad",
+  Numerator: "p",
+  Denominator: "q",
 } as const;
 
 export const DecimalExpansionSignal = {
@@ -39,6 +41,8 @@ const decimalExpansionState = z
     isClockShown: z.boolean(),
     /** Whether the learner works out each next digit (a digit pad) instead of tapping for it. */
     isAskingDigit: z.boolean(),
+    /** Whether the learner can type p and q. */
+    isEditable: z.boolean(),
     /** The digit the learner last tried that doesn't fit, or null. */
     rejectedDigit: z.number().int().min(0).max(9).nullable(),
   })
@@ -98,6 +102,7 @@ export const decimalExpansion = defineProp({
     digitsShown: 0,
     isClockShown: false,
     isAskingDigit: false,
+    isEditable: false,
     rejectedDigit: null,
   },
   derived: {
@@ -254,11 +259,14 @@ export const decimalExpansion = defineProp({
     }),
     startAgain: act({
       describe: "Go back to no digits worked out. Keeps the fraction.",
+      byLearner: true,
       args: z.object({}).strict(),
       run: () => set({ digitsShown: 0, rejectedDigit: null }),
     }),
     setFraction: act({
-      describe: "Divide a new fraction, with no digits worked out yet",
+      describe:
+        "Divide a new fraction, with no digits worked out yet (the learner types it when editable)",
+      byLearner: true,
       args: z.object({ numerator, denominator }).strict(),
       run: (_s, a) =>
         set({
@@ -287,7 +295,9 @@ export const decimalExpansion = defineProp({
     },
   },
   parts: (s) => {
-    const out: string[] = [];
+    const out: string[] = s.isEditable
+      ? [DecimalExpansionPart.Numerator, DecimalExpansionPart.Denominator]
+      : [];
     for (let n = 1; n <= s.digitsShown; n++) out.push(`${DecimalExpansionPart.DigitPrefix}${n}`);
     for (let i = 0; i <= s.digitsShown; i++)
       out.push(`${DecimalExpansionPart.RemainderPrefix}${i}`);

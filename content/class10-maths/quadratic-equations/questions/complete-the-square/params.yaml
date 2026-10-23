@@ -1,0 +1,15 @@
+# Fig 4.2 and the squares inside Exercise 4.3 Q1.
+- params: { b: 4 }
+  firstTry: 1
+- params: { b: 6 }
+  firstTry: 2
+- params: { b: 2 }
+- params: { b: 10 }
+- params: { b: -6 }
+  level: medium
+- params: { b: -8 }
+  level: medium
+- params: { b: 3 }
+  level: hard
+- params: { b: -5 }
+  level: hard

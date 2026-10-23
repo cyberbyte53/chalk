@@ -1,0 +1,8 @@
+# NCERT 16.1 (the Ganga Action Plan) and Exercises 1, 2 and 6.
+- params: { case: gap }
+  firstTry: 3
+- params: { case: coliform }
+  firstTry: 4
+- params: { case: home }
+- params: { case: school }
+- params: { case: pressure }

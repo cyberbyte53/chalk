@@ -1,0 +1,7 @@
+# NCERT 12.2: meters, the volt (in-text Q1, Q2; Exercise 5).
+- params: { item: voltmeter }
+  firstTry: 1
+- params: { item: ammeter }
+- params: { item: volt }
+  firstTry: 2
+- params: { item: source }

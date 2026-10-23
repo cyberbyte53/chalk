@@ -1,0 +1,9 @@
+# Where Mendeléev's table falls short.
+- params: { item: which-not }
+  firstTry: 1
+  level: medium
+- params: { item: steps }
+  firstTry: 2
+  level: medium
+- params: { item: root }
+  level: hard

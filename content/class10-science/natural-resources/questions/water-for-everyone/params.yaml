@@ -1,0 +1,8 @@
+# NCERT 16.3, the kulhs, in-text question 3 and Exercise 4(b): water for all.
+- params: { case: kulh }
+  firstTry: 3
+- params: { case: individual }
+  firstTry: 4
+- params: { case: canal }
+- params: { case: shortage }
+- params: { case: fair }

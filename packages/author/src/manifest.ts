@@ -76,6 +76,11 @@ export const paramsRowSchema = z
     /** Overrides the family's level for this question. */
     level: z.nativeEnum(Level).optional(),
     origin: z.nativeEnum(Origin).default(Origin.Authored),
+    /**
+     * Its place (from 1) in the first practice right after the concept's lesson. Rows without it
+     * wait in the bank for later practice. Places are unique within each concept it tests.
+     */
+    firstTry: z.number().int().min(1).optional(),
     /** Kept in the file, left out of the build. */
     exclude: z.boolean().optional(),
   })

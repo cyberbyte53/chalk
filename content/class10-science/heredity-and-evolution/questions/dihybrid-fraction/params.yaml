@@ -1,0 +1,11 @@
+# Fig. 9.5: the 9 : 3 : 3 : 1 of a two-trait F2.
+- params: { look: wrinkledGreen, ask: fraction, total: 16 }
+  firstTry: 1
+- params: { look: roundYellow, ask: fraction, total: 16 }
+  firstTry: 2
+- params: { look: roundGreen, ask: fraction, total: 16 }
+- params: { look: wrinkledYellow, ask: count, total: 160 }
+- params: { look: roundYellow, ask: count, total: 320 }
+  level: hard
+- params: { look: wrinkledGreen, ask: count, total: 800 }
+  level: hard

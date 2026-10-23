@@ -1,0 +1,8 @@
+# NCERT Exercise 6.2 Q1 and two more of the same kind (Theorem 6.1).
+- params: { item: q1i }
+  firstTry: 1
+- params: { item: q1ii }
+- params: { item: ratio }
+  level: medium
+- params: { item: simple }
+  firstTry: 2

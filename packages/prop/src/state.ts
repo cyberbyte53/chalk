@@ -1,4 +1,4 @@
-import type { AnyPropDef, Effect, PropView, StoredState } from "./define";
+import type { AnyPropDef, Effect, Element, Observation, PropView, StoredState } from "./define";
 import { EffectKind } from "./define";
 
 export type StateResult =
@@ -10,6 +10,30 @@ export function viewOf(def: AnyPropDef, stored: StoredState): PropView {
   const derived: Record<string, unknown> = {};
   for (const [key, spec] of Object.entries(def.derived ?? {})) derived[key] = spec.compute(stored);
   return { ...stored, ...derived };
+}
+
+/**
+ * What the student sees of a prop right now: its own `observe`, or the default made from its view
+ * (every field an element, `offScreen` ones under `hidden`) and its parts.
+ */
+export function observationOf(def: AnyPropDef, stored: StoredState): Observation {
+  const view = viewOf(def, stored);
+  if (def.observe !== undefined) return def.observe(view as never);
+  const hiddenFields = new Set(def.offScreen ?? []);
+  const elements: Element[] = [];
+  const hidden: Record<string, unknown> = {};
+  for (const [field, value] of Object.entries(view)) {
+    if (hiddenFields.has(field)) hidden[field] = value;
+    else elements.push({ id: field, value });
+  }
+  const seen = new Set(elements.map((e) => e.id));
+  for (const part of def.parts?.(view as never) ?? [])
+    if (!seen.has(part)) elements.push({ id: part });
+  return {
+    summary: def.describe,
+    elements,
+    ...(Object.keys(hidden).length > 0 ? { hidden } : {}),
+  };
 }
 
 /** Checks a whole stored state against the prop's schema and invariant. */

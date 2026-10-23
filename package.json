@@ -6,7 +6,7 @@
   "type": "module",
   "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "dev": "pnpm --filter @chalk/learner-app dev",
+    "dev": "pnpm --parallel --filter @chalk/server --filter @chalk/learner-app dev",
     "build": "pnpm -r run build",
     "test": "vitest run",
     "typecheck": "pnpm -r run typecheck",
@@ -18,7 +18,9 @@
     "preview": "pnpm --filter @chalk/studio content preview",
     "publish-content": "pnpm --filter @chalk/studio content publish",
     "build-content": "pnpm --filter @chalk/studio content build",
-    "art": "pnpm --filter @chalk/studio content art"
+    "art": "pnpm --filter @chalk/studio content art",
+    "ship": "sh deploy/ship.sh",
+    "add-school": "sh deploy/add-school.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

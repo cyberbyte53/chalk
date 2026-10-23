@@ -1,0 +1,7 @@
+# NCERT Exercise 11: comparing nervous and hormonal control.
+- params: { case: fast }
+- params: { case: everywhere }
+- params: { case: stagefright }
+  level: medium
+- params: { case: hotPlate }
+- params: { case: need }

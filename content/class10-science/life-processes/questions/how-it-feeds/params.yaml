@@ -1,0 +1,12 @@
+# NCERT 6.2.2: which heterotrophic strategy does this organism use?
+- params: { case: tick }
+  firstTry: 1
+- params: { case: breadMould }
+  firstTry: 2
+- params: { case: lion }
+- params: { case: tapeworm }
+- params: { case: mushroom }
+- params: { case: leech }
+- params: { case: amoeba }
+  level: medium
+- params: { case: cuscuta }

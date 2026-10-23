@@ -1,0 +1,15 @@
+title: { en: "Sources of Energy", hi: "ऊर्जा के स्रोत" }
+# Concepts in book order (NCERT Chapter 14, the full 2020-21 edition, with the Do You Know and
+# Think it over boxes: the solar constant, Denmark's winds, E = Δmc², nuclear fusion).
+concepts:
+  - good-source-of-energy
+  - fossil-fuels-and-thermal-power
+  - hydro-power
+  - biomass-and-biogas
+  - wind-energy
+  - solar-energy
+  - sea-and-geothermal
+  - nuclear-energy
+  - environment-and-how-long
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

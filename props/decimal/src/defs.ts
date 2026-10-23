@@ -1,0 +1,9 @@
+import { type AnyPropDef, asAnyProp } from "@chalk/prop";
+import { decimalExpansion } from "./model";
+import { decimalShift } from "./shift";
+
+/**
+ * Every prop this package defines, without its drawing code: what the app needs up front (to run
+ * boards, check answers, let Jugnu act). The views load with a chapter (`import("@chalk/prop-decimal")`).
+ */
+export const defs: readonly AnyPropDef[] = [asAnyProp(decimalExpansion), asAnyProp(decimalShift)];

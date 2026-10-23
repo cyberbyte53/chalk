@@ -1,0 +1,7 @@
+# NCERT 9.2 definitions, the balcony (Fig 8.2) and the minar (Fig 9.1); alternate angles.
+- params: { item: balcony }
+  firstTry: 1
+- params: { item: minar }
+- params: { item: measured }
+- params: { item: same }
+  level: medium

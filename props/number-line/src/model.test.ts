@@ -4,6 +4,7 @@ import {
   type TaskContext,
   applyPatch,
   asAnyProp,
+  observationOf,
   prepareAction,
   viewOf,
 } from "@chalk/prop";
@@ -316,5 +317,54 @@ describe("scale", () => {
       1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2,
     ]);
     expect(ticks({ from: 2.66, to: 2.67, width: 340 })).toHaveLength(11);
+  });
+});
+
+describe("what the student sees (the observation)", () => {
+  const seen = (s: NumberLineState) => observationOf(def, s);
+  const ids = (s: NumberLineState) => seen(s).elements.map((e) => e.id);
+  const valueOf = (s: NumberLineState, id: string) =>
+    seen(s).elements.find((e) => e.id === id)?.value;
+
+  it("shows the dot only while it is shown and inside the window", () => {
+    const s = { ...start, marker: 1.5, showMarker: true };
+    expect(valueOf(s, "marker")).toBe(1.5);
+    expect(ids({ ...s, showMarker: false })).not.toContain("marker");
+    // Zoomed to 3.1–3.2 with the dot still at 1.5: nothing to see of it.
+    expect(ids({ ...s, from: 3.1, to: 3.2 })).not.toContain("marker");
+    expect(seen({ ...s, from: 3.1, to: 3.2 }).summary).not.toContain("dot");
+  });
+
+  it("names every tick, mark, dot, cut point and button on screen, with what it shows", () => {
+    const s = {
+      ...start,
+      from: 1,
+      to: 2,
+      showMarker: true,
+      marker: 1.4,
+      marks: [{ at: 1.41, label: "√2" }],
+      split: { from: 1, to: 2, parts: 4 },
+      isZoomable: true,
+    };
+    const got = ids(s);
+    expect(got).toEqual(
+      expect.arrayContaining(["tick:1.4", "marker", "mark:√2", "split", "splitPoint:1", "zoomIn"]),
+    );
+    expect(valueOf(s, "mark:√2")).toBe(1.41);
+    expect(valueOf(s, "splitPoint:1")).toBe("cut 1");
+    expect(valueOf(s, "split")).toBe("1 to 2 in 4 equal parts");
+    // Where the cuts fall isn't written on screen: hidden, not an element's value.
+    expect(seen(s).hidden).toEqual({ splitPoints: [1, 1.25, 1.5, 1.75, 2] });
+    expect(got).not.toContain("between");
+  });
+
+  it("every element it names can be found on screen", () => {
+    // Buttons are found by their data-part tag in the view; everything else by locate.
+    const buttons = new Set(["zoomIn", "zoomOut", "splitStepper"]);
+    const s = { ...start, from: 1, to: 2, showMarker: true, marker: 1.4, isZoomable: true };
+    for (const id of ids(s)) {
+      if (buttons.has(id)) continue;
+      expect(numberLine.locate?.(viewOf(def, s) as never, id, 300), id).toBeDefined();
+    }
   });
 });

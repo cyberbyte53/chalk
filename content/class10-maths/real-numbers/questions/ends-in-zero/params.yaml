@@ -1,0 +1,11 @@
+# kⁿ ends in 0 exactly when k has a 2 and a 5. NCERT Example 5 (4ⁿ) and Ex 1.2 Q5 (6ⁿ).
+- params: { base: 4 }
+- params: { base: 6 }
+- params: { base: 15 }
+  firstTry: 3
+- params: { base: 20 }
+  firstTry: 4
+- params: { base: 12 }
+  level: medium
+- params: { base: 25 }
+  level: medium

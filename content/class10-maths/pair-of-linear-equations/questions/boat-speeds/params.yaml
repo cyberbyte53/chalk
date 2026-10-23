@@ -1,0 +1,8 @@
+# NCERT Example 19 (11 and 5 km/h) and Exercise 3.6 Q2(i), Ritu (10 and 2 km/h).
+- params: { down: 11, up: 5, ask: stream }
+  firstTry: 3
+- params: { down: 11, up: 5, ask: boat }
+- params: { down: 10, up: 2, ask: stream }
+  firstTry: 4
+- params: { down: 10, up: 2, ask: boat }
+- params: { down: 18, up: 12, ask: stream }

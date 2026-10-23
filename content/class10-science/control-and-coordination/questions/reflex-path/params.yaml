@@ -1,0 +1,11 @@
+# NCERT 7.1.1, Fig. 7.2: the reflex arc.
+- params: { case: where }
+  firstTry: 1
+- params: { case: order }
+  firstTry: 2
+- params: { case: why }
+- params: { case: brainRole }
+  level: medium
+- params: { case: sensory }
+- params: { case: injury }
+  level: medium

@@ -1,0 +1,7 @@
+# NCERT Exercise 6.6 Q3, Q4, Q6 and Q10 (optional).
+- params: { item: obtuse }
+  firstTry: 3
+- params: { item: acute }
+- params: { item: parallelogram }
+- params: { item: fishing }
+  level: hard

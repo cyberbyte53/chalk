@@ -1,0 +1,8 @@
+# The ciliary muscles, the lens's thickness and focal length for near and far (NCERT 11.1.1; Exercise 9).
+- params: { item: musclesNear }
+  firstTry: 1
+- params: { item: musclesFar }
+- params: { item: focalNear }
+- params: { item: focalFar }
+- params: { item: imageDistance }
+  level: hard

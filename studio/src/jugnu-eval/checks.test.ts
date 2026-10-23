@@ -4,6 +4,7 @@ import { type JugnuTurn, scriptedProvider } from "@chalk/jugnu";
 import { propDefs } from "@chalk/library";
 import { describe, expect, it } from "vitest";
 import cases from "../../evals/jugnu-cases.json";
+import toolCases from "../../evals/jugnu-tool-cases.json";
 import { loadReadings } from "../pronunciations";
 import { validateLesson } from "../validate";
 import { type EvalCase, evalCasesSchema } from "./cases";
@@ -11,7 +12,7 @@ import { CheckName, devanagariShare, runChecks } from "./checks";
 import { type TurnRecord, runCase } from "./run";
 
 const root = resolve(new URL(".", import.meta.url).pathname, "../../..");
-const all = evalCasesSchema.parse(cases).cases;
+const all = [...evalCasesSchema.parse(cases).cases, ...evalCasesSchema.parse(toolCases).cases];
 const byId = (id: string): EvalCase => {
   const found = all.find((c) => c.id === id);
   if (found === undefined) throw new Error(`missing case ${id}`);
@@ -22,9 +23,11 @@ const turn = (events: JugnuTurn["events"], extra: Partial<JugnuTurn> = {}): Jugn
   asked: "q",
   reply: events.flatMap((e) => (e.kind === "say" ? [e.text] : [])).join(" "),
   events,
-  watching: [],
+  cues: [],
+  options: [],
   model: "m",
   modelCalls: 1,
+  usage: { input: 0, cached: 0, output: 0 },
   isFallback: false,
   ...extra,
 });
@@ -43,9 +46,9 @@ describe("Jugnu test cases", () => {
       for (const p of [...(c.expect.notSay ?? []), ...(c.expect.say ?? [])]) new RegExp(p, "iu");
   });
 
-  it("the test boards are valid lessons", () => {
+  it.each(["jugnu-boards", "jugnu-demos"])("the test boards are valid lessons (%s)", (name) => {
     const lesson = JSON.parse(
-      readFileSync(resolve(root, "studio/evals/boards/lessons/jugnu-boards.json"), "utf8"),
+      readFileSync(resolve(root, `studio/evals/boards/lessons/${name}.json`), "utf8"),
     );
     const readings = loadReadings(resolve(root, "content/pronunciations.json"));
     expect(
@@ -89,18 +92,6 @@ describe("Jugnu test checks", () => {
       say("Look at the meter."),
     ]);
     expect(opened).toContain(CheckName.NotDo);
-    const undone = failed(meters, [
-      {
-        kind: "act",
-        prop: "circuit",
-        action: "setSwitch",
-        args: {},
-        isUndone: true,
-        refused: "put back",
-      },
-      say("Try it."),
-    ]);
-    expect(undone).toContain(CheckName.HoldsLine);
     const pressed = failed(meters, [
       {
         kind: "act",
@@ -121,16 +112,6 @@ describe("Jugnu test checks", () => {
       failed(calc, [
         { kind: "calculate", expression: "1.5 / 10", result: 0.15 },
         say("1.5 ÷ 10 = 0.15 A."),
-      ]),
-    ).toEqual([]);
-    const handBack = byId("onlyb-do-it");
-    expect(failed(handBack, [say("Which switch is in B's branch?")])).toContain(
-      CheckName.HandsBack,
-    );
-    expect(
-      failed(handBack, [
-        say("Which switch is in B's branch?"),
-        { kind: "wait", watch: ["circuit"] },
       ]),
     ).toEqual([]);
   });

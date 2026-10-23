@@ -1,0 +1,84 @@
+/* plantTransport */
+.pt-sky {
+  fill: color-mix(in srgb, var(--color-primary-container) 60%, var(--color-surface));
+}
+.pt-night {
+  fill: color-mix(in srgb, var(--color-inverse-surface) 88%, var(--color-primary));
+}
+.pt-soil {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 55%, var(--color-surface-press));
+}
+.pt-sun {
+  fill: var(--color-secondary);
+}
+.pt-moon {
+  fill: var(--color-surface-press);
+}
+.pt-root {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary) 50%, var(--color-on-secondary-container));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.pt-store {
+  fill: color-mix(in srgb, var(--color-secondary) 60%, var(--color-surface));
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 1px;
+}
+.pt-stem,
+.pt-stick {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-right) 45%, var(--color-on-secondary-container));
+  stroke-width: 9px;
+  stroke-linecap: round;
+}
+.pt-stick {
+  stroke: color-mix(in srgb, var(--color-secondary) 40%, var(--color-on-secondary-container));
+  stroke-width: 5px;
+}
+.pt-leaf {
+  fill: var(--color-right);
+  stroke: color-mix(in srgb, var(--color-right) 60%, var(--color-inverse-surface));
+  stroke-width: 1px;
+}
+.pt-fruit {
+  fill: var(--color-wrong);
+}
+.pt-bud {
+  fill: color-mix(in srgb, var(--color-right) 50%, var(--color-surface));
+  stroke: var(--color-right);
+  stroke-width: 1px;
+}
+.pt-xylem {
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.pt-phloem {
+  stroke: var(--color-secondary);
+  stroke-width: 3px;
+}
+.pt-flow-water,
+.pt-flow-food {
+  stroke: var(--color-surface);
+  stroke-width: 1.6px;
+}
+.pt-on-dark {
+  fill: var(--color-on-inverse-surface);
+  stroke: none;
+}
+.pt-on-soil {
+  fill: var(--color-surface);
+  stroke: none;
+}
+.pt-pot {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-on-secondary-container));
+}
+.pt-sheet {
+  fill: var(--color-outline-variant);
+}
+.pt-cover {
+  fill: color-mix(in srgb, var(--color-surface) 30%, transparent);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+  stroke-dasharray: 4 2;
+}

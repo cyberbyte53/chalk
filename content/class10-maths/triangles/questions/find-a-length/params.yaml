@@ -1,0 +1,12 @@
+# NCERT Example 11, Exercise 6.5 Q9–Q12 and the wire (Theorem 6.8).
+- params: { item: ex11 }
+  firstTry: 1
+- params: { item: q9 }
+  firstTry: 2
+- params: { item: q10 }
+  level: medium
+- params: { item: q11 }
+  level: hard
+- params: { item: q12 }
+  level: medium
+- params: { item: wire }

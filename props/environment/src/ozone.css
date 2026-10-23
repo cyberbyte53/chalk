@@ -1,0 +1,75 @@
+/* ozoneLayer */
+.ev-oz-high {
+  fill: color-mix(in srgb, var(--color-primary) 30%, var(--color-inverse-surface));
+}
+.ev-oz-sky {
+  fill: color-mix(in srgb, var(--color-primary-container) 65%, var(--color-surface));
+}
+.ev-oz-sun {
+  fill: var(--color-secondary);
+}
+.ev-uv path {
+  fill: none;
+  stroke: var(--color-category-3);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.ev-uv .ev-uv-head {
+  fill: var(--color-category-3);
+  stroke: none;
+}
+.ev-uv.is-through path {
+  stroke: var(--color-wrong);
+}
+.ev-uv.is-through .ev-uv-head {
+  fill: var(--color-wrong);
+}
+.ev-atom circle {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+  stroke: var(--color-surface);
+  stroke-width: 1px;
+}
+.ev-atom text {
+  font: 800 8px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.ev-atom.is-free circle {
+  fill: var(--color-secondary);
+}
+.ev-atom.is-ozone circle {
+  fill: color-mix(in srgb, var(--color-category-4) 70%, var(--color-surface));
+}
+.ev-oz-eq {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+}
+.ev-oz-eq-text {
+  font: 800 13px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.ev-oz-band {
+  fill: color-mix(in srgb, var(--color-category-4) 45%, var(--color-surface));
+  transition: height 0.4s;
+}
+.ev-oz-hole {
+  fill: color-mix(in srgb, var(--color-primary-container) 65%, var(--color-surface));
+}
+.ev-oz-ground {
+  fill: color-mix(in srgb, var(--color-right) 50%, var(--color-surface));
+}
+.ev-oz-cfc rect {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.ev-oz-cfc line {
+  stroke: var(--color-on-surface-variant);
+}
+.ev-oz-puff {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 40%, var(--color-surface));
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-oz-band {
+    transition: none;
+  }
+}

@@ -1,0 +1,7 @@
+# NCERT Example 12 and Exercise 8.4 Q1–Q2.
+- params: { item: q1tan }
+  level: easy
+  firstTry: 2
+- params: { item: q1sin }
+- params: { item: q2 }
+- params: { item: where }

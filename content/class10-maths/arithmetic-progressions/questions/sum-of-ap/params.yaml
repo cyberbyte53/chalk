@@ -1,0 +1,20 @@
+# NCERT Exercise 5.3 Q1–Q2, Example 11, Shakila's money box (Section 5.4) and Kabir's savings.
+- params: { item: q1i }
+  firstTry: 1
+  level: easy
+- params: { item: q1ii }
+- params: { item: q1iii }
+- params: { item: q1iv }
+  level: hard
+- params: { item: q2i }
+  level: hard
+- params: { item: q2ii }
+  firstTry: 2
+- params: { item: q2iii }
+  level: hard
+- params: { item: ex11 }
+  firstTry: 3
+- params: { item: shakila }
+  level: easy
+- params: { item: kabir20 }
+  level: easy

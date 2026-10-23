@@ -1,0 +1,7 @@
+# How a thermal power plant works (NCERT 14.2.2).
+- params: { item: order }
+  firstTry: 3
+- params: { item: thermal }
+- params: { item: coalfield }
+  level: medium
+- params: { item: forms }

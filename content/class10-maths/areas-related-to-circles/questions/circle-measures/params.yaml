@@ -1,0 +1,12 @@
+# NCERT Exercise 12.1 Q1, Q2, Q5, Example 1, and plain circumference and area.
+- params: { item: rim21 }
+  firstTry: 1
+  level: easy
+- params: { item: area14 }
+  level: easy
+- params: { item: q1 }
+- params: { item: q2 }
+- params: { item: q5 }
+- params: { item: ex1r }
+- params: { item: ex1cost }
+  level: hard

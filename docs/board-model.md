@@ -11,11 +11,54 @@ Everything on a board is a prop: words, a character's line, a question, a number
 | **State** | One live view, read with `getState()`. Stored fields are the few independent quantities; derived fields follow from them and are read-only. A reader can't tell them apart. | stored `from`, `to`, `marker`; derived `between` ("1.4 and 1.5") |
 | **Actions** | The only way stored fields change. Each says what it keeps fixed. Instant, or taking time (then it finishes). Flagged if it gives an answer away. | `moveMarker`, `zoomTo` (glides), `placeMark` |
 | **Signals** | What it announces. A few are commits (logged). | `markerReleased` |
-| **Parts** | What can be pointed at, by name. | `marker`, `tick:1.4`, `mark` |
+| **Observation** | What a student sees of it right now, as the prop itself describes it: one line, then each visible element with its name and value. The only way Jugnu sees a prop; what `point` can name. See below. | "a number line from 1 to 2, dot at 1.75"; `marker: 1.75`, `tick:1.4`, `mark:√2 at 1.41` |
 
 A prop holds the laws of its own world; a lesson holds what is specific to the lesson. The number line knows nothing about square roots: the √2 lesson writes `line.marker * line.marker` in its own rules. Inverse questions get their own named action (a mirror's `moveObjectSoImageIsAt`), never a vague "set the image".
 
 Code: `defineProp` in `@chalk/prop`; examples in `props/basics` (text, line, choice, goal, button, timer), `props/number-line`, `props/chance` (coin) and `props/plot` (graph).
+
+## The observation
+
+Jugnu never reads a prop's state. He reads its **observation**: what the student can see right now, in the prop's own words. Each prop defines one function, `observe(view)`, and everything Jugnu is given comes from it: the board as it is now, what a `try` would change, what he can point at.
+
+```ts
+observe: (view) => ({
+  summary: "a number line from 1 to 2 with a dot at 1.75",
+  elements: [
+    { id: "marker", value: 1.75 },           // only while the dot is shown and in the window
+    { id: "tick:1.4", value: 1.4 }, …,
+    { id: "mark:√2", value: 1.41 },
+  ],
+  hidden: { answer: "b" },                   // facts the prop holds that the student can't see
+})
+```
+
+Two rules make it trustworthy, and a test per prop checks both:
+
+1. **Faithful.** Every element is something the view draws right now, with the value it shows. Nothing stale: a hidden dot has no element, a marker outside the window has no element, a wire with no meter has no reading. What the prop knows but the screen doesn't show goes under `hidden`, labelled, so he can keep it to himself (the answer key) or leave it (a wire's current).
+2. **Addressable.** An element's `id` is what `point` takes, and `locate` can find it on screen. If the student can see it and tell it apart, it has an id; if they can't tell it apart (an unlabelled junction), it doesn't.
+
+This replaces `parts` and `offScreen`, and most derived fields: a derived field that was only there for Jugnu becomes a value on an element, or goes. State stays what the runtime, rules and events use; the view stays what the student sees; the observation is the view in words. The same observation can drive a screen reader later.
+
+Where the lesson needs to say what a prop stands for here ("the student's guess for √3"), it says so in the board's `jugnu` notes; the prop's own words stay lesson-free.
+
+**A worked example: a parallel circuit with meters.** The state holds every component, its current, voltage and brightness, and node coordinates. The student sees three meter dials, two bulbs and a switch. The observation:
+
+```
+summary: a parallel circuit: a cell, two branches each with an ammeter and a bulb, a switch S in bulb B's branch, a main ammeter before the branches
+elements:
+  cell        1.5 V
+  mainMeter   reads 0.45 A
+  meterA      reads 0.30 A
+  bulbA       glowing (5 Ω)
+  switchB     closed
+  meterB      reads 0.15 A
+  bulbB       glowing (10 Ω)
+```
+
+No wire currents, no brightness as a decimal, no node ids: the student can't see them. Bulb B's current is on screen only because meter B shows it, so it appears once, as the meter's reading. After `try setSwitch(switchB, open)` Jugnu gets the elements that changed: `mainMeter reads 0.30 A (was 0.45)`, `meterB reads 0 A`, `switchB open`, `bulbB dark`. He can see for himself that the main meter now shows one of the question's options, and decide, as a tutor would, whether to show it.
+
+**Evidence.** What the student has committed to is read from the question's own observation: how many times they checked, the last result and its feedback, what they have picked. Moving things around is exploring, not an answer, so nothing else is kept: there is no history of moves. If he wants to know what they tried, he asks.
 
 ## IS, WHEN, THEN
 
@@ -72,7 +115,7 @@ A prop with the question role (`choice`, `goal`) has `status` (open / correct / 
 
 ### Student only
 
-`"studentOnly": ["circuit.takeOutBulb"]` on a board lists the actions only the learner may do there: the move the board is asking of them. Jugnu can never do these, nor anything on the question, nor `board.pass` or Continue, nor an action marked `reveals` while the question is open; the runtime refuses them, including when his actions set off the lesson's own WHEN rules. The validator checks each entry is a real `prop.action`.
+`"studentOnly": ["circuit.takeOutBulb"]` on a board lists the actions only the learner may do there: the move the board is asking of them. Jugnu can never do these, nor anything on the question, nor `board.pass` or Continue, nor an action marked `reveals` while the question is open; the runtime refuses them, including when his actions set off the lesson's own WHEN rules. Beyond those, what a demonstration would give away is his judgement: he knows the answer, sees what the student would see, and his persona says to nudge, never tell. The validator checks each entry is a real `prop.action`.
 
 ## Events
 

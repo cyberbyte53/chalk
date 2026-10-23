@@ -1,0 +1,9 @@
+# The rainbow (NCERT 11.4, Fig. 11.8).
+- params: { item: where }
+  firstTry: 2
+- params: { item: what }
+- params: { item: steps }
+  level: hard
+- params: { item: fountain }
+- params: { item: whiteLight }
+  level: easy

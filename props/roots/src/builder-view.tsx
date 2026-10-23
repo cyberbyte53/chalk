@@ -204,7 +204,7 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
     <div class="rb">
       <svg
         ref={svg}
-        class="rb-svg"
+        class="rtb-svg"
         viewBox={`0 0 ${width} ${layout.height}`}
         width="100%"
         role="img"
@@ -213,10 +213,10 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
       >
-        <g class="rb-grid">{grid}</g>
+        <g class="rtb-grid">{grid}</g>
 
         <line
-          class="rb-axis"
+          class="rtb-axis"
           x1={layout.originX - 12}
           y1={layout.axisY}
           x2={lineEnd + 16}
@@ -226,8 +226,8 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
           const x = layout.originX + k * unit;
           return (
             <g key={k} data-part={`${RootBuilderPart.TickPrefix}${k}`}>
-              <line class="rb-tick" x1={x} y1={layout.axisY - 6} x2={x} y2={layout.axisY + 6} />
-              <text class="rb-tick-label" x={x} y={layout.axisY + 26} text-anchor="middle">
+              <line class="rtb-tick" x1={x} y1={layout.axisY - 6} x2={x} y2={layout.axisY + 6} />
+              <text class="rtb-tick-label" x={x} y={layout.axisY + 26} text-anchor="middle">
                 {k}
               </text>
             </g>
@@ -236,7 +236,7 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
 
         {/* The triangle. */}
         <line
-          class="rb-leg"
+          class="rtb-leg"
           data-part={RootBuilderPart.Base}
           x1={zero.x}
           y1={zero.y}
@@ -244,7 +244,7 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
           y2={foot.y}
         />
         <text
-          class="rb-leg-label"
+          class="rtb-leg-label"
           x={(zero.x + foot.x) / 2}
           y={layout.axisY - 10}
           text-anchor="middle"
@@ -254,7 +254,7 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
         {s.height > 0 && (
           <>
             <line
-              class="rb-leg"
+              class="rtb-leg"
               data-part={RootBuilderPart.Perpendicular}
               x1={foot.x}
               y1={foot.y}
@@ -262,35 +262,35 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
               y2={top.y}
             />
             <path
-              class="rb-right-angle"
+              class="rtb-right-angle"
               d={`M ${foot.x - 12} ${foot.y} L ${foot.x - 12} ${foot.y - 12} L ${foot.x} ${foot.y - 12}`}
             />
             <text
-              class="rb-leg-label"
+              class="rtb-leg-label"
               x={top.x - 10}
               y={(foot.y + top.y) / 2 + 6}
               text-anchor="end"
             >
               {s.height}
             </text>
-            {s.swing > 0 && <line class="rb-ghost" x1={zero.x} y1={zero.y} x2={top.x} y2={top.y} />}
+            {s.swing > 0 && <line class="rtb-ghost" x1={zero.x} y1={zero.y} x2={top.x} y2={top.y} />}
           </>
         )}
 
         {/* The compass: the arc behind the swinging tip. */}
-        {s.swing > 0 && <path class="rb-arc" data-part={RootBuilderPart.Arc} d={arcPath} />}
+        {s.swing > 0 && <path class="rtb-arc" data-part={RootBuilderPart.Arc} d={arcPath} />}
 
         {/* Points already landed. */}
         {landedAt.map(({ n, x }) => (
           <g
             key={n}
-            class={n === newest ? "rb-landed is-newest" : "rb-landed"}
+            class={n === newest ? "rtb-landed is-newest" : "rtb-landed"}
             data-part={`${RootBuilderPart.LandedPrefix}${n}`}
           >
             <circle cx={x} cy={layout.axisY} r={n === newest ? 6.5 : 5} />
             {(levels.get(n) ?? 0) > 0 && (
               <line
-                class="rb-leader"
+                class="rtb-leader"
                 x1={x}
                 y1={layout.axisY + 8}
                 x2={x}
@@ -311,15 +311,15 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
         {s.height > 0 && (
           // biome-ignore lint/a11y/useKeyWithClickEvents: the arrow by the tip is the keyboard way to swing
           <g
-            class={s.canSwing ? "rb-hyp can-swing" : "rb-hyp"}
+            class={s.canSwing ? "rtb-hyp can-swing" : "rtb-hyp"}
             data-part={RootBuilderPart.Hypotenuse}
             onClick={swing}
           >
-            <line class="rb-hyp-hit" x1={zero.x} y1={zero.y} x2={tipPx.x} y2={tipPx.y} />
-            <line class="rb-hyp-line" x1={zero.x} y1={zero.y} x2={tipPx.x} y2={tipPx.y} />
+            <line class="rtb-hyp-hit" x1={zero.x} y1={zero.y} x2={tipPx.x} y2={tipPx.y} />
+            <line class="rtb-hyp-line" x1={zero.x} y1={zero.y} x2={tipPx.x} y2={tipPx.y} />
             {s.swing < LABEL_FADE_END && (
               <text
-                class="rb-hyp-label"
+                class="rtb-hyp-label"
                 opacity={Math.min(
                   1,
                   (LABEL_FADE_END - s.swing) / (LABEL_FADE_END - LABEL_FADE_START),
@@ -335,11 +335,11 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
             )}
           </g>
         )}
-        <circle class="rb-zero" data-part={RootBuilderPart.Zero} cx={zero.x} cy={zero.y} r={4} />
+        <circle class="rtb-zero" data-part={RootBuilderPart.Zero} cx={zero.x} cy={zero.y} r={4} />
 
         {s.canSwing && s.swing === 0 && (
           <g
-            class="rb-swing"
+            class="rtb-swing"
             // biome-ignore lint/a11y/useSemanticElements: a <button> can't live inside SVG; this group is one
             role="button"
             tabIndex={0}
@@ -348,15 +348,15 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
             onKeyDown={onSwingKey}
           >
             <path
-              class="rb-swing-hit"
+              class="rtb-swing-hit"
               d={`M ${arrowFrom.x} ${arrowFrom.y} A ${length * unit} ${length * unit} 0 0 1 ${arrowTo.x} ${arrowTo.y}`}
             />
             <path
-              class="rb-swing-arrow"
+              class="rtb-swing-arrow"
               d={`M ${arrowFrom.x} ${arrowFrom.y} A ${length * unit} ${length * unit} 0 0 1 ${arrowTo.x} ${arrowTo.y}`}
             />
             <path
-              class="rb-swing-head"
+              class="rtb-swing-head"
               d={`M ${head(1).x} ${head(1).y} L ${arrowTo.x} ${arrowTo.y} L ${head(-1).x} ${head(-1).y}`}
             />
           </g>
@@ -364,7 +364,7 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
 
         {/* What the finger holds. */}
         <g
-          class="rb-handle"
+          class="rtb-handle"
           data-part={RootBuilderPart.HeightHandle}
           role="slider"
           tabIndex={0}
@@ -377,7 +377,7 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
         >
           {s.height === 0 && (
             <line
-              class="rb-handle-stem"
+              class="rtb-handle-stem"
               x1={foot.x}
               y1={foot.y}
               x2={foot.x}
@@ -385,20 +385,20 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
             />
           )}
           <circle
-            class="rb-handle-hit"
+            class="rtb-handle-hit"
             cx={top.x}
             cy={s.height > 0 ? top.y : top.y - GHOST_HANDLE_PX}
             r={22}
           />
           <circle
-            class={s.height > 0 ? "rb-handle-dot" : "rb-handle-dot is-ghost"}
+            class={s.height > 0 ? "rtb-handle-dot" : "rtb-handle-dot is-ghost"}
             cx={top.x}
             cy={s.height > 0 ? top.y : top.y - GHOST_HANDLE_PX}
             r={9}
           />
         </g>
         <g
-          class="rb-handle"
+          class="rtb-handle"
           data-part={RootBuilderPart.BaseHandle}
           role="slider"
           tabIndex={0}
@@ -410,8 +410,8 @@ export function RootBuilderView({ view, width, call }: PropViewProps): JSX.Eleme
           onPointerDown={startDrag(Drag.Base)}
           onKeyDown={onBaseKey}
         >
-          <circle class="rb-handle-hit" cx={foot.x} cy={foot.y} r={22} />
-          <circle class="rb-handle-dot" cx={foot.x} cy={foot.y} r={9} />
+          <circle class="rtb-handle-hit" cx={foot.x} cy={foot.y} r={22} />
+          <circle class="rtb-handle-dot" cx={foot.x} cy={foot.y} r={9} />
         </g>
       </svg>
     </div>

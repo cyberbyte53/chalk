@@ -1,0 +1,94 @@
+/* heart */
+.ht-chamber {
+  stroke-width: 2px;
+  transition: x 0.4s ease, y 0.4s ease, width 0.4s ease, height 0.4s ease;
+}
+.ht-chamber.is-red {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+  stroke: var(--color-wrong);
+}
+.ht-chamber.is-blue {
+  fill: color-mix(in srgb, var(--color-primary) 35%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-primary) 70%, var(--color-wrong));
+}
+.ht-chamber.is-filling {
+  stroke-dasharray: 5 3;
+}
+.ht-chamber.is-red.is-contracting {
+  fill: color-mix(in srgb, var(--color-wrong) 75%, var(--color-surface));
+}
+.ht-chamber.is-blue.is-contracting {
+  fill: color-mix(in srgb, var(--color-primary) 65%, var(--color-surface));
+}
+.ht-vessel {
+  fill: none;
+  stroke-width: 9px;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+.ht-vessel.is-red,
+.ht-loop.is-red {
+  stroke: var(--color-wrong);
+}
+.ht-vessel.is-blue,
+.ht-loop.is-blue {
+  stroke: color-mix(in srgb, var(--color-primary) 70%, var(--color-wrong));
+}
+.ht-valve path {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.ht-arrow line {
+  stroke-width: 3.5px;
+}
+.ht-flow-red line {
+  stroke: var(--color-wrong);
+}
+.ht-flow-red path {
+  fill: var(--color-wrong);
+}
+.ht-flow-blue line {
+  stroke: color-mix(in srgb, var(--color-primary) 70%, var(--color-wrong));
+}
+.ht-flow-blue path {
+  fill: color-mix(in srgb, var(--color-primary) 70%, var(--color-wrong));
+}
+.ht-organ {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 18%, var(--color-surface));
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.2px;
+}
+.ht-loop {
+  fill: none;
+  stroke-width: 7px;
+  stroke-linecap: round;
+}
+.ht-flow {
+  stroke: var(--color-surface);
+  stroke-width: 2px;
+  opacity: 0.8;
+}
+.ht-wall.is-artery {
+  fill: color-mix(in srgb, var(--color-wrong) 55%, var(--color-surface));
+}
+.ht-wall.is-vein {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+}
+.ht-wall.is-capillary {
+  fill: color-mix(in srgb, var(--color-wrong) 35%, var(--color-surface));
+}
+.ht-lumen {
+  fill: color-mix(in srgb, var(--color-wrong) 20%, var(--color-surface));
+}
+.ht-flap {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-primary) 70%, var(--color-inverse-surface));
+  stroke-width: 2.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ht-chamber {
+    transition: none;
+  }
+}

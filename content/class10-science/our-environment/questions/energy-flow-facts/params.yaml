@@ -1,0 +1,8 @@
+# NCERT 15.1.1 and Fig 15.4: one-way flow, loss at each level, short chains, numbers at each level.
+- params: { case: oneWay }
+  firstTry: 5
+- params: { case: lost }
+  firstTry: 6
+- params: { case: steps }
+- params: { case: most }
+- params: { case: remove }

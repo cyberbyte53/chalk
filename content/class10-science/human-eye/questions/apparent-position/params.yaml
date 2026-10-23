@@ -1,0 +1,8 @@
+# Apparent positions: a star seen higher, advance sunrise and delayed sunset (NCERT 11.5, Fig. 11.9, 11.10).
+- params: { item: starHigher }
+  firstTry: 2
+- params: { item: sunriseEarly }
+- params: { item: sunsetLate }
+- params: { item: dayLonger }
+  level: hard
+- params: { item: flattened }

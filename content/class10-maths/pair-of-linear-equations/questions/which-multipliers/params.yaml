@@ -1,0 +1,9 @@
+# NCERT Example 11 (remove y: times 3 and times 4) and Exercise 3.4 Q1.
+- params: { a1: 9, b1: -4, k1: 2000, a2: 7, b2: -3, k2: 2000, remove: y }
+  firstTry: 7
+- params: { a1: 1, b1: 1, k1: 5, a2: 2, b2: -3, k2: 4, remove: x }
+  firstTry: 8
+- params: { a1: 3, b1: 4, k1: 10, a2: 2, b2: -2, k2: 2, remove: y }
+- params: { a1: 3, b1: -5, k1: 4, a2: 9, b2: -2, k2: 7, remove: x }
+- params: { a1: 2, b1: 3, k1: 8, a2: 4, b2: 6, k2: 7, remove: x }
+- params: { a1: 5, b1: 3, k1: 35, a2: 2, b2: 4, k2: 28, remove: y }

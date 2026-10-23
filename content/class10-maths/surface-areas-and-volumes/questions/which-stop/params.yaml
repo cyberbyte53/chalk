@@ -1,0 +1,10 @@
+# Review: which of the chapter's four ideas a problem needs.
+- params: { item: paint }
+  firstTry: 1
+- params: { item: kulfi }
+  firstTry: 2
+- params: { item: syrup }
+- params: { item: bucket }
+- params: { item: rod }
+  level: medium
+- params: { item: shed }

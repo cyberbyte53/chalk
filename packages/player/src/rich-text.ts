@@ -75,10 +75,18 @@ export function parseRich(source: string): Parsed {
         continue;
       }
       flush();
-      spans.push({
-        kind: isBold ? SpanKind.Bold : SpanKind.Emphasis,
-        text: source.slice(i + open.length, close),
-      });
+      // The words inside take the style; maths inside stays maths ("**If** $p$ **divides…**" and
+      // "**If $p$ divides…**" read the same).
+      const kind = isBold ? SpanKind.Bold : SpanKind.Emphasis;
+      const inner = source.slice(i + open.length, close);
+      if (inner.includes(DOLLAR)) {
+        const nested = parseRich(inner);
+        problems.push(...nested.problems);
+        for (const span of nested.spans)
+          spans.push(span.kind === SpanKind.Text ? { ...span, kind } : span);
+      } else {
+        spans.push({ kind, text: inner });
+      }
       i = close + open.length;
       continue;
     }
@@ -94,12 +102,14 @@ function glueTrailing(spans: Span[]): Span[] {
   const out: Span[] = [];
   for (const span of spans) {
     const before = out.at(-1);
-    if (span.kind === SpanKind.Text && before?.kind === SpanKind.Math) {
+    const isWords =
+      span.kind === SpanKind.Text || span.kind === SpanKind.Bold || span.kind === SpanKind.Emphasis;
+    if (isWords && before?.kind === SpanKind.Math && before.trailing === undefined) {
       const trailing = TRAILING.exec(span.text)?.[0];
       if (trailing !== undefined) {
         before.trailing = trailing;
         const rest = span.text.slice(trailing.length);
-        if (rest !== "") out.push({ kind: SpanKind.Text, text: rest });
+        if (rest !== "") out.push({ ...span, text: rest });
         continue;
       }
     }
@@ -161,4 +171,117 @@ export function richProblems(source: string): string[] {
     }
   }
   return problems;
+}
+
+/** LaTeX commands read as one symbol. */
+const SYMBOL: Readonly<Record<string, string>> = {
+  times: "×",
+  div: "÷",
+  cdot: "·",
+  pm: "±",
+  ne: "≠",
+  neq: "≠",
+  le: "≤",
+  leq: "≤",
+  ge: "≥",
+  geq: "≥",
+  approx: "≈",
+  pi: "π",
+  infty: "∞",
+  dots: "…",
+  ldots: "…",
+  cdots: "…",
+  Rightarrow: "⇒",
+  rightarrow: "→",
+  to: "→",
+  in: "∈",
+  mid: "|",
+  degree: "°",
+  circ: "°",
+};
+/** Commands that only space or size things: read as a space, or nothing. */
+const SPACING = new Set(["quad", "qquad", ",", ";", ":", "!", " "]);
+const SILENT = new Set(["left", "right", "displaystyle", "big", "Big", "bigg", "Bigg"]);
+const SUPERSCRIPT: Readonly<Record<string, string>> = {
+  "0": "⁰",
+  "1": "¹",
+  "2": "²",
+  "3": "³",
+  "4": "⁴",
+  "5": "⁵",
+  "6": "⁶",
+  "7": "⁷",
+  "8": "⁸",
+  "9": "⁹",
+  n: "ⁿ",
+  "+": "⁺",
+  "-": "⁻",
+};
+
+/** Maths written as a line of plain text a screen reader can read: `\frac{3}{8}` → "3/8", `\sqrt{2}` → "√2". */
+export function mathText(latex: string): string {
+  let i = 0;
+  /** A group in braces, or one token. */
+  const group = (): string => {
+    while (latex[i] === " ") i++;
+    if (latex[i] === "{") {
+      i++;
+      let out = "";
+      while (i < latex.length && latex[i] !== "}") out += token();
+      i++;
+      return out;
+    }
+    return token();
+  };
+  /** Wraps anything longer than a single number or letter in brackets, so "a/b" stays unambiguous. */
+  const bracket = (s: string) => (/^[\w.√]+$/.test(s.trim()) ? s.trim() : `(${s.trim()})`);
+  const token = (): string => {
+    const ch = latex[i];
+    if (ch === undefined) return "";
+    if (ch === "\\") {
+      const name = /^[A-Za-z]+/.exec(latex.slice(i + 1))?.[0] ?? latex[i + 1] ?? "";
+      i += 1 + name.length;
+      if (name === "frac" || name === "dfrac" || name === "tfrac") {
+        const top = group();
+        return `${bracket(top)}/${bracket(group())}`;
+      }
+      if (name === "sqrt") return `√${bracket(group())}`;
+      if (name === "text" || name === "mathrm" || name === "textbf" || name === "mathbf")
+        return group();
+      if (name === "overline") return `${group()} repeating`;
+      if (SPACING.has(name)) return " ";
+      if (SILENT.has(name)) return "";
+      return SYMBOL[name] ?? name;
+    }
+    i++;
+    if (ch === "^") {
+      const power = group();
+      const raised = [...power].map((c) => SUPERSCRIPT[c]);
+      return raised.every((c) => c !== undefined) ? raised.join("") : `^(${power})`;
+    }
+    if (ch === "_") return group();
+    if (ch === "{") {
+      i--;
+      return group();
+    }
+    if (ch === "}") return "";
+    if (ch === "~") return " ";
+    return ch;
+  };
+  let out = "";
+  while (i < latex.length) out += token();
+  return out.replace(/\s+/g, " ").trim();
+}
+
+/** Rich text as plain text: markers dropped, maths written out (for an `aria-label`). */
+export function plainText(source: string): string {
+  return parseRich(source)
+    .spans.map((span) =>
+      span.kind === SpanKind.Math || span.kind === SpanKind.DisplayMath
+        ? `${mathText(span.text)}${span.trailing ?? ""}`
+        : span.text,
+    )
+    .join("")
+    .replace(/\s+/g, " ")
+    .trim();
 }

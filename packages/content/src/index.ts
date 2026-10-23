@@ -77,6 +77,20 @@ export {
   refSchema,
   sourceSchema,
 } from "./built";
+export {
+  CueKind,
+  MAX_OPTIONS,
+  OPTION_MAX,
+  TurnInputKind,
+  aboutSchema,
+  cueSchema,
+  jugnuNotesSchema,
+  turnInputSchema,
+  type About,
+  type Cue,
+  type JugnuNotes,
+  type TurnInput,
+} from "./jugnu";
 export { assertPublished, lessonSchema, parseLesson, type Lesson } from "./lesson";
 export {
   Locale,

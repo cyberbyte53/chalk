@@ -1,0 +1,18 @@
+# NCERT Examples 4–5 and Exercise 9.1 Q6–Q11, Q14.
+- params: { item: ex4flag }
+  firstTry: 1
+- params: { item: ex4dist }
+  level: easy
+- params: { item: ex5 }
+- params: { item: q6 }
+  firstTry: 2
+- params: { item: q7 }
+- params: { item: q8 }
+  level: hard
+- params: { item: q9 }
+  level: hard
+- params: { item: q10 }
+- params: { item: q10where }
+- params: { item: q11 }
+- params: { item: q14 }
+  level: hard

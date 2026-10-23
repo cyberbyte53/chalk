@@ -1,0 +1,676 @@
+/* @chalk/prop-linear-equations: drawn only with the look's tokens (@chalk/look).
+   The plane is drawn by Mafs; its colours are set here from the look, so it reads as Chalk. */
+@import "mafs/core.css";
+
+/* ---- shared: buttons, steppers ---- */
+.le-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  height: 46px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 800 19px / 1 var(--font-display);
+  cursor: pointer;
+}
+.le-button.is-wide {
+  min-width: 72px;
+  font-size: var(--text-note);
+}
+.le-button.is-primary {
+  background: var(--color-primary);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary-press);
+  color: var(--color-on-primary);
+}
+.le-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.le-button:disabled {
+  color: var(--color-outline-variant);
+  box-shadow: none;
+  cursor: default;
+}
+.le-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.le-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.le-stepper-value {
+  min-width: 64px;
+  text-align: center;
+  font: 800 18px var(--font-display);
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.le-name {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+}
+
+/* ---- linePair ---- */
+.le-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.le-mafs {
+  overflow: hidden;
+  border-radius: var(--shape-radius-m);
+  border: var(--shape-stroke-thin) solid var(--color-outline-variant);
+  touch-action: none;
+}
+.le-pair .MafsView {
+  --mafs-bg: var(--color-surface);
+  --mafs-fg: var(--color-on-surface);
+  --mafs-origin-color: var(--color-on-surface);
+  --mafs-line-color: color-mix(in srgb, var(--color-outline-variant) 70%, var(--color-surface));
+  --mafs-axis-stroke-width: 1.5px;
+  --mafs-blue: var(--color-primary);
+  --mafs-indigo: var(--color-primary);
+  --mafs-pink: var(--color-secondary);
+  --mafs-orange: var(--color-category-1);
+  font-family: var(--font-body);
+}
+.le-pair .MafsView text {
+  font: 700 13px var(--font-body);
+}
+.le-equations {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.le-equation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+}
+.le-chip {
+  flex: none;
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-primary);
+}
+.le-equation.is-line-1 .le-chip {
+  background: var(--color-secondary);
+}
+.le-number {
+  margin-left: auto;
+  color: var(--color-on-surface-variant);
+  font-weight: 700;
+}
+.le-verdict-line {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+.le-probe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  font-size: var(--text-note);
+}
+.le-probe-at {
+  font-weight: 700;
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.le-tag {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--color-wrong-container);
+  color: var(--color-wrong);
+  font-weight: 700;
+}
+.le-tag.is-on {
+  background: var(--color-right-container);
+  color: var(--color-right);
+}
+.le-tables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.le-table {
+  border-collapse: collapse;
+  font-size: var(--text-note);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-surface);
+}
+.le-table caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: 4px;
+  font-size: var(--text-caption);
+  color: var(--color-on-surface-variant);
+}
+.le-table th,
+.le-table td {
+  min-width: 40px;
+  padding: 4px 8px;
+  border: var(--shape-stroke-thin) solid var(--color-outline-variant);
+  text-align: center;
+}
+.le-table th {
+  font-style: italic;
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+}
+.le-table.is-line-1 th {
+  background: color-mix(in srgb, var(--color-secondary) 16%, var(--color-surface));
+}
+.le-ratios {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+}
+.le-ratios p {
+  margin: 0;
+}
+.le-ratios-title {
+  font-size: var(--text-caption);
+  color: var(--color-on-surface-variant);
+  font-weight: 700;
+}
+.le-compare {
+  padding-top: 4px;
+}
+.le-verdict {
+  font-weight: 800;
+  color: var(--color-right);
+}
+.le-verdict.is-parallel {
+  color: var(--color-wrong);
+}
+.le-verdict.is-coincident {
+  color: var(--color-primary);
+}
+/* a, b, c side by side: each stepper stands up (+ on top, the value, − below) so three fit a phone. */
+.le-steppers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.le-steppers .le-stepper {
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+.le-steppers .le-stepper-value {
+  min-width: 0;
+}
+.le-hint {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-on-surface-variant);
+}
+
+/* ---- solveSteps ---- */
+.le-solve {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.le-given {
+  padding: 4px 12px;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+}
+.le-given-line,
+.le-step-line {
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+}
+.le-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.le-choices-prompt {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+.le-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.le-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.le-step {
+  padding: 8px 12px 4px;
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0 var(--shape-radius-s) var(--shape-radius-s) 0;
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface));
+}
+.le-step.is-check {
+  border-left-color: var(--color-right);
+  background: var(--color-right-container);
+}
+.le-step.is-result {
+  border-left-color: var(--color-secondary);
+  background: var(--color-secondary-container);
+}
+.le-step-caption {
+  margin: 0;
+  font-size: var(--text-note);
+  color: var(--color-on-surface);
+}
+.le-step-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+.le-cross {
+  display: block;
+  align-self: center;
+}
+.le-cross-headword {
+  font: 800 17px var(--font-display);
+  fill: var(--color-on-surface);
+  text-anchor: middle;
+  font-style: italic;
+}
+.le-cross-name {
+  font: 600 12px var(--font-body);
+  fill: var(--color-on-surface-variant);
+  text-anchor: middle;
+}
+.le-cross-value {
+  font: 800 18px var(--font-display);
+  fill: var(--color-on-surface);
+  text-anchor: middle;
+  font-variant-numeric: tabular-nums;
+}
+.le-cross-arrow {
+  stroke-width: 2px;
+}
+.le-cross-arrow.is-down {
+  stroke: var(--color-primary);
+}
+.le-cross-arrow.is-up {
+  stroke: var(--color-secondary);
+  stroke-dasharray: 4 3;
+}
+.le-cross-head.is-down {
+  fill: var(--color-primary);
+}
+.le-cross-head.is-up {
+  fill: var(--color-secondary);
+}
+
+/* ---- linearScene: the story pictures ---- */
+.lq-svg {
+  display: block;
+}
+.lq-sky {
+  fill: color-mix(in srgb, var(--color-category-4) 18%, var(--color-surface));
+}
+.lq-dusk {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, var(--color-secondary-container));
+}
+.lq-night {
+  fill: var(--color-inverse-surface);
+}
+.lq-star {
+  fill: var(--color-secondary-container);
+}
+.lq-ground {
+  fill: color-mix(in srgb, var(--color-right) 30%, var(--color-surface));
+}
+.lq-bank {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-surface));
+}
+.lq-gravel {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 30%, var(--color-surface));
+}
+.lq-wood {
+  fill: color-mix(
+    in srgb,
+    var(--color-on-secondary-container) 35%,
+    var(--color-secondary-container)
+  );
+}
+.lq-wood-grain {
+  stroke: color-mix(
+    in srgb,
+    var(--color-on-secondary-container) 45%,
+    var(--color-secondary-container)
+  );
+  stroke-width: 1px;
+}
+.lq-road {
+  fill: color-mix(in srgb, var(--color-inverse-surface) 70%, var(--color-surface));
+}
+.lq-road-line {
+  stroke: var(--color-surface);
+  stroke-width: 2px;
+  stroke-dasharray: 14 10;
+}
+.lq-string {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-surface));
+  stroke-width: 1px;
+}
+.lq-flag-a {
+  fill: var(--color-secondary);
+}
+.lq-flag-b {
+  fill: var(--color-primary);
+}
+.lq-flag-c {
+  fill: var(--color-category-3);
+}
+.lq-flag-d {
+  fill: var(--color-category-4);
+}
+.lq-wheel-rim {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5px;
+}
+.lq-wheel-spoke {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+.lq-wheel-leg {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.lq-wheel-hub {
+  fill: var(--color-on-surface);
+}
+.lq-wheel.is-far {
+  opacity: 0.45;
+}
+.lq-post,
+.lq-pole,
+.lq-peg {
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 80%, var(--color-inverse-surface));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.lq-peg {
+  stroke-width: 1.5px;
+}
+.lq-awning-a {
+  fill: var(--color-wrong);
+}
+.lq-awning-b {
+  fill: var(--color-surface);
+}
+.lq-cloth {
+  fill: color-mix(in srgb, var(--color-category-3) 75%, var(--color-surface));
+}
+.lq-cloth-edge {
+  fill: color-mix(in srgb, var(--color-category-3) 75%, var(--color-inverse-surface));
+}
+.lq-glass {
+  fill: color-mix(in srgb, var(--color-category-4) 12%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.7px;
+}
+.lq-lemonade {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-secondary-container));
+}
+.lq-lemon {
+  fill: var(--color-secondary);
+}
+.lq-jug-handle {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.lq-samosa {
+  fill: color-mix(in srgb, var(--color-secondary) 60%, var(--color-on-secondary-container));
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 0.6px;
+  stroke-linejoin: round;
+}
+.lq-tray {
+  fill: var(--color-on-surface-variant);
+}
+.lq-box {
+  fill: color-mix(in srgb, var(--color-primary) 35%, var(--color-on-surface-variant));
+}
+.lq-box-lid {
+  fill: color-mix(in srgb, var(--color-primary) 25%, var(--color-on-surface-variant));
+}
+.lq-box-handle {
+  fill: var(--color-on-surface-variant);
+}
+.lq-box-seam {
+  stroke: color-mix(in srgb, var(--color-inverse-surface) 40%, transparent);
+  stroke-width: 1px;
+}
+.lq-lock {
+  fill: color-mix(in srgb, var(--color-secondary) 70%, var(--color-on-secondary-container));
+}
+.lq-dial {
+  fill: var(--color-surface);
+}
+.lq-dial-text {
+  font: 800 15px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.lq-board,
+.lq-slip {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.lq-slip-rule {
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+  stroke-dasharray: 3 2;
+}
+.lq-price,
+.lq-total {
+  font: 800 11px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.lq-total {
+  font-size: 18px;
+}
+.lq-pencil {
+  fill: var(--color-secondary);
+}
+.lq-pencil-tip {
+  fill: var(--color-on-surface);
+}
+.lq-eraser {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+}
+.lq-ring {
+  fill: none;
+  stroke: var(--color-wrong);
+  stroke-width: 2px;
+}
+.lq-coin {
+  fill: var(--color-secondary);
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 0.6px;
+}
+.lq-note {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-surface));
+  stroke: var(--color-right);
+  stroke-width: 0.5px;
+}
+.lq-note.is-b {
+  fill: color-mix(in srgb, var(--color-category-3) 40%, var(--color-surface));
+  stroke: var(--color-category-3);
+}
+.lq-notebook {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.6px;
+}
+.lq-notebook-line {
+  stroke: var(--color-primary);
+  stroke-width: 0.6px;
+}
+.lq-fence {
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-surface));
+  stroke-width: 2px;
+}
+.lq-sleeper {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-inverse-surface));
+}
+.lq-rail {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-inverse-surface));
+  stroke-width: 4px;
+}
+.lq-engine {
+  fill: var(--color-wrong);
+}
+.lq-engine-roof {
+  fill: color-mix(in srgb, var(--color-wrong) 60%, var(--color-inverse-surface));
+}
+.lq-lamp {
+  fill: var(--color-secondary-container);
+}
+.lq-bus {
+  fill: var(--color-secondary);
+}
+.lq-bus-stripe {
+  fill: var(--color-on-secondary-container);
+}
+.lq-window {
+  fill: color-mix(in srgb, var(--color-category-4) 25%, var(--color-surface));
+}
+.lq-tyre {
+  fill: var(--color-inverse-surface);
+}
+.lq-route {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.lq-ticket.is-a {
+  fill: color-mix(in srgb, var(--color-secondary) 60%, var(--color-surface));
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 0.5px;
+}
+.lq-ticket.is-b {
+  fill: color-mix(in srgb, var(--color-primary) 35%, var(--color-surface));
+  stroke: var(--color-primary);
+  stroke-width: 0.5px;
+}
+.lq-water {
+  fill: color-mix(in srgb, var(--color-category-4) 45%, var(--color-surface));
+}
+.lq-current {
+  stroke: var(--color-surface);
+  stroke-width: 1.5px;
+  opacity: 0.8;
+}
+.lq-current-head {
+  fill: var(--color-surface);
+  opacity: 0.8;
+}
+.lq-wake {
+  stroke: var(--color-surface);
+  stroke-width: 1.2px;
+}
+.lq-hull {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 85%, var(--color-inverse-surface));
+}
+.lq-oar {
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 60%, var(--color-surface));
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.lq-trunk {
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 3px;
+}
+.lq-tree {
+  fill: color-mix(in srgb, var(--color-right) 70%, var(--color-surface));
+}
+.lq-bulb-glow {
+  fill: var(--color-secondary);
+  opacity: 0.25;
+}
+.lq-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.lq-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.lq-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.lq-hair-grey {
+  fill: var(--color-surface-press);
+}
+.lq-cap {
+  fill: var(--color-wrong);
+}
+.lq-face circle {
+  fill: var(--color-inverse-surface);
+}
+.lq-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.lq-specs circle,
+.lq-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.lq-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.lq-shirt-riya {
+  fill: var(--color-category-4);
+}
+.lq-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.lq-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.lq-shirt-mom {
+  fill: var(--color-category-3);
+}
+.lq-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.lq-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.lq-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.lq-shirt-grandpa-line {
+  stroke: var(--color-on-surface-variant);
+}
+.lq-shirt-mom-line {
+  stroke: var(--color-category-3);
+}

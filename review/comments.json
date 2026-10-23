@@ -1,0 +1,781 @@
+[
+  {
+    "lessonId": "concept/d2d596fb72746c28",
+    "lessonTitle": "Euclid's division lemma",
+    "board": "lemma",
+    "boardIndex": 1,
+    "piece": "w6",
+    "part": null,
+    "snapshot": "**There is only one answer.** Each round takes 6 sweets out of the box. Riya keeps going while there are at least 6 left, and stops as soon as there are fewer than 6.",
+    "locale": "en",
+    "quote": "",
+    "text": "there is only one answer feels weird? can we frame better",
+    "id": "cmvdxpha3lr5",
+    "createdAt": "2026-10-18T14:42:18.939Z",
+    "status": "done",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-18T14:53:26Z",
+        "text": "Proposal below: the heading becomes the question the table answers."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T14:58:34Z",
+        "text": "Done: both lines changed as proposed (English and Hindi). Rebuild content to see it."
+      }
+    ],
+    "proposal": {
+      "summary": "Ask it as a question the table then answers, and end by tying it to 'unique' in the lemma.",
+      "changes": [
+        {
+          "before": "**There is only one answer.** Each round takes 6 sweets out of the box. Riya keeps going while there are at least 6 left, and stops as soon as there are fewer than 6.",
+          "after": "**Could the sharing stop anywhere else?** Each round takes 6 sweets out of the box. Riya keeps going while there are at least 6 left, and stops as soon as there are fewer than 6."
+        },
+        {
+          "before": "Only one number in that row is less than 6, so she can stop in only one place: 3 rounds, 2 left over.",
+          "after": "No. Only one number in that row is less than 6, so the sharing always stops in the same place: 3 rounds, 2 left over. That's why the lemma says $q$ and $r$ are **unique**."
+        }
+      ]
+    }
+  },
+  {
+    "lessonId": "concept/d2d596fb72746c28",
+    "lessonTitle": "Euclid's division lemma",
+    "board": "exampleSquare",
+    "boardIndex": 4,
+    "piece": "w4",
+    "part": null,
+    "snapshot": "**Why divide by 2?** We want a multiple of 4, and squaring $2q$ gives $4q^2$, a multiple of 4. Now square both sides: $$\\begin{aligned} n^2 &= (2q + r)^2 \\\\ &= 4q^2 + 4qr + r^2 \\\\ &= 4(q^2 + qr) + r^2 \\\\ &= 4m + r^2, \\quad \\text{where } m = q^2 + qr. \\end{aligned}$$",
+    "locale": "en",
+    "quote": "",
+    "text": "we can name it better , why choose b=2 ? because we want something like 4m , which we can get (2)**2  ----> give propoer intution",
+    "id": "cmvdy2wc3wxq",
+    "createdAt": "2026-10-18T14:52:44.979Z",
+    "status": "done",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-18T14:53:26Z",
+        "text": "Proposal below: label names the question, intuition before the algebra."
+      },
+      {
+        "by": "you",
+        "at": "2026-10-18T14:57:33.758Z",
+        "text": "we can do if we choose (bq+r)**2 => b2q2 + 2bqr + r2 \nsee if we take b=2 then we will get something like 4q2+4qr+r2"
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T14:58:09Z",
+        "text": "Revised to your general (bq + r)² version."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:06:29Z",
+        "text": "Reread the whole page: the old flow chose b = 2, then asked why, then went general, then back to 2. Reordered so the choice comes before it's used."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:11:12Z",
+        "text": "Done: answer reordered as proposed (English and Hindi). Rebuild content to see it."
+      }
+    ],
+    "proposal": {
+      "summary": "Fix the order: the answer picked b = 2 first and explained why afterwards. Now it divides by some b, squares to see which b gives a 4, then picks b = 2 and does the working. The cases and the conclusion after it stay as they are.",
+      "changes": [
+        {
+          "before": "**A.** Let $n$ be any positive integer. Divide it by 2: by Euclid's division lemma with $b = 2$, $$n = 2q + r, \\qquad r = 0 \\text{ or } 1.$$",
+          "after": "**A.** Let $n$ be any positive integer. By Euclid's division lemma, dividing $n$ by some $b$ gives $$n = bq + r, \\qquad 0 \\le r < b$$ Which $b$ should we pick? Square it and see: $$n^2 = b^2q^2 + 2bqr + r^2$$ We want a 4 in front. With $b = 2$, the first two terms both get a 4."
+        },
+        {
+          "before": "**Why divide by 2?** We want a multiple of 4, and squaring $2q$ gives $4q^2$, a multiple of 4. Now square both sides: $$\\begin{aligned} n^2 &= (2q + r)^2 \\\\ &= 4q^2 + 4qr + r^2 \\\\ &= 4(q^2 + qr) + r^2 \\\\ &= 4m + r^2, \\quad \\text{where } m = q^2 + qr. \\end{aligned}$$",
+          "after": "So take $b = 2$, which leaves $r = 0$ or $1$: $$\\begin{aligned} n^2 &= (2q + r)^2 \\\\ &= 4q^2 + 4qr + r^2 \\\\ &= 4(q^2 + qr) + r^2 \\\\ &= 4m + r^2, \\quad \\text{where } m = q^2 + qr. \\end{aligned}$$"
+        }
+      ]
+    }
+  },
+  {
+    "lessonId": "concept/af0ea8e1d811903c",
+    "lessonTitle": "HCF by Euclid's algorithm",
+    "board": "why",
+    "boardIndex": 2,
+    "piece": "because",
+    "part": null,
+    "snapshot": "**Why?** If pieces of length $d$ fit exactly into 18 and into 12, they also fit into what's left when 12 is taken from 18: $$18 - 12 = 6$$ It works back too. If they fit into 12 and 6, they fit into the two together: $$12 + 6 = 18$$ So no length is gained or lost.",
+    "locale": "en",
+    "quote": "",
+    "text": "this explanation is not good bro , this is not looking good",
+    "id": "cmvdz8p0mbd3",
+    "createdAt": "2026-10-18T15:25:15.046Z",
+    "status": "done",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:31:21Z",
+        "text": "Proposal below: counted pieces instead of a letter d."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:38:50Z",
+        "text": "Done: applied as proposed (English and Hindi). Rebuild content to see it."
+      }
+    ],
+    "proposal": {
+      "summary": "Explain it with pieces the student can count on the ribbons, not with d. One length (3 cm) worked through, then the general point in one sentence, then the way back.",
+      "changes": [
+        {
+          "before": "**Why?** If pieces of length $d$ fit exactly into 18 and into 12, they also fit into what's left when 12 is taken from 18: $$18 - 12 = 6$$ It works back too. If they fit into 12 and 6, they fit into the two together: $$12 + 6 = 18$$ So no length is gained or lost.",
+          "after": "**Why the same list?** Take 3 cm pieces. The 18 cm ribbon is 6 pieces. The 12 laid on it covers 4 of them, so the leftover is the other 2: whole pieces again. $$\\underbrace{18}_{6 \\text{ pieces}} = \\underbrace{12}_{4 \\text{ pieces}} + \\underbrace{6}_{2 \\text{ pieces}}$$ The same happens for any length that cuts both 18 and 12: it cuts the leftover too. And back: a length that cuts 12 and 6 cuts 18, because 18 is just 12 and 6 end to end."
+        }
+      ]
+    }
+  },
+  {
+    "lessonId": "concept/af0ea8e1d811903c",
+    "lessonTitle": "HCF by Euclid's algorithm",
+    "board": "division",
+    "boardIndex": 3,
+    "piece": "w5",
+    "part": null,
+    "snapshot": "**In general.** Say $d$ divides $a$ and $b$. Since it divides $b$, it divides $bq$. A number that divides two numbers divides their difference too: $$d \\text{ divides } a - bq = r$$ It works back too. If $d$ divides $b$ and $r$, it divides their sum: $$bq + r = a$$ So $a, b$ and $b, r$ have the same common divisors, and the same HCF:",
+    "locale": "en",
+    "quote": "",
+    "text": "this proof will not go easy for 10th graders , can we have something intutive",
+    "id": "cmvdzfbfifml",
+    "createdAt": "2026-10-18T15:30:24.030Z",
+    "status": "done",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:31:21Z",
+        "text": "Proposal below: the general step told with the ribbon picture."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:33:12Z",
+        "text": "Rewritten as you said: h a common factor of a and b, so h is a factor of a − qb. Numbers line first, then the same steps with letters."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:34:47Z",
+        "text": "Rewritten so the numbers and the letters take the same steps in the same words."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:36:02Z",
+        "text": "Numbers line now says remainder, same as the general proof."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:36:30Z",
+        "text": "Added the first line of the page: the leftover is named the remainder."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:38:50Z",
+        "text": "Done: applied as proposed (English and Hindi). Rebuild content to see it."
+      }
+    ],
+    "proposal": {
+      "summary": "First line names the swap (leftover → remainder). Then numbers and letters follow the same four steps, in the same words: what we want to show, write both as multiples, write the remainder as a − qb, substitute and take the factor out.",
+      "changes": [
+        {
+          "before": "$$\\underbrace{51}_{\\text{ribbon}} = \\underbrace{21}_{\\text{laid}} \\times 2 + \\underbrace{9}_{\\text{leftover}}$$ The leftover, 9, is shorter than 21. That's Euclid's division lemma.",
+          "after": "$$\\underbrace{51}_{\\text{ribbon}} = \\underbrace{21}_{\\text{laid}} \\times 2 + \\underbrace{9}_{\\text{leftover}}$$ This is $51 \\div 21$: the leftover, 9, is the **remainder**, and it's shorter than 21. That's Euclid's division lemma. From here on we call it the remainder."
+        },
+        {
+          "before": "**Same common divisors.** First with numbers. 3 divides 21, so it also divides 21 twice over: $$21 \\times 2 = 42$$ 3 divides 51 too, so it divides the difference: $$51 - 42 = 9$$",
+          "after": "**Same common factors.** We want to show: a common factor of 51 and 21 is also a factor of the remainder 9. Take 3, a common factor of 51 and 21. Write both as multiples of 3: $$51 = 3 \\times 17, \\qquad 21 = 3 \\times 7$$ The remainder is what's left of 51 after two 21s: $$9 = 51 - 2 \\times 21$$ Replace 51 and 21 by their multiples of 3, and take the 3 out: $$\\begin{aligned} 9 &= 3 \\times 17 - 2 \\times (3 \\times 7) \\\\ &= 3 \\times (17 - 14) \\\\ &= 3 \\times 3 \\end{aligned}$$ So 3 is a factor of 9."
+        },
+        {
+          "before": "**In general.** Say $d$ divides $a$ and $b$. Since it divides $b$, it divides $bq$. A number that divides two numbers divides their difference too: $$d \\text{ divides } a - bq = r$$ It works back too. If $d$ divides $b$ and $r$, it divides their sum: $$bq + r = a$$ So $a, b$ and $b, r$ have the same common divisors, and the same HCF:",
+          "after": "**In general.** We want to show: a common factor of $a$ and $b$ is also a factor of the remainder $r$. Take $h$, a common factor of $a$ and $b$. Write both as multiples of $h$: $$a = hx, \\qquad b = hy$$ The remainder is what's left of $a$ after $q$ copies of $b$: $$r = a - qb$$ Replace $a$ and $b$ by their multiples of $h$, and take the $h$ out: $$\\begin{aligned} r &= hx - q \\times hy \\\\ &= h(x - qy) \\end{aligned}$$ So $h$ is a factor of $r$. It works the other way too: a common factor of $b$ and $r$ is a factor of $a = qb + r$, in the same way. So $a, b$ and $b, r$ have the same common factors, and the same HCF:"
+        }
+      ]
+    }
+  },
+  {
+    "lessonId": "concept/af0ea8e1d811903c",
+    "lessonTitle": "HCF by Euclid's algorithm",
+    "board": "division",
+    "boardIndex": 3,
+    "piece": "w4",
+    "part": null,
+    "snapshot": "**Same common factors.** We want to show: a common factor of 51 and 21 is also a factor of the remainder 9. Take 3, a common factor of 51 and 21. Write both as multiples of 3: $$51 = 3 \\times 17, \\qquad 21 = 3 \\times 7$$ The remainder is what's left of 51 after two 21s: $$9 = 51 - 2 \\times 21$$ Replace 51 and 21 by their multiples of 3, and take the 3 out: $$\\begin{aligned} 9 &= 3 \\times 17 - 2 \\times (3 \\times 7) \\\\ &= 3 \\times (17 - 14) \\\\ &= 3 \\times 3 \\end{aligned}$$ So 3 is a factor of 9.",
+    "locale": "en",
+    "quote": "",
+    "text": "we shuld write when 51 divided by 21 r=9 and q=2",
+    "id": "cmvdztscxxo2",
+    "createdAt": "2026-10-18T15:41:39.153Z",
+    "status": "done",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:42:04Z",
+        "text": "Proposal below: q and r named at the start."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T15:44:15Z",
+        "text": "Done: applied as proposed (English and Hindi). Rebuild content to see it."
+      }
+    ],
+    "proposal": {
+      "summary": "Open the numbers example with the division itself, naming q and r, so a = 51, b = 21, q = 2, r = 9 line up with the letters in the general proof below.",
+      "changes": [
+        {
+          "before": "**Same common factors.** We want to show: a common factor of 51 and 21 is also a factor of the remainder 9. Take 3, a common factor of 51 and 21. Write both as multiples of 3: $$51 = 3 \\times 17, \\qquad 21 = 3 \\times 7$$ The remainder is what's left of 51 after two 21s: $$9 = 51 - 2 \\times 21$$ Replace 51 and 21 by their multiples of 3, and take the 3 out: $$\\begin{aligned} 9 &= 3 \\times 17 - 2 \\times (3 \\times 7) \\\\ &= 3 \\times (17 - 14) \\\\ &= 3 \\times 3 \\end{aligned}$$ So 3 is a factor of 9.",
+          "after": "**Same common factors.** When 51 is divided by 21, the quotient is $q = 2$ and the remainder is $r = 9$: $$51 = 21 \\times 2 + 9$$ We want to show: a common factor of 51 and 21 is also a factor of the remainder 9. Take 3, a common factor of 51 and 21. Write both as multiples of 3: $$51 = 3 \\times 17, \\qquad 21 = 3 \\times 7$$ The remainder is what's left of 51 after two 21s: $$9 = 51 - 2 \\times 21$$ Replace 51 and 21 by their multiples of 3, and take the 3 out: $$\\begin{aligned} 9 &= 3 \\times 17 - 2 \\times (3 \\times 7) \\\\ &= 3 \\times (17 - 14) \\\\ &= 3 \\times 3 \\end{aligned}$$ So 3 is a factor of 9."
+        }
+      ]
+    }
+  },
+  {
+    "lessonId": "concept/bdcebf0535b8af0e",
+    "lessonTitle": "What is a polynomial",
+    "board": "sort",
+    "boardIndex": 0,
+    "piece": null,
+    "part": null,
+    "snapshot": "Board \"sort\"",
+    "locale": "en",
+    "quote": "",
+    "text": "won't a good idea be to introduce what is a polynimial first ?? like the definations ??",
+    "id": "cmve27lbw8tt",
+    "createdAt": "2026-10-18T16:48:22.460Z",
+    "status": "done",
+    "thread": [
+      {
+        "text": "Proposal: open the page with the definition, then the tap question applies it.\n\n1. Title, then definition: \"A **polynomial** in x is a sum of terms. Each term is a number times a power of x, and every power is a whole number: 0, 1, 2, …\" plus one example with powers written out: 2x² − 3x + 4 = 2x² − 3x¹ + 4x⁰.\n2. \"Tap every polynomial\" (same list, same wrong-tap feedback).\n3. After it: the powers-written-out block for √x and 1/(x−1).\n4. Drop the \"what do they have in common\" question, since the rule is already given.\n\nSame fix on L2: the value definition goes before the ball, and the zero definition goes before the machine hunt. Results (at most n zeroes, sum and product, when to stop dividing) keep explore-then-state, because those are things we find, not names.",
+        "by": "claude",
+        "at": "2026-10-18T16:50:52.195Z"
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T16:58:29.896Z",
+        "text": "Done as proposed, plus the same definition-first fix across the chapter."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/bdcebf0535b8af0e",
+    "lessonTitle": "What is a polynomial",
+    "board": "names",
+    "boardIndex": 2,
+    "piece": "w3",
+    "part": null,
+    "snapshot": "Every quadratic can be written as $$ax^2 + bx + c$$ where $a$, $b$ and $c$ are real numbers.",
+    "locale": "en",
+    "quote": "",
+    "text": "this feels kind of we are pointing out only for quadratic as anyway we are going to explain general forma below",
+    "id": "cmve28sds5fe",
+    "createdAt": "2026-10-18T16:49:18.256Z",
+    "status": "done",
+    "thread": [
+      {
+        "text": "Proposal: remove the quadratic-only line. New order: names table → General forms (linear, quadratic, cubic, a ≠ 0) shown straight away → \"What if a = 0?\" → why a can't be 0 but b and c can → \"Which are quadratic?\".",
+        "by": "claude",
+        "at": "2026-10-18T16:50:52.195Z"
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-18T16:58:29.896Z",
+        "text": "Done as proposed, plus the same definition-first fix across the chapter."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "seeing",
+    "boardIndex": 0,
+    "piece": "reflect",
+    "part": null,
+    "snapshot": "A charger doesn't glow. A bulb or the Sun makes its own light, but most things don't. Light falls on them, bounces off, and some of it reaches your eyes. That's the only way you ever see them. Light bouncing off a surface is called **reflection**. In a dark room there's no light to bounce, so nothing reaches Riya's eyes.",
+    "locale": "en",
+    "quote": "",
+    "text": "how did NCERT explain it ?? basically that we see things after reflection , shouldn't we first tell them ??? i feel we are not starting from basics",
+    "id": "cmveojn08hbx",
+    "createdAt": "2026-10-19T03:13:36.056Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Agreed. NCERT opens with exactly this: we see an object because it reflects the light falling on it, and that reflected light reaches our eyes. Proposal: L1 starts with a 'How we see' theory section in that order (light sources → most things only reflect light → reflected light reaches the eye → that's seeing), with an animation, before any story. The power-cut scene comes after, as 'now explain this'."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "seeing",
+    "boardIndex": 0,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "Sunday, 8 pm. Riya and Kabir are twenty minutes from the end of the movie when the power goes. The TV dies. The whole street goes dark. Riya grabs her phone to keep watching: **2%**. The charger is *right there* on the table. She's staring straight at it, and she can't see it.",
+    "locale": "en",
+    "quote": "",
+    "text": "she is staring at it and still can't see it ?",
+    "id": "cmvf0pnpgwdv",
+    "createdAt": "2026-10-19T08:54:12.291Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Fair: 'staring at it and can't see it' sounds illogical. Proposal: 'She knows exactly where the charger is, but in the dark she can't see it at all.' and the scene moves after the theory as an application."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "seeing",
+    "boardIndex": 0,
+    "piece": "ray",
+    "part": null,
+    "snapshot": "Found it! The torch's light lands on the charger, bounces off, and reaches Riya's eyes. Notice two things. The light goes in a **straight line** from the torch. And the charger throws a sharp shadow, because light can't bend around it.",
+    "locale": "en",
+    "quote": "",
+    "text": "these are not the evident from the pictures",
+    "id": "cmvf0y8kwfpr",
+    "createdAt": "2026-10-19T09:00:52.591Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Right, the still picture doesn't show either claim. Proposal: an animation: the torch switches on, light travels out in straight lines (moving dashes along rays), hits the charger, bounces into the eye; then a small source + an object → a sharp shadow, and the rays that just miss the edge go straight on (no bending round). Text only states what the animation shows."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "words",
+    "boardIndex": 3,
+    "piece": "room",
+    "part": null,
+    "snapshot": "planeMirror: a torch shining down on a mirror along the floor, with the normal and both angles drawn",
+    "locale": "en",
+    "quote": "",
+    "text": "it would be great to see markation of dimesion on the mirror , currently we only have 0 and 100 cm",
+    "id": "cmvf17w20fa5",
+    "createdAt": "2026-10-19T09:08:22.920Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Proposal: ruler along the mirror with ticks every 5 cm and numbers every 10 cm (0–100), plus the strike point's position read out ('lands at 50 cm')."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "words",
+    "boardIndex": 3,
+    "piece": "w3",
+    "part": null,
+    "snapshot": "**The rays of a bounce.** The ray coming to the mirror is the **incident ray**. The point where it meets the mirror is the **point of incidence**. The line drawn there **at right angles to the mirror** is the **normal** (the dashed line). The ray going away is the **reflected ray**.",
+    "locale": "en",
+    "quote": "",
+    "text": "this is a important concpet , we could have used a diagram to expain all the angles no ?",
+    "id": "cmvf18u5ur65",
+    "createdAt": "2026-10-19T09:09:07.122Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Agreed. Proposal: one labelled diagram with leader lines: incident ray, point of incidence, normal (dashed, with the right-angle mark), reflected ray, angle i, angle r — each label lighting up as its definition is read (step-through: tap 'next' to reveal one term at a time)."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "realVirtual",
+    "boardIndex": 7,
+    "piece": "paper",
+    "part": null,
+    "snapshot": "mirrorImage: the arrow, the mirror and Kabir's sheet of paper behind the mirror exactly where the image is: the paper stays dark, only the dashed lines pass through it",
+    "locale": "en",
+    "quote": "",
+    "text": "image and object are not looking alike , might cause confusion",
+    "id": "cmvf1mmph8tu",
+    "createdAt": "2026-10-19T09:19:50.644Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Proposal: draw the image exactly like the object (same arrow, same colour), just dashed/faded to mark it as virtual — so it's obviously 'the same thing, seen behind the mirror'. Same change in the curved-mirror and lens props where the image is upright."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "planeImage",
+    "boardIndex": 8,
+    "piece": "lateral",
+    "part": null,
+    "snapshot": "Same size, every time: no bigger. And there's a weirder problem. The subtitles in the mirror read **backwards**. Riya waves her right hand, and her mirror self waves the left. Left and right are swapped: that's **lateral inversion**. Just then a siren goes past outside, and Riya finally gets why AMBULANCE is painted back to front on the ambulance's bonnet. The driver ahead sees it in the rear-view mirror, flipped, and reads it the right way.",
+    "locale": "en",
+    "quote": "",
+    "text": "it would good if we can demostrate these things bro",
+    "id": "cmvf1qheu532",
+    "createdAt": "2026-10-19T09:22:50.406Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Proposal: an interactive lateral-inversion demo: a word (e.g. RIYA / AMBULANCE) and a hand in front of a mirror; the mirror shows the flipped version; tap to 'walk round' and compare left/right. Then the ambulance bonnet shown as written and as seen in the rear-view mirror."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "examples",
+    "boardIndex": 9,
+    "piece": "w4",
+    "part": null,
+    "snapshot": "The angle is already measured from the normal, so the angle of incidence is 30°. By the first law: $$r = i = 30°$$ The two rays are on opposite sides of the normal, so the angle between them is $$i + r = 30° + 30° = 60°$$",
+    "locale": "en",
+    "quote": "",
+    "text": "figures will help bro to understand",
+    "id": "cmvf1rquu3r8",
+    "createdAt": "2026-10-19T09:23:49.302Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Proposal: every worked example gets its figure: the mirror, the normal, the ray at 30° (and the 25°-from-the-surface case with both angles marked, so the 90° − 25° step is visible)."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/63430a5659cf3492",
+    "lessonTitle": "Spherical mirrors",
+    "board": "wall",
+    "boardIndex": 0,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "Monday morning. Kabir yells from Mom's room. On the wall, just below the window, there's a **picture of the window**: glowing, sharp, and **upside down**. Even the tree outside is upside down. It's coming off Mom's round shaving mirror, sitting on the table across the room, facing the window.",
+    "locale": "en",
+    "quote": "",
+    "text": "mom's shaving mirror ??",
+    "id": "cmvf1sy57dw4",
+    "createdAt": "2026-10-19T09:24:45.403Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Fair: that's odd. Proposal: Mom's round make-up mirror (the magnifying kind on a stand). Same physics (concave), and the scene/text change to match."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/63430a5659cf3492",
+    "lessonTitle": "Spherical mirrors",
+    "board": "parts",
+    "boardIndex": 2,
+    "piece": "sphere",
+    "part": null,
+    "snapshot": "lightScene: a sphere seen from the side as a dashed circle, with a short arc of it drawn thick as the mirror; its centre C, the middle of the mirror P, and the radius R from C to P",
+    "locale": "en",
+    "quote": "",
+    "text": "this image looks weird, how exactly is this part of the mirror",
+    "id": "cmvf21tqybbv",
+    "createdAt": "2026-10-19T09:31:39.610Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Proposal: build it up in steps: a shiny steel ball → slice off a small cap (animation) → that cap is a spherical mirror; hollow side shiny = concave, outside shiny = convex → then the side view with C (centre of the ball), R (its radius) and P (middle of the cap)."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/63430a5659cf3492",
+    "lessonTitle": "Spherical mirrors",
+    "board": "focus",
+    "boardIndex": 3,
+    "piece": "guess",
+    "part": null,
+    "snapshot": "Moving the paper back and forth, Kabir finds a small, very bright spot. A few minutes later the paper starts to smoke, and Mom confiscates the mirror. Why did the paper smoke?",
+    "locale": "en",
+    "quote": "",
+    "text": "i feel these are the things a perosn can appriecites after he has read theory ; stories are nice but we need to teach them theory first",
+    "id": "cmvf24ypjfjo",
+    "createdAt": "2026-10-19T09:34:06.007Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Agreed — this is the structural point. Proposal (whole chapter): each lesson = Learn (theory in NCERT's order, with diagrams/animations and 'try it' props) → See it in life (the story moment, now explained) → Practice. Story stays as the frame and the applications, not the way the theory is delivered. Here: define principal focus and focal length first (parallel rays → meet at F, with an animated beam), then Kabir's burning paper as 'why did it smoke?'."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/b629c15e84fe70f7",
+    "lessonTitle": "Ray diagrams for mirrors",
+    "board": "centre",
+    "boardIndex": 3,
+    "piece": "w3",
+    "part": null,
+    "snapshot": "**Why:** the line from $C$ to any point of the mirror is the normal there. So this ray meets the mirror **along the normal**: its angle of incidence is 0, its angle of reflection is 0 too, and it goes straight back.",
+    "locale": "en",
+    "quote": "",
+    "text": "bro it would help to understand things propoerly , we can easily explain the behaviour no , why these are happeing , we just need cuircles understanding",
+    "id": "cmvf2ax6jff9",
+    "createdAt": "2026-10-19T09:38:43.963Z",
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-19T09:42:26.604Z",
+        "text": "Agreed. Proposal: a short circle-geometry step before the ray rules: (1) a radius of a circle meets the circle at right angles (animate: tangent at a point, radius to it, right-angle mark; drag the point round the circle, it stays 90°); (2) so the line from C to any point of the mirror is the normal there; (3) then each rule falls out: through C → along the normal → straight back; parallel ray → equal angles about that normal → through F (with the triangle argument drawn)."
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "names",
+    "boardIndex": 6,
+    "piece": "room",
+    "part": null,
+    "snapshot": "planeMirror: a torch shining down on a flat mirror with a ruler along it; tapping next labels, one by one, the incident ray, the point of incidence, the normal, the reflected ray, i and r",
+    "locale": "en",
+    "quote": "",
+    "text": "can we differnetiat angle of incidednce and refelction they are colored the same",
+    "id": "cmvf4x1m2vvx",
+    "createdAt": "2026-10-19T10:51:55.370Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "laws",
+    "boardIndex": 8,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "**The laws of reflection.** (1) The angle of incidence is equal to the angle of reflection. $$i = r$$ (2) The incident ray, the normal at the point of incidence and the reflected ray all lie in the same flat sheet (the same **plane**).",
+    "locale": "en",
+    "quote": "",
+    "text": "would be good to show a demonstration for 2 no ?",
+    "id": "cmvf4zum9vo5",
+    "createdAt": "2026-10-19T10:54:06.273Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "realVirtual",
+    "boardIndex": 10,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "**Real and virtual.** If the rays **really meet** at the image, the image is **real**. Light actually gets there, so it can be caught on a screen, like a projector's picture on a wall. If the rays only **seem to come from** the image, it is **virtual**. No light gets there, so no screen can catch it: you can only see it by looking into the mirror.",
+    "locale": "en",
+    "quote": "",
+    "text": "it would be really good if we can demonstrate it ; differtaite the 2 types",
+    "id": "cmvf52vnw2eb",
+    "createdAt": "2026-10-19T10:56:27.596Z",
+    "status": "open",
+    "thread": [
+      {
+        "by": "you",
+        "at": "2026-10-19T10:57:26.619Z",
+        "text": "how can we introduce this without introducing the mirros is kind of tricky"
+      }
+    ]
+  },
+  {
+    "lessonId": "concept/3027536a100838c2",
+    "lessonTitle": "Reflection and images",
+    "board": "planeImage",
+    "boardIndex": 11,
+    "piece": "scene",
+    "part": null,
+    "snapshot": "mirrorImage: the object and its image in a plane mirror, with both distances marked on the floor",
+    "locale": "en",
+    "quote": "",
+    "text": "we can show the height also no ?? it would be good to see what mirros does to the height of the image",
+    "id": "cmvf55mm49be",
+    "createdAt": "2026-10-19T10:58:35.836Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/d2d596fb72746c28",
+    "lessonTitle": "Euclid's division lemma",
+    "board": "lemma",
+    "boardIndex": 1,
+    "piece": "w7",
+    "part": null,
+    "snapshot": "$$\\begin{array}{l|cccc} \\text{Rounds} & 0 & 1 & 2 & 3 \\\\ \\hline \\text{Sweets in the box} & 20 & 14 & 8 & \\mathbf{2} \\end{array}$$",
+    "locale": "en",
+    "quote": "",
+    "text": "there is a rendering issue throughout the chapter",
+    "id": "cmvj32oi52q1",
+    "createdAt": "2026-10-22T05:11:23.789Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/d2d596fb72746c28",
+    "lessonTitle": "Euclid's division lemma",
+    "board": "lemma",
+    "boardIndex": 1,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "Every sweet ends up on a plate or in the box: $$\\underbrace{20}_{\\text{sweets}} = \\underbrace{6}_{\\text{friends}} \\times \\underbrace{3}_{\\text{rounds}} + \\underbrace{2}_{\\text{left over}}$$",
+    "locale": "en",
+    "quote": "",
+    "text": "rendering issue",
+    "id": "cmvj32xt8hly",
+    "createdAt": "2026-10-22T05:11:35.852Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/af0ea8e1d811903c",
+    "lessonTitle": "HCF by Euclid's algorithm",
+    "board": "story",
+    "boardIndex": 0,
+    "piece": "ribbons",
+    "part": null,
+    "snapshot": "stickMeasure: ribbons of 18 cm and 12 cm, with pieces of 1 to 7 cm to mark on both",
+    "locale": "en",
+    "quote": "",
+    "text": "check this also",
+    "id": "cmvj333og075",
+    "createdAt": "2026-10-22T05:11:43.456Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/90b8b2408e9d2fec",
+    "lessonTitle": "The Fundamental Theorem of Arithmetic",
+    "board": "story",
+    "boardIndex": 0,
+    "piece": "riya",
+    "part": null,
+    "snapshot": "factorTree: Riya's tree: 360 split first as 10 × 36",
+    "locale": "en",
+    "quote": "",
+    "text": "when a number is selected it looks off (bold is not competely visible)",
+    "id": "cmvkqeej986k",
+    "createdAt": "2026-10-23T08:52:08.085Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/0964e549eb68be7e",
+    "lessonTitle": "Irrational numbers",
+    "board": "intro",
+    "boardIndex": 0,
+    "piece": "must",
+    "part": null,
+    "snapshot": "A prime $p$ divides $a^2$. Must $p$ divide $a$?",
+    "locale": "en",
+    "quote": "",
+    "text": "we should try to lead with an example, direct notations might be harder for kids to understand",
+    "id": "cmvkr4ysyvjw",
+    "createdAt": "2026-10-23T09:12:47.410Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/0964e549eb68be7e",
+    "lessonTitle": "Irrational numbers",
+    "board": "intro",
+    "boardIndex": 0,
+    "piece": "proof",
+    "part": null,
+    "snapshot": "**Why.** $p$ divides $a^2$, so $p$ fits inside $a^2$: $a^2$ has a $p$-tower. $a^2$'s towers are $a$'s towers doubled, and doubling a height of 0 gives 0. So $a$ has a $p$-tower too: $p$ divides $a$.",
+    "locale": "en",
+    "quote": "",
+    "text": "this is a confusing way to teach , why can't we just do a =p1^a1 p2^a2 .. by fundamnetal theorm and then \na2 = p1^2a1... \nif a2 divices p (where p is prime) , only if 1 of pi is p itslef somehting like that",
+    "id": "cmvkr7euqg3l",
+    "createdAt": "2026-10-23T09:14:41.522Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/0964e549eb68be7e",
+    "lessonTitle": "Irrational numbers",
+    "board": "intro",
+    "boardIndex": 0,
+    "piece": "prime",
+    "part": null,
+    "snapshot": "It needs $p$ to be prime. 4 divides 36 but not 6: its two 2s fit inside 36, but 6 has only one 2. $$4 = 2^2, \\quad 36 = 2^2 \\times 3^2, \\quad 6 = 2 \\times 3$$",
+    "locale": "en",
+    "quote": "",
+    "text": "nice example to have but can be framed better",
+    "id": "cmvkr8xuhfvn",
+    "createdAt": "2026-10-23T09:15:52.793Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/0964e549eb68be7e",
+    "lessonTitle": "Irrational numbers",
+    "board": "combinations",
+    "boardIndex": 3,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "The proof for $\\sqrt{2}$ works for $\\sqrt{3}$ too: use 3 (also prime) in place of 2 at every step. So $\\sqrt{3}$ is irrational as well. **Q.** Show that $5 - \\sqrt{3}$ is irrational.",
+    "locale": "en",
+    "quote": "",
+    "text": "there appear some layout issue Q should be on new line no ?",
+    "id": "cmvkra0dznf0",
+    "createdAt": "2026-10-23T09:16:42.743Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/37acfda40cd09c1e",
+    "lessonTitle": "Decimal expansions",
+    "board": "repeats",
+    "boardIndex": 2,
+    "piece": "w2",
+    "part": null,
+    "snapshot": "**One step of long division** $$\\underbrace{3}_{\\text{remainder}} \\times 10 = 8 \\times \\underbrace{3}_{\\text{digit}} + \\underbrace{6}_{\\text{new remainder}}$$ This is the first step of $3 \\div 8$. The next digit and the next remainder depend only on the remainder. The clock marks each remainder, an arrow per step.",
+    "locale": "en",
+    "quote": "",
+    "text": "bro read the full page the starting feels very out of place",
+    "id": "cmvkrdbbf1y1",
+    "createdAt": "2026-10-23T09:19:16.875Z",
+    "status": "open",
+    "thread": []
+  },
+  {
+    "lessonId": "concept/37acfda40cd09c1e",
+    "lessonTitle": "Decimal expansions",
+    "board": "repeats",
+    "boardIndex": 2,
+    "piece": "predict",
+    "part": null,
+    "snapshot": "The remainder is 1 again, just like at the start. What will the next digit be?",
+    "locale": "en",
+    "quote": "",
+    "text": "the questuon is ill poised , next digit of what?",
+    "id": "cmvkre53olz2",
+    "createdAt": "2026-10-23T09:19:55.476Z",
+    "status": "open",
+    "thread": []
+  }
+]

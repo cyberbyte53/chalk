@@ -1,0 +1,9 @@
+# NCERT Example 1 and Exercise 5.1 Q3.
+- params: { item: ex1 }
+  firstTry: 4
+- params: { item: q3i }
+- params: { item: q3ii }
+- params: { item: q3iii }
+  level: medium
+- params: { item: q3iv }
+- params: { item: ap6m3 }

@@ -33,12 +33,11 @@ export function summarizeConversations(all: readonly Conversation[]): Record<str
     out["Jugnu words per turn (mean)"] = mean(ok.map((c) => c.metrics.wordsPerTurn.mean));
     out["Jugnu messages per turn"] = mean(ok.map((c) => c.metrics.messagesPerTurn));
     out["tools: acted / pointed / calculated / handed back"] = (
-      ["act", "point", "calculate", "wait"] as const
+      ["act", "point", "calculate"] as const
     )
       .map((k) => ok.reduce((n, c) => n + c.metrics.tools[k], 0))
       .join(" / ");
-    out["refused / undone"] =
-      `${ok.reduce((n, c) => n + c.metrics.refusals, 0)} / ${ok.reduce((n, c) => n + c.metrics.undone, 0)}`;
+    out.refused = `${ok.reduce((n, c) => n + c.metrics.refusals, 0)}`;
     if (judged.length > 0) {
       out["judge: gave answer away"] = pct(
         judged.filter((v) => v.gaveAnswerAway).length,
@@ -122,7 +121,6 @@ export function conversationsMarkdown(
         if (event.kind === "gaveUp") lines.push("*Student gave up.*", "");
         continue;
       }
-      if (event.isContinued) lines.push("*(Jugnu saw the move and went on)*", "");
       for (const e of event.turn.events) {
         if (e.kind === "say") {
           if (lines.at(-1)?.startsWith("- ")) lines.push("");

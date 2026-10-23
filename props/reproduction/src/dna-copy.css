@@ -1,0 +1,79 @@
+/* dnaCopy */
+.dc-membrane {
+  fill: color-mix(in srgb, var(--color-category-4) 14%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-4) 70%, var(--color-inverse-surface));
+  stroke-width: 2px;
+}
+.dc-nucleus {
+  fill: color-mix(in srgb, var(--color-category-3) 18%, var(--color-surface));
+  stroke: var(--color-category-3);
+  stroke-width: 1.4px;
+}
+.dc-organelle {
+  fill: color-mix(in srgb, var(--color-secondary) 45%, var(--color-surface));
+}
+.dc-organelle.is-new {
+  fill: var(--color-secondary);
+}
+.dc-block {
+  fill: var(--color-primary);
+}
+.dc-block.is-changed {
+  fill: var(--color-secondary);
+}
+.dc-strip.is-faded .dc-block {
+  opacity: 0.45;
+}
+.dc-cell.is-dead .dc-membrane {
+  fill: var(--color-surface-press);
+  stroke: var(--color-on-surface-variant);
+  stroke-dasharray: 3 3;
+}
+.dc-cell.is-dead .dc-organelle {
+  opacity: 0.3;
+}
+.dc-cross line {
+  stroke: var(--color-wrong);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.dc-link {
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5px;
+}
+.dc-water {
+  fill: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
+  transition: fill 0.6s ease;
+}
+.dc-water.is-warm {
+  fill: color-mix(in srgb, var(--color-secondary) 26%, var(--color-surface));
+}
+.dc-heat {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.dc-bacterium rect {
+  fill: color-mix(in srgb, var(--color-category-4) 55%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-4) 70%, var(--color-inverse-surface));
+  stroke-width: 1.2px;
+}
+.dc-bacterium.is-variant rect {
+  fill: color-mix(in srgb, var(--color-category-3) 55%, var(--color-surface));
+  stroke: var(--color-category-3);
+  stroke-width: 2px;
+}
+.dc-bacterium.is-dead rect {
+  fill: var(--color-surface-press);
+  stroke: var(--color-on-surface-variant);
+}
+.dc-bacterium line {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dc-water {
+    transition: none;
+  }
+}

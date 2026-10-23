@@ -1,0 +1,10 @@
+# Where Newlands' octaves break.
+- params: { item: calcium }
+  firstTry: 3
+- params: { item: co-ni }
+  firstTry: 4
+  level: medium
+- params: { item: iron }
+  level: medium
+- params: { item: noble }
+  level: hard

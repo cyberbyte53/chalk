@@ -1,0 +1,11 @@
+# The assumed-mean method (Example 2, Activity 1, Exercise 14.1 Q2 and Q6).
+- params: { item: ex2 }
+  firstTry: 1
+- params: { item: anya }
+  level: easy
+- params: { item: q2 }
+  firstTry: 2
+- params: { item: q6 }
+  level: hard
+- params: { item: deviation }
+  level: easy

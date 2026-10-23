@@ -13,12 +13,15 @@ The single map of this repo. README and AGENTS link here instead of copying it. 
 | `packages/exact` | `@chalk/exact` | Exact decimals for content (`dec("7.384")`): kept as written, digit work without floats | nothing |
 | `packages/author` | `@chalk/author` | How content is written: typed board building (props, IS, WHEN, witnesses), `page`, `family`, manifest schemas, ids and versions | `@chalk/content`, `@chalk/prop`, `@chalk/exact`, `zod`, `node:crypto` |
 | `packages/events` | `@chalk/events` | The event backbone: adds the envelope, checks schemas, hands events to subscribers | `@chalk/content` |
-| `packages/jugnu` | `@chalk/jugnu` | Jugnu, the AI tutor: an agent loop over the whole board as data, with tools (the board's own actions, point, calculate, hand back) through a swappable model (any OpenAI-style API, Ollama) | `@chalk/content`, `@chalk/prop`, `zod` |
+| `packages/jugnu` | `@chalk/jugnu` | Jugnu, the AI tutor: an agent loop over the board as data, run on the server on a copy of the board, with tools to think (try what actions would do, calculate) and one reply (say, show, point, then ask with options or go quiet), typed from the board's actions and strict where the board allows through a swappable model (any OpenAI-style API, Ollama); his reply comes back as cues the phone plays | `@chalk/content`, `@chalk/prop`, `zod` |
 | `packages/player` | `@chalk/player` | The board runtime (framework-free; state in `@preact/signals-core`) and the player (Preact, re-rendering each prop only when its own view changes): layout, chrome (Check, feedback, Continue, Jugnu's chat), narration, rich text (KaTeX); raises commits as events | `@chalk/content`, `@chalk/prop`, `@chalk/events`, `@chalk/jugnu`, `preact`, `@preact/signals`, `katex` |
 | `props/<name>` | `@chalk/prop-<name>` | One prop (or a family) each: definition + view + its own `styles.css` (drawn with the look's tokens) | `@chalk/prop`, `@chalk/content`, `@chalk/player` (types), `@chalk/draw`, `preact` |
 | `library` | `@chalk/library` | The registry of every prop type, and `styles.css` gathering every prop's styles | props, `@chalk/prop`, `@chalk/player` (types) |
 | `studio` | `@chalk/studio` | Validator and publish for JSON lessons (ids, version, audio); the content build (`pnpm build-content`, `pnpm preview`, `pnpm publish-content`: manifests walked, boards checked, witnesses played on the real props, `build/` written); later a viewer | `@chalk/content`, `@chalk/prop`, `@chalk/library`, Node |
-| `apps/learner` | `@chalk/learner-app` | The learner app (dev shell for now) | everything above |
+| `packages/api` | `@chalk/api` | What the app and the server say to each other: paths, request and reply schemas, roles, error codes, join and school codes; progress from events (`progressFrom`), the same on both sides | `@chalk/content` (event types), `zod` |
+| `apps/learner` | `@chalk/learner-app` | The app (a PWA): Google sign-in, setup, joining a teacher, home, a chapter's path, a concept's pages and practice, the result; a teacher's groups and their learners' progress; events kept on the phone and uploaded | everything above |
+| `apps/server` | `@chalk/server` | The server: Hono API (Google sign-in, setup, groups, joining, events), Jugnu's turns (thought through here on a board with no screen; the model's key never leaves) and flagged chats, the built app; Postgres through Drizzle | `@chalk/api`, `@chalk/content`, `@chalk/jugnu`, `@chalk/player` (the runtime), `@chalk/library`, Node, `hono`, `drizzle-orm`, `postgres`, `google-auth-library` |
+| `deploy/` | (no package) | Running it on the box: Docker Compose (Postgres, the app, Caddy for HTTPS, nightly backups), `pnpm ship` and `pnpm add-school`; see `deploy/README.md` | n/a |
 | `content/` | `@chalk/content-source` | The content tree: `build.yaml` manifests (books → chapters → concepts), each concept's `overview.ts`, each chapter's question bank `questions/<family>/{family.ts, params.yaml}` and generated `concepts.gen.ts`, `graph.yaml`, shared board patterns (`patterns/`); the older lessons as JSON | `@chalk/author`, `@chalk/content`, `@chalk/exact`, prop packages |
 | `tmp/` | (ignored) | The old codebase, parked for reference; not tracked | n/a |
 
@@ -47,7 +50,7 @@ Styles: the app loads `@chalk/look/look.css`, then `@chalk/player/styles.css` (t
 2. The app parses it (`parseLesson`) and hands it to `LessonPlayer` with the prop library.
 3. Each board gets a `BoardRuntime`: every prop starts from its defaults plus what the lesson gives (through the one door), each IS rule becomes an effect that runs again only when a prop it read changes, and `board.started` is raised, which usually starts the board's script.
 4. The learner's taps and drags call the same actions; touching a prop stops the lesson's animation on it.
-5. When the learner asks Jugnu (on any board), he reads the whole board as data and works in a loop: act, point or calculate, see the result, decide; his actions go through the same door as `Actor.Jugnu`, under limits the runtime enforces (see `packages/jugnu/README.md`).
+5. When the learner asks Jugnu (on any board), the phone sends the board, its state and the chat to the server, which thinks the turn through on a copy of the board with no screen: tries actions and calculates out of sight, then writes one reply, which is checked on the copy before it goes. It comes back as cues the phone plays; his actions go through the phone's own door as `Actor.Jugnu`, under limits the runtime enforces on both sides (see `packages/jugnu/README.md`).
 6. Commits (Continue, Check, lesson start/complete/leave, a question to Jugnu) become events on the backbone (see [events.md](./events.md)). Today the dev log subscribes; later the uploader will.
 
 ## How content is built
@@ -60,4 +63,4 @@ Styles: the app loads `@chalk/look/look.css`, then `@chalk/player/styles.css` (t
 
 ## Not built yet
 
-Jugnu's slate, speech and memory, chapter bundles and the CDN, event upload, the server and learner model, the teacher view, the Studio GUI. The system design doc is the reference for all of these.
+Jugnu's slate, speech and memory, chapter bundles and the CDN, the learner model, what stood out (misconceptions) on the teacher's view, the Studio GUI. The system design doc is the reference for all of these.

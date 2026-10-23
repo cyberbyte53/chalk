@@ -1,0 +1,12 @@
+# NCERT in-text Q3 and Q4: optical density and where light is faster, from Table 10.3.
+- params: { a: water, b: crownGlass, ask: denser }
+  firstTry: 3
+- params: { a: air, b: ice, ask: faster }
+- params: { a: water, b: kerosene, ask: denser }
+  level: medium
+  firstTry: 4
+- params: { a: kerosene, b: water, ask: faster }
+  level: medium
+- params: { a: turpentine, b: benzene, ask: faster }
+  level: hard
+- params: { a: diamond, b: crownGlass, ask: denser }

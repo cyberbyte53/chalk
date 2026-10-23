@@ -1,0 +1,650 @@
+/* @chalk/prop-carbon: the carbon props. Look tokens only: every colour is mixed from them. */
+.cb {
+  --cb-c: var(--color-inverse-surface);
+  --cb-h: color-mix(in srgb, var(--color-on-surface-variant) 85%, var(--color-surface));
+  --cb-o: var(--color-wrong);
+  --cb-n: var(--color-primary);
+  --cb-hal: var(--color-right);
+  --cb-glass: color-mix(in srgb, var(--color-primary-container) 40%, var(--color-surface));
+  --cb-liquid: color-mix(in srgb, var(--color-primary-container) 75%, var(--color-surface));
+  --cb-purple: var(--color-category-3);
+  --cb-soot: var(--color-inverse-surface);
+  --cb-blue-flame: color-mix(in srgb, var(--color-primary) 80%, var(--color-category-4));
+  --cb-yellow-flame: color-mix(in srgb, var(--color-secondary) 85%, var(--color-wrong));
+  --cb-oil: color-mix(in srgb, var(--color-secondary) 45%, var(--color-surface));
+}
+.cb-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.cb-formula {
+  font: 800 20px / 1 var(--font-display);
+  color: var(--color-on-surface);
+}
+.cb-name {
+  font: 700 15px / 1.2 var(--font-display);
+  color: var(--color-on-surface-variant);
+}
+.cb-counts,
+.cb-equation,
+.cb-hint {
+  margin: 4px 0 0;
+  text-align: center;
+  font: 600 13px / 1.35 var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.cb-equation {
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+.cb-row-label {
+  font: 700 12px var(--font-body);
+  color: var(--color-on-surface-variant);
+  margin-right: 2px;
+}
+/* atoms and bonds */
+.cb-atom,
+.cb-symbol {
+  font: 800 15px var(--font-display);
+  fill: var(--cb-c);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.cb-symbol {
+  font-size: 17px;
+}
+.cb-atom.is-H,
+.cb-symbol.is-H {
+  fill: var(--cb-h);
+  font-size: 13px;
+}
+.cb-atom.is-O,
+.cb-symbol.is-O,
+.cb-atom.is-S,
+.cb-symbol.is-S {
+  fill: var(--cb-o);
+}
+.cb-atom.is-N,
+.cb-symbol.is-N {
+  fill: var(--cb-n);
+}
+.cb-atom.is-Cl,
+.cb-atom.is-Br,
+.cb-atom.is-F,
+.cb-symbol.is-Cl,
+.cb-symbol.is-F {
+  fill: var(--cb-hal);
+}
+.cb-atom.is-hot {
+  fill: var(--color-right);
+}
+.cb-bond {
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.cb-bond.is-hot {
+  stroke: var(--color-wrong);
+  stroke-width: 2.4px;
+}
+.cb-shell {
+  fill: color-mix(in srgb, var(--color-primary-container) 45%, var(--color-surface-container));
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.2px;
+  stroke-dasharray: 3 3;
+}
+.cb-e-dot {
+  fill: var(--color-primary);
+}
+.cb-e-cross line {
+  stroke: var(--color-wrong);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+/* homologous series */
+.cb-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.cb-rung {
+  display: grid;
+  grid-template-columns: 5.2em 1fr auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 38px;
+  padding: 4px 10px;
+  border: 1.5px solid var(--color-outline-variant);
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+  font: 600 13px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+.cb-rung:disabled {
+  cursor: default;
+}
+.cb-rung.is-on {
+  border-color: var(--color-primary);
+  background: var(--color-primary-container);
+}
+.cb-rung-formula {
+  font: 800 15px var(--font-display);
+}
+.cb-rung-mass {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-surface-variant);
+}
+.cb-rung-bp {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cb-rung-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-secondary);
+}
+.cb-rung-k {
+  font: 600 11px var(--font-body);
+  color: var(--color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+}
+.cb-step {
+  align-self: center;
+  margin: 1px 0;
+  font: 700 11px var(--font-body);
+  color: var(--color-on-surface-variant);
+  text-align: center;
+}
+.cb-step.is-on {
+  color: var(--color-primary);
+  font-size: 12px;
+}
+/* allotropes */
+.cb-net-bond {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.6px;
+}
+.cb-net-bond.is-back {
+  stroke: var(--color-outline-variant);
+}
+.cb-net-atom {
+  fill: color-mix(in srgb, var(--color-primary) 65%, var(--color-surface));
+  stroke: var(--color-surface-container);
+  stroke-width: 1px;
+}
+.cb-net-atom.is-back {
+  fill: color-mix(in srgb, var(--color-primary) 30%, var(--color-surface));
+}
+.cb-sheet {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: 1.4px;
+}
+.cb-sheet.is-l1 {
+  stroke: color-mix(in srgb, var(--color-on-surface) 60%, var(--color-surface));
+}
+.cb-sheet.is-l2 {
+  stroke: color-mix(in srgb, var(--color-on-surface) 35%, var(--color-surface));
+}
+.cb-sheet-atom {
+  fill: var(--cb-c);
+}
+.cb-sheet-atom.is-l1 {
+  fill: color-mix(in srgb, var(--cb-c) 60%, var(--color-surface));
+}
+.cb-sheet-atom.is-l2 {
+  fill: color-mix(in srgb, var(--cb-c) 35%, var(--color-surface));
+}
+.cb-ball-bond {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.5px;
+}
+.cb-ball-bond.is-back {
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.cb-ball-atom {
+  fill: var(--cb-c);
+}
+.cb-facts {
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+  font: 600 13px / 1.45 var(--font-body);
+  color: var(--color-on-surface);
+}
+/* the bench */
+.cb-bench {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, var(--color-surface-press));
+}
+.cb-glass {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.6px;
+}
+.cb-liquid {
+  fill: var(--cb-liquid);
+}
+.cb-liquid.is-purple {
+  fill: var(--cb-purple);
+}
+.cb-liquid.is-warm {
+  fill: color-mix(in srgb, var(--color-secondary-container) 70%, var(--cb-liquid));
+}
+.cb-liquid.is-orange {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-wrong));
+}
+.cb-liquid.is-red {
+  fill: var(--color-wrong);
+}
+.cb-liquid.is-milky {
+  fill: color-mix(in srgb, var(--color-surface) 80%, var(--color-on-surface-variant));
+}
+.cb-liquid.is-hard {
+  fill: color-mix(in srgb, var(--cb-liquid) 85%, var(--color-on-surface-variant));
+}
+.cb-bubble {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+  animation: cb-rise 1.6s ease-in infinite;
+}
+@keyframes cb-rise {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+}
+.cb-flame path {
+  fill: var(--cb-blue-flame);
+}
+.cb-flame.is-sooty path {
+  fill: var(--cb-yellow-flame);
+}
+.cb-flame .cb-flame-core {
+  fill: color-mix(in srgb, var(--color-primary-container) 70%, var(--color-surface));
+}
+.cb-smoke path {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+.cb-flame.is-sooty .cb-smoke path {
+  fill: none;
+}
+.cb-burner rect,
+.cb-burner path {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-surface));
+}
+.cb-airhole {
+  fill: var(--color-on-surface-variant);
+}
+.cb-airhole.is-open {
+  fill: var(--color-inverse-surface);
+  stroke: var(--color-surface);
+  stroke-width: 1.5px;
+}
+.cb-plate,
+.cb-pan {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 50%, var(--color-surface));
+}
+.cb-soot ellipse,
+.cb-soot-fill {
+  fill: var(--cb-soot);
+}
+.cb-spatula {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-surface));
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.cb-lump {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+}
+.cb-bath {
+  fill: color-mix(in srgb, var(--color-primary-container) 55%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.cb-dropper rect {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.cb-drop.is-purple {
+  fill: var(--cb-purple);
+}
+.cb-beaker {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.6px;
+}
+.cb-oil {
+  fill: var(--cb-oil);
+}
+.cb-fat {
+  fill: color-mix(in srgb, var(--color-secondary) 25%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-secondary) 50%, var(--color-surface));
+}
+.cb-pipe {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.4px;
+}
+.cb-catalyst {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 80%, var(--color-surface));
+}
+.cb-dark {
+  fill: var(--color-inverse-surface);
+  opacity: 0.18;
+}
+.cb-sun circle {
+  fill: var(--color-secondary);
+}
+.cb-sun line {
+  stroke: var(--color-secondary);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.cb-sodium {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 40%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+}
+.cb-splint {
+  stroke: color-mix(in srgb, var(--color-secondary) 50%, var(--color-on-secondary-container));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.cb-pop {
+  font: 800 16px var(--font-display);
+  fill: var(--color-wrong);
+}
+.cb-gas circle {
+  fill: color-mix(in srgb, var(--color-primary-container) 60%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.cb-smell path {
+  fill: none;
+  stroke: var(--color-category-3);
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+}
+.cb-litmus {
+  fill: var(--color-primary);
+}
+.cb-litmus.is-red {
+  fill: var(--color-wrong);
+}
+.cb-powder {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+}
+/* soap */
+.cb-water {
+  fill: color-mix(in srgb, var(--color-primary-container) 65%, var(--color-surface));
+}
+.cb-soap-tail {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+.cb-soap-tail.is-big {
+  stroke-width: 4px;
+}
+.cb-soap-head {
+  fill: var(--color-primary);
+}
+.cb-soap-head.is-big {
+  fill: color-mix(in srgb, var(--color-primary) 30%, var(--color-surface));
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+}
+.cb-head-text {
+  font: 800 10px var(--font-display);
+  fill: var(--color-primary);
+}
+.cb-ion {
+  font: 800 12px var(--font-display);
+  fill: var(--color-on-surface-variant);
+}
+.cb-cloth {
+  fill: color-mix(in srgb, var(--color-category-4) 35%, var(--color-surface));
+}
+.cb-oil-drop {
+  fill: var(--cb-oil);
+  stroke: color-mix(in srgb, var(--color-secondary) 70%, var(--color-on-secondary-container));
+  stroke-width: 1.2px;
+}
+.cb-micelle {
+  transition: transform 0.8s ease;
+}
+.cb-foam {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.cb-scum ellipse {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cb-bubble {
+    animation: none;
+  }
+  .cb-micelle {
+    transition: none;
+  }
+}
+/* carbonScene */
+.cbs-wall {
+  fill: var(--color-surface-container);
+}
+.cbs-floor {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 25%, var(--color-surface));
+}
+.cbs-sky {
+  fill: color-mix(in srgb, var(--color-primary-container) 70%, var(--color-category-4));
+}
+.cbs-ground {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-on-secondary-container));
+}
+.cbs-board,
+.cbs-table,
+.cbs-counter,
+.cbs-shelf,
+.cbs-stall {
+  fill: color-mix(in srgb, var(--color-secondary) 45%, var(--color-on-secondary-container));
+}
+.cbs-cabinet {
+  fill: color-mix(in srgb, var(--color-secondary) 25%, var(--color-surface-press));
+}
+.cbs-poster,
+.cbs-paper {
+  fill: var(--color-surface);
+}
+.cbs-title,
+.cbs-big {
+  font: 800 13px var(--font-display);
+  fill: var(--color-right);
+}
+.cbs-big {
+  font-size: 18px;
+  fill: var(--color-on-surface);
+}
+.cbs-title-light {
+  font: 800 13px var(--font-display);
+  fill: var(--color-surface);
+}
+.cbs-small,
+.cbs-tag {
+  font: 700 9px var(--font-body);
+  fill: var(--color-on-surface);
+}
+.cbs-tag-light {
+  font: 800 11px var(--font-display);
+  fill: var(--color-surface);
+}
+.cbs-leaf {
+  fill: var(--color-right);
+}
+.cbs-writing {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.cbs-soap {
+  fill: color-mix(in srgb, var(--color-category-3) 35%, var(--color-surface));
+  stroke: var(--color-category-3);
+  stroke-width: 1px;
+}
+.cbs-soap-mark {
+  fill: none;
+  stroke: var(--color-category-3);
+  stroke-width: 1px;
+}
+.cbs-toothpaste {
+  fill: var(--color-primary);
+}
+.cbs-pencil,
+.cbs-pencil-body {
+  fill: var(--color-secondary);
+}
+.cbs-wood {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+}
+.cbs-lead {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-inverse-surface));
+}
+.cbs-velvet {
+  fill: color-mix(in srgb, var(--color-category-3) 25%, var(--color-surface-container));
+}
+.cbs-diamond {
+  fill: color-mix(in srgb, var(--color-primary-container) 70%, var(--color-surface));
+  stroke: var(--color-primary);
+  stroke-width: 1.4px;
+}
+.cbs-facet {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 0.9px;
+}
+.cbs-sparkle {
+  fill: var(--color-surface);
+}
+.cbs-stove {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-surface));
+}
+.cbs-flame.is-blue {
+  fill: var(--cb-blue-flame);
+}
+.cbs-flame.is-yellow {
+  fill: var(--cb-yellow-flame);
+}
+.cbs-smoke {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 3px;
+  opacity: 0.5;
+}
+.cbs-cylinder {
+  fill: var(--color-wrong);
+}
+.cbs-hose {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 3px;
+}
+.cbs-bottle {
+  fill: color-mix(in srgb, var(--color-primary-container) 60%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+.cbs-bottle.is-vinegar {
+  fill: color-mix(in srgb, var(--color-secondary) 25%, var(--color-surface));
+}
+.cbs-bottle.is-poison {
+  fill: color-mix(in srgb, var(--color-wrong) 20%, var(--color-surface));
+}
+.cbs-label-patch {
+  fill: var(--color-surface);
+}
+.cbs-danger {
+  fill: var(--color-wrong);
+}
+.cbs-danger-mark {
+  font: 800 13px var(--font-display);
+  fill: var(--color-surface);
+}
+.cbs-pan {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 50%, var(--color-surface));
+}
+.cbs-soot {
+  fill: var(--color-inverse-surface);
+}
+.cbs-tin {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-surface));
+}
+.cbs-oil {
+  fill: var(--cb-oil);
+  stroke: color-mix(in srgb, var(--color-secondary) 70%, var(--color-on-secondary-container));
+  stroke-width: 1px;
+}
+.cbs-tube {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.cbs-tube-liquid {
+  fill: color-mix(in srgb, var(--color-secondary-container) 70%, var(--color-surface));
+}
+.cbs-smell {
+  fill: none;
+  stroke: var(--color-category-3);
+  stroke-width: 2.2px;
+  stroke-linecap: round;
+}
+.cbs-fruit circle {
+  fill: var(--color-secondary);
+}
+.cbs-fruit-leaf {
+  fill: var(--color-right);
+}
+.cbs-pump {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-inverse-surface));
+}
+.cbs-handle {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-inverse-surface));
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.cbs-stream {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.cbs-bucket-water {
+  fill: color-mix(in srgb, var(--color-primary-container) 75%, var(--color-surface));
+}
+.cbs-scum {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.cbs-banner {
+  fill: var(--color-right);
+}

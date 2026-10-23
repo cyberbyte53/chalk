@@ -1,0 +1,8 @@
+# NCERT 16.2 and Exercises 3 and 5: why forests matter, and who decides.
+- params: { case: hotspot }
+  firstTry: 3
+- params: { case: stable }
+  firstTry: 4
+- params: { case: why }
+- params: { case: authority }
+- params: { case: monoculture }

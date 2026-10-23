@@ -1,0 +1,8 @@
+# Bending at the two faces of a prism, compared with a glass slab (NCERT 11.3).
+- params: { item: firstFace }
+  firstTry: 2
+- params: { item: secondFace }
+- params: { item: slab }
+- params: { item: slabShift }
+- params: { item: base }
+  level: hard

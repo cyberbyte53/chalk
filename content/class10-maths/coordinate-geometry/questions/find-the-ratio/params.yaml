@@ -1,0 +1,8 @@
+# NCERT Examples 7 and 9 and Exercise 7.2 Q4, Q5.
+- params: { item: ex7 }
+  firstTry: 1
+- params: { item: q4 }
+- params: { item: ex9 }
+  firstTry: 2
+- params: { item: q5 }
+- params: { item: ex9point }

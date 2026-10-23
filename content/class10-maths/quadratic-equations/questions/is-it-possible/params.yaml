@@ -1,0 +1,10 @@
+# NCERT Exercise 4.4 Q3–Q5, and Kabir's rocket.
+- params: { item: grove }
+  firstTry: 3
+- params: { item: friends }
+  firstTry: 4
+- params: { item: park }
+  level: hard
+- params: { item: rocket25 }
+- params: { item: rocket15 }
+  level: easy

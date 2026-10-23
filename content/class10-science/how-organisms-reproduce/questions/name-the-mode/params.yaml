@@ -1,0 +1,10 @@
+# NCERT 8.2: name the mode of asexual reproduction used by an organism (fission, budding, fragmentation, regeneration, spores, vegetative propagation).
+- params: { case: amoeba }
+  firstTry: 1
+- params: { case: plasmodium }
+  firstTry: 2
+- params: { case: spirogyra }
+- params: { case: hydra }
+- params: { case: rhizopus }
+- params: { case: bryophyllum }
+- params: { case: planaria }

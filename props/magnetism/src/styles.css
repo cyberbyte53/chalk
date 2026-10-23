@@ -1,0 +1,995 @@
+/* @chalk/prop-magnetism: drawn only with the look's tokens (@chalk/look). */
+
+.mg-mf,
+.mg-hr,
+.mg-fr,
+.mg-mo,
+.mg-in,
+.mg-ge,
+.mg-hw,
+.mg-sc {
+  --mg-n: color-mix(in srgb, var(--color-wrong) 80%, var(--color-surface));
+  --mg-s: color-mix(in srgb, var(--color-primary) 70%, var(--color-surface));
+  --mg-copper: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-wrong));
+  --mg-metal: color-mix(in srgb, var(--color-on-surface-variant) 55%, var(--color-surface));
+  --mg-wood: color-mix(in srgb, var(--color-on-secondary-container) 65%, var(--color-surface));
+  --mg-dark: var(--color-inverse-surface);
+  --mg-field: var(--color-category-2);
+  --mg-force: var(--color-wrong);
+  --mg-current: var(--color-secondary);
+  --mg-motion: var(--color-right);
+  --mg-live: var(--color-wrong);
+  --mg-earth: var(--color-right);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--font-body);
+  color: var(--color-on-surface);
+}
+
+.mg-svg {
+  display: block;
+  overflow: visible;
+  user-select: none;
+}
+.mg-svg.is-tappable {
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+.mg-bg {
+  fill: var(--color-surface-container);
+}
+
+/* text */
+.mg-small,
+.mg-caption,
+.mg-tiny,
+.mg-note {
+  font-family: var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.mg-small {
+  font-size: 11px;
+  font-weight: 600;
+}
+.mg-tiny {
+  font-size: 9px;
+  font-weight: 600;
+}
+.mg-tiny.is-strong {
+  font-weight: 800;
+  fill: var(--color-on-surface);
+}
+.mg-tiny.is-live {
+  fill: var(--mg-live);
+}
+.mg-tiny.is-earth {
+  fill: color-mix(in srgb, var(--mg-earth) 80%, var(--color-on-surface));
+}
+.mg-caption {
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+.mg-note {
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+.mg-caption.is-halo {
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 4px;
+  fill: var(--color-on-surface);
+}
+.mg-warn {
+  font: 800 10px var(--font-display);
+  fill: var(--color-wrong);
+}
+.mg-reading-small {
+  font: 800 10px var(--font-display);
+  fill: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* arrows and crossings */
+.mg-arrow line {
+  stroke: currentColor;
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.mg-arrow path {
+  fill: currentColor;
+}
+.mg-arrow {
+  color: var(--color-on-surface);
+}
+.mg-faint-arrow {
+  color: color-mix(in srgb, var(--mg-field) 45%, var(--color-surface-container));
+}
+.mg-faint-arrow line {
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 4;
+}
+.mg-force {
+  color: var(--mg-force);
+}
+.mg-force line {
+  stroke-width: 3.5px;
+}
+.mg-force-name {
+  font: 800 11px var(--font-display);
+  fill: var(--mg-force);
+}
+.mg-motion {
+  color: var(--mg-motion);
+}
+.mg-crossing circle {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+}
+.mg-crossing.is-out circle:first-child,
+.mg-crossing.is-in circle:first-child {
+  stroke: var(--mg-current);
+  stroke-width: 2.5px;
+}
+.mg-crossing .mg-crossing-dot {
+  fill: var(--mg-current);
+  stroke: none;
+}
+.mg-crossing-x line {
+  stroke: var(--mg-current);
+  stroke-width: 2.2px;
+  stroke-linecap: round;
+}
+
+/* magnets */
+.mg-bar.is-n,
+.mg-pole.is-n rect {
+  fill: var(--mg-n);
+}
+.mg-bar.is-s,
+.mg-pole.is-s rect {
+  fill: var(--mg-s);
+}
+.mg-bar.is-plain {
+  fill: var(--color-outline-variant);
+}
+.mg-bar,
+.mg-pole rect {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.5px;
+}
+.mg-bar-name,
+.mg-pole text {
+  font: 800 14px var(--font-display);
+  fill: var(--color-on-primary);
+}
+.mg-horseshoe-back {
+  fill: none;
+  stroke: var(--mg-metal);
+  stroke-width: 16px;
+  stroke-linejoin: round;
+}
+.mg-horseshoe.is-strong .mg-pole rect {
+  stroke-width: 3.5px;
+}
+
+/* magnetic field */
+.mg-line {
+  fill: none;
+  stroke: var(--mg-field);
+  stroke-width: 1.6px;
+  opacity: 0.85;
+}
+.mg-line-arrow {
+  color: var(--mg-field);
+}
+.mg-line-arrow line {
+  stroke-width: 0;
+}
+.mg-filings line {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.4px;
+  stroke-linecap: round;
+}
+.mg-loop {
+  fill: none;
+  stroke: var(--mg-copper);
+  stroke-width: 2px;
+  stroke-dasharray: 3 3;
+}
+.mg-solenoid {
+  fill: none;
+  stroke: var(--mg-copper);
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 3;
+}
+.mg-end-names text {
+  font: 800 15px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 4px;
+}
+.mg-compass-case {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 1.8px;
+}
+.mg-needle-n {
+  fill: var(--mg-n);
+}
+.mg-needle-s {
+  fill: var(--mg-metal);
+}
+.mg-compass-needle {
+  transition: transform 0.35s ease-out;
+}
+.mg-compass-needle.is-rest {
+  opacity: 0.55;
+}
+.mg-compass-pivot {
+  fill: var(--color-on-surface);
+}
+.mg-row {
+  display: flex;
+  justify-content: center;
+  min-height: 22px;
+}
+.mg-hint {
+  font: 600 var(--text-caption) var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.mg-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 var(--text-caption) var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.mg-meter b {
+  color: var(--color-on-surface);
+}
+.mg-meter-bar {
+  width: 96px;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--color-surface-container);
+  overflow: hidden;
+}
+.mg-meter-bar span {
+  display: block;
+  height: 100%;
+  background: var(--mg-field);
+}
+
+/* hand rules */
+.mg-hand-badge rect {
+  fill: var(--color-primary-container);
+  stroke: var(--color-primary);
+  stroke-width: 1.5px;
+}
+.mg-hand-badge text {
+  font: 800 12px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.mg-leg.is-field {
+  color: var(--mg-field);
+}
+.mg-leg.is-current {
+  color: var(--mg-current);
+}
+.mg-leg.is-force {
+  color: var(--mg-force);
+}
+.mg-leg.is-motion {
+  color: var(--mg-motion);
+}
+.mg-leg.is-point {
+  color: var(--color-on-surface-variant);
+}
+.mg-leg.is-dashed line {
+  stroke-dasharray: 5 4;
+  stroke-width: 2px;
+}
+.mg-leg .mg-arrow {
+  color: inherit;
+}
+.mg-leg .mg-crossing circle:first-child {
+  stroke: currentColor;
+}
+.mg-leg .mg-crossing-dot {
+  fill: currentColor;
+}
+.mg-leg .mg-crossing-x line {
+  stroke: currentColor;
+}
+.mg-leg-name {
+  font: 800 12px var(--font-display);
+  fill: currentColor;
+}
+.mg-leg-finger {
+  font: 600 10px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.mg-wire-axis line {
+  stroke: var(--mg-copper);
+  stroke-width: 7px;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+.mg-hidden-answer circle {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+  stroke-dasharray: 4 3;
+}
+.mg-hidden-answer text {
+  font: 800 15px var(--font-display);
+  fill: var(--color-primary);
+}
+.mg-origin {
+  fill: var(--color-on-surface);
+}
+.mg-answer {
+  margin: 0;
+  text-align: center;
+  font: 600 var(--text-note) var(--font-body);
+}
+.mg-chooser {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.mg-chooser-label {
+  min-width: 56px;
+  font: 800 var(--text-caption) var(--font-display);
+  color: var(--color-on-surface-variant);
+}
+
+/* rod */
+.mg-stand {
+  fill: var(--mg-wood);
+}
+.mg-thread {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.6px;
+}
+.mg-field-arrows {
+  color: var(--mg-field);
+}
+.mg-field-arrows line {
+  stroke-width: 2px;
+}
+.mg-field-arrows.is-strong line {
+  stroke-width: 3.5px;
+}
+.mg-fr [data-part="rod"] {
+  transition: transform 0.4s ease-out;
+}
+
+/* motor and generator */
+.mg-coil {
+  stroke: var(--mg-copper);
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+.mg-ring {
+  fill: none;
+  stroke: var(--mg-copper);
+  stroke-width: 5px;
+}
+.mg-ring.is-q {
+  stroke: color-mix(in srgb, var(--mg-copper) 60%, var(--color-surface));
+}
+.mg-ring.is-touched {
+  stroke-width: 6.5px;
+}
+.mg-ring-names text,
+.mg-arm-names text,
+.mg-small-names text {
+  font: 800 11px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 3px;
+}
+.mg-brushes rect {
+  fill: var(--mg-dark);
+}
+.mg-rotor {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mg-rotor.is-spinning {
+  animation: mg-spin 1.6s linear infinite;
+}
+.mg-rotor.is-cranking {
+  animation: mg-spin-cw 1.6s linear infinite;
+}
+.mg-rotor.is-rocking {
+  animation: mg-rock 1.1s ease-in-out infinite alternate;
+}
+@keyframes mg-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes mg-spin-cw {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes mg-rock {
+  from {
+    transform: rotate(-40deg);
+  }
+  to {
+    transform: rotate(-140deg);
+  }
+}
+.mg-lead {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.8px;
+}
+.mg-lead.is-live {
+  stroke: var(--color-primary);
+}
+.mg-graph .mg-axis {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.mg-graph .mg-grid {
+  stroke: var(--color-outline-variant);
+  stroke-dasharray: 3 3;
+}
+.mg-curve {
+  fill: none;
+  stroke: var(--mg-current);
+  stroke-width: 2.4px;
+}
+.mg-marker {
+  fill: var(--color-primary);
+  stroke: var(--color-surface);
+  stroke-width: 2px;
+}
+.mg-graph-kind {
+  font: 800 10px var(--font-display);
+  fill: var(--color-on-surface);
+}
+
+/* induction */
+.mg-roll {
+  fill: color-mix(in srgb, var(--mg-wood) 35%, var(--color-surface));
+  stroke: var(--color-outline-variant);
+}
+.mg-coil-side ellipse {
+  fill: none;
+  stroke: var(--mg-copper);
+  stroke-width: 2px;
+}
+.mg-coil-side.is-secondary ellipse {
+  stroke: color-mix(in srgb, var(--mg-copper) 55%, var(--color-primary));
+}
+.mg-battery line {
+  stroke: var(--color-on-surface);
+  stroke-width: 4px;
+}
+.mg-battery line.is-thin {
+  stroke-width: 2px;
+}
+.mg-key circle {
+  fill: var(--color-on-surface);
+}
+.mg-key line {
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.mg-galvo-case {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 1.5px;
+}
+.mg-galvo-scale {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.mg-galvo-tick {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.mg-galvo-zero,
+.mg-galvo-label {
+  font: 800 9px var(--font-display);
+  fill: var(--color-on-surface-variant);
+}
+.mg-needle line {
+  stroke: var(--color-wrong);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.mg-needle.is-kick {
+  animation: mg-kick 1.4s ease-out both;
+}
+@keyframes mg-kick {
+  0% {
+    transform: rotate(0deg);
+  }
+  18% {
+    transform: rotate(var(--mg-swing));
+  }
+  45% {
+    transform: rotate(var(--mg-swing));
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.mg-galvo-pivot {
+  fill: var(--color-on-surface);
+}
+
+/* wiring */
+.mg-wire {
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+  fill: none;
+}
+.mg-wire.is-live {
+  stroke: var(--mg-live);
+}
+.mg-wire.is-neutral {
+  stroke: var(--mg-dark);
+}
+.mg-wire.is-earth {
+  stroke: var(--mg-earth);
+}
+.mg-wire.is-dead {
+  stroke: var(--color-outline-variant);
+  stroke-dasharray: 3 3;
+}
+.mg-meter-box rect,
+.mg-main-switch rect,
+.mg-vfuse rect {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 1.4px;
+}
+.mg-meter-box text {
+  font: 800 8px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.mg-vfuse line,
+.mg-fuse line {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.2px;
+}
+.mg-fuse rect {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 1.4px;
+}
+.mg-fuse.is-blown rect {
+  fill: var(--color-wrong-container);
+  stroke: var(--color-wrong);
+}
+.mg-fuse.is-blown line {
+  stroke: var(--color-wrong);
+}
+.mg-device-box {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.mg-device-box.is-metal {
+  fill: color-mix(in srgb, var(--mg-metal) 50%, var(--color-surface));
+}
+.mg-device-light {
+  fill: var(--color-outline-variant);
+}
+.mg-device.is-on .mg-device-light {
+  fill: var(--color-secondary);
+}
+.mg-earth-plate line {
+  stroke: var(--mg-earth);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.mg-spark {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2.4px;
+  stroke-linejoin: round;
+}
+.mg-touch.is-shock {
+  animation: mg-shake 0.12s linear infinite alternate;
+}
+@keyframes mg-shake {
+  to {
+    transform: translateX(2px);
+  }
+}
+
+/* controls */
+.mg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.mg-controls.is-column {
+  flex-direction: column;
+}
+.mg-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mg-stepper-value {
+  min-width: 76px;
+  text-align: center;
+  font: 800 var(--text-note) var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+.mg-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1.5px solid var(--color-outline-variant);
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font: 800 var(--text-note) var(--font-display);
+  cursor: pointer;
+}
+.mg-button.is-small {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 10px;
+}
+.mg-button.is-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.mg-button.is-on {
+  background: var(--color-primary-container);
+  border-color: var(--color-primary);
+}
+.mg-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.mg-chip {
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 18px;
+  border: 1.5px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font: 700 var(--text-caption) var(--font-body);
+  cursor: pointer;
+}
+.mg-chip.is-on {
+  background: var(--color-primary-container);
+  border-color: var(--color-primary);
+}
+.mg-button:focus-visible,
+.mg-chip:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* person (the shared family look) */
+.mg-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.mg-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.mg-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.mg-hair-grey {
+  fill: var(--color-surface-press);
+}
+.mg-cap {
+  fill: var(--color-wrong);
+}
+.mg-face circle {
+  fill: var(--color-inverse-surface);
+}
+.mg-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.mg-specs circle,
+.mg-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.mg-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.mg-shirt-riya {
+  fill: var(--color-category-4);
+}
+.mg-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.mg-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.mg-shirt-mom {
+  fill: var(--color-category-3);
+}
+.mg-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.mg-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.mg-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.mg-shirt-grandpa-line {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.mg-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+
+/* scenes */
+.mg-sc-wall {
+  fill: color-mix(in srgb, var(--color-secondary-container) 55%, var(--color-surface));
+}
+.mg-sc-floor {
+  fill: color-mix(in srgb, var(--mg-wood) 60%, var(--color-surface));
+}
+.mg-sc-night {
+  fill: color-mix(in srgb, var(--mg-dark) 92%, var(--color-primary));
+}
+.mg-sc-floor-dark {
+  fill: color-mix(in srgb, var(--mg-dark) 80%, var(--mg-wood));
+}
+.mg-sc-sky {
+  fill: color-mix(in srgb, var(--color-primary-container) 60%, var(--color-surface));
+}
+.mg-sc-dusk {
+  fill: color-mix(in srgb, var(--mg-dark) 70%, var(--color-category-3));
+}
+.mg-sc-ground {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--mg-wood));
+}
+.mg-sc-road {
+  fill: color-mix(in srgb, var(--mg-dark) 75%, var(--mg-metal));
+}
+.mg-sc-window-night {
+  fill: color-mix(in srgb, var(--mg-dark) 70%, var(--color-primary));
+  stroke: var(--mg-wood);
+  stroke-width: 3px;
+}
+.mg-sc-moon {
+  fill: var(--color-secondary-container);
+}
+.mg-sc-table rect {
+  fill: var(--mg-wood);
+}
+.mg-sc-glow {
+  fill: var(--color-secondary);
+  opacity: 0.18;
+}
+.mg-sc-candle {
+  fill: var(--color-surface);
+}
+.mg-sc-flame {
+  fill: var(--color-secondary);
+}
+.mg-sc-beam {
+  fill: var(--color-secondary-container);
+  opacity: 0.55;
+}
+.mg-sc-beam.is-wide {
+  opacity: 0.45;
+}
+.mg-sc-torch rect,
+.mg-sc-torch path {
+  fill: var(--color-category-4);
+}
+.mg-sc-lamp {
+  fill: var(--color-secondary);
+}
+.mg-sc-bubble rect {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+}
+.mg-sc-bubble circle,
+.mg-sc-bubble line {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.mg-sc-cell rect {
+  fill: var(--mg-metal);
+  stroke: var(--mg-dark);
+}
+.mg-sc-cord {
+  fill: none;
+  stroke: var(--mg-dark);
+  stroke-width: 3px;
+}
+.mg-sc-socket {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+}
+.mg-sc-swing {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: 1.4px;
+  stroke-dasharray: 2 2;
+}
+.mg-sc-mark {
+  font: 800 16px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.mg-sc-crane rect {
+  fill: var(--color-secondary);
+}
+.mg-sc-crane line {
+  stroke: var(--color-secondary);
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+.mg-sc-crane .mg-sc-cable {
+  stroke: var(--mg-dark);
+  stroke-width: 2px;
+}
+.mg-sc-disc ellipse,
+.mg-sc-disc rect {
+  fill: var(--mg-dark);
+}
+.mg-sc-car path,
+.mg-sc-car rect {
+  fill: color-mix(in srgb, var(--color-wrong) 55%, var(--mg-metal));
+}
+.mg-sc-car circle {
+  fill: var(--mg-dark);
+}
+.mg-sc-pull line {
+  stroke: var(--mg-dark);
+  stroke-width: 1.4px;
+  stroke-dasharray: 2 2;
+}
+.mg-sc-scrap rect {
+  fill: var(--mg-metal);
+}
+.mg-sc-paper {
+  fill: var(--color-surface);
+}
+.mg-sc-magnet {
+  fill: var(--mg-n);
+}
+.mg-sc-core {
+  fill: var(--mg-metal);
+}
+.mg-sc-copper line {
+  stroke: var(--mg-copper);
+  stroke-width: 3px;
+}
+.mg-sc-brush {
+  fill: var(--mg-dark);
+}
+.mg-sc-jar path {
+  fill: color-mix(in srgb, var(--color-primary-container) 50%, var(--color-surface));
+  stroke: var(--color-outline-variant);
+}
+.mg-sc-screwdriver {
+  stroke: var(--color-secondary);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.mg-sc-cycle circle,
+.mg-sc-cycle path,
+.mg-sc-cycle line {
+  fill: none;
+  stroke: var(--color-on-inverse-surface);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.mg-sc-dynamo rect {
+  fill: var(--mg-metal);
+}
+.mg-sc-board rect {
+  fill: var(--color-category-4);
+}
+.mg-sc-board line {
+  stroke: var(--mg-metal);
+  stroke-width: 3px;
+}
+.mg-sc-iron path {
+  fill: var(--mg-metal);
+  stroke: var(--color-on-surface);
+  stroke-width: 1px;
+}
+.mg-sc-plug rect {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+}
+.mg-sc-plug line {
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+}
+.mg-sc-plug line.is-loose {
+  stroke: var(--color-right);
+}
+.mg-sc-zap {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+}
+.mg-sc-board-panel rect {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.mg-sc-meter {
+  fill: var(--color-surface-container);
+}
+.mg-sc-wire-live,
+.mg-sc-wire-neutral,
+.mg-sc-wire-earth {
+  fill: none;
+  stroke-width: 3px;
+}
+.mg-sc-wire-live {
+  stroke: var(--mg-live);
+}
+.mg-sc-wire-neutral {
+  stroke: var(--mg-dark);
+}
+.mg-sc-wire-earth {
+  stroke: var(--mg-earth);
+}
+.mg-sc-crank-torch rect,
+.mg-sc-crank-torch path {
+  fill: var(--color-category-4);
+}
+.mg-sc-handle {
+  stroke: var(--color-secondary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.mg-sc-handle-knob {
+  fill: var(--color-secondary);
+}
+.mg-sc-sparkle path {
+  fill: var(--color-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mg-rotor.is-spinning,
+  .mg-rotor.is-cranking,
+  .mg-rotor.is-rocking,
+  .mg-touch.is-shock {
+    animation: none;
+  }
+  .mg-needle.is-kick {
+    /* No swing back: rest where the kick took it, so the reading is still seen. */
+    animation: none;
+    transform: rotate(var(--mg-swing));
+  }
+  .mg-compass-needle,
+  .mg-fr [data-part="rod"] {
+    transition: none;
+  }
+}

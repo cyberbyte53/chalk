@@ -1,0 +1,13 @@
+title: { en: "Sustainable Management of Natural Resources", hi: "प्राकृतिक संसाधनों का संपोषित प्रबंधन" }
+# Concepts in book order (NCERT Chapter 16, the full 2020-21 edition: the Ganga box, the Atharva
+# Veda hymns, kulhs, Rajendra Singh and the 16.5 overview included).
+concepts:
+  - one-earth-one-family
+  - why-manage-resources
+  - forests-and-stakeholders
+  - managing-forests-with-people
+  - water-for-all
+  - water-harvesting
+  - coal-and-petroleum
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

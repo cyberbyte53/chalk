@@ -1,6 +1,13 @@
 import { Actor, lessonSchema } from "@chalk/content";
-import { JugnuSession, type JugnuStep, boardJson, scriptedProvider, toolsFor } from "@chalk/jugnu";
-import { BoardRuntime, type RuntimeServices } from "@chalk/player";
+import {
+  JugnuSession,
+  type ScriptedReply,
+  boardJson,
+  jugnuTools,
+  jugnuTurn,
+  scriptedProvider,
+} from "@chalk/jugnu";
+import { BoardRuntime, type RuntimeServices, boardState, headlessBoard } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import coinLesson from "../../content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json";
@@ -22,19 +29,39 @@ const services: RuntimeServices = {
 const place = { lessonTitle: "Where does √2 live?", boardNumber: 2, boardCount: 4 } as const;
 const en = { ...place, locale: "en" } as const;
 const start = () => new BoardRuntime(guess, (type) => propDefs[type], services);
-const toolNames = (runtime: BoardRuntime) => toolsFor(runtime).map((tool) => tool.name);
 const lastToolResult = (messages: readonly { role: string; content: string }[]) =>
   [...messages].reverse().find((m) => m.role === "tool")?.content ?? "";
 
+/** His reply, as the model writes it (strict: every field there). */
+const reply = (
+  steps: Record<string, unknown>[],
+  end: Record<string, unknown> | null = null,
+): ScriptedReply => ({ call: [{ name: "reply", args: { steps, end } }] });
+const say = (text: string) => ({ say: text });
+const show = (call: string, args: Record<string, unknown>) => ({ show: { call, args } });
+const point = (prop: string, part: string | null = null) => ({ point: { prop, part } });
+
 describe("what Jugnu is given", () => {
-  it("the whole board as data: every prop's state, the question included, and the lesson's rules", () => {
+  it("the board as the student sees it: each prop's elements, what's hidden apart, and the lesson's rules", () => {
     const runtime = start();
-    const json = boardJson(runtime, en, []);
-    const props = json.props as Record<string, { type: string; state: Record<string, unknown> }>;
-    expect(props.line?.state).toMatchObject({ marker: 1.5, from: 1, to: 2 });
+    const json = boardJson(runtime, en);
+    const props = json.props as Record<
+      string,
+      {
+        type: string;
+        is?: string;
+        elements: Record<string, unknown>;
+        hidden?: Record<string, unknown>;
+      }
+    >;
+    expect(props.line?.elements).toMatchObject({ marker: 1.5, axis: "1 to 2", "tick:1.4": "1.4" });
+    expect(props.line?.is).toBe("a number line from 1 to 2 (ticks every 0.1), the dot at 1.5");
     expect(props.guessRoot).toMatchObject({ type: "goal", role: "question" });
-    expect(props.guessRoot?.state.prompt).toBe("Press Check when the square is close to 2.");
-    expect(props.squareLabel?.state.text).toBe("1.50 × 1.50 = 2.2500");
+    expect(props.guessRoot?.elements.prompt).toBe("Press Check when the square is close to 2.");
+    // What the prop knows but the screen doesn't show is labelled, apart.
+    expect(props.guessRoot?.hidden).toEqual({ isMet: false });
+    expect(props.guessRoot?.elements.isMet).toBeUndefined();
+    expect(props.squareLabel?.elements.text).toBe("1.50 × 1.50 = 2.2500");
     expect(json.isQuestionOpen).toBe(true);
     const rules = json.rules as { is: { set: string; to?: string }[]; when: unknown[] };
     expect(rules.is).toContainEqual({
@@ -42,63 +69,121 @@ describe("what Jugnu is given", () => {
       to: "1.98 <= line.marker * line.marker and line.marker * line.marker <= 2.02",
     });
     expect(JSON.stringify(rules.when)).toContain("Its square is less than 2. Move right.");
-  });
-
-  it("a tool for each action he may use now, plus point, calculate and wait_for_student", () => {
-    const names = toolNames(start());
-    expect(names).toContain("line__moveMarker");
-    expect(names).toContain("line__zoomTo");
-    expect(names).toEqual(expect.arrayContaining(["point", "calculate", "wait_for_student"]));
+    const actions = json.yourActions as Record<string, string>;
+    expect(actions["line.magnify"]).toMatch(/Zoom ten times/);
     // Never the question, the board, or the lesson's lines.
-    expect(names.some((n) => n.startsWith("guessRoot__") || n.startsWith(`${BOARD}__`))).toBe(
+    expect(Object.keys(actions).some((a) => a.startsWith("guessRoot.") || a.endsWith(".say"))).toBe(
       false,
     );
-    expect(names).not.toContain("title__say");
-    const move = toolsFor(start()).find((tool) => tool.name === "line__moveMarker");
-    expect(move?.parameters).toMatchObject({
-      type: "object",
-      properties: { to: { type: "number" } },
-      required: ["to"],
-    });
+  });
+
+  it("three tools: try and calculate to think, reply to answer; typed and strict", () => {
+    const tools = jugnuTools(start());
+    expect(tools.specs.map((t) => t.name)).toEqual(["try", "calculate", "reply"]);
+    expect(tools.isStrict).toBe(true);
+    expect(tools.specs.every((t) => t.strict === true)).toBe(true);
+    // Each action is a typed choice: its name, and its own arguments.
+    const calls = JSON.stringify(tools.specs[0]?.parameters);
+    expect(calls).toContain('"enum":["line.moveMarker"]');
+    expect(calls).toContain('"to":{"type":"number"}');
+    expect(calls).not.toContain("guessRoot.check");
+    expect(calls).not.toContain(`${BOARD}.`);
+    // An optional argument is "or null" in a strict schema (placeMark's colour).
+    expect(calls).toMatch(/"color":\{"anyOf":\[.*\{"type":"null"\}\]\}/);
+  });
+
+  it("what the lesson wrote for him: what the board is for, what each prop stands for", async () => {
+    const model = scriptedProvider([reply([say("ok")])]);
+    await new JugnuSession(start(), model, en).ask("hi");
+    const system = model.requests[0]?.messages[0]?.content ?? "";
+    expect(system).toContain('"purpose": "Estimate √2 by squeezing');
+    expect(system).toContain('"standsFor": "the student\'s guess for √2 (the marker)"');
+  });
+
+  it("the system message and tools are the same however the board moves (so they cache)", async () => {
+    const runtime = start();
+    const model = scriptedProvider([reply([say("ok")])]);
+    const session = new JugnuSession(runtime, model, en);
+    await session.ask("one");
+    await runtime.call("line", "moveMarker", { to: 1.8 }, Actor.Learner);
+    await session.ask("two");
+    const [first, second] = model.requests;
+    expect(second?.messages[0]).toEqual(first?.messages[0]);
+    expect(JSON.stringify(second?.tools)).toBe(JSON.stringify(first?.tools));
+    // The board now comes in the turn's opening, which is added to the chat, never rewritten.
+    expect(second?.messages.at(-1)?.content).toContain('"marker":1.8');
+    expect(second?.messages[1]).toEqual(first?.messages[1]);
   });
 });
 
-describe("the loop", () => {
-  it("acts through the one door, sees what changed, then talks about it", async () => {
+describe("a turn", () => {
+  it("thinks out of sight, then sends one reply: words, a move to watch, a glow", async () => {
     const runtime = start();
     const model = scriptedProvider([
-      { call: [{ name: "line__moveMarker", args: { to: 1.4 } }] },
-      (request) => ({
-        say: lastToolResult(request.messages).includes("1.96")
-          ? "I put the dot at 1.4. Its square is 1.96: more or less than 2?"
-          : "Hmm.",
-      }),
+      {
+        call: [{ name: "try", args: { calls: [{ call: "line.moveMarker", args: { to: 1.4 } }] } }],
+      },
+      (request) =>
+        lastToolResult(request.messages).includes('"marker":1.4')
+          ? reply([
+              show("line.moveMarker", { to: 1.4 }),
+              say("At 1.4 the square is 1.96: more or less than 2?"),
+              point("squareLabel"),
+            ])
+          : reply([say("?")]),
     ]);
     const events: string[] = [];
     const session = new JugnuSession(runtime, model, en, {
-      onEvent: (event) => events.push(event.kind),
+      onEvent: (event) => {
+        events.push(event.kind);
+      },
     });
     const turn = await session.ask("I'm stuck");
-    expect(turn.reply).toBe("I put the dot at 1.4. Its square is 1.96: more or less than 2?");
+    expect(turn.cues).toEqual([
+      { kind: "act", prop: "line", action: "moveMarker", args: { to: 1.4 } },
+      { kind: "say", text: "At 1.4 the square is 1.96: more or less than 2?" },
+      { kind: "point", prop: "squareLabel" },
+    ]);
+    expect(turn.reply).toBe("At 1.4 the square is 1.96: more or less than 2?");
     expect(turn.modelCalls).toBe(2);
-    expect(events).toEqual(["act", "say"]);
-    expect(turn.events[0]).toMatchObject({
-      kind: "act",
-      prop: "line",
-      action: "moveMarker",
-      changed: { line: { marker: 1.4 } },
-    });
+    expect(events).toEqual(["act", "say", "point"]);
+    // Played here, through the one door, as his: not the student's own work.
     expect(runtime.getView("line").marker).toBe(1.4);
-    // His move isn't the student's own work.
     expect(runtime.isTouched("line")).toBe(false);
-    // Each step gets the board fresh: the second call already sees the dot at 1.4.
-    expect(model.requests[1]?.messages[0]?.content).toContain('"marker": 1.4');
+  });
+
+  it("try shows what the student would see change, and leaves the board as it was", async () => {
+    const runtime = start();
+    const model = scriptedProvider([
+      {
+        call: [
+          { name: "try", args: { calls: [{ call: "line.moveMarker", args: { to: 1.414 } }] } },
+        ],
+      },
+      (request) =>
+        reply([
+          say(
+            lastToolResult(request.messages).includes("1.9994")
+              ? "Get close to 2 yourself."
+              : "Look!",
+          ),
+        ]),
+    ]);
+    const turn = await new JugnuSession(runtime, model, en).ask("show me");
+    // The square label is what the student would see change; the goal's isMet stays hidden.
+    expect(turn.events[0]).toMatchObject({
+      kind: "try",
+      changed: { line: { marker: 1.414 }, squareLabel: { text: { en: "1.41 × 1.41 = 1.9994" } } },
+    });
+    expect(JSON.stringify(turn.events[0])).not.toContain("isMet");
+    expect(turn.cues).toEqual([{ kind: "say", text: "Get close to 2 yourself." }]);
+    expect(runtime.getView("line").marker).toBe(1.5);
   });
 
   it("calculates exactly, reading board values by name", async () => {
     const model = scriptedProvider([
       { call: [{ name: "calculate", args: { expression: "line.marker * line.marker - 2" } }] },
-      { say: "ok" },
+      reply([say("ok")]),
     ]);
     const turn = await new JugnuSession(start(), model, en).ask("how far off?");
     expect(turn.events[0]).toEqual({
@@ -109,88 +194,86 @@ describe("the loop", () => {
     expect(lastToolResult(model.requests[1]?.messages ?? [])).toBe('{"result":0.25}');
   });
 
-  it("points at a prop or a part by name, and says when there is no such part", async () => {
-    const model = scriptedProvider([
-      {
-        call: [
-          { name: "point", args: { prop: "line", part: "marker" } },
-          { name: "point", args: { prop: "line", part: "elbow" } },
-        ],
-      },
-      { say: "Look at the dot." },
-    ]);
-    const turn = await new JugnuSession(start(), model, en).ask("where?");
-    expect(turn.events[0]).toEqual({ kind: "point", prop: "line", part: "marker" });
-    expect(turn.events[1]).toMatchObject({
-      kind: "point",
-      refused: expect.stringMatching(/no part "elbow"/),
-    });
-  });
-
-  it("can't do what's the student's, and hears why", async () => {
+  it("what he shows is his call: a move that lands on the answer goes through", async () => {
     const runtime = start();
     const model = scriptedProvider([
-      {
-        call: [
-          { name: "guessRoot__check" },
-          { name: "board__continue" },
-          { name: "line__fly" },
-          { name: "line__moveMarker", args: { to: "far" } },
-        ],
-      },
-      { say: "Zoom in and look closely." },
+      reply([show("line.moveMarker", { to: 1.414 }), say("There!")]),
     ]);
+    const turn = await new JugnuSession(runtime, model, en).ask("put it on root 2");
+    expect(turn.cues[0]).toMatchObject({ kind: "act", action: "moveMarker" });
+    expect(runtime.getView("line").marker).toBe(1.414);
+    // The student still has to press Check themselves.
+    expect(runtime.getView("guessRoot").status).not.toBe("correct");
+  });
+
+  it("can't do what's the student's: the reply goes back with the reason", async () => {
+    const model = scriptedProvider([
+      reply([show("guessRoot.check", {})]),
+      reply([point("line", "elbow")]),
+      reply([say("Zoom in and look closely.")]),
+    ]);
+    const runtime = start();
     const turn = await new JugnuSession(runtime, model, en).ask("just press check");
     const refused = turn.events.map((e) => ("refused" in e ? e.refused : undefined));
     expect(refused[0]).toMatch(/only the student answers it/);
-    expect(refused[1]).toMatch(/no tool "board__continue"|the board itself/);
-    expect(refused[2]).toMatch(/no tool "line__fly"/);
-    expect(refused[3]).toBeDefined();
+    expect(refused[1]).toMatch(/nothing called "elbow"/);
     expect(runtime.getView("guessRoot").attempts).toBe(0);
     expect(turn.reply).toBe("Zoom in and look closely.");
+    expect(turn.modelCalls).toBe(3);
   });
 
-  it("puts the board back if his move would answer the question for the student", async () => {
-    const runtime = start();
+  it("asks with options; the student's tap starts the next turn", async () => {
     const model = scriptedProvider([
-      { call: [{ name: "line__moveMarker", args: { to: 1.414 } }] },
-      (request) => ({
-        say: lastToolResult(request.messages).includes("put back") ? "Try it yourself." : "Done!",
+      reply([say("1.3² is 1.69 and 1.6² is 2.56.")], {
+        ask: { question: "So where is √2?", options: ["Left of 1.3", "Between them"] },
       }),
+      (request) =>
+        reply([
+          say(
+            request.messages.at(-1)?.content.includes('tapped your option: "Between them"')
+              ? "Yes! Try the middle."
+              : "?",
+          ),
+        ]),
     ]);
-    const turn = await new JugnuSession(runtime, model, en).ask("put it on root 2");
-    const step = turn.events[0] as JugnuStep & { kind: "act" };
-    expect(step.isUndone).toBe(true);
-    expect(runtime.getView("line").marker).toBe(1.5);
-    expect(runtime.getView("guessRoot").isMet).toBe(false);
-    expect(turn.reply).toBe("Try it yourself.");
+    const session = new JugnuSession(start(), model, en);
+    const first = await session.ask("where is it");
+    expect(first.options).toEqual(["Left of 1.3", "Between them"]);
+    expect(first.reply).toBe("1.3² is 1.69 and 1.6² is 2.56. So where is √2?");
+    const second = await session.choose("Between them");
+    expect(second.reply).toBe("Yes! Try the middle.");
   });
 
-  it("hands the board back, hears the student's move, and goes on from it", async () => {
+  it("refuses options that aren't options", async () => {
+    const model = scriptedProvider([
+      reply([say("Hmm.")], { ask: { question: "Which?", options: ["only one"] } }),
+      reply([say("Which side is it on?")]),
+    ]);
+    const turn = await new JugnuSession(start(), model, en).ask("?");
+    expect(turn.events[0]).toMatchObject({ kind: "ask", refused: "give 2 to 4 options" });
+    expect(turn.options).toEqual([]);
+    expect(turn.cues).toEqual([{ kind: "say", text: "Which side is it on?" }]);
+  });
+
+  it("ends quiet: the board is the student's, and the next turn sees where they left it", async () => {
     const runtime = start();
     const model = scriptedProvider([
-      {
-        say: "Your turn: move the dot a little left.",
-        call: [{ name: "wait_for_student", args: { watch: ["line"] } }],
-      },
-      (request) => ({
-        say: request.messages[0]?.content.includes("student: line.moveMarker")
-          ? "Good, 1.45. What's its square?"
-          : "?",
-      }),
+      reply([say("Try moving the dot a little left.")]),
+      (request) =>
+        reply([
+          say(
+            request.messages.at(-1)?.content.includes('"marker":1.45')
+              ? "Good, 1.45. What's its square?"
+              : "?",
+          ),
+        ]),
     ]);
     const session = new JugnuSession(runtime, model, en);
     const first = await session.ask("help");
-    expect(first.watching).toEqual(["line"]);
-    expect(model.requests).toHaveLength(1);
-    const moves: string[] = [];
-    session.onStudentMove((prop) => moves.push(prop));
+    expect(first.options).toEqual([]);
     await runtime.call("line", "moveMarker", { to: 1.45 }, Actor.Learner);
-    expect(moves).toEqual(["line"]);
-    const next = await session.continue();
-    expect(next.asked).toBeUndefined();
+    const next = await session.ask("now?");
     expect(next.reply).toBe("Good, 1.45. What's its square?");
-    expect(next.watching).toEqual([]);
     // The chat stays whole: every tool call has its answer.
     expect(model.requests[1]?.messages.map((m) => m.role)).toEqual([
       "system",
@@ -201,30 +284,70 @@ describe("the loop", () => {
     ]);
   });
 
-  it("stops after a few steps, with words", async () => {
-    // An instant action, so the loop is about steps, not about waiting for a glide to finish.
+  it("hears what the student held to ask about, in the names he points with", async () => {
+    const model = scriptedProvider([reply([say("That's the dot.")])]);
+    const session = new JugnuSession(start(), model, en);
+    await session.ask("what's this?", [
+      { prop: "line", part: "marker" },
+      { prop: "guessRoot", text: "Check" },
+      { prop: "line", part: "nothingHere" },
+      { prop: "nope" },
+    ]);
+    const opening = model.requests[0]?.messages.at(-1)?.content ?? "";
+    expect(opening).toContain(
+      'held these on the board to ask about them: line · marker; guessRoot (where they held it reads "Check"); line.',
+    );
+    expect(opening).not.toContain("nope");
+  });
+
+  it("the last step must be a reply; plain words count as one", async () => {
     const model = scriptedProvider([
-      { say: "Hmm.", call: [{ name: "line__moveMarker", args: { to: 1.5 } }] },
+      { call: [{ name: "calculate", args: { expression: "1+1" } }] },
     ]);
     const turn = await new JugnuSession(start(), model, en, { maxSteps: 3 }).ask("show me");
     expect(turn.modelCalls).toBe(3);
-    expect(model.requests[2]?.toolChoice).toBe("none");
-    expect(turn.reply).toBe("Hmm. Hmm. Hmm.");
+    expect(model.requests[2]?.toolChoice).toEqual({ name: "reply" });
+    expect(turn.isFallback).toBe(true);
+    const words = scriptedProvider([{ say: "Look at the dot." }]);
+    const plain = await new JugnuSession(start(), words, en).ask("hi");
+    expect(plain.cues).toEqual([{ kind: "say", text: "Look at the dot." }]);
   });
 
-  it("remembers what the student did and the chat so far, and answers in Hindi", async () => {
+  it("sees where things are now, not the moves that got there; keeps the chat; answers in Hindi", async () => {
     const runtime = start();
-    const model = scriptedProvider([{ say: "ठीक है" }]);
+    const model = scriptedProvider([reply([say("ठीक है")])]);
     const session = new JugnuSession(runtime, model, { ...place, locale: "hi" });
     await runtime.call("line", "moveMarker", { to: 1.6 }, Actor.Learner);
     await runtime.call("line", "moveMarker", { to: 1.7 }, Actor.Learner);
     await session.ask("पहला सवाल");
     await session.ask("दूसरा सवाल");
+    const first = model.requests[0]?.messages ?? [];
     const second = model.requests[1]?.messages ?? [];
     expect(second[0]?.content).toContain("Hindi, in Devanagari");
-    // A drag is one line, with its last value.
-    expect(second[0]?.content).toContain('student: line.moveMarker {\\"to\\":1.7} (×2)');
-    expect(second.map((m) => m.role)).toEqual(["system", "user", "assistant", "user"]);
+    expect(first[1]?.content).toContain('"marker":1.7');
+    expect(first[1]?.content).not.toContain("moveMarker");
+    expect(second.map((m) => m.role)).toEqual(["system", "user", "assistant", "tool", "user"]);
+  });
+
+  it("what he tried stays out of sight: the next turn's board shows only what he showed", async () => {
+    const model = scriptedProvider([
+      {
+        call: [
+          {
+            name: "try",
+            args: { calls: [{ call: "line.zoomTo", args: { from: 1, to: 3, over: 0 } }] },
+          },
+        ],
+      },
+      reply([show("line.placeMark", { at: 1.2, label: "a", color: null }), say("See a.")]),
+      reply([say("ok")]),
+    ]);
+    const session = new JugnuSession(start(), model, en);
+    await session.ask("one");
+    await session.ask("two");
+    const opening = model.requests.at(-1)?.messages.at(-1)?.content ?? "";
+    expect(opening).toContain('"mark:a":1.2');
+    expect(opening).toContain('"axis":"1 to 2"');
   });
 
   it("forgets a turn the model failed, so the next one starts clean", async () => {
@@ -241,6 +364,40 @@ describe("the loop", () => {
     await expect(session.ask("one")).rejects.toThrow("server down");
     const turn = await session.ask("two");
     expect(turn.reply).toBe("hi");
+  });
+
+  it("works a turn out on a copy with no screen, as the server does", async () => {
+    const phone = start();
+    await phone.call("line", "moveMarker", { to: 1.3 }, Actor.Learner);
+    const copy = headlessBoard(guess, (type) => propDefs[type], boardState(phone));
+    const model = scriptedProvider([
+      {
+        call: [{ name: "try", args: { calls: [{ call: "line.magnify", args: { value: 1.3 } }] } }],
+      },
+      (request) =>
+        lastToolResult(request.messages).includes('"axis":"1.3 to 1.4"')
+          ? reply([show("line.magnify", { value: 1.3 }), say("Zoomed.")])
+          : reply([say("?")]),
+    ]);
+    const result = await jugnuTurn(copy.runtime, model, en, {
+      chat: [],
+      input: { kind: "typed", text: "zoom" },
+      settle: copy.settle,
+    });
+    expect(result.cues).toEqual([
+      { kind: "act", prop: "line", action: "magnify", args: { value: 1.3 } },
+      { kind: "say", text: "Zoomed." },
+    ]);
+    expect(result.chat.map((m) => m.role)).toEqual([
+      "user",
+      "assistant",
+      "tool",
+      "assistant",
+      "tool",
+    ]);
+    // The phone's board hasn't moved; it will when it plays the cues.
+    expect(phone.getView("line").from).toBe(1);
+    copy.dispose();
   });
 });
 

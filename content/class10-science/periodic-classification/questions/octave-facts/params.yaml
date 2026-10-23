@@ -1,0 +1,8 @@
+# Newlands' law of octaves.
+- params: { item: law }
+  firstTry: 1
+- params: { item: li-na }
+  firstTry: 2
+- params: { item: range }
+  level: medium
+- params: { item: notes }

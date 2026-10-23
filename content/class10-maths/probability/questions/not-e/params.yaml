@@ -1,0 +1,15 @@
+# NCERT Examples 3, 5 and 6, Exercise 15.1 Q1 (i), Q5, Q7, Q12 (iii, iv) and Q13 (iii).
+- params: { item: ex3 }
+  firstTry: 1
+- params: { item: ex5 }
+- params: { item: ex6 }
+  level: medium
+- params: { item: q1i }
+- params: { item: q5 }
+  firstTry: 2
+- params: { item: q7 }
+  level: medium
+- params: { item: q12iii }
+  level: medium
+- params: { item: q12iv }
+- params: { item: q13iii }

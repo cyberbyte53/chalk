@@ -1,0 +1,8 @@
+# NCERT 16.4: coal and petroleum, how long they last and what burning them gives.
+- params: { case: petroleum }
+  firstTry: 1
+- params: { case: coal }
+  firstTry: 2
+- params: { case: formed }
+- params: { case: elements }
+- params: { case: judicious }

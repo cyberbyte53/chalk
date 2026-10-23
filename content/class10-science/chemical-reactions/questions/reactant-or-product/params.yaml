@@ -1,0 +1,8 @@
+# Reading a word equation: which side holds what.
+- params: { equation: zincSulphuricAcid, ask: reactants }
+  firstTry: 3
+- params: { equation: quickLimeWater, ask: products }
+- params: { equation: ironCopperSulphate, ask: products }
+- params: { equation: sodiumWater, ask: reactants }
+- params: { equation: limestoneHeat, ask: products }
+  level: medium

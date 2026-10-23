@@ -1,0 +1,10 @@
+# NCERT Activities 1.1–1.3 and 1.4: which sign shows the reaction happened.
+- params: { item: magnesium }
+  firstTry: 3
+- params: { item: leadIodide }
+- params: { item: zincAcid }
+- params: { item: quickLime }
+  level: medium
+- params: { item: ferrousSulphate }
+  level: medium
+- params: { item: silverChloride }

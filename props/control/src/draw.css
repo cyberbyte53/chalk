@@ -1,0 +1,159 @@
+/* @chalk/prop-control: shared pieces. Drawn only with the look's tokens. */
+.ctc-svg {
+  display: block;
+  overflow: hidden;
+  user-select: none;
+}
+.ctc-caption {
+  margin: 8px 2px 0;
+  min-height: 2.6em;
+  font: 500 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+}
+.ctc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.ctc-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.ctc-button {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--shape-radius-m);
+  border: none;
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 700 15px / 1.1 var(--font-display);
+  cursor: pointer;
+}
+.ctc-button.is-chip {
+  min-height: 36px;
+  padding: 0 10px;
+  font-size: 14px;
+}
+.ctc-button.is-on {
+  background: var(--color-primary-container);
+  color: var(--color-primary);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.ctc-button.is-main {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 var(--shape-press) 0 var(--color-inverse-surface);
+}
+.ctc-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.ctc-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.ctc-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.ctc-card {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  font: 500 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+}
+.ctc-card b {
+  font-weight: 800;
+}
+.ctc-card.is-right {
+  background: var(--color-right-container);
+}
+.ctc-card.is-wrong {
+  background: var(--color-wrong-container);
+}
+.ctc-hint {
+  font: 600 var(--text-caption) / 1.2 var(--font-body);
+  color: var(--color-on-surface-variant);
+  text-align: center;
+  margin-top: 6px;
+}
+/* the family, drawn as in the other science chapters */
+.ctc-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.ctc-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.ctc-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.ctc-hair-grey {
+  fill: var(--color-surface-press);
+}
+.ctc-cap {
+  fill: var(--color-wrong);
+}
+.ctc-face circle {
+  fill: var(--color-inverse-surface);
+}
+.ctc-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.ctc-specs circle,
+.ctc-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.ctc-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.ctc-shirt-riya {
+  fill: var(--color-category-4);
+}
+.ctc-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.ctc-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.ctc-shirt-mom {
+  fill: var(--color-category-3);
+}
+.ctc-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.ctc-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.ctc-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.ctc-shirt-grandpa-line {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.ctc-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+/* scenes */
+.ctc-label {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: var(--color-on-surface);
+}
+.ctc-label-strong {
+  font-weight: 800;
+}

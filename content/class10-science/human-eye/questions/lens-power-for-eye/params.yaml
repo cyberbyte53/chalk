@@ -1,0 +1,12 @@
+# The power of the correcting lens. NCERT Exercise 6 (far point 80 cm), Exercise 7 (near point 1 m),
+# in-text Q2 (far point 1.2 m).
+- params: { defect: myopia, cm: 80 }
+  firstTry: 2
+- params: { defect: myopia, cm: 120 }
+- params: { defect: myopia, cm: 200 }
+  level: medium
+- params: { defect: myopia, cm: 50 }
+- params: { defect: hypermetropia, cm: 100 }
+  firstTry: 3
+- params: { defect: hypermetropia, cm: 50 }
+- params: { defect: hypermetropia, cm: 75 }

@@ -1,0 +1,350 @@
+@import "./kit/kit.css";
+
+/* @chalk/prop-circles: only the look's tokens. */
+
+.ci {
+  width: 100%;
+}
+.ci-svg {
+  display: block;
+  overflow: hidden;
+}
+.ci-verdict,
+.ci-caption {
+  margin: 6px 0 0;
+  font: var(--text-note) / var(--text-note-leading) var(--font-body);
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.ci-verdict.is-on strong,
+.ci-verdict.is-on {
+  color: var(--color-right);
+}
+.ci-verdict.is-off strong {
+  color: var(--color-wrong);
+}
+.ci-caption {
+  min-height: 3.2em;
+  padding: 8px 10px;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+}
+.ci-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.ci-working {
+  margin-top: 6px;
+  overflow-x: auto;
+}
+.ci-working p {
+  margin: 3px 0;
+  font: var(--text-note) / var(--text-note-leading) var(--font-body);
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.ci-working p.is-now {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.ci-working p.is-total {
+  font-weight: 700;
+  color: var(--color-right);
+}
+
+/* ---- circleArea: the slices glide from the circle into the near-rectangle ---- */
+.ci-slice {
+  stroke: var(--color-surface);
+  stroke-width: 1px;
+  transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.ci-slice-a {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+}
+.ci-slice-b {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-surface));
+}
+
+/* ---- combinedFigures ---- */
+.gk-region.ci-outline {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.ci-dim {
+  opacity: 0.45;
+}
+.ci-lit {
+  animation: ci-fade 0.5s ease-out;
+}
+@keyframes ci-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- circlesScene ---- */
+.cis-svg {
+  display: block;
+}
+.cis-sky {
+  fill: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+}
+.cis-road {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 35%, var(--color-surface));
+}
+.cis-roadline {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+}
+.cis-wall {
+  fill: color-mix(in srgb, var(--color-category-1) 16%, var(--color-surface));
+}
+.cis-floor {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 25%, var(--color-surface));
+}
+.cis-board,
+.cis-table,
+.cis-wood,
+.cis-stall {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-surface));
+}
+.cis-wood {
+  fill: none;
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+.cis-paper {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+}
+.cis-title {
+  font: 800 11px var(--font-display);
+  fill: var(--color-wrong);
+}
+.cis-label {
+  font: 800 12px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.cis-label.is-small {
+  font-size: 10px;
+}
+.cis-line,
+.cis-ink {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.cis-big {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+}
+.cis-guide {
+  fill: none;
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+  stroke-dasharray: 3 3;
+}
+.cis-tyre {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 5px;
+}
+.cis-rim {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.cis-spoke {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.cis-hub {
+  fill: var(--color-on-surface);
+}
+.cis-frame {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cis-seat {
+  fill: var(--color-inverse-surface);
+}
+.cis-sprocket,
+.cis-sprocket-big,
+.cis-pulley {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 30%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+}
+.cis-chain,
+.cis-chainloop {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 2.5px;
+  stroke-dasharray: 3 1.5;
+}
+.cis-rope {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 80%, var(--color-surface));
+  stroke-width: 2.5px;
+}
+.cis-wellwall {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 45%, var(--color-surface));
+}
+.cis-bucket {
+  fill: var(--color-on-surface-variant);
+}
+.cis-mark {
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.cis-right {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 1.5px;
+}
+.cis-touch {
+  fill: var(--color-right);
+}
+.cis-compass {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.cis-ruler {
+  fill: color-mix(in srgb, var(--color-category-1) 45%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.cis-box {
+  fill: var(--color-primary);
+}
+.cis-chalk {
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.cis-dim {
+  fill: none;
+  stroke: var(--color-surface);
+  stroke-width: 1px;
+  stroke-dasharray: 3 2;
+}
+.cis-sector {
+  fill: color-mix(in srgb, var(--color-primary) 22%, var(--color-surface));
+}
+.cis-guard {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+.cis-reflector {
+  fill: var(--color-wrong);
+  opacity: 0.85;
+}
+.cis-protractor {
+  fill: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+.cis-shade {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-surface));
+}
+.cis-hole {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+.cis-flag.is-1 {
+  fill: var(--color-secondary);
+}
+.cis-flag.is-2 {
+  fill: var(--color-primary);
+}
+.cis-flag.is-3 {
+  fill: var(--color-right);
+}
+.cis-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.cis-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.cis-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.cis-hair-grey {
+  fill: var(--color-surface-press);
+}
+.cis-cap {
+  fill: var(--color-wrong);
+}
+.cis-face circle {
+  fill: var(--color-inverse-surface);
+}
+.cis-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.cis-specs circle,
+.cis-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.cis-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.cis-shirt-riya {
+  fill: var(--color-category-4);
+}
+.cis-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.cis-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.cis-shirt-mom {
+  fill: var(--color-category-3);
+}
+.cis-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.cis-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.cis-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.cis-shirt-grandpa-line {
+  stroke: var(--color-on-surface-variant);
+}
+.cis-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ci-slice {
+    transition: none;
+  }
+  .ci-lit {
+    animation: none;
+  }
+}

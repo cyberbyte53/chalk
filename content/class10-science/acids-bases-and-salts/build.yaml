@@ -1,0 +1,14 @@
+title: { en: "Acids, Bases and Salts", hi: "अम्ल, क्षारक एवं लवण" }
+# Concepts in book order (NCERT Chapter 2, the full edition).
+concepts:
+  - indicators
+  - acids-with-metals
+  - neutralisation
+  - acids-and-bases-in-water
+  - ph-scale
+  - ph-in-everyday-life
+  - salts-and-their-ph
+  - chemicals-from-common-salt
+  - water-of-crystallisation
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

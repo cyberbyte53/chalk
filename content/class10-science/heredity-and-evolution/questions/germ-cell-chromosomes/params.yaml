@@ -1,0 +1,9 @@
+# Germ cells carry one chromosome of each pair; fertilisation restores the pairs.
+- params: { body: 8, ask: germ, who: animal }
+  firstTry: 1
+- params: { body: 46, ask: germ, who: human }
+  firstTry: 2
+- params: { body: 14, ask: zygote, who: plant }
+- params: { body: 24, ask: germ, who: plant }
+- params: { body: 46, ask: zygote, who: human }
+  level: medium

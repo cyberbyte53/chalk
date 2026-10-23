@@ -1,0 +1,10 @@
+# Döbereiner's triads: is the middle mass the average of the outer two?
+- params: { item: li-na-k }
+  firstTry: 1
+- params: { item: n-p-as }
+  firstTry: 2
+- params: { item: cl-br-i }
+  level: medium
+- params: { item: ca-sr-ba }
+  level: medium
+- params: { item: limit }

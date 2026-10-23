@@ -5,6 +5,11 @@ export type ToolSpec = {
   name: string;
   description: string;
   parameters: Readonly<Record<string, unknown>>;
+  /**
+   * The model server must hold the arguments to the schema exactly (structured outputs). Servers
+   * that don't take it are asked again without it.
+   */
+  strict?: boolean;
 };
 
 /** A tool call the model asked for. `args` is undefined when its arguments weren't valid JSON. */
@@ -32,15 +37,63 @@ export type ChatMessage =
 export type ChatRequest = {
   messages: readonly ChatMessage[];
   tools: readonly ToolSpec[];
-  /** "none": answer in words only this time (the tools are still described). Default "auto". */
-  toolChoice?: "auto" | "none";
+  /**
+   * "none": answer in words only this time (the tools are still described); `{ name }`: call that
+   * tool. Default "auto".
+   */
+  toolChoice?: "auto" | "none" | "required" | { name: string };
+};
+
+/** Tokens one call (or a turn) used: all input, the part of it read from the cache, and output. */
+export type Usage = {
+  input: number;
+  cached: number;
+  output: number;
+  /** Of `input`, what was written to the cache this call (Anthropic reports it). */
+  cacheWritten?: number;
 };
 
 export type ChatReply = {
   content: string;
   toolCalls: ToolCall[];
   reasoning?: string;
+  /** What the model server reported, if it did. */
+  usage?: Usage;
 };
+
+const toolCallSchema = z
+  .object({
+    id: z.string().max(200),
+    name: z.string().max(200),
+    args: z.record(z.string(), z.unknown()).optional(),
+    rawArgs: z.string().max(20_000),
+  })
+  .strict()
+  .transform((call): ToolCall => ({ ...call, args: call.args }));
+
+/**
+ * A chat as a phone sends it back to the server (his earlier turns): never a system message, which
+ * the server writes itself.
+ */
+export const chatMessageSchema: z.ZodType<ChatMessage, z.ZodTypeDef, unknown> = z.union([
+  z.object({ role: z.literal("user"), content: z.string().max(40_000) }).strict(),
+  z
+    .object({
+      role: z.literal("assistant"),
+      content: z.string().max(20_000),
+      toolCalls: z.array(toolCallSchema).max(20).optional(),
+      reasoning: z.string().max(60_000).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      role: z.literal("tool"),
+      toolCallId: z.string().max(200),
+      name: z.string().max(200),
+      content: z.string().max(40_000),
+    })
+    .strict(),
+]);
 
 /** A plain message, for a one-shot JSON answer (the test bench's judge). */
 export type PlainMessage = { role: "system" | "user" | "assistant"; content: string };
@@ -72,6 +125,8 @@ export const ProviderKind = {
    * llama.cpp, vLLM.
    */
   OpenAiCompatible: "openai-compatible",
+  /** Anthropic's Messages API (Claude), at https://api.anthropic.com. */
+  Anthropic: "anthropic",
 } as const;
 export type ProviderKind = (typeof ProviderKind)[keyof typeof ProviderKind];
 
@@ -99,6 +154,65 @@ export const llmConfigSchema = z
 export type LlmConfig = z.input<typeof llmConfigSchema>;
 
 type Fetch = typeof fetch;
+
+/**
+ * One model call exactly as it went: the request body as sent and the response as it came back
+ * (parsed when it is JSON, else the text), with the status and how long it took. Keys and other
+ * headers are never kept.
+ */
+export type CallRecord = {
+  at: string;
+  url: string;
+  ms: number;
+  status: number | null;
+  request: unknown;
+  response: unknown;
+  error?: string;
+};
+
+/**
+ * A fetch that records every call it makes (give it to a provider): so every model call, from the
+ * dev shell, the server or the bench, can be read back exactly.
+ */
+export function recordingFetch(record: (call: CallRecord) => void, fetchFn: Fetch = fetch): Fetch {
+  return (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const started = Date.now();
+    const at = new Date(started).toISOString();
+    const url = String(input instanceof Request ? input.url : input);
+    const parse = (text: string): unknown => {
+      try {
+        return JSON.parse(text);
+      } catch {
+        return text;
+      }
+    };
+    const request = typeof init?.body === "string" ? parse(init.body) : null;
+    try {
+      const response = await fetchFn(input, init);
+      const text = await response.clone().text();
+      record({
+        at,
+        url,
+        ms: Date.now() - started,
+        status: response.status,
+        request,
+        response: parse(text),
+      });
+      return response;
+    } catch (error) {
+      record({
+        at,
+        url,
+        ms: Date.now() - started,
+        status: null,
+        request,
+        response: null,
+        error: String(error),
+      });
+      throw error;
+    }
+  }) as Fetch;
+}
 
 const trimSlash = (url: string) => url.replace(/\/+$/, "");
 
@@ -169,15 +283,35 @@ function leadingObjectEnd(text: string): number {
   return text.length;
 }
 
-const asFunctions = (tools: readonly ToolSpec[]) =>
+const asFunctions = (tools: readonly ToolSpec[], canBeStrict = true) =>
   tools.map((tool) => ({
     type: "function",
-    function: { name: tool.name, description: tool.description, parameters: tool.parameters },
+    function: {
+      name: tool.name,
+      description: tool.description,
+      parameters: tool.parameters,
+      ...(canBeStrict && tool.strict === true ? { strict: true } : {}),
+    },
   }));
+
+const openAiToolChoice = (choice: ChatRequest["toolChoice"]) =>
+  typeof choice === "object" ? { type: "function", function: { name: choice.name } } : choice;
 
 // ---- OpenAI-compatible ----
 
+const openAiUsage = z
+  .object({
+    prompt_tokens: z.number().optional(),
+    completion_tokens: z.number().optional(),
+    /** OpenAI and Microsoft Foundry. */
+    prompt_tokens_details: z.object({ cached_tokens: z.number().nullish() }).nullish(),
+    /** DeepSeek's own API. */
+    prompt_cache_hit_tokens: z.number().optional(),
+  })
+  .nullish();
+
 const openAiReply = z.object({
+  usage: openAiUsage,
   choices: z
     .array(
       z.object({
@@ -266,16 +400,36 @@ export function openAiCompatibleProvider(config: LlmConfig, fetchFn: Fetch = fet
   // Ask for JSON in the reply's exact shape; servers that only offer plain JSON mode (DeepSeek, some
   // local servers) refuse that, so fall back to "any JSON" once and remember.
   let isShapeSupported = true;
+  // Strict tool schemas, unless this server refused them once.
+  let canBeStrict = true;
   return {
     id: `${ProviderKind.OpenAiCompatible}:${model}${think ? " (thinking)" : ""}`,
     chat: async ({ messages, tools, toolChoice = "auto" }) => {
-      const reply = openAiReply.parse(
-        await post({
+      const send = () => {
+        const isStrict = canBeStrict && tools.some((tool) => tool.strict === true);
+        return post({
           messages: messages.map(toOpenAi),
-          max_tokens: maxTokens(1000),
-          ...(tools.length > 0 ? { tools: asFunctions(tools), tool_choice: toolChoice } : {}),
-        }),
-      );
+          max_tokens: maxTokens(1500),
+          ...(tools.length > 0
+            ? {
+                tools: asFunctions(tools, canBeStrict),
+                tool_choice: openAiToolChoice(toolChoice),
+                // Strict schemas can't be held across several calls at once.
+                ...(isStrict ? { parallel_tool_calls: false } : {}),
+              }
+            : {}),
+        });
+      };
+      let raw: unknown;
+      try {
+        raw = await send();
+      } catch (error) {
+        if (!canBeStrict || !/strict|parallel_tool_calls|json_schema/i.test(String(error)))
+          throw error;
+        canBeStrict = false;
+        raw = await send();
+      }
+      const reply = openAiReply.parse(raw);
       const message = reply.choices[0]?.message;
       const out: ChatReply = {
         content: message?.content ?? "",
@@ -285,6 +439,14 @@ export function openAiCompatibleProvider(config: LlmConfig, fetchFn: Fetch = fet
         }),
       };
       if (message?.reasoning_content) out.reasoning = message.reasoning_content;
+      if (reply.usage) {
+        const used = reply.usage;
+        out.usage = {
+          input: used.prompt_tokens ?? 0,
+          cached: used.prompt_tokens_details?.cached_tokens ?? used.prompt_cache_hit_tokens ?? 0,
+          output: used.completion_tokens ?? 0,
+        };
+      }
       return out;
     },
     complete: async ({ messages, schema }) => {
@@ -309,9 +471,228 @@ export function openAiCompatibleProvider(config: LlmConfig, fetchFn: Fetch = fet
   };
 }
 
+// ---- Anthropic ----
+
+const anthropicReply = z.object({
+  content: z.array(
+    z.union([
+      z.object({ type: z.literal("text"), text: z.string() }),
+      z.object({
+        type: z.literal("tool_use"),
+        id: z.string(),
+        name: z.string(),
+        input: z.unknown(),
+      }),
+      z.object({ type: z.literal("thinking"), thinking: z.string() }).passthrough(),
+      z.object({ type: z.string() }).passthrough(),
+    ]),
+  ),
+  usage: z
+    .object({
+      input_tokens: z.number().optional(),
+      output_tokens: z.number().optional(),
+      cache_read_input_tokens: z.number().nullish(),
+      cache_creation_input_tokens: z.number().nullish(),
+    })
+    .nullish(),
+});
+
+type AnthropicBlock = Record<string, unknown>;
+type AnthropicMessage = { role: "user" | "assistant"; content: AnthropicBlock[] };
+
+/**
+ * Our chat in Anthropic's shape: system text apart; tool results as user blocks; and turns of the
+ * same role merged, since the API wants user and assistant to alternate.
+ */
+function toAnthropic(messages: readonly ChatMessage[]): {
+  system: string;
+  turns: AnthropicMessage[];
+} {
+  const system: string[] = [];
+  const turns: AnthropicMessage[] = [];
+  const push = (role: AnthropicMessage["role"], blocks: AnthropicBlock[]) => {
+    if (blocks.length === 0) return;
+    const last = turns[turns.length - 1];
+    if (last !== undefined && last.role === role) last.content.push(...blocks);
+    else turns.push({ role, content: blocks });
+  };
+  for (const message of messages) {
+    switch (message.role) {
+      case "system":
+        system.push(message.content);
+        break;
+      case "user":
+        push("user", message.content === "" ? [] : [{ type: "text", text: message.content }]);
+        break;
+      case "assistant":
+        push("assistant", [
+          // A thinking model's blocks go back as they came (signatures and all), before its words.
+          ...thinkingBlocksOf(message.reasoning),
+          ...(message.content.trim() === "" ? [] : [{ type: "text", text: message.content }]),
+          ...(message.toolCalls ?? []).map((call) => ({
+            type: "tool_use",
+            id: call.id,
+            name: call.name,
+            input: call.args ?? {},
+          })),
+        ]);
+        break;
+      case "tool":
+        push("user", [
+          { type: "tool_result", tool_use_id: message.toolCallId, content: message.content },
+        ]);
+        break;
+    }
+  }
+  return { system: system.join("\n\n"), turns };
+}
+
+/** Claude's thinking blocks, kept in `reasoning` as their JSON so they can go back unchanged. */
+const THINKING_PREFIX = "anthropic-thinking:";
+function thinkingBlocksOf(reasoning: string | undefined): AnthropicBlock[] {
+  if (reasoning === undefined || !reasoning.startsWith(THINKING_PREFIX)) return [];
+  try {
+    const blocks = JSON.parse(reasoning.slice(THINKING_PREFIX.length)) as unknown;
+    return Array.isArray(blocks) ? (blocks as AnthropicBlock[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+const anthropicToolChoice = (choice: ChatRequest["toolChoice"]) =>
+  typeof choice === "object"
+    ? { type: "tool", name: choice.name }
+    : { type: choice === "required" ? "any" : (choice ?? "auto") };
+
+/**
+ * Claude through Anthropic's Messages API. The system prompt and the tools are marked for prompt
+ * caching (they repeat every call of a conversation). Thinking is off (`think` is ignored for now):
+ * it costs seconds and tokens the student waits for, and thinking blocks would have to be sent back
+ * with their signatures across tool calls.
+ */
+export function anthropicProvider(config: LlmConfig, fetchFn: Fetch = fetch): LlmProvider {
+  // No temperature: newer Claude models refuse it.
+  const { url, model, apiKey, timeoutSeconds, think } = llmConfigSchema.parse({
+    ...config,
+    provider: ProviderKind.Anthropic,
+  });
+  const endpoint = `${trimSlash(url)}/v1/messages`;
+  const headers: Record<string, string> = {
+    "anthropic-version": "2023-06-01",
+    ...(apiKey === undefined ? {} : { "x-api-key": apiKey }),
+  };
+  const cached = { cache_control: { type: "ephemeral" } };
+  // How to say "don't think": "disabled", unless the model asks for another way (its error names it),
+  // which is then used for every call after.
+  let thinkingOff: Record<string, unknown> = { type: "disabled" };
+  const toolsOf = (tools: readonly ToolSpec[]) =>
+    tools.map((tool, i) => ({
+      name: tool.name,
+      description: tool.description,
+      input_schema: tool.parameters,
+      ...(i === tools.length - 1 ? cached : {}),
+    }));
+  const call = async (
+    messages: readonly ChatMessage[],
+    tools: readonly ToolSpec[],
+    toolChoice: ChatRequest["toolChoice"],
+    maxTokens: number,
+  ) => {
+    const { system, turns } = toAnthropic(messages);
+    // A third cache point at the end of the chat: the next call reads everything up to here from
+    // the cache and pays full price only for what is new (with the tools and the system, 3 of 4).
+    const lastBlock = turns.at(-1)?.content.at(-1);
+    if (lastBlock !== undefined) Object.assign(lastBlock, cached);
+    const body: Record<string, unknown> = {
+      model,
+      max_tokens: maxTokens,
+      messages: turns,
+      // Newer models think unless told not to (their default, when `think` is on). A forced tool
+      // call can't go with thinking, so a thinking model is only ever left to choose.
+      ...(think ? {} : { thinking: thinkingOff }),
+      ...(system === "" ? {} : { system: [{ type: "text", text: system, ...cached }] }),
+      ...(tools.length > 0
+        ? {
+            tools: toolsOf(tools),
+            tool_choice: anthropicToolChoice(think ? "auto" : toolChoice),
+          }
+        : {}),
+    };
+    try {
+      return anthropicReply.parse(await postJson(fetchFn, endpoint, body, timeoutSeconds, headers));
+    } catch (error) {
+      const asked = /To turn thinking off on this model, send \\?"thinking\\?": (\{[^}]*\})/.exec(
+        String(error),
+      )?.[1];
+      if (asked === undefined) throw error;
+      thinkingOff = JSON.parse(asked.replace(/\\"/g, '"')) as Record<string, unknown>;
+      return anthropicReply.parse(
+        await postJson(
+          fetchFn,
+          endpoint,
+          { ...body, thinking: thinkingOff },
+          timeoutSeconds,
+          headers,
+        ),
+      );
+    }
+  };
+  return {
+    id: `${ProviderKind.Anthropic}:${model}${think ? " (thinking)" : ""}`,
+    chat: async ({ messages, tools, toolChoice = "auto" }) => {
+      const reply = await call(messages, tools, toolChoice, 1500);
+      const out: ChatReply = { content: "", toolCalls: [] };
+      const texts: string[] = [];
+      const thinking = reply.content.filter(
+        (block) => block.type === "thinking" || block.type === "redacted_thinking",
+      );
+      if (thinking.length > 0) out.reasoning = THINKING_PREFIX + JSON.stringify(thinking);
+      for (const block of reply.content) {
+        if (block.type === "text" && "text" in block) texts.push(block.text as string);
+        if (block.type === "tool_use" && "id" in block && "name" in block) {
+          const input = (block as { input: unknown }).input;
+          const rawArgs = JSON.stringify(input ?? {});
+          out.toolCalls.push({
+            id: block.id as string,
+            name: block.name as string,
+            args: parseArgs(rawArgs),
+            rawArgs,
+          });
+        }
+      }
+      out.content = texts.join("\n\n");
+      if (reply.usage) {
+        const used = reply.usage;
+        const read = used.cache_read_input_tokens ?? 0;
+        const written = used.cache_creation_input_tokens ?? 0;
+        out.usage = {
+          input: (used.input_tokens ?? 0) + read + written,
+          cached: read,
+          output: used.output_tokens ?? 0,
+          cacheWritten: written,
+        };
+      }
+      return out;
+    },
+    // JSON of a given shape: asked for as the arguments of one forced tool.
+    complete: async ({ messages, schema }) => {
+      const reply = await call(
+        messages,
+        [{ name: "reply", description: "Give your answer.", parameters: schema }],
+        { name: "reply" },
+        1200,
+      );
+      const used = reply.content.find((block) => block.type === "tool_use");
+      return JSON.stringify(used === undefined ? {} : (used as { input: unknown }).input);
+    },
+  };
+}
+
 // ---- Ollama ----
 
 const ollamaReply = z.object({
+  prompt_eval_count: z.number().optional(),
+  eval_count: z.number().optional(),
   message: z.object({
     content: z.string().nullish(),
     thinking: z.string().nullish(),
@@ -375,15 +756,19 @@ export function ollamaProvider(config: LlmConfig, fetchFn: Fetch = fetch): LlmPr
   return {
     id: `${ProviderKind.Ollama}:${model}${think ? " (thinking)" : ""}`,
     chat: async ({ messages, tools, toolChoice = "auto" }) => {
-      // Ollama has no tool_choice: leaving the tools out is how to ask for words only.
+      // Ollama has no tool_choice: leaving the tools out is how to ask for words only (and a call
+      // can't be forced).
       const reply = ollamaReply.parse(
         await post({
           messages: messages.map(toOllama),
-          ...(tools.length > 0 && toolChoice === "auto" ? { tools: asFunctions(tools) } : {}),
+          ...(tools.length > 0 && toolChoice !== "none"
+            ? { tools: asFunctions(tools, false) }
+            : {}),
         }),
       );
       return {
         content: reply.message.content ?? "",
+        usage: { input: reply.prompt_eval_count ?? 0, cached: 0, output: reply.eval_count ?? 0 },
         toolCalls: (reply.message.tool_calls ?? []).map((call) => {
           const raw = call.function.arguments ?? {};
           const rawArgs = typeof raw === "string" ? raw : JSON.stringify(raw);
@@ -411,6 +796,8 @@ export function providerFrom(config: LlmConfig, fetchFn: Fetch = fetch): LlmProv
       return ollamaProvider(config, fetchFn);
     case ProviderKind.OpenAiCompatible:
       return openAiCompatibleProvider(config, fetchFn);
+    case ProviderKind.Anthropic:
+      return anthropicProvider(config, fetchFn);
   }
 }
 

@@ -1,0 +1,10 @@
+# Sections 4.3.1–4.3.2: combustion equations; Activity 4.5, oxidising agents.
+- params: { item: products }
+  firstTry: 3
+- params: { item: oxidising }
+  firstTry: 4
+- params: { item: purple }
+  level: medium
+- params: { item: agent }
+- params: { item: coal }
+  level: medium

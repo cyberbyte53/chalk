@@ -1,0 +1,11 @@
+# Series against parallel (NCERT 12.6; in-text Q1, Q3 of 12.6.2; Exercise 18c).
+- params: { item: sameCurrent }
+  firstTry: 1
+- params: { item: sameV }
+- params: { item: oneFails }
+  firstTry: 2
+- params: { item: bigger }
+- params: { item: smaller }
+  level: medium
+- params: { item: domestic }
+  level: medium

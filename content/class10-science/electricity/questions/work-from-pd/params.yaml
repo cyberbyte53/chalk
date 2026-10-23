@@ -1,0 +1,10 @@
+# V = W/Q (NCERT Example 12.2; in-text Q3: energy for each coulomb from a 6 V battery).
+- params: { ask: work, volts: 12, coulombs: 2 }
+  firstTry: 3
+- params: { ask: work, volts: 6, coulombs: 1 }
+  firstTry: 4
+- params: { ask: work, volts: 1.5, coulombs: 20 }
+- params: { ask: volts, joules: 45, coulombs: 5 }
+  level: medium
+- params: { ask: charge, joules: 360, volts: 12 }
+  level: medium

@@ -47,9 +47,12 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Voice provider** | What turns a line into audio at publish (macOS `say` now; a self-hosted or cloud model later) | `TtsProvider`, `content/voices.json` |
 | **Publish** | Check a lesson, hand out ids, retire deleted ids, bump the version, keep a copy of every version, and with `--voice` speak every line a script says | `pnpm publish-lesson`, `publishLesson` |
 | **Jugnu** | The AI tutor, on question boards: an agent that reads the whole board as data and works in a loop of tool calls (the board's actions, point, calculate, hand back), within limits the runtime enforces | `@chalk/jugnu`, `JugnuSession`, `JugnuPanel` |
-| **Jugnu's tools** | What he can do besides talk: each action he may use now (`<prop>__<action>`), `point`, `calculate`, `wait_for_student` (hand the board back) | `toolsFor`, `runTool` |
+| **Jugnu's tools** | `try` (what actions would do, unseen) and `calculate` to think; `reply` to answer: say, show (an action for the student to watch), point, then ask (options to tap) or nothing (he goes quiet; the board is theirs). Typed from the board's own actions; strict where the board allows | `jugnuTools`, `runTool` |
+| **Cue** | One thing Jugnu's reply does on the phone, in order: say, point, act, ask (options). Only what he kept; his tries never reach the student | `Cue`, `cueSchema` |
+| **Headless board** | A board with no screen, where time jumps to the end of whatever moves: the server's copy Jugnu thinks on | `headlessBoard` |
+| **Jugnu notes** | What a lesson tells Jugnu about a board, in plain English: its purpose, what each prop stands for | `jugnu` on a board, `b.purpose`, `b.standsFor` |
+| **Flag** | A chat with Jugnu someone wasn't happy with, kept whole on the server to look at and replay | `POST /api/jugnu/flags`, `pnpm --filter @chalk/server flags` |
 | **Student only** | Actions on a board that only the learner may do (taking the bulb out, when that is the task); Jugnu can never do them | `studentOnly` on a board |
-| **Hand back** | Jugnu ends his turn and watches props; when the learner acts on one, he goes on | `wait_for_student`, `JugnuSession.continue` |
 | **Model provider** | The model Jugnu runs on, through its standard tool calling (any OpenAI-style API such as DeepSeek or Foundry, or Ollama); swapping it changes nothing else | `LlmProvider`, `providerFrom` |
 | **Slate** | Jugnu's own board, shown inside his chat; the same player as a board | (not built yet) |
 | **Book** | A subject for one class (Class 9 Maths): chapters in book order | `content/<book>/build.yaml`, `book.json` |
@@ -80,3 +83,14 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Runtime** | One board, live: props' state (signals), IS kept true (one effect per rule, re-run only when what it read changes), WHEN answered, scripts run | `BoardRuntime` |
 | **Library** | The registry of every prop type | `@chalk/library` |
 | **Studio** | Authoring: formats + validator now, a GUI later | `@chalk/studio` |
+| **Server** | The one Node process on the box: the API, Jugnu's model (key added there), and the built app | `@chalk/server`, `createApp` |
+| **Account** | Someone who signed in with Google, known by Google's id (`sub`), not their email | `accounts`, `Account` (`@chalk/api`) |
+| **Sign-in** | One device's signed-in state: a random token in an HttpOnly cookie; only its hash is stored. Lasts 90 days. (Not the events' `sessionId`, which is one run of the app) | `sign_ins`, `SIGN_IN_COOKIE` |
+| **Setup** | The one-time screen after the first sign-in: name, school code, learner or teacher | `POST /api/me/setup` |
+| **Role** | Learner or teacher, chosen at setup, never changed. The screens say "student" | `Role` (`@chalk/api`) |
+| **School code** | The code we give a school; everyone types it at setup | `schools.code`, `pnpm add-school` |
+| **Group** | A teacher's learners for one course. No name: shown as its course and when it was made | `groups`, `TeacherGroup`, `JoinedGroup` |
+| **Join code** | Six characters (no look-alike letters) a learner types, or opens as `/join/<code>`, to join a group. A new code stops the old one | `groups.join_code`, `makeCode` |
+| **Practice** | A concept's questions after its pages, played as their own lesson (`practice/<concept id>`); its score is each question's first try | `practiceLessonId`, `PracticeScore`, `ResultScreen` |
+| **Progress** | Which concepts a learner has played and practised, worked out from their events and nothing else, the same on phone and server | `progressFrom`, `Progress` (`@chalk/api`) |
+| **Concept mark** | How a concept went for one learner, as a square on the teacher's view: strong (practice 70%+ right, or done with no practice), shaky (40%+), weak, started (pages only), none | `ConceptMark`, `conceptMark` |

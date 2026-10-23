@@ -1,0 +1,11 @@
+# NCERT Example 3 and Exercise 12.2 Q4, Q5(iii), Q6, Q7.
+- params: { item: q4minor }
+  firstTry: 3
+  level: medium
+- params: { item: q4major }
+  level: medium
+- params: { item: ex3 }
+- params: { item: q5seg }
+- params: { item: q6minor }
+- params: { item: q6major }
+- params: { item: q7 }

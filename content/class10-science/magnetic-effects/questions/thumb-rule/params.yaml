@@ -1,0 +1,10 @@
+# The right-hand thumb rule (NCERT 13.2.2; Example 13.1; Exercise 15(i)).
+- params: { item: state }
+  level: easy
+  firstTry: 3
+- params: { item: below }
+  level: hard
+  firstTry: 4
+- params: { item: page }
+- params: { item: corkscrew }
+  level: easy

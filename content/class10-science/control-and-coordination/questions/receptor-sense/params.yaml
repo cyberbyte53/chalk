@@ -1,0 +1,10 @@
+# NCERT 7.1 and Activity 7.1: receptors, stimulus and response.
+- params: { case: smell }
+  firstTry: 4
+- params: { case: taste }
+- params: { case: cold }
+- params: { case: stimulus }
+- params: { case: receptorJob }
+  firstTry: 5
+- params: { case: whisper }
+  level: medium

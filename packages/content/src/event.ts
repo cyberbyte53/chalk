@@ -98,12 +98,16 @@ const boardEventSchema = z
 export const QuestionStatus = { Correct: "correct", Wrong: "wrong" } as const;
 export type QuestionStatus = (typeof QuestionStatus)[keyof typeof QuestionStatus];
 
-export const SubmittedKind = { Choice: "choice", Prop: "prop" } as const;
+export const SubmittedKind = { Choice: "choice", Choices: "choices", Prop: "prop" } as const;
 export type SubmittedKind = (typeof SubmittedKind)[keyof typeof SubmittedKind];
 
 /** What the learner submitted when pressing Check. */
 export const submittedSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal(SubmittedKind.Choice), optionId: z.string() }).strict(),
+  /** A multi-choice question: every option picked. */
+  z
+    .object({ kind: z.literal(SubmittedKind.Choices), optionIds: z.array(z.string()) })
+    .strict(),
   z
     .object({
       kind: z.literal(SubmittedKind.Prop),
@@ -149,10 +153,10 @@ const lineEventSchema = z
   })
   .strict();
 
-// ---- jugnu (one turn: the learner asked, or moved after he handed back; what he said and did) ----
+// ---- jugnu (one turn: the learner asked; what he said and did) ----
 
 /**
- * One thing Jugnu did in a turn: acted on a prop, pointed, calculated, handed back. Kept as he
+ * One thing Jugnu did in a turn: acted on a prop, pointed, calculated. Kept as he
  * reported it (`kind` plus its own fields); the shapes live in @chalk/jugnu.
  */
 const jugnuStepSchema = z.object({ kind: z.string() }).passthrough();
@@ -163,8 +167,25 @@ const jugnuEventSchema = z
     /** Jugnu's chat on one board: the board's permanent id. */
     machine: z.object({ type: z.literal(MachineType.Jugnu), id: permanentIdSchema }).strict(),
     input: z.discriminatedUnion("type", [
-      z.object({ type: z.literal("ask"), text: z.string() }).strict(),
-      /** He had handed the board back, and the learner acted on these props. */
+      z
+        .object({
+          type: z.literal("ask"),
+          text: z.string(),
+          /** What they held on the board to ask about. */
+          about: z
+            .array(
+              z
+                .object({
+                  prop: z.string(),
+                  part: z.string().optional(),
+                  text: z.string().optional(),
+                })
+                .strict(),
+            )
+            .optional(),
+        })
+        .strict(),
+      /** Older events only: he used to hand the board back and go on when the learner moved. */
       z
         .object({ type: z.literal("moved"), props: z.array(z.string()) })
         .strict(),
@@ -174,8 +195,8 @@ const jugnuEventSchema = z
         reply: z.string(),
         /** What he did, in order, including what he tried and wasn't allowed to do (`refused`). */
         steps: z.array(jugnuStepSchema),
-        /** Props he is waiting on the learner to act on; empty if none. */
-        watching: z.array(z.string()),
+        /** Older events only: props he was waiting on the learner to act on. */
+        watching: z.array(z.string()).optional(),
         /** Which model answered (e.g. "openai-compatible:deepseek-chat"), to compare answers later. */
         model: z.string(),
       })

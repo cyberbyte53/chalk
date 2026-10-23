@@ -1,0 +1,10 @@
+# NCERT Exercise 6.4 Q5, Q7, Q8, Q9 and the banner (Theorem 6.6).
+- params: { item: q9 }
+  firstTry: 1
+- params: { item: q5 }
+- params: { item: q7 }
+  level: medium
+- params: { item: q8 }
+  level: medium
+- params: { item: banner }
+  firstTry: 2

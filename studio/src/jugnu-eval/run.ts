@@ -18,9 +18,7 @@ import { type Verdict, judge } from "./judge";
 /** One turn of a case as it happened. */
 export type TurnRecord =
   | { kind: "ask"; text: string; turn: JugnuTurn; seconds: number }
-  | { kind: "student"; did: string[] }
-  /** Jugnu went on by himself after the student acted on a prop he was watching. */
-  | { kind: "continued"; turn: JugnuTurn; seconds: number };
+  | { kind: "student"; did: string[] };
 
 export type CaseResult = {
   testCase: EvalCase;
@@ -120,7 +118,7 @@ export async function runCase(
   runtime.start();
   await settle();
   await act(testCase.setup);
-  const boardAtStart = JSON.stringify(boardJson(runtime, place, []), null, 1);
+  const boardAtStart = JSON.stringify(boardJson(runtime, place), null, 1);
 
   const turns: TurnRecord[] = [];
   let error: string | undefined;
@@ -139,16 +137,8 @@ export async function runCase(
         turns.push({ kind: "ask", text: step.ask, ...(await timed(() => session.ask(step.ask))) });
         continue;
       }
-      const watched = [...session.watchedProps];
-      let isWatchedMove = false;
-      const stopHearing = session.onStudentMove(() => {
-        isWatchedMove = true;
-      });
       await act(step.student);
-      stopHearing();
       turns.push({ kind: "student", did: step.student.map(describeStep) });
-      if (isWatchedMove && watched.length > 0)
-        turns.push({ kind: "continued", ...(await timed(() => session.continue())) });
     }
   } catch (e) {
     error = e instanceof Error ? e.message : String(e);
@@ -187,10 +177,12 @@ export function transcript(turns: readonly TurnRecord[]): string {
   for (const record of turns) {
     if (record.kind === "ask") lines.push(`Student: ${record.text}`);
     if (record.kind === "student") lines.push(`Student did on the board: ${record.did.join("; ")}`);
-    if (record.kind === "continued") lines.push("(Jugnu saw the student's move and went on.)");
     if (record.kind === "student") continue;
     for (const event of record.turn.events) {
       if (event.kind === "say") lines.push(`Jugnu: ${event.text}`);
+      // His tries and sums happen out of sight: the student never sees them.
+      else if (event.kind === "try" || event.kind === "calculate" || event.kind === "reply")
+        lines.push(`(Jugnu, thinking, not seen by the student: ${stepText(event)})`);
       else lines.push(`Jugnu ${stepText(event)}`);
     }
   }
@@ -208,8 +200,12 @@ export function stepText(event: Exclude<JugnuTurn["events"][number], { kind: "sa
       return `pointed at ${event.prop}${event.part === undefined ? "" : `.${event.part}`}${refused}`;
     case "calculate":
       return `calculated ${event.expression}${event.result === undefined ? "" : ` = ${event.result}`}${refused}`;
-    case "wait":
-      return `handed back, watching ${event.watch.join(", ") || "nothing"}`;
+    case "try":
+      return `tried ${event.calls.map((c) => `${c.call} ${JSON.stringify(c.args)}`).join("; ")} (unseen)${event.changed !== undefined ? ` → would change ${JSON.stringify(event.changed)}` : ""}${refused}`;
+    case "reply":
+      return `wrote a reply that was sent back: ${event.refused}`;
+    case "ask":
+      return `asked "${event.question}" with options ${event.options.map((o) => `"${o}"`).join(", ")}${refused}`;
     case "unknown":
       return `called ${event.name}${refused}`;
   }

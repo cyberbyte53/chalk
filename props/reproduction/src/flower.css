@@ -1,0 +1,136 @@
+/* flower */
+.fl-bg {
+  fill: color-mix(in srgb, var(--color-right-container) 60%, var(--color-surface));
+}
+.fl-stalk {
+  stroke: color-mix(in srgb, var(--color-right) 70%, var(--color-inverse-surface));
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.fl-sepal {
+  fill: color-mix(in srgb, var(--color-right) 60%, var(--color-surface));
+  stroke: var(--color-right);
+  stroke-width: 1.2px;
+}
+.fl-petal {
+  fill: color-mix(in srgb, var(--color-wrong) 30%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-wrong) 70%, var(--color-surface));
+  stroke-width: 1.4px;
+}
+.fl-receptacle {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-surface));
+}
+.fl-filament {
+  stroke: color-mix(in srgb, var(--color-secondary) 60%, var(--color-on-secondary-container));
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+}
+.fl-anther {
+  fill: var(--color-secondary);
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 1px;
+}
+.fl-style {
+  fill: color-mix(in srgb, var(--color-category-4) 45%, var(--color-surface));
+  stroke: var(--color-category-4);
+  stroke-width: 1px;
+}
+.fl-stigma {
+  fill: var(--color-category-4);
+}
+.fl-ovary {
+  fill: color-mix(in srgb, var(--color-category-4) 25%, var(--color-surface));
+  stroke: var(--color-category-4);
+  stroke-width: 1.6px;
+  transition: rx 0.5s ease, ry 0.5s ease;
+}
+.fl-ovary.is-fruit {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-surface));
+  stroke: var(--color-on-secondary-container);
+}
+.fl-ovule {
+  fill: var(--color-surface);
+  stroke: var(--color-category-4);
+  stroke-width: 1.2px;
+}
+.fl-ovule.is-zygote {
+  fill: var(--color-right);
+  stroke: var(--color-right);
+}
+.fl-ovule.is-seed {
+  fill: var(--color-on-secondary-container);
+  stroke: var(--color-inverse-surface);
+}
+/* A selected part of the flower or the body (both reproduction props): outlined. Scoped to these
+   props, and not their name labels (a stroke there would smear the text). */
+.rp .is-selected:not(.fl-name):not(.rph-name) {
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.fl-name.is-selected .rp-label {
+  fill: var(--color-primary);
+}
+.fl-leader {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.fl-pollen {
+  fill: var(--color-secondary);
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 1px;
+}
+.fl-tube {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+  stroke-dasharray: 200;
+  animation: fl-grow 1.2s ease-out;
+}
+@keyframes fl-grow {
+  from {
+    stroke-dashoffset: 200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.fl-path {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 1.8px;
+  stroke-dasharray: 4 4;
+}
+.fl-bee ellipse {
+  fill: var(--color-secondary);
+}
+.fl-bee line {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 2px;
+}
+.fl-bee .fl-wing {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 0.8px;
+}
+.fl-wind {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+.fl-drop {
+  fill: var(--color-primary);
+}
+.fl-fallen {
+  fill: color-mix(in srgb, var(--color-wrong) 25%, var(--color-on-secondary-container));
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-tube {
+    animation: none;
+  }
+  .fl-ovary {
+    transition: none;
+  }
+}

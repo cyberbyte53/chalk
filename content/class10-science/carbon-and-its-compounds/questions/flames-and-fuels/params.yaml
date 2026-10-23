@@ -1,0 +1,10 @@
+# Activities 4.3–4.4: clean and sooty flames; flames and glows; pollutants.
+- params: { item: naphthalene }
+  firstTry: 1
+- params: { item: air-hole }
+  firstTry: 2
+- params: { item: pan }
+  level: medium
+- params: { item: glow }
+  level: medium
+- params: { item: pollutant }

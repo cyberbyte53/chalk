@@ -1,0 +1,7 @@
+# The field of a current in a straight wire (NCERT 13.2.1; Exercise 1).
+- params: { item: shape }
+  firstTry: 1
+- params: { item: current }
+  firstTry: 2
+- params: { item: distance }
+- params: { item: reverse }

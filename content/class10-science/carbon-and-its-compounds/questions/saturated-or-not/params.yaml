@@ -1,0 +1,9 @@
+# Section 4.2.1: saturated and unsaturated compounds.
+- params: { item: ethane }
+  firstTry: 1
+- params: { item: ethene }
+  firstTry: 2
+- params: { item: ethyne }
+- params: { item: propane }
+- params: { item: reactive }
+  level: medium

@@ -1,0 +1,7 @@
+# NCERT Examples 13–14 and Exercise 7.3 Q2.
+- params: { item: ex13 }
+  firstTry: 3
+- params: { item: ex14 }
+- params: { item: q2a }
+  firstTry: 4
+- params: { item: q2b }

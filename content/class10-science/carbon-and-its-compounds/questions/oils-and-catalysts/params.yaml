@@ -1,0 +1,8 @@
+# Catalysts; vegetable oils and animal fats.
+- params: { item: catalyst }
+  firstTry: 3
+- params: { item: nickel }
+  firstTry: 4
+- params: { item: veg-oil }
+- params: { item: healthier }
+- params: { item: vanaspati }

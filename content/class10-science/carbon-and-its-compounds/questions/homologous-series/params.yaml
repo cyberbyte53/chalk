@@ -1,0 +1,10 @@
+# Section 4.2.4: homologous series, CH₂ and 14 u, general formulae.
+- params: { item: mass }
+  firstTry: 3
+- params: { item: step }
+  firstTry: 4
+- params: { item: alkene-general }
+  level: medium
+- params: { item: same-series }
+  level: medium
+- params: { item: properties }

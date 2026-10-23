@@ -80,15 +80,15 @@
   padding: 0;
   min-width: 0;
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 .choices.is-pairs {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--columns, 2), minmax(0, 1fr));
 }
 /* Options are raised grey cards: they sink when tapped, and turn green or red once answered. */
 .choice {
-  min-height: 58px;
-  padding: 12px 16px;
+  min-height: 46px;
+  padding: 8px 14px;
   border: none;
   border-radius: var(--shape-radius-m);
   background: var(--color-surface-container);
@@ -165,4 +165,49 @@
   color: var(--color-on-surface-variant);
   box-shadow: none;
   cursor: default;
+}
+
+/* ---- orderSteps ---- */
+.order-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 26px;
+}
+.order-lines > li::marker {
+  font-weight: 800;
+  color: var(--color-on-surface-variant);
+}
+.order-line {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--shape-radius-m);
+  background: var(--color-primary-container);
+  color: var(--color-on-surface);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.order-lines.is-right .order-line {
+  border-color: var(--color-right);
+  background: var(--color-right-container);
+  cursor: default;
+}
+.order-slot {
+  min-height: 42px;
+  border: 2px dashed var(--color-outline-variant);
+  border-radius: var(--shape-radius-m);
+}
+.order-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.order-step {
+  text-align: left;
+  font-weight: 600;
 }

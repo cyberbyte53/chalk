@@ -1,0 +1,7 @@
+# NCERT 15.2.2 in-text Q2–Q3 and Exercise 7: how each kind of waste affects the environment.
+- params: { case: heap }
+  firstTry: 3
+- params: { case: drain }
+  firstTry: 4
+- params: { case: cow }
+- params: { case: good }

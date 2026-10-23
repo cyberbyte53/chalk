@@ -1,0 +1,5 @@
+# Class 9 recap used by Chapter 10: circle, diameter, the perpendicular bisecting a chord.
+- params: { item: diameter }
+  firstTry: 3
+- params: { item: bisect }
+- params: { item: circle }

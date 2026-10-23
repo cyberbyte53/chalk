@@ -1,0 +1,8 @@
+# NCERT 8.3.1: why sexual reproduction, the doubling problem, germ cells with half the chromosomes (meiosis), zygote, and male and female gametes.
+- params: { case: half }
+  firstTry: 1
+- params: { case: meiosis }
+  firstTry: 2
+- params: { case: doubling }
+- params: { case: female }
+- params: { case: advantage }

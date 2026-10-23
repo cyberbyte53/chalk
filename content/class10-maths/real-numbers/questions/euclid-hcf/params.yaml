@@ -1,0 +1,12 @@
+# NCERT Ex 1.1 Q1, Example 2 and Q2.
+- params: { a: 135, b: 225 }
+  firstTry: 1
+- params: { a: 196, b: 38220 }
+  firstTry: 2
+- params: { a: 867, b: 255 }
+- params: { a: 455, b: 42 }
+  firstTry: 3
+- params: { a: 420, b: 130 }
+  level: easy
+- params: { a: 4052, b: 12576 }
+  level: hard

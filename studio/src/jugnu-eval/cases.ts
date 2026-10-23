@@ -52,9 +52,18 @@ export const evalCaseSchema = z
          * should, or must not, have left it.
          */
         boardAfter: z.array(z.string()).optional(),
-        /** He should hand the board back to the student at some point. */
-        handsBack: z.boolean().optional(),
-        /** Longest acceptable reply, in words. Default 70. */
+        /**
+         * He should look ahead with `try` on at least one of these, as "prop.action" or "prop":
+         * what a good tutor checks before deciding what to show or say.
+         */
+        tries: z.array(z.string()).optional(),
+        /** His reply should show (do on the board) at least one of these, as "prop.action" or "prop". */
+        shows: z.array(z.string()).optional(),
+        /** Everything he shows, he tried first in the same turn (he checked it before showing). */
+        triesFirst: z.boolean().optional(),
+        /** How his last turn should end: a question with options (ask), or quiet (nothing). */
+        ends: z.enum(["ask", "nothing"]).optional(),
+        /** Longest acceptable reply, in words. Default 30. */
         maxWords: z.number().int().positive().optional(),
       })
       .strict(),

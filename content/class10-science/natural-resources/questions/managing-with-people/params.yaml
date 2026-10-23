@@ -1,0 +1,8 @@
+# NCERT 16.2 and Exercises 4(a) and 6: managing forests with local people.
+- params: { case: approach }
+  firstTry: 3
+- params: { case: individual }
+  firstTry: 4
+- params: { case: lop }
+- params: { case: grazing }
+- params: { case: stake }

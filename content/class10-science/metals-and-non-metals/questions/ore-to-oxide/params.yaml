@@ -1,0 +1,11 @@
+# Section 3.4.4 (roasting and calcination), Exercise 12(d).
+- params: { ore: ZnS }
+  firstTry: 4
+- params: { ore: ZnCO3 }
+  firstTry: 5
+- params: { ore: PbS }
+- params: { ore: PbCO3 }
+- params: { ore: FeCO3 }
+  level: hard
+- params: { ore: Cu2S }
+  level: hard

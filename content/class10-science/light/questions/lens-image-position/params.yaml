@@ -1,0 +1,14 @@
+# NCERT Example 10.4, Ex 10, a magnifying glass, and the concave lens (Example 10.3 / Ex 11 the other way round).
+- params: { kind: convex, distance: 30, focalLength: 10 }
+  level: easy
+  firstTry: 1
+- params: { kind: convex, distance: 15, focalLength: 10 }
+  firstTry: 2
+- params: { kind: concave, distance: 30, focalLength: 15 }
+  firstTry: 3
+- params: { kind: convex, distance: 25, focalLength: 10 }
+- params: { kind: convex, distance: 10, focalLength: 20 }
+  level: hard
+- params: { kind: concave, distance: 10, focalLength: 10 }
+  level: hard
+- params: { kind: convex, distance: 24, focalLength: 12 }

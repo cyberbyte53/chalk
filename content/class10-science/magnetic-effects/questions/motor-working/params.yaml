@@ -1,0 +1,10 @@
+# How an electric motor works (NCERT 13.4; in-text Q1, Q2; Exercises 6(a), 12).
+- params: { item: energy }
+  level: easy
+  firstTry: 3
+- params: { item: principle }
+  firstTry: 4
+- params: { item: rock }
+  level: hard
+- params: { item: devices }
+  level: easy

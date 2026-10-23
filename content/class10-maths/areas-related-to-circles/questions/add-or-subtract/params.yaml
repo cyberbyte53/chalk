@@ -1,0 +1,11 @@
+# Planning a combined figure: add or subtract.
+- params: { item: frame }
+  firstTry: 2
+  level: easy
+- params: { item: ring }
+  level: easy
+- params: { item: track }
+- params: { item: leaf }
+- params: { item: pacman }
+- params: { item: petals }
+  level: hard

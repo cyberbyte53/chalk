@@ -1,0 +1,10 @@
+# f = 1/P from a prescription: NCERT Ex 16 (−2.0 D), Ex 17 (+1.5 D), and the optician's examples.
+- params: { power: -2 }
+  firstTry: 3
+- params: { power: 1.5 }
+  level: hard
+  firstTry: 4
+- params: { power: 2 }
+  level: easy
+- params: { power: -2.5 }
+- params: { power: 4 }

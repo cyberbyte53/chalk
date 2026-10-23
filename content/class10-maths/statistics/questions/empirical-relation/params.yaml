@@ -1,0 +1,6 @@
+# 3 Median = Mode + 2 Mean, and which measure suits which data (Section 14.4, Exercise 14.3 Q1 and Q6).
+- params: { item: mode1 }
+  firstTry: 5
+- params: { item: median6 }
+- params: { item: mean }
+  level: easy

@@ -1,0 +1,498 @@
+/* @chalk/prop-solids: drawn only with the look's tokens (@chalk/look). */
+
+/* ---- shared ---- */
+.so-svg {
+  display: block;
+  overflow: visible;
+}
+.so-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  height: 44px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 800 19px / 1 var(--font-display);
+  cursor: pointer;
+}
+.so-button.is-wide {
+  min-width: 64px;
+  font-size: 16px;
+}
+.so-button.is-on {
+  background: var(--color-primary-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.so-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.so-button:disabled {
+  color: var(--color-outline-variant);
+  box-shadow: none;
+  cursor: default;
+}
+.so-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.so-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin-top: 8px;
+}
+.so-nudger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.so-nudger-value {
+  min-width: 64px;
+  text-align: center;
+  font: 800 18px var(--font-display);
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.so-name {
+  font-style: italic;
+}
+.so-row {
+  display: flex;
+  gap: 8px;
+}
+.so-steppers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+.so-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  border: none;
+  min-inline-size: 0;
+}
+.so-chip {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 2px solid var(--color-outline-variant);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font: 700 var(--text-note) / 1 var(--font-body);
+  cursor: pointer;
+}
+.so-chip.is-on {
+  border-color: var(--color-primary);
+  background: var(--color-primary-container);
+}
+.so-chip:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.so-lines {
+  margin-top: 6px;
+  overflow-x: auto;
+  max-width: 100%;
+  font-size: var(--text-note);
+}
+.so-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font: 700 var(--text-caption) / var(--text-caption-leading) var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.so-verb {
+  color: var(--color-secondary);
+}
+
+/* ---- solids ---- */
+.so-body {
+  stroke: var(--color-on-surface);
+  stroke-width: var(--shape-stroke-thin);
+  stroke-linejoin: round;
+}
+.so-tone-1 {
+  fill: color-mix(in srgb, var(--color-category-1) 45%, var(--color-surface));
+}
+.so-tone-2 {
+  fill: color-mix(in srgb, var(--color-category-2) 45%, var(--color-surface));
+}
+.so-tone-3 {
+  fill: color-mix(in srgb, var(--color-category-3) 45%, var(--color-surface));
+}
+.so-tone-4 {
+  fill: color-mix(in srgb, var(--color-category-4) 40%, var(--color-surface));
+}
+.so-face {
+  filter: brightness(1.08);
+}
+.so-side {
+  filter: brightness(0.9);
+}
+.so-cut {
+  fill: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: var(--shape-stroke-thin);
+  stroke-dasharray: 4 3;
+}
+.so-ghost {
+  fill: color-mix(in srgb, var(--color-primary) 6%, transparent);
+  stroke: var(--color-primary);
+  stroke-width: var(--shape-stroke-thin);
+  stroke-dasharray: 5 4;
+}
+.so-rim {
+  fill: color-mix(in srgb, var(--color-on-surface) 18%, var(--color-surface));
+  stroke: var(--color-on-surface);
+  stroke-width: var(--shape-stroke-thin);
+}
+.so-hidden {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+  stroke-dasharray: 3 3;
+}
+.so-equator {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+  stroke-dasharray: 3 3;
+}
+.so-dim path,
+.so-dim line {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 1.4px;
+}
+.so-axis,
+.so-slant {
+  stroke-dasharray: 4 3;
+}
+.so-dim-text {
+  font: 700 12px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+/* What is lit: the curved (side) surface, every surface, or the inside (volume). */
+.so-solid.is-curved .so-body:not(.so-face),
+.so-solid.is-total .so-body {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-surface));
+}
+.so-solid.is-volume .so-body {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+}
+.so-net-piece {
+  fill: color-mix(in srgb, var(--color-category-1) 30%, var(--color-surface));
+  stroke: var(--color-on-surface);
+  stroke-width: var(--shape-stroke-thin);
+}
+.so-net-piece.is-curved {
+  fill: color-mix(in srgb, var(--color-category-2) 40%, var(--color-surface));
+}
+.so-net-piece.is-lit {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-surface));
+}
+
+/* ---- comboBuilder ---- */
+.so-terms {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+.so-group {
+  padding: 6px 10px;
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+}
+.so-group-name {
+  font: 800 var(--text-note) / var(--text-note-leading) var(--font-body);
+  color: var(--color-on-surface);
+}
+.so-term-list {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.so-term {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  font: var(--text-note) / var(--text-note-leading) var(--font-body);
+  color: var(--color-on-surface);
+}
+.so-term.is-minus .so-term-name {
+  color: var(--color-wrong);
+}
+.so-sign {
+  min-width: 10px;
+  font-weight: 800;
+}
+.so-group-total {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 2px;
+  padding-top: 2px;
+  border-top: 1px solid var(--color-outline-variant);
+  font: 800 var(--text-note) / var(--text-note-leading) var(--font-body);
+}
+
+/* ---- meltRecast ---- */
+.so-before.is-melted {
+  opacity: 0.55;
+}
+.so-arrow {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.so-count {
+  font: 800 16px var(--font-display);
+  fill: var(--color-secondary);
+}
+.so-after.is-filling {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: so-rise 900ms ease-out both;
+}
+@keyframes so-rise {
+  from {
+    transform: scaleY(0.05);
+    opacity: 0.3;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* ---- frustumCut ---- */
+.so-plane {
+  fill: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+  stroke: var(--color-secondary);
+  stroke-width: 1.5px;
+  stroke-dasharray: 6 4;
+}
+.so-lift .is-lifting {
+  animation: so-lift 700ms ease-out both;
+}
+@keyframes so-lift {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .so-after.is-filling,
+  .so-lift .is-lifting {
+    animation: none;
+  }
+}
+
+/* ---- solidsScene ---- */
+.sos-svg {
+  display: block;
+}
+.sos-wall {
+  fill: color-mix(in srgb, var(--color-secondary-container) 70%, var(--color-surface));
+}
+.sos-floor {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 45%, var(--color-surface));
+}
+.sos-sky {
+  fill: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+}
+.sos-ground {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 35%, var(--color-surface));
+}
+.sos-post {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 80%, var(--color-inverse-surface));
+}
+.sos-awning.is-a {
+  fill: var(--color-wrong);
+}
+.sos-awning.is-b {
+  fill: var(--color-surface);
+}
+.sos-table,
+.sos-shelf,
+.sos-counter {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-surface));
+}
+.sos-table-leg {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 80%, var(--color-inverse-surface));
+}
+.sos-cloth {
+  fill: color-mix(in srgb, var(--color-category-4) 45%, var(--color-surface));
+}
+.sos-notebook,
+.sos-paper {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+}
+.sos-wood {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 45%, var(--color-surface));
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 0.8px;
+}
+.sos-wood.is-cone {
+  fill: color-mix(in srgb, var(--color-category-1) 55%, var(--color-surface));
+}
+.sos-stick,
+.sos-brush,
+.sos-spoon {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.sos-orange {
+  fill: var(--color-category-3);
+  stroke: var(--color-on-surface);
+  stroke-width: 0.6px;
+}
+.sos-yellow {
+  fill: color-mix(in srgb, var(--color-secondary) 70%, var(--color-surface));
+  stroke: var(--color-on-surface);
+  stroke-width: 0.6px;
+}
+.sos-top {
+  filter: brightness(1.1);
+}
+.sos-tin {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 50%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+}
+.sos-mould {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 60%, var(--color-surface));
+  stroke: var(--color-on-secondary-container);
+}
+.sos-bowl {
+  fill: color-mix(in srgb, var(--color-primary) 30%, var(--color-surface));
+  stroke: var(--color-primary);
+}
+.sos-syrup,
+.sos-molasses {
+  fill: color-mix(in srgb, var(--color-secondary) 60%, var(--color-on-secondary-container));
+}
+.sos-jamun {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 80%, var(--color-inverse-surface));
+}
+.sos-wafer {
+  fill: color-mix(in srgb, var(--color-secondary) 50%, var(--color-on-secondary-container));
+}
+.sos-cream {
+  fill: color-mix(in srgb, var(--color-category-4) 35%, var(--color-surface));
+}
+.sos-glass {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.sos-glass-base {
+  fill: color-mix(in srgb, var(--color-primary) 20%, var(--color-surface));
+}
+.sos-juice {
+  fill: color-mix(in srgb, var(--color-category-3) 60%, var(--color-surface));
+}
+.sos-jug {
+  fill: color-mix(in srgb, var(--color-primary) 25%, var(--color-surface));
+  stroke: var(--color-primary);
+}
+.sos-pour {
+  fill: none;
+  stroke: var(--color-category-3);
+  stroke-width: 2px;
+}
+.sos-pan {
+  fill: var(--color-inverse-surface);
+}
+.sos-fire {
+  fill: var(--color-wrong);
+}
+.sos-crowd {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 35%, var(--color-surface));
+}
+.sos-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.sos-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.sos-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.sos-hair-grey {
+  fill: var(--color-surface-press);
+}
+.sos-cap {
+  fill: var(--color-wrong);
+}
+.sos-face circle {
+  fill: var(--color-inverse-surface);
+}
+.sos-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.sos-specs circle,
+.sos-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.sos-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.sos-shirt-riya {
+  fill: var(--color-category-4);
+}
+.sos-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.sos-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.sos-shirt-mom {
+  fill: var(--color-category-3);
+}
+.sos-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.sos-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.sos-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.sos-shirt-grandpa-line {
+  stroke: var(--color-on-surface-variant);
+}
+.sos-shirt-mom-line {
+  stroke: var(--color-category-3);
+}

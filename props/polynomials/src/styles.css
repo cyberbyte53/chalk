@@ -1,0 +1,218 @@
+/* @chalk/prop-polynomials: drawn only with the look's tokens (@chalk/look).
+   The plane is drawn by Mafs; its colours are set here from the look, so it reads as Chalk. */
+@import "mafs/core.css";
+
+/* ---- shared: buttons, steppers ---- */
+.pp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 46px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 800 20px / 1 var(--font-display);
+  cursor: pointer;
+}
+.pp-button.is-wide {
+  min-width: 72px;
+}
+.pp-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.pp-button:disabled {
+  color: var(--color-outline-variant);
+  box-shadow: none;
+  cursor: default;
+}
+.pp-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.pp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  align-items: center;
+}
+.pp-stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pp-stepper-value {
+  min-width: 64px;
+  text-align: center;
+  font: 800 19px var(--font-display);
+  color: var(--color-on-surface);
+}
+.pp-name {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+}
+
+/* ---- zeroPlane ---- */
+.pp-plane {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pp-mafs {
+  overflow: hidden;
+  border-radius: var(--shape-radius-m);
+  border: var(--shape-stroke-thin) solid var(--color-outline-variant);
+  touch-action: none;
+}
+.pp-plane .MafsView,
+.pp-machine .MafsView {
+  --mafs-bg: var(--color-surface);
+  --mafs-fg: var(--color-on-surface);
+  --mafs-origin-color: var(--color-on-surface);
+  --mafs-line-color: color-mix(in srgb, var(--color-outline-variant) 70%, var(--color-surface));
+  --mafs-axis-stroke-width: 1.5px;
+  --mafs-blue: var(--color-primary);
+  --mafs-indigo: var(--color-primary);
+  --mafs-pink: var(--color-secondary);
+  --mafs-orange: var(--color-category-1);
+  font-family: var(--font-body);
+}
+.pp-plane .MafsView text,
+.pp-machine .MafsView text {
+  font: 700 13px var(--font-body);
+}
+.pp-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+.pp-equation,
+.pp-probe {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+}
+.pp-probe {
+  color: var(--color-on-surface-variant);
+}
+
+/* ---- polyBox ---- */
+.pp-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pp-grid {
+  display: grid;
+  grid-template-columns: minmax(52px, auto) repeat(var(--columns), minmax(0, 1fr));
+  gap: 4px;
+}
+.pp-row {
+  display: contents;
+}
+.pp-corner,
+.pp-head,
+.pp-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 4px 6px;
+  border-radius: var(--shape-radius-s);
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+  overflow-wrap: anywhere;
+}
+.pp-corner {
+  color: var(--color-on-surface-variant);
+  font: 800 20px var(--font-display);
+}
+.pp-head {
+  font-weight: 700;
+  background: var(--color-surface-container);
+}
+.pp-head.is-side {
+  background: var(--color-surface-container);
+}
+.pp-head.is-empty,
+.pp-cell.is-empty {
+  background: transparent;
+  border: var(--shape-stroke-thin) dashed var(--color-outline-variant);
+}
+.pp-cell {
+  --tone: var(--color-category-2);
+  background: color-mix(in srgb, var(--tone) 18%, var(--color-surface));
+  border: var(--shape-stroke-thin) solid color-mix(in srgb, var(--tone) 55%, var(--color-surface));
+  animation: pp-fill 0.25s ease-out;
+}
+.pp-power-0 {
+  --tone: var(--color-category-1);
+}
+.pp-power-1 {
+  --tone: var(--color-category-2);
+}
+.pp-power-2 {
+  --tone: var(--color-category-3);
+}
+.pp-power-3 {
+  --tone: var(--color-category-4);
+}
+@keyframes pp-fill {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+.pp-box-line {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+}
+.pp-box-line.is-left {
+  color: var(--color-on-surface-variant);
+}
+.pp-box-line.is-done {
+  color: var(--color-on-surface);
+  font-weight: 700;
+}
+.pp-box-line.is-result {
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pp-cell {
+    animation: none;
+  }
+}
+.pp-sum-product {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+}
+
+/* ---- valueMachine ---- */
+.pp-machine {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.pp-machine .pp-mafs {
+  align-self: stretch;
+}
+.pp-working {
+  margin: 0;
+  min-height: 32px;
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+  overflow-x: auto;
+  max-width: 100%;
+}
+.pp-working-empty {
+  color: var(--color-on-surface-variant);
+}

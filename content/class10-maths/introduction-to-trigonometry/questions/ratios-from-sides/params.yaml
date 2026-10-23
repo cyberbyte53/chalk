@@ -1,0 +1,6 @@
+# NCERT Exercise 8.1 Q1 and Q2.
+- params: { item: q1sin }
+  firstTry: 2
+- params: { item: q1cosC }
+- params: { item: q2 }
+- params: { item: q2side }

@@ -1,0 +1,7 @@
+# NCERT Exercise 7.4 Q7: medians and the centroid.
+- params: { item: q7d }
+  firstTry: 1
+- params: { item: q7p }
+- params: { item: formula }
+  firstTry: 2
+- params: { item: ratio }

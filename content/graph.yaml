@@ -2,4 +2,449 @@
 # Every path must be a built concept; the build refuses loops.
 #   - concept: class9-maths/number-systems/successive-magnification
 #     parents: [class9-maths/number-systems/place-value]
-edges: []
+edges:
+  # Class 10 Real Numbers: each concept's direct parents (one hop).
+  - concept: class10-maths/real-numbers/euclid-algorithm
+    parents: [class10-maths/real-numbers/division-lemma]
+  - concept: class10-maths/real-numbers/hcf-and-lcm
+    parents: [class10-maths/real-numbers/fundamental-theorem, class10-maths/real-numbers/euclid-algorithm]
+  - concept: class10-maths/real-numbers/root-two-irrational
+    parents: [class10-maths/real-numbers/fundamental-theorem, class10-maths/real-numbers/hcf-and-lcm]
+  - concept: class10-maths/real-numbers/which-fractions-end
+    parents: [class10-maths/real-numbers/fundamental-theorem]
+  # Class 10 Polynomials.
+  - concept: class10-maths/polynomials/value-and-zeroes
+    parents: [class10-maths/polynomials/what-is-a-polynomial]
+  - concept: class10-maths/polynomials/zeroes-on-the-graph
+    parents: [class10-maths/polynomials/value-and-zeroes]
+  - concept: class10-maths/polynomials/zeroes-from-factors
+    parents: [class10-maths/polynomials/zeroes-on-the-graph]
+  - concept: class10-maths/polynomials/zeroes-and-coefficients
+    parents: [class10-maths/polynomials/zeroes-from-factors]
+  - concept: class10-maths/polynomials/quadratic-from-zeroes
+    parents: [class10-maths/polynomials/zeroes-and-coefficients]
+  - concept: class10-maths/polynomials/cubic-zeroes
+    parents: [class10-maths/polynomials/zeroes-and-coefficients, class10-maths/polynomials/zeroes-on-the-graph]
+  - concept: class10-maths/polynomials/dividing-polynomials
+    parents: [class10-maths/polynomials/what-is-a-polynomial, class10-maths/real-numbers/division-lemma]
+  - concept: class10-maths/polynomials/finding-other-zeroes
+    parents: [class10-maths/polynomials/dividing-polynomials, class10-maths/polynomials/zeroes-from-factors]
+  # Class 10 Pair of Linear Equations in Two Variables.
+  - concept: class10-maths/pair-of-linear-equations/three-kinds-of-pairs
+    parents: [class10-maths/pair-of-linear-equations/pair-of-equations]
+  - concept: class10-maths/pair-of-linear-equations/graphical-method
+    parents: [class10-maths/pair-of-linear-equations/three-kinds-of-pairs]
+  - concept: class10-maths/pair-of-linear-equations/substitution-method
+    parents: [class10-maths/pair-of-linear-equations/graphical-method]
+  - concept: class10-maths/pair-of-linear-equations/elimination-method
+    parents: [class10-maths/pair-of-linear-equations/substitution-method]
+  - concept: class10-maths/pair-of-linear-equations/cross-multiplication
+    parents: [class10-maths/pair-of-linear-equations/elimination-method, class10-maths/pair-of-linear-equations/graphical-method]
+  - concept: class10-maths/pair-of-linear-equations/reducible-to-linear
+    parents: [class10-maths/pair-of-linear-equations/substitution-method, class10-maths/pair-of-linear-equations/elimination-method]
+  # Class 10 Quadratic Equations.
+  - concept: class10-maths/quadratic-equations/what-is-a-quadratic-equation
+    parents: [class10-maths/polynomials/what-is-a-polynomial]
+  - concept: class10-maths/quadratic-equations/solving-by-factorising
+    parents: [class10-maths/quadratic-equations/what-is-a-quadratic-equation, class10-maths/polynomials/zeroes-from-factors]
+  - concept: class10-maths/quadratic-equations/completing-the-square
+    parents: [class10-maths/quadratic-equations/solving-by-factorising]
+  - concept: class10-maths/quadratic-equations/quadratic-formula
+    parents: [class10-maths/quadratic-equations/completing-the-square]
+  - concept: class10-maths/quadratic-equations/word-problems
+    parents: [class10-maths/quadratic-equations/quadratic-formula]
+  - concept: class10-maths/quadratic-equations/nature-of-roots
+    parents: [class10-maths/quadratic-equations/quadratic-formula, class10-maths/polynomials/zeroes-on-the-graph]
+  # Class 10 Maths: Arithmetic Progressions.
+  - concept: class10-maths/arithmetic-progressions/the-nth-term
+    parents: [class10-maths/arithmetic-progressions/patterns-and-aps, class10-maths/pair-of-linear-equations/elimination-method]
+  - concept: class10-maths/arithmetic-progressions/using-the-nth-term
+    parents: [class10-maths/arithmetic-progressions/the-nth-term]
+  - concept: class10-maths/arithmetic-progressions/sum-of-n-terms
+    parents: [class10-maths/arithmetic-progressions/the-nth-term]
+  - concept: class10-maths/arithmetic-progressions/using-the-sum
+    parents: [class10-maths/arithmetic-progressions/sum-of-n-terms, class10-maths/quadratic-equations/solving-by-factorising]
+  - concept: class10-maths/arithmetic-progressions/challenge-and-finale
+    parents: [class10-maths/arithmetic-progressions/using-the-sum, class10-maths/arithmetic-progressions/using-the-nth-term]
+  # Class 10 Maths: Triangles.
+  - concept: class10-maths/triangles/basic-proportionality
+    parents: [class10-maths/triangles/similar-figures]
+  - concept: class10-maths/triangles/aa-and-sss
+    parents: [class10-maths/triangles/basic-proportionality]
+  - concept: class10-maths/triangles/sas-and-using-similarity
+    parents: [class10-maths/triangles/aa-and-sss]
+  - concept: class10-maths/triangles/areas-of-similar-triangles
+    parents: [class10-maths/triangles/sas-and-using-similarity]
+  - concept: class10-maths/triangles/pythagoras-theorem
+    parents: [class10-maths/triangles/aa-and-sss, class10-maths/triangles/areas-of-similar-triangles]
+  - concept: class10-maths/triangles/challenge-and-finale
+    parents: [class10-maths/triangles/pythagoras-theorem, class10-maths/triangles/basic-proportionality]
+  # Class 10 Maths: Coordinate Geometry.
+  - concept: class10-maths/coordinate-geometry/points-on-the-plane
+    parents: [class10-maths/pair-of-linear-equations/graphical-method, class10-maths/triangles/pythagoras-theorem]
+  - concept: class10-maths/coordinate-geometry/distance-formula
+    parents: [class10-maths/coordinate-geometry/points-on-the-plane, class10-maths/triangles/pythagoras-theorem]
+  - concept: class10-maths/coordinate-geometry/using-distances
+    parents: [class10-maths/coordinate-geometry/distance-formula, class10-maths/pair-of-linear-equations/substitution-method]
+  - concept: class10-maths/coordinate-geometry/section-formula
+    parents: [class10-maths/coordinate-geometry/points-on-the-plane, class10-maths/triangles/aa-and-sss]
+  - concept: class10-maths/coordinate-geometry/using-section-formula
+    parents: [class10-maths/coordinate-geometry/section-formula]
+  - concept: class10-maths/coordinate-geometry/area-of-a-triangle
+    parents: [class10-maths/coordinate-geometry/points-on-the-plane, class10-maths/coordinate-geometry/using-distances]
+  - concept: class10-maths/coordinate-geometry/challenge-and-finale
+    parents: [class10-maths/coordinate-geometry/using-section-formula, class10-maths/coordinate-geometry/area-of-a-triangle, class10-maths/triangles/areas-of-similar-triangles]
+  # Class 10 Maths: Introduction to Trigonometry.
+  - concept: class10-maths/introduction-to-trigonometry/trigonometric-ratios
+    parents: [class10-maths/triangles/aa-and-sss, class10-maths/triangles/pythagoras-theorem]
+  - concept: class10-maths/introduction-to-trigonometry/ratios-from-one-ratio
+    parents: [class10-maths/introduction-to-trigonometry/trigonometric-ratios]
+  - concept: class10-maths/introduction-to-trigonometry/ratios-of-specific-angles
+    parents: [class10-maths/introduction-to-trigonometry/ratios-from-one-ratio]
+  - concept: class10-maths/introduction-to-trigonometry/complementary-angles
+    parents: [class10-maths/introduction-to-trigonometry/ratios-of-specific-angles]
+  - concept: class10-maths/introduction-to-trigonometry/trigonometric-identities
+    parents: [class10-maths/introduction-to-trigonometry/complementary-angles, class10-maths/introduction-to-trigonometry/ratios-from-one-ratio]
+  # Class 10 Maths: Some Applications of Trigonometry.
+  - concept: class10-maths/applications-of-trigonometry/angle-of-elevation
+    parents: [class10-maths/introduction-to-trigonometry/trigonometric-ratios, class10-maths/introduction-to-trigonometry/ratios-of-specific-angles]
+  - concept: class10-maths/applications-of-trigonometry/angle-of-depression
+    parents: [class10-maths/applications-of-trigonometry/angle-of-elevation]
+  - concept: class10-maths/applications-of-trigonometry/two-observations
+    parents: [class10-maths/applications-of-trigonometry/angle-of-elevation, class10-maths/applications-of-trigonometry/angle-of-depression]
+  - concept: class10-maths/applications-of-trigonometry/heights-and-depths-from-above
+    parents: [class10-maths/applications-of-trigonometry/two-observations, class10-maths/introduction-to-trigonometry/complementary-angles]
+  # Class 10 Maths: Circles.
+  - concept: class10-maths/circles/lines-and-circles
+    parents: [class10-maths/triangles/pythagoras-theorem]
+  - concept: class10-maths/circles/tangent-at-a-point
+    parents: [class10-maths/circles/lines-and-circles]
+  - concept: class10-maths/circles/tangent-perpendicular-radius
+    parents: [class10-maths/circles/tangent-at-a-point]
+  - concept: class10-maths/circles/tangents-from-a-point
+    parents: [class10-maths/circles/tangent-perpendicular-radius, class10-maths/triangles/pythagoras-theorem]
+  - concept: class10-maths/circles/using-tangent-theorems
+    parents: [class10-maths/circles/tangents-from-a-point, class10-maths/triangles/aa-and-sss]
+  # Class 10 Maths: Areas Related to Circles.
+  - concept: class10-maths/areas-related-to-circles/circumference-and-area
+    parents: [class10-maths/circles/lines-and-circles]
+  - concept: class10-maths/areas-related-to-circles/sector-and-segment
+    parents: [class10-maths/areas-related-to-circles/circumference-and-area, class10-maths/introduction-to-trigonometry/ratios-of-specific-angles]
+  - concept: class10-maths/areas-related-to-circles/using-sectors
+    parents: [class10-maths/areas-related-to-circles/sector-and-segment]
+  - concept: class10-maths/areas-related-to-circles/combinations-of-figures
+    parents: [class10-maths/areas-related-to-circles/using-sectors, class10-maths/circles/tangent-perpendicular-radius]
+  # Class 10 Maths: Surface Areas and Volumes.
+  - concept: class10-maths/surface-areas-and-volumes/the-solids-we-know
+    parents: [class10-maths/areas-related-to-circles/circumference-and-area, class10-maths/triangles/pythagoras-theorem]
+  - concept: class10-maths/surface-areas-and-volumes/surface-area-of-combinations
+    parents: [class10-maths/surface-areas-and-volumes/the-solids-we-know, class10-maths/areas-related-to-circles/combinations-of-figures]
+  - concept: class10-maths/surface-areas-and-volumes/volume-of-combinations
+    parents: [class10-maths/surface-areas-and-volumes/surface-area-of-combinations]
+  - concept: class10-maths/surface-areas-and-volumes/converting-solids
+    parents: [class10-maths/surface-areas-and-volumes/volume-of-combinations]
+  - concept: class10-maths/surface-areas-and-volumes/frustum-of-a-cone
+    parents: [class10-maths/surface-areas-and-volumes/converting-solids, class10-maths/triangles/aa-and-sss]
+  - concept: class10-maths/surface-areas-and-volumes/challenge-and-finale
+    parents: [class10-maths/surface-areas-and-volumes/frustum-of-a-cone]
+  # Class 10 Maths: Statistics.
+  - concept: class10-maths/statistics/assumed-mean-and-step-deviation
+    parents: [class10-maths/statistics/mean-of-grouped-data]
+  - concept: class10-maths/statistics/mode-of-grouped-data
+    parents: [class10-maths/statistics/mean-of-grouped-data]
+  - concept: class10-maths/statistics/median-of-grouped-data
+    parents: [class10-maths/statistics/mode-of-grouped-data, class10-maths/statistics/assumed-mean-and-step-deviation]
+  - concept: class10-maths/statistics/ogives
+    parents: [class10-maths/statistics/median-of-grouped-data]
+  # Class 10 Maths: Probability.
+  - concept: class10-maths/probability/complementary-events
+    parents: [class10-maths/probability/experimental-and-theoretical]
+  - concept: class10-maths/probability/cards-bags-and-choosing
+    parents: [class10-maths/probability/complementary-events]
+  - concept: class10-maths/probability/two-coins-and-two-dice
+    parents: [class10-maths/probability/cards-bags-and-choosing]
+  - concept: class10-maths/probability/beyond-counting
+    parents: [class10-maths/probability/two-coins-and-two-dice, class10-maths/areas-related-to-circles/circumference-and-area]
+  # Class 10 Science: Chemical Reactions and Equations.
+  - concept: class10-science/chemical-reactions/writing-equations
+    parents: [class10-science/chemical-reactions/what-is-a-reaction]
+  - concept: class10-science/chemical-reactions/balancing-equations
+    parents: [class10-science/chemical-reactions/writing-equations]
+  - concept: class10-science/chemical-reactions/combination-reactions
+    parents: [class10-science/chemical-reactions/balancing-equations]
+  - concept: class10-science/chemical-reactions/decomposition-reactions
+    parents: [class10-science/chemical-reactions/combination-reactions]
+  - concept: class10-science/chemical-reactions/displacement-reactions
+    parents: [class10-science/chemical-reactions/balancing-equations, class10-science/chemical-reactions/what-is-a-reaction]
+  - concept: class10-science/chemical-reactions/oxidation-and-reduction
+    parents: [class10-science/chemical-reactions/combination-reactions, class10-science/chemical-reactions/decomposition-reactions]
+  - concept: class10-science/chemical-reactions/corrosion-and-rancidity
+    parents: [class10-science/chemical-reactions/oxidation-and-reduction]
+  # Class 10 Science: Acids, Bases and Salts.
+  - concept: class10-science/acids-bases-and-salts/indicators
+    parents: [class10-science/chemical-reactions/what-is-a-reaction]
+  - concept: class10-science/acids-bases-and-salts/acids-with-metals
+    parents: [class10-science/acids-bases-and-salts/indicators, class10-science/chemical-reactions/balancing-equations, class10-science/chemical-reactions/displacement-reactions]
+  - concept: class10-science/acids-bases-and-salts/neutralisation
+    parents: [class10-science/acids-bases-and-salts/acids-with-metals]
+  - concept: class10-science/acids-bases-and-salts/acids-and-bases-in-water
+    parents: [class10-science/acids-bases-and-salts/neutralisation]
+  - concept: class10-science/acids-bases-and-salts/ph-scale
+    parents: [class10-science/acids-bases-and-salts/acids-and-bases-in-water, class10-science/acids-bases-and-salts/indicators]
+  - concept: class10-science/acids-bases-and-salts/ph-in-everyday-life
+    parents: [class10-science/acids-bases-and-salts/ph-scale, class10-science/acids-bases-and-salts/neutralisation]
+  - concept: class10-science/acids-bases-and-salts/salts-and-their-ph
+    parents: [class10-science/acids-bases-and-salts/ph-scale, class10-science/acids-bases-and-salts/neutralisation]
+  - concept: class10-science/acids-bases-and-salts/chemicals-from-common-salt
+    parents: [class10-science/acids-bases-and-salts/salts-and-their-ph, class10-science/chemical-reactions/decomposition-reactions]
+  - concept: class10-science/acids-bases-and-salts/water-of-crystallisation
+    parents: [class10-science/acids-bases-and-salts/chemicals-from-common-salt, class10-science/chemical-reactions/decomposition-reactions]
+  # Class 10 Science: Metals and Non-metals.
+  - concept: class10-science/metals-and-non-metals/physical-properties
+    parents: [class10-science/chemical-reactions/what-is-a-reaction]
+  - concept: class10-science/metals-and-non-metals/metals-and-oxygen
+    parents: [class10-science/metals-and-non-metals/physical-properties, class10-science/chemical-reactions/combination-reactions]
+  - concept: class10-science/metals-and-non-metals/metals-with-water-and-acids
+    parents: [class10-science/metals-and-non-metals/metals-and-oxygen]
+  - concept: class10-science/metals-and-non-metals/reactivity-series
+    parents: [class10-science/metals-and-non-metals/metals-with-water-and-acids, class10-science/chemical-reactions/displacement-reactions]
+  - concept: class10-science/metals-and-non-metals/ionic-compounds
+    parents: [class10-science/metals-and-non-metals/reactivity-series]
+  - concept: class10-science/metals-and-non-metals/properties-of-ionic-compounds
+    parents: [class10-science/metals-and-non-metals/ionic-compounds]
+  - concept: class10-science/metals-and-non-metals/extraction-of-metals
+    parents: [class10-science/metals-and-non-metals/reactivity-series, class10-science/chemical-reactions/oxidation-and-reduction]
+  - concept: class10-science/metals-and-non-metals/electrolysis-and-refining
+    parents: [class10-science/metals-and-non-metals/extraction-of-metals, class10-science/metals-and-non-metals/properties-of-ionic-compounds]
+  - concept: class10-science/metals-and-non-metals/corrosion-and-alloys
+    parents: [class10-science/metals-and-non-metals/reactivity-series, class10-science/chemical-reactions/corrosion-and-rancidity]
+  # Class 10 Science: Carbon and its Compounds.
+  - concept: class10-science/carbon-and-its-compounds/covalent-bond
+    parents: [class10-science/metals-and-non-metals/ionic-compounds]
+  - concept: class10-science/carbon-and-its-compounds/allotropes-of-carbon
+    parents: [class10-science/carbon-and-its-compounds/covalent-bond]
+  - concept: class10-science/carbon-and-its-compounds/versatile-carbon
+    parents: [class10-science/carbon-and-its-compounds/covalent-bond]
+  - concept: class10-science/carbon-and-its-compounds/chains-branches-rings
+    parents: [class10-science/carbon-and-its-compounds/versatile-carbon]
+  - concept: class10-science/carbon-and-its-compounds/functional-groups-and-series
+    parents: [class10-science/carbon-and-its-compounds/chains-branches-rings]
+  - concept: class10-science/carbon-and-its-compounds/naming-carbon-compounds
+    parents: [class10-science/carbon-and-its-compounds/functional-groups-and-series]
+  - concept: class10-science/carbon-and-its-compounds/combustion-and-oxidation
+    parents: [class10-science/carbon-and-its-compounds/versatile-carbon, class10-science/chemical-reactions/oxidation-and-reduction]
+  - concept: class10-science/carbon-and-its-compounds/addition-and-substitution
+    parents: [class10-science/carbon-and-its-compounds/versatile-carbon, class10-science/chemical-reactions/combination-reactions]
+  - concept: class10-science/carbon-and-its-compounds/ethanol-and-ethanoic-acid
+    parents: [class10-science/carbon-and-its-compounds/naming-carbon-compounds, class10-science/carbon-and-its-compounds/combustion-and-oxidation, class10-science/acids-bases-and-salts/acids-with-metals]
+  - concept: class10-science/carbon-and-its-compounds/soaps-and-detergents
+    parents: [class10-science/carbon-and-its-compounds/ethanol-and-ethanoic-acid]
+  # Class 10 Science: Light.
+  - concept: class10-science/light/mirror-parts
+    parents: [class10-science/light/reflection-and-images]
+  - concept: class10-science/light/mirror-ray-rules
+    parents: [class10-science/light/mirror-parts]
+  - concept: class10-science/light/concave-mirror-cases
+    parents: [class10-science/light/mirror-ray-rules]
+  - concept: class10-science/light/convex-mirror-cases
+    parents: [class10-science/light/concave-mirror-cases]
+  - concept: class10-science/light/mirror-formula
+    parents: [class10-science/light/concave-mirror-cases, class10-science/light/convex-mirror-cases]
+  - concept: class10-science/light/refraction
+    parents: [class10-science/light/reflection-and-images]
+  - concept: class10-science/light/refractive-index
+    parents: [class10-science/light/refraction]
+  - concept: class10-science/light/lenses
+    parents: [class10-science/light/refraction, class10-science/light/mirror-parts]
+  - concept: class10-science/light/convex-lens-cases
+    parents: [class10-science/light/lenses, class10-science/light/concave-mirror-cases]
+  - concept: class10-science/light/concave-lens-cases
+    parents: [class10-science/light/convex-lens-cases]
+  - concept: class10-science/light/lens-formula
+    parents: [class10-science/light/convex-lens-cases, class10-science/light/concave-lens-cases, class10-science/light/mirror-formula]
+  - concept: class10-science/light/power-of-a-lens
+    parents: [class10-science/light/lens-formula]
+  # Class 10 Science: How do Organisms Reproduce?
+  - concept: class10-science/how-organisms-reproduce/exact-copies
+    parents: [class10-science/life-processes/what-are-life-processes]
+  - concept: class10-science/how-organisms-reproduce/single-cell-modes
+    parents: [class10-science/how-organisms-reproduce/exact-copies]
+  - concept: class10-science/how-organisms-reproduce/plants-from-parts
+    parents: [class10-science/how-organisms-reproduce/single-cell-modes]
+  - concept: class10-science/how-organisms-reproduce/why-two-parents
+    parents: [class10-science/how-organisms-reproduce/exact-copies, class10-science/how-organisms-reproduce/plants-from-parts]
+  - concept: class10-science/how-organisms-reproduce/flowering-plants
+    parents: [class10-science/how-organisms-reproduce/why-two-parents]
+  - concept: class10-science/how-organisms-reproduce/human-reproduction
+    parents: [class10-science/how-organisms-reproduce/why-two-parents, class10-science/how-organisms-reproduce/flowering-plants]
+  - concept: class10-science/how-organisms-reproduce/reproductive-health
+    parents: [class10-science/how-organisms-reproduce/human-reproduction]
+  - concept: class10-science/heredity-and-evolution/variation-and-traits
+    parents: [class10-science/how-organisms-reproduce/why-two-parents]
+  # Class 10 Science: Heredity and Evolution.
+  - concept: class10-science/heredity-and-evolution/mendel-one-trait
+    parents: [class10-science/heredity-and-evolution/variation-and-traits]
+  - concept: class10-science/heredity-and-evolution/mendel-two-traits
+    parents: [class10-science/heredity-and-evolution/mendel-one-trait]
+  - concept: class10-science/heredity-and-evolution/how-traits-are-expressed
+    parents: [class10-science/heredity-and-evolution/mendel-two-traits]
+  - concept: class10-science/heredity-and-evolution/sex-determination
+    parents: [class10-science/heredity-and-evolution/how-traits-are-expressed]
+  - concept: class10-science/heredity-and-evolution/natural-selection-and-drift
+    parents: [class10-science/heredity-and-evolution/variation-and-traits, class10-science/heredity-and-evolution/how-traits-are-expressed]
+  - concept: class10-science/heredity-and-evolution/speciation
+    parents: [class10-science/heredity-and-evolution/natural-selection-and-drift]
+  - concept: class10-science/heredity-and-evolution/evolution-and-classification
+    parents: [class10-science/heredity-and-evolution/speciation]
+  - concept: class10-science/heredity-and-evolution/evolution-by-stages
+    parents: [class10-science/heredity-and-evolution/evolution-and-classification]
+  # Class 10 Science: Life Processes.
+  - concept: class10-science/life-processes/photosynthesis
+    parents: [class10-science/life-processes/what-are-life-processes]
+  - concept: class10-science/life-processes/heterotrophic-nutrition
+    parents: [class10-science/life-processes/photosynthesis]
+  - concept: class10-science/life-processes/human-digestion
+    parents: [class10-science/life-processes/heterotrophic-nutrition]
+  - concept: class10-science/life-processes/respiration
+    parents: [class10-science/life-processes/human-digestion]
+  - concept: class10-science/life-processes/breathing
+    parents: [class10-science/life-processes/respiration]
+  - concept: class10-science/life-processes/heart-and-blood
+    parents: [class10-science/life-processes/breathing, class10-science/life-processes/respiration]
+  - concept: class10-science/life-processes/transport-in-plants
+    parents: [class10-science/life-processes/heart-and-blood, class10-science/life-processes/photosynthesis]
+  - concept: class10-science/life-processes/excretion
+    parents: [class10-science/life-processes/transport-in-plants]
+  # Class 10 Science: Control and Coordination.
+  - concept: class10-science/control-and-coordination/responding-to-change
+    parents: [class10-science/life-processes/what-are-life-processes]
+  - concept: class10-science/control-and-coordination/reflex-actions
+    parents: [class10-science/control-and-coordination/responding-to-change]
+  - concept: class10-science/control-and-coordination/brain-and-action
+    parents: [class10-science/control-and-coordination/reflex-actions]
+  - concept: class10-science/control-and-coordination/how-plants-move
+    parents: [class10-science/control-and-coordination/responding-to-change]
+  - concept: class10-science/control-and-coordination/plant-hormones
+    parents: [class10-science/control-and-coordination/how-plants-move]
+  - concept: class10-science/control-and-coordination/hormones-in-animals
+    parents: [class10-science/control-and-coordination/plant-hormones, class10-science/control-and-coordination/brain-and-action]
+  # Class 10 Science, The Human Eye and the Colourful World.
+  - concept: class10-science/human-eye/the-human-eye
+    parents: [class10-science/light/lenses, class10-science/light/convex-lens-cases]
+  - concept: class10-science/human-eye/power-of-accommodation
+    parents: [class10-science/human-eye/the-human-eye]
+  - concept: class10-science/human-eye/defects-of-vision
+    parents: [class10-science/human-eye/power-of-accommodation, class10-science/light/power-of-a-lens, class10-science/light/lens-formula]
+  - concept: class10-science/human-eye/refraction-through-a-prism
+    parents: [class10-science/light/refraction]
+  - concept: class10-science/human-eye/dispersion-and-rainbow
+    parents: [class10-science/human-eye/refraction-through-a-prism]
+  - concept: class10-science/human-eye/atmospheric-refraction
+    parents: [class10-science/light/refractive-index]
+  - concept: class10-science/human-eye/scattering-of-light
+    parents: [class10-science/human-eye/dispersion-and-rainbow]
+  # Class 10 Science: Electricity.
+  - concept: class10-science/electricity/potential-difference
+    parents: [class10-science/electricity/current-and-circuit]
+  - concept: class10-science/electricity/circuit-diagrams
+    parents: [class10-science/electricity/current-and-circuit]
+  - concept: class10-science/electricity/ohms-law
+    parents: [class10-science/electricity/potential-difference, class10-science/electricity/circuit-diagrams]
+  - concept: class10-science/electricity/resistance-factors
+    parents: [class10-science/electricity/ohms-law]
+  - concept: class10-science/electricity/resistors-in-series
+    parents: [class10-science/electricity/ohms-law, class10-science/electricity/circuit-diagrams]
+  - concept: class10-science/electricity/resistors-in-parallel
+    parents: [class10-science/electricity/resistors-in-series]
+  - concept: class10-science/electricity/heating-effect
+    parents: [class10-science/electricity/ohms-law, class10-science/electricity/resistance-factors]
+  - concept: class10-science/electricity/electric-power
+    parents: [class10-science/electricity/heating-effect, class10-science/electricity/resistors-in-parallel]
+  # Class 10 Science: Magnetic Effects of Electric Current.
+  - concept: class10-science/magnetic-effects/magnetic-field-and-lines
+    parents: [class10-science/electricity/current-and-circuit]
+  - concept: class10-science/magnetic-effects/field-of-a-straight-wire
+    parents: [class10-science/magnetic-effects/magnetic-field-and-lines]
+  - concept: class10-science/magnetic-effects/loops-and-solenoids
+    parents: [class10-science/magnetic-effects/field-of-a-straight-wire]
+  - concept: class10-science/magnetic-effects/force-on-a-current
+    parents: [class10-science/magnetic-effects/field-of-a-straight-wire]
+  - concept: class10-science/magnetic-effects/electric-motor
+    parents: [class10-science/magnetic-effects/force-on-a-current, class10-science/magnetic-effects/loops-and-solenoids]
+  - concept: class10-science/magnetic-effects/electromagnetic-induction
+    parents: [class10-science/magnetic-effects/force-on-a-current]
+  - concept: class10-science/magnetic-effects/electric-generator
+    parents: [class10-science/magnetic-effects/electromagnetic-induction, class10-science/magnetic-effects/electric-motor]
+  - concept: class10-science/magnetic-effects/domestic-circuits
+    parents: [class10-science/magnetic-effects/electric-generator, class10-science/electricity/resistors-in-parallel, class10-science/electricity/heating-effect, class10-science/electricity/electric-power]
+  # Sources of Energy
+  - concept: class10-science/sources-of-energy/good-source-of-energy
+    parents: [class10-science/electricity/electric-power, class10-science/chemical-reactions/oxidation-and-reduction]
+  - concept: class10-science/sources-of-energy/fossil-fuels-and-thermal-power
+    parents: [class10-science/sources-of-energy/good-source-of-energy, class10-science/magnetic-effects/electric-generator, class10-science/carbon-and-its-compounds/combustion-and-oxidation]
+  - concept: class10-science/sources-of-energy/hydro-power
+    parents: [class10-science/sources-of-energy/fossil-fuels-and-thermal-power]
+  - concept: class10-science/sources-of-energy/biomass-and-biogas
+    parents: [class10-science/sources-of-energy/good-source-of-energy, class10-science/carbon-and-its-compounds/combustion-and-oxidation]
+  - concept: class10-science/sources-of-energy/wind-energy
+    parents: [class10-science/sources-of-energy/fossil-fuels-and-thermal-power]
+  - concept: class10-science/sources-of-energy/solar-energy
+    parents: [class10-science/sources-of-energy/good-source-of-energy, class10-science/electricity/potential-difference]
+  - concept: class10-science/sources-of-energy/sea-and-geothermal
+    parents: [class10-science/sources-of-energy/hydro-power, class10-science/sources-of-energy/fossil-fuels-and-thermal-power]
+  - concept: class10-science/sources-of-energy/nuclear-energy
+    parents: [class10-science/sources-of-energy/fossil-fuels-and-thermal-power]
+  - concept: class10-science/sources-of-energy/environment-and-how-long
+    parents: [class10-science/sources-of-energy/biomass-and-biogas, class10-science/sources-of-energy/wind-energy, class10-science/sources-of-energy/solar-energy, class10-science/sources-of-energy/sea-and-geothermal, class10-science/sources-of-energy/nuclear-energy]
+  # Class 10 Science: Our Environment.
+  - concept: class10-science/our-environment/what-is-an-ecosystem
+    parents: [class10-science/life-processes/photosynthesis, class10-science/life-processes/heterotrophic-nutrition]
+  - concept: class10-science/our-environment/food-chains-and-webs
+    parents: [class10-science/our-environment/what-is-an-ecosystem]
+  - concept: class10-science/our-environment/energy-flow
+    parents: [class10-science/our-environment/food-chains-and-webs]
+  - concept: class10-science/our-environment/biological-magnification
+    parents: [class10-science/our-environment/food-chains-and-webs]
+  - concept: class10-science/our-environment/ozone-layer
+    parents: [class10-science/our-environment/what-is-an-ecosystem]
+  - concept: class10-science/our-environment/biodegradable-or-not
+    parents: [class10-science/our-environment/what-is-an-ecosystem, class10-science/life-processes/human-digestion]
+  - concept: class10-science/our-environment/managing-garbage
+    parents: [class10-science/our-environment/biodegradable-or-not]
+  # Class 10 Science: Sustainable Management of Natural Resources.
+  - concept: class10-science/natural-resources/one-earth-one-family
+    parents: [class10-science/our-environment/managing-garbage]
+  - concept: class10-science/natural-resources/why-manage-resources
+    parents: [class10-science/natural-resources/one-earth-one-family]
+  - concept: class10-science/natural-resources/forests-and-stakeholders
+    parents: [class10-science/natural-resources/why-manage-resources, class10-science/our-environment/what-is-an-ecosystem]
+  - concept: class10-science/natural-resources/managing-forests-with-people
+    parents: [class10-science/natural-resources/forests-and-stakeholders]
+  - concept: class10-science/natural-resources/water-for-all
+    parents: [class10-science/natural-resources/why-manage-resources, class10-science/sources-of-energy/hydro-power]
+  - concept: class10-science/natural-resources/water-harvesting
+    parents: [class10-science/natural-resources/water-for-all]
+  - concept: class10-science/natural-resources/coal-and-petroleum
+    parents: [class10-science/natural-resources/why-manage-resources, class10-science/sources-of-energy/fossil-fuels-and-thermal-power, class10-science/sources-of-energy/environment-and-how-long]
+  # Class 10 Science: Periodic Classification of Elements.
+  - concept: class10-science/periodic-classification/why-classify
+    parents: [class10-science/metals-and-non-metals/physical-properties]
+  - concept: class10-science/periodic-classification/newlands-octaves
+    parents: [class10-science/periodic-classification/why-classify]
+  - concept: class10-science/periodic-classification/mendeleev-table
+    parents: [class10-science/periodic-classification/newlands-octaves]
+  - concept: class10-science/periodic-classification/mendeleev-limits
+    parents: [class10-science/periodic-classification/mendeleev-table]
+  - concept: class10-science/periodic-classification/modern-periodic-table
+    parents: [class10-science/periodic-classification/mendeleev-limits, class10-science/metals-and-non-metals/ionic-compounds]
+  - concept: class10-science/periodic-classification/trends-and-finale
+    parents: [class10-science/periodic-classification/modern-periodic-table, class10-science/metals-and-non-metals/metals-and-oxygen, class10-science/carbon-and-its-compounds/covalent-bond]
+  # Class 10 Maths: Constructions.
+  - concept: class10-maths/constructions/dividing-a-segment
+    parents: [class10-maths/triangles/basic-proportionality]
+  - concept: class10-maths/constructions/similar-triangle-smaller
+    parents: [class10-maths/constructions/dividing-a-segment, class10-maths/triangles/aa-and-sss]
+  - concept: class10-maths/constructions/similar-triangle-larger
+    parents: [class10-maths/constructions/similar-triangle-smaller]
+  - concept: class10-maths/constructions/tangents-by-construction
+    parents: [class10-maths/circles/tangent-perpendicular-radius, class10-maths/circles/tangents-from-a-point]

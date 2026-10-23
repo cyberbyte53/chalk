@@ -1,0 +1,7 @@
+# Which of the chapter's three effects explains it: dispersion, atmospheric refraction or scattering.
+- params: { item: rainbow }
+- params: { item: twinkle }
+- params: { item: blueSky }
+- params: { item: earlySun }
+- params: { item: redSun }
+- params: { item: prismBand }

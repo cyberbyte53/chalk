@@ -1,0 +1,9 @@
+# NCERT 3.2 general form: Akhila's 3x + 4y = 20, and the pairs listed in the text.
+- params: { a: 3, b: 4, k: 20, ask: c }
+  firstTry: 3
+- params: { a: 2, b: 3, k: 7, ask: c }
+- params: { a: 9, b: -2, k: -8, ask: c }
+  level: medium
+- params: { a: 5, b: -1, k: 0, ask: b }
+- params: { a: 1, b: -3, k: 6, ask: b }
+- params: { a: -7, b: 2, k: -3, ask: a }

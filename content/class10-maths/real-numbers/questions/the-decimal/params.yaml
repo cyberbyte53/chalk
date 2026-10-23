@@ -1,0 +1,13 @@
+# NCERT Ex 1.4 Q2: the terminating ones from Q1.
+- params: { p: 17, q: 8 }
+- params: { p: 23, q: 200 }
+  firstTry: 3
+- params: { p: 6, q: 15 }
+  level: easy
+- params: { p: 35, q: 50 }
+  level: easy
+- params: { p: 13, q: 3125 }
+  level: hard
+- params: { p: 15, q: 1600 }
+  level: hard
+- params: { p: 7, q: 80 }

@@ -1,0 +1,164 @@
+/* riverHealth: the river past a town, and the pH bench. */
+.rs-river-prop {
+  --rs-ph-0: var(--color-wrong);
+  --rs-ph-1: color-mix(in srgb, var(--color-wrong) 88%, var(--color-secondary));
+  --rs-ph-2: color-mix(in srgb, var(--color-wrong) 74%, var(--color-secondary));
+  --rs-ph-3: color-mix(in srgb, var(--color-wrong) 52%, var(--color-secondary));
+  --rs-ph-4: color-mix(in srgb, var(--color-wrong) 30%, var(--color-secondary));
+  --rs-ph-5: var(--color-secondary);
+  --rs-ph-6: color-mix(in srgb, var(--color-secondary) 70%, var(--color-right));
+  --rs-ph-7: color-mix(in srgb, var(--color-right) 80%, var(--color-secondary));
+  --rs-ph-8: var(--color-right);
+  --rs-ph-9: color-mix(in srgb, var(--color-right) 45%, var(--color-category-4));
+  --rs-ph-10: var(--color-category-4);
+  --rs-ph-11: color-mix(in srgb, var(--color-category-4) 45%, var(--color-primary));
+  --rs-ph-12: var(--color-primary);
+  --rs-ph-13: color-mix(in srgb, var(--color-primary) 50%, var(--color-category-3));
+  --rs-ph-14: color-mix(in srgb, var(--color-category-3) 70%, var(--color-inverse-surface));
+}
+.rs-sky {
+  fill: var(--color-surface-container);
+}
+.rs-bank {
+  fill: color-mix(in srgb, var(--color-secondary) 22%, var(--color-surface-container));
+}
+.rs-river {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+  transition: fill 0.4s ease;
+}
+.rs-river.is-high {
+  fill: color-mix(in srgb, var(--color-primary) 50%, var(--color-secondary));
+}
+.rs-river.is-veryHigh {
+  fill: color-mix(in srgb, var(--color-secondary) 65%, var(--color-inverse-surface));
+}
+.rs-river.is-toxic {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-inverse-surface));
+}
+.rs-ripple {
+  stroke: var(--color-surface);
+  stroke-width: 1.5px;
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rs-river {
+    transition: none;
+  }
+}
+.rs-src {
+  opacity: 0.35;
+}
+.rs-src.is-on {
+  opacity: 1;
+}
+.rs-pipe,
+.rs-pot {
+  fill: var(--color-on-surface-variant);
+}
+.rs-murk {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary) 60%, var(--color-inverse-surface));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.rs-toxic {
+  fill: none;
+  stroke: var(--color-category-3);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.rs-heap {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-on-surface-variant));
+}
+.rs-heap-bit {
+  fill: var(--color-category-4);
+}
+.rs-person-dot {
+  fill: var(--color-on-surface);
+}
+.rs-cloth {
+  fill: var(--color-category-1);
+}
+.rs-ash {
+  fill: var(--color-outline-variant);
+}
+.rs-factory {
+  fill: var(--color-on-surface-variant);
+}
+.rs-plant {
+  fill: var(--color-right-container);
+  stroke: var(--color-right);
+  stroke-width: 1.5px;
+}
+.rs-fish ellipse,
+.rs-fish path {
+  fill: var(--color-category-4);
+}
+.rs-fish.is-dead ellipse,
+.rs-fish.is-dead path {
+  fill: var(--color-outline-variant);
+}
+.rs-fish .rs-fish-eye {
+  fill: var(--color-inverse-surface);
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+}
+.rs-meter {
+  fill: var(--color-surface);
+}
+.rs-rack {
+  fill: var(--color-outline-variant);
+}
+.rs-tube {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.rs-liquid.is-plain {
+  fill: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+}
+.rs-ph-0 {
+  fill: var(--rs-ph-0);
+}
+.rs-ph-1 {
+  fill: var(--rs-ph-1);
+}
+.rs-ph-2 {
+  fill: var(--rs-ph-2);
+}
+.rs-ph-3 {
+  fill: var(--rs-ph-3);
+}
+.rs-ph-4 {
+  fill: var(--rs-ph-4);
+}
+.rs-ph-5 {
+  fill: var(--rs-ph-5);
+}
+.rs-ph-6 {
+  fill: var(--rs-ph-6);
+}
+.rs-ph-7 {
+  fill: var(--rs-ph-7);
+}
+.rs-ph-8 {
+  fill: var(--rs-ph-8);
+}
+.rs-ph-9 {
+  fill: var(--rs-ph-9);
+}
+.rs-ph-10 {
+  fill: var(--rs-ph-10);
+}
+.rs-ph-11 {
+  fill: var(--rs-ph-11);
+}
+.rs-ph-12 {
+  fill: var(--rs-ph-12);
+}
+.rs-ph-13 {
+  fill: var(--rs-ph-13);
+}
+.rs-ph-14 {
+  fill: var(--rs-ph-14);
+}

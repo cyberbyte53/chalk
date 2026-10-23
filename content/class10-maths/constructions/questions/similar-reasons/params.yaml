@@ -1,0 +1,6 @@
+# The justifications of Example 1 and Example 2.
+- params: { item: ratio34 }
+  firstTry: 3
+- params: { item: ratio53 }
+- params: { item: extended }
+- params: { item: angles }

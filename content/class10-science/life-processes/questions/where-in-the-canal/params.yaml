@@ -1,0 +1,10 @@
+# NCERT 6.2.4: in which part of the alimentary canal does this happen?
+- params: { case: starchBegins }
+  firstTry: 3
+- params: { case: proteinBegins }
+  firstTry: 4
+- params: { case: fat }
+- params: { case: absorbed }
+- params: { case: water }
+- params: { case: longest }
+- params: { case: pipe }

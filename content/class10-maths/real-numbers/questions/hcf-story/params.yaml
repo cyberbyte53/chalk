@@ -1,0 +1,9 @@
+# HCF word problems: NCERT Ex 1.1 Q3 (army), Example 2 (sweets), and kin.
+- params: { story: army }
+- params: { story: sweets }
+- params: { story: rope }
+  level: easy
+- params: { story: tiles }
+- params: { story: teams }
+  firstTry: 4
+  level: easy

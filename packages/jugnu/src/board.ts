@@ -1,4 +1,4 @@
-import type { Actor, IsRule, Script, WhenRule } from "@chalk/content";
+import type { Actor, IsRule, JugnuNotes, Script, WhenRule } from "@chalk/content";
 import type { AnyPropDef, StoredState } from "@chalk/prop";
 
 /** A signal on the board, as Jugnu hears it. */
@@ -22,7 +22,7 @@ export type HeardAction = {
 export type Snapshot = ReadonlyMap<string, StoredState>;
 
 /**
- * The live board as Jugnu sees it. The player's `BoardRuntime` is one; Jugnu needs nothing else, so
+ * The board as Jugnu sees it. The player's `BoardRuntime` is one; Jugnu needs nothing else, so
  * he never depends on the player or any UI.
  */
 export type JugnuBoard = {
@@ -32,6 +32,7 @@ export type JugnuBoard = {
     readonly is: readonly IsRule[];
     readonly when: readonly WhenRule[];
     readonly studentOnly: readonly string[];
+    readonly jugnu?: JugnuNotes | undefined;
   };
   propNames: () => string[];
   getDef: (name: string) => AnyPropDef;
@@ -56,4 +57,9 @@ export type JugnuPlace = {
   boardCount: number;
   /** The learner's language: Jugnu answers in it. */
   locale: "en" | "hi";
+  /**
+   * How the board is being played (the player's play mode): a lesson's page, practice after it,
+   * or a skill check's mistake under review. Left out: a lesson's page.
+   */
+  mode?: "lesson" | "guided" | "skillCheck" | "review";
 };

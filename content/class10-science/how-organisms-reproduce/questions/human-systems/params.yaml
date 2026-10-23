@@ -1,0 +1,9 @@
+# NCERT 8.3.3(a), (b) and Exercises 2 and 5: organs of the human male and female reproductive systems and their functions.
+- params: { case: testis }
+  firstTry: 1
+- params: { case: notFemale }
+  firstTry: 2
+- params: { case: glands }
+- params: { case: scrotum }
+- params: { case: ovary }
+- params: { case: urethra }

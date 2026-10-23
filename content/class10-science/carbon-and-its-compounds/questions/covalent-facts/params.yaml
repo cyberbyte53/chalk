@@ -1,0 +1,9 @@
+# Section 4.1: why carbon shares, and the properties of covalent compounds (Table 4.1).
+- params: { item: why-share }
+  firstTry: 3
+- params: { item: valence }
+  firstTry: 4
+- params: { item: conduct }
+- params: { item: low-mp }
+  level: medium
+- params: { item: valency }

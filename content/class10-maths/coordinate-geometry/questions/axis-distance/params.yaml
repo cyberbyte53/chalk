@@ -1,0 +1,8 @@
+# NCERT 7.2's opening: AB, CD on the axes, then AC and BD across them.
+- params: { item: xAxis }
+  firstTry: 3
+- params: { item: yAxis }
+- params: { item: sixEight }
+- params: { item: fiveTwelve }
+  firstTry: 4
+- params: { item: origin }

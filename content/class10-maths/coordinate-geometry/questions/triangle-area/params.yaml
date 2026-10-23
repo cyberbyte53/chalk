@@ -1,0 +1,8 @@
+# NCERT Examples 11–12 and Exercise 7.3 Q1, and Mom's herb patch.
+- params: { item: ex11 }
+  firstTry: 1
+- params: { item: ex12 }
+- params: { item: q1a }
+  firstTry: 2
+- params: { item: q1b }
+- params: { item: herbs }

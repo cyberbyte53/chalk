@@ -1,0 +1,274 @@
+/* ---- light: lens ---- */
+.ln {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ln-svg {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  touch-action: none;
+  user-select: none;
+}
+.ln-bg {
+  fill: var(--color-surface-container);
+}
+.ln-axis {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.ln-glass {
+  fill: var(--color-primary-container);
+  fill-opacity: 0.45;
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+.ln-card {
+  fill: var(--color-inverse-surface);
+}
+.ln-ray line {
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.ln-ray .ln-head {
+  fill: var(--color-primary);
+}
+.ln-dashed {
+  stroke: var(--color-primary);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 4;
+  opacity: 0.55;
+}
+.ln-mark circle {
+  fill: var(--color-on-surface);
+}
+.ln-mark text {
+  font-family: var(--font-display);
+  font-size: var(--text-note);
+  font-weight: 700;
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.ln-object line {
+  stroke: var(--color-on-surface);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.ln-object .ln-head {
+  fill: var(--color-on-surface);
+}
+.ln-object,
+.ln-object:focus,
+.ln-object:focus-visible {
+  outline: none;
+  cursor: grab;
+}
+.ln-handle {
+  fill: var(--color-primary);
+  opacity: 0.18;
+}
+.ln-object:focus-visible .ln-handle {
+  opacity: 0.35;
+}
+.ln-caption {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  fill: var(--color-on-surface-variant);
+}
+.ln-image line {
+  stroke: var(--color-secondary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.ln-image .ln-head {
+  fill: var(--color-secondary);
+}
+.ln-image.is-virtual line {
+  stroke-dasharray: 6 4;
+}
+.ln-image.is-dim {
+  opacity: 0.45;
+}
+.ln-under {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.ln-readout {
+  font-family: var(--font-display);
+  font-size: var(--text-note);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-surface);
+}
+.ln-focal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ln-focal-value {
+  font-family: var(--font-display);
+  font-size: var(--text-note);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-surface);
+  min-width: 6.5em;
+  text-align: center;
+}
+.ln-step {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.ln-step:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.ln-card-screen {
+  fill: #fff;
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5px;
+}
+.ln-stand {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.ln-screen.is-movable,
+.ln-screen:focus,
+.ln-screen:focus-visible {
+  cursor: ew-resize;
+  outline: none;
+}
+.ln-screen:focus-visible .ln-card-screen {
+  stroke: var(--color-primary);
+  stroke-width: 2.5px;
+}
+.ln-grip {
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+.ln-cone {
+  stroke: var(--color-primary);
+  stroke-width: 1px;
+  opacity: 0.3;
+}
+.ln-caught line {
+  stroke: var(--color-secondary);
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.ln-glow {
+  fill: var(--color-secondary);
+  opacity: 0.25;
+}
+.ln-patch {
+  fill: var(--color-secondary);
+  opacity: 0.18;
+}
+.ln-phone-body {
+  fill: var(--color-inverse-surface);
+}
+.ln-phone-glass {
+  fill: var(--color-primary-container);
+}
+.ln-phone-cam {
+  fill: var(--color-surface);
+}
+.ln-smear {
+  fill: var(--color-secondary);
+}
+.ln-name {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  fill: var(--color-on-surface-variant);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.ln-name.is-image {
+  fill: var(--color-secondary);
+}
+.ln-sphere {
+  fill: none;
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 4;
+}
+.ln-sphere-centre {
+  fill: var(--color-on-surface-variant);
+}
+.ln-sphere-name {
+  font-family: var(--font-display);
+  font-size: var(--text-note);
+  font-weight: 700;
+  fill: var(--color-on-surface-variant);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.ln-pick {
+  display: inline-flex;
+  gap: 8px;
+}
+.ln-raybtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-display);
+  font-weight: 700;
+  cursor: pointer;
+}
+.ln-raybtn.is-on {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.ln-mark-q,
+.ln-mark-q:focus,
+.ln-mark-q:focus-visible {
+  cursor: grab;
+  outline: none;
+}
+.ln-mark-q circle {
+  fill: var(--color-surface);
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+  stroke-dasharray: 3 3;
+}
+.ln-mark-q text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  fill: var(--color-secondary);
+}
+.ln-mark-q.is-right circle {
+  stroke: var(--color-right);
+  stroke-dasharray: none;
+  fill: var(--color-right-container);
+}
+.ln-mark-q.is-right text {
+  fill: var(--color-right);
+}
+.ln-mark-q:focus-visible circle {
+  stroke-width: 3px;
+}

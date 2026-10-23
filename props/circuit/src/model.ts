@@ -1,8 +1,8 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Element, type Emit, actionsFor, defineProp, set } from "@chalk/prop";
 import { type ZodType, z } from "zod";
 import { HIT_SIZE, layoutFor, placeAll } from "./layout";
-import { type Element, ElementKind, clean, solveNetwork } from "./solve";
+import { ElementKind, type Element as NetElement, clean, solveNetwork } from "./solve";
 
 export const ComponentKind = {
   Cell: "cell",
@@ -101,7 +101,7 @@ export type CircuitReadings = {
 /** Below this many amps, nothing is flowing (rounding dust). */
 const NO_CURRENT = 1e-9;
 
-function elementFor(c: Component, index: (id: string) => number): Element {
+function elementFor(c: Component, index: (id: string) => number): NetElement {
   const from = index(c.from);
   const to = index(c.to);
   switch (c.kind) {
@@ -399,7 +399,63 @@ export const circuit = defineProp({
       describe: "Something in the circuit changed, so its currents may have too",
     },
   },
-  parts: (s) => [...s.components.map((c) => c.id), ...s.nodes.map((n) => n.id)],
+  observe: (s) => {
+    // What the student sees: each component as drawn, with the one thing its symbol shows. Wires
+    // show nothing; currents are seen only on an ammeter's dial; nodes are unlabelled junctions.
+    const r = measure(s);
+    const elements: Element[] = [];
+    const bulbs: string[] = [];
+    for (const c of s.components) {
+      const name = c.label?.en ?? c.id;
+      switch (c.kind) {
+        case ComponentKind.Cell:
+          elements.push({
+            id: c.id,
+            value: `cell, ${c.volts} V${r.shortedCells.includes(c.id) ? ", short-circuited" : ""}`,
+          });
+          break;
+        case ComponentKind.Bulb: {
+          const glow = !c.isInSocket
+            ? "taken out of its socket"
+            : (r.brightness[c.id] ?? 0) > 0
+              ? "glowing"
+              : "dark";
+          elements.push({ id: c.id, value: `bulb ${name}, ${c.ohms} Ω, ${glow}` });
+          bulbs.push(`${name} ${glow}`);
+          break;
+        }
+        case ComponentKind.Resistor:
+          elements.push({ id: c.id, value: `resistor, ${c.ohms} Ω` });
+          break;
+        case ComponentKind.Switch:
+          elements.push({ id: c.id, value: `switch ${name}, ${c.isClosed ? "closed" : "open"}` });
+          break;
+        case ComponentKind.Ammeter:
+          elements.push({
+            id: c.id,
+            value: `ammeter ${name} reads ${(r.reading[c.id] ?? 0).toFixed(2)} A`,
+          });
+          break;
+        case ComponentKind.Voltmeter:
+          elements.push({
+            id: c.id,
+            value: `voltmeter ${name} reads ${(r.reading[c.id] ?? 0).toFixed(2)} V`,
+          });
+          break;
+        case ComponentKind.Wire:
+          break;
+      }
+    }
+    const count = (kind: ComponentKind) => s.components.filter((c) => c.kind === kind).length;
+    const summary = `a circuit with ${count(ComponentKind.Cell)} cell(s), ${count(ComponentKind.Bulb)} bulb(s)${count(ComponentKind.Switch) > 0 ? `, ${count(ComponentKind.Switch)} switch(es)` : ""}${count(ComponentKind.Ammeter) > 0 ? `, ${count(ComponentKind.Ammeter)} ammeter(s)` : ""}${count(ComponentKind.Voltmeter) > 0 ? `, ${count(ComponentKind.Voltmeter)} voltmeter(s)` : ""}${bulbs.length > 0 ? `: ${bulbs.join(", ")}` : ""}${r.isShortCircuit ? " (short circuit)" : ""}`;
+    return {
+      summary,
+      elements,
+      // Worked out by the circuit, shown nowhere: what each wire and bulb carries.
+      hidden: { current: r.current, voltage: r.voltage },
+    };
+  },
+  parts: (s) => s.components.filter((c) => c.kind !== ComponentKind.Wire).map((c) => c.id),
   locate: (s, part, width) => {
     const layout = layoutFor(s.nodes, width);
     const node = s.nodes.find((n) => n.id === part);

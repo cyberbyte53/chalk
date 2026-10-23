@@ -22,7 +22,7 @@ export type ConversationEvent =
   | { who: "student"; kind: "said"; text: string }
   | { who: "student"; kind: "did"; call: string; args: unknown; result: string }
   | { who: "student"; kind: "gaveUp" }
-  | { who: "jugnu"; turn: JugnuTurn; seconds: number; isContinued: boolean };
+  | { who: "jugnu"; turn: JugnuTurn; seconds: number };
 
 export const Outcome = {
   /** The student pressed Check and was right. */
@@ -47,10 +47,9 @@ export type ConversationMetrics = {
   wordsPerTurn: { mean: number; max: number };
   /** Separate things he said per turn (more than one is chatter). */
   messagesPerTurn: number;
-  tools: { act: number; point: number; calculate: number; wait: number };
+  tools: { act: number; point: number; calculate: number };
   refusals: number;
   /** Times a move of his was put back because it answered the question. */
-  undone: number;
   seconds: number;
 };
 
@@ -149,13 +148,19 @@ function studentLog(events: readonly ConversationEvent[]): string {
         );
       continue;
     }
-    for (const e of event.turn.events) {
-      if (e.kind === "say") lines.push(`Jugnu: ${e.text}`);
-      if (e.kind === "act" && e.refused === undefined)
-        lines.push(`Jugnu did on the board: ${e.prop}.${e.action} ${JSON.stringify(e.args)}`);
-      if (e.kind === "point" && e.refused === undefined)
-        lines.push(`Jugnu made ${e.part === undefined ? e.prop : `${e.prop} (${e.part})`} glow`);
-      if (e.kind === "wait") lines.push("Jugnu is waiting for you to try.");
+    // Only what he kept reaches the student: his tries and taken-back moves never do.
+    for (const cue of event.turn.cues) {
+      if (cue.kind === "say") lines.push(`Jugnu: ${cue.text}`);
+      if (cue.kind === "act")
+        lines.push(`Jugnu did on the board: ${cue.prop}.${cue.action} ${JSON.stringify(cue.args)}`);
+      if (cue.kind === "point")
+        lines.push(
+          `Jugnu made ${cue.part === undefined ? cue.prop : `${cue.prop} (${cue.part})`} glow`,
+        );
+      if (cue.kind === "ask")
+        lines.push(
+          `Jugnu asked: ${cue.question} (buttons you can tap by saying one exactly: ${cue.options.map((o) => `"${o}"`).join(", ")})`,
+        );
     }
   }
   return lines.length === 0 ? "Nothing yet: you just opened this board." : lines.join("\n");
@@ -174,9 +179,14 @@ export function conversationText(events: readonly ConversationEvent[]): string {
       if (event.kind === "gaveUp") lines.push("Student gave up.");
       continue;
     }
-    if (event.isContinued) lines.push("(Jugnu saw the student's move and went on.)");
     for (const e of event.turn.events)
-      lines.push(e.kind === "say" ? `Jugnu: ${e.text}` : `Jugnu ${stepText(e)}`);
+      lines.push(
+        e.kind === "say"
+          ? `Jugnu: ${e.text}`
+          : e.kind === "try" || e.kind === "calculate" || e.kind === "reply"
+            ? `(Jugnu, thinking, not seen by the student: ${stepText(e)})`
+            : `Jugnu ${stepText(e)}`,
+      );
   }
   return lines.join("\n");
 }
@@ -213,10 +223,8 @@ function metricsOf(
       act: steps.filter((s) => s.kind === "act" && s.refused === undefined).length,
       point: count("point"),
       calculate: count("calculate"),
-      wait: count("wait"),
     },
     refusals: steps.filter((s) => "refused" in s && s.refused !== undefined).length,
-    undone: steps.filter((s) => s.kind === "act" && s.isUndone === true).length,
     seconds: events.reduce((n, e) => n + (e.who === "jugnu" ? e.seconds : 0), 0),
   };
 }
@@ -249,7 +257,7 @@ export async function simulate(options: {
     throw new Error(`${student.id}: board "${student.board}" has no question`);
   runtime.start();
   await settle();
-  const boardAtStart = JSON.stringify(boardJson(runtime, place, []), null, 1);
+  const boardAtStart = JSON.stringify(boardJson(runtime, place), null, 1);
   const system = persona(student, withJugnu);
   const events: ConversationEvent[] = [];
   let outcome: Outcome = Outcome.OutOfRounds;
@@ -257,10 +265,6 @@ export async function simulate(options: {
   let error: string | undefined;
   let rounds = 0;
   let idle = 0;
-  let movedWatched = false;
-  const stopHearing = session?.onStudentMove(() => {
-    movedWatched = true;
-  });
   const isSolved = () => runtime.getStored(question).status === "correct";
 
   try {
@@ -278,7 +282,6 @@ export async function simulate(options: {
       };
       const reply = await studentModel.chat(request);
       const said = reply.content.trim();
-      movedWatched = false;
       let gaveUp = false;
       for (const call of reply.toolCalls) {
         if (call.name === GIVE_UP) {
@@ -328,15 +331,9 @@ export async function simulate(options: {
       }
       if (session === undefined) continue;
       const started = Date.now();
-      let turn: JugnuTurn | undefined;
-      let isContinued = false;
-      if (said !== "") turn = await session.ask(said);
-      else if (movedWatched && session.watchedProps.length > 0) {
-        isContinued = true;
-        turn = await session.continue();
-      }
-      if (turn !== undefined) {
-        events.push({ who: "jugnu", turn, seconds: (Date.now() - started) / 1000, isContinued });
+      if (said !== "") {
+        const turn = await session.ask(said);
+        events.push({ who: "jugnu", turn, seconds: (Date.now() - started) / 1000 });
         await settle();
       }
     }
@@ -344,7 +341,6 @@ export async function simulate(options: {
     outcome = Outcome.Error;
     error = e instanceof Error ? e.message : String(e);
   }
-  stopHearing?.();
   session?.close();
 
   let explanation = "";

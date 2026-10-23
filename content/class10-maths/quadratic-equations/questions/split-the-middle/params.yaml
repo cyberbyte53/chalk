@@ -1,0 +1,14 @@
+# The splits behind Exercise 4.2 and the examples.
+- params: { a: 1, b: -3, c: -10 }
+  firstTry: 3
+  level: easy
+- params: { a: 2, b: -5, c: 3 }
+  firstTry: 4
+- params: { a: 6, b: -1, c: -2 }
+- params: { a: 2, b: 1, c: -6 }
+- params: { a: 1, b: -27, c: 182 }
+  level: hard
+- params: { a: 1, b: -7, c: -60 }
+- params: { a: 2, b: -7, c: 3 }
+- params: { a: 1, b: 1, c: -306 }
+  level: hard

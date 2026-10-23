@@ -1,0 +1,13 @@
+# Electronic configuration and an element's place (Exercise 3, 5).
+- params: { item: two-filled }
+  firstTry: 1
+- params: { item: config-282 }
+  firstTry: 2
+- params: { item: three-four }
+  level: medium
+- params: { item: two-three }
+  level: medium
+- params: { item: twice }
+  level: hard
+- params: { item: config-287 }
+  level: medium

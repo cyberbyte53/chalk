@@ -1,0 +1,14 @@
+# Activity 3.8, section 3.2.1 (amphoteric oxides), Exercises 6 and 11.
+- params: { oxide: MgO }
+  firstTry: 1
+- params: { oxide: SO2 }
+  firstTry: 2
+- params: { oxide: Al2O3 }
+  firstTry: 3
+- params: { oxide: ZnO }
+  level: hard
+- params: { oxide: CaO }
+- params: { oxide: Na2O }
+- params: { oxide: K2O }
+- params: { oxide: CuO }
+- params: { oxide: CO2 }

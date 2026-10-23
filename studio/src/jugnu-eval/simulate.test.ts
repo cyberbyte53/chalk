@@ -64,8 +64,15 @@ describe("simulated students", () => {
     ]);
     const jugnu = scriptedProvider([
       {
-        say: "What is 1.5 × 1.5? Try a little left.",
-        call: [{ name: "wait_for_student", args: { watch: ["line"] } }],
+        call: [
+          {
+            name: "reply",
+            args: {
+              steps: [{ say: "What is 1.5 × 1.5? Try a little left." }],
+              end: null,
+            },
+          },
+        ],
       },
     ]);
     const c = await simulate({
@@ -80,7 +87,6 @@ describe("simulated students", () => {
     expect(c.outcome).toBe(Outcome.Solved);
     expect(c.metrics.solvedInRound).toBe(2);
     expect(c.metrics.jugnuTurns).toBe(1);
-    expect(c.metrics.tools.wait).toBe(1);
     expect(c.explanation).toBe("Because 1.414 times itself is about 2.");
     // The student saw what Jugnu said, not his internals.
     const second = student.requests[1]?.messages[1]?.content ?? "";

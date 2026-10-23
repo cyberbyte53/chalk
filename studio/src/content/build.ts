@@ -403,11 +403,18 @@ async function buildFamily(
       family: familyId,
       level,
       origin: r.origin,
+      ...(r.firstTry === undefined ? {} : { firstTry: r.firstTry }),
       params: r.params,
       board,
     };
     const ref = emit(c, outPath(familyPath, `${id}.json`), item, builtQuestionSchema);
-    banked.push({ ...ref, level, tests, props: propTypesOf(board) });
+    banked.push({
+      ...ref,
+      level,
+      tests,
+      ...(r.firstTry === undefined ? {} : { firstTry: r.firstTry }),
+      props: propTypesOf(board),
+    });
   }
   claimId(c, familyId, familyFile);
   const item: BuiltFamily = {
@@ -451,6 +458,18 @@ async function buildBank(
   const bank: Banked[] = [];
   for (const name of included)
     bank.push(...(await buildFamily(c, chapter, `${questionsDir}/${name}`)));
+  // A first-try place names one question per concept.
+  const taken = new Map<string, string>();
+  for (const q of bank) {
+    if (q.firstTry === undefined) continue;
+    for (const concept of q.tests) {
+      const key = `${concept} ${q.firstTry}`;
+      const other = taken.get(key);
+      if (other !== undefined)
+        report(c, q.path, `firstTry ${q.firstTry} is also given to ${other} (concept ${concept})`);
+      else taken.set(key, q.path);
+    }
+  }
   return bank;
 }
 
@@ -560,7 +579,50 @@ async function buildChapter(c: Context, chapterPath: string): Promise<Ref | unde
     questions: bank.map(({ props: _, ...ref }) => ref),
     props: explainers(c, [...drafts.flatMap((d) => [...d.used]), ...bank.flatMap((q) => q.props)]),
   };
+  noteLongAnswers(c, chapterPath);
   return emit(c, outPath(chapterPath, BuiltFile.Chapter), item, builtChapterSchema);
+}
+
+/** Above this share, "pick the longest option" works too often: say so (it doesn't stop the build). */
+const LONGEST_ANSWER_LIMIT = 0.4;
+
+/**
+ * Multiple-choice questions where the right answer is the longest option teach students to guess by
+ * length. Counts, across a chapter's built pages and questions, how often the answer is strictly the
+ * longest of three or more options, and adds a notice when that's well above chance.
+ */
+function noteLongAnswers(c: Context, chapterPath: string): void {
+  let asked = 0;
+  let longest = 0;
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      for (const child of node) visit(child);
+      return;
+    }
+    if (node === null || typeof node !== "object") return;
+    const o = node as Record<string, unknown>;
+    if (Array.isArray(o.options) && typeof o.answer === "string" && o.options.length >= 3) {
+      const lengths = new Map<string, number>();
+      for (const option of o.options as { id?: unknown; label?: { en?: unknown } }[]) {
+        if (typeof option?.id === "string" && typeof option.label?.en === "string") {
+          lengths.set(option.id, option.label.en.length);
+        }
+      }
+      const answer = lengths.get(o.answer);
+      if (answer !== undefined && lengths.size >= 3) {
+        asked += 1;
+        const others = [...lengths].filter(([id]) => id !== o.answer).map(([, n]) => n);
+        if (answer > Math.max(...others)) longest += 1;
+      }
+    }
+    for (const value of Object.values(o)) visit(value);
+  };
+  for (const [path, json] of c.files) if (path.startsWith(`${chapterPath}/`)) visit(json);
+  if (asked >= 20 && longest / asked > LONGEST_ANSWER_LIMIT) {
+    c.notices.push(
+      `${chapterPath}: the right answer is the longest option in ${longest} of ${asked} questions (${Math.round((100 * longest) / asked)}%); make wrong options as specific as the right one`,
+    );
+  }
 }
 
 async function buildBook(c: Context, bookPath: string): Promise<Ref | undefined> {

@@ -1,0 +1,9 @@
+# The parts of the eye and their jobs (NCERT 11.1; Exercise 2: where the image forms).
+- params: { item: mostBending }
+  firstTry: 1
+- params: { item: controlsLight }
+- params: { item: hole }
+- params: { item: fineFocus }
+- params: { item: screen }
+  firstTry: 2
+- params: { item: toBrain }

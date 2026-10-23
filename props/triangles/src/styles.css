@@ -1,0 +1,585 @@
+/* @chalk/prop-triangles: drawn only with the look's tokens (@chalk/look). */
+/* ---- shared ---- */
+.tg-svg {
+  display: block;
+  overflow: visible;
+}
+.tg-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  height: 44px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 800 19px / 1 var(--font-display);
+  cursor: pointer;
+}
+.tg-button.is-wide {
+  min-width: 64px;
+  font-size: 16px;
+}
+.tg-button.is-on {
+  background: var(--color-primary-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.tg-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.tg-button:disabled {
+  color: var(--color-outline-variant);
+  box-shadow: none;
+  cursor: default;
+}
+.tg-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.tg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin-top: 8px;
+}
+.tg-nudger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tg-nudger-value {
+  min-width: 64px;
+  text-align: center;
+  font: 800 18px var(--font-display);
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+.tg-name {
+  font-style: italic;
+}
+.tg-verdict {
+  margin: 8px 0 0;
+  padding: 6px 10px;
+  border-left: 4px solid var(--color-outline-variant);
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  font: 700 var(--text-note) / var(--text-note-leading) var(--font-body);
+  color: var(--color-on-surface);
+}
+.tg-verdict.is-on {
+  border-left-color: var(--color-right);
+  background: var(--color-right-container);
+}
+.tg-verdict.is-off {
+  border-left-color: var(--color-wrong);
+  background: var(--color-wrong-container);
+}
+
+/* ---- pictures ---- */
+.tg-shape-1 {
+  fill: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+.tg-shape-2 {
+  fill: color-mix(in srgb, var(--color-secondary) 14%, var(--color-surface));
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+.tg-shade {
+  fill: color-mix(in srgb, var(--color-inverse-surface) 22%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 3;
+}
+.tg-ray {
+  stroke: var(--color-category-1);
+  stroke-width: 1.2px;
+  stroke-dasharray: 5 4;
+}
+.tg-bulb {
+  fill: var(--color-category-1);
+}
+.tg-bulb-glow {
+  fill: color-mix(in srgb, var(--color-category-1) 30%, transparent);
+}
+.tg-note {
+  font: 600 10px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.tg-vertex {
+  font: 800 13px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.tg-arc path {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.tg-arc text {
+  font: 700 9.5px var(--font-display);
+  fill: var(--color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+}
+.tg-arc.is-match path {
+  stroke: var(--color-right);
+  stroke-width: 2px;
+}
+.tg-arc.is-match text {
+  fill: var(--color-right);
+}
+.tg-right {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: 1.3px;
+}
+.tg-length {
+  font: 700 11px var(--font-display);
+  fill: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.tg-length.is-ask {
+  fill: var(--color-secondary);
+}
+.tg-parallel {
+  fill: none;
+  stroke: var(--color-right);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tg-tick {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.tg-cut {
+  stroke: var(--color-wrong);
+  stroke-width: 2.5px;
+  stroke-dasharray: 6 4;
+  stroke-linecap: round;
+}
+.tg-cut.is-parallel {
+  stroke: var(--color-right);
+  stroke-dasharray: none;
+}
+.tg-point {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+}
+.tg-tile {
+  stroke: var(--color-surface);
+  stroke-width: 1px;
+}
+.tg-tile.is-one {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-surface));
+}
+.tg-tile.is-one.is-down {
+  fill: color-mix(in srgb, var(--color-primary) 35%, var(--color-surface));
+}
+.tg-tile.is-two {
+  fill: color-mix(in srgb, var(--color-secondary) 60%, var(--color-surface));
+}
+.tg-tile.is-two.is-down {
+  fill: color-mix(in srgb, var(--color-secondary) 38%, var(--color-surface));
+}
+.tg-count {
+  font: 700 11px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.tg-part {
+  fill: color-mix(in srgb, var(--color-category-2) 30%, var(--color-surface));
+  stroke: var(--color-category-2);
+  stroke-width: 1.5px;
+}
+.tg-part.is-one {
+  fill: color-mix(in srgb, var(--color-primary) 22%, transparent);
+  stroke: var(--color-primary);
+}
+.tg-part.is-two {
+  fill: color-mix(in srgb, var(--color-secondary) 26%, transparent);
+  stroke: var(--color-secondary);
+}
+.tg-part.is-half {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-surface));
+  stroke: var(--color-right);
+}
+.tg-square {
+  stroke-width: 1.5px;
+}
+.tg-square.is-one {
+  fill: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+  stroke: var(--color-primary);
+}
+.tg-square.is-two {
+  fill: color-mix(in srgb, var(--color-secondary) 20%, var(--color-surface));
+  stroke: var(--color-secondary);
+}
+.tg-square.is-three {
+  fill: color-mix(in srgb, var(--color-right) 18%, var(--color-surface));
+  stroke: var(--color-right);
+}
+.tg-grid {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 30%, transparent);
+  stroke-width: 0.8px;
+}
+.tg-area {
+  font: 800 13px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.tg-ground {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+}
+.tg-sun {
+  fill: var(--color-category-1);
+}
+.tg-shadow-line {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 4px;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+.tg-object-leg,
+.tg-object-pole,
+.tg-object-trunk {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.tg-object-body {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 40%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+}
+.tg-object-leaf {
+  fill: color-mix(in srgb, var(--color-right) 55%, var(--color-surface));
+}
+.tg-stick {
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.tg-head {
+  fill: var(--color-on-secondary-container);
+}
+.tg-tag {
+  font: 800 11px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.tg-readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.tg-chip {
+  padding: 3px 8px;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  font: 700 var(--text-caption) / var(--text-caption-leading) var(--font-display);
+  color: var(--color-on-surface);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.tg-sign {
+  font: 800 18px var(--font-display);
+}
+.tg-sign.is-on {
+  color: var(--color-right);
+}
+.tg-sign.is-off {
+  color: var(--color-wrong);
+}
+.tg-working {
+  margin-top: 6px;
+  overflow-x: auto;
+}
+.tg-working p {
+  margin: 4px 0;
+  font: var(--text-note) / var(--text-note-leading) var(--font-body);
+  color: var(--color-on-surface);
+}
+
+/* ---- trianglesScene ---- */
+.tgs-svg {
+  display: block;
+}
+.tgs-sky {
+  fill: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+}
+.tgs-night {
+  fill: color-mix(in srgb, var(--color-inverse-surface) 88%, var(--color-primary));
+}
+.tgs-grass {
+  fill: color-mix(in srgb, var(--color-right) 45%, var(--color-surface));
+}
+.tgs-ground-night {
+  fill: color-mix(in srgb, var(--color-right) 30%, var(--color-inverse-surface));
+}
+.tgs-wall {
+  fill: color-mix(in srgb, var(--color-secondary-container) 70%, var(--color-surface));
+}
+.tgs-floor {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 45%, var(--color-surface));
+}
+.tgs-leg,
+.tgs-brace {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 80%, var(--color-surface));
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.tgs-brace {
+  stroke-width: 1.5px;
+}
+.tgs-drum {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 45%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+}
+.tgs-roof {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 65%, var(--color-surface));
+}
+.tgs-bulb-on {
+  fill: var(--color-category-1);
+}
+.tgs-bulb-off {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 40%, var(--color-surface));
+}
+.tgs-glow {
+  fill: color-mix(in srgb, var(--color-category-1) 35%, transparent);
+}
+.tgs-pillar {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+}
+.tgs-pillar-cap {
+  fill: color-mix(in srgb, var(--color-wrong) 65%, var(--color-inverse-surface));
+}
+.tgs-wire {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 1.2px;
+}
+.tgs-post {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-inverse-surface));
+}
+.tgs-post-arm {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-inverse-surface));
+  stroke-width: 3px;
+}
+.tgs-board {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-surface));
+}
+.tgs-paper,
+.tgs-print {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+}
+.tgs-print-sky {
+  fill: color-mix(in srgb, var(--color-primary) 20%, var(--color-surface));
+}
+.tgs-title {
+  font: 800 11px var(--font-display);
+  fill: var(--color-wrong);
+}
+.tgs-tank-mini {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 50%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+.tgs-line {
+  stroke: var(--color-outline-variant);
+  stroke-width: 2px;
+}
+.tgs-ladder {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 75%, var(--color-inverse-surface));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.tgs-rung {
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 60%, var(--color-surface));
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.tgs-lock {
+  fill: var(--color-category-1);
+  stroke: var(--color-inverse-surface);
+}
+.tgs-counter {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 65%, var(--color-surface));
+}
+.tgs-mark {
+  font: 800 14px var(--font-display);
+}
+.tgs-mark.is-ok {
+  fill: var(--color-right);
+}
+.tgs-mark.is-bad {
+  fill: var(--color-wrong);
+}
+.tgs-sun {
+  fill: var(--color-category-1);
+}
+.tgs-shadow {
+  fill: var(--color-inverse-surface);
+  opacity: 0.35;
+}
+.tgs-ray {
+  stroke: var(--color-category-1);
+  stroke-width: 1.2px;
+  stroke-dasharray: 5 4;
+}
+.tgs-stick {
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.tgs-tape {
+  stroke: var(--color-category-1);
+  stroke-width: 2px;
+}
+.tgs-light {
+  fill: color-mix(in srgb, var(--color-category-1) 12%, transparent);
+}
+.tgs-measure {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.tgs-plan {
+  fill: var(--color-surface);
+}
+.tgs-plan-ground {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+}
+.tgs-tri {
+  fill: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  stroke: var(--color-primary);
+  stroke-width: 1.2px;
+  stroke-dasharray: 4 3;
+}
+.tgs-dim {
+  stroke: var(--color-primary);
+  stroke-width: 1.2px;
+  stroke-dasharray: 4 3;
+}
+.tgs-label {
+  font: 800 12px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.tgs-label.is-ask {
+  fill: var(--color-secondary);
+}
+.tgs-label.is-small {
+  font-size: 10px;
+  fill: var(--color-on-surface-variant);
+}
+.tgs-right {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 1.2px;
+}
+.tgs-star {
+  fill: var(--color-on-inverse-surface);
+}
+.tgs-flagpole {
+  stroke: var(--color-on-inverse-surface);
+  stroke-width: 2px;
+}
+.tgs-flag.is-1 {
+  fill: var(--color-secondary);
+}
+.tgs-flag.is-2 {
+  fill: var(--color-surface);
+}
+.tgs-flag.is-3 {
+  fill: var(--color-right);
+}
+.tgs-chakra {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 0.8px;
+}
+.tgs-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.tgs-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.tgs-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.tgs-hair-grey {
+  fill: var(--color-surface-press);
+}
+.tgs-cap {
+  fill: var(--color-wrong);
+}
+.tgs-face circle {
+  fill: var(--color-inverse-surface);
+}
+.tgs-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.tgs-specs circle,
+.tgs-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.tgs-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.tgs-shirt-riya {
+  fill: var(--color-category-4);
+}
+.tgs-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.tgs-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.tgs-shirt-mom {
+  fill: var(--color-category-3);
+}
+.tgs-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.tgs-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.tgs-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.tgs-shirt-grandpa-line {
+  stroke: var(--color-on-surface-variant);
+}
+.tgs-shirt-mom-line {
+  stroke: var(--color-category-3);
+}

@@ -1,0 +1,14 @@
+# NCERT Example 16 and Exercise 5.3 Q15–Q20.
+- params: { item: ex16 }
+  firstTry: 5
+- params: { item: q15 }
+- params: { item: q16 }
+  level: hard
+- params: { item: q17 }
+  firstTry: 6
+  level: easy
+- params: { item: q18 }
+  level: hard
+- params: { item: q19 }
+  level: hard
+- params: { item: q20 }

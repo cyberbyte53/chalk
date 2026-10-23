@@ -1,0 +1,12 @@
+# Cumulative frequency and the median class (Tables 14.11–14.14, Example 7, Exercise 14.3 Q1 and Q3).
+- params: { item: below60 }
+  firstTry: 1
+- params: { item: more60 }
+- params: { item: ex7f }
+- params: { item: q3f }
+  level: medium
+- params: { item: mclass }
+  firstTry: 2
+  level: medium
+- params: { item: q1class }
+  level: medium

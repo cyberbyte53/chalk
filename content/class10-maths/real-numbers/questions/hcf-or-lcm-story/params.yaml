@@ -1,0 +1,11 @@
+# NCERT Ex 1.1 Q2 (sweets), Ex 1.2 Q7 (Sonia and Ravi), and everyday ones.
+- params: { story: sweets }
+- params: { story: bells }
+- params: { story: rope }
+- params: { story: buses }
+  firstTry: 6
+- params: { story: tiles }
+  firstTry: 5
+- params: { story: lights }
+  level: hard
+- params: { story: runners }

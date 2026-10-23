@@ -1,0 +1,10 @@
+# One-trait crosses (Fig. 9.3): tall : short among the children.
+- params: { a: TT, b: tt }
+  firstTry: 1
+  level: easy
+- params: { a: Tt, b: Tt }
+  firstTry: 2
+- params: { a: Tt, b: tt }
+- params: { a: TT, b: Tt }
+- params: { a: tt, b: tt }
+  level: easy

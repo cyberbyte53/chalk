@@ -1,0 +1,8 @@
+# Nuclear fission, reactors and their hazards (NCERT 14.3.4; Exercise 8).
+- params: { item: fission }
+  firstTry: 1
+- params: { item: neutron }
+  firstTry: 2
+- params: { item: hazard }
+- params: { item: india }
+  level: medium

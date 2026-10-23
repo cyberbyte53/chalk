@@ -1,0 +1,10 @@
+# NCERT 2.3, Exercises 1 and 9.
+- params: { item: ph1 }
+  firstTry: 5
+- params: { item: ph4 }
+- params: { item: ph7 }
+  firstTry: 4
+- params: { item: ph9 }
+- params: { item: ph11 }
+- params: { item: redLitmusBlue }
+  level: medium

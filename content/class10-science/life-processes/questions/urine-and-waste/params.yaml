@@ -1,0 +1,11 @@
+# NCERT 6.5: regulating urine, dialysis and excretion in plants.
+- params: { case: regulate }
+  firstTry: 3
+- params: { case: filtrate }
+  firstTry: 4
+- params: { case: urine }
+- params: { case: dialysis }
+  level: hard
+- params: { case: plantLeaves }
+- params: { case: resins }
+  level: hard

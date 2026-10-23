@@ -1,0 +1,11 @@
+# NCERT 2.2 and its in-text questions.
+- params: { item: acidIon }
+  firstTry: 2
+  level: easy
+- params: { item: baseIon }
+  level: easy
+- params: { item: dryHcl }
+- params: { item: alkali }
+- params: { item: dilute }
+  firstTry: 3
+- params: { item: moreBase }

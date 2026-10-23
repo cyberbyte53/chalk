@@ -1,0 +1,142 @@
+import type { Locale, Localized } from "@chalk/content";
+
+/** The app's own screens' copy (sign-in, setup, home, practice). Lessons bring their own words. */
+export const AppText = {
+  tagline: {
+    en: "Don't just learn it. See why it's true.",
+    hi: "सिर्फ़ याद मत करो। देखो कि यह सच क्यों है।",
+  },
+  jugnuHelps: { en: "Jugnu helps when you're stuck.", hi: "अटकोगे तो जुगनू मदद करेगा।" },
+  signInFailed: {
+    en: "That sign-in didn't work. Try again.",
+    hi: "साइन-इन नहीं हुआ। फिर से कोशिश करो।",
+  },
+  offline: {
+    en: "You're offline. Connect to the internet and try again.",
+    hi: "इंटरनेट नहीं है। जुड़कर फिर से कोशिश करो।",
+  },
+  googleUnreachable: {
+    en: "Can't reach Google's sign-in. Check your internet and try again.",
+    hi: "Google साइन-इन तक नहीं पहुँच पा रहे। इंटरनेट जाँचकर फिर से कोशिश करो।",
+  },
+  signedInWithGoogle: { en: "Signed in with Google", hi: "Google से साइन-इन" },
+  welcome: { en: "Welcome, {name}", hi: "स्वागत है, {name}" },
+  yourName: { en: "Your name", hi: "तुम्हारा नाम" },
+  yourNameHint: { en: "Your teachers see this.", hi: "यह तुम्हारे शिक्षक देखेंगे।" },
+  schoolCode: { en: "School code", hi: "स्कूल कोड" },
+  schoolCodeHint: { en: "Your school gives you this.", hi: "यह कोड तुम्हारा स्कूल देता है।" },
+  unknownSchool: { en: "No school has that code.", hi: "इस कोड का कोई स्कूल नहीं है।" },
+  iAm: { en: "I'm a", hi: "मैं हूँ" },
+  student: { en: "Student", hi: "विद्यार्थी" },
+  teacher: { en: "Teacher", hi: "शिक्षक" },
+  continue: { en: "Continue", hi: "आगे" },
+  signOut: { en: "Sign out", hi: "साइन आउट" },
+  hi: { en: "Hi {name}", hi: "नमस्ते {name}" },
+  yourCourses: { en: "Your courses", hi: "तुम्हारे कोर्स" },
+  addTeacher: { en: "+ Add a teacher", hi: "+ शिक्षक जोड़ो" },
+  addTeacherTitle: { en: "Add a teacher", hi: "शिक्षक जोड़ो" },
+  addTeacherLead: {
+    en: "Your teacher gives the class a code. Type it to get their course.",
+    hi: "तुम्हारे शिक्षक कक्षा को एक कोड देते हैं। उनका कोर्स पाने के लिए उसे लिखो।",
+  },
+  noTeacherYet: {
+    en: "Add your teacher to start. Ask them for the class code.",
+    hi: "शुरू करने के लिए अपने शिक्षक को जोड़ो। उनसे कक्षा का कोड माँगो।",
+  },
+  teachersCode: { en: "Teacher's code", hi: "शिक्षक का कोड" },
+  unknownJoinCode: {
+    en: "No class has that code. Check it with your teacher.",
+    hi: "इस कोड की कोई कक्षा नहीं है। शिक्षक से जाँच लो।",
+  },
+  join: { en: "Join", hi: "जुड़ो" },
+  later: { en: "Later", hi: "बाद में" },
+  joined: { en: "You're in {teacher}'s class.", hi: "तुम {teacher} की कक्षा में हो।" },
+  chapterOf: { en: "Chapter {n}", hi: "अध्याय {n}" },
+  conceptsThenPractice: { en: "{n} concepts", hi: "{n} विषय" },
+  start: { en: "Start", hi: "शुरू करो" },
+  practiceScore: { en: "Practice {right}/{of}", hi: "अभ्यास {right}/{of}" },
+  learnt: { en: "Done", hi: "पूरा" },
+  chapterProgress: { en: "{done} of {all} concepts", hi: "{all} में से {done} विषय" },
+  notStarted: { en: "not started", hi: "शुरू नहीं किया" },
+  practice: { en: "Practice", hi: "अभ्यास" },
+  practiceOf: { en: "{concept} · practice", hi: "{concept} · अभ्यास" },
+  worthAnotherLook: { en: "Worth another look", hi: "एक बार और देखो" },
+  questionsToLook: {
+    en: "Questions {list}. Jugnu can go over them with you.",
+    hi: "सवाल {list}। जुगनू उन्हें तुम्हारे साथ देख सकता है।",
+  },
+  allRight: { en: "Every one right on the first try.", hi: "हर सवाल पहली बार में सही।" },
+  goOver: { en: "Go over them", hi: "फिर से करो" },
+  nextConcept: { en: "Next concept", hi: "अगला विषय" },
+  chapterComplete: { en: "Chapter {n} complete", hi: "अध्याय {n} पूरा" },
+  backToCourse: { en: "Back to {course}", hi: "{course} पर वापस" },
+  yourGroups: { en: "Your groups", hi: "तुम्हारे समूह" },
+  noGroupsYet: {
+    en: "Make a group for a class: pick the course, and Chalk gives you a code for your students.",
+    hi: "किसी कक्षा के लिए समूह बनाओ: कोर्स चुनो, और Chalk तुम्हें विद्यार्थियों के लिए एक कोड देगा।",
+  },
+  newGroup: { en: "+ New group", hi: "+ नया समूह" },
+  newGroupTitle: { en: "New group", hi: "नया समूह" },
+  newGroupLead: {
+    en: "Pick the course. Chalk makes a code for your students to join with.",
+    hi: "कोर्स चुनो। Chalk विद्यार्थियों के जुड़ने के लिए एक कोड बनाएगा।",
+  },
+  createGroup: { en: "Create group", hi: "समूह बनाओ" },
+  chapters: { en: "{n} chapters", hi: "{n} अध्याय" },
+  oneChapter: { en: "1 chapter", hi: "1 अध्याय" },
+  groupMeta: { en: "{n} students · code {code}", hi: "{n} विद्यार्थी · कोड {code}" },
+  madeOn: { en: "Made {date}", hi: "{date} को बना" },
+  studentsCount: { en: "{n} students", hi: "{n} विद्यार्थी" },
+  finished: { en: "finished", hi: "पूरा किया" },
+  notStartedYet: { en: "not started", hi: "शुरू नहीं" },
+  weakest: { en: "weakest", hi: "सबसे कमज़ोर" },
+  eachSquare: { en: "Each square is a concept, in order", hi: "हर खाना एक विषय है, क्रम से" },
+  mostBehind: { en: "Most behind first", hi: "सबसे पीछे वाले पहले" },
+  noStudentsYet: {
+    en: "No one has joined yet. Share the code or the link with your class.",
+    hi: "अभी कोई नहीं जुड़ा। कोड या लिंक अपनी कक्षा को भेजो।",
+  },
+  shareLink: { en: "Share join link", hi: "जुड़ने का लिंक भेजो" },
+  linkCopied: { en: "Link copied", hi: "लिंक कॉपी हो गया" },
+  shareText: {
+    en: "Join my {course} class on Chalk: {link}",
+    hi: "Chalk पर मेरी {course} कक्षा से जुड़ो: {link}",
+  },
+  newCode: { en: "New code", hi: "नया कोड" },
+  newCodeConfirm: {
+    en: "Old code stops working. Tap again",
+    hi: "पुराना कोड बंद हो जाएगा। फिर दबाओ",
+  },
+  joinedOn: { en: "Joined {date}", hi: "{date} को जुड़े" },
+  activeWhen: { en: "active {when}", hi: "सक्रिय {when}" },
+  neverActive: { en: "not active yet", hi: "अभी सक्रिय नहीं" },
+  conceptsDone: { en: "{done} of {all} concepts done", hi: "{all} में से {done} विषय पूरे" },
+  notReached: { en: "not reached", hi: "अभी नहीं पहुँचे" },
+  pagesOnly: { en: "pages done, practice next", hi: "पन्ने पूरे, अभ्यास बाकी" },
+  remove: { en: "Remove from group", hi: "समूह से हटाओ" },
+  removeConfirm: { en: "Tap again to remove", hi: "हटाने के लिए फिर दबाओ" },
+  devSignIn: { en: "Sign in", hi: "साइन इन" },
+  fetching1: { en: "Jugnu is fetching your lessons…", hi: "जुगनू तुम्हारे पाठ ला रहा है…" },
+  fetching2: { en: "Gathering the pictures…", hi: "चित्र इकट्ठा हो रहे हैं…" },
+  fetching3: { en: "Lighting up the questions…", hi: "प्रश्न जगमगा रहे हैं…" },
+  fetching4: { en: "Almost ready…", hi: "बस तैयार है…" },
+  fetchProgress: { en: "{done} of {all}", hi: "{all} में से {done}" },
+  fetchFailed: {
+    en: "Couldn't download this chapter. Connect to the internet and try again; once it's here, it works offline.",
+    hi: "यह अध्याय डाउनलोड नहीं हुआ। इंटरनेट से जुड़कर फिर से कोशिश करो; एक बार आ गया तो बिना इंटरनेट भी चलेगा।",
+  },
+  tryAgain: { en: "Try again", hi: "फिर से कोशिश करो" },
+  goBack: { en: "Back", hi: "वापस" },
+} as const satisfies Record<string, Localized>;
+export type AppTextKey = keyof typeof AppText;
+
+/** The copy in the learner's language, with {placeholders} filled in. */
+export function say(
+  locale: Locale,
+  key: AppTextKey,
+  values: Readonly<Record<string, string | number>> = {},
+): string {
+  return AppText[key][locale].replace(/\{(\w+)\}/g, (_, name: string) =>
+    String(values[name] ?? ""),
+  );
+}

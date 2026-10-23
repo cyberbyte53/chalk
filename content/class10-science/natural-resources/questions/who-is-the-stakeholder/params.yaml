@@ -1,0 +1,8 @@
+# NCERT 16.2.1: the four stakeholders of a forest.
+- params: { case: locals }
+  firstTry: 1
+- params: { case: dept }
+  firstTry: 2
+- params: { case: industry }
+- params: { case: enthusiasts }
+- params: { case: count }

@@ -1,0 +1,9 @@
+# Hydrogen's two families, and isotopes.
+- params: { item: like-alkali }
+  firstTry: 3
+- params: { item: like-halogen }
+  firstTry: 4
+  level: medium
+- params: { item: isotope-def }
+- params: { item: cl-slots }
+  level: medium

@@ -1,0 +1,16 @@
+title: { en: "Carbon and its Compounds", hi: "कार्बन एवं उसके यौगिक" }
+# Concepts in book order (NCERT Chapter 4, the full edition: the "More to Know" boxes, soaps and
+# detergents included).
+concepts:
+  - covalent-bond
+  - allotropes-of-carbon
+  - versatile-carbon
+  - chains-branches-rings
+  - functional-groups-and-series
+  - naming-carbon-compounds
+  - combustion-and-oxidation
+  - addition-and-substitution
+  - ethanol-and-ethanoic-acid
+  - soaps-and-detergents
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

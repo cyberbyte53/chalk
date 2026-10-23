@@ -1,0 +1,13 @@
+# Reactivity: Activity 1.9, eqs 1.25–1.26, Exercises 7 and 14. Order used: Al > Zn > Fe > Pb > Cu > Ag.
+- params: { metal: Fe, salt: Cu }
+  firstTry: 4
+- params: { metal: Cu, salt: Fe }
+  firstTry: 5
+- params: { metal: Zn, salt: Cu }
+- params: { metal: Cu, salt: Ag }
+- params: { metal: Ag, salt: Cu }
+  level: hard
+- params: { metal: Pb, salt: Cu }
+- params: { metal: Cu, salt: Zn }
+  level: hard
+- params: { metal: Al, salt: Cu }

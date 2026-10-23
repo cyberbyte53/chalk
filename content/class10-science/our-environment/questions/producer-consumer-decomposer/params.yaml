@@ -1,0 +1,8 @@
+# NCERT 15.1: producers, consumers (herbivores, carnivores, omnivores, parasites) and decomposers.
+- params: { case: grass }
+  firstTry: 3
+- params: { case: fungi }
+  firstTry: 4
+- params: { case: crow }
+- params: { case: lice }
+- params: { case: noDecomposers }

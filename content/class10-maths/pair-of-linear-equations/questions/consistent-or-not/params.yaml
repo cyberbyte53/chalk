@@ -1,0 +1,11 @@
+# NCERT Exercise 3.2 Q3 and Q4.
+- params: { a1: 3, b1: 2, k1: 5, a2: 2, b2: -3, k2: 7 }
+  firstTry: 6
+- params: { a1: 2, b1: -3, k1: 8, a2: 4, b2: -6, k2: 9 }
+  firstTry: 7
+- params: { a1: 5, b1: -3, k1: 11, a2: -10, b2: 6, k2: -22 }
+  firstTry: 8
+- params: { a1: 1, b1: 1, k1: 5, a2: 2, b2: 2, k2: 10 }
+- params: { a1: 1, b1: -1, k1: 8, a2: 3, b2: -3, k2: 16 }
+- params: { a1: 2, b1: 1, k1: 6, a2: 4, b2: -2, k2: 4 }
+- params: { a1: 2, b1: -2, k1: 2, a2: 4, b2: -4, k2: 5 }

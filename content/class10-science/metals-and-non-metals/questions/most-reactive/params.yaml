@@ -1,0 +1,11 @@
+# Table 3.2 (the reactivity series).
+- params: { a: Fe, b: Mg, c: Cu, ask: most }
+  firstTry: 5
+- params: { a: Au, b: Zn, c: Ag, ask: least }
+  firstTry: 6
+- params: { a: Al, b: Na, c: Zn, ask: most }
+- params: { a: Pb, b: Fe, c: Cu, ask: least }
+- params: { a: K, b: Ca, c: Mg, ask: most }
+- params: { a: Hg, b: Cu, c: Ag, ask: least }
+  level: hard
+- params: { a: Zn, b: Al, c: Fe, ask: most }

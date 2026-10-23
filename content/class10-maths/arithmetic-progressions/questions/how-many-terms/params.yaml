@@ -1,0 +1,20 @@
+# NCERT Example 13, Exercise 5.3 Q4–Q11 and Kabir's ₹4,000.
+- params: { item: ex13 }
+  firstTry: 3
+- params: { item: q4 }
+- params: { item: q5 }
+- params: { item: q6 }
+  level: medium
+- params: { item: q7 }
+  level: medium
+- params: { item: q8 }
+  level: medium
+- params: { item: q9 }
+- params: { item: q10i }
+  level: medium
+- params: { item: q10ii }
+  level: medium
+- params: { item: q11 }
+- params: { item: kabir }
+  firstTry: 4
+  level: medium

@@ -1,0 +1,187 @@
+/* resourcesScene: the Village Audit's story panels. */
+.rss-sky {
+  fill: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
+}
+.rss-sky.is-dry {
+  fill: color-mix(in srgb, var(--color-secondary) 16%, var(--color-surface));
+}
+.rss-sun {
+  fill: var(--color-secondary);
+}
+.rss-ground {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-surface));
+}
+.rss-ground.is-dry {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+}
+.rss-ground.is-sand {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, var(--color-surface));
+}
+.rss-trunk,
+.rss-stump {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-inverse-surface));
+}
+.rss-leaves {
+  fill: var(--color-right);
+}
+.rss-wall {
+  fill: var(--color-surface-container);
+}
+.rss-floor {
+  fill: color-mix(in srgb, var(--color-secondary) 25%, var(--color-surface-container));
+}
+.rss-board {
+  fill: color-mix(in srgb, var(--color-secondary) 50%, var(--color-inverse-surface));
+}
+.rss-paper,
+.rss-page {
+  fill: var(--color-surface);
+}
+.rss-photo {
+  fill: color-mix(in srgb, var(--color-right) 18%, var(--color-surface-container));
+  stroke: var(--color-outline-variant);
+  stroke-width: 2px;
+}
+.rss-check {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: 1.2px;
+}
+.rss-line {
+  stroke: var(--color-outline-variant);
+  stroke-width: 2px;
+}
+.rss-road {
+  fill: var(--color-on-surface-variant);
+}
+.rss-house {
+  fill: color-mix(in srgb, var(--color-secondary) 45%, var(--color-surface));
+}
+.rss-house.is-new {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+}
+.rss-roof {
+  fill: color-mix(in srgb, var(--color-wrong) 60%, var(--color-inverse-surface));
+}
+.rss-door {
+  fill: var(--color-inverse-surface);
+}
+.rss-bus {
+  fill: var(--color-category-4);
+}
+.rss-well {
+  fill: var(--color-on-surface-variant);
+}
+.rss-post,
+.rss-rope {
+  stroke: color-mix(in srgb, var(--color-secondary) 55%, var(--color-inverse-surface));
+  stroke-width: 2.5px;
+}
+.rss-rope {
+  stroke-width: 1px;
+}
+.rss-mud {
+  fill: color-mix(in srgb, var(--color-secondary) 60%, var(--color-inverse-surface));
+}
+.rss-pot {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-secondary));
+}
+.rss-temple {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.rss-stone {
+  fill: var(--color-outline-variant);
+}
+.rss-axe {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.rss-green-field {
+  fill: color-mix(in srgb, var(--color-right) 55%, var(--color-surface));
+}
+.rss-cracked {
+  fill: color-mix(in srgb, var(--color-secondary) 45%, var(--color-surface));
+}
+.rss-crack {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary) 60%, var(--color-inverse-surface));
+  stroke-width: 1.5px;
+}
+.rss-canal {
+  stroke: var(--color-outline-variant);
+  stroke-width: 8px;
+}
+.rss-canal-water {
+  stroke: var(--color-primary);
+  stroke-width: 5px;
+}
+.rss-cane {
+  fill: none;
+  stroke: var(--color-right);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.rss-gully {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-surface));
+}
+.rss-checkdam {
+  fill: var(--color-on-surface-variant);
+}
+.rss-steps {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 30%, var(--color-surface));
+}
+.rss-step-line {
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.rss-river {
+  fill: color-mix(in srgb, var(--color-primary) 40%, var(--color-secondary));
+}
+.rss-drain {
+  fill: var(--color-on-surface-variant);
+}
+.rss-murk {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.rss-litter {
+  fill: var(--color-category-4);
+}
+.rss-tube {
+  fill: color-mix(in srgb, var(--color-primary) 40%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1px;
+}
+.rss-pump {
+  fill: var(--color-wrong);
+}
+.rss-wheel {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 2.5px;
+}
+.rss-scooter {
+  fill: var(--color-category-4);
+}
+.rss-sign {
+  fill: var(--color-right-container);
+  stroke: var(--color-right);
+  stroke-width: 1.5px;
+}
+.rss-chart {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.rss-chart-bar {
+  fill: var(--color-right);
+}
+.rss-pool {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+}

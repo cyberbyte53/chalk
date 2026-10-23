@@ -1,0 +1,79 @@
+/* contraceptionChart: HTML cards */
+.cc-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.cc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: none;
+  border-left: 5px solid var(--color-outline-variant);
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  text-align: left;
+  cursor: pointer;
+}
+.cc-card:disabled {
+  cursor: default;
+}
+.cc-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.cc-card.is-on {
+  background: var(--color-primary-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.cc-barrier {
+  border-left-color: var(--color-category-4);
+}
+.cc-hormonal {
+  border-left-color: var(--color-category-3);
+}
+.cc-device {
+  border-left-color: var(--color-secondary);
+}
+.cc-surgical {
+  border-left-color: var(--color-primary);
+}
+.cc-name {
+  font: 800 15px / 1.15 var(--font-display);
+}
+.cc-cat {
+  font: 600 var(--text-caption) / 1.2 var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.cc-detail {
+  margin-top: 10px;
+  padding: 10px 12px;
+  min-height: 88px;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+}
+.cc-detail p {
+  margin: 0 0 6px;
+  font: 500 var(--text-note) / 1.4 var(--font-body);
+  color: var(--color-on-surface);
+}
+.cc-hint {
+  color: var(--color-on-surface-variant) !important;
+}
+.cc-drawback {
+  color: var(--color-on-surface-variant) !important;
+}
+.cc-std {
+  font-weight: 700 !important;
+}
+.cc-std.is-yes {
+  color: var(--color-right) !important;
+}
+.cc-std.is-no {
+  color: var(--color-wrong) !important;
+}

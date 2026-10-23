@@ -1,0 +1,9 @@
+# NCERT 8.2.5–8.2.6 and the tissue-culture box: vegetative propagation methods and advantages, spores, and the potato and money-plant activities.
+- params: { case: potatoBud }
+  firstTry: 3
+- params: { case: moneyPlant }
+  firstTry: 4
+- params: { case: seedless }
+- params: { case: earlier }
+- params: { case: callus }
+- params: { case: spores }

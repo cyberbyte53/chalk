@@ -1,0 +1,8 @@
+# NCERT Exercise 12.2 Q14 and the sector formulas run backwards.
+- params: { item: q14 }
+  firstTry: 2
+- params: { item: halfLR }
+- params: { item: areaFromArc }
+  level: easy
+- params: { item: angleFromArea }
+  level: hard

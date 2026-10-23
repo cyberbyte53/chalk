@@ -1,0 +1,7 @@
+# NCERT Exercise 10.1 Q3 and similar right triangles from Theorem 10.1.
+- params: { item: q3 }
+  firstTry: 1
+- params: { item: six }
+- params: { item: eight }
+- params: { item: oq }
+  firstTry: 2

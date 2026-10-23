@@ -1,0 +1,14 @@
+# NCERT 6.4.2: is this carried out by the xylem or the phloem?
+- params: { case: waterUp }
+  firstTry: 1
+- params: { case: sugarDown }
+  firstTry: 2
+- params: { case: minerals }
+- params: { case: aminoAcids }
+- params: { case: springBuds }
+- params: { case: usesAtp }
+  level: medium
+- params: { case: sieveTubes }
+  level: medium
+- params: { case: tracheids }
+  level: medium

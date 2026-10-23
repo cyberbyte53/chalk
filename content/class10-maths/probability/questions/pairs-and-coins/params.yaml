@@ -1,0 +1,9 @@
+# NCERT Example 9, Exercise 15.1 Q22 (ii), Q23 and Q25 (i).
+- params: { item: ex9 }
+  firstTry: 3
+  level: easy
+- params: { item: ex9b }
+- params: { item: q23 }
+  firstTry: 4
+- params: { item: q25i }
+- params: { item: q22ii }

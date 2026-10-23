@@ -1,0 +1,391 @@
+/* eyeScene: story pictures, in the family's look (shared with the light chapter's scenes). */
+.es {
+  display: block;
+}
+.es-svg {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.es-skin {
+  fill: var(--ey-skin);
+}
+.es-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.es-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.es-hair-grey {
+  fill: var(--color-surface-press);
+}
+.es-cap {
+  fill: var(--color-wrong);
+}
+.es-face circle {
+  fill: var(--color-inverse-surface);
+}
+.es-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.es-specs circle,
+.es-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.es-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.es-shirt-riya {
+  fill: var(--color-category-4);
+}
+.es-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.es-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.es-shirt-mom {
+  fill: var(--color-category-3);
+}
+.es-shirt-doctor {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.es-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.es-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.es-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.es-shirt-grandpa-line {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.es-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+.es-shirt-doctor-line {
+  stroke: var(--color-surface-press);
+}
+
+/* Rooms and skies. */
+.es-night {
+  fill: var(--ey-night);
+}
+.es-room {
+  fill: var(--color-secondary-container);
+}
+.es-classroom {
+  fill: color-mix(in srgb, var(--color-secondary-container) 60%, var(--color-surface));
+}
+.es-clinic {
+  fill: color-mix(in srgb, var(--color-primary-container) 45%, var(--color-surface));
+}
+.es-sunny {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-surface));
+}
+.es-dim-room {
+  fill: color-mix(in srgb, var(--ey-night) 88%, var(--color-on-secondary-container));
+}
+.es-shadowy rect,
+.es-shadowy circle {
+  fill: color-mix(in srgb, var(--ey-night) 75%, var(--color-on-surface-variant));
+}
+.es-door {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--ey-night));
+}
+.es-sun {
+  fill: var(--color-secondary);
+}
+.es-day-sky {
+  fill: var(--ey-sky);
+}
+.es-dawn-sky {
+  fill: color-mix(in srgb, var(--color-secondary) 25%, var(--ey-sky));
+}
+.es-dawn {
+  fill: color-mix(in srgb, var(--ey-sky) 70%, var(--color-primary));
+}
+.es-dawn-glow {
+  fill: color-mix(in srgb, var(--color-secondary) 70%, var(--color-wrong));
+  opacity: 0.55;
+}
+.es-red-sun {
+  fill: color-mix(in srgb, var(--color-wrong) 80%, var(--color-secondary));
+}
+.es-hill-far {
+  fill: color-mix(in srgb, var(--ey-ground) 60%, var(--color-primary));
+}
+.es-hill-near,
+.es-ridge {
+  fill: var(--ey-ground);
+}
+.es-hill-night {
+  fill: color-mix(in srgb, var(--ey-ground) 35%, var(--ey-night));
+}
+.es-road {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 10px;
+}
+.es-sofa {
+  fill: color-mix(in srgb, var(--color-category-3) 60%, var(--color-inverse-surface));
+}
+.es-sofa-front {
+  fill: color-mix(in srgb, var(--color-category-3) 75%, var(--color-inverse-surface));
+}
+
+/* Things. */
+.es-beam {
+  fill: var(--color-surface);
+  opacity: 0.12;
+}
+.es-screen {
+  fill: var(--color-surface);
+}
+.es-box {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 60%, var(--color-secondary));
+}
+.es-rocket {
+  fill: var(--color-wrong);
+}
+.es-window {
+  fill: var(--color-primary);
+}
+.es-flame {
+  fill: var(--color-secondary);
+}
+.es-thought ellipse,
+.es-thought > circle {
+  fill: var(--color-surface);
+  opacity: 0.92;
+}
+.es-thought .es-eyeball {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+  opacity: 1;
+}
+.es-eyelens {
+  fill: var(--ey-glass);
+  stroke: var(--color-primary);
+  stroke-width: 1px;
+}
+.es-eyerays {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 1.2px;
+}
+.es-upside {
+  stroke: var(--color-right);
+  stroke-width: 2px;
+}
+.es-upside-head {
+  fill: var(--color-right);
+}
+.es-board {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-inverse-surface));
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 3px;
+}
+.es-chalk path {
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  fill: none;
+}
+.es-desk {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-secondary));
+}
+.es-squiggle path {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.es-window-frame {
+  fill: var(--ey-sky);
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.es-paper,
+.es-card,
+.es-notebook {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.es-print {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+  fill: none;
+}
+.es-paper-title {
+  font: 800 6px var(--font-display);
+  fill: var(--color-on-surface);
+}
+.es-card-text {
+  font: 800 8.5px var(--font-display);
+  fill: var(--color-primary);
+}
+.es-bifocal-word {
+  font: 800 8px var(--font-body);
+  fill: var(--color-primary);
+}
+.es-notebook-title {
+  font: 800 12px var(--font-display);
+  fill: var(--color-primary);
+}
+.es-specs-up circle {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+}
+.es-chart {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.es-chart-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  fill: var(--color-on-surface);
+}
+.es-chair {
+  fill: var(--color-on-surface-variant);
+}
+.es-trial rect {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 1.4px;
+}
+.es-sight {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 1px;
+  stroke-dasharray: 3 3;
+}
+.es-tv {
+  fill: var(--color-inverse-surface);
+}
+.es-tv-stand {
+  fill: var(--color-on-surface-variant);
+}
+.es-bifocal-lens {
+  fill: var(--ey-glass);
+  stroke: var(--color-inverse-surface);
+  stroke-width: 2px;
+}
+.es-bifocal-split {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 1px;
+}
+.es-bifocal-mark {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 1.4px;
+}
+.es-poster {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 1.5px;
+}
+.es-poster-eye {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 1.4px;
+}
+.es-poster-pupil {
+  fill: var(--ey-iris);
+}
+.es-poster-text {
+  font: 800 13px var(--font-display);
+  fill: var(--color-primary);
+}
+.es-poster-small {
+  font: 700 6.5px var(--font-body);
+  fill: var(--color-on-surface);
+}
+.es-car {
+  fill: var(--color-wrong);
+}
+.es-car-top {
+  fill: color-mix(in srgb, var(--color-wrong) 70%, var(--color-surface));
+}
+.es-wheel {
+  fill: var(--color-inverse-surface);
+}
+.es-cliff {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--ey-ground));
+}
+.es-falls {
+  fill: color-mix(in srgb, var(--color-surface) 80%, var(--ey-sky));
+}
+.es-spray {
+  fill: var(--color-surface);
+  opacity: 0.7;
+}
+.es-bow {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 3px;
+  opacity: 0.85;
+}
+.es-pool {
+  fill: color-mix(in srgb, var(--ey-sky) 60%, var(--color-primary));
+}
+.es-star {
+  fill: var(--color-surface);
+}
+.es-star.is-twinkling {
+  animation: es-twinkle 1.4s steps(5, jump-none) infinite;
+}
+@keyframes es-twinkle {
+  50% {
+    opacity: 0.25;
+  }
+}
+.es-planet {
+  fill: var(--color-secondary-container);
+}
+.es-dhaba {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 55%, var(--ey-night));
+}
+.es-dhaba-roof {
+  fill: color-mix(in srgb, var(--color-wrong) 50%, var(--ey-night));
+}
+.es-stove {
+  fill: var(--color-on-surface-variant);
+}
+.es-forest {
+  fill: color-mix(in srgb, var(--ey-ground) 40%, var(--ey-night));
+}
+.es-sunbeam {
+  fill: var(--color-surface);
+  opacity: 0.28;
+}
+.es-mist {
+  fill: var(--color-surface);
+  opacity: 0.12;
+}
+.es-pine {
+  fill: color-mix(in srgb, var(--color-right) 55%, var(--ey-night));
+}
+.es-trunk {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 55%, var(--ey-night));
+}
+.es-path {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 40%, var(--color-surface));
+}
+.es-cast-shadow {
+  fill: var(--color-inverse-surface);
+  opacity: 0.22;
+}

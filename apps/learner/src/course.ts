@@ -9,15 +9,34 @@ import {
 } from "@chalk/content";
 
 export type CourseConcept = {
-  /** The concept's lesson, as `conceptLessons` names it. */
-  lessonId: string;
+  /** The concept's id in the build: what progress and events hang on. */
+  id: string;
+  /** Whether its chapter's bank has questions testing it (then it ends with practice). */
+  hasPractice: boolean;
   title: Localized;
   art: BuiltArt | null;
   /** Its glyph on the chapter's path, or null. */
   glyph: string | null;
+  /** Concepts it builds on (ids). */
+  prereqs: string[];
 };
-export type CourseChapter = { title: Localized; art: BuiltArt | null; concepts: CourseConcept[] };
-export type Course = { title: Localized; art: BuiltArt | null; chapters: CourseChapter[] };
+export type CourseChapter = {
+  /** Its chapter.json's path in build/, and that file's version: where its content is fetched from. */
+  path: string;
+  version: string;
+  title: Localized;
+  art: BuiltArt | null;
+  concepts: CourseConcept[];
+  /** Every prop type its lessons may use, so their drawing code loads with the chapter. */
+  props: string[];
+};
+export type Course = {
+  /** The book's id in the build; a group is for one. */
+  id: string;
+  title: Localized;
+  art: BuiltArt | null;
+  chapters: CourseChapter[];
+};
 
 /**
  * The books in build/, as the course and chapter screens show them: each book's chapters in
@@ -34,20 +53,26 @@ export function readCourses(files: Readonly<Record<string, unknown>>, prefix: st
   return buildIndexSchema.parse(index).books.map((bookRef) => {
     const book = builtBookSchema.parse(read(bookRef.path));
     return {
+      id: book.id,
       title: book.title,
       art: book.art,
       chapters: book.chapters.map((chapterRef) => {
         const chapter = builtChapterSchema.parse(read(chapterRef.path));
         return {
+          path: chapterRef.path,
+          version: chapterRef.version,
           title: chapter.title,
           art: chapter.art,
+          props: chapter.props,
           concepts: chapter.concepts.map((conceptRef) => {
             const concept = builtConceptSchema.parse(read(conceptRef.path));
             return {
-              lessonId: `build/${concept.source.path}`,
+              id: concept.id,
+              hasPractice: chapter.questions.some((q) => q.tests.includes(concept.id)),
               title: concept.title,
               art: concept.art,
               glyph: concept.glyph,
+              prereqs: concept.prereqs,
             };
           }),
         };

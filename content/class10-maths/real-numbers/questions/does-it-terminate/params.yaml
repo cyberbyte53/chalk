@@ -1,0 +1,15 @@
+# NCERT Ex 1.4 Q1, without long division.
+- params: { p: 13, q: 3125 }
+- params: { p: 17, q: 8 }
+- params: { p: 64, q: 455 }
+- params: { p: 15, q: 1600 }
+  firstTry: 1
+- params: { p: 29, q: 343 }
+- params: { p: 23, q: 200 }
+- params: { p: 6, q: 15 }
+  level: medium
+- params: { p: 35, q: 50 }
+  level: medium
+- params: { p: 77, q: 210 }
+  firstTry: 2
+  level: medium

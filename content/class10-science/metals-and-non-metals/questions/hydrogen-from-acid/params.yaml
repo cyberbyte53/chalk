@@ -1,0 +1,10 @@
+# Activity 3.11, Exercise 7.
+- params: { metal: Zn }
+  firstTry: 7
+- params: { metal: Cu }
+  firstTry: 8
+- params: { metal: Mg }
+- params: { metal: Al }
+- params: { metal: Fe }
+- params: { metal: Ag }
+- params: { metal: Au }

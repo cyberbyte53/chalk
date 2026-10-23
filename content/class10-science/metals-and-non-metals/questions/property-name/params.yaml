@@ -1,0 +1,9 @@
+# Activities 3.1–3.6, and in-text Q2 (malleable, ductile).
+- params: { property: malleable }
+  firstTry: 4
+- params: { property: ductile }
+  firstTry: 5
+- params: { property: lustre }
+- params: { property: sonorous }
+- params: { property: heat }
+- params: { property: electricity }

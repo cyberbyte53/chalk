@@ -1,0 +1,11 @@
+# Symptoms and causes of myopia, hypermetropia and presbyopia (NCERT 11.2; in-text Q4).
+- params: { item: blackboard }
+  firstTry: 1
+- params: { item: newspaper }
+- params: { item: imageInFront }
+- params: { item: imageBehind }
+- params: { item: longEyeball }
+  level: hard
+- params: { item: shortEyeball }
+  level: hard
+- params: { item: grandpa }

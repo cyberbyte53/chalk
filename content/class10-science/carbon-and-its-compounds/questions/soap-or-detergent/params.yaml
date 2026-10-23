@@ -1,0 +1,10 @@
+# Activities 4.11–4.12: hard water, scum, detergents.
+- params: { item: hard-soap }
+  firstTry: 1
+- params: { item: hard-detergent }
+  firstTry: 2
+- params: { item: hard-water }
+- params: { item: shampoo }
+  level: medium
+- params: { item: detergent-salt }
+  level: hard

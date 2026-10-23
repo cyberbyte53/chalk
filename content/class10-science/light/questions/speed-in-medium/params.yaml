@@ -1,0 +1,12 @@
+# v = c / n: NCERT in-text Q2 (glass of 1.50), then Table 10.3 media.
+- params: { medium: glass }
+  firstTry: 1
+- params: { medium: water }
+  firstTry: 2
+- params: { medium: crownGlass }
+- params: { medium: diamond }
+  level: medium
+- params: { medium: kerosene }
+  level: medium
+- params: { medium: ice }
+  level: hard

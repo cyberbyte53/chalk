@@ -1,0 +1,94 @@
+/* fiveRs: the card, the five bins, what went where. */
+.rs-five {
+  gap: 8px;
+}
+.rs-five-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+  font: 700 16px / 1.3 var(--font-display);
+  min-height: 64px;
+  justify-content: center;
+}
+.rs-five-ask {
+  font: 600 var(--text-caption) / 1.2 var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.rs-five-card .is-good,
+.rs-five-placed .is-good {
+  color: var(--color-right);
+}
+.rs-five-card .is-bad,
+.rs-five-placed .is-bad {
+  color: var(--color-wrong);
+}
+.rs-five-bins {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 6px;
+}
+.rs-five-bin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-primary-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+  color: var(--color-on-surface);
+  text-align: left;
+  cursor: pointer;
+}
+.rs-five-bin:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.rs-five-bin:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.rs-five-bin:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.rs-five-name {
+  font: 800 15px / 1.1 var(--font-display);
+  color: var(--color-primary);
+}
+.rs-five-meaning {
+  font: 600 var(--text-caption) / 1.25 var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.rs-five-count {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font: 800 13px / 1 var(--font-display);
+  color: var(--color-on-surface-variant);
+}
+.rs-five-placed {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 600 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+}
+.rs-five-placed li {
+  display: flex;
+  gap: 6px;
+}
+.rs-five-mark {
+  font-weight: 800;
+  min-width: 1em;
+}

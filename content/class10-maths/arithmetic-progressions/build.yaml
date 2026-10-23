@@ -1,0 +1,12 @@
+title: { en: Arithmetic Progressions, hi: समांतर श्रेढ़ियाँ }
+# Concepts in book order (NCERT 5.1 to 5.4, the full edition: Exercise 5.4 (optional) and the note on
+# the arithmetic mean included).
+concepts:
+  - patterns-and-aps
+  - the-nth-term
+  - using-the-nth-term
+  - sum-of-n-terms
+  - using-the-sum
+  - challenge-and-finale
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

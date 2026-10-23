@@ -7,15 +7,20 @@
   font-size: 1.1em;
 }
 
-/* A display formula gets its own line, and scrolls sideways rather than overflowing a phone. */
+/* A display formula gets its own line and is never clipped. Only one wider than the board (marked
+   is-wide by the view, which measures it) scrolls sideways; a scrolling box clips top and bottom,
+   so it gets room there for tall parts (braces, fractions, limits). */
 .rich-display-math {
   display: block;
 }
 .rich-display-math .katex-display {
   margin: 0.5em 0;
+}
+.rich-display-math.is-wide .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.1em 0;
+  padding: 0.6em 0;
+  margin: 0;
 }
 
 /* Inline maths never breaks across lines in the middle of a formula. */
@@ -26,4 +31,14 @@
 /* A title's maths keeps the title's weight in the words around it; the maths stays upright. */
 .text-title .katex {
   font-weight: normal;
+}
+
+/* Safari 26: KaTeX's table-cell spacer breaks its stacks; the view sets katex-vlist-fix only where a
+   test formula comes out wrong (rich-text-view.tsx), and the spacer becomes plain text there. */
+.katex-vlist-fix .katex .vlist-s {
+  display: inline;
+  font-size: inherit;
+  width: auto;
+  min-width: 0;
+  vertical-align: baseline;
 }

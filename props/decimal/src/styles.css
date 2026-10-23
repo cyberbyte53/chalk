@@ -239,6 +239,65 @@
   stroke-width: 3;
   opacity: 1;
 }
+.dx-head path {
+  fill: var(--color-on-surface-variant);
+}
+.dx-head.is-newest path {
+  fill: var(--color-primary);
+}
+.dx-head.is-loop path {
+  fill: var(--color-secondary);
+}
+.dx-step-digit {
+  font: 800 12px var(--font-display);
+  fill: var(--color-on-surface-variant);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+}
+.dx-step.is-newest .dx-step-digit {
+  fill: var(--color-primary);
+}
+.dx-step.is-loop .dx-step-digit {
+  fill: var(--color-secondary);
+}
+/* p and q typed in, and a button to start the division again. */
+.dx-fields {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.dx-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 var(--text-note) var(--font-display);
+  color: var(--color-on-surface-variant);
+}
+.dx-field input {
+  width: 64px;
+  height: 40px;
+  border: 2px solid var(--color-outline-variant);
+  border-radius: var(--shape-radius-m);
+  font: 700 var(--text-body) var(--font-display);
+  text-align: center;
+  color: var(--color-on-surface);
+  background: var(--color-surface);
+}
+.dx-again {
+  width: 44px;
+  height: 40px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  font: 700 18px var(--font-display);
+  cursor: pointer;
+}
+.dx-again:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 .dx-slot circle {
   fill: var(--color-surface);
   stroke: var(--color-outline-variant);

@@ -1,0 +1,129 @@
+/* forestStakeholders: the forest and the four stakeholders; NCERT's forest stories. */
+.rs-trunk {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-inverse-surface));
+}
+.rs-leaves {
+  fill: var(--color-right);
+}
+.rs-forest-floor {
+  fill: color-mix(in srgb, var(--color-right) 22%, var(--color-surface-container));
+}
+.rs-stake {
+  cursor: pointer;
+}
+.rs-stake-card {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5px;
+}
+.rs-stake.is-sel .rs-stake-card {
+  fill: var(--color-primary-container);
+  stroke: var(--color-primary);
+  stroke-width: 2.5px;
+}
+.rs-tie {
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.rs-tie.is-high {
+  stroke: var(--color-right);
+  stroke-width: 3.5px;
+}
+.rs-tie.is-some {
+  stroke: var(--color-on-surface-variant);
+}
+.rs-tie.is-none {
+  stroke: var(--color-outline-variant);
+  stroke-dasharray: 3 4;
+}
+.rs-basket {
+  fill: var(--color-secondary);
+}
+.rs-office {
+  fill: var(--color-on-surface-variant);
+}
+.rs-flagpole {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.2px;
+}
+.rs-flag {
+  fill: var(--color-right);
+}
+.rs-log {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-inverse-surface));
+}
+.rs-lens {
+  fill: var(--color-primary-container);
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+}
+.rs-lens-bar {
+  fill: var(--color-on-surface);
+}
+.rs-stake-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--color-surface-container);
+  font: 600 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+}
+.rs-stake-panel strong {
+  font: 800 15px / 1.2 var(--font-display);
+}
+.rs-stake-dep {
+  color: var(--color-on-surface-variant);
+}
+.rs-stake-dep.is-high {
+  color: var(--color-right);
+}
+.rs-caption.is-dim {
+  color: var(--color-on-surface-variant);
+}
+.rs-desert {
+  fill: color-mix(in srgb, var(--color-secondary) 18%, var(--color-surface-container));
+}
+.rs-sand {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+}
+.rs-award {
+  fill: var(--color-secondary);
+}
+.rs-mountain {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 35%, var(--color-surface));
+}
+.rs-meadow {
+  fill: color-mix(in srgb, var(--color-right) 40%, var(--color-surface));
+}
+.rs-sheep {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.rs-fence {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-inverse-surface));
+}
+.rs-tall-grass {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-right) 70%, var(--color-secondary));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.rs-short-grass {
+  fill: none;
+  stroke: var(--color-right);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.rs-truck {
+  fill: var(--color-on-surface-variant);
+}
+.rs-wheel {
+  fill: var(--color-inverse-surface);
+}
+.rs-stump {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-inverse-surface));
+}

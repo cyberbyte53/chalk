@@ -1,0 +1,11 @@
+# NCERT Exercise 4.1 Q2 and Example 1 (i).
+- params: { item: plot }
+  firstTry: 3
+  level: easy
+- params: { item: consecutive }
+  level: easy
+- params: { item: rohan }
+  firstTry: 4
+- params: { item: train }
+  level: hard
+- params: { item: marbles }

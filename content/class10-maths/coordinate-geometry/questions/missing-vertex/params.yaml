@@ -1,0 +1,7 @@
+# NCERT Example 10 and Exercise 7.2 Q6, Q7, Q10.
+- params: { item: ex10 }
+  firstTry: 5
+- params: { item: q6 }
+- params: { item: q7 }
+  firstTry: 6
+- params: { item: q10 }

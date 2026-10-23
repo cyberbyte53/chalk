@@ -1,0 +1,7 @@
+# NCERT 8.3.3(c) and Exercise 6: what happens when the egg is not fertilised; why menstruation occurs.
+- params: { case: why }
+  firstTry: 1
+- params: { case: eggLife }
+  firstTry: 2
+- params: { case: duration }
+- params: { case: lining }

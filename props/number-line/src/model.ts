@@ -1,4 +1,5 @@
 import {
+  type Element,
   type Emit,
   type TaskContext,
   actionsFor,
@@ -438,13 +439,53 @@ export const numberLine = defineProp({
       describe: "The learner let go after sliding the line: the window `from`–`to` it rests on",
     },
   },
+  observe: (s) => {
+    const view = { from: s.from, to: s.to, width: 1 };
+    const level = decimalsFor((s.to - s.from) / 10);
+    const elements: Element[] = [{ id: NumberLinePart.Axis, value: `${s.from} to ${s.to}` }];
+    if (s.showTicks)
+      for (const v of ticks(view))
+        elements.push({ id: `${NumberLinePart.TickPrefix}${v}`, value: formatValue(v, level) });
+    // The dot: only while it is shown and inside the window.
+    if (s.showMarker && isInView(s, s.marker))
+      elements.push({ id: NumberLinePart.Marker, value: s.marker });
+    for (const mark of s.marks)
+      if (isInView(s, mark.at))
+        elements.push({ id: `${NumberLinePart.MarkPrefix}${mark.label}`, value: mark.at });
+    for (const dot of s.dots)
+      if (isInView(s, dot.at)) elements.push({ id: `dot:${dot.at}`, value: dot.at });
+    if (s.split !== null) {
+      elements.push({
+        id: NumberLinePart.Split,
+        value: `${s.split.from} to ${s.split.to} in ${s.split.parts} equal parts`,
+      });
+      // The cuts are unlabelled: the student sees the 1st, 2nd, … cut, not a number.
+      splitPoints(s.split).forEach((p, i) => {
+        if (isInView(s, p))
+          elements.push({ id: `${NumberLinePart.SplitPointPrefix}${i}`, value: `cut ${i}` });
+      });
+      if (s.isSplittable) elements.push({ id: NumberLinePart.SplitStepper, value: s.split.parts });
+    }
+    if (s.lens !== null)
+      elements.push({ id: NumberLinePart.Lens, value: `${s.lens.from} to ${s.lens.to}` });
+    if (s.isZoomable) elements.push({ id: NumberLinePart.ZoomIn }, { id: NumberLinePart.ZoomOut });
+    const dot = s.showMarker && isInView(s, s.marker) ? `, the dot at ${s.marker}` : "";
+    return {
+      summary: `a number line from ${s.from} to ${s.to}${s.showTicks ? ` (ticks every ${formatValue((s.to - s.from) / 10, level)})` : ""}${dot}`,
+      elements,
+      // Where the cuts fall is not written on screen.
+      ...(s.split !== null
+        ? { hidden: { splitPoints: splitPoints(s.split).map((p) => Number(p.toPrecision(10))) } }
+        : {}),
+    };
+  },
   parts: (s) => {
     const view = { from: s.from, to: s.to, width: 1 };
     const out: string[] = [
       NumberLinePart.Axis,
       ...(s.showTicks ? ticks(view).map((v) => `${NumberLinePart.TickPrefix}${v}`) : []),
     ];
-    if (s.showMarker) out.push(NumberLinePart.Marker);
+    if (s.showMarker && isInView(s, s.marker)) out.push(NumberLinePart.Marker);
     for (const mark of s.marks) {
       if (isInView(s, mark.at)) out.push(`${NumberLinePart.MarkPrefix}${mark.label}`);
     }

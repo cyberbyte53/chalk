@@ -1,0 +1,8 @@
+# NCERT Table 2.3.
+- params: { item: vinegar }
+- params: { item: lemon }
+- params: { item: tamarind }
+- params: { item: tomato }
+- params: { item: curd }
+- params: { item: ant }
+  firstTry: 3

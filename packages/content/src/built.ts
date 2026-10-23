@@ -98,6 +98,8 @@ export const builtQuestionSchema = z
     family: id,
     level: z.nativeEnum(Level),
     origin: z.nativeEnum(Origin),
+    /** Its place (from 1) in the first practice after the lesson; absent: bank only. */
+    firstTry: z.number().int().min(1).optional(),
     params: z.record(z.string(), paramValue),
     board: boardSchema,
   })
@@ -136,7 +138,12 @@ export type BuiltConcept = z.infer<typeof builtConceptSchema>;
 
 /** A question as the bank lists it: enough to sample by level and by what is taught. */
 export const bankRefSchema = refSchema
-  .extend({ level: z.nativeEnum(Level), tests: z.array(id).min(1) })
+  .extend({
+    level: z.nativeEnum(Level),
+    tests: z.array(id).min(1),
+    /** Its place in the first practice after the lesson; absent: bank only. */
+    firstTry: z.number().int().min(1).optional(),
+  })
   .strict();
 export type BankRef = z.infer<typeof bankRefSchema>;
 

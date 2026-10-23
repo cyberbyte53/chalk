@@ -1,0 +1,8 @@
+# NCERT 16.3.2: traditional water harvesting systems and where they are found.
+- params: { case: khadin }
+  firstTry: 1
+- params: { case: bandhara }
+  firstTry: 2
+- params: { case: ahar }
+- params: { case: eri }
+- params: { case: surangam }

@@ -1,0 +1,10 @@
+# Section 4.4.1: ethanol, its reactions and its effects.
+- params: { item: sodium }
+  firstTry: 1
+- params: { item: dehydration }
+  firstTry: 2
+  level: medium
+- params: { item: methanol }
+- params: { item: denatured }
+- params: { item: fuel }
+  level: medium

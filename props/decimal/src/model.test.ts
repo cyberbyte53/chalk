@@ -40,6 +40,7 @@ function fraction(numerator: number, denominator: number, digitsShown = 0): Deci
     digitsShown,
     isClockShown: false,
     isAskingDigit: false,
+    isEditable: false,
     rejectedDigit: null,
   };
 }
@@ -362,6 +363,19 @@ describe("decimalExpansion: parts", () => {
     expect(parts(fraction(1, 7, 5))).not.toContain(DecimalExpansionPart.RepeatBar);
     expect(parts(fraction(1, 7, 6))).toContain(DecimalExpansionPart.RepeatBar);
     expect(parts(fraction(1, 8, 3))).not.toContain(DecimalExpansionPart.RepeatBar);
+  });
+});
+
+describe("a fraction the learner types", () => {
+  it("names p and q when editable, first", () => {
+    const parts = decimalExpansion.parts?.(look({ ...fraction(3, 8), isEditable: true }) as never);
+    expect(parts?.slice(0, 2)).toEqual([
+      DecimalExpansionPart.Numerator,
+      DecimalExpansionPart.Denominator,
+    ]);
+    expect(decimalExpansion.parts?.(look(fraction(3, 8)) as never)).not.toContain(
+      DecimalExpansionPart.Numerator,
+    );
   });
 });
 

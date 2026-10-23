@@ -1,0 +1,11 @@
+# Towards or away from the normal, by which medium is slower (NCERT in-text Q1, Table 10.3).
+- params: { from: air, to: water }
+  firstTry: 1
+- params: { from: water, to: air }
+  firstTry: 2
+- params: { from: glass, to: water }
+- params: { from: air, to: diamond }
+- params: { from: water, to: kerosene }
+  level: medium
+- params: { from: kerosene, to: alcohol }
+  level: hard

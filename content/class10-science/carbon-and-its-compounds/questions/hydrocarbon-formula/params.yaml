@@ -1,0 +1,12 @@
+# Table 4.2 and the general formulae: alkanes, alkenes, alkynes.
+- params: { item: c3-alkane }
+  firstTry: 1
+- params: { item: c4-alkane }
+  firstTry: 2
+- params: { item: c5-alkane }
+- params: { item: c6-alkane }
+- params: { item: c3-alkene }
+  level: medium
+- params: { item: c2-alkyne }
+- params: { item: c4-alkyne }
+  level: hard

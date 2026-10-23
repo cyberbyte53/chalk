@@ -1,0 +1,7 @@
+# NCERT 7.2 Remark 1: the distance of P(x, y) from the origin.
+- params: { item: threeFour }
+  firstTry: 3
+- params: { item: sixEight }
+- params: { item: fiveTwelve }
+  firstTry: 4
+- params: { item: ones }

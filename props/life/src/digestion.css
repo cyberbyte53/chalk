@@ -1,0 +1,105 @@
+/* digestiveTract */
+.ldt-head {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, var(--color-surface));
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.2px;
+}
+.ldt-mouth,
+.ldt-tube {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+  stroke-width: 7px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ldt-mouth {
+  stroke-width: 3px;
+}
+.ldt-small {
+  stroke-width: 5px;
+}
+.ldt-large {
+  stroke-width: 9px;
+  stroke: color-mix(in srgb, var(--color-wrong) 30%, var(--color-surface));
+}
+.ldt-organ {
+  fill: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+  stroke: none;
+}
+.ldt-tube.is-here,
+.ldt-mouth.is-here {
+  stroke: var(--color-primary);
+}
+.ldt-organ.is-here {
+  fill: var(--color-primary);
+}
+.ldt-liver {
+  fill: color-mix(in srgb, var(--color-wrong) 55%, var(--color-on-secondary-container));
+  opacity: 0.75;
+}
+.ldt-pancreas {
+  fill: color-mix(in srgb, var(--color-secondary) 50%, var(--color-surface));
+}
+.ldt-bolus {
+  fill: var(--color-secondary);
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 1.5px;
+  transition: cx 0.5s ease, cy 0.5s ease;
+}
+.ldt-starch {
+  fill: var(--color-secondary);
+}
+.ldt-protein {
+  fill: var(--color-category-3);
+}
+.ldt-fat {
+  fill: var(--color-category-2);
+}
+.ldt-lumen {
+  fill: color-mix(in srgb, var(--color-secondary) 12%, var(--color-surface));
+}
+.ldt-wall {
+  fill: color-mix(in srgb, var(--color-wrong) 40%, var(--color-surface));
+}
+.ldt-on-wall {
+  fill: var(--color-on-surface);
+}
+.ldt-villus {
+  fill: color-mix(in srgb, var(--color-wrong) 30%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-wrong) 55%, var(--color-surface));
+  stroke-width: 1.2px;
+}
+.ldt-capillary {
+  fill: none;
+  stroke: var(--color-wrong);
+  stroke-width: 1.5px;
+}
+.ldt-glass {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.8px;
+}
+.ldt-starch-solution {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 12%, var(--color-surface));
+}
+.ldt-iodine-light {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+}
+.ldt-blue-black {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.ldt-clock {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+}
+.ldt-hand {
+  stroke: var(--color-on-surface);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ldt-bolus {
+    transition: none;
+  }
+}

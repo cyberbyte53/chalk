@@ -1,0 +1,9 @@
+# NCERT 6.1, in-text Q1: is diffusion alone enough to bring oxygen to every cell of this organism?
+- params: { case: amoeba }
+  firstTry: 4
+- params: { case: human }
+  firstTry: 5
+- params: { case: bacterium }
+- params: { case: cow }
+- params: { case: paramoecium }
+- params: { case: fish }

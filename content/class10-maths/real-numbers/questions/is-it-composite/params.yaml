@@ -1,0 +1,7 @@
+# NCERT Ex 1.2 Q6 and kin: a product plus one of its own factors.
+- params: { factors: "7,11,13", add: 13 }
+- params: { factors: "7,6,5,4,3,2,1", add: 5 }
+- params: { factors: "3,5,7", add: 7 }
+  firstTry: 5
+  level: easy
+- params: { factors: "2,3,5,11", add: 11 }

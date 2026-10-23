@@ -40,10 +40,10 @@ const DEFAULT_URL: Record<string, string> = {
   [ProviderKind.OpenAiCompatible]: "https://api.deepseek.com",
 };
 
-/** JUGNU_* settings from apps/learner/.env, for whatever the shell doesn't set (the app's own key). */
+/** JUGNU_* settings from the repo's .env, for whatever the shell doesn't set (the app's own key). */
 function appEnv(root: string): Record<string, string> {
   try {
-    const text = readFileSync(join(root, "apps/learner/.env"), "utf8");
+    const text = readFileSync(join(root, ".env"), "utf8");
     return Object.fromEntries(
       text
         .split("\n")
@@ -87,7 +87,7 @@ if (modelName === undefined) {
       "         [--judge-model <name> --judge-provider … --judge-url … --judge-key …] [--only <id part>]\n" +
       "         [--students [--student-model <name>] [--runs <n>] [--baseline]]\n" +
       "Model, provider, server and key default to JUGNU_MODEL, JUGNU_PROVIDER, JUGNU_MODEL_SERVER and\n" +
-      "JUGNU_API_KEY, from the shell or apps/learner/.env.",
+      "JUGNU_API_KEY, from the shell or the repo's .env.",
   );
   process.exit(1);
 }

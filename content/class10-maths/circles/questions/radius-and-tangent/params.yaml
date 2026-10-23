@@ -1,0 +1,7 @@
+# NCERT Theorem 10.1, its remarks, and Exercise 10.2 Q5.
+- params: { item: angle }
+  firstTry: 3
+- params: { item: q5 }
+- params: { item: normal }
+- params: { item: shortest }
+  level: medium

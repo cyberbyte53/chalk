@@ -1,0 +1,20 @@
+# Section 3.1: metals, non-metals, and the exceptions (mercury, gallium, sodium, iodine, graphite, diamond, bromine).
+- params: { element: iron }
+  firstTry: 1
+- params: { element: sulphur }
+  firstTry: 2
+- params: { element: iodine }
+  firstTry: 3
+- params: { element: copper }
+- params: { element: sodium }
+  level: medium
+- params: { element: mercury }
+  level: medium
+- params: { element: gallium }
+  level: hard
+- params: { element: graphite }
+  level: hard
+- params: { element: diamond }
+  level: medium
+- params: { element: bromine }
+  level: medium

@@ -1,0 +1,19 @@
+# NCERT Example 4, Exercise 15.1 Q14 and Q15.
+- params: { item: ex4 }
+  firstTry: 1
+  level: easy
+- params: { item: q14i }
+- params: { item: q14ii }
+  firstTry: 2
+- params: { item: q14iii }
+  level: hard
+- params: { item: q14iv }
+  level: easy
+- params: { item: q14v }
+  level: easy
+- params: { item: q14vi }
+  level: easy
+- params: { item: q15i }
+  level: easy
+- params: { item: q15iia }
+- params: { item: q15iib }

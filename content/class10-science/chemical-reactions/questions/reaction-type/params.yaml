@@ -1,0 +1,21 @@
+# NCERT Exercises 2, 8 and the text's examples of each type.
+- params: { equation: quickLimeWater }
+  firstTry: 1
+- params: { equation: limestoneHeat }
+  firstTry: 2
+- params: { equation: ironCopperSulphate }
+  firstTry: 3
+- params: { equation: sodiumSulphateBariumChloride }
+- params: { equation: coalBurns }
+  level: easy
+- params: { equation: electrolysisOfWater }
+- params: { equation: zincCopperSulphate }
+- params: { equation: leadNitratePotassiumIodide }
+- params: { equation: thermite }
+  level: hard
+- params: { equation: zincCarbonateHeat }
+- params: { equation: magnesiumHydrochloricAcid }
+  level: hard
+- params: { equation: hydrogenChlorine }
+- params: { equation: sodiumChlorideSilverNitrate }
+- params: { equation: silverChlorideLight }

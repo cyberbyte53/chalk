@@ -1,0 +1,9 @@
+# NCERT Example 2, Exercise 10.2 Q2, Q3, Q9, and the bisector from Theorem 10.2.
+- params: { item: q2 }
+  firstTry: 1
+- params: { item: q3 }
+- params: { item: example2 }
+- params: { item: q9 }
+- params: { item: bisect }
+  level: easy
+  firstTry: 2

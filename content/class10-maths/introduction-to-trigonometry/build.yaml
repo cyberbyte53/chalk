@@ -1,0 +1,11 @@
+title: { en: "Introduction to Trigonometry", hi: "त्रिकोणमिति का परिचय" }
+# Concepts in book order (NCERT 8.1 to 8.5, the full edition: complementary angles and the
+# identities included, with all their examples and exercises).
+concepts:
+  - trigonometric-ratios
+  - ratios-from-one-ratio
+  - ratios-of-specific-angles
+  - complementary-angles
+  - trigonometric-identities
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

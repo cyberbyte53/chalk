@@ -1,0 +1,13 @@
+# Activity 3.9 and section 3.2.1; in-text Q1 (sodium in kerosene), Exercise 12(b).
+- params: { metal: sodium }
+  firstTry: 4
+- params: { metal: gold }
+  firstTry: 5
+- params: { metal: aluminium }
+  level: hard
+- params: { metal: potassium }
+- params: { metal: magnesium }
+- params: { metal: zinc }
+- params: { metal: iron }
+- params: { metal: copper }
+- params: { metal: silver }

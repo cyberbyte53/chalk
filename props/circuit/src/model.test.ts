@@ -4,6 +4,7 @@ import {
   applyPatch,
   asAnyProp,
   initialState,
+  observationOf,
   prepareAction,
   viewOf,
 } from "@chalk/prop";
@@ -705,11 +706,31 @@ describe("circuit: schema and invariant refusals", () => {
 });
 
 describe("circuit: parts", () => {
-  it("names every component and node", () => {
+  it("names every component the student can tell apart: not wires, not junctions", () => {
     const view = read(circuit.defaults);
     const parts = circuit.parts?.(view) ?? [];
-    for (const c of circuit.defaults.components) expect(parts).toContain(c.id);
-    for (const n of circuit.defaults.nodes) expect(parts).toContain(n.id);
+    for (const c of circuit.defaults.components)
+      if (c.kind === ComponentKind.Wire) expect(parts).not.toContain(c.id);
+      else expect(parts).toContain(c.id);
+    for (const n of circuit.defaults.nodes) expect(parts).not.toContain(n.id);
+  });
+
+  it("is seen as its symbols show it: dials, switch positions, glow; currents stay hidden", () => {
+    const seen = observationOf(asAnyProp(circuit), circuit.defaults);
+    const byId = new Map(seen.elements.map((e) => [e.id, String(e.value)]));
+    for (const c of circuit.defaults.components) {
+      if (c.kind === ComponentKind.Wire) expect(byId.has(c.id)).toBe(false);
+      else expect(byId.has(c.id), c.id).toBe(true);
+    }
+    for (const [id, text] of byId) {
+      const c = circuit.defaults.components.find((x) => x.id === id);
+      if (c?.kind === ComponentKind.Ammeter) expect(text).toMatch(/reads \d+\.\d\d A$/);
+      if (c?.kind === ComponentKind.Switch) expect(text).toMatch(/closed|open/);
+      if (c?.kind === ComponentKind.Bulb) expect(text).toMatch(/glowing|dark|taken out/);
+    }
+    // What the circuit works out but no symbol shows is labelled hidden, never an element.
+    expect(Object.keys(seen.hidden ?? {})).toEqual(["current", "voltage"]);
+    expect(JSON.stringify(seen.elements)).not.toContain("brightness");
   });
 
   it("locates switches and bulbs with tap targets at least 44 px, and nothing else by guesswork", () => {

@@ -1,0 +1,8 @@
+# NCERT 16.3.1: big dams, what they give and the problems they raise.
+- params: { case: benefit }
+  firstTry: 1
+- params: { case: social }
+  firstTry: 2
+- params: { case: economic }
+- params: { case: environmental }
+- params: { case: narmada }

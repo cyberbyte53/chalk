@@ -1,0 +1,12 @@
+# NCERT Exercise 15.1 Q1 (iv), Q2, Q3 and Q25 (ii).
+- params: { item: q2car }
+  firstTry: 3
+- params: { item: q2ball }
+- params: { item: q2quiz }
+  level: medium
+- params: { item: q2baby }
+- params: { item: q3 }
+  firstTry: 4
+- params: { item: q25ii }
+  level: medium
+- params: { item: q1iv }

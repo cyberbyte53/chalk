@@ -18,6 +18,43 @@ type DecimalExpansionView = DecimalExpansionState & {
 
 const NEXT_DIGIT = "nextDigit";
 const TRY_DIGIT = "tryDigit";
+const SET_FRACTION = "setFraction";
+const START_AGAIN = "startAgain";
+const MAX_TYPED = 999;
+
+/** A typed whole number: p or q. A value out of range snaps back. */
+function NumberField({
+  name,
+  value,
+  min,
+  part,
+  onChange,
+}: {
+  name: string;
+  value: number;
+  min: number;
+  part: string;
+  onChange: (value: number) => void;
+}): JSX.Element {
+  return (
+    <label class="dx-field" data-part={part}>
+      <span>{name}</span>
+      <input
+        type="number"
+        inputMode="numeric"
+        min={min}
+        max={MAX_TYPED}
+        value={value}
+        onChange={(event) => {
+          const input = event.target as HTMLInputElement;
+          const next = Number(input.value);
+          if (Number.isInteger(next) && next >= min && next <= MAX_TYPED) onChange(next);
+          else input.value = String(value);
+        }}
+      />
+    </label>
+  );
+}
 /** Width of one digit column, in px. */
 const COL = 15;
 /** The decimal point's column has no width: the digits of the top two rows step aside for it. */
@@ -240,6 +277,35 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
   // The whole-part digits come first in `quotient`; the bar starts after them, at the block.
   return (
     <div class={`dx${s.hasEnded ? " is-ended" : ""}${s.hasRepeated ? " is-repeated" : ""}`}>
+      {s.isEditable && (
+        <div class="dx-fields">
+          <NumberField
+            name="p"
+            value={s.numerator}
+            min={0}
+            part={DecimalExpansionPart.Numerator}
+            onChange={(value) =>
+              call(SET_FRACTION, { numerator: value, denominator: s.denominator })
+            }
+          />
+          <NumberField
+            name="q"
+            value={s.denominator}
+            min={2}
+            part={DecimalExpansionPart.Denominator}
+            onChange={(value) => call(SET_FRACTION, { numerator: s.numerator, denominator: value })}
+          />
+          <button
+            type="button"
+            class="dx-again"
+            aria-label="Start again"
+            disabled={s.digitsShown === 0}
+            onClick={() => call(START_AGAIN)}
+          >
+            ↺
+          </button>
+        </div>
+      )}
       <div class="dx-top">
         {s.isAskingDigit || s.hasEnded ? (
           <div class="dx-sheet" ref={scroller} role="img" aria-label={label}>
@@ -276,9 +342,9 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
   );
 }
 
-const CLOCK = 150;
+const CLOCK = 176;
 const CENTRE = CLOCK / 2;
-const RING = 58;
+const RING = 68;
 
 /**
  * The remainder clock: a slot for each non-zero remainder dividing by q can leave (q − 1 of them)
@@ -312,23 +378,54 @@ function RemainderClock({ s }: { s: DecimalExpansionView }): JSX.Element {
       data-part={DecimalExpansionPart.Clock}
     >
       <circle class="dx-clock-ring" cx={CENTRE} cy={CENTRE} r={RING} />
+      <defs>
+        {["plain", "newest", "loop"].map((tone) => (
+          <marker
+            key={tone}
+            id={`dx-head-${tone}`}
+            class={`dx-head is-${tone}`}
+            viewBox="0 0 8 8"
+            refX="7"
+            refY="4"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
+            <path d="M0 0 L8 4 L0 8 z" />
+          </marker>
+        ))}
+      </defs>
       {path.slice(1).map((r, i) => {
-        const from = at(path[i] ?? 0);
-        const to = at(r);
-        const classes = ["dx-chord"];
-        if (isLoopStep(i)) classes.push("is-loop");
-        if (i === path.length - 2) classes.push("is-newest");
+        const a = at(path[i] ?? 0);
+        const b = at(r);
+        // Stop short of both dots, so the arrowhead shows; the digit sits beside the middle.
+        const length = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+        const ux = (b.x - a.x) / length;
+        const uy = (b.y - a.y) / length;
+        const gap = (r === 0 ? 12 : dot) + 2;
+        const from = { x: a.x + ux * (dot + 2), y: a.y + uy * (dot + 2) };
+        const to = { x: b.x - ux * gap, y: b.y - uy * gap };
+        const tone = isLoopStep(i) ? "loop" : i === path.length - 2 ? "newest" : "plain";
+        const digit = s.digits[i];
+        const mid = { x: (a.x + b.x) / 2 - uy * 9, y: (a.y + b.y) / 2 + ux * 9 };
         return (
-          <line
-            // A step of the path is its place in the division.
-            // biome-ignore lint/suspicious/noArrayIndexKey: see above
-            key={i}
-            class={classes.join(" ")}
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
-          />
+          // A step of the path is its place in the division.
+          // biome-ignore lint/suspicious/noArrayIndexKey: see above
+          <g key={i} class={`dx-step is-${tone}`}>
+            <line
+              class={`dx-chord${tone === "plain" ? "" : ` is-${tone === "loop" ? "loop" : "newest"}`}`}
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+              marker-end={`url(#dx-head-${tone})`}
+            />
+            {isLabelled && digit !== undefined && (
+              <text class="dx-step-digit" x={mid.x} y={mid.y + 4} text-anchor="middle">
+                {digit}
+              </text>
+            )}
+          </g>
         );
       })}
       <g

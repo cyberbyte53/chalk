@@ -1,0 +1,19 @@
+# NCERT Examples 1–4 and Exercise 13.1 Q1–Q4, Q6, Q7.
+- params: { item: q1 }
+  firstTry: 1
+  level: easy
+- params: { item: ex2 }
+  firstTry: 2
+- params: { item: ex1 }
+- params: { item: ex3orange }
+  level: hard
+- params: { item: ex3yellow }
+  level: hard
+- params: { item: ex4 }
+- params: { item: q2 }
+- params: { item: q3 }
+  firstTry: 3
+- params: { item: q4 }
+- params: { item: q6 }
+- params: { item: q7 }
+  level: hard

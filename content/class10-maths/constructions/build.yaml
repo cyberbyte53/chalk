@@ -1,0 +1,11 @@
+title: { en: Constructions, hi: रचनाएँ }
+# Concepts in book order (NCERT Chapter 11, the full edition: Construction 11.1 with its
+# alternative method, Construction 11.2 smaller and larger, Construction 11.3 and the tangent at a
+# point, every justification, Exercises 11.1 and 11.2).
+concepts:
+  - dividing-a-segment
+  - similar-triangle-smaller
+  - similar-triangle-larger
+  - tangents-by-construction
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

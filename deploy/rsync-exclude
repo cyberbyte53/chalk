@@ -1,0 +1,10 @@
+.git/
+node_modules/
+dist/
+build/
+tmp/
+.env
+_to_delete/
+.chalk-xfer/
+.cursor/
+.DS_Store

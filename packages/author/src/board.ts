@@ -201,6 +201,8 @@ export class BoardKit {
   private readonly studentOnlyActions: string[] = [];
   private readonly steps: Step[] = [];
   private readonly notes: NoteCheck[] = [];
+  private boardPurpose: string | undefined;
+  private readonly propsStandFor: Record<string, string> = {};
 
   /** Places a prop: `b.prop(numberLine, "line", { from: 2, to: 3 })`. */
   prop<S extends StoredState, A extends string, G extends string, D extends string>(
@@ -244,6 +246,16 @@ export class BoardKit {
     this.studentOnlyActions.push(action.target);
   }
 
+  /** For Jugnu, in plain English: what this board is for ("estimate √2 by squeezing"). */
+  purpose(text: string): void {
+    this.boardPurpose = text;
+  }
+
+  /** For Jugnu, in plain English: what a prop stands for here ("the student's guess for √2"). */
+  standsFor(prop: AnyPlaced, text: string): void {
+    this.propsStandFor[prop.name] = text;
+  }
+
   /** How a learner gets this board right. Played on the real props at publish. */
   witness(...steps: Step[]): void {
     this.steps.push(...steps);
@@ -277,6 +289,16 @@ export class BoardKit {
         is: this.isRules,
         when: this.whenRules,
         studentOnly: this.studentOnlyActions,
+        ...(this.boardPurpose !== undefined || Object.keys(this.propsStandFor).length > 0
+          ? {
+              jugnu: {
+                ...(this.boardPurpose !== undefined ? { purpose: this.boardPurpose } : {}),
+                ...(Object.keys(this.propsStandFor).length > 0
+                  ? { props: { ...this.propsStandFor } }
+                  : {}),
+              },
+            }
+          : {}),
       },
       witness: this.steps,
       noteChecks: this.notes,

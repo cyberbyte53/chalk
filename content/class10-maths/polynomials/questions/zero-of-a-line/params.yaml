@@ -1,0 +1,6 @@
+# NCERT 2.1 and 2.2: 2x + 3 is the book's own example.
+- params: { a: 2, b: 3 }
+- params: { a: 3, b: -5 }
+  firstTry: 4
+- params: { a: -4, b: 6 }
+- params: { a: 5, b: 2 }

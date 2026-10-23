@@ -1,0 +1,100 @@
+/* shared plant pieces */
+.pl-sky {
+  fill: var(--color-surface-container);
+}
+.pl-leaf {
+  fill: color-mix(in srgb, var(--color-right) 55%, var(--color-surface));
+  stroke: var(--color-right);
+  stroke-width: 1.2px;
+}
+.pl-leaf.is-old {
+  fill: color-mix(in srgb, var(--color-right) 25%, var(--color-on-secondary-container));
+  opacity: 0.7;
+}
+.pl-vein {
+  stroke: var(--color-right);
+  stroke-width: 0.8px;
+}
+.pl-stem {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-right) 70%, var(--color-inverse-surface));
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.pl-stem.is-thick {
+  stroke-width: 5px;
+}
+.pl-stem.is-cut {
+  stroke-dasharray: 0;
+}
+.pl-roots path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-secondary-container) 70%, var(--color-surface));
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+.pl-pot {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 55%, var(--color-secondary));
+}
+.pl-pot-rim {
+  fill: var(--color-on-secondary-container);
+}
+.pl-soil,
+.pl-ground {
+  fill: color-mix(in srgb, var(--color-on-secondary-container) 45%, var(--color-inverse-surface));
+}
+.pl-ground {
+  opacity: 0.55;
+}
+.pl-water {
+  fill: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+}
+.pl-jar {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+}
+.pl-potato {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-surface));
+  stroke: var(--color-on-secondary-container);
+  stroke-width: 1.4px;
+}
+.pl-eye {
+  fill: var(--color-on-secondary-container);
+}
+.pl-cotton {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5px;
+}
+.pl-bud {
+  fill: color-mix(in srgb, var(--color-right) 80%, var(--color-inverse-surface));
+}
+.pl-cut {
+  stroke: var(--color-wrong);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+.pl-tie {
+  fill: var(--color-secondary);
+}
+.pl-rose circle {
+  fill: var(--color-wrong);
+}
+.pl-rose .pl-rose-in {
+  fill: color-mix(in srgb, var(--color-wrong) 60%, var(--color-inverse-surface));
+}
+.pl-tipcells,
+.pl-callus {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-surface));
+  stroke: var(--color-right);
+  stroke-width: 1.2px;
+}
+.pl-dish {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.pl-medium {
+  fill: color-mix(in srgb, var(--color-secondary) 18%, var(--color-surface));
+}

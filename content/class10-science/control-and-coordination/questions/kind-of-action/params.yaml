@@ -1,0 +1,9 @@
+# NCERT 7.1.1–7.1.2: reflex, voluntary and involuntary actions.
+- params: { case: flame }
+- params: { case: writing }
+- params: { case: heart }
+- params: { case: pupil }
+- params: { case: salivation }
+  level: medium
+- params: { case: walking }
+  level: medium

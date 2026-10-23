@@ -1,0 +1,11 @@
+title: { en: Quadratic Equations, hi: द्विघात समीकरण }
+# Concepts in book order (NCERT 4.1 to 4.5, the full edition, completing the square included).
+concepts:
+  - what-is-a-quadratic-equation
+  - solving-by-factorising
+  - completing-the-square
+  - quadratic-formula
+  - word-problems
+  - nature-of-roots
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

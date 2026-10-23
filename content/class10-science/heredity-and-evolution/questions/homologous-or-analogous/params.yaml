@@ -1,0 +1,11 @@
+# Homologous vs analogous organs (NCERT 9.5.1, Exercises 2 and 6).
+- params: { pair: armForeleg }
+  firstTry: 1
+- params: { pair: butterflyBatWing }
+  firstTry: 2
+- params: { pair: birdBatWing }
+  level: hard
+- params: { pair: armFlipper }
+- params: { pair: teethTusks }
+- params: { pair: potatoRunner }
+  level: hard

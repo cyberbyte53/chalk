@@ -1,0 +1,9 @@
+# NCERT Examples 6–7 and Exercise 9.1 Q12, Q13, Q15.
+- params: { item: ex6 }
+  firstTry: 1
+- params: { item: ex7 }
+  level: medium
+  firstTry: 2
+- params: { item: q12 }
+- params: { item: q13 }
+- params: { item: q15 }

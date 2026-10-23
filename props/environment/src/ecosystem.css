@@ -1,0 +1,122 @@
+/* ecosystem: the jar-world */
+.ev-eco-day {
+  fill: color-mix(in srgb, var(--color-primary-container) 55%, var(--color-surface));
+}
+.ev-eco-night {
+  fill: color-mix(in srgb, var(--color-inverse-surface) 70%, var(--color-surface));
+}
+.ev-eco-sun circle {
+  fill: var(--color-secondary);
+}
+.ev-eco-sun line {
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.ev-eco-lid {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 55%, var(--color-surface));
+}
+.ev-eco-glass {
+  fill: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-surface));
+  stroke-width: 2px;
+}
+.ev-eco-water {
+  fill: color-mix(in srgb, var(--color-primary) 22%, var(--color-surface));
+  transition: fill 0.4s;
+}
+.ev-eco-water.is-foul {
+  fill: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--color-right) 40%, var(--color-secondary)) 45%,
+    var(--color-surface)
+  );
+}
+.ev-eco-sand {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-surface));
+}
+.ev-eco-plant path {
+  fill: none;
+  stroke: var(--color-right);
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+}
+.ev-eco-plant ellipse {
+  fill: var(--color-right);
+}
+.is-dim .ev-eco-plant path {
+  stroke: color-mix(in srgb, var(--color-right) 35%, var(--color-on-surface-variant));
+}
+.is-dim .ev-eco-plant ellipse {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-on-surface-variant));
+}
+.ev-eco-fish ellipse,
+.ev-eco-fish path {
+  fill: var(--color-secondary);
+}
+.ev-eco-eye {
+  fill: var(--color-inverse-surface);
+}
+.ev-eco-snail circle {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-on-secondary-container));
+}
+.ev-eco-snail-body {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 50%, var(--color-surface));
+}
+.ev-eco-spiral {
+  fill: none;
+  stroke: var(--color-surface);
+  stroke-width: 1px;
+}
+.ev-eco-remains ellipse {
+  fill: color-mix(in srgb, var(--color-secondary) 40%, var(--color-inverse-surface));
+}
+.ev-eco-microbes rect {
+  fill: var(--color-category-3);
+}
+.ev-eco-pump path {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2px;
+}
+.ev-eco-pump rect {
+  fill: var(--color-on-surface-variant);
+}
+.ev-eco-bubble {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 0.8px;
+  animation: ev-rise 2.4s linear infinite;
+}
+@keyframes ev-rise {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-24px);
+    opacity: 0.3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-eco-bubble {
+    animation: none;
+  }
+  .ev-eco-water {
+    transition: none;
+  }
+}
+.ev-eco-card {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.ev-tick {
+  font: 800 12px var(--font-display);
+}
+.ev-tick.is-good {
+  fill: var(--color-right);
+}
+.ev-tick.is-bad {
+  fill: var(--color-wrong);
+}

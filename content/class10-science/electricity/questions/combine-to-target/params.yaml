@@ -1,0 +1,11 @@
+# Reaching a target resistance (in-text Q4, Q5 of 12.6.2; Exercises 1 and 11).
+- params: { item: one }
+  level: medium
+  firstTry: 5
+- params: { item: four }
+- params: { item: nine }
+- params: { item: fourOfSixes }
+- params: { item: highest }
+  level: medium
+- params: { item: lowest }
+- params: { item: fifths }

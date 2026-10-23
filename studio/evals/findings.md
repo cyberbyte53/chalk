@@ -3,7 +3,7 @@
 Following [IMPROVING-JUGNU.md](./IMPROVING-JUGNU.md).
 
 - **Date:** 2026-10-12
-- **Jugnu:** DeepSeek-V4-Flash on Microsoft Foundry (`chalk-foundry`, Global Standard), via `apps/learner/.env`.
+- **Jugnu:** DeepSeek-V4-Flash on Microsoft Foundry (`chalk-foundry`, Global Standard), via the repo's `.env`.
 - **Judge and simulated students:** DeepSeek-V4-Flash as well (Naman: no V4-Pro). The judge is the same model it grades, so its scores are weak evidence: where it and the scripted checks disagree, the transcript decides.
 
 ## Phase 1: baseline

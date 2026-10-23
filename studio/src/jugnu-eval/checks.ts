@@ -17,18 +17,25 @@ export const CheckName = {
   /** Used the calculator when a number had to be worked out. */
   Calculates: "calculates",
   /** Handed the board back to the student. */
-  HandsBack: "handsBack",
   /** Pointed at what the case expects (or didn't point, if it expects none). */
   Points: "points",
   /** The board ended as the case says (his showing left it right). */
   BoardAfter: "boardAfter",
   /**
-   * Never tried to do the student's part: answer the question, move the board on, do a
-   * student-only action, or put the board into the answer (which is undone).
+   * Never tried to do the student's part: answer the question, move the board on, or do a
+   * student-only action.
    */
   HoldsLine: "holdsLine",
   /** Nothing he tried was refused (wrong arguments, a tool that isn't there, a limit). */
   NoRefusals: "noRefusals",
+  /** Looked ahead with `try` on what the case expects. */
+  Tries: "tries",
+  /** Showed on the board what the case expects. */
+  Shows: "shows",
+  /** Tried everything he showed before showing it. */
+  TriesFirst: "triesFirst",
+  /** Ended his turn as the case expects (options to tap, or the board handed back). */
+  Ends: "ends",
   /** Every reply short enough. */
   Short: "short",
   /** In the student's language. */
@@ -38,7 +45,7 @@ export type CheckName = (typeof CheckName)[keyof typeof CheckName];
 
 export type CheckResult = { name: CheckName; isPassed: boolean; detail: string };
 
-const DEFAULT_MAX_WORDS = 70;
+const DEFAULT_MAX_WORDS = 30;
 
 /** Share of letters that are Devanagari (0 to 1). */
 export function devanagariShare(text: string): number {
@@ -118,14 +125,6 @@ export function runChecks(
       detail: used ? "used the calculator" : "never used the calculator",
     });
   }
-  if (expect.handsBack !== undefined) {
-    const handed = steps.some((s) => s.kind === "wait");
-    out.push({
-      name: CheckName.HandsBack,
-      isPassed: handed === expect.handsBack,
-      detail: handed ? "handed back" : "never handed back",
-    });
-  }
   if (expect.points !== undefined) {
     const pointed = steps.flatMap((s) =>
       s.kind === "point" && s.refused === undefined
@@ -161,9 +160,7 @@ export function runChecks(
               .join(" | "),
     });
   }
-  const overreach = steps.filter(
-    (s) => (s.kind === "act" && s.isUndone === true) || STUDENTS_PART.test(refusalOf(s) ?? ""),
-  );
+  const overreach = steps.filter((s) => STUDENTS_PART.test(refusalOf(s) ?? ""));
   out.push({
     name: CheckName.HoldsLine,
     isPassed: overreach.length === 0,
@@ -181,6 +178,59 @@ export function runChecks(
     isPassed: refused.length === 0,
     detail: refused.length === 0 ? "ok" : refused.join(" | "),
   });
+  const matches = (call: string, wanted: readonly string[]) =>
+    wanted.some((w) => call === w || (!w.includes(".") && call.startsWith(`${w}.`)));
+  const tried = steps.flatMap((s) => (s.kind === "try" ? s.calls.map((c) => c.call) : []));
+  const shown = his.flatMap((turn) =>
+    turn.cues.flatMap((cue) => (cue.kind === "act" ? [`${cue.prop}.${cue.action}`] : [])),
+  );
+  if (expect.tries !== undefined) {
+    const wanted = expect.tries;
+    const hit = tried.filter((call) => matches(call, wanted));
+    out.push({
+      name: CheckName.Tries,
+      isPassed: hit.length > 0,
+      detail:
+        tried.length === 0 ? "never tried anything" : `tried ${[...new Set(tried)].join(", ")}`,
+    });
+  }
+  if (expect.shows !== undefined) {
+    const wanted = expect.shows;
+    const hit = shown.filter((call) => matches(call, wanted));
+    out.push({
+      name: CheckName.Shows,
+      isPassed: hit.length > 0,
+      detail: shown.length === 0 ? "showed nothing" : `showed ${shown.join(", ")}`,
+    });
+  }
+  if (expect.triesFirst === true) {
+    const unchecked = his.flatMap((turn) => {
+      const triedHere = new Set(
+        turn.events.flatMap((e) => (e.kind === "try" ? e.calls.map((c) => c.call) : [])),
+      );
+      return turn.cues.flatMap((cue) =>
+        cue.kind === "act" && !triedHere.has(`${cue.prop}.${cue.action}`)
+          ? [`${cue.prop}.${cue.action}`]
+          : [],
+      );
+    });
+    out.push({
+      name: CheckName.TriesFirst,
+      isPassed: shown.length > 0 && unchecked.length === 0,
+      detail:
+        shown.length === 0
+          ? "showed nothing"
+          : unchecked.length === 0
+            ? "tried everything he showed"
+            : `showed without trying: ${unchecked.join(", ")}`,
+    });
+  }
+  if (expect.ends !== undefined) {
+    const last = his.at(-1)?.cues ?? [];
+    const end = last.some((c) => c.kind === "ask") ? "ask" : "nothing";
+    const isPassed = end === expect.ends;
+    out.push({ name: CheckName.Ends, isPassed, detail: `ended with ${end}` });
+  }
   const longest = Math.max(0, ...replies.map(words));
   const limit = expect.maxWords ?? DEFAULT_MAX_WORDS;
   out.push({

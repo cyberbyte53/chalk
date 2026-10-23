@@ -1,0 +1,10 @@
+# √n is rational exactly when n is a perfect square.
+- params: { n: 2 }
+- params: { n: 5 }
+- params: { n: 49 }
+- params: { n: 8 }
+  level: medium
+- params: { n: 12 }
+  level: medium
+- params: { n: 144 }
+  level: medium

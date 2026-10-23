@@ -1,0 +1,4 @@
+# Construction 11.2: Example 1 (3/4) and Example 2 (5/3).
+- params: { item: smaller }
+  firstTry: 1
+- params: { item: larger }

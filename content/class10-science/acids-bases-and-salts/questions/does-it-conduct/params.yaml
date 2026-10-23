@@ -1,0 +1,8 @@
+# NCERT Activity 2.8, Exercises 6 and 7.
+- params: { item: hcl }
+- params: { item: glucose }
+  firstTry: 1
+- params: { item: alcohol }
+- params: { item: naoh }
+- params: { item: distilled }
+  level: medium

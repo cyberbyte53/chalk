@@ -1,0 +1,16 @@
+# NCERT 2.1's own examples, and a few more of the same kinds.
+- params: { expression: "4x + 2", kind: linear }
+  level: easy
+- params: { expression: "2y^2 - 3y + 4", kind: quadratic }
+  level: easy
+- params: { expression: "\\frac{1}{x - 1}", kind: not, power: "(x - 1)^{-1}" }
+- params: { expression: "\\sqrt{x} + 2", kind: not, power: "x^{\\frac{1}{2}}" }
+  firstTry: 1
+- params: { expression: "5x^3 - 4x^2 + x - \\sqrt{2}", kind: cubic }
+- params: { expression: "6x - 3 + 2x^2", kind: quadratic }
+  firstTry: 2
+- params: { expression: "\\sqrt{3}\\,x + 5", kind: linear }
+- params: { expression: "2 - x + x^3", kind: cubic }
+  firstTry: 3
+- params: { expression: "x^2 + \\frac{2}{x}", kind: not, power: "\\frac{2}{x} = 2x^{-1}" }
+- params: { expression: "5 - x^2", kind: quadratic }

@@ -1,0 +1,8 @@
+# What the force on a current depends on (NCERT 13.3; in-text Q1, Q2; Exercise 9).
+- params: { item: largest }
+  firstTry: 3
+- params: { item: moreCurrent }
+  firstTry: 4
+- params: { item: magnet }
+- params: { item: proton }
+  level: hard

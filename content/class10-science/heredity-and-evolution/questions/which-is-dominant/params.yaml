@@ -1,0 +1,8 @@
+# Which trait is dominant, from F1 (and F2); one case where the evidence can't tell (NCERT Ex 4).
+- params: { case: height }
+  firstTry: 3
+- params: { case: shape }
+- params: { case: flower }
+- params: { case: colour }
+- params: { case: lightEyes }
+  level: hard

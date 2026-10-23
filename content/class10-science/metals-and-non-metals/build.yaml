@@ -1,0 +1,14 @@
+title: { en: "Metals and Non-metals", hi: "धातु एवं अधातु" }
+# Concepts in book order (NCERT Chapter 3, the full edition).
+concepts:
+  - physical-properties
+  - metals-and-oxygen
+  - metals-with-water-and-acids
+  - reactivity-series
+  - ionic-compounds
+  - properties-of-ionic-compounds
+  - extraction-of-metals
+  - electrolysis-and-refining
+  - corrosion-and-alloys
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

@@ -1,0 +1,14 @@
+# Activity 3.14, section 3.5.1 (galvanising), Exercises 2 and 10.
+- params: { setup: tubeA }
+  firstTry: 1
+- params: { setup: tubeB }
+  firstTry: 2
+- params: { setup: galvanisedScratched }
+  firstTry: 3
+  level: hard
+- params: { setup: tubeC }
+- params: { setup: painted }
+  level: easy
+- params: { setup: stainless }
+- params: { setup: bareChain }
+  level: easy

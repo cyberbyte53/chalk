@@ -1,0 +1,6 @@
+# Choosing a fuel for a job (NCERT 14.1, Activities 14.1 and 14.2).
+- params: { item: village }
+  firstTry: 3
+- params: { item: rocket }
+- params: { item: city }
+  level: medium

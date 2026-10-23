@@ -1,0 +1,10 @@
+# Sections 4.3.3–4.3.4: addition and substitution reactions.
+- params: { item: hydrogenation }
+  firstTry: 1
+- params: { item: chlorination }
+  firstTry: 2
+- params: { item: sunlight }
+- params: { item: which-adds }
+  level: medium
+- params: { item: welding }
+  level: hard

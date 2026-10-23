@@ -11,7 +11,10 @@
     "validate": "tsx --tsconfig ../tsconfig.base.json src/cli.ts ../content",
     "publish-lesson": "tsx --tsconfig ../tsconfig.base.json src/publish-cli.ts",
     "test-jugnu": "tsx --tsconfig ../tsconfig.base.json src/jugnu-eval/cli.ts",
-    "content": "tsx --tsconfig ../tsconfig.base.json src/content/cli.ts"
+    "content": "tsx --tsconfig ../tsconfig.base.json src/content/cli.ts",
+    "cache-check": "tsx --tsconfig ../tsconfig.base.json src/jugnu-eval/cache-check.ts",
+    "trace": "tsx --tsconfig ../tsconfig.base.json src/jugnu-eval/trace.ts",
+    "chat-log": "tsx --tsconfig ../tsconfig.base.json src/jugnu-eval/chat-log.ts"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

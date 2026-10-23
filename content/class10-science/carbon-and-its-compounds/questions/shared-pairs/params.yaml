@@ -1,0 +1,14 @@
+# Section 4.1: shared pairs and bond types in simple molecules; in-text Q1 (CO₂).
+- params: { item: h2 }
+  firstTry: 1
+- params: { item: o2 }
+  firstTry: 2
+- params: { item: n2 }
+- params: { item: ch4 }
+- params: { item: nh3 }
+- params: { item: co2 }
+  level: medium
+- params: { item: c2h6 }
+  level: medium
+- params: { item: c2h2 }
+  level: hard

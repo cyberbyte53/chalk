@@ -1,0 +1,8 @@
+# Which sources are stored solar energy (Activity 14.7; Exercise 3).
+- params: { item: notSun }
+  firstTry: 3
+- params: { item: coal }
+- params: { item: hydro }
+  firstTry: 4
+- params: { item: tidal }
+  level: medium

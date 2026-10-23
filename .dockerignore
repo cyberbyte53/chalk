@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+.git
+tmp
+build
+.env
+.env.*
+!.env.example
+_to_delete
+.chalk-xfer
+.cursor

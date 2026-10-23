@@ -1,0 +1,87 @@
+/* Colours shared by the eye chapter's props, mixed only from the look's tokens. */
+.ey,
+.pr,
+.at,
+.sc,
+.es {
+  --ey-glass: color-mix(in srgb, var(--color-primary-container) 55%, var(--color-surface));
+  --ey-retina: color-mix(in srgb, var(--color-wrong) 55%, var(--color-secondary));
+  --ey-iris: color-mix(in srgb, var(--color-category-4) 65%, var(--color-inverse-surface));
+  --ey-muscle: color-mix(in srgb, var(--color-wrong) 45%, var(--color-surface));
+  /* The seven colours of the spectrum, red to violet. */
+  --ey-red: var(--color-wrong);
+  --ey-orange: color-mix(in srgb, var(--color-wrong) 45%, var(--color-secondary));
+  --ey-yellow: color-mix(in srgb, var(--color-secondary) 70%, var(--color-surface));
+  --ey-green: var(--color-right);
+  --ey-blue: color-mix(in srgb, var(--color-category-4) 45%, var(--color-primary));
+  --ey-indigo: var(--color-primary);
+  --ey-violet: var(--color-category-3);
+  --ey-white: var(--color-surface);
+  --ey-sky: color-mix(in srgb, var(--color-category-4) 35%, var(--color-primary-container));
+  --ey-night: var(--color-inverse-surface);
+  --ey-ground: color-mix(in srgb, var(--color-right) 35%, var(--color-on-secondary-container));
+  --ey-sun: var(--color-secondary);
+  --ey-skin: color-mix(in srgb, var(--color-secondary) 55%, var(--color-on-secondary-container));
+}
+
+/* Buttons under every eye-chapter picture. */
+.ey-button {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font: 700 var(--text-caption) var(--font-body);
+  cursor: pointer;
+}
+.ey-button.is-on {
+  background: var(--color-primary-container);
+  border-color: var(--color-primary);
+}
+.ey-button.is-quiet {
+  border-style: dashed;
+}
+.ey-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.ey-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Spectrum strokes and fills, by colour name. */
+.ey-c-red {
+  --c: var(--ey-red);
+}
+.ey-c-orange {
+  --c: var(--ey-orange);
+}
+.ey-c-yellow {
+  --c: var(--ey-yellow);
+}
+.ey-c-green {
+  --c: var(--ey-green);
+}
+.ey-c-blue {
+  --c: var(--ey-blue);
+}
+.ey-c-indigo {
+  --c: var(--ey-indigo);
+}
+.ey-c-violet {
+  --c: var(--ey-violet);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ey *,
+  .pr *,
+  .at *,
+  .sc *,
+  .es * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

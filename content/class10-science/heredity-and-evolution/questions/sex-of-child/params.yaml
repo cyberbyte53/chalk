@@ -1,0 +1,13 @@
+# Sex determination (NCERT 9.2.4, in-text Q4).
+- params: { case: decides }
+  firstTry: 1
+- params: { case: xSperm }
+  firstTry: 2
+- params: { case: ySperm }
+  firstTry: 3
+- params: { case: mother }
+- params: { case: chance }
+  level: medium
+- params: { case: reptile }
+- params: { case: pairs }
+  level: medium

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   type ChatMessage,
   ProviderKind,
+  anthropicProvider,
   ollamaProvider,
   openAiCompatibleProvider,
   parseArgs,
@@ -335,5 +336,134 @@ describe("tool calling", () => {
     // Words only: Ollama has no tool_choice, so the tools are left out.
     await provider.chat({ messages: conversation, tools: TOOLS, toolChoice: "none" });
     expect(sent[1]?.body.tools).toBeUndefined();
+  });
+});
+
+describe("anthropic", () => {
+  const tool = { name: "point", description: "Point at a prop.", parameters: { type: "object" } };
+  const chat: ChatMessage[] = [
+    { role: "system", content: "You are Jugnu." },
+    { role: "user", content: "help" },
+    {
+      role: "assistant",
+      content: "Let me look.",
+      toolCalls: [
+        { id: "t1", name: "point", args: { at: "a" }, rawArgs: '{"at":"a"}' },
+        { id: "t2", name: "point", args: undefined, rawArgs: "oops" },
+      ],
+    },
+    { role: "tool", toolCallId: "t1", name: "point", content: "ok" },
+    { role: "tool", toolCallId: "t2", name: "point", content: "refused" },
+    { role: "user", content: "and now?" },
+  ];
+
+  it("sends Claude's shape: system and tools cached, tool results merged into one user turn", async () => {
+    const { fetchFn, sent } = fakeFetch({
+      content: [
+        { type: "text", text: "Look at the ribbon." },
+        { type: "tool_use", id: "t3", name: "point", input: { at: "ribbon" } },
+      ],
+      usage: { input_tokens: 10, cache_read_input_tokens: 90, output_tokens: 7 },
+    });
+    const provider = anthropicProvider(
+      {
+        provider: ProviderKind.Anthropic,
+        url: "https://api.anthropic.com/",
+        model: "claude-haiku-5-5",
+        apiKey: "k",
+      },
+      fetchFn,
+    );
+    const reply = await provider.chat({
+      messages: chat,
+      tools: [tool],
+      toolChoice: { name: "point" },
+    });
+    const [call] = sent;
+    expect(call?.url).toBe("https://api.anthropic.com/v1/messages");
+    expect(call?.headers["x-api-key"]).toBe("k");
+    expect(call?.headers["anthropic-version"]).toBe("2023-06-01");
+    expect(call?.body.system).toEqual([
+      { type: "text", text: "You are Jugnu.", cache_control: { type: "ephemeral" } },
+    ]);
+    expect(call?.body.tool_choice).toEqual({ type: "tool", name: "point" });
+    expect(call?.body.tools).toEqual([
+      {
+        name: "point",
+        description: "Point at a prop.",
+        input_schema: { type: "object" },
+        cache_control: { type: "ephemeral" },
+      },
+    ]);
+    const turns = call?.body.messages as { role: string; content: Record<string, unknown>[] }[];
+    expect(turns.map((t) => t.role)).toEqual(["user", "assistant", "user"]);
+    expect(turns[1]?.content).toEqual([
+      { type: "text", text: "Let me look." },
+      { type: "tool_use", id: "t1", name: "point", input: { at: "a" } },
+      { type: "tool_use", id: "t2", name: "point", input: {} },
+    ]);
+    expect(turns[2]?.content).toEqual([
+      { type: "tool_result", tool_use_id: "t1", content: "ok" },
+      { type: "tool_result", tool_use_id: "t2", content: "refused" },
+      { type: "text", text: "and now?", cache_control: { type: "ephemeral" } },
+    ]);
+    expect(reply.content).toBe("Look at the ribbon.");
+    expect(reply.toolCalls).toEqual([
+      { id: "t3", name: "point", args: { at: "ribbon" }, rawArgs: '{"at":"ribbon"}' },
+    ]);
+    expect(reply.usage).toEqual({ input: 100, cached: 90, output: 7, cacheWritten: 0 });
+  });
+
+  it("answers JSON through one forced tool, and is chosen by providerFrom", async () => {
+    const { fetchFn, sent } = fakeFetch({
+      content: [{ type: "tool_use", id: "r", name: "reply", input: { say: "hi" } }],
+    });
+    const provider = providerFrom(
+      {
+        provider: ProviderKind.Anthropic,
+        url: "https://api.anthropic.com",
+        model: "claude-sonnet-5-5",
+      },
+      fetchFn,
+    );
+    expect(provider.id).toBe("anthropic:claude-sonnet-5-5");
+    expect(JSON.parse(await provider.complete(request))).toEqual({ say: "hi" });
+    expect(sent[0]?.body.tool_choice).toEqual({ type: "tool", name: "reply" });
+  });
+});
+
+describe("anthropic thinking off", () => {
+  it("asks again the way the model says to turn thinking off, and keeps that way", async () => {
+    const bodies: Record<string, unknown>[] = [];
+    let calls = 0;
+    const fetchFn = (async (_url: string, init: RequestInit) => {
+      bodies.push(JSON.parse(String(init.body)));
+      calls++;
+      if (calls === 1)
+        return new Response(
+          JSON.stringify({
+            type: "error",
+            error: {
+              type: "invalid_request_error",
+              message:
+                'To turn thinking off on this model, send "thinking": {"type": "between_tools"} instead of {"type": "disabled"}',
+            },
+          }),
+          { status: 400 },
+        );
+      return new Response(JSON.stringify({ content: [{ type: "text", text: "hi" }] }));
+    }) as unknown as typeof fetch;
+    const provider = anthropicProvider(
+      { provider: ProviderKind.Anthropic, url: "https://api.anthropic.com", model: "m" },
+      fetchFn,
+    );
+    const ask = { messages: [{ role: "user" as const, content: "x" }], tools: [] };
+    expect((await provider.chat(ask)).content).toBe("hi");
+    await provider.chat(ask);
+    expect(bodies.map((b) => b.thinking)).toEqual([
+      { type: "disabled" },
+      { type: "between_tools" },
+      { type: "between_tools" },
+    ]);
   });
 });

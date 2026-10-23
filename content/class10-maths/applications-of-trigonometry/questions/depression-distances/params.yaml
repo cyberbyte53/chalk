@@ -1,0 +1,6 @@
+# Angle of depression with a known height (the mission's temple steps, a cliff, a tower).
+- params: { item: temple }
+  firstTry: 2
+- params: { item: cliff }
+  level: easy
+- params: { item: steep }

@@ -4,7 +4,8 @@ Interactive lessons built from props, and Jugnu, an AI tutor (an agent on the bo
 
 ```bash
 pnpm install
-pnpm dev        # the learner app at http://localhost:5173 (phone width)
+pnpm dev        # the learner app at http://localhost:5173 (phone width), already signed in
+                # (needs .env from .env.example and Postgres at DATABASE_URL)
 pnpm check      # typecheck, tests, validate content, lint
 ```
 

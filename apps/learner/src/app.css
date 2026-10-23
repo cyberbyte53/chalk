@@ -37,10 +37,25 @@
   font-weight: 700;
   cursor: pointer;
 }
+/* Dev shell: which model Jugnu runs on (`?model=`); switching reopens the lesson on the same board.
+   Top right, with the events button under it, so neither covers the board's footer or the chat. */
+.dev-model {
+  position: fixed;
+  right: 8px;
+  top: 4px;
+  z-index: 50;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 8px;
+  background: var(--color-inverse-surface);
+  color: var(--color-on-inverse-surface);
+  font-size: 12px;
+  opacity: 0.75;
+}
 .log-toggle {
   position: fixed;
-  right: 12px;
-  bottom: 12px;
+  right: 8px;
+  top: 34px;
   border: none;
   border-radius: 10px;
   padding: 6px 10px;
@@ -229,4 +244,1139 @@
 .stop-go {
   font-weight: 800;
   color: var(--color-primary);
+}
+.stop-node.is-done {
+  border: none;
+  background: var(--color-right);
+  color: var(--color-on-primary);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--color-right) 70%, var(--color-on-surface));
+}
+.stop-node.is-done path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.stop-status {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-right);
+}
+
+/* The app's own screens (sign-in, setup, home, practice): Calm 5, one column, buttons at the foot. */
+.page {
+  color: var(--color-on-surface);
+}
+.page-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px 0;
+}
+.page-top.is-end {
+  justify-content: flex-end;
+}
+.page-top.is-between {
+  justify-content: space-between;
+  padding-top: 20px;
+}
+.page-body {
+  flex: 1;
+  padding: 18px 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.page-body.is-centred {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+}
+.page-body.is-high {
+  justify-content: flex-start;
+  padding-top: 44px;
+}
+.page-foot {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 14px 18px 26px;
+}
+.page-foot.is-stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+.page-foot.is-raised {
+  padding-bottom: 96px;
+}
+.page-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1.08;
+}
+.page-section {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+}
+.brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 44px;
+  line-height: 1;
+  margin-top: 6px;
+}
+.tagline {
+  max-width: 300px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.2;
+}
+.lead {
+  margin: 0;
+  max-width: 340px;
+  font-size: var(--text-body);
+  line-height: var(--text-body-leading);
+  color: var(--color-on-surface-variant);
+}
+.kicker,
+.small {
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+.kicker {
+  font-size: var(--text-note);
+}
+.small {
+  font-size: var(--text-caption);
+}
+.bad {
+  margin: 0;
+  font-size: var(--text-note);
+  font-weight: 700;
+  color: var(--color-wrong);
+}
+.hello {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+}
+.pill {
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  font-weight: 700;
+  font-size: var(--text-caption);
+  cursor: pointer;
+}
+
+/* Who is signed in, on setup. */
+.who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.who-email {
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.avatar {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--color-primary-container);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* Fields. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-label {
+  font-weight: 700;
+  font-size: 14px;
+}
+.input {
+  height: 56px;
+  width: 100%;
+  border-radius: 16px;
+  background: var(--color-surface-container);
+  border: 2px solid transparent;
+  padding: 0 16px;
+  font: 700 19px var(--font-body);
+  color: var(--color-on-surface);
+  outline: none;
+}
+.input:focus {
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+}
+.input.is-code {
+  letter-spacing: 0.08em;
+}
+.input.is-bad {
+  border-color: var(--color-wrong);
+}
+.hint {
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+}
+.segmented {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--color-surface-container);
+}
+.segmented button {
+  flex: 1;
+  height: 44px;
+  border: none;
+  border-radius: var(--shape-radius-s);
+  background: none;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+}
+.segmented button.is-on {
+  background: var(--color-surface);
+  box-shadow: 0 3px 0 var(--color-surface-press);
+  font-weight: 800;
+  color: var(--color-on-surface);
+}
+
+/* Buttons beside the player's .primary. */
+.second {
+  flex: 1;
+  width: 100%;
+  height: 58px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+}
+.page-foot .primary {
+  flex: 1;
+}
+.primary.is-off {
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  cursor: default;
+}
+.primary.is-small {
+  width: auto;
+  flex: none;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary-press);
+}
+.link {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  padding: 0;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+.link.is-quiet {
+  color: var(--color-on-surface-variant);
+  font-weight: 700;
+}
+.google-button {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+.dev-sign-in {
+  display: flex;
+  gap: 8px;
+}
+.dev-sign-in .second {
+  height: 56px;
+  font-size: 14px;
+}
+
+/* Cards on home and the result. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 12px 14px;
+  border: none;
+  border-radius: var(--shape-radius-l);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+.card:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.card.is-flat {
+  width: 100%;
+  margin-top: 12px;
+  cursor: default;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.card.is-flat:active {
+  transform: none;
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+}
+.card .art {
+  background: var(--color-surface);
+}
+.card .name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.15;
+}
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.card-row .bar {
+  flex: 1;
+}
+.bar {
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--color-outline-variant);
+  overflow: hidden;
+}
+.bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--color-primary);
+}
+.bar > i.is-right {
+  background: var(--color-right);
+}
+.bar > i.is-so-so {
+  background: var(--color-secondary);
+}
+
+/* Practice's result and the chapter's end. */
+.score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 64px;
+  line-height: 1;
+}
+.score span {
+  font-size: 32px;
+  color: var(--color-on-surface-variant);
+}
+.marks {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  max-width: 300px;
+}
+.marks i {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+}
+.marks i.is-right {
+  background: var(--color-right);
+}
+.marks i.is-wrong {
+  background: var(--color-wrong);
+}
+.scores {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  text-align: left;
+}
+.scores-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.scores-name {
+  flex: 1;
+  font-weight: 700;
+  font-size: 16px;
+}
+.scores-row .bar {
+  width: 120px;
+}
+.scores-n {
+  width: 44px;
+  text-align: right;
+  font-weight: 800;
+}
+.samples {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.samples > .lesson {
+  width: 390px;
+  min-height: 844px;
+  margin: 0;
+}
+.dev-sign-in .second {
+  flex: none;
+  width: auto;
+  padding: 0 18px;
+}
+
+/* The teacher's screens. */
+.grow {
+  flex: 1;
+}
+.page-body.is-tight {
+  gap: 10px;
+}
+.code-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+.group-actions {
+  display: flex;
+  gap: 8px;
+}
+.second.is-small {
+  height: 44px;
+  font-size: 15px;
+}
+.is-armed {
+  color: var(--color-wrong);
+}
+.card.is-picked {
+  outline: 3px solid var(--color-primary);
+}
+.link.is-danger {
+  color: var(--color-wrong);
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 4px;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: var(--shape-radius-l);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+}
+.stat b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 1.2;
+}
+.stat b.is-weak {
+  color: var(--color-wrong);
+}
+.legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+.learners {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.learner-row,
+.concept-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 16px;
+  background: var(--color-surface-container);
+  text-align: left;
+  color: inherit;
+}
+.learner-row {
+  cursor: pointer;
+}
+.concept-row {
+  align-items: flex-start;
+  gap: 12px;
+}
+.learner-who {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.learner-name {
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.2;
+}
+.squares {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  max-width: 60%;
+}
+.square {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 7px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-outline-variant);
+}
+.concept-row .square {
+  width: 22px;
+  height: 22px;
+}
+.square.is-strong {
+  background: var(--color-right);
+  border-color: var(--color-right);
+}
+.square.is-shaky {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+.square.is-weak {
+  background: var(--color-wrong);
+  border-color: var(--color-wrong);
+}
+.square.is-started {
+  border-color: var(--color-primary);
+}
+
+/* Review (`?dev&review`): every board of the picked lessons, drawn by the player, side by side. */
+.review {
+  min-height: 100dvh;
+  background: var(--color-surface-container);
+  padding: 0 16px 64px;
+}
+.review-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 -16px;
+  padding: 10px 16px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-outline-variant);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 45dvh;
+  overflow-y: auto;
+}
+.review-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.review-hint {
+  flex: 1;
+  font-size: 12px;
+  color: var(--color-on-surface-variant);
+}
+.review-group summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+}
+.review-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 6px;
+}
+.review-chip,
+.review-jump {
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.review-chip[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.review-link {
+  margin-left: 8px;
+  border: none;
+  background: none;
+  color: var(--color-primary);
+  font-size: 12px;
+  cursor: pointer;
+}
+.review-title {
+  margin: 28px 0 10px;
+  scroll-margin-top: 140px;
+}
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 430px));
+  gap: 20px;
+  align-items: start;
+}
+/* Sequence: one board at a time on black, as big as the screen allows, ← / → in a bar on top.
+   Above the review bar; under the comment panel and the comment box. */
+.review-focus {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  overflow: auto;
+}
+.review-seq-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgb(0 0 0 / 0.85);
+}
+.review-focus .review-chip {
+  background: #1c1c1f;
+  border-color: #3a3a40;
+  color: #f2f2f5;
+}
+.review-focus .review-chip[aria-pressed="true"] {
+  border-color: #8e8bff;
+  color: #b9b7ff;
+}
+.review-focus .review-chip:disabled {
+  opacity: 0.35;
+}
+.review-seq-where {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: #a0a0aa;
+  text-align: center;
+}
+.review-seq-where strong {
+  color: #fff;
+}
+.review-seq-zoom {
+  min-width: 40px;
+  text-align: center;
+  font-size: 12px;
+  color: #a0a0aa;
+}
+.review-seq-board {
+  width: 430px;
+  max-width: calc(100vw - 32px);
+  margin: 8px auto 40px;
+}
+.review-focus .review-tag {
+  color: #8a8a94;
+}
+.review-focus .review-phone {
+  border-color: #2a2a2e;
+}
+.review-jump.is-here {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.review-card {
+  scroll-margin-top: 140px;
+  min-width: 0;
+}
+.review-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+  margin-bottom: 6px;
+}
+.review-phone {
+  position: relative;
+  min-height: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--color-outline-variant);
+}
+.review-phone .board-footer {
+  display: none;
+}
+
+.review-phone.is-commenting [data-piece] {
+  cursor: crosshair;
+}
+.review-phone.is-commenting [data-piece]:hover {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.review-card.is-flash .review-phone {
+  box-shadow: 0 0 0 3px var(--color-primary);
+}
+.review-mark {
+  position: absolute;
+  border: 2px solid var(--color-secondary);
+  border-radius: 8px;
+  background: transparent;
+  padding: 0;
+  z-index: 3;
+  /* The outline lets taps through to the prop under it; only the number badge opens the comment. */
+  pointer-events: none;
+}
+.review-mark span {
+  pointer-events: auto;
+  cursor: pointer;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--color-secondary);
+  color: var(--color-surface);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+}
+.review-mark.is-done {
+  border-style: dotted;
+  opacity: 0.45;
+}
+.review-count {
+  border: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: var(--color-secondary);
+  color: var(--color-surface);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.review-error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-wrong);
+}
+.review-primary {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.review-primary:disabled,
+.review-chip:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.review-sheet.is-near {
+  bottom: auto;
+  transform: none;
+  width: min(420px, calc(100vw - 24px));
+}
+.review-sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 40;
+  width: min(560px, calc(100vw - 32px));
+  max-height: 70dvh;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.18);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.review-sheet-where {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+}
+.review-sheet-snap {
+  font-size: 13px;
+  max-height: 120px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--color-surface-container);
+}
+.review-sheet textarea,
+.review-reply {
+  width: 100%;
+  min-height: 72px;
+  font: inherit;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  resize: vertical;
+  box-sizing: border-box;
+}
+.review-reply {
+  min-height: 40px;
+}
+.review-sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.review-quote {
+  margin: 0;
+  padding: 4px 10px;
+  border-left: 3px solid var(--color-secondary);
+  font-size: 13px;
+  color: var(--color-on-surface-variant);
+}
+.review-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  width: min(440px, 100vw);
+  overflow-y: auto;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-outline-variant);
+  box-shadow: -8px 0 30px rgb(0 0 0 / 0.12);
+  padding: 14px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+.review-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.review-item {
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+.review-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.review-item-head .review-link {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+.review-pill {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+}
+.review-pill.is-proposed,
+.review-pill.is-question {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+.review-pill.is-done {
+  color: var(--color-right);
+}
+.review-said,
+.review-msg {
+  margin: 0;
+}
+.review-msg {
+  font-size: 13px;
+  color: var(--color-on-surface-variant);
+}
+.review-proposal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--color-surface-container);
+}
+.review-proposal p {
+  margin: 0;
+}
+.review-diff {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.review-before,
+.review-after {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border-left: 3px solid;
+  background: var(--color-surface);
+  overflow-x: auto;
+}
+.review-before {
+  border-color: var(--color-wrong);
+  opacity: 0.8;
+}
+.review-after {
+  border-color: var(--color-right);
+}
+.review-select {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  max-width: 100%;
+}
+.review-chip.is-small {
+  padding: 3px 9px;
+  font-size: 12px;
+}
+.review-part {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+}
+.review-row {
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .review-bar nav.review-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .review-jump {
+    white-space: nowrap;
+  }
+  .review-hint {
+    display: none;
+  }
+}
+
+/* ---- Jugnu fetching a chapter (chapter-gate.tsx) ---- */
+.loader-stage {
+  position: relative;
+  width: min(260px, 72vw);
+  aspect-ratio: 1;
+  margin: 6px 0 4px;
+}
+.loader-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.loader-halo {
+  fill: var(--brand-jugnu-container);
+  animation: loader-breathe 2.4s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 120px 120px;
+}
+.loader-track {
+  fill: none;
+  stroke: var(--color-outline-variant);
+  stroke-width: 6px;
+  opacity: 0.5;
+}
+.loader-trail {
+  fill: none;
+  stroke: var(--brand-jugnu-glow);
+  stroke-width: 8px;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--brand-jugnu-glow) 70%, transparent));
+  transition: stroke-dasharray 0.35s ease-out;
+}
+.loader-trail.is-spinning {
+  transform-box: view-box;
+  transform-origin: 120px 120px;
+  animation: loader-spin 1.4s linear infinite;
+}
+.loader-page {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  opacity: 0;
+  animation: loader-fly 2.1s ease-in infinite;
+  animation-delay: calc(var(--i) * 0.35s);
+}
+.loader-page rect {
+  fill: var(--brand-jugnu-container);
+  stroke: var(--brand-jugnu-glow);
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--brand-jugnu-glow) 80%, transparent));
+}
+.loader-page line {
+  stroke: var(--brand-jugnu-curl);
+  stroke-width: 1.4px;
+  stroke-linecap: round;
+}
+.loader-jugnu {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 6%;
+}
+.loader-line {
+  min-height: 2.6em;
+  text-align: center;
+  animation: loader-line-in 0.4s ease-out;
+}
+.loader-count {
+  font-variant-numeric: tabular-nums;
+  min-height: 1.2em;
+}
+@keyframes loader-breathe {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+@keyframes loader-spin {
+  from {
+    transform: rotate(-90deg);
+  }
+  to {
+    transform: rotate(270deg);
+  }
+}
+@keyframes loader-fly {
+  0% {
+    opacity: 0;
+    transform: translate(120px, 120px) rotate(calc(var(--i) * 60deg + 20deg)) translateY(-128px)
+      scale(1);
+  }
+  25% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(120px, 120px) rotate(calc(var(--i) * 60deg + 70deg)) translateY(-36px)
+      scale(0.35);
+  }
+}
+@keyframes loader-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-halo,
+  .loader-trail.is-spinning,
+  .loader-line {
+    animation: none;
+  }
+  .loader-page {
+    display: none;
+  }
+}
+/* A prop whose drawing code is still on its way keeps its place (lazy-views.ts). */
+.prop-waiting {
+  border-radius: 12px;
+  background: var(--color-surface-container);
+  animation: prop-waiting 1.2s ease-in-out infinite alternate;
+}
+@keyframes prop-waiting {
+  to {
+    opacity: 0.55;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prop-waiting {
+    animation: none;
+  }
 }

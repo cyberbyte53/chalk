@@ -1,0 +1,10 @@
+# NCERT 6.4.1: which part of the human transport system matches this description?
+- params: { case: artery }
+  firstTry: 3
+- params: { case: vein }
+  firstTry: 4
+- params: { case: capillary }
+- params: { case: platelets }
+- params: { case: lymph }
+- params: { case: plasma }
+- params: { case: ventricle }

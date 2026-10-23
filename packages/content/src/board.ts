@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { jugnuNotesSchema } from "./jugnu";
 import { localizedSchema } from "./localized";
 import { permanentIdSchema, pieceSchema } from "./piece";
 
@@ -60,6 +61,8 @@ export const boardSchema = z.object({
    * is what the board asks of them). Jugnu can never do these for them.
    */
   studentOnly: z.array(z.string()).default([]),
+  /** For Jugnu: what the board is for and what its props stand for (plain English). */
+  jugnu: jugnuNotesSchema.optional(),
 });
 export type Board = z.infer<typeof boardSchema>;
 

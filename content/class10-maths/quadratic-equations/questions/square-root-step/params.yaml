@@ -1,0 +1,12 @@
+# Section 4.4: Sunita's age, (x + 2)² = 9, and the last step of Examples 7, 9 and Exercise 4.3.
+- params: { item: sunita }
+  firstTry: 3
+- params: { item: plus2 }
+  firstTry: 4
+- params: { item: minus1 }
+- params: { item: surd }
+  level: medium
+- params: { item: quarter }
+  level: medium
+- params: { item: negative }
+  level: hard

@@ -1,0 +1,11 @@
+# Section 4.2.5, Table 4.4: naming; NCERT in-text Q.
+- params: { item: ethanoic }
+  firstTry: 1
+- params: { item: propanone }
+  firstTry: 2
+  level: medium
+- params: { item: bromopentane }
+- params: { item: hexanal }
+  level: medium
+- params: { item: methanal }
+- params: { item: propene }

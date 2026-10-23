@@ -1,0 +1,10 @@
+# NCERT Example 11 and Exercise 3.4 Q1.
+- params: { a1: 1, b1: 1, k1: 5, a2: 2, b2: -3, k2: 4 }
+  firstTry: 5
+- params: { a1: 3, b1: 4, k1: 10, a2: 2, b2: -2, k2: 2 }
+  firstTry: 6
+- params: { a1: 9, b1: -4, k1: 2000, a2: 7, b2: -3, k2: 2000 }
+- params: { a1: 3, b1: -5, k1: 4, a2: 9, b2: -2, k2: 7 }
+  level: hard
+- params: { a1: 3, b1: 4, k1: -6, a2: 3, b2: -1, k2: 9 }
+  level: hard

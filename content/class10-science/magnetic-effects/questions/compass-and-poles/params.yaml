@@ -1,0 +1,8 @@
+# Compass needles and magnetic poles (NCERT 13.1, Activity 13.3; in-text Q1).
+- params: { item: needle }
+  firstTry: 3
+- params: { item: deflect }
+  firstTry: 4
+- params: { item: nearN }
+- params: { item: direction }
+  level: medium

@@ -1,0 +1,7 @@
+# NCERT 16.1.1 and Exercise 4: equitable distribution.
+- params: { case: why }
+  firstTry: 3
+- params: { case: against }
+  firstTry: 4
+- params: { case: groves }
+- params: { case: slag }

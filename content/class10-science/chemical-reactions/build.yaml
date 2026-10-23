@@ -1,0 +1,13 @@
+title: { en: "Chemical Reactions and Equations", hi: "रासायनिक अभिक्रियाएँ एवं समीकरण" }
+# Concepts in book order (NCERT Chapter 1).
+concepts:
+  - what-is-a-reaction
+  - writing-equations
+  - balancing-equations
+  - combination-reactions
+  - decomposition-reactions
+  - displacement-reactions
+  - oxidation-and-reduction
+  - corrosion-and-rancidity
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

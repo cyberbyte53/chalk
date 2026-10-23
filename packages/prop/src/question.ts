@@ -7,7 +7,12 @@ import { z } from "zod";
 export const AnswerStatus = { Open: "open", Correct: "correct", Wrong: "wrong" } as const;
 export type AnswerStatus = (typeof AnswerStatus)[keyof typeof AnswerStatus];
 
-export const QuestionAction = { Check: "check", GiveFeedback: "giveFeedback" } as const;
+export const QuestionAction = {
+  Check: "check",
+  GiveFeedback: "giveFeedback",
+  /** After a wrong check: clear the result so the learner can answer again (the player's Try again). */
+  Retry: "retry",
+} as const;
 
 export const QuestionSignal = { Checked: "checked", Correct: "correct", Wrong: "wrong" } as const;
 export type QuestionSignal = (typeof QuestionSignal)[keyof typeof QuestionSignal];
@@ -49,5 +54,7 @@ export type QuestionView = {
 /** Payload of the `checked` signal: the commit, with what was submitted. */
 export type CheckedPayload =
   | { status: AnswerStatus; attempts: number; optionId: string }
+  /** A multi-choice question: every option picked. */
+  | { status: AnswerStatus; attempts: number; optionIds: string[] }
   /** A goal question: the learner's answer is the state of the prop named `about`. */
   | { status: AnswerStatus; attempts: number; about: string };

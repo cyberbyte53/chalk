@@ -102,6 +102,27 @@ export type SignalSpec = {
 /** A screen-space box, in the prop's own pixels at the given width. */
 export type Box = { x: number; y: number; width: number; height: number };
 
+/** One thing the student can see and tell apart, with what it shows them right now. */
+export type Element = {
+  /** What `point` takes, and `locate` finds: stable while the element is there. */
+  id: string;
+  /** What it shows, in the prop's own words or numbers; left out for a thing with no value. */
+  value?: unknown;
+};
+
+/**
+ * What a student sees of a prop right now, in the prop's own words: the only way Jugnu sees it.
+ * Faithful: every element is drawn right now, with the value it shows (a hidden dot has no
+ * element). Addressable: an element's id can be pointed at. What the prop knows but the screen
+ * doesn't show goes under `hidden`, labelled.
+ */
+export type Observation = {
+  /** One line: what this is and where it stands. */
+  summary: string;
+  elements: readonly Element[];
+  hidden?: Readonly<Record<string, unknown>>;
+};
+
 export const PropRole = { Question: "question" } as const;
 export type PropRole = (typeof PropRole)[keyof typeof PropRole];
 
@@ -129,10 +150,20 @@ export type PropDef<
   derived?: Readonly<Record<D, DerivedSpec<S>>>;
   /** Stored fields an IS may own (e.g. a text's words). An owned field can't be set by actions. */
   inputs?: readonly (keyof S & string)[];
-  /** Fields the learner can't see on screen; Jugnu must not mention them as if they could. */
+  /**
+   * Fields the learner can't see on screen; Jugnu must not mention them as if they could. Only
+   * for a prop without `observe`: the default observation leaves them out of the elements and
+   * lists them under `hidden`.
+   */
   offScreen?: readonly string[];
   actions: Readonly<Record<A, ActionSpec<S>>>;
   signals?: Readonly<Record<G, SignalSpec>>;
+  /**
+   * What the student sees right now, as the prop describes it (see `Observation`). Without it, the
+   * default is every field as an element (minus `offScreen`), plus each part: a prop should define
+   * its own once it can show something that isn't on screen (a hidden marker, a wire's current).
+   */
+  observe?: (view: PropView & S) => Observation;
   /** Names of the parts that exist right now (they can come and go with the state). */
   parts?: (view: PropView & S) => readonly string[];
   /** Where a part is drawn at this width, or undefined if it isn't there. */

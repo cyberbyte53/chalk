@@ -1,0 +1,7 @@
+# NCERT Exercise 6.4 Q1, the half-area line (Example 9's kind) and one more.
+- params: { item: q1 }
+  firstTry: 3
+- params: { item: half }
+  level: hard
+- params: { item: bigger }
+  level: medium

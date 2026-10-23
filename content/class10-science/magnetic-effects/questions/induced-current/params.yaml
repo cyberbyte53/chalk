@@ -1,0 +1,10 @@
+# Galvanometer kicks in Activity 13.8 and 13.9 (NCERT 13.5; Exercises 13, 14).
+- params: { item: push }
+  firstTry: 1
+- params: { item: withdraw }
+  firstTry: 2
+- params: { item: still }
+- params: { item: coils }
+  level: medium
+- params: { item: steady }
+  level: medium

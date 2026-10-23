@@ -1,0 +1,8 @@
+# Biomass as a fuel, and charcoal (NCERT 14.2.3).
+- params: { item: charcoal }
+  firstTry: 3
+- params: { item: better }
+- params: { item: biomass }
+  firstTry: 4
+- params: { item: dung }
+  level: medium

@@ -1,0 +1,12 @@
+# Figs 3.5–3.6, in-text Q1 (Na2O, MgO).
+- params: { compound: NaCl }
+  firstTry: 1
+- params: { compound: MgCl2 }
+  firstTry: 2
+- params: { compound: Na2O }
+  firstTry: 3
+- params: { compound: MgO }
+- params: { compound: KCl }
+- params: { compound: CaCl2 }
+- params: { compound: CaO }
+  level: hard

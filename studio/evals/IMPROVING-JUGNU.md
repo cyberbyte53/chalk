@@ -24,7 +24,7 @@ Jugnu helps a school student reason their own way to the answer, with the least 
 
 ## Setup
 
-1. `apps/learner/.env` has `JUGNU_API_KEY` (DeepSeek). The bench reads it: `pnpm test-jugnu` uses `deepseek-flash`.
+1. The repo's `.env` has `JUGNU_API_KEY` (DeepSeek). The bench reads it: `pnpm test-jugnu` uses `deepseek-flash`.
 2. Judge: `--judge-model deepseek-v4-pro`. Use it on every full run; scripts can't see correctness, leaks in words, or tone.
 3. `pnpm check` passes before you start.
 

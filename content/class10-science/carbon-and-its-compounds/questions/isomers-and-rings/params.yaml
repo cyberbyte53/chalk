@@ -1,0 +1,10 @@
+# Section 4.2.2: isomers, rings, benzene; NCERT Exercise 2 (pentane's isomers).
+- params: { item: isomer }
+  firstTry: 3
+- params: { item: butane }
+  firstTry: 4
+- params: { item: pentane }
+  level: medium
+- params: { item: benzene }
+  level: medium
+- params: { item: hydrocarbon }

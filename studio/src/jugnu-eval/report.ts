@@ -79,7 +79,6 @@ export function reportMarkdown(
         lines.push(`*Student did:* ${record.did.map((d) => `\`${d}\``).join(", ")}`, "");
         continue;
       }
-      if (record.kind === "continued") lines.push("*(Jugnu saw the move and went on)*", "");
       for (const event of record.turn.events) {
         if (event.kind === "say") {
           if (lines.at(-1)?.startsWith("- ")) lines.push("");

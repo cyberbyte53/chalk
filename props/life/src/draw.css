@@ -1,0 +1,224 @@
+/* @chalk/prop-life: shared pieces (frame, buttons, arrows, labels, the family). Look tokens only. */
+.lp {
+  display: flex;
+  flex-direction: column;
+}
+.lp-svg {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  user-select: none;
+}
+.lp-bg {
+  fill: var(--color-surface-container);
+}
+.lp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.lp-button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: var(--shape-radius-m);
+  border: none;
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 700 14px / 1.1 var(--font-display);
+  cursor: pointer;
+}
+.lp-button.is-on {
+  background: var(--color-primary-container);
+  color: var(--color-primary);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.lp-button:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.lp-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.lp-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.lp-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.lp-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-outline-variant);
+}
+.lp-dot.is-on {
+  background: var(--color-primary);
+}
+.lp-caption {
+  margin: 6px 0 0;
+  min-height: 2.6em;
+  font: 600 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+  text-align: center;
+}
+.lp-arrow line {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+.lp-arrow path {
+  fill: var(--color-on-surface);
+}
+.lp-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.lp-label.is-dim {
+  fill: var(--color-on-surface-variant);
+  font-weight: 600;
+}
+.lp-label.is-big {
+  font-size: 12px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.lp-label.is-good {
+  fill: var(--color-right);
+}
+.lp-label.is-bad {
+  fill: var(--color-wrong);
+}
+/* gases and substances: one colour each, everywhere in the package */
+.lp-oxygen line {
+  stroke: var(--color-category-1);
+}
+.lp-oxygen path,
+.lp-o2 {
+  fill: var(--color-category-1);
+}
+.lp-co2 line {
+  stroke: var(--color-on-surface-variant);
+}
+.lp-co2 path,
+.lp-co2-dot {
+  fill: var(--color-on-surface-variant);
+}
+.lp-water line {
+  stroke: var(--color-primary);
+}
+.lp-water path,
+.lp-water-dot {
+  fill: var(--color-primary);
+}
+.lp-food line {
+  stroke: var(--color-secondary);
+}
+.lp-food path,
+.lp-food-dot {
+  fill: var(--color-secondary);
+}
+.lp-waste line {
+  stroke: var(--color-category-3);
+}
+.lp-waste path,
+.lp-waste-dot {
+  fill: var(--color-category-3);
+}
+/* the family */
+.lp-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.lp-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.lp-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.lp-hair-grey {
+  fill: var(--color-surface-press);
+}
+.lp-cap {
+  fill: var(--color-wrong);
+}
+.lp-face circle,
+.lp-face ellipse {
+  fill: var(--color-inverse-surface);
+}
+.lp-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.lp-sweat path {
+  fill: var(--color-primary);
+}
+.lp-specs circle,
+.lp-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.lp-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.lp-shirt-riya {
+  fill: var(--color-category-4);
+}
+.lp-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.lp-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.lp-shirt-mom {
+  fill: var(--color-category-3);
+}
+.lp-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.lp-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.lp-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.lp-shirt-grandpa-line {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.lp-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+/* a slow flow along a path: dashes that travel. Reduced motion: still dashes. */
+.lp-flow {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-dasharray: 6 8;
+  animation: lp-flow 1.6s linear infinite;
+}
+@keyframes lp-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lp-flow {
+    animation: none;
+  }
+}

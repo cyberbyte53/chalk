@@ -1,0 +1,49 @@
+/* bioMagnification */
+.ev-mag-soil {
+  fill: color-mix(in srgb, var(--color-secondary) 45%, var(--color-on-secondary-container));
+}
+.ev-mag-water {
+  fill: color-mix(in srgb, var(--color-primary) 40%, var(--color-surface));
+}
+.ev-mag-wheat line,
+.ev-mag-wheat path {
+  stroke: color-mix(in srgb, var(--color-right) 60%, var(--color-secondary));
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.ev-mag-wheat ellipse {
+  fill: var(--color-secondary);
+}
+.ev-mag-goat ellipse,
+.ev-mag-goat circle {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 40%, var(--color-surface));
+}
+.ev-mag-goat line,
+.ev-mag-goat path {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 70%, var(--color-surface));
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+  fill: none;
+}
+.ev-mag-fish ellipse,
+.ev-mag-fish path {
+  fill: var(--color-secondary);
+}
+.ev-mag-body {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1px;
+}
+.ev-mag-dots circle {
+  fill: var(--color-wrong);
+}
+.ev-mag-hidden {
+  opacity: 0.25;
+}
+.ev-mag-spray rect {
+  fill: var(--color-on-surface-variant);
+}
+.ev-mag-spray circle {
+  fill: var(--color-wrong);
+  opacity: 0.7;
+}

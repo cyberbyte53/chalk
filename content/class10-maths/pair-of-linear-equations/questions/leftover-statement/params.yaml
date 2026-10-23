@@ -1,0 +1,8 @@
+# NCERT Examples 9, 10 and 12.
+- params: { left: 18, right: 18 }
+  firstTry: 3
+- params: { left: -4, right: 0 }
+  firstTry: 4
+- params: { left: 0, right: 9 }
+- params: { left: 9, right: 9 }
+- params: { left: 0, right: 0 }

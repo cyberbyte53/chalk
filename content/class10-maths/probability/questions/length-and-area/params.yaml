@@ -1,0 +1,11 @@
+# NCERT Examples 10* and 11*, Exercise 15.1 Q20* (not from the examination point of view).
+- params: { item: ex10 }
+  firstTry: 1
+  level: easy
+- params: { item: ex10b }
+  level: easy
+- params: { item: ex11 }
+  firstTry: 2
+- params: { item: ex11b }
+- params: { item: q20 }
+  level: hard

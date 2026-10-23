@@ -1,0 +1,7 @@
+# Section 8.2: the six ratios from the sides of a right triangle.
+- params: { item: sinA }
+  firstTry: 1
+- params: { item: cosA }
+- params: { item: tanC }
+- params: { item: cosecA }
+- params: { item: hyp }

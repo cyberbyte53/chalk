@@ -1,0 +1,11 @@
+# NCERT Examples 2, 3 and 12, Exercise 3.1 and 3.4.
+- params: { a1: 2, b1: 3, k1: 9, a2: 4, b2: 6, k2: 18 }
+  firstTry: 4
+- params: { a1: 2, b1: 3, k1: 8, a2: 4, b2: 6, k2: 7 }
+  firstTry: 5
+- params: { a1: 1, b1: 3, k1: 6, a2: 2, b2: -3, k2: 12 }
+- params: { a1: 3, b1: -1, k1: 3, a2: 9, b2: -3, k2: 9 }
+- params: { a1: 1, b1: -1, k1: 8, a2: 3, b2: -3, k2: 16 }
+- params: { a1: 2, b1: 1, k1: 160, a2: 4, b2: 2, k2: 300 }
+- params: { a1: 3, b1: -5, k1: 20, a2: 6, b2: -10, k2: 40 }
+  level: medium

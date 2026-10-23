@@ -1,12 +1,14 @@
+import { type Progress, isConceptDone } from "@chalk/api";
 import type { BuiltArt, Locale } from "@chalk/content";
 import { Stage, Trail } from "@chalk/draw";
 import { RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";
+import { say } from "./app-text";
 import type { Course, CourseChapter } from "./course";
 
 /** Art from the build: checked SVG (see studio's art checks), so it is inlined as it is. */
-function ArtView({ art }: { art: BuiltArt | null }): JSX.Element | null {
+export function ArtView({ art }: { art: BuiltArt | null }): JSX.Element | null {
   if (art === null) return null;
   // biome-ignore lint/security/noDangerouslySetInnerHtml: built art is checked markup, never user input
   return <div class={`art is-${art.frame}`} dangerouslySetInnerHTML={{ __html: art.svg }} />;
@@ -116,67 +118,86 @@ function useWidth(): [(el: HTMLElement | null) => void, number] {
   return [setEl, width];
 }
 
+/** Where a learner is in a chapter: the first concept not done yet (-1 when all are). */
+export function currentConcept(chapter: CourseChapter, progress: Progress): number {
+  return chapter.concepts.findIndex((c) => !isConceptDone(progress[c.id], c.hasPractice));
+}
+
 /**
- * A chapter: its concepts as stops on a winding path (Calm 5). The current one is filled and shows
- * its art; the others wait as grey stops with their glyph. Until progress is kept, the current
- * concept is the first.
+ * A chapter: its concepts as stops on a winding path (Calm 5). Done ones are green with their
+ * score; the current one is filled and shows its art; the rest wait as grey stops with their glyph.
  */
 export function ChapterScreen({
   chapter,
   number,
   locale,
+  progress,
   onConcept,
   onBack,
 }: {
   chapter: CourseChapter;
   number: number;
   locale: Locale;
-  onConcept: (lessonId: string) => void;
+  progress: Progress;
+  onConcept: (conceptId: string) => void;
   onBack: () => void;
 }): JSX.Element {
-  const current = 0;
+  const current = currentConcept(chapter, progress);
   const [measured, width] = useWidth();
   const { stops, height } = layoutStops(chapter.concepts.length, current);
   const count = chapter.concepts.length;
+  const done = current === -1 ? 1 : count < 2 ? 0 : current / (count - 1);
   return (
     <div class="lesson screen">
       <header class="screen-header">
         <BackButton label="Back to chapters" onBack={onBack} />
       </header>
-      <div class="screen-kicker">Chapter {number}</div>
+      <div class="screen-kicker">{say(locale, "chapterOf", { n: number })}</div>
       <h1 class="screen-title">
         <RichText text={chapter.title[locale]} />
       </h1>
-      <div class="screen-kicker">
-        {count} {count === 1 ? "concept" : "concepts"}, then practice
-      </div>
+      <div class="screen-kicker">{say(locale, "conceptsThenPractice", { n: count })}</div>
       <div class="path" ref={measured} style={{ height: `${height}px` }}>
         {width > 0 && (
           <Stage label="The chapter's path" x={[0, 1]} width={width} height={height}>
-            <Trail points={roadThrough(stops)} done={0} />
+            <Trail points={roadThrough(stops)} done={done} />
           </Stage>
         )}
         {chapter.concepts.map((concept, i) => {
           const stop = stops[i];
           if (stop === undefined) return null;
           const isLeft = stop.x < 0.5;
+          const mine = progress[concept.id];
+          const isDone = isConceptDone(mine, concept.hasPractice);
+          const status = isDone
+            ? mine?.practice
+              ? say(locale, "practiceScore", { right: mine.practice.right, of: mine.practice.of })
+              : say(locale, "learnt")
+            : undefined;
           return (
-            <div key={concept.lessonId} class="stop" style={{ top: `${stop.top}px` }}>
+            <div key={concept.id} class="stop" style={{ top: `${stop.top}px` }}>
               <button
                 type="button"
-                class={stop.isCurrent ? "stop-node is-current" : "stop-node"}
+                class={`stop-node${stop.isCurrent ? " is-current" : ""}${isDone ? " is-done" : ""}`}
                 style={{ left: `calc(${stop.x * 100}% - 32px)`, top: `${NODE_Y - 32}px` }}
                 aria-label={concept.title[locale]}
-                onClick={() => onConcept(concept.lessonId)}
+                onClick={() => onConcept(concept.id)}
               >
-                {concept.glyph ?? i + 1}
+                {isDone ? (
+                  <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+                    <path d="M6 13.5 L11 18.5 L20 8.5" />
+                  </svg>
+                ) : (
+                  (concept.glyph ?? i + 1)
+                )}
               </button>
               {!stop.isCurrent && (
                 <div
                   class={isLeft ? "stop-name is-right-of" : "stop-name is-left-of"}
-                  style={{ top: `${NODE_Y - 14}px` }}
+                  style={{ top: `${NODE_Y - (status === undefined ? 14 : 22)}px` }}
                 >
                   <RichText text={concept.title[locale]} />
+                  {status !== undefined && <div class="stop-status">{status}</div>}
                 </div>
               )}
               {stop.isCurrent && (
@@ -184,13 +205,15 @@ export function ChapterScreen({
                   type="button"
                   class="stop-card"
                   style={{ top: `${NODE_Y + 44}px` }}
-                  onClick={() => onConcept(concept.lessonId)}
+                  onClick={() => onConcept(concept.id)}
                 >
                   <ArtView art={concept.art} />
                   <span class="concept-name">
                     <RichText text={concept.title[locale]} />
                   </span>
-                  <span class="stop-go">Start</span>
+                  <span class="stop-go">
+                    {say(locale, mine === undefined ? "start" : "continue")}
+                  </span>
                 </button>
               )}
             </div>

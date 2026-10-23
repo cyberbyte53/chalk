@@ -1,0 +1,10 @@
+# Section 4.2: catenation, tetravalency, strong bonds; organic compounds.
+- params: { item: catenation }
+  firstTry: 3
+- params: { item: tetravalency }
+  firstTry: 4
+- params: { item: silicon }
+  level: medium
+- params: { item: wohler }
+  level: medium
+- params: { item: stable }

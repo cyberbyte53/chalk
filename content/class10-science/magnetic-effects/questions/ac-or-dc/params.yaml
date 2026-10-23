@@ -1,0 +1,10 @@
+# Alternating and direct current (NCERT 13.6; in-text Q2–Q4; Exercise 4).
+- params: { item: half }
+  firstTry: 1
+- params: { item: difference }
+  firstTry: 2
+- params: { item: sources }
+- params: { item: india }
+  level: medium
+- params: { item: whyAc }
+  level: medium

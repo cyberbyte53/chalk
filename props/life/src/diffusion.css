@@ -1,0 +1,42 @@
+/* diffusionReach */
+.dr-water {
+  fill: color-mix(in srgb, var(--color-primary-container) 75%, var(--color-surface));
+}
+.dr-body {
+  fill: color-mix(in srgb, var(--color-category-3) 18%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-category-3) 55%, var(--color-surface));
+  stroke-width: 1.5px;
+}
+.dr-cell {
+  stroke-width: 1px;
+}
+.dr-cell.is-fed {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-surface));
+  stroke: var(--color-right);
+}
+.dr-cell.is-starving {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 25%, var(--color-surface));
+  stroke: var(--color-outline-variant);
+}
+.dr-nucleus {
+  fill: color-mix(in srgb, var(--color-on-surface) 45%, var(--color-surface));
+}
+.dr-vessels path {
+  fill: none;
+  stroke: var(--color-wrong);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+.dr-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.dr-row-label {
+  font: 600 var(--text-caption) / 1 var(--font-body);
+  color: var(--color-on-surface-variant);
+  margin-right: 2px;
+}

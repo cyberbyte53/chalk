@@ -1,0 +1,12 @@
+# Activity 3.13 and section 3.3.1 (iv).
+- params: { salt: NaCl, form: solid }
+  firstTry: 1
+- params: { salt: NaCl, form: water }
+  firstTry: 2
+- params: { salt: NaCl, form: molten }
+  firstTry: 3
+- params: { salt: KI, form: water }
+- params: { salt: BaCl2, form: solid }
+- params: { salt: CaCl2, form: kerosene }
+  level: hard
+- params: { salt: KI, form: molten }

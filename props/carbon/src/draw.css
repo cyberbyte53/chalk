@@ -1,0 +1,224 @@
+/* @chalk/prop-carbon: shared pieces (frame, buttons, arrows, labels, the family). Look tokens only. */
+.lp {
+  display: flex;
+  flex-direction: column;
+}
+.cb-svg {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  user-select: none;
+}
+.cb-bg {
+  fill: var(--color-surface-container);
+}
+.cb-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.cb-button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: var(--shape-radius-m);
+  border: none;
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 700 14px / 1.1 var(--font-display);
+  cursor: pointer;
+}
+.cb-button.is-on {
+  background: var(--color-primary-container);
+  color: var(--color-primary);
+  box-shadow: 0 var(--shape-press) 0 var(--color-primary);
+}
+.cb-button:active {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.cb-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.cb-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.cb-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.cb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-outline-variant);
+}
+.cb-dot.is-on {
+  background: var(--color-primary);
+}
+.cb-caption {
+  margin: 6px 0 0;
+  min-height: 2.6em;
+  font: 600 var(--text-note) / 1.35 var(--font-body);
+  color: var(--color-on-surface);
+  text-align: center;
+}
+.cb-arrow line {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+.cb-arrow path {
+  fill: var(--color-on-surface);
+}
+.cb-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface-container);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.cb-label.is-dim {
+  fill: var(--color-on-surface-variant);
+  font-weight: 600;
+}
+.cb-label.is-big {
+  font-size: 12px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.cb-label.is-good {
+  fill: var(--color-right);
+}
+.cb-label.is-bad {
+  fill: var(--color-wrong);
+}
+/* gases and substances: one colour each, everywhere in the package */
+.cb-oxygen line {
+  stroke: var(--color-category-1);
+}
+.cb-oxygen path,
+.cb-o2 {
+  fill: var(--color-category-1);
+}
+.cb-co2 line {
+  stroke: var(--color-on-surface-variant);
+}
+.cb-co2 path,
+.cb-co2-dot {
+  fill: var(--color-on-surface-variant);
+}
+.cb-water line {
+  stroke: var(--color-primary);
+}
+.cb-water path,
+.cb-water-dot {
+  fill: var(--color-primary);
+}
+.cb-food line {
+  stroke: var(--color-secondary);
+}
+.cb-food path,
+.cb-food-dot {
+  fill: var(--color-secondary);
+}
+.cb-waste line {
+  stroke: var(--color-category-3);
+}
+.cb-waste path,
+.cb-waste-dot {
+  fill: var(--color-category-3);
+}
+/* the family */
+.cb-skin {
+  fill: color-mix(in srgb, var(--color-secondary) 62%, var(--color-on-secondary-container));
+}
+.cb-hair-fill {
+  fill: var(--color-inverse-surface);
+}
+.cb-hair {
+  stroke: var(--color-inverse-surface);
+  stroke-linecap: round;
+}
+.cb-hair-grey {
+  fill: var(--color-surface-press);
+}
+.cb-cap {
+  fill: var(--color-wrong);
+}
+.cb-face circle,
+.cb-face ellipse {
+  fill: var(--color-inverse-surface);
+}
+.cb-face path {
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+}
+.cb-sweat path {
+  fill: var(--color-primary);
+}
+.cb-specs circle,
+.cb-specs line {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 0.7px;
+}
+.cb-legs {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-inverse-surface));
+}
+.cb-shirt-riya {
+  fill: var(--color-category-4);
+}
+.cb-shirt-kabir {
+  fill: var(--color-secondary);
+}
+.cb-shirt-grandpa {
+  fill: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.cb-shirt-mom {
+  fill: var(--color-category-3);
+}
+.cb-arm {
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.cb-shirt-kabir-line {
+  stroke: var(--color-secondary);
+}
+.cb-shirt-riya-line {
+  stroke: var(--color-category-4);
+}
+.cb-shirt-grandpa-line {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 60%, var(--color-surface));
+}
+.cb-shirt-mom-line {
+  stroke: var(--color-category-3);
+}
+/* a slow flow along a path: dashes that travel. Reduced motion: still dashes. */
+.cb-flow {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-dasharray: 6 8;
+  animation: cb-flow 1.6s linear infinite;
+}
+@keyframes cb-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cb-flow {
+    animation: none;
+  }
+}

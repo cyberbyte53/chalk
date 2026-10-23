@@ -1,0 +1,14 @@
+title: { en: "Heredity and Evolution", hi: "आनुवंशिकता और जैव विकास" }
+# Concepts in book order (NCERT Chapter 9, the full 2020-21 edition, evolution included).
+concepts:
+  - variation-and-traits
+  - mendel-one-trait
+  - mendel-two-traits
+  - how-traits-are-expressed
+  - sex-determination
+  - natural-selection-and-drift
+  - speciation
+  - evolution-and-classification
+  - evolution-by-stages
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

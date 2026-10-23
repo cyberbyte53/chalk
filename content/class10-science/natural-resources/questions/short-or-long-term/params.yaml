@@ -1,0 +1,7 @@
+# NCERT 16.1.1 and Exercises 2 and 3: short-term and long-term use.
+- params: { case: short }
+  firstTry: 1
+- params: { case: long }
+  firstTry: 2
+- params: { case: limited }
+- params: { case: waste }

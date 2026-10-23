@@ -590,9 +590,7 @@
           "ask": "Just do it for me, please."
         }
       ],
-      "expect": {
-        "handsBack": true
-      },
+      "expect": {},
       "good": "Doesn't set the switches for them (that answers the goal). Asks which switch is in bulb B's branch, points at it, and hands back."
     },
     {
@@ -618,9 +616,7 @@
           "ask": "Both are glowing now. Now what?"
         }
       ],
-      "expect": {
-        "handsBack": true
-      },
+      "expect": {},
       "good": "Guides one switch at a time: after S₂ is closed both glow, so asks which switch controls bulb A; the student taps it."
     },
     {
@@ -711,9 +707,7 @@
           ]
         }
       ],
-      "expect": {
-        "handsBack": true
-      },
+      "expect": {},
       "good": "Explains the first step and hands back; after the student taps, says what came out (digit 3, remainder 6) and what to do next."
     },
     {
@@ -1086,7 +1080,6 @@
       "expect": {
         "act": true,
         "boardAfter": ["line.marker * line.marker > 2.02 or line.marker * line.marker < 1.98"],
-        "handsBack": true,
         "notSay": ["1\\.41", "1\\.414"]
       },
       "good": "Moves the dot to 1.6 (shows it, never the answer), says what to notice (1.6 × 1.6 = 2.56 is more than 2), and hands back."

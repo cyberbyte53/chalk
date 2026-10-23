@@ -1,0 +1,9 @@
+# NCERT 12.1: what a circuit and a current are (in-text Q1, Q2) and the direction of current.
+- params: { item: circuit }
+  firstTry: 1
+- params: { item: ampere }
+  firstTry: 2
+- params: { item: direction }
+- params: { item: milli }
+- params: { item: consumed }
+  level: medium

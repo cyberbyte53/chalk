@@ -1,0 +1,10 @@
+# The spectrum, dispersion, and Newton's recombination (NCERT 11.4).
+- params: { item: most }
+  firstTry: 1
+- params: { item: least }
+- params: { item: betweenGreenOrange }
+- params: { item: betweenVioletBlue }
+- params: { item: dispersion }
+- params: { item: why }
+  level: medium
+- params: { item: newton }

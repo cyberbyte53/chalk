@@ -107,3 +107,91 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* A play mode's banner under the board (play-mode.ts): right or wrong in one word, and what to do
+   next. It sits on a tinted footer: Try again or Continue below it, Jugnu at the left. */
+.board-footer.has-banner {
+  flex-wrap: wrap;
+  row-gap: 12px;
+  border-radius: 22px 22px 0 0;
+  animation: rise 0.18s ease-out;
+}
+.board-footer.has-banner.is-wrong {
+  background: color-mix(in srgb, var(--color-secondary-container) 70%, var(--color-surface));
+}
+.board-footer.has-banner.is-correct {
+  background: var(--color-right-container);
+}
+.board-banner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.board-banner strong {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+}
+.has-banner.is-wrong .board-banner strong {
+  color: var(--color-on-secondary-container);
+}
+.has-banner.is-correct .board-banner strong {
+  color: var(--color-right);
+}
+.banner-help {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font: inherit;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
+  color: var(--color-on-surface);
+  cursor: pointer;
+}
+/* A skill check's wrong answer is final: the board can't be answered again. */
+.board-body.is-settled {
+  pointer-events: none;
+}
+/* While Jugnu's chat is open the screen stops scrolling as a whole: it is split into the board,
+   which scrolls on its own, the footer, and the chat sheet. Nothing then scrolls the page (a
+   focused input, a growing chat), so the board's top stays where the student left it. The page
+   is shorter by the phone's keyboard where the keyboard overlays it (iOS; set by the chat). */
+.lesson:has(.board.is-chatting) {
+  height: calc(100dvh - var(--keyboard-inset, 0px));
+  min-height: 0;
+}
+.board.is-chatting {
+  min-height: 0;
+}
+.board.is-chatting .board-body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+.board.is-chatting .board-footer {
+  flex: none;
+}
+/* The banner while chatting: one slim row, the verdict and its one move (Try again, Continue).
+   Back and his own button wait until the chat closes; Ask Jugnu is already open. */
+.board.is-chatting .board-footer {
+  padding: 8px 18px;
+}
+.board.is-chatting .board-footer.has-banner {
+  flex-wrap: nowrap;
+}
+.board.is-chatting .board-footer .back,
+.board.is-chatting .board-footer .jugnu-button,
+.board.is-chatting .banner-help {
+  display: none;
+}
+.board.is-chatting .board-banner {
+  width: auto;
+  flex: 1;
+  min-width: max-content;
+}
+.board.is-chatting .board-footer.has-banner .primary {
+  width: auto;
+  flex: 1;
+}

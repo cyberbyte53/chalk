@@ -1,0 +1,8 @@
+# Magnetic field lines (NCERT 13.1; in-text questions on field lines).
+- params: { item: outside }
+  firstTry: 1
+- params: { item: crowded }
+  firstTry: 2
+- params: { item: cross }
+  level: medium
+- params: { item: closed }

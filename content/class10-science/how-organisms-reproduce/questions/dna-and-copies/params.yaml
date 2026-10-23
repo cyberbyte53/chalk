@@ -1,0 +1,8 @@
+# NCERT 8.1: what reproduction copies (DNA, the blueprint for proteins and body design), and why copies are similar but not identical.
+- params: { case: blueprint }
+  firstTry: 1
+- params: { case: proteins }
+  firstTry: 2
+- params: { case: apparatus }
+- params: { case: notIdentical }
+- params: { case: drastic }

@@ -1,0 +1,8 @@
+# The direction of the field of a loop or solenoid (NCERT 13.2.3; in-text Q1; Exercise 8).
+- params: { item: table }
+  firstTry: 3
+- params: { item: reverse }
+  level: easy
+  firstTry: 4
+- params: { item: test }
+- params: { item: centre }

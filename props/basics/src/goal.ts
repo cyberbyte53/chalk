@@ -68,6 +68,15 @@ export const goal = defineProp({
         );
       },
     }),
+    [QuestionAction.Retry]: act({
+      describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
+      byLearner: true,
+      args: noArgs,
+      run: (s) =>
+        s.status === AnswerStatus.Wrong
+          ? set({ status: AnswerStatus.Open, feedback: null })
+          : set({}),
+    }),
     [QuestionAction.GiveFeedback]: act({
       describe: "Show words under the question (e.g. a hint)",
       args: z.object({ text: localizedSchema }).strict(),

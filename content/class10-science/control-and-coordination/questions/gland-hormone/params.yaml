@@ -1,0 +1,12 @@
+# NCERT 7.3, Fig. 7.7, Table 7.1: endocrine glands and their hormones.
+- params: { case: adrenal }
+  firstTry: 1
+- params: { case: thyroid }
+  firstTry: 2
+- params: { case: insulin }
+  firstTry: 3
+- params: { case: growth }
+- params: { case: testosterone }
+- params: { case: oestrogen }
+- params: { case: releasing }
+  level: medium

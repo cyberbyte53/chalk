@@ -1,0 +1,8 @@
+# Fossil fuels and the pollution they cause (NCERT 14.2.1; Exercise 4).
+- params: { item: formed }
+  firstTry: 1
+- params: { item: gases }
+  firstTry: 2
+- params: { item: differ }
+  level: medium
+- params: { item: reduce }

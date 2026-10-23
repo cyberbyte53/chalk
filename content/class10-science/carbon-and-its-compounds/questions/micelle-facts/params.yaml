@@ -1,0 +1,11 @@
+# Section 4.5: soap molecules and micelles; NCERT Exercises (micelles in ethanol, agitation).
+- params: { item: head }
+  firstTry: 3
+- params: { item: micelle }
+  firstTry: 4
+- params: { item: ethanol }
+  level: hard
+- params: { item: cloudy }
+  level: medium
+- params: { item: agitation }
+- params: { item: what-soap }

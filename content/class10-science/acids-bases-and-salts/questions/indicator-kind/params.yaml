@@ -1,0 +1,6 @@
+# NCERT's Do You Know box and Activity 2.2.
+- params: { item: litmus }
+  firstTry: 3
+- params: { item: phenolphthalein }
+- params: { item: vanilla }
+- params: { item: hydrangea }

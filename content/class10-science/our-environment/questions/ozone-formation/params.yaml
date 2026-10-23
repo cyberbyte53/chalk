@@ -1,0 +1,7 @@
+# NCERT 15.2.1: UV splits O₂ into O atoms, and O + O₂ gives O₃.
+- params: { case: split }
+  firstTry: 3
+- params: { case: join }
+  firstTry: 4
+- params: { case: where }
+- params: { case: when }

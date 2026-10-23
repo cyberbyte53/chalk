@@ -1,0 +1,12 @@
+# The basic solids' formulas (recalled in 13.1).
+- params: { item: cylinderCsa }
+  firstTry: 1
+- params: { item: coneSlant }
+  firstTry: 2
+- params: { item: sphereSa }
+- params: { item: hemisphereTsa }
+  level: medium
+- params: { item: hemisphereVolume }
+  level: medium
+- params: { item: coneVolume }
+- params: { item: cuboidTsa }

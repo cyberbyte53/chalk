@@ -5,9 +5,25 @@ export type {
   JugnuPlace,
   Snapshot,
 } from "./board";
-export { boardJson, persona, readable, systemPrompt } from "./context";
-export { BoardHistory } from "./history";
 export {
+  boardDefinition,
+  boardJson,
+  boardNow,
+  persona,
+  propNow,
+  readable,
+  systemPrompt,
+  type Taught,
+} from "./context";
+export {
+  type ConceptLine,
+  type LessonLibrary,
+  conceptsOnBoard,
+  lessonText,
+  mapText,
+} from "./lessons";
+export {
+  type CallRecord,
   type ChatMessage,
   type ChatReply,
   type ChatRequest,
@@ -19,17 +35,42 @@ export {
   type ScriptedReply,
   type ToolCall,
   type ToolSpec,
+  type Usage,
+  chatMessageSchema,
   llmConfigSchema,
+  anthropicProvider,
   ollamaProvider,
   openAiCompatibleProvider,
   providerFrom,
+  recordingFetch,
   scriptedProvider,
 } from "./provider";
-export { jsonSchemaOf } from "./schema";
+export { fromStrict, jsonSchemaOf, schemaSize, strictSchemaOf } from "./schema";
 export {
-  type JugnuEvent,
-  JugnuSession,
   type JugnuOptions,
+  JugnuSession,
+  type JugnuThink,
   type JugnuTurn,
+  type PlayedCue,
+  type ThinkRequest,
+  thinkHere,
 } from "./session";
-export { type JugnuStep, JugnuTool, runTool, toolsFor, wouldPass } from "./tools";
+export {
+  type Call,
+  type JugnuEvent,
+  type JugnuStep,
+  JugnuTool,
+  type JugnuTools,
+  type ToolOutcome,
+  type TurnWork,
+  jugnuTools,
+  runTool,
+  toolsFor,
+} from "./tools";
+export {
+  type TurnOptions,
+  type TurnResult,
+  fallback,
+  jugnuTurn,
+  openingOf,
+} from "./turn";

@@ -6,13 +6,13 @@ Does Jugnu help the way the design says, on real boards, in real situations? Two
 - **Simulated students** (`pnpm test-jugnu --students`): a second model plays a student with a misconception, start to finish, and we see whether they get there themselves and actually understand. This is the real measure of the learning experience.
 
 ```
-pnpm test-jugnu                                   # the model in apps/learner/.env (DeepSeek Flash)
+pnpm test-jugnu                                   # the model in the repo's .env (DeepSeek Flash)
 pnpm test-jugnu --judge-model deepseek-v4-pro     # and have a stronger model grade each conversation
 pnpm test-jugnu --only meters                     # just the cases whose id has "meters"
 pnpm test-jugnu --model qwen3.5:9b --provider ollama
 ```
 
-The model, provider, server and key come from `JUGNU_MODEL`, `JUGNU_PROVIDER`, `JUGNU_MODEL_SERVER` and `JUGNU_API_KEY` (the shell, else `apps/learner/.env`), or `--model`, `--provider`, `--url`, `--key`. With nothing set, the provider is `openai-compatible` at `https://api.deepseek.com`. The judge takes the same options with `--judge-` in front and uses the same server and key unless told otherwise (`JUGNU_JUDGE_KEY`). `--think` lets the model think first (the report name gets `-thinking`).
+The model, provider, server and key come from `JUGNU_MODEL`, `JUGNU_PROVIDER`, `JUGNU_MODEL_SERVER` and `JUGNU_API_KEY` (the shell, else the repo's `.env`), or `--model`, `--provider`, `--url`, `--key`. With nothing set, the provider is `openai-compatible` at `https://api.deepseek.com`. The judge takes the same options with `--judge-` in front and uses the same server and key unless told otherwise (`JUGNU_JUDGE_KEY`). `--think` lets the model think first (the report name gets `-thinking`).
 
 ## What a case is
 

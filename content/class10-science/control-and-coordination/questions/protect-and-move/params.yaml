@@ -1,0 +1,7 @@
+# NCERT 7.1.3–7.1.4: protecting the nervous system; how muscles move.
+- params: { case: skull }
+- params: { case: backbone }
+  firstTry: 4
+- params: { case: shorten }
+  firstTry: 5
+- params: { case: voluntaryMuscle }

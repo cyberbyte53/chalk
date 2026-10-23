@@ -1,0 +1,22 @@
+# NCERT Example 13, Exercise 15.1 Q22 (i) and Q24.
+- params: { item: sum8 }
+  firstTry: 1
+- params: { item: sum3 }
+  level: easy
+- params: { item: sum4 }
+- params: { item: sum5 }
+- params: { item: sum6 }
+- params: { item: sum7 }
+  firstTry: 2
+- params: { item: sum9 }
+- params: { item: sum10 }
+- params: { item: sum11 }
+  level: easy
+- params: { item: ex13ii }
+  level: easy
+- params: { item: ex13iii }
+  level: easy
+- params: { item: q24i }
+  level: hard
+- params: { item: q24ii }
+  level: hard

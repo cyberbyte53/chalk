@@ -71,7 +71,8 @@ Boards and pieces have a **name** (chosen by the author, free to rename, used in
 ## Notes
 
 - Events are plain data, typed per machine with Zod (a TypeScript union), checked before they're saved.
-- They're saved on the phone, then uploaded in batches. Anything can subscribe to them on the phone (the dev log, the uploader).
+- They're saved on the phone (IndexedDB), then uploaded in batches to `POST /api/events`; the server keeps each once by its id, so a batch sent again after a lost reply counts once. Anything can subscribe to them on the phone (the uploader, the dev log).
+- Progress is worked out from them, nothing else: a concept's pages are the lesson `concept/<id>`, its practice `practice/<id>`; a practice run's score is each question's first check (`progressFrom` in `@chalk/api`, the same on phone and server).
 - Adding something new: mark the prop's signal as a commit (`isCommit`), map it to its machine in the player, and add the machine's input and state to the types and the table above.
 - Until the first learner, shapes change freely and `schemaVersion` stays 1. After that, shapes only change by adding optional fields; anything else bumps `schemaVersion`.
 - No personal data in events, only ids.

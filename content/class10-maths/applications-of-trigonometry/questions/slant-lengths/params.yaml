@@ -1,0 +1,10 @@
+# NCERT Example 2 and Exercise 9.1 Q2, Q3 and Q5.
+- params: { item: ex2ladder }
+  firstTry: 2
+- params: { item: ex2foot }
+- params: { item: q2tree }
+  level: hard
+- params: { item: q3small }
+  level: easy
+- params: { item: q3big }
+- params: { item: q5kite }

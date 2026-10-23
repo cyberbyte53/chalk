@@ -1,0 +1,6 @@
+# NCERT Ex 1.2 Q4 and Example 6.
+- params: { a: 306, b: 657 }
+- params: { a: 96, b: 404 }
+  firstTry: 4
+- params: { a: 26, b: 91 }
+  level: easy

@@ -1,0 +1,10 @@
+title: { en: "Some Applications of Trigonometry", hi: "त्रिकोणमिति के कुछ अनुप्रयोग" }
+# Concepts in book order (NCERT Chapter 9, the full edition: the Great Trigonometric Survey box,
+# Examples 1–7 and all of Exercise 9.1).
+concepts:
+  - angle-of-elevation
+  - angle-of-depression
+  - two-observations
+  - heights-and-depths-from-above
+# The question bank: every family folder under questions/. Each family says which concepts it tests.
+questions: all

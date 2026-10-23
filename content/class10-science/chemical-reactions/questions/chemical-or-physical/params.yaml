@@ -1,0 +1,14 @@
+# NCERT's opening situations (milk, iron, grapes, food) and everyday physical changes.
+- params: { item: milkSours }
+  firstTry: 1
+- params: { item: iceMelts }
+  firstTry: 2
+- params: { item: ironRusts }
+- params: { item: saltDissolves }
+- params: { item: grapesFerment }
+- params: { item: waterBoils }
+- params: { item: foodCooks }
+  level: medium
+- params: { item: candleBurns }
+  level: medium
+- params: { item: glassBreaks }

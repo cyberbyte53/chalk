@@ -1,0 +1,6 @@
+# Section 9.2: what you need, and which ratio links the known side to the wanted one.
+- params: { item: height }
+  firstTry: 3
+- params: { item: ladder }
+- params: { item: foot }
+- params: { item: measure }

@@ -1,0 +1,6 @@
+# NCERT 10.2 Activities 1–2, Exercise 10.1 Q1 and Q2 (iii).
+- params: { item: total }
+  firstTry: 1
+- params: { item: atPoint }
+- params: { item: parallel }
+  firstTry: 2

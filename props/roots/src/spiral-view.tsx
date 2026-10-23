@@ -44,7 +44,7 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
   hypotenuses.push(
     <line
       key="h1"
-      class="rs-first"
+      class="rts-first"
       data-part={`${RootSpiralPart.HypotenusePrefix}1`}
       x1={o.x}
       y1={o.y}
@@ -55,7 +55,7 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
   labels.push(
     <text
       key="l1"
-      class="rs-one"
+      class="rts-one"
       x={(o.x + at(1).x) / 2 + 4}
       y={o.y - 10}
       text-anchor="middle"
@@ -74,9 +74,9 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
     const along = unitFrom(p, q);
     legs.push(
       <g key={`g${k}`} data-part={`${RootSpiralPart.LegPrefix}${k}`}>
-        <line class="rs-leg" x1={p.x} y1={p.y} x2={legEnd.x} y2={legEnd.y} />
+        <line class="rts-leg" x1={p.x} y1={p.y} x2={legEnd.x} y2={legEnd.y} />
         <path
-          class="rs-right-angle"
+          class="rts-right-angle"
           d={`M ${p.x + toO.x * mark} ${p.y + toO.y * mark} l ${along.x * mark} ${along.y * mark} l ${-toO.x * mark} ${-toO.y * mark}`}
         />
       </g>,
@@ -87,7 +87,7 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
       labels.push(
         <text
           key={`one${k}`}
-          class="rs-one"
+          class="rts-one"
           x={mid.x + inward.x * 11}
           y={mid.y + inward.y * 11}
           text-anchor="middle"
@@ -102,7 +102,7 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
     const drawn = isNewest ? hypDrawn : 1;
     if (drawn <= 0) continue;
     const end = lerp(o, q, drawn);
-    const classes = ["rs-hyp"];
+    const classes = ["rts-hyp"];
     if (isPerfectSquare(n)) classes.push("is-whole");
     if (isNewest) classes.push("is-newest");
     hypotenuses.push(
@@ -120,7 +120,7 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
     labels.push(
       <text
         key={`r${n}`}
-        class={classes.map((c) => c.replace("rs-hyp", "rs-root")).join(" ")}
+        class={classes.map((c) => c.replace("rts-hyp", "rts-root")).join(" ")}
         x={q.x + out.x * LABEL_OFFSET}
         y={q.y + out.y * LABEL_OFFSET}
         text-anchor="middle"
@@ -149,18 +149,18 @@ export function RootSpiralView({ view, width, call }: PropViewProps): JSX.Elemen
   return (
     <button
       type="button"
-      class="rs"
+      class="rts"
       disabled={!canAdd}
       aria-label={`Square-root spiral to ${rootText(s.steps + 1)}`}
       onClick={add}
     >
-      <svg class="rs-svg" viewBox={`0 0 ${width} ${layout.height}`} width="100%" aria-hidden="true">
+      <svg class="rts-svg" viewBox={`0 0 ${width} ${layout.height}`} width="100%" aria-hidden="true">
         {hypotenuses}
         {legs}
-        <circle class="rs-centre" data-part={RootSpiralPart.Centre} cx={o.x} cy={o.y} r={3.5} />
+        <circle class="rts-centre" data-part={RootSpiralPart.Centre} cx={o.x} cy={o.y} r={3.5} />
         {oLabel !== undefined && (
           <text
-            class="rs-o"
+            class="rts-o"
             x={oLabel.x}
             y={oLabel.y}
             text-anchor="middle"

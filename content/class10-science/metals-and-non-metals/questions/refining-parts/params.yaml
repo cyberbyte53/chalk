@@ -1,0 +1,11 @@
+# Section 3.4.6, Fig 3.12, Exercise 8.
+- params: { metal: copper, part: anode }
+  firstTry: 6
+- params: { metal: copper, part: cathode }
+  firstTry: 7
+- params: { metal: copper, part: electrolyte }
+- params: { metal: copper, part: mud }
+- params: { metal: gold, part: anode }
+- params: { metal: silver, part: cathode }
+- params: { metal: zinc, part: electrolyte }
+  level: hard

@@ -247,7 +247,15 @@
             "call": "board.pass"
           }
         }
-      ]
+      ],
+      "jugnu": {
+        "purpose": "Estimate √2 by squeezing: square a guess, and move it toward where the square is 2.",
+        "props": {
+          "line": "the student's guess for √2 (the marker)",
+          "squareLabel": "their guess squared, live",
+          "guessRoot": "is the guess's square close enough to 2?"
+        }
+      }
     },
     {
       "id": 3,

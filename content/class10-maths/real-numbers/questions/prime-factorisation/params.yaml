@@ -1,0 +1,14 @@
+# NCERT Ex 1.2 Q1 and Example 4.
+- params: { n: 140 }
+  firstTry: 1
+- params: { n: 156 }
+- params: { n: 360 }
+- params: { n: 3825 }
+  firstTry: 2
+  level: medium
+- params: { n: 5005 }
+  level: medium
+- params: { n: 7429 }
+  level: hard
+- params: { n: 32760 }
+  level: hard

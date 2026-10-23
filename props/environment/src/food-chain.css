@@ -1,0 +1,86 @@
+/* foodChain: chain, pyramid, web */
+.ev-bg {
+  fill: var(--color-surface-container);
+}
+.ev-fc-box {
+  stroke-width: 1.2px;
+}
+.ev-fc-box.is-l1 {
+  fill: color-mix(in srgb, var(--color-right) 35%, var(--color-surface));
+  stroke: var(--color-right);
+}
+.ev-fc-box.is-l2 {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, var(--color-surface));
+  stroke: var(--color-secondary);
+}
+.ev-fc-box.is-l3 {
+  fill: color-mix(in srgb, var(--color-category-3) 30%, var(--color-surface));
+  stroke: var(--color-category-3);
+}
+.ev-fc-box.is-l4 {
+  fill: color-mix(in srgb, var(--color-wrong) 28%, var(--color-surface));
+  stroke: var(--color-wrong);
+}
+.ev-fc-box.is-gone {
+  fill: var(--color-surface);
+  stroke-dasharray: 4 3;
+}
+.ev-fc-cross {
+  stroke: var(--color-wrong);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.ev-up line {
+  stroke: var(--color-on-surface-variant);
+}
+.ev-up path {
+  fill: var(--color-on-surface-variant);
+}
+.ev-fc-sun {
+  fill: var(--color-secondary);
+}
+.ev-sunlight line {
+  stroke: var(--color-secondary);
+  stroke-width: 2px;
+}
+.ev-sunlight path {
+  fill: var(--color-secondary);
+}
+.ev-heat line {
+  stroke: var(--color-wrong);
+  stroke-dasharray: 3 2;
+}
+.ev-heat path {
+  fill: var(--color-wrong);
+}
+.ev-web-link line {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2px;
+}
+.ev-web-link path {
+  fill: var(--color-on-surface-variant);
+}
+.ev-web-link.is-on line {
+  stroke: var(--color-primary);
+  stroke-width: 2.4px;
+}
+.ev-web-link.is-on path {
+  fill: var(--color-primary);
+}
+.ev-web-link.is-faded {
+  opacity: 0.25;
+}
+.ev-web-node {
+  cursor: pointer;
+}
+.ev-web-node.is-sel circle {
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.ev-web-node.is-linked circle {
+  stroke: var(--color-primary);
+  stroke-width: 1.8px;
+}
+.ev-web-node.is-faded {
+  opacity: 0.35;
+}
