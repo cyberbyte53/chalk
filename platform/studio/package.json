@@ -15,7 +15,8 @@
     "cache-check": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/cache-check.ts",
     "trace": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/trace.ts",
     "chat-log": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/chat-log.ts",
-    "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts"
+    "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts",
+    "catalogue": "tsx --tsconfig ../../tsconfig.base.json src/catalogue-cli.ts"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

@@ -18,6 +18,8 @@ Read before changing code:
 
 Before writing content: [content/principles.md](content/principles.md) is the taste — what a lesson is, the story, the teaching rules, questions, writing, props. Every chapter is planned against it and reviewed against it.
 
+The content pipeline is five skills in `.claude/skills/` (any harness can read them: they are plain SKILL.md files): `plan-chapter` → person approves `plan.md` → `build-props` → `build-lesson` (first lesson alone, then the rest) → `self-review` → screen review in Studio → `apply-review`. Each writes a note to the chapter's `runs/`. Studio (`?dev&studio` in the learner app) shows every chapter's stage, its plan, its runs and its comments; it builds nothing.
+
 Rules of thumb:
 
 - The model: props (state, actions, signals, parts) wired by IS, WHEN and THEN. Read [platform/docs/board-model.md](platform/docs/board-model.md) before writing a lesson or a prop.

@@ -30,6 +30,29 @@ content/
 - **Every name is checked** against the folders on disk; a listed folder that doesn't exist fails the build.
 - **Questions are the chapter's pool**: `questions: all` takes every family folder under the chapter's `questions/`, minus `exclude`; or list the families to take. `exclude` only goes with `all`. Each family says which concepts it tests; a question is served once all of them are taught.
 
+## A chapter's own files: `source/`, `plan.md`, `runs/`
+
+Besides its concepts and questions, a chapter folder holds the pipeline's artefacts. They are plain files, so any harness and any agent can read and write them, and git keeps their history.
+
+- **`source/`**: what the chapter is built from, as handed over (a PDF, a text extract, notes). The plan skill reads everything in it. Older chapters point at `content/sources/text/<file>` from their plan instead.
+- **`plan.md`**: the chapter plan, written before anything is built and approved before building starts. Front matter, then the sections Studio reads:
+
+  ```markdown
+  ---
+  status: draft          # queued | draft | approved | built
+  source: source/        # or a path under content/sources/
+  approved: 2026-10-24   # once approved
+  ---
+  # <Book>, <Chapter>: <Title> (plan)
+  ## Mission            # the story and the "why this chapter"
+  ## Lessons            # a numbered list, one lesson (concept folder) per item, in book order
+  ## Props              # reused (from library/catalogue.md) and new, each with its reason
+  ## Open questions     # what the author wants decided before building; emptied on approval
+  ```
+
+  `status` is the gate: `queued` (dropped, not planned), `draft` (planned, awaiting review), `approved` (build may start), `built` (every lesson in the plan exists and `pnpm check` passes). Only a person moves a plan to `approved`.
+- **`runs/`**: one short append-only note per pipeline run, named `<YYYY-MM-DD-HHMM>-<stage>.md` (stages: `plan`, `props`, `lesson-<slug>`, `self-review`, `review`): what was asked, what was produced, which checks passed, what is left. This is the chapter's history; Studio shows it, chat does not keep it.
+
 ## Manifests (`build.yaml`)
 
 ```yaml

@@ -45,43 +45,47 @@ import { defs as trigonometryDefs } from "@chalk/prop-trigonometry/defs";
  * choices, buttons, goals) are on every page, so they come with the app. Adding a prop package =
  * one line here, its `defs.ts`, and its styles.
  */
-const packs: readonly PropPack[] = [
-  { defs: coordinatesDefs, load: () => import("@chalk/prop-coordinates") },
-  { defs: solidsDefs, load: () => import("@chalk/prop-solids") },
-  { defs: dataDefs, load: () => import("@chalk/prop-data") },
-  { defs: circlesDefs, load: () => import("@chalk/prop-circles") },
-  { defs: trigonometryDefs, load: () => import("@chalk/prop-trigonometry") },
-  { defs: resourcesDefs, load: () => import("@chalk/prop-resources") },
-  { defs: trianglesDefs, load: () => import("@chalk/prop-triangles") },
-  { defs: energyDefs, load: () => import("@chalk/prop-energy") },
-  { defs: environmentDefs, load: () => import("@chalk/prop-environment") },
-  { defs: periodicDefs, load: () => import("@chalk/prop-periodic") },
-  { defs: reproductionDefs, load: () => import("@chalk/prop-reproduction") },
-  { defs: magnetismDefs, load: () => import("@chalk/prop-magnetism") },
-  { defs: carbonDefs, load: () => import("@chalk/prop-carbon") },
-  { defs: apDefs, load: () => import("@chalk/prop-ap") },
-  { defs: chanceDefs, load: () => import("@chalk/prop-chance") },
-  { defs: chemistryDefs, load: () => import("@chalk/prop-chemistry") },
-  { defs: circuitDefs, load: () => import("@chalk/prop-circuit") },
-  { defs: collisionDefs, load: () => import("@chalk/prop-collision") },
-  { defs: controlDefs, load: () => import("@chalk/prop-control") },
-  { defs: decimalDefs, load: () => import("@chalk/prop-decimal") },
-  { defs: electricityDefs, load: () => import("@chalk/prop-electricity") },
-  { defs: exponentsDefs, load: () => import("@chalk/prop-exponents") },
-  { defs: eyeDefs, load: () => import("@chalk/prop-eye") },
-  { defs: gasDefs, load: () => import("@chalk/prop-gas") },
-  { defs: heredityDefs, load: () => import("@chalk/prop-heredity") },
-  { defs: lifeDefs, load: () => import("@chalk/prop-life") },
-  { defs: lightDefs, load: () => import("@chalk/prop-light") },
-  { defs: linearEquationsDefs, load: () => import("@chalk/prop-linear-equations") },
-  { defs: numberLineDefs, load: () => import("@chalk/prop-number-line") },
-  { defs: numberSetsDefs, load: () => import("@chalk/prop-number-sets") },
-  { defs: plotDefs, load: () => import("@chalk/prop-plot") },
-  { defs: polynomialsDefs, load: () => import("@chalk/prop-polynomials") },
-  { defs: primesDefs, load: () => import("@chalk/prop-primes") },
-  { defs: quadraticsDefs, load: () => import("@chalk/prop-quadratics") },
-  { defs: rootsDefs, load: () => import("@chalk/prop-roots") },
-  { defs: surdsDefs, load: () => import("@chalk/prop-surds") },
+const packs: readonly (PropPack & { name: string })[] = [
+  { name: "coordinates", defs: coordinatesDefs, load: () => import("@chalk/prop-coordinates") },
+  { name: "solids", defs: solidsDefs, load: () => import("@chalk/prop-solids") },
+  { name: "data", defs: dataDefs, load: () => import("@chalk/prop-data") },
+  { name: "circles", defs: circlesDefs, load: () => import("@chalk/prop-circles") },
+  { name: "trigonometry", defs: trigonometryDefs, load: () => import("@chalk/prop-trigonometry") },
+  { name: "resources", defs: resourcesDefs, load: () => import("@chalk/prop-resources") },
+  { name: "triangles", defs: trianglesDefs, load: () => import("@chalk/prop-triangles") },
+  { name: "energy", defs: energyDefs, load: () => import("@chalk/prop-energy") },
+  { name: "environment", defs: environmentDefs, load: () => import("@chalk/prop-environment") },
+  { name: "periodic", defs: periodicDefs, load: () => import("@chalk/prop-periodic") },
+  { name: "reproduction", defs: reproductionDefs, load: () => import("@chalk/prop-reproduction") },
+  { name: "magnetism", defs: magnetismDefs, load: () => import("@chalk/prop-magnetism") },
+  { name: "carbon", defs: carbonDefs, load: () => import("@chalk/prop-carbon") },
+  { name: "ap", defs: apDefs, load: () => import("@chalk/prop-ap") },
+  { name: "chance", defs: chanceDefs, load: () => import("@chalk/prop-chance") },
+  { name: "chemistry", defs: chemistryDefs, load: () => import("@chalk/prop-chemistry") },
+  { name: "circuit", defs: circuitDefs, load: () => import("@chalk/prop-circuit") },
+  { name: "collision", defs: collisionDefs, load: () => import("@chalk/prop-collision") },
+  { name: "control", defs: controlDefs, load: () => import("@chalk/prop-control") },
+  { name: "decimal", defs: decimalDefs, load: () => import("@chalk/prop-decimal") },
+  { name: "electricity", defs: electricityDefs, load: () => import("@chalk/prop-electricity") },
+  { name: "exponents", defs: exponentsDefs, load: () => import("@chalk/prop-exponents") },
+  { name: "eye", defs: eyeDefs, load: () => import("@chalk/prop-eye") },
+  { name: "gas", defs: gasDefs, load: () => import("@chalk/prop-gas") },
+  { name: "heredity", defs: heredityDefs, load: () => import("@chalk/prop-heredity") },
+  { name: "life", defs: lifeDefs, load: () => import("@chalk/prop-life") },
+  { name: "light", defs: lightDefs, load: () => import("@chalk/prop-light") },
+  {
+    name: "linear-equations",
+    defs: linearEquationsDefs,
+    load: () => import("@chalk/prop-linear-equations"),
+  },
+  { name: "number-line", defs: numberLineDefs, load: () => import("@chalk/prop-number-line") },
+  { name: "number-sets", defs: numberSetsDefs, load: () => import("@chalk/prop-number-sets") },
+  { name: "plot", defs: plotDefs, load: () => import("@chalk/prop-plot") },
+  { name: "polynomials", defs: polynomialsDefs, load: () => import("@chalk/prop-polynomials") },
+  { name: "primes", defs: primesDefs, load: () => import("@chalk/prop-primes") },
+  { name: "quadratics", defs: quadraticsDefs, load: () => import("@chalk/prop-quadratics") },
+  { name: "roots", defs: rootsDefs, load: () => import("@chalk/prop-roots") },
+  { name: "surds", defs: surdsDefs, load: () => import("@chalk/prop-surds") },
 ];
 
 const lazy = lazyRegistry(packs, basicProps);
@@ -91,6 +95,12 @@ export const propLibrary = lazy.registry;
 
 /** Load the drawing code for these prop types now (a chapter's, while its lessons download). */
 export const preloadProps = lazy.preload;
+
+/** Every prop package by folder name under library/props, with its definitions (for the catalogue). */
+export const propPackages: ReadonlyMap<string, readonly AnyPropDef[]> = new Map([
+  ["basics", basicsDefs],
+  ...packs.map((pack) => [pack.name, pack.defs] as const),
+]);
 
 /** Just the definitions, plus the board itself, for tools that only need the contract (validator, Jugnu). */
 export const propDefs: Readonly<Record<string, AnyPropDef>> = {

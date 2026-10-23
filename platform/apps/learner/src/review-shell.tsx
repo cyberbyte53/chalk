@@ -72,9 +72,14 @@ function viewFromUrl(): View {
   const parts = (params.get("show") ?? Part.Pages)
     .split(",")
     .filter((x): x is Part => (Object.values(Part) as string[]).includes(x));
+  const chapterParam = params.get("chapter") ?? "0";
+  // Studio links by folder names (`book=class10-science&chapter=light`); the chips by index.
+  const bySlug = /^\d+$/.test(chapterParam)
+    ? undefined
+    : places.find((p) => p.source.path === `${params.get("book")}/${chapterParam}/chapter.json`);
   return {
-    book: params.get("book") ?? first?.book ?? OTHER,
-    chapter: Number(params.get("chapter") ?? 0) || 0,
+    book: bySlug?.book ?? params.get("book") ?? first?.book ?? OTHER,
+    chapter: bySlug?.chapter ?? (Number(chapterParam) || 0),
     parts: parts.length > 0 ? parts : [Part.Pages],
   };
 }

@@ -11,6 +11,7 @@ import { join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { studioMiddleware } from "./dev-studio";
 
 /** The repo's root, where the one .env lives (see .env.example). */
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
@@ -137,6 +138,17 @@ function devReview(): Plugin {
   };
 }
 
+/** In development, Studio (`?dev&studio`) reads the content tree through /dev-studio; see dev-studio.ts. */
+function devStudio(): Plugin {
+  return {
+    name: "chalk-dev-studio",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use("/dev-studio", studioMiddleware(ROOT));
+    },
+  };
+}
+
 /**
  * The model servers are called by this machine, not a browser: the page's Origin is dropped, or
  * Anthropic treats the call as one from a browser holding a key.
@@ -211,6 +223,7 @@ export default defineConfig(({ mode }): UserConfig => {
     plugins: [
       devLog(),
       devReview(),
+      devStudio(),
       devContent(),
       // The app installs to the home screen and works offline: the app and its fonts are cached
       // on first visit, and each chapter's content (and its props' drawing code) the first time

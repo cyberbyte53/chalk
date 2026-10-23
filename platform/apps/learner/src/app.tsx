@@ -28,6 +28,7 @@ import { jugnuLink } from "./jugnu";
 import { courses } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { ReviewShell } from "./review-shell";
+import { StudioShell } from "./studio-shell";
 import { TeacherApp } from "./teacher-screens";
 import { type Uploader, deviceStore, startUploader } from "./uploader";
 
@@ -195,6 +196,8 @@ export function App(): JSX.Element {
 
   if (isDevShell && new URLSearchParams(window.location.search).has("review"))
     return <ReviewShell bus={bus} />;
+  if (isDevShell && new URLSearchParams(window.location.search).has("studio"))
+    return <StudioShell />;
   if (isDevShell) return <DevShell bus={bus} />;
   if (import.meta.env.DEV && new URLSearchParams(window.location.search).has("screens"))
     return <ScreenSamples locale={locale} />;
