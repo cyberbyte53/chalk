@@ -804,6 +804,7 @@ function CommentItem({ c, onApprove }: { c: ReviewComment; onApprove?: () => voi
         </span>
         <span class={`review-pill is-${c.status}`}>{statusLabel[c.status]}</span>
       </div>
+      {c.source !== undefined && <p class="review-msg">{c.source}</p>}
       {c.quote !== "" && <blockquote class="review-quote">{c.quote}</blockquote>}
       <p class="review-said">{c.text}</p>
       {c.proposal !== undefined && (

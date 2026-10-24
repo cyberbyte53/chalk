@@ -98,8 +98,10 @@ function lineOf(event: Record<string, unknown>): string[] {
     const message = event.message as { content?: unknown } | undefined;
     const content = Array.isArray(message?.content) ? message.content : [];
     for (const part of content as Record<string, unknown>[]) {
-      if (part.type === "text" && typeof part.text === "string" && part.text.trim() !== "")
-        out.push(type === "assistant" ? part.text.trim() : `(you) ${part.text.trim()}`);
+      if (part.type === "text" && typeof part.text === "string" && part.text.trim() !== "") {
+        // Tool results and skill bodies come back as user turns; the page shows only the agent's own words.
+        if (type === "assistant") out.push(part.text.trim());
+      }
       if (part.type === "tool_use") {
         const input = (part.input ?? {}) as Record<string, unknown>;
         const what =

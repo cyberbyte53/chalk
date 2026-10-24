@@ -38,6 +38,9 @@ export type ReviewComment = {
   part: string | null;
   /** What the piece said when the comment was made, in English. */
   snapshot: string;
+  /** Where the board comes from, filled in by the dev server: `content/…/overview.ts (row 3)` or a family. */
+  source?: string;
+  sourcePath?: string;
   locale: Locale;
   /** Words selected on the screen when commenting, if any. */
   quote: string;
@@ -325,6 +328,7 @@ function CommentItem({
         </button>
         <span class={`review-pill is-${c.status}`}>{statusLabel[c.status]}</span>
       </div>
+      {c.source !== undefined && <p class="review-msg">{c.source}</p>}
       {c.quote !== "" && <blockquote class="review-quote">{c.quote}</blockquote>}
       <p class="review-said">{c.text}</p>
       {c.thread.map((m) => (

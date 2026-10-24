@@ -19,4 +19,8 @@ How a comment moves:
 4. **done**: Claude applied the approved change, rebuilt, and added a line to `thread`.
 
 Each comment records the lesson, board, piece and part, and `snapshot`: what the piece said in
-English when you commented, so it can be found in the source even if names change.
+English when you commented, so it can be found in the source even if names change. The dev
+server adds `source`: the file the board comes from, read from `build/` — a page's
+`overview.ts` (with its place in the overview array) or a question's `family.ts` (with its
+`params.yaml` row) — and `sourcePath`, the folder. Open `source` first; `snapshot` then finds
+the piece inside it.

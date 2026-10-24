@@ -11,7 +11,7 @@ import { join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import { studioMiddleware } from "./dev-studio";
+import { sourceOf, studioMiddleware } from "./dev-studio";
 
 /** The repo's root, where the one .env lives (see .env.example). */
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
@@ -89,6 +89,12 @@ function devReview(): Plugin {
   type Comment = { id: string; status: string; thread: Entry[] } & Record<string, unknown>;
   const read = (): Comment[] =>
     existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Comment[]) : [];
+  /** Every screen comment names its source file (from build/), so an agent opens it at once. */
+  const withSource = (c: Comment): Comment => {
+    if (c.source !== undefined || c.board === "plan") return c;
+    const found = sourceOf(ROOT, String(c.lessonId), Number(c.boardIndex));
+    return found === null ? c : { ...c, source: found.source, sourcePath: found.path };
+  };
   const write = (all: Comment[]) => {
     mkdirSync(dir, { recursive: true });
     writeFileSync(`${file}.tmp`, `${JSON.stringify(all, null, 2)}\n`);
@@ -103,7 +109,12 @@ function devReview(): Plugin {
           res.setHeader("content-type", "application/json");
           res.end(JSON.stringify(all));
         };
-        if (req.method !== "POST") return send(read());
+        if (req.method !== "POST") {
+          const all = read();
+          const filled = all.map(withSource);
+          if (filled.some((c, i) => c !== all[i])) write(filled);
+          return send(filled);
+        }
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
@@ -121,7 +132,9 @@ function devReview(): Plugin {
           const found = all.find((c) => c.id === change.id);
           if (change.op === "add" && change.comment !== undefined) {
             const id = `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
-            all.push({ ...change.comment, id, createdAt: at, status: "open", thread: [] });
+            all.push(
+              withSource({ ...change.comment, id, createdAt: at, status: "open", thread: [] }),
+            );
           } else if (change.op === "reply" && found !== undefined && change.text) {
             found.thread.push({ by: "you", at, text: change.text });
             found.status = change.status ?? "open";

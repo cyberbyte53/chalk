@@ -303,6 +303,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Agreed. NCERT opens with exactly this: we see an object because it reflects the light falling on it, and that reflected light reaches our eyes. Proposal: L1 starts with a 'How we see' theory section in that order (light sources → most things only reflect light → reflected light reaches the eye → that's seeing), with an animation, before any story. The power-cut scene comes after, as 'now explain this'."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: reflection-and-images now has 'How we see things' (luminous / non-luminous → reflected light reaches the eye, with the HowWeSee animation) before any explaining, and the charger is explained later on 'Back to the power cut'. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -325,6 +330,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Fair: 'staring at it and can't see it' sounds illogical. Proposal: 'She knows exactly where the charger is, but in the dark she can't see it at all.' and the scene moves after the theory as an application."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: the 'dark' page reads 'Riya knows exactly where the charger is, on the table a metre away, but in the dark she can't see it at all.' Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -347,6 +357,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Right, the still picture doesn't show either claim. Proposal: an animation: the torch switches on, light travels out in straight lines (moving dashes along rays), hits the charger, bounces into the eye; then a small source + an object → a sharp shadow, and the rays that just miss the edge go straight on (no bending round). Text only states what the animation shows."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: the 'straight' page has the StraightLines animation (small bulb, a ball, the grazing rays going on to a sharp shadow), and the old 'Found it!' line is gone. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -369,6 +384,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Proposal: ruler along the mirror with ticks every 5 cm and numbers every 10 cm (0–100), plus the strike point's position read out ('lands at 50 cm')."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: planeMirror draws a ruler with ticks every 5 cm, numbered every 10, and has a showStrikeAt readout. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -391,6 +411,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Agreed. Proposal: one labelled diagram with leader lines: incident ray, point of incidence, normal (dashed, with the right-angle mark), reflected ray, angle i, angle r — each label lighting up as its definition is read (step-through: tap 'next' to reveal one term at a time)."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: the 'names' page steps through the six labels with Next (labelStep), and the definitions appear after the last one. Your new comment on that page (i and r in the same colour) is a separate proposal. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -413,6 +438,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Proposal: draw the image exactly like the object (same arrow, same colour), just dashed/faded to mark it as virtual — so it's obviously 'the same thing, seen behind the mirror'. Same change in the curved-mirror and lens props where the image is upright."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in mirrorImage, but not yet approved: the image is drawn as the object's own arrow, same shape and colour, faded and dashed (mirror-image.css). I haven't checked the sphericalMirror and lens props for the same change. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -435,6 +465,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Proposal: an interactive lateral-inversion demo: a word (e.g. RIYA / AMBULANCE) and a hand in front of a mirror; the mirror shows the flipped version; tap to 'walk round' and compare left/right. Then the ambulance bonnet shown as written and as seen in the rear-view mirror."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: a 'lateral' page with the lateralMirror prop (raise a hand, change the word, print AMBULANCE back to front). Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -457,6 +492,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Proposal: every worked example gets its figure: the mirror, the normal, the ray at 30° (and the 25°-from-the-surface case with both angles marked, so the 90° − 25° step is visible)."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source, but not yet approved: both examples and 'Your turn' have a rayAngle figure, the 25° one with the angle to the surface and the angles to the normal marked. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -479,6 +519,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Fair: that's odd. Proposal: Mom's round make-up mirror (the magnifying kind on a stand). Same physics (concave), and the scene/text change to match."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source (mirror-parts), but not yet approved: it's now Mom's round make-up mirror throughout, and the picture lands on a tissue box. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -501,6 +546,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Proposal: build it up in steps: a shiny steel ball → slice off a small cap (animation) → that cap is a spherical mirror; hollow side shiny = concave, outside shiny = convex → then the side view with C (centre of the ball), R (its radius) and P (middle of the cap)."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source (mirror-parts), but not yet approved: a 'sphere' page (steel ball → slice off a cap with Next → concave or convex), then the side view with C, R and P. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -523,6 +573,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Agreed — this is the structural point. Proposal (whole chapter): each lesson = Learn (theory in NCERT's order, with diagrams/animations and 'try it' props) → See it in life (the story moment, now explained) → Practice. Story stays as the frame and the applications, not the way the theory is delivered. Here: define principal focus and focal length first (parallel rays → meet at F, with an animated beam), then Kabir's burning paper as 'why did it smoke?'."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Already in the source (mirror-parts), but not yet approved: the 'focus' page teaches F and the focal length first, Kabir's card smoking now comes in 'Back to Mom's mirror', and the lessons follow Learn → See it in life → Practice. Check it on screen: approve to close it, or reply."
       }
     ]
   },
@@ -545,6 +600,11 @@
         "by": "claude",
         "at": "2026-10-19T09:42:26.604Z",
         "text": "Agreed. Proposal: a short circle-geometry step before the ray rules: (1) a radius of a circle meets the circle at right angles (animate: tangent at a point, radius to it, right-angle mark; drag the point round the circle, it stays 90°); (2) so the line from C to any point of the mirror is the normal there; (3) then each rule falls out: through C → along the normal → straight back; parallel ray → equal angles about that normal → through F (with the triangle argument drawn)."
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Partly in the source, not yet approved: mirror-parts has a 'normal' page (a radius meets the circle at right angles, told with bicycle spokes), and the C-ray's 'Why' in mirror-ray-rules now builds on it. Two parts of the proposal are not built: the draggable tangent-and-radius animation, and the triangle argument for the parallel ray. Ray 1's 'Why' still says 'this is what F means'. Approve the remaining parts if you want them, or say the current version is enough."
       }
     ]
   },
@@ -561,8 +621,27 @@
     "text": "can we differnetiat angle of incidednce and refelction they are colored the same",
     "id": "cmvf4x1m2vvx",
     "createdAt": "2026-10-19T10:51:55.370Z",
-    "status": "open",
-    "thread": []
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Proposal below: i and r get their own colours (arc and label), and each ray takes its angle's colour, so you can see which angle belongs to which ray. Same change in rayAngle, the figure used on the examples and your-turn pages. I'd also add it to principles.md as a rule: two quantities that are compared get different colours."
+      }
+    ],
+    "proposal": {
+      "summary": "Colour i and r differently in planeMirror and rayAngle: incident ray + i in --color-category-1, reflected ray + r in --color-category-2 (arcs and labels). The normal stays grey and dashed. Text unchanged.",
+      "changes": [
+        {
+          "before": "planeMirror (plane-mirror-view.tsx, styles.css): both arcs and both labels use .pm-angles / .pm-angle-label in --color-secondary; both rays use .pm-ray in --color-primary",
+          "after": "the arc and label for i, and the incident ray, in --color-category-1; the arc and label for r, and the reflected ray, in --color-category-2 (new classes .pm-angle-i / .pm-angle-r, .pm-ray-in / .pm-ray-out); the label step that names i and r lights each in its own colour"
+        },
+        {
+          "before": "rayAngle (ray-angle-view.tsx, ray-angle.css): every .ra-arc and .ra-label in --color-secondary",
+          "after": "the angle to the normal (i) in --color-category-1, the reflected angle (r) in --color-category-2; the angle to the surface and the angle between the rays stay --color-secondary"
+        }
+      ]
+    }
   },
   {
     "lessonId": "concept/3027536a100838c2",
@@ -577,8 +656,23 @@
     "text": "would be good to show a demonstration for 2 no ?",
     "id": "cmvf4zum9vo5",
     "createdAt": "2026-10-19T10:54:06.273Z",
-    "status": "open",
-    "thread": []
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Proposal below: a demo of law 2 done the way NCERT does it (Activity 10.1 in older editions: a ray on a sheet of paper, then fold the paper). It needs a 3D-ish view, which none of the light props has, so it's a new scene in lightScene (or a small new prop). Tell me which you prefer, or approve as written (a lightScene scene, stepped with Next)."
+      }
+    ],
+    "proposal": {
+      "summary": "Add a stepped 'same plane' demo on the laws page, between law (2) and the sandbox: the incident ray, the normal and the reflected ray drawn on a sheet of card standing on the mirror; bending the half of the card with the reflected ray out of line makes that ray vanish from it. The text only says what the demo shows.",
+      "changes": [
+        {
+          "before": "laws page: law (2) as text, then 'The second law says the ray doesn't twist sideways…', then the sandbox",
+          "after": "laws page: law (2), then a new lightScene scene (SceneKind.SamePlane, stepped with Next): (1) a card standing upright on the mirror with the incident ray, the normal and the reflected ray all lying on it; (2) the reflected half of the card is bent back, and the reflected ray no longer lies on it, it carries on in the original flat sheet; (3) bent back flat, the ray is on the card again. Then: 'The reflected ray is only on the card when the card is one flat sheet with the incident ray and the normal. That is law (2): all three lie in one plane.' Then the existing sentence about drawings on flat paper, then the sandbox."
+        }
+      ]
+    }
   },
   {
     "lessonId": "concept/3027536a100838c2",
@@ -593,14 +687,28 @@
     "text": "it would be really good if we can demonstrate it ; differtaite the 2 types",
     "id": "cmvf52vnw2eb",
     "createdAt": "2026-10-19T10:56:27.596Z",
-    "status": "open",
+    "status": "proposed",
     "thread": [
       {
         "by": "you",
         "at": "2026-10-19T10:57:26.619Z",
         "text": "how can we introduce this without introducing the mirros is kind of tricky"
+      },
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Your worry is right: a real image from a mirror or a lens needs ideas we haven't taught yet. A pinhole camera doesn't. It uses only 'light travels in straight lines', taught three pages earlier, and students know it from Class 6. Rays from a candle really cross at the pinhole and land on the screen, so you get a real (upside-down) picture you can catch on paper. Put next to the plane mirror and its paper that stays dark, that shows both kinds side by side. It's also our projector's first step: Kabir's 'throw the movie on the wall'. Proposal below."
       }
-    ]
+    ],
+    "proposal": {
+      "summary": "On the real-virtual page, demonstrate both kinds before the plane mirror is called virtual: a pinhole camera (real: rays really meet on the screen, the picture is caught on paper) next to the plane mirror with paper behind it (virtual: only dashed lines get there, the paper stays dark).",
+      "changes": [
+        {
+          "before": "real-virtual page: definition → 'In a plane mirror the reflected rays spread apart…' → mirrorImage with paper → question",
+          "after": "real-virtual page: definition → new lightScene scene (SceneKind.Pinhole): a candle, a box with a pinhole and a paper screen; rays from the top and bottom of the flame go straight through the hole and really reach the paper, where an upside-down flame glows, with the caption 'Light really gets here: a real image' → 'Now the plane mirror. Put paper where its image is.' → the existing mirrorImage with paper (caption 'No light gets here: a virtual image') → question. The definition text stays; the body becomes: 'In the pinhole camera the rays really reach the paper, so the picture is real. In a plane mirror the reflected rays spread apart and never meet: only their dashed extensions meet, behind the mirror. So the image in a plane mirror is virtual.'"
+        }
+      ]
+    }
   },
   {
     "lessonId": "concept/3027536a100838c2",
@@ -615,8 +723,27 @@
     "text": "we can show the height also no ?? it would be good to see what mirros does to the height of the image",
     "id": "cmvf55mm49be",
     "createdAt": "2026-10-19T10:58:35.836Z",
-    "status": "open",
-    "thread": []
+    "status": "proposed",
+    "thread": [
+      {
+        "by": "claude",
+        "at": "2026-10-24T06:07:26Z",
+        "text": "Proposal below: heights marked like the distances, and the object's height made draggable, so 'same size' is found the same way as 'as far behind'."
+      }
+    ],
+    "proposal": {
+      "summary": "mirrorImage gets height marks (a bracket beside the object and one beside the image, each reading its height in cm) and a draggable object height. On the plane-image page both are on, and the question checks size as well as distance.",
+      "changes": [
+        {
+          "before": "mirrorImage: showDistances marks the two distances on the floor; the height is fixed per page (no action)",
+          "after": "mirrorImage: new input showHeights (a bracket and 'h = 8 cm' beside the object and beside the image), new action setHeight (drag the arrow's tip up or down, within HEIGHT.min–HEIGHT.max); both measured the same way as the distances"
+        },
+        {
+          "before": "plane-image page: 'Where is it, and how big? Drag the object and read the floor.' → one question on distance",
+          "after": "plane-image page: 'Where is it, and how big? Drag the object nearer and farther, and drag its tip to make it taller or shorter. Read the floor and the heights.' → the distance question, then a new question 'Make the object taller. What happens to the image?' (right: 'It grows by the same amount: always the same height as the object'; wrong: 'It stays the same height' and 'It grows more when the object is close')"
+        }
+      ]
+    }
   },
   {
     "lessonId": "concept/d2d596fb72746c28",

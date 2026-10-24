@@ -476,3 +476,72 @@ export function studioMiddleware(root: string) {
     });
   };
 }
+
+/**
+ * Where a reviewed board comes from, as a path an agent can open: the concept's `overview.ts`
+ * (with the page's row) for a lesson page, or the family's folder (with the params row) for a
+ * practice or bank question. Read from build/, which records every item's source.
+ */
+export function sourceOf(
+  root: string,
+  lessonId: string,
+  boardIndex: number,
+): { source: string; path: string } | null {
+  const [kind, conceptId] = lessonId.split("/");
+  if (conceptId === undefined) return null;
+  const build = join(root, "build");
+  const readJson = (rel: string): Record<string, unknown> | null => {
+    const file = join(build, rel);
+    if (!existsSync(file)) return null;
+    try {
+      return JSON.parse(readFileSync(file, "utf8")) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  };
+  type Ref = { id: string; path: string; tests?: string[]; firstTry?: number };
+  type Src = { path: string; file: string; row?: number };
+  for (const book of dirsIn(build)) {
+    for (const chapter of dirsIn(join(build, book))) {
+      const chapterJson = readJson(`${book}/${chapter}/chapter.json`);
+      if (chapterJson === null) continue;
+      const concepts = (chapterJson.concepts ?? []) as Ref[];
+      const concept = concepts.find((c) => c.id === conceptId);
+      if (concept === undefined) continue;
+      const describe = (src: Src | undefined, fallback: string) =>
+        src === undefined
+          ? { source: fallback, path: fallback }
+          : {
+              source: `content/${src.path}/${src.file}${src.row === undefined ? "" : ` (page ${src.row + 1} of the overview array)`}`,
+              path: `content/${src.path}`,
+            };
+      if (kind === "concept") {
+        const conceptJson = readJson(concept.path);
+        const pages = (conceptJson?.overview ?? []) as Ref[];
+        const page = pages[boardIndex];
+        const pageJson = page === undefined ? null : readJson(page.path);
+        return describe(
+          pageJson?.source as Src | undefined,
+          `content/${concept.path.replace(/\/concept\.json$/, "")}/overview.ts`,
+        );
+      }
+      const questions = (chapterJson.questions ?? []) as Ref[];
+      const testing = questions.filter((q) => (q.tests ?? []).includes(conceptId));
+      const first = testing
+        .filter((q) => q.firstTry !== undefined)
+        .sort((a, b) => (a.firstTry ?? 0) - (b.firstTry ?? 0));
+      const rest = first.length === 0 ? [] : testing.filter((q) => q.firstTry === undefined);
+      const list = kind === "practice" ? (first.length === 0 ? testing : first) : rest;
+      const q = list[boardIndex];
+      const qJson = q === undefined ? null : readJson(q.path);
+      const src = qJson?.source as Src | undefined;
+      return src === undefined
+        ? null
+        : {
+            source: `content/${src.path}/family.ts (params.yaml row ${src.row ?? 0})`,
+            path: `content/${src.path}`,
+          };
+    }
+  }
+  return null;
+}
