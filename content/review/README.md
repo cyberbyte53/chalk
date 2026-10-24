@@ -1,7 +1,14 @@
 # Review comments
 
 `comments.json` holds the comments made on the review page (`?dev&review` in the learner app's
-dev server). The page writes it through `/dev-review`; Claude reads it and writes back.
+dev server) and on a chapter's plan in Studio (`?dev&studio`). The pages write it through
+`/dev-review`; Claude reads it and writes back (the `apply-review` skill).
+
+A plan comment has `lessonId` = the chapter's path (`class9-science/motion`), `board` = `plan`,
+`piece` = the section heading it was made under (or null for the whole plan), `quote` = the
+words selected, `part` = their line range in `plan.md` ("12" or "12-14", null when the words
+weren't found) and `snapshot` = `content/<book>/<chapter>/plan.md:<lines>`. Open the file at
+those lines; the quote is the exact text. A piece comment has the lesson's built id, the board and the piece, as before.
 
 How a comment moves:
 

@@ -8,7 +8,7 @@
 import { Locale } from "@chalk/content";
 import { marked } from "marked";
 import type { JSX } from "preact";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { Board, ChapterDetail, ChapterRow, PlanStatus } from "../dev-studio";
 import { CommentStatus, type ReviewComment, statusLabel, useComments } from "./review-comments";
 
@@ -283,6 +283,46 @@ function renderPlan(plan: string): { html: string; sections: string[] } {
   return { html, sections };
 }
 
+/**
+ * Where a quoted passage sits in plan.md, as 1-based lines ("12" or "12-14"), so an agent can
+ * open the file at the place. Markdown marks are ignored when matching, and the quote may run
+ * over several lines.
+ */
+export function linesOf(plan: string, quote: string): string | null {
+  const plain = (t: string) =>
+    t
+      .replace(/^\s*(?:[-*+]|\d+\.)\s+/gm, "")
+      .replace(/[*_`#>|]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+  const wanted = plain(quote);
+  if (wanted === "") return null;
+  const lines = plan.split("\n").map(plain);
+  // The tightest window: the latest start that still matches, with its earliest end.
+  let best: { start: number; end: number } | null = null;
+  for (let start = 0; start < lines.length; start++) {
+    let joined = "";
+    for (let end = start; end < lines.length && end < start + 12; end++) {
+      joined = joined === "" ? (lines[end] ?? "") : `${joined} ${lines[end] ?? ""}`;
+      if (joined.includes(wanted)) {
+        best = { start, end };
+        break;
+      }
+    }
+  }
+  if (best === null) return null;
+  return best.start === best.end ? `${best.start + 1}` : `${best.start + 1}-${best.end + 1}`;
+}
+
+type Draft = {
+  section: string;
+  quote: string;
+  lines: string | null;
+  text: string;
+  at: { x: number; y: number } | null;
+};
+
 function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.Element {
   const [detail, setDetail] = useState<ChapterDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -308,7 +348,77 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
     [comments, chapterId],
   );
   const rendered = useMemo(() => (detail?.plan ? renderPlan(detail.plan) : null), [detail?.plan]);
-  const [draft, setDraft] = useState<{ section: string; quote: string; text: string } | null>(null);
+  const [draft, setDraft] = useState<Draft | null>(null);
+  /** A "Comment" button floating by the words just selected in the plan. */
+  const [pick, setPick] = useState<{ quote: string; section: string; x: number; y: number } | null>(
+    null,
+  );
+  const planRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const onUp = () => {
+      window.setTimeout(() => {
+        const selection = window.getSelection();
+        const quote = selection?.toString().trim() ?? "";
+        const box = planRef.current;
+        if (quote === "" || selection === null || selection.rangeCount === 0 || box === null) {
+          setPick(null);
+          return;
+        }
+        const range = selection.getRangeAt(0);
+        if (!box.contains(range.commonAncestorContainer)) {
+          setPick(null);
+          return;
+        }
+        const rect = range.getBoundingClientRect();
+        const host = box.getBoundingClientRect();
+        setPick({
+          quote,
+          section: sectionOf(range.startContainer),
+          x: rect.right - host.left,
+          y: rect.bottom - host.top,
+        });
+      }, 0);
+    };
+    document.addEventListener("mouseup", onUp);
+    document.addEventListener("keyup", onUp);
+    return () => {
+      document.removeEventListener("mouseup", onUp);
+      document.removeEventListener("keyup", onUp);
+    };
+  }, []);
+  // Underline what has been commented on, so the plan shows its own review. Runs again when the
+  // plan is re-rendered, since that replaces the marked nodes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `rendered` is the trigger, not an input
+  useEffect(() => {
+    const box = planRef.current;
+    if (box === null) return;
+    for (const mark of box.querySelectorAll("mark.studio-mark")) {
+      const parent = mark.parentNode;
+      if (parent === null) continue;
+      parent.replaceChild(document.createTextNode(mark.textContent ?? ""), mark);
+      parent.normalize();
+    }
+    for (const c of planComments) {
+      if (c.quote === "" || c.status === CommentStatus.Done) continue;
+      const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+      let node: Node | null = walker.nextNode();
+      while (node !== null) {
+        const text = node.textContent ?? "";
+        const at = text.indexOf(c.quote);
+        if (at >= 0 && node instanceof Text) {
+          const hit = node.splitText(at);
+          hit.splitText(c.quote.length);
+          const mark = document.createElement("mark");
+          mark.className = `studio-mark is-${c.status}`;
+          mark.title = c.text;
+          hit.parentNode?.replaceChild(mark, hit);
+          mark.appendChild(hit);
+          break;
+        }
+        node = walker.nextNode();
+      }
+    }
+  }, [planComments, rendered]);
 
   if (error !== null) return <p class="review-msg">{error}</p>;
   if (detail === null) return <p class="review-msg">Reading the chapter…</p>;
@@ -320,19 +430,18 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
     });
     setDetail(next);
   };
-  const startComment = () => {
-    const selection = window.getSelection();
-    const quote = selection?.toString().trim() ?? "";
-    let section = "";
-    let node: Node | null = selection?.anchorNode ?? null;
-    while (node !== null && section === "") {
-      if (node instanceof HTMLElement) {
-        const heading = node.closest("[data-section]") ?? previousHeading(node);
-        section = heading?.getAttribute("data-section") ?? "";
-      }
-      node = node.parentNode;
-    }
-    setDraft({ section, quote, text: "" });
+  const startComment = (from?: { quote: string; section: string; x: number; y: number }) => {
+    const quote = from?.quote ?? "";
+    const section = from?.section ?? "";
+    setDraft({
+      section,
+      quote,
+      lines: detail?.plan ? linesOf(detail.plan, quote) : null,
+      text: "",
+      at: from === undefined ? null : { x: from.x, y: from.y },
+    });
+    setPick(null);
+    window.getSelection()?.removeAllRanges();
   };
   const saveComment = async () => {
     if (draft === null || draft.text.trim() === "") return;
@@ -344,8 +453,8 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
         board: PLAN_BOARD,
         boardIndex: -1,
         piece: draft.section === "" ? null : draft.section,
-        part: null,
-        snapshot: draft.section === "" ? "The plan" : draft.section,
+        part: draft.lines,
+        snapshot: `content/${book}/${chapter}/plan.md${draft.lines === null ? "" : `:${draft.lines}`}`,
         locale: Locale.En,
         quote: draft.quote,
         text: draft.text,
@@ -382,46 +491,66 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
             <span class="review-hint">Queued: run the plan-chapter skill.</span>
           )}
           {detail.plan !== null && (
-            <button type="button" class="review-chip" onClick={startComment}>
-              Comment on the selection
+            <button type="button" class="review-chip" onClick={() => startComment()}>
+              Comment on the whole plan
             </button>
           )}
+          {detail.plan !== null && (
+            <span class="review-hint">Select words in the plan to comment on that place.</span>
+          )}
         </div>
-        {draft !== null && (
-          <div class="review-sheet is-near studio-sheet">
-            <div class="review-sheet-where">
-              {draft.section === "" ? "The plan" : draft.section}
-            </div>
-            {draft.quote !== "" && <blockquote class="review-quote">{draft.quote}</blockquote>}
-            <textarea
-              value={draft.text}
-              placeholder="What should change?"
-              onInput={(e) => setDraft({ ...draft, text: (e.target as HTMLTextAreaElement).value })}
-            />
-            <div class="review-sheet-actions">
-              <button type="button" class="review-chip" onClick={() => setDraft(null)}>
-                Cancel
-              </button>
-              <button
-                type="button"
-                class="review-primary"
-                disabled={draft.text.trim() === ""}
-                onClick={() => void saveComment()}
-              >
-                Save comment
-              </button>
-            </div>
-          </div>
-        )}
       </section>
 
       <div class="studio-columns">
-        <section class="studio-plan">
+        <section class="studio-plan" ref={planRef}>
           {rendered === null ? (
             <p class="review-msg">No plan yet.</p>
           ) : (
             // biome-ignore lint/security/noDangerouslySetInnerHtml: the plan is this repo's own markdown, not user input
             <div class="studio-md" dangerouslySetInnerHTML={{ __html: rendered.html }} />
+          )}
+          {pick !== null && draft === null && (
+            <button
+              type="button"
+              class="review-primary studio-pick"
+              style={{ left: `${Math.max(0, pick.x - 90)}px`, top: `${pick.y + 6}px` }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => startComment(pick)}
+            >
+              Comment
+            </button>
+          )}
+          {draft !== null && (
+            <div
+              class={`review-sheet is-near studio-sheet${draft.at === null ? "" : " is-anchored"}`}
+              style={draft.at === null ? undefined : { top: `${draft.at.y + 8}px` }}
+            >
+              <div class="review-sheet-where">
+                {draft.section === "" ? "The plan" : draft.section}
+                {draft.lines !== null && <span class="review-hint"> · plan.md:{draft.lines}</span>}
+              </div>
+              {draft.quote !== "" && <blockquote class="review-quote">{draft.quote}</blockquote>}
+              <textarea
+                value={draft.text}
+                placeholder="What should change?"
+                onInput={(e) =>
+                  setDraft({ ...draft, text: (e.target as HTMLTextAreaElement).value })
+                }
+              />
+              <div class="review-sheet-actions">
+                <button type="button" class="review-chip" onClick={() => setDraft(null)}>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="review-primary"
+                  disabled={draft.text.trim() === ""}
+                  onClick={() => void saveComment()}
+                >
+                  Save comment
+                </button>
+              </div>
+            </div>
           )}
         </section>
 
@@ -485,6 +614,20 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
   );
 }
 
+/** The heading a node sits under in the rendered plan. */
+function sectionOf(start: Node): string {
+  let node: Node | null = start;
+  while (node !== null) {
+    if (node instanceof HTMLElement) {
+      const heading = node.closest("[data-section]") ?? previousHeading(node);
+      const name = heading?.getAttribute("data-section");
+      if (name) return name;
+    }
+    node = node.parentNode;
+  }
+  return "";
+}
+
 function previousHeading(el: HTMLElement): Element | null {
   let node: Element | null = el;
   while (node !== null) {
@@ -503,7 +646,12 @@ function CommentItem({ c, onApprove }: { c: ReviewComment; onApprove?: () => voi
   return (
     <li class={`review-item is-${c.status}`}>
       <div class="review-item-head">
-        <span>{c.piece ?? c.snapshot}</span>
+        <span>
+          {c.piece ?? "The plan"}
+          {c.part !== null && c.board === "plan" && (
+            <span class="review-hint"> · lines {c.part}</span>
+          )}
+        </span>
         <span class={`review-pill is-${c.status}`}>{statusLabel[c.status]}</span>
       </div>
       {c.quote !== "" && <blockquote class="review-quote">{c.quote}</blockquote>}

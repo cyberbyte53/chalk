@@ -1548,3 +1548,26 @@
   padding: 8px;
   border-radius: 8px;
 }
+.studio-plan {
+  position: relative;
+}
+.studio-pick {
+  position: absolute;
+  z-index: 5;
+}
+.studio-sheet.is-anchored {
+  position: absolute;
+  right: 12px;
+  left: auto;
+  width: min(360px, 80%);
+  z-index: 6;
+}
+.studio-mark {
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-bottom: 2px solid var(--color-primary);
+  color: inherit;
+}
+.studio-mark.is-approved {
+  background: color-mix(in srgb, var(--color-right) 18%, transparent);
+  border-bottom-color: var(--color-right);
+}
