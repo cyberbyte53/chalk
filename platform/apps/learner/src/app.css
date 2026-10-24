@@ -1554,13 +1554,18 @@
 .studio-pick {
   position: absolute;
   z-index: 5;
+  padding: 4px 12px;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
 }
-.studio-sheet.is-anchored {
-  position: absolute;
-  right: 12px;
-  left: auto;
-  width: min(360px, 80%);
+.studio-side .studio-sheet {
+  position: sticky;
+  top: 60px;
+  margin-bottom: 12px;
   z-index: 6;
+}
+.studio-mark.is-draft {
+  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 .studio-mark {
   background: color-mix(in srgb, var(--color-primary) 18%, transparent);

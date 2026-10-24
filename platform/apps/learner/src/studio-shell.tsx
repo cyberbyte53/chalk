@@ -374,8 +374,8 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
         setPick({
           quote,
           section: sectionOf(range.startContainer),
-          x: rect.right - host.left,
-          y: rect.bottom - host.top,
+          x: rect.left - host.left,
+          y: rect.top - host.top,
         });
       }, 0);
     };
@@ -398,8 +398,13 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
       parent.replaceChild(document.createTextNode(mark.textContent ?? ""), mark);
       parent.normalize();
     }
-    for (const c of planComments) {
-      if (c.quote === "" || c.status === CommentStatus.Done) continue;
+    const toMark = [
+      ...planComments.filter((c) => c.quote !== "" && c.status !== CommentStatus.Done),
+      ...(draft !== null && draft.quote !== ""
+        ? [{ quote: draft.quote, status: "draft", text: "" }]
+        : []),
+    ];
+    for (const c of toMark) {
       const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
       let node: Node | null = walker.nextNode();
       while (node !== null) {
@@ -418,7 +423,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
         node = walker.nextNode();
       }
     }
-  }, [planComments, rendered]);
+  }, [planComments, rendered, draft]);
 
   if (error !== null) return <p class="review-msg">{error}</p>;
   if (detail === null) return <p class="review-msg">Reading the chapter…</p>;
@@ -513,18 +518,18 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
             <button
               type="button"
               class="review-primary studio-pick"
-              style={{ left: `${Math.max(0, pick.x - 90)}px`, top: `${pick.y + 6}px` }}
+              style={{ left: `${Math.max(0, pick.x)}px`, top: `${pick.y - 38}px` }}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => startComment(pick)}
             >
               Comment
             </button>
           )}
+        </section>
+
+        <aside class="studio-side">
           {draft !== null && (
-            <div
-              class={`review-sheet is-near studio-sheet${draft.at === null ? "" : " is-anchored"}`}
-              style={draft.at === null ? undefined : { top: `${draft.at.y + 8}px` }}
-            >
+            <div class="review-sheet is-near studio-sheet">
               <div class="review-sheet-where">
                 {draft.section === "" ? "The plan" : draft.section}
                 {draft.lines !== null && <span class="review-hint"> · plan.md:{draft.lines}</span>}
@@ -552,9 +557,6 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
               </div>
             </div>
           )}
-        </section>
-
-        <aside class="studio-side">
           <h3>Lessons</h3>
           <ol class="studio-lessons">
             {detail.lessons.map((l) => (
