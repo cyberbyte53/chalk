@@ -5,7 +5,7 @@ source: source/
 
 # Class 9 Science, Ch 8: Motion (plan)
 
-Source: `source/iesc108.pdf` (NCERT Class 9 Science, 2020-21 edition; text extract beside it). Everything is kept: 8.1–8.6, Activities 8.1–8.11, Examples 8.1–8.7, every in-text question, the summary and Exercises 1–10. Built against `content/principles.md`. Hindi with every string.
+Source: `source/iesc108.pdf` (NCERT Class 9 Science, 2020-21 edition; text extract beside it). Everything is kept: 8.1–8.6, Activities 8.1–8.11, Examples 8.1–8.7, every in-text question, the summary and Exercises 1–10. Built against `content/taste/`. Hindi with every string.
 
 ## Mission: Beat the school bus
 

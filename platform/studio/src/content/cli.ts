@@ -6,7 +6,7 @@ import { WORKING_TREE } from "@chalk/content";
 import { propDefs } from "@chalk/library";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
-import { type BuildResult, buildContent } from "./build";
+import { type BuildResult, SOURCES_FILE, buildContent } from "./build";
 import { writeConceptModules } from "./concepts";
 
 /**
@@ -48,6 +48,11 @@ function write(result: BuildResult): void {
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, `${JSON.stringify(json, null, 2)}\n`);
   }
+  // Where each board was written, for the preview's "open in editor"; not part of the content.
+  writeFileSync(
+    join(buildDir, SOURCES_FILE),
+    `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`,
+  );
 }
 
 async function build(commit: string): Promise<BuildResult> {
@@ -108,6 +113,7 @@ async function publish(): Promise<void> {
   const kept = join(root, "published", commit);
   rmSync(kept, { recursive: true, force: true });
   cpSync(buildDir, kept, { recursive: true });
+  rmSync(join(kept, SOURCES_FILE), { force: true });
   console.log(`✓ published ${commit.slice(0, 7)} → ${kept}`);
 }
 

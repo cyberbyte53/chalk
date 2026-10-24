@@ -1,7 +1,7 @@
 /**
  * Studio's runner: starts one agent run at a time on a chapter, in this repo, with the coding
  * harness installed on the machine (Claude Code by default: `claude -p`), and streams what it says
- * back to the page. The agent does the work through the skills in `.claude/skills/`; Studio only
+ * back to the page. The agent does the work through the skills in `.agents/skills/`; Studio only
  * picks the step, writes the prompt, starts the process and shows its transcript. Nothing here
  * knows how a lesson is built.
  *
@@ -63,7 +63,7 @@ export function promptFor(book: string, chapter: string, step: Step, lesson?: st
     `Use the \`${step}\` skill on \`${place}\`.`,
     lesson !== undefined ? `The lesson to build is \`${lesson}\`.` : "",
     step === Step.ApplyReview
-      ? "Handle every open comment on this chapter in content/review/comments.json (plan comments and screen comments); apply the approved ones first."
+      ? "Handle the comments in this chapter's .comments/ folder (approved first, then open); see platform/docs/comments.md."
       : "",
     "Work only in this repo. Run the checks the skill names. Write the run note in the chapter's runs/.",
     "End with a short summary for the person: what changed, what passed, what needs their decision.",

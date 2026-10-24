@@ -25,6 +25,7 @@
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
+    "playwright-core": "1.63.0",
     "preact": "10.29.8",
     "preact-render-to-string": "6.5.13",
     "yaml": "2.6.1",

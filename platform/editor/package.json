@@ -1,0 +1,74 @@
+{
+  "name": "chalk-editor",
+  "displayName": "Chalk",
+  "description": "See Chalk content as boards beside its code: the book, chapter and lesson screens, every board as a phone draws it, pick a piece to ask the agent or leave a comment.",
+  "version": "0.3.0",
+  "publisher": "chalk",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Other"],
+  "main": "./out/extension.js",
+  "activationEvents": ["workspaceContains:content/build.yaml"],
+  "contributes": {
+    "commands": [
+      { "command": "chalk.preview", "title": "Chalk: Preview boards", "icon": "$(open-preview)" },
+      {
+        "command": "chalk.pick",
+        "title": "Chalk: Pick a piece on the preview",
+        "icon": "$(inspect)"
+      },
+      { "command": "chalk.refresh", "title": "Chalk: Refresh tree", "icon": "$(refresh)" },
+      { "command": "chalk.copyReview", "title": "Chalk: Copy review for the agent" }
+    ],
+    "configuration": {
+      "title": "Chalk",
+      "properties": {
+        "chalk.previewUrl": {
+          "type": "string",
+          "default": "http://localhost:5173/",
+          "description": "The learner app's dev server. Started by the extension when nothing answers there."
+        }
+      }
+    },
+    "views": {
+      "explorer": [{ "id": "chalk.tree", "name": "Chalk" }]
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "chalk.preview",
+          "when": "resourcePath =~ /[\\\\/]content[\\\\/]/",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "chalk.preview",
+          "when": "resourcePath =~ /[\\\\/]content[\\\\/]/",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        { "command": "chalk.refresh", "when": "view == chalk.tree", "group": "navigation" }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "chalk.preview",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "package": "tsc -p tsconfig.json && npx -y @vscode/vsce@3.6.0 package --no-dependencies --allow-missing-repository --skip-license -o chalk-editor.vsix"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "@types/vscode": "1.90.0",
+    "typescript": "5.6.3"
+  }
+}

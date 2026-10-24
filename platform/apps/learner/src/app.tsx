@@ -27,6 +27,7 @@ import { HomeScreen } from "./home-screen";
 import { jugnuLink } from "./jugnu";
 import { courses } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
+import { PreviewShell } from "./preview-shell";
 import { ReviewShell } from "./review-shell";
 import { StudioShell } from "./studio-shell";
 import { TeacherApp } from "./teacher-screens";
@@ -194,6 +195,8 @@ export function App(): JSX.Element {
     if (next !== undefined) setSession({ kind: "signedIn", me: next });
   };
 
+  if (isDevShell && new URLSearchParams(window.location.search).has("board"))
+    return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("review"))
     return <ReviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("studio"))

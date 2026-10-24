@@ -9,7 +9,7 @@
  * on every workspace package's `package.json` dependencies and on every `import … from "@chalk/…"`
  * in its sources. Fails with the offending lines.
  */
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 export const Layer = {
@@ -111,5 +111,23 @@ export function boundaryBreaks(root: string): string[] {
       }
     }
   }
-  return breaks;
+  return [...breaks, ...rendererBreaks(root)];
+}
+
+/**
+ * One renderer: the tools agents use to look at boards (platform/studio/src/mcp) never draw one
+ * themselves. They open the app's preview, which draws with the player. So they import no
+ * player, prop, drawing or UI code.
+ */
+const DRAWING = /from\s+"(@chalk\/(?:player|draw|look|library|prop-[^"/]+)|preact[^"]*)"/g;
+export function rendererBreaks(root: string): string[] {
+  const dir = join(root, "platform", "studio", "src", "mcp");
+  if (!existsSync(dir)) return [];
+  const out: string[] = [];
+  for (const file of sourceFiles(dir))
+    for (const m of readFileSync(file, "utf8").matchAll(DRAWING))
+      out.push(
+        `${relative(root, file)}: imports ${m[1]}; look at boards through the preview instead`,
+      );
+  return out;
 }

@@ -1600,3 +1600,173 @@
   max-height: 360px;
   overflow: auto;
 }
+
+/* ?dev&board= : boards at phone width, as drawn on a phone. */
+/* The phones sit on a dark backdrop, as on the review page, so the white boards stand out. */
+.preview {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #1f1f23;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.preview.is-one {
+  flex-direction: column;
+  align-items: center;
+}
+.preview-away {
+  display: none;
+}
+.preview-nav {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 6px 0;
+  background: #1f1f23;
+  color: #e6e6ea;
+  font: 600 13px system-ui, sans-serif;
+}
+.preview-nav button {
+  border: 1px solid #4a4a52;
+  background: none;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+.preview-nav button.is-on {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.preview-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.preview-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+.preview.is-shot {
+  background: #fff;
+  padding: 0;
+  gap: 0;
+  flex-direction: column;
+}
+.preview-card {
+  width: 390px;
+  flex: none;
+}
+.preview-tag {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  padding: 0 4px 6px;
+  color: #b4b4bc;
+}
+.preview-tag a {
+  color: inherit;
+  font-weight: 700;
+}
+.preview-tag button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.preview-phone {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #2a2a2e;
+}
+.is-shot .preview-phone {
+  border-radius: 0;
+  border: 0;
+}
+.preview-phone .board-footer {
+  display: none;
+}
+.preview-empty {
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+}
+.preview-phone .is-revealed {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+body.is-selecting [data-piece]:hover {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: 4px;
+  cursor: crosshair;
+}
+.preview-help {
+  flex-basis: 100%;
+  text-align: center;
+  font: 13px system-ui, sans-serif;
+  color: #b4b4bc;
+}
+.preview-help b {
+  color: #fff;
+}
+.preview-threads {
+  margin-top: 8px;
+  font: 13px / 1.4 system-ui, sans-serif;
+  color: #d4d4da;
+}
+.preview-threads ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.preview-thread {
+  background: #2a2a30;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.preview-status {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 6px;
+  color: #f0b45a;
+}
+.preview-thread.is-done .preview-status {
+  color: #7fcf8a;
+}
+.preview-piece {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  margin-right: 6px;
+  color: #9a9aa4;
+}
+.preview-plan,
+.preview-reply {
+  margin-top: 4px;
+  color: #b4b4bc;
+}
+.preview-threads summary {
+  cursor: pointer;
+  color: #9a9aa4;
+  margin: 6px 0;
+}

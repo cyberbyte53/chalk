@@ -15,7 +15,8 @@ coverage
 # local scratch
 .chalk-xfer/
 _to_delete/
-.cursor/
+.cursor/*
+!.cursor/mcp.json
 /published/
 /build/
 studio/src/content/.fixtures/

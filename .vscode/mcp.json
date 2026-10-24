@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "chalk": {
+      "type": "stdio",
+      "command": "${workspaceFolder}/platform/studio/node_modules/.bin/tsx",
+      "args": ["${workspaceFolder}/platform/studio/src/mcp/server.ts"]
+    }
+  }
+}

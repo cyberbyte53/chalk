@@ -11,7 +11,17 @@ import { join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import { sourceOf, studioMiddleware } from "./dev-studio";
+import { findBoard, siteOf } from "../../studio/src/boards";
+import {
+  type Comment,
+  CommentStatus,
+  chapterOf,
+  listComments,
+  newCommentId,
+  removeComment,
+  writeComment,
+} from "../../studio/src/comments";
+import { studioMiddleware } from "./dev-studio";
 
 /** The repo's root, where the one .env lives (see .env.example). */
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
@@ -69,6 +79,17 @@ function devContent(): Plugin {
     name: "chalk-dev-content",
     configureServer(server) {
       server.middlewares.use("/content", handle);
+      // build/sources.json is written last by every build: tell open previews to redraw.
+      const sources = join(dir, "sources.json");
+      let timer: NodeJS.Timeout | undefined;
+      const changed = (file: string) => {
+        if (file !== sources) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => server.ws.send({ type: "custom", event: "chalk:build" }), 150);
+      };
+      server.watcher.add(sources);
+      server.watcher.on("change", changed);
+      server.watcher.on("add", changed);
     },
     configurePreviewServer(server) {
       server.middlewares.use("/content", handle);
@@ -77,44 +98,30 @@ function devContent(): Plugin {
 }
 
 /**
- * In development, review comments made on `?dev&review` live in content/review/comments.json at the repo's
- * root. GET /dev-review reads them all; POST /dev-review takes one change ({ op: "add" | "reply" |
- * "status" | "remove" }) and writes the file back. Claude reads the same file, writes its
- * proposals and replies into it, and the page shows them.
+ * In development, the review page's comments are the comments files in each chapter's .comments/
+ * folder (see platform/studio/src/comments.ts). GET /dev-review reads them all; POST /dev-review
+ * takes one change ({ op: "add" | "reply" | "status" | "remove" }) and writes that one file.
+ * Agents read and write the same files; the page shows what they wrote.
  */
 function devReview(): Plugin {
-  const dir = join(ROOT, "content", "review");
-  const file = join(dir, "comments.json");
-  type Entry = { by: string; at: string; text: string };
-  type Comment = { id: string; status: string; thread: Entry[] } & Record<string, unknown>;
-  const read = (): Comment[] =>
-    existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Comment[]) : [];
-  /** Every screen comment names its source file (from build/), so an agent opens it at once. */
-  const withSource = (c: Comment): Comment => {
-    if (c.source !== undefined || c.board === "plan") return c;
-    const found = sourceOf(ROOT, String(c.lessonId), Number(c.boardIndex));
-    return found === null ? c : { ...c, source: found.source, sourcePath: found.path };
-  };
-  const write = (all: Comment[]) => {
-    mkdirSync(dir, { recursive: true });
-    writeFileSync(`${file}.tmp`, `${JSON.stringify(all, null, 2)}\n`);
-    renameSync(`${file}.tmp`, file);
+  /** A new screen comment gets its board, its line and its chapter from build/. */
+  const placed = (c: Record<string, unknown>): Record<string, unknown> => {
+    if (c.board === "plan") return { ...c, source: `content/${String(c.lessonId)}/plan.md` };
+    const on = findBoard(ROOT, String(c.lessonId), Number(c.boardIndex));
+    if (on === null) return c;
+    const source = siteOf(ROOT, on, c.piece as string | null);
+    return { ...c, on, ...(source ? { source } : {}) };
   };
   return {
     name: "chalk-dev-review",
     apply: "serve",
     configureServer(server) {
       server.middlewares.use("/dev-review", (req, res) => {
-        const send = (all: Comment[]) => {
+        const send = () => {
           res.setHeader("content-type", "application/json");
-          res.end(JSON.stringify(all));
+          res.end(JSON.stringify(listComments(ROOT)));
         };
-        if (req.method !== "POST") {
-          const all = read();
-          const filled = all.map(withSource);
-          if (filled.some((c, i) => c !== all[i])) write(filled);
-          return send(filled);
-        }
+        if (req.method !== "POST") return send();
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
@@ -127,24 +134,34 @@ function devReview(): Plugin {
             text?: string;
             status?: string;
           };
-          const all = read();
           const at = new Date().toISOString();
-          const found = all.find((c) => c.id === change.id);
+          const found: Comment | undefined = listComments(ROOT).find((c) => c.id === change.id);
           if (change.op === "add" && change.comment !== undefined) {
-            const id = `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
-            all.push(
-              withSource({ ...change.comment, id, createdAt: at, status: "open", thread: [] }),
-            );
+            const draft = placed({
+              ...change.comment,
+              id: newCommentId(),
+              createdAt: at,
+              status: CommentStatus.Open,
+              thread: [],
+            });
+            const chapter = chapterOf(draft);
+            if (chapter !== undefined)
+              writeComment(ROOT, {
+                ...(draft as Comment),
+                chapter,
+                text: String(draft.text ?? ""),
+              });
           } else if (change.op === "reply" && found !== undefined && change.text) {
             found.thread.push({ by: "you", at, text: change.text });
-            found.status = change.status ?? "open";
+            found.status = change.status ?? CommentStatus.Open;
+            writeComment(ROOT, found);
           } else if (change.op === "status" && found !== undefined && change.status) {
             found.status = change.status;
+            writeComment(ROOT, found);
           } else if (change.op === "remove" && found !== undefined) {
-            all.splice(all.indexOf(found), 1);
+            removeComment(ROOT, found);
           }
-          write(all);
-          send(all);
+          send();
         });
       });
     },

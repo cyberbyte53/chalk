@@ -11,6 +11,7 @@ import {
 import { Dec } from "@chalk/exact";
 import { BOARD, BoardAction, BoardSignal, type PropDef, type StoredState } from "@chalk/prop";
 import { Expr } from "./expr";
+import { noteSite, siteHere } from "./site";
 
 /** A field's value as an author may give it: anywhere a number goes, an exact Dec may go too. */
 export type Loose<T> = T extends number
@@ -218,6 +219,7 @@ export class BoardKit {
     const fields = plain(given) as Record<string, unknown>;
     if (Object.keys(fields).length > 0) piece.with = fields;
     if (options.isHidden === true) piece.isHidden = true;
+    noteSite(piece, siteHere());
     return new Placed(name, def, piece);
   }
 

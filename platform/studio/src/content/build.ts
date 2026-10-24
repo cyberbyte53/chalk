@@ -20,6 +20,7 @@ import {
   isPage,
   paramsFileSchema,
   rootManifestSchema,
+  siteOf,
   versionOf,
 } from "@chalk/author";
 import {
@@ -67,7 +68,18 @@ export type BuildResult = {
   problems: Problem[];
   /** Things worth knowing that don't stop the build (a folder no manifest includes, an excluded row). */
   notices: string[];
+  /**
+   * Built item path → where its board was written: the board's own line and each prop's, as
+   * `content/<path>/<file>:<line>`. Written to build/sources.json for the preview; never shipped.
+   */
+  sources: Map<string, ItemSources>;
 };
+
+/** build/sources.json: built item path → where its board was written. */
+export const SOURCES_FILE = "sources.json";
+
+/** Where one built board's parts were written. */
+export type ItemSources = { board?: string; pieces: Record<string, string> };
 
 type Context = {
   contentDir: string;
@@ -83,7 +95,20 @@ type Context = {
   parents: Map<string, string[]>;
   /** Concept paths built, for checking the graph. */
   concepts: Set<string>;
+  sources: Map<string, ItemSources>;
 };
+
+/** Each prop's line, read from the board as authored (before ids are added, which copies it). */
+function sitesOf(board: Board, boardSite: string | undefined): ItemSources {
+  const pieces: Record<string, string> = {};
+  for (const piece of walkPieces(board.root)) {
+    const site = siteOf(piece);
+    if (site !== undefined && piece.name !== "") pieces[piece.name] = site;
+  }
+  const first = Object.values(pieces)[0];
+  const top = boardSite ?? first;
+  return top === undefined ? { pieces } : { board: top, pieces };
+}
 
 /** The output file for an item: its kind's name in its own folder (book.json, concept.json, …). */
 function outPath(path: string, file: string): string {
@@ -152,6 +177,23 @@ function checkChildren(
     }
   }
   return listed.filter((name) => present.has(name));
+}
+
+/** The line (from 1) where a params.yaml's row starts: its `- ` at the top level, else 1. */
+function rowLine(c: Context, file: string, row: number): number {
+  let text: string;
+  try {
+    text = readFileSync(join(c.contentDir, file), "utf8");
+  } catch {
+    return 1;
+  }
+  let seen = -1;
+  const lines = text.split("\n");
+  for (const [i, line] of lines.entries()) {
+    if (/^-( |$)/.test(line)) seen += 1;
+    if (seen === row) return i + 1;
+  }
+  return 1;
 }
 
 /** Hands out an item's id, refusing one already taken. */
@@ -317,7 +359,9 @@ async function buildPages(
       key: p.key,
       board,
     };
-    refs.push(emit(c, `${conceptPath}/${OVERVIEW_DIR}/${p.key}.json`, item, builtPageSchema));
+    const out = `${conceptPath}/${OVERVIEW_DIR}/${p.key}.json`;
+    c.sources.set(out, sitesOf(built.board, p.site));
+    refs.push(emit(c, out, item, builtPageSchema));
   }
   return refs;
 }
@@ -407,7 +451,12 @@ async function buildFamily(
       params: r.params,
       board,
     };
-    const ref = emit(c, outPath(familyPath, `${id}.json`), item, builtQuestionSchema);
+    const out = outPath(familyPath, `${id}.json`);
+    c.sources.set(out, {
+      ...sitesOf(built.board, undefined),
+      board: `content/${paramsFile}:${rowLine(c, paramsFile, row)}`,
+    });
+    const ref = emit(c, out, item, builtQuestionSchema);
     banked.push({
       ...ref,
       level,
@@ -695,6 +744,7 @@ export async function buildContent(options: {
     ids: new Map(),
     parents: new Map(),
     concepts: new Set(),
+    sources: new Map(),
   };
   const graph: GraphFile = existsSync(join(c.contentDir, ContentFile.Graph))
     ? (readYaml(c, ContentFile.Graph, graphFileSchema) ?? { edges: [] })
@@ -711,5 +761,5 @@ export async function buildContent(options: {
   c.files.set(BuiltFile.Graph, checkGraph(c, graph));
   const index: BuildIndex = { commit: c.commit, books };
   c.files.set(BuiltFile.Index, index);
-  return { files: c.files, problems: c.problems, notices: c.notices };
+  return { files: c.files, problems: c.problems, notices: c.notices, sources: c.sources };
 }

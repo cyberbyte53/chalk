@@ -8,6 +8,7 @@
       "content/**/lessons/*.json",
       "content/**/published/**",
       "build/**",
+      "platform/editor/out/**",
       "published/**"
     ]
   },

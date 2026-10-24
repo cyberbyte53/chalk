@@ -1,4 +1,5 @@
 import { type BoardKit, type BuiltBoard, type Child, buildBoard, theBoard } from "./board";
+import { siteHere } from "./site";
 
 /** When a page lets the learner go on: at once (reading), or when its own rules say `pass`. */
 export const PassOn = { Start: "start", Rules: "rules" } as const;
@@ -10,6 +11,8 @@ const PAGE = Symbol("page");
 export type Page = {
   readonly [PAGE]: true;
   readonly key: string;
+  /** Where the page(...) call is: `content/<path>/overview.ts:12` (for editors; may be absent). */
+  readonly site?: string;
   readonly build: () => BuiltBoard;
 };
 
@@ -31,9 +34,11 @@ export function page(
 ): Page {
   if (!KEY.test(key)) throw new Error(`Page "${key}": use kebab-case, like decimal-zoom`);
   const passOn = options.passOn ?? PassOn.Start;
+  const site = siteHere();
   return {
     [PAGE]: true,
     key,
+    ...(site === undefined ? {} : { site }),
     build: () =>
       buildBoard(camel(key), (b) => {
         if (passOn === PassOn.Start) b.when(theBoard.started, theBoard.pass());

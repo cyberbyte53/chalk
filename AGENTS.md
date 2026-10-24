@@ -1,35 +1,50 @@
 # Agent notes
 
-The repo has three layers, and they import one way (`pnpm boundaries` checks):
+Three layers, importing one way (`pnpm boundaries` checks):
 
 ```text
-content/    the books: book → chapter → lesson (overview pages + question bank). Changes every day.
-library/    props and board patterns, shared across books. Grows with every chapter.
+content/    the books: book → chapter → lesson (overview pages + question bank). Changes daily.
+library/    props and board patterns, shared across books.
 platform/   the fixed code: packages (the core), apps, studio tooling, deploy, engineering docs.
 ```
 
-Read before changing code:
+## Content work
 
-1. [platform/docs/glossary.md](platform/docs/glossary.md): use these names, nothing else.
-   [platform/docs/board-model.md](platform/docs/board-model.md): props, IS, WHEN, THEN.
-2. [platform/docs/architecture.md](platform/docs/architecture.md): packages, layers, what may import what.
-   [platform/docs/how-it-works.md](platform/docs/how-it-works.md): the whole loop, end to end.
-3. [platform/docs/code-conventions.md](platform/docs/code-conventions.md): style and rules.
+- **The taste is `content/taste/`.** Read `constitution.md` always. Then read only the guide for your step (`guides/plan.md`, `pages.md`, `questions.md` or `props.md`) and the exemplars. `checks.md` is enforced by the build, and `reviewer.md` is for reviewers.
+- **The steps are skills** in `.agents/skills/` (`.claude/skills` points there). In order:
+  1. `plan-chapter`, then the person approves `plan.md`.
+  2. `build-props`.
+  3. `build-lesson`: the first lesson alone, then the rest.
+  4. `self-review`, run by a fresh agent.
+  5. The person's review.
+  6. `apply-review`.
 
-Before writing content: [content/principles.md](content/principles.md) is the taste — what a lesson is, the story, the teaching rules, questions, writing, props. Every chapter is planned against it and reviewed against it.
+  When a chat with the person ends, run `wrap-up`: corrections that could recur become checks, examples or guide lines, with the person's yes.
 
-The content pipeline is five skills in `.claude/skills/` (any harness can read them: they are plain SKILL.md files): `plan-chapter` → person approves `plan.md` → `build-props` → `build-lesson` (first lesson alone, then the rest) → `self-review` → screen review in Studio → `apply-review`. Each writes a note to the chapter's `runs/`. Studio (`?dev&studio` in the learner app) shows every chapter's stage, its plan, its runs and its comments, and starts the next step: its **Run** button spawns the harness on the machine (`claude -p` by default; `CHALK_AGENT_CMD` to change it) with the skill's prompt, in this repo, and streams the transcript to the page. Studio itself never edits content.
+  Each step writes a note to the chapter's `runs/`.
+- **Look at what you make.** The chalk MCP server (`.cursor/mcp.json`, `.vscode/mcp.json`, `.mcp.json`) gives you:
+  - `render_board`: boards drawn by the real player at phone width, with each piece's source line and any overflow;
+  - `boards`, including `changed: true`;
+  - `comments`, `comment_update`, `comment_add`;
+  - `find_prop`;
+  - `check`.
 
-Rules of thumb:
+  For people and agents alike, the same boards are at `?dev&board=<book>/<chapter>/<lesson>` in the learner app's dev server; add `&play` and use them in a browser as a student would (Cursor's browser, or a browser MCP). Every piece carries `data-source="content/…:line"`, and Alt-click opens the line.
+- **In the editor**, the Chalk extension (`platform/editor`, install `chalk-editor.vsix`) previews whatever file or folder is open as the student sees it (book screen, chapter path, lesson boards), follows the cursor, and lets the person pick a piece to send to you.
+- **Reviews:** when the person hands you a review file (`@content/reviews/<id>.md`), use `apply-review`: plan in that file, apply, answer each comment, commit.
+- **Comments** are one file each in `content/<book>/<chapter>/.comments/` ([platform/docs/comments.md](platform/docs/comments.md)). Only the person approves.
+- `plan.md` approval is the person's gate. Never set `status: approved` yourself.
+- **Commit only what the person has seen and is happy with.** Finish, show it, wait for their yes, then commit.
 
-- The model: props (state, actions, signals, parts) wired by IS, WHEN and THEN. Read [platform/docs/board-model.md](platform/docs/board-model.md) before writing a lesson or a prop.
-- Every change to a prop is one of its actions, through the one door (`BoardRuntime.call`). Never set prop state directly.
-- Events: only commits are logged; see [platform/docs/events.md](platform/docs/events.md).
-- Art (a book's, chapter's or lesson's picture): an `art.tsx` next to its `build.yaml`; read [platform/docs/making-art.md](platform/docs/making-art.md) and look at `pnpm art`.
-- Drawing: read [platform/docs/drawing.md](platform/docs/drawing.md). Draw with `@chalk/draw`'s pieces; before writing geometry, a shape, a scale or a statistic by hand, check the d3 list there and use or extend it. d3 is imported only inside `@chalk/draw`.
-- New prop: it lives in `library/props/<name>`, never inside a chapter. Follow [platform/docs/making-a-prop.md](platform/docs/making-a-prop.md) (contract first, laws as tests, then code), then add one line to `library/registry/src/index.ts`.
-- A board shape that shows up a second time goes to `library/patterns/` (`@chalk/patterns`).
-- New content: read [platform/docs/writing-content.md](platform/docs/writing-content.md). Folders with `build.yaml` manifests; pages in `overview.ts`; questions as `family.ts` + `params.yaml` in the chapter's `questions/`, with `tests: [Concept.X]` from `concepts.gen.ts`; every question has a witness. `pnpm build-content` must say every check passed. (The code still says `concept` where the docs say lesson: same thing.)
-- Older JSON lessons: `content/<book>/<chapter>/lessons/*.json`, published with `pnpm publish-lesson <file>` (hands out permanent ids; never edit or reuse an `id`). Nothing is spoken unless a script calls `say`; screen text is turned into spoken words by `content/pronunciations.json`.
-- `tmp/` is the old code, for reference only. Do not import from it or edit it.
+## Code work
+
+Read [platform/docs/glossary.md](platform/docs/glossary.md) (use its names), [board-model.md](platform/docs/board-model.md), [architecture.md](platform/docs/architecture.md) and [code-conventions.md](platform/docs/code-conventions.md).
+
+- Every change to a prop is one of its actions, through `BoardRuntime.call`.
+- New prop: in `library/props/<name>`, following [making-a-prop.md](platform/docs/making-a-prop.md), with one line in `library/registry/src/index.ts`.
+- A board shape used twice goes to `library/patterns/`.
+- Drawing: `@chalk/draw` only ([drawing.md](platform/docs/drawing.md)). Art: [making-art.md](platform/docs/making-art.md).
+- New content: [writing-content.md](platform/docs/writing-content.md). `pnpm build-content` must pass. Never edit or reuse an `id`.
+- **One renderer.** Studio tooling never draws a board itself. Preview, screenshots and checks all go through the app's player.
+- `tmp/` is old code: don't import from it or edit it.
 - Done means `pnpm check` passes.
