@@ -9,6 +9,7 @@ import { Locale } from "@chalk/content";
 import { marked } from "marked";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import type { RunState, Step } from "../dev-runner";
 import type { Board, ChapterDetail, ChapterRow, PlanStatus } from "../dev-studio";
 import { CommentStatus, type ReviewComment, statusLabel, useComments } from "./review-comments";
 
@@ -138,7 +139,7 @@ function BoardView(): JSX.Element {
                 <th>Stage</th>
                 <th>Lessons</th>
                 <th>Comments</th>
-                <th>Runs</th>
+                <th>Next</th>
               </tr>
             </thead>
             <tbody>
@@ -173,7 +174,13 @@ function BoardView(): JSX.Element {
                         {c.lessonsPlanned > 0 ? ` / ${c.lessonsPlanned}` : ""}
                       </td>
                       <td>{c.openComments > 0 ? c.openComments : ""}</td>
-                      <td>{c.runs > 0 ? c.runs : ""}</td>
+                      <td class="review-hint">
+                        {c.next === null
+                          ? c.status === "draft"
+                            ? "your review"
+                            : ""
+                          : `${c.next.step}${c.next.lesson ? ` ${c.next.lesson}` : ""}`}
+                      </td>
                     </tr>
                   );
                 })}
@@ -492,9 +499,6 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
               Reopen the plan
             </button>
           )}
-          {detail.status === "queued" && (
-            <span class="review-hint">Queued: run the plan-chapter skill.</span>
-          )}
           {detail.plan !== null && (
             <button type="button" class="review-chip" onClick={() => startComment()}>
               Comment on the whole plan
@@ -557,6 +561,8 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
               </div>
             </div>
           )}
+          <RunPanel detail={detail} onChanged={load} />
+
           <h3>Lessons</h3>
           <ol class="studio-lessons">
             {detail.lessons.map((l) => (
@@ -613,6 +619,148 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
         </aside>
       </div>
     </div>
+  );
+}
+
+const STEPS: Step[] = [
+  "plan-chapter",
+  "apply-review",
+  "build-props",
+  "build-lesson",
+  "self-review",
+];
+
+/**
+ * The agent, from here: what the pipeline would do next and a button to do it, any other step on
+ * request, and the live transcript of the run going now. One run at a time for the repo.
+ */
+function RunPanel({
+  detail,
+  onChanged,
+}: { detail: ChapterDetail; onChanged: () => void }): JSX.Element {
+  const [runs, setRuns] = useState<{ current: RunState | null; recent: RunState[] } | null>(null);
+  const [pickStep, setPickStep] = useState<Step | "">("");
+  const [lesson, setLesson] = useState("");
+  const [note, setNote] = useState<string | null>(null);
+  const logRef = useRef<HTMLPreElement>(null);
+  const poll = useCallback(() => {
+    getJson<{ current: RunState | null; recent: RunState[] }>("/dev-studio/runs")
+      .then(setRuns)
+      .catch(() => {});
+  }, []);
+  useEffect(() => {
+    poll();
+    const timer = window.setInterval(poll, 2000);
+    return () => window.clearInterval(timer);
+  }, [poll]);
+  const live = runs?.current ?? null;
+  const isRunning = live !== null && live.endedAt === null;
+  const mine = live !== null && live.book === detail.book && live.chapter === detail.chapter;
+  // When a run ends, the files changed: re-read the chapter.
+  const endedAt = live?.endedAt ?? null;
+  useEffect(() => {
+    if (endedAt !== null) onChanged();
+  }, [endedAt, onChanged]);
+  const lineCount = live?.lines.length ?? 0;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll to the end when a line arrives
+  useEffect(() => {
+    const el = logRef.current;
+    if (el !== null) el.scrollTop = el.scrollHeight;
+  }, [lineCount]);
+  const start = async (step?: Step) => {
+    setNote(null);
+    try {
+      await post<RunState>("run", {
+        book: detail.book,
+        chapter: detail.chapter,
+        ...(step !== undefined ? { step } : {}),
+        ...(step === "build-lesson" && lesson !== "" ? { lesson } : {}),
+      });
+      poll();
+    } catch (e) {
+      setNote(e instanceof Error ? e.message : String(e));
+    }
+  };
+  return (
+    <section class="studio-runpanel">
+      <h3>Agent</h3>
+      {detail.next === null ? (
+        <p class="review-hint">
+          {detail.status === "draft"
+            ? "Nothing to run: the plan waits for your review and approval."
+            : "Nothing to run: the chapter is up to date."}
+        </p>
+      ) : (
+        <p class="review-msg">
+          Next: <strong>{detail.next.step}</strong>
+          {detail.next.lesson !== undefined && <code> {detail.next.lesson}</code>} —{" "}
+          {detail.next.reason}.
+        </p>
+      )}
+      <div class="review-chips">
+        {detail.next !== null && (
+          <button
+            type="button"
+            class="review-primary"
+            disabled={isRunning}
+            onClick={() => void start()}
+          >
+            {isRunning ? "A run is going…" : "Run next step"}
+          </button>
+        )}
+        <select
+          value={pickStep}
+          disabled={isRunning}
+          onChange={(e) => setPickStep((e.target as HTMLSelectElement).value as Step | "")}
+        >
+          <option value="">Another step…</option>
+          {STEPS.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+        {pickStep === "build-lesson" && (
+          <input
+            placeholder="lesson slug"
+            value={lesson}
+            onInput={(e) => setLesson((e.target as HTMLInputElement).value)}
+          />
+        )}
+        {pickStep !== "" && (
+          <button
+            type="button"
+            class="review-chip"
+            disabled={isRunning}
+            onClick={() => void start(pickStep)}
+          >
+            Run {pickStep}
+          </button>
+        )}
+        {isRunning && (
+          <button
+            type="button"
+            class="review-chip"
+            onClick={() => void post("stop", {}).then(poll)}
+          >
+            Stop
+          </button>
+        )}
+      </div>
+      {note !== null && <p class="review-msg">{note}</p>}
+      {live !== null && (
+        <details class="studio-run" open={mine}>
+          <summary>
+            {isRunning ? "Running" : live.exitCode === 0 ? "Finished" : "Ended"}: {live.step} on{" "}
+            {live.book}/{live.chapter}
+            {!mine && " (another chapter)"}
+          </summary>
+          <pre ref={logRef} class="studio-log">
+            {live.lines.join("\n")}
+          </pre>
+        </details>
+      )}
+    </section>
   );
 }
 

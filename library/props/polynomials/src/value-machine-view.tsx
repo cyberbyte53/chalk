@@ -1,7 +1,7 @@
 import { type PropViewProps, RichText } from "@chalk/player";
-import { Coordinates, Mafs, Point, Text } from "mafs";
+import { Coordinates, Mafs, Point } from "mafs";
 import type { JSX } from "preact";
-import { clean, niceNumber, polyTex, valueAt } from "./poly";
+import { clean, polyTex, valueAt } from "./poly";
 import { Stepper, SymbolButton } from "./ui";
 import { ValueMachineAction, type ValueMachineState, workingTex } from "./value-machine";
 import { planeBox } from "./zero-plane";
@@ -85,13 +85,6 @@ export function ValueMachineView({ view, width, call }: PropViewProps): JSX.Elem
               />
             );
           })}
-          {s.tried
-            .filter((x) => inside(x) && Math.abs(at(x)) < 1e-9)
-            .map((x) => (
-              <Text key={`l${x}`} x={x} y={0} attach="n" attachDistance={18} size={14}>
-                {niceNumber(x).text}
-              </Text>
-            ))}
         </Mafs>
       </div>
       <SymbolButton

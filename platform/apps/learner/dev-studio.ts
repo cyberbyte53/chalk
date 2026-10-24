@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
+import { type Next, type Step, nextStep, runs, startRun, steps, stopRun } from "./dev-runner";
 
 export const PlanStatus = {
   None: "none",
@@ -30,6 +31,8 @@ export type Lesson = {
 };
 
 export type ChapterRow = {
+  /** What the pipeline would do next, or null when it waits for the person or is finished. */
+  next: Next;
   book: string;
   bookTitle: string;
   chapter: string;
@@ -41,6 +44,10 @@ export type ChapterRow = {
   source: string | null;
   /** Lessons the plan lists (numbered items under "## Lessons"). */
   lessonsPlanned: number;
+  /** Their slugs, when the plan writes them as `1. **slug** …`. */
+  plannedLessons: string[];
+  /** The notes in runs/, by file name. */
+  runNames: string[];
   lessons: Lesson[];
   runs: number;
   openComments: number;
@@ -97,6 +104,7 @@ export function readPlan(file: string): {
   approvedOn: string | null;
   source: string | null;
   lessonsPlanned: number;
+  plannedLessons: string[];
   openQuestions: number;
 } {
   const text = readFileSync(file, "utf8");
@@ -118,12 +126,16 @@ export function readPlan(file: string): {
     return (end < 0 ? rest : rest.slice(0, end)).join("\n");
   };
   const count = (body: string, item: RegExp) => body.split("\n").filter((l) => item.test(l)).length;
+  const plannedLessons = [
+    ...section(/^## Lessons/i).matchAll(/^(?:\d+\.|### \d+\.)\s+\*\*([a-z0-9][a-z0-9-]*)\*\*/gm),
+  ].map((m) => m[1] ?? "");
   return {
     text,
     status,
     approvedOn: field("approved"),
     source: field("source"),
     lessonsPlanned: count(section(/^## Lessons/i), /^(\d+\.|### \d+\.|\| \d+ \|)/),
+    plannedLessons,
     openQuestions: count(section(/^## Open questions/i), /^\s*[-*\d]/),
   };
 }
@@ -218,9 +230,9 @@ function chapterRow(
   }
   const planFile = join(dir, "plan.md");
   const plan = existsSync(planFile) ? readPlan(planFile) : null;
-  const runs = existsSync(join(dir, "runs")) ? readdirSync(join(dir, "runs")).length : 0;
+  const runNames = existsSync(join(dir, "runs")) ? readdirSync(join(dir, "runs")).sort() : [];
   const mine = chapterComments(comments, byConcept, book, chapter);
-  return {
+  const row: Omit<ChapterRow, "next"> = {
     book,
     bookTitle,
     chapter,
@@ -230,11 +242,14 @@ function chapterRow(
     approvedOn: plan?.approvedOn ?? null,
     source: plan?.source ?? (existsSync(join(dir, "source")) ? "source/" : null),
     lessonsPlanned: plan?.lessonsPlanned ?? 0,
+    plannedLessons: plan?.plannedLessons ?? [],
+    runNames,
     lessons,
-    runs,
+    runs: runNames.length,
     openComments: mine.filter((c) => c.status !== "done").length,
     openQuestions: plan?.openQuestions ?? 0,
   };
+  return { ...row, next: nextStep({ ...row, next: null }) };
 }
 
 /** Every book and chapter on disk, listed or not, with where each stands. */
@@ -397,6 +412,7 @@ export function studioMiddleware(root: string) {
     const fail = (e: unknown) => send(400, { error: e instanceof Error ? e.message : String(e) });
     try {
       if (req.method === "GET" && url.pathname === "/board") return send(200, studioBoard(root));
+      if (req.method === "GET" && url.pathname === "/runs") return send(200, runs());
       if (req.method === "GET" && url.pathname === "/chapter") {
         const detail = studioChapter(
           root,
@@ -421,6 +437,27 @@ export function studioMiddleware(root: string) {
           setPlanStatus(root, data.book ?? "", data.chapter ?? "", status);
           return send(200, studioChapter(root, data.book ?? "", data.chapter ?? ""));
         }
+        if (url.pathname === "/run") {
+          const step = data.step as Step | undefined;
+          if (step !== undefined && !steps.includes(step)) throw new Error(`no such step: ${step}`);
+          const detail = studioChapter(root, data.book ?? "", data.chapter ?? "");
+          if (detail === null) throw new Error("no such chapter");
+          const chosen: { step: Step; lesson?: string } | null =
+            step !== undefined
+              ? { step, ...(data.lesson ? { lesson: data.lesson } : {}) }
+              : detail.next === null
+                ? null
+                : {
+                    step: detail.next.step,
+                    ...(detail.next.lesson ? { lesson: detail.next.lesson } : {}),
+                  };
+          if (chosen === null) throw new Error("nothing to run: the chapter waits for you");
+          return send(
+            200,
+            startRun(root, { book: detail.book, chapter: detail.chapter, ...chosen }),
+          );
+        }
+        if (url.pathname === "/stop") return send(200, stopRun());
         if (url.pathname === "/drop") {
           const where = dropSource(root, {
             book: data.book ?? "",

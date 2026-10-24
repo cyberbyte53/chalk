@@ -51,6 +51,7 @@ Besides its concepts and questions, a chapter folder holds the pipeline's artefa
   ```
 
   `status` is the gate: `queued` (dropped, not planned), `draft` (planned, awaiting review), `approved` (build may start), `built` (every lesson in the plan exists and `pnpm check` passes). Only a person moves a plan to `approved`.
+- **Running a step from Studio**: the chapter page says what the pipeline would do next (from the files: no plan → `plan-chapter`; open comments → `apply-review`; approved and nothing built → `build-props`; then `build-lesson` per lesson; then `self-review`) and runs it with the coding harness installed on the machine, one run at a time. The transcript streams to the page and is kept in `tmp/studio-runs/`. The same skills work from a terminal; Studio adds nothing the files don't say.
 - **`runs/`**: one short append-only note per pipeline run, named `<YYYY-MM-DD-HHMM>-<stage>.md` (stages: `plan`, `props`, `lesson-<slug>`, `self-review`, `review`): what was asked, what was produced, which checks passed, what is left. This is the chapter's history; Studio shows it, chat does not keep it.
 
 ## Manifests (`build.yaml`)
