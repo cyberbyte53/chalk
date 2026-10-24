@@ -62,11 +62,14 @@ function choiceClass(s: ChoiceState, option: string): string {
 /** Two or four short options sit side by side (Yes / No); anything else is one column. */
 const PAIR_LABEL = 14;
 /** Short options sit side by side: two or three in a row (four as two pairs); long ones stack. */
-function columnsFor(s: ChoiceState, locale: PropViewProps["locale"]): number {
-  const isShort = s.options.every((option) => (option.label[locale] ?? "").length <= PAIR_LABEL);
+function columnsFor(
+  options: readonly { label: { en: string; hi: string } }[],
+  locale: PropViewProps["locale"],
+): number {
+  const isShort = options.every((option) => (option.label[locale] ?? "").length <= PAIR_LABEL);
   if (!isShort) return 1;
-  if (s.options.length === 2 || s.options.length === 4) return 2;
-  if (s.options.length === 3) return 3;
+  if (options.length === 2 || options.length === 4) return 2;
+  if (options.length === 3) return 3;
   return 1;
 }
 
@@ -79,14 +82,15 @@ export function ChoiceView({ view, locale, call }: PropViewProps): JSX.Element {
     call(ChoiceAction.Select, { option });
     call(QuestionAction.Check);
   };
+  const columns = columnsFor(s.options, locale);
   return (
     <div class="piece-question">
       <p class="question-prompt">
         <RichText text={s.prompt[locale]} />
       </p>
       <fieldset
-        class={columnsFor(s, locale) > 1 ? "choices is-pairs" : "choices"}
-        style={{ "--columns": String(columnsFor(s, locale)) }}
+        class={columns > 1 ? "choices is-pairs" : "choices"}
+        style={{ "--columns": String(columns) }}
       >
         {s.options.map((option) => (
           <button
@@ -120,8 +124,7 @@ export function MultiChoiceView({ view, locale, call }: PropViewProps): JSX.Elem
   const s = view as unknown as MultiChoiceState & { canCheck: boolean };
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
-  const isShort = s.options.every((o) => (o.label[locale] ?? "").length <= PAIR_LABEL);
-  const columns = isShort ? Math.min(s.options.length, 5) : 1;
+  const columns = columnsFor(s.options, locale);
   return (
     <div class="piece-question">
       <p class="question-prompt">
