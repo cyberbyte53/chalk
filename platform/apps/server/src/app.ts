@@ -81,6 +81,21 @@ export type AppDeps = {
   contentDir?: string;
   now?: () => number;
   random?: (n: number) => number;
+  /** Where the server's log lines go; unset: the console (one JSON object per line for records). */
+  log?: ServerLog;
+};
+
+/** The server's log: records (one per Jugnu turn), refusals and failures. */
+export type ServerLog = {
+  record: (record: Record<string, unknown>) => void;
+  warn: (message: string) => void;
+  error: (message: string, error?: unknown) => void;
+};
+
+const consoleLog: ServerLog = {
+  record: (record) => console.log(JSON.stringify(record)),
+  warn: (message) => console.warn(message),
+  error: (message, error) => console.error(message, error ?? ""),
 };
 
 type Env = { Variables: { account: AccountRow } };
@@ -138,6 +153,7 @@ export const CONTENT_ROUTE = "/content/";
 export function createApp(deps: AppDeps): Hono<Env> {
   const { db } = deps;
   const now = deps.now ?? Date.now;
+  const log = deps.log ?? consoleLog;
   const random = deps.random ?? ((n: number) => randomInt(n));
   const isSecure = deps.origin.startsWith("https:");
   const jugnuLimit: RateLimit = rateLimit(JUGNU_TURNS_PER_HOUR, HOUR_MS);
@@ -145,7 +161,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   app.onError((error, c) => {
     if (error instanceof ApiFailure) return c.json(error.body, error.status);
-    console.error(error);
+    log.error("request failed:", error);
     return c.json({ error: ApiErrorCode.BadRequest, message: "the server failed" }, 500);
   });
 
@@ -253,7 +269,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
         else {
           const id = (raw as { envelope?: { id?: unknown } } | null)?.envelope?.id;
           rejected.push(typeof id === "string" ? id : `#${i}`);
-          console.warn(`event refused: ${parsed.error.issues[0]?.message}`);
+          log.warn(`event refused: ${parsed.error.issues[0]?.message}`);
         }
       });
       const reply: EventsReply = {
@@ -345,21 +361,19 @@ export function createApp(deps: AppDeps): Hono<Env> {
           input: request.input,
           settle: copy.settle,
         });
-        console.log(
-          JSON.stringify({
-            jugnuTurn: {
-              account: c.get("account").id,
-              model: turn.model,
-              calls: turn.modelCalls,
-              usage: turn.usage,
-              board: request.board.name,
-            },
-          }),
-        );
+        log.record({
+          jugnuTurn: {
+            account: c.get("account").id,
+            model: turn.model,
+            calls: turn.modelCalls,
+            usage: turn.usage,
+            board: request.board.name,
+          },
+        });
         const reply: JugnuTurnReply = turn;
         return c.json(reply);
       } catch (error) {
-        console.error("Jugnu turn failed:", error);
+        log.error("Jugnu turn failed:", error);
         throw new ApiFailure(502, ApiErrorCode.JugnuFailed, String(error).slice(0, 300));
       } finally {
         copy.dispose();

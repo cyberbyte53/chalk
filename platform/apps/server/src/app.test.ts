@@ -32,7 +32,14 @@ import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import rootTwo from "../../../studio/evals/boards/published/where-is-root-2.json";
-import { type AppDeps, JUGNU_TURNS_PER_HOUR, SIGN_IN_COOKIE, createApp, isLanOrigin } from "./app";
+import {
+  type AppDeps,
+  JUGNU_TURNS_PER_HOUR,
+  SIGN_IN_COOKIE,
+  type ServerLog,
+  createApp,
+  isLanOrigin,
+} from "./app";
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
 import { schema } from "./schema";
@@ -125,9 +132,17 @@ describe("server", () => {
   let schoolCode: string;
   let clock: number;
   let model: ReturnType<typeof scriptedProvider>;
+  // What the server logged, kept for the tests to check instead of printed.
+  let logged: { records: Record<string, unknown>[]; warnings: string[]; errors: string[] };
+  const log: ServerLog = {
+    record: (record) => logged.records.push(record),
+    warn: (message) => logged.warnings.push(message),
+    error: (message) => logged.errors.push(message),
+  };
 
   const make = (extra: Partial<AppDeps> = {}) =>
     createApp({
+      log,
       db,
       verifyGoogle: fakeGoogle,
       origin: ORIGIN,
@@ -144,6 +159,7 @@ describe("server", () => {
   });
 
   beforeEach(async () => {
+    logged = { records: [], warnings: [], errors: [] };
     await db.execute(
       sql`truncate jugnu_flags, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
     );
@@ -320,6 +336,7 @@ describe("server", () => {
     const batch = [lessonStart("e1", at), { envelope: { id: "e2" }, nonsense: true }];
     const first = await learner.json<EventsReply>("POST", ApiPath.Events, { events: batch });
     expect(first).toEqual({ saved: 1, rejected: ["e2"] });
+    expect(logged.warnings).toEqual([expect.stringMatching(/^event refused: /)]);
     // The reply was lost and the phone sends it again: nothing is counted twice.
     const again = await learner.json<EventsReply>("POST", ApiPath.Events, {
       events: [lessonStart("e1", at), lessonStart("e3", at + 1000)],
@@ -406,6 +423,8 @@ describe("server", () => {
       turnRequest(reply.chat, "and now?"),
     );
     expect(next.cues).toEqual([{ kind: "say", text: "Try the midpoint." }]);
+    // One record per turn: who, which model, how many calls.
+    expect(logged.records.map((r) => (r.jugnuTurn as { calls: number }).calls)).toEqual([2, 1]);
     const last = model.requests.at(-1)?.messages ?? [];
     expect(last.map((m) => m.role)).toEqual([
       "system",

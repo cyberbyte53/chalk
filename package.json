@@ -11,7 +11,7 @@
     "test": "vitest run",
     "typecheck": "pnpm -r run typecheck",
     "validate": "pnpm --filter @chalk/studio validate",
-    "check": "pnpm typecheck && pnpm test && pnpm validate && pnpm boundaries && pnpm catalogue --check && biome check .",
+    "check": "pnpm --filter @chalk/studio --silent check",
     "format": "biome check --write .",
     "publish-lesson": "pnpm --filter @chalk/studio publish-lesson",
     "test-jugnu": "pnpm --filter @chalk/studio test-jugnu",

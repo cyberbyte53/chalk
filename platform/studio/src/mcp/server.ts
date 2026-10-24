@@ -1,5 +1,5 @@
 import { execFileSync, spawn } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { boardName, listBoards, readSources } from "../boards";
@@ -67,6 +67,20 @@ function changedFiles(): Set<string> {
   }
 }
 
+/** Files changed outside content/ since the last commit (props, patterns, platform). */
+function changedOutsideContent(): string[] {
+  try {
+    return execFileSync("git", ["diff", "--name-only", "HEAD", "--", "library", "platform"], {
+      cwd: root,
+      encoding: "utf8",
+    })
+      .split("\n")
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
 const fileOf = (site: string) => site.replace(/:\d+$/, "");
 
 function commentLine(f: Comment & { file: string }): string {
@@ -80,7 +94,136 @@ function commentLine(f: Comment & { file: string }): string {
   ].join("\n");
 }
 
+/** Prop types in the prop packages these files are in, from library/catalogue.md. */
+function propTypesIn(files: readonly string[]): Set<string> {
+  const catalogue = join(root, "library", "catalogue.md");
+  const out = new Set<string>();
+  if (!existsSync(catalogue)) return out;
+  const packages = new Set(
+    files
+      .map((f) => /^library\/props\/([^/]+)/.exec(f)?.[1])
+      .filter((n): n is string => n !== undefined),
+  );
+  if (packages.size === 0) return out;
+  let current: string | undefined;
+  for (const line of readFileSync(catalogue, "utf8").split("\n")) {
+    const section = /^## `([^`]+)`/.exec(line);
+    if (section) current = section[1];
+    const row = /^\| `([^`]+)`/.exec(line);
+    if (row?.[1] && current && packages.has(current)) out.add(row[1]);
+  }
+  return out;
+}
+
+/** Every built board piece of these prop types, with where it was written. */
+function placesOf(
+  types: ReadonlySet<string>,
+): { board: string; piece: string; type: string; site?: string }[] {
+  const sources = readSources(root);
+  const out: { board: string; piece: string; type: string; site?: string }[] = [];
+  type Piece = { name?: string; prop?: string; children?: Piece[] };
+  for (const b of listBoards(root)) {
+    let item: { board?: { root?: Piece } };
+    try {
+      item = JSON.parse(readFileSync(join(root, "build", `${b.board}.json`), "utf8"));
+    } catch {
+      continue;
+    }
+    const walk = (piece: Piece | undefined): void => {
+      if (piece === undefined) return;
+      if (piece.prop !== undefined && types.has(piece.prop) && piece.name !== undefined)
+        out.push({
+          board: b.board,
+          piece: piece.name,
+          type: piece.prop,
+          ...(sources[`${b.board}.json`]?.pieces[piece.name]
+            ? { site: sources[`${b.board}.json`]?.pieces[piece.name] }
+            : {}),
+        });
+      for (const child of piece.children ?? []) walk(child);
+    };
+    walk(item.board?.root);
+  }
+  return out;
+}
+
+/**
+ * Which chapters a set of files feeds, from what each chapter's last build recorded reading (the
+ * content build's cache: platform/studio/src/content/build.ts). Exact for chapters built since
+ * their files last changed; a chapter never built yet is listed as unknown.
+ */
+function chaptersReading(files: readonly string[]): { chapter: string; because: string[] }[] {
+  const dir = join(root, "node_modules", ".cache", "chalk-content");
+  if (!existsSync(dir)) return [];
+  const wanted = files.map((f) => join(root, f));
+  const out: { chapter: string; because: string[] }[] = [];
+  for (const name of readdirSync(dir).filter((n) => n.endsWith(".json"))) {
+    const chapter = name.replace(/\.json$/, "").replace(/__/g, "/");
+    let deps: string[] = [];
+    try {
+      deps = (JSON.parse(readFileSync(join(dir, name), "utf8")) as { deps?: string[] }).deps ?? [];
+    } catch {
+      continue;
+    }
+    const inside = (f: string) => f.startsWith(`${join(root, "content", chapter)}/`);
+    const because = wanted.filter(
+      (w) => inside(w) || deps.some((d) => d === w || d.startsWith(`${w}/`)),
+    );
+    if (because.length > 0)
+      out.push({ chapter, because: because.map((b) => b.slice(root.length + 1)) });
+  }
+  return out.sort((a, b) => a.chapter.localeCompare(b.chapter));
+}
+
 const tools: Tool[] = [
+  {
+    name: "affected",
+    description:
+      "What a change reaches, before or after you make it. Give files or folders (library/props/circles, library/patterns/words.ts, platform/packages/player/src/runtime.ts), or nothing for everything changed since the last commit. For a prop package: every place its props are placed (board, piece, source line), grouped by chapter. For anything else: the chapters whose last build read it. Use it before changing a prop or a pattern, then render_board the boards it lists.",
+    inputSchema: {
+      type: "object",
+      properties: { files: { type: "array", items: { type: "string" } } },
+    },
+    async run(args) {
+      const given = Array.isArray(args.files) ? (args.files as unknown[]).map(String) : [];
+      const files = given.length > 0 ? given : [...changedFiles(), ...changedOutsideContent()];
+      if (files.length === 0) return [text("Nothing changed since the last commit.")];
+      const out: string[] = [];
+      // Props: the exact places each prop type is placed.
+      const types = propTypesIn(files);
+      if (types.size > 0) {
+        const places = placesOf(types);
+        out.push(
+          `${[...types].map((t) => `\`${t}\``).join(", ")}: ${places.length} place${places.length === 1 ? "" : "s"}${places.length === 0 ? " (no board places them)" : ""}`,
+        );
+        const byChapter = new Map<string, typeof places>();
+        for (const p of places) {
+          const chapter = p.board.split("/").slice(0, 2).join("/");
+          byChapter.set(chapter, [...(byChapter.get(chapter) ?? []), p]);
+        }
+        for (const [chapter, list] of byChapter) {
+          out.push(`\n${chapter} (${list.length})`);
+          for (const p of list.slice(0, 40))
+            out.push(
+              `  • ${p.board.slice(chapter.length + 1)} · \`${p.piece}\` (${p.type}) → ${p.site ?? "?"}`,
+            );
+          if (list.length > 40)
+            out.push(`  … ${list.length - 40} more: boards { under: "${chapter}" }`);
+        }
+      }
+      // Everything (props included): chapters whose last build read the files.
+      const hits = chaptersReading(files);
+      if (hits.length > 0)
+        out.push(
+          `\nChapters whose build reads ${types.size > 0 ? "these files (also through patterns or other code)" : "them"}: ${hits.map((h) => h.chapter).join(", ")}`,
+        );
+      if (out.length === 0)
+        out.push(
+          `Nothing reads ${files.join(", ")} (as of each chapter's last build; run the check tool if content isn't built yet).`,
+        );
+      return [text(out.join("\n"))];
+    },
+  },
   {
     name: "render_board",
     description:

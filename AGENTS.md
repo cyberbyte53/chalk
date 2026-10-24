@@ -26,6 +26,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
   - `render_board`: boards drawn by the real player at phone width, with each piece's source line and any overflow;
   - `boards`, including `changed: true`;
   - `comments`, `comment_update`, `comment_add`;
+  - `affected`: which chapters a change to a prop, pattern or platform file reaches (from what each chapter's build actually read);
   - `find_prop`;
   - `check`.
 
@@ -47,4 +48,4 @@ Read [platform/docs/glossary.md](platform/docs/glossary.md) (use its names), [bo
 - New content: [writing-content.md](platform/docs/writing-content.md). `pnpm build-content` must pass. Never edit or reuse an `id`.
 - **One renderer.** Studio tooling never draws a board itself. Preview, screenshots and checks all go through the app's player.
 - `tmp/` is old code: don't import from it or edit it.
-- Done means `pnpm check` passes.
+- Done means `pnpm check` passes. It only redoes what a change could affect (type checks, tests and chapters are skipped when nothing they read changed); `pnpm check --force` redoes everything.

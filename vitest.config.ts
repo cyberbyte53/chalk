@@ -23,5 +23,7 @@ export default defineConfig({
       "platform/apps/*/src/**/*.test.ts",
     ],
     server: { deps: { inline: [/mafs/, /@use-gesture/, /use-resize-observer/] } },
+    // Notes the files each test reads from disk, for the test cache (platform/studio/src/check).
+    setupFiles: ["platform/studio/src/check/trace-reads.ts"],
   },
 });

@@ -7,12 +7,17 @@ const sites = new WeakMap<object, string>();
 
 const FRAME = /\(?(?:file:\/\/)?(\/[^()]+?):(\d+):\d+\)?$/;
 
-/** The first stack frame inside content/ (not the platform's content package), as path:line. */
+/**
+ * Where in content/ the current call comes from, as path:line: the lesson or question file that
+ * placed it (overview.ts, family.ts, art.tsx) when there is one, so a prop built by a chapter's kit
+ * points at the page that uses it; else the first frame in content/.
+ */
 export function siteHere(): string | undefined {
   const limit = Error.stackTraceLimit;
-  Error.stackTraceLimit = 40;
+  Error.stackTraceLimit = 60;
   const stack = new Error().stack ?? "";
   Error.stackTraceLimit = limit;
+  let first: string | undefined;
   for (const line of stack.split("\n").slice(1)) {
     const match = FRAME.exec(line.trim());
     if (match === null) continue;
@@ -20,9 +25,11 @@ export function siteHere(): string | undefined {
     if (file.includes("/node_modules/") || file.includes("/platform/")) continue;
     const at = file.indexOf("/content/");
     if (at === -1) continue;
-    return `${file.slice(at + 1)}:${row}`;
+    const site = `${file.slice(at + 1)}:${row}`;
+    if (/\/(overview\.ts|family\.ts|art\.tsx)$/.test(file)) return site;
+    first ??= site;
   }
-  return undefined;
+  return first;
 }
 
 export function noteSite(of: object, site: string | undefined): void {

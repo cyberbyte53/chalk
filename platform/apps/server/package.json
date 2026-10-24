@@ -9,7 +9,7 @@
     "add-school": "tsx --env-file-if-exists=../../../.env --tsconfig ../../../tsconfig.base.json src/cli.ts add-school",
     "flags": "tsx --env-file-if-exists=../../../.env --tsconfig ../../../tsconfig.base.json src/cli.ts flags",
     "migration": "drizzle-kit generate",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
   },
   "dependencies": {
     "@chalk/api": "workspace:*",
@@ -28,6 +28,6 @@
     "@electric-sql/pglite": "0.5.8",
     "@types/node": "22.10.2",
     "drizzle-kit": "0.31.11",
-    "tsx": "4.19.2"
+    "tsx": "4.23.15"
   }
 }

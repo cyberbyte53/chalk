@@ -1,4 +1,4 @@
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { ContentFile } from "@chalk/author";
 import {
@@ -96,14 +96,27 @@ function fixture(spec: {
   return dir;
 }
 
+/**
+ * The real Class 9 Maths book, alone: a root manifest listing only it, the book linked in. (The
+ * whole real content is built and checked by the content step of `pnpm check`; these tests are
+ * about what the builder writes, so one real book is enough.)
+ */
+function realBook(): string {
+  const dir = join(fixturesDir, `real${++fixtureCount}`);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "build.yaml"), "books: [class9-maths]\n");
+  symlinkSync(join(contentDir, "class9-maths"), join(dir, "class9-maths"), "dir");
+  return dir;
+}
+
 const build = (dir: string, commit = WORKING_TREE) =>
   buildContent({ contentDir: dir, defs: propDefs, readings, commit });
 const messages = (result: Awaited<ReturnType<typeof build>>) =>
   result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");
 
 describe("building content", () => {
-  it("the real content builds, and every witness and note works on the real props", async () => {
-    const result = await build(contentDir);
+  it("a real book builds, and every witness and note works on the real props", async () => {
+    const result = await build(realBook());
     expect(result.problems).toEqual([]);
     const chapter = builtChapterSchema.parse(
       result.files.get(`class9-maths/number-systems/${BuiltFile.Chapter}`),
@@ -119,7 +132,7 @@ describe("building content", () => {
   }, 60_000);
 
   it("a page's questions are about its concept, ungraded; a bank question is graded", async () => {
-    const result = await build(contentDir);
+    const result = await build(realBook());
     const rational = "class9-maths/number-systems/rational-numbers";
     const concept = builtConceptSchema.parse(result.files.get(`${rational}/${BuiltFile.Concept}`));
     const first = builtPageSchema.parse(
@@ -129,8 +142,9 @@ describe("building content", () => {
   }, 60_000);
 
   it("ids and versions are stable: the same content gives the same files, whatever the commit", async () => {
-    const a = await build(contentDir, "aaaaaaa");
-    const b = await build(contentDir, "bbbbbbb");
+    const book = realBook();
+    const a = await build(book, "aaaaaaa");
+    const b = await build(book, "bbbbbbb");
     const ids = (r: typeof a) =>
       [...r.files.values()].map((f) => {
         const item = f as { id?: string; version?: string };

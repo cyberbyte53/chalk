@@ -39,7 +39,7 @@ export function layerOf(dirFromRoot: string): Layer | undefined {
   return second === "packages" ? Layer.Core : Layer.Assembly;
 }
 
-function workspaceDirs(root: string): string[] {
+export function workspaceDirs(root: string): string[] {
   const yaml = readFileSync(join(root, "pnpm-workspace.yaml"), "utf8");
   const dirs: string[] = [];
   for (const line of yaml.split("\n")) {

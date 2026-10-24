@@ -1,6 +1,6 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   ALL,
   type BuiltBoard,
@@ -57,6 +57,7 @@ import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateLesson } from "../validate";
 import { renderArt } from "./art";
 import { conceptsModule } from "./concepts";
+import { filesUnder, fingerprint, importClosure, isRecordingImports, recordImports } from "./deps";
 import { checkNote, checkWitness } from "./witness";
 
 type Defs = Readonly<Record<string, AnyPropDef>>;
@@ -73,6 +74,8 @@ export type BuildResult = {
    * `content/<path>/<file>:<line>`. Written to build/sources.json for the preview; never shipped.
    */
   sources: Map<string, ItemSources>;
+  /** Chapters built this run, and how many were reused unchanged from the cache. */
+  chapters: { built: string[]; reused: number };
 };
 
 /** build/sources.json: built item path → where its board was written. */
@@ -96,6 +99,10 @@ type Context = {
   /** Concept paths built, for checking the graph. */
   concepts: Set<string>;
   sources: Map<string, ItemSources>;
+  /** Files imported while building (content paths, relative), for a chapter's dependency list. */
+  imported: string[];
+  cache: ChapterCache | undefined;
+  chapters: { built: string[]; reused: number };
 };
 
 /** Each prop's line, read from the board as authored (before ids are added, which copies it). */
@@ -257,6 +264,7 @@ async function importModule(
   path: string,
 ): Promise<Record<string, unknown> | undefined> {
   try {
+    c.imported.push(join(c.contentDir, path));
     return await import(pathToFileURL(join(c.contentDir, path)).href);
   } catch (error) {
     report(c, path, error instanceof Error ? error.message : String(error));
@@ -674,12 +682,155 @@ function noteLongAnswers(c: Context, chapterPath: string): void {
   }
 }
 
+// ---- The chapter cache: a chapter is rebuilt only when something it read has changed ----
+
+/**
+ * Settings for keeping built chapters between runs. A chapter's entry holds everything building it
+ * added (files, problems, notices, ids, concepts, sources) and the list of files it depended on,
+ * recorded, not declared:
+ * - every file under the chapter's folder (its manifests, lessons, questions, art), except its
+ *   comments, run notes and sources, which the build never reads;
+ * - every file the chapter's modules imported, transitively (other chapters' kits, patterns, props'
+ *   defs, the platform), from the imports Node actually resolved;
+ * - the whole source of each prop package its boards place (their witnesses run that code);
+ * - the builder's own code, and the inputs every chapter shares (root manifests, graph,
+ *   pronunciations, root files of the repo, the Node version, the commit being built).
+ * If every one of those files is byte-for-byte as it was, the entry is replayed; otherwise the
+ * chapter is built and its entry rewritten.
+ */
+type ChapterCache = {
+  dir: string;
+  root: string;
+  propDirs: Readonly<Record<string, string>>;
+  /** Files every chapter depends on (builder code, shared inputs). */
+  shared: string[];
+};
+
+type ChapterEntry = {
+  key: string;
+  deps: string[];
+  ref: Ref | undefined;
+  files: [string, unknown][];
+  problems: Problem[];
+  notices: string[];
+  ids: [string, string][];
+  concepts: string[];
+  sources: [string, ItemSources][];
+};
+
+/** Folders inside a chapter the build never reads. */
+const UNREAD = new Set([".comments", "runs", "source"]);
+
+function chapterCache(o: {
+  dir: string;
+  root: string;
+  propDirs: Readonly<Record<string, string>>;
+}): ChapterCache {
+  const builder = importClosure([fileURLToPath(import.meta.url)]);
+  const rootFiles = readdirSync(o.root)
+    .map((name) => join(o.root, name))
+    .filter((f) => statSync(f).isFile());
+  // The registry's table of prop definitions is used to check every board.
+  const registry = filesUnder(join(o.root, "library", "registry", "src"));
+  return { ...o, shared: [...builder, ...rootFiles, ...registry] };
+}
+
+function entryFile(cache: ChapterCache, chapterPath: string): string {
+  return join(cache.dir, `${chapterPath.replace(/\//g, "__")}.json`);
+}
+
+/** Bump when what an entry records changes: every older entry is then rebuilt. */
+const CACHE_FORMAT = "2";
+
+function keyOf(c: Context, deps: readonly string[]): string {
+  return fingerprint(deps, [CACHE_FORMAT, c.commit, process.version, c.contentDir]);
+}
+
+function sharedContentFiles(c: Context): string[] {
+  return [ContentFile.Manifest, ContentFile.Graph, "pronunciations.json"].map((f) =>
+    join(c.contentDir, f),
+  );
+}
+
+async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | undefined> {
+  const cache = c.cache;
+  if (cache === undefined || !isRecordingImports()) {
+    c.chapters.built.push(chapterPath);
+    return buildChapter(c, chapterPath);
+  }
+  const file = entryFile(cache, chapterPath);
+  let entry: ChapterEntry | undefined;
+  try {
+    entry = existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as ChapterEntry) : undefined;
+  } catch {
+    entry = undefined;
+  }
+  const chapterFiles = filesUnder(join(c.contentDir, chapterPath), UNREAD);
+  // The folder's own files are listed afresh: a file added or removed changes the key.
+  if (entry !== undefined && keyOf(c, [...entry.deps, ...chapterFiles]) === entry.key) {
+    for (const [path, json] of entry.files) c.files.set(path, json);
+    c.problems.push(...entry.problems);
+    c.notices.push(...entry.notices);
+    for (const [id, where] of entry.ids) claimId(c, id, where);
+    for (const concept of entry.concepts) c.concepts.add(concept);
+    for (const [path, where] of entry.sources) c.sources.set(path, where);
+    c.chapters.reused += 1;
+    return entry.ref;
+  }
+  const before = {
+    files: new Set(c.files.keys()),
+    problems: c.problems.length,
+    notices: c.notices.length,
+    ids: new Set(c.ids.keys()),
+    concepts: new Set(c.concepts),
+    sources: new Set(c.sources.keys()),
+    imported: c.imported.length,
+  };
+  const ref = await buildChapter(c, chapterPath);
+  c.chapters.built.push(chapterPath);
+  const files = [...c.files].filter(([path]) => !before.files.has(path));
+  const used = new Set<string>();
+  for (const [, json] of files) {
+    const board = (json as { board?: Board }).board;
+    if (board?.root !== undefined) for (const type of propTypesOf(board)) used.add(type);
+  }
+  const propFiles: string[] = [];
+  for (const type of used) {
+    const dir = cache.propDirs[type];
+    // A prop whose package we can't place: depend on every prop (larger, never wrong).
+    propFiles.push(...filesUnder(join(cache.root, dir ?? "library/props")));
+  }
+  const deps = [
+    ...cache.shared,
+    ...sharedContentFiles(c),
+    ...importClosure(c.imported.slice(before.imported)),
+    ...propFiles,
+  ].filter((f) => !f.startsWith(`${join(c.contentDir, chapterPath)}/`));
+  const fresh: ChapterEntry = {
+    key: keyOf(c, [...deps, ...chapterFiles]),
+    deps: [...new Set(deps)],
+    ref,
+    files,
+    problems: c.problems.slice(before.problems),
+    notices: c.notices.slice(before.notices),
+    ids: [...c.ids].filter(([id]) => !before.ids.has(id)),
+    concepts: [...c.concepts].filter((x) => !before.concepts.has(x)),
+    sources: [...c.sources].filter(([path]) => !before.sources.has(path)),
+  };
+  // A chapter with problems is rebuilt every time: some problems (a repeated id) depend on others.
+  if (fresh.problems.length === 0) {
+    mkdirSync(cache.dir, { recursive: true });
+    writeFileSync(file, JSON.stringify(fresh));
+  }
+  return ref;
+}
+
 async function buildBook(c: Context, bookPath: string): Promise<Ref | undefined> {
   const manifest = readYaml(c, outPath(bookPath, ContentFile.Manifest), bookManifestSchema);
   if (manifest === undefined) return undefined;
   const chapters: Ref[] = [];
   for (const name of checkChildren(c, bookPath, manifest.chapters, ContentFile.Manifest)) {
-    const ref = await buildChapter(c, `${bookPath}/${name}`);
+    const ref = await cachedChapter(c, `${bookPath}/${name}`);
     if (ref !== undefined) chapters.push(ref);
   }
   const id = idOf(bookPath);
@@ -735,9 +886,15 @@ export async function buildContent(options: {
   defs: Defs;
   readings: Readings;
   commit: string;
+  /** Where built chapters are kept between runs (with what they read); no cache when absent. */
+  cache?: { dir: string; root: string; propDirs: Readonly<Record<string, string>> };
 }): Promise<BuildResult> {
+  const { cache, ...rest } = options;
   const c: Context = {
-    ...options,
+    ...rest,
+    imported: [],
+    chapters: { built: [], reused: 0 },
+    cache: cache === undefined || !recordImports() ? undefined : chapterCache(cache),
     files: new Map(),
     problems: [],
     notices: [],
@@ -761,5 +918,11 @@ export async function buildContent(options: {
   c.files.set(BuiltFile.Graph, checkGraph(c, graph));
   const index: BuildIndex = { commit: c.commit, books };
   c.files.set(BuiltFile.Index, index);
-  return { files: c.files, problems: c.problems, notices: c.notices, sources: c.sources };
+  return {
+    files: c.files,
+    problems: c.problems,
+    notices: c.notices,
+    sources: c.sources,
+    chapters: c.chapters,
+  };
 }

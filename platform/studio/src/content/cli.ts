@@ -1,9 +1,9 @@
 import { execFileSync, spawn } from "node:child_process";
-import { cpSync, mkdirSync, readFileSync, rmSync, watch, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, watch, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 import { WORKING_TREE } from "@chalk/content";
-import { propDefs } from "@chalk/library";
+import { propDefs, propPackages } from "@chalk/library";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
 import { type BuildResult, SOURCES_FILE, buildContent } from "./build";
@@ -19,7 +19,12 @@ import { writeConceptModules } from "./concepts";
  */
 const Command = { Build: "build", Preview: "preview", Publish: "publish", Art: "art" } as const;
 
-const { positionals } = parseArgs({ allowPositionals: true });
+const { positionals, values } = parseArgs({
+  // `pnpm build-content -- --force` hands the script a bare "--": skip it.
+  args: process.argv.slice(2).filter((a) => a !== "--"),
+  allowPositionals: true,
+  options: { force: { type: "boolean", default: false } },
+});
 const command = positionals[0];
 const root = dirname(findUp("pnpm-workspace.yaml", process.cwd()));
 const contentDir = join(root, "content");
@@ -32,6 +37,10 @@ function git(...args: string[]): string {
 
 function report(result: BuildResult): void {
   for (const notice of result.notices) console.log(`  · ${notice}`);
+  const { built, reused } = result.chapters;
+  console.log(
+    `  · ${built.length} chapter${built.length === 1 ? "" : "s"} built${built.length > 0 && built.length <= 5 ? ` (${built.join(", ")})` : ""}, ${reused} unchanged`,
+  );
   if (result.problems.length === 0) {
     console.log(`✓ ${result.files.size} files, every check passed`);
     return;
@@ -55,8 +64,25 @@ function write(result: BuildResult): void {
   );
 }
 
+/**
+ * Built chapters are kept in node_modules/.cache/chalk-content with what each read; a chapter is
+ * rebuilt only when one of those files changed (see build.ts). `--force` builds everything afresh.
+ */
+const cacheDir = join(root, "node_modules", ".cache", "chalk-content");
+const propDirs: Record<string, string> = {};
+for (const [name, defs] of propPackages)
+  if (existsSync(join(root, "library", "props", name)))
+    for (const def of defs) propDirs[def.type] = `library/props/${name}`;
+
 async function build(commit: string): Promise<BuildResult> {
-  const result = await buildContent({ contentDir, defs: propDefs, readings, commit });
+  if (values.force) rmSync(cacheDir, { recursive: true, force: true });
+  const result = await buildContent({
+    contentDir,
+    defs: propDefs,
+    readings,
+    commit,
+    cache: { dir: cacheDir, root, propDirs },
+  });
   report(result);
   return result;
 }
