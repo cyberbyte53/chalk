@@ -1,5 +1,21 @@
-import { type Box, type Element, actionsFor, defineProp, set } from "@chalk/prop";
+import { actionsFor, defineGroup, set } from "@chalk/prop";
 import { z } from "zod";
+import {
+  Look,
+  type OpticRay,
+  type RayPiece,
+  axisPoints,
+  bench,
+  focalStepper,
+  marker,
+  opticImage,
+  opticObject,
+  opticRays,
+  opticScreen,
+  rayButtons,
+  readout,
+} from "./bench/kit";
+import { lensCard, thinLens } from "./bench/lens-parts";
 
 /**
  * A thin convex or concave lens on its principal axis, an upright object to its left, the
@@ -594,12 +610,77 @@ export function isImageDrawn(s: LensState): boolean {
 
 const act = actionsFor<LensState>();
 
-export const lens = defineProp({
+/** Each standard ray's button: what it says, by locale. */
+const RAY_BUTTONS = [
+  { ray: LensRay.Parallel, en: "Ray 1: parallel to the axis", hi: "किरण 1: अक्ष के समानांतर" },
+  { ray: LensRay.Focal, en: "Ray 2: through the focus", hi: "किरण 2: फोकस से होकर" },
+  { ray: LensRay.Centre, en: "Ray 3: through O", hi: "किरण 3: O से होकर" },
+];
+
+/** A ray from its path, as pieces on the bench: dashed where it is only traced or aimed. */
+function piecesOf(s: LensState, path: LensRayPath): RayPiece[] {
+  const img = lensImageOf(s);
+  // A real image's rays are aimed through its tip so they visibly meet there.
+  const toward: [number, number] =
+    img?.isReal && !s.beam ? [img.v - path.hit[0], img.height - path.hit[1]] : path.out;
+  const dashed = (to: LensPoint | null, from: LensPoint = path.hit): RayPiece[] =>
+    to === null ? [] : [{ from, to, isDashed: true }];
+  return [
+    ...dashed(path.source, path.from),
+    { from: path.from, to: path.hit },
+    { from: path.hit, toward, edge: "right" },
+    ...dashed(path.aim),
+    ...dashed(path.back),
+  ];
+}
+
+/** Every ray drawn: the beam, or the chosen standard rays and, under a card, the spare ones. */
+function raysOf(s: LensState): OpticRay[] {
+  const ray = (
+    id: string,
+    path: LensRayPath,
+    says = "",
+    kind: "ray" | "beam" = "ray",
+  ): OpticRay[] => (path.isOff ? [] : [{ id, pieces: piecesOf(s, path), kind, says }]);
+  if (s.beam) return beamRays(s).flatMap((p, k) => ray(`beam${k}`, p, "", "beam"));
+  return [
+    ...s.rays.flatMap((r) => ray(r, lensRayPath(s, r), describeRay(s, r))),
+    ...spareRays(s).flatMap((p, k) => ray(`spare${k}`, p)),
+  ];
+}
+
+/** The image's words when it falls outside the picture. */
+function outsideWords(s: LensState): string {
+  const img = lensImageOf(s);
+  if (img === null) return "";
+  const side = img.isReal ? "on the other side" : "on the object's side";
+  const size = Math.abs(img.magnification) > 1 ? "enlarged" : "diminished";
+  return `image ${Math.round(Math.abs(img.v))} cm ${side}, ${img.isErect ? "erect" : "inverted"}, ${size}: outside the picture`;
+}
+
+/** The cone of light from the object's tip to the lens's open edges and on to the screen. */
+function coneOf(s: LensState): RayPiece[] {
+  const img = lensImageOf(s);
+  if (s.screen === null || !img?.isReal) return [];
+  const x = s.screen;
+  const tip: [number, number] = [s.object.x, s.object.height];
+  return openPart(s).flatMap((edge): RayPiece[] => [
+    { from: tip, to: [0, edge] },
+    { from: [0, edge], to: [x, edge + (img.height - edge) * (x / img.v)] },
+  ]);
+}
+
+/**
+ * A thin convex or concave lens on the optical bench: a group of the optics kit's leaves. The lens
+ * holds the facts (kind, f, the object, which rays, the screen and the marker); every leaf shows
+ * them, bound, and what the learner moves is routed back here.
+ */
+export const lens = defineGroup({
   type: "lens",
   describe:
     "A thin convex or concave lens on its principal axis with an upright object to its left: the standard rays (parallel, through F, through the optical centre O) and the image they form, by the lens formula 1/v − 1/u = 1/f with the New Cartesian sign convention (u < 0; f > 0 for convex). Optionally sunlight as a parallel beam, a readout of u, v and f, and a card covering half the lens.",
-  state: lensState,
-  defaults: {
+  own: lensState,
+  ownDefaults: {
     kind: LensKind.Convex,
     focalLength: 10,
     object: { x: -30, height: 4 },
@@ -622,6 +703,140 @@ export const lens = defineProp({
     mark: null,
   },
   inputs: ["showImage", "showLabels", "showDistances", "beam"],
+  children: {
+    bench,
+    glass: thinLens,
+    rayLines: opticRays,
+    card: lensCard,
+    points: axisPoints,
+    imageArrow: opticImage,
+    whiteScreen: opticScreen,
+    objectArrow: opticObject,
+    marker,
+    rayButtons,
+    readout,
+    focal: focalStepper,
+  },
+  is: {
+    "bench.window": (s) => lensWindowOf(s),
+    "bench.aspect": () => LENS_ASPECT,
+    "bench.pad": () => LENS_PAD,
+    "bench.label": (s) => {
+      if (s.beam) return `Sunlight through a ${s.kind} lens`;
+      const img = lensImageOf(s);
+      return `A ${s.kind} lens with an object ${Math.round(-s.object.x)} cm to the left; ${img === null ? "the image is at infinity" : `the image is ${img.isReal ? "real" : "virtual"}`}`;
+    },
+    "bench.look": () => Look.Lens,
+    "glass.kind": (s) => s.kind,
+    "glass.aperture": (s) => lensApertureOf(s),
+    "glass.showCentres": (s) => s.showCentres,
+    "glass.says": (s) => {
+      const cover = s.cover === LensCover.None ? "" : `, its ${s.cover} half covered by a card`;
+      return `${s.kind} lens, f = ${fmt(s.focalLength)} cm, power ${powerOf(s)} D${cover}`;
+    },
+    "rayLines.rays": (s) => raysOf(s),
+    "rayLines.beamSays": (s) =>
+      !s.beam
+        ? ""
+        : `sunlight, parallel to the axis: ${s.kind === LensKind.Convex ? "the rays meet at F₂, on the far side" : "the rays spread out as if they came from F₁"}`,
+    "rayLines.look": () => Look.Lens,
+    "card.cover": (s) => s.cover,
+    "card.aperture": (s) => lensApertureOf(s),
+    "points.points": (s) => {
+      const f = s.focalLength;
+      const all = [
+        { id: LensPart.Centre, x: 0, name: "O", says: "O, the optical centre" },
+        { id: LensPart.F1, x: -f, name: "F₁", says: `F₁, ${fmt(f)} cm to the left` },
+        { id: LensPart.F2, x: f, name: "F₂", says: `F₂, ${fmt(f)} cm to the right` },
+        { id: LensPart.TwoF1, x: -2 * f, name: "2F₁", says: `2F₁, ${fmt(2 * f)} cm to the left` },
+        { id: LensPart.TwoF2, x: 2 * f, name: "2F₂", says: `2F₂, ${fmt(2 * f)} cm to the right` },
+      ];
+      return all.filter((p) => s.showFocus || p.name === "O");
+    },
+    "points.showNames": (s) => s.showLabels,
+    "points.look": () => Look.Lens,
+    "imageArrow.isShown": (s) => !s.beam && isImageDrawn(s),
+    "imageArrow.tip": (s) => {
+      const img = lensImageOf(s);
+      return img === null ? null : { x: img.v, height: img.height, isReal: img.isReal };
+    },
+    "imageArrow.isDim": (s) => s.cover !== LensCover.None,
+    "imageArrow.showName": (s) => s.showNames,
+    "imageArrow.whenOutside": (s) => outsideWords(s),
+    "imageArrow.whenInfinite": () => "image at infinity: the rays come out parallel",
+    "imageArrow.says": (s) => {
+      const img = lensImageOf(s);
+      return img === null ? "" : describeLensImage(s, img);
+    },
+    "imageArrow.look": () => Look.Lens,
+    "whiteScreen.isShown": (s) => !s.beam && s.screen !== null,
+    "whiteScreen.x": (s) => s.screen ?? 10,
+    "whiteScreen.half": (s) => 1.1 * lensApertureOf(s),
+    "whiteScreen.canMove": (s) => s.canMoveScreen,
+    "whiteScreen.min": () => 0.5,
+    "whiteScreen.max": (s) => Math.min(200, lensWindowOf(s).xMax - 0.5),
+    "whiteScreen.nudge": () => 0.5,
+    "whiteScreen.caught": (s) => {
+      const img = lensImageOf(s);
+      const centre = patchCentreOf(s);
+      if (s.screen === null || !img?.isReal || centre === null) return null;
+      return {
+        height: img.height * (s.screen / img.v),
+        centre,
+        blur: blurOf(s) ?? 0,
+        isSharp: isSharpOf(s),
+      };
+    },
+    "whiteScreen.blur": (s) => blurOf(s) ?? 0,
+    "whiteScreen.cone": (s) => coneOf(s),
+    "whiteScreen.says": (s) => (s.screen === null ? "" : screenWords(s)),
+    "whiteScreen.look": () => Look.Lens,
+    "objectArrow.isShown": (s) => !s.beam,
+    "objectArrow.x": (s) => s.object.x,
+    "objectArrow.height": (s) => s.object.height,
+    "objectArrow.style": (s) => s.objectStyle,
+    "objectArrow.name": (s) =>
+      s.showNames ? (s.objectStyle === LensObjectStyle.Phone ? "phone" : "object") : null,
+    "objectArrow.min": (s) => leftmostObject(s),
+    "objectArrow.max": () => -0.5,
+    "objectArrow.nudge": () => 1,
+    "objectArrow.says": (s) =>
+      `${fmt(-s.object.x)} cm to the left, ${fmt(s.object.height)} cm tall, ${placeWords[lensPlaceOf(s)]}`,
+    "objectArrow.look": () => Look.Lens,
+    "marker.isShown": (s) => !s.beam && s.markImage,
+    "marker.at": (s) => s.mark ?? markParking(s),
+    "marker.isRight": (s) => s.markImage && markOnImageOf(s),
+    "marker.bounds": (s) => {
+      const y = lensWindowOf(s).yMax - 0.5;
+      return { xMin: -200, xMax: 200, yMin: -y, yMax: y };
+    },
+    "marker.says": (s) =>
+      s.mark === null
+        ? "the ? marker, not yet placed"
+        : markOnImageOf(s)
+          ? `the ? marker at (${fmt(s.mark.x)}, ${fmt(s.mark.y)}) cm: on the image's tip`
+          : `the ? marker at (${fmt(s.mark.x)}, ${fmt(s.mark.y)}) cm: not on the image's tip`,
+    "marker.look": () => Look.Lens,
+    "rayButtons.isShown": (s) => s.canPickRays && !s.beam,
+    "rayButtons.buttons": () => RAY_BUTTONS,
+    "rayButtons.on": (s) => s.rays,
+    "rayButtons.look": () => Look.Lens,
+    "readout.text": (s) => (s.showDistances && !s.beam ? readoutOf(s) : null),
+    "readout.look": () => Look.Lens,
+    "focal.isShown": (s) => s.canSetFocal,
+    "focal.value": (s) => s.focalLength,
+    "focal.min": () => LENS_FOCAL.min,
+    "focal.max": () => LENS_FOCAL.max,
+    "focal.look": () => Look.Lens,
+  },
+  route: {
+    // What the learner moves is the lens's: the object, the screen, the marker, rays, f.
+    "objectArrow.move": (_s, a) => [[LensAction.MoveObject, { x: a.x }]],
+    "whiteScreen.move": (_s, a) => [[LensAction.MoveScreen, { x: a.x }]],
+    "marker.move": (_s, a) => [[LensAction.MoveMark, { x: a.x, y: a.y }]],
+    "rayButtons.toggle": (_s, a) => [[LensAction.ToggleRay, { ray: a.ray }]],
+    "focal.change": (_s, a) => [[LensAction.SetFocalLength, { f: a.to }]],
+  },
   derived: {
     [LensDerived.U]: {
       describe: "Object distance u (cm, negative)",
@@ -736,143 +951,43 @@ export const lens = defineProp({
       run: (_s, a) => set({ mark: { x: a.x, y: a.y } }),
     }),
   },
-  signals: {
-    [LensSignal.ObjectReleased]: {
-      describe: "The learner let go of the object; `x` is where it stands",
-    },
-    [LensSignal.ScreenReleased]: {
-      describe: "The learner let go of the screen; `x` is where it stands",
-    },
-    [LensSignal.MarkReleased]: {
-      describe: "The learner let go of the ? marker; `x` and `y` are where it is",
-    },
-  },
-  observe: (s) => {
+  summary: (s) => {
     const f = s.focalLength;
     const img = lensImageOf(s);
     const cover = s.cover === LensCover.None ? "" : `, its ${s.cover} half covered by a card`;
-    const elements: Element[] = [
-      {
-        id: LensPart.Lens,
-        value: `${s.kind} lens, f = ${fmt(f)} cm, power ${powerOf(s)} D${cover}`,
-      },
-    ];
-    if (s.showLabels) {
-      elements.push(
-        { id: LensPart.Centre, value: "O, the optical centre" },
-        { id: LensPart.F1, value: `F₁, ${fmt(f)} cm to the left` },
-        { id: LensPart.F2, value: `F₂, ${fmt(f)} cm to the right` },
-        { id: LensPart.TwoF1, value: `2F₁, ${fmt(2 * f)} cm to the left` },
-        { id: LensPart.TwoF2, value: `2F₂, ${fmt(2 * f)} cm to the right` },
-      );
-    }
     if (s.beam) {
       const where =
         s.kind === LensKind.Convex
           ? "they meet at F₂, on the far side"
           : "they spread out as if they came from F₁";
-      return {
-        summary: `sunlight, parallel to the axis, through a ${s.kind} lens (f = ${fmt(f)} cm)${cover}: ${where}`,
-        elements,
-      };
+      return `sunlight, parallel to the axis, through a ${s.kind} lens (f = ${fmt(f)} cm)${cover}: ${where}`;
     }
-    elements.push({
-      id: LensPart.Object,
-      value: `${fmt(-s.object.x)} cm to the left, ${fmt(s.object.height)} cm tall, ${placeWords[lensPlaceOf(s)]}`,
-    });
-    for (const ray of s.rays)
-      elements.push({ id: `${LensPart.RayPrefix}${ray}`, value: describeRay(s, ray) });
-    if (isImageDrawn(s) && img !== null)
-      elements.push({ id: LensPart.Image, value: describeLensImage(s, img) });
-    if (s.showDistances) elements.push({ id: LensPart.Readout, value: readoutOf(s) });
-    if (s.screen !== null) elements.push({ id: LensPart.Screen, value: screenWords(s) });
-    if (s.markImage)
-      elements.push({
-        id: LensPart.Mark,
-        value:
-          s.mark === null
-            ? "the ? marker, not yet placed"
-            : markOnImageOf(s)
-              ? `the ? marker at (${fmt(s.mark.x)}, ${fmt(s.mark.y)}) cm: on the image's tip`
-              : `the ? marker at (${fmt(s.mark.x)}, ${fmt(s.mark.y)}) cm: not on the image's tip`,
-      });
     const where =
       img === null
         ? "the image is at infinity (the object is at F₁)"
         : isImageDrawn(s)
           ? `the image is ${describeLensImage(s, img)}`
           : "the image is not drawn";
-    const summary = `a ${s.kind} lens (f = ${fmt(f)} cm)${cover} with a ${fmt(s.object.height)} cm object ${fmt(-s.object.x)} cm to the left, ${placeWords[lensPlaceOf(s)]}; ${s.rays.length} ray(s) drawn; ${where}${s.screen === null ? "" : `; ${screenWords(s)}`}`;
-    return isImageDrawn(s) || img === null
-      ? { summary, elements }
-      : {
-          summary,
-          elements,
-          hidden: { image: { v: img.v, height: img.height, magnification: img.magnification } },
-        };
+    return `a ${s.kind} lens (f = ${fmt(f)} cm)${cover} with a ${fmt(s.object.height)} cm object ${fmt(-s.object.x)} cm to the left, ${placeWords[lensPlaceOf(s)]}; ${s.rays.length} ray(s) drawn; ${where}${s.screen === null ? "" : `; ${screenWords(s)}`}`;
   },
-  parts: (s) => {
-    const out: string[] = [LensPart.Lens];
-    if (s.showLabels)
-      out.push(LensPart.Centre, LensPart.F1, LensPart.F2, LensPart.TwoF1, LensPart.TwoF2);
-    if (s.beam) return out;
-    out.push(LensPart.Object);
-    for (const ray of s.rays) out.push(`${LensPart.RayPrefix}${ray}`);
-    if (isImageDrawn(s) && lensImageOf(s) !== null) out.push(LensPart.Image);
-    if (s.markImage) out.push(LensPart.Mark);
-    if (s.showDistances) out.push(LensPart.Readout);
-    if (s.screen !== null) out.push(LensPart.Screen);
-    return out;
-  },
-  locate: (s, part, width): Box | undefined => {
-    const box = lensBox(s, width);
-    const around = (x: number, y: number): Box => {
-      const [px, py] = box.toPixel(x, y);
-      return { x: px - 24, y: py - 24, width: 48, height: 48 };
-    };
-    const f = s.focalLength;
+  hidden: (s) => {
     const img = lensImageOf(s);
-    if (part === LensPart.Lens) {
-      const [px, top] = box.toPixel(0, lensApertureOf(s));
-      const [, bottom] = box.toPixel(0, -lensApertureOf(s));
-      return { x: px - 16, y: top, width: 32, height: bottom - top };
-    }
-    if (s.showLabels) {
-      if (part === LensPart.Centre) return around(0, 0);
-      if (part === LensPart.F1) return around(-f, 0);
-      if (part === LensPart.F2) return around(f, 0);
-      if (part === LensPart.TwoF1) return around(-2 * f, 0);
-      if (part === LensPart.TwoF2) return around(2 * f, 0);
-    }
-    if (part === LensPart.Readout && s.showDistances && !s.beam)
-      return { x: 0, y: box.height, width, height: 32 };
-    if (s.beam) return undefined;
-    if (part === LensPart.Screen && s.screen !== null) {
-      const [px, top] = box.toPixel(s.screen, 1.1 * lensApertureOf(s));
-      const [, bottom] = box.toPixel(s.screen, -1.1 * lensApertureOf(s));
-      return { x: px - 16, y: top, width: 32, height: bottom - top };
-    }
-    if (part === LensPart.Object) return around(s.object.x, s.object.height);
-    if (part === LensPart.Image && isImageDrawn(s) && img !== null)
-      return around(img.v, img.height);
-    if (part === LensPart.Mark && s.markImage) {
-      const m = s.mark ?? markParking(s);
-      return around(m.x, m.y);
-    }
-    if (part.startsWith(LensPart.RayPrefix)) {
-      const ray = part.slice(LensPart.RayPrefix.length) as LensRay;
-      if (!s.rays.includes(ray)) return undefined;
-      const path = lensRayPath(s, ray);
-      if (path.isOff) return undefined;
-      const [x1, y1] = box.toPixel(path.from[0], path.from[1]);
-      const [x2, y2] = box.toPixel(path.hit[0], path.hit[1]);
-      return {
-        x: Math.min(x1, x2),
-        y: Math.min(y1, y2) - 8,
-        width: Math.abs(x2 - x1) + 8,
-        height: Math.abs(y2 - y1) + 16,
-      };
-    }
-    return undefined;
+    if (s.beam || img === null || isImageDrawn(s)) return undefined;
+    return { image: { v: img.v, height: img.height, magnification: img.magnification } };
+  },
+  layout: {
+    kind: "frame",
+    provider: "bench",
+    children: [
+      "glass",
+      "rayLines",
+      "card",
+      "points",
+      "imageArrow",
+      "whiteScreen",
+      "objectArrow",
+      "marker",
+    ],
+    below: ["rayButtons", "readout", "focal"],
   },
 });

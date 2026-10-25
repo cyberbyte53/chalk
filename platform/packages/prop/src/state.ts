@@ -121,7 +121,28 @@ export function applyPatch(
       errors: unknownKeys.map((key) => `${def.type} has no stored field "${key}"`),
     };
   }
-  return checkStored(def, { ...stored, ...patch });
+  // A group's own fields changed from outside (a board's IS, a lesson setting them): its leaves
+  // follow, in the same change. A patch that writes a child is a group's own action's, already
+  // settled, and is checked as it is (so a write to a bound field is caught).
+  const group = def as AnyPropDef & {
+    settle?: (s: StoredState) => StoredState;
+    group?: { own: readonly string[] };
+  };
+  const merged = { ...stored, ...patch };
+  const isOwnOnly = Object.keys(patch).every((k) => group.group?.own.includes(k) === true);
+  if (group.settle !== undefined && isOwnOnly) {
+    let settled: StoredState;
+    try {
+      settled = group.settle(merged);
+    } catch (error) {
+      return {
+        isOk: false,
+        errors: [`${def.type}: ${error instanceof Error ? error.message : String(error)}`],
+      };
+    }
+    return checkStored(def, settled);
+  }
+  return checkStored(def, merged);
 }
 
 export type ActionResult =

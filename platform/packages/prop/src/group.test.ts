@@ -210,6 +210,16 @@ describe("groups", () => {
     ).toThrow(/derived "input" has the name of a child/);
   });
 
+  it("makes its leaves follow when its own fields are set from outside (a board's IS)", () => {
+    const start = initialState(machine, {});
+    if (!start.isOk) throw new Error();
+    const set = applyPatch(machine, start.state, { tried: [1, 2] });
+    if (!set.isOk) throw new Error(set.errors.join());
+    expect(set.state.tried).toEqual([1, 2]);
+    // A leaf written directly is still checked against its binding.
+    expect(applyPatch(machine, start.state, { working: { tex: "no" } }).isOk).toBe(false);
+  });
+
   it("lets a placement leave out an optional child, which then does nothing", () => {
     const placed = initialState(machine, { note: null });
     if (!placed.isOk) throw new Error(placed.errors.join());

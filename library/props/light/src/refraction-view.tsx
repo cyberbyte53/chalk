@@ -2,6 +2,7 @@ import { Stage } from "@chalk/draw";
 import type { PropViewProps } from "@chalk/player";
 import type { JSX } from "preact";
 import { useId, useRef } from "preact/hooks";
+import { clipSegment } from "./bench/clip";
 import {
   BOUNDARY_O,
   BOWL,
@@ -27,7 +28,6 @@ import {
   speedText,
   surfaceOf,
 } from "./refraction";
-import { clipSegment } from "./spherical-mirror-view";
 
 type Px = [number, number];
 

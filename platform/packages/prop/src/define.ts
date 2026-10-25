@@ -137,7 +137,7 @@ export type Observation = {
 };
 
 /** What a frame offers: a 1-D axis (numbers along a line) or a 2-D plane. */
-export type FrameKindName = "axis" | "plane";
+export type FrameKindName = "axis" | "plane" | "bench";
 
 /** Where things are drawn in a frame at a width: its height, and model ↔ pixels (y down). */
 export type FramePixels = {

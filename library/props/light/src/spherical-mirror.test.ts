@@ -1,11 +1,17 @@
+import { partPaths } from "@chalk/player";
 import {
+  type AnyPropDef,
   EffectKind,
-  applyPatch,
+  type StoredState,
+  applyPatch as applyStored,
   asAnyProp,
   observationOf,
-  prepareAction,
-  viewOf,
+  prepareAction as prepareStored,
+  settleGroup,
+  viewOf as viewOfStored,
 } from "@chalk/prop";
+import { h } from "preact";
+import { render } from "preact-render-to-string";
 import { describe, expect, it } from "vitest";
 import {
   BEAM_RAYS,
@@ -16,7 +22,6 @@ import {
   SHARP_WITHIN,
   SphericalMirrorAction,
   SphericalMirrorDerived,
-  SphericalMirrorPart,
   SphericalMirrorSignal,
   type SphericalMirrorState,
   apertureOf,
@@ -36,11 +41,51 @@ import {
   sphericalMirror,
   surfaceX,
 } from "./spherical-mirror";
+import { SphericalMirrorView } from "./spherical-mirror-view";
 
 const def = asAnyProp(sphericalMirror);
+/** The parts drawn on screen (tagged), as the description names them. */
+const drawn = (s: StoredState): Set<string> =>
+  partPaths(
+    render(
+      h(SphericalMirrorView, {
+        view: viewOf(def, s),
+        width: 340,
+        locale: "en",
+        call: () => undefined,
+        signal: () => undefined,
+      }),
+    ),
+  );
+/** Each part as the mirror's description names it now: "<leaf> › <part>". */
+const P = {
+  Mirror: "face › mirror",
+  Pole: "points › pole",
+  Focus: "points › focus",
+  Centre: "points › centre",
+  Object: "objectArrow › object",
+  Image: "imageArrow › image",
+  RayPrefix: "rayLines › ray:",
+  Beam: "rayLines › beam",
+  Readout: "readout › readout",
+  Signs: "signs › signs",
+  Ruler: "bench › ruler",
+  Screen: "whiteScreen › screen",
+  Mark: "marker › mark",
+  RayPicker: "rayButtons › rayPicker",
+  FocalStepper: "focal › focalStepper",
+  KindToggle: "kindToggle › kindToggle",
+} as const;
+// The mirror is a group: a state written by hand (its own fields changed) has its leaves made to
+// match before it is read or changed, as a placement would.
+const viewOf = (d: AnyPropDef, s: StoredState) => viewOfStored(d, settleGroup(d, s));
+const prepareAction = (d: AnyPropDef, s: StoredState, name: string, args: unknown) =>
+  prepareStored(d, settleGroup(d, s), name, args);
+const applyPatch = (d: AnyPropDef, s: StoredState, patch: StoredState) =>
+  applyStored(d, settleGroup(d, s), patch);
 /** A concave mirror, f = 10: the object 30 cm in front, beyond C (NCERT Example 10.1 shape). */
 const concave: SphericalMirrorState = {
-  ...sphericalMirror.defaults,
+  ...(sphericalMirror.defaults as SphericalMirrorState),
   kind: MirrorKind.Concave,
   focalLength: 10,
   object: { x: -30, height: 4 },
@@ -54,7 +99,8 @@ const convex: SphericalMirrorState = {
   object: { x: -30, height: 4 },
 };
 
-function run(state: SphericalMirrorState, name: string, args: Record<string, unknown> = {}) {
+function run(given: SphericalMirrorState, name: string, args: Record<string, unknown> = {}) {
+  const state = settleGroup(def, given);
   const result = prepareAction(def, state, name, args);
   if (!result.isOk) throw new Error(result.errors.join("; "));
   if (result.effect.kind !== EffectKind.Set) throw new Error(`${name} should be instant`);
@@ -205,7 +251,9 @@ describe("spherical mirror: actions", () => {
   it("moveObjectSoImageIsAt is the inverse of the formula", () => {
     const next = run(concave, SphericalMirrorAction.MoveObjectSoImageIsAt, { v: -30 });
     expect(next.object.x).toBeCloseTo(-15, 9);
-    expect(sphericalMirror.actions[SphericalMirrorAction.MoveObjectSoImageIsAt].reveals).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.MoveObjectSoImageIsAt]?.reveals).toBe(
+      true,
+    );
   });
 
   it("refuses an object behind the mirror, or a focal length of zero", () => {
@@ -216,27 +264,28 @@ describe("spherical mirror: actions", () => {
   });
 
   it("marks moveObject, setFocalLength and setKind as the learner's, and nothing else", () => {
-    expect(sphericalMirror.actions[SphericalMirrorAction.MoveObject].byLearner).toBe(true);
-    expect(sphericalMirror.actions[SphericalMirrorAction.SetFocalLength].byLearner).toBe(true);
-    expect(sphericalMirror.actions[SphericalMirrorAction.SetKind].byLearner).toBe(true);
-    expect(sphericalMirror.actions[SphericalMirrorAction.PlaceObject].byLearner).toBeUndefined();
+    expect(sphericalMirror.actions[SphericalMirrorAction.MoveObject]?.byLearner).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.SetFocalLength]?.byLearner).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.SetKind]?.byLearner).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.PlaceObject]?.byLearner).toBeUndefined();
   });
 });
 
 describe("spherical mirror: observation", () => {
   it("reports the drawn rays and the image only while shown", () => {
     const shown = observationOf(def, viewOf(def, concave));
+    // In drawing order: the mirror, the rays, its points, the image, the object.
     expect(shown.elements.map((e) => e.id)).toEqual([
-      SphericalMirrorPart.Mirror,
-      SphericalMirrorPart.Pole,
-      SphericalMirrorPart.Focus,
-      SphericalMirrorPart.Centre,
-      SphericalMirrorPart.Object,
-      `${SphericalMirrorPart.RayPrefix}${Ray.Parallel}`,
-      `${SphericalMirrorPart.RayPrefix}${Ray.Focal}`,
-      SphericalMirrorPart.Image,
+      P.Mirror,
+      `${P.RayPrefix}${Ray.Parallel}`,
+      `${P.RayPrefix}${Ray.Focal}`,
+      P.Pole,
+      P.Focus,
+      P.Centre,
+      P.Image,
+      P.Object,
     ]);
-    expect(shown.elements.at(-1)?.value).toBe(
+    expect(shown.elements.find((e) => e.id === P.Image)?.value).toBe(
       "real, inverted, diminished, 15 cm in front, between F and C",
     );
     expect(shown.hidden).toBeUndefined();
@@ -245,32 +294,36 @@ describe("spherical mirror: observation", () => {
       def,
       viewOf(def, { ...concave, showImage: false, showLabels: false, rays: [] }),
     );
-    expect(bare.elements.map((e) => e.id)).toEqual([
-      SphericalMirrorPart.Mirror,
-      SphericalMirrorPart.Object,
-    ]);
+    expect(bare.elements.map((e) => e.id)).toEqual([P.Mirror, P.Object]);
     expect(bare.hidden).toMatchObject({ image: { v: -15 } });
   });
 
   it("says the image is at infinity for an object at F", () => {
     const o = observationOf(def, viewOf(def, { ...concave, object: { x: -10, height: 4 } }));
-    expect(o.elements.find((e) => e.id === SphericalMirrorPart.Image)).toBeUndefined();
+    expect(o.elements.find((e) => e.id === P.Image)).toBeUndefined();
     expect(o.summary).toContain("infinity");
   });
 
-  it("locates the object, pole, focus and image with tap targets at least 44 px", () => {
-    const view = viewOf(def, concave) as ReturnType<typeof viewOf> & SphericalMirrorState;
-    for (const part of [
-      SphericalMirrorPart.Object,
-      SphericalMirrorPart.Pole,
-      SphericalMirrorPart.Focus,
-      SphericalMirrorPart.Image,
+  it("draws every part it describes, each found on screen by its path", () => {
+    for (const state of [
+      concave,
+      convex,
+      { ...concave, showDistances: true, screen: -15, canMoveScreen: true },
+      { ...concave, beam: true },
+      {
+        ...concave,
+        markImage: true,
+        canPickRays: true,
+        canSetKind: true,
+        canSetFocal: true,
+        showRuler: true,
+        showSigns: true,
+      },
     ]) {
-      const box = sphericalMirror.locate?.(view, part, 340);
-      expect(box?.width).toBeGreaterThanOrEqual(44);
-      expect(box?.height).toBeGreaterThanOrEqual(44);
+      const onScreen = drawn(state);
+      for (const e of observationOf(def, viewOf(def, state)).elements)
+        expect(onScreen.has(e.id), e.id).toBe(true);
     }
-    expect(sphericalMirror.locate?.(view, "nothing", 340)).toBeUndefined();
   });
 });
 
@@ -298,18 +351,14 @@ describe("spherical mirror: sunlight, readout, signs and controls", () => {
     const sun = { ...concave, beam: true };
     const o = observationOf(def, viewOf(def, sun));
     const ids = o.elements.map((e) => e.id);
-    expect(ids).toContain(SphericalMirrorPart.Beam);
-    expect(ids).not.toContain(SphericalMirrorPart.Object);
-    expect(ids).not.toContain(SphericalMirrorPart.Image);
+    expect(ids).toContain(P.Beam);
+    expect(ids).not.toContain(P.Object);
+    expect(ids).not.toContain(P.Image);
     expect(o.summary).toContain("through F");
     const back = observationOf(def, viewOf(def, { ...convex, beam: true }));
     expect(back.summary).toContain("as if it came from F");
-    expect(sphericalMirror.parts?.(viewOf(def, sun) as never)).not.toContain(
-      SphericalMirrorPart.Object,
-    );
-    expect(
-      sphericalMirror.locate?.(viewOf(def, sun) as never, SphericalMirrorPart.Object, 340),
-    ).toBeUndefined();
+    expect(sphericalMirror.parts?.(viewOf(def, sun) as never)).not.toContain(P.Object);
+    expect(drawn(sun).has(P.Object)).toBe(false);
   });
 
   it("writes u, v, f, h and h′ with New Cartesian signs and a true minus", () => {
@@ -324,26 +373,15 @@ describe("spherical mirror: sunlight, readout, signs and controls", () => {
     );
     expect(readoutOf(concave, false)).toBe("u = −30 cm   v = ?   f = −10 cm   h = +4 cm   h′ = ?");
     const o = observationOf(def, viewOf(def, { ...concave, showDistances: true }));
-    expect(o.elements.find((e) => e.id === SphericalMirrorPart.Readout)?.value).toContain(
-      "v = −15 cm",
-    );
-    const box = sphericalMirror.locate?.(
-      viewOf(def, { ...concave, showDistances: true }) as never,
-      SphericalMirrorPart.Readout,
-      340,
-    );
-    expect(box?.width).toBe(340);
+    expect(o.elements.find((e) => e.id === P.Readout)?.value).toContain("v = −15 cm");
+    expect(drawn({ ...concave, showDistances: true }).has(P.Readout)).toBe(true);
   });
 
   it("shows the sign convention as a part when asked", () => {
     const v = viewOf(def, { ...concave, showSigns: true });
-    expect(sphericalMirror.parts?.(v as never)).toContain(SphericalMirrorPart.Signs);
-    expect(
-      observationOf(def, v).elements.find((e) => e.id === SphericalMirrorPart.Signs)?.value,
-    ).toContain("+x");
-    expect(
-      sphericalMirror.locate?.(v as never, SphericalMirrorPart.Signs, 340)?.width,
-    ).toBeGreaterThanOrEqual(44);
+    expect(sphericalMirror.parts?.(v as never)).toContain(P.Signs);
+    expect(observationOf(def, v).elements.find((e) => e.id === P.Signs)?.value).toContain("+x");
+    expect(drawn({ ...concave, showSigns: true }).has(P.Signs)).toBe(true);
   });
 
   it("lets the learner change f and the kind, keeping the object", () => {
@@ -359,8 +397,8 @@ describe("spherical mirror: sunlight, readout, signs and controls", () => {
     const parts = sphericalMirror.parts?.(
       viewOf(def, { ...concave, canSetFocal: true, canSetKind: true }) as never,
     );
-    expect(parts).toContain(SphericalMirrorPart.FocalStepper);
-    expect(parts).toContain(SphericalMirrorPart.KindToggle);
+    expect(parts).toContain(P.FocalStepper);
+    expect(parts).toContain(P.KindToggle);
   });
 
   it("derives 1/u + 1/v equal to 1/f, and |f| and R", () => {
@@ -385,10 +423,8 @@ describe("spherical mirror: sunlight, readout, signs and controls", () => {
     expect(front.every((x) => x % 5 === 0)).toBe(true);
     expect(rulerTicks(convex).some((x) => x > 0)).toBe(true);
     const v = viewOf(def, { ...concave, showRuler: true });
-    expect(sphericalMirror.parts?.(v as never)).toContain(SphericalMirrorPart.Ruler);
-    expect(
-      sphericalMirror.locate?.(v as never, SphericalMirrorPart.Ruler, 340)?.height,
-    ).toBeGreaterThanOrEqual(44);
+    expect(sphericalMirror.parts?.(v as never)).toContain(P.Ruler);
+    expect(drawn({ ...concave, showRuler: true }).has(P.Ruler)).toBe(true);
   });
 });
 
@@ -486,7 +522,7 @@ describe("spherical mirror: catching the image on a screen", () => {
   });
 
   it("lets the learner slide the screen, kept in front of the mirror and inside the picture", () => {
-    expect(sphericalMirror.actions[SphericalMirrorAction.MoveScreen].byLearner).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.MoveScreen]?.byLearner).toBe(true);
     const moved = run(
       { ...concave, screen: -20, canMoveScreen: true },
       SphericalMirrorAction.MoveScreen,
@@ -507,15 +543,11 @@ describe("spherical mirror: catching the image on a screen", () => {
   it("observes, lists and locates the screen, and says what it catches", () => {
     const sharp = viewOf(def, { ...concave, screen: -15 });
     const o = observationOf(def, sharp);
-    expect(o.elements.find((e) => e.id === SphericalMirrorPart.Screen)?.value).toContain("sharp");
+    expect(o.elements.find((e) => e.id === P.Screen)?.value).toContain("sharp");
     const blurred = observationOf(def, viewOf(def, { ...concave, screen: -25 }));
-    expect(blurred.elements.find((e) => e.id === SphericalMirrorPart.Screen)?.value).toContain(
-      "after passing",
-    );
-    expect(sphericalMirror.parts?.(sharp as never)).toContain(SphericalMirrorPart.Screen);
-    const box = sphericalMirror.locate?.(sharp as never, SphericalMirrorPart.Screen, 340);
-    expect(box?.width).toBeGreaterThanOrEqual(44);
-    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(blurred.elements.find((e) => e.id === P.Screen)?.value).toContain("after passing");
+    expect(sphericalMirror.parts?.(sharp as never)).toContain(P.Screen);
+    expect(drawn({ ...concave, screen: -15 }).has(P.Screen)).toBe(true);
   });
 });
 
@@ -552,15 +584,13 @@ describe("spherical mirror: draw it yourself", () => {
   };
 
   it("lets the learner switch each ray on and off, keeping the textbook's order", () => {
-    expect(sphericalMirror.actions[SphericalMirrorAction.ToggleRay].byLearner).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.ToggleRay]?.byLearner).toBe(true);
     const a = run(game, SphericalMirrorAction.ToggleRay, { ray: Ray.Focal });
     const b = run(a, SphericalMirrorAction.ToggleRay, { ray: Ray.Parallel });
     expect(b.rays).toEqual([Ray.Parallel, Ray.Focal]);
     const c = run(b, SphericalMirrorAction.ToggleRay, { ray: Ray.Focal });
     expect(c.rays).toEqual([Ray.Parallel]);
-    expect(sphericalMirror.parts?.(viewOf(def, game) as never)).toContain(
-      SphericalMirrorPart.RayPicker,
-    );
+    expect(sphericalMirror.parts?.(viewOf(def, game) as never)).toContain(P.RayPicker);
   });
 
   it("starts the ? in front of the mirror near its top, not on the image", () => {
@@ -573,7 +603,7 @@ describe("spherical mirror: draw it yourself", () => {
   });
 
   it("finds the image when the ? is within 1 cm of its tip, and only then draws it", () => {
-    expect(sphericalMirror.actions[SphericalMirrorAction.MoveMark].byLearner).toBe(true);
+    expect(sphericalMirror.actions[SphericalMirrorAction.MoveMark]?.byLearner).toBe(true);
     // Object beyond C: image tip at (−15, −2).
     const near = run(game, SphericalMirrorAction.MoveMark, { x: -15.5, y: -2.5 });
     expect(isMarkOnImage(near)).toBe(true);
@@ -582,12 +612,11 @@ describe("spherical mirror: draw it yourself", () => {
     expect(isMarkOnImage(off)).toBe(false);
     expect(isImageShown(off)).toBe(false);
     const found = observationOf(def, viewOf(def, near));
-    expect(found.elements.map((e) => e.id)).toContain(SphericalMirrorPart.Image);
-    expect(found.elements.find((e) => e.id === SphericalMirrorPart.Mark)?.value).toContain(
-      "on the image",
-    );
+    expect(found.elements.map((e) => e.id)).toContain(P.Image);
+    // Found: the ? gives way to the image itself (it is no longer on screen).
+    expect(found.elements.map((e) => e.id)).not.toContain(P.Mark);
     const hidden = observationOf(def, viewOf(def, off));
-    expect(hidden.elements.map((e) => e.id)).not.toContain(SphericalMirrorPart.Image);
+    expect(hidden.elements.map((e) => e.id)).not.toContain(P.Image);
     expect(hidden.hidden).toMatchObject({ image: { v: -15 } });
     expect(SphericalMirrorSignal.MarkReleased).toBe("markReleased");
   });

@@ -1,11 +1,17 @@
+import { partPaths } from "@chalk/player";
 import {
+  type AnyPropDef,
   EffectKind,
+  type StoredState,
   applyPatch,
   asAnyProp,
   observationOf,
   prepareAction,
-  viewOf,
+  settleGroup,
+  viewOf as viewOfStored,
 } from "@chalk/prop";
+import { h } from "preact";
+import { render } from "preact-render-to-string";
 import { describe, expect, it } from "vitest";
 import {
   LensAction,
@@ -36,13 +42,18 @@ import {
   spareRays,
   toggled,
 } from "./lens";
+import { LensView } from "./lens-view";
 
 const def = asAnyProp(lens);
-const convex: LensState = { ...lens.defaults };
-const concave: LensState = { ...lens.defaults, kind: LensKind.Concave };
+// The lens is a group: a state written by hand (its own fields changed) has its leaves made to
+// match before it is read, as a placement would.
+const viewOf = (d: AnyPropDef, s: StoredState) => viewOfStored(d, settleGroup(d, s));
+const convex = lens.defaults as LensState;
+const concave: LensState = { ...convex, kind: LensKind.Concave };
 const at = (s: LensState, x: number, height = 4): LensState => ({ ...s, object: { x, height } });
 
-function run(state: LensState, name: string, args: Record<string, unknown> = {}) {
+function run(given: LensState, name: string, args: Record<string, unknown> = {}) {
+  const state = settleGroup(def, given);
   const result = prepareAction(def, state, name, args);
   if (!result.isOk) throw new Error(result.errors.join("; "));
   if (result.effect.kind !== EffectKind.Set) throw new Error(`${name} should be instant`);
@@ -409,5 +420,38 @@ describe("lens: names, centres and drawing it yourself", () => {
 
   it("never counts the marker for an image at infinity", () => {
     expect(markOnImageOf({ ...at(convex, -10), mark: { x: 30, y: 0 } })).toBe(false);
+  });
+});
+
+describe("lens: drawn as described", () => {
+  it("draws every part it describes, each found on screen by its path", () => {
+    const cases: LensState[] = [
+      convex,
+      at(concave, -30),
+      { ...convex, showCentres: true, cover: LensCover.Top },
+      { ...convex, screen: 15, canMoveScreen: true, showDistances: true },
+      { ...convex, markImage: true, canPickRays: true, canSetFocal: true },
+      { ...convex, beam: true },
+    ];
+    for (const s of cases) {
+      const html = render(
+        h(LensView, {
+          view: viewOf(def, s),
+          width: 340,
+          locale: "en",
+          call: () => undefined,
+          signal: () => undefined,
+        }),
+      );
+      const onScreen = partPaths(html);
+      const seen = observationOf(def, viewOf(def, s)).elements.map((e) => e.id);
+      for (const id of seen) expect(onScreen.has(id), id).toBe(true);
+    }
+  });
+
+  it("names the spheres' centres C₁ and C₂ when it shows them", () => {
+    const o = observationOf(def, viewOf(def, { ...convex, showCentres: true }));
+    expect(o.elements.find((e) => e.id === "glass › c1")?.value).toContain("right face");
+    expect(o.elements.find((e) => e.id === "glass › c2")?.value).toContain("left face");
   });
 });

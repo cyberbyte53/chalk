@@ -66,6 +66,14 @@ export type GroupViewOptions = {
   wide?: readonly string[];
   /** Extra classes on a frame's picture, from the group's view (e.g. "is-dial" while draggable). */
   look?: (view: PropViewProps["view"]) => string;
+  /**
+   * How a frame's `below` children are arranged (a row of controls, some only while shown). Gets
+   * a function drawing one child by name, and the group's view. Default: one under another.
+   */
+  below?: (
+    slot: (name: string) => JSX.Element | null,
+    view: PropViewProps["view"],
+  ) => JSX.Element | null;
 };
 
 export function groupView(
@@ -120,7 +128,9 @@ export function groupView(
               ))}
             </FrameStage>
           </div>
-          {(l.below ?? []).map((name) => slot(name, false))}
+          {options.below !== undefined
+            ? options.below((name) => slot(name, false), view)
+            : (l.below ?? []).map((name) => slot(name, false))}
         </div>
       );
     }

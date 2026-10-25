@@ -272,3 +272,20 @@
 .ln-mark-q:focus-visible circle {
   stroke-width: 3px;
 }
+
+/* The lens as a group: the picture and the row under it, as the single view had them. */
+.group-lens {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Each control sits straight in the row, as before (its slot adds no box). */
+.group-lens .ln-under > .group-child,
+.group-sphericalMirror .sm-controls > .group-child {
+  display: contents;
+}
+/* The bench's picture is a drawing stage; it keeps its rounded edge and clips what runs past it. */
+.draw-stage > svg.ln-svg,
+.draw-stage > svg.sm-svg {
+  overflow: hidden;
+}

@@ -34,3 +34,7 @@
   overflow: hidden;
   touch-action: none;
 }
+/* A child that draws nothing right now takes no room (no gap for it in a row or column). */
+.group-child:empty {
+  display: none;
+}

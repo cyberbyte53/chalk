@@ -87,6 +87,8 @@ export type GroupSpec<
   /** What no child holds. */
   own?: ZodType<O>;
   ownDefaults?: NoInfer<O>;
+  /** Own fields a board's IS may own (as a leaf's `inputs`). */
+  inputs?: readonly (keyof O & string)[];
   children: C;
   /** Children a placement may leave out (`with: { screen: null }`). */
   optional?: readonly Opt[];
@@ -176,6 +178,19 @@ const diff = (before: StoredState, after: StoredState): Record<string, unknown> 
 
 const isObject = (v: unknown): v is Record<string, unknown> =>
   v !== null && typeof v === "object" && !Array.isArray(v);
+
+/** Deep equality of plain data, whatever order an object's keys are in (a schema reorders them). */
+function isSame(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b) || (a === 0 && b === 0)) return true;
+  if (Array.isArray(a) || Array.isArray(b)) {
+    if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+    return a.every((x, i) => isSame(x, b[i]));
+  }
+  if (!isObject(a) || !isObject(b)) return false;
+  const keys = (o: Record<string, unknown>) => Object.keys(o).filter((k) => o[k] !== undefined);
+  const ka = keys(a);
+  return ka.length === keys(b).length && ka.every((k) => isSame(a[k], b[k]));
+}
 
 /** A value at a path in a nested state ("plane.handle.x"). */
 function getPath(s: unknown, path: readonly string[]): unknown {
@@ -642,11 +657,12 @@ export function defineGroup<
       if (!isFullChecking()) return spec.invariant?.(viewOfGroup(s));
       const settledNow = settle(s);
       for (const b of bindings)
-        if (JSON.stringify(getPath(settledNow, b.path)) !== JSON.stringify(getPath(s, b.path)))
+        if (!isSame(getPath(settledNow, b.path), getPath(s, b.path)))
           return `${b.target} is bound and must equal its rule`;
       return spec.invariant?.(viewOfGroup(s));
     },
     ...(spec.isExplainer !== undefined ? { isExplainer: spec.isExplainer } : {}),
+    ...(spec.inputs !== undefined ? { inputs: spec.inputs } : {}),
     group: {
       children: spec.children,
       optional: [...optional],
