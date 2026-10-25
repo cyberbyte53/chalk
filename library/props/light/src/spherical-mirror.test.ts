@@ -58,6 +58,7 @@ const drawn = (s: StoredState): Set<string> =>
   );
 /** Each part as the mirror's description names it now: "<leaf>/<part>". */
 const P = {
+  Bench: "bench/bench",
   Mirror: "face/mirror",
   Pole: "points/pole",
   Focus: "points/focus",
@@ -71,9 +72,9 @@ const P = {
   Ruler: "bench/ruler",
   Screen: "whiteScreen/screen",
   Mark: "marker/mark",
-  RayPicker: "rayButtons/rayPicker",
-  FocalStepper: "focal/focalStepper",
-  KindToggle: "kindToggle/kindToggle",
+  RayButtonParallel: "rayButtons/button:parallel",
+  FocalMore: "focal/more",
+  KindConvex: "kindToggle/convex",
 } as const;
 // The mirror is a group that stores only facts: a state written by hand (its own fields changed)
 // is complete, and its leaves are worked out when read.
@@ -272,8 +273,9 @@ describe("spherical mirror: actions", () => {
 describe("spherical mirror: observation", () => {
   it("reports the drawn rays and the image only while shown", () => {
     const shown = observationOf(def, viewOf(def, concave));
-    // In drawing order: the mirror, the rays, its points, the image, the object.
+    // In drawing order: the bench, the mirror, the rays, its points, the image, the object.
     expect(shown.elements.map((e) => e.id)).toEqual([
+      P.Bench,
       P.Mirror,
       `${P.RayPrefix}${Ray.Parallel}`,
       `${P.RayPrefix}${Ray.Focal}`,
@@ -292,7 +294,7 @@ describe("spherical mirror: observation", () => {
       def,
       viewOf(def, { ...concave, showImage: false, showLabels: false, rays: [] }),
     );
-    expect(bare.elements.map((e) => e.id)).toEqual([P.Mirror, P.Object]);
+    expect(bare.elements.map((e) => e.id)).toEqual([P.Bench, P.Mirror, P.Object]);
     expect(bare.hidden).toMatchObject({ image: { v: -15 } });
   });
 
@@ -319,8 +321,10 @@ describe("spherical mirror: observation", () => {
       },
     ]) {
       const onScreen = drawn(state);
-      for (const e of observationOf(def, viewOf(def, state)).elements)
-        expect(onScreen.has(e.id), e.id).toBe(true);
+      const seen = observationOf(def, viewOf(def, state)).elements.map((e) => e.id);
+      for (const id of seen) expect(onScreen.has(id), id).toBe(true);
+      // And the other way: nothing drawn that the description leaves out.
+      for (const path of onScreen) expect(seen, path).toContain(path);
     }
   });
 });
@@ -395,8 +399,8 @@ describe("spherical mirror: sunlight, readout, signs and controls", () => {
     const parts = sphericalMirror.parts?.(
       viewOf(def, { ...concave, canSetFocal: true, canSetKind: true }) as never,
     );
-    expect(parts).toContain(P.FocalStepper);
-    expect(parts).toContain(P.KindToggle);
+    expect(parts).toContain(P.FocalMore);
+    expect(parts).toContain(P.KindConvex);
   });
 
   it("derives 1/u + 1/v equal to 1/f, and |f| and R", () => {
@@ -588,7 +592,7 @@ describe("spherical mirror: draw it yourself", () => {
     expect(b.rays).toEqual([Ray.Parallel, Ray.Focal]);
     const c = run(b, SphericalMirrorAction.ToggleRay, { ray: Ray.Focal });
     expect(c.rays).toEqual([Ray.Parallel]);
-    expect(sphericalMirror.parts?.(viewOf(def, game) as never)).toContain(P.RayPicker);
+    expect(sphericalMirror.parts?.(viewOf(def, game) as never)).toContain(P.RayButtonParallel);
   });
 
   it("starts the ? in front of the mirror near its top, not on the image", () => {

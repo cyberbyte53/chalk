@@ -33,6 +33,8 @@ export {
   useFrame,
   useFrameLabels,
 } from "./frame";
+export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
+export { leafView, useParts, type PartAttrs, type ViewContext } from "./parts";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";
 // Addresses, for apps that find nodes on screen (the helpers live with the props).
 export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";

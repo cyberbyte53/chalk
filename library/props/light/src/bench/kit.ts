@@ -20,6 +20,10 @@ export const Look = { Lens: "ln", Mirror: "sm" } as const;
 export type Look = (typeof Look)[keyof typeof Look];
 
 const cm = z.number().min(-1000).max(1000);
+
+/** To the nearest half cm: where a dragged part lands. */
+const halfCm = (x: number) => Math.round(x * 2) / 2;
+const within = (x: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, x));
 const point = z.tuple([cm, cm]);
 export type Pt = z.infer<typeof point>;
 
@@ -88,18 +92,17 @@ export const bench = defineProp({
   },
   actions: {},
   frame: { kind: "bench", pixels: benchPixels, label: (s) => s.label },
-  observe: (s) => ({
-    summary: `the principal axis from ${Math.round(s.window.xMin)} to ${Math.round(s.window.xMax)} cm`,
-    elements:
-      s.ticks.length === 0
-        ? []
-        : [
-            {
-              id: "ruler",
-              value: `a ruler along the axis, ticks every ${Math.abs((s.ticks[1] ?? 0) - (s.ticks[0] ?? 0))} cm`,
-            },
-          ],
-  }),
+  anatomy: {
+    bench: { is: "drawing" },
+    ruler: {
+      is: "drawing",
+      when: (s) => s.ticks.length > 0,
+      value: (s) =>
+        `a ruler along the axis, ticks every ${Math.abs((s.ticks[1] ?? 0) - (s.ticks[0] ?? 0))} cm`,
+    },
+  },
+  summary: (s) =>
+    `the principal axis from ${Math.round(s.window.xMin)} to ${Math.round(s.window.xMax)} cm`,
 });
 
 // ---- points on the axis ----
@@ -117,10 +120,13 @@ export const axisPoints = defineProp({
   defaults: { points: [], showNames: true },
   drawsOn: "bench",
   actions: {},
-  observe: (s) => ({
-    summary: s.points.map((p) => p.name).join(", "),
-    elements: s.showNames ? s.points.map((p) => ({ id: p.id, value: p.says })) : [],
-  }),
+  anatomy: {
+    point: {
+      is: "label",
+      each: (s) => (s.showNames ? s.points.map((p) => ({ id: p.id, value: p.says })) : []),
+    },
+  },
+  summary: (s) => s.points.map((p) => p.name).join(", "),
 });
 
 // ---- the object ----
@@ -176,10 +182,22 @@ export const opticObject = defineProp({
   },
   signals: { [OpticObjectSignal.Released]: { describe: "The learner let go of it; `x`" } },
   invariant: (s) => (s.min <= s.max ? undefined : "min must not be above max"),
-  observe: (s) => ({
-    summary: s.says,
-    elements: [{ id: "object", value: s.says, does: OpticObjectAction.Move }],
-  }),
+  anatomy: {
+    object: {
+      is: "control",
+      value: (s) => s.says,
+      name: (s) => s.name ?? "object",
+      drag: {
+        axis: "x",
+        at: (s) => ({ x: s.x, y: s.height }),
+        place: (s, to) => ({ x: within(halfCm(to.x), s.min, s.max), y: s.height }),
+        move: OpticObjectAction.Move,
+        release: { signal: OpticObjectSignal.Released },
+        step: (s) => s.nudge,
+      },
+    },
+  },
+  summary: (s) => s.says,
 });
 
 // ---- the image ----
@@ -215,13 +233,14 @@ export const opticImage = defineProp({
   },
   drawsOn: "bench",
   actions: {},
-  observe: (s) =>
-    s.tip !== null
-      ? { summary: s.says, elements: [{ id: "image", value: s.says }] }
-      : { summary: "", elements: [] },
+  anatomy: { image: { is: "drawing", when: (s) => s.tip !== null, value: (s) => s.says } },
+  summary: (s) => (s.tip !== null ? s.says : ""),
 });
 
 // ---- rays ----
+
+/** A ray's id: "ray:parallel". */
+export const RAY = "ray:";
 
 /**
  * One straight piece of a ray, cm: from a point to a point, or on along a direction to the edge
@@ -271,13 +290,15 @@ export const opticRays = defineProp({
   defaults: { rays: [], spots: [], beamSays: "" },
   drawsOn: "bench",
   actions: {},
-  observe: (s) => ({
-    summary: `${s.rays.length} ray(s)`,
-    elements: [
-      ...(s.beamSays === "" ? [] : [{ id: "beam", value: s.beamSays }]),
-      ...s.rays.filter((r) => r.says !== "").map((r) => ({ id: `ray:${r.id}`, value: r.says })),
-    ],
-  }),
+  anatomy: {
+    beam: { is: "drawing", when: (s) => s.beamSays !== "", value: (s) => s.beamSays },
+    ray: {
+      is: "drawing",
+      each: (s) =>
+        s.rays.filter((r) => r.says !== "").map((r) => ({ id: `${RAY}${r.id}`, value: r.says })),
+    },
+  },
+  summary: (s) => `${s.rays.length} ray(s)`,
 });
 
 // ---- a screen ----
@@ -344,14 +365,23 @@ export const opticScreen = defineProp({
     }),
   },
   signals: { [ScreenSignal.Released]: { describe: "The learner let go of the screen; `x`" } },
-  observe: (s) => ({
-    summary: s.says,
-    elements: [
-      s.canMove
-        ? { id: "screen", value: s.says, does: ScreenAction.Move }
-        : { id: "screen", value: s.says },
-    ],
-  }),
+  anatomy: {
+    screen: {
+      is: "control",
+      value: (s) => s.says,
+      name: () => "screen",
+      drag: {
+        axis: "x",
+        at: (s) => ({ x: s.x, y: 0 }),
+        place: (s, to) => ({ x: within(halfCm(to.x), s.min, s.max), y: 0 }),
+        move: ScreenAction.Move,
+        release: { signal: ScreenSignal.Released },
+        step: (s) => s.nudge,
+        enabled: (s) => s.canMove,
+      },
+    },
+  },
+  summary: (s) => s.says,
 });
 
 // ---- the learner's "?" marker ----
@@ -400,10 +430,31 @@ export const marker = defineProp({
     }),
   },
   signals: { [MarkerSignal.Released]: { describe: "The learner let go of the marker; `x`, `y`" } },
-  observe: (s) => ({
-    summary: s.says,
-    elements: [{ id: "mark", value: s.says, does: MarkerAction.Move }],
-  }),
+  anatomy: {
+    mark: {
+      is: "control",
+      value: (s) => s.says,
+      // Anywhere in its bounds that the picture shows, in half cm.
+      drag: {
+        axis: "xy",
+        at: (s) => s.at,
+        place: (s, to, shown) => ({
+          x: within(
+            halfCm(to.x),
+            Math.max(s.bounds.xMin, shown.xMin),
+            Math.min(s.bounds.xMax, shown.xMax),
+          ),
+          y: within(halfCm(to.y), s.bounds.yMin, s.bounds.yMax),
+        }),
+        move: MarkerAction.Move,
+        release: { signal: MarkerSignal.Released },
+        step: () => 0.5,
+        // Its round face stays whole inside the picture.
+        inset: 14,
+      },
+    },
+  },
+  summary: (s) => s.says,
 });
 
 // ---- under the picture: a readout, ray buttons, a focal-length stepper ----
@@ -415,13 +466,13 @@ export const readout = defineProp({
   state: z.object({ text: z.string().max(200) }).strict(),
   defaults: { text: "" },
   actions: {},
-  observe: (s) =>
-    s.text === ""
-      ? { summary: "", elements: [] }
-      : { summary: s.text, elements: [{ id: "readout", value: s.text }] },
+  anatomy: { readout: { is: "readout", value: (s) => s.text, when: (s) => s.text !== "" } },
+  summary: (s) => s.text,
 });
 
 export const RayButtonsAction = { Toggle: "toggle" } as const;
+/** A ray button's id: "button:parallel". */
+export const RAY_BUTTON = "button:";
 const rayButtonsState = z
   .object({
     /** Each button: the ray it switches, and what it says (English, Hindi). */
@@ -450,10 +501,23 @@ export const rayButtons = defineProp({
         set({ on: s.on.includes(a.ray) ? s.on.filter((r) => r !== a.ray) : [...s.on, a.ray] }),
     }),
   },
-  observe: (s) => ({
-    summary: `ray buttons, on: ${s.on.join(", ") || "none"}`,
-    elements: [{ id: "rayPicker", value: s.on, does: RayButtonsAction.Toggle }],
-  }),
+  anatomy: {
+    button: {
+      is: "control",
+      // One per ray: on or off, and what it says.
+      each: (s) =>
+        s.buttons.map((b) => ({
+          id: `${RAY_BUTTON}${b.ray}`,
+          value: s.on.includes(b.ray),
+          words: b.en,
+        })),
+      press: {
+        action: RayButtonsAction.Toggle,
+        args: (_s, id) => ({ ray: id.slice(RAY_BUTTON.length) }),
+      },
+    },
+  },
+  summary: (s) => `ray buttons, on: ${s.on.join(", ") || "none"}`,
 });
 
 export const FocalStepperAction = { Change: "change" } as const;
@@ -482,8 +546,26 @@ export const focalStepper = defineProp({
       run: (s, a) => set({ value: Math.min(s.max, Math.max(s.min, a.to)) }),
     }),
   },
-  observe: (s) => ({
-    summary: `f = ${s.value} cm`,
-    elements: [{ id: "focalStepper", value: s.value, does: FocalStepperAction.Change }],
-  }),
+  anatomy: {
+    less: {
+      is: "control",
+      name: () => "shorter focal length",
+      press: {
+        action: FocalStepperAction.Change,
+        args: (s) => ({ to: s.value - 1 }),
+        enabled: (s) => s.value - 1 >= s.min,
+      },
+    },
+    value: { is: "readout", value: (s) => s.value, words: (s) => `f = ${s.value} cm` },
+    more: {
+      is: "control",
+      name: () => "longer focal length",
+      press: {
+        action: FocalStepperAction.Change,
+        args: (s) => ({ to: s.value + 1 }),
+        enabled: (s) => s.value + 1 <= s.max,
+      },
+    },
+  },
+  summary: (s) => `f = ${s.value} cm`,
 });

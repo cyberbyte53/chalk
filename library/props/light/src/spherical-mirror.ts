@@ -103,9 +103,6 @@ export const SphericalMirrorPart = {
   Ruler: "ruler",
   Screen: "screen",
   Mark: "mark",
-  RayPicker: "rayPicker",
-  FocalStepper: "focalStepper",
-  KindToggle: "kindToggle",
 } as const;
 
 /** How many parallel rays the sunlight beam has. */

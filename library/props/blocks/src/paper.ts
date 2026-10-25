@@ -59,15 +59,19 @@ export const graphPaper = defineProp({
     label: (s) =>
       `Graph paper from ${s.window[0]} to ${s.window[1]} across, ${s.window[2]} to ${s.window[3]} up`,
   },
-  observe: (s) => ({
-    summary: `graph paper from ${s.window[0]} to ${s.window[1]} across and ${s.window[2]} to ${s.window[3]} up${s.showQuadrants ? ", quadrants named I to IV" : ""}`,
-    elements: [
-      {
-        id: GraphPaperPart.Plane,
-        value: { xMin: s.window[0], xMax: s.window[1], yMin: s.window[2], yMax: s.window[3] },
-      },
-    ],
-  }),
+  anatomy: {
+    [GraphPaperPart.Plane]: {
+      is: "drawing",
+      value: (s) => ({
+        xMin: s.window[0],
+        xMax: s.window[1],
+        yMin: s.window[2],
+        yMax: s.window[3],
+      }),
+    },
+  },
+  summary: (s) =>
+    `graph paper from ${s.window[0]} to ${s.window[1]} across and ${s.window[2]} to ${s.window[3]} up${s.showQuadrants ? ", quadrants named I to IV" : ""}`,
 });
 
 // ---- dots ----
@@ -110,13 +114,15 @@ export const dots = defineProp({
       run: () => set({ dots: [] }),
     }),
   },
-  observe: (s) =>
-    s.dots.length === 0
-      ? { summary: "no dots", elements: [] }
-      : {
-          summary: `${s.dots.length} dot${s.dots.length === 1 ? "" : "s"}`,
-          elements: [{ id: DotsPart.Dots, value: s.dots.map((p) => ({ x: p.x, y: p.y })) }],
-        },
+  anatomy: {
+    [DotsPart.Dots]: {
+      is: "drawing",
+      when: (s) => s.dots.length > 0,
+      value: (s) => s.dots.map((p) => ({ x: p.x, y: p.y })),
+    },
+  },
+  summary: (s) =>
+    s.dots.length === 0 ? "no dots" : `${s.dots.length} dot${s.dots.length === 1 ? "" : "s"}`,
 });
 
 // ---- a handle on the x-axis ----
@@ -165,17 +171,24 @@ export const xHandle = defineProp({
     }),
   },
   signals: { [XHandleSignal.Put]: { describe: "The learner put the handle down at `x`" } },
-  observe: (s) => ({
-    summary: `a handle on the x-axis at ${s.name} = ${s.label}`,
-    elements: [
-      {
-        id: XHandlePart.Handle,
-        value: s.x,
-        words: s.label,
-        does: [XHandleAction.Move, XHandleAction.Put],
+  anatomy: {
+    [XHandlePart.Handle]: {
+      is: "control",
+      value: (s) => s.x,
+      words: (s) => s.label,
+      name: (s) => s.name,
+      // Touching the paper anywhere moves it there; letting go (or a key) puts it down.
+      drag: {
+        axis: "x",
+        at: (s) => ({ x: s.x, y: 0 }),
+        follow: "finger",
+        move: XHandleAction.Move,
+        release: { action: XHandleAction.Put },
+        step: (s) => s.step,
       },
-    ],
-  }),
+    },
+  },
+  summary: (s) => `a handle on the x-axis at ${s.name} = ${s.label}`,
 });
 
 // ---- a drop line from the x-axis to a point ----
@@ -194,10 +207,14 @@ export const dropLine = defineProp({
   defaults: { at: null },
   drawsOn: "plane",
   actions: {},
-  observe: (s) =>
-    s.at === null
-      ? { summary: "no drop line", elements: [] }
-      : { summary: "a drop line", elements: [{ id: DropLinePart.Line, value: { ...s.at } }] },
+  anatomy: {
+    [DropLinePart.Line]: {
+      is: "drawing",
+      when: (s) => s.at !== null,
+      value: (s) => (s.at === null ? null : { ...s.at }),
+    },
+  },
+  summary: (s) => (s.at === null ? "no drop line" : "a drop line"),
 });
 
 // ---- the four together ----

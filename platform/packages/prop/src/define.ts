@@ -79,6 +79,8 @@ export type Effect<S extends StoredState> =
       to: Partial<S>;
       ease?: Easing;
       interpolate?: (from: S, to: Partial<S>, t: number) => Partial<S>;
+      /** It stops (and so does the effect) once this fails (the race was paused). */
+      while?: (s: S) => boolean;
     }
   | { kind: typeof EffectKind.Wait; seconds: number }
   /** Reads this prop's line aloud. */
@@ -122,6 +124,7 @@ export function tween<S extends StoredState>(
   options: {
     ease?: Easing;
     interpolate?: (from: NoInfer<S>, to: NoInfer<Partial<S>>, t: number) => NoInfer<Partial<S>>;
+    while?: (s: NoInfer<S>) => boolean;
   } = {},
 ): Effect<S> {
   return { kind: EffectKind.Tween, duration, to, ...options } as Effect<S>;
@@ -277,6 +280,72 @@ export type FrameSpec<S extends StoredState> = {
   label?: (state: S) => string;
 };
 
+/**
+ * A drag, declared: the framework wires the pointer (against the frame's transform as it was when
+ * the drag began), arrow keys, focus, the slider's role and words, and the let-go. The view only
+ * draws. `x`/`y` are model units in the frame the prop draws on.
+ */
+export type DragSpec<S extends StoredState> = {
+  /** Which way it moves: along x, along y, or anywhere. */
+  axis: "x" | "y" | "xy";
+  /** Where it is now (where a grab starts, what a key nudges). */
+  at: (s: S) => { x: number; y: number };
+  /**
+   * "grab" (default): it moves by how far the finger moved, so a press near it doesn't make it
+   * jump; "finger": it goes where the finger is (a touch anywhere on a track).
+   */
+  follow?: "grab" | "finger";
+  /**
+   * Where a point it is dragged to lands (snapped, kept in bounds; `shown` is the window the frame
+   * shows now). Default: as it is.
+   */
+  place?: (
+    s: S,
+    to: { x: number; y: number },
+    shown: { xMin: number; xMax: number; yMin: number; yMax: number },
+  ) => { x: number; y: number };
+  /** Whether it can be dragged now (default: always). */
+  enabled?: (s: S) => boolean;
+  /** How far inside the frame's edges `shown` stops, px (so a round handle isn't cut off). */
+  inset?: number;
+  /** The action each move runs, with `{ x }`, `{ y }` or `{ x, y }`. */
+  move: string;
+  /** On let-go (and after a key): an action to run and/or a signal to raise, with the same. */
+  release?: { action?: string; signal?: string };
+  /** How far one arrow key moves it, model units. */
+  step: (s: S) => number;
+};
+
+/** A button, declared: tapping it (or Enter / Space on it) runs the action. */
+export type PressSpec<S extends StoredState> = {
+  action: string;
+  /** Its arguments; `id` is which one, for a part with `each`. */
+  args?: (s: S, id: string) => Readonly<Record<string, unknown>>;
+  /** Whether it can be pressed now (default: always). */
+  enabled?: (s: S) => boolean;
+};
+
+/**
+ * One named part of a prop, declared up front: what it is, whether it is there now, what it shows,
+ * and, for a control, what touching it does. The default description is made from these, the
+ * framework wires the controls, and a view names the parts it draws (`part("object")`).
+ */
+export type PartSpec<S extends StoredState> = {
+  is: "control" | "readout" | "label" | "drawing";
+  /** Whether it is there now (default: always). */
+  when?: (s: S) => boolean;
+  /** What it shows, typed (a number as a number, a point as { x, y }). */
+  value?: (s: S) => unknown;
+  /** How the screen writes it ("1.40", "½"), when that isn't just the value. */
+  words?: (s: S) => string | undefined;
+  /** What it is called, for a screen reader (default: its words). */
+  name?: (s: S) => string;
+  /** Several of it, one per item (the points on an axis): each item's id, value and words. */
+  each?: (s: S) => readonly { id: string; value?: unknown; words?: string }[];
+  drag?: DragSpec<S>;
+  press?: PressSpec<S>;
+};
+
 export const PropRole = { Question: "question" } as const;
 export type PropRole = (typeof PropRole)[keyof typeof PropRole];
 
@@ -293,6 +362,8 @@ export type PropDef<
   G extends string = string,
   /** Its derived field names. */
   D extends string = string,
+  /** Its declared part names. */
+  N extends string = string,
 > = {
   type: string;
   describe: string;
@@ -320,6 +391,13 @@ export type PropDef<
   observe?: (view: PropView & S) => Observation;
   /** Names of the parts that exist right now (they can come and go with the state). */
   parts?: (view: PropView & S) => readonly string[];
+  /**
+   * Its parts, declared (see `PartSpec`). With these and `summary`, the prop needs no `observe`:
+   * its description is made from them, and its view draws them with `part(name)`.
+   */
+  anatomy?: Readonly<Record<N, PartSpec<S>>>;
+  /** Its one line in the description, when the description is made from `anatomy`. */
+  summary?: (view: PropView & S) => string;
   /** Where a part is drawn at this width, or undefined if it isn't there. */
   locate?: (view: PropView & S, part: string, width: number) => Box | undefined;
   /** Rules that span fields (e.g. from < to). Returns a message when broken. */
@@ -352,7 +430,8 @@ export function defineProp<
   A extends string,
   G extends string = never,
   D extends string = never,
->(def: PropDef<S, A, G, D>): PropDef<S, A, G, D> {
+  N extends string = never,
+>(def: PropDef<S, A, G, D, N>): PropDef<S, A, G, D, N> {
   return def;
 }
 
@@ -360,6 +439,7 @@ export function defineProp<
 export type ActionOf<P extends { actions: object }> = keyof P["actions"] & string;
 export type SignalOf<P extends { signals?: object }> = keyof NonNullable<P["signals"]> & string;
 export type DerivedOf<P extends { derived?: object }> = keyof NonNullable<P["derived"]> & string;
+export type PartOf<P extends { anatomy?: object }> = keyof NonNullable<P["anatomy"]> & string;
 
 /** A prop of any state type, as the registry, the player and the validator hold it. */
 export type AnyPropDef = PropDef<StoredState>;
@@ -370,7 +450,8 @@ export function asAnyProp<
   A extends string,
   G extends string,
   D extends string,
->(def: PropDef<S, A, G, D>): AnyPropDef {
+  N extends string,
+>(def: PropDef<S, A, G, D, N>): AnyPropDef {
   // Safe: everything that touches the state goes through the def's own schema first.
   return def as unknown as AnyPropDef;
 }

@@ -1,30 +1,26 @@
-import { type FrameContextValue, type PropViewProps, useFrame, useTheme } from "@chalk/player";
+import { type FrameContextValue, type PartAttrs, leafView, useTheme } from "@chalk/player";
 import type { JSX } from "preact";
-import { useId, useRef } from "preact/hooks";
+import { useId } from "preact/hooks";
 import { type Px, clipSegment } from "./clip";
 import {
-  type AxisPoint,
-  type BenchState,
-  FocalStepperAction,
-  type FocalStepperState,
   Look,
-  MarkerAction,
-  MarkerSignal,
-  type MarkerState,
   ObjectStyle,
-  type OpticImageState,
-  OpticObjectAction,
-  OpticObjectSignal,
-  type OpticObjectState,
   type OpticRay,
-  type Pt,
+  RAY,
+  RAY_BUTTON,
   RULER_ROW,
-  RayButtonsAction,
   type RayButtonsState,
   type RayPiece,
-  ScreenAction,
-  ScreenSignal,
-  type ScreenState,
+  axisPoints,
+  bench,
+  focalStepper,
+  marker,
+  opticImage,
+  opticObject,
+  opticRays,
+  opticScreen,
+  rayButtons,
+  readout,
 } from "./kit";
 
 /** Arrowhead length, px. */
@@ -147,45 +143,18 @@ const NAMES = {
 const nameIn = (k: keyof typeof NAMES, locale: string) =>
   locale === "hi" ? NAMES[k].hi : NAMES[k].en;
 
-/**
- * A drag measured from where it took hold: the part moves by how far the finger has moved (in cm,
- * through the transform as it was when the drag began), so a press near a handle doesn't jump it.
- */
-function grab(
-  frame: Frame,
-  event: JSX.TargetedPointerEvent<Element>,
-  start: readonly [number, number],
-  move: (to: [number, number]) => void,
-  end: (to: [number, number]) => void,
-): void {
-  let first: readonly [number, number] | null = null;
-  const to = (p: readonly [number, number]): [number, number] => {
-    if (first === null) first = p;
-    return [start[0] + (p[0] - first[0]), start[1] + (p[1] - first[1])];
-  };
-  frame.drag(
-    event,
-    (p) => move(to(p)),
-    (p) => end(to(p)),
-  );
-}
-
-const half = (x: number) => Math.round(x * 2) / 2;
-
 // ---- the bench ----
 
-export function BenchView({ view }: PropViewProps): JSX.Element | null {
+export const BenchView = leafView(bench, ({ s, frame, part }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as BenchState;
-  const frame = useFrame();
   if (frame === null) return null;
   const { width, height } = frame.px;
   const [, axisY] = at(frame, [0, 0]);
   return (
-    <g data-part="bench">
+    <g {...part("bench")}>
       <rect class={`${look}-bg`} x={0} y={0} width={width} height={height} rx={12} />
       {s.ticks.length > 0 && (
-        <g class={`${look}-ruler`} data-part="ruler">
+        <g class={`${look}-ruler`} {...part("ruler")}>
           {s.ticks.map((x) => {
             const [px, py] = at(frame, [x, 0]);
             const isMajor = x % 10 === 0;
@@ -205,21 +174,19 @@ export function BenchView({ view }: PropViewProps): JSX.Element | null {
       <line class={`${look}-axis`} x1={0} y1={axisY} x2={width} y2={axisY} />
     </g>
   );
-}
+});
 
 // ---- points on the axis ----
 
-export function AxisPointsView({ view }: PropViewProps): JSX.Element | null {
+export const AxisPointsView = leafView(axisPoints, ({ s, frame, part }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as { points: AxisPoint[]; showNames: boolean };
-  const frame = useFrame();
   if (frame === null) return null;
   return (
     <g>
       {s.points.map((p) => {
         const [px, py] = at(frame, [p.x, 0]);
         return (
-          <g key={p.id} class={`${look}-mark`} data-part={p.id}>
+          <g key={p.id} class={`${look}-mark`} {...part("point", p.id)}>
             <circle cx={px} cy={py} r={3.5} />
             {s.showNames && (
               <text x={px} y={py + LABEL} text-anchor="middle">
@@ -231,42 +198,16 @@ export function AxisPointsView({ view }: PropViewProps): JSX.Element | null {
       })}
     </g>
   );
-}
+});
 
 // ---- the object ----
 
-export function OpticObjectView({ view, call, signal, locale }: PropViewProps): JSX.Element | null {
+export const OpticObjectView = leafView(opticObject, ({ s, frame, part, grab, locale }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as OpticObjectState;
-  const frame = useFrame();
-  const last = useRef(s.x);
-  last.current = s.x;
   if (frame === null) return null;
   const { width } = frame.px;
   const foot = at(frame, [s.x, 0]);
   const tip = at(frame, [s.x, s.height]);
-  const place = (x: number) => Math.min(s.max, Math.max(s.min, half(x)));
-  const moveTo = (x: number) => {
-    if (x === last.current) return;
-    last.current = x;
-    call(OpticObjectAction.Move, { x });
-  };
-  const onPointerDown = (e: JSX.TargetedPointerEvent<SVGCircleElement>) =>
-    grab(
-      frame,
-      e,
-      [s.x, s.height],
-      ([x]) => moveTo(place(x)),
-      () => signal(OpticObjectSignal.Released, { x: last.current }),
-    );
-  const onKeyDown = (e: JSX.TargetedKeyboardEvent<SVGGElement>) => {
-    const by = e.key === "ArrowRight" ? s.nudge : e.key === "ArrowLeft" ? -s.nudge : 0;
-    if (by === 0) return;
-    e.preventDefault();
-    const x = place(s.x + by);
-    call(OpticObjectAction.Move, { x });
-    signal(OpticObjectSignal.Released, { x });
-  };
   const art =
     s.style === ObjectStyle.Phone ? (
       <Phone foot={foot} tip={tip} />
@@ -281,7 +222,7 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
       cy={tip[1]}
       r={GRAB}
       fill="transparent"
-      onPointerDown={onPointerDown}
+      onPointerDown={grab("object")}
     />
   );
   if (look === Look.Mirror)
@@ -296,7 +237,7 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
             width={width}
           />
         )}
-        <g class="sm-object" data-part="object" tabindex={0} onKeyDown={onKeyDown}>
+        <g class="sm-object" {...part("object")}>
           {art}
           {handle}
         </g>
@@ -304,7 +245,7 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
       </>
     );
   const lensObject = (
-    <g class="ln-object" data-part="object" tabindex={0} onKeyDown={onKeyDown}>
+    <g class="ln-object" {...part("object")}>
       {art}
       {handle}
       {s.name !== null && (
@@ -326,18 +267,16 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
       {hit}
     </>
   );
-}
+});
 
 // ---- the image ----
 
-export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | null {
+export const OpticImageView = leafView(opticImage, ({ s, frame, part, locale }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as OpticImageState;
-  const frame = useFrame();
   if (frame === null) return null;
   const { width, height } = frame.px;
   const caption = (text: string) => (
-    <text class={`${look}-caption`} data-part="image" x={12} y={height - 10}>
+    <text class={`${look}-caption`} {...part("image")} x={12} y={height - 10}>
       {text}
     </text>
   );
@@ -354,7 +293,7 @@ export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | n
   const virtual = s.tip.isReal ? "" : " is-virtual";
   if (look === Look.Mirror)
     return (
-      <g data-part="image">
+      <g {...part("image")}>
         <Arrow foot={foot} tip={tip} cls={`sm-image${virtual}`} look={look} />
         {s.showName && (
           <MirrorName
@@ -369,7 +308,7 @@ export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | n
     );
   const isNearRight = foot[0] > width - 72;
   return (
-    <g data-part="image">
+    <g {...part("image")}>
       <Arrow
         foot={foot}
         tip={tip}
@@ -388,7 +327,7 @@ export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | n
       )}
     </g>
   );
-}
+});
 
 // ---- rays ----
 
@@ -420,10 +359,15 @@ export function pieceEnds(frame: Frame, p: RayPiece): [Px, Px] {
   return [from, [frame.px.width, base[1] + dy * t]];
 }
 
-function RayDraw({ ray, frame, look }: { ray: OpticRay; frame: Frame; look: Look }) {
+function RayDraw({
+  ray,
+  frame,
+  look,
+  tag,
+}: { ray: OpticRay; frame: Frame; look: Look; tag: PartAttrs | undefined }) {
   const { width, height } = frame.px;
   return (
-    <g data-part={`ray:${ray.id}`}>
+    <g {...tag}>
       {ray.pieces.map((p, i) => {
         const [a, b] = pieceEnds(frame, p);
         const c = clipSegment(a, b, width, height);
@@ -456,22 +400,22 @@ function RayDraw({ ray, frame, look }: { ray: OpticRay; frame: Frame; look: Look
   );
 }
 
-export function OpticRaysView({ view }: PropViewProps): JSX.Element | null {
+export const OpticRaysView = leafView(opticRays, ({ s, frame, part }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as { rays: OpticRay[]; spots: Pt[] };
-  const frame = useFrame();
   if (frame === null) return null;
+  // A ray is a part while it says what it is (a spare one drawn for a moment isn't).
+  const rayPart = (r: OpticRay) => (r.says === "" ? undefined : part("ray", `${RAY}${r.id}`));
   const rays = s.rays.filter((r) => r.kind === "ray");
   const beam = s.rays.filter((r) => r.kind === "beam");
   return (
     <g>
       {rays.map((r) => (
-        <RayDraw key={r.id} ray={r} frame={frame} look={look} />
+        <RayDraw key={r.id} ray={r} frame={frame} look={look} tag={rayPart(r)} />
       ))}
       {beam.length > 0 && (
-        <g class={`${look}-beam`} data-part="beam">
+        <g class={`${look}-beam`} {...part("beam")}>
           {beam.map((r) => (
-            <RayDraw key={r.id} ray={r} frame={frame} look={look} />
+            <RayDraw key={r.id} ray={r} frame={frame} look={look} tag={rayPart(r)} />
           ))}
           {s.spots.map((p) => {
             const [x, y] = at(frame, p);
@@ -481,44 +425,18 @@ export function OpticRaysView({ view }: PropViewProps): JSX.Element | null {
       )}
     </g>
   );
-}
+});
 
 // ---- a screen ----
 
-export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Element | null {
+export const OpticScreenView = leafView(opticScreen, ({ s, frame, part, grab }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as ScreenState;
-  const frame = useFrame();
   const id = useId();
-  const last = useRef(s.x);
-  last.current = s.x;
   if (frame === null) return null;
   const { width, height } = frame.px;
   const blurId = `${look}-blur-${id}`;
   const [sx, top] = at(frame, [s.x, s.half]);
   const [, bottom] = at(frame, [s.x, -s.half]);
-  const place = (x: number) => Math.min(s.max, Math.max(s.min, half(x)));
-  const onPointerDown = (e: JSX.TargetedPointerEvent<SVGRectElement>) =>
-    grab(
-      frame,
-      e,
-      [s.x, 0],
-      ([x]) => {
-        const to = place(x);
-        if (to === last.current) return;
-        last.current = to;
-        call(ScreenAction.Move, { x: to });
-      },
-      () => signal(ScreenSignal.Released, { x: last.current }),
-    );
-  const onKeyDown = (e: JSX.TargetedKeyboardEvent<SVGGElement>) => {
-    const by = e.key === "ArrowRight" ? s.nudge : e.key === "ArrowLeft" ? -s.nudge : 0;
-    if (by === 0) return;
-    e.preventDefault();
-    const x = place(s.x + by);
-    call(ScreenAction.Move, { x });
-    signal(ScreenSignal.Released, { x });
-  };
   const cone = s.cone.map((p, i) => {
     const c = clipSegment(...pieceEnds(frame, p), width, height);
     if (c === null) return null;
@@ -537,7 +455,6 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
   const movable = s.canMove ? " is-movable" : "";
   /** px per cm. */
   const scale = frame.px.toPx(1, 0)[0] - frame.px.toPx(0, 0)[0];
-  const keys = s.canMove ? { tabindex: 0, onKeyDown } : {};
 
   if (look === Look.Mirror) {
     const k = s.caught;
@@ -587,7 +504,7 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
     return (
       <>
         <g class="sm-cone">{cone}</g>
-        <g class={`sm-screen${movable}`} data-part="screen" aria-label="screen" {...keys}>
+        <g class={`sm-screen${movable}`} {...part("screen")}>
           <defs>
             <filter id={blurId} x="-200%" y="-50%" width="500%" height="200%">
               <feGaussianBlur stdDeviation={std.toFixed(2)} />
@@ -611,7 +528,7 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
             width={GRAB * 1.6}
             height={height - (top - 10)}
             fill="transparent"
-            onPointerDown={onPointerDown}
+            onPointerDown={grab("screen")}
           />
         )}
       </>
@@ -667,7 +584,7 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
         </filter>
       </defs>
       {cone}
-      <g class={`ln-screen${movable}`} data-part="screen" {...keys}>
+      <g class={`ln-screen${movable}`} {...part("screen")}>
         <rect class="ln-card-screen" x={sx - 4} y={top} width={14} height={bottom - top} rx={2} />
         <line class="ln-stand" x1={sx + 3} y1={bottom} x2={sx + 3} y2={stand} />
         <line class="ln-stand" x1={sx - 9} y1={stand} x2={sx + 15} y2={stand} />
@@ -681,60 +598,25 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
           width={2 * GRAB}
           height={bottom - top + 2 * GRAB}
           fill="transparent"
-          onPointerDown={onPointerDown}
+          onPointerDown={grab("screen")}
         />
       )}
     </g>
   );
-}
+});
 
 // ---- the "?" marker ----
 
-export function MarkerView({ view, call, signal }: PropViewProps): JSX.Element | null {
+export const MarkerView = leafView(marker, ({ s, frame, part, grab }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as MarkerState & { edgeInset?: number };
-  const frame = useFrame();
-  const last = useRef(s.at);
-  last.current = s.at;
   if (frame === null) return null;
-  const inset = look === Look.Lens ? 10 : 0;
-  const [left] = frame.px.fromPx(inset, 0);
-  const [right] = frame.px.fromPx(frame.px.width - inset, 0);
-  const place = (x: number, y: number) => ({
-    x: Math.max(Math.max(s.bounds.xMin, left), Math.min(Math.min(s.bounds.xMax, right), half(x))),
-    y: Math.max(s.bounds.yMin, Math.min(s.bounds.yMax, half(y))),
-  });
-  const moveTo = (to: { x: number; y: number }) => {
-    if (to.x === last.current.x && to.y === last.current.y) return;
-    last.current = to;
-    call(MarkerAction.Move, to);
-  };
-  const onPointerDown = (e: JSX.TargetedPointerEvent<SVGCircleElement>) =>
-    grab(
-      frame,
-      e,
-      [s.at.x, s.at.y],
-      ([x, y]) => moveTo(place(x, y)),
-      () => signal(MarkerSignal.Released, { ...last.current }),
-    );
-  const onKeyDown = (e: JSX.TargetedKeyboardEvent<SVGGElement>) => {
-    const dx = e.key === "ArrowRight" ? 0.5 : e.key === "ArrowLeft" ? -0.5 : 0;
-    const dy = e.key === "ArrowUp" ? 0.5 : e.key === "ArrowDown" ? -0.5 : 0;
-    if (dx === 0 && dy === 0) return;
-    e.preventDefault();
-    const to = place(s.at.x + dx, s.at.y + dy);
-    call(MarkerAction.Move, to);
-    signal(MarkerSignal.Released, to);
-  };
   const [mx, my] = at(frame, [s.at.x, s.at.y]);
   const isLens = look === Look.Lens;
   return (
     <>
       <g
         class={`${look}-mark-q${isLens && s.isRight ? " is-right" : ""}`}
-        data-part="mark"
-        tabindex={0}
-        onKeyDown={onKeyDown}
+        {...part("mark")}
         aria-label={isLens ? "Marker for the image's tip" : "your guess for the image's tip"}
       >
         <circle cx={mx} cy={my} r={isLens ? 11 : 13} />
@@ -748,124 +630,83 @@ export function MarkerView({ view, call, signal }: PropViewProps): JSX.Element |
         cy={my}
         r={GRAB}
         fill="transparent"
-        onPointerDown={onPointerDown}
+        onPointerDown={grab("mark")}
       />
     </>
   );
-}
+});
 
 // ---- under the picture ----
 
-export function ReadoutView({ view }: PropViewProps): JSX.Element | null {
+export const ReadoutView = leafView(readout, ({ s, part }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as { text: string };
   return look === Look.Mirror ? (
-    <p class="sm-readout" data-part="readout">
+    <p class="sm-readout" {...part("readout")}>
       {s.text}
     </p>
   ) : (
-    <span class="ln-readout" data-part="readout">
+    <span class="ln-readout" {...part("readout")}>
       {s.text}
     </span>
   );
-}
+});
 
-export function RayButtonsView({ view, call, locale }: PropViewProps): JSX.Element | null {
+export const RayButtonsView = leafView(rayButtons, ({ s, part, locale }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as RayButtonsState;
   const words = (b: RayButtonsState["buttons"][number]) => (locale === "hi" ? b.hi : b.en);
+  const buttons = (
+    cls: string,
+    label: (b: RayButtonsState["buttons"][number], k: number) => string,
+  ) =>
+    s.buttons.map((b, k) => (
+      <button
+        key={b.ray}
+        type="button"
+        class={s.on.includes(b.ray) ? `${cls} is-on` : cls}
+        {...part("button", `${RAY_BUTTON}${b.ray}`)}
+        aria-pressed={s.on.includes(b.ray)}
+        aria-label={label(b, k)}
+        title={words(b)}
+      >
+        {k + 1}
+      </button>
+    ));
   if (look === Look.Mirror)
     return (
-      <fieldset
-        class="sm-rays"
-        data-part="rayPicker"
-        aria-label={locale === "hi" ? "किरणें" : "rays"}
-      >
-        {s.buttons.map((b, k) => (
-          <button
-            key={b.ray}
-            type="button"
-            class={s.on.includes(b.ray) ? "sm-button sm-ray-pick is-on" : "sm-button sm-ray-pick"}
-            aria-pressed={s.on.includes(b.ray)}
-            aria-label={`${k + 1}: ${words(b)}`}
-            title={words(b)}
-            onClick={() => call(RayButtonsAction.Toggle, { ray: b.ray })}
-          >
-            {k + 1}
-          </button>
-        ))}
+      <fieldset class="sm-rays" aria-label={locale === "hi" ? "किरणें" : "rays"}>
+        {buttons("sm-button sm-ray-pick", (b, k) => `${k + 1}: ${words(b)}`)}
       </fieldset>
     );
-  return (
-    <span class="ln-pick" data-part="rayPicker">
-      {s.buttons.map((b, k) => (
-        <button
-          key={b.ray}
-          type="button"
-          class={s.on.includes(b.ray) ? "ln-raybtn is-on" : "ln-raybtn"}
-          aria-pressed={s.on.includes(b.ray)}
-          aria-label={words(b)}
-          title={words(b)}
-          onClick={() => call(RayButtonsAction.Toggle, { ray: b.ray })}
-        >
-          {k + 1}
-        </button>
-      ))}
-    </span>
-  );
-}
+  return <span class="ln-pick">{buttons("ln-raybtn", (b) => words(b))}</span>;
+});
 
-export function FocalStepperView({ view, call }: PropViewProps): JSX.Element | null {
+export const FocalStepperView = leafView(focalStepper, ({ s, part }) => {
   const look = useTheme() as Look;
-  const s = view as unknown as FocalStepperState;
-  const to = (v: number) => call(FocalStepperAction.Change, { to: v });
   if (look === Look.Mirror)
     return (
-      <div class="sm-stepper" data-part="focalStepper">
-        <button
-          type="button"
-          class="sm-button"
-          aria-label="focal length − 1 cm"
-          disabled={s.value - 1 < s.min}
-          onClick={() => to(s.value - 1)}
-        >
+      <div class="sm-stepper">
+        <button type="button" class="sm-button" {...part("less")} aria-label="focal length − 1 cm">
           −
         </button>
-        <span class="sm-stepper-value">
+        <span class="sm-stepper-value" {...part("value")}>
           <span class="sm-name">f</span> = {s.value} cm
         </span>
-        <button
-          type="button"
-          class="sm-button"
-          aria-label="focal length + 1 cm"
-          disabled={s.value + 1 > s.max}
-          onClick={() => to(s.value + 1)}
-        >
+        <button type="button" class="sm-button" {...part("more")} aria-label="focal length + 1 cm">
           +
         </button>
       </div>
     );
   return (
-    <span class="ln-focal" data-part="focalStepper">
-      <button
-        type="button"
-        class="ln-step"
-        aria-label="Shorter focal length"
-        disabled={s.value <= s.min}
-        onClick={() => to(s.value - 1)}
-      >
+    <span class="ln-focal">
+      <button type="button" class="ln-step" {...part("less")} aria-label="Shorter focal length">
         −
       </button>
-      <span class="ln-focal-value">f = {s.value} cm</span>
-      <button
-        type="button"
-        class="ln-step"
-        aria-label="Longer focal length"
-        disabled={s.value >= s.max}
-        onClick={() => to(s.value + 1)}
-      >
+      <span class="ln-focal-value" {...part("value")}>
+        f = {s.value} cm
+      </span>
+      <button type="button" class="ln-step" {...part("more")} aria-label="Longer focal length">
         +
       </button>
     </span>
   );
-}
+});

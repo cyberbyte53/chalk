@@ -128,6 +128,7 @@ async function tweenOn(
     t = progress();
     const now = c.get();
     if (keys.some((k) => !Object.is(now[k], last[k]))) return false;
+    if (effect.while !== undefined && !effect.while(now)) return false;
     const next =
       effect.interpolate !== undefined
         ? t >= 1

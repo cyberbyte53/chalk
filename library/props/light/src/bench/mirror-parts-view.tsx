@@ -1,36 +1,33 @@
-import { type PropViewProps, useFrame } from "@chalk/player";
+import { leafView } from "@chalk/player";
 import type { JSX } from "preact";
 import { Head } from "./kit-view";
-import { KindToggleAction, MirrorFaceKind } from "./mirror-parts";
+import { MirrorFaceKind, curvedMirror, kindToggle, signConvention } from "./mirror-parts";
 
 const pt = (p: readonly [number, number]): string => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
 
-export function CurvedMirrorView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { face: [number, number][] };
-  const frame = useFrame();
+export const CurvedMirrorView = leafView(curvedMirror, ({ s, frame, part }) => {
   if (frame === null) return null;
   const d = s.face
     .map((p, k) => `${k === 0 ? "M" : "L"}${pt(frame.px.toPx(p[0], p[1]))}`)
     .join(" ");
   return (
-    <g data-part="mirror">
+    <g {...part("mirror")}>
       {/* A shaded back behind the reflecting face. */}
       <path class="sm-back" d={d} transform="translate(5 0)" />
       <path class="sm-face" d={d} />
     </g>
   );
-}
+});
 
 /** The New Cartesian sign convention at P: +x right, −x left, +y up, −y down, light from the left. */
-export function SignConventionView(): JSX.Element | null {
-  const frame = useFrame();
+export const SignConventionView = leafView(signConvention, ({ frame, part }) => {
   if (frame === null) return null;
   const [px, py] = frame.px.toPx(0, 0);
   const L = 52;
   const V = Math.min(46, frame.px.height / 2 - 26);
   const look = "sm" as const;
   return (
-    <g class="sm-signs" data-part="signs">
+    <g class="sm-signs" {...part("signs")}>
       <circle cx={px} cy={py} r={4.5} />
       <g class="sm-sign-pos">
         <line x1={px} y1={py} x2={px + L} y2={py} />
@@ -65,7 +62,7 @@ export function SignConventionView(): JSX.Element | null {
       </g>
     </g>
   );
-}
+});
 
 const KIND_WORDS = {
   concave: { en: "concave", hi: "अवतल" },
@@ -82,24 +79,22 @@ function MirrorIcon({ kind }: { kind: "concave" | "convex" }): JSX.Element {
   );
 }
 
-export function KindToggleView({ view, call, locale }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { kind: "concave" | "convex" };
-  return (
-    <fieldset class="sm-toggle" data-part="kindToggle" aria-label="mirror kind">
-      {([MirrorFaceKind.Concave, MirrorFaceKind.Convex] as const).map((kind) => (
-        <button
-          key={kind}
-          type="button"
-          class={kind === s.kind ? "sm-button is-on" : "sm-button"}
-          aria-pressed={kind === s.kind}
-          onClick={() => kind !== s.kind && call(KindToggleAction.Set, { kind })}
-        >
-          <MirrorIcon kind={kind} />
-          <span class="sm-kind-word">
-            {locale === "hi" ? KIND_WORDS[kind].hi : KIND_WORDS[kind].en}
-          </span>
-        </button>
-      ))}
-    </fieldset>
-  );
-}
+export const KindToggleView = leafView(kindToggle, ({ s, part, locale }) => (
+  <fieldset class="sm-toggle" aria-label="mirror kind">
+    {([MirrorFaceKind.Concave, MirrorFaceKind.Convex] as const).map((kind) => (
+      <button
+        key={kind}
+        type="button"
+        class={kind === s.kind ? "sm-button is-on" : "sm-button"}
+        {...part(kind)}
+        aria-pressed={kind === s.kind}
+        aria-label={locale === "hi" ? KIND_WORDS[kind].hi : KIND_WORDS[kind].en}
+      >
+        <MirrorIcon kind={kind} />
+        <span class="sm-kind-word">
+          {locale === "hi" ? KIND_WORDS[kind].hi : KIND_WORDS[kind].en}
+        </span>
+      </button>
+    ))}
+  </fieldset>
+));

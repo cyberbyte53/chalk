@@ -48,14 +48,32 @@ export const stepper = defineProp({
   },
   signals: { [StepperSignal.Changed]: { describe: "The number changed: `to`" } },
   invariant: (s) => (s.min <= s.max ? undefined : "min must not be above max"),
-  observe: (s) => ({
-    summary: `${s.name} = ${s.shown ?? s.value}, stepped by ${s.step}`,
-    elements: [
-      ...(stepped(s, -1) < s.value ? [{ id: StepperPart.Less, does: StepperAction.Change }] : []),
-      { id: StepperPart.Value, value: s.value, words: `${s.name} = ${s.shown ?? s.value}` },
-      ...(stepped(s, 1) > s.value ? [{ id: StepperPart.More, does: StepperAction.Change }] : []),
-    ],
-  }),
+  anatomy: {
+    [StepperPart.Less]: {
+      is: "control",
+      name: (s) => `${s.name} − ${s.step}`,
+      press: {
+        action: StepperAction.Change,
+        args: (s) => ({ to: stepped(s, -1) }),
+        enabled: (s) => stepped(s, -1) < s.value,
+      },
+    },
+    [StepperPart.Value]: {
+      is: "readout",
+      value: (s) => s.value,
+      words: (s) => `${s.name} = ${s.shown ?? s.value}`,
+    },
+    [StepperPart.More]: {
+      is: "control",
+      name: (s) => `${s.name} + ${s.step}`,
+      press: {
+        action: StepperAction.Change,
+        args: (s) => ({ to: stepped(s, 1) }),
+        enabled: (s) => stepped(s, 1) > s.value,
+      },
+    },
+  },
+  summary: (s) => `${s.name} = ${s.shown ?? s.value}, stepped by ${s.step}`,
 });
 
 // ---- mathLine ----
@@ -81,14 +99,14 @@ export const mathLine = defineProp({
   defaults: { tex: "", placeholder: "…", isSplit: false },
   inputs: ["tex"],
   actions: {},
-  observe: (s) => ({
-    summary: s.tex === "" ? "an empty line of maths" : "a line of maths",
-    elements: [
-      s.tex === ""
-        ? { id: MathLinePart.Line, value: null, words: s.placeholder }
-        : { id: MathLinePart.Line, value: s.tex },
-    ],
-  }),
+  anatomy: {
+    [MathLinePart.Line]: {
+      is: "readout",
+      value: (s) => (s.tex === "" ? null : s.tex),
+      words: (s) => (s.tex === "" ? s.placeholder : undefined),
+    },
+  },
+  summary: (s) => (s.tex === "" ? "an empty line of maths" : "a line of maths"),
 });
 
 // ---- iconButton ----
@@ -124,12 +142,13 @@ export const iconButton = defineProp({
     }),
   },
   signals: { [IconButtonSignal.Pressed]: { describe: "It was pressed" } },
-  observe: (s) => ({
-    summary: `a ${s.symbol} button: ${s.label}${s.isEnabled ? "" : " (off)"}`,
-    elements: [
-      s.isEnabled
-        ? { id: IconButtonPart.Button, value: s.label, does: IconButtonAction.Press }
-        : { id: IconButtonPart.Button, value: s.label },
-    ],
-  }),
+  anatomy: {
+    [IconButtonPart.Button]: {
+      is: "control",
+      value: (s) => s.label,
+      name: (s) => s.label,
+      press: { action: IconButtonAction.Press, enabled: (s) => s.isEnabled },
+    },
+  },
+  summary: (s) => `a ${s.symbol} button: ${s.label}${s.isEnabled ? "" : " (off)"}`,
 });

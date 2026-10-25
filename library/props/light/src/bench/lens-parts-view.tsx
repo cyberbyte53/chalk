@@ -1,6 +1,6 @@
-import { type PropViewProps, useFrame } from "@chalk/player";
+import { leafView } from "@chalk/player";
 import type { JSX } from "preact";
-import { CardCover, GlassKind } from "./lens-parts";
+import { CardCover, GlassKind, lensCard, thinLens } from "./lens-parts";
 
 /** Half the lens's thickness at its thick part, px. */
 export const THICK = 9;
@@ -51,9 +51,7 @@ function sphericalLens(kind: Kind, cx: number, top: number, bottom: number, d: n
   };
 }
 
-export function ThinLensView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { kind: Kind; aperture: number; showCentres: boolean };
-  const frame = useFrame();
+export const ThinLensView = leafView(thinLens, ({ s, frame, part }) => {
   if (frame === null) return null;
   const { width } = frame.px;
   const [cx, top] = frame.px.toPx(0, s.aperture);
@@ -78,7 +76,7 @@ export function ThinLensView({ view }: PropViewProps): JSX.Element | null {
               [spheres.right, "C₂", "c2"],
             ] as const
           ).map(([x, name, id]) => (
-            <g key={name} data-part={id}>
+            <g key={name} {...part(id)}>
               <circle class="ln-sphere" cx={x} cy={mid} r={spheres.r} />
               <circle class="ln-sphere-centre" cx={x} cy={mid} r={3} />
               <text class="ln-sphere-name" x={x} y={mid - 9} text-anchor="middle">
@@ -90,16 +88,14 @@ export function ThinLensView({ view }: PropViewProps): JSX.Element | null {
       )}
       <path
         class="ln-glass"
-        data-part="lens"
+        {...part("lens")}
         d={spheres !== null ? spheres.path : lensPath(s.kind, cx, top, bottom)}
       />
     </g>
   );
-}
+});
 
-export function LensCardView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { cover: string; aperture: number };
-  const frame = useFrame();
+export const LensCardView = leafView(lensCard, ({ s, frame, part }) => {
   if (frame === null || s.cover === CardCover.None) return null;
   const [cx, top] = frame.px.toPx(0, s.aperture);
   const [, bottom] = frame.px.toPx(0, -s.aperture);
@@ -108,7 +104,7 @@ export function LensCardView({ view }: PropViewProps): JSX.Element | null {
   return (
     <rect
       class="ln-card"
-      data-part="card"
+      {...part("card")}
       x={cx - THICK - 4}
       y={y0}
       width={2 * THICK + 8}
@@ -116,4 +112,4 @@ export function LensCardView({ view }: PropViewProps): JSX.Element | null {
       rx={2}
     />
   );
-}
+});

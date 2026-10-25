@@ -2,7 +2,8 @@ import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/
 import { Actor } from "@chalk/content";
 import { type Box, joinPath, namesOf, segment } from "@chalk/prop";
 import type { JSX } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { type BoardClock, BoardClockContext } from "./board-clock";
 import { findNode, stampPaths } from "./part-paths";
 import type { PropRegistry } from "./prop-module";
 import type { BoardRuntime } from "./runtime";
@@ -66,6 +67,10 @@ function PropPieceView({
   if (module === undefined) throw new Error(`No prop type "${piece.prop}" in the library`);
   const { View } = module;
   const { runtime } = context;
+  const clock = useMemo<BoardClock>(
+    () => ({ time: () => runtime.time(), frame: (callback) => runtime.onFrame(callback) }),
+    [runtime],
+  );
   const pointed = context.pointed?.prop === piece.name ? context.pointed : undefined;
   // A part is ringed where the prop says it is drawn (`locate`), or where the view tagged it
   // (`data-part`); without either, the whole prop glows.
@@ -113,13 +118,15 @@ function PropPieceView({
           }}
         />
       )}
-      <View
-        view={runtime.getView(piece.name)}
-        locale={context.locale}
-        width={width}
-        call={(action, args) => void runtime.call(piece.name, action, args ?? {}, Actor.Learner)}
-        signal={(name, payload) => runtime.signal(piece.name, name, payload ?? {}, Actor.Learner)}
-      />
+      <BoardClockContext.Provider value={clock}>
+        <View
+          view={runtime.getView(piece.name)}
+          locale={context.locale}
+          width={width}
+          call={(action, args) => void runtime.call(piece.name, action, args ?? {}, Actor.Learner)}
+          signal={(name, payload) => runtime.signal(piece.name, name, payload ?? {}, Actor.Learner)}
+        />
+      </BoardClockContext.Provider>
     </div>
   );
 }

@@ -1,17 +1,16 @@
-import { type PropViewProps, groupView, useFrame } from "@chalk/player";
+import { groupView, leafView, type useFrame } from "@chalk/player";
 import type { JSX } from "preact";
 import { Grid } from "./grid";
 import {
   DotsPart,
-  type DotsState,
   DropLinePart,
-  type DropLineState,
   GraphPaperPart,
-  type GraphPaperState,
-  XHandleAction,
   XHandlePart,
-  type XHandleState,
   dotPlane,
+  dots,
+  dropLine,
+  graphPaper,
+  xHandle,
 } from "./paper";
 
 const f = (n: number) => n.toFixed(1);
@@ -23,23 +22,18 @@ function shown(frame: NonNullable<ReturnType<typeof useFrame>>) {
   return { xMin: x0, xMax: x1, yMin: y0, yMax: y1 };
 }
 
-export function GraphPaperView({ view }: PropViewProps): JSX.Element {
-  const s = view as unknown as GraphPaperState;
-  return (
-    <g data-part={GraphPaperPart.Plane}>
-      <Grid
-        win={s.window}
-        names={s.axisNames}
-        quadrants={s.showQuadrants}
-        lineGap={s.isEqualUnits ? 0 : 8}
-      />
-    </g>
-  );
-}
+export const GraphPaperView = leafView(graphPaper, ({ s, part }) => (
+  <g {...part(GraphPaperPart.Plane)}>
+    <Grid
+      win={s.window}
+      names={s.axisNames}
+      quadrants={s.showQuadrants}
+      lineGap={s.isEqualUnits ? 0 : 8}
+    />
+  </g>
+));
 
-export function DotsView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as DotsState;
-  const frame = useFrame();
+export const DotsView = leafView(dots, ({ s, frame, part }) => {
   if (frame === null) return null;
   const w = shown(frame);
   const inside = s.dots.filter(
@@ -47,7 +41,7 @@ export function DotsView({ view }: PropViewProps): JSX.Element | null {
   );
   if (inside.length === 0) return null;
   return (
-    <g data-part={DotsPart.Dots}>
+    <g {...part(DotsPart.Dots)}>
       {inside.map((p) => {
         const [x, y] = frame.px.toPx(p.x, p.y);
         return (
@@ -62,11 +56,9 @@ export function DotsView({ view }: PropViewProps): JSX.Element | null {
       })}
     </g>
   );
-}
+});
 
-export function DropLineView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as DropLineState;
-  const frame = useFrame();
+export const DropLineView = leafView(dropLine, ({ s, frame, part }) => {
   if (frame === null || s.at === null) return null;
   const w = shown(frame);
   const top = Math.min(w.yMax, Math.max(w.yMin, s.at.y));
@@ -75,24 +67,18 @@ export function DropLineView({ view }: PropViewProps): JSX.Element | null {
   return (
     <line
       class="bk-guide"
-      data-part={DropLinePart.Line}
+      {...part(DropLinePart.Line)}
       x1={f(x1)}
       y1={f(y1)}
       x2={f(x2)}
       y2={f(y2)}
     />
   );
-}
+});
 
-/**
- * The handle, and the paper under it as its touch area: touching anywhere moves the handle to that
- * x, dragging slides it, letting go puts it down; arrow keys nudge it by its step.
- */
-export function XHandleView({ view, call }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as XHandleState;
-  const frame = useFrame();
+/** The handle, and the paper under it as its touch area (the wiring is the handle's, declared). */
+export const XHandleView = leafView(xHandle, ({ s, frame, part, grab }) => {
   if (frame === null) return null;
-  const w = shown(frame);
   const [px, py] = frame.px.toPx(s.x, 0);
   const y = Math.min(frame.px.height, Math.max(0, py));
   return (
@@ -102,39 +88,9 @@ export function XHandleView({ view, call }: PropViewProps): JSX.Element | null {
         width={frame.px.width}
         height={frame.px.height}
         fill="transparent"
-        onPointerDown={(e) =>
-          frame.drag(
-            e,
-            ([x]) => call(XHandleAction.Move, { x }),
-            ([x]) => call(XHandleAction.Put, { x }),
-          )
-        }
+        onPointerDown={grab(XHandlePart.Handle)}
       />
-      <g
-        class="bk-handle"
-        data-part={XHandlePart.Handle}
-        tabindex={0}
-        role="slider"
-        aria-label={s.name}
-        aria-valuemin={w.xMin}
-        aria-valuemax={w.xMax}
-        aria-valuenow={s.x}
-        aria-valuetext={`${s.name} = ${s.label}`}
-        transform={`translate(${f(px)} ${f(y)})`}
-        onKeyDown={(e) => {
-          const by = e.key === "ArrowLeft" ? -s.step : e.key === "ArrowRight" ? s.step : 0;
-          if (by === 0) return;
-          e.preventDefault();
-          call(XHandleAction.Put, { x: Number((s.x + by).toFixed(10)) });
-        }}
-        onPointerDown={(e) =>
-          frame.drag(
-            e,
-            ([x]) => call(XHandleAction.Move, { x }),
-            ([x]) => call(XHandleAction.Put, { x }),
-          )
-        }
-      >
+      <g class="bk-handle" transform={`translate(${f(px)} ${f(y)})`} {...part(XHandlePart.Handle)}>
         <circle class="bk-handle-ring" r={11} />
         <text class="bk-handle-label" y={30} text-anchor="middle">
           {s.label}
@@ -142,7 +98,7 @@ export function XHandleView({ view, call }: PropViewProps): JSX.Element | null {
       </g>
     </>
   );
-}
+});
 
 /** Graph paper, then the drop line, the dots and the handle, in one picture. */
 export const DotPlaneView = groupView(

@@ -1,6 +1,6 @@
 import type { PropViewProps } from "@chalk/player";
 import type { JSX } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { lcm } from "./arithmetic";
 import { LapRaceAction, type LapRaceState, crossings, nextMeeting } from "./lap-race";
 import { SymbolButton } from "./ui";
@@ -9,40 +9,6 @@ import { SymbolButton } from "./ui";
 const MAX_TRACK = 240;
 const LANE_GAP = 26;
 const RUNNER = 11;
-/** Race minutes per second of watching. */
-const MINUTES_PER_SECOND = 8;
-
-/**
- * The clock while the race runs: it counts up from where it stopped, and when it reaches the next
- * minute both runners are at the start together it tells the prop, which stops it there.
- */
-function useRaceClock(s: LapRaceState, onArrive: () => void): number {
-  const [now, setNow] = useState(s.time);
-  const arrive = useRef(onArrive);
-  arrive.current = onArrive;
-  const { time, isRunning, lapA, lapB } = s;
-  useEffect(() => {
-    setNow(time);
-    if (!isRunning || typeof requestAnimationFrame === "undefined") return;
-    const stop = nextMeeting({ time, lapA, lapB });
-    const t0 = performance.now();
-    let frame = 0;
-    const step = (t: number) => {
-      const value = time + ((t - t0) / 1000) * MINUTES_PER_SECOND;
-      if (value >= stop) {
-        setNow(stop);
-        arrive.current();
-        return;
-      }
-      setNow(value);
-      frame = requestAnimationFrame(step);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [time, isRunning, lapA, lapB]);
-  return now;
-}
-
 /** Where on its lane a runner is at minute t: clockwise from the start line at the top. */
 function spot(cx: number, cy: number, radius: number, lap: number, t: number) {
   const angle = -Math.PI / 2 + (2 * Math.PI * (t % lap)) / lap;
@@ -117,7 +83,8 @@ function Logs({
 export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as LapRaceState & { isMet: boolean };
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
-  const t = useRaceClock(s, () => call(LapRaceAction.Arrive));
+  // The clock runs in the prop (on the board's clock); the view only draws where it is.
+  const t = s.time;
   const isRunning = s.isRunning;
   const size = Math.min(width, MAX_TRACK);
   const cx = size / 2;
@@ -139,7 +106,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
         width={size}
         height={size}
         role="img"
-        aria-label={`${nameA} and ${nameB} on the track at minute ${s.time}`}
+        aria-label={`${nameA} and ${nameB} on the track at minute ${Math.floor(t + 1e-6)}`}
       >
         <circle class="pr-lane-ring" cx={cx} cy={cy} r={outer} />
         <circle class="pr-lane-ring" cx={cx} cy={cy} r={inner} />
@@ -188,7 +155,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
             label={word(s.pauseLabel)}
             isWide
             part="pause"
-            onPress={() => call(LapRaceAction.Pause, { time: Math.floor(t) })}
+            onPress={() => call(LapRaceAction.Pause)}
           />
         ) : (
           <SymbolButton

@@ -21,7 +21,8 @@ export const curvedMirror = defineProp({
   defaults: { face: [], says: "" },
   drawsOn: "bench",
   actions: {},
-  observe: (s) => ({ summary: s.says, elements: [{ id: "mirror", value: s.says }] }),
+  anatomy: { mirror: { is: "drawing", value: (s) => s.says } },
+  summary: (s) => s.says,
 });
 
 export const signConvention = defineProp({
@@ -33,16 +34,14 @@ export const signConvention = defineProp({
   defaults: {},
   drawsOn: "bench",
   actions: {},
-  observe: () => ({
-    summary: "the sign convention at P",
-    elements: [
-      {
-        id: "signs",
-        value:
-          "New Cartesian signs at P: right +x, left −x, up +y, down −y; light comes from the left",
-      },
-    ],
-  }),
+  anatomy: {
+    signs: {
+      is: "drawing",
+      value: () =>
+        "New Cartesian signs at P: right +x, left −x, up +y, down −y; light comes from the left",
+    },
+  },
+  summary: () => "the sign convention at P",
 });
 
 export const KindToggleAction = { Set: "set" } as const;
@@ -64,14 +63,19 @@ export const kindToggle = defineProp({
       run: (_s, a) => set({ kind: a.kind }),
     }),
   },
-  observe: (s) => ({
-    summary: `concave / convex, now ${s.kind}`,
-    elements: [
-      {
-        id: "kindToggle",
-        value: `concave / convex switch, now ${s.kind}`,
-        does: KindToggleAction.Set,
-      },
-    ],
-  }),
+  anatomy: {
+    concave: {
+      is: "control",
+      value: (s) => s.kind === MirrorFaceKind.Concave,
+      words: () => "concave",
+      press: { action: KindToggleAction.Set, args: () => ({ kind: MirrorFaceKind.Concave }) },
+    },
+    convex: {
+      is: "control",
+      value: (s) => s.kind === MirrorFaceKind.Convex,
+      words: () => "convex",
+      press: { action: KindToggleAction.Set, args: () => ({ kind: MirrorFaceKind.Convex }) },
+    },
+  },
+  summary: (s) => `concave / convex, now ${s.kind}`,
 });

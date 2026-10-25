@@ -1,10 +1,12 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, defineProp, set } from "@chalk/prop";
+import { actionsFor, call, defineProp, seq, set, tween } from "@chalk/prop";
 import { z } from "zod";
 import { lcm } from "./arithmetic";
 import { button } from "./seen";
 
 export const MAX_LAP = 120;
+/** Race minutes per second of watching. */
+export const MINUTES_PER_SECOND = 8;
 /** Longest the race runs, in minutes: past the LCM of any two laps up to MAX_LAP. */
 export const MAX_TIME = MAX_LAP * MAX_LAP;
 
@@ -28,8 +30,8 @@ const lapRaceState = z
     /** Minutes each runner takes for one round. */
     lapA: z.number().int().min(1).max(MAX_LAP),
     lapB: z.number().int().min(1).max(MAX_LAP),
-    /** The clock, in minutes, where it last stopped. */
-    time: z.number().int().min(0).max(MAX_TIME),
+    /** The clock, in minutes (it runs on smoothly while the race runs; it shows whole minutes). */
+    time: z.number().min(0).max(MAX_TIME),
     /** Whether the race is running: the clock goes on until both are at the start together. */
     isRunning: z.boolean(),
     /** The letter counting each runner's rounds: Sonia is at the start at minute lapA × letterA. */
@@ -72,7 +74,7 @@ export function logText(name: string, lap: number, time: number): string {
 
 /**
  * Two runners on a round track, starting together at the start line, one taking a minutes a round
- * and the other b. Play runs the clock (the view animates it) until both are at the start together,
+ * and the other b. Play runs the clock (on the board's clock) until both are at the start together,
  * first at LCM(a, b); each minute a runner crosses the start is logged under them on the way.
  */
 export const lapRace = defineProp({
@@ -108,26 +110,36 @@ export const lapRace = defineProp({
         "Start the clock: both run until they are at the start together (the learner's button)",
       byLearner: true,
       args: none,
-      run: (s) => (s.isRunning || nextMeeting(s) > MAX_TIME ? set({}) : set({ isRunning: true })),
+      run: (s) => {
+        const stop = nextMeeting(s);
+        if (s.isRunning || stop > MAX_TIME) return set({});
+        // The clock runs on the board's clock to the next minute both are at the start, and stops.
+        return seq(
+          set({ isRunning: true }),
+          tween(
+            (stop - s.time) / MINUTES_PER_SECOND,
+            { time: stop },
+            { ease: (x) => x, while: (now) => now.isRunning },
+          ),
+          call(LapRaceAction.Arrive),
+        );
+      },
     }),
     [LapRaceAction.Pause]: act({
       describe: "Stop the clock at the minute it shows (the learner's button)",
       byLearner: true,
-      args: z.object({ time: z.number().int().min(0).max(MAX_TIME) }).strict(),
-      run: (s, a) => {
-        if (!s.isRunning || a.time < s.time || a.time >= nextMeeting(s))
-          return set({ isRunning: false });
-        return set({ isRunning: false, time: a.time });
-      },
+      args: none,
+      run: (s) => set({ isRunning: false, time: Math.floor(s.time + 1e-9) }),
     }),
     [LapRaceAction.Arrive]: act({
       describe:
-        "The running clock reaches the next minute both are at the start together; it stops there (the view calls this when its clock gets there)",
+        "The running clock reaches the next minute both are at the start together; it stops there",
       byLearner: true,
       args: none,
       run: (s) => {
         if (!s.isRunning) return set({});
-        const time = nextMeeting(s);
+        // Already there (the clock ran to it), or on to it at once.
+        const time = s.time > 0 && isMetOf(s) ? s.time : nextMeeting(s);
         return set({ isRunning: false, time }, { signal: LapRaceSignal.Met, payload: { time } });
       },
     }),
@@ -156,15 +168,17 @@ export const lapRace = defineProp({
   observe: (s) => {
     const met = isMetOf(s);
     return {
-      summary: `${s.nameA.en} takes ${s.lapA} minutes a round, ${s.nameB.en} ${s.lapB}; the clock shows ${s.time} minutes${
+      summary: `${s.nameA.en} takes ${s.lapA} minutes a round, ${s.nameB.en} ${s.lapB}; the clock shows ${Math.floor(s.time + 1e-9)} minutes${
         met ? ", and both are at the start together" : ""
       }${s.isRunning ? "; the race is running" : ""}`,
       elements: [
         {
           id: "track",
-          value: met ? "both runners at the start line" : `minute ${s.time} of the race`,
+          value: met
+            ? "both runners at the start line"
+            : `minute ${Math.floor(s.time + 1e-9)} of the race`,
         },
-        { id: "clock", value: `${s.time} min` },
+        { id: "clock", value: `${Math.floor(s.time + 1e-9)} min` },
         { id: "logA", value: logText(s.nameA.en, s.lapA, s.time) },
         { id: "logB", value: logText(s.nameB.en, s.lapB, s.time) },
         s.isRunning ? button("pause") : button("play", nextMeeting(s) <= MAX_TIME),

@@ -664,6 +664,16 @@ export class BoardRuntime {
     this.emitFrom(name, { signal, payload }, actor);
   }
 
+  /** Seconds on the board's clock (not counting pauses): what views animate by. */
+  time(): number {
+    return this.clock.time();
+  }
+
+  /** Calls back on the next frame (for a view's look that eases on the board's clock). */
+  onFrame(callback: () => void): () => void {
+    return this.isDisposed ? () => {} : this.services.frame(() => callback());
+  }
+
   /** Pauses everything moving on the board (e.g. while Jugnu's chat is open). */
   pause(): void {
     this.clock.pause();

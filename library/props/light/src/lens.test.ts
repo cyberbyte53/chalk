@@ -445,6 +445,8 @@ describe("lens: drawn as described", () => {
       const onScreen = partPaths(html);
       const seen = observationOf(def, viewOf(def, s)).elements.map((e) => e.id);
       for (const id of seen) expect(onScreen.has(id), id).toBe(true);
+      // And the other way: nothing drawn that the description leaves out.
+      for (const path of onScreen) expect(seen, path).toContain(path);
     }
   });
 

@@ -1,7 +1,6 @@
 import { Stage, useSpace } from "@chalk/draw";
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, useBoardTween } from "@chalk/player";
 import type { JSX } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import {
   MAX_SIDE,
@@ -21,7 +20,8 @@ const MAX_HEIGHT = 230;
 /** How much room around the zoomed piece stays in view, as a multiple of its size. */
 const ZOOM_ROOM = 1.6;
 /** How long the zoom takes, in ms. */
-const ZOOM_MS = 450;
+/** How long the window takes to glide to the piece being cut, s (board time). */
+const ZOOM_SECONDS = 0.45;
 
 /**
  * The window around a piece: the piece with room on every side, shaped like the drawing's frame
@@ -42,40 +42,6 @@ function roomAround(piece: Box, whole: Box, aspect: number): Box {
     w,
     h,
   };
-}
-
-/** A window that glides to its target (the view's own animation; the prop's state is the target). */
-function useGlide(target: Box): Box {
-  const [now, setNow] = useState(target);
-  const from = useRef(target);
-  const { x, y, w, h } = target;
-  useEffect(() => {
-    const start = from.current;
-    if (start.x === x && start.y === y && start.w === w && start.h === h) return;
-    if (typeof requestAnimationFrame === "undefined") {
-      from.current = { x, y, w, h };
-      setNow({ x, y, w, h });
-      return;
-    }
-    const t0 = performance.now();
-    let frame = 0;
-    const step = (t: number) => {
-      const k = Math.min(1, (t - t0) / ZOOM_MS);
-      const e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
-      const box = {
-        x: start.x + (x - start.x) * e,
-        y: start.y + (y - start.y) * e,
-        w: start.w + (w - start.w) * e,
-        h: start.h + (h - start.h) * e,
-      };
-      from.current = box;
-      setNow(box);
-      if (k < 1) frame = requestAnimationFrame(step);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [x, y, w, h]);
-  return now;
 }
 
 /** Where every round's squares sit inside the whole rectangle (long side across). */
@@ -302,8 +268,10 @@ export function SquareCutterView({ view, width, call, locale }: PropViewProps): 
   const zoomPiece = zoomAt === null ? undefined : all[zoomAt]?.rest;
   const isZoomed = zoomPiece !== undefined && !s.isZoomedOut;
   const frame = frameOf(long, short, width);
-  const window = useGlide(
+  // The window glides to the piece being cut, on the board's clock (the state is where it ends).
+  const window = useBoardTween(
     isZoomed && zoomPiece !== undefined ? roomAround(zoomPiece, whole, frame.w / frame.h) : whole,
+    ZOOM_SECONDS,
   );
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
   const L = s.letters;

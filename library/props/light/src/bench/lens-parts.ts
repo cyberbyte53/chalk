@@ -22,26 +22,24 @@ export const thinLens = defineProp({
   defaults: { kind: GlassKind.Convex, aperture: 10, showCentres: false, says: "" },
   drawsOn: "bench",
   actions: {},
-  observe: (s) => ({
-    summary: s.says,
-    elements: [
-      { id: "lens", value: s.says },
-      // A convex lens's faces bulge: each is cut from the sphere centred on the far side. A
-      // concave lens's faces are hollow: each from the sphere on its own side.
-      ...(s.showCentres
-        ? [
-            {
-              id: "c1",
-              value: `C₁, to the left: the centre of the sphere the ${s.kind === GlassKind.Convex ? "right" : "left"} face is cut from`,
-            },
-            {
-              id: "c2",
-              value: `C₂, to the right: the centre of the sphere the ${s.kind === GlassKind.Convex ? "left" : "right"} face is cut from`,
-            },
-          ]
-        : []),
-    ],
-  }),
+  // A convex lens's faces bulge: each is cut from the sphere centred on the far side. A concave
+  // lens's faces are hollow: each from the sphere on its own side.
+  anatomy: {
+    lens: { is: "drawing", value: (s) => s.says },
+    c1: {
+      is: "label",
+      when: (s) => s.showCentres,
+      value: (s) =>
+        `C₁, to the left: the centre of the sphere the ${s.kind === GlassKind.Convex ? "right" : "left"} face is cut from`,
+    },
+    c2: {
+      is: "label",
+      when: (s) => s.showCentres,
+      value: (s) =>
+        `C₂, to the right: the centre of the sphere the ${s.kind === GlassKind.Convex ? "left" : "right"} face is cut from`,
+    },
+  },
+  summary: (s) => s.says,
 });
 
 export const CardCover = { None: "none", Top: "top", Bottom: "bottom" } as const;
@@ -54,11 +52,12 @@ export const lensCard = defineProp({
   defaults: { cover: CardCover.None, aperture: 10 },
   drawsOn: "bench",
   actions: {},
-  observe: (s) =>
-    s.cover === CardCover.None
-      ? { summary: "", elements: [] }
-      : {
-          summary: `a card over the ${s.cover} half`,
-          elements: [{ id: "card", value: `a black card over the lens's ${s.cover} half` }],
-        },
+  anatomy: {
+    card: {
+      is: "drawing",
+      when: (s) => s.cover !== CardCover.None,
+      value: (s) => `a black card over the lens's ${s.cover} half`,
+    },
+  },
+  summary: (s) => (s.cover === CardCover.None ? "" : `a card over the ${s.cover} half`),
 });

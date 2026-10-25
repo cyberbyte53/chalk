@@ -509,19 +509,24 @@ describe("stickMeasure: Euclid's method with two sticks", () => {
 describe("lapRace: two runners meet at the start at the LCM", () => {
   const d = door(lapRace);
   const start = { ...lapRace.defaults };
-  it("18 and 12: Play, then the clock arrives at 36, where they meet", () => {
-    const running = d.run(start, "play").state;
-    expect(running.isRunning).toBe(true);
-    const out = d.run(running, "arrive");
+  it("18 and 12: Play runs the clock on to 36, where they meet, and stops", async () => {
+    const played = await d.play(start, "play");
+    expect(played.state.time).toBe(36);
+    expect(played.state.isRunning).toBe(false);
+    expect(played.emit).toEqual([{ signal: "met", payload: { time: 36 } }]);
+    expect(d.look(played.state).isMet).toBe(true);
+    // Every frame on the way through the one door, the clock only going forward.
+    const times = played.frames.map((f) => f.time);
+    expect(times.every((t, i) => i === 0 || t >= (times[i - 1] ?? 0))).toBe(true);
+    expect((await d.play(played.state, "play")).state.time).toBe(72);
+  });
+  it("Arrive takes a running race on to the next meeting at once", () => {
+    const out = d.run({ ...start, isRunning: true, time: 5 }, "arrive");
     expect(out.state.time).toBe(36);
     expect(out.emit).toEqual([{ signal: "met", payload: { time: 36 } }]);
-    expect(d.look(out.state).isMet).toBe(true);
-    const again = d.run(d.run(out.state, "play").state, "arrive");
-    expect(again.state.time).toBe(72);
   });
-  it("Pause stops the clock where it is", () => {
-    const running = d.run(start, "play").state;
-    const paused = d.run(running, "pause", { time: 20 }).state;
+  it("Pause stops the clock at the whole minute it shows", () => {
+    const paused = d.run({ ...start, isRunning: true, time: 20.6 }, "pause").state;
     expect([paused.time, paused.isRunning]).toEqual([20, false]);
     expect(d.look(paused).isMet).toBe(false);
   });
