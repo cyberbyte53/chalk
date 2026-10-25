@@ -1,7 +1,14 @@
-import { type Step, StepKind } from "@chalk/author";
+import { type Step, StepKind, asRuleFn } from "@chalk/author";
 import { Actor, type Board, type Localized, PieceKind } from "@chalk/content";
 import { BoardRuntime, type RuntimeServices } from "@chalk/player";
-import { AnswerStatus, type AnyPropDef, BOARD, PropRole, compileExpression } from "@chalk/prop";
+import {
+  AnswerStatus,
+  type AnyPropDef,
+  BOARD,
+  type BoardFn,
+  PropRole,
+  compileRule,
+} from "@chalk/prop";
 
 type Defs = Readonly<Record<string, AnyPropDef>>;
 
@@ -65,18 +72,21 @@ export async function play(board: Board, defs: Defs, steps: readonly Step[]): Pr
   runtime.start();
   await advance(1);
   for (const step of steps) {
+    if ("wait" in step) {
+      await advance(step.wait);
+      continue;
+    }
     switch (step.kind) {
       case StepKind.Act:
         void runtime.call(step.prop, step.action, step.args, Actor.Learner);
         await advance(0.05);
         break;
-      case StepKind.Wait:
-        await advance(step.seconds);
-        break;
       case StepKind.Expect: {
-        const value = compileExpression(step.that.source).evaluate((name) => runtime.getView(name));
+        const that = typeof step.that === "function" ? asRuleFn(step.that) : step.that.source;
+        const rule = compileRule(that);
+        const value = rule.evaluate((name) => runtime.getView(name));
         if (value !== true)
-          failures.push(`expected ${step.says} (${step.that.source} was ${String(value)})`);
+          failures.push(`expected ${step.says} (${rule.source} was ${String(value)})`);
         break;
       }
     }

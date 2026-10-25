@@ -16,6 +16,14 @@ describe("Dec", () => {
     expect(() => dec("1,000")).toThrow();
   });
 
+  it("reads a number a learner set at its own places", () => {
+    expect(dec("7.384").isAt(7.3841)).toBe(true);
+    expect(dec("7.384").isAt(7.3835)).toBe(false);
+    expect(dec("2.50").isAt(2.5)).toBe(true);
+    expect(dec("-0.5").isAt(-0.5)).toBe(true);
+    expect(dec("1").isAt(Number.NaN)).toBe(false);
+  });
+
   it("compares by value, exactly", () => {
     expect(dec("2.5").eq(dec("2.50"))).toBe(true);
     expect(dec("0.1").plus(dec("0.2")).eq(dec("0.3"))).toBe(true);

@@ -1,15 +1,4 @@
-import {
-  PassOn,
-  after,
-  column,
-  expect,
-  inOrder,
-  page,
-  space,
-  t,
-  theBoard,
-  wait,
-} from "@chalk/author";
+import { PassOn, column, expect, inOrder, page, space, t, theBoard, wait } from "@chalk/author";
 import { NumberColor } from "@chalk/patterns";
 import { QuestionAction, QuestionSignal } from "@chalk/prop";
 import {
@@ -384,8 +373,8 @@ const rationalNumbers = page(
       found.eq(BY_HAND),
     );
 
-    for (let i = 0; i < BY_HAND; i++) b.witness(find.learner(ButtonAction.Press), after(0.3));
-    b.witness(keepGoing.learner(ButtonAction.Press), after(KEEP_GOING_SETTLES));
+    for (let i = 0; i < BY_HAND; i++) b.witness(find.learner(ButtonAction.Press), wait(0.3));
+    b.witness(keepGoing.learner(ButtonAction.Press), wait(KEEP_GOING_SETTLES));
     b.witness(expect(theBoard.isPassed.eq(true), "the line fills and the page concludes"));
     return column([
       title,

@@ -1,4 +1,4 @@
-import { type BoardKit, type PlacedOf, after, expect, inOrder, row, t, wait } from "@chalk/author";
+import { type BoardKit, type PlacedOf, expect, inOrder, row, t, wait } from "@chalk/author";
 import type { Piece } from "@chalk/content";
 import type { Dec } from "@chalk/exact";
 import { ButtonAction, ButtonSignal, buttonDef } from "@chalk/prop-basics";
@@ -37,7 +37,7 @@ export function magnifier(
     ),
   );
   for (let i = 0; i < spec.zooms; i++)
-    b.witness(zoom.learner(ButtonAction.Press), after(PRESS_SETTLES));
+    b.witness(zoom.learner(ButtonAction.Press), wait(PRESS_SETTLES));
   b.witness(expect(level.eq(spec.zooms), `${spec.zooms} zooms reach ${spec.zooms} decimal places`));
   return { line, zoom, pieces: [line.piece, row([zoom])] };
 }

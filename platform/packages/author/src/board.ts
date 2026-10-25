@@ -10,8 +10,18 @@ import {
   type WhenRule,
 } from "@chalk/content";
 import { Dec } from "@chalk/exact";
-import { BOARD, BoardAction, BoardSignal, type PropDef, type StoredState } from "@chalk/prop";
+import {
+  AnswerStatus,
+  BOARD,
+  BoardAction,
+  BoardSignal,
+  type PropDef,
+  PropRole,
+  QuestionSignal,
+  type StoredState,
+} from "@chalk/prop";
 import { Expr } from "./expr";
+import { PassOn } from "./pass";
 import { noteSite, siteHere } from "./site";
 
 /** A field's value as an author may give it: anywhere a number goes, an exact Dec may go too. */
@@ -50,13 +60,16 @@ export type ActionRef = { readonly target: string };
  * One step of a witness: what a learner does (or waits for, or should see) to show a board works.
  * Publish plays witnesses on the real props; a question whose witness fails is not published.
  */
-export const StepKind = { Act: "act", Wait: "wait", Expect: "expect" } as const;
+export const StepKind = { Act: "act", Expect: "expect" } as const;
 export type StepKind = (typeof StepKind)[keyof typeof StepKind];
+
+/** A pause on the board's clock: the same step in a witness as in a script (`wait(2)`). */
+export type Wait = { wait: number };
 
 export type Step =
   | { kind: typeof StepKind.Act; prop: string; action: string; args: Args }
-  | { kind: typeof StepKind.Wait; seconds: number }
-  | { kind: typeof StepKind.Expect; that: Expr; says: string };
+  | Wait
+  | { kind: typeof StepKind.Expect; that: Rule<boolean> | Expr; says: string };
 
 /** The name every board's root layout gets. */
 export const ROOT_NAME = "page";
@@ -135,7 +148,7 @@ export type At = <P extends AnyPlaced>(piece: P) => ViewOfPlaced<P>;
 export type Rule<T = unknown> = (at: At) => T;
 
 /** The rule as the board keeps it (its `at` takes a piece or a name, untyped). */
-const asRuleFn = (rule: Rule): RuleFn => rule as unknown as RuleFn;
+export const asRuleFn = (rule: Rule): RuleFn => rule as unknown as RuleFn;
 
 /** The placed form of a prop definition: `PlacedOf<typeof numberLineDef>`. */
 export type PlacedOf<P> = P extends PropDef<infer S, infer A, infer G, infer D>
@@ -173,7 +186,8 @@ export function space(): Piece {
   return { kind: PieceKind.Space, name: "" };
 }
 
-export function wait(seconds: number): Script {
+/** A pause on the board's clock, in a script or a witness. */
+export function wait(seconds: number): Wait {
   return { wait: seconds };
 }
 
@@ -218,6 +232,14 @@ export class BoardKit {
   private readonly steps: Step[] = [];
   private readonly notes: NoteCheck[] = [];
   private boardPurpose: string | undefined;
+  /** How the page asked to pass, if it did (pages written before `passWhen`). */
+  private passOnOption: PassOn | undefined;
+  private isPage = false;
+  /** The page's own `passWhen` rules. */
+  private readonly passesWhen = new Set<WhenRule>();
+  /** Rules a question pattern added to pass the board on a right answer (older pages only). */
+  private readonly questionPasses = new Set<WhenRule>();
+  private readonly placed: Placed<StoredState, string, string, string>[] = [];
   private readonly propsStandFor: Record<string, string> = {};
 
   /** Places a prop: `b.prop(numberLine, "line", { from: 2, to: 3 })`. */
@@ -235,7 +257,51 @@ export class BoardKit {
     if (Object.keys(fields).length > 0) piece.with = fields;
     if (options.isHidden === true) piece.isHidden = true;
     noteSite(piece, siteHere());
-    return new Placed(name, def, piece);
+    const placed = new Placed(name, def, piece);
+    this.placed.push(placed as unknown as Placed<StoredState, string, string, string>);
+    return placed;
+  }
+
+  /**
+   * What appears later: these pieces start hidden and show when `trigger` fires (and `if` holds).
+   * A question as the trigger means "once it is answered right". Presence on the board is one
+   * stored fact, so a later rule may hide a piece again (`when(…, theBoard.hide(p))`).
+   */
+  after(
+    trigger: Signal | AnyPlaced,
+    pieces: AnyPlaced | readonly AnyPlaced[],
+    options: { if?: Rule<boolean> } = {},
+  ): void {
+    const list: readonly AnyPlaced[] = "piece" in pieces ? [pieces] : pieces;
+    if (list.length === 0) throw new Error("after(...): name the pieces that appear");
+    for (const p of list) p.piece.isHidden = true;
+    this.when(signalOf(trigger), list.map(theBoard.show), options.if);
+  }
+
+  /**
+   * When the learner may go on, if not when the page's questions are all answered right (or at
+   * once, on a page with none): on this signal, if the condition holds. May be given more than once.
+   */
+  passWhen(signal: Signal, options: { if?: Rule<boolean> } = {}): void {
+    this.when(signal, theBoard.pass(), options.if);
+    const rule = this.whenRules.at(-1);
+    if (rule !== undefined) this.passesWhen.add(rule);
+  }
+
+  /**
+   * A question pattern's "a right answer lets the learner go on". On a page returning a list it is
+   * dropped: such a page passes on all its questions (or `passWhen`) by itself.
+   */
+  passOnRight(question: AnyPlaced): void {
+    this.when(signalOf(question), theBoard.pass());
+    const rule = this.whenRules.at(-1);
+    if (rule !== undefined) this.questionPasses.add(rule);
+  }
+
+  /** How a page made with `page(…, { passOn })` passes (its rule goes first, as it always has). */
+  setPassOn(passOn: PassOn | undefined): void {
+    this.isPage = true;
+    this.passOnOption = passOn;
   }
 
   /** IS: this input always equals the rule's value (`(at) => at(line).marker ** 2`). */
@@ -284,7 +350,59 @@ export class BoardKit {
     this.notes.push(check);
   }
 
-  finish(name: string, root: Child): BuiltBoard {
+  /**
+   * A page in the new shape (it returns a list) passes when its questions are all answered right,
+   * or at once if it has none, unless it says `passWhen`. It never passes by a rule of its own.
+   */
+  private derivePass(name: string): void {
+    if (this.passOnOption !== undefined)
+      throw new Error(
+        `Board ${name}: a page returning a list passes on its questions, or by passWhen; drop passOn`,
+      );
+    for (let i = this.whenRules.length - 1; i >= 0; i--)
+      if (this.questionPasses.has(this.whenRules[i] as WhenRule)) this.whenRules.splice(i, 1);
+    const passRule = this.whenRules.find(
+      (r) => !this.passesWhen.has(r) && callsIn(r.do).includes(PASS),
+    );
+    if (passRule !== undefined)
+      throw new Error(
+        `Board ${name}: ${passRule.on} passes the board by a rule; use passWhen (or let its questions pass it)`,
+      );
+    if (this.passesWhen.size > 0) return;
+    const questions = this.placed.filter((p) => p.def.role === PropRole.Question);
+    if (questions.length === 0) {
+      this.whenRules.unshift({ on: theBoard.started.target, do: theBoard.pass() });
+      return;
+    }
+    const allRight = (at: At) => questions.every((q) => at(q).status === AnswerStatus.Correct);
+    for (const q of questions)
+      this.when(signalOf(q), theBoard.pass(), questions.length === 1 ? undefined : allRight);
+  }
+
+  /** Every piece that starts hidden is shown by some rule (else it could never appear). */
+  private checkShown(name: string, root: Piece): void {
+    const shown = new Set(
+      this.whenRules.flatMap((r) =>
+        scriptCalls(r.do)
+          .filter((c) => c.call === SHOW)
+          .map((c) => String(c.args?.name)),
+      ),
+    );
+    const never = [...walkLayout(root)].filter((p) => p.isHidden === true && !shown.has(p.name));
+    if (never.length > 0)
+      throw new Error(
+        `Board ${name}: ${never.map((p) => p.name).join(", ")} start hidden and nothing shows them (use after)`,
+      );
+  }
+
+  finish(name: string, built: Child | readonly Child[]): BuiltBoard {
+    const isList = Array.isArray(built);
+    if (isList) this.derivePass(name);
+    else if (this.isPage && (this.passOnOption ?? PassOn.Start) === PassOn.Start)
+      this.whenRules.unshift({ on: theBoard.started.target, do: theBoard.pass() });
+    const root: Child = isList
+      ? column([...(built as readonly Child[]), space()])
+      : (built as Child);
     const top = pieceOf(root);
     const named = top.kind === PieceKind.Prop ? column([top]) : top;
     const onBoard = new Set<string>();
@@ -300,6 +418,7 @@ export class BoardKit {
       );
     }
     nameLayouts(named, this.names);
+    if (isList) this.checkShown(name, named);
     return {
       board: {
         name,
@@ -324,13 +443,8 @@ export class BoardKit {
   }
 }
 
-/** A witness step: wait on the board's clock. */
-export function after(seconds: number): Step {
-  return { kind: StepKind.Wait, seconds };
-}
-
-/** A witness step: this should hold now. */
-export function expect(that: Expr, says: string): Step {
+/** A witness step: this should hold now (`(at) => at(race).time === 36`). */
+export function expect(that: Rule<boolean> | Expr, says: string): Step {
   return { kind: StepKind.Expect, that, says };
 }
 
@@ -352,7 +466,40 @@ function nameLayouts(root: Piece, taken: Set<string>): void {
 }
 
 /** Runs an author's build function and returns the finished board. */
-export function buildBoard(name: string, build: (b: BoardKit) => Child): BuiltBoard {
+export function buildBoard(
+  name: string,
+  build: (b: BoardKit) => Child | readonly Child[],
+): BuiltBoard {
   const kit = new BoardKit();
   return kit.finish(name, build(kit));
+}
+
+const PASS = `${BOARD}.${BoardAction.Pass}`;
+const SHOW = `${BOARD}.${BoardAction.Show}`;
+
+/** A trigger as the signal it waits for: a question means its Correct. */
+function signalOf(trigger: Signal | AnyPlaced): Signal {
+  if ("target" in trigger) return trigger;
+  if (trigger instanceof Placed && trigger.def.role === PropRole.Question)
+    return { target: `${trigger.name}.${QuestionSignal.Correct}` };
+  throw new Error(`${trigger.name} isn't a question; wait for one of its signals instead`);
+}
+
+/** Every call in a script, in order. */
+function scriptCalls(script: Script): { call: string; args?: Record<string, unknown> }[] {
+  if (Array.isArray(script)) return script.flatMap(scriptCalls);
+  if ("seq" in script) return script.seq.flatMap(scriptCalls);
+  if ("par" in script) return script.par.flatMap(scriptCalls);
+  if ("call" in script) return [script];
+  return [];
+}
+
+function callsIn(script: Script): string[] {
+  return scriptCalls(script).map((c) => c.call);
+}
+
+/** Every piece in a layout. */
+function* walkLayout(piece: Piece): Generator<Piece> {
+  yield piece;
+  if ("children" in piece) for (const child of piece.children) yield* walkLayout(child);
 }

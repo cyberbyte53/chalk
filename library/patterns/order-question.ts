@@ -1,4 +1,4 @@
-import { type BoardKit, type PlacedOf, theBoard } from "@chalk/author";
+import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
 import { QuestionAction, QuestionSignal } from "@chalk/prop";
 import { OrderStepsAction, orderStepsDef } from "@chalk/prop-basics";
@@ -43,7 +43,7 @@ export function orderQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  if (spec.passes !== false) b.when(ask.on(QuestionSignal.Correct), theBoard.pass());
+  if (spec.passes !== false) b.passOnRight(ask);
   b.witness(
     ...first.map((step) => ask.learner(OrderStepsAction.Place, { step })),
     ask.learner(QuestionAction.Check),

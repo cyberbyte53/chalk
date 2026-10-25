@@ -1,4 +1,4 @@
-import { type BoardKit, type PlacedOf, theBoard } from "@chalk/author";
+import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
 import { QuestionAction, QuestionSignal } from "@chalk/prop";
 import { ChoiceAction, choiceDef } from "@chalk/prop-basics";
@@ -51,7 +51,7 @@ export function choiceQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  if (spec.passes !== false) b.when(ask.on(QuestionSignal.Correct), theBoard.pass());
+  if (spec.passes !== false) b.passOnRight(ask);
   b.witness(
     ask.learner(ChoiceAction.Select, { option: spec.answer }),
     ask.learner(QuestionAction.Check),
@@ -92,3 +92,37 @@ export function settle<T>(items: readonly T[], seed: number): T[] {
   }
   return out;
 }
+
+/** A wrong option: what it reads, and what it shows the learner missed. */
+export type Wrong = { label: Localized; feedback?: Localized };
+
+/**
+ * A multiple-choice question: the right option and the wrong ones by key (each key is that option's
+ * id). Its options are shuffled the same way every build, unless `keepOrder` (then the right one
+ * comes first, the wrong ones as written). Placed like any piece: `after(...)` shows it later.
+ */
+export function choice(
+  b: BoardKit,
+  spec: {
+    name?: string;
+    prompt: Localized;
+    right: Localized;
+    wrong: Readonly<Record<string, Wrong>>;
+    keepOrder?: boolean;
+  },
+): PlacedOf<typeof choiceDef> {
+  if (RIGHT in spec.wrong) throw new Error(`choice: "${RIGHT}" is the right option's key`);
+  return choiceQuestion(b, {
+    ...(spec.name !== undefined ? { name: spec.name } : {}),
+    prompt: spec.prompt,
+    options: [
+      { id: RIGHT, label: spec.right },
+      ...Object.entries(spec.wrong).map(([id, w]) => ({ id, ...w })),
+    ],
+    answer: RIGHT,
+    ...(spec.keepOrder !== undefined ? { keepOrder: spec.keepOrder } : {}),
+  });
+}
+
+/** The right option's id. */
+const RIGHT = "right";

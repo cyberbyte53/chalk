@@ -77,14 +77,38 @@ A book has `title` and `chapters`; `content/build.yaml` has `books`. Unknown fie
 ## The overview (`overview.ts`)
 
 ```ts
-const idea = page("idea", (b) => column([ b.prop(textDef, "title", { text: t("…", "…") }), … ]));
-const zoom = page("zoom", (b) => { … }, { passOn: PassOn.Rules });
+const story = page("story", (b) => {
+  const w = wordsOn(b);
+  const race = b.prop(lapRaceDef, "race", {});
+  b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
+  const must = choice(b, {
+    name: "must",
+    prompt: t("So a minute when they're there together is…", "…"),
+    right: t("a multiple of both 18 and 12", "…"),
+    wrong: {
+      factor: { label: t("a factor of both", "…"), feedback: t("Their minutes only grow…", "…") },
+    },
+  });
+  const lcmIs = w.definition(t("…the **lowest common multiple**…", "…"), "lcmIs");
+  b.after(race.on(LapRaceSignal.Met), must);                        // appears when they meet
+  b.after(race.on(LapRaceSignal.Met), lcmIs, { if: (at) => at(race).time > 36 });
+  b.passWhen(race.on(LapRaceSignal.Met), { if: (at) => at(race).time > 36 });
+  return [w.title(t("HCF and LCM", "HCF और LCM")), race, must, lcmIs];
+});
 
 /** The pages, in reading order. Leave one out to drop it from the build. */
-export const overview = [idea, zoom, play];
+export const overview = [story, towers, play];
 ```
 
-A page lets the learner go on at once. An interactive page passes `{ passOn: PassOn.Rules }`, calls `theBoard.pass()` from its own rules, and gives a witness. A page may ask any number of questions (a `choice` making the learner commit, a `goal`); each answers where it sits. The build writes the page's concept into them, ungraded (`isGraded: false`): answering one teaches but counts towards no mastery. Bank questions are graded on the concepts they test. Jugnu is there for doubts on both.
+- **A page returns its pieces, top to bottom.** It is laid out as a column with room at the bottom; `row(...)` and `overlay(...)` are for pieces side by side or on top of each other.
+- **What appears later:** `b.after(trigger, pieces, { if })`. The pieces start hidden and show when the trigger fires (and the condition holds). The trigger is a signal (`race.on(LapRaceSignal.Met)`) or a question (shown once it is answered right). A piece shown in steps, or hidden again, uses `b.when(signal, theBoard.show(p) / theBoard.hide(p))`. A piece that starts hidden and that nothing shows doesn't build.
+- **When the learner may go on:** when every question on the page is answered right; at once on a page with none. `b.passWhen(signal, { if })` replaces that (passing on a prop's signal, or a page whose question is a stop on the way). Nothing else passes a page.
+- **Conditions are plain functions of the board,** typed from the pieces: `(at) => at(race).time > 36`, `(at) => at(line).marker > 2 && at(ask).status === AnswerStatus.Correct`. Any condition TypeScript can compute; no strings.
+- **Questions:** `choice(b, { prompt, right, wrong: { key: { label, feedback } } })`, its options shuffled the same way every build (`keepOrder` keeps them as written, the right one first); `goal(b, { about, prompt, met: (at) => …, solve, notes })` for "get this prop into a state, then Check". Each answers where it sits. The build writes the page's concept into them, ungraded (`isGraded: false`): answering one teaches but counts towards no mastery. Bank questions are graded on the concepts they test. Jugnu is there for doubts on both.
+- Every interactive page has a witness: how a learner gets through it (`b.witness(...)`, with `wait(seconds)` for the board's clock).
+- Anyone may act on any piece; Jugnu's judgement (never answering an open question for the learner) is checked by his evals, not by the board. Don't write `b.studentOnly`.
+
+Older pages return one `column([... , space()])` and pass at once unless `{ passOn: PassOn.Rules }` (their own rules call `theBoard.pass()`); they are moved to the shape above chapter by chapter.
 
 ## A question family (`family.ts` + `params.yaml`)
 
@@ -97,14 +121,14 @@ export const locateOnLine = family({
   params: z.object({ target: decimal, from: z.number(), to: z.number() }).strict(),
   build: ({ target, from, to }, b) => {
     const line = b.prop(numberLineDef, "line", { from, to, showMarker: true, isZoomable: true });
-    const goal = goalQuestion(b, {
+    const ask = goal(b, {
       about: line,
       prompt: t(`Put the marker exactly on ${target}.`, "…"),
-      isMet: line.field("marker").isAt(target),     // fixed(line.marker, 3) == "7.384"
+      met: (at) => target.isAt(at(line).marker),     // exact: a Dec, never == on floats
       solve: reach(line, target),                    // the witness
-      notes: [{ when: …, say: t("…", "…"), reach: reach(line, early) }],
+      notes: [{ when: (at) => …, say: t("…", "…"), reach: reach(line, early) }],
     });
-    return column([line, goal, space()]);
+    return [line, ask];
   },
 });
 ```
@@ -127,9 +151,9 @@ export const locateOnLine = family({
 ## Rules for TypeScript content
 
 - Props, actions, signals and derived fields come from the prop's definition, typed: `line.learner(NumberLineAction.ZoomIn)`, `goal.on(QuestionSignal.Wrong)`, `line.derived(NumberLineDerived.Level)`. Naming one a prop doesn't have is a compile error. Use the props' enums, never a string.
-- Numbers a learner sets are compared with `isAt(dec("…"))`, never `==` on floats.
+- Numbers a learner sets are compared with an exact decimal, `dec("7.384").isAt(at(line).marker)`, never `==` on floats.
 - Every learner-facing string is `t(en, hi)`.
-- When the same board-building shows up a second or third time, lift it into `library/patterns/` (`goalQuestion`, `magnifier`, `reach`).
+- When the same board-building shows up a second or third time, lift it into `library/patterns/` (`choice`, `goal`, `magnifier`, `reach`).
 
 ## Words and maths
 

@@ -87,6 +87,14 @@ export class Dec {
     return this.compare(other) === 0;
   }
 
+  /**
+   * Whether a number a learner set (a dragged marker is never exactly 7.384) reads as this decimal
+   * at its own places: the way to compare it with an exact one.
+   */
+  isAt(value: number): boolean {
+    return Number.isFinite(value) && Dec.parse(value.toFixed(this.places)).eq(this);
+  }
+
   /** The digits after the point, in order: 2.665 → ["6", "6", "5"]. */
   digits(): string[] {
     return this.places === 0 ? [] : (this.toString().split(".")[1] ?? "").split("");

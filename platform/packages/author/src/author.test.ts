@@ -1,11 +1,12 @@
-import { Level } from "@chalk/content";
+import { Level, type RuleFn } from "@chalk/content";
 import { dec } from "@chalk/exact";
-import { actionsFor, defineProp, set } from "@chalk/prop";
+import { AnswerStatus, PropRole, QuestionSignal, actionsFor, defineProp, set } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { buildBoard, column, inOrder, theBoard, wait } from "./board";
 import { family, isFamily } from "./family";
 import { idOf, versionOf } from "./id";
+import { page } from "./page";
 import { decimal } from "./params";
 
 const dialState = z.object({ at: z.number(), isOn: z.boolean() }).strict();
@@ -85,6 +86,91 @@ describe("building a board", () => {
       d.field("angle");
       return column([d]);
     });
+  });
+});
+
+const askState = z.object({ status: z.enum(["open", "correct", "wrong"]) }).strict();
+const ask = defineProp({
+  type: "ask",
+  describe: "A question",
+  role: PropRole.Question,
+  state: askState,
+  defaults: { status: "open" },
+  actions: {},
+  signals: { [QuestionSignal.Correct]: { describe: "right" } },
+});
+
+describe("a page in the new shape (it returns a list)", () => {
+  it("is a column with room at the bottom; what comes later starts hidden and shows after", () => {
+    const built = page("later", (b) => {
+      const d = b.prop(dial, "d");
+      const q = b.prop(ask, "q");
+      const note = b.prop(dial, "note");
+      b.after(d.on("turned"), q);
+      b.after(q, [note], { if: (at) => at(d).at > 2 });
+      return [d, q, note];
+    }).build().board;
+    expect(built.root).toMatchObject({
+      kind: "column",
+      children: [
+        { name: "d" },
+        { name: "q", isHidden: true },
+        { name: "note", isHidden: true },
+        { kind: "space" },
+      ],
+    });
+    expect(built.when.map((r) => [r.on, r.do, typeof r.if])).toEqual([
+      ["d.turned", [{ call: "board.show", args: { name: "q" } }], "undefined"],
+      ["q.correct", [{ call: "board.show", args: { name: "note" } }], "function"],
+      // Its one question passes it.
+      ["q.correct", { call: "board.pass" }, "undefined"],
+    ]);
+  });
+
+  it("passes when every question is right, at once with none, or by passWhen", () => {
+    const two = page("two", (b) => [b.prop(ask, "a"), b.prop(ask, "b")]).build().board;
+    const passes = two.when.filter((r) => JSON.stringify(r.do).includes("board.pass"));
+    expect(passes.map((r) => r.on)).toEqual(["a.correct", "b.correct"]);
+    const allRight = passes[0]?.if as RuleFn;
+    const statuses: Record<string, string> = { a: AnswerStatus.Correct, b: AnswerStatus.Open };
+    const at = (p: string | { name: string }) => ({
+      status: statuses[typeof p === "string" ? p : p.name],
+    });
+    expect(allRight(at)).toBe(false);
+    statuses.b = AnswerStatus.Correct;
+    expect(allRight(at)).toBe(true);
+
+    const reading = page("reading", (b) => [b.prop(dial, "d")]).build().board;
+    expect(reading.when).toEqual([{ on: "board.started", do: { call: "board.pass" } }]);
+
+    const onSignal = page("on-signal", (b) => {
+      const d = b.prop(dial, "d");
+      b.passWhen(d.on("turned"), { if: (at) => at(d).at === 3 });
+      return [d, b.prop(ask, "q")];
+    }).build().board;
+    // passWhen replaces passing on the question.
+    expect(onSignal.when.map((r) => [r.on, r.do])).toEqual([["d.turned", { call: "board.pass" }]]);
+  });
+
+  it("refuses the older ways: passOn, a rule that passes, a piece hidden that nothing shows", () => {
+    expect(() => page("a", (b) => [b.prop(dial, "d")], { passOn: "rules" }).build()).toThrow(
+      /drop passOn/,
+    );
+    expect(() =>
+      page("b", (b) => {
+        const d = b.prop(dial, "d");
+        b.when(d.on("turned"), theBoard.pass());
+        return [d];
+      }).build(),
+    ).toThrow(/use passWhen/);
+    expect(() => page("c", (b) => [b.prop(dial, "d", {}, { isHidden: true })]).build()).toThrow(
+      /nothing shows them/,
+    );
+  });
+
+  it("an older page still passes at once, or by its own rules", () => {
+    const old = page("old", (b) => column([b.prop(ask, "q")])).build().board;
+    expect(old.when).toEqual([{ on: "board.started", do: { call: "board.pass" } }]);
   });
 });
 

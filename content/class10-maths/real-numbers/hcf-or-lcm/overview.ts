@@ -1,4 +1,4 @@
-import { PassOn, after, column, page, space, t, theBoard } from "@chalk/author";
+import { PassOn, column, page, space, t, theBoard, wait } from "@chalk/author";
 import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { textDef } from "@chalk/prop-basics";
 import { GearPairAction, GearPairSignal, gearPairDef, squareCutterDef } from "@chalk/prop-primes";
@@ -23,7 +23,7 @@ const meetAgain = page(
       { isHidden: true },
     );
     b.when(gears.on(GearPairSignal.Met), [theBoard.show(reveal), theBoard.pass()]);
-    b.witness(gears.learner(GearPairAction.TurnBy, { teeth: 36 }), after(4));
+    b.witness(gears.learner(GearPairAction.TurnBy, { teeth: 36 }), wait(4));
     return column([
       w.title(t("When do they meet again?", "वे फिर कब मिलेंगे?")),
       w.body(

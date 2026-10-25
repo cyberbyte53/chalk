@@ -1,4 +1,4 @@
-import { type PlacedOf, type Step, after } from "@chalk/author";
+import { type PlacedOf, type Step, wait } from "@chalk/author";
 import type { Dec } from "@chalk/exact";
 import { NumberLineAction, type numberLineDef } from "@chalk/prop-number-line";
 
@@ -15,7 +15,7 @@ export function reach(line: PlacedOf<typeof numberLineDef>, value: Dec): Step[] 
     steps.push(
       line.learner(NumberLineAction.MoveMarker, { to: value }),
       line.learner(NumberLineAction.ZoomIn),
-      after(ZOOM_SETTLES),
+      wait(ZOOM_SETTLES),
     );
   }
   steps.push(line.learner(NumberLineAction.MoveMarker, { to: value }));
