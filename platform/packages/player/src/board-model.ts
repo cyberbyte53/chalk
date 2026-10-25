@@ -8,8 +8,7 @@ import {
   type StoredState,
   compositeOf,
   hostOf,
-  observationOf,
-  viewOf,
+  observationOfView,
 } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
 import { partPathsIn } from "./part-paths";
@@ -151,9 +150,10 @@ export function pieceModel(
   onScreen?: Element | null,
 ): PieceModel {
   const def = runtime.getDef(name);
-  const stored = runtime.getStored(name);
-  const view = viewOf(def, stored);
-  const seen = observationOf(def, stored);
+  // Its fields with what the board binds into them, and its view.
+  const stored = runtime.getFields(name);
+  const view = runtime.getView(name);
+  const seen = observationOfView(def, view);
   const problems: string[] = [];
   const board = runtime.board;
 

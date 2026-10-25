@@ -443,11 +443,52 @@ describe("BoardRuntime", () => {
     // The dial's `at` is bound: not stored, read through the view.
     expect(board.getStored("p").dial).toEqual({});
     expect(board.getView("p").dial).toMatchObject({ at: 2 });
-    expect(board.getStored("shown").value).toBe(20);
+    // A field the board binds is not stored either.
+    expect(board.getStored("shown").value).toBeUndefined();
+    expect(board.getView("shown").value).toBe(20);
     await board.call("p", "dial.setTo", { to: 7 }, Actor.Learner);
     expect(board.getStored("p").value).toMatchObject({ value: 7 });
     expect(board.getView("p").dial).toMatchObject({ at: 7 });
-    expect(board.getStored("shown").value).toBe(70);
+    expect(board.getView("shown").value).toBe(70);
     expect(errors).toEqual([]);
+    // Writing it is refused, and reported when the lesson does it.
+    await board.call("shown", "setValue", { v: 1 });
+    expect(board.getView("shown").value).toBe(70);
+    expect(errors.join()).toMatch(/shown: value is set by an IS rule/);
+  });
+
+  it("forks: a copy of the board now, changed without touching the original", async () => {
+    const { services } = fakeServices();
+    const board = new BoardRuntime(
+      boardOf({
+        name: "b",
+        root: {
+          name: "page",
+          kind: "column",
+          children: [
+            { name: "d", kind: "prop", prop: "dial" },
+            { name: "shown", kind: "prop", prop: "label" },
+          ],
+        },
+        is: [{ set: "shown.value", to: "d.at + 1" }],
+      }),
+      (t) => defs[t],
+      services,
+    );
+    await board.call("d", "setTo", { to: 3 }, Actor.Learner);
+    const copy = board.fork();
+    expect(copy.getView("shown").value).toBe(4);
+    expect(copy.isTouched("d")).toBe(true);
+    await copy.call("d", "setTo", { to: 5 }, Actor.Learner);
+    expect(copy.getView("shown").value).toBe(6);
+    expect(board.getView("shown").value).toBe(4);
+    // Restoring an old snapshot that still holds a bound field: the board works it out again.
+    board.restore(
+      new Map([
+        ["d", { at: 9 }],
+        ["shown", { text: { en: "", hi: "" }, value: 0 }],
+      ]),
+    );
+    expect(board.getView("shown").value).toBe(10);
   });
 });

@@ -80,7 +80,7 @@ export function studentView(runtime: BoardRuntime, locale: "en" | "hi"): Record<
     if (runtime.isHidden(name)) continue;
     const def = runtime.getDef(name);
     const hidden = new Set(def.offScreen ?? []);
-    const view = viewOf(def, runtime.getStored(name));
+    const view = runtime.getView(name);
     props[name] = {
       type: def.type,
       state: readable(

@@ -161,11 +161,47 @@ export function prepareAction(
       ),
     };
   }
-  const view = viewOf(def, stored) as PropView & StoredState;
+  return runOn(def, viewOf(def, stored), name, parsed.data);
+}
+
+/**
+ * The same, on a view already worked out (a piece on a board, with what the board binds into it).
+ * Checks the action's name and arguments, then asks the prop what it does. Pure.
+ */
+export function prepareOnView(
+  def: AnyPropDef,
+  view: PropView,
+  name: string,
+  args: unknown = {},
+): ActionResult {
+  const spec = def.actions[name];
+  if (spec === undefined) {
+    return {
+      isOk: false,
+      errors: [
+        `${def.type} has no action "${name}" (actions: ${Object.keys(def.actions).join(", ")})`,
+      ],
+    };
+  }
+  const parsed = spec.args.safeParse(args);
+  if (!parsed.success) {
+    return {
+      isOk: false,
+      errors: parsed.error.issues.map(
+        (i) => `${def.type}.${name}(${i.path.join(".")}): ${i.message}`,
+      ),
+    };
+  }
+  return runOn(def, view, name, parsed.data);
+}
+
+function runOn(def: AnyPropDef, view: PropView, name: string, args: unknown): ActionResult {
+  const spec = def.actions[name];
+  if (spec === undefined) return { isOk: false, errors: [`${def.type} has no action "${name}"`] };
   // `run` is typed per prop; the arguments were just checked against that prop's own schema.
   // A prop may throw to refuse (e.g. no component with that id): that is a refusal, not a crash.
   try {
-    return { isOk: true, effect: spec.run(view, parsed.data as never) };
+    return { isOk: true, effect: spec.run(view as PropView & StoredState, args as never) };
   } catch (error) {
     return {
       isOk: false,

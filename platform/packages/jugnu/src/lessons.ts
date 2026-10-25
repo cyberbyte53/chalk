@@ -45,7 +45,7 @@ export function mapText(lines: readonly ConceptLine[], current: readonly string[
 export function conceptsOnBoard(board: JugnuBoard): string[] {
   const out: string[] = [];
   for (const name of board.propNames()) {
-    const stored = board.getStored(name) as { concepts?: unknown };
+    const stored = board.getView(name) as { concepts?: unknown };
     if (!Array.isArray(stored.concepts)) continue;
     for (const id of stored.concepts) if (typeof id === "string" && !out.includes(id)) out.push(id);
   }

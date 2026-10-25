@@ -1,5 +1,5 @@
 import { Actor, type Cue, CueKind, MAX_OPTIONS, OPTION_MAX, splitTarget } from "@chalk/content";
-import { PropRole, SAY, compileExpression, observationOf, viewOf } from "@chalk/prop";
+import { PropRole, SAY, compileExpression, observationOfView } from "@chalk/prop";
 import type { z } from "zod";
 import type { HeardAction, HeardSignal, JugnuBoard, JugnuPlace } from "./board";
 import type { LessonLibrary } from "./lessons";
@@ -249,7 +249,7 @@ export const toolsFor = (board: JugnuBoard): ToolSpec[] => jugnuTools(board).spe
 const seenOf = (board: JugnuBoard, names: readonly string[]) =>
   new Map(
     names.map((name) => {
-      const seen = observationOf(board.getDef(name), board.getStored(name));
+      const seen = observationOfView(board.getDef(name), board.getView(name));
       return [
         name,
         new Map(
@@ -405,9 +405,7 @@ async function tryCalls(
 function calculate(board: JugnuBoard, args: Record<string, unknown>): ToolOutcome {
   const expression = String(args.expression ?? "");
   try {
-    const value = compileExpression(expression).evaluate((prop) =>
-      viewOf(board.getDef(prop), board.getStored(prop)),
-    );
+    const value = compileExpression(expression).evaluate((prop) => board.getView(prop));
     if (typeof value !== "number" && typeof value !== "boolean" && typeof value !== "string")
       throw new Error("that isn't a number");
     const result = typeof value === "number" ? Number(value.toPrecision(12)) : value;
@@ -489,7 +487,7 @@ async function reply(
           refused: `no prop "${prop}" is shown`,
         });
       if (part !== undefined) {
-        const seen = observationOf(board.getDef(prop), board.getStored(prop));
+        const seen = observationOfView(board.getDef(prop), board.getView(prop));
         const parts = seen.elements.map((e) => e.id);
         if (!parts.includes(part)) {
           const why = `${prop} has nothing called "${part}" (it shows: ${parts.join(", ") || "nothing"})`;

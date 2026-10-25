@@ -1,5 +1,5 @@
 import { type About, type Cue, CueKind, type TurnInput } from "@chalk/content";
-import { observationOf } from "@chalk/prop";
+import { observationOfView } from "@chalk/prop";
 import type { JugnuBoard, JugnuPlace } from "./board";
 import { type Taught, boardNow, systemPrompt } from "./context";
 import { type LessonLibrary, conceptsOnBoard, mapText } from "./lessons";
@@ -71,7 +71,7 @@ export function aboutOf(board: JugnuBoard, about: readonly About[]): string[] {
   const out: string[] = [];
   for (const { prop, part, text } of about) {
     if (!board.propNames().includes(prop) || board.isHidden(prop)) continue;
-    const parts = observationOf(board.getDef(prop), board.getStored(prop)).elements.map(
+    const parts = observationOfView(board.getDef(prop), board.getView(prop)).elements.map(
       (e) => e.id,
     );
     const where = part !== undefined && parts.includes(part) ? `${prop} · ${part}` : prop;

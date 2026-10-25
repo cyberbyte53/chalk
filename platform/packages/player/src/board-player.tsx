@@ -153,7 +153,7 @@ export function BoardPlayer({
               : {
                   kind: SubmittedKind.Prop,
                   propId: permanentId({ name: payload.about, id: runtime.idOf(payload.about) }),
-                  state: { ...runtime.getStored(payload.about) },
+                  state: { ...runtime.getFields(payload.about) },
                 };
         bindRaise<typeof MachineType.Question>(raise, {
           type: MachineType.Question,

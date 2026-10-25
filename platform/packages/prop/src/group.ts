@@ -216,7 +216,15 @@ type GroupInternals = {
   ) => Effect<StoredState>;
   /** The stored schema minus fields a parent binds. */
   stateWithout: (tree: BoundTree) => z.ZodTypeAny;
+  /** The rules across children, checked on a view. */
+  invariantOfView: (view: PropView) => string | undefined;
 };
+
+/** A prop's invariant on its view: a leaf's on its fields, a group's across its children. */
+export function invariantOfView(def: AnyPropDef, view: PropView): string | undefined {
+  const inner = internalsOf(def);
+  return inner !== undefined ? inner.invariantOfView(view) : def.invariant?.(view as StoredState);
+}
 
 /** The group layout of a prop, if it is a group. */
 export function groupOf(def: AnyPropDef): GroupLayout | undefined {
@@ -275,7 +283,7 @@ function mergeBound(
 }
 
 /** A state without the fields a tree binds (for a leaf: its fields; for a group: own and nested). */
-function without(s: StoredState, tree: BoundTree | undefined): StoredState {
+export function without(s: StoredState, tree: BoundTree | undefined): StoredState {
   if (tree === undefined) return s;
   const out: Record<string, unknown> = { ...s };
   for (const [k, sub] of Object.entries(tree)) {
@@ -325,7 +333,7 @@ function overlap(a: BoundTree, b: BoundTree, prefix = ""): string | undefined {
 }
 
 /** A leaf's or group's stored schema minus the fields a parent binds. */
-function schemaWithout(def: AnyPropDef, tree: BoundTree | undefined): z.ZodTypeAny {
+export function schemaWithout(def: AnyPropDef, tree: BoundTree | undefined): z.ZodTypeAny {
   const base = def.state as unknown as z.ZodTypeAny;
   if (tree === undefined || Object.keys(tree).length === 0) return base;
   const inner = internalsOf(def);
@@ -463,7 +471,9 @@ export function defineGroup<
     const fields = Object.entries(tree).flatMap(([k, sub]) => (sub === true ? [k] : []));
     if (fields.length === 0) continue;
     for (const [action, a] of Object.entries(childDef(name).actions)) {
-      const writes = a.changes === undefined || a.changes.some((f) => fields.includes(f));
+      // Only what an action declares it changes is known before it runs; any other write to a
+      // bound field is refused when it happens.
+      const writes = a.changes?.some((f) => fields.includes(f)) === true;
       const key = `${name}.${action}`;
       if (a.byLearner === true && writes && spec.route?.[key] === undefined)
         throw new Error(
@@ -834,10 +844,27 @@ export function defineGroup<
     };
   };
 
+  /** The rules across children, on a view (with whatever a parent binds into the group). */
+  const invariantOfView = (view: PropView): string | undefined => {
+    for (const name of childNames) {
+      const v = view[name];
+      if (v === null || v === undefined) continue;
+      const def = childDef(name);
+      const inner = internalsOf(def);
+      const broken =
+        inner !== undefined
+          ? inner.invariantOfView(v as PropView)
+          : def.invariant?.(v as StoredState);
+      if (broken !== undefined) return `${name}: ${broken}`;
+    }
+    return spec.invariant?.(view);
+  };
+
   const internals: GroupInternals = {
     viewWith: (stored, injected) => read(stored, injected).view,
     actOn,
     stateWithout,
+    invariantOfView,
   };
   Object.assign(groupDef, internals, {
     type: spec.type,
@@ -861,14 +888,7 @@ export function defineGroup<
       for (const name of childNames) {
         if (s[name] === null && !optional.has(name)) return `${name} can't be left out`;
       }
-      const view = read(s).view;
-      for (const name of childNames) {
-        const v = view[name];
-        if (v === null) continue;
-        const broken = childDef(name).invariant?.(v as StoredState);
-        if (broken !== undefined) return `${name}: ${broken}`;
-      }
-      return spec.invariant?.(view);
+      return invariantOfView(read(s).view);
     },
     ...(spec.isExplainer !== undefined ? { isExplainer: spec.isExplainer } : {}),
     ...(spec.inputs !== undefined ? { inputs: spec.inputs } : {}),

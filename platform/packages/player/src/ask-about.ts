@@ -1,5 +1,5 @@
 import type { About, Locale } from "@chalk/content";
-import { PropRole, observationOf } from "@chalk/prop";
+import { PropRole, observationOfView } from "@chalk/prop";
 import type { RefObject } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import type { BoardRuntime } from "./runtime";
@@ -60,7 +60,7 @@ export function pickAt(
   const prop = piece?.getAttribute("data-piece");
   if (piece == null || prop == null || !runtime.propNames().includes(prop)) return undefined;
   const def = runtime.getDef(prop);
-  const elements = observationOf(def, runtime.getStored(prop)).elements;
+  const elements = observationOfView(def, runtime.getView(prop)).elements;
   const ids = new Set(elements.map((e) => e.id));
   let part: string | undefined;
   const tagged = target.closest("[data-part]")?.getAttribute("data-part");

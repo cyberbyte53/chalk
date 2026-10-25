@@ -1,7 +1,6 @@
 import {
   Actor,
   type Board,
-  type IsRule,
   type Script,
   type WhenRule,
   argExpression,
@@ -14,33 +13,31 @@ import {
   BOARD,
   BoardAction,
   BoardSignal,
+  type BoundTree,
   EffectKind,
   type Emit,
   type Expression,
   PropRole,
   type PropView,
   SAY,
+  type Scope,
   type Spoken,
   type StoredState,
-  type Template,
-  applyPatch,
   boardProp,
   compileExpression,
   compileTemplate,
+  defineGroup,
+  groupOf,
   initialState,
-  prepareAction,
+  invariantOfView,
+  isFullChecking,
+  prepareOnView,
+  schemaWithout,
   tweenAt,
   viewOf,
+  without,
 } from "@chalk/prop";
-import {
-  type ReadonlySignal,
-  type Signal,
-  batch,
-  computed,
-  effect,
-  signal,
-  untracked,
-} from "@preact/signals-core";
+import { type ReadonlySignal, type Signal, batch, computed, signal } from "@preact/signals-core";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
@@ -74,34 +71,22 @@ export type SignalRecord = {
   actor: Actor;
 };
 
-/**
- * One placed prop, live. Its stored state is a signal: whatever read it (an IS rule, its view, a
- * prop on screen) runs again when it changes, and nothing else does.
- */
-type Instance = {
+/** One placed prop: what it is. Its facts live in the board's one root; its view is worked out. */
+type Piece = {
   name: string;
   id: number | undefined;
   def: AnyPropDef;
-  stored: Signal<StoredState>;
-  /** Stored plus derived, worked out again only when `stored` changes. */
+  /** Its stored facts' schema: the prop's own, minus the fields the board binds. */
+  facts: FactsSchema;
+  /** Fields the board binds into it (never stored, never set by an action). */
+  bound: BoundTree | undefined;
+  isGroup: boolean;
+  /** Its view, made again only when it changes (a prop on screen re-renders only then). */
   view: ReadonlySignal<PropView>;
 };
 
-function liveInstance(
-  name: string,
-  id: number | undefined,
-  def: AnyPropDef,
-  start: StoredState,
-): Instance {
-  const stored = signal(start);
-  return { name, id, def, stored, view: computed(() => viewOf(def, stored.value)) };
-}
-
-type CompiledIs = {
-  prop: string;
-  field: string;
-  value: { expression: Expression } | { texts: Record<string, Template> };
-};
+/** The whole board's facts: each piece's, by name (the board's own under BOARD). */
+type Root = Readonly<Record<string, StoredState>>;
 
 type CompiledWhen = {
   prop: string;
@@ -192,22 +177,175 @@ class Clock {
   }
 }
 
+/** A schema for a piece's facts. */
+type FactsSchema = ReturnType<typeof schemaWithout>;
+
+/** What a fork runs on when given nothing: the parent's services, silent. */
+const silenced = (services: RuntimeServices): RuntimeServices => ({
+  ...services,
+  speak: () => Promise.resolve(),
+});
+
+const isObject = (v: unknown): v is Record<string, unknown> =>
+  v !== null && typeof v === "object" && !Array.isArray(v);
+
+/** Sets `value` at `path` in a nested object, making the levels it needs. */
+function setPath(out: Record<string, unknown>, path: readonly string[], value: unknown): void {
+  const [first, ...rest] = path;
+  if (first === undefined) return;
+  if (rest.length === 0) {
+    out[first] = value;
+    return;
+  }
+  const next = isObject(out[first]) ? { ...out[first] } : {};
+  setPath(next, rest, value);
+  out[first] = next;
+}
+
+function getPath(from: unknown, path: readonly string[]): unknown {
+  let at = from;
+  for (const key of path) at = isObject(at) ? at[key] : undefined;
+  return at;
+}
+
+type Link = (view: PropView) => Record<string, unknown>;
+
 /**
- * One board, live: its props' state, its IS rules kept true, its WHEN rules answered in order,
- * and its scripts. Every change to a prop goes through `call` (the one door).
+ * The board's IS rules as the top group's links: per piece, one function returning the fields the
+ * board binds into it. Pieces come in an order where each reads only pieces already worked out.
+ * A rule that breaks (an error, or a value its field won't take) keeps its last good value and is
+ * reported once, until it works again.
+ */
+function boardLinks(
+  board: Board,
+  defs: ReadonlyMap<string, AnyPropDef>,
+  starts: ReadonlyMap<string, StoredState>,
+  report: (message: string, error?: unknown) => void,
+): Record<string, Link> {
+  type Rule = {
+    target: string;
+    path: readonly string[];
+    compute: (scope: Scope) => unknown;
+    reads: readonly string[];
+    check: ((value: unknown) => string | undefined) | undefined;
+    last: unknown;
+    lastError: string | undefined;
+  };
+  const rules = new Map<string, Rule[]>();
+  for (const rule of board.is) {
+    const { prop, member } = splitTarget(rule.set);
+    const def = defs.get(prop);
+    if (def === undefined)
+      throw new Error(`Board ${board.name}: IS ${rule.set}: no prop "${prop}"`);
+    const path = member.split(".");
+    let compute: (scope: Scope) => unknown;
+    let refs: readonly (readonly string[])[];
+    if ("to" in rule) {
+      const expression = compileExpression(rule.to);
+      compute = (scope) => expression.evaluate(scope);
+      refs = expression.refs;
+    } else {
+      const texts = Object.entries(rule.text).map(
+        ([locale, source]) => [locale, compileTemplate(source)] as const,
+      );
+      compute = (scope) => Object.fromEntries(texts.map(([l, t]) => [l, t.render(scope)]));
+      refs = texts.flatMap(([, t]) => t.refs);
+    }
+    // A leaf's own field is checked against its schema (a group's fields are checked inside it).
+    const shape = (def.state as unknown as { shape?: Record<string, FieldSchema> }).shape;
+    const field = path.length === 1 && groupOf(def) === undefined ? shape?.[member] : undefined;
+    const check =
+      field === undefined
+        ? undefined
+        : (value: unknown) => {
+            if (!isFullChecking()) return undefined;
+            const parsed = field.safeParse(value);
+            return parsed.success
+              ? undefined
+              : parsed.error.issues.map((i) => i.message).join("; ");
+          };
+    const list = rules.get(prop) ?? [];
+    list.push({
+      target: rule.set,
+      path,
+      compute,
+      reads: [...new Set(refs.map((r) => r[0] ?? ""))],
+      check,
+      last: getPath(starts.get(prop), path),
+      lastError: undefined,
+    });
+    rules.set(prop, list);
+  }
+  // Each piece after the pieces it reads (a loop is the validator's to report; kept as written).
+  const order: string[] = [];
+  const visiting = new Set<string>();
+  const visit = (name: string) => {
+    if (order.includes(name) || visiting.has(name) || !rules.has(name)) return;
+    visiting.add(name);
+    for (const rule of rules.get(name) ?? []) for (const read of rule.reads) visit(read);
+    visiting.delete(name);
+    order.push(name);
+  };
+  for (const name of rules.keys()) visit(name);
+
+  const links: Record<string, Link> = {};
+  for (const name of order) {
+    const list = rules.get(name) ?? [];
+    links[name] = (view) => {
+      const out: Record<string, unknown> = {};
+      const scope: Scope = (prop) => {
+        const seen = view[prop];
+        if (!isObject(seen)) throw new Error(`no prop "${prop}"`);
+        return prop === name ? { ...seen, ...out } : seen;
+      };
+      for (const rule of list) {
+        let value: unknown;
+        let problem: string | undefined;
+        let cause: unknown;
+        try {
+          value = rule.compute(scope);
+          problem = rule.check?.(value);
+        } catch (error) {
+          problem = error instanceof Error ? error.message : String(error);
+          cause = error;
+        }
+        if (problem === undefined) {
+          rule.last = value;
+          rule.lastError = undefined;
+        } else if (problem !== rule.lastError) {
+          rule.lastError = problem;
+          report(`Board ${board.name}: IS ${rule.target}: ${problem}`, cause);
+        }
+        setPath(out, rule.path, rule.last);
+      }
+      return out;
+    };
+  }
+  return links;
+}
+
+type FieldSchema = {
+  safeParse: (
+    v: unknown,
+  ) => { success: true } | { success: false; error: { issues: { message: string }[] } };
+};
+
+/**
+ * One board, live. It is the top group: its children are the placed props (and the board's own
+ * prop), its links are the board's IS rules, and its state is one root of facts, by piece. A field
+ * an IS binds is never stored: it is worked out when read, like everything derived. Every change
+ * goes through `commit`, which checks it and swaps the root; a refusal is always reported.
  *
- * State is held in signals (@preact/signals-core). Each IS rule is an effect: it records which props
- * it read and runs again only when one of them changes. Each prop's view is a computed value, and a
- * prop on screen re-renders only when its own view changes (through @preact/signals in the player).
+ * The root is a signal (@preact/signals-core) and each piece's view a computed value, made again
+ * only when its facts or what is bound into it changed: a prop on screen re-renders only then.
+ * WHEN rules are answered in order, and scripts run on the board's own clock.
  */
 export class BoardRuntime {
-  private readonly instances = new Map<string, Instance>();
-  private readonly isRules: CompiledIs[];
+  private readonly pieces = new Map<string, Piece>();
+  private readonly top: AnyPropDef;
+  private readonly root: Signal<Root>;
+  private readonly boardView: ReadonlySignal<PropView>;
   private readonly whenRules: CompiledWhen[];
-  /** Inputs owned by an IS, as "prop.field": no action may set them. */
-  private readonly owned = new Set<string>();
-  /** Stops each IS rule's effect. */
-  private readonly stopIs: (() => void)[];
   private readonly signalListeners = new Set<(record: SignalRecord) => void>();
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
   private readonly queue: SignalRecord[] = [];
@@ -219,10 +357,15 @@ export class BoardRuntime {
 
   constructor(
     readonly board: Board,
-    lookup: (type: string) => AnyPropDef | undefined,
+    private readonly lookup: (type: string) => AnyPropDef | undefined,
     private readonly services: RuntimeServices,
+    /** Start from these facts instead of the placements (a fork). */
+    from?: Root,
   ) {
     this.clock = new Clock(services);
+    const defs = new Map<string, AnyPropDef>();
+    const starts = new Map<string, StoredState>();
+    const ids = new Map<string, number | undefined>();
     const hidden: string[] = [];
     for (const piece of propPieces(board.root)) {
       const def = lookup(piece.prop);
@@ -231,48 +374,98 @@ export class BoardRuntime {
       const start = initialState(def, piece.with);
       if (!start.isOk)
         throw new Error(`Board ${board.name}, ${piece.name}: ${start.errors.join("; ")}`);
-      this.instances.set(piece.name, liveInstance(piece.name, piece.id, def, start.state));
+      defs.set(piece.name, def);
+      starts.set(piece.name, start.state);
+      ids.set(piece.name, piece.id);
       if (piece.isHidden === true) hidden.push(piece.name);
     }
-    this.instances.set(
-      BOARD,
-      liveInstance(BOARD, board.id, boardProp as unknown as AnyPropDef, {
-        ...boardProp.defaults,
-        hidden,
-      }),
-    );
-    this.isRules = board.is.map((rule) => this.compileIs(rule));
+    defs.set(BOARD, boardProp as unknown as AnyPropDef);
+    starts.set(BOARD, { ...boardProp.defaults, hidden });
+    ids.set(BOARD, board.id);
+
+    const names = [...defs.keys()];
+    let top: AnyPropDef;
+    try {
+      top = defineGroup({
+        type: `board ${board.name}`,
+        describe: `The board ${board.name}`,
+        children: Object.fromEntries(defs),
+        defaults: Object.fromEntries(starts),
+        is: boardLinks(board, defs, starts, (m, e) => this.services.onError(m, e)),
+        summary: () => board.name,
+        layout: { kind: "column", children: names },
+      } as never) as unknown as AnyPropDef;
+    } catch (error) {
+      throw new Error(
+        `Board ${board.name}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+    this.top = top;
+    const boundTree = groupOf(top)?.boundTree ?? {};
+    this.root = signal((from ?? top.defaults) as Root);
+    this.boardView = computed(() => viewOf(top, this.root.value));
+    for (const name of names) {
+      const def = defs.get(name) as AnyPropDef;
+      const bound = boundTree[name];
+      this.pieces.set(name, {
+        name,
+        id: ids.get(name),
+        def,
+        facts: schemaWithout(def, bound),
+        bound,
+        isGroup: groupOf(def) !== undefined,
+        view: computed(() => this.boardView.value[name] as PropView),
+      });
+    }
     this.whenRules = board.when.map((rule) => this.compileWhen(rule));
-    // Each effect runs once now, making its IS true, then again whenever what it read changes.
-    this.stopIs = this.isRules.map((rule) => effect(() => this.keep(rule)));
   }
 
   // ---- reading ----
 
-  /** A prop's state, stored and derived. Read while rendering, it re-renders on change. */
+  /** A prop's state: its facts, what the board binds into it, and what is derived. */
   getView(name: string): PropView {
-    return this.instance(name).view.value;
+    return this.piece(name).view.value;
   }
 
+  /** A prop's stored facts (without what the board binds into it). */
   getStored(name: string): StoredState {
-    return this.instance(name).stored.value;
+    this.piece(name);
+    return this.root.value[name] as StoredState;
+  }
+
+  /**
+   * A prop's fields as its own code reads them: a leaf's stored fields with what the board binds
+   * into them (no derived values), a group's facts (it works out its own links).
+   */
+  getFields(name: string): StoredState {
+    return this.fieldsOf(this.piece(name));
+  }
+
+  /** Why these facts don't fit the prop here (checked fully), or nothing if they do. */
+  checkFacts(name: string, facts: StoredState): readonly string[] {
+    const piece = this.piece(name);
+    const parsed = (piece.facts as unknown as FieldSchema).safeParse(facts);
+    if (parsed.success) return [];
+    return (parsed.error.issues as unknown as { path: (string | number)[]; message: string }[]).map(
+      (i) => `${piece.def.type}.${i.path.join(".") || "state"}: ${i.message}`,
+    );
   }
 
   getDef(name: string): AnyPropDef {
-    return this.instance(name).def;
+    return this.piece(name).def;
   }
 
   idOf(name: string): number | undefined {
-    return this.instance(name).id;
+    return this.piece(name).id;
   }
 
   /** Every placed prop's name (not the board). */
   propNames(): string[] {
-    return [...this.instances.keys()].filter((name) => name !== BOARD);
+    return [...this.pieces.keys()].filter((name) => name !== BOARD);
   }
 
   isHidden(name: string): boolean {
-    const hidden = this.instance(BOARD).stored.value.hidden;
+    const hidden = this.piece(BOARD).view.value.hidden;
     return Array.isArray(hidden) && hidden.includes(name);
   }
 
@@ -287,25 +480,40 @@ export class BoardRuntime {
     return () => this.actionListeners.delete(listener);
   }
 
-  /** Every prop's stored state right now. */
+  /** Every prop's stored facts right now. */
   snapshot(): BoardSnapshot {
-    return new Map([...this.instances].map(([name, instance]) => [name, instance.stored.peek()]));
+    return new Map(Object.entries(this.root.peek()));
   }
 
   /**
-   * Puts the board back to a snapshot: used to undo what Jugnu did when it would have solved the
-   * question for the student. Each state still passes its prop's schema.
+   * Puts the board back to a snapshot (Jugnu's undo; a phone's state on the server). Each piece's
+   * facts are checked; one that doesn't fit is reported and left as it is. A field the board
+   * binds is worked out again, whatever the snapshot says.
    */
   restore(snapshot: BoardSnapshot): void {
     batch(() => {
       for (const [name, stored] of snapshot) {
-        const instance = this.instances.get(name);
-        if (instance === undefined) continue;
+        const piece = this.pieces.get(name);
+        if (piece === undefined) continue;
         this.tweens.get(name)?.cancel();
-        const result = applyPatch(instance.def, instance.stored.peek(), stored);
-        if (result.isOk) instance.stored.value = result.state;
+        const errors = this.commit({ [name]: without(stored, piece.bound) });
+        if (errors.length > 0)
+          this.services.onError(
+            `Board ${this.board.name}: restoring ${name}: ${errors.join("; ")}`,
+          );
       }
     });
+  }
+
+  /**
+   * A copy of the board as it is now, with its own clock and no listeners: for trying something
+   * out (Jugnu's try, a witness, a test) without touching this one. Nothing is said aloud unless
+   * `services` say so.
+   */
+  fork(services: RuntimeServices = silenced(this.services)): BoardRuntime {
+    const copy = new BoardRuntime(this.board, this.lookup, services, this.root.peek());
+    copy.touchedProps.value = this.touchedProps.peek();
+    return copy;
   }
 
   onSignal(listener: (record: SignalRecord) => void): () => void {
@@ -342,7 +550,7 @@ export class BoardRuntime {
     isSetOff: boolean,
   ): Promise<void> {
     if (this.isDisposed) return Promise.resolve();
-    const instance = this.instance(name);
+    const piece = this.piece(name);
     const notify = (refused?: string) => {
       const record: ActionRecord = { prop: name, action, args, actor };
       if (refused !== undefined) record.refused = refused;
@@ -360,7 +568,7 @@ export class BoardRuntime {
       if (!this.touchedProps.peek().has(name))
         this.touchedProps.value = new Set([...this.touchedProps.peek(), name]);
     }
-    const prepared = prepareAction(instance.def, instance.stored.peek(), action, args);
+    const prepared = prepareOnView(piece.def, piece.view.peek(), action, args);
     if (!prepared.isOk) {
       notify(prepared.errors.join("; "));
       return this.fail(`${name}.${action}: ${prepared.errors.join("; ")}`, actor);
@@ -368,7 +576,7 @@ export class BoardRuntime {
     notify();
     const effect = prepared.effect;
     // An action changes only the fields it says it changes: anything else is refused here.
-    const allowed = instance.def.actions[action]?.changes;
+    const allowed = piece.def.actions[action]?.changes;
     const outside = (patch: Readonly<Record<string, unknown>>) =>
       allowed === undefined ? [] : Object.keys(patch).filter((key) => !allowed.includes(key));
     // A prop bug, whoever acted: always reported.
@@ -381,26 +589,26 @@ export class BoardRuntime {
     switch (effect.kind) {
       case EffectKind.Set:
         if (outside(effect.set).length > 0) return refuse(outside(effect.set));
-        this.change(instance, effect.set, actor);
+        this.change(piece, effect.set, actor);
         for (const emit of effect.emit) this.emitFrom(name, emit, actor);
         return Promise.resolve();
       case EffectKind.Tween:
         if (outside(effect.to).length > 0) return refuse(outside(effect.to));
-        return this.runTween(instance, effect.duration, effect.to, actor);
+        return this.runTween(piece, effect.duration, effect.to, actor);
       case EffectKind.Task: {
-        const spoken = instance.def.speech?.(instance.stored.peek());
+        const spoken = piece.def.speech?.(this.fieldsOf(piece));
         return effect
           .run({
             speak: () =>
               spoken === undefined || this.isDisposed
                 ? Promise.resolve()
-                : this.services.speak({ name, id: instance.id }, spoken),
+                : this.services.speak({ name, id: piece.id }, spoken),
             wait: (seconds) => this.clock.wait(seconds),
             set: (patch) => {
               if (outside(patch).length > 0) void refuse(outside(patch));
-              else this.change(instance, patch, actor);
+              else this.change(piece, patch, actor);
             },
-            get: () => instance.stored.peek(),
+            get: () => this.fieldsOf(piece),
             emit: (signal, payload) => this.emitFrom(name, { signal, payload }, actor),
           })
           .catch((error: unknown) => this.services.onError(`${name}.${action} failed`, error));
@@ -441,17 +649,26 @@ export class BoardRuntime {
     for (const running of this.tweens.values()) running.cancel();
     this.tweens.clear();
     this.clock.stop();
-    for (const stop of this.stopIs) stop();
     this.signalListeners.clear();
     this.actionListeners.clear();
   }
 
   // ---- internals ----
 
-  private instance(name: string): Instance {
-    const instance = this.instances.get(name);
-    if (instance === undefined) throw new Error(`Board ${this.board.name}: no prop "${name}"`);
-    return instance;
+  private piece(name: string): Piece {
+    const piece = this.pieces.get(name);
+    if (piece === undefined) throw new Error(`Board ${this.board.name}: no prop "${name}"`);
+    return piece;
+  }
+
+  /**
+   * What a prop's own code reads as its state while an action runs over time: a leaf's fields
+   * (with what the board binds), a group's facts (it works out its own bindings).
+   */
+  private fieldsOf(piece: Piece): StoredState {
+    if (piece.isGroup) return this.root.peek()[piece.name] as StoredState;
+    const view = piece.view.value;
+    return Object.fromEntries(Object.keys(piece.def.defaults).map((k) => [k, view[k]]));
   }
 
   private fail(message: string, actor: Actor): Promise<void> {
@@ -471,18 +688,18 @@ export class BoardRuntime {
    * rules still may, in answer to what he did.
    */
   whyNotJugnu(name: string, action: string, isSetOff = false): string | undefined {
-    const instance = this.instances.get(name);
-    if (instance === undefined) return `there is no prop "${name}" on this board`;
+    const piece = this.pieces.get(name);
+    if (piece === undefined) return `there is no prop "${name}" on this board`;
     if (name === BOARD && (action === BoardAction.Pass || action === BoardAction.Continue))
       return "only the student's own work moves the board on";
     if (name === BOARD && !isSetOff)
       return "the board itself is the student's (Continue) and the lesson's";
-    if (instance.def.role === PropRole.Question)
+    if (piece.def.role === PropRole.Question)
       return `${name} is the question: only the student answers it`;
     if (this.board.studentOnly.includes(`${name}.${action}`))
       return `${name}.${action} is the student's job on this board`;
     if (action === SAY && !isSetOff) return "lesson lines are the lesson's to say";
-    const spec = instance.def.actions[action];
+    const spec = piece.def.actions[action];
     if (spec === undefined) return undefined; // the action itself refuses, with its own words
     if (spec.reveals === true && this.hasOpenQuestion())
       return `${name}.${action} would give the answer away while the question is open`;
@@ -491,61 +708,92 @@ export class BoardRuntime {
 
   /** True while some question on the board isn't answered correctly yet. */
   hasOpenQuestion(): boolean {
-    return [...this.instances.values()].some(
-      (instance) =>
-        instance.def.role === PropRole.Question &&
-        instance.stored.value.status !== AnswerStatus.Correct,
+    return [...this.pieces.values()].some(
+      (piece) =>
+        piece.def.role === PropRole.Question && piece.view.value.status !== AnswerStatus.Correct,
     );
   }
 
-  private change(
-    instance: Instance,
-    patch: Readonly<Record<string, unknown>>,
-    actor: Actor,
-  ): boolean {
-    const blocked = Object.keys(patch).filter((field) =>
-      this.owned.has(`${instance.name}.${field}`),
-    );
+  /**
+   * Checks new facts for some pieces and, if they all hold, swaps them into the root. Returns why
+   * not, if not. Every IS that reads them is worked out again when next read.
+   */
+  private commit(changes: Readonly<Record<string, StoredState>>): string[] {
+    const next: Root = { ...this.root.peek(), ...changes };
+    const errors = isFullChecking()
+      ? Object.keys(changes).flatMap((name) => this.checkFacts(name, next[name] as StoredState))
+      : [];
+    if (errors.length > 0) return errors;
+    let view: PropView;
+    try {
+      view = viewOf(this.top, next);
+    } catch (error) {
+      return [error instanceof Error ? error.message : String(error)];
+    }
+    for (const name of Object.keys(changes)) {
+      const piece = this.piece(name);
+      const broken = invariantOfView(piece.def, view[name] as PropView);
+      if (broken !== undefined) errors.push(`${piece.def.type}: ${broken}`);
+    }
+    if (errors.length > 0) return errors;
+    this.root.value = next;
+    return [];
+  }
+
+  /** Changes some of a piece's facts. A field the board binds has one writer, its IS. */
+  private change(piece: Piece, patch: Readonly<Record<string, unknown>>, actor: Actor): boolean {
+    const blocked = Object.keys(patch).filter((field) => piece.bound?.[field] === true);
     if (blocked.length > 0) {
       void this.fail(
-        `${instance.name}: ${blocked.join(", ")} is set by an IS rule; actions can't change it`,
+        `${piece.name}: ${blocked.join(", ")} is set by an IS rule; actions can't change it`,
         actor,
       );
       return false;
     }
     if (Object.keys(patch).length === 0) return true;
-    const result = applyPatch(instance.def, instance.stored.peek(), patch);
-    if (!result.isOk) {
-      void this.fail(`${instance.name}: ${result.errors.join("; ")}`, actor);
+    const facts = this.root.peek()[piece.name] as StoredState;
+    const unknown = Object.keys(patch).filter((key) => !(key in facts));
+    if (unknown.length > 0) {
+      void this.fail(
+        `${piece.name}: ${unknown.map((k) => `${piece.def.type} has no stored field "${k}"`).join("; ")}`,
+        actor,
+      );
       return false;
     }
-    // Every IS that read this prop runs again before this returns.
-    instance.stored.value = result.state;
+    const errors = this.commit({ [piece.name]: { ...facts, ...patch } });
+    if (errors.length > 0) {
+      void this.fail(`${piece.name}: ${errors.join("; ")}`, actor);
+      return false;
+    }
     return true;
   }
 
   private runTween(
-    instance: Instance,
+    piece: Piece,
     duration: number,
     to: Readonly<Record<string, unknown>>,
     actor: Actor,
   ): Promise<void> {
-    const end = applyPatch(instance.def, instance.stored.peek(), to);
-    if (!end.isOk) return this.fail(`${instance.name}: ${end.errors.join("; ")}`, actor);
-    this.tweens.get(instance.name)?.cancel();
-    const from = instance.stored.peek();
+    const blocked = Object.keys(to).filter((field) => piece.bound?.[field] === true);
+    if (blocked.length > 0)
+      return this.fail(
+        `${piece.name}: ${blocked.join(", ")} is set by an IS rule; actions can't change it`,
+        actor,
+      );
+    this.tweens.get(piece.name)?.cancel();
+    const from = this.fieldsOf(piece);
     return new Promise((resolve) => {
       let stopAnimation = () => {};
       const finish = () => {
         stopAnimation();
-        if (this.tweens.get(instance.name) === running) this.tweens.delete(instance.name);
+        if (this.tweens.get(piece.name) === running) this.tweens.delete(piece.name);
         resolve();
       };
       const running: Running = { cancel: finish };
-      this.tweens.set(instance.name, running);
+      this.tweens.set(piece.name, running);
       stopAnimation = this.clock.animate((elapsed) => {
         const progress = duration <= 0 ? 1 : Math.min(1, elapsed / duration);
-        const isOk = this.change(instance, tweenAt(from, to, progress), actor);
+        const isOk = this.change(piece, tweenAt(from, to, progress), actor);
         if (!isOk || progress >= 1) {
           finish();
           return false;
@@ -556,58 +804,6 @@ export class BoardRuntime {
   }
 
   private scope = (name: string): Readonly<Record<string, unknown>> => this.getView(name);
-
-  // ---- IS ----
-
-  private compileIs(rule: IsRule): CompiledIs {
-    const { prop, member } = splitTarget(rule.set);
-    this.owned.add(rule.set);
-    const value =
-      "to" in rule
-        ? { expression: compileExpression(rule.to) }
-        : {
-            texts: Object.fromEntries(
-              Object.entries(rule.text).map(([locale, source]) => [
-                locale,
-                compileTemplate(source),
-              ]),
-            ),
-          };
-    return { prop, field: member, value };
-  }
-
-  /**
-   * Makes one IS true. Run inside its effect: the props its expression reads are recorded, and it
-   * runs again when any of them changes. The prop it sets is only peeked at, so setting it doesn't
-   * count as reading it. Rules can feed each other, never in a loop (the validator checks).
-   */
-  private keep(rule: CompiledIs): void {
-    const instance = this.instance(rule.prop);
-    let value: unknown;
-    try {
-      value =
-        "expression" in rule.value
-          ? rule.value.expression.evaluate(this.scope)
-          : Object.fromEntries(
-              Object.entries(rule.value.texts).map(([locale, t]) => [locale, t.render(this.scope)]),
-            );
-    } catch (error) {
-      this.services.onError(`Board ${this.board.name}: IS ${rule.prop}.${rule.field}`, error);
-      return;
-    }
-    untracked(() => {
-      const stored = instance.stored.value;
-      if (JSON.stringify(stored[rule.field]) === JSON.stringify(value)) return;
-      const result = applyPatch(instance.def, stored, { [rule.field]: value });
-      if (!result.isOk) {
-        this.services.onError(
-          `Board ${this.board.name}: IS ${rule.prop}.${rule.field}: ${result.errors.join("; ")}`,
-        );
-        return;
-      }
-      instance.stored.value = result.state;
-    });
-  }
 
   // ---- WHEN ----
 

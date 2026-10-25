@@ -15,7 +15,7 @@ describe("a board with no screen (Jugnu's copy on the server)", () => {
     const copy = headlessBoard(guess, lookup, boardState(phone.runtime));
     expect(copy.runtime.getStored("line").marker).toBe(1.3);
     expect(copy.runtime.getView("squareLabel").text).toMatchObject({ en: "1.30 × 1.30 = 1.6900" });
-    expect(copy.runtime.getStored("guessRoot").isMet).toBe(false);
+    expect(copy.runtime.getView("guessRoot").isMet).toBe(false);
     phone.dispose();
     copy.dispose();
   });

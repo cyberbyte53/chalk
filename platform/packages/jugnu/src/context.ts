@@ -1,4 +1,4 @@
-import { PropRole, SAY, observationOf } from "@chalk/prop";
+import { PropRole, SAY, observationOfView } from "@chalk/prop";
 import type { JugnuBoard, JugnuPlace } from "./board";
 
 const LANGUAGE: Record<JugnuPlace["locale"], string> = {
@@ -127,7 +127,7 @@ function actionList(board: JugnuBoard): Record<string, string> {
  */
 export function propNow(board: JugnuBoard, name: string, locale: JugnuPlace["locale"]) {
   const def = board.getDef(name);
-  const seen = observationOf(def, board.getStored(name));
+  const seen = observationOfView(def, board.getView(name));
   const elements: Record<string, unknown> = {};
   for (const element of seen.elements) elements[element.id] = shown(element, locale);
   if (def.role === PropRole.Question) withoutNotes(elements);

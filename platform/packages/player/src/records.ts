@@ -1,5 +1,4 @@
 import { type Board, type PropRecord, propPieces } from "@chalk/content";
-import { checkStored } from "@chalk/prop";
 import type { BoardRuntime } from "./runtime";
 
 /**
@@ -16,9 +15,9 @@ export function propRecords(board: Board, runtime: BoardRuntime): Record<string,
     const state = runtime.getStored(piece.name);
     // What is saved is checked fully, even where changes are checked lightly (the shipped app). A
     // prop bug is reported, never in the learner's way: their Continue still goes through.
-    const checked = checkStored(runtime.getDef(piece.name), state, "full");
-    if (!checked.isOk)
-      console.error(`${piece.name} is in a state its prop refuses: ${checked.errors.join("; ")}`);
+    const errors = runtime.checkFacts(piece.name, state);
+    if (errors.length > 0)
+      console.error(`${piece.name} is in a state its prop refuses: ${errors.join("; ")}`);
     out[String(piece.id)] = { isTouched: runtime.isTouched(piece.name), state: { ...state } };
   }
   return out;

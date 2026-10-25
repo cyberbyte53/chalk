@@ -1,5 +1,5 @@
 import type { Actor, IsRule, JugnuNotes, Script, WhenRule } from "@chalk/content";
-import type { AnyPropDef, StoredState } from "@chalk/prop";
+import type { AnyPropDef, PropView, StoredState } from "@chalk/prop";
 
 /** A signal on the board, as Jugnu hears it. */
 export type HeardSignal = {
@@ -37,6 +37,8 @@ export type JugnuBoard = {
   propNames: () => string[];
   getDef: (name: string) => AnyPropDef;
   getStored: (name: string) => StoredState;
+  /** A prop's view: its facts, what the board binds into it, and what is derived. */
+  getView: (name: string) => PropView;
   isHidden: (name: string) => boolean;
   /** Runs a script through the one door, as `actor`. */
   perform: (script: Script, actor: Actor) => Promise<void>;
