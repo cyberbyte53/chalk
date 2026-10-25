@@ -4,8 +4,6 @@ import {
   type Piece,
   builtChapterSchema,
   builtConceptSchema,
-  builtPageSchema,
-  builtQuestionSchema,
 } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
@@ -22,7 +20,7 @@ import {
 } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { CONTENT_ROUTE } from "./content-store";
+import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
 import { courses } from "./lessons";
@@ -110,16 +108,15 @@ async function boardsAt(path: string, withQuestions: boolean): Promise<Shown[]> 
   const clean = path.replace(/\.json$/, "").replace(/\/$/, "");
   const parts = clean.split("/");
   if (parts.length >= 4) {
-    const item = (await json(`${clean}.json`)) as { kind?: string };
-    const schema = item.kind === "question" ? builtQuestionSchema : builtPageSchema;
-    return [{ path: `${clean}.json`, board: schema.parse(item).board }];
+    const file = `${clean}.json`;
+    return [{ path: file, board: await boardOfFile(file, await json(file)) }];
   }
   const [book, chapter] = parts;
   const concept = builtConceptSchema.parse(await json(`${clean}/concept.json`));
   const pages = await Promise.all(
     concept.overview.map(async (ref) => ({
       path: ref.path,
-      board: builtPageSchema.parse(await json(ref.path)).board,
+      board: await boardOfFile(ref.path, await json(ref.path)),
     })),
   );
   if (!withQuestions) return pages;
@@ -129,7 +126,7 @@ async function boardsAt(path: string, withQuestions: boolean): Promise<Shown[]> 
       .filter((q) => q.tests.includes(concept.id))
       .map(async (ref) => ({
         path: ref.path,
-        board: builtQuestionSchema.parse(await json(ref.path)).board,
+        board: await boardOfFile(ref.path, await json(ref.path)),
       })),
   );
   return [...pages, ...questions];
@@ -147,9 +144,7 @@ async function boardsFrom(source: string, sources: Sources): Promise<Shown[]> {
     .slice(0, 120);
   return Promise.all(
     paths.map(async (path) => {
-      const item = (await json(path)) as { kind?: string };
-      const schema = item.kind === "question" ? builtQuestionSchema : builtPageSchema;
-      return { path, board: schema.parse(item).board };
+      return { path, board: await boardOfFile(path, await json(path)) };
     }),
   );
 }

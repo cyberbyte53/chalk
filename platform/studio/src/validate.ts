@@ -21,6 +21,7 @@ import {
   type StoredState,
   applyPatch,
   compileExpression,
+  compileRule,
   compileTemplate,
   hostOf,
   initialState,
@@ -182,7 +183,7 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
       );
     }
     writers.set(rule.set, (writers.get(rule.set) ?? 0) + 1);
-    const expression = "to" in rule ? compile(where, () => compileExpression(rule.to)) : undefined;
+    const expression = "to" in rule ? compile(where, () => compileRule(rule.to, scope)) : undefined;
     const templates =
       "text" in rule
         ? compile(where, () =>
@@ -260,7 +261,8 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
       );
     }
     if (rule.if !== undefined) {
-      const condition = compile(`${where} if`, () => compileExpression(rule.if ?? ""));
+      const test = rule.if;
+      const condition = compile(`${where} if`, () => compileRule(test, scope));
       if (condition !== undefined) checkRefs(`${where} if`, condition.refs);
     }
     for (const step of callsIn(rule.do)) {

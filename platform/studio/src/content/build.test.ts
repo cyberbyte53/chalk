@@ -1,6 +1,7 @@
 import { mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
-import { ContentFile } from "@chalk/author";
+import { pathToFileURL } from "node:url";
+import { type BoardItem, ContentFile, boardOf, moduleOf } from "@chalk/author";
 import {
   BuiltFile,
   OVERVIEW_DIR,
@@ -16,7 +17,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { stringify as stringifyYaml } from "yaml";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { buildContent } from "./build";
-import { conceptsModule } from "./concepts";
+import { MODULES_FILE, boardModules, conceptsModule, modulesModule } from "./concepts";
 
 const contentDir = join(dirname(findUp("pnpm-workspace.yaml", import.meta.dirname)), "content");
 const readings = loadReadings(join(contentDir, PRONUNCIATIONS_FILE));
@@ -93,7 +94,19 @@ function fixture(spec: {
     mkdirSync(dirname(join(dir, path)), { recursive: true });
     writeFileSync(join(dir, path), text);
   }
+  return withModules(dir);
+}
+
+/** The tree's modules.gen.ts, as pnpm build-content writes it. */
+function withModules(dir: string): string {
+  writeFileSync(join(dir, MODULES_FILE), modulesModule(boardModules(dir)));
   return dir;
+}
+
+/** A built item's board, made from its module as the app makes it. */
+async function boardFrom(dir: string, item: BoardItem, path: string) {
+  const module = await import(pathToFileURL(join(dir, moduleOf(item))).href);
+  return boardOf(item, module, (type) => propDefs[type]?.role, path);
 }
 
 /**
@@ -106,7 +119,7 @@ function realBook(): string {
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "build.yaml"), "books: [class9-maths]\n");
   symlinkSync(join(contentDir, "class9-maths"), join(dir, "class9-maths"), "dir");
-  return dir;
+  return withModules(dir);
 }
 
 const build = (dir: string, commit = WORKING_TREE) =>
@@ -132,13 +145,15 @@ describe("building content", () => {
   }, 60_000);
 
   it("a page's questions are about its concept, ungraded; a bank question is graded", async () => {
-    const result = await build(realBook());
+    const dir = realBook();
+    const result = await build(dir);
     const rational = "class9-maths/number-systems/rational-numbers";
     const concept = builtConceptSchema.parse(result.files.get(`${rational}/${BuiltFile.Concept}`));
-    const first = builtPageSchema.parse(
-      result.files.get(`${rational}/${OVERVIEW_DIR}/numbers-you-know.json`),
+    const path = `${rational}/${OVERVIEW_DIR}/numbers-you-know.json`;
+    const first = builtPageSchema.parse(result.files.get(path));
+    expect(JSON.stringify(await boardFrom(dir, first, path))).toContain(
+      `"concepts":["${concept.id}"],"isGraded":false`,
     );
-    expect(JSON.stringify(first.board)).toContain(`"concepts":["${concept.id}"],"isGraded":false`);
   }, 60_000);
 
   it("ids and versions are stable: the same content gives the same files, whatever the commit", async () => {
@@ -154,9 +169,8 @@ describe("building content", () => {
   }, 60_000);
 
   it("a question carries the concepts it tests, its family, level and where it came from", async () => {
-    const result = await build(
-      fixture({ rows: [{ params: { target: "7.384", from: 7, to: 8 }, level: "hard" }] }),
-    );
+    const dir = fixture({ rows: [{ params: { target: "7.384", from: 7, to: 8 }, level: "hard" }] });
+    const result = await build(dir);
     expect(result.problems).toEqual([]);
     const file = [...result.files.keys()].find(
       (k) => k.startsWith(`${CHAPTER}/questions/locate/`) && !k.endsWith(BuiltFile.Family),
@@ -172,7 +186,9 @@ describe("building content", () => {
     });
     const concept = builtConceptSchema.parse(result.files.get(`${CONCEPT}/${BuiltFile.Concept}`));
     expect(q.tests).toEqual([concept.id]);
-    expect(JSON.stringify(q.board)).toContain(`"concepts":["${concept.id}"],"isGraded":true`);
+    expect(JSON.stringify(await boardFrom(dir, q, file ?? ""))).toContain(
+      `"concepts":["${concept.id}"],"isGraded":true`,
+    );
     const family = builtFamilySchema.parse(
       result.files.get(`${CHAPTER}/questions/locate/${BuiltFile.Family}`),
     );

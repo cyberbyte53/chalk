@@ -12,7 +12,7 @@ import {
   type PropView,
   type Element as SeenElement,
   type StoredState,
-  compileExpression,
+  compileRule,
   compileTemplate,
   compositeOf,
   groupOf,
@@ -322,7 +322,7 @@ export function snapshotOf(runtime: BoardRuntime, page?: ParentNode): BoardSnaps
       if (prop !== name) continue;
       const refs =
         "to" in rule
-          ? compileExpression(rule.to).refs
+          ? compileRule(rule.to, (n) => runtime.getView(n)).refs
           : Object.values(rule.text).flatMap((t) => compileTemplate(t).refs);
       bound.set(member, [...new Set(refs.map((r) => `${r[0]}.${r.slice(1).join(".")}`))]);
     }

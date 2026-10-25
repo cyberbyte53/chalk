@@ -57,6 +57,8 @@ export function shown(
 
 /** Floats as a person would read them (1.9881, not 1.9880999999999998), and one language. */
 export function readable(value: unknown, locale: JugnuPlace["locale"]): unknown {
+  // A rule written as code reads as its code.
+  if (typeof value === "function") return value.toString();
   if (typeof value === "number")
     return Number.isFinite(value) ? Number(value.toPrecision(10)) : String(value);
   if (Array.isArray(value)) return value.map((item) => readable(item, locale));

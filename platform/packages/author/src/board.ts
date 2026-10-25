@@ -5,6 +5,7 @@ import {
   type Piece,
   PieceKind,
   type Pin,
+  type RuleFn,
   type Script,
   type WhenRule,
 } from "@chalk/content";
@@ -122,6 +123,20 @@ export class Placed<
   }
 }
 
+/** What a rule written as code sees of a placed prop: its stored fields, and its derived ones. */
+export type ViewOfPlaced<P> = P extends Placed<infer S, infer _A, infer _G, infer D>
+  ? Readonly<S & { readonly [K in D]: unknown }>
+  : Readonly<Record<string, unknown>>;
+
+/** How a rule written as code reads the board, typed: `at(race).time`. */
+export type At = <P extends AnyPlaced>(piece: P) => ViewOfPlaced<P>;
+
+/** A rule's value or condition as code: `(at) => at(race).time > 36`. */
+export type Rule<T = unknown> = (at: At) => T;
+
+/** The rule as the board keeps it (its `at` takes a piece or a name, untyped). */
+const asRuleFn = (rule: Rule): RuleFn => rule as unknown as RuleFn;
+
 /** The placed form of a prop definition: `PlacedOf<typeof numberLineDef>`. */
 export type PlacedOf<P> = P extends PropDef<infer S, infer A, infer G, infer D>
   ? Placed<S, A, G, D>
@@ -223,9 +238,9 @@ export class BoardKit {
     return new Placed(name, def, piece);
   }
 
-  /** IS: this input always equals the expression. */
-  is(input: Expr, to: Expr): void {
-    this.isRules.push({ set: input.source, to: to.source });
+  /** IS: this input always equals the rule's value (`(at) => at(line).marker ** 2`). */
+  is(input: Expr, to: Rule | Expr): void {
+    this.isRules.push({ set: input.source, to: to instanceof Expr ? to.source : asRuleFn(to) });
   }
 
   /** IS for words: the input always reads this text, with {expressions} filled in. */
@@ -234,12 +249,13 @@ export class BoardKit {
   }
 
   /** WHEN: on this signal (and if the condition holds), run the script. */
-  when(signal: Signal, script: Script | readonly Script[], condition?: Expr): void {
+  when(signal: Signal, script: Script | readonly Script[], condition?: Rule<boolean> | Expr): void {
     const rule: WhenRule = {
       on: signal.target,
       do: Array.isArray(script) ? [...script] : (script as Script),
     };
-    if (condition !== undefined) rule.if = condition.source;
+    if (condition !== undefined)
+      rule.if = condition instanceof Expr ? condition.source : asRuleFn(condition);
     this.whenRules.push(rule);
   }
 

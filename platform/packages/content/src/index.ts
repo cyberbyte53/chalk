@@ -13,6 +13,9 @@ export {
 } from "./audio";
 export {
   argExpression,
+  type ItemRef,
+  itemRefSchema,
+  type RuleFn,
   boardSchema,
   isRuleSchema,
   scriptSchema,

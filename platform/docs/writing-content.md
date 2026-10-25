@@ -1,6 +1,6 @@
 # Writing content
 
-Content is a tree of folders. Each folder's `build.yaml` lists what goes into the build and in what order, the way a `CMakeLists.txt` does. Boards (pages and questions) are TypeScript, because they hold logic. The build turns it all into plain JSON in `build/`; the app, Jugnu and the database only ever read that.
+Content is a tree of folders. Each folder's `build.yaml` lists what goes into the build and in what order, the way a `CMakeLists.txt` does. Boards (pages and questions) are TypeScript, because they hold logic, and they ship as TypeScript: the build checks every board and writes the course's shape as JSON in `build/`, each page and question naming the module that makes it; the app and the server make each board from that module (its rules stay typed functions, never strings).
 
 Glossary words: Book, Chapter, Concept, Page, Question family, Params row, Question, Witness, Note check, Board pattern, Explainer prop, Build.
 
@@ -175,7 +175,7 @@ Every path must be a built concept; the build refuses loops. A concept's `prereq
 - `pnpm preview`: the same on every save; the learner app (`pnpm dev`) shows each built concept as a lesson.
 - `pnpm publish-content`: refuses unless git is clean; builds from that commit and keeps a copy as `published/<commit>/`.
 
-`build/` mirrors the tree (`book.json`; `chapter.json` with the bank; `concept.json`, `overview/<page>.json`; `questions/<family>/family.json` and one `<id>.json` per question; `index.json` and `graph.json`). It is generated, never edited, and not in git.
+`build/` mirrors the tree (`book.json`; `chapter.json` with the bank; `concept.json`, `overview/<page>.json`; `questions/<family>/family.json` and one `<id>.json` per question; `index.json` and `graph.json`). It is generated, never edited, and not in git. `content/modules.gen.ts` (every module that makes boards, for the app and the server to load) is generated too, and committed, like each chapter's `concepts.gen.ts`.
 
 ## Colours
 

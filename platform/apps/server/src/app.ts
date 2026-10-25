@@ -18,7 +18,7 @@ import {
   setupRequestSchema,
   signInGoogleRequestSchema,
 } from "@chalk/api";
-import { type ChalkEvent, eventSchema } from "@chalk/content";
+import { type Board, type ChalkEvent, type ItemRef, eventSchema } from "@chalk/content";
 import { type LlmProvider, chatMessageSchema, jugnuTurn } from "@chalk/jugnu";
 import { propDefs } from "@chalk/library";
 import { type HeadlessBoard, headlessBoard } from "@chalk/player";
@@ -79,6 +79,8 @@ export type AppDeps = {
   staticDir?: string;
   /** The built content (build/), served under /content/ for the app to fetch a chapter at a time. */
   contentDir?: string;
+  /** A built page's or question's board, made from its code (unset: Jugnu has no boards). */
+  boards?: (item: ItemRef) => Promise<Board>;
   now?: () => number;
   random?: (n: number) => number;
   /** Where the server's log lines go; unset: the console (one JSON object per line for records). */
@@ -330,7 +332,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   // ---- Jugnu ----
 
-  // A turn is thought through here, on a copy of the board built from what the phone sent: the
+  // A turn is thought through here, on a copy of the board made from the same code as the phone's: the
   // model's key never reaches a phone, his tries never reach the student, and the phone makes one
   // request a turn. Each person gets JUGNU_TURNS_PER_HOUR.
   app.post(
@@ -347,7 +349,9 @@ export function createApp(deps: AppDeps): Hono<Env> {
         throw new ApiFailure(429, ApiErrorCode.TooMany, "Jugnu needs a rest; try again later");
       let copy: HeadlessBoard;
       try {
-        copy = headlessBoard(request.board, (type) => propDefs[type], request.state);
+        if (deps.boards === undefined) throw new Error("no boards here");
+        const board = await deps.boards(request.item);
+        copy = headlessBoard(board, (type) => propDefs[type], request.state);
       } catch (error) {
         throw new ApiFailure(
           400,
@@ -367,7 +371,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
             model: turn.model,
             calls: turn.modelCalls,
             usage: turn.usage,
-            board: request.board.name,
+            board: request.item.path,
           },
         });
         const reply: JugnuTurnReply = turn;

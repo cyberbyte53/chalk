@@ -8,7 +8,11 @@ import { join } from "node:path";
  */
 
 type Ref = { id: string; version: string; path: string; tests?: string[]; firstTry?: number };
-export type Sources = Record<string, { board?: string; pieces: Record<string, string> }>;
+/** build/sources.json: per built item, where its board and pieces were written, and each prop's type. */
+export type Sources = Record<
+  string,
+  { board?: string; pieces: Record<string, string>; props: Record<string, string> }
+>;
 
 const readJson = <T>(file: string): T | null => {
   if (!existsSync(file)) return null;

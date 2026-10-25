@@ -1,4 +1,15 @@
-import { type Ref, builtChapterSchema, builtConceptSchema } from "@chalk/content";
+import { loadBoard } from "@chalk/author";
+import {
+  type Board,
+  Kind,
+  type Ref,
+  builtChapterSchema,
+  builtConceptSchema,
+  builtPageSchema,
+  builtQuestionSchema,
+} from "@chalk/content";
+import { modules } from "@chalk/content-source/modules";
+import { propDefs } from "@chalk/library";
 import { type ConceptLessons, conceptLessons } from "./built-content";
 import type { CourseChapter } from "./course";
 import { SKELETON_PREFIX, skeleton } from "./lessons";
@@ -7,7 +18,9 @@ import { SKELETON_PREFIX, skeleton } from "./lessons";
  * A chapter's lessons, fetched when it is first opened. The app bundles only the course screens'
  * skeleton (lessons.ts); each page and question is a file under /content/ (build/ on the server),
  * named by its version, so a file is fetched once, kept by the service worker for offline, and a
- * new version is a new file. Kept in memory while the app is open.
+ * new version is a new file. The file says which module makes its board, and with what: chapters
+ * ship as code, and the board is made from it here (its module is a chunk of the app, loaded once).
+ * Kept in memory while the app is open.
  */
 export type ChapterContent = ReadonlyMap<string, ConceptLessons>;
 
@@ -92,7 +105,18 @@ async function fetchChapter(
     }
   };
   await Promise.all(Array.from({ length: Math.min(AT_ONCE, refs.length) }, worker));
-  return conceptLessons(files, "");
+  const boards = new Map<string, Board>();
+  for (const ref of refs) boards.set(ref.path, await boardOfFile(ref.path, files[ref.path]));
+  return conceptLessons(files, "", boards);
+}
+
+/** A page's or question's board, made from its code (its file under build/ says which). */
+export async function boardOfFile(path: string, json: unknown): Promise<Board> {
+  const item =
+    (json as { kind?: unknown }).kind === Kind.Page
+      ? builtPageSchema.parse(json)
+      : builtQuestionSchema.parse(json);
+  return loadBoard(modules, item, (type) => propDefs[type]?.role, path);
 }
 
 async function fetchJson(ref: Ref): Promise<unknown> {

@@ -342,6 +342,49 @@ export function compileExpression(source: string): Expression {
   return { source, refs, evaluate: (scope) => evaluate(ast, scope) };
 }
 
+/** How a rule written as code reads the board: `at(piece)` is that piece's view. */
+export type BoardAt = (
+  piece: string | { readonly name: string },
+) => Readonly<Record<string, unknown>>;
+
+/** A rule written as code: a typed function of the board. */
+export type BoardFn = (at: BoardAt) => unknown;
+
+/**
+ * A rule's value or condition, written as code or (in older boards) as an expression: one way to
+ * work it out and to know what it reads. What code reads is noted by running it once on `probe`
+ * (the board's first values), as a group's links are; `source` is the code itself, for readers.
+ */
+export function compileRule(rule: string | BoardFn, probe?: Scope): Expression {
+  if (typeof rule === "string") return compileExpression(rule);
+  const atOn =
+    (scope: Scope): BoardAt =>
+    (piece) =>
+      scope(typeof piece === "string" ? piece : piece.name);
+  const refs: string[][] = [];
+  if (probe !== undefined) {
+    const seen = new Set<string>();
+    const noted: Scope = (name) => {
+      const view = probe(name);
+      return new Proxy(view, {
+        get(target, key, receiver) {
+          if (typeof key === "string" && !seen.has(`${name}.${key}`)) {
+            seen.add(`${name}.${key}`);
+            refs.push([name, key]);
+          }
+          return Reflect.get(target, key, receiver);
+        },
+      });
+    };
+    try {
+      rule(atOn(noted));
+    } catch {
+      // A rule that can't run on the first values reads what it read before it stopped.
+    }
+  }
+  return { source: rule.toString(), refs, evaluate: (scope) => rule(atOn(scope)) };
+}
+
 /**
  * Text with live values in it: "Heads: {coin.heads} of {coin.count}". Inside maths (`$…$`, `$$…$$`)
  * braces are LaTeX's own, so a live value there is written `\live{…}`: "$x = \live{line.marker}$".

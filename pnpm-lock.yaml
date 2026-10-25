@@ -1171,9 +1171,15 @@ importers:
       '@chalk/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@chalk/author':
+        specifier: workspace:*
+        version: link:../../packages/author
       '@chalk/content':
         specifier: workspace:*
         version: link:../../packages/content
+      '@chalk/content-source':
+        specifier: workspace:*
+        version: link:../../../content
       '@chalk/draw':
         specifier: workspace:*
         version: link:../../packages/draw
@@ -1223,9 +1229,15 @@ importers:
       '@chalk/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@chalk/author':
+        specifier: workspace:*
+        version: link:../../packages/author
       '@chalk/content':
         specifier: workspace:*
         version: link:../../packages/content
+      '@chalk/content-source':
+        specifier: workspace:*
+        version: link:../../../content
       '@chalk/jugnu':
         specifier: workspace:*
         version: link:../../packages/jugnu
@@ -1418,6 +1430,9 @@ importers:
       '@chalk/content':
         specifier: workspace:*
         version: link:../packages/content
+      '@chalk/content-source':
+        specifier: workspace:*
+        version: link:../../content
       '@chalk/jugnu':
         specifier: workspace:*
         version: link:../packages/jugnu

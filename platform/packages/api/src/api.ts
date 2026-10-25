@@ -1,4 +1,4 @@
-import { Locale, boardSchema, cueSchema, turnInputSchema } from "@chalk/content";
+import { Locale, cueSchema, itemRefSchema, turnInputSchema } from "@chalk/content";
 import { z } from "zod";
 import { progressSchema } from "./progress";
 
@@ -83,13 +83,13 @@ const boardStateSchema = z.record(z.string(), z.record(z.string(), z.unknown()))
 export const JUGNU_CHAT_MAX = 600;
 
 /**
- * One of Jugnu's turns: the board as the lesson wrote it, where it is now, the chat so far (as the
- * server last sent it; checked again there), and what the student did. The server is stateless:
- * everything it needs is here.
+ * One of Jugnu's turns: which board (the built page or question it was made from: the server makes
+ * its own copy from the same code), where it is now, the chat so far (as the server last sent it;
+ * checked again there), and what the student did. The server keeps nothing between turns.
  */
 export const jugnuTurnRequestSchema = z
   .object({
-    board: boardSchema,
+    item: itemRefSchema,
     place: jugnuPlaceSchema,
     state: boardStateSchema,
     chat: z.array(z.unknown()).max(JUGNU_CHAT_MAX),
@@ -106,7 +106,9 @@ export const jugnuFlagRequestSchema = z
   .object({
     lessonId: z.string().max(200).nullable(),
     boardId: z.number().int().nullable(),
-    board: boardSchema,
+    /** The board's name, and the built item it was made from (none for a board made by hand). */
+    board: z.string().min(1).max(200),
+    item: itemRefSchema.nullable(),
     place: jugnuPlaceSchema,
     /** The board when the chat started, and now. */
     stateAtStart: boardStateSchema,

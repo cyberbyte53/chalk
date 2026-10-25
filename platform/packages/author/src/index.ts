@@ -9,6 +9,9 @@ export {
   type NoteCheck,
   Placed,
   type PlacedOf,
+  type At,
+  type Rule,
+  type ViewOfPlaced,
   ROOT_NAME,
   type Signal,
   type Step,
@@ -28,7 +31,16 @@ export {
 } from "./board";
 export { Expr, type Operand, expr, literal } from "./expr";
 export { type Family, family, isFamily } from "./family";
-export { canonical, hashOf, idOf, versionOf } from "./id";
+export {
+  type BoardItem,
+  type ContentModules,
+  type RoleOf,
+  boardOf,
+  builtOf,
+  finishBoard,
+  loadBoard,
+  moduleOf,
+} from "./item";
 export {
   ALL,
   type BookManifest,

@@ -27,6 +27,9 @@ const DEV_PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
 
 /** The repo's root, where the one .env lives (see .env.example). */
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
+/** The content's source, and where a chunk made only of it is written (and served) in the build. */
+const CONTENT_SOURCE = join(ROOT, "content") + sep;
+const CONTENT_CHUNKS = "assets/content/";
 
 /**
  * In development, what Jugnu heard and said on the dev shell is appended, one JSON line per
@@ -304,6 +307,19 @@ export default defineConfig(({ mode }): UserConfig => {
   return {
     // JSX is compiled by esbuild straight to Preact; no Babel, no plugin.
     esbuild: { jsx: "automatic", jsxImportSource: "preact" },
+    build: {
+      rollupOptions: {
+        output: {
+          // Chapters ship as code: a chunk made only of content/ goes under assets/content/, kept
+          // out of the install (below) and fetched the first time its chapter is opened.
+          chunkFileNames: (chunk) =>
+            chunk.moduleIds.length > 0 &&
+            chunk.moduleIds.every((id) => id.startsWith(CONTENT_SOURCE))
+              ? `${CONTENT_CHUNKS}[name]-[hash].js`
+              : "assets/[name]-[hash].js",
+        },
+      },
+    },
     define: { __CHALK__: JSON.stringify(chalk) },
     plugins: [
       devLog(),
@@ -344,6 +360,7 @@ export default defineConfig(({ mode }): UserConfig => {
         workbox: {
           // woff2 only: every phone that runs the app reads it; .woff and .ttf are fallbacks.
           globPatterns: ["**/*.{js,css,html,svg,png,woff2}"],
+          globIgnores: [`${CONTENT_CHUNKS}**`],
           // The app's own code only: a chapter's pages and questions come from /content/ when the
           // chapter is opened, and are kept below. A bigger main script means content or a prop's
           // drawing code slipped back into it.
@@ -352,6 +369,16 @@ export default defineConfig(({ mode }): UserConfig => {
           navigateFallbackDenylist: [/^\/api\//, /^\/content\//],
           cleanupOutdatedCaches: true,
           runtimeCaching: [
+            {
+              // A chapter's code, named by its hash: kept the first time it is opened, like its files.
+              urlPattern: ({ url }) => url.pathname.startsWith(`/${CONTENT_CHUNKS}`),
+              handler: "CacheFirst",
+              options: {
+                cacheName: "chalk-content-code",
+                expiration: { maxEntries: 5000, purgeOnQuotaError: true },
+                cacheableResponse: { statuses: [200] },
+              },
+            },
             {
               // Every content file is named by its version (?v=), so a kept copy never goes stale:
               // a chapter opened once opens offline after; a new version is a new URL.

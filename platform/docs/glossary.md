@@ -86,7 +86,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Item id** | 16 hex characters: a hash of the item's path in content/ (a question: plus its params). Never typed | `idOf` |
 | **Version** | A hash of an item's built JSON (not the commit); a container's includes its children's | `versionOf` |
 | **Source** | Where a built item came from: path, file, row, commit | `Source` |
-| **Build** | Everything the manifests reach, as JSON in `build/`, checked; what the app, Jugnu and the database read | `pnpm build-content`, `pnpm preview`, `pnpm publish-content` |
+| **Build** | Everything the manifests reach, checked: the course's shape as JSON in `build/`, each page and question naming the module that makes its board (chapters ship as code) | `pnpm build-content`, `pnpm preview`, `pnpm publish-content` |
 | **Player** | Plays lessons and boards; one player for everything | `@chalk/player` |
 | **Runtime** | One board, live: props' state (signals), IS kept true (one effect per rule, re-run only when what it read changes), WHEN answered, scripts run | `BoardRuntime` |
 | **Library** | The registry of every prop type | `@chalk/library` |

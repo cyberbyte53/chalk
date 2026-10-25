@@ -25,8 +25,12 @@ export function jugnuLink(): JugnuLink | undefined {
   if (!settings.jugnu.isOn) return undefined;
   return {
     think: (runtime, place) => async (request) => {
+      // The server makes its own copy of the board from the same code, so it needs to know which.
+      const item = runtime.board.item;
+      if (item === undefined)
+        throw new Error(`${runtime.board.name} wasn't made from built content; Jugnu can't see it`);
       const reply = await api.jugnuTurn({
-        board: runtime.board,
+        item,
         place,
         state: boardState(runtime),
         chat: [...request.chat],

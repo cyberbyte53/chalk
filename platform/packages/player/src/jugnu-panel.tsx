@@ -1,4 +1,4 @@
-import { Actor, type Board, type Locale, MachineType } from "@chalk/content";
+import { Actor, type ItemRef, type Locale, MachineType } from "@chalk/content";
 import { type Raise, bindRaise } from "@chalk/events";
 import {
   type ChatMessage,
@@ -30,7 +30,9 @@ export type ShownMessage = {
 export type JugnuFlag = {
   lessonId: string | null;
   boardId: number | null;
-  board: Board;
+  /** The board's name, and the built item it was made from (none for a board made by hand). */
+  board: string;
+  item: ItemRef | null;
   place: JugnuPlace;
   /** The board when the chat started, and now. */
   stateAtStart: BoardState;
@@ -320,7 +322,8 @@ export function JugnuPanel({
       await link.flag({
         lessonId,
         boardId,
-        board: runtime.board,
+        board: runtime.board.name,
+        item: runtime.board.item ?? null,
         place: {
           lessonTitle,
           boardNumber,

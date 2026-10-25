@@ -1,3 +1,4 @@
+import type { BoardFn } from "@chalk/prop";
 import { z } from "zod";
 import { jugnuNotesSchema } from "./jugnu";
 import { localizedSchema } from "./localized";
@@ -27,21 +28,39 @@ export const scriptSchema: z.ZodType<Script, z.ZodTypeDef, unknown> = z.lazy(() 
   ]),
 );
 
+/** A rule's value or condition written as code: a typed function of the board (`at(race).time`). */
+export type RuleFn = BoardFn;
+
+const ruleFnSchema = z.custom<RuleFn>((value) => typeof value === "function", {
+  message: "should be a function of the board",
+});
+
 /**
- * IS: a prop's input is always equal to something. `to` is an expression
- * (`line.marker * line.marker`); `text` is words with {expressions} in them, per language.
+ * IS: a prop's input is always equal to something. `to` is a function of the board
+ * (`(at) => at(line).marker ** 2`) or, in older boards, an expression (`line.marker * line.marker`);
+ * `text` is words with {expressions} in them, per language.
  */
 export const isRuleSchema = z.union([
-  z.object({ set: z.string().min(1), to: z.string().min(1) }).strict(),
+  z.object({ set: z.string().min(1), to: z.union([z.string().min(1), ruleFnSchema]) }).strict(),
   z.object({ set: z.string().min(1), text: localizedSchema }).strict(),
 ]);
 export type IsRule = z.infer<typeof isRuleSchema>;
 
-/** WHEN: a prop's signal (and an optional condition) runs a script. */
+/** WHEN: a prop's signal (and an optional condition, a function or an expression) runs a script. */
 export const whenRuleSchema = z
-  .object({ on: z.string().min(1), if: z.string().min(1).optional(), do: scriptSchema })
+  .object({
+    on: z.string().min(1),
+    if: z.union([z.string().min(1), ruleFnSchema]).optional(),
+    do: scriptSchema,
+  })
   .strict();
 export type WhenRule = z.infer<typeof whenRuleSchema>;
+
+/** A built page or question, by its file under build/ and its version: what its board is made from. */
+export const itemRefSchema = z
+  .object({ path: z.string().min(1).max(400), version: z.string().min(1).max(64) })
+  .strict();
+export type ItemRef = z.infer<typeof itemRefSchema>;
 
 /** One screen: a layout tree of props, and the IS and WHEN rules that wire them. */
 export const boardSchema = z.object({
@@ -63,6 +82,11 @@ export const boardSchema = z.object({
   studentOnly: z.array(z.string()).default([]),
   /** For Jugnu: what the board is for and what its props stand for (plain English). */
   jugnu: jugnuNotesSchema.optional(),
+  /**
+   * The built item it was made from (build/<path>, at that version): where any copy of the board,
+   * on the phone or on the server, is made again from its code.
+   */
+  item: itemRefSchema.optional(),
 });
 export type Board = z.infer<typeof boardSchema>;
 

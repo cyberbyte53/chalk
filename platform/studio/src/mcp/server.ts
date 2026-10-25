@@ -152,28 +152,16 @@ function placesOf(
 ): { board: string; piece: string; type: string; site?: string }[] {
   const sources = readSources(root);
   const out: { board: string; piece: string; type: string; site?: string }[] = [];
-  type Piece = { name?: string; prop?: string; children?: Piece[] };
   for (const b of listBoards(root)) {
-    let item: { board?: { root?: Piece } };
-    try {
-      item = JSON.parse(readFileSync(join(root, "build", `${b.board}.json`), "utf8"));
-    } catch {
-      continue;
-    }
-    const walk = (piece: Piece | undefined): void => {
-      if (piece === undefined) return;
-      if (piece.prop !== undefined && types.has(piece.prop) && piece.name !== undefined)
+    const where = sources[`${b.board}.json`];
+    for (const [piece, type] of Object.entries(where?.props ?? {}))
+      if (types.has(type))
         out.push({
           board: b.board,
-          piece: piece.name,
-          type: piece.prop,
-          ...(sources[`${b.board}.json`]?.pieces[piece.name]
-            ? { site: sources[`${b.board}.json`]?.pieces[piece.name] }
-            : {}),
+          piece,
+          type,
+          ...(where?.pieces[piece] !== undefined ? { site: where.pieces[piece] } : {}),
         });
-      for (const child of piece.children ?? []) walk(child);
-    };
-    walk(item.board?.root);
   }
   return out;
 }

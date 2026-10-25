@@ -17,7 +17,7 @@ import { propDefs, propPackages } from "@chalk/library";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
 import { type BuildResult, SOURCES_FILE, buildContent } from "./build";
-import { writeConceptModules } from "./concepts";
+import { MODULES_FILE, writeConceptModules, writeModulesModule } from "./concepts";
 import { buildInputsKey, inputsKeyFile } from "./inputs";
 
 /** In build/, rewritten at the end of every build: what a dev server watches to redraw. */
@@ -218,6 +218,7 @@ async function publish(): Promise<void> {
 if (command === Command.Build) {
   await holdBuildLock();
   for (const file of writeConceptModules(contentDir)) console.log(`  · generated ${file}`);
+  if (writeModulesModule(contentDir)) console.log(`  · generated ${MODULES_FILE}`);
   // Taken before building: an edit made while the build runs must not count as built.
   const inputs = buildInputsKey(root);
   const result = await build(WORKING_TREE);

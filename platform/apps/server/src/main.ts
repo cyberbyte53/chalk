@@ -4,6 +4,7 @@ import { buildIndexSchema } from "@chalk/content";
 import { providerFrom } from "@chalk/jugnu";
 import { serve } from "@hono/node-server";
 import { createApp } from "./app";
+import { contentBoards } from "./boards";
 import { readConfig } from "./config";
 import { openDb } from "./db";
 import { googleVerifier, withDevSignIn } from "./google";
@@ -19,6 +20,7 @@ if (config.DEV_SIGN_IN === "on")
     index.books.map((book) => book.id),
   );
 
+const contentDir = config.CONTENT_DIR ?? dirname(config.CONTENT_INDEX);
 const app = createApp({
   db,
   verifyGoogle:
@@ -39,7 +41,8 @@ const app = createApp({
           think: config.JUGNU_THINK === "on",
         }),
   staticDir: config.STATIC_DIR,
-  contentDir: config.CONTENT_DIR ?? dirname(config.CONTENT_INDEX),
+  contentDir,
+  boards: contentBoards(contentDir),
 });
 
 const server = serve({ fetch: app.fetch, port: config.PORT }, ({ port }) =>

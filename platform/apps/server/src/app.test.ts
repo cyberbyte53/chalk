@@ -150,6 +150,12 @@ describe("server", () => {
       jugnu: model,
       now: () => clock,
       random: counter(),
+      // The boards the app makes from built content; here, one hand-kept board stands in for it.
+      boards: async (item) => {
+        if (item.path !== GUESS.path || item.version !== GUESS.version)
+          throw new Error(`no item ${item.path}`);
+        return guess;
+      },
       ...extra,
     });
 
@@ -394,14 +400,16 @@ describe("server", () => {
     expect(response.status).toBe(403);
   });
 
-  const guess = lessonSchema.parse(rootTwo).boards[1];
-  if (guess === undefined) throw new Error("no guess board");
+  const guessBoard = lessonSchema.parse(rootTwo).boards[1];
+  if (guessBoard === undefined) throw new Error("no guess board");
+  const guess = guessBoard;
+  const GUESS = { path: "book/chapter/lesson/overview/guess.json", version: "abc123" };
   const place = { lessonTitle: "Where does √2 live?", boardNumber: 2, boardCount: 4, locale: "en" };
   const turnRequest = (chat: readonly unknown[], text = "help") => {
     const phone = headlessBoard(guess, (type) => propDefs[type]);
     const state = boardState(phone.runtime);
     phone.dispose();
-    return { board: guess, place, state, chat, input: { kind: "typed", text } };
+    return { item: GUESS, place, state, chat, input: { kind: "typed", text } };
   };
 
   it("thinks Jugnu's turn through on its own copy of the board, and sends back what to play", async () => {
@@ -423,6 +431,13 @@ describe("server", () => {
       turnRequest(reply.chat, "and now?"),
     );
     expect(next.cues).toEqual([{ kind: "say", text: "Try the midpoint." }]);
+    // A board the server can't make (another version than the phone's, say) is refused.
+    expect(
+      await learner.error("POST", ApiPath.JugnuTurn, {
+        ...turnRequest([]),
+        item: { ...GUESS, version: "old" },
+      }),
+    ).toEqual([400, ApiErrorCode.BadRequest]);
     // One record per turn: who, which model, how many calls.
     expect(logged.records.map((r) => (r.jugnuTurn as { calls: number }).calls)).toEqual([2, 1]);
     const last = model.requests.at(-1)?.messages ?? [];
@@ -476,7 +491,8 @@ describe("server", () => {
     const flag = {
       lessonId: "where-is-root-2",
       boardId: 2,
-      board: guess,
+      board: guess.name,
+      item: GUESS,
       place,
       stateAtStart: state,
       state,

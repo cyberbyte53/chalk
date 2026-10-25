@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@chalk/api": "workspace:*",
+    "@chalk/author": "workspace:*",
     "@chalk/content": "workspace:*",
+    "@chalk/content-source": "workspace:*",
     "@chalk/jugnu": "workspace:*",
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",

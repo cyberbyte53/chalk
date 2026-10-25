@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { boardSchema } from "./board";
 import { localizedSchema } from "./localized";
 
 /** Every kind of item the build writes. */
@@ -84,7 +83,11 @@ export const builtPageSchema = z
     ...base,
     concept: id,
     key: z.string().min(1),
-    board: boardSchema,
+    /**
+     * The hash of the code that makes its board (its module and every file it imports, under
+     * content/, library/ and platform/): the board itself is made from that code, never kept as data.
+     */
+    code: id,
   })
   .strict();
 export type BuiltPage = z.infer<typeof builtPageSchema>;
@@ -101,7 +104,11 @@ export const builtQuestionSchema = z
     /** Its place (from 1) in the first practice after the lesson; absent: bank only. */
     firstTry: z.number().int().min(1).optional(),
     params: z.record(z.string(), paramValue),
-    board: boardSchema,
+    /**
+     * The hash of the code that makes its board (its module and every file it imports, under
+     * content/, library/ and platform/): the board itself is made from that code, never kept as data.
+     */
+    code: id,
   })
   .strict();
 export type BuiltQuestion = z.infer<typeof builtQuestionSchema>;

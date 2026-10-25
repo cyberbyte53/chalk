@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@chalk/api": "workspace:*",
+    "@chalk/author": "workspace:*",
     "@chalk/content": "workspace:*",
+    "@chalk/content-source": "workspace:*",
     "@chalk/draw": "workspace:*",
     "@chalk/events": "workspace:*",
     "@chalk/jugnu": "workspace:*",

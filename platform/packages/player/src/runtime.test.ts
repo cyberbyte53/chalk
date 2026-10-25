@@ -12,7 +12,7 @@ import {
   tween,
   waitUntil,
 } from "@chalk/prop";
-import { defineGroup } from "@chalk/prop";
+import { type BoardAt, defineGroup } from "@chalk/prop";
 import { effect } from "@preact/signals-core";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
@@ -255,6 +255,42 @@ describe("BoardRuntime", () => {
     void runtime.call("coin", "toss");
     expect(runtime.getView("first").value).toBe(10);
     expect(runtime.getView("second").value).toBe(11);
+  });
+
+  it("runs rules written as code the same way, ordered by what they read", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "first", prop: "label" },
+        { kind: "prop", name: "second", prop: "label" },
+        { kind: "prop", name: "dial", prop: "dial" },
+      ),
+      // second reads first, but is listed before it; a piece is named or given as itself
+      is: [
+        { set: "second.value", to: (at: BoardAt) => (at("first").value as number) + 1 },
+        { set: "first.value", to: (at: BoardAt) => (at({ name: "coin" }).count as number) * 10 },
+      ],
+      when: [
+        {
+          on: "coin.landed",
+          if: (at: BoardAt) => (at("coin").count as number) >= 2,
+          do: { call: "dial.setTo", args: { to: 9 } },
+        },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    expect(runtime.getView("second").value).toBe(1);
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("second").value).toBe(11);
+    expect(runtime.getView("dial").at).toBe(0);
+    void runtime.call("coin", "toss");
+    expect(runtime.getView("dial").at).toBe(9);
+    // What a rule reads is known, for the snapshot's "worked out from".
+    expect(runtime.snapshot().nodes.find((n) => n.path === "second")?.bound.value?.from).toEqual([
+      "first.value",
+    ]);
   });
 
   it("re-reads a prop's view only when that prop changed", () => {

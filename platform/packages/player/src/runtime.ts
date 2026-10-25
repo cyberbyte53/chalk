@@ -29,6 +29,7 @@ import {
   boardProp,
   changesBetween,
   compileExpression,
+  compileRule,
   compileTemplate,
   defineGroup,
   groupOf,
@@ -245,6 +246,13 @@ function boardLinks(
     lastError: string | undefined;
   };
   const rules = new Map<string, Rule[]>();
+  // What a rule written as code reads: noted by running it once on the board's first values.
+  const probe: Scope = (name) => {
+    const def = defs.get(name);
+    const start = starts.get(name);
+    if (def === undefined || start === undefined) throw new Error(`no prop "${name}"`);
+    return viewOf(def, start);
+  };
   for (const rule of board.is) {
     const { prop, member } = splitTarget(rule.set);
     const def = defs.get(prop);
@@ -254,7 +262,7 @@ function boardLinks(
     let compute: (scope: Scope) => unknown;
     let refs: readonly (readonly string[])[];
     if ("to" in rule) {
-      const expression = compileExpression(rule.to);
+      const expression = compileRule(rule.to, probe);
       compute = (scope) => expression.evaluate(scope);
       refs = expression.refs;
     } else {
@@ -921,7 +929,7 @@ export class BoardRuntime {
     return {
       prop,
       signal: member,
-      condition: rule.if === undefined ? undefined : compileExpression(rule.if),
+      condition: rule.if === undefined ? undefined : compileRule(rule.if),
       script: rule.do,
     };
   }

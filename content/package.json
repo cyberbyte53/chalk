@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "The course content as TypeScript: course → chapter → concept → theory pages and question families",
+  "description": "The course content as TypeScript: course \u2192 chapter \u2192 concept \u2192 theory pages and question families",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
   },
@@ -50,5 +50,11 @@
   },
   "devDependencies": {
     "@types/node": "22.10.2"
+  },
+  "exports": {
+    "./modules": {
+      "types": "./modules.d.ts",
+      "default": "./modules.gen.ts"
+    }
   }
 }

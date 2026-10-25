@@ -59,7 +59,10 @@ export {
   type Texts,
 } from "./define";
 export {
+  type BoardAt,
+  type BoardFn,
   compileExpression,
+  compileRule,
   compileTemplate,
   type Expression,
   type Scope,
