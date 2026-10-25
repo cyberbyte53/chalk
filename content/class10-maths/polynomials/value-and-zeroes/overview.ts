@@ -51,10 +51,11 @@ const value = page(
     );
     b.standsFor(machine, "the value machine for p(x) = x² − 3x − 4");
     b.studentOnly(machine.action(ValueMachineAction.Put));
+    b.studentOnly(machine.action(ValueMachineAction.Move));
     const putIn = w.body(
       t(
-        r`It takes any number $x$ and gives back $p(x) = x^2 - 3x - 4$. Put in 2. What comes out?`,
-        r`यह कोई भी संख्या $x$ लेकर $p(x) = x^2 - 3x - 4$ लौटाती है। 2 डालो। क्या निकलता है?`,
+        r`It takes any number $x$ and gives back $p(x) = x^2 - 3x - 4$. Drag the handle along the x-axis to choose $x$, or nudge it with − and +. Let go, and the number goes in and leaves a dot. Put in 2. What comes out?`,
+        r`यह कोई भी संख्या $x$ लेकर $p(x) = x^2 - 3x - 4$ लौटाती है। $x$ चुनने के लिए हैंडल को x-अक्ष पर खिसकाओ, या − और + से थोड़ा-थोड़ा बदलो। छोड़ते ही संख्या अंदर जाती है और एक बिंदु बनता है। 2 डालो। क्या निकलता है?`,
       ),
       "putIn",
       { isHidden: true },
@@ -168,6 +169,7 @@ const zeroes = page(
     });
     b.standsFor(machine, "the value machine for p(x) = x² − 3x − 4, with −1 already put in");
     b.studentOnly(machine.action(ValueMachineAction.Put));
+    b.studentOnly(machine.action(ValueMachineAction.Move));
     b.witness(machine.learner(ValueMachineAction.Put, { x: 4 }));
     const found = w.body(
       t(

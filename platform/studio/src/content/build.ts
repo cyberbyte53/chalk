@@ -718,8 +718,8 @@ type ChapterEntry = {
   sources: [string, ItemSources][];
 };
 
-/** Folders inside a chapter the build never reads. */
-const UNREAD = new Set([".comments", "runs", "source"]);
+/** What inside a chapter the build never reads: its comments, runs and source. */
+const UNREAD = new Set(["comments.yaml", "runs", "source"]);
 
 function chapterCache(o: {
   dir: string;

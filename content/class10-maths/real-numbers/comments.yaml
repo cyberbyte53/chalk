@@ -1,0 +1,278 @@
+# Comments, written only by the Chalk dev server (platform/studio/src/comments.ts). Don't edit by hand.
+- id: cmvdxpha3lr5
+  kind: comment
+  status: ready
+  by: you
+  createdAt: 2026-10-18T14:42:18.939Z
+  board: class10-maths/real-numbers/division-lemma/overview/lemma
+  target: w6
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:142
+  snapshot: "**There is only one answer.** Each round takes 6 sweets out of the box. Riya keeps going
+    while there are at least 6 left, and stops as soon as there are fewer than 6."
+  text: there is only one answer feels weird? can we frame better
+  plan:
+    by: agent
+    at: 2026-10-18T14:58:34Z
+    text: Ask it as a question the table then answers, and end by tying it to 'unique' in the lemma.
+  thread:
+    - by: claude
+      at: 2026-10-18T14:53:26Z
+      text: "Proposal below: the heading becomes the question the table answers."
+    - by: claude
+      at: 2026-10-18T14:58:34Z
+      text: "Done: both lines changed as proposed (English and Hindi). Rebuild content to see it."
+- id: cmvdy2wc3wxq
+  kind: comment
+  status: ready
+  by: you
+  createdAt: 2026-10-18T14:52:44.979Z
+  board: class10-maths/real-numbers/division-lemma/overview/example-square
+  target: w4
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:254
+  snapshot: "**Why divide by 2?** We want a multiple of 4, and squaring $2q$ gives $4q^2$, a multiple
+    of 4. Now square both sides: $$\\begin{aligned} n^2 &= (2q + r)^2 \\\\ &= 4q^2 + 4qr + r^2 \\\\
+    &= 4(q^2 + qr) + r^2 \\\\ &= 4m + r^2, \\quad \\text{where } m = q^2 + qr. \\end{aligned}$$"
+  text: we can name it better , why choose b=2 ? because we want something like 4m , which we can get
+    (2)**2  ----> give propoer intution
+  plan:
+    by: agent
+    at: 2026-10-18T15:11:12Z
+    text: "Fix the order: the answer picked b = 2 first and explained why afterwards. Now it divides by
+      some b, squares to see which b gives a 4, then picks b = 2 and does the working. The cases and
+      the conclusion after it stay as they are."
+  thread:
+    - by: claude
+      at: 2026-10-18T14:53:26Z
+      text: "Proposal below: label names the question, intuition before the algebra."
+    - by: you
+      at: 2026-10-18T14:57:33.758Z
+      text: |-
+        we can do if we choose (bq+r)**2 => b2q2 + 2bqr + r2 
+        see if we take b=2 then we will get something like 4q2+4qr+r2
+    - by: claude
+      at: 2026-10-18T14:58:09Z
+      text: Revised to your general (bq + r)² version.
+    - by: claude
+      at: 2026-10-18T15:06:29Z
+      text: "Reread the whole page: the old flow chose b = 2, then asked why, then went general, then back
+        to 2. Reordered so the choice comes before it's used."
+    - by: claude
+      at: 2026-10-18T15:11:12Z
+      text: "Done: answer reordered as proposed (English and Hindi). Rebuild content to see it."
+- id: cmvdz8p0mbd3
+  kind: comment
+  status: ready
+  by: you
+  createdAt: 2026-10-18T15:25:15.046Z
+  board: class10-maths/real-numbers/euclid-algorithm/overview/why
+  target: because
+  source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:307
+  snapshot: "**Why?** If pieces of length $d$ fit exactly into 18 and into 12, they also fit into
+    what's left when 12 is taken from 18: $$18 - 12 = 6$$ It works back too. If they fit into 12 and
+    6, they fit into the two together: $$12 + 6 = 18$$ So no length is gained or lost."
+  text: this explanation is not good bro , this is not looking good
+  plan:
+    by: agent
+    at: 2026-10-18T15:38:50Z
+    text: Explain it with pieces the student can count on the ribbons, not with d. One length (3 cm)
+      worked through, then the general point in one sentence, then the way back.
+  thread:
+    - by: claude
+      at: 2026-10-18T15:31:21Z
+      text: "Proposal below: counted pieces instead of a letter d."
+    - by: claude
+      at: 2026-10-18T15:38:50Z
+      text: "Done: applied as proposed (English and Hindi). Rebuild content to see it."
+- id: cmvdzfbfifml
+  kind: comment
+  status: ready
+  by: you
+  createdAt: 2026-10-18T15:30:24.030Z
+  board: class10-maths/real-numbers/euclid-algorithm/overview/division
+  target: w5
+  source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:386
+  snapshot: "**In general.** Say $d$ divides $a$ and $b$. Since it divides $b$, it divides $bq$. A
+    number that divides two numbers divides their difference too: $$d \\text{ divides } a - bq = r$$
+    It works back too. If $d$ divides $b$ and $r$, it divides their sum: $$bq + r = a$$ So $a, b$
+    and $b, r$ have the same common divisors, and the same HCF:"
+  text: this proof will not go easy for 10th graders , can we have something intutive
+  plan:
+    by: agent
+    at: 2026-10-18T15:38:50Z
+    text: "First line names the swap (leftover → remainder). Then numbers and letters follow the same
+      four steps, in the same words: what we want to show, write both as multiples, write the
+      remainder as a − qb, substitute and take the factor out."
+  thread:
+    - by: claude
+      at: 2026-10-18T15:31:21Z
+      text: "Proposal below: the general step told with the ribbon picture."
+    - by: claude
+      at: 2026-10-18T15:33:12Z
+      text: "Rewritten as you said: h a common factor of a and b, so h is a factor of a − qb. Numbers line
+        first, then the same steps with letters."
+    - by: claude
+      at: 2026-10-18T15:34:47Z
+      text: Rewritten so the numbers and the letters take the same steps in the same words.
+    - by: claude
+      at: 2026-10-18T15:36:02Z
+      text: Numbers line now says remainder, same as the general proof.
+    - by: claude
+      at: 2026-10-18T15:36:30Z
+      text: "Added the first line of the page: the leftover is named the remainder."
+    - by: claude
+      at: 2026-10-18T15:38:50Z
+      text: "Done: applied as proposed (English and Hindi). Rebuild content to see it."
+- id: cmvdztscxxo2
+  kind: comment
+  status: ready
+  by: you
+  createdAt: 2026-10-18T15:41:39.153Z
+  board: class10-maths/real-numbers/euclid-algorithm/overview/division
+  target: w4
+  source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:380
+  snapshot: "**Same common factors.** We want to show: a common factor of 51 and 21 is also a factor
+    of the remainder 9. Take 3, a common factor of 51 and 21. Write both as multiples of 3: $$51 = 3
+    \\times 17, \\qquad 21 = 3 \\times 7$$ The remainder is what's left of 51 after two 21s: $$9 =
+    51 - 2 \\times 21$$ Replace 51 and 21 by their multiples of 3, and take the 3 out:
+    $$\\begin{aligned} 9 &= 3 \\times 17 - 2 \\times (3 \\times 7) \\\\ &= 3 \\times (17 - 14) \\\\
+    &= 3 \\times 3 \\end{aligned}$$ So 3 is a factor of 9."
+  text: we shuld write when 51 divided by 21 r=9 and q=2
+  plan:
+    by: agent
+    at: 2026-10-18T15:44:15Z
+    text: Open the numbers example with the division itself, naming q and r, so a = 51, b = 21, q = 2, r
+      = 9 line up with the letters in the general proof below.
+  thread:
+    - by: claude
+      at: 2026-10-18T15:42:04Z
+      text: "Proposal below: q and r named at the start."
+    - by: claude
+      at: 2026-10-18T15:44:15Z
+      text: "Done: applied as proposed (English and Hindi). Rebuild content to see it."
+- id: cmvj32oi52q1
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-22T05:11:23.789Z
+  board: class10-maths/real-numbers/division-lemma/overview/lemma
+  target: w7
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:148
+  snapshot: $$\begin{array}{l|cccc} \text{Rounds} & 0 & 1 & 2 & 3 \\ \hline \text{Sweets in the box} &
+    20 & 14 & 8 & \mathbf{2} \end{array}$$
+  text: there is a rendering issue throughout the chapter
+  thread: []
+- id: cmvj32xt8hly
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-22T05:11:35.852Z
+  board: class10-maths/real-numbers/division-lemma/overview/lemma
+  target: w2
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:118
+  snapshot: "Every sweet ends up on a plate or in the box: $$\\underbrace{20}_{\\text{sweets}} =
+    \\underbrace{6}_{\\text{friends}} \\times \\underbrace{3}_{\\text{rounds}} +
+    \\underbrace{2}_{\\text{left over}}$$"
+  text: rendering issue
+  thread: []
+- id: cmvj333og075
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-22T05:11:43.456Z
+  board: class10-maths/real-numbers/euclid-algorithm/overview/story
+  target: ribbons
+  source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:32
+  snapshot: "stickMeasure: ribbons of 18 cm and 12 cm, with pieces of 1 to 7 cm to mark on both"
+  text: check this also
+  thread: []
+- id: cmvkqeej986k
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T08:52:08.085Z
+  board: class10-maths/real-numbers/fundamental-theorem/overview/story
+  target: riya
+  source: content/class10-maths/real-numbers/fundamental-theorem/overview.ts:25
+  snapshot: "factorTree: Riya's tree: 360 split first as 10 × 36"
+  text: when a number is selected it looks off (bold is not competely visible)
+  thread: []
+- id: cmvkr4ysyvjw
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T09:12:47.410Z
+  board: class10-maths/real-numbers/root-two-irrational/overview/intro
+  target: must
+  source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:61
+  snapshot: A prime $p$ divides $a^2$. Must $p$ divide $a$?
+  text: we should try to lead with an example, direct notations might be harder for kids to understand
+  thread: []
+- id: cmvkr7euqg3l
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T09:14:41.522Z
+  board: class10-maths/real-numbers/root-two-irrational/overview/intro
+  target: proof
+  source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:13
+  snapshot: "**Why.** $p$ divides $a^2$, so $p$ fits inside $a^2$: $a^2$ has a $p$-tower. $a^2$'s
+    towers are $a$'s towers doubled, and doubling a height of 0 gives 0. So $a$ has a $p$-tower too:
+    $p$ divides $a$."
+  text: >-
+    this is a confusing way to teach , why can't we just do a =p1^a1 p2^a2 .. by fundamnetal theorm
+    and then 
+
+    a2 = p1^2a1... 
+
+    if a2 divices p (where p is prime) , only if 1 of pi is p itslef somehting like that
+  thread: []
+- id: cmvkr8xuhfvn
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T09:15:52.793Z
+  board: class10-maths/real-numbers/root-two-irrational/overview/intro
+  target: prime
+  source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:115
+  snapshot: "It needs $p$ to be prime. 4 divides 36 but not 6: its two 2s fit inside 36, but 6 has
+    only one 2. $$4 = 2^2, \\quad 36 = 2^2 \\times 3^2, \\quad 6 = 2 \\times 3$$"
+  text: nice example to have but can be framed better
+  thread: []
+- id: cmvkra0dznf0
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T09:16:42.743Z
+  board: class10-maths/real-numbers/root-two-irrational/overview/combinations
+  target: w2
+  source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:323
+  snapshot: "The proof for $\\sqrt{2}$ works for $\\sqrt{3}$ too: use 3 (also prime) in place of 2 at
+    every step. So $\\sqrt{3}$ is irrational as well. **Q.** Show that $5 - \\sqrt{3}$ is
+    irrational."
+  text: there appear some layout issue Q should be on new line no ?
+  thread: []
+- id: cmvkrdbbf1y1
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T09:19:16.875Z
+  board: class10-maths/real-numbers/which-fractions-end/overview/repeats
+  target: w2
+  source: content/class10-maths/real-numbers/which-fractions-end/overview.ts:380
+  snapshot: "**One step of long division** $$\\underbrace{3}_{\\text{remainder}} \\times 10 = 8
+    \\times \\underbrace{3}_{\\text{digit}} + \\underbrace{6}_{\\text{new remainder}}$$ This is the
+    first step of $3 \\div 8$. The next digit and the next remainder depend only on the remainder.
+    The clock marks each remainder, an arrow per step."
+  text: bro read the full page the starting feels very out of place
+  thread: []
+- id: cmvkre53olz2
+  kind: comment
+  status: open
+  by: you
+  createdAt: 2026-10-23T09:19:55.476Z
+  board: class10-maths/real-numbers/which-fractions-end/overview/repeats
+  target: predict
+  source: content/class10-maths/real-numbers/which-fractions-end/overview.ts:282
+  snapshot: The remainder is 1 again, just like at the start. What will the next digit be?
+  text: the questuon is ill poised , next digit of what?
+  thread: []

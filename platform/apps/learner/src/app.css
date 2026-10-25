@@ -1785,12 +1785,12 @@ body.is-selecting .is-pick-target {
   right: 0;
 }
 /* A finished one is one line until pointed at. */
-.preview-thread.is-done:not(:hover) > :not(:first-child),
-.preview-thread.is-declined:not(:hover) > :not(:first-child) {
+.preview-thread.is-closed:not(:hover) > :not(:first-child),
+.preview-thread.is-withdrawn:not(:hover) > :not(:first-child) {
   display: none;
 }
-.preview-thread.is-done:not(:hover) > :first-child,
-.preview-thread.is-declined:not(:hover) > :first-child {
+.preview-thread.is-closed:not(:hover) > :first-child,
+.preview-thread.is-withdrawn:not(:hover) > :first-child {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1823,7 +1823,7 @@ body.is-selecting .is-pick-target {
   margin-right: 6px;
   color: #f0b45a;
 }
-.preview-thread.is-done .preview-status {
+.preview-thread.is-closed .preview-status {
   color: #7fcf8a;
 }
 .preview-piece {
@@ -1837,13 +1837,45 @@ body.is-selecting .is-pick-target {
   margin-top: 4px;
   color: #b4b4bc;
 }
-.preview-thread.is-done,
-.preview-thread.is-declined {
+.preview-thread.is-closed,
+.preview-thread.is-withdrawn {
   opacity: 0.7;
 }
 .preview-piece.is-prop {
   color: #f0b45a;
 }
+.preview-kind {
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 6px;
+  text-transform: uppercase;
+}
+.preview-kind.is-regression {
+  color: #ff7a7a;
+}
+.preview-kind.is-finding {
+  color: #8fb8ff;
+}
+.preview-thread.is-ready .preview-status {
+  color: #7fcf8a;
+}
+.preview-detached,
+.preview-problem {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #ffb36b;
+}
+.preview-changed {
+  margin-top: 4px;
+  font: 11px ui-monospace, monospace;
+  color: #9a9aa4;
+}
+.preview-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.preview-actions button,
 .preview-reply-open {
   margin-top: 4px;
   border: 0;

@@ -2,7 +2,7 @@ import { Actor, lessonSchema } from "@chalk/content";
 import { BoardRuntime, type RuntimeServices, propRecords } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import coinLesson from "../../../content/class8-maths/ch4-data-handling/lessons/does-a-coin-settle.json";
+import coinLesson from "../../../content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json";
 import doesItEnd from "../../../platform/studio/evals/boards/lessons/does-it-end.json";
 import { propDefs } from "./index";
 

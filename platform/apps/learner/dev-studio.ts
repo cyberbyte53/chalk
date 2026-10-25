@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { type Comment, listComments } from "../../studio/src/comments";
+import { type Filed as Comment, Status, readComments as readAll } from "../../studio/src/comments";
 import { type Next, type Step, nextStep, runs, startRun, steps, stopRun } from "./dev-runner";
 
 export const PlanStatus = {
@@ -171,16 +171,16 @@ function conceptIds(root: string, book: string, chapter: string): Map<string, st
   return ids;
 }
 
-const readComments = (root: string): Comment[] => listComments(root);
+const readComments = (root: string): Comment[] => readAll(root).comments;
 
-/** Comments on a chapter: the files in its .comments/ folder (plan comments and screen comments). */
+/** Comments on a chapter: those filed in its comments.yaml (plan comments and screen comments). */
 function chapterComments(
   comments: Comment[],
   _byConcept: Map<string, { book: string; chapter: string }>,
   book: string,
   chapter: string,
 ): Comment[] {
-  return comments.filter((c) => c.chapter === `${book}/${chapter}`);
+  return comments.filter((c) => c.home === `content/${book}/${chapter}`);
 }
 
 function chapterRow(
@@ -233,7 +233,8 @@ function chapterRow(
     runNames,
     lessons,
     runs: runNames.length,
-    openComments: mine.filter((c) => c.status !== "done").length,
+    openComments: mine.filter((c) => c.status === Status.Open || c.status === Status.Planned)
+      .length,
     openQuestions: plan?.openQuestions ?? 0,
   };
   return { ...row, next: nextStep({ ...row, next: null }) };

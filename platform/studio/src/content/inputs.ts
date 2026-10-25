@@ -11,7 +11,7 @@ import { join } from "node:path";
  */
 
 /** Never read by a build: dependencies, outputs, and a chapter's comments, runs and source. */
-const SKIP = new Set(["node_modules", ".git", "dist", "out", ".comments", "runs", "source"]);
+const SKIP = new Set(["node_modules", ".git", "dist", "out", "comments.yaml", "runs", "source"]);
 
 export function buildInputsKey(root: string): string {
   const h = createHash("sha1");

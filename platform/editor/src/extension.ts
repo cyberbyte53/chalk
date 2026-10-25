@@ -12,14 +12,16 @@ import * as vscode from "vscode";
  * - The panel follows the editor: move the cursor in overview.ts and the piece written there is
  *   outlined; click a piece (Alt-click, or after "Pick") and the editor goes to its line.
  * - Pick a piece, then ask the agent about it (it goes to the chat with its board, line and words)
- *   or leave a comment (a file in the chapter's .comments/ folder; a prop's, for a pick on a prop).
+ *   or leave a comment (sent to the dev server, which files it in the chapter's comments.yaml, or
+ *   the prop's for a pick on a prop).
  * - The Chalk tree (in the explorer): book → chapter → lesson, with open comments counted.
  *
  * It uses a dev server already running on :5173, or starts the learner app's (and the content
  * rebuild on save) itself.
  */
 
-const PORT = 5173;
+/** The one dev server (it runs the content rebuild too); see platform/apps/learner/vite.config.ts. */
+const PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
 let root = "";
 let base = `http://localhost:${PORT}/`;
 let started: ChildProcess[] = [];
@@ -50,20 +52,17 @@ function startProcess(cmd: string, args: string[], cwd: string): ChildProcess {
   return child;
 }
 
-let serving: Promise<boolean> | undefined;
-/** The dev server is up (ours or one already running), with content rebuilding on save. */
-function ensureServer(): Promise<boolean> {
-  serving ??= (async () => {
-    if (await isUp(base)) return true;
-    log.appendLine("Starting the learner app's dev server and the content rebuild…");
-    const studio = join(root, "platform", "studio");
-    startProcess(
-      join(studio, "node_modules", ".bin", "tsx"),
-      ["--tsconfig", "../../tsconfig.base.json", "src/content/cli.ts", "preview"],
-      studio,
-    );
+let starting: Promise<boolean> | undefined;
+/**
+ * The one dev server is up: the one already running (started by the chalk MCP tools, `pnpm dev`,
+ * or another window), else one started here. It runs the content rebuild itself.
+ */
+async function ensureServer(): Promise<boolean> {
+  if (await isUp(base)) return true;
+  starting ??= (async () => {
+    log.appendLine("Starting the dev server (it rebuilds content on save)…");
     const app = join(root, "platform", "apps", "learner");
-    startProcess(join(app, "node_modules", ".bin", "vite"), ["--port", String(PORT)], app);
+    startProcess(join(app, "node_modules", ".bin", "vite"), [], app);
     for (let i = 0; i < 90; i++) {
       if (await isUp(base)) return true;
       await new Promise((r) => setTimeout(r, 1000));
@@ -71,7 +70,9 @@ function ensureServer(): Promise<boolean> {
     log.show(true);
     return false;
   })();
-  return serving;
+  const ok = await starting;
+  starting = undefined;
+  return ok;
 }
 
 /** What the preview should show for a file or folder in content/ (a `?dev&…` query), or null. */
@@ -92,10 +93,6 @@ function queryFor(file: string): string | null {
     return family === undefined
       ? `board=${book}/${chapter}`
       : `source=content/${book}/${chapter}/questions/${family}`;
-  if (third === ".comments" && !isDir) {
-    const on = /^on:\s*"?([^"\n]+)"?$/m.exec(readFileSync(file, "utf8"))?.[1]?.trim();
-    return on ? `board=${on}` : `board=${book}/${chapter}`;
-  }
   if (third === "runs" || third === "source") return `board=${book}/${chapter}`;
   return `board=${book}/${chapter}/${third}&show=questions`;
 }
@@ -227,106 +224,63 @@ type Picked = {
   note?: string;
 };
 
-// ---- Reviews: the comments made in one sitting, handed to an agent in one line ----
+// ---- Comments: written only by the dev server (platform/studio/src/comments.ts) ----
 
-let state: vscode.Memento | undefined;
-type Review = { id: string; files: string[] };
-const REVIEW_KEY = "chalk.review";
-const currentReview = (): Review | undefined => state?.get<Review>(REVIEW_KEY);
-
-function git(...args: string[]): string {
+/** Sends one change to the dev server, the comments' one writer. Says why, if it was refused. */
+async function changeComments(change: Record<string, unknown>): Promise<{
+  ok: boolean;
+  error?: string;
+  count?: number;
+  comments?: { by: string; review?: string; status: string }[];
+}> {
+  if (!(await ensureServer())) return { ok: false, error: "the dev server isn't running" };
   try {
-    return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
-  } catch {
-    return "";
+    const res = await fetch(new URL("dev-review", base), {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(change),
+    });
+    return (await res.json()) as { ok: boolean; error?: string };
+  } catch (e) {
+    return { ok: false, error: String(e) };
   }
 }
 
-function tellReview(): void {
-  void panel?.webview.postMessage({ type: "review", count: currentReview()?.files.length ?? 0 });
+/** How many of your comments haven't been handed to an agent yet (the panel's button shows it). */
+async function tellReview(): Promise<void> {
+  let count = 0;
+  try {
+    const res = await fetch(new URL("dev-review", base));
+    const all = (await res.json()) as { by: string; review?: string; status: string }[];
+    count = all.filter(
+      (c) => c.by === "you" && c.review === undefined && c.status === "open",
+    ).length;
+  } catch {}
+  void panel?.webview.postMessage({ type: "review", count });
 }
 
 /**
- * Writes content/reviews/<id>.md listing this sitting's comments, copies one line pointing at it,
- * and starts a new sitting. The agent reads the file (the apply-review skill), writes its plan
- * there, and works through the comments.
+ * Hands your new comments to an agent: the dev server marks them as one review, and one line is
+ * copied for the agent's chat. The agent reads the review with the chalk `comments` tool.
  */
 async function copyReview(): Promise<void> {
-  try {
-    await writeReview();
-  } catch (e) {
-    void vscode.window.showErrorMessage(`Chalk: couldn't write the review: ${String(e)}`);
+  const done = await changeComments({ op: "handover" });
+  if (!done.ok) {
+    void vscode.window.showErrorMessage(`Chalk: couldn't hand the review over: ${done.error}`);
+    return;
   }
-}
-
-/**
- * Where a comment of this sitting is now: where it was saved, or, if it moved (a board comment
- * made a prop comment), the file with its id in any comments folder; undefined if it is gone.
- */
-function findComment(file: string): string | undefined {
-  if (existsSync(join(root, file))) return file;
-  const name = file.split("/").pop() ?? "";
-  const folders = [
-    ...readdirSync(join(root, "content"), { withFileTypes: true })
-      .filter((d) => d.isDirectory())
-      .flatMap((book) =>
-        readdirSync(join(root, "content", book.name), { withFileTypes: true })
-          .filter((d) => d.isDirectory())
-          .map((chapter) => `content/${book.name}/${chapter.name}/.comments`),
-      ),
-    ...readdirSync(join(root, "library", "props"), { withFileTypes: true })
-      .filter((d) => d.isDirectory())
-      .map((d) => `library/props/${d.name}/.comments`),
-  ];
-  return folders.map((dir) => `${dir}/${name}`).find((f) => existsSync(join(root, f)));
-}
-
-async function writeReview(): Promise<void> {
-  const saved = currentReview();
-  const files = [
-    ...new Set((saved?.files ?? []).map(findComment).filter((f): f is string => f !== undefined)),
-  ];
-  const review = saved === undefined ? undefined : { ...saved, files };
-  if (review === undefined || review.files.length === 0) {
+  if (!done.count) {
     void vscode.window.showInformationMessage(
-      "Chalk: no new comments since the last copy. Pick a piece (c) to add one.",
+      "Chalk: no new comments since the last handover. Pick a piece (c) to add one.",
     );
     return;
   }
-  const lines = [
-    "---",
-    `id: ${review.id}`,
-    "status: open",
-    `createdAt: ${JSON.stringify(new Date().toISOString())}`,
-    `commit: ${git("rev-parse", "HEAD") || "unknown"}`,
-    "---",
-    `# Review ${review.id}`,
-    "",
-    `${review.files.length} comment${review.files.length > 1 ? "s" : ""}, each a file with its board, piece, line and words:`,
-    "",
-    ...review.files.map((f) => {
-      const text = readFileSync(join(root, f), "utf8");
-      const on = /^on:\s*"?([^"\n]+)"?$/m.exec(text)?.[1] ?? "?";
-      const body = text.split(/^---$/m)[2]?.trim().replace(/\s+/g, " ").slice(0, 120) ?? "";
-      return `- [${f.split("/").pop()}](../../${f}) · \`${on}\` · ${body}`;
-    }),
-    "",
-    "## Plan",
-    "",
-    "(The agent writes its plan here: chapter-wide changes first, then one line per board.)",
-    "",
-  ];
-  const dir = join(root, "content", "reviews");
-  mkdirSync(dir, { recursive: true });
-  const file = join(dir, `${review.id}.md`);
-  writeFileSync(file, lines.join("\n"));
-  // Short, and @path so editors that understand mentions attach the file; AGENTS.md says what to do.
-  const line = `@${rel(file)} apply this review (${review.files.length} comment${review.files.length > 1 ? "s" : ""})`;
-  await vscode.env.clipboard.writeText(line);
-  await state?.update(REVIEW_KEY, undefined);
-  tellReview();
+  await vscode.env.clipboard.writeText(
+    `apply my review (${done.count} comment${done.count > 1 ? "s" : ""})`,
+  );
+  void tellReview();
   void vscode.window.showInformationMessage(
-    `Chalk: copied. Paste it into the agent's chat (⌘V). ${rel(file)}`,
+    "Chalk: copied. Paste it into the agent's chat (⌘V); plan mode is a good place to start.",
   );
 }
 
@@ -347,79 +301,28 @@ async function askForComment(p: Picked): Promise<void> {
     placeHolder: "What's wrong, or what should change?",
     ignoreFocusOut: true,
   });
-  if (note?.trim()) leaveComment({ ...p, note });
+  if (note?.trim()) await leaveComment({ ...p, note });
 }
 
-/**
- * A comment file in the chapter's .comments/ folder, or the prop's (library/props/<package>/.comments/)
- * when a prop or a part of one was picked (see platform/docs/comments.md).
- */
-function leaveComment(p: Picked): void {
-  const [book, chapter] = (p.board ?? "").split("/");
-  if (!book || !chapter || !p.note?.trim()) {
-    void vscode.window.showWarningMessage("Chalk: write the comment first.");
+/** Files the comment through the dev server: on the board, or on the prop when one was picked. */
+async function leaveComment(p: Picked): Promise<void> {
+  const target = p.piece ? (p.part ? `${p.piece} › ${p.part}` : p.piece) : undefined;
+  const done = await changeComments({
+    op: "add",
+    comment: {
+      board: p.board,
+      ...(target ? { target } : {}),
+      ...(p.propPackage && p.prop ? { prop: p.prop } : {}),
+      ...(p.site ? { source: p.site } : {}),
+      ...(p.text ? { snapshot: p.text } : {}),
+      text: p.note?.trim() ?? "",
+    },
+  });
+  if (!done.ok) {
+    void vscode.window.showErrorMessage(`Chalk: the comment wasn't saved: ${done.error}`);
     return;
   }
-  const id = `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
-  const now = new Date();
-  const review =
-    currentReview() ??
-    ({
-      id: now.toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "-"),
-      files: [],
-    } as Review);
-  const commit = git("rev-parse", "HEAD");
-  const isDirty = git("status", "--porcelain", "--", "content", "library") !== "";
-  const q = (s: string) => JSON.stringify(s);
-  const lines = [
-    "---",
-    `id: ${id}`,
-    "status: open",
-    ...(p.propPackage && p.prop ? [`prop: ${q(p.prop)}`] : []),
-    `on: ${q(p.board ?? "")}`,
-    ...(p.piece ? [`piece: ${q(p.piece)}`] : []),
-    ...(p.part ? [`part: ${q(p.part)}`] : []),
-    ...(p.site ? [`source: ${q(p.site)}`] : []),
-    `createdAt: ${q(now.toISOString())}`,
-    `review: ${q(review.id)}`,
-    ...(commit ? [`commit: ${commit}`] : []),
-    ...(isDirty ? ["uncommitted: true"] : []),
-    ...(p.text ? [`snapshot: ${q(p.text)}`] : []),
-    "by: you",
-    "---",
-    p.note.trim(),
-    "",
-  ];
-  // A prop's comment lives with the prop: it is about every board that places it.
-  const dir = p.propPackage
-    ? join(root, "library", "props", p.propPackage, ".comments")
-    : join(root, "content", book, chapter, ".comments");
-  mkdirSync(dir, { recursive: true });
-  const file = join(dir, `${id}.md`);
-  writeFileSync(file, lines.join("\n"));
-  void state?.update(REVIEW_KEY, { ...review, files: [...review.files, rel(file)] });
-  setTimeout(tellReview, 0);
-  void panel?.webview.postMessage({ type: "comments" });
-  tree.refresh();
-  if (isDirty)
-    void vscode.window.showWarningMessage(
-      "Chalk: comment saved, but content has uncommitted changes. Commit them so the comment points at fixed code.",
-    );
-}
-
-/** A reply in the preview reopens a comment: it goes into this sitting's review again. */
-function addToReview(file: string | undefined): void {
-  if (file === undefined) return;
-  const now = new Date();
-  const review =
-    currentReview() ??
-    ({
-      id: now.toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "-"),
-      files: [],
-    } as Review);
-  if (!review.files.includes(file))
-    void state?.update(REVIEW_KEY, { ...review, files: [...review.files, file] });
-  setTimeout(tellReview, 0);
+  void tellReview();
   tree.refresh();
 }
 
@@ -429,11 +332,10 @@ function onMessage(
   if (m.type === "ready") {
     isReady = true;
     revealCursor();
-    tellReview();
+    void tellReview();
   } else if (m.type === "open") void openSite(m.site);
   else if (m.type === "copy") void copyReview();
   else if (m.type === "pick") void askForComment(m);
-  else if (m.type === "replied") addToReview(m.file);
   else if (m.type === "external" && m.url) void openInBrowser(m.url);
   // The preview went to another level by itself (a chapter or lesson was tapped).
   if (m.follow !== undefined) {
@@ -478,14 +380,11 @@ const readJson = <T>(file: string): T | null => {
   }
 };
 
+/** Comments in a chapter still waiting on the agent (open or planned), from its comments.yaml. */
 function openComments(chapterDir: string): number {
-  const dir = join(chapterDir, ".comments");
-  if (!existsSync(dir)) return 0;
-  return readdirSync(dir).filter(
-    (n) =>
-      n.endsWith(".md") &&
-      /^status:\s*(open|approved)\s*$/m.test(readFileSync(join(dir, n), "utf8")),
-  ).length;
+  const file = join(chapterDir, "comments.yaml");
+  if (!existsSync(file)) return 0;
+  return (readFileSync(file, "utf8").match(/^ {2}status: (open|planned)$/gm) ?? []).length;
 }
 
 class ChalkTree implements vscode.TreeDataProvider<Node> {
@@ -577,7 +476,6 @@ export function activate(context: vscode.ExtensionContext): void {
   root = folder.uri.fsPath;
   base = vscode.workspace.getConfiguration("chalk").get<string>("previewUrl") ?? base;
   log = vscode.window.createOutputChannel("Chalk");
-  state = context.workspaceState;
 
   let timer: NodeJS.Timeout | undefined;
   context.subscriptions.push(
@@ -604,7 +502,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,content/*/*/.comments/*.md,library/props/*/.comments/*.md}",
+      "{build/index.json,content/*/*/comments.yaml,library/props/*/comments.yaml}",
     ),
   );
   watcher.onDidChange(() => tree.refresh());

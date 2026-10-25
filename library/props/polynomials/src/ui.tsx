@@ -41,9 +41,12 @@ export function Stepper({
   step = 1,
   skip,
   part,
+  shown,
 }: {
   name: string;
   value: number;
+  /** How the value is written, when not as plain digits (½, −3.6). */
+  shown?: string;
   min: number;
   max: number;
   onChange: (value: number) => void;
@@ -65,7 +68,7 @@ export function Stepper({
         onPress={() => onChange(next(-step))}
       />
       <span class="pp-stepper-value">
-        <span class="pp-name">{name}</span> = {value}
+        <span class="pp-name">{name}</span> = {shown ?? value}
       </span>
       <SymbolButton
         symbol="+"

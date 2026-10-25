@@ -1,5 +1,7 @@
 import type { PropModule } from "@chalk/player";
 import { asAnyProp } from "@chalk/prop";
+import { longDivision } from "./long-division";
+import { LongDivisionView } from "./long-division-view";
 import { polyBox } from "./poly-box";
 import { PolyBoxView } from "./poly-box-view";
 import { valueMachine } from "./value-machine";
@@ -30,6 +32,14 @@ export {
   polyBox as polyBoxDef,
 } from "./poly-box";
 export {
+  DivisionMove,
+  LongDivisionAction,
+  LongDivisionDerived,
+  LongDivisionSignal,
+  type LongDivisionState,
+  longDivision as longDivisionDef,
+} from "./long-division";
+export {
   ValueMachineAction,
   ValueMachineDerived,
   ValueMachineSignal,
@@ -53,9 +63,15 @@ export const valueMachineProp: PropModule = {
   View: ValueMachineView,
 };
 
+export const longDivisionProp: PropModule = {
+  def: asAnyProp(longDivision),
+  View: LongDivisionView,
+};
+
 /** Every prop in this package, for the library. */
 export const polynomialProps: readonly PropModule[] = [
   zeroPlaneProp,
   polyBoxProp,
   valueMachineProp,
+  longDivisionProp,
 ];

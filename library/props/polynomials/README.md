@@ -1,6 +1,6 @@
 # @chalk/prop-polynomials
 
-Polynomials, two ways: as a graph on a plane (`zeroPlane`) and as a box of terms (`polyBox`). Built for Class 10 Polynomials, used again for quadratic equations; each prop knows only its own world.
+Polynomials as a graph on a plane (`zeroPlane`), as a machine that gives values (`valueMachine`), as a box of terms (`polyBox`) and as a long division (`longDivision`). Built for Class 10 Polynomials, used again for quadratic equations; each prop knows only its own world.
 
 Polynomials are coefficient lists, highest power first (`x² − 2x − 3` is `[1, −2, −3]`). `src/poly.ts` holds the shared laws: `valueAt`, `fromZeroes`, `realZeroes` (each real zero with its multiplicity), and writing a polynomial or a number the book's way (`polyTex`, `polyText`, `niceNumber`: `−3/2`, `√3`, `2 + √3`). `src/box-algebra.ts` does the box's arithmetic exactly, with fraction.js.
 
@@ -31,6 +31,30 @@ The plane is drawn by **Mafs** from the prop's state (see the toolkit in `docs/m
 **View:** cells of the same power share a colour (category tokens), so like terms can be seen before they're added: for (x − α)(x − β) the two x-cells sit side by side in one colour. Dividing, the quotient grows along the top one column per step; under the box, what's left of the dividend, labelled r once its degree is below the divisor's.
 
 **Observation:** `side:i`, `top:j`, `cell:i:j`, `dividend`, `left`, `result`, `next`, `startAgain`; the product, quotient and remainder sit under `hidden` until they're on screen.
+
+## `valueMachine`: put a number in, get its value
+
+**Stored:** `coefficients`, `name` and `variable` (p, x), `input` (the number in now, or null), `tried` (every number put in, oldest first, at most 60: a dot each), `step` (0.1 by default; the input snaps to it), `min`, `max`, `window`.
+
+**Derived:** `value` (p at the input), `working` (the substitution written out, in LaTeX), `zeroesFound`.
+
+**Actions** (by learner unless noted): `move {x}` (the learner dragging the handle along the x-axis: the working follows, no dot, no signal), `put {x}` (letting go of the handle, or a − / + nudge: leaves a dot), `startAgain`. **Signals:** `put {x, value}`, `foundZero {x}`.
+
+**View:** p(x), then x with − and +, the working, and the grid. x is a handle on the grid's x-axis: drag it, or touch the grid anywhere. While it moves, a dashed line runs from the axis up to (x, p(x)); letting go puts the number in. A cubic's working puts its value on a second line. Numbers are written as the book would: halves and quarters as fractions (½), other decimals as decimals (p(2.3) = −5.61, not 23/10).
+
+**Observation:** `rule`, `input`, `handle`, `working`, `dots`, `startAgain`.
+
+## `longDivision`: long division, set out as in the book
+
+**Stored:** `dividend`, `divisor` (coefficients, highest first), `steps` (moves made), `variable`.
+
+**Derived:** `stepCount` (three moves per quotient term), `isDone`, `quotient`, `remainder`.
+
+**Actions:** `next` (by learner: the next move), `all` (reveals), `startAgain` (by learner), `setProblem {dividend, divisor}`. **Signals:** `stepped {step}`, `finished {quotient, remainder}`.
+
+Each quotient term takes three moves: **divide** (what's left's first term ÷ the divisor's first term, written on top), **multiply** (the divisor by it, written underneath as −( … )) and **subtract** (what's left, under a line). Like powers stand in one column, the quotient's included. Under the layout, the maths of the move just made (2x²/x = 2x; 2x(x + 2) = 2x² + 4x; the subtraction), and after the last move dividend = divisor × quotient + remainder.
+
+**Observation:** `working` (the layout, row by row), `move`, `next`, `startAgain`; the quotient and remainder sit under `hidden` until the last move.
 
 ## Tests
 

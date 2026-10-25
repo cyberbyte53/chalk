@@ -1,3 +1,4 @@
+import { spawn } from "node:child_process";
 import {
   appendFileSync,
   existsSync,
@@ -13,15 +14,16 @@ import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { findBoard, siteOf } from "../../studio/src/boards";
 import {
-  type Comment,
-  CommentStatus,
-  chapterOf,
-  listComments,
-  newCommentId,
-  removeComment,
-  writeComment,
+  Actor,
+  COMMENTS_FILE,
+  type Change,
+  applyChange,
+  readComments,
 } from "../../studio/src/comments";
 import { studioMiddleware } from "./dev-studio";
+
+/** The one dev server's port (CHALK_DEV_PORT to change it). */
+const DEV_PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
 
 /** The repo's root, where the one .env lives (see .env.example). */
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
@@ -79,8 +81,8 @@ function devContent(): Plugin {
     name: "chalk-dev-content",
     configureServer(server) {
       server.middlewares.use("/content", handle);
-      // build/sources.json is written last by every build: tell open previews to redraw.
-      const sources = join(dir, "sources.json");
+      // build/.built is rewritten last by every build: tell open previews to redraw.
+      const sources = join(dir, ".built");
       let timer: NodeJS.Timeout | undefined;
       const changed = (file: string) => {
         if (file !== sources) return;
@@ -98,75 +100,125 @@ function devContent(): Plugin {
 }
 
 /**
- * In development, the review page's comments are the comments files in each chapter's .comments/
- * folder (see platform/studio/src/comments.ts). GET /dev-review reads them all; POST /dev-review
- * takes one change ({ op: "add" | "reply" | "status" | "remove" }) and writes that one file.
- * Agents read and write the same files; the page shows what they wrote.
+ * In development, comments (platform/studio/src/comments.ts) are read and written here and only
+ * here: the dev server is their one writer, so two writers can never collide and every change
+ * follows the lifecycle. GET /dev-review lists them (?problems for anything a file holds that
+ * doesn't fit); POST /dev-review applies one change. The caller says who it is with
+ * x-chalk-actor ("agent" for the chalk MCP tools; the person otherwise). A comments file that
+ * changes on disk is pushed to open previews at once (chalk:comments).
  */
 function devReview(): Plugin {
-  /** A new screen comment gets its board, its line and its chapter from build/. */
-  const placed = (c: Record<string, unknown>): Record<string, unknown> => {
-    if (c.board === "plan") return { ...c, source: `content/${String(c.lessonId)}/plan.md` };
+  /** A comment from the older review pages (lessonId and board index): its board and line from build/. */
+  const fromReviewPage = (c: Record<string, unknown>): Record<string, unknown> => {
+    const piece = typeof c.piece === "string" ? c.piece : undefined;
+    const part = typeof c.part === "string" ? c.part : undefined;
+    const base = {
+      text: String(c.text ?? ""),
+      ...(typeof c.snapshot === "string" ? { snapshot: c.snapshot } : {}),
+      ...(typeof c.quote === "string" ? { quote: c.quote } : {}),
+      ...(piece ? { target: part ? `${piece} › ${part}` : piece } : {}),
+    };
+    if (c.board === "plan") return { ...base, source: `content/${String(c.lessonId)}/plan.md` };
     const on = findBoard(ROOT, String(c.lessonId), Number(c.boardIndex));
-    if (on === null) return c;
-    const source = siteOf(ROOT, on, c.piece as string | null);
-    return { ...c, on, ...(source ? { source } : {}) };
+    if (on === null) return base;
+    const source = siteOf(ROOT, on, piece ?? null);
+    return { ...base, board: on, ...(source ? { source } : {}) };
+  };
+  /** The older pages' changes, in today's terms. */
+  const translate = (body: Record<string, unknown>): Change | null => {
+    const id = String(body.id ?? "");
+    if (body.op === "add" && body.comment !== undefined) {
+      const c = body.comment as Record<string, unknown>;
+      const isOld = c.lessonId !== undefined && c.board !== undefined && c.target === undefined;
+      return { op: "add", comment: (isOld ? fromReviewPage(c) : c) as never };
+    }
+    if (body.op === "status") {
+      if (body.status === "done" || body.status === "closed") return { op: "close", id };
+      if (body.status === "declined" || body.status === "withdrawn") return { op: "withdraw", id };
+      if (body.status === "open") return { op: "reopen", id };
+      return null; // "approved": approval now happens in the agent's chat
+    }
+    if (body.op === "remove") return { op: "delete", id };
+    return body as unknown as Change;
   };
   return {
     name: "chalk-dev-review",
     apply: "serve",
     configureServer(server) {
       server.middlewares.use("/dev-review", (req, res) => {
-        const send = () => {
+        const send = (status: number, value: unknown) => {
+          res.statusCode = status;
           res.setHeader("content-type", "application/json");
-          res.end(JSON.stringify(listComments(ROOT)));
+          res.end(JSON.stringify(value));
         };
-        if (req.method !== "POST") return send();
+        if (req.method !== "POST") {
+          const read = readComments(ROOT);
+          return send(200, (req.url ?? "").includes("problems") ? read.problems : read.comments);
+        }
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
         });
         req.on("end", () => {
-          const change = JSON.parse(body) as {
-            op: string;
-            id?: string;
-            comment?: Record<string, unknown>;
-            text?: string;
-            status?: string;
-          };
-          const at = new Date().toISOString();
-          // Without `file` (where listComments found it), which isn't part of the comment.
-          const found: Comment | undefined = listComments(ROOT)
-            .map(({ file: _, ...c }) => c)
-            .find((c) => c.id === change.id);
-          if (change.op === "add" && change.comment !== undefined) {
-            const draft = placed({
-              ...change.comment,
-              id: newCommentId(),
-              createdAt: at,
-              status: CommentStatus.Open,
-              thread: [],
-            });
-            const chapter = chapterOf(draft);
-            if (chapter !== undefined)
-              writeComment(ROOT, {
-                ...(draft as Comment),
-                chapter,
-                text: String(draft.text ?? ""),
-              });
-          } else if (change.op === "reply" && found !== undefined && change.text) {
-            found.thread.push({ by: "you", at, text: change.text });
-            found.status = change.status ?? CommentStatus.Open;
-            writeComment(ROOT, found);
-          } else if (change.op === "status" && found !== undefined && change.status) {
-            found.status = change.status;
-            writeComment(ROOT, found);
-          } else if (change.op === "remove" && found !== undefined) {
-            removeComment(ROOT, found);
+          let change: Change | null;
+          try {
+            change = translate(JSON.parse(body) as Record<string, unknown>);
+          } catch {
+            return send(400, { ok: false, error: "not JSON" });
           }
-          send();
+          if (change === null) return send(200, { ok: true });
+          const actor = req.headers["x-chalk-actor"] === "agent" ? Actor.Agent : Actor.Person;
+          const applied = applyChange(ROOT, change, actor);
+          send(applied.ok ? 200 : 409, { ...applied, comments: readComments(ROOT).comments });
+          if (applied.ok) server.ws.send({ type: "custom", event: "chalk:comments" });
         });
       });
+      // A comments file changed (by this server, or git): open previews reload their comments.
+      const isComments = (file: string) => file.endsWith(`${sep}${COMMENTS_FILE}`);
+      let timer: NodeJS.Timeout | undefined;
+      const changed = (file: string) => {
+        if (!isComments(file)) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => server.ws.send({ type: "custom", event: "chalk:comments" }), 50);
+      };
+      server.watcher.add([
+        join(ROOT, "content", "*", "*", COMMENTS_FILE),
+        join(ROOT, "library", "props", "*", COMMENTS_FILE),
+      ]);
+      for (const event of ["change", "add", "unlink"] as const) server.watcher.on(event, changed);
+    },
+  };
+}
+
+/**
+ * In development, the content rebuild runs inside the dev server (one watcher, one build/): every
+ * save under content/ rebuilds what it touched, and open previews redraw (see devContent).
+ * Whoever starts the dev server (the editor, the chalk MCP server, `pnpm dev`) gets it.
+ */
+function devRebuild(): Plugin {
+  return {
+    name: "chalk-dev-rebuild",
+    apply: "serve",
+    configureServer(server) {
+      if (process.env.VITEST || process.env.CHALK_NO_REBUILD) return;
+      const studio = join(ROOT, "platform", "studio");
+      const child = spawn(
+        join(studio, "node_modules", ".bin", "tsx"),
+        [
+          "--tsconfig",
+          "../../tsconfig.base.json",
+          "--import",
+          "./src/content/record-imports.ts",
+          "src/content/cli.ts",
+          "preview",
+        ],
+        { cwd: studio, stdio: ["ignore", "inherit", "inherit"] },
+      );
+      const stop = () => {
+        if (child.exitCode === null) child.kill();
+      };
+      server.httpServer?.on("close", stop);
+      process.on("exit", stop);
     },
   };
 }
@@ -255,6 +307,7 @@ export default defineConfig(({ mode }): UserConfig => {
     define: { __CHALK__: JSON.stringify(chalk) },
     plugins: [
       devLog(),
+      devRebuild(),
       devReview(),
       devStudio(),
       devContent(),
@@ -315,6 +368,10 @@ export default defineConfig(({ mode }): UserConfig => {
       }),
     ],
     server: {
+      // One dev server for everything (the editor, the chalk MCP tools, the browser): a fixed
+      // port, and never another one. A second start finds this one already there.
+      port: DEV_PORT,
+      strictPort: true,
       // With dev sign-in on, a phone on the same Wi-Fi can open it at this computer's address.
       host: chalk.isDevSignIn ? true : "localhost",
       fs: { allow: ["../../.."] },

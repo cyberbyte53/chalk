@@ -1,0 +1,74 @@
+# Comments, written only by the Chalk dev server (platform/studio/src/comments.ts). Don't edit by hand.
+- id: cmvmkog1eu18
+  kind: comment
+  status: closed
+  by: you
+  createdAt: 2026-10-24T15:47:31.250Z
+  board: class10-maths/polynomials/value-and-zeroes/overview/value
+  target: machine
+  prop: valueMachine
+  source: content/class10-maths/polynomials/value-and-zeroes/overview.ts:46
+  snapshot: $p(x) = x^{2} - 3x - 4$ − x = -5+ → $p(-5) = \left(-5\right)^{2} - 3 \times
+    \left(-5\right) - 4 = 36$ -2-112345-7-6-5-4-3-2-11234567 ↺
+  commit: a3ad68f663782881a5c2e57ff39289f142c57a01
+  review: 20261024-1547
+  text: can we make x steps more granuar?
+  plan:
+    by: agent
+    at: 2026-10-24T18:57:43.923Z
+    text: Default x step 0.1 (was 1), with decimals written as decimals (2.3, not 23/10); the cubic
+      board keeps 0.5.
+  thread:
+    - by: agent
+      at: 2026-10-24T18:57:43.923Z
+      text: "Done: the step is 0.1 by default, and decimals are written as decimals (p(2.3) = −5.61).
+        Halves and quarters stay as fractions, so the cubic board still shows p(½)."
+- id: cmvmkpdy7fos
+  kind: comment
+  status: closed
+  by: you
+  createdAt: 2026-10-24T15:48:15.199Z
+  board: class10-maths/polynomials/value-and-zeroes/overview/value
+  target: machine
+  prop: valueMachine
+  source: content/class10-maths/polynomials/value-and-zeroes/overview.ts:46
+  snapshot: $p(x) = x^{2} - 3x - 4$ − x = -5+ → $p(-5) = \left(-5\right)^{2} - 3 \times
+    \left(-5\right) - 4 = 36$ -2-112345-7-6-5-4-3-2-11234567 ↺
+  commit: a3ad68f663782881a5c2e57ff39289f142c57a01
+  review: 20261024-1547
+  text: also this prop is a bit bad no , the UX is not great;
+  plan:
+    by: agent
+    at: 2026-10-24T18:57:43.924Z
+    text: "Rework the input: drag a handle along the grid's x-axis (live working, dot left on release),
+      −/+ as fine nudges, drop the redundant → button."
+  thread:
+    - by: agent
+      at: 2026-10-24T18:57:43.924Z
+      text: "Done: x is a handle on the grid's x-axis. Drag it, or touch the grid anywhere, and the
+        working follows live, with a dashed line up to the curve; let go and the dot is left. − and
+        + nudge by one step, and the → button is gone."
+- id: cmvmmafyodme
+  kind: comment
+  status: closed
+  by: you
+  createdAt: 2026-10-24T16:32:37.200Z
+  board: class10-maths/polynomials/value-and-zeroes/overview/value
+  target: machine
+  prop: valueMachine
+  source: content/class10-maths/polynomials/value-and-zeroes/overview.ts:46
+  snapshot: $p(x) = x^{2} - 3x - 4$ − x = 0+ → … -2-112345-7-6-5-4-3-2-11234567 ↺
+  commit: a3ad68f663782881a5c2e57ff39289f142c57a01
+  review: 20261024-1547
+  text: can we make the x more granular and the way we are taking inputs is not great , i am not
+    feeling good about this prop ;
+  plan:
+    by: agent
+    at: 2026-10-24T18:57:43.924Z
+    text: "Both at once: 0.1 steps, and the number goes in by dragging x on the grid's axis (−/+ to
+      nudge), no → button."
+  thread:
+    - by: agent
+      at: 2026-10-24T18:57:43.924Z
+      text: "Both together: 0.1 steps, input by dragging on the x-axis with − and + to nudge, no → button.
+        Used on value, zeroes and the cubic check."

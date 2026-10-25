@@ -23,7 +23,7 @@ Arguments: the chapter (`content/<book>/<chapter>`) and the lesson's slug from `
 3. Add `art.tsx` if the plan gives the lesson a picture (`platform/docs/making-art.md`).
 4. Write the question families in the chapter's `questions/`: `family.ts` + `params.yaml`, `tests: [Concept.<This>]`, each with a witness.
 5. **Look at every board.** `render_board` with the lesson's name (`<book>/<chapter>/<slug>`, `questions: true`) shows each one as the phone draws it, with each piece's source line and any overflow. Fix what you see, then render again. Do it in Hindi once (`locale: "hi"`). Then open the lesson's preview URL with `&play` in your browser and play it through as a student: answer right and wrong, use every prop. What doesn't work is not done.
-6. The `check` tool (or `pnpm build-content`) must pass, then `pnpm check`.
+6. `pnpm build-content` must pass, then `pnpm check`.
 7. Append `runs/<YYYY-MM-DD-HHMM>-lesson-<slug>.md`: pages, props, question counts, what you fixed after looking, what is left for the person.
 
 Don't invent a prop inside a lesson, set prop state directly, reuse an `id`, or start the next lesson in the same run.

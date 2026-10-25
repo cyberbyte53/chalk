@@ -12,11 +12,20 @@ import {
 import type { ComponentType } from "preact";
 import { renderToString } from "preact-render-to-string";
 import { describe, expect, it } from "vitest";
+import {
+  LongDivisionAction,
+  type LongDivisionState,
+  layoutTex,
+  longDivision,
+  moveTex,
+} from "./long-division";
+import { LongDivisionView } from "./long-division-view";
 import { BoxMode, PolyBoxAction, polyBox } from "./poly-box";
 import { PolyBoxView } from "./poly-box-view";
 import {
   ValueMachineAction,
   type ValueMachineState,
+  machineNumber,
   valueMachine,
   workingTex,
 } from "./value-machine";
@@ -331,8 +340,89 @@ describe("valueMachine", () => {
     expect(look(machine, four.state).zeroesFound).toEqual([4]);
     expect(look(machine, four.state).value).toBe(0);
   });
+  it("writes decimals as decimals, halves and quarters as fractions", () => {
+    expect(workingTex([1, -3, -4], 2.3)).toBe(
+      "p(2.3) = \\left(2.3\\right)^{2} - 3 \\times \\left(2.3\\right) - 4 = -5.61",
+    );
+    expect(machineNumber(-3.61).text).toBe("−3.61");
+    expect(machineNumber(0.5).tex).toBe("\\frac{1}{2}");
+    expect(machineNumber(-0.25).text).toBe("−1/4");
+    expect(machineNumber(1 / 3).text).toBe("1/3");
+  });
+  it("puts in on the 0.1 step, inside the range", () => {
+    const s = valueMachine.defaults as ValueMachineState;
+    expect(run(machine, s, ValueMachineAction.Put, { x: 2.34 }).state.input).toBe(2.3);
+    expect(run(machine, s, ValueMachineAction.Put, { x: 0.1 + 0.2 }).state.tried).toEqual([0.3]);
+    expect(run(machine, s, ValueMachineAction.Put, { x: 40 }).state.input).toBe(s.max);
+  });
+  it("sliding x moves the working but leaves no dot and says nothing", () => {
+    const s = { ...(valueMachine.defaults as ValueMachineState), input: -1, tried: [-1] };
+    const moved = run(machine, s, ValueMachineAction.Move, { x: 3.96 });
+    expect(moved.state.input).toBe(4);
+    expect(moved.state.tried).toEqual([-1]);
+    expect(moved.emit).toEqual([]);
+    expect(look(machine, moved.state).value).toBe(0);
+    expect(look(machine, moved.state).zeroesFound).toEqual([-1]);
+  });
   it("every element can be found on screen", () => {
     const s = { ...(valueMachine.defaults as ValueMachineState), input: -1, tried: [2, -1] };
     expectAddressable(machine, ValueMachineView, s);
+  });
+});
+
+describe("longDivision", () => {
+  const division = asAnyProp(longDivision);
+  const start = longDivision.defaults as LongDivisionState;
+  const played = (s: LongDivisionState, moves: number) => {
+    let at = s;
+    for (let i = 0; i < moves; i++) at = run(division, at, LongDivisionAction.Next).state;
+    return at;
+  };
+  it("takes three moves per quotient term: divide, multiply, subtract", () => {
+    expect(look(division, start).stepCount).toBe(6);
+    expect(moveTex(played(start, 1))).toBe("\\frac{2x^{2}}{x} = 2x");
+    expect(moveTex(played(start, 2))).toBe("2x(x + 2) = 2x^{2} + 4x");
+    expect(moveTex(played(start, 3))).toBe(
+      "\\begin{aligned} &(2x^{2} + 3x + 1) - (2x^{2} + 4x) \\\\ &= -x + 1 \\end{aligned}",
+    );
+    expect(moveTex(played(start, 4))).toBe("\\frac{-x}{x} = -1");
+    expect(moveTex(played(start, 5))).toBe("(-1)(x + 2) = -x - 2");
+  });
+  it("ends with dividend = divisor × quotient + remainder (NCERT Example 6 and 7)", () => {
+    const done = played(start, 6);
+    expect(look(division, done).quotient).toBe("2x − 1");
+    expect(look(division, done).remainder).toBe("3");
+    expect(moveTex(done)).toContain("\\\\[6pt] &2x^{2} + 3x + 1 \\\\ &= (x + 2)(2x - 1) + 3 ");
+    const ncert = { ...start, dividend: [3, 1, 2, 5], divisor: [1, 2, 1] };
+    const end = played(ncert, 6);
+    expect(look(division, end).quotient).toBe("3x − 5");
+    expect(look(division, end).remainder).toBe("9x + 10");
+    expect(moveTex(end)).toContain("&= (x^{2} + 2x + 1)(3x - 5) + (9x + 10)");
+  });
+  it("a factor leaves 0, written in the constant's column", () => {
+    const factor = { ...start, dividend: [2, 3, -2, -9, -12], divisor: [1, 0, -3], variable: "t" };
+    const end = played(factor, look(division, factor).stepCount as number);
+    expect(look(division, end).quotient).toBe("2t² + 3t + 4");
+    expect(look(division, end).remainder).toBe("0");
+    expect(layoutTex(end).endsWith("\\hline  &  &  &  &  & 0 \\end{array}")).toBe(true);
+    expect(moveTex(end)).toContain("&= (t^{2} - 3)(2t^{2} + 3t + 4) ");
+    expect(moveTex(end)).not.toContain("+ 0");
+  });
+  it("puts each quotient term over the dividend term of the same power", () => {
+    const ncert = { ...start, dividend: [3, 1, 2, 5], divisor: [1, 2, 1] };
+    const firstRow = layoutTex(played(ncert, 1)).split("\\\\")[0];
+    expect(firstRow).toBe("\\begin{array}{r|rrrr}  &  &  & 3x &  ");
+  });
+  it("signals each move, and finishing once; stops at the end; starts again", () => {
+    const five = played(start, 5);
+    const last = run(division, five, LongDivisionAction.Next);
+    expect(last.emit.map((e) => e.signal)).toEqual(["stepped", "finished"]);
+    expect(run(division, last.state, LongDivisionAction.Next).emit).toEqual([]);
+    expect(run(division, last.state, LongDivisionAction.StartAgain).state.steps).toBe(0);
+    expect(run(division, start, LongDivisionAction.All).state.steps).toBe(6);
+  });
+  it("every element can be found on screen, from start to end", () => {
+    for (const moves of [0, 2, 6])
+      expectAddressable(division, LongDivisionView, played(start, moves));
   });
 });

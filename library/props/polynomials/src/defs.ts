@@ -1,4 +1,5 @@
 import { type AnyPropDef, asAnyProp } from "@chalk/prop";
+import { longDivision } from "./long-division";
 import { polyBox } from "./poly-box";
 import { valueMachine } from "./value-machine";
 import { zeroPlane } from "./zero-plane";
@@ -11,4 +12,5 @@ export const defs: readonly AnyPropDef[] = [
   asAnyProp(zeroPlane),
   asAnyProp(polyBox),
   asAnyProp(valueMachine),
+  asAnyProp(longDivision),
 ];

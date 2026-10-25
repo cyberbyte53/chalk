@@ -2,9 +2,8 @@ import { column, family, space, t } from "@chalk/author";
 import { Level } from "@chalk/content";
 import { choiceQuestion, parsePoly, settle } from "@chalk/patterns";
 import {
-  BoxMode,
   divisionSteps,
-  polyBoxDef,
+  longDivisionDef,
   polyTex,
   termsOf,
   termsTex,
@@ -28,8 +27,8 @@ export const isItAFactor = family({
     const r = termsTex(remainder, v);
     const ask = choiceQuestion(b, {
       prompt: t(
-        `Is $${polyTex(g, v)}$ a factor of $${polyTex(p, v)}$? Divide in the box to find out.`,
-        `क्या $${polyTex(g, v)}$, $${polyTex(p, v)}$ का गुणनखंड है? डिब्बे में भाग देकर पता करो।`,
+        `Is $${polyTex(g, v)}$ a factor of $${polyTex(p, v)}$? Divide to find out.`,
+        `क्या $${polyTex(g, v)}$, $${polyTex(p, v)}$ का गुणनखंड है? भाग देकर पता करो।`,
       ),
       options: settle(
         [
@@ -64,7 +63,7 @@ export const isItAFactor = family({
     });
     return column([
       ask,
-      b.prop(polyBoxDef, "box", { mode: BoxMode.Divide, side: g, dividend: p, variable: v }),
+      b.prop(longDivisionDef, "division", { divisor: g, dividend: p, variable: v }),
       space(),
     ]);
   },

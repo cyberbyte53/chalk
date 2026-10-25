@@ -20,6 +20,9 @@ import { type BuildResult, SOURCES_FILE, buildContent } from "./build";
 import { writeConceptModules } from "./concepts";
 import { buildInputsKey, inputsKeyFile } from "./inputs";
 
+/** In build/, rewritten at the end of every build: what a dev server watches to redraw. */
+export const BUILT_FILE = ".built";
+
 /**
  * `pnpm build-content`: builds everything content/build.yaml reaches into build/, checking it all.
  * First it brings each chapter's concepts.gen.ts in line with its build.yaml (families import it).
@@ -70,7 +73,12 @@ function write(result: BuildResult): void {
   for (const [path, json] of result.files) wanted.set(path, `${JSON.stringify(json, null, 2)}\n`);
   // Where each board was written, for the preview's "open in editor"; not part of the content.
   wanted.set(SOURCES_FILE, `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`);
-  for (const [path, text] of wanted) {
+  // Written last, every time (only changed files are written, so nothing else always changes):
+  // the dev server watches it to tell open previews to redraw.
+  wanted.set(BUILT_FILE, `${new Date().toISOString()}\n`);
+  for (const [path, text] of [...wanted].sort(
+    ([a], [b]) => Number(a === BUILT_FILE) - Number(b === BUILT_FILE),
+  )) {
     const file = join(buildDir, path);
     if (existsSync(file) && readFileSync(file, "utf8") === text) continue;
     mkdirSync(dirname(file), { recursive: true });
@@ -143,7 +151,9 @@ function watchAndRebuild(): void {
   };
   rebuild();
   watch(contentDir, { recursive: true }, (_event, file) => {
-    if (file === null || !/\.(tsx?|yaml|json)$/.test(file)) return;
+    // Comments aren't content: a new comment rebuilds nothing.
+    if (file === null || !/\.(tsx?|yaml|json)$/.test(file) || file.endsWith("comments.yaml"))
+      return;
     clearTimeout(timer);
     timer = setTimeout(() => {
       console.log(`\n↻ ${file} changed`);
@@ -151,6 +161,32 @@ function watchAndRebuild(): void {
     }, 200);
   });
   console.log(`watching ${contentDir} …`);
+}
+
+/**
+ * One build at a time: the dev server's rebuild-on-save and an agent's render_board may both start
+ * one, and two writing build/ at once would mix. The lock is a file only one process can create;
+ * a lock left by a process that died is taken over.
+ */
+async function holdBuildLock(): Promise<void> {
+  const lock = join(cacheDir, "build.lock");
+  mkdirSync(cacheDir, { recursive: true });
+  for (let waited = 0; ; waited += 200) {
+    try {
+      writeFileSync(lock, String(process.pid), { flag: "wx" });
+      process.on("exit", () => rmSync(lock, { force: true }));
+      return;
+    } catch {
+      const holder = Number(readFileSync(lock, "utf8"));
+      let isAlive = false;
+      try {
+        process.kill(holder, 0);
+        isAlive = holder !== process.pid;
+      } catch {}
+      if (!isAlive || waited > 180_000) rmSync(lock, { force: true });
+      else await new Promise((r) => setTimeout(r, 200));
+    }
+  }
 }
 
 async function publish(): Promise<void> {
@@ -180,6 +216,7 @@ async function publish(): Promise<void> {
 }
 
 if (command === Command.Build) {
+  await holdBuildLock();
   for (const file of writeConceptModules(contentDir)) console.log(`  · generated ${file}`);
   // Taken before building: an edit made while the build runs must not count as built.
   const inputs = buildInputsKey(root);

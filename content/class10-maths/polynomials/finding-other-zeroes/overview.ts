@@ -2,11 +2,10 @@ import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
 import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import { QuestionSignal } from "@chalk/prop";
 import {
-  BoxMode,
+  LongDivisionAction,
+  LongDivisionSignal,
   PlaneForm,
-  PolyBoxAction,
-  PolyBoxSignal,
-  polyBoxDef,
+  longDivisionDef,
   zeroPlaneDef,
 } from "@chalk/prop-polynomials";
 
@@ -20,19 +19,14 @@ const oneKnown = page(
     b.purpose(
       "Why a known zero k makes x − k divide exactly: p(x) = (x − k)q(x) + r with r a number, and putting x = k gives r = p(k) = 0. Divide x³ − 3x² − x + 3 by x − 1 and factorise the quotient: zeroes 1, −1 and 3.",
     );
-    const box = b.prop(polyBoxDef, "box", {
-      mode: BoxMode.Divide,
+    const division = b.prop(longDivisionDef, "division", {
       dividend: [1, -3, -1, 3],
-      side: [1, -1],
+      divisor: [1, -1],
       steps: 0,
     });
-    b.standsFor(box, "the box dividing x³ − 3x² − x + 3 by x − 1");
-    b.studentOnly(box.action(PolyBoxAction.Next));
-    b.witness(
-      box.learner(PolyBoxAction.Next),
-      box.learner(PolyBoxAction.Next),
-      box.learner(PolyBoxAction.Next),
-    );
+    b.standsFor(division, "the long division of x³ − 3x² − x + 3 by x − 1");
+    b.studentOnly(division.action(LongDivisionAction.Next));
+    b.witness(...Array.from({ length: 9 }, () => division.learner(LongDivisionAction.Next)));
     const quotient = w.body(
       t(
         r`The remainder comes out 0: $$x^3 - 3x^2 - x + 3 = (x - 1)(x^2 - 2x - 3)$$`,
@@ -66,7 +60,10 @@ const oneKnown = page(
       "all",
       { isHidden: true },
     );
-    b.when(box.on(PolyBoxSignal.Finished), [theBoard.show(quotient), theBoard.show(rest)]);
+    b.when(division.on(LongDivisionSignal.Finished), [
+      theBoard.show(quotient),
+      theBoard.show(rest),
+    ]);
     b.when(rest.on(QuestionSignal.Correct), theBoard.show(all));
     return column([
       w.title(t("One zero, then the rest", "एक शून्यक, फिर बाक़ी")),
@@ -82,8 +79,8 @@ const oneKnown = page(
           r`शून्यक से गुणनखंड मिलता है। क्यों, देखो। $x - 1$ से भाग दो: $$p(x) = (x - 1)\,q(x) + r$$ शेषफल $r$ बस एक संख्या है, क्योंकि उसकी घात 1 से कम होनी चाहिए। अब $x = 1$ रखो: $$p(1) = 0 \times q(1) + r$$ $p(1) = 0$, तो $r = 0$। **यदि $k$ शून्यक है, तो $x - k$ ठीक-ठीक भाग देता है।**`,
         ),
       ),
-      w.body(t("Divide in the box: tap → for each step.", "डिब्बे में भाग दो: हर क़दम के लिए → दबाओ।")),
-      box,
+      w.body(t("Divide: tap → for each move.", "भाग दो: हर क़दम के लिए → दबाओ।")),
+      division,
       quotient,
       rest,
       all,
@@ -122,17 +119,36 @@ const twoKnown = page("two-known", (b) => {
   ]);
 });
 
-/** Ex 2.3 Q2: remainder 0 means a factor. */
+/** Ex 2.3 Q2: remainder 0 means a factor, with the long division to tap through. */
 const isFactor = page("is-it-a-factor", (b) => {
   const w = wordsOn(b);
+  const division = b.prop(longDivisionDef, "division", {
+    dividend: [2, 3, -2, -9, -12],
+    divisor: [1, 0, -3],
+    variable: "t",
+    steps: 0,
+  });
+  b.standsFor(division, "the long division of 2t⁴ + 3t³ − 2t² − 9t − 12 by t² − 3");
+  b.studentOnly(division.action(LongDivisionAction.Next));
+  const yes = w.body(
+    t(
+      r`The remainder is 0, so yes: $t^2 - 3$ is a factor.`,
+      r`शेषफल 0 है, तो हाँ: $t^2 - 3$ एक गुणनखंड है।`,
+    ),
+    "yes",
+    { isHidden: true },
+  );
+  b.when(division.on(LongDivisionSignal.Finished), theBoard.show(yes));
   return column([
     w.title(t("Is it a factor?", "क्या यह गुणनखंड है?")),
     w.body(
       t(
-        r`To check whether one polynomial is a factor of another, divide. Remainder 0 means yes. Is $t^2 - 3$ a factor of $2t^4 + 3t^3 - 2t^2 - 9t - 12$? Divide, one step at a time: $$\begin{aligned} \tfrac{2t^4}{t^2} = 2t^2 &: \quad \text{left } 3t^3 + 4t^2 - 9t - 12 \\ \tfrac{3t^3}{t^2} = 3t &: \quad \text{left } 4t^2 - 12 \\ \tfrac{4t^2}{t^2} = 4 &: \quad \text{left } 0 \end{aligned}$$ So $$\begin{aligned} &2t^4 + 3t^3 - 2t^2 - 9t - 12 \\ &= (t^2 - 3)(2t^2 + 3t + 4) + 0 \end{aligned}$$ The remainder is 0, so yes.`,
-        r`कोई बहुपद दूसरे का गुणनखंड है या नहीं, यह जाँचने के लिए भाग दो। शेषफल 0 का अर्थ है हाँ। क्या $t^2 - 3$, $2t^4 + 3t^3 - 2t^2 - 9t - 12$ का गुणनखंड है? एक-एक क़दम भाग दो: $$\begin{aligned} \tfrac{2t^4}{t^2} = 2t^2 &: \quad \text{बचा } 3t^3 + 4t^2 - 9t - 12 \\ \tfrac{3t^3}{t^2} = 3t &: \quad \text{बचा } 4t^2 - 12 \\ \tfrac{4t^2}{t^2} = 4 &: \quad \text{बचा } 0 \end{aligned}$$ तो $$\begin{aligned} &2t^4 + 3t^3 - 2t^2 - 9t - 12 \\ &= (t^2 - 3)(2t^2 + 3t + 4) + 0 \end{aligned}$$ शेषफल 0 है, तो हाँ।`,
+        r`To check whether one polynomial is a factor of another, divide. Remainder 0 means yes. Is $t^2 - 3$ a factor of $2t^4 + 3t^3 - 2t^2 - 9t - 12$?`,
+        r`कोई बहुपद दूसरे का गुणनखंड है या नहीं, यह जाँचने के लिए भाग दो। शेषफल 0 का अर्थ है हाँ। क्या $t^2 - 3$, $2t^4 + 3t^3 - 2t^2 - 9t - 12$ का गुणनखंड है?`,
       ),
     ),
+    division,
+    yes,
     space(),
   ]);
 });

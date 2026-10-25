@@ -42,21 +42,38 @@ import { courses } from "./lessons";
 type Sources = Record<string, { board?: string; pieces: Record<string, string> }>;
 type Shown = { path: string; board: Board };
 
-/** A comment on a board, as the comment files hold it (platform/docs/comments.md). */
+/** A comment, as the dev server gives it (platform/studio/src/comments.ts). */
 type Thread = {
   id: string;
-  status: string;
+  kind: "comment" | "finding" | "regression";
+  status: "open" | "planned" | "ready" | "closed" | "withdrawn";
+  by: string;
   text: string;
-  on?: string;
-  piece?: string;
-  /** A comment on a prop (filed with it): shown under every board that places it. */
+  /** The board, by build path. */
+  board?: string;
+  /** What on it: "machine" or "machine › put". */
+  target?: string;
+  /** A comment on a prop wherever it is used: shown under every board that places it. */
   prop?: string;
-  part?: string;
-  proposal?: { summary?: string };
+  snapshot?: string;
   review?: string;
-  file?: string;
-  thread: { by: string; at?: string; text: string }[];
+  causedBy?: string;
+  from?: string;
+  plan?: { by: string; at: string; text: string };
+  changed?: string[];
+  thread: { by: string; at: string; text: string }[];
 };
+
+/** Sends one change to the dev server (the comments' one writer); the comments after it, or why not. */
+async function changeComments(change: Record<string, unknown>): Promise<Thread[] | string> {
+  const res = await fetch("/dev-review", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(change),
+  });
+  const body = (await res.json()) as { ok: boolean; error?: string; comments?: Thread[] };
+  return body.ok ? (body.comments ?? []) : (body.error ?? `${res.status}`);
+}
 
 const url = (path: string) => `${CONTENT_ROUTE}${path}?t=${Date.now()}`;
 async function json(path: string): Promise<unknown> {
@@ -167,13 +184,17 @@ function openInEditor(site: string): void {
 }
 
 /** Where a comment stands, in words: waiting for the agent, planned, done. */
-const STATUS_WORDS: Record<string, string> = {
+const STATUS_WORDS: Record<Thread["status"], string> = {
   open: "waiting",
-  proposed: "planned",
-  approved: "approved",
-  done: "done",
-  declined: "dropped",
+  planned: "planned",
+  ready: "ready for you",
+  closed: "closed",
+  withdrawn: "withdrawn",
 };
+
+/** Whether the agent has acted on it: then it can only be withdrawn, not deleted. */
+const isTouched = (t: Thread) =>
+  t.status !== "open" || t.plan !== undefined || t.thread.some((e) => e.by !== "you");
 
 /**
  * The board's comments under it, newest first, each with its whole thread: what was said, what the
@@ -190,22 +211,25 @@ function BoardThreads({
   phone: { current: HTMLDivElement | null };
 }): JSX.Element {
   const list = useRef<HTMLUListElement>(null);
-  const open = threads.filter((t) => t.status !== "done" && t.status !== "declined");
-  const closed = threads.filter((t) => !open.includes(t));
+  const isDone = (t: Thread) => t.status === "closed" || t.status === "withdrawn";
+  const open = threads.filter((t) => !isDone(t));
+  const closed = threads.filter(isDone);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
+  const [problem, setProblem] = useState<string | null>(null);
+  const act = async (change: Record<string, unknown>) => {
+    const after = await changeComments(change);
+    if (typeof after === "string") {
+      setProblem(after);
+      return false;
+    }
+    setProblem(null);
+    onChange(after);
+    return true;
+  };
   const send = async (t: Thread) => {
     const text = draft.trim();
-    if (text === "") return;
-    const res = await fetch("/dev-review", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ op: "reply", id: t.id, text }),
-    });
-    if (!res.ok) return;
-    onChange((await res.json()) as Thread[]);
-    // The editor adds it to this sitting's review, so `a` hands it to the agent again.
-    toEditor({ type: "replied", file: t.file });
+    if (text === "" || !(await act({ op: "reply", id: t.id, text }))) return;
     setDraft("");
     setReplyingTo(null);
   };
@@ -213,6 +237,8 @@ function BoardThreads({
     const el = phone.current === null ? null : anchorOf(phone.current, t);
     el?.classList.toggle("is-revealed", on);
   };
+  const isDetached = (t: Thread) =>
+    t.target !== undefined && phone.current !== null && anchorOf(phone.current, t) === null;
   const one = (t: Thread) => (
     <li
       key={t.id}
@@ -223,20 +249,28 @@ function BoardThreads({
     >
       <div>
         <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
+        {t.kind !== "comment" && <span class={`preview-kind is-${t.kind}`}>{t.kind}</span>}
         {t.prop !== undefined ? (
-          <span class="preview-piece is-prop">{`prop ${t.prop}${t.part ? ` › ${t.part}` : ""}`}</span>
+          <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes("›") ? ` › ${t.target.split("›").at(-1)?.trim()}` : ""}`}</span>
         ) : (
-          t.piece && <span class="preview-piece">{t.piece}</span>
+          t.target && <span class="preview-piece">{t.target}</span>
         )}
+        {t.from === "chat" && <span class="preview-piece">from chat</span>}
         {t.text}
       </div>
-      {t.proposal?.summary && <div class="preview-plan">Plan: {t.proposal.summary}</div>}
+      {isDetached(t) && (
+        <div class="preview-detached">{`Not on this board any more. It said: ${t.snapshot ?? "?"}`}</div>
+      )}
+      {t.plan && <div class="preview-plan">Plan: {t.plan.text}</div>}
       {t.thread.map((entry) => (
         <div
           class="preview-reply"
           key={`${entry.at}·${entry.by}·${entry.text.slice(0, 40)}`}
         >{`${entry.by}: ${entry.text}`}</div>
       ))}
+      {t.changed && t.changed.length > 0 && (
+        <div class="preview-changed">{`Changed: ${t.changed.join(", ")}`}</div>
+      )}
       {replyingTo === t.id ? (
         <form
           class="preview-reply-form"
@@ -247,7 +281,7 @@ function BoardThreads({
         >
           <textarea
             value={draft}
-            placeholder="Add to this comment…"
+            placeholder={isDone(t) ? "Reopen it with…" : "Add to this comment…"}
             ref={(el) => el?.focus()}
             onInput={(e) => setDraft((e.target as HTMLTextAreaElement).value)}
             onKeyDown={(e) => {
@@ -267,17 +301,34 @@ function BoardThreads({
           </div>
         </form>
       ) : (
-        <button
-          type="button"
-          class="preview-reply-open"
-          onClick={() => {
-            setDraft("");
-            setReplyingTo(t.id);
-          }}
-        >
-          Reply
-        </button>
+        <div class="preview-actions">
+          <button
+            type="button"
+            onClick={() => {
+              setDraft("");
+              setReplyingTo(t.id);
+            }}
+          >
+            Reply
+          </button>
+          {!isDone(t) && (
+            <button type="button" onClick={() => void act({ op: "close", id: t.id })}>
+              Close
+            </button>
+          )}
+          {!isDone(t) &&
+            (isTouched(t) ? (
+              <button type="button" onClick={() => void act({ op: "withdraw", id: t.id })}>
+                Withdraw
+              </button>
+            ) : (
+              <button type="button" onClick={() => void act({ op: "delete", id: t.id })}>
+                Delete
+              </button>
+            ))}
+        </div>
       )}
+      {problem !== null && replyingTo !== t.id && <div class="preview-problem">{problem}</div>}
     </li>
   );
   // Beside the board, each level with what it is about (its piece, its prop's part), pushed
@@ -339,10 +390,11 @@ function BoardThreads({
  * prop comment, that prop where this board places it); null for a comment on the whole board.
  */
 function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
-  const named =
-    t.piece === undefined
-      ? null
-      : phone.querySelector<HTMLElement>(`[data-piece="${CSS.escape(t.piece)}"]`);
+  const [pieceName, ...rest] = (t.target ?? "").split("›").map((x) => x.trim());
+  const partName = rest.at(-1);
+  const named = pieceName
+    ? phone.querySelector<HTMLElement>(`[data-piece="${CSS.escape(pieceName)}"]`)
+    : null;
   const piece =
     t.prop === undefined
       ? named
@@ -351,9 +403,9 @@ function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
         : phone.querySelector<HTMLElement>(`.prop-${CSS.escape(t.prop)}`);
   if (piece === null || piece === undefined) return null;
   const part =
-    t.part === undefined
+    partName === undefined
       ? null
-      : piece.querySelector<HTMLElement>(`[data-part="${CSS.escape(t.part)}"]`);
+      : piece.querySelector<HTMLElement>(`[data-part="${CSS.escape(partName)}"]`);
   return part ?? piece;
 }
 
@@ -563,7 +615,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
 function threadsOn(threads: readonly Thread[], shown: Shown): Thread[] {
   const path = shown.path.replace(/\.json$/, "");
   const props = propTypes(shown.board.root, new Set());
-  return threads.filter((t) => (t.prop !== undefined ? props.has(t.prop) : t.on === path));
+  return threads.filter((t) => (t.prop !== undefined ? props.has(t.prop) : t.board === path));
 }
 
 /** The package (folder under library/props) each prop type comes from. */
@@ -587,7 +639,7 @@ type PickTarget = {
  * What a click can pick at a point, finest first: each part of a prop under the pointer (a
  * slider, a stepper, one bar; inner before outer), the piece, the whole board. The click takes the
  * finest; ↑ widens it, ↓ narrows it again. A comment on a prop or its part is about the prop,
- * filed with it (library/props/<package>/.comments/) and shown wherever it is used; the basics
+ * filed with it (library/props/<package>/comments.yaml) and shown wherever it is used; the basics
  * (words, choices, buttons) are the lesson's own, so those stay with the board.
  */
 function picksAt(target: HTMLElement): PickTarget[] {
@@ -860,10 +912,12 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       if (m?.chalk === true && m.type === "comments") load();
     };
     window.addEventListener("message", onMessage);
-    const timer = window.setInterval(load, 15000);
+    // The dev server says the moment a comments file changes (an agent's reply, a new comment).
+    const hot = import.meta.hot;
+    hot?.on("chalk:comments", load);
     return () => {
       window.removeEventListener("message", onMessage);
-      window.clearInterval(timer);
+      hot?.off?.("chalk:comments", load);
     };
   }, []);
   const [zoom, setZoomState] = useState(keptZoom);

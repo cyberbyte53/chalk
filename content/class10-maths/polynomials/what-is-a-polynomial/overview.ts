@@ -232,8 +232,8 @@ const names = page(
       w.title(t("Linear, quadratic, cubic", "रैखिक, द्विघात, त्रिघात")),
       w.body(
         t(
-          r`Polynomials of degree 1, 2 and 3 have names: $$\begin{array}{lll} \text{degree } 1 & \textbf{linear} & 2x - 3, \; \sqrt{3}\,x + 5 \\ \text{degree } 2 & \textbf{quadratic} & 2x^2 + 3x - \tfrac{2}{5}, \; y^2 - 2 \\ \text{degree } 3 & \textbf{cubic} & 4x^3, \; 2 - x + x^3 \end{array}$$`,
-          r`घात 1, 2 और 3 वाले बहुपदों के नाम हैं: $$\begin{array}{lll} \text{घात } 1 & \textbf{रैखिक} & 2x - 3, \; \sqrt{3}\,x + 5 \\ \text{घात } 2 & \textbf{द्विघात} & 2x^2 + 3x - \tfrac{2}{5}, \; y^2 - 2 \\ \text{घात } 3 & \textbf{त्रिघात} & 4x^3, \; 2 - x + x^3 \end{array}$$`,
+          r`Polynomials of degree 1, 2 and 3 have names: $$\begin{array}{cll} \text{degree} & \text{name} & \text{for example} \\ \hline 1 & \textbf{linear} & 2x - 3, \; \sqrt{3}\,x + 5 \\ 2 & \textbf{quadratic} & 2x^2 + 3x - \tfrac{2}{5}, \; y^2 \\ 3 & \textbf{cubic} & 4x^3, \; 2 - x + x^3 \end{array}$$`,
+          r`घात 1, 2 और 3 वाले बहुपदों के नाम हैं: $$\begin{array}{cll} \text{घात} & \text{नाम} & \text{उदाहरण} \\ \hline 1 & \textbf{रैखिक} & 2x - 3, \; \sqrt{3}\,x + 5 \\ 2 & \textbf{द्विघात} & 2x^2 + 3x - \tfrac{2}{5}, \; y^2 \\ 3 & \textbf{त्रिघात} & 4x^3, \; 2 - x + x^3 \end{array}$$`,
         ),
       ),
       forms,

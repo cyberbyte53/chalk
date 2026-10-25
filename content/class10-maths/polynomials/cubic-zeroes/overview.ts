@@ -1,7 +1,6 @@
 import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
 import { choiceQuestion, wordsOn } from "@chalk/patterns";
-import { QuestionSignal } from "@chalk/prop";
-import { ValueMachineAction, valueMachineDef } from "@chalk/prop-polynomials";
+import { ValueMachineAction, ValueMachineSignal, valueMachineDef } from "@chalk/prop-polynomials";
 
 const r = String.raw;
 
@@ -11,7 +10,7 @@ const check = page(
   (b) => {
     const w = wordsOn(b);
     b.purpose(
-      "Check claimed zeroes by putting them in: p(4) = p(−2) = p(½) = 0, ½ worked through with (½)³ = 1/8. A cubic has at most three zeroes, so these are all of them.",
+      "Check claimed zeroes by putting them in: p(4) = p(−2) = p(½) = 0; once ½ is in, its working is written out. A cubic has at most three zeroes, so these are all of them.",
     );
     const machine = b.prop(valueMachineDef, "machine", {
       coefficients: [2, -5, -14, 8],
@@ -24,42 +23,21 @@ const check = page(
     });
     b.standsFor(machine, "the value machine for p(x) = 2x³ − 5x² − 14x + 8, in steps of ½");
     b.studentOnly(machine.action(ValueMachineAction.Put));
-    const cube = choiceQuestion(b, {
-      name: "cube",
-      prompt: t(
-        r`For $\frac{1}{2}$ you need $\left(\frac{1}{2}\right)^3$. What is it?`,
-        r`$\frac{1}{2}$ के लिए $\left(\frac{1}{2}\right)^3$ चाहिए। यह क्या है?`,
-      ),
-      options: [
-        { id: "right", label: t(r`$\frac{1}{8}$`, r`$\frac{1}{8}$`) },
-        {
-          id: "times",
-          label: t(r`$\frac{3}{2}$`, r`$\frac{3}{2}$`),
-          feedback: t(
-            r`Cubing means $\frac{1}{2} \times \frac{1}{2} \times \frac{1}{2}$, not $3 \times \frac{1}{2}$.`,
-            r`घन का अर्थ $\frac{1}{2} \times \frac{1}{2} \times \frac{1}{2}$, न कि $3 \times \frac{1}{2}$।`,
-          ),
-        },
-        {
-          id: "six",
-          label: t(r`$\frac{1}{6}$`, r`$\frac{1}{6}$`),
-          feedback: t(
-            r`Multiply the bottoms: $2 \times 2 \times 2 = 8$.`,
-            r`नीचे वाले गुणा करो: $2 \times 2 \times 2 = 8$।`,
-          ),
-        },
-      ],
-      answer: "right",
-    });
+    b.studentOnly(machine.action(ValueMachineAction.Move));
+    b.witness(machine.learner(ValueMachineAction.Put, { x: 0.5 }));
     const half = w.body(
       t(
-        r`$$\begin{aligned} p\left(\tfrac{1}{2}\right) &= 2 \times \tfrac{1}{8} - 5 \times \tfrac{1}{4} - 14 \times \tfrac{1}{2} + 8 \\ &= \tfrac{1}{4} - \tfrac{5}{4} - 7 + 8 \\ &= 0 \end{aligned}$$ All three give 0. A cubic has at most three zeroes, so 4, $-2$ and $\frac{1}{2}$ are all of them.`,
-        r`$$\begin{aligned} p\left(\tfrac{1}{2}\right) &= 2 \times \tfrac{1}{8} - 5 \times \tfrac{1}{4} - 14 \times \tfrac{1}{2} + 8 \\ &= \tfrac{1}{4} - \tfrac{5}{4} - 7 + 8 \\ &= 0 \end{aligned}$$ तीनों से 0 मिलता है। त्रिघात बहुपद के अधिकतम तीन शून्यक होते हैं, तो 4, $-2$ और $\frac{1}{2}$ ही सब हैं।`,
+        r`$$\begin{aligned} p\left(\tfrac{1}{2}\right) &= 2 \times \tfrac{1}{8} - 5 \times \tfrac{1}{4} - 14 \times \tfrac{1}{2} + 8 \\ &= \tfrac{1}{4} - \tfrac{5}{4} - 7 + 8 \\ &= 0 \end{aligned}$$ 4 and $-2$ give 0 too: all three are zeroes. A cubic has at most three zeroes, so 4, $-2$ and $\frac{1}{2}$ are all of them.`,
+        r`$$\begin{aligned} p\left(\tfrac{1}{2}\right) &= 2 \times \tfrac{1}{8} - 5 \times \tfrac{1}{4} - 14 \times \tfrac{1}{2} + 8 \\ &= \tfrac{1}{4} - \tfrac{5}{4} - 7 + 8 \\ &= 0 \end{aligned}$$ 4 और $-2$ से भी 0 मिलता है: तीनों शून्यक हैं। त्रिघात बहुपद के अधिकतम तीन शून्यक होते हैं, तो 4, $-2$ और $\frac{1}{2}$ ही सब हैं।`,
       ),
       "half",
       { isHidden: true },
     );
-    b.when(cube.on(QuestionSignal.Correct), theBoard.show(half));
+    b.when(
+      machine.on(ValueMachineSignal.FoundZero),
+      [theBoard.show(half), theBoard.pass()],
+      machine.field("input").eq(0.5),
+    );
     return column([
       w.title(t("Checking the zeroes", "शून्यकों की जाँच")),
       w.body(
@@ -69,7 +47,6 @@ const check = page(
         ),
       ),
       machine,
-      cube,
       half,
       space(),
     ]);
@@ -77,33 +54,42 @@ const check = page(
   { passOn: PassOn.Rules },
 );
 
-/** Three zeroes, three relations: with the numbers first, then why (one more factor), then the rule. */
+/**
+ * Three zeroes, three relations: the cubic ax³ + bx² + cx + d written as a(x − α)(x − β)(x − γ),
+ * multiplied out, the coefficients compared; then the numbers from the last page as a check.
+ */
 const relations = page("relations", (b) => {
   const w = wordsOn(b);
   return column([
     w.title(t("Three zeroes, three relations", "तीन शून्यक, तीन संबंध")),
     w.body(
       t(
-        r`With two zeroes we had a sum and a product. With three zeroes there's one more: the **sum of pairs**. Take every pair of zeroes, multiply each pair, and add. Three zeroes make three pairs.`,
-        r`दो शून्यकों के साथ एक योग और एक गुणनफल था। तीन शून्यकों के साथ एक और है: **जोड़ों का योग**। शून्यकों का हर जोड़ा लो, हर जोड़े को गुणा करो, और जोड़ दो। तीन शून्यकों से तीन जोड़े बनते हैं।`,
+        r`Take a cubic $$p(x) = ax^3 + bx^2 + cx + d, \quad a \neq 0$$ and call its zeroes $\alpha$, $\beta$ and $\gamma$ (alpha, beta, gamma). Each zero gives a factor, so $$p(x) = a(x - \alpha)(x - \beta)(x - \gamma)$$`,
+        r`एक त्रिघात बहुपद लो $$p(x) = ax^3 + bx^2 + cx + d, \quad a \neq 0$$ और इसके शून्यकों को $\alpha$, $\beta$ और $\gamma$ (ऐल्फ़ा, बीटा, गामा) कहो। हर शून्यक से एक गुणनखंड मिलता है, तो $$p(x) = a(x - \alpha)(x - \beta)(x - \gamma)$$`,
       ),
     ),
     w.body(
       t(
-        r`First with the numbers, against $a = 2$, $b = -5$, $c = -14$, $d = 8$: $$\begin{aligned} \text{sum: } & 4 + (-2) + \tfrac{1}{2} = \tfrac{5}{2} = -\tfrac{b}{a} \\ \text{pairs: } & 4(-2) + (-2)\tfrac{1}{2} + \tfrac{1}{2}(4) = -7 = \tfrac{c}{a} \\ \text{product: } & 4 \times (-2) \times \tfrac{1}{2} = -4 = -\tfrac{d}{a} \end{aligned}$$`,
-        r`पहले संख्याओं से, $a = 2$, $b = -5$, $c = -14$, $d = 8$ के सामने: $$\begin{aligned} \text{योग: } & 4 + (-2) + \tfrac{1}{2} = \tfrac{5}{2} = -\tfrac{b}{a} \\ \text{जोड़े: } & 4(-2) + (-2)\tfrac{1}{2} + \tfrac{1}{2}(4) = -7 = \tfrac{c}{a} \\ \text{गुणनफल: } & 4 \times (-2) \times \tfrac{1}{2} = -4 = -\tfrac{d}{a} \end{aligned}$$`,
+        r`Multiply out the brackets. The first two you know from *Zeroes and coefficients*: $$\begin{aligned} &(x - \alpha)(x - \beta)(x - \gamma) \\ &= \big(x^2 - (\alpha + \beta)x + \alpha\beta\big)(x - \gamma) \\ &= x^3 - (\alpha + \beta)x^2 + \alpha\beta\,x \\ &\quad - \gamma x^2 + (\alpha + \beta)\gamma\,x - \alpha\beta\gamma \\ &= x^3 - (\alpha + \beta + \gamma)x^2 \\ &\quad + (\alpha\beta + \beta\gamma + \gamma\alpha)x - \alpha\beta\gamma \end{aligned}$$`,
+        r`कोष्ठक खोलो। पहले दो *शून्यक और गुणांक* से पता हैं: $$\begin{aligned} &(x - \alpha)(x - \beta)(x - \gamma) \\ &= \big(x^2 - (\alpha + \beta)x + \alpha\beta\big)(x - \gamma) \\ &= x^3 - (\alpha + \beta)x^2 + \alpha\beta\,x \\ &\quad - \gamma x^2 + (\alpha + \beta)\gamma\,x - \alpha\beta\gamma \\ &= x^3 - (\alpha + \beta + \gamma)x^2 \\ &\quad + (\alpha\beta + \beta\gamma + \gamma\alpha)x - \alpha\beta\gamma \end{aligned}$$`,
       ),
     ),
     w.body(
       t(
-        r`**Why.** From *Zeroes and coefficients*: $$(x - \alpha)(x - \beta) = x^2 - (\alpha + \beta)x + \alpha\beta$$ Call the third zero $\gamma$ (gamma), and multiply by one more factor, $(x - \gamma)$. Multiply the bracket first by $x$, then by $-\gamma$: $$\begin{aligned} &(x - \alpha)(x - \beta)(x - \gamma) \\ &= x\,\big(x^2 - (\alpha+\beta)x + \alpha\beta\big) - \gamma\,\big(x^2 - (\alpha+\beta)x + \alpha\beta\big) \\ &= x^3 - (\alpha+\beta)x^2 + \alpha\beta\,x - \gamma x^2 + (\alpha+\beta)\gamma\,x - \alpha\beta\gamma \end{aligned}$$ Now collect the $x^2$ terms and the $x$ terms: $(\alpha+\beta)\gamma = \beta\gamma + \gamma\alpha$, so $$\begin{aligned} &= x^3 - (\alpha + \beta + \gamma)x^2 \\ &\quad + (\alpha\beta + \beta\gamma + \gamma\alpha)x - \alpha\beta\gamma \end{aligned}$$`,
-        r`**क्यों।** *शून्यक और गुणांक* से: $$(x - \alpha)(x - \beta) = x^2 - (\alpha + \beta)x + \alpha\beta$$ तीसरे शून्यक को $\gamma$ (गामा) कहो, और एक और गुणनखंड $(x - \gamma)$ से गुणा करो। कोष्ठक को पहले $x$ से, फिर $-\gamma$ से गुणा करो: $$\begin{aligned} &(x - \alpha)(x - \beta)(x - \gamma) \\ &= x\,\big(x^2 - (\alpha+\beta)x + \alpha\beta\big) - \gamma\,\big(x^2 - (\alpha+\beta)x + \alpha\beta\big) \\ &= x^3 - (\alpha+\beta)x^2 + \alpha\beta\,x - \gamma x^2 + (\alpha+\beta)\gamma\,x - \alpha\beta\gamma \end{aligned}$$ अब $x^2$ वाले और $x$ वाले पद इकट्ठे करो: $(\alpha+\beta)\gamma = \beta\gamma + \gamma\alpha$, तो $$\begin{aligned} &= x^3 - (\alpha + \beta + \gamma)x^2 \\ &\quad + (\alpha\beta + \beta\gamma + \gamma\alpha)x - \alpha\beta\gamma \end{aligned}$$`,
+        r`Times $a$, this is $ax^3 + bx^2 + cx + d$. Compare the two, term by term: $$\begin{array}{ll} x^2\text{:} & b = -a(\alpha + \beta + \gamma) \\ x\text{:} & c = a(\alpha\beta + \beta\gamma + \gamma\alpha) \\ \text{number:} & d = -a\,\alpha\beta\gamma \end{array}$$ Divide each by $a$:`,
+        r`$a$ से गुणा करने पर यह $ax^3 + bx^2 + cx + d$ है। दोनों को पद-पद मिलाओ: $$\begin{array}{ll} x^2\text{:} & b = -a(\alpha + \beta + \gamma) \\ x\text{:} & c = a(\alpha\beta + \beta\gamma + \gamma\alpha) \\ \text{अचर:} & d = -a\,\alpha\beta\gamma \end{array}$$ हर एक को $a$ से भाग दो:`,
       ),
     ),
     w.definition(
       t(
         r`**For a cubic.** If $\alpha$, $\beta$ and $\gamma$ are the zeroes of $ax^3 + bx^2 + cx + d$, then $$\begin{aligned} \alpha + \beta + \gamma &= -\tfrac{b}{a} \\ \alpha\beta + \beta\gamma + \gamma\alpha &= \tfrac{c}{a} \\ \alpha\beta\gamma &= -\tfrac{d}{a} \end{aligned}$$`,
         r`**त्रिघात के लिए।** यदि $\alpha$, $\beta$ और $\gamma$, $ax^3 + bx^2 + cx + d$ के शून्यक हैं, तो $$\begin{aligned} \alpha + \beta + \gamma &= -\tfrac{b}{a} \\ \alpha\beta + \beta\gamma + \gamma\alpha &= \tfrac{c}{a} \\ \alpha\beta\gamma &= -\tfrac{d}{a} \end{aligned}$$`,
+      ),
+    ),
+    w.body(
+      t(
+        r`Check it on the last page's cubic, $2x^3 - 5x^2 - 14x + 8$, with zeroes $4$, $-2$ and $\tfrac{1}{2}$. Here $a = 2$, $b = -5$, $c = -14$, $d = 8$: $$\begin{aligned} 4 + (-2) + \tfrac{1}{2} &= \tfrac{5}{2} = -\tfrac{-5}{2} \\ 4(-2) + (-2)\tfrac{1}{2} + \tfrac{1}{2}(4) &= -7 = \tfrac{-14}{2} \\ 4 \times (-2) \times \tfrac{1}{2} &= -4 = -\tfrac{8}{2} \end{aligned}$$`,
+        r`पिछले पेज के त्रिघात $2x^3 - 5x^2 - 14x + 8$ पर जाँचो, जिसके शून्यक $4$, $-2$ और $\tfrac{1}{2}$ हैं। यहाँ $a = 2$, $b = -5$, $c = -14$, $d = 8$: $$\begin{aligned} 4 + (-2) + \tfrac{1}{2} &= \tfrac{5}{2} = -\tfrac{-5}{2} \\ 4(-2) + (-2)\tfrac{1}{2} + \tfrac{1}{2}(4) &= -7 = \tfrac{-14}{2} \\ 4 \times (-2) \times \tfrac{1}{2} &= -4 = -\tfrac{8}{2} \end{aligned}$$`,
       ),
     ),
     space(),

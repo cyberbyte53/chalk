@@ -1,26 +1,20 @@
-import { execFileSync, spawn } from "node:child_process";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { spawn } from "node:child_process";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { boardName, listBoards, readSources } from "../boards";
-import {
-  type Comment,
-  CommentStatus,
-  chapterOf,
-  listComments,
-  newCommentId,
-  writeComment,
-} from "../comments";
+import { type Filed, Kind, Status, latestReview, unanswered } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
-import { closeBrowser, previewUrl, shoot } from "./preview";
+import { closeBrowser, previewBase, previewUrl, shoot } from "./preview";
 import { type Content, type Extra, createServer, progressOf, result, serveStdio } from "./protocol";
 
 /**
  * `chalk` MCP server: what an agent in any harness (Cursor, VS Code, Claude Code, Codex…) needs to
- * work on Chalk content that a file editor doesn't give it — eyes on the rendered board, the
- * comments files, the prop library, and the checks. Start: platform/studio/node_modules/.bin/tsx
+ * work on Chalk content that a file editor doesn't give it: eyes and hands on the real board,
+ * what a change reaches, and the comments (read and answered through the dev server, their one
+ * writer, which enforces their lifecycle). Start: platform/studio/node_modules/.bin/tsx
  * platform/studio/src/mcp/server.ts (the repo's .cursor/mcp.json, .vscode/mcp.json and .mcp.json
  * do this). Every tool reads the repo as it is on disk; boards come from build/.
  */
@@ -81,44 +75,38 @@ const buildContent = (signal?: AbortSignal) =>
     { cwd: studio, signal },
   );
 
-/** Files changed in content/ since the last commit (edited, added, untracked). */
-function changedFiles(): Set<string> {
-  const git = (...args: string[]) =>
-    execFileSync("git", args, { cwd: root, encoding: "utf8" }).split("\n").filter(Boolean);
-  try {
-    return new Set([
-      ...git("diff", "--name-only", "HEAD", "--", "content"),
-      ...git("ls-files", "--others", "--exclude-standard", "--", "content"),
-    ]);
-  } catch {
-    return new Set();
-  }
+// ---- Comments, through the dev server (their one writer) ----
+
+/** One change to the comments, as an agent; the dev server says what it did or why not. */
+async function changeComments(
+  change: Record<string, unknown>,
+): Promise<{ ok: boolean; error?: string; comment?: Filed }> {
+  const base = await previewBase(root);
+  const res = await fetch(new URL("/dev-review", base), {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-chalk-actor": "agent" },
+    body: JSON.stringify(change),
+  });
+  return (await res.json()) as { ok: boolean; error?: string; comment?: Filed };
 }
 
-/** Files changed outside content/ since the last commit (props, patterns, platform). */
-function changedOutsideContent(): string[] {
-  try {
-    return execFileSync("git", ["diff", "--name-only", "HEAD", "--", "library", "platform"], {
-      cwd: root,
-      encoding: "utf8",
-    })
-      .split("\n")
-      .filter(Boolean);
-  } catch {
-    return [];
-  }
+async function allComments(): Promise<Filed[]> {
+  const base = await previewBase(root);
+  return (await (await fetch(new URL("/dev-review", base))).json()) as Filed[];
 }
 
-const fileOf = (site: string) => site.replace(/:\d+$/, "");
-
-function commentLine(f: Comment & { file: string }): string {
-  const last = f.thread.at(-1);
+function commentLine(c: Filed): string {
+  const where = [c.board ?? `${c.home} (plan)`, c.target, c.prop ? `prop ${c.prop}` : undefined]
+    .filter(Boolean)
+    .join(" · ");
   return [
-    `• ${f.id} [${f.status}] ${f.on ?? `${f.chapter} plan`}${f.piece ? ` · ${f.piece}` : ""}`,
-    `  source: ${f.source ?? "?"}   file: ${f.file}`,
-    `  “${f.text.replace(/\s+/g, " ").slice(0, 300)}”`,
-    ...(f.quote ? [`  quote: ${String(f.quote).slice(0, 200)}`] : []),
-    ...(last ? [`  last (${last.by}): ${last.text.replace(/\s+/g, " ").slice(0, 200)}`] : []),
+    `• ${c.id} [${c.status}]${c.kind === Kind.Comment ? "" : ` ${c.kind}`}${c.causedBy ? ` caused by ${c.causedBy}` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
+    `  source: ${c.source ?? "?"}${c.review ? `   review: ${c.review}` : ""}`,
+    `  ${c.by}: “${c.text.replace(/\s+/g, " ").slice(0, 400)}”`,
+    ...(c.quote ? [`  quote: ${c.quote.slice(0, 200)}`] : []),
+    ...(c.plan ? [`  plan: ${c.plan.text.replace(/\s+/g, " ").slice(0, 300)}`] : []),
+    ...c.thread.map((e) => `  ${e.by}: ${e.text.replace(/\s+/g, " ").slice(0, 300)}`),
+    ...(c.changed?.length ? [`  changed: ${c.changed.join(", ")}`] : []),
   ].join("\n");
 }
 
@@ -219,68 +207,143 @@ function chaptersReading(files: readonly string[]): { chapter: string; because: 
 
 const server = createServer();
 
+/** Files inside one prop package that `file` reaches by relative imports, it included. */
+function closureIn(dir: string, file: string, seen = new Set<string>()): Set<string> {
+  if (seen.has(file) || !existsSync(file)) return seen;
+  seen.add(file);
+  const code = readFileSync(file, "utf8");
+  for (const m of code.matchAll(/(?:from|import)\s*["'](\.{1,2}\/[^"']+)["']/g)) {
+    const spec = resolve(dirname(file), m[1] ?? "");
+    const next = [spec, `${spec}.ts`, `${spec}.tsx`, join(spec, "index.ts")].find(
+      (f) => existsSync(f) && statSync(f).isFile() && f.startsWith(dir),
+    );
+    if (next !== undefined) closureIn(dir, next, seen);
+  }
+  return seen;
+}
+
+/** The prop types a file in a prop package reaches: those whose definition or view imports it. */
+function propsReaching(file: string): Set<string> {
+  const pkg = /^library\/props\/([^/]+)/.exec(file)?.[1];
+  if (pkg === undefined) return new Set();
+  const src = join(root, "library", "props", pkg, "src");
+  const whole = join(root, file);
+  if (!existsSync(whole) || statSync(whole).isDirectory() || file === `library/props/${pkg}`)
+    return propTypesIn([file]);
+  const out = new Set<string>();
+  for (const name of readdirSync(src).filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))) {
+    const def = join(src, name);
+    const type = /\btype:\s*"([A-Za-z0-9]+)"/.exec(readFileSync(def, "utf8"))?.[1];
+    if (type === undefined || !propTypesIn([file]).has(type)) continue;
+    const view = def.replace(/\.tsx?$/, "-view.tsx");
+    const reach = new Set([...closureIn(src, def), ...closureIn(src, view)]);
+    if (reach.has(whole)) out.add(type);
+  }
+  return out;
+}
+
+type Place = { board: string; piece: string; type: string; site?: string };
+
+/** A board's lesson: "value-and-zeroes", or "questions/count-zeroes" for a question family. */
+const lessonOf = (board: string) => {
+  const [, , third, fourth] = board.split("/");
+  return third === "questions" ? `questions/${fourth}` : (third ?? "?");
+};
+
+/** A tree of places: chapters, then lessons, then boards; opened as far as asked (or fully if small). */
+function tree(places: readonly Place[], open: string | undefined): string[] {
+  const out: string[] = [];
+  const isSmall = places.length <= 30;
+  const chapters = new Map<string, Place[]>();
+  for (const p of places) {
+    const chapter = p.board.split("/").slice(0, 2).join("/");
+    chapters.set(chapter, [...(chapters.get(chapter) ?? []), p]);
+  }
+  for (const [chapter, inChapter] of chapters) {
+    const lessons = new Map<string, Place[]>();
+    for (const p of inChapter)
+      lessons.set(lessonOf(p.board), [...(lessons.get(lessonOf(p.board)) ?? []), p]);
+    out.push(
+      `└─ ${chapter} — ${inChapter.length} board${inChapter.length === 1 ? "" : "s"}, ${lessons.size} lesson${lessons.size === 1 ? "" : "s"}`,
+    );
+    const isChapterOpen = isSmall || open === chapter || open?.startsWith(`${chapter}/`);
+    if (!isChapterOpen) continue;
+    for (const [lesson, inLesson] of lessons) {
+      out.push(`   ├─ ${lesson} — ${inLesson.length} board${inLesson.length === 1 ? "" : "s"}`);
+      if (!(isSmall || open === `${chapter}/${lesson}`)) continue;
+      for (const p of inLesson)
+        out.push(
+          `   │   • ${p.board.slice(chapter.length + 1)} · ${p.piece} (${p.type}) → ${p.site ?? "?"}`,
+        );
+    }
+  }
+  if (!isSmall && open === undefined)
+    out.push(
+      `(${places.length} boards: open one branch with open: "<book/chapter>" or "<book/chapter/lesson>")`,
+    );
+  return out;
+}
+
 server.registerTool(
   "affected",
   {
     title: "What a change reaches",
     description:
-      "What a change reaches, before or after you make it. Give files or folders (library/props/circles, library/patterns/words.ts, platform/packages/player/src/runtime.ts), or nothing for everything changed since the last commit. For a prop package, or just the prop types in `props` (e.g. valueMachine): every place they are placed (board, piece, source line), grouped by chapter. For anything else: the chapters whose last build read it. Use it before changing a prop or a pattern, then render_board the boards it lists.",
+      'What a change to shared code reaches, before you make it, as a tree you can open branch by branch. Give prop types (`props`: ["valueMachine"]) or files and folders: a prop package or a file in one (its props are found from what imports it), a content file (the boards written in it), or other code (the chapters whose last build read it). Each prop\'s tree: chapters → lessons → boards (piece, file:line). Small trees come back fully open; otherwise `open` a chapter or lesson. Use it before changing a prop, a pattern or shared code, then render_board the boards it lists.',
     inputSchema: {
+      props: z.array(z.string()).optional().describe("Prop types, e.g. valueMachine."),
       files: z.array(z.string()).optional().describe("Files or folders, repo-relative."),
-      props: z
-        .array(z.string())
+      open: z
+        .string()
         .optional()
-        .describe("Only these prop types (e.g. valueMachine), not every prop in a package."),
+        .describe(
+          "A branch to open: book/chapter, or book/chapter/lesson (questions/<family> for questions).",
+        ),
     },
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
-  async (args) => {
-    const given = args.files ?? [];
-    const only = args.props === undefined ? null : new Set(args.props);
-    const named =
-      only === null ? [] : [...only].map((t) => packageOfType(t)).filter((f) => f !== undefined);
-    const files =
-      given.length > 0 || named.length > 0
-        ? [...given, ...named]
-        : [...changedFiles(), ...changedOutsideContent()];
-    if (files.length === 0) return result([text("Nothing changed since the last commit.")]);
+  async ({ props, files, open }) => {
+    if ((props?.length ?? 0) === 0 && (files?.length ?? 0) === 0)
+      throw new Error("say what is changing: props (types) or files");
     const out: string[] = [];
-    // Props: the exact places each prop type is placed.
-    const types = new Set([...propTypesIn(files)].filter((t) => only === null || only.has(t)));
-    if (types.size > 0) {
-      const places = placesOf(types);
-      out.push(
-        `${[...types].map((t) => `\`${t}\``).join(", ")}: ${places.length} place${places.length === 1 ? "" : "s"}${places.length === 0 ? " (no board places them)" : ""}`,
-      );
-      const byChapter = new Map<string, typeof places>();
-      for (const p of places) {
-        const chapter = p.board.split("/").slice(0, 2).join("/");
-        byChapter.set(chapter, [...(byChapter.get(chapter) ?? []), p]);
-      }
-      for (const [chapter, list] of byChapter) {
-        out.push(`\n${chapter} (${list.length})`);
-        for (const p of list.slice(0, 40))
-          out.push(
-            `  • ${p.board.slice(chapter.length + 1)} · \`${p.piece}\` (${p.type}) → ${p.site ?? "?"}`,
-          );
-        if (list.length > 40)
-          out.push(`  … ${list.length - 40} more: boards { under: "${chapter}" }`);
+    const sources = readSources(root);
+    const types = new Set(props ?? []);
+    for (const file of files ?? []) {
+      const f = file.replace(/\/$/, "");
+      if (f.startsWith("library/props/")) for (const t of propsReaching(f)) types.add(t);
+      else if (f.startsWith("content/")) {
+        const boards = Object.entries(sources)
+          .filter(([, w]) =>
+            [w.board, ...Object.values(w.pieces)].some(
+              (site) =>
+                site !== undefined && (site.replace(/:\d+$/, "") === f || site.startsWith(`${f}/`)),
+            ),
+          )
+          .map(([b]) => b.replace(/\.json$/, ""));
+        out.push(
+          `${f} — ${boards.length} board${boards.length === 1 ? "" : "s"} written here`,
+          ...boards.slice(0, 60).map((b) => `   • ${b}`),
+          "",
+        );
+      } else {
+        const hits = chaptersReading([f]);
+        out.push(
+          hits.length >= 25
+            ? `${f} — read by every chapter's build (${hits.length}): every board can change`
+            : `${f} — read by ${hits.length} chapter${hits.length === 1 ? "" : "s"}: ${hits.map((h) => h.chapter).join(", ") || "none (as of each chapter's last build)"}`,
+          "",
+        );
       }
     }
-    // Anything else: chapters whose last build read it. Not for prop packages, whose places are
-    // listed above: every build reads every package through the prop registry, so that list
-    // would be every chapter.
-    const other = files.filter((f) => !/^library\/props\/[^/]+/.test(f));
-    const hits = other.length > 0 ? chaptersReading(other) : [];
-    if (hits.length > 0)
+    for (const type of types) {
+      const places = placesOf(new Set([type]));
+      const chapters = new Set(places.map((p) => p.board.split("/").slice(0, 2).join("/")));
       out.push(
-        `\nChapters whose build reads ${other.join(", ")}: ${hits.map((h) => h.chapter).join(", ")}`,
+        `${type} (${packageOfType(type) ?? "?"}) — ${places.length} board${places.length === 1 ? "" : "s"} in ${chapters.size} chapter${chapters.size === 1 ? "" : "s"}`,
       );
-    if (out.length === 0)
-      out.push(
-        `Nothing reads ${files.join(", ")} (as of each chapter's last build; run the check tool if content isn't built yet).`,
-      );
-    return result([text(out.join("\n"))]);
+      out.push(...(places.length === 0 ? ["   (no board places it)"] : tree(places, open)), "");
+    }
+    return result([text(out.join("\n").trim())]);
   },
 );
 
@@ -420,103 +483,57 @@ server.registerTool(
 );
 
 server.registerTool(
-  "boards",
+  "comments",
   {
-    title: "List boards",
+    title: "Read comments",
     description:
-      "List boards: every page and question of a chapter or lesson, with its name (for render_board and comments), where it was written, and its preview URL. `changed: true` lists only boards whose source files changed since the last commit — the ones to look at after editing.",
+      'Read comments: the person\'s (from the preview), reviewers\' findings and regressions, and chat feedback filed as comments. `review: "latest"` is the review the person just handed over ("apply my review"); or filter by board prefix, prop, status, kind. `unanswered: true` lists what still needs your answer (not yet ready, closed or withdrawn). Each shows its board, target (piece › part), source line, plan, thread and changed files.',
     inputSchema: {
-      under: z.string().optional().describe("book/chapter or book/chapter/lesson"),
-      changed: z.boolean().optional(),
+      review: z.string().optional().describe('"latest", or a review id.'),
+      board: z.string().optional().describe("A board, lesson or chapter path prefix."),
+      prop: z.string().optional(),
+      status: z
+        .enum([Status.Open, Status.Planned, Status.Ready, Status.Closed, Status.Withdrawn])
+        .optional(),
+      kind: z.enum([Kind.Comment, Kind.Finding, Kind.Regression]).optional(),
+      unanswered: z.boolean().optional(),
     },
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
   async (args) => {
-    const under = str(args.under);
-    let boards = listBoards(root).filter(
-      (b) => under === undefined || b.board.startsWith(under) || b.lesson.startsWith(under),
-    );
-    if (args.changed === true) {
-      const changed = changedFiles();
-      const sources = readSources(root);
-      boards = boards.filter((b) => {
-        const where = sources[`${b.board}.json`];
-        const files = [where?.board, ...Object.values(where?.pieces ?? {})]
-          .filter((s): s is string => s !== undefined)
-          .map(fileOf);
-        return files.some((f) => changed.has(f));
-      });
-    }
-    if (boards.length === 0)
-      return result([text("No boards (is build/ there? run the check tool).")]);
-    const base = await previewUrl(root, "").catch(() => "");
+    let found = await allComments();
+    const review = args.review === "latest" ? latestReview(found) : args.review;
+    if (args.review !== undefined && review === undefined)
+      return result([text("No review has been handed over yet.")]);
+    if (review !== undefined) found = found.filter((c) => c.review === review);
+    if (args.board) found = found.filter((c) => (c.board ?? c.home).startsWith(args.board ?? ""));
+    if (args.prop) found = found.filter((c) => c.prop === args.prop);
+    if (args.status) found = found.filter((c) => c.status === args.status);
+    if (args.kind) found = found.filter((c) => c.kind === args.kind);
+    if (args.unanswered) found = unanswered(found) as Filed[];
+    const head =
+      review !== undefined
+        ? `Review ${review}: ${found.length} comment${found.length === 1 ? "" : "s"}\n\n`
+        : "";
     return result([
       text(
-        boards
-          .slice(0, 300)
-          .map((b) => `${b.kind === "page" ? "page" : "q   "} ${b.board}  ← ${b.source ?? "?"}`)
-          .join("\n") + (base ? `\n\nPreview: ${base}<board>` : ""),
+        found.length === 0
+          ? `${head}No comments match.`
+          : head + found.map(commentLine).join("\n\n"),
       ),
     ]);
   },
 );
 
-server.registerTool(
-  "comments",
-  {
-    title: "Read comments",
-    description:
-      "Read the person's (and reviewers') comments: one file per comment in content/<book>/<chapter>/.comments/, or library/props/<package>/.comments/ for a comment on a prop (it names the `prop` and the `part` picked, and applies wherever the prop is used: see `affected`). Each names its board (`on`), piece, source line and status (open → proposed → approved → done, or declined). Filter by chapter/lesson/board prefix and status. Edit the files directly or use comment_update.",
-    inputSchema: {
-      under: z.string().optional(),
-      status: z
-        .enum([
-          CommentStatus.Open,
-          CommentStatus.Proposed,
-          CommentStatus.Approved,
-          CommentStatus.Done,
-          CommentStatus.Declined,
-        ])
-        .optional()
-        .describe("Default: everything not done or declined."),
-    },
-    annotations: { readOnlyHint: true, openWorldHint: false },
-  },
-  async (args) => {
-    const under = str(args.under);
-    const status = str(args.status);
-    const found = listComments(root).filter(
-      (f) =>
-        (under === undefined ||
-          f.chapter.startsWith(under) ||
-          (f.on ?? "").startsWith(under) ||
-          under.startsWith(f.chapter)) &&
-        (status === undefined
-          ? f.status !== CommentStatus.Done && f.status !== CommentStatus.Declined
-          : f.status === status),
-    );
-    return result([
-      text(found.length === 0 ? "No comments matches." : found.map(commentLine).join("\n\n")),
-    ]);
-  },
-);
-
 /** One answer to one comment (comment_update). */
-const commentChange = z.object({
+const answer = z.object({
   id: z.string(),
-  status: z
-    .enum([CommentStatus.Open, CommentStatus.Proposed, CommentStatus.Done, CommentStatus.Declined])
-    .optional()
-    .describe("Only the person approves, so approved is not one of these."),
-  reply: z.string().optional(),
-  proposal: z
-    .object({
-      summary: z.string(),
-      changes: z.array(z.object({ before: z.string(), after: z.string() })).optional(),
-    })
-    .passthrough()
-    .optional(),
-  by: z.string().optional().describe("Who is writing (default: agent)."),
+  op: z
+    .enum(["plan", "reply", "ready"])
+    .describe(
+      "plan: what you will do (after the person's go); reply: add to the thread; ready: done, with what you did",
+    ),
+  text: z.string().min(1),
 });
 
 server.registerTool(
@@ -524,10 +541,9 @@ server.registerTool(
   {
     title: "Answer comments",
     description:
-      "Answer comments: set a status, add a reply to the thread, and/or write a proposal ({summary, changes:[{before, after}]}). One comment (id, …) or several at once (items: [{id, …}, …]). Status rules: write a proposal → proposed; only the person moves it to approved; after applying an approved change → done.",
+      "Answer comments, one or many at once. plan: write what you will do on it (after the person approved the overall plan in chat), which makes it planned. reply: add to its thread. ready: say what you did; it becomes ready for the person (allowed only after a plan, and not while a regression it caused is open), and the files you changed are recorded from git. Only the person closes, withdraws or deletes.",
     inputSchema: {
-      ...commentChange.partial({ id: true }).shape,
-      items: z.array(commentChange).optional().describe("Several comments at once."),
+      items: z.array(answer).min(1),
     },
     annotations: {
       readOnlyHint: false,
@@ -536,27 +552,12 @@ server.registerTool(
       openWorldHint: false,
     },
   },
-  async ({ items, ...one }) => {
-    const all = items ?? (one.id !== undefined ? [{ ...one, id: one.id }] : []);
-    if (all.length === 0) throw new Error("give id, or items: [{id, …}]");
-    const comments = listComments(root);
-    const lines = all.map((item) => {
-      const found = comments.find((f) => f.id === item.id);
-      if (found === undefined) return `✗ no comment ${item.id}`;
-      const { file: _, ...fb } = found;
-      if (str(item.reply))
-        fb.thread.push({
-          by: str(item.by) ?? "agent",
-          at: new Date().toISOString(),
-          text: String(item.reply),
-        });
-      if (item.proposal !== undefined) {
-        fb.proposal = item.proposal;
-        fb.status = CommentStatus.Proposed;
-      }
-      if (item.status !== undefined) fb.status = item.status;
-      return `✓ ${writeComment(root, fb)} [${fb.status}]`;
-    });
+  async ({ items }) => {
+    const lines: string[] = [];
+    for (const item of items) {
+      const done = await changeComments({ op: item.op, id: item.id, text: item.text });
+      lines.push(done.ok ? `✓ ${item.id} [${done.comment?.status}]` : `✗ ${done.error}`);
+    }
     return result([text(lines.join("\n"))]);
   },
 );
@@ -566,12 +567,16 @@ server.registerTool(
   {
     title: "File a comment",
     description:
-      "File a new comments item on a board (for reviewers: one finding per item, naming the principle and what a student would get wrong).",
+      'File a comment on a board. A reviewer: kind finding (one per item: the principle and what a student would get wrong), or kind regression with causedBy (the comment whose change broke it). Feedback the person gave in chat: kind comment, from: chat, so the threads stay the complete record. target is "piece" or "piece › part"; prop makes it about that prop wherever it is used.',
     inputSchema: {
       board: z.string().min(1),
-      piece: z.string().optional(),
-      text: z.string().min(1),
+      target: z.string().optional(),
+      prop: z.string().optional(),
+      kind: z.enum([Kind.Finding, Kind.Regression, Kind.Comment]),
+      causedBy: z.string().optional(),
+      from: z.literal("chat").optional(),
       by: z.string().optional().describe("e.g. reviewer"),
+      text: z.string().min(1),
     },
     annotations: {
       readOnlyHint: false,
@@ -582,56 +587,24 @@ server.registerTool(
   },
   async (args) => {
     const on = boardName(args.board);
-    const piece = str(args.piece);
+    const piece = args.target?.split("›")[0]?.trim();
     const where = readSources(root)[`${on}.json`];
-    const chapter = chapterOf({ on });
-    if (chapter === undefined) throw new Error(`can't tell the chapter of ${on}`);
-    const fb: Comment = {
-      id: newCommentId(),
-      status: CommentStatus.Open,
-      chapter,
-      on,
-      ...(piece ? { piece } : {}),
-      ...((piece && where?.pieces[piece]) || where?.board
-        ? { source: (piece && where?.pieces[piece]) || where?.board }
-        : {}),
-      by: str(args.by) ?? "agent",
-      createdAt: new Date().toISOString(),
-      thread: [],
-      text: args.text,
-    };
-    return result([text(`✓ ${writeComment(root, fb)}`)]);
-  },
-);
-
-server.registerTool(
-  "check",
-  {
-    title: "Run the checks",
-    description:
-      "Run Chalk's checks. Default: build all content (every board built, witnesses played, questions checked) and report problems. full=true: the whole `pnpm check` (types, tests, boundaries, catalogue, lint) — run before calling work done.",
-    inputSchema: { full: z.boolean().optional() },
-    annotations: { readOnlyHint: true, openWorldHint: false },
-  },
-  async (args, extra: Extra) => {
-    const progress = progressOf(extra);
-    if (args.full !== true && isBuildCurrent(root))
-      return result([text("✓ passed: nothing changed since the last build that passed")]);
-    await progress(args.full === true ? "running pnpm check" : "building content");
-    const ran =
-      args.full === true
-        ? await run("pnpm", ["check"], {
-            signal: extra.signal,
-            // Each step of pnpm check (typecheck, tests, …) as it starts.
-            onLine: (line) => {
-              const step = /^▸ (.+)$/.exec(line.trim())?.[1];
-              if (step !== undefined) void progress(step);
-            },
-          })
-        : await buildContent(extra.signal);
-    const lines = ran.out.split("\n");
-    const tail = lines.filter((l) => /✗|✓|error|Error|problem|^\s{4}/.test(l)).slice(-80);
-    return result([text(`${ran.code === 0 ? "✓ passed" : "✗ failed"}\n${tail.join("\n")}`)]);
+    const source = (piece && where?.pieces[piece]) || where?.board;
+    const done = await changeComments({
+      op: "add",
+      comment: {
+        board: on,
+        ...(args.target ? { target: args.target } : {}),
+        ...(args.prop ? { prop: args.prop } : {}),
+        ...(source ? { source } : {}),
+        kind: args.kind,
+        ...(args.causedBy ? { causedBy: args.causedBy } : {}),
+        ...(args.from ? { from: args.from, by: "you" } : {}),
+        ...(args.by && !args.from ? { by: args.by } : {}),
+        text: args.text,
+      },
+    });
+    return result([text(done.ok ? `✓ ${done.comment?.id} on ${on}` : `✗ ${done.error}`)]);
   },
 );
 

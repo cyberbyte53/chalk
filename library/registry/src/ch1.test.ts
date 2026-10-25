@@ -9,8 +9,10 @@ import { propDefs } from "./index";
 // Every board of Class 9 Maths Chapter 1, played the way a student would: real lessons, real props,
 // fake time. A board passes only if a learner doing the right thing gets Continue.
 
-const folder = new URL("../../../content/class9-maths/ch1-number-systems/lessons/", import.meta.url)
-  .pathname;
+const folder = new URL(
+  "../../../content/class9-maths/ch1-number-systems/published/",
+  import.meta.url,
+).pathname;
 const lessons = readdirSync(folder)
   .filter((f) => f.endsWith(".json"))
   .sort()

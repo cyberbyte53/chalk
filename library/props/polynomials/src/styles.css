@@ -213,6 +213,68 @@
   overflow-x: auto;
   max-width: 100%;
 }
+.pp-working-value {
+  display: block;
+  padding-left: 2em;
+}
 .pp-working-empty {
   color: var(--color-on-surface-variant);
+}
+.pp-dial {
+  position: relative;
+  cursor: pointer;
+}
+.pp-handle {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border: 3px solid var(--color-primary);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--color-on-surface) 30%, transparent);
+  cursor: grab;
+  touch-action: none;
+}
+.pp-handle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.pp-handle-label {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 6px;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface);
+  font: 800 14px var(--font-display);
+  color: var(--color-primary);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.pp-long {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+.pp-long-layout,
+.pp-long-move {
+  overflow-x: auto;
+  max-width: 100%;
+  color: var(--color-on-surface);
+}
+.pp-long-move {
+  padding: 4px 12px;
+  border-radius: var(--shape-radius-m);
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+}
+.pp-long-buttons {
+  display: flex;
+  gap: 12px;
+}
+.pp-long.is-wide .pp-long-layout,
+.pp-long.is-wide .pp-long-move {
+  font-size: 0.82em;
 }

@@ -5,9 +5,9 @@ import { pathToFileURL } from "node:url";
 import type { Browser, Page } from "playwright-core";
 
 /**
- * The learner app's own dev server and a headless browser, for looking at boards. Uses a dev
- * server already running (CHALK_PREVIEW_URL, else localhost:5173 if it serves Chalk); otherwise
- * starts one in this process from the learner app's vite config. Nothing here draws a board: the
+ * The learner app's own dev server and a headless browser, for looking at boards. Uses the one
+ * dev server (CHALK_PREVIEW_URL to point elsewhere), starting it in this process if nothing
+ * answers on its port. Nothing here draws a board: the
  * page at `?dev&board=` does, with the app's player.
  */
 
@@ -27,10 +27,18 @@ async function isChalk(url: string): Promise<boolean> {
   }
 }
 
+/** The one dev server's address (platform/apps/learner/vite.config.ts; CHALK_DEV_PORT to move it). */
+export const DEV_URL = `http://localhost:${process.env.CHALK_DEV_PORT ?? 5173}`;
+
+/**
+ * The one dev server: the one already running (the editor's, `pnpm dev`, another agent's), else
+ * started here, in this process, with the content rebuild inside it. Never a second one: the port
+ * is fixed, so if another starts it first, that one is used.
+ */
 async function startServer(root: string): Promise<string> {
   const given = process.env.CHALK_PREVIEW_URL;
   if (given !== undefined && given !== "") return given;
-  if (await isChalk("http://localhost:5173")) return "http://localhost:5173";
+  if (await isChalk(DEV_URL)) return DEV_URL;
   const app = join(root, "platform", "apps", "learner");
   const require = createRequire(join(app, "package.json"));
   const viteDir = dirname(require.resolve("vite/package.json"));
@@ -39,17 +47,26 @@ async function startServer(root: string): Promise<string> {
       listen: () => Promise<{ resolvedUrls?: { local: string[] } }>;
     }>;
   };
-  const server = await vite.createServer({
-    root: app,
-    configFile: join(app, "vite.config.ts"),
-    logLevel: "silent",
-    clearScreen: false,
-    server: { port: 5199, strictPort: false, open: false },
-  });
-  const listening = await server.listen();
-  const url = listening.resolvedUrls?.local[0];
-  if (url === undefined) throw new Error("the preview server started without a URL");
-  return url;
+  try {
+    const server = await vite.createServer({
+      root: app,
+      configFile: join(app, "vite.config.ts"),
+      logLevel: "silent",
+      clearScreen: false,
+      server: { open: false },
+    });
+    await server.listen();
+    return DEV_URL;
+  } catch (error) {
+    // Someone else started it a moment ago: use theirs.
+    for (let i = 0; i < 20; i++) {
+      if (await isChalk(DEV_URL)) return DEV_URL;
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    throw new Error(
+      `Couldn't start the dev server on ${DEV_URL} (${error instanceof Error ? error.message.split("\n")[0] : String(error)}). Is something else using that port? Set CHALK_DEV_PORT to move it.`,
+    );
+  }
 }
 
 /**
