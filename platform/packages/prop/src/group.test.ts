@@ -77,7 +77,7 @@ const machineOwn = z.object({ tried: z.array(z.number()).max(5) }).strict();
 type Own = z.infer<typeof machineOwn>;
 const onMachine = actionsFor<Own>();
 
-const machine = defineGroup<Own>({
+const machine = defineGroup({
   type: "machine",
   describe: "x² from a stepper and a handle",
   own: machineOwn,
@@ -86,8 +86,9 @@ const machine = defineGroup<Own>({
   optional: ["note"],
   defaults: { input: { min: -3, max: 3 } },
   is: {
-    "working.tex": (s) => `${(s.input as Stepper).value}² = ${(s.input as Stepper).value ** 2}`,
-    "dial.x": (s) => (s.input as Stepper).value,
+    // Typed from the children: s.input is the stepper's state.
+    "working.tex": (s) => `${s.input.value}² = ${s.input.value ** 2}`,
+    "dial.x": (s) => s.input.value,
   },
   route: {
     // The handle's x is bound to the stepper: a drag moves the stepper (and nothing past ±3).
@@ -104,8 +105,9 @@ const machine = defineGroup<Own>({
     }),
   },
   signals: { put: { describe: "" } },
-  invariant: (s) => ((s.tried as number[]).includes(99) ? "99 is never tried" : undefined),
-  summary: (s) => `the machine, ${(s.tried as number[]).length} tried`,
+  invariant: (s) => (s.tried.includes(99) ? "99 is never tried" : undefined),
+  summary: (s) =>
+    `the machine, ${s.tried.length} tried${s.note === null || s.note.tex === "" ? "" : `, ${s.note.tex}`}`,
   layout: { kind: "column", children: ["input", "working", "dial", "note"] },
 });
 
@@ -170,6 +172,42 @@ describe("groups", () => {
     if (!start.isOk) throw new Error();
     expect(applyPatch(machine, start.state, { dial: { x: 2 } }).isOk).toBe(false);
     expect(applyPatch(machine, start.state, { tried: [99] }).isOk).toBe(false);
+  });
+
+  it("types its links from its children", () => {
+    defineGroup({
+      type: "typed",
+      describe: "",
+      children: { input: stepper, note: text },
+      optional: ["note"],
+      is: {
+        // @ts-expect-error the stepper has no field "valu"
+        "note.tex": (s) => String(s.input.valu),
+      },
+      // @ts-expect-error an optional child may be null
+      summary: (s) => s.note.tex,
+      layout: { kind: "column", children: ["input", "note"] },
+    });
+    expect(() =>
+      defineGroup({
+        type: "typed",
+        describe: "",
+        children: { input: stepper },
+        summary: () => "",
+        // @ts-expect-error the layout can only name its children
+        layout: { kind: "column", children: ["nope"] },
+      }),
+    ).toThrow(/layout names no child "nope"/);
+    expect(() =>
+      defineGroup({
+        type: "clash",
+        describe: "",
+        children: { input: stepper },
+        derived: { input: { describe: "", compute: () => 1 } },
+        summary: () => "",
+        layout: { kind: "column", children: ["input"] },
+      }),
+    ).toThrow(/derived "input" has the name of a child/);
   });
 
   it("lets a placement leave out an optional child, which then does nothing", () => {

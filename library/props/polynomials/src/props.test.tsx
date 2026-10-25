@@ -5,6 +5,7 @@ import {
   type StoredState,
   applyPatch,
   asAnyProp,
+  initialState,
   observationOf,
   prepareAction,
   viewOf,
@@ -331,14 +332,41 @@ describe("valueMachine", () => {
       "p(\\frac{1}{2}) = 2 \\times \\left(\\frac{1}{2}\\right)^{3} - 5 \\times \\left(\\frac{1}{2}\\right)^{2} - 14 \\times \\left(\\frac{1}{2}\\right) + 8 = 0",
     );
   });
+  /** A machine placed as a board places it (bindings made true). */
+  const placed = (given: Record<string, unknown> = {}) => {
+    const r = initialState(machine, given);
+    if (!r.isOk) throw new Error(r.errors.join("; "));
+    return r.state as ValueMachineState;
+  };
   it("each number put in leaves a dot; a zero says so", () => {
-    let s = valueMachine.defaults as ValueMachineState;
+    let s = placed();
     s = run(machine, s, ValueMachineAction.Put, { x: 2 }).state;
     const four = run(machine, s, ValueMachineAction.Put, { x: 4 });
     expect(four.state.tried).toEqual([2, 4]);
     expect(four.emit.map((e) => e.signal)).toEqual(["put", "foundZero"]);
     expect(look(machine, four.state).zeroesFound).toEqual([4]);
     expect(look(machine, four.state).value).toBe(0);
+    // Every block shows the machine's numbers.
+    expect(four.state.substitution.tex).toBe("p(4) = 4^{2} - 3 \\times 4 - 4 = 0");
+    expect(four.state.plane.handle).toMatchObject({ x: 4, label: "4" });
+    expect(four.state.plane.dots?.dots).toEqual([
+      { x: 2, y: -6, tone: "main", isFaded: true },
+      { x: 4, y: 0, tone: "accent" },
+    ]);
+  });
+  it("what the learner does to a block becomes the machine's Put, Move or StartAgain", () => {
+    const s = placed({ input: -1, tried: [-1] });
+    const nudged = run(machine, s, "stepper.change", { to: -0.9 });
+    expect(nudged.state.tried).toEqual([-1, -0.9]);
+    expect(nudged.emit.map((e) => e.signal)).toEqual(["put"]);
+    const dragging = run(machine, s, "plane.handle.move", { x: 2.04 });
+    expect(dragging.state).toMatchObject({ input: 2, tried: [-1] });
+    expect(dragging.state.plane.dots?.dots.at(-1)).toEqual({ x: 2, y: -6, tone: "muted" });
+    const letGo = run(machine, dragging.state, "plane.handle.put", { x: 2.04 });
+    expect(letGo.state.tried).toEqual([-1, 2]);
+    const cleared = run(machine, letGo.state, "clear.press", {});
+    expect(cleared.state).toMatchObject({ input: null, tried: [] });
+    expect(cleared.state.clear.isEnabled).toBe(false);
   });
   it("writes decimals as decimals, halves and quarters as fractions", () => {
     expect(workingTex([1, -3, -4], 2.3)).toBe(
@@ -350,13 +378,13 @@ describe("valueMachine", () => {
     expect(machineNumber(1 / 3).text).toBe("1/3");
   });
   it("puts in on the 0.1 step, inside the range", () => {
-    const s = valueMachine.defaults as ValueMachineState;
+    const s = placed();
     expect(run(machine, s, ValueMachineAction.Put, { x: 2.34 }).state.input).toBe(2.3);
     expect(run(machine, s, ValueMachineAction.Put, { x: 0.1 + 0.2 }).state.tried).toEqual([0.3]);
     expect(run(machine, s, ValueMachineAction.Put, { x: 40 }).state.input).toBe(s.max);
   });
   it("sliding x moves the working but leaves no dot and says nothing", () => {
-    const s = { ...(valueMachine.defaults as ValueMachineState), input: -1, tried: [-1] };
+    const s = placed({ input: -1, tried: [-1] });
     const moved = run(machine, s, ValueMachineAction.Move, { x: 3.96 });
     expect(moved.state.input).toBe(4);
     expect(moved.state.tried).toEqual([-1]);
@@ -365,8 +393,12 @@ describe("valueMachine", () => {
     expect(look(machine, moved.state).zeroesFound).toEqual([-1]);
   });
   it("every element can be found on screen", () => {
-    const s = { ...(valueMachine.defaults as ValueMachineState), input: -1, tried: [2, -1] };
-    expectAddressable(machine, ValueMachineView, s);
+    const s = placed({ input: -1, tried: [2, -1] });
+    const { html, ids } = expectAddressable(machine, ValueMachineView, s);
+    // One picture: graph paper, the drop line, the dots and the handle drawn together.
+    expect(html.match(/<svg/g)?.length).toBe(2); // the stage's own SVG and its top layer
+    expect(ids).toContain("plane › handle › handle");
+    expect(ids).toContain("stepper › more");
   });
 });
 

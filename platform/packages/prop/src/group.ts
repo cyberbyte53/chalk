@@ -52,74 +52,118 @@ export type GroupView = PropView;
 // biome-ignore lint/suspicious/noExplicitAny: a child of any state type
 export type GroupChildren = Readonly<Record<string, PropDef<any, any, any, any>>>;
 
-export type GroupSpec<O extends StoredState> = {
+/** The stored state of a prop definition (a group's from its carried type, a leaf's from its schema). */
+export type StateOf<P> = P extends { readonly stateType?: infer G }
+  ? G extends StoredState
+    ? G
+    : LeafStateOf<P>
+  : LeafStateOf<P>;
+type LeafStateOf<P> = P extends { state: ZodType<infer S> } ? S : never;
+
+/** A group's stored state: its own fields, then each child's state under its name (null if left out). */
+export type GroupState<O extends StoredState, C extends GroupChildren, Opt extends string> = O & {
+  readonly [K in keyof C]: K extends Opt ? StateOf<C[K]> | null : StateOf<C[K]>;
+};
+
+/**
+ * What a group's links read: its state, typed (`s.input.value`), and its derived values by name.
+ * A child's derived values aren't typed here: read them as `(s.plane as PropView).name`, rarely.
+ */
+export type GroupViewOf<
+  O extends StoredState,
+  C extends GroupChildren,
+  Opt extends string,
+  D extends string = never,
+> = GroupState<O, C, Opt> & { readonly [K in D]: unknown };
+
+export type GroupSpec<
+  O extends StoredState,
+  C extends GroupChildren = GroupChildren,
+  Opt extends string = string,
+  D extends string = string,
+> = {
   type: string;
   describe: string;
   /** What no child holds. */
   own?: ZodType<O>;
-  ownDefaults?: O;
-  children: GroupChildren;
+  ownDefaults?: NoInfer<O>;
+  children: C;
   /** Children a placement may leave out (`with: { screen: null }`). */
-  optional?: readonly string[];
+  optional?: readonly Opt[];
   /** Overrides of the children's defaults, by child: { input: { step: 0.1 } }. */
-  defaults?: Readonly<Record<string, Readonly<Record<string, unknown>>>>;
+  defaults?: { readonly [K in keyof C]?: Partial<StateOf<C[K]>> };
   /**
    * Bindings: "child.field" (or "child.grandchild.field") → its value from the group's view. A
    * bound field has one writer: this. Worked out in the order they're written; each may read the
    * ones before it.
    */
-  is?: Readonly<Record<string, (s: GroupView) => unknown>>;
+  is?: Readonly<Record<string, (s: GroupViewOf<O, C, Opt, D>) => unknown>>;
   /** "child.signal" (or "child.grandchild.signal") → steps to run, given the signal's payload. */
   when?: Readonly<
-    Record<string, (s: GroupView, payload: Readonly<Record<string, unknown>>) => Steps>
+    Record<
+      string,
+      (s: GroupViewOf<O, C, Opt, D>, payload: Readonly<Record<string, unknown>>) => Steps
+    >
   >;
   /**
    * "child.action" → steps to run instead of the child's own action, or undefined to refuse (the
    * learner's drag has nowhere to go).
    */
   route?: Readonly<
-    Record<string, (s: GroupView, args: Readonly<Record<string, unknown>>) => Steps | undefined>
+    Record<
+      string,
+      (s: GroupViewOf<O, C, Opt, D>, args: Readonly<Record<string, unknown>>) => Steps | undefined
+    >
   >;
   /** The group's own actions: they change its own fields (`changes` names them). */
   actions?: Readonly<Record<string, ActionSpec<O>>>;
   signals?: Readonly<Record<string, SignalSpec>>;
   /** Derived values over the whole group (they can read children). */
-  derived?: Readonly<Record<string, { describe: string; compute: (s: GroupView) => unknown }>>;
+  derived?: Readonly<
+    Record<D, { describe: string; compute: (s: GroupViewOf<O, C, Opt, D>) => unknown }>
+  >;
   /** A rule across children; the change is refused if it breaks. */
-  invariant?: (s: GroupView) => string | undefined;
+  invariant?: (s: GroupViewOf<O, C, Opt, D>) => string | undefined;
   /** The group's own line in its description; each child describes itself. */
-  summary: (s: GroupView) => string;
+  summary: (s: GroupViewOf<O, C, Opt, D>) => string;
   /** What the group knows that the screen doesn't show. */
-  hidden?: (s: GroupView) => Readonly<Record<string, unknown>> | undefined;
+  hidden?: (s: GroupViewOf<O, C, Opt, D>) => Readonly<Record<string, unknown>> | undefined;
   /**
    * How children are placed: top to bottom, side by side, or drawn together in one frame. In a
    * frame, `provider` owns the window and transform, `children` draw into its picture in this
    * order (later on top), `backdrop` (if any) is a picture behind it in its own coordinates, and
    * `below` are drawn under the picture (controls, readouts).
    */
-  layout:
-    | { kind: "column" | "row"; children: readonly string[] }
-    | {
-        kind: "frame";
-        provider: string;
-        children: readonly string[];
-        backdrop?: string;
-        below?: readonly string[];
-      };
+  layout: GroupLayoutSpec<keyof C & string>;
   isExplainer?: boolean;
 };
+
+export type GroupLayoutSpec<N extends string = string> =
+  | { kind: "column" | "row"; children: readonly N[] }
+  | {
+      kind: "frame";
+      provider: N;
+      children: readonly N[];
+      backdrop?: N;
+      below?: readonly N[];
+    };
 
 export type GroupLayout = {
   children: GroupChildren;
   optional: readonly string[];
-  layout: GroupSpec<StoredState>["layout"];
+  layout: GroupLayoutSpec;
   /** Bound fields, as paths: "plane.handle.x". */
   bound: readonly string[];
   /** Own field names. */
   own: readonly string[];
 };
 
-export type GroupDef = AnyPropDef & { group: GroupLayout };
+/** A group: an ordinary prop (its state typed, nested) that also knows its children and links. */
+export type GroupDef<S extends StoredState = StoredState> = AnyPropDef & {
+  group: GroupLayout;
+  /** Never set: carries the group's state type, so a parent group reads its child typed. */
+  readonly stateType?: S;
+};
 
 /** The group layout of a prop, if it is a group. */
 export function groupOf(def: AnyPropDef): GroupLayout | undefined {
@@ -176,7 +220,7 @@ function resolve(
 }
 
 /** Every child a layout places, in drawing order (backdrop, provider, frame children, below). */
-export function layoutChildren(layout: GroupSpec<StoredState>["layout"]): string[] {
+export function layoutChildren(layout: GroupLayoutSpec): string[] {
   if (layout.kind !== "frame") return [...layout.children];
   return [
     ...(layout.backdrop !== undefined ? [layout.backdrop] : []),
@@ -186,9 +230,14 @@ export function layoutChildren(layout: GroupSpec<StoredState>["layout"]): string
   ];
 }
 
-export function defineGroup<O extends StoredState = Record<string, never>>(
-  spec: GroupSpec<O>,
-): GroupDef {
+export function defineGroup<
+  C extends GroupChildren,
+  O extends StoredState = Record<never, never>,
+  Opt extends keyof C & string = never,
+  D extends string = never,
+>(typed: GroupSpec<O, C, Opt, D>): GroupDef<GroupState<O, C, Opt>> {
+  // Inside, the state is handled untyped; the types are for the links an author writes.
+  const spec = typed as unknown as GroupSpec<StoredState>;
   const childNames = Object.keys(spec.children);
   const optional = new Set(spec.optional ?? []);
   const own = (spec.own ?? z.object({}).strict()) as unknown as ZodType<StoredState>;
@@ -197,6 +246,9 @@ export function defineGroup<O extends StoredState = Record<string, never>>(
   for (const name of childNames)
     if (ownFields.includes(name))
       throw new Error(`${spec.type}: "${name}" is both an own field and a child`);
+  for (const name of Object.keys(spec.derived ?? {}))
+    if (childNames.includes(name) || ownFields.includes(name))
+      throw new Error(`${spec.type}: derived "${name}" has the name of a child or an own field`);
   const placed = layoutChildren(spec.layout);
   for (const name of placed)
     if (spec.children[name] === undefined)
@@ -264,6 +316,13 @@ export function defineGroup<O extends StoredState = Record<string, never>>(
     for (const b of bindings) {
       if (b.children.some((_, i) => getPath(at, b.children.slice(0, i + 1)) === null)) continue;
       at = setPath(at, b.path, b.fn(viewOfGroup(at)));
+    }
+    // A child group keeps its own links true over what this group just wrote into it.
+    for (const name of childNames) {
+      const child = spec.children[name] as unknown as { settle?: (s: StoredState) => StoredState };
+      const slice = at[name];
+      if (child.settle === undefined || slice === null || slice === s[name]) continue;
+      at = { ...at, [name]: child.settle(slice as StoredState) };
     }
     return at;
   };
@@ -609,7 +668,7 @@ export function defineGroup<O extends StoredState = Record<string, never>>(
       }
     },
   });
-  return groupDef;
+  return groupDef as unknown as GroupDef<GroupState<O, C, Opt>>;
 }
 
 /** A placement's state for a group: defaults, overridden child by child, bindings made true. */

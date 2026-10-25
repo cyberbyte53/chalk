@@ -5,3 +5,32 @@
 @import "./styles/board.css";
 @import "./styles/question.css";
 @import "./styles/jugnu.css";
+
+/* ---- groups: a prop made of props (group-view.tsx) ---- */
+.group-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.group-child {
+  max-width: 100%;
+}
+.group-child.is-wide {
+  align-self: stretch;
+}
+.group-frame,
+.group-picture {
+  width: 100%;
+}
+.frame-svg {
+  display: block;
+  overflow: hidden;
+  touch-action: none;
+}

@@ -61,12 +61,19 @@ const ChildSlot = memo(
  * to a child is the group's action by path ("input.change"): the group runs the child's law or
  * routes it. Each child sits in `data-child`, so its parts are found as "<child> › <part>".
  */
+export type GroupViewOptions = {
+  /** Children that take the whole width (a plane); the rest keep their own size. */
+  wide?: readonly string[];
+  /** Extra classes on a frame's picture, from the group's view (e.g. "is-dial" while draggable). */
+  look?: (view: PropViewProps["view"]) => string;
+};
+
 export function groupView(
   def: AnyPropDef,
   views: Readonly<Record<string, ComponentType<PropViewProps>>>,
-  /** Children that take the whole width (a plane); the rest keep their own size. */
-  wide: readonly string[] = [],
+  options: GroupViewOptions = {},
 ): ComponentType<PropViewProps> {
+  const wide = options.wide ?? [];
   const layout = groupOf(def);
   if (layout === undefined) throw new Error(`${def.type} is not a group`);
   for (const name of layout.layout.children)
@@ -100,7 +107,12 @@ export function groupView(
         <div class={`group group-frame group-${def.type}`}>
           <div class="group-picture">
             {l.backdrop !== undefined && slot(l.backdrop, false)}
-            <FrameStage px={px} label={def.describe} present={inside}>
+            <FrameStage
+              px={px}
+              label={provider.frame?.label?.(providerState) ?? def.describe}
+              present={inside}
+              look={options.look?.(view) ?? ""}
+            >
               {inside.map((name) => (
                 <InFrame key={name} owner={name} px={px}>
                   {slot(name, true)}

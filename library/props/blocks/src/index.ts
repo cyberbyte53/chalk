@@ -39,6 +39,24 @@ export {
 } from "./plane-view";
 export { Grid, isInside, planeFrame } from "./grid";
 export {
+  type Dot,
+  DotsAction,
+  DotsPart,
+  type DotPlaneState,
+  DropLinePart,
+  GraphPaperPart,
+  XHandleAction,
+  XHandlePart,
+  XHandleSignal,
+  dotPlane,
+  dots,
+  dropLine,
+  graphPaper,
+  paperPixels,
+  xHandle,
+} from "./paper";
+export { DotPlaneView, DotsView, DropLineView, GraphPaperView, XHandleView } from "./paper-view";
+export {
   IconButtonAction,
   IconButtonSignal,
   MathLinePart,

@@ -1,4 +1,4 @@
-import { type Obstacles, type PixelPoint, placeLabels } from "@chalk/draw";
+import { type Obstacles, type PixelPoint, Stage, placeLabels } from "@chalk/draw";
 import type { FramePixels } from "@chalk/prop";
 import { type ComponentChildren, type JSX, createContext } from "preact";
 import { useContext, useRef } from "preact/hooks";
@@ -71,12 +71,15 @@ export function FrameStage({
   px,
   label,
   present,
+  look,
   children,
 }: {
   px: FramePixels;
   label: string;
   /** The children drawn now: labels of any other are dropped (a child left out, or hidden). */
   present: readonly string[];
+  /** Extra classes on the picture's SVG. */
+  look?: string;
   children: ComponentChildren;
 }): JSX.Element {
   const store = useRef<LabelStore>(new Map()).current;
@@ -111,20 +114,38 @@ export function FrameStage({
       target.addEventListener("pointercancel", onUp as EventListener);
     },
   };
+  const inside = (
+    <FrameContext.Provider value={{ ...base, owner: "" }}>
+      {children}
+      <LabelLayer present={present} />
+    </FrameContext.Provider>
+  );
+  const svgClass = `frame-svg${look ? ` ${look}` : ""}`;
+  // A linear frame is also a drawing stage: grids and kit pieces take its scales.
+  if (px.domain !== undefined)
+    return (
+      <Stage
+        label={label}
+        x={px.domain.x}
+        {...(px.domain.y !== undefined ? { y: px.domain.y } : {})}
+        width={px.width}
+        height={px.height}
+        svg={{ ref: svg, class: svgClass, style: { touchAction: "none" } }}
+      >
+        {inside}
+      </Stage>
+    );
   return (
     <svg
       ref={svg}
-      class="frame-svg"
+      class={svgClass}
       viewBox={`0 0 ${px.width} ${px.height}`}
       width="100%"
       role="img"
       aria-label={label}
       style={{ touchAction: "none" }}
     >
-      <FrameContext.Provider value={{ ...base, owner: "" }}>
-        {children}
-        <LabelLayer present={present} />
-      </FrameContext.Provider>
+      {inside}
     </svg>
   );
 }

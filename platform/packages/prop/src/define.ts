@@ -143,6 +143,11 @@ export type FrameKindName = "axis" | "plane";
 export type FramePixels = {
   width: number;
   height: number;
+  /**
+   * The model stretch across (and up) the picture, when the transform is linear: the frame is then
+   * also a drawing stage, so drawing-kit pieces and grids that take the stage's scales draw in it.
+   */
+  domain?: { x: readonly [number, number]; y?: readonly [number, number] };
   toPx: (x: number, y?: number) => readonly [number, number];
   fromPx: (px: number, py?: number) => readonly [number, number];
 };
@@ -150,6 +155,8 @@ export type FramePixels = {
 export type FrameSpec<S extends StoredState> = {
   kind: FrameKindName;
   pixels: (state: S, width: number) => FramePixels;
+  /** What the picture shows, for a screen reader ("Graph paper from −3 to 6 across"). */
+  label?: (state: S) => string;
 };
 
 export const PropRole = { Question: "question" } as const;
