@@ -60,7 +60,7 @@ const ChildSlot = memo(
 /**
  * A group's view: each child drawn by its own view, in the group's layout. What the learner does
  * to a child is the group's action by path ("input.change"): the group runs the child's law or
- * routes it. Each child sits in `data-child`, so its parts are found as "<child> › <part>".
+ * routes it. Each child sits in `data-child`, so its parts are found as "<child>/<part>".
  */
 const ThemeContext = createContext<string>("");
 

@@ -56,24 +56,24 @@ const drawn = (s: StoredState): Set<string> =>
       }),
     ),
   );
-/** Each part as the mirror's description names it now: "<leaf> › <part>". */
+/** Each part as the mirror's description names it now: "<leaf>/<part>". */
 const P = {
-  Mirror: "face › mirror",
-  Pole: "points › pole",
-  Focus: "points › focus",
-  Centre: "points › centre",
-  Object: "objectArrow › object",
-  Image: "imageArrow › image",
-  RayPrefix: "rayLines › ray:",
-  Beam: "rayLines › beam",
-  Readout: "readout › readout",
-  Signs: "signs › signs",
-  Ruler: "bench › ruler",
-  Screen: "whiteScreen › screen",
-  Mark: "marker › mark",
-  RayPicker: "rayButtons › rayPicker",
-  FocalStepper: "focal › focalStepper",
-  KindToggle: "kindToggle › kindToggle",
+  Mirror: "face/mirror",
+  Pole: "points/pole",
+  Focus: "points/focus",
+  Centre: "points/centre",
+  Object: "objectArrow/object",
+  Image: "imageArrow/image",
+  RayPrefix: "rayLines/ray:",
+  Beam: "rayLines/beam",
+  Readout: "readout/readout",
+  Signs: "signs/signs",
+  Ruler: "bench/ruler",
+  Screen: "whiteScreen/screen",
+  Mark: "marker/mark",
+  RayPicker: "rayButtons/rayPicker",
+  FocalStepper: "focal/focalStepper",
+  KindToggle: "kindToggle/kindToggle",
 } as const;
 // The mirror is a group that stores only facts: a state written by hand (its own fields changed)
 // is complete, and its leaves are worked out when read.

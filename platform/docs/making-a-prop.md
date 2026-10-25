@@ -13,7 +13,7 @@ Before writing a new prop, check whether it is:
 Hosts, layers and composites are explained in plain words in the project doc `plans/props-system.md`. Code: `platform/packages/prop/src/compose.ts`. Examples: `library/props/number-line` (a host: `axis.ts` is the core, `layers.ts` the layers, `view-layers.tsx` their drawing), `library/props/coordinates/src/coordinate-plane.ts` (layers on the blocks' plane), `library/props/polynomials/src/value-machine.ts` (a composite).
 
 - **A layer** owns its fields (no two parts of a host may define one field), says which other layers it `needs` and which it `excludes` (a board turning both on is refused at build), and is on when it shows something. Its drawing tags every part with `data-part`.
-- **A composite** owns the state and the laws. Each child is drawn from it (`childrenFor<S>()`: `kid(stepper, (s) => ({ value: s.input }), { change: (s, a) => [Put, { x: a.to }] })`); what the learner does to a child becomes one of the parent's actions, and anything not routed does nothing. Its view is `compositeView(def, { child: View, … })`. Children's ids sit under their names: `plane › handle`.
+- **A composite** owns the state and the laws. Each child is drawn from it (`childrenFor<S>()`: `kid(stepper, (s) => ({ value: s.input }), { change: (s, a) => [Put, { x: a.to }] })`); what the learner does to a child becomes one of the parent's actions, and anything not routed does nothing. Its view is `compositeView(def, { child: View, … })`. Children's ids sit under their names: `plane/handle` (an address).
 
 ## 1. Write the contract before any code
 

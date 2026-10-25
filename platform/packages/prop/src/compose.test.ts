@@ -166,11 +166,11 @@ describe("composites", () => {
     const seen = observationOf(pair as never, { total: 5 });
     expect(seen.summary).toBe("total 5");
     expect(seen.elements).toEqual([
-      { id: "left › n", value: 5 },
-      { id: "left › plus", does: "left › bump" },
-      { id: "right › n", value: 10 },
+      { id: "left/n", value: 5 },
+      { id: "left/plus", does: "left/bump" },
+      { id: "right/n", value: 10 },
       // Not routed: the right child's button does nothing here.
-      { id: "right › plus" },
+      { id: "right/plus" },
     ]);
   });
 
@@ -188,6 +188,6 @@ describe("composites", () => {
       order: ["left"],
       summary: () => "",
     });
-    expect(() => observationOf(bad as never, { total: 1 })).toThrow(/bad › left/);
+    expect(() => observationOf(bad as never, { total: 1 })).toThrow(/bad\/left/);
   });
 });

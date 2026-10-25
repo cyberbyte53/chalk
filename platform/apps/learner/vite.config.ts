@@ -116,7 +116,7 @@ function devReview(): Plugin {
       text: String(c.text ?? ""),
       ...(typeof c.snapshot === "string" ? { snapshot: c.snapshot } : {}),
       ...(typeof c.quote === "string" ? { quote: c.quote } : {}),
-      ...(piece ? { target: part ? `${piece} › ${part}` : piece } : {}),
+      ...(piece ? { target: part ? `${piece}/${part}` : piece } : {}),
     };
     if (c.board === "plan") return { ...base, source: `content/${String(c.lessonId)}/plan.md` };
     const on = findBoard(ROOT, String(c.lessonId), Number(c.boardIndex));

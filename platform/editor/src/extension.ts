@@ -290,9 +290,9 @@ async function copyReview(): Promise<void> {
  */
 async function askForComment(p: Picked): Promise<void> {
   const what = p.propPackage
-    ? `the ${p.prop} prop${p.part ? ` › ${p.part}` : ""} (everywhere it's used)`
+    ? `the ${p.prop} prop${p.part ? `/${p.part}` : ""} (everywhere it's used)`
     : p.piece
-      ? `${p.piece}${p.part ? ` › ${p.part}` : ""}`
+      ? `${p.piece}${p.part ? `/${p.part}` : ""}`
       : "the board";
   const where = `${what} · ${(p.site ?? p.board ?? "").replace(/^content\//, "")}`;
   const note = await vscode.window.showInputBox({
@@ -306,7 +306,7 @@ async function askForComment(p: Picked): Promise<void> {
 
 /** Files the comment through the dev server: on the board, or on the prop when one was picked. */
 async function leaveComment(p: Picked): Promise<void> {
-  const target = p.piece ? (p.part ? `${p.piece} › ${p.part}` : p.piece) : undefined;
+  const target = p.piece ? (p.part ? `${p.piece}/${p.part}` : p.piece) : undefined;
   const done = await changeComments({
     op: "add",
     comment: {

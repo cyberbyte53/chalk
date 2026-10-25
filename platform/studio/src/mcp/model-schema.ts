@@ -21,7 +21,11 @@ export const pieceSchema = z.object({
     .describe("Can change on this board (learner, rules, IS), and derived values that follow."),
   elements: z.array(
     z.object({
-      id: z.string().describe("What steps, comments and Jugnu call it: piece › id."),
+      id: z
+        .string()
+        .describe(
+          "What steps, comments and Jugnu call it: its address under the piece (piece/id).",
+        ),
       value: z.unknown().optional(),
       words: z.string().optional().describe("How the screen writes it."),
       does: z.union([z.string(), z.array(z.string())]).optional(),

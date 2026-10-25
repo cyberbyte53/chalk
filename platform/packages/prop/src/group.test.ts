@@ -252,11 +252,11 @@ describe("groups", () => {
     });
     const hidden = initialState(shy, {});
     if (!hidden.isOk) throw new Error();
-    expect(observationOf(shy, hidden.state).elements.map((e) => e.id)).not.toContain("note › line");
+    expect(observationOf(shy, hidden.state).elements.map((e) => e.id)).not.toContain("note/line");
     const shown = initialState(shy, { input: { value: 2 } });
     if (!shown.isOk) throw new Error();
     expect(observationOf(shy, shown.state).elements).toContainEqual({
-      id: "note › line",
+      id: "note/line",
       value: "x = 2",
     });
   });
@@ -266,7 +266,7 @@ describe("groups", () => {
     if (!placed.isOk) throw new Error(placed.errors.join());
     expect(placed.state.note).toBeNull();
     expect(observationOf(machine, placed.state).elements.map((e) => e.id)).not.toContain(
-      "note › line",
+      "note/line",
     );
     expect(initialState(machine, { input: null }).isOk).toBe(false);
   });
@@ -306,8 +306,8 @@ describe("groups", () => {
     if (!start.isOk) throw new Error();
     const seen = observationOf(machine, start.state);
     expect(seen.summary).toBe("the machine, 0 tried");
-    expect(seen.elements).toContainEqual({ id: "input › more", does: "input.change" });
-    expect(seen.elements).toContainEqual({ id: "dial › handle", value: 0, does: "dial.move" });
+    expect(seen.elements).toContainEqual({ id: "input/more", does: "input.change" });
+    expect(seen.elements).toContainEqual({ id: "dial/handle", value: 0, does: "dial.move" });
   });
 
   it("is fast enough to drag: a change costs well under a frame, checked fully or lightly", () => {

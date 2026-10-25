@@ -33,7 +33,9 @@ export {
   useFrame,
   useFrameLabels,
 } from "./frame";
-export { partPaths, partPathsIn } from "./part-paths";
+export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";
+// Addresses, for apps that find nodes on screen (the helpers live with the props).
+export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";
 export {
   type BoardModel,
   type ElementModel,

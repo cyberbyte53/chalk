@@ -1,7 +1,7 @@
 import { type Board, Locale, type Piece } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import { propLibrary } from "@chalk/library";
-import { BoardPlayer, RichText } from "@chalk/player";
+import { BoardPlayer, RichText, SEP, addressOf } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { JugnuLoader } from "./chapter-gate";
@@ -140,9 +140,11 @@ function ReviewBoard({
     e.stopPropagation();
     noteTap(e.clientX, e.clientY);
     const piece = target.closest<HTMLElement>("[data-piece]");
-    const part = piece === null ? null : target.closest<HTMLElement>("[data-part]");
+    // The part by its address under the piece ("objectArrow/object"), if a part was tapped.
+    const address = piece === null ? undefined : addressOf(target);
+    const part = address?.includes(SEP) ? address.slice(address.indexOf(SEP) + 1) : null;
     const selected = window.getSelection()?.toString().trim() ?? "";
-    pick(piece?.dataset.piece ?? null, part?.dataset.part ?? null, selected);
+    pick(piece?.dataset.piece ?? null, part, selected);
   };
   const open = comments.filter((c) => c.status !== CommentStatus.Done).length;
   return (

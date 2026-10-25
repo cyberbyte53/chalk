@@ -1,4 +1,5 @@
 import { type ZodType, z } from "zod";
+import { SEP } from "./address";
 import type {
   ActionSpec,
   AnyPropDef,
@@ -25,7 +26,7 @@ import { checkStored, observationOf, viewOf } from "./state";
  * - A **composite** is a parent prop drawn with other props as its children. The parent owns the
  *   state and the laws; each child is drawn from it (`from`), and what the learner does to a child
  *   becomes one of the parent's actions (`on`). Children describe themselves; their element ids
- *   sit under the child's name ("plane › handle").
+ *   sit under the child's name ("plane/handle").
  *
  * Both come out as ordinary prop definitions: the runtime, rules and events see one prop.
  */
@@ -356,8 +357,8 @@ export function childrenFor<P extends StoredState>() {
   });
 }
 
-/** Where a child id sits under its parent: "plane › handle". */
-export const PATH = " › ";
+/** Where a child id sits under its parent: "plane/handle". */
+const PATH = SEP;
 
 export type CompositeLayout = {
   /** Children in the order they are drawn, top to bottom. */
@@ -412,7 +413,7 @@ export function defineComposite<
   const stateOf = (parent: PropView, name: string) => {
     const made = childOf(name).from(parent as never);
     const checked = checkStored(childOf(name).def, made);
-    if (!checked.isOk) throw new Error(`${spec.type} › ${name}: ${checked.errors.join("; ")}`);
+    if (!checked.isOk) throw new Error(`${spec.type}/${name}: ${checked.errors.join("; ")}`);
     return checked.state;
   };
   const observe = (view: PropView & S): Observation => {

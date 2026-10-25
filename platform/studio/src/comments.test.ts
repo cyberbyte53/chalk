@@ -21,7 +21,7 @@ function repo(): string {
 function add(root: string, extra: Record<string, unknown> = {}, actor: Actor = Actor.Person) {
   const done = applyChange(
     root,
-    { op: "add", comment: { board: BOARD, target: "machine › put", text: "too small", ...extra } },
+    { op: "add", comment: { board: BOARD, target: "machine/put", text: "too small", ...extra } },
     actor,
   );
   if (!done.ok || done.comment === undefined) throw new Error(done.ok ? "no comment" : done.error);
@@ -40,7 +40,7 @@ describe("comments", () => {
     expect(read.problems).toEqual([]);
     expect(read.comments.map((c) => c.id).sort()).toEqual([onBoard.id, onProp.id].sort());
     expect(readFileSync(join(root, onBoard.home, "comments.yaml"), "utf8")).toContain(
-      "machine › put",
+      "machine/put",
     );
   });
 

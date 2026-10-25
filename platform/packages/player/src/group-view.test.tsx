@@ -131,12 +131,12 @@ describe("frames", () => {
     const html = draw();
     // Both names are found by path, and drawn = described for every part.
     expect([...partPaths(html)].sort()).toEqual([
-      "count › n",
-      "p › dot",
-      "p › name",
-      "paper › plane",
-      "q › dot",
-      "q › name",
+      "count/n",
+      "p/dot",
+      "p/name",
+      "paper/plane",
+      "q/dot",
+      "q/name",
     ]);
     const spots = [...html.matchAll(/<text[^>]*x="([\d.]+)" y="([\d.]+)"/g)].map((m) => [
       Number(m[1]),

@@ -395,7 +395,9 @@ server.registerTool(
 const step = z.union([
   z
     .object({
-      tap: z.string().describe('A piece, or a part of one: "machine" or "machine › put".'),
+      tap: z
+        .string()
+        .describe('A piece, or a part of one, by address: "machine" or "machine/plane/handle".'),
       text: z
         .string()
         .optional()
@@ -404,7 +406,7 @@ const step = z.union([
     .strict(),
   z
     .object({
-      drag: z.string().describe('A piece or part to drag: "graph › point".'),
+      drag: z.string().describe('A piece or part to drag, by address: "graph/point".'),
       by: z.tuple([z.number(), z.number()]).describe("How far, in pixels: [right, down]."),
     })
     .strict(),
@@ -489,7 +491,7 @@ server.registerTool(
   {
     title: "See (and use) boards",
     description:
-      "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (build path without .json, e.g. class10-maths/real-numbers/division-lemma/overview/story) or a lesson for all its pages. Returns a PNG per board and the board model (structured): every piece with where it's placed (file:line), its layers or children, setup (fixed where placed) and live values (what can change here), each thing on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what the student can do (with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are the element ids: piece › id, e.g. machine › plane › handle), starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the live values that changed, the events the app raised, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
+      "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (build path without .json, e.g. class10-maths/real-numbers/division-lemma/overview/story) or a lesson for all its pages. Returns a PNG per board and the board model (structured): every piece with where it's placed (file:line), its layers or children, setup (fixed where placed) and live values (what can change here), each thing on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what the student can do (with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are addresses: piece/element id, e.g. machine/plane/handle), starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the live values that changed, the events the app raised, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
     inputSchema: {
       board: z.string().min(1).describe("A board (build path without .json) or a lesson."),
       steps: z.array(step).max(40).optional().describe("What a finger does, in order."),
@@ -648,7 +650,7 @@ server.registerTool(
   {
     title: "Read comments",
     description:
-      'Read comments: the person\'s (from the preview), reviewers\' findings and regressions, and chat feedback filed as comments. `review: "latest"` is the review the person just handed over ("apply my review"); or filter by board prefix, prop, status, kind. `unanswered: true` lists what still needs your answer (not yet ready, closed or withdrawn). Each shows its board, target (piece › part), source line, plan, thread and changed files.',
+      'Read comments: the person\'s (from the preview), reviewers\' findings and regressions, and chat feedback filed as comments. `review: "latest"` is the review the person just handed over ("apply my review"); or filter by board prefix, prop, status, kind. `unanswered: true` lists what still needs your answer (not yet ready, closed or withdrawn). Each shows its board, target (an address: piece/part), source line, plan, thread and changed files.',
     inputSchema: {
       review: z.string().optional().describe('"latest", or a review id.'),
       board: z.string().optional().describe("A board, lesson or chapter path prefix."),
@@ -728,7 +730,7 @@ server.registerTool(
   {
     title: "File a comment",
     description:
-      'File a comment on a board. A reviewer: kind finding (one per item: the principle and what a student would get wrong), or kind regression with causedBy (the comment whose change broke it). Feedback the person gave in chat: kind comment, from: chat, so the threads stay the complete record. target is "piece" or "piece › part"; prop makes it about that prop wherever it is used.',
+      'File a comment on a board. A reviewer: kind finding (one per item: the principle and what a student would get wrong), or kind regression with causedBy (the comment whose change broke it). Feedback the person gave in chat: kind comment, from: chat, so the threads stay the complete record. target is an address: "piece" or "piece/part"; prop makes it about that prop wherever it is used.',
     inputSchema: {
       board: z.string().min(1),
       target: z.string().optional(),
@@ -748,7 +750,7 @@ server.registerTool(
   },
   async (args) => {
     const on = boardName(args.board);
-    const piece = args.target?.split("›")[0]?.trim();
+    const piece = args.target?.split("/")[0];
     const where = readSources(root)[`${on}.json`];
     const source = (piece && where?.pieces[piece]) || where?.board;
     const done = await changeComments({

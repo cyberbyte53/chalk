@@ -1,4 +1,5 @@
 import { type ZodType, z } from "zod";
+import { SEP } from "./address";
 import {
   type ActionSpec,
   type AnyPropDef,
@@ -41,8 +42,8 @@ import { flatten, isInstant, runEffect } from "./steps";
  * - **Invariants** across children are checked on the whole view (refused whole if broken).
  */
 
-/** Where an element sits under its parent in descriptions and on screen: "plane › handle". */
-export const PATH = " › ";
+/** Where an element sits under its parent in descriptions and on screen: "plane/handle". */
+export const PATH = SEP;
 
 /** A refusal: the action had nowhere to go, and why. */
 export type Refusal = { readonly refused: string };

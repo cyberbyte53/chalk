@@ -55,7 +55,7 @@ function convert(file: string): Comment {
     by,
     createdAt,
     ...(board !== undefined && board !== "plan" ? { board } : {}),
-    ...(piece !== undefined ? { target: part ? `${piece} › ${part}` : piece } : {}),
+    ...(piece !== undefined ? { target: part ? `${piece}/${part}` : piece } : {}),
     ...(str(m.prop) ? { prop: str(m.prop) } : {}),
     ...(str(m.source) ? { source: str(m.source) } : {}),
     ...(str(m.snapshot) ? { snapshot: str(m.snapshot) } : {}),

@@ -1,17 +1,19 @@
 import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/content";
 import { Actor } from "@chalk/content";
-import type { Box } from "@chalk/prop";
+import { type Box, joinPath, namesOf, segment } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { findNode, stampPaths } from "./part-paths";
 import type { PropRegistry } from "./prop-module";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 
-/** Where an element the view tagged `data-part` sits, relative to the prop's box. */
+/** Where a part (its address under the piece) is drawn in the piece's box, if it is tagged. */
 function tagged(box: HTMLDivElement | null, part: string): Box | undefined {
   if (box === null) return undefined;
-  const element = box.querySelector(`[data-part="${CSS.escape(part)}"]`);
-  if (element === null) return undefined;
+  const name = box.getAttribute("data-piece") ?? "";
+  const element = findNode(box.parentElement ?? box, joinPath(segment(name), part));
+  if (element === undefined) return undefined;
   const outer = box.getBoundingClientRect();
   const inner = element.getBoundingClientRect();
   return {
@@ -21,6 +23,12 @@ function tagged(box: HTMLDivElement | null, part: string): Box | undefined {
     height: inner.height,
   };
 }
+
+/** A leaf's part name from its address under the piece (what `locate` takes). */
+const nameIn = (part: string): string => {
+  const names = namesOf(part);
+  return names.length === 1 ? (names[0] ?? part) : part;
+};
 
 export type LayoutContext = {
   locale: Locale;
@@ -48,7 +56,11 @@ function PropPieceView({
       if (entry !== undefined) setWidth(Math.max(200, Math.round(entry.contentRect.width)));
     });
     observer.observe(element);
-    return () => observer.disconnect();
+    const stopStamping = stampPaths(element);
+    return () => {
+      observer.disconnect();
+      stopStamping();
+    };
   }, []);
   const module = context.registry[piece.prop];
   if (module === undefined) throw new Error(`No prop type "${piece.prop}" in the library`);
@@ -60,7 +72,7 @@ function PropPieceView({
   const ringOf = (part: string | undefined): Box | undefined =>
     part === undefined
       ? undefined
-      : (module.def.locate?.({ ...runtime.getView(piece.name) } as never, part, width) ??
+      : (module.def.locate?.({ ...runtime.getView(piece.name) } as never, nameIn(part), width) ??
         tagged(box.current, part));
   const ring = ringOf(pointed?.part);
   const isWholeGlow = pointed !== undefined && ring === undefined;

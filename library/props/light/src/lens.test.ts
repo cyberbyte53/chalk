@@ -450,7 +450,7 @@ describe("lens: drawn as described", () => {
 
   it("names the spheres' centres C₁ and C₂ when it shows them", () => {
     const o = observationOf(def, viewOf(def, { ...convex, showCentres: true }));
-    expect(o.elements.find((e) => e.id === "glass › c1")?.value).toContain("right face");
-    expect(o.elements.find((e) => e.id === "glass › c2")?.value).toContain("left face");
+    expect(o.elements.find((e) => e.id === "glass/c1")?.value).toContain("right face");
+    expect(o.elements.find((e) => e.id === "glass/c2")?.value).toContain("left face");
   });
 });

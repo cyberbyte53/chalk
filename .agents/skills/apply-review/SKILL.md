@@ -5,7 +5,7 @@ description: Work through a review (the comments the person made in one sitting,
 
 # Apply a review
 
-A **review** is one sitting of the person's comments, handed over in one line: `apply my review (N comments)`. Read them with the `comments` tool (`review: "latest"`). Each has its board, its target (`piece › part`), the piece's source line, what the piece said (`snapshot`), the commit it was made on, and what the person said. Format and rules: `platform/docs/comments.md`.
+A **review** is one sitting of the person's comments, handed over in one line: `apply my review (N comments)`. Read them with the `comments` tool (`review: "latest"`). Each has its board, its target (an address: `piece/part`), the piece's source line, what the piece said (`snapshot`), the commit it was made on, and what the person said. Format and rules: `platform/docs/comments.md`.
 
 You read and write comments only with the tools (`comments`, `comment_update`, `comment_add`); never edit comments.yaml.
 

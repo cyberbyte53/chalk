@@ -53,7 +53,7 @@ export const commentSchema = z
     createdAt: z.string(),
     /** The board, by its build path without .json; absent for a comment on a plan. */
     board: z.string().optional(),
-    /** What on the board, as a path: "machine", "machine › put", "shadow › circle › point". */
+    /** What on the board, by address: "machine", "machine/put", "shadow/circle/point". */
     target: z.string().optional(),
     /** For a comment about a prop wherever it is used: its type. */
     prop: z.string().optional(),

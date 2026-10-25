@@ -6,7 +6,7 @@ import type { PropViewProps } from "./prop-module";
  * A composite's view: each child drawn by its own view, one under another, from the parent's
  * state. What the learner does to a child goes to the parent as the action the composite routes it
  * to; anything it doesn't route does nothing. Each child sits in `data-child`, so a part inside it
- * is found as "<child> › <part>".
+ * is found as "<child>/<part>".
  */
 export function compositeView(
   def: AnyPropDef,

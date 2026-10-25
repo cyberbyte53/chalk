@@ -1,7 +1,8 @@
 import type { About, Locale } from "@chalk/content";
-import { PropRole, observationOfView } from "@chalk/prop";
+import { PropRole, SEP, namesOf, observationOfView } from "@chalk/prop";
 import type { RefObject } from "preact";
 import { useEffect, useRef } from "preact/hooks";
+import { addressOf } from "./part-paths";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 
@@ -63,9 +64,11 @@ export function pickAt(
   const elements = observationOfView(def, runtime.getView(prop)).elements;
   const ids = new Set(elements.map((e) => e.id));
   let part: string | undefined;
-  const tagged = target.closest("[data-part]")?.getAttribute("data-part");
-  if (tagged != null && ids.has(tagged) && piece.contains(target.closest("[data-part]")))
-    part = tagged;
+  // Its address under the piece ("objectArrow/object"): what the description calls it.
+  const address = addressOf(target);
+  const at = address?.indexOf(SEP) ?? -1;
+  const tagged = at < 0 ? undefined : address?.slice(at + 1);
+  if (tagged !== undefined && ids.has(tagged)) part = tagged;
   else if (def.locate !== undefined) {
     const box = piece.getBoundingClientRect();
     const width = Math.max(200, Math.round(box.width));
@@ -73,7 +76,9 @@ export function pickAt(
     const py = y - box.top;
     let best = Number.POSITIVE_INFINITY;
     for (const { id } of elements) {
-      const at = def.locate({ ...runtime.getView(prop) } as never, id, width);
+      const names = namesOf(id);
+      const name = names.length === 1 ? (names[0] ?? id) : id;
+      const at = def.locate({ ...runtime.getView(prop) } as never, name, width);
       if (at === undefined) continue;
       const isIn =
         px >= at.x - REACH_PX &&

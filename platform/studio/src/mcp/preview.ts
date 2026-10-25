@@ -107,7 +107,7 @@ async function launch(): Promise<Browser> {
 export type Shot = {
   board: string;
   png: Buffer;
-  /** Each piece's parts by name (data-part), the targets a step can name: "piece › part". */
+  /** Each piece's parts by address: what a step can name ("machine/plane/handle"). */
   parts: Record<string, string[]>;
   /** Pieces drawn wider than the phone or cut off by their box. */
   overflow: string[];
@@ -338,37 +338,25 @@ const stepWords = (step: Step): string =>
  * as its TeX too, so "x^2 - 4" or "x² − 4" both work).
  */
 function markTarget(arg: { target: string; text?: string }): string | null {
-  const [piece, ...path] = arg.target.split("›").map((t) => t.trim());
   for (const old of document.querySelectorAll("[data-chalk-target]"))
     old.removeAttribute("data-chalk-target");
-  const pieceEl = document.querySelector<HTMLElement>(`[data-piece="${CSS.escape(piece ?? "")}"]`);
+  // The player writes each node's address on it (data-path): one exact match.
+  const piece = arg.target.split("/")[0] ?? "";
+  const pieceEl = document.querySelector<HTMLElement>(`[data-piece="${CSS.escape(piece)}"]`);
   if (pieceEl === null) {
     const names = [...document.querySelectorAll<HTMLElement>("[data-piece]")].map(
       (e) => e.dataset.piece,
     );
     return `no piece "${piece}" on screen (shown now: ${names.join(", ")}). In play, a piece can stay hidden until the ones before it are answered.`;
   }
-  // A part's path: the composite children it sits in (data-child), then the part (data-part).
-  const pathsIn = (root: HTMLElement) =>
-    [...root.querySelectorAll<HTMLElement>("[data-part]")].map((e) => {
-      const names: string[] = [];
-      for (let at = e.parentElement; at !== null && at !== root; at = at.parentElement)
-        if (at.dataset.child !== undefined) names.unshift(at.dataset.child);
-      return [...names, e.dataset.part].join(" › ");
-    });
-  let el: HTMLElement | null = pieceEl;
-  for (const [i, name] of path.filter((p) => p !== "").entries()) {
-    const isLast = i === path.length - 1;
-    const asChild: HTMLElement | null = el.querySelector<HTMLElement>(
-      `[data-child="${CSS.escape(name)}"]`,
+  let el: HTMLElement | null = document.querySelector<HTMLElement>(
+    `[data-path="${CSS.escape(arg.target)}"]`,
+  );
+  if (el === null) {
+    const paths = [...pieceEl.querySelectorAll<HTMLElement>("[data-part]")].map(
+      (e) => e.dataset.path ?? "",
     );
-    const asPart: HTMLElement | null = el.querySelector<HTMLElement>(
-      `[data-part="${CSS.escape(name)}"]`,
-    );
-    const next: HTMLElement | null = isLast ? (asPart ?? asChild) : asChild;
-    if (next === null)
-      return `no part "${path.join(" › ")}" in ${piece} (parts: ${[...new Set(pathsIn(pieceEl))].join(", ") || "none"})`;
-    el = next;
+    return `no part "${arg.target}" (parts: ${[...new Set(paths)].join(", ") || "none"})`;
   }
   if (arg.text !== undefined) {
     const norm = (t: string) => t.replace(/[−–]/g, "-").replace(/\s+/g, "").toLowerCase();
@@ -526,7 +514,7 @@ async function shootNow(
       const out: Record<string, string[]> = {};
       for (const piece of c.querySelectorAll<HTMLElement>("[data-piece]")) {
         const names = [...piece.querySelectorAll<HTMLElement>("[data-part]")].map(
-          (p) => p.dataset.part ?? "",
+          (p) => p.dataset.path ?? p.dataset.part ?? "",
         );
         if (names.length > 0) out[piece.dataset.piece ?? "?"] = [...new Set(names)];
       }

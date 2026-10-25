@@ -212,7 +212,7 @@ function LabelLayer({ present }: { present: readonly string[] }): JSX.Element | 
       {placed.map((p, i) => {
         const l = sorted[i];
         if (l === undefined) return null;
-        // Under its child's name, so a label's part is found as "<child> › <part>".
+        // Under its child's name, so a label's part is found as "<child>/<part>".
         return (
           <g key={p.id} data-child={l.owner}>
             <text

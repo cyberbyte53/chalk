@@ -9,7 +9,18 @@ import {
 } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
-import { BoardPlayer, boardModel, runningBoards, stampCodePaths } from "@chalk/player";
+import {
+  BoardPlayer,
+  SEP,
+  addressOf,
+  boardModel,
+  findNode,
+  joinPath,
+  namesOf,
+  runningBoards,
+  segment,
+  stampCodePaths,
+} from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { CONTENT_ROUTE } from "./content-store";
@@ -51,7 +62,7 @@ type Thread = {
   text: string;
   /** The board, by build path. */
   board?: string;
-  /** What on it: "machine" or "machine › put". */
+  /** What on it, by address: "machine" or "machine/plane/handle". */
   target?: string;
   /** A comment on a prop wherever it is used: shown under every board that places it. */
   prop?: string;
@@ -251,7 +262,7 @@ function BoardThreads({
         <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
         {t.kind !== "comment" && <span class={`preview-kind is-${t.kind}`}>{t.kind}</span>}
         {t.prop !== undefined ? (
-          <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes("›") ? ` › ${t.target.split("›").at(-1)?.trim()}` : ""}`}</span>
+          <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
         ) : (
           t.target && <span class="preview-piece">{t.target}</span>
         )}
@@ -390,8 +401,10 @@ function BoardThreads({
  * prop comment, that prop where this board places it); null for a comment on the whole board.
  */
 function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
-  const [pieceName, ...rest] = (t.target ?? "").split("›").map((x) => x.trim());
-  const partName = rest.at(-1);
+  const target = t.target ?? "";
+  const [pieceName] = namesOf(target);
+  // The part's address under its piece ("objectArrow/object"), if the comment is on a part.
+  const under = target.includes(SEP) ? target.slice(target.indexOf(SEP) + 1) : undefined;
   const named = pieceName
     ? phone.querySelector<HTMLElement>(`[data-piece="${CSS.escape(pieceName)}"]`)
     : null;
@@ -403,10 +416,10 @@ function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
         : phone.querySelector<HTMLElement>(`.prop-${CSS.escape(t.prop)}`);
   if (piece === null || piece === undefined) return null;
   const part =
-    partName === undefined
-      ? null
-      : piece.querySelector<HTMLElement>(`[data-part="${CSS.escape(partName)}"]`);
-  return part ?? piece;
+    under === undefined
+      ? undefined
+      : findNode(piece.parentElement ?? phone, joinPath(segment(piece.dataset.piece ?? ""), under));
+  return (part as HTMLElement | undefined) ?? piece;
 }
 
 function PreviewBoard({
@@ -642,6 +655,12 @@ type PickTarget = {
  * filed with it (library/props/<package>/comments.yaml) and shown wherever it is used; the basics
  * (words, choices, buttons) are the lesson's own, so those stay with the board.
  */
+/** An element's address under its piece ("objectArrow/object"). */
+function underPiece(el: Element): string | undefined {
+  const address = addressOf(el);
+  return address?.includes(SEP) ? address.slice(address.indexOf(SEP) + 1) : undefined;
+}
+
 function picksAt(target: HTMLElement): PickTarget[] {
   const card = target.closest<HTMLElement>("[data-board]");
   const phone = target.closest<HTMLElement>(".preview-phone");
@@ -663,8 +682,8 @@ function picksAt(target: HTMLElement): PickTarget[] {
     prop,
     propPackage: isProp ? pkg : undefined,
     words: isProp
-      ? `prop ${prop}${part ? ` › ${part}` : ""}`
-      : `board › ${piece}${part ? ` › ${part}` : ""}`,
+      ? `prop ${prop}${part ? `${SEP}${part}` : ""}`
+      : `${piece}${part ? `${SEP}${part}` : ""}`,
   });
   const parts: PickTarget[] = [];
   for (
@@ -672,7 +691,7 @@ function picksAt(target: HTMLElement): PickTarget[] {
     el !== null && pieceEl.contains(el) && el !== pieceEl;
     el = el.parentElement?.closest<HTMLElement>("[data-part]") ?? null
   )
-    parts.push(of(el, el.dataset.part));
+    parts.push(of(el, underPiece(el)));
   return [...parts, of(pieceEl), whole];
 }
 

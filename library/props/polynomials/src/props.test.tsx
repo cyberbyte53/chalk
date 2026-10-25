@@ -406,8 +406,8 @@ describe("valueMachine", () => {
     const { html, ids } = expectAddressable(machine, ValueMachineView, s);
     // One picture: graph paper, the drop line, the dots and the handle drawn together.
     expect(html.match(/<svg/g)?.length).toBe(2); // the stage's own SVG and its top layer
-    expect(ids).toContain("plane › handle › handle");
-    expect(ids).toContain("stepper › more");
+    expect(ids).toContain("plane/handle/handle");
+    expect(ids).toContain("stepper/more");
   });
 });
 

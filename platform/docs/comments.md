@@ -18,7 +18,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
   by: you
   createdAt: 2026-10-24T05:21:44.000Z
   board: class10-maths/polynomials/what-is-a-polynomial/overview/names
-  target: which › option
+  target: which/option
   source: content/class10-maths/polynomials/what-is-a-polynomial/overview.ts:205
   snapshot: "Which of these are quadratic? …"
   commit: ff358ba…
@@ -36,7 +36,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 
 - **`text`**: what was said.
 - **`board`**: the board, by its build path without `.json`. Open it at `?dev&board=<board>`, or with `render_board`.
-- **`target`**: what was picked on the board, as a path: the piece's name, then the part (`which › option`). Absent for the whole board. If the board changes and the path no longer finds anything, the preview shows the comment as detached.
+- **`target`**: what was picked on the board, by address: the piece's name, then the groups and the part, joined by `/` (`which/option`). Absent for the whole board. If the board changes and the path no longer finds anything, the preview shows the comment as detached.
 - **`prop`**: the prop's type, for a comment on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`. A plan comment points at `plan.md` and has `quote` (the exact words).
 - **`snapshot`**: what the piece said when the comment was made. **`commit`**: the commit it was made on.

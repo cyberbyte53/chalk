@@ -1,3 +1,4 @@
+export { SEP, joinPath, namesOf, pathOf, segment } from "./address";
 export { BOARD, BoardAction, BoardSignal, boardProp } from "./board";
 export { Color, cssColor } from "@chalk/look";
 export { colorSchema } from "./color";
@@ -96,7 +97,6 @@ export {
   hostOf,
   isInAxis,
   isInPlane,
-  PATH,
   type AnyLayer,
   type AxisPixels,
   type AxisWindow,
@@ -119,6 +119,7 @@ export {
   invariantOfView,
   layoutChildren,
   mergeGiven,
+  PATH,
   refuse,
   schemaWithout,
   shownOf,

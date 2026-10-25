@@ -1,5 +1,5 @@
 import type { Board, Locale, Piece } from "@chalk/content";
-import { RichText } from "@chalk/player";
+import { RichText, findNode, joinPath, segment } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 
@@ -147,8 +147,7 @@ export function CommentMarks({
       if (c.piece === null) return [];
       const piece = root.querySelector(`[data-piece="${CSS.escape(c.piece)}"]`);
       const el =
-        (c.part === null ? null : piece?.querySelector(`[data-part="${CSS.escape(c.part)}"]`)) ??
-        piece;
+        (c.part === null ? undefined : findNode(root, joinPath(segment(c.piece), c.part))) ?? piece;
       if (el === null || el === undefined) return [];
       const r = el.getBoundingClientRect();
       return [

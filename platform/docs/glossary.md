@@ -18,6 +18,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Signal** | Something a prop announces (pressed, landed, wrong) | `SignalSpec` |
 | **Commit** | A signal where the learner decides something; the only thing logged | `SignalSpec.isCommit` |
 | **Part** | A named thing on a prop that can be pointed at; can come and go | `PropDef.parts`, `PropDef.locate` |
+| **Address** | Where a node is on a board, one spelling everywhere: names from the piece down, joined by `/` (`mirror/objectArrow/object`); on screen as `data-path`. A `/` inside a name from data is written `%2F` | `pathOf`, `namesOf` (`@chalk/prop`), `findNode`, `addressOf` (`@chalk/player`) |
 | **Leaf** | A prop with no children: one thing, with its own state or with every field bound | `defineProp` |
 | **Group** | A prop made of other props (its children) joined by links; its state is its own fields plus each child's, nested. A board works the same way | `defineGroup` (`@chalk/prop`), `groupView` (`@chalk/player`) |
 | **Link** | How a group wires its children: IS (a child's field always equals a function of the rest), WHEN (on a child's signal, run steps), ROUTE (take over a learner action on a child, or refuse it) | `GroupSpec.is`, `.when`, `.route` |
