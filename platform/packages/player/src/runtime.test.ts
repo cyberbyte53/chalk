@@ -9,6 +9,7 @@ import {
   task,
   tween,
 } from "@chalk/prop";
+import { defineGroup } from "@chalk/prop";
 import { effect } from "@preact/signals-core";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
@@ -405,5 +406,46 @@ describe("BoardRuntime", () => {
     await board.call("d", "sneak", {}, Actor.Learner);
     expect(board.getStored("d").at).toBe(3);
     expect(errors.join()).toMatch(/d\.sneak changed at, outside what it declares/);
+  });
+
+  it("runs a group placed on a board: children's laws, links, routes, and board rules reading inside it", async () => {
+    // A dial whose `at` is bound to a label's value; dragging the dial is routed to the label.
+    const pair = defineGroup({
+      type: "pair",
+      describe: "a dial bound to a value",
+      children: { value: label, dial },
+      is: { "dial.at": (s) => (s.value as { value: number }).value },
+      route: {
+        "dial.setTo": (_s, a) => [["value.setValue", { v: a.to }]],
+        "dial.turnTo": (_s, a) => [["value.setValue", { v: a.to }]],
+        "dial.sneak": () => undefined,
+      },
+      summary: () => "a pair",
+      layout: { kind: "column", children: ["value", "dial"] },
+    });
+    const { services, errors } = fakeServices();
+    const board = new BoardRuntime(
+      boardOf({
+        name: "b",
+        root: {
+          name: "page",
+          kind: "column",
+          children: [
+            { name: "p", kind: "prop", prop: "pair", with: { value: { value: 2 } } },
+            { name: "shown", kind: "prop", prop: "label" },
+          ],
+        },
+        is: [{ set: "shown.value", to: "p.dial.at * 10" }],
+      }),
+      (t) => (t === "pair" ? pair : defs[t]),
+      services,
+    );
+    expect(board.getStored("p").dial).toEqual({ at: 2 });
+    expect(board.getStored("shown").value).toBe(20);
+    await board.call("p", "dial.setTo", { to: 7 }, Actor.Learner);
+    expect(board.getStored("p").value).toMatchObject({ value: 7 });
+    expect(board.getStored("p").dial).toEqual({ at: 7 });
+    expect(board.getStored("shown").value).toBe(70);
+    expect(errors).toEqual([]);
   });
 });

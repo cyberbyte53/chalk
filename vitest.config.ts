@@ -16,6 +16,7 @@ export default defineConfig({
   test: {
     include: [
       "platform/packages/*/src/**/*.test.ts",
+      "platform/packages/*/src/**/*.test.tsx",
       "library/props/*/src/**/*.test.ts",
       "library/props/*/src/**/*.test.tsx",
       "platform/studio/src/**/*.test.ts",

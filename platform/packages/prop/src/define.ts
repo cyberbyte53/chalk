@@ -136,6 +136,22 @@ export type Observation = {
   hidden?: Readonly<Record<string, unknown>>;
 };
 
+/** What a frame offers: a 1-D axis (numbers along a line) or a 2-D plane. */
+export type FrameKindName = "axis" | "plane";
+
+/** Where things are drawn in a frame at a width: its height, and model ↔ pixels (y down). */
+export type FramePixels = {
+  width: number;
+  height: number;
+  toPx: (x: number, y?: number) => readonly [number, number];
+  fromPx: (px: number, py?: number) => readonly [number, number];
+};
+
+export type FrameSpec<S extends StoredState> = {
+  kind: FrameKindName;
+  pixels: (state: S, width: number) => FramePixels;
+};
+
 export const PropRole = { Question: "question" } as const;
 export type PropRole = (typeof PropRole)[keyof typeof PropRole];
 
@@ -186,6 +202,14 @@ export type PropDef<
   /** What this prop says when told to `say` (for audio generation and the voice check). */
   speech?: (state: S) => Spoken | undefined;
   role?: PropRole;
+  /**
+   * A frame this prop provides: other props in a group's frame layout draw into its picture through
+   * its transform (graph paper, an optical bench, an axis). `pixels` is pure, so `locate` and tests
+   * use the same mapping the view draws with.
+   */
+  frame?: FrameSpec<S>;
+  /** The kind of frame this prop draws on, when it only draws inside one (a ray, a marker). */
+  drawsOn?: FrameKindName;
   /**
    * Whether Jugnu may bring this prop in to explain a concept (a number line, tiles). Words, buttons,
    * questions and timers are not explainers. Default: true.

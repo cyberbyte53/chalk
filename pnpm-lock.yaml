@@ -1328,6 +1328,9 @@ importers:
       '@types/d3-shape':
         specifier: 3.1.6
         version: 3.1.6
+      preact-render-to-string:
+        specifier: 6.5.13
+        version: 6.5.13(preact@10.29.8)
 
   platform/packages/events:
     dependencies:
@@ -1363,6 +1366,9 @@ importers:
       '@chalk/content':
         specifier: workspace:*
         version: link:../content
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../draw
       '@chalk/events':
         specifier: workspace:*
         version: link:../events
@@ -1388,6 +1394,9 @@ importers:
       '@types/katex':
         specifier: 0.16.7
         version: 0.16.7
+      preact-render-to-string:
+        specifier: 6.5.13
+        version: 6.5.13(preact@10.29.8)
       zod:
         specifier: 3.25.76
         version: 3.25.76

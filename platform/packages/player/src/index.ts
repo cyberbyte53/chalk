@@ -24,6 +24,15 @@ export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource } from "./narration";
 export type { PropModule, PropRegistry, PropViewProps } from "./prop-module";
 export { compositeView } from "./composite-view";
+export { groupView } from "./group-view";
+export {
+  type FrameContextValue,
+  type FrameLabel,
+  FrameStage,
+  InFrame,
+  useFrame,
+  useFrameLabels,
+} from "./frame";
 export { partPaths, partPathsIn } from "./part-paths";
 export {
   type BoardModel,
@@ -48,3 +57,6 @@ export {
 } from "./runtime";
 export { type BoardState, type HeadlessBoard, boardState, headlessBoard } from "./headless";
 export { t, UiText, type UiTextKey } from "./ui-text";
+
+/** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */
+export { setStateChecks } from "@chalk/prop";

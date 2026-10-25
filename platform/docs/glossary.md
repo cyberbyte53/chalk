@@ -18,6 +18,13 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Signal** | Something a prop announces (pressed, landed, wrong) | `SignalSpec` |
 | **Commit** | A signal where the learner decides something; the only thing logged | `SignalSpec.isCommit` |
 | **Part** | A named thing on a prop that can be pointed at; can come and go | `PropDef.parts`, `PropDef.locate` |
+| **Leaf** | A prop with no children: one thing, with its own state or with every field bound | `defineProp` |
+| **Group** | A prop made of other props (its children) joined by links; its state is its own fields plus each child's, nested. A board works the same way | `defineGroup` (`@chalk/prop`), `groupView` (`@chalk/player`) |
+| **Link** | How a group wires its children: IS (a child's field always equals a function of the rest), WHEN (on a child's signal, run steps), ROUTE (take over a learner action on a child, or refuse it) | `GroupSpec.is`, `.when`, `.route` |
+| **Bound field** | A child's field an IS link writes; the child's own actions can't change it, so a learner control on it must be routed | `GroupLayout.bound` |
+| **Frame** | One picture several children draw into: its provider owns the window and the transform; it places every child's labels in one pass | `FrameSpec`, `FrameStage`, `useFrame`, `useFrameLabels` |
+| **Drawing kit** | Stateless drawing pieces shared by props (labware, geometry marks, optics, circuit symbols) | `@chalk/draw` (`lab.tsx`, `marks.tsx`, `optics.tsx`, `circuit.tsx`) |
+| **Written number** | A number as Chalk writes it, the same everywhere: exact (integer, fraction, surd) or a rounded decimal, as text and TeX | `exact`, `quantity`, `formula` (`@chalk/exact`) |
 | **The one door** | The single path every change takes: an action, checked against the prop's schema | `applyPatch`, `BoardRuntime.call` |
 | **IS** | A rule that keeps a prop's input equal to an expression, always | `IsRule` |
 | **WHEN** | A rule that answers a signal (with an optional condition) with a script | `WhenRule` |

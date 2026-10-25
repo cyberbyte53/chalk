@@ -36,8 +36,34 @@ export function observationOf(def: AnyPropDef, stored: StoredState): Observation
   };
 }
 
+/**
+ * How much every change is checked. "full" (the default: development, tests, the content build,
+ * the preview) parses the whole state against the prop's schema and runs its invariant on every
+ * change, so a bug fails loudly where it happens. "light" (the shipped app) runs the invariant only;
+ * action arguments are always checked, and saved state is checked fully when loaded or saved.
+ */
+export type StateChecks = "full" | "light";
+let checks: StateChecks = "full";
+export function setStateChecks(mode: StateChecks): void {
+  checks = mode;
+}
+export function isFullChecking(): boolean {
+  return checks === "full";
+}
+
 /** Checks a whole stored state against the prop's schema and invariant. */
-export function checkStored(def: AnyPropDef, candidate: unknown): StateResult {
+export function checkStored(
+  def: AnyPropDef,
+  candidate: unknown,
+  mode: StateChecks = checks,
+): StateResult {
+  if (mode === "light") {
+    const state = candidate as StoredState;
+    const broken = def.invariant?.(state);
+    return broken === undefined
+      ? { isOk: true, state }
+      : { isOk: false, errors: [`${def.type}: ${broken}`] };
+  }
   const parsed = def.state.safeParse(candidate);
   if (!parsed.success) {
     return {
@@ -69,7 +95,14 @@ export function initialState(
       ),
     };
   }
-  return checkStored(def, { ...def.defaults, ...given });
+  // A group merges child by child and makes its bindings true (group.ts); a placement is always
+  // checked fully, at build and when a board opens.
+  const place = (def as { place?: (g: Readonly<Record<string, unknown>>) => StoredState }).place;
+  return checkStored(
+    def,
+    place !== undefined ? place(given) : { ...def.defaults, ...given },
+    "full",
+  );
 }
 
 /**

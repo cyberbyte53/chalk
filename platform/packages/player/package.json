@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@chalk/content": "workspace:*",
+    "@chalk/draw": "workspace:*",
     "@chalk/events": "workspace:*",
     "@chalk/jugnu": "workspace:*",
     "@chalk/prop": "workspace:*",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/katex": "0.16.7",
-    "zod": "3.25.76"
+    "zod": "3.25.76",
+    "preact-render-to-string": "6.5.13"
   }
 }
