@@ -1,9 +1,9 @@
 import { Actor, lessonSchema } from "@chalk/content";
-import { BoardRuntime, type RuntimeServices, propRecords } from "@chalk/player";
+import { BoardRuntime, type RuntimeServices, continueRecord } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import coinLesson from "../../../content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json";
-import doesItEnd from "../../../platform/studio/evals/boards/lessons/does-it-end.json";
+import coinLesson from "../../../platform/studio/evals/boards/does-a-coin-settle.json";
+import doesItEnd from "../../../platform/studio/evals/boards/does-it-end.json";
 import { propDefs } from "./index";
 
 // Real lessons, real props, fake time: the whole board model end to end, without a browser.
@@ -89,19 +89,20 @@ describe("does a coin settle?", () => {
     runtime.start();
     await runtime.call("tossMany", "press", {}, Actor.Learner);
     await advance(5);
-    const records = propRecords(board, runtime);
-    const byName = (name: string) => records[String(runtime.idOf(name))];
+    const records = continueRecord(board, runtime);
+    const byName = (name: string) => records[name];
     expect(byName("chart")).toBeUndefined();
     expect(byName("tossMany")?.isTouched).toBe(true);
     // The learner never tapped the coin, but its result is still kept.
     expect(byName("coin")).toMatchObject({
+      type: runtime.factsKey("coin"),
       isTouched: false,
-      state: { heads: expect.any(Number) },
+      facts: { heads: expect.any(Number) },
     });
-    expect((byName("coin")?.state.heads as number) + (byName("coin")?.state.tails as number)).toBe(
+    expect((byName("coin")?.facts.heads as number) + (byName("coin")?.facts.tails as number)).toBe(
       100,
     );
-    expect(byName("title")?.state.text).toMatchObject({ en: expect.any(String) });
+    expect(byName("title")?.facts.text).toMatchObject({ en: expect.any(String) });
   });
 
   it("stops ticking when the board goes away", async () => {

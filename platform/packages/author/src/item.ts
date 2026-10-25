@@ -1,11 +1,4 @@
-import {
-  type Board,
-  type BuiltPage,
-  type BuiltQuestion,
-  Kind,
-  propPieces,
-  walkPieces,
-} from "@chalk/content";
+import { type Board, type BuiltPage, type BuiltQuestion, Kind, propPieces } from "@chalk/content";
 import { PropRole } from "@chalk/prop";
 import type { BuiltBoard } from "./board";
 import { isFamily } from "./family";
@@ -57,8 +50,7 @@ export function builtOf(item: BoardItem, module: Readonly<Record<string, unknown
 }
 
 /**
- * The item's board as it is played: its pieces numbered in layout order (1, 2, 3 …), its questions
- * told what they are about and whether they count (a bank question is graded on the concepts it
+ * The item's board as it is played: its questions told what they are about and whether they count (a bank question is graded on the concepts it
  * tests; a page's are about its concept, ungraded), and where it was made from (`path`: its file
  * under build/, so a copy elsewhere can be made again).
  */
@@ -71,12 +63,8 @@ export function finishBoard(
   const board: Board = {
     ...built.board,
     root: structuredClone(built.board.root),
-    id: 1,
-    item: { path, version: item.version },
+    item: { id: item.id, path, version: item.version },
   };
-  let next = 1;
-  for (const piece of walkPieces(board.root)) piece.id = next++;
-  board.nextPieceId = next;
   const tag =
     item.kind === Kind.Page
       ? { concepts: [item.concept], isGraded: false }

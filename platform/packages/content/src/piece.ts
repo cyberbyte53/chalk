@@ -18,9 +18,6 @@ export const Pin = {
 } as const;
 export type Pin = (typeof Pin)[keyof typeof Pin];
 
-/** A permanent number, assigned at publish and never changed or reused (see docs/events.md). */
-export const permanentIdSchema = z.number().int().positive();
-
 /** Names appear in rules (`line.marker`), so they are identifiers: camelCase, no spaces or dashes. */
 export const NAME_PATTERN = /^[a-z][A-Za-z0-9]*$/;
 export const nameSchema = z
@@ -30,8 +27,6 @@ export const nameSchema = z
 const base = {
   /** Unique within the board; how rules refer to it. Free to rename. */
   name: nameSchema,
-  /** Permanent id, assigned at publish; used in events. */
-  id: permanentIdSchema.optional(),
   /** Not shown until the board shows it (`board.show`). */
   isHidden: z.boolean().optional(),
 };
@@ -44,25 +39,22 @@ export type Piece =
   | {
       kind: "column";
       name: string;
-      id?: number;
       isHidden?: boolean;
       gap?: number;
       children: Piece[];
     }
-  | { kind: "row"; name: string; id?: number; isHidden?: boolean; gap?: number; children: Piece[] }
+  | { kind: "row"; name: string; isHidden?: boolean; gap?: number; children: Piece[] }
   | {
       kind: "overlay";
       name: string;
-      id?: number;
       isHidden?: boolean;
       children: Piece[];
       pins?: Record<string, Pin>;
     }
-  | { kind: "space"; name: string; id?: number; isHidden?: boolean }
+  | { kind: "space"; name: string; isHidden?: boolean }
   | {
       kind: "prop";
       name: string;
-      id?: number;
       isHidden?: boolean;
       /** Prop type from the library (e.g. "numberLine", "text"). */
       prop: string;

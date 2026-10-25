@@ -38,7 +38,6 @@ import {
   type BuiltPage,
   type BuiltQuestion,
   Kind,
-  type Lesson,
   OVERVIEW_DIR,
   type Readings,
   type Ref,
@@ -55,7 +54,7 @@ import {
 import { type AnyPropDef, PropRole } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
-import { type Problem, validateLesson } from "../validate";
+import { type Problem, validateBoard } from "../validate";
 import { renderArt } from "./art";
 import { MODULES_FILE, boardModules, conceptsModule, modulesModule } from "./concepts";
 import { filesUnder, fingerprint, importClosure, isRecordingImports, recordImports } from "./deps";
@@ -293,7 +292,7 @@ async function buildArt(c: Context, folder: string): Promise<BuiltArt | null> {
   return result.art;
 }
 
-/** Checks a built board: its wiring (the lesson validator), its witness and its note checks. */
+/** Checks a built board: its wiring (the validator), its witness and its note checks. */
 async function checkBoard(
   c: Context,
   where: string,
@@ -301,14 +300,7 @@ async function checkBoard(
   board: Board,
 ): Promise<boolean> {
   const before = c.problems.length;
-  const lesson: Lesson = {
-    id: where,
-    version: "0.0.0",
-    title: { en: where, hi: where },
-    concepts: [],
-    boards: [board],
-  };
-  for (const p of validateLesson(lesson, c.defs, c.readings))
+  for (const p of validateBoard(board, c.defs, c.readings))
     report(c, where, `${p.where}: ${p.message}`);
   if (c.problems.length > before) return false;
   for (const failure of await checkWitness(board, c.defs, built.witness)) report(c, where, failure);

@@ -113,8 +113,7 @@ function ReviewBoard({
     () =>
       bus.raiserFor({
         lessonId: entry.lesson.id,
-        contentVersion: entry.lesson.version,
-        boardId: board.id ?? null,
+        item: board.item ?? null,
       }),
     [bus, entry, board],
   );

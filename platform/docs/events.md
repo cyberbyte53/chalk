@@ -13,19 +13,19 @@ Today:
 
 | Raised by | Machine | Input | State after |
 |---|---|---|---|
-| Continue (`board.continued`) | `board/<id>` | `continue { props }`: every prop on the board (words and questions too) as it was when pressed, each as `{ isTouched, state }`. A prop placed with `isInEvents: false` is left out | `{ phase: "passed" }` |
-| Check (`<question>.checked`) | `question/<id>` | `check { submitted }`: the option picked, or the state of the prop the question is about | `{ status: "correct" \| "wrong", attempts }` |
+| Continue (`board.continued`) | `board/<item id>` | `continue { nodes, actions }`: every node on the board (words and questions too) saved as it was when pressed, by address, each as `{ type: "<prop>@<hash>", facts, isTouched }`; and every learner action on the board, in order, as `{ node, action, args, t }` on the board's clock. A prop placed with `isInEvents: false` is left out | `{ phase: "passed" }` |
+| Check (`<question>.checked`) | `question/<item id>#<address>` | `check { submitted, saw }`: the option picked, or the facts of the node the question is about; and what the learner saw of the question and that node, every part as drawn | `{ status: "correct" \| "wrong", attempts, isGraded }` |
 | Lesson player | `lesson/<id>` | `start`, `complete`, `leave` | `{ status: "playing" \| "completed" \| "left", boardIndex }` |
-| Narration | `line/<id>` | `audioFailed { reason }` | `{ audio: "failed" }` |
-| A turn with Jugnu | `jugnu/<board id>` | `ask { text }`: what the learner asked; or `moved { props }`: they acted on props he handed back | `{ reply, steps, watching, model }`: what he said; each thing he did (acted, pointed, calculated, handed back, with what changed or why it was refused); the props he's waiting on; which model |
+| Narration | `line/<item id>#<address>` | `audioFailed { reason }` | `{ audio: "failed" }` |
+| A turn with Jugnu | `jugnu/<item id>` | `ask { text }`: what the learner asked; or `moved { props }`: they acted on props he handed back | `{ reply, steps, watching, model }`: what he said; each thing he did (acted, pointed, calculated, handed back, with what changed or why it was refused); the props he's waiting on; which model |
 
-**Input** is what happened plus the data that came with it; **state** is the machine's own state afterwards, the same shape every time for a machine type. Boards and pieces are identified by their permanent ids (see "Ids" below).
+**Input** is what happened plus the data that came with it; **state** is the machine's own state afterwards, the same shape every time for a machine type. Boards and nodes are named by their item id and address (see "Ids" below).
 
 ## Shape
 
 ```ts
 Event = {
-  envelope: { id, schemaVersion, sessionId, seq, producedAt, actor, lessonId, contentVersion, boardId },
+  envelope: { id, schemaVersion, sessionId, seq, producedAt, actor, lessonId, item: { id, path, version } },
   machine:  { type, id },
   input:    { type, ... },
   state:    { ... },
@@ -36,27 +36,23 @@ Event = {
 - `producedAt`: Unix ms when the phone produced it.
 - `actor`: `learner`, `lesson`, `app` or `jugnu`. Only the learner's own commits are evidence; what Jugnu does on the board never counts as the learner touching it.
 
-## Example: "Where does √2 live?"
+## Example
 
-The real log from playing the lesson (ids from the published lesson: board 2 is "guess", question 4 on it is "guess-root"):
+A concept's pages, as the log records them (`A` is a page's item id, `B` the next one's):
 
 ```text
-seq  actor    machine                                  input                                                              state after
- 0   app      lesson/class9-maths/ch1/where-is-root-2  start                                                              { status: playing, boardIndex: 0 }
- 1   learner  board/1                                  continue { props: { 2 title, 3 mayaSquares, 4 line, 5 arjunBetween } } { phase: passed }
- 2   learner  question/4                               check { submitted: prop 3, marker 1.62 }                            { status: wrong,   attempts: 1 }
- 3   learner  question/4                               check { submitted: prop 3, marker 1.41 }                            { status: correct, attempts: 2 }
- 4   learner  board/2                                  continue { props: { …, 3: { isTouched: true, state: { marker: 1.41, … } }, … } } { phase: passed }
- 5   learner  board/3                                  continue { props: { 2 title, 3 line, 4–6 lines } }                  { phase: passed }
- 6   learner  question/2                               check { submitted: "exactly-1-41" }                                 { status: wrong,   attempts: 1 }
- 7   learner  question/2                               check { submitted: "never-ends" }                                   { status: correct, attempts: 2 }
- 8   learner  board/4                                  continue { props: { 2: { isTouched: true, state: { prompt, options, selected, … } } } } { phase: passed }
- 9   app      lesson/class9-maths/ch1/where-is-root-2  complete                                                           { status: completed, boardIndex: 4 }
+seq  actor    machine              input                                                              state after
+ 0   app      lesson/concept/c1    start                                                              { status: playing, boardIndex: 0 }
+ 1   learner  board/A              continue { nodes: { title, mayaSquares, line, arjunBetween }, actions: [] } { phase: passed }
+ 2   learner  question/B#guessRoot check { submitted: line { marker: 1.62 }, saw: [line/marker 1.62, …] } { status: wrong,   attempts: 1 }
+ 3   learner  question/B#guessRoot check { submitted: line { marker: 1.41 }, saw: [line/marker 1.41, …] } { status: correct, attempts: 2 }
+ 4   learner  board/B              continue { nodes: { …, line: { type: numberLine@…, isTouched: true, facts: { marker: 1.41, … } } }, actions: [line.moveMarker …] } { phase: passed }
+ 5   app      lesson/concept/c1    complete                                                           { status: completed, boardIndex: 2 }
 ```
 
-A Continue event stands on its own: it holds every prop's state, question wording included, so Jugnu or an analysis can read what the board was without looking anything up. Each prop says whether the learner touched it, which separates exploring from watching. A lesson leaves a prop out with `isInEvents: false` where it places it, for anything not worth keeping.
+A Continue event stands on its own: it holds every node's facts, question wording included, so Jugnu or an analysis can read what the board was without looking anything up, and its actions replay the session. Each node says whether the learner touched it, which separates exploring from watching. A lesson leaves a prop out with `isInEvents: false` where it places it, for anything not worth keeping.
 
-Every published version is also kept (`published/versions/<lesson>/<version>.json`), and every event names its version, so the board as authored can always be found again.
+Every event names the item and its version (the hash of the code that makes the board), so the board as authored can always be found again; a question's check also keeps what the learner saw, so history never depends on recomputing it.
 
 In code, the player binds `raiseEvent` to the machine and calls it when the commit signal arrives:
 
@@ -66,7 +62,9 @@ raiseEvent(Actor.Learner, { type: "continue", props }, { phase: "passed" });
 
 ## Ids
 
-Boards and pieces have a **name** (chosen by the author, free to rename, used inside the lesson file) and a **permanent id** (a number handed out by `pnpm publish-lesson`, never changed or reused). Events use the ids, so history stays intact when things are renamed, reordered, inserted or deleted. Deleted ids are retired for good.
+A board is named by the id of the built page or question it was made from: a hash of where that lives in content/ (plus a question's params row), so nobody types it. A node on the board is named by its address (`line`, `machine/plane`), and a question or a line by both: `<item id>#<address>`. Renaming a folder or a piece gives new names; the build reports what it moved. A board made by hand (a test board) is named by its name.
+
+A saved board (`runtime.save()`) names each node's prop and the shape of its facts (`numberLine@1a2b3c4d`, from its schema). It is read back (`runtime.load()`) only by props of the same shape: a record from before a prop's facts changed is refused, loudly, never read wrong.
 
 ## Notes
 

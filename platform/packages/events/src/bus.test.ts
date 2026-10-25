@@ -3,7 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { bindRaise, createEventBus } from "./bus";
 import { makeId } from "./id";
 
-const place = { lessonId: "l", contentVersion: "1", boardId: 2 };
+const ITEM = { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/overview/p.json", version: "1" };
+const place = { lessonId: "l", item: ITEM };
 
 describe("createEventBus", () => {
   it("adds the envelope and numbers events in order", () => {
@@ -12,16 +13,16 @@ describe("createEventBus", () => {
     bus.subscribe((e) => seen.push(e));
     const board = bindRaise<typeof MachineType.Board>(bus.raiserFor(place), {
       type: "board",
-      id: 2,
+      id: ITEM.id,
     });
     const question = bindRaise<typeof MachineType.Question>(bus.raiserFor(place), {
       type: "question",
-      id: 4,
+      id: `${ITEM.id}#ask`,
     });
-    board(Actor.Learner, { type: "continue", props: {} }, { phase: "passed" });
+    board(Actor.Learner, { type: "continue", nodes: {}, actions: [] }, { phase: "passed" });
     question(
       Actor.Learner,
-      { type: "check", submitted: { kind: "choice", optionId: "a" } },
+      { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
       { status: "wrong", attempts: 1, isGraded: true },
     );
     expect(seen.map((e) => e.envelope.seq)).toEqual([0, 1]);
@@ -29,9 +30,9 @@ describe("createEventBus", () => {
       sessionId: "s",
       producedAt: 1000,
       actor: "learner",
-      boardId: 2,
+      item: ITEM,
     });
-    expect(seen[1]?.machine).toEqual({ type: "question", id: 4 });
+    expect(seen[1]?.machine).toEqual({ type: "question", id: `${ITEM.id}#ask` });
   });
   it("refuses events that break their shape, without using up a sequence number", () => {
     const problems: string[] = [];
@@ -40,16 +41,16 @@ describe("createEventBus", () => {
     bus.subscribe((e) => seen.push(e));
     const question = bindRaise<typeof MachineType.Question>(bus.raiserFor(place), {
       type: "question",
-      id: 4,
+      id: `${ITEM.id}#ask`,
     });
     question(
       Actor.Learner,
-      { type: "check", submitted: { kind: "choice", optionId: "a" } },
+      { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
       { status: "wrong", attempts: 0, isGraded: true },
     );
     question(
       Actor.Learner,
-      { type: "check", submitted: { kind: "choice", optionId: "a" } },
+      { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
       { status: "wrong", attempts: 1, isGraded: true },
     );
     expect(problems).toHaveLength(1);
@@ -58,10 +59,10 @@ describe("createEventBus", () => {
   it("throws on invalid events by default", () => {
     const board = bindRaise<typeof MachineType.Board>(createEventBus().raiserFor(place), {
       type: "board",
-      id: -1,
+      id: "",
     });
     expect(() =>
-      board(Actor.Learner, { type: "continue", props: {} }, { phase: "passed" }),
+      board(Actor.Learner, { type: "continue", nodes: {}, actions: [] }, { phase: "passed" }),
     ).toThrow(/Invalid event/);
   });
   it("lets subscribers stop listening", () => {
@@ -69,9 +70,9 @@ describe("createEventBus", () => {
     const seen: ChalkEvent[] = [];
     const stop = bus.subscribe((e) => seen.push(e));
     stop();
-    bindRaise<typeof MachineType.Board>(bus.raiserFor(place), { type: "board", id: 2 })(
+    bindRaise<typeof MachineType.Board>(bus.raiserFor(place), { type: "board", id: ITEM.id })(
       Actor.Learner,
-      { type: "continue", props: {} },
+      { type: "continue", nodes: {}, actions: [] },
       { phase: "passed" },
     );
     expect(seen).toEqual([]);

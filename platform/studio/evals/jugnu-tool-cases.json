@@ -2,7 +2,7 @@
   "cases": [
     {
       "id": "demo-root3-narrow",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "rootThree",
       "locale": "en",
       "turns": [
@@ -20,7 +20,7 @@
     },
     {
       "id": "demo-root3-compare",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "rootThree",
       "locale": "en",
       "turns": [
@@ -37,7 +37,7 @@
     },
     {
       "id": "demo-root3-squeezed",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "rootThree",
       "locale": "en",
       "setup": [
@@ -75,7 +75,7 @@
     },
     {
       "id": "demo-pi-zoom",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "findPi",
       "locale": "en",
       "turns": [
@@ -94,7 +94,7 @@
     },
     {
       "id": "demo-pi-zoom-all",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "findPi",
       "locale": "en",
       "turns": [
@@ -111,7 +111,7 @@
     },
     {
       "id": "demo-thirds-split",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "whereTwoThirds",
       "locale": "en",
       "turns": [
@@ -129,7 +129,7 @@
     },
     {
       "id": "demo-thirds-wrong",
-      "lesson": "platform/studio/evals/boards/published/jugnu-demos.json",
+      "lesson": "platform/studio/evals/boards/jugnu-demos.json",
       "board": "whereTwoThirds",
       "locale": "en",
       "setup": [
@@ -154,7 +154,7 @@
     },
     {
       "id": "explore-switch",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -176,7 +176,7 @@
     },
     {
       "id": "explore-period",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "en",
       "turns": [
@@ -193,7 +193,7 @@
     },
     {
       "id": "demo-coin",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "coinPredict",
       "locale": "en",
       "turns": [

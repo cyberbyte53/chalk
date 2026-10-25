@@ -1,4 +1,4 @@
-import { Actor, type ItemRef, type Locale, MachineType } from "@chalk/content";
+import { Actor, type ItemRef, type Locale, MachineType, type SavedBoard } from "@chalk/content";
 import { type Raise, bindRaise } from "@chalk/events";
 import {
   type ChatMessage,
@@ -11,7 +11,6 @@ import {
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { Picked } from "./ask-about";
-import { type BoardState, boardState } from "./headless";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { RichText } from "./rich-text-view";
 import type { BoardRuntime } from "./runtime";
@@ -29,14 +28,13 @@ export type ShownMessage = {
 /** A chat someone flagged: everything needed to look at it again, and replay it on the bench. */
 export type JugnuFlag = {
   lessonId: string | null;
-  boardId: number | null;
   /** The board's name, and the built item it was made from (none for a board made by hand). */
   board: string;
   item: ItemRef | null;
   place: JugnuPlace;
   /** The board when the chat started, and now. */
-  stateAtStart: BoardState;
-  state: BoardState;
+  stateAtStart: SavedBoard;
+  state: SavedBoard;
   /** The chat as the model saw it. */
   chat: readonly ChatMessage[];
   shown: readonly ShownMessage[];
@@ -63,8 +61,8 @@ export type JugnuPanelProps = {
   link: JugnuLink;
   place: JugnuPlace;
   lessonId: string | null;
-  /** This board's permanent id: Jugnu's chats are logged against it. */
-  boardId: number;
+  /** The board, as events name it (boardKey): Jugnu's chats are logged against it. */
+  boardKey: string;
   raise: Raise;
   locale: Locale;
   /** Jugnu points at a prop, or a part of it: the board makes it glow. */
@@ -119,7 +117,7 @@ export function JugnuPanel({
   link,
   place,
   lessonId,
-  boardId,
+  boardKey,
   raise,
   locale,
   onPoint,
@@ -180,7 +178,7 @@ export function JugnuPanel({
       ...(mode !== undefined ? { mode } : {}),
     };
     return {
-      stateAtStart: boardState(runtime),
+      stateAtStart: runtime.save(),
       session: new JugnuSession(runtime, undefined, where, {
         think: link.think(runtime, where),
         onEvent: async (event) => {
@@ -249,7 +247,7 @@ export function JugnuPanel({
     input: { type: "ask"; text: string; about?: { prop: string; part?: string; text?: string }[] },
     turn: JugnuTurn,
   ) =>
-    bindRaise<typeof MachineType.Jugnu>(raise, { type: MachineType.Jugnu, id: boardId })(
+    bindRaise<typeof MachineType.Jugnu>(raise, { type: MachineType.Jugnu, id: boardKey })(
       Actor.Learner,
       input,
       {
@@ -321,7 +319,6 @@ export function JugnuPanel({
     try {
       await link.flag({
         lessonId,
-        boardId,
         board: runtime.board.name,
         item: runtime.board.item ?? null,
         place: {
@@ -332,7 +329,7 @@ export function JugnuPanel({
           ...(mode !== undefined ? { mode } : {}),
         },
         stateAtStart,
-        state: boardState(runtime),
+        state: runtime.save(),
         chat: session.messages,
         shown: messages,
         note: flagNote.trim(),

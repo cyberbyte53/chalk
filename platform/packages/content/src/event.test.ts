@@ -8,17 +8,17 @@ const envelope = {
   seq: 3,
   producedAt: 1791692957412,
   actor: "learner",
-  lessonId: "class9-maths/ch1/where-is-root-2",
-  contentVersion: "0.1.1",
-  boardId: 2,
+  lessonId: "concept/975e4c05ea34e125",
+  item: { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/overview/guess.json", version: "0123456789abcdef" },
 };
 
 const check = {
   envelope,
-  machine: { type: "question", id: 4 },
+  machine: { type: "question", id: "aaaaaaaaaaaaaaaa#guessRoot" },
   input: {
     type: "check",
-    submitted: { kind: "prop", propId: 3, state: { from: 1, to: 2, marker: 1.41 } },
+    submitted: { kind: "prop", node: "line", facts: { from: 1, to: 2, marker: 1.41 } },
+    saw: [{ path: "line/marker", value: 1.41, words: "1.41" }],
   },
   state: { status: "correct", attempts: 2, isGraded: true },
 };
@@ -47,17 +47,20 @@ describe("eventSchema", () => {
   });
   it("accepts lesson and board events", () => {
     const lessonStart = {
-      envelope: { ...envelope, actor: "app", boardId: null },
+      envelope: { ...envelope, actor: "app", item: null },
       machine: { type: "lesson", id: "class9-maths/ch1/where-is-root-2" },
       input: { type: "start" },
       state: { status: "playing", boardIndex: 0 },
     };
     const boardContinue = {
       envelope,
-      machine: { type: "board", id: 2 },
+      machine: { type: "board", id: "aaaaaaaaaaaaaaaa" },
       input: {
         type: "continue",
-        props: { "3": { isTouched: true, state: { from: 1, to: 2, marker: 1.41 } } },
+        nodes: {
+          line: { type: "numberLine@0a1b2c3d", isTouched: true, facts: { marker: 1.41 } },
+        },
+        actions: [{ node: "line", action: "moveMarker", args: { to: 1.41 }, t: 3.2 }],
       },
       state: { phase: "passed" },
     };

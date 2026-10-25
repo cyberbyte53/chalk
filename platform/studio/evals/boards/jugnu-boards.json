@@ -13,19 +13,14 @@
     "terminating-decimals",
     "experimental-probability"
   ],
-  "nextBoardId": 7,
   "boards": [
     {
-      "id": 1,
       "name": "seriesPredict",
-      "nextPieceId": 6,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -38,7 +33,6 @@
             }
           },
           {
-            "id": 3,
             "name": "circuit",
             "kind": "prop",
             "prop": "circuit",
@@ -128,7 +122,6 @@
             }
           },
           {
-            "id": 4,
             "name": "whatHappens",
             "kind": "prop",
             "prop": "choice",
@@ -165,7 +158,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -194,16 +186,12 @@
       "studentOnly": ["circuit.takeOutBulb"]
     },
     {
-      "id": 2,
       "name": "meterPredict",
-      "nextPieceId": 7,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -216,7 +204,6 @@
             }
           },
           {
-            "id": 3,
             "name": "circuit",
             "kind": "prop",
             "prop": "circuit",
@@ -349,7 +336,6 @@
             }
           },
           {
-            "id": 4,
             "name": "readings",
             "kind": "prop",
             "prop": "text",
@@ -362,7 +348,6 @@
             }
           },
           {
-            "id": 5,
             "name": "mainAfter",
             "kind": "prop",
             "prop": "choice",
@@ -406,7 +391,6 @@
             }
           },
           {
-            "id": 6,
             "name": "rest",
             "kind": "space"
           }
@@ -443,16 +427,12 @@
       "studentOnly": []
     },
     {
-      "id": 3,
       "name": "onlyB",
-      "nextPieceId": 6,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -465,7 +445,6 @@
             }
           },
           {
-            "id": 3,
             "name": "circuit",
             "kind": "prop",
             "prop": "circuit",
@@ -594,7 +573,6 @@
             }
           },
           {
-            "id": 4,
             "name": "onlyBGlows",
             "kind": "prop",
             "prop": "goal",
@@ -608,7 +586,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -654,16 +631,12 @@
       "studentOnly": []
     },
     {
-      "id": 4,
       "name": "decimalPeriod",
-      "nextPieceId": 6,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -676,7 +649,6 @@
             }
           },
           {
-            "id": 3,
             "name": "division",
             "kind": "prop",
             "prop": "decimalExpansion",
@@ -687,7 +659,6 @@
             }
           },
           {
-            "id": 4,
             "name": "howMany",
             "kind": "prop",
             "prop": "choice",
@@ -731,7 +702,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -760,16 +730,12 @@
       "studentOnly": []
     },
     {
-      "id": 5,
       "name": "decimalGoal",
-      "nextPieceId": 6,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -782,7 +748,6 @@
             }
           },
           {
-            "id": 3,
             "name": "division",
             "kind": "prop",
             "prop": "decimalExpansion",
@@ -792,7 +757,6 @@
             }
           },
           {
-            "id": 4,
             "name": "untilEnd",
             "kind": "prop",
             "prop": "goal",
@@ -806,7 +770,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -852,16 +815,12 @@
       "studentOnly": []
     },
     {
-      "id": 6,
       "name": "coinPredict",
-      "nextPieceId": 12,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -874,18 +833,15 @@
             }
           },
           {
-            "id": 3,
             "name": "controls",
             "kind": "row",
             "children": [
               {
-                "id": 4,
                 "name": "coin",
                 "kind": "prop",
                 "prop": "coin"
               },
               {
-                "id": 5,
                 "name": "tossOnce",
                 "kind": "prop",
                 "prop": "button",
@@ -897,7 +853,6 @@
                 }
               },
               {
-                "id": 6,
                 "name": "tossMany",
                 "kind": "prop",
                 "prop": "button",
@@ -911,7 +866,6 @@
             ]
           },
           {
-            "id": 7,
             "name": "score",
             "kind": "prop",
             "prop": "text",
@@ -924,7 +878,6 @@
             }
           },
           {
-            "id": 8,
             "name": "chart",
             "kind": "prop",
             "prop": "graph",
@@ -945,13 +898,11 @@
             }
           },
           {
-            "id": 9,
             "name": "clock",
             "kind": "prop",
             "prop": "timer"
           },
           {
-            "id": 10,
             "name": "afterMany",
             "kind": "prop",
             "prop": "choice",
@@ -988,7 +939,6 @@
             }
           },
           {
-            "id": 11,
             "name": "rest",
             "kind": "space"
           }

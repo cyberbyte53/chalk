@@ -1,6 +1,6 @@
 # Indic Parler-TTS voice (self-hosted)
 
-A voice provider for `pnpm publish-lesson … --voice parler`, using [ai4bharat/indic-parler-tts](https://huggingface.co/ai4bharat/indic-parler-tts) (Apache 2.0) on your own machine. It runs only at publish; nothing calls it while a student learns.
+A voice provider for the audio step (`generateAudio` in `src/voice/`; not wired to a command yet), using [ai4bharat/indic-parler-tts](https://huggingface.co/ai4bharat/indic-parler-tts) (Apache 2.0) on your own machine. It runs only when audio is made; nothing calls it while a student learns.
 
 Each character has one named speaker, described in `content/voices.json` under `parler` (the model is steered by a sentence that names the speaker).
 
@@ -17,13 +17,11 @@ python3 -m venv .venv
 .venv/bin/huggingface-cli login     # paste the token
 ```
 
-The first publish downloads the model (~3.5 GB) into the Hugging Face cache.
+The first run downloads the model (~3.5 GB) into the Hugging Face cache.
 
 ## Use
 
-```bash
-pnpm publish-lesson studio/evals/boards/lessons/where-is-root-2.json --voice parler
-```
+Call `generateAudio(lesson, readings, propDefs, parlerProvider, voices, dir, name)`.
 
 Unchanged lines are reused, so only new or edited lines are spoken again.
 

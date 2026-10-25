@@ -83,9 +83,9 @@ export function spokenText(line: Spoken, locale: Locale, readings: Readings): st
   return say === undefined ? undefined : toSpoken(say, locale, readings);
 }
 
-/** The key for one spoken line in one language, built from permanent ids (board, then piece). */
-export function audioKey(boardId: number, pieceId: number, locale: Locale): string {
-  return `${boardId}.${pieceId}.${locale}`;
+/** The key for one spoken line in one language: the board's item id (or name), the prop's address. */
+export function audioKey(board: string, path: string, locale: Locale): string {
+  return `${board}.${path}.${locale}`;
 }
 
 /** Written by publish next to the published lesson: which audio file plays for each spoken line. */

@@ -153,3 +153,4 @@ export {
   type Step,
   type Steps,
 } from "./group";
+export { schemaKey, shapeOf } from "./schema-key";

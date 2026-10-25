@@ -6,19 +6,14 @@
     "hi": "√2 कहाँ रहता है?"
   },
   "concepts": ["sqrt-estimation", "irrational-numbers"],
-  "nextBoardId": 5,
   "boards": [
     {
-      "id": 1,
       "name": "between",
-      "nextPieceId": 7,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -31,7 +26,6 @@
             }
           },
           {
-            "id": 3,
             "name": "mayaSquares",
             "kind": "prop",
             "prop": "line",
@@ -48,7 +42,6 @@
             }
           },
           {
-            "id": 4,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -60,7 +53,6 @@
             }
           },
           {
-            "id": 5,
             "name": "arjunBetween",
             "kind": "prop",
             "isHidden": true,
@@ -74,7 +66,6 @@
             }
           },
           {
-            "id": 6,
             "name": "rest",
             "kind": "space"
           }
@@ -123,16 +114,12 @@
       ]
     },
     {
-      "id": 2,
       "name": "guess",
-      "nextPieceId": 7,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -145,7 +132,6 @@
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -157,7 +143,6 @@
             }
           },
           {
-            "id": 6,
             "name": "squareLabel",
             "kind": "prop",
             "prop": "text",
@@ -170,7 +155,6 @@
             }
           },
           {
-            "id": 4,
             "name": "guessRoot",
             "kind": "prop",
             "prop": "goal",
@@ -184,7 +168,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -258,16 +241,12 @@
       }
     },
     {
-      "id": 3,
       "name": "zoom",
-      "nextPieceId": 8,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -280,7 +259,6 @@
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -292,7 +270,6 @@
             }
           },
           {
-            "id": 4,
             "name": "mayaTenths",
             "kind": "prop",
             "isHidden": true,
@@ -310,7 +287,6 @@
             }
           },
           {
-            "id": 5,
             "name": "arjunHundredths",
             "kind": "prop",
             "isHidden": true,
@@ -324,7 +300,6 @@
             }
           },
           {
-            "id": 6,
             "name": "mayaNeverEnds",
             "kind": "prop",
             "isHidden": true,
@@ -338,7 +313,6 @@
             }
           },
           {
-            "id": 7,
             "name": "rest",
             "kind": "space"
           }
@@ -427,16 +401,12 @@
       ]
     },
     {
-      "id": 4,
       "name": "check",
-      "nextPieceId": 4,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "whatIsRoot2",
             "kind": "prop",
             "prop": "choice",
@@ -483,7 +453,6 @@
             }
           },
           {
-            "id": 3,
             "name": "rest",
             "kind": "space"
           }

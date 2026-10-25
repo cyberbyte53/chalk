@@ -6,6 +6,7 @@ import {
   QuestionStatus,
   type Submitted,
   SubmittedKind,
+  nodeMachineId,
 } from "@chalk/content";
 import { type Raise, bindRaise } from "@chalk/events";
 import type { JugnuPlace } from "@chalk/jugnu";
@@ -20,6 +21,7 @@ import {
   QuestionSignal,
   type QuestionView,
   SAY,
+  segment,
 } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -30,17 +32,10 @@ import { Layout, type LayoutContext } from "./layout";
 import { type AudioSource, type SpokenProp, useNarrator } from "./narration";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
-import { propRecords } from "./records";
+import { actionLog, boardKey, continueRecord, seenParts } from "./records";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
-
-/** The permanent id of a board or prop. Lessons are checked as published before they play. */
-function permanentId(item: { name: string; id?: number | undefined }): number {
-  if (item.id === undefined)
-    throw new Error(`"${item.name}" has no permanent id; run publish-lesson`);
-  return item.id;
-}
 
 /** How long Jugnu's pointing glow stays. */
 const POINT_SECONDS = 5;
@@ -107,24 +102,22 @@ export function BoardPlayer({
   const jugnu = policy?.hasJugnu === false ? undefined : given;
   const reportAudioFailure = useCallback(
     (prop: SpokenProp, reason: string) =>
-      bindRaise<typeof MachineType.Line>(raise, { type: MachineType.Line, id: permanentId(prop) })(
-        Actor.App,
-        { type: "audioFailed", reason },
-        { audio: "failed" },
-      ),
-    [raise],
+      bindRaise<typeof MachineType.Line>(raise, {
+        type: MachineType.Line,
+        id: nodeMachineId(boardKey(board), segment(prop.name)),
+      })(Actor.App, { type: "audioFailed", reason }, { audio: "failed" }),
+    [raise, board],
   );
-  const narrator = useNarrator(
-    permanentId({ name: board.name, id: board.id }),
-    locale,
-    audio,
-    reportAudioFailure,
-  );
+  const narrator = useNarrator(boardKey(board), locale, audio, reportAudioFailure);
   const runtime = useBoardRuntime(board, registry, narrator.speak);
   const questions = useMemo(() => questionsOf(runtime), [runtime]);
   useEffect(() => {
     if (wasPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, wasPassed]);
+
+  // Everything the learner does on the board, kept for its Continue event.
+  const log = useMemo(() => actionLog(runtime), [runtime]);
+  useEffect(() => log.stop, [log]);
 
   // Commits become events: a question checked, Continue pressed.
   useEffect(
@@ -133,10 +126,14 @@ export function BoardPlayer({
         if (record.prop === BOARD && record.signal === BoardSignal.Continued) {
           bindRaise<typeof MachineType.Board>(raise, {
             type: MachineType.Board,
-            id: permanentId(board),
+            id: boardKey(board),
           })(
             record.actor,
-            { type: "continue", props: propRecords(board, runtime) },
+            {
+              type: "continue",
+              nodes: continueRecord(board, runtime),
+              actions: [...log.actions],
+            },
             { phase: "passed" },
           );
           onPass();
@@ -152,15 +149,16 @@ export function BoardPlayer({
               ? { kind: SubmittedKind.Choices, optionIds: [...payload.optionIds] }
               : {
                   kind: SubmittedKind.Prop,
-                  propId: permanentId({ name: payload.about, id: runtime.idOf(payload.about) }),
-                  state: { ...runtime.getFields(payload.about) },
+                  node: segment(payload.about),
+                  facts: { ...runtime.getFields(payload.about) },
                 };
+        const about = "about" in payload ? [payload.about] : [];
         bindRaise<typeof MachineType.Question>(raise, {
           type: MachineType.Question,
-          id: permanentId({ name: record.prop, id: runtime.idOf(record.prop) }),
+          id: nodeMachineId(boardKey(board), segment(record.prop)),
         })(
           record.actor,
-          { type: "check", submitted },
+          { type: "check", submitted, saw: seenParts(runtime, [record.prop, ...about]) },
           {
             status:
               payload.status === AnswerStatus.Correct
@@ -171,7 +169,7 @@ export function BoardPlayer({
           },
         );
       }),
-    [runtime, raise, board, questions, onPass],
+    [runtime, raise, board, questions, onPass, log],
   );
 
   const isPassed = runtime.getView(BOARD).isPassed === true;
@@ -285,7 +283,7 @@ export function BoardPlayer({
             link={jugnu.link}
             place={mode === undefined ? jugnu.place : { ...jugnu.place, mode }}
             lessonId={jugnu.lessonId}
-            boardId={permanentId(board)}
+            boardKey={boardKey(board)}
             raise={raise}
             locale={locale}
             onPoint={(prop, part) => setPointed({ prop, part })}

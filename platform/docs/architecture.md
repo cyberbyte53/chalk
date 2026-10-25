@@ -58,8 +58,8 @@ Styles: the app loads `@chalk/look/look.css`, then `@chalk/player/styles.css` (t
 
 ## How a lesson plays
 
-1. `content/**/lessons/*.json` goes through `pnpm publish-lesson`: checked (formats, every prop's contract, the wiring), given permanent ids, version bumped, and with `--voice` the lines scripts say are spoken. The latest published copy is in `published/`, and every version in `published/versions/`.
-2. The app parses it (`parseLesson`) and hands it to `LessonPlayer` with the prop library.
+1. The content build checks every board (formats, every prop's contract, the wiring, its witness) and writes the course to `build/` (see "How content is built" below).
+2. When a chapter is opened, the app fetches its pages' and questions' files, makes each board from its module's code (`boardOf`), groups them into lessons and hands each to `LessonPlayer` with the prop library.
 3. Each board gets a `BoardRuntime`: every prop starts from its defaults plus what the lesson gives (through the one door), each IS rule becomes an effect that runs again only when a prop it read changes, and `board.started` is raised, which usually starts the board's script.
 4. The learner's taps and drags call the same actions; touching a prop stops the lesson's animation on it.
 5. When the learner asks Jugnu (on any board), the phone sends which board it is (its built item and version), its state and the chat to the server, which makes its own copy of the board from the same content code and thinks the turn through on it with no screen: tries actions and calculates out of sight, then writes one reply, which is checked on the copy before it goes. It comes back as cues the phone plays; his actions go through the phone's own door as `Actor.Jugnu`, under limits the runtime enforces on both sides (see `platform/packages/jugnu/README.md`).

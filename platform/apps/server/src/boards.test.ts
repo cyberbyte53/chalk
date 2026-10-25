@@ -6,6 +6,7 @@ import { NoSuchBoard, contentBoards } from "./boards";
 
 const PATH = "class9-maths/number-systems/rational-numbers/overview/numbers-you-know.json";
 const VERSION = "0123456789abcdef";
+const ID = "aaaaaaaaaaaaaaaa";
 
 /** A build/ holding one page, pointing at its real module. */
 function buildDir(): string {
@@ -34,19 +35,20 @@ function buildDir(): string {
 describe("the server's boards", () => {
   it("are made from the content's code, as the app makes them", async () => {
     const boards = contentBoards(buildDir());
-    const board = await boards({ path: PATH, version: VERSION });
+    const board = await boards({ id: ID, path: PATH, version: VERSION });
     expect(board.name).toBe("numbersYouKnow");
-    expect(board.item).toEqual({ path: PATH, version: VERSION });
-    expect(board.root.id).toBe(1);
+    expect(board.item).toEqual({ id: ID, path: PATH, version: VERSION });
   });
 
   it("refuses another version, a missing item and a path outside build/", async () => {
     const boards = contentBoards(buildDir());
-    await expect(boards({ path: PATH, version: "ffffffffffffffff" })).rejects.toThrow(NoSuchBoard);
-    await expect(boards({ path: "a/b/missing.json", version: VERSION })).rejects.toThrow(
+    await expect(boards({ id: ID, path: PATH, version: "ffffffffffffffff" })).rejects.toThrow(
       NoSuchBoard,
     );
-    await expect(boards({ path: "../etc/passwd.json", version: VERSION })).rejects.toThrow(
+    await expect(boards({ id: ID, path: "a/b/missing.json", version: VERSION })).rejects.toThrow(
+      NoSuchBoard,
+    );
+    await expect(boards({ id: ID, path: "../etc/passwd.json", version: VERSION })).rejects.toThrow(
       NoSuchBoard,
     );
   });

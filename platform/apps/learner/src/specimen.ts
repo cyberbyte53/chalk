@@ -1,7 +1,6 @@
 import type { Lesson } from "@chalk/content";
 
-const text = (id: number, name: string, en: string, hi: string, style = "body") => ({
-  id,
+const text = (name: string, en: string, hi: string, style = "body") => ({
   name,
   kind: "prop" as const,
   prop: "text",
@@ -19,65 +18,54 @@ export const specimen: Lesson = {
   concepts: [],
   boards: [
     {
-      id: 1,
       name: "specimen",
       root: {
-        id: 1,
         name: "page",
         kind: "column",
         children: [
           text(
-            2,
             "title",
             "The value of $p(x) = x^2 + 3x - 1$",
             "$p(x) = x^2 + 3x - 1$ का मान",
             "title",
           ),
           text(
-            3,
             "body",
             "Put **2** wherever $x$ is: $p(2) = 2^2 + 3 \\times 2 - 1 = 9$. *Every* term is worked out first, then added.",
             "जहाँ $x$ है वहाँ **2** रखो: $p(2) = 2^2 + 3 \\times 2 - 1 = 9$। *हर* पद पहले हल करो, फिर जोड़ो।",
           ),
           text(
-            4,
             "display",
             "Rationalising: $$\\frac{1}{2 + \\sqrt{3}} = \\frac{2 - \\sqrt{3}}{(2 + \\sqrt{3})(2 - \\sqrt{3})} = 2 - \\sqrt{3}$$",
             "परिमेयकरण: $$\\frac{1}{2 + \\sqrt{3}} = \\frac{2 - \\sqrt{3}}{(2 + \\sqrt{3})(2 - \\sqrt{3})} = 2 - \\sqrt{3}$$",
           ),
           text(
-            5,
             "exponents",
             "Laws of exponents: $x^{1/3} \\cdot x^{2/3} = x^{1/3 + 2/3} = x$, and $\\left(a^m\\right)^n = a^{mn}$.",
             "घातांक के नियम: $x^{1/3} \\cdot x^{2/3} = x^{1/3 + 2/3} = x$, और $\\left(a^m\\right)^n = a^{mn}$।",
           ),
           text(
-            6,
             "decimals",
             "$\\frac{1}{3} = 0.\\overline{3}$ never ends; $2.665$ ends after three digits; $\\sqrt{2} \\approx 1.414$.",
             "$\\frac{1}{3} = 0.\\overline{3}$ कभी ख़त्म नहीं होता; $2.665$ तीन अंकों पर ख़त्म; $\\sqrt{2} \\approx 1.414$।",
           ),
           text(
-            7,
             "geometry",
             "In $\\triangle ABC$, $\\angle A + \\angle B + \\angle C = 180^\\circ$ and $\\overline{AB} \\parallel \\overline{DE}$.",
             "$\\triangle ABC$ में $\\angle A + \\angle B + \\angle C = 180^\\circ$ और $\\overline{AB} \\parallel \\overline{DE}$।",
           ),
           text(
-            8,
             "science",
             "Water: $\\ce{2H2 + O2 -> 2H2O}$. A ball falls with $g = 9.8\\,\\text{m/s}^2$.",
             "पानी: $\\ce{2H2 + O2 -> 2H2O}$। गेंद $g = 9.8\\,\\text{m/s}^2$ से गिरती है।",
           ),
           text(
-            9,
             "note",
             "A note: smaller, softer, for asides like $\\pi \\approx 3.14$.",
             "टिप्पणी: छोटी, हल्की, जैसे $\\pi \\approx 3.14$।",
             "note",
           ),
           {
-            id: 10,
             name: "ask",
             kind: "prop",
             prop: "choice",
@@ -107,7 +95,6 @@ export const specimen: Lesson = {
       is: [],
       when: [{ on: "ask.correct", do: { call: "board.pass" } }],
       studentOnly: [],
-      nextPieceId: 11,
     },
   ],
 };

@@ -8,15 +8,12 @@
   "concepts": ["decimal-expansions"],
   "boards": [
     {
-      "id": 1,
       "name": "oneEighth",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -29,7 +26,6 @@
             }
           },
           {
-            "id": 3,
             "name": "division",
             "kind": "prop",
             "prop": "decimalExpansion",
@@ -39,7 +35,6 @@
             }
           },
           {
-            "id": 4,
             "name": "mayaEnds",
             "kind": "prop",
             "isHidden": true,
@@ -53,7 +48,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -84,19 +78,15 @@
             }
           ]
         }
-      ],
-      "nextPieceId": 6
+      ]
     },
     {
-      "id": 2,
       "name": "oneSeventh",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -109,7 +99,6 @@
             }
           },
           {
-            "id": 3,
             "name": "division",
             "kind": "prop",
             "prop": "decimalExpansion",
@@ -119,7 +108,6 @@
             }
           },
           {
-            "id": 4,
             "name": "arjunRepeats",
             "kind": "prop",
             "isHidden": true,
@@ -133,7 +121,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -164,19 +151,15 @@
             }
           ]
         }
-      ],
-      "nextPieceId": 6
+      ]
     },
     {
-      "id": 3,
       "name": "twentyTwoSevenths",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -189,7 +172,6 @@
             }
           },
           {
-            "id": 3,
             "name": "division",
             "kind": "prop",
             "prop": "decimalExpansion",
@@ -199,12 +181,10 @@
             }
           },
           {
-            "id": 4,
             "name": "controls",
             "kind": "row",
             "children": [
               {
-                "id": 5,
                 "name": "divide",
                 "kind": "prop",
                 "prop": "button",
@@ -218,13 +198,11 @@
             ]
           },
           {
-            "id": 6,
             "name": "clock",
             "kind": "prop",
             "prop": "timer"
           },
           {
-            "id": 7,
             "name": "mayaPi",
             "kind": "prop",
             "isHidden": true,
@@ -238,7 +216,6 @@
             }
           },
           {
-            "id": 8,
             "name": "rest",
             "kind": "space"
           }
@@ -292,19 +269,15 @@
             }
           ]
         }
-      ],
-      "nextPieceId": 9
+      ]
     },
     {
-      "id": 4,
       "name": "which",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "whichEnds",
             "kind": "prop",
             "prop": "choice",
@@ -351,7 +324,6 @@
             }
           },
           {
-            "id": 3,
             "name": "rest",
             "kind": "space"
           }
@@ -371,9 +343,7 @@
             "call": "board.pass"
           }
         }
-      ],
-      "nextPieceId": 4
+      ]
     }
-  ],
-  "nextBoardId": 5
+  ]
 }

@@ -2,7 +2,7 @@
   "students": [
     {
       "id": "root2-halfway",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "who": "A class 9 student who is okay at maths but rushes.",
@@ -12,7 +12,7 @@
     },
     {
       "id": "root2-gives-up-hi",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "hi",
       "who": "A class 9 student from a Hindi-medium school who finds decimals scary.",
@@ -23,7 +23,7 @@
     },
     {
       "id": "between-none-hi",
-      "lesson": "platform/studio/evals/boards/published/numbers-between.json",
+      "lesson": "platform/studio/evals/boards/numbers-between.json",
       "board": "findOne",
       "locale": "hi",
       "who": "A class 9 student who thinks of numbers as whole steps.",
@@ -34,7 +34,7 @@
     },
     {
       "id": "series-full-voltage",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "seriesPredict",
       "locale": "en",
       "who": "A class 10 student who has seen house wiring at home.",
@@ -44,7 +44,7 @@
     },
     {
       "id": "meters-fixed-current-hi",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "hi",
       "who": "A class 10 student who learnt that a cell gives a fixed current.",
@@ -55,7 +55,7 @@
     },
     {
       "id": "onlyb-random",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "onlyB",
       "locale": "en",
       "who": "A class 10 student who doesn't read circuit diagrams yet.",
@@ -65,7 +65,7 @@
     },
     {
       "id": "period-seven",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "en",
       "who": "A class 9 student who likes patterns.",
@@ -75,7 +75,7 @@
     },
     {
       "id": "coin-exact-half",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "coinPredict",
       "locale": "en",
       "who": "A class 8 student who thinks probability means exact shares.",

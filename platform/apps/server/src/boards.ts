@@ -35,6 +35,8 @@ export function contentBoards(contentDir: string): (item: ItemRef) => Promise<Bo
       (json as { kind?: unknown }).kind === Kind.Page
         ? builtPageSchema.parse(json)
         : builtQuestionSchema.parse(json);
+    if (built.id !== item.id)
+      throw new NoSuchBoard(`${item.path} is item ${built.id}, not ${item.id}`);
     if (built.version !== item.version)
       throw new NoSuchBoard(`${item.path} is at ${built.version}, not ${item.version}`);
     return loadBoard(modules, built, (type) => propDefs[type]?.role, item.path);

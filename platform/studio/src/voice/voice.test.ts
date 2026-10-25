@@ -12,10 +12,7 @@ import { toneProvider } from "./tone";
 
 const lesson: Lesson = lessonSchema.parse(
   JSON.parse(
-    readFileSync(
-      new URL("../../evals/boards/lessons/where-is-root-2.json", import.meta.url),
-      "utf8",
-    ),
+    readFileSync(new URL("../../evals/boards/where-is-root-2.json", import.meta.url), "utf8"),
   ),
 );
 const readings = loadReadings(
@@ -26,7 +23,7 @@ const voices = {
 };
 
 describe("generateAudio", () => {
-  it("speaks every spoken piece in both languages, keyed by permanent ids", async () => {
+  it("speaks every spoken piece in both languages, keyed by board and address", async () => {
     const dir = mkdtempSync(join(tmpdir(), "chalk-audio-"));
     const result = await generateAudio(
       lesson,
@@ -38,8 +35,10 @@ describe("generateAudio", () => {
       "where-is-root-2",
     );
     expect(result.manifest.provider).toBe("tone");
-    expect(result.manifest.files["2.4.en"]).toMatch(/^audio\/where-is-root-2\/[0-9a-f]{16}\.wav$/); // question "guess-root"
-    expect(result.manifest.files["1.3.hi"]).toBeDefined(); // Maya's first line, in Hindi
+    expect(result.manifest.files["guess.guessRoot.en"]).toMatch(
+      /^audio\/where-is-root-2\/[0-9a-f]{16}\.wav$/,
+    ); // question "guess-root"
+    expect(result.manifest.files["between.mayaSquares.hi"]).toBeDefined(); // Maya's first line, in Hindi
     for (const file of Object.values(result.manifest.files))
       expect(existsSync(join(dir, file))).toBe(true);
     expect(result.reused).toBe(0);

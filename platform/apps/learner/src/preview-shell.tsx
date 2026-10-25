@@ -442,8 +442,7 @@ function PreviewBoard({
   const phone = useRef<HTMLDivElement>(null);
   useSourceTags(phone, where, shown.path.replace(/\.json$/, ""));
   const raise = useMemo(
-    () =>
-      bus.raiserFor({ lessonId: "preview", contentVersion: "preview", boardId: board.id ?? null }),
+    () => bus.raiserFor({ lessonId: "preview", item: board.item ?? null }),
     [bus, board],
   );
   const onClick = (e: MouseEvent) => {

@@ -1,7 +1,7 @@
 import { Actor, lessonSchema } from "@chalk/content";
-import { boardState, headlessBoard } from "@chalk/player";
+import { headlessBoard } from "@chalk/player";
 import { describe, expect, it } from "vitest";
-import rootTwo from "../../../platform/studio/evals/boards/published/where-is-root-2.json";
+import rootTwo from "../../../platform/studio/evals/boards/where-is-root-2.json";
 import { propDefs } from "./index";
 
 const guess = lessonSchema.parse(rootTwo).boards[1];
@@ -14,7 +14,7 @@ describe("a board with no screen (Jugnu's copy on the server)", () => {
     phone.runtime.restoreFacts(
       new Map([["line", { ...phone.runtime.getStored("line"), marker: 1.3 }]]),
     );
-    const copy = headlessBoard(guess, lookup, boardState(phone.runtime));
+    const copy = headlessBoard(guess, lookup, phone.runtime.save());
     expect(copy.runtime.getStored("line").marker).toBe(1.3);
     expect(copy.runtime.getView("squareLabel").text).toMatchObject({ en: "1.30 × 1.30 = 1.6900" });
     expect(copy.runtime.getView("guessRoot").isMet).toBe(false);

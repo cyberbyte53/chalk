@@ -1,11 +1,4 @@
-import {
-  Actor,
-  type Lesson,
-  LessonStatus,
-  type Locale,
-  MachineType,
-  assertPublished,
-} from "@chalk/content";
+import { Actor, type Lesson, LessonStatus, type Locale, MachineType } from "@chalk/content";
 import { type EventBus, bindRaise } from "@chalk/events";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -57,7 +50,6 @@ export function LessonPlayer({
   onExit,
   onComplete,
 }: LessonPlayerProps): JSX.Element {
-  useMemo(() => assertPublished(lesson), [lesson]);
   const [index, setIndex] = useState(startBoard);
   // The furthest board reached: every board before it has been passed.
   const [furthest, setFurthest] = useState(startBoard);
@@ -74,10 +66,9 @@ export function LessonPlayer({
     () =>
       bus.raiserFor({
         lessonId: lesson.id,
-        contentVersion: lesson.version,
-        boardId: board?.id ?? null,
+        item: board?.item ?? null,
       }),
-    [bus, board?.id, lesson.id, lesson.version],
+    [bus, board?.item, lesson.id],
   );
   const raiseLessonEvent = useMemo(
     () => bindRaise<typeof MachineType.Lesson>(raise, { type: MachineType.Lesson, id: lesson.id }),

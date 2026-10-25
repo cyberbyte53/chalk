@@ -2,7 +2,7 @@ import type { BoardFn } from "@chalk/prop";
 import { z } from "zod";
 import { jugnuNotesSchema } from "./jugnu";
 import { localizedSchema } from "./localized";
-import { permanentIdSchema, pieceSchema } from "./piece";
+import { pieceSchema } from "./piece";
 
 /**
  * A script: actions over time. `call` runs one action ("line.zoomTo") and finishes when the action
@@ -58,7 +58,12 @@ export type WhenRule = z.infer<typeof whenRuleSchema>;
 
 /** A built page or question, by its file under build/ and its version: what its board is made from. */
 export const itemRefSchema = z
-  .object({ path: z.string().min(1).max(400), version: z.string().min(1).max(64) })
+  .object({
+    /** Its id (a hash of where it lives in content/): with a node's address, what events name. */
+    id: z.string().min(1).max(64),
+    path: z.string().min(1).max(400),
+    version: z.string().min(1).max(64),
+  })
   .strict();
 export type ItemRef = z.infer<typeof itemRefSchema>;
 
@@ -66,12 +71,6 @@ export type ItemRef = z.infer<typeof itemRefSchema>;
 export const boardSchema = z.object({
   /** Unique within the lesson; free to rename. */
   name: z.string().min(1),
-  /** Permanent id, assigned at publish; used in events. */
-  id: permanentIdSchema.optional(),
-  /** The next piece id publish will hand out on this board. */
-  nextPieceId: permanentIdSchema.optional(),
-  /** Ids of deleted pieces; never handed out again. */
-  retiredPieceIds: z.array(permanentIdSchema).optional(),
   root: pieceSchema,
   is: z.array(isRuleSchema).default([]),
   when: z.array(whenRuleSchema).default([]),

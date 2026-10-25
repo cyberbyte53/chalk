@@ -1,26 +1,19 @@
 {
   "id": "evals/jugnu-demos",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "title": {
     "en": "Jugnu demo boards",
-    "hi": "जुगनू के डेमो बोर्ड"
+    "hi": "जगन क डम बर"
   },
-  "concepts": [
-    "sqrt-estimation",
-    "decimal-places",
-    "fractions-on-line"
-  ],
+  "concepts": ["sqrt-estimation", "decimal-places", "fractions-on-line"],
   "boards": [
     {
-      "id": 1,
       "name": "rootThree",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -28,12 +21,11 @@
               "style": "title",
               "text": {
                 "en": "Find √3: drag the dot until its square is close to 3.",
-                "hi": "√3 ढूँढो: बिंदु को तब तक खींचो जब तक उसका वर्ग 3 के पास न हो।"
+                "hi": "√3 ढढ: बद क तब तक खच जब तक उसक वर 3 क पस न ह।"
               }
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -46,7 +38,6 @@
             }
           },
           {
-            "id": 4,
             "name": "squareLabel",
             "kind": "prop",
             "prop": "text",
@@ -59,23 +50,19 @@
             }
           },
           {
-            "id": 5,
             "name": "guessRoot",
             "kind": "prop",
             "prop": "goal",
             "with": {
               "prompt": {
                 "en": "Press Check when the square is close to 3.",
-                "hi": "जब वर्ग 3 के पास हो, तब 'जाँचो' दबाओ।"
+                "hi": "जब वर 3 क पस ह, तब 'जच' दबओ।"
               },
               "about": "line",
-              "concepts": [
-                "sqrt-estimation"
-              ]
+              "concepts": ["sqrt-estimation"]
             }
           },
           {
-            "id": 6,
             "name": "rest",
             "kind": "space"
           }
@@ -121,19 +108,15 @@
           "squareLabel": "the guess squared, live",
           "guessRoot": "is the guess's square close enough to 3?"
         }
-      },
-      "nextPieceId": 7
+      }
     },
     {
-      "id": 2,
       "name": "findPi",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -141,12 +124,11 @@
               "style": "title",
               "text": {
                 "en": "π is marked on the line. Zoom in to find where it is.",
-                "hi": "रेखा पर π लगा है। ज़ूम करके देखो वह कहाँ है।"
+                "hi": "रख पर π लग ह। जम करक दख वह कह ह।"
               }
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -165,14 +147,13 @@
             }
           },
           {
-            "id": 4,
             "name": "whichHundredths",
             "kind": "prop",
             "prop": "choice",
             "with": {
               "prompt": {
                 "en": "Between which two hundredths is π?",
-                "hi": "π किन दो सौवें भागों के बीच है?"
+                "hi": "π कन द सव भग क बच ह?"
               },
               "options": [
                 {
@@ -205,13 +186,10 @@
                 }
               ],
               "answer": "b",
-              "concepts": [
-                "decimal-places"
-              ]
+              "concepts": ["decimal-places"]
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -239,24 +217,20 @@
       ],
       "studentOnly": [],
       "jugnu": {
-        "purpose": "Successive magnification: each zoom into the tenth that holds π decides one more decimal place. The question asks for the hundredths, so two zooms show the answer; one zoom only shows the tenths.",
+        "purpose": "Successive magnification: zooming into the tenth that holds π shows the hundredths, which is what the question asks, so one zoom gives the answer away. Picking out that tenth (the lens) without zooming shows the idea.",
         "props": {
           "line": "a number line from 3 to 4 with π marked; magnify zooms ten times into the tenth that holds a number",
           "whichHundredths": "the question: which two hundredths π lies between"
         }
-      },
-      "nextPieceId": 6
+      }
     },
     {
-      "id": 3,
       "name": "whereTwoThirds",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -264,16 +238,15 @@
               "style": "title",
               "text": {
                 "en": "Put the dot at 2/3.",
-                "hi": "बिंदु को 2/3 पर रखो।"
+                "hi": "बद क 2/3 पर रख।"
               },
               "speak": {
                 "en": "Put the dot at two thirds.",
-                "hi": "बिंदु को दो तिहाई पर रखो।"
+                "hi": "बद क द तहई पर रख।"
               }
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -286,27 +259,23 @@
             }
           },
           {
-            "id": 4,
             "name": "atTwoThirds",
             "kind": "prop",
             "prop": "goal",
             "with": {
               "prompt": {
                 "en": "Press Check when the dot is at 2/3.",
-                "hi": "जब बिंदु 2/3 पर हो, तब 'जाँचो' दबाओ।"
+                "hi": "जब बद 2/3 पर ह, तब 'जच' दबओ।"
               },
               "about": "line",
-              "concepts": [
-                "fractions-on-line"
-              ],
+              "concepts": ["fractions-on-line"],
               "speak": {
                 "en": "Press Check when the dot is at two thirds.",
-                "hi": "जब बिंदु दो तिहाई पर हो, तब जाँचो दबाओ।"
+                "hi": "जब बद द तहई पर ह, तब जच दबओ।"
               }
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -344,9 +313,7 @@
           "line": "0 to 1, with the student's dot; it can be cut into equal parts (split)",
           "atTwoThirds": "is the dot at 2/3?"
         }
-      },
-      "nextPieceId": 6
+      }
     }
-  ],
-  "nextBoardId": 4
+  ]
 }

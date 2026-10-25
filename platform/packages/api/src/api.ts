@@ -1,4 +1,10 @@
-import { Locale, cueSchema, itemRefSchema, turnInputSchema } from "@chalk/content";
+import {
+  Locale,
+  cueSchema,
+  itemRefSchema,
+  savedBoardSchema,
+  turnInputSchema,
+} from "@chalk/content";
 import { z } from "zod";
 import { progressSchema } from "./progress";
 
@@ -77,7 +83,6 @@ export const jugnuPlaceSchema = z
   .strict();
 
 /** Every prop's stored state, as the phone's board holds it. */
-const boardStateSchema = z.record(z.string(), z.record(z.string(), z.unknown()));
 
 /** Most messages a chat with Jugnu on one board may carry; a longer one starts again. */
 export const JUGNU_CHAT_MAX = 600;
@@ -91,7 +96,7 @@ export const jugnuTurnRequestSchema = z
   .object({
     item: itemRefSchema,
     place: jugnuPlaceSchema,
-    state: boardStateSchema,
+    state: savedBoardSchema,
     chat: z.array(z.unknown()).max(JUGNU_CHAT_MAX),
     input: turnInputSchema,
   })
@@ -105,14 +110,13 @@ const jugnuEventSchema = z.object({ kind: z.string() }).passthrough();
 export const jugnuFlagRequestSchema = z
   .object({
     lessonId: z.string().max(200).nullable(),
-    boardId: z.number().int().nullable(),
     /** The board's name, and the built item it was made from (none for a board made by hand). */
     board: z.string().min(1).max(200),
     item: itemRefSchema.nullable(),
     place: jugnuPlaceSchema,
     /** The board when the chat started, and now. */
-    stateAtStart: boardStateSchema,
-    state: boardStateSchema,
+    stateAtStart: savedBoardSchema,
+    state: savedBoardSchema,
     /** The chat as the model saw it (his tries and their results included). */
     chat: z.array(z.unknown()).max(JUGNU_CHAT_MAX),
     /** What the student saw, turn by turn. */

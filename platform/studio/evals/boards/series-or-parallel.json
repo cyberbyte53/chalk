@@ -5,23 +5,15 @@
     "en": "Series or parallel?",
     "hi": "श्रेणी या पार्श्व?"
   },
-  "concepts": [
-    "series-circuits",
-    "parallel-circuits"
-  ],
-  "nextBoardId": 4,
+  "concepts": ["series-circuits", "parallel-circuits"],
   "boards": [
     {
-      "id": 1,
       "name": "series",
-      "nextPieceId": 7,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -34,7 +26,6 @@
             }
           },
           {
-            "id": 3,
             "name": "circuit",
             "kind": "prop",
             "prop": "circuit",
@@ -124,7 +115,6 @@
             }
           },
           {
-            "id": 4,
             "name": "volts",
             "kind": "prop",
             "prop": "text",
@@ -137,7 +127,6 @@
             }
           },
           {
-            "id": 5,
             "name": "mayaSeries",
             "kind": "prop",
             "isHidden": true,
@@ -151,7 +140,6 @@
             }
           },
           {
-            "id": 6,
             "name": "rest",
             "kind": "space"
           }
@@ -191,21 +179,15 @@
           ]
         }
       ],
-      "studentOnly": [
-        "circuit.takeOutBulb"
-      ]
+      "studentOnly": ["circuit.takeOutBulb"]
     },
     {
-      "id": 2,
       "name": "parallel",
-      "nextPieceId": 7,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -218,7 +200,6 @@
             }
           },
           {
-            "id": 3,
             "name": "circuit",
             "kind": "prop",
             "prop": "circuit",
@@ -325,7 +306,6 @@
             }
           },
           {
-            "id": 4,
             "name": "volts",
             "kind": "prop",
             "prop": "text",
@@ -338,7 +318,6 @@
             }
           },
           {
-            "id": 5,
             "name": "arjunParallel",
             "kind": "prop",
             "isHidden": true,
@@ -352,7 +331,6 @@
             }
           },
           {
-            "id": 6,
             "name": "rest",
             "kind": "space"
           }
@@ -392,21 +370,15 @@
           ]
         }
       ],
-      "studentOnly": [
-        "circuit.takeOutBulb"
-      ]
+      "studentOnly": ["circuit.takeOutBulb"]
     },
     {
-      "id": 3,
       "name": "check",
-      "nextPieceId": 4,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "houseWiring",
             "kind": "prop",
             "prop": "choice",
@@ -449,13 +421,10 @@
                 }
               ],
               "answer": "parallel",
-              "concepts": [
-                "parallel-circuits"
-              ]
+              "concepts": ["parallel-circuits"]
             }
           },
           {
-            "id": 3,
             "name": "rest",
             "kind": "space"
           }

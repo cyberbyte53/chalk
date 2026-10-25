@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { memoryStore, startUploader } from "./uploader";
 
 function raiseStarts(bus: ReturnType<typeof createEventBus>, count: number) {
-  const raise = bus.raiserFor({ lessonId: "concept/c1", contentVersion: null, boardId: null });
+  const raise = bus.raiserFor({ lessonId: "concept/c1", item: null });
   for (let i = 0; i < count; i++)
     raise(Actor.App, {
       machine: { type: MachineType.Lesson, id: "concept/c1" },

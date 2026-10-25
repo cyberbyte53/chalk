@@ -50,7 +50,7 @@ describe("Jugnu test cases", () => {
 
   it.each(["jugnu-boards", "jugnu-demos"])("the test boards are valid lessons (%s)", (name) => {
     const lesson = JSON.parse(
-      readFileSync(resolve(root, `platform/studio/evals/boards/lessons/${name}.json`), "utf8"),
+      readFileSync(resolve(root, `platform/studio/evals/boards/${name}.json`), "utf8"),
     );
     const readings = loadReadings(resolve(root, "content/pronunciations.json"));
     expect(

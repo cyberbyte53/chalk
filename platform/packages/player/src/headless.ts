@@ -1,14 +1,6 @@
-import type { Board } from "@chalk/content";
-import type { AnyPropDef, StoredState } from "@chalk/prop";
+import type { Board, SavedBoard } from "@chalk/content";
+import type { AnyPropDef } from "@chalk/prop";
 import { BoardRuntime, type RuntimeServices } from "./runtime";
-
-/** Every prop's stored state (the board's own included), as plain data: what a phone sends. */
-export type BoardState = Readonly<Record<string, StoredState>>;
-
-/** A board's state right now, as plain data (the board's own state included: what is hidden). */
-export function boardState(runtime: BoardRuntime): BoardState {
-  return Object.fromEntries(runtime.saveFacts());
-}
 
 /** Each frame jumps this far: further than any wait or glide, so each finishes in one frame. */
 const JUMP_MS = 60_000;
@@ -34,14 +26,14 @@ export type HeadlessBoard = {
 const nextTurn = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 /**
- * A board for Jugnu's server: built from the lesson's board, then put into `state` (what the phone
- * sent). Its start script is not run; it is already wherever the student is. Nothing is spoken.
+ * A board for Jugnu's server: built from the lesson's board, then put into `saved` (the phone's
+ * board, `runtime.save()`; refused if it doesn't fit). Its start script is not run; it is already wherever the student is. Nothing is spoken.
  * Timed actions finish at once, so `await runtime.call(...)` resolves at the end state.
  */
 export function headlessBoard(
   board: Board,
   lookup: (type: string) => AnyPropDef | undefined,
-  state?: BoardState,
+  saved?: SavedBoard,
 ): HeadlessBoard {
   const errors: string[] = [];
   let now = 0;
@@ -90,7 +82,14 @@ export function headlessBoard(
   };
 
   const runtime = new BoardRuntime(board, lookup, services);
-  if (state !== undefined) runtime.restoreFacts(new Map(Object.entries(state)));
+  if (saved !== undefined) {
+    try {
+      runtime.load(saved);
+    } catch (error) {
+      runtime.dispose();
+      throw error;
+    }
+  }
 
   const settle = async (): Promise<boolean> => {
     frames = 0;

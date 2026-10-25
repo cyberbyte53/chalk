@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { permanentIdSchema } from "./piece";
+import { itemRefSchema } from "./board";
 
 /**
  * Events (see docs/events.md). Everything with behaviour is a state machine; an event is one
@@ -34,18 +34,49 @@ export const eventEnvelopeSchema = z
     producedAt: z.number().int().positive(),
     actor: z.nativeEnum(Actor),
     lessonId: z.string().nullable(),
-    contentVersion: z.string().nullable(),
-    boardId: permanentIdSchema.nullable(),
+    /** The built page or question the board was made from (and so its code version); none for a board made by hand. */
+    item: itemRefSchema.nullable(),
   })
   .strict();
 export type EventEnvelope = z.infer<typeof eventEnvelopeSchema>;
 
-/** A prop's stored state as it was at the commit. */
-const propStateSchema = z.record(z.string(), z.unknown());
+/** A node's stored facts as they were at the commit. */
+const factsSchema = z.record(z.string(), z.unknown());
 
-/** One prop in a board's Continue event: its state then, and whether the learner touched it. */
-const propRecordSchema = z.object({ isTouched: z.boolean(), state: propStateSchema }).strict();
-export type PropRecord = z.infer<typeof propRecordSchema>;
+/**
+ * One node of a saved board: its prop type and the shape of its facts (`type@hash`: facts are read
+ * back only by a prop with the same key), its facts, and whether the learner touched it.
+ */
+export const savedNodeSchema = z
+  .object({ type: z.string().min(1), facts: factsSchema, isTouched: z.boolean() })
+  .strict();
+export type SavedNode = z.infer<typeof savedNodeSchema>;
+
+/** A board as saved: each placed node by its address. Written and read by one function each (the player's). */
+export const savedBoardSchema = z.record(z.string(), savedNodeSchema);
+export type SavedBoard = z.infer<typeof savedBoardSchema>;
+
+/** One thing the learner did on the board: the node by address, the action, its arguments, when (board clock, s). */
+export const loggedActionSchema = z
+  .object({
+    node: z.string().min(1),
+    action: z.string().min(1),
+    args: z.record(z.string(), z.unknown()),
+    t: z.number().min(0),
+  })
+  .strict();
+export type LoggedAction = z.infer<typeof loggedActionSchema>;
+
+/** What a part on screen showed: its address, its value, its words. */
+const seenPartSchema = z
+  .object({ path: z.string(), value: z.unknown().optional(), words: z.string().optional() })
+  .strict();
+
+/**
+ * A machine on a board is named by the board's item id and the node's address in it
+ * (`<item id>#<address>`); a board made by hand by its name.
+ */
+export const nodeMachineId = (board: string, path: string): string => `${board}#${path}`;
 
 // ---- lesson ----
 
@@ -76,16 +107,19 @@ const lessonEventSchema = z
 const boardEventSchema = z
   .object({
     envelope: eventEnvelopeSchema,
-    machine: z.object({ type: z.literal(MachineType.Board), id: permanentIdSchema }).strict(),
+    /** The board's item id (its name, for a board made by hand). */
+    machine: z.object({ type: z.literal(MachineType.Board), id: z.string().min(1) }).strict(),
     input: z.discriminatedUnion("type", [
       z
         .object({
           type: z.literal("continue"),
           /**
-           * Every prop on the board as it was when the learner pressed Continue, by piece id, so the
+           * Every node on the board as it was when the learner pressed Continue, by address, so the
            * event stands on its own (Jugnu, analysis). A prop placed with `isInEvents: false` is left out.
            */
-          props: z.record(z.string(), propRecordSchema),
+          nodes: savedBoardSchema,
+          /** Everything the learner did on the board, in order: the session replays from it. */
+          actions: z.array(loggedActionSchema),
         })
         .strict(),
     ]),
@@ -109,11 +143,7 @@ export const submittedSchema = z.discriminatedUnion("kind", [
     .object({ kind: z.literal(SubmittedKind.Choices), optionIds: z.array(z.string()) })
     .strict(),
   z
-    .object({
-      kind: z.literal(SubmittedKind.Prop),
-      propId: permanentIdSchema,
-      state: propStateSchema,
-    })
+    .object({ kind: z.literal(SubmittedKind.Prop), node: z.string().min(1), facts: factsSchema })
     .strict(),
 ]);
 export type Submitted = z.infer<typeof submittedSchema>;
@@ -121,9 +151,20 @@ export type Submitted = z.infer<typeof submittedSchema>;
 const questionEventSchema = z
   .object({
     envelope: eventEnvelopeSchema,
-    machine: z.object({ type: z.literal(MachineType.Question), id: permanentIdSchema }).strict(),
+    /** `<item id>#<address>` (nodeMachineId). */
+    machine: z.object({ type: z.literal(MachineType.Question), id: z.string().min(1) }).strict(),
     input: z.discriminatedUnion("type", [
-      z.object({ type: z.literal("check"), submitted: submittedSchema }).strict(),
+      z
+        .object({
+          type: z.literal("check"),
+          submitted: submittedSchema,
+          /**
+           * What the learner saw when they checked: the question's parts and those of the node it is
+           * about, as drawn. With the item's version, history never depends on recomputing it.
+           */
+          saw: z.array(seenPartSchema),
+        })
+        .strict(),
     ]),
     state: z
       .object({
@@ -142,7 +183,8 @@ const questionEventSchema = z
 const lineEventSchema = z
   .object({
     envelope: eventEnvelopeSchema,
-    machine: z.object({ type: z.literal(MachineType.Line), id: permanentIdSchema }).strict(),
+    /** `<item id>#<address>` of the prop that spoke (nodeMachineId). */
+    machine: z.object({ type: z.literal(MachineType.Line), id: z.string().min(1) }).strict(),
     input: z.discriminatedUnion("type", [
       /** The line's audio couldn't play (missing, failed to load, or blocked); the text stayed on screen. */
       z
@@ -164,8 +206,8 @@ const jugnuStepSchema = z.object({ kind: z.string() }).passthrough();
 const jugnuEventSchema = z
   .object({
     envelope: eventEnvelopeSchema,
-    /** Jugnu's chat on one board: the board's permanent id. */
-    machine: z.object({ type: z.literal(MachineType.Jugnu), id: permanentIdSchema }).strict(),
+    /** Jugnu's chat on one board: the board's item id (its name, for a board made by hand). */
+    machine: z.object({ type: z.literal(MachineType.Jugnu), id: z.string().min(1) }).strict(),
     input: z.discriminatedUnion("type", [
       z
         .object({
@@ -234,4 +276,4 @@ export function isEventFor<T extends MachineType>(
 }
 
 /** The lesson and board an event happened in; supplied by the player. */
-export type EventPlace = Pick<EventEnvelope, "lessonId" | "contentVersion" | "boardId">;
+export type EventPlace = Pick<EventEnvelope, "lessonId" | "item">;

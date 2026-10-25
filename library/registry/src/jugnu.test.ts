@@ -7,11 +7,11 @@ import {
   jugnuTurn,
   scriptedProvider,
 } from "@chalk/jugnu";
-import { BoardRuntime, type RuntimeServices, boardState, headlessBoard } from "@chalk/player";
+import { BoardRuntime, type RuntimeServices, headlessBoard } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import coinLesson from "../../../content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json";
-import rootTwo from "../../../platform/studio/evals/boards/published/where-is-root-2.json";
+import coinLesson from "../../../platform/studio/evals/boards/does-a-coin-settle.json";
+import rootTwo from "../../../platform/studio/evals/boards/where-is-root-2.json";
 import { propDefs } from "./index";
 
 // Jugnu on real boards, with a stand-in model playing his part.
@@ -370,7 +370,7 @@ describe("a turn", () => {
   it("works a turn out on a copy with no screen, as the server does", async () => {
     const phone = start();
     await phone.call("line", "moveMarker", { to: 1.3 }, Actor.Learner);
-    const copy = headlessBoard(guess, (type) => propDefs[type], boardState(phone));
+    const copy = headlessBoard(guess, (type) => propDefs[type], phone.save());
     const model = scriptedProvider([
       {
         call: [{ name: "try", args: { calls: [{ call: "line.magnify", args: { value: 1.3 } }] } }],

@@ -11,7 +11,7 @@ import {
   propPieces,
   spokenText,
 } from "@chalk/content";
-import { type AnyPropDef, initialState } from "@chalk/prop";
+import { type AnyPropDef, initialState, segment } from "@chalk/prop";
 import { z } from "zod";
 import { spokenPropsOf } from "../validate";
 import type { TtsProvider } from "./provider";
@@ -54,8 +54,6 @@ function linesOf(
       const line =
         def !== undefined && start?.isOk === true ? def.speech?.(start.state) : undefined;
       if (line === undefined) continue;
-      if (board.id === undefined || piece.id === undefined)
-        throw new Error("Publish ids before generating audio");
       const speaker = line.speaker ?? NARRATOR;
       const voice = cast[speaker] ?? cast[DEFAULT_SPEAKER];
       if (voice === undefined)
@@ -63,7 +61,11 @@ function linesOf(
       for (const locale of LOCALES) {
         const text = spokenText(line, locale, readings);
         if (text !== undefined)
-          lines.push({ key: audioKey(board.id, piece.id, locale), text, voice: voice[locale] });
+          lines.push({
+            key: audioKey(board.item?.id ?? board.name, segment(piece.name), locale),
+            text,
+            voice: voice[locale],
+          });
       }
     }
   }

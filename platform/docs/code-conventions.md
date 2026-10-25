@@ -40,7 +40,7 @@ library/props/<name>/
 ## Content
 
 - Content is TypeScript in the folder tree [writing-content.md](./writing-content.md) describes: `build.yaml` manifests, a concept's `overview.ts`, a chapter's question bank (`questions/<family>/family.ts` + `params.yaml`). `pnpm build-content` turns it into JSON in `build/`. Nobody types an id.
-- The older lessons are JSON under `content/<course>/<chapter>/lessons/`; their `id`s come from `pnpm publish-lesson`. New content goes in the tree.
+- Content is TypeScript in the tree (`writing-content.md`); hand-written JSON boards are only test boards (`platform/studio/evals/boards/`).
 - Props, actions, signals and derived fields are named through the prop's enums (`NumberLineAction.ZoomIn`); concepts through the chapter's generated `Concept` enum. Never a string.
 - Nothing is spoken unless a script calls `say`.
 - Every user-facing string is `t(en, hi)` (JSON: `{ en, hi }`), rich text. Use `speak` when screen text has maths glyphs.

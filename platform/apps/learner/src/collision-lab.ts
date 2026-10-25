@@ -8,15 +8,12 @@ export const collisionLab: Lesson = {
   concepts: [],
   boards: [
     {
-      id: 1,
       name: "collisionLab",
       root: {
-        id: 1,
         name: "page",
         kind: "column",
         children: [
           {
-            id: 2,
             name: "title",
             kind: "prop",
             prop: "text",
@@ -26,7 +23,6 @@ export const collisionLab: Lesson = {
             },
           },
           {
-            id: 3,
             name: "body",
             kind: "prop",
             prop: "text",
@@ -38,13 +34,12 @@ export const collisionLab: Lesson = {
               style: "body",
             },
           },
-          { id: 4, name: "track", kind: "prop", prop: "collision", with: {} },
+          { name: "track", kind: "prop", prop: "collision", with: {} },
         ],
       },
       is: [],
       when: [],
       studentOnly: [],
-      nextPieceId: 5,
     },
   ],
 };

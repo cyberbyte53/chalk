@@ -3,7 +3,7 @@
 The whole loop, end to end, with "Where does √2 live?" as the running example. Parts marked *(later)* aren't built yet.
 
 ```text
-Author ─▶ Publish ─▶ CDN ─▶ Phone: lesson plays ─▶ events ─▶ Server ─▶ learner model
+Author ─▶ Build ──▶ CDN ─▶ Phone: lesson plays ─▶ events ─▶ Server ─▶ learner model
    ▲                                │  ▲                                    │
    │                                ▼  │                                    ▼
    └──── teacher view & content fixes ◀─── Jugnu (when stuck)      practice the next day
@@ -13,17 +13,17 @@ Author ─▶ Publish ─▶ CDN ─▶ Phone: lesson plays ─▶ events ─▶
 
 You make "Where does √2 live?": four boards, Maya and Arjun's lines, the number line, two questions.
 
-The lesson is a JSON file under `content/`. Each board places **props** (words, lines, the number line, a question) and wires them with three kinds of rule: **IS** (always true), **WHEN** (react to a signal) and **THEN** (a script). Boards and props have a **name** you choose (`guess`, `guessRoot`), which the rules use. Prop types come from the library. Studio's GUI comes later; for now an AI assistant can write the file against [board-model.md](./board-model.md).
+The lesson is TypeScript under `content/` (see [writing-content.md](./writing-content.md)). Each board places **props** (words, lines, the number line, a question) and wires them with rules: what is always true (IS), what reacts to a signal (`when`, `after`), scripts, and when the learner may go on (`passWhen`). Conditions are plain typed functions of the board. Boards and props have a **name** you choose (`guess`, `guessRoot`). Prop types come from the library.
 
-## 2. Publish
+## 2. Build
 
-You run `pnpm publish-lesson <file>`.
+You run `pnpm build-content` (or `pnpm preview`, which builds on every save).
 
-1. **Check:** the formats, every prop's contract (starting state, actions, arguments) and the wiring (IS, WHEN, scripts).
-2. **Assign ids:** new boards and pieces get a permanent number from a counter. Names can change any time; ids never do.
-3. **Protect ids:** compared with the last published version, deleted boards and pieces have their ids retired for good; a retired id can never come back.
-4. **Version:** if anything changed, the version goes up (`0.1.0` → `0.1.1`), so every event says which version the learner saw. Every version is kept in `published/versions/<lesson>/`, never overwritten.
-5. **Audio** (`--voice <provider>`): every line a script tells a prop to `say` is spoken once per language, in the voice set for its speaker in `content/voices.json`. What's shown and what's said can differ: screen text is turned into words by the pronunciation rules in `content/pronunciations.json` ("√2" → "square root of 2", "25°C" → "25 degrees Celsius"), and an author's `speak` line wins when given. The voice only ever gets plain words: any character no rule handles stops publish instead of being read out wrong. Files are named by what was said, so only new or edited lines are spoken again. A manifest maps each line (board id, piece id, language) to its file.
+1. **Check:** the formats, every prop's contract (starting state, actions, arguments), the wiring, and each board's witness, played on the real props.
+2. **Name:** each page and question gets an id from where it lives (and a question's params). Events name a board by it and a piece by its address; nobody hands ids out.
+3. **Version:** each item's version is a hash of what made it, its code included, so every event says which version the learner saw.
+4. **Ship as code:** `build/` holds the course's shape and, per page or question, which module makes its board. The app and the server make each board from that same module.
+5. *(later)* **Audio:** every line a script tells a prop to `say` is spoken once per language, in the voice set for its speaker in `content/voices.json`. What's shown and what's said can differ: screen text is turned into words by the pronunciation rules in `content/pronunciations.json` ("√2" → "square root of 2", "25°C" → "25 degrees Celsius"), and an author's `speak` line wins when given. The voice only ever gets plain words: any character no rule handles is refused instead of being read out wrong. Files are named by what was said, so only new or edited lines are spoken again.
 6. *(later)* **Bundle:** everything is packaged and uploaded to the CDN. Jugnu's server gets the prop definitions and a board index.
 
 ## 3. The learner opens the app
@@ -88,4 +88,4 @@ The teacher view shows 12 of 30 picked "√2 = 1.41 exactly". You project the zo
 
 ## 13. Fixing content
 
-Most kids still guessed wrong on board 2 after the hint, so you rewrite it and publish again (`0.1.2`). Ids stay the same, only the wording changes. Old events say the old version, so you can compare whether the new hint works better.
+Most kids still guessed wrong on board 2 after the hint, so you rewrite it and ship again. Its id stays the same, only the wording and the version change. Old events say the old version, so you can compare whether the new hint works better.

@@ -1,11 +1,12 @@
 import { type Locale, audioKey } from "@chalk/content";
+import { segment } from "@chalk/prop";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
 /** Where a spoken line's audio file is, by audio key; undefined when the lesson has no audio at all. */
 export type AudioSource = (key: string) => string | undefined;
 
-/** A prop that is speaking: its name (for the retry mark) and permanent id (for its audio file). */
-export type SpokenProp = { name: string; id: number | undefined };
+/** A prop that is speaking: its name (for the retry mark and, as its address, its audio file). */
+export type SpokenProp = { name: string };
 
 export type Narrator = {
   /** Plays a prop's line and resolves when it ends (or fails; the text is on screen either way). */
@@ -22,7 +23,8 @@ const MAX_LINE_MS = 20_000;
  * Failures never block the lesson: the line is marked, reported, and the board carries on.
  */
 export function useNarrator(
-  boardId: number,
+  /** The board as events name it (boardKey): with each prop's address, its audio files' keys. */
+  board: string,
   locale: Locale,
   source: AudioSource | undefined,
   onFailure: (prop: SpokenProp, reason: string) => void,
@@ -47,8 +49,7 @@ export function useNarrator(
           onFailure(prop, reason);
           resolve();
         };
-        if (prop.id === undefined) return fail("prop has no permanent id");
-        const url = source(audioKey(boardId, prop.id, locale));
+        const url = source(audioKey(board, segment(prop.name), locale));
         if (url === undefined) return fail("no audio file for this line");
         audio.current?.pause();
         const player = new Audio(url);
@@ -81,7 +82,7 @@ export function useNarrator(
           fail(error instanceof Error ? error.name : "audio could not play");
         });
       }),
-    [boardId, locale, source, onFailure],
+    [board, locale, source, onFailure],
   );
 
   return { speak, failed };

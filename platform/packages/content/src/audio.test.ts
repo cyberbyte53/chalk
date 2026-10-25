@@ -26,8 +26,8 @@ describe("spoken lines", () => {
       spokenText({ say: { en: "Where does √2 live?", hi: "√2 कहाँ रहता है?" } }, "hi", readings),
     ).toBe("2 का वर्गमूल कहाँ रहता है?");
   });
-  it("keys audio by permanent ids and language", () => {
-    expect(audioKey(3, 4, "hi")).toBe("3.4.hi");
+  it("keys audio by board, address and language", () => {
+    expect(audioKey("aaaaaaaaaaaaaaaa", "maya", "hi")).toBe("aaaaaaaaaaaaaaaa.maya.hi");
   });
 });
 

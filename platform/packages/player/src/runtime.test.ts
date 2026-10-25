@@ -293,6 +293,35 @@ describe("BoardRuntime", () => {
     ]);
   });
 
+  it("saves the board by address, and loads it back only into props of the same shape", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props({ kind: "prop", name: "dial", prop: "dial" }),
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    void runtime.call("dial", "setTo", { to: 4 }, Actor.Learner);
+    const saved = runtime.save();
+    expect(saved.dial).toEqual({
+      type: runtime.factsKey("dial"),
+      facts: { at: 4 },
+      isTouched: true,
+    });
+    expect(runtime.factsKey("dial")).toMatch(/^dial@[0-9a-f]{8}$/);
+
+    const copy = new BoardRuntime(board, (t) => defs[t], services);
+    copy.load(saved);
+    expect(copy.getView("dial").at).toBe(4);
+    expect(copy.isTouched("dial")).toBe(true);
+    // Saved by a prop whose facts had another shape: refused, nothing changed.
+    const other = new BoardRuntime(board, (t) => defs[t], services);
+    expect(() => other.load({ dial: { ...saved.dial, type: "dial@00000000" } } as never)).toThrow(
+      /saved as dial@00000000/,
+    );
+    expect(() => other.load({ gone: saved.dial } as never)).toThrow(/not on this board/);
+    expect(other.getView("dial").at).toBe(0);
+  });
+
   it("re-reads a prop's view only when that prop changed", () => {
     const { services } = fakeServices();
     const board = boardOf({

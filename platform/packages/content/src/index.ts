@@ -42,7 +42,13 @@ export {
   type EventFor,
   type EventPlace,
   type MachineEvent,
-  type PropRecord,
+  type LoggedAction,
+  type SavedBoard,
+  type SavedNode,
+  loggedActionSchema,
+  nodeMachineId,
+  savedBoardSchema,
+  savedNodeSchema,
   type Submitted,
 } from "./event";
 export {
@@ -94,7 +100,7 @@ export {
   type JugnuNotes,
   type TurnInput,
 } from "./jugnu";
-export { assertPublished, lessonSchema, parseLesson, type Lesson } from "./lesson";
+export { lessonSchema, parseLesson, type Lesson } from "./lesson";
 export {
   Locale,
   LOCALES,
@@ -106,7 +112,6 @@ export {
 export {
   NAME_PATTERN,
   nameSchema,
-  permanentIdSchema,
   Pin,
   PieceKind,
   pieceSchema,

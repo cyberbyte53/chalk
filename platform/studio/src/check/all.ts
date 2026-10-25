@@ -37,7 +37,6 @@ const stamped = (name: string, args: string[]) => () => {
 const steps: [string, () => Promise<boolean>][] = [
   ["typecheck", () => typecheck(root, { force })],
   ["tests", () => test(root, { force })],
-  ["old lessons", stamped("old lessons", ["src/cli.ts", "../../content"])],
   ["boundaries", stamped("boundaries", ["src/boundaries-cli.ts"])],
   ["catalogue", stamped("catalogue", ["src/catalogue-cli.ts", "--check"])],
   [

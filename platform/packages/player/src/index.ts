@@ -48,7 +48,7 @@ export {
 } from "./snapshot";
 export { stampCodePaths } from "./code-paths";
 export { type PropPack, lazyRegistry } from "./lazy-views";
-export { propRecords } from "./records";
+export { actionLog, boardKey, continueRecord, seenParts } from "./records";
 export {
   type ActResult,
   type ActionRecord,
@@ -58,7 +58,7 @@ export {
   type RuntimeServices,
   type SignalRecord,
 } from "./runtime";
-export { type BoardState, type HeadlessBoard, boardState, headlessBoard } from "./headless";
+export { type HeadlessBoard, headlessBoard } from "./headless";
 export { t, UiText, type UiTextKey } from "./ui-text";
 
 /** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */

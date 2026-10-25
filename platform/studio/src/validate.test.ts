@@ -5,7 +5,7 @@ import { loadReadings } from "./pronunciations";
 import { validateLesson } from "./validate";
 
 const lesson = JSON.parse(
-  readFileSync(new URL("../evals/boards/lessons/where-is-root-2.json", import.meta.url), "utf8"),
+  readFileSync(new URL("../evals/boards/where-is-root-2.json", import.meta.url), "utf8"),
 );
 const clone = () => structuredClone(lesson);
 const readings = loadReadings(

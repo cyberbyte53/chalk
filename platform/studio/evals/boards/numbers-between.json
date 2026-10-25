@@ -8,15 +8,12 @@
   "concepts": ["rationals-between", "density-of-rationals"],
   "boards": [
     {
-      "id": 1,
       "name": "tenths",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -29,7 +26,6 @@
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -41,7 +37,6 @@
             }
           },
           {
-            "id": 4,
             "name": "arjunZoom",
             "kind": "prop",
             "isHidden": true,
@@ -55,7 +50,6 @@
             }
           },
           {
-            "id": 5,
             "name": "rest",
             "kind": "space"
           }
@@ -102,19 +96,15 @@
             }
           ]
         }
-      ],
-      "nextPieceId": 6
+      ]
     },
     {
-      "id": 2,
       "name": "findOne",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -127,7 +117,6 @@
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -138,7 +127,6 @@
             }
           },
           {
-            "id": 4,
             "name": "where",
             "kind": "prop",
             "prop": "text",
@@ -151,7 +139,6 @@
             }
           },
           {
-            "id": 5,
             "name": "findOne",
             "kind": "prop",
             "prop": "goal",
@@ -165,7 +152,6 @@
             }
           },
           {
-            "id": 6,
             "name": "mayaOne",
             "kind": "prop",
             "isHidden": true,
@@ -179,7 +165,6 @@
             }
           },
           {
-            "id": 7,
             "name": "rest",
             "kind": "space"
           }
@@ -248,19 +233,15 @@
             }
           ]
         }
-      ],
-      "nextPieceId": 8
+      ]
     },
     {
-      "id": 3,
       "name": "findSmaller",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -273,7 +254,6 @@
             }
           },
           {
-            "id": 3,
             "name": "line",
             "kind": "prop",
             "prop": "numberLine",
@@ -284,7 +264,6 @@
             }
           },
           {
-            "id": 4,
             "name": "where",
             "kind": "prop",
             "prop": "text",
@@ -297,7 +276,6 @@
             }
           },
           {
-            "id": 5,
             "name": "findOne",
             "kind": "prop",
             "prop": "goal",
@@ -311,7 +289,6 @@
             }
           },
           {
-            "id": 6,
             "name": "mayaAgain",
             "kind": "prop",
             "isHidden": true,
@@ -325,7 +302,6 @@
             }
           },
           {
-            "id": 7,
             "name": "rest",
             "kind": "space"
           }
@@ -394,19 +370,15 @@
             }
           ]
         }
-      ],
-      "nextPieceId": 8
+      ]
     },
     {
-      "id": 4,
       "name": "howMany",
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "howManyBetween",
             "kind": "prop",
             "prop": "choice",
@@ -453,7 +425,6 @@
             }
           },
           {
-            "id": 3,
             "name": "rest",
             "kind": "space"
           }
@@ -473,9 +444,7 @@
             "call": "board.pass"
           }
         }
-      ],
-      "nextPieceId": 4
+      ]
     }
-  ],
-  "nextBoardId": 5
+  ]
 }

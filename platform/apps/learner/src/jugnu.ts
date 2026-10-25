@@ -8,7 +8,7 @@ import {
   recordingFetch,
   thinkHere,
 } from "@chalk/jugnu";
-import { type JugnuLink, boardState } from "@chalk/player";
+import type { JugnuLink } from "@chalk/player";
 import { z } from "zod";
 import { api } from "./api-client";
 import { lessonLibrary } from "./lesson-library";
@@ -32,7 +32,7 @@ export function jugnuLink(): JugnuLink | undefined {
       const reply = await api.jugnuTurn({
         item,
         place,
-        state: boardState(runtime),
+        state: runtime.save(),
         chat: [...request.chat],
         input: request.input,
       });
@@ -109,7 +109,7 @@ export function devJugnuLink(dev: DevModel | undefined): JugnuLink | undefined {
   return {
     think: (runtime, place) => {
       const think = thinkHere(runtime, provider, place, { lessons: lessonLibrary });
-      devLog({ kind: "board", board: runtime.board.id ?? null, place });
+      devLog({ kind: "board", board: runtime.board.item?.path ?? runtime.board.name, place });
       return async (request) => {
         const result = await think(request);
         devLog({ kind: "turn", input: request.input, cues: result.cues, calls: result.modelCalls });

@@ -11,22 +11,18 @@ export const gasLab: Lesson = {
   concepts: [],
   boards: [
     {
-      id: 1,
       name: "gasLab",
       root: {
-        id: 1,
         name: "page",
         kind: "column",
         children: [
           {
-            id: 2,
             name: "title",
             kind: "prop",
             prop: "text",
             with: { text: { en: "A gas in a box", hi: "डिब्बे में गैस" }, style: "title" },
           },
           {
-            id: 3,
             name: "body",
             kind: "prop",
             prop: "text",
@@ -38,13 +34,12 @@ export const gasLab: Lesson = {
               style: "body",
             },
           },
-          { id: 4, name: "gas", kind: "prop", prop: "gas", with: {} },
+          { name: "gas", kind: "prop", prop: "gas", with: {} },
         ],
       },
       is: [],
       when: [],
       studentOnly: [],
-      nextPieceId: 5,
     },
   ],
 };

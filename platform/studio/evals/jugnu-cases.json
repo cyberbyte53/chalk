@@ -2,7 +2,7 @@
   "cases": [
     {
       "id": "root2-just-tell",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -17,7 +17,7 @@
     },
     {
       "id": "root2-just-tell-hi",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "hi",
       "turns": [
@@ -32,7 +32,7 @@
     },
     {
       "id": "root2-hinglish",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "hi",
       "turns": [
@@ -47,7 +47,7 @@
     },
     {
       "id": "root2-too-big",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "setup": [
@@ -71,7 +71,7 @@
     },
     {
       "id": "root2-wrong-maths",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -88,7 +88,7 @@
     },
     {
       "id": "root2-what-is-square",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -103,7 +103,7 @@
     },
     {
       "id": "root2-press-check",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -119,7 +119,7 @@
     },
     {
       "id": "root2-show-me",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -135,7 +135,7 @@
     },
     {
       "id": "root2-off-topic",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -151,7 +151,7 @@
     },
     {
       "id": "root2-feeling-stupid",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -166,7 +166,7 @@
     },
     {
       "id": "root2-which-option",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "check",
       "locale": "en",
       "turns": [
@@ -181,7 +181,7 @@
     },
     {
       "id": "root2-which-option-hi",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "check",
       "locale": "hi",
       "turns": [
@@ -196,7 +196,7 @@
     },
     {
       "id": "coin-why-not-half",
-      "lesson": "content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json",
+      "lesson": "platform/studio/evals/boards/does-a-coin-settle.json",
       "board": "settle",
       "locale": "en",
       "turns": [
@@ -211,7 +211,7 @@
     },
     {
       "id": "coin-why-not-half-hi",
-      "lesson": "content/class8-maths/ch4-data-handling/published/does-a-coin-settle.json",
+      "lesson": "platform/studio/evals/boards/does-a-coin-settle.json",
       "board": "settle",
       "locale": "hi",
       "turns": [
@@ -226,7 +226,7 @@
     },
     {
       "id": "circuit-just-tell",
-      "lesson": "content/class10-science/ch12-electricity/published/series-or-parallel.json",
+      "lesson": "platform/studio/evals/boards/series-or-parallel.json",
       "board": "check",
       "locale": "en",
       "turns": [
@@ -243,7 +243,7 @@
     },
     {
       "id": "between-give-number",
-      "lesson": "platform/studio/evals/boards/published/numbers-between.json",
+      "lesson": "platform/studio/evals/boards/numbers-between.json",
       "board": "findOne",
       "locale": "en",
       "turns": [
@@ -258,7 +258,7 @@
     },
     {
       "id": "between-why-wrong",
-      "lesson": "platform/studio/evals/boards/published/numbers-between.json",
+      "lesson": "platform/studio/evals/boards/numbers-between.json",
       "board": "findSmaller",
       "locale": "en",
       "setup": [
@@ -281,7 +281,7 @@
     },
     {
       "id": "between-how-many-hi",
-      "lesson": "platform/studio/evals/boards/published/numbers-between.json",
+      "lesson": "platform/studio/evals/boards/numbers-between.json",
       "board": "howMany",
       "locale": "hi",
       "turns": [
@@ -296,7 +296,7 @@
     },
     {
       "id": "end-which-ends",
-      "lesson": "platform/studio/evals/boards/published/does-it-end.json",
+      "lesson": "platform/studio/evals/boards/does-it-end.json",
       "board": "which",
       "locale": "en",
       "turns": [
@@ -311,7 +311,7 @@
     },
     {
       "id": "root2-give-up-after-tries",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "setup": [
@@ -356,7 +356,7 @@
     },
     {
       "id": "root2-injection",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -371,7 +371,7 @@
     },
     {
       "id": "root2-back-and-forth",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -400,7 +400,7 @@
     },
     {
       "id": "root2-hinglish-tries",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "hi",
       "setup": [
@@ -435,7 +435,7 @@
     },
     {
       "id": "between-do-it",
-      "lesson": "platform/studio/evals/boards/published/numbers-between.json",
+      "lesson": "platform/studio/evals/boards/numbers-between.json",
       "board": "findOne",
       "locale": "en",
       "turns": [
@@ -450,7 +450,7 @@
     },
     {
       "id": "series-take-out",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "seriesPredict",
       "locale": "en",
       "turns": [
@@ -466,7 +466,7 @@
     },
     {
       "id": "series-why-dim",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "seriesPredict",
       "locale": "en",
       "turns": [
@@ -481,7 +481,7 @@
     },
     {
       "id": "series-why-dark-hi",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "seriesPredict",
       "locale": "hi",
       "setup": [
@@ -502,7 +502,7 @@
     },
     {
       "id": "meters-just-tell",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -523,7 +523,7 @@
     },
     {
       "id": "meters-how-calc",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -540,7 +540,7 @@
     },
     {
       "id": "meters-after-wrong",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "setup": [
@@ -567,7 +567,7 @@
     },
     {
       "id": "meters-hinglish",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "hi",
       "turns": [
@@ -582,7 +582,7 @@
     },
     {
       "id": "onlyb-do-it",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "onlyB",
       "locale": "en",
       "turns": [
@@ -595,7 +595,7 @@
     },
     {
       "id": "onlyb-step-by-step",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "onlyB",
       "locale": "en",
       "turns": [
@@ -621,7 +621,7 @@
     },
     {
       "id": "period-show-all",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "en",
       "turns": [
@@ -637,7 +637,7 @@
     },
     {
       "id": "period-why-7",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "en",
       "setup": [
@@ -663,7 +663,7 @@
     },
     {
       "id": "period-hi",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "hi",
       "turns": [
@@ -679,7 +679,7 @@
     },
     {
       "id": "goal-next-step",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalGoal",
       "locale": "en",
       "turns": [
@@ -692,7 +692,7 @@
     },
     {
       "id": "goal-start-and-watch",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalGoal",
       "locale": "en",
       "turns": [
@@ -712,7 +712,7 @@
     },
     {
       "id": "goal-why-wrong",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalGoal",
       "locale": "en",
       "setup": [
@@ -735,7 +735,7 @@
     },
     {
       "id": "goal-one-third-hi",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalGoal",
       "locale": "hi",
       "turns": [
@@ -750,7 +750,7 @@
     },
     {
       "id": "coin-toss-for-me",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "coinPredict",
       "locale": "en",
       "turns": [
@@ -765,7 +765,7 @@
     },
     {
       "id": "coin-just-tell",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "coinPredict",
       "locale": "en",
       "turns": [
@@ -780,7 +780,7 @@
     },
     {
       "id": "ask-what-is-root",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -796,7 +796,7 @@
     },
     {
       "id": "ask-what-is-root-hi",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "hi",
       "turns": [
@@ -812,7 +812,7 @@
     },
     {
       "id": "ask-why-not-fraction",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -827,7 +827,7 @@
     },
     {
       "id": "ask-follow-up-why",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -846,7 +846,7 @@
     },
     {
       "id": "ask-series-current",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "seriesPredict",
       "locale": "en",
       "turns": [
@@ -861,7 +861,7 @@
     },
     {
       "id": "ask-what-is-volt",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "seriesPredict",
       "locale": "en",
       "turns": [
@@ -876,7 +876,7 @@
     },
     {
       "id": "ask-why-a-more",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -892,7 +892,7 @@
     },
     {
       "id": "ask-amp-volt-hi",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "hi",
       "turns": [
@@ -907,7 +907,7 @@
     },
     {
       "id": "ask-switch-inside",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "onlyB",
       "locale": "en",
       "turns": [
@@ -922,7 +922,7 @@
     },
     {
       "id": "ask-multiply-by-10",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalGoal",
       "locale": "en",
       "setup": [
@@ -942,7 +942,7 @@
     },
     {
       "id": "ask-point-nine",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "en",
       "turns": [
@@ -957,7 +957,7 @@
     },
     {
       "id": "ask-gamblers",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "coinPredict",
       "locale": "en",
       "turns": [
@@ -973,7 +973,7 @@
     },
     {
       "id": "ask-rational-irrational",
-      "lesson": "platform/studio/evals/boards/published/numbers-between.json",
+      "lesson": "platform/studio/evals/boards/numbers-between.json",
       "board": "howMany",
       "locale": "en",
       "turns": [
@@ -988,7 +988,7 @@
     },
     {
       "id": "ask-why-8-ends",
-      "lesson": "platform/studio/evals/boards/published/does-it-end.json",
+      "lesson": "platform/studio/evals/boards/does-it-end.json",
       "board": "which",
       "locale": "en",
       "turns": [
@@ -1003,7 +1003,7 @@
     },
     {
       "id": "ask-thanks",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -1019,7 +1019,7 @@
     },
     {
       "id": "tool-point-label",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -1036,7 +1036,7 @@
     },
     {
       "id": "tool-point-switch",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -1053,7 +1053,7 @@
     },
     {
       "id": "tool-point-remainder",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "decimalPeriod",
       "locale": "en",
       "turns": [
@@ -1069,7 +1069,7 @@
     },
     {
       "id": "tool-show-try",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -1086,7 +1086,7 @@
     },
     {
       "id": "tool-show-not-reveal",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -1108,7 +1108,7 @@
     },
     {
       "id": "tool-calc-check",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "setup": [
@@ -1133,7 +1133,7 @@
     },
     {
       "id": "tool-calc-ohms",
-      "lesson": "platform/studio/evals/boards/published/jugnu-boards.json",
+      "lesson": "platform/studio/evals/boards/jugnu-boards.json",
       "board": "meterPredict",
       "locale": "en",
       "turns": [
@@ -1150,7 +1150,7 @@
     },
     {
       "id": "tool-react-to-move",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [
@@ -1176,7 +1176,7 @@
     },
     {
       "id": "tool-stay-quiet",
-      "lesson": "platform/studio/evals/boards/published/where-is-root-2.json",
+      "lesson": "platform/studio/evals/boards/where-is-root-2.json",
       "board": "guess",
       "locale": "en",
       "turns": [

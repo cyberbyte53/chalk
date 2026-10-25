@@ -18,12 +18,12 @@ The model, provider, server and key come from `JUGNU_MODEL`, `JUGNU_PROVIDER`, `
 
 In `jugnu-cases.json`:
 
-- `lesson` (relative to the repo root) and `board`: a published lesson, or a test board in `boards/`.
+- `lesson` (relative to the repo root) and `board`: a test lesson in `boards/`.
 - `setup`: what the student did before asking, as their own actions (`line.moveMarker`, `guessRoot.check`).
 - `turns`, in order: `{ "ask": "…" }`, or `{ "student": [actions] }`. If Jugnu handed the board back and the student acts on a prop he's watching, he goes on by himself, as in the app.
 - `expect`: what the script checks (below). `good`: what good help does, in words, for the judge and for you.
 
-`boards/lessons/jugnu-boards.json` holds question boards made only for testing, harder than the lessons so far: a series circuit with a prediction (taking the bulb out is the student's job), a parallel circuit with ammeters where opening the switch shows the answer and the numbers need the calculator, a goal that Jugnu could solve by flipping switches, 1 ÷ 7 where tapping to the end shows how many digits repeat, a 3 ÷ 8 goal, and the coin with a question. They are checked like any lesson (`pnpm test` validates them); after changing them, `pnpm publish-lesson platform/studio/evals/boards/lessons/jugnu-boards.json`. In `pnpm dev` they show at the bottom of the lesson list as "Jugnu test boards", so you can try him on them yourself.
+`boards/jugnu-boards.json` holds question boards made only for testing, harder than the lessons so far: a series circuit with a prediction (taking the bulb out is the student's job), a parallel circuit with ammeters where opening the switch shows the answer and the numbers need the calculator, a goal that Jugnu could solve by flipping switches, 1 ÷ 7 where tapping to the end shows how many digits repeat, a 3 ÷ 8 goal, and the coin with a question. They are checked like any board (`pnpm test` validates them). In `pnpm dev` they show at the bottom of the lesson list as "Jugnu test boards", so you can try him on them yourself.
 
 ## What it checks
 

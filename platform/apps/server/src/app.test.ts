@@ -25,13 +25,13 @@ import {
 } from "@chalk/content";
 import { type ChatMessage, scriptedProvider } from "@chalk/jugnu";
 import { propDefs } from "@chalk/library";
-import { boardState, headlessBoard } from "@chalk/player";
+import { headlessBoard } from "@chalk/player";
 import { PGlite } from "@electric-sql/pglite";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import rootTwo from "../../../studio/evals/boards/published/where-is-root-2.json";
+import rootTwo from "../../../studio/evals/boards/where-is-root-2.json";
 import {
   type AppDeps,
   JUGNU_TURNS_PER_HOUR,
@@ -117,8 +117,7 @@ function lessonStart(id: string, producedAt: number): ChalkEvent {
       producedAt,
       actor: Actor.App,
       lessonId: "class9-maths/ch1/where-is-root-2",
-      contentVersion: null,
-      boardId: null,
+      item: null,
     },
     machine: { type: MachineType.Lesson, id: "class9-maths/ch1/where-is-root-2" },
     input: { type: "start" },
@@ -366,8 +365,8 @@ describe("server", () => {
       {
         ...start,
         envelope: { ...start.envelope, id: "p1", seq: 1, lessonId: practice },
-        machine: { type: MachineType.Question, id: 3 },
-        input: { type: "check", submitted: { kind: "choice", optionId: "a" } },
+        machine: { type: MachineType.Question, id: "aaaaaaaaaaaaaaaa#ask" },
+        input: { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
         state: { status: "correct", attempts: 1, isGraded: true },
       },
       {
@@ -403,11 +402,15 @@ describe("server", () => {
   const guessBoard = lessonSchema.parse(rootTwo).boards[1];
   if (guessBoard === undefined) throw new Error("no guess board");
   const guess = guessBoard;
-  const GUESS = { path: "book/chapter/lesson/overview/guess.json", version: "abc123" };
+  const GUESS = {
+    id: "aaaaaaaaaaaaaaaa",
+    path: "book/chapter/lesson/overview/guess.json",
+    version: "abc123",
+  };
   const place = { lessonTitle: "Where does √2 live?", boardNumber: 2, boardCount: 4, locale: "en" };
   const turnRequest = (chat: readonly unknown[], text = "help") => {
     const phone = headlessBoard(guess, (type) => propDefs[type]);
-    const state = boardState(phone.runtime);
+    const state = phone.runtime.save();
     phone.dispose();
     return { item: GUESS, place, state, chat, input: { kind: "typed", text } };
   };
@@ -490,7 +493,6 @@ describe("server", () => {
     const { state } = turnRequest([]);
     const flag = {
       lessonId: "where-is-root-2",
-      boardId: 2,
       board: guess.name,
       item: GUESS,
       place,

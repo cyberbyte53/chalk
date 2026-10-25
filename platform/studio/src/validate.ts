@@ -32,10 +32,7 @@ export type Problem = { where: string; message: string };
 
 type Defs = Readonly<Record<string, AnyPropDef>>;
 
-/**
- * Checks a lesson against the content formats, every prop's contract, and its own wiring.
- * A lesson with problems cannot be published.
- */
+/** A hand-made run of boards (a test lesson): its format, unique board names, and each board. */
 export function validateLesson(input: unknown, defs: Defs, readings: Readings): Problem[] {
   const parsed = lessonSchema.safeParse(input);
   if (!parsed.success) {
@@ -45,7 +42,7 @@ export function validateLesson(input: unknown, defs: Defs, readings: Readings): 
     }));
   }
   const lesson: Lesson = parsed.data;
-  const problems: Problem[] = [...checkIds(lesson)];
+  const problems: Problem[] = [];
   const boardNames = new Set<string>();
   for (const board of lesson.boards) {
     if (boardNames.has(board.name))
@@ -72,7 +69,8 @@ function split(target: string): { prop: string; member: string } | undefined {
     : { prop: target.slice(0, dot), member: target.slice(dot + 1) };
 }
 
-function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem[] {
+/** Checks a board against the content formats, every prop's contract, and its own wiring. */
+export function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem[] {
   const problems: Problem[] = [];
   const report = (where: string, message: string) =>
     problems.push({ where: `${board.name}/${where}`, message });
@@ -382,48 +380,4 @@ export function spokenPropsOf(board: Board): Set<string> {
     }
   }
   return out;
-}
-
-/** Permanent ids: unique, below their counter, and never a retired one. Missing ids are fine (publish assigns them). */
-export function checkIds(lesson: Lesson): Problem[] {
-  const problems: Problem[] = [];
-  const retiredBoards = new Set(lesson.retiredBoardIds ?? []);
-  const boardIds = new Set<number>();
-  for (const board of lesson.boards) {
-    if (board.id !== undefined) {
-      if (boardIds.has(board.id))
-        problems.push({ where: board.name, message: `board id ${board.id} is used twice` });
-      if (retiredBoards.has(board.id)) {
-        problems.push({
-          where: board.name,
-          message: `board id ${board.id} was retired and can't be reused`,
-        });
-      }
-      if (lesson.nextBoardId !== undefined && board.id >= lesson.nextBoardId) {
-        problems.push({
-          where: board.name,
-          message: `board id ${board.id} is not below nextBoardId ${lesson.nextBoardId}`,
-        });
-      }
-      boardIds.add(board.id);
-    }
-    const retiredPieces = new Set(board.retiredPieceIds ?? []);
-    const pieceIds = new Set<number>();
-    for (const piece of walkPieces(board.root)) {
-      if (piece.id === undefined) continue;
-      const where = `${board.name}/${piece.name}`;
-      if (pieceIds.has(piece.id))
-        problems.push({ where, message: `piece id ${piece.id} is used twice on this board` });
-      if (retiredPieces.has(piece.id))
-        problems.push({ where, message: `piece id ${piece.id} was retired and can't be reused` });
-      if (board.nextPieceId !== undefined && piece.id >= board.nextPieceId) {
-        problems.push({
-          where,
-          message: `piece id ${piece.id} is not below nextPieceId ${board.nextPieceId}`,
-        });
-      }
-      pieceIds.add(piece.id);
-    }
-  }
-  return problems;
 }

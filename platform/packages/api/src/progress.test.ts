@@ -29,8 +29,7 @@ function session(id: string) {
     producedAt: 1000 + seq,
     actor: Actor.Learner,
     lessonId,
-    contentVersion: null,
-    boardId: null,
+    item: null,
   });
   const lesson = (lessonId: string, type: "start" | "complete" | "leave"): ChalkEvent => ({
     envelope: envelope(lessonId),
@@ -48,13 +47,13 @@ function session(id: string) {
   });
   const check = (
     lessonId: string,
-    question: number,
+    question: string,
     isRight: boolean,
     attempts = 1,
   ): ChalkEvent => ({
     envelope: envelope(lessonId),
     machine: { type: MachineType.Question, id: question },
-    input: { type: "check", submitted: { kind: SubmittedKind.Choice, optionId: "a" } },
+    input: { type: "check", submitted: { kind: SubmittedKind.Choice, optionId: "a" }, saw: [] },
     state: {
       status: isRight ? QuestionStatus.Correct : QuestionStatus.Wrong,
       attempts,
@@ -74,10 +73,10 @@ describe("progress", () => {
       s.lesson(conceptLessonId(C), "start"),
       s.lesson(conceptLessonId(C), "complete"),
       s.lesson(p, "start"),
-      s.check(p, 2, true),
-      s.check(p, 3, false),
-      s.check(p, 3, true, 2),
-      s.check(p, 4, true),
+      s.check(p, "item#q2", true),
+      s.check(p, "item#q3", false),
+      s.check(p, "item#q3", true, 2),
+      s.check(p, "item#q4", true),
       s.lesson(p, "complete"),
     ];
     const progress = progressFrom(events);
@@ -93,14 +92,14 @@ describe("progress", () => {
   it("ignores a practice left halfway, and keeps the latest finished one", () => {
     const p = practiceLessonId(C);
     const a = session("a");
-    const left = [a.lesson(p, "start"), a.check(p, 2, false), a.lesson(p, "leave")];
+    const left = [a.lesson(p, "start"), a.check(p, "item#q2", false), a.lesson(p, "leave")];
     expect(progressFrom(left)[C]).toBeUndefined();
     expect(isConceptDone(progressFrom(left)[C], true)).toBe(false);
 
     const b = session("b");
-    const done = [b.lesson(p, "start"), b.check(p, 2, false), b.lesson(p, "complete")];
+    const done = [b.lesson(p, "start"), b.check(p, "item#q2", false), b.lesson(p, "complete")];
     const c = session("c");
-    const again = [c.lesson(p, "start"), c.check(p, 2, true), c.lesson(p, "complete")];
+    const again = [c.lesson(p, "start"), c.check(p, "item#q2", true), c.lesson(p, "complete")];
     // Session c's events come later in time.
     for (const e of again) e.envelope.producedAt += 10_000;
     expect(progressFrom([...left, ...done, ...again])[C]?.practice?.right).toBe(1);

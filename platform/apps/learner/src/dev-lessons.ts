@@ -11,44 +11,27 @@ import { specimen } from "./specimen";
 /**
  * Lessons for the development shells (`?dev`, `?dev&review`), fetched when asked for: a book's
  * chapter one at a time from /content/ (build/, as the app does), and the lessons in no book
- * (specimens, labs, published lessons, test boards) only when that list is opened.
+ * (specimens, labs, test boards) only when that list is opened.
  */
 
 /**
  * A lesson and where its spoken lines' audio is. v1 is silent: no lesson gets audio, so `say`
- * shows its text and moves on, and no retry mark appears. The player's narration and publish's
- * voices are kept for later; turning audio on means handing the player each lesson's
- * published/<lesson>.audio.json files again (git history has the loader).
+ * shows its text and moves on, and no retry mark appears. The player's narration and the voices
+ * (platform/studio/src/voice) are kept for the audio step, later.
  */
 export type PlayableLesson = { lesson: Lesson; audio: AudioSource | undefined };
 
-/** Published lessons, straight from the repo's content folder; each read only when wanted. */
-const jsonFiles = import.meta.env.DEV
-  ? import.meta.glob<unknown>(
-      ["../../../../content/**/published/*.json", "!../../../../content/**/published/*.audio.json"],
-      { import: "default" },
-    )
-  : {};
-
 /** Test-only boards for trying Jugnu (platform/studio/evals/boards). */
 const testBoards = import.meta.env.DEV
-  ? import.meta.glob<unknown>(
-      [
-        "../../../studio/evals/boards/published/*.json",
-        "!../../../studio/evals/boards/published/*.audio.json",
-      ],
-      { import: "default" },
-    )
+  ? import.meta.glob<unknown>("../../../studio/evals/boards/*.json", { import: "default" })
   : {};
 
 const playable = (lesson: Lesson): PlayableLesson => ({ lesson, audio: undefined });
 
 let others: Promise<PlayableLesson[]> | undefined;
-/** Every lesson in no book: specimens and labs, then published lessons and test boards. */
+/** Every lesson in no book: specimens and labs, then the test boards. */
 export function otherLessons(): Promise<PlayableLesson[]> {
-  others ??= Promise.all(
-    [...Object.values(jsonFiles), ...Object.values(testBoards)].map((load) => load()),
-  ).then((files) => [
+  others ??= Promise.all(Object.values(testBoards).map((load) => load())).then((files) => [
     playable(specimen),
     playable(gasLab),
     playable(collisionLab),

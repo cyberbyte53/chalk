@@ -7,7 +7,7 @@ import type { PropRegistry } from "./prop-module";
 import { BoardRuntime } from "./runtime";
 import { trackBoard } from "./snapshot";
 
-export type Speak = (prop: { name: string; id: number | undefined }, line: Spoken) => Promise<void>;
+export type Speak = (prop: { name: string }, line: Spoken) => Promise<void>;
 
 /**
  * Runs one board while it is on screen. Nothing here re-renders: each component that reads a prop's

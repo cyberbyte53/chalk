@@ -5,22 +5,15 @@
     "en": "Does a coin settle?",
     "hi": "क्या सिक्का टिकता है?"
   },
-  "concepts": [
-    "experimental-probability"
-  ],
-  "nextBoardId": 3,
+  "concepts": ["experimental-probability"],
   "boards": [
     {
-      "id": 1,
       "name": "tossing",
-      "nextPieceId": 12,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "title",
             "kind": "prop",
             "prop": "text",
@@ -33,18 +26,15 @@
             }
           },
           {
-            "id": 3,
             "name": "controls",
             "kind": "row",
             "children": [
               {
-                "id": 4,
                 "name": "coin",
                 "kind": "prop",
                 "prop": "coin"
               },
               {
-                "id": 5,
                 "name": "tossOnce",
                 "kind": "prop",
                 "prop": "button",
@@ -56,7 +46,6 @@
                 }
               },
               {
-                "id": 6,
                 "name": "tossMany",
                 "kind": "prop",
                 "prop": "button",
@@ -70,7 +59,6 @@
             ]
           },
           {
-            "id": 7,
             "name": "score",
             "kind": "prop",
             "prop": "text",
@@ -83,7 +71,6 @@
             }
           },
           {
-            "id": 8,
             "name": "chart",
             "kind": "prop",
             "prop": "graph",
@@ -104,7 +91,6 @@
             }
           },
           {
-            "id": 9,
             "name": "mayaSettles",
             "kind": "prop",
             "isHidden": true,
@@ -118,13 +104,11 @@
             }
           },
           {
-            "id": 10,
             "name": "clock",
             "kind": "prop",
             "prop": "timer"
           },
           {
-            "id": 11,
             "name": "rest",
             "kind": "space"
           }
@@ -211,16 +195,12 @@
       ]
     },
     {
-      "id": 2,
       "name": "settle",
-      "nextPieceId": 4,
       "root": {
-        "id": 1,
         "name": "page",
         "kind": "column",
         "children": [
           {
-            "id": 2,
             "name": "howClose",
             "kind": "prop",
             "prop": "choice",
@@ -263,13 +243,10 @@
                 }
               ],
               "answer": "nearHalf",
-              "concepts": [
-                "experimental-probability"
-              ]
+              "concepts": ["experimental-probability"]
             }
           },
           {
-            "id": 3,
             "name": "rest",
             "kind": "space"
           }

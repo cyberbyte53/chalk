@@ -1,6 +1,8 @@
 import {
   Actor,
   type Board,
+  type SavedBoard,
+  type SavedNode,
   type Script,
   type WhenRule,
   argExpression,
@@ -39,6 +41,7 @@ import {
   namesOf,
   prepareOnView,
   runEffect,
+  schemaKey,
   schemaWithout,
   segment,
   viewOf,
@@ -50,7 +53,7 @@ import { snapshotOf } from "./snapshot";
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
   /** Reads a prop's line aloud; resolves when it ends or fails (the text stays on screen either way). */
-  speak: (prop: { name: string; id: number | undefined }, line: Spoken) => Promise<void>;
+  speak: (prop: { name: string }, line: Spoken) => Promise<void>;
   /** Calls back on the next frame with the time in ms; returns a function that cancels it. */
   frame: (callback: (now: number) => void) => () => void;
   now: () => number;
@@ -64,6 +67,8 @@ export type ActionRecord = {
   action: string;
   args: unknown;
   actor: Actor;
+  /** When, on the board's clock (seconds, not counting pauses). */
+  t: number;
   /** Why it was refused; absent when the board took it. */
   refused?: string;
 };
@@ -101,10 +106,11 @@ export type SignalRecord = {
 /** One placed prop: what it is. Its facts live in the board's one root; its view is worked out. */
 type Piece = {
   name: string;
-  id: number | undefined;
   def: AnyPropDef;
   /** Its stored facts' schema: the prop's own, minus the fields the board binds. */
   facts: FactsSchema;
+  /** What a saved record calls the shape of its facts: `type@hash` (schemaKey). */
+  key: string;
   /** Fields the board binds into it (never stored, never set by an action). */
   bound: BoundTree | undefined;
   isGroup: boolean;
@@ -387,7 +393,6 @@ export class BoardRuntime {
     this.clock = new Clock(services);
     const defs = new Map<string, AnyPropDef>();
     const starts = new Map<string, StoredState>();
-    const ids = new Map<string, number | undefined>();
     const hidden: string[] = [];
     for (const piece of propPieces(board.root)) {
       const def = lookup(piece.prop);
@@ -398,12 +403,10 @@ export class BoardRuntime {
         throw new Error(`Board ${board.name}, ${piece.name}: ${start.errors.join("; ")}`);
       defs.set(piece.name, def);
       starts.set(piece.name, start.state);
-      ids.set(piece.name, piece.id);
       if (piece.isHidden === true) hidden.push(piece.name);
     }
     defs.set(BOARD, boardProp as unknown as AnyPropDef);
     starts.set(BOARD, { ...boardProp.defaults, hidden });
-    ids.set(BOARD, board.id);
 
     const names = [...defs.keys()];
     let top: AnyPropDef;
@@ -429,11 +432,12 @@ export class BoardRuntime {
     for (const name of names) {
       const def = defs.get(name) as AnyPropDef;
       const bound = boundTree[name];
+      const facts = schemaWithout(def, bound);
       this.pieces.set(name, {
         name,
-        id: ids.get(name),
         def,
-        facts: schemaWithout(def, bound),
+        facts,
+        key: schemaKey(def.type, facts),
         bound,
         isGroup: groupOf(def) !== undefined,
         view: computed(() => this.boardView.value[name] as PropView),
@@ -477,8 +481,9 @@ export class BoardRuntime {
     return this.piece(name).def;
   }
 
-  idOf(name: string): number | undefined {
-    return this.piece(name).id;
+  /** What a saved record calls the shape of a node's facts: `type@hash`. */
+  factsKey(name: string): string {
+    return this.piece(name).key;
   }
 
   /** Every placed prop's name (not the board). */
@@ -505,6 +510,55 @@ export class BoardRuntime {
   /** The board as agents read it: every node by address, its values, parts and what can be done. */
   snapshot(page?: ParentNode): BoardSnapshot {
     return snapshotOf(this, page);
+  }
+
+  /**
+   * The board as saved (a Continue event, the phone's board sent to Jugnu's server): each node by
+   * address, with the shape of its facts (`type@hash`), its facts, and whether the learner touched
+   * it. The one way a board is written down; `load` is the one way it is read back.
+   */
+  save(): SavedBoard {
+    const out: Record<string, SavedNode> = {};
+    for (const [name, facts] of Object.entries(this.root.peek())) {
+      const piece = this.pieces.get(name);
+      if (piece === undefined) continue;
+      out[segment(name)] = {
+        type: piece.key,
+        facts: { ...(facts as StoredState) },
+        isTouched: this.touchedProps.peek().has(name),
+      };
+    }
+    return out;
+  }
+
+  /**
+   * Puts the board into a saved one. Refused, before anything changes, if a node isn't on this board
+   * or was saved with another shape of facts (its prop changed since): it is never read wrong.
+   */
+  load(saved: SavedBoard): void {
+    const problems: string[] = [];
+    const facts = new Map<string, StoredState>();
+    const touched = new Set<string>();
+    for (const [path, node] of Object.entries(saved)) {
+      const [name] = namesOf(path);
+      const piece = name === undefined ? undefined : this.pieces.get(name);
+      if (name === undefined || piece === undefined) {
+        problems.push(`${path}: not on this board`);
+        continue;
+      }
+      if (node.type !== piece.key) {
+        problems.push(`${path}: saved as ${node.type}, this board's is ${piece.key}`);
+        continue;
+      }
+      const errors = this.checkFacts(name, node.facts as StoredState);
+      if (errors.length > 0) problems.push(`${path}: ${errors.join("; ")}`);
+      facts.set(name, node.facts as StoredState);
+      if (node.isTouched) touched.add(name);
+    }
+    if (problems.length > 0)
+      throw new Error(`Board ${this.board.name} can't load this record: ${problems.join(" | ")}`);
+    this.restoreFacts(facts);
+    this.touchedProps.value = touched;
   }
 
   /** Every prop's stored facts right now. */
@@ -660,7 +714,7 @@ export class BoardRuntime {
     if (this.isDisposed) return Promise.resolve();
     const piece = this.piece(name);
     const notify = (refused?: string) => {
-      const record: ActionRecord = { prop: name, action, args, actor };
+      const record: ActionRecord = { prop: name, action, args, actor, t: this.clock.time() };
       if (refused !== undefined) record.refused = refused;
       for (const listener of this.actionListeners) listener(record);
     };
@@ -713,7 +767,7 @@ export class BoardRuntime {
         const spoken = piece.def.speech?.(this.fieldsOf(piece));
         return spoken === undefined || !isLive()
           ? Promise.resolve()
-          : this.services.speak({ name, id: piece.id }, spoken);
+          : this.services.speak({ name }, spoken);
       },
       wait: (seconds) => this.clock.wait(seconds),
       now: () => this.clock.time(),

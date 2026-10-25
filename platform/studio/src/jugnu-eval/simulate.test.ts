@@ -34,7 +34,7 @@ describe("simulated students", () => {
   it("see only what's on screen, and do only what a finger can", () => {
     const { runtime, stop } = openBoard(
       root,
-      "platform/studio/evals/boards/published/jugnu-boards.json",
+      "platform/studio/evals/boards/jugnu-boards.json",
       "decimalPeriod",
       "en",
     );
