@@ -3,9 +3,9 @@ import type { Spoken } from "@chalk/prop";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
 import "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { trackBoard } from "./board-model";
 import type { PropRegistry } from "./prop-module";
 import { BoardRuntime } from "./runtime";
+import { trackBoard } from "./snapshot";
 
 export type Speak = (prop: { name: string; id: number | undefined }, line: Spoken) => Promise<void>;
 

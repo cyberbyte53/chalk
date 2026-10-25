@@ -1,4 +1,11 @@
-import { PropRole, SAY, observationOfView } from "@chalk/prop";
+import {
+  type BoardSnapshot,
+  type PartSnapshot,
+  PropRole,
+  SAY,
+  partsUnder,
+  segment,
+} from "@chalk/prop";
 import type { JugnuBoard, JugnuPlace } from "./board";
 
 const LANGUAGE: Record<JugnuPlace["locale"], string> = {
@@ -122,22 +129,41 @@ function actionList(board: JugnuBoard): Record<string, string> {
   return out;
 }
 
+/** What a prop shows now, each thing by its address under the prop ("objectArrow/object"). */
+export function partsNow(
+  board: JugnuBoard,
+  name: string,
+  snapshot: BoardSnapshot = board.snapshot(),
+): (PartSnapshot & { id: string })[] {
+  const node = snapshot.nodes.find((n) => n.path === segment(name));
+  if (node === undefined) return [];
+  return partsUnder(node).map((p) => ({ ...p, id: p.path.slice(node.path.length + 1) }));
+}
+
 /**
- * One prop as the student sees it right now, in the prop's own words (its observation): a line,
- * each visible element with its value, and, apart, what it holds that isn't on screen.
+ * One prop as the student sees it right now, in the prop's own words (its node in the board's
+ * snapshot): a line, each visible thing with its value, and, apart, what it holds that isn't on
+ * screen.
  */
-export function propNow(board: JugnuBoard, name: string, locale: JugnuPlace["locale"]) {
+export function propNow(
+  board: JugnuBoard,
+  name: string,
+  locale: JugnuPlace["locale"],
+  snapshot: BoardSnapshot = board.snapshot(),
+) {
   const def = board.getDef(name);
-  const seen = observationOfView(def, board.getView(name));
+  const node = snapshot.nodes.find((n) => n.path === segment(name));
+  if (node === undefined) throw new Error(`no prop "${name}" on the board`);
   const elements: Record<string, unknown> = {};
-  for (const element of seen.elements) elements[element.id] = shown(element, locale);
+  for (const part of partsUnder(node))
+    elements[part.path.slice(node.path.length + 1)] = shown(part, locale);
   if (def.role === PropRole.Question) withoutNotes(elements);
   return {
-    ...(board.isHidden(name) ? { isShown: false } : {}),
-    is: seen.summary,
+    ...(node.isShown ? {} : { isShown: false }),
+    is: node.summary,
     elements,
-    ...(seen.hidden !== undefined && Object.keys(seen.hidden).length > 0
-      ? { hidden: readable(seen.hidden, locale) }
+    ...(node.hidden !== undefined && Object.keys(node.hidden).length > 0
+      ? { hidden: readable(node.hidden, locale) }
       : {}),
   };
 }
@@ -160,9 +186,10 @@ function withoutNotes(elements: Record<string, unknown>): void {
 
 /** The board right now: every prop as the student sees it, and whether a question is open. */
 export function boardNow(board: JugnuBoard, place: JugnuPlace): Record<string, unknown> {
+  const snapshot = board.snapshot();
   const props: Record<string, unknown> = {};
-  for (const name of board.propNames()) props[name] = propNow(board, name, place.locale);
-  return { isQuestionOpen: board.hasOpenQuestion(), props };
+  for (const name of board.propNames()) props[name] = propNow(board, name, place.locale, snapshot);
+  return { isQuestionOpen: snapshot.openQuestion !== undefined, props };
 }
 
 /** Everything at once (the definition and the board now): for tests and the bench. */

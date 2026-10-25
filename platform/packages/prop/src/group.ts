@@ -193,7 +193,24 @@ export type GroupLayout = {
   boundTree: Readonly<Record<string, BoundTree>>;
   /** Own field names. */
   own: readonly string[];
+  /** What each child's binding reads, as dotted paths in the group's view ("objectArrow.x"). */
+  sources: Readonly<Record<string, readonly string[]>>;
+  /** Children's actions the group turns into its own changes ("objectArrow.move"). */
+  routes: readonly string[];
 };
+
+/** A view that notes every value read from it, as a dotted path ("objectArrow.x"). */
+function noting(view: Readonly<Record<string, unknown>>, reads: Set<string>, prefix = ""): never {
+  return new Proxy(view, {
+    get: (target, key) => {
+      const value = (target as Record<string | symbol, unknown>)[key];
+      if (typeof key !== "string") return value;
+      if (isObject(value)) return noting(value, reads, `${prefix}${key}.`);
+      reads.add(`${prefix}${key}`);
+      return value;
+    },
+  }) as never;
+}
 
 /** A group: an ordinary prop (its state typed, nested) that also knows its children and links. */
 export type GroupDef<S extends StoredState = StoredState> = AnyPropDef & {
@@ -438,6 +455,7 @@ export function defineGroup<
   // ---- which fields each binding binds: run once on the defaults, checked against the child ----
   const bindings = Object.entries(spec.is ?? {});
   const boundTree: Record<string, BoundTree> = {};
+  const sources: Record<string, string[]> = {};
   {
     const probe: Record<string, unknown> = { ...ownDefaults };
     for (const name of childNames)
@@ -450,7 +468,9 @@ export function defineGroup<
       }
     }
     for (const [name, fn] of bindings) {
-      const value = fn(probe);
+      const reads = new Set<string>();
+      const value = fn(noting(probe, reads));
+      sources[name] = [...reads];
       const tree = shapeOf(`${spec.type}: IS ${name}`, childDef(name), value);
       const inner = groupOf(childDef(name))?.boundTree;
       if (inner !== undefined) {
@@ -892,6 +912,8 @@ export function defineGroup<
       bound,
       boundTree,
       own: ownFields,
+      sources,
+      routes: Object.keys(spec.route ?? {}),
     },
     /** A placement's facts: defaults merged child by child with what it gives. */
     place: (given: Readonly<Record<string, unknown>>) => mergeGiven(groupDef, given),

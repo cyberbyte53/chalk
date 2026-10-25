@@ -38,23 +38,22 @@ export { leafView, useParts, type PartAttrs, type ViewContext } from "./parts";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";
 // Addresses, for apps that find nodes on screen (the helpers live with the props).
 export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";
+export { type Change, changesBetween } from "@chalk/prop";
 export {
-  type BoardModel,
-  type ElementModel,
-  type PieceModel,
-  boardModel,
   fieldsRead,
-  pieceModel,
   runningBoards,
+  snapshotOf,
   takes,
   trackBoard,
-} from "./board-model";
+} from "./snapshot";
 export { stampCodePaths } from "./code-paths";
 export { type PropPack, lazyRegistry } from "./lazy-views";
 export { propRecords } from "./records";
 export {
+  type ActResult,
   type ActionRecord,
-  type BoardSnapshot,
+  type BoardEvent,
+  type BoardFacts,
   BoardRuntime,
   type RuntimeServices,
   type SignalRecord,

@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { type BoardSnapshot, changesBetween } from "@chalk/prop";
 import type { Browser, Page } from "playwright-core";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
@@ -113,7 +114,7 @@ export type Shot = {
   overflow: string[];
   /** Errors the page logged while drawing. */
   errors: string[];
-  /** The board model (see @chalk/player board-model.ts), when the page could make it. */
+  /** The board's snapshot (see @chalk/player snapshot.ts), when the page could make it. */
   model?: BoardModel;
 };
 
@@ -129,26 +130,15 @@ async function readModels(page: Page): Promise<Map<string, BoardModel>> {
   return new Map(all.map((m) => [m.path, boardModelSchema.parse(m.model)]));
 }
 
-/** What a step changed: each live value that moved, as "piece.field". */
+/** What a step changed: each live or bound value that moved, by address ("lens/imageArrow.tip"). */
 function liveChanges(was: BoardModel | undefined, now: BoardModel | undefined) {
-  const out: Record<string, { was: unknown; now: unknown }> = {};
-  if (was === undefined || now === undefined) return out;
-  for (const piece of now.pieces) {
-    const before = was.pieces.find((p) => p.name === piece.name);
-    for (const [field, value] of Object.entries(piece.live)) {
-      const old =
-        before === undefined
-          ? undefined
-          : field in before.live
-            ? before.live[field]
-            : before.setup[field];
-      if (JSON.stringify(old) !== JSON.stringify(value))
-        out[`${piece.name}.${field}`] = { was: old, now: value };
-    }
-    if (before !== undefined && before.isShown !== piece.isShown)
-      out[`${piece.name} shown`] = { was: before.isShown, now: piece.isShown };
-  }
-  return out;
+  if (was === undefined || now === undefined) return {};
+  return Object.fromEntries(
+    changesBetween(was as BoardSnapshot, now as BoardSnapshot).map((c) => [
+      c.path,
+      { was: c.was, now: c.now },
+    ]),
+  );
 }
 
 /**

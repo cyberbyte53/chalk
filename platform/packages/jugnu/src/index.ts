@@ -3,13 +3,14 @@ export type {
   HeardSignal,
   JugnuBoard,
   JugnuPlace,
-  Snapshot,
+  Facts,
 } from "./board";
 export {
   boardDefinition,
   boardJson,
   boardNow,
   persona,
+  partsNow,
   propNow,
   readable,
   systemPrompt,

@@ -13,7 +13,6 @@ import {
   BoardPlayer,
   SEP,
   addressOf,
-  boardModel,
   findNode,
   joinPath,
   namesOf,
@@ -869,20 +868,27 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
   useEffect(() => {
     stampCodePaths();
     const w = window as Window & { __chalkModel?: () => unknown };
+    const same = (a: string, b: string) =>
+      a.replace(/[^a-z0-9]/gi, "").toLowerCase() === b.replace(/[^a-z0-9]/gi, "").toLowerCase();
     w.__chalkModel = () =>
       runningBoards().flatMap((runtime) => {
         const card = [...document.querySelectorAll<HTMLElement>(".preview-card[data-board]")].find(
           (c) =>
-            (c.dataset.board ?? "").replace(/\.json$/, "").endsWith(`/${runtime.board.name}`) &&
+            // The build path is kebab-case ("draw-it"), the board's name camelCase ("drawIt").
+            same(
+              (c.dataset.board ?? "")
+                .replace(/\.json$/, "")
+                .split("/")
+                .at(-1) ?? "",
+              runtime.board.name,
+            ) &&
             runtime.propNames().every((n) => c.querySelector(`[data-piece="${CSS.escape(n)}"]`)),
         );
         if (card === undefined) return [];
         return [
           {
             path: (card.dataset.board ?? "").replace(/\.json$/, ""),
-            model: boardModel(runtime, (piece) =>
-              card.querySelector(`[data-piece="${CSS.escape(piece)}"]`),
-            ),
+            model: runtime.snapshot(card),
           },
         ];
       });

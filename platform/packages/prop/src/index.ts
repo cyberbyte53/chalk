@@ -1,4 +1,15 @@
 export { SEP, joinPath, namesOf, pathOf, segment } from "./address";
+export {
+  changesBetween,
+  nodeAt,
+  partsUnder,
+  type Change,
+  type BoardSnapshot,
+  type BoundSnapshot,
+  type CanSnapshot,
+  type NodeSnapshot,
+  type PartSnapshot,
+} from "./snapshot";
 export { BOARD, BoardAction, BoardSignal, boardProp } from "./board";
 export { Color, cssColor } from "@chalk/look";
 export { colorSchema } from "./color";

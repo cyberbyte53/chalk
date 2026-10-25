@@ -7,7 +7,7 @@ export type BoardState = Readonly<Record<string, StoredState>>;
 
 /** A board's state right now, as plain data (the board's own state included: what is hidden). */
 export function boardState(runtime: BoardRuntime): BoardState {
-  return Object.fromEntries(runtime.snapshot());
+  return Object.fromEntries(runtime.saveFacts());
 }
 
 /** Each frame jumps this far: further than any wait or glide, so each finishes in one frame. */
@@ -90,7 +90,7 @@ export function headlessBoard(
   };
 
   const runtime = new BoardRuntime(board, lookup, services);
-  if (state !== undefined) runtime.restore(new Map(Object.entries(state)));
+  if (state !== undefined) runtime.restoreFacts(new Map(Object.entries(state)));
 
   const settle = async (): Promise<boolean> => {
     frames = 0;

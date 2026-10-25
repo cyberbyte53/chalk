@@ -11,7 +11,9 @@ const lookup = (type: string) => propDefs[type];
 describe("a board with no screen (Jugnu's copy on the server)", () => {
   it("is put into the state the phone sent, with its IS rules true", () => {
     const phone = headlessBoard(guess, lookup);
-    phone.runtime.restore(new Map([["line", { ...phone.runtime.getStored("line"), marker: 1.3 }]]));
+    phone.runtime.restoreFacts(
+      new Map([["line", { ...phone.runtime.getStored("line"), marker: 1.3 }]]),
+    );
     const copy = headlessBoard(guess, lookup, boardState(phone.runtime));
     expect(copy.runtime.getStored("line").marker).toBe(1.3);
     expect(copy.runtime.getView("squareLabel").text).toMatchObject({ en: "1.30 × 1.30 = 1.6900" });

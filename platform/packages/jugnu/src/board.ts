@@ -1,5 +1,5 @@
 import type { Actor, IsRule, JugnuNotes, Script, WhenRule } from "@chalk/content";
-import type { AnyPropDef, PropView, StoredState } from "@chalk/prop";
+import type { AnyPropDef, BoardSnapshot, PropView, StoredState } from "@chalk/prop";
 
 /** A signal on the board, as Jugnu hears it. */
 export type HeardSignal = {
@@ -18,8 +18,8 @@ export type HeardAction = {
   refused?: string;
 };
 
-/** Every prop's stored state at one moment, to put the board back exactly. */
-export type Snapshot = ReadonlyMap<string, StoredState>;
+/** Every prop's stored facts at one moment, to put the board back exactly. */
+export type Facts = ReadonlyMap<string, StoredState>;
 
 /**
  * The board as Jugnu sees it. The player's `BoardRuntime` is one; Jugnu needs nothing else, so
@@ -44,8 +44,11 @@ export type JugnuBoard = {
   perform: (script: Script, actor: Actor) => Promise<void>;
   onSignal: (listener: (signal: HeardSignal) => void) => () => void;
   onAction: (listener: (action: HeardAction) => void) => () => void;
-  snapshot: () => Snapshot;
-  restore: (snapshot: Snapshot) => void;
+  /** Every prop's facts now, to put the board back exactly (after trying something). */
+  saveFacts: () => Facts;
+  restoreFacts: (facts: Facts) => void;
+  /** The board as agents read it (the one snapshot). */
+  snapshot: () => BoardSnapshot;
   /** Why Jugnu may not run `prop.action` now, or undefined if he may (his hard limits, in code). */
   whyNotJugnu: (prop: string, action: string) => string | undefined;
   hasOpenQuestion: () => boolean;

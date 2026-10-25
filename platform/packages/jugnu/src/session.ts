@@ -67,11 +67,11 @@ export function thinkHere(
   options: { maxSteps?: number; settle?: () => Promise<boolean>; lessons?: LessonLibrary } = {},
 ): JugnuThink {
   return async (request) => {
-    const before = board.snapshot();
+    const before = board.saveFacts();
     try {
       return await jugnuTurn(board, provider, place, { ...request, ...options });
     } finally {
-      board.restore(before);
+      board.restoreFacts(before);
       await options.settle?.();
     }
   };

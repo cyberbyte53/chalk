@@ -1,7 +1,8 @@
 import { Actor, type Cue, CueKind, MAX_OPTIONS, OPTION_MAX, splitTarget } from "@chalk/content";
-import { PropRole, SAY, compileExpression, observationOfView } from "@chalk/prop";
+import { PropRole, SAY, compileExpression } from "@chalk/prop";
 import type { z } from "zod";
 import type { HeardAction, HeardSignal, JugnuBoard, JugnuPlace } from "./board";
+import { partsNow } from "./context";
 import type { LessonLibrary } from "./lessons";
 import type { ToolSpec } from "./provider";
 import { fromStrict, jsonSchemaOf, schemaSize, strictSchemaOf } from "./schema";
@@ -246,18 +247,20 @@ const objectOrEmpty = (schema: Record<string, unknown>) =>
 export const toolsFor = (board: JugnuBoard): ToolSpec[] => jugnuTools(board).specs;
 
 /** Every prop's elements right now, as the student sees them: id → value. */
-const seenOf = (board: JugnuBoard, names: readonly string[]) =>
-  new Map(
-    names.map((name) => {
-      const seen = observationOfView(board.getDef(name), board.getView(name));
-      return [
-        name,
-        new Map(
-          seen.elements.map((e) => [e.id, e.words ?? (e.value === undefined ? true : e.value)]),
-        ),
-      ];
-    }),
+const seenOf = (board: JugnuBoard, names: readonly string[]) => {
+  const snapshot = board.snapshot();
+  return new Map(
+    names.map((name) => [
+      name,
+      new Map(
+        partsNow(board, name, snapshot).map((e) => [
+          e.id,
+          e.words ?? (e.value === undefined ? true : e.value),
+        ]),
+      ),
+    ]),
   );
+};
 
 /**
  * What the student would see change between two moments, prop by prop: elements whose value
@@ -383,9 +386,9 @@ async function tryCalls(
     return answer([{ kind: "try", calls: [], refused }], { error: refused });
   }
   const valid = calls as Call[];
-  const before = board.snapshot();
+  const before = board.saveFacts();
   const done = await run(board, valid, work);
-  board.restore(before);
+  board.restoreFacts(before);
   await work.settle?.();
   const step: JugnuStep = {
     kind: "try",
@@ -427,11 +430,11 @@ async function reply(
   tools: JugnuTools,
   work: TurnWork,
 ): Promise<ToolOutcome> {
-  const before = board.snapshot();
+  const before = board.saveFacts();
   const steps: JugnuEvent[] = [];
   const cues: Cue[] = [];
   const refuse = async (why: string, step?: JugnuStep): Promise<ToolOutcome> => {
-    board.restore(before);
+    board.restoreFacts(before);
     await work.settle?.();
     return answer([...(step !== undefined ? [step] : [{ kind: "reply" as const, refused: why }])], {
       error: `${why}. Nothing was sent; reply again.`,
@@ -487,8 +490,7 @@ async function reply(
           refused: `no prop "${prop}" is shown`,
         });
       if (part !== undefined) {
-        const seen = observationOfView(board.getDef(prop), board.getView(prop));
-        const parts = seen.elements.map((e) => e.id);
+        const parts = partsNow(board, prop).map((e) => e.id);
         if (!parts.includes(part)) {
           const why = `${prop} has nothing called "${part}" (it shows: ${parts.join(", ") || "nothing"})`;
           return refuse(`${at}: ${why}`, { kind: "point", prop, part, refused: why });

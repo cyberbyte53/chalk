@@ -7,7 +7,7 @@ import { boardName, listBoards, readSources } from "../boards";
 import { type Filed, Kind, Status, latestReview, unanswered } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
-import { pieceSchema } from "./model-schema";
+import { type NodeShape, nodeSchema } from "./model-schema";
 import { closeBrowser, previewBase, previewUrl, shoot } from "./preview";
 import { type Content, type Extra, createServer, progressOf, result, serveStdio } from "./protocol";
 
@@ -419,8 +419,8 @@ const renderOutput = {
       board: z.string(),
       source: z.string().optional(),
       isPassed: z.boolean().optional(),
-      isQuestionOpen: z.boolean().optional(),
-      pieces: z.array(pieceSchema),
+      openQuestion: z.string().optional(),
+      nodes: z.array(nodeSchema),
       layoutProblems: z.array(z.string()),
       pageErrors: z.array(z.string()),
     }),
@@ -451,39 +451,52 @@ const brief = (v: unknown) => {
   return t === undefined ? "—" : t.length > 120 ? `${t.slice(0, 117)}…` : t;
 };
 
-/** The model of one board, as readable lines (the structured result has all of it). */
-function modelText(pieces: z.infer<typeof pieceSchema>[]): string[] {
+/** The snapshot of one board, as readable lines (the structured result has all of it). */
+function modelText(nodes: readonly NodeShape[], indent = ""): string[] {
   const out: string[] = [];
-  for (const p of pieces) {
+  for (const p of nodes) {
     out.push(
-      `${p.name} (${p.prop}${p.layers?.length ? ` + ${p.layers.join(", ")}` : ""})${p.source ? ` → ${p.source}` : ""}${p.isShown ? "" : " [hidden]"}`,
-      `  ${p.summary}`,
+      `${indent}${p.path} (${p.prop})${p.source ? ` → ${p.source}` : ""}${p.isShown ? "" : " [hidden]"}`,
+      `${indent}  ${p.summary}`,
     );
-    if (p.children?.length)
-      out.push(`  children: ${p.children.map((c) => `${c.name} (${c.prop})`).join(", ")}`);
     const fields = (r: Record<string, unknown>) =>
       Object.entries(r)
         .map(([k, v]) => `${k} ${brief(v)}`)
         .join(" · ");
-    if (Object.keys(p.setup).length > 0) out.push(`  setup: ${fields(p.setup)}`);
-    if (Object.keys(p.live).length > 0) out.push(`  live: ${fields(p.live)}`);
-    // A prop without its own description lists its fields as elements: already shown above.
-    const isFieldsOnly = p.elements.every(
-      (e) => e.id in p.setup || e.id in p.live || e.id === "canCheck",
+    if (Object.keys(p.setup).length > 0) out.push(`${indent}  setup: ${fields(p.setup)}`);
+    if (Object.keys(p.live).length > 0) out.push(`${indent}  live: ${fields(p.live)}`);
+    for (const [field, b] of Object.entries(p.bound))
+      out.push(`${indent}  bound: ${field} ${brief(b.value)} ← ${b.from.join(", ") || "?"}`);
+    // A prop without its own description lists its fields as parts: already shown above.
+    const own = (path: string) => path.slice(p.path.length + 1);
+    const isFieldsOnly = p.parts.every(
+      (e) => own(e.path) in p.setup || own(e.path) in p.live || own(e.path) === "canCheck",
     );
-    for (const e of isFieldsOnly ? [] : p.elements)
+    for (const e of isFieldsOnly ? [] : p.parts)
       out.push(
-        `  • ${e.id}${e.value !== undefined ? ` = ${brief(e.value)}` : ""}${e.words !== undefined ? ` “${e.words}”` : ""}${e.does !== undefined ? ` → ${[e.does].flat().join(", ")}` : ""}${e.drawnAt ? `  (${e.drawnAt})` : ""}`,
+        `${indent}  • ${e.path}${e.value !== undefined ? ` = ${brief(e.value)}` : ""}${e.words !== undefined ? ` “${e.words}”` : ""}${e.does !== undefined ? ` → ${[e.does].flat().join(", ")}` : ""}${e.drawnAt ? `  (${e.drawnAt})` : ""}`,
       );
-    for (const c of p.studentCan)
+    for (const c of p.can)
       out.push(
-        `  can: ${c.action} ${brief(c.takes)} via ${c.via.join(", ")}${c.codeAt ? `  (${c.codeAt})` : ""}`,
+        `${indent}  can: ${c.action} ${brief(c.takes)} (${c.who.join(", ")})${c.via.length > 0 ? ` via ${c.via.join(", ")}` : ""}${c.routed ? " [routed]" : ""}${c.codeAt ? `  (${c.codeAt})` : ""}`,
       );
-    if (p.noControlNow?.length) out.push(`  no control now: ${p.noControlNow.join(", ")}`);
-    if (p.hidden !== undefined) out.push(`  hidden: ${brief(p.hidden)}`);
-    for (const problem of p.problems) out.push(`  ⚠ ${problem}`);
+    if (p.noControlNow?.length) out.push(`${indent}  no control now: ${p.noControlNow.join(", ")}`);
+    if (p.hidden !== undefined) out.push(`${indent}  hidden: ${brief(p.hidden)}`);
+    for (const problem of p.problems) out.push(`${indent}  ⚠ ${problem}`);
+    if (p.children !== undefined) out.push(...modelText(p.children, `${indent}  `));
   }
   return out;
+}
+
+/** Adds where each action is written (file:line) to a node and its children. */
+function withSites(node: NodeShape): NodeShape {
+  const sites = actionSites(node.prop);
+  return {
+    ...node,
+    parts: node.parts.map((e) => (Array.isArray(e.does) ? { ...e, does: [...e.does] } : e)),
+    can: node.can.map((c) => (sites.has(c.action) ? { ...c, codeAt: sites.get(c.action) } : c)),
+    ...(node.children !== undefined ? { children: node.children.map(withSites) } : {}),
+  };
 }
 
 server.registerTool(
@@ -491,7 +504,7 @@ server.registerTool(
   {
     title: "See (and use) boards",
     description:
-      "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (build path without .json, e.g. class10-maths/real-numbers/division-lemma/overview/story) or a lesson for all its pages. Returns a PNG per board and the board model (structured): every piece with where it's placed (file:line), its layers or children, setup (fixed where placed) and live values (what can change here), each thing on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what the student can do (with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are addresses: piece/element id, e.g. machine/plane/handle), starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the live values that changed, the events the app raised, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
+      "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (build path without .json, e.g. class10-maths/real-numbers/division-lemma/overview/story) or a lesson for all its pages. Returns a PNG per board and its snapshot (structured; the same one Jugnu and tests read): every node by address (a placed prop and, inside a group, its children) with where it's placed (file:line), setup (fixed where placed), live values (what can change here) and bound values (worked out from others, with where from), each part on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what can be done to it (who: learner or lesson, the controls that reach it, routed or not, with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are addresses: piece/element id, e.g. machine/plane/handle), starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the live values that changed, the events the app raised, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
     inputSchema: {
       board: z.string().min(1).describe("A board (build path without .json) or a lesson."),
       steps: z.array(step).max(40).optional().describe("What a finger does, in order."),
@@ -561,28 +574,20 @@ server.registerTool(
     const boards: z.infer<typeof renderOutput.boards> = [];
     for (const s of drawn.shots) {
       const where = sources[`${s.board}.json`];
-      const pieces = (s.model?.pieces ?? []).map((p) => {
-        const sites = actionSites(p.prop);
-        return {
-          ...p,
-          elements: p.elements.map((e) =>
-            Array.isArray(e.does)
-              ? { ...e, does: [...e.does] }
-              : (e as typeof e & { does?: string }),
-          ),
-          ...(where?.pieces[p.name] !== undefined ? { source: where.pieces[p.name] } : {}),
-          studentCan: p.studentCan.map((c) =>
-            sites.has(c.action) ? { ...c, codeAt: sites.get(c.action) } : c,
-          ),
-        };
-      });
+      const nodes = (s.model?.nodes ?? []).map((p) => ({
+        ...withSites(p),
+        ...(where?.pieces[p.path] !== undefined ? { source: where.pieces[p.path] } : {}),
+      }));
       boards.push({
         board: s.board,
         ...(where?.board !== undefined ? { source: where.board } : {}),
         ...(s.model !== undefined
-          ? { isPassed: s.model.isPassed, isQuestionOpen: s.model.isQuestionOpen }
+          ? {
+              isPassed: s.model.isPassed,
+              ...(s.model.openQuestion !== undefined ? { openQuestion: s.model.openQuestion } : {}),
+            }
           : {}),
-        pieces,
+        nodes,
         layoutProblems: s.overflow,
         pageErrors: s.errors,
       });
@@ -594,8 +599,8 @@ server.registerTool(
           [
             `## ${b.board}`,
             `board → ${b.source ?? "?"}`,
-            ...(b.pieces.length > 0
-              ? modelText(b.pieces)
+            ...(b.nodes.length > 0
+              ? modelText(b.nodes)
               : ["(no board model: is the dev preview up to date?)"]),
             b.layoutProblems.length > 0
               ? `Layout problems:\n${b.layoutProblems.join("\n")}`

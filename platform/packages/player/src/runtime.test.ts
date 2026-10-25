@@ -545,7 +545,7 @@ describe("BoardRuntime", () => {
     expect(copy.getView("shown").value).toBe(6);
     expect(board.getView("shown").value).toBe(4);
     // Restoring an old snapshot that still holds a bound field: the board works it out again.
-    board.restore(
+    board.restoreFacts(
       new Map([
         ["d", { at: 9 }],
         ["shown", { text: { en: "", hi: "" }, value: 0 }],
@@ -621,5 +621,65 @@ describe("BoardRuntime", () => {
     await advance(1100);
     expect(board.getView("t").at).toBe(10);
     expect(heard).toContain("glided");
+  });
+});
+
+describe("the one snapshot, act and watch", () => {
+  const pair = defineGroup({
+    type: "pair",
+    describe: "a dial bound to a value",
+    children: { value: label, dial },
+    is: { dial: (s) => ({ at: s.value.value }) },
+    route: { "dial.setTo": (_s, a) => [["value.setValue", { v: a.to }]] },
+    summary: () => "a pair",
+    layout: { kind: "column", children: ["value", "dial"] },
+  });
+  const make = () => {
+    const { services } = fakeServices();
+    return new BoardRuntime(
+      boardOf({
+        name: "b",
+        root: props(
+          { kind: "prop", name: "p", prop: "pair", with: { value: { value: 2 } } },
+          { kind: "prop", name: "shown", prop: "label" },
+        ),
+        is: [{ set: "shown.value", to: "p.dial.at * 10" }],
+        when: [{ on: "p.dial.turned", do: { call: "shown.say" } }],
+      }),
+      (t) => (t === "pair" ? pair : defs[t]),
+      services,
+    );
+  };
+
+  it("reads every node by address, with what is bound into it and where from", () => {
+    const snap = make().snapshot();
+    const p = snap.nodes.find((n) => n.path === "p");
+    expect(p?.children?.map((c) => c.path)).toEqual(["p/value", "p/dial"]);
+    const dialNode = p?.children?.find((c) => c.path === "p/dial");
+    expect(dialNode?.bound.at).toEqual({ value: 2, from: ["p/value.value"] });
+    const shown = snap.nodes.find((n) => n.path === "shown");
+    expect(shown?.bound.value).toEqual({ value: 20, from: ["p.dial.at"] });
+  });
+
+  it("acts on a node by address and says what moved", async () => {
+    const board = make();
+    const heard: string[] = [];
+    board.watch((e) =>
+      heard.push(`${e.kind} ${e.node} ${e.kind === "signal" ? e.signal : e.action}`),
+    );
+    const done = await board.act(
+      { node: "p/dial", action: "setTo", args: { to: 5 } },
+      Actor.Learner,
+    );
+    expect(done.refused).toBeUndefined();
+    expect(done.changed).toEqual(
+      expect.arrayContaining([
+        { path: "p/dial.at", was: 2, now: 5 },
+        { path: "shown.value", was: 20, now: 50 },
+      ]),
+    );
+    expect(heard).toContain("action p/dial setTo");
+    const no = await board.act({ node: "nowhere", action: "x" });
+    expect(no.refused).toMatch(/no prop "nowhere"/);
   });
 });

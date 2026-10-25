@@ -13,7 +13,9 @@ import {
   BOARD,
   BoardAction,
   BoardSignal,
+  type BoardSnapshot,
   type BoundTree,
+  type Change,
   EffectKind,
   type Emit,
   type Expression,
@@ -25,6 +27,7 @@ import {
   type StoredState,
   type TaskContext,
   boardProp,
+  changesBetween,
   compileExpression,
   compileTemplate,
   defineGroup,
@@ -32,13 +35,16 @@ import {
   initialState,
   invariantOfView,
   isFullChecking,
+  namesOf,
   prepareOnView,
   runEffect,
   schemaWithout,
+  segment,
   viewOf,
   without,
 } from "@chalk/prop";
 import { type ReadonlySignal, type Signal, batch, computed, signal } from "@preact/signals-core";
+import { snapshotOf } from "./snapshot";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
@@ -61,8 +67,27 @@ export type ActionRecord = {
   refused?: string;
 };
 
-/** A copy of every prop's stored state, to put the board back exactly as it was. */
-export type BoardSnapshot = ReadonlyMap<string, StoredState>;
+/** A copy of every prop's stored facts, to put the board back exactly as it was. */
+export type BoardFacts = ReadonlyMap<string, StoredState>;
+
+/** An event on the board, its node by address: a signal raised, or an action asked of it. */
+export type BoardEvent =
+  | {
+      kind: "signal";
+      node: string;
+      signal: string;
+      payload: Readonly<Record<string, unknown>>;
+      actor: Actor;
+    }
+  | { kind: "action"; node: string; action: string; args: unknown; actor: Actor; refused?: string };
+
+/** What acting on a node did. */
+export type ActResult = {
+  changed: Change[];
+  signals: { node: string; signal: string; payload: Readonly<Record<string, unknown>> }[];
+  /** Why it was refused; absent when it was taken. */
+  refused?: string;
+};
 
 /** A signal as the runtime saw it: which prop, what, with what, and who caused it. */
 export type SignalRecord = {
@@ -469,8 +494,13 @@ export class BoardRuntime {
     return () => this.actionListeners.delete(listener);
   }
 
+  /** The board as agents read it: every node by address, its values, parts and what can be done. */
+  snapshot(page?: ParentNode): BoardSnapshot {
+    return snapshotOf(this, page);
+  }
+
   /** Every prop's stored facts right now. */
-  snapshot(): BoardSnapshot {
+  saveFacts(): BoardFacts {
     return new Map(Object.entries(this.root.peek()));
   }
 
@@ -479,9 +509,9 @@ export class BoardRuntime {
    * facts are checked; one that doesn't fit is reported and left as it is. A field the board
    * binds is worked out again, whatever the snapshot says.
    */
-  restore(snapshot: BoardSnapshot): void {
+  restoreFacts(facts: BoardFacts): void {
     batch(() => {
-      for (const [name, stored] of snapshot) {
+      for (const [name, stored] of facts) {
         const piece = this.pieces.get(name);
         if (piece === undefined) continue;
         this.stopTimelines(name);
@@ -503,6 +533,82 @@ export class BoardRuntime {
     const copy = new BoardRuntime(this.board, this.lookup, services, this.root.peek());
     copy.touchedProps.value = this.touchedProps.peek();
     return copy;
+  }
+
+  /**
+   * The one event stream, every node by address: signals ("lens/objectArrow" released), actions
+   * asked by anyone (taken or refused, and by whom). What Jugnu, review steps and logs watch.
+   */
+  watch(listener: (event: BoardEvent) => void): () => void {
+    const offSignal = this.onSignal((r) => {
+      const { node, member } = this.nodeOf(r.prop, r.signal);
+      listener({ kind: "signal", node, signal: member, payload: r.payload, actor: r.actor });
+    });
+    const offAction = this.onAction((r) => {
+      const { node, member } = this.nodeOf(r.prop, r.action);
+      listener({
+        kind: "action",
+        node,
+        action: member,
+        args: r.args,
+        actor: r.actor,
+        ...(r.refused !== undefined ? { refused: r.refused } : {}),
+      });
+    });
+    return () => {
+      offSignal();
+      offAction();
+    };
+  }
+
+  /**
+   * Acts on a node through the one door, as `actor`, and says what happened: each value that moved
+   * (by address), the signals raised, and why not, if it was refused. Resolves when it finishes.
+   */
+  async act(
+    ref: { node: string; action: string; args?: Readonly<Record<string, unknown>> },
+    actor: Actor = Actor.App,
+  ): Promise<ActResult> {
+    const [piece = "", ...inside] = namesOf(ref.node);
+    const member = [...inside, ref.action].join(".");
+    const before = this.snapshot();
+    const signals: ActResult["signals"] = [];
+    let refused: string | undefined;
+    const stop = this.watch((e) => {
+      if (e.kind === "signal") signals.push({ node: e.node, signal: e.signal, payload: e.payload });
+      else if (
+        e.refused !== undefined &&
+        e.node === ref.node &&
+        e.action === ref.action &&
+        refused === undefined
+      )
+        refused = e.refused;
+    });
+    try {
+      if (!this.pieces.has(piece)) refused = `there is no prop "${piece}" on this board`;
+      else await this.call(piece, member, ref.args ?? {}, actor);
+    } finally {
+      stop();
+    }
+    return {
+      changed: changesBetween(before, this.snapshot()),
+      signals,
+      ...(refused !== undefined ? { refused } : {}),
+    };
+  }
+
+  /** "objectArrow.released" on a group piece → the node "lens/objectArrow" and "released". */
+  private nodeOf(piece: string, dotted: string): { node: string; member: string } {
+    const names = dotted.split(".");
+    let def = this.pieces.get(piece)?.def;
+    const path = [segment(piece)];
+    while (names.length > 1 && def !== undefined) {
+      const child = groupOf(def)?.children[names[0] ?? ""] as AnyPropDef | undefined;
+      if (child === undefined) break;
+      path.push(segment(names.shift() ?? ""));
+      def = child;
+    }
+    return { node: path.join("/"), member: names.join(".") };
   }
 
   onSignal(listener: (record: SignalRecord) => void): () => void {
