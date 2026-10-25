@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { divide } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -38,7 +38,6 @@ export const quotientAndRemainder = family({
             ),
           };
     const options: Option[] = [
-      { id: "right", label: t(pair(q, rem), pair(q, rem)) },
       tooFew,
       {
         id: "negative",
@@ -49,14 +48,14 @@ export const quotientAndRemainder = family({
         ),
       },
     ];
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(
         r`Divide ${a} by ${d}. What are the quotient $q$ and the remainder $r$?`,
         r`${a} को ${d} से भाग दो। भागफल $q$ और शेषफल $r$ क्या हैं?`,
       ),
-      options: settle(options, a * 31 + d),
-      answer: "right",
+      right: t(pair(q, rem), pair(q, rem)),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

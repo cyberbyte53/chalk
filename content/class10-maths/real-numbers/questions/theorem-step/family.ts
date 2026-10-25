@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -25,13 +25,6 @@ export const theoremStep = family({
         ),
       },
       {
-        id: "right",
-        label: t(
-          r`${p} divides $a^2$, so ${p} divides $a$`,
-          r`${p}, $a^2$ को विभाजित करता है, तो $a$ को भी`,
-        ),
-      },
-      {
         id: "sub",
         label: t(r`$a = ${p}c$ gives $b^2 = ${p}c^2$`, r`$a = ${p}c$ से $b^2 = ${p}c^2$`),
         feedback: t(
@@ -40,14 +33,17 @@ export const theoremStep = family({
         ),
       },
     ];
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(
         r`In the proof that $\sqrt{${p}}$ is irrational, which step needs ${p} to be prime?`,
         r`$\sqrt{${p}}$ अपरिमेय है, इसकी उपपत्ति में किस क़दम के लिए ${p} का अभाज्य होना ज़रूरी है?`,
       ),
-      options: settle(options, p * 17),
-      answer: "right",
+      right: t(
+        r`${p} divides $a^2$, so ${p} divides $a$`,
+        r`${p}, $a^2$ को विभाजित करता है, तो $a$ को भी`,
+      ),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

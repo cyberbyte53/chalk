@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -26,7 +26,6 @@ export const isolateTheRoot = family({
     const right = sign === Sign.Plus ? `x - ${a}` : `${a} - x`;
     const flipped = sign === Sign.Plus ? `${a} - x` : `x - ${a}`;
     const options: Option[] = [
-      { id: "right", label: t(`$${over(right)}$`, `$${over(right)}$`) },
       {
         id: "flip",
         label: t(`$${over(flipped)}$`, `$${over(flipped)}$`),
@@ -55,14 +54,14 @@ export const isolateTheRoot = family({
         ),
       });
     }
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(
         r`To prove $${sum}$ irrational, suppose $${sum} = x$, where $x$ is rational. Then $\sqrt{${n}} = $ ?`,
         r`$${sum}$ को अपरिमेय सिद्ध करने के लिए मान लो $${sum} = x$, जहाँ $x$ परिमेय है। तब $\sqrt{${n}} = $ ?`,
       ),
-      options: settle(options, a * 13 + c * 7 + n),
-      answer: "right",
+      right: t(`$${over(right)}$`, `$${over(right)}$`),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

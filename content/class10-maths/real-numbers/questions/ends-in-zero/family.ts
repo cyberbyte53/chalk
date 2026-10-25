@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, primesTex } from "@chalk/patterns";
+import { choice, primesTex } from "@chalk/patterns";
 import { bagOf } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -23,32 +23,29 @@ export const endsInZero = family({
       r`$${base} = ${primesTex(base)}$, so $${base}^n$ has only these primes, and no ${missing} ever appears. Ending in 0 needs both a 2 and a 5.`,
       r`$${base} = ${primesTex(base)}$, इसलिए $${base}^n$ में केवल यही अभाज्य हैं, और कोई ${hiMissing} कभी नहीं आता। 0 पर ख़त्म होने के लिए 2 और 5 दोनों चाहिए।`,
     );
-    const ask = choiceQuestion(b, {
+    const yes = {
+      label: t("Yes", "हाँ"),
+      ...(can ? {} : { feedback: why }),
+    };
+    const no = {
+      label: t("No", "नहीं"),
+      ...(can
+        ? {
+            feedback: t(
+              r`$${base} = ${primesTex(base)}$ has a 2 and a 5, so 10 divides $${base}^n$ for every $n$.`,
+              r`$${base} = ${primesTex(base)}$ में 2 और 5 दोनों हैं, इसलिए हर $n$ के लिए 10, $${base}^n$ को विभाजित करता है।`,
+            ),
+          }
+        : {}),
+    };
+    const ask = choice(b, {
       prompt: t(
         r`Can $${base}^n$ end with the digit 0 for some natural number $n$?`,
         r`क्या किसी प्राकृत संख्या $n$ के लिए $${base}^n$ का अंतिम अंक 0 हो सकता है?`,
       ),
-      options: [
-        {
-          id: "yes",
-          label: t("Yes", "हाँ"),
-          ...(can ? {} : { feedback: why }),
-        },
-        {
-          id: "no",
-          label: t("No", "नहीं"),
-          ...(can
-            ? {
-                feedback: t(
-                  r`$${base} = ${primesTex(base)}$ has a 2 and a 5, so 10 divides $${base}^n$ for every $n$.`,
-                  r`$${base} = ${primesTex(base)}$ में 2 और 5 दोनों हैं, इसलिए हर $n$ के लिए 10, $${base}^n$ को विभाजित करता है।`,
-                ),
-              }
-            : {}),
-        },
-      ],
-      answer: can ? "yes" : "no",
+      right: can ? yes.label : no.label,
+      wrong: can ? { no } : { yes },
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

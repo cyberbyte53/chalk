@@ -1,4 +1,4 @@
-import { column, family, space } from "@chalk/author";
+import { family } from "@chalk/author";
 import { Level } from "@chalk/content";
 import { StickMeasureAction, stickMeasureDef } from "@chalk/prop-primes";
 import { z } from "zod";
@@ -26,6 +26,6 @@ export const euclidHcfRibbons = family({
       ribbons.learner(StickMeasureAction.Keep),
       ribbons.learner(StickMeasureAction.Lay),
     );
-    return column([ask, ribbons, space()]);
+    return [ask, ribbons];
   },
 });

@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level, type Localized } from "@chalk/content";
-import { choiceQuestion, settle } from "@chalk/patterns";
+import { choice } from "@chalk/patterns";
 import { gcd, lcm } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -89,29 +89,24 @@ export const hcfOrLcmStory = family({
     const l = spec.numbers.reduce((m, n) => lcm(m, n));
     const right = spec.isHcf ? h : l;
     const wrong = spec.isHcf ? l : h;
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: spec.text,
-      options: settle(
-        [
-          { id: "right", label: t(`${right}`, `${right}`) },
-          {
-            id: "other",
-            label: t(`${wrong}`, `${wrong}`),
-            feedback: spec.isHcf
-              ? t(
-                  "That is the LCM. Here things are shared into equal groups, as big as possible, with nothing left over: that is the HCF.",
-                  "यह LCM है। यहाँ चीज़ों को बराबर समूहों में बाँटना है, जितने बड़े हो सकें, बिना कुछ बचे: यह HCF है।",
-                )
-              : t(
-                  "That is the HCF. Here things repeat and must happen together: that is a common multiple, the LCM.",
-                  "यह HCF है। यहाँ चीज़ें दोहराती हैं और उन्हें साथ होना है: यह साझा गुणज है, LCM।",
-                ),
-          },
-        ],
-        spec.numbers.reduce((sum, n) => sum + n, 0),
-      ),
-      answer: "right",
+      right: t(`${right}`, `${right}`),
+      wrong: {
+        other: {
+          label: t(`${wrong}`, `${wrong}`),
+          feedback: spec.isHcf
+            ? t(
+                "That is the LCM. Here things are shared into equal groups, as big as possible, with nothing left over: that is the HCF.",
+                "यह LCM है। यहाँ चीज़ों को बराबर समूहों में बाँटना है, जितने बड़े हो सकें, बिना कुछ बचे: यह HCF है।",
+              )
+            : t(
+                "That is the HCF. Here things repeat and must happen together: that is a common multiple, the LCM.",
+                "यह HCF है। यहाँ चीज़ें दोहराती हैं और उन्हें साथ होना है: यह साझा गुणज है, LCM।",
+              ),
+        },
+      },
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

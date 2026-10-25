@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level, type Localized } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { bagOf, euclidSteps } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -119,11 +119,11 @@ export const hcfStory = family({
         `${hcf * 2}, ${big} और ${small} दोनों को विभाजित नहीं करता।`,
       ),
     );
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: spec.text,
-      options: settle([{ id: "right", label: label(hcf) }, ...wrong], big + small),
-      answer: "right",
+      right: label(hcf),
+      wrong: Object.fromEntries(wrong.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

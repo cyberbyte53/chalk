@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -25,13 +25,6 @@ export const scaledRoot = family({
     const back = isTimes ? r`\frac{x}{${c}}` : r`\frac{1}{x}`;
     const options: Option[] = [
       {
-        id: "right",
-        label: t(
-          r`Irrational: if $${shown} = x$, then $\sqrt{${n}} = ${back}$ would be rational`,
-          r`अपरिमेय: अगर $${shown} = x$, तो $\sqrt{${n}} = ${back}$ परिमेय होता`,
-        ),
-      },
-      {
         id: "rational",
         label: isTimes
           ? t(r`Rational: ${c} is rational`, r`परिमेय: ${c} परिमेय है`)
@@ -55,11 +48,14 @@ export const scaledRoot = family({
         ),
       },
     ];
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(r`Is $${shown}$ rational or irrational?`, r`$${shown}$ परिमेय है या अपरिमेय?`),
-      options: settle(options, n * 7 + (c ?? 1)),
-      answer: "right",
+      right: t(
+        r`Irrational: if $${shown} = x$, then $\sqrt{${n}} = ${back}$ would be rational`,
+        r`अपरिमेय: अगर $${shown} = x$, तो $\sqrt{${n}} = ${back}$ परिमेय होता`,
+      ),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

@@ -1,6 +1,6 @@
-import { type BoardKit, column, family, space, t } from "@chalk/author";
+import { type BoardKit, family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { bagOf, euclidSteps } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -49,13 +49,13 @@ export function euclidAsk(b: BoardKit, a: number, d: number) {
     en: `${hcf * 2} doesn't divide both numbers. Check the last line of the algorithm.`,
     hi: `${hcf * 2} दोनों संख्याओं को विभाजित नहीं करता। एल्गोरिथ्म की आख़िरी पंक्ति जाँचो।`,
   });
-  const ask = choiceQuestion(b, {
+  const ask = choice(b, {
     prompt: t(
       r`Use Euclid's division algorithm to find $\text{HCF}(${a}, ${d})$.`,
       r`यूक्लिड विभाजन एल्गोरिथ्म से $\text{HCF}(${a}, ${d})$ ज्ञात करो।`,
     ),
-    options: settle([{ id: "right", label: t(`${hcf}`, `${hcf}`) }, ...wrong], a + d),
-    answer: "right",
+    right: t(`${hcf}`, `${hcf}`),
+    wrong: Object.fromEntries(wrong.map(({ id, ...o }) => [id, o])),
   });
   return ask;
 }
@@ -65,5 +65,5 @@ export const euclidHcf = family({
   level: Level.Medium,
   tests: [Concept.EuclidAlgorithm],
   params: z.object({ a: z.number().int().min(2), b: z.number().int().min(2) }).strict(),
-  build: ({ a, b: d }, b) => column([euclidAsk(b, a, d), space()]),
+  build: ({ a, b: d }, b) => [euclidAsk(b, a, d)],
 });

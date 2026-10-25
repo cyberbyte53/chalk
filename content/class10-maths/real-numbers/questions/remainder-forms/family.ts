@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -39,10 +39,6 @@ export const remainderForms = family({
     );
     const options: Option[] = [
       {
-        id: "right",
-        label: t(forms(divisor, right, "m"), forms(divisor, right, "m")),
-      },
-      {
         id: "all",
         label: t(forms(divisor, all, "m"), forms(divisor, all, "m")),
         feedback: t(
@@ -71,14 +67,14 @@ export const remainderForms = family({
         r`कोई भी ${hiWord}, ${divisor} से भाग देने पर ${missing[0]} शेष नहीं छोड़ता। ${tryIt.hi}`,
       ),
     });
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(
         r`The ${word} of any positive integer is of the form… (for some integer $m$)`,
         r`किसी भी धनात्मक पूर्णांक का ${hiWord} किस रूप का होता है? (किसी पूर्णांक $m$ के लिए)`,
       ),
-      options: settle(options, divisor * 7 + power),
-      answer: "right",
+      right: t(forms(divisor, right, "m"), forms(divisor, right, "m")),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

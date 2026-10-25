@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -31,10 +31,6 @@ export const isItComposite = family({
     const decoy = Math.max(...fs.filter((f) => f > 1 && add % f !== 0));
     const options: Option[] = [
       {
-        id: "right",
-        label: t(`Composite: ${add} is a factor`, `भाज्य: ${add} एक गुणनखंड है`),
-      },
-      {
         id: "prime",
         label: t(
           `Prime: adding ${add} leaves no common factor`,
@@ -54,11 +50,11 @@ export const isItComposite = family({
         ),
       },
     ];
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(r`Is $${written}$ prime or composite?`, r`$${written}$ अभाज्य है या भाज्य?`),
-      options: settle(options, product % 9973),
-      answer: "right",
+      right: t(`Composite: ${add} is a factor`, `भाज्य: ${add} एक गुणनखंड है`),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

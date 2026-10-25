@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceQuestion, primesTex } from "@chalk/patterns";
+import { choice, primesTex } from "@chalk/patterns";
 import { bagOf } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -19,36 +19,33 @@ export const isRootRational = family({
       .find((p) => (bag[p] ?? 0) % 2 === 1);
     const isRational = odd === undefined;
     const root = Math.round(Math.sqrt(n));
-    const ask = choiceQuestion(b, {
+    const rational = {
+      label: t("Rational", "परिमेय"),
+      ...(isRational
+        ? {}
+        : {
+            feedback: t(
+              r`$${n} = ${primesTex(n)}$ has an odd number of ${odd}s. A square has an even count of every prime, so $a^2 = ${n}b^2$ can never balance.`,
+              r`$${n} = ${primesTex(n)}$ में ${odd} विषम बार है। वर्ग में हर अभाज्य सम बार होता है, इसलिए $a^2 = ${n}b^2$ कभी बराबर नहीं हो सकता।`,
+            ),
+          }),
+    };
+    const irrational = {
+      label: t("Irrational", "अपरिमेय"),
+      ...(isRational
+        ? {
+            feedback: t(
+              r`$${n} = ${root}^2$, so $\sqrt{${n}} = ${root}$, a whole number.`,
+              r`$${n} = ${root}^2$, इसलिए $\sqrt{${n}} = ${root}$, एक पूर्ण संख्या।`,
+            ),
+          }
+        : {}),
+    };
+    const ask = choice(b, {
       prompt: t(r`Is $\sqrt{${n}}$ rational or irrational?`, r`$\sqrt{${n}}$ परिमेय है या अपरिमेय?`),
-      options: [
-        {
-          id: "rational",
-          label: t("Rational", "परिमेय"),
-          ...(isRational
-            ? {}
-            : {
-                feedback: t(
-                  r`$${n} = ${primesTex(n)}$ has an odd number of ${odd}s. A square has an even count of every prime, so $a^2 = ${n}b^2$ can never balance.`,
-                  r`$${n} = ${primesTex(n)}$ में ${odd} विषम बार है। वर्ग में हर अभाज्य सम बार होता है, इसलिए $a^2 = ${n}b^2$ कभी बराबर नहीं हो सकता।`,
-                ),
-              }),
-        },
-        {
-          id: "irrational",
-          label: t("Irrational", "अपरिमेय"),
-          ...(isRational
-            ? {
-                feedback: t(
-                  r`$${n} = ${root}^2$, so $\sqrt{${n}} = ${root}$, a whole number.`,
-                  r`$${n} = ${root}^2$, इसलिए $\sqrt{${n}} = ${root}$, एक पूर्ण संख्या।`,
-                ),
-              }
-            : {}),
-        },
-      ],
-      answer: isRational ? "rational" : "irrational",
+      right: isRational ? rational.label : irrational.label,
+      wrong: isRational ? { irrational } : { rational },
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

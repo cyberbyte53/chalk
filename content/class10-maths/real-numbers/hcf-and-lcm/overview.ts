@@ -1,6 +1,5 @@
-import { PassOn, column, page, space, t, theBoard } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/patterns";
-import { QuestionSignal } from "@chalk/prop";
+import { type At, page, t } from "@chalk/author";
+import { choice, wordsOn } from "@chalk/patterns";
 import {
   LapRaceAction,
   LapRaceSignal,
@@ -19,218 +18,186 @@ const r = String.raw;
  * Ravi at 12 × k, so together means a multiple of both. Played on, every common multiple lights up;
  * the first one is the LCM. Set against the ribbons, where 6 was the biggest number in both.
  */
-const story = page(
-  "story",
-  (b) => {
-    const w = wordsOn(b);
-    b.purpose(
-      "Sonia (18-minute rounds) and Ravi (12-minute rounds) are at the start together only at a minute that is a multiple of both 18 and 12: a common multiple (36, 72, …). The first is the lowest common multiple, LCM(18, 12) = 36. Contrast with HCF(18, 12) = 6 from the ribbons.",
-    );
-    const race = b.prop(lapRaceDef, "race", {});
-    b.studentOnly(race.action(LapRaceAction.Play));
-    b.standsFor(
-      race,
-      "Sonia and Ravi on the track; under each, the minutes they are back at the start, as 18 × k and 12 × k",
-    );
-    b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
-    const must = choiceQuestion(b, {
-      name: "must",
-      prompt: t(
-        r`Sonia is at the start after 18, 36, 54, … minutes: multiples of 18. Ravi is there after multiples of 12. So a minute when they're there together is…`,
-        r`सोनिया 18, 36, 54, … मिनट बाद शुरुआत पर होती है: 18 के गुणज। रवि 12 के गुणजों पर वहाँ होता है। तो जिस मिनट वे साथ हों, वह है…`,
-      ),
-      options: [
-        { id: "right", label: t("a multiple of both 18 and 12", "18 और 12 दोनों का गुणज") },
-        {
-          id: "factor",
-          label: t("a factor of both 18 and 12", "18 और 12 दोनों का गुणनखंड"),
-          feedback: t(
-            "Their minutes only grow: 18, 36, … and 12, 24, 36, …. Those are multiples, not factors.",
-            "उनके मिनट बढ़ते ही जाते हैं: 18, 36, … और 12, 24, 36, …। ये गुणज हैं, गुणनखंड नहीं।",
-          ),
-        },
-        {
-          id: "sum",
-          label: t("18 + 12", "18 + 12"),
-          feedback: t(
-            "At 30 minutes neither is at the start: 30 isn't in either row.",
-            "30 मिनट पर कोई भी शुरुआत पर नहीं है: 30 किसी भी पंक्ति में नहीं है।",
-          ),
-        },
-      ],
-      answer: "right",
-      isHidden: true,
-      passes: false,
-    });
-    const playOn = w.body(
-      t(
-        "So any minute in **both rows** works, and 36 is the first. Tap **Play** again to see the next one.",
-        "तो जो भी मिनट **दोनों पंक्तियों** में हो, वह चलेगा, और 36 पहला है। अगला देखने के लिए फिर से **चलाओ** दबाओ।",
-      ),
-      "playOn",
-      { isHidden: true },
-    );
-    b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
-    const lcmIs = w.definition(
-      t(
-        "Numbers that are multiples of both 18 and 12 are their **common multiples**: 36, 72, 108 and so on. The smallest is the **lowest common multiple**: LCM(18, 12) = 36.",
-        "जो संख्याएँ 18 और 12 दोनों की गुणज हैं, वे उनके **सार्व गुणज** हैं: 36, 72, 108 इत्यादि। सबसे छोटा **लघुत्तम समापवर्त्य** है: LCM(18, 12) = 36।",
-      ),
-      "lcmIs",
-      { isHidden: true },
-    );
-    const contrast = w.body(
-      t(
-        r`Remember the ribbons: the HCF is the **biggest** number that divides both 18 and 12. $$\text{HCF}(18, 12) = 6$$`,
-        r`रिबन याद करो: HCF वह **सबसे बड़ी** संख्या है जो 18 और 12 दोनों को भाग दे। $$\text{HCF}(18, 12) = 6$$`,
-      ),
-      "contrast",
-      { isHidden: true },
-    );
-    const contrastLcm = w.body(
-      t(
-        r`The LCM is the **smallest** number that both 18 and 12 divide. $$\text{LCM}(18, 12) = 36$$`,
-        r`LCM वह **सबसे छोटी** संख्या है जिसे 18 और 12 दोनों भाग दें। $$\text{LCM}(18, 12) = 36$$`,
-      ),
-      "contrastLcm",
-      { isHidden: true },
-    );
-    b.when(race.on(LapRaceSignal.Met), theBoard.show(must));
-    b.when(must.on(QuestionSignal.Correct), theBoard.show(playOn));
-    b.when(
-      race.on(LapRaceSignal.Met),
-      [theBoard.show(lcmIs), theBoard.show(contrast), theBoard.show(contrastLcm), theBoard.pass()],
-      race.field("time").gt(36),
-    );
-    return column([
-      w.title(t("HCF and LCM", "HCF और LCM")),
-      w.body(
-        t(
-          "Sonia and Ravi run round a field. Sonia takes **18 minutes** for a round, Ravi **12 minutes**. They start together, from the same point.",
-          "सोनिया और रवि एक मैदान के चक्कर लगाते हैं। सोनिया एक चक्कर में **18 मिनट** लेती है, रवि **12 मिनट**। वे एक साथ, एक ही जगह से शुरू करते हैं।",
+const story = page("story", (b) => {
+  const w = wordsOn(b);
+  b.purpose(
+    "Sonia (18-minute rounds) and Ravi (12-minute rounds) are at the start together only at a minute that is a multiple of both 18 and 12: a common multiple (36, 72, …). The first is the lowest common multiple, LCM(18, 12) = 36. Contrast with HCF(18, 12) = 6 from the ribbons.",
+  );
+  const race = b.prop(lapRaceDef, "race", {});
+  b.standsFor(
+    race,
+    "Sonia and Ravi on the track; under each, the minutes they are back at the start, as 18 × k and 12 × k",
+  );
+  b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
+  const must = choice(b, {
+    name: "must",
+    prompt: t(
+      r`Sonia is at the start after 18, 36, 54, … minutes: multiples of 18. Ravi is there after multiples of 12. So a minute when they're there together is…`,
+      r`सोनिया 18, 36, 54, … मिनट बाद शुरुआत पर होती है: 18 के गुणज। रवि 12 के गुणजों पर वहाँ होता है। तो जिस मिनट वे साथ हों, वह है…`,
+    ),
+    right: t("a multiple of both 18 and 12", "18 और 12 दोनों का गुणज"),
+    wrong: {
+      factor: {
+        label: t("a factor of both 18 and 12", "18 और 12 दोनों का गुणनखंड"),
+        feedback: t(
+          "Their minutes only grow: 18, 36, … and 12, 24, 36, …. Those are multiples, not factors.",
+          "उनके मिनट बढ़ते ही जाते हैं: 18, 36, … और 12, 24, 36, …। ये गुणज हैं, गुणनखंड नहीं।",
         ),
-      ),
-      w.body(
-        t(
-          "When will they next be at the start together? Tap **Play** and watch. Each time one of them crosses the start, that minute is written under their name.",
-          "वे अगली बार एक साथ शुरुआत पर कब होंगे? **चलाओ** दबाओ और देखो। जब भी उनमें से कोई शुरुआत की रेखा पार करे, वह मिनट उसके नाम के नीचे लिखा जाता है।",
+      },
+      sum: {
+        label: t("18 + 12", "18 + 12"),
+        feedback: t(
+          "At 30 minutes neither is at the start: 30 isn't in either row.",
+          "30 मिनट पर कोई भी शुरुआत पर नहीं है: 30 किसी भी पंक्ति में नहीं है।",
         ),
+      },
+    },
+  });
+  const playOn = w.body(
+    t(
+      "So any minute in **both rows** works, and 36 is the first. Tap **Play** again to see the next one.",
+      "तो जो भी मिनट **दोनों पंक्तियों** में हो, वह चलेगा, और 36 पहला है। अगला देखने के लिए फिर से **चलाओ** दबाओ।",
+    ),
+    "playOn",
+  );
+  b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
+  const lcmIs = w.definition(
+    t(
+      "Numbers that are multiples of both 18 and 12 are their **common multiples**: 36, 72, 108 and so on. The smallest is the **lowest common multiple**: LCM(18, 12) = 36.",
+      "जो संख्याएँ 18 और 12 दोनों की गुणज हैं, वे उनके **सार्व गुणज** हैं: 36, 72, 108 इत्यादि। सबसे छोटा **लघुत्तम समापवर्त्य** है: LCM(18, 12) = 36।",
+    ),
+    "lcmIs",
+  );
+  const contrast = w.body(
+    t(
+      r`Remember the ribbons: the HCF is the **biggest** number that divides both 18 and 12. $$\text{HCF}(18, 12) = 6$$`,
+      r`रिबन याद करो: HCF वह **सबसे बड़ी** संख्या है जो 18 और 12 दोनों को भाग दे। $$\text{HCF}(18, 12) = 6$$`,
+    ),
+    "contrast",
+  );
+  const contrastLcm = w.body(
+    t(
+      r`The LCM is the **smallest** number that both 18 and 12 divide. $$\text{LCM}(18, 12) = 36$$`,
+      r`LCM वह **सबसे छोटी** संख्या है जिसे 18 और 12 दोनों भाग दें। $$\text{LCM}(18, 12) = 36$$`,
+    ),
+    "contrastLcm",
+  );
+  // Past their first meeting: they have met again, at the next common multiple.
+  const metAgain = { if: (at: At) => at(race).time > 36 };
+  b.after(race.on(LapRaceSignal.Met), must);
+  b.after(must, playOn);
+  b.after(race.on(LapRaceSignal.Met), [lcmIs, contrast, contrastLcm], metAgain);
+  b.passWhen(race.on(LapRaceSignal.Met), metAgain);
+  return [
+    w.title(t("HCF and LCM", "HCF और LCM")),
+    w.body(
+      t(
+        "Sonia and Ravi run round a field. Sonia takes **18 minutes** for a round, Ravi **12 minutes**. They start together, from the same point.",
+        "सोनिया और रवि एक मैदान के चक्कर लगाते हैं। सोनिया एक चक्कर में **18 मिनट** लेती है, रवि **12 मिनट**। वे एक साथ, एक ही जगह से शुरू करते हैं।",
       ),
-      race,
-      must,
-      playOn,
-      lcmIs,
-      contrast,
-      contrastLcm,
-      space(),
-    ]);
-  },
-  { passOn: PassOn.Rules },
-);
+    ),
+    w.body(
+      t(
+        "When will they next be at the start together? Tap **Play** and watch. Each time one of them crosses the start, that minute is written under their name.",
+        "वे अगली बार एक साथ शुरुआत पर कब होंगे? **चलाओ** दबाओ और देखो। जब भी उनमें से कोई शुरुआत की रेखा पार करे, वह मिनट उसके नाम के नीचे लिखा जाता है।",
+      ),
+    ),
+    race,
+    must,
+    playOn,
+    lcmIs,
+    contrast,
+    contrastLcm,
+  ];
+});
 
 /** HCF and LCM from primes: each prime's two towers side by side; HCF at the shorter top, LCM at the taller. */
-const towers = page(
-  "towers",
-  (b) => {
-    const w = wordsOn(b);
-    b.purpose(
-      "See 18 = 2 × 3² and 12 = 2² × 3 as towers, each prime's two side by side. The HCF divides both, so it goes up to the height both towers reach, the shorter top: 2 × 3 = 6. Both numbers divide the LCM, so it goes up to the height that covers both, the taller top: 2² × 3² = 36.",
-    );
-    const stack = b.prop(primeTowersDef, "towers", {});
-    b.standsFor(stack, "for each prime, 18's tower and 12's side by side, as tall as its power");
-    b.witness(
-      stack.learner(PrimeTowersAction.Show, { show: TowerShow.Hcf }),
-      stack.learner(PrimeTowersAction.Show, { show: TowerShow.Lcm }),
-    );
-    const hcfWhy = w.body(
-      t(
-        r`**HCF** is the biggest number that fits inside both 18 and 12. For each prime it can go only as high as the **shorter** tower. $$\text{HCF} = 2 \times 3 = 6$$ Now tap **LCM**.`,
-        r`**HCF** वह सबसे बड़ी संख्या है जो 18 और 12 दोनों के अंदर समाए। हर अभाज्य के लिए वह केवल **छोटे** स्तंभ जितनी ऊँची जा सकती है। $$\text{HCF} = 2 \times 3 = 6$$ अब **LCM** दबाओ।`,
-      ),
-      "hcfWhy",
-      { isHidden: true },
-    );
-    const lcmWhy = w.body(
-      t(
-        r`**LCM** is the smallest number that both 18 and 12 fit inside. For each prime it must reach the **taller** tower, and no higher. $$\text{LCM} = 2^2 \times 3^2 = 36$$ The minute Sonia and Ravi met.`,
-        r`**LCM** वह सबसे छोटी संख्या है जिसके अंदर 18 और 12 दोनों समाएँ। हर अभाज्य के लिए उसे **ऊँचे** स्तंभ तक पहुँचना है, उससे ऊपर नहीं। $$\text{LCM} = 2^2 \times 3^2 = 36$$ वही मिनट जब सोनिया और रवि मिले।`,
-      ),
-      "lcmWhy",
-      { isHidden: true },
-    );
-    const ask = choiceQuestion(b, {
-      name: "ask",
-      prompt: t(
-        r`What is the HCF of 12 and 15? $$12 = 2^2 \times 3, \qquad 15 = 3 \times 5$$`,
-        r`12 और 15 का HCF क्या है? $$12 = 2^2 \times 3, \qquad 15 = 3 \times 5$$`,
-      ),
-      options: [
-        { id: "right", label: t("3", "3") },
-        {
-          id: "lcm",
-          label: t("60", "60"),
-          feedback: t(
-            r`That's the LCM: each prime at its taller tower. $$2^2 \times 3 \times 5 = 60$$`,
-            r`यह LCM है: हर अभाज्य अपने ऊँचे स्तंभ पर। $$2^2 \times 3 \times 5 = 60$$`,
-          ),
-        },
-        {
-          id: "fifteen",
-          label: t("15", "15"),
-          feedback: t(
-            "12 has no 5-tower, so the shorter top for 5 is 0: no 5 in the HCF.",
-            "12 में 5 का स्तंभ नहीं है, इसलिए 5 का छोटा शिखर 0 है: HCF में 5 नहीं।",
-          ),
-        },
-      ],
-      answer: "right",
-      isHidden: true,
-    });
-    const rule = w.definition(
-      t(
-        "**HCF** = product of each common prime at its **smallest** power. **LCM** = product of each prime at its **greatest** power.",
-        "**HCF** = हर साझा अभाज्य की **सबसे छोटी** घात का गुणनफल। **LCM** = हर अभाज्य की **सबसे बड़ी** घात का गुणनफल।",
-      ),
-      "rule",
-      { isHidden: true },
-    );
-    b.when(
-      stack.on(PrimeTowersSignal.Shown),
-      theBoard.show(hcfWhy),
-      stack.field("show").eq(TowerShow.Hcf),
-    );
-    b.when(
-      stack.on(PrimeTowersSignal.Shown),
-      [theBoard.show(lcmWhy), theBoard.show(ask)],
-      stack.field("show").eq(TowerShow.Lcm),
-    );
-    b.when(ask.on(QuestionSignal.Correct), theBoard.show(rule));
-    return column([
-      w.title(t("HCF and LCM from primes", "अभाज्यों से HCF और LCM")),
-      w.body(
-        t(
-          r`**Primes show what divides what:** one number divides another when its towers fit inside. $$18 = 2 \times 3^2, \qquad 12 = 2^2 \times 3$$ For each prime, 18's tower and 12's stand side by side.`,
-          r`**अभाज्य दिखाते हैं कौन किसे भाग देता है:** एक संख्या दूसरी को तब भाग देती है जब उसके स्तंभ अंदर समाएँ। $$18 = 2 \times 3^2, \qquad 12 = 2^2 \times 3$$ हर अभाज्य के लिए, 18 और 12 के स्तंभ साथ-साथ खड़े हैं।`,
+const towers = page("towers", (b) => {
+  const w = wordsOn(b);
+  b.purpose(
+    "See 18 = 2 × 3² and 12 = 2² × 3 as towers, each prime's two side by side. The HCF divides both, so it goes up to the height both towers reach, the shorter top: 2 × 3 = 6. Both numbers divide the LCM, so it goes up to the height that covers both, the taller top: 2² × 3² = 36.",
+  );
+  const stack = b.prop(primeTowersDef, "towers", {});
+  b.standsFor(stack, "for each prime, 18's tower and 12's side by side, as tall as its power");
+  b.witness(
+    stack.learner(PrimeTowersAction.Show, { show: TowerShow.Hcf }),
+    stack.learner(PrimeTowersAction.Show, { show: TowerShow.Lcm }),
+  );
+  const hcfWhy = w.body(
+    t(
+      r`**HCF** is the biggest number that fits inside both 18 and 12. For each prime it can go only as high as the **shorter** tower. $$\text{HCF} = 2 \times 3 = 6$$ Now tap **LCM**.`,
+      r`**HCF** वह सबसे बड़ी संख्या है जो 18 और 12 दोनों के अंदर समाए। हर अभाज्य के लिए वह केवल **छोटे** स्तंभ जितनी ऊँची जा सकती है। $$\text{HCF} = 2 \times 3 = 6$$ अब **LCM** दबाओ।`,
+    ),
+    "hcfWhy",
+  );
+  const lcmWhy = w.body(
+    t(
+      r`**LCM** is the smallest number that both 18 and 12 fit inside. For each prime it must reach the **taller** tower, and no higher. $$\text{LCM} = 2^2 \times 3^2 = 36$$ The minute Sonia and Ravi met.`,
+      r`**LCM** वह सबसे छोटी संख्या है जिसके अंदर 18 और 12 दोनों समाएँ। हर अभाज्य के लिए उसे **ऊँचे** स्तंभ तक पहुँचना है, उससे ऊपर नहीं। $$\text{LCM} = 2^2 \times 3^2 = 36$$ वही मिनट जब सोनिया और रवि मिले।`,
+    ),
+    "lcmWhy",
+  );
+  const ask = choice(b, {
+    name: "ask",
+    prompt: t(
+      r`What is the HCF of 12 and 15? $$12 = 2^2 \times 3, \qquad 15 = 3 \times 5$$`,
+      r`12 और 15 का HCF क्या है? $$12 = 2^2 \times 3, \qquad 15 = 3 \times 5$$`,
+    ),
+    right: t("3", "3"),
+    wrong: {
+      lcm: {
+        label: t("60", "60"),
+        feedback: t(
+          r`That's the LCM: each prime at its taller tower. $$2^2 \times 3 \times 5 = 60$$`,
+          r`यह LCM है: हर अभाज्य अपने ऊँचे स्तंभ पर। $$2^2 \times 3 \times 5 = 60$$`,
         ),
+      },
+      fifteen: {
+        label: t("15", "15"),
+        feedback: t(
+          "12 has no 5-tower, so the shorter top for 5 is 0: no 5 in the HCF.",
+          "12 में 5 का स्तंभ नहीं है, इसलिए 5 का छोटा शिखर 0 है: HCF में 5 नहीं।",
+        ),
+      },
+    },
+  });
+  const rule = w.definition(
+    t(
+      "**HCF** = product of each common prime at its **smallest** power. **LCM** = product of each prime at its **greatest** power.",
+      "**HCF** = हर साझा अभाज्य की **सबसे छोटी** घात का गुणनफल। **LCM** = हर अभाज्य की **सबसे बड़ी** घात का गुणनफल।",
+    ),
+    "rule",
+  );
+  b.after(stack.on(PrimeTowersSignal.Shown), hcfWhy, {
+    if: (at) => at(stack).show === TowerShow.Hcf,
+  });
+  b.after(stack.on(PrimeTowersSignal.Shown), [lcmWhy, ask], {
+    if: (at) => at(stack).show === TowerShow.Lcm,
+  });
+  b.after(ask, rule);
+  return [
+    w.title(t("HCF and LCM from primes", "अभाज्यों से HCF और LCM")),
+    w.body(
+      t(
+        r`**Primes show what divides what:** one number divides another when its towers fit inside. $$18 = 2 \times 3^2, \qquad 12 = 2^2 \times 3$$ For each prime, 18's tower and 12's stand side by side.`,
+        r`**अभाज्य दिखाते हैं कौन किसे भाग देता है:** एक संख्या दूसरी को तब भाग देती है जब उसके स्तंभ अंदर समाएँ। $$18 = 2 \times 3^2, \qquad 12 = 2^2 \times 3$$ हर अभाज्य के लिए, 18 और 12 के स्तंभ साथ-साथ खड़े हैं।`,
       ),
-      w.body(t("Tap **HCF**.", "**HCF** दबाओ।")),
-      stack,
-      hcfWhy,
-      lcmWhy,
-      ask,
-      rule,
-      space(),
-    ]);
-  },
-  { passOn: PassOn.Rules },
-);
+    ),
+    w.body(t("Tap **HCF**.", "**HCF** दबाओ।")),
+    stack,
+    hcfWhy,
+    lcmWhy,
+    ask,
+    rule,
+  ];
+});
 
 /** HCF × LCM = a × b: for each prime, the shorter and taller towers are the two towers. */
 const product = page("product", (b) => {
   const w = wordsOn(b);
   const stack = b.prop(primeTowersDef, "towers", { show: TowerShow.Product, choices: [] });
   b.standsFor(stack, "18's and 12's towers; for each prime, shorter + taller = the two heights");
-  return column([
+  return [
     w.title(t("HCF × LCM = a × b", "HCF × LCM = a × b")),
     w.body(
       t(
@@ -269,8 +236,7 @@ const product = page("product", (b) => {
         "केवल दो संख्याओं के लिए। तीन स्तंभों में सबसे छोटा और सबसे बड़ा, तीनों का योग नहीं बनाते।",
       ),
     ),
-    space(),
-  ]);
+  ];
 });
 
 /** The towers handed over: any two numbers, HCF, LCM and HCF × LCM. */
@@ -283,7 +249,7 @@ const play = page("play", (b) => {
     choices: [TowerShow.Hcf, TowerShow.Lcm, TowerShow.Product],
   });
   b.standsFor(stack, "a sandbox: any two numbers as towers, with HCF, LCM and HCF × LCM");
-  return column([
+  return [
     w.title(t("Try it yourself", "ख़ुद आज़माओ")),
     w.body(
       t(
@@ -292,14 +258,13 @@ const play = page("play", (b) => {
       ),
     ),
     stack,
-    space(),
-  ]);
+  ];
 });
 
 /** Which one a problem wants, and the size check. */
 const hcfOrLcm = page("hcf-or-lcm", (b) => {
   const w = wordsOn(b);
-  return column([
+  return [
     w.title(t("HCF or LCM?", "HCF या LCM?")),
     w.definition(
       t(
@@ -319,14 +284,13 @@ const hcfOrLcm = page("hcf-or-lcm", (b) => {
         r`**आकार जाँचो।** HCF छोटी संख्या से बड़ा नहीं होता; LCM बड़ी संख्या से छोटा नहीं होता। टुकड़े छोटे होते हैं, फिर से मिलने में समय लगता है।`,
       ),
     ),
-    space(),
-  ]);
+  ];
 });
 
 /** NCERT Example 6: 6 and 20. */
 const exampleTwo = page("example-two", (b) => {
   const w = wordsOn(b);
-  return column([
+  return [
     w.title(t("Example", "उदाहरण")),
     w.body(
       t(
@@ -346,14 +310,13 @@ const exampleTwo = page("example-two", (b) => {
         r`जाँच: HCF × LCM, 6 × 20 के बराबर होना चाहिए। $$2 \times 60 = 120 = 6 \times 20$$`,
       ),
     ),
-    space(),
-  ]);
+  ];
 });
 
 /** NCERT Example 7: three numbers, 6, 72 and 120. */
 const exampleThree = page("example-three", (b) => {
   const w = wordsOn(b);
-  return column([
+  return [
     w.title(t("Example", "उदाहरण")),
     w.body(
       t(
@@ -379,14 +342,13 @@ const exampleThree = page("example-three", (b) => {
         r`HCF × LCM = गुणनफल केवल दो संख्याओं के लिए है। यहाँ यह नहीं चलता: $$6 \times 360 \ne 6 \times 72 \times 120$$`,
       ),
     ),
-    space(),
-  ]);
+  ];
 });
 
 /** NCERT Ex 1.2: the LCM from the HCF. */
 const exampleFromHcf = page("example-from-hcf", (b) => {
   const w = wordsOn(b);
-  return column([
+  return [
     w.title(t("Example", "उदाहरण")),
     w.body(
       t(
@@ -400,8 +362,7 @@ const exampleFromHcf = page("example-from-hcf", (b) => {
         r`**उत्तर।** दो संख्याओं के लिए HCF × LCM उनका गुणनफल है: $$9 \times \text{LCM} = 306 \times 657$$ तो $$\text{LCM} = \frac{306 \times 657}{9} = 34 \times 657 = 22338$$`,
       ),
     ),
-    space(),
-  ]);
+  ];
 });
 
 /** The pages, in reading order. */

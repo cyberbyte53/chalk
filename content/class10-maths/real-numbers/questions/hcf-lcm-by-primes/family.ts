@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, primesTex, settle } from "@chalk/patterns";
+import { type Option, choice, primesTex } from "@chalk/patterns";
 import { gcd, lcm } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -29,7 +29,7 @@ export const hcfLcmByPrimes = family({
     const factored = ns.map((n) => `$${n} = ${primesTex(n)}$`).join(", ");
     const isHcf = ask === Ask.Hcf;
     const right = isHcf ? h : l;
-    const options: Option[] = [{ id: "right", label: t(`${right}`, `${right}`) }];
+    const options: Option[] = [];
     const used = new Set([right]);
     const offer = (id: string, value: number, en: string, hi: string) => {
       if (used.has(value)) return;
@@ -85,7 +85,7 @@ export const hcfLcmByPrimes = family({
         );
       }
     }
-    const choice = choiceQuestion(b, {
+    const question = choice(b, {
       prompt: isHcf
         ? t(
             r`Find the HCF of ${list} by prime factorisation: ${factored}.`,
@@ -95,9 +95,9 @@ export const hcfLcmByPrimes = family({
             r`Find the LCM of ${list} by prime factorisation: ${factored}.`,
             r`अभाज्य गुणनखंडन से ${list} का LCM ज्ञात करो: ${factored}।`,
           ),
-      options: settle(options, product % 9973),
-      answer: "right",
+      right: t(`${right}`, `${right}`),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([choice, space()]);
+    return [question];
   },
 });

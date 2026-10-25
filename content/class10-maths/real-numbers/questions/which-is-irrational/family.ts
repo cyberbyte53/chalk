@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -50,18 +50,17 @@ export const whichIsIrrational = family({
   build: ({ set }, b) => {
     const { right, decoys } = SETS[set];
     const options: Option[] = [
-      { id: "right", label: t(`$${right}$`, `$${right}$`) },
       ...decoys.map((d, i) => ({
         id: `decoy${i}`,
         label: t(`$${d.tex}$`, `$${d.tex}$`),
         feedback: t(d.en, d.hi),
       })),
     ];
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t("Which of these is irrational?", "इनमें से कौन-सा अपरिमेय है?"),
-      options: settle(options, set.length * 13),
-      answer: "right",
+      right: t(`$${right}$`, `$${right}$`),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

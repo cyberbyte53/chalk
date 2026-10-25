@@ -1,4 +1,4 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
 import { type OrderStep, orderQuestion, settle } from "@chalk/patterns";
 import { z } from "zod";
@@ -83,6 +83,6 @@ export const orderTheProof = family({
       shown,
       answers: [answer],
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, choice } from "@chalk/patterns";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -28,7 +28,6 @@ export const oddForms = family({
       r`${divisor} से भाग दो: शेषफल ${all.join(", ")} में से एक है। सम शेषफल वाले रूप, जैसे $${evenShown.at(-1)}$, सम हैं, क्योंकि $${divisor}q$ सम है।`,
     );
     const options: Option[] = [
-      { id: "right", label: t(forms(divisor, odd), forms(divisor, odd)) },
       {
         id: "even",
         label: t(forms(divisor, even), forms(divisor, even)),
@@ -45,14 +44,14 @@ export const oddForms = family({
         ),
       });
     }
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(
         r`Any positive odd integer is of the form… (for some integer $q$)`,
         r`कोई भी धनात्मक विषम पूर्णांक किस रूप का होता है? (किसी पूर्णांक $q$ के लिए)`,
       ),
-      options: settle(options, divisor * 11),
-      answer: "right",
+      right: t(forms(divisor, odd), forms(divisor, odd)),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

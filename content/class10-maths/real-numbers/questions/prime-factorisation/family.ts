@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, bagTex, choiceQuestion, settle } from "@chalk/patterns";
+import { type Option, bagTex, choice } from "@chalk/patterns";
 import { bagOf, isPrime } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -18,7 +18,7 @@ export const primeFactorisation = family({
     const p = primes[0];
     if (p === undefined || isPrime(n)) throw new Error(`${n} should be composite`);
     const rest = n / p;
-    const options: Option[] = [{ id: "right", label: t(`$${bagTex(bag)}$`, `$${bagTex(bag)}$`) }];
+    const options: Option[] = [];
     if (!isPrime(rest)) {
       options.push({
         id: "notPrime",
@@ -51,14 +51,14 @@ export const primeFactorisation = family({
         ),
       });
     }
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(
         `Express ${n} as a product of its prime factors.`,
         `${n} को उसके अभाज्य गुणनखंडों के गुणनफल के रूप में लिखो।`,
       ),
-      options: settle(options, n),
-      answer: "right",
+      right: t(`$${bagTex(bag)}$`, `$${bagTex(bag)}$`),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });

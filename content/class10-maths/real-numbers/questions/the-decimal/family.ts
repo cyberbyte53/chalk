@@ -1,6 +1,6 @@
-import { column, family, space, t } from "@chalk/author";
+import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { type Option, choiceQuestion, frac, settle } from "@chalk/patterns";
+import { type Option, choice, frac } from "@chalk/patterns";
 import { terminatingDecimal } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -32,7 +32,7 @@ export const theDecimal = family({
     const decimal = terminatingDecimal(p, q);
     if (decimal === null) throw new Error(`${p}/${q} doesn't terminate`);
     const places = (decimal.split(".")[1] ?? "").length;
-    const options: Option[] = [{ id: "right", label: t(decimal, decimal) }];
+    const options: Option[] = [];
     const used = new Set([decimal]);
     const offer = (id: string, value: string) => {
       if (used.has(value)) return;
@@ -48,11 +48,11 @@ export const theDecimal = family({
     };
     offer("left", shift(decimal, -1));
     offer("right1", shift(decimal, 1));
-    const ask = choiceQuestion(b, {
+    const ask = choice(b, {
       prompt: t(r`Write $${frac(p, q)}$ as a decimal.`, r`$${frac(p, q)}$ को दशमलव में लिखो।`),
-      options: settle(options, p * 17 + q),
-      answer: "right",
+      right: t(decimal, decimal),
+      wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),
     });
-    return column([ask, space()]);
+    return [ask];
   },
 });
