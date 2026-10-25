@@ -229,7 +229,8 @@ function changedSince(root: string, since: string): string[] {
   }
   return listed.filter((f) => {
     try {
-      return statSync(join(root, f)).mtimeMs >= t;
+      // File times come from a coarse clock (a few ms behind Date.now on Linux): allow for it.
+      return statSync(join(root, f)).mtimeMs >= t - 20;
     } catch {
       return false; // deleted: git can't say when, so it can't be pinned on this comment
     }

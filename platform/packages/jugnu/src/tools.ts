@@ -252,7 +252,9 @@ const seenOf = (board: JugnuBoard, names: readonly string[]) =>
       const seen = observationOf(board.getDef(name), board.getStored(name));
       return [
         name,
-        new Map(seen.elements.map((e) => [e.id, e.value === undefined ? true : e.value])),
+        new Map(
+          seen.elements.map((e) => [e.id, e.words ?? (e.value === undefined ? true : e.value)]),
+        ),
       ];
     }),
   );

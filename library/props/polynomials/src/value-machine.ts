@@ -1,4 +1,15 @@
-import { type Element, type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, actionsFor, childrenFor, defineComposite, set } from "@chalk/prop";
+import {
+  DotTone,
+  HandleAction,
+  IconButtonAction,
+  type Plotted,
+  StepperAction,
+  iconButtonDef,
+  mathLineDef,
+  planeDef,
+  stepperDef,
+} from "@chalk/prop-blocks";
 import { z } from "zod";
 import {
   EPS,
@@ -7,6 +18,7 @@ import {
   clean,
   degreeOf,
   niceNumber,
+  polyTex,
   polyText,
   trim,
   valueAt,
@@ -49,6 +61,7 @@ const valueMachineState = z
 export type ValueMachineState = z.infer<typeof valueMachineState>;
 
 const act = actionsFor<ValueMachineState>();
+const child = childrenFor<ValueMachineState>();
 const snapTo = (x: number, step: number) => clean(Math.round(x / step) * step);
 const isZero = (p: Poly, x: number) => Math.abs(valueAt(p, x)) < 1e-9;
 
@@ -109,12 +122,36 @@ function put(s: ValueMachineState, x: number): ValueMachineState {
   return { ...s, input: x, tried };
 }
 
+/** The dots on the grid: every number put in (the last one bright), zeroes marked. */
+function dotsOf(s: ValueMachineState) {
+  const p = s.coefficients;
+  const { xMin, xMax, yMin, yMax } = s.window;
+  const at = (x: number) => clean(valueAt(p, x));
+  const inside = (x: number) => x >= xMin && x <= xMax && at(x) >= yMin && at(x) <= yMax;
+  const dots: Plotted[] = s.tried.filter(inside).map((t) => ({
+    x: t,
+    y: at(t),
+    tone: isZero(p, t) ? DotTone.Accent : DotTone.Main,
+    ...(t === s.input ? {} : { isFaded: true }),
+  }));
+  // Held but not put in yet (dragging): a grey dot.
+  const isHeld = s.input !== null && !s.tried.includes(s.input);
+  if (isHeld && s.input !== null && inside(s.input))
+    dots.push({ x: s.input, y: at(s.input), tone: DotTone.Muted });
+  return dots;
+}
+
 /**
  * The value machine: put in a number, and out comes the polynomial's value at it, with the
  * substitution written out. Every number put in leaves a dot at (x, p(x)) on a grid; a dot on the
  * x-axis is a zero. With enough dots, they trace the graph.
+ *
+ * Built from blocks: the rule and the working are lines of maths, x is a stepper and a handle on
+ * the plane's x-axis, the dots are plotted on the plane, ↺ is a button. The machine owns the state
+ * and the laws; each block is drawn from it, and what the learner does to one becomes Put, Move or
+ * StartAgain.
  */
-export const valueMachine = defineProp({
+export const valueMachine = defineComposite({
   type: "valueMachine",
   describe:
     "A polynomial p(x) as a machine: the learner drags x along the grid's x-axis (or nudges it with − and +, in steps of 0.1 by default) and sees p(x), with the substitution written out term by term as they go (p(−1) = (−1)² − 3 × (−1) − 4 = 0; decimals as decimals, p(2.3) = −5.61). Letting go, or each nudge, puts the number in and leaves a dot at (k, p(k)) on the grid; a zero, where p(k) = 0, is a dot on the x-axis. Enough dots trace the graph of y = p(x).",
@@ -151,6 +188,7 @@ export const valueMachine = defineProp({
         "Put a number into the machine: letting go of the x handle, or a − / + nudge. Leaves a dot",
       byLearner: true,
       args: z.object({ x: reach }).strict(),
+      changes: ["input", "tried"],
       run: (s, a) => {
         const x = land(s, a.x);
         const next = put(s, x);
@@ -166,12 +204,14 @@ export const valueMachine = defineProp({
         "Slide x along the axis (the learner dragging the handle): the working follows, no dot is left",
       byLearner: true,
       args: z.object({ x: reach }).strict(),
+      changes: ["input"],
       run: (s, a) => set({ input: land(s, a.x) }),
     }),
     [ValueMachineAction.StartAgain]: act({
       describe: "Clear every dot",
       byLearner: true,
       args: z.object({}).strict(),
+      changes: ["input", "tried"],
       run: () => set({ input: null, tried: [] }),
     }),
   },
@@ -179,40 +219,60 @@ export const valueMachine = defineProp({
     [ValueMachineSignal.Put]: { describe: "A number went in: `x` and `value` = p(x)" },
     [ValueMachineSignal.FoundZero]: { describe: "A number put in gave 0: `x` is a zero" },
   },
-  observe: (s) => {
-    const p = s.coefficients;
-    const fn = `${s.name}(${s.variable}) = ${polyText(p, s.variable)}`;
-    const elements: Element[] = [
+  children: {
+    rule: child(mathLineDef, (s) => ({
+      tex: `${s.name}(${s.variable}) = ${polyTex(s.coefficients, s.variable)}`,
+    })),
+    input: child(
+      stepperDef,
+      (s) => ({
+        name: s.variable,
+        value: s.input ?? 0,
+        shown: machineNumber(s.input ?? 0).text,
+        step: s.step,
+        min: s.min,
+        max: s.max,
+      }),
+      { [StepperAction.Change]: (_s, a) => [ValueMachineAction.Put, { x: a.to }] },
+    ),
+    working: child(mathLineDef, (s) => ({
+      tex: s.input === null ? "" : workingTex(s.coefficients, s.input, s.name, s.variable),
+      isSplit: degreeOf(trim(s.coefficients)) >= 3,
+    })),
+    plane: child(
+      planeDef,
+      (s) => ({
+        window: [s.window.xMin, s.window.xMax, s.window.yMin, s.window.yMax] as [
+          number,
+          number,
+          number,
+          number,
+        ],
+        isEqualUnits: false,
+        axisNames: [s.variable, "y"] as [string, string],
+        plotted: dotsOf(s),
+        handle: {
+          x: s.input ?? 0,
+          label: machineNumber(s.input ?? 0).text,
+          step: s.step,
+        },
+        guide: s.input === null ? null : { x: s.input, y: clean(valueAt(s.coefficients, s.input)) },
+      }),
       {
-        id: "input",
-        value:
-          s.input === null
-            ? "nothing put in yet"
-            : `${s.variable} = ${machineNumber(s.input).text}`,
+        [HandleAction.MoveHandle]: (_s, a) => [ValueMachineAction.Move, { x: a.x }],
+        [HandleAction.PutHandle]: (_s, a) => [ValueMachineAction.Put, { x: a.x }],
       },
-    ];
-    elements.push({
-      id: "handle",
-      value: `on the x-axis at ${s.variable} = ${machineNumber(s.input ?? 0).text}, to drag`,
-    });
-    if (s.input !== null)
-      elements.push({
-        id: "working",
-        value: `${s.name}(${machineNumber(s.input).text}) = ${machineNumber(clean(valueAt(p, s.input))).text}`,
-      });
-    elements.push({
-      id: "dots",
-      value:
-        s.tried.length === 0
-          ? "no dots yet"
-          : s.tried
-              .map((x) => `(${machineNumber(x).text}, ${machineNumber(clean(valueAt(p, x))).text})`)
-              .join(", "),
-    });
-    const zeroes = s.tried.filter((x) => isZero(p, x));
-    return {
-      summary: `the value machine for ${fn}; ${s.tried.length} numbers put in${zeroes.length > 0 ? `, zeroes found: ${zeroes.map((x) => machineNumber(x).text).join(", ")}` : ""}`,
-      elements,
-    };
+    ),
+    clear: child(
+      iconButtonDef,
+      (s) => ({ symbol: "↺", label: "Clear the dots", isEnabled: s.tried.length > 0 }),
+      { [IconButtonAction.Press]: () => [ValueMachineAction.StartAgain, {}] },
+    ),
+  },
+  order: ["rule", "input", "working", "plane", "clear"],
+  summary: (s) => {
+    const fn = `${s.name}(${s.variable}) = ${polyText(s.coefficients, s.variable)}`;
+    const zeroes = s.tried.filter((x) => isZero(s.coefficients, x));
+    return `the value machine for ${fn}; ${s.tried.length} numbers put in${zeroes.length > 0 ? `, zeroes found: ${zeroes.map((x) => machineNumber(x).text).join(", ")}` : ""}`;
   },
 });

@@ -1,0 +1,178 @@
+@import "@chalk/prop-circles/kit.css";
+
+/* @chalk/prop-blocks: only the look's tokens. Class names start with .bk- (graph paper keeps .co-). */
+
+.bk-plane {
+  width: 100%;
+}
+.bk-plane-svg {
+  display: block;
+  overflow: hidden;
+  touch-action: none;
+}
+.bk-plane-svg.is-dial {
+  cursor: pointer;
+}
+
+/* ---- graph paper ---- */
+.co-grid-line {
+  stroke: var(--color-outline-variant);
+  stroke-width: 0.6px;
+  opacity: 0.55;
+}
+.co-grid-line.is-major {
+  opacity: 0.9;
+}
+.co-axis {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4px;
+}
+.co-axis-head {
+  fill: var(--color-on-surface-variant);
+}
+.co-axis-name {
+  font: italic 700 12px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.co-grid-num {
+  font: 600 9.5px var(--font-body);
+  fill: var(--color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 2.5px;
+}
+.co-quadrant {
+  font: 800 18px var(--font-display);
+  fill: var(--color-primary);
+  opacity: 0.35;
+}
+.co-grid-num.is-origin {
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* ---- the handle on the x-axis ---- */
+.bk-handle-ring {
+  fill: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+}
+.bk-handle:focus-visible {
+  outline: none;
+}
+.bk-handle:focus-visible .bk-handle-ring {
+  stroke-width: 4.5px;
+}
+.bk-handle-label {
+  font: 800 14px var(--font-display);
+  fill: var(--color-on-surface);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+}
+.bk-guide {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 4;
+}
+.bk-dot {
+  stroke: var(--color-surface);
+  stroke-width: 1.5px;
+}
+.bk-dot.is-main {
+  fill: var(--color-primary);
+}
+.bk-dot.is-accent {
+  fill: var(--color-secondary);
+}
+.bk-dot.is-muted {
+  fill: var(--color-on-surface-variant);
+}
+.bk-dot.is-faded {
+  opacity: 0.55;
+}
+
+/* ---- stepper and button ---- */
+.bk-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 46px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--shape-radius-m);
+  background: var(--color-surface-container);
+  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
+  color: var(--color-on-surface);
+  font: 800 20px / 1 var(--font-display);
+  cursor: pointer;
+}
+.bk-button:active:not(:disabled) {
+  transform: translateY(var(--shape-press));
+  box-shadow: none;
+}
+.bk-button:disabled {
+  color: var(--color-outline-variant);
+  box-shadow: none;
+  cursor: default;
+}
+.bk-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.bk-stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bk-stepper-value {
+  min-width: 64px;
+  text-align: center;
+  font: 800 19px var(--font-display);
+  color: var(--color-on-surface);
+}
+.bk-name {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+}
+
+/* ---- a line of maths ---- */
+.bk-math {
+  margin: 0;
+  min-height: 32px;
+  font-size: var(--text-body);
+  color: var(--color-on-surface);
+  overflow-x: auto;
+  max-width: 100%;
+}
+.bk-math-rest {
+  display: block;
+  padding-left: 2em;
+}
+.bk-math-empty {
+  color: var(--color-on-surface-variant);
+}
+
+/* ---- composites: children one under another ---- */
+.bk-composite {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.bk-composite > .bk-child {
+  max-width: 100%;
+}
+.bk-composite > .bk-child.is-wide {
+  align-self: stretch;
+}
+
+/* A plane the learner dials on (a handle on its x-axis) sits in a frame. */
+.bk-plane-svg.is-dial {
+  border-radius: var(--shape-radius-m);
+  outline: var(--shape-stroke-thin) solid var(--color-outline-variant);
+  outline-offset: calc(-1 * var(--shape-stroke-thin));
+}

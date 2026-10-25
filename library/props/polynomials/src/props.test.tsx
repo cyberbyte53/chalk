@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, partPaths } from "@chalk/player";
 import {
   type AnyPropDef,
   EffectKind,
@@ -69,7 +69,7 @@ function drawn(def: AnyPropDef, View: ComponentType<PropViewProps>, s: StoredSta
 /** Every element is either tagged `data-part` in the view or found on screen by `locate`. */
 function expectAddressable(def: AnyPropDef, View: ComponentType<PropViewProps>, s: StoredState) {
   const html = drawn(def, View, s);
-  const tagged = new Set([...html.matchAll(/data-part="([^"]+)"/g)].map((m) => m[1]));
+  const tagged = partPaths(html);
   const seen = observationOf(def, s);
   for (const e of seen.elements) {
     const isFound =

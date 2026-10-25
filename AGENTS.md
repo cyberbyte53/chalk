@@ -23,7 +23,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
   Each step writes a note to the chapter's `runs/`.
 - **Look at what you make.** The chalk MCP server (`.cursor/mcp.json`, `.vscode/mcp.json`, `.mcp.json`) gives you:
-  - `render_board`: boards drawn by the real player at phone width, with each piece's source line and parts, and layout problems found by measuring; with `steps`, it taps and drags the real board as a student would and reports what the app did after each (events, passed, a picture);
+  - `render_board`: boards drawn by the real player at phone width, with the board model (each piece's source line, setup and live values, every element with its typed value, words, action and file:line, what the student can do, and gaps between what's drawn and what's described) and layout problems found by measuring; with `steps`, it taps and drags the real board as a student would and reports what changed after each (live values, events, passed, a picture);
   - `affected`: what a change to a prop, pattern or platform file reaches, as a tree (chapters → lessons → boards; `open` one to expand), from what each chapter's build actually read;
   - `comments`, `comment_add`, `comment_update`: the only way to read and write comments.
 

@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { Browser, Page } from "playwright-core";
+import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
  * The learner app's own dev server and a headless browser, for looking at boards. Uses the one
@@ -112,7 +113,43 @@ export type Shot = {
   overflow: string[];
   /** Errors the page logged while drawing. */
   errors: string[];
+  /** The board model (see @chalk/player board-model.ts), when the page could make it. */
+  model?: BoardModel;
 };
+
+/** The board model of each board on the page, by its build path (the preview keeps it on window). */
+async function readModels(page: Page): Promise<Map<string, BoardModel>> {
+  const all = (await page
+    .evaluate(() => {
+      const w = window as unknown as { __chalkModel?: () => unknown };
+      return w.__chalkModel?.() ?? [];
+    })
+    .catch(() => [])) as { path: string; model: unknown }[];
+  // Checked against the output schema here, so a model the page made wrong is caught at once.
+  return new Map(all.map((m) => [m.path, boardModelSchema.parse(m.model)]));
+}
+
+/** What a step changed: each live value that moved, as "piece.field". */
+function liveChanges(was: BoardModel | undefined, now: BoardModel | undefined) {
+  const out: Record<string, { was: unknown; now: unknown }> = {};
+  if (was === undefined || now === undefined) return out;
+  for (const piece of now.pieces) {
+    const before = was.pieces.find((p) => p.name === piece.name);
+    for (const [field, value] of Object.entries(piece.live)) {
+      const old =
+        before === undefined
+          ? undefined
+          : field in before.live
+            ? before.live[field]
+            : before.setup[field];
+      if (JSON.stringify(old) !== JSON.stringify(value))
+        out[`${piece.name}.${field}`] = { was: old, now: value };
+    }
+    if (before !== undefined && before.isShown !== piece.isShown)
+      out[`${piece.name} shown`] = { was: before.isShown, now: piece.isShown };
+  }
+  return out;
+}
 
 /**
  * Layout problems on one drawn board, found by measuring (runs in the page). Each names the piece
@@ -180,6 +217,8 @@ export type StepResult = {
   passed: boolean;
   errors: string[];
   png?: Buffer;
+  /** Live values the step changed ("machine.input": was 0, now 2). */
+  changed?: Record<string, { was: unknown; now: unknown }>;
 };
 
 export async function previewUrl(
@@ -299,7 +338,7 @@ const stepWords = (step: Step): string =>
  * as its TeX too, so "x^2 - 4" or "x² − 4" both work).
  */
 function markTarget(arg: { target: string; text?: string }): string | null {
-  const [piece, part] = arg.target.split("›").map((t) => t.trim());
+  const [piece, ...path] = arg.target.split("›").map((t) => t.trim());
   for (const old of document.querySelectorAll("[data-chalk-target]"))
     old.removeAttribute("data-chalk-target");
   const pieceEl = document.querySelector<HTMLElement>(`[data-piece="${CSS.escape(piece ?? "")}"]`);
@@ -309,15 +348,27 @@ function markTarget(arg: { target: string; text?: string }): string | null {
     );
     return `no piece "${piece}" on screen (shown now: ${names.join(", ")}). In play, a piece can stay hidden until the ones before it are answered.`;
   }
+  // A part's path: the composite children it sits in (data-child), then the part (data-part).
+  const pathsIn = (root: HTMLElement) =>
+    [...root.querySelectorAll<HTMLElement>("[data-part]")].map((e) => {
+      const names: string[] = [];
+      for (let at = e.parentElement; at !== null && at !== root; at = at.parentElement)
+        if (at.dataset.child !== undefined) names.unshift(at.dataset.child);
+      return [...names, e.dataset.part].join(" › ");
+    });
   let el: HTMLElement | null = pieceEl;
-  if (part !== undefined && part !== "") {
-    el = pieceEl.querySelector<HTMLElement>(`[data-part="${CSS.escape(part)}"]`);
-    if (el === null) {
-      const parts = [...pieceEl.querySelectorAll<HTMLElement>("[data-part]")].map(
-        (e) => e.dataset.part,
-      );
-      return `no part "${part}" in ${piece} (parts: ${[...new Set(parts)].join(", ") || "none"})`;
-    }
+  for (const [i, name] of path.filter((p) => p !== "").entries()) {
+    const isLast = i === path.length - 1;
+    const asChild: HTMLElement | null = el.querySelector<HTMLElement>(
+      `[data-child="${CSS.escape(name)}"]`,
+    );
+    const asPart: HTMLElement | null = el.querySelector<HTMLElement>(
+      `[data-part="${CSS.escape(name)}"]`,
+    );
+    const next: HTMLElement | null = isLast ? (asPart ?? asChild) : asChild;
+    if (next === null)
+      return `no part "${path.join(" › ")}" in ${piece} (parts: ${[...new Set(pathsIn(pieceEl))].join(", ") || "none"})`;
+    el = next;
   }
   if (arg.text !== undefined) {
     const norm = (t: string) => t.replace(/[−–]/g, "-").replace(/\s+/g, "").toLowerCase();
@@ -415,6 +466,7 @@ async function shootNow(
     if ((await page.$$(".preview-card")).length !== 1)
       throw new Error("Steps act on one board: name a board, not a lesson.");
     let seen = await recorded(page);
+    let modelWas = [...(await readModels(page)).values()][0];
     for (const [i, step] of act.steps.entries()) {
       at.errors.length = 0;
       const words = stepWords(step);
@@ -431,6 +483,7 @@ async function shootNow(
         const target = page.locator("[data-chalk-target]").first();
         if ("tap" in step) await target.click({ timeout: 5000 });
         else {
+          await target.scrollIntoViewIfNeeded({ timeout: 5000 });
           const box = await target.boundingBox();
           if (box === null) throw new Error(`${step.drag} isn't on screen`);
           const x = box.x + box.width / 2;
@@ -444,8 +497,12 @@ async function shootNow(
       await settle(page);
       const now = await recorded(page);
       const isLast = i === act.steps.length - 1;
+      const modelNow = [...(await readModels(page)).values()][0];
+      const changed = liveChanges(modelWas, modelNow);
+      modelWas = modelNow;
       steps.push({
         step: words,
+        changed,
         events: now.events.slice(seen.events.length).map((e) => {
           const what = `${e.machine?.type ?? "?"}${e.machine?.id !== undefined ? `/${e.machine.id}` : ""}`;
           return `${what} ${JSON.stringify(e.input ?? null).slice(0, 160)}`;
@@ -461,6 +518,7 @@ async function shootNow(
   }
   const cards = await page.$$(".preview-card");
   const shots: Shot[] = [];
+  const models = await readModels(page);
   for (const card of cards) {
     const name = (await card.getAttribute("data-board")) ?? board;
     const overflow = await card.evaluate(layoutProblems);
@@ -484,6 +542,9 @@ async function shootNow(
       parts,
       overflow,
       errors: [...at.errors],
+      ...(models.has(name.replace(/\.json$/, ""))
+        ? { model: models.get(name.replace(/\.json$/, "")) }
+        : {}),
     });
   }
   return { shots, steps };

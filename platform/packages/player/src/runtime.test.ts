@@ -57,7 +57,15 @@ const dial = defineProp({
     setTo: dialAct({
       describe: "Set at once",
       args: z.object({ to: z.number() }).strict(),
+      changes: ["at"],
       run: (_s, a) => set({ at: a.to }),
+    }),
+    // Says it changes nothing, then changes `at`: a prop bug the runtime refuses.
+    sneak: dialAct({
+      describe: "Changes what it doesn't declare",
+      args: z.object({}).strict(),
+      changes: [],
+      run: () => set({ at: 9 }),
     }),
   },
 });
@@ -376,5 +384,26 @@ describe("BoardRuntime", () => {
     runtime.dispose();
     await advance(1000);
     expect(runtime.getView("coin").count).toBe(0);
+  });
+
+  it("refuses a change outside the fields an action declares, whoever acts", async () => {
+    const { services, errors } = fakeServices();
+    const board = new BoardRuntime(
+      boardOf({
+        name: "b",
+        root: {
+          name: "page",
+          kind: "column",
+          children: [{ name: "d", kind: "prop", prop: "dial" }],
+        },
+      }),
+      (t) => defs[t],
+      services,
+    );
+    await board.call("d", "setTo", { to: 3 }, Actor.Learner);
+    expect(board.getStored("d").at).toBe(3);
+    await board.call("d", "sneak", {}, Actor.Learner);
+    expect(board.getStored("d").at).toBe(3);
+    expect(errors.join()).toMatch(/d\.sneak changed at, outside what it declares/);
   });
 });

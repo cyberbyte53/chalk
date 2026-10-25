@@ -146,7 +146,8 @@ function propLine(
       const seen = observationOf(def, start.state);
       const elements: Record<string, unknown> = {};
       for (const element of seen.elements)
-        if (element.value !== undefined && element.value !== null)
+        if (element.words !== undefined) elements[element.id] = element.words;
+        else if (element.value !== undefined && element.value !== null)
           elements[element.id] = readable(element.value, locale);
       if (def.role === PropRole.Question)
         return `[question "${piece.name}"] ${questionLine(elements, (readable(seen.hidden ?? {}, locale) ?? {}) as Record<string, unknown>)}`;

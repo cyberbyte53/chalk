@@ -1,4 +1,5 @@
 @import "@chalk/prop-circles/kit.css";
+@import "@chalk/prop-blocks/styles.css";
 
 /* @chalk/prop-coordinates: only the look's tokens. */
 
@@ -8,44 +9,6 @@
 .co-svg {
   display: block;
   overflow: hidden;
-}
-
-/* ---- graph paper ---- */
-.co-grid-line {
-  stroke: var(--color-outline-variant);
-  stroke-width: 0.6px;
-  opacity: 0.55;
-}
-.co-grid-line.is-major {
-  opacity: 0.9;
-}
-.co-axis {
-  stroke: var(--color-on-surface-variant);
-  stroke-width: 1.4px;
-}
-.co-axis-head {
-  fill: var(--color-on-surface-variant);
-}
-.co-axis-name {
-  font: italic 700 12px var(--font-body);
-  fill: var(--color-on-surface-variant);
-}
-.co-grid-num {
-  font: 600 9.5px var(--font-body);
-  fill: var(--color-on-surface-variant);
-  font-variant-numeric: tabular-nums;
-  paint-order: stroke;
-  stroke: var(--color-surface);
-  stroke-width: 2.5px;
-}
-.co-quadrant {
-  font: 800 18px var(--font-display);
-  fill: var(--color-primary);
-  opacity: 0.35;
-}
-.co-grid-num.is-origin {
-  font-style: italic;
-  font-weight: 700;
 }
 
 /* ---- readouts ---- */

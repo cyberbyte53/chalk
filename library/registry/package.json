@@ -17,6 +17,7 @@
     "@chalk/prop": "workspace:*",
     "@chalk/prop-ap": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
+    "@chalk/prop-blocks": "workspace:*",
     "@chalk/prop-carbon": "workspace:*",
     "@chalk/prop-chance": "workspace:*",
     "@chalk/prop-chemistry": "workspace:*",

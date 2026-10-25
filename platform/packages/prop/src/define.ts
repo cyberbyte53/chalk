@@ -70,6 +70,11 @@ export type ActionSpec<S extends StoredState> = {
   reveals?: boolean;
   /** The learner's finger does this (through the prop's view, or the player's Check). */
   byLearner?: boolean;
+  /**
+   * The stored fields it can change, and no others: the runtime refuses a change outside them.
+   * What tells setup (fixed where placed) from live (changes on this board) in the board model.
+   */
+  changes?: readonly string[];
   /** Pure: reads the prop's view and the checked arguments, says what changes. */
   run: (view: PropView & S, args: never) => Effect<S>;
 };
@@ -84,6 +89,7 @@ export function actionsFor<S extends StoredState>() {
     args: ZodType<A, ZodTypeDef, unknown>;
     reveals?: boolean;
     byLearner?: boolean;
+    changes?: readonly (keyof S & string)[];
     run: (view: PropView & S, args: A) => Effect<S>;
   }): ActionSpec<S> => spec as ActionSpec<S>;
 }
@@ -106,8 +112,15 @@ export type Box = { x: number; y: number; width: number; height: number };
 export type Element = {
   /** What `point` takes, and `locate` finds: stable while the element is there. */
   id: string;
-  /** What it shows, in the prop's own words or numbers; left out for a thing with no value. */
+  /**
+   * What it shows, typed: a number as a number, a point as { x, y }, an id as its id. Left out for
+   * a thing with no value (a button).
+   */
   value?: unknown;
+  /** The value as the screen writes it ("1.40", "½"), when that isn't just the value printed. */
+  words?: string;
+  /** For a control: the action(s) touching it does (a button's press; a handle's drag, then its let-go). */
+  does?: string | readonly string[];
 };
 
 /**

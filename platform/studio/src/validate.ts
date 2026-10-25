@@ -22,6 +22,7 @@ import {
   applyPatch,
   compileExpression,
   compileTemplate,
+  hostOf,
   initialState,
   viewOf,
 } from "@chalk/prop";
@@ -108,6 +109,18 @@ function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem
       defs.set(piece.name, def);
       states.set(piece.name, start.state);
     }
+  }
+  // Layers that exclude each other can't both be on: from where it's placed, or the actions its rules call.
+  const called = board.when.flatMap((rule) => callsIn(rule.do));
+  for (const [name, def] of defs) {
+    const host = hostOf(def);
+    const state = states.get(name);
+    if (host === undefined || state === undefined) continue;
+    const used = called.flatMap((c) => {
+      const t = split(c.call);
+      return t?.prop === name ? [t.member] : [];
+    });
+    for (const clash of host.clashes(state, used)) report(name, clash);
   }
   const fields = (name: string): Set<string> => {
     const def = defs.get(name);

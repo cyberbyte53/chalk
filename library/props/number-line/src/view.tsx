@@ -1,20 +1,13 @@
-import { Axis, Dots, Mark as MarkPiece, Stage, type Tick } from "@chalk/draw";
+import { Axis, Stage, type Tick } from "@chalk/draw";
 import type { PropViewProps } from "@chalk/player";
 import { cssColor } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useRef, useState } from "preact/hooks";
-import {
-  type Mark,
-  NumberLineAction,
-  NumberLinePart,
-  NumberLineSignal,
-  type NumberLineState,
-  splitPoints,
-} from "./model";
+import { AxisPart } from "./axis";
+import { NumberLineAction, NumberLineSignal, type NumberLineState } from "./model";
 import {
   AXIS_GAP,
   HEIGHT,
-  LABEL_ROW,
   PAD,
   type View,
   decimalsFor,
@@ -25,39 +18,22 @@ import {
   valueToX,
   xToValue,
 } from "./scale";
+import {
+  DotsDraw,
+  LensDraw,
+  MarkerDraw,
+  MarksDraw,
+  SplitControls,
+  SplitCutsDraw,
+  SplitStretchDraw,
+  ZoomControls,
+} from "./view-layers";
 
 /** What a finger on the line is doing: dragging the marker, or sliding the whole line. */
 type Drag = { kind: "marker" } | { kind: "pan"; startX: number; startFrom: number };
 
 /** How close (px) a touch must be to the marker to grab it rather than slide the line. */
 const MARKER_REACH = 22;
-
-/** Rough width of a label in px (display font, 16 px). */
-function labelWidth(text: string): number {
-  return [...text].length * 9.5 + 10;
-}
-
-type PlacedMark = Mark & { x: number; row: number };
-
-/** Puts mark labels in rows above the line so none overlap: same or nearby points stack upwards. */
-function placeLabels(marks: readonly Mark[], view: View): PlacedMark[] {
-  const rows: { left: number; right: number }[][] = [];
-  const slack = (view.to - view.from) * 1e-9;
-  const inView = marks
-    .filter((m) => m.at >= view.from - slack && m.at <= view.to + slack)
-    .map((m) => ({ ...m, x: valueToX(view, m.at) }))
-    .sort((a, b) => a.x - b.x);
-  return inView.map((mark) => {
-    const half = labelWidth(mark.label) / 2;
-    const left = Math.max(0, mark.x - half);
-    const right = Math.min(view.width, mark.x + half);
-    let row = 0;
-    while (rows[row]?.some((r) => left < r.right + 4 && right > r.left - 4)) row++;
-    if (rows[row] === undefined) rows[row] = [];
-    rows[row]?.push({ left, right });
-    return { ...mark, row: Math.min(row, 2) };
-  });
-}
 
 type TickLabel = { value: number; text: string; isEnd: boolean };
 
@@ -114,11 +90,8 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
   const digits = markerPrecision(view);
   const y = AXIS_GAP;
   const labels = s.showTicks ? tickLabels(ticks(view), view) : [];
-  const placed = placeLabels(s.marks, view);
   const x = (v: number) => valueToX(view, v);
-  const clampX = (v: number) => Math.min(width - PAD + 10, Math.max(PAD - 10, x(v)));
   const slack = (view.to - view.from) * 1e-9;
-  const isInView = (v: number) => v >= view.from - slack && v <= view.to + slack;
 
   const valueAt = (clientX: number): number | undefined => {
     const box = svg.current?.getBoundingClientRect();
@@ -185,22 +158,20 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
     release();
   };
 
-  const cuts = s.split === null ? [] : splitPoints(s.split);
   const inLens = (v: number) =>
     s.lens !== null && v >= s.lens.from - slack && v <= s.lens.to + slack;
-  const hasStepper = s.isSplittable && s.split !== null;
   const axisTicks: Tick[] = labels.map((tick) => {
     const classes = [tick.isEnd ? "is-end" : "", inLens(tick.value) ? "is-in-lens" : ""];
     const extra = classes.filter((c) => c !== "").join(" ");
+    const part = `${AxisPart.TickPrefix}${tick.value}`;
     return extra === ""
-      ? { value: tick.value, label: tick.text }
-      : { value: tick.value, label: tick.text, class: extra };
+      ? { value: tick.value, label: tick.text, part }
+      : { value: tick.value, label: tick.text, class: extra, part };
   });
-  const shownDots = s.dots.filter((dot) => isInView(dot.at));
-  const dotPoints = shownDots.flatMap((dot) => [dot.at, y]);
-  const dotColors = shownDots.map((dot) => dot.color);
   const lowest = formatValue(view.from, digits);
   const highest = formatValue(view.to, digits);
+  // Each layer draws itself from its own fields: off, it draws nothing.
+  const layer = { s, view, y, call };
 
   return (
     <div class="nl">
@@ -217,143 +188,37 @@ export function NumberLineView({ view: props, width, call, signal }: PropViewPro
             s.showMarker ? "is-draggable" : "",
             s.pan !== null ? "is-pannable" : "",
           ].join(" "),
+          ...(s.pan !== null ? { "data-part": "pan" } : {}),
           onPointerDown,
           onPointerMove,
           onPointerUp,
           onPointerCancel: onPointerUp,
         }}
       >
-        {s.lens !== null && (
-          <rect
-            class="nl-lens"
-            x={x(s.lens.from)}
-            y={y - 22}
-            width={Math.max(4, x(s.lens.to) - x(s.lens.from))}
-            height={44}
-            rx={6}
-          />
-        )}
-        {s.split !== null && (
-          <line class="nl-split" x1={clampX(s.split.from)} y1={y} x2={clampX(s.split.to)} y2={y} />
-        )}
-        <g style={s.color === null ? undefined : { "--piece-color": cssColor(s.color) }}>
+        <LensDraw {...layer} />
+        <SplitStretchDraw {...layer} />
+        <g
+          data-part={AxisPart.Axis}
+          style={s.color === null ? undefined : { "--piece-color": cssColor(s.color) }}
+        >
           <Axis y={y} ticks={axisTicks} hasEnds />
         </g>
-        {cuts.map((cut, i) =>
-          isInView(cut) ? (
-            <g
-              // A cut is its place along the split.
-              // biome-ignore lint/suspicious/noArrayIndexKey: see above
-              key={i}
-              class={i === 0 || i === cuts.length - 1 ? "nl-cut is-end" : "nl-cut"}
-              data-part={`${NumberLinePart.SplitPointPrefix}${i}`}
-              transform={`translate(${x(cut)} ${y})`}
-            >
-              <line y1={-13} y2={13} />
-              {i > 0 && i < cuts.length - 1 && <circle r={4.5} />}
-            </g>
-          ) : null,
-        )}
-        <Dots points={dotPoints} colors={dotColors} r={5} class="nl-dot" />
-        {placed.map((mark) => {
-          const half = labelWidth(mark.label) / 2;
-          return (
-            <MarkPiece
-              key={mark.label}
-              at={mark.at}
-              y={y}
-              label={mark.label}
-              row={mark.row}
-              labelX={Math.min(width - half, Math.max(half, mark.x))}
-              color={mark.color}
-            />
-          );
-        })}
-        {s.showMarker && isInView(s.marker) && (
-          <g
-            class="nl-marker"
-            transform={`translate(${x(s.marker)} ${y})`}
-            tabIndex={0}
-            role="slider"
-            aria-label="Marker"
-            aria-valuemin={view.from}
-            aria-valuemax={view.to}
-            aria-valuenow={s.marker}
-            onKeyDown={onKeyDown}
-          >
-            <circle r={22} class="nl-marker-hit" />
-            <circle r={11} class="nl-marker-dot" />
-          </g>
-        )}
+        <SplitCutsDraw {...layer} />
+        <DotsDraw {...layer} />
+        <MarksDraw {...layer} />
+        <MarkerDraw {...layer} onKeyDown={onKeyDown} />
       </Stage>
       {s.pan !== null && !hasPanned && (
         <div class="nl-swipe" aria-hidden="true">
           <span class="nl-swipe-finger" />
         </div>
       )}
-      {(s.isZoomable || hasStepper) && (
+      {(s.isZoomable || (s.isSplittable && s.split !== null)) && (
         <div class="nl-controls">
-          {s.split !== null && hasStepper && (
-            <div class="nl-stepper" data-part={NumberLinePart.SplitStepper}>
-              <button
-                type="button"
-                class="nl-button"
-                aria-label="One part fewer"
-                disabled={s.split.parts <= 1}
-                onClick={() => call(NumberLineAction.ChangeParts, { by: -1 })}
-              >
-                −
-              </button>
-              <span class="nl-parts" aria-live="polite">
-                {s.split.parts}
-              </span>
-              <button
-                type="button"
-                class="nl-button"
-                aria-label="One part more"
-                onClick={() => call(NumberLineAction.ChangeParts, { by: 1 })}
-              >
-                +
-              </button>
-            </div>
-          )}
-          {s.isZoomable && (
-            <div class="nl-zoom">
-              <button
-                type="button"
-                class="nl-button"
-                aria-label="Zoom out"
-                data-part={NumberLinePart.ZoomOut}
-                disabled={view.to - view.from >= 19.99}
-                onClick={() => call(NumberLineAction.ZoomOut)}
-              >
-                <Magnifier isIn={false} />
-              </button>
-              <button
-                type="button"
-                class="nl-button"
-                aria-label="Zoom in"
-                data-part={NumberLinePart.ZoomIn}
-                disabled={view.to - view.from <= 1.01e-8}
-                onClick={() => call(NumberLineAction.ZoomIn)}
-              >
-                <Magnifier isIn={true} />
-              </button>
-            </div>
-          )}
+          <SplitControls {...layer} />
+          <ZoomControls {...layer} />
         </div>
       )}
     </div>
-  );
-}
-
-function Magnifier({ isIn }: { isIn: boolean }): JSX.Element {
-  return (
-    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class="nl-magnifier">
-      <circle cx="10" cy="10" r="6.5" />
-      <line x1="15" y1="15" x2="21" y2="21" />
-      <line x1="7" y1="10" x2="13" y2="10" />
-      {isIn && <line x1="10" y1="7" x2="10" y2="13" />}
-    </svg>
   );
 }

@@ -1,17 +1,19 @@
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, FrameKind, actionsFor, defineHost, defineLayer, set } from "@chalk/prop";
+import { type GridState, planeCore, planePixels, windowOf } from "@chalk/prop-blocks/plane";
 import { type Pt, type Words, clean, near } from "@chalk/prop-circles/kit";
 import { z } from "zod";
 import {
   type NamedPoint,
-  type PlaneWindow,
   coordTex,
+  coordText,
   dist2,
   isCollinear,
   namedPoint,
-  planeWindow,
+  pairText,
   ptOf,
   snapTo,
   sqrtTex,
+  sqrtText,
   term,
   within,
 } from "./plane";
@@ -57,37 +59,27 @@ export const PlaneDerived = {
 } as const;
 export const PlanePart = {
   Plane: "plane",
-  Points: "points",
+  PointPrefix: "point:",
+  SidePrefix: "side:",
+  Collinear: "collinear",
   Triangle: "triangle",
   Working: "working",
   Steps: "steps",
 } as const;
 
-const planeState = z
-  .object({
-    points: z.array(namedPoint).min(1).max(4),
-    /** Which points (by index) the learner can drag. */
-    movable: z.array(z.number().int().min(0).max(3)).max(4),
-    /** The grid a dragged point snaps to, in units (1, or 0.5 for half-units). */
-    snap: z.number().gt(0).max(5),
-    window: planeWindow,
-    join: z.nativeEnum(PlaneJoin),
-    /** Write each point's coordinates next to its name. */
-    showCoords: z.boolean(),
-    /** Name the four quadrants I to IV. */
-    showQuadrants: z.boolean(),
-    /** Write the length of each joined side. */
-    showLengths: z.boolean(),
-    /** Draw the right triangle PTQ under the first two points, with PT and QT. */
-    showTriangle: z.boolean(),
-    /** Write the distance formula worked out for the first two points. */
-    showWorking: z.boolean(),
-    /** Walk the derivation of the distance formula step by step. */
-    proof: z.boolean(),
-    step: z.number().int().min(0).max(4),
-  })
-  .strict();
-export type PlaneState = z.infer<typeof planeState>;
+/** The whole state: the graph paper's fields and every layer's, side by side. */
+export type PlaneState = GridState & {
+  points: NamedPoint[];
+  movable: number[];
+  snap: number;
+  showCoords: boolean;
+  join: PlaneJoin;
+  showLengths: boolean;
+  showTriangle: boolean;
+  showWorking: boolean;
+  proof: boolean;
+  step: number;
+};
 
 /** The derivation's steps (with `proof` on). */
 export const PROOF_STEPS: readonly Words[] = [
@@ -113,7 +105,7 @@ export const PROOF_STEPS: readonly Words[] = [
   },
 ];
 
-const pt = (s: PlaneState, i: number): Pt => {
+const pt = (s: Pick<PlaneState, "points">, i: number): Pt => {
   const p = s.points[i];
   return p === undefined ? [0, 0] : ptOf(p);
 };
@@ -143,7 +135,7 @@ export function sidesOf(s: Pick<PlaneState, "points" | "join">): [number, number
 }
 
 /** The working of PQ for the first two points, one TeX line each. */
-export function workingOf(s: PlaneState): string[] {
+export function workingOf(s: Pick<PlaneState, "points">): string[] {
   if (s.points.length < 2) return [];
   const p = s.points[0] as NamedPoint;
   const q = s.points[1] as NamedPoint;
@@ -158,7 +150,7 @@ export function workingOf(s: PlaneState): string[] {
   ];
 }
 
-function changed(s: PlaneState): Emit[] {
+function changed(s: Pick<PlaneState, "points">): Emit[] {
   return [
     {
       signal: PlaneSignal.Changed,
@@ -167,24 +159,44 @@ function changed(s: PlaneState): Emit[] {
   ];
 }
 
-function placed(s: PlaneState, i: number, x: number, y: number) {
-  const [x0, x1, y0, y1] = s.window as PlaneWindow;
+function placed(s: PointsState, i: number, x: number, y: number) {
+  const [x0, x1, y0, y1] = s.window;
   const nx = within(x, x0, x1);
   const ny = within(y, y0, y1);
   const old = s.points[i] as NamedPoint;
   if (near(nx, old.x, 1e-9) && near(ny, old.y, 1e-9)) return set({});
   const points = s.points.map((p, j) => (j === i ? { ...p, x: nx, y: ny } : p));
-  return set({ points }, ...changed({ ...s, points }));
+  return set({ points }, ...changed({ points }));
 }
 
-const act = actionsFor<PlaneState>();
 const index = z.number().int().min(0).max(3);
 
-export const coordinatePlane = defineProp({
-  type: "coordinatePlane",
+// ---- layers on the plane ----
+
+export type PointsState = GridState & {
+  points: NamedPoint[];
+  movable: number[];
+  snap: number;
+  showCoords: boolean;
+};
+const onPoints = actionsFor<PointsState>();
+const pointId = (p: NamedPoint) => `${PlanePart.PointPrefix}${p.name}`;
+
+/** Up to four named points; the movable ones are dragged (snapped) or moved with the arrow keys. */
+export const points = defineLayer({
+  name: "points",
+  frame: FrameKind.Plane,
   describe:
-    "Graph paper with the x- and y-axes, the origin O and up to four named points, for NCERT Class 10 Ch 7 (7.1 and 7.2). The lesson chooses which points the learner can drag; they snap to the grid and can also be moved with the arrow keys. The picture can write each point's coordinates, join the points (a segment PQ, a closed shape or an open path) and write each joined side's length as a surd (√8 = 2√2). For the distance formula it draws the right triangle PTQ under the first two points (T level with P and directly below or above Q, so PT = |x₂ − x₁| and QT = |y₂ − y₁|) and writes PQ² = (x₂ − x₁)² + (y₂ − y₁)² worked out with their numbers. With `proof` on, the learner taps Next through the textbook's derivation: PR and QS perpendicular to the x-axis, PT perpendicular to QS, PT and QT from the coordinates, then Pythagoras.",
-  state: planeState,
+    "Up to four named points; the lesson says which the learner can drag (they snap to the grid) or move with the arrow keys.",
+  fields: {
+    points: z.array(namedPoint).min(1).max(4),
+    /** Which points (by index) the learner can drag. */
+    movable: z.array(z.number().int().min(0).max(3)).max(4),
+    /** The grid a dragged point snaps to, in units (1, or 0.5 for half-units). */
+    snap: z.number().gt(0).max(5),
+    /** Write each point's coordinates next to its name. */
+    showCoords: z.boolean(),
+  },
   defaults: {
     points: [
       { name: "P", x: 4, y: 6 },
@@ -192,19 +204,9 @@ export const coordinatePlane = defineProp({
     ],
     movable: [1],
     snap: 1,
-    window: [-2, 10, -2, 10],
-    join: PlaneJoin.Segment,
     showCoords: true,
-    showQuadrants: false,
-    showLengths: false,
-    showTriangle: true,
-    showWorking: true,
-    proof: false,
-    step: 0,
   },
-  invariant: (s) =>
-    s.movable.every((i) => i < s.points.length) ? undefined : "a movable index has no point",
-  inputs: ["showCoords", "showLengths", "showTriangle", "showWorking", "join"],
+  inputs: ["showCoords"],
   derived: {
     [PlaneDerived.X0]: { describe: "The first point's x-coordinate", compute: (s) => pt(s, 0)[0] },
     [PlaneDerived.Y0]: { describe: "The first point's y-coordinate", compute: (s) => pt(s, 0)[1] },
@@ -222,16 +224,16 @@ export const coordinatePlane = defineProp({
       describe: "Whether the first three points lie on one straight line",
       compute: collinearOf,
     },
-    [PlaneDerived.Step]: { describe: "The derivation step shown (0–4)", compute: (s) => s.step },
   },
   actions: {
-    [PlaneAction.SetPoint]: act({
+    [PlaneAction.SetPoint]: onPoints({
       describe:
         "Put point i at (x, y); a learner's drag snaps to the grid and works only on a movable point",
       byLearner: true,
       args: z
         .object({ i: index, x: z.number(), y: z.number(), isSnapped: z.boolean().optional() })
         .strict(),
+      changes: ["points"],
       run: (s, a) => {
         if (a.i >= s.points.length) return set({});
         if (a.isSnapped === true) {
@@ -241,7 +243,7 @@ export const coordinatePlane = defineProp({
         return placed(s, a.i, a.x, a.y);
       },
     }),
-    [PlaneAction.Nudge]: act({
+    [PlaneAction.Nudge]: onPoints({
       describe: "Move movable point i one grid step left/right (dx) and down/up (dy)",
       byLearner: true,
       args: z
@@ -251,16 +253,150 @@ export const coordinatePlane = defineProp({
           dy: z.union([z.literal(-1), z.literal(0), z.literal(1)]),
         })
         .strict(),
+      changes: ["points"],
       run: (s, a) => {
         if (a.i >= s.points.length || !s.movable.includes(a.i)) return set({});
         const p = s.points[a.i] as NamedPoint;
         return placed(s, a.i, clean(p.x + a.dx * s.snap), clean(p.y + a.dy * s.snap));
       },
     }),
-    [PlaneAction.Next]: act({
+  },
+  signals: {
+    [PlaneSignal.Changed]: {
+      describe:
+        "A point moved: every point's coordinates, PQ² and whether the first three are collinear",
+    },
+  },
+  observe: (s: PointsState) => ({
+    elements: s.points.map((p, i) => ({
+      id: pointId(p),
+      value: { x: p.x, y: p.y },
+      words: s.showCoords ? `${p.name}${pairText(ptOf(p))}` : p.name,
+      ...(s.movable.includes(i) ? { does: PlaneAction.SetPoint } : {}),
+    })),
+    summary: s.points.map((p) => `${p.name}${pairText(ptOf(p))}`).join(", "),
+  }),
+  locate: (s, part, at) => {
+    const p = s.points.find((q) => pointId(q) === part);
+    if (p === undefined) return undefined;
+    const [x, y] = at.toPx(p.x, p.y);
+    return { x: x - 14, y: y - 14, width: 28, height: 28 };
+  },
+  invariant: (s) =>
+    s.movable.every((i) => i < s.points.length) ? undefined : "a movable index has no point",
+});
+
+export type JoinState = PointsState & { join: PlaneJoin; showLengths: boolean };
+
+/** Lines joining the points (a segment, a closed shape or an open path), each side's length. */
+export const joins = defineLayer({
+  name: "joins",
+  frame: FrameKind.Plane,
+  describe:
+    "Joins the points (a segment PQ, a closed shape or an open path) and can write each joined side's length as a surd (√8 = 2√2).",
+  needs: ["points"],
+  fields: { join: z.nativeEnum(PlaneJoin), showLengths: z.boolean() },
+  defaults: { join: PlaneJoin.Segment, showLengths: false },
+  inputs: ["join", "showLengths"],
+  actions: {},
+  observe: (s: JoinState) => {
+    const elements = sidesOf(s).map(([i, j]) => {
+      const p = s.points[i] as NamedPoint;
+      const q = s.points[j] as NamedPoint;
+      const d2 = dist2(ptOf(p), ptOf(q));
+      return {
+        id: `${PlanePart.SidePrefix}${p.name}${q.name}`,
+        value: s.showLengths ? Math.sqrt(d2) : null,
+        words: s.showLengths ? `${p.name}${q.name} = ${sqrtText(d2)}` : `${p.name}${q.name}`,
+      };
+    });
+    if (s.points.length >= 3 && s.join !== PlaneJoin.None && s.showLengths && collinearOf(s))
+      elements.push({
+        id: PlanePart.Collinear,
+        value: null,
+        words: "The three points lie on one line",
+      });
+    return { elements };
+  },
+});
+
+export type TriangleState = PointsState & { showTriangle: boolean } & ProofState;
+
+/** The right triangle PTQ under the first two points: PT = |x₂ − x₁| and QT = |y₂ − y₁|. */
+export const rightTriangle = defineLayer({
+  name: "rightTriangle",
+  frame: FrameKind.Plane,
+  describe:
+    "The right triangle PTQ under the first two points, T level with P and directly below or above Q, so PT = |x₂ − x₁| and QT = |y₂ − y₁|.",
+  needs: ["points", "proof"],
+  fields: { showTriangle: z.boolean() },
+  defaults: { showTriangle: true },
+  inputs: ["showTriangle"],
+  actions: {},
+  observe: (s: TriangleState) => {
+    const step = s.proof ? s.step : PROOF_STEPS.length - 1;
+    const isDrawn = s.points.length >= 2 && (s.showTriangle || s.proof) && step >= 2;
+    const P = pt(s, 0);
+    const Q = pt(s, 1);
+    if (!isDrawn || near(P[0], Q[0], 1e-9) || near(P[1], Q[1], 1e-9)) return { elements: [] };
+    return {
+      elements: [
+        {
+          id: PlanePart.Triangle,
+          value: { T: { x: Q[0], y: P[1] } },
+          ...(step >= 3
+            ? {
+                words: `PT = ${coordText(Math.abs(Q[0] - P[0]))}, QT = ${coordText(Math.abs(Q[1] - P[1]))}`,
+              }
+            : { words: "right triangle PTQ" }),
+        },
+      ],
+    };
+  },
+});
+
+export type WorkingState = PointsState & { showWorking: boolean } & ProofState;
+
+export const working = defineLayer({
+  name: "working",
+  frame: FrameKind.Plane,
+  describe: "PQ² = (x₂ − x₁)² + (y₂ − y₁)² worked out with the first two points' numbers.",
+  needs: ["points", "proof"],
+  fields: { showWorking: z.boolean() },
+  defaults: { showWorking: true },
+  inputs: ["showWorking"],
+  actions: {},
+  observe: (s: WorkingState) => {
+    const lines =
+      s.showWorking && s.points.length >= 2 && (!s.proof || s.step >= 4)
+        ? workingOf(s as PlaneState)
+        : [];
+    return lines.length === 0
+      ? { elements: [] }
+      : { elements: [{ id: PlanePart.Working, value: lines }] };
+  },
+});
+
+export type ProofState = { proof: boolean; step: number };
+const onProof = actionsFor<ProofState>();
+
+/** The textbook's derivation of the distance formula, a step at a time. */
+export const proof = defineLayer({
+  name: "proof",
+  frame: FrameKind.Plane,
+  describe:
+    "The learner taps Next through the textbook's derivation: PR and QS perpendicular to the x-axis, PT perpendicular to QS, PT and QT from the coordinates, then Pythagoras.",
+  fields: { proof: z.boolean(), step: z.number().int().min(0).max(4) },
+  defaults: { proof: false, step: 0 },
+  derived: {
+    [PlaneDerived.Step]: { describe: "The derivation step shown (0–4)", compute: (s) => s.step },
+  },
+  actions: {
+    [PlaneAction.Next]: onProof({
       describe: "Show the derivation's next step",
       byLearner: true,
       args: z.object({}).strict(),
+      changes: ["step"],
       run: (s) =>
         !s.proof || s.step >= PROOF_STEPS.length - 1
           ? set({})
@@ -269,10 +405,11 @@ export const coordinatePlane = defineProp({
               { signal: PlaneSignal.Stepped, payload: { step: s.step + 1 } },
             ),
     }),
-    [PlaneAction.Back]: act({
+    [PlaneAction.Back]: onProof({
       describe: "Go back one step in the derivation",
       byLearner: true,
       args: z.object({}).strict(),
+      changes: ["step"],
       run: (s) =>
         !s.proof || s.step === 0
           ? set({})
@@ -281,14 +418,45 @@ export const coordinatePlane = defineProp({
               { signal: PlaneSignal.Stepped, payload: { step: s.step - 1 } },
             ),
     }),
-    [PlaneAction.Again]: act({
+    [PlaneAction.Again]: onProof({
       describe: "Start the derivation again",
       byLearner: true,
       args: z.object({}).strict(),
+      changes: ["step"],
       run: (s) =>
         s.step === 0
           ? set({})
           : set({ step: 0 }, { signal: PlaneSignal.Stepped, payload: { step: 0 } }),
     }),
   },
+  signals: { [PlaneSignal.Stepped]: { describe: "The derivation moved to `step`" } },
+  observe: (s: ProofState) =>
+    s.proof
+      ? {
+          elements: [
+            {
+              id: PlanePart.Steps,
+              value: s.step,
+              words: (PROOF_STEPS[s.step] as Words).en,
+              // The step bar: Next until the last step, Back and Again after the first.
+              does: [
+                ...(s.step < PROOF_STEPS.length - 1 ? [PlaneAction.Next] : []),
+                ...(s.step > 0 ? [PlaneAction.Back, PlaneAction.Again] : []),
+              ],
+            },
+          ],
+          summary: `the derivation at step ${s.step + 1} of ${PROOF_STEPS.length}`,
+        }
+      : { elements: [] },
+});
+
+export const coordinatePlane = defineHost({
+  type: "coordinatePlane",
+  describe:
+    "Graph paper with the x- and y-axes, the origin O and up to four named points, for NCERT Class 10 Ch 7 (7.1 and 7.2). The lesson chooses which points the learner can drag; they snap to the grid and can also be moved with the arrow keys. The picture can write each point's coordinates, join the points (a segment PQ, a closed shape or an open path) and write each joined side's length as a surd (√8 = 2√2). For the distance formula it draws the right triangle PTQ under the first two points (T level with P and directly below or above Q, so PT = |x₂ − x₁| and QT = |y₂ − y₁|) and writes PQ² = (x₂ − x₁)² + (y₂ − y₁)² worked out with their numbers. With `proof` on, the learner taps Next through the textbook's derivation: PR and QS perpendicular to the x-axis, PT perpendicular to QS, PT and QT from the coordinates, then Pythagoras.",
+  frame: FrameKind.Plane,
+  core: planeCore,
+  layers: [points, joins, rightTriangle, working, proof],
+  window: windowOf,
+  pixels: planePixels,
 });

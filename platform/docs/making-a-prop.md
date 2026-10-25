@@ -2,6 +2,19 @@
 
 How to add a prop, step by step. Written so a person or an AI agent can follow it without help. Read [board-model.md](board-model.md) first; the conventions are in [code-conventions.md](code-conventions.md).
 
+## 0. Build from what exists first
+
+Before writing a new prop, check whether it is:
+
+- **one more feature on a prop that exists** (a number line, graph paper): write a **layer** for that host;
+- **existing props side by side**, joined by a law (a stepper, a line of maths and a plane showing one polynomial): write a **composite**;
+- **truly new**: a prop of its own, as below. Draw its parts with the blocks (`@chalk/prop-blocks`: `plane`, `stepper`, `mathLine`, `iconButton`) where they fit.
+
+Hosts, layers and composites are explained in plain words in the project doc `plans/props-system.md`. Code: `platform/packages/prop/src/compose.ts`. Examples: `library/props/number-line` (a host: `axis.ts` is the core, `layers.ts` the layers, `view-layers.tsx` their drawing), `library/props/coordinates/src/coordinate-plane.ts` (layers on the blocks' plane), `library/props/polynomials/src/value-machine.ts` (a composite).
+
+- **A layer** owns its fields (no two parts of a host may define one field), says which other layers it `needs` and which it `excludes` (a board turning both on is refused at build), and is on when it shows something. Its drawing tags every part with `data-part`.
+- **A composite** owns the state and the laws. Each child is drawn from it (`childrenFor<S>()`: `kid(stepper, (s) => ({ value: s.input }), { change: (s, a) => [Put, { x: a.to }] })`); what the learner does to a child becomes one of the parent's actions, and anything not routed does nothing. Its view is `compositeView(def, { child: View, … })`. Children's ids sit under their names: `plane › handle`.
+
 ## 1. Write the contract before any code
 
 Write the prop's `README.md` first. It answers:
@@ -11,7 +24,7 @@ Write the prop's `README.md` first. It answers:
 - **Derived state:** what follows from the stored state by the prop's laws (a bulb's brightness, the fraction of heads).
 - **Actions:** every way the state can change. For each: what it changes, what it keeps fixed, and whether it reveals an answer. If a lesson will ask the inverse question ("where must the object be for the image to be here?"), give that its own named action.
 - **Signals:** what the prop announces (pressed, landed, switched). Mark a signal a commit only if it is the learner deciding something that should be logged; most are not.
-- **Observation:** what the student sees right now, as `observe` will report it: a one-line summary, each visible element with its id and value, and under `hidden` what the prop knows but the screen doesn't show (see [board-model.md](board-model.md#the-observation)). Element ids are what `point` takes.
+- **Observation:** what the student sees right now, as `observe` will report it: a one-line summary, each visible element with its id, its value **typed** (a number as a number, a point as `{ x, y }`), the `words` the screen writes when that isn't just the value printed ("1.40"), and for a control the action(s) it `does`; under `hidden`, what the prop knows but the screen doesn't show (see [board-model.md](board-model.md#the-observation)). Element ids are what `point`, steps and comments take, and each is the `data-part` of what draws it: drawn must equal described (render_board reports any gap).
 - **What a learner can do with a finger:** each of these is just one of the actions above, marked `byLearner: true` in the model (the test bench's simulated students use exactly these).
 
 Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`.
@@ -32,7 +45,7 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 - `state`: a strict zod object; `defaults` for every field.
 - `derived`: pure functions of stored state.
-- `actions` via `actionsFor<S>()`: `set(patch, ...signals)` for an instant change, `tween(seconds, to)` to glide, `task(async (c) => …)` for anything that takes steps.
+- `actions` via `actionsFor<S>()`: `set(patch, ...signals)` for an instant change, `tween(seconds, to)` to glide, `task(async (c) => …)` for anything that takes steps. Each lists the fields it `changes`: the runtime refuses any other, and the board model uses it to tell setup (fixed where placed) from live (changes on this board).
 - Name actions, signals and derived fields once, in `as const` maps exported with the prop (`NumberLineAction`, `NumberLineSignal`, `NumberLineDerived`), and key the definition with them (`[NumberLineAction.MoveMarker]: act({ … })`). Views, lessons and content use the maps, never the strings.
 - `isExplainer: false` for props that don't explain anything (words, buttons, questions, timers), so Jugnu isn't offered them.
 - `invariant` for rules across fields the schema can't say.

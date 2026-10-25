@@ -351,8 +351,16 @@ describe("what the student sees (the observation)", () => {
       expect.arrayContaining(["tick:1.4", "marker", "mark:√2", "split", "splitPoint:1", "zoomIn"]),
     );
     expect(valueAt(s, "mark:√2")).toBe(1.41);
-    expect(valueAt(s, "splitPoint:1")).toBe("cut 1");
-    expect(valueAt(s, "split")).toBe("1 to 2 in 4 equal parts");
+    // Values are typed; the screen's words come with them.
+    expect(valueAt(s, "splitPoint:1")).toBe(1);
+    expect(valueAt(s, "split")).toEqual({ from: 1, to: 2, parts: 4 });
+    expect(seen(s).elements.find((e) => e.id === "split")?.words).toBe("1 to 2 in 4 equal parts");
+    expect(seen(s).elements.find((e) => e.id === "tick:1.4")).toEqual({
+      id: "tick:1.4",
+      value: 1.4,
+      words: "1.4",
+    });
+    expect(seen(s).elements.find((e) => e.id === "marker")?.does).toBe("moveMarker");
     // Where the cuts fall isn't written on screen: hidden, not an element's value.
     expect(seen(s).hidden).toEqual({ splitPoints: [1, 1.25, 1.5, 1.75, 2] });
     expect(got).not.toContain("between");
@@ -360,7 +368,7 @@ describe("what the student sees (the observation)", () => {
 
   it("every element it names can be found on screen", () => {
     // Buttons are found by their data-part tag in the view; everything else by locate.
-    const buttons = new Set(["zoomIn", "zoomOut", "splitStepper"]);
+    const buttons = new Set(["zoomIn", "zoomOut", "splitStepper", "dots"]);
     const s = { ...start, from: 1, to: 2, showMarker: true, marker: 1.4, isZoomable: true };
     for (const id of ids(s)) {
       if (buttons.has(id)) continue;

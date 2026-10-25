@@ -23,6 +23,20 @@ export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource } from "./narration";
 export type { PropModule, PropRegistry, PropViewProps } from "./prop-module";
+export { compositeView } from "./composite-view";
+export { partPaths, partPathsIn } from "./part-paths";
+export {
+  type BoardModel,
+  type ElementModel,
+  type PieceModel,
+  boardModel,
+  fieldsRead,
+  pieceModel,
+  runningBoards,
+  takes,
+  trackBoard,
+} from "./board-model";
+export { stampCodePaths } from "./code-paths";
 export { type PropPack, lazyRegistry } from "./lazy-views";
 export { propRecords } from "./records";
 export {

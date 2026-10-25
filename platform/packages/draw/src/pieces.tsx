@@ -16,7 +16,8 @@ import { toPixels, useSpace } from "./stage";
 const colorStyle = (color: string | undefined): JSX.CSSProperties | undefined =>
   color === undefined ? undefined : { "--piece-color": cssColor(color) };
 
-export type Tick = { value: number; label?: string; class?: string };
+/** `part`: the name it is pointed at by (data-part), when it can be. */
+export type Tick = { value: number; label?: string; class?: string; part?: string };
 
 export type AxisProps = {
   /** Where the axis runs, in px from the top (a one-dimensional stage) or in the stage's y units. */
@@ -33,7 +34,13 @@ function sameTicks(a: readonly Tick[], b: readonly Tick[]): boolean {
     a.length === b.length &&
     a.every((t, i) => {
       const u = b[i];
-      return u !== undefined && t.value === u.value && t.label === u.label && t.class === u.class;
+      return (
+        u !== undefined &&
+        t.value === u.value &&
+        t.label === u.label &&
+        t.class === u.class &&
+        t.part === u.part
+      );
     })
   );
 }
@@ -57,6 +64,7 @@ export const Axis = memo(
           <g
             key={tick.value}
             class={tick.class === undefined ? "draw-tick" : `draw-tick ${tick.class}`}
+            data-part={tick.part}
             transform={`translate(${space.x(tick.value)} ${py})`}
           >
             <line y1={-9} y2={9} />
@@ -109,6 +117,8 @@ export type MarkProps = {
   /** Where the label's centre goes, px, when it must be nudged to stay on the stage. */
   labelX?: number;
   color?: string;
+  /** The name it is pointed at by (data-part). */
+  part?: string;
 };
 
 /** A labelled point on a line: a dot, a stem and the label above it. */
@@ -119,12 +129,18 @@ export const Mark = memo(function Mark({
   row = 0,
   labelX,
   color,
+  part,
 }: MarkProps): JSX.Element {
   const space = useSpace();
   const [px, py] = toPixels(space, at, y);
   const labelY = -26 - row * 22;
   return (
-    <g class="draw-mark" transform={`translate(${px} ${py})`} style={colorStyle(color)}>
+    <g
+      class="draw-mark"
+      data-part={part}
+      transform={`translate(${px} ${py})`}
+      style={colorStyle(color)}
+    >
       <line y1={labelY + 5} y2={0} />
       <circle r={6} />
       <text x={labelX === undefined ? 0 : labelX - px} y={labelY} text-anchor="middle">

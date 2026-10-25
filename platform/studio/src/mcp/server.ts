@@ -7,6 +7,7 @@ import { boardName, listBoards, readSources } from "../boards";
 import { type Filed, Kind, Status, latestReview, unanswered } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
+import { pieceSchema } from "./model-schema";
 import { closeBrowser, previewBase, previewUrl, shoot } from "./preview";
 import { type Content, type Extra, createServer, progressOf, result, serveStdio } from "./protocol";
 
@@ -242,6 +243,50 @@ function propsReaching(file: string): Set<string> {
   return out;
 }
 
+/**
+ * Where each of a prop's actions is written (file:line), from its package's source: the line that
+ * keys it (`[NumberLineAction.ZoomIn]: on…(`, or `zoomIn: act(`), among the files its definition
+ * reaches. An action written in more than one of them is left out: exact, or nothing.
+ */
+const actionSitesCache = new Map<string, Map<string, string>>();
+function actionSites(type: string): Map<string, string> {
+  const cached = actionSitesCache.get(type);
+  if (cached !== undefined) return cached;
+  const out = new Map<string, string>();
+  actionSitesCache.set(type, out);
+  const pkg = packageOfType(type);
+  if (pkg === undefined) return out;
+  const src = join(root, pkg, "src");
+  if (!existsSync(src)) return out;
+  const files = readdirSync(src)
+    .filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))
+    .map((n) => join(src, n));
+  const defFile = files.find((f) =>
+    new RegExp(`\\btype:\\s*"${type}"`).test(readFileSync(f, "utf8")),
+  );
+  if (defFile === undefined) return out;
+  const reach = closureIn(src, defFile);
+  // Name maps (`export const XAction = { ZoomIn: "zoomIn" }`) in the package, to read keys.
+  const names = new Map<string, string>();
+  for (const f of files)
+    for (const m of readFileSync(f, "utf8").matchAll(/export const (\w+) = \{([^}]*)\}/g))
+      for (const e of (m[2] ?? "").matchAll(/(\w+):\s*"([^"]+)"/g))
+        names.set(`${m[1]}.${e[1]}`, e[2] ?? "");
+  const found = new Map<string, string[]>();
+  for (const f of reach) {
+    readFileSync(f, "utf8")
+      .split("\n")
+      .forEach((line, i) => {
+        const m = /^\s*(?:\[(\w+\.\w+)\]|(\w+)):\s*(?:act|on\w*)\(\{?\s*$/.exec(line);
+        const action = m === null ? undefined : m[1] !== undefined ? names.get(m[1]) : m[2];
+        if (action !== undefined)
+          found.set(action, [...(found.get(action) ?? []), `${relative(root, f)}:${i + 1}`]);
+      });
+  }
+  for (const [action, sites] of found) if (sites.length === 1) out.set(action, sites[0] as string);
+  return out;
+}
+
 type Place = { board: string; piece: string; type: string; site?: string };
 
 /** A board's lesson: "value-and-zeroes", or "questions/count-zeroes" for a question family. */
@@ -366,12 +411,85 @@ const step = z.union([
   z.object({ wait: z.number().int().min(0).max(10000).describe("Milliseconds.") }).strict(),
 ]);
 
+const renderOutput = {
+  boards: z.array(
+    z.object({
+      board: z.string(),
+      source: z.string().optional(),
+      isPassed: z.boolean().optional(),
+      isQuestionOpen: z.boolean().optional(),
+      pieces: z.array(pieceSchema),
+      layoutProblems: z.array(z.string()),
+      pageErrors: z.array(z.string()),
+    }),
+  ),
+  steps: z.array(
+    z.object({
+      step: z.string(),
+      passed: z.boolean(),
+      events: z.array(z.string()),
+      changed: z.record(z.object({ was: z.unknown(), now: z.unknown() })),
+      errors: z.array(z.string()),
+    }),
+  ),
+  openAt: z.string(),
+};
+
+/** A value in a line of text: short JSON, words in English only. */
+const brief = (v: unknown) => {
+  const english = (x: unknown): unknown =>
+    Array.isArray(x)
+      ? x.map(english)
+      : x !== null && typeof x === "object"
+        ? "en" in x && typeof (x as { en: unknown }).en === "string"
+          ? (x as { en: string }).en
+          : Object.fromEntries(Object.entries(x).map(([k, y]) => [k, english(y)]))
+        : x;
+  const t = JSON.stringify(english(v));
+  return t === undefined ? "—" : t.length > 120 ? `${t.slice(0, 117)}…` : t;
+};
+
+/** The model of one board, as readable lines (the structured result has all of it). */
+function modelText(pieces: z.infer<typeof pieceSchema>[]): string[] {
+  const out: string[] = [];
+  for (const p of pieces) {
+    out.push(
+      `${p.name} (${p.prop}${p.layers?.length ? ` + ${p.layers.join(", ")}` : ""})${p.source ? ` → ${p.source}` : ""}${p.isShown ? "" : " [hidden]"}`,
+      `  ${p.summary}`,
+    );
+    if (p.children?.length)
+      out.push(`  children: ${p.children.map((c) => `${c.name} (${c.prop})`).join(", ")}`);
+    const fields = (r: Record<string, unknown>) =>
+      Object.entries(r)
+        .map(([k, v]) => `${k} ${brief(v)}`)
+        .join(" · ");
+    if (Object.keys(p.setup).length > 0) out.push(`  setup: ${fields(p.setup)}`);
+    if (Object.keys(p.live).length > 0) out.push(`  live: ${fields(p.live)}`);
+    // A prop without its own description lists its fields as elements: already shown above.
+    const isFieldsOnly = p.elements.every(
+      (e) => e.id in p.setup || e.id in p.live || e.id === "canCheck",
+    );
+    for (const e of isFieldsOnly ? [] : p.elements)
+      out.push(
+        `  • ${e.id}${e.value !== undefined ? ` = ${brief(e.value)}` : ""}${e.words !== undefined ? ` “${e.words}”` : ""}${e.does !== undefined ? ` → ${[e.does].flat().join(", ")}` : ""}${e.drawnAt ? `  (${e.drawnAt})` : ""}`,
+      );
+    for (const c of p.studentCan)
+      out.push(
+        `  can: ${c.action} ${brief(c.takes)} via ${c.via.join(", ")}${c.codeAt ? `  (${c.codeAt})` : ""}`,
+      );
+    if (p.noControlNow?.length) out.push(`  no control now: ${p.noControlNow.join(", ")}`);
+    if (p.hidden !== undefined) out.push(`  hidden: ${brief(p.hidden)}`);
+    for (const problem of p.problems) out.push(`  ⚠ ${problem}`);
+  }
+  return out;
+}
+
 server.registerTool(
   "render_board",
   {
     title: "See (and use) boards",
     description:
-      "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (build path without .json, e.g. class10-maths/real-numbers/division-lemma/overview/story) or a lesson for all its pages. Returns a PNG per board, where each piece was written (file:line), each piece's parts (what steps can name), layout problems found by measuring (maths past the edge, text out of a button, overlaps), and page errors. With `steps` (one board): taps and drags on the real page, in order, starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the events the app raised and whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
+      "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (build path without .json, e.g. class10-maths/real-numbers/division-lemma/overview/story) or a lesson for all its pages. Returns a PNG per board and the board model (structured): every piece with where it's placed (file:line), its layers or children, setup (fixed where placed) and live values (what can change here), each thing on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what the student can do (with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are the element ids: piece › id, e.g. machine › plane › handle), starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the live values that changed, the events the app raised, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
     inputSchema: {
       board: z.string().min(1).describe("A board (build path without .json) or a lesson."),
       steps: z.array(step).max(40).optional().describe("What a finger does, in order."),
@@ -396,6 +514,7 @@ server.registerTool(
         .optional()
         .describe("Rebuild content first if it changed (default true)."),
     },
+    outputSchema: renderOutput,
     // Rebuilding writes build/, which is generated: nothing the person wrote changes.
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
@@ -437,38 +556,76 @@ server.registerTool(
       data: png.toString("base64"),
       mimeType: "image/png",
     });
-    for (const s of drawn.shots.slice(0, 10)) {
+    const boards: z.infer<typeof renderOutput.boards> = [];
+    for (const s of drawn.shots) {
       const where = sources[`${s.board}.json`];
-      const pieces = where
-        ? Object.entries(where.pieces)
-            .map(
-              ([p, site]) =>
-                `${p} → ${site}${s.parts[p] ? `  parts: ${s.parts[p].join(", ")}` : ""}`,
-            )
-            .join("\n")
-        : "(no sources: run pnpm build-content)";
+      const pieces = (s.model?.pieces ?? []).map((p) => {
+        const sites = actionSites(p.prop);
+        return {
+          ...p,
+          elements: p.elements.map((e) =>
+            Array.isArray(e.does)
+              ? { ...e, does: [...e.does] }
+              : (e as typeof e & { does?: string }),
+          ),
+          ...(where?.pieces[p.name] !== undefined ? { source: where.pieces[p.name] } : {}),
+          studentCan: p.studentCan.map((c) =>
+            sites.has(c.action) ? { ...c, codeAt: sites.get(c.action) } : c,
+          ),
+        };
+      });
+      boards.push({
+        board: s.board,
+        ...(where?.board !== undefined ? { source: where.board } : {}),
+        ...(s.model !== undefined
+          ? { isPassed: s.model.isPassed, isQuestionOpen: s.model.isQuestionOpen }
+          : {}),
+        pieces,
+        layoutProblems: s.overflow,
+        pageErrors: s.errors,
+      });
+    }
+    for (const [i, b] of boards.entries()) {
+      if (i >= 10) break;
       out.push(
         text(
           [
-            `## ${s.board}`,
-            `board → ${where?.board ?? "?"}`,
-            pieces,
-            s.overflow.length > 0
-              ? `Layout problems:\n${s.overflow.join("\n")}`
+            `## ${b.board}`,
+            `board → ${b.source ?? "?"}`,
+            ...(b.pieces.length > 0
+              ? modelText(b.pieces)
+              : ["(no board model: is the dev preview up to date?)"]),
+            b.layoutProblems.length > 0
+              ? `Layout problems:\n${b.layoutProblems.join("\n")}`
               : "Layout problems: none",
-            ...(s.errors.length > 0 ? [`Page errors:\n${s.errors.join("\n")}`] : []),
+            ...(b.pageErrors.length > 0 ? [`Page errors:\n${b.pageErrors.join("\n")}`] : []),
           ].join("\n"),
         ),
       );
-      if (s.png.length > 0) out.push(image(s.png));
+      const png = drawn.shots[i]?.png;
+      if (png !== undefined && png.length > 0) out.push(image(png));
     }
+    const stepsDone = drawn.steps.map((r) => ({
+      step: r.step,
+      passed: r.passed,
+      events: r.events,
+      changed: r.changed ?? {},
+      errors: r.errors,
+    }));
     for (const [i, r] of drawn.steps.entries()) {
       out.push(
         text(
           [
             `${i + 1}. ${r.step}${r.passed ? "  ✓ board passed" : ""}`,
+            ...Object.entries(r.changed ?? {}).map(
+              ([k, v]) => `   ${k}: ${brief(v.was)} → ${brief(v.now)}`,
+            ),
             ...r.events.map((e) => `   event: ${e}`),
-            ...(r.events.length === 0 && r.errors.length === 0 ? ["   (no event)"] : []),
+            ...(r.events.length === 0 &&
+            Object.keys(r.changed ?? {}).length === 0 &&
+            r.errors.length === 0
+              ? ["   (nothing changed)"]
+              : []),
             ...r.errors.map((e) => `   ${e}`),
           ].join("\n"),
         ),
@@ -477,8 +634,12 @@ server.registerTool(
     }
     if (drawn.shots.length > 10)
       notes.push(`${drawn.shots.length - 10} more boards not shown; render them one by one.`);
-    notes.push(`Open it yourself: ${await previewUrl(root, board, options)}`);
-    return result([...out, text(notes.join("\n"))]);
+    const openAt = await previewUrl(root, board, options);
+    notes.push(`Open it yourself: ${openAt}`);
+    return {
+      content: [...out, text(notes.join("\n"))],
+      structuredContent: { boards, steps: stepsDone, openAt },
+    };
   },
 );
 

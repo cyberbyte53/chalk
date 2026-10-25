@@ -33,6 +33,8 @@ observe: (view) => ({
 })
 ```
 
+Values are typed (`1.4`, `{ x: 2, y: 3 }`), with `words` for how the screen writes them when that differs ("1.40"; Jugnu reads the words), and a control says which action(s) it `does`. The chalk MCP's `render_board` returns the whole board this way (`platform/packages/player/src/board-model.ts`): each piece's setup and live fields, its elements with where each is drawn (file:line), and what the student can do.
+
 Two rules make it trustworthy, and a test per prop checks both:
 
 1. **Faithful.** Every element is something the view draws right now, with the value it shows. Nothing stale: a hidden dot has no element, a marker outside the window has no element, a wire with no meter has no reading. What the prop knows but the screen doesn't show goes under `hidden`, labelled, so he can keep it to himself (the answer key) or leave it (a wire's current).

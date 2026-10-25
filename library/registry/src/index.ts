@@ -3,6 +3,7 @@ import { type AnyPropDef, BOARD, asAnyProp, boardProp } from "@chalk/prop";
 import { defs as apDefs } from "@chalk/prop-ap/defs";
 import { basicProps } from "@chalk/prop-basics";
 import { defs as basicsDefs } from "@chalk/prop-basics/defs";
+import { defs as blocksDefs } from "@chalk/prop-blocks/defs";
 import { defs as carbonDefs } from "@chalk/prop-carbon/defs";
 import { defs as chanceDefs } from "@chalk/prop-chance/defs";
 import { defs as chemistryDefs } from "@chalk/prop-chemistry/defs";
@@ -46,6 +47,7 @@ import { defs as trigonometryDefs } from "@chalk/prop-trigonometry/defs";
  * one line here, its `defs.ts`, and its styles.
  */
 const packs: readonly (PropPack & { name: string })[] = [
+  { name: "blocks", defs: blocksDefs, load: () => import("@chalk/prop-blocks") },
   { name: "coordinates", defs: coordinatesDefs, load: () => import("@chalk/prop-coordinates") },
   { name: "solids", defs: solidsDefs, load: () => import("@chalk/prop-solids") },
   { name: "data", defs: dataDefs, load: () => import("@chalk/prop-data") },

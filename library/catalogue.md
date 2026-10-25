@@ -28,6 +28,17 @@ The props every lesson uses.
 | `button` *(not an explainer)* | A button. Pressing it raises `pressed`; the lesson's rules decide what it does. | `press` | class9-maths/number-systems |
 | `timer` *(not an explainer)* | A timer that raises `tick` every so often, for things that repeat (toss, sample, step). | — | — |
 
+## `blocks` — `@chalk/prop-blocks`
+
+Small props other props are built from, and usable on a board alone:
+
+| Prop | Shows | Learner can | Used in |
+|---|---|---|---|
+| `plane` | Graph paper: a window on the plane with grid lines, the axes and O. It can show unnamed dots, a handle on the x-axis the learner drags, and a dashed drop line from the x-axis to a point. | `moveHandle`, `putHandle` | — |
+| `stepper` *(not an explainer)* | − value +: a named number the learner nudges by `step`, between `min` and `max`. | `change` | — |
+| `mathLine` *(not an explainer)* | One line of typeset maths (an equation, a working). | — | — |
+| `iconButton` *(not an explainer)* | A round button with a symbol (↺, ×) and no words. Pressing it raises `pressed`. | `press` | — |
+
 ## `carbon` — `@chalk/prop-carbon`
 
 | Prop | Shows | Learner can | Used in |
@@ -287,7 +298,7 @@ A number line you can magnify, mark and cut into equal parts, with a draggable m
 
 | Prop | Shows | Learner can | Used in |
 |---|---|---|---|
-| `numberLine` | A number line showing the window from `from` to `to`. It can show labelled points (marks), a stretch cut into equal parts (split), and a draggable marker. Magnifying picks the tenth of the window that holds a number and zooms into it, one decimal place per step (successive magnification). | `moveMarker`, `zoomIn`, `zoomOut`, `changeParts`, `panTo` | class9-maths/number-systems |
+| `numberLine` | A number line showing the window from `from` to `to`. It can show labelled points (marks), a stretch cut into equal parts (split), and a draggable marker. Magnifying picks the tenth of the window that holds a number and zooms into it, one decimal place per step (successive magnification). | `moveMarker`, `changeParts`, `zoomIn`, `zoomOut`, `panTo` | class9-maths/number-systems |
 
 ## `number-sets` — `@chalk/prop-number-sets`
 

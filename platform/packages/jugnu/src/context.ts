@@ -39,6 +39,15 @@ How you help:
 9. Always reply in ${LANGUAGE[locale]}.`;
 }
 
+/** An element as Jugnu reads it: as the screen writes it (a tick's "1.40"), else its value. */
+export function shown(
+  element: { value?: unknown; words?: string },
+  locale: JugnuPlace["locale"],
+): unknown {
+  if (element.words !== undefined) return element.words;
+  return element.value === undefined ? true : readable(element.value, locale);
+}
+
 /** Floats as a person would read them (1.9881, not 1.9880999999999998), and one language. */
 export function readable(value: unknown, locale: JugnuPlace["locale"]): unknown {
   if (typeof value === "number")
@@ -120,8 +129,7 @@ export function propNow(board: JugnuBoard, name: string, locale: JugnuPlace["loc
   const def = board.getDef(name);
   const seen = observationOf(def, board.getStored(name));
   const elements: Record<string, unknown> = {};
-  for (const element of seen.elements)
-    elements[element.id] = element.value === undefined ? true : readable(element.value, locale);
+  for (const element of seen.elements) elements[element.id] = shown(element, locale);
   if (def.role === PropRole.Question) withoutNotes(elements);
   return {
     ...(board.isHidden(name) ? { isShown: false } : {}),

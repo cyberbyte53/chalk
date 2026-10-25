@@ -15,6 +15,7 @@
     "@chalk/content": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
+    "@chalk/prop-blocks": "workspace:*",
     "fraction.js": "5.3.4",
     "mafs": "0.21.0",
     "preact": "10.29.8",

@@ -3,6 +3,7 @@ import type { Spoken } from "@chalk/prop";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
 import "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { trackBoard } from "./board-model";
 import type { PropRegistry } from "./prop-module";
 import { BoardRuntime } from "./runtime";
 
@@ -30,7 +31,11 @@ export function useBoardRuntime(board: Board, registry: PropRegistry, speak: Spe
   );
   useEffect(() => {
     runtime.start();
-    return () => runtime.dispose();
+    const untrack = trackBoard(runtime);
+    return () => {
+      untrack();
+      runtime.dispose();
+    };
   }, [runtime]);
   return runtime;
 }

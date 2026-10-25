@@ -367,12 +367,25 @@ export class BoardRuntime {
     }
     notify();
     const effect = prepared.effect;
+    // An action changes only the fields it says it changes: anything else is refused here.
+    const allowed = instance.def.actions[action]?.changes;
+    const outside = (patch: Readonly<Record<string, unknown>>) =>
+      allowed === undefined ? [] : Object.keys(patch).filter((key) => !allowed.includes(key));
+    // A prop bug, whoever acted: always reported.
+    const refuse = (keys: string[]) => {
+      this.services.onError(
+        `Board ${this.board.name}: ${name}.${action} changed ${keys.join(", ")}, outside what it declares (changes)`,
+      );
+      return Promise.resolve();
+    };
     switch (effect.kind) {
       case EffectKind.Set:
+        if (outside(effect.set).length > 0) return refuse(outside(effect.set));
         this.change(instance, effect.set, actor);
         for (const emit of effect.emit) this.emitFrom(name, emit, actor);
         return Promise.resolve();
       case EffectKind.Tween:
+        if (outside(effect.to).length > 0) return refuse(outside(effect.to));
         return this.runTween(instance, effect.duration, effect.to, actor);
       case EffectKind.Task: {
         const spoken = instance.def.speech?.(instance.stored.peek());
@@ -383,7 +396,10 @@ export class BoardRuntime {
                 ? Promise.resolve()
                 : this.services.speak({ name, id: instance.id }, spoken),
             wait: (seconds) => this.clock.wait(seconds),
-            set: (patch) => this.change(instance, patch, actor),
+            set: (patch) => {
+              if (outside(patch).length > 0) void refuse(outside(patch));
+              else this.change(instance, patch, actor);
+            },
             get: () => instance.stored.peek(),
             emit: (signal, payload) => this.emitFrom(name, { signal, payload }, actor),
           })

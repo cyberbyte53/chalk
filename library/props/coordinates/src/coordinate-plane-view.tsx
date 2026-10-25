@@ -1,5 +1,5 @@
-import { Stage } from "@chalk/draw";
 import { type PropViewProps, RichText } from "@chalk/player";
+import { PlaneStage } from "@chalk/prop-blocks";
 import {
   DragHandle,
   type LabelItem,
@@ -26,7 +26,6 @@ import {
   sidesOf,
   workingOf,
 } from "./coordinate-plane";
-import { Grid, planeFrame } from "./grid";
 import { coordText, dist2, pairText, ptOf, sqrtText } from "./plane";
 
 export const PLANE_WORDS = {
@@ -36,7 +35,6 @@ export const PLANE_WORDS = {
 
 export function CoordinatePlaneView({ view, width, call, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as PlaneState;
-  const { frame, height } = planeFrame(s.window, width);
   const pts: Pt[] = s.points.map(ptOf);
   const names = s.points.map((p) => p.name);
   const P = pts[0] as Pt;
@@ -103,17 +101,12 @@ export function CoordinatePlaneView({ view, width, call, locale }: PropViewProps
   const pqName = `${names[0] ?? ""}${names[1] ?? ""}`;
   return (
     <div class="co co-plane">
-      <Stage
-        label={`Graph paper with ${s.points.map((p, i) => `${p.name}${pairText(pts[i] as Pt)}`).join(", ")}${s.points.length >= 2 ? `; ${pqName} = ${sqrtText(d2Of(s))}` : ""}`}
-        x={frame.x}
-        y={frame.y}
+      <PlaneStage
+        s={s}
         width={width}
-        height={height}
+        label={`Graph paper with ${s.points.map((p, i) => `${p.name}${pairText(pts[i] as Pt)}`).join(", ")}${s.points.length >= 2 ? `; ${pqName} = ${sqrtText(d2Of(s))}` : ""}`}
         svg={{ class: "co-svg" }}
       >
-        <g data-part={PlanePart.Plane}>
-          <Grid win={s.window} quadrants={s.showQuadrants} />
-        </g>
         {showFeet && (
           <g>
             <Seg from={P} to={R} tone="construction" dashed />
@@ -132,22 +125,27 @@ export function CoordinatePlaneView({ view, width, call, locale }: PropViewProps
           </g>
         )}
         {segs.map(([a, b], i) => (
-          <Seg
+          <g
             // biome-ignore lint/suspicious/noArrayIndexKey: sides in order
             key={i}
-            from={a}
-            to={b}
-            tone={s.join === PlaneJoin.Segment || (tri && i === 0) ? "result" : "main"}
-          />
+            data-part={`${PlanePart.SidePrefix}${names[sides[i]?.[0] ?? 0]}${names[sides[i]?.[1] ?? 0]}`}
+          >
+            <Seg
+              from={a}
+              to={b}
+              tone={s.join === PlaneJoin.Segment || (tri && i === 0) ? "result" : "main"}
+            />
+          </g>
         ))}
-        <g data-part={PlanePart.Points}>
+        <g>
           {pts.map((p, i) => (
-            <PointDot
+            <g
               // biome-ignore lint/suspicious/noArrayIndexKey: points in order
               key={i}
-              at={p}
-              tone={s.movable.includes(i) ? "accent" : "main"}
-            />
+              data-part={`${PlanePart.PointPrefix}${names[i]}`}
+            >
+              <PointDot at={p} tone={s.movable.includes(i) ? "accent" : "main"} />
+            </g>
           ))}
         </g>
         <Labels items={labels} segments={segs} />
@@ -158,7 +156,7 @@ export function CoordinatePlaneView({ view, width, call, locale }: PropViewProps
               key={i}
               at={pts[i] as Pt}
               label={`${say(locale, PLANE_WORDS.move)} ${p.name}: ${pairText(pts[i] as Pt)}`}
-              part={`${PlanePart.Points}-${i}`}
+              part={`${PlanePart.PointPrefix}${p.name}`}
               onMove={(to) =>
                 call(PlaneAction.SetPoint, { i, x: to[0], y: to[1], isSnapped: true })
               }
@@ -168,7 +166,7 @@ export function CoordinatePlaneView({ view, width, call, locale }: PropViewProps
             />
           ) : null,
         )}
-      </Stage>
+      </PlaneStage>
       {caption !== null && (
         <div class="co-caption" data-part={PlanePart.Steps} aria-live="polite">
           <p>{say(locale, caption)}</p>
@@ -192,7 +190,9 @@ export function CoordinatePlaneView({ view, width, call, locale }: PropViewProps
         </div>
       )}
       {s.points.length >= 3 && s.join !== PlaneJoin.None && s.showLengths && isCollinear && (
-        <p class="co-verdict is-on">{say(locale, PLANE_WORDS.collinear)}</p>
+        <p class="co-verdict is-on" data-part={PlanePart.Collinear}>
+          {say(locale, PLANE_WORDS.collinear)}
+        </p>
       )}
     </div>
   );

@@ -9,7 +9,7 @@ import {
 } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
-import { BoardPlayer } from "@chalk/player";
+import { BoardPlayer, boardModel, runningBoards, stampCodePaths } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { CONTENT_ROUTE } from "./content-store";
@@ -845,6 +845,32 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
   useLayoutEffect(() => {
     document.body.dataset.previewShown = search;
   }, [search]);
+  // The board model of every board on the page, for the chalk MCP's render_board: made from the
+  // prop definitions and the running boards, with what's drawn and where each part's code is.
+  useEffect(() => {
+    stampCodePaths();
+    const w = window as Window & { __chalkModel?: () => unknown };
+    w.__chalkModel = () =>
+      runningBoards().flatMap((runtime) => {
+        const card = [...document.querySelectorAll<HTMLElement>(".preview-card[data-board]")].find(
+          (c) =>
+            (c.dataset.board ?? "").replace(/\.json$/, "").endsWith(`/${runtime.board.name}`) &&
+            runtime.propNames().every((n) => c.querySelector(`[data-piece="${CSS.escape(n)}"]`)),
+        );
+        if (card === undefined) return [];
+        return [
+          {
+            path: (card.dataset.board ?? "").replace(/\.json$/, ""),
+            model: boardModel(runtime, (piece) =>
+              card.querySelector(`[data-piece="${CSS.escape(piece)}"]`),
+            ),
+          },
+        ];
+      });
+    return () => {
+      w.__chalkModel = undefined;
+    };
+  }, []);
   // What the app did, for a tool acting on the board (the chalk MCP's render_board steps): every
   // event the bus carries, and each board passed. Kept on window, recent ones only.
   useEffect(() => {
