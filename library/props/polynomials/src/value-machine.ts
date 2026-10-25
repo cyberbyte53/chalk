@@ -166,27 +166,42 @@ export const valueMachine = defineGroup({
   },
   defaults: { clear: { symbol: "↺", label: "Clear the dots" } },
   is: {
-    "rule.tex": (s) => `${s.name}(${s.variable}) = ${polyTex(s.coefficients, s.variable)}`,
-    "stepper.name": (s) => s.variable,
-    "stepper.value": (s) => s.input ?? 0,
-    "stepper.shown": (s) => machineNumber(s.input ?? 0).text,
-    "stepper.step": (s) => s.step,
-    "stepper.min": (s) => s.min,
-    "stepper.max": (s) => s.max,
-    "substitution.tex": (s) =>
-      s.input === null ? "" : workingTex(s.coefficients, s.input, s.name, s.variable),
-    "substitution.isSplit": (s) => degreeOf(trim(s.coefficients)) >= 3,
-    "plane.paper.window": (s) => [s.window.xMin, s.window.xMax, s.window.yMin, s.window.yMax],
-    "plane.paper.isEqualUnits": () => false,
-    "plane.paper.axisNames": (s) => [s.variable, "y"],
-    "plane.dots.dots": (s) => dotsOf(s),
-    "plane.handle.x": (s) => s.input ?? 0,
-    "plane.handle.label": (s) => machineNumber(s.input ?? 0).text,
-    "plane.handle.step": (s) => s.step,
-    "plane.handle.name": (s) => s.variable,
-    "plane.guide.at": (s) =>
-      s.input === null ? null : { x: s.input, y: clean(valueAt(s.coefficients, s.input)) },
-    "clear.isEnabled": (s) => s.tried.length > 0,
+    rule: (s) => ({ tex: `${s.name}(${s.variable}) = ${polyTex(s.coefficients, s.variable)}` }),
+    stepper: (s) => ({
+      name: s.variable,
+      value: s.input ?? 0,
+      shown: machineNumber(s.input ?? 0).text,
+      step: s.step,
+      min: s.min,
+      max: s.max,
+    }),
+    substitution: (s) => ({
+      tex: s.input === null ? "" : workingTex(s.coefficients, s.input, s.name, s.variable),
+      isSplit: degreeOf(trim(s.coefficients)) >= 3,
+    }),
+    plane: (s) => ({
+      paper: {
+        window: [s.window.xMin, s.window.xMax, s.window.yMin, s.window.yMax] as [
+          number,
+          number,
+          number,
+          number,
+        ],
+        isEqualUnits: false,
+        axisNames: [s.variable, "y"] as [string, string],
+      },
+      dots: { dots: dotsOf(s) },
+      handle: {
+        x: s.input ?? 0,
+        label: machineNumber(s.input ?? 0).text,
+        step: s.step,
+        name: s.variable,
+      },
+      guide: {
+        at: s.input === null ? null : { x: s.input, y: clean(valueAt(s.coefficients, s.input)) },
+      },
+    }),
+    clear: (s) => ({ isEnabled: s.tried.length > 0 }),
   },
   route: {
     // x is the machine's: a nudge or a drag moves the machine's input, not the block's own copy.

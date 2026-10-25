@@ -7,7 +7,6 @@ import {
   asAnyProp,
   observationOf,
   prepareAction as prepareStored,
-  settleGroup,
   viewOf as viewOfStored,
 } from "@chalk/prop";
 import { h } from "preact";
@@ -76,13 +75,12 @@ const P = {
   FocalStepper: "focal › focalStepper",
   KindToggle: "kindToggle › kindToggle",
 } as const;
-// The mirror is a group: a state written by hand (its own fields changed) has its leaves made to
-// match before it is read or changed, as a placement would.
-const viewOf = (d: AnyPropDef, s: StoredState) => viewOfStored(d, settleGroup(d, s));
+// The mirror is a group that stores only facts: a state written by hand (its own fields changed)
+// is complete, and its leaves are worked out when read.
+const viewOf = (d: AnyPropDef, s: StoredState) => viewOfStored(d, s);
 const prepareAction = (d: AnyPropDef, s: StoredState, name: string, args: unknown) =>
-  prepareStored(d, settleGroup(d, s), name, args);
-const applyPatch = (d: AnyPropDef, s: StoredState, patch: StoredState) =>
-  applyStored(d, settleGroup(d, s), patch);
+  prepareStored(d, s, name, args);
+const applyPatch = (d: AnyPropDef, s: StoredState, patch: StoredState) => applyStored(d, s, patch);
 /** A concave mirror, f = 10: the object 30 cm in front, beyond C (NCERT Example 10.1 shape). */
 const concave: SphericalMirrorState = {
   ...(sphericalMirror.defaults as SphericalMirrorState),
@@ -100,7 +98,7 @@ const convex: SphericalMirrorState = {
 };
 
 function run(given: SphericalMirrorState, name: string, args: Record<string, unknown> = {}) {
-  const state = settleGroup(def, given);
+  const state = given;
   const result = prepareAction(def, state, name, args);
   if (!result.isOk) throw new Error(result.errors.join("; "));
   if (result.effect.kind !== EffectKind.Set) throw new Error(`${name} should be instant`);

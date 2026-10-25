@@ -1,4 +1,5 @@
 import { groupView } from "@chalk/player";
+import { shownOf } from "@chalk/prop";
 import {
   AxisPointsView,
   BenchView,
@@ -39,13 +40,14 @@ export const SphericalMirrorView = groupView(
     rayButtons: RayButtonsView,
   },
   {
+    theme: "sm",
     look: () => "sm-svg",
     below: (slot, view) => {
-      const v = view as { kindToggle: { isShown: boolean }; focal: { isShown: boolean } };
+      const shown = shownOf(view);
       return (
         <>
           {slot("readout")}
-          {(v.kindToggle.isShown || v.focal.isShown) && (
+          {(shown?.kindToggle || shown?.focal) && (
             <div class="sm-controls">
               {slot("kindToggle")}
               {slot("focal")}

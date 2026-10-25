@@ -7,7 +7,6 @@ import {
   asAnyProp,
   observationOf,
   prepareAction,
-  settleGroup,
   viewOf as viewOfStored,
 } from "@chalk/prop";
 import { h } from "preact";
@@ -45,15 +44,15 @@ import {
 import { LensView } from "./lens-view";
 
 const def = asAnyProp(lens);
-// The lens is a group: a state written by hand (its own fields changed) has its leaves made to
-// match before it is read, as a placement would.
-const viewOf = (d: AnyPropDef, s: StoredState) => viewOfStored(d, settleGroup(d, s));
+// The lens is a group that stores only facts: a state written by hand (its own fields changed)
+// is complete, and its leaves are worked out when read.
+const viewOf = (d: AnyPropDef, s: StoredState) => viewOfStored(d, s);
 const convex = lens.defaults as LensState;
 const concave: LensState = { ...convex, kind: LensKind.Concave };
 const at = (s: LensState, x: number, height = 4): LensState => ({ ...s, object: { x, height } });
 
 function run(given: LensState, name: string, args: Record<string, unknown> = {}) {
-  const state = settleGroup(def, given);
+  const state = given;
   const result = prepareAction(def, state, name, args);
   if (!result.isOk) throw new Error(result.errors.join("; "));
   if (result.effect.kind !== EffectKind.Set) throw new Error(`${name} should be instant`);

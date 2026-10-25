@@ -22,10 +22,9 @@ export function CurvedMirrorView({ view }: PropViewProps): JSX.Element | null {
 }
 
 /** The New Cartesian sign convention at P: +x right, −x left, +y up, −y down, light from the left. */
-export function SignConventionView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { isShown: boolean };
+export function SignConventionView(): JSX.Element | null {
   const frame = useFrame();
-  if (frame === null || !s.isShown) return null;
+  if (frame === null) return null;
   const [px, py] = frame.px.toPx(0, 0);
   const L = 52;
   const V = Math.min(46, frame.px.height / 2 - 26);
@@ -84,8 +83,7 @@ function MirrorIcon({ kind }: { kind: "concave" | "convex" }): JSX.Element {
 }
 
 export function KindToggleView({ view, call, locale }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { isShown: boolean; kind: "concave" | "convex" };
-  if (!s.isShown) return null;
+  const s = view as unknown as { kind: "concave" | "convex" };
   return (
     <fieldset class="sm-toggle" data-part="kindToggle" aria-label="mirror kind">
       {([MirrorFaceKind.Concave, MirrorFaceKind.Convex] as const).map((kind) => (

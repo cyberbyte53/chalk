@@ -11,13 +11,13 @@ import { z } from "zod";
  * (the image, each ray, what the screen catches) and binds it in; the leaves the learner moves
  * (object, screen, marker, buttons, stepper) are routed back to the instrument's own actions.
  *
- * `look` picks the instrument's classes ("ln" lens, "sm" mirror), so each keeps its exact
- * drawing while they share the code; one look for both is a later, visible decision.
+ * The look (the lens's "ln" classes, the mirror's "sm") is the group view's theme, never state, so
+ * each instrument keeps its exact drawing while they share the code. Whether a leaf is there right
+ * now is the group's `show` link, never a field of the leaf.
  */
 
 export const Look = { Lens: "ln", Mirror: "sm" } as const;
 export type Look = (typeof Look)[keyof typeof Look];
-const look = z.nativeEnum(Look);
 
 const cm = z.number().min(-1000).max(1000);
 const point = z.tuple([cm, cm]);
@@ -43,7 +43,6 @@ const benchState = z
     ticks: z.array(cm).max(200),
     /** What the picture shows, for a screen reader. */
     label: z.string().max(300),
-    look,
   })
   .strict();
 export type BenchState = z.infer<typeof benchState>;
@@ -86,7 +85,6 @@ export const bench = defineProp({
     pad: 8,
     ticks: [],
     label: "An optical bench",
-    look: Look.Lens,
   },
   actions: {},
   frame: { kind: "bench", pixels: benchPixels, label: (s) => s.label },
@@ -115,8 +113,8 @@ export const axisPoints = defineProp({
   type: "axisPoints",
   isExplainer: false,
   describe: "Named points on the principal axis: a dot each (O, F₁, F₂; P, F, C), named below it.",
-  state: z.object({ points: z.array(axisPoint).max(12), showNames: z.boolean(), look }).strict(),
-  defaults: { points: [], showNames: true, look: Look.Lens },
+  state: z.object({ points: z.array(axisPoint).max(12), showNames: z.boolean() }).strict(),
+  defaults: { points: [], showNames: true },
   drawsOn: "bench",
   actions: {},
   observe: (s) => ({
@@ -134,7 +132,6 @@ export const OpticObjectSignal = { Released: "released" } as const;
 
 const objectState = z
   .object({
-    isShown: z.boolean(),
     /** Its foot on the axis, cm, and how tall it stands. */
     x: cm,
     height: z.number().positive().max(200),
@@ -146,7 +143,6 @@ const objectState = z
     max: cm,
     nudge: z.number().positive(),
     says,
-    look,
   })
   .strict();
 export type OpticObjectState = z.infer<typeof objectState>;
@@ -159,7 +155,6 @@ export const opticObject = defineProp({
     "The object: an upright arrow (or a phone held upside down) standing on the axis. The learner drags its tip along the axis.",
   state: objectState,
   defaults: {
-    isShown: true,
     x: -30,
     height: 4,
     style: ObjectStyle.Arrow,
@@ -168,7 +163,6 @@ export const opticObject = defineProp({
     max: -0.5,
     nudge: 1,
     says: "",
-    look: Look.Lens,
   },
   drawsOn: "bench",
   actions: {
@@ -182,20 +176,16 @@ export const opticObject = defineProp({
   },
   signals: { [OpticObjectSignal.Released]: { describe: "The learner let go of it; `x`" } },
   invariant: (s) => (s.min <= s.max ? undefined : "min must not be above max"),
-  observe: (s) =>
-    s.isShown
-      ? {
-          summary: s.says,
-          elements: [{ id: "object", value: s.says, does: OpticObjectAction.Move }],
-        }
-      : { summary: "", elements: [] },
+  observe: (s) => ({
+    summary: s.says,
+    elements: [{ id: "object", value: s.says, does: OpticObjectAction.Move }],
+  }),
 });
 
 // ---- the image ----
 
 const imageState = z
   .object({
-    isShown: z.boolean(),
     /** Its tip, cm (height negative: inverted), and whether it is real; null: at infinity. */
     tip: z.object({ x: cm, height: cm, isReal: z.boolean() }).strict().nullable(),
     /** Fainter (half the lens covered: fewer rays make it). */
@@ -205,7 +195,6 @@ const imageState = z
     whenOutside: z.string().max(200),
     whenInfinite: z.string().max(200),
     says,
-    look,
   })
   .strict();
 export type OpticImageState = z.infer<typeof imageState>;
@@ -217,19 +206,17 @@ export const opticImage = defineProp({
     "The image: an arrow at the image's place (dashed when virtual); a line of words instead when it is at infinity or outside the picture.",
   state: imageState,
   defaults: {
-    isShown: true,
     tip: null,
     isDim: false,
     showName: true,
     whenOutside: "",
     whenInfinite: "image at infinity",
     says: "",
-    look: Look.Lens,
   },
   drawsOn: "bench",
   actions: {},
   observe: (s) =>
-    s.isShown && s.tip !== null
+    s.tip !== null
       ? { summary: s.says, elements: [{ id: "image", value: s.says }] }
       : { summary: "", elements: [] },
 });
@@ -279,10 +266,9 @@ export const opticRays = defineProp({
       spots: z.array(point).max(4),
       /** What a beam of sunlight does, in words; empty: no beam. */
       beamSays: says,
-      look,
     })
     .strict(),
-  defaults: { rays: [], spots: [], beamSays: "", look: Look.Lens },
+  defaults: { rays: [], spots: [], beamSays: "" },
   drawsOn: "bench",
   actions: {},
   observe: (s) => ({
@@ -300,7 +286,6 @@ export const ScreenAction = { Move: "move" } as const;
 export const ScreenSignal = { Released: "released" } as const;
 const screenState = z
   .object({
-    isShown: z.boolean(),
     x: cm,
     /** Half its height, cm. */
     half: z.number().positive(),
@@ -325,7 +310,6 @@ const screenState = z
     /** The cone of light from the object's tip: thin lines, cm. */
     cone: z.array(piece).max(8),
     says,
-    look,
   })
   .strict();
 export type ScreenState = z.infer<typeof screenState>;
@@ -338,7 +322,6 @@ export const opticScreen = defineProp({
     "A white screen on a stand, standing on the axis: it catches a sharp picture where a real image forms, a blur near it, only light otherwise. The learner can slide it.",
   state: screenState,
   defaults: {
-    isShown: false,
     x: 10,
     half: 5,
     canMove: false,
@@ -349,7 +332,6 @@ export const opticScreen = defineProp({
     blur: 0,
     cone: [],
     says: "",
-    look: Look.Lens,
   },
   drawsOn: "bench",
   actions: {
@@ -362,17 +344,14 @@ export const opticScreen = defineProp({
     }),
   },
   signals: { [ScreenSignal.Released]: { describe: "The learner let go of the screen; `x`" } },
-  observe: (s) =>
-    s.isShown
-      ? {
-          summary: s.says,
-          elements: [
-            s.canMove
-              ? { id: "screen", value: s.says, does: ScreenAction.Move }
-              : { id: "screen", value: s.says },
-          ],
-        }
-      : { summary: "", elements: [] },
+  observe: (s) => ({
+    summary: s.says,
+    elements: [
+      s.canMove
+        ? { id: "screen", value: s.says, does: ScreenAction.Move }
+        : { id: "screen", value: s.says },
+    ],
+  }),
 });
 
 // ---- the learner's "?" marker ----
@@ -381,15 +360,12 @@ export const MarkerAction = { Move: "move" } as const;
 export const MarkerSignal = { Released: "released" } as const;
 const markerState = z
   .object({
-    isShown: z.boolean(),
     at: z.object({ x: cm, y: cm }).strict(),
-    /** On the image's tip: drawn ✓ (or not drawn at all, `hideWhenRight`). */
+    /** On the image's tip: drawn ✓. */
     isRight: z.boolean(),
-    hideWhenRight: z.boolean(),
     /** Where it may go, cm. */
     bounds: z.object({ xMin: cm, xMax: cm, yMin: cm, yMax: cm }).strict(),
     says,
-    look,
   })
   .strict();
 export type MarkerState = z.infer<typeof markerState>;
@@ -402,13 +378,10 @@ export const marker = defineProp({
     "A “?” the learner drops where they think the image's tip is; it turns to ✓ on the tip.",
   state: markerState,
   defaults: {
-    isShown: false,
     at: { x: 0, y: 0 },
     isRight: false,
-    hideWhenRight: false,
     bounds: { xMin: -200, xMax: 200, yMin: -100, yMax: 100 },
     says: "",
-    look: Look.Lens,
   },
   drawsOn: "bench",
   actions: {
@@ -427,10 +400,10 @@ export const marker = defineProp({
     }),
   },
   signals: { [MarkerSignal.Released]: { describe: "The learner let go of the marker; `x`, `y`" } },
-  observe: (s) =>
-    s.isShown && !(s.hideWhenRight && s.isRight)
-      ? { summary: s.says, elements: [{ id: "mark", value: s.says, does: MarkerAction.Move }] }
-      : { summary: "", elements: [] },
+  observe: (s) => ({
+    summary: s.says,
+    elements: [{ id: "mark", value: s.says, does: MarkerAction.Move }],
+  }),
 });
 
 // ---- under the picture: a readout, ray buttons, a focal-length stepper ----
@@ -439,11 +412,11 @@ export const readout = defineProp({
   type: "opticReadout",
   isExplainer: false,
   describe: "A line of numbers under the picture: u, v and f with their signs.",
-  state: z.object({ text: z.string().max(200).nullable(), look }).strict(),
-  defaults: { text: null, look: Look.Lens },
+  state: z.object({ text: z.string().max(200) }).strict(),
+  defaults: { text: "" },
   actions: {},
   observe: (s) =>
-    s.text === null
+    s.text === ""
       ? { summary: "", elements: [] }
       : { summary: s.text, elements: [{ id: "readout", value: s.text }] },
 });
@@ -451,13 +424,11 @@ export const readout = defineProp({
 export const RayButtonsAction = { Toggle: "toggle" } as const;
 const rayButtonsState = z
   .object({
-    isShown: z.boolean(),
     /** Each button: the ray it switches, and what it says (English, Hindi). */
     buttons: z
       .array(z.object({ ray: z.string().min(1).max(16), en: z.string(), hi: z.string() }).strict())
       .max(4),
     on: z.array(z.string().min(1).max(16)).max(4),
-    look,
   })
   .strict();
 export type RayButtonsState = z.infer<typeof rayButtonsState>;
@@ -468,7 +439,7 @@ export const rayButtons = defineProp({
   isExplainer: false,
   describe: "Buttons 1, 2, 3 (4) that switch each standard ray on or off.",
   state: rayButtonsState,
-  defaults: { isShown: false, buttons: [], on: [], look: Look.Lens },
+  defaults: { buttons: [], on: [] },
   actions: {
     [RayButtonsAction.Toggle]: onButtons({
       describe: "Switch one ray on or off",
@@ -479,23 +450,18 @@ export const rayButtons = defineProp({
         set({ on: s.on.includes(a.ray) ? s.on.filter((r) => r !== a.ray) : [...s.on, a.ray] }),
     }),
   },
-  observe: (s) =>
-    s.isShown
-      ? {
-          summary: `ray buttons, on: ${s.on.join(", ") || "none"}`,
-          elements: [{ id: "rayPicker", value: s.on, does: RayButtonsAction.Toggle }],
-        }
-      : { summary: "", elements: [] },
+  observe: (s) => ({
+    summary: `ray buttons, on: ${s.on.join(", ") || "none"}`,
+    elements: [{ id: "rayPicker", value: s.on, does: RayButtonsAction.Toggle }],
+  }),
 });
 
 export const FocalStepperAction = { Change: "change" } as const;
 const focalStepperState = z
   .object({
-    isShown: z.boolean(),
     value: z.number(),
     min: z.number(),
     max: z.number(),
-    look,
   })
   .strict();
 export type FocalStepperState = z.infer<typeof focalStepperState>;
@@ -506,7 +472,7 @@ export const focalStepper = defineProp({
   isExplainer: false,
   describe: "− f = 10 cm +: the focal length's size, a cm at a time.",
   state: focalStepperState,
-  defaults: { isShown: false, value: 10, min: 4, max: 40, look: Look.Lens },
+  defaults: { value: 10, min: 4, max: 40 },
   actions: {
     [FocalStepperAction.Change]: onFocal({
       describe: "Set the focal length to `to` cm",
@@ -516,11 +482,8 @@ export const focalStepper = defineProp({
       run: (s, a) => set({ value: Math.min(s.max, Math.max(s.min, a.to)) }),
     }),
   },
-  observe: (s) =>
-    s.isShown
-      ? {
-          summary: `f = ${s.value} cm`,
-          elements: [{ id: "focalStepper", value: s.value, does: FocalStepperAction.Change }],
-        }
-      : { summary: "", elements: [] },
+  observe: (s) => ({
+    summary: `f = ${s.value} cm`,
+    elements: [{ id: "focalStepper", value: s.value, does: FocalStepperAction.Change }],
+  }),
 });

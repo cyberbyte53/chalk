@@ -99,7 +99,7 @@ const twoPoints = defineGroup({
   describe: "two points on graph paper",
   children: { paper, p: dot, q: dot, count: counter },
   defaults: { q: { x: 1.2, y: 1.1, name: "Q" } },
-  is: { "count.n": (s) => (s.p as { x: number }).x + (s.q as { x: number }).x },
+  is: { count: (s) => ({ n: s.p.x + s.q.x }) },
   summary: () => "two points",
   layout: { kind: "frame", provider: "paper", children: ["p", "q"], below: ["count"] },
 });

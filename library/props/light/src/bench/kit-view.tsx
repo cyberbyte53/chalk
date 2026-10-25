@@ -1,4 +1,4 @@
-import { type FrameContextValue, type PropViewProps, useFrame } from "@chalk/player";
+import { type FrameContextValue, type PropViewProps, useFrame, useTheme } from "@chalk/player";
 import type { JSX } from "preact";
 import { useId, useRef } from "preact/hooks";
 import { type Px, clipSegment } from "./clip";
@@ -175,6 +175,7 @@ const half = (x: number) => Math.round(x * 2) / 2;
 // ---- the bench ----
 
 export function BenchView({ view }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as BenchState;
   const frame = useFrame();
   if (frame === null) return null;
@@ -182,9 +183,9 @@ export function BenchView({ view }: PropViewProps): JSX.Element | null {
   const [, axisY] = at(frame, [0, 0]);
   return (
     <g data-part="bench">
-      <rect class={`${s.look}-bg`} x={0} y={0} width={width} height={height} rx={12} />
+      <rect class={`${look}-bg`} x={0} y={0} width={width} height={height} rx={12} />
       {s.ticks.length > 0 && (
-        <g class={`${s.look}-ruler`} data-part="ruler">
+        <g class={`${look}-ruler`} data-part="ruler">
           {s.ticks.map((x) => {
             const [px, py] = at(frame, [x, 0]);
             const isMajor = x % 10 === 0;
@@ -201,7 +202,7 @@ export function BenchView({ view }: PropViewProps): JSX.Element | null {
           })}
         </g>
       )}
-      <line class={`${s.look}-axis`} x1={0} y1={axisY} x2={width} y2={axisY} />
+      <line class={`${look}-axis`} x1={0} y1={axisY} x2={width} y2={axisY} />
     </g>
   );
 }
@@ -209,7 +210,8 @@ export function BenchView({ view }: PropViewProps): JSX.Element | null {
 // ---- points on the axis ----
 
 export function AxisPointsView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { points: AxisPoint[]; showNames: boolean; look: Look };
+  const look = useTheme() as Look;
+  const s = view as unknown as { points: AxisPoint[]; showNames: boolean };
   const frame = useFrame();
   if (frame === null) return null;
   return (
@@ -217,7 +219,7 @@ export function AxisPointsView({ view }: PropViewProps): JSX.Element | null {
       {s.points.map((p) => {
         const [px, py] = at(frame, [p.x, 0]);
         return (
-          <g key={p.id} class={`${s.look}-mark`} data-part={p.id}>
+          <g key={p.id} class={`${look}-mark`} data-part={p.id}>
             <circle cx={px} cy={py} r={3.5} />
             {s.showNames && (
               <text x={px} y={py + LABEL} text-anchor="middle">
@@ -234,11 +236,12 @@ export function AxisPointsView({ view }: PropViewProps): JSX.Element | null {
 // ---- the object ----
 
 export function OpticObjectView({ view, call, signal, locale }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as OpticObjectState;
   const frame = useFrame();
   const last = useRef(s.x);
   last.current = s.x;
-  if (frame === null || !s.isShown) return null;
+  if (frame === null) return null;
   const { width } = frame.px;
   const foot = at(frame, [s.x, 0]);
   const tip = at(frame, [s.x, s.height]);
@@ -268,9 +271,9 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
     s.style === ObjectStyle.Phone ? (
       <Phone foot={foot} tip={tip} />
     ) : (
-      <Arrow foot={foot} tip={tip} cls="" look={s.look} />
+      <Arrow foot={foot} tip={tip} cls="" look={look} />
     );
-  const handle = <circle class={`${s.look}-handle`} cx={tip[0]} cy={tip[1]} r={14} />;
+  const handle = <circle class={`${look}-handle`} cx={tip[0]} cy={tip[1]} r={14} />;
   const hit = (
     <circle
       class="bench-grab"
@@ -281,7 +284,7 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
       onPointerDown={onPointerDown}
     />
   );
-  if (s.look === Look.Mirror)
+  if (look === Look.Mirror)
     return (
       <>
         {s.name !== null && (
@@ -328,12 +331,13 @@ export function OpticObjectView({ view, call, signal, locale }: PropViewProps): 
 // ---- the image ----
 
 export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as OpticImageState;
   const frame = useFrame();
-  if (frame === null || !s.isShown) return null;
+  if (frame === null) return null;
   const { width, height } = frame.px;
   const caption = (text: string) => (
-    <text class={`${s.look}-caption`} data-part="image" x={12} y={height - 10}>
+    <text class={`${look}-caption`} data-part="image" x={12} y={height - 10}>
       {text}
     </text>
   );
@@ -345,13 +349,13 @@ export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | n
     tip[0] <= width - 8 &&
     tip[1] >= 8 &&
     tip[1] <= height - 8 &&
-    (s.look === Look.Lens || (foot[0] >= 8 && foot[0] <= width - 8));
+    (look === Look.Lens || (foot[0] >= 8 && foot[0] <= width - 8));
   if (!fits) return caption(s.whenOutside);
   const virtual = s.tip.isReal ? "" : " is-virtual";
-  if (s.look === Look.Mirror)
+  if (look === Look.Mirror)
     return (
       <g data-part="image">
-        <Arrow foot={foot} tip={tip} cls={`sm-image${virtual}`} look={s.look} />
+        <Arrow foot={foot} tip={tip} cls={`sm-image${virtual}`} look={look} />
         {s.showName && (
           <MirrorName
             tip={tip}
@@ -370,7 +374,7 @@ export function OpticImageView({ view, locale }: PropViewProps): JSX.Element | n
         foot={foot}
         tip={tip}
         cls={`ln-image${virtual}${s.isDim ? " is-dim" : ""}`}
-        look={s.look}
+        look={look}
       />
       {s.showName && (
         <text
@@ -453,7 +457,8 @@ function RayDraw({ ray, frame, look }: { ray: OpticRay; frame: Frame; look: Look
 }
 
 export function OpticRaysView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { rays: OpticRay[]; spots: Pt[]; look: Look };
+  const look = useTheme() as Look;
+  const s = view as unknown as { rays: OpticRay[]; spots: Pt[] };
   const frame = useFrame();
   if (frame === null) return null;
   const rays = s.rays.filter((r) => r.kind === "ray");
@@ -461,16 +466,16 @@ export function OpticRaysView({ view }: PropViewProps): JSX.Element | null {
   return (
     <g>
       {rays.map((r) => (
-        <RayDraw key={r.id} ray={r} frame={frame} look={s.look} />
+        <RayDraw key={r.id} ray={r} frame={frame} look={look} />
       ))}
       {beam.length > 0 && (
-        <g class={`${s.look}-beam`} data-part="beam">
+        <g class={`${look}-beam`} data-part="beam">
           {beam.map((r) => (
-            <RayDraw key={r.id} ray={r} frame={frame} look={s.look} />
+            <RayDraw key={r.id} ray={r} frame={frame} look={look} />
           ))}
           {s.spots.map((p) => {
             const [x, y] = at(frame, p);
-            return <circle key={`${x},${y}`} class={`${s.look}-spot`} cx={x} cy={y} r={7} />;
+            return <circle key={`${x},${y}`} class={`${look}-spot`} cx={x} cy={y} r={7} />;
           })}
         </g>
       )}
@@ -481,14 +486,15 @@ export function OpticRaysView({ view }: PropViewProps): JSX.Element | null {
 // ---- a screen ----
 
 export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as ScreenState;
   const frame = useFrame();
   const id = useId();
   const last = useRef(s.x);
   last.current = s.x;
-  if (frame === null || !s.isShown) return null;
+  if (frame === null) return null;
   const { width, height } = frame.px;
-  const blurId = `${s.look}-blur-${id}`;
+  const blurId = `${look}-blur-${id}`;
   const [sx, top] = at(frame, [s.x, s.half]);
   const [, bottom] = at(frame, [s.x, -s.half]);
   const place = (x: number) => Math.min(s.max, Math.max(s.min, half(x)));
@@ -520,7 +526,7 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
       <line
         // biome-ignore lint/suspicious/noArrayIndexKey: the cone's pieces are fixed
         key={i}
-        class={s.look === Look.Lens ? "ln-cone" : undefined}
+        class={look === Look.Lens ? "ln-cone" : undefined}
         x1={c[0][0]}
         y1={c[0][1]}
         x2={c[1][0]}
@@ -533,7 +539,7 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
   const scale = frame.px.toPx(1, 0)[0] - frame.px.toPx(0, 0)[0];
   const keys = s.canMove ? { tabindex: 0, onKeyDown } : {};
 
-  if (s.look === Look.Mirror) {
+  if (look === Look.Mirror) {
     const k = s.caught;
     const picture = ((): JSX.Element => {
       if (k === null)
@@ -572,7 +578,7 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
             />
           )}
           <g filter={k.isSharp ? undefined : `url(#${blurId})`}>
-            <Arrow foot={foot} tip={tip} cls="sm-caught-arrow" look={s.look} />
+            <Arrow foot={foot} tip={tip} cls="sm-caught-arrow" look={look} />
           </g>
         </g>
       );
@@ -685,12 +691,13 @@ export function OpticScreenView({ view, call, signal }: PropViewProps): JSX.Elem
 // ---- the "?" marker ----
 
 export function MarkerView({ view, call, signal }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as MarkerState & { edgeInset?: number };
   const frame = useFrame();
   const last = useRef(s.at);
   last.current = s.at;
-  if (frame === null || !s.isShown || (s.hideWhenRight && s.isRight)) return null;
-  const inset = s.look === Look.Lens ? 10 : 0;
+  if (frame === null) return null;
+  const inset = look === Look.Lens ? 10 : 0;
   const [left] = frame.px.fromPx(inset, 0);
   const [right] = frame.px.fromPx(frame.px.width - inset, 0);
   const place = (x: number, y: number) => ({
@@ -720,11 +727,11 @@ export function MarkerView({ view, call, signal }: PropViewProps): JSX.Element |
     signal(MarkerSignal.Released, to);
   };
   const [mx, my] = at(frame, [s.at.x, s.at.y]);
-  const isLens = s.look === Look.Lens;
+  const isLens = look === Look.Lens;
   return (
     <>
       <g
-        class={`${s.look}-mark-q${isLens && s.isRight ? " is-right" : ""}`}
+        class={`${look}-mark-q${isLens && s.isRight ? " is-right" : ""}`}
         data-part="mark"
         tabindex={0}
         onKeyDown={onKeyDown}
@@ -750,9 +757,9 @@ export function MarkerView({ view, call, signal }: PropViewProps): JSX.Element |
 // ---- under the picture ----
 
 export function ReadoutView({ view }: PropViewProps): JSX.Element | null {
-  const s = view as unknown as { text: string | null; look: Look };
-  if (s.text === null) return null;
-  return s.look === Look.Mirror ? (
+  const look = useTheme() as Look;
+  const s = view as unknown as { text: string };
+  return look === Look.Mirror ? (
     <p class="sm-readout" data-part="readout">
       {s.text}
     </p>
@@ -764,10 +771,10 @@ export function ReadoutView({ view }: PropViewProps): JSX.Element | null {
 }
 
 export function RayButtonsView({ view, call, locale }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as RayButtonsState;
-  if (!s.isShown) return null;
   const words = (b: RayButtonsState["buttons"][number]) => (locale === "hi" ? b.hi : b.en);
-  if (s.look === Look.Mirror)
+  if (look === Look.Mirror)
     return (
       <fieldset
         class="sm-rays"
@@ -809,10 +816,10 @@ export function RayButtonsView({ view, call, locale }: PropViewProps): JSX.Eleme
 }
 
 export function FocalStepperView({ view, call }: PropViewProps): JSX.Element | null {
+  const look = useTheme() as Look;
   const s = view as unknown as FocalStepperState;
-  if (!s.isShown) return null;
   const to = (v: number) => call(FocalStepperAction.Change, { to: v });
-  if (s.look === Look.Mirror)
+  if (look === Look.Mirror)
     return (
       <div class="sm-stepper" data-part="focalStepper">
         <button

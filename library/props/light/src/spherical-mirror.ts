@@ -705,6 +705,31 @@ function outsideWords(s: SphericalMirrorState): string {
 
 const hasObject = (s: SphericalMirrorState) => !s.beam && s.showObject;
 
+/** P, F and C on the axis (F only once it's defined). */
+function axisPointsOf(s: SphericalMirrorState) {
+  const f = signedF(s);
+  const side = s.kind === MirrorKind.Concave ? "in front" : "behind";
+  const all = [
+    { id: SphericalMirrorPart.Pole, x: 0, name: "P", says: "P" },
+    { id: SphericalMirrorPart.Focus, x: f, name: "F", says: `F, ${fmt(s.focalLength)} cm ${side}` },
+    {
+      id: SphericalMirrorPart.Centre,
+      x: 2 * f,
+      name: "C",
+      says: `C, ${fmt(2 * s.focalLength)} cm ${side}`,
+    },
+  ];
+  return all.filter((p) => s.showFocus || p.name !== "F");
+}
+
+/** What a screen catches from a real image: the tip's height there, and how sharp. */
+function caughtOf(s: SphericalMirrorState) {
+  const img = imageOf(s);
+  if (s.screen === null || !img?.isReal) return null;
+  const height = img.height * (s.screen / img.v);
+  return { height, centre: height, blur: blurAt(s, s.screen), isSharp: isSharpAt(s, s.screen) };
+}
+
 /**
  * A concave or convex mirror on the optical bench: a group of the optics kit's leaves and its own
  * face. The mirror holds the facts; every leaf shows them, bound; what the learner moves is routed
@@ -771,126 +796,88 @@ export const sphericalMirror = defineGroup({
     rayButtons,
   },
   is: {
-    "bench.window": (s) => windowOf(s),
-    "bench.aspect": () => ASPECT,
-    "bench.pad": () => PAD,
-    "bench.ticks": (s) => (s.showRuler ? rulerTicks(s) : []),
-    "bench.label": (s) => {
+    bench: (s) => {
       const img = imageOf(s);
-      return `A ${s.kind} mirror with an object ${Math.round(-s.object.x)} cm in front; ${img === null ? "the image is at infinity" : `the image is ${img.isReal ? "real" : "virtual"}`}`;
-    },
-    "bench.look": () => Look.Mirror,
-    "face.face": (s) => faceOf(s),
-    "face.says": (s) =>
-      `${s.kind} mirror, f = ${fmt(s.focalLength)} cm, C at ${fmt(2 * s.focalLength)} cm`,
-    "rayLines.rays": (s) => raysOf(s),
-    "rayLines.spots": (s) =>
-      s.beam && s.kind === MirrorKind.Concave ? [[signedF(s), 0] as [number, number]] : [],
-    "rayLines.beamSays": (s) =>
-      !s.beam
-        ? ""
-        : `${BEAM_RAYS} rays of sunlight parallel to the principal axis; ${s.kind === MirrorKind.Concave ? "every ray reflects through F, where they meet in a bright spot" : "every ray reflects away, as if it came from F behind the mirror (dashed)"}`,
-    "rayLines.look": () => Look.Mirror,
-    "points.points": (s) => {
-      const f = signedF(s);
-      const side = s.kind === MirrorKind.Concave ? "in front" : "behind";
-      const all = [
-        { id: SphericalMirrorPart.Pole, x: 0, name: "P", says: "P" },
-        {
-          id: SphericalMirrorPart.Focus,
-          x: f,
-          name: "F",
-          says: `F, ${fmt(s.focalLength)} cm ${side}`,
-        },
-        {
-          id: SphericalMirrorPart.Centre,
-          x: 2 * f,
-          name: "C",
-          says: `C, ${fmt(2 * s.focalLength)} cm ${side}`,
-        },
-      ];
-      return all.filter((p) => s.showFocus || p.name !== "F");
-    },
-    "points.showNames": (s) => s.showLabels,
-    "points.look": () => Look.Mirror,
-    "whiteScreen.isShown": (s) => s.screen !== null && !s.beam,
-    "whiteScreen.x": (s) => s.screen ?? -10,
-    "whiteScreen.half": (s) => screenHalf(s),
-    "whiteScreen.canMove": (s) => s.canMoveScreen,
-    "whiteScreen.min": (s) => windowOf(s).xMin,
-    "whiteScreen.max": () => -0.5,
-    "whiteScreen.nudge": () => 1,
-    "whiteScreen.caught": (s) => {
-      const img = imageOf(s);
-      if (s.screen === null || !img?.isReal) return null;
-      const height = img.height * (s.screen / img.v);
       return {
-        height,
-        centre: height,
-        blur: blurAt(s, s.screen),
-        isSharp: isSharpAt(s, s.screen),
+        window: windowOf(s),
+        aspect: ASPECT,
+        pad: PAD,
+        ticks: s.showRuler ? rulerTicks(s) : [],
+        label: `A ${s.kind} mirror with an object ${Math.round(-s.object.x)} cm in front; ${img === null ? "the image is at infinity" : `the image is ${img.isReal ? "real" : "virtual"}`}`,
       };
     },
-    "whiteScreen.blur": (s) => (s.screen === null ? 0 : blurAt(s, s.screen)),
-    "whiteScreen.cone": (s) => coneOf(s),
-    "whiteScreen.says": (s) => screenWords(s),
-    "whiteScreen.look": () => Look.Mirror,
-    "signs.isShown": (s) => s.showSigns,
-    "imageArrow.isShown": (s) => hasObject(s) && isImageShown(s),
-    "imageArrow.tip": (s) => {
+    face: (s) => ({
+      face: faceOf(s),
+      says: `${s.kind} mirror, f = ${fmt(s.focalLength)} cm, C at ${fmt(2 * s.focalLength)} cm`,
+    }),
+    rayLines: (s) => ({
+      rays: raysOf(s),
+      spots: s.beam && s.kind === MirrorKind.Concave ? [[signedF(s), 0] as [number, number]] : [],
+      beamSays: !s.beam
+        ? ""
+        : `${BEAM_RAYS} rays of sunlight parallel to the principal axis; ${s.kind === MirrorKind.Concave ? "every ray reflects through F, where they meet in a bright spot" : "every ray reflects away, as if it came from F behind the mirror (dashed)"}`,
+    }),
+    points: (s) => ({ points: axisPointsOf(s), showNames: s.showLabels }),
+    whiteScreen: (s) => ({
+      x: s.screen ?? -10,
+      half: screenHalf(s),
+      canMove: s.canMoveScreen,
+      min: windowOf(s).xMin,
+      max: -0.5,
+      nudge: 1,
+      caught: caughtOf(s),
+      blur: s.screen === null ? 0 : blurAt(s, s.screen),
+      cone: coneOf(s),
+      says: screenWords(s),
+    }),
+    imageArrow: (s) => {
       const img = imageOf(s);
-      return img === null ? null : { x: img.v, height: img.height, isReal: img.isReal };
+      return {
+        tip: img === null ? null : { x: img.v, height: img.height, isReal: img.isReal },
+        isDim: false,
+        showName: s.showNames,
+        whenOutside: outsideWords(s),
+        whenInfinite: "image at infinity",
+        says: img === null ? "" : describeImage(s, img),
+      };
     },
-    "imageArrow.isDim": () => false,
-    "imageArrow.showName": (s) => s.showNames,
-    "imageArrow.whenOutside": (s) => outsideWords(s),
-    "imageArrow.whenInfinite": () => "image at infinity",
-    "imageArrow.says": (s) => {
-      const img = imageOf(s);
-      return img === null ? "" : describeImage(s, img);
-    },
-    "imageArrow.look": () => Look.Mirror,
-    "objectArrow.isShown": (s) => hasObject(s),
-    "objectArrow.x": (s) => s.object.x,
-    "objectArrow.height": (s) => s.object.height,
-    "objectArrow.name": (s) => (s.showNames ? "object" : null),
-    "objectArrow.min": (s) => windowOf(s).xMin + 0.15 * s.focalLength,
-    "objectArrow.max": () => -0.5,
-    "objectArrow.nudge": () => 1,
-    "objectArrow.says": (s) =>
-      `${fmt(-s.object.x)} cm in front, ${fmt(s.object.height)} cm tall, ${placeWords[placeOf(s)]}`,
-    "objectArrow.look": () => Look.Mirror,
-    "marker.isShown": (s) => !s.beam && s.markImage,
-    "marker.at": (s) => markOf(s),
-    "marker.isRight": (s) => isImageShown(s) && isMarkOnImage(s),
-    "marker.hideWhenRight": () => true,
-    "marker.bounds": (s) => {
+    objectArrow: (s) => ({
+      x: s.object.x,
+      height: s.object.height,
+      name: s.showNames ? ("object" as const) : null,
+      min: windowOf(s).xMin + 0.15 * s.focalLength,
+      max: -0.5,
+      nudge: 1,
+      says: `${fmt(-s.object.x)} cm in front, ${fmt(s.object.height)} cm tall, ${placeWords[placeOf(s)]}`,
+    }),
+    marker: (s) => {
       const w = windowOf(s);
-      return { xMin: w.xMin, xMax: w.xMax, yMin: -w.yMax, yMax: w.yMax };
-    },
-    "marker.says": (s) => {
       const m = markOf(s);
-      return `the learner's ? mark at (${fmt(m.x)}, ${fmt(m.y)}) cm${isMarkOnImage(s) ? ": on the image's tip" : s.mark === null ? ": not moved yet" : ": not on the image's tip"}`;
+      return {
+        at: m,
+        isRight: isMarkOnImage(s),
+        bounds: { xMin: w.xMin, xMax: w.xMax, yMin: -w.yMax, yMax: w.yMax },
+        says: `the learner's ? mark at (${fmt(m.x)}, ${fmt(m.y)}) cm${isMarkOnImage(s) ? ": on the image's tip" : s.mark === null ? ": not moved yet" : ": not on the image's tip"}`,
+      };
     },
-    "marker.look": () => Look.Mirror,
-    "readout.text": (s) =>
-      !s.showDistances
-        ? null
-        : s.beam
-          ? `f = ${signedCm(signedF(s))} cm`
-          : readoutOf(s, isImageShown(s)),
-    "readout.look": () => Look.Mirror,
-    "kindToggle.isShown": (s) => s.canSetKind,
-    "kindToggle.kind": (s) => s.kind,
-    "focal.isShown": (s) => s.canSetFocal,
-    "focal.value": (s) => s.focalLength,
-    "focal.min": () => FOCAL.min,
-    "focal.max": () => FOCAL.max,
-    "focal.look": () => Look.Mirror,
-    "rayButtons.isShown": (s) => s.canPickRays && !s.beam,
-    "rayButtons.buttons": () => RAY_BUTTONS,
-    "rayButtons.on": (s) => s.rays,
-    "rayButtons.look": () => Look.Mirror,
+    readout: (s) => ({
+      text: s.beam ? `f = ${signedCm(signedF(s))} cm` : readoutOf(s, isImageShown(s)),
+    }),
+    kindToggle: (s) => ({ kind: s.kind }),
+    focal: (s) => ({ value: s.focalLength, min: FOCAL.min, max: FOCAL.max }),
+    rayButtons: (s) => ({ buttons: RAY_BUTTONS, on: s.rays }),
+  },
+  show: {
+    whiteScreen: (s) => s.screen !== null && !s.beam,
+    signs: (s) => s.showSigns,
+    imageArrow: (s) => hasObject(s) && isImageShown(s),
+    objectArrow: (s) => hasObject(s),
+    // Found, the ? gives way to the image itself.
+    marker: (s) => !s.beam && s.markImage && !(isImageShown(s) && isMarkOnImage(s)),
+    readout: (s) => s.showDistances,
+    kindToggle: (s) => s.canSetKind,
+    focal: (s) => s.canSetFocal,
+    rayButtons: (s) => s.canPickRays && !s.beam,
   },
   route: {
     "objectArrow.move": (_s, a) => [[SphericalMirrorAction.MoveObject, { x: a.x }]],

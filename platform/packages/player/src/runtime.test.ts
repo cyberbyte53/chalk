@@ -414,7 +414,7 @@ describe("BoardRuntime", () => {
       type: "pair",
       describe: "a dial bound to a value",
       children: { value: label, dial },
-      is: { "dial.at": (s) => (s.value as { value: number }).value },
+      is: { dial: (s) => ({ at: s.value.value }) },
       route: {
         "dial.setTo": (_s, a) => [["value.setValue", { v: a.to }]],
         "dial.turnTo": (_s, a) => [["value.setValue", { v: a.to }]],
@@ -440,11 +440,13 @@ describe("BoardRuntime", () => {
       (t) => (t === "pair" ? pair : defs[t]),
       services,
     );
-    expect(board.getStored("p").dial).toEqual({ at: 2 });
+    // The dial's `at` is bound: not stored, read through the view.
+    expect(board.getStored("p").dial).toEqual({});
+    expect(board.getView("p").dial).toMatchObject({ at: 2 });
     expect(board.getStored("shown").value).toBe(20);
     await board.call("p", "dial.setTo", { to: 7 }, Actor.Learner);
     expect(board.getStored("p").value).toMatchObject({ value: 7 });
-    expect(board.getStored("p").dial).toEqual({ at: 7 });
+    expect(board.getView("p").dial).toMatchObject({ at: 7 });
     expect(board.getStored("shown").value).toBe(70);
     expect(errors).toEqual([]);
   });

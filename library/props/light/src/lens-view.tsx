@@ -1,4 +1,5 @@
 import { groupView } from "@chalk/player";
+import { shownOf } from "@chalk/prop";
 import {
   AxisPointsView,
   BenchView,
@@ -36,14 +37,11 @@ export const LensView = groupView(
     focal: FocalStepperView,
   },
   {
+    theme: "ln",
     look: () => "ln-svg",
     below: (slot, view) => {
-      const v = view as {
-        rayButtons: { isShown: boolean };
-        readout: { text: string | null };
-        focal: { isShown: boolean };
-      };
-      if (!v.rayButtons.isShown && v.readout.text === null && !v.focal.isShown) return null;
+      const shown = shownOf(view);
+      if (!shown?.rayButtons && !shown?.readout && !shown?.focal) return null;
       return (
         <div class="ln-under">
           {slot("rayButtons")}

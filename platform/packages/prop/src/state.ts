@@ -7,6 +7,9 @@ export type StateResult =
 
 /** What anyone reads from a prop: its stored fields plus the derived ones, computed now. */
 export function viewOf(def: AnyPropDef, stored: StoredState): PropView {
+  // A group works out its own view: facts, what its links bind, and derived values (memoised).
+  const own = (def as { view?: (s: StoredState) => PropView }).view;
+  if (own !== undefined) return own(stored);
   const derived: Record<string, unknown> = {};
   for (const [key, spec] of Object.entries(def.derived ?? {})) derived[key] = spec.compute(stored);
   return { ...stored, ...derived };
@@ -17,7 +20,11 @@ export function viewOf(def: AnyPropDef, stored: StoredState): PropView {
  * (every field an element, `offScreen` ones under `hidden`) and its parts.
  */
 export function observationOf(def: AnyPropDef, stored: StoredState): Observation {
-  const view = viewOf(def, stored);
+  return observationOfView(def, viewOf(def, stored));
+}
+
+/** The same, from a view already worked out (a group's child, with what is bound into it). */
+export function observationOfView(def: AnyPropDef, view: PropView): Observation {
   if (def.observe !== undefined) return def.observe(view as never);
   const hiddenFields = new Set(def.offScreen ?? []);
   const elements: Element[] = [];
@@ -95,8 +102,8 @@ export function initialState(
       ),
     };
   }
-  // A group merges child by child and makes its bindings true (group.ts); a placement is always
-  // checked fully, at build and when a board opens.
+  // A group merges child by child (group.ts); a placement is always checked fully, at build and
+  // when a board opens.
   const place = (def as { place?: (g: Readonly<Record<string, unknown>>) => StoredState }).place;
   return checkStored(
     def,
@@ -121,27 +128,7 @@ export function applyPatch(
       errors: unknownKeys.map((key) => `${def.type} has no stored field "${key}"`),
     };
   }
-  // A group's own fields changed from outside (a board's IS, a lesson setting them): its leaves
-  // follow, in the same change. A patch that writes a child is a group's own action's, already
-  // settled, and is checked as it is (so a write to a bound field is caught).
-  const group = def as AnyPropDef & {
-    settle?: (s: StoredState) => StoredState;
-    group?: { own: readonly string[] };
-  };
   const merged = { ...stored, ...patch };
-  const isOwnOnly = Object.keys(patch).every((k) => group.group?.own.includes(k) === true);
-  if (group.settle !== undefined && isOwnOnly) {
-    let settled: StoredState;
-    try {
-      settled = group.settle(merged);
-    } catch (error) {
-      return {
-        isOk: false,
-        errors: [`${def.type}: ${error instanceof Error ? error.message : String(error)}`],
-      };
-    }
-    return checkStored(def, settled);
-  }
   return checkStored(def, merged);
 }
 

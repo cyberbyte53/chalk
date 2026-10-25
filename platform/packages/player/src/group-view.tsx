@@ -1,6 +1,7 @@
-import { type AnyPropDef, type StoredState, groupOf } from "@chalk/prop";
-import type { ComponentType, JSX } from "preact";
+import { type AnyPropDef, type StoredState, groupOf, shownOf } from "@chalk/prop";
+import { type ComponentType, type JSX, createContext } from "preact";
 import { memo } from "preact/compat";
+import { useContext } from "preact/hooks";
 import { FrameStage, InFrame } from "./frame";
 import type { PropViewProps } from "./prop-module";
 
@@ -61,7 +62,19 @@ const ChildSlot = memo(
  * to a child is the group's action by path ("input.change"): the group runs the child's law or
  * routes it. Each child sits in `data-child`, so its parts are found as "<child> › <part>".
  */
+const ThemeContext = createContext<string>("");
+
+/**
+ * The look a group gives its children (the lens's "ln", the mirror's "sm"): a view concern, never
+ * state. A leaf reads it to pick its classes.
+ */
+export function useTheme(): string {
+  return useContext(ThemeContext);
+}
+
 export type GroupViewOptions = {
+  /** The look its children draw in (read with `useTheme`). */
+  theme?: string;
   /** Children that take the whole width (a plane); the rest keep their own size. */
   wide?: readonly string[];
   /** Extra classes on a frame's picture, from the group's view (e.g. "is-dial" while draggable). */
@@ -86,9 +99,18 @@ export function groupView(
   if (layout === undefined) throw new Error(`${def.type} is not a group`);
   for (const name of layout.layout.children)
     if (views[name] === undefined) throw new Error(`${def.type}: no view for child ${name}`);
+  const withTheme = (tree: JSX.Element) =>
+    options.theme === undefined ? (
+      tree
+    ) : (
+      <ThemeContext.Provider value={options.theme}>{tree}</ThemeContext.Provider>
+    );
   function GroupView({ view, width, locale, call, signal }: PropViewProps): JSX.Element {
+    const shown = shownOf(view);
+    const isThere = (name: string) =>
+      view[name] !== null && view[name] !== undefined && shown?.[name] !== false;
     const slot = (name: string, inFrame: boolean) =>
-      view[name] === null || view[name] === undefined ? null : (
+      !isThere(name) ? null : (
         <ChildSlot
           key={name}
           name={name}
@@ -108,10 +130,8 @@ export function groupView(
       const providerState = view[l.provider] as StoredState;
       const px = provider.frame?.pixels(providerState, width);
       if (px === undefined) throw new Error(`${def.type}: ${l.provider} provides no frame`);
-      const inside = [l.provider, ...l.children].filter(
-        (n) => view[n] !== null && view[n] !== undefined,
-      );
-      return (
+      const inside = [l.provider, ...l.children].filter(isThere);
+      return withTheme(
         <div class={`group group-frame group-${def.type}`}>
           <div class="group-picture">
             {l.backdrop !== undefined && slot(l.backdrop, false)}
@@ -131,13 +151,13 @@ export function groupView(
           {options.below !== undefined
             ? options.below((name) => slot(name, false), view)
             : (l.below ?? []).map((name) => slot(name, false))}
-        </div>
+        </div>,
       );
     }
-    return (
+    return withTheme(
       <div class={`group group-${layout?.layout.kind} group-${def.type}`}>
         {layout?.layout.children.map((name) => slot(name, false))}
-      </div>
+      </div>,
     );
   }
   return GroupView;

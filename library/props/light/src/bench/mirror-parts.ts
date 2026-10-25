@@ -29,29 +29,24 @@ export const signConvention = defineProp({
   isExplainer: false,
   describe:
     "The New Cartesian sign convention drawn at the pole: +x right, −x left, +y up, −y down, light from the left.",
-  state: z.object({ isShown: z.boolean() }).strict(),
-  defaults: { isShown: false },
+  state: z.object({}).strict(),
+  defaults: {},
   drawsOn: "bench",
   actions: {},
-  observe: (s) =>
-    s.isShown
-      ? {
-          summary: "the sign convention at P",
-          elements: [
-            {
-              id: "signs",
-              value:
-                "New Cartesian signs at P: right +x, left −x, up +y, down −y; light comes from the left",
-            },
-          ],
-        }
-      : { summary: "", elements: [] },
+  observe: () => ({
+    summary: "the sign convention at P",
+    elements: [
+      {
+        id: "signs",
+        value:
+          "New Cartesian signs at P: right +x, left −x, up +y, down −y; light comes from the left",
+      },
+    ],
+  }),
 });
 
 export const KindToggleAction = { Set: "set" } as const;
-const kindToggleState = z
-  .object({ isShown: z.boolean(), kind: z.nativeEnum(MirrorFaceKind) })
-  .strict();
+const kindToggleState = z.object({ kind: z.nativeEnum(MirrorFaceKind) }).strict();
 const onToggle = actionsFor<z.infer<typeof kindToggleState>>();
 
 export const kindToggle = defineProp({
@@ -59,7 +54,7 @@ export const kindToggle = defineProp({
   isExplainer: false,
   describe: "A concave / convex switch: two buttons, the mirror's shape on each.",
   state: kindToggleState,
-  defaults: { isShown: false, kind: MirrorFaceKind.Concave },
+  defaults: { kind: MirrorFaceKind.Concave },
   actions: {
     [KindToggleAction.Set]: onToggle({
       describe: "Make it concave or convex",
@@ -69,17 +64,14 @@ export const kindToggle = defineProp({
       run: (_s, a) => set({ kind: a.kind }),
     }),
   },
-  observe: (s) =>
-    s.isShown
-      ? {
-          summary: `concave / convex, now ${s.kind}`,
-          elements: [
-            {
-              id: "kindToggle",
-              value: `concave / convex switch, now ${s.kind}`,
-              does: KindToggleAction.Set,
-            },
-          ],
-        }
-      : { summary: "", elements: [] },
+  observe: (s) => ({
+    summary: `concave / convex, now ${s.kind}`,
+    elements: [
+      {
+        id: "kindToggle",
+        value: `concave / convex switch, now ${s.kind}`,
+        does: KindToggleAction.Set,
+      },
+    ],
+  }),
 });

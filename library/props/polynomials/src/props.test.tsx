@@ -34,6 +34,9 @@ import { ValueMachineView } from "./value-machine-view";
 import { PlaneForm, ZeroPlaneAction, type ZeroPlaneState, zeroPlane } from "./zero-plane";
 import { ZeroPlaneView } from "./zero-plane-view";
 
+/** A view read by path in a test (its shape is the prop's). */
+type Seen = { readonly [key: string]: Seen };
+
 const plane = asAnyProp(zeroPlane);
 const box = asAnyProp(polyBox);
 
@@ -346,10 +349,12 @@ describe("valueMachine", () => {
     expect(four.emit.map((e) => e.signal)).toEqual(["put", "foundZero"]);
     expect(look(machine, four.state).zeroesFound).toEqual([4]);
     expect(look(machine, four.state).value).toBe(0);
-    // Every block shows the machine's numbers.
-    expect(four.state.substitution.tex).toBe("p(4) = 4^{2} - 3 \\times 4 - 4 = 0");
-    expect(four.state.plane.handle).toMatchObject({ x: 4, label: "4" });
-    expect(four.state.plane.dots?.dots).toEqual([
+    // Every block shows the machine's numbers: bound, so read through the view, never stored.
+    const shown = look(machine, four.state) as unknown as Seen;
+    expect(four.state.substitution).toEqual({ placeholder: "…" }); // its only own fact
+    expect(shown?.substitution?.tex).toBe("p(4) = 4^{2} - 3 \\times 4 - 4 = 0");
+    expect(shown?.plane?.handle).toMatchObject({ x: 4, label: "4" });
+    expect(shown?.plane?.dots?.dots).toEqual([
       { x: 2, y: -6, tone: "main", isFaded: true },
       { x: 4, y: 0, tone: "accent" },
     ]);
@@ -361,12 +366,16 @@ describe("valueMachine", () => {
     expect(nudged.emit.map((e) => e.signal)).toEqual(["put"]);
     const dragging = run(machine, s, "plane.handle.move", { x: 2.04 });
     expect(dragging.state).toMatchObject({ input: 2, tried: [-1] });
-    expect(dragging.state.plane.dots?.dots.at(-1)).toEqual({ x: 2, y: -6, tone: "muted" });
+    expect((look(machine, dragging.state) as unknown as Seen)?.plane?.dots?.dots).toContainEqual({
+      x: 2,
+      y: -6,
+      tone: "muted",
+    });
     const letGo = run(machine, dragging.state, "plane.handle.put", { x: 2.04 });
     expect(letGo.state.tried).toEqual([-1, 2]);
     const cleared = run(machine, letGo.state, "clear.press", {});
     expect(cleared.state).toMatchObject({ input: null, tried: [] });
-    expect(cleared.state.clear.isEnabled).toBe(false);
+    expect((look(machine, cleared.state) as unknown as Seen)?.clear?.isEnabled).toBe(false);
   });
   it("writes decimals as decimals, halves and quarters as fractions", () => {
     expect(workingTex([1, -3, -4], 2.3)).toBe(
