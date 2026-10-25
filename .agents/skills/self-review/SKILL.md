@@ -14,7 +14,7 @@ The person's review is the expensive part; this pass catches everything a fresh 
 ## Steps
 
 1. Run the `check` tool; if it fails, that is the first finding.
-2. `render_board` on the lesson with `questions: true` and once in Hindi: read every board in the screenshots, not the source. Then open the preview URL with `&play` in your browser and play the lesson as a student: tap, drag, answer right and wrong.
+2. `render_board` on the lesson with `questions: true` and once in Hindi: read every board in the screenshots, not the source. Then play each board as a student with `render_board` `steps`: tap, drag, answer right and wrong, and check what each step did (the events, "board passed", the picture).
 3. Go through `reviewer.md` board by board: as the student, as the teacher, on the screen. Put the source passage beside it.
 4. File each finding with `comment_add` (`by: "reviewer"`): the board, the piece, the principle, and what a student would get wrong. One finding per item.
 5. Fix the mechanical findings yourself (overflow, a give-away option, an undefined term, maths inside a sentence), render again, and mark them `done` with a reply saying what changed. Leave taste decisions open for the person.

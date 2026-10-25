@@ -35,7 +35,18 @@ equations are not getting contained in the button
 - **`piece`**: the piece's name on that board. Absent when the comment is on the whole board.
 - **`source`**: the file and line the piece was written at, from `build/sources.json`. A plan comment points at `plan.md` and has `quote` (the exact words) and `part` (its line range).
 - **`snapshot`**: what the piece said when the comment was made, so it can be found even if lines move.
+- **`part`**: the part of a prop picked (a slider, a stepper, one bar: the prop's `data-part`), when a part was.
 - Other fields (`lessonId`, `boardIndex`, `locale`, `by`, …) are kept as written. The format can grow; unknown fields are carried through.
+
+## Comments on a prop
+
+In the preview's pick mode (`c`) a click takes the finest thing under the pointer: a part of a prop, else the piece, else the whole board, and the label says which. A pick on a prop or one of its parts (any prop but the basics: words, choices and buttons are the lesson's own) is about the prop, wherever it is used. It is filed with the prop:
+
+```text
+library/props/<package>/.comments/<id>.md
+```
+
+It has `prop` (the type) and `part` when a part was picked, and still `on`, `piece` and `source` for the board it was seen on. The preview shows it under every board that places the prop. Whoever handles it decides where the fix goes: the prop's code (then `affected` lists every place to check), or just how that one board uses it.
 
 ## Status
 

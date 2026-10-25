@@ -1,73 +1,65 @@
-import { createInterface } from "node:readline";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
+import type {
+  CallToolResult,
+  ServerNotification,
+  ServerRequest,
+} from "@modelcontextprotocol/sdk/types.js";
 
 /**
- * The few parts of the Model Context Protocol a local tool server needs: JSON-RPC over stdio,
- * `initialize`, `tools/list` and `tools/call`. Hand-written (about a page) rather than a
- * dependency: the protocol's stdio transport is newline-delimited JSON and stable.
+ * The Model Context Protocol, through its official SDK: the server (version negotiation, input
+ * validation against each tool's schema, cancellation, progress) and the stdio transport. What's
+ * here is only what every Chalk tool shares.
  */
 
-export type Content =
-  | { type: "text"; text: string }
-  | { type: "image"; data: string; mimeType: string };
+export type Content = CallToolResult["content"][number];
 
-export type Tool = {
-  name: string;
-  description: string;
-  inputSchema: { type: "object"; properties: Record<string, unknown>; required?: string[] };
-  run: (args: Record<string, unknown>) => Promise<Content[]>;
-};
+/** What a tool's handler is given besides its arguments: the cancel signal, the progress token. */
+export type Extra = RequestHandlerExtra<ServerRequest, ServerNotification>;
 
-const PROTOCOL = "2025-06-18";
+export const result = (content: Content[]): CallToolResult => ({ content });
 
-export function serve(info: { name: string; version: string }, tools: readonly Tool[]): void {
-  // stdout is the protocol: anything else printed by our code or a library goes to stderr.
+/**
+ * Tells the client how a long call is going, when it asked to be told (it sent a progress
+ * token); otherwise does nothing.
+ */
+export function progressOf(extra: Extra): (message: string) => Promise<void> {
+  const token = extra._meta?.progressToken;
+  let step = 0;
+  return async (message) => {
+    if (token === undefined) return;
+    step += 1;
+    await extra
+      .sendNotification({
+        method: "notifications/progress",
+        params: { progressToken: token, progress: step, message },
+      })
+      .catch(() => {});
+  };
+}
+
+export function createServer(): McpServer {
+  return new McpServer({ name: "chalk", version: "0.2.0" });
+}
+
+/** Serves over stdio. stdout is the protocol, so anything else printed goes to stderr. */
+export async function serveStdio(server: McpServer, onClose: () => Promise<void>): Promise<void> {
   console.log = console.error;
   console.info = console.error;
-  const write = (message: unknown) => process.stdout.write(`${JSON.stringify(message)}\n`);
-  const byName = new Map(tools.map((t) => [t.name, t]));
-  const lines = createInterface({ input: process.stdin });
-  lines.on("line", async (line) => {
-    if (line.trim() === "") return;
-    let msg: { id?: number | string; method?: string; params?: Record<string, unknown> };
-    try {
-      msg = JSON.parse(line);
-    } catch {
-      return;
-    }
-    if (msg.id === undefined) return; // a notification: nothing to answer
-    const reply = (result: unknown) => write({ jsonrpc: "2.0", id: msg.id, result });
-    const fail = (code: number, message: string) =>
-      write({ jsonrpc: "2.0", id: msg.id, error: { code, message } });
-    switch (msg.method) {
-      case "initialize":
-        return reply({
-          protocolVersion: String(msg.params?.protocolVersion ?? PROTOCOL),
-          capabilities: { tools: {} },
-          serverInfo: info,
-        });
-      case "ping":
-        return reply({});
-      case "tools/list":
-        return reply({
-          tools: tools.map(({ name, description, inputSchema }) => ({
-            name,
-            description,
-            inputSchema,
-          })),
-        });
-      case "tools/call": {
-        const tool = byName.get(String(msg.params?.name));
-        if (tool === undefined) return fail(-32602, `no tool ${String(msg.params?.name)}`);
-        try {
-          const content = await tool.run((msg.params?.arguments ?? {}) as Record<string, unknown>);
-          return reply({ content });
-        } catch (error) {
-          const text = error instanceof Error ? error.message : String(error);
-          return reply({ content: [{ type: "text", text }], isError: true });
-        }
-      }
-      default:
-        return fail(-32601, `unknown method ${String(msg.method)}`);
-    }
-  });
+  const transport = new StdioServerTransport();
+  // The editor closed the connection or stopped the server: tidy up, then go.
+  let isClosing = false;
+  const close = async () => {
+    if (isClosing) return;
+    isClosing = true;
+    await onClose().catch(() => {});
+    process.exit(0);
+  };
+  process.stdin.on("end", () => void close());
+  for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"] as const)
+    process.on(signal, () => void close());
+  await server.connect(transport);
+  // Set after connecting: connecting sets the transport's own close handler.
+  server.server.onclose = () => void close();
 }

@@ -13,7 +13,7 @@
     "@chalk/content": "workspace:*",
     "@chalk/exact": "workspace:*",
     "@chalk/prop": "workspace:*",
-    "zod": "3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/node": "22.10.2"

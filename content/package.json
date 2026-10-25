@@ -46,7 +46,7 @@
     "@chalk/prop-trigonometry": "workspace:*",
     "nerdamer": "2.0.0",
     "preact": "10.29.8",
-    "zod": "3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/node": "22.10.2"

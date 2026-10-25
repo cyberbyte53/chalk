@@ -8,10 +8,10 @@ import {
   builtQuestionSchema,
 } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
-import { preloadProps, propLibrary } from "@chalk/library";
+import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import { BoardPlayer } from "@chalk/player";
 import type { JSX } from "preact";
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { CONTENT_ROUTE } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
@@ -49,9 +49,13 @@ type Thread = {
   text: string;
   on?: string;
   piece?: string;
+  /** A comment on a prop (filed with it): shown under every board that places it. */
+  prop?: string;
+  part?: string;
   proposal?: { summary?: string };
   review?: string;
-  thread: { by: string; text: string }[];
+  file?: string;
+  thread: { by: string; at?: string; text: string }[];
 };
 
 const url = (path: string) => `${CONTENT_ROUTE}${path}?t=${Date.now()}`;
@@ -172,37 +176,185 @@ const STATUS_WORDS: Record<string, string> = {
 };
 
 /**
- * The board's comments under it, newest first: what was said, what the agent plans or did. Open
- * ones in full; finished ones folded, as the board's history.
+ * The board's comments under it, newest first, each with its whole thread: what was said, what the
+ * agent plans or did, and a reply box (a reply reopens the comment for the agent). Finished ones
+ * are dimmed, and folded only when there are many.
  */
-function BoardThreads({ threads }: { threads: readonly Thread[] }): JSX.Element {
+function BoardThreads({
+  threads,
+  onChange,
+  phone,
+}: {
+  threads: readonly Thread[];
+  onChange: (all: Thread[]) => void;
+  phone: { current: HTMLDivElement | null };
+}): JSX.Element {
+  const list = useRef<HTMLUListElement>(null);
   const open = threads.filter((t) => t.status !== "done" && t.status !== "declined");
   const closed = threads.filter((t) => !open.includes(t));
-  const one = (t: Thread) => {
-    const last = t.thread.at(-1);
-    return (
-      <li key={t.id} class={`preview-thread is-${t.status}`}>
-        <div>
-          <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
-          {t.piece && <span class="preview-piece">{t.piece}</span>}
-          {t.text}
-        </div>
-        {t.proposal?.summary && <div class="preview-plan">Plan: {t.proposal.summary}</div>}
-        {last && <div class="preview-reply">{`${last.by}: ${last.text}`}</div>}
-      </li>
-    );
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [draft, setDraft] = useState("");
+  const send = async (t: Thread) => {
+    const text = draft.trim();
+    if (text === "") return;
+    const res = await fetch("/dev-review", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ op: "reply", id: t.id, text }),
+    });
+    if (!res.ok) return;
+    onChange((await res.json()) as Thread[]);
+    // The editor adds it to this sitting's review, so `a` hands it to the agent again.
+    toEditor({ type: "replied", file: t.file });
+    setDraft("");
+    setReplyingTo(null);
   };
-  return (
-    <div class="preview-threads">
-      <ul>{[...open].reverse().map(one)}</ul>
-      {closed.length > 0 && (
-        <details>
-          <summary>{`${closed.length} done earlier`}</summary>
-          <ul>{[...closed].reverse().map(one)}</ul>
-        </details>
+  const reveal = (t: Thread, on: boolean) => {
+    const el = phone.current === null ? null : anchorOf(phone.current, t);
+    el?.classList.toggle("is-revealed", on);
+  };
+  const one = (t: Thread) => (
+    <li
+      key={t.id}
+      data-id={t.id}
+      class={`preview-thread is-${t.status}`}
+      onMouseEnter={() => reveal(t, true)}
+      onMouseLeave={() => reveal(t, false)}
+    >
+      <div>
+        <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
+        {t.prop !== undefined ? (
+          <span class="preview-piece is-prop">{`prop ${t.prop}${t.part ? ` › ${t.part}` : ""}`}</span>
+        ) : (
+          t.piece && <span class="preview-piece">{t.piece}</span>
+        )}
+        {t.text}
+      </div>
+      {t.proposal?.summary && <div class="preview-plan">Plan: {t.proposal.summary}</div>}
+      {t.thread.map((entry) => (
+        <div
+          class="preview-reply"
+          key={`${entry.at}·${entry.by}·${entry.text.slice(0, 40)}`}
+        >{`${entry.by}: ${entry.text}`}</div>
+      ))}
+      {replyingTo === t.id ? (
+        <form
+          class="preview-reply-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void send(t);
+          }}
+        >
+          <textarea
+            value={draft}
+            placeholder="Add to this comment…"
+            ref={(el) => el?.focus()}
+            onInput={(e) => setDraft((e.target as HTMLTextAreaElement).value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                void send(t);
+              } else if (e.key === "Escape") setReplyingTo(null);
+            }}
+          />
+          <div>
+            <button type="submit" disabled={draft.trim() === ""}>
+              Reply
+            </button>
+            <button type="button" onClick={() => setReplyingTo(null)}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      ) : (
+        <button
+          type="button"
+          class="preview-reply-open"
+          onClick={() => {
+            setDraft("");
+            setReplyingTo(t.id);
+          }}
+        >
+          Reply
+        </button>
       )}
-    </div>
+    </li>
   );
+  // Beside the board, each level with what it is about (its piece, its prop's part), pushed
+  // down only as far as needed not to overlap; under the board when the window is narrow.
+  useLayoutEffect(() => {
+    const ul = list.current;
+    const ph = phone.current;
+    if (ul === null || ph === null) return;
+    const byId = new Map(threads.map((t) => [t.id, t]));
+    let frame = 0;
+    const place = () => {
+      const items = [...ul.children] as HTMLElement[];
+      if (getComputedStyle(ul).position === "static") {
+        for (const li of items) li.style.top = "";
+        ul.style.minHeight = "";
+        return;
+      }
+      const base = ul.getBoundingClientRect().top;
+      const wanted = items.map((li) => {
+        const t = byId.get(li.dataset.id ?? "");
+        const el = t === undefined ? null : anchorOf(ph, t);
+        return { li, top: el === null ? 0 : el.getBoundingClientRect().top - base };
+      });
+      let bottom = 0;
+      for (const { li, top } of wanted.sort((x, y) => x.top - y.top)) {
+        const at = Math.max(top, bottom);
+        li.style.top = `${at}px`;
+        bottom = at + li.offsetHeight + 8;
+      }
+      ul.style.minHeight = `${bottom}px`;
+    };
+    const later = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(place);
+    };
+    place();
+    const sizes = new ResizeObserver(later);
+    sizes.observe(ph);
+    sizes.observe(ul);
+    const changes = new MutationObserver(later);
+    changes.observe(ph, { childList: true, subtree: true });
+    window.addEventListener("resize", later);
+    return () => {
+      cancelAnimationFrame(frame);
+      sizes.disconnect();
+      changes.disconnect();
+      window.removeEventListener("resize", later);
+    };
+  });
+  return (
+    <ul class="preview-threads" ref={list}>
+      {[...open, ...closed].map(one)}
+    </ul>
+  );
+}
+
+/**
+ * What a comment is about, on the drawn board: the part of the prop picked, else its piece (for a
+ * prop comment, that prop where this board places it); null for a comment on the whole board.
+ */
+function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
+  const named =
+    t.piece === undefined
+      ? null
+      : phone.querySelector<HTMLElement>(`[data-piece="${CSS.escape(t.piece)}"]`);
+  const piece =
+    t.prop === undefined
+      ? named
+      : named?.classList.contains(`prop-${t.prop}`)
+        ? named
+        : phone.querySelector<HTMLElement>(`.prop-${CSS.escape(t.prop)}`);
+  if (piece === null || piece === undefined) return null;
+  const part =
+    t.part === undefined
+      ? null
+      : piece.querySelector<HTMLElement>(`[data-part="${CSS.escape(t.part)}"]`);
+  return part ?? piece;
 }
 
 function PreviewBoard({
@@ -213,6 +365,7 @@ function PreviewBoard({
   bus,
   isShot,
   threads,
+  onThreads,
 }: {
   shown: Shown;
   where: Sources[string] | undefined;
@@ -221,6 +374,7 @@ function PreviewBoard({
   bus: EventBus;
   isShot: boolean;
   threads: readonly Thread[];
+  onThreads: (all: Thread[]) => void;
 }): JSX.Element {
   const board = useMemo(
     () => (isPlaying ? shown.board : { ...shown.board, root: unhide(shown.board.root) }),
@@ -242,7 +396,10 @@ function PreviewBoard({
     openInEditor(site);
   };
   return (
-    <section class="preview-card" data-board={shown.path}>
+    <section
+      class={`preview-card${!isShot && threads.length > 0 ? " has-threads" : ""}`}
+      data-board={shown.path}
+    >
       {!isShot && (
         <div class="preview-tag">
           <a href={`?dev&board=${shown.path.replace(/\.json$/, "")}`}>{board.name}</a>
@@ -253,17 +410,25 @@ function PreviewBoard({
           )}
         </div>
       )}
-      <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
-        <BoardPlayer
-          board={board}
-          registry={propLibrary}
-          locale={locale}
-          raise={raise}
-          audio={undefined}
-          onPass={() => {}}
-        />
+      <div class="preview-body">
+        <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
+          <BoardPlayer
+            board={board}
+            registry={propLibrary}
+            locale={locale}
+            raise={raise}
+            audio={undefined}
+            onPass={() => {
+              const w = window as Window & { __chalkPassed?: string[] };
+              w.__chalkPassed ??= [];
+              w.__chalkPassed.push(shown.path);
+            }}
+          />
+        </div>
+        {!isShot && threads.length > 0 && (
+          <BoardThreads threads={threads} onChange={onThreads} phone={phone} />
+        )}
       </div>
-      {!isShot && threads.length > 0 && <BoardThreads threads={threads} />}
     </section>
   );
 }
@@ -283,16 +448,47 @@ function wordsOf(piece: HTMLElement): string {
 const SHOW_CARD = "chalk:show-card";
 
 /** Goes to another level of the tree (and tells an editor showing this page). */
-function go(board: string): void {
+function go(board: string, isAtEnd = false): void {
   // Only the preview moves; the editor stays on the file you're in (Alt-click a piece to open it).
   toEditor({ type: "follow", follow: board });
   const params = new URLSearchParams(window.location.search);
   params.delete("source");
   params.set("board", board);
-  window.location.search = params.toString().replace(/=(&|$)/g, "$1");
+  if (isAtEnd) params.set("at", "end");
+  else params.delete("at");
+  window.location.search = params
+    .toString()
+    .replace(/%2F/g, "/")
+    .replace(/=(&|$)/g, "$1");
 }
 
 const slugOf = (chapterPath: string) => chapterPath.replace(/\/chapter\.json$/, "");
+
+/**
+ * The lesson after (or before) one, as a student meets them: the next in its chapter, else the
+ * first of the next chapter in the book (the last of the previous one going back).
+ */
+async function lessonBeside(lesson: string, by: 1 | -1): Promise<string | undefined> {
+  const chapterOf = lesson.split("/").slice(0, 2).join("/");
+  const course = courses.find((c) => c.chapters.some((ch) => slugOf(ch.path) === chapterOf));
+  const chapters = course?.chapters.map((ch) => slugOf(ch.path)) ?? [];
+  const lessonsOf = async (chapter: string) =>
+    ((await json(`${chapter}/chapter.json`)) as { concepts: { path: string }[] }).concepts.map(
+      (c) => c.path.replace(/\/concept\.json$/, ""),
+    );
+  let at = chapters.indexOf(chapterOf);
+  if (at === -1) return undefined;
+  let lessons = await lessonsOf(chapterOf);
+  let i = lessons.indexOf(lesson) + by;
+  while (i < 0 || i >= lessons.length) {
+    at += by;
+    const chapter = chapters[at];
+    if (chapter === undefined) return undefined;
+    lessons = await lessonsOf(chapter);
+    i = by === 1 ? 0 : lessons.length - 1;
+  }
+  return lessons[i];
+}
 
 /** Books and chapters, drawn by the app's own screens. */
 function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Element {
@@ -363,6 +559,71 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
   );
 }
 
+/** The comments to show under a board: its own, and those on the props it places. */
+function threadsOn(threads: readonly Thread[], shown: Shown): Thread[] {
+  const path = shown.path.replace(/\.json$/, "");
+  const props = propTypes(shown.board.root, new Set());
+  return threads.filter((t) => (t.prop !== undefined ? props.has(t.prop) : t.on === path));
+}
+
+/** The package (folder under library/props) each prop type comes from. */
+const packageOfProp = new Map(
+  [...propPackages].flatMap(([name, defs]) => defs.map((def) => [def.type, name] as const)),
+);
+
+type PickTarget = {
+  /** What it outlines. */
+  el: HTMLElement;
+  pieceEl?: HTMLElement;
+  board?: string;
+  piece?: string;
+  part?: string;
+  prop?: string;
+  propPackage?: string;
+  words: string;
+};
+
+/**
+ * What a click can pick at a point, finest first: each part of a prop under the pointer (a
+ * slider, a stepper, one bar; inner before outer), the piece, the whole board. The click takes the
+ * finest; ↑ widens it, ↓ narrows it again. A comment on a prop or its part is about the prop,
+ * filed with it (library/props/<package>/.comments/) and shown wherever it is used; the basics
+ * (words, choices, buttons) are the lesson's own, so those stay with the board.
+ */
+function picksAt(target: HTMLElement): PickTarget[] {
+  const card = target.closest<HTMLElement>("[data-board]");
+  const phone = target.closest<HTMLElement>(".preview-phone");
+  if (card === null || phone === null) return [];
+  const board = card.dataset.board?.replace(/\.json$/, "");
+  const whole: PickTarget = { el: phone, board, words: "board" };
+  const pieceEl = target.closest<HTMLElement>("[data-piece]") ?? undefined;
+  if (pieceEl === undefined) return [whole];
+  const prop = /(?:^|\s)prop-(\S+)/.exec(pieceEl.className)?.[1];
+  const pkg = prop === undefined ? undefined : packageOfProp.get(prop);
+  const piece = pieceEl.dataset.piece;
+  const isProp = pkg !== undefined && pkg !== "basics";
+  const of = (el: HTMLElement, part?: string): PickTarget => ({
+    el,
+    pieceEl,
+    board,
+    piece,
+    part,
+    prop,
+    propPackage: isProp ? pkg : undefined,
+    words: isProp
+      ? `prop ${prop}${part ? ` › ${part}` : ""}`
+      : `board › ${piece}${part ? ` › ${part}` : ""}`,
+  });
+  const parts: PickTarget[] = [];
+  for (
+    let el = target.closest<HTMLElement>("[data-part]");
+    el !== null && pieceEl.contains(el) && el !== pieceEl;
+    el = el.parentElement?.closest<HTMLElement>("[data-part]") ?? null
+  )
+    parts.push(of(el, el.dataset.part));
+  return [...parts, of(pieceEl), whole];
+}
+
 /**
  * When this page sits in an editor's panel: the editor asks it to show the piece written at a
  * line (`reveal`) or to let the person pick a piece (`select`); a pick goes back with its board,
@@ -410,31 +671,77 @@ function useEditorLink(): [boolean, (on: boolean | ((was: boolean) => boolean)) 
   }, []);
   useEffect(() => {
     if (!isSelecting) return;
+    const label = document.createElement("div");
+    label.className = "pick-label";
+    document.body.append(label);
+    let shown: HTMLElement | undefined;
+    let under: HTMLElement | undefined;
+    let wider = 0;
+    const current = (): PickTarget | undefined => {
+      const all = under === undefined ? [] : picksAt(under);
+      return all[Math.min(wider, all.length - 1)];
+    };
+    const draw = () => {
+      const at = current();
+      shown?.classList.remove("is-pick-target");
+      shown = at?.el;
+      label.hidden = at === undefined;
+      if (at === undefined) return;
+      at.el.classList.add("is-pick-target");
+      label.textContent = `${at.words}  ↑↓`;
+      const box = at.el.getBoundingClientRect();
+      label.style.left = `${Math.max(4, box.left)}px`;
+      label.style.top = `${Math.max(4, box.top - 26)}px`;
+    };
+    const hover = (e: MouseEvent) => {
+      if (e.target === under) return;
+      under = e.target as HTMLElement;
+      wider = 0;
+      draw();
+    };
+    const widen = (e: KeyboardEvent) => {
+      if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+      e.preventDefault();
+      e.stopPropagation();
+      const most = (under === undefined ? 1 : picksAt(under).length) - 1;
+      wider = Math.max(0, Math.min(most, wider + (e.key === "ArrowUp" ? 1 : -1)));
+      draw();
+    };
     const pick = (e: MouseEvent) => {
-      const piece = (e.target as HTMLElement).closest<HTMLElement>("[data-piece]");
-      const card = piece?.closest<HTMLElement>("[data-board]");
-      if (piece === null || piece === undefined) return;
+      under = e.target as HTMLElement;
+      const at = current();
+      if (at === undefined) return;
       e.preventDefault();
       e.stopPropagation();
       setIsSelecting(false);
       // Outside an editor there is no chat to send it to: open its line instead.
       if (!isInEditor) {
-        if (piece.dataset.source !== undefined) openInEditor(piece.dataset.source);
+        const site = at.el.closest<HTMLElement>("[data-source]")?.dataset.source;
+        if (site !== undefined) openInEditor(site);
         return;
       }
       toEditor({
         type: "pick",
-        board: card?.dataset.board?.replace(/\.json$/, ""),
-        piece: piece.dataset.piece,
-        site: piece.dataset.source,
-        text: wordsOf(piece).slice(0, 400),
+        board: at.board,
+        piece: at.piece,
+        part: at.part,
+        prop: at.prop,
+        propPackage: at.propPackage,
+        site: (at.pieceEl ?? at.el).dataset.source,
+        text: wordsOf(at.el).slice(0, 400),
       });
     };
+    window.addEventListener("keydown", widen, true);
+    document.addEventListener("mouseover", hover, true);
     document.addEventListener("click", pick, true);
     document.body.classList.add("is-selecting");
     return () => {
+      window.removeEventListener("keydown", widen, true);
+      document.removeEventListener("mouseover", hover, true);
       document.removeEventListener("click", pick, true);
       document.body.classList.remove("is-selecting");
+      shown?.classList.remove("is-pick-target");
+      label.remove();
     };
   }, [isSelecting]);
   // The editor's Pick button follows the key.
@@ -469,7 +776,40 @@ function keptZoom(): number {
   }
 }
 
+/**
+ * The preview, drawn afresh for each URL. A tool can move it to another board without reloading
+ * the page (history.pushState, then a popstate event), which is much faster than a page load.
+ * When a board is drawn, body[data-preview-ready] is set to its URL's query, so a tool knows the
+ * boards on screen are the ones it asked for; data-preview-shown says which query an error or
+ * "nothing to show" is about.
+ */
 export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
+  const [search, setSearch] = useState(window.location.search);
+  useEffect(() => {
+    const onMove = () => setSearch(window.location.search);
+    window.addEventListener("popstate", onMove);
+    return () => window.removeEventListener("popstate", onMove);
+  }, []);
+  useLayoutEffect(() => {
+    document.body.dataset.previewShown = search;
+  }, [search]);
+  // What the app did, for a tool acting on the board (the chalk MCP's render_board steps): every
+  // event the bus carries, and each board passed. Kept on window, recent ones only.
+  useEffect(() => {
+    const w = window as Window & { __chalkEvents?: unknown[] };
+    const stop = bus.subscribe((event) => {
+      w.__chalkEvents ??= [];
+      w.__chalkEvents.push(event);
+      if (w.__chalkEvents.length > 500) w.__chalkEvents.shift();
+    });
+    return () => {
+      stop();
+    };
+  }, [bus]);
+  return <PreviewPage key={search} bus={bus} search={search} />;
+}
+
+function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.Element {
   const params = new URLSearchParams(window.location.search);
   const path = (params.get("board") ?? "").replace(/\/$/, "");
   const source = params.get("source");
@@ -487,8 +827,25 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
   // One board at a time (‹ › or the arrow keys), as the student goes through them; or all at once.
   const [isOne, setIsOneState] = useState(params.has("one"));
   const [index, setIndex] = useState(0);
+  const indexRef = useRef(index);
+  indexRef.current = index;
   const [isHelp, setIsHelp] = useState(false);
   const [, setSelecting] = useEditorLink();
+  // A lesson's neighbours: the arrows carry on past its last board into the next lesson.
+  const isLesson = source === null && path.split("/").filter(Boolean).length === 3;
+  const [beside, setBeside] = useState<{ before?: string; after?: string }>({});
+  const besideRef = useRef(beside);
+  besideRef.current = beside;
+  useEffect(() => {
+    if (!isLesson) return;
+    let isLive = true;
+    void Promise.all([lessonBeside(path, -1), lessonBeside(path, 1)])
+      .then(([before, after]) => isLive && setBeside({ before, after }))
+      .catch(() => {});
+    return () => {
+      isLive = false;
+    };
+  }, [path, isLesson]);
   // Comments on the boards shown, read from the chapters' comment files; again when one is added.
   const [threads, setThreads] = useState<Thread[]>([]);
   useEffect(() => {
@@ -541,9 +898,17 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
           : e.key === "ArrowLeft" || e.key === "k"
             ? -1
             : 0;
+      const { before, after } = besideRef.current;
       if (step !== 0 && isOne) {
         e.preventDefault();
-        setIndex((i) => Math.max(0, Math.min(last, i + step)));
+        const i = Math.min(indexRef.current, last);
+        if (i + step > last && after !== undefined) go(after);
+        else if (i + step < 0 && before !== undefined) go(before, true);
+        else setIndex(Math.max(0, Math.min(last, i + step)));
+      } else if (step !== 0 && e.key.startsWith("Arrow") && isLesson) {
+        // All at once: → / ← go to the next or previous lesson.
+        const to = step === 1 ? after : before;
+        if (to !== undefined) go(to);
       } else if ((e.key === "j" || e.key === "k") && !isOne) {
         const cards = [...document.querySelectorAll<HTMLElement>(".preview-slot")];
         const next = cards.findIndex((c) => c.getBoundingClientRect().top > 60);
@@ -576,14 +941,12 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener(SHOW_CARD, onShow);
     };
-  }, [isOne, setIsOne, setZoom, setSelecting]);
+  }, [isOne, isLesson, setIsOne, setZoom, setSelecting]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `build` is the trigger: a rebuild fetches the boards again.
   useEffect(() => {
     let isLive = true;
-    if (isTree) {
-      document.body.dataset.previewReady = String(build);
-      return;
-    }
+    if (isTree) return;
     (async () => {
       const where = (await json("sources.json").catch(() => ({}))) as Sources;
       const boards =
@@ -594,13 +957,24 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       if (!isLive) return;
       setSources(where);
       setShown(boards);
+      // Come back from the next lesson: start on this one's last board.
+      const now = new URLSearchParams(window.location.search);
+      if (now.get("at") === "end") {
+        setIndex(boards.length - 1);
+        now.delete("at");
+        history.replaceState(null, "", `?${now.toString().replace(/=(&|$)/g, "$1")}`);
+      }
       setError(null);
-      document.body.dataset.previewReady = String(build);
     })().catch((e: unknown) => isLive && setError(e instanceof Error ? e.message : String(e)));
     return () => {
       isLive = false;
     };
   }, [path, source, isTree, withQuestions, build]);
+
+  // Ready once the boards are on screen (this runs after they are drawn), not when they arrive.
+  useEffect(() => {
+    if (isTree || shown !== null) document.body.dataset.previewReady = search;
+  }, [isTree, shown, search]);
 
   // A rebuild (pnpm preview / build-content) redraws the boards without a reload.
   useEffect(() => {
@@ -613,12 +987,18 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
 
   if (isTree) return <TreeScreen path={path} locale={locale} />;
   if (error !== null) return <div class="preview-empty">{error}</div>;
-  if (shown === null) return <div class="preview-empty">Loading {source ?? path}…</div>;
+  // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.
+  if (shown === null) return <div class="preview-loading">Loading {source ?? path}…</div>;
   if (shown.length === 0)
     return <div class="preview-empty">No boards are written in {source}.</div>;
   const count = shown.length;
   const at = Math.min(index, count - 1);
-  const step = (by: number) => setIndex(Math.max(0, Math.min(count - 1, at + by)));
+  const step = (by: number) => {
+    if (at + by > count - 1 && beside.after !== undefined) go(beside.after);
+    else if (at + by < 0 && beside.before !== undefined) go(beside.before, true);
+    else setIndex(Math.max(0, Math.min(count - 1, at + by)));
+  };
+  const lessonName = (lesson: string) => lesson.split("/").at(-1) ?? lesson;
   return (
     <main class={`preview${isShot ? " is-shot" : ""}${isOne ? " is-one" : ""}`} key={build}>
       {!isShot && count > 1 && (
@@ -637,8 +1017,11 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
               <button
                 type="button"
                 onClick={() => step(-1)}
-                disabled={at === 0}
+                disabled={at === 0 && beside.before === undefined}
                 aria-label="Previous"
+                title={
+                  at === 0 && beside.before ? `Back to ${lessonName(beside.before)}` : undefined
+                }
               >
                 ‹
               </button>
@@ -646,10 +1029,10 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
               <button
                 type="button"
                 onClick={() => step(1)}
-                disabled={at === count - 1}
+                disabled={at === count - 1 && beside.after === undefined}
                 aria-label="Next"
               >
-                ›
+                {at === count - 1 && beside.after ? `${lessonName(beside.after)} ›` : "›"}
               </button>
             </span>
           )}
@@ -657,9 +1040,9 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       )}
       {isHelp && (
         <div class="preview-help">
-          <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous · <b>c</b> pick a piece ·{" "}
-          <b>a</b> copy review for the agent · <b>p</b> play · <b>h</b> Hindi · <b>+ −</b> zoom ·{" "}
-          <b>Esc</b> leave · <b>?</b> keys
+          <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
+          <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play ·{" "}
+          <b>h</b> Hindi · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
         </div>
       )}
       {shown.map((s, i) => (
@@ -671,7 +1054,8 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
           <PreviewBoard
             shown={s}
             where={sources[s.path]}
-            threads={threads.filter((t) => t.on === s.path.replace(/\.json$/, ""))}
+            threads={threadsOn(threads, s)}
+            onThreads={setThreads}
             locale={locale}
             isPlaying={isPlaying}
             bus={bus}
@@ -679,6 +1063,20 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
           />
         </div>
       ))}
+      {!isShot && !isOne && (beside.before !== undefined || beside.after !== undefined) && (
+        <nav class="preview-lessons">
+          {beside.before !== undefined && (
+            <button type="button" onClick={() => go(beside.before ?? "")}>
+              {`‹ ${lessonName(beside.before)}`}
+            </button>
+          )}
+          {beside.after !== undefined && (
+            <button type="button" onClick={() => go(beside.after ?? "")}>
+              {`${lessonName(beside.after)} ›`}
+            </button>
+          )}
+        </nav>
+      )}
     </main>
   );
 }

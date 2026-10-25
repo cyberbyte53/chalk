@@ -6,6 +6,8 @@ import { validateLesson } from "./validate";
 
 function lessonFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
+    // content/node_modules links to every package (and theirs): no lessons there.
+    if (name === "node_modules") return [];
     const path = join(dir, name);
     if (statSync(path).isDirectory()) return lessonFiles(path);
     return path.includes(`${join("lessons", "")}`) && name.endsWith(".json") ? [path] : [];

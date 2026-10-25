@@ -12,6 +12,8 @@ A **review** is one sitting of the person's comments, handed over in one line: `
 - the commit it was made on;
 - what the person said (the body).
 
+A comment with `prop` (filed in `library/props/<package>/.comments/`) is about that prop wherever it is used, not one board: decide whether the fix belongs in the prop (follow the build-props skill, and check every place `affected` lists) or only in how the board named in `on` uses it, and say which in the plan.
+
 ## Steps
 
 1. **Read every comment** in the review. For each, open `source` at its line and render the board (`render_board` with `on`). See what the person saw. Read them together first: several comments often share one cause ("he wants figures here").

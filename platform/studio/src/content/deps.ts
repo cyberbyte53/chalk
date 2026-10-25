@@ -43,6 +43,19 @@ export function recordImports(): boolean {
 
 export const isRecordingImports = (): boolean => isRecording;
 
+/** Every repo file imported so far in this process (outside node_modules), as absolute paths. */
+export function importedFiles(): string[] {
+  const urls = new Set<string>();
+  for (const [from, to] of edges) {
+    urls.add(from);
+    for (const url of to) urls.add(url);
+  }
+  return [...urls]
+    .filter((url) => url.startsWith("file:"))
+    .map((url) => fileURLToPath(url))
+    .filter((path) => !path.includes("/node_modules/"));
+}
+
 /**
  * Every file these files import, directly or not, themselves included: absolute paths, outside
  * node_modules (outside libraries change only with the lockfile, which is a global input).

@@ -12,7 +12,7 @@ import * as vscode from "vscode";
  * - The panel follows the editor: move the cursor in overview.ts and the piece written there is
  *   outlined; click a piece (Alt-click, or after "Pick") and the editor goes to its line.
  * - Pick a piece, then ask the agent about it (it goes to the chat with its board, line and words)
- *   or leave a comment (a file in the chapter's .comments/ folder).
+ *   or leave a comment (a file in the chapter's .comments/ folder; a prop's, for a pick on a prop).
  * - The Chalk tree (in the explorer): book → chapter → lesson, with open comments counted.
  *
  * It uses a dev server already running on :5173, or starts the learner app's (and the content
@@ -93,7 +93,7 @@ function queryFor(file: string): string | null {
       ? `board=${book}/${chapter}`
       : `source=content/${book}/${chapter}/questions/${family}`;
   if (third === ".comments" && !isDir) {
-    const on = /^on:\s*(.+)$/m.exec(readFileSync(file, "utf8"))?.[1]?.trim();
+    const on = /^on:\s*"?([^"\n]+)"?$/m.exec(readFileSync(file, "utf8"))?.[1]?.trim();
     return on ? `board=${on}` : `board=${book}/${chapter}`;
   }
   if (third === "runs" || third === "source") return `board=${book}/${chapter}`;
@@ -214,7 +214,18 @@ async function openSite(site: string | undefined): Promise<void> {
   editor.revealRange(new vscode.Range(at, at), vscode.TextEditorRevealType.InCenter);
 }
 
-type Picked = { board?: string; piece?: string; site?: string; text?: string; note?: string };
+type Picked = {
+  board?: string;
+  piece?: string;
+  /** The part of the prop picked (a slider, a stepper), when a part was. */
+  part?: string;
+  prop?: string;
+  /** Set when the pick is a prop's (not the basics): the comment is filed with the prop. */
+  propPackage?: string;
+  site?: string;
+  text?: string;
+  note?: string;
+};
 
 // ---- Reviews: the comments made in one sitting, handed to an agent in one line ----
 
@@ -241,7 +252,41 @@ function tellReview(): void {
  * there, and works through the comments.
  */
 async function copyReview(): Promise<void> {
-  const review = currentReview();
+  try {
+    await writeReview();
+  } catch (e) {
+    void vscode.window.showErrorMessage(`Chalk: couldn't write the review: ${String(e)}`);
+  }
+}
+
+/**
+ * Where a comment of this sitting is now: where it was saved, or, if it moved (a board comment
+ * made a prop comment), the file with its id in any comments folder; undefined if it is gone.
+ */
+function findComment(file: string): string | undefined {
+  if (existsSync(join(root, file))) return file;
+  const name = file.split("/").pop() ?? "";
+  const folders = [
+    ...readdirSync(join(root, "content"), { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .flatMap((book) =>
+        readdirSync(join(root, "content", book.name), { withFileTypes: true })
+          .filter((d) => d.isDirectory())
+          .map((chapter) => `content/${book.name}/${chapter.name}/.comments`),
+      ),
+    ...readdirSync(join(root, "library", "props"), { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => `library/props/${d.name}/.comments`),
+  ];
+  return folders.map((dir) => `${dir}/${name}`).find((f) => existsSync(join(root, f)));
+}
+
+async function writeReview(): Promise<void> {
+  const saved = currentReview();
+  const files = [
+    ...new Set((saved?.files ?? []).map(findComment).filter((f): f is string => f !== undefined)),
+  ];
+  const review = saved === undefined ? undefined : { ...saved, files };
   if (review === undefined || review.files.length === 0) {
     void vscode.window.showInformationMessage(
       "Chalk: no new comments since the last copy. Pick a piece (c) to add one.",
@@ -290,7 +335,12 @@ async function copyReview(): Promise<void> {
  * Enter saves, Escape cancels.
  */
 async function askForComment(p: Picked): Promise<void> {
-  const where = `${p.piece ?? "board"} · ${(p.site ?? "").replace(/^content\//, "")}`;
+  const what = p.propPackage
+    ? `the ${p.prop} prop${p.part ? ` › ${p.part}` : ""} (everywhere it's used)`
+    : p.piece
+      ? `${p.piece}${p.part ? ` › ${p.part}` : ""}`
+      : "the board";
+  const where = `${what} · ${(p.site ?? p.board ?? "").replace(/^content\//, "")}`;
   const note = await vscode.window.showInputBox({
     title: `Comment on ${where}`,
     prompt: (p.text ?? "").slice(0, 140),
@@ -300,7 +350,10 @@ async function askForComment(p: Picked): Promise<void> {
   if (note?.trim()) leaveComment({ ...p, note });
 }
 
-/** A comment file in the chapter's .comments/ folder (see platform/docs/comments.md). */
+/**
+ * A comment file in the chapter's .comments/ folder, or the prop's (library/props/<package>/.comments/)
+ * when a prop or a part of one was picked (see platform/docs/comments.md).
+ */
 function leaveComment(p: Picked): void {
   const [book, chapter] = (p.board ?? "").split("/");
   if (!book || !chapter || !p.note?.trim()) {
@@ -322,8 +375,10 @@ function leaveComment(p: Picked): void {
     "---",
     `id: ${id}`,
     "status: open",
+    ...(p.propPackage && p.prop ? [`prop: ${q(p.prop)}`] : []),
     `on: ${q(p.board ?? "")}`,
     ...(p.piece ? [`piece: ${q(p.piece)}`] : []),
+    ...(p.part ? [`part: ${q(p.part)}`] : []),
     ...(p.site ? [`source: ${q(p.site)}`] : []),
     `createdAt: ${q(now.toISOString())}`,
     `review: ${q(review.id)}`,
@@ -335,7 +390,10 @@ function leaveComment(p: Picked): void {
     p.note.trim(),
     "",
   ];
-  const dir = join(root, "content", book, chapter, ".comments");
+  // A prop's comment lives with the prop: it is about every board that places it.
+  const dir = p.propPackage
+    ? join(root, "library", "props", p.propPackage, ".comments")
+    : join(root, "content", book, chapter, ".comments");
   mkdirSync(dir, { recursive: true });
   const file = join(dir, `${id}.md`);
   writeFileSync(file, lines.join("\n"));
@@ -349,8 +407,24 @@ function leaveComment(p: Picked): void {
     );
 }
 
+/** A reply in the preview reopens a comment: it goes into this sitting's review again. */
+function addToReview(file: string | undefined): void {
+  if (file === undefined) return;
+  const now = new Date();
+  const review =
+    currentReview() ??
+    ({
+      id: now.toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "-"),
+      files: [],
+    } as Review);
+  if (!review.files.includes(file))
+    void state?.update(REVIEW_KEY, { ...review, files: [...review.files, file] });
+  setTimeout(tellReview, 0);
+  tree.refresh();
+}
+
 function onMessage(
-  m: { type?: string; site?: string; url?: string; follow?: string } & Picked,
+  m: { type?: string; site?: string; url?: string; follow?: string; file?: string } & Picked,
 ): void {
   if (m.type === "ready") {
     isReady = true;
@@ -359,6 +433,7 @@ function onMessage(
   } else if (m.type === "open") void openSite(m.site);
   else if (m.type === "copy") void copyReview();
   else if (m.type === "pick") void askForComment(m);
+  else if (m.type === "replied") addToReview(m.file);
   else if (m.type === "external" && m.url) void openInBrowser(m.url);
   // The preview went to another level by itself (a chapter or lesson was tapped).
   if (m.follow !== undefined) {
@@ -527,7 +602,10 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
   );
   const watcher = vscode.workspace.createFileSystemWatcher(
-    new vscode.RelativePattern(folder, "{build/index.json,content/*/*/.comments/*.md}"),
+    new vscode.RelativePattern(
+      folder,
+      "{build/index.json,content/*/*/.comments/*.md,library/props/*/.comments/*.md}",
+    ),
   );
   watcher.onDidChange(() => tree.refresh());
   watcher.onDidCreate(() => tree.refresh());

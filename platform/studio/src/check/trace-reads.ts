@@ -1,9 +1,8 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs";
-import { syncBuiltinESMExports } from "node:module";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { afterAll, expect } from "vitest";
+import { watchReads } from "./reads";
 
 /**
  * Test setup (vitest setupFiles): notes every repo file a test file reads from disk (readFileSync,
@@ -26,39 +25,8 @@ const root = rootOf(process.cwd());
 if (g[KEY] === undefined) {
   const reads = new Set<string>();
   g[KEY] = reads;
-  const note = (p: unknown) => {
-    if (typeof p !== "string" && !(p instanceof URL)) return;
-    let path = resolve(p instanceof URL ? fileURLToPath(p) : p);
-    // Through a link (a test's fixture can link real content in): the real file is what matters.
-    try {
-      path = fs.realpathSync.native(path);
-    } catch {}
-    if (path.startsWith(root) && !path.includes("/node_modules/")) reads.add(path);
-  };
-  const wrap = <T extends object, K extends keyof T>(target: T, name: K) => {
-    const original = target[name] as unknown as (...args: unknown[]) => unknown;
-    if (typeof original !== "function") return;
-    (target as Record<K, unknown>)[name] = function (this: unknown, ...args: unknown[]) {
-      note(args[0]);
-      return original.apply(this, args);
-    };
-  };
-  for (const name of [
-    "readFileSync",
-    "readFile",
-    "readdirSync",
-    "readdir",
-    "existsSync",
-    "statSync",
-    "lstatSync",
-    "stat",
-    "lstat",
-  ] as const)
-    wrap(fs, name);
-  for (const name of ["readFile", "readdir", "stat", "lstat", "access"] as const)
-    wrap(fs.promises, name);
-  // `import { readFileSync } from "node:fs"` binds to the ES module view: bring it up to date.
-  syncBuiltinESMExports();
+  // Tests are stamped by the bytes of everything they touched, however they touched it.
+  watchReads(root, (path) => reads.add(path));
 }
 
 afterAll(() => {

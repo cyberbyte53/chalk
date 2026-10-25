@@ -135,7 +135,10 @@ function devReview(): Plugin {
             status?: string;
           };
           const at = new Date().toISOString();
-          const found: Comment | undefined = listComments(ROOT).find((c) => c.id === change.id);
+          // Without `file` (where listComments found it), which isn't part of the comment.
+          const found: Comment | undefined = listComments(ROOT)
+            .map(({ file: _, ...c }) => c)
+            .find((c) => c.id === change.id);
           if (change.op === "add" && change.comment !== undefined) {
             const draft = placed({
               ...change.comment,

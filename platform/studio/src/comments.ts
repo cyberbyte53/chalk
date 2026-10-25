@@ -28,6 +28,11 @@ import { parse, stringify } from "yaml";
  *   thread: [{ by: claude, at: …, text: … }]
  *   ---
  *   there is only one answer feels weird? can we frame better
+ *
+ * A comment on a prop (picked on a prop or a part of one, in the preview) is about the prop, not
+ * one board: it lives with the prop, in library/props/<package>/.comments/, names it (`prop`, and
+ * `part` when a part was picked) and still names the board it was seen on (`on`, `source`). The
+ * preview shows it under every board that places the prop.
  */
 
 export const COMMENTS_DIR = ".comments";
@@ -49,8 +54,11 @@ export type Comment = {
   status: string;
   text: string;
   thread: ThreadEntry[];
-  /** `<book>/<chapter>`: which folder it is filed in. */
+  /** Where it is filed: `<book>/<chapter>`, or `library/props/<package>` for a prop comment. */
   chapter: string;
+  /** For a prop comment: the prop type, and the part picked. */
+  prop?: string;
+  part?: string;
   /** The board, as a build path without .json; absent for a plan comment. */
   on?: string;
   piece?: string | null;
@@ -77,7 +85,7 @@ export function parseComment(text: string, chapter: string): Comment {
 export function formatComment(fb: Comment): string {
   const { text, chapter: _, ...meta } = fb;
   const ordered: Record<string, unknown> = { id: meta.id, status: meta.status };
-  for (const key of ["on", "piece", "part", "source", "lessonTitle", "board", "createdAt"])
+  for (const key of ["prop", "on", "piece", "part", "source", "lessonTitle", "board", "createdAt"])
     if (meta[key] !== undefined && meta[key] !== null && meta[key] !== "") ordered[key] = meta[key];
   for (const [key, value] of Object.entries(meta))
     if (!(key in ordered) && value !== undefined && value !== null && value !== "")
@@ -92,33 +100,43 @@ const dirsIn = (dir: string): string[] =>
         .map((d) => d.name)
     : [];
 
-/** Every comment in content/, each with the file it lives in (repo-relative). */
-export function listComments(root: string): (Comment & { file: string })[] {
+/** The folders comments are filed in: each chapter's, and each prop package's. */
+function homes(root: string): string[] {
   const content = join(root, "content");
+  const props = join(root, "library", "props");
+  return [
+    ...dirsIn(content).flatMap((book) =>
+      dirsIn(join(content, book)).map((chapter) => `${book}/${chapter}`),
+    ),
+    ...dirsIn(props).map((name) => `library/props/${name}`),
+  ];
+}
+
+/** Every comment (in content/ and on props), each with the file it lives in (repo-relative). */
+export function listComments(root: string): (Comment & { file: string })[] {
   const out: (Comment & { file: string })[] = [];
-  for (const book of dirsIn(content))
-    for (const chapter of dirsIn(join(content, book))) {
-      const dir = join(content, book, chapter, COMMENTS_DIR);
-      if (!existsSync(dir)) continue;
-      for (const name of readdirSync(dir)
-        .filter((n) => n.endsWith(".md"))
-        .sort()) {
-        const file = join(dir, name);
-        try {
-          out.push({
-            ...parseComment(readFileSync(file, "utf8"), `${book}/${chapter}`),
-            file: relative(root, file),
-          });
-        } catch {
-          // A half-written or broken file is skipped, not fatal; `pnpm check` can report it later.
-        }
+  for (const home of homes(root)) {
+    const dir = join(homeDir(root, home), COMMENTS_DIR);
+    if (!existsSync(dir)) continue;
+    for (const name of readdirSync(dir)
+      .filter((n) => n.endsWith(".md"))
+      .sort()) {
+      const file = join(dir, name);
+      try {
+        out.push({ ...parseComment(readFileSync(file, "utf8"), home), file: relative(root, file) });
+      } catch {
+        // A half-written or broken file is skipped, not fatal; `pnpm check` can report it later.
       }
     }
+  }
   return out.sort((a, b) => String(a.createdAt ?? "").localeCompare(String(b.createdAt ?? "")));
 }
 
+const homeDir = (root: string, home: string): string =>
+  home.startsWith("library/") ? join(root, home) : join(root, "content", home);
+
 export function commentFile(root: string, fb: Pick<Comment, "chapter" | "id">): string {
-  return join(root, "content", fb.chapter, COMMENTS_DIR, `${fb.id}.md`);
+  return join(homeDir(root, fb.chapter), COMMENTS_DIR, `${fb.id}.md`);
 }
 
 export function writeComment(root: string, fb: Comment): string {

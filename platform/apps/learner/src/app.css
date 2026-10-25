@@ -1659,6 +1659,22 @@
   gap: 8px;
   margin-left: 12px;
 }
+.preview-lessons {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0 32px;
+}
+.preview-lessons button {
+  border: 1px solid #4a4a52;
+  background: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font: 600 13px system-ui, sans-serif;
+  color: #e6e6ea;
+  cursor: pointer;
+}
 .preview.is-shot {
   background: #fff;
   padding: 0;
@@ -1703,7 +1719,8 @@
 .preview-phone .board-footer {
   display: none;
 }
-.preview-empty {
+.preview-empty,
+.preview-loading {
   padding: 24px;
   font-family: system-ui, sans-serif;
 }
@@ -1712,10 +1729,23 @@
   outline-offset: 4px;
   border-radius: 8px;
 }
-body.is-selecting [data-piece]:hover {
-  outline: 2px dashed var(--color-primary);
-  outline-offset: 4px;
+body.is-selecting .preview-phone {
   cursor: crosshair;
+}
+body.is-selecting .is-pick-target {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: 3px;
+}
+.pick-label {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #fff;
+  font: 600 12px ui-monospace, monospace;
+  white-space: nowrap;
 }
 .preview-help {
   flex-basis: 100%;
@@ -1726,18 +1756,60 @@ body.is-selecting [data-piece]:hover {
 .preview-help b {
   color: #fff;
 }
-.preview-threads {
-  margin-top: 8px;
-  font: 13px / 1.4 system-ui, sans-serif;
-  color: #d4d4da;
+.preview-card.has-threads {
+  width: auto;
 }
-.preview-threads ul {
+.preview-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.preview-body > .preview-phone {
+  width: 390px;
+  flex: none;
+}
+/* Beside the board, each comment level with what it is about (placed by BoardThreads). */
+.preview-threads {
+  position: relative;
+  width: 280px;
+  flex: none;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  font: 13px / 1.4 system-ui, sans-serif;
+  color: #d4d4da;
+}
+.preview-threads > .preview-thread {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+/* A finished one is one line until pointed at. */
+.preview-thread.is-done:not(:hover) > :not(:first-child),
+.preview-thread.is-declined:not(:hover) > :not(:first-child) {
+  display: none;
+}
+.preview-thread.is-done:not(:hover) > :first-child,
+.preview-thread.is-declined:not(:hover) > :first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 720px) {
+  .preview-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .preview-threads {
+    position: static;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .preview-threads > .preview-thread {
+    position: static;
+  }
 }
 .preview-thread {
   background: #2a2a30;
@@ -1765,8 +1837,57 @@ body.is-selecting [data-piece]:hover {
   margin-top: 4px;
   color: #b4b4bc;
 }
-.preview-threads summary {
-  cursor: pointer;
+.preview-thread.is-done,
+.preview-thread.is-declined {
+  opacity: 0.7;
+}
+.preview-piece.is-prop {
+  color: #f0b45a;
+}
+.preview-reply-open {
+  margin-top: 4px;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
   color: #9a9aa4;
-  margin: 6px 0;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.preview-reply-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  margin-top: 6px;
+  border: 1px solid #4a4a52;
+  border-radius: 8px;
+  background: #1f1f23;
+  color: inherit;
+  font: inherit;
+  padding: 6px 8px;
+  resize: vertical;
+}
+.preview-reply-form div {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.preview-reply-form button {
+  border: 1px solid #4a4a52;
+  background: none;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  cursor: pointer;
+}
+.preview-reply-form button[type="submit"] {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.preview-reply-form button:disabled {
+  opacity: 0.4;
 }

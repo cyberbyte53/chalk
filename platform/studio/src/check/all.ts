@@ -1,14 +1,16 @@
 import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { findUp } from "../pronunciations";
+import { lint } from "./lint";
+import { stampedStep } from "./steps";
 import { test } from "./test";
 import { typecheck } from "./typecheck";
 
 /**
  * `pnpm check`: everything that must hold before a commit, doing only the work a change calls for.
- * Type checks and tests skip what nothing they read has changed for (typecheck.ts, test.ts); the
- * content build reuses chapters whose files are unchanged (content/build.ts). The rest are quick
- * and run in full. `pnpm check --force` ignores every cache and runs everything.
+ * Type checks, tests, lint and the other steps skip what nothing they read has changed for
+ * (typecheck.ts, test.ts, lint.ts, steps.ts); the content build reuses chapters whose files are
+ * unchanged (content/build.ts). `pnpm check --force` ignores every cache and runs everything.
  */
 
 const root = dirname(findUp("pnpm-workspace.yaml", process.cwd()));
@@ -26,18 +28,18 @@ function run(label: string, cmd: string, args: string[], cwd: string): Promise<b
   });
 }
 
+/** A tsx step that runs only when something it read changed (see steps.ts). */
+const stamped = (name: string, args: string[]) => () => {
+  console.log(`\n▸ ${name}`);
+  return stampedStep(root, name, { cwd: studio, tsx: [tsx, ...tsconfig], args, force });
+};
+
 const steps: [string, () => Promise<boolean>][] = [
   ["typecheck", () => typecheck(root, { force })],
   ["tests", () => test(root, { force })],
-  [
-    "old lessons",
-    () => run("old lessons", tsx, [...tsconfig, "src/cli.ts", "../../content"], studio),
-  ],
-  ["boundaries", () => run("boundaries", tsx, [...tsconfig, "src/boundaries-cli.ts"], studio)],
-  [
-    "catalogue",
-    () => run("catalogue", tsx, [...tsconfig, "src/catalogue-cli.ts", "--check"], studio),
-  ],
+  ["old lessons", stamped("old lessons", ["src/cli.ts", "../../content"])],
+  ["boundaries", stamped("boundaries", ["src/boundaries-cli.ts"])],
+  ["catalogue", stamped("catalogue", ["src/catalogue-cli.ts", "--check"])],
   [
     "content",
     () =>
@@ -55,14 +57,14 @@ const steps: [string, () => Promise<boolean>][] = [
         studio,
       ),
   ],
-  ["lint", () => run("lint", join(root, "node_modules", ".bin", "biome"), ["check", "."], root)],
+  ["lint", () => lint(root, { force })],
 ];
 
 const started = Date.now();
 const times: string[] = [];
 const seconds = (since: number) => `${((Date.now() - since) / 1000).toFixed(1)}s`;
 for (const [name, step] of steps) {
-  if (name === "typecheck" || name === "tests") console.log(`\n▸ ${name}`);
+  if (name === "typecheck" || name === "tests" || name === "lint") console.log(`\n▸ ${name}`);
   const at = Date.now();
   const ok = await step();
   times.push(`${name} ${seconds(at)}`);

@@ -23,17 +23,16 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
   Each step writes a note to the chapter's `runs/`.
 - **Look at what you make.** The chalk MCP server (`.cursor/mcp.json`, `.vscode/mcp.json`, `.mcp.json`) gives you:
-  - `render_board`: boards drawn by the real player at phone width, with each piece's source line and any overflow;
+  - `render_board`: boards drawn by the real player at phone width, with each piece's source line and parts, and layout problems found by measuring; with `steps`, it taps and drags the real board as a student would and reports what the app did after each (events, passed, a picture);
   - `boards`, including `changed: true`;
   - `comments`, `comment_update`, `comment_add`;
   - `affected`: which chapters a change to a prop, pattern or platform file reaches (from what each chapter's build actually read);
-  - `find_prop`;
   - `check`.
 
   For people and agents alike, the same boards are at `?dev&board=<book>/<chapter>/<lesson>` in the learner app's dev server; add `&play` and use them in a browser as a student would (Cursor's browser, or a browser MCP). Every piece carries `data-source="content/…:line"`, and Alt-click opens the line.
 - **In the editor**, the Chalk extension (`platform/editor`, install `chalk-editor.vsix`) previews whatever file or folder is open as the student sees it (book screen, chapter path, lesson boards), follows the cursor, and lets the person pick a piece to send to you.
 - **Reviews:** when the person hands you a review file (`@content/reviews/<id>.md`), use `apply-review`: plan in that file, apply, answer each comment, commit.
-- **Comments** are one file each in `content/<book>/<chapter>/.comments/` ([platform/docs/comments.md](platform/docs/comments.md)). Only the person approves.
+- **Comments** are one file each in `content/<book>/<chapter>/.comments/`, or `library/props/<package>/.comments/` for a comment on a prop ([platform/docs/comments.md](platform/docs/comments.md)). Only the person approves.
 - `plan.md` approval is the person's gate. Never set `status: approved` yourself.
 - **Commit only what the person has seen and is happy with.** Finish, show it, wait for their yes, then commit.
 

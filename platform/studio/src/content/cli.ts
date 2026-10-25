@@ -1,5 +1,15 @@
 import { execFileSync, spawn } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, watch, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  rmdirSync,
+  watch,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 import { WORKING_TREE } from "@chalk/content";
@@ -8,6 +18,7 @@ import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
 import { type BuildResult, SOURCES_FILE, buildContent } from "./build";
 import { writeConceptModules } from "./concepts";
+import { buildInputsKey, inputsKeyFile } from "./inputs";
 
 /**
  * `pnpm build-content`: builds everything content/build.yaml reaches into build/, checking it all.
@@ -49,19 +60,37 @@ function report(result: BuildResult): void {
   for (const p of result.problems) console.error(`    ${p.where}: ${p.message}`);
 }
 
-/** Replaces build/ with exactly these files. */
+/**
+ * Makes build/ exactly these files, in place: a file is written only when it changed, and files no
+ * longer built are removed. build/ never disappears, so a dev server reading it while this runs
+ * (the preview's bundled course list) never sees it empty.
+ */
 function write(result: BuildResult): void {
-  rmSync(buildDir, { recursive: true, force: true });
-  for (const [path, json] of result.files) {
-    const file = join(buildDir, path);
-    mkdirSync(dirname(file), { recursive: true });
-    writeFileSync(file, `${JSON.stringify(json, null, 2)}\n`);
-  }
+  const wanted = new Map<string, string>();
+  for (const [path, json] of result.files) wanted.set(path, `${JSON.stringify(json, null, 2)}\n`);
   // Where each board was written, for the preview's "open in editor"; not part of the content.
-  writeFileSync(
-    join(buildDir, SOURCES_FILE),
-    `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`,
-  );
+  wanted.set(SOURCES_FILE, `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`);
+  for (const [path, text] of wanted) {
+    const file = join(buildDir, path);
+    if (existsSync(file) && readFileSync(file, "utf8") === text) continue;
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, text);
+  }
+  // Removes what is no longer built; says whether `dir` was left empty.
+  const prune = (dir: string, rel: string): boolean => {
+    let isEmpty = true;
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = rel === "" ? entry.name : `${rel}/${entry.name}`;
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (prune(full, path)) rmdirSync(full);
+        else isEmpty = false;
+      } else if (wanted.has(path)) isEmpty = false;
+      else rmSync(full);
+    }
+    return isEmpty;
+  };
+  if (existsSync(buildDir)) prune(buildDir, "");
 }
 
 /**
@@ -90,9 +119,15 @@ async function build(commit: string): Promise<BuildResult> {
 function watchAndRebuild(): void {
   let timer: NodeJS.Timeout | undefined;
   let isRunning = false;
+  // A save while a build runs: build again when it ends, or the preview misses that save.
+  let isWanted = false;
   const rebuild = () => {
-    if (isRunning) return;
+    if (isRunning) {
+      isWanted = true;
+      return;
+    }
     isRunning = true;
+    isWanted = false;
     // A fresh process each time: ES modules can't be re-imported after an edit.
     const child = spawn(
       process.execPath,
@@ -103,6 +138,7 @@ function watchAndRebuild(): void {
     );
     child.on("exit", () => {
       isRunning = false;
+      if (isWanted) rebuild();
     });
   };
   rebuild();
@@ -145,9 +181,15 @@ async function publish(): Promise<void> {
 
 if (command === Command.Build) {
   for (const file of writeConceptModules(contentDir)) console.log(`  · generated ${file}`);
+  // Taken before building: an edit made while the build runs must not count as built.
+  const inputs = buildInputsKey(root);
   const result = await build(WORKING_TREE);
   write(result);
   if (result.problems.length > 0) process.exitCode = 1;
+  else {
+    mkdirSync(dirname(inputsKeyFile(root)), { recursive: true });
+    writeFileSync(inputsKeyFile(root), inputs);
+  }
 } else if (command === Command.Preview) {
   watchAndRebuild();
 } else if (command === Command.Publish) {

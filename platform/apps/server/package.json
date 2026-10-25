@@ -22,7 +22,7 @@
     "google-auth-library": "11.1.0",
     "hono": "4.13.12",
     "postgres": "3.4.9",
-    "zod": "3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
