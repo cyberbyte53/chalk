@@ -16,6 +16,7 @@ import {
   task,
 } from "./define";
 import { isFullChecking, observationOfView, prepareAction, viewOf } from "./state";
+import { flatten, isInstant, runEffect } from "./steps";
 
 /**
  * Groups: a prop made of other props joined by links (plans/props-composition.md,
@@ -612,6 +613,10 @@ export function defineGroup<
     const tree = boundTree[name];
     const writesBound = (patch: Readonly<Record<string, unknown>>) =>
       tree !== undefined && Object.keys(patch).some((k) => tree[k] === true);
+    if (effect.kind !== EffectKind.Set && isInstant(effect)) {
+      const flat = flatten(effect);
+      return onSlice(state, name, set(flat.set, ...flat.emit), out);
+    }
     if (effect.kind === EffectKind.Set) {
       if (writesBound(effect.set))
         throw new Error(
@@ -656,28 +661,14 @@ export function defineGroup<
           for (const e of later.emits) c.emit(e.signal, e.payload);
           for (const run of later.later) void run(c);
         },
+        call: (action, args) => {
+          if (c.call === undefined) throw new Error(`${name}.${action}: nothing runs actions here`);
+          return c.call(`${name}.${action}`, args);
+        },
+        ...(c.isLive !== undefined ? { isLive: c.isLive } : {}),
+        ...(c.now !== undefined ? { now: c.now } : {}),
       };
-      if (effect.kind === EffectKind.Task) await effect.run(sliceContext);
-      else {
-        const from = sliceContext.get();
-        const frames = Math.max(1, Math.round(effect.duration * 60));
-        for (let i = 1; i <= frames; i++) {
-          await c.wait(effect.duration / frames);
-          const t = i / frames;
-          const x = t * t * (3 - 2 * t);
-          const patch: Record<string, unknown> = {};
-          for (const [k, to] of Object.entries(effect.to)) {
-            const start = from[k];
-            patch[k] =
-              typeof start === "number" && typeof to === "number"
-                ? start + (to - start) * x
-                : t >= 1
-                  ? to
-                  : start;
-          }
-          sliceContext.set(patch);
-        }
-      }
+      await runEffect(effect, sliceContext);
     });
     return state;
   };
@@ -703,7 +694,9 @@ export function defineGroup<
         throw new Error(
           `${spec.type}.${name}: ${parsed.error.issues.map((i) => i.message).join("; ")}`,
         );
-      const e = a.run(read(state, injected).view as never, parsed.data as never);
+      const ran = a.run(read(state, injected).view as never, parsed.data as never);
+      const flat = ran.kind !== EffectKind.Set && isInstant(ran) ? flatten(ran) : undefined;
+      const e = flat === undefined ? ran : set(flat.set, ...flat.emit);
       if (e.kind === EffectKind.Set) {
         const extra = Object.keys(e.set).filter((k) => !ownFields.includes(k));
         if (extra.length > 0)
@@ -715,8 +708,7 @@ export function defineGroup<
       }
       // Over time: each step writes the group's own facts through its door.
       out.later.push(async (c) => {
-        if (e.kind !== EffectKind.Task) return;
-        await e.run({ ...c, get: () => read(c.get()).view as StoredState });
+        await runEffect(e, { ...c, get: () => read(c.get()).view as StoredState });
       });
       return state;
     }

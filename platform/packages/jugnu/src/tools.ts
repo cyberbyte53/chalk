@@ -66,7 +66,7 @@ function isNeverHis(board: JugnuBoard, prop: string, action: string): boolean {
   return (
     board.getDef(prop).role === PropRole.Question ||
     action === SAY ||
-    board.board.studentOnly.includes(`${prop}.${action}`)
+    board.getDef(prop).actions[action]?.internal === true
   );
 }
 

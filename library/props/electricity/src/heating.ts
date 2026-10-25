@@ -1,4 +1,4 @@
-import { type Element, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Element, actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 import { APPLIANCE_EN, Appliance, WATTS } from "./appliances";
 import { num } from "./words";
@@ -19,6 +19,7 @@ export const HeatAction = {
   SetAmps: "setAmps",
   SetOhms: "setOhms",
   SetSeconds: "setSeconds",
+  Tick: "tick",
   Run: "run",
   Toggle: "toggle",
   SetRating: "setRating",
@@ -122,6 +123,10 @@ export function describeHeat(s: HeatState): string {
 
 const act = actionsFor<HeatState>();
 
+/** A run is shown speeded up: this many frames, this far apart (about 3 seconds). */
+const RUN_FRAMES = 20;
+const RUN_STEP = 0.15;
+
 export const jouleHeating = defineProp({
   type: "jouleHeating",
   describe:
@@ -205,24 +210,28 @@ export const jouleHeating = defineProp({
       byLearner: true,
       args: z.object({}).strict(),
       run: () =>
-        task(async (c) => {
-          c.set({ elapsed: 0, isRunning: true });
-          const total = c.get().seconds;
-          const frames = 20;
-          for (let f = 1; f <= frames; f++) {
-            await c.wait(0.15);
-            if (!c.get().isRunning) return;
-            c.set({ elapsed: Math.round(((total * f) / frames) * 100) / 100 });
-          }
-          c.set({ isRunning: false, elapsed: total });
-          const s = c.get();
-          c.emit(HeatSignal.Heated, {
-            amps: s.amps,
-            ohms: s.ohms,
-            seconds: s.seconds,
-            heat: heatOf(s),
-          });
-        }),
+        seq(
+          set({ elapsed: 0, isRunning: true }),
+          repeat(RUN_STEP, HeatAction.Tick, { while: (now) => now.isRunning }),
+        ),
+    }),
+    [HeatAction.Tick]: act({
+      describe: "Move the run on by one frame (its own clock)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => {
+        const frame = Math.round((s.elapsed / s.seconds) * RUN_FRAMES) + 1;
+        if (frame < RUN_FRAMES)
+          return set({ elapsed: Math.round(((s.seconds * frame) / RUN_FRAMES) * 100) / 100 });
+        const end = { ...s, elapsed: s.seconds };
+        return set(
+          { isRunning: false, elapsed: s.seconds },
+          {
+            signal: HeatSignal.Heated,
+            payload: { amps: end.amps, ohms: end.ohms, seconds: end.seconds, heat: heatOf(end) },
+          },
+        );
+      },
     }),
     [HeatAction.Toggle]: act({
       describe: "Switch one appliance on or off (fuse mode); too much current melts the fuse",

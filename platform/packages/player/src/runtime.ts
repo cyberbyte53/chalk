@@ -23,6 +23,7 @@ import {
   type Scope,
   type Spoken,
   type StoredState,
+  type TaskContext,
   boardProp,
   compileExpression,
   compileTemplate,
@@ -32,8 +33,8 @@ import {
   invariantOfView,
   isFullChecking,
   prepareOnView,
+  runEffect,
   schemaWithout,
-  tweenAt,
   viewOf,
   without,
 } from "@chalk/prop";
@@ -95,14 +96,14 @@ type CompiledWhen = {
   script: Script;
 };
 
-type Running = { cancel: () => void };
+/** Steps running over time on one prop: stopped by marking it dead (it stops at its next step). */
+type Timeline = { actor: Actor; isLive: boolean };
 
-/** Waits and tweens run on the board's own clock, so pausing the board pauses them all together. */
+/** Waits (and so every step over time) run on the board's own clock, so pausing the board pauses them all together. */
 class Clock {
   private pausedAt: number | undefined;
   private pausedTotal = 0;
   private readonly waiters = new Set<{ until: number; resolve: () => void }>();
-  private readonly animations = new Set<{ step: (time: number) => boolean }>();
   private cancelFrame: (() => void) | undefined;
   private isStopped = false;
 
@@ -134,27 +135,17 @@ class Clock {
     });
   }
 
-  /** Calls `step` with seconds elapsed each frame until it returns false. */
-  animate(step: (elapsed: number) => boolean): () => void {
-    const started = this.time();
-    const animation = { step: (time: number) => step(time - started) };
-    this.animations.add(animation);
-    this.schedule();
-    return () => this.animations.delete(animation);
-  }
-
   stop(): void {
     this.isStopped = true;
     this.cancelFrame?.();
     this.cancelFrame = undefined;
     for (const waiter of this.waiters) waiter.resolve();
     this.waiters.clear();
-    this.animations.clear();
   }
 
   private schedule(): void {
     if (this.cancelFrame !== undefined || this.pausedAt !== undefined) return;
-    if (this.waiters.size === 0 && this.animations.size === 0) return;
+    if (this.waiters.size === 0) return;
     this.cancelFrame = this.services.frame(() => {
       this.cancelFrame = undefined;
       this.tick();
@@ -164,9 +155,6 @@ class Clock {
   private tick(): void {
     if (this.pausedAt !== undefined) return;
     const time = this.time();
-    for (const animation of [...this.animations]) {
-      if (!animation.step(time)) this.animations.delete(animation);
-    }
     for (const waiter of [...this.waiters]) {
       if (time >= waiter.until) {
         this.waiters.delete(waiter);
@@ -350,7 +338,8 @@ export class BoardRuntime {
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
   private readonly queue: SignalRecord[] = [];
   private isDispatching = false;
-  private readonly tweens = new Map<string, Running>();
+  /** What is running over time on each prop, and who started it. */
+  private readonly timelines = new Map<string, Set<Timeline>>();
   private readonly clock: Clock;
   private readonly touchedProps = signal<ReadonlySet<string>>(new Set());
   private isDisposed = false;
@@ -495,7 +484,7 @@ export class BoardRuntime {
       for (const [name, stored] of snapshot) {
         const piece = this.pieces.get(name);
         if (piece === undefined) continue;
-        this.tweens.get(name)?.cancel();
+        this.stopTimelines(name);
         const errors = this.commit({ [name]: without(stored, piece.bound) });
         if (errors.length > 0)
           this.services.onError(
@@ -542,12 +531,17 @@ export class BoardRuntime {
     return this.invoke(name, action, args, actor, false);
   }
 
+  /**
+   * `fromTimeline`: a step of an effect already running on this prop (a tick, a `call`): it is the
+   * same act as the one that started it, so it neither stops the prop's timelines nor counts again.
+   */
   private invoke(
     name: string,
     action: string,
     args: unknown,
     actor: Actor,
     isSetOff: boolean,
+    fromTimeline = false,
   ): Promise<void> {
     if (this.isDisposed) return Promise.resolve();
     const piece = this.piece(name);
@@ -556,15 +550,16 @@ export class BoardRuntime {
       if (refused !== undefined) record.refused = refused;
       for (const listener of this.actionListeners) listener(record);
     };
-    if (actor === Actor.Jugnu) {
+    if (actor === Actor.Jugnu && !fromTimeline) {
       const why = this.whyNotJugnu(name, action, isSetOff);
       if (why !== undefined) {
         notify(why);
         return Promise.resolve();
       }
     }
-    if (actor === Actor.Learner) {
-      this.tweens.get(name)?.cancel();
+    if (actor === Actor.Learner && !fromTimeline) {
+      // The learner wins: whatever the lesson (or Jugnu) is moving on this prop stops.
+      this.stopTimelines(name, (t) => t.actor !== Actor.Learner);
       if (!this.touchedProps.peek().has(name))
         this.touchedProps.value = new Set([...this.touchedProps.peek(), name]);
     }
@@ -580,40 +575,75 @@ export class BoardRuntime {
     const outside = (patch: Readonly<Record<string, unknown>>) =>
       allowed === undefined ? [] : Object.keys(patch).filter((key) => !allowed.includes(key));
     // A prop bug, whoever acted: always reported.
-    const refuse = (keys: string[]) => {
+    const refuse = (keys: string[]) =>
       this.services.onError(
         `Board ${this.board.name}: ${name}.${action} changed ${keys.join(", ")}, outside what it declares (changes)`,
       );
-      return Promise.resolve();
-    };
-    switch (effect.kind) {
-      case EffectKind.Set:
-        if (outside(effect.set).length > 0) return refuse(outside(effect.set));
-        this.change(piece, effect.set, actor);
-        for (const emit of effect.emit) this.emitFrom(name, emit, actor);
+    if (effect.kind === EffectKind.Set) {
+      if (outside(effect.set).length > 0) {
+        refuse(outside(effect.set));
         return Promise.resolve();
-      case EffectKind.Tween:
-        if (outside(effect.to).length > 0) return refuse(outside(effect.to));
-        return this.runTween(piece, effect.duration, effect.to, actor);
-      case EffectKind.Task: {
-        const spoken = piece.def.speech?.(this.fieldsOf(piece));
-        return effect
-          .run({
-            speak: () =>
-              spoken === undefined || this.isDisposed
-                ? Promise.resolve()
-                : this.services.speak({ name, id: piece.id }, spoken),
-            wait: (seconds) => this.clock.wait(seconds),
-            set: (patch) => {
-              if (outside(patch).length > 0) void refuse(outside(patch));
-              else this.change(piece, patch, actor);
-            },
-            get: () => this.fieldsOf(piece),
-            emit: (signal, payload) => this.emitFrom(name, { signal, payload }, actor),
-          })
-          .catch((error: unknown) => this.services.onError(`${name}.${action} failed`, error));
       }
+      this.change(piece, effect.set, actor);
+      for (const emit of effect.emit) this.emitFrom(name, emit, actor);
+      return Promise.resolve();
     }
+    // Anything else runs as a timeline on this prop: steps on the board's clock, through the door.
+    const timeline: Timeline = { actor, isLive: true };
+    const running = this.timelines.get(name) ?? new Set<Timeline>();
+    running.add(timeline);
+    this.timelines.set(name, running);
+    const isLive = () => timeline.isLive && !this.isDisposed;
+    const context: TaskContext<StoredState> = {
+      speak: () => {
+        const spoken = piece.def.speech?.(this.fieldsOf(piece));
+        return spoken === undefined || !isLive()
+          ? Promise.resolve()
+          : this.services.speak({ name, id: piece.id }, spoken);
+      },
+      wait: (seconds) => this.clock.wait(seconds),
+      now: () => this.clock.time(),
+      set: (patch) => {
+        if (!isLive()) return;
+        if (outside(patch).length > 0) refuse(outside(patch));
+        else this.change(piece, patch, actor);
+      },
+      get: () => this.fieldsOf(piece),
+      emit: (signal, payload) => {
+        if (isLive()) this.emitFrom(name, { signal, payload }, actor);
+      },
+      call: (next, nextArgs) =>
+        isLive() ? this.invoke(name, next, nextArgs, actor, isSetOff, true) : Promise.resolve(),
+      isLive,
+    };
+    const finish = () => {
+      running.delete(timeline);
+    };
+    let ran: Promise<boolean> | boolean;
+    try {
+      ran = runEffect(effect, context);
+    } catch (error) {
+      finish();
+      this.services.onError(`${name}.${action} failed`, error);
+      return Promise.resolve();
+    }
+    if (ran === true || ran === false) {
+      finish();
+      return Promise.resolve();
+    }
+    return ran.then(
+      () => finish(),
+      (error: unknown) => {
+        finish();
+        this.services.onError(`${name}.${action} failed`, error);
+      },
+    );
+  }
+
+  /** Stops a prop's timelines (those `which` picks): each stops at its next step. */
+  private stopTimelines(name: string, which: (t: Timeline) => boolean = () => true): void {
+    for (const timeline of this.timelines.get(name) ?? [])
+      if (which(timeline)) timeline.isLive = false;
   }
 
   /**
@@ -646,8 +676,8 @@ export class BoardRuntime {
   /** The board is gone: stop every tween, wait and script. */
   dispose(): void {
     this.isDisposed = true;
-    for (const running of this.tweens.values()) running.cancel();
-    this.tweens.clear();
+    for (const name of this.timelines.keys()) this.stopTimelines(name);
+    this.timelines.clear();
     this.clock.stop();
     this.signalListeners.clear();
     this.actionListeners.clear();
@@ -682,10 +712,10 @@ export class BoardRuntime {
   /**
    * Why Jugnu may not run `prop.action` right now, or undefined if he may. The one place his hard
    * limits live, checked on every call he makes and on everything his actions set off through the
-   * lesson's rules (`isSetOff`): nothing he does answers the question, lets the board pass, does
-   * what the board leaves to the student, or gives an answer away while a question is open. He
-   * also never directly speaks the lesson's lines or shows and hides its props; the lesson's own
-   * rules still may, in answer to what he did.
+   * lesson's rules (`isSetOff`): he never answers a question or lets the board pass, never directly
+   * speaks the lesson's lines or shows and hides its props (the lesson's own rules still may, in
+   * answer to what he did), and never runs a prop's own steps. Everything else is his judgement:
+   * his instructions say what is the student's part, and his evals check he leaves it to them.
    */
   whyNotJugnu(name: string, action: string, isSetOff = false): string | undefined {
     const piece = this.pieces.get(name);
@@ -696,13 +726,11 @@ export class BoardRuntime {
       return "the board itself is the student's (Continue) and the lesson's";
     if (piece.def.role === PropRole.Question)
       return `${name} is the question: only the student answers it`;
-    if (this.board.studentOnly.includes(`${name}.${action}`))
-      return `${name}.${action} is the student's job on this board`;
     if (action === SAY && !isSetOff) return "lesson lines are the lesson's to say";
     const spec = piece.def.actions[action];
     if (spec === undefined) return undefined; // the action itself refuses, with its own words
-    if (spec.reveals === true && this.hasOpenQuestion())
-      return `${name}.${action} would give the answer away while the question is open`;
+    if (spec.internal === true)
+      return `${name}.${action} is a step of the prop's own, not an action`;
     return undefined;
   }
 
@@ -766,41 +794,6 @@ export class BoardRuntime {
       return false;
     }
     return true;
-  }
-
-  private runTween(
-    piece: Piece,
-    duration: number,
-    to: Readonly<Record<string, unknown>>,
-    actor: Actor,
-  ): Promise<void> {
-    const blocked = Object.keys(to).filter((field) => piece.bound?.[field] === true);
-    if (blocked.length > 0)
-      return this.fail(
-        `${piece.name}: ${blocked.join(", ")} is set by an IS rule; actions can't change it`,
-        actor,
-      );
-    this.tweens.get(piece.name)?.cancel();
-    const from = this.fieldsOf(piece);
-    return new Promise((resolve) => {
-      let stopAnimation = () => {};
-      const finish = () => {
-        stopAnimation();
-        if (this.tweens.get(piece.name) === running) this.tweens.delete(piece.name);
-        resolve();
-      };
-      const running: Running = { cancel: finish };
-      this.tweens.set(piece.name, running);
-      stopAnimation = this.clock.animate((elapsed) => {
-        const progress = duration <= 0 ? 1 : Math.min(1, elapsed / duration);
-        const isOk = this.change(piece, tweenAt(from, to, progress), actor);
-        if (!isOk || progress >= 1) {
-          finish();
-          return false;
-        }
-        return true;
-      });
-    });
   }
 
   private scope = (name: string): Readonly<Record<string, unknown>> => this.getView(name);

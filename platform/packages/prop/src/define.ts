@@ -18,7 +18,10 @@ export type PropView = Readonly<Record<string, unknown>>;
 /** One signal a prop raises, with its data. */
 export type Emit = { signal: string; payload?: Readonly<Record<string, unknown>> };
 
-/** What a running task can do. The player supplies it; a prop never touches the clock or audio itself. */
+/**
+ * What an effect running over time can do. The player supplies it; a prop never touches the clock
+ * or audio itself.
+ */
 export type TaskContext<S extends StoredState> = {
   /** Reads this prop's spoken line aloud; resolves when it ends (or fails: the text stays on screen). */
   speak: () => Promise<void>;
@@ -26,25 +29,74 @@ export type TaskContext<S extends StoredState> = {
   wait: (seconds: number) => Promise<void>;
   /** Changes stored fields through the one door. */
   set: (patch: Partial<S>) => void;
-  /** This prop's stored state right now (a long task reads it to know when to stop). */
+  /** This prop's state right now (a long effect reads it to know when to stop). */
   get: () => S;
   emit: (signal: string, payload?: Readonly<Record<string, unknown>>) => void;
+  /** Runs one of this prop's own actions through the one door; resolves when it finishes. */
+  call?: (action: string, args: Readonly<Record<string, unknown>>) => Promise<void>;
+  /** False once the effect was stopped (the learner took over, the board closed). */
+  isLive?: () => boolean;
+  /** Seconds on the board's clock (not counting pauses): tweens follow it, so a slow frame skips ahead. */
+  now?: () => number;
 };
 
 /** The action every speaking prop has: read its line aloud, finishing when the line ends. */
 export const SAY = "say";
 
-export const EffectKind = { Set: "set", Tween: "tween", Task: "task" } as const;
+export const EffectKind = {
+  Set: "set",
+  Tween: "tween",
+  Wait: "wait",
+  Say: "say",
+  Call: "call",
+  Seq: "seq",
+  Par: "par",
+  Until: "until",
+  Repeat: "repeat",
+  /** Old form: a function run over time. Being replaced by the steps above. */
+  Task: "task",
+} as const;
 export type EffectKind = (typeof EffectKind)[keyof typeof EffectKind];
 
+/** How far along a tween is, 0 to 1, from how much of its time has gone, 0 to 1. */
+export type Easing = (t: number) => number;
+
 /**
- * What an action does. `set` is instant. `tween` and `task` take time; the player runs them,
- * can pause or cancel them, and a script waits for them to finish.
+ * What an action does, as data: one step, or steps in order and together. `set` is instant (and
+ * steps that only set fold into one change); the others take time. The player runs them on the
+ * board's clock, so pausing the board pauses them, and a script waits for them to finish.
  */
 export type Effect<S extends StoredState> =
   | { kind: typeof EffectKind.Set; set: Partial<S>; emit: readonly Emit[] }
-  /** Eases numeric stored fields from where they are to `to` over `duration` seconds. */
-  | { kind: typeof EffectKind.Tween; duration: number; to: Partial<S> }
+  /**
+   * Moves fields from where they are to `to` over `duration` seconds: numbers eased, anything else
+   * switching at the end, or `interpolate` (a zoom that scales evenly in log). Stops the whole
+   * effect if anything else changes those fields meanwhile (the learner wins).
+   */
+  | {
+      kind: typeof EffectKind.Tween;
+      duration: number;
+      to: Partial<S>;
+      ease?: Easing;
+      interpolate?: (from: S, to: Partial<S>, t: number) => Partial<S>;
+    }
+  | { kind: typeof EffectKind.Wait; seconds: number }
+  /** Reads this prop's line aloud. */
+  | { kind: typeof EffectKind.Say }
+  /** Runs one of this prop's own actions (through the one door), and waits for it. */
+  | { kind: typeof EffectKind.Call; action: string; args: Readonly<Record<string, unknown>> }
+  | { kind: typeof EffectKind.Seq; steps: readonly Effect<S>[] }
+  | { kind: typeof EffectKind.Par; steps: readonly Effect<S>[] }
+  /** Waits until the prop's state passes the test (at once if it already does). */
+  | { kind: typeof EffectKind.Until; test: (state: S) => boolean }
+  /** While the test passes: wait `every` seconds, then run `action` (a tick). */
+  | {
+      kind: typeof EffectKind.Repeat;
+      every: number;
+      action: string;
+      args: Readonly<Record<string, unknown>>;
+      while: (state: S) => boolean;
+    }
   | { kind: typeof EffectKind.Task; run: (context: TaskContext<S>) => Promise<void> };
 
 // `NoInfer`: the state type comes from the action being written, not from the patch.
@@ -52,8 +104,71 @@ export function set<S extends StoredState>(patch: NoInfer<Partial<S>>, ...emit: 
   return { kind: EffectKind.Set, set: patch, emit };
 }
 
-export function tween<S extends StoredState>(duration: number, to: NoInfer<Partial<S>>): Effect<S> {
-  return { kind: EffectKind.Tween, duration, to };
+/** Raises a signal (with nothing changed). */
+export function emit<S extends StoredState>(
+  signal: string,
+  payload?: Readonly<Record<string, unknown>>,
+): Effect<S> {
+  return {
+    kind: EffectKind.Set,
+    set: {},
+    emit: [payload === undefined ? { signal } : { signal, payload }],
+  };
+}
+
+export function tween<S extends StoredState>(
+  duration: number,
+  to: NoInfer<Partial<S>>,
+  options: {
+    ease?: Easing;
+    interpolate?: (from: NoInfer<S>, to: NoInfer<Partial<S>>, t: number) => NoInfer<Partial<S>>;
+  } = {},
+): Effect<S> {
+  return { kind: EffectKind.Tween, duration, to, ...options } as Effect<S>;
+}
+
+export function wait<S extends StoredState>(seconds: number): Effect<S> {
+  return { kind: EffectKind.Wait, seconds };
+}
+
+export function say<S extends StoredState>(): Effect<S> {
+  return { kind: EffectKind.Say };
+}
+
+export function call<S extends StoredState>(
+  action: string,
+  args: Readonly<Record<string, unknown>> = {},
+): Effect<S> {
+  return { kind: EffectKind.Call, action, args };
+}
+
+/** Steps one after another. */
+export function seq<S extends StoredState>(...steps: Effect<NoInfer<S>>[]): Effect<S> {
+  return { kind: EffectKind.Seq, steps };
+}
+
+/** Steps together; finishes when all have. */
+export function par<S extends StoredState>(...steps: Effect<NoInfer<S>>[]): Effect<S> {
+  return { kind: EffectKind.Par, steps };
+}
+
+export function waitUntil<S extends StoredState>(test: (state: NoInfer<S>) => boolean): Effect<S> {
+  return { kind: EffectKind.Until, test };
+}
+
+/** While `test` passes: wait `every` seconds, then run the tick `action` (mark it `internal`). */
+export function repeat<S extends StoredState>(
+  every: number,
+  action: string,
+  options: { while: (state: NoInfer<S>) => boolean; args?: Readonly<Record<string, unknown>> },
+): Effect<S> {
+  return {
+    kind: EffectKind.Repeat,
+    every,
+    action,
+    args: options.args ?? {},
+    while: options.while,
+  } as Effect<S>;
 }
 
 export function task<S extends StoredState>(
@@ -70,6 +185,8 @@ export type ActionSpec<S extends StoredState> = {
   reveals?: boolean;
   /** The learner's finger does this (through the prop's view, or the player's Check). */
   byLearner?: boolean;
+  /** A step of the prop's own effects (a tick): not offered to anyone as something to do. */
+  internal?: boolean;
   /**
    * The stored fields it can change, and no others: the runtime refuses a change outside them.
    * What tells setup (fixed where placed) from live (changes on this board) in the board model.
@@ -89,6 +206,7 @@ export function actionsFor<S extends StoredState>() {
     args: ZodType<A, ZodTypeDef, unknown>;
     reveals?: boolean;
     byLearner?: boolean;
+    internal?: boolean;
     changes?: readonly (keyof S & string)[];
     run: (view: PropView & S, args: A) => Effect<S>;
   }): ActionSpec<S> => spec as ActionSpec<S>;

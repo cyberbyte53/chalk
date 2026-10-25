@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { SAY, actionsFor, defineProp, task } from "@chalk/prop";
+import { SAY, actionsFor, defineProp, say } from "@chalk/prop";
 import { z } from "zod";
 import { CharacterId } from "./cast";
 
@@ -27,7 +27,7 @@ export const line = defineProp({
     [SAY]: act({
       describe: "The character says the line, in their own voice",
       args: z.object({}).strict(),
-      run: () => task((context) => context.speak()),
+      run: () => say(),
     }),
   },
   speech: (s) => ({ say: s.line, speak: s.speak ?? undefined, speaker: s.character }),

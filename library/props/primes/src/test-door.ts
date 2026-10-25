@@ -4,9 +4,10 @@ import {
   type Emit,
   type PropDef,
   type StoredState,
-  type TaskContext,
   applyPatch,
   asAnyProp,
+  isInstant,
+  playAction,
   prepareAction,
   viewOf,
 } from "@chalk/prop";
@@ -37,26 +38,8 @@ export function door<S extends StoredState, A extends string, G extends string, 
     /** A timed action played to its end, every frame through the one door. */
     async play(state: S, name: A, args: Record<string, unknown> = {}) {
       const effect = effectOf(state, name, args);
-      if (effect.kind !== EffectKind.Task) throw new Error(`${name} should take time`);
-      let now = state;
-      const frames: S[] = [];
-      const emitted: Emit[] = [];
-      const context: TaskContext<StoredState> = {
-        speak: async () => {},
-        wait: async () => {},
-        get: () => now,
-        set: (patch) => {
-          const next = applyPatch(def, now, patch);
-          if (!next.isOk) throw new Error(next.errors.join("; "));
-          now = next.state as S;
-          frames.push(now);
-        },
-        emit: (signal, payload) => {
-          emitted.push(payload === undefined ? { signal } : { signal, payload });
-        },
-      };
-      await effect.run(context as never);
-      return { state: now, frames, emit: emitted };
+      if (isInstant(effect)) throw new Error(`${name} should take time`);
+      return playAction(def, state, name, args);
     },
     /** Whether the door refuses these arguments. */
     refuses(state: S, name: A, args: Record<string, unknown>): boolean {

@@ -1,12 +1,13 @@
 import {
+  type Effect,
   type Element,
   FrameKind,
-  type TaskContext,
   actionsFor,
   colorSchema,
   defineLayer,
+  emit,
+  seq,
   set,
-  task,
   tween,
 } from "@chalk/prop";
 import { z } from "zod";
@@ -60,25 +61,21 @@ function easeInOut(t: number): number {
 }
 
 /**
- * Glides the window from where it is to `target`, frame by frame through the one door, scaling
- * evenly in log about the point both windows share. Stops if anything else moves the window.
+ * Glides the window from where it is to `target` (clearing the lens first), scaling evenly in log
+ * about the point both windows share, then says `zoomed`. Stops if anything else moves the window.
  */
-export async function glide(
-  c: TaskContext<AxisState>,
+export function glide<S extends Window & { lens: unknown }>(
   target: Window,
   seconds: number,
-): Promise<void> {
-  const start = { from: c.get().from, to: c.get().to };
-  const frames = Math.max(1, Math.round(seconds * 60));
-  let last = start;
-  for (let i = 1; i <= frames; i++) {
-    await c.wait(seconds / frames);
-    const now = c.get();
-    if (now.from !== last.from || now.to !== last.to) return;
-    last = i === frames ? target : zoomFrame(start, target, easeInOut(i / frames));
-    c.set(last);
-  }
-  c.emit(AxisSignal.Zoomed, { from: target.from, to: target.to, level: levelOf(target) });
+): Effect<S> {
+  return seq<S>(
+    set({ lens: null } as Partial<S>),
+    tween(seconds, { from: target.from, to: target.to } as Partial<S>, {
+      ease: easeInOut,
+      interpolate: (s, to, t) => zoomFrame(s, to as Window, t) as Partial<S>,
+    }),
+    emit(AxisSignal.Zoomed, { from: target.from, to: target.to, level: levelOf(target) }),
+  );
 }
 
 const act = actionsFor<AxisState>();
@@ -115,10 +112,7 @@ export const axis = defineLayer({
         if (a.over === 0) return set({ from: a.from, to: a.to, lens: null });
         const isSameSize = Math.abs(Math.log10((a.to - a.from) / (s.to - s.from))) < 0.01;
         if (isSameSize) return tween(a.over, { from: a.from, to: a.to });
-        return task((c) => {
-          c.set({ lens: null });
-          return glide(c, { from: a.from, to: a.to }, a.over);
-        });
+        return glide({ from: a.from, to: a.to }, a.over);
       },
     }),
     [AxisAction.ShowLens]: act({

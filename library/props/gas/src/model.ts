@@ -1,4 +1,4 @@
-import { actionsFor, defineProp, set, task } from "@chalk/prop";
+import { actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 
 /**
@@ -12,6 +12,7 @@ import { z } from "zod";
 
 export const GasAction = {
   Start: "start",
+  Step: "step",
   Stop: "stop",
   Heat: "heat",
   Cool: "cool",
@@ -94,15 +95,13 @@ export const gas = defineProp({
       byLearner: true,
       args: z.object({}).strict(),
       run: () =>
-        task(async (context) => {
-          context.set({ isRunning: true });
-          while (context.get().isRunning) {
-            await context.wait(STEP);
-            const s = context.get();
-            if (!s.isRunning) break;
-            context.set({ travel: s.travel + SPEED * Math.sqrt(s.temperature) * STEP });
-          }
-        }),
+        seq(set({ isRunning: true }), repeat(STEP, GasAction.Step, { while: (s) => s.isRunning })),
+    }),
+    [GasAction.Step]: act({
+      describe: "Move the gas on by one step (its own clock)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => set({ travel: s.travel + SPEED * Math.sqrt(s.temperature) * STEP }),
     }),
     [GasAction.Stop]: act({
       describe: "Freeze the gas",

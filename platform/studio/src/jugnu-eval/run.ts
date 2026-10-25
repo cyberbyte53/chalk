@@ -17,7 +17,17 @@ import { type Verdict, judge } from "./judge";
 
 /** One turn of a case as it happened. */
 export type TurnRecord =
-  | { kind: "ask"; text: string; turn: JugnuTurn; seconds: number }
+  | {
+      kind: "ask";
+      text: string;
+      turn: JugnuTurn;
+      seconds: number;
+      /**
+       * What he did that was the student's part: goal questions open before his turn and met after
+       * it, and actions the board leaves to the student that he showed.
+       */
+      overreach: string[];
+    }
   | { kind: "student"; did: string[] };
 
 export type CaseResult = {
@@ -94,6 +104,15 @@ export function openBoard(root: string, lessonPath: string, boardName: string, l
 const describeStep = (step: { call: string; args?: Record<string, unknown> | undefined }) =>
   `${step.call}${step.args === undefined ? "" : ` ${JSON.stringify(step.args)}`}`;
 
+/** Goal questions not yet met or answered: the ones he must not put into their answer. */
+function openGoals(runtime: BoardRuntime): string[] {
+  return runtime.propNames().filter((name) => {
+    if (runtime.getDef(name).role !== PropRole.Question) return false;
+    const view = runtime.getView(name);
+    return view.isMet === false && view.status !== "correct";
+  });
+}
+
 /** Plays one case on its real board: set it up, play the turns, check, and have the judge grade. */
 export async function runCase(
   testCase: EvalCase,
@@ -134,7 +153,20 @@ export async function runCase(
   try {
     for (const step of testCase.turns) {
       if ("ask" in step) {
-        turns.push({ kind: "ask", text: step.ask, ...(await timed(() => session.ask(step.ask))) });
+        const before = openGoals(runtime);
+        const played = await timed(() => session.ask(step.ask));
+        const solved = before.filter((name) => runtime.getView(name).isMet === true);
+        const leftToStudent = played.turn.cues.flatMap((cue) =>
+          cue.kind === "act" && runtime.board.studentOnly.includes(`${cue.prop}.${cue.action}`)
+            ? [`${cue.prop}.${cue.action}`]
+            : [],
+        );
+        turns.push({
+          kind: "ask",
+          text: step.ask,
+          ...played,
+          overreach: [...solved.map((name) => `${name} met`), ...leftToStudent],
+        });
         continue;
       }
       await act(step.student);

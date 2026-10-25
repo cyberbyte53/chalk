@@ -1,7 +1,6 @@
-import { type Box, type Emit, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Box, type Emit, actionsFor, defineProp, seq, set, tween } from "@chalk/prop";
 import { z } from "zod";
 import { MAX_HEIGHT, around, builderLayout, builderPx, swingTip } from "./geometry";
-import { glide } from "./glide";
 import { floorRoot, isPerfectSquare, rootText } from "./surd";
 
 export const RootBuilderPart = {
@@ -219,24 +218,9 @@ export const rootBuilder = defineProp({
         const landed = landedEmit(hypotenuseSquared(s));
         const over = a.over ?? SWING_SECONDS;
         if (over === 0) return set(landPatch(s), landed);
-        return task(async (c) => {
-          const start = c.get();
-          let last = start.swing;
-          // The learner wins: if anything else changes the triangle or the swing, stop here.
-          const isSame = () => {
-            const now = c.get();
-            return now.base === start.base && now.height === start.height && now.swing === last;
-          };
-          const isDone = await glide(c.wait, over, start.swing, (value) => {
-            if (!isSame()) return false;
-            c.set({ swing: value });
-            last = value;
-            return true;
-          });
-          if (!isDone || !isSame()) return;
-          c.set(landPatch(c.get()));
-          c.emit(landed.signal, landed.payload);
-        });
+        // The learner wins: changing the triangle meanwhile folds the swing back, which stops it.
+        // It lands (in `landed`) on its last frame.
+        return seq(tween(over, landPatch(s)), set({}, landed));
       },
     }),
     buildOn: act({

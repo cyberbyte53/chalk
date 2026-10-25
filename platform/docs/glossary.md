@@ -14,7 +14,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Derived field** | Computed from stored fields; read-only, never stale | `PropDef.derived` |
 | **Input** | A stored field an IS rule may own (e.g. a text's words) | `PropDef.inputs` |
 | **Action** | The only way a prop changes. Instant or timed; says what it keeps fixed; flagged if it reveals an answer | `ActionSpec`, `actionsFor` |
-| **Timed action** | An action that takes time (a tween, a spoken line); scripts wait for it to finish | `tween`, `task` |
+| **Timed action** | An action that takes time (a tween, a spoken line); scripts wait for it to finish | `tween`, `seq`, `repeat` (steps, as data) |
 | **Signal** | Something a prop announces (pressed, landed, wrong) | `SignalSpec` |
 | **Commit** | A signal where the learner decides something; the only thing logged | `SignalSpec.isCommit` |
 | **Part** | A named thing on a prop that can be pointed at; can come and go | `PropDef.parts`, `PropDef.locate` |

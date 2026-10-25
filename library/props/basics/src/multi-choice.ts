@@ -9,8 +9,8 @@ import {
   defineProp,
   questionDefaults,
   questionFields,
+  say,
   set,
-  task,
 } from "@chalk/prop";
 import { z } from "zod";
 
@@ -128,7 +128,7 @@ export const multiChoice = defineProp({
     [SAY]: act({
       describe: "Read the prompt aloud (narrator)",
       args: noArgs,
-      run: () => task((context) => context.speak()),
+      run: () => say(),
     }),
   },
   signals: {

@@ -7,7 +7,6 @@ import {
   defineLayer,
   isInAxis,
   set,
-  task,
 } from "@chalk/prop";
 import { z } from "zod";
 import {
@@ -380,10 +379,7 @@ export const zoom = defineLayer({
       run: (s, a) => {
         const target = magnifyTarget(s, a.value);
         if (!canMagnify(target)) return set({});
-        return task((c) => {
-          c.set({ lens: null });
-          return glide(c, target, MAGNIFY_SECONDS);
-        });
+        return glide(target, MAGNIFY_SECONDS);
       },
     }),
     [ZoomAction.ZoomIn]: onZoom({
@@ -395,10 +391,7 @@ export const zoom = defineLayer({
       run: (s) => {
         const target = magnifyTarget(s, s.showMarker ? s.marker : (s.from + s.to) / 2);
         if (!canMagnify(target)) return set({});
-        return task((c) => {
-          c.set({ lens: null });
-          return glide(c, target, MAGNIFY_SECONDS * 0.8);
-        });
+        return glide(target, MAGNIFY_SECONDS * 0.8);
       },
     }),
     [ZoomAction.ZoomOut]: onZoom({
@@ -414,10 +407,7 @@ export const zoom = defineLayer({
         if (Math.abs(from - s.from) < 1e-12 && Math.abs(span - (s.to - s.from)) < 1e-12) {
           return set({});
         }
-        return task((c) => {
-          c.set({ lens: null });
-          return glide(c, { from, to: from + span }, MAGNIFY_SECONDS * 0.8);
-        });
+        return glide({ from, to: from + span }, MAGNIFY_SECONDS * 0.8);
       },
     }),
   },

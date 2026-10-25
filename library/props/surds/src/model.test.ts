@@ -1,16 +1,19 @@
 import {
   type AnyPropDef,
   EffectKind,
+  FRAMES_PER_SECOND,
   type StoredState,
   applyPatch,
   asAnyProp,
+  isInstant,
   prepareAction,
+  runEffect,
   tweenAt,
   viewOf,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { layoutOf } from "./layout";
-import { type SurdTilesState, surdTiles } from "./model";
+import { COMBINE_SECONDS, type SurdTilesState, surdTiles } from "./model";
 import { type Term, sumValue, termValue } from "./surd";
 
 const def: AnyPropDef = asAnyProp(surdTiles);
@@ -44,8 +47,8 @@ async function play(state: SurdTilesState, name: string, args: Record<string, un
     if (!r.isOk) throw new Error(r.errors.join("; "));
     return { state: r.state, steps, signals: [...effect.emit] };
   }
-  if (effect.kind !== EffectKind.Task) throw new Error("expected a task");
-  await effect.run({
+  if (isInstant(effect)) throw new Error("expected a task");
+  await runEffect(effect, {
     speak: async () => {},
     wait: async () => {},
     get: () => stored,
@@ -233,7 +236,7 @@ describe("surdTiles: actions", () => {
   it("combine glides through the one door at every step, then raises combined", async () => {
     const s = at(ROOT5_PLUS_ROOT3, ROOT5_MINUS_ROOT3);
     const { state, steps, signals } = await play(s, "combine");
-    expect(steps.length).toBe(45);
+    expect(steps.length).toBe(COMBINE_SECONDS * FRAMES_PER_SECOND);
     expect(steps.at(-1)).toBe(1);
     for (let i = 1; i < steps.length; i++) expect(steps[i] ?? 0).toBeGreaterThan(steps[i - 1] ?? 0);
     expect(state.combine).toBe(1);
@@ -253,11 +256,11 @@ describe("surdTiles: actions", () => {
   it("a combine run stops when the factors change on its way", async () => {
     const s = at(ROOT5_PLUS_ROOT3, ROOT5_MINUS_ROOT3, { canChangeRight: true });
     const effect = run(s, "combine");
-    if (effect.kind !== EffectKind.Task) throw new Error("expected a task");
+    if (isInstant(effect)) throw new Error("expected a task");
     let stored: StoredState = s;
     let sets = 0;
     const signals: string[] = [];
-    await effect.run({
+    await runEffect(effect, {
       speak: async () => {},
       wait: async () => {
         if (sets === 10) stored = { ...stored, right: ROOT5_PLUS_ROOT3, combine: 0 };

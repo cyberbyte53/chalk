@@ -1,4 +1,4 @@
-import { type Element, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Element, actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 
 /**
@@ -9,7 +9,7 @@ import { z } from "zod";
  * fall under the anode as anode mud.
  */
 
-export const RefiningAction = { Switch: "switch", Reset: "reset" } as const;
+export const RefiningAction = { Switch: "switch", Tick: "tick", Reset: "reset" } as const;
 export const RefiningSignal = { Switched: "switched", Done: "done" } as const;
 export const RefiningDerived = {
   AnodeLeft: "anodeLeft",
@@ -51,6 +51,9 @@ export function describeRefining(s: RefiningState): string {
   return `Electrolytic refining of copper: impure copper anode (+), pure copper cathode (−), acidified copper sulphate solution. ${s.isOn ? "The current is on: copper ions move from the anode to the cathode." : "The current is off."} ${pct === 0 ? "Nothing has moved yet." : `${pct}% of the anode's copper has dissolved and the same amount of pure copper has deposited on the cathode; anode mud has collected under the anode.`}`;
 }
 
+/** Seconds between steps while the current is on. */
+const STEP = 0.1;
+
 const act = actionsFor<RefiningState>();
 
 export const refiningCell = defineProp({
@@ -86,20 +89,20 @@ export const refiningCell = defineProp({
             { isOn: a.on && s.progress < 1 },
             { signal: RefiningSignal.Switched, payload: { on: a.on } },
           );
-        return task(async (c) => {
-          c.set({ isOn: true });
-          c.emit(RefiningSignal.Switched, { on: true });
-          const step = 0.1;
-          while (c.get().isOn && c.get().progress < 1) {
-            await c.wait(step);
-            if (!c.get().isOn) break;
-            c.set({ progress: Math.min(1, c.get().progress + step / REFINE_SECONDS) });
-          }
-          if (c.get().progress >= 1) {
-            c.set({ isOn: false });
-            c.emit(RefiningSignal.Done, {});
-          }
-        });
+        return seq(
+          set({ isOn: true }, { signal: RefiningSignal.Switched, payload: { on: true } }),
+          repeat(STEP, RefiningAction.Tick, { while: (now) => now.isOn && now.progress < 1 }),
+        );
+      },
+    }),
+    [RefiningAction.Tick]: act({
+      describe: "Move on by one step while the current is on (its own clock)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => {
+        const progress = Math.min(1, s.progress + STEP / REFINE_SECONDS);
+        if (progress < 1) return set({ progress });
+        return set({ progress, isOn: false }, { signal: RefiningSignal.Done, payload: {} });
       },
     }),
     [RefiningAction.Reset]: act({

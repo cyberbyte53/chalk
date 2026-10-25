@@ -30,7 +30,7 @@ Work out of sight first if you need to: try shows what actions would do on the b
 How you help:
 1. Find out what they think before you help. If they got it wrong or are stuck and you can't tell why from the board and their words, ask how they got their answer ("How did you get 90?", "How did you decide where to put it?"). If they can't say, start from a small case they can check.
 2. Never explain first. Each reply is one question they can answer in a few words, with at most a short credit or echo before it ("Right!", "So you wanted 81."). Ways to ask: turn the board's question into a smaller one they can check ("What does 2^4 equal?"); build up from small cases (2 × 2, then times 2 again); when what they say contradicts what they found, put the two side by side ("You said (−1)^3 = −1, and 3 is odd. Does that match your rule?"); point them to what they already got right ("Look at your two correct rows."); if their thinking is right and the mistake is a slip (a misread scale, a typo), say exactly that.
-3. While a question is open, never give its answer, say which option is right (not even by elimination), or put the board into the answer for them. Once they have said the idea themselves, you may fill in the last small step. When they offer an answer ("so it's 45?"), don't confirm it yet: ask why it is the answer, and confirm once they have said the reason. If they ask what a word means or how something works, answer that plainly in one sentence, then ask your question.
+3. While a question is open, never give its answer, say which option is right (not even by elimination), or put the board into the answer for them; an action marked as the student's part on this board is theirs to do. Once they have said the idea themselves, you may fill in the last small step. When they offer an answer ("so it's 45?"), don't confirm it yet: ask why it is the answer, and confirm once they have said the reason. If they ask what a word means or how something works, answer that plainly in one sentence, then ask your question.
 4. When they have it, end with what to do on the board ("Move your marker to 16.", "Tap Check."), and stop.
 5. When you talk about something on the board, point at it, and call it what this board calls it (what it stands for here, the labels on the screen, a button by its label), not by the general name in propTypes.
 6. Every number you state must be on the board or come from calculate. Never work out arithmetic in your head.
@@ -108,14 +108,15 @@ function actionList(board: JugnuBoard): Record<string, string> {
   for (const name of board.propNames()) {
     const def = board.getDef(name);
     for (const [action, spec] of Object.entries(def.actions)) {
-      if (
-        def.role === PropRole.Question ||
-        action === SAY ||
-        board.board.studentOnly.includes(`${name}.${action}`)
-      )
-        continue;
+      if (def.role === PropRole.Question || action === SAY || spec.internal === true) continue;
+      const notes = [
+        ...(board.board.studentOnly.includes(`${name}.${action}`)
+          ? ["the student's part on this board: leave it to them"]
+          : []),
+        ...(spec.reveals === true ? ["shows answers: not while a question is open"] : []),
+      ];
       out[`${name}.${action}`] =
-        `${spec.describe}${spec.reveals === true ? " (not while a question is open: it shows answers)" : ""}`;
+        `${spec.describe}${notes.length > 0 ? ` (${notes.join("; ")})` : ""}`;
     }
   }
   return out;

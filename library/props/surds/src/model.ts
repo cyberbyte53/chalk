@@ -1,4 +1,13 @@
-import { type Box, type PropView, actionsFor, defineProp, set, task, tween } from "@chalk/prop";
+import {
+  type Box,
+  type PropView,
+  actionsFor,
+  defineProp,
+  emit,
+  seq,
+  set,
+  tween,
+} from "@chalk/prop";
 import { z } from "zod";
 import { layoutOf, tilesOf } from "./layout";
 import { type Term, addLikeTerms, factorText, sumText, termText } from "./surd";
@@ -14,9 +23,8 @@ export const SurdTilesSignal = { Combined: "combined" } as const;
 
 export const MAX_COEFFICIENT = 20;
 export const MAX_RADICAND = 200;
-/** How long `combine` takes unless told otherwise, and how often it steps. */
+/** How long `combine` takes unless told otherwise. */
 export const COMBINE_SECONDS = 1.5;
-const STEPS_PER_SECOND = 30;
 
 const term = z
   .object({
@@ -76,11 +84,6 @@ function tiles(s: SurdTilesState): TileView[] {
 
 function isRational(s: SurdTilesState): boolean {
   return termsOf(s).every((t) => t.radicand === 1);
-}
-
-/** The factors, as one string: a combine run stops if they change on its way. */
-function factorsKey(s: SurdTilesState): string {
-  return JSON.stringify([s.left, s.right]);
 }
 
 function needsCanChange(s: SurdTilesState): void {
@@ -177,21 +180,11 @@ export const surdTiles = defineProp({
         const over = a.over ?? COMBINE_SECONDS;
         const done = { signal: SurdTilesSignal.Combined, payload: { isRational: isRational(s) } };
         if (over === 0 || s.combine === 1) return set({ combine: 1 }, done);
-        return task(async (context) => {
-          const key = factorsKey(context.get());
-          const from = context.get().combine;
-          const steps = Math.max(1, Math.round(over * STEPS_PER_SECOND));
-          let last = from;
-          for (let i = 1; i <= steps; i++) {
-            await context.wait(over / steps);
-            const now = context.get();
-            // Someone changed the factors or moved the tiles meanwhile: this run is over.
-            if (factorsKey(now) !== key || now.combine !== last) return;
-            last = i === steps ? 1 : from + ((1 - from) * i) / steps;
-            context.set({ combine: last });
-          }
-          context.emit(done.signal, done.payload);
-        });
+        // Changing the tiles meanwhile moves `combine` too, which stops the glide (no `combined`).
+        return seq(
+          tween(over, { combine: 1 }, { ease: (x) => x }),
+          emit(done.signal, done.payload),
+        );
       },
     }),
     separate: act({

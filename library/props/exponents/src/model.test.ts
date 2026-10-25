@@ -3,9 +3,12 @@ import {
   EffectKind,
   type Emit,
   type StoredState,
+  type TaskContext,
   applyPatch,
   asAnyProp,
+  isInstant,
   prepareAction,
+  runEffect,
   viewOf,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
@@ -318,15 +321,20 @@ async function playShowBoth(state: ExponentRoutesState) {
   const result = prepareAction(def, state, "showBoth", {});
   if (!result.isOk) throw new Error(result.errors.join("; "));
   const effect: Effect<StoredState> = result.effect;
-  if (effect.kind !== EffectKind.Task) throw new Error("showBoth should be timed");
+  if (isInstant(effect)) throw new Error("showBoth should be timed");
   let now: StoredState = state;
   const waits: number[] = [];
   const emitted: Emit[] = [];
   const states: ExponentRoutesState[] = [];
-  await effect.run({
+  const context: TaskContext<StoredState> = {
     speak: async () => {},
     wait: async (seconds) => {
       waits.push(seconds);
+    },
+    call: async (action, args) => {
+      const step = prepareAction(def, now, action, args);
+      if (!step.isOk) throw new Error(step.errors.join("; "));
+      await runEffect(step.effect, context);
     },
     set: (patch) => {
       const next = applyPatch(def, now, patch);
@@ -337,7 +345,8 @@ async function playShowBoth(state: ExponentRoutesState) {
     get: () => now,
     emit: (signal, payload) =>
       emitted.push(payload === undefined ? { signal } : { signal, payload }),
-  });
+  };
+  await runEffect(effect, context);
   return { end: now as ExponentRoutesState, waits, emitted, states };
 }
 

@@ -45,7 +45,7 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 - `state`: a strict zod object; `defaults` for every field.
 - `derived`: pure functions of stored state.
-- `actions` via `actionsFor<S>()`: `set(patch, ...signals)` for an instant change, `tween(seconds, to)` to glide, `task(async (c) => …)` for anything that takes steps. Each lists the fields it `changes`: the runtime refuses any other, and the board model uses it to tell setup (fixed where placed) from live (changes on this board).
+- `actions` via `actionsFor<S>()`: `set(patch, ...signals)` for an instant change; anything over time is steps, as data: `tween(seconds, to, { ease, interpolate })` to glide (it stops if anything else moves those fields), `wait(s)`, `say()`, `call(action)`, `seq(...)`, `par(...)`, `waitUntil(test)`, and `repeat(every, tick, { while })` for things that run (a tick is an action marked `internal`). Each lists the fields it `changes`: the runtime refuses any other, and the board model uses it to tell setup (fixed where placed) from live (changes on this board).
 - Name actions, signals and derived fields once, in `as const` maps exported with the prop (`NumberLineAction`, `NumberLineSignal`, `NumberLineDerived`), and key the definition with them (`[NumberLineAction.MoveMarker]: act({ … })`). Views, lessons and content use the maps, never the strings.
 - `isExplainer: false` for props that don't explain anything (words, buttons, questions, timers), so Jugnu isn't offered them.
 - `invariant` for rules across fields the schema can't say.
@@ -71,7 +71,7 @@ Use what already exists before writing your own, but only from this list. One to
 | Anything on a coordinate plane: function graphs, draggable points on an axis, lines, circles, polygons, vectors, ray diagrams, motion graphs | [Mafs](https://mafs.dev) (MIT) | React components run through `@preact/compat`, set up once per prop package. Pass `point` and `onMove` (the prop's state, our action); never `useMovablePoint`, whose state lives in Mafs. `constrain` on `MovablePoint` takes a function, `([x]) => [x, 0]`. Set its `--mafs-*` colours to look tokens in the prop's `styles.css`. Its points take no `data-part`, so give the prop a `locate` from plane to pixels. |
 | Algebra: expand, factorise, divide polynomials, exact roots (fractions and surds), read off coefficients | [nerdamer](https://github.com/jiggzson/nerdamer) (Apache-2.0) | Pin the version. It writes terms in its own order (−6+x+x²); print the textbook's order from `coeffs`. |
 | Exact fractions in a prop's own arithmetic (cells, remainders) | [fraction.js](https://github.com/rawify/Fraction.js) (MIT) | Small and stateless. `library/props/polynomials` keeps the box's coefficients as fractions with it. |
-| A scene to watch, many bodies, nothing measured | matter.js (MIT) | Last resort. Its numbers are approximate and its world holds state: step it with a fixed time step inside a `task` and copy positions into stored state. Never use it for anything a question checks; use closed-form laws, as `library/props/collision` and `library/props/gas` do. |
+| A scene to watch, many bodies, nothing measured | matter.js (MIT) | Last resort. Its numbers are approximate and its world holds state: step it with a fixed time step in a `repeat` tick and copy positions into stored state. Never use it for anything a question checks; use closed-form laws, as `library/props/collision` and `library/props/gas` do. |
 
 A library joins this list only if it passes all four:
 

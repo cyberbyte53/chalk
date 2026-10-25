@@ -4,8 +4,10 @@ import {
   type TaskContext,
   applyPatch,
   asAnyProp,
+  isInstant,
   observationOf,
   prepareAction,
+  runEffect,
   viewOf,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
@@ -38,7 +40,7 @@ function run(state: NumberLineState, name: string, args: Record<string, unknown>
 /** Plays a task to the end, every change through the one door; returns the states and signals. */
 async function play(state: NumberLineState, name: string, args: Record<string, unknown> = {}) {
   const e = effect(state, name, args);
-  if (e.kind !== EffectKind.Task) throw new Error(`${name} should take time`);
+  if (isInstant(e)) throw new Error(`${name} should take time`);
   let now = state;
   const frames: NumberLineState[] = [];
   const emitted: Emit[] = [];
@@ -56,7 +58,7 @@ async function play(state: NumberLineState, name: string, args: Record<string, u
       emitted.push(payload === undefined ? { signal } : { signal, payload });
     },
   };
-  await e.run(context as never);
+  await runEffect(e, context as never);
   return { state: now, frames, emitted };
 }
 
@@ -155,7 +157,7 @@ describe("successive magnification (NCERT 1.4, Fig 1.11–1.13)", () => {
 
   it("stops gliding if something else moves the window", async () => {
     const e = effect({ ...start, from: 2, to: 3 }, "magnify", { value: 2.665 });
-    if (e.kind !== EffectKind.Task) throw new Error("expected a task");
+    if (isInstant(e)) throw new Error("expected it to take time");
     let now: NumberLineState = { ...start, from: 2, to: 3 };
     let waits = 0;
     const context: TaskContext<NumberLineState> = {
@@ -173,7 +175,7 @@ describe("successive magnification (NCERT 1.4, Fig 1.11–1.13)", () => {
         throw new Error("should not finish");
       },
     };
-    await e.run(context as never);
+    await runEffect(e, context as never);
     expect(now).toMatchObject({ from: 0, to: 10 });
   });
 

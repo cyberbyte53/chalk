@@ -5,9 +5,12 @@ import {
   actionsFor,
   asAnyProp,
   defineProp,
+  repeat,
+  say,
+  seq,
   set,
-  task,
   tween,
+  waitUntil,
 } from "@chalk/prop";
 import { defineGroup } from "@chalk/prop";
 import { effect } from "@preact/signals-core";
@@ -89,13 +92,72 @@ const label = defineProp({
     say: labelAct({
       describe: "Say",
       args: z.object({}).strict(),
-      run: () => task((c) => c.speak()),
+      run: () => say(),
     }),
   },
   speech: (s) => ({ say: s.text }),
 });
 
+const tickerState = z
+  .object({ isRunning: z.boolean(), ticks: z.number().int(), at: z.number() })
+  .strict();
+type TickerState = z.infer<typeof tickerState>;
+const tickerAct = actionsFor<TickerState>();
+/** Steps as data: a repeat with an internal tick, a glide, and a wait for its own state. */
+const ticker = defineProp({
+  type: "ticker",
+  describe: "Ticks while running; glides `at`",
+  state: tickerState,
+  defaults: { isRunning: false, ticks: 0, at: 0 },
+  actions: {
+    start: tickerAct({
+      describe: "Tick every 0.1 s until stopped",
+      args: z.object({}).strict(),
+      run: () => seq(set({ isRunning: true }), repeat(0.1, "tick", { while: (s) => s.isRunning })),
+    }),
+    tick: tickerAct({
+      describe: "One tick",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) =>
+        set({ ticks: s.ticks + 1 }, { signal: "ticked", payload: { ticks: s.ticks + 1 } }),
+    }),
+    stop: tickerAct({
+      describe: "Stop",
+      byLearner: true,
+      args: z.object({}).strict(),
+      run: () => set({ isRunning: false }),
+    }),
+    glide: tickerAct({
+      describe: "Glide `at` to 10 over a second, then say so",
+      args: z.object({}).strict(),
+      run: () => seq(tween(1, { at: 10 }), set({}, { signal: "glided" })),
+    }),
+    nudge: tickerAct({
+      describe: "The learner moves `at` by hand",
+      byLearner: true,
+      args: z.object({ to: z.number() }).strict(),
+      run: (_s, a) => set({ at: a.to }),
+    }),
+    afterThree: tickerAct({
+      describe: "Wait until three ticks, then say so",
+      args: z.object({}).strict(),
+      run: () =>
+        seq(
+          waitUntil((s) => s.ticks >= 3),
+          set({}, { signal: "three" }),
+        ),
+    }),
+  },
+  signals: {
+    ticked: { describe: "A tick" },
+    glided: { describe: "Glided" },
+    three: { describe: "Three" },
+  },
+});
+
 const defs: Record<string, AnyPropDef> = {
+  ticker: asAnyProp(ticker),
   coin: asAnyProp(coin),
   dial: asAnyProp(dial),
   label: asAnyProp(label),
@@ -490,5 +552,74 @@ describe("BoardRuntime", () => {
       ]),
     );
     expect(board.getView("shown").value).toBe(10);
+  });
+  it("runs steps as data: a repeat ticks on the board's clock until its test fails", async () => {
+    const { services, advance } = fakeServices();
+    const board = new BoardRuntime(
+      boardOf({ name: "b", root: props({ kind: "prop", name: "t", prop: "ticker" }) }),
+      (t) => defs[t],
+      services,
+    );
+    const heard: string[] = [];
+    board.onSignal((r) => heard.push(r.signal));
+    let isDone = false;
+    void board.call("t", "start").then(() => {
+      isDone = true;
+    });
+    await advance(350);
+    expect(board.getView("t").ticks).toBe(3);
+    expect(heard.filter((s) => s === "ticked")).toHaveLength(3);
+    // The learner stops it: the repeat ends at its next turn, and `start` finishes.
+    await board.call("t", "stop", {}, Actor.Learner);
+    await advance(200);
+    expect(board.getView("t").ticks).toBe(3);
+    expect(isDone).toBe(true);
+    // Ticks are the prop's own: Jugnu can't call one.
+    expect(board.whyNotJugnu("t", "tick")).toMatch(/step of the prop's own/);
+  });
+
+  it("waits for a prop's own state: at once if it already holds", async () => {
+    const { services, advance } = fakeServices();
+    const board = new BoardRuntime(
+      boardOf({ name: "b", root: props({ kind: "prop", name: "t", prop: "ticker" }) }),
+      (t) => defs[t],
+      services,
+    );
+    const heard: string[] = [];
+    board.onSignal((r) => heard.push(r.signal));
+    void board.call("t", "afterThree");
+    void board.call("t", "start");
+    await advance(250);
+    expect(heard).not.toContain("three");
+    await advance(200);
+    expect(heard).toContain("three");
+    await board.call("t", "stop");
+    await board.call("t", "afterThree");
+    expect(heard.filter((s) => s === "three")).toHaveLength(2);
+  });
+
+  it("the learner wins: a lesson's glide stops when they move what it moves", async () => {
+    const { services, advance } = fakeServices();
+    const board = new BoardRuntime(
+      boardOf({ name: "b", root: props({ kind: "prop", name: "t", prop: "ticker" }) }),
+      (t) => defs[t],
+      services,
+    );
+    const heard: string[] = [];
+    board.onSignal((r) => heard.push(r.signal));
+    void board.call("t", "glide");
+    await advance(300);
+    const midway = board.getView("t").at as number;
+    expect(midway).toBeGreaterThan(0);
+    expect(midway).toBeLessThan(10);
+    await board.call("t", "nudge", { to: 2 }, Actor.Learner);
+    await advance(1000);
+    expect(board.getView("t").at).toBe(2);
+    expect(heard).not.toContain("glided");
+    // Left alone, it runs to the end and says so.
+    void board.call("t", "glide");
+    await advance(1100);
+    expect(board.getView("t").at).toBe(10);
+    expect(heard).toContain("glided");
   });
 });

@@ -236,7 +236,10 @@ export function tweenAt(
   return out;
 }
 
-/** Applies an instant effect to a state (for tools that play a board forward, e.g. the validator). */
+/**
+ * Where an effect leaves a state, as far as can be known without running it (for tools that play a
+ * board forward, e.g. the validator): sets applied, tweens at their ends, in order.
+ */
 export function settle(
   def: AnyPropDef,
   stored: StoredState,
@@ -244,5 +247,14 @@ export function settle(
 ): StateResult {
   if (effect.kind === EffectKind.Set) return applyPatch(def, stored, effect.set);
   if (effect.kind === EffectKind.Tween) return applyPatch(def, stored, effect.to);
-  return { isOk: true, state: stored }; // a task's changes are only known when it runs
+  if (effect.kind === EffectKind.Seq || effect.kind === EffectKind.Par) {
+    let at: StoredState = stored;
+    for (const step of effect.steps) {
+      const next = settle(def, at, step);
+      if (!next.isOk) return next;
+      at = next.state;
+    }
+    return { isOk: true, state: at };
+  }
+  return { isOk: true, state: stored }; // other steps' changes are only known when they run
 }

@@ -22,8 +22,8 @@ export const CheckName = {
   /** The board ended as the case says (his showing left it right). */
   BoardAfter: "boardAfter",
   /**
-   * Never tried to do the student's part: answer the question, move the board on, or do a
-   * student-only action.
+   * Never did the student's part: answered the question, moved the board on, put a goal question
+   * into its answer, or showed an action the board leaves to the student.
    */
   HoldsLine: "holdsLine",
   /** Nothing he tried was refused (wrong arguments, a tool that isn't there, a limit). */
@@ -57,7 +57,7 @@ export function devanagariShare(text: string): number {
 const words = (text: string) => text.split(/\s+/).filter((w) => w.length > 0).length;
 
 /** Refusals that mean he tried to do the student's part. */
-const STUDENTS_PART = /only the student answers|student's job|moves the board on|board itself/;
+const STUDENTS_PART = /only the student answers|moves the board on|board itself/;
 
 const refusalOf = (step: JugnuStep): string | undefined =>
   "refused" in step ? step.refused : undefined;
@@ -160,14 +160,16 @@ export function runChecks(
               .join(" | "),
     });
   }
-  const overreach = steps.filter((s) => STUDENTS_PART.test(refusalOf(s) ?? ""));
+  const overreach = [
+    ...steps
+      .filter((s) => STUDENTS_PART.test(refusalOf(s) ?? ""))
+      .map((s) => (s.kind === "act" ? `${s.prop}.${s.action}` : s.kind)),
+    ...turns.flatMap((t) => (t.kind === "ask" ? t.overreach : [])),
+  ];
   out.push({
     name: CheckName.HoldsLine,
     isPassed: overreach.length === 0,
-    detail:
-      overreach.length === 0
-        ? "ok"
-        : overreach.map((s) => (s.kind === "act" ? `${s.prop}.${s.action}` : s.kind)).join(", "),
+    detail: overreach.length === 0 ? "ok" : overreach.join(", "),
   });
   const refused = steps.flatMap((s) => {
     const why = refusalOf(s);

@@ -1,4 +1,4 @@
-import { actionsFor, defineProp, set, task } from "@chalk/prop";
+import { actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 
 /**
@@ -17,6 +17,7 @@ export type Block = (typeof Block)[keyof typeof Block];
 
 export const CollisionAction = {
   Play: "play",
+  Step: "step",
   Pause: "pause",
   Reset: "reset",
   SetMass: "setMass",
@@ -179,29 +180,33 @@ export const collision = defineProp({
       describe: "Let the blocks go (from where they are) until they leave the track",
       byLearner: true,
       args: z.object({}).strict(),
-      run: () =>
-        task(async (context) => {
-          const start = context.get();
-          if (!isOnTrack(start, momentAt(start, start.time)) || start.time >= MAX_TIME) {
-            context.set({ time: 0 });
-          }
-          context.set({ isRunning: true });
-          while (context.get().isRunning) {
-            await context.wait(STEP);
-            const s = context.get();
-            if (!s.isRunning) break;
-            const time = Math.min(MAX_TIME, s.time + STEP);
-            const moment = momentAt(s, time);
-            const isDone = !isOnTrack(s, moment) || time >= MAX_TIME;
-            context.set(isDone ? { time, isRunning: false } : { time });
-            if (moment.hasCollided && !momentAt(s, s.time).hasCollided) {
-              context.emit(CollisionSignal.Collided, {
-                speedA: moment.speedA,
-                speedB: moment.speedB,
-              });
-            }
-          }
-        }),
+      run: (s) => {
+        const isOver = !isOnTrack(s, momentAt(s, s.time)) || s.time >= MAX_TIME;
+        return seq(
+          set(isOver ? { time: 0, isRunning: true } : { isRunning: true }),
+          repeat(STEP, CollisionAction.Step, { while: (now) => now.isRunning }),
+        );
+      },
+    }),
+    [CollisionAction.Step]: act({
+      describe: "Move time on by one step (the blocks' own clock)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => {
+        const time = Math.min(MAX_TIME, s.time + STEP);
+        const moment = momentAt(s, time);
+        const isDone = !isOnTrack(s, moment) || time >= MAX_TIME;
+        const collided =
+          moment.hasCollided && !momentAt(s, s.time).hasCollided
+            ? [
+                {
+                  signal: CollisionSignal.Collided,
+                  payload: { speedA: moment.speedA, speedB: moment.speedB },
+                },
+              ]
+            : [];
+        return set(isDone ? { time, isRunning: false } : { time }, ...collided);
+      },
     }),
     [CollisionAction.Pause]: act({
       describe: "Freeze the blocks where they are",

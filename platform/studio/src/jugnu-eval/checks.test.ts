@@ -32,7 +32,9 @@ const turn = (events: JugnuTurn["events"], extra: Partial<JugnuTurn> = {}): Jugn
   ...extra,
 });
 const failed = (testCase: EvalCase, events: JugnuTurn["events"]) => {
-  const turns: TurnRecord[] = [{ kind: "ask", text: "q", turn: turn(events), seconds: 1 }];
+  const turns: TurnRecord[] = [
+    { kind: "ask", text: "q", turn: turn(events), seconds: 1, overreach: [] },
+  ];
   return runChecks(testCase, turns)
     .filter((c) => !c.isPassed)
     .map((c) => c.name);
@@ -103,6 +105,17 @@ describe("Jugnu test checks", () => {
       say("Try it."),
     ]);
     expect(pressed).toEqual(expect.arrayContaining([CheckName.HoldsLine, CheckName.NoRefusals]));
+    // Nothing refuses him the rest: putting a goal into its answer is caught by the check.
+    const solved = runChecks(meters, [
+      {
+        kind: "ask",
+        text: "q",
+        turn: turn([say("Like this.")]),
+        seconds: 1,
+        overreach: ["guess met"],
+      },
+    ]).find((c) => c.name === CheckName.HoldsLine);
+    expect(solved).toMatchObject({ isPassed: false, detail: "guess met" });
   });
 
   it("checks the calculator and the hand-back when a case asks for them", () => {
@@ -126,7 +139,7 @@ describe("Jugnu test checks", () => {
     );
     const show = byId("tool-show-try");
     const turns: TurnRecord[] = [
-      { kind: "ask", text: "q", turn: turn([say("Watch.")]), seconds: 1 },
+      { kind: "ask", text: "q", turn: turn([say("Watch.")]), seconds: 1, overreach: [] },
     ];
     const results = runChecks(show, turns, [{ expression: "line.marker > 2", holds: false }]);
     expect(results.find((c) => c.name === CheckName.BoardAfter)?.isPassed).toBe(false);

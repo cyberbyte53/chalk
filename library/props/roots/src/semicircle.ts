@@ -1,7 +1,6 @@
-import { type Box, type Emit, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Box, type Emit, actionsFor, defineProp, seq, set, tween } from "@chalk/prop";
 import { z } from "zod";
 import { around, semicircleFigure, semicircleLayout, semicirclePx, swungD } from "./geometry";
-import { glide } from "./glide";
 import {
   hundredthsText,
   isTenthsPerfectSquare,
@@ -152,22 +151,8 @@ export const rootSemicircle = defineProp({
         if (s.swing >= 1) return set({});
         const over = a.over ?? SEMICIRCLE_SWING_SECONDS;
         if (over === 0) return set({ swing: 1 }, landedEmit(s.x));
-        return task(async (c) => {
-          const start = c.get();
-          let last = start.swing;
-          // The learner wins: if anything else changes x or the swing, stop here.
-          const isSame = () => c.get().x === start.x && c.get().swing === last;
-          const isDone = await glide(c.wait, over, start.swing, (swing) => {
-            if (!isSame()) return false;
-            c.set({ swing });
-            last = swing;
-            return true;
-          });
-          if (!isDone || !isSame()) return;
-          c.set({ swing: 1 });
-          const landed = landedEmit(start.x);
-          c.emit(landed.signal, landed.payload);
-        });
+        // The learner wins: a new x meanwhile folds the swing back, which stops it.
+        return seq(tween(over, { swing: 1 }), set({ swing: 1 }, landedEmit(s.x)));
       },
     }),
     startAgain: act({

@@ -1,7 +1,6 @@
-import { type Box, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Box, actionsFor, defineProp, emit, seq, set, tween } from "@chalk/prop";
 import { z } from "zod";
 import { around, spiralLayout, spiralPoints } from "./geometry";
-import { glide } from "./glide";
 import { rootText } from "./surd";
 
 export const RootSpiralPart = {
@@ -78,20 +77,12 @@ export const rootSpiral = defineProp({
       run: (s) => {
         if (s.steps >= MAX_STEPS) throw new Error(`the spiral stops at ${MAX_STEPS} triangles`);
         const steps = s.steps + 1;
-        return task(async (c) => {
-          c.set({ steps, grow: 0 });
-          let last = 0;
-          const isSame = () => c.get().steps === steps && c.get().grow === last;
-          const isDone = await glide(c.wait, GROW_SECONDS, 0, (grow) => {
-            if (!isSame()) return false;
-            c.set({ grow });
-            last = grow;
-            return true;
-          });
-          if (!isDone || !isSame()) return;
-          c.set({ grow: 1 });
-          c.emit(RootSpiralSignal.Grown, { squared: steps + 1 });
-        });
+        // Taking a triangle away or showing others meanwhile moves `grow`, which stops it.
+        return seq(
+          set({ steps, grow: 0 }),
+          tween(GROW_SECONDS, { grow: 1 }),
+          emit(RootSpiralSignal.Grown, { squared: steps + 1 }),
+        );
       },
     }),
     removeStep: act({

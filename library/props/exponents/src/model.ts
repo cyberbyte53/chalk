@@ -1,4 +1,4 @@
-import { type Box, type Emit, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Box, type Emit, actionsFor, call, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 import { type Layout, layoutOf, unionOf } from "./layout";
 import {
@@ -233,22 +233,19 @@ export const exponentRoutes = defineProp({
       reveals: true,
       args: z.object({}).strict(),
       run: () =>
-        task(async (context) => {
-          let route: Route = Route.RootFirst;
-          let isFirst = true;
-          while (!haveMet(context.get())) {
-            const { patch, emit } = stepOn(context.get(), route);
-            if (Object.keys(patch).length > 0) {
-              if (!isFirst) await context.wait(STEP_SECONDS);
-              isFirst = false;
-              // The learner may have stepped during the wait: work the step out again.
-              const now = stepOn(context.get(), route);
-              context.set(now.patch);
-              for (const e of now.emit) context.emit(e.signal, e.payload);
-            }
-            route = route === Route.RootFirst ? Route.PowerFirst : Route.RootFirst;
-          }
-        }),
+        seq(call("showNext"), repeat(STEP_SECONDS, "showNext", { while: (now) => !haveMet(now) })),
+    }),
+    showNext: act({
+      describe: "One more step of the route that is behind (the root-first one on a tie)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => {
+        const behind = s.rootFirstStep <= s.powerFirstStep ? Route.RootFirst : Route.PowerFirst;
+        const other = behind === Route.RootFirst ? Route.PowerFirst : Route.RootFirst;
+        const first = stepOn(s, behind);
+        const { patch, emit } = Object.keys(first.patch).length > 0 ? first : stepOn(s, other);
+        return set(patch, ...emit);
+      },
     }),
     hideSteps: act({
       describe: "Hide every step of both routes",

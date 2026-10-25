@@ -294,7 +294,7 @@ describe("electrolysis", () => {
     const result = prepareAction(def, electrolysisCell.defaults, ElectrolysisAction.Switch, {
       on: true,
     });
-    expect(result.isOk && result.effect.kind).toBe(EffectKind.Task);
+    expect(result.isOk && result.effect.kind).toBe(EffectKind.Seq);
   });
   it("the candle pops at hydrogen and burns brighter in oxygen", () => {
     expect(candleResult(full, Tube.Cathode)).toBe("pop");

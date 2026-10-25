@@ -5,7 +5,9 @@ import {
   applyPatch,
   asAnyProp,
   checkStored,
+  isInstant,
   prepareAction,
+  runEffect,
   viewOf,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
@@ -89,13 +91,13 @@ async function play(
   waited: number;
 }> {
   const effect = effectOf(state, name);
-  if (effect.kind !== EffectKind.Task) throw new Error(`${name} should be a task`);
+  if (isInstant(effect)) throw new Error(`${name} should be a task`);
   let now = state;
   let waited = 0;
   let step = 0;
   const steps: DecimalShiftState[] = [];
   const emit: Emit[] = [];
-  await effect.run({
+  await runEffect(effect, {
     speak: () => Promise.resolve(),
     wait: (seconds) => {
       waited += seconds;

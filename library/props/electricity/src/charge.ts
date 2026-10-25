@@ -1,4 +1,4 @@
-import { type Element, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Element, type Emit, actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 import { num, sig } from "./words";
 
@@ -12,6 +12,7 @@ import { num, sig } from "./words";
 export const ChargeAction = {
   SetCurrent: "setCurrent",
   Count: "count",
+  Tick: "tick",
   Reset: "reset",
   SetShow: "setShow",
 } as const;
@@ -86,6 +87,15 @@ export function describeCharge(s: ChargeState): string {
 
 const act = actionsFor<ChargeState>();
 
+/** Seconds the count moves on each step. */
+const COUNT_STEP = 0.25;
+
+/** The count is done: what it found. */
+const countedAt = (s: ChargeState): Emit => ({
+  signal: ChargeSignal.Counted,
+  payload: { seconds: s.seconds, amps: s.amps, coulombs: coulombsOf(s) },
+});
+
 export const chargeFlow = defineProp({
   type: "chargeFlow",
   describe:
@@ -133,24 +143,24 @@ export const chargeFlow = defineProp({
         "Start the clock from zero and count the charge crossing the section for `countFor` seconds",
       byLearner: true,
       args: z.object({}).strict(),
-      run: () =>
-        task(async (c) => {
-          c.set({ seconds: 0, isCounting: true });
-          const total = c.get().countFor;
-          const step = 0.25;
-          while (c.get().isCounting && c.get().seconds < total) {
-            await c.wait(step);
-            if (!c.get().isCounting) return;
-            c.set({ seconds: Math.min(total, Math.round((c.get().seconds + step) * 100) / 100) });
-          }
-          c.set({ isCounting: false });
-          const s = c.get();
-          c.emit(ChargeSignal.Counted, {
-            seconds: s.seconds,
-            amps: s.amps,
-            coulombs: coulombsOf(s),
-          });
-        }),
+      run: (s) => {
+        if (s.countFor <= 0)
+          return set({ seconds: 0, isCounting: false }, countedAt({ ...s, seconds: 0 }));
+        return seq(
+          set({ seconds: 0, isCounting: true }),
+          repeat(COUNT_STEP, ChargeAction.Tick, { while: (now) => now.isCounting }),
+        );
+      },
+    }),
+    [ChargeAction.Tick]: act({
+      describe: "Move the clock on by one step (its own clock)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => {
+        const seconds = Math.min(s.countFor, Math.round((s.seconds + COUNT_STEP) * 100) / 100);
+        if (seconds < s.countFor) return set({ seconds });
+        return set({ seconds, isCounting: false }, countedAt({ ...s, seconds }));
+      },
     }),
     [ChargeAction.Reset]: act({
       describe: "Stop and clear the count",

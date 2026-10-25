@@ -1,4 +1,4 @@
-import { actionsFor, defineProp, set, task } from "@chalk/prop";
+import { actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 
 export const TimerSignal = { Tick: "tick" } as const;
@@ -36,17 +36,23 @@ export const timer = defineProp({
         })
         .strict(),
       run: (_s, a) =>
-        task(async (context) => {
-          context.set({ isRunning: true, ticks: 0 });
-          while (context.get().isRunning) {
-            await context.wait(a.every);
-            if (!context.get().isRunning) break;
-            const ticks = context.get().ticks + 1;
-            context.set({ ticks });
-            context.emit(TimerSignal.Tick, { ticks });
-            if (a.times !== undefined && ticks >= a.times) context.set({ isRunning: false });
-          }
-        }),
+        seq(
+          set({ isRunning: true, ticks: 0 }),
+          repeat(a.every, "tick", {
+            while: (s) => s.isRunning,
+            args: a.times === undefined ? {} : { times: a.times },
+          }),
+        ),
+    }),
+    tick: act({
+      describe: "One tick (the timer's own step)",
+      internal: true,
+      args: z.object({ times: z.number().int().positive().optional() }).strict(),
+      run: (s, a) => {
+        const ticks = s.ticks + 1;
+        const isRunning = a.times === undefined || ticks < a.times;
+        return set({ ticks, isRunning }, { signal: TimerSignal.Tick, payload: { ticks } });
+      },
     }),
     stop: act({
       describe: "Stop ticking",

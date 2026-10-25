@@ -1,4 +1,4 @@
-import { type Element, actionsFor, defineProp, set, task } from "@chalk/prop";
+import { type Element, actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 
 /**
@@ -10,7 +10,12 @@ import { z } from "zod";
  * flame brighter.
  */
 
-export const ElectrolysisAction = { Switch: "switch", TestGas: "testGas", Reset: "reset" } as const;
+export const ElectrolysisAction = {
+  Switch: "switch",
+  Tick: "tick",
+  TestGas: "testGas",
+  Reset: "reset",
+} as const;
 export const ElectrolysisSignal = { Switched: "switched", Full: "full", Tested: "tested" } as const;
 export const ElectrolysisDerived = {
   HydrogenMl: "hydrogenMl",
@@ -82,6 +87,9 @@ export function describeElectrolysis(s: ElectrolysisState): string {
   return `Electrolysis of water: the current is ${s.isOn ? "on, bubbles rise at both electrodes" : "off"}; ${gas}${test}.`;
 }
 
+/** Seconds between steps while the current is on. */
+const STEP = 0.1;
+
 const act = actionsFor<ElectrolysisState>();
 
 export const electrolysisCell = defineProp({
@@ -126,20 +134,26 @@ export const electrolysisCell = defineProp({
             { isOn: a.on && s.progress < 1 },
             { signal: ElectrolysisSignal.Switched, payload: { on: a.on } },
           );
-        return task(async (c) => {
-          c.set({ isOn: true });
-          c.emit(ElectrolysisSignal.Switched, { on: true });
-          const step = 0.1;
-          while (c.get().isOn && c.get().progress < 1) {
-            await c.wait(step);
-            if (!c.get().isOn) break;
-            c.set({ progress: Math.min(1, c.get().progress + step / FILL_SECONDS) });
-          }
-          if (c.get().progress >= 1) {
-            c.set({ isOn: false });
-            c.emit(ElectrolysisSignal.Full, { hydrogenMl: TUBE_ML, oxygenMl: TUBE_ML / 2 });
-          }
-        });
+        return seq(
+          set({ isOn: true }, { signal: ElectrolysisSignal.Switched, payload: { on: true } }),
+          repeat(STEP, ElectrolysisAction.Tick, { while: (now) => now.isOn && now.progress < 1 }),
+        );
+      },
+    }),
+    [ElectrolysisAction.Tick]: act({
+      describe: "Move on by one step while the current is on (its own clock)",
+      internal: true,
+      args: z.object({}).strict(),
+      run: (s) => {
+        const progress = Math.min(1, s.progress + STEP / FILL_SECONDS);
+        if (progress < 1) return set({ progress });
+        return set(
+          { progress, isOn: false },
+          {
+            signal: ElectrolysisSignal.Full,
+            payload: { hydrogenMl: TUBE_ML, oxygenMl: TUBE_ML / 2 },
+          },
+        );
       },
     }),
     [ElectrolysisAction.TestGas]: act({

@@ -1,4 +1,4 @@
-import { actionsFor, defineProp, ease, set, task } from "@chalk/prop";
+import { actionsFor, defineProp, emit, seq, set, tween } from "@chalk/prop";
 import { z } from "zod";
 import {
   type Recurring,
@@ -38,8 +38,6 @@ export const MAX_WHOLE = 999;
 export const MAX_POWER = 6;
 /** How long the subtraction takes, in seconds. */
 export const SUBTRACT_SECONDS = 1.4;
-/** One step of the subtraction's glide, in seconds. */
-const STEP_SECONDS = 0.05;
 /** How many digits after the point each tape draws (the view fades the last ones out). */
 export const DIGITS_DRAWN = 12;
 
@@ -91,17 +89,6 @@ function isDifferenceWhole(s: DecimalShiftState): boolean {
 
 function multiplier(s: DecimalShiftState): number {
   return Number(powerOfTen(s.topPower) - powerOfTen(s.bottomPower));
-}
-
-/** The same x and the same tapes (the subtraction checks nothing else moved them meanwhile). */
-function isSameSetUp(a: DecimalShiftState, b: DecimalShiftState): boolean {
-  return (
-    a.whole === b.whole &&
-    a.prefix === b.prefix &&
-    a.block === b.block &&
-    a.topPower === b.topPower &&
-    a.bottomPower === b.bottomPower
-  );
 }
 
 /** x as written: "0.2353535…". */
@@ -218,26 +205,16 @@ export const decimalShift = defineProp({
           );
         }
         if (s.cancel === 1) return set({});
-        const from = s.cancel;
-        const steps = Math.max(1, Math.round((SUBTRACT_SECONDS * (1 - from)) / STEP_SECONDS));
-        const each = (SUBTRACT_SECONDS * (1 - from)) / steps;
-        return task(async (context) => {
-          let last = from;
-          for (let i = 1; i <= steps; i++) {
-            await context.wait(each);
-            const now = context.get();
-            // Someone else moved the tapes or the number meanwhile: they win, the glide stops.
-            if (now.cancel !== last || !isSameSetUp(now, s)) return;
-            last = i === steps ? 1 : from + (1 - from) * ease(i / steps);
-            context.set({ cancel: last });
-          }
-          const end = context.get();
-          context.emit(DecimalShiftSignal.Subtracted, {
+        // Moving the tapes or the number meanwhile un-subtracts, which stops the glide.
+        const end = { ...s, cancel: 1 };
+        return seq(
+          tween(SUBTRACT_SECONDS * (1 - s.cancel), { cancel: 1 }),
+          emit(DecimalShiftSignal.Subtracted, {
             isLinedUp: isLinedUp(end),
             isWhole: isDifferenceWhole(end),
             multiplier: multiplier(end),
-          });
-        });
+          }),
+        );
       },
     }),
     startAgain: act({
