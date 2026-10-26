@@ -60,7 +60,7 @@
   flex: 1;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 20px;
+  font-size: var(--text-heading);
 }
 .jugnu-close {
   width: 44px;
@@ -116,13 +116,13 @@
 .jugnu-message.is-did {
   align-self: flex-start;
   padding: 0 14px;
-  font-size: 13px;
+  font-size: var(--text-caption);
   color: var(--color-on-secondary-container);
 }
 .jugnu-message.is-watching {
   align-self: flex-start;
   padding: 0 14px;
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: 700;
   color: var(--color-on-surface-variant);
 }

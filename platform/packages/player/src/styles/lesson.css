@@ -58,7 +58,7 @@
   background: var(--color-primary);
   color: var(--color-on-primary);
   font-weight: 800;
-  font-size: 19px;
+  font-size: var(--text-body);
   box-shadow: 0 5px 0 var(--color-primary-press);
   cursor: pointer;
   transition: transform 0.08s, box-shadow 0.08s;
@@ -87,7 +87,7 @@
 .lesson-complete h2 {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 32px;
+  font-size: var(--text-title-l);
   margin: 0;
 }
 .lesson-complete .primary {

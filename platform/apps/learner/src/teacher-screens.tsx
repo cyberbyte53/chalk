@@ -71,7 +71,7 @@ function GroupsScreen({
   onSignOut: () => void;
 }): JSX.Element {
   return (
-    <div class="lesson page">
+    <div class="lesson page is-wide">
       <div class="page-top is-between">
         <div>
           <div class="kicker">
@@ -279,7 +279,7 @@ function GroupScreen({
   }
 
   return (
-    <div class="lesson page">
+    <div class="lesson page is-wide">
       <div class="page-top">
         <BackButton label="Back" onBack={onBack} />
         <div class="grow" />
@@ -388,7 +388,7 @@ function LearnerScreen({
       ? say(locale, "neverActive")
       : say(locale, "activeWhen", { when: whenText(learner.lastActiveAt, locale) });
   return (
-    <div class="lesson page">
+    <div class="lesson page is-wide">
       <div class="page-top">
         <BackButton label="Back" onBack={onBack} />
       </div>
