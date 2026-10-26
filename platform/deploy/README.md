@@ -9,12 +9,12 @@ Everything runs on one box (chalk1, Ubuntu on Azure) in Docker Compose (`compose
 | `caddy` | HTTPS for `ORIGIN` on 80/443: a free Let's Encrypt certificate, renewed by itself; compresses everything |
 | `backup` | A `pg_dump` every night into `~/chalk-backups` on the box, kept 30 days |
 
-The image is built on the box (it's x86; Macs are ARM), from the repo copied over with rsync. Migrations run when the app starts.
+The image is built on the box (it's x86; Macs are ARM), from the commit you are on (`git archive HEAD`) copied over with rsync: `pnpm ship` refuses a tree with uncommitted changes, so what runs is always one commit, named in `build/index.json`, the app, `/api/health` and every event. Migrations run when the app starts.
 
 ## From your Mac
 
 ```sh
-pnpm ship                         # copy the repo to chalk1, build, start (only what changed restarts)
+pnpm ship                         # copy HEAD to chalk1, build, start (only what changed restarts)
 pnpm add-school "Sunrise School"  # prints the school's code
 ```
 

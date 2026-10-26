@@ -3,12 +3,10 @@ import { dirname, join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 import { type BoardItem, ContentFile, boardOf, moduleOf } from "@chalk/author";
 import {
-  BuiltFile,
-  OVERVIEW_DIR,
-  WORKING_TREE,
   builtChapterSchema,
   builtConceptSchema,
   builtFamilySchema,
+  builtFile,
   builtPageSchema,
   builtQuestionSchema,
 } from "@chalk/content";
@@ -104,9 +102,9 @@ function withModules(dir: string): string {
 }
 
 /** A built item's board, made from its module as the app makes it. */
-async function boardFrom(dir: string, item: BoardItem, path: string) {
+async function boardFrom(dir: string, item: BoardItem) {
   const module = await import(pathToFileURL(join(dir, moduleOf(item))).href);
-  return boardOf(item, module, (type) => propDefs[type]?.role, path);
+  return boardOf(item, module, (type) => propDefs[type]?.role);
 }
 
 /**
@@ -122,7 +120,7 @@ function realBook(): string {
   return withModules(dir);
 }
 
-const build = (dir: string, commit = WORKING_TREE) =>
+const build = (dir: string, commit = "test") =>
   buildContent({ contentDir: dir, defs: propDefs, readings, commit });
 const messages = (result: Awaited<ReturnType<typeof build>>) =>
   result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");
@@ -132,10 +130,10 @@ describe("building content", () => {
     const result = await build(realBook());
     expect(result.problems).toEqual([]);
     const chapter = builtChapterSchema.parse(
-      result.files.get(`class9-maths/number-systems/${BuiltFile.Chapter}`),
+      result.files.get(builtFile("class9-maths/number-systems")),
     );
     const concept = builtConceptSchema.parse(
-      result.files.get(`class9-maths/number-systems/successive-magnification/${BuiltFile.Concept}`),
+      result.files.get(builtFile("class9-maths/number-systems/successive-magnification")),
     );
     expect(concept.overview).toHaveLength(3);
     expect(chapter.questions).toHaveLength(3);
@@ -148,10 +146,12 @@ describe("building content", () => {
     const dir = realBook();
     const result = await build(dir);
     const rational = "class9-maths/number-systems/rational-numbers";
-    const concept = builtConceptSchema.parse(result.files.get(`${rational}/${BuiltFile.Concept}`));
-    const path = `${rational}/${OVERVIEW_DIR}/numbers-you-know.json`;
-    const first = builtPageSchema.parse(result.files.get(path));
-    expect(JSON.stringify(await boardFrom(dir, first, path))).toContain(
+    const concept = builtConceptSchema.parse(result.files.get(builtFile(rational)));
+    const first = builtPageSchema.parse(
+      result.files.get(builtFile(`${rational}/numbers-you-know`)),
+    );
+    expect(first.path).toBe(`${rational}/numbers-you-know`);
+    expect(JSON.stringify(await boardFrom(dir, first))).toContain(
       `"concepts":["${concept.id}"],"isGraded":false`,
     );
   }, 60_000);
@@ -172,25 +172,23 @@ describe("building content", () => {
     const dir = fixture({ rows: [{ params: { target: "7.384", from: 7, to: 8 }, level: "hard" }] });
     const result = await build(dir);
     expect(result.problems).toEqual([]);
-    const file = [...result.files.keys()].find(
-      (k) => k.startsWith(`${CHAPTER}/questions/locate/`) && !k.endsWith(BuiltFile.Family),
-    );
+    const file = [...result.files.keys()].find((k) => k.startsWith(`${CHAPTER}/questions/locate/`));
     const q = builtQuestionSchema.parse(result.files.get(file ?? ""));
+    expect(q.path).toMatch(new RegExp(`^${CHAPTER}/questions/locate/[0-9a-f]{8}$`));
     expect(q.level).toBe("hard");
     expect(q.params).toEqual({ target: "7.384", from: 7, to: 8 });
     expect(q.source).toEqual({
       path: `${CHAPTER}/questions/locate`,
       file: ContentFile.Params,
       row: 0,
-      commit: WORKING_TREE,
     });
-    const concept = builtConceptSchema.parse(result.files.get(`${CONCEPT}/${BuiltFile.Concept}`));
+    const concept = builtConceptSchema.parse(result.files.get(builtFile(CONCEPT)));
     expect(q.tests).toEqual([concept.id]);
-    expect(JSON.stringify(await boardFrom(dir, q, file ?? ""))).toContain(
+    expect(JSON.stringify(await boardFrom(dir, q))).toContain(
       `"concepts":["${concept.id}"],"isGraded":true`,
     );
     const family = builtFamilySchema.parse(
-      result.files.get(`${CHAPTER}/questions/locate/${BuiltFile.Family}`),
+      result.files.get(builtFile(`${CHAPTER}/questions/locate`)),
     );
     expect(family.tests).toEqual([concept.id]);
     expect(concept.props).toEqual(["numberLine"]); // from the question that tests it
@@ -224,9 +222,7 @@ describe("building content", () => {
     );
     expect(messages(result)).toMatch(/row 0: .*fewer than 2 decimal places/);
     expect(messages(result)).toMatch(/row 1: params\.from/);
-    const questions = [...result.files.keys()].filter(
-      (k) => k.includes("/questions/locate/") && !k.endsWith(BuiltFile.Family),
-    );
+    const questions = [...result.files.keys()].filter((k) => k.includes("/questions/locate/"));
     expect(questions).toHaveLength(1);
   }, 60_000);
 
@@ -248,10 +244,10 @@ describe("building content", () => {
     expect(result.notices.join("\n")).toMatch(/excluded: .*row 1/);
   }, 60_000);
 
-  it("the same question twice is one id, refused", async () => {
+  it("the same params twice are one question, refused", async () => {
     const row = { params: { target: "2.665", from: 2, to: 3 } };
     const result = await build(fixture({ rows: [row, row] }));
-    expect(messages(result)).toMatch(/same id/);
+    expect(messages(result)).toMatch(/row 1: the same params as row 0/);
   }, 60_000);
 
   it("manifests: a listed folder must exist, an unlisted one is reported, and exclude only goes with all", async () => {

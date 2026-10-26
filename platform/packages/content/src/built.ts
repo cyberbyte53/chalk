@@ -12,19 +12,16 @@ export const Kind = {
 } as const;
 export type Kind = (typeof Kind)[keyof typeof Kind];
 
-/** The files the build writes, by kind: each item's in its own folder; index and graph at the top. */
-export const BuiltFile = {
-  Index: "index.json",
-  Graph: "graph.json",
-  Book: "book.json",
-  Chapter: "chapter.json",
-  Concept: "concept.json",
-  Family: "family.json",
-} as const;
+/** The two files at the top of build/: the books, and the concept graph. */
+export const BuiltFile = { Index: "index.json", Graph: "graph.json" } as const;
 export type BuiltFile = (typeof BuiltFile)[keyof typeof BuiltFile];
 
-/** A concept's pages are built into this folder, one `<key>.json` each. */
-export const OVERVIEW_DIR = "overview";
+/**
+ * Every built item lives at its path in the course tree, as `<path>.json`: a book at
+ * `class10-maths.json`, a page at `class10-maths/real-numbers/hcf-and-lcm/story.json`, a bank
+ * question at `class10-maths/real-numbers/questions/hcf-story/3922a76b.json`.
+ */
+export const builtFile = (path: string): string => `${path}.json`;
 
 /** How hard a question is, for its concept. */
 export const Level = { Easy: "easy", Medium: "medium", Hard: "hard" } as const;
@@ -47,29 +44,35 @@ export const ART_SIZE: Record<ArtFrame, { width: number; height: number }> = {
 /** The most an item's art may weigh, as SVG text. */
 export const MAX_ART_BYTES = 16_000;
 
-/** The commit recorded when building from uncommitted files (preview, a local build). */
-export const WORKING_TREE = "working-tree";
-
 const id = z.string().regex(/^[0-9a-f]{16}$/);
 const paramValue = z.union([z.string(), z.number(), z.boolean()]);
 
-/** Where an item came from: its folder in content/, the file, the row (questions), the commit. */
+/** Where an item came from: its folder in content/, the file, and the row (a question's, in params.yaml). */
 export const sourceSchema = z
   .object({
     path: z.string().min(1),
     file: z.string().min(1),
     /** A question's row in params.yaml, or a page's place in overview.ts (from 0). */
     row: z.number().int().min(0).optional(),
-    commit: z.string().min(1),
   })
   .strict();
 export type Source = z.infer<typeof sourceSchema>;
 
-/** A pointer from a container to a child: enough to fetch it and to know if it changed. */
-export const refSchema = z.object({ id, version: id, path: z.string().min(1) }).strict();
+/** A node's path in the course tree: its name (`class10-maths/real-numbers/hcf-and-lcm/story`). */
+const path = z.string().min(1);
+
+/** A pointer from a container to a child: its path (its file is `<path>.json`), id and version. */
+export const refSchema = z.object({ id, version: id, path }).strict();
 export type Ref = z.infer<typeof refSchema>;
 
-const base = { id, version: id, source: sourceSchema };
+/** Every item: where it is in the tree (`path`; `id` is a hash of it), its version, where it came from. */
+const base = { path, id, version: id, source: sourceSchema };
+
+/**
+ * The prop types a board places, each with its version (a hash of its package's code): a board is
+ * made from its own code and these, so its version changes when one of them does.
+ */
+const propVersions = z.record(z.string(), id);
 
 /** Art built from an `art.tsx`: drawn with @chalk/draw, checked, kept as SVG markup to inline. */
 export const builtArtSchema = z
@@ -83,11 +86,7 @@ export const builtPageSchema = z
     ...base,
     concept: id,
     key: z.string().min(1),
-    /**
-     * The hash of the code that makes its board (its module and every file it imports, under
-     * content/, library/ and platform/): the board itself is made from that code, never kept as data.
-     */
-    code: id,
+    props: propVersions,
   })
   .strict();
 export type BuiltPage = z.infer<typeof builtPageSchema>;
@@ -104,11 +103,7 @@ export const builtQuestionSchema = z
     /** Its place (from 1) in the first practice after the lesson; absent: bank only. */
     firstTry: z.number().int().min(1).optional(),
     params: z.record(z.string(), paramValue),
-    /**
-     * The hash of the code that makes its board (its module and every file it imports, under
-     * content/, library/ and platform/): the board itself is made from that code, never kept as data.
-     */
-    code: id,
+    props: propVersions,
   })
   .strict();
 export type BuiltQuestion = z.infer<typeof builtQuestionSchema>;
@@ -182,7 +177,7 @@ export const builtBookSchema = z
   .strict();
 export type BuiltBook = z.infer<typeof builtBookSchema>;
 
-/** build/index.json: the books, and the commit they were built from. */
+/** build/index.json: the books, and the commit they were built from (`<sha>-dirty` from uncommitted files). */
 export const buildIndexSchema = z
   .object({ commit: z.string().min(1), books: z.array(refSchema) })
   .strict();

@@ -4,7 +4,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T03:13:36.056Z
-  board: class10-science/light/reflection-and-images/overview/hook
+  board: class10-science/light/reflection-and-images/hook
   target: reflect
   source: content/class10-science/light/reflection-and-images/overview.ts:29
   snapshot: A charger doesn't glow. A bulb or the Sun makes its own light, but most things don't.
@@ -32,7 +32,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T08:54:12.291Z
-  board: class10-science/light/reflection-and-images/overview/hook
+  board: class10-science/light/reflection-and-images/hook
   target: w2
   source: content/class10-science/light/reflection-and-images/overview.ts:39
   snapshot: "Sunday, 8 pm. Riya and Kabir are twenty minutes from the end of the movie when the power
@@ -55,7 +55,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:00:52.591Z
-  board: class10-science/light/reflection-and-images/overview/hook
+  board: class10-science/light/reflection-and-images/hook
   target: ray
   source: content/class10-science/light/reflection-and-images/overview.ts:29
   snapshot: Found it! The torch's light lands on the charger, bounces off, and reaches Riya's eyes.
@@ -80,7 +80,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:08:22.920Z
-  board: class10-science/light/reflection-and-images/overview/how-we-see
+  board: class10-science/light/reflection-and-images/how-we-see
   target: room
   source: content/class10-science/light/reflection-and-images/overview.ts:118
   snapshot: "planeMirror: a torch shining down on a mirror along the floor, with the normal and both
@@ -102,7 +102,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:09:07.122Z
-  board: class10-science/light/reflection-and-images/overview/how-we-see
+  board: class10-science/light/reflection-and-images/how-we-see
   target: w3
   source: content/class10-science/light/reflection-and-images/overview.ts:175
   snapshot: "**The rays of a bounce.** The ray coming to the mirror is the **incident ray**. The point
@@ -128,7 +128,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:19:50.644Z
-  board: class10-science/light/reflection-and-images/overview/star
+  board: class10-science/light/reflection-and-images/star
   target: paper
   source: content/class10-science/light/reflection-and-images/overview.ts:388
   snapshot: "mirrorImage: the arrow, the mirror and Kabir's sheet of paper behind the mirror exactly
@@ -151,7 +151,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:22:50.406Z
-  board: class10-science/light/reflection-and-images/overview/laws
+  board: class10-science/light/reflection-and-images/laws
   target: lateral
   source: content/class10-science/light/reflection-and-images/overview.ts:461
   snapshot: "Same size, every time: no bigger. And there's a weirder problem. The subtitles in the
@@ -176,7 +176,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:23:49.302Z
-  board: class10-science/light/reflection-and-images/overview/image
+  board: class10-science/light/reflection-and-images/image
   target: w4
   source: content/class10-science/light/reflection-and-images/overview.ts:556
   snapshot: "The angle is already measured from the normal, so the angle of incidence is 30°. By the
@@ -198,7 +198,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:24:45.403Z
-  board: class10-science/light/mirror-parts/overview/wall
+  board: class10-science/light/mirror-parts/wall
   target: w2
   source: content/class10-science/light/mirror-parts/overview.ts:62
   snapshot: "Monday morning. Kabir yells from Mom's room. On the wall, just below the window, there's
@@ -221,7 +221,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:31:39.610Z
-  board: class10-science/light/mirror-parts/overview/spoon
+  board: class10-science/light/mirror-parts/spoon
   target: sphere
   source: content/class10-science/light/mirror-parts/overview.ts:174
   snapshot: "lightScene: a sphere seen from the side as a dashed circle, with a short arc of it drawn
@@ -243,7 +243,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:34:06.007Z
-  board: class10-science/light/mirror-parts/overview/parts
+  board: class10-science/light/mirror-parts/parts
   target: guess
   source: content/class10-science/light/mirror-parts/overview.ts:233
   snapshot: Moving the paper back and forth, Kabir finds a small, very bright spot. A few minutes
@@ -270,7 +270,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T09:38:43.963Z
-  board: class10-science/light/mirror-ray-rules/overview/focal
+  board: class10-science/light/mirror-ray-rules/focal
   target: w3
   source: content/class10-science/light/mirror-ray-rules/overview.ts:120
   snapshot: "**Why:** the line from $C$ to any point of the mirror is the normal there. So this ray
@@ -300,7 +300,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T10:51:55.370Z
-  board: class10-science/light/reflection-and-images/overview/names
+  board: class10-science/light/reflection-and-images/names
   target: room
   source: content/class10-science/light/reflection-and-images/overview.ts:319
   snapshot: "planeMirror: a torch shining down on a flat mirror with a ruler along it; tapping next
@@ -325,7 +325,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T10:54:06.273Z
-  board: class10-science/light/reflection-and-images/overview/laws
+  board: class10-science/light/reflection-and-images/laws
   target: w2
   source: content/class10-science/light/reflection-and-images/overview.ts:477
   snapshot: "**The laws of reflection.** (1) The angle of incidence is equal to the angle of
@@ -351,7 +351,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T10:56:27.596Z
-  board: class10-science/light/reflection-and-images/overview/real-virtual
+  board: class10-science/light/reflection-and-images/real-virtual
   target: w2
   source: content/class10-science/light/reflection-and-images/overview.ts:625
   snapshot: "**Real and virtual.** If the rays **really meet** at the image, the image is **real**.
@@ -384,7 +384,7 @@
   status: planned
   by: you
   createdAt: 2026-10-19T10:58:35.836Z
-  board: class10-science/light/reflection-and-images/overview/plane-image
+  board: class10-science/light/reflection-and-images/plane-image
   target: scene
   source: content/class10-science/light/reflection-and-images/overview.ts:653
   snapshot: "mirrorImage: the object and its image in a plane mirror, with both distances marked on

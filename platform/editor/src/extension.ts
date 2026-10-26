@@ -424,9 +424,9 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
     if (node === undefined) {
       const index = readJson<{ books: Ref[] }>(join(build, "index.json"));
       return (index?.books ?? []).map((ref) => {
-        const slug = dirname(ref.path);
+        const slug = ref.path;
         return {
-          label: title(readJson(join(build, ref.path)), slug),
+          label: title(readJson(join(build, `${ref.path}.json`)), slug),
           path: slug,
           kind: "book",
           file: join(root, "content", slug, "build.yaml"),
@@ -434,11 +434,11 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
       });
     }
     if (node.kind === "book") {
-      const book = readJson<{ chapters: Ref[] }>(join(build, node.path, "book.json"));
+      const book = readJson<{ chapters: Ref[] }>(join(build, `${node.path}.json`));
       return (book?.chapters ?? []).map((ref, i) => {
-        const slug = dirname(ref.path);
+        const slug = ref.path;
         return {
-          label: `${i + 1}. ${title(readJson(join(build, ref.path)), slug)}`,
+          label: `${i + 1}. ${title(readJson(join(build, `${ref.path}.json`)), slug)}`,
           path: slug,
           kind: "chapter",
           file: join(
@@ -451,11 +451,11 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
       });
     }
     if (node.kind === "chapter") {
-      const chapter = readJson<{ concepts: Ref[] }>(join(build, node.path, "chapter.json"));
+      const chapter = readJson<{ concepts: Ref[] }>(join(build, `${node.path}.json`));
       return (chapter?.concepts ?? []).map((ref) => {
-        const slug = dirname(ref.path);
+        const slug = ref.path;
         return {
-          label: title(readJson(join(build, ref.path)), slug),
+          label: title(readJson(join(build, `${ref.path}.json`)), slug),
           path: slug,
           kind: "lesson",
           file: join(root, "content", slug, "overview.ts"),

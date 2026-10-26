@@ -51,7 +51,7 @@ export const commentSchema = z
     status: z.nativeEnum(Status),
     by: z.string(),
     createdAt: z.string(),
-    /** The board, by its build path without .json; absent for a comment on a plan. */
+    /** The board, by its path; absent for a comment on a plan. */
     board: z.string().optional(),
     /** What on the board, by address: "machine", "machine/put", "shadow/circle/point". */
     target: z.string().optional(),

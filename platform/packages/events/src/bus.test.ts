@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { bindRaise, createEventBus } from "./bus";
 import { makeId } from "./id";
 
-const ITEM = { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/overview/p.json", version: "1" };
+const ITEM = { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/p", version: "1" };
 const place = { lessonId: "l", item: ITEM };
 
 describe("createEventBus", () => {

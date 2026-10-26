@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { Actor, Kind, Status, applyChange, latestReview, readComments } from "./comments";
 
-const BOARD = "class10-maths/polynomials/value-and-zeroes/overview/value";
+const BOARD = "class10-maths/polynomials/value-and-zeroes/value";
 
 function repo(): string {
   const root = mkdtempSync(join(tmpdir(), "comments-"));

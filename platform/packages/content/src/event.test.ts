@@ -9,7 +9,7 @@ const envelope = {
   producedAt: 1791692957412,
   actor: "learner",
   lessonId: "concept/975e4c05ea34e125",
-  item: { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/overview/guess.json", version: "0123456789abcdef" },
+  item: { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/guess", version: "0123456789abcdef" },
 };
 
 const check = {

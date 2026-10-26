@@ -5,6 +5,7 @@ import {
   type Ref,
   builtChapterSchema,
   builtConceptSchema,
+  builtFile,
   builtPageSchema,
   builtQuestionSchema,
 } from "@chalk/content";
@@ -27,7 +28,7 @@ export type ChapterContent = ReadonlyMap<string, ConceptLessons>;
 /** Where a built file is served: build/<path>, its version in the query so it can be kept forever. */
 export const CONTENT_ROUTE = "/content/";
 export const contentUrl = (ref: Pick<Ref, "path" | "version">): string =>
-  `${CONTENT_ROUTE}${ref.path}?v=${ref.version}`;
+  `${CONTENT_ROUTE}${builtFile(ref.path)}?v=${ref.version}`;
 
 /** The chapter's files couldn't be fetched: offline and not kept from before, or the server said no. */
 export class ContentUnavailable extends Error {}
@@ -81,9 +82,9 @@ async function fetchChapter(
   path: string,
   tell: (done: number, total: number) => void,
 ): Promise<ChapterContent> {
-  const bundled = (inBuild: string): unknown => {
-    const json = skeleton[SKELETON_PREFIX + inBuild];
-    if (json === undefined) throw new ContentUnavailable(`build/${inBuild} isn't in the app`);
+  const bundled = (path: string): unknown => {
+    const json = skeleton[SKELETON_PREFIX + builtFile(path)];
+    if (json === undefined) throw new ContentUnavailable(`${path} isn't in the app`);
     return json;
   };
   const chapter = builtChapterSchema.parse(bundled(path));
@@ -106,17 +107,17 @@ async function fetchChapter(
   };
   await Promise.all(Array.from({ length: Math.min(AT_ONCE, refs.length) }, worker));
   const boards = new Map<string, Board>();
-  for (const ref of refs) boards.set(ref.path, await boardOfFile(ref.path, files[ref.path]));
-  return conceptLessons(files, "", boards);
+  for (const ref of refs) boards.set(ref.path, await boardOfFile(files[ref.path]));
+  return conceptLessons(files, boards);
 }
 
 /** A page's or question's board, made from its code (its file under build/ says which). */
-export async function boardOfFile(path: string, json: unknown): Promise<Board> {
+export async function boardOfFile(json: unknown): Promise<Board> {
   const item =
     (json as { kind?: unknown }).kind === Kind.Page
       ? builtPageSchema.parse(json)
       : builtQuestionSchema.parse(json);
-  return loadBoard(modules, item, (type) => propDefs[type]?.role, path);
+  return loadBoard(modules, item, (type) => propDefs[type]?.role);
 }
 
 async function fetchJson(ref: Ref): Promise<unknown> {

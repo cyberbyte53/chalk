@@ -50,20 +50,15 @@ export function builtOf(item: BoardItem, module: Readonly<Record<string, unknown
 }
 
 /**
- * The item's board as it is played: its questions told what they are about and whether they count (a bank question is graded on the concepts it
- * tests; a page's are about its concept, ungraded), and where it was made from (`path`: its file
- * under build/, so a copy elsewhere can be made again).
+ * The item's board as it is played: its questions told what they are about and whether they count
+ * (a bank question is graded on the concepts it tests; a page's are about its concept, ungraded),
+ * and which item it was made from (its id, path and version), so a copy elsewhere can be made again.
  */
-export function finishBoard(
-  item: BoardItem,
-  built: BuiltBoard,
-  roleOf: RoleOf,
-  path: string,
-): Board {
+export function finishBoard(item: BoardItem, built: BuiltBoard, roleOf: RoleOf): Board {
   const board: Board = {
     ...built.board,
     root: structuredClone(built.board.root),
-    item: { id: item.id, path, version: item.version },
+    item: { id: item.id, path: item.path, version: item.version },
   };
   const tag =
     item.kind === Kind.Page
@@ -80,9 +75,8 @@ export function boardOf(
   item: BoardItem,
   module: Readonly<Record<string, unknown>>,
   roleOf: RoleOf,
-  path: string,
 ): Board {
-  return finishBoard(item, builtOf(item, module), roleOf, path);
+  return finishBoard(item, builtOf(item, module), roleOf);
 }
 
 /** Where each item's module is loaded from: content/modules.gen.ts, by module path. */
@@ -95,10 +89,9 @@ export async function loadBoard(
   modules: ContentModules,
   item: BoardItem,
   roleOf: RoleOf,
-  path: string,
 ): Promise<Board> {
   const load = modules[moduleOf(item)];
   if (load === undefined)
     throw new Error(`${moduleOf(item)} isn't in content/modules.gen.ts; run pnpm build-content`);
-  return boardOf(item, await load(), roleOf, path);
+  return boardOf(item, await load(), roleOf);
 }

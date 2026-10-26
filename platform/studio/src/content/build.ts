@@ -23,7 +23,7 @@ import {
   rootManifestSchema,
   siteOf,
 } from "@chalk/author";
-import { hashOf, idOf, versionOf } from "@chalk/author/id";
+import { hashOf, idOf, rowKey, versionOf } from "@chalk/author/id";
 import {
   type BankRef,
   type Board,
@@ -38,7 +38,6 @@ import {
   type BuiltPage,
   type BuiltQuestion,
   Kind,
-  OVERVIEW_DIR,
   type Readings,
   type Ref,
   type Source,
@@ -46,11 +45,13 @@ import {
   builtChapterSchema,
   builtConceptSchema,
   builtFamilySchema,
+  builtFile,
   builtPageSchema,
   builtQuestionSchema,
   propPieces,
   walkPieces,
 } from "@chalk/content";
+import { propPackages } from "@chalk/library";
 import { type AnyPropDef, PropRole } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
@@ -78,7 +79,7 @@ export type BuildResult = {
   chapters: { built: string[]; reused: number };
 };
 
-/** build/sources.json: built item path → where its board was written. */
+/** build/sources.json: node path → where its board was written. */
 export const SOURCES_FILE = "sources.json";
 
 /** Where one built board's parts were written, and each placed prop's type. */
@@ -88,7 +89,21 @@ export type ItemSources = {
   props: Record<string, string>;
 };
 
+/** The repo's root: prop packages are under library/props/ there. */
+const REPO_ROOT = fileURLToPath(new URL("../../../../", import.meta.url));
+
+/** Each prop type's package folder (from the repo root), from the library's own list. */
+export const PROP_DIRS: Readonly<Record<string, string>> = Object.fromEntries(
+  [...propPackages].flatMap(([name, defs]) =>
+    existsSync(join(REPO_ROOT, "library", "props", name))
+      ? defs.map((def) => [def.type, `library/props/${name}`] as const)
+      : [],
+  ),
+);
+
 type Context = {
+  /** Each prop type's package folder, for its version. */
+  propDirs: Readonly<Record<string, string>>;
   contentDir: string;
   defs: Defs;
   readings: Readings;
@@ -243,26 +258,59 @@ function claimId(c: Context, id: string, where: string): void {
 }
 
 function source(c: Context, path: string, file: string, row?: number): Source {
-  return row === undefined
-    ? { path, file, commit: c.commit }
-    : { path, file, row, commit: c.commit };
+  return row === undefined ? { path, file } : { path, file, row };
 }
 
-/** Gives the item its version, checks it against its format, files it, and returns a pointer to it. */
-function emit<T extends { id: string; version: string; source: Source }>(
+/**
+ * Files an item at its path in the course tree (`<path>.json`), with its version unless it has one
+ * already (a board's is worked out with its code), checks it against its format, and returns a
+ * pointer to it.
+ */
+function emit<T extends { path: string; id: string; version: string; source: Source }>(
   c: Context,
-  file: string,
   item: T,
   schema: ZodType<T, ZodTypeDef, unknown>,
 ): Ref {
-  item.version = versionOf(item);
+  if (item.version === "") item.version = versionOf(item);
+  const file = builtFile(item.path);
   const parsed = schema.safeParse(item);
   if (!parsed.success) {
     for (const issue of parsed.error.issues)
       report(c, file, `${issue.path.join(".")}: ${issue.message}`);
   }
+  if (c.files.has(file)) report(c, file, `two items at ${item.path}`);
   c.files.set(file, item);
-  return { id: item.id, version: item.version, path: file };
+  return { id: item.id, version: item.version, path: item.path };
+}
+
+/**
+ * A board item's prop versions and its version: the board is made from its module's code and the
+ * props it places, so its version is worked out from them (its board must be built first).
+ */
+function versionBoard(
+  c: Context,
+  item: BuiltPage | BuiltQuestion,
+  built: BuiltBoard,
+  module: string,
+): void {
+  item.props = Object.fromEntries(
+    [...new Set(propTypesOf(built.board))].sort().map((type) => [type, propVersion(c, type)]),
+  );
+  item.version = versionOf(item, codeHash(c, module));
+}
+
+/** A prop type's version: a hash of its package's source (every file under its folder). */
+function propVersion(c: Context, type: string): string {
+  const key = `prop:${type}`;
+  const known = c.codeHashes.get(key);
+  if (known !== undefined) return known;
+  const dir = c.propDirs[type];
+  const files = dir === undefined ? [] : filesUnder(join(REPO_ROOT, dir));
+  const version = hashOf(
+    files.sort().map((f) => [relative(REPO_ROOT, f), hashOf(readFileSync(f, "utf8"))]),
+  );
+  c.codeHashes.set(key, version);
+  return version;
 }
 
 async function importModule(
@@ -321,12 +369,13 @@ function makeBoard(
   where: string,
   item: BuiltPage | BuiltQuestion,
   module: Readonly<Record<string, unknown>>,
-  out: string,
+  moduleFile: string,
 ): { built: BuiltBoard; board: Board } | undefined {
   try {
     const built = builtOf(item, module);
-    const board = finishBoard(item, built, (type) => c.defs[type]?.role, out);
-    c.boards.set(out, board);
+    versionBoard(c, item, built, moduleFile);
+    const board = finishBoard(item, built, (type) => c.defs[type]?.role);
+    c.boards.set(item.path, board);
     return { built, board };
   } catch (error) {
     report(c, where, error instanceof Error ? error.message : String(error));
@@ -366,23 +415,23 @@ async function buildPages(
     const where = `${file} · ${p.key}`;
     if (keys.has(p.key)) report(c, where, `two pages with the key "${p.key}"`);
     keys.add(p.key);
+    const path = `${conceptPath}/${p.key}`;
     const item: BuiltPage = {
       kind: Kind.Page,
-      id: idOf(`${conceptPath}/${OVERVIEW_DIR}/${p.key}`),
+      path,
+      id: idOf(path),
       version: "",
       source: source(c, conceptPath, ContentFile.Overview, row),
       concept: conceptId,
       key: p.key,
-      code: codeHash(c, file),
+      props: {},
     };
-    item.version = versionOf(item);
-    const out = `${conceptPath}/${OVERVIEW_DIR}/${p.key}.json`;
-    const made = makeBoard(c, where, item, module, out);
+    const made = makeBoard(c, where, item, module, file);
     if (made === undefined || !(await checkBoard(c, where, made.built, made.board))) continue;
     for (const type of propTypesOf(made.board)) used.add(type);
     claimId(c, item.id, where);
-    c.sources.set(out, sitesOf(made.built.board, p.site));
-    refs.push(emit(c, out, item, builtPageSchema));
+    c.sources.set(path, sitesOf(made.built.board, p.site));
+    refs.push(emit(c, item, builtPageSchema));
   }
   return refs;
 }
@@ -429,6 +478,7 @@ async function buildFamily(
   if (rows === undefined) return [];
   const familyId = idOf(familyPath);
   const banked: Banked[] = [];
+  const keys = new Map<string, number>();
   for (const [row, r] of rows.entries()) {
     const where = `${paramsFile} · row ${row}`;
     if (r.exclude === true) {
@@ -441,10 +491,19 @@ async function buildFamily(
         report(c, where, `params.${issue.path.join(".")}: ${issue.message}`);
       continue;
     }
-    const id = idOf(familyPath, r.params);
+    const key = rowKey(r.params);
+    const other = keys.get(key);
+    if (other !== undefined) {
+      report(c, where, `the same params as row ${other}: one question, written twice`);
+      continue;
+    }
+    keys.set(key, row);
+    const path = `${familyPath}/${key}`;
+    const id = idOf(path);
     const level = r.level ?? fam.level;
     const item: BuiltQuestion = {
       kind: Kind.Question,
+      path,
       id,
       version: "",
       source: source(c, familyPath, ContentFile.Params, row),
@@ -454,11 +513,9 @@ async function buildFamily(
       origin: r.origin,
       ...(r.firstTry === undefined ? {} : { firstTry: r.firstTry }),
       params: r.params,
-      code: codeHash(c, familyFile),
+      props: {},
     };
-    item.version = versionOf(item);
-    const out = outPath(familyPath, `${id}.json`);
-    const made = makeBoard(c, where, item, module, out);
+    const made = makeBoard(c, where, item, module, familyFile);
     if (made === undefined || !(await checkBoard(c, where, made.built, made.board))) continue;
     const { built, board } = made;
     if (built.witness.length === 0) {
@@ -466,11 +523,11 @@ async function buildFamily(
       continue;
     }
     claimId(c, id, where);
-    c.sources.set(out, {
+    c.sources.set(path, {
       ...sitesOf(built.board, undefined),
       board: `content/${paramsFile}:${rowLine(c, paramsFile, row)}`,
     });
-    const ref = emit(c, out, item, builtQuestionSchema);
+    const ref = emit(c, item, builtQuestionSchema);
     banked.push({
       ...ref,
       level,
@@ -482,6 +539,7 @@ async function buildFamily(
   claimId(c, familyId, familyFile);
   const item: BuiltFamily = {
     kind: Kind.Family,
+    path: familyPath,
     id: familyId,
     version: "",
     source: source(c, familyPath, ContentFile.Family),
@@ -489,7 +547,7 @@ async function buildFamily(
     tests,
     questions: banked.map(({ id, version, path }) => ({ id, version, path })),
   };
-  emit(c, outPath(familyPath, BuiltFile.Family), item, builtFamilySchema);
+  emit(c, item, builtFamilySchema);
   return banked;
 }
 
@@ -586,6 +644,7 @@ function emitConcept(c: Context, draft: ConceptDraft, bank: readonly Banked[]): 
   const tested = bank.filter((q) => q.tests.includes(draft.id)).flatMap((q) => q.props);
   const item: BuiltConcept = {
     kind: Kind.Concept,
+    path: draft.path,
     id: draft.id,
     version: "",
     source: source(c, draft.path, ContentFile.Manifest),
@@ -596,7 +655,7 @@ function emitConcept(c: Context, draft: ConceptDraft, bank: readonly Banked[]): 
     overview: draft.overview,
     props: explainers(c, [...draft.used, ...tested]),
   };
-  return emit(c, outPath(draft.path, BuiltFile.Concept), item, builtConceptSchema);
+  return emit(c, item, builtConceptSchema);
 }
 
 /** concepts.gen.ts must say what build.yaml says (build-content and preview rewrite it first). */
@@ -633,6 +692,7 @@ async function buildChapter(c: Context, chapterPath: string): Promise<Ref | unde
   const concepts = drafts.map((draft) => emitConcept(c, draft, bank));
   const item: BuiltChapter = {
     kind: Kind.Chapter,
+    path: chapterPath,
     id,
     version: "",
     source: source(c, chapterPath, ContentFile.Manifest),
@@ -643,7 +703,7 @@ async function buildChapter(c: Context, chapterPath: string): Promise<Ref | unde
     props: explainers(c, [...drafts.flatMap((d) => [...d.used]), ...bank.flatMap((q) => q.props)]),
   };
   noteLongAnswers(c, chapterPath);
-  return emit(c, outPath(chapterPath, BuiltFile.Chapter), item, builtChapterSchema);
+  return emit(c, item, builtChapterSchema);
 }
 
 /** Above this share, "pick the longest option" works too often: say so (it doesn't stop the build). */
@@ -746,10 +806,10 @@ function entryFile(cache: ChapterCache, chapterPath: string): string {
 }
 
 /** Bump when what an entry records changes: every older entry is then rebuilt. */
-const CACHE_FORMAT = "2";
+const CACHE_FORMAT = "3";
 
 function keyOf(c: Context, deps: readonly string[]): string {
-  return fingerprint(deps, [CACHE_FORMAT, c.commit, process.version, c.contentDir]);
+  return fingerprint(deps, [CACHE_FORMAT, process.version, c.contentDir]);
 }
 
 function sharedContentFiles(c: Context): string[] {
@@ -844,6 +904,7 @@ async function buildBook(c: Context, bookPath: string): Promise<Ref | undefined>
   const art = await buildArt(c, bookPath);
   const item: BuiltBook = {
     kind: Kind.Book,
+    path: bookPath,
     id,
     version: "",
     source: source(c, bookPath, ContentFile.Manifest),
@@ -851,7 +912,7 @@ async function buildBook(c: Context, bookPath: string): Promise<Ref | undefined>
     art,
     chapters,
   };
-  return emit(c, outPath(bookPath, BuiltFile.Book), item, builtBookSchema);
+  return emit(c, item, builtBookSchema);
 }
 
 /** Graph edges must join built concepts and never loop. */
@@ -898,6 +959,7 @@ export async function buildContent(options: {
   const { cache, ...rest } = options;
   const c: Context = {
     ...rest,
+    propDirs: PROP_DIRS,
     imported: [],
     chapters: { built: [], reused: 0 },
     cache: cache === undefined || !recordImports() ? undefined : chapterCache(cache),

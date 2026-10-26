@@ -6,6 +6,7 @@ import {
   builtBookSchema,
   builtChapterSchema,
   builtConceptSchema,
+  builtFile,
 } from "@chalk/content";
 
 export type CourseConcept = {
@@ -21,7 +22,7 @@ export type CourseConcept = {
   prereqs: string[];
 };
 export type CourseChapter = {
-  /** Its chapter.json's path in build/, and that file's version: where its content is fetched from. */
+  /** Its path in the course tree (its file is build/<path>.json), and its version. */
   path: string;
   version: string;
   title: Localized;
@@ -46,8 +47,9 @@ export function readCourses(files: Readonly<Record<string, unknown>>, prefix: st
   const index = files[`${prefix}${BuiltFile.Index}`];
   if (index === undefined) return [];
   const read = (path: string): unknown => {
-    const json = files[prefix + path];
-    if (json === undefined) throw new Error(`build/${path} is missing; run pnpm build-content`);
+    const json = files[prefix + builtFile(path)];
+    if (json === undefined)
+      throw new Error(`build/${builtFile(path)} is missing; run pnpm build-content`);
     return json;
   };
   return buildIndexSchema.parse(index).books.map((bookRef) => {

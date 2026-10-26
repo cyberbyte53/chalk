@@ -199,7 +199,11 @@ Every path must be a built concept; the build refuses loops. A concept's `prereq
 - `pnpm preview`: the same on every save; the learner app (`pnpm dev`) shows each built concept as a lesson.
 - `pnpm publish-content`: refuses unless git is clean; builds from that commit and keeps a copy as `published/<commit>/`.
 
-`build/` mirrors the tree (`book.json`; `chapter.json` with the bank; `concept.json`, `overview/<page>.json`; `questions/<family>/family.json` and one `<id>.json` per question; `index.json` and `graph.json`). It is generated, never edited, and not in git. `content/modules.gen.ts` (every module that makes boards, for the app and the server to load) is generated too, and committed, like each chapter's `concepts.gen.ts`.
+Everything is one tree, and a node's **path** is its identity: book → chapter → concept → its pages (`class10-maths/real-numbers/division-lemma/story`); the chapter's question families beside its concepts (`…/real-numbers/questions/locate`), each row named by 8 hex characters of a hash of its params (`…/questions/locate/3fa1c2d9`: only params count, not level, `firstTry` or `exclude`; two rows with the same params are a build error). Each node names only itself and siblings' names are unique; a title is what a learner sees, so a chapter can be retitled without moving its path. Renaming a folder makes a new node.
+
+Each built item carries its `path`, its `id` (a hash of the path, always worked out from it, what events carry) and its `version`: a hash of its own content and everything it is made from (a board: its module's code and the version of every prop type it places, listed in `props`; a concept, chapter or book: its children's versions). `build/index.json` also names the commit it was built from (`<sha>-dirty` with uncommitted changes; `pnpm ship` refuses those).
+
+A node's file is `build/<path>.json` (`build/class10-maths.json`, `build/class10-maths/real-numbers.json`, …), next to `index.json` and `graph.json`. It is generated, never edited, and not in git. `content/modules.gen.ts` (every module that makes boards, for the app and the server to load) is generated too, and committed, like each chapter's `concepts.gen.ts`.
 
 ## Colours
 

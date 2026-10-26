@@ -404,7 +404,7 @@ describe("server", () => {
   const guess = guessBoard;
   const GUESS = {
     id: "aaaaaaaaaaaaaaaa",
-    path: "book/chapter/lesson/overview/guess.json",
+    path: "book/chapter/lesson/guess",
     version: "abc123",
   };
   const place = { lessonTitle: "Where does √2 live?", boardNumber: 2, boardCount: 4, locale: "en" };
@@ -542,7 +542,10 @@ describe("server", () => {
   });
 
   it("answers health checks", async () => {
-    expect(await new Phone(app).json("GET", ApiPath.Health)).toEqual({ ok: true });
+    expect(await new Phone(app).json("GET", ApiPath.Health)).toEqual({
+      ok: true,
+      commit: "unknown",
+    });
   });
 });
 

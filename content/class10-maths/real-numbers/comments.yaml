@@ -4,7 +4,7 @@
   status: ready
   by: you
   createdAt: 2026-10-18T14:42:18.939Z
-  board: class10-maths/real-numbers/division-lemma/overview/lemma
+  board: class10-maths/real-numbers/division-lemma/lemma
   target: w6
   source: content/class10-maths/real-numbers/division-lemma/overview.ts:142
   snapshot: "**There is only one answer.** Each round takes 6 sweets out of the box. Riya keeps going
@@ -26,7 +26,7 @@
   status: ready
   by: you
   createdAt: 2026-10-18T14:52:44.979Z
-  board: class10-maths/real-numbers/division-lemma/overview/example-square
+  board: class10-maths/real-numbers/division-lemma/example-square
   target: w4
   source: content/class10-maths/real-numbers/division-lemma/overview.ts:254
   snapshot: "**Why divide by 2?** We want a multiple of 4, and squaring $2q$ gives $4q^2$, a multiple
@@ -64,7 +64,7 @@
   status: ready
   by: you
   createdAt: 2026-10-18T15:25:15.046Z
-  board: class10-maths/real-numbers/euclid-algorithm/overview/why
+  board: class10-maths/real-numbers/euclid-algorithm/why
   target: because
   source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:307
   snapshot: "**Why?** If pieces of length $d$ fit exactly into 18 and into 12, they also fit into
@@ -88,7 +88,7 @@
   status: ready
   by: you
   createdAt: 2026-10-18T15:30:24.030Z
-  board: class10-maths/real-numbers/euclid-algorithm/overview/division
+  board: class10-maths/real-numbers/euclid-algorithm/division
   target: w5
   source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:386
   snapshot: "**In general.** Say $d$ divides $a$ and $b$. Since it divides $b$, it divides $bq$. A
@@ -127,7 +127,7 @@
   status: ready
   by: you
   createdAt: 2026-10-18T15:41:39.153Z
-  board: class10-maths/real-numbers/euclid-algorithm/overview/division
+  board: class10-maths/real-numbers/euclid-algorithm/division
   target: w4
   source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:380
   snapshot: "**Same common factors.** We want to show: a common factor of 51 and 21 is also a factor
@@ -154,7 +154,7 @@
   status: open
   by: you
   createdAt: 2026-10-22T05:11:23.789Z
-  board: class10-maths/real-numbers/division-lemma/overview/lemma
+  board: class10-maths/real-numbers/division-lemma/lemma
   target: w7
   source: content/class10-maths/real-numbers/division-lemma/overview.ts:148
   snapshot: $$\begin{array}{l|cccc} \text{Rounds} & 0 & 1 & 2 & 3 \\ \hline \text{Sweets in the box} &
@@ -166,7 +166,7 @@
   status: open
   by: you
   createdAt: 2026-10-22T05:11:35.852Z
-  board: class10-maths/real-numbers/division-lemma/overview/lemma
+  board: class10-maths/real-numbers/division-lemma/lemma
   target: w2
   source: content/class10-maths/real-numbers/division-lemma/overview.ts:118
   snapshot: "Every sweet ends up on a plate or in the box: $$\\underbrace{20}_{\\text{sweets}} =
@@ -179,7 +179,7 @@
   status: open
   by: you
   createdAt: 2026-10-22T05:11:43.456Z
-  board: class10-maths/real-numbers/euclid-algorithm/overview/story
+  board: class10-maths/real-numbers/euclid-algorithm/story
   target: ribbons
   source: content/class10-maths/real-numbers/euclid-algorithm/overview.ts:32
   snapshot: "stickMeasure: ribbons of 18 cm and 12 cm, with pieces of 1 to 7 cm to mark on both"
@@ -190,7 +190,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T08:52:08.085Z
-  board: class10-maths/real-numbers/fundamental-theorem/overview/story
+  board: class10-maths/real-numbers/fundamental-theorem/story
   target: riya
   source: content/class10-maths/real-numbers/fundamental-theorem/overview.ts:25
   snapshot: "factorTree: Riya's tree: 360 split first as 10 × 36"
@@ -201,7 +201,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T09:12:47.410Z
-  board: class10-maths/real-numbers/root-two-irrational/overview/intro
+  board: class10-maths/real-numbers/root-two-irrational/intro
   target: must
   source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:61
   snapshot: A prime $p$ divides $a^2$. Must $p$ divide $a$?
@@ -212,7 +212,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T09:14:41.522Z
-  board: class10-maths/real-numbers/root-two-irrational/overview/intro
+  board: class10-maths/real-numbers/root-two-irrational/intro
   target: proof
   source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:13
   snapshot: "**Why.** $p$ divides $a^2$, so $p$ fits inside $a^2$: $a^2$ has a $p$-tower. $a^2$'s
@@ -231,7 +231,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T09:15:52.793Z
-  board: class10-maths/real-numbers/root-two-irrational/overview/intro
+  board: class10-maths/real-numbers/root-two-irrational/intro
   target: prime
   source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:115
   snapshot: "It needs $p$ to be prime. 4 divides 36 but not 6: its two 2s fit inside 36, but 6 has
@@ -243,7 +243,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T09:16:42.743Z
-  board: class10-maths/real-numbers/root-two-irrational/overview/combinations
+  board: class10-maths/real-numbers/root-two-irrational/combinations
   target: w2
   source: content/class10-maths/real-numbers/root-two-irrational/overview.ts:323
   snapshot: "The proof for $\\sqrt{2}$ works for $\\sqrt{3}$ too: use 3 (also prime) in place of 2 at
@@ -256,7 +256,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T09:19:16.875Z
-  board: class10-maths/real-numbers/which-fractions-end/overview/repeats
+  board: class10-maths/real-numbers/which-fractions-end/repeats
   target: w2
   source: content/class10-maths/real-numbers/which-fractions-end/overview.ts:380
   snapshot: "**One step of long division** $$\\underbrace{3}_{\\text{remainder}} \\times 10 = 8
@@ -270,7 +270,7 @@
   status: open
   by: you
   createdAt: 2026-10-23T09:19:55.476Z
-  board: class10-maths/real-numbers/which-fractions-end/overview/repeats
+  board: class10-maths/real-numbers/which-fractions-end/repeats
   target: predict
   source: content/class10-maths/real-numbers/which-fractions-end/overview.ts:282
   snapshot: The remainder is 1 again, just like at the start. What will the next digit be?

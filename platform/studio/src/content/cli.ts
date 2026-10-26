@@ -12,11 +12,10 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
-import { WORKING_TREE } from "@chalk/content";
-import { propDefs, propPackages } from "@chalk/library";
+import { propDefs } from "@chalk/library";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
-import { type BuildResult, SOURCES_FILE, buildContent } from "./build";
+import { type BuildResult, PROP_DIRS, SOURCES_FILE, buildContent } from "./build";
 import { MODULES_FILE, writeConceptModules, writeModulesModule } from "./concepts";
 import { buildInputsKey, inputsKeyFile } from "./inputs";
 
@@ -47,6 +46,21 @@ const readings = loadReadings(join(contentDir, PRONUNCIATIONS_FILE));
 
 function git(...args: string[]): string {
   return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+}
+
+/**
+ * The commit this build is of: CHALK_COMMIT when shipping (the image has no .git), else the
+ * checkout's HEAD, marked `-dirty` when there are uncommitted changes (never mistaken for a ship).
+ */
+function currentCommit(): string {
+  const given = process.env.CHALK_COMMIT;
+  if (given !== undefined && given !== "") return given;
+  try {
+    const head = git("rev-parse", "HEAD");
+    return git("status", "--porcelain") === "" ? head : `${head}-dirty`;
+  } catch {
+    return "unknown";
+  }
 }
 
 function report(result: BuildResult): void {
@@ -106,10 +120,7 @@ function write(result: BuildResult): void {
  * rebuilt only when one of those files changed (see build.ts). `--force` builds everything afresh.
  */
 const cacheDir = join(root, "node_modules", ".cache", "chalk-content");
-const propDirs: Record<string, string> = {};
-for (const [name, defs] of propPackages)
-  if (existsSync(join(root, "library", "props", name)))
-    for (const def of defs) propDirs[def.type] = `library/props/${name}`;
+const propDirs = PROP_DIRS;
 
 async function build(commit: string): Promise<BuildResult> {
   if (values.force) rmSync(cacheDir, { recursive: true, force: true });
@@ -221,7 +232,7 @@ if (command === Command.Build) {
   if (writeModulesModule(contentDir)) console.log(`  · generated ${MODULES_FILE}`);
   // Taken before building: an edit made while the build runs must not count as built.
   const inputs = buildInputsKey(root);
-  const result = await build(WORKING_TREE);
+  const result = await build(currentCommit());
   write(result);
   if (result.problems.length > 0) process.exitCode = 1;
   else {
@@ -233,7 +244,7 @@ if (command === Command.Build) {
 } else if (command === Command.Publish) {
   await publish();
 } else if (command === Command.Art) {
-  const result = await build(WORKING_TREE);
+  const result = await build(currentCommit());
   write(result);
   const css = ARTS_CSS.map((file) => readFileSync(join(root, file), "utf8")).join("\n");
   const page = artGallery(collectArt(result.files), css);

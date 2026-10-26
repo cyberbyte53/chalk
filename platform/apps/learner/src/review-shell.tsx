@@ -76,7 +76,7 @@ function viewFromUrl(): View {
   // Studio links by folder names (`book=class10-science&chapter=light`); the chips by index.
   const bySlug = /^\d+$/.test(chapterParam)
     ? undefined
-    : places.find((p) => p.source.path === `${params.get("book")}/${chapterParam}/chapter.json`);
+    : places.find((p) => p.source.path === `${params.get("book")}/${chapterParam}`);
   return {
     book: bySlug?.book ?? params.get("book") ?? first?.book ?? OTHER,
     chapter: bySlug?.chapter ?? (Number(chapterParam) || 0),

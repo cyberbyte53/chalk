@@ -29,6 +29,7 @@ const app = createApp({
       : googleVerifier(config.GOOGLE_CLIENT_ID),
   origin: config.ORIGIN,
   isLanAllowed: config.DEV_SIGN_IN === "on",
+  commit: index.commit,
   courseIds: new Set(index.books.map((book) => book.id)),
   jugnu:
     config.JUGNU_MODEL_SERVER === undefined || config.JUGNU_MODEL === undefined

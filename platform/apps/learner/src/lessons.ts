@@ -7,11 +7,13 @@ import { type Course, readCourses } from "./course";
  * a chapter's are fetched when it is opened (content-store.ts).
  */
 export const skeleton = import.meta.glob<unknown>(
+  // Each item is at build/<path>.json: books one level down, chapters two, concepts three.
   [
-    "../../../../build/index.json",
-    "../../../../build/*/book.json",
-    "../../../../build/*/*/chapter.json",
-    "../../../../build/*/*/*/concept.json",
+    "../../../../build/*.json",
+    "../../../../build/*/*.json",
+    "../../../../build/*/*/*.json",
+    "!../../../../build/graph.json",
+    "!../../../../build/sources.json",
   ],
   { eager: true, import: "default" },
 );

@@ -4,7 +4,7 @@
   status: closed
   by: you
   createdAt: 2026-10-24T15:47:31.250Z
-  board: class10-maths/polynomials/value-and-zeroes/overview/value
+  board: class10-maths/polynomials/value-and-zeroes/value
   target: machine
   prop: valueMachine
   source: content/class10-maths/polynomials/value-and-zeroes/overview.ts:46
@@ -28,7 +28,7 @@
   status: closed
   by: you
   createdAt: 2026-10-24T15:48:15.199Z
-  board: class10-maths/polynomials/value-and-zeroes/overview/value
+  board: class10-maths/polynomials/value-and-zeroes/value
   target: machine
   prop: valueMachine
   source: content/class10-maths/polynomials/value-and-zeroes/overview.ts:46
@@ -53,7 +53,7 @@
   status: closed
   by: you
   createdAt: 2026-10-24T16:32:37.200Z
-  board: class10-maths/polynomials/value-and-zeroes/overview/value
+  board: class10-maths/polynomials/value-and-zeroes/value
   target: machine
   prop: valueMachine
   source: content/class10-maths/polynomials/value-and-zeroes/overview.ts:46

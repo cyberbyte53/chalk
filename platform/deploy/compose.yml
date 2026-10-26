@@ -27,6 +27,7 @@ services:
         - JUGNU_PROVIDER
         - JUGNU_MODEL
         - JUGNU_THINK
+        - COMMIT
     image: chalk-app
     restart: unless-stopped
     env_file: ../.env

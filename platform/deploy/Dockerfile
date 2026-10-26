@@ -12,13 +12,20 @@ ARG GOOGLE_CLIENT_ID
 ARG JUGNU_PROVIDER
 ARG JUGNU_MODEL
 ARG JUGNU_THINK
+# The commit being shipped (ship.sh passes it; the image has no .git): written into
+# build/index.json, baked into the app, served by /api/health and put on every event.
+ARG COMMIT
+RUN test -n "$COMMIT" || { echo "build with --build-arg COMMIT=<sha> (pnpm ship does)"; exit 1; }
+ENV CHALK_COMMIT=$COMMIT
 ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID JUGNU_PROVIDER=$JUGNU_PROVIDER JUGNU_MODEL=$JUGNU_MODEL JUGNU_THINK=$JUGNU_THINK
 RUN pnpm build-content && pnpm --filter @chalk/learner-app build
 
 FROM node:22-slim
 WORKDIR /repo
 COPY --from=build /repo /repo
-ENV NODE_ENV=production \
+ARG COMMIT
+ENV CHALK_COMMIT=$COMMIT \
+    NODE_ENV=production \
     PORT=8080 \
     STATIC_DIR=/repo/platform/apps/learner/dist \
     CONTENT_INDEX=/repo/build/index.json

@@ -27,6 +27,15 @@ const DEV_PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
 
 /** The repo's root, where the one .env lives (see .env.example). */
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
+/** The commit build/ was made from (pnpm build-content writes it into build/index.json). */
+function builtCommit(): string {
+  try {
+    const index = JSON.parse(readFileSync(join(ROOT, "build", "index.json"), "utf8"));
+    return typeof index.commit === "string" ? index.commit : "unknown";
+  } catch {
+    return "unknown";
+  }
+}
 /** The content's source, and where a chunk made only of it is written (and served) in the build. */
 const CONTENT_SOURCE = join(ROOT, "content") + sep;
 const CONTENT_CHUNKS = "assets/content/";
@@ -294,6 +303,7 @@ export default defineConfig(({ mode }): UserConfig => {
           : []),
       ];
   const chalk = {
+    commit: builtCommit(),
     googleClientId: env.GOOGLE_CLIENT_ID ?? "",
     isDevSignIn: mode === "development" && env.DEV_SIGN_IN === "on",
     jugnu: {

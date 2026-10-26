@@ -71,6 +71,8 @@ export type AppDeps = {
    * same port, so a phone on the same network can try it.
    */
   isLanAllowed?: boolean;
+  /** The commit the server and its content were built from (build/index.json), for /api/health. */
+  commit?: string;
   /** The book ids in the built content: what a group may be for. */
   courseIds: ReadonlySet<string>;
   /** Jugnu's model; unset: Jugnu is off. */
@@ -403,7 +405,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   app.get(ApiPath.Health, async (c) => {
     await db.execute(sql`select 1`);
-    return c.json({ ok: true });
+    return c.json({ ok: true, commit: deps.commit ?? "unknown" });
   });
 
   app.all("/api/*", () => {

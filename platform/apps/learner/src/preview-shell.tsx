@@ -4,6 +4,7 @@ import {
   type Piece,
   builtChapterSchema,
   builtConceptSchema,
+  builtFile,
 } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
@@ -34,7 +35,7 @@ import { courses } from "./lessons";
  *   ?dev&board=class10-maths/real-numbers                            a chapter's screen (its lessons)
  *   ?dev&board=class10-maths/real-numbers/division-lemma            every page of a lesson
  *   ?dev&board=class10-maths/real-numbers/division-lemma&show=questions   …then its questions
- *   ?dev&board=class10-maths/real-numbers/division-lemma/overview/story   one page
+ *   ?dev&board=class10-maths/real-numbers/division-lemma/story            one page
  *   ?dev&board=class10-maths/real-numbers/questions/euclid-hcf/<id>       one question
  *   ?dev&source=content/class10-maths/real-numbers/questions/euclid-hcf   boards written in a file
  *                                                                    or folder (from sources.json)
@@ -89,6 +90,8 @@ async function json(path: string): Promise<unknown> {
   if (!res.ok) throw new Error(`build/${path}: ${res.status} (run pnpm build-content?)`);
   return res.json();
 }
+/** A node's built item: build/<path>.json. */
+const item = (path: string): Promise<unknown> => json(builtFile(path));
 
 function unhide(piece: Piece): Piece {
   const { isHidden: _, ...rest } = piece;
@@ -103,31 +106,26 @@ function propTypes(piece: Piece, into: Set<string>): Set<string> {
   return into;
 }
 
-/** The boards a `board=` path names, in order. */
+/** A page's or question's board, by its node path. */
+const shownAt = async (path: string): Promise<Shown> => ({
+  path,
+  board: await boardOfFile(await item(path)),
+});
+
+/** The boards a `board=` path names, in order: one page or question, or a concept's. */
 async function boardsAt(path: string, withQuestions: boolean): Promise<Shown[]> {
   const clean = path.replace(/\.json$/, "").replace(/\/$/, "");
   const parts = clean.split("/");
-  if (parts.length >= 4) {
-    const file = `${clean}.json`;
-    return [{ path: file, board: await boardOfFile(file, await json(file)) }];
-  }
+  if (parts.length >= 4) return [await shownAt(clean)];
   const [book, chapter] = parts;
-  const concept = builtConceptSchema.parse(await json(`${clean}/concept.json`));
-  const pages = await Promise.all(
-    concept.overview.map(async (ref) => ({
-      path: ref.path,
-      board: await boardOfFile(ref.path, await json(ref.path)),
-    })),
-  );
+  const concept = builtConceptSchema.parse(await item(clean));
+  const pages = await Promise.all(concept.overview.map((ref) => shownAt(ref.path)));
   if (!withQuestions) return pages;
-  const chapterJson = builtChapterSchema.parse(await json(`${book}/${chapter}/chapter.json`));
+  const chapterJson = builtChapterSchema.parse(await item(`${book}/${chapter}`));
   const questions = await Promise.all(
     chapterJson.questions
       .filter((q) => q.tests.includes(concept.id))
-      .map(async (ref) => ({
-        path: ref.path,
-        board: await boardOfFile(ref.path, await json(ref.path)),
-      })),
+      .map((ref) => shownAt(ref.path)),
   );
   return [...pages, ...questions];
 }
@@ -142,11 +140,7 @@ async function boardsFrom(source: string, sources: Sources): Promise<Shown[]> {
     .filter(([, w]) => inside(w.board) || Object.values(w.pieces).some(inside))
     .map(([path]) => path)
     .slice(0, 120);
-  return Promise.all(
-    paths.map(async (path) => {
-      return { path, board: await boardOfFile(path, await json(path)) };
-    }),
-  );
+  return Promise.all(paths.map(shownAt));
 }
 
 /** Messages to and from an editor that shows this page in a panel (platform/editor). */
@@ -440,7 +434,7 @@ function PreviewBoard({
     [shown, isPlaying],
   );
   const phone = useRef<HTMLDivElement>(null);
-  useSourceTags(phone, where, shown.path.replace(/\.json$/, ""));
+  useSourceTags(phone, where, shown.path);
   const raise = useMemo(
     () => bus.raiserFor({ lessonId: "preview", item: board.item ?? null }),
     [bus, board],
@@ -460,7 +454,7 @@ function PreviewBoard({
     >
       {!isShot && (
         <div class="preview-tag">
-          <a href={`?dev&board=${shown.path.replace(/\.json$/, "")}`}>{board.name}</a>
+          <a href={`?dev&board=${shown.path}`}>{board.name}</a>
           {where?.board !== undefined && (
             <button type="button" onClick={() => where.board && openInEditor(where.board)}>
               {where.board.replace(/^content\//, "")}
@@ -520,20 +514,16 @@ function go(board: string, isAtEnd = false): void {
     .replace(/=(&|$)/g, "$1");
 }
 
-const slugOf = (chapterPath: string) => chapterPath.replace(/\/chapter\.json$/, "");
-
 /**
  * The lesson after (or before) one, as a student meets them: the next in its chapter, else the
  * first of the next chapter in the book (the last of the previous one going back).
  */
 async function lessonBeside(lesson: string, by: 1 | -1): Promise<string | undefined> {
   const chapterOf = lesson.split("/").slice(0, 2).join("/");
-  const course = courses.find((c) => c.chapters.some((ch) => slugOf(ch.path) === chapterOf));
-  const chapters = course?.chapters.map((ch) => slugOf(ch.path)) ?? [];
+  const course = courses.find((c) => c.chapters.some((ch) => ch.path === chapterOf));
+  const chapters = course?.chapters.map((ch) => ch.path) ?? [];
   const lessonsOf = async (chapter: string) =>
-    ((await json(`${chapter}/chapter.json`)) as { concepts: { path: string }[] }).concepts.map(
-      (c) => c.path.replace(/\/concept\.json$/, ""),
-    );
+    ((await item(chapter)) as { concepts: { path: string }[] }).concepts.map((c) => c.path);
   let at = chapters.indexOf(chapterOf);
   if (at === -1) return undefined;
   let lessons = await lessonsOf(chapterOf);
@@ -554,14 +544,14 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
   const shown: readonly Course[] =
     book === undefined
       ? courses
-      : courses.filter((c) => slugOf(c.chapters[0]?.path ?? "").startsWith(`${book}/`));
+      : courses.filter((c) => (c.chapters[0]?.path ?? "").startsWith(`${book}/`));
   if (shown.length === 0)
     return <div class="preview-empty">No book {book} in build/ (run pnpm build-content?)</div>;
   if (chapter === undefined)
     return (
       <main class="preview">
         {shown.map((course) => {
-          const bookSlug = slugOf(course.chapters[0]?.path ?? "").split("/")[0] ?? "";
+          const bookSlug = (course.chapters[0]?.path ?? "").split("/")[0] ?? "";
           return (
             <section class="preview-card" key={course.id} data-board={bookSlug}>
               <div class="preview-tag">
@@ -572,7 +562,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
                   course={course}
                   locale={locale}
                   onChapter={(i) => {
-                    const slug = slugOf(course.chapters[i]?.path ?? "");
+                    const slug = course.chapters[i]?.path ?? "";
                     go(slug);
                   }}
                   onBack={() => go("")}
@@ -584,7 +574,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
       </main>
     );
   const course = shown[0];
-  const index = course?.chapters.findIndex((c) => slugOf(c.path) === `${book}/${chapter}`) ?? -1;
+  const index = course?.chapters.findIndex((c) => c.path === `${book}/${chapter}`) ?? -1;
   const found = index === -1 ? undefined : course?.chapters[index];
   if (found === undefined) return <div class="preview-empty">No chapter {path} in build/</div>;
   return (
@@ -601,11 +591,11 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
             locale={locale}
             progress={{}}
             onConcept={(id) => {
-              void json(found.path).then((raw) => {
+              void item(found.path).then((raw) => {
                 const ref = (raw as { concepts: { id: string; path: string }[] }).concepts.find(
                   (c) => c.id === id,
                 );
-                const lesson = ref?.path.replace(/\/concept\.json$/, "");
+                const lesson = ref?.path;
                 if (lesson !== undefined) go(lesson);
               });
             }}
@@ -619,7 +609,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
 
 /** The comments to show under a board: its own, and those on the props it places. */
 function threadsOn(threads: readonly Thread[], shown: Shown): Thread[] {
-  const path = shown.path.replace(/\.json$/, "");
+  const path = shown.path;
   const props = propTypes(shown.board.root, new Set());
   return threads.filter((t) => (t.prop !== undefined ? props.has(t.prop) : t.board === path));
 }
@@ -658,7 +648,7 @@ function picksAt(target: HTMLElement): PickTarget[] {
   const card = target.closest<HTMLElement>("[data-board]");
   const phone = target.closest<HTMLElement>(".preview-phone");
   if (card === null || phone === null) return [];
-  const board = card.dataset.board?.replace(/\.json$/, "");
+  const board = card.dataset.board;
   const whole: PickTarget = { el: phone, board, words: "board" };
   const pieceEl = target.closest<HTMLElement>("[data-piece]") ?? undefined;
   if (pieceEl === undefined) return [whole];
@@ -869,19 +859,13 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
         const card = [...document.querySelectorAll<HTMLElement>(".preview-card[data-board]")].find(
           (c) =>
             // The build path is kebab-case ("draw-it"), the board's name camelCase ("drawIt").
-            same(
-              (c.dataset.board ?? "")
-                .replace(/\.json$/, "")
-                .split("/")
-                .at(-1) ?? "",
-              runtime.board.name,
-            ) &&
+            same((c.dataset.board ?? "").split("/").at(-1) ?? "", runtime.board.name) &&
             runtime.propNames().every((n) => c.querySelector(`[data-piece="${CSS.escape(n)}"]`)),
         );
         if (card === undefined) return [];
         return [
           {
-            path: (card.dataset.board ?? "").replace(/\.json$/, ""),
+            path: card.dataset.board ?? "",
             model: runtime.snapshot(card),
           },
         ];

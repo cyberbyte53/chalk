@@ -147,7 +147,7 @@ function conceptChapters(root: string): Map<string, { book: string; chapter: str
   const build = join(root, "build");
   for (const book of dirsIn(build)) {
     for (const chapter of dirsIn(join(build, book))) {
-      const file = join(build, book, chapter, "chapter.json");
+      const file = join(build, book, `${chapter}.json`);
       if (!existsSync(file)) continue;
       try {
         const json = JSON.parse(readFileSync(file, "utf8")) as { concepts?: { id: string }[] };
@@ -160,7 +160,7 @@ function conceptChapters(root: string): Map<string, { book: string; chapter: str
 
 function conceptIds(root: string, book: string, chapter: string): Map<string, string> {
   const ids = new Map<string, string>();
-  const file = join(root, "build", book, chapter, "chapter.json");
+  const file = join(root, "build", book, `${chapter}.json`);
   if (!existsSync(file)) return ids;
   try {
     const json = JSON.parse(readFileSync(file, "utf8")) as {

@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { buildBoard, column, inOrder, theBoard, wait } from "./board";
 import { family, isFamily } from "./family";
-import { idOf, versionOf } from "./id";
+import { idOf, rowKey, versionOf } from "./id";
 import { page } from "./page";
 import { decimal } from "./params";
 
@@ -204,22 +204,18 @@ describe("question families", () => {
 });
 
 describe("ids and versions", () => {
-  it("an id is the path (and a question's params), whatever order the keys come in", () => {
-    expect(idOf("a/b", { x: 1, y: [2, { d: 3, c: 4 }] })).toBe(
-      idOf("a/b", { y: [2, { c: 4, d: 3 }], x: 1 }),
-    );
+  it("an id is a hash of the path; a bank row is named by its params, whatever order the keys come in", () => {
     expect(idOf("a/b")).not.toBe(idOf("a/c"));
     expect(idOf("a/b")).toMatch(/^[0-9a-f]{16}$/);
+    expect(rowKey({ x: 1, y: [2, { d: 3, c: 4 }] })).toBe(rowKey({ y: [2, { c: 4, d: 3 }], x: 1 }));
+    expect(rowKey({ x: 1 })).not.toBe(rowKey({ x: 2 }));
+    expect(rowKey({ x: 1 })).toMatch(/^[0-9a-f]{8}$/);
   });
 
-  it("a version is the content, not the commit it was built from", () => {
-    const item = (commit: string, title: string) => ({
-      id: "x",
-      version: "",
-      source: { path: "p", file: "f", commit },
-      title,
-    });
-    expect(versionOf(item("abc", "A"))).toBe(versionOf(item("def", "A")));
-    expect(versionOf(item("abc", "A"))).not.toBe(versionOf(item("abc", "B")));
+  it("a version is the item's content and what it is made from, not its own version field", () => {
+    const item = (title: string, version = "") => ({ id: "x", version, path: "p", title });
+    expect(versionOf(item("A"))).toBe(versionOf(item("A", "old")));
+    expect(versionOf(item("A"))).not.toBe(versionOf(item("B")));
+    expect(versionOf(item("A"), { code: "1" })).not.toBe(versionOf(item("A"), { code: "2" }));
   });
 });

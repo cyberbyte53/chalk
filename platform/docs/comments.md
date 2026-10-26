@@ -17,7 +17,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
   status: planned
   by: you
   createdAt: 2026-10-24T05:21:44.000Z
-  board: class10-maths/polynomials/what-is-a-polynomial/overview/names
+  board: class10-maths/polynomials/what-is-a-polynomial/names
   target: which/option
   source: content/class10-maths/polynomials/what-is-a-polynomial/overview.ts:205
   snapshot: "Which of these are quadratic? …"
