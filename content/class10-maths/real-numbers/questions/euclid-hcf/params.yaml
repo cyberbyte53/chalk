@@ -1,4 +1,4 @@
-# NCERT Ex 1.1 Q1, Example 2 and Q2.
+# NCERT Ex 1.1 Q1, and kin of the worked examples (their own numbers are on the pages).
 - params: { a: 135, b: 225 }
   firstTry: 1
 - params: { a: 196, b: 38220 }
@@ -6,7 +6,7 @@
 - params: { a: 867, b: 255 }
 - params: { a: 455, b: 42 }
   firstTry: 3
-- params: { a: 420, b: 130 }
+- params: { a: 390, b: 150 }
   level: easy
-- params: { a: 4052, b: 12576 }
+- params: { a: 3045, b: 8715 }
   level: hard

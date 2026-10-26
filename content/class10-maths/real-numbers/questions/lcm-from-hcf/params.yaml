@@ -1,6 +1,6 @@
-# NCERT Ex 1.2 Q4 and Example 6.
-- params: { a: 306, b: 657 }
-- params: { a: 96, b: 404 }
+# Kin of NCERT Ex 1.2 Q4 and Example 7 (their own numbers are on the pages).
+- params: { a: 165, b: 231 }
+- params: { a: 144, b: 180 }
   firstTry: 4
 - params: { a: 26, b: 91 }
   level: easy

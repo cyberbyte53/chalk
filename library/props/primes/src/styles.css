@@ -1184,8 +1184,8 @@
 }
 .pr-race-grid {
   display: grid;
-  row-gap: 10px;
-  column-gap: 4px;
+  row-gap: 12px;
+  column-gap: 10px;
   align-items: center;
   width: max-content;
 }
@@ -1195,20 +1195,24 @@
 .pr-race-name {
   position: sticky;
   left: -6px;
-  z-index: 1;
+  z-index: 2;
+  align-self: stretch;
+  padding-left: 6px;
   background: var(--color-surface);
+  /* Covers the gap after it too, so chips scrolling by don't show beside the name. */
+  box-shadow: 10px 0 0 var(--color-surface);
   display: flex;
   flex-direction: column;
+  justify-content: center;
   font-weight: 700;
   color: var(--color-on-surface);
   line-height: 1.2;
 }
-.pr-race-name small,
 .pr-race-chip small {
   font-size: 11px;
-  font-style: italic;
   font-weight: 600;
-  opacity: 0.8;
+  white-space: nowrap;
+  opacity: 0.85;
 }
 .pr-race-chip {
   display: inline-flex;
@@ -1222,7 +1226,7 @@
   gap: 6px;
 }
 .pr-race-chip {
-  min-width: 32px;
+  min-width: 40px;
   padding: 3px 2px;
   font-size: 14px;
   border-radius: 12px;

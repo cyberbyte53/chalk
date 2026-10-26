@@ -59,18 +59,20 @@ export const remainderForms = family({
       });
     }
     const extra = [...right, missing[0] ?? 0].sort((x, y) => x - y);
-    options.push({
-      id: "extra",
-      label: t(forms(divisor, extra, "m"), forms(divisor, extra, "m")),
-      feedback: t(
-        r`No ${word} leaves remainder ${missing[0]} on dividing by ${divisor}. ${tryIt.en}`,
-        r`कोई भी ${hiWord}, ${divisor} से भाग देने पर ${missing[0]} शेष नहीं छोड़ता। ${tryIt.hi}`,
-      ),
-    });
+    // With one remainder missing, "one too many" is every remainder: already the "all" option.
+    if (extra.length < divisor)
+      options.push({
+        id: "extra",
+        label: t(forms(divisor, extra, "m"), forms(divisor, extra, "m")),
+        feedback: t(
+          r`No ${word} leaves remainder ${missing[0]} on dividing by ${divisor}. ${tryIt.en}`,
+          r`कोई भी ${hiWord}, ${divisor} से भाग देने पर ${missing[0]} शेष नहीं छोड़ता। ${tryIt.hi}`,
+        ),
+      });
     const ask = choice(b, {
       prompt: t(
-        r`The ${word} of any positive integer is of the form… (for some integer $m$)`,
-        r`किसी भी धनात्मक पूर्णांक का ${hiWord} किस रूप का होता है? (किसी पूर्णांक $m$ के लिए)`,
+        r`The ${word} of any positive integer is of exactly these forms… (for some integer $m$)`,
+        r`किसी भी धनात्मक पूर्णांक का ${hiWord} ठीक-ठीक किन रूपों का होता है? (किसी पूर्णांक $m$ के लिए)`,
       ),
       right: t(forms(divisor, right, "m"), forms(divisor, right, "m")),
       wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),

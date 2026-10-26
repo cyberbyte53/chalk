@@ -276,3 +276,519 @@
   snapshot: The remainder is 1 again, just like at the start. What will the next digit be?
   text: the questuon is ill poised , next digit of what?
   thread: []
+- id: cmvp5s0ugcqs
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:42.472Z
+  board: class10-maths/real-numbers/fundamental-theorem/story
+  target: theorem
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 1 (teach the idea before you use it). The theorem says 'Every composite number…'
+    but 'composite' is not recapped anywhere before it; the page only defines 'prime'. A student who
+    has forgotten the Class 6 word can't read the theorem. Fix: one-line recap inside the theorem."
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.354Z
+    text: Add a one-line recap of 'composite' inside the theorem (en + hi).
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:28.668Z
+      text: Theorem now reads 'Every composite number (a number bigger than 1 that isn't prime) can be
+        written…'; Hindi '(1 से बड़ी संख्या जो अभाज्य नहीं है)'. Re-rendered.
+- id: cmvp5s27kq2d
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:44.240Z
+  board: class10-maths/real-numbers/fundamental-theorem/story
+  target: prime
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8 (right option never stands out). '2, 3 and 5 can't be split any more. Why?' —
+    'They're small' and 'They're odd' are not real mistakes (2 is even; small numbers like 4 split),
+    and the right option is the only long, reasoned one. A student picks it by length without
+    thinking. Suggest distractors students actually hold, e.g. 'They're less than 6' or 'They're
+    odd', at similar length, or ask it as 'Which of these can still be split: 9, 7, 5?'."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:37.522Z
+    text: Replace the give-away distractors with real misconceptions of the same length and shape.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:07.128Z
+      text: "unsplit: right 'Each has no factors but 1 and itself'; wrong 'Each one divides 360 exactly'
+        (10 divides 360 but splits) and 'Each one is smaller than 6' (4 splits), en + hi. Played
+        wrong, wrong, right (en); wrong in hi."
+- id: cmvp5s3xsq42
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:46.480Z
+  board: class10-maths/real-numbers/root-two-irrational/proof
+  target: twoA
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8. '2b² = a². So 2 divides…' — the right option is the only one that carries a
+    reason ('a, because 2 is prime'), so it stands out. Fix: right option just 'a', and the reason
+    moves into the next line (step2), where it is the real reason for the step."
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.539Z
+    text: Right option becomes just 'a'; the reason moves into the next line.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:28.861Z
+      text: Right option label is now '$a$' (hi '$a$ को'). step2 opens '2 divides $a^2$, and 2 is prime,
+        so 2 divides $a$ (the fact from the last page).' (en + hi). Re-rendered.
+- id: cmvp5s5q014p
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:48.792Z
+  board: class10-maths/real-numbers/which-fractions-end/bill
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: Principle 8. 'What do 2, 4, 5, 8 and 10 have in common?' — 'They're even' is false on sight
+    (5), 'They're small' is a non-answer, and 'Their only prime factors are 2 and 5' is the only
+    long, mathematical option. Guessable by length. Suggest a real mistake as distractor, e.g. 'They
+    all divide 100' (8 doesn't; a student who only tried 2, 4, 5, 10 believes it).
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:37.787Z
+    text: Ask what sets 2, 4, 5, 8, 10 apart from 3, 6, 7, 9; distractors 'divide 100' and 'no 3', same
+      length.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:07.372Z
+      text: "Prompt now 'What do 2, 4, 5, 8 and 10 have that 3, 6, 7 and 9 don't?' (so 'no 3' is
+        defensibly wrong: 7 has none). Wrong: 'Each of them divides 100 exactly' (8 doesn't, yet
+        ₹12.50 ends) and 'None of them has 3 as a factor' (7). en + hi; played both wrong then
+        right."
+- id: cmvp5s897red
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:52.075Z
+  board: class10-maths/real-numbers/which-fractions-end/story
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: Principle 8. 'Why can't 7/30 be written over a power of 10?' — '7 is prime' / '30 is too big'
+    vs the long specific '30 has a 3, and no power of 10 has a 3'. Same give-away-by-length pattern
+    as the bill page and the FTA story. Suggest a real mistake as distractor, e.g. '30 has a 5' or
+    '7 doesn't divide 10', at similar length.
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:37.906Z
+    text: Distractors become reasoned misconceptions of similar length (lowest terms; 'not itself a
+      power of 10').
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:07.531Z
+      text: Right '30 has a 3, and no power of 10 has one'; wrong '7 and 30 share no factor other than 1'
+        (so do 7 and 40, which terminates) and '30 isn't itself a power of 10' (nor is 8, yet 3/8 =
+        375/1000). en + hi; played in hi.
+- id: cmvp5sahph1n
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:54.973Z
+  board: class10-maths/real-numbers/which-fractions-end/repeats
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8. 'Why did 1/7's path have to come back to a remainder it had seen?' — 'Because 7
+    is prime' vs the long right option 'It never reached 0, and only 1 to 6 are possible'. Right
+    option stands out by length and detail. Also principle 7: this page carries the remainder rule,
+    3/8, 1/7, the pigeonhole reason, the definition and a sandbox (about 3900 px on a phone) —
+    consider splitting at 'Repeating decimals' definition."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.012Z
+    text: Reasoned distractors of the same length; split the page at the pigeonhole reason into a second
+      page.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:07.715Z
+      text: "Split: 'repeats' now holds 3/8, 1/7 and the next-digit prediction; new page 'why-repeats'
+        (Why the digits repeat) opens with 1/7's remainders 1→3→2→6→4→5→1 and 'dividing by 7 a
+        remainder can only be 0 to 6', then the question, the rule and the sandbox. Question options
+        now same length: right 'It never hit 0, and only 1 to 6 can be remainders'; wrong '7 is
+        prime, and dividing by a prime always repeats' (1/5 stops, 1/6 repeats) and 'Every division
+        comes back to the remainder it began with' (3/8 stopped; 1/6 returns to 4). en + hi; played
+        both pages."
+- id: cmvp5scqaepd
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:13:57.874Z
+  board: class10-maths/real-numbers/division-lemma/story
+  target: last
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: Principle 8. '2 sweets are left. Can Riya give everyone one more?' appears after the third
+    round, when the 'Give everyone one' button is already greyed out. The disabled button answers
+    the question for the student. Either ask before disabling (let them try a 4th round and see it
+    refused), or ask why it is greyed out ('How many sweets would one more round need?').
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.146Z
+    text: Ask a prediction after round 2 (how many more rounds?), before the button greys; wrap-up after
+      both.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:07.823Z
+      text: "The question now appears after round 2, while the button still works: 'Two rounds are given
+        and 8 sweets are left. How many more rounds can Riya give?' (0 / 1 / 2, feedback for each).
+        The wrap-up shows once it's answered and round 3 is played; the page passes on both. en +
+        hi; played rounds, wrong, right, last round."
+- id: cmvp5sfbfs7f
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:14:01.227Z
+  board: class10-maths/real-numbers/hcf-and-lcm/story
+  target: race
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: Principle 1 (labels in props). Under the names the lap race shows 'Sonia 18m' and 'Ravi 12n'.
+    m and n are never introduced on this page, and with minutes in the story '18m' reads as '18
+    minutes' or '18 metres'. A student can't tell what the letters count. Either say in the text
+    that m and n count rounds (Sonia is back at minute 18 × m), or have the prop show no letters
+    here. Prop-level (lapRace letterA/letterB defaults), so not fixed in content.
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.294Z
+    text: "lapRace: drop the letters; chips show the minute with '18 × 2' under it; wider columns so
+      chips don't touch."
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:35:04.309Z
+      text: "Played it: after Play, the chips read 'm = 1', 'm = 2', 'n = 1' … so the letters do count
+        rounds, but nothing on the page says so. Also Ravi's 24 and 36 chips touch/overlap at minute
+        36 (close times sit too close on the row)."
+    - by: agent
+      at: 2026-10-26T12:15:07.921Z
+      text: "lapRace (only board: this one, per affected): letterA/letterB removed; the name column shows
+        just the name; each chip shows the minute with '18 × 2' / '12 × 3' under it. Columns 44px,
+        gap 10px, so 24 and 36 no longer touch; sticky name column now covers chips scrolling under
+        it. Intro text says what the line under a chip means with Ravi's 24 = 12 × 2 (not 36, so
+        nothing is spoiled). Played to 36 (en) and 72 (hi). pnpm check passes."
+- id: cmvp5sh7z27n
+  kind: finding
+  status: open
+  by: reviewer
+  createdAt: 2026-10-26T11:14:03.695Z
+  board: class10-maths/real-numbers/hcf-and-lcm/hcf-or-lcm
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principles 4 and 6. This page only tells (two rule boxes and a note): nothing to tap, no
+    question, no story to sort into HCF or LCM, so the student never touches the rule before the
+    question bank leans on it (hcf-or-lcm-story). Suggest one quick sort: two short stories, 'HCF or
+    LCM?'. Also the last sentence 'Pieces are small, meeting again takes long.' is cryptic (fixed
+    separately as wording)."
+  thread: []
+- id: cmvp5sjdlxe3
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:14:06.489Z
+  board: class10-maths/real-numbers/hcf-and-lcm/product
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 6/10 (maths written as maths, class notation). Step 3 writes 2³ 3³ and the
+    underbrace labels 2¹ 3¹, 2² 3² … with the primes side by side and no ×; everywhere else the
+    chapter (and NCERT) writes 2³ × 3³. A student can read 2³3³ as one number. Fix: add ×."
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.614Z
+    text: Write × between the prime powers in step 3 and its labels.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:28.975Z
+      text: Step 3 now shows 2¹ × 3¹, 2² × 3², 2³ × 3³ etc. (en + hi). Re-rendered.
+- id: cmvp5sl4qlt6
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:14:08.762Z
+  board: class10-maths/real-numbers/hcf-and-lcm/example-from-hcf
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: Principle 11 (whole source). NCERT 1.3 Example 7 (HCF of 96 and 404 by prime factorisation,
+    hence their LCM via HCF × LCM = a × b) is not in the chapter; the page uses 306 and 657
+    (Exercise 1.2) with the HCF given. The NCERT example also practises finding the HCF first. Check
+    whether the question bank covers it (lcm-from-hcf), otherwise add or swap.
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.365Z
+    text: Add NCERT Example 7 (HCF of 96 and 404 by primes, then LCM) to the page.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:35:04.523Z
+      text: "Checked the bank: lcm-from-hcf has an instance with 96 and 404 (HCF given as 4), so Example
+        7's second half is practised; finding the HCF of 96 and 404 by primes first is still not
+        anywhere."
+    - by: agent
+      at: 2026-10-26T12:15:07.988Z
+      text: "example-from-hcf (now 'Examples') opens with NCERT Example 7: 96 = 2⁵ × 3, 404 = 2² × 101,
+        HCF = 2² = 4, LCM = 96 × 404 / 4 = 9696 (aligned so it fits), then the 306/657 example. en +
+        hi. The bank's lcm-from-hcf 96/404 row changed to fresh numbers so it doesn't repeat it."
+- id: cmvp5sncwd45
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:14:11.649Z
+  board: class10-maths/real-numbers/root-two-irrational/combinations
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: Principle 11. NCERT proves √3 irrational in full as a worked example; here it is one sentence
+    ('use 3 in place of 2 at every step'). Students are examined on writing that proof. Suggest a
+    full Q/A for √3 (it can be short, beside the √2 one), and 3√2 as its own Q/A as in the book
+    rather than a sentence after 5 − √3.
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.444Z
+    text: New page with the √3 proof written out as NCERT; 3√2 as its own Q/A on the combinations page.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:08.076Z
+      text: "New page root-two-irrational/root-three ('√3 is irrational'): Q/A written out as NCERT
+        Example 9, same lines as 'The proof, written out' with 3. combinations (now 'Examples'):
+        one-line √3 remark removed; 5 − √3 and then 3√2 as its own Q/A (√2 = a/(3b), contradiction),
+        then the rule. en + hi."
+- id: cmvp5spmmxfo
+  kind: finding
+  status: open
+  by: reviewer
+  createdAt: 2026-10-26T11:14:14.590Z
+  board: class10-maths/real-numbers/fundamental-theorem/fits
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 2 (each page follows from the last). 'Divides = fits inside' (towers) sits between
+    the FTA story and 'Try it yourself'/'Prime factorisation', but it is only used later in
+    hcf-and-lcm, whose 'towers' page opens by restating the same idea. The FTA lesson reads story →
+    towers → sandbox → ladder: the ladder (how to factorise) is separated from the theorem by an
+    unrelated page. Suggest: story, play, ladder, examples; move 'fits' to open hcf-and-lcm (or
+    merge with 'towers'). The 4ⁿ example uses towers, so it would follow it."
+  thread: []
+- id: cmvp5swzila0
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:14:24.126Z
+  board: class10-maths/real-numbers/hcf-and-lcm/hcf-or-lcm
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: 'Principle 10 (plain, exact). The note ends: "Pieces are small, meeting again takes long."
+    Read literally it is a fragment: which pieces, small compared with what? A student cannot turn
+    it into the size check it is meant to be. Fix: say it plainly, tied to the two numbers.'
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.683Z
+    text: Replace the fragment with the size check said on 18 and 12.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:29.136Z
+      text: "Now: 'For 18 and 12: the HCF, 6, is no more than 12, and the LCM, 36, is no less than 18.'
+        (en + hi). Re-rendered."
+- id: cmvp6j579dcl
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:34:47.829Z
+  board: class10-maths/real-numbers/questions/remainder-forms/622145a9
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Bug + principle 8. For divisor 3 (squares, NCERT Ex 1.1 Q4) two options are identical: '3m,
+    3m + 1, 3m + 2' appears twice (the 'one extra remainder' option equals the 'all remainders'
+    option when only one remainder is missing). Also ill-posed for every divisor: 'The square of any
+    positive integer is of the form…' is TRUE of the all-remainders list too (every square is one of
+    3m, 3m+1, 3m+2), so a careful student can defend a 'wrong' option. Fix: drop the extra option
+    when it equals 'all', and ask for 'exactly these forms'."
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.786Z
+    text: Skip the 'extra' option when it equals 'all'; prompt asks for 'exactly these forms'.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:29.294Z
+      text: "remainder-forms/family.ts: the extra-remainder option is only added when it isn't every
+        remainder; prompt now 'The square of any positive integer is of exactly these forms… (for
+        some integer m)' (hi 'ठीक-ठीक किन रूपों का'). The 3m instance now has 3 distinct options.
+        Re-rendered 3m (en, hi) and 4m."
+- id: cmvp6j6wktd6
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:34:50.036Z
+  board: class10-maths/real-numbers/questions/odd-forms/51ff12e6
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8 (ill-posed). 'Any positive odd integer is of the form… (for some integer q)' with
+    the option '6q, 6q + 1, …, 6q + 5': that statement is also true (every odd integer is one of
+    those six forms), so the question has two defensible answers. Same in the 4q and 8q instances.
+    Fix: ask for 'exactly these forms'."
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.875Z
+    text: Prompt asks for 'exactly these forms'.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:29.385Z
+      text: "odd-forms prompt: 'Any positive odd integer is of exactly these forms… (for some integer q)'
+        (hi 'ठीक-ठीक किन रूपों का'). Re-rendered."
+- id: cmvp6j8mg7dc
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:34:52.264Z
+  board: class10-maths/real-numbers/questions/hcf-lcm-by-primes/1afb2a2c
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 10 (plain wording) and 6 (maths not inside a sentence). Prompts read 'Find the LCM
+    of 336, 54 by prime factorisation: 336 = 2⁴ × 3 × 7, 54 = 2 × 3³.' — the list lacks 'and' ('336,
+    54'), and the factorisations run inside the sentence, wrapping mid-equation on a phone. The 17,
+    23, 29 instance shows '17 = 17, 23 = 23, 29 = 29', which reads oddly; 'all three are prime' says
+    it better. Wording fixed ('336 and 54'); the inline maths and the trivial factorisations are
+    left for the person (display maths in a choice prompt is a pattern decision)."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.532Z
+    text: Factorisations as an aligned display block under the prompt; primes said in words, not '17 =
+      17'.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:29.617Z
+      text: "Fixed the wording part: lists now read '336 and 54', '12, 15 and 21' (hi 'और'). Left open:
+        the factorisations still run inline in the prompt, and the all-prime case shows '17 = 17, …'
+        — pattern/taste call for the person."
+    - by: agent
+      at: 2026-10-26T12:15:08.147Z
+      text: Prompt now 'Find the LCM of 336 and 54 by prime factorisation.' followed by an aligned display
+        block of the factorisations; primes are said in words ('All three are prime.', 'Both are
+        prime.', or '17 is prime.'), never '17 = 17'. Same in the 'one' feedback. en + hi rendered
+        (17/23/29, 12/90/150, 336/54).
+- id: cmvp6jaa4xph
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:34:54.412Z
+  board: class10-maths/real-numbers/questions/prime-divides-square/1ddca3d1
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 10 (one name per thing). The right-answer feedback for a prime k says 'a prime in
+    a²'s bag came from a's bag'. 'Bag' is never used on the chapter's pages (they say towers / prime
+    factorisation); it is left over from an older draft. A student meets an undefined word in the
+    feedback. Fix: say it with the factorisation."
+  plan:
+    by: agent
+    at: 2026-10-26T11:40:26.944Z
+    text: Say it with the factorisation instead of 'bag'.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T11:40:29.514Z
+      text: "Feedback now: 'k is prime. Squaring a only doubles the powers of its primes, so every prime
+        of a² is a prime of a: k divides a.' (en + hi). Re-rendered and played."
+- id: cmvp6jbvuxci
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:34:56.490Z
+  board: class10-maths/real-numbers/questions/is-root-rational/78e629c9
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 11 / 5 (class-level reason). For √12, √8, √5, √2 the feedback argues 'a square has
+    an even count of every prime, so a² = n b² can never balance'. That parity-of-exponents proof is
+    not the one the chapter teaches (the √2 page uses 'p divides a², so p divides a', and
+    multiplying by a rational). A student is told a new method in a feedback line. Suggest: for √12
+    = 2√3 and √8 = 2√2 point at 'rational × irrational' from the combinations page; for √5, 'same
+    proof as √2 with 5'."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.665Z
+    text: Feedback uses the √2-style proof (n prime) or √n = s√p with rational × irrational.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:08.231Z
+      text: "Feedback now uses what the pages teach: for a prime n, the √2 proof with n in place of 2 (n
+        b² = a², n divides a then b, contradiction); for √8, √12: √n = s√p, √p irrational by that
+        proof, and s × irrational is irrational. The family refuses n that isn't s² × a prime. en +
+        hi; played √12 and √5."
+- id: cmvp6jdfqnyy
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:34:58.502Z
+  board: class10-maths/real-numbers/questions/scaled-root/22c1f4ea
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8. In every instance the right option is the only long, reasoned one ('Irrational:
+    if 1/√3 = x, then √3 = 1/x would be rational'), against 'Can't tell without a calculator' and a
+    one-liner. Picked by length. Suggest equally reasoned wrong options built on real mistakes, e.g.
+    'Rational: 1/√3 = √3/3 is a fraction' or 'Irrational: 3 is prime'."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.725Z
+    text: "All three options 'Verdict: reason' of similar length; wrong ones real mistakes."
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:08.350Z
+      text: "Every option is now 'Verdict: reason' of similar length. c√n: 'Rational: c is rational, so c
+        times anything is rational' and 'Rational: c√n = √(c²n), an integer under the root'. 1/√n:
+        'Rational: it is written as a fraction, 1 over √n' and 'Rational: 1/√n = √n/n, and n is an
+        integer'. Right: 'Irrational: if it were a rational x, √n = … would be too'. 3√2 row (now
+        worked on the pages) → 4√3. en + hi; played wrong then right. render_board reports 'text
+        spills 7000px' on options containing √ — a KaTeX √ measuring artefact; the pictures show
+        nothing spilling."
+- id: cmvp6jey8o3b
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:35:00.464Z
+  board: class10-maths/real-numbers/questions/euclid-hcf/006a300f
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8 (questions test the subject, not memory). Several bank instances repeat the
+    worked examples on the pages with the same numbers: euclid-hcf HCF(4052, 12576) (= example-big),
+    hcf-lcm-by-primes 6, 72, 120 (= example-three), hcf-story / hcf-or-lcm-story sweets 420 and 130
+    (= example-sweets) and Sonia/Ravi 18 and 12 (= hcf-and-lcm story), the-decimal 13/3125 and 17/8
+    (= writing page), prime-factorisation 32760 (= ladder), quotient-and-remainder 38 ÷ 7 (= the
+    lemma page's question). A student can answer from memory of the page. Keep NCERT's numbers on
+    the pages or in the bank, not both, or keep them as firstTry warm-ups only."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.795Z
+    text: Change bank rows that repeat a worked example to fresh numbers of similar difficulty.
+  changed: []
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:08.493Z
+      text: "Fresh numbers, same row counts and firstTry: euclid-hcf 420/130 → 390/150, 4052/12576 →
+        3045/8715 (HCF 105, 4 steps); hcf-lcm-by-primes 6,72,120 → 12,90,150; hcf-story sweets
+        420/130 → 480/168; hcf-or-lcm-story sweets → 234/144 and runners Sonia/Ravi 18/12 →
+        Asha/Kabir 16/24; the-decimal 13/3125 → 11/625, 17/8 → 19/16; prime-factorisation 32760 →
+        27720 and 360 (the theorem's number) → 480; quotient-and-remainder 38 ÷ 7 → 47 ÷ 8;
+        lcm-from-hcf 306/657 and 96/404 (both on the pages) → 165/231 and 144/180; scaled-root 3√2 →
+        4√3. All rendered."
+- id: cmvp6jgfh5aa
+  kind: finding
+  status: ready
+  by: reviewer
+  createdAt: 2026-10-26T11:35:02.382Z
+  board: class10-maths/real-numbers/questions/quotient-and-remainder/2bacfa6c
+  commit: 237e7872e9a0cfbd95a12232d72804cf754dae10
+  text: "Principle 8 (wrong options are real mistakes). Each instance has one negative-remainder
+    option (q = 6, r = −4 for 38 ÷ 7; q = 1, r = −7 for 5 ÷ 12). Students don't produce negative
+    remainders; it is eliminated on sight, leaving a 50/50. A real mistake: off-by-one in the
+    remainder, or swapping q and r (q = 3, r = 5 for 38 ÷ 7)."
+  plan:
+    by: agent
+    at: 2026-10-26T12:14:38.861Z
+    text: Replace the negative-remainder option with q and r swapped (off-by-one when they'd coincide);
+      same on the lemma page.
+  thread:
+    - by: agent
+      at: 2026-10-26T12:15:08.573Z
+      text: Negative-remainder option replaced by q and r swapped (q = 7, r = 5 for 47 ÷ 8), with feedback
+        'That swaps them…'; when swapping gives the same pair, a remainder one out instead. The
+        lemma page's 38 ÷ 7 question had the same negative option; now q = 3, r = 5. en + hi; played
+        both.
+  changed: []

@@ -26,7 +26,7 @@ const story = page("story", (b) => {
   const race = b.prop(lapRaceDef, "race", {});
   b.standsFor(
     race,
-    "Sonia and Ravi on the track; under each, the minutes they are back at the start, as 18 × k and 12 × k",
+    "Sonia and Ravi on the track; beside each name, the minutes they are back at the start, each written as 18 × rounds or 12 × rounds",
   );
   b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
   const must = choice(b, {
@@ -98,8 +98,8 @@ const story = page("story", (b) => {
     ),
     w.body(
       t(
-        "When will they next be at the start together? Tap **Play** and watch. Each time one of them crosses the start, that minute is written under their name.",
-        "वे अगली बार एक साथ शुरुआत पर कब होंगे? **चलाओ** दबाओ और देखो। जब भी उनमें से कोई शुरुआत की रेखा पार करे, वह मिनट उसके नाम के नीचे लिखा जाता है।",
+        "When will they next be at the start together? Tap **Play** and watch. Each time one of them crosses the start, that minute is written beside their name, with the rounds under it: Ravi's 2nd round ends at minute 24, written 12 × 2.",
+        "वे अगली बार एक साथ शुरुआत पर कब होंगे? **चलाओ** दबाओ और देखो। जब भी उनमें से कोई शुरुआत की रेखा पार करे, वह मिनट उसके नाम के आगे लिखा जाता है, और नीचे चक्कर: रवि का दूसरा चक्कर मिनट 24 पर पूरा होता है, लिखा 12 × 2।",
       ),
     ),
     race,
@@ -214,8 +214,8 @@ const product = page("product", (b) => {
     ),
     w.body(
       t(
-        r`**3.** Multiplying adds tower heights. So each prime is as tall in HCF × LCM as in $a \times b$: $$\underbrace{6}_{2^1\, 3^1} \times \underbrace{36}_{2^2\, 3^2} = 2^3\, 3^3 = \underbrace{18}_{2^1\, 3^2} \times \underbrace{12}_{2^2\, 3^1}$$`,
-        r`**3.** गुणा करने से स्तंभों की ऊँचाई जुड़ती है। तो हर अभाज्य HCF × LCM में उतना ही ऊँचा है जितना $a \times b$ में: $$\underbrace{6}_{2^1\, 3^1} \times \underbrace{36}_{2^2\, 3^2} = 2^3\, 3^3 = \underbrace{18}_{2^1\, 3^2} \times \underbrace{12}_{2^2\, 3^1}$$`,
+        r`**3.** Multiplying adds tower heights. So each prime is as tall in HCF × LCM as in $a \times b$: $$\underbrace{6}_{2^1 \times 3^1} \times \underbrace{36}_{2^2 \times 3^2} = 2^3 \times 3^3 = \underbrace{18}_{2^1 \times 3^2} \times \underbrace{12}_{2^2 \times 3^1}$$`,
+        r`**3.** गुणा करने से स्तंभों की ऊँचाई जुड़ती है। तो हर अभाज्य HCF × LCM में उतना ही ऊँचा है जितना $a \times b$ में: $$\underbrace{6}_{2^1 \times 3^1} \times \underbrace{36}_{2^2 \times 3^2} = 2^3 \times 3^3 = \underbrace{18}_{2^1 \times 3^2} \times \underbrace{12}_{2^2 \times 3^1}$$`,
       ),
     ),
     w.body(
@@ -280,8 +280,8 @@ const hcfOrLcm = page("hcf-or-lcm", (b) => {
     ),
     w.body(
       t(
-        r`**Check the size.** The HCF is at most the smaller number; the LCM is at least the larger. Pieces are small, meeting again takes long.`,
-        r`**आकार जाँचो।** HCF छोटी संख्या से बड़ा नहीं होता; LCM बड़ी संख्या से छोटा नहीं होता। टुकड़े छोटे होते हैं, फिर से मिलने में समय लगता है।`,
+        r`**Check the size.** The HCF is at most the smaller number; the LCM is at least the larger. For 18 and 12: the HCF, 6, is no more than 12, and the LCM, 36, is no less than 18.`,
+        r`**आकार जाँचो।** HCF छोटी संख्या से बड़ा नहीं होता; LCM बड़ी संख्या से छोटा नहीं होता। 18 और 12 के लिए: HCF, 6, 12 से बड़ा नहीं है, और LCM, 36, 18 से छोटा नहीं है।`,
       ),
     ),
   ];
@@ -345,11 +345,29 @@ const exampleThree = page("example-three", (b) => {
   ];
 });
 
-/** NCERT Ex 1.2: the LCM from the HCF. */
+/** The LCM from the HCF: NCERT Example 7 (96 and 404, the HCF found first) and Ex 1.2 (306 and 657). */
 const exampleFromHcf = page("example-from-hcf", (b) => {
   const w = wordsOn(b);
   return [
-    w.title(t("Example", "उदाहरण")),
+    w.title(t("Examples", "उदाहरण")),
+    w.body(
+      t(
+        "**Q.** Find the HCF of 96 and 404 by prime factorisation. Hence find their LCM.",
+        "**प्र.** अभाज्य गुणनखंडन से 96 और 404 का HCF ज्ञात करो। इससे उनका LCM ज्ञात करो।",
+      ),
+    ),
+    w.body(
+      t(
+        r`**A.** Write both as primes: $$96 = 2^5 \times 3, \qquad 404 = 2^2 \times 101$$ Only 2 is in both, and its shorter tower is $2^2$: $$\text{HCF}(96, 404) = 2^2 = 4$$`,
+        r`**उत्तर।** दोनों को अभाज्यों में लिखो: $$96 = 2^5 \times 3, \qquad 404 = 2^2 \times 101$$ दोनों में केवल 2 है, और उसका छोटा स्तंभ $2^2$ है: $$\text{HCF}(96, 404) = 2^2 = 4$$`,
+      ),
+    ),
+    w.body(
+      t(
+        r`For two numbers, HCF × LCM is their product, so $$\begin{aligned} \text{LCM}(96, 404) &= \frac{96 \times 404}{4} \\ &= 96 \times 101 = 9696 \end{aligned}$$`,
+        r`दो संख्याओं के लिए HCF × LCM उनका गुणनफल है, तो $$\begin{aligned} \text{LCM}(96, 404) &= \frac{96 \times 404}{4} \\ &= 96 \times 101 = 9696 \end{aligned}$$`,
+      ),
+    ),
     w.body(
       t(
         "**Q.** Given that HCF(306, 657) = 9, find LCM(306, 657).",

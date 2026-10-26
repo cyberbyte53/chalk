@@ -1,4 +1,4 @@
-# NCERT Ex 1.1 Q2 (sweets), Ex 1.2 Q7 (Sonia and Ravi), and everyday ones.
+# Kin of NCERT Ex 1.1 Q2 (sweets) and Ex 1.2 Q7 (runners), with their own numbers, and everyday ones.
 - params: { story: sweets }
 - params: { story: bells }
 - params: { story: rope }

@@ -1,5 +1,6 @@
-import { page, t } from "@chalk/author";
+import { type At, page, t, theBoard } from "@chalk/author";
 import { choice, wordsOn } from "@chalk/patterns";
+import { AnswerStatus, QuestionSignal } from "@chalk/prop";
 import { SweetShareAction, SweetShareSignal, sweetShareDef } from "@chalk/prop-primes";
 
 const r = String.raw;
@@ -32,16 +33,23 @@ const story = page("story", (b) => {
   const last = choice(b, {
     name: "last",
     prompt: t(
-      "2 sweets are left. Can Riya give everyone one more?",
-      "2 मिठाइयाँ बची हैं। क्या रिया सबको एक और दे सकती है?",
+      "Two rounds are given and 8 sweets are left. How many more rounds can Riya give?",
+      "दो बारियाँ हो गईं और 8 मिठाइयाँ बची हैं। रिया और कितनी बारियाँ दे सकती है?",
     ),
-    right: t("No", "नहीं"),
+    right: t("1", "1"),
     wrong: {
-      yes: {
-        label: t("Yes", "हाँ"),
+      none: {
+        label: t("0", "0"),
         feedback: t(
-          "That needs 6 sweets, one for each friend. There are only 2.",
-          "उसके लिए 6 मिठाइयाँ चाहिए, हर दोस्त के लिए एक। केवल 2 हैं।",
+          "8 is more than 6, so there's still a sweet for every friend: one more round.",
+          "8, 6 से ज़्यादा है, तो अभी हर दोस्त के लिए एक मिठाई है: एक और बारी।",
+        ),
+      },
+      two: {
+        label: t("2", "2"),
+        feedback: t(
+          "After one more round, 8 − 6 = 2 are left. 2 aren't enough for 6 friends.",
+          "एक और बारी के बाद 8 − 6 = 2 बचती हैं। 6 दोस्तों के लिए 2 काफ़ी नहीं।",
         ),
       },
     },
@@ -53,8 +61,15 @@ const story = page("story", (b) => {
     ),
     "wrap",
   );
-  b.after(game.on(SweetShareSignal.Over), last);
-  b.after(last, wrap);
+  // Asked after the second round, before the screen shows the game ending.
+  b.after(game.on(SweetShareSignal.Round), last, { if: (at) => at(game).rounds === 2 });
+  // The wrap-up once both are done: the answer given and the last round played.
+  b.after(last, wrap, { if: (at) => at(game).rounds >= 3 });
+  const isAnswered = (at: At) => at(last).status === AnswerStatus.Correct;
+  b.when(game.on(SweetShareSignal.Over), theBoard.show(wrap), isAnswered);
+  // On only when both are done, too.
+  b.passWhen(game.on(SweetShareSignal.Over), { if: isAnswered });
+  b.passWhen(last.on(QuestionSignal.Correct), { if: (at) => at(game).rounds >= 3 });
   return [
     w.title(t("Euclid's division lemma", "यूक्लिड विभाजन प्रमेयिका")),
     w.body(
@@ -88,11 +103,11 @@ const lemma = page("lemma", (b) => {
           "10, 7 से ज़्यादा है: एक और 7 आ जाता है। शेषफल 7 से कम होना चाहिए।",
         ),
       },
-      over: {
-        label: t(r`$q = 6, \; r = -4$`, r`$q = 6, \; r = -4$`),
+      swap: {
+        label: t(r`$q = 3, \; r = 5$`, r`$q = 3, \; r = 5$`),
         feedback: t(
-          r`6 sevens are more than 38: $$7 \times 6 = 42$$ And a remainder can't be negative.`,
-          r`6 सात 38 से ज़्यादा हैं: $$7 \times 6 = 42$$ और शेषफल ऋणात्मक नहीं हो सकता।`,
+          r`That swaps them. The quotient is how many 7s fit in 38, and the remainder is what is left: $$38 = 7 \times 5 + 3$$`,
+          r`इसमें दोनों उलट गए। भागफल यह है कि 38 में कितने 7 आते हैं, और शेषफल जो बचता है: $$38 = 7 \times 5 + 3$$`,
         ),
       },
     },

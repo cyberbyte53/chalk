@@ -46,8 +46,8 @@ export const oddForms = family({
     }
     const ask = choice(b, {
       prompt: t(
-        r`Any positive odd integer is of the form… (for some integer $q$)`,
-        r`कोई भी धनात्मक विषम पूर्णांक किस रूप का होता है? (किसी पूर्णांक $q$ के लिए)`,
+        r`Any positive odd integer is of exactly these forms… (for some integer $q$)`,
+        r`कोई भी धनात्मक विषम पूर्णांक ठीक-ठीक किन रूपों का होता है? (किसी पूर्णांक $q$ के लिए)`,
       ),
       right: t(forms(divisor, odd), forms(divisor, odd)),
       wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),

@@ -24,9 +24,31 @@ export const hcfLcmByPrimes = family({
     const h = ns.reduce((g, n) => gcd(g, n));
     const l = ns.reduce((m, n) => lcm(m, n));
     const product = ns.reduce((p, n) => p * n, 1);
-    const list = ns.join(", ");
-    // Each number its own bit of maths, so the list wraps on a phone.
-    const factored = ns.map((n) => `$${n} = ${primesTex(n)}$`).join(", ");
+    const head = ns.slice(0, -1).join(", ");
+    const list = `${head} and ${ns.at(-1)}`;
+    const listHi = `${head} और ${ns.at(-1)}`;
+    // The factorisations as display maths, one per line; a prime is said in words, not as "17 = 17".
+    const isPrime = (n: number) => primesTex(n) === `${n}`;
+    const composite = ns.filter((n) => !isPrime(n));
+    const primes = ns.filter(isPrime);
+    const lines =
+      composite.length === 0
+        ? ""
+        : `$$\\begin{aligned} ${composite.map((n) => `${n} &= ${primesTex(n)}`).join(" \\\\ ")} \\end{aligned}$$`;
+    const primeWords =
+      primes.length === 0
+        ? { en: "", hi: "" }
+        : primes.length === ns.length
+          ? ns.length === 2
+            ? { en: " Both are prime.", hi: " दोनों अभाज्य हैं।" }
+            : { en: " All three are prime.", hi: " तीनों अभाज्य हैं।" }
+          : primes.length === 1
+            ? { en: ` ${primes[0]} is prime.`, hi: ` ${primes[0]} अभाज्य है।` }
+            : {
+                en: ` ${primes.slice(0, -1).join(", ")} and ${primes.at(-1)} are prime.`,
+                hi: ` ${primes.slice(0, -1).join(", ")} और ${primes.at(-1)} अभाज्य हैं।`,
+              };
+    const factored = { en: `${lines}${primeWords.en}`, hi: `${lines}${primeWords.hi}` };
     const isHcf = ask === Ask.Hcf;
     const right = isHcf ? h : l;
     const options: Option[] = [];
@@ -46,8 +68,8 @@ export const hcfLcmByPrimes = family({
       offer(
         "one",
         1,
-        `Look again for a prime that every number has: ${factored}.`,
-        `फिर देखो, कोई ऐसा अभाज्य जो हर संख्या में हो: ${factored}।`,
+        `Look again for a prime that every number has: ${factored.en}`,
+        `फिर देखो, कोई ऐसा अभाज्य जो हर संख्या में हो: ${factored.hi}`,
       );
       offer(
         "double",
@@ -88,12 +110,12 @@ export const hcfLcmByPrimes = family({
     const question = choice(b, {
       prompt: isHcf
         ? t(
-            r`Find the HCF of ${list} by prime factorisation: ${factored}.`,
-            r`अभाज्य गुणनखंडन से ${list} का HCF ज्ञात करो: ${factored}।`,
+            r`Find the HCF of ${list} by prime factorisation. ${factored.en}`,
+            r`अभाज्य गुणनखंडन से ${listHi} का HCF ज्ञात करो। ${factored.hi}`,
           )
         : t(
-            r`Find the LCM of ${list} by prime factorisation: ${factored}.`,
-            r`अभाज्य गुणनखंडन से ${list} का LCM ज्ञात करो: ${factored}।`,
+            r`Find the LCM of ${list} by prime factorisation. ${factored.en}`,
+            r`अभाज्य गुणनखंडन से ${listHi} का LCM ज्ञात करो। ${factored.hi}`,
           ),
       right: t(`${right}`, `${right}`),
       wrong: Object.fromEntries(options.map(({ id, ...o }) => [id, o])),

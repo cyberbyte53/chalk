@@ -30,10 +30,10 @@ const STORIES: Record<Story, Spec> = {
   },
   [Story.Sweets]: {
     text: t(
-      "A sweet seller has 420 kaju barfis and 130 badam barfis. She stacks them so that each stack has the same number of barfis, of one kind, taking up the least area of the tray. How many barfis go in each stack?",
-      "एक मिठाई वाली के पास 420 काजू बर्फ़ी और 130 बादाम बर्फ़ी हैं। वह इन्हें ऐसे ढेरों में रखती है कि हर ढेर में एक ही तरह की और बराबर बर्फ़ियाँ हों, और ट्रे में सबसे कम जगह घिरे। हर ढेर में कितनी बर्फ़ियाँ?",
+      "A sweet seller has 480 kaju barfis and 168 badam barfis. She stacks them so that each stack has the same number of barfis, of one kind, taking up the least area of the tray. How many barfis go in each stack?",
+      "एक मिठाई वाली के पास 480 काजू बर्फ़ी और 168 बादाम बर्फ़ी हैं। वह इन्हें ऐसे ढेरों में रखती है कि हर ढेर में एक ही तरह की और बराबर बर्फ़ियाँ हों, और ट्रे में सबसे कम जगह घिरे। हर ढेर में कितनी बर्फ़ियाँ?",
     ),
-    numbers: [420, 130],
+    numbers: [480, 168],
     unit: t("barfis", "बर्फ़ियाँ"),
   },
   [Story.Rope]: {

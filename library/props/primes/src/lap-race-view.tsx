@@ -17,14 +17,15 @@ function spot(cx: number, cy: number, radius: number, lap: number, t: number) {
 
 /**
  * Both runners' logs on one time line: a column for every minute either is back at the start, so a
- * minute they share sits in the same column in both rows. Each chip is lap × k.
+ * minute they share sits in the same column in both rows. Each chip is the minute, with how it is
+ * made written under it: 36 is 18 × 2 (the 2nd round) for Sonia and 12 × 3 for Ravi.
  */
 function Logs({
   rows,
   shownTime,
   common,
 }: {
-  rows: readonly { name: string; lap: number; letter: string; tone: "a" | "b"; part: string }[];
+  rows: readonly { name: string; lap: number; tone: "a" | "b"; part: string }[];
   shownTime: number;
   /** Minutes both runners are at the start are ringed. */
   common: number;
@@ -43,24 +44,18 @@ function Logs({
     <div class="pr-race-logs" ref={box}>
       <div
         class="pr-race-grid"
-        style={{ gridTemplateColumns: `48px repeat(${Math.max(1, columns)}, 32px)` }}
+        style={{ gridTemplateColumns: `64px repeat(${Math.max(1, columns)}, 44px)` }}
       >
         {rows.map((r) => (
           <div class={`pr-race-row is-${r.tone}`} data-part={r.part} key={r.part}>
-            <span class="pr-race-name">
-              {r.name}
-              <small>
-                {r.lap}
-                {r.letter}
-              </small>
-            </span>
+            <span class="pr-race-name">{r.name}</span>
             {columns === 0 && <span class="pr-race-empty">–</span>}
             {minutes.map((m) =>
               m % r.lap === 0 ? (
                 <span key={m} class={m % common === 0 ? "pr-race-chip is-met" : "pr-race-chip"}>
                   {m}
                   <small>
-                    {r.letter} = {m / r.lap}
+                    {r.lap} × {m / r.lap}
                   </small>
                 </span>
               ) : (
@@ -142,8 +137,8 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
       </svg>
       <Logs
         rows={[
-          { name: nameA, lap: s.lapA, letter: s.letterA, tone: "a", part: "logA" },
-          { name: nameB, lap: s.lapB, letter: s.letterB, tone: "b", part: "logB" },
+          { name: nameA, lap: s.lapA, tone: "a", part: "logA" },
+          { name: nameB, lap: s.lapB, tone: "b", part: "logB" },
         ]}
         shownTime={t}
         common={common}

@@ -9,7 +9,8 @@ const r = String.raw;
 
 /**
  * Divide a by b: which q and r? One option has a remainder of b or more (or, when q = 0, divides the
- * wrong way round), one a negative remainder. q = 0 (a < b) and r = 0 (b divides a) are both fine.
+ * wrong way round), one swaps q and r (or, when they are equal, is one out in the remainder).
+ * q = 0 (a < b) and r = 0 (b divides a) are both fine.
  */
 export const quotientAndRemainder = family({
   level: Level.Easy,
@@ -37,17 +38,28 @@ export const quotientAndRemainder = family({
               r`यह ${d} को ${a} से भाग देता है। यहाँ ${a} को ${d} से भाग देना है: ${d}, ${a} में शून्य बार जाता है, इसलिए $q = 0$ और $r = ${a}$।`,
             ),
           };
-    const options: Option[] = [
-      tooFew,
-      {
-        id: "negative",
-        label: t(pair(q + 1, rem - d), pair(q + 1, rem - d)),
-        feedback: t(
-          r`$${d} \times ${q + 1} = ${d * (q + 1)}$ is more than ${a}, and a remainder can't be negative.`,
-          r`$${d} \times ${q + 1} = ${d * (q + 1)}$, ${a} से ज़्यादा है, और शेषफल ऋणात्मक नहीं हो सकता।`,
-        ),
-      },
-    ];
+    const swappedLabel = pair(rem, q);
+    // Swapping q and r is the usual slip; when that reads the same as the right pair (or the other
+    // wrong one), the remainder is one out instead.
+    const flipped: Option =
+      rem !== q && swappedLabel !== tooFew.label.en
+        ? {
+            id: "flipped",
+            label: t(swappedLabel, swappedLabel),
+            feedback: t(
+              r`That swaps them. The quotient is how many ${d}s fit in ${a}, and the remainder is what is left: $$${a} = ${d} \times ${q} + ${rem}$$`,
+              r`इसमें दोनों उलट गए। भागफल यह है कि ${a} में कितने ${d} आते हैं, और शेषफल जो बचता है: $$${a} = ${d} \times ${q} + ${rem}$$`,
+            ),
+          }
+        : {
+            id: "offByOne",
+            label: t(pair(q, rem + 1), pair(q, rem + 1)),
+            feedback: t(
+              r`Check it: $${d} \times ${q} + ${rem + 1} = ${d * q + rem + 1}$, not ${a}.`,
+              r`जाँचो: $${d} \times ${q} + ${rem + 1} = ${d * q + rem + 1}$, ${a} नहीं।`,
+            ),
+          };
+    const options: Option[] = [tooFew, flipped];
     const ask = choice(b, {
       prompt: t(
         r`Divide ${a} by ${d}. What are the quotient $q$ and the remainder $r$?`,

@@ -1,8 +1,8 @@
-# NCERT Ex 1.2 Q1 and Example 4.
+# NCERT Ex 1.2 Q1, and kin of Example 4.
 - params: { n: 140 }
   firstTry: 1
 - params: { n: 156 }
-- params: { n: 360 }
+- params: { n: 480 }
 - params: { n: 3825 }
   firstTry: 2
   level: medium
@@ -10,5 +10,5 @@
   level: medium
 - params: { n: 7429 }
   level: hard
-- params: { n: 32760 }
+- params: { n: 27720 }
   level: hard

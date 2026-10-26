@@ -1,4 +1,4 @@
-# NCERT Ex 1.2 Q2 (pairs) and Q3 (threes); Examples 6 and 7.
+# NCERT Ex 1.2 Q2 (pairs) and Q3 (threes), and kin of Examples 6 and 7.
 - params: { numbers: "26,91", ask: hcf }
 - params: { numbers: "26,91", ask: lcm }
 - params: { numbers: "510,92", ask: hcf }
@@ -15,7 +15,7 @@
   level: hard
 - params: { numbers: "8,9,25", ask: lcm }
   level: hard
-- params: { numbers: "6,72,120", ask: hcf }
+- params: { numbers: "12,90,150", ask: hcf }
   level: medium
 - params: { numbers: "17,23,29", ask: hcf }
 - params: { numbers: "17,23,29", ask: lcm }

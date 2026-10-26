@@ -37,20 +37,20 @@ const story = page("story", (b) => {
   const unsplit = choice(b, {
     name: "unsplit",
     prompt: t("2, 3 and 5 can't be split any more. Why?", "2, 3 और 5 को और नहीं तोड़ा जा सकता। क्यों?"),
-    right: t("Their only factors are 1 and themselves", "उनके गुणनखंड केवल 1 और वे ख़ुद हैं"),
+    right: t("Each has no factors but 1 and itself", "हर एक के गुणनखंड केवल 1 और वह ख़ुद हैं"),
     wrong: {
-      small: {
-        label: t("They're small", "वे छोटे हैं"),
+      divide: {
+        label: t("Each one divides 360 exactly", "हर एक 360 को पूरा-पूरा भाग देता है"),
         feedback: t(
-          r`4 is small too, but it splits: $$4 = 2 \times 2$$`,
-          r`4 भी छोटा है, पर वह टूटता है: $$4 = 2 \times 2$$`,
+          r`10 divides 360 too, but it splits: $$10 = 2 \times 5$$`,
+          r`10 भी 360 को भाग देता है, पर वह टूटता है: $$10 = 2 \times 5$$`,
         ),
       },
-      odd: {
-        label: t("They're odd", "वे विषम हैं"),
+      small: {
+        label: t("Each one is smaller than 6", "हर एक 6 से छोटा है"),
         feedback: t(
-          r`2 is even. And 9 is odd, but it splits: $$9 = 3 \times 3$$`,
-          r`2 सम है। और 9 विषम है, पर टूटता है: $$9 = 3 \times 3$$`,
+          r`4 is smaller than 6 too, but it splits: $$4 = 2 \times 2$$`,
+          r`4 भी 6 से छोटा है, पर वह टूटता है: $$4 = 2 \times 2$$`,
         ),
       },
     },
@@ -103,8 +103,8 @@ const story = page("story", (b) => {
   });
   const theorem = w.definition(
     t(
-      r`**The Fundamental Theorem of Arithmetic.** Every composite number can be written as a product of primes, and this factorisation is **unique**, apart from the order of the primes. $$360 = 2^3 \times 3^2 \times 5$$`,
-      r`**अंकगणित की आधारभूत प्रमेय।** प्रत्येक भाज्य संख्या को अभाज्य संख्याओं के गुणनफल के रूप में लिखा जा सकता है, और यह गुणनखंडन, अभाज्यों के क्रम को छोड़कर, **अद्वितीय** होता है। $$360 = 2^3 \times 3^2 \times 5$$`,
+      r`**The Fundamental Theorem of Arithmetic.** Every composite number (a number bigger than 1 that isn't prime) can be written as a product of primes, and this factorisation is **unique**, apart from the order of the primes. $$360 = 2^3 \times 3^2 \times 5$$`,
+      r`**अंकगणित की आधारभूत प्रमेय।** प्रत्येक भाज्य संख्या (1 से बड़ी संख्या जो अभाज्य नहीं है) को अभाज्य संख्याओं के गुणनफल के रूप में लिखा जा सकता है, और यह गुणनखंडन, अभाज्यों के क्रम को छोड़कर, **अद्वितीय** होता है। $$360 = 2^3 \times 3^2 \times 5$$`,
     ),
     "theorem",
   );

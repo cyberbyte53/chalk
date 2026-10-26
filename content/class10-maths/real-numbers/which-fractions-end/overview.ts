@@ -60,21 +60,24 @@ const bill = page("bill", (b) => {
   });
   const common = choice(b, {
     name: "common",
-    prompt: t("What do 2, 4, 5, 8 and 10 have in common?", "2, 4, 5, 8 और 10 में क्या साझा है?"),
+    prompt: t(
+      "What do 2, 4, 5, 8 and 10 have that 3, 6, 7 and 9 don't?",
+      "2, 4, 5, 8 और 10 में ऐसा क्या है जो 3, 6, 7 और 9 में नहीं?",
+    ),
     right: t("Their only prime factors are 2 and 5", "उनके अभाज्य गुणनखंड केवल 2 और 5 हैं"),
     wrong: {
-      even: {
-        label: t("They're even", "वे सम हैं"),
+      hundred: {
+        label: t("Each of them divides 100 exactly", "हर एक 100 को पूरा-पूरा भाग देता है"),
         feedback: t(
-          "5 isn't even, and 6 is even but ₹100 ÷ 6 doesn't terminate.",
-          "5 सम नहीं है, और 6 सम है पर ₹100 ÷ 6 सांत नहीं है।",
+          "8 doesn't: 100 ÷ 8 = 12.5. Yet ₹100 ÷ 8 = ₹12.50 terminates.",
+          "8 नहीं देता: 100 ÷ 8 = 12.5। फिर भी ₹100 ÷ 8 = ₹12.50 सांत है।",
         ),
       },
-      small: {
-        label: t("They're small", "वे छोटे हैं"),
+      three: {
+        label: t("None of them has 3 as a factor", "उनमें से किसी का गुणनखंड 3 नहीं है"),
         feedback: t(
-          "3 is small too, and ₹100 ÷ 3 doesn't terminate.",
-          "3 भी छोटा है, और ₹100 ÷ 3 सांत नहीं है।",
+          "7 has no 3 either, yet ₹100 ÷ 7 = ₹14.2857… doesn't terminate.",
+          "7 में भी 3 नहीं है, फिर भी ₹100 ÷ 7 = ₹14.2857… सांत नहीं है।",
         ),
       },
     },
@@ -138,20 +141,20 @@ const story = page("story", (b) => {
       r`Why can't $\frac{7}{30}$ be written over a power of 10?`,
       r`$\frac{7}{30}$ को 10 की घात पर क्यों नहीं लिखा जा सकता?`,
     ),
-    right: t("30 has a 3, and no power of 10 has a 3", "30 में 3 है, और 10 की किसी घात में 3 नहीं"),
+    right: t("30 has a 3, and no power of 10 has one", "30 में 3 है, और 10 की किसी घात में 3 नहीं"),
     wrong: {
-      seven: {
-        label: t("7 is prime", "7 अभाज्य है"),
+      common: {
+        label: t("7 and 30 share no factor other than 1", "7 और 30 का 1 के सिवा कोई सार्व गुणनखंड नहीं"),
         feedback: t(
-          r`The top doesn't matter: $\frac{7}{40}$ terminates. Look at the towers below the bar.`,
-          r`ऊपर वाली संख्या से फ़र्क़ नहीं पड़ता: $\frac{7}{40}$ सांत है। नीचे वाली के स्तंभ देखो।`,
+          r`So do 7 and 40, and $\frac{7}{40}$ terminates: $$\frac{7}{40} = \frac{175}{1000} = 0.175$$`,
+          r`7 और 40 का भी नहीं, और $\frac{7}{40}$ सांत है: $$\frac{7}{40} = \frac{175}{1000} = 0.175$$`,
         ),
       },
-      big: {
-        label: t("30 is too big", "30 बहुत बड़ा है"),
+      power: {
+        label: t("30 isn't itself a power of 10", "30 ख़ुद 10 की घात नहीं है"),
         feedback: t(
-          r`$\frac{1}{3125}$ has a much bigger denominator and still terminates, because 3125 is only 5s: $$3125 = 5^5$$`,
-          r`$\frac{1}{3125}$ का हर बहुत बड़ा है फिर भी सांत है, क्योंकि 3125 केवल 5 से बना है: $$3125 = 5^5$$`,
+          r`Neither is 8, yet $\frac{3}{8}$ became $\frac{375}{1000}$. Look at the towers below the bar.`,
+          r`8 भी नहीं है, फिर भी $\frac{3}{8}$, $\frac{375}{1000}$ बन गया। नीचे वाली संख्या के स्तंभ देखो।`,
         ),
       },
     },
@@ -206,12 +209,12 @@ const story = page("story", (b) => {
 /**
  * Why the rest repeat. Each long-division step depends only on the remainder; the clock draws the
  * path of remainders. 3/8's path reaches 0 and stops; 1/7's comes back to 1 and goes round the same
- * loop forever. With only q − 1 remainders, a path that never reaches 0 has to loop.
+ * loop forever.
  */
 const repeats = page("repeats", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "See the remainders as a path: 3/8 goes 3 → 6 → 4 → 0 and stops (terminates); 1/7 goes 1 → 3 → 2 → 6 → 4 → 5 → 1 and, because each step depends only on the remainder, repeats the same loop forever. Only q − 1 remainders exist, so a path that never reaches 0 must loop.",
+    "See the remainders as a path: 3/8 goes 3 → 6 → 4 → 0 and stops (terminates); 1/7 goes 1 → 3 → 2 → 6 → 4 → 5 → 1 and, because each step depends only on the remainder, repeats the same loop forever.",
   );
   const eight = b.prop(decimalExpansionDef, "eight", {
     numerator: 3,
@@ -265,22 +268,69 @@ const repeats = page("repeats", (b) => {
     ),
     "loop",
   );
+  b.after(eight.on(DecimalExpansionSignal.Ended), [zero, seven]);
+  b.after(seven.on(DecimalExpansionSignal.Repeated), predict);
+  b.after(predict, loop);
+  return [
+    w.title(t("Repeating decimals", "आवर्ती दशमलव")),
+    w.body(
+      t(
+        r`**Do the digits follow a pattern?** We saw that $\frac{7}{30}$ never terminates, and neither does $\frac{1}{7}$. Long division shows what their digits do. Each step of the division gives a digit and a remainder; the clock marks each remainder, with an arrow per step.`,
+        r`**क्या अंक किसी पैटर्न पर चलते हैं?** हमने देखा कि $\frac{7}{30}$ कभी सांत नहीं होता, और $\frac{1}{7}$ भी नहीं। लंबा भाग दिखाता है कि उनके अंक क्या करते हैं। भाग का हर क़दम एक अंक और एक शेषफल देता है; घड़ी हर शेषफल दिखाती है, हर क़दम पर एक तीर।`,
+      ),
+    ),
+    w.body(
+      t(
+        r`Start with one that ends. Tap the division for $\frac{3}{8}$.`,
+        r`एक ऐसी भिन्न से शुरू करो जो सांत है। $\frac{3}{8}$ के लिए भाग पर टैप करो।`,
+      ),
+    ),
+    eight,
+    zero,
+    seven,
+    predict,
+    loop,
+  ];
+});
+
+/**
+ * Why a path that never reaches 0 has to loop: dividing by q, the only remainders are 0 to q − 1. If
+ * 0 never comes, one of the other q − 1 comes back, and from there the digits repeat. Then a sandbox.
+ */
+const whyRepeats = page("why-repeats", (b) => {
+  const w = wordsOn(b);
+  b.purpose(
+    "The pigeonhole reason: dividing by 7, the remainders can only be 0 to 6. 1/7 never reaches 0, so within 6 steps a remainder comes back, and the digits repeat from there. In general only q − 1 non-zero remainders exist, so a fraction that doesn't terminate repeats.",
+  );
   const back = choice(b, {
     name: "back",
     prompt: t(
-      "Why did 1/7's path have to come back to a remainder it had seen?",
-      "1/7 का रास्ता किसी देखे हुए शेषफल पर लौटना ही क्यों था?",
+      r`Why did the path of $1 \div 7$ have to come back to a remainder it had seen?`,
+      r`$1 \div 7$ का रास्ता किसी देखे हुए शेषफल पर लौटना ही क्यों था?`,
     ),
     right: t(
-      "It never reached 0, and only 1 to 6 are possible",
-      "वह कभी 0 पर नहीं पहुँचा, और केवल 1 से 6 संभव हैं",
+      "It never hit 0, and only 1 to 6 can be remainders",
+      "वह कभी 0 पर नहीं पहुँचा, और शेषफल केवल 1 से 6 हो सकते हैं",
     ),
     wrong: {
       prime: {
-        label: t("Because 7 is prime", "क्योंकि 7 अभाज्य है"),
+        label: t(
+          "7 is prime, and dividing by a prime always repeats",
+          "7 अभाज्य है, और अभाज्य से भाग हमेशा दोहराता है",
+        ),
         feedback: t(
-          r`$\frac{1}{6}$ loops too, and 6 isn't prime. It's about how many remainders there are.`,
-          r`$\frac{1}{6}$ भी चक्कर लगाता है, और 6 अभाज्य नहीं। बात यह है कि शेषफल कितने हो सकते हैं।`,
+          r`5 is prime, but $\frac{1}{5} = 0.2$ stops. And $\frac{1}{6}$ repeats, though 6 isn't prime. It's about how many remainders there can be.`,
+          r`5 अभाज्य है, पर $\frac{1}{5} = 0.2$ रुक जाता है। और $\frac{1}{6}$ दोहराता है, जबकि 6 अभाज्य नहीं। बात यह है कि शेषफल कितने हो सकते हैं।`,
+        ),
+      },
+      start: {
+        label: t(
+          "Every division comes back to the remainder it began with",
+          "हर भाग उसी शेषफल पर लौटता है जिससे वह शुरू हुआ",
+        ),
+        feedback: t(
+          r`$\frac{3}{8}$ never came back: it reached 0 and stopped. And $\frac{1}{6} = 0.1\overline{6}$ comes back to 4, not to 1.`,
+          r`$\frac{3}{8}$ कभी नहीं लौटा: वह 0 पर पहुँचकर रुक गया। और $\frac{1}{6} = 0.1\overline{6}$, 4 पर लौटता है, 1 पर नहीं।`,
         ),
       },
     },
@@ -306,29 +356,15 @@ const repeats = page("repeats", (b) => {
     isEditable: true,
   });
   b.standsFor(own, "a sandbox: any p ÷ q by long division, with the path of remainders");
-  b.after(eight.on(DecimalExpansionSignal.Ended), [zero, seven]);
-  b.after(seven.on(DecimalExpansionSignal.Repeated), predict);
-  b.after(predict, [loop, back]);
   b.after(back, [rule, tryOwn, own]);
   return [
-    w.title(t("Repeating decimals", "आवर्ती दशमलव")),
+    w.title(t("Why the digits repeat", "अंक क्यों दोहराते हैं")),
     w.body(
       t(
-        r`**Do the digits follow a pattern?** We saw that $\frac{7}{30}$ never terminates, and neither does $\frac{1}{7}$. Long division shows what their digits do. Each step of the division gives a digit and a remainder; the clock marks each remainder, with an arrow per step.`,
-        r`**क्या अंक किसी पैटर्न पर चलते हैं?** हमने देखा कि $\frac{7}{30}$ कभी सांत नहीं होता, और $\frac{1}{7}$ भी नहीं। लंबा भाग दिखाता है कि उनके अंक क्या करते हैं। भाग का हर क़दम एक अंक और एक शेषफल देता है; घड़ी हर शेषफल दिखाती है, हर क़दम पर एक तीर।`,
+        r`Dividing 1 by 7 gave these remainders, and then the same ones again: $$1 \to 3 \to 2 \to 6 \to 4 \to 5 \to 1$$ A remainder is always less than the divisor, so dividing by 7 it can only be 0, 1, 2, 3, 4, 5 or 6.`,
+        r`1 को 7 से भाग देने पर ये शेषफल आए, और फिर वही दोबारा: $$1 \to 3 \to 2 \to 6 \to 4 \to 5 \to 1$$ शेषफल हमेशा भाजक से छोटा होता है, तो 7 से भाग देने पर वह केवल 0, 1, 2, 3, 4, 5 या 6 हो सकता है।`,
       ),
     ),
-    w.body(
-      t(
-        r`Start with one that ends. Tap the division for $\frac{3}{8}$.`,
-        r`एक ऐसी भिन्न से शुरू करो जो सांत है। $\frac{3}{8}$ के लिए भाग पर टैप करो।`,
-      ),
-    ),
-    eight,
-    zero,
-    seven,
-    predict,
-    loop,
     back,
     rule,
     tryOwn,
@@ -406,4 +442,4 @@ const play = page("play", (b) => {
 });
 
 /** The pages, in reading order. */
-export const overview = [bill, story, repeats, writing, reading, play];
+export const overview = [bill, story, repeats, whyRepeats, writing, reading, play];

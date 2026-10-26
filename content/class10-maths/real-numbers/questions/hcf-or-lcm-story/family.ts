@@ -22,10 +22,10 @@ type Spec = { text: Localized; numbers: readonly number[]; isHcf: boolean };
 const STORIES: Record<Story, Spec> = {
   [Story.Sweets]: {
     text: t(
-      "A sweet seller has 420 kaju barfis and 130 badam barfis. She stacks them in piles of the same number, one kind per pile, as few piles as possible. How many barfis in each pile?",
-      "एक मिठाई वाली के पास 420 काजू बर्फ़ी और 130 बादाम बर्फ़ी हैं। वह इन्हें बराबर संख्या के ढेरों में रखती है, हर ढेर में एक ही तरह की, और ढेर जितने कम हो सकें। हर ढेर में कितनी बर्फ़ी?",
+      "A sweet seller has 234 kaju barfis and 144 badam barfis. She stacks them in piles of the same number, one kind per pile, as few piles as possible. How many barfis in each pile?",
+      "एक मिठाई वाली के पास 234 काजू बर्फ़ी और 144 बादाम बर्फ़ी हैं। वह इन्हें बराबर संख्या के ढेरों में रखती है, हर ढेर में एक ही तरह की, और ढेर जितने कम हो सकें। हर ढेर में कितनी बर्फ़ी?",
     ),
-    numbers: [420, 130],
+    numbers: [234, 144],
     isHcf: true,
   },
   [Story.Bells]: {
@@ -70,10 +70,10 @@ const STORIES: Record<Story, Spec> = {
   },
   [Story.Runners]: {
     text: t(
-      "There is a circular path around a sports field. Sonia takes 18 minutes to drive one round of the field, while Ravi takes 12 minutes for the same. Suppose they both start at the same point and at the same time, and go in the same direction. After how many minutes will they meet again at the starting point?",
-      "एक खेल के मैदान के चारों ओर एक वृत्ताकार रास्ता है। सोनिया को मैदान का एक चक्कर लगाने में 18 मिनट लगते हैं, जबकि रवि को 12 मिनट। मान लो दोनों एक ही जगह से, एक ही समय, एक ही दिशा में चलते हैं। कितने मिनट बाद वे फिर से शुरुआत की जगह पर मिलेंगे?",
+      "There is a circular path around a sports field. Asha takes 16 minutes to cycle one round of the field, while Kabir takes 24 minutes for the same. Suppose they both start at the same point and at the same time, and go in the same direction. After how many minutes will they meet again at the starting point?",
+      "एक खेल के मैदान के चारों ओर एक वृत्ताकार रास्ता है। आशा को साइकिल से मैदान का एक चक्कर लगाने में 16 मिनट लगते हैं, जबकि कबीर को 24 मिनट। मान लो दोनों एक ही जगह से, एक ही समय, एक ही दिशा में चलते हैं। कितने मिनट बाद वे फिर से शुरुआत की जगह पर मिलेंगे?",
     ),
-    numbers: [18, 12],
+    numbers: [16, 24],
     isHcf: false,
   },
 };

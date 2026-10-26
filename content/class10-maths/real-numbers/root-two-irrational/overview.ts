@@ -139,7 +139,7 @@ const proof = page("proof", (b) => {
   const twoA = choice(b, {
     name: "twoA",
     prompt: t(r`$2b^2 = a^2$. So 2 divides…`, r`$2b^2 = a^2$। तो 2 विभाजित करता है…`),
-    right: t(r`$a$, because 2 is prime`, r`$a$ को, क्योंकि 2 अभाज्य है`),
+    right: t(r`$a$`, r`$a$ को`),
     wrong: {
       b: {
         label: t(r`$b$`, r`$b$ को`),
@@ -159,8 +159,8 @@ const proof = page("proof", (b) => {
   });
   const step2 = w.body(
     t(
-      r`2 divides $a$, so $a$ is 2 times some integer $c$: $$a = 2c$$ Put it into $2b^2 = a^2$: $$2b^2 = (2c)^2 = 4c^2, \quad \text{so} \quad b^2 = 2c^2$$`,
-      r`2, $a$ को भाग देता है, तो $a$ किसी पूर्णांक $c$ का 2 गुना है: $$a = 2c$$ इसे $2b^2 = a^2$ में रखो: $$2b^2 = (2c)^2 = 4c^2, \quad \text{तो} \quad b^2 = 2c^2$$`,
+      r`2 divides $a^2$, and 2 is prime, so 2 divides $a$ (the fact from the last page). So $a$ is 2 times some integer $c$: $$a = 2c$$ Put it into $2b^2 = a^2$: $$2b^2 = (2c)^2 = 4c^2, \quad \text{so} \quad b^2 = 2c^2$$`,
+      r`2, $a^2$ को भाग देता है, और 2 अभाज्य है, तो 2, $a$ को भी भाग देता है (पिछले पेज का तथ्य)। तो $a$ किसी पूर्णांक $c$ का 2 गुना है: $$a = 2c$$ इसे $2b^2 = a^2$ में रखो: $$2b^2 = (2c)^2 = 4c^2, \quad \text{तो} \quad b^2 = 2c^2$$`,
     ),
     "step2",
   );
@@ -268,15 +268,59 @@ const written = page("written", (b) => {
   ];
 });
 
+/** NCERT Example 9: √3 is irrational, written out the same way as √2, with 3 in place of 2. */
+const rootThree = page("root-three", (b) => {
+  const w = wordsOn(b);
+  return [
+    w.title(t(r`$\sqrt{3}$ is irrational`, r`$\sqrt{3}$ अपरिमेय है`)),
+    w.body(
+      t(
+        r`The same proof works for $\sqrt{3}$, because 3 is prime too. Here it is in full, as you would write it.`,
+        r`यही उपपत्ति $\sqrt{3}$ के लिए भी चलती है, क्योंकि 3 भी अभाज्य है। यह रही पूरी, जैसे तुम लिखोगे।`,
+      ),
+    ),
+    w.body(
+      t(
+        r`**Q.** Prove that $\sqrt{3}$ is irrational.`,
+        r`**प्र.** सिद्ध करो कि $\sqrt{3}$ अपरिमेय है।`,
+      ),
+    ),
+    w.body(
+      t(
+        r`**A.** Suppose $\sqrt{3}$ is rational. Then for some integers $a$ and $b$, with $b \ne 0$ and no common factor other than 1, $$\sqrt{3} = \frac{a}{b}$$`,
+        r`**उत्तर।** मान लो $\sqrt{3}$ परिमेय है। तब किन्हीं पूर्णांकों $a$ और $b$ के लिए, जहाँ $b \ne 0$ और 1 के सिवा कोई उभयनिष्ठ गुणनखंड नहीं, $$\sqrt{3} = \frac{a}{b}$$`,
+      ),
+    ),
+    w.body(
+      t(
+        r`Multiplying by $b$ and squaring both sides, $$\begin{aligned} b\sqrt{3} &= a \\ 3b^2 &= a^2 \end{aligned}$$ So 3 divides $a^2$. Since 3 is prime, 3 divides $a$.`,
+        r`$b$ से गुणा करके दोनों पक्षों का वर्ग करने पर $$\begin{aligned} b\sqrt{3} &= a \\ 3b^2 &= a^2 \end{aligned}$$ तो 3, $a^2$ को भाग देता है। 3 अभाज्य है, इसलिए 3, $a$ को भाग देता है।`,
+      ),
+    ),
+    w.body(
+      t(
+        r`So we can write $a = 3c$ for some integer $c$. Substituting, $$3b^2 = 9c^2, \quad \text{so} \quad b^2 = 3c^2$$ So 3 divides $b^2$. Since 3 is prime, 3 divides $b$.`,
+        r`तो किसी पूर्णांक $c$ के लिए $a = 3c$ लिख सकते हैं। रखने पर $$3b^2 = 9c^2, \quad \text{तो} \quad b^2 = 3c^2$$ तो 3, $b^2$ को भाग देता है। 3 अभाज्य है, इसलिए 3, $b$ को भाग देता है।`,
+      ),
+    ),
+    w.body(
+      t(
+        r`So 3 is a common factor of $a$ and $b$. This contradicts that $a$ and $b$ have no common factor other than 1. So our supposition is wrong, and $\sqrt{3}$ is irrational.`,
+        r`तो 3, $a$ और $b$ का साझा गुणनखंड है। यह इस बात का खंडन करता है कि $a$ और $b$ का 1 के अलावा कोई साझा गुणनखंड नहीं। इसलिए हमारी मान्यता ग़लत है, और $\sqrt{3}$ अपरिमेय है।`,
+      ),
+    ),
+  ];
+});
+
 /** Combinations: 5 − √3 and 3√2 (NCERT Examples 10 and 11). */
 const combinations = page("combinations", (b) => {
   const w = wordsOn(b);
   return [
-    w.title(t("Example", "उदाहरण")),
+    w.title(t("Examples", "उदाहरण")),
     w.body(
       t(
-        r`The proof for $\sqrt{2}$ works for $\sqrt{3}$ too: use 3 (also prime) in place of 2 at every step. So $\sqrt{3}$ is irrational as well.`,
-        r`$\sqrt{2}$ वाली उपपत्ति $\sqrt{3}$ के लिए भी चलती है: हर चरण में 2 की जगह 3 (वह भी अभाज्य) रखो। तो $\sqrt{3}$ भी अपरिमेय है।`,
+        r`Now that $\sqrt{2}$ and $\sqrt{3}$ are known to be irrational, we can use them to show that other numbers are irrational.`,
+        r`अब हम जानते हैं कि $\sqrt{2}$ और $\sqrt{3}$ अपरिमेय हैं, तो इनसे दूसरी संख्याओं को भी अपरिमेय दिखा सकते हैं।`,
       ),
     ),
     w.body(
@@ -292,9 +336,12 @@ const combinations = page("combinations", (b) => {
       ),
     ),
     w.body(
+      t(r`**Q.** Show that $3\sqrt{2}$ is irrational.`, r`**प्र.** दिखाओ कि $3\sqrt{2}$ अपरिमेय है।`),
+    ),
+    w.body(
       t(
-        r`The same works for $3\sqrt{2}$. If it were a fraction, then $\sqrt{2}$ would be one too: $$3\sqrt{2} = \frac{a}{b} \;\Rightarrow\; \sqrt{2} = \frac{a}{3b}$$`,
-        r`$3\sqrt{2}$ के लिए भी यही चलता है। अगर यह भिन्न होता, तो $\sqrt{2}$ भी होता: $$3\sqrt{2} = \frac{a}{b} \;\Rightarrow\; \sqrt{2} = \frac{a}{3b}$$`,
+        r`**A.** Suppose it is rational. Then for some integers $a$ and $b$, with $b \ne 0$, $$3\sqrt{2} = \frac{a}{b}$$ Dividing both sides by 3, $$\sqrt{2} = \frac{a}{3b}$$ Since $a$ and $3b$ are integers, and $3b \ne 0$, this makes $\sqrt{2}$ rational. But $\sqrt{2}$ is irrational. This contradiction shows that $3\sqrt{2}$ is irrational.`,
+        r`**उत्तर।** मान लो यह परिमेय है। तब किन्हीं पूर्णांकों $a$ और $b$ के लिए, जहाँ $b \ne 0$, $$3\sqrt{2} = \frac{a}{b}$$ दोनों पक्षों को 3 से भाग देने पर $$\sqrt{2} = \frac{a}{3b}$$ $a$ और $3b$ पूर्णांक हैं, और $3b \ne 0$, तो इससे $\sqrt{2}$ परिमेय हो जाता है। पर $\sqrt{2}$ अपरिमेय है। यह विरोधाभास दिखाता है कि $3\sqrt{2}$ अपरिमेय है।`,
       ),
     ),
     w.definition(
@@ -307,4 +354,4 @@ const combinations = page("combinations", (b) => {
 });
 
 /** The pages, in reading order. */
-export const overview = [intro, proof, written, combinations];
+export const overview = [intro, proof, written, rootThree, combinations];

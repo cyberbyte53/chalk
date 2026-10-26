@@ -1,8 +1,8 @@
-# NCERT Ex 1.3 Q3 (1/√2, 7√5) and Example 11 (3√2).
+# NCERT Ex 1.3 Q3 (1/√2, 7√5), and kin of Example 11 (3√2 is worked on the pages).
 - params: { form: over, n: 2 }
   firstTry: 4
 - params: { form: times, c: 7, n: 5 }
   firstTry: 5
-- params: { form: times, c: 3, n: 2 }
+- params: { form: times, c: 4, n: 3 }
   level: easy
 - params: { form: over, n: 3 }

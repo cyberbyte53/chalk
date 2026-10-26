@@ -34,9 +34,6 @@ const lapRaceState = z
     time: z.number().min(0).max(MAX_TIME),
     /** Whether the race is running: the clock goes on until both are at the start together. */
     isRunning: z.boolean(),
-    /** The letter counting each runner's rounds: Sonia is at the start at minute lapA × letterA. */
-    letterA: z.string().min(1).max(2),
-    letterB: z.string().min(1).max(2),
     /** The runners' names, from the lesson. */
     nameA: localizedSchema,
     nameB: localizedSchema,
@@ -87,8 +84,6 @@ export const lapRace = defineProp({
     lapB: 12,
     time: 0,
     isRunning: false,
-    letterA: "m",
-    letterB: "n",
     nameA: { en: "Sonia", hi: "सोनिया" },
     nameB: { en: "Ravi", hi: "रवि" },
     playLabel: { en: "Play", hi: "चलाओ" },

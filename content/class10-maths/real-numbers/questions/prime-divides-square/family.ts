@@ -39,8 +39,8 @@ export const primeDividesSquare = family({
         ? {
             feedback: isPrime(k)
               ? t(
-                  r`${k} is prime: a prime in $a^2$'s bag came from $a$'s bag, so ${k} divides $a$.`,
-                  r`${k} अभाज्य है: $a^2$ की थैली का अभाज्य, $a$ की थैली से ही आया, इसलिए ${k}, $a$ को विभाजित करता है।`,
+                  r`${k} is prime. Squaring $a$ only doubles the powers of its primes, so every prime of $a^2$ is a prime of $a$: ${k} divides $a$.`,
+                  r`${k} अभाज्य है। $a$ का वर्ग करने से उसके अभाज्यों की घातें बस दोगुनी होती हैं, इसलिए $a^2$ का हर अभाज्य $a$ का भी अभाज्य है: ${k}, $a$ को विभाजित करता है।`,
                 )
               : t(
                   r`$${k} = ${primesTex(k)}$: each of these primes divides $a^2$, so each divides $a$, and so does their product.`,
