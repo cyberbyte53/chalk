@@ -6,7 +6,7 @@ import type { Locale } from "./localized";
 export const NARRATOR = "narrator";
 
 /**
- * How text on screen is said aloud (content/pronunciations.json): ordered groups of rules, each a
+ * How text on screen is said aloud (authoring/pronunciations.json): ordered groups of rules, each a
  * pattern and its wording per language. Maths is one group among others (units, chemistry, short
  * forms); adding a reading is a line of content, not code. A line's own `speak` always wins.
  */

@@ -1,5 +1,6 @@
 # Three layers. platform/ is the fixed code, library/ the props and patterns shared across books,
-# content/ the books. Imports go one way: content → library → platform (checked by `pnpm boundaries`).
+# content/ the books (not a package: its code resolves from the root; platform/content-source
+# loads it). Imports go one way: content → library → platform (checked by `pnpm boundaries`).
 packages:
   - platform/packages/*
   - platform/apps/*
@@ -7,4 +8,4 @@ packages:
   - library/props/*
   - library/patterns
   - library/registry
-  - content
+  - platform/content-source

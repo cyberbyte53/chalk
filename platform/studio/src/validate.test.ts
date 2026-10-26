@@ -9,7 +9,7 @@ const lesson = JSON.parse(
 );
 const clone = () => structuredClone(lesson);
 const readings = loadReadings(
-  new URL("../../../content/pronunciations.json", import.meta.url).pathname,
+  new URL("../../../authoring/pronunciations.json", import.meta.url).pathname,
 );
 const messages = (input: unknown) =>
   validateLesson(input, propDefs, readings).map((p) => `${p.where}: ${p.message}`);

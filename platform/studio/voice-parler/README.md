@@ -2,7 +2,7 @@
 
 A voice provider for the audio step (`generateAudio` in `src/voice/`; not wired to a command yet), using [ai4bharat/indic-parler-tts](https://huggingface.co/ai4bharat/indic-parler-tts) (Apache 2.0) on your own machine. It runs only when audio is made; nothing calls it while a student learns.
 
-Each character has one named speaker, described in `content/voices.json` under `parler` (the model is steered by a sentence that names the speaker).
+Each character has one named speaker, described in `authoring/voices.json` under `parler` (the model is steered by a sentence that names the speaker).
 
 ## One-time setup (Mac)
 

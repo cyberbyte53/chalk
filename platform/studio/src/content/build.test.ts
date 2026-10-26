@@ -18,7 +18,7 @@ import { buildContent } from "./build";
 import { MODULES_FILE, boardModules, conceptsModule, modulesModule } from "./concepts";
 
 const contentDir = join(dirname(findUp("pnpm-workspace.yaml", import.meta.dirname)), "content");
-const readings = loadReadings(join(contentDir, PRONUNCIATIONS_FILE));
+const readings = loadReadings(join(contentDir, "..", "authoring", PRONUNCIATIONS_FILE));
 const fixturesDir = join(import.meta.dirname, ".fixtures");
 const CHAPTER = "book/chapter";
 /** Named as in the real chapter: the real locate-on-line family tests it. */
@@ -140,7 +140,7 @@ function fixture(spec: {
 
 /** The tree's modules.gen.ts, as pnpm build-content writes it. */
 function withModules(dir: string): string {
-  writeFileSync(join(dir, MODULES_FILE), modulesModule(boardModules(dir)));
+  writeFileSync(join(dir, MODULES_FILE), modulesModule(boardModules(dir), "."));
   return dir;
 }
 
@@ -164,7 +164,13 @@ function realBook(): string {
 }
 
 const build = (dir: string, commit = "test") =>
-  buildContent({ contentDir: dir, defs: propDefs, readings, commit });
+  buildContent({
+    contentDir: dir,
+    defs: propDefs,
+    readings,
+    commit,
+    modulesFile: join(dir, MODULES_FILE),
+  });
 const messages = (result: Awaited<ReturnType<typeof build>>) =>
   result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");
 

@@ -10,7 +10,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
 ## Content work
 
-- **The taste is `content/taste/`.** Read `constitution.md` always. Then read only the guide for your step (`guides/plan.md`, `pages.md`, `questions.md` or `props.md`) and the exemplars. `checks.md` is enforced by the build, and `reviewer.md` is for reviewers.
+- **The taste is `authoring/taste/`.** Read `constitution.md` always. Then read only the guide for your step (`guides/plan.md`, `pages.md`, `questions.md` or `props.md`) and the exemplars. `checks.md` is enforced by the build, and `reviewer.md` is for reviewers.
 - **The steps are skills** in `.agents/skills/` (`.claude/skills` points there). In order:
   1. `plan-chapter`, then the person approves `plan.md`.
   2. `build-props`.

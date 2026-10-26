@@ -50,9 +50,9 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Saved board** | A board written down: each node by address, the shape of its facts (`type@hash`), its facts, whether the learner touched it; loaded back only by props of the same shape | `runtime.save()`, `runtime.load()`, `SavedBoard`, `schemaKey` |
 | **Say** | The action every speaking prop has: read its line aloud, finishing when it ends | `SAY` |
 | **Speak** | The author's own spoken version of a line, when it should be said differently from how it's shown; wins over the rules | `speak`, `spokenText` |
-| **Pronunciation rules** | How screen text is said aloud, for every lesson: ordered groups (maths, units, chemistry, short forms) of pattern → words per language | `content/pronunciations.json`, `toSpoken` |
+| **Pronunciation rules** | How screen text is said aloud, for every lesson: ordered groups (maths, units, chemistry, short forms) of pattern → words per language | `authoring/pronunciations.json`, `toSpoken` |
 | **Speakable** | What a voice may be given: letters, digits, spaces, ordinary punctuation. Anything else is refused when audio is made | `unspeakable` |
-| **Voice provider** | What turns a line into audio (the audio step) (macOS `say` now; a self-hosted or cloud model later) | `TtsProvider`, `content/voices.json` |
+| **Voice provider** | What turns a line into audio (the audio step) (macOS `say` now; a self-hosted or cloud model later) | `TtsProvider`, `authoring/voices.json` |
 | **Publish** | Build the content from a clean commit and keep that build as `published/<commit>/` | `pnpm publish-content` |
 | **Jugnu** | The AI tutor, on question boards: an agent that reads the whole board as data and works in a loop of tool calls (the board's actions, point, calculate, hand back), within limits the runtime enforces | `@chalk/jugnu`, `JugnuSession`, `JugnuPanel` |
 | **Jugnu's tools** | `try` (what actions would do, unseen) and `calculate` to think; `reply` to answer: say, show (an action for the student to watch), point, then ask (options to tap) or nothing (he goes quiet; the board is theirs). Typed from the board's own actions; strict where the board allows | `jugnuTools`, `runTool` |

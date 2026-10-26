@@ -1,0 +1,22 @@
+{
+  "name": "@chalk/content-source",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Loads the course's code: modules.gen.ts lists every module under content/ that makes boards (chapters ship as code).",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
+  },
+  "dependencies": {
+    "@chalk/author": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2"
+  },
+  "exports": {
+    "./modules": {
+      "types": "./modules.d.ts",
+      "default": "./modules.gen.ts"
+    }
+  }
+}

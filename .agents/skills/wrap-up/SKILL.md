@@ -1,6 +1,6 @@
 ---
 name: wrap-up
-description: At the end of a working chat on content (or when the person says "wrap up"), find what the person corrected that could happen again, and propose the smallest lasting change to content/taste/ for each. The person approves each line before anything is written. Use whenever a session had corrections, before the chat is closed.
+description: At the end of a working chat on content (or when the person says "wrap up"), find what the person corrected that could happen again, and propose the smallest lasting change to authoring/taste/ for each. The person approves each line before anything is written. Use whenever a session had corrections, before the chat is closed.
 ---
 
 # Wrap up a chat
@@ -15,9 +15,9 @@ Most corrections are one-offs, already fixed in the files. A few are patterns: t
    - **Pattern:** the same mistake could come up on another board, lesson or chapter.
    - **Unsure:** ask the person.
 3. **For each pattern, find its smallest home**, in this order. Take the first that works:
-   1. a **check** the build or `render_board` can run (write it, or add it to the Proposed table in `content/taste/checks.md`);
-   2. an **exemplar**: the board or file you just fixed becomes the example in `content/taste/exemplars.md`;
-   3. an **edit to an existing line** in the stage guide for that step (`content/taste/guides/…`);
+   1. a **check** the build or `render_board` can run (write it, or add it to the Proposed table in `authoring/taste/checks.md`);
+   2. an **exemplar**: the board or file you just fixed becomes the example in `authoring/taste/exemplars.md`;
+   3. an **edit to an existing line** in the stage guide for that step (`authoring/taste/guides/…`);
    4. a **new line** in that guide, one sentence, naming the case it came from;
    5. a **constitution** change, only if it is about why we teach the way we do. It must replace or merge an existing principle; there are always 12.
 4. **Check before proposing.** Read the file you would change. If a line already says it, the agent ignored it: make that line sharper or turn it into a check rather than adding another. If it contradicts a line, show both and let the person choose.

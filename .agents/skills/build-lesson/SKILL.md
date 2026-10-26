@@ -9,7 +9,7 @@ Arguments: the chapter (`content/<book>/<chapter>`) and the lesson's slug from `
 
 ## Read first
 
-`content/taste/constitution.md`; `content/taste/guides/pages.md` and `guides/questions.md`; the lesson exemplars in `content/taste/exemplars.md` (open the files); `platform/docs/writing-content.md`; the plan's entry for this lesson and the source passage it covers.
+`authoring/taste/constitution.md`; `authoring/taste/guides/pages.md` and `guides/questions.md`; the lesson exemplars in `authoring/taste/exemplars.md` (open the files); `platform/docs/writing-content.md`; the plan's entry for this lesson and the source passage it covers.
 
 ## Pre-conditions
 

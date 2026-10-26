@@ -346,7 +346,7 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
       if (odd.length > 0) {
         report(
           name,
-          `the ${locale} voice would get "${odd.join(" ")}" it can't read ("${said}"); add a "speak" line in plain words, or a rule to content/pronunciations.json`,
+          `the ${locale} voice would get "${odd.join(" ")}" it can't read ("${said}"); add a "speak" line in plain words, or a rule to authoring/pronunciations.json`,
         );
       }
     }

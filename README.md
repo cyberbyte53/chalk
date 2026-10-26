@@ -11,7 +11,7 @@ pnpm check      # typecheck, tests, validate content, layer boundaries, lint
 
 Three layers, importing one way (`pnpm boundaries`):
 
-- `content/` — the books (book → chapter → lesson), [content/taste/](content/taste/README.md) is the taste
+- `content/` — the books (book → chapter → lesson), [authoring/taste/](authoring/taste/README.md) is the taste
 - `library/` — props and board patterns shared across books
 - `platform/` — the fixed code: packages, apps, studio tooling, deploy, [docs](platform/docs/README.md)
 

@@ -58,7 +58,14 @@ import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateBoard } from "../validate";
 import { renderArt } from "./art";
-import { MODULES_FILE, boardModules, conceptsModule, modulesModule } from "./concepts";
+import {
+  MODULES_FILE,
+  boardModules,
+  conceptsModule,
+  contentFrom,
+  modulesFileOf,
+  modulesModule,
+} from "./concepts";
 import { filesUnder, fingerprint, importClosure, isRecordingImports, recordImports } from "./deps";
 import { checkNote, checkWitness } from "./witness";
 
@@ -969,10 +976,12 @@ export async function buildContent(options: {
   defs: Defs;
   readings: Readings;
   commit: string;
+  /** The modules.gen.ts the app and the server load (platform/content-source/ by default). */
+  modulesFile?: string;
   /** Where built chapters are kept between runs (with what they read); no cache when absent. */
   cache?: { dir: string; root: string; propDirs: Readonly<Record<string, string>> };
 }): Promise<BuildResult> {
-  const { cache, ...rest } = options;
+  const { cache, modulesFile, ...rest } = options;
   const c: Context = {
     ...rest,
     propDirs: PROP_DIRS,
@@ -1003,9 +1012,9 @@ export async function buildContent(options: {
   }
   c.files.set(BuiltFile.Graph, checkGraph(c, graph));
   // The app and the server load boards' code through modules.gen.ts: it must list what this builds.
-  const modules = join(c.contentDir, MODULES_FILE);
+  const modules = modulesFile ?? modulesFileOf(c.contentDir);
   const modulesText = existsSync(modules) ? readFileSync(modules, "utf8") : undefined;
-  if (modulesText !== modulesModule(boardModules(c.contentDir)))
+  if (modulesText !== modulesModule(boardModules(c.contentDir), contentFrom(modules, c.contentDir)))
     report(
       c,
       MODULES_FILE,

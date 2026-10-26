@@ -16,7 +16,7 @@ const lesson: Lesson = lessonSchema.parse(
   ),
 );
 const readings = loadReadings(
-  new URL("../../../../content/pronunciations.json", import.meta.url).pathname,
+  new URL("../../../../authoring/pronunciations.json", import.meta.url).pathname,
 );
 const voices = {
   tone: { narrator: { en: "n", hi: "n" }, maya: { en: "m", hi: "m" }, arjun: { en: "a", hi: "a" } },

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import {
   ALL,
   ContentFile,
@@ -72,8 +72,12 @@ export function writeConceptModules(contentDir: string): string[] {
 /** Biome's line width (biome.json). */
 const LINE_WIDTH = 100;
 
-/** content/modules.gen.ts: where the app and the server load each module that makes boards. */
+/** platform/content-source/modules.gen.ts: where the app and the server load each module that makes boards. */
 export const MODULES_FILE = "modules.gen.ts";
+
+/** Where a content tree's modules.gen.ts is: in platform/content-source/, beside content/. */
+export const modulesFileOf = (contentDir: string): string =>
+  join(contentDir, "..", "platform", "content-source", MODULES_FILE);
 
 /**
  * Every module that makes boards, in build order: each included concept's overview.ts and each
@@ -112,13 +116,16 @@ export function boardModules(contentDir: string): string[] {
   return out;
 }
 
-/** modules.gen.ts for these modules: a lazy import each (the app splits each into its own chunk). */
-export function modulesModule(modules: readonly string[]): string {
+/**
+ * modules.gen.ts for these modules: a lazy import each (the app splits each into its own chunk).
+ * `from`: content/ as the file at `file` reaches it.
+ */
+export function modulesModule(modules: readonly string[], from: string): string {
   // Laid out as Biome lays it out: one line when it fits, else the import on the next.
   const entries = modules
     .map((file) => {
       const key = `  "${file}": () =>`;
-      const path = `"./${file.replace(/\.ts$/, "")}"`;
+      const path = `"${from}/${file.replace(/\.ts$/, "")}"`;
       const load = `import(${path}),`;
       if (`${key} ${load}`.length <= LINE_WIDTH) return `${key} ${load}\n`;
       if (`    ${load}`.length <= LINE_WIDTH) return `${key}\n    ${load}\n`;
@@ -135,10 +142,15 @@ export function modulesModule(modules: readonly string[]): string {
   ].join("\n");
 }
 
-/** Brings content/modules.gen.ts in line with the manifests; true if it wrote it. */
-export function writeModulesModule(contentDir: string): boolean {
-  const file = join(contentDir, MODULES_FILE);
-  const text = modulesModule(boardModules(contentDir));
+/** content/ as an import path from the modules file at `file` ("../../content", "."). */
+export const contentFrom = (file: string, contentDir: string): string => {
+  const path = relative(dirname(file), contentDir) || ".";
+  return path.startsWith(".") ? path : `./${path}`;
+};
+
+/** Brings modules.gen.ts in line with the manifests; true if it wrote it. */
+export function writeModulesModule(contentDir: string, file = modulesFileOf(contentDir)): boolean {
+  const text = modulesModule(boardModules(contentDir), contentFrom(file, contentDir));
   if (existsSync(file) && readFileSync(file, "utf8") === text) return false;
   writeFileSync(file, text);
   return true;

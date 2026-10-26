@@ -42,7 +42,7 @@ const command = positionals[0];
 const root = dirname(findUp("pnpm-workspace.yaml", process.cwd()));
 const contentDir = join(root, "content");
 const buildDir = join(root, "build");
-const readings = loadReadings(join(contentDir, PRONUNCIATIONS_FILE));
+const readings = loadReadings(join(root, "authoring", PRONUNCIATIONS_FILE));
 
 function git(...args: string[]): string {
   return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();

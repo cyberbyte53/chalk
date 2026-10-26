@@ -20,7 +20,7 @@ import type { TtsProvider } from "./provider";
 export const DEFAULT_SPEAKER = "default";
 
 /**
- * content/voices.json: for each provider, which of its voices speaks for each speaker in each
+ * authoring/voices.json: for each provider, which of its voices speaks for each speaker in each
  * language. Lessons never name voices, so swapping a provider or a voice is a change here only.
  */
 export const voicesSchema = z.record(

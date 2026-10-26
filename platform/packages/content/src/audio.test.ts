@@ -5,7 +5,7 @@ import { audioKey, compileReadings, spokenText, toSpoken, unspeakable } from "./
 
 const readings = compileReadings(
   JSON.parse(
-    readFileSync(new URL("../../../../content/pronunciations.json", import.meta.url), "utf8"),
+    readFileSync(new URL("../../../../authoring/pronunciations.json", import.meta.url), "utf8"),
   ),
 );
 const en = (text: string) => toSpoken(text, "en", readings);

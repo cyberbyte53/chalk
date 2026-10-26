@@ -34,13 +34,13 @@ content/
 
 Besides its concepts and questions, a chapter folder holds the pipeline's artefacts. They are plain files, so any harness and any agent can read and write them, and git keeps their history.
 
-- **`source/`**: what the chapter is built from, as handed over (a PDF, a text extract, notes). The plan skill reads everything in it. Older chapters point at `content/sources/text/<file>` from their plan instead.
+- **`source/`**: what the chapter is built from, as handed over (a PDF, a text extract, notes). The plan skill reads everything in it. Older chapters point at `authoring/sources/text/<file>` from their plan instead.
 - **`plan.md`**: the chapter plan, written before anything is built and approved before building starts. Front matter, then the sections Studio reads:
 
   ```markdown
   ---
   status: draft          # queued | draft | approved | built
-  source: source/        # or a path under content/sources/
+  source: source/        # or a path under authoring/sources/
   approved: 2026-10-24   # once approved
   ---
   # <Book>, <Chapter>: <Title> (plan)
@@ -203,7 +203,7 @@ Everything is one tree, and a node's **path** is its identity: book → chapter 
 
 Each built item carries its `path`, its `id` (a hash of the path, always worked out from it, what events carry) and its `version`: a hash of its own content and everything it is made from (a board: its module's code and the version of every prop type it places, listed in `props`; a concept, chapter or book: its children's versions). `build/index.json` also names the commit it was built from (`<sha>-dirty` with uncommitted changes; `pnpm ship` refuses those).
 
-A node's file is `build/<path>.json` (`build/class10-maths.json`, `build/class10-maths/real-numbers.json`, …), next to `index.json` and `graph.json`. It is generated, never edited, and not in git. `content/modules.gen.ts` (every module that makes boards, for the app and the server to load) is generated too, and committed, like each chapter's `concepts.gen.ts`.
+A node's file is `build/<path>.json` (`build/class10-maths.json`, `build/class10-maths/real-numbers.json`, …), next to `index.json` and `graph.json`. It is generated, never edited, and not in git. `platform/content-source/modules.gen.ts` (every module that makes boards, for the app and the server to load) is generated too, and committed, like each chapter's `concepts.gen.ts`.
 
 ## Colours
 

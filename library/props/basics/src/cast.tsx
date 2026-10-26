@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
 
-/** The lesson cast. Each character has its own voice (content/voices.json). */
+/** The lesson cast. Each character has its own voice (authoring/voices.json). */
 export const CharacterId = { Maya: "maya", Arjun: "arjun" } as const;
 export type CharacterId = (typeof CharacterId)[keyof typeof CharacterId];
 

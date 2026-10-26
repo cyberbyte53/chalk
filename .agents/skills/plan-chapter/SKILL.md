@@ -9,7 +9,7 @@ The plan is the one thing the person approves before anything is built, so it ca
 
 ## Read first
 
-1. `content/taste/constitution.md`, then `content/taste/guides/plan.md`.
+1. `authoring/taste/constitution.md`, then `authoring/taste/guides/plan.md`.
 2. The other `plan.md` files in the same book: characters, places and timeline continue across chapters.
 3. Props: read `library/catalogue.md` (every prop, what it shows, what a student can do on it, where it is used).
 4. The whole source: the chapter's `source/`, or the path the person gives. Read activities, examples, boxes and exercises too.

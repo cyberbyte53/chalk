@@ -86,7 +86,7 @@ function queryFor(file: string): string | null {
   } catch {}
   const folders = isDir ? parts : parts.slice(0, -1);
   const [book, chapter, third, family] = folders;
-  if (book === undefined || book === "taste" || book === "sources") return "board=";
+  if (book === undefined) return "board=";
   if (chapter === undefined) return `board=${book}`;
   if (third === undefined) return `board=${book}/${chapter}`;
   if (third === "questions")

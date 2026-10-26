@@ -79,7 +79,7 @@ export function boardOf(
   return finishBoard(item, builtOf(item, module), roleOf);
 }
 
-/** Where each item's module is loaded from: content/modules.gen.ts, by module path. */
+/** Where each item's module is loaded from: platform/content-source/modules.gen.ts, by module path. */
 export type ContentModules = Readonly<
   Record<string, () => Promise<Readonly<Record<string, unknown>>>>
 >;
@@ -92,6 +92,8 @@ export async function loadBoard(
 ): Promise<Board> {
   const load = modules[moduleOf(item)];
   if (load === undefined)
-    throw new Error(`${moduleOf(item)} isn't in content/modules.gen.ts; run pnpm build-content`);
+    throw new Error(
+      `${moduleOf(item)} isn't in platform/content-source/modules.gen.ts; run pnpm build-content`,
+    );
   return boardOf(item, await load(), roleOf);
 }

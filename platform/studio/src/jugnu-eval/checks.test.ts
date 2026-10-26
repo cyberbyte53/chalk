@@ -52,7 +52,7 @@ describe("Jugnu test cases", () => {
     const lesson = JSON.parse(
       readFileSync(resolve(root, `platform/studio/evals/boards/${name}.json`), "utf8"),
     );
-    const readings = loadReadings(resolve(root, "content/pronunciations.json"));
+    const readings = loadReadings(resolve(root, "authoring/pronunciations.json"));
     expect(
       validateLesson(lesson, propDefs, readings).map((p) => `${p.where}: ${p.message}`),
     ).toEqual([]);
