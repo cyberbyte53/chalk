@@ -1,8 +1,0 @@
-# NCERT Theorem 10.2, Exercise 10.2 Q1 and Q6, and similar.
-- params: { item: q1 }
-  firstTry: 2
-- params: { item: q6 }
-- params: { item: other }
-  level: easy
-  firstTry: 3
-- params: { item: op }

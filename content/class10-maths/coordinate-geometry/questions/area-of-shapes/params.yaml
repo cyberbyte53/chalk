@@ -1,7 +1,0 @@
-# NCERT Example 15 and Exercise 7.3 Q3, Q4, Q5.
-- params: { item: ex15 }
-  firstTry: 5
-- params: { item: q4 }
-- params: { item: q3 }
-  firstTry: 6
-- params: { item: q5 }

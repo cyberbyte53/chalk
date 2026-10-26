@@ -29,7 +29,7 @@ export function family<Params extends z.ZodTypeAny, C extends string>(spec: {
   level: Level;
   tests: readonly [C, ...C[]];
   params: Params;
-  build: (params: z.output<Params>, b: BoardKit) => Child | readonly Child[];
+  build: (params: z.output<Params>, b: BoardKit) => readonly Child[];
 }): Family<Params> {
   return {
     [FAMILY]: true,

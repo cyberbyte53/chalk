@@ -1,7 +1,0 @@
-# Which rule to use: the thumb rule, the left hand or the right hand (NCERT Exercise 15).
-- params: { item: field }
-  firstTry: 5
-- params: { item: force }
-  firstTry: 6
-- params: { item: induced }
-  firstTry: 7

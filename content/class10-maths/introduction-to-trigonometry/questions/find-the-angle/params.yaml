@@ -1,9 +1,0 @@
-# NCERT Examples 6–7 and Exercise 8.2 Q3–Q4.
-- params: { item: sin60 }
-  level: easy
-  firstTry: 2
-- params: { item: ex6bc }
-- params: { item: ex7 }
-- params: { item: q3 }
-  level: hard
-- params: { item: q4 }

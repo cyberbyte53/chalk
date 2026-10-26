@@ -1,9 +1,0 @@
-# NCERT Exercise 4.4 Q2, and three more of the same kind.
-- params: { item: q2i }
-  firstTry: 5
-- params: { item: q2ii }
-- params: { item: nine }
-  level: medium
-- params: { item: four }
-  level: medium
-- params: { item: lead }

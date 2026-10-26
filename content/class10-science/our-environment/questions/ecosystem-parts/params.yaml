@@ -1,8 +1,0 @@
-# NCERT 15.1: biotic and abiotic components; natural and human-made ecosystems.
-- params: { case: soil }
-  firstTry: 1
-- params: { case: biotic }
-  firstTry: 2
-- params: { case: cropField }
-- params: { case: lake }
-- params: { case: define }

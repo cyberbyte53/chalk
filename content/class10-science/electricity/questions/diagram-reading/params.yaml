@@ -1,7 +1,0 @@
-# Reading a diagram: counting parts, a battery's voltage, where the meters go.
-- params: { item: resistors }
-  firstTry: 3
-- params: { item: batteryVolts }
-- params: { item: ammeterPlace }
-- params: { item: openKey }
-  level: easy

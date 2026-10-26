@@ -1,7 +1,0 @@
-# NCERT 15.1.1 and Exercise 6: which level holds the most of a magnified chemical.
-- params: { case: field }
-  firstTry: 3
-- params: { case: pond }
-  firstTry: 4
-- params: { case: least }
-- params: { case: top }

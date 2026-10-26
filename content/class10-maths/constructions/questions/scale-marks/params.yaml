@@ -1,8 +1,0 @@
-# Construction 11.2, smaller copies: Example 1, Exercise 11.1 Q2 and Q5.
-- params: { item: steps23 }
-  firstTry: 2
-- params: { item: joined }
-- params: { item: q2sides }
-- params: { item: q5angle }
-- params: { item: inside }
-  level: medium

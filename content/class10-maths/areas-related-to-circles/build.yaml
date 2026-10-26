@@ -1,9 +1,0 @@
-title: { en: Areas Related to Circles, hi: वृत्तों से संबंधित क्षेत्रफल }
-# Concepts in book order (NCERT 12.1 to 12.5, the full edition: Examples 1–6 and Exercises 12.1–12.3).
-concepts:
-  - circumference-and-area
-  - sector-and-segment
-  - using-sectors
-  - combinations-of-figures
-# The question bank: every family folder under questions/. Each family says which concepts it tests.
-questions: all

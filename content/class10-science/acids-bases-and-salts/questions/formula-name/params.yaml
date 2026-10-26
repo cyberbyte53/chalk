@@ -1,9 +1,0 @@
-# Names and formulae from NCERT 2.4.3 and 2.4.4.
-- params: { item: caocl2 }
-- params: { item: nahco3 }
-  firstTry: 3
-- params: { item: washing }
-- params: { item: gypsum }
-  firstTry: 4
-- params: { item: pop }
-- params: { item: blue }

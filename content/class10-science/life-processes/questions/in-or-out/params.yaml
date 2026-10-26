@@ -1,9 +1,0 @@
-# NCERT 6.3: is this happening while breathing in or breathing out?
-- params: { case: ribsLift }
-  firstTry: 3
-- params: { case: diaphragmFlat }
-  firstTry: 4
-- params: { case: chestSmaller }
-- params: { case: airSucked }
-- params: { case: ribsDown }
-- params: { case: diaphragmDome }

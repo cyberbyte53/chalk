@@ -1,8 +1,0 @@
-# The qualities of a good source of energy and of a good fuel (NCERT 14.1; in-text Q1, Q2).
-- params: { item: good }
-  firstTry: 1
-- params: { item: fuel }
-  firstTry: 2
-- params: { item: notQuality }
-- params: { item: spread }
-  level: medium

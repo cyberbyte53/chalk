@@ -1,9 +1,0 @@
-# NCERT Exercise 12: decomposition by heat, light and electricity.
-- params: { reaction: water }
-  firstTry: 6
-- params: { reaction: silverChloride }
-- params: { reaction: limestone }
-- params: { reaction: ferrousSulphate }
-- params: { reaction: leadNitrate }
-- params: { reaction: silverBromide }
-  level: medium

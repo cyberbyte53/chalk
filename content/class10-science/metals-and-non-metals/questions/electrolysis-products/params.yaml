@@ -1,9 +1,0 @@
-# Section 3.4.5 (Na⁺ + e⁻ → Na at the cathode, 2Cl⁻ → Cl₂ + 2e⁻ at the anode).
-- params: { chloride: NaCl, at: cathode }
-  firstTry: 4
-- params: { chloride: NaCl, at: anode }
-  firstTry: 5
-- params: { chloride: MgCl2, at: cathode }
-- params: { chloride: CaCl2, at: anode }
-- params: { chloride: CaCl2, at: cathode }
-- params: { chloride: MgCl2, at: anode }

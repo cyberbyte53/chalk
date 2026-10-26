@@ -1,8 +1,0 @@
-# Missing frequencies from a known median (Example 8, Exercise 14.3 Q2).
-- params: { item: ex8sum }
-  firstTry: 4
-  level: medium
-- params: { item: ex8 }
-- params: { item: q2sum }
-  level: medium
-- params: { item: q2 }

@@ -1,9 +1,0 @@
-# Construction 11.1: counts, which mark, Exercise 11.1 Q1, the two justifications.
-- params: { item: howMany }
-  firstTry: 2
-- params: { item: through }
-- params: { item: q1 }
-  level: medium
-- params: { item: why }
-- params: { item: altWhy }
-  level: medium

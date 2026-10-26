@@ -1,6 +1,0 @@
-# NCERT 10.3, Activity 3: no tangent from inside, one on, two from outside; length of a tangent.
-- params: { item: inside }
-  firstTry: 1
-- params: { item: on }
-- params: { item: outside }
-- params: { item: length }

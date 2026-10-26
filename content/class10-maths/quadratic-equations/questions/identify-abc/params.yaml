@@ -1,9 +1,0 @@
-# Section 4.2's examples of quadratic equations, and the equations of this chapter.
-- params: { item: mixed }
-  firstTry: 3
-- params: { item: noX }
-  level: medium
-- params: { item: noC }
-  firstTry: 4
-- params: { item: plot }
-- params: { item: toys }

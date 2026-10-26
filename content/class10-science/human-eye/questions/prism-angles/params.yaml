@@ -1,7 +1,0 @@
-# The angles and rays of NCERT Fig. 11.4.
-- params: { item: betweenFaces }
-- params: { item: turned }
-  firstTry: 1
-- params: { item: emergent }
-- params: { item: inside }
-- params: { item: rayNames }

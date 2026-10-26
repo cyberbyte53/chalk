@@ -1,8 +1,0 @@
-# NCERT Exercise 7.1 Q1 and Q2, and the textbook's points in two quadrants.
-- params: { item: q1a }
-  firstTry: 1
-- params: { item: q1b }
-- params: { item: q2 }
-  firstTry: 2
-- params: { item: across }
-- params: { item: half }

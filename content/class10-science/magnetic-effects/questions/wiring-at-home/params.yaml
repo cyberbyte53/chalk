@@ -1,9 +1,0 @@
-# Domestic circuits (NCERT 13.7; in-text Q1, Q3; Exercises 5, 6(d), 17).
-- params: { item: live }
-  firstTry: 1
-- params: { item: volts }
-  firstTry: 2
-- params: { item: short }
-- params: { item: cause }
-- params: { item: parallel }
-  level: medium

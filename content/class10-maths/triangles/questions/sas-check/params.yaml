@@ -1,7 +1,0 @@
-# NCERT Exercise 6.3 Q1 (iv), (v) and Theorem 6.5.
-- params: { item: q1iv }
-  firstTry: 1
-- params: { item: q1v }
-  level: medium
-- params: { item: rule }
-  firstTry: 2

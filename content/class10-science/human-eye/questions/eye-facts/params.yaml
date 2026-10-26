@@ -1,9 +1,0 @@
-# The image on the retina, the pupil, the eye as our most valuable sense, and two eyes (NCERT 11.1).
-- params: { item: imageKind }
-  firstTry: 3
-- params: { item: dimLight }
-- params: { item: brightLight }
-- params: { item: colours }
-- params: { item: twoEyes }
-  level: medium
-- params: { item: depth }

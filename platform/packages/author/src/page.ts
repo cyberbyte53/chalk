@@ -1,8 +1,5 @@
 import { type BoardKit, type BuiltBoard, type Child, buildBoard } from "./board";
-import { PassOn } from "./pass";
 import { siteHere } from "./site";
-
-export { PassOn };
 
 const PAGE = Symbol("page");
 
@@ -25,25 +22,16 @@ export function camel(key: string): string {
 /**
  * A theory page. `key` names it within its concept's overview (and with the concept's path decides
  * its id). It returns its pieces, top to bottom; it lets the learner go on when its questions are
- * all answered right (at once, with none), unless it says `b.passWhen(…)`. (A page returning one
- * piece is the older shape: it goes on at once unless `passOn: PassOn.Rules`.)
+ * all answered right (at once, with none), unless it says `b.passWhen(…)`.
  */
-export function page(
-  key: string,
-  build: (b: BoardKit) => Child | readonly Child[],
-  options: { passOn?: PassOn } = {},
-): Page {
+export function page(key: string, build: (b: BoardKit) => readonly Child[]): Page {
   if (!KEY.test(key)) throw new Error(`Page "${key}": use kebab-case, like decimal-zoom`);
   const site = siteHere();
   return {
     [PAGE]: true,
     key,
     ...(site === undefined ? {} : { site }),
-    build: () =>
-      buildBoard(camel(key), (b) => {
-        b.setPassOn(options.passOn);
-        return build(b);
-      }),
+    build: () => buildBoard(camel(key), build),
   };
 }
 

@@ -1,8 +1,0 @@
-# NCERT Examples 1–2 and Exercise 7.1 Q4, Q5, Q6.
-- params: { item: ex1 }
-  firstTry: 1
-- params: { item: q6a }
-- params: { item: q6c }
-  firstTry: 2
-- params: { item: q4 }
-- params: { item: q5 }

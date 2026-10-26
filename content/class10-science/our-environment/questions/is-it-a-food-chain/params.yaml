@@ -1,7 +1,0 @@
-# NCERT Exercise 2 and Fig 15.1: telling a real food chain from a list of organisms.
-- params: { case: goat }
-  firstTry: 3
-- params: { case: pond }
-  firstTry: 4
-- params: { case: forest }
-- params: { case: web }

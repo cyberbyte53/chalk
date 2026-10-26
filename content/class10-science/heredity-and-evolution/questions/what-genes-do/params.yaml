@@ -1,9 +1,0 @@
-# Genes, proteins and chromosomes (NCERT 9.2.3, Exercise 11).
-- params: { case: gene }
-  firstTry: 3
-  level: easy
-- params: { case: control }
-- params: { case: short }
-- params: { case: pieces }
-  level: hard
-- params: { case: equal }

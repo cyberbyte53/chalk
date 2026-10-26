@@ -1,7 +1,0 @@
-# NCERT 7.3's special case: the mid-point.
-- params: { item: basic }
-  firstTry: 3
-- params: { item: flags }
-- params: { item: ratio }
-  firstTry: 4
-- params: { item: origin }

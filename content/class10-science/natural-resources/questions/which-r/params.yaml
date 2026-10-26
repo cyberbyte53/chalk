@@ -1,8 +1,0 @@
-# NCERT 16.1, the five R's: which R is each action?
-- params: { case: refuse }
-  firstTry: 1
-- params: { case: reduce }
-  firstTry: 2
-- params: { case: reuse }
-- params: { case: repurpose }
-- params: { case: recycle }

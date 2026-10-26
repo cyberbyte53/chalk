@@ -1,8 +1,0 @@
-# Mass turned into energy in fission (NCERT 14.3.4).
-- params: { item: formula }
-  firstTry: 3
-- params: { item: mev }
-  firstTry: 4
-- params: { item: half }
-- params: { item: compare }
-  level: medium

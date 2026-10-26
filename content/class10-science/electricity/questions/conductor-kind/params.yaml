@@ -1,8 +1,0 @@
-# Ohm's law reasoning (NCERT 12.4, 12.5 in-text Q3).
-- params: { item: halfV }
-  firstTry: 1
-- params: { item: doubleR }
-- params: { item: graph }
-  firstTry: 2
-- params: { item: insulator }
-- params: { item: rheostat }

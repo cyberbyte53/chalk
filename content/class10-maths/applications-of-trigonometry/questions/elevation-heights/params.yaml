@@ -1,8 +1,0 @@
-# NCERT Examples 1 and 3, Exercise 9.1 Q1 and Q4, and the mission's watch-tower.
-- params: { item: ex1 }
-  firstTry: 1
-- params: { item: ex3 }
-- params: { item: q1 }
-- params: { item: q4 }
-- params: { item: tower }
-  level: medium

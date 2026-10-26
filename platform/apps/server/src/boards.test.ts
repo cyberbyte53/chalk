@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { NoSuchBoard, contentBoards } from "./boards";
 
-const PATH = "class9-maths/number-systems/rational-numbers/numbers-you-know";
+const PATH = "class10-maths/real-numbers/division-lemma/story";
 const VERSION = "0123456789abcdef";
 const ID = "aaaaaaaaaaaaaaaa";
 
@@ -20,12 +20,12 @@ function buildDir(): string {
       id: ID,
       version: VERSION,
       source: {
-        path: "class9-maths/number-systems/rational-numbers",
+        path: "class10-maths/real-numbers/division-lemma",
         file: "overview.ts",
         row: 0,
       },
       concept: "bbbbbbbbbbbbbbbb",
-      key: "numbers-you-know",
+      key: "story",
       props: {},
     }),
   );
@@ -36,7 +36,7 @@ describe("the server's boards", () => {
   it("are made from the content's code, as the app makes them", async () => {
     const boards = contentBoards(buildDir());
     const board = await boards({ id: ID, path: PATH, version: VERSION });
-    expect(board.name).toBe("numbersYouKnow");
+    expect(board.name).toBe("story");
     expect(board.item).toEqual({ id: ID, path: PATH, version: VERSION });
   });
 

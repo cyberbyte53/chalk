@@ -1,6 +1,0 @@
-# NCERT 8.2–8.3: decide whether a way of producing new individuals is sexual (two individuals, germ cells) or asexual (one individual).
-- params: { case: calf }
-  firstTry: 5
-- params: { case: rose }
-- params: { case: peaSeed }
-- params: { case: yeast }

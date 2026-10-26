@@ -1,8 +1,0 @@
-# NCERT Example 14, Exercise 3.5 Q1(ii), (iv) and Q3.
-- params: { a1: 2, b1: 3, k1: 46, a2: 3, b2: 5, k2: 74, general: true }
-  firstTry: 3
-- params: { a1: 2, b1: 1, k1: 5, a2: 3, b2: 2, k2: 8 }
-  firstTry: 4
-- params: { a1: 1, b1: -3, k1: 7, a2: 3, b2: -3, k2: 15, general: true }
-- params: { a1: 8, b1: 5, k1: 9, a2: 3, b2: 2, k2: 4 }
-- params: { a1: 5, b1: 3, k1: 35, a2: 2, b2: 4, k2: 28 }

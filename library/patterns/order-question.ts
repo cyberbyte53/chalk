@@ -21,7 +21,6 @@ export function orderQuestion(
     shown: readonly string[];
     answers: readonly (readonly string[])[];
     isHidden?: boolean;
-    passes?: boolean;
   },
 ): PlacedOf<typeof orderStepsDef> {
   const byId = new Map(spec.steps.map((s) => [s.id, s]));
@@ -43,7 +42,6 @@ export function orderQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  if (spec.passes !== false) b.passOnRight(ask);
   b.witness(
     ...first.map((step) => ask.learner(OrderStepsAction.Place, { step })),
     ask.learner(QuestionAction.Check),

@@ -1,8 +1,0 @@
-# How a hydro power plant works (NCERT 14.2.2).
-- params: { item: change }
-  firstTry: 1
-- params: { item: dam }
-  firstTry: 2
-- params: { item: renew }
-- params: { item: share }
-  level: medium

@@ -1,9 +1,0 @@
-# NCERT 8.3.2, Figs 8.8–8.9: pollination (self, cross, agents), pollen tube, fertilisation, what becomes the seed and fruit, and germination.
-- params: { case: pollVsFert }
-  firstTry: 3
-- params: { case: cross }
-  firstTry: 4
-- params: { case: tube }
-- params: { case: ovuleBecomes }
-- params: { case: ovaryBecomes }
-- params: { case: radicle }

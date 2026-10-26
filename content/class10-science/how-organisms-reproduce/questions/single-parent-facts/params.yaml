@@ -1,8 +1,0 @@
-# NCERT 8.2.1–8.2.4 and in-text questions: binary vs multiple fission, why complex organisms can't regenerate or split cell by cell, regeneration is not reproduction.
-- params: { case: binaryVsMultiple }
-  firstTry: 3
-- params: { case: leishmania }
-  firstTry: 4
-- params: { case: cellByCell }
-- params: { case: notReproduction }
-- params: { case: development }

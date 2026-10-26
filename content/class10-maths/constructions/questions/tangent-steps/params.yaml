@@ -1,6 +1,0 @@
-# Construction 11.3, Exercise 11.2 Q7 (no centre), Exercise 11.2 Q4 (at 60°).
-- params: { item: fromPoint }
-  firstTry: 1
-- params: { item: noCentre }
-  level: hard
-- params: { item: atAngle }

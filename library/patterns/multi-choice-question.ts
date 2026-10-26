@@ -18,8 +18,6 @@ export function multiChoiceQuestion(
     /** Said when every pick is right but some right ones are missing. */
     missing: Localized;
     isHidden?: boolean;
-    /** Whether a right answer lets the learner go on (default true). */
-    passes?: boolean;
   },
 ): PlacedOf<typeof multiChoiceDef> {
   const ids = spec.options.map((o) => o.id);
@@ -41,7 +39,6 @@ export function multiChoiceQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  if (spec.passes !== false) b.passOnRight(ask);
   b.witness(
     ...spec.answers.map((option) => ask.learner(MultiChoiceAction.Toggle, { option })),
     ask.learner(QuestionAction.Check),

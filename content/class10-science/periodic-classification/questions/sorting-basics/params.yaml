@@ -1,6 +1,0 @@
-# Why classify elements, and the first attempts.
-- params: { item: why }
-  firstTry: 3
-- params: { item: first }
-  firstTry: 4
-- params: { item: count }

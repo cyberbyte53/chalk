@@ -1,8 +1,0 @@
-# NCERT 16.3.2 and in-text questions 1 and 2: watersheds, khadins and groundwater.
-- params: { case: ground }
-  firstTry: 3
-- params: { case: watershed }
-  firstTry: 4
-- params: { case: hills }
-- params: { case: khadin }
-- params: { case: local }

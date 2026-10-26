@@ -1,7 +1,0 @@
-# NCERT Exercise 6.2 Q2 and one more (Theorem 6.2).
-- params: { item: q2i }
-  firstTry: 3
-- params: { item: q2ii }
-- params: { item: q2iii }
-  level: medium
-- params: { item: equalParts }

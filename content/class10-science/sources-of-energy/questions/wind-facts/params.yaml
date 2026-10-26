@@ -1,8 +1,0 @@
-# Wind energy and its limits (NCERT 14.2.4; Exercise 6a).
-- params: { item: change }
-  firstTry: 1
-- params: { item: speed }
-  firstTry: 2
-- params: { item: limit }
-- params: { item: sun }
-  level: medium

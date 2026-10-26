@@ -23,8 +23,51 @@ const fixturesDir = join(import.meta.dirname, ".fixtures");
 const CHAPTER = "book/chapter";
 /** Named as in the real chapter: the real locate-on-line family tests it. */
 const CONCEPT = `${CHAPTER}/successive-magnification`;
-const LOCATE = join(contentDir, "class9-maths/number-systems/questions/locate-on-line/family.ts");
 const BASICS = join(contentDir, "../library/props/basics/src/index.ts");
+const PATTERNS = join(contentDir, "../library/patterns/index.ts");
+const NUMBER_LINE = join(contentDir, "../library/props/number-line/src/index.ts");
+
+/** A family for the fixtures: put the marker exactly on a decimal, zooming in as far as it needs. */
+const locateOnLine = (from: (file: string) => string) => `
+import { decimal, family, t } from "@chalk/author";
+import { Level } from "@chalk/content";
+import { goalQuestion, reach } from "${from(PATTERNS)}";
+import { NumberLineAction, numberLineDef } from "${from(NUMBER_LINE)}";
+import { z } from "zod";
+export const locateOnLine = family({
+  level: Level.Medium,
+  tests: ["successive-magnification"],
+  params: z.object({ target: decimal, from: z.number(), to: z.number() }).strict(),
+  build: ({ target, from, to }, b) => {
+    const line = b.prop(numberLineDef, "line", {
+      from, to, showMarker: true, marker: (from + to) / 2, isZoomable: true,
+    });
+    b.studentOnly(line.action(NumberLineAction.MoveMarker));
+    const marker = line.field("marker");
+    const early = target.round(target.places - 1);
+    const swapped = target.swapLastTwo();
+    const goal = goalQuestion(b, {
+      about: line,
+      prompt: t(\`Put the marker exactly on \${target}.\`, \`मार्कर को ठीक \${target} पर रखो।\`),
+      isMet: marker.isAt(target),
+      solve: reach(line, target),
+      notes: [
+        {
+          when: marker.isAt(early.at(target.places)),
+          say: t(\`That's \${early}: one zoom early.\`, \`यह \${early} है: एक ज़ूम पहले।\`),
+          reach: reach(line, early),
+        },
+        {
+          when: marker.isAt(swapped),
+          say: t(\`That's \${swapped}.\`, \`यह \${swapped} है।\`),
+          reach: reach(line, swapped),
+        },
+      ],
+    });
+    return [line, goal];
+  },
+});
+`;
 
 /** A params.yaml with one good row, for fixtures about something else. */
 const ONE_ROW = [{ params: { target: "7.384", from: 7, to: 8 } }];
@@ -32,8 +75,8 @@ const ONE_ROW = [{ params: { target: "7.384", from: 7, to: 8 } }];
 /** A page asking two yes/no questions; it passes once both are right. Its witness answers `answered`. */
 const twoQuestions = (answered: readonly string[]) => (basics: string) =>
   `
-import { PassOn, column, page, t, theBoard, expr } from "@chalk/author";
-import { QuestionAction, QuestionSignal } from "@chalk/prop";
+import { page, t } from "@chalk/author";
+import { QuestionAction } from "@chalk/prop";
 import { ChoiceAction, choiceDef } from "${basics}";
 const options = [{ id: "yes", label: t("Yes", "हाँ") }, { id: "no", label: t("No", "नहीं") }];
 export const overview = [
@@ -41,12 +84,10 @@ export const overview = [
     const qs = ["first", "second"].map((name) =>
       b.prop(choiceDef, name, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" }),
     );
-    const bothRight = expr('first.status == "correct" and second.status == "correct"');
-    for (const q of qs) b.when(q.on(QuestionSignal.Correct), theBoard.pass(), bothRight);
     for (const q of qs.filter((q) => ${JSON.stringify(answered)}.includes(q.name)))
       b.witness(q.learner(ChoiceAction.Select, { option: "yes" }), q.learner(QuestionAction.Check));
-    return column(qs);
-  }, { passOn: PassOn.Rules }),
+    return qs;
+  }),
 ];
 `;
 
@@ -82,7 +123,9 @@ function fixture(spec: {
     [`${CONCEPT}/overview.ts`]:
       spec.overview?.(relative(join(dir, CONCEPT), BASICS).replace(/\.ts$/, "")) ??
       "export const overview = [];\n",
-    [`${familyDir}/family.ts`]: `export { locateOnLine } from "${relative(join(dir, familyDir), LOCATE).replace(/\\.ts$/, "")}";\n`,
+    [`${familyDir}/family.ts`]: locateOnLine((file) =>
+      relative(join(dir, familyDir), file).replace(/\.ts$/, ""),
+    ),
     [`${familyDir}/${ContentFile.Params}`]: stringifyYaml(spec.rows),
   };
   for (const folder of spec.extraFolders ?? [])
@@ -108,15 +151,15 @@ async function boardFrom(dir: string, item: BoardItem) {
 }
 
 /**
- * The real Class 9 Maths book, alone: a root manifest listing only it, the book linked in. (The
+ * The real Class 10 Maths book, alone: a root manifest listing only it, the book linked in. (The
  * whole real content is built and checked by the content step of `pnpm check`; these tests are
  * about what the builder writes, so one real book is enough.)
  */
 function realBook(): string {
   const dir = join(fixturesDir, `real${++fixtureCount}`);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "build.yaml"), "books: [class9-maths]\n");
-  symlinkSync(join(contentDir, "class9-maths"), join(dir, "class9-maths"), "dir");
+  writeFileSync(join(dir, "build.yaml"), "books: [class10-maths]\n");
+  symlinkSync(join(contentDir, "class10-maths"), join(dir, "class10-maths"), "dir");
   return withModules(dir);
 }
 
@@ -130,27 +173,26 @@ describe("building content", () => {
     const result = await build(realBook());
     expect(result.problems).toEqual([]);
     const chapter = builtChapterSchema.parse(
-      result.files.get(builtFile("class9-maths/number-systems")),
+      result.files.get(builtFile("class10-maths/real-numbers")),
     );
-    const concept = builtConceptSchema.parse(
-      result.files.get(builtFile("class9-maths/number-systems/successive-magnification")),
+    expect(chapter.concepts).toHaveLength(6);
+    const ids = new Set(chapter.concepts.map((c) => c.id));
+    expect(chapter.questions.length).toBeGreaterThan(50);
+    expect(chapter.questions.every((q) => q.tests.every((id) => ids.has(id)))).toBe(true);
+    const lemma = builtConceptSchema.parse(
+      result.files.get(builtFile("class10-maths/real-numbers/division-lemma")),
     );
-    expect(concept.overview).toHaveLength(3);
-    expect(chapter.questions).toHaveLength(3);
-    expect(chapter.questions.every((q) => q.tests.includes(concept.id))).toBe(true);
-    expect(concept.props).toEqual(["numberLine"]);
-    expect(chapter.props).toEqual(["numberLine", "numberSorter"]);
+    expect(lemma.overview.length).toBeGreaterThan(2);
+    expect(lemma.overview[0]?.path).toBe("class10-maths/real-numbers/division-lemma/story");
   }, 60_000);
 
   it("a page's questions are about its concept, ungraded; a bank question is graded", async () => {
     const dir = realBook();
     const result = await build(dir);
-    const rational = "class9-maths/number-systems/rational-numbers";
-    const concept = builtConceptSchema.parse(result.files.get(builtFile(rational)));
-    const first = builtPageSchema.parse(
-      result.files.get(builtFile(`${rational}/numbers-you-know`)),
-    );
-    expect(first.path).toBe(`${rational}/numbers-you-know`);
+    const hcf = "class10-maths/real-numbers/hcf-and-lcm";
+    const concept = builtConceptSchema.parse(result.files.get(builtFile(hcf)));
+    const first = builtPageSchema.parse(result.files.get(builtFile(`${hcf}/story`)));
+    expect(first.path).toBe(`${hcf}/story`);
     expect(JSON.stringify(await boardFrom(dir, first))).toContain(
       `"concepts":["${concept.id}"],"isGraded":false`,
     );

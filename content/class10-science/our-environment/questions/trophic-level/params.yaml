@@ -1,8 +1,0 @@
-# NCERT 15.1.1: trophic levels in the chains of Fig 15.1.
-- params: { case: grasshopper }
-  firstTry: 1
-- params: { case: snake }
-  firstTry: 2
-- params: { case: zooplankton }
-- params: { case: autotroph }
-- params: { case: frog }

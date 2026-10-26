@@ -1,8 +1,0 @@
-# Solar cells and panels (NCERT 14.3.1).
-- params: { item: does }
-  firstTry: 3
-- params: { item: volts }
-  firstTry: 4
-- params: { item: silicon }
-- params: { item: cost }
-  level: medium

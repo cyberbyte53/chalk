@@ -1,9 +1,0 @@
-# NCERT 16.4, Activities 16.11 and 16.12, Exercises 4(c), 5 and 7: using less coal and petroleum.
-- params: { case: travel }
-  firstTry: 3
-- params: { case: light }
-  firstTry: 4
-- params: { case: stairs }
-- params: { case: cold }
-- params: { case: reduce }
-- params: { case: euro }

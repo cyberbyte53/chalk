@@ -1,6 +1,0 @@
-# NCERT Exercise 6.3 Q15, Example 7 and the water tank.
-- params: { item: q15 }
-  firstTry: 3
-- params: { item: tank }
-- params: { item: ex7 }
-  level: hard

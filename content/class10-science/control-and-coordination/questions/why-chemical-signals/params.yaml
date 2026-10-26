@@ -1,7 +1,0 @@
-# NCERT 7.2: why living things also use chemical messages.
-- params: { case: reach }
-- params: { case: reset }
-- params: { case: chemicalGood }
-- params: { case: plantHow }
-- params: { case: animalHow }
-  level: medium

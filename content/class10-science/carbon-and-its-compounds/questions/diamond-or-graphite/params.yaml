@@ -1,8 +1,0 @@
-# Diamond vs graphite: properties from structure.
-- params: { item: hardest }
-  firstTry: 3
-- params: { item: conducts }
-  firstTry: 4
-- params: { item: lubricant }
-- params: { item: pencil }
-- params: { item: cutting }

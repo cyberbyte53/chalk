@@ -1,8 +1,0 @@
-# The biogas plant (NCERT 14.2.3; in-text Q; Exercise 2).
-- params: { item: gas }
-  firstTry: 1
-- params: { item: noAir }
-  firstTry: 2
-- params: { item: excellent }
-- params: { item: slurry }
-  level: medium

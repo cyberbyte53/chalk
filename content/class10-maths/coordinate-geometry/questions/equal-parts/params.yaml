@@ -1,7 +1,0 @@
-# NCERT Example 8 and Exercise 7.2 Q2, Q8, Q9.
-- params: { item: ex8 }
-  firstTry: 3
-- params: { item: q2 }
-- params: { item: q9 }
-  firstTry: 4
-- params: { item: q8 }

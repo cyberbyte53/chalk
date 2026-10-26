@@ -1,7 +1,0 @@
-# NCERT 15.1.1: how pesticides enter food chains and build up (biological magnification).
-- params: { case: why }
-  firstTry: 1
-- params: { case: name }
-  firstTry: 2
-- params: { case: entry }
-- params: { case: residue }

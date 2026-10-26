@@ -1,9 +1,0 @@
-# Electromagnetic induction and Fleming's right-hand rule (NCERT 13.5; Exercises 2, 15(iii)).
-- params: { item: what }
-  level: easy
-  firstTry: 3
-- params: { item: rule }
-  firstTry: 4
-- params: { item: fingers }
-- params: { item: direction }
-  level: hard

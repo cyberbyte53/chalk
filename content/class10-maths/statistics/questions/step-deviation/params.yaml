@@ -1,9 +1,0 @@
-# The step-deviation method (Example 3, Exercise 14.1 Q4, Q8, Q9).
-- params: { item: ex3 }
-  firstTry: 3
-- params: { item: q4 }
-- params: { item: q8 }
-  level: hard
-- params: { item: q9 }
-  level: easy
-- params: { item: uvalue }

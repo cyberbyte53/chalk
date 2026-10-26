@@ -1,6 +1,0 @@
-# The four state symbols.
-- params: { symbol: aq }
-  firstTry: 3
-- params: { symbol: g }
-- params: { symbol: s }
-- params: { symbol: l }

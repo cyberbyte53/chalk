@@ -1,9 +1,0 @@
-# Points on the less-than and more-than ogives (Section 14.5, Example 9, Exercise 14.4 Q1–Q3).
-- params: { item: less1412 }
-  firstTry: 1
-- params: { item: income }
-- params: { item: weights }
-- params: { item: farms }
-  level: medium
-- params: { item: profits }
-  level: medium

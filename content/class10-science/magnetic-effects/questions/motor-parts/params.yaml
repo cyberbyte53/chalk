@@ -1,8 +1,0 @@
-# The parts of an electric motor (NCERT 13.4; in-text Q3; Exercise 11).
-- params: { item: split }
-  firstTry: 1
-- params: { item: brushes }
-  firstTry: 2
-- params: { item: armature }
-- params: { item: commercial }
-  level: medium

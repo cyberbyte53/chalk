@@ -1,8 +1,0 @@
-# NCERT Exercise 8.1 Q11 and the bounds on sin and cos.
-- params: { item: secA }
-- params: { item: cosecA }
-- params: { item: sinBound }
-  firstTry: 3
-- params: { item: sameSize }
-  firstTry: 4
-- params: { item: negRoot }

@@ -1,9 +1,0 @@
-# NCERT Exercise 15.1 Q1 (ii, iii, v), Q4 and Q6.
-- params: { item: q1ii }
-  firstTry: 3
-- params: { item: q1iii }
-- params: { item: q1v }
-- params: { item: q4 }
-  firstTry: 4
-- params: { item: q6i }
-- params: { item: q6ii }

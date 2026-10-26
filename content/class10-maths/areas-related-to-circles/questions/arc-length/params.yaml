@@ -1,8 +1,0 @@
-# NCERT Exercise 12.2 Q5(i), the mudguard, and finding the angle from an arc.
-- params: { item: arc45 }
-  firstTry: 2
-  level: easy
-- params: { item: q5arc }
-- params: { item: mudguard }
-- params: { item: angle }
-  level: hard

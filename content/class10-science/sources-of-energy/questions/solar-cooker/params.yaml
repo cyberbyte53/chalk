@@ -1,8 +1,0 @@
-# Solar heating and the solar cooker (NCERT 14.3.1; Exercises 1 and 9).
-- params: { item: black }
-  firstTry: 1
-- params: { item: glass }
-  firstTry: 2
-- params: { item: cloudy }
-- params: { item: limit }
-  level: medium

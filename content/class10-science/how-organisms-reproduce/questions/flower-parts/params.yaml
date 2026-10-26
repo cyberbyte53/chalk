@@ -1,9 +1,0 @@
-# NCERT 8.3.2, Fig 8.7 and Exercise 3: the parts of a flower, their jobs, and unisexual vs bisexual flowers.
-- params: { case: anther }
-  firstTry: 1
-- params: { case: male }
-  firstTry: 2
-- params: { case: ovary }
-- params: { case: stigma }
-- params: { case: papaya }
-- params: { case: hibiscus }

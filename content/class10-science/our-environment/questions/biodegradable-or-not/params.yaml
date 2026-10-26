@@ -1,9 +1,0 @@
-# NCERT 15.2.2 and Activity 15.5: biodegradable or non-biodegradable.
-- params: { case: peel }
-  firstTry: 1
-- params: { case: bag }
-  firstTry: 2
-- params: { case: glass }
-- params: { case: cloth }
-- params: { case: why }
-- params: { case: fastest }

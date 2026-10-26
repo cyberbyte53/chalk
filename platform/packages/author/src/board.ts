@@ -21,7 +21,6 @@ import {
   type StoredState,
 } from "@chalk/prop";
 import { Expr } from "./expr";
-import { PassOn } from "./pass";
 import { noteSite, siteHere } from "./site";
 
 /** A field's value as an author may give it: anywhere a number goes, an exact Dec may go too. */
@@ -232,13 +231,8 @@ export class BoardKit {
   private readonly steps: Step[] = [];
   private readonly notes: NoteCheck[] = [];
   private boardPurpose: string | undefined;
-  /** How the page asked to pass, if it did (pages written before `passWhen`). */
-  private passOnOption: PassOn | undefined;
-  private isPage = false;
   /** The page's own `passWhen` rules. */
   private readonly passesWhen = new Set<WhenRule>();
-  /** Rules a question pattern added to pass the board on a right answer (older pages only). */
-  private readonly questionPasses = new Set<WhenRule>();
   private readonly placed: Placed<StoredState, string, string, string>[] = [];
   private readonly propsStandFor: Record<string, string> = {};
 
@@ -288,22 +282,6 @@ export class BoardKit {
     if (rule !== undefined) this.passesWhen.add(rule);
   }
 
-  /**
-   * A question pattern's "a right answer lets the learner go on". On a page returning a list it is
-   * dropped: such a page passes on all its questions (or `passWhen`) by itself.
-   */
-  passOnRight(question: AnyPlaced): void {
-    this.when(signalOf(question), theBoard.pass());
-    const rule = this.whenRules.at(-1);
-    if (rule !== undefined) this.questionPasses.add(rule);
-  }
-
-  /** How a page made with `page(…, { passOn })` passes (its rule goes first, as it always has). */
-  setPassOn(passOn: PassOn | undefined): void {
-    this.isPage = true;
-    this.passOnOption = passOn;
-  }
-
   /** IS: this input always equals the rule's value (`(at) => at(line).marker ** 2`). */
   is(input: Expr, to: Rule | Expr): void {
     this.isRules.push({ set: input.source, to: to instanceof Expr ? to.source : asRuleFn(to) });
@@ -351,16 +329,10 @@ export class BoardKit {
   }
 
   /**
-   * A page in the new shape (it returns a list) passes when its questions are all answered right,
-   * or at once if it has none, unless it says `passWhen`. It never passes by a rule of its own.
+   * A board passes when its questions are all answered right, or at once if it has none, unless it
+   * says `passWhen`. It never passes by a rule of its own.
    */
   private derivePass(name: string): void {
-    if (this.passOnOption !== undefined)
-      throw new Error(
-        `Board ${name}: a page returning a list passes on its questions, or by passWhen; drop passOn`,
-      );
-    for (let i = this.whenRules.length - 1; i >= 0; i--)
-      if (this.questionPasses.has(this.whenRules[i] as WhenRule)) this.whenRules.splice(i, 1);
     const passRule = this.whenRules.find(
       (r) => !this.passesWhen.has(r) && callsIn(r.do).includes(PASS),
     );
@@ -395,16 +367,12 @@ export class BoardKit {
       );
   }
 
-  finish(name: string, built: Child | readonly Child[]): BuiltBoard {
-    const isList = Array.isArray(built);
-    if (isList) this.derivePass(name);
-    else if (this.isPage && (this.passOnOption ?? PassOn.Start) === PassOn.Start)
-      this.whenRules.unshift({ on: theBoard.started.target, do: theBoard.pass() });
-    const root: Child = isList
-      ? column([...(built as readonly Child[]), space()])
-      : (built as Child);
-    const top = pieceOf(root);
-    const named = top.kind === PieceKind.Prop ? column([top]) : top;
+  /** A board's pieces, top to bottom: laid out in a column with room at the bottom. */
+  finish(name: string, built: readonly Child[]): BuiltBoard {
+    if (!Array.isArray(built))
+      throw new Error(`Board ${name}: return its pieces as a list, top to bottom: [a, b, c]`);
+    this.derivePass(name);
+    const named = pieceOf(column([...built, space()]));
     const onBoard = new Set<string>();
     const collect = (piece: Piece): void => {
       if (piece.kind === PieceKind.Prop) onBoard.add(piece.name);
@@ -418,7 +386,7 @@ export class BoardKit {
       );
     }
     nameLayouts(named, this.names);
-    if (isList) this.checkShown(name, named);
+    this.checkShown(name, named);
     return {
       board: {
         name,
@@ -466,10 +434,7 @@ function nameLayouts(root: Piece, taken: Set<string>): void {
 }
 
 /** Runs an author's build function and returns the finished board. */
-export function buildBoard(
-  name: string,
-  build: (b: BoardKit) => Child | readonly Child[],
-): BuiltBoard {
+export function buildBoard(name: string, build: (b: BoardKit) => readonly Child[]): BuiltBoard {
   const kit = new BoardKit();
   return kit.finish(name, build(kit));
 }

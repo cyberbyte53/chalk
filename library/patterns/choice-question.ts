@@ -20,8 +20,6 @@ export function choiceQuestion(
     answer: string;
     /** Placed hidden: a rule shows it once something else on the page is done. */
     isHidden?: boolean;
-    /** Whether a right answer lets the learner go on (default true); false for all but a page's last. */
-    passes?: boolean;
     /**
      * Keep the options in the order written (for options that read as a sequence: numbers in
      * order). By default they are shuffled, the same way every build, so the answer isn't always
@@ -51,7 +49,6 @@ export function choiceQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  if (spec.passes !== false) b.passOnRight(ask);
   b.witness(
     ask.learner(ChoiceAction.Select, { option: spec.answer }),
     ask.learner(QuestionAction.Check),

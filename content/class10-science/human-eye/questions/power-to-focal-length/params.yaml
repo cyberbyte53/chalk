@@ -1,8 +1,0 @@
-# From power to focal length. NCERT Exercise 5: −5.5 D (distant vision) and +1.5 D (near vision).
-- params: { tenths: -55 }
-  firstTry: 4
-- params: { tenths: 15 }
-- params: { tenths: -20 }
-  level: easy
-- params: { tenths: 25 }
-- params: { tenths: -5 }

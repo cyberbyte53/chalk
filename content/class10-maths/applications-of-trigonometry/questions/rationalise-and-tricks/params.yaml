@@ -1,6 +1,0 @@
-# Rationalising (Examples 6, Exercise 9.1 Q8) and Exercise 9.1 Q16.
-- params: { item: eight }
-  firstTry: 3
-- params: { item: pedestal }
-- params: { item: q16 }
-  level: hard

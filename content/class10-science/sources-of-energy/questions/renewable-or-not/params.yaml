@@ -1,8 +1,0 @@
-# Renewable and exhaustible sources, and the environment (NCERT 14.4, 14.5; Exercises 7 and 10).
-- params: { item: two }
-  firstTry: 1
-- params: { item: exhaust }
-  firstTry: 2
-- params: { item: criteria }
-- params: { item: cleaner }
-  level: medium

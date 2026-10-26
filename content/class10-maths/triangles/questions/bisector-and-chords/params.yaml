@@ -1,7 +1,0 @@
-# NCERT Exercise 6.6 Q1 and Q7 (optional).
-- params: { item: bisector }
-  firstTry: 1
-- params: { item: chords }
-  firstTry: 2
-- params: { item: halves }
-  level: hard

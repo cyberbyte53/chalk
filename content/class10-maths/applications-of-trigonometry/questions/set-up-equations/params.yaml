@@ -1,8 +1,0 @@
-# The two-triangle method: Example 5, Exercise 9.1 Q11, Example 7, eliminating an unknown.
-- params: { item: ex5second }
-  firstTry: 3
-- params: { item: q11pair }
-- params: { item: shared }
-  level: easy
-- params: { item: eliminate }
-  level: easy

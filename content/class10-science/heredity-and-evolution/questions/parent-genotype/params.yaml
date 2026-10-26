@@ -1,7 +1,0 @@
-# NCERT Exercise 1 (TtWW) and its three sister cases.
-- params: { parent: TtWW }
-  firstTry: 3
-- params: { parent: TTWW }
-  level: medium
-- params: { parent: TTWw }
-- params: { parent: TtWw }

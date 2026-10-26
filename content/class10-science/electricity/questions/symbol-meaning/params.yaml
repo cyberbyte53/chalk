@@ -1,8 +1,0 @@
-# NCERT Table 12.1: what the symbols mean.
-- params: { item: cellLines }
-  firstTry: 1
-- params: { item: dot }
-  firstTry: 2
-- params: { item: closedKey }
-- params: { item: rheostat }
-- params: { item: meters }

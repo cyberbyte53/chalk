@@ -31,7 +31,6 @@ export function goalQuestion(
     );
     b.noteCheck({ steps: [...note.reach, goal.learner(QuestionAction.Check)], feedback: note.say });
   }
-  b.passOnRight(goal);
   b.witness(...spec.solve, goal.learner(QuestionAction.Check));
   return goal;
 }

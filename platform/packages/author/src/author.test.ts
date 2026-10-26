@@ -37,23 +37,34 @@ describe("building a board", () => {
       b.is(d.field("isOn"), d.field("at").isAt(dec("7.384")));
       b.when(
         d.on("turned"),
-        inOrder(d.call("turn", { to: dec("1.5") }), wait(1), theBoard.pass()),
+        inOrder(d.call("turn", { to: dec("1.5") }), wait(1), theBoard.show(d)),
         d.derived("double").gt(3),
       );
       b.witness(d.learner("turn", { to: dec("7.384") }));
-      return column([d]);
+      return [d];
     });
     expect(built.board.root).toEqual({
       kind: "column",
       name: "page",
-      children: [{ kind: "prop", name: "d", prop: "dial", with: { at: 2.5 } }],
+      children: [
+        { kind: "prop", name: "d", prop: "dial", with: { at: 2.5 } },
+        { kind: "space", name: "space1" },
+      ],
     });
     expect(built.board.is).toEqual([{ set: "d.isOn", to: '(fixed(d.at, 3) == "7.384")' }]);
     expect(built.board.when).toEqual([
+      // No questions: it passes at once.
+      { on: "board.started", do: { call: "board.pass" } },
       {
         on: "d.turned",
         if: "(d.double > 3)",
-        do: { seq: [{ call: "d.turn", args: { to: 1.5 } }, { wait: 1 }, { call: "board.pass" }] },
+        do: {
+          seq: [
+            { call: "d.turn", args: { to: 1.5 } },
+            { wait: 1 },
+            { call: "board.show", args: { name: "d" } },
+          ],
+        },
       },
     ]);
     expect(built.witness).toEqual([
@@ -62,15 +73,18 @@ describe("building a board", () => {
   });
 
   it("catches authoring mistakes when the board is built", () => {
-    expect(() => buildBoard("x", (b) => column([b.prop(dial, "d"), b.prop(dial, "d")]))).toThrow(
+    expect(() => buildBoard("x", (b) => [b.prop(dial, "d"), b.prop(dial, "d")])).toThrow(
       /Two props named "d"/,
     );
     expect(() =>
       buildBoard("x", (b) => {
         b.prop(dial, "d");
-        return column([]);
+        return [];
       }),
     ).toThrow(/not in the layout: d/);
+    expect(() => buildBoard("x", (b) => column([b.prop(dial, "d")]) as never)).toThrow(
+      /return its pieces as a list/,
+    );
   });
 
   it("names an action, signal or field the prop doesn't have: a compile error, not a runtime one", () => {
@@ -84,7 +98,7 @@ describe("building a board", () => {
       d.on("spun");
       // @ts-expect-error the dial has no stored field "angle"
       d.field("angle");
-      return column([d]);
+      return [d];
     });
   });
 });
@@ -100,7 +114,7 @@ const ask = defineProp({
   signals: { [QuestionSignal.Correct]: { describe: "right" } },
 });
 
-describe("a page in the new shape (it returns a list)", () => {
+describe("a page", () => {
   it("is a column with room at the bottom; what comes later starts hidden and shows after", () => {
     const built = page("later", (b) => {
       const d = b.prop(dial, "d");
@@ -152,10 +166,7 @@ describe("a page in the new shape (it returns a list)", () => {
     expect(onSignal.when.map((r) => [r.on, r.do])).toEqual([["d.turned", { call: "board.pass" }]]);
   });
 
-  it("refuses the older ways: passOn, a rule that passes, a piece hidden that nothing shows", () => {
-    expect(() => page("a", (b) => [b.prop(dial, "d")], { passOn: "rules" }).build()).toThrow(
-      /drop passOn/,
-    );
+  it("refuses a rule that passes the board, and a piece hidden that nothing shows", () => {
     expect(() =>
       page("b", (b) => {
         const d = b.prop(dial, "d");
@@ -167,11 +178,6 @@ describe("a page in the new shape (it returns a list)", () => {
       /nothing shows them/,
     );
   });
-
-  it("an older page still passes at once, or by its own rules", () => {
-    const old = page("old", (b) => column([b.prop(ask, "q")])).build().board;
-    expect(old.when).toEqual([{ on: "board.started", do: { call: "board.pass" } }]);
-  });
 });
 
 describe("question families", () => {
@@ -182,7 +188,7 @@ describe("question families", () => {
     build: ({ to }, b) => {
       const d = b.prop(dial, "d");
       b.witness(d.learner("turn", { to }));
-      return column([d]);
+      return [d];
     },
   });
 

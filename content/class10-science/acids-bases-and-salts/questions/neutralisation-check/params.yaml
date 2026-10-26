@@ -1,9 +1,0 @@
-# NCERT Activity 2.6, Exercises 3 and 14.
-- params: { item: products }
-  firstTry: 2
-  level: easy
-- params: { item: double }
-  firstTry: 3
-- params: { item: half }
-- params: { item: pinkBack }
-- params: { item: example }

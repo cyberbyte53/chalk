@@ -1,6 +1,0 @@
-# NCERT 8.1.1: niches, stability of populations, and why variation helps a species survive change (heat-resistant bacteria).
-- params: { case: warming }
-  firstTry: 3
-- params: { case: stability }
-- params: { case: individual }
-- params: { case: niche }

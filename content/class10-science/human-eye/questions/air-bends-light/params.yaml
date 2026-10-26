@@ -1,9 +1,0 @@
-# Atmospheric refraction: hot air, stars and planets (NCERT 11.5; Exercises 10, 11).
-- params: { item: stars }
-  firstTry: 1
-- params: { item: planets }
-- params: { item: hotAir }
-- params: { item: hotDenser }
-  level: hard
-- params: { item: name }
-  level: easy

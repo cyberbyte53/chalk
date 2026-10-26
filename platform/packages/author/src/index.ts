@@ -60,7 +60,7 @@ export {
   paramsFileSchema,
   rootManifestSchema,
 } from "./manifest";
-export { type Page, PassOn, camel, isPage, page } from "./page";
+export { type Page, camel, isPage, page } from "./page";
 export { decimal, noParams } from "./params";
 export { noteSite, siteHere, siteOf } from "./site";
 export { t } from "./text";

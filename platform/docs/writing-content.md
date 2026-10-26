@@ -108,7 +108,7 @@ export const overview = [story, towers, play];
 - Every interactive page has a witness: how a learner gets through it (`b.witness(...)`, with `wait(seconds)` for the board's clock).
 - Anyone may act on any piece; Jugnu's judgement (never answering an open question for the learner) is checked by his evals, not by the board. Don't write `b.studentOnly`.
 
-Older pages return one `column([... , space()])` and pass at once unless `{ passOn: PassOn.Rules }` (their own rules call `theBoard.pass()`); they are moved to the shape above chapter by chapter.
+A bank question's `build` is the same: it returns its pieces, and passes when its questions are right. The build refuses a board that returns anything but a list. Chapters still in the older shape live on the `content-pipeline` branch and come over one at a time.
 
 ## A question family (`family.ts` + `params.yaml`)
 

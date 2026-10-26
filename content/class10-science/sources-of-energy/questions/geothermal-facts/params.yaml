@@ -1,8 +1,0 @@
-# Geothermal energy (NCERT 14.3.3).
-- params: { item: hotSpot }
-  firstTry: 3
-- params: { item: springs }
-- params: { item: pros }
-  firstTry: 4
-- params: { item: few }
-  level: medium

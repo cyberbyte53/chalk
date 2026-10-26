@@ -1,9 +1,0 @@
-# NCERT 15.2.1: ozone, UV, CFCs and the 1987 agreement.
-- params: { case: formula }
-  firstTry: 1
-- params: { case: uv }
-  firstTry: 2
-- params: { case: harm }
-- params: { case: cfc }
-- params: { case: ground }
-- params: { case: unep }

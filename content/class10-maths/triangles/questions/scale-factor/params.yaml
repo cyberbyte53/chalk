@@ -1,6 +1,0 @@
-# Scale factors between similar figures (Section 6.2).
-- params: { item: quad }
-  firstTry: 3
-- params: { item: plan }
-- params: { item: pentagon }
-  level: medium

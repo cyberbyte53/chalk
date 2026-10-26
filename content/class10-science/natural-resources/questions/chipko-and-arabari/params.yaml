@@ -1,8 +1,0 @@
-# NCERT 16.2.1: the Bishnois, Chipko Andolan and Arabari.
-- params: { case: chipko }
-  firstTry: 1
-- params: { case: reni }
-  firstTry: 2
-- params: { case: arabari }
-- params: { case: worth }
-- params: { case: bishnoi }

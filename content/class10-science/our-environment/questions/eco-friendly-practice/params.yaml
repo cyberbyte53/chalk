@@ -1,7 +1,0 @@
-# NCERT Exercise 3 and Activity 15.7: environment-friendly habits.
-- params: { case: bag }
-  firstTry: 1
-- params: { case: fan }
-  firstTry: 2
-- params: { case: walk }
-- params: { case: compost }

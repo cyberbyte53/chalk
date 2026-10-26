@@ -1,8 +1,0 @@
-# The emergent ray of a rectangular slab (NCERT Activity 10.10), and the ray along the normal.
-- params: { incidence: 40 }
-  firstTry: 3
-- params: { incidence: 30 }
-- params: { incidence: 60 }
-- params: { incidence: 0 }
-  level: hard
-  firstTry: 4

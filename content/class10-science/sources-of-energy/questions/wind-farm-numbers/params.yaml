@@ -1,8 +1,0 @@
-# Wind farms in numbers (NCERT 14.2.4).
-- params: { item: land }
-  firstTry: 3
-- params: { item: farm }
-- params: { item: denmark }
-  firstTry: 4
-- params: { item: tower }
-  level: medium

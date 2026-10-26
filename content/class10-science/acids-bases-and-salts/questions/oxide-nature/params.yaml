@@ -1,8 +1,0 @@
-# NCERT 2.1.5 and 2.1.6.
-- params: { item: cuo }
-  firstTry: 1
-- params: { item: co2 }
-- params: { item: mgo }
-  level: medium
-- params: { item: so2 }
-  level: medium

@@ -1,8 +1,0 @@
-# NCERT Example 3 and Exercise 7.1 Q3: three points in a line when two distances add to the third.
-- params: { item: ex3 }
-  firstTry: 3
-- params: { item: q3 }
-- params: { item: fives }
-- params: { item: kite }
-  firstTry: 4
-- params: { item: rule }

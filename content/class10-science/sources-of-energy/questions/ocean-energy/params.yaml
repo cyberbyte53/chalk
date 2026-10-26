@@ -1,8 +1,0 @@
-# Tidal, wave and ocean thermal energy (NCERT 14.3.2; Exercise 6b, 6c).
-- params: { item: tides }
-  firstTry: 1
-- params: { item: tidalLimit }
-  firstTry: 2
-- params: { item: waveLimit }
-- params: { item: otec }
-  level: medium

@@ -1,9 +1,0 @@
-# NCERT 8.3.3 and in-text questions 3 and 4: puberty, where fertilisation happens, implantation, the placenta and birth.
-- params: { case: girls }
-  firstTry: 3
-- params: { case: puberty }
-  firstTry: 4
-- params: { case: fertilisation }
-- params: { case: placenta }
-- params: { case: implant }
-- params: { case: birth }

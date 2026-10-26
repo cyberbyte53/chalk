@@ -1,7 +1,0 @@
-# NCERT 10.1, Fig 10.1: non-intersecting line, secant, tangent.
-- params: { item: none }
-  firstTry: 1
-- params: { item: two }
-- params: { item: one }
-  firstTry: 2
-- params: { item: three }

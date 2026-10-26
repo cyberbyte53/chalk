@@ -1,7 +1,0 @@
-# NCERT Example 6, Exercise 7.2 Q1 and the relay tower of 7.3.
-- params: { item: ex6 }
-  firstTry: 1
-- params: { item: q1 }
-- params: { item: tower }
-  firstTry: 2
-- params: { item: kOne }

@@ -1,9 +1,0 @@
-# Exercise 11.1 Q3, Q4, Q6, Q7.
-- params: { item: q3 }
-  firstTry: 2
-- params: { item: q3long }
-- params: { item: q4 }
-- params: { item: q6 }
-  level: hard
-- params: { item: q7 }
-  level: hard

@@ -1,8 +1,0 @@
-# The electric generator (NCERT 13.6; in-text Q1; Exercises 3, 6(b), 16).
-- params: { item: device }
-  firstTry: 3
-- params: { item: principle }
-  firstTry: 4
-- params: { item: energy }
-- params: { item: brushes }
-  level: medium

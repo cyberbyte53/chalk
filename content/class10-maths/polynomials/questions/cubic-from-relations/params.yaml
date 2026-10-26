@@ -1,6 +1,0 @@
-# NCERT Ex 2.4 Q2, and two more: zeroes 1, 2, 3 and zeroes 2, −1, −1.
-- params: { sum: 2, pairs: -7, product: -14 }
-  firstTry: 3
-- params: { sum: 6, pairs: 11, product: 6 }
-  level: medium
-- params: { sum: 0, pairs: -3, product: 2 }

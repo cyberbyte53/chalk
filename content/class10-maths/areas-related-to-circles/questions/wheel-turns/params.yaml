@@ -1,8 +1,0 @@
-# NCERT Exercise 12.1 Q4 and wheel problems like it.
-- params: { item: school }
-  firstTry: 2
-  level: easy
-- params: { item: wheel56 }
-- params: { item: rope }
-- params: { item: q4 }
-  level: hard
