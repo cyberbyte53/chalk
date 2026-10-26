@@ -227,7 +227,6 @@ export const equationBalancer = defineProp({
     },
     [BalancerSignal.Balanced]: {
       describe: "The equation has just become balanced",
-      isCommit: true,
     },
   },
   observe: (s) => {

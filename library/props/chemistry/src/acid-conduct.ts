@@ -185,7 +185,6 @@ export const conductivityTester = defineProp({
   signals: {
     [ConductSignal.Switched]: {
       describe: "The switch was turned (payload: on, and whether the bulb glows)",
-      isCommit: true,
     },
     [ConductSignal.Chosen]: {
       describe: "Another solution was poured in (payload: whether the bulb glows)",

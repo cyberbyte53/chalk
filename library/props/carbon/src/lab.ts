@@ -315,7 +315,7 @@ export const carbonLab = defineProp({
   },
   signals: {
     [LabSignal.Stepped]: { describe: "Moved to `step`" },
-    [LabSignal.Done]: { describe: "The demonstration has reached its result", isCommit: true },
+    [LabSignal.Done]: { describe: "The demonstration has reached its result" },
     [LabSignal.Changed]: { describe: "A setting changed (fuel, air hole, drops, sunlight)" },
   },
   observe: (s) => ({

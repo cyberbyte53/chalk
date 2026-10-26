@@ -247,7 +247,6 @@ export const saltFactory = defineProp({
   signals: {
     [SaltFactorySignal.Picked]: {
       describe: "A product was tapped (payload: product)",
-      isCommit: true,
     },
   },
   invariant: (s) =>

@@ -36,15 +36,14 @@ function modelFromUrl(): string | undefined {
   return [asked, kept].find((id) => id !== null && ids.includes(id)) ?? ids[0];
 }
 
-function formatEvent({ envelope: e, machine, input, state }: ChalkEvent): string {
+function formatEvent(e: ChalkEvent): string {
   return [
     String(e.seq).padStart(3),
-    new Date(e.producedAt).toISOString().slice(11, 19),
+    new Date(e.at).toISOString().slice(11, 19),
     e.actor.padEnd(7),
-    `${machine.type}/${machine.id}`.padEnd(28),
-    JSON.stringify(input),
-    "→",
-    JSON.stringify(state),
+    e.kind.padEnd(6),
+    (e.node ?? e.board ?? "").slice(0, 8).padEnd(8),
+    JSON.stringify(e.payload),
   ].join(" ");
 }
 
@@ -106,7 +105,17 @@ export function DevShell({ bus }: { bus: EventBus }): JSX.Element {
   const course = screen.kind === "home" ? undefined : courses[screen.course];
 
   // The dev log is just one subscriber; the uploader will subscribe the same way.
-  useEffect(() => bus.subscribe((event) => setEvents((prev) => [...prev, event])), [bus]);
+  useEffect(
+    () =>
+      bus.subscribe((event) => {
+        setEvents((prev) => [...prev, event]);
+        // For a tool driving the page (as the preview keeps them).
+        const w = window as Window & { __chalkEvents?: unknown[] };
+        w.__chalkEvents ??= [];
+        w.__chalkEvents.push(event);
+      }),
+    [bus],
+  );
 
   return (
     <>

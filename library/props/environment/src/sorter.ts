@@ -142,7 +142,6 @@ export const wasteSorter = defineProp({
     },
     [SortSignal.Sorted]: {
       describe: "Everything is sorted; the payload has how many were right",
-      isCommit: true,
     },
   },
   observe: (s) => ({

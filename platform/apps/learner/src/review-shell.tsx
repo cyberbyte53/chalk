@@ -109,14 +109,6 @@ function ReviewBoard({
 }): JSX.Element {
   const shown = useMemo(() => ({ ...board, root: unhide(board.root) }), [board]);
   const phone = useRef<HTMLDivElement>(null);
-  const raise = useMemo(
-    () =>
-      bus.raiserFor({
-        lessonId: entry.lesson.id,
-        item: board.item ?? null,
-      }),
-    [bus, entry, board],
-  );
   const pick = (piece: string | null, part: string | null, quote: string) =>
     onPick({
       lessonId: entry.lesson.id,
@@ -178,7 +170,7 @@ function ReviewBoard({
           board={shown}
           registry={propLibrary}
           locale={locale}
-          raise={raise}
+          record={bus.record}
           audio={entry.audio}
           onPass={() => {}}
         />

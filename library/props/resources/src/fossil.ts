@@ -221,7 +221,6 @@ export const fossilClock = defineProp({
     },
     [FossilSignal.AllPicked]: {
       describe: "Every choice is picked; the payload has how many use less fuel",
-      isCommit: true,
     },
   },
   observe: (s) => ({

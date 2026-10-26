@@ -179,13 +179,11 @@ export const electrolysisCell = defineProp({
   signals: {
     [ElectrolysisSignal.Switched]: {
       describe: "The current was switched on or off",
-      isCommit: true,
     },
     [ElectrolysisSignal.Full]: { describe: "The cathode's tube has filled with gas" },
     [ElectrolysisSignal.Tested]: {
       describe:
         "A burning candle was brought to a tube; the payload says which and what happened (pop, brighter, nothing)",
-      isCommit: true,
     },
   },
   observe: (s) => {

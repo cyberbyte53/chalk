@@ -186,7 +186,6 @@ export const medianTable = defineProp({
     [MedianSignal.Picked]: {
       describe:
         "The learner tapped a row; the payload has its index and whether it is the median class",
-      isCommit: true,
     },
     [MedianSignal.Done]: { describe: "The median is worked out; the payload has the median" },
   },

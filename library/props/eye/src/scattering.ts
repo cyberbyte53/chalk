@@ -202,7 +202,7 @@ export const scattering = defineProp({
     [ScatterSignal.Changed]: {
       describe: "The learner changed the particles, the air or the Sun's height",
     },
-    [ScatterSignal.Started]: { describe: "The hypo experiment was started", isCommit: true },
+    [ScatterSignal.Started]: { describe: "The hypo experiment was started" },
   },
   observe: (s) => {
     const elements: Element[] = [{ id: ScatterPart.Picture, value: describeScatter(s) }];

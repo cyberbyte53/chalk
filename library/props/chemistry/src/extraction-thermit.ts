@@ -68,7 +68,7 @@ export const thermitWeld = defineProp({
     }),
   },
   signals: {
-    [ThermitSignal.Ignited]: { describe: "The thermit mixture was lit", isCommit: true },
+    [ThermitSignal.Ignited]: { describe: "The thermit mixture was lit" },
   },
   observe: (s) => {
     const elements: Element[] = [

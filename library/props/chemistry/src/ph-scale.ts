@@ -216,7 +216,6 @@ export const phScale = defineProp({
   signals: {
     [PhSignal.Picked]: {
       describe: "A substance was tested; the payload has its pH",
-      isCommit: true,
     },
     [PhSignal.Probed]: { describe: "The probe was moved to a pH" },
   },

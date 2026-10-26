@@ -138,7 +138,6 @@ export const middleSplit = defineProp({
   signals: {
     [SplitSignal.Picked]: {
       describe: "The learner picked a pair; the payload has p, q and whether it is right",
-      isCommit: true,
     },
   },
   observe: (s) => {

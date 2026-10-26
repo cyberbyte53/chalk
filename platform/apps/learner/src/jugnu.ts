@@ -107,6 +107,7 @@ export function devJugnuLink(dev: DevModel | undefined): JugnuLink | undefined {
     },
   };
   return {
+    isOnThisBoard: true,
     think: (runtime, place) => {
       const think = thinkHere(runtime, provider, place, { lessons: lessonLibrary });
       devLog({ kind: "board", board: runtime.board.item?.path ?? runtime.board.name, place });

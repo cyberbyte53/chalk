@@ -176,10 +176,9 @@ export const chargeFlow = defineProp({
     }),
   },
   signals: {
-    [ChargeSignal.CurrentSet]: { describe: "The learner set the current", isCommit: true },
+    [ChargeSignal.CurrentSet]: { describe: "The learner set the current" },
     [ChargeSignal.Counted]: {
       describe: "A count finished; the payload has seconds, amps and coulombs",
-      isCommit: true,
     },
   },
   observe: (s) => {

@@ -16,7 +16,6 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Action** | The only way a prop changes. Instant or timed; says what it keeps fixed; flagged if it reveals an answer | `ActionSpec`, `actionsFor` |
 | **Timed action** | An action that takes time (a tween, a spoken line); scripts wait for it to finish | `tween`, `seq`, `repeat` (steps, as data) |
 | **Signal** | Something a prop announces (pressed, landed, wrong) | `SignalSpec` |
-| **Commit** | A signal where the learner decides something; the only thing logged | `SignalSpec.isCommit` |
 | **Part** | A named thing on a prop that can be pointed at; can come and go | `PropDef.parts`, `PropDef.locate` |
 | **Address** | Where a node is on a board, one spelling everywhere: names from the piece down, joined by `/` (`mirror/objectArrow/object`); on screen as `data-path`. A `/` inside a name from data is written `%2F` | `pathOf`, `namesOf` (`@chalk/prop`), `findNode`, `addressOf` (`@chalk/player`) |
 | **Leaf** | A prop with no children: one thing, with its own state or with every field bound | `defineProp` |
@@ -33,7 +32,6 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Expression** | Read-only maths and logic over props' state in rules | `compileExpression`, `compileTemplate` |
 | **Expression argument** | An action argument worked out from props' state when the action is called: `{ "expr": "coin.count" }` | `argExpression` |
 | **Timer** | A prop with nothing on screen that ticks while running; how a lesson makes things repeat or happen on their own | `timer` (`library/props/basics`) |
-| **In events** | Whether a placed prop's state goes into the board's Continue event; yes unless the lesson says `isInEvents: false` | `isInEvents` |
 | **Board prop** | The board itself, named `board`: `pass`, `show`, `hide`; signals `started`, `continued` | `boardProp`, `BOARD` |
 | **Question** | A prop with the question role (`choice`, `goal`): status, attempts, feedback, `check` | `PropRole.Question`, `QuestionView` |
 | **Concept** | The smallest thing a student can get wrong on its own: a folder with an overview (pages). Its id is what questions test and what learner counts hang on | `<concept>/build.yaml`, `BuiltConcept`, `concepts` on a question prop |
@@ -41,11 +39,12 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Concept enum** | A chapter's concepts as `Concept.X`, generated from its `build.yaml` into `concepts.gen.ts`, for a family's `tests` | `conceptsModule`, `ContentFile.Concepts` |
 | **Misconception** | Why a specific wrong answer is wrong; reported, not just "wrong" | `misconception` on an option |
 | **Line** | A cast character's speech bubble (Maya, Arjun) | `line` prop, `CharacterId` |
-| **Event** | One commit: an input applied to a machine, plus the machine's state after, inside a fixed envelope | `ChalkEvent`, `MachineEvent` |
-| **Machine** | Anything whose commits are logged (lesson, board, question, line): a type, an id, a state and its inputs | `MachineType`, `EventFor` |
-| **raiseEvent** | What the player calls to record a commit, bound to its machine | `bindRaise`, `RaiseEvent` |
+| **Event** | One entry in the record of what a learner did: the same envelope, plus one kind's payload (`open`, `close`, `cause`, `signal`, `jugnu`, `app`) | `ChalkEvent`, `eventKinds` |
+| **Cause** | Something the learner or Jugnu did on a board: an action through the door, or a signal a view raised; a drag is one per gesture | `cause` entries |
+| **Board recorder** | The one producer for boards: records every cause and signal, linked | `recordBoard` |
+| **Processor** | A server task that reads events as they arrive and keeps its own table (board facts, progress) | `boardFactsFrom` |
 | **Actor** | Who did it: learner, lesson (its script), app, or Jugnu. Only the learner's own actions are evidence | `Actor` |
-| **Event backbone** | Where commits are raised and subscribers receive them, on the phone | `createEventBus` (`@chalk/events`) |
+| **Event channel** | One `record()` on the phone: adds the envelope, checks the kind, hands entries to subscribers (the uploader) | `createEventBus` (`@chalk/events`) |
 | **Name** | What an author calls a board or piece; free to rename; camelCase because rules use it | `name` |
 | **Item id, address** | What events name: a board by its built item's id (a hash of where it lives in content/), a node on it by its address (`<item id>#<address>`) | `ItemRef`, `nodeMachineId`, `boardKey` |
 | **Saved board** | A board written down: each node by address, the shape of its facts (`type@hash`), its facts, whether the learner touched it; loaded back only by props of the same shape | `runtime.save()`, `runtime.load()`, `SavedBoard`, `schemaKey` |
@@ -85,8 +84,11 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Type scale** | The four text sizes a board uses (title, body, note, caption), each with its line height | `--text-*` (`@chalk/look`) |
 | **Exact decimal** | A decimal kept as written ("7.384", "2.50"), with digit work and no float drift | `Dec`, `dec()` (`@chalk/exact`), `decimal` (params) |
 | **Item id** | 16 hex characters: a hash of the item's path in content/ (a question: plus its params). Never typed | `idOf` |
-| **Version** | A hash of an item's built JSON (not the commit); a container's includes its children's | `versionOf` |
-| **Source** | Where a built item came from: path, file, row, commit | `Source` |
+| **Path** | A node's place in the course tree, its identity: `class10-maths/real-numbers/hcf-and-lcm/story`, a piece after `#`; a bank row is named by a hash of its params | `item.path`, `piecePath` |
+| **Id** | A hash of a path, always worked out from it: what events carry (`build/ids.json` reads it back) | `idOf` |
+| **Commit** | The git commit the app and server were built from: in `build/index.json`, the app, `/api/health` and every event | `CHALK_COMMIT` |
+| **Version** | A hash of an item's own content and what it is made from (a board: its code and its props' versions; a container: its children's) | `versionOf` |
+| **Source** | Where a built item came from: path, file, row | `Source` |
 | **Build** | Everything the manifests reach, checked: the course's shape as JSON in `build/`, each page and question naming the module that makes its board (chapters ship as code) | `pnpm build-content`, `pnpm preview`, `pnpm publish-content` |
 | **Player** | Plays lessons and boards; one player for everything | `@chalk/player` |
 | **Runtime** | One board, live: props' state (signals), IS kept true (one effect per rule, re-run only when what it read changes), WHEN answered, scripts run | `BoardRuntime` |

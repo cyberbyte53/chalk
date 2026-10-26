@@ -198,7 +198,6 @@ export const chanceRun = defineProp({
     [RunSignal.Ran]: { describe: "A batch was run; the payload has trials, hits and the fraction" },
     [RunSignal.Many]: {
       describe: `The run passed ${MANY} trials; the payload has the fraction`,
-      isCommit: true,
     },
   },
   observe: (s) => {

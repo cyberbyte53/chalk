@@ -1,26 +1,32 @@
 import { randomInt } from "node:crypto";
 import { writeFileSync } from "node:fs";
 import { openDb } from "./db";
-import { addSchool, jugnuFlag, jugnuFlagList } from "./store";
+import { addSchool, jugnuFlag, jugnuFlagList, rebuildBoardFacts } from "./store";
 
 /**
  * `pnpm --filter @chalk/server add-school "School name"`: adds a school and prints its code.
  * `pnpm --filter @chalk/server flags`: the latest chats with Jugnu someone flagged.
  * `pnpm --filter @chalk/server flags <id>`: writes that one, whole, to jugnu-flag-<id>.json.
+ * `pnpm --filter @chalk/server rebuild-facts`: makes the processors' tables again from the events.
  */
 const USAGE = `Usage (DATABASE_URL set):
   pnpm --filter @chalk/server add-school "School name"
-  pnpm --filter @chalk/server flags [id]`;
+  pnpm --filter @chalk/server flags [id]
+  pnpm --filter @chalk/server rebuild-facts`;
 
 const [command, ...rest] = process.argv.slice(2);
 const url = process.env.DATABASE_URL;
-if (url === undefined || (command !== "add-school" && command !== "flags")) {
+const COMMANDS = ["add-school", "flags", "rebuild-facts"];
+if (url === undefined || command === undefined || !COMMANDS.includes(command)) {
   console.error(USAGE);
   process.exit(1);
 }
 const { db, close } = await openDb(url);
 try {
-  if (command === "add-school") {
+  if (command === "rebuild-facts") {
+    await rebuildBoardFacts(db);
+    console.log("✓ board facts made again from the events");
+  } else if (command === "add-school") {
     if (rest.length === 0) {
       console.error(USAGE);
       process.exitCode = 1;

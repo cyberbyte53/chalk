@@ -238,7 +238,6 @@ export const fiveRs = defineProp({
     },
     [FiveRSignal.Sorted]: {
       describe: "Every action is sorted; the payload gives how many are right",
-      isCommit: true,
     },
   },
   observe: (s) => ({

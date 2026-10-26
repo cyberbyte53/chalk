@@ -285,7 +285,6 @@ export const homeWiring = defineProp({
   signals: {
     [WiringSignal.Changed]: {
       describe: "Something changed; the payload has both currents and whether the iron is live",
-      isCommit: true,
     },
     [WiringSignal.Blown]: { describe: "A circuit's fuse melted; the payload says which" },
   },

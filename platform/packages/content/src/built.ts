@@ -13,7 +13,12 @@ export const Kind = {
 export type Kind = (typeof Kind)[keyof typeof Kind];
 
 /** The two files at the top of build/: the books, and the concept graph. */
-export const BuiltFile = { Index: "index.json", Graph: "graph.json" } as const;
+export const BuiltFile = {
+  Index: "index.json",
+  Graph: "graph.json",
+  /** Every id the build knows, to its path: how an event's ids read back (items and their pieces). */
+  Ids: "ids.json",
+} as const;
 export type BuiltFile = (typeof BuiltFile)[keyof typeof BuiltFile];
 
 /**

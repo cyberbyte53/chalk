@@ -67,6 +67,20 @@ export const itemRefSchema = z
   .strict();
 export type ItemRef = z.infer<typeof itemRefSchema>;
 
+/** One node of a board as plain facts: its stored facts, and whether the learner touched it. */
+export const savedNodeSchema = z
+  .object({ facts: z.record(z.string(), z.unknown()), isTouched: z.boolean() })
+  .strict();
+export type SavedNode = z.infer<typeof savedNodeSchema>;
+
+/**
+ * A board as plain facts, each node by its address (the phone's board sent to Jugnu's server).
+ * Written and read by one function each (the runtime's save and load); load checks every node's
+ * facts against its prop.
+ */
+export const savedBoardSchema = z.record(z.string(), savedNodeSchema);
+export type SavedBoard = z.infer<typeof savedBoardSchema>;
+
 /** One screen: a layout tree of props, and the IS and WHEN rules that wire them. */
 export const boardSchema = z.object({
   /** Unique within the lesson; free to rename. */

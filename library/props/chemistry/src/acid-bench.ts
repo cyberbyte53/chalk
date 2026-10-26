@@ -360,7 +360,6 @@ export const acidBench = defineProp({
   signals: {
     [AcidBenchSignal.Stepped]: {
       describe: "A step of the experiment was done (payload: step)",
-      isCommit: true,
     },
     [AcidBenchSignal.Done]: { describe: "The experiment's last step was done" },
   },

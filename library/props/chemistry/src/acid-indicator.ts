@@ -188,7 +188,6 @@ export const acidIndicator = defineProp({
   signals: {
     [IndicatorSignal.Tested]: {
       describe: "An indicator was added to a sample; the payload has the result in words",
-      isCommit: true,
     },
     [IndicatorSignal.AllTested]: {
       describe: "Every indicator on offer has now been tried on every sample",

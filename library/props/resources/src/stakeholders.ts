@@ -280,7 +280,7 @@ export const stakeholders = defineProp({
       describe: "A stakeholder was tapped; the payload has their dependence and long stake",
     },
     [StakeSignal.Stepped]: { describe: "The story moved on a step" },
-    [StakeSignal.CaseDone]: { describe: "A story reached its last step", isCommit: true },
+    [StakeSignal.CaseDone]: { describe: "A story reached its last step" },
   },
   observe: (s) => ({
     summary: describeStakeholders(s),

@@ -10,18 +10,22 @@ import type { EventBus } from "@chalk/events";
  */
 export type EventStore = {
   add: (event: ChalkEvent) => Promise<void>;
-  /** Up to `limit` waiting events, oldest first where the store can tell. */
+  /** Up to `limit` waiting events, in order: by session, then seq. */
   take: (limit: number) => Promise<ChalkEvent[]>;
   remove: (ids: readonly string[]) => Promise<void>;
 };
+
+/** The order events are sent in: by session, then seq (the phone's clock can't order them). */
+const inOrder = (a: ChalkEvent, b: ChalkEvent) =>
+  a.session < b.session ? -1 : a.session > b.session ? 1 : a.seq - b.seq;
 
 export function memoryStore(): EventStore {
   const waiting = new Map<string, ChalkEvent>();
   return {
     add: async (event) => {
-      waiting.set(event.envelope.id, event);
+      waiting.set(event.id, event);
     },
-    take: async (limit) => [...waiting.values()].slice(0, limit),
+    take: async (limit) => [...waiting.values()].sort(inOrder).slice(0, limit),
     remove: async (ids) => {
       for (const id of ids) waiting.delete(id);
     },
@@ -30,6 +34,8 @@ export function memoryStore(): EventStore {
 
 const DB = "chalk";
 const STORE = "events";
+/** 2: entries in the shape of event.ts v2, ordered by (session, seq). */
+const DB_VERSION = 2;
 
 function request<T>(req: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -42,10 +48,12 @@ function request<T>(req: IDBRequest<T>): Promise<T> {
 export async function deviceStore(): Promise<EventStore> {
   if (typeof indexedDB === "undefined") return memoryStore();
   try {
-    const open = indexedDB.open(DB, 1);
+    const open = indexedDB.open(DB, DB_VERSION);
     open.onupgradeneeded = () => {
-      const store = open.result.createObjectStore(STORE, { keyPath: "envelope.id" });
-      store.createIndex("producedAt", "envelope.producedAt");
+      // Entries of an older shape can't be read by the server any more: they go.
+      if (open.result.objectStoreNames.contains(STORE)) open.result.deleteObjectStore(STORE);
+      const store = open.result.createObjectStore(STORE, { keyPath: "id" });
+      store.createIndex("order", ["session", "seq"]);
     };
     const db = await request(open);
     const tx = (mode: IDBTransactionMode) => db.transaction(STORE, mode).objectStore(STORE);
@@ -57,7 +65,7 @@ export async function deviceStore(): Promise<EventStore> {
         (await request(
           // IndexedDB counts are unsigned 32-bit.
           tx("readonly")
-            .index("producedAt")
+            .index("order")
             .getAll(null, Math.min(limit, 2 ** 32 - 1)),
         )) as ChalkEvent[],
       remove: async (ids) => {
@@ -106,7 +114,7 @@ export function startUploader(options: {
           return; // offline, signed out or the server is down: they wait for the next try
         }
         // Saved, already saved, or refused as unreadable: none of them should be sent again.
-        await store.remove(batch.map((event) => event.envelope.id));
+        await store.remove(batch.map((event) => event.id));
         if (batch.length < EVENTS_PER_BATCH) return;
       }
     } finally {

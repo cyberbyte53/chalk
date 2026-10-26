@@ -113,7 +113,7 @@ export const refiningCell = defineProp({
     }),
   },
   signals: {
-    [RefiningSignal.Switched]: { describe: "The current was switched on or off", isCommit: true },
+    [RefiningSignal.Switched]: { describe: "The current was switched on or off" },
     [RefiningSignal.Done]: { describe: "The anode's copper has all moved to the cathode" },
   },
   observe: (s) => {

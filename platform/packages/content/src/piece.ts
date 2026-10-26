@@ -58,8 +58,6 @@ export type Piece =
       isHidden?: boolean;
       /** Prop type from the library (e.g. "numberLine", "text"). */
       prop: string;
-      /** False leaves this prop out of the board's Continue event. Default: in. */
-      isInEvents?: boolean;
       /** Its starting fields; anything left out uses the prop's defaults. */
       with?: Record<string, unknown>;
     };
@@ -92,7 +90,6 @@ export const pieceSchema: z.ZodType<Piece, z.ZodTypeDef, unknown> = z.lazy(() =>
       ...base,
       kind: z.literal(PieceKind.Prop),
       prop: z.string().min(1),
-      isInEvents: z.boolean().optional(),
       with: z.record(z.string(), z.unknown()).optional(),
     }),
   ]),

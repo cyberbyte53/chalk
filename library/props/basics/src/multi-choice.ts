@@ -105,7 +105,7 @@ export const multiChoice = defineProp({
           { status, attempts, feedback },
           {
             signal: QuestionSignal.Checked,
-            payload: { status, attempts, optionIds: [...s.selected] },
+            payload: { status, attempts, isGraded: s.isGraded, optionIds: [...s.selected] },
           },
           { signal: isRight ? QuestionSignal.Correct : QuestionSignal.Wrong },
         );
@@ -132,7 +132,7 @@ export const multiChoice = defineProp({
     }),
   },
   signals: {
-    [QuestionSignal.Checked]: { describe: "The learner pressed Check", isCommit: true },
+    [QuestionSignal.Checked]: { describe: "The learner pressed Check" },
     [QuestionSignal.Correct]: { describe: "Checked, and right" },
     [QuestionSignal.Wrong]: { describe: "Checked, and wrong" },
   },

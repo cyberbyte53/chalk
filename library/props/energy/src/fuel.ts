@@ -260,7 +260,6 @@ export const fuelCompare = defineProp({
   signals: {
     [FuelSignal.Picked]: {
       describe: "The learner tapped a fuel; the payload has the fuel and how many checks it passes",
-      isCommit: true,
     },
   },
   observe: (s) => ({

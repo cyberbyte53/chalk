@@ -174,7 +174,6 @@ export const forceOnRod = defineProp({
   signals: {
     [RodSignal.Swung]: {
       describe: "Something changed; the payload has which way the rod is pushed and how far",
-      isCommit: true,
     },
   },
   observe: (s) => ({

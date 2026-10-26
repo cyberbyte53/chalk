@@ -293,7 +293,7 @@ describe("BoardRuntime", () => {
     ]);
   });
 
-  it("saves the board by address, and loads it back only into props of the same shape", () => {
+  it("saves the board as plain facts by address, and loads it back only if they fit", () => {
     const { services } = fakeServices();
     const board = boardOf({
       name: "b",
@@ -302,24 +302,71 @@ describe("BoardRuntime", () => {
     const runtime = new BoardRuntime(board, (t) => defs[t], services);
     void runtime.call("dial", "setTo", { to: 4 }, Actor.Learner);
     const saved = runtime.save();
-    expect(saved.dial).toEqual({
-      type: runtime.factsKey("dial"),
-      facts: { at: 4 },
-      isTouched: true,
-    });
-    expect(runtime.factsKey("dial")).toMatch(/^dial@[0-9a-f]{8}$/);
+    expect(saved.dial).toEqual({ facts: { at: 4 }, isTouched: true });
 
     const copy = new BoardRuntime(board, (t) => defs[t], services);
     copy.load(saved);
     expect(copy.getView("dial").at).toBe(4);
     expect(copy.isTouched("dial")).toBe(true);
-    // Saved by a prop whose facts had another shape: refused, nothing changed.
+    // Facts its prop refuses, or a node not on the board: refused, nothing changed.
     const other = new BoardRuntime(board, (t) => defs[t], services);
-    expect(() => other.load({ dial: { ...saved.dial, type: "dial@00000000" } } as never)).toThrow(
-      /saved as dial@00000000/,
-    );
+    expect(() => other.load({ dial: { facts: { at: 99 }, isTouched: false } })).toThrow(/dial/);
     expect(() => other.load({ gone: saved.dial } as never)).toThrow(/not on this board/);
     expect(other.getView("dial").at).toBe(0);
+  });
+
+  it("numbers every action and signal, and says which act set each one off", async () => {
+    const { services, advance } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "ticker", prop: "ticker" },
+      ),
+      when: [{ on: "coin.landed", do: { call: "ticker.glide" } }],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    const actions: { prop: string; action: string; n: number; cause?: number; isStep: boolean }[] =
+      [];
+    const signals: { prop: string; signal: string; n: number; from?: number }[] = [];
+    runtime.onAction(({ prop, action, n, cause, isStep }) =>
+      actions.push({ prop, action, n, isStep, ...(cause !== undefined ? { cause } : {}) }),
+    );
+    runtime.onSignal(({ prop, signal, n, from }) =>
+      signals.push({ prop, signal, n, ...(from !== undefined ? { from } : {}) }),
+    );
+    void runtime.call("coin", "toss", {}, Actor.Learner);
+    await advance(1100);
+    runtime.signal("coin", "landed", { face: "T" });
+    const toss = actions[0];
+    expect(toss).toMatchObject({ prop: "coin", action: "toss", isStep: false });
+    expect(toss?.cause).toBeUndefined();
+    // Its signal, the rule's action it set off and that action's signal all point back to it.
+    expect(signals[0]).toMatchObject({ prop: "coin", signal: "landed", from: toss?.n });
+    expect(actions[1]).toMatchObject({ prop: "ticker", action: "glide", cause: toss?.n });
+    expect(signals[1]).toMatchObject({ prop: "ticker", signal: "glided", from: toss?.n });
+    // A signal a view raised is an act itself; what it sets off points back to it.
+    const raised = signals[2];
+    expect(raised?.from).toBeUndefined();
+    expect(actions[2]).toMatchObject({ action: "glide", cause: raised?.n });
+  });
+
+  it("marks a prop's own steps over time as steps, not acts", async () => {
+    const { services, advance } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props({ kind: "prop", name: "ticker", prop: "ticker" }),
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    const seen: { action: string; isStep: boolean; cause?: number }[] = [];
+    runtime.onAction(({ action, isStep, cause }) =>
+      seen.push({ action, isStep, ...(cause !== undefined ? { cause } : {}) }),
+    );
+    void runtime.call("ticker", "start", {}, Actor.Learner);
+    await advance(250);
+    expect(seen[0]).toEqual({ action: "start", isStep: false });
+    expect(seen.slice(1).every((a) => a.action === "tick" && a.isStep)).toBe(true);
+    expect(seen.length).toBeGreaterThan(1);
   });
 
   it("re-reads a prop's view only when that prop changed", () => {

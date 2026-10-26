@@ -1,6 +1,7 @@
 import type { ChalkEvent } from "@chalk/content";
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   check,
   index,
   integer,
@@ -14,7 +15,8 @@ import {
 
 /**
  * The database. Content is not in it (it ships with the app as built JSON); only the people, their
- * groups and the events they produced. Progress is worked out from events, never stored twice.
+ * groups, the events they recorded, and tables processors derive from those events (any of them
+ * can be dropped and made again from the events).
  * A change here needs a migration: `pnpm --filter @chalk/server migration`.
  */
 
@@ -96,8 +98,9 @@ export const members = pgTable(
 );
 
 /**
- * Every event a learner's phone uploaded (docs/events.md), whole in `body`, with the fields
- * queries need pulled out beside it. The id is the phone's, so an event sent twice is kept once.
+ * Every entry a learner's phone recorded (docs/events.md): the envelope in its own columns, the
+ * kind's payload as JSON. The id is the phone's, so an entry sent twice is kept once. The stream is
+ * the truth; every table derived from it can be dropped and made again from it.
  */
 export const events = pgTable(
   "events",
@@ -106,20 +109,46 @@ export const events = pgTable(
       .notNull()
       .references(() => accounts.id),
     id: text("id").notNull(),
-    sessionId: text("session_id").notNull(),
+    schemaVersion: integer("schema_version").notNull(),
+    session: text("session").notNull(),
     seq: integer("seq").notNull(),
-    producedAt: timestamp("produced_at", { withTimezone: true }).notNull(),
+    /** The phone's clock (Unix ms): when it happened there. */
+    at: timestamp("at", { withTimezone: true, mode: "date" }).notNull(),
     receivedAt: timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
+    commit: text("commit").notNull(),
     actor: text("actor").notNull(),
-    machineType: text("machine_type").notNull(),
-    machineId: text("machine_id").notNull(),
-    lessonId: text("lesson_id"),
-    body: jsonb("body").$type<ChalkEvent>().notNull(),
+    opening: text("opening"),
+    board: text("board"),
+    version: text("version"),
+    node: text("node"),
+    kind: text("kind").notNull(),
+    payload: jsonb("payload").$type<ChalkEvent["payload"]>().notNull(),
   },
   (t) => [
     primaryKey({ columns: [t.accountId, t.id] }),
-    index("events_account_time").on(t.accountId, t.producedAt),
+    index("events_account_order").on(t.accountId, t.session, t.seq),
+    index("events_account_time").on(t.accountId, t.at),
+    index("events_board").on(t.board),
   ],
+);
+
+/**
+ * A processor's table (docs/events.md): each learner's facts about each board, kept as entries
+ * arrive (store.ts, `boardFactsFrom`): when they first passed it, and their first graded check.
+ * Progress is read from it and the course tree.
+ */
+export const boardFacts = pgTable(
+  "board_facts",
+  {
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id),
+    board: text("board").notNull(),
+    passedAt: timestamp("passed_at", { withTimezone: true }),
+    firstAt: timestamp("first_at", { withTimezone: true }),
+    firstIsRight: boolean("first_is_right"),
+  },
+  (t) => [primaryKey({ columns: [t.accountId, t.board] })],
 );
 
 /**
@@ -142,4 +171,13 @@ export const jugnuFlags = pgTable(
   (t) => [index("jugnu_flags_time").on(t.createdAt)],
 );
 
-export const schema = { schools, accounts, signIns, groups, members, events, jugnuFlags };
+export const schema = {
+  schools,
+  accounts,
+  signIns,
+  groups,
+  members,
+  events,
+  boardFacts,
+  jugnuFlags,
+};

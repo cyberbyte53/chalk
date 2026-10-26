@@ -126,7 +126,7 @@ export const wasteBurial = defineProp({
   },
   signals: {
     [BurialSignal.Checked]: { describe: "The pit was dug up after `days` days" },
-    [BurialSignal.Finished]: { describe: "The 60-day check is done", isCommit: true },
+    [BurialSignal.Finished]: { describe: "The 60-day check is done" },
   },
   observe: (s) => ({
     summary: describeBurial(s),

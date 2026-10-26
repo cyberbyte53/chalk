@@ -34,7 +34,7 @@ function stateOf(result: typeof quiz) {
 }
 
 describe("choice", () => {
-  it("checks the picked option, shows its feedback and raises the commit", () => {
+  it("checks the picked option, shows its feedback and raises the check", () => {
     const picked = { ...stateOf(quiz), selected: "exact" };
     const result = prepareAction(choiceDef, picked, "check");
     if (!result.isOk || result.effect.kind !== EffectKind.Set) throw new Error("expected a set");
@@ -46,7 +46,7 @@ describe("choice", () => {
     expect(result.effect.emit).toEqual([
       {
         signal: QuestionSignal.Checked,
-        payload: { status: AnswerStatus.Wrong, attempts: 1, optionId: "exact" },
+        payload: { status: AnswerStatus.Wrong, attempts: 1, isGraded: false, optionId: "exact" },
       },
       { signal: QuestionSignal.Wrong },
     ]);
@@ -148,6 +148,7 @@ describe("goal", () => {
     expect(hit.isOk && hit.effect.kind === EffectKind.Set && hit.effect.emit[0]?.payload).toEqual({
       status: AnswerStatus.Correct,
       attempts: 1,
+      isGraded: false,
       about: "line",
     });
   });

@@ -208,7 +208,7 @@ export const electricityBill = defineProp({
     [BillSignal.Changed]: {
       describe: "Hours, counts or the rate changed; the payload has the month's units and cost",
     },
-    [BillSignal.Swapped]: { describe: "Bulbs were swapped for LEDs (or back)", isCommit: true },
+    [BillSignal.Swapped]: { describe: "Bulbs were swapped for LEDs (or back)" },
   },
   observe: (s) => {
     const elements: Element[] = s.rows.map((r, i) => ({

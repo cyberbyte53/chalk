@@ -15,6 +15,20 @@
       "when": 1792085867316,
       "tag": "0001_jugnu_flags",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793009527431,
+      "tag": "0002_events_v1_gone",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793009544020,
+      "tag": "0003_events",
+      "breakpoints": true
     }
   ]
 }

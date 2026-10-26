@@ -1,4 +1,4 @@
-import { bankLessonId, conceptLessonId, practiceLessonId } from "@chalk/api";
+import { bankLessonId, conceptLessonId, practiceLessonId, practiceOf } from "@chalk/api";
 import {
   type Board,
   Kind,
@@ -56,12 +56,9 @@ export function conceptLessons(
       const concept = builtConceptSchema.parse(read(ref.path));
       const pages = concept.overview.map((page) => boardAt(page.path));
       const testing = chapter.questions.filter((question) => question.tests.includes(concept.id));
-      const first = testing
-        .filter((question) => question.firstTry !== undefined)
-        .sort((a, b) => (a.firstTry ?? 0) - (b.firstTry ?? 0));
-      const rest = first.length === 0 ? [] : testing.filter((q) => q.firstTry === undefined);
+      const practice = practiceOf(chapter.questions, concept.id);
+      const rest = testing.filter((q) => !practice.includes(q));
       const boards = (refs: typeof testing) => refs.map((question) => boardAt(question.path));
-      const practice = first.length === 0 ? testing : first;
       const base = { version: concept.version, title: concept.title, concepts: [concept.id] };
       lessons.set(concept.id, {
         pages: asLesson({ ...base, id: conceptLessonId(concept.id) }, pages),

@@ -306,7 +306,7 @@ async function settle(page: Page): Promise<void> {
 
 /** What the app recorded so far (the preview keeps it on window; see preview-shell.tsx). */
 type Recorded = {
-  events: { machine?: { type?: string; id?: string | number }; input?: unknown }[];
+  events: { kind?: string; actor?: string; payload?: unknown }[];
   passed: string[];
 };
 const recorded = (page: Page): Promise<Recorded> =>
@@ -481,10 +481,12 @@ async function shootNow(
       steps.push({
         step: words,
         changed,
-        events: now.events.slice(seen.events.length).map((e) => {
-          const what = `${e.machine?.type ?? "?"}${e.machine?.id !== undefined ? `/${e.machine.id}` : ""}`;
-          return `${what} ${JSON.stringify(e.input ?? null).slice(0, 160)}`;
-        }),
+        events: now.events
+          .slice(seen.events.length)
+          .map(
+            (e) =>
+              `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null).slice(0, 160)}`,
+          ),
         passed: now.passed.length > seen.passed.length,
         errors: [...at.errors],
         ...(act.shots === "each" || (act.shots === "last" && isLast)

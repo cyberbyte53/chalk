@@ -1,76 +1,62 @@
 import { describe, expect, it } from "vitest";
-import { EVENT_SCHEMA_VERSION, MachineType, eventSchema, isEventFor } from "./event";
+import { EVENT_SCHEMA_VERSION, eventSchema, isKind } from "./event";
+import { hashOf, idOf, sha256 } from "./hash";
 
 const envelope = {
   id: "e1",
   schemaVersion: EVENT_SCHEMA_VERSION,
-  sessionId: "s1",
-  seq: 3,
-  producedAt: 1791692957412,
+  session: "s1",
+  seq: 7,
+  at: 1791692957412,
+  commit: "6fcca4a2c723184deabffb765c4d0d76330028d4",
   actor: "learner",
-  lessonId: "concept/975e4c05ea34e125",
-  item: { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/guess", version: "0123456789abcdef" },
-};
-
-const check = {
-  envelope,
-  machine: { type: "question", id: "aaaaaaaaaaaaaaaa#guessRoot" },
-  input: {
-    type: "check",
-    submitted: { kind: "prop", node: "line", facts: { from: 1, to: 2, marker: 1.41 } },
-    saw: [{ path: "line/marker", value: 1.41, words: "1.41" }],
-  },
-  state: { status: "correct", attempts: 2, isGraded: true },
+  opening: "o1",
+  board: "aaaaaaaaaaaaaaaa",
+  version: "0123456789abcdef",
+  node: "bbbbbbbbbbbbbbbb",
 };
 
 describe("eventSchema", () => {
-  it("accepts a question check", () => {
-    const parsed = eventSchema.parse(check);
-    expect(isEventFor(parsed, MachineType.Question) && parsed.state.attempts).toBe(2);
-  });
-  it("refuses an input the machine does not accept", () => {
+  it("takes each kind with its own payload", () => {
+    const checked = eventSchema.parse({
+      ...envelope,
+      kind: "signal",
+      payload: { signal: "checked", payload: { status: "wrong", attempts: 1 }, from: 6 },
+    });
+    expect(isKind(checked, "signal") && checked.payload.from).toBe(6);
     expect(
-      eventSchema.safeParse({ ...check, input: { type: "continue", props: {} } }).success,
-    ).toBe(false);
-  });
-  it("refuses state fields that do not belong", () => {
+      eventSchema.parse({
+        ...envelope,
+        kind: "cause",
+        payload: { action: "select", args: { option: "factor" } },
+      }).kind,
+    ).toBe("cause");
     expect(
-      eventSchema.safeParse({
-        ...check,
-        state: { status: "correct", attempts: 2, isGraded: true, extra: 1 },
-      }).success,
+      eventSchema.parse({ ...envelope, node: null, kind: "app", payload: { what: "passed" } }).kind,
+    ).toBe("app");
+  });
+
+  it("refuses a payload of another kind, and fields that don't belong", () => {
+    expect(
+      eventSchema.safeParse({ ...envelope, kind: "signal", payload: { action: "x", args: {} } })
+        .success,
     ).toBe(false);
+    expect(
+      eventSchema.safeParse({ ...envelope, extra: 1, kind: "close", payload: {} }).success,
+    ).toBe(false);
+    expect(eventSchema.safeParse({ ...envelope, kind: "nope", payload: {} }).success).toBe(false);
   });
-  it("refuses a time that is not Unix ms", () => {
-    const bad = { ...check, envelope: { ...envelope, producedAt: "2026-10-11T10:00:00Z" } };
-    expect(eventSchema.safeParse(bad).success).toBe(false);
+});
+
+describe("hashes", () => {
+  it("are SHA-256, the same as Node's", async () => {
+    const { createHash } = await import("node:crypto");
+    for (const text of ["", "abc", "ई".repeat(100), "x".repeat(1000)])
+      expect(sha256(text)).toBe(createHash("sha256").update(text).digest("hex"));
   });
-  it("accepts lesson and board events", () => {
-    const lessonStart = {
-      envelope: { ...envelope, actor: "app", item: null },
-      machine: { type: "lesson", id: "class9-maths/ch1/where-is-root-2" },
-      input: { type: "start" },
-      state: { status: "playing", boardIndex: 0 },
-    };
-    const boardContinue = {
-      envelope,
-      machine: { type: "board", id: "aaaaaaaaaaaaaaaa" },
-      input: {
-        type: "continue",
-        nodes: {
-          line: { type: "numberLine@0a1b2c3d", isTouched: true, facts: { marker: 1.41 } },
-        },
-        actions: [{ node: "line", action: "moveMarker", args: { to: 1.41 }, t: 3.2 }],
-      },
-      state: { phase: "passed" },
-    };
-    expect(eventSchema.safeParse(lessonStart).success).toBe(true);
-    expect(eventSchema.safeParse(boardContinue).success).toBe(true);
-    const lessonBack = {
-      ...lessonStart,
-      envelope: { ...envelope, actor: "learner" },
-      input: { type: "back" },
-    };
-    expect(eventSchema.safeParse(lessonBack).success).toBe(true);
+
+  it("an id is a hash of the path", () => {
+    expect(idOf("a/b")).toBe(hashOf({ path: "a/b" }));
+    expect(idOf("a/b")).toMatch(/^[0-9a-f]{16}$/);
   });
 });

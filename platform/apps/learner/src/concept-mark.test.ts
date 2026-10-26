@@ -5,6 +5,7 @@ import type { CourseConcept } from "./course";
 
 const concept = (hasPractice: boolean): CourseConcept => ({
   id: "c",
+  version: "v",
   hasPractice,
   title: { en: "C", hi: "C" },
   art: null,

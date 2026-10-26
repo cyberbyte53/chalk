@@ -230,7 +230,6 @@ export const wireResistance = defineProp({
   signals: {
     [WireSignal.Changed]: {
       describe: "The wire changed; the payload has material, length, area, resistance, current",
-      isCommit: true,
     },
   },
   observe: (s) => {

@@ -155,7 +155,6 @@ export const bioMagnification = defineProp({
     [MagSignal.Stepped]: { describe: "Moved one level up; `step` is the new level" },
     [MagSignal.ReachedTop]: {
       describe: "The chain now shows humans at the top, holding the most",
-      isCommit: true,
     },
   },
   observe: (s) => ({

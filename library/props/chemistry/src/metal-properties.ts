@@ -457,7 +457,6 @@ export const propertyTester = defineProp({
     [PropertySignal.Tried]: {
       describe:
         "A test was done; the payload has the sample, the test, the mark (yes, no, partly) and whether the sample is a metal",
-      isCommit: true,
     },
   },
   observe: (s) => {

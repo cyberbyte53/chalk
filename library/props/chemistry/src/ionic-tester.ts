@@ -194,7 +194,6 @@ export const ionicTester = defineProp({
     [TesterSignal.Switched]: {
       describe:
         "The circuit was switched on or off; the payload has on, the form, and whether the bulb glows",
-      isCommit: true,
     },
   },
   observe: (s) => {

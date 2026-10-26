@@ -14,15 +14,8 @@ import {
   groupCodePath,
   groupLearnerPath,
   groupPath,
-  practiceLessonId,
 } from "@chalk/api";
-import {
-  Actor,
-  type ChalkEvent,
-  EVENT_SCHEMA_VERSION,
-  MachineType,
-  lessonSchema,
-} from "@chalk/content";
+import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, lessonSchema } from "@chalk/content";
 import { type ChatMessage, scriptedProvider } from "@chalk/jugnu";
 import { propDefs } from "@chalk/library";
 import { headlessBoard } from "@chalk/player";
@@ -107,23 +100,43 @@ class Phone {
   }
 }
 
-function lessonStart(id: string, producedAt: number): ChalkEvent {
+/** One entry as a phone records it. */
+function entry(id: string, at: number, more: Partial<ChalkEvent> = {}): ChalkEvent {
   return {
-    envelope: {
-      id,
-      schemaVersion: EVENT_SCHEMA_VERSION,
-      sessionId: "s1",
-      seq: 0,
-      producedAt,
-      actor: Actor.App,
-      lessonId: "class9-maths/ch1/where-is-root-2",
-      item: null,
-    },
-    machine: { type: MachineType.Lesson, id: "class9-maths/ch1/where-is-root-2" },
-    input: { type: "start" },
-    state: { status: "playing", boardIndex: 0 },
-  };
+    id,
+    schemaVersion: EVENT_SCHEMA_VERSION,
+    session: "s1",
+    seq: 0,
+    at,
+    commit: "abc",
+    actor: Actor.App,
+    opening: null,
+    board: null,
+    version: "v",
+    node: "cccccccccccccccc",
+    kind: "open",
+    payload: {},
+    ...more,
+  } as ChalkEvent;
 }
+
+/** A learner's signal on a board. */
+const signalOn = (
+  id: string,
+  seq: number,
+  board: string,
+  name: string,
+  payload: Record<string, unknown> = {},
+): ChalkEvent =>
+  entry(id, 1000 + seq, {
+    seq,
+    actor: Actor.Learner,
+    opening: "o",
+    board,
+    node: name === "continued" ? null : "qqqqqqqqqqqqqqqq",
+    kind: "signal",
+    payload: { signal: name, payload, from: null },
+  } as Partial<ChalkEvent>);
 
 describe("server", () => {
   let db: Db;
@@ -146,6 +159,7 @@ describe("server", () => {
       verifyGoogle: fakeGoogle,
       origin: ORIGIN,
       courseIds: new Set([COURSE]),
+      plans: [{ id: "c1", pages: ["page1"], practice: ["ask1", "ask2"] }],
       jugnu: model,
       now: () => clock,
       random: counter(),
@@ -338,13 +352,13 @@ describe("server", () => {
     await learner.json("POST", ApiPath.Join, { code: group.joinCode });
 
     const at = Date.UTC(2026, 9, 15, 9, 30);
-    const batch = [lessonStart("e1", at), { envelope: { id: "e2" }, nonsense: true }];
+    const batch = [entry("e1", at), { id: "e2", nonsense: true }];
     const first = await learner.json<EventsReply>("POST", ApiPath.Events, { events: batch });
     expect(first).toEqual({ saved: 1, rejected: ["e2"] });
     expect(logged.warnings).toEqual([expect.stringMatching(/^event refused: /)]);
     // The reply was lost and the phone sends it again: nothing is counted twice.
     const again = await learner.json<EventsReply>("POST", ApiPath.Events, {
-      events: [lessonStart("e1", at), lessonStart("e3", at + 1000)],
+      events: [entry("e1", at), entry("e3", at + 1000, { seq: 1 })],
     });
     expect(again).toEqual({ saved: 1, rejected: [] });
 
@@ -354,34 +368,17 @@ describe("server", () => {
 
   it("works out a learner's progress from their events", async () => {
     const { teacher, learner, group } = await teacherAndLearner();
-    const practice = practiceLessonId("c1");
-    const start = lessonStart("p0", 1);
     const events = [
-      {
-        ...start,
-        envelope: { ...start.envelope, lessonId: practice },
-        machine: { ...start.machine, id: practice },
-      },
-      {
-        ...start,
-        envelope: { ...start.envelope, id: "p1", seq: 1, lessonId: practice },
-        machine: { type: MachineType.Question, id: "aaaaaaaaaaaaaaaa#ask" },
-        input: { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
-        state: { status: "correct", attempts: 1, isGraded: true },
-      },
-      {
-        ...start,
-        envelope: { ...start.envelope, id: "p2", seq: 2, lessonId: practice },
-        machine: { type: MachineType.Lesson, id: practice },
-        input: { type: "complete" },
-        state: { status: "completed", boardIndex: 1 },
-      },
+      signalOn("p0", 0, "page1", "continued"),
+      signalOn("p1", 1, "ask1", "checked", { status: "wrong", isGraded: true }),
+      signalOn("p2", 2, "ask1", "checked", { status: "correct", isGraded: true }),
+      signalOn("p3", 3, "ask2", "checked", { status: "correct", isGraded: true }),
     ];
     expect(await learner.json<EventsReply>("POST", ApiPath.Events, { events })).toMatchObject({
-      saved: 3,
+      saved: 4,
     });
     const progress = await learner.json<Progress>("GET", ApiPath.Progress);
-    expect(progress.c1?.practice).toMatchObject({ right: 1, of: 1 });
+    expect(progress.c1).toMatchObject({ isLearnt: true, practice: { right: 1, of: 2 } });
     // Their teacher sees the same.
     await learner.json("POST", ApiPath.Join, { code: group.joinCode });
     const view = await teacher.json<GroupReply>("GET", groupPath(group.id));

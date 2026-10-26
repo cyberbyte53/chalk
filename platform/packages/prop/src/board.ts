@@ -59,6 +59,6 @@ export const boardProp = defineProp({
   },
   signals: {
     [BoardSignal.Started]: { describe: "The board opened" },
-    [BoardSignal.Continued]: { describe: "The learner pressed Continue", isCommit: true },
+    [BoardSignal.Continued]: { describe: "The learner pressed Continue" },
   },
 });

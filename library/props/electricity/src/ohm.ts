@@ -294,12 +294,10 @@ export const ohmLab = defineProp({
   signals: {
     [OhmSignal.Recorded]: {
       describe: "A reading was written in the table; the payload has cells, amps, volts, rowCount",
-      isCommit: true,
     },
     [OhmSignal.KeySet]: { describe: "The plug key was put in or taken out" },
     [OhmSignal.GapFilled]: {
       describe: "Something was put in gap XY; the payload has the item and the current",
-      isCommit: true,
     },
   },
   observe: (s) => {

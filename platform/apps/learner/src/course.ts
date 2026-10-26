@@ -12,6 +12,7 @@ import {
 export type CourseConcept = {
   /** The concept's id in the build: what progress and events hang on. */
   id: string;
+  version: string;
   /** Whether its chapter's bank has questions testing it (then it ends with practice). */
   hasPractice: boolean;
   title: Localized;
@@ -22,8 +23,9 @@ export type CourseConcept = {
   prereqs: string[];
 };
 export type CourseChapter = {
-  /** Its path in the course tree (its file is build/<path>.json), and its version. */
+  /** Its path in the course tree (its file is build/<path>.json), its id and its version. */
   path: string;
+  id: string;
   version: string;
   title: Localized;
   art: BuiltArt | null;
@@ -34,6 +36,7 @@ export type CourseChapter = {
 export type Course = {
   /** The book's id in the build; a group is for one. */
   id: string;
+  version: string;
   title: Localized;
   art: BuiltArt | null;
   chapters: CourseChapter[];
@@ -56,12 +59,14 @@ export function readCourses(files: Readonly<Record<string, unknown>>, prefix: st
     const book = builtBookSchema.parse(read(bookRef.path));
     return {
       id: book.id,
+      version: book.version,
       title: book.title,
       art: book.art,
       chapters: book.chapters.map((chapterRef) => {
         const chapter = builtChapterSchema.parse(read(chapterRef.path));
         return {
           path: chapterRef.path,
+          id: chapterRef.id,
           version: chapterRef.version,
           title: chapter.title,
           art: chapter.art,
@@ -70,6 +75,7 @@ export function readCourses(files: Readonly<Record<string, unknown>>, prefix: st
             const concept = builtConceptSchema.parse(read(conceptRef.path));
             return {
               id: concept.id,
+              version: concept.version,
               hasPractice: chapter.questions.some((q) => q.tests.includes(concept.id)),
               title: concept.title,
               art: concept.art,

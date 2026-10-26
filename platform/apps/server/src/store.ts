@@ -1,6 +1,8 @@
 import { createHash, randomBytes } from "node:crypto";
 import {
   type Account,
+  type BoardFact,
+  type ConceptPlan,
   DEV_SCHOOL_CODE,
   type GroupLearner,
   JOIN_CODE_LENGTH,
@@ -10,17 +12,25 @@ import {
   Role,
   SCHOOL_CODE_LENGTH,
   type TeacherGroup,
-  conceptLessonId,
+  boardFactsFrom,
   devJoinCode,
   makeCode,
-  practiceLessonId,
   progressFrom,
 } from "@chalk/api";
 import type { ChalkEvent } from "@chalk/content";
-import { and, desc, eq, gt, inArray, isNull, like, max, or, sql } from "drizzle-orm";
+import { and, desc, eq, gt, inArray, isNull, max, sql } from "drizzle-orm";
 import type { Db } from "./db";
 import type { GoogleProfile } from "./google";
-import { events, accounts, groups, jugnuFlags, members, schools, signIns } from "./schema";
+import {
+  events,
+  accounts,
+  boardFacts,
+  groups,
+  jugnuFlags,
+  members,
+  schools,
+  signIns,
+} from "./schema";
 
 /** Every query the routes make. Routes check who may ask; these only read and write. */
 
@@ -246,14 +256,18 @@ export async function joinedGroups(db: Db, learnerId: string): Promise<JoinedGro
 }
 
 /** The learners in a group now, with when each was last active. */
-export async function groupLearners(db: Db, groupId: string): Promise<GroupLearner[]> {
+export async function groupLearners(
+  db: Db,
+  groupId: string,
+  plans: readonly ConceptPlan[],
+): Promise<GroupLearner[]> {
   const rows = await db
     .select({
       id: accounts.id,
       name: accounts.name,
       picture: accounts.picture,
       joinedAt: members.joinedAt,
-      lastActiveAt: max(events.producedAt),
+      lastActiveAt: max(events.at),
     })
     .from(members)
     .innerJoin(accounts, eq(accounts.id, members.learnerId))
@@ -264,6 +278,7 @@ export async function groupLearners(db: Db, groupId: string): Promise<GroupLearn
   const progress = await progressOfEach(
     db,
     rows.map((row) => row.id),
+    plans,
   );
   return rows.map((row) => ({
     ...row,
@@ -370,7 +385,10 @@ export async function removeLearner(db: Db, groupId: string, learnerId: string, 
 
 // ---- events ----
 
-/** Stores the events; one already stored (sent again after a lost reply) is skipped. */
+/**
+ * Stores the entries; one already stored (sent again after a lost reply) is skipped. Then the
+ * processors read what was new: each keeps its own table (docs/events.md).
+ */
 export async function saveEvents(
   db: Db,
   accountId: string,
@@ -382,47 +400,106 @@ export async function saveEvents(
     .values(
       batch.map((event) => ({
         accountId,
-        id: event.envelope.id,
-        sessionId: event.envelope.sessionId,
-        seq: event.envelope.seq,
-        producedAt: new Date(event.envelope.producedAt),
-        actor: event.envelope.actor,
-        machineType: event.machine.type,
-        machineId: String(event.machine.id),
-        lessonId: event.envelope.lessonId,
-        body: event,
+        id: event.id,
+        schemaVersion: event.schemaVersion,
+        session: event.session,
+        seq: event.seq,
+        at: new Date(event.at),
+        commit: event.commit,
+        actor: event.actor,
+        opening: event.opening,
+        board: event.board,
+        version: event.version,
+        node: event.node,
+        kind: event.kind,
+        payload: event.payload,
       })),
     )
     .onConflictDoNothing({ target: [events.accountId, events.id] })
     .returning({ id: events.id });
+  const isNew = new Set(saved.map((row) => row.id));
+  await keepBoardFacts(db, accountId, boardFactsFrom(batch.filter((event) => isNew.has(event.id))));
   return saved.length;
 }
 
-/** Each learner's progress, from their events in concept and practice lessons. */
+/** The board-facts processor: folds new facts in, keeping the earlier of each. */
+async function keepBoardFacts(
+  db: Db,
+  accountId: string,
+  facts: ReadonlyMap<string, BoardFact>,
+): Promise<void> {
+  if (facts.size === 0) return;
+  await db
+    .insert(boardFacts)
+    .values(
+      [...facts].map(([board, fact]) => ({
+        accountId,
+        board,
+        passedAt: fact.passedAt === null ? null : new Date(fact.passedAt),
+        firstAt: fact.first === null ? null : new Date(fact.first.at),
+        firstIsRight: fact.first?.isRight ?? null,
+      })),
+    )
+    .onConflictDoUpdate({
+      target: [boardFacts.accountId, boardFacts.board],
+      set: {
+        passedAt: sql`least(${boardFacts.passedAt}, excluded.passed_at)`,
+        firstIsRight: sql`case when ${boardFacts.firstAt} is null or (excluded.first_at is not null and excluded.first_at < ${boardFacts.firstAt}) then excluded.first_is_right else ${boardFacts.firstIsRight} end`,
+        firstAt: sql`least(${boardFacts.firstAt}, excluded.first_at)`,
+      },
+    });
+}
+
+/** Makes the board-facts table again from every stored entry (after the processor changed). */
+export async function rebuildBoardFacts(db: Db): Promise<void> {
+  await db.delete(boardFacts);
+  const rows = await db.select().from(events).orderBy(events.accountId, events.session, events.seq);
+  const byAccount = new Map<string, ChalkEvent[]>();
+  for (const row of rows) {
+    const list = byAccount.get(row.accountId) ?? [];
+    list.push({
+      ...row,
+      at: row.at.getTime(),
+      schemaVersion: row.schemaVersion as ChalkEvent["schemaVersion"],
+      actor: row.actor as ChalkEvent["actor"],
+    } as unknown as ChalkEvent);
+    byAccount.set(row.accountId, list);
+  }
+  for (const [accountId, list] of byAccount)
+    await keepBoardFacts(db, accountId, boardFactsFrom(list));
+}
+
+/** Each learner's progress: their board facts, rolled up through the course tree. */
 export async function progressOfEach(
   db: Db,
   accountIds: readonly string[],
+  plans: readonly ConceptPlan[],
 ): Promise<Map<string, Progress>> {
   if (accountIds.length === 0) return new Map();
   const rows = await db
-    .select({ accountId: events.accountId, body: events.body })
-    .from(events)
-    .where(
-      and(
-        inArray(events.accountId, [...accountIds]),
-        or(
-          like(events.lessonId, `${conceptLessonId("")}%`),
-          like(events.lessonId, `${practiceLessonId("")}%`),
-        ),
-      ),
-    );
-  const byAccount = new Map<string, ChalkEvent[]>(accountIds.map((id) => [id, []]));
-  for (const row of rows) byAccount.get(row.accountId)?.push(row.body);
-  return new Map([...byAccount].map(([id, list]) => [id, progressFrom(list)]));
+    .select()
+    .from(boardFacts)
+    .where(inArray(boardFacts.accountId, [...accountIds]));
+  const byAccount = new Map<string, Map<string, BoardFact>>(
+    accountIds.map((id) => [id, new Map()]),
+  );
+  for (const row of rows)
+    byAccount.get(row.accountId)?.set(row.board, {
+      passedAt: row.passedAt?.getTime() ?? null,
+      first:
+        row.firstAt === null
+          ? null
+          : { isRight: row.firstIsRight === true, at: row.firstAt.getTime() },
+    });
+  return new Map([...byAccount].map(([id, facts]) => [id, progressFrom(facts, plans)]));
 }
 
-export async function progressOf(db: Db, accountId: string): Promise<Progress> {
-  return (await progressOfEach(db, [accountId])).get(accountId) ?? {};
+export async function progressOf(
+  db: Db,
+  accountId: string,
+  plans: readonly ConceptPlan[],
+): Promise<Progress> {
+  return (await progressOfEach(db, [accountId], plans)).get(accountId) ?? {};
 }
 
 /** Keeps a flagged chat with Jugnu; returns its id. */

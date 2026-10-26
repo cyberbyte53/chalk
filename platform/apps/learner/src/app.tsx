@@ -2,6 +2,7 @@ import {
   type MeReply,
   type Progress,
   Role,
+  boardFactsFrom,
   isConceptDone,
   meReplySchema,
   mergeProgress,
@@ -9,7 +10,7 @@ import {
   progressFrom,
   progressSchema,
 } from "@chalk/api";
-import { type ChalkEvent, Locale } from "@chalk/content";
+import { Actor, type ChalkEvent, Locale } from "@chalk/content";
 import { createEventBus } from "@chalk/events";
 import { preloadProps, propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode } from "@chalk/player";
@@ -25,16 +26,17 @@ import { DevShell } from "./dev-shell";
 import { devSession, stopDevSignIn } from "./dev-sign-in";
 import { HomeScreen } from "./home-screen";
 import { jugnuLink } from "./jugnu";
-import { courses } from "./lessons";
+import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { PreviewShell } from "./preview-shell";
 import { ReviewShell } from "./review-shell";
+import { settings } from "./settings";
 import { StudioShell } from "./studio-shell";
 import { TeacherApp } from "./teacher-screens";
 import { type Uploader, deviceStore, startUploader } from "./uploader";
 
-/** One event backbone for the whole run of the app; the uploader is one subscriber. */
-const bus = createEventBus();
+/** One event channel for the whole run of the app; the uploader is one subscriber. */
+const bus = createEventBus({ commit: settings.commit });
 const jugnu = jugnuLink();
 
 const LOCALE_KEY = "chalk.locale";
@@ -83,6 +85,23 @@ function joinCodeFromLink(): string | null {
   return code;
 }
 
+/** The node of the course a screen shows, and why. */
+function nodeOnScreen(
+  screen: Screen,
+): { node: { node: string; version: string }; reason?: string } | undefined {
+  if (screen.kind === "home" || screen.kind === "join") return undefined;
+  const course = courses.find((c) => c.id === screen.course);
+  if (course === undefined) return undefined;
+  if (screen.kind === "course") return { node: { node: course.id, version: course.version } };
+  const chapter = course.chapters[screen.chapter];
+  if (chapter === undefined) return undefined;
+  if (screen.kind !== "lesson") return { node: { node: chapter.id, version: chapter.version } };
+  const concept = chapter.concepts.find((c) => c.id === screen.concept);
+  return concept === undefined
+    ? undefined
+    : { node: { node: concept.id, version: concept.version }, reason: screen.part };
+}
+
 type Session = { kind: "loading" } | { kind: "signedOut" } | { kind: "signedIn"; me: MeReply };
 
 type Place = { course: string; chapter: number };
@@ -109,9 +128,24 @@ export function App(): JSX.Element {
   const uploader = useRef<Uploader | undefined>();
 
   const progress = useMemo(
-    () => mergeProgress(serverProgress, progressFrom(localEvents)),
+    () => mergeProgress(serverProgress, progressFrom(boardFactsFrom(localEvents), plans)),
     [serverProgress, localEvents],
   );
+
+  // The node of the course on screen (a book, a chapter, a concept being played) is opened and
+  // closed in the record, like a board.
+  const shownKey = JSON.stringify(nodeOnScreen(screen) ?? null);
+  useEffect(() => {
+    const shown = JSON.parse(shownKey) as ReturnType<typeof nodeOnScreen> | null;
+    if (shown === null || shown === undefined) return;
+    const place = { actor: Actor.App, opening: null, board: null, ...shown.node } as const;
+    bus.record({
+      ...place,
+      kind: "open",
+      payload: shown.reason === undefined ? {} : { reason: shown.reason },
+    });
+    return () => void bus.record({ ...place, kind: "close", payload: {} });
+  }, [shownKey]);
 
   const changeLocale = (next: Locale) => {
     setLocale(next);

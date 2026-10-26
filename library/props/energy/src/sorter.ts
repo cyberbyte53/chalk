@@ -236,7 +236,6 @@ export const energySorter = defineProp({
   signals: {
     [SorterSignal.Placed]: {
       describe: "A source was put in a bin; the payload says which and whether it is right",
-      isCommit: true,
     },
     [SorterSignal.AllRight]: { describe: "Every source is now in its right bin" },
   },

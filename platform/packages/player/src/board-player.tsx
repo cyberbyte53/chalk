@@ -1,25 +1,14 @@
-import {
-  Actor,
-  type Board,
-  type Locale,
-  MachineType,
-  QuestionStatus,
-  type Submitted,
-  SubmittedKind,
-  nodeMachineId,
-} from "@chalk/content";
-import { type Raise, bindRaise } from "@chalk/events";
+import { Actor, AppWhat, type Board, type Locale } from "@chalk/content";
+import { type RecordEvent, makeId } from "@chalk/events";
 import type { JugnuPlace } from "@chalk/jugnu";
 import {
   AnswerStatus,
   BOARD,
   BoardAction,
   BoardSignal,
-  type CheckedPayload,
   PropRole,
   QuestionAction,
   QuestionSignal,
-  type QuestionView,
   SAY,
   segment,
 } from "@chalk/prop";
@@ -32,7 +21,7 @@ import { Layout, type LayoutContext } from "./layout";
 import { type AudioSource, type SpokenProp, useNarrator } from "./narration";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
-import { actionLog, boardKey, continueRecord, seenParts } from "./records";
+import { recordBoard } from "./recorder";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
@@ -49,8 +38,8 @@ export type BoardPlayerProps = {
   board: Board;
   registry: PropRegistry;
   locale: Locale;
-  /** Raises events in this board's place; the board binds it to its machines. */
-  raise: Raise;
+  /** The app's event channel: the board records what happens on it (recorder.ts). */
+  record: RecordEvent;
   /** Where each line's audio is; undefined when the lesson has no audio yet. */
   audio: AudioSource | undefined;
   onPass: () => void;
@@ -89,7 +78,7 @@ export function BoardPlayer({
   board,
   registry,
   locale,
-  raise,
+  record,
   audio,
   onPass,
   onBack,
@@ -100,76 +89,57 @@ export function BoardPlayer({
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
   const jugnu = policy?.hasJugnu === false ? undefined : given;
+  // Set once the recorder exists (the narrator is made first, and reports through it).
+  const recorderRef = useRef<ReturnType<typeof recordBoard> | undefined>(undefined);
   const reportAudioFailure = useCallback(
     (prop: SpokenProp, reason: string) =>
-      bindRaise<typeof MachineType.Line>(raise, {
-        type: MachineType.Line,
-        id: nodeMachineId(boardKey(board), segment(prop.name)),
-      })(Actor.App, { type: "audioFailed", reason }, { audio: "failed" }),
-    [raise, board],
+      recorderRef.current?.app(AppWhat.AudioFailed, { reason }, segment(prop.name)),
+    [],
   );
-  const narrator = useNarrator(boardKey(board), locale, audio, reportAudioFailure);
+  const narrator = useNarrator(board.item?.id ?? board.name, locale, audio, reportAudioFailure);
   const runtime = useBoardRuntime(board, registry, narrator.speak);
+  // Everything that happens on the board is recorded; it opens before its first signal.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: one recorder per board on screen
+  const recorder = useMemo(() => {
+    const made = recordBoard(runtime, record, makeId());
+    made.open({
+      locale,
+      wasPassed,
+      hasAudio: audio !== undefined,
+      ...(mode !== undefined ? { mode } : {}),
+    });
+    recorderRef.current = made;
+    return made;
+  }, [runtime, record]);
+  useEffect(() => () => recorder.close(), [recorder]);
+  // A drag is one entry: the board tells its recorder when a pointer is down on it.
+  useEffect(() => {
+    const up = () => recorder.gesture(false);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [recorder]);
+
   const questions = useMemo(() => questionsOf(runtime), [runtime]);
   useEffect(() => {
     if (wasPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, wasPassed]);
 
-  // Everything the learner does on the board, kept for its Continue event.
-  const log = useMemo(() => actionLog(runtime), [runtime]);
-  useEffect(() => log.stop, [log]);
-
-  // Commits become events: a question checked, Continue pressed.
+  // What the chrome answers: a question checked (the banner), Continue pressed (the next board).
   useEffect(
     () =>
-      runtime.onSignal((record) => {
-        if (record.prop === BOARD && record.signal === BoardSignal.Continued) {
-          bindRaise<typeof MachineType.Board>(raise, {
-            type: MachineType.Board,
-            id: boardKey(board),
-          })(
-            record.actor,
-            {
-              type: "continue",
-              nodes: continueRecord(board, runtime),
-              actions: [...log.actions],
-            },
-            { phase: "passed" },
-          );
+      runtime.onSignal((signal) => {
+        if (signal.prop === BOARD && signal.signal === BoardSignal.Continued) {
           onPass();
           return;
         }
-        if (!questions.includes(record.prop) || record.signal !== QuestionSignal.Checked) return;
-        setLastChecked(record.prop);
-        const payload = record.payload as CheckedPayload;
-        const submitted: Submitted =
-          "optionId" in payload
-            ? { kind: SubmittedKind.Choice, optionId: payload.optionId }
-            : "optionIds" in payload
-              ? { kind: SubmittedKind.Choices, optionIds: [...payload.optionIds] }
-              : {
-                  kind: SubmittedKind.Prop,
-                  node: segment(payload.about),
-                  facts: { ...runtime.getFields(payload.about) },
-                };
-        const about = "about" in payload ? [payload.about] : [];
-        bindRaise<typeof MachineType.Question>(raise, {
-          type: MachineType.Question,
-          id: nodeMachineId(boardKey(board), segment(record.prop)),
-        })(
-          record.actor,
-          { type: "check", submitted, saw: seenParts(runtime, [record.prop, ...about]) },
-          {
-            status:
-              payload.status === AnswerStatus.Correct
-                ? QuestionStatus.Correct
-                : QuestionStatus.Wrong,
-            attempts: payload.attempts,
-            isGraded: runtime.getStored(record.prop).isGraded === true,
-          },
-        );
+        if (questions.includes(signal.prop) && signal.signal === QuestionSignal.Checked)
+          setLastChecked(signal.prop);
       }),
-    [runtime, raise, board, questions, onPass, log],
+    [runtime, questions, onPass],
   );
 
   const isPassed = runtime.getView(BOARD).isPassed === true;
@@ -244,7 +214,7 @@ export function BoardPlayer({
     registry,
     runtime,
     audioFailed: narrator.failed,
-    onRetryAudio: (name) => void runtime.call(name, SAY),
+    onRetryAudio: (name) => void runtime.call(name, SAY, {}, Actor.Learner),
     pointed,
     picked: picks,
   };
@@ -262,6 +232,7 @@ export function BoardPlayer({
         <main
           class={`board-body${pill !== undefined ? " is-picking" : ""}${isSettled ? " is-settled" : ""}`}
           ref={body}
+          onPointerDownCapture={() => recorder.gesture(true)}
         >
           <Layout piece={board.root} context={context} />
           {pill !== undefined && (
@@ -283,8 +254,7 @@ export function BoardPlayer({
             link={jugnu.link}
             place={mode === undefined ? jugnu.place : { ...jugnu.place, mode }}
             lessonId={jugnu.lessonId}
-            boardKey={boardKey(board)}
-            raise={raise}
+            recorder={recorder}
             locale={locale}
             onPoint={(prop, part) => setPointed({ prop, part })}
             onAct={(prop) => bringIntoView(body.current, prop)}

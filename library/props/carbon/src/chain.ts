@@ -445,7 +445,6 @@ export const carbonChain = defineProp({
   signals: {
     [ChainSignal.Built]: {
       describe: "A new compound was built: `name`, `formula`",
-      isCommit: true,
     },
     [ChainSignal.NotPossible]: {
       describe: "The change was refused: `problem` says why (e.g. a carbon would have five bonds)",

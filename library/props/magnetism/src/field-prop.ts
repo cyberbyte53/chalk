@@ -261,7 +261,6 @@ export const magneticField = defineProp({
   signals: {
     [FieldSignal.Placed]: {
       describe: "The compass was placed; the payload has where and the needle's angle",
-      isCommit: true,
     },
     [FieldSignal.Changed]: {
       describe: "The current, the magnet's way round or the turns changed",

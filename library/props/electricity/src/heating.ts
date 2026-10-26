@@ -280,15 +280,12 @@ export const jouleHeating = defineProp({
   signals: {
     [HeatSignal.Heated]: {
       describe: "The coil finished heating; the payload has amps, ohms, seconds and heat",
-      isCommit: true,
     },
     [HeatSignal.Switched]: {
       describe: "An appliance was switched; the payload has the current drawn",
-      isCommit: true,
     },
     [HeatSignal.Blown]: {
       describe: "The fuse melted: the current was more than its rating",
-      isCommit: true,
     },
   },
   observe: (s) => {

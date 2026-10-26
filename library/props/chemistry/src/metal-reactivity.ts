@@ -685,7 +685,6 @@ export const reactivityLab = defineProp({
     [ReactivitySignal.Started]: {
       describe:
         "A metal went into a reagent; the payload has the metal, the reagent, the intensity (0–4, or null if not done), whether it displaced and whether hydrogen came off",
-      isCommit: true,
     },
   },
   observe: (s) => {

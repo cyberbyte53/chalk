@@ -133,7 +133,7 @@ export const orderSteps = defineProp({
           {
             signal: QuestionSignal.Checked,
             // The learner's order, as the ids of the steps line by line.
-            payload: { status, attempts, optionIds: [...s.placed] },
+            payload: { status, attempts, isGraded: s.isGraded, optionIds: [...s.placed] },
           },
           { signal: isRight ? QuestionSignal.Correct : QuestionSignal.Wrong },
         );
@@ -160,7 +160,7 @@ export const orderSteps = defineProp({
     }),
   },
   signals: {
-    [QuestionSignal.Checked]: { describe: "The learner pressed Check", isCommit: true },
+    [QuestionSignal.Checked]: { describe: "The learner pressed Check" },
     [QuestionSignal.Correct]: { describe: "Checked, and in a right order" },
     [QuestionSignal.Wrong]: { describe: "Checked, and out of order" },
   },

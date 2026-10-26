@@ -166,7 +166,6 @@ export const modeChart = defineProp({
     [ModeSignal.Picked]: {
       describe:
         "The learner tapped a bar; the payload has its index and whether it is the modal class",
-      isCommit: true,
     },
     [ModeSignal.Done]: { describe: "The mode is worked out; the payload has the mode" },
   },

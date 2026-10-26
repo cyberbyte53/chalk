@@ -1,3 +1,5 @@
+import { type ConceptPlan, conceptPlansOf } from "@chalk/api";
+import { BuiltFile, buildIndexSchema, builtFile } from "@chalk/content";
 import { type Course, readCourses } from "./course";
 
 /**
@@ -13,6 +15,7 @@ export const skeleton = import.meta.glob<unknown>(
     "../../../../build/*/*.json",
     "../../../../build/*/*/*.json",
     "!../../../../build/graph.json",
+    "!../../../../build/ids.json",
     "!../../../../build/sources.json",
   ],
   { eager: true, import: "default" },
@@ -23,3 +26,14 @@ export const SKELETON_PREFIX = "../../../../build/";
 
 /** The books in build/, for the course and chapter screens. */
 export const courses: readonly Course[] = readCourses(skeleton, SKELETON_PREFIX);
+
+/** What the author decided about each concept (its pages, its first practice): progress reads it. */
+export const plans: readonly ConceptPlan[] = (() => {
+  const index = skeleton[`${SKELETON_PREFIX}${BuiltFile.Index}`];
+  return index === undefined
+    ? []
+    : conceptPlansOf(
+        buildIndexSchema.parse(index),
+        (path) => skeleton[`${SKELETON_PREFIX}${builtFile(path)}`],
+      );
+})();

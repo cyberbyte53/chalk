@@ -1,76 +1,93 @@
 # Events
 
-Like a market-data log: every time something worth recording happens, we write one line (JSON). That log is the only record of what learners did; mastery, practice and the teacher view are all computed from it.
+Content is public: anyone can open a chapter and solve it. What the server can't know is **what this child did**. Events are the channel that carries that from the phone to the server: everything the learner (or Jugnu) does is recorded, automatically, as entries on nodes of the course tree. Progress, the teacher view, content and prop statistics, and later the scheduler are all worked out from that stream and the tree. The design is in the project doc `plans/events-and-names.md`.
 
-## The model
+## What is recorded
 
-- **Everything with behaviour is a state machine:** the lesson, each board, each question. Each has a type, an id, a state and the inputs it accepts.
-- **An event is one input applied to one machine, plus the machine's state right after.**
-- **Only commits are logged:** the moments the learner decides something, like pressing **Check** or **Continue**. Dragging the number line or picking an option before checking changes state but isn't logged; the next commit captures the result.
-- **Commits are signals.** Props announce things on the board (a coin landed, Check pressed); a few signals are marked as commits, and only those become events. The player raises them with `raiseEvent`, bound to the machine.
+Everything the learner does, with nothing written per board, prop or signal:
 
-Today:
+| kind | when | payload |
+|---|---|---|
+| `open` | a board opens, or a book, chapter or concept is on screen | how: `mode`, `wasPassed`, `locale`, `hasAudio`; why: `reason` |
+| `close` | it closes | |
+| `cause` | the learner or Jugnu acts on a board: an action through the door, or a signal a view raised directly | `{ action, args, refused? }` or `{ signal, payload }`; a drag is **one entry per gesture**, its last args with `startAt` and `steps` |
+| `signal` | every signal the board raises | `{ signal, payload, from }`: `from` is the seq of the cause that set it off (null: none did, like `started`) |
+| `jugnu` | one turn with Jugnu | `{ asked, about?, reply, steps, model }`; what he does on the board is `cause` entries of his own |
+| `app` | things around boards | `{ what, … }`: `audioFailed { reason }` |
 
-| Raised by | Machine | Input | State after |
-|---|---|---|---|
-| Continue (`board.continued`) | `board/<item id>` | `continue { nodes, actions }`: every node on the board (words and questions too) saved as it was when pressed, by address, each as `{ type: "<prop>@<hash>", facts, isTouched }`; and every learner action on the board, in order, as `{ node, action, args, t }` on the board's clock. A prop placed with `isInEvents: false` is left out | `{ phase: "passed" }` |
-| Check (`<question>.checked`) | `question/<item id>#<address>` | `check { submitted, saw }`: the option picked, or the facts of the node the question is about; and what the learner saw of the question and that node, every part as drawn | `{ status: "correct" \| "wrong", attempts, isGraded }` |
-| Lesson player | `lesson/<id>` | `start`, `complete`, `leave` | `{ status: "playing" \| "completed" \| "left", boardIndex }` |
-| Narration | `line/<item id>#<address>` | `audioFailed { reason }` | `{ audio: "failed" }` |
-| A turn with Jugnu | `jugnu/<item id>` | `ask { text }`: what the learner asked; or `moved { props }`: they acted on props he handed back | `{ reply, steps, watching, model }`: what he said; each thing he did (acted, pointed, calculated, handed back, with what changed or why it was refused); the props he's waiting on; which model |
+**Not recorded:**
+- What the lesson's own rules do (show, hide, pass): consequences. Their signals are recorded, pointing back to the act that set them off.
+- A prop's own steps over time (a tick, a tween, the race calling its own `arrive`).
+- What Jugnu tries while he thinks on the phone's own board (development).
 
-**Input** is what happened plus the data that came with it; **state** is the machine's own state afterwards, the same shape every time for a machine type. Boards and nodes are named by their item id and address (see "Ids" below).
+**Signals carry the evidence.** A question's `checked` says what it was judged on (`status`, `attempts`, `isGraded`, the option or the node it is about). Processors read signal payloads, which the prop declares, never raw action args.
 
-## Shape
+## The shape
 
 ```ts
-Event = {
-  envelope: { id, schemaVersion, sessionId, seq, producedAt, actor, lessonId, item: { id, path, version } },
-  machine:  { type, id },
-  input:    { type, ... },
-  state:    { ... },
+{
+  // the envelope: the same on every entry; its own columns on the server
+  id, schemaVersion, session, seq,
+  at,        // Unix ms on the phone: the only time (the server adds receivedAt; order comes from seq)
+  commit,    // the commit the app was built from
+  actor,     // learner | jugnu | lesson | app
+  opening,   // which opening of the board (it can open twice in a session); null off a board
+  board,     // the board's id; null off a board
+  version,   // the board's version, or the opened node's
+  node,      // the piece's id; the opened node off a board; null for the board itself
+  kind,
+  payload,   // only what's new in that moment, never the page's state
 }
 ```
 
-- `seq`: order within the session (phone clocks can't be trusted for order).
-- `producedAt`: Unix ms when the phone produced it.
-- `actor`: `learner`, `lesson`, `app` or `jugnu`. Only the learner's own commits are evidence; what Jugnu does on the board never counts as the learner touching it.
+The learner is added by the server, from sign-in. Ids are hashes of paths (`idOf`), so entries stay short; `build/ids.json` maps every item's and placed prop's id back to its path (`class10-maths/real-numbers/hcf-and-lcm/story#must`).
 
 ## Example
 
-A concept's pages, as the log records them (`A` is a page's item id, `B` the next one's):
+The story page in hcf-and-lcm, played on the real app: Play, they meet at 36, answer "factor" (wrong), Try again, answer right, Play to 72, Continue. Node ids shortened; `race` and `must` are the pieces they name.
 
 ```text
-seq  actor    machine              input                                                              state after
- 0   app      lesson/concept/c1    start                                                              { status: playing, boardIndex: 0 }
- 1   learner  board/A              continue { nodes: { title, mayaSquares, line, arjunBetween }, actions: [] } { phase: passed }
- 2   learner  question/B#guessRoot check { submitted: line { marker: 1.62 }, saw: [line/marker 1.62, …] } { status: wrong,   attempts: 1 }
- 3   learner  question/B#guessRoot check { submitted: line { marker: 1.41 }, saw: [line/marker 1.41, …] } { status: correct, attempts: 2 }
- 4   learner  board/B              continue { nodes: { …, line: { type: numberLine@…, isTouched: true, facts: { marker: 1.41, … } } }, actions: [line.moveMarker …] } { phase: passed }
- 5   app      lesson/concept/c1    complete                                                           { status: completed, boardIndex: 2 }
+seq kind   actor   node  payload
+ 0  open   app     -     { mode: lesson, wasPassed: false, locale: en, hasAudio: false }
+ 1  signal lesson  -     { signal: started, from: null }
+ 2  cause  learner race  { action: play, args: {} }
+ 3  signal learner race  { signal: met, payload: { time: 36 }, from: 2 }
+ 4  cause  learner must  { action: select, args: { option: factor } }
+ 5  cause  learner must  { action: check, args: {} }
+ 6  signal learner must  { signal: checked, payload: { status: wrong, attempts: 1, isGraded: false, optionId: factor }, from: 5 }
+ 7  signal learner must  { signal: wrong, from: 5 }
+ 8  cause  learner must  { action: retry, args: {} }
+ 9  cause  learner must  { action: select, args: { option: right } }
+10  cause  learner must  { action: check, args: {} }
+11  signal learner must  { signal: checked, payload: { status: correct, attempts: 2, isGraded: false, optionId: right }, from: 10 }
+12  signal learner must  { signal: correct, from: 10 }
+13  cause  learner race  { action: play, args: {} }
+14  signal learner race  { signal: met, payload: { time: 72 }, from: 13 }
+15  cause  learner -     { action: continue, args: {} }
+16  signal learner -     { signal: continued, from: 15 }
+17  close  app     -     {}
 ```
 
-A Continue event stands on its own: it holds every node's facts, question wording included, so Jugnu or an analysis can read what the board was without looking anything up, and its actions replay the session. Each node says whether the learner touched it, which separates exploring from watching. A lesson leaves a prop out with `isInEvents: false` where it places it, for anything not worth keeping.
+A drag on a number line is one entry: `cause { action: moveMarker, args: { to: 6.4 }, startAt, steps: 16 }`.
 
-Every event names the item and its version (the hash of the code that makes the board), so the board as authored can always be found again; a question's check also keeps what the learner saw, so history never depends on recomputing it.
+## In code
 
-In code, the player binds `raiseEvent` to the machine and calls it when the commit signal arrives:
+- **Kinds** are one table in `@chalk/content` (`event.ts`): a name and its payload schema. Adding a kind is adding a line there; the envelope, bus, uploader and server don't change.
+- **One door:** `record(entry)` on the bus (`@chalk/events`). It adds the envelope, checks the payload against its kind, hands the entry to subscribers and returns its seq.
+- **One producer for boards:** `recordBoard(runtime, record, opening)` (`@chalk/player`, recorder.ts). The runtime numbers every action and signal and says what set each off (`ActionRecord.cause`, `SignalRecord.from`, `isStep`); the recorder turns that into `cause` and `signal` entries. The board player makes one per board on screen and tells it when a pointer is down, so a drag is one entry.
+- **The phone** keeps entries in IndexedDB and uploads them in batches (`POST /api/events`), in `(session, seq)` order. The server stores each once by id.
+- **Reactions on the phone** (Continue → the next board, the result banner) are local listeners on the runtime's signals, not events.
 
-```tsx
-raiseEvent(Actor.Learner, { type: "continue", props }, { phase: "passed" });
-```
+## On the server
 
-## Ids
+Each downstream task is a **processor**: it reads entries as they arrive and keeps its own table, which can be dropped and made again from the stream (`pnpm --filter @chalk/server rebuild-facts`).
 
-A board is named by the id of the built page or question it was made from: a hash of where that lives in content/ (plus a question's params row), so nobody types it. A node on the board is named by its address (`line`, `machine/plane`), and a question or a line by both: `<item id>#<address>`. Renaming a folder or a piece gives new names; the build reports what it moved. A board made by hand (a test board) is named by its name.
+- **Board facts** (`board_facts`, `boardFactsFrom` in `@chalk/api`): per learner and board, when they first passed it (their Continue) and their first graded check.
+- **Progress** (`progressFrom`) rolls board facts up through the tree: a concept is learnt once every one of its pages is passed, and practised once every question of its first practice (`firstTry`, else all testing it) has a first try. The phone works out the same from its own entries, so the two agree.
 
-A saved board (`runtime.save()`) names each node's prop and the shape of its facts (`numberLine@1a2b3c4d`, from its schema). It is read back (`runtime.load()`) only by props of the same shape: a record from before a prop's facts changed is refused, loudly, never read wrong.
+## Care
 
-## Notes
-
-- Events are plain data, typed per machine with Zod (a TypeScript union), checked before they're saved.
-- They're saved on the phone (IndexedDB), then uploaded in batches to `POST /api/events`; the server keeps each once by its id, so a batch sent again after a lost reply counts once. Anything can subscribe to them on the phone (the uploader, the dev log).
-- Progress is worked out from them, nothing else: a concept's pages are the lesson `concept/<id>`, its practice `practice/<id>`; a practice run's score is each question's first check (`progressFrom` in `@chalk/api`, the same on phone and server).
-- Adding something new: mark the prop's signal as a commit (`isCommit`), map it to its machine in the player, and add the machine's input and state to the types and the table above.
-- Until the first learner, shapes change freely and `schemaVersion` stays 1. After that, shapes only change by adding optional fields; anything else bumps `schemaVersion`.
-- No personal data in events, only ids.
+- **Time is only `at`** (Unix ms). The board's own clock stays inside props' animations.
+- **Replay is best-effort:** a spoken line's length or where a tween was when interrupted depend on the device. The record is the truth.
+- **Minors' typed text** (typed answers, Jugnu chats) will be marked in the prop's schema and kept apart, with its own retention, out of the teacher view.
+- Until the first learner, shapes change freely at `schemaVersion` 2. After that, add optional fields freely; anything else bumps it.

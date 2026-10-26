@@ -322,7 +322,6 @@ export const resistorCombo = defineProp({
     [ComboSignal.Broken]: {
       describe:
         "A bulb was broken or mended; the payload has which, and how many bulbs are still lit",
-      isCommit: true,
     },
   },
   observe: (s) => {

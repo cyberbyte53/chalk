@@ -1,5 +1,5 @@
-import { Actor, lessonSchema } from "@chalk/content";
-import { BoardRuntime, type RuntimeServices, continueRecord } from "@chalk/player";
+import { Actor, type EventEntry, lessonSchema } from "@chalk/content";
+import { BoardRuntime, type RuntimeServices, recordBoard } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import coinLesson from "../../../platform/studio/evals/boards/does-a-coin-settle.json";
@@ -76,33 +76,31 @@ describe("does a coin settle?", () => {
     expect(Math.abs((coin.headsFraction as number) - 0.5)).toBeLessThan(0.15);
   });
 
-  it("records every prop at Continue, whether the learner touched it, and skips isInEvents: false", async () => {
+  it("records what the learner did and every signal, linked to its cause; not the coin's own steps", async () => {
     const { services, advance } = fakeTime();
-    const board = structuredClone(tossing);
-    const chart =
-      board.root.kind === "column"
-        ? board.root.children.find((p) => p.name === "chart")
-        : undefined;
-    if (chart?.kind !== "prop") throw new Error("no chart");
-    chart.isInEvents = false;
-    const runtime = new BoardRuntime(board, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(tossing, (type) => propDefs[type], services);
+    // The channel, as the board sees it: each entry gets the next seq.
+    const seen: (EventEntry & { seq: number })[] = [];
+    const record = (entry: EventEntry) => seen.push({ ...entry, seq: seen.length }) - 1;
+    const recorder = recordBoard(runtime, record, "o1");
+    recorder.open({ locale: "en" });
     runtime.start();
     await runtime.call("tossMany", "press", {}, Actor.Learner);
     await advance(5);
-    const records = continueRecord(board, runtime);
-    const byName = (name: string) => records[name];
-    expect(byName("chart")).toBeUndefined();
-    expect(byName("tossMany")?.isTouched).toBe(true);
-    // The learner never tapped the coin, but its result is still kept.
-    expect(byName("coin")).toMatchObject({
-      type: runtime.factsKey("coin"),
-      isTouched: false,
-      facts: { heads: expect.any(Number) },
-    });
-    expect((byName("coin")?.facts.heads as number) + (byName("coin")?.facts.tails as number)).toBe(
-      100,
-    );
-    expect(byName("title")?.facts.text).toMatchObject({ en: expect.any(String) });
+    recorder.close();
+    expect(seen[0]?.kind).toBe("open");
+    expect(seen.at(-1)?.kind).toBe("close");
+    // One cause: the press. The hundred tosses it set off are the props' own steps and the
+    // lesson's rules, so they aren't causes; their signals point back to the press.
+    const causes = seen.filter((e) => e.kind === "cause");
+    expect(causes.map((e) => e.payload)).toEqual([{ action: "press", args: {} }]);
+    const press = causes[0]?.seq;
+    const signals = seen.filter((e) => e.kind === "signal");
+    expect(signals[0]?.payload).toMatchObject({ signal: "started", from: null });
+    const after = signals.slice(1);
+    expect(after.length).toBeGreaterThan(1);
+    expect(after.every((e) => e.kind === "signal" && e.payload.from === press)).toBe(true);
+    expect(new Set(seen.map((e) => e.opening))).toEqual(new Set(["o1"]));
   });
 
   it("stops ticking when the board goes away", async () => {

@@ -179,7 +179,7 @@ export const handRule = defineProp({
   },
   signals: {
     [RuleSignal.Changed]: { describe: "A given direction changed; the payload has the answer" },
-    [RuleSignal.Revealed]: { describe: "The third direction was shown", isCommit: true },
+    [RuleSignal.Revealed]: { describe: "The third direction was shown" },
   },
   observe: (s) => {
     const a = answerOf(s);

@@ -1,25 +1,14 @@
 import { createHash } from "node:crypto";
+import { canonical } from "@chalk/content";
 
-/** JSON with keys sorted at every level, so the same data always gives the same text. */
-export function canonical(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  if (value !== null && typeof value === "object") {
-    const entries = Object.entries(value as Record<string, unknown>)
-      .filter(([, v]) => v !== undefined)
-      .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
-    return `{${entries.map(([k, v]) => `${JSON.stringify(k)}:${canonical(v)}`).join(",")}}`;
-  }
-  return JSON.stringify(value);
-}
+export { canonical, idOf } from "@chalk/content";
 
-/** 16 hex characters (64 bits) of the SHA-256 of some data's canonical JSON. */
+/**
+ * 16 hex characters (64 bits) of the SHA-256 of some data's canonical JSON: the same as
+ * @chalk/content's hashOf (which the phone uses), with Node's faster SHA-256 for the build.
+ */
 export function hashOf(value: unknown): string {
   return createHash("sha256").update(canonical(value)).digest("hex").slice(0, 16);
-}
-
-/** An item's id: a hash of its path in the course tree. Nobody types an id; it is never stored without its path. */
-export function idOf(path: string): string {
-  return hashOf({ path });
 }
 
 /**

@@ -8,7 +8,7 @@
 | [glossary.md](./glossary.md) | The one name for each concept |
 | [architecture.md](./architecture.md) | The repo map, layers, and how a lesson plays |
 | [code-conventions.md](./code-conventions.md) | How code is written here |
-| [events.md](./events.md) | Events: state machines and commits, raiseEvent, the event shape, examples |
+| [events.md](./events.md) | Events: what is recorded, the shape, a real example, processors on the server |
 | [writing-content.md](./writing-content.md) | The content tree, manifests, overviews, question families, the build |
 | [drawing.md](./drawing.md) | Drawing with `@chalk/draw`; the d3 list |
 | [making-art.md](./making-art.md) | A book's, chapter's or lesson's picture |

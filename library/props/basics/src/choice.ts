@@ -90,7 +90,10 @@ export const choice = defineProp({
         const attempts = s.attempts + 1;
         return set(
           { status, attempts, feedback: isRight ? null : (picked?.feedback ?? null) },
-          { signal: QuestionSignal.Checked, payload: { status, attempts, optionId: s.selected } },
+          {
+            signal: QuestionSignal.Checked,
+            payload: { status, attempts, isGraded: s.isGraded, optionId: s.selected },
+          },
           { signal: isRight ? QuestionSignal.Correct : QuestionSignal.Wrong },
         );
       },
@@ -116,7 +119,7 @@ export const choice = defineProp({
     }),
   },
   signals: {
-    [QuestionSignal.Checked]: { describe: "The learner pressed Check", isCommit: true },
+    [QuestionSignal.Checked]: { describe: "The learner pressed Check" },
     [QuestionSignal.Correct]: { describe: "Checked, and right" },
     [QuestionSignal.Wrong]: { describe: "Checked, and wrong" },
   },

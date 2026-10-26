@@ -170,7 +170,6 @@ export const soapAction = defineProp({
     [SoapSignal.Stepped]: { describe: "Moved to `step`" },
     [SoapSignal.Shaken]: {
       describe: "Shaken: `foam` (0–3) and `scum` for this `water` and `cleaner`",
-      isCommit: true,
     },
   },
   observe: (s) => ({

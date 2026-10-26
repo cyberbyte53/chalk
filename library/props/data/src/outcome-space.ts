@@ -191,7 +191,6 @@ export const outcomeSpace = defineProp({
     },
     [SpaceSignal.Matched]: {
       describe: "The learner's picks are now exactly the event",
-      isCommit: true,
     },
     [SpaceSignal.Shown]: { describe: "The event or the complement was lit up or hidden" },
   },

@@ -48,7 +48,7 @@ export {
 } from "./snapshot";
 export { stampCodePaths } from "./code-paths";
 export { type PropPack, lazyRegistry } from "./lazy-views";
-export { actionLog, boardKey, continueRecord, seenParts } from "./records";
+export { type BoardRecorder, boardIdOf, boardPathOf, recordBoard } from "./recorder";
 export {
   type ActResult,
   type ActionRecord,

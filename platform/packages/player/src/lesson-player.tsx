@@ -1,7 +1,7 @@
-import { Actor, type Lesson, LessonStatus, type Locale, MachineType } from "@chalk/content";
-import { type EventBus, bindRaise } from "@chalk/events";
+import type { Lesson, Locale } from "@chalk/content";
+import type { EventBus } from "@chalk/events";
 import type { JSX } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { BoardPlayer } from "./board-player";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import type { JugnuLink } from "./jugnu-panel";
@@ -16,7 +16,7 @@ export type LessonPlayerProps = {
   /** Every prop type the lesson may use, from the library. */
   registry: PropRegistry;
   locale: Locale;
-  /** The app's event backbone; the player only ever raises events on it. */
+  /** The app's event channel: each board records what happens on it. */
   bus: EventBus;
   /** Where each line's audio is (from publish); leave out for a silent lesson. */
   audio?: AudioSource;
@@ -30,7 +30,7 @@ export type LessonPlayerProps = {
   onBoard?: (index: number) => void;
   onExit: () => void;
   /**
-   * Called once the last board is passed (after the lesson's complete event). Given, the app shows
+   * Called once the last board is passed. Given, the app shows
    * what comes next itself; left out, the player shows "Lesson complete".
    */
   onComplete?: () => void;
@@ -62,55 +62,12 @@ export function LessonPlayer({
   onCompleteRef.current = onComplete;
   const isDone = index >= lesson.boards.length;
 
-  const raise = useMemo(
-    () =>
-      bus.raiserFor({
-        lessonId: lesson.id,
-        item: board?.item ?? null,
-      }),
-    [bus, board?.item, lesson.id],
-  );
-  const raiseLessonEvent = useMemo(
-    () => bindRaise<typeof MachineType.Lesson>(raise, { type: MachineType.Lesson, id: lesson.id }),
-    [raise, lesson.id],
-  );
-
   useEffect(() => {
-    if (index === 0) {
-      raiseLessonEvent(
-        Actor.App,
-        { type: "start" },
-        { status: LessonStatus.Playing, boardIndex: 0 },
-      );
-    }
-    if (isDone) {
-      raiseLessonEvent(
-        Actor.App,
-        { type: "complete" },
-        { status: LessonStatus.Completed, boardIndex: index },
-      );
-      onCompleteRef.current?.();
-    }
-  }, [index, isDone, raiseLessonEvent]);
+    if (isDone) onCompleteRef.current?.();
+  }, [isDone]);
 
-  const back = () => {
-    raiseLessonEvent(
-      Actor.Learner,
-      { type: "back" },
-      { status: LessonStatus.Playing, boardIndex: index - 1 },
-    );
-    setIndex(index - 1);
-  };
-
-  const exit = () => {
-    if (!isDone)
-      raiseLessonEvent(
-        Actor.Learner,
-        { type: "leave" },
-        { status: LessonStatus.Left, boardIndex: index },
-      );
-    onExit();
-  };
+  const back = () => setIndex(index - 1);
+  const exit = onExit;
 
   return (
     <div class="lesson">
@@ -147,7 +104,7 @@ export function LessonPlayer({
           board={board}
           registry={registry}
           locale={locale}
-          raise={raise}
+          record={bus.record}
           audio={audio}
           onPass={() => {
             setIndex(index + 1);

@@ -242,7 +242,6 @@ export const riverHealth = defineProp({
     },
     [RiverSignal.Tested]: {
       describe: "A sample was tested; the payload has its pH and colour band",
-      isCommit: true,
     },
   },
   observe: (s) => ({

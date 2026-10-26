@@ -48,11 +48,12 @@ import {
   builtFile,
   builtPageSchema,
   builtQuestionSchema,
+  piecePath,
   propPieces,
   walkPieces,
 } from "@chalk/content";
 import { propPackages } from "@chalk/library";
-import { type AnyPropDef, PropRole } from "@chalk/prop";
+import { type AnyPropDef, PropRole, segment } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateBoard } from "../validate";
@@ -281,6 +282,21 @@ function emit<T extends { path: string; id: string; version: string; source: Sou
   if (c.files.has(file)) report(c, file, `two items at ${item.path}`);
   c.files.set(file, item);
   return { id: item.id, version: item.version, path: item.path };
+}
+
+/**
+ * Every id to its path: each built item's, and each prop placed on a board (`<board path>#<address>`),
+ * so the ids events carry read back as paths. Sorted, so an unchanged build writes the same file.
+ */
+function idsOf(c: Context): Record<string, string> {
+  const paths: string[] = [];
+  for (const item of c.files.values()) {
+    const path = (item as { path?: unknown }).path;
+    if (typeof path === "string") paths.push(path);
+  }
+  for (const [board, where] of c.sources)
+    for (const name of Object.keys(where.props)) paths.push(piecePath(board, segment(name)));
+  return Object.fromEntries(paths.sort().map((path) => [idOf(path), path]));
 }
 
 /**
@@ -997,6 +1013,7 @@ export async function buildContent(options: {
     );
   const index: BuildIndex = { commit: c.commit, books };
   c.files.set(BuiltFile.Index, index);
+  c.files.set(BuiltFile.Ids, idsOf(c));
   return {
     files: c.files,
     problems: c.problems,

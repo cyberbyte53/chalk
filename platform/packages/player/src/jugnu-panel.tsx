@@ -1,5 +1,4 @@
-import { Actor, type ItemRef, type Locale, MachineType, type SavedBoard } from "@chalk/content";
-import { type Raise, bindRaise } from "@chalk/events";
+import type { ItemRef, Locale, SavedBoard } from "@chalk/content";
 import {
   type ChatMessage,
   type JugnuPlace,
@@ -12,6 +11,7 @@ import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { Picked } from "./ask-about";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
+import type { BoardRecorder } from "./recorder";
 import { RichText } from "./rich-text-view";
 import type { BoardRuntime } from "./runtime";
 import { canSpeak, hush, speak, useSpeech } from "./speech";
@@ -45,9 +45,27 @@ export type JugnuFlag = {
 export type JugnuLink = {
   /** Where one board's turns are thought through (the server, on its copy of the board). */
   think: (runtime: BoardRuntime, place: JugnuPlace) => JugnuThink;
+  /**
+   * He thinks on the phone's own board (development, no server): what he tries there isn't the
+   * learner's, so the board's recording is off while he thinks.
+   */
+  isOnThisBoard?: boolean;
   /** Keeps a chat someone wasn't happy with; leave out for no flag button. */
   flag?: (flag: JugnuFlag) => Promise<void>;
 };
+
+/** Thinking on the phone's own board: the recorder is off until he is done. */
+function quietWhile(link: JugnuLink, think: JugnuThink, recorder: BoardRecorder): JugnuThink {
+  if (link.isOnThisBoard !== true) return think;
+  return async (request) => {
+    recorder.pause(true);
+    try {
+      return await think(request);
+    } finally {
+      recorder.pause(false);
+    }
+  };
+}
 
 /** How long a pointed prop's glow holds before his next words. */
 const POINT_MS = 700;
@@ -61,9 +79,8 @@ export type JugnuPanelProps = {
   link: JugnuLink;
   place: JugnuPlace;
   lessonId: string | null;
-  /** The board, as events name it (boardKey): Jugnu's chats are logged against it. */
-  boardKey: string;
-  raise: Raise;
+  /** The board's recorder: each turn is an entry on the board. */
+  recorder: BoardRecorder;
   locale: Locale;
   /** Jugnu points at a prop, or a part of it: the board makes it glow. */
   onPoint: (prop: string, part: string | undefined) => void;
@@ -117,8 +134,7 @@ export function JugnuPanel({
   link,
   place,
   lessonId,
-  boardKey,
-  raise,
+  recorder,
   locale,
   onPoint,
   onAct,
@@ -180,7 +196,7 @@ export function JugnuPanel({
     return {
       stateAtStart: runtime.save(),
       session: new JugnuSession(runtime, undefined, where, {
-        think: link.think(runtime, where),
+        think: quietWhile(link, link.think(runtime, where), recorder),
         onEvent: async (event) => {
           // He is talking or acting on the board: the sheet comes back to its fitted height so
           // both his words and the board are in view.
@@ -202,7 +218,7 @@ export function JugnuPanel({
         },
       }),
     };
-  }, [runtime, link, lessonTitle, boardNumber, boardCount, locale, mode]);
+  }, [runtime, link, lessonTitle, boardNumber, boardCount, locale, mode, recorder]);
   useEffect(
     () => () => {
       session.close();
@@ -244,18 +260,16 @@ export function JugnuPanel({
   useEffect(() => showLatest(list.current), [messages, isThinking, options, isOpen, sheet]);
 
   const log = (
-    input: { type: "ask"; text: string; about?: { prop: string; part?: string; text?: string }[] },
+    asked: { text: string; about?: { prop: string; part?: string; text?: string }[] },
     turn: JugnuTurn,
   ) =>
-    bindRaise<typeof MachineType.Jugnu>(raise, { type: MachineType.Jugnu, id: boardKey })(
-      Actor.Learner,
-      input,
-      {
-        reply: turn.reply,
-        steps: turn.events.filter((event) => event.kind !== "say"),
-        model: turn.model,
-      },
-    );
+    recorder.jugnu({
+      asked: asked.text,
+      ...(asked.about !== undefined ? { about: asked.about } : {}),
+      reply: turn.reply,
+      steps: turn.events.filter((event) => event.kind !== "say"),
+      model: turn.model,
+    });
 
   /** `asked`: what they typed or tapped, and what they held to ask about. */
   const runTurn = async (asked: { text: string; isOption: boolean; about: readonly Picked[] }) => {
@@ -267,7 +281,7 @@ export function JugnuPanel({
       const turn = asked.isOption
         ? await session.choose(asked.text)
         : await session.ask(asked.text, refs);
-      log({ type: "ask", text: asked.text, ...(refs.length > 0 ? { about: refs } : {}) }, turn);
+      log({ text: asked.text, ...(refs.length > 0 ? { about: refs } : {}) }, turn);
     } catch (error) {
       console.error("Jugnu:", error);
       // While we build, say exactly what failed (the server's own words).

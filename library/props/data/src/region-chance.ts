@@ -203,7 +203,7 @@ export const regionChance = defineProp({
     [RegionSignal.Dropped]: {
       describe: "Points were dropped; the payload has trials, hits and the fraction",
     },
-    [RegionSignal.Answered]: { describe: "The ratio was shown", isCommit: true },
+    [RegionSignal.Answered]: { describe: "The ratio was shown" },
   },
   observe: (s) => {
     const elements: Element[] = [

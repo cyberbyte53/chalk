@@ -1,80 +1,61 @@
-import { Actor, type ChalkEvent, type MachineType } from "@chalk/content";
+import { Actor, type ChalkEvent, type EventEntry } from "@chalk/content";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { bindRaise, createEventBus } from "./bus";
+import { createEventBus } from "./bus";
 import { makeId } from "./id";
 
-const ITEM = { id: "aaaaaaaaaaaaaaaa", path: "b/c/d/p", version: "1" };
-const place = { lessonId: "l", item: ITEM };
+const onBoard = {
+  opening: "o1",
+  board: "aaaaaaaaaaaaaaaa",
+  version: "0123456789abcdef",
+} as const;
+const select: EventEntry = {
+  ...onBoard,
+  actor: Actor.Learner,
+  node: "bbbbbbbbbbbbbbbb",
+  kind: "cause",
+  payload: { action: "select", args: { option: "factor" } },
+};
 
 describe("createEventBus", () => {
-  it("adds the envelope and numbers events in order", () => {
-    const bus = createEventBus({ sessionId: "s", now: () => 1000 });
+  it("adds the envelope, numbers entries in order and says each one's seq", () => {
+    const bus = createEventBus({ commit: "abc", session: "s", now: () => 1000 });
     const seen: ChalkEvent[] = [];
     bus.subscribe((e) => seen.push(e));
-    const board = bindRaise<typeof MachineType.Board>(bus.raiserFor(place), {
-      type: "board",
-      id: ITEM.id,
+    const cause = bus.record(select);
+    const signal = bus.record({
+      ...onBoard,
+      actor: Actor.Learner,
+      node: "bbbbbbbbbbbbbbbb",
+      kind: "signal",
+      payload: { signal: "checked", payload: { status: "wrong" }, from: cause },
     });
-    const question = bindRaise<typeof MachineType.Question>(bus.raiserFor(place), {
-      type: "question",
-      id: `${ITEM.id}#ask`,
-    });
-    board(Actor.Learner, { type: "continue", nodes: {}, actions: [] }, { phase: "passed" });
-    question(
-      Actor.Learner,
-      { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
-      { status: "wrong", attempts: 1, isGraded: true },
-    );
-    expect(seen.map((e) => e.envelope.seq)).toEqual([0, 1]);
-    expect(seen[0]?.envelope).toMatchObject({
-      sessionId: "s",
-      producedAt: 1000,
-      actor: "learner",
-      item: ITEM,
-    });
-    expect(seen[1]?.machine).toEqual({ type: "question", id: `${ITEM.id}#ask` });
+    expect([cause, signal]).toEqual([0, 1]);
+    expect(seen[0]).toMatchObject({ session: "s", seq: 0, at: 1000, commit: "abc", kind: "cause" });
+    expect(seen[1]?.payload).toMatchObject({ from: 0 });
   });
-  it("refuses events that break their shape, without using up a sequence number", () => {
+
+  it("refuses entries that break their kind's shape, without using up a seq", () => {
     const problems: string[] = [];
-    const bus = createEventBus({ onInvalid: (p) => problems.push(p) });
+    const bus = createEventBus({ commit: "abc", onInvalid: (p) => problems.push(p) });
     const seen: ChalkEvent[] = [];
     bus.subscribe((e) => seen.push(e));
-    const question = bindRaise<typeof MachineType.Question>(bus.raiserFor(place), {
-      type: "question",
-      id: `${ITEM.id}#ask`,
-    });
-    question(
-      Actor.Learner,
-      { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
-      { status: "wrong", attempts: 0, isGraded: true },
-    );
-    question(
-      Actor.Learner,
-      { type: "check", submitted: { kind: "choice", optionId: "a" }, saw: [] },
-      { status: "wrong", attempts: 1, isGraded: true },
-    );
+    expect(bus.record({ ...select, payload: { signal: "", payload: {} } })).toBe(-1);
+    bus.record(select);
     expect(problems).toHaveLength(1);
-    expect(seen.map((e) => e.envelope.seq)).toEqual([0]);
+    expect(seen.map((e) => e.seq)).toEqual([0]);
   });
-  it("throws on invalid events by default", () => {
-    const board = bindRaise<typeof MachineType.Board>(createEventBus().raiserFor(place), {
-      type: "board",
-      id: "",
-    });
-    expect(() =>
-      board(Actor.Learner, { type: "continue", nodes: {}, actions: [] }, { phase: "passed" }),
-    ).toThrow(/Invalid event/);
-  });
-  it("lets subscribers stop listening", () => {
-    const bus = createEventBus();
-    const seen: ChalkEvent[] = [];
-    const stop = bus.subscribe((e) => seen.push(e));
-    stop();
-    bindRaise<typeof MachineType.Board>(bus.raiserFor(place), { type: "board", id: ITEM.id })(
-      Actor.Learner,
-      { type: "continue", nodes: {}, actions: [] },
-      { phase: "passed" },
+
+  it("throws on invalid entries by default", () => {
+    expect(() => createEventBus({ commit: "abc" }).record({ ...select, board: "" })).toThrow(
+      /Invalid event/,
     );
+  });
+
+  it("lets subscribers stop listening", () => {
+    const bus = createEventBus({ commit: "abc" });
+    const seen: ChalkEvent[] = [];
+    bus.subscribe((e) => seen.push(e))();
+    bus.record(select);
     expect(seen).toEqual([]);
   });
 });

@@ -2,7 +2,6 @@ import {
   Actor,
   type Board,
   type SavedBoard,
-  type SavedNode,
   type Script,
   type WhenRule,
   argExpression,
@@ -41,7 +40,6 @@ import {
   namesOf,
   prepareOnView,
   runEffect,
-  schemaKey,
   schemaWithout,
   segment,
   viewOf,
@@ -61,12 +59,24 @@ export type RuntimeServices = {
   onError: (message: string, error?: unknown) => void;
 };
 
-/** An action someone asked for, and whether the board took it. */
+/**
+ * An action someone asked for, and whether the board took it. Every action and signal on a board
+ * is numbered (`n`) in the order it happened, and says what set it off, so a record can link a
+ * consequence to its cause.
+ */
 export type ActionRecord = {
+  n: number;
   prop: string;
   action: string;
   args: unknown;
   actor: Actor;
+  /**
+   * What set it off: the `n` of the act (an action asked directly, or a signal a view raised)
+   * whose consequence this is, through the lesson's rules. Undefined: it was asked directly.
+   */
+  cause?: number;
+  /** A step of an effect already running on the prop (a tween's tick, its own `call`), not an act. */
+  isStep: boolean;
   /** When, on the board's clock (seconds, not counting pauses). */
   t: number;
   /** Why it was refused; absent when the board took it. */
@@ -97,10 +107,16 @@ export type ActResult = {
 
 /** A signal as the runtime saw it: which prop, what, with what, and who caused it. */
 export type SignalRecord = {
+  n: number;
   prop: string;
   signal: string;
   payload: Readonly<Record<string, unknown>>;
   actor: Actor;
+  /**
+   * The `n` of the act that set it off (an action asked directly, whatever rules ran between).
+   * Undefined: nothing did; a view raised it (it is an act itself), or the board started.
+   */
+  from?: number;
 };
 
 /** One placed prop: what it is. Its facts live in the board's one root; its view is worked out. */
@@ -109,8 +125,6 @@ type Piece = {
   def: AnyPropDef;
   /** Its stored facts' schema: the prop's own, minus the fields the board binds. */
   facts: FactsSchema;
-  /** What a saved record calls the shape of its facts: `type@hash` (schemaKey). */
-  key: string;
   /** Fields the board binds into it (never stored, never set by an action). */
   bound: BoundTree | undefined;
   isGroup: boolean;
@@ -382,6 +396,8 @@ export class BoardRuntime {
   private readonly clock: Clock;
   private readonly touchedProps = signal<ReadonlySet<string>>(new Set());
   private isDisposed = false;
+  /** The last number given to an action or signal (ActionRecord.n). */
+  private count = 0;
 
   constructor(
     readonly board: Board,
@@ -437,7 +453,6 @@ export class BoardRuntime {
         name,
         def,
         facts,
-        key: schemaKey(def.type, facts),
         bound,
         isGroup: groupOf(def) !== undefined,
         view: computed(() => this.boardView.value[name] as PropView),
@@ -481,11 +496,6 @@ export class BoardRuntime {
     return this.piece(name).def;
   }
 
-  /** What a saved record calls the shape of a node's facts: `type@hash`. */
-  factsKey(name: string): string {
-    return this.piece(name).key;
-  }
-
   /** Every placed prop's name (not the board). */
   propNames(): string[] {
     return [...this.pieces.keys()].filter((name) => name !== BOARD);
@@ -513,17 +523,15 @@ export class BoardRuntime {
   }
 
   /**
-   * The board as saved (a Continue event, the phone's board sent to Jugnu's server): each node by
-   * address, with the shape of its facts (`type@hash`), its facts, and whether the learner touched
-   * it. The one way a board is written down; `load` is the one way it is read back.
+   * The board as plain facts (the phone's board sent to Jugnu's server): each node by address, its
+   * stored facts and whether the learner touched it. The one way a board is written down; `load` is
+   * the one way it is read back.
    */
   save(): SavedBoard {
-    const out: Record<string, SavedNode> = {};
+    const out: SavedBoard = {};
     for (const [name, facts] of Object.entries(this.root.peek())) {
-      const piece = this.pieces.get(name);
-      if (piece === undefined) continue;
+      if (!this.pieces.has(name)) continue;
       out[segment(name)] = {
-        type: piece.key,
         facts: { ...(facts as StoredState) },
         isTouched: this.touchedProps.peek().has(name),
       };
@@ -533,7 +541,7 @@ export class BoardRuntime {
 
   /**
    * Puts the board into a saved one. Refused, before anything changes, if a node isn't on this board
-   * or was saved with another shape of facts (its prop changed since): it is never read wrong.
+   * or its facts don't fit its prop (checked fully): it is never read wrong.
    */
   load(saved: SavedBoard): void {
     const problems: string[] = [];
@@ -544,10 +552,6 @@ export class BoardRuntime {
       const piece = name === undefined ? undefined : this.pieces.get(name);
       if (name === undefined || piece === undefined) {
         problems.push(`${path}: not on this board`);
-        continue;
-      }
-      if (node.type !== piece.key) {
-        problems.push(`${path}: saved as ${node.type}, this board's is ${piece.key}`);
         continue;
       }
       const errors = this.checkFacts(name, node.facts as StoredState);
@@ -660,7 +664,7 @@ export class BoardRuntime {
   }
 
   /** "objectArrow.released" on a group piece → the node "lens/objectArrow" and "released". */
-  private nodeOf(piece: string, dotted: string): { node: string; member: string } {
+  nodeOf(piece: string, dotted: string): { node: string; member: string } {
     const names = dotted.split(".");
     let def = this.pieces.get(piece)?.def;
     const path = [segment(piece)];
@@ -682,7 +686,7 @@ export class BoardRuntime {
 
   /** Opens the board: raises `board.started`, which usually starts its script. */
   start(): void {
-    this.enqueue({ prop: BOARD, signal: BoardSignal.Started, payload: {}, actor: Actor.Lesson });
+    this.enqueue(BOARD, { signal: BoardSignal.Started }, Actor.Lesson, undefined);
   }
 
   /**
@@ -702,6 +706,7 @@ export class BoardRuntime {
   /**
    * `fromTimeline`: a step of an effect already running on this prop (a tick, a `call`): it is the
    * same act as the one that started it, so it neither stops the prop's timelines nor counts again.
+   * `cause`: the act this is a consequence of (a lesson rule answering it); undefined, asked directly.
    */
   private invoke(
     name: string,
@@ -710,11 +715,24 @@ export class BoardRuntime {
     actor: Actor,
     isSetOff: boolean,
     fromTimeline = false,
+    cause: number | undefined = undefined,
   ): Promise<void> {
     if (this.isDisposed) return Promise.resolve();
     const piece = this.piece(name);
+    const n = ++this.count;
+    // What its signals (and what they set off) are consequences of.
+    const root = cause ?? n;
     const notify = (refused?: string) => {
-      const record: ActionRecord = { prop: name, action, args, actor, t: this.clock.time() };
+      const record: ActionRecord = {
+        n,
+        prop: name,
+        action,
+        args,
+        actor,
+        isStep: fromTimeline,
+        t: this.clock.time(),
+      };
+      if (cause !== undefined) record.cause = cause;
       if (refused !== undefined) record.refused = refused;
       for (const listener of this.actionListeners) listener(record);
     };
@@ -753,7 +771,7 @@ export class BoardRuntime {
         return Promise.resolve();
       }
       this.change(piece, effect.set, actor);
-      for (const emit of effect.emit) this.emitFrom(name, emit, actor);
+      for (const emit of effect.emit) this.enqueue(name, emit, actor, root);
       return Promise.resolve();
     }
     // Anything else runs as a timeline on this prop: steps on the board's clock, through the door.
@@ -778,10 +796,12 @@ export class BoardRuntime {
       },
       get: () => this.fieldsOf(piece),
       emit: (signal, payload) => {
-        if (isLive()) this.emitFrom(name, { signal, payload }, actor);
+        if (isLive()) this.enqueue(name, { signal, payload }, actor, root);
       },
       call: (next, nextArgs) =>
-        isLive() ? this.invoke(name, next, nextArgs, actor, isSetOff, true) : Promise.resolve(),
+        isLive()
+          ? this.invoke(name, next, nextArgs, actor, isSetOff, true, root)
+          : Promise.resolve(),
       isLive,
     };
     const finish = () => {
@@ -822,14 +842,14 @@ export class BoardRuntime {
     return this.run(script, actor);
   }
 
-  /** A prop's view raises one of its signals (e.g. the learner let go of the marker). */
+  /** A prop's view raises one of its signals (e.g. the learner let go of the marker): an act itself. */
   signal(
     name: string,
     signal: string,
     payload: Readonly<Record<string, unknown>> = {},
     actor: Actor = Actor.Learner,
   ): void {
-    this.emitFrom(name, { signal, payload }, actor);
+    this.enqueue(name, { signal, payload }, actor, undefined);
   }
 
   /** Seconds on the board's clock (not counting pauses): what views animate by. */
@@ -988,13 +1008,20 @@ export class BoardRuntime {
     };
   }
 
-  private emitFrom(name: string, emit: Emit, actor: Actor): void {
-    this.enqueue({ prop: name, signal: emit.signal, payload: emit.payload ?? {}, actor });
-  }
-
-  /** Signals are answered one at a time, in order. A signal raised while answering waits its turn. */
-  private enqueue(record: SignalRecord): void {
+  /**
+   * Signals are answered one at a time, in order. A signal raised while answering waits its turn.
+   * `from`: the act it is a consequence of (see SignalRecord).
+   */
+  private enqueue(name: string, emit: Emit, actor: Actor, from: number | undefined): void {
     if (this.isDisposed) return;
+    const record: SignalRecord = {
+      n: ++this.count,
+      prop: name,
+      signal: emit.signal,
+      payload: emit.payload ?? {},
+      actor,
+    };
+    if (from !== undefined) record.from = from;
     this.queue.push(record);
     if (this.isDispatching) return;
     this.isDispatching = true;
@@ -1023,26 +1050,36 @@ export class BoardRuntime {
       }
       // The rule's script runs on its own; the next signal doesn't wait for it to finish. What
       // Jugnu sets off stays Jugnu's, so his limits hold through the lesson's own rules too.
-      if (record.actor === Actor.Jugnu) void this.run(rule.script, Actor.Jugnu, true);
-      else void this.run(rule.script, Actor.Lesson);
+      // Everything it does is a consequence of the act that raised the signal.
+      const cause = record.from ?? record.n;
+      if (record.actor === Actor.Jugnu) void this.run(rule.script, Actor.Jugnu, true, cause);
+      else void this.run(rule.script, Actor.Lesson, false, cause);
     }
   }
 
   // ---- THEN ----
 
-  /** `isSetOff`: a lesson rule answering something Jugnu did (his limits still hold). */
-  private async run(script: Script, actor: Actor = Actor.Lesson, isSetOff = false): Promise<void> {
+  /**
+   * `isSetOff`: a lesson rule answering something Jugnu did (his limits still hold). `cause`: the
+   * act a lesson rule is answering; undefined for a script run directly (Jugnu's own).
+   */
+  private async run(
+    script: Script,
+    actor: Actor = Actor.Lesson,
+    isSetOff = false,
+    cause: number | undefined = undefined,
+  ): Promise<void> {
     if (this.isDisposed) return;
     if (Array.isArray(script)) {
-      for (const step of script) await this.run(step, actor, isSetOff);
+      for (const step of script) await this.run(step, actor, isSetOff, cause);
       return;
     }
     if ("seq" in script) {
-      for (const step of script.seq) await this.run(step, actor, isSetOff);
+      for (const step of script.seq) await this.run(step, actor, isSetOff, cause);
       return;
     }
     if ("par" in script) {
-      await Promise.all(script.par.map((step) => this.run(step, actor, isSetOff)));
+      await Promise.all(script.par.map((step) => this.run(step, actor, isSetOff, cause)));
       return;
     }
     if ("wait" in script) {
@@ -1057,7 +1094,7 @@ export class BoardRuntime {
       this.services.onError(`Board ${this.board.name}: ${script.call} arguments`, error);
       return;
     }
-    await this.invoke(prop, member, args, actor, isSetOff);
+    await this.invoke(prop, member, args, actor, isSetOff, false, cause);
   }
 
   /** Arguments are plain values, or `{ "expr": "coin.count" }`, worked out when the call runs. */

@@ -348,7 +348,6 @@ export const foodChain = defineProp({
     [ChainSignal.Revealed]: { describe: "A new trophic level is showing; `shown` levels in all" },
     [ChainSignal.Removed]: {
       describe: "A level was wiped out (or brought back); the payload has each level's effect",
-      isCommit: true,
     },
     [ChainSignal.Tapped]: { describe: "An organism in the web was tapped" },
   },

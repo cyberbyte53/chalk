@@ -222,8 +222,6 @@ export type DerivedSpec<S extends StoredState> = {
 
 export type SignalSpec = {
   describe: string;
-  /** A commit: a moment the learner decides something. Only commits are logged. */
-  isCommit?: boolean;
 };
 
 /** A screen-space box, in the prop's own pixels at the given width. */

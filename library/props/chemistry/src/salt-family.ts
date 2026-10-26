@@ -351,7 +351,6 @@ export const saltFamily = defineProp({
   signals: {
     [SaltFamilySignal.Picked]: {
       describe: "A salt was tapped (payload: salt, nature)",
-      isCommit: true,
     },
     [SaltFamilySignal.Highlighted]: { describe: "A family was lit (payload: ion, its salts)" },
   },

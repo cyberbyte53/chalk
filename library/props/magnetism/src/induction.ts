@@ -173,7 +173,6 @@ export const induction = defineProp({
     [InductionSignal.Kicked]: {
       describe:
         "Something moved or switched; the payload says which way the needle kicked (or none)",
-      isCommit: true,
     },
   },
   observe: (s) => ({

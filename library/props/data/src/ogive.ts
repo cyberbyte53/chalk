@@ -193,7 +193,6 @@ export const ogive = defineProp({
     [OgiveSignal.Joined]: { describe: "Every point is plotted and joined" },
     [OgiveSignal.Read]: {
       describe: "The median was read off the graph; the payload has it",
-      isCommit: true,
     },
   },
   observe: (s) => {

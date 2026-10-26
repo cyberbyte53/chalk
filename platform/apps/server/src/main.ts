@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
-import { dirname } from "node:path";
-import { buildIndexSchema } from "@chalk/content";
+import { dirname, join } from "node:path";
+import { conceptPlansOf } from "@chalk/api";
+import { buildIndexSchema, builtFile } from "@chalk/content";
 import { providerFrom } from "@chalk/jugnu";
 import { serve } from "@hono/node-server";
 import { createApp } from "./app";
@@ -21,6 +22,10 @@ if (config.DEV_SIGN_IN === "on")
   );
 
 const contentDir = config.CONTENT_DIR ?? dirname(config.CONTENT_INDEX);
+// The course tree's plans, for progress: read once, from the same build the app was made with.
+const plans = conceptPlansOf(index, (path) =>
+  JSON.parse(readFileSync(join(contentDir, builtFile(path)), "utf8")),
+);
 const app = createApp({
   db,
   verifyGoogle:
@@ -30,6 +35,7 @@ const app = createApp({
   origin: config.ORIGIN,
   isLanAllowed: config.DEV_SIGN_IN === "on",
   commit: index.commit,
+  plans,
   courseIds: new Set(index.books.map((book) => book.id)),
   jugnu:
     config.JUGNU_MODEL_SERVER === undefined || config.JUGNU_MODEL === undefined

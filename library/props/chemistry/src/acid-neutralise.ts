@@ -210,11 +210,9 @@ export const neutraliser = defineProp({
     },
     [NeutraliseSignal.ColourChanged]: {
       describe: "The indicator changed colour (payload from, to)",
-      isCommit: true,
     },
     [NeutraliseSignal.Neutralised]: {
       describe: "Exactly enough acid is in: only salt and water (pH 7)",
-      isCommit: true,
     },
   },
   observe: (s) => {

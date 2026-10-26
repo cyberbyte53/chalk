@@ -23,7 +23,7 @@ const MAX_LINE_MS = 20_000;
  * Failures never block the lesson: the line is marked, reported, and the board carries on.
  */
 export function useNarrator(
-  /** The board as events name it (boardKey): with each prop's address, its audio files' keys. */
+  /** The board's item id (its name, for a board made by hand): with each prop's address, its audio files' keys. */
   board: string,
   locale: Locale,
   source: AudioSource | undefined,

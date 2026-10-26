@@ -222,7 +222,6 @@ export const motor = defineProp({
     [MotorSignal.Turned]: {
       describe:
         "The coil was turned (or the rings swapped); the payload has the current, force and spin",
-      isCommit: true,
     },
     [MotorSignal.Switched]: { describe: "The battery or the running changed" },
   },

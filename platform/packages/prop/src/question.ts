@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /**
  * The question role. A prop with `role: "question"` has these fields and this action and signals,
- * so the player can log the commit without knowing the prop. A board may ask any number of them.
+ * so the player can read a check without knowing the prop. A board may ask any number of them.
  */
 export const AnswerStatus = { Open: "open", Correct: "correct", Wrong: "wrong" } as const;
 export type AnswerStatus = (typeof AnswerStatus)[keyof typeof AnswerStatus];
@@ -51,10 +51,14 @@ export type QuestionView = {
   canCheck: boolean;
 };
 
-/** Payload of the `checked` signal: the commit, with what was submitted. */
-export type CheckedPayload =
-  | { status: AnswerStatus; attempts: number; optionId: string }
-  /** A multi-choice question: every option picked. */
-  | { status: AnswerStatus; attempts: number; optionIds: string[] }
+/**
+ * Payload of the `checked` signal: the result, whether it counts (`isGraded`, the question's own),
+ * and what was submitted. It is what processors read as evidence (docs/events.md).
+ */
+export type CheckedPayload = { status: AnswerStatus; attempts: number; isGraded: boolean } & (
+  | { optionId: string }
+  /** A multi-choice question: every option picked (an order question: in order). */
+  | { optionIds: string[] }
   /** A goal question: the learner's answer is the state of the prop named `about`. */
-  | { status: AnswerStatus; attempts: number; about: string };
+  | { about: string }
+);

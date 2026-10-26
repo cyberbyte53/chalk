@@ -142,7 +142,6 @@ export const waterTank = defineProp({
   signals: {
     [TankSignal.Changed]: {
       describe: "The tank, pipe or tap changed; the payload has the new flow and current",
-      isCommit: true,
     },
   },
   observe: (s) => {

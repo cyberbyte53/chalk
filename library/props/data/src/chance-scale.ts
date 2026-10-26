@@ -132,7 +132,7 @@ export const chanceScale = defineProp({
     [ScaleSignal.Placed]: {
       describe: "An event was placed on the line; the payload has its value",
     },
-    [ScaleSignal.Done]: { describe: "Every event is on the line", isCommit: true },
+    [ScaleSignal.Done]: { describe: "Every event is on the line" },
   },
   observe: (s) => {
     const placed = s.items.slice(0, s.shown);

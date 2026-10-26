@@ -4,6 +4,7 @@ import { join as joinPath } from "node:path";
 import {
   ApiErrorCode,
   ApiPath,
+  type ConceptPlan,
   type EventsReply,
   type JugnuTurnReply,
   Role,
@@ -73,6 +74,8 @@ export type AppDeps = {
   isLanAllowed?: boolean;
   /** The commit the server and its content were built from (build/index.json), for /api/health. */
   commit?: string;
+  /** What the author decided about each concept (its pages, its first practice): progress reads it. */
+  plans?: readonly ConceptPlan[];
   /** The book ids in the built content: what a group may be for. */
   courseIds: ReadonlySet<string>;
   /** Jugnu's model; unset: Jugnu is off. */
@@ -271,7 +274,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
         const parsed = eventSchema.safeParse(raw);
         if (parsed.success) good.push(parsed.data);
         else {
-          const id = (raw as { envelope?: { id?: unknown } } | null)?.envelope?.id;
+          const id = (raw as { id?: unknown } | null)?.id;
           rejected.push(typeof id === "string" ? id : `#${i}`);
           log.warn(`event refused: ${parsed.error.issues[0]?.message}`);
         }
@@ -285,7 +288,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
   );
 
   app.get(ApiPath.Progress, signedIn, as(Role.Learner), async (c) =>
-    c.json(await progressOf(db, c.get("account").id)),
+    c.json(await progressOf(db, c.get("account").id, deps.plans ?? [])),
   );
 
   // ---- teachers ----
@@ -312,7 +315,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   app.get(`${ApiPath.Groups}/:groupId`, signedIn, as(Role.Teacher), async (c) => {
     const group = await ownGroup(c);
-    return c.json({ group, learners: await groupLearners(db, group.id) });
+    return c.json({ group, learners: await groupLearners(db, group.id, deps.plans ?? []) });
   });
 
   app.post(`${ApiPath.Groups}/:groupId/code`, signedIn, as(Role.Teacher), async (c) => {

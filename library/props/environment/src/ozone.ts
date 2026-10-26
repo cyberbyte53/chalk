@@ -138,7 +138,7 @@ export const ozoneLayer = defineProp({
   },
   signals: {
     [OzoneSignal.Stepped]: { describe: "Moved to formation step `step`" },
-    [OzoneSignal.Formed]: { describe: "The steps have reached ozone, O₃", isCommit: true },
+    [OzoneSignal.Formed]: { describe: "The steps have reached ozone, O₃" },
     [OzoneSignal.Changed]: {
       describe: "The CFC level changed; the payload says how many UV rays get through",
     },

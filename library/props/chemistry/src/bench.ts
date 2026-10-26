@@ -331,7 +331,7 @@ export const reactionBench = defineProp({
     }),
   },
   signals: {
-    [BenchSignal.Started]: { describe: "The experiment was started", isCommit: true },
+    [BenchSignal.Started]: { describe: "The experiment was started" },
   },
   observe: (s) => {
     const info = BENCH[s.kind];

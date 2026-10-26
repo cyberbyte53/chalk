@@ -237,7 +237,7 @@ export const waterHarvest = defineProp({
   },
   signals: {
     [WaterSignal.Stepped]: { describe: "Moved on a step" },
-    [WaterSignal.Done]: { describe: "Reached the last step", isCommit: true },
+    [WaterSignal.Done]: { describe: "Reached the last step" },
     [WaterSignal.Picked]: { describe: "A scheme was picked; the payload lists its problems" },
   },
   observe: (s) => ({

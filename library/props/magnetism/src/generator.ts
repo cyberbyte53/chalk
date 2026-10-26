@@ -171,7 +171,6 @@ export const generator = defineProp({
   signals: {
     [GeneratorSignal.Turned]: {
       describe: "The coil was turned or the rings swapped; the payload has the output",
-      isCommit: true,
     },
     [GeneratorSignal.Switched]: { describe: "The coil started or stopped turning by itself" },
   },

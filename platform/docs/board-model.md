@@ -121,7 +121,7 @@ A prop with the question role (`choice`, `goal`) has `status` (open / correct / 
 
 ## Events
 
-When the learner presses Continue, the board's event holds every prop's state as it was then (words and questions included) and whether the learner touched it, so the event stands on its own. A lesson leaves a prop out with `"isInEvents": false` where it places it, next to `isHidden`. See [events.md](events.md).
+Everything the learner does on a board is recorded on its own: each action they (or Jugnu) take, each signal the board raises and the act that set it off, with nothing written per board or prop. See [events.md](events.md).
 
 ## Speech
 

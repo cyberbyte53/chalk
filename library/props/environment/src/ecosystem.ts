@@ -223,7 +223,6 @@ export const ecosystem = defineProp({
     },
     [EcoSignal.Sustained]: {
       describe: "The jar has just become able to keep itself going",
-      isCommit: true,
     },
   },
   observe: (s) => ({

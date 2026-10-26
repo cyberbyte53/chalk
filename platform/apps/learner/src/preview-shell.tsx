@@ -435,10 +435,6 @@ function PreviewBoard({
   );
   const phone = useRef<HTMLDivElement>(null);
   useSourceTags(phone, where, shown.path);
-  const raise = useMemo(
-    () => bus.raiserFor({ lessonId: "preview", item: board.item ?? null }),
-    [bus, board],
-  );
   const onClick = (e: MouseEvent) => {
     if (!e.altKey) return;
     const site = (e.target as HTMLElement).closest<HTMLElement>("[data-source]")?.dataset.source;
@@ -468,7 +464,7 @@ function PreviewBoard({
             board={board}
             registry={propLibrary}
             locale={locale}
-            raise={raise}
+            record={bus.record}
             audio={undefined}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };
