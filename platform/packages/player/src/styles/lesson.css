@@ -1,7 +1,10 @@
 /* A lesson: its header and progress, the Continue button, the end. */
 
+/* The column every lesson and screen sits in: the phone's width, up to a readable 640px on a tablet
+   or laptop. It is the container text sizes grow with (the look's fluid tokens, in cqi). */
 .lesson {
-  max-width: 430px;
+  max-width: 640px;
+  container-type: inline-size;
   min-height: 100dvh;
   margin: 0 auto;
   background: var(--color-surface);

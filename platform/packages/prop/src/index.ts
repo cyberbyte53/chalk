@@ -153,3 +153,11 @@ export {
   type Step,
   type Steps,
 } from "./group";
+export {
+  DEFAULT_SIZE,
+  PHONE_COLUMN,
+  type Size,
+  SizeFit,
+  sizeOf,
+  zoomFor,
+} from "./size";

@@ -5,6 +5,7 @@ import {
   QuestionAction,
   QuestionSignal,
   SAY,
+  SizeFit,
   actionsFor,
   defineProp,
   questionDefaults,
@@ -33,6 +34,8 @@ const noArgs = z.object({}).strict();
 /** "Get the prop into this state, then Check." The lesson says what counts, as an IS on `isMet`. */
 export const goal = defineProp({
   type: "goal",
+  /** Words and controls: they reflow with the column (text sizes grow), never scale. */
+  size: { fit: SizeFit.Fill },
   isExplainer: false,
   describe: "A question answered by getting another prop into a goal state, then pressing Check.",
   role: PropRole.Question,

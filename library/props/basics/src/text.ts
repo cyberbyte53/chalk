@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { SAY, actionsFor, colorSchema, defineProp, say } from "@chalk/prop";
+import { SAY, SizeFit, actionsFor, colorSchema, defineProp, say } from "@chalk/prop";
 import { z } from "zod";
 
 /** How words sit on the board. A definition is set apart in an outlined box. */
@@ -28,6 +28,8 @@ const act = actionsFor<TextState>();
 /** Words on the board. The lesson may own its words with an IS (e.g. a live "1.41² = 1.9881"). */
 export const text = defineProp({
   type: "text",
+  /** Words and controls: they reflow with the column (text sizes grow), never scale. */
+  size: { fit: SizeFit.Fill },
   isExplainer: false,
   describe: "Words on the board, in the learner's language.",
   state: textState,

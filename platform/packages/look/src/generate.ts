@@ -9,8 +9,17 @@ const GENERIC_FONTS = new Set(["serif", "sans-serif", "monospace", "system-ui", 
 /** The group content may name a colour from; the others (brand) are the app's own. */
 const CONTENT_GROUP = "color";
 
+/**
+ * Sizes that grow with the column (`$max`): `$value` at the narrowest column, `$max` at the widest,
+ * in between in step with the column's width (`cqi`: the nearest container, the lesson column),
+ * in `rem` so the reader's text-size setting still scales them.
+ */
+export const NARROW_COLUMN = 360;
+export const WIDE_COLUMN = 640;
+const ROOT_PX = 16;
+
 type TokenValue = string | number | string[];
-type Token = { name: string; value: TokenValue };
+type Token = { name: string; value: TokenValue; max?: string };
 type Group = { name: string; tokens: Token[] };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -37,7 +46,10 @@ export function readGroups(json: unknown): Group[] {
         .map(([key, token]) => {
           const value = isRecord(token) ? token.$value : undefined;
           if (!isTokenValue(value)) throw new Error(`tokens.json: ${name}.${key} has no $value`);
-          return { name: key, value };
+          const max = isRecord(token) ? token.$max : undefined;
+          if (max !== undefined && typeof max !== "string")
+            throw new Error(`tokens.json: ${name}.${key}: $max must be a size like "20px"`);
+          return { name: key, value, ...(max !== undefined ? { max } : {}) };
         });
       return { name, tokens };
     });
@@ -56,14 +68,35 @@ function cssValue(value: TokenValue, known: Set<string>, where: string): string 
   return `var(--${target})`;
 }
 
+const px = (size: string, where: string): number => {
+  const match = /^(\d+(?:\.\d+)?)px$/.exec(size);
+  if (match === null) throw new Error(`tokens.json: ${where}: write sizes in px, like "17px"`);
+  return Number(match[1]);
+};
+const rem = (n: number): string => `${Number((n / ROOT_PX).toFixed(4))}rem`;
+
+/** A size from `min` (narrowest column) to `max` (widest), in step with the column between. */
+export function fluid(min: string, max: string, where: string): string {
+  const lo = px(min, where);
+  const hi = px(max, where);
+  const slope = (hi - lo) / (WIDE_COLUMN - NARROW_COLUMN);
+  const base = lo - slope * NARROW_COLUMN;
+  return `clamp(${rem(lo)}, ${rem(base)} + ${Number((slope * 100).toFixed(4))}cqi, ${rem(hi)})`;
+}
+
 /** `:root` with one CSS variable per token: `--color-primary`, `--font-body`, `--text-title`. */
 export function generateCss(json: unknown): string {
   const groups = readGroups(json);
   const known = new Set(groups.flatMap((g) => g.tokens.map((t) => `${g.name}-${t.name}`)));
   const lines = groups.flatMap((group) =>
-    group.tokens.map(
-      (t) => `  --${group.name}-${t.name}: ${cssValue(t.value, known, `${group.name}.${t.name}`)};`,
-    ),
+    group.tokens.map((t) => {
+      const where = `${group.name}.${t.name}`;
+      const value =
+        t.max === undefined
+          ? cssValue(t.value, known, where)
+          : fluid(String(t.value), t.max, where);
+      return `  --${group.name}-${t.name}: ${value};`;
+    }),
   );
   return `/* ${HEADER} */\n:root {\n${lines.join("\n")}\n}\n`;
 }

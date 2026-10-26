@@ -894,6 +894,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const withQuestions = params.get("show") === "questions";
   const isPlaying = params.has("play");
   const isShot = params.has("shot");
+  // The column's width, to see the board as another device draws it (a phone by default).
+  const width = Number(params.get("width")) || undefined;
   const locale = params.get("locale") === "hi" ? Locale.Hi : Locale.En;
   const [shown, setShown] = useState<Shown[] | null>(null);
   const shownRef = useRef<Shown[] | null>(null);
@@ -1079,7 +1081,11 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   };
   const lessonName = (lesson: string) => lesson.split("/").at(-1) ?? lesson;
   return (
-    <main class={`preview${isShot ? " is-shot" : ""}${isOne ? " is-one" : ""}`} key={build}>
+    <main
+      class={`preview${isShot ? " is-shot" : ""}${isOne ? " is-one" : ""}`}
+      key={build}
+      style={width === undefined ? undefined : { "--phone-width": `${width}px` }}
+    >
       {!isShot && count > 1 && (
         <nav class="preview-nav">
           <button type="button" class={isOne ? "" : "is-on"} onClick={() => setIsOne(false)}>

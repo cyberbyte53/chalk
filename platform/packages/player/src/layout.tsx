@@ -1,6 +1,6 @@
 import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/content";
 import { Actor } from "@chalk/content";
-import { type Box, joinPath, namesOf, segment } from "@chalk/prop";
+import { type Box, PHONE_COLUMN, joinPath, namesOf, segment, sizeOf, zoomFor } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type BoardClock, BoardClockContext } from "./board-clock";
@@ -23,6 +23,13 @@ function tagged(box: HTMLDivElement | null, part: string): Box | undefined {
     width: inner.width,
     height: inner.height,
   };
+}
+
+/** A box in the prop's own coordinates, as it is drawn at this zoom. */
+function scaled(at: Box | undefined, zoom: number): Box | undefined {
+  return at === undefined
+    ? undefined
+    : { x: at.x * zoom, y: at.y * zoom, width: at.width * zoom, height: at.height * zoom };
 }
 
 /** A leaf's part name from its address under the piece (what `locate` takes). */
@@ -49,22 +56,41 @@ function PropPieceView({
   context,
 }: { piece: PropPiece; context: LayoutContext }): JSX.Element {
   const box = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(340);
+  const drawn = useRef<HTMLDivElement>(null);
+  const module = context.registry[piece.prop];
+  if (module === undefined) throw new Error(`No prop type "${piece.prop}" in the library`);
+  // Sized by the player (size.ts): the default, over it the prop type's rule, then the board's.
+  const rule = useRef(sizeOf(module.def.size, piece.size));
+  rule.current = sizeOf(module.def.size, piece.size);
+  // The column's width, and the zoom the prop is drawn at; the prop lays out at column ÷ zoom.
+  const [column, setColumn] = useState(PHONE_COLUMN);
+  const [zoom, setZoom] = useState(1);
   useEffect(() => {
     const element = box.current;
-    if (element === null) return;
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry !== undefined) setWidth(Math.max(200, Math.round(entry.contentRect.width)));
-    });
+    const inner = drawn.current;
+    if (element === null || inner === null) return;
+    const fit = () => {
+      const width = Math.round(element.getBoundingClientRect().width);
+      // Its height as drawn now, back at 1× (zoom scales it).
+      const current = Number(inner.style.zoom) || 1;
+      const natural = inner.getBoundingClientRect().height / current;
+      const next = zoomFor(rule.current, width, window.innerHeight, natural);
+      setColumn(width);
+      // Small changes are left alone, so a prop that grows as it lays out doesn't flicker.
+      setZoom((was) => (Math.abs(was - next) < 0.02 ? was : Number(next.toFixed(3))));
+    };
+    const observer = new ResizeObserver(fit);
     observer.observe(element);
+    observer.observe(inner);
+    window.addEventListener("resize", fit);
     const stopStamping = stampPaths(element);
     return () => {
       observer.disconnect();
+      window.removeEventListener("resize", fit);
       stopStamping();
     };
   }, []);
-  const module = context.registry[piece.prop];
-  if (module === undefined) throw new Error(`No prop type "${piece.prop}" in the library`);
+  const width = Math.max(200, Math.round(column / zoom));
   const { View } = module;
   const { runtime } = context;
   const clock = useMemo<BoardClock>(
@@ -77,8 +103,10 @@ function PropPieceView({
   const ringOf = (part: string | undefined): Box | undefined =>
     part === undefined
       ? undefined
-      : (module.def.locate?.({ ...runtime.getView(piece.name) } as never, nameIn(part), width) ??
-        tagged(box.current, part));
+      : (scaled(
+          module.def.locate?.({ ...runtime.getView(piece.name) } as never, nameIn(part), width),
+          zoom,
+        ) ?? tagged(box.current, part));
   const ring = ringOf(pointed?.part);
   const isWholeGlow = pointed !== undefined && ring === undefined;
   const picks = (context.picked ?? []).filter((p) => p.prop === piece.name);
@@ -118,15 +146,21 @@ function PropPieceView({
           }}
         />
       )}
-      <BoardClockContext.Provider value={clock}>
-        <View
-          view={runtime.getView(piece.name)}
-          locale={context.locale}
-          width={width}
-          call={(action, args) => void runtime.call(piece.name, action, args ?? {}, Actor.Learner)}
-          signal={(name, payload) => runtime.signal(piece.name, name, payload ?? {}, Actor.Learner)}
-        />
-      </BoardClockContext.Provider>
+      <div class="piece-drawn" ref={drawn} style={zoom === 1 ? undefined : { zoom }}>
+        <BoardClockContext.Provider value={clock}>
+          <View
+            view={runtime.getView(piece.name)}
+            locale={context.locale}
+            width={width}
+            call={(action, args) =>
+              void runtime.call(piece.name, action, args ?? {}, Actor.Learner)
+            }
+            signal={(name, payload) =>
+              runtime.signal(piece.name, name, payload ?? {}, Actor.Learner)
+            }
+          />
+        </BoardClockContext.Provider>
+      </div>
     </div>
   );
 }

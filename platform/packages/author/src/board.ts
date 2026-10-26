@@ -18,6 +18,7 @@ import {
   type PropDef,
   PropRole,
   QuestionSignal,
+  type Size,
   type StoredState,
 } from "@chalk/prop";
 import { Expr } from "./expr";
@@ -241,7 +242,7 @@ export class BoardKit {
     def: PropDef<S, A, G, D>,
     name: string,
     given: Given<S> = {},
-    options: { isHidden?: boolean } = {},
+    options: { isHidden?: boolean; size?: Size } = {},
   ): Placed<S, A, G, D> {
     if (this.names.has(name)) throw new Error(`Two props named "${name}" on one board`);
     if (name === BOARD) throw new Error(`"${BOARD}" is the board itself; pick another name`);
@@ -250,6 +251,7 @@ export class BoardKit {
     const fields = plain(given) as Record<string, unknown>;
     if (Object.keys(fields).length > 0) piece.with = fields;
     if (options.isHidden === true) piece.isHidden = true;
+    if (options.size !== undefined) piece.size = { ...options.size };
     noteSite(piece, siteHere());
     const placed = new Placed(name, def, piece);
     this.placed.push(placed as unknown as Placed<StoredState, string, string, string>);

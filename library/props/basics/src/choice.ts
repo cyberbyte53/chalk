@@ -5,6 +5,7 @@ import {
   QuestionAction,
   QuestionSignal,
   SAY,
+  SizeFit,
   actionsFor,
   defineProp,
   questionDefaults,
@@ -46,6 +47,8 @@ const noArgs = z.object({}).strict();
 /** Pick one option, then Check. The answer key is in the prop, checked on the phone. */
 export const choice = defineProp({
   type: "choice",
+  /** Words and controls: they reflow with the column (text sizes grow), never scale. */
+  size: { fit: SizeFit.Fill },
   isExplainer: false,
   describe: "A multiple-choice question.",
   role: PropRole.Question,

@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { SAY, actionsFor, defineProp, say } from "@chalk/prop";
+import { SAY, SizeFit, actionsFor, defineProp, say } from "@chalk/prop";
 import { z } from "zod";
 import { CharacterId } from "./cast";
 
@@ -18,6 +18,8 @@ const act = actionsFor<LineState>();
 /** A cast character's speech bubble. It is said aloud only when a script calls `say`. */
 export const line = defineProp({
   type: "line",
+  /** Words and controls: they reflow with the column (text sizes grow), never scale. */
+  size: { fit: SizeFit.Fill },
   isExplainer: false,
   describe: "A character's speech bubble.",
   state: lineState,

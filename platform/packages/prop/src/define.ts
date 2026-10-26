@@ -1,4 +1,5 @@
 import type { ZodType, ZodTypeDef } from "zod";
+import type { Size } from "./size";
 
 /** Text in every supported language, by locale ("en", "hi"). */
 export type Texts = Readonly<Record<string, string>>;
@@ -411,6 +412,11 @@ export type PropDef<
   frame?: FrameSpec<S>;
   /** The kind of frame this prop draws on, when it only draws inside one (a ray, a marker). */
   drawsOn?: FrameKindName;
+  /**
+   * How it is sized on screens wider or shorter than a phone (size.ts): by default drawn for a
+   * phone and scaled with the column; a board can override it where it places the prop.
+   */
+  size?: Size;
   /**
    * Whether Jugnu may bring this prop in to explain a concept (a number line, tiles). Words, buttons,
    * questions and timers are not explainers. Default: true.

@@ -24,6 +24,13 @@ describe("look", () => {
     expect(css).toContain("--text-body-leading: 1.45;");
   });
 
+  it("a size with $max grows with the column, in rem, from the narrowest to the widest", () => {
+    const css = generateCss({ text: { body: { $value: "17px", $max: "20px" } } });
+    // 17px at a 360px column, 20px at 640px: 17 = b + 360s and 20 = b + 640s.
+    expect(css).toContain("--text-body: clamp(1.0625rem, 0.8214rem + 1.0714cqi, 1.25rem);");
+    expect(() => generateCss({ text: { body: { $value: "1rem", $max: "20px" } } })).toThrow(/px/);
+  });
+
   it("refuses a reference to a missing token", () => {
     expect(() => generateCss({ color: { a: { $value: "{color.b}" } } })).toThrow(/color\.b/);
   });

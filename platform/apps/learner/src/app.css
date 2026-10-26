@@ -1682,7 +1682,8 @@
   flex-direction: column;
 }
 .preview-card {
-  width: 390px;
+  /* A phone by default; ?width= draws the column as another device would. */
+  width: var(--phone-width, 390px);
   flex: none;
 }
 .preview-tag {
@@ -1765,7 +1766,7 @@ body.is-selecting .is-pick-target {
   gap: 14px;
 }
 .preview-body > .preview-phone {
-  width: 390px;
+  width: var(--phone-width, 390px);
   flex: none;
 }
 /* Beside the board, each comment level with what it is about (placed by BoardThreads). */

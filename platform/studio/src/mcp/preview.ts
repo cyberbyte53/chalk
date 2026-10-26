@@ -188,7 +188,13 @@ function layoutProblems(card: Element): string[] {
   return [...new Set(found)].slice(0, 20);
 }
 
-export type ShotOptions = { locale?: "en" | "hi"; play?: boolean; questions?: boolean };
+export type ShotOptions = {
+  locale?: "en" | "hi";
+  play?: boolean;
+  questions?: boolean;
+  /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
+  width?: number;
+};
 
 /**
  * One thing a finger does on the drawn board. Nothing here knows how a board behaves: a step only
@@ -217,7 +223,7 @@ export async function previewUrl(
   o: ShotOptions = {},
 ): Promise<string> {
   const url = new URL(await previewBase(root));
-  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&play" : ""}${o.locale === "hi" ? "&locale=hi" : ""}`;
+  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&play" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}`;
   return url.toString();
 }
 
@@ -392,6 +398,7 @@ async function shootNow(
   const at = await openPage(base);
   const { page } = at;
   at.errors.length = 0;
+  await page.setViewportSize({ width: (o.width ?? PHONE_WIDTH) + 48, height: 900 });
   const isOnApp = page.url().startsWith(base);
   try {
     if (isContinued) {

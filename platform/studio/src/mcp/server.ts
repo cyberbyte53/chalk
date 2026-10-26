@@ -512,6 +512,15 @@ server.registerTool(
           "Hidden pieces stay hidden until earned, as a student meets them. Default: true with steps, false without.",
         ),
       questions: z.boolean().optional().describe("For a lesson: its questions too."),
+      width: z
+        .number()
+        .int()
+        .min(320)
+        .max(640)
+        .optional()
+        .describe(
+          "The column's width in px: 390 (a phone) by default; 360 a small phone, 640 a tablet or laptop.",
+        ),
       rebuild: z
         .boolean()
         .optional()
@@ -542,6 +551,7 @@ server.registerTool(
       locale: args.locale ?? ("en" as const),
       play: args.play ?? steps.length > 0,
       questions: args.questions === true,
+      ...(args.width !== undefined ? { width: args.width } : {}),
     };
     await progress(steps.length > 0 ? "acting" : "drawing");
     const drawn = await shoot(

@@ -1,3 +1,4 @@
+import type { Size } from "@chalk/prop";
 import { z } from "zod";
 
 export const PieceKind = {
@@ -58,6 +59,8 @@ export type Piece =
       isHidden?: boolean;
       /** Prop type from the library (e.g. "numberLine", "text"). */
       prop: string;
+      /** How it is sized on other screens, over its prop type's own rule (see @chalk/prop size.ts). */
+      size?: Size;
       /** Its starting fields; anything left out uses the prop's defaults. */
       with?: Record<string, unknown>;
     };
@@ -90,6 +93,15 @@ export const pieceSchema: z.ZodType<Piece, z.ZodTypeDef, unknown> = z.lazy(() =>
       ...base,
       kind: z.literal(PieceKind.Prop),
       prop: z.string().min(1),
+      size: z
+        .object({
+          fit: z.enum(["scale", "fill"]).optional(),
+          maxZoom: z.number().min(1).max(3).optional(),
+          maxHeight: z.number().min(0.2).max(1).optional(),
+          minZoom: z.number().min(0.3).max(1).optional(),
+        })
+        .strict()
+        .optional(),
       with: z.record(z.string(), z.unknown()).optional(),
     }),
   ]),

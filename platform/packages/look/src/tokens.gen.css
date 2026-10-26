@@ -30,13 +30,13 @@
   --brand-jugnu-curl: #f4a300;
   --font-body: "Baloo 2", "Noto Sans Devanagari", system-ui, sans-serif;
   --font-display: "Baloo 2", "Noto Sans Devanagari", system-ui, sans-serif;
-  --text-title: 27px;
+  --text-title: clamp(1.6875rem, 1.2857rem + 1.7857cqi, 2rem);
   --text-title-leading: 1.15;
-  --text-body: 17px;
+  --text-body: clamp(1.0625rem, 0.8214rem + 1.0714cqi, 1.25rem);
   --text-body-leading: 1.45;
-  --text-note: 15px;
+  --text-note: clamp(0.9375rem, 0.7768rem + 0.7143cqi, 1.0625rem);
   --text-note-leading: 1.4;
-  --text-caption: 13px;
+  --text-caption: clamp(0.8125rem, 0.7321rem + 0.3571cqi, 0.875rem);
   --text-caption-leading: 1.35;
   --shape-radius-s: 12px;
   --shape-radius-m: 18px;

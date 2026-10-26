@@ -59,6 +59,13 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.md) first, including the list of d3 modules to check before writing geometry by hand); draw your own SVG inside the stage only for what no piece covers. For anything on a coordinate plane use Mafs instead (see Libraries below). Styles go in the prop's own `src/styles.css`, exported as `@chalk/prop-<folder>/styles.css`; class names start with the prop's short prefix (`.nl-`, `.ns-`). Draw only with the look's tokens (`var(--color-on-surface)`, `var(--font-display)`, `var(--text-note)`; see `platform/packages/look`), never a raw colour: a test checks. A colour the content picks (a `colorSchema` field) reaches the view as a role or a hex; set it as `--tone` with `cssColor` and mix tints from it. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
 
+**Sizing is the player's, not the view's.** Draw for a phone: the `width` you get is about 390 (never under 200), and nothing in a view knows the device. The player sizes each prop by a rule (`size` in `@chalk/prop`), with defaults a prop type can change and a board can change again where it places the prop (`b.prop(def, name, given, { size })`):
+
+- **`fit: "scale"`** (the default): drawn for a phone and zoomed as one picture with the column, 1× on a phone up to `maxZoom` (1.2) on a 640px column, in step with the text. If that would take more than `maxHeight` of the screen's height (0.6), it is zoomed down to fit, never below `minZoom` (0.75). SVG and HTML props alike.
+- **`fit: "fill"`**: no zoom; the view gets the column's whole width and uses it. For words and controls (they reflow, and text sizes grow on their own), and for props that should show more rather than grow (a number line showing more axis).
+
+Use the look's text tokens for words (they grow with the column), no fixed widths or max-widths in px, and lay out to the `width` given.
+
 ## Libraries: use the toolkit, don't add to it
 
 Use what already exists before writing your own, but only from this list. One tool per kind of job keeps props consistent and the app small.

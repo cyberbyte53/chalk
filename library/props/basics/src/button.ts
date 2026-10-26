@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, defineProp, set } from "@chalk/prop";
+import { SizeFit, actionsFor, defineProp, set } from "@chalk/prop";
 import { z } from "zod";
 
 export const ButtonAction = { Press: "press" } as const;
@@ -19,6 +19,8 @@ const act = actionsFor<ButtonState>();
 /** A button on the board. Pressing it only announces `pressed`; WHEN rules decide what happens. */
 export const button = defineProp({
   type: "button",
+  /** Words and controls: they reflow with the column (text sizes grow), never scale. */
+  size: { fit: SizeFit.Fill },
   isExplainer: false,
   describe: "A button. Pressing it raises `pressed`; the lesson's rules decide what it does.",
   state: buttonState,

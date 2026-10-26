@@ -1,4 +1,4 @@
-import { actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
+import { SizeFit, actionsFor, defineProp, repeat, seq, set } from "@chalk/prop";
 import { z } from "zod";
 
 export const TimerSignal = { Tick: "tick" } as const;
@@ -20,6 +20,8 @@ const act = actionsFor<TimerState>();
  */
 export const timer = defineProp({
   type: "timer",
+  /** Words and controls: they reflow with the column (text sizes grow), never scale. */
+  size: { fit: SizeFit.Fill },
   isExplainer: false,
   describe:
     "A timer that raises `tick` every so often, for things that repeat (toss, sample, step).",
