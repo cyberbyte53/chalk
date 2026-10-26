@@ -3,7 +3,18 @@
     "chalk": {
       "type": "stdio",
       "command": "${workspaceFolder}/platform/studio/node_modules/.bin/tsx",
-      "args": ["${workspaceFolder}/platform/studio/src/mcp/server.ts"]
+      "args": ["${workspaceFolder}/platform/studio/src/mcp/server.ts"],
+      "env": {
+        "CHALK_ROLE": "fixer"
+      }
+    },
+    "chalk-reviewer": {
+      "type": "stdio",
+      "command": "${workspaceFolder}/platform/studio/node_modules/.bin/tsx",
+      "args": ["${workspaceFolder}/platform/studio/src/mcp/server.ts"],
+      "env": {
+        "CHALK_ROLE": "reviewer"
+      }
     }
   }
 }

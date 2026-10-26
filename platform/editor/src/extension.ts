@@ -231,7 +231,7 @@ async function changeComments(change: Record<string, unknown>): Promise<{
   ok: boolean;
   error?: string;
   count?: number;
-  comments?: { by: string; review?: string; status: string }[];
+  review?: { id: string };
 }> {
   if (!(await ensureServer())) return { ok: false, error: "the dev server isn't running" };
   try {
@@ -246,22 +246,20 @@ async function changeComments(change: Record<string, unknown>): Promise<{
   }
 }
 
-/** How many of your comments haven't been handed to an agent yet (the panel's button shows it). */
+/** How many threads are in your sitting, not yet handed to an agent (the panel's button shows it). */
 async function tellReview(): Promise<void> {
   let count = 0;
   try {
-    const res = await fetch(new URL("dev-review", base));
-    const all = (await res.json()) as { by: string; review?: string; status: string }[];
-    count = all.filter(
-      (c) => c.by === "you" && c.review === undefined && c.status === "open",
-    ).length;
+    const res = await fetch(new URL("dev-review?sitting", base));
+    count = ((await res.json()) as unknown[]).length;
   } catch {}
   void panel?.webview.postMessage({ type: "review", count });
 }
 
 /**
- * Hands your new comments to an agent: the dev server marks them as one review, and one line is
- * copied for the agent's chat. The agent reads the review with the chalk `comments` tool.
+ * Hands your sitting to an agent: every thread you started or replied to since your last handover.
+ * The dev server writes it as reviews/<id>.yaml, and one line naming it is copied for the agent's
+ * chat; the agent reads it with the chalk `comments` tool (review: <id>).
  */
 async function copyReview(): Promise<void> {
   const done = await changeComments({ op: "handover" });
@@ -271,12 +269,12 @@ async function copyReview(): Promise<void> {
   }
   if (!done.count) {
     void vscode.window.showInformationMessage(
-      "Chalk: no new comments since the last handover. Pick a piece (c) to add one.",
+      "Chalk: nothing new since your last handover. Pick a piece (c) to comment, or reply on a thread.",
     );
     return;
   }
   await vscode.env.clipboard.writeText(
-    `apply my review (${done.count} comment${done.count > 1 ? "s" : ""})`,
+    `apply review ${done.review?.id ?? "latest"} (${done.count} thread${done.count > 1 ? "s" : ""})`,
   );
   void tellReview();
   void vscode.window.showInformationMessage(
@@ -308,8 +306,8 @@ async function askForComment(p: Picked): Promise<void> {
 async function leaveComment(p: Picked): Promise<void> {
   const target = p.piece ? (p.part ? `${p.piece}/${p.part}` : p.piece) : undefined;
   const done = await changeComments({
-    op: "add",
-    comment: {
+    op: "start",
+    thread: {
       board: p.board,
       ...(target ? { target } : {}),
       ...(p.propPackage && p.prop ? { prop: p.prop } : {}),
@@ -502,12 +500,18 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,content/*/*/comments.yaml,library/props/*/comments.yaml}",
+      "{build/index.json,content/*/*/comments.yaml,library/props/*/comments.yaml,reviews/*.yaml}",
     ),
   );
-  watcher.onDidChange(() => tree.refresh());
-  watcher.onDidCreate(() => tree.refresh());
-  watcher.onDidDelete(() => tree.refresh());
+  // A thread or a review changed (a reply in the preview, an agent's answer): the tree's counts
+  // and the panel's "Copy for agent (n)" follow.
+  const refresh = () => {
+    tree.refresh();
+    void tellReview();
+  };
+  watcher.onDidChange(refresh);
+  watcher.onDidCreate(refresh);
+  watcher.onDidDelete(refresh);
   context.subscriptions.push(watcher);
 }
 

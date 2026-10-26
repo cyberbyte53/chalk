@@ -18,6 +18,7 @@ import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { z } from "zod";
 import { JoinScreen, SetupScreen, WelcomeScreen } from "./account-screens";
+import { ActivityFeed } from "./activity";
 import { api } from "./api-client";
 import { ChapterGate } from "./chapter-gate";
 import type { Course, CourseChapter } from "./course";
@@ -29,7 +30,6 @@ import { jugnuLink } from "./jugnu";
 import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { PreviewShell } from "./preview-shell";
-import { ReviewShell } from "./review-shell";
 import { settings } from "./settings";
 import { StudioShell } from "./studio-shell";
 import { TeacherApp } from "./teacher-screens";
@@ -231,8 +231,8 @@ export function App(): JSX.Element {
 
   if (isDevShell && new URLSearchParams(window.location.search).has("board"))
     return <PreviewShell bus={bus} />;
-  if (isDevShell && new URLSearchParams(window.location.search).has("review"))
-    return <ReviewShell bus={bus} />;
+  if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
+    return <ActivityFeed />;
   if (isDevShell && new URLSearchParams(window.location.search).has("studio"))
     return <StudioShell />;
   if (isDevShell) return <DevShell bus={bus} />;

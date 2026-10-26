@@ -9,7 +9,7 @@ import { courses } from "./lessons";
 import { specimen } from "./specimen";
 
 /**
- * Lessons for the development shells (`?dev`, `?dev&review`), fetched when asked for: a book's
+ * Lessons for the development shells (`?dev`, `?dev&board`), fetched when asked for: a book's
  * chapter one at a time from /content/ (build/, as the app does), and the lessons in no book
  * (specimens, labs, test boards) only when that list is opened.
  */

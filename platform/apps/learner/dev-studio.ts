@@ -8,7 +8,11 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { type Filed as Comment, Status, readComments as readAll } from "../../studio/src/comments";
+import {
+  type Filed as Comment,
+  isUnanswered,
+  readComments as readAll,
+} from "../../studio/src/comments";
 import { type Next, type Step, nextStep, runs, startRun, steps, stopRun } from "./dev-runner";
 
 export const PlanStatus = {
@@ -171,7 +175,7 @@ function conceptIds(root: string, book: string, chapter: string): Map<string, st
   return ids;
 }
 
-const readComments = (root: string): Comment[] => readAll(root).comments;
+const readComments = (root: string): Comment[] => readAll(root).threads;
 
 /** Comments on a chapter: those filed in its comments.yaml (plan comments and screen comments). */
 function chapterComments(
@@ -233,8 +237,7 @@ function chapterRow(
     runNames,
     lessons,
     runs: runNames.length,
-    openComments: mine.filter((c) => c.status === Status.Open || c.status === Status.Planned)
-      .length,
+    openComments: mine.filter(isUnanswered).length,
     openQuestions: plan?.openQuestions ?? 0,
   };
   return { ...row, next: nextStep({ ...row, next: null }) };

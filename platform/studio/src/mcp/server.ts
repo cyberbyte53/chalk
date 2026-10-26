@@ -4,7 +4,18 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { boardName, listBoards, readSources } from "../boards";
-import { type Filed, Kind, Status, latestReview, unanswered } from "../comments";
+import {
+  type Filed,
+  Label,
+  type Review,
+  Role,
+  Status,
+  isUnanswered,
+  lastMove,
+  latestReview,
+  standing,
+  threadsOf,
+} from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
 import { type NodeShape, nodeSchema } from "./model-schema";
@@ -78,35 +89,59 @@ const buildContent = (signal?: AbortSignal) =>
 
 // ---- Comments, through the dev server (their one writer) ----
 
-/** One change to the comments, as an agent; the dev server says what it did or why not. */
-async function changeComments(
-  change: Record<string, unknown>,
-): Promise<{ ok: boolean; error?: string; comment?: Filed }> {
+/**
+ * This connection's role, fixed when the server starts (CHALK_ROLE in the MCP config: fixer by
+ * default, or reviewer) and never chosen per call: the writer checks every write against what the
+ * role may do. CHALK_NAME names the agent in threads (its role when unset).
+ */
+const ROLE = process.env.CHALK_ROLE === Role.Reviewer ? Role.Reviewer : Role.Fixer;
+const NAME = str(process.env.CHALK_NAME) ?? ROLE;
+
+type Applied = {
+  ok: boolean;
+  error?: string;
+  thread?: Filed;
+  review?: Review;
+  count?: number;
+};
+
+/** One change, as this connection's role; the dev server says what it did or why not. */
+async function changeComments(change: Record<string, unknown>): Promise<Applied> {
   const base = await previewBase(root);
   const res = await fetch(new URL("/dev-review", base), {
     method: "POST",
-    headers: { "content-type": "application/json", "x-chalk-actor": "agent" },
+    headers: { "content-type": "application/json", "x-chalk-role": ROLE, "x-chalk-name": NAME },
     body: JSON.stringify(change),
   });
-  return (await res.json()) as { ok: boolean; error?: string; comment?: Filed };
+  return (await res.json()) as Applied;
 }
 
-async function allComments(): Promise<Filed[]> {
+async function readAll(): Promise<{ threads: Filed[]; reviews: Review[] }> {
   const base = await previewBase(root);
-  return (await (await fetch(new URL("/dev-review", base))).json()) as Filed[];
+  return (await (await fetch(new URL("/dev-review", base))).json()) as {
+    threads: Filed[];
+    reviews: Review[];
+  };
 }
 
-function commentLine(c: Filed): string {
+const oneLine = (t: string, n: number) => t.replace(/\s+/g, " ").slice(0, n);
+
+function threadLine(c: Filed): string {
   const where = [c.board ?? `${c.home} (plan)`, c.target, c.prop ? `prop ${c.prop}` : undefined]
     .filter(Boolean)
     .join(" · ");
+  const plan = lastMove(c, Status.Planned);
   return [
-    `• ${c.id} [${c.status}]${c.kind === Kind.Comment ? "" : ` ${c.kind}`}${c.causedBy ? ` caused by ${c.causedBy}` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
-    `  source: ${c.source ?? "?"}${c.review ? `   review: ${c.review}` : ""}`,
-    `  ${c.by}: “${c.text.replace(/\s+/g, " ").slice(0, 400)}”`,
+    `• ${c.id} [${c.status}]${c.label === Label.Comment ? "" : ` ${c.label}`}${c.about ? ` about ${c.about}` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
+    `  source: ${c.source ?? "?"}`,
+    ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot, 200)}`] : []),
+    `  ${c.by}: “${oneLine(c.text, 400)}”`,
     ...(c.quote ? [`  quote: ${c.quote.slice(0, 200)}`] : []),
-    ...(c.plan ? [`  plan: ${c.plan.text.replace(/\s+/g, " ").slice(0, 300)}`] : []),
-    ...c.thread.map((e) => `  ${e.by}: ${e.text.replace(/\s+/g, " ").slice(0, 300)}`),
+    ...(plan ? [`  plan: ${oneLine(plan.text, 300)}`] : []),
+    ...c.messages.map(
+      (m) =>
+        `  ${m.by}${m.status ? ` → ${m.status}` : ""}: ${oneLine(m.text, 300) || "(no words)"}`,
+    ),
     ...(c.changed?.length ? [`  changed: ${c.changed.join(", ")}`] : []),
   ].join("\n");
 }
@@ -653,63 +688,80 @@ server.registerTool(
   {
     title: "Read comments",
     description:
-      'Read comments: the person\'s (from the preview), reviewers\' findings and regressions, and chat feedback filed as comments. `review: "latest"` is the review the person just handed over ("apply my review"); or filter by board prefix, prop, status, kind. `unanswered: true` lists what still needs your answer (not yet ready, closed or withdrawn). Each shows its board, target (an address: piece/part), source line, plan, thread and changed files.',
+      'Read threads: the person\'s comments from the preview, reviewers\' findings and regressions, and chat feedback filed as comments. `review`: a review\'s id ("apply review 20261026-1734"), or "latest": exactly the threads it handed over, in order, with how it stands. Or filter by `board` (path prefix) or `prop`. `unanswered: true`: only what still waits on a fixer (open or planned). Each shows its board, target (an address: piece/part), source line, what it showed, its plan and every message.',
     inputSchema: {
-      review: z.string().optional().describe('"latest", or a review id.'),
+      review: z.string().optional().describe('A review id, or "latest".'),
       board: z.string().optional().describe("A board, lesson or chapter path prefix."),
       prop: z.string().optional(),
-      status: z
-        .enum([Status.Open, Status.Planned, Status.Ready, Status.Closed, Status.Withdrawn])
-        .optional(),
-      kind: z.enum([Kind.Comment, Kind.Finding, Kind.Regression]).optional(),
       unanswered: z.boolean().optional(),
     },
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
   async (args) => {
-    let found = await allComments();
-    const review = args.review === "latest" ? latestReview(found) : args.review;
+    const { threads, reviews } = await readAll();
+    const review =
+      args.review === undefined
+        ? undefined
+        : args.review === "latest"
+          ? latestReview(reviews)
+          : reviews.find((r) => r.id === args.review);
     if (args.review !== undefined && review === undefined)
-      return result([text("No review has been handed over yet.")]);
-    if (review !== undefined) found = found.filter((c) => c.review === review);
+      return result([
+        text(
+          args.review === "latest"
+            ? "No review has been handed over yet."
+            : `No review ${args.review}. Reviews: ${reviews.map((r) => r.id).join(", ") || "none"}.`,
+        ),
+      ]);
+    let found = review === undefined ? threads : threadsOf(review, threads);
     if (args.board) found = found.filter((c) => (c.board ?? c.home).startsWith(args.board ?? ""));
     if (args.prop) found = found.filter((c) => c.prop === args.prop);
-    if (args.status) found = found.filter((c) => c.status === args.status);
-    if (args.kind) found = found.filter((c) => c.kind === args.kind);
-    if (args.unanswered) found = unanswered(found) as Filed[];
+    if (args.unanswered) found = found.filter(isUnanswered);
     const head =
       review !== undefined
-        ? `Review ${review}: ${found.length} comment${found.length === 1 ? "" : "s"}\n\n`
+        ? `Review ${review.id} by ${review.by} (${review.role}), ${review.threads.length} thread${review.threads.length === 1 ? "" : "s"}: ${standing(threadsOf(review, threads)).text}\n\n`
         : "";
     return result([
       text(
-        found.length === 0
-          ? `${head}No comments match.`
-          : head + found.map(commentLine).join("\n\n"),
+        found.length === 0 ? `${head}No threads match.` : head + found.map(threadLine).join("\n\n"),
       ),
     ]);
   },
 );
 
-/** One answer to one comment (comment_update). */
-const answer = z.object({
-  id: z.string(),
-  op: z
-    .enum(["plan", "reply", "ready"])
-    .describe(
-      "plan: what you will do (after the person's go); reply: add to the thread; ready: done, with what you did",
-    ),
-  text: z.string().min(1),
-});
+/** One write: on a thread by its id, or a new thread on a board. */
+const write = z
+  .object({
+    id: z.string().optional().describe("The thread to write on."),
+    text: z.string().describe('What you say. May be "" only with a status move.'),
+    status: z
+      .enum([Status.Open, Status.Planned, Status.Ready, Status.Closed, Status.Withdrawn])
+      .optional()
+      .describe(
+        "On a thread: move it. A fixer: planned (what you will do, after the person's go in chat; again to revise it), ready (what you did; needs a plan first and no open regression it caused; the files you changed are recorded from git). Leave it out to just talk. Closing, reopening and withdrawing are the person's.",
+      ),
+    board: z.string().optional().describe("A new thread: its board."),
+    target: z.string().optional().describe('A new thread: "piece" or "piece/part" on the board.'),
+    prop: z.string().optional().describe("A new thread about that prop wherever it is used."),
+    label: z
+      .enum([Label.Comment, Label.Finding, Label.Regression])
+      .optional()
+      .describe(
+        "A new thread: finding (a reviewer: the principle and what a student would get wrong), regression (what a change broke; with about), comment (a fixer: what the person said in chat; with from: chat).",
+      ),
+    about: z.string().optional().describe("A regression: the thread whose change broke this."),
+    from: z.literal("chat").optional(),
+  })
+  .strict();
 
 server.registerTool(
-  "comment_update",
+  "comment",
   {
-    title: "Answer comments",
-    description:
-      "Answer comments, one or many at once. plan: write what you will do on it (after the person approved the overall plan in chat), which makes it planned. reply: add to its thread. ready: say what you did; it becomes ready for the person (allowed only after a plan, and not while a regression it caused is open), and the files you changed are recorded from git. Only the person closes, withdraws or deletes.",
+    title: "Write on threads",
+    description: `Write on threads, or start them; one or many at once. With \`id\`: write on that thread, maybe moving its status. With \`board\` (no id): start a thread. This connection writes as a ${ROLE}${NAME === ROLE ? "" : ` (${NAME})`}; the writer refuses what a ${ROLE} may not do and says why. When you finish a pass, \`handover: true\` hands what you started or wrote on as one review (a reviewer's pass).`,
     inputSchema: {
-      items: z.array(answer).min(1),
+      items: z.array(write).default([]),
+      handover: z.boolean().optional(),
     },
     annotations: {
       readOnlyHint: false,
@@ -718,59 +770,53 @@ server.registerTool(
       openWorldHint: false,
     },
   },
-  async ({ items }) => {
+  async ({ items, handover }) => {
     const lines: string[] = [];
     for (const item of items) {
-      const done = await changeComments({ op: item.op, id: item.id, text: item.text });
-      lines.push(done.ok ? `✓ ${item.id} [${done.comment?.status}]` : `✗ ${done.error}`);
+      if (item.id !== undefined) {
+        const done = await changeComments({
+          op: "write",
+          id: item.id,
+          text: item.text,
+          ...(item.status ? { status: item.status } : {}),
+        });
+        lines.push(done.ok ? `✓ ${item.id} [${done.thread?.status}]` : `✗ ${done.error}`);
+        continue;
+      }
+      if (item.board === undefined) {
+        lines.push("✗ give the thread's id, or a board to start one on");
+        continue;
+      }
+      const on = boardName(item.board);
+      const piece = item.target?.split("/")[0];
+      const where = readSources(root)[`${on}.json`];
+      const source = (piece && where?.pieces[piece]) || where?.board;
+      const done = await changeComments({
+        op: "start",
+        thread: {
+          board: on,
+          ...(item.target ? { target: item.target } : {}),
+          ...(item.prop ? { prop: item.prop } : {}),
+          ...(source ? { source } : {}),
+          ...(item.label ? { label: item.label } : {}),
+          ...(item.about ? { about: item.about } : {}),
+          ...(item.from ? { from: item.from } : {}),
+          text: item.text,
+        },
+      });
+      lines.push(done.ok ? `✓ ${done.thread?.id} on ${on}` : `✗ ${done.error}`);
     }
-    return result([text(lines.join("\n"))]);
-  },
-);
-
-server.registerTool(
-  "comment_add",
-  {
-    title: "File a comment",
-    description:
-      'File a comment on a board. A reviewer: kind finding (one per item: the principle and what a student would get wrong), or kind regression with causedBy (the comment whose change broke it). Feedback the person gave in chat: kind comment, from: chat, so the threads stay the complete record. target is an address: "piece" or "piece/part"; prop makes it about that prop wherever it is used.',
-    inputSchema: {
-      board: z.string().min(1),
-      target: z.string().optional(),
-      prop: z.string().optional(),
-      kind: z.enum([Kind.Finding, Kind.Regression, Kind.Comment]),
-      causedBy: z.string().optional(),
-      from: z.literal("chat").optional(),
-      by: z.string().optional().describe("e.g. reviewer"),
-      text: z.string().min(1),
-    },
-    annotations: {
-      readOnlyHint: false,
-      destructiveHint: false,
-      idempotentHint: false,
-      openWorldHint: false,
-    },
-  },
-  async (args) => {
-    const on = boardName(args.board);
-    const piece = args.target?.split("/")[0];
-    const where = readSources(root)[`${on}.json`];
-    const source = (piece && where?.pieces[piece]) || where?.board;
-    const done = await changeComments({
-      op: "add",
-      comment: {
-        board: on,
-        ...(args.target ? { target: args.target } : {}),
-        ...(args.prop ? { prop: args.prop } : {}),
-        ...(source ? { source } : {}),
-        kind: args.kind,
-        ...(args.causedBy ? { causedBy: args.causedBy } : {}),
-        ...(args.from ? { from: args.from, by: "you" } : {}),
-        ...(args.by && !args.from ? { by: args.by } : {}),
-        text: args.text,
-      },
-    });
-    return result([text(done.ok ? `✓ ${done.comment?.id} on ${on}` : `✗ ${done.error}`)]);
+    if (handover) {
+      const done = await changeComments({ op: "handover" });
+      lines.push(
+        !done.ok
+          ? `✗ ${done.error}`
+          : done.review
+            ? `✓ handed over review ${done.review.id} (${done.count} threads)`
+            : "Nothing to hand over: no thread started or written on since your last handover.",
+      );
+    }
+    return result([text(lines.join("\n") || "Nothing to do.")]);
   },
 );
 

@@ -26,6 +26,15 @@ import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
 import { courses } from "./lessons";
 import { PlayInApp } from "./play-in-app";
+import {
+  type Review,
+  type Thread,
+  type Threads,
+  changeComments,
+  isKept,
+  planOf,
+  useThreads,
+} from "./threads";
 
 /**
  * Development only (`?dev&board=<path>`): boards exactly as a phone draws them (the real player,
@@ -53,39 +62,6 @@ import { PlayInApp } from "./play-in-app";
 
 type Sources = Record<string, { board?: string; pieces: Record<string, string> }>;
 type Shown = { path: string; board: Board };
-
-/** A comment, as the dev server gives it (platform/studio/src/comments.ts). */
-type Thread = {
-  id: string;
-  kind: "comment" | "finding" | "regression";
-  status: "open" | "planned" | "ready" | "closed" | "withdrawn";
-  by: string;
-  text: string;
-  /** The board, by build path. */
-  board?: string;
-  /** What on it, by address: "machine" or "machine/plane/handle". */
-  target?: string;
-  /** A comment on a prop wherever it is used: shown under every board that places it. */
-  prop?: string;
-  snapshot?: string;
-  review?: string;
-  causedBy?: string;
-  from?: string;
-  plan?: { by: string; at: string; text: string };
-  changed?: string[];
-  thread: { by: string; at: string; text: string }[];
-};
-
-/** Sends one change to the dev server (the comments' one writer); the comments after it, or why not. */
-async function changeComments(change: Record<string, unknown>): Promise<Thread[] | string> {
-  const res = await fetch("/dev-review", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(change),
-  });
-  const body = (await res.json()) as { ok: boolean; error?: string; comments?: Thread[] };
-  return body.ok ? (body.comments ?? []) : (body.error ?? `${res.status}`);
-}
 
 const url = (path: string) => `${CONTENT_ROUTE}${path}?t=${Date.now()}`;
 async function json(path: string): Promise<unknown> {
@@ -194,10 +170,6 @@ const STATUS_WORDS: Record<Thread["status"], string> = {
   withdrawn: "withdrawn",
 };
 
-/** Whether the agent has acted on it: then it can only be withdrawn, not deleted. */
-const isTouched = (t: Thread) =>
-  t.status !== "open" || t.plan !== undefined || t.thread.some((e) => e.by !== "you");
-
 /**
  * The board's comments under it, newest first, each with its whole thread: what was said, what the
  * agent plans or did, and a reply box (a reply reopens the comment for the agent). Finished ones
@@ -205,11 +177,13 @@ const isTouched = (t: Thread) =>
  */
 function BoardThreads({
   threads,
+  reviews,
   onChange,
   phone,
 }: {
   threads: readonly Thread[];
-  onChange: (all: Thread[]) => void;
+  reviews: readonly Review[];
+  onChange: (all: Threads) => void;
   phone: { current: HTMLDivElement | null };
 }): JSX.Element {
   const list = useRef<HTMLUListElement>(null);
@@ -231,7 +205,7 @@ function BoardThreads({
   };
   const send = async (t: Thread) => {
     const text = draft.trim();
-    if (text === "" || !(await act({ op: "reply", id: t.id, text }))) return;
+    if (text === "" || !(await act({ op: "write", id: t.id, text }))) return;
     setDraft("");
     setReplyingTo(null);
   };
@@ -251,7 +225,11 @@ function BoardThreads({
     >
       <div>
         <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
-        {t.kind !== "comment" && <span class={`preview-kind is-${t.kind}`}>{t.kind}</span>}
+        {t.label !== "comment" && (
+          <span
+            class={`preview-kind is-${t.label}`}
+          >{`${t.label}${t.by === "you" ? "" : ` · ${t.by}`}`}</span>
+        )}
         {t.prop !== undefined ? (
           <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
         ) : (
@@ -263,13 +241,14 @@ function BoardThreads({
       {isDetached(t) && (
         <div class="preview-detached">{`Not on this board any more. It said: ${t.snapshot ?? "?"}`}</div>
       )}
-      {t.plan && <div class="preview-plan">Plan: {t.plan.text}</div>}
-      {t.thread.map((entry) => (
-        <div
-          class="preview-reply"
-          key={`${entry.at}·${entry.by}·${entry.text.slice(0, 40)}`}
-        >{`${entry.by}: ${entry.text}`}</div>
-      ))}
+      {planOf(t) && <div class="preview-plan">Plan: {planOf(t)?.text}</div>}
+      {t.messages
+        .filter((m) => m.status !== "planned")
+        .map((m) => (
+          <div class="preview-reply" key={`${m.at}·${m.by}`}>
+            {`${m.by}${m.status ? ` → ${m.status}` : ""}${m.text ? `: ${m.text}` : ""}`}
+          </div>
+        ))}
       {t.changed && t.changed.length > 0 && (
         <div class="preview-changed">{`Changed: ${t.changed.join(", ")}`}</div>
       )}
@@ -314,13 +293,19 @@ function BoardThreads({
             Reply
           </button>
           {!isDone(t) && (
-            <button type="button" onClick={() => void act({ op: "close", id: t.id })}>
+            <button
+              type="button"
+              onClick={() => void act({ op: "write", id: t.id, text: "", status: "closed" })}
+            >
               Close
             </button>
           )}
           {!isDone(t) &&
-            (isTouched(t) ? (
-              <button type="button" onClick={() => void act({ op: "withdraw", id: t.id })}>
+            (isKept(t, reviews) ? (
+              <button
+                type="button"
+                onClick={() => void act({ op: "write", id: t.id, text: "", status: "withdrawn" })}
+              >
                 Withdraw
               </button>
             ) : (
@@ -421,6 +406,7 @@ function PreviewBoard({
   bus,
   isShot,
   threads,
+  reviews,
   onThreads,
 }: {
   shown: Shown;
@@ -430,7 +416,8 @@ function PreviewBoard({
   bus: EventBus;
   isShot: boolean;
   threads: readonly Thread[];
-  onThreads: (all: Thread[]) => void;
+  reviews: readonly Review[];
+  onThreads: (all: Threads) => void;
 }): JSX.Element {
   const board = useMemo(
     () => (isPlaying ? shown.board : { ...shown.board, root: unhide(shown.board.root) }),
@@ -477,7 +464,7 @@ function PreviewBoard({
           />
         </div>
         {!isShot && threads.length > 0 && (
-          <BoardThreads threads={threads} onChange={onThreads} phone={phone} />
+          <BoardThreads threads={threads} reviews={reviews} onChange={onThreads} phone={phone} />
         )}
       </div>
     </section>
@@ -943,28 +930,11 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       isLive = false;
     };
   }, [path, isLesson]);
-  // Comments on the boards shown, read from the chapters' comment files; again when one is added.
-  const [threads, setThreads] = useState<Thread[]>([]);
-  useEffect(() => {
-    const load = () =>
-      fetch("/dev-review")
-        .then((r) => (r.ok ? r.json() : []))
-        .then((all: Thread[]) => setThreads(all))
-        .catch(() => {});
-    load();
-    const onMessage = (e: MessageEvent) => {
-      const m = e.data as { chalk?: boolean; type?: string };
-      if (m?.chalk === true && m.type === "comments") load();
-    };
-    window.addEventListener("message", onMessage);
-    // The dev server says the moment a comments file changes (an agent's reply, a new comment).
-    const hot = import.meta.hot;
-    hot?.on("chalk:comments", load);
-    return () => {
-      window.removeEventListener("message", onMessage);
-      hot?.off?.("chalk:comments", load);
-    };
-  }, []);
+  // Threads on the boards shown, kept current as files change (an agent's answer, a new thread).
+  const {
+    all: { threads, reviews },
+    set: setThreads,
+  } = useThreads();
   const [zoom, setZoomState] = useState(keptZoom);
   const setZoom = useCallback(
     (next: (z: number) => number) =>
@@ -1019,6 +989,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       } else if (e.key === "s") setIsOne(!isOne);
       else if (e.key === "c") setSelecting((on) => !on);
       else if (e.key === "a") toEditor({ type: "copy" });
+      else if (e.key === "f") window.location.search = "?dev&activity";
       else if (e.key === "p") toggleParam("play");
       else if (e.key === "h") toggleParam("locale");
       else if (e.key === "+" || e.key === "=") setZoom((z) => Math.min(2, z + 0.1));
@@ -1145,7 +1116,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
           <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play as
-          the app · <b>h</b> Hindi · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
+          the app · <b>h</b> Hindi · <b>f</b> activity · <b>+ −</b> zoom · <b>Esc</b> leave ·{" "}
+          <b>?</b> keys
         </div>
       )}
       {shown.map((s, i) => (
@@ -1158,6 +1130,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
             shown={s}
             where={sources[s.path]}
             threads={threadsOn(threads, s)}
+            reviews={reviews}
             onThreads={setThreads}
             locale={locale}
             isPlaying={isPlaying}

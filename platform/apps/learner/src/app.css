@@ -810,40 +810,16 @@
   border-color: var(--color-primary);
 }
 
-/* Review (`?dev&review`): every board of the picked lessons, drawn by the player, side by side. */
+/* Lists, chips and the comment sheet of the studio's chapter page (`?dev&studio`). */
 .review {
   min-height: 100dvh;
   background: var(--color-surface-container);
   padding: 0 16px 64px;
 }
-.review-bar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  margin: 0 -16px;
-  padding: 10px 16px;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-outline-variant);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 45dvh;
-  overflow-y: auto;
-}
-.review-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 .review-hint {
   flex: 1;
   font-size: 12px;
   color: var(--color-on-surface-variant);
-}
-.review-group summary {
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 14px;
 }
 .review-chips {
   display: flex;
@@ -873,161 +849,6 @@
   color: var(--color-primary);
   font-size: 12px;
   cursor: pointer;
-}
-.review-title {
-  margin: 28px 0 10px;
-  scroll-margin-top: 140px;
-}
-.review-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 430px));
-  gap: 20px;
-  align-items: start;
-}
-/* Sequence: one board at a time on black, as big as the screen allows, ← / → in a bar on top.
-   Above the review bar; under the comment panel and the comment box. */
-.review-focus {
-  position: fixed;
-  inset: 0;
-  z-index: 25;
-  display: flex;
-  flex-direction: column;
-  background: #000;
-  overflow: auto;
-}
-.review-seq-bar {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: rgb(0 0 0 / 0.85);
-}
-.review-focus .review-chip {
-  background: #1c1c1f;
-  border-color: #3a3a40;
-  color: #f2f2f5;
-}
-.review-focus .review-chip[aria-pressed="true"] {
-  border-color: #8e8bff;
-  color: #b9b7ff;
-}
-.review-focus .review-chip:disabled {
-  opacity: 0.35;
-}
-.review-seq-where {
-  flex: 1;
-  min-width: 0;
-  font-size: 12px;
-  color: #a0a0aa;
-  text-align: center;
-}
-.review-seq-where strong {
-  color: #fff;
-}
-.review-seq-zoom {
-  min-width: 40px;
-  text-align: center;
-  font-size: 12px;
-  color: #a0a0aa;
-}
-.review-seq-board {
-  width: 430px;
-  max-width: calc(100vw - 32px);
-  margin: 8px auto 40px;
-}
-.review-focus .review-tag {
-  color: #8a8a94;
-}
-.review-focus .review-phone {
-  border-color: #2a2a2e;
-}
-.review-jump.is-here {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-.review-card {
-  scroll-margin-top: 140px;
-  min-width: 0;
-}
-.review-tag {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-on-surface-variant);
-  margin-bottom: 6px;
-}
-.review-phone {
-  position: relative;
-  min-height: 0;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--color-outline-variant);
-}
-.review-phone .board-footer {
-  display: none;
-}
-
-.review-phone.is-commenting [data-piece] {
-  cursor: crosshair;
-}
-.review-phone.is-commenting [data-piece]:hover {
-  outline: 2px dashed var(--color-primary);
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-.review-card.is-flash .review-phone {
-  box-shadow: 0 0 0 3px var(--color-primary);
-}
-.review-mark {
-  position: absolute;
-  border: 2px solid var(--color-secondary);
-  border-radius: 8px;
-  background: transparent;
-  padding: 0;
-  z-index: 3;
-  /* The outline lets taps through to the prop under it; only the number badge opens the comment. */
-  pointer-events: none;
-}
-.review-mark span {
-  pointer-events: auto;
-  cursor: pointer;
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background: var(--color-secondary);
-  color: var(--color-surface);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 20px;
-}
-.review-mark.is-done {
-  border-style: dotted;
-  opacity: 0.45;
-}
-.review-count {
-  border: none;
-  border-radius: 999px;
-  padding: 2px 8px;
-  background: var(--color-secondary);
-  color: var(--color-surface);
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.review-error {
-  margin: 0;
-  font-size: 13px;
-  color: var(--color-wrong);
 }
 .review-primary {
   border: none;
@@ -1072,14 +893,6 @@
   font-weight: 700;
   color: var(--color-on-surface-variant);
 }
-.review-sheet-snap {
-  font-size: 13px;
-  max-height: 120px;
-  overflow: auto;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: var(--color-surface-container);
-}
 .review-sheet textarea,
 .review-reply {
   width: 100%;
@@ -1094,9 +907,6 @@
   resize: vertical;
   box-sizing: border-box;
 }
-.review-reply {
-  min-height: 40px;
-}
 .review-sheet-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1109,23 +919,6 @@
   border-left: 3px solid var(--color-secondary);
   font-size: 13px;
   color: var(--color-on-surface-variant);
-}
-.review-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 30;
-  width: min(440px, 100vw);
-  overflow-y: auto;
-  background: var(--color-surface);
-  border-left: 1px solid var(--color-outline-variant);
-  box-shadow: -8px 0 30px rgb(0 0 0 / 0.12);
-  padding: 14px 16px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-sizing: border-box;
 }
 .review-list {
   list-style: none;
@@ -1180,69 +973,11 @@
   font-size: 13px;
   color: var(--color-on-surface-variant);
 }
-.review-proposal {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: var(--color-surface-container);
-}
-.review-proposal p {
-  margin: 0;
-}
-.review-diff {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 13px;
-}
-.review-before,
-.review-after {
-  padding: 6px 8px;
-  border-radius: 8px;
-  border-left: 3px solid;
-  background: var(--color-surface);
-  overflow-x: auto;
-}
-.review-before {
-  border-color: var(--color-wrong);
-  opacity: 0.8;
-}
-.review-after {
-  border-color: var(--color-right);
-}
-.review-select {
-  font: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--color-outline-variant);
-  background: var(--color-surface);
-  color: var(--color-on-surface);
-  max-width: 100%;
-}
 .review-chip.is-small {
   padding: 3px 9px;
   font-size: 12px;
 }
-.review-part {
-  margin: 16px 0 8px;
-  font-size: 14px;
-  color: var(--color-on-surface-variant);
-}
-.review-row {
-  flex-wrap: wrap;
-}
 @media (max-width: 600px) {
-  .review-bar nav.review-chips {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  .review-jump {
-    white-space: nowrap;
-  }
   .review-hint {
     display: none;
   }
@@ -1959,4 +1694,92 @@ body.is-selecting .is-pick-target {
 }
 .play-phone > .lesson {
   min-height: 100%;
+}
+
+/* Activity (`?dev&activity`): everything written on threads, newest first (activity.tsx). */
+.activity {
+  min-height: 100dvh;
+  background: #18181b;
+  color: #e6e6ea;
+  font: 14px / 1.45 system-ui, sans-serif;
+  padding: 0 16px 48px;
+}
+.activity-bar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding: 14px 0 10px;
+  background: #18181b;
+  border-bottom: 1px solid #2a2a2e;
+}
+.activity-bar span {
+  margin-left: auto;
+  color: #8a8a94;
+  font-size: 12px;
+}
+.activity-bar a,
+.activity-where {
+  color: #a5b4fc;
+  text-decoration: none;
+}
+.activity-empty {
+  color: #8a8a94;
+}
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 960px;
+}
+.activity-line {
+  display: grid;
+  grid-template-columns: 72px 80px 96px minmax(0, 220px) minmax(0, 1fr);
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #222226;
+  align-items: baseline;
+}
+.activity-line time {
+  color: #8a8a94;
+  font-variant-numeric: tabular-nums;
+}
+.activity-who {
+  font-weight: 700;
+}
+.activity-who.is-reviewer {
+  color: #fbbf24;
+}
+.activity-who.is-fixer {
+  color: #6ee7b7;
+}
+.activity-what {
+  color: #b4b4bc;
+}
+.activity-line.is-finding .activity-what,
+.activity-line.is-regression .activity-what {
+  color: #fca5a5;
+}
+.activity-line.is-ready .activity-what {
+  color: #6ee7b7;
+}
+.activity-line.is-review {
+  background: #1f1f24;
+}
+.activity-where {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.activity-words {
+  color: #d4d4da;
+}
+@media (max-width: 720px) {
+  .activity-line {
+    grid-template-columns: 72px 1fr;
+  }
+  .activity-line > :nth-child(n + 3) {
+    grid-column: 2;
+  }
 }

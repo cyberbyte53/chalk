@@ -16,9 +16,11 @@ The person's review is the expensive part; this pass catches everything a fresh 
 1. Run `pnpm check`; if it fails, that is the first finding.
 2. `render_board` on the lesson with `questions: true` and once in Hindi: read every board in the pictures, not the source. Then play each board as a student with `render_board` `steps`: tap, drag, answer right and wrong, and check what each step did (the events, "board passed", the picture).
 3. Go through `reviewer.md` board by board: as the student, as the teacher, on the screen. Put the source passage beside it.
-4. File each item with `comment_add` (`by: "reviewer"`), one per item, with the board and target, the principle, and what a student would get wrong:
-   - `kind: "finding"` for something wrong with the lesson;
-   - `kind: "regression"` with `causedBy: <comment id>` when a change made for that comment broke something (when reviewing an applied review: the boards it touched, and the places `affected` lists). The comment can't be marked ready until it is fixed.
-5. Fix the mechanical findings yourself (overflow, a give-away option, an undefined term, maths inside a sentence): write the plan line, fix, render again, mark it ready with what changed (`comment_update`). Leave taste decisions open for the person.
+4. File each item as a reviewer, with the `comment` tool of the **`chalk-reviewer`** server (it writes as a reviewer), one thread per item, with the board and target, the principle, and what a student would get wrong:
+   - `label: "finding"` for something wrong with the lesson;
+   - `label: "regression"` with `about: <thread id>` when a change made for that thread broke something (when reviewing an applied review: the boards it touched, and the places `affected` lists). That thread can't be marked ready until it is fixed.
+
+   When you have filed everything, hand your pass over: `comment` with `handover: true` on `chalk-reviewer`. It becomes a review of its own (`by: reviewer`) the person can open in the activity feed (`?dev&activity`).
+5. Fix the mechanical findings yourself (overflow, a give-away option, an undefined term, maths inside a sentence) with the **`chalk`** server's `comment` (a fixer): `status: "planned"` with the plan line, fix, render again, `status: "ready"` with what changed. A reviewer can't move a thread; a fixer can. Leave taste decisions open for the person.
 6. Append `runs/<YYYY-MM-DD-HHMM>-self-review.md`: what was checked, fixed and still open, and a verdict: ready for the person, or needs another pass.
 7. Reply with the open items and the verdict.

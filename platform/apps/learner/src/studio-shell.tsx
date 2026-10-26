@@ -5,13 +5,12 @@
  * in `.claude/skills/`, and this page is how a person watches and steers. Data comes from
  * /dev-studio (see ../dev-studio.ts) and comments from /dev-review.
  */
-import { Locale } from "@chalk/content";
 import { marked } from "marked";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RunState, Step } from "../dev-runner";
 import type { Board, ChapterDetail, ChapterRow, PlanStatus } from "../dev-studio";
-import { CommentStatus, type ReviewComment, statusLabel, useComments } from "./review-comments";
+import { type Thread, isFinished, useThreads } from "./threads";
 
 const Stage = {
   None: "none",
@@ -41,8 +40,6 @@ function stageOf(row: ChapterRow): Stage {
   if (written === 0) return Stage.Approved;
   return row.lessonsPlanned > 0 && written < row.lessonsPlanned ? Stage.Building : Stage.Built;
 }
-
-const PLAN_BOARD = "plan";
 
 async function getJson<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);
@@ -94,8 +91,8 @@ export function StudioShell(): JSX.Element {
             ? "Every chapter and where it stands."
             : `${route.book} / ${route.chapter}`}
         </span>
-        <a class="review-chip" href="?dev&review">
-          Screen review
+        <a class="review-chip" href="?dev&activity">
+          Activity
         </a>
       </header>
       {route === null ? <BoardView /> : <ChapterView book={route.book} chapter={route.chapter} />}
@@ -333,7 +330,10 @@ type Draft = {
 function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.Element {
   const [detail, setDetail] = useState<ChapterDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { comments, send } = useComments();
+  const {
+    all: { threads },
+    send,
+  } = useThreads();
   const load = useCallback(() => {
     getJson<ChapterDetail>(
       `/dev-studio/chapter?book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(chapter)}`,
@@ -351,8 +351,11 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
   }, [load]);
   const chapterId = `${book}/${chapter}`;
   const planComments = useMemo(
-    () => comments.filter((c) => c.lessonId === chapterId && c.board === PLAN_BOARD),
-    [comments, chapterId],
+    () =>
+      threads.filter(
+        (t) => t.board === undefined && t.source?.startsWith(`content/${chapterId}/plan.md`),
+      ),
+    [threads, chapterId],
   );
   const rendered = useMemo(() => (detail?.plan ? renderPlan(detail.plan) : null), [detail?.plan]);
   const [draft, setDraft] = useState<Draft | null>(null);
@@ -406,20 +409,21 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
       parent.normalize();
     }
     const toMark = [
-      ...planComments.filter((c) => c.quote !== "" && c.status !== CommentStatus.Done),
+      ...planComments.filter((c) => (c.quote ?? "") !== "" && !isFinished(c)),
       ...(draft !== null && draft.quote !== ""
         ? [{ quote: draft.quote, status: "draft", text: "" }]
         : []),
     ];
     for (const c of toMark) {
+      const quote = c.quote ?? "";
       const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
       let node: Node | null = walker.nextNode();
       while (node !== null) {
         const text = node.textContent ?? "";
-        const at = text.indexOf(c.quote);
+        const at = text.indexOf(quote);
         if (at >= 0 && node instanceof Text) {
           const hit = node.splitText(at);
-          hit.splitText(c.quote.length);
+          hit.splitText(quote.length);
           const mark = document.createElement("mark");
           mark.className = `studio-mark is-${c.status}`;
           mark.title = c.text;
@@ -457,26 +461,19 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
   };
   const saveComment = async () => {
     if (draft === null || draft.text.trim() === "") return;
-    await send({
-      op: "add",
-      comment: {
-        lessonId: chapterId,
-        lessonTitle: detail.title,
-        board: PLAN_BOARD,
-        boardIndex: -1,
-        piece: draft.section === "" ? null : draft.section,
-        part: draft.lines,
-        snapshot: `content/${book}/${chapter}/plan.md${draft.lines === null ? "" : `:${draft.lines}`}`,
-        locale: Locale.En,
-        quote: draft.quote,
+    const problem = await send({
+      op: "start",
+      thread: {
+        source: `content/${book}/${chapter}/plan.md${draft.lines === null ? "" : `:${draft.lines}`}`,
+        ...(draft.section === "" ? {} : { snapshot: draft.section }),
+        ...(draft.quote === "" ? {} : { quote: draft.quote }),
         text: draft.text,
       },
     });
-    setDraft(null);
+    if (problem === null) setDraft(null);
+    else setError(problem);
   };
-  const lessonComments = detail.comments.filter(
-    (c) => c.board !== PLAN_BOARD,
-  ) as unknown as ReviewComment[];
+  const lessonComments = threads.filter((t) => t.board?.startsWith(`${chapterId}/`));
 
   return (
     <div class="studio-chapter">
@@ -568,9 +565,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
             {detail.lessons.map((l) => (
               <li key={l.slug}>
                 {l.id !== null ? (
-                  <a
-                    href={`?dev&review&book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(chapter)}`}
-                  >
+                  <a href={`?dev&board=${encodeURIComponent(`${book}/${chapter}/${l.slug}`)}`}>
                     {l.title}
                   </a>
                 ) : (
@@ -590,13 +585,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
           <ul class="review-list">
             {planComments.length === 0 && <li class="review-hint">None.</li>}
             {planComments.map((c) => (
-              <CommentItem
-                key={c.id}
-                c={c}
-                onApprove={() =>
-                  void send({ op: "status", id: c.id, status: CommentStatus.Approved })
-                }
-              />
+              <CommentItem key={c.id} c={c} />
             ))}
           </ul>
 
@@ -792,39 +781,23 @@ function previousHeading(el: HTMLElement): Element | null {
   return null;
 }
 
-function CommentItem({ c, onApprove }: { c: ReviewComment; onApprove?: () => void }): JSX.Element {
+/** A thread, as the studio lists it: where, what was said, and everything written on it since. */
+function CommentItem({ c }: { c: Thread }): JSX.Element {
   return (
     <li class={`review-item is-${c.status}`}>
       <div class="review-item-head">
         <span>
-          {c.piece ?? "The plan"}
-          {c.part !== null && c.board === "plan" && (
-            <span class="review-hint"> · lines {c.part}</span>
-          )}
+          {c.board === undefined ? (c.snapshot ?? "The plan") : (c.target ?? c.board)}
+          {c.label !== "comment" && <span class="review-hint">{` · ${c.label}`}</span>}
         </span>
-        <span class={`review-pill is-${c.status}`}>{statusLabel[c.status]}</span>
+        <span class={`review-pill is-${c.status}`}>{c.status}</span>
       </div>
       {c.source !== undefined && <p class="review-msg">{c.source}</p>}
-      {c.quote !== "" && <blockquote class="review-quote">{c.quote}</blockquote>}
+      {c.quote !== undefined && <blockquote class="review-quote">{c.quote}</blockquote>}
       <p class="review-said">{c.text}</p>
-      {c.proposal !== undefined && (
-        <div class="review-proposal">
-          <strong>{c.proposal.summary}</strong>
-          {c.proposal.changes.map((ch, i) => (
-            <p key={String(i)} class="review-msg">
-              <s>{ch.before}</s> → {ch.after}
-            </p>
-          ))}
-          {c.status === CommentStatus.Proposed && onApprove !== undefined && (
-            <button type="button" class="review-primary" onClick={onApprove}>
-              Approve
-            </button>
-          )}
-        </div>
-      )}
-      {c.thread.map((t, i) => (
-        <p key={String(i)} class="review-msg">
-          <strong>{t.by}:</strong> {t.text}
+      {c.messages.map((m) => (
+        <p key={`${m.at}·${m.by}`} class="review-msg">
+          <strong>{`${m.by}${m.status ? ` → ${m.status}` : ""}:`}</strong> {m.text}
         </p>
       ))}
     </li>

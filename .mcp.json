@@ -2,7 +2,17 @@
   "mcpServers": {
     "chalk": {
       "command": "platform/studio/node_modules/.bin/tsx",
-      "args": ["platform/studio/src/mcp/server.ts"]
+      "args": ["platform/studio/src/mcp/server.ts"],
+      "env": {
+        "CHALK_ROLE": "fixer"
+      }
+    },
+    "chalk-reviewer": {
+      "command": "platform/studio/node_modules/.bin/tsx",
+      "args": ["platform/studio/src/mcp/server.ts"],
+      "env": {
+        "CHALK_ROLE": "reviewer"
+      }
     }
   }
 }

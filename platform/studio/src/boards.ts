@@ -30,13 +30,6 @@ export function readSources(root: string): Sources {
   return readJson<Sources>(join(root, "build", "sources.json")) ?? {};
 }
 
-/** Where a board (and optionally one of its pieces) was written: `content/…/overview.ts:42`. */
-export function siteOf(root: string, board: string, piece?: string | null): string | undefined {
-  const where = readSources(root)[boardName(board)];
-  if (where === undefined) return undefined;
-  return (piece ? where.pieces[piece] : undefined) ?? where.board;
-}
-
 export type BoardEntry = {
   /** The board's name: its path in the course tree. */
   board: string;
@@ -88,34 +81,4 @@ export function listBoards(root: string): BoardEntry[] {
         out.push(entry(q, ref.path, "question"));
     }
   return out;
-}
-
-/**
- * The board a player lesson id and index name (`concept/<id>` board 2), as the app numbers them:
- * pages in order; practice = questions marked firstTry (in that order), else all testing it; bank =
- * the rest. Returns null when build/ doesn't have it.
- */
-export function findBoard(root: string, lessonId: string, boardIndex: number): string | null {
-  const [kind, conceptId] = lessonId.split("/");
-  if (conceptId === undefined) return null;
-  for (const chapter of chapters(root)) {
-    const ref = chapter.concepts.find((c) => c.id === conceptId);
-    if (ref === undefined) continue;
-    if (kind === "concept")
-      return readItem<{ overview: Ref[] }>(root, ref.path)?.overview[boardIndex]?.path ?? null;
-    const testing = chapter.questions.filter((q) => q.tests?.includes(conceptId));
-    const first = testing
-      .filter((q) => q.firstTry !== undefined)
-      .sort((a, b) => (a.firstTry ?? 0) - (b.firstTry ?? 0));
-    const list =
-      kind === "practice"
-        ? first.length === 0
-          ? testing
-          : first
-        : first.length === 0
-          ? []
-          : testing.filter((q) => q.firstTry === undefined);
-    return list[boardIndex]?.path ?? null;
-  }
-  return null;
 }

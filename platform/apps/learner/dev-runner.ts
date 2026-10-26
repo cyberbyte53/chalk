@@ -63,7 +63,7 @@ export function promptFor(book: string, chapter: string, step: Step, lesson?: st
     `Use the \`${step}\` skill on \`${place}\`.`,
     lesson !== undefined ? `The lesson to build is \`${lesson}\`.` : "",
     step === Step.ApplyReview
-      ? "Handle this chapter's open comments (the comments tool); see platform/docs/comments.md."
+      ? "Handle this chapter's open threads (the comments tool, unanswered: true); see platform/docs/comments.md."
       : "",
     "Work only in this repo. Run the checks the skill names. Write the run note in the chapter's runs/.",
     "End with a short summary for the person: what changed, what passed, what needs their decision.",

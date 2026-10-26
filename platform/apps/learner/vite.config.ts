@@ -12,13 +12,16 @@ import { join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import { findBoard, siteOf } from "../../studio/src/boards";
 import {
-  Actor,
   COMMENTS_FILE,
   type Change,
+  REVIEWS_DIR,
+  Role,
+  type Who,
+  YOU,
   applyChange,
   readComments,
+  sittingOf,
 } from "../../studio/src/comments";
 import { studioMiddleware } from "./dev-studio";
 
@@ -112,46 +115,22 @@ function devContent(): Plugin {
 }
 
 /**
- * In development, comments (platform/studio/src/comments.ts) are read and written here and only
- * here: the dev server is their one writer, so two writers can never collide and every change
- * follows the lifecycle. GET /dev-review lists them (?problems for anything a file holds that
- * doesn't fit); POST /dev-review applies one change. The caller says who it is with
- * x-chalk-actor ("agent" for the chalk MCP tools; the person otherwise). A comments file that
- * changes on disk is pushed to open previews at once (chalk:comments).
+ * In development, comments and reviews (platform/studio/src/comments.ts) are read and written here
+ * and only here: the dev server is their one writer, so two writers can never collide and every
+ * change is checked against what the writer's role may do. GET /dev-review gives the threads and
+ * reviews (?problems: anything a file holds that doesn't fit; ?sitting: the person's threads not
+ * yet handed over); POST /dev-review applies one change. An agent says its role in
+ * x-chalk-role (fixer or reviewer, fixed by the chalk MCP when it starts) and may give its name in
+ * x-chalk-name; anything else writes as the person. A comments or review file that changes on disk
+ * is pushed to open previews at once (chalk:comments).
  */
 function devReview(): Plugin {
-  /** A comment from the older review pages (lessonId and board index): its board and line from build/. */
-  const fromReviewPage = (c: Record<string, unknown>): Record<string, unknown> => {
-    const piece = typeof c.piece === "string" ? c.piece : undefined;
-    const part = typeof c.part === "string" ? c.part : undefined;
-    const base = {
-      text: String(c.text ?? ""),
-      ...(typeof c.snapshot === "string" ? { snapshot: c.snapshot } : {}),
-      ...(typeof c.quote === "string" ? { quote: c.quote } : {}),
-      ...(piece ? { target: part ? `${piece}/${part}` : piece } : {}),
-    };
-    if (c.board === "plan") return { ...base, source: `content/${String(c.lessonId)}/plan.md` };
-    const on = findBoard(ROOT, String(c.lessonId), Number(c.boardIndex));
-    if (on === null) return base;
-    const source = siteOf(ROOT, on, piece ?? null);
-    return { ...base, board: on, ...(source ? { source } : {}) };
-  };
-  /** The older pages' changes, in today's terms. */
-  const translate = (body: Record<string, unknown>): Change | null => {
-    const id = String(body.id ?? "");
-    if (body.op === "add" && body.comment !== undefined) {
-      const c = body.comment as Record<string, unknown>;
-      const isOld = c.lessonId !== undefined && c.board !== undefined && c.target === undefined;
-      return { op: "add", comment: (isOld ? fromReviewPage(c) : c) as never };
-    }
-    if (body.op === "status") {
-      if (body.status === "done" || body.status === "closed") return { op: "close", id };
-      if (body.status === "declined" || body.status === "withdrawn") return { op: "withdraw", id };
-      if (body.status === "open") return { op: "reopen", id };
-      return null; // "approved": approval now happens in the agent's chat
-    }
-    if (body.op === "remove") return { op: "delete", id };
-    return body as unknown as Change;
+  const AGENT_ROLES: readonly string[] = [Role.Fixer, Role.Reviewer];
+  const whoOf = (req: IncomingMessage): Who => {
+    const role = String(req.headers["x-chalk-role"] ?? "");
+    if (!AGENT_ROLES.includes(role)) return YOU;
+    const name = String(req.headers["x-chalk-name"] ?? "").trim();
+    return { name: name !== "" && name !== YOU.name ? name : role, role: role as Role };
   };
   return {
     name: "chalk-dev-review",
@@ -165,28 +144,40 @@ function devReview(): Plugin {
         };
         if (req.method !== "POST") {
           const read = readComments(ROOT);
-          return send(200, (req.url ?? "").includes("problems") ? read.problems : read.comments);
+          const url = req.url ?? "";
+          if (url.includes("problems")) return send(200, read.problems);
+          if (url.includes("sitting")) return send(200, sittingOf(read, whoOf(req)));
+          return send(200, { threads: read.threads, reviews: read.reviews });
         }
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
         });
         req.on("end", () => {
-          let change: Change | null;
+          let change: Change;
           try {
-            change = translate(JSON.parse(body) as Record<string, unknown>);
+            const parsed = JSON.parse(body) as Record<string, unknown>;
+            // An editor extension from before threads files a comment as "add".
+            change = (
+              parsed.op === "add" ? { op: "start", thread: parsed.comment } : parsed
+            ) as Change;
           } catch {
             return send(400, { ok: false, error: "not JSON" });
           }
-          if (change === null) return send(200, { ok: true });
-          const actor = req.headers["x-chalk-actor"] === "agent" ? Actor.Agent : Actor.Person;
-          const applied = applyChange(ROOT, change, actor);
-          send(applied.ok ? 200 : 409, { ...applied, comments: readComments(ROOT).comments });
+          const applied = applyChange(ROOT, change, whoOf(req));
+          const read = readComments(ROOT);
+          send(applied.ok ? 200 : 409, {
+            ...applied,
+            threads: read.threads,
+            reviews: read.reviews,
+          });
           if (applied.ok) server.ws.send({ type: "custom", event: "chalk:comments" });
         });
       });
-      // A comments file changed (by this server, or git): open previews reload their comments.
-      const isComments = (file: string) => file.endsWith(`${sep}${COMMENTS_FILE}`);
+      // A comments or review file changed (by this server, or git): open previews reload them.
+      const isComments = (file: string) =>
+        file.endsWith(`${sep}${COMMENTS_FILE}`) ||
+        (file.includes(`${sep}${REVIEWS_DIR}${sep}`) && file.endsWith(".yaml"));
       let timer: NodeJS.Timeout | undefined;
       const changed = (file: string) => {
         if (!isComments(file)) return;
@@ -196,6 +187,7 @@ function devReview(): Plugin {
       server.watcher.add([
         join(ROOT, "content", "*", "*", COMMENTS_FILE),
         join(ROOT, "library", "props", "*", COMMENTS_FILE),
+        join(ROOT, REVIEWS_DIR, "*.yaml"),
       ]);
       for (const event of ["change", "add", "unlink"] as const) server.watcher.on(event, changed);
     },
