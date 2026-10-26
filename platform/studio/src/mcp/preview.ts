@@ -223,7 +223,7 @@ export async function previewUrl(
   o: ShotOptions = {},
 ): Promise<string> {
   const url = new URL(await previewBase(root));
-  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&play" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}`;
+  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}`;
   return url.toString();
 }
 

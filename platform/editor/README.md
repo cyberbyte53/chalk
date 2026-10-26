@@ -15,7 +15,7 @@ app's own `?dev&board=` page, so what you see is what the phone draws.
 - **Pick** a piece, write what should change, then:
   - **Ask the agent** puts it in the chat with its board, line and words. If the editor's chat can't take text from an extension, it goes on the clipboard and the chat opens.
   - **Leave a comment** writes it to the chapter's `comments/` folder.
-- **Play** plays the boards as a student first meets them; **हि** shows them in Hindi.
+- **Play** plays it exactly as the app does, in a phone's frame: the chapter's path, one board at a time with Continue, practice, results, from the board or lesson you're on. **हि** shows it in Hindi.
 - **The Chalk tree** (in the explorer): book → chapter → lesson, with each chapter's open comments counted.
 
 It uses the dev server on :5173 if one is running. Otherwise it starts the learner app's server and the content rebuild-on-save itself (output in the "Chalk" channel).

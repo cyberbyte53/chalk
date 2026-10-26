@@ -25,6 +25,7 @@ import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
 import { courses } from "./lessons";
+import { PlayInApp } from "./play-in-app";
 
 /**
  * Development only (`?dev&board=<path>`): boards exactly as a phone draws them (the real player,
@@ -41,8 +42,10 @@ import { courses } from "./lessons";
  *                                                                    or folder (from sources.json)
  *
  * Book and chapter screens are the app's own; tapping a chapter or a lesson goes one level down.
- * `&play` plays boards as a student meets them (hidden pieces stay hidden until earned); without
- * it everything is shown. `&locale=hi` for Hindi. `&shot` drops the chrome (for screenshots).
+ * `&play` plays it as the app does (play-in-app.tsx): the chapter's path, its lessons one board at
+ * a time, results, from the board or lesson named. `&earned` keeps the boards side by side but
+ * plays them as a student meets them (hidden pieces stay hidden until earned; render_board's
+ * steps); without either everything is shown. `&locale=hi` for Hindi. `&shot` drops the chrome (for screenshots).
  * Each piece carries `data-source="content/…/overview.ts:42"` (from build/sources.json), so an
  * editor's browser or an agent pointed at a piece knows the line; Alt-click opens it in the editor.
  * Nothing here draws anything itself: the player does.
@@ -801,7 +804,7 @@ function useEditorLink(): [boolean, (on: boolean | ((was: boolean) => boolean)) 
   return [isSelecting, setIsSelecting];
 }
 
-/** A view setting kept in the URL (play, Hindi): the editor's panel owns it when there is one. */
+/** A view setting kept in the URL (play as the app, Hindi): the editor's panel owns it when there is one. */
 function toggleParam(name: "play" | "locale"): void {
   if (isInEditor) {
     toEditor({ type: "toggle", what: name === "play" ? "play" : "hindi" });
@@ -883,6 +886,21 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       stop();
     };
   }, [bus]);
+  const params = new URLSearchParams(search);
+  if (params.has("play"))
+    return (
+      <PlayInApp
+        key={search}
+        path={(
+          params.get("board") ??
+          params.get("source")?.replace(/^content\//, "") ??
+          ""
+        ).replace(/\/$/, "")}
+        locale={params.get("locale") === "hi" ? Locale.Hi : Locale.En}
+        bus={bus}
+        width={Number(params.get("width")) || undefined}
+      />
+    );
   return <PreviewPage key={search} bus={bus} search={search} />;
 }
 
@@ -892,7 +910,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const source = params.get("source");
   const isTree = source === null && path.split("/").filter(Boolean).length < 3;
   const withQuestions = params.get("show") === "questions";
-  const isPlaying = params.has("play");
+  const isPlaying = params.has("earned");
   const isShot = params.has("shot");
   // The column's width, to see the board as another device draws it (a phone by default).
   const width = Number(params.get("width")) || undefined;
@@ -1126,8 +1144,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       {isHelp && (
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
-          <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play ·{" "}
-          <b>h</b> Hindi · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
+          <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play as
+          the app · <b>h</b> Hindi · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
         </div>
       )}
       {shown.map((s, i) => (

@@ -1939,3 +1939,24 @@ body.is-selecting .is-pick-target {
 .preview-reply-form button:disabled {
   opacity: 0.4;
 }
+
+/* Play as the app (play-in-app.tsx): the app's screens in a phone's frame, centred on the dark page. */
+.play-app {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18181b;
+}
+.play-phone {
+  position: relative;
+  overflow: auto;
+  /* Anything the app pins to the screen (Jugnu's sheet, banners) is pinned to the phone instead. */
+  transform: translateZ(0);
+  border-radius: 20px;
+  border: 1px solid #2a2a2e;
+  background: var(--color-surface);
+}
+.play-phone > .lesson {
+  min-height: 100%;
+}
