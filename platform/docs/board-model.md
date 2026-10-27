@@ -33,7 +33,7 @@ observe: (view) => ({
 })
 ```
 
-Values are typed (`1.4`, `{ x: 2, y: 3 }`), with `words` for how the screen writes them when that differs ("1.40"; Jugnu reads the words), and a control says which action(s) it `does`. The chalk MCP's `look` returns a piece this way (pointed at `<board>#<piece>`) (`platform/packages/player/src/board-model.ts`): each piece's setup and live fields, its elements with where each is drawn (file:line), and what the student can do.
+Values are typed (`1.4`, `{ x: 2, y: 3 }`), with `words` for how the screen writes them when that differs ("1.40"; Jugnu reads the words), and a control says which action(s) it `does`: on the page, an input says it itself (`{...does(action)}` in the view, [making-a-prop.md](making-a-prop.md#4-write-the-view)), and the snapshot reads it there. The chalk MCP's `look` returns a piece this way (pointed at `<board>#<piece>`) (`platform/packages/player/src/board-model.ts`): each piece's setup and live fields, its elements with where each is drawn (file:line), and what the student can do.
 
 Two rules make it trustworthy, and a test per prop checks both:
 

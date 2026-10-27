@@ -2,6 +2,7 @@ import { type AnyPropDef, type StoredState, groupOf, shownOf } from "@chalk/prop
 import { type ComponentType, type JSX, createContext } from "preact";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
+import { pressHandler } from "./does";
 import { FrameStage, InFrame } from "./frame";
 import type { PropViewProps } from "./prop-module";
 
@@ -32,18 +33,31 @@ const ChildSlot = memo(
     isWide,
     inFrame,
   }: Slot): JSX.Element {
+    const own = (action: string, args?: Readonly<Record<string, unknown>>) =>
+      call(`${name}.${action}`, args);
     const inner = (
       <View
         view={view}
         width={width}
         locale={locale}
-        call={(action, args) => call(`${name}.${action}`, args)}
+        call={own}
         signal={(s, payload) => signal(`${name}.${s}`, payload)}
       />
     );
-    if (inFrame) return <g data-child={name}>{inner}</g>;
+    if (inFrame)
+      return (
+        // biome-ignore lint/a11y/useKeyWithClickEvents: the inputs inside are buttons (Enter and Space press them); this only hears their clicks to run what they say they do
+        <g data-child={name} onClick={pressHandler(own)}>
+          {inner}
+        </g>
+      );
     return (
-      <div class={`group-child${isWide ? " is-wide" : ""}`} data-child={name}>
+      // biome-ignore lint/a11y/useKeyWithClickEvents: the inputs inside are buttons (Enter and Space press them); this only hears their clicks to run what they say they do
+      <div
+        class={`group-child${isWide ? " is-wide" : ""}`}
+        data-child={name}
+        onClick={pressHandler(own)}
+      >
         {inner}
       </div>
     );

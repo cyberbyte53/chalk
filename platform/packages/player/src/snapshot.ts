@@ -23,6 +23,7 @@ import {
   shownOf,
 } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
+import { inputsIn } from "./does";
 import { findNode, partPathsIn } from "./part-paths";
 import type { BoardRuntime } from "./runtime";
 
@@ -161,6 +162,13 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
       parts.push({ ...rest, path: at });
       for (const action of controlActions(def, view, e))
         fromControls.set(action, [...(fromControls.get(action) ?? []), at]);
+    }
+  // And what its inputs on the page say they do (does / says): the input is the source.
+  if (group === undefined && onScreen !== undefined)
+    for (const input of inputsIn(onScreen)) {
+      const at = input.at ?? path;
+      const known = fromControls.get(input.action) ?? [];
+      if (!known.includes(at)) fromControls.set(input.action, [...known, at]);
     }
 
   // A field is live when something here can change it: what a control or rule does (its declared

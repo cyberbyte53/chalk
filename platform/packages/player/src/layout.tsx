@@ -4,6 +4,7 @@ import { type Box, PHONE_COLUMN, joinPath, namesOf, segment, sizeOf, zoomFor } f
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type BoardClock, BoardClockContext } from "./board-clock";
+import { heard, pressHandler } from "./does";
 import { findNode, stampPaths } from "./part-paths";
 import type { PropRegistry } from "./prop-module";
 import type { BoardRuntime } from "./runtime";
@@ -146,14 +147,26 @@ function PropPieceView({
           }}
         />
       )}
-      <div class="piece-drawn" ref={drawn} style={zoom === 1 ? undefined : { zoom }}>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: the inputs inside are buttons (Enter and Space press them); this only hears their clicks to run what they say they do */}
+      <div
+        class="piece-drawn"
+        ref={drawn}
+        style={zoom === 1 ? undefined : { zoom }}
+        onClick={pressHandler((action, args) =>
+          heard(piece.name, action, () =>
+            runtime.call(piece.name, action, { ...(args ?? {}) }, Actor.Learner),
+          ),
+        )}
+      >
         <BoardClockContext.Provider value={clock}>
           <View
             view={runtime.getView(piece.name)}
             locale={context.locale}
             width={width}
             call={(action, args) =>
-              void runtime.call(piece.name, action, args ?? {}, Actor.Learner)
+              heard(piece.name, action, () =>
+                runtime.call(piece.name, action, args ?? {}, Actor.Learner),
+              )
             }
             signal={(name, payload) =>
               runtime.signal(piece.name, name, payload ?? {}, Actor.Learner)

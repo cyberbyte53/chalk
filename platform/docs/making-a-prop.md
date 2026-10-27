@@ -55,7 +55,17 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 ## 4. Write the view
 
-`src/view.tsx`: draws `view` (stored and derived) at the `width` it's given. Every touch is `call("<action>", args)`. The view owns no state. Words come from the lesson (`{ en, hi }`), not the prop.
+`src/view.tsx`: draws `view` (stored and derived) at the `width` it's given. The view owns no state. Words come from the lesson (`{ en, hi }`), not the prop.
+
+**An input says what it does, as data on the input** (`does` from `@chalk/player`), never hidden in a function:
+
+```tsx
+<SymbolButton {...does(SweetShareAction.GiveRound)} />                    // a button
+<SymbolButton {...does(RemainderShelvesAction.PlaceMany, { count: 10 })} />  // with its values
+<Stepper {...says(SweetShareAction.SetFriends)} onChange={(value) => call(SweetShareAction.SetFriends, { value })} />
+```
+
+`does(action, values)` puts the action on the page (`data-does`, `data-with`) and the player presses it: no `onClick`. An input whose values are only known when it's used (a stepper's step, a typed number, a drag) keeps its handler and says which action with `says(action)`. A component passes them on to the element that is pressed (`{...doesOf(props)}`). So the snapshot on a drawn board (the preview, `look`, `play`) knows what each input does without pressing it, and that it's on screen now (Jugnu's copy on the server has no page yet: it reads them once the server draws the view as text, which is next); in the dev preview, an input that calls a student action without saying so is reported (`look` shows it under page errors). Each action lists the fields it `changes`, so what an input changes is state, not setup. The sweet-sharing prop (`library/props/primes/src/sweet-share-view.tsx`) is the example; props written before this are moved over as they're touched.
 
 Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.md) first, including the list of d3 modules to check before writing geometry by hand); draw your own SVG inside the stage only for what no piece covers. For anything on a coordinate plane use Mafs instead (see Libraries below). Styles go in the prop's own `src/styles.css`, exported as `@chalk/prop-<folder>/styles.css`; class names start with the prop's short prefix (`.nl-`, `.ns-`). Draw only with the look's tokens (`var(--color-on-surface)`, `var(--font-display)`, `var(--text-note)`; see `platform/packages/look`), never a raw colour: a test checks. A colour the content picks (a `colorSchema` field) reaches the view as a role or a hex; set it as `--tone` with `cssColor` and mix tints from it. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
 

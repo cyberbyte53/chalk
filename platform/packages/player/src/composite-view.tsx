@@ -1,5 +1,6 @@
 import { type AnyPropDef, childView, compositeOf } from "@chalk/prop";
 import type { ComponentType, JSX } from "preact";
+import { pressHandler } from "./does";
 import type { PropViewProps } from "./prop-module";
 
 /**
@@ -28,10 +29,12 @@ export function compositeView(
             if (to !== undefined) call(to[0], to[1] as Record<string, unknown>);
           };
           return (
+            // biome-ignore lint/a11y/useKeyWithClickEvents: the inputs inside are buttons (Enter and Space press them); this only hears their clicks to run what they say they do
             <div
               key={name}
               class={`bk-child${wide.includes(name) ? " is-wide" : ""}`}
               data-child={name}
+              onClick={pressHandler(route)}
             >
               <View
                 view={childView(def, view, name)}

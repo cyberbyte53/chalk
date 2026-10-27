@@ -302,6 +302,30 @@ const cases: Record<string, () => Promise<void>> = {
       noPiece.error?.slice(0, 120) ?? "went ahead",
     );
   },
+  async inputs() {
+    // Inputs say what they do (does / says): read off the page, without pressing anything.
+    const c = await agent("stress-inputs");
+    const r = await call(c, "look", { at: `${STORY}#game`, play: true });
+    expect(
+      "a piece's inputs say what they do: what can be done, by which input",
+      r.ok && /giveRound\s+\(learner, via game\/giveRound\)/.test(textOf(r)),
+      r.error ??
+        textOf(r)
+          .split("\n")
+          .find((l) => l.startsWith("can:")) ??
+        "no can line",
+    );
+    const p = await call(c, "play", {
+      board: STORY,
+      steps: [{ tap: "game/giveRound" }],
+      shots: "none",
+    });
+    expect(
+      "pressing one runs what it says (the player presses it, not a handler)",
+      p.ok && /game\.rounds 0 → 1/.test(textOf(p)),
+      p.error ?? textOf(p),
+    );
+  },
   async relay() {
     // As a harness starts it: the stdio relay (connect.ts), which reaches the service and
     // reconnects when it restarts. The restart is made the way an edit makes it (tsx watch).

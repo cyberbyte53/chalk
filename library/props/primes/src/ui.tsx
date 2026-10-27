@@ -1,3 +1,4 @@
+import { type DoesAttrs, doesOf } from "@chalk/player";
 import type { ComponentChildren, JSX } from "preact";
 import { type Bag, primesIn, toneOf } from "./arithmetic";
 
@@ -89,7 +90,11 @@ export function BagTowers({
   );
 }
 
-/** A small round button with a symbol on it (props show no words; the label is for screen readers). */
+/**
+ * A small round button with a symbol on it (props show no words; the label is for screen readers).
+ * What it does is said on it, `{...does(Action.X)}`, and the player presses it; `onPress` is for a
+ * button inside another input (a stepper's − and +).
+ */
 export function SymbolButton({
   symbol,
   label,
@@ -98,16 +103,17 @@ export function SymbolButton({
   isWide = false,
   isOn = false,
   part,
+  ...rest
 }: {
   symbol: ComponentChildren;
   label: string;
-  onPress: () => void;
+  onPress?: () => void;
   isEnabled?: boolean;
   isWide?: boolean;
   /** Drawn pressed in: the option that is chosen. */
   isOn?: boolean;
   part?: string;
-}): JSX.Element {
+} & Partial<DoesAttrs>): JSX.Element {
   const classes = ["pr-button"];
   if (isWide) classes.push("is-wide");
   if (isOn) classes.push("is-on");
@@ -119,6 +125,7 @@ export function SymbolButton({
       aria-pressed={isOn}
       disabled={!isEnabled}
       data-part={part}
+      {...doesOf(rest)}
       onClick={onPress}
     >
       {symbol}
@@ -135,7 +142,8 @@ export function Stepper({
   onChange,
   step = 1,
   part,
-}: {
+  ...rest
+}: Partial<DoesAttrs> & {
   /** What the number is called, maths only ("a", "b", "n"). */
   name: string;
   value: number;
@@ -147,7 +155,7 @@ export function Stepper({
   part?: string;
 }): JSX.Element {
   return (
-    <div class="pr-stepper" data-part={part}>
+    <div class="pr-stepper" data-part={part} {...doesOf(rest)}>
       <SymbolButton
         symbol="−"
         label={`${name} − ${step}`}
@@ -175,7 +183,8 @@ export function NumberBox({
   max,
   onChange,
   part,
-}: {
+  ...rest
+}: Partial<DoesAttrs> & {
   name: string;
   value: number;
   min: number;
@@ -185,7 +194,7 @@ export function NumberBox({
   part?: string;
 }): JSX.Element {
   return (
-    <label class="pr-numberbox" data-part={part}>
+    <label class="pr-numberbox" data-part={part} {...doesOf(rest)}>
       <span class="pr-name">{name}</span>
       <input
         type="number"

@@ -117,6 +117,7 @@ export const sweetShare = defineProp({
     [SweetShareAction.GiveRound]: act({
       describe: "Give every friend one more sweet from the box (the learner's round button)",
       byLearner: true,
+      changes: ["rounds"],
       args: none,
       run: (s) => {
         if (isOverOf(s)) return set({});
@@ -136,6 +137,7 @@ export const sweetShare = defineProp({
     [SweetShareAction.GiveAll]: act({
       describe: "Give every round at once",
       reveals: true,
+      changes: ["rounds"],
       args: none,
       run: (s) => {
         const { q, r } = divide(s.sweets, s.friends);
@@ -146,18 +148,21 @@ export const sweetShare = defineProp({
     [SweetShareAction.StartAgain]: act({
       describe: "Put every sweet back in the box",
       byLearner: true,
+      changes: ["rounds"],
       args: none,
       run: () => set({ rounds: 0 }),
     }),
     [SweetShareAction.SetSweets]: act({
       describe: "Change a, the sweets in the box; the sharing starts again",
       byLearner: true,
+      changes: ["sweets", "rounds"],
       args: value(MAX_SWEETS, 0),
       run: (_s, a) => set({ sweets: a.value, rounds: 0 }),
     }),
     [SweetShareAction.SetFriends]: act({
       describe: "Change b, how many friends; the sharing starts again",
       byLearner: true,
+      changes: ["friends", "rounds"],
       args: value(MAX_FRIENDS, 1),
       run: (_s, a) => set({ friends: a.value, rounds: 0 }),
     }),

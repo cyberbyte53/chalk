@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
 import { MAX_FRIENDS, MAX_SWEETS, SweetShareAction, type SweetShareState } from "./sweet-share";
 import { NumberBox, Stepper, SymbolButton } from "./ui";
@@ -69,6 +69,7 @@ export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Eleme
             min={0}
             max={MAX_SWEETS}
             part="a"
+            {...says(SweetShareAction.SetSweets)}
             onChange={(value) => call(SweetShareAction.SetSweets, { value })}
           />
           <Stepper
@@ -77,6 +78,7 @@ export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Eleme
             min={1}
             max={MAX_FRIENDS}
             part="b"
+            {...says(SweetShareAction.SetFriends)}
             onChange={(value) => call(SweetShareAction.SetFriends, { value })}
           />
         </div>
@@ -116,14 +118,14 @@ export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Eleme
           isWide
           part="giveRound"
           isEnabled={s.canGiveRound}
-          onPress={() => call(SweetShareAction.GiveRound)}
+          {...does(SweetShareAction.GiveRound)}
         />
         <SymbolButton
           symbol="↺"
           label="Put every sweet back in the box"
           part="startAgain"
           isEnabled={s.rounds > 0}
-          onPress={() => call(SweetShareAction.StartAgain)}
+          {...does(SweetShareAction.StartAgain)}
         />
       </div>
       {s.showLog && (
