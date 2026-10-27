@@ -6,7 +6,7 @@
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { type AnyPropDef, BOARD } from "@chalk/prop";
+import { type AnyPropDef, BOARD, PropRole } from "@chalk/prop";
 
 type PropRow = {
   type: string;
@@ -78,7 +78,7 @@ export function catalogueRows(
       .map((def) => ({
         type: def.type,
         describe: def.describe,
-        isExplainer: def.isExplainer !== false,
+        isExplainer: def.role === PropRole.Explainer,
         learnerActions: Object.entries(def.actions)
           .filter(([, spec]) => (spec as { byLearner?: boolean }).byLearner === true)
           .map(([action]) => action),

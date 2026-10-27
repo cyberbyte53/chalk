@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { divide } from "./arithmetic";
 import { count } from "./seen";
@@ -50,6 +50,7 @@ const signals = {
  */
 export const sweetShare = defineProp({
   type: "sweetShare",
+  role: PropRole.Explainer,
   describe:
     "a sweets shared equally among b friends, one round at a time: each round every friend gets one sweet from the box. A round can be given only while the box holds at least b sweets, so the game ends by itself with fewer than b left. At the end the rounds are the quotient q and the box is the remainder r: a = b × q + r with 0 ≤ r < b, and only one such q and r.",
   state: sweetShareState,

@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, gcd, primesIn } from "./arithmetic";
 import { sup } from "./seen";
@@ -146,6 +146,7 @@ const signals = {
  */
 export const tenMaker = defineProp({
   type: "tenMaker",
+  role: PropRole.Explainer,
   describe:
     "A fraction p/q as prime beads, the numerator's above the bar and the denominator's below. Cancel crosses out the primes they share (lowest terms). Pair links each 2 in the denominator with a 5: a ten. Add puts in the missing 2s or 5s, top and bottom alike, so every bead below is in a ten and the denominator is 10ⁿ (3/8 = 375/1000 = 0.375). A 3, 7 or any other prime below has no partner, so the decimal never terminates.",
   state: tenMakerState,

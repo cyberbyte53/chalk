@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { BoardAction, BoardSignal, boardProp } from "./board";
-import { EffectKind, actionsFor, asAnyProp, defineProp, raise, set, signal, tween } from "./define";
+import {
+  EffectKind,
+  PropRole,
+  actionsFor,
+  asAnyProp,
+  defineProp,
+  raise,
+  set,
+  signal,
+  tween,
+} from "./define";
 import { applyPatch, initialState, prepareAction, tweenAt, viewOf } from "./state";
 
 // A concave mirror: two stored causes (u, f); everything else follows.
@@ -16,6 +26,7 @@ const imageAt = (s: MirrorState) => 1 / (1 / s.f - 1 / s.u);
 const mirror = asAnyProp(
   defineProp({
     type: "mirror",
+    role: PropRole.Explainer,
     describe: "Concave mirror (NCERT sign convention, cm)",
     state: mirrorState,
     defaults: { u: -20, f: -15 },

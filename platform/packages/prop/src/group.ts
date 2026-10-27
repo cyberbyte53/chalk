@@ -6,6 +6,7 @@ import {
   type Effect,
   EffectKind,
   type PropDef,
+  type PropRole,
   type PropView,
   type Raised,
   type SignalSpec,
@@ -164,7 +165,7 @@ export type GroupSpec<
    * `below` are drawn under the picture (controls, readouts).
    */
   layout: GroupLayoutSpec<keyof C & string>;
-  isExplainer?: boolean;
+  role: PropRole;
 };
 
 export type GroupLayoutSpec<N extends string = string> =
@@ -927,7 +928,7 @@ export function defineGroup<
       }
       return invariantOfView(read(s).view);
     },
-    ...(spec.isExplainer !== undefined ? { isExplainer: spec.isExplainer } : {}),
+    role: spec.role,
     ...(spec.inputs !== undefined ? { inputs: spec.inputs } : {}),
     group: {
       children: kids,

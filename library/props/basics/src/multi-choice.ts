@@ -57,7 +57,6 @@ export const multiChoice = defineProp({
   type: "multiChoice",
   /** Words and controls: they reflow with the column (text sizes grow), never scale. */
   size: { fit: SizeFit.Fill },
-  isExplainer: false,
   describe: "A question with several right options: pick all of them, then Check.",
   role: PropRole.Question,
   state: multiChoiceState,

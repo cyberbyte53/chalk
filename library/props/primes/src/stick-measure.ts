@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 
@@ -154,6 +154,7 @@ const signals = {
  */
 export const stickMeasure = defineProp({
   type: "stickMeasure",
+  role: PropRole.Explainer,
   describe:
     "Two sticks, a and b. Lay the shorter along the longer as many times as it fits (a = b × q + r) and keep the leftover r; then do the same with b and r, until nothing is left over. The last stick laid is the longest piece that measures both a and b exactly: HCF(a, b). Marks of a chosen piece length show that a piece measuring both sticks measures the leftover too.",
   state: stickMeasureState,

@@ -51,7 +51,6 @@ export const choice = defineProp({
   type: "choice",
   /** Words and controls: they reflow with the column (text sizes grow), never scale. */
   size: { fit: SizeFit.Fill },
-  isExplainer: false,
   describe: "A multiple-choice question.",
   role: PropRole.Question,
   state: choiceState,

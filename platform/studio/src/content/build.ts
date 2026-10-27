@@ -692,7 +692,7 @@ async function buildBank(
 
 /** Explainer props only: words, buttons and questions are on every board and explain nothing. */
 function explainers(c: Context, types: Iterable<string>): string[] {
-  return [...new Set(types)].filter((type) => c.defs[type]?.isExplainer !== false).sort();
+  return [...new Set(types)].filter((type) => c.defs[type]?.role === PropRole.Explainer).sort();
 }
 
 /** A concept read and its pages built; its concept.json waits for the bank (for its props). */
@@ -724,7 +724,7 @@ async function draftConcept(c: Context, conceptPath: string): Promise<ConceptDra
   for (const extra of manifest.props ?? []) {
     const def = c.defs[extra];
     if (def === undefined) report(c, manifestFile, `props: no prop type "${extra}" in the library`);
-    else if (def.isExplainer === false)
+    else if (def.role !== PropRole.Explainer)
       report(
         c,
         manifestFile,

@@ -1,6 +1,7 @@
 import { Actor, type Board, type BoardAt, boardSchema } from "@chalk/content";
 import {
   BOARD,
+  PropRole,
   actionsFor,
   defineProp,
   raise,
@@ -29,6 +30,7 @@ const coinAct = actionsFor<CoinState>();
 const coinSignals = { landed: signal("Landed") };
 const coin = defineProp({
   type: "coin",
+  role: PropRole.Explainer,
   describe: "A coin that lands on `next` (tests decide; no randomness here)",
   state: coinState,
   defaults: { heads: 0, count: 0, next: "H" },
@@ -52,6 +54,7 @@ type DialState = z.infer<typeof dialState>;
 const dialAct = actionsFor<DialState>();
 const dial = defineProp({
   type: "dial",
+  role: PropRole.Explainer,
   describe: "A dial",
   state: dialState,
   defaults: { at: 0 },
@@ -83,6 +86,7 @@ type LabelState = z.infer<typeof labelState>;
 const labelAct = actionsFor<LabelState>();
 const label = defineProp({
   type: "label",
+  role: PropRole.Explainer,
   describe: "A label",
   state: labelState,
   defaults: { text: { en: "", hi: "" }, value: 0 },
@@ -124,6 +128,7 @@ const tick = tickerAct({
 /** Steps as data: a repeat with an internal tick, a glide, and a wait for its own state. */
 const ticker = defineProp({
   type: "ticker",
+  role: PropRole.Explainer,
   describe: "Ticks while running; glides `at`",
   state: tickerState,
   defaults: { isRunning: false, ticks: 0, at: 0 },
@@ -637,6 +642,7 @@ describe("BoardRuntime", () => {
     // A dial whose `at` is bound to a label's value; dragging the dial is routed to the label.
     const pair = defineGroup({
       type: "pair",
+      role: PropRole.Explainer,
       describe: "a dial bound to a value",
       children: { value: label, dial },
       is: { dial: (s) => ({ at: s.value.value }) },

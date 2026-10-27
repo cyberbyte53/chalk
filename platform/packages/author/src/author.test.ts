@@ -14,6 +14,7 @@ type DialState = z.infer<typeof dialState>;
 const act = actionsFor<DialState>();
 const dial = defineProp({
   type: "dial",
+  role: PropRole.Explainer,
   describe: "A dial",
   state: dialState,
   defaults: { at: 0, isOn: true },

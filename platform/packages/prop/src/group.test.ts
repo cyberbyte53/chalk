@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { EffectKind, actionsFor, defineProp, raise, set, signal } from "./define";
+import { EffectKind, PropRole, actionsFor, defineProp, raise, set, signal } from "./define";
 import { defineGroup, groupOf, refuse, shownOf } from "./group";
 import { applyPatch, initialState, prepareAction, setStateChecks, viewOf } from "./state";
 
@@ -16,6 +16,7 @@ const onStepper = actionsFor<Stepper>();
 const stepperSignals = { changed: signal("") };
 const stepper = defineProp({
   type: "stepper",
+  role: PropRole.Explainer,
   describe: "",
   state: stepperState,
   defaults: { value: 0, min: -5, max: 5 },
@@ -36,6 +37,7 @@ const stepper = defineProp({
 
 const text = defineProp({
   type: "text",
+  role: PropRole.Explainer,
   describe: "",
   state: z.object({ tex: z.string() }).strict(),
   defaults: { tex: "" },
@@ -47,6 +49,7 @@ const onHandle = actionsFor<z.infer<typeof handleState>>();
 const handleSignals = { moved: signal("") };
 const handle = defineProp({
   type: "handle",
+  role: PropRole.Explainer,
   describe: "",
   state: handleState,
   defaults: { x: 0 },
@@ -69,6 +72,7 @@ const machineSignals = { put: signal("") };
 
 const machine = defineGroup({
   type: "machine",
+  role: PropRole.Explainer,
   describe: "x² from a stepper and a handle",
   own: machineOwn,
   ownDefaults: { tried: [] },
@@ -160,6 +164,7 @@ describe("groups", () => {
     expect(() =>
       defineGroup({
         type: "bad",
+        role: PropRole.Explainer,
         describe: "",
         children: { input: stepper, dial: handle },
         is: { dial: (s) => ({ x: s.input.value }) },
@@ -183,6 +188,7 @@ describe("groups", () => {
   it("types its links from its children", () => {
     defineGroup({
       type: "typed",
+      role: PropRole.Explainer,
       describe: "",
       children: { input: stepper, note: text },
       optional: ["note"],
@@ -197,6 +203,7 @@ describe("groups", () => {
     expect(() =>
       defineGroup({
         type: "typed",
+        role: PropRole.Explainer,
         describe: "",
         children: { input: stepper },
         summary: () => "",
@@ -207,6 +214,7 @@ describe("groups", () => {
     expect(() =>
       defineGroup({
         type: "clash",
+        role: PropRole.Explainer,
         describe: "",
         children: { input: stepper },
         derived: { input: { describe: "", compute: () => 1 } },
@@ -217,6 +225,7 @@ describe("groups", () => {
     expect(() =>
       defineGroup({
         type: "unknownField",
+        role: PropRole.Explainer,
         describe: "",
         children: { input: stepper, note: text },
         // @ts-expect-error text has no field "words"
@@ -230,6 +239,7 @@ describe("groups", () => {
   it("shows a child or not: a hidden child keeps its facts", () => {
     const shy = defineGroup({
       type: "shy",
+      role: PropRole.Explainer,
       describe: "",
       children: { input: stepper, note: text },
       is: { note: (s) => ({ tex: `x = ${s.input.value}` }) },
@@ -258,6 +268,7 @@ describe("groups", () => {
   it("binds into a child group's children, nested", () => {
     const inner = defineGroup({
       type: "inner",
+      role: PropRole.Explainer,
       describe: "",
       children: { dial: handle, note: text },
       summary: () => "",
@@ -265,6 +276,7 @@ describe("groups", () => {
     });
     const outer = defineGroup({
       type: "outer",
+      role: PropRole.Explainer,
       describe: "",
       children: { input: stepper, pane: inner },
       is: { pane: (s) => ({ dial: { x: s.input.value }, note: { tex: `at ${s.input.value}` } }) },
@@ -288,6 +300,7 @@ describe("groups", () => {
   it("works bindings and derived values out when read, so they may be written in any order", () => {
     const chain = defineGroup({
       type: "chain",
+      role: PropRole.Explainer,
       describe: "",
       children: { input: stepper, working: text, dial: handle },
       derived: { double: { describe: "", compute: (s) => s.dial.x * 2 } },
@@ -311,6 +324,7 @@ describe("groups", () => {
     expect(() =>
       defineGroup({
         type: "knot",
+        role: PropRole.Explainer,
         describe: "",
         children: { a: text, b: text },
         is: { a: (s) => ({ tex: s.b.tex }), b: (s) => ({ tex: s.a.tex }) },
@@ -323,6 +337,7 @@ describe("groups", () => {
   it("draws children in a frame only on the frame they draw on", () => {
     const paper = defineProp({
       type: "paper",
+      role: PropRole.Explainer,
       describe: "",
       state: z.object({ from: z.number() }).strict(),
       defaults: { from: 0 },
@@ -342,6 +357,7 @@ describe("groups", () => {
     const framed = (children: Record<string, typeof handle>, layout: object) =>
       defineGroup({
         type: "framed",
+        role: PropRole.Explainer,
         describe: "",
         children: { paper, ...children },
         summary: () => "",

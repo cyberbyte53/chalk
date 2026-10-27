@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { defineHost, layersFor } from "./compose";
-import { type FrameSpec, actionsFor, nameOf, set } from "./define";
+import { type FrameSpec, PropRole, actionsFor, nameOf, set } from "./define";
 
 type Axis = { from: number; to: number };
 const axis = layersFor<Axis>()({
@@ -52,6 +52,7 @@ const frame: FrameSpec<Axis> = {
 
 const host = defineHost({
   type: "testLine",
+  role: PropRole.Explainer,
   describe: "a test line",
   frame,
   core: axis,
@@ -70,7 +71,7 @@ describe("hosts and layers", () => {
   });
 
   it("refuses two parts claiming one field, a layer on another frame, and one needing a missing layer", () => {
-    const spec = { type: "t", describe: "", frame, core: axis } as const;
+    const spec = { type: "t", describe: "", role: PropRole.Explainer, frame, core: axis } as const;
     const twin = { ...dot, name: "twin" };
     expect(() => defineHost({ ...spec, layers: [dot, twin] })).toThrow(/field "dot"/);
     const flat = { ...fixed, name: "flat", frame: "plane" as const };

@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 
 /** A share as a decimal: whole rupees, then digits that come once, then digits that repeat forever. */
@@ -62,6 +62,7 @@ const signals = {
  */
 export const billSplit = defineProp({
   type: "billSplit",
+  role: PropRole.Explainer,
   describe:
     "A bill of `amount` rupees shared equally by n friends, for n among `sizes`. Each try lists n and each friend's share as a decimal: it ends (₹100 ÷ 8 = ₹12.50) or repeats forever (₹100 ÷ 3 = ₹33.33…). The shares that end are the n whose only primes are 2 and 5.",
   state: billSplitState,

@@ -1,5 +1,15 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, call, defineProp, raise, seq, set, signal, tween } from "@chalk/prop";
+import {
+  PropRole,
+  actionsFor,
+  call,
+  defineProp,
+  raise,
+  seq,
+  set,
+  signal,
+  tween,
+} from "@chalk/prop";
 import { z } from "zod";
 import { lcm } from "./arithmetic";
 
@@ -80,6 +90,7 @@ const arrive = act({
  */
 export const lapRace = defineProp({
   type: "lapRace",
+  role: PropRole.Explainer,
   describe:
     "Two runners on a round track start together from the start line; one takes a minutes a round, the other b. Play runs the clock for both at once; each minute a runner is back at the start is written in their log (Sonia: 18, 36; Ravi: 12, 24, 36). They are at the start together at a minute in both logs, a common multiple of a and b, first at LCM(a, b). Passing each other elsewhere on the track doesn't count.",
   state: lapRaceState,

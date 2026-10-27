@@ -6,6 +6,7 @@ import {
   type FrameKindName,
   type FrameSpec,
   type PropDef,
+  type PropRole,
   type SignalSpec,
   type StoredState,
   noteNames,
@@ -119,7 +120,7 @@ export type HostSpec<C extends AnyLayer, L extends readonly AnyLayer[]> = {
   core: C;
   layers: L;
   summary?: (s: HostState<C, L>) => string;
-  isExplainer?: boolean;
+  role: PropRole;
 };
 
 export type HostDef<
@@ -227,7 +228,7 @@ export function defineHost<C extends AnyLayer, const L extends readonly AnyLayer
       return undefined;
     },
     ...(spec.summary !== undefined ? { summary: spec.summary as never } : {}),
-    ...(spec.isExplainer !== undefined ? { isExplainer: spec.isExplainer } : {}),
+    role: spec.role,
     host: layout,
   };
   return def as never;

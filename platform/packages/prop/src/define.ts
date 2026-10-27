@@ -338,7 +338,12 @@ export type Observation = {
   hidden?: Readonly<Record<string, unknown>>;
 };
 
-export const PropRole = { Question: "question" } as const;
+/**
+ * What a prop is for on a board. An **explainer** shows a world the student works in (a number
+ * line, tiles, a race): Jugnu may bring one in to explain. A **question** asks, and is checked. A
+ * **page** prop is part of the page around them (words, the board itself): never brought in.
+ */
+export const PropRole = { Explainer: "explainer", Question: "question", Page: "page" } as const;
 export type PropRole = (typeof PropRole)[keyof typeof PropRole];
 
 /**
@@ -378,17 +383,12 @@ export type PropDef<
   invariant?: (state: S) => string | undefined;
   /** What this prop says when told to `say` (for audio generation and the voice check). */
   speech?: (state: S) => Spoken | undefined;
-  role?: PropRole;
+  role: PropRole;
   /**
    * How it is sized on screens wider or shorter than a phone (size.ts): by default drawn for a
    * phone and scaled with the column; a board can override it where it places the prop.
    */
   size?: Size;
-  /**
-   * Whether Jugnu may bring this prop in to explain a concept (a number line, tiles). Words, buttons,
-   * questions and timers are not explainers. Default: true.
-   */
-  isExplainer?: boolean;
   /**
    * A frame this prop provides: in a group's frame layout, other props draw into its picture
    * through its transform.

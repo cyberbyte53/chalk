@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, bagText, isPrime } from "./arithmetic";
 
@@ -120,6 +120,7 @@ const signals = {
  */
 export const factorTree = defineProp({
   type: "factorTree",
+  role: PropRole.Explainer,
   describe:
     "A factor tree. The number at the top is split into two factors, and each factor that isn't prime is split again, until every end is a prime. The primes at the ends are the number's prime factorisation; whichever splits are chosen, the ends are the same primes (the Fundamental Theorem of Arithmetic).",
   state: factorTreeState,

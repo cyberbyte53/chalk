@@ -1,11 +1,12 @@
 import { expect, describe as group, it } from "vitest";
 import { z } from "zod";
-import { actionsFor, asAnyProp, defineProp, set } from "./define";
+import { PropRole, actionsFor, asAnyProp, defineProp, set } from "./define";
 import { describe, does, says, shows, tagsInMarkup, tagsOf } from "./tags";
 
 const act = actionsFor<{ count: number; isOpen: boolean }>();
 const shelf = defineProp({
   type: "shelf",
+  role: PropRole.Explainer,
   describe: "A shelf of counters",
   state: z.object({ count: z.number().int(), isOpen: z.boolean() }).strict(),
   defaults: { count: 0, isOpen: true },

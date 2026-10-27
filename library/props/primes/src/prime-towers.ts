@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, gcd, lcm, primesIn } from "./arithmetic";
 
@@ -69,6 +69,7 @@ const signals = {
  */
 export const primeTowers = defineProp({
   type: "primeTowers",
+  role: PropRole.Explainer,
   describe:
     "Two numbers' prime factorisations as towers: for each prime, the two numbers' towers side by side, each as tall as that prime's power in the number (18 = 2 × 3²: a 2-tower of 1 and a 3-tower of 2). HCF: a line at the shorter tower's top in each column (each prime at its smaller power). LCM: a line at the taller tower's top (each prime at its greater power). HCF × LCM: both lines; shorter + taller = the two heights together, so HCF × LCM = a × b.",
   state: primeTowersState,

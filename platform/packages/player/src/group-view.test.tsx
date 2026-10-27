@@ -1,5 +1,6 @@
 import {
   type FramePixels,
+  PropRole,
   actionsFor,
   defineGroup,
   defineProp,
@@ -38,6 +39,7 @@ const pixels = (s: Paper, width: number): FramePixels => {
 };
 const paper = defineProp({
   type: "paper",
+  role: PropRole.Explainer,
   describe: "graph paper",
   state: paperState,
   defaults: { xMin: 0, xMax: 10, yMin: 0, yMax: 10 },
@@ -59,6 +61,7 @@ const dotState = z.object({ x: z.number(), y: z.number(), name: z.string() }).st
 const onDot = actionsFor<z.infer<typeof dotState>>();
 const dot = defineProp({
   type: "dot",
+  role: PropRole.Explainer,
   describe: "a named point",
   state: dotState,
   defaults: { x: 1, y: 1, name: "P" },
@@ -92,6 +95,7 @@ function DotView({ view: s }: PropViewProps<typeof dot>): JSX.Element {
 
 const counter = defineProp({
   type: "counter",
+  role: PropRole.Explainer,
   describe: "",
   state: z.object({ n: z.number() }).strict(),
   defaults: { n: 0 },
@@ -103,6 +107,7 @@ function CounterView({ view }: PropViewProps<typeof counter>): JSX.Element {
 
 const twoPoints = defineGroup({
   type: "twoPoints",
+  role: PropRole.Explainer,
   describe: "two points on graph paper",
   children: { paper, p: dot, q: dot, count: counter },
   defaults: { q: { x: 1.2, y: 1.1, name: "Q" } },

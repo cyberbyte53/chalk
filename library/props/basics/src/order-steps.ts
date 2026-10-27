@@ -70,7 +70,6 @@ export const orderSteps = defineProp({
   type: "orderSteps",
   /** Words and controls: they reflow with the column (text sizes grow), never scale. */
   size: { fit: SizeFit.Fill },
-  isExplainer: false,
   describe:
     "A proof's steps, shuffled: the learner taps them into order, one line at a time, then checks. A step placed too early gets its hint: what has to come before it.",
   role: PropRole.Question,

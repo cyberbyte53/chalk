@@ -425,6 +425,7 @@ export class BoardRuntime {
     try {
       top = defineGroup({
         type: `board ${board.name}`,
+        role: PropRole.Page,
         describe: `The board ${board.name}`,
         children: Object.fromEntries(defs),
         defaults: Object.fromEntries(starts),
