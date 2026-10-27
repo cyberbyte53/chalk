@@ -1,0 +1,83 @@
+/**
+ * Messages to and from an editor that shows this page in a panel (platform/editor): the page sits
+ * in an iframe inside the editor's webview.
+ */
+export const isInEditor = window.parent !== window;
+
+export const toEditor = (message: Record<string, unknown>) =>
+  isInEditor && window.parent.postMessage({ ...message, chalk: true }, "*");
+
+type Field = HTMLTextAreaElement | HTMLInputElement;
+
+const isField = (el: EventTarget | null): el is Field =>
+  (el instanceof HTMLTextAreaElement ||
+    (el instanceof HTMLInputElement && /^(text|search|url|email|)$/.test(el.type))) &&
+  !el.readOnly &&
+  !el.disabled;
+
+/**
+ * Copy, cut, paste, select all, undo and redo in this page's text boxes, inside an editor: the
+ * editor takes ⌘C/⌘V/⌘X/⌘A/⌘Z (Ctrl on Windows and Linux) for itself and never passes them into
+ * an iframe, so the boxes would ignore them. Select all and undo work on the box itself; the
+ * clipboard goes through the editor (`clipboard` writes it, `paste` asks for it back as `pasted`).
+ * Edits go through execCommand, so they are on the box's undo stack and the page sees the input.
+ */
+export function installTextKeys(): void {
+  if (!isInEditor) return;
+  let pasteInto: Field | undefined;
+  const selected = (f: Field) => f.value.slice(f.selectionStart ?? 0, f.selectionEnd ?? 0);
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (!(e.metaKey || e.ctrlKey) || e.altKey || !isField(e.target)) return;
+      const field = e.target;
+      const key = e.key.toLowerCase();
+      const act = (run: () => void) => {
+        e.preventDefault();
+        e.stopPropagation();
+        run();
+      };
+      if (key === "a" && !e.shiftKey) act(() => field.select());
+      else if (key === "c" && !e.shiftKey)
+        act(() => {
+          if (selected(field) !== "") toEditor({ type: "clipboard", text: selected(field) });
+        });
+      else if (key === "x" && !e.shiftKey)
+        act(() => {
+          if (selected(field) === "") return;
+          toEditor({ type: "clipboard", text: selected(field) });
+          document.execCommand("delete");
+        });
+      else if (key === "v" && !e.shiftKey)
+        act(() => {
+          pasteInto = field;
+          toEditor({ type: "paste" });
+        });
+      else if (key === "z") act(() => document.execCommand(e.shiftKey ? "redo" : "undo"));
+      else if (key === "y" && e.ctrlKey && !e.metaKey) act(() => document.execCommand("redo"));
+    },
+    true,
+  );
+  window.addEventListener("message", (e) => {
+    const m = e.data as { chalk?: boolean; type?: string; text?: unknown };
+    if (m?.chalk !== true || m.type !== "pasted" || typeof m.text !== "string") return;
+    const field = pasteInto;
+    pasteInto = undefined;
+    if (field === undefined || !field.isConnected) return;
+    field.focus();
+    document.execCommand("insertText", false, m.text);
+  });
+}
+
+/** ⌘↵ / Ctrl+↵ sends, Esc leaves: for a reply box's onKeyDown. */
+export function sendKeys(send: () => void, leave: () => void): (e: KeyboardEvent) => void {
+  return (e) => {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      send();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      leave();
+    }
+  };
+}

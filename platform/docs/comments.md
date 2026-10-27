@@ -102,7 +102,7 @@ What this doesn't stop: on a laptop the tokens sit in config files, so anything 
 
 A **sitting** is every thread a participant started or wrote on since their last handover, in the order they did: new comments, and old threads they replied to (reopened). Closing or withdrawing alone doesn't count.
 
-In the editor's preview, pick a piece (`c`), type, press Enter: a thread is started. Reply on any thread under its board. When you're done, **Copy for agent (n)** hands the sitting over: the writer writes `reviews/<id>.yaml` and copies `apply review <id> (n threads)`. Paste it into the agent's chat; the agent reads it with `comments` (`review: "<id>"`) and follows the `apply-review` skill.
+In the editor's preview, pick a piece (`c`): a box opens next to it; type, press ⌘↵, and a thread is started. Reply on any thread under its board. When you're done, **Copy for agent (n)** hands the sitting over: the writer writes `reviews/<id>.yaml` and copies `apply review <id> (n threads)`. Paste it into the agent's chat; the agent reads it with `comments` (`review: "<id>"`) and follows the `apply-review` skill.
 
 ```yaml
 id: 20261026-1734

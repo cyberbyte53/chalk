@@ -376,7 +376,18 @@ function onMessage(
   else if (m.type === "copyText" && typeof (m as { text?: unknown }).text === "string") {
     void vscode.env.clipboard.writeText((m as { text: string }).text);
     void vscode.window.showInformationMessage("Chalk: copied. Paste it into the agent's chat.");
-  } else if (m.type === "pick") void askForComment(m);
+  } else if (m.type === "clipboard" && typeof (m as { text?: unknown }).text === "string") {
+    // Copy and cut in the preview's text boxes: the editor keeps those keys from the iframe.
+    void vscode.env.clipboard.writeText((m as { text: string }).text);
+  } else if (m.type === "paste")
+    void vscode.env.clipboard
+      .readText()
+      .then((text) => panel?.webview.postMessage({ type: "pasted", text }));
+  // A comment written next to the piece in the preview.
+  else if (m.type === "comment" && typeof (m as { note?: unknown }).note === "string")
+    void leaveComment(m);
+  // A pick with nowhere to write in the preview (an older page): ask here.
+  else if (m.type === "pick") void askForComment(m);
   else if (m.type === "external" && m.url) void openInBrowser(m.url);
   // The preview went to another level by itself (a chapter or lesson was tapped).
   if (m.follow !== undefined) {

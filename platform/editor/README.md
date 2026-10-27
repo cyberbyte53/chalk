@@ -13,9 +13,8 @@ app's own `?dev&board=` page, so what you see is what the phone draws.
 
   Tapping a chapter or lesson goes one level down and opens its file.
 - **Follows you:** switch files and the preview switches; move the cursor in `overview.ts` and the piece written there is outlined. Alt-click a piece and the editor jumps to its line.
-- **Pick** a piece, write what should change, then:
-  - **Ask the agent** puts it in the chat with its board, line and words. If the editor's chat can't take text from an extension, it goes on the clipboard and the chat opens.
-  - **Leave a comment** writes it to the chapter's `comments/` folder.
+- **Pick** a piece (`c`, or the Pick button; ↑ ↓ for wider or finer): a box opens next to it. Write what should change and press ⌘↵: it's a thread on that board (or on the prop, wherever it's used). Esc cancels.
+- **Text boxes** in the preview (the comment box, replies) take ⌘C, ⌘X, ⌘V, ⌘A and ⌘Z / ⌘⇧Z, and ⌘↵ sends. The editor keeps those keys from the panel, so the preview handles them itself, with the clipboard through the extension.
 - **Play** plays it exactly as the app does, in a phone's frame: the chapter's path, one board at a time with Continue, practice, results, from the board or lesson you're on. **हि** shows it in Hindi.
 - **The Chalk tree** (in the explorer): book → chapter → lesson, with each chapter's open threads counted.
 - **Chalk Reviews** (in the explorer): every review in one place. At the top, your threads not handed over yet (Copy for agent hands them over); then each review, newest first, with where it stands ("1 open, 3 ready") and its threads, each with its status, the latest plan or answer, and the whole thread in its tooltip.

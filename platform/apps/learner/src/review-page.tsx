@@ -3,6 +3,7 @@ import type { EventBus } from "@chalk/events";
 import { preloadProps } from "@chalk/library";
 import type { JSX } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useState } from "preact/hooks";
+import { sendKeys } from "./editor-link";
 import {
   PreviewBoard,
   type Shown,
@@ -291,6 +292,10 @@ function ThreadFold({
 }): JSX.Element {
   const latest = [...t.messages].reverse().find((m) => m.text !== "");
   const [reply, setReply] = useState("");
+  const sendReply = async () => {
+    if (reply.trim() !== "" && (await act({ op: "write", id: t.id, text: reply.trim() })))
+      setReply("");
+  };
   const isLive = t.status === "open" || t.status === "planned" || t.status === "ready";
   const back = encodeURIComponent(
     `dev&review=${new URLSearchParams(window.location.search).get("review") ?? ""}&thread=${t.id}`,
@@ -352,13 +357,9 @@ function ThreadFold({
             )}
             <form
               class="rv-reply"
-              onSubmit={async (e) => {
+              onSubmit={(e) => {
                 e.preventDefault();
-                if (
-                  reply.trim() !== "" &&
-                  (await act({ op: "write", id: t.id, text: reply.trim() }))
-                )
-                  setReply("");
+                void sendReply();
               }}
             >
               <textarea
@@ -369,6 +370,10 @@ function ThreadFold({
                     : "Reply…"
                 }
                 onInput={(e) => setReply((e.target as HTMLTextAreaElement).value)}
+                onKeyDown={sendKeys(
+                  () => void sendReply(),
+                  () => (document.activeElement as HTMLElement | null)?.blur(),
+                )}
               />
               <div class="rv-actions">
                 <button type="submit" disabled={reply.trim() === ""}>

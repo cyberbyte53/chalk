@@ -24,6 +24,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
+import { installTextKeys, isInEditor, sendKeys, toEditor } from "./editor-link";
 import { courses } from "./lessons";
 import { PlayInApp } from "./play-in-app";
 import { ReviewList, ReviewPage } from "./review-page";
@@ -124,10 +125,8 @@ async function boardsFrom(source: string, sources: Sources): Promise<Shown[]> {
   return Promise.all(paths.map(shownAt));
 }
 
-/** Messages to and from an editor that shows this page in a panel (platform/editor). */
-export const isInEditor = window.parent !== window;
-export const toEditor = (message: Record<string, unknown>) =>
-  isInEditor && window.parent.postMessage({ ...message, chalk: true }, "*");
+export { isInEditor, toEditor };
+installTextKeys();
 
 /** Puts `data-source` on every piece of one drawn board; Alt-click opens that line. */
 function useSourceTags(
@@ -298,12 +297,10 @@ function BoardThreads({
               placeholder={isDone(t) ? "Reopen it with…" : "Add to this comment…"}
               ref={(el) => el?.focus()}
               onInput={(e) => setDraft((e.target as HTMLTextAreaElement).value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                  e.preventDefault();
-                  void send(t);
-                } else if (e.key === "Escape") setReplyingTo(null);
-              }}
+              onKeyDown={sendKeys(
+                () => void send(t),
+                () => setReplyingTo(null),
+              )}
             />
             <div>
               <button type="submit" disabled={draft.trim() === ""}>
@@ -639,6 +636,84 @@ const packageOfProp = new Map(
   [...propPackages].flatMap(([name, defs]) => defs.map((def) => [def.type, name] as const)),
 );
 
+/** Asks for a comment box next to a picked element (PickComposer). */
+const COMPOSE = "chalk:compose";
+type Composing = { el: HTMLElement; words: string; pick: Record<string, string | undefined> };
+
+/**
+ * The box for a comment, next to what was picked: under it, or above it when there's no room
+ * below; it moves with the page. ⌘↵ files it (through the editor, which writes the thread), Esc
+ * leaves.
+ */
+function PickComposer(): JSX.Element | null {
+  const [at, setAt] = useState<Composing | null>(null);
+  const [note, setNote] = useState("");
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const open = (e: Event) => {
+      setAt((e as CustomEvent<Composing>).detail);
+      setNote("");
+    };
+    const move = () => setTick((n) => n + 1);
+    window.addEventListener(COMPOSE, open);
+    window.addEventListener("scroll", move, true);
+    window.addEventListener("resize", move);
+    return () => {
+      window.removeEventListener(COMPOSE, open);
+      window.removeEventListener("scroll", move, true);
+      window.removeEventListener("resize", move);
+    };
+  }, []);
+  useEffect(() => {
+    if (at === null) return;
+    at.el.classList.add("is-composing");
+    return () => at.el.classList.remove("is-composing");
+  }, [at]);
+  if (at === null || !at.el.isConnected) return null;
+  const close = () => setAt(null);
+  const send = () => {
+    if (note.trim() === "") return;
+    toEditor({ type: "comment", ...at.pick, note: note.trim() });
+    close();
+  };
+  const box = at.el.getBoundingClientRect();
+  const HEIGHT = 150;
+  const WIDTH = Math.min(360, window.innerWidth - 16);
+  const below = box.bottom + 8 + HEIGHT <= window.innerHeight || box.top < HEIGHT + 16;
+  const top = below
+    ? Math.min(box.bottom + 8, window.innerHeight - HEIGHT - 8)
+    : box.top - HEIGHT - 8;
+  const left = Math.max(8, Math.min(box.left, window.innerWidth - WIDTH - 8));
+  return (
+    <form
+      class="pick-composer"
+      style={{ top: `${Math.max(8, top)}px`, left: `${left}px`, width: `${WIDTH}px` }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        send();
+      }}
+    >
+      <div class="pick-composer-what">{`Comment on ${at.words}`}</div>
+      <textarea
+        value={note}
+        placeholder="What's wrong, or what should change?"
+        ref={(el) => el?.focus()}
+        onInput={(e) => setNote((e.target as HTMLTextAreaElement).value)}
+        onKeyDown={sendKeys(send, close)}
+      />
+      <div class="pick-composer-actions">
+        <span>⌘↵ save · Esc cancel</span>
+        <button type="button" onClick={close}>
+          Cancel
+        </button>
+        <button type="submit" disabled={note.trim() === ""}>
+          Comment
+        </button>
+      </div>
+    </form>
+  );
+}
+
 type PickTarget = {
   /** What it outlines. */
   el: HTMLElement;
@@ -794,16 +869,24 @@ function useEditorLink(): [boolean, (on: boolean | ((was: boolean) => boolean)) 
         if (site !== undefined) openInEditor(site);
         return;
       }
-      toEditor({
-        type: "pick",
-        board: at.board,
-        piece: at.piece,
-        part: at.part,
-        prop: at.prop,
-        propPackage: at.propPackage,
-        site: (at.pieceEl ?? at.el).dataset.source,
-        text: wordsOf(at.el).slice(0, 400),
-      });
+      // The comment is written next to what was picked (PickComposer), then filed by the editor.
+      window.dispatchEvent(
+        new CustomEvent<Composing>(COMPOSE, {
+          detail: {
+            el: at.el,
+            words: at.words,
+            pick: {
+              board: at.board,
+              piece: at.piece,
+              part: at.part,
+              prop: at.prop,
+              propPackage: at.propPackage,
+              site: (at.pieceEl ?? at.el).dataset.source,
+              text: wordsOf(at.el).slice(0, 400),
+            },
+          },
+        }),
+      );
     };
     window.addEventListener("keydown", widen, true);
     document.addEventListener("mouseover", hover, true);
@@ -1156,6 +1239,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
           )}
         </nav>
       )}
+      {isInEditor && <PickComposer />}
       {isHelp && (
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
