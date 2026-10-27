@@ -110,6 +110,10 @@ export type InputRef<P = DefLike, K extends string = string> = {
 };
 /** What an action of a placed prop takes, as an author may write it (exact Decs where numbers go). */
 type TakesOf<P, K extends ActionNames<P>> = ArgsParam<Loose<ArgsOf<ActionsOf<P>[K]>>>;
+/** What a lesson's call takes: the arguments, or a rule working them out when the call runs. */
+type CallTakes<P, K extends ActionNames<P>> =
+  | TakesOf<P, K>
+  | [args: Rule<Loose<ArgsOf<ActionsOf<P>[K]>>>];
 
 /** One entry per name: `byName(names, (n) => …)`, typed by the caller. */
 function byName<T>(names: readonly string[], make: (name: string) => T): Record<string, T> {
@@ -124,8 +128,11 @@ function byName<T>(names: readonly string[], make: (name: string) => T): Record<
 export class Placed<P extends DefLike = DefLike> implements AnyPlaced {
   /** Its signals, for a WHEN rule: `game.on.over`. */
   readonly on: { readonly [K in SignalNames<P>]: Signal };
-  /** The lesson (or a rule) runs one of its actions: `game.call.giveRound()`. */
-  readonly call: { readonly [K in ActionNames<P>]: (...args: TakesOf<P, K>) => Script };
+  /**
+   * The lesson (or a rule) runs one of its actions: `game.call.giveRound()`, or with arguments
+   * worked out when it runs: `chart.call.addPoint((at) => ({ x: at(coin).count, y: 0 }))`.
+   */
+  readonly call: { readonly [K in ActionNames<P>]: (...args: CallTakes<P, K>) => Script };
   /** A witness step, the learner doing one of its actions: `split.learner.split({ n: 4 })`. */
   readonly learner: { readonly [K in ActionNames<P>]: (...args: TakesOf<P, K>) => Step };
   /** One of its actions as a reference (to make it the student's alone): `line.action.moveMarker`. */
@@ -140,9 +147,12 @@ export class Placed<P extends DefLike = DefLike> implements AnyPlaced {
     this.on = byName(Object.keys(def.signals ?? {}), (s) => ({
       target: `${name}.${s}`,
     })) as Placed<P>["on"];
-    this.call = byName(actions, (a) => (args?: Args): Script => {
-      const out: { call: string; args?: Record<string, unknown> } = { call: `${name}.${a}` };
-      if (args !== undefined && Object.keys(args).length > 0)
+    this.call = byName(actions, (a) => (args?: Args | Rule<Args>): Script => {
+      const out: { call: string; args?: CallArgs } = { call: `${name}.${a}` };
+      if (typeof args === "function") {
+        const rule = asRuleFn(args as Rule);
+        out.args = (at) => plain(rule(at)) as Record<string, unknown>;
+      } else if (args !== undefined && Object.keys(args).length > 0)
         out.args = plain(args) as Record<string, unknown>;
       return out;
     }) as unknown as Placed<P>["call"];

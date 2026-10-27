@@ -1,4 +1,4 @@
-import { localizedSchema } from "@chalk/content";
+import { type Locale, type Localized, localizedSchema } from "@chalk/content";
 import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
@@ -68,9 +68,9 @@ export function fillStep(text: string, step: DivisionStep): string {
 }
 
 /** The steps written so far, in words or as divisions: every pair laid. */
-export function workingOf(s: StickMeasureState, locale = "en"): string[] {
+export function workingOf(s: StickMeasureState, locale: Locale): string[] {
   const steps = stepsOf(s).slice(0, s.rounds + (s.isLaid ? 1 : 0));
-  const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const word = (w: Localized) => w[locale];
   return steps.map((st) =>
     s.showDivision
       ? `${st.a} = ${st.b} × ${st.q} + ${st.r}`
@@ -91,9 +91,9 @@ function measuredSticks(s: StickMeasureState): number[] {
 }
 
 /** One line per stick for the marked piece, in the lesson's words; none without fitWords or a piece. */
-export function fitLines(s: StickMeasureState, locale = "en"): { text: string; fits: boolean }[] {
+export function fitLines(s: StickMeasureState, locale: Locale): { text: string; fits: boolean }[] {
   if (s.fitWords === null || s.piece <= 0) return [];
-  const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const word = (w: Localized) => w[locale];
   const { fits, leaves } = s.fitWords;
   return measuredSticks(s).map((stick) => {
     const gap = pieceGap(stick, s.piece);

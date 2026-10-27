@@ -1,3 +1,4 @@
+import type { Localized } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
 import { type PropViewProps, useFitColumns } from "@chalk/player";
 import { does, shows } from "@chalk/prop";
@@ -21,7 +22,7 @@ export function BillSplitView({
   locale,
 }: PropViewProps<typeof billSplit>): JSX.Element {
   const s = view;
-  const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const word = (w: Localized) => w[locale];
   const [fit, columns] = useFitColumns<HTMLDivElement>(s.sizes.length, s.sizes.join(" "));
   return (
     <div class="pr-bill">

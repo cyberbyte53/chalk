@@ -117,8 +117,8 @@ export function SweetShareView({
       </div>
       <div class="pr-controls">
         <SymbolButton
-          symbol={s.shareLabel[locale] ?? s.shareLabel.en ?? "Give everyone one"}
-          label={s.shareLabel[locale] ?? s.shareLabel.en ?? "Give everyone one"}
+          symbol={s.shareLabel[locale]}
+          label={s.shareLabel[locale]}
           isWide
           isEnabled={s.canGiveRound}
           {...does(sweetShare.actions.giveRound)}
@@ -143,8 +143,8 @@ export function SweetShareView({
         >
           <thead>
             <tr>
-              <th>{s.roundsLabel[locale] ?? s.roundsLabel.en}</th>
-              <th>{s.boxLabel[locale] ?? s.boxLabel.en}</th>
+              <th>{s.roundsLabel[locale]}</th>
+              <th>{s.boxLabel[locale]}</th>
             </tr>
           </thead>
           <tbody>

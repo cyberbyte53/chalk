@@ -1,3 +1,4 @@
+import type { Localized } from "@chalk/content";
 import { NumberField, SymbolButton } from "@chalk/draw";
 import type { PropViewProps } from "@chalk/player";
 import { does, says, shows } from "@chalk/prop";
@@ -91,7 +92,7 @@ function Side({
  */
 export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMaker>): JSX.Element {
   const s = view;
-  const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const word = (w: Localized) => w[locale];
   const t = tensOf(s.numerator, s.denominator);
   const isCancelled = s.stage !== TenStage.Given;
   const isPaired = s.stage === TenStage.Paired || s.stage === TenStage.ToppedUp;

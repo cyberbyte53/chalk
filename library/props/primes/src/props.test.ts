@@ -245,17 +245,17 @@ describe("stickMeasure: Euclid's method with two sticks", () => {
       leaves: { en: "{stick}: {n} of {piece}, {gap} left", hi: "" },
     };
     const ribbons = { ...stickMeasure.defaults, fitWords, piece: 4 };
-    expect(fitLines(ribbons)).toEqual([
+    expect(fitLines(ribbons, "en")).toEqual([
       { text: "18: 4 of 4, 2 left", fits: false },
       { text: "12: 3 of 4, nothing left", fits: true },
     ]);
-    expect(fitLines({ ...ribbons, isLaid: true, piece: 3 }).map((l) => l.text)).toEqual([
+    expect(fitLines({ ...ribbons, isLaid: true, piece: 3 }, "en").map((l) => l.text)).toEqual([
       "18: 6 of 3, nothing left",
       "12: 4 of 3, nothing left",
       "6: 2 of 3, nothing left",
     ]);
-    expect(fitLines({ ...ribbons, piece: 0 })).toEqual([]);
-    expect(fitLines({ ...stickMeasure.defaults, piece: 4 })).toEqual([]);
+    expect(fitLines({ ...ribbons, piece: 0 }, "en")).toEqual([]);
+    expect(fitLines({ ...stickMeasure.defaults, piece: 4 }, "en")).toEqual([]);
   });
 });
 

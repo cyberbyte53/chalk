@@ -1,3 +1,4 @@
+import type { Localized } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
 import type { PropViewProps } from "@chalk/player";
 import { does, shows } from "@chalk/prop";
@@ -87,7 +88,7 @@ export function LapRaceView({
   locale,
 }: PropViewProps<typeof lapRace>): JSX.Element {
   const s = view;
-  const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const word = (w: Localized) => w[locale];
   // The clock runs in the prop (on the board's clock); the view only draws where it is.
   const t = s.time;
   const isRunning = s.isRunning;

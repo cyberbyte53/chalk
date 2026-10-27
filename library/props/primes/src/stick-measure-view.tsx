@@ -1,3 +1,4 @@
+import type { Localized } from "@chalk/content";
 import { NumberField, SymbolButton } from "@chalk/draw";
 import { type PropViewProps, useFitColumns } from "@chalk/player";
 import { does, says, shows } from "@chalk/prop";
@@ -168,7 +169,7 @@ export function StickMeasureView({
   const s = view;
   const steps = euclidSteps(s.stickA, s.stickB);
   const step = steps[s.rounds];
-  const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const word = (w: Localized) => w[locale];
   const [fit, columns] = useFitColumns<HTMLDivElement>(
     s.pieceChoices.length,
     s.pieceChoices.join(" "),

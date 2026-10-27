@@ -8,7 +8,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Lesson** | An ordered run of boards. Story, walkthrough, practice and quiz are all lessons. | `Lesson` (`@chalk/content`) |
 | **Board** | One screen: a layout tree of props, plus the IS and WHEN rules that wire them | `Board` |
 | **Piece** | A node in a board's layout tree: layout pieces (Column, Row, Overlay, Space) arrange; a prop piece places a prop | `Piece`, `PieceKind` |
-| **Prop** | Anything placed on a board. Same shape for all: state, actions, signals, parts | `PropDef`, `defineProp` (`@chalk/prop`), `library/props/<name>/` |
+| **Prop** | Anything placed on a board. Same shape for all: state, actions, signals, a view, a role | `PropDef`, `defineProp` (`@chalk/prop`), `library/props/<name>/` |
 | **State** | What a prop is right now: stored fields plus derived ones, read alike | `viewOf`, `PropView` |
 | **Stored field** | One of the few independent quantities a prop keeps; changed only by actions | `PropDef.state` |
 | **Derived field** | Computed from stored fields; read-only, never stale | `PropDef.derived` |
@@ -16,7 +16,11 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Action** | The only way a prop changes. Instant or timed; says what it keeps fixed; flagged if it reveals an answer | `ActionSpec`, `actionsFor` |
 | **Timed action** | An action that takes time (a tween, a spoken line); scripts wait for it to finish | `tween`, `seq`, `repeat` (steps, as data) |
 | **Signal** | Something a prop announces (pressed, landed, wrong) | `SignalSpec` |
-| **Part** | A named thing on a prop that can be pointed at; can come and go | `PropDef.parts`, `PropDef.locate` |
+| **Part** | A named thing a prop's view draws: an input (it says what it `does`) or something the student reads (it `shows` a value). Its name is its address under the piece; what `look`, `play`, comments and Jugnu's pointing use | `does`, `says`, `shows` (`@chalk/prop` tags.ts) |
+| **Description** | A prop as the student sees it: read from the tags in what its view draws (one line, each part, what it knows but doesn't show) | `describeView` (`@chalk/player`), `Observation` |
+| **Role** | What a prop is for: an explainer (Jugnu may bring it in), a question, or part of the page (words, the board) | `PropRole` |
+| **Drag** | A part the learner moves, inside a frame; the player wires pointer, keys and the frame's transform | `useDrags` (`@chalk/player`) |
+| **Host** | A prop made of a core and optional layers side by side (a number line and its marker, marks, split); a layer is one feature, on when it shows something | `defineHost`, `layersFor` (`@chalk/prop`) |
 | **Address** | Where a node is on a board, one spelling everywhere: names from the piece down, joined by `/` (`mirror/objectArrow/object`); on screen as `data-path`. A `/` inside a name from data is written `%2F` | `pathOf`, `namesOf` (`@chalk/prop`), `findNode`, `addressOf` (`@chalk/player`) |
 | **Leaf** | A prop with no children: one thing, with its own state or with every field bound | `defineProp` |
 | **Group** | A prop made of other props (its children) joined by links; its state is its own fields plus each child's, nested. A board works the same way | `defineGroup` (`@chalk/prop`), `groupView` (`@chalk/player`) |
@@ -26,11 +30,10 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Drawing kit** | Stateless drawing pieces shared by props (labware, geometry marks, optics, circuit symbols) | `@chalk/draw` (`lab.tsx`, `marks.tsx`, `optics.tsx`, `circuit.tsx`) |
 | **Written number** | A number as Chalk writes it, the same everywhere: exact (integer, fraction, surd) or a rounded decimal, as text and TeX | `exact`, `quantity`, `formula` (`@chalk/exact`) |
 | **The one door** | The single path every change takes: an action, checked against the prop's schema | `applyPatch`, `BoardRuntime.call` |
-| **IS** | A rule that keeps a prop's input equal to an expression, always | `IsRule` |
-| **WHEN** | A rule that answers a signal (with an optional condition) with a script | `WhenRule` |
+| **IS** | A rule that keeps a prop's input equal to a function of the board, always (`(at) => at(race).time > 36`) | `IsRule`, `b.is` |
+| **WHEN** | A rule that answers a signal (with an optional condition on the board) with a script | `WhenRule`, `b.when` |
 | **THEN / script** | Actions over time: `call`, `wait`, `seq` (then), `par` (with) | `Script` |
-| **Expression** | Read-only maths and logic over props' state in rules | `compileExpression`, `compileTemplate` |
-| **Expression argument** | An action argument worked out from props' state when the action is called: `{ "expr": "coin.count" }` | `argExpression` |
+| **Worked-out arguments** | A call's arguments as a function of the board, worked out when the call runs | `CallArgs` |
 | **Timer** | A prop with nothing on screen that ticks while running; how a lesson makes things repeat or happen on their own | `timer` (`library/props/basics`) |
 | **Board prop** | The board itself, named `board`: `pass`, `show`, `hide`; signals `started`, `continued` | `boardProp`, `BOARD` |
 | **Question** | A prop with the question role (`choice`, `goal`): status, attempts, feedback, `check` | `PropRole.Question`, `QuestionView` |
@@ -73,7 +76,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Witness** | How a learner gets a board right, as steps; played on the real props at build. A board whose witness fails is not built | `b.witness`, `Step` |
 | **Note check** | A known wrong answer and the note it should get; played like a witness | `b.noteCheck` |
 | **Board pattern** | A reusable piece of board-building shared by every concept | `library/patterns/` |
-| **Explainer prop** | A prop Jugnu may bring in to explain a concept (a number line, tiles). Words, buttons, questions and timers are not | `isExplainer` on `PropDef` |
+| **Explainer prop** | A prop Jugnu may bring in to explain a concept (a number line, tiles). Words, questions and the board are not | `PropRole.Explainer` |
 | **Rich text** | What every learner-facing string may hold: words, `**bold**`, `*emphasis*`, `$maths$`, `$$display maths$$` (KaTeX, with mhchem). Checked at build | `RichText`, `parseRich`, `richProblems` (`@chalk/player`) |
 | **Art** | A book's, chapter's or concept's picture, drawn in code with the pieces (`art.tsx`), built to checked SVG | `defineArt`, `ArtFrame`, `BuiltArt`, `pnpm art` |
 | **Stage** | A drawing: an SVG whose x (and y) ranges become d3 scales, plus layers for crowds and for what sits above them | `Stage`, `Space` (`@chalk/draw`) |

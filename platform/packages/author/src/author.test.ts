@@ -74,6 +74,19 @@ describe("building a board", () => {
     ]);
   });
 
+  it("works a call's arguments out when it runs, from the board", () => {
+    let rule: RuleFn | undefined;
+    buildBoard("demo", (b) => {
+      const d = b.prop(dial, "d", {});
+      const script = d.call.turn((at) => ({ to: at(d).double }));
+      const args = (script as { args?: unknown }).args;
+      if (typeof args === "function") rule = (at) => (args as (a: typeof at) => unknown)(at);
+      b.when(d.on.turned, script);
+      return [d];
+    });
+    expect(rule?.(() => ({ double: 6 }))).toEqual({ to: 6 });
+  });
+
   it("catches authoring mistakes when the board is built", () => {
     expect(() => buildBoard("x", (b) => [b.prop(dial, "d"), b.prop(dial, "d")])).toThrow(
       /Two props named "d"/,
