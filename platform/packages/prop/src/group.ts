@@ -3,6 +3,8 @@ import { SEP } from "./address";
 import {
   type ActionSpec,
   type AnyPropDef,
+  type ArgsOf,
+  type ArgsParam,
   type Effect,
   EffectKind,
   type PropDef,
@@ -54,9 +56,28 @@ export function refuse(reason: string): Refusal {
 const isRefusal = (v: unknown): v is Refusal =>
   v !== null && typeof v === "object" && typeof (v as Refusal).refused === "string";
 
-/** One step a link runs: a target ("input.change", "put", "plane.handle.put") and its arguments. */
+/**
+ * One step a link runs: a target ("input.change", "put", "plane.handle.put") and its arguments.
+ * Built typed with a link's `run` (`run.input.change({ to: 3 })`), never written by hand.
+ */
 export type Step = readonly [target: string, args?: Readonly<Record<string, unknown>>];
 export type Steps = readonly Step[];
+
+type ActionsOfDef<P> = P extends { actions: infer A } ? A : never;
+type SignalsOfDef<P> = P extends { signals?: infer G } ? NonNullable<G> : never;
+type StepMaker<X> = (...args: ArgsParam<ArgsOf<X>>) => Step;
+/** An action's arguments; a child group's actions (reached by path) are known only as records. */
+type LinkArgs<X> = unknown extends ArgsOf<X> ? Readonly<Record<string, unknown>> : ArgsOf<X>;
+
+/**
+ * The steps a link may run, typed from the group's children and its own actions:
+ * `run.input.change({ to: 3 })` runs a child's action, `run.put({ x })` the group's own.
+ */
+export type Runs<C extends GroupChildren, X> = {
+  readonly [K in keyof C]: {
+    readonly [A in keyof ActionsOfDef<C[K]> & string]: StepMaker<ActionsOfDef<C[K]>[A]>;
+  };
+} & { readonly [A in keyof X & string]: StepMaker<X[A]> };
 
 /** A group's view: its own fields and derived values, and each child's view under its name. */
 export type GroupView = PropView;
@@ -106,6 +127,9 @@ export type GroupSpec<
   C extends GroupChildren = GroupChildren,
   Opt extends string = string,
   D extends string = string,
+  X extends Readonly<Record<string, ActionSpec<O, unknown>>> = Readonly<
+    Record<string, ActionSpec<O, unknown>>
+  >,
 > = {
   type: string;
   describe: string;
@@ -127,28 +151,35 @@ export type GroupSpec<
   is?: { readonly [K in keyof C]?: (s: GroupViewOf<O, C, Opt, D>) => BindOf<C[K]> };
   /** Whether a child is there right now (default: always). */
   show?: { readonly [K in keyof C]?: (s: GroupViewOf<O, C, Opt, D>) => boolean };
-  /** "child.signal" (or "child.grandchild.signal") → steps to run, given the signal's payload. */
-  when?: Readonly<
-    Record<
-      string,
-      (s: GroupViewOf<O, C, Opt, D>, payload: Readonly<Record<string, unknown>>) => Steps
-    >
-  >;
   /**
-   * "child.action" → steps to run instead of the child's own action, or `refuse("why")` (or
-   * undefined) when the learner's drag has nowhere to go.
+   * A child's signal → steps to run, given its payload: `when: { input: { changed: (s, p, run) =>
+   * [run.put({ x: p.to })] } }`.
    */
-  route?: Readonly<
-    Record<
-      string,
-      (
+  when?: {
+    readonly [K in keyof C]?: {
+      readonly [G in keyof SignalsOfDef<C[K]> & string]?: (
         s: GroupViewOf<O, C, Opt, D>,
-        args: Readonly<Record<string, unknown>>,
-      ) => Steps | Refusal | undefined
-    >
-  >;
+        payload: Readonly<Record<string, unknown>>,
+        run: Runs<C, X>,
+      ) => Steps;
+    };
+  };
+  /**
+   * A learner's action on a child → steps to run instead of the child's own action, or
+   * `refuse("why")` (or undefined) when it has nowhere to go: `route: { dial: { move: (s, a, run)
+   * => [run.input.change({ to: a.x })] } }`.
+   */
+  route?: {
+    readonly [K in keyof C]?: {
+      readonly [A in keyof ActionsOfDef<C[K]> & string]?: (
+        s: GroupViewOf<O, C, Opt, D>,
+        args: LinkArgs<ActionsOfDef<C[K]>[A]>,
+        run: Runs<C, X>,
+      ) => Steps | Refusal | undefined;
+    };
+  };
   /** The group's own actions: they change its own fields. */
-  actions?: Readonly<Record<string, ActionSpec<O>>>;
+  actions?: X;
   signals?: Readonly<Record<string, SignalSpec>>;
   /** Derived values over the whole group (they can read children). */
   derived?: Readonly<
@@ -456,11 +487,15 @@ export function defineGroup<
   O extends StoredState = Record<never, never>,
   Opt extends keyof C & string = never,
   D extends string = never,
->(typed: GroupSpec<O, C, Opt, D>): GroupDef<GroupState<O, C, Opt>> {
+  const X extends Readonly<Record<string, ActionSpec<O, unknown>>> = Record<never, never>,
+>(typed: GroupSpec<O, C, Opt, D, X>): GroupDef<GroupState<O, C, Opt>> {
   // Inside, the state is handled untyped; the types are for the links an author writes.
-  const spec = typed as unknown as GroupSpec<StoredState> & {
+  type Link<R> = (s: PropView, given: Readonly<Record<string, unknown>>, run: never) => R;
+  const spec = typed as unknown as Omit<GroupSpec<StoredState>, "when" | "route"> & {
     is?: Readonly<Record<string, (s: PropView) => unknown>>;
     show?: Readonly<Record<string, (s: PropView) => boolean>>;
+    when?: Readonly<Record<string, Readonly<Record<string, Link<Steps>>>>>;
+    route?: Readonly<Record<string, Readonly<Record<string, Link<Steps | Refusal | undefined>>>>>;
   };
   const kids = spec.children;
   const childNames = Object.keys(kids);
@@ -477,6 +512,40 @@ export function defineGroup<
       throw new Error(`${spec.type}: derived "${name}" has the name of a child or an own field`);
   for (const name of [...Object.keys(spec.is ?? {}), ...Object.keys(spec.show ?? {})])
     if (kids[name] === undefined) throw new Error(`${spec.type}: no child "${name}" to bind`);
+  for (const name of Object.keys(spec.actions ?? {}))
+    if (kids[name] !== undefined)
+      throw new Error(`${spec.type}: "${name}" is both an own action and a child`);
+
+  // ---- links by path ("input.changed", "dial.move"), each a real signal or action of its child ----
+  const byPath = <F>(
+    what: "signal" | "action",
+    nested: Readonly<Record<string, Readonly<Record<string, F>>>> | undefined,
+  ): Record<string, F> => {
+    const out: Record<string, F> = {};
+    for (const [child, links] of Object.entries(nested ?? {})) {
+      const def = kids[child] as AnyPropDef | undefined;
+      if (def === undefined) throw new Error(`${spec.type}: no child "${child}" to link`);
+      const names = what === "signal" ? (def.signals ?? {}) : def.actions;
+      for (const [name, link] of Object.entries(links)) {
+        if (names[name] === undefined)
+          throw new Error(`${spec.type}: ${child} (${def.type}) has no ${what} "${name}"`);
+        out[`${child}.${name}`] = link;
+      }
+    }
+    return out;
+  };
+  const whenLinks = byPath("signal", spec.when);
+  const routeLinks = byPath("action", spec.route);
+  // What a link's steps are built with: each child's actions and the group's own.
+  const run: Record<string, unknown> = {};
+  for (const name of Object.keys(kids)) {
+    const steps: Record<string, (args?: Readonly<Record<string, unknown>>) => Step> = {};
+    for (const action of Object.keys((kids[name] as AnyPropDef).actions))
+      steps[action] = (args) => [`${name}.${action}`, args ?? {}];
+    run[name] = steps;
+  }
+  for (const action of Object.keys(spec.actions ?? {}))
+    run[action] = (args?: Readonly<Record<string, unknown>>): Step => [action, args ?? {}];
   const placed = layoutChildren(spec.layout);
   for (const name of placed)
     if (kids[name] === undefined) throw new Error(`${spec.type}: layout names no child "${name}"`);
@@ -540,7 +609,7 @@ export function defineGroup<
       // bound field is refused when it happens.
       const writes = a.changes?.some((f) => fields.includes(f)) === true;
       const key = `${name}.${action}`;
-      if (a.byLearner === true && writes && spec.route?.[key] === undefined)
+      if (a.byLearner === true && writes && routeLinks[key] === undefined)
         throw new Error(
           `${spec.type}: ${key} is the learner's and changes ${name}.${fields.join("/")}, which is bound: route it to the owner`,
         );
@@ -713,7 +782,7 @@ export function defineGroup<
           const full = `${name}.${signal}`;
           c.emit(full, payload);
           // A signal a child raises later (a glide ending) sets off WHEN too.
-          if (spec.when?.[full] === undefined) return;
+          if (whenLinks[full] === undefined) return;
           const whole = c.get();
           const later: Folded = { emits: [], later: [] };
           const next = reactAll(
@@ -779,9 +848,9 @@ export function defineGroup<
       return state;
     }
     const [first = ""] = children;
-    const route = isRouted ? undefined : spec.route?.[`${children.join(".")}.${name}`];
+    const route = isRouted ? undefined : routeLinks[`${children.join(".")}.${name}`];
     if (route !== undefined) {
-      const steps = route(read(state, injected).view, args);
+      const steps = route(read(state, injected).view, args, run as never);
       if (steps === undefined || isRefusal(steps)) {
         out.refused ??= isRefusal(steps) ? steps.refused : `${first}: nowhere for this to go`;
         return state;
@@ -821,9 +890,9 @@ export function defineGroup<
   ): StoredState => {
     let at = state;
     for (const e of emits) {
-      const react = spec.when?.[e.signal];
+      const react = whenLinks[e.signal];
       if (react === undefined) continue;
-      for (const s of react(read(at, injected).view, e.payload ?? {}))
+      for (const s of react(read(at, injected).view, e.payload ?? {}, run as never))
         at = runStep(at, injected, s, out, depth + 1, false);
     }
     return at;
@@ -860,7 +929,7 @@ export function defineGroup<
   });
 
   // Every action: the group's own, then each child's by path (a child group's include its children's).
-  const routes = new Set(Object.keys(spec.route ?? {}));
+  const routes = new Set(Object.keys(routeLinks));
   const actions: Record<string, ActionSpec<StoredState>> = {};
   for (const [name, a] of Object.entries(spec.actions ?? {}))
     actions[name] = actionFor(
@@ -937,7 +1006,7 @@ export function defineGroup<
       bound,
       boundTree,
       own: ownFields,
-      routes: Object.keys(spec.route ?? {}),
+      routes: Object.keys(routeLinks),
     },
     /** A placement's facts: defaults merged child by child with what it gives. */
     place: (given: Readonly<Record<string, unknown>>) => mergeGiven(groupDef, given),

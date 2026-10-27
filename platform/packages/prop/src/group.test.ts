@@ -86,12 +86,12 @@ const machine = defineGroup({
   },
   route: {
     // The handle's x is bound to the stepper: a drag moves the stepper (and nothing past ±10).
-    "dial.move": (_s, a) =>
-      Math.abs(Number(a.x)) > 10
-        ? refuse("x is limited to −10…10")
-        : [["input.change", { to: a.x }]],
+    dial: {
+      move: (_s, a, run) =>
+        Math.abs(a.x) > 10 ? refuse("x is limited to −10…10") : [run.input.change({ to: a.x })],
+    },
   },
-  when: { "input.changed": (_s, p) => [["put", { x: p.to }]] },
+  when: { input: { changed: (_s, p, run) => [run.put({ x: Number(p.to) })] } },
   actions: {
     put: onMachine({
       describe: "",
@@ -280,7 +280,7 @@ describe("groups", () => {
       describe: "",
       children: { input: stepper, pane: inner },
       is: { pane: (s) => ({ dial: { x: s.input.value }, note: { tex: `at ${s.input.value}` } }) },
-      route: { "pane.dial.move": (_s, a) => [["input.change", { to: a.x }]] },
+      route: { pane: { "dial.move": (_s, a, run) => [run.input.change({ to: Number(a.x) })] } },
       summary: () => "",
       layout: { kind: "column", children: ["input", "pane"] },
     });
@@ -309,7 +309,7 @@ describe("groups", () => {
         working: (s) => ({ tex: `${s.dial.x} doubled is ${s.double}` }),
         dial: (s) => ({ x: s.input.value + 1 }),
       },
-      route: { "dial.move": (_s, a) => [["input.change", { to: Number(a.x) - 1 }]] },
+      route: { dial: { move: (_s, a, run) => [run.input.change({ to: a.x - 1 })] } },
       summary: () => "",
       layout: { kind: "column", children: ["input", "working", "dial"] },
     });
@@ -318,6 +318,23 @@ describe("groups", () => {
     const v = viewOf(chain, start.state) as unknown as Seen;
     expect(v?.working).toEqual({ tex: "3 doubled is 6" });
     expect(v?.double).toBe(6);
+  });
+
+  it("links only to real children, signals and actions", () => {
+    const spec = {
+      type: "bad",
+      describe: "",
+      role: PropRole.Explainer,
+      children: { input: stepper },
+      summary: () => "",
+      layout: { kind: "column", children: ["input"] },
+    } as const;
+    expect(() =>
+      defineGroup({ ...spec, when: { input: { exploded: () => [] } } } as never),
+    ).toThrow(/input \(stepper\) has no signal "exploded"/);
+    expect(() => defineGroup({ ...spec, route: { ghost: { move: () => [] } } } as never)).toThrow(
+      /no child "ghost" to link/,
+    );
   });
 
   it("refuses bindings that read each other in a loop", () => {

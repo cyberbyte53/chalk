@@ -647,9 +647,11 @@ describe("BoardRuntime", () => {
       children: { value: label, dial },
       is: { dial: (s) => ({ at: s.value.value }) },
       route: {
-        "dial.setTo": (_s, a) => [["value.setValue", { v: a.to }]],
-        "dial.turnTo": (_s, a) => [["value.setValue", { v: a.to }]],
-        "dial.sneak": () => undefined,
+        dial: {
+          setTo: (_s, a, run) => [run.value.setValue({ v: a.to })],
+          turnTo: (_s, a, run) => [run.value.setValue({ v: a.to })],
+          sneak: () => undefined,
+        },
       },
       summary: () => "a pair",
       layout: { kind: "column", children: ["value", "dial"] },
