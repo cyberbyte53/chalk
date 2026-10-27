@@ -6,7 +6,8 @@
   "type": "module",
   "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "dev": "pnpm --parallel --filter @chalk/server --filter @chalk/learner-app dev",
+    "dev": "pnpm --parallel --filter @chalk/server --filter @chalk/learner-app --filter @chalk/studio dev",
+    "mcp": "pnpm --filter @chalk/studio mcp",
     "build": "pnpm -r run build",
     "test": "vitest run",
     "typecheck": "pnpm -r run typecheck",

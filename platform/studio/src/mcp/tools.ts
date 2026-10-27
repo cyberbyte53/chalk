@@ -29,8 +29,8 @@ import { type Content, type Extra, createServer, progressOf, result } from "./pr
  * `chalk` MCP server: what an agent in any harness (Cursor, VS Code, Claude Code, Codex…) needs to
  * work on Chalk content that a file editor doesn't give it: eyes and hands on the real board,
  * what a change reaches, and the comments (read and answered through the dev server, their one
- * writer, which checks what each role may do). Served by the dev server at /mcp (http.ts), one
- * endpoint for every agent, each identified by its token. Every tool reads the repo as it is on
+ * writer, which checks what each role may do). Served at http://127.0.0.1:5174/mcp (main.ts,
+ * http.ts), one endpoint for every agent, each identified by its token. Every tool reads the repo as it is on
  * disk; boards come from build/.
  */
 
@@ -355,7 +355,7 @@ export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string
 /**
  * The chalk tools for one caller: a fresh MCP server per connection, showing only what the caller's
  * role uses (`SEES`, and in `comment` only the moves and labels the writer's tables allow it). The
- * dev server serves it at /mcp (http.ts) and says who is calling from their token.
+ * MCP service (main.ts, http.ts) says who is calling from their token.
  */
 export function chalkMcp(who: Who): McpServer {
   const server = createServer();

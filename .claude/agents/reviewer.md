@@ -5,7 +5,7 @@ disallowedTools: mcp__chalk__*
 mcpServers:
   - chalk-review:
       type: http
-      url: http://localhost:5173/mcp
+      url: http://127.0.0.1:5174/mcp
       headers:
         Authorization: Bearer chalk-dev-reviewer
 ---

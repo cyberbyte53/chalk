@@ -6,15 +6,30 @@ import { closeBrowser } from "./preview";
 import { type Who, chalkMcp } from "./tools";
 
 /**
- * The chalk MCP over HTTP (the spec's Streamable HTTP transport), served by the dev server at
- * /mcp: one endpoint for every agent. Each connection says who it is with a bearer token; the token
+ * The chalk MCP over HTTP (the spec's Streamable HTTP transport), served at /mcp by its own
+ * service (main.ts): one endpoint for every agent. Each connection says who it is with a bearer token; the token
  * decides the caller's role, and the caller gets its own MCP session showing only what that role
  * may do (tools.ts). Nobody picks a role per call.
  *
- * Tokens: CHALK_TOKENS (JSON, token → role, e.g. {"…": "reviewer"}) or the development defaults
- * below. On a laptop they are only as private as its config files; on the Chalk server they will
- * come from sign-in.
+ * Settings (main.ts has where it listens):
+ * - CHALK_TOKENS: JSON, token → role ({"…": "reviewer"}); the development tokens below by default.
+ *   On a laptop they are only as private as its config files; on a server they come from sign-in.
+ * - CHALK_MCP_ALLOW: the addresses that may connect, comma-separated, or "*" for any (then only
+ *   tokens decide). Default this machine only.
  */
+
+const LOOPBACK = ["127.0.0.1", "::1", "::ffff:127.0.0.1"];
+
+/** Whether a connection from `address` may be heard at all (CHALK_MCP_ALLOW). */
+export function isAllowed(address: string, allow = process.env.CHALK_MCP_ALLOW): boolean {
+  if (allow === undefined || allow.trim() === "") return LOOPBACK.includes(address);
+  const list = allow.split(",").map((a) => a.trim());
+  if (list.includes("*")) return true;
+  const plain = address.replace(/^::ffff:/, "");
+  return list.some(
+    (a) => a === address || a === plain || (a === "localhost" && LOOPBACK.includes(address)),
+  );
+}
 
 /** Development tokens: one per agent role, written in the repo's MCP configs. */
 export const DEV_TOKENS: Readonly<Record<string, Who["role"]>> = {
@@ -78,10 +93,9 @@ export function mcpMiddleware(): {
     });
 
   const handle = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
-    // This machine only: the dev server can listen on the network (dev sign-in on a phone).
-    const from = req.socket.remoteAddress ?? "";
-    if (!["127.0.0.1", "::1", "::ffff:127.0.0.1"].includes(from))
-      return refuse(res, 403, "the chalk tools answer only on this machine");
+    // Who may connect at all (CHALK_MCP_ALLOW; this machine only by default), then the token.
+    if (!isAllowed(req.socket.remoteAddress ?? ""))
+      return refuse(res, 403, "this address may not use the chalk tools");
     const who = whoOf(req);
     if (who === null)
       return refuse(res, 401, "a chalk token is needed: Authorization: Bearer <token>");

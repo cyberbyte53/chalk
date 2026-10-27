@@ -15,7 +15,9 @@
     "chat-log": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/chat-log.ts",
     "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts",
     "catalogue": "tsx --tsconfig ../../tsconfig.base.json src/catalogue-cli.ts",
-    "check": "tsx --tsconfig ../../tsconfig.base.json src/check/all.ts"
+    "check": "tsx --tsconfig ../../tsconfig.base.json src/check/all.ts",
+    "mcp": "tsx --tsconfig ../../tsconfig.base.json src/mcp/main.ts",
+    "dev": "tsx --tsconfig ../../tsconfig.base.json src/mcp/main.ts"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

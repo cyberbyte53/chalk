@@ -52,6 +52,23 @@ function startProcess(cmd: string, args: string[], cwd: string): ChildProcess {
   return child;
 }
 
+/** The chalk MCP service agents connect to (platform/studio/src/mcp/main.ts). */
+const MCP_HEALTH = "http://127.0.0.1:5174/health";
+
+/** Starts the chalk MCP service for this repo's agents, unless one is already running. */
+async function ensureMcp(): Promise<void> {
+  try {
+    if ((await fetch(MCP_HEALTH, { signal: AbortSignal.timeout(1200) })).ok) return;
+  } catch {}
+  log.appendLine("Starting the chalk MCP service for agents (127.0.0.1:5174/mcp)…");
+  const studio = join(root, "platform", "studio");
+  startProcess(
+    join(studio, "node_modules", ".bin", "tsx"),
+    ["--tsconfig", "../../tsconfig.base.json", "src/mcp/main.ts"],
+    studio,
+  );
+}
+
 let starting: Promise<boolean> | undefined;
 /**
  * The one dev server is up: the one already running (started by the chalk MCP tools, `pnpm dev`,
@@ -474,6 +491,8 @@ export function activate(context: vscode.ExtensionContext): void {
   root = folder.uri.fsPath;
   base = vscode.workspace.getConfiguration("chalk").get<string>("previewUrl") ?? base;
   log = vscode.window.createOutputChannel("Chalk");
+  // Agents in this window (Cursor's, Claude Code's) connect to the chalk MCP service.
+  void ensureMcp();
 
   let timer: NodeJS.Timeout | undefined;
   context.subscriptions.push(
