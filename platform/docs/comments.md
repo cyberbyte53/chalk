@@ -117,6 +117,7 @@ Reviews point to threads; threads don't point back. A thread can be in several r
 
 ## Watching
 
+- **Chalk Reviews**, in the editor's sidebar: every review and its threads in one place, with Reply, Close, Withdraw and Copy for agent (platform/editor/README.md).
 - Under each board in the preview: its threads, live, with the plan, the messages and the files changed; closed ones fold away as the board's history.
 - **`?dev&activity`** (or `f` in the preview): everything written, newest first, across every board: who started what, every message and move, every review handed over. `&review=<id>` keeps to one review. A line opens its board.
 

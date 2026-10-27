@@ -2,6 +2,7 @@ import { type ChildProcess, execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import * as vscode from "vscode";
+import { ReviewsTree } from "./reviews";
 
 /**
  * Chalk in the editor (Cursor, VS Code): content seen as boards beside its code.
@@ -181,7 +182,18 @@ function html(webview: vscode.Webview, query: string): string {
 
 async function showPreview(target?: vscode.Uri): Promise<void> {
   const file = target?.fsPath ?? vscode.window.activeTextEditor?.document.uri.fsPath;
-  const query = (file && queryFor(file)) ?? "board=";
+  await showQuery((file && queryFor(file)) ?? "board=");
+}
+
+/** A place to outline once the preview has drawn: a source line (content/…:42). */
+let pendingReveal: { file: string; line: number } | undefined;
+
+/** Shows a preview query (`board=…`, `activity…`); `reveal` outlines the piece written at that line. */
+async function showQuery(query: string, reveal?: string): Promise<void> {
+  if (reveal !== undefined) {
+    const [file, line] = reveal.split(/:(?=\d+$)/);
+    if (file !== undefined) pendingReveal = { file, line: Number(line ?? 1) };
+  }
   if (!(await ensureServer())) {
     void vscode.window.showErrorMessage(
       "Chalk: the dev server didn't start. See the Chalk output; or run `pnpm dev` and try again.",
@@ -207,6 +219,9 @@ async function showPreview(target?: vscode.Uri): Promise<void> {
     shown = query;
     isReady = false;
     void panel.webview.postMessage({ type: "show", query });
+  } else if (pendingReveal !== undefined && isReady) {
+    void panel.webview.postMessage({ type: "reveal", ...pendingReveal });
+    pendingReveal = undefined;
   }
   panel.reveal(vscode.ViewColumn.Beside, true);
 }
@@ -294,6 +309,7 @@ async function copyReview(): Promise<void> {
     `apply review ${done.review?.id ?? "latest"} (${done.count} thread${done.count > 1 ? "s" : ""})`,
   );
   void tellReview();
+  void reviews.refresh();
   void vscode.window.showInformationMessage(
     "Chalk: copied. Paste it into the agent's chat (⌘V); plan mode is a good place to start.",
   );
@@ -346,7 +362,10 @@ function onMessage(
 ): void {
   if (m.type === "ready") {
     isReady = true;
-    revealCursor();
+    if (pendingReveal !== undefined) {
+      void panel?.webview.postMessage({ type: "reveal", ...pendingReveal });
+      pendingReveal = undefined;
+    } else revealCursor();
     void tellReview();
   } else if (m.type === "open") void openSite(m.site);
   else if (m.type === "copy") void copyReview();
@@ -482,6 +501,89 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
 }
 
 const tree = new ChalkTree();
+const reviews = new ReviewsTree(() => base);
+
+/** Writes on a thread as you, then redraws what shows threads. Says why, if it was refused. */
+async function writeThread(id: string, text: string, status?: string): Promise<boolean> {
+  const done = await changeComments({ op: "write", id, text, ...(status ? { status } : {}) });
+  if (!done.ok) void vscode.window.showErrorMessage(`Chalk: ${done.error}`);
+  void reviews.refresh();
+  void tellReview();
+  return done.ok;
+}
+
+/** The Reviews view's commands: open, reply, close, withdraw a thread; copy or close a review. */
+function reviewCommands(): vscode.Disposable[] {
+  const thread = ReviewsTree.threadOf;
+  return [
+    vscode.commands.registerCommand("chalk.reviews.refresh", () => reviews.refresh()),
+    vscode.commands.registerCommand("chalk.thread.open", async (item: unknown) => {
+      const t = thread(item);
+      if (t === undefined) return;
+      if (t.board !== undefined) await showQuery(`board=${t.board}`, t.source);
+      else await openSite(t.source);
+    }),
+    vscode.commands.registerCommand("chalk.thread.source", (item: unknown) =>
+      openSite(thread(item)?.source),
+    ),
+    vscode.commands.registerCommand("chalk.thread.reply", async (item: unknown) => {
+      const t = thread(item);
+      if (t === undefined) return;
+      const text = await vscode.window.showInputBox({
+        title: `Reply on ${t.board ?? t.source ?? t.id}`,
+        prompt: t.text.slice(0, 140),
+        placeHolder:
+          t.status === "ready" || t.status === "planned"
+            ? "What's still wrong? (sends it back to the agent)"
+            : "Add to this thread",
+        ignoreFocusOut: true,
+      });
+      if (text?.trim()) await writeThread(t.id, text.trim());
+    }),
+    vscode.commands.registerCommand("chalk.thread.close", async (item: unknown) => {
+      const t = thread(item);
+      if (t !== undefined) await writeThread(t.id, "", "closed");
+    }),
+    vscode.commands.registerCommand("chalk.thread.withdraw", async (item: unknown) => {
+      const t = thread(item);
+      if (t !== undefined) await writeThread(t.id, "", "withdrawn");
+    }),
+    vscode.commands.registerCommand("chalk.review.copy", async (item: unknown) => {
+      const r = ReviewsTree.reviewOf(item);
+      if (r === undefined) return;
+      const n = r.review.threads.length;
+      await vscode.env.clipboard.writeText(
+        `apply review ${r.review.id} (${n} thread${n === 1 ? "" : "s"})`,
+      );
+      void vscode.window.showInformationMessage("Chalk: copied. Paste it into the agent's chat.");
+    }),
+    vscode.commands.registerCommand("chalk.review.closeReady", async (item: unknown) => {
+      const r = ReviewsTree.reviewOf(item);
+      if (r === undefined) return;
+      const ready = r.threads.filter((t) => t.status === "ready");
+      let closed = 0;
+      for (const t of ready) if (await writeThread(t.id, "", "closed")) closed++;
+      void vscode.window.showInformationMessage(
+        `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${r.review.id}.`,
+      );
+    }),
+    vscode.commands.registerCommand("chalk.review.activity", async (item: unknown) => {
+      const r = ReviewsTree.reviewOf(item);
+      await showQuery(r === undefined ? "activity" : `activity&review=${r.review.id}`);
+    }),
+  ];
+}
+
+/** The Reviews view, with a note in it when the dev server isn't answering. */
+function reviewsView(): vscode.Disposable {
+  const view = vscode.window.createTreeView("chalk.reviews", { treeDataProvider: reviews });
+  const note = reviews.onDidChangeTreeData(() => {
+    view.message = reviews.message;
+  });
+  // Read once the dev server is up (the preview or the agent starts it).
+  void ensureServer().then(() => reviews.refresh());
+  return vscode.Disposable.from(view, note);
+}
 
 export function activate(context: vscode.ExtensionContext): void {
   const folder = vscode.workspace.workspaceFolders?.find((f) =>
@@ -505,6 +607,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("chalk.refresh", () => tree.refresh()),
     vscode.commands.registerCommand("chalk.copyReview", () => copyReview()),
     vscode.window.registerTreeDataProvider("chalk.tree", tree),
+    reviewsView(),
+    ...reviewCommands(),
     // The preview follows the file you're in, and the line your cursor is on.
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       if (panel === undefined || editor === undefined) return;
@@ -527,6 +631,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const refresh = () => {
     tree.refresh();
     void tellReview();
+    void reviews.refresh();
   };
   watcher.onDidChange(refresh);
   watcher.onDidCreate(refresh);

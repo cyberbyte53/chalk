@@ -6,20 +6,78 @@
   "publisher": "chalk",
   "private": true,
   "license": "UNLICENSED",
-  "engines": { "vscode": "^1.90.0" },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
   "categories": ["Other"],
   "main": "./out/extension.js",
   "activationEvents": ["workspaceContains:content/build.yaml"],
   "contributes": {
     "commands": [
-      { "command": "chalk.preview", "title": "Chalk: Preview boards", "icon": "$(open-preview)" },
+      {
+        "command": "chalk.preview",
+        "title": "Chalk: Preview boards",
+        "icon": "$(open-preview)"
+      },
       {
         "command": "chalk.pick",
         "title": "Chalk: Pick a piece on the preview",
         "icon": "$(inspect)"
       },
-      { "command": "chalk.refresh", "title": "Chalk: Refresh tree", "icon": "$(refresh)" },
-      { "command": "chalk.copyReview", "title": "Chalk: Copy review for the agent" }
+      {
+        "command": "chalk.refresh",
+        "title": "Chalk: Refresh tree",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "chalk.copyReview",
+        "title": "Chalk: Copy review for the agent",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "chalk.reviews.refresh",
+        "title": "Chalk: Refresh reviews",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "chalk.thread.open",
+        "title": "Show on the board"
+      },
+      {
+        "command": "chalk.thread.source",
+        "title": "Open source line",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "chalk.thread.reply",
+        "title": "Reply",
+        "icon": "$(reply)"
+      },
+      {
+        "command": "chalk.thread.close",
+        "title": "Close",
+        "icon": "$(check)"
+      },
+      {
+        "command": "chalk.thread.withdraw",
+        "title": "Withdraw",
+        "icon": "$(circle-slash)"
+      },
+      {
+        "command": "chalk.review.copy",
+        "title": "Copy for agent",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "chalk.review.closeReady",
+        "title": "Close all ready",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "chalk.review.activity",
+        "title": "Show its activity",
+        "icon": "$(history)"
+      }
     ],
     "configuration": {
       "title": "Chalk",
@@ -32,7 +90,16 @@
       }
     },
     "views": {
-      "explorer": [{ "id": "chalk.tree", "name": "Chalk" }]
+      "explorer": [
+        {
+          "id": "chalk.tree",
+          "name": "Chalk"
+        },
+        {
+          "id": "chalk.reviews",
+          "name": "Chalk Reviews"
+        }
+      ]
     },
     "menus": {
       "editor/title": [
@@ -50,7 +117,118 @@
         }
       ],
       "view/title": [
-        { "command": "chalk.refresh", "when": "view == chalk.tree", "group": "navigation" }
+        {
+          "command": "chalk.refresh",
+          "when": "view == chalk.tree",
+          "group": "navigation"
+        },
+        {
+          "command": "chalk.reviews.refresh",
+          "when": "view == chalk.reviews",
+          "group": "navigation"
+        },
+        {
+          "command": "chalk.review.activity",
+          "when": "view == chalk.reviews",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "chalk.thread.close",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-(open|planned|ready)$/",
+          "group": "inline@1"
+        },
+        {
+          "command": "chalk.thread.reply",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-/",
+          "group": "inline@2"
+        },
+        {
+          "command": "chalk.thread.reply",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-/",
+          "group": "1_thread@1"
+        },
+        {
+          "command": "chalk.thread.close",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-(open|planned|ready)$/",
+          "group": "1_thread@2"
+        },
+        {
+          "command": "chalk.thread.withdraw",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-(open|planned|ready)$/",
+          "group": "1_thread@3"
+        },
+        {
+          "command": "chalk.thread.source",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-/",
+          "group": "2_open@1"
+        },
+        {
+          "command": "chalk.thread.open",
+          "when": "view == chalk.reviews && viewItem =~ /^thread-/",
+          "group": "2_open@2"
+        },
+        {
+          "command": "chalk.review.copy",
+          "when": "view == chalk.reviews && viewItem =~ /^review/",
+          "group": "inline@1"
+        },
+        {
+          "command": "chalk.review.closeReady",
+          "when": "view == chalk.reviews && viewItem == review-ready",
+          "group": "inline@2"
+        },
+        {
+          "command": "chalk.review.activity",
+          "when": "view == chalk.reviews && viewItem =~ /^review/",
+          "group": "1_review@1"
+        },
+        {
+          "command": "chalk.review.copy",
+          "when": "view == chalk.reviews && viewItem =~ /^review/",
+          "group": "1_review@2"
+        },
+        {
+          "command": "chalk.review.closeReady",
+          "when": "view == chalk.reviews && viewItem == review-ready",
+          "group": "1_review@3"
+        },
+        {
+          "command": "chalk.copyReview",
+          "when": "view == chalk.reviews && viewItem == sitting",
+          "group": "inline@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "chalk.thread.open",
+          "when": "false"
+        },
+        {
+          "command": "chalk.thread.source",
+          "when": "false"
+        },
+        {
+          "command": "chalk.thread.reply",
+          "when": "false"
+        },
+        {
+          "command": "chalk.thread.close",
+          "when": "false"
+        },
+        {
+          "command": "chalk.thread.withdraw",
+          "when": "false"
+        },
+        {
+          "command": "chalk.review.copy",
+          "when": "false"
+        },
+        {
+          "command": "chalk.review.closeReady",
+          "when": "false"
+        }
       ]
     },
     "keybindings": [

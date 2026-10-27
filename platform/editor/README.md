@@ -16,7 +16,12 @@ app's own `?dev&board=` page, so what you see is what the phone draws.
   - **Ask the agent** puts it in the chat with its board, line and words. If the editor's chat can't take text from an extension, it goes on the clipboard and the chat opens.
   - **Leave a comment** writes it to the chapter's `comments/` folder.
 - **Play** plays it exactly as the app does, in a phone's frame: the chapter's path, one board at a time with Continue, practice, results, from the board or lesson you're on. **हि** shows it in Hindi.
-- **The Chalk tree** (in the explorer): book → chapter → lesson, with each chapter's open comments counted.
+- **The Chalk tree** (in the explorer): book → chapter → lesson, with each chapter's open threads counted.
+- **Chalk Reviews** (in the explorer): every review in one place. At the top, your threads not handed over yet (Copy for agent hands them over); then each review, newest first, with where it stands ("1 open, 3 ready") and its threads, each with its status, the latest plan or answer, and the whole thread in its tooltip.
+  - Click a thread: the preview goes to its board and outlines the piece.
+  - On a thread: Reply (sends a planned or ready one back to the agent), Close, Withdraw, Open source line.
+  - On a review: Copy for agent (`apply review <id>`), Close all ready, Show its activity.
+  - It follows the files: an agent's plans and answers show up as they're written.
 
 It uses the dev server on :5173 if one is running. Otherwise it starts the learner app's server and the content rebuild-on-save itself (output in the "Chalk" channel). It also starts the chalk MCP service agents connect to (127.0.0.1:5174/mcp) if it isn't running.
 
