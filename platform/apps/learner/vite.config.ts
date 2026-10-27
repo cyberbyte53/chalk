@@ -195,6 +195,39 @@ function devReview(): Plugin {
 }
 
 /**
+ * The chalk MCP for agents, at /mcp on this machine (platform/studio/src/mcp/http.ts): one
+ * endpoint for every agent, each connection held to the role its token gives it. Loaded through
+ * Vite so the tools' TypeScript and their packages resolve from platform/studio.
+ */
+function devMcp(): Plugin {
+  type Mcp = {
+    handle: (req: IncomingMessage, res: ServerResponse) => Promise<void>;
+    close: () => Promise<void>;
+  };
+  return {
+    name: "chalk-dev-mcp",
+    apply: "serve",
+    configureServer(server) {
+      if (process.env.VITEST) return;
+      let mcp: Promise<Mcp> | undefined;
+      server.middlewares.use("/mcp", (req, res) => {
+        mcp ??= server
+          .ssrLoadModule(join(ROOT, "platform", "studio", "src", "mcp", "http.ts"))
+          .then((m) => (m as { mcpMiddleware: () => Mcp }).mcpMiddleware());
+        mcp
+          .then((m) => m.handle(req, res))
+          .catch((error: unknown) => {
+            if (res.headersSent) return;
+            res.statusCode = 500;
+            res.end(String(error instanceof Error ? error.message : error));
+          });
+      });
+      server.httpServer?.on("close", () => void mcp?.then((m) => m.close()));
+    },
+  };
+}
+
+/**
  * In development, the content rebuild runs inside the dev server (one watcher, one build/): every
  * save under content/ rebuilds what it touched, and open previews redraw (see devContent).
  * Whoever starts the dev server (the editor, the chalk MCP server, `pnpm dev`) gets it.
@@ -327,6 +360,7 @@ export default defineConfig(({ mode }): UserConfig => {
       devLog(),
       devRebuild(),
       devReview(),
+      devMcp(),
       devStudio(),
       devContent(),
       // The app installs to the home screen and works offline: the app and its fonts are cached

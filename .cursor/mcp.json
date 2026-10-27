@@ -1,17 +1,9 @@
 {
   "mcpServers": {
     "chalk": {
-      "command": "${workspaceFolder}/platform/studio/node_modules/.bin/tsx",
-      "args": ["${workspaceFolder}/platform/studio/src/mcp/server.ts"],
-      "env": {
-        "CHALK_ROLE": "fixer"
-      }
-    },
-    "chalk-reviewer": {
-      "command": "${workspaceFolder}/platform/studio/node_modules/.bin/tsx",
-      "args": ["${workspaceFolder}/platform/studio/src/mcp/server.ts"],
-      "env": {
-        "CHALK_ROLE": "reviewer"
+      "url": "http://localhost:5173/mcp",
+      "headers": {
+        "Authorization": "Bearer chalk-dev-fixer"
       }
     }
   }

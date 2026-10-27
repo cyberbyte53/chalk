@@ -22,10 +22,10 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
   When a chat with the person ends, run `wrap-up`: corrections that could recur become checks, examples or guide lines, with the person's yes.
 
   Each step writes a note to the chapter's `runs/`.
-- **Look at what you make.** The chalk MCP server (`.cursor/mcp.json`, `.vscode/mcp.json`, `.mcp.json`) gives you:
+- **Look at what you make.** The chalk MCP (one endpoint, `localhost:5173/mcp`, served by the dev server: the editor starts it, or `pnpm dev`; configured in `.cursor/mcp.json`, `.vscode/mcp.json`, `.mcp.json`) gives you:
   - `render_board`: boards drawn by the real player at phone width, with the board model (each piece's source line, setup and live values, every element with its typed value, words, action and file:line, what the student can do, and gaps between what's drawn and what's described) and layout problems found by measuring; with `steps`, it taps and drags the real board as a student would and reports what changed after each (live values, events, passed, a picture);
   - `affected`: what a change to a prop, pattern or platform file reaches, as a tree (chapters → lessons → boards; `open` one to expand), from what each chapter's build actually read;
-  - `comments` (read) and `comment` (write): the only way to read and write threads. The `chalk` server writes as a fixer; `chalk-reviewer` as a reviewer. Each may only do what its role may (platform/docs/comments.md).
+  - `comments` (read) and `comment` (write): the only way to read and write threads. Your connection's token makes you a fixer; the `reviewer` subagent (`.claude/agents/reviewer.md`) connects with the reviewer's token. Each connection is shown only what its role may do (platform/docs/comments.md).
 
   For people and agents alike, the same boards are at `?dev&board=<book>/<chapter>/<lesson>` in the learner app's dev server; add `&play` and use them in a browser as a student would (Cursor's browser, or a browser MCP). Every piece carries `data-source="content/…:line"`, and Alt-click opens the line.
 - **In the editor**, the Chalk extension (`platform/editor`, install `chalk-editor.vsix`) previews whatever file or folder is open as the student sees it (book screen, chapter path, lesson boards), follows the cursor, and lets the person pick a piece to send to you.

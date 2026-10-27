@@ -86,7 +86,15 @@ Other acts:
 
 Also: a thread can't become ready while a regression about it is open or planned. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
 
-**The caller never picks its role.** The person writes through the preview and the editor. An agent writes through the chalk MCP, whose role is fixed when it starts: the `chalk` server is a fixer and `chalk-reviewer` a reviewer (`CHALK_ROLE` in `.mcp.json`, `.cursor/mcp.json`, `.vscode/mcp.json`; `CHALK_NAME` to name one). In one checkout an agent with a shell could still edit the files by hand; the reader catches a broken file the next time it reads it. If that ever matters, threads move to the server, where only the API writes.
+**Each agent holds one role, and is shown only what it may do.** This is the standard shape for MCP: one server, every caller identified by its token, the server deciding what that caller sees and may do.
+
+- The person writes through the preview and the editor.
+- Agents use **one endpoint**, `http://localhost:5173/mcp`, served by the dev server (`platform/studio/src/mcp/http.ts`, this machine only). Each connection sends a bearer token, and the token gives its role. Nobody picks a role per call.
+- Development tokens are one per role (`chalk-dev-fixer`, `chalk-dev-reviewer`, in `http.ts`; `CHALK_TOKENS` to set others). The shared configs (`.mcp.json`, `.cursor/mcp.json`, `.vscode/mcp.json`) connect as a **fixer**. The **`reviewer` subagent** (`.claude/agents/reviewer.md`) connects with the reviewer's token and has none of the fixer's tools. Without subagents, a reviewer is a chat whose config uses the reviewer's token. `x-chalk-name` names an agent in threads.
+- Each connection gets its own session, showing only the tools its role uses; its `comment` tool offers only the status moves and labels its role may use (from the same `MOVES` and `ACTS` tables). An agent can't pick what it never sees; the writer still checks every call.
+- The dev server must be running for agents to connect: the editor extension starts it, or `pnpm dev`.
+
+What this doesn't stop: on a laptop the tokens sit in config files, so anything on the machine can read them and call the dev server, and an agent with a shell can edit the files (the reader catches a broken file the next time it reads it). Closing that means the same endpoint on the Chalk server, with tokens from sign-in.
 
 ## Reviews: one sitting, handed over in one line
 
