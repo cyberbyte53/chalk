@@ -1,0 +1,387 @@
+# Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
+- id: cmvpi4adan2w
+  label: comment
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-10-26T16:59:10.078Z
+  board: class10-maths/real-numbers/division-lemma/story
+  target: last
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:33
+  snapshot: Two rounds are given and 8 sweets are left. How many more rounds can Riya give? 2 1 0
+  commit: ec00c1a98e6d86336eb347a1e8f0a69afe06861e
+  text: questions can be framed better
+  changed:
+    - content/class10-maths/real-numbers/division-lemma/overview.ts
+    - library/props/basics/src/styles.css
+    - library/props/basics/src/views.tsx
+    - library/props/primes/src/bill-split-view.tsx
+    - library/props/primes/src/square-cutter-view.tsx
+    - library/props/primes/src/stick-measure-view.tsx
+    - library/props/primes/src/styles.css
+    - platform/packages/player/src/index.ts
+    - platform/packages/player/src/fit-columns.test.ts
+    - platform/packages/player/src/fit-columns.ts
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T04:49:39.998Z
+      text: "Tell it from Riya's side in the board's own words: \"Riya has given 2 rounds, and 8 sweets
+        are left in the box. How many more rounds can she give?\" (Hindi to match)."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.612Z
+      text: "Now from Riya's side: \"Riya has given 2 rounds, and 8 sweets are left in the box. How many
+        more rounds can she give?\" Options in order 0, 1, 2."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T07:58:07.185Z
+      text: ""
+      status: closed
+- id: cmvpi5bgyhfr
+  label: comment
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-10-26T16:59:58.162Z
+  board: class10-maths/real-numbers/division-lemma/lemma
+  target: w2
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:117
+  snapshot: "Every sweet ends up on a plate or in the box: $\\underbrace{20}_{\\text{sweets}} =
+    \\underbrace{6}_{\\text{friends}} \\times \\underbrace{3}_{\\text{rounds}} +
+    \\underbrace{2}_{\\text{left over}}$"
+  commit: ec00c1a98e6d86336eb347a1e8f0a69afe06861e
+  text: this equation is always true we should show this conservation of sweets for each round no ?
+  changed:
+    - content/class10-maths/real-numbers/division-lemma/overview.ts
+    - library/props/basics/src/styles.css
+    - library/props/basics/src/views.tsx
+    - library/props/primes/src/bill-split-view.tsx
+    - library/props/primes/src/square-cutter-view.tsx
+    - library/props/primes/src/stick-measure-view.tsx
+    - library/props/primes/src/styles.css
+    - platform/packages/player/src/index.ts
+    - platform/packages/player/src/fit-columns.test.ts
+    - platform/packages/player/src/fit-columns.ts
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T04:49:40.017Z
+      text: "Replace the one sum with a line per round, so 20 = 6×q + box is seen holding every round (20
+        = 6×0 + 20 … 20 = 6×3 + 2, stop: fewer than 6); the last line keeps its labels. Drop the
+        later box table, which repeats these numbers."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.645Z
+      text: "A line per round, aligned term by term under one set of labels: 20 = 6×0 + 20, …, 20 = 6×3 +
+        2, then why it stops. The repeated box table is gone."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T07:58:30.929Z
+      text: ""
+      status: closed
+- id: cmvpi6ba3atl
+  label: comment
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-10-26T17:00:44.571Z
+  board: class10-maths/real-numbers/division-lemma/lemma
+  target: w8
+  source: content/class10-maths/real-numbers/division-lemma/overview.ts:153
+  snapshot: "No. Only one number in that row is less than 6, so the sharing always stops in the same
+    place: 3 rounds, 2 left over. That's why the lemma says $q$ and $r$ are unique."
+  commit: ec00c1a98e6d86336eb347a1e8f0a69afe06861e
+  text: we have not yet introduced lemma
+  changed:
+    - content/class10-maths/real-numbers/division-lemma/overview.ts
+    - library/props/basics/src/styles.css
+    - library/props/basics/src/views.tsx
+    - library/props/primes/src/bill-split-view.tsx
+    - library/props/primes/src/square-cutter-view.tsx
+    - library/props/primes/src/stick-measure-view.tsx
+    - library/props/primes/src/styles.css
+    - platform/packages/player/src/index.ts
+    - platform/packages/player/src/fit-columns.test.ts
+    - platform/packages/player/src/fit-columns.ts
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T04:49:40.028Z
+      text: "Don't name the lemma before its box: \"…3 rounds, 2 left over. There's only one possible q
+        and one possible r: they are unique.\""
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.678Z
+      text: "The line before the definition no longer names the lemma: \"There's only one possible q and
+        one possible r: they are unique.\""
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T07:58:43.936Z
+      text: ""
+      status: closed
+- id: cmvpjc9veib8
+  label: comment
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-10-26T17:33:22.298Z
+  board: class10-maths/real-numbers/which-fractions-end/bill
+  target: which
+  source: content/class10-maths/real-numbers/which-fractions-end/overview.ts:44
+  snapshot: For which group sizes does each share terminate? 2 3 4 5 6 7 8 9 10 Check
+  commit: ec00c1a98e6d86336eb347a1e8f0a69afe06861e
+  text: this could have fitted in 2 lines no ?? i think there are 2 condtions 1st the button should be
+    able to contain the content and then we should place these no and this is true for all options
+  changed:
+    - content/class10-maths/real-numbers/division-lemma/overview.ts
+    - library/props/basics/src/styles.css
+    - library/props/basics/src/views.tsx
+    - library/props/primes/src/bill-split-view.tsx
+    - library/props/primes/src/square-cutter-view.tsx
+    - library/props/primes/src/stick-measure-view.tsx
+    - library/props/primes/src/styles.css
+    - platform/packages/player/src/index.ts
+    - platform/packages/player/src/fit-columns.test.ts
+    - platform/packages/player/src/fit-columns.ts
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T04:49:40.039Z
+      text: "Options are measured, not guessed from character count: as many equal-width columns as the
+        widest option allows, rows balanced (these nine become 5 + 4). Same for every choice,
+        multiChoice and the billSplit size buttons."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.709Z
+      text: "Options are measured, not counted: as many equal columns as the widest fits, rows balanced,
+        the last more than half full. These nine: 5 + 4 on a phone, one row of 9 at 640. Same for
+        every choice, multiChoice, and the billSplit/stickMeasure/squareCutter tiles."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T07:58:54.414Z
+      text: ""
+      status: closed
+- id: cmvq7tt1hx4r
+  label: regression
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-27T04:58:51.077Z
+  board: class10-maths/real-numbers/which-fractions-end/bill
+  target: split
+  commit: 64e222b571f25ccf4e45db6e5c68a54585c24327
+  about: cmvpjc9veib8
+  text: "At 640 wide (en and hi) the billSplit tiles 2–10 stay 5 + 4. The multiChoice right below
+    holds the same nine numbers and goes 9 across, as it should. So one board draws the same nine
+    numbers two ways: the tiles leave half the width empty and the question looks like a different
+    set. stickMeasure on euclid-algorithm/why does reflow to 7 across at 640, so the problem is in
+    billSplit's use of useFitColumns: the tiles are either measured wider than they are, or not
+    measured again at the new width. Fix: at 640 the tiles should be 9 across like the multiChoice,
+    and 5 + 4 at 390 (as now). Mechanical."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:47.098Z
+      text: "Measure the grid and its options in the same units: under a prop's zoom, clientWidth is
+        unzoomed while getBoundingClientRect is zoomed."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:57.982Z
+      text: "Both widths now from getBoundingClientRect: at 640 the tiles and the question both sit 9
+        across; at 390 both 5 + 4."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T08:01:15.984Z
+      text: ""
+      status: closed
+- id: cmvq7tt2694m
+  label: regression
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-27T04:58:51.102Z
+  board: class10-maths/real-numbers/which-fractions-end/bill
+  target: which
+  commit: 64e222b571f25ccf4e45db6e5c68a54585c24327
+  about: cmvpjc9veib8
+  text: "pnpm check fails at lint. Biome's useExhaustiveDependencies flags
+    platform/packages/player/src/fit-columns.ts:28: `key` is in the deps of useLayoutEffect but the
+    effect never reads it (\"Outer scope values aren't valid dependencies\"). It is there on
+    purpose, to measure again when the labels change, so either read it inside the effect or add a
+    biome-ignore with that reason. Mechanical; the branch can't merge red."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:47.077Z
+      text: Say why `key` is a dependency (when to measure again) in a biome-ignore on the effect.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:57.950Z
+      text: biome-ignore with the reason; pnpm check is green.
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T08:01:16.030Z
+      text: ""
+      status: closed
+- id: cmvq7tt2vk5j
+  label: regression
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-27T04:58:51.127Z
+  board: class10-maths/real-numbers/division-lemma/lemma
+  target: w2
+  commit: 64e222b571f25ccf4e45db6e5c68a54585c24327
+  about: cmvpi5bgyhfr
+  text: "The four lines are aligned only at \"=\". The last line's underbraces spread its terms out,
+    so its 6, ×, 3, + and 2 don't sit under the 6 × q + box of the lines above (see the 390 shot:
+    the 3 and the 2 are well right of the 1/2 and 14/8 above). What the thread asked for was to see
+    the same sum hold every round, and that needs each column lined up. Also, only the last line is
+    labelled, so a student reading 6 × 0 + 20 isn't told that 0 is the rounds and 20 is the box.
+    Fix: align term by term (alignat, or an array with one column per term) and label the columns
+    once, on the first line or as a header, not only on the last. Principle: wide working aligned;
+    can I see what the text points at."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:47.131Z
+      text: One array, term by term, with the columns labelled once above (sweets, friends, rounds, in the
+        box).
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.007Z
+      text: Aligned term by term in one array, column labels once (small) above; fits at 360 in Hindi, no
+        layout problems.
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T08:01:16.061Z
+      text: ""
+      status: closed
+- id: cmvq7tt3ntbn
+  label: finding
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-27T04:58:51.156Z
+  board: class10-maths/real-numbers/division-lemma/lemma
+  target: w6
+  commit: 64e222b571f25ccf4e45db6e5c68a54585c24327
+  text: Hindi uses two words for a round on one board. The new w2 says "हर बारी के बाद" with the label
+    "बारियाँ", while w4 (q labelled "दौर"), the new w6 line "हर दौर के बाद" and w7 "3 दौर" say दौर.
+    The story board's prop and question say बारियाँ, and its wrap box says दौर. A Hindi student can
+    take these for two different things. Pick one (the story teaches बारी-बारी / बारियाँ) and use it
+    everywhere. Mechanical (a term used two ways).
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:47.150Z
+      text: Use बारी/बारियाँ everywhere on the lesson, as the story teaches.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.032Z
+      text: "दौर gone from the lesson: बारी/बारियाँ throughout (and निकालती, to agree)."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T08:01:16.083Z
+      text: ""
+      status: closed
+- id: cmvq7tt4auge
+  label: finding
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-27T04:58:51.178Z
+  board: class10-maths/real-numbers/division-lemma/story
+  target: last
+  commit: 64e222b571f25ccf4e45db6e5c68a54585c24327
+  text: The numeric options read 0, 2, 1, out of order. A short list of counts should be in order (0,
+    1, 2), so that position tells the student nothing and they don't have to hunt for the number.
+    Taste-light; for the person, or mechanical if a rule already asks for sorted numeric options.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:47.160Z
+      text: Write the options 0, 1, 2 in order (choiceQuestion with keepOrder).
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.064Z
+      text: Options read 0, 1, 2; played through, the board passes.
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-27T08:01:16.119Z
+      text: ""
+      status: closed
+- id: cmvq7tt4qndv
+  label: finding
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-27T04:58:51.194Z
+  board: class10-maths/real-numbers/questions/which-is-irrational/a3543885
+  target: ask
+  commit: 64e222b571f25ccf4e45db6e5c68a54585c24327
+  text: "render_board's layout check reports \"text spills ~7500px out of its button\" on every √
+    option (here and in 0101bb0e at 640). On screen the options look fine. The cause is KaTeX's
+    sqrt: it draws a 400em SVG clipped by .hide-tail. Now that √ options sit 3 across, this false
+    alarm shows on every such board and will hide a real overflow. Either the checker should ignore
+    what overflow:hidden clips, or the option should clip it. Possibly older than this change
+    (before it these options were one column, and the same SVG was there), so filed as a finding,
+    not a regression."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T05:03:58.077Z
+      text: "Not from this change: it's the layout check misreading KaTeX's clipped sqrt SVG. Left for a
+        separate fix to the check, so it isn't hidden in this review."
+    - by: you
+      role: person
+      at: 2026-10-27T08:07:49.422Z
+      text: can you explain the issue in a better way?
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:08:27.182Z
+      text: >-
+        In plain terms: the boards are fine, and the checker that measures them is wrong.
+
+
+        When I check a board, a script measures every button and reports when text sticks out past
+        its edge. To draw a √ sign, KaTeX (the maths renderer) uses a trick. It draws one very long
+        line, about 400 letters wide, so the bar over the number is long enough for any size, and
+        then hides everything past the number. On screen you see a √ of the right width. The script,
+        though, measures every element inside the button, hidden or not
+        (platform/studio/src/mcp/preview.ts:170). It finds that long line and reports "text spills
+        7500px out of its button".
+
+
+        It matters for two reasons. First, every board with a √ option now shows this warning.
+        Second, a real overflow on those boards would be lost among the false ones, so the check
+        stops being useful there.
+
+
+        The fix belongs in the checker, not the boards: skip what a parent clips (anything inside
+        overflow:hidden), or measure only the visible bounds. It's about 5 lines in preview.ts. Say
+        if you want it done now, in this review, or kept separate.

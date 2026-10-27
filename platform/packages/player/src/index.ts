@@ -1,5 +1,6 @@
 export { BoardPlayer, type BoardPlayerProps } from "./board-player";
 export { AnswerFeedback } from "./answer-feedback";
+export { useFitColumns } from "./fit-columns";
 export {
   type ModePolicy,
   PlayMode,

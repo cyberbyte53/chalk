@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, useFitColumns } from "@chalk/player";
 import type { JSX } from "preact";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import {
@@ -163,6 +163,10 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
   const steps = euclidSteps(s.stickA, s.stickB);
   const step = steps[s.rounds];
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const [fit, columns] = useFitColumns<HTMLDivElement>(
+    s.pieceChoices.length,
+    s.pieceChoices.join(" "),
+  );
   const L = s.letters;
   const working = workingOf(s, locale);
   return (
@@ -205,7 +209,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
         </div>
       )}
       {s.pieceChoices.length > 0 && (
-        <div class="pr-controls pr-tile-choices">
+        <div ref={fit} class="pr-controls pr-tile-choices" style={{ "--columns": String(columns) }}>
           {s.pieceChoices.map((n) => (
             <SymbolButton
               key={n}

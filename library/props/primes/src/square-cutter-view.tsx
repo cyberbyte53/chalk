@@ -1,5 +1,5 @@
 import { Stage, useSpace } from "@chalk/draw";
-import { type PropViewProps, useBoardTween } from "@chalk/player";
+import { type PropViewProps, useBoardTween, useFitColumns } from "@chalk/player";
 import type { JSX } from "preact";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import {
@@ -273,6 +273,10 @@ export function SquareCutterView({ view, width, call, locale }: PropViewProps): 
     isZoomed && zoomPiece !== undefined ? roomAround(zoomPiece, whole, frame.w / frame.h) : whole,
     ZOOM_SECONDS,
   );
+  const [fit, columns] = useFitColumns<HTMLDivElement>(
+    s.tileChoices.length,
+    s.tileChoices.join(" "),
+  );
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
   const L = s.letters;
   const name = (n: number, letter: keyof NonNullable<typeof L>) =>
@@ -392,7 +396,12 @@ export function SquareCutterView({ view, width, call, locale }: PropViewProps): 
         </ol>
       )}
       {s.tileChoices.length > 0 && (
-        <div class="pr-controls pr-tile-choices" data-part="tiles">
+        <div
+          ref={fit}
+          class="pr-controls pr-tile-choices"
+          style={{ "--columns": String(columns) }}
+          data-part="tiles"
+        >
           {s.tileChoices.map((side) => (
             <SymbolButton
               key={side}

@@ -81,9 +81,8 @@
   min-width: 0;
   display: grid;
   gap: 8px;
-}
-.choices.is-pairs {
-  grid-template-columns: repeat(var(--columns, 2), minmax(0, 1fr));
+  /* As many as fit, measured by the view (useFitColumns). */
+  grid-template-columns: repeat(var(--columns, 1), minmax(0, 1fr));
 }
 /* Options are raised grey cards: they sink when tapped, and turn green or red once answered. */
 .choice {

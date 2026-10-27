@@ -4,6 +4,7 @@ import {
   RichText,
   plainText,
   t,
+  useFitColumns,
   usePlayMode,
 } from "@chalk/player";
 import { AnswerStatus, QuestionAction, cssColor } from "@chalk/prop";
@@ -59,18 +60,12 @@ function choiceClass(s: ChoiceState, option: string): string {
   return "choice is-selected";
 }
 
-/** Two or four short options sit side by side (Yes / No); anything else is one column. */
-const PAIR_LABEL = 14;
-/** Short options sit side by side: two or three in a row (four as two pairs); long ones stack. */
-function columnsFor(
+/** The labels in this locale, so the options are measured again when they change. */
+function labelsKey(
   options: readonly { label: { en: string; hi: string } }[],
   locale: PropViewProps["locale"],
-): number {
-  const isShort = options.every((option) => (option.label[locale] ?? "").length <= PAIR_LABEL);
-  if (!isShort) return 1;
-  if (options.length === 2 || options.length === 4) return 2;
-  if (options.length === 3) return 3;
-  return 1;
+): string {
+  return options.map((option) => option.label[locale] ?? "").join("\n");
 }
 
 /** Tapping an option answers: it is picked and checked at once, and the feedback shows below. */
@@ -82,16 +77,16 @@ export function ChoiceView({ view, locale, call }: PropViewProps): JSX.Element {
     call(ChoiceAction.Select, { option });
     call(QuestionAction.Check);
   };
-  const columns = columnsFor(s.options, locale);
+  const [fit, columns] = useFitColumns<HTMLFieldSetElement>(
+    s.options.length,
+    labelsKey(s.options, locale),
+  );
   return (
     <div class="piece-question">
       <p class="question-prompt">
         <RichText text={s.prompt[locale]} />
       </p>
-      <fieldset
-        class={columns > 1 ? "choices is-pairs" : "choices"}
-        style={{ "--columns": String(columns) }}
-      >
+      <fieldset ref={fit} class="choices" style={{ "--columns": String(columns) }}>
         {s.options.map((option) => (
           <button
             type="button"
@@ -124,16 +119,16 @@ export function MultiChoiceView({ view, locale, call }: PropViewProps): JSX.Elem
   const s = view as unknown as MultiChoiceState & { canCheck: boolean };
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
-  const columns = columnsFor(s.options, locale);
+  const [fit, columns] = useFitColumns<HTMLFieldSetElement>(
+    s.options.length,
+    labelsKey(s.options, locale),
+  );
   return (
     <div class="piece-question">
       <p class="question-prompt">
         <RichText text={s.prompt[locale]} />
       </p>
-      <fieldset
-        class={columns > 1 ? "choices is-pairs" : "choices"}
-        style={{ "--columns": String(columns) }}
-      >
+      <fieldset ref={fit} class="choices" style={{ "--columns": String(columns) }}>
         {s.options.map((option) => (
           <button
             type="button"

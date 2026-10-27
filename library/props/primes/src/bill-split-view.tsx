@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, useFitColumns } from "@chalk/player";
 import type { JSX } from "preact";
 import { BillSplitAction, type BillSplitState, shareOf } from "./bill-split";
 import { SymbolButton } from "./ui";
@@ -17,12 +17,13 @@ function digitsOf(share: { once: string; repeats: string }, count: number): stri
 export function BillSplitView({ view, call, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as BillSplitState;
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
+  const [fit, columns] = useFitColumns<HTMLDivElement>(s.sizes.length, s.sizes.join(" "));
   return (
     <div class="pr-bill">
       <div class="pr-bill-note" aria-label={`A bill of ₹${s.amount}`}>
         ₹{s.amount}
       </div>
-      <div class="pr-controls pr-tile-choices">
+      <div ref={fit} class="pr-controls pr-tile-choices" style={{ "--columns": String(columns) }}>
         {s.sizes.map((n) => (
           <SymbolButton
             key={n}

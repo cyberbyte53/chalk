@@ -1,5 +1,5 @@
 import { type At, page, t, theBoard } from "@chalk/author";
-import { choice, wordsOn } from "@chalk/patterns";
+import { choice, choiceQuestion, wordsOn } from "@chalk/patterns";
 import { AnswerStatus, QuestionSignal } from "@chalk/prop";
 import { SweetShareAction, SweetShareSignal, sweetShareDef } from "@chalk/prop-primes";
 
@@ -30,34 +30,39 @@ const story = page("story", (b) => {
     game.learner(SweetShareAction.GiveRound),
     game.learner(SweetShareAction.GiveRound),
   );
-  const last = choice(b, {
+  // The counts read in order (0, 1, 2), so they are written in order, not shuffled.
+  const last = choiceQuestion(b, {
     name: "last",
     prompt: t(
-      "Two rounds are given and 8 sweets are left. How many more rounds can Riya give?",
-      "दो बारियाँ हो गईं और 8 मिठाइयाँ बची हैं। रिया और कितनी बारियाँ दे सकती है?",
+      "Riya has given 2 rounds, and 8 sweets are left in the box. How many more rounds can she give?",
+      "रिया 2 बारियाँ दे चुकी है, और डिब्बे में 8 मिठाइयाँ बची हैं। वह और कितनी बारियाँ दे सकती है?",
     ),
-    right: t("1", "1"),
-    wrong: {
-      none: {
+    options: [
+      {
+        id: "none",
         label: t("0", "0"),
         feedback: t(
           "8 is more than 6, so there's still a sweet for every friend: one more round.",
           "8, 6 से ज़्यादा है, तो अभी हर दोस्त के लिए एक मिठाई है: एक और बारी।",
         ),
       },
-      two: {
+      { id: "right", label: t("1", "1") },
+      {
+        id: "two",
         label: t("2", "2"),
         feedback: t(
           "After one more round, 8 − 6 = 2 are left. 2 aren't enough for 6 friends.",
           "एक और बारी के बाद 8 − 6 = 2 बचती हैं। 6 दोस्तों के लिए 2 काफ़ी नहीं।",
         ),
       },
-    },
+    ],
+    answer: "right",
+    keepOrder: true,
   });
   const wrap = w.definition(
     t(
       r`**Each friend gets 3 sweets, and 2 are left in the box.** 2 aren't enough for another round.`,
-      r`**हर दोस्त को 3 मिठाइयाँ मिलीं, और 2 डिब्बे में बचीं।** 2 एक और दौर के लिए काफ़ी नहीं।`,
+      r`**हर दोस्त को 3 मिठाइयाँ मिलीं, और 2 डिब्बे में बचीं।** 2 एक और बारी के लिए काफ़ी नहीं।`,
     ),
     "wrap",
   );
@@ -116,8 +121,8 @@ const lemma = page("lemma", (b) => {
     w.title(t("From sweets to numbers", "मिठाइयों से संख्याओं तक")),
     w.body(
       t(
-        r`Every sweet ends up on a plate or in the box: $$\underbrace{20}_{\text{sweets}} = \underbrace{6}_{\text{friends}} \times \underbrace{3}_{\text{rounds}} + \underbrace{2}_{\text{left over}}$$`,
-        r`हर मिठाई अंत में या तो प्लेट पर होती है या डिब्बे में: $$\underbrace{20}_{\text{मिठाइयाँ}} = \underbrace{6}_{\text{दोस्त}} \times \underbrace{3}_{\text{बारियाँ}} + \underbrace{2}_{\text{बचीं}}$$`,
+        r`After every round, each sweet is on a plate or in the box: $$\begin{array}{ccccccc} \scriptsize\text{sweets} & & \scriptsize\text{friends} & & \scriptsize\text{rounds} & & \scriptsize\text{in the box} \\ 20 & = & 6 & \times & 0 & + & 20 \\ 20 & = & 6 & \times & 1 & + & 14 \\ 20 & = & 6 & \times & 2 & + & 8 \\ 20 & = & 6 & \times & 3 & + & \mathbf{2} \end{array}$$ 2 is fewer than 6, so the sharing stops: 2 are left over.`,
+        r`हर बारी के बाद, हर मिठाई या तो प्लेट पर है या डिब्बे में: $$\begin{array}{ccccccc} \scriptsize\text{मिठाइयाँ} & & \scriptsize\text{दोस्त} & & \scriptsize\text{बारियाँ} & & \scriptsize\text{डिब्बे में} \\ 20 & = & 6 & \times & 0 & + & 20 \\ 20 & = & 6 & \times & 1 & + & 14 \\ 20 & = & 6 & \times & 2 & + & 8 \\ 20 & = & 6 & \times & 3 & + & \mathbf{2} \end{array}$$ 2, 6 से कम है, तो बँटवारा रुक जाता है: 2 बचती हैं।`,
       ),
     ),
     w.body(
@@ -129,7 +134,7 @@ const lemma = page("lemma", (b) => {
     w.body(
       t(
         r`**In letters** $$\underbrace{a}_{\text{sweets}} = \underbrace{b}_{\text{friends}} \times \underbrace{q}_{\text{rounds}} + \underbrace{r}_{\text{left over}}$$`,
-        r`**अक्षरों में** $$\underbrace{a}_{\text{मिठाइयाँ}} = \underbrace{b}_{\text{दोस्त}} \times \underbrace{q}_{\text{दौर}} + \underbrace{r}_{\text{बचा}}$$`,
+        r`**अक्षरों में** $$\underbrace{a}_{\text{मिठाइयाँ}} = \underbrace{b}_{\text{दोस्त}} \times \underbrace{q}_{\text{बारियाँ}} + \underbrace{r}_{\text{बचा}}$$`,
       ),
     ),
     w.body(
@@ -140,20 +145,14 @@ const lemma = page("lemma", (b) => {
     ),
     w.body(
       t(
-        r`**Could the sharing stop anywhere else?** Each round takes 6 sweets out of the box. Riya keeps going while there are at least 6 left, and stops as soon as there are fewer than 6.`,
-        r`**क्या बँटवारा कहीं और रुक सकता है?** हर दौर डिब्बे से 6 मिठाइयाँ निकालता है। रिया तब तक बाँटती है जब तक कम से कम 6 बची हों, और 6 से कम होते ही रुक जाती है।`,
+        r`**Could the sharing stop anywhere else?** Each round takes 6 sweets out of the box. Riya keeps going while there are at least 6 left, and stops as soon as there are fewer than 6. Look at what's in the box after each round: 20, 14, 8, 2.`,
+        r`**क्या बँटवारा कहीं और रुक सकता है?** हर बारी डिब्बे से 6 मिठाइयाँ निकालती है। रिया तब तक बाँटती है जब तक कम से कम 6 बची हों, और 6 से कम होते ही रुक जाती है। हर बारी के बाद डिब्बे में देखो: 20, 14, 8, 2।`,
       ),
     ),
     w.body(
       t(
-        r`$$\begin{array}{l|cccc} \text{Rounds} & 0 & 1 & 2 & 3 \\ \hline \text{Sweets in the box} & 20 & 14 & 8 & \mathbf{2} \end{array}$$`,
-        r`$$\begin{array}{l|cccc} \text{दौर} & 0 & 1 & 2 & 3 \\ \hline \text{डिब्बे में मिठाइयाँ} & 20 & 14 & 8 & \mathbf{2} \end{array}$$`,
-      ),
-    ),
-    w.body(
-      t(
-        r`No. Only one number in that row is less than 6, so the sharing always stops in the same place: 3 rounds, 2 left over. That's why the lemma says $q$ and $r$ are **unique**.`,
-        r`नहीं। उस पंक्ति में केवल एक संख्या 6 से कम है, तो बँटवारा हमेशा एक ही जगह रुकता है: 3 दौर, 2 बचीं। इसीलिए प्रमेयिका कहती है कि $q$ और $r$ **अद्वितीय** हैं।`,
+        r`No. Only one of those is less than 6, so the sharing always stops in the same place: 3 rounds, 2 left over. There's only one possible $q$ and one possible $r$: they are **unique**.`,
+        r`नहीं। उनमें से केवल एक संख्या 6 से कम है, तो बँटवारा हमेशा एक ही जगह रुकता है: 3 बारियाँ, 2 बचीं। $q$ और $r$ केवल एक-एक ही हो सकते हैं: वे **अद्वितीय** हैं।`,
       ),
     ),
     w.definition(
