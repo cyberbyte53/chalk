@@ -24,8 +24,6 @@ export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource } from "./narration";
 export type { PropModule, PropRegistry, PropViewProps } from "./prop-module";
-export { compositeView } from "./composite-view";
-export { groupView, useTheme } from "./group-view";
 export {
   type FrameContextValue,
   type FrameLabel,

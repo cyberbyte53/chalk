@@ -14,9 +14,7 @@ import {
   type StoredState,
   compileRule,
   compileTemplate,
-  compositeOf,
   groupOf,
-  hostOf,
   layoutChildren,
   observationOfView,
   segment,
@@ -106,21 +104,9 @@ export function takes(schema: ZodTypeAny): unknown {
   }
 }
 
-/** The actions an element's control does, on its own node (a composite's child's routed up). */
-function controlActions(def: AnyPropDef, view: PropView, e: SeenElement): string[] {
-  const does = e.does === undefined ? [] : typeof e.does === "string" ? [e.does] : e.does;
-  const layout = compositeOf(def);
-  return does.flatMap((d) => {
-    const at = d.lastIndexOf(PATH);
-    if (at < 0) return [d];
-    const routed = layout?.route(
-      view as StoredState,
-      d.slice(0, at),
-      d.slice(at + PATH.length),
-      {},
-    )?.[0];
-    return routed === undefined ? [] : [routed];
-  });
+/** The actions an element's control does. */
+function controlActions(e: SeenElement): readonly string[] {
+  return e.does === undefined ? [] : typeof e.does === "string" ? [e.does] : e.does;
 }
 
 /** A value's dotted path in a group's view as an address: "objectArrow.x" → "mirror/objectArrow.x". */
@@ -160,7 +146,7 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
       const at = `${path}/${e.id}`;
       const { id: _id, ...rest } = e;
       parts.push({ ...rest, path: at });
-      for (const action of controlActions(def, view, e))
+      for (const action of controlActions(e))
         fromControls.set(action, [...(fromControls.get(action) ?? []), at]);
     }
   // And what its inputs on the page say they do (does / says): the input is the source.
@@ -187,15 +173,7 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
     for (const f of ["status", "attempts", "feedback"]) live.add(f);
   if (group !== undefined && group.routes.length > 0) for (const f of fields) live.add(f);
 
-  const host = hostOf(def);
-  const on = host?.layersOn(view as StoredState);
-  const shown =
-    host === undefined
-      ? fields
-      : fields.filter((f) => {
-          const owner = host.ownerOf(f);
-          return owner === undefined || (on ?? []).includes(owner) || live.has(f);
-        });
+  const shown = fields;
   const setup: Record<string, unknown> = {};
   const liveValues: Record<string, unknown> = {};
   const bound: Record<string, BoundSnapshot> = {};
@@ -232,17 +210,11 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
     };
   });
   // The learner's actions no control offers right now (a button that's off until there are dots).
-  // (A host's layers that are off don't count: their controls aren't meant to be there.)
-  const layersNow = host?.layersOn(view as StoredState) ?? [];
   const noControlNow =
     group !== undefined
       ? []
       : Object.entries(def.actions)
-          .filter(([a, spec]) => {
-            if (spec.byLearner !== true || fromControls.has(a)) return false;
-            const owner = host?.ownerOf(a);
-            return owner === undefined || layersNow.includes(owner);
-          })
+          .filter(([a, spec]) => spec.byLearner === true && !fromControls.has(a))
           .map(([a]) => a);
 
   // Drawn must equal described, for props that describe themselves. A part `locate` finds counts.
