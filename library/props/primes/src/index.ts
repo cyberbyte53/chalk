@@ -1,5 +1,4 @@
-import type { PropModule } from "@chalk/player";
-import { asAnyProp } from "@chalk/prop";
+import { type PropModule, propModule } from "@chalk/player";
 import { billSplit } from "./bill-split";
 import { BillSplitView } from "./bill-split-view";
 import { factorTree } from "./factor-tree";
@@ -26,71 +25,48 @@ export {
   lcm,
 } from "./arithmetic";
 export {
-  FactorTreeAction,
-  FactorTreeDerived,
-  FactorTreeSignal,
   type FactorTreeState,
   factorTree as factorTreeDef,
 } from "./factor-tree";
 export {
-  LapRaceAction,
-  LapRaceDerived,
-  LapRaceSignal,
   type LapRaceState,
   lapRace as lapRaceDef,
 } from "./lap-race";
 export {
-  PrimeTowersAction,
-  PrimeTowersDerived,
-  PrimeTowersSignal,
   type PrimeTowersState,
   TowerShow,
   primeTowers as primeTowersDef,
 } from "./prime-towers";
 export {
-  StickMeasureAction,
-  StickMeasureDerived,
-  StickMeasureSignal,
   type StickMeasureState,
   stickMeasure as stickMeasureDef,
 } from "./stick-measure";
 export {
   MAX_FRIENDS,
   MAX_SWEETS,
-  SweetShareAction,
-  SweetShareDerived,
-  SweetShareSignal,
   type SweetShareState,
   sweetShare as sweetShareDef,
   sweetSum,
 } from "./sweet-share";
 export {
-  BillSplitAction,
-  BillSplitSignal,
   type BillSplitState,
   billSplit as billSplitDef,
   shareOf,
 } from "./bill-split";
 export {
-  TenMakerAction,
-  TenMakerDerived,
-  TenMakerSignal,
   type TenMakerState,
   TenStage,
   tenMaker as tenMakerDef,
   terminatingDecimal,
 } from "./ten-maker";
 
-export const sweetShareProp: PropModule = { def: asAnyProp(sweetShare), View: SweetShareView };
-export const factorTreeProp: PropModule = { def: asAnyProp(factorTree), View: FactorTreeView };
-export const stickMeasureProp: PropModule = {
-  def: asAnyProp(stickMeasure),
-  View: StickMeasureView,
-};
-export const lapRaceProp: PropModule = { def: asAnyProp(lapRace), View: LapRaceView };
-export const primeTowersProp: PropModule = { def: asAnyProp(primeTowers), View: PrimeTowersView };
-export const tenMakerProp: PropModule = { def: asAnyProp(tenMaker), View: TenMakerView };
-export const billSplitProp: PropModule = { def: asAnyProp(billSplit), View: BillSplitView };
+export const sweetShareProp = propModule(sweetShare, SweetShareView);
+export const factorTreeProp = propModule(factorTree, FactorTreeView);
+export const stickMeasureProp = propModule(stickMeasure, StickMeasureView);
+export const lapRaceProp = propModule(lapRace, LapRaceView);
+export const primeTowersProp = propModule(primeTowers, PrimeTowersView);
+export const tenMakerProp = propModule(tenMaker, TenMakerView);
+export const billSplitProp = propModule(billSplit, BillSplitView);
 
 /** Every prop in this package, for the library. */
 export const primeProps: readonly PropModule[] = [

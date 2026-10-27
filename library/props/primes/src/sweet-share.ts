@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { divide } from "./arithmetic";
 import { button, count } from "./seen";
@@ -7,24 +7,6 @@ import { button, count } from "./seen";
 /** The most sweets in the box, and the most friends round the table. */
 export const MAX_SWEETS = 120;
 export const MAX_FRIENDS = 12;
-
-export const SweetShareAction = {
-  GiveRound: "giveRound",
-  GiveAll: "giveAll",
-  StartAgain: "startAgain",
-  SetSweets: "setSweets",
-  SetFriends: "setFriends",
-} as const;
-
-export const SweetShareDerived = {
-  Box: "box",
-  CanGiveRound: "canGiveRound",
-  IsOver: "isOver",
-  Quotient: "quotient",
-  Remainder: "remainder",
-} as const;
-
-export const SweetShareSignal = { Round: "round", Over: "over" } as const;
 
 const sweetShareState = z
   .object({
@@ -69,6 +51,10 @@ export function logOf(s: SweetShareState): string[] {
   });
 }
 
+const signals = {
+  round: signal("A round was given; `rounds` so far and the `box` left"),
+  over: signal("The box holds fewer sweets than friends: no round is possible; `q` and `r`"),
+};
 /**
  * Euclid's division lemma as a game: a sweets shared among b friends one round at a time, every
  * friend one sweet a round. A round is given while the box holds at least b; the game stops itself
@@ -92,29 +78,29 @@ export const sweetShare = defineProp({
   },
   inputs: ["isEditable", "showSum", "showLog"],
   derived: {
-    [SweetShareDerived.Box]: {
+    box: {
       describe: "The sweets still in the box",
       compute: boxOf,
     },
-    [SweetShareDerived.CanGiveRound]: {
+    canGiveRound: {
       describe: "The box holds at least one sweet for every friend",
       compute: (s) => !isOverOf(s),
     },
-    [SweetShareDerived.IsOver]: {
+    isOver: {
       describe: "No round is possible: the box holds fewer sweets than there are friends",
       compute: isOverOf,
     },
-    [SweetShareDerived.Quotient]: {
+    quotient: {
       describe: "q: how many rounds the game gives in all",
       compute: (s) => divide(s.sweets, s.friends).q,
     },
-    [SweetShareDerived.Remainder]: {
+    remainder: {
       describe: "r: what the box holds when the game ends, always fewer than b",
       compute: (s) => divide(s.sweets, s.friends).r,
     },
   },
   actions: {
-    [SweetShareAction.GiveRound]: act({
+    giveRound: act({
       describe: "Give every friend one more sweet from the box (the learner's round button)",
       byLearner: true,
       changes: ["rounds"],
@@ -122,19 +108,14 @@ export const sweetShare = defineProp({
       run: (s) => {
         if (isOverOf(s)) return set({});
         const next = { ...s, rounds: s.rounds + 1 };
-        const emits: Emit[] = [
-          { signal: SweetShareSignal.Round, payload: { rounds: next.rounds, box: boxOf(next) } },
-        ];
+        const emits: Emit[] = [raise(signals.round, { rounds: next.rounds, box: boxOf(next) })];
         if (isOverOf(next)) {
-          emits.push({
-            signal: SweetShareSignal.Over,
-            payload: { q: next.rounds, r: boxOf(next) },
-          });
+          emits.push(raise(signals.over, { q: next.rounds, r: boxOf(next) }));
         }
         return set({ rounds: next.rounds }, ...emits);
       },
     }),
-    [SweetShareAction.GiveAll]: act({
+    giveAll: act({
       describe: "Give every round at once",
       reveals: true,
       changes: ["rounds"],
@@ -142,24 +123,24 @@ export const sweetShare = defineProp({
       run: (s) => {
         const { q, r } = divide(s.sweets, s.friends);
         if (s.rounds >= q) return set({});
-        return set({ rounds: q }, { signal: SweetShareSignal.Over, payload: { q, r } });
+        return set({ rounds: q }, raise(signals.over, { q, r }));
       },
     }),
-    [SweetShareAction.StartAgain]: act({
+    startAgain: act({
       describe: "Put every sweet back in the box",
       byLearner: true,
       changes: ["rounds"],
       args: none,
       run: () => set({ rounds: 0 }),
     }),
-    [SweetShareAction.SetSweets]: act({
+    setSweets: act({
       describe: "Change a, the sweets in the box; the sharing starts again",
       byLearner: true,
       changes: ["sweets", "rounds"],
       args: value(MAX_SWEETS, 0),
       run: (_s, a) => set({ sweets: a.value, rounds: 0 }),
     }),
-    [SweetShareAction.SetFriends]: act({
+    setFriends: act({
       describe: "Change b, how many friends; the sharing starts again",
       byLearner: true,
       changes: ["friends", "rounds"],
@@ -167,12 +148,7 @@ export const sweetShare = defineProp({
       run: (_s, a) => set({ friends: a.value, rounds: 0 }),
     }),
   },
-  signals: {
-    [SweetShareSignal.Round]: { describe: "A round was given; `rounds` so far and the `box` left" },
-    [SweetShareSignal.Over]: {
-      describe: "The box holds fewer sweets than friends: no round is possible; `q` and `r`",
-    },
-  },
+  signals,
   invariant: (s) =>
     boxOf(s) >= 0
       ? undefined

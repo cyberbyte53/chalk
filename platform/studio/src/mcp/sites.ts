@@ -37,8 +37,8 @@ function closureIn(dir: string, file: string, seen = new Set<string>()): Set<str
 
 /**
  * Where each of a prop's actions is written (file:line), from its package's source: the line that
- * keys it (`[NumberLineAction.ZoomIn]: on…(`, or `zoomIn: act(`), among the files its definition
- * reaches. An action written in more than one of them is left out: exact, or nothing.
+ * keys it (`zoomIn: act(`), or defines it before (`const arrive = act(`), among the files its
+ * definition reaches. An action written in more than one of them is left out: exact, or nothing.
  */
 const actionSitesCache = new Map<string, Map<string, string>>();
 export function actionSites(root: string, type: string): Map<string, string> {
@@ -58,19 +58,12 @@ export function actionSites(root: string, type: string): Map<string, string> {
   );
   if (defFile === undefined) return out;
   const reach = closureIn(src, defFile);
-  // Name maps (`export const XAction = { ZoomIn: "zoomIn" }`) in the package, to read keys.
-  const names = new Map<string, string>();
-  for (const f of files)
-    for (const m of readFileSync(f, "utf8").matchAll(/export const (\w+) = \{([^}]*)\}/g))
-      for (const e of (m[2] ?? "").matchAll(/(\w+):\s*"([^"]+)"/g))
-        names.set(`${m[1]}.${e[1]}`, e[2] ?? "");
   const found = new Map<string, string[]>();
   for (const f of reach) {
     readFileSync(f, "utf8")
       .split("\n")
       .forEach((line, i) => {
-        const m = /^\s*(?:\[(\w+\.\w+)\]|(\w+)):\s*(?:act|on\w*)\(\{?\s*$/.exec(line);
-        const action = m === null ? undefined : m[1] !== undefined ? names.get(m[1]) : m[2];
+        const action = /^\s*(?:const\s+)?(\w+)\s*[:=]\s*act\w*\(\{?\s*$/.exec(line)?.[1];
         if (action !== undefined)
           found.set(action, [...(found.get(action) ?? []), `${relative(root, f)}:${i + 1}`]);
       });

@@ -1,6 +1,6 @@
 import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
-import { MAX_FRIENDS, MAX_SWEETS, SweetShareAction, type SweetShareState } from "./sweet-share";
+import { MAX_FRIENDS, MAX_SWEETS, type SweetShareState, sweetShare } from "./sweet-share";
 import { NumberBox, Stepper, SymbolButton } from "./ui";
 
 /** One wrapped sweet: a round middle with a twist of wrapper either side. */
@@ -52,12 +52,12 @@ function Face(): JSX.Element {
  * (one per round), and the box with what's left. +1 gives a round and greys out when the box holds
  * fewer sweets than friends; ↺ puts them all back. a = b × q + r underneath when the page wants it.
  */
-export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as SweetShareState & {
-    box: number;
-    canGiveRound: boolean;
-    isOver: boolean;
-  };
+export function SweetShareView({
+  view,
+  call,
+  locale,
+}: PropViewProps<typeof sweetShare>): JSX.Element {
+  const s = view;
   const friends = Array.from({ length: s.friends }, (_, i) => i);
   return (
     <div class="pr-share">
@@ -69,8 +69,8 @@ export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Eleme
             min={0}
             max={MAX_SWEETS}
             part="a"
-            {...says(SweetShareAction.SetSweets)}
-            onChange={(value) => call(SweetShareAction.SetSweets, { value })}
+            {...says(sweetShare.actions.setSweets)}
+            onChange={(value) => call(sweetShare.actions.setSweets, { value })}
           />
           <Stepper
             name="b"
@@ -78,8 +78,8 @@ export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Eleme
             min={1}
             max={MAX_FRIENDS}
             part="b"
-            {...says(SweetShareAction.SetFriends)}
-            onChange={(value) => call(SweetShareAction.SetFriends, { value })}
+            {...says(sweetShare.actions.setFriends)}
+            onChange={(value) => call(sweetShare.actions.setFriends, { value })}
           />
         </div>
       )}
@@ -118,14 +118,14 @@ export function SweetShareView({ view, call, locale }: PropViewProps): JSX.Eleme
           isWide
           part="giveRound"
           isEnabled={s.canGiveRound}
-          {...does(SweetShareAction.GiveRound)}
+          {...does(sweetShare.actions.giveRound)}
         />
         <SymbolButton
           symbol="↺"
           label="Put every sweet back in the box"
           part="startAgain"
           isEnabled={s.rounds > 0}
-          {...does(SweetShareAction.StartAgain)}
+          {...does(sweetShare.actions.startAgain)}
         />
       </div>
       {s.showLog && (

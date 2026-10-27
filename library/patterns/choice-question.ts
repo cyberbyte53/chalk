@@ -1,7 +1,6 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { QuestionAction, QuestionSignal } from "@chalk/prop";
-import { ChoiceAction, choiceDef } from "@chalk/prop-basics";
+import { choiceDef } from "@chalk/prop-basics";
 
 /** One option of a multiple-choice question; a wrong one says what it shows the learner missed. */
 export type Option = { id: string; label: Localized; feedback?: Localized };
@@ -49,17 +48,11 @@ export function choiceQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  b.witness(
-    ask.learner(ChoiceAction.Select, { option: spec.answer }),
-    ask.learner(QuestionAction.Check),
-  );
+  b.witness(ask.learner.select({ option: spec.answer }), ask.learner.check());
   for (const o of spec.options) {
     if (o.id === spec.answer || o.feedback === undefined) continue;
     b.noteCheck({
-      steps: [
-        ask.learner(ChoiceAction.Select, { option: o.id }),
-        ask.learner(QuestionAction.Check),
-      ],
+      steps: [ask.learner.select({ option: o.id }), ask.learner.check()],
       feedback: o.feedback,
     });
   }

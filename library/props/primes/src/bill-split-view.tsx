@@ -1,6 +1,6 @@
 import { type PropViewProps, does, useFitColumns } from "@chalk/player";
 import type { JSX } from "preact";
-import { BillSplitAction, type BillSplitState, shareOf } from "./bill-split";
+import { type BillSplitState, billSplit, shareOf } from "./bill-split";
 import { SymbolButton } from "./ui";
 
 /** At least `count` digits after the point, the repeating block written out again as needed. */
@@ -14,8 +14,12 @@ function digitsOf(share: { once: string; repeats: string }, count: number): stri
  * The ₹ note, a button per group size, and the shares tried so far in order of size: each written
  * out (a repeating one to a few places and …), marked "ends" or "never ends".
  */
-export function BillSplitView({ view, call, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as BillSplitState;
+export function BillSplitView({
+  view,
+  call,
+  locale,
+}: PropViewProps<typeof billSplit>): JSX.Element {
+  const s = view;
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
   const [fit, columns] = useFitColumns<HTMLDivElement>(s.sizes.length, s.sizes.join(" "));
   return (
@@ -31,7 +35,7 @@ export function BillSplitView({ view, call, locale }: PropViewProps): JSX.Elemen
             label={`Share among ${n}`}
             part={`size-${n}`}
             isOn={s.chosen === n}
-            {...does(BillSplitAction.Split, { n })}
+            {...does(billSplit.actions.split, { n })}
           />
         ))}
       </div>

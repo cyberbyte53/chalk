@@ -36,11 +36,11 @@ describe("building a board", () => {
       const d = b.prop(dial, "d", { at: dec("2.50") });
       b.is(d.field("isOn"), d.field("at").isAt(dec("7.384")));
       b.when(
-        d.on("turned"),
-        inOrder(d.call("turn", { to: dec("1.5") }), wait(1), theBoard.show(d)),
-        d.derived("double").gt(3),
+        d.on.turned,
+        inOrder(d.call.turn({ to: dec("1.5") }), wait(1), theBoard.show(d)),
+        (at) => at(d).double > 3,
       );
-      b.witness(d.learner("turn", { to: dec("7.384") }));
+      b.witness(d.learner.turn({ to: dec("7.384") }));
       return [d];
     });
     expect(built.board.root).toEqual({
@@ -57,7 +57,7 @@ describe("building a board", () => {
       { on: "board.started", do: { call: "board.pass" } },
       {
         on: "d.turned",
-        if: "(d.double > 3)",
+        if: expect.any(Function),
         do: {
           seq: [
             { call: "d.turn", args: { to: 1.5 } },
@@ -87,17 +87,25 @@ describe("building a board", () => {
     );
   });
 
-  it("names an action, signal or field the prop doesn't have: a compile error, not a runtime one", () => {
+  it("names an action, signal or field the prop doesn't have, or gives an action the wrong arguments: a compile error, not a runtime one", () => {
     buildBoard("x", (b) => {
       const d = b.prop(dial, "d");
-      // @ts-expect-error the dial has no action "spin"
-      d.call("spin");
-      // @ts-expect-error the dial has no derived field "triple"
-      d.derived("triple");
-      // @ts-expect-error the dial has no signal "spun"
-      d.on("spun");
-      // @ts-expect-error the dial has no stored field "angle"
-      d.field("angle");
+      // Only checked by the compiler: the lines below are never run.
+      const never = () => {
+        // @ts-expect-error the dial has no action "spin"
+        d.call.spin();
+        // @ts-expect-error turn takes { to }
+        d.learner.turn({ from: 1 });
+        // @ts-expect-error turn needs its arguments
+        d.call.turn();
+        // @ts-expect-error the dial has no signal "spun"
+        d.on.spun;
+        // @ts-expect-error the dial has no stored field "angle"
+        d.field("angle");
+        // @ts-expect-error the dial has no derived field "triple"
+        b.when(d.on.turned, d.call.turn({ to: 1 }), (at) => at(d).triple > 0);
+      };
+      expect(typeof never).toBe("function");
       return [d];
     });
   });
@@ -120,7 +128,7 @@ describe("a page", () => {
       const d = b.prop(dial, "d");
       const q = b.prop(ask, "q");
       const note = b.prop(dial, "note");
-      b.after(d.on("turned"), q);
+      b.after(d.on.turned, q);
       b.after(q, [note], { if: (at) => at(d).at > 2 });
       return [d, q, note];
     }).build().board;
@@ -159,7 +167,7 @@ describe("a page", () => {
 
     const onSignal = page("on-signal", (b) => {
       const d = b.prop(dial, "d");
-      b.passWhen(d.on("turned"), { if: (at) => at(d).at === 3 });
+      b.passWhen(d.on.turned, { if: (at) => at(d).at === 3 });
       return [d, b.prop(ask, "q")];
     }).build().board;
     // passWhen replaces passing on the question.
@@ -170,7 +178,7 @@ describe("a page", () => {
     expect(() =>
       page("b", (b) => {
         const d = b.prop(dial, "d");
-        b.when(d.on("turned"), theBoard.pass());
+        b.when(d.on.turned, theBoard.pass());
         return [d];
       }).build(),
     ).toThrow(/use passWhen/);
@@ -187,7 +195,7 @@ describe("question families", () => {
     params: z.object({ to: decimal }).strict(),
     build: ({ to }, b) => {
       const d = b.prop(dial, "d");
-      b.witness(d.learner("turn", { to }));
+      b.witness(d.learner.turn({ to }));
       return [d];
     },
   });

@@ -2,16 +2,15 @@ import { localizedSchema } from "@chalk/content";
 import {
   AnswerStatus,
   PropRole,
-  QuestionAction,
-  QuestionSignal,
-  SAY,
   SizeFit,
   actionsFor,
   defineProp,
   questionDefaults,
   questionFields,
+  raise,
   say,
   set,
+  signal,
 } from "@chalk/prop";
 import { z } from "zod";
 
@@ -39,11 +38,14 @@ const choiceState = z
   .strict();
 export type ChoiceState = z.infer<typeof choiceState>;
 
-export const ChoiceAction = { Select: "select" } as const;
-
 const act = actionsFor<ChoiceState>();
 const noArgs = z.object({}).strict();
 
+const signals = {
+  checked: signal("The learner pressed Check"),
+  correct: signal("Checked, and right"),
+  wrong: signal("Checked, and wrong"),
+};
 /** Pick one option, then Check. The answer key is in the prop, checked on the phone. */
 export const choice = defineProp({
   type: "choice",
@@ -72,7 +74,7 @@ export const choice = defineProp({
   },
   offScreen: ["answer"],
   actions: {
-    [ChoiceAction.Select]: act({
+    select: act({
       describe: "Pick an option (what the learner's tap does)",
       changes: ["selected", "status", "feedback"],
       byLearner: true,
@@ -82,7 +84,7 @@ export const choice = defineProp({
           ? set({})
           : set({ selected: a.option, status: AnswerStatus.Open, feedback: null }),
     }),
-    [QuestionAction.Check]: act({
+    check: act({
       describe: "Check the picked option",
       changes: ["status", "attempts", "feedback"],
       byLearner: true,
@@ -95,15 +97,12 @@ export const choice = defineProp({
         const attempts = s.attempts + 1;
         return set(
           { status, attempts, feedback: isRight ? null : (picked?.feedback ?? null) },
-          {
-            signal: QuestionSignal.Checked,
-            payload: { status, attempts, isGraded: s.isGraded, optionId: s.selected },
-          },
-          { signal: isRight ? QuestionSignal.Correct : QuestionSignal.Wrong },
+          raise(signals.checked, { status, attempts, isGraded: s.isGraded, optionId: s.selected }),
+          raise(isRight ? signals.correct : signals.wrong),
         );
       },
     }),
-    [QuestionAction.Retry]: act({
+    retry: act({
       describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
       changes: ["status", "feedback", "selected"],
       byLearner: true,
@@ -113,24 +112,20 @@ export const choice = defineProp({
           ? set({ status: AnswerStatus.Open, feedback: null, selected: null })
           : set({}),
     }),
-    [QuestionAction.GiveFeedback]: act({
+    giveFeedback: act({
       describe: "Show words under the question (e.g. a hint)",
       changes: ["feedback"],
       args: z.object({ text: localizedSchema }).strict(),
       run: (_s, a) => set({ feedback: a.text }),
     }),
-    [SAY]: act({
+    say: act({
       describe: "Read the prompt aloud (narrator)",
       changes: [],
       args: noArgs,
       run: () => say(),
     }),
   },
-  signals: {
-    [QuestionSignal.Checked]: { describe: "The learner pressed Check" },
-    [QuestionSignal.Correct]: { describe: "Checked, and right" },
-    [QuestionSignal.Wrong]: { describe: "Checked, and wrong" },
-  },
+  signals,
   invariant: (s) =>
     s.options.some((o) => o.id === s.answer) ? undefined : `answer "${s.answer}" is not an option`,
   speech: (s) => ({ say: s.prompt, speak: s.speak ?? undefined }),

@@ -2,7 +2,7 @@ import { type PropViewProps, does } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { lcm } from "./arithmetic";
-import { LapRaceAction, type LapRaceState, crossings, nextMeeting } from "./lap-race";
+import { type LapRaceState, crossings, lapRace, nextMeeting } from "./lap-race";
 import { SymbolButton } from "./ui";
 
 /** Px: the track's size cap, the two lanes' gap, a runner's radius. */
@@ -75,8 +75,13 @@ function Logs({
  * that minute joins their log. The clock stops by itself when both are at the start together: the
  * start line lights up. Every minute in both logs (a common multiple) is ringed.
  */
-export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as LapRaceState & { isMet: boolean };
+export function LapRaceView({
+  view,
+  width,
+  call,
+  locale,
+}: PropViewProps<typeof lapRace>): JSX.Element {
+  const s = view;
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
   // The clock runs in the prop (on the board's clock); the view only draws where it is.
   const t = s.time;
@@ -150,7 +155,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
             label={word(s.pauseLabel)}
             isWide
             part="pause"
-            {...does(LapRaceAction.Pause)}
+            {...does(lapRace.actions.pause)}
           />
         ) : (
           <SymbolButton
@@ -158,7 +163,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
             label={word(s.playLabel)}
             isWide
             part="play"
-            {...does(LapRaceAction.Play)}
+            {...does(lapRace.actions.play)}
           />
         )}
         <SymbolButton
@@ -166,7 +171,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
           label="Start again"
           part="startAgain"
           isEnabled={s.time > 0 || isRunning}
-          {...does(LapRaceAction.StartAgain)}
+          {...does(lapRace.actions.startAgain)}
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { divide, isTerminating, repeatingBlock, step } from "./division";
 
@@ -12,13 +12,6 @@ export const DecimalExpansionPart = {
   DigitPad: "digitPad",
   Numerator: "p",
   Denominator: "q",
-} as const;
-
-export const DecimalExpansionSignal = {
-  DigitFound: "digitFound",
-  Ended: "ended",
-  Repeated: "repeated",
-  DigitRejected: "digitRejected",
 } as const;
 
 export const MAX_NUMERATOR = 99_999;
@@ -75,10 +68,10 @@ function partialDividend(s: DecimalExpansionState): number {
 /** The signals for the end or the repeat coming into view on the way from `before` to `after`. */
 function milestones(before: DecimalExpansionState, after: DecimalExpansionState): Emit[] {
   const out: Emit[] = [];
-  if (!hasEnded(before) && hasEnded(after)) out.push({ signal: DecimalExpansionSignal.Ended });
+  if (!hasEnded(before) && hasEnded(after)) out.push(raise(signals.ended));
   if (!hasRepeated(before) && hasRepeated(after)) {
     const { start, length } = repeatingBlock(after.numerator, after.denominator);
-    out.push({ signal: DecimalExpansionSignal.Repeated, payload: { start, length } });
+    out.push(raise(signals.repeated, { start, length }));
   }
   return out;
 }
@@ -90,6 +83,18 @@ function decimalText(s: DecimalExpansionState): string {
   return after === "" ? `${wholePart}…` : `${wholePart}.${after}…`;
 }
 
+const signals = {
+  digitFound: signal(
+    "One more digit was worked out; `position` (from 1 after the point), `digit`, and the `remainder` left",
+  ),
+  ended: signal("The remainder became 0: the expansion terminates"),
+  repeated: signal(
+    "A remainder came back: the `length` digits after the first `start` repeat from here on",
+  ),
+  digitRejected: signal(
+    "The learner tried a digit that doesn't fit: `digit`, the `dividend` it was for, `product` (digit × denominator) and `isTooBig` (the product is more than the dividend; otherwise the remainder would be too big)",
+  ),
+};
 /** Turning p/q into a decimal by long division, one digit at a time. It knows division, nothing about any lesson. */
 export const decimalExpansion = defineProp({
   type: "decimalExpansion",
@@ -174,14 +179,11 @@ export const decimalExpansion = defineProp({
         const { digits, remainders } = divide(s.numerator, s.denominator, after.digitsShown);
         return set(
           { digitsShown: after.digitsShown, rejectedDigit: null },
-          {
-            signal: DecimalExpansionSignal.DigitFound,
-            payload: {
-              position: after.digitsShown,
-              digit: digits.at(-1),
-              remainder: remainders.at(-1),
-            },
-          },
+          raise(signals.digitFound, {
+            position: after.digitsShown,
+            digit: digits.at(-1),
+            remainder: remainders.at(-1),
+          }),
           ...milestones(s, after),
         );
       },
@@ -200,25 +202,23 @@ export const decimalExpansion = defineProp({
           const product = a.digit * s.denominator;
           return set(
             { rejectedDigit: a.digit },
-            {
-              signal: DecimalExpansionSignal.DigitRejected,
-              payload: {
-                digit: a.digit,
-                dividend,
-                product,
-                isTooBig: product > dividend,
-              },
-            },
+            raise(signals.digitRejected, {
+              digit: a.digit,
+              dividend,
+              product,
+              isTooBig: product > dividend,
+            }),
           );
         }
         const after = { ...s, digitsShown: s.digitsShown + 1 };
         const { remainders } = divide(s.numerator, s.denominator, after.digitsShown);
         return set(
           { digitsShown: after.digitsShown, rejectedDigit: null },
-          {
-            signal: DecimalExpansionSignal.DigitFound,
-            payload: { position: after.digitsShown, digit: right, remainder: remainders.at(-1) },
-          },
+          raise(signals.digitFound, {
+            position: after.digitsShown,
+            digit: right,
+            remainder: remainders.at(-1),
+          }),
           ...milestones(s, after),
         );
       },
@@ -285,40 +285,7 @@ export const decimalExpansion = defineProp({
         }),
     }),
   },
-  signals: {
-    [DecimalExpansionSignal.DigitFound]: {
-      describe:
-        "One more digit was worked out; `position` (from 1 after the point), `digit`, and the `remainder` left",
-    },
-    [DecimalExpansionSignal.Ended]: {
-      describe: "The remainder became 0: the expansion terminates",
-    },
-    [DecimalExpansionSignal.Repeated]: {
-      describe:
-        "A remainder came back: the `length` digits after the first `start` repeat from here on",
-    },
-    [DecimalExpansionSignal.DigitRejected]: {
-      describe:
-        "The learner tried a digit that doesn't fit: `digit`, the `dividend` it was for, `product` (digit × denominator) and `isTooBig` (the product is more than the dividend; otherwise the remainder would be too big)",
-    },
-  },
-  parts: (s) => {
-    const out: string[] = s.isEditable
-      ? [DecimalExpansionPart.Numerator, DecimalExpansionPart.Denominator]
-      : [];
-    for (let n = 1; n <= s.digitsShown; n++) out.push(`${DecimalExpansionPart.DigitPrefix}${n}`);
-    for (let i = 0; i <= s.digitsShown; i++)
-      out.push(`${DecimalExpansionPart.RemainderPrefix}${i}`);
-    if (hasRepeated(s)) out.push(DecimalExpansionPart.RepeatBar);
-    if (s.isClockShown) {
-      out.push(DecimalExpansionPart.Clock);
-      for (let r = 0; r < s.denominator; r++) out.push(`${DecimalExpansionPart.SlotPrefix}${r}`);
-    }
-    if (s.isAskingDigit && !hasEnded(s)) {
-      out.push(DecimalExpansionPart.NextDigit, DecimalExpansionPart.DigitPad);
-    }
-    return out;
-  },
+  signals,
   invariant: (s) => {
     const last = lastDigit(s);
     return s.digitsShown > last

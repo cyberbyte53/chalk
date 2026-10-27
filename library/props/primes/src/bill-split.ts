@@ -1,10 +1,7 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, defineProp, set } from "@chalk/prop";
+import { actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { option } from "./seen";
-
-export const BillSplitAction = { Split: "split", StartAgain: "startAgain" } as const;
-export const BillSplitSignal = { Split: "split" } as const;
 
 /** A share as a decimal: whole rupees, then digits that come once, then digits that repeat forever. */
 export type Share = { whole: number; once: string; repeats: string };
@@ -56,6 +53,9 @@ export type BillSplitState = z.infer<typeof billSplitState>;
 
 const act = actionsFor<BillSplitState>();
 
+const signals = {
+  split: signal("The bill was shared among `n`: each `share`, and whether it `ends`"),
+};
 /**
  * A bill shared equally by n friends: each tap of a group size writes each friend's share. Some
  * shares end (₹100 among 8: ₹12.50); some never do (among 3: ₹33.33…). Tried sizes stay listed in
@@ -84,7 +84,7 @@ export const billSplit = defineProp({
     },
   },
   actions: {
-    [BillSplitAction.Split]: act({
+    split: act({
       describe: "Share the bill among n friends (the learner's button)",
       changes: ["tried", "chosen"],
       byLearner: true,
@@ -95,14 +95,11 @@ export const billSplit = defineProp({
         const share = shareOf(s.amount, a.n);
         return set(
           { tried, chosen: a.n },
-          {
-            signal: BillSplitSignal.Split,
-            payload: { n: a.n, share: shareText(share), ends: share.repeats === "" },
-          },
+          raise(signals.split, { n: a.n, share: shareText(share), ends: share.repeats === "" }),
         );
       },
     }),
-    [BillSplitAction.StartAgain]: act({
+    startAgain: act({
       describe: "Clear the list",
       changes: ["tried", "chosen"],
       byLearner: true,
@@ -110,11 +107,7 @@ export const billSplit = defineProp({
       run: () => set({ tried: [], chosen: null }),
     }),
   },
-  signals: {
-    [BillSplitSignal.Split]: {
-      describe: "The bill was shared among `n`: each `share`, and whether it `ends`",
-    },
-  },
+  signals,
   observe: (s) => ({
     summary: `₹${s.amount} shared equally; tried: ${
       s.tried.length === 0

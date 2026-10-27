@@ -217,8 +217,8 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
           .filter(([a, spec]) => spec.byLearner === true && !fromControls.has(a))
           .map(([a]) => a);
 
-  // Drawn must equal described, for props that describe themselves. A part `locate` finds counts.
-  const describesItself = def.observe !== undefined || def.anatomy !== undefined;
+  // Drawn must equal described, for props that describe themselves.
+  const describesItself = def.observe !== undefined;
   if (
     onScreen !== undefined &&
     group === undefined &&
@@ -226,15 +226,13 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
     def.role !== PropRole.Question
   ) {
     const drawn = partPathsIn(onScreen);
-    const width = Math.round(onScreen.getBoundingClientRect().width);
     const described = new Set(parts.map((p) => p.path.slice(path.length + 1)));
     for (const p of parts) {
       const id = p.path.slice(path.length + 1);
       const el = drawn.get(id);
       const code = el?.getAttribute("data-code");
       if (code) p.drawnAt = code;
-      if (el === undefined && def.locate?.(view as never, id, width) === undefined)
-        problems.push(`${id} is described but not drawn (no data-part)`);
+      if (el === undefined) problems.push(`${id} is described but not drawn (no data-part)`);
     }
     for (const id of drawn.keys())
       if (!described.has(id)) problems.push(`${id} is drawn but not described`);

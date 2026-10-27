@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, call, defineProp, seq, set, tween } from "@chalk/prop";
+import { actionsFor, call, defineProp, raise, seq, set, signal, tween } from "@chalk/prop";
 import { z } from "zod";
 import { lcm } from "./arithmetic";
 import { button } from "./seen";
@@ -9,21 +9,6 @@ export const MAX_LAP = 120;
 export const MINUTES_PER_SECOND = 8;
 /** Longest the race runs, in minutes: past the LCM of any two laps up to MAX_LAP. */
 export const MAX_TIME = MAX_LAP * MAX_LAP;
-
-export const LapRaceAction = {
-  Play: "play",
-  Pause: "pause",
-  Arrive: "arrive",
-  StartAgain: "startAgain",
-  RunToMeet: "runToMeet",
-} as const;
-
-export const LapRaceDerived = {
-  IsMet: "isMet",
-  Lcm: "lcm",
-} as const;
-
-export const LapRaceSignal = { Met: "met" } as const;
 
 const lapRaceState = z
   .object({
@@ -69,6 +54,26 @@ export function logText(name: string, lap: number, time: number): string {
     : `${name} at the start at ${at.map((m, k) => `${m} (${lap} × ${k + 1})`).join(", ")}`;
 }
 
+const signals = {
+  met: signal("Both are at the start together, at minute `time`"),
+};
+
+/** Play's own last step, when the running clock gets to a meeting: no finger does it. */
+const arrive = act({
+  describe:
+    "The running clock reaches the next minute both are at the start together; it stops there",
+  changes: ["isRunning", "time"],
+  // Play's own step when the clock gets there: no finger does it.
+  internal: true,
+  args: none,
+  run: (s) => {
+    if (!s.isRunning) return set({});
+    // Already there (the clock ran to it), or on to it at once.
+    const time = s.time > 0 && isMetOf(s) ? s.time : nextMeeting(s);
+    return set({ isRunning: false, time }, raise(signals.met, { time }));
+  },
+});
+
 /**
  * Two runners on a round track, starting together at the start line, one taking a minutes a round
  * and the other b. Play runs the clock (on the board's clock) until both are at the start together,
@@ -90,17 +95,17 @@ export const lapRace = defineProp({
     pauseLabel: { en: "Pause", hi: "रोको" },
   },
   derived: {
-    [LapRaceDerived.IsMet]: {
+    isMet: {
       describe: "Both are at the start at this minute",
       compute: isMetOf,
     },
-    [LapRaceDerived.Lcm]: {
+    lcm: {
       describe: "The first minute they are at the start together: LCM(a, b)",
       compute: (s) => lcm(s.lapA, s.lapB),
     },
   },
   actions: {
-    [LapRaceAction.Play]: act({
+    play: act({
       describe:
         "Start the clock: both run until they are at the start together (the learner's button)",
       changes: ["isRunning", "time"],
@@ -117,55 +122,37 @@ export const lapRace = defineProp({
             { time: stop },
             { ease: (x) => x, while: (now) => now.isRunning },
           ),
-          call(LapRaceAction.Arrive),
+          call(arrive),
         );
       },
     }),
-    [LapRaceAction.Pause]: act({
+    pause: act({
       describe: "Stop the clock at the minute it shows (the learner's button)",
       changes: ["isRunning", "time"],
       byLearner: true,
       args: none,
       run: (s) => set({ isRunning: false, time: Math.floor(s.time + 1e-9) }),
     }),
-    [LapRaceAction.Arrive]: act({
-      describe:
-        "The running clock reaches the next minute both are at the start together; it stops there",
-      changes: ["isRunning", "time"],
-      // Play's own step when the clock gets there: no finger does it.
-      internal: true,
-      args: none,
-      run: (s) => {
-        if (!s.isRunning) return set({});
-        // Already there (the clock ran to it), or on to it at once.
-        const time = s.time > 0 && isMetOf(s) ? s.time : nextMeeting(s);
-        return set({ isRunning: false, time }, { signal: LapRaceSignal.Met, payload: { time } });
-      },
-    }),
-    [LapRaceAction.StartAgain]: act({
+    arrive,
+    startAgain: act({
       describe: "Both back at the start line, the clock at 0",
       changes: ["time", "isRunning"],
       byLearner: true,
       args: none,
       run: () => set({ time: 0, isRunning: false }),
     }),
-    [LapRaceAction.RunToMeet]: act({
+    runToMeet: act({
       describe: "Run until they are first at the start together",
       changes: ["time", "isRunning"],
       reveals: true,
       args: none,
       run: (s) => {
         const m = lcm(s.lapA, s.lapB);
-        return set(
-          { time: m, isRunning: false },
-          { signal: LapRaceSignal.Met, payload: { time: m } },
-        );
+        return set({ time: m, isRunning: false }, raise(signals.met, { time: m }));
       },
     }),
   },
-  signals: {
-    [LapRaceSignal.Met]: { describe: "Both are at the start together, at minute `time`" },
-  },
+  signals,
   observe: (s) => {
     const met = isMetOf(s);
     return {

@@ -1,14 +1,6 @@
 import { type At, page, t } from "@chalk/author";
 import { choice, wordsOn } from "@chalk/patterns";
-import {
-  LapRaceAction,
-  LapRaceSignal,
-  PrimeTowersAction,
-  PrimeTowersSignal,
-  TowerShow,
-  lapRaceDef,
-  primeTowersDef,
-} from "@chalk/prop-primes";
+import { TowerShow, lapRaceDef, primeTowersDef } from "@chalk/prop-primes";
 
 const r = String.raw;
 
@@ -28,7 +20,7 @@ const story = page("story", (b) => {
     race,
     "Sonia and Ravi on the track; beside each name, the minutes they are back at the start, each written as 18 × rounds or 12 × rounds",
   );
-  b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
+  b.witness(race.learner.play(), race.learner.arrive());
   const must = choice(b, {
     name: "must",
     prompt: t(
@@ -60,7 +52,7 @@ const story = page("story", (b) => {
     ),
     "playOn",
   );
-  b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
+  b.witness(race.learner.play(), race.learner.arrive());
   const lcmIs = w.definition(
     t(
       "Numbers that are multiples of both 18 and 12 are their **common multiples**: 36, 72, 108 and so on. The smallest is the **lowest common multiple**: LCM(18, 12) = 36.",
@@ -84,10 +76,10 @@ const story = page("story", (b) => {
   );
   // Past their first meeting: they have met again, at the next common multiple.
   const metAgain = { if: (at: At) => at(race).time > 36 };
-  b.after(race.on(LapRaceSignal.Met), must);
+  b.after(race.on.met, must);
   b.after(must, playOn);
-  b.after(race.on(LapRaceSignal.Met), [lcmIs, contrast, contrastLcm], metAgain);
-  b.passWhen(race.on(LapRaceSignal.Met), metAgain);
+  b.after(race.on.met, [lcmIs, contrast, contrastLcm], metAgain);
+  b.passWhen(race.on.met, metAgain);
   return [
     w.title(t("HCF and LCM", "HCF और LCM")),
     w.body(
@@ -120,8 +112,8 @@ const towers = page("towers", (b) => {
   const stack = b.prop(primeTowersDef, "towers", {});
   b.standsFor(stack, "for each prime, 18's tower and 12's side by side, as tall as its power");
   b.witness(
-    stack.learner(PrimeTowersAction.Show, { show: TowerShow.Hcf }),
-    stack.learner(PrimeTowersAction.Show, { show: TowerShow.Lcm }),
+    stack.learner.show({ show: TowerShow.Hcf }),
+    stack.learner.show({ show: TowerShow.Lcm }),
   );
   const hcfWhy = w.body(
     t(
@@ -168,10 +160,10 @@ const towers = page("towers", (b) => {
     ),
     "rule",
   );
-  b.after(stack.on(PrimeTowersSignal.Shown), hcfWhy, {
+  b.after(stack.on.shown, hcfWhy, {
     if: (at) => at(stack).show === TowerShow.Hcf,
   });
-  b.after(stack.on(PrimeTowersSignal.Shown), [lcmWhy, ask], {
+  b.after(stack.on.shown, [lcmWhy, ask], {
     if: (at) => at(stack).show === TowerShow.Lcm,
   });
   b.after(ask, rule);

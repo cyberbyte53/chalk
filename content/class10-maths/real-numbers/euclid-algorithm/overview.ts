@@ -1,6 +1,6 @@
 import { page, t } from "@chalk/author";
 import { choice, multiChoiceQuestion, wordsOn } from "@chalk/patterns";
-import { StickMeasureAction, StickMeasureSignal, stickMeasureDef } from "@chalk/prop-primes";
+import { stickMeasureDef } from "@chalk/prop-primes";
 
 const r = String.raw;
 
@@ -34,7 +34,7 @@ const story = page("story", (b) => {
     fitWords,
   });
   b.standsFor(ribbons, "ribbons of 18 cm and 12 cm, with pieces of 1 to 7 cm to mark on both");
-  b.witness(ribbons.learner(StickMeasureAction.TryPiece, { length: 4 }));
+  b.witness(ribbons.learner.tryPiece({ length: 4 }));
   const which = multiChoiceQuestion(b, {
     name: "which",
     prompt: t(
@@ -72,7 +72,7 @@ const story = page("story", (b) => {
     ),
     "slow",
   );
-  b.after(ribbons.on(StickMeasureSignal.Tried), which);
+  b.after(ribbons.on.tried, which);
   b.after(which, [hcf, slow]);
   return [
     w.title(t("Euclid's division algorithm", "यूक्लिड विभाजन एल्गोरिथ्म")),
@@ -103,11 +103,7 @@ const method = page("method", (b) => {
   );
   const ribbons = b.prop(stickMeasureDef, "ribbons", { stickA: 18, stickB: 12 });
   b.standsFor(ribbons, "the two ribbons, 18 and 12, for Euclid's method");
-  b.witness(
-    ribbons.learner(StickMeasureAction.Lay),
-    ribbons.learner(StickMeasureAction.Keep),
-    ribbons.learner(StickMeasureAction.Lay),
-  );
+  b.witness(ribbons.learner.lay(), ribbons.learner.keep(), ribbons.learner.lay());
   const first = choice(b, {
     name: "first",
     prompt: t("Nothing is left over. What is HCF(18, 12)?", "कुछ नहीं बचा। HCF(18, 12) क्या है?"),
@@ -143,11 +139,11 @@ const method = page("method", (b) => {
   const second = b.prop(stickMeasureDef, "second", { stickA: 51, stickB: 21 });
   b.standsFor(second, "ribbons of 51 and 21, for Euclid's method");
   b.witness(
-    second.learner(StickMeasureAction.Lay),
-    second.learner(StickMeasureAction.Keep),
-    second.learner(StickMeasureAction.Lay),
-    second.learner(StickMeasureAction.Keep),
-    second.learner(StickMeasureAction.Lay),
+    second.learner.lay(),
+    second.learner.keep(),
+    second.learner.lay(),
+    second.learner.keep(),
+    second.learner.lay(),
   );
   const longest = choice(b, {
     name: "longest",
@@ -177,9 +173,9 @@ const method = page("method", (b) => {
     ),
     "wonder",
   );
-  b.after(ribbons.on(StickMeasureSignal.Finished), first);
+  b.after(ribbons.on.finished, first);
   b.after(first, [same, again, second]);
-  b.after(second.on(StickMeasureSignal.Finished), longest);
+  b.after(second.on.finished, longest);
   b.after(longest, wonder);
   const step = (n: number, en: string, hi: string) =>
     w.body(t(`**${n}.** ${en}`, `**${n}.** ${hi}`));
@@ -233,7 +229,7 @@ const why = page("why", (b) => {
     fitWords,
   });
   b.standsFor(marks, "12 laid along 18 with the leftover 6, and pieces of 1 to 7 cm to mark");
-  b.witness(marks.learner(StickMeasureAction.TryPiece, { length: 3 }));
+  b.witness(marks.learner.tryPiece({ length: 3 }));
   const leftover = multiChoiceQuestion(b, {
     name: "leftover",
     prompt: t(
@@ -275,7 +271,7 @@ const why = page("why", (b) => {
     ),
     "end",
   );
-  b.after(marks.on(StickMeasureSignal.Tried), leftover);
+  b.after(marks.on.tried, leftover);
   b.after(leftover, [same, because, end]);
   return [
     w.title(t("Why it works", "यह क्यों काम करता है")),

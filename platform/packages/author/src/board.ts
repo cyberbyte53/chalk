@@ -12,15 +12,18 @@ import {
 import { Dec } from "@chalk/exact";
 import {
   AnswerStatus,
+  type ArgsOf,
+  type ArgsParam,
   BOARD,
   BoardAction,
   BoardSignal,
-  type PropDef,
   PropRole,
   QuestionSignal,
   type Size,
   type StoredState,
+  type ViewOf,
 } from "@chalk/prop";
+import type { ZodType } from "zod";
 import { Expr } from "./expr";
 import { framesHere, noteStack } from "./site";
 
@@ -84,61 +87,80 @@ type LayoutPiece = Exclude<Piece, PropPiece>;
 /** Any placed prop, whatever its state type: enough to lay it out or show and hide it. */
 export type AnyPlaced = { readonly name: string; readonly piece: PropPiece };
 
+/** A prop definition as content places it: its state, actions, signals and derived values. */
+export type DefLike = {
+  readonly type: string;
+  readonly state: ZodType<StoredState>;
+  readonly actions: object;
+  readonly signals?: object;
+  readonly derived?: object;
+  readonly role?: string;
+};
+
+type ActionsOf<P> = P extends { actions: infer X } ? X : never;
+type ActionNames<P> = keyof ActionsOf<P> & string;
+type SignalNames<P> = P extends { signals?: infer G } ? keyof NonNullable<G> & string : never;
+type StateOfDef<P> = P extends { state: ZodType<infer S> } ? S : never;
+/** What an action of a placed prop takes, as an author may write it (exact Decs where numbers go). */
+type TakesOf<P, K extends ActionNames<P>> = ArgsParam<Loose<ArgsOf<ActionsOf<P>[K]>>>;
+
+/** One entry per name: `byName(names, (n) => …)`, typed by the caller. */
+function byName<T>(names: readonly string[], make: (name: string) => T): Record<string, T> {
+  return Object.fromEntries(names.map((n) => [n, make(n)]));
+}
+
 /**
- * A prop placed on a board, by name. Its stored fields, derived fields, signals and actions are typed
- * from its definition: naming one the prop doesn't have is a compile error.
+ * A prop placed on a board, by name. Its actions and signals are reached by name from its
+ * definition (`split.learner.split({ n: 4 })`, `game.on.over`), with their arguments typed: naming
+ * one the prop doesn't have, or giving it the wrong arguments, is a compile error.
  */
-export class Placed<
-  S extends StoredState = StoredState,
-  A extends string = string,
-  G extends string = string,
-  D extends string = string,
-> implements AnyPlaced
-{
+export class Placed<P extends DefLike = DefLike> implements AnyPlaced {
+  /** Its signals, for a WHEN rule: `game.on.over`. */
+  readonly on: { readonly [K in SignalNames<P>]: Signal };
+  /** The lesson (or a rule) runs one of its actions: `game.call.giveRound()`. */
+  readonly call: { readonly [K in ActionNames<P>]: (...args: TakesOf<P, K>) => Script };
+  /** A witness step, the learner doing one of its actions: `split.learner.split({ n: 4 })`. */
+  readonly learner: { readonly [K in ActionNames<P>]: (...args: TakesOf<P, K>) => Step };
+  /** One of its actions as a reference (to make it the student's alone): `line.action.moveMarker`. */
+  readonly action: { readonly [K in ActionNames<P>]: ActionRef };
+
   constructor(
     readonly name: string,
-    readonly def: PropDef<S, A, G, D>,
+    readonly def: P,
     readonly piece: PropPiece,
-  ) {}
+  ) {
+    const actions = Object.keys(def.actions);
+    this.on = byName(Object.keys(def.signals ?? {}), (s) => ({
+      target: `${name}.${s}`,
+    })) as Placed<P>["on"];
+    this.call = byName(actions, (a) => (args?: Args): Script => {
+      const out: { call: string; args?: Record<string, unknown> } = { call: `${name}.${a}` };
+      if (args !== undefined && Object.keys(args).length > 0)
+        out.args = plain(args) as Record<string, unknown>;
+      return out;
+    }) as unknown as Placed<P>["call"];
+    this.learner = byName(
+      actions,
+      (a) =>
+        (args?: Args): Step => ({
+          kind: StepKind.Act,
+          prop: name,
+          action: a,
+          args: plain(args ?? {}) as Args,
+        }),
+    ) as unknown as Placed<P>["learner"];
+    this.action = byName(actions, (a) => ({ target: `${name}.${a}` })) as Placed<P>["action"];
+  }
 
   /** A stored field, for rules: `line.field("marker")`. */
-  field(key: keyof S & string): Expr {
+  field(key: keyof StateOfDef<P> & string): Expr {
     return new Expr(`${this.name}.${key}`);
-  }
-
-  /** A derived field, for rules: `line.derived(NumberLineDerived.Level)`. */
-  derived(key: D): Expr {
-    return new Expr(`${this.name}.${key}`);
-  }
-
-  /** One of its actions, as a reference (e.g. to make it the student's alone). */
-  action(action: A): ActionRef {
-    return { target: `${this.name}.${action}` };
-  }
-
-  /** One of its signals, for a WHEN rule. */
-  on(signal: G): Signal {
-    return { target: `${this.name}.${signal}` };
-  }
-
-  /** The lesson (or a rule) runs one of its actions. */
-  call(action: A, args: Args = {}): Script {
-    const out: { call: string; args?: Record<string, unknown> } = {
-      call: `${this.name}.${action}`,
-    };
-    if (Object.keys(args).length > 0) out.args = plain(args) as Record<string, unknown>;
-    return out;
-  }
-
-  /** A witness step: the learner does this. */
-  learner(action: A, args: Args = {}): Step {
-    return { kind: StepKind.Act, prop: this.name, action, args: plain(args) as Args };
   }
 }
 
 /** What a rule written as code sees of a placed prop: its stored fields, and its derived ones. */
-export type ViewOfPlaced<P> = P extends Placed<infer S, infer _A, infer _G, infer D>
-  ? Readonly<S & { readonly [K in D]: unknown }>
+export type ViewOfPlaced<P> = P extends Placed<infer D>
+  ? Readonly<ViewOf<D>>
   : Readonly<Record<string, unknown>>;
 
 /** How a rule written as code reads the board, typed: `at(race).time`. */
@@ -151,9 +173,7 @@ export type Rule<T = unknown> = (at: At) => T;
 export const asRuleFn = (rule: Rule): RuleFn => rule as unknown as RuleFn;
 
 /** The placed form of a prop definition: `PlacedOf<typeof numberLineDef>`. */
-export type PlacedOf<P> = P extends PropDef<infer S, infer A, infer G, infer D>
-  ? Placed<S, A, G, D>
-  : never;
+export type PlacedOf<P extends DefLike> = Placed<P>;
 
 export type Child = AnyPlaced | Piece;
 
@@ -234,16 +254,16 @@ export class BoardKit {
   private boardPurpose: string | undefined;
   /** The page's own `passWhen` rules. */
   private readonly passesWhen = new Set<WhenRule>();
-  private readonly placed: Placed<StoredState, string, string, string>[] = [];
+  private readonly placed: Placed[] = [];
   private readonly propsStandFor: Record<string, string> = {};
 
   /** Places a prop: `b.prop(numberLine, "line", { from: 2, to: 3 })`. */
-  prop<S extends StoredState, A extends string, G extends string, D extends string>(
-    def: PropDef<S, A, G, D>,
+  prop<P extends DefLike>(
+    def: P,
     name: string,
-    given: Given<S> = {},
+    given: Given<StateOfDef<P>> = {},
     options: { isHidden?: boolean; size?: Size } = {},
-  ): Placed<S, A, G, D> {
+  ): Placed<P> {
     if (this.names.has(name)) throw new Error(`Two props named "${name}" on one board`);
     if (name === BOARD) throw new Error(`"${BOARD}" is the board itself; pick another name`);
     this.names.add(name);
@@ -254,7 +274,7 @@ export class BoardKit {
     if (options.size !== undefined) piece.size = { ...options.size };
     noteStack(piece, framesHere());
     const placed = new Placed(name, def, piece);
-    this.placed.push(placed as unknown as Placed<StoredState, string, string, string>);
+    this.placed.push(placed as unknown as Placed);
     return placed;
   }
 

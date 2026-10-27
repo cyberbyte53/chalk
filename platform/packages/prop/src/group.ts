@@ -6,14 +6,16 @@ import {
   type Effect,
   EffectKind,
   type Element,
-  type Emit,
   type Observation,
   type PropDef,
   type PropView,
+  type Raised,
   type SignalSpec,
   type StoredState,
   type TaskContext,
+  noteNames,
   set,
+  setRaised,
   task,
 } from "./define";
 import { isFullChecking, observationOfView, prepareAction, viewOf } from "./state";
@@ -160,25 +162,15 @@ export type GroupSpec<
   summary: (s: GroupViewOf<O, C, Opt, D>) => string;
   /** What the group knows that the screen doesn't show. */
   hidden?: (s: GroupViewOf<O, C, Opt, D>) => Readonly<Record<string, unknown>> | undefined;
-  /**
-   * How children are placed: top to bottom, side by side, or drawn together in one frame. In a
-   * frame, `provider` owns the window and transform, `children` draw into its picture in this
-   * order (later on top), `backdrop` (if any) is a picture behind it in its own coordinates, and
-   * `below` are drawn under the picture (controls, readouts).
-   */
+  /** How children are placed: top to bottom, or side by side. */
   layout: GroupLayoutSpec<keyof C & string>;
   isExplainer?: boolean;
 };
 
-export type GroupLayoutSpec<N extends string = string> =
-  | { kind: "column" | "row"; children: readonly N[] }
-  | {
-      kind: "frame";
-      provider: N;
-      children: readonly N[];
-      backdrop?: N;
-      below?: readonly N[];
-    };
+export type GroupLayoutSpec<N extends string = string> = {
+  kind: "column" | "row";
+  children: readonly N[];
+};
 
 /** The fields bound into a child: `true` for a leaf's field (or a child group's own field), nested for a grandchild. */
 export type BoundTree = { readonly [name: string]: true | BoundTree };
@@ -390,15 +382,9 @@ function resolve(
   return { children: path, name: parts.join("."), leaf: at };
 }
 
-/** Every child a layout places, in drawing order (backdrop, provider, frame children, below). */
+/** Every child a layout places, in order. */
 export function layoutChildren(layout: GroupLayoutSpec): string[] {
-  if (layout.kind !== "frame") return [...layout.children];
-  return [
-    ...(layout.backdrop !== undefined ? [layout.backdrop] : []),
-    layout.provider,
-    ...layout.children,
-    ...(layout.below ?? []),
-  ];
+  return [...layout.children];
 }
 
 /** A child's view, made again only when its facts or what is bound into it changed. */
@@ -433,19 +419,6 @@ export function defineGroup<
   const placed = layoutChildren(spec.layout);
   for (const name of placed)
     if (kids[name] === undefined) throw new Error(`${spec.type}: layout names no child "${name}"`);
-  if (spec.layout.kind === "frame") {
-    const kind = childDef(spec.layout.provider)?.frame?.kind;
-    if (kind === undefined)
-      throw new Error(`${spec.type}: ${spec.layout.provider} provides no frame`);
-    for (const name of spec.layout.children) {
-      const drawsOn = childDef(name).drawsOn;
-      if (drawsOn !== undefined && drawsOn !== kind)
-        throw new Error(`${spec.type}: ${name} draws on ${drawsOn}, the frame is ${kind}`);
-    }
-    for (const name of spec.layout.below ?? [])
-      if (childDef(name).drawsOn !== undefined)
-        throw new Error(`${spec.type}: ${name} draws on a frame; it can't go below it`);
-  }
 
   // ---- each child's facts before bindings: its defaults, with the group's overrides ----
   const fullDefaults: Record<string, StoredState> = {};
@@ -618,7 +591,7 @@ export function defineGroup<
 
   // ---- running steps, purely: fold every instant change into one ----
   type Folded = {
-    emits: Emit[];
+    emits: Raised[];
     later: ((c: TaskContext<StoredState>) => Promise<void>)[];
     refused?: string;
   };
@@ -636,7 +609,7 @@ export function defineGroup<
       tree !== undefined && Object.keys(patch).some((k) => tree[k] === true);
     if (effect.kind !== EffectKind.Set && isInstant(effect)) {
       const flat = flatten(effect);
-      return onSlice(state, name, set(flat.set, ...flat.emit), out);
+      return onSlice(state, name, setRaised(flat.set, flat.emit), out);
     }
     if (effect.kind === EffectKind.Set) {
       if (writesBound(effect.set))
@@ -717,7 +690,7 @@ export function defineGroup<
         );
       const ran = a.run(read(state, injected).view as never, parsed.data as never);
       const flat = ran.kind !== EffectKind.Set && isInstant(ran) ? flatten(ran) : undefined;
-      const e = flat === undefined ? ran : set(flat.set, ...flat.emit);
+      const e = flat === undefined ? ran : setRaised(flat.set, flat.emit);
       if (e.kind === EffectKind.Set) {
         const extra = Object.keys(e.set).filter((k) => !ownFields.includes(k));
         if (extra.length > 0)
@@ -770,7 +743,7 @@ export function defineGroup<
   const reactAll = (
     state: StoredState,
     injected: Readonly<Record<string, unknown>> | undefined,
-    emits: readonly Emit[],
+    emits: readonly Raised[],
     out: Folded,
     depth: number,
   ): StoredState => {
@@ -791,7 +764,7 @@ export function defineGroup<
     const patch = diff(stored, next);
     if (out.refused !== undefined && Object.keys(patch).length === 0 && out.emits.length === 0)
       throw new Error(out.refused);
-    if (out.later.length === 0) return set(patch, ...out.emits);
+    if (out.later.length === 0) return setRaised(patch, out.emits);
     return task(async (c) => {
       if (Object.keys(patch).length > 0) c.set(patch);
       for (const e of out.emits) c.emit(e.signal, e.payload);
@@ -918,6 +891,8 @@ export function defineGroup<
     /** A placement's facts: defaults merged child by child with what it gives. */
     place: (given: Readonly<Record<string, unknown>>) => mergeGiven(groupDef, given),
   });
+  noteNames(spec.type, spec.actions);
+  noteNames(spec.type, spec.signals);
   return groupDef as unknown as GroupDef<GroupState<O, C, Opt>>;
 }
 

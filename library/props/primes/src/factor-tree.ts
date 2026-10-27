@@ -1,28 +1,10 @@
-import { type Element, type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Element, type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, bagText, isPrime } from "./arithmetic";
 import { button, factorPairs } from "./seen";
 
 export const MAX_TREE_NUMBER = 999_999;
 export const ROOT = "r";
-
-export const FactorTreeAction = {
-  Select: "select",
-  Split: "split",
-  SplitAll: "splitAll",
-  SetNumber: "setNumber",
-  StartAgain: "startAgain",
-} as const;
-
-export const FactorTreeDerived = {
-  Nodes: "nodes",
-  IsComplete: "isComplete",
-  Bag: "bag",
-  BagText: "bagText",
-  Primes: "primes",
-} as const;
-
-export const FactorTreeSignal = { Split: "split", Completed: "completed" } as const;
 
 const splitSchema = z
   .object({
@@ -128,6 +110,10 @@ function splitEverything(s: Pick<FactorTreeState, "number" | "splits">): FactorT
   }
 }
 
+const signals = {
+  split: signal("An end was split: { node, factor }"),
+  completed: signal("Every end is prime: `primes` is the factorisation"),
+};
 /**
  * A factor tree: the number at the top, split into two factors, each split again until every end is
  * prime. However the splits are chosen, the primes at the ends are the same (the Fundamental
@@ -140,29 +126,29 @@ export const factorTree = defineProp({
   state: factorTreeState,
   defaults: { number: 360, splits: [], selected: null, isEditable: false },
   derived: {
-    [FactorTreeDerived.Nodes]: {
+    nodes: {
       describe: "The tree: { id, value, isPrime, depth, children }, root first",
       compute: nodesOf,
     },
-    [FactorTreeDerived.IsComplete]: {
+    isComplete: {
       describe: "Every end of the tree is prime",
       compute: (s) => leavesOf(nodesOf(s)).every((n) => n.isPrime),
     },
-    [FactorTreeDerived.Bag]: {
+    bag: {
       describe: "The primes at the ends so far, by prime: how many of each",
       compute: (s) => primeBagOf(nodesOf(s)),
     },
-    [FactorTreeDerived.BagText]: {
+    bagText: {
       describe: "The primes at the ends so far, the book's way: 2³ × 3² × 5",
       compute: (s) => bagText(primeBagOf(nodesOf(s))),
     },
-    [FactorTreeDerived.Primes]: {
+    primes: {
       describe: "The number's prime factorisation, whatever the tree shows yet",
       compute: (s) => bagText(bagOf(s.number)),
     },
   },
   actions: {
-    [FactorTreeAction.Select]: act({
+    select: act({
       describe: "Pick an end to split (the learner's tap; again to put it down)",
       changes: ["selected"],
       byLearner: true,
@@ -173,7 +159,7 @@ export const factorTree = defineProp({
         return set({ selected: s.selected === a.node ? null : a.node });
       },
     }),
-    [FactorTreeAction.Split]: act({
+    split: act({
       describe: "Split an end into two factors: `factor` and value ÷ factor (the learner's tap)",
       changes: ["splits", "selected"],
       byLearner: true,
@@ -182,19 +168,14 @@ export const factorTree = defineProp({
         if (whyNotSplit(s, a.node, a.factor) !== undefined) return set({});
         const splits = [...s.splits, { node: a.node, factor: a.factor }];
         const nodes = nodesOf({ number: s.number, splits });
-        const emits: Emit[] = [
-          { signal: FactorTreeSignal.Split, payload: { node: a.node, factor: a.factor } },
-        ];
+        const emits: Emit[] = [raise(signals.split, { node: a.node, factor: a.factor })];
         if (leavesOf(nodes).every((n) => n.isPrime)) {
-          emits.push({
-            signal: FactorTreeSignal.Completed,
-            payload: { primes: bagText(primeBagOf(nodes)) },
-          });
+          emits.push(raise(signals.completed, { primes: bagText(primeBagOf(nodes)) }));
         }
         return set({ splits, selected: null }, ...emits);
       },
     }),
-    [FactorTreeAction.SplitAll]: act({
+    splitAll: act({
       describe: "Finish the tree, splitting each end at its smallest prime",
       changes: ["splits", "selected"],
       reveals: true,
@@ -204,18 +185,18 @@ export const factorTree = defineProp({
         const splits = splitEverything(s);
         return set(
           { splits, selected: null },
-          { signal: FactorTreeSignal.Completed, payload: { primes: bagText(bagOf(s.number)) } },
+          raise(signals.completed, { primes: bagText(bagOf(s.number)) }),
         );
       },
     }),
-    [FactorTreeAction.SetNumber]: act({
+    setNumber: act({
       describe: "A new number at the top, unsplit",
       changes: ["number", "splits", "selected"],
       byLearner: true,
       args: z.object({ number: z.number().int().min(2).max(MAX_TREE_NUMBER) }).strict(),
       run: (_s, a) => set({ number: a.number, splits: [], selected: null }),
     }),
-    [FactorTreeAction.StartAgain]: act({
+    startAgain: act({
       describe: "Take every split back",
       changes: ["splits", "selected"],
       byLearner: true,
@@ -223,10 +204,7 @@ export const factorTree = defineProp({
       run: () => set({ splits: [], selected: null }),
     }),
   },
-  signals: {
-    [FactorTreeSignal.Split]: { describe: "An end was split: { node, factor }" },
-    [FactorTreeSignal.Completed]: { describe: "Every end is prime: `primes` is the factorisation" },
-  },
+  signals,
   invariant: (s) => {
     let partial: Pick<FactorTreeState, "number" | "splits"> = { number: s.number, splits: [] };
     for (const sp of s.splits) {

@@ -1,8 +1,10 @@
+import { type ActionSpec, type ArgsParam, type StoredState, nameOf } from "@chalk/prop";
 import { addressOf } from "./part-paths";
 
 /**
- * What an input does, said as data on the input itself: `<button {...does(SweetShareAction.GiveRound)}>`
- * or `<SymbolButton {...does(RemainderShelvesAction.PlaceMany, { count: 10 })} />`. The player runs
+ * What an input does, said as data on the input itself: `<button {...does(sweetShare.actions.giveRound)}>`
+ * or `<SymbolButton {...does(tenMaker.actions.tryPiece, { length: 3 })} />` (the action itself, its
+ * arguments checked against it). The player runs
  * it when the input is pressed, and anything that reads the board (the snapshot, the chalk MCP's
  * look and play, Jugnu) sees what each input does without pressing it: the action is a value on the
  * page (`data-does`, its arguments in `data-with`), not hidden inside a function.
@@ -21,18 +23,23 @@ export type DoesAttrs = {
 };
 
 /** An input that does `action` (with `args`) when pressed: the player calls it. */
-export function does(action: string, args?: Readonly<Record<string, unknown>>): DoesAttrs {
-  return args === undefined || Object.keys(args).length === 0
-    ? { "data-does": action }
-    : { "data-does": action, "data-with": JSON.stringify(args) };
+export function does<S extends StoredState, Ar>(
+  action: ActionSpec<S, Ar>,
+  ...args: ArgsParam<Ar>
+): DoesAttrs {
+  const name = nameOf(action);
+  const given = args[0] as Readonly<Record<string, unknown>> | undefined;
+  return given === undefined || Object.keys(given).length === 0
+    ? { "data-does": name }
+    : { "data-does": name, "data-with": JSON.stringify(given) };
 }
 
 /**
  * An input whose own handler calls `action` (its arguments known only when it's used), or calls
- * several in turn (a choice's option picks, then checks: `says(Select, Check)`).
+ * several in turn (a choice's option picks, then checks: `says(choice.actions.select, choice.actions.check)`).
  */
-export function says(...actions: readonly string[]): DoesAttrs {
-  return { "data-does": actions.join(" "), "data-by-hand": "" };
+export function says(...actions: readonly { readonly describe: string }[]): DoesAttrs {
+  return { "data-does": actions.map(nameOf).join(" "), "data-by-hand": "" };
 }
 
 /** The does-attributes among a component's props, to pass on to the element that is pressed. */

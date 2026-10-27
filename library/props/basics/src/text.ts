@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { SAY, SizeFit, actionsFor, colorSchema, defineProp, say } from "@chalk/prop";
+import { SizeFit, actionsFor, colorSchema, defineProp, say } from "@chalk/prop";
 import { z } from "zod";
 
 /** How words sit on the board. A definition is set apart in an outlined box. */
@@ -36,7 +36,7 @@ export const text = defineProp({
   defaults: { text: { en: "", hi: "" }, speak: null, style: TextStyle.Body, color: null },
   inputs: ["text"],
   actions: {
-    [SAY]: act({
+    say: act({
       describe: "Read the words aloud (narrator)",
       args: z.object({}).strict(),
       run: () => say(),

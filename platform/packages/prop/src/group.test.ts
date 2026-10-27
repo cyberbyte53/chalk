@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { EffectKind, actionsFor, defineProp, set } from "./define";
+import { EffectKind, actionsFor, defineProp, raise, set, signal } from "./define";
 import { defineGroup, groupOf, refuse } from "./group";
 import {
   applyPatch,
@@ -20,6 +20,7 @@ type Seen = { readonly [key: string]: Seen };
 const stepperState = z.object({ value: z.number(), min: z.number(), max: z.number() }).strict();
 type Stepper = z.infer<typeof stepperState>;
 const onStepper = actionsFor<Stepper>();
+const stepperSignals = { changed: signal("") };
 const stepper = defineProp({
   type: "stepper",
   describe: "",
@@ -33,11 +34,11 @@ const stepper = defineProp({
       changes: ["value"],
       run: (s, a) => {
         const to = Math.min(s.max, Math.max(s.min, a.to));
-        return set({ value: to }, { signal: "changed", payload: { to } });
+        return set({ value: to }, raise(stepperSignals.changed, { to }));
       },
     }),
   },
-  signals: { changed: { describe: "" } },
+  signals: stepperSignals,
   observe: (s) => ({
     summary: "",
     elements: [
@@ -58,6 +59,7 @@ const text = defineProp({
 
 const handleState = z.object({ x: z.number() }).strict();
 const onHandle = actionsFor<z.infer<typeof handleState>>();
+const handleSignals = { moved: signal("") };
 const handle = defineProp({
   type: "handle",
   describe: "",
@@ -69,16 +71,17 @@ const handle = defineProp({
       byLearner: true,
       args: z.object({ x: z.number() }).strict(),
       changes: ["x"],
-      run: (_s, a) => set({ x: a.x }, { signal: "moved" }),
+      run: (_s, a) => set({ x: a.x }, raise(handleSignals.moved)),
     }),
   },
-  signals: { moved: { describe: "" } },
+  signals: handleSignals,
   observe: (s) => ({ summary: "", elements: [{ id: "handle", value: s.x, does: "move" }] }),
 });
 
 const machineOwn = z.object({ tried: z.array(z.number()).max(5) }).strict();
 type Own = z.infer<typeof machineOwn>;
 const onMachine = actionsFor<Own>();
+const machineSignals = { put: signal("") };
 
 const machine = defineGroup({
   type: "machine",
@@ -106,10 +109,10 @@ const machine = defineGroup({
       describe: "",
       args: z.object({ x: z.number() }).strict(),
       changes: ["tried"],
-      run: (s, a) => set({ tried: [...s.tried, a.x].slice(-5) }, { signal: "put" }),
+      run: (s, a) => set({ tried: [...s.tried, a.x].slice(-5) }, raise(machineSignals.put)),
     }),
   },
-  signals: { put: { describe: "" } },
+  signals: machineSignals,
   invariant: (s) => (s.tried.includes(99) ? "99 is never tried" : undefined),
   summary: (s) =>
     `the machine, ${s.tried.length} tried${s.note === null || s.note.tex === "" ? "" : `, ${s.note.tex}`}`,

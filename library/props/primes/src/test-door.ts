@@ -1,8 +1,8 @@
 import {
   type AnyPropDef,
   EffectKind,
-  type Emit,
   type PropDef,
+  type Raised,
   type StoredState,
   applyPatch,
   asAnyProp,
@@ -28,7 +28,7 @@ export function door<S extends StoredState, A extends string, G extends string, 
       state: S,
       name: A,
       args: Record<string, unknown> = {},
-    ): { state: S; emit: readonly Emit[] } {
+    ): { state: S; emit: readonly Raised[] } {
       const effect = effectOf(state, name, args);
       if (effect.kind !== EffectKind.Set) throw new Error(`${name} should be instant`);
       const next = applyPatch(def, state, effect.set);

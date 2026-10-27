@@ -1,20 +1,14 @@
 import {
   type Effect,
   EffectKind,
-  type Emit,
+  type Raised,
   applyPatch,
   asAnyProp,
   prepareAction,
   viewOf,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import {
-  DecimalExpansionPart,
-  DecimalExpansionSignal,
-  type DecimalExpansionState,
-  MAX_DIGITS,
-  decimalExpansion,
-} from "./model";
+import { type DecimalExpansionState, MAX_DIGITS, decimalExpansion } from "./model";
 
 const def = asAnyProp(decimalExpansion);
 
@@ -65,7 +59,7 @@ function run(
   state: DecimalExpansionState,
   name: string,
   args: Record<string, unknown> = {},
-): { state: DecimalExpansionState; emit: readonly Emit[] } {
+): { state: DecimalExpansionState; emit: readonly Raised[] } {
   const effect = effectOf(state, name, args);
   const next = applyPatch(def, state, effect.set);
   if (!next.isOk) throw new Error(next.errors.join("; "));
@@ -248,21 +242,16 @@ describe("decimalExpansion: actions", () => {
     expect(state).toEqual(fraction(22, 7, 3));
     expect(emit).toEqual([
       {
-        signal: DecimalExpansionSignal.DigitFound,
+        signal: "digitFound",
         payload: { position: 3, digit: 2, remainder: 6 },
       },
     ]);
   });
 
   it("nextDigit announces the end on the step that reaches remainder 0, then does nothing", () => {
-    expect(run(fraction(1, 8, 1), "nextDigit").emit.map((e) => e.signal)).toEqual([
-      DecimalExpansionSignal.DigitFound,
-    ]);
+    expect(run(fraction(1, 8, 1), "nextDigit").emit.map((e) => e.signal)).toEqual(["digitFound"]);
     const last = run(fraction(1, 8, 2), "nextDigit");
-    expect(last.emit.map((e) => e.signal)).toEqual([
-      DecimalExpansionSignal.DigitFound,
-      DecimalExpansionSignal.Ended,
-    ]);
+    expect(last.emit.map((e) => e.signal)).toEqual(["digitFound", "ended"]);
     const after = run(last.state, "nextDigit");
     expect(after.state).toEqual(fraction(1, 8, 3));
     expect(after.emit).toEqual([]);
@@ -271,20 +260,17 @@ describe("decimalExpansion: actions", () => {
   it("nextDigit announces the repeat on the step a remainder comes back, and only then", () => {
     const signalsAt = (p: number, q: number, from: number) =>
       run(fraction(p, q, from), "nextDigit").emit.map((e) => e.signal);
-    expect(signalsAt(1, 6, 0)).toEqual([DecimalExpansionSignal.DigitFound]);
+    expect(signalsAt(1, 6, 0)).toEqual(["digitFound"]);
     expect(run(fraction(1, 6, 1), "nextDigit").emit).toEqual([
       {
-        signal: DecimalExpansionSignal.DigitFound,
+        signal: "digitFound",
         payload: { position: 2, digit: 6, remainder: 4 },
       },
-      { signal: DecimalExpansionSignal.Repeated, payload: { start: 1, length: 1 } },
+      { signal: "repeated", payload: { start: 1, length: 1 } },
     ]);
-    expect(signalsAt(1, 6, 2)).toEqual([DecimalExpansionSignal.DigitFound]);
-    expect(signalsAt(1, 7, 4)).toEqual([DecimalExpansionSignal.DigitFound]);
-    expect(signalsAt(1, 7, 5)).toEqual([
-      DecimalExpansionSignal.DigitFound,
-      DecimalExpansionSignal.Repeated,
-    ]);
+    expect(signalsAt(1, 6, 2)).toEqual(["digitFound"]);
+    expect(signalsAt(1, 7, 4)).toEqual(["digitFound"]);
+    expect(signalsAt(1, 7, 5)).toEqual(["digitFound", "repeated"]);
   });
 
   it("nextDigit stops at the most digits it can show", () => {
@@ -297,10 +283,10 @@ describe("decimalExpansion: actions", () => {
     expect(run(fraction(1, 7, 5), "showDigits", { count: 2 }).state).toEqual(fraction(1, 7, 2));
     expect(run(fraction(1, 8), "showDigits", { count: 10 }).state).toEqual(fraction(1, 8, 3));
     expect(run(fraction(1, 8), "showDigits", { count: 10 }).emit.map((e) => e.signal)).toEqual([
-      DecimalExpansionSignal.Ended,
+      "ended",
     ]);
     expect(run(fraction(1, 7), "showDigits", { count: 10 }).emit).toEqual([
-      { signal: DecimalExpansionSignal.Repeated, payload: { start: 0, length: 6 } },
+      { signal: "repeated", payload: { start: 0, length: 6 } },
     ]);
     expect(run(fraction(1, 7, 8), "showDigits", { count: 10 }).emit).toEqual([]);
   });
@@ -346,39 +332,6 @@ describe("decimalExpansion: actions", () => {
   });
 });
 
-describe("decimalExpansion: parts", () => {
-  const parts = (s: DecimalExpansionState) => decimalExpansion.parts?.(look(s) as never) ?? [];
-
-  it("has a part for each digit and each remainder shown", () => {
-    expect(parts(fraction(1, 7, 2))).toEqual([
-      `${DecimalExpansionPart.DigitPrefix}1`,
-      `${DecimalExpansionPart.DigitPrefix}2`,
-      `${DecimalExpansionPart.RemainderPrefix}0`,
-      `${DecimalExpansionPart.RemainderPrefix}1`,
-      `${DecimalExpansionPart.RemainderPrefix}2`,
-    ]);
-  });
-
-  it("has the repeat bar only once it has repeated", () => {
-    expect(parts(fraction(1, 7, 5))).not.toContain(DecimalExpansionPart.RepeatBar);
-    expect(parts(fraction(1, 7, 6))).toContain(DecimalExpansionPart.RepeatBar);
-    expect(parts(fraction(1, 8, 3))).not.toContain(DecimalExpansionPart.RepeatBar);
-  });
-});
-
-describe("a fraction the learner types", () => {
-  it("names p and q when editable, first", () => {
-    const parts = decimalExpansion.parts?.(look({ ...fraction(3, 8), isEditable: true }) as never);
-    expect(parts?.slice(0, 2)).toEqual([
-      DecimalExpansionPart.Numerator,
-      DecimalExpansionPart.Denominator,
-    ]);
-    expect(decimalExpansion.parts?.(look(fraction(3, 8)) as never)).not.toContain(
-      DecimalExpansionPart.Numerator,
-    );
-  });
-});
-
 describe("the learner works out each digit", () => {
   const asking = (n: number, d: number, shown = 0) => ({
     ...fraction(n, d, shown),
@@ -400,7 +353,7 @@ describe("the learner works out each digit", () => {
     expect(state.digitsShown).toBe(2);
     expect(look(state).digits).toBe("14");
     expect(emit[0]).toEqual({
-      signal: DecimalExpansionSignal.DigitFound,
+      signal: "digitFound",
       payload: { position: 2, digit: 4, remainder: 2 },
     });
   });
@@ -411,7 +364,7 @@ describe("the learner works out each digit", () => {
     expect(state.rejectedDigit).toBe(5);
     expect(emit).toEqual([
       {
-        signal: DecimalExpansionSignal.DigitRejected,
+        signal: "digitRejected",
         payload: { digit: 5, dividend: 30, product: 35, isTooBig: true },
       },
     ]);
@@ -437,10 +390,10 @@ describe("the learner works out each digit", () => {
   it("raises ended / repeated on the step that gets there, like nextDigit", () => {
     // 7 ÷ 8 = 0.875: the third right digit ends it.
     const { emit } = run(asking(7, 8, 2), "tryDigit", { digit: 5 });
-    expect(emit.map((e) => e.signal)).toContain(DecimalExpansionSignal.Ended);
+    expect(emit.map((e) => e.signal)).toContain("ended");
     // 1 ÷ 3: the first 3 already leaves remainder 1 again, so the repeat shows.
     const repeat = run(asking(1, 3), "tryDigit", { digit: 3 });
-    expect(repeat.emit.map((e) => e.signal)).toContain(DecimalExpansionSignal.Repeated);
+    expect(repeat.emit.map((e) => e.signal)).toContain("repeated");
   });
 
   it("does nothing once the division has ended", () => {
@@ -471,16 +424,6 @@ describe("the remainder clock", () => {
     expect(look(fraction(1, 7)).slots).toBe(6);
     expect(look(fraction(1, 13)).slots).toBe(12);
     expect(look(fraction(1, 17)).slots).toBe(16);
-  });
-
-  it("lists the clock and its slots as parts only while it is shown", () => {
-    const parts = (s: DecimalExpansionState) =>
-      decimalExpansion.parts?.(viewOf(def, s) as never) ?? [];
-    expect(parts(fraction(1, 7))).not.toContain(DecimalExpansionPart.Clock);
-    const shown = parts({ ...fraction(1, 7), isClockShown: true });
-    expect(shown).toContain(DecimalExpansionPart.Clock);
-    expect(shown).toContain(`${DecimalExpansionPart.SlotPrefix}6`);
-    expect(shown).not.toContain(`${DecimalExpansionPart.SlotPrefix}7`);
   });
 
   it("can never visit more than q − 1 different non-zero remainders before one comes back", () => {

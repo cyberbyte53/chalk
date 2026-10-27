@@ -1,14 +1,7 @@
 import { page, t } from "@chalk/author";
 import { choice, multiChoiceQuestion, wordsOn } from "@chalk/patterns";
-import { DecimalExpansionSignal, decimalExpansionDef } from "@chalk/prop-decimal";
-import {
-  BillSplitAction,
-  BillSplitSignal,
-  TenMakerAction,
-  TenMakerSignal,
-  billSplitDef,
-  tenMakerDef,
-} from "@chalk/prop-primes";
+import { decimalExpansionDef } from "@chalk/prop-decimal";
+import { billSplitDef, tenMakerDef } from "@chalk/prop-primes";
 
 const r = String.raw;
 
@@ -37,10 +30,7 @@ const bill = page("bill", (b) => {
     },
   });
   b.standsFor(split, "a ₹100 bill shared equally by 2 to 10 friends, each share written out");
-  b.witness(
-    split.learner(BillSplitAction.Split, { n: 4 }),
-    split.learner(BillSplitAction.Split, { n: 3 }),
-  );
+  b.witness(split.learner.split({ n: 4 }), split.learner.split({ n: 3 }));
   const which = multiChoiceQuestion(b, {
     name: "which",
     prompt: t("For which group sizes does each share terminate?", "किन समूहों के लिए हर हिस्सा सांत है?"),
@@ -89,7 +79,7 @@ const bill = page("bill", (b) => {
     ),
     "next",
   );
-  b.after(split.on(BillSplitSignal.Split), which);
+  b.after(split.on.split, which);
   b.after(which, common);
   b.after(common, next);
   return [
@@ -120,11 +110,7 @@ const story = page("story", (b) => {
   );
   const eight = b.prop(tenMakerDef, "eight", { numerator: 3, denominator: 8 });
   b.standsFor(eight, "3/8, its denominator as prime towers, topped up to a power of 10");
-  b.witness(
-    eight.learner(TenMakerAction.Cancel),
-    eight.learner(TenMakerAction.Pair),
-    eight.learner(TenMakerAction.TopUp),
-  );
+  b.witness(eight.learner.cancel(), eight.learner.pair(), eight.learner.topUp());
   const thirtyIntro = w.body(
     t(
       r`**If the denominator has any other prime, the decimal never terminates.** The 3 in 30 has no partner to make a ten: $$\frac{7}{30} = \frac{7}{2 \times 3 \times 5}$$`,
@@ -134,7 +120,7 @@ const story = page("story", (b) => {
   );
   const thirty = b.prop(tenMakerDef, "thirty", { numerator: 7, denominator: 30 });
   b.standsFor(thirty, "7/30, whose denominator has a 3 that no power of 10 holds");
-  b.witness(thirty.learner(TenMakerAction.Cancel), thirty.learner(TenMakerAction.Pair));
+  b.witness(thirty.learner.cancel(), thirty.learner.pair());
   const why = choice(b, {
     name: "why",
     prompt: t(
@@ -173,8 +159,8 @@ const story = page("story", (b) => {
     ),
     "lowest",
   );
-  b.after(eight.on(TenMakerSignal.ToppedUp), [thirtyIntro, thirty]);
-  b.after(thirty.on(TenMakerSignal.CantTopUp), why);
+  b.after(eight.on.toppedUp, [thirtyIntro, thirty]);
+  b.after(thirty.on.cantTopUp, why);
   b.after(why, [rule, lowest]);
   return [
     w.title(t("Terminating decimals", "सांत दशमलव")),
@@ -222,7 +208,7 @@ const repeats = page("repeats", (b) => {
     isClockShown: true,
   });
   b.standsFor(eight, "3 ÷ 8 by long division, its remainders as a path on a clock of 0 to 7");
-  b.witness(...Array.from({ length: 3 }, () => eight.learner("nextDigit")));
+  b.witness(...Array.from({ length: 3 }, () => eight.learner.nextDigit()));
   const zero = w.body(
     t(
       r`**The remainder reached 0, so the division stops.** $$\frac{3}{8} = 0.375$$ **Each step uses only the remainder.** The first step was: $$\underbrace{3}_{\text{remainder}} \times 10 = 8 \times \underbrace{3}_{\text{digit}} + \underbrace{6}_{\text{new remainder}}$$ So the next digit and the next remainder depend only on the remainder. Now try $\frac{1}{7}$:`,
@@ -236,7 +222,7 @@ const repeats = page("repeats", (b) => {
     isClockShown: true,
   });
   b.standsFor(seven, "1 ÷ 7 by long division, its remainders as a path on a clock of 0 to 6");
-  b.witness(...Array.from({ length: 6 }, () => seven.learner("nextDigit")));
+  b.witness(...Array.from({ length: 6 }, () => seven.learner.nextDigit()));
   const predict = choice(b, {
     name: "predict",
     prompt: t(
@@ -268,8 +254,8 @@ const repeats = page("repeats", (b) => {
     ),
     "loop",
   );
-  b.after(eight.on(DecimalExpansionSignal.Ended), [zero, seven]);
-  b.after(seven.on(DecimalExpansionSignal.Repeated), predict);
+  b.after(eight.on.ended, [zero, seven]);
+  b.after(seven.on.repeated, predict);
   b.after(predict, loop);
   return [
     w.title(t("Repeating decimals", "आवर्ती दशमलव")),

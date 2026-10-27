@@ -18,10 +18,10 @@ import {
   type BoundTree,
   type Change,
   EffectKind,
-  type Emit,
   type Expression,
   PropRole,
   type PropView,
+  type Raised,
   SAY,
   type Scope,
   type Spoken,
@@ -1012,7 +1012,7 @@ export class BoardRuntime {
    * Signals are answered one at a time, in order. A signal raised while answering waits its turn.
    * `from`: the act it is a consequence of (see SignalRecord).
    */
-  private enqueue(name: string, emit: Emit, actor: Actor, from: number | undefined): void {
+  private enqueue(name: string, emit: Raised, actor: Actor, from: number | undefined): void {
     if (this.isDisposed) return;
     const record: SignalRecord = {
       n: ++this.count,

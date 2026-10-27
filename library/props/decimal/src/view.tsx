@@ -1,25 +1,13 @@
 import { type PropViewProps, does, says } from "@chalk/player";
+import type { ViewOf } from "@chalk/prop";
 import { Fragment, type JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
-import { DecimalExpansionPart, type DecimalExpansionState } from "./model";
+import { DecimalExpansionPart, decimalExpansion } from "./model";
 import { type Cell, CellKind, layOut, nextColumn } from "./paper";
 
-type DecimalExpansionView = DecimalExpansionState & {
-  wholePart: number;
-  digits: string;
-  remainders: number[];
-  repeatStart: number;
-  repeatLength: number;
-  hasEnded: boolean;
-  hasRepeated: boolean;
-  decimalText: string;
-  partialDividend: number;
-};
+/** What the view reads: the prop's stored and derived fields. */
+type Seen = ViewOf<typeof decimalExpansion>;
 
-const NEXT_DIGIT = "nextDigit";
-const TRY_DIGIT = "tryDigit";
-const SET_FRACTION = "setFraction";
-const START_AGAIN = "startAgain";
 const MAX_TYPED = 999;
 
 /** A typed whole number: p or q. A value out of range snaps back. */
@@ -68,9 +56,12 @@ const ROW = 25;
  * remainder dividing by q can leave, lit as the division visits it. With the digit pad on, the learner
  * works out each next digit; otherwise a tap on the paper does the next step. It owns no state.
  */
-export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element {
+export function DecimalExpansionView({
+  view,
+  call,
+}: PropViewProps<typeof decimalExpansion>): JSX.Element {
   // The player hands each view its own prop's state, already checked against its schema.
-  const s = view as unknown as DecimalExpansionView;
+  const s = view;
   const count = s.digitsShown;
   const isPending = !s.hasEnded && count < 60;
   const paper = layOut(s.numerator, s.denominator, count, isPending);
@@ -284,9 +275,12 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             value={s.numerator}
             min={0}
             part={DecimalExpansionPart.Numerator}
-            {...says(SET_FRACTION)}
+            {...says(decimalExpansion.actions.setFraction)}
             onChange={(value) =>
-              call(SET_FRACTION, { numerator: value, denominator: s.denominator })
+              call(decimalExpansion.actions.setFraction, {
+                numerator: value,
+                denominator: s.denominator,
+              })
             }
           />
           <NumberField
@@ -294,15 +288,20 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             value={s.denominator}
             min={2}
             part={DecimalExpansionPart.Denominator}
-            {...says(SET_FRACTION)}
-            onChange={(value) => call(SET_FRACTION, { numerator: s.numerator, denominator: value })}
+            {...says(decimalExpansion.actions.setFraction)}
+            onChange={(value) =>
+              call(decimalExpansion.actions.setFraction, {
+                numerator: s.numerator,
+                denominator: value,
+              })
+            }
           />
           <button
             type="button"
             class="dx-again"
             aria-label="Start again"
             disabled={s.digitsShown === 0}
-            {...does(START_AGAIN)}
+            {...does(decimalExpansion.actions.startAgain)}
           >
             ↺
           </button>
@@ -319,7 +318,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             class="dx-sheet is-tappable"
             ref={tapSheet}
             aria-label={label}
-            {...does(NEXT_DIGIT)}
+            {...does(decimalExpansion.actions.nextDigit)}
           >
             {paperGrid}
           </button>
@@ -333,7 +332,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
               type="button"
               key={digit}
               class={rejected === digit ? "dx-key is-rejected" : "dx-key"}
-              {...does(TRY_DIGIT, { digit })}
+              {...does(decimalExpansion.actions.tryDigit, { digit })}
             >
               {digit}
             </button>
@@ -353,7 +352,7 @@ const RING = 68;
  * and 0 in the middle. Each step of the division moves to the slot of its remainder; once a slot is
  * visited twice the path closes into a loop, and everything after it repeats.
  */
-function RemainderClock({ s }: { s: DecimalExpansionView }): JSX.Element {
+function RemainderClock({ s }: { s: Seen }): JSX.Element {
   const q = s.denominator;
   const slots = q - 1;
   const at = (r: number) => {

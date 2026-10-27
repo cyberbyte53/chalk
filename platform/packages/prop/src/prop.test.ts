@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { BoardAction, BoardSignal, boardProp } from "./board";
-import { EffectKind, actionsFor, asAnyProp, defineProp, set, tween } from "./define";
+import { EffectKind, actionsFor, asAnyProp, defineProp, raise, set, signal, tween } from "./define";
 import { compileExpression, compileTemplate } from "./expression";
 import { applyPatch, initialState, prepareAction, tweenAt, viewOf } from "./state";
 
@@ -11,6 +11,7 @@ const mirrorState = z
   .strict();
 type MirrorState = z.infer<typeof mirrorState>;
 const act = actionsFor<MirrorState>();
+const mirrorSignals = { objectMoved: signal("The object moved") };
 const imageAt = (s: MirrorState) => 1 / (1 / s.f - 1 / s.u);
 
 const mirror = asAnyProp(
@@ -28,7 +29,7 @@ const mirror = asAnyProp(
       moveObjectTo: act({
         describe: "Move the object; keeps f",
         args: z.object({ u: z.number() }).strict(),
-        run: (_s, a) => set({ u: a.u }, { signal: "objectMoved", payload: { u: a.u } }),
+        run: (_s, a) => set({ u: a.u }, raise(mirrorSignals.objectMoved, { u: a.u })),
       }),
       slideObjectTo: act({
         describe: "Slide the object over time; keeps f",
@@ -49,7 +50,7 @@ const mirror = asAnyProp(
         },
       }),
     },
-    signals: { objectMoved: { describe: "The object moved" } },
+    signals: mirrorSignals,
   }),
 );
 

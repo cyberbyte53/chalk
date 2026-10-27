@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, gcd, primesIn } from "./arithmetic";
 import { button, sup } from "./seen";
@@ -18,32 +18,6 @@ export const TenStage = {
   ToppedUp: "toppedUp",
 } as const;
 export type TenStage = (typeof TenStage)[keyof typeof TenStage];
-
-export const TenMakerAction = {
-  SetFraction: "setFraction",
-  Cancel: "cancel",
-  Pair: "pair",
-  TopUp: "topUp",
-  StartAgain: "startAgain",
-} as const;
-
-export const TenMakerDerived = {
-  Lowest: "lowest",
-  Twos: "twos",
-  Fives: "fives",
-  Others: "others",
-  CanEnd: "canEnd",
-  Places: "places",
-  Multiplier: "multiplier",
-  Decimal: "decimal",
-} as const;
-
-export const TenMakerSignal = {
-  Cancelled: "cancelled",
-  Paired: "paired",
-  ToppedUp: "toppedUp",
-  CantTopUp: "cantTopUp",
-} as const;
 
 const tenMakerState = z
   .object({
@@ -140,6 +114,14 @@ export function workingOf(s: TenMakerState): string[] {
 const act = actionsFor<TenMakerState>();
 const none = z.object({}).strict();
 
+const signals = {
+  cancelled: signal("Common primes crossed out: lowest terms"),
+  paired: signal("The denominator's 2s and 5s linked into `tens`; `others` have no partner"),
+  toppedUp: signal("The denominator is a power of 10: `decimal`"),
+  cantTopUp: signal(
+    "A prime other than 2 or 5 is in the denominator: `others`, so it never terminates",
+  ),
+};
 /**
  * A fraction drawn as primes: the numerator's beads above the bar, the denominator's below, one
  * column per prime. Cancel crosses out the beads the two share; Pair links each 2 below with a 5
@@ -161,41 +143,41 @@ export const tenMaker = defineProp({
     topUpLabel: { en: "Add {p}s", hi: "{p} जोड़ो" },
   },
   derived: {
-    [TenMakerDerived.Lowest]: {
+    lowest: {
       describe: "p/q in lowest terms: { numerator, denominator }",
       compute: lowestOf,
     },
-    [TenMakerDerived.Twos]: {
+    twos: {
       describe: "2s in the lowest-terms denominator",
       compute: (s) => tensOf(s.numerator, s.denominator).twos,
     },
-    [TenMakerDerived.Fives]: {
+    fives: {
       describe: "5s in the lowest-terms denominator",
       compute: (s) => tensOf(s.numerator, s.denominator).fives,
     },
-    [TenMakerDerived.Others]: {
+    others: {
       describe: "Primes other than 2 and 5 in the lowest-terms denominator (no partner for a ten)",
       compute: (s) => tensOf(s.numerator, s.denominator).others,
     },
-    [TenMakerDerived.CanEnd]: {
+    canEnd: {
       describe: "The decimal terminates: the lowest-terms denominator has only 2s and 5s",
       compute: (s) => tensOf(s.numerator, s.denominator).canEnd,
     },
-    [TenMakerDerived.Places]: {
+    places: {
       describe: "Decimal places when it terminates: the larger of the 2s and 5s",
       compute: (s) => tensOf(s.numerator, s.denominator).places,
     },
-    [TenMakerDerived.Multiplier]: {
+    multiplier: {
       describe: "What top and bottom are multiplied by to make the denominator a power of 10",
       compute: (s) => tensOf(s.numerator, s.denominator).multiplier,
     },
-    [TenMakerDerived.Decimal]: {
+    decimal: {
       describe: "The terminating decimal, or null if it doesn't terminate",
       compute: (s) => terminatingDecimal(s.numerator, s.denominator),
     },
   },
   actions: {
-    [TenMakerAction.SetFraction]: act({
+    setFraction: act({
       describe: "A new fraction, as given",
       changes: ["numerator", "denominator", "stage"],
       byLearner: true,
@@ -208,7 +190,7 @@ export const tenMaker = defineProp({
       run: (_s, a) =>
         set({ numerator: a.numerator, denominator: a.denominator, stage: TenStage.Given }),
     }),
-    [TenMakerAction.Cancel]: act({
+    cancel: act({
       describe: "Cross out the primes top and bottom share: lowest terms (the learner's button)",
       changes: ["stage"],
       byLearner: true,
@@ -216,12 +198,9 @@ export const tenMaker = defineProp({
       run: (s) =>
         s.stage !== TenStage.Given
           ? set({})
-          : set(
-              { stage: TenStage.Cancelled },
-              { signal: TenMakerSignal.Cancelled, payload: lowestOf(s) },
-            ),
+          : set({ stage: TenStage.Cancelled }, raise(signals.cancelled, lowestOf(s))),
     }),
-    [TenMakerAction.Pair]: act({
+    pair: act({
       describe:
         "Link each 2 in the denominator with a 5 into a ten (the learner's button). If every bead is then in a ten, the denominator is already 10ⁿ; a prime other than 2 or 5 can't pair.",
       changes: ["stage"],
@@ -231,24 +210,19 @@ export const tenMaker = defineProp({
         if (s.stage !== TenStage.Cancelled) return set({});
         const t = tensOf(s.numerator, s.denominator);
         const emits: Emit[] = [
-          {
-            signal: TenMakerSignal.Paired,
-            payload: { tens: Math.min(t.twos, t.fives), others: primesIn(t.others) },
-          },
+          raise(signals.paired, { tens: Math.min(t.twos, t.fives), others: primesIn(t.others) }),
         ];
-        if (!t.canEnd)
-          emits.push({ signal: TenMakerSignal.CantTopUp, payload: { others: primesIn(t.others) } });
+        if (!t.canEnd) emits.push(raise(signals.cantTopUp, { others: primesIn(t.others) }));
         if (t.canEnd && t.missing === null) {
-          emits.push({
-            signal: TenMakerSignal.ToppedUp,
-            payload: { decimal: terminatingDecimal(s.numerator, s.denominator) },
-          });
+          emits.push(
+            raise(signals.toppedUp, { decimal: terminatingDecimal(s.numerator, s.denominator) }),
+          );
           return set({ stage: TenStage.ToppedUp }, ...emits);
         }
         return set({ stage: TenStage.Paired }, ...emits);
       },
     }),
-    [TenMakerAction.TopUp]: act({
+    topUp: act({
       describe:
         "Add the missing 2s or 5s, top and bottom alike, so every bead below is in a ten (the learner's button)",
       changes: ["stage"],
@@ -260,14 +234,11 @@ export const tenMaker = defineProp({
         if (s.stage !== TenStage.Paired || !t.canEnd) return set({});
         return set(
           { stage: TenStage.ToppedUp },
-          {
-            signal: TenMakerSignal.ToppedUp,
-            payload: { decimal: terminatingDecimal(s.numerator, s.denominator) },
-          },
+          raise(signals.toppedUp, { decimal: terminatingDecimal(s.numerator, s.denominator) }),
         );
       },
     }),
-    [TenMakerAction.StartAgain]: act({
+    startAgain: act({
       describe: "Back to the fraction as given",
       changes: ["stage"],
       byLearner: true,
@@ -275,16 +246,7 @@ export const tenMaker = defineProp({
       run: () => set({ stage: TenStage.Given }),
     }),
   },
-  signals: {
-    [TenMakerSignal.Cancelled]: { describe: "Common primes crossed out: lowest terms" },
-    [TenMakerSignal.Paired]: {
-      describe: "The denominator's 2s and 5s linked into `tens`; `others` have no partner",
-    },
-    [TenMakerSignal.ToppedUp]: { describe: "The denominator is a power of 10: `decimal`" },
-    [TenMakerSignal.CantTopUp]: {
-      describe: "A prime other than 2 or 5 is in the denominator: `others`, so it never terminates",
-    },
-  },
+  signals,
   observe: (s) => {
     const t = tensOf(s.numerator, s.denominator);
     const working = workingOf(s);

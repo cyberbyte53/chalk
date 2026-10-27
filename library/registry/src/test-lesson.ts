@@ -1,10 +1,9 @@
 import { buildBoard, t, theBoard } from "@chalk/author";
 import type { Lesson } from "@chalk/content";
 import { choiceQuestion } from "@chalk/patterns";
-import { SAY } from "@chalk/prop";
 import { TextStyle, textDef } from "@chalk/prop-basics";
-import { DecimalExpansionSignal, decimalExpansionDef } from "@chalk/prop-decimal";
-import { LapRaceSignal, SweetShareSignal, lapRaceDef, sweetShareDef } from "@chalk/prop-primes";
+import { decimalExpansionDef } from "@chalk/prop-decimal";
+import { lapRaceDef, sweetShareDef } from "@chalk/prop-primes";
 
 /**
  * A small lesson on the library's own props, for the platform's tests (validator, runtime, server,
@@ -44,8 +43,8 @@ export function testLesson(): Lesson {
       isHidden: true,
       keepOrder: true,
     });
-    b.when(theBoard.started, title.call(SAY));
-    b.when(game.on(SweetShareSignal.Over), theBoard.show(left));
+    b.when(theBoard.started, title.call.say());
+    b.when(game.on.over, theBoard.show(left));
     return [title, game, box, left];
   });
 
@@ -61,9 +60,9 @@ export function testLesson(): Lesson {
       { text: t("Together at 12 minutes.", "12 मिनट पर साथ में।") },
       { isHidden: true },
     );
-    b.when(theBoard.started, title.call(SAY));
-    b.when(runners.on(LapRaceSignal.Met), [theBoard.show(met), met.call(SAY)]);
-    b.passWhen(runners.on(LapRaceSignal.Met));
+    b.when(theBoard.started, title.call.say());
+    b.when(runners.on.met, [theBoard.show(met), met.call.say()]);
+    b.passWhen(runners.on.met);
     return [title, runners, met];
   });
 
@@ -79,12 +78,9 @@ export function testLesson(): Lesson {
       { text: t("A remainder came back: it repeats.", "एक शेषफल लौट आया: यह दोहराता है।") },
       { isHidden: true },
     );
-    b.when(theBoard.started, title.call(SAY));
-    b.when(division.on(DecimalExpansionSignal.Repeated), [
-      theBoard.show(repeats),
-      repeats.call(SAY),
-    ]);
-    b.passWhen(division.on(DecimalExpansionSignal.Repeated));
+    b.when(theBoard.started, title.call.say());
+    b.when(division.on.repeated, [theBoard.show(repeats), repeats.call.say()]);
+    b.passWhen(division.on.repeated);
     return [title, division, repeats];
   });
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { actionsFor, defineProp, set } from "./define";
+import { actionsFor, defineProp, raise, set, signal } from "./define";
 
 /** Every board has one of these, named `board`. The board is a prop like any other. */
 export const BOARD = "board";
@@ -26,6 +26,11 @@ const boardState = z
 type BoardState = z.infer<typeof boardState>;
 
 const act = actionsFor<BoardState>();
+
+const signals = {
+  [BoardSignal.Started]: signal("The board opened"),
+  [BoardSignal.Continued]: signal("The learner pressed Continue"),
+};
 const named = z.object({ name: z.string().min(1) }).strict();
 
 /** The board itself: shows and hides props, opens the way on, and says when it starts. */
@@ -54,11 +59,8 @@ export const boardProp = defineProp({
     [BoardAction.Continue]: act({
       describe: "The learner pressed Continue",
       args: z.object({}).strict(),
-      run: (s) => (s.isPassed ? set({}, { signal: BoardSignal.Continued }) : set({})),
+      run: (s) => (s.isPassed ? set({}, raise(signals.continued)) : set({})),
     }),
   },
-  signals: {
-    [BoardSignal.Started]: { describe: "The board opened" },
-    [BoardSignal.Continued]: { describe: "The learner pressed Continue" },
-  },
+  signals,
 });

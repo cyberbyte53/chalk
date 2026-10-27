@@ -1,14 +1,7 @@
 import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
 import { bagOf, primesIn } from "./arithmetic";
-import {
-  MAX_TERM,
-  TenMakerAction,
-  type TenMakerState,
-  TenStage,
-  tensOf,
-  workingOf,
-} from "./ten-maker";
+import { MAX_TERM, type TenMakerState, TenStage, tenMaker, tensOf, workingOf } from "./ten-maker";
 import { Bead, NumberBox, SymbolButton } from "./ui";
 
 /** One bead's place in a column: still there, crossed out by cancelling, or added to make a ten. */
@@ -94,8 +87,8 @@ function Side({
  * a 5 into a ten; Add brings the missing partners in, hollow, above and below alike. The working is
  * written under it, a line per step, and one button offers the next step.
  */
-export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as TenMakerState;
+export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMaker>): JSX.Element {
+  const s = view;
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
   const t = tensOf(s.numerator, s.denominator);
   const isCancelled = s.stage !== TenStage.Given;
@@ -139,9 +132,9 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             min={0}
             max={MAX_TERM}
             part="p"
-            {...says(TenMakerAction.SetFraction)}
+            {...says(tenMaker.actions.setFraction)}
             onChange={(value) =>
-              call(TenMakerAction.SetFraction, { numerator: value, denominator: s.denominator })
+              call(tenMaker.actions.setFraction, { numerator: value, denominator: s.denominator })
             }
           />
           <NumberBox
@@ -150,9 +143,9 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             min={1}
             max={MAX_TERM}
             part="q"
-            {...says(TenMakerAction.SetFraction)}
+            {...says(tenMaker.actions.setFraction)}
             onChange={(value) =>
-              call(TenMakerAction.SetFraction, { numerator: s.numerator, denominator: value })
+              call(tenMaker.actions.setFraction, { numerator: s.numerator, denominator: value })
             }
           />
         </div>
@@ -194,7 +187,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             label={word(s.cancelLabel)}
             isWide
             part="cancel"
-            {...does(TenMakerAction.Cancel)}
+            {...does(tenMaker.actions.cancel)}
           />
         )}
         {s.stage === TenStage.Cancelled && (
@@ -203,7 +196,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             label={word(s.pairLabel)}
             isWide
             part="pair"
-            {...does(TenMakerAction.Pair)}
+            {...does(tenMaker.actions.pair)}
           />
         )}
         {s.stage === TenStage.Paired && (
@@ -213,7 +206,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             isWide
             part="topUp"
             isEnabled={t.canEnd}
-            {...does(TenMakerAction.TopUp)}
+            {...does(tenMaker.actions.topUp)}
           />
         )}
         <SymbolButton
@@ -221,7 +214,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
           label="Start again"
           part="startAgain"
           isEnabled={s.stage !== TenStage.Given}
-          {...does(TenMakerAction.StartAgain)}
+          {...does(tenMaker.actions.startAgain)}
         />
       </div>
     </div>

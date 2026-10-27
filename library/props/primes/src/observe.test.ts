@@ -28,8 +28,11 @@ const extra = {
   topUpLabel: { en: "Add {p}s", hi: "{p} जोड़ो" },
 };
 
+/** Any prop's view (each is typed by its own prop). */
+type AnyView = (props: never) => unknown;
+
 /** The view drawn at phone width, as HTML. */
-function drawn(def: AnyPropDef, View: ComponentType<PropViewProps>, s: StoredState): string {
+function drawn(def: AnyPropDef, View: AnyView, s: StoredState): string {
   const props: PropViewProps = {
     view: viewOf(def, s),
     locale: "en",
@@ -37,11 +40,11 @@ function drawn(def: AnyPropDef, View: ComponentType<PropViewProps>, s: StoredSta
     call: noop,
     signal: noop,
   };
-  return renderToString(h(View, props));
+  return renderToString(h(View as unknown as ComponentType<PropViewProps>, props));
 }
 
 /** Every element's id is tagged `data-part` in the view drawn from the same state */
-function expectAddressable(def: AnyPropDef, View: ComponentType<PropViewProps>, s: StoredState) {
+function expectAddressable(def: AnyPropDef, View: AnyView, s: StoredState) {
   const html = drawn(def, View, s);
   const seen = observationOf(def, s);
   const tagged = new Set([...html.matchAll(/data-part="([^"]+)"/g)].map((m) => m[1]));

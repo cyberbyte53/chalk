@@ -2,12 +2,7 @@ import { Stage } from "@chalk/draw";
 import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
 import { type Bag, toneOf } from "./arithmetic";
-import {
-  FactorTreeAction,
-  type FactorTreeState,
-  MAX_TREE_NUMBER,
-  type TreeNode,
-} from "./factor-tree";
+import { type FactorTreeState, MAX_TREE_NUMBER, type TreeNode, factorTree } from "./factor-tree";
 import { factorPairs } from "./seen";
 import { BagTowers, NumberBox, SymbolButton } from "./ui";
 
@@ -48,13 +43,12 @@ function place(nodes: readonly TreeNode[], width: number): Map<string, number> {
  * pairs to split it. Primes are beads in their colour; they collect in the bag underneath, which is
  * the same whichever pairs were picked.
  */
-export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Element {
-  const s = view as unknown as FactorTreeState & {
-    nodes: TreeNode[];
-    isComplete: boolean;
-    bag: Bag;
-    bagText: string;
-  };
+export function FactorTreeView({
+  view,
+  width,
+  call,
+}: PropViewProps<typeof factorTree>): JSX.Element {
+  const s = view;
   const depth = Math.max(...s.nodes.map((n) => n.depth));
   const height = TOP + depth * LEVEL + RADIUS + 12;
   const xs = place(s.nodes, width);
@@ -71,8 +65,8 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
             min={2}
             max={MAX_TREE_NUMBER}
             part="n"
-            {...says(FactorTreeAction.SetNumber)}
-            onChange={(number) => call(FactorTreeAction.SetNumber, { number })}
+            {...says(factorTree.actions.setNumber)}
+            onChange={(number) => call(factorTree.actions.setNumber, { number })}
           />
         </div>
       )}
@@ -116,7 +110,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
               class={classes.join(" ")}
               data-part={`node:${n.id}`}
               transform={`translate(${x} ${y})`}
-              {...(isOpen ? does(FactorTreeAction.Select, { node: n.id }) : {})}
+              {...(isOpen ? does(factorTree.actions.select, { node: n.id }) : {})}
               role={isOpen ? "button" : undefined}
               aria-label={isOpen ? `Split ${n.value}` : undefined}
               tabIndex={isOpen ? 0 : undefined}
@@ -125,7 +119,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
                   ? (event) => {
                       if (event.key === "Enter" || event.key === " ") {
                         event.preventDefault();
-                        call(FactorTreeAction.Select, { node: n.id });
+                        call(factorTree.actions.select, { node: n.id });
                       }
                     }
                   : undefined
@@ -150,7 +144,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
               label={`${selected.value} = ${d} × ${e}`}
               isWide
               part={`pair:${d}`}
-              {...does(FactorTreeAction.Split, { node: selected.id, factor: d })}
+              {...does(factorTree.actions.split, { node: selected.id, factor: d })}
             />
           ))}
         </div>
@@ -169,7 +163,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
           label="Start the tree again"
           part="startAgain"
           isEnabled={s.splits.length > 0}
-          {...does(FactorTreeAction.StartAgain)}
+          {...does(factorTree.actions.startAgain)}
         />
       </div>
     </div>

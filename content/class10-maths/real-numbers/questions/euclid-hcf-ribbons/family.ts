@@ -1,6 +1,6 @@
 import { family } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { StickMeasureAction, stickMeasureDef } from "@chalk/prop-primes";
+import { stickMeasureDef } from "@chalk/prop-primes";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 import { euclidAsk } from "../euclid-hcf/family";
@@ -21,11 +21,7 @@ export const euclidHcfRibbons = family({
       ribbons,
       `ribbons of ${a} and ${d}, for working Euclid's method if the student wants`,
     );
-    b.witness(
-      ribbons.learner(StickMeasureAction.Lay),
-      ribbons.learner(StickMeasureAction.Keep),
-      ribbons.learner(StickMeasureAction.Lay),
-    );
+    b.witness(ribbons.learner.lay(), ribbons.learner.keep(), ribbons.learner.lay());
     return [ask, ribbons];
   },
 });

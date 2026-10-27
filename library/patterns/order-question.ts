@@ -1,7 +1,6 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { QuestionAction, QuestionSignal } from "@chalk/prop";
-import { OrderStepsAction, orderStepsDef } from "@chalk/prop-basics";
+import { orderStepsDef } from "@chalk/prop-basics";
 
 /** One step of an argument to put in order; `hint` says what it needs before it. */
 export type OrderStep = { id: string; label: Localized; hint?: Localized };
@@ -42,20 +41,14 @@ export function orderQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  b.witness(
-    ...first.map((step) => ask.learner(OrderStepsAction.Place, { step })),
-    ask.learner(QuestionAction.Check),
-  );
+  b.witness(...first.map((step) => ask.learner.place({ step })), ask.learner.check());
   // A wrong order: the last two lines swapped, unless some right order allows that.
   const swapped = [...first.slice(0, -2), first.at(-1) as string, first.at(-2) as string];
   const isAllowed = spec.answers.some((a) => a.every((id, i) => swapped[i] === id));
   const misplaced = byId.get(first.at(-1) as string);
   if (!isAllowed && misplaced?.hint !== undefined) {
     b.noteCheck({
-      steps: [
-        ...swapped.map((step) => ask.learner(OrderStepsAction.Place, { step })),
-        ask.learner(QuestionAction.Check),
-      ],
+      steps: [...swapped.map((step) => ask.learner.place({ step })), ask.learner.check()],
       feedback: misplaced.hint,
     });
   }

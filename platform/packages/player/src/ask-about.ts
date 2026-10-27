@@ -69,30 +69,6 @@ export function pickAt(
   const at = address?.indexOf(SEP) ?? -1;
   const tagged = at < 0 ? undefined : address?.slice(at + 1);
   if (tagged !== undefined && ids.has(tagged)) part = tagged;
-  else if (def.locate !== undefined) {
-    const box = piece.getBoundingClientRect();
-    const width = Math.max(200, Math.round(box.width));
-    const px = x - box.left;
-    const py = y - box.top;
-    let best = Number.POSITIVE_INFINITY;
-    for (const { id } of elements) {
-      const names = namesOf(id);
-      const name = names.length === 1 ? (names[0] ?? id) : id;
-      const at = def.locate({ ...runtime.getView(prop) } as never, name, width);
-      if (at === undefined) continue;
-      const isIn =
-        px >= at.x - REACH_PX &&
-        px <= at.x + at.width + REACH_PX &&
-        py >= at.y - REACH_PX &&
-        py <= at.y + at.height + REACH_PX;
-      // The part whose middle is nearest the finger: the dot sitting on a tick wins over the tick.
-      const far = Math.hypot(px - (at.x + at.width / 2), py - (at.y + at.height / 2));
-      if (isIn && far < best) {
-        best = far;
-        part = id;
-      }
-    }
-  }
   const text = wordsAt(target, piece);
   const value = elements.find((e) => e.id === part)?.value;
   // The chip names a part by what it shows; words they held name a whole prop.

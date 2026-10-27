@@ -1,7 +1,6 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { QuestionAction, QuestionSignal } from "@chalk/prop";
-import { MultiChoiceAction, multiChoiceDef } from "@chalk/prop-basics";
+import { multiChoiceDef } from "@chalk/prop-basics";
 import type { Option } from "./choice-question";
 
 /**
@@ -39,27 +38,18 @@ export function multiChoiceQuestion(
     },
     { isHidden: spec.isHidden === true },
   );
-  b.witness(
-    ...spec.answers.map((option) => ask.learner(MultiChoiceAction.Toggle, { option })),
-    ask.learner(QuestionAction.Check),
-  );
+  b.witness(...spec.answers.map((option) => ask.learner.toggle({ option })), ask.learner.check());
   for (const o of spec.options) {
     if (spec.answers.includes(o.id) || o.feedback === undefined) continue;
     b.noteCheck({
-      steps: [
-        ask.learner(MultiChoiceAction.Toggle, { option: o.id }),
-        ask.learner(QuestionAction.Check),
-      ],
+      steps: [ask.learner.toggle({ option: o.id }), ask.learner.check()],
       feedback: o.feedback,
     });
   }
   const first = spec.answers[0];
   if (spec.answers.length > 1 && first !== undefined) {
     b.noteCheck({
-      steps: [
-        ask.learner(MultiChoiceAction.Toggle, { option: first }),
-        ask.learner(QuestionAction.Check),
-      ],
+      steps: [ask.learner.toggle({ option: first }), ask.learner.check()],
       feedback: spec.missing,
     });
   }

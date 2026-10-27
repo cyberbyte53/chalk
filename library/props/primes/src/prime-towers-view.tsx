@@ -3,11 +3,11 @@ import type { JSX } from "preact";
 import { gcd, lcm } from "./arithmetic";
 import {
   MAX_TOWERED,
-  PrimeTowersAction,
   type PrimeTowersState,
   TowerShow,
   hcfLine,
   lcmLine,
+  primeTowers,
   towersOf,
 } from "./prime-towers";
 import { Bead, NumberBox, SymbolButton } from "./ui";
@@ -44,8 +44,8 @@ function Level({ at, name, tone }: { at: number; name: string; tone: "hcf" | "lc
  * HCF draws a line at the shorter tower's top (the height both reach), fading what's above it; LCM
  * draws one at the taller's top (the height that covers both); HCF × LCM draws both.
  */
-export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
-  const s = view as unknown as PrimeTowersState;
+export function PrimeTowersView({ view, call }: PropViewProps<typeof primeTowers>): JSX.Element {
+  const s = view;
   const towers = towersOf(s.numberA, s.numberB);
   const isHcf = s.show === TowerShow.Hcf;
   const isLcm = s.show === TowerShow.Lcm;
@@ -67,9 +67,9 @@ export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
             min={2}
             max={MAX_TOWERED}
             part="a"
-            {...says(PrimeTowersAction.SetNumbers)}
+            {...says(primeTowers.actions.setNumbers)}
             onChange={(value) =>
-              call(PrimeTowersAction.SetNumbers, { numberA: value, numberB: s.numberB })
+              call(primeTowers.actions.setNumbers, { numberA: value, numberB: s.numberB })
             }
           />
           <NumberBox
@@ -78,9 +78,9 @@ export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
             min={2}
             max={MAX_TOWERED}
             part="b"
-            {...says(PrimeTowersAction.SetNumbers)}
+            {...says(primeTowers.actions.setNumbers)}
             onChange={(value) =>
-              call(PrimeTowersAction.SetNumbers, { numberA: s.numberA, numberB: value })
+              call(primeTowers.actions.setNumbers, { numberA: s.numberA, numberB: value })
             }
           />
         </div>
@@ -125,7 +125,7 @@ export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
               isWide
               isOn={s.show === c}
               part={c}
-              {...does(PrimeTowersAction.Show, { show: c })}
+              {...does(primeTowers.actions.show, { show: c })}
             />
           ))}
         </div>

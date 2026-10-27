@@ -34,8 +34,7 @@ const BASICS = join(contentDir, "../library/props/basics/src/index.ts");
 const pickDecimal = (from: (file: string) => string) => `
 import { decimal, family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { QuestionAction } from "@chalk/prop";
-import { ChoiceAction, choiceDef } from "${from(BASICS)}";
+import { choiceDef } from "${from(BASICS)}";
 import { z } from "zod";
 export const pickDecimal = family({
   level: Level.Medium,
@@ -53,9 +52,9 @@ export const pickDecimal = family({
       options,
       answer,
     });
-    b.witness(ask.learner(ChoiceAction.Select, { option: answer }), ask.learner(QuestionAction.Check));
+    b.witness(ask.learner.select({ option: answer }), ask.learner.check());
     b.noteCheck({
-      steps: [ask.learner(ChoiceAction.Select, { option: "swapped" }), ask.learner(QuestionAction.Check)],
+      steps: [ask.learner.select({ option: "swapped" }), ask.learner.check()],
       feedback: options[0]!.feedback!,
     });
     return [ask];
@@ -70,8 +69,7 @@ const ONE_ROW = [{ params: { target: "7.384", from: 7, to: 8 } }];
 const twoQuestions = (answered: readonly string[]) => (basics: string) =>
   `
 import { page, t } from "@chalk/author";
-import { QuestionAction } from "@chalk/prop";
-import { ChoiceAction, choiceDef } from "${basics}";
+import { choiceDef } from "${basics}";
 const options = [{ id: "yes", label: t("Yes", "हाँ") }, { id: "no", label: t("No", "नहीं") }];
 export const overview = [
   page("two", (b) => {
@@ -79,7 +77,7 @@ export const overview = [
       b.prop(choiceDef, name, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" }),
     );
     for (const q of qs.filter((q) => ${JSON.stringify(answered)}.includes(q.name)))
-      b.witness(q.learner(ChoiceAction.Select, { option: "yes" }), q.learner(QuestionAction.Check));
+      b.witness(q.learner.select({ option: "yes" }), q.learner.check());
     return qs;
   }),
 ];

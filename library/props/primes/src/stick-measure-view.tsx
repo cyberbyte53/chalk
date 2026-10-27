@@ -3,11 +3,11 @@ import type { JSX } from "preact";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import {
   MAX_STICK,
-  StickMeasureAction,
   type StickMeasureState,
   fillStep,
   fitLines,
   pieceGap,
+  stickMeasure,
   workingOf,
 } from "./stick-measure";
 import { NumberBox, SymbolButton } from "./ui";
@@ -158,8 +158,13 @@ function Sticks({
  * of the shorter along the longer as fit and colours the leftover; Keep moves on to the shorter and
  * the leftover, drawn to fill the width again. The steps are written underneath.
  */
-export function StickMeasureView({ view, width, call, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as StickMeasureState & { isDone: boolean };
+export function StickMeasureView({
+  view,
+  width,
+  call,
+  locale,
+}: PropViewProps<typeof stickMeasure>): JSX.Element {
+  const s = view;
   const steps = euclidSteps(s.stickA, s.stickB);
   const step = steps[s.rounds];
   const word = (w: { en: string; hi?: string }) => w[locale as "en" | "hi"] ?? w.en;
@@ -179,9 +184,9 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
             min={1}
             max={MAX_STICK}
             part="a"
-            {...says(StickMeasureAction.SetSticks)}
+            {...says(stickMeasure.actions.setSticks)}
             onChange={(value) =>
-              call(StickMeasureAction.SetSticks, { stickA: value, stickB: s.stickB })
+              call(stickMeasure.actions.setSticks, { stickA: value, stickB: s.stickB })
             }
           />
           <NumberBox
@@ -190,9 +195,9 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
             min={1}
             max={MAX_STICK}
             part="b"
-            {...says(StickMeasureAction.SetSticks)}
+            {...says(stickMeasure.actions.setSticks)}
             onChange={(value) =>
-              call(StickMeasureAction.SetSticks, { stickA: s.stickA, stickB: value })
+              call(stickMeasure.actions.setSticks, { stickA: s.stickA, stickB: value })
             }
           />
         </div>
@@ -219,7 +224,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
               label={`Mark pieces of ${n}`}
               part={`piece-${n}`}
               isOn={s.piece === n}
-              {...does(StickMeasureAction.TryPiece, { length: s.piece === n ? 0 : n })}
+              {...does(stickMeasure.actions.tryPiece, { length: s.piece === n ? 0 : n })}
             />
           ))}
         </div>
@@ -252,7 +257,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
               label={word(s.words.keep)}
               isWide
               part="keep"
-              {...does(StickMeasureAction.Keep)}
+              {...does(stickMeasure.actions.keep)}
             />
           ) : (
             <SymbolButton
@@ -261,7 +266,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
               isWide
               part="lay"
               isEnabled={!s.isLaid}
-              {...does(StickMeasureAction.Lay)}
+              {...does(stickMeasure.actions.lay)}
             />
           )}
           <SymbolButton
@@ -269,7 +274,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
             label="Start again"
             part="startAgain"
             isEnabled={s.rounds > 0 || s.isLaid}
-            {...does(StickMeasureAction.StartAgain)}
+            {...does(stickMeasure.actions.startAgain)}
           />
         </div>
       )}

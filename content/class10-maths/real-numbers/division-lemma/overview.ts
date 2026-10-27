@@ -1,7 +1,7 @@
 import { type At, page, t, theBoard } from "@chalk/author";
 import { choice, choiceQuestion, wordsOn } from "@chalk/patterns";
-import { AnswerStatus, QuestionSignal } from "@chalk/prop";
-import { SweetShareAction, SweetShareSignal, sweetShareDef } from "@chalk/prop-primes";
+import { AnswerStatus } from "@chalk/prop";
+import { sweetShareDef } from "@chalk/prop-primes";
 
 const r = String.raw;
 
@@ -25,11 +25,7 @@ const story = page("story", (b) => {
     ...shareWords,
   });
   b.standsFor(game, "Riya's 20 sweets shared among 6 friends, a round at a time");
-  b.witness(
-    game.learner(SweetShareAction.GiveRound),
-    game.learner(SweetShareAction.GiveRound),
-    game.learner(SweetShareAction.GiveRound),
-  );
+  b.witness(game.learner.giveRound(), game.learner.giveRound(), game.learner.giveRound());
   // The counts read in order (0, 1, 2), so they are written in order, not shuffled.
   const last = choiceQuestion(b, {
     name: "last",
@@ -67,14 +63,14 @@ const story = page("story", (b) => {
     "wrap",
   );
   // Asked after the second round, before the screen shows the game ending.
-  b.after(game.on(SweetShareSignal.Round), last, { if: (at) => at(game).rounds === 2 });
+  b.after(game.on.round, last, { if: (at) => at(game).rounds === 2 });
   // The wrap-up once both are done: the answer given and the last round played.
   b.after(last, wrap, { if: (at) => at(game).rounds >= 3 });
   const isAnswered = (at: At) => at(last).status === AnswerStatus.Correct;
-  b.when(game.on(SweetShareSignal.Over), theBoard.show(wrap), isAnswered);
+  b.when(game.on.over, theBoard.show(wrap), isAnswered);
   // On only when both are done, too.
-  b.passWhen(game.on(SweetShareSignal.Over), { if: isAnswered });
-  b.passWhen(last.on(QuestionSignal.Correct), { if: (at) => at(game).rounds >= 3 });
+  b.passWhen(game.on.over, { if: isAnswered });
+  b.passWhen(last.on.correct, { if: (at) => at(game).rounds >= 3 });
   return [
     w.title(t("Euclid's division lemma", "यूक्लिड विभाजन प्रमेयिका")),
     w.body(

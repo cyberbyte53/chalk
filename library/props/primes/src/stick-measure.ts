@@ -1,32 +1,10 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import { button, option } from "./seen";
 
 export const MAX_STICK = 100_000;
-
-export const StickMeasureAction = {
-  Lay: "lay",
-  Keep: "keep",
-  LayAll: "layAll",
-  StartAgain: "startAgain",
-  SetSticks: "setSticks",
-  TryPiece: "tryPiece",
-} as const;
-
-export const StickMeasureDerived = {
-  Pair: "pair",
-  IsDone: "isDone",
-  Hcf: "hcf",
-} as const;
-
-export const StickMeasureSignal = {
-  Laid: "laid",
-  Kept: "kept",
-  Finished: "finished",
-  Tried: "tried",
-} as const;
 
 const stickMeasureState = z
   .object({
@@ -162,6 +140,12 @@ export function sticksText(s: StickMeasureState): string {
   return parts.join("; ");
 }
 
+const signals = {
+  laid: signal("The shorter stick was laid along the longer; the division"),
+  kept: signal("The leftover was kept: the new `long` and `short`"),
+  finished: signal("Nothing was left over; `hcf` is the last stick laid"),
+  tried: signal("A piece `length` was marked; `fitsBoth` sticks"),
+};
 /**
  * Euclid's method with two sticks: lay the shorter along the longer as many times as it fits, keep
  * the leftover, and do the same with the shorter stick and the leftover, until nothing is left over.
@@ -201,24 +185,24 @@ export const stickMeasure = defineProp({
   },
   inputs: ["canLay", "showDivision"],
   derived: {
-    [StickMeasureDerived.Pair]: {
+    pair: {
       describe: "The two sticks in front of the learner now, { long, short }",
       compute: (s) => {
         const step = stepNow(s);
         return step === undefined ? null : { long: step.a, short: step.b };
       },
     },
-    [StickMeasureDerived.IsDone]: {
+    isDone: {
       describe: "The last stick laid fits exactly: nothing is left over",
       compute: isDoneOf,
     },
-    [StickMeasureDerived.Hcf]: {
+    hcf: {
       describe: "The longest piece that measures both sticks: HCF(a, b)",
       compute: (s) => stepsOf(s).at(-1)?.b ?? Math.max(s.stickA, s.stickB),
     },
   },
   actions: {
-    [StickMeasureAction.Lay]: act({
+    lay: act({
       describe:
         "Lay the shorter stick along the longer as many times as it fits (the learner's button)",
       changes: ["isLaid"],
@@ -227,13 +211,12 @@ export const stickMeasure = defineProp({
       run: (s) => {
         const step = stepNow(s);
         if (s.isLaid || step === undefined) return set({});
-        const emits: Emit[] = [{ signal: StickMeasureSignal.Laid, payload: { ...step } }];
-        if (step.r === 0)
-          emits.push({ signal: StickMeasureSignal.Finished, payload: { hcf: step.b } });
+        const emits: Emit[] = [raise(signals.laid, { ...step })];
+        if (step.r === 0) emits.push(raise(signals.finished, { hcf: step.b }));
         return set({ isLaid: true }, ...emits);
       },
     }),
-    [StickMeasureAction.Keep]: act({
+    keep: act({
       describe: "Keep the shorter stick and the leftover, and set the rest aside",
       changes: ["rounds", "isLaid"],
       byLearner: true,
@@ -243,11 +226,11 @@ export const stickMeasure = defineProp({
         if (!s.isLaid || step === undefined || step.r === 0) return set({});
         return set(
           { rounds: s.rounds + 1, isLaid: false },
-          { signal: StickMeasureSignal.Kept, payload: { long: step.b, short: step.r } },
+          raise(signals.kept, { long: step.b, short: step.r }),
         );
       },
     }),
-    [StickMeasureAction.LayAll]: act({
+    layAll: act({
       describe: "Do every step at once",
       changes: ["rounds", "isLaid"],
       reveals: true,
@@ -258,18 +241,18 @@ export const stickMeasure = defineProp({
         if (last === undefined || isDoneOf(s)) return set({});
         return set(
           { rounds: steps.length - 1, isLaid: true },
-          { signal: StickMeasureSignal.Finished, payload: { hcf: last.b } },
+          raise(signals.finished, { hcf: last.b }),
         );
       },
     }),
-    [StickMeasureAction.StartAgain]: act({
+    startAgain: act({
       describe: "Back to the two sticks the learner started with",
       changes: ["rounds", "isLaid"],
       byLearner: true,
       args: none,
       run: () => set({ rounds: 0, isLaid: false }),
     }),
-    [StickMeasureAction.SetSticks]: act({
+    setSticks: act({
       describe: "Two new sticks",
       changes: ["stickA", "stickB", "rounds", "isLaid", "piece"],
       byLearner: true,
@@ -282,7 +265,7 @@ export const stickMeasure = defineProp({
       run: (_s, a) =>
         set({ stickA: a.stickA, stickB: a.stickB, rounds: 0, isLaid: false, piece: 0 }),
     }),
-    [StickMeasureAction.TryPiece]: act({
+    tryPiece: act({
       describe: "Mark pieces of this length along every stick (0 takes the marks off)",
       changes: ["piece"],
       byLearner: true,
@@ -292,27 +275,15 @@ export const stickMeasure = defineProp({
         if (a.length === 0 || step === undefined) return set({ piece: a.length });
         return set(
           { piece: a.length },
-          {
-            signal: StickMeasureSignal.Tried,
-            payload: {
-              length: a.length,
-              fitsBoth: step.a % a.length === 0 && step.b % a.length === 0,
-            },
-          },
+          raise(signals.tried, {
+            length: a.length,
+            fitsBoth: step.a % a.length === 0 && step.b % a.length === 0,
+          }),
         );
       },
     }),
   },
-  signals: {
-    [StickMeasureSignal.Laid]: {
-      describe: "The shorter stick was laid along the longer; the division",
-    },
-    [StickMeasureSignal.Kept]: { describe: "The leftover was kept: the new `long` and `short`" },
-    [StickMeasureSignal.Finished]: {
-      describe: "Nothing was left over; `hcf` is the last stick laid",
-    },
-    [StickMeasureSignal.Tried]: { describe: "A piece `length` was marked; `fitsBoth` sticks" },
-  },
+  signals,
   invariant: (s) =>
     s.rounds < Math.max(1, stepsOf(s).length) ? undefined : `only ${stepsOf(s).length} steps`,
   observe: (s) => {

@@ -5,10 +5,12 @@ import {
   actionsFor,
   asAnyProp,
   defineProp,
+  raise,
   repeat,
   say,
   seq,
   set,
+  signal,
   tween,
   waitUntil,
 } from "@chalk/prop";
@@ -25,6 +27,7 @@ const coinState = z
   .strict();
 type CoinState = z.infer<typeof coinState>;
 const coinAct = actionsFor<CoinState>();
+const coinSignals = { landed: signal("Landed") };
 const coin = defineProp({
   type: "coin",
   describe: "A coin that lands on `next` (tests decide; no randomness here)",
@@ -37,11 +40,11 @@ const coin = defineProp({
       run: (s) =>
         set(
           { heads: s.heads + (s.next === "H" ? 1 : 0), count: s.count + 1 },
-          { signal: "landed", payload: { face: s.next } },
+          raise(coinSignals.landed, { face: s.next }),
         ),
     }),
   },
-  signals: { landed: { describe: "Landed" } },
+  signals: coinSignals,
 });
 
 const dialState = z.object({ at: z.number().min(0).max(10) }).strict();
@@ -103,6 +106,17 @@ const tickerState = z
   .strict();
 type TickerState = z.infer<typeof tickerState>;
 const tickerAct = actionsFor<TickerState>();
+const tickerSignals = {
+  ticked: signal("A tick"),
+  glided: signal("Glided"),
+  three: signal("Three"),
+};
+const tick = tickerAct({
+  describe: "One tick",
+  internal: true,
+  args: z.object({}).strict(),
+  run: (s) => set({ ticks: s.ticks + 1 }, raise(tickerSignals.ticked, { ticks: s.ticks + 1 })),
+});
 /** Steps as data: a repeat with an internal tick, a glide, and a wait for its own state. */
 const ticker = defineProp({
   type: "ticker",
@@ -113,15 +127,9 @@ const ticker = defineProp({
     start: tickerAct({
       describe: "Tick every 0.1 s until stopped",
       args: z.object({}).strict(),
-      run: () => seq(set({ isRunning: true }), repeat(0.1, "tick", { while: (s) => s.isRunning })),
+      run: () => seq(set({ isRunning: true }), repeat(0.1, tick, { while: (s) => s.isRunning })),
     }),
-    tick: tickerAct({
-      describe: "One tick",
-      internal: true,
-      args: z.object({}).strict(),
-      run: (s) =>
-        set({ ticks: s.ticks + 1 }, { signal: "ticked", payload: { ticks: s.ticks + 1 } }),
-    }),
+    tick,
     stop: tickerAct({
       describe: "Stop",
       byLearner: true,
@@ -131,7 +139,7 @@ const ticker = defineProp({
     glide: tickerAct({
       describe: "Glide `at` to 10 over a second, then say so",
       args: z.object({}).strict(),
-      run: () => seq(tween(1, { at: 10 }), set({}, { signal: "glided" })),
+      run: () => seq(tween(1, { at: 10 }), set({}, raise(tickerSignals.glided))),
     }),
     nudge: tickerAct({
       describe: "The learner moves `at` by hand",
@@ -145,15 +153,11 @@ const ticker = defineProp({
       run: () =>
         seq(
           waitUntil((s) => s.ticks >= 3),
-          set({}, { signal: "three" }),
+          set({}, raise(tickerSignals.three)),
         ),
     }),
   },
-  signals: {
-    ticked: { describe: "A tick" },
-    glided: { describe: "Glided" },
-    three: { describe: "Three" },
-  },
+  signals: tickerSignals,
 });
 
 const defs: Record<string, AnyPropDef> = {

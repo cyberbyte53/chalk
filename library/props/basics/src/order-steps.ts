@@ -2,16 +2,15 @@ import { localizedSchema } from "@chalk/content";
 import {
   AnswerStatus,
   PropRole,
-  QuestionAction,
-  QuestionSignal,
-  SAY,
   SizeFit,
   actionsFor,
   defineProp,
   questionDefaults,
   questionFields,
+  raise,
   say,
   set,
+  signal,
 } from "@chalk/prop";
 import { z } from "zod";
 
@@ -41,8 +40,6 @@ const orderStepsState = z
   .strict();
 export type OrderStepsState = z.infer<typeof orderStepsState>;
 
-export const OrderStepsAction = { Place: "place", Remove: "remove" } as const;
-
 const act = actionsFor<OrderStepsState>();
 const noArgs = z.object({}).strict();
 
@@ -60,6 +57,11 @@ export function firstWrong(
   return best;
 }
 
+const signals = {
+  checked: signal("The learner pressed Check"),
+  correct: signal("Checked, and in a right order"),
+  wrong: signal("Checked, and out of order"),
+};
 /**
  * Put the steps of a proof (or any argument) in order: tap a step to add it as the next line, tap a
  * placed line to take it back, then Check. A step out of place says what it needs before it.
@@ -96,7 +98,7 @@ export const orderSteps = defineProp({
   },
   offScreen: ["answers"],
   actions: {
-    [OrderStepsAction.Place]: act({
+    place: act({
       describe: "Add a step as the next line (what the learner's tap on a step does)",
       changes: ["placed", "status", "feedback"],
       byLearner: true,
@@ -107,7 +109,7 @@ export const orderSteps = defineProp({
         return set({ placed: [...s.placed, a.step], status: AnswerStatus.Open, feedback: null });
       },
     }),
-    [OrderStepsAction.Remove]: act({
+    remove: act({
       describe: "Take a placed line back (what the learner's tap on a placed line does)",
       changes: ["placed", "status", "feedback"],
       byLearner: true,
@@ -121,7 +123,7 @@ export const orderSteps = defineProp({
         });
       },
     }),
-    [QuestionAction.Check]: act({
+    check: act({
       describe: "Check the order",
       changes: ["status", "attempts", "feedback"],
       byLearner: true,
@@ -136,16 +138,18 @@ export const orderSteps = defineProp({
         const attempts = s.attempts + 1;
         return set(
           { status, attempts, feedback },
-          {
-            signal: QuestionSignal.Checked,
-            // The learner's order, as the ids of the steps line by line.
-            payload: { status, attempts, isGraded: s.isGraded, optionIds: [...s.placed] },
-          },
-          { signal: isRight ? QuestionSignal.Correct : QuestionSignal.Wrong },
+          // The learner's order, as the ids of the steps line by line.
+          raise(signals.checked, {
+            status,
+            attempts,
+            isGraded: s.isGraded,
+            optionIds: [...s.placed],
+          }),
+          raise(isRight ? signals.correct : signals.wrong),
         );
       },
     }),
-    [QuestionAction.Retry]: act({
+    retry: act({
       describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
       changes: ["status", "feedback"],
       byLearner: true,
@@ -155,24 +159,20 @@ export const orderSteps = defineProp({
           ? set({ status: AnswerStatus.Open, feedback: null })
           : set({}),
     }),
-    [QuestionAction.GiveFeedback]: act({
+    giveFeedback: act({
       describe: "Show words under the question (e.g. a hint)",
       changes: ["feedback"],
       args: z.object({ text: localizedSchema }).strict(),
       run: (_s, a) => set({ feedback: a.text }),
     }),
-    [SAY]: act({
+    say: act({
       describe: "Read the prompt aloud (narrator)",
       changes: [],
       args: noArgs,
       run: () => say(),
     }),
   },
-  signals: {
-    [QuestionSignal.Checked]: { describe: "The learner pressed Check" },
-    [QuestionSignal.Correct]: { describe: "Checked, and in a right order" },
-    [QuestionSignal.Wrong]: { describe: "Checked, and out of order" },
-  },
+  signals,
   invariant: (s) => {
     const ids = s.steps.map((st) => st.id);
     for (const answer of s.answers) {

@@ -9,12 +9,12 @@ import {
   useFitColumns,
   usePlayMode,
 } from "@chalk/player";
-import { AnswerStatus, QuestionAction, cssColor } from "@chalk/prop";
+import { AnswerStatus, cssColor } from "@chalk/prop";
 import type { JSX } from "preact";
-import { ChoiceAction, type ChoiceState } from "./choice";
-import { MultiChoiceAction, type MultiChoiceState } from "./multi-choice";
-import { OrderStepsAction, type OrderStepsState } from "./order-steps";
-import type { TextState } from "./text";
+import { type ChoiceState, choice } from "./choice";
+import { type MultiChoiceState, multiChoice } from "./multi-choice";
+import { type OrderStepsState, orderSteps } from "./order-steps";
+import type { text } from "./text";
 
 // The player hands each view its own prop's state, already checked against that prop's schema.
 
@@ -26,8 +26,8 @@ function useIsHeld(status: AnswerStatus): boolean {
   return usePlayMode() !== undefined && status === AnswerStatus.Wrong;
 }
 
-export function TextView({ view, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as TextState;
+export function TextView({ view, locale }: PropViewProps<typeof text>): JSX.Element {
+  const s = view;
   return (
     <p
       class={`piece-text text-${s.style}${s.color === null ? "" : " has-color"}`}
@@ -54,13 +54,13 @@ function labelsKey(
 }
 
 /** Tapping an option answers: it is picked and checked at once, and the feedback shows below. */
-export function ChoiceView({ view, locale, call }: PropViewProps): JSX.Element {
-  const s = view as unknown as ChoiceState;
+export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>): JSX.Element {
+  const s = view;
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
   const answer = (option: string) => {
-    call(ChoiceAction.Select, { option });
-    call(QuestionAction.Check);
+    call(choice.actions.select, { option });
+    call(choice.actions.check);
   };
   const [fit, columns] = useFitColumns<HTMLFieldSetElement>(
     s.options.length,
@@ -80,7 +80,7 @@ export function ChoiceView({ view, locale, call }: PropViewProps): JSX.Element {
             aria-label={plainText(option.label[locale] ?? "")}
             class={choiceClass(s, option.id)}
             disabled={isLocked}
-            {...says(ChoiceAction.Select, QuestionAction.Check)}
+            {...says(choice.actions.select, choice.actions.check)}
             onClick={() => answer(option.id)}
           >
             <RichText text={option.label[locale]} />
@@ -101,8 +101,8 @@ function multiClass(s: MultiChoiceState, option: string): string {
 }
 
 /** Pick every right option, then Check: tapping only picks, so one tap gives nothing away. */
-export function MultiChoiceView({ view, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as MultiChoiceState & { canCheck: boolean };
+export function MultiChoiceView({ view, locale }: PropViewProps<typeof multiChoice>): JSX.Element {
+  const s = view;
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
   const [fit, columns] = useFitColumns<HTMLFieldSetElement>(
@@ -123,7 +123,7 @@ export function MultiChoiceView({ view, locale }: PropViewProps): JSX.Element {
             aria-label={plainText(option.label[locale] ?? "")}
             class={multiClass(s, option.id)}
             disabled={isLocked}
-            {...does(MultiChoiceAction.Toggle, { option: option.id })}
+            {...does(multiChoice.actions.toggle, { option: option.id })}
           >
             <RichText text={option.label[locale]} />
           </button>
@@ -134,7 +134,7 @@ export function MultiChoiceView({ view, locale }: PropViewProps): JSX.Element {
           type="button"
           class="question-check"
           disabled={!s.canCheck || isHeld}
-          {...does(QuestionAction.Check)}
+          {...does(multiChoice.actions.check)}
         >
           {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
         </button>
@@ -148,8 +148,8 @@ export function MultiChoiceView({ view, locale }: PropViewProps): JSX.Element {
  * Put a proof's steps in order: the lines placed so far, numbered, then the steps still to place.
  * Tap a step to add it as the next line; tap a line to take it back.
  */
-export function OrderStepsView({ view, locale }: PropViewProps): JSX.Element {
-  const s = view as unknown as OrderStepsState & { canCheck: boolean };
+export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps>): JSX.Element {
+  const s = view;
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
   const byId = new Map(s.steps.map((st) => [st.id, st]));
@@ -170,7 +170,7 @@ export function OrderStepsView({ view, locale }: PropViewProps): JSX.Element {
                 class="order-line"
                 disabled={isLocked}
                 aria-label={`Take back: ${plainText(step.label[locale] ?? "")}`}
-                {...does(OrderStepsAction.Remove, { step: id })}
+                {...does(orderSteps.actions.remove, { step: id })}
               >
                 <RichText text={step.label[locale]} />
               </button>
@@ -191,7 +191,7 @@ export function OrderStepsView({ view, locale }: PropViewProps): JSX.Element {
               key={step.id}
               class="choice order-step"
               aria-label={plainText(step.label[locale] ?? "")}
-              {...does(OrderStepsAction.Place, { step: step.id })}
+              {...does(orderSteps.actions.place, { step: step.id })}
             >
               <RichText text={step.label[locale]} />
             </button>
@@ -203,7 +203,7 @@ export function OrderStepsView({ view, locale }: PropViewProps): JSX.Element {
           type="button"
           class="question-check"
           disabled={!s.canCheck || isHeld}
-          {...does(QuestionAction.Check)}
+          {...does(orderSteps.actions.check)}
         >
           {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
         </button>

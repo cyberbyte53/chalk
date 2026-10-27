@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, defineProp, set } from "@chalk/prop";
+import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, gcd, lcm, primesIn } from "./arithmetic";
 import { option } from "./seen";
@@ -12,10 +12,6 @@ export const TowerShow = {
   Product: "product",
 } as const;
 export type TowerShow = (typeof TowerShow)[keyof typeof TowerShow];
-
-export const PrimeTowersAction = { Show: "show", SetNumbers: "setNumbers" } as const;
-export const PrimeTowersDerived = { Hcf: "hcf", Lcm: "lcm" } as const;
-export const PrimeTowersSignal = { Shown: "shown" } as const;
 
 const primeTowersState = z
   .object({
@@ -63,6 +59,9 @@ export function towerText(t: { prime: number; inA: number; inB: number }, a: num
   return `${t.prime}: ${a} has ${t.inA}, ${b} has ${t.inB}`;
 }
 
+const signals = {
+  shown: signal("The towers now mark `show`"),
+};
 /**
  * Two numbers as towers of primes: for each prime, the two numbers' towers stand side by side, as
  * high as the prime's power in each. The HCF line sits at the shorter tower's top (the height both
@@ -83,28 +82,28 @@ export const primeTowers = defineProp({
   },
   inputs: ["show"],
   derived: {
-    [PrimeTowersDerived.Hcf]: {
+    hcf: {
       describe: "HCF of the two numbers",
       compute: (s) => gcd(s.numberA, s.numberB),
     },
-    [PrimeTowersDerived.Lcm]: {
+    lcm: {
       describe: "LCM of the two numbers",
       compute: (s) => lcm(s.numberA, s.numberB),
     },
   },
   actions: {
-    [PrimeTowersAction.Show]: act({
+    show: act({
       describe: "Mark the HCF, the LCM or HCF × LCM on the towers (the learner's buttons)",
       changes: ["show"],
       byLearner: true,
       args: z.object({ show: z.nativeEnum(TowerShow) }).strict(),
       run: (s, a) => {
         if (a.show !== TowerShow.Apart && !s.choices.includes(a.show)) return set({});
-        const emits: Emit[] = [{ signal: PrimeTowersSignal.Shown, payload: { show: a.show } }];
+        const emits: Emit[] = [raise(signals.shown, { show: a.show })];
         return set({ show: a.show }, ...emits);
       },
     }),
-    [PrimeTowersAction.SetNumbers]: act({
+    setNumbers: act({
       describe: "Two new numbers (the learner types them); nothing marked",
       changes: ["numberA", "numberB", "show"],
       byLearner: true,
@@ -117,9 +116,7 @@ export const primeTowers = defineProp({
       run: (_s, a) => set({ numberA: a.numberA, numberB: a.numberB, show: TowerShow.Apart }),
     }),
   },
-  signals: {
-    [PrimeTowersSignal.Shown]: { describe: "The towers now mark `show`" },
-  },
+  signals,
   observe: (s) => {
     const towers = towersOf(s.numberA, s.numberB);
     const result =

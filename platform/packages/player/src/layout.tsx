@@ -1,6 +1,6 @@
 import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/content";
 import { Actor } from "@chalk/content";
-import { type Box, PHONE_COLUMN, joinPath, namesOf, segment, sizeOf, zoomFor } from "@chalk/prop";
+import { type Box, PHONE_COLUMN, joinPath, nameOf, segment, sizeOf, zoomFor } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type BoardClock, BoardClockContext } from "./board-clock";
@@ -25,19 +25,6 @@ function tagged(box: HTMLDivElement | null, part: string): Box | undefined {
     height: inner.height,
   };
 }
-
-/** A box in the prop's own coordinates, as it is drawn at this zoom. */
-function scaled(at: Box | undefined, zoom: number): Box | undefined {
-  return at === undefined
-    ? undefined
-    : { x: at.x * zoom, y: at.y * zoom, width: at.width * zoom, height: at.height * zoom };
-}
-
-/** A leaf's part name from its address under the piece (what `locate` takes). */
-const nameIn = (part: string): string => {
-  const names = namesOf(part);
-  return names.length === 1 ? (names[0] ?? part) : part;
-};
 
 export type LayoutContext = {
   locale: Locale;
@@ -99,15 +86,9 @@ function PropPieceView({
     [runtime],
   );
   const pointed = context.pointed?.prop === piece.name ? context.pointed : undefined;
-  // A part is ringed where the prop says it is drawn (`locate`), or where the view tagged it
-  // (`data-part`); without either, the whole prop glows.
+  // A part is ringed where the view tagged it (`data-part`); without that, the whole prop glows.
   const ringOf = (part: string | undefined): Box | undefined =>
-    part === undefined
-      ? undefined
-      : (scaled(
-          module.def.locate?.({ ...runtime.getView(piece.name) } as never, nameIn(part), width),
-          zoom,
-        ) ?? tagged(box.current, part));
+    part === undefined ? undefined : tagged(box.current, part);
   const ring = ringOf(pointed?.part);
   const isWholeGlow = pointed !== undefined && ring === undefined;
   const picks = (context.picked ?? []).filter((p) => p.prop === piece.name);
@@ -163,13 +144,13 @@ function PropPieceView({
             view={runtime.getView(piece.name)}
             locale={context.locale}
             width={width}
-            call={(action, args) =>
-              heard(piece.name, action, () =>
-                runtime.call(piece.name, action, args ?? {}, Actor.Learner),
+            call={(action, ...args) =>
+              heard(piece.name, nameOf(action), () =>
+                runtime.call(piece.name, nameOf(action), { ...(args[0] ?? {}) }, Actor.Learner),
               )
             }
-            signal={(name, payload) =>
-              runtime.signal(piece.name, name, payload ?? {}, Actor.Learner)
+            signal={(signal, payload) =>
+              runtime.signal(piece.name, nameOf(signal), payload ?? {}, Actor.Learner)
             }
           />
         </BoardClockContext.Provider>

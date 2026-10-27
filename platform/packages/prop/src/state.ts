@@ -1,13 +1,5 @@
 import { SEP, segment } from "./address";
-import type {
-  AnyPropDef,
-  Effect,
-  Element,
-  Observation,
-  PartSpec,
-  PropView,
-  StoredState,
-} from "./define";
+import type { AnyPropDef, Effect, Element, Observation, PropView, StoredState } from "./define";
 import { EffectKind } from "./define";
 
 export type StateResult =
@@ -26,7 +18,7 @@ export function viewOf(def: AnyPropDef, stored: StoredState): PropView {
 
 /**
  * What the student sees of a prop right now: its own `observe`, or the default made from its view
- * (every field an element, `offScreen` ones under `hidden`) and its parts.
+ * (every field an element, `offScreen` ones under `hidden`).
  */
 export function observationOf(def: AnyPropDef, stored: StoredState): Observation {
   return observationOfView(def, viewOf(def, stored));
@@ -46,7 +38,6 @@ export function observationOfView(def: AnyPropDef, view: PropView): Observation 
 
 function leafObservation(def: AnyPropDef, view: PropView): Observation {
   if (def.observe !== undefined) return def.observe(view as never);
-  if (def.anatomy !== undefined) return anatomyObservation(def, view);
   const hiddenFields = new Set(def.offScreen ?? []);
   const elements: Element[] = [];
   const hidden: Record<string, unknown> = {};
@@ -54,47 +45,11 @@ function leafObservation(def: AnyPropDef, view: PropView): Observation {
     if (hiddenFields.has(field)) hidden[field] = value;
     else elements.push({ id: field, value });
   }
-  const seen = new Set(elements.map((e) => e.id));
-  for (const part of def.parts?.(view as never) ?? [])
-    if (!seen.has(part)) elements.push({ id: part });
   return {
     summary: def.describe,
     elements,
     ...(Object.keys(hidden).length > 0 ? { hidden } : {}),
   };
-}
-
-/** A description made from declared parts: each part there now, with what it shows and does. */
-function anatomyObservation(def: AnyPropDef, view: PropView): Observation {
-  const s = view as PropView & StoredState;
-  const elements: Element[] = [];
-  for (const [name, spec] of Object.entries(def.anatomy ?? {}) as [
-    string,
-    PartSpec<StoredState>,
-  ][]) {
-    if (spec.when !== undefined && !spec.when(s)) continue;
-    const drag = spec.drag?.enabled?.(s) === false ? undefined : spec.drag;
-    const press = spec.press?.enabled?.(s) === false ? undefined : spec.press;
-    const does = drag
-      ? [drag.move, ...(drag.release?.action ? [drag.release.action] : [])]
-      : press
-        ? [press.action]
-        : [];
-    const doing = does.length === 0 ? {} : { does: does.length === 1 ? (does[0] as string) : does };
-    if (spec.each !== undefined) {
-      for (const item of spec.each(s)) elements.push({ ...item, ...doing });
-      continue;
-    }
-    const value = spec.value?.(s);
-    const words = spec.words?.(s);
-    elements.push({
-      id: name,
-      ...(value !== undefined ? { value } : {}),
-      ...(words !== undefined ? { words } : {}),
-      ...doing,
-    });
-  }
-  return { summary: def.summary?.(s) ?? def.describe, elements };
 }
 
 /**

@@ -1,11 +1,6 @@
 import { page, t } from "@chalk/author";
 import { choice, wordsOn } from "@chalk/patterns";
-import {
-  FactorTreeAction,
-  FactorTreeSignal,
-  factorTreeDef,
-  primeTowersDef,
-} from "@chalk/prop-primes";
+import { factorTreeDef, primeTowersDef } from "@chalk/prop-primes";
 
 const r = String.raw;
 
@@ -25,8 +20,8 @@ const story = page("story", (b) => {
   });
   b.standsFor(riya, "Riya's tree: 360 split first as 10 × 36");
   const pick = (on: typeof riya, node: string, factor: number) => [
-    on.learner(FactorTreeAction.Select, { node }),
-    on.learner(FactorTreeAction.Split, { node, factor }),
+    on.learner.select({ node }),
+    on.learner.split({ node, factor }),
   ];
   b.witness(
     ...pick(riya, "r0", 2),
@@ -115,9 +110,9 @@ const story = page("story", (b) => {
     ),
     "why",
   );
-  b.after(riya.on(FactorTreeSignal.Completed), unsplit);
+  b.after(riya.on.completed, unsplit);
   b.after(unsplit, [primeIs, amanIntro, aman]);
-  b.after(aman.on(FactorTreeSignal.Completed), who);
+  b.after(aman.on.completed, who);
   b.after(who, [theorem, why]);
   return [
     w.title(t("The Fundamental Theorem of Arithmetic", "अंकगणित की आधारभूत प्रमेय")),

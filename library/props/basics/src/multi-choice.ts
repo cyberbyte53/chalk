@@ -2,16 +2,15 @@ import { localizedSchema } from "@chalk/content";
 import {
   AnswerStatus,
   PropRole,
-  QuestionAction,
-  QuestionSignal,
-  SAY,
   SizeFit,
   actionsFor,
   defineProp,
   questionDefaults,
   questionFields,
+  raise,
   say,
   set,
+  signal,
 } from "@chalk/prop";
 import { z } from "zod";
 
@@ -42,14 +41,17 @@ const multiChoiceState = z
   .strict();
 export type MultiChoiceState = z.infer<typeof multiChoiceState>;
 
-export const MultiChoiceAction = { Toggle: "toggle" } as const;
-
 const act = actionsFor<MultiChoiceState>();
 const noArgs = z.object({}).strict();
 
 const sameSet = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && a.every((x) => b.includes(x));
 
+const signals = {
+  checked: signal("The learner pressed Check"),
+  correct: signal("Checked, and right"),
+  wrong: signal("Checked, and wrong"),
+};
 /** Pick every option that is right, then Check. Picking one doesn't give the others away. */
 export const multiChoice = defineProp({
   type: "multiChoice",
@@ -79,7 +81,7 @@ export const multiChoice = defineProp({
   },
   offScreen: ["answers"],
   actions: {
-    [MultiChoiceAction.Toggle]: act({
+    toggle: act({
       describe: "Pick or unpick an option (what the learner's tap does)",
       changes: ["selected", "status", "feedback"],
       byLearner: true,
@@ -92,7 +94,7 @@ export const multiChoice = defineProp({
         return set({ selected, status: AnswerStatus.Open, feedback: null });
       },
     }),
-    [QuestionAction.Check]: act({
+    check: act({
       describe: "Check the picked options",
       changes: ["status", "attempts", "feedback"],
       byLearner: true,
@@ -108,15 +110,17 @@ export const multiChoice = defineProp({
         const attempts = s.attempts + 1;
         return set(
           { status, attempts, feedback },
-          {
-            signal: QuestionSignal.Checked,
-            payload: { status, attempts, isGraded: s.isGraded, optionIds: [...s.selected] },
-          },
-          { signal: isRight ? QuestionSignal.Correct : QuestionSignal.Wrong },
+          raise(signals.checked, {
+            status,
+            attempts,
+            isGraded: s.isGraded,
+            optionIds: [...s.selected],
+          }),
+          raise(isRight ? signals.correct : signals.wrong),
         );
       },
     }),
-    [QuestionAction.Retry]: act({
+    retry: act({
       describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
       changes: ["status", "feedback"],
       byLearner: true,
@@ -126,24 +130,20 @@ export const multiChoice = defineProp({
           ? set({ status: AnswerStatus.Open, feedback: null })
           : set({}),
     }),
-    [QuestionAction.GiveFeedback]: act({
+    giveFeedback: act({
       describe: "Show words under the question (e.g. a hint)",
       changes: ["feedback"],
       args: z.object({ text: localizedSchema }).strict(),
       run: (_s, a) => set({ feedback: a.text }),
     }),
-    [SAY]: act({
+    say: act({
       describe: "Read the prompt aloud (narrator)",
       changes: [],
       args: noArgs,
       run: () => say(),
     }),
   },
-  signals: {
-    [QuestionSignal.Checked]: { describe: "The learner pressed Check" },
-    [QuestionSignal.Correct]: { describe: "Checked, and right" },
-    [QuestionSignal.Wrong]: { describe: "Checked, and wrong" },
-  },
+  signals,
   invariant: (s) => {
     const missing = s.answers.find((a) => !s.options.some((o) => o.id === a));
     return missing === undefined ? undefined : `answer "${missing}" is not an option`;
