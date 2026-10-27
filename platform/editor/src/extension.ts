@@ -373,7 +373,10 @@ function onMessage(
     void tellReview();
   } else if (m.type === "open") void openSite(m.site);
   else if (m.type === "copy") void copyReview();
-  else if (m.type === "pick") void askForComment(m);
+  else if (m.type === "copyText" && typeof (m as { text?: unknown }).text === "string") {
+    void vscode.env.clipboard.writeText((m as { text: string }).text);
+    void vscode.window.showInformationMessage("Chalk: copied. Paste it into the agent's chat.");
+  } else if (m.type === "pick") void askForComment(m);
   else if (m.type === "external" && m.url) void openInBrowser(m.url);
   // The preview went to another level by itself (a chapter or lesson was tapped).
   if (m.follow !== undefined) {
@@ -524,8 +527,16 @@ function reviewCommands(): vscode.Disposable[] {
     vscode.commands.registerCommand("chalk.thread.open", async (item: unknown) => {
       const t = thread(item);
       if (t === undefined) return;
-      if (t.board !== undefined) await showQuery(`board=${t.board}`, t.source);
-      else await openSite(t.source);
+      // The thread on its review's page (or your sitting's), opened at it.
+      await showQuery(`review=${ReviewsTree.reviewIdOf(item) ?? "sitting"}&thread=${t.id}`);
+    }),
+    vscode.commands.registerCommand("chalk.thread.board", async (item: unknown) => {
+      const t = thread(item);
+      if (t?.board !== undefined) await showQuery(`board=${t.board}`, t.source);
+    }),
+    vscode.commands.registerCommand("chalk.review.open", async (item: unknown) => {
+      const r = ReviewsTree.reviewOf(item);
+      await showQuery(`review=${r?.review.id ?? "sitting"}`);
     }),
     vscode.commands.registerCommand("chalk.thread.source", (item: unknown) =>
       openSite(thread(item)?.source),

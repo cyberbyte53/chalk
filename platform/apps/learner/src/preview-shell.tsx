@@ -26,6 +26,7 @@ import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
 import { courses } from "./lessons";
 import { PlayInApp } from "./play-in-app";
+import { ReviewList, ReviewPage } from "./review-page";
 import {
   type Review,
   type Thread,
@@ -60,11 +61,11 @@ import {
  * Nothing here draws anything itself: the player does.
  */
 
-type Sources = Record<string, { board?: string; pieces: Record<string, string> }>;
-type Shown = { path: string; board: Board };
+export type Sources = Record<string, { board?: string; pieces: Record<string, string> }>;
+export type Shown = { path: string; board: Board };
 
 const url = (path: string) => `${CONTENT_ROUTE}${path}?t=${Date.now()}`;
-async function json(path: string): Promise<unknown> {
+export async function json(path: string): Promise<unknown> {
   const res = await fetch(url(path));
   if (!res.ok) throw new Error(`build/${path}: ${res.status} (run pnpm build-content?)`);
   return res.json();
@@ -79,14 +80,14 @@ function unhide(piece: Piece): Piece {
     : (rest as Piece);
 }
 
-function propTypes(piece: Piece, into: Set<string>): Set<string> {
+export function propTypes(piece: Piece, into: Set<string>): Set<string> {
   if ("prop" in piece && typeof piece.prop === "string") into.add(piece.prop);
   if ("children" in piece) for (const child of piece.children) propTypes(child, into);
   return into;
 }
 
 /** A page's or question's board, by its node path. */
-const shownAt = async (path: string): Promise<Shown> => ({
+export const shownAt = async (path: string): Promise<Shown> => ({
   path,
   board: await boardOfFile(await item(path)),
 });
@@ -123,8 +124,8 @@ async function boardsFrom(source: string, sources: Sources): Promise<Shown[]> {
 }
 
 /** Messages to and from an editor that shows this page in a panel (platform/editor). */
-const isInEditor = window.parent !== window;
-const toEditor = (message: Record<string, unknown>) =>
+export const isInEditor = window.parent !== window;
+export const toEditor = (message: Record<string, unknown>) =>
   isInEditor && window.parent.postMessage({ ...message, chalk: true }, "*");
 
 /** Puts `data-source` on every piece of one drawn board; Alt-click opens that line. */
@@ -398,7 +399,7 @@ function BoardThreads({
  * What a comment is about, on the drawn board: the part of the prop picked, else its piece (for a
  * prop comment, that prop where this board places it); null for a comment on the whole board.
  */
-function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
+export function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
   const target = t.target ?? "";
   const [pieceName] = namesOf(target);
   // The part's address under its piece ("objectArrow/object"), if the comment is on a part.
@@ -420,7 +421,7 @@ function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
   return (part as HTMLElement | undefined) ?? piece;
 }
 
-function PreviewBoard({
+export function PreviewBoard({
   shown,
   where,
   locale,
@@ -838,49 +839,6 @@ function keptZoom(): number {
   }
 }
 
-/** "1 open, 3 ready": how a review stands, from its threads as they are now. */
-function standingOf(review: Review, threads: readonly Thread[]): string {
-  const order = ["open", "planned", "ready", "closed", "withdrawn"];
-  const counts = new Map<string, number>();
-  for (const x of review.threads) {
-    const status = threads.find((t) => t.id === x.id)?.status;
-    if (status !== undefined) counts.set(status, (counts.get(status) ?? 0) + 1);
-  }
-  return order
-    .filter((k) => counts.has(k))
-    .map((k) => `${counts.get(k)} ${k}`)
-    .join(", ");
-}
-
-/** Every review (`?dev&reviews`, the reviews/ folder), newest first; one opens its boards. */
-function ReviewList({
-  threads,
-  reviews,
-}: {
-  threads: readonly Thread[];
-  reviews: readonly Review[];
-}): JSX.Element {
-  useLayoutEffect(() => {
-    document.body.dataset.previewReady = window.location.search;
-  });
-  if (reviews.length === 0)
-    return <div class="preview-empty">No reviews yet: Copy for agent hands one over.</div>;
-  return (
-    <main class="preview">
-      <ul class="preview-reviews">
-        {[...reviews].reverse().map((r) => (
-          <li key={r.id}>
-            <a href={`?dev&review=${encodeURIComponent(r.id)}`}>
-              <strong>{r.id}</strong>
-              <span>{`${r.by} · ${r.threads.length} thread${r.threads.length === 1 ? "" : "s"} · ${standingOf(r, threads)}`}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-
 /**
  * The preview, drawn afresh for each URL. A tool can move it to another board without reloading
  * the page (history.pushState, then a popstate event), which is much faster than a page load.
@@ -939,6 +897,8 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     };
   }, [bus]);
   const params = new URLSearchParams(search);
+  if (params.has("reviews")) return <ReviewList key={search} />;
+  if (params.has("review")) return <ReviewPage key={search} bus={bus} />;
   if (params.has("play"))
     return (
       <PlayInApp
@@ -960,15 +920,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const params = new URLSearchParams(window.location.search);
   const path = (params.get("board") ?? "").replace(/\/$/, "");
   const source = params.get("source");
-  // A review (`review=<id>`): the boards its threads are on, with only its threads beside them.
-  const reviewId = params.get("review");
-  // Every review (`reviews`): the list.
-  const isReviewList = params.has("reviews");
-  const isTree =
-    source === null &&
-    reviewId === null &&
-    !isReviewList &&
-    path.split("/").filter(Boolean).length < 3;
+  const isTree = source === null && path.split("/").filter(Boolean).length < 3;
+  // Opened from a review page (`back=<its query>`): a way back to it.
+  const back = params.get("back");
   const withQuestions = params.get("show") === "questions";
   const isPlaying = params.has("earned");
   const isShot = params.has("shot");
@@ -1008,13 +962,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     all: { threads, reviews },
     set: setThreads,
   } = useThreads();
-  const review = reviewId === null ? undefined : reviews.find((r) => r.id === reviewId);
-  const reviewIds = useMemo(() => new Set(review?.threads.map((t) => t.id) ?? []), [review]);
-  // The boards the review's threads are on, in the review's order, once each.
-  const reviewBoards = useMemo(() => {
-    const boards = review?.threads.flatMap((x) => threads.find((t) => t.id === x.id)?.board ?? []);
-    return [...new Set(boards ?? [])].join("\n");
-  }, [review, threads]);
+
   const [zoom, setZoomState] = useState(keptZoom);
   const setZoom = useCallback(
     (next: (z: number) => number) =>
@@ -1096,17 +1044,11 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   // biome-ignore lint/correctness/useExhaustiveDependencies: `build` is the trigger: a rebuild fetches the boards again.
   useEffect(() => {
     let isLive = true;
-    if (isTree || isReviewList) return;
-    // A review waits for the threads and reviews to arrive.
-    if (reviewId !== null && review === undefined) return;
+    if (isTree) return;
     (async () => {
       const where = (await json("sources.json").catch(() => ({}))) as Sources;
       const boards =
-        reviewId !== null
-          ? await Promise.all(reviewBoards.split("\n").filter(Boolean).map(shownAt))
-          : source !== null
-            ? await boardsFrom(source, where)
-            : await boardsAt(path, withQuestions);
+        source !== null ? await boardsFrom(source, where) : await boardsAt(path, withQuestions);
       const types = new Set<string>();
       for (const s of boards) propTypes(s.board.root, types);
       await preloadProps([...types]);
@@ -1125,7 +1067,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     return () => {
       isLive = false;
     };
-  }, [path, source, isTree, withQuestions, build, reviewId, reviewBoards, isReviewList]);
+  }, [path, source, isTree, withQuestions, build]);
 
   // Ready once the boards are on screen (this runs after they are drawn), not when they arrive.
   useEffect(() => {
@@ -1142,13 +1084,6 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   }, []);
 
   if (isTree) return <TreeScreen path={path} locale={locale} />;
-  if (isReviewList) return <ReviewList threads={threads} reviews={reviews} />;
-  if (reviewId !== null && review === undefined)
-    return reviews.length === 0 ? (
-      <div class="preview-loading">Loading review {reviewId}…</div>
-    ) : (
-      <div class="preview-empty">{`No review ${reviewId}.`}</div>
-    );
   if (error !== null) return <div class="preview-empty">{error}</div>;
   // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.
   if (shown === null) return <div class="preview-loading">Loading {source ?? path}…</div>;
@@ -1168,12 +1103,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       key={build}
       style={width === undefined ? undefined : { "--phone-width": `${width}px` }}
     >
-      {!isShot && review !== undefined && (
+      {!isShot && back !== null && (
         <header class="preview-review-head">
-          <strong>{`Review ${review.id}`}</strong>
-          <span>{`${review.by} · ${standingOf(review, threads)}`}</span>
-          <a href="?dev&reviews">All reviews</a>
-          <a href={`?dev&activity&review=${encodeURIComponent(review.id)}`}>Activity</a>
+          <a href={`?${back}`}>← Back to the review</a>
         </header>
       )}
       {!isShot && count > 1 && (
@@ -1230,11 +1162,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
           <PreviewBoard
             shown={s}
             where={sources[s.path]}
-            threads={
-              review === undefined
-                ? threadsOn(threads, s)
-                : threadsOn(threads, s).filter((t) => reviewIds.has(t.id))
-            }
+            threads={threadsOn(threads, s)}
             reviews={reviews}
             onThreads={setThreads}
             locale={locale}

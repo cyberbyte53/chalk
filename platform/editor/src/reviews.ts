@@ -146,6 +146,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
       );
       t.contextValue = "sitting";
       t.iconPath = new vscode.ThemeIcon("inbox");
+      t.command = { command: "chalk.review.open", title: "Open", arguments: [item] };
       t.tooltip =
         "Threads you started or replied to since your last handover. Copy for agent hands them over.";
       return t;
@@ -160,6 +161,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
           : vscode.TreeItemCollapsibleState.Collapsed,
       );
       t.description = `${review.by} · ${standing(threads)}`;
+      t.command = { command: "chalk.review.open", title: "Open", arguments: [item] };
       t.contextValue = threads.some((x) => x.status === "ready") ? "review-ready" : "review";
       t.iconPath = new vscode.ThemeIcon(
         isDone ? "check-all" : threads.some(isWaiting) ? "sync" : "eye",
@@ -188,6 +190,12 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
   static threadOf(item: unknown): Thread | undefined {
     const i = item as Item | undefined;
     return i?.kind === "thread" ? i.thread : undefined;
+  }
+
+  /** The review a thread item was listed under (undefined: your sitting). */
+  static reviewIdOf(item: unknown): string | undefined {
+    const i = item as Item | undefined;
+    return i?.kind === "thread" ? i.review : undefined;
   }
 
   static reviewOf(item: unknown): { review: Review; threads: Thread[] } | undefined {

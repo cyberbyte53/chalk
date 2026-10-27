@@ -1847,3 +1847,201 @@ body.is-selecting .is-pick-target {
 .preview-reviews span {
   color: #b4b4bc;
 }
+
+/* The review page (`?dev&review=<id>`, review-page.tsx): its threads, each a fold with the
+   conversation and the board as it is now; and the list of reviews (`?dev&reviews`). */
+.rv {
+  min-height: 100dvh;
+  background: #18181b;
+  color: #e6e6ea;
+  font: 14px / 1.5 system-ui, sans-serif;
+  padding: 0 20px 64px;
+}
+.rv-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  padding: 12px 0;
+  background: #18181b;
+  border-bottom: 1px solid #2a2a2e;
+}
+.rv-bar a,
+.rv-list a,
+.rv-actions a {
+  color: #a5b4fc;
+  text-decoration: none;
+}
+.rv-bar span {
+  color: #9a9aa4;
+}
+.rv-grow {
+  flex: 1;
+}
+.rv-bar button,
+.rv-actions button {
+  border: 1px solid #3a3a40;
+  border-radius: 8px;
+  padding: 5px 10px;
+  background: #232328;
+  color: #e6e6ea;
+  font: inherit;
+  cursor: pointer;
+}
+.rv-bar button.rv-primary {
+  border-color: #4f46e5;
+  background: #4f46e5;
+}
+.rv-note,
+.rv-empty {
+  color: #9a9aa4;
+}
+.rv-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  max-width: 760px;
+}
+.rv-list li a {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #2a2a2e;
+}
+.rv-list strong {
+  color: #fff;
+}
+.rv-list span {
+  color: #9a9aa4;
+}
+.rv-thread {
+  margin: 12px 0;
+  border: 1px solid #2a2a2e;
+  border-radius: 12px;
+  background: #1f1f24;
+}
+.rv-head {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.rv-chevron {
+  color: #6b6b75;
+}
+.rv-status {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.rv-status.is-open {
+  color: #fbbf24;
+}
+.rv-status.is-planned {
+  color: #93c5fd;
+}
+.rv-status.is-ready {
+  color: #6ee7b7;
+}
+.rv-status.is-closed,
+.rv-status.is-withdrawn {
+  color: #6b6b75;
+}
+.rv-place {
+  flex: none;
+  font: 12px ui-monospace, monospace;
+  color: #b4b4bc;
+}
+.rv-label {
+  flex: none;
+  font-size: 12px;
+  color: #fca5a5;
+}
+.rv-said {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rv-thread:not(.is-folded) .rv-said {
+  white-space: normal;
+}
+.rv-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0 14px 16px;
+  align-items: flex-start;
+}
+.rv-talk {
+  flex: 1 1 360px;
+  min-width: 0;
+}
+.rv-msg {
+  margin: 0 0 10px;
+}
+.rv-msg b {
+  display: block;
+  font-size: 12px;
+  color: #9a9aa4;
+}
+.rv-msg.is-reviewer b {
+  color: #fbbf24;
+}
+.rv-msg.is-fixer b {
+  color: #6ee7b7;
+}
+.rv-msg.moves-planned {
+  padding-left: 10px;
+  border-left: 2px solid #93c5fd;
+}
+.rv-changed {
+  margin: 4px 0 12px;
+  font: 12px ui-monospace, monospace;
+  color: #9a9aa4;
+}
+.rv-changed summary {
+  cursor: pointer;
+}
+.rv-reply textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px;
+  border: 1px solid #3a3a40;
+  border-radius: 8px;
+  background: #18181b;
+  color: inherit;
+  font: inherit;
+}
+.rv-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.rv-actions a {
+  margin-left: auto;
+}
+.rv-board {
+  flex: none;
+  width: var(--phone-width, 390px);
+  /* The board as the app draws it: the body's text, not the page's. */
+  color: var(--color-on-surface);
+  font: 500 16px / normal var(--font-body);
+}
+.rv-board .preview-card {
+  width: 100%;
+}
