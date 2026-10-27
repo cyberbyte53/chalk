@@ -959,12 +959,27 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       a.replace(/[^a-z0-9]/gi, "").toLowerCase() === b.replace(/[^a-z0-9]/gi, "").toLowerCase();
     w.__chalkModel = () =>
       runningBoards().flatMap((runtime) => {
-        const card = [...document.querySelectorAll<HTMLElement>(".preview-card[data-board]")].find(
-          (c) =>
-            // The build path is kebab-case ("draw-it"), the board's name camelCase ("drawIt").
-            same((c.dataset.board ?? "").split("/").at(-1) ?? "", runtime.board.name) &&
-            runtime.propNames().every((n) => c.querySelector(`[data-piece="${CSS.escape(n)}"]`)),
-        );
+        // A card is this board's when what it draws is the board's pieces: every piece shown now
+        // (in play, hidden ones aren't drawn yet), and nothing else. Of those, the one named like
+        // the board; a question's build path is its id, not its name, so else the only one.
+        const names = new Set(runtime.propNames());
+        const cards = [
+          ...document.querySelectorAll<HTMLElement>(".preview-card[data-board]"),
+        ].filter((c) => {
+          const drawn = [...c.querySelectorAll<HTMLElement>("[data-piece]")].map(
+            (e) => e.dataset.piece ?? "",
+          );
+          return (
+            drawn.length > 0 &&
+            drawn.every((n) => names.has(n)) &&
+            [...names].every((n) => runtime.isHidden(n) || drawn.includes(n))
+          );
+        });
+        // The build path is kebab-case ("draw-it"), the board's name camelCase ("drawIt").
+        const card =
+          cards.find((c) =>
+            same((c.dataset.board ?? "").split("/").at(-1) ?? "", runtime.board.name),
+          ) ?? (cards.length === 1 ? cards[0] : undefined);
         if (card === undefined) return [];
         return [
           {

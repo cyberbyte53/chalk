@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { Role } from "../comments";
-import { closeBrowser } from "./preview";
+import { closeBrowser, closeLane } from "./preview";
 import { type Who, chalkMcp } from "./tools";
 
 /**
@@ -117,10 +117,13 @@ export function mcpMiddleware(): {
         sessions.set(sessionId, { transport, who });
       },
     });
+    // The connection's own page for drawing boards (preview.ts), closed with it.
+    const lane = randomUUID();
     transport.onclose = () => {
       if (transport.sessionId !== undefined) sessions.delete(transport.sessionId);
+      void closeLane(lane);
     };
-    await chalkMcp(who).connect(transport);
+    await chalkMcp(who, lane).connect(transport);
     await transport.handleRequest(req, res, body);
   };
 

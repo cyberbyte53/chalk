@@ -78,7 +78,9 @@ async function startServer(root: string): Promise<string> {
 export async function closeBrowser(): Promise<void> {
   const open = browser;
   browser = undefined;
-  warm = undefined;
+  lanes.clear();
+  queues.clear();
+  used.clear();
   if (open !== undefined) await (await open.catch(() => undefined))?.close().catch(() => {});
 }
 
@@ -296,15 +298,37 @@ const firstLine = (error: unknown): string =>
   (error instanceof Error ? error.message : String(error)).split("\n")[0] ?? "";
 
 /**
- * One page kept open between calls: moving it to another board inside the app (history.pushState,
- * which the preview listens for) skips a page load, the slow part. Errors the page logs go to
- * whichever call is drawing.
+ * A lane: one agent connection's own page, kept open between its calls. Moving it to another board
+ * inside the app (history.pushState, which the preview listens for) skips a page load, the slow
+ * part. Each connection draws on its own page, so agents draw at the same time and one agent's
+ * board (what `continue` goes on from) is never moved by another's call. A lane's calls run one
+ * at a time. Errors the page logs go to whichever call is drawing.
  */
-let warm: { page: Page; base: string; errors: string[]; lastBoard?: string } | undefined;
-let queue: Promise<unknown> = Promise.resolve();
+type Lane = {
+  page: Page;
+  base: string;
+  errors: string[];
+  lastBoard?: string;
+  /** Content was rebuilt since this page last loaded: load it afresh, don't move it. */
+  isStale: boolean;
+};
+const lanes = new Map<string, Lane>();
+const queues = new Map<string, Promise<unknown>>();
+const used = new Map<string, number>();
+/** Pages kept open at once; the one used longest ago (and idle) is closed for a new one. */
+const MAX_LANES = 4;
+/** The lane of a caller that doesn't name one (scripts, tests). */
+export const DEFAULT_LANE = "default";
 
-async function openPage(base: string): Promise<NonNullable<typeof warm>> {
-  if (warm !== undefined && warm.base === base && !warm.page.isClosed()) return warm;
+async function openPage(lane: string, base: string): Promise<Lane> {
+  const kept = lanes.get(lane);
+  if (kept !== undefined && kept.base === base && !kept.page.isClosed()) return kept;
+  if (lanes.size >= MAX_LANES) {
+    const idle = [...lanes.keys()]
+      .filter((l) => l !== lane && !busy.has(l))
+      .sort((a, b) => (used.get(a) ?? 0) - (used.get(b) ?? 0))[0];
+    if (idle !== undefined) await closeLane(idle);
+  }
   browser ??= launch();
   const page = await (await browser).newPage({
     viewport: { width: PHONE_WIDTH + 48, height: 900 },
@@ -312,31 +336,103 @@ async function openPage(base: string): Promise<NonNullable<typeof warm>> {
   });
   // tsx keeps function names with a helper the page doesn't have; give it one.
   await page.addInitScript("globalThis.__name = (f) => f;");
-  const opened: NonNullable<typeof warm> = { page, base, errors: [] };
+  const opened: Lane = { page, base, errors: [], isStale: false };
   page.on("console", (m) => {
     // The app asks the API who is signed in; previews don't need a server, so that one is noise.
     if (m.type() === "error" && !m.location().url.includes("/api/")) opened.errors.push(m.text());
   });
   page.on("pageerror", (e) => opened.errors.push(e.message));
   page.on("crash", () => {
-    warm = undefined;
+    if (lanes.get(lane) === opened) lanes.delete(lane);
   });
-  warm = opened;
+  lanes.set(lane, opened);
   return opened;
 }
 
+/** Closes a lane's page (its connection ended). */
+export async function closeLane(lane: string): Promise<void> {
+  const open = lanes.get(lane);
+  lanes.delete(lane);
+  queues.delete(lane);
+  used.delete(lane);
+  await open?.page.close().catch(() => {});
+}
+
+/**
+ * Drawing and rebuilding content never overlap: a rebuild rewrites build/, and the dev server
+ * reloads every page showing it, so a page being drawn would be pulled away mid-call ("Execution
+ * context was destroyed"). Draws run together; a rebuild waits for the draws already running,
+ * and draws asked for after it wait for it. Afterwards every page loads afresh on its next call.
+ */
+let gate: Promise<unknown> = Promise.resolve();
+const drawing = new Set<Promise<unknown>>();
+const busy = new Set<string>();
+
+function asDraw<T>(fn: () => Promise<T>): Promise<T> {
+  return gate.then(() => {
+    const p = fn();
+    const settled = p.catch(() => {});
+    drawing.add(settled);
+    void settled.finally(() => drawing.delete(settled));
+    return p;
+  });
+}
+
+/** Runs `fn` (a content rebuild) with nothing drawing, then marks every page to load afresh. */
+export function withNothingDrawing<T>(fn: () => Promise<T>): Promise<T> {
+  const run = gate.then(async () => {
+    await Promise.all([...drawing]);
+    try {
+      return await fn();
+    } finally {
+      for (const lane of lanes.values()) lane.isStale = true;
+    }
+  });
+  gate = run.catch(() => {});
+  return run;
+}
+
+/** A page pulled away mid-call (a reload, a navigation): worth one more try on a fresh load. */
+const isPulledAway = (error: unknown): boolean =>
+  /Execution context was destroyed|not attached to the DOM|Target (page, context or browser )?(has been )?closed|frame was detached|navigation/i.test(
+    firstLine(error),
+  );
+
 /**
  * Each board at `board` (one board, or a whole lesson) drawn at phone width; with `steps`, a
- * single board acted on first, a picture after each step if asked. One call at a time.
+ * single board acted on first, a picture after each step if asked. A lane's calls run one at a
+ * time; different lanes (agent connections) draw at once, each on its own page. A call that the
+ * page is pulled away from (content reloaded under it) is tried once more from a fresh load,
+ * unless it continued a board, whose state is then gone.
  */
 export function shoot(
   root: string,
   board: string,
   o: ShotOptions = {},
   act?: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean },
+  lane: string = DEFAULT_LANE,
 ): Promise<{ shots: Shot[]; steps: StepResult[] }> {
-  const next = queue.then(() => shootNow(root, board, o, act));
-  queue = next.catch(() => {});
+  const once = () => shootNow(root, board, o, act, lane);
+  const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
+    asDraw(async () => {
+      busy.add(lane);
+      used.set(lane, Date.now());
+      try {
+        return await once();
+      } catch (error) {
+        if (act?.isContinued === true || !isPulledAway(error)) throw error;
+        const at = lanes.get(lane);
+        if (at !== undefined) at.isStale = true;
+        return await once();
+      } finally {
+        busy.delete(lane);
+      }
+    }),
+  );
+  queues.set(
+    lane,
+    next.catch(() => {}),
+  );
   return next;
 }
 
@@ -450,19 +546,34 @@ async function shootNow(
   root: string,
   board: string,
   o: ShotOptions,
-  act?: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean },
+  act: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean } | undefined,
+  lane: string,
 ): Promise<{ shots: Shot[]; steps: StepResult[] }> {
-  // Acting starts from a fresh board (a new run) unless it continues the last call's board.
-  const isContinued = act?.isContinued === true && warm?.lastBoard === board;
+  // Acting starts from a fresh board (a new run) unless it continues this lane's last board.
+  const isContinued = act?.isContinued === true;
   const run = act !== undefined && !isContinued ? `&run=${Date.now()}` : "";
   const url = `${await previewUrl(root, board, o)}&shot${run}`;
   const target = new URL(url);
   const base = target.origin;
-  const at = await openPage(base);
+  const at = await openPage(lane, base);
   const { page } = at;
+  if (isContinued) {
+    // Going on from a board that isn't there would act on a fresh one and look like it worked.
+    const why =
+      at.lastBoard === undefined
+        ? "nothing was drawn on this connection yet"
+        : at.lastBoard !== board
+          ? `this connection's last board is ${at.lastBoard}`
+          : at.isStale
+            ? "content was rebuilt since, so the board was reloaded"
+            : undefined;
+    if (why !== undefined)
+      throw new Error(`Can't continue ${board}: ${why}. Run the steps again without continue.`);
+  }
   at.errors.length = 0;
   await page.setViewportSize({ width: (o.width ?? PHONE_WIDTH) + 48, height: 900 });
-  const isOnApp = page.url().startsWith(base);
+  const isOnApp = page.url().startsWith(base) && !at.isStale;
+  at.isStale = false;
   try {
     if (isContinued) {
       // The board as the last call left it.
@@ -473,8 +584,7 @@ async function shootNow(
       }, `${target.pathname}${target.search}`);
     else await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
   } catch (error) {
-    warm = undefined;
-    await page.close().catch(() => {});
+    await closeLane(lane);
     throw new Error(
       `The preview server didn't answer at ${url} (${firstLine(error)}). Start it with \`pnpm dev\` in platform/apps/learner (or set CHALK_PREVIEW_URL), then retry.`,
     );
@@ -491,8 +601,7 @@ async function shootNow(
       );
   } catch {
     const shown = ((await page.textContent("body").catch(() => "")) ?? "").trim().slice(0, 200);
-    warm = undefined;
-    await page.close().catch(() => {});
+    await closeLane(lane);
     throw new Error(
       [
         `The board didn't finish drawing within ${READY_TIMEOUT / 1000}s at ${url}.`,
@@ -504,9 +613,7 @@ async function shootNow(
   }
   const empty = await page.$(".preview-empty");
   if (empty !== null)
-    throw new Error(
-      `${(await empty.textContent()) ?? "Nothing to show"} (at ${url}). Check the board name with the boards tool.`,
-    );
+    throw new Error(`${(await empty.textContent()) ?? "Nothing to show"} (at ${url}).`);
   await settle(page);
   at.lastBoard = board;
   const steps: StepResult[] = [];

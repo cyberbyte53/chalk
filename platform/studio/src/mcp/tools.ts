@@ -23,7 +23,7 @@ import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
 import { type NodeShape, nodeSchema } from "./model-schema";
-import { previewBase, previewUrl, shoot } from "./preview";
+import { DEFAULT_LANE, previewBase, previewUrl, shoot, withNothingDrawing } from "./preview";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
 
 /**
@@ -90,6 +90,36 @@ const buildContent = (signal?: AbortSignal) =>
     ],
     { cwd: studio, signal },
   );
+
+/**
+ * Why `board` names no built board or lesson, with the nearest names; undefined when it does.
+ * Said before drawing, so a typo isn't mistaken for a missing build.
+ */
+function unknownBoard(board: string): string | undefined {
+  const all = listBoards(root).map((b) => b.board);
+  if (all.length === 0) return undefined; // Nothing built yet: the page says what's wrong.
+  if (all.some((b) => b === board || b.startsWith(`${board}/`))) return undefined;
+  const parts = board.split("/");
+  const last = parts.at(-1) ?? "";
+  // Boards that share its last name, else what is under the longest part of it that exists.
+  let near = all.filter((b) => b.split("/").at(-1) === last);
+  for (let n = parts.length - 1; near.length === 0 && n > 0; n--) {
+    const prefix = `${parts.slice(0, n).join("/")}/`;
+    const under = all.filter((b) => b.startsWith(prefix));
+    const lessons = [
+      ...new Set(
+        under.map((b) =>
+          b
+            .split("/")
+            .slice(0, n + 1)
+            .join("/"),
+        ),
+      ),
+    ];
+    near = lessons.length > 0 ? lessons : under;
+  }
+  return `No board or lesson "${board}" in the build.${near.length > 0 ? ` Nearest: ${near.slice(0, 8).join(", ")}${near.length > 8 ? ", …" : ""}.` : ""}`;
+}
 
 // ---- Comments, through the dev server (their one writer) ----
 
@@ -227,7 +257,11 @@ export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string
  * role uses (`SEES`, and in `comment` only the moves and labels the writer's tables allow it). The
  * MCP service (main.ts, http.ts) says who is calling from their token.
  */
-export function chalkMcp(who: Who): McpServer {
+/**
+ * The tools for one connection. `lane` is the connection's own page for drawing boards
+ * (preview.ts): its `continue` goes on from its own last board, and connections draw at once.
+ */
+export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const server = createServer();
   const ROLE = who.role;
   const NAME = who.name;
@@ -402,7 +436,7 @@ export function chalkMcp(who: Who): McpServer {
       {
         title: "See (and use) boards",
         description:
-          "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (its path, e.g. class10-maths/real-numbers/division-lemma/story) or a lesson for all its pages. Returns a PNG per board and its snapshot (structured; the same one Jugnu and tests read): every node by address (a placed prop and, inside a group, its children) with where it's placed (file:line), setup (fixed where placed), live values (what can change here) and bound values (worked out from others, with where from), each part on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what can be done to it (who: learner or lesson, the controls that reach it, routed or not, with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are addresses: piece/element id, e.g. machine/plane/handle), starting from a fresh board (`continue: true` keeps the last call's board as it was left); after each, the live values that changed, the events the app recorded, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
+          "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (its path, e.g. class10-maths/real-numbers/division-lemma/story) or a lesson for all its pages. Returns a PNG per board and its snapshot (structured; the same one Jugnu and tests read): every node by address (a placed prop and, inside a group, its children) with where it's placed (file:line), setup (fixed where placed), live values (what can change here) and bound values (worked out from others, with where from), each part on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what can be done to it (who: learner or lesson, the controls that reach it, routed or not, with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are addresses: piece/element id, e.g. machine/plane/handle), starting from a fresh board (`continue: true` keeps this connection's last board as it was left; each connection draws on its own page, so agents can render at the same time); after each, the live values that changed, the events the app recorded, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
         inputSchema: {
           board: z.string().min(1).describe("A board (its path) or a lesson."),
           steps: z.array(step).max(40).optional().describe("What a finger does, in order."),
@@ -413,7 +447,7 @@ export function chalkMcp(who: Who): McpServer {
           continue: z
             .boolean()
             .optional()
-            .describe("With steps: go on from the board as the last call left it."),
+            .describe("With steps: go on from the board as this connection last left it."),
           locale: z.enum(["en", "hi"]).optional(),
           play: z
             .boolean()
@@ -444,11 +478,15 @@ export function chalkMcp(who: Who): McpServer {
         const progress = progressOf(extra);
         const board = boardName(args.board);
         const notes: string[] = [];
-        // Skipped when build/ is already the last good build of exactly what is on disk.
+        // Skipped when build/ is already the last good build of exactly what is on disk. Never
+        // while a board is being drawn (the dev server reloads pages when build/ changes), and
+        // once for calls that ask together: the check is made again when it's this call's turn.
         if (args.rebuild !== false && args.continue !== true && !isBuildCurrent(root)) {
           await progress("building content");
-          const built = await buildContent(extra.signal);
-          if (built.code !== 0)
+          const built = await withNothingDrawing(() =>
+            isBuildCurrent(root) ? Promise.resolve(undefined) : buildContent(extra.signal),
+          );
+          if (built !== undefined && built.code !== 0)
             notes.push(
               `build-content failed:\n${built.out
                 .split("\n")
@@ -456,6 +494,8 @@ export function chalkMcp(who: Who): McpServer {
                 .join("\n")}`,
             );
         }
+        const unknown = unknownBoard(board);
+        if (unknown !== undefined) throw new Error(unknown);
         const steps = args.steps ?? [];
         const options = {
           locale: args.locale ?? ("en" as const),
@@ -471,6 +511,7 @@ export function chalkMcp(who: Who): McpServer {
           steps.length > 0
             ? { steps, shots: args.shots ?? "last", isContinued: args.continue === true }
             : undefined,
+          lane,
         );
         const sources = readSources(root);
         const out: Content[] = [];
