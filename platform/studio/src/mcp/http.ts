@@ -117,11 +117,13 @@ export function mcpMiddleware(): {
         sessions.set(sessionId, { transport, who });
       },
     });
-    // The connection's own page for drawing boards (app-driver.ts), closed with it.
-    const lane = randomUUID();
+    // The agent's own page for drawing boards (app-driver.ts): by the id its relay (connect.ts)
+    // sends with every call, so it outlives a reconnect; else this connection's own, closed with it.
+    const agent = String(req.headers["x-chalk-agent"] ?? "").trim();
+    const lane = agent !== "" ? `agent:${agent}` : randomUUID();
     transport.onclose = () => {
       if (transport.sessionId !== undefined) sessions.delete(transport.sessionId);
-      void closeLane(lane);
+      if (agent === "") void closeLane(lane);
     };
     await chalkMcp(who, lane).connect(transport);
     await transport.handleRequest(req, res, body);

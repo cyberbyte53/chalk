@@ -1,11 +1,9 @@
 {
   "mcpServers": {
     "chalk": {
-      "type": "http",
-      "url": "http://127.0.0.1:5174/mcp",
-      "headers": {
-        "Authorization": "Bearer chalk-dev-fixer"
-      }
+      "command": "platform/studio/node_modules/.bin/tsx",
+      "args": ["--tsconfig", "tsconfig.base.json", "platform/studio/src/mcp/connect.ts"],
+      "env": { "CHALK_TOKEN": "chalk-dev-fixer" }
     }
   }
 }

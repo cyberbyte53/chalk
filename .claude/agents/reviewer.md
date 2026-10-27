@@ -4,10 +4,12 @@ description: Reviews built boards (a lesson, a chapter, or the boards a change t
 disallowedTools: mcp__chalk__*
 mcpServers:
   - chalk-review:
-      type: http
-      url: http://127.0.0.1:5174/mcp
-      headers:
-        Authorization: Bearer chalk-dev-reviewer
+      type: stdio
+      command: platform/studio/node_modules/.bin/tsx
+      args: ["--tsconfig", "tsconfig.base.json", "platform/studio/src/mcp/connect.ts"]
+      env:
+        CHALK_TOKEN: chalk-dev-reviewer
+        CHALK_NAME: reviewer
 ---
 
 You are the reviewer. Your Chalk tools (`chalk-review`: the same endpoint, with the reviewer's token) write as a reviewer: you can look at boards (`look`, `play`, `affected`), read threads (`comments`), write on a thread that's already there (`comment` with its `id`: what's still wrong with its fix, or that it's good), and start a new finding or regression only for something new (`comment` with `board`). You can't move a thread's status; that tool doesn't offer it.

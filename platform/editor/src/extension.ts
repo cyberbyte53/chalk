@@ -65,7 +65,7 @@ async function ensureMcp(): Promise<void> {
   const studio = join(root, "platform", "studio");
   startProcess(
     join(studio, "node_modules", ".bin", "tsx"),
-    ["--tsconfig", "../../tsconfig.base.json", "src/mcp/main.ts"],
+    ["watch", "--clear-screen=false", "--tsconfig", "../../tsconfig.base.json", "src/mcp/main.ts"],
     studio,
   );
 }

@@ -1,7 +1,8 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, utimesSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { findUp } from "../pronunciations";
 
@@ -10,7 +11,8 @@ import { findUp } from "../pronunciations";
  * service (`pnpm mcp`), the way agents call it: looks at once from one agent and from several,
  * mixed widths and languages, reads during drawing, content changing mid-drawing, `continue`
  * across agents, the snapshot of played and question boards, labels that don't change the
- * picture, a piece cut out, a chapter checked, and bad names (platform/docs/seeing-boards.md). Each case says what must hold; any that doesn't fails the run.
+ * picture, a piece cut out, a chapter checked, bad names, and the stdio relay across a restart
+ * (platform/docs/seeing-boards.md). Each case says what must hold; any that doesn't fails the run.
  * Writes no comments. Briefly appends a comment line to one content file (restored after).
  *
  * Run: `pnpm stress-mcp` (all), or `pnpm stress-mcp rebuild lanes` (some). CHALK_MCP_URL to point
@@ -299,6 +301,57 @@ const cases: Record<string, () => Promise<void>> = {
       !noPiece.ok && /pieces: /.test(noPiece.error ?? ""),
       noPiece.error?.slice(0, 120) ?? "went ahead",
     );
+  },
+  async relay() {
+    // As a harness starts it: the stdio relay (connect.ts), which reaches the service and
+    // reconnects when it restarts. The restart is made the way an edit makes it (tsx watch).
+    const relay = new Client({ name: "stress-relay", version: "0" });
+    await relay.connect(
+      new StdioClientTransport({
+        command: join(root, "platform", "studio", "node_modules", ".bin", "tsx"),
+        args: [
+          "--tsconfig",
+          join(root, "tsconfig.base.json"),
+          join(root, "platform", "studio", "src", "mcp", "connect.ts"),
+        ],
+        env: { ...(process.env as Record<string, string>), CHALK_TOKEN: "chalk-dev-reviewer" },
+        stderr: "ignore",
+      }),
+    );
+    try {
+      const first = await call(relay, "look", { at: STORY });
+      expect("the relay reaches the service", first.ok && asked(first, STORY), first.error ?? "");
+      await call(relay, "play", { board: STORY, steps: [{ wait: 10 }], shots: "none" });
+      const main = join(root, "platform", "studio", "src", "mcp", "main.ts");
+      const health = new URL("/health", URL_);
+      const isUp = () =>
+        fetch(health, { signal: AbortSignal.timeout(800) }).then(
+          (r) => r.ok,
+          () => false,
+        );
+      const t = new Date();
+      utimesSync(main, t, t);
+      let wentDown = false;
+      for (let i = 0; i < 40 && !wentDown; i++) {
+        await new Promise((r) => setTimeout(r, 250));
+        wentDown = !(await isUp());
+      }
+      expect("touching the service's code restarts it (tsx watch)", wentDown);
+      const lost = await call(relay, "look", { at: STORY, continue: true });
+      expect(
+        "after a restart, continue fails, saying why",
+        !lost.ok && /Can't continue/.test(lost.error ?? ""),
+        lost.error?.slice(0, 120) ?? "went ahead",
+      );
+      const again = await call(relay, "look", { at: STORY });
+      expect(
+        "and the next call just works: the relay connected again",
+        again.ok,
+        again.error ?? "",
+      );
+    } finally {
+      await relay.close().catch(() => {});
+    }
   },
   async check() {
     const c = await agent("stress-check");
