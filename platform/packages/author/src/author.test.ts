@@ -35,7 +35,7 @@ describe("building a board", () => {
   it("writes props, IS, WHEN and witnesses as plain data", () => {
     const built = buildBoard("demo", (b) => {
       const d = b.prop(dial, "d", { at: dec("2.50") });
-      b.is(d.field("isOn"), d.field("at").isAt(dec("7.384")));
+      b.is(d.input.isOn, (at) => at(d).at === 7.384);
       b.when(
         d.on.turned,
         inOrder(d.call.turn({ to: dec("1.5") }), wait(1), theBoard.show(d)),
@@ -52,7 +52,7 @@ describe("building a board", () => {
         { kind: "space", name: "space1" },
       ],
     });
-    expect(built.board.is).toEqual([{ set: "d.isOn", to: '(fixed(d.at, 3) == "7.384")' }]);
+    expect(built.board.is).toEqual([{ set: "d.isOn", to: expect.any(Function) }]);
     expect(built.board.when).toEqual([
       // No questions: it passes at once.
       { on: "board.started", do: { call: "board.pass" } },
@@ -101,8 +101,10 @@ describe("building a board", () => {
         d.call.turn();
         // @ts-expect-error the dial has no signal "spun"
         d.on.spun;
-        // @ts-expect-error the dial has no stored field "angle"
-        d.field("angle");
+        // @ts-expect-error the dial's "at" isn't one a lesson may own (only its inputs are)
+        b.is(d.input.at, () => 1);
+        // @ts-expect-error an input is set to a value of its own type
+        b.is(d.input.isOn, () => 3);
         // @ts-expect-error the dial has no derived field "triple"
         b.when(d.on.turned, d.call.turn({ to: 1 }), (at) => at(d).triple > 0);
       };

@@ -1,5 +1,6 @@
 import {
   type Board,
+  type CallArgs,
   type IsRule,
   type Localized,
   type Piece,
@@ -24,7 +25,6 @@ import {
   type ViewOf,
 } from "@chalk/prop";
 import type { ZodType } from "zod";
-import { Expr } from "./expr";
 import { framesHere, noteStack } from "./site";
 
 /** A field's value as an author may give it: anywhere a number goes, an exact Dec may go too. */
@@ -42,10 +42,9 @@ export type Given<S> = { [K in keyof S]?: Loose<S[K]> };
 /** Action arguments: plain values, exact Decs, or expressions worked out when the action runs. */
 export type Args = Readonly<Record<string, unknown>>;
 
-/** Turns authoring values into plain JSON: a Dec becomes a number, an Expr an expression argument. */
+/** Turns authoring values into plain JSON: a Dec becomes a number. */
 export function plain(value: unknown): unknown {
   if (value instanceof Dec) return value.toNumber();
-  if (value instanceof Expr) return { expr: value.source };
   if (Array.isArray(value)) return value.map(plain);
   if (value !== null && typeof value === "object") {
     return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, plain(v)]));
@@ -72,7 +71,7 @@ export type Wait = { wait: number };
 export type Step =
   | { kind: typeof StepKind.Act; prop: string; action: string; args: Args }
   | Wait
-  | { kind: typeof StepKind.Expect; that: Rule<boolean> | Expr; says: string };
+  | { kind: typeof StepKind.Expect; that: Rule<boolean>; says: string };
 
 /** The name every board's root layout gets. */
 export const ROOT_NAME = "page";
@@ -101,6 +100,14 @@ type ActionsOf<P> = P extends { actions: infer X } ? X : never;
 type ActionNames<P> = keyof ActionsOf<P> & string;
 type SignalNames<P> = P extends { signals?: infer G } ? keyof NonNullable<G> & string : never;
 type StateOfDef<P> = P extends { state: ZodType<infer S> } ? S : never;
+type InputNames<P> = P extends { inputs?: readonly (infer I)[] } ? I & string : never;
+type FieldOf<P, K extends string> = K extends keyof StateOfDef<P> ? StateOfDef<P>[K] : never;
+/** A field of a placed prop that a lesson owns with an IS rule. */
+export type InputRef<P = DefLike, K extends string = string> = {
+  readonly target: string;
+  /** Only carries the types: which prop and field. */
+  readonly __input?: [P, K];
+};
 /** What an action of a placed prop takes, as an author may write it (exact Decs where numbers go). */
 type TakesOf<P, K extends ActionNames<P>> = ArgsParam<Loose<ArgsOf<ActionsOf<P>[K]>>>;
 
@@ -152,9 +159,10 @@ export class Placed<P extends DefLike = DefLike> implements AnyPlaced {
     this.action = byName(actions, (a) => ({ target: `${name}.${a}` })) as Placed<P>["action"];
   }
 
-  /** A stored field, for rules: `line.field("marker")`. */
-  field(key: keyof StateOfDef<P> & string): Expr {
-    return new Expr(`${this.name}.${key}`);
+  /** The fields a lesson may own with an IS rule (the prop's `inputs`): `b.is(box.input.text, …)`. */
+  get input(): { readonly [K in InputNames<P>]: InputRef<P, K> } {
+    const inputs = ((this.def as { inputs?: readonly string[] }).inputs ?? []) as readonly string[];
+    return byName(inputs, (field) => ({ target: `${this.name}.${field}` })) as never;
   }
 }
 
@@ -233,7 +241,6 @@ export const theBoard = {
     call: `${BOARD}.${BoardAction.Hide}`,
     args: { name: prop.name },
   }),
-  isPassed: new Expr(`${BOARD}.isPassed`),
 };
 
 /** What building a board gives: the board itself, and the witnesses that show it works. */
@@ -304,24 +311,21 @@ export class BoardKit {
     if (rule !== undefined) this.passesWhen.add(rule);
   }
 
-  /** IS: this input always equals the rule's value (`(at) => at(line).marker ** 2`). */
-  is(input: Expr, to: Rule | Expr): void {
-    this.isRules.push({ set: input.source, to: to instanceof Expr ? to.source : asRuleFn(to) });
-  }
-
-  /** IS for words: the input always reads this text, with {expressions} filled in. */
-  isText(input: Expr, text: Localized): void {
-    this.isRules.push({ set: input.source, text });
+  /** IS: this input always equals the rule's value (`b.is(box.input.text, (at) => …)`). */
+  is<P extends DefLike, K extends InputNames<P>>(
+    input: InputRef<P, K>,
+    to: Rule<FieldOf<P, K>>,
+  ): void {
+    this.isRules.push({ set: input.target, to: asRuleFn(to) });
   }
 
   /** WHEN: on this signal (and if the condition holds), run the script. */
-  when(signal: Signal, script: Script | readonly Script[], condition?: Rule<boolean> | Expr): void {
+  when(signal: Signal, script: Script | readonly Script[], condition?: Rule<boolean>): void {
     const rule: WhenRule = {
       on: signal.target,
       do: Array.isArray(script) ? [...script] : (script as Script),
     };
-    if (condition !== undefined)
-      rule.if = condition instanceof Expr ? condition.source : asRuleFn(condition);
+    if (condition !== undefined) rule.if = asRuleFn(condition);
     this.whenRules.push(rule);
   }
 
@@ -379,7 +383,7 @@ export class BoardKit {
       this.whenRules.flatMap((r) =>
         scriptCalls(r.do)
           .filter((c) => c.call === SHOW)
-          .map((c) => String(c.args?.name)),
+          .map((c) => (typeof c.args === "function" ? undefined : String(c.args?.name))),
       ),
     );
     const never = [...walkLayout(root)].filter((p) => p.isHidden === true && !shown.has(p.name));
@@ -434,7 +438,7 @@ export class BoardKit {
 }
 
 /** A witness step: this should hold now (`(at) => at(race).time === 36`). */
-export function expect(that: Rule<boolean> | Expr, says: string): Step {
+export function expect(that: Rule<boolean>, says: string): Step {
   return { kind: StepKind.Expect, that, says };
 }
 
@@ -473,7 +477,7 @@ function signalOf(trigger: Signal | AnyPlaced): Signal {
 }
 
 /** Every call in a script, in order. */
-function scriptCalls(script: Script): { call: string; args?: Record<string, unknown> }[] {
+function scriptCalls(script: Script): { call: string; args?: CallArgs }[] {
   if (Array.isArray(script)) return script.flatMap(scriptCalls);
   if ("seq" in script) return script.seq.flatMap(scriptCalls);
   if ("par" in script) return script.par.flatMap(scriptCalls);

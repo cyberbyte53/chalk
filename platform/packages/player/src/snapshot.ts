@@ -12,8 +12,7 @@ import {
   type PropView,
   type Element as SeenElement,
   type StoredState,
-  compileRule,
-  compileTemplate,
+  hostOf,
   segment,
 } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
@@ -122,6 +121,13 @@ function nodeOf(
   path: string,
   c: Context,
 ): NodeSnapshot {
+  // A host's layers that are off show nothing: their fields and controls aren't meant to be there.
+  const host = hostOf(def);
+  const layersOn = host?.layersOn(view as StoredState) ?? [];
+  const isOff = (name: string) => {
+    const owner = host?.ownerOf(name);
+    return owner !== undefined && !layersOn.includes(owner);
+  };
   const fields = Object.keys(def.defaults);
 
   // Its parts, as its view draws them, and which inputs do each action.
@@ -148,6 +154,7 @@ function nodeOf(
   const liveValues: Record<string, unknown> = {};
   const bound: Record<string, BoundSnapshot> = {};
   for (const f of fields) {
+    if (isOff(f) && !live.has(f)) continue;
     const sources = c.bound.get(f);
     if (sources !== undefined) bound[f] = { value: view[f], from: sources };
     else (live.has(f) ? liveValues : setup)[f] = view[f];
@@ -172,7 +179,7 @@ function nodeOf(
   });
   // The learner's actions no input offers right now (a button that's off until there are dots).
   const noControlNow = Object.entries(def.actions)
-    .filter(([a, spec]) => spec.byLearner === true && !fromControls.has(a))
+    .filter(([a, spec]) => spec.byLearner === true && !fromControls.has(a) && !isOff(a))
     .map(([a]) => a);
 
   return {
@@ -198,16 +205,8 @@ export function snapshotOf(runtime: BoardRuntime, page?: ParentNode): BoardSnaps
   const nodes = runtime.propNames().map((name) => {
     const def = runtime.getDef(name);
     const prefix = `${name}.`;
-    const bound = new Map<string, readonly string[]>();
-    for (const rule of board.is) {
-      const { prop, member } = splitTarget(rule.set);
-      if (prop !== name) continue;
-      const refs =
-        "to" in rule
-          ? compileRule(rule.to, (n) => runtime.getView(n)).refs
-          : Object.values(rule.text).flatMap((t) => compileTemplate(t).refs);
-      bound.set(member, [...new Set(refs.map((r) => `${r[0]}.${r.slice(1).join(".")}`))]);
-    }
+    // What each bound field's rule read when it last ran.
+    const bound = runtime.boundReads(name);
     return nodeOf(def, runtime.getView(name), runtime.describe(name), segment(name), {
       page,
       rules: new Set(

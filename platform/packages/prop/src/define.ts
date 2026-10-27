@@ -281,6 +281,33 @@ export function noteNames(type: string, specs: Readonly<Record<string, object>> 
 /** A screen-space box, in the prop's own pixels at the given width. */
 export type Box = { x: number; y: number; width: number; height: number };
 
+/** What a frame offers: a 1-D axis (numbers along a line), a 2-D plane, or an optical bench. */
+export type FrameKindName = "axis" | "plane" | "bench";
+
+/** Where things are drawn in a frame at a width: its height, and model ↔ pixels (y down). */
+export type FramePixels = {
+  width: number;
+  height: number;
+  /**
+   * The model stretch across (and up) the picture, when the transform is linear: the frame is then
+   * also a drawing stage, so drawing-kit pieces and grids that take the stage's scales draw in it.
+   */
+  domain?: { x: readonly [number, number]; y?: readonly [number, number] };
+  toPx: (x: number, y?: number) => readonly [number, number];
+  fromPx: (px: number, py?: number) => readonly [number, number];
+};
+
+/**
+ * A picture other props draw into (graph paper, an optical bench, an axis): its kind, and where
+ * things go at a width. `pixels` is pure, so tests and the view use the same mapping.
+ */
+export type FrameSpec<S extends StoredState> = {
+  kind: FrameKindName;
+  pixels: (state: S, width: number) => FramePixels;
+  /** What the picture shows, for a screen reader ("Graph paper from −3 to 6 across"). */
+  label?: (state: S) => string;
+};
+
 /** One thing the student can see and tell apart, with what it shows them right now. */
 export type Element = {
   /** Its name under the piece: what `point`, steps and comments take. */
@@ -362,6 +389,13 @@ export type PropDef<
    * questions and timers are not explainers. Default: true.
    */
   isExplainer?: boolean;
+  /**
+   * A frame this prop provides: in a group's frame layout, other props draw into its picture
+   * through its transform.
+   */
+  frame?: FrameSpec<S>;
+  /** The kind of frame this prop draws on, when it only draws inside one (a ray, a marker). */
+  drawsOn?: FrameKindName;
 };
 
 /**
@@ -374,9 +408,18 @@ export function defineProp<
   const X extends Readonly<Record<string, ActionSpec<S, unknown>>>,
   const Dv extends Readonly<Record<string, DerivedSpec<S>>> = Record<never, DerivedSpec<S>>,
   G extends string = never,
+  const In extends readonly (keyof S & string)[] = [],
 >(
-  def: PropDef<S, keyof X & string, G, keyof Dv & string> & { actions: X; derived?: Dv },
-): PropDef<S, keyof X & string, G, keyof Dv & string> & { actions: X; derived?: Dv } {
+  def: PropDef<S, keyof X & string, G, keyof Dv & string> & {
+    actions: X;
+    derived?: Dv;
+    inputs?: In;
+  },
+): PropDef<S, keyof X & string, G, keyof Dv & string> & {
+  actions: X;
+  derived?: Dv;
+  inputs?: In;
+} {
   noteNames(def.type, def.actions);
   noteNames(def.type, def.signals);
   return def;

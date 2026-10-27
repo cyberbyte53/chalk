@@ -25,6 +25,15 @@ export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource } from "./narration";
 export { type PropModule, type PropRegistry, type PropViewProps, propModule } from "./prop-module";
 export { checkProp } from "./check-prop";
+export { groupView, useTheme, type GroupViewOptions } from "./group-view";
+export {
+  type FrameContextValue,
+  type FrameLabel,
+  FrameStage,
+  useFrame,
+  useFrameLabels,
+} from "./frame";
+export { type DragAttrs, type DragSpec, useDrags } from "./drag";
 export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";

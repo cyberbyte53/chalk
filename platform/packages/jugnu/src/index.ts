@@ -76,3 +76,4 @@ export {
   jugnuTurn,
   openingOf,
 } from "./turn";
+export { evaluateCalculation } from "./calculate";

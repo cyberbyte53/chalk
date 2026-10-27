@@ -24,7 +24,7 @@ export function testLesson(): Lesson {
     });
     const game = b.prop(sweetShareDef, "game", { sweets: 17, friends: 5 });
     const box = b.prop(textDef, "box", { text: t("17 in the box", "डिब्बे में 17") });
-    b.is(box.field("text"), (at) => {
+    b.is(box.input.text, (at) => {
       const left = at(game).box as number;
       return { en: `${left} in the box`, hi: `डिब्बे में ${left}` };
     });

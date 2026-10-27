@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { BoardAction, BoardSignal, boardProp } from "./board";
 import { EffectKind, actionsFor, asAnyProp, defineProp, raise, set, signal, tween } from "./define";
-import { compileExpression, compileTemplate } from "./expression";
 import { applyPatch, initialState, prepareAction, tweenAt, viewOf } from "./state";
 
 // A concave mirror: two stored causes (u, f); everything else follows.
@@ -120,54 +119,5 @@ describe("board prop", () => {
     expect(late.isOk && late.effect.kind === EffectKind.Set && late.effect.emit).toEqual([
       { signal: BoardSignal.Continued },
     ]);
-  });
-});
-
-describe("expressions", () => {
-  const scope = (name: string) => {
-    if (name === "line") return { marker: 1.5 };
-    if (name === "coin") return { heads: 47, count: 100 };
-    throw new Error(`No prop "${name}"`);
-  };
-
-  it("reads props and does maths and logic", () => {
-    expect(compileExpression("line.marker * line.marker").evaluate(scope)).toBe(2.25);
-    expect(compileExpression("line.marker ^ 2 > 2.02").evaluate(scope)).toBe(true);
-    expect(
-      compileExpression("1.98 <= line.marker^2 and line.marker^2 <= 2.02").evaluate(scope),
-    ).toBe(false);
-    expect(compileExpression("not (coin.count == 100)").evaluate(scope)).toBe(false);
-    expect(compileExpression("fixed(line.marker, 2)").evaluate(scope)).toBe("1.50");
-  });
-
-  it("lists what it reads", () => {
-    expect(compileExpression("coin.heads / coin.count").refs).toEqual([
-      ["coin", "heads"],
-      ["coin", "count"],
-    ]);
-  });
-
-  it("refuses anything that isn't maths over props", () => {
-    expect(() => compileExpression("alert(1)")).toThrow(/Unknown function/);
-    expect(() => compileExpression("line.marker = 2")).toThrow();
-    expect(() => compileExpression("coin.flips").evaluate(scope)).toThrow(/doesn't exist/);
-  });
-
-  it("fills templates", () => {
-    const label = compileTemplate("{fixed(line.marker, 2)}² = {fixed(line.marker^2, 4)}");
-    expect(label.render(scope)).toBe("1.50² = 2.2500");
-    expect(label.refs).toEqual([
-      ["line", "marker"],
-      ["line", "marker"],
-    ]);
-  });
-
-  it("keeps LaTeX braces inside maths, and fills \\live{…} there", () => {
-    const label = compileTemplate(
-      "At {fixed(line.marker, 2)}: $\\frac{1}{3} \\ne \\live{fixed(line.marker, 2)}$, costs \\$1",
-    );
-    expect(label.render(scope)).toBe("At 1.50: $\\frac{1}{3} \\ne 1.50$, costs \\$1");
-    expect(label.skeleton).toBe("At 0: $\\frac{1}{3} \\ne 0$, costs \\$1");
-    expect(label.refs).toHaveLength(2);
   });
 });

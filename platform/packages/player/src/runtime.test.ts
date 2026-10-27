@@ -1,4 +1,4 @@
-import { Actor, type Board, boardSchema } from "@chalk/content";
+import { Actor, type Board, type BoardAt, boardSchema } from "@chalk/content";
 import {
   BOARD,
   actionsFor,
@@ -12,7 +12,7 @@ import {
   tween,
   waitUntil,
 } from "@chalk/prop";
-import { type BoardAt, defineGroup } from "@chalk/prop";
+import { defineGroup } from "@chalk/prop";
 import { effect } from "@preact/signals-core";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
@@ -240,7 +240,10 @@ describe("BoardRuntime", () => {
       is: [
         {
           set: "score.text",
-          text: { en: "Heads: {coin.heads} / {coin.count}", hi: "चित: {coin.heads}" },
+          to: (at: BoardAt) => ({
+            en: `Heads: ${at("coin").heads} / ${at("coin").count}`,
+            hi: `चित: ${at("coin").heads}`,
+          }),
         },
       ],
     });
@@ -250,7 +253,7 @@ describe("BoardRuntime", () => {
     expect(runtime.getView("score").text).toEqual({ en: "Heads: 1 / 1", hi: "चित: 1" });
   });
 
-  it("settles IS rules that feed each other, whatever order they are listed in", () => {
+  it("settles IS rules that feed each other, whatever order they are listed in, noting what each reads", () => {
     const { services } = fakeServices();
     const board = boardOf({
       name: "b",
@@ -261,8 +264,8 @@ describe("BoardRuntime", () => {
       ),
       // second reads first, but is listed before it
       is: [
-        { set: "second.value", to: "first.value + 1" },
-        { set: "first.value", to: "coin.count * 10" },
+        { set: "second.value", to: (at: BoardAt) => (at("first").value as number) + 1 },
+        { set: "first.value", to: (at: BoardAt) => (at("coin").count as number) * 10 },
       ],
     });
     const runtime = new BoardRuntime(board, (t) => defs[t], services);
@@ -270,9 +273,32 @@ describe("BoardRuntime", () => {
     void runtime.call("coin", "toss");
     expect(runtime.getView("first").value).toBe(10);
     expect(runtime.getView("second").value).toBe(11);
+    expect(runtime.boundReads("second").get("value")).toEqual(["first.value"]);
   });
 
-  it("runs rules written as code the same way, ordered by what they read", () => {
+  it("notes what a rule reads each time it runs, down whichever branch it takes", () => {
+    const { services } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "coin", prop: "coin" },
+        { kind: "prop", name: "dial", prop: "dial" },
+        { kind: "prop", name: "shown", prop: "label" },
+      ),
+      is: [
+        {
+          set: "shown.value",
+          to: (at: BoardAt) => ((at("coin").count as number) > 0 ? (at("dial").at as number) : 0),
+        },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    expect(runtime.boundReads("shown").get("value")).toEqual(["coin.count"]);
+    void runtime.call("coin", "toss");
+    expect(runtime.boundReads("shown").get("value")).toEqual(["coin.count", "dial.at"]);
+  });
+
+  it("reads a piece named or given as itself, in rules and conditions", () => {
     const { services } = fakeServices();
     const board = boardOf({
       name: "b",
@@ -415,7 +441,7 @@ describe("BoardRuntime", () => {
         { kind: "prop", name: "coin", prop: "coin" },
         { kind: "prop", name: "score", prop: "label" },
       ),
-      is: [{ set: "score.value", to: "coin.count * 10" }],
+      is: [{ set: "score.value", to: (at: BoardAt) => (at("coin").count as number) * 10 }],
     });
     const runtime = new BoardRuntime(board, (t) => defs[t], services);
     await runtime.call("score", "setValue", { v: 5 });
@@ -433,7 +459,11 @@ describe("BoardRuntime", () => {
       ),
       when: [
         { on: "coin.landed", do: { call: "dial.setTo", args: { to: 1 } } },
-        { on: "coin.landed", if: "coin.count >= 3", do: { call: "dial.setTo", args: { to: 9 } } },
+        {
+          on: "coin.landed",
+          if: (at: BoardAt) => (at("coin").count as number) >= 3,
+          do: { call: "dial.setTo", args: { to: 9 } },
+        },
       ],
     });
     const runtime = new BoardRuntime(board, (t) => defs[t], services);
@@ -451,7 +481,7 @@ describe("BoardRuntime", () => {
     ]);
   });
 
-  it("works out expression arguments when the action is called", () => {
+  it("works out arguments written as code when the action is called", () => {
     const { services } = fakeServices();
     const board = boardOf({
       name: "b",
@@ -460,7 +490,13 @@ describe("BoardRuntime", () => {
         { kind: "prop", name: "dial", prop: "dial" },
       ),
       when: [
-        { on: "coin.landed", do: { call: "dial.setTo", args: { to: { expr: "coin.count * 2" } } } },
+        {
+          on: "coin.landed",
+          do: {
+            call: "dial.setTo",
+            args: (at: BoardAt) => ({ to: (at("coin").count as number) * 2 }),
+          },
+        },
       ],
     });
     const runtime = new BoardRuntime(board, (t) => defs[t], services);
@@ -624,7 +660,12 @@ describe("BoardRuntime", () => {
             { name: "shown", kind: "prop", prop: "label" },
           ],
         },
-        is: [{ set: "shown.value", to: "p.dial.at * 10" }],
+        is: [
+          {
+            set: "shown.value",
+            to: (at: BoardAt) => ((at("p").dial as { at: number }).at as number) * 10,
+          },
+        ],
       }),
       (t) => (t === "pair" ? propModule(pair, Nothing) : defs[t]),
       services,
@@ -659,7 +700,7 @@ describe("BoardRuntime", () => {
             { name: "shown", kind: "prop", prop: "label" },
           ],
         },
-        is: [{ set: "shown.value", to: "d.at + 1" }],
+        is: [{ set: "shown.value", to: (at: BoardAt) => (at("d").at as number) + 1 }],
       }),
       (t) => defs[t],
       services,
@@ -761,7 +802,7 @@ describe("the one snapshot, act and watch", () => {
           { kind: "prop", name: "d", prop: "dial", with: { at: 2 } },
           { kind: "prop", name: "shown", prop: "label" },
         ),
-        is: [{ set: "shown.value", to: "d.at * 10" }],
+        is: [{ set: "shown.value", to: (at: BoardAt) => (at("d").at as number) * 10 }],
         when: [{ on: "board.started", do: { call: "shown.say" } }],
       }),
       (t) => defs[t],

@@ -7,10 +7,11 @@ import {
   type JugnuTurn,
   type LlmProvider,
   boardJson,
+  evaluateCalculation,
 } from "@chalk/jugnu";
 import { propModules } from "@chalk/library/modules";
 import { BoardRuntime, type RuntimeServices } from "@chalk/player";
-import { BOARD, PropRole, compileExpression } from "@chalk/prop";
+import { BOARD, PropRole } from "@chalk/prop";
 import type { EvalCase } from "./cases";
 import { type CheckResult, runChecks } from "./checks";
 import { type Verdict, judge } from "./judge";
@@ -183,7 +184,7 @@ export async function runCase(
     isPassed: runtime.getView(BOARD).isPassed === true,
     conditions: (testCase.expect.boardAfter ?? []).map((expression) => {
       try {
-        const value = compileExpression(expression).evaluate((name) => runtime.getView(name));
+        const value = evaluateCalculation(expression, (name) => runtime.getView(name));
         return { expression, holds: value === true };
       } catch (e) {
         return { expression, holds: e instanceof Error ? e.message : String(e) };

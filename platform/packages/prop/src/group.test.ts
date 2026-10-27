@@ -285,6 +285,82 @@ describe("groups", () => {
     expect((viewOf(outer, next.state) as unknown as Seen)?.pane?.dial).toEqual({ x: -2 });
   });
 
+  it("works bindings and derived values out when read, so they may be written in any order", () => {
+    const chain = defineGroup({
+      type: "chain",
+      describe: "",
+      children: { input: stepper, working: text, dial: handle },
+      derived: { double: { describe: "", compute: (s) => s.dial.x * 2 } },
+      is: {
+        // Reads the dial's binding (written after it) and a derived value that reads it too.
+        working: (s) => ({ tex: `${s.dial.x} doubled is ${s.double}` }),
+        dial: (s) => ({ x: s.input.value + 1 }),
+      },
+      route: { "dial.move": (_s, a) => [["input.change", { to: Number(a.x) - 1 }]] },
+      summary: () => "",
+      layout: { kind: "column", children: ["input", "working", "dial"] },
+    });
+    const start = initialState(chain, { input: { value: 2 } });
+    if (!start.isOk) throw new Error(start.errors.join());
+    const v = viewOf(chain, start.state) as unknown as Seen;
+    expect(v?.working).toEqual({ tex: "3 doubled is 6" });
+    expect(v?.double).toBe(6);
+  });
+
+  it("refuses bindings that read each other in a loop", () => {
+    expect(() =>
+      defineGroup({
+        type: "knot",
+        describe: "",
+        children: { a: text, b: text },
+        is: { a: (s) => ({ tex: s.b.tex }), b: (s) => ({ tex: s.a.tex }) },
+        summary: () => "",
+        layout: { kind: "column", children: ["a", "b"] },
+      }),
+    ).toThrow(/knot: a → b → a reads itself/);
+  });
+
+  it("draws children in a frame only on the frame they draw on", () => {
+    const paper = defineProp({
+      type: "paper",
+      describe: "",
+      state: z.object({ from: z.number() }).strict(),
+      defaults: { from: 0 },
+      actions: {},
+      frame: {
+        kind: "plane",
+        pixels: (_s, width) => ({
+          width,
+          height: width,
+          toPx: (x, y = 0) => [x, -y],
+          fromPx: (x, y = 0) => [x, -y],
+        }),
+      },
+    });
+    const dot = { ...handle, drawsOn: "plane" as const };
+    const bead = { ...handle, drawsOn: "axis" as const };
+    const framed = (children: Record<string, typeof handle>, layout: object) =>
+      defineGroup({
+        type: "framed",
+        describe: "",
+        children: { paper, ...children },
+        summary: () => "",
+        layout: layout as never,
+      });
+    expect(() =>
+      framed({ dot }, { kind: "frame", provider: "paper", children: ["dot"] }),
+    ).not.toThrow();
+    expect(() =>
+      framed({ bead }, { kind: "frame", provider: "paper", children: ["bead"] }),
+    ).toThrow(/bead draws on axis, the frame is plane/);
+    expect(() =>
+      framed({ dot }, { kind: "frame", provider: "paper", children: [], below: ["dot"] }),
+    ).toThrow(/can't go below it/);
+    expect(() => framed({ dot }, { kind: "frame", provider: "dot", children: [] })).toThrow(
+      /provides no frame/,
+    );
+  });
+
   it("is fast enough to drag: a change costs well under a frame, checked fully or lightly", () => {
     const start = initialState(machine, {});
     if (!start.isOk) throw new Error();

@@ -1,7 +1,7 @@
 import { type Step, StepKind, asRuleFn } from "@chalk/author";
 import { Actor, type Board, type Localized, PieceKind } from "@chalk/content";
 import { BoardRuntime, type PropModule, type RuntimeServices } from "@chalk/player";
-import { AnswerStatus, BOARD, type BoardFn, PropRole, compileRule } from "@chalk/prop";
+import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
 
 type Defs = Readonly<Record<string, PropModule>>;
 
@@ -75,11 +75,11 @@ export async function play(board: Board, defs: Defs, steps: readonly Step[]): Pr
         await advance(0.05);
         break;
       case StepKind.Expect: {
-        const that = typeof step.that === "function" ? asRuleFn(step.that) : step.that.source;
-        const rule = compileRule(that);
-        const value = rule.evaluate((name) => runtime.getView(name));
+        const value = asRuleFn(step.that)((piece) =>
+          runtime.getView(typeof piece === "string" ? piece : piece.name),
+        );
         if (value !== true)
-          failures.push(`expected ${step.says} (${rule.source} was ${String(value)})`);
+          failures.push(`expected ${step.says} (${step.that.toString()} was ${String(value)})`);
         break;
       }
     }

@@ -12,7 +12,8 @@ export {
   unspeakable,
 } from "./audio";
 export {
-  argExpression,
+  type BoardAt,
+  type CallArgs,
   type ItemRef,
   itemRefSchema,
   type RuleFn,

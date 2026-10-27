@@ -31,7 +31,7 @@ import { flatten, isInstant, runEffect } from "./steps";
  *   it runs the child's own action on the child's full view (facts plus what is bound into it), and
  *   may change only the child's own facts.
  * - **IS**: one function per child, returning the fields bound into it (`is: { stepper: s => ({
- *   value: s.input }) }`). Worked out in the order written; each reads the ones before it. A child
+ *   value: s.input }) }`). Worked out when read, so any may read another. A child
  *   group's grandchildren are bound by nesting (`{ plane: s => ({ handle: { x: s.input } }) }`).
  * - **show**: whether a child is there right now. A hidden child keeps its facts but draws nothing
  *   and isn't described.
@@ -120,8 +120,8 @@ export type GroupSpec<
   defaults?: { readonly [K in keyof C]?: Partial<StateOf<C[K]>> };
   /**
    * Bindings, one per child: the fields bound into it, worked out from the group's view. A bound
-   * field is never stored and has one writer: this. Worked out in the order written; each reads
-   * the ones before it. Always return the same fields.
+   * field is never stored and has one writer: this. Worked out when read, so any may read another
+   * (one reading its own child sees it unbound). Always return the same fields.
    */
   is?: { readonly [K in keyof C]?: (s: GroupViewOf<O, C, Opt, D>) => BindOf<C[K]> };
   /** Whether a child is there right now (default: always). */
@@ -157,15 +157,25 @@ export type GroupSpec<
   invariant?: (s: GroupViewOf<O, C, Opt, D>) => string | undefined;
   /** The group's own line in its description; each child describes itself. */
   summary: (s: GroupViewOf<O, C, Opt, D>) => string;
-  /** How children are placed: top to bottom, or side by side. */
+  /**
+   * How children are placed: top to bottom, side by side, or drawn together in one frame. In a
+   * frame, `provider` owns the window and transform, `children` draw into its picture in this
+   * order (later on top), `backdrop` (if any) is a picture behind it in its own coordinates, and
+   * `below` are drawn under the picture (controls, readouts).
+   */
   layout: GroupLayoutSpec<keyof C & string>;
   isExplainer?: boolean;
 };
 
-export type GroupLayoutSpec<N extends string = string> = {
-  kind: "column" | "row";
-  children: readonly N[];
-};
+export type GroupLayoutSpec<N extends string = string> =
+  | { kind: "column" | "row"; children: readonly N[] }
+  | {
+      kind: "frame";
+      provider: N;
+      children: readonly N[];
+      backdrop?: N;
+      below?: readonly N[];
+    };
 
 /** The fields bound into a child: `true` for a leaf's field (or a child group's own field), nested for a grandchild. */
 export type BoundTree = { readonly [name: string]: true | BoundTree };
@@ -180,23 +190,72 @@ export type GroupLayout = {
   boundTree: Readonly<Record<string, BoundTree>>;
   /** Own field names. */
   own: readonly string[];
-  /** What each child's binding reads, as dotted paths in the group's view ("objectArrow.x"). */
-  sources: Readonly<Record<string, readonly string[]>>;
   /** Children's actions the group turns into its own changes ("objectArrow.move"). */
   routes: readonly string[];
 };
 
-/** A view that notes every value read from it, as a dotted path ("objectArrow.x"). */
-function noting(view: Readonly<Record<string, unknown>>, reads: Set<string>, prefix = ""): never {
-  return new Proxy(view, {
-    get: (target, key) => {
-      const value = (target as Record<string | symbol, unknown>)[key];
-      if (typeof key !== "string") return value;
-      if (isObject(value)) return noting(value, reads, `${prefix}${key}.`);
-      reads.add(`${prefix}${key}`);
-      return value;
-    },
-  }) as never;
+/**
+ * A group's view worked out on demand: a child is read with its binding applied, the binding run
+ * when first read; a derived value is worked out when first read. So bindings and derived values
+ * may read each other in any order, and each runs once per reading. A binding that reads its own
+ * child sees it unbound; anything else that reads itself (directly or not) throws.
+ */
+function lazily(o: {
+  type: string;
+  own: Readonly<Record<string, unknown>>;
+  children: readonly string[];
+  /** A child's view before its binding (null when left out). */
+  base: (name: string) => PropView | null;
+  /** A child's view with the fields its binding returned. */
+  bind: (name: string, value: unknown) => PropView;
+  bindings: Readonly<Record<string, (s: never) => unknown>>;
+  derived: Readonly<Record<string, { compute: (s: never) => unknown }>>;
+}): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...o.own };
+  const done = new Set<string>();
+  /** What is being worked out now, innermost last. */
+  const busy: string[] = [];
+  const children = new Set(o.children);
+  const loop = (key: string) =>
+    new Error(`${o.type}: ${[...busy.slice(busy.indexOf(key)), key].join(" → ")} reads itself`);
+  const work = (key: string, run: () => unknown): unknown => {
+    busy.push(key);
+    try {
+      out[key] = run();
+    } finally {
+      busy.pop();
+    }
+    done.add(key);
+    return out[key];
+  };
+  const get = (key: string): unknown => {
+    if (done.has(key)) return out[key];
+    if (children.has(key)) {
+      const base = o.base(key);
+      const binding = o.bindings[key];
+      if (base === null || binding === undefined) {
+        out[key] = base;
+        done.add(key);
+        return base;
+      }
+      // A binding reads its own child as it is before the binding; any other way round is a loop.
+      if (busy.at(-1) === key) return base;
+      if (busy.includes(key)) throw loop(key);
+      return work(key, () => o.bind(key, binding(view as never)));
+    }
+    const derived = o.derived[key];
+    if (derived !== undefined) {
+      if (busy.includes(key)) throw loop(key);
+      return work(key, () => derived.compute(view as never));
+    }
+    return out[key];
+  };
+  const view = new Proxy(out, {
+    get: (target, key) => (typeof key === "string" ? get(key) : Reflect.get(target, key)),
+  });
+  for (const name of o.children) get(name);
+  for (const name of Object.keys(o.derived)) get(name);
+  return out;
 }
 
 /** A group: an ordinary prop (its state typed, nested) that also knows its children and links. */
@@ -377,9 +436,15 @@ function resolve(
   return { children: path, name: parts.join("."), leaf: at };
 }
 
-/** Every child a layout places, in order. */
+/** Every child a layout places, in drawing order (backdrop, provider, frame children, below). */
 export function layoutChildren(layout: GroupLayoutSpec): string[] {
-  return [...layout.children];
+  if (layout.kind !== "frame") return [...layout.children];
+  return [
+    ...(layout.backdrop !== undefined ? [layout.backdrop] : []),
+    layout.provider,
+    ...layout.children,
+    ...(layout.below ?? []),
+  ];
 }
 
 /** A child's view, made again only when its facts or what is bound into it changed. */
@@ -414,31 +479,37 @@ export function defineGroup<
   const placed = layoutChildren(spec.layout);
   for (const name of placed)
     if (kids[name] === undefined) throw new Error(`${spec.type}: layout names no child "${name}"`);
+  if (spec.layout.kind === "frame") {
+    const kind = childDef(spec.layout.provider)?.frame?.kind;
+    if (kind === undefined)
+      throw new Error(`${spec.type}: ${spec.layout.provider} provides no frame`);
+    for (const name of spec.layout.children) {
+      const drawsOn = childDef(name).drawsOn;
+      if (drawsOn !== undefined && drawsOn !== kind)
+        throw new Error(`${spec.type}: ${name} draws on ${drawsOn}, the frame is ${kind}`);
+    }
+    for (const name of spec.layout.below ?? [])
+      if (childDef(name).drawsOn !== undefined)
+        throw new Error(`${spec.type}: ${name} draws on a frame; it can't go below it`);
+  }
 
   // ---- each child's facts before bindings: its defaults, with the group's overrides ----
   const fullDefaults: Record<string, StoredState> = {};
   for (const name of childNames)
     fullDefaults[name] = { ...childDef(name).defaults, ...(spec.defaults?.[name] ?? {}) };
 
-  // ---- which fields each binding binds: run once on the defaults, checked against the child ----
-  const bindings = Object.entries(spec.is ?? {});
+  // ---- which fields each binding binds: the group read once on its defaults ----
+  const bindings = Object.fromEntries(Object.entries(spec.is ?? {})) as Record<
+    string,
+    (s: never) => unknown
+  >;
   const boundTree: Record<string, BoundTree> = {};
-  const sources: Record<string, string[]> = {};
-  {
-    const probe: Record<string, unknown> = { ...ownDefaults };
-    for (const name of childNames)
-      probe[name] = viewOf(childDef(name), fullDefaults[name] as StoredState);
-    for (const [d, { compute }] of Object.entries(spec.derived ?? {})) {
-      try {
-        probe[d] = compute(probe);
-      } catch {
-        probe[d] = undefined;
-      }
-    }
-    for (const [name, fn] of bindings) {
-      const reads = new Set<string>();
-      const value = fn(noting(probe, reads));
-      sources[name] = [...reads];
+  lazily({
+    type: spec.type,
+    own: ownDefaults,
+    children: childNames,
+    base: (name) => viewOf(childDef(name), fullDefaults[name] as StoredState),
+    bind: (name, value) => {
       const tree = shapeOf(`${spec.type}: IS ${name}`, childDef(name), value);
       const inner = groupOf(childDef(name))?.boundTree;
       if (inner !== undefined) {
@@ -449,11 +520,14 @@ export function defineGroup<
           );
       }
       boundTree[name] = tree;
-      // Later bindings read this one's result.
-      const base = fullDefaults[name] as StoredState;
-      probe[name] = viewOf(childDef(name), { ...base, ...(value as object) });
-    }
-  }
+      return viewOf(childDef(name), {
+        ...(fullDefaults[name] as StoredState),
+        ...(value as object),
+      });
+    },
+    bindings,
+    derived: spec.derived ?? {},
+  });
   const bound = Object.entries(boundTree).flatMap(([name, tree]) => pathsOf(tree, `${name}.`));
 
   // ---- one writer: a learner control on a bound field must be routed ----
@@ -530,42 +604,44 @@ export function defineGroup<
       const known = top.get(stored);
       if (known !== undefined) return known;
     }
-    const out: Record<string, unknown> = {};
+    const own: Record<string, unknown> = {};
     for (const f of ownFields)
-      out[f] = injected !== undefined && f in injected ? injected[f] : stored[f];
+      own[f] = injected !== undefined && f in injected ? injected[f] : stored[f];
     const inputs: Reading["inputs"] = {};
     for (const name of childNames) {
       const slice = stored[name];
-      if (slice === null || slice === undefined) {
-        inputs[name] = null;
-        out[name] = null;
-        continue;
-      }
       const fromAbove = injected?.[name];
-      inputs[name] = {
-        slice: slice as StoredState,
-        injected: isObject(fromAbove) ? fromAbove : undefined,
-      };
-      out[name] = childView(name, slice as StoredState, inputs[name]?.injected);
+      inputs[name] =
+        slice === null || slice === undefined
+          ? null
+          : { slice: slice as StoredState, injected: isObject(fromAbove) ? fromAbove : undefined };
     }
-    const derive = () => {
-      for (const [d, { compute }] of Object.entries(spec.derived ?? {})) out[d] = compute(out);
-    };
-    derive();
-    for (const [name, fn] of bindings) {
-      const input = inputs[name];
-      if (input === null || input === undefined) continue;
-      const value = fn(out) as Record<string, unknown>;
-      if (isFullChecking()) {
-        const tree = shapeOf(`${spec.type}: IS ${name}`, childDef(name), value);
-        const want = boundTree[name] as BoundTree;
-        if (!isSame(Object.keys(tree).sort(), Object.keys(want).sort()))
-          throw new Error(`${spec.type}: IS ${name} must always bind the same fields`);
-      }
-      input.injected = mergeBound(input.injected, value, boundTree[name]);
-      out[name] = childView(name, input.slice, input.injected);
-      derive();
-    }
+    const out = lazily({
+      type: spec.type,
+      own,
+      children: childNames,
+      base: (name) => {
+        const input = inputs[name];
+        return input == null ? null : childView(name, input.slice, input.injected);
+      },
+      bind: (name, value) => {
+        const input = inputs[name] as NonNullable<Reading["inputs"][string]>;
+        if (isFullChecking()) {
+          const tree = shapeOf(`${spec.type}: IS ${name}`, childDef(name), value);
+          const want = boundTree[name] as BoundTree;
+          if (!isSame(Object.keys(tree).sort(), Object.keys(want).sort()))
+            throw new Error(`${spec.type}: IS ${name} must always bind the same fields`);
+        }
+        input.injected = mergeBound(
+          input.injected,
+          value as Record<string, unknown>,
+          boundTree[name],
+        );
+        return childView(name, input.slice, input.injected);
+      },
+      bindings,
+      derived: spec.derived ?? {},
+    });
     const shown: Record<string, boolean> = {};
     for (const name of childNames)
       shown[name] = out[name] !== null && (spec.show?.[name]?.(out) ?? true);
@@ -860,7 +936,6 @@ export function defineGroup<
       bound,
       boundTree,
       own: ownFields,
-      sources,
       routes: Object.keys(spec.route ?? {}),
     },
     /** A placement's facts: defaults merged child by child with what it gives. */

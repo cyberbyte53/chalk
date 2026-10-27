@@ -1,4 +1,4 @@
-import type { Lesson } from "@chalk/content";
+import type { BoardAt as At, Lesson } from "@chalk/content";
 import { propDefs } from "@chalk/library";
 import { testLesson } from "@chalk/library/test-lesson";
 import { describe, expect, it } from "vitest";
@@ -57,11 +57,20 @@ describe("validateLesson", () => {
 
   it("checks IS: an input of a real prop, real fields read, one writer", () => {
     const bad = fresh();
-    board(bad, "share").is.push({ set: "game.sweets", to: "1" });
-    board(bad, "share").is.push({ set: "box.text", to: "game.nowhere" });
+    board(bad, "share").is.push({ set: "game.sweets", to: () => 1 });
+    board(bad, "share").is.push({ set: "box.text", to: (at: At) => at("game").nowhere });
     has(bad, /sweetShare.sweets can't be set by IS/);
     has(bad, /has no field "nowhere"/);
     has(bad, /2 IS rules set box.text/);
+  });
+
+  it("checks IS rules don't feed each other in a loop", () => {
+    const bad = fresh();
+    board(bad, "share").is.push(
+      { set: "box.text", to: (at: At) => at("title").text },
+      { set: "title.text", to: (at: At) => at("box").text },
+    );
+    has(bad, /feed each other in a loop/);
   });
 
   it("checks WHEN: real signals, actions and arguments", () => {
@@ -76,13 +85,13 @@ describe("validateLesson", () => {
     has(bad, /no action "fly"/);
   });
 
-  it("checks expression arguments: real fields, and a value the action accepts", () => {
+  it("checks arguments worked out from the board: real fields, and a value the action accepts", () => {
     const bad = fresh();
     board(bad, "share").when.push({
       on: "board.started",
       do: [
-        { call: "game.setSweets", args: { value: { expr: "game.nowhere" } } },
-        { call: "game.setSweets", args: { value: { expr: '"far"' } } },
+        { call: "game.setSweets", args: (at: At) => ({ value: at("game").nowhere }) },
+        { call: "game.setSweets", args: () => ({ value: "far" }) },
       ],
     });
     has(bad, /no field "nowhere"/);
@@ -90,7 +99,10 @@ describe("validateLesson", () => {
     const fine = fresh();
     board(fine, "share").when.push({
       on: "board.started",
-      do: { call: "game.setSweets", args: { value: { expr: "game.sweets + 1" } } },
+      do: {
+        call: "game.setSweets",
+        args: (at: At) => ({ value: (at("game").sweets as number) + 1 }),
+      },
     });
     expect(messages(fine)).toEqual([]);
   });

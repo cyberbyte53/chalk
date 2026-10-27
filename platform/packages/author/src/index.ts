@@ -1,5 +1,6 @@
 export {
   type ActionRef,
+  type InputRef,
   type AnyPlaced,
   type Args,
   BoardKit,
@@ -30,7 +31,6 @@ export {
   together,
   wait,
 } from "./board";
-export { Expr, type Operand, expr, literal } from "./expr";
 export { type Family, family, isFamily } from "./family";
 export {
   type BoardItem,

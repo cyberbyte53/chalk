@@ -1,3 +1,5 @@
+import { pathFrom } from "./door";
+
 /**
  * Pressing what a view's inputs say they do (`does` and `says`, @chalk/prop's tags.ts): a press on
  * an input that does an action with fixed arguments runs it; an input whose own handler runs its
@@ -27,7 +29,12 @@ export function pressHandler(
       input.closest("[disabled]") !== null
     )
       return;
-    const action = input.getAttribute("data-does") ?? "";
+    // Inside a group's child, the action is the child's: its path runs through the child's name.
+    const action = pathFrom(
+      input,
+      e.currentTarget as Element,
+      input.getAttribute("data-does") ?? "",
+    );
     const raw = input.getAttribute("data-with");
     call(action, raw === null ? undefined : (JSON.parse(raw) as Record<string, unknown>));
   };

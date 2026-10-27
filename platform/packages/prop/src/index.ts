@@ -46,6 +46,9 @@ export {
   type Effect,
   type Element,
   type Emit,
+  type FrameKindName,
+  type FramePixels,
+  type FrameSpec,
   type Raised,
   type Observation,
   type PropDef,
@@ -56,16 +59,6 @@ export {
   type TaskContext,
   type Texts,
 } from "./define";
-export {
-  type BoardAt,
-  type BoardFn,
-  compileExpression,
-  compileRule,
-  compileTemplate,
-  type Expression,
-  type Scope,
-  type Template,
-} from "./expression";
 export {
   FRAMES_PER_SECOND,
   flatten,
@@ -122,6 +115,19 @@ export {
   type Step,
   type Steps,
 } from "./group";
+export {
+  defineHost,
+  hostOf,
+  isInAxis,
+  isInPlane,
+  layersFor,
+  type AnyLayer,
+  type HostDef,
+  type HostLayout,
+  type HostSpec,
+  type HostState,
+  type Layer,
+} from "./compose";
 export {
   DEFAULT_SIZE,
   PHONE_COLUMN,

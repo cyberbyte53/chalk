@@ -1,5 +1,7 @@
+import { SEP } from "./address";
 import { type ActionSpec, type Element, type Observation, nameOf } from "./define";
 import type { AnyPropDef, PropView, StoredState } from "./define";
+import { groupOf, shownOf } from "./group";
 
 /**
  * What is on screen is written once, in the view: each part the student can tell apart says what
@@ -159,17 +161,30 @@ const unescapeHtml = (s: string) =>
     .replaceAll("&amp;", "&");
 
 /**
+ * A tag found inside a group's child (`data-child`): named under the child ("dial/handle"), and
+ * doing the child's action by its path in the group ("dial.move").
+ */
+function underChildren(tag: Tag, children: readonly string[]): Tag {
+  if (children.length === 0) return tag;
+  return {
+    ...tag,
+    part: [...children, tag.part].join(SEP),
+    ...(tag.does !== undefined ? { does: tag.does.map((a) => [...children, a].join(".")) } : {}),
+  };
+}
+
+/**
  * Every tagged part in a view's markup (as `preact-render-to-string` writes it), in order. An input
- * inside a disabled element is off. A view still waiting for its drawing code is refused: what it
- * would show isn't known yet.
+ * inside a disabled element is off. A part inside a group's child is named under it. A view still
+ * waiting for its drawing code is refused: what it would show isn't known yet.
  */
 export function tagsInMarkup(html: string): Tag[] {
   const out: Tag[] = [];
-  const offs: boolean[] = [];
+  const open: { isOff: boolean; child: string | undefined }[] = [];
   for (const m of html.matchAll(/<(\/?)([a-zA-Z][\w:-]*)((?:[^>"]|"[^"]*")*?)(\/?)>/g)) {
     const [, closing, tag = "", attrs = "", selfClosing] = m;
     if (closing === "/") {
-      offs.pop();
+      open.pop();
       continue;
     }
     const values = new Map<string, string>();
@@ -178,10 +193,14 @@ export function tagsInMarkup(html: string): Tag[] {
     if (values.has("data-waiting"))
       throw new Error("a view is still loading its drawing code: describe it once it has loaded");
     const isOff =
-      offs.at(-1) === true || values.has("disabled") || values.get("aria-disabled") === "true";
+      open.at(-1)?.isOff === true ||
+      values.has("disabled") ||
+      values.get("aria-disabled") === "true";
+    const children = open.flatMap((o) => (o.child === undefined ? [] : [o.child]));
     const found = tagFrom((name) => values.get(name) ?? null, isOff);
-    if (found !== undefined) out.push(found);
-    if (selfClosing !== "/" && !VOID.has(tag.toLowerCase())) offs.push(isOff);
+    if (found !== undefined) out.push(underChildren(found, children));
+    if (selfClosing !== "/" && !VOID.has(tag.toLowerCase()))
+      open.push({ isOff, child: values.get("data-child") });
   }
   return out;
 }
@@ -212,11 +231,26 @@ export function describe(def: AnyPropDef, view: PropView, tags: readonly Tag[]):
       ...(t.isOff === true ? { isOff: true } : {}),
     });
   }
-  const hidden: Record<string, unknown> = {};
-  for (const field of def.offScreen ?? []) hidden[field] = view[field];
+  const hidden = hiddenOf(def, view);
   return {
     summary: def.summary?.(view as never) ?? def.describe,
     elements,
     ...(Object.keys(hidden).length > 0 ? { hidden } : {}),
   };
+}
+
+/** What a prop knows but doesn't show: its `offScreen` fields, and each shown child's, by name. */
+function hiddenOf(def: AnyPropDef, view: PropView): Record<string, unknown> {
+  const hidden: Record<string, unknown> = {};
+  for (const field of def.offScreen ?? []) hidden[field] = view[field];
+  const group = groupOf(def);
+  if (group === undefined) return hidden;
+  const shown = shownOf(view);
+  for (const [name, child] of Object.entries(group.children)) {
+    const childView = view[name];
+    if (childView === null || childView === undefined || shown?.[name] === false) continue;
+    const inner = hiddenOf(child, childView as PropView);
+    if (Object.keys(inner).length > 0) hidden[name] = inner;
+  }
+  return hidden;
 }

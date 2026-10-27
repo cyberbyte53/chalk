@@ -1,7 +1,8 @@
 import { Actor, type Cue, CueKind, MAX_OPTIONS, OPTION_MAX, splitTarget } from "@chalk/content";
-import { PropRole, SAY, compileExpression } from "@chalk/prop";
+import { PropRole, SAY } from "@chalk/prop";
 import type { z } from "zod";
 import type { HeardAction, HeardSignal, JugnuBoard, JugnuPlace } from "./board";
+import { evaluateCalculation } from "./calculate";
 import { partsNow } from "./context";
 import type { LessonLibrary } from "./lessons";
 import type { ToolSpec } from "./provider";
@@ -408,7 +409,7 @@ async function tryCalls(
 function calculate(board: JugnuBoard, args: Record<string, unknown>): ToolOutcome {
   const expression = String(args.expression ?? "");
   try {
-    const value = compileExpression(expression).evaluate((prop) => board.getView(prop));
+    const value = evaluateCalculation(expression, (prop) => board.getView(prop));
     if (typeof value !== "number" && typeof value !== "boolean" && typeof value !== "string")
       throw new Error("that isn't a number");
     const result = typeof value === "number" ? Number(value.toPrecision(12)) : value;

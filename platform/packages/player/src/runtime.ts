@@ -1,11 +1,12 @@
 import {
   Actor,
   type Board,
+  type BoardAt,
+  type CallArgs,
   type Locale,
   type SavedBoard,
   type Script,
   type WhenRule,
-  argExpression,
   propPieces,
   splitTarget,
 } from "@chalk/content";
@@ -19,21 +20,16 @@ import {
   type BoundTree,
   type Change,
   EffectKind,
-  type Expression,
   type Observation,
   PropRole,
   type PropView,
   type Raised,
   SAY,
-  type Scope,
   type Spoken,
   type StoredState,
   type TaskContext,
   boardProp,
   changesBetween,
-  compileExpression,
-  compileRule,
-  compileTemplate,
   defineGroup,
   groupOf,
   initialState,
@@ -142,7 +138,7 @@ type Root = Readonly<Record<string, StoredState>>;
 type CompiledWhen = {
   prop: string;
   signal: string;
-  condition: Expression | undefined;
+  condition: ((at: BoardAt) => unknown) | undefined;
   script: Script;
 };
 
@@ -248,54 +244,47 @@ function getPath(from: unknown, path: readonly string[]): unknown {
 
 type Link = (view: PropView) => Record<string, unknown>;
 
+/** What each bound field's rule read the last time it ran ("race.time"), by piece and field. */
+type BoundReads = Map<string, Map<string, readonly string[]>>;
+
+/** A placed prop's view as a rule reads it, noting each field read. */
+function noted(name: string, view: Readonly<Record<string, unknown>>, reads: Set<string>) {
+  return new Proxy(view, {
+    get(target, key, receiver) {
+      if (typeof key === "string" && key in target) reads.add(`${segment(name)}.${key}`);
+      return Reflect.get(target, key, receiver);
+    },
+  });
+}
+
 /**
  * The board's IS rules as the top group's links: per piece, one function returning the fields the
- * board binds into it. Pieces come in an order where each reads only pieces already worked out.
- * A rule that breaks (an error, or a value its field won't take) keeps its last good value and is
- * reported once, until it works again.
+ * board binds into it. The group works a piece out when it is read, so a rule may read any piece;
+ * what each rule reads is noted every time it runs (`reads`). A rule that breaks (an error, or a
+ * value its field won't take) keeps its last good value and is reported once, until it works again.
  */
 function boardLinks(
   board: Board,
   defs: ReadonlyMap<string, AnyPropDef>,
   starts: ReadonlyMap<string, StoredState>,
   report: (message: string, error?: unknown) => void,
-): Record<string, Link> {
+): { links: Record<string, Link>; reads: BoundReads } {
   type Rule = {
     target: string;
+    member: string;
     path: readonly string[];
-    compute: (scope: Scope) => unknown;
-    reads: readonly string[];
+    to: (at: BoardAt) => unknown;
     check: ((value: unknown) => string | undefined) | undefined;
     last: unknown;
     lastError: string | undefined;
   };
   const rules = new Map<string, Rule[]>();
-  // What a rule written as code reads: noted by running it once on the board's first values.
-  const probe: Scope = (name) => {
-    const def = defs.get(name);
-    const start = starts.get(name);
-    if (def === undefined || start === undefined) throw new Error(`no prop "${name}"`);
-    return viewOf(def, start);
-  };
   for (const rule of board.is) {
     const { prop, member } = splitTarget(rule.set);
     const def = defs.get(prop);
     if (def === undefined)
       throw new Error(`Board ${board.name}: IS ${rule.set}: no prop "${prop}"`);
     const path = member.split(".");
-    let compute: (scope: Scope) => unknown;
-    let refs: readonly (readonly string[])[];
-    if ("to" in rule) {
-      const expression = compileRule(rule.to, probe);
-      compute = (scope) => expression.evaluate(scope);
-      refs = expression.refs;
-    } else {
-      const texts = Object.entries(rule.text).map(
-        ([locale, source]) => [locale, compileTemplate(source)] as const,
-      );
-      compute = (scope) => Object.fromEntries(texts.map(([l, t]) => [l, t.render(scope)]));
-      refs = texts.flatMap(([, t]) => t.refs);
-    }
     // A leaf's own field is checked against its schema (a group's fields are checked inside it).
     const shape = (def.state as unknown as { shape?: Record<string, FieldSchema> }).shape;
     const field = path.length === 1 && groupOf(def) === undefined ? shape?.[member] : undefined;
@@ -312,48 +301,43 @@ function boardLinks(
     const list = rules.get(prop) ?? [];
     list.push({
       target: rule.set,
+      member,
       path,
-      compute,
-      reads: [...new Set(refs.map((r) => r[0] ?? ""))],
+      to: rule.to,
       check,
       last: getPath(starts.get(prop), path),
       lastError: undefined,
     });
     rules.set(prop, list);
   }
-  // Each piece after the pieces it reads (a loop is the validator's to report; kept as written).
-  const order: string[] = [];
-  const visiting = new Set<string>();
-  const visit = (name: string) => {
-    if (order.includes(name) || visiting.has(name) || !rules.has(name)) return;
-    visiting.add(name);
-    for (const rule of rules.get(name) ?? []) for (const read of rule.reads) visit(read);
-    visiting.delete(name);
-    order.push(name);
-  };
-  for (const name of rules.keys()) visit(name);
 
+  const reads: BoundReads = new Map();
   const links: Record<string, Link> = {};
-  for (const name of order) {
-    const list = rules.get(name) ?? [];
+  for (const [name, list] of rules) {
+    const noting = new Map<string, readonly string[]>();
+    reads.set(name, noting);
     links[name] = (view) => {
       const out: Record<string, unknown> = {};
-      const scope: Scope = (prop) => {
-        const seen = view[prop];
-        if (!isObject(seen)) throw new Error(`no prop "${prop}"`);
-        return prop === name ? { ...seen, ...out } : seen;
-      };
       for (const rule of list) {
+        const read = new Set<string>();
+        // The group's view works each piece out as it is read; this piece reads as it is so far.
+        const at: BoardAt = (piece) => {
+          const prop = typeof piece === "string" ? piece : piece.name;
+          const seen = view[prop];
+          if (!isObject(seen)) throw new Error(`no prop "${prop}"`);
+          return noted(prop, prop === name ? { ...seen, ...out } : seen, read);
+        };
         let value: unknown;
         let problem: string | undefined;
         let cause: unknown;
         try {
-          value = rule.compute(scope);
+          value = rule.to(at);
           problem = rule.check?.(value);
         } catch (error) {
           problem = error instanceof Error ? error.message : String(error);
           cause = error;
         }
+        noting.set(rule.member, [...read]);
         if (problem === undefined) {
           rule.last = value;
           rule.lastError = undefined;
@@ -366,7 +350,7 @@ function boardLinks(
       return out;
     };
   }
-  return links;
+  return { links, reads };
 }
 
 type FieldSchema = {
@@ -391,6 +375,8 @@ export class BoardRuntime {
   private readonly root: Signal<Root>;
   private readonly boardView: ReadonlySignal<PropView>;
   private readonly whenRules: CompiledWhen[];
+  /** What each bound field's rule read when it last ran. */
+  private readonly reads: BoundReads;
   private readonly signalListeners = new Set<(record: SignalRecord) => void>();
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
   private readonly queue: SignalRecord[] = [];
@@ -433,6 +419,8 @@ export class BoardRuntime {
     starts.set(BOARD, { ...boardProp.defaults, hidden });
 
     const names = [...defs.keys()];
+    const links = boardLinks(board, defs, starts, (m, e) => this.services.onError(m, e));
+    this.reads = links.reads;
     let top: AnyPropDef;
     try {
       top = defineGroup({
@@ -440,7 +428,7 @@ export class BoardRuntime {
         describe: `The board ${board.name}`,
         children: Object.fromEntries(defs),
         defaults: Object.fromEntries(starts),
-        is: boardLinks(board, defs, starts, (m, e) => this.services.onError(m, e)),
+        is: links.links,
         summary: () => board.name,
         layout: { kind: "column", children: names },
       } as never) as unknown as AnyPropDef;
@@ -470,6 +458,15 @@ export class BoardRuntime {
   }
 
   // ---- reading ----
+
+  /**
+   * What the board binds into a prop, field by field, and what each field's rule read the last time
+   * it ran ("race.time"). Empty for a prop the board binds nothing into.
+   */
+  boundReads(name: string): ReadonlyMap<string, readonly string[]> {
+    this.getView(name);
+    return this.reads.get(name) ?? new Map();
+  }
 
   /** A prop's state: its facts, what the board binds into it, and what is derived. */
   getView(name: string): PropView {
@@ -1009,7 +1006,8 @@ export class BoardRuntime {
     return true;
   }
 
-  private scope = (name: string): Readonly<Record<string, unknown>> => this.getView(name);
+  /** How a rule or a script's arguments read the board: a piece's view. */
+  private at: BoardAt = (piece) => this.getView(typeof piece === "string" ? piece : piece.name);
 
   // ---- WHEN ----
 
@@ -1018,7 +1016,7 @@ export class BoardRuntime {
     return {
       prop,
       signal: member,
-      condition: rule.if === undefined ? undefined : compileRule(rule.if),
+      condition: rule.if,
       script: rule.do,
     };
   }
@@ -1054,7 +1052,7 @@ export class BoardRuntime {
       if (rule.prop !== record.prop || rule.signal !== record.signal) continue;
       if (rule.condition !== undefined) {
         try {
-          if (!rule.condition.evaluate(this.scope)) continue;
+          if (!rule.condition(this.at)) continue;
         } catch (error) {
           this.services.onError(
             `Board ${this.board.name}: WHEN ${record.prop}.${record.signal} condition`,
@@ -1104,7 +1102,7 @@ export class BoardRuntime {
     const { prop, member } = splitTarget(script.call);
     let args: Record<string, unknown>;
     try {
-      args = this.resolveArgs(script.args ?? {});
+      args = this.resolveArgs(script.args);
     } catch (error) {
       this.services.onError(`Board ${this.board.name}: ${script.call} arguments`, error);
       return;
@@ -1112,13 +1110,8 @@ export class BoardRuntime {
     await this.invoke(prop, member, args, actor, isSetOff, false, cause);
   }
 
-  /** Arguments are plain values, or `{ "expr": "coin.count" }`, worked out when the call runs. */
-  private resolveArgs(args: Readonly<Record<string, unknown>>): Record<string, unknown> {
-    const out: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(args)) {
-      const source = argExpression(value);
-      out[key] = source === undefined ? value : compileExpression(source).evaluate(this.scope);
-    }
-    return out;
+  /** Arguments are plain values, or a function of the board worked out when the call runs. */
+  private resolveArgs(args: CallArgs | undefined): Record<string, unknown> {
+    return typeof args === "function" ? args(this.at) : { ...(args ?? {}) };
   }
 }

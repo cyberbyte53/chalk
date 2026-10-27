@@ -1,13 +1,11 @@
 /**
- * The lesson's expression language: read-only maths and logic over props' state, e.g.
- * `line.marker * line.marker > 2.02` or `coin.heads / coin.count`. It is parsed, never run as code,
- * and it can't change anything.
+ * Jugnu's calculator: read-only maths over the board's values, as the model writes it in a
+ * `calculate` call, e.g. `game.sweets - game.friends * 3` or `lcm(18, 12)`. It is parsed, never run
+ * as code, and it can't change anything. (Lessons write their rules as code, not in this.)
  *
  * Values: numbers, strings ("…"), true / false / null. Names: `prop.field`.
  * Operators: + - * / ^, < <= > >= == !=, and / or / not. Functions: see FUNCTIONS.
  */
-
-export type ExpressionValue = unknown;
 
 /** Looks up a prop's view by name. Throws if there is no such prop. */
 export type Scope = (name: string) => Readonly<Record<string, unknown>>;
@@ -306,145 +304,7 @@ function evaluate(node: Node, scope: Scope): unknown {
   }
 }
 
-function collectRefs(node: Node, out: string[][]): void {
-  switch (node.op) {
-    case "ref":
-      out.push([...node.path]);
-      return;
-    case "not":
-    case "neg":
-      collectRefs(node.arg, out);
-      return;
-    case "bin":
-      collectRefs(node.left, out);
-      collectRefs(node.right, out);
-      return;
-    case "call":
-      for (const arg of node.args) collectRefs(arg, out);
-      return;
-    case "literal":
-      return;
-  }
-}
-
-export type Expression = {
-  source: string;
-  /** Every `prop.field` it reads, for the validator and for knowing when to recompute. */
-  refs: readonly (readonly string[])[];
-  evaluate: (scope: Scope) => unknown;
-};
-
-/** Parses an expression once; throws a readable error if it is not allowed. */
-export function compileExpression(source: string): Expression {
-  const ast = new Parser(tokenize(source)).parse();
-  const refs: string[][] = [];
-  collectRefs(ast, refs);
-  return { source, refs, evaluate: (scope) => evaluate(ast, scope) };
-}
-
-/** How a rule written as code reads the board: `at(piece)` is that piece's view. */
-export type BoardAt = (
-  piece: string | { readonly name: string },
-) => Readonly<Record<string, unknown>>;
-
-/** A rule written as code: a typed function of the board. */
-export type BoardFn = (at: BoardAt) => unknown;
-
-/**
- * A rule's value or condition, written as code or (in older boards) as an expression: one way to
- * work it out and to know what it reads. What code reads is noted by running it once on `probe`
- * (the board's first values), as a group's links are; `source` is the code itself, for readers.
- */
-export function compileRule(rule: string | BoardFn, probe?: Scope): Expression {
-  if (typeof rule === "string") return compileExpression(rule);
-  const atOn =
-    (scope: Scope): BoardAt =>
-    (piece) =>
-      scope(typeof piece === "string" ? piece : piece.name);
-  const refs: string[][] = [];
-  if (probe !== undefined) {
-    const seen = new Set<string>();
-    const noted: Scope = (name) => {
-      const view = probe(name);
-      return new Proxy(view, {
-        get(target, key, receiver) {
-          if (typeof key === "string" && !seen.has(`${name}.${key}`)) {
-            seen.add(`${name}.${key}`);
-            refs.push([name, key]);
-          }
-          return Reflect.get(target, key, receiver);
-        },
-      });
-    };
-    try {
-      rule(atOn(noted));
-    } catch {
-      // A rule that can't run on the first values reads what it read before it stopped.
-    }
-  }
-  return { source: rule.toString(), refs, evaluate: (scope) => rule(atOn(scope)) };
-}
-
-/**
- * Text with live values in it: "Heads: {coin.heads} of {coin.count}". Inside maths (`$…$`, `$$…$$`)
- * braces are LaTeX's own, so a live value there is written `\live{…}`: "$x = \live{line.marker}$".
- */
-export type Template = {
-  source: string;
-  refs: readonly (readonly string[])[];
-  render: (scope: Scope) => string;
-  /** The text with every live value as 0: what the validator typesets to check the maths. */
-  skeleton: string;
-};
-
-/** Opens a live value inside maths. */
-const LIVE = "\\live{";
-
-export function compileTemplate(source: string): Template {
-  const parts: (string | Expression)[] = [];
-  let text = "";
-  let isMath = false;
-  /** Reads the expression from `from` to the next "}", and returns where the text goes on. */
-  const slot = (from: number): number => {
-    const close = source.indexOf("}", from);
-    if (close === -1) throw new Error(`"{" at position ${from - 1} has no closing "}"`);
-    if (text !== "") parts.push(text);
-    text = "";
-    parts.push(compileExpression(source.slice(from, close)));
-    return close + 1;
-  };
-  let i = 0;
-  while (i < source.length) {
-    if (source.startsWith("\\$", i)) {
-      text += "\\$";
-      i += 2;
-    } else if (source[i] === "$") {
-      const marker = source.startsWith("$$", i) ? "$$" : "$";
-      text += marker;
-      i += marker.length;
-      isMath = !isMath;
-    } else if (isMath && source.startsWith(LIVE, i)) {
-      i = slot(i + LIVE.length);
-    } else if (!isMath && source[i] === "{") {
-      i = slot(i + 1);
-    } else {
-      text += source[i];
-      i++;
-    }
-  }
-  if (text !== "") parts.push(text);
-  const refs = parts.flatMap((part) => (typeof part === "string" ? [] : part.refs));
-  return {
-    source,
-    refs,
-    render: (scope) =>
-      parts
-        .map((part) => {
-          if (typeof part === "string") return part;
-          const value = part.evaluate(scope);
-          return typeof value === "number" ? String(Number(value.toFixed(6))) : String(value);
-        })
-        .join(""),
-    skeleton: parts.map((part) => (typeof part === "string" ? part : "0")).join(""),
-  };
+/** Works out a calculation on the board's values; throws a readable error if it is not allowed. */
+export function evaluateCalculation(source: string, scope: Scope): unknown {
+  return evaluate(new Parser(tokenize(source)).parse(), scope);
 }

@@ -5,6 +5,7 @@ import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type BoardClock, BoardClockContext } from "./board-clock";
 import { heard, pressHandler } from "./does";
+import { type Door, DoorContext } from "./door";
 import { findNode, stampPaths } from "./part-paths";
 import type { PropRegistry } from "./prop-module";
 import type { BoardRuntime } from "./runtime";
@@ -85,6 +86,17 @@ function PropPieceView({
     () => ({ time: () => runtime.time(), frame: (callback) => runtime.onFrame(callback) }),
     [runtime],
   );
+  // Every learner action on this piece, by path ("giveRound", or "dial.move" in a group).
+  const door = useMemo<Door>(
+    () => ({
+      call: (path, args) =>
+        heard(piece.name, path, () =>
+          runtime.call(piece.name, path, { ...(args ?? {}) }, Actor.Learner),
+        ),
+      signal: (path, payload) => runtime.signal(piece.name, path, payload ?? {}, Actor.Learner),
+    }),
+    [runtime, piece.name],
+  );
   const pointed = context.pointed?.prop === piece.name ? context.pointed : undefined;
   // A part is ringed where the view tagged it (`data-part`); without that, the whole prop glows.
   const ringOf = (part: string | undefined): Box | undefined =>
@@ -133,26 +145,20 @@ function PropPieceView({
         class="piece-drawn"
         ref={drawn}
         style={zoom === 1 ? undefined : { zoom }}
-        onClick={pressHandler((action, args) =>
-          heard(piece.name, action, () =>
-            runtime.call(piece.name, action, { ...(args ?? {}) }, Actor.Learner),
-          ),
-        )}
+        onClick={pressHandler(door.call)}
       >
         <BoardClockContext.Provider value={clock}>
-          <View
-            view={runtime.getView(piece.name)}
-            locale={context.locale}
-            width={width}
-            call={(action, ...args) =>
-              heard(piece.name, nameOf(action), () =>
-                runtime.call(piece.name, nameOf(action), { ...(args[0] ?? {}) }, Actor.Learner),
-              )
-            }
-            signal={(signal, payload) =>
-              runtime.signal(piece.name, nameOf(signal), payload ?? {}, Actor.Learner)
-            }
-          />
+          <DoorContext.Provider value={door}>
+            <View
+              view={runtime.getView(piece.name)}
+              locale={context.locale}
+              width={width}
+              call={(action, ...args) =>
+                door.call(nameOf(action), args[0] as Readonly<Record<string, unknown>> | undefined)
+              }
+              signal={(signal, payload) => door.signal(nameOf(signal), payload)}
+            />
+          </DoorContext.Provider>
         </BoardClockContext.Provider>
       </div>
     </div>

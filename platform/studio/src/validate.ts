@@ -1,10 +1,11 @@
 import {
   type Board,
+  type BoardAt,
+  type CallArgs,
   LOCALES,
   type Lesson,
   type Readings,
   type Script,
-  argExpression,
   lessonSchema,
   propPieces,
   spokenText,
@@ -20,9 +21,7 @@ import {
   SAY,
   type StoredState,
   applyPatch,
-  compileExpression,
-  compileRule,
-  compileTemplate,
+  hostOf,
   initialState,
   viewOf,
 } from "@chalk/prop";
@@ -53,7 +52,7 @@ export function validateLesson(input: unknown, defs: Defs, readings: Readings): 
 }
 
 /** Every `call` in a script, in order. */
-function callsIn(script: Script): { call: string; args: Record<string, unknown> }[] {
+function callsIn(script: Script): { call: string; args: CallArgs }[] {
   if (Array.isArray(script)) return script.flatMap(callsIn);
   if ("seq" in script) return script.seq.flatMap(callsIn);
   if ("par" in script) return script.par.flatMap(callsIn);
@@ -114,18 +113,40 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
       ? new Set()
       : new Set([...Object.keys(def.defaults), ...Object.keys(def.derived ?? {})]);
   };
-  const checkRefs = (where: string, refs: readonly (readonly string[])[]) => {
-    for (const [prop, field] of refs) {
-      if (prop === undefined || !defs.has(prop)) report(where, `no prop "${prop}" on this board`);
-      else if (field === undefined)
-        report(where, `"${prop}" needs a field, e.g. ${prop}.something`);
-      else if (!fields(prop).has(field))
-        report(where, `${prop} has no field "${field}" (fields: ${[...fields(prop)].join(", ")})`);
-    }
-  };
-  const compile = <T>(where: string, make: () => T): T | undefined => {
+  /**
+   * How a rule reads the board as it opens: each field it reads is noted, and one the piece hasn't
+   * is reported.
+   */
+  const reading =
+    (where: string, reads: Set<string>): BoardAt =>
+    (piece) => {
+      const name = typeof piece === "string" ? piece : piece.name;
+      const def = defs.get(name);
+      const state = states.get(name);
+      if (def === undefined || state === undefined)
+        throw new Error(`no prop "${name}" on this board`);
+      return new Proxy(viewOf(def, state), {
+        get(target, key, receiver) {
+          if (typeof key === "string" && key !== "toJSON") {
+            if (key in target) reads.add(`${name}.${key}`);
+            else
+              report(
+                where,
+                `${name} has no field "${key}" (fields: ${[...fields(name)].join(", ")})`,
+              );
+          }
+          return Reflect.get(target, key, receiver);
+        },
+      });
+    };
+  /** Runs a rule on the board as it opens: what it gave, or nothing when it threw (reported). */
+  const tryOn = <T>(
+    where: string,
+    reads: Set<string>,
+    run: (at: BoardAt) => T,
+  ): { value: T } | undefined => {
     try {
-      return make();
+      return { value: run(reading(where, reads)) };
     } catch (error) {
       report(where, error instanceof Error ? error.message : String(error));
       return undefined;
@@ -145,14 +166,8 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
   // IS: owns an input of a real prop, once; reads real fields; no loops; and gives a value the prop accepts.
   const writers = new Map<string, number>();
   const edges = new Map<string, Set<string>>();
-  /** Each IS text that compiled, with its live values as 0: its maths is checked below. */
-  const liveTexts: [where: string, skeletons: Record<string, string>][] = [];
-  const scope = (name: string) => {
-    const def = defs.get(name);
-    const state = states.get(name);
-    if (def === undefined || state === undefined) throw new Error(`no prop "${name}"`);
-    return viewOf(def, state);
-  };
+  /** What each IS gave on the board as it opens: its words are checked below. */
+  const liveTexts: [where: string, value: unknown][] = [];
   board.is.forEach((rule, i) => {
     const where = `is[${i}] ${rule.set}`;
     const target = split(rule.set);
@@ -168,41 +183,17 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
       );
     }
     writers.set(rule.set, (writers.get(rule.set) ?? 0) + 1);
-    const expression = "to" in rule ? compile(where, () => compileRule(rule.to, scope)) : undefined;
-    const templates =
-      "text" in rule
-        ? compile(where, () =>
-            Object.entries(rule.text).map(
-              ([locale, source]) => [locale, compileTemplate(source)] as const,
-            ),
-          )
-        : undefined;
-    if (expression === undefined && templates === undefined) return;
-    if (templates !== undefined)
-      liveTexts.push([
-        `is ${rule.set}`,
-        Object.fromEntries(templates.map(([locale, template]) => [locale, template.skeleton])),
-      ]);
-    const refs = expression?.refs ?? (templates ?? []).flatMap(([, template]) => template.refs);
-    checkRefs(where, refs);
-    for (const [prop, field] of refs)
-      edges.set(`${prop}.${field}`, (edges.get(`${prop}.${field}`) ?? new Set()).add(rule.set));
-    // Try it on the board as it opens: the value must be one the prop accepts.
+    // Tried on the board as it opens: what it reads, and a value the prop accepts.
+    const reads = new Set<string>();
+    const result = tryOn(where, reads, rule.to);
+    for (const read of reads) edges.set(read, (edges.get(read) ?? new Set()).add(rule.set));
+    if (result === undefined) return;
+    liveTexts.push([`is ${rule.set}`, result.value]);
     const state = states.get(target.prop);
     if (state === undefined) return;
-    try {
-      const result =
-        expression !== undefined
-          ? expression.evaluate(scope)
-          : Object.fromEntries(
-              (templates ?? []).map(([locale, template]) => [locale, template.render(scope)]),
-            );
-      const check = applyPatch(def, state, { [target.member]: result });
-      if (!check.isOk) for (const e of check.errors) report(where, e);
-      else states.set(target.prop, check.state);
-    } catch (error) {
-      report(where, error instanceof Error ? error.message : String(error));
-    }
+    const check = applyPatch(def, state, { [target.member]: result.value });
+    if (!check.isOk) for (const e of check.errors) report(where, e);
+    else states.set(target.prop, check.state);
   });
   for (const [target, count] of writers)
     if (count > 1) report(`is ${target}`, `${count} IS rules set ${target}; one field, one writer`);
@@ -219,6 +210,19 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
   };
   for (const node of edges.keys())
     if (hasLoop(node)) report(`is ${node}`, "IS rules feed each other in a loop");
+
+  // Layers that exclude each other can't both be on: from where it's placed, or the actions its rules call.
+  const called = board.when.flatMap((rule) => callsIn(rule.do));
+  for (const [name, def] of defs) {
+    const host = hostOf(def);
+    const state = states.get(name);
+    if (host === undefined || state === undefined) continue;
+    const used = called.flatMap((c) => {
+      const t = split(c.call);
+      return t?.prop === name ? [t.member] : [];
+    });
+    for (const clash of host.clashes(state, used)) report(name, clash);
+  }
 
   // studentOnly: real actions on this board.
   for (const entry of board.studentOnly) {
@@ -245,11 +249,8 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
         `${def.type} has no signal "${on.member}" (signals: ${Object.keys(def.signals ?? {}).join(", ") || "none"})`,
       );
     }
-    if (rule.if !== undefined) {
-      const test = rule.if;
-      const condition = compile(`${where} if`, () => compileRule(test, scope));
-      if (condition !== undefined) checkRefs(`${where} if`, condition.refs);
-    }
+    const test = rule.if;
+    if (test !== undefined) tryOn(`${where} if`, new Set(), test);
     for (const step of callsIn(rule.do)) {
       const call = split(step.call);
       const target = call === undefined ? undefined : defs.get(call.prop);
@@ -265,29 +266,13 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
         );
         continue;
       }
-      // Expression arguments are checked like IS rules, then tried on the board as it opens,
-      // so their type is checked against the action's arguments too.
-      const sample: Record<string, unknown> = {};
-      for (const [key, value] of Object.entries(step.args)) {
-        const source = argExpression(value);
-        if (source === undefined) {
-          sample[key] = value;
-          continue;
-        }
-        const expression = compile(`${where} ${step.call}(${key})`, () =>
-          compileExpression(source),
-        );
-        if (expression === undefined) continue;
-        checkRefs(`${where} ${step.call}(${key})`, expression.refs);
-        try {
-          sample[key] = expression.evaluate(scope);
-        } catch (error) {
-          report(
-            `${where} ${step.call}(${key})`,
-            error instanceof Error ? error.message : String(error),
-          );
-        }
-      }
+      // Arguments worked out from the board are tried on it as it opens, and checked like any.
+      const given = step.args;
+      const sample =
+        typeof given === "function"
+          ? tryOn(`${where} ${step.call}`, new Set(), given)?.value
+          : given;
+      if (sample === undefined) continue;
       const args = action.args.safeParse(sample);
       if (!args.success)
         for (const issue of args.error.issues)
@@ -299,7 +284,7 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
         call.prop === BOARD &&
         (call.member === BoardAction.Show || call.member === BoardAction.Hide)
       ) {
-        const name = step.args.name;
+        const name = sample.name;
         if (typeof name === "string" && !names.has(name))
           report(where, `no "${name}" on this board to show or hide`);
       }
@@ -315,9 +300,10 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
       for (const problem of richProblems(text)) report(where, `${path}: ${problem}`);
     });
   for (const piece of propPieces(board.root)) checkRich(piece.name, piece.with ?? {});
-  for (const [where, skeletons] of liveTexts) checkRich(where, skeletons);
+  for (const [where, value] of liveTexts) checkRich(where, value);
   for (const rule of board.when) {
-    for (const call of callsIn(rule.do)) checkRich(`when ${rule.on} → ${call.call}`, call.args);
+    for (const call of callsIn(rule.do))
+      if (typeof call.args !== "function") checkRich(`when ${rule.on} → ${call.call}`, call.args);
   }
 
   // Voice: every line that is said must reach the voice as plain words. Anything else needs a `speak`
