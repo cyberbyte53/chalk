@@ -84,7 +84,7 @@ Other acts:
 | Delete a thread | own, untouched, never handed over | the same | | |
 | Hand over a review | ✅ | ✅ | ✅ | ✅ |
 
-Also: a thread can't become ready while a regression about it is open or planned. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
+Also: a thread can't become ready while a regression about it is open or planned, or while a reviewer's message is the last word on it (the fixer answers first). What's wrong with a thread's own fix is said **on that thread**; a regression is something its change broke **elsewhere**, so the writer refuses a regression on the thread's own piece. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
 
 **Each agent holds one role, and is shown only what it may do.** This is the standard shape for MCP: one server, every caller identified by its token, the server deciding what that caller sees and may do.
 

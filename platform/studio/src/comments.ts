@@ -480,8 +480,23 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       };
     if (label === Label.Regression && change.thread.about === undefined)
       return { ok: false, error: "a regression names the thread whose change caused it (about)" };
-    if (change.thread.about !== undefined && !threads.some((x) => x.id === change.thread.about))
+    const aboutThread =
+      change.thread.about === undefined
+        ? undefined
+        : threads.find((x) => x.id === change.thread.about);
+    if (change.thread.about !== undefined && aboutThread === undefined)
       return { ok: false, error: `no thread ${change.thread.about} to be about` };
+    // What's wrong with a thread's own fix is said on that thread; a regression is a break elsewhere.
+    const isSamePlace =
+      aboutThread !== undefined &&
+      aboutThread.board === change.thread.board &&
+      (aboutThread.target ?? "") === (change.thread.target ?? "") &&
+      (aboutThread.prop ?? "") === (change.thread.prop ?? "");
+    if (label === Label.Regression && isSamePlace)
+      return {
+        ok: false,
+        error: `that is the piece ${aboutThread.id} is about: write on that thread instead (a regression is something its change broke elsewhere)`,
+      };
     const author = isFromChat ? YOU : who;
     const draft = {
       ...change.thread,
@@ -556,6 +571,12 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   if (to !== undefined && !mayMove(to))
     return refuse(`a ${who.role} can't move a thread from ${t.status} to ${to}`);
   if (to === Status.Ready) {
+    // A reviewer's words on the thread wait for an answer (a message or a new plan) before it's ready.
+    const last = t.messages.at(-1);
+    if (last?.role === Role.Reviewer)
+      return refuse(
+        `answer the reviewer first (${last.by}: "${last.text.slice(0, 80)}"): write a message or a new plan, then mark it ready`,
+      );
     const blocking = threads.filter(
       (x) => x.label === Label.Regression && x.about === t.id && isUnanswered(x),
     );

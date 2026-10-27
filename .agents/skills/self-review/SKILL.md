@@ -16,9 +16,10 @@ The person's review is the expensive part; this pass catches everything a fresh 
 1. Run `pnpm check`; if it fails, that is the first finding.
 2. `render_board` on the lesson with `questions: true` and once in Hindi: read every board in the pictures, not the source. Then play each board as a student with `render_board` `steps`: tap, drag, answer right and wrong, and check what each step did (the events, "board passed", the picture).
 3. Go through `reviewer.md` board by board: as the student, as the teacher, on the screen. Put the source passage beside it.
-4. File each item with your `comment` tool (it writes as a reviewer), one thread per item, with the board and target, the principle, and what a student would get wrong:
-   - `label: "finding"` for something wrong with the lesson;
-   - `label: "regression"` with `about: <thread id>` when a change made for that thread broke something (when reviewing an applied review: the boards it touched, and the places `affected` lists). That thread can't be marked ready until it is fixed.
+4. Say each item where it belongs, with your `comment` tool (it writes as a reviewer): the principle, and what a student would get wrong.
+   - **About a thread already there** (reviewing an applied review: its fix isn't right yet, or you checked it and it's good): **write on that thread** (`id`). The fixer must answer your words before it can mark that thread ready.
+   - **A new problem** with the lesson: a new thread, `label: "finding"`, on its board and target.
+   - **Something a thread's change broke elsewhere** (another board or piece; check the boards it touched and the places `affected` lists): a new thread, `label: "regression"`, `about: <that thread's id>`. That thread can't be ready until it's fixed. The writer refuses a regression on the thread's own piece: that goes on the thread.
 
    When you have filed everything, hand your pass over: `comment` with `handover: true`. It becomes a review of its own (`by: reviewer`) the person can open in the activity feed (`?dev&activity`).
 5. Say which findings are mechanical (overflow, a give-away option, an undefined term, maths inside a sentence). The agent that asked for the review fixes those as a fixer (`status: "planned"`, fix, render again, `status: "ready"`); a reviewer can't move a thread. Taste decisions stay open for the person.

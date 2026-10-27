@@ -184,13 +184,59 @@ describe("threads", () => {
     const t = start(root);
     write(root, t.id, FIXER, "x", Status.Planned);
     expect(() => start(root, { label: Label.Regression }, REVIEWER)).toThrow(/about/);
-    const broke = start(root, { label: Label.Regression, about: t.id }, REVIEWER);
+    const broke = start(
+      root,
+      { target: "machine/out", label: Label.Regression, about: t.id },
+      REVIEWER,
+    );
     expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
       ok: false,
       error: expect.stringContaining(broke.id),
     });
     write(root, broke.id, FIXER, "fix", Status.Planned);
     write(root, broke.id, FIXER, "fixed", Status.Ready);
+    expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({ ok: true });
+  });
+
+  it("keeps what's wrong with a fix on its own thread: a regression is a break elsewhere", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, FIXER, "bigger", Status.Planned);
+    // The same piece: refused, write on the thread.
+    expect(
+      applyChange(
+        root,
+        {
+          op: "start",
+          thread: {
+            board: BOARD,
+            target: "machine/put",
+            label: Label.Regression,
+            about: t.id,
+            text: "still small",
+          },
+        },
+        REVIEWER,
+      ),
+    ).toMatchObject({ ok: false, error: expect.stringContaining("write on that thread instead") });
+    // Elsewhere: a regression.
+    expect(
+      start(root, { target: "machine/out", label: Label.Regression, about: t.id }, REVIEWER),
+    ).toMatchObject({
+      label: Label.Regression,
+    });
+  });
+
+  it("holds a thread back from ready until the fixer answers the reviewer's words on it", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, FIXER, "bigger", Status.Planned);
+    write(root, t.id, REVIEWER, "still clipped at 360");
+    expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
+      ok: false,
+      error: expect.stringContaining("answer the reviewer first"),
+    });
+    write(root, t.id, FIXER, "it wrapped at 360; now two lines");
     expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({ ok: true });
   });
 

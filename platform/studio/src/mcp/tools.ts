@@ -776,14 +776,16 @@ export function chalkMcp(who: Who): McpServer {
     [Status.Planned]:
       "planned: what you will do, after the person's go in chat (again to revise it)",
     [Status.Ready]:
-      "ready: what you did; needs a plan first and no open regression it caused; the files you changed are recorded from git",
+      "ready: what you did; needs a plan first, an answer to any reviewer's words on it, and no open regression it caused; the files you changed are recorded from git",
     [Status.Open]: "open: reopen it",
     [Status.Closed]: "closed: done",
     [Status.Withdrawn]: "withdrawn: take it back",
   };
   const LABEL_WORDS: Record<Label, string> = {
-    [Label.Finding]: "finding: the principle, and what a student would get wrong",
-    [Label.Regression]: "regression: what a change broke (with about)",
+    [Label.Finding]:
+      "finding: a new problem (the principle, and what a student would get wrong); about a thread already there, write on it instead",
+    [Label.Regression]:
+      "regression: what a thread's change broke elsewhere (with about); what's wrong with its own fix goes on that thread",
     [Label.Comment]: "comment: what the person said in your chat (with from: chat)",
   };
 
