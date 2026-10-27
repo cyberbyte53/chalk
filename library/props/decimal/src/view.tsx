@@ -1,48 +1,17 @@
-import { type PropViewProps, does, says } from "@chalk/player";
-import type { ViewOf } from "@chalk/prop";
+import { NumberField } from "@chalk/draw";
+import type { PropViewProps } from "@chalk/player";
+import { type ViewOf, does, says, shows } from "@chalk/prop";
 import { Fragment, type JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
-import { DecimalExpansionPart, decimalExpansion } from "./model";
+import { decimalExpansion } from "./model";
 import { type Cell, CellKind, layOut, nextColumn } from "./paper";
 
 /** What the view reads: the prop's stored and derived fields. */
 type Seen = ViewOf<typeof decimalExpansion>;
 
+/** The largest p or q the learner may type. */
 const MAX_TYPED = 999;
 
-/** A typed whole number: p or q. A value out of range snaps back. */
-function NumberField({
-  name,
-  value,
-  min,
-  part,
-  onChange,
-}: {
-  name: string;
-  value: number;
-  min: number;
-  part: string;
-  onChange: (value: number) => void;
-}): JSX.Element {
-  return (
-    <label class="dx-field" data-part={part}>
-      <span>{name}</span>
-      <input
-        type="number"
-        inputMode="numeric"
-        min={min}
-        max={MAX_TYPED}
-        value={value}
-        onChange={(event) => {
-          const input = event.target as HTMLInputElement;
-          const next = Number(input.value);
-          if (Number.isInteger(next) && next >= min && next <= MAX_TYPED) onChange(next);
-          else input.value = String(value);
-        }}
-      />
-    </label>
-  );
-}
 /** Width of one digit column, in px. */
 const COL = 15;
 /** The decimal point's column has no width: the digits of the top two rows step aside for it. */
@@ -108,14 +77,15 @@ export function DecimalExpansionView({
     if (isNewestStep) classes.push("is-newest-step");
     return classes.join(" ");
   };
-  const dataPart = (cell: Cell): string | undefined => {
-    if (cell.kind === CellKind.Quotient && cell.position !== undefined && cell.position > 0) {
-      return `${DecimalExpansionPart.DigitPrefix}${cell.position}`;
-    }
-    if (cell.remainderIndex !== undefined) {
-      return `${DecimalExpansionPart.RemainderPrefix}${cell.remainderIndex}`;
-    }
-    return undefined;
+  // What a cell shows: a digit of the quotient, or a remainder (tagged once, on its first digit).
+  const tagged = new Set<number>();
+  const tagOf = (cell: Cell) => {
+    if (cell.kind === CellKind.Quotient && cell.position !== undefined && cell.position > 0)
+      return shows(`digit:${cell.position}`, Number(cell.text));
+    const i = cell.remainderIndex;
+    if (i === undefined || tagged.has(i)) return {};
+    tagged.add(i);
+    return shows(`remainder:${i}`, s.remainders[i]);
   };
   // Grid tracks: the divisor, then one per digit column, with a narrow track for the decimal point
   // straight after the numerator's last digit.
@@ -181,7 +151,7 @@ export function DecimalExpansionView({
           key={`q${cell.col}`}
           class={`${cellClass(cell, false)} is-head${side(cell.col)}`}
           style={place(cell.col, quotientRow)}
-          data-part={dataPart(cell)}
+          {...tagOf(cell)}
         >
           {cell.text}
         </span>
@@ -192,7 +162,9 @@ export function DecimalExpansionView({
             rejected !== null ? " is-rejected" : ""
           }`}
           style={place(nextCol, quotientRow)}
-          data-part={s.isAskingDigit ? DecimalExpansionPart.NextDigit : undefined}
+          {...(s.isAskingDigit
+            ? shows("asked", rejected, rejected === null ? "?" : `${rejected}, not it`)
+            : {})}
         >
           {s.isAskingDigit ? (rejected ?? "?") : count > 0 ? "…" : ""}
         </span>
@@ -201,7 +173,11 @@ export function DecimalExpansionView({
         <span
           class="dx-bar is-head is-after-point"
           style={place(String(s.numerator).length + s.repeatStart, quotientRow, s.repeatLength)}
-          data-part={DecimalExpansionPart.RepeatBar}
+          {...shows(
+            "repeatBar",
+            s.digits.slice(s.repeatStart, s.repeatStart + s.repeatLength),
+            `the block ${s.digits.slice(s.repeatStart, s.repeatStart + s.repeatLength)} repeats`,
+          )}
           aria-hidden="true"
         />
       )}
@@ -221,7 +197,7 @@ export function DecimalExpansionView({
           key={`d${cell.col}`}
           class={`${cellClass(cell, false)} is-head-2${side(cell.col)}`}
           style={place(cell.col, dividendRow)}
-          data-part={dataPart(cell)}
+          {...tagOf(cell)}
         >
           {cell.text}
         </span>
@@ -242,7 +218,7 @@ export function DecimalExpansionView({
               key={cell.col}
               class={cellClass(cell, row.step === lastStep)}
               style={place(cell.col, workStart + r)}
-              data-part={dataPart(cell)}
+              {...tagOf(cell)}
             >
               {cell.text}
             </span>
@@ -274,8 +250,8 @@ export function DecimalExpansionView({
             name="p"
             value={s.numerator}
             min={0}
-            part={DecimalExpansionPart.Numerator}
-            {...says(decimalExpansion.actions.setFraction)}
+            max={MAX_TYPED}
+            {...says(decimalExpansion.actions.setFraction, "p")}
             onChange={(value) =>
               call(decimalExpansion.actions.setFraction, {
                 numerator: value,
@@ -287,8 +263,8 @@ export function DecimalExpansionView({
             name="q"
             value={s.denominator}
             min={2}
-            part={DecimalExpansionPart.Denominator}
-            {...says(decimalExpansion.actions.setFraction)}
+            max={MAX_TYPED}
+            {...says(decimalExpansion.actions.setFraction, "q")}
             onChange={(value) =>
               call(decimalExpansion.actions.setFraction, {
                 numerator: s.numerator,
@@ -326,13 +302,13 @@ export function DecimalExpansionView({
         {s.isClockShown && <RemainderClock s={s} />}
       </div>
       {s.isAskingDigit && !s.hasEnded && (
-        <div class="dx-pad" data-part={DecimalExpansionPart.DigitPad}>
+        <div class="dx-pad">
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
             <button
               type="button"
               key={digit}
               class={rejected === digit ? "dx-key is-rejected" : "dx-key"}
-              {...does(decimalExpansion.actions.tryDigit, { digit })}
+              {...does(decimalExpansion.actions.tryDigit, { digit }, digit)}
             >
               {digit}
             </button>
@@ -376,7 +352,7 @@ function RemainderClock({ s }: { s: Seen }): JSX.Element {
       height={CLOCK}
       role="img"
       aria-label={`Remainders dividing by ${q}: ${s.remainders.join(", ")}`}
-      data-part={DecimalExpansionPart.Clock}
+      {...shows("clock", s.remainders, `the remainders so far: ${s.remainders.join(", ")}`)}
     >
       <circle class="dx-clock-ring" cx={CENTRE} cy={CENTRE} r={RING} />
       <defs>
@@ -431,7 +407,7 @@ function RemainderClock({ s }: { s: Seen }): JSX.Element {
       })}
       <g
         class={`dx-slot dx-slot-zero${visited.has(0) ? " is-hit" : ""}`}
-        data-part={`${DecimalExpansionPart.SlotPrefix}0`}
+        {...shows("slot:0", { isVisited: visited.has(0) })}
       >
         <circle cx={CENTRE} cy={CENTRE} r={12} />
         <text x={CENTRE} y={CENTRE + 4.5} text-anchor="middle">
@@ -446,7 +422,14 @@ function RemainderClock({ s }: { s: Seen }): JSX.Element {
         if (s.hasRepeated && r === s.remainders[s.repeatStart]) classes.push("is-repeat");
         const isOutside = !isLabelled;
         return (
-          <g key={r} class={classes.join(" ")} data-part={`${DecimalExpansionPart.SlotPrefix}${r}`}>
+          <g
+            key={r}
+            class={classes.join(" ")}
+            {...shows(`slot:${r}`, {
+              isVisited: visited.has(r),
+              isCurrent: r === current && !s.hasEnded,
+            })}
+          >
             <circle cx={x} cy={y} r={dot} />
             {(isLabelled || visited.has(r)) && (
               <text

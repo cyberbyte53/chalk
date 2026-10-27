@@ -182,5 +182,7 @@ export const orderSteps = defineProp({
     }
     return undefined;
   },
+  summary: (s) =>
+    `steps to put in order, ${s.status === "open" ? "not answered yet" : s.status}: ${s.prompt.en}`,
   speech: (s) => ({ say: s.prompt, speak: s.speak ?? undefined }),
 });

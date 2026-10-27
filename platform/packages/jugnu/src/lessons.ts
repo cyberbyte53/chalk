@@ -1,5 +1,5 @@
 import type { Board, Piece } from "@chalk/content";
-import { type AnyPropDef, PropRole, initialState, observationOf } from "@chalk/prop";
+import { type AnyPropDef, type Observation, PropRole } from "@chalk/prop";
 import type { JugnuBoard, JugnuPlace } from "./board";
 import { readable } from "./context";
 
@@ -65,7 +65,7 @@ const PROP_LINE_MAX = 600;
 export function lessonText(
   title: string,
   pages: readonly Board[],
-  getDef: (type: string) => AnyPropDef | undefined,
+  props: LessonProps,
   locale: JugnuPlace["locale"],
 ): string {
   const out: string[] = [`Lesson: ${title}`];
@@ -79,9 +79,9 @@ export function lessonText(
         if ("children" in piece) for (const child of piece.children) walk(child, later);
         return;
       }
-      const def = getDef(piece.prop);
+      const def = props.def(piece.prop);
       if (def !== undefined && piece.prop !== "text") used.set(piece.prop, def);
-      const line = propLine(piece, page, getDef, locale);
+      const line = propLine(piece, page, props, locale);
       if (line !== undefined) out.push(later ? `(after they answer) ${line}` : line);
     };
     walk(page.root, false);
@@ -101,9 +101,21 @@ export function lessonText(
   return out.join("\n");
 }
 
+/** What `lessonText` needs of the props: each type's definition, and a placed one described as it starts. */
+export type LessonProps = {
+  def: (type: string) => AnyPropDef | undefined;
+  /** A prop placed with these fields, as the student first sees it (read from its view). */
+  describeStart: (
+    type: string,
+    given: Readonly<Record<string, unknown>>,
+    locale: JugnuPlace["locale"],
+  ) => Observation | undefined;
+};
+
 /** A question in the lesson: its prompt and its options, the right one marked (no authored notes). */
-function questionLine(elements: Record<string, unknown>, hidden: Record<string, unknown>): string {
+function questionLine(seen: Observation): string {
   // A single-answer question keeps `answer`, a multiple-answer one `answers`.
+  const hidden = seen.hidden ?? {};
   const answer = hidden.answers ?? hidden.answer;
   const right = new Set(
     (Array.isArray(answer) ? answer : [answer]).filter(
@@ -111,24 +123,25 @@ function questionLine(elements: Record<string, unknown>, hidden: Record<string, 
     ),
   );
   const parts: string[] = [];
-  if (typeof elements.prompt === "string") parts.push(elements.prompt);
-  if (Array.isArray(elements.options))
-    for (const option of elements.options as {
-      id?: string;
-      label?: unknown;
-      feedback?: unknown;
-    }[]) {
-      const label = typeof option.label === "string" ? option.label : JSON.stringify(option.label);
-      const mark = option.id !== undefined && right.has(option.id) ? " ✓" : "";
-      parts.push(`  - ${label}${mark}`);
-    }
+  for (const e of seen.elements) {
+    if (e.id === "prompt" && typeof e.value === "string") parts.push(e.value);
+    const [kind, id] = e.id.split(":");
+    if ((kind !== "option" && kind !== "step") || id === undefined) continue;
+    const label =
+      typeof e.value === "string"
+        ? e.value
+        : typeof (e.value as { label?: unknown })?.label === "string"
+          ? (e.value as { label: string }).label
+          : JSON.stringify(e.value);
+    parts.push(`  - ${label}${right.has(id) ? " ✓" : ""}`);
+  }
   return parts.join("\n");
 }
 
 function propLine(
   piece: Extract<Piece, { kind: "prop" }>,
   page: Board,
-  getDef: (type: string) => AnyPropDef | undefined,
+  props: LessonProps,
   locale: JugnuPlace["locale"],
 ): string | undefined {
   const given = piece.with ?? {};
@@ -138,21 +151,17 @@ function propLine(
     return typeof text === "string" ? text : undefined;
   }
   const standsFor = page.jugnu?.props?.[piece.name];
-  const def = getDef(piece.prop);
+  const def = props.def(piece.prop);
+  const seen = props.describeStart(piece.prop, given, locale);
   let shows = "";
-  if (def !== undefined) {
-    const start = initialState(def, given);
-    if (start.isOk) {
-      const seen = observationOf(def, start.state);
-      const elements: Record<string, unknown> = {};
-      for (const element of seen.elements)
-        if (element.words !== undefined) elements[element.id] = element.words;
-        else if (element.value !== undefined && element.value !== null)
-          elements[element.id] = readable(element.value, locale);
-      if (def.role === PropRole.Question)
-        return `[question "${piece.name}"] ${questionLine(elements, (readable(seen.hidden ?? {}, locale) ?? {}) as Record<string, unknown>)}`;
-      shows = JSON.stringify(elements);
-    }
+  if (def !== undefined && seen !== undefined) {
+    if (def.role === PropRole.Question) return `[question "${piece.name}"] ${questionLine(seen)}`;
+    const elements: Record<string, unknown> = {};
+    for (const element of seen.elements)
+      if (element.words !== undefined) elements[element.id] = element.words;
+      else if (element.value !== undefined && element.value !== null)
+        elements[element.id] = readable(element.value, locale);
+    shows = JSON.stringify(elements);
   }
   const head = `[${piece.prop} "${piece.name}"${standsFor !== undefined ? `: ${standsFor}` : ""}]`;
   const line = shows === "" || shows === "{}" ? head : `${head} shows ${shows}`;

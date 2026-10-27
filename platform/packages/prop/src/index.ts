@@ -82,8 +82,6 @@ export {
   ease,
   initialState,
   isFullChecking,
-  observationOf,
-  observationOfView,
   setStateChecks,
   type StateChecks,
   prepareAction,
@@ -133,3 +131,17 @@ export {
   sizeOf,
   zoomFor,
 } from "./size";
+export {
+  describe,
+  does,
+  inputName,
+  says,
+  shows,
+  tagFrom,
+  tagsInMarkup,
+  tagsOf,
+  type InputTags,
+  type Key,
+  type ShownTags,
+  type Tag,
+} from "./tags";

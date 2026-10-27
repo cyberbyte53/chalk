@@ -2,7 +2,6 @@ import { localizedSchema } from "@chalk/content";
 import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
-import { button, option } from "./seen";
 
 export const MAX_STICK = 100_000;
 
@@ -184,6 +183,8 @@ export const stickMeasure = defineProp({
     },
   },
   inputs: ["canLay", "showDivision"],
+  // The answer, until the sticks get there.
+  offScreen: ["hcf"],
   derived: {
     pair: {
       describe: "The two sticks in front of the learner now, { long, short }",
@@ -286,39 +287,5 @@ export const stickMeasure = defineProp({
   signals,
   invariant: (s) =>
     s.rounds < Math.max(1, stepsOf(s).length) ? undefined : `only ${stepsOf(s).length} steps`,
-  observe: (s) => {
-    const done = isDoneOf(s);
-    const step = stepNow(s);
-    const working = workingOf(s);
-    return {
-      summary: `Euclid's method on sticks of ${s.stickA} and ${s.stickB}: ${sticksText(s)}`,
-      elements: [
-        ...(s.isEditable
-          ? [
-              { id: "a", value: s.stickA },
-              { id: "b", value: s.stickB },
-            ]
-          : []),
-        { id: "sticks", value: sticksText(s) },
-        ...(working.length > 0 && s.letters === null && s.canLay
-          ? [{ id: "working", value: working }]
-          : []),
-        ...(fitLines(s).length > 0
-          ? [{ id: "fit", value: fitLines(s).map((line) => line.text) }]
-          : []),
-        ...(s.pieceChoices.length > 0
-          ? s.pieceChoices.map((n) => option(`piece-${n}`, s.piece === n))
-          : []),
-        ...(s.canLay
-          ? [
-              s.isLaid && step !== undefined && step.r > 0
-                ? button("keep")
-                : button("lay", !s.isLaid),
-              button("startAgain", s.rounds > 0 || s.isLaid),
-            ]
-          : []),
-      ],
-      ...(done ? {} : { hidden: { hcf: stepsOf(s).at(-1)?.b ?? 0 } }),
-    };
-  },
+  summary: (s) => `Euclid's method on sticks of ${s.stickA} and ${s.stickB}: ${sticksText(s)}`,
 });

@@ -8,7 +8,7 @@ import {
   type LlmProvider,
   boardJson,
 } from "@chalk/jugnu";
-import { propDefs } from "@chalk/library";
+import { propModules } from "@chalk/library/modules";
 import { BoardRuntime, type RuntimeServices } from "@chalk/player";
 import { BOARD, PropRole, compileExpression } from "@chalk/prop";
 import type { EvalCase } from "./cases";
@@ -91,7 +91,7 @@ export function openBoard(root: string, lessonPath: string, boardName: string, l
   if (board === undefined) throw new Error(`${lessonPath}: no board "${boardName}"`);
   const errors: string[] = [];
   const { services, settle, stop } = fastServices(errors);
-  const runtime = new BoardRuntime(board, (type) => propDefs[type], services);
+  const runtime = new BoardRuntime(board, (type) => propModules[type], services);
   const place: JugnuPlace = {
     lessonTitle: lesson.title[locale],
     boardNumber: index + 1,

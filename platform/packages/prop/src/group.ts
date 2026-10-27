@@ -5,8 +5,6 @@ import {
   type AnyPropDef,
   type Effect,
   EffectKind,
-  type Element,
-  type Observation,
   type PropDef,
   type PropView,
   type Raised,
@@ -14,11 +12,10 @@ import {
   type StoredState,
   type TaskContext,
   noteNames,
-  set,
   setRaised,
   task,
 } from "./define";
-import { isFullChecking, observationOfView, prepareAction, viewOf } from "./state";
+import { isFullChecking, prepareAction, viewOf } from "./state";
 import { flatten, isInstant, runEffect } from "./steps";
 
 /**
@@ -160,8 +157,6 @@ export type GroupSpec<
   invariant?: (s: GroupViewOf<O, C, Opt, D>) => string | undefined;
   /** The group's own line in its description; each child describes itself. */
   summary: (s: GroupViewOf<O, C, Opt, D>) => string;
-  /** What the group knows that the screen doesn't show. */
-  hidden?: (s: GroupViewOf<O, C, Opt, D>) => Readonly<Record<string, unknown>> | undefined;
   /** How children are placed: top to bottom, or side by side. */
   layout: GroupLayoutSpec<keyof C & string>;
   isExplainer?: boolean;
@@ -775,10 +770,12 @@ export function defineGroup<
   const actionFor = (
     target: string,
     spec0: Pick<ActionSpec<StoredState>, "describe" | "args" | "byLearner" | "reveals">,
+    /** The group's facts it can change: an own action's own, a child's action its child's. */
+    changes: readonly string[],
   ): ActionSpec<StoredState> => ({
-    // A routed action can change anything in the group: its own `changes` don't carry over.
     describe: spec0.describe,
     args: spec0.args,
+    changes,
     ...(spec0.byLearner !== undefined ? { byLearner: spec0.byLearner } : {}),
     ...(spec0.reveals !== undefined ? { reveals: spec0.reveals } : {}),
     run: (view, args) =>
@@ -786,49 +783,28 @@ export function defineGroup<
   });
 
   // Every action: the group's own, then each child's by path (a child group's include its children's).
+  const routes = new Set(Object.keys(spec.route ?? {}));
   const actions: Record<string, ActionSpec<StoredState>> = {};
   for (const [name, a] of Object.entries(spec.actions ?? {}))
-    actions[name] = actionFor(name, a as ActionSpec<StoredState>);
+    actions[name] = actionFor(
+      name,
+      a as ActionSpec<StoredState>,
+      (a as ActionSpec<StoredState>).changes,
+    );
+  // A routed action can change anything in the group; a child's own changes only that child.
   for (const name of childNames)
     for (const [action, a] of Object.entries(childDef(name).actions))
-      actions[`${name}.${action}`] = actionFor(`${name}.${action}`, a);
+      actions[`${name}.${action}`] = actionFor(
+        `${name}.${action}`,
+        a,
+        routes.has(`${name}.${action}`) ? [...ownFields, ...childNames] : [name],
+      );
 
   // Signals: the group's own, and each child's by path.
   const signals: Record<string, SignalSpec> = { ...(spec.signals ?? {}) };
   for (const name of childNames)
     for (const [signal, s] of Object.entries(childDef(name).signals ?? {}))
       signals[`${name}.${signal}`] = s;
-
-  const observe = (view: PropView): Observation => {
-    const shown = shownOf(view) ?? {};
-    const elements: Element[] = [];
-    const inner: Record<string, unknown> = {};
-    for (const name of placed) {
-      if (shown[name] !== true) continue;
-      const seen = observationOfView(childDef(name), view[name] as PropView);
-      for (const e of seen.elements) {
-        const does = e.does === undefined ? [] : typeof e.does === "string" ? [e.does] : e.does;
-        // A control does the child's action by path (the group routes it, or the child runs it).
-        const paths = does.map((a) => `${name}.${a}`);
-        const { does: _d, ...plain } = e;
-        elements.push({
-          ...plain,
-          id: `${name}${PATH}${e.id}`,
-          ...(paths.length === 1 ? { does: paths[0] } : paths.length > 1 ? { does: paths } : {}),
-        });
-      }
-      if (seen.hidden !== undefined) inner[name] = seen.hidden;
-    }
-    const all = {
-      ...(spec.hidden?.(view) ?? {}),
-      ...(Object.keys(inner).length > 0 ? { children: inner } : {}),
-    };
-    return {
-      summary: spec.summary(view),
-      elements,
-      ...(Object.keys(all).length > 0 ? { hidden: all } : {}),
-    };
-  };
 
   /** The rules across children, on a view (with whatever a parent binds into the group). */
   const invariantOfView = (view: PropView): string | undefined => {
@@ -868,8 +844,7 @@ export function defineGroup<
     ),
     /** The group's view: its facts, with everything bound and derived worked out (memoised). */
     view: (stored: StoredState) => read(stored).view,
-    observe,
-    parts: (view: PropView) => observe(view).elements.map((e) => e.id),
+    summary: (view: PropView) => spec.summary(view as never),
     invariant: (s: StoredState) => {
       for (const name of childNames) {
         if (s[name] === null && !optional.has(name)) return `${name} can't be left out`;

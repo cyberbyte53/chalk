@@ -358,6 +358,9 @@ importers:
       '@chalk/look':
         specifier: workspace:*
         version: link:../look
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../prop
       d3-scale:
         specifier: 4.0.2
         version: 4.0.2
@@ -436,13 +439,13 @@ importers:
       preact:
         specifier: 10.29.8
         version: 10.29.8(preact-render-to-string@6.5.13)
+      preact-render-to-string:
+        specifier: 6.5.13
+        version: 6.5.13(preact@10.29.8)
     devDependencies:
       '@types/katex':
         specifier: 0.16.7
         version: 0.16.7
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
       zod:
         specifier: 3.25.76
         version: 3.25.76

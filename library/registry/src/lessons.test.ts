@@ -2,7 +2,7 @@ import { Actor, type EventEntry } from "@chalk/content";
 import { BoardRuntime, type RuntimeServices, recordBoard } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import { propDefs } from "./index";
+import { propModules } from "./modules";
 import { testLesson } from "./test-lesson";
 
 // A lesson built as content is, real props, fake time: the whole board model end to end, without a browser.
@@ -44,7 +44,7 @@ if (race === undefined || divide === undefined) throw new Error("no test boards"
 describe("two runners", () => {
   it("play glides the clock on the board's time; at 12 they meet, the note is said, the board passes", async () => {
     const { services, advance, spoken } = fakeTime();
-    const runtime = new BoardRuntime(race, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(race, (type) => propModules[type], services);
     runtime.start();
     // Play resolves when the clock arrives, on the board's time: don't wait for it here.
     void runtime.call("runners", "play", {}, Actor.Learner);
@@ -62,7 +62,7 @@ describe("two runners", () => {
 
   it("records what the learner did and every signal, linked to its cause; not the props' own steps", async () => {
     const { services, advance } = fakeTime();
-    const runtime = new BoardRuntime(race, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(race, (type) => propModules[type], services);
     // The channel, as the board sees it: each entry gets the next seq.
     const seen: (EventEntry & { seq: number })[] = [];
     const record = (entry: EventEntry) => seen.push({ ...entry, seq: seen.length }) - 1;
@@ -89,7 +89,7 @@ describe("two runners", () => {
 
   it("stops the clock when the board goes away", async () => {
     const { services, advance } = fakeTime();
-    const runtime = new BoardRuntime(race, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(race, (type) => propModules[type], services);
     runtime.start();
     void runtime.call("runners", "play", {}, Actor.Learner);
     await advance(0.5);
@@ -103,7 +103,7 @@ describe("two runners", () => {
 describe("does 22 ÷ 7 end?", () => {
   it("a digit a tap, until a remainder comes back; then the note is said and the board passes", async () => {
     const { services, advance, spoken } = fakeTime();
-    const runtime = new BoardRuntime(divide, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(divide, (type) => propModules[type], services);
     runtime.start();
     for (let i = 0; i < 7 && runtime.getView("division").hasRepeated !== true; i++)
       await runtime.call("division", "nextDigit", {}, Actor.Learner);

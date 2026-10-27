@@ -1,3 +1,4 @@
+import { checkProp } from "@chalk/player";
 import {
   type Effect,
   EffectKind,
@@ -8,6 +9,7 @@ import {
   viewOf,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
+import { decimalExpansionProp } from "./index";
 import { type DecimalExpansionState, MAX_DIGITS, decimalExpansion } from "./model";
 
 const def = asAnyProp(decimalExpansion);
@@ -441,5 +443,17 @@ describe("the remainder clock", () => {
   it("is switched by showClock, keeping the division", () => {
     const { state } = run(fraction(1, 7, 3), "showClock", { isShown: true });
     expect(state).toMatchObject({ isClockShown: true, digitsShown: 3 });
+  });
+});
+
+describe("decimalExpansion, used the way a lesson uses it", () => {
+  it("every input says what it does, and every learner's action has one", () => {
+    expect(
+      checkProp(decimalExpansionProp, [
+        { numerator: 1, denominator: 7 },
+        { numerator: 3, denominator: 8, isAskingDigit: true },
+        { numerator: 1, denominator: 7, isEditable: true, isClockShown: true },
+      ]),
+    ).toEqual([]);
   });
 });

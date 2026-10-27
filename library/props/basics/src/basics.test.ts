@@ -1,3 +1,4 @@
+import { checkProp } from "@chalk/player";
 import {
   AnswerStatus,
   EffectKind,
@@ -8,6 +9,7 @@ import {
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { choice } from "./choice";
+import { basicProps } from "./index";
 import { multiChoice } from "./multi-choice";
 import { firstWrong, orderSteps } from "./order-steps";
 
@@ -127,4 +129,29 @@ describe("orderSteps", () => {
     expect(firstWrong(["a", "c", "b"], [["a", "b", "c"]])).toBe(1);
     expect(firstWrong(["a", "b", "c"], [["a", "b", "c"]])).toBe(-1);
   });
+});
+
+describe("every basic prop, used the way a lesson uses it", () => {
+  const options = [
+    { id: "a", label: { en: "A", hi: "A" } },
+    { id: "b", label: { en: "B", hi: "B" } },
+  ];
+  const steps = [
+    { id: "one", label: { en: "One", hi: "एक" } },
+    { id: "two", label: { en: "Two", hi: "दो" } },
+  ];
+  const prompt = { en: "Which?", hi: "कौन-सा?" };
+  it.each([
+    ["text", { text: { en: "Hello", hi: "नमस्ते" } }],
+    ["choice", { prompt, options, answer: "a" }],
+    ["multiChoice", { prompt, options, answers: ["a"] }],
+    ["orderSteps", { prompt, steps, answers: [["one", "two"]] }],
+  ] as const)(
+    "%s: every input says what it does, and every learner's action has one",
+    (type, given) => {
+      const module = basicProps.find((m) => m.def.type === type);
+      if (module === undefined) throw new Error(`no ${type}`);
+      expect(checkProp(module, [given])).toEqual([]);
+    },
+  );
 });

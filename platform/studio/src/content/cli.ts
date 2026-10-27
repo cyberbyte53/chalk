@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
-import { propDefs } from "@chalk/library";
+import { propModules } from "@chalk/library/modules";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
 import { type BuildResult, PROP_DIRS, REACH_FILE, SOURCES_FILE, buildContent } from "./build";
@@ -128,7 +128,7 @@ async function build(commit: string): Promise<BuildResult> {
   if (values.force) rmSync(cacheDir, { recursive: true, force: true });
   const result = await buildContent({
     contentDir,
-    defs: propDefs,
+    modules: propModules,
     readings,
     commit,
     cache: { dir: cacheDir, root, propDirs },

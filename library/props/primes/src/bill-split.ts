@@ -1,7 +1,6 @@
 import { localizedSchema } from "@chalk/content";
 import { actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import { option } from "./seen";
 
 /** A share as a decimal: whole rupees, then digits that come once, then digits that repeat forever. */
 export type Share = { whole: number; once: string; repeats: string };
@@ -100,30 +99,17 @@ export const billSplit = defineProp({
       },
     }),
     startAgain: act({
-      describe: "Clear the list",
+      describe: "Clear the list (the lesson's: no input does it)",
       changes: ["tried", "chosen"],
-      byLearner: true,
       args: z.object({}).strict(),
       run: () => set({ tried: [], chosen: null }),
     }),
   },
   signals,
-  observe: (s) => ({
-    summary: `₹${s.amount} shared equally; tried: ${
+  summary: (s) =>
+    `₹${s.amount} shared equally; tried: ${
       s.tried.length === 0
         ? "none yet"
         : s.tried.map((n) => `${n} → ₹${shareText(shareOf(s.amount, n))}`).join(", ")
     }`,
-    elements: [
-      ...s.sizes.map((n) => option(`size-${n}`, s.chosen === n)),
-      ...(s.tried.length > 0
-        ? [
-            {
-              id: "shares",
-              value: s.tried.map((n) => `${n}: ₹${shareText(shareOf(s.amount, n))}`),
-            },
-          ]
-        : []),
-    ],
-  }),
 });

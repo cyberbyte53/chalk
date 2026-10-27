@@ -1,8 +1,10 @@
-import { type PropViewProps, does, says } from "@chalk/player";
+import { NumberField, SymbolButton } from "@chalk/draw";
+import type { PropViewProps } from "@chalk/player";
+import { does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { bagOf, primesIn } from "./arithmetic";
-import { MAX_TERM, type TenMakerState, TenStage, tenMaker, tensOf, workingOf } from "./ten-maker";
-import { Bead, NumberBox, SymbolButton } from "./ui";
+import { MAX_TERM, TenStage, beadsText, tenMaker, tensOf, workingOf } from "./ten-maker";
+import { Bead } from "./ui";
 
 /** One bead's place in a column: still there, crossed out by cancelling, or added to make a ten. */
 const Kind = { Live: "live", Crossed: "crossed", Added: "added" } as const;
@@ -126,31 +128,36 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
     <div class="pr-tm">
       {s.isEditable && (
         <div class="pr-steppers">
-          <NumberBox
+          <NumberField
             name="p"
             value={s.numerator}
             min={0}
             max={MAX_TERM}
-            part="p"
-            {...says(tenMaker.actions.setFraction)}
+            {...says(tenMaker.actions.setFraction, "p")}
             onChange={(value) =>
               call(tenMaker.actions.setFraction, { numerator: value, denominator: s.denominator })
             }
           />
-          <NumberBox
+          <NumberField
             name="q"
             value={s.denominator}
             min={1}
             max={MAX_TERM}
-            part="q"
-            {...says(tenMaker.actions.setFraction)}
+            {...says(tenMaker.actions.setFraction, "q")}
             onChange={(value) =>
               call(tenMaker.actions.setFraction, { numerator: s.numerator, denominator: value })
             }
           />
         </div>
       )}
-      <div class="pr-tm-frac" data-part="beads">
+      <div
+        class="pr-tm-frac"
+        {...shows(
+          "beads",
+          { top: shownTop, bottom: shownBottom, tens: pairedLevels, stuck },
+          beadsText(s),
+        )}
+      >
         <span class="pr-tm-num is-top">{shownTop}</span>
         <Side
           cols={above}
@@ -169,7 +176,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
           stuck={stuck}
         />
       </div>
-      <ol class="pr-working" data-part="working">
+      <ol class="pr-working" {...shows("working", working)}>
         {working.map((line, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: one line per step, in order
           <li key={i} class={i === working.length - 1 ? "is-latest" : undefined}>
@@ -186,7 +193,6 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
             symbol={word(s.cancelLabel)}
             label={word(s.cancelLabel)}
             isWide
-            part="cancel"
             {...does(tenMaker.actions.cancel)}
           />
         )}
@@ -195,7 +201,6 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
             symbol={word(s.pairLabel)}
             label={word(s.pairLabel)}
             isWide
-            part="pair"
             {...does(tenMaker.actions.pair)}
           />
         )}
@@ -204,7 +209,6 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
             symbol={word(s.topUpLabel).replace("{p}", String(t.missing ?? 5))}
             label={word(s.topUpLabel).replace("{p}", String(t.missing ?? 5))}
             isWide
-            part="topUp"
             isEnabled={t.canEnd}
             {...does(tenMaker.actions.topUp)}
           />
@@ -212,7 +216,6 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
         <SymbolButton
           symbol="↺"
           label="Start again"
-          part="startAgain"
           isEnabled={s.stage !== TenStage.Given}
           {...does(tenMaker.actions.startAgain)}
         />

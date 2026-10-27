@@ -1,9 +1,10 @@
-import { type PropViewProps, does } from "@chalk/player";
+import { SymbolButton } from "@chalk/draw";
+import type { PropViewProps } from "@chalk/player";
+import { does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { lcm } from "./arithmetic";
-import { type LapRaceState, crossings, lapRace, nextMeeting } from "./lap-race";
-import { SymbolButton } from "./ui";
+import { MAX_TIME, crossings, lapRace, logText, nextMeeting } from "./lap-race";
 
 /** Px: the track's size cap, the two lanes' gap, a runner's radius. */
 const MAX_TRACK = 240;
@@ -47,7 +48,11 @@ function Logs({
         style={{ gridTemplateColumns: `64px repeat(${Math.max(1, columns)}, 44px)` }}
       >
         {rows.map((r) => (
-          <div class={`pr-race-row is-${r.tone}`} data-part={r.part} key={r.part}>
+          <div
+            class={`pr-race-row is-${r.tone}`}
+            key={r.part}
+            {...shows(r.part, crossings(r.lap, now), logText(r.name, r.lap, now))}
+          >
             <span class="pr-race-name">{r.name}</span>
             {columns === 0 && <span class="pr-race-empty">–</span>}
             {minutes.map((m) =>
@@ -101,7 +106,13 @@ export function LapRaceView({
     <div class="pr-race">
       <svg
         class="pr-race-art"
-        data-part="track"
+        {...shows(
+          "track",
+          { minute: Math.floor(t + 1e-6), isAtStartTogether },
+          isAtStartTogether
+            ? "both runners at the start line"
+            : `minute ${Math.floor(t + 1e-6)} of the race`,
+        )}
         viewBox={`0 0 ${size} ${size}`}
         width={size}
         height={size}
@@ -119,7 +130,7 @@ export function LapRaceView({
         />
         <text
           class="pr-clock"
-          data-part="clock"
+          {...shows("clock", Math.floor(t + 1e-6), `${Math.floor(t + 1e-6)} min`)}
           x={cx}
           y={cy}
           text-anchor="middle"
@@ -154,7 +165,6 @@ export function LapRaceView({
             symbol={word(s.pauseLabel)}
             label={word(s.pauseLabel)}
             isWide
-            part="pause"
             {...does(lapRace.actions.pause)}
           />
         ) : (
@@ -162,14 +172,13 @@ export function LapRaceView({
             symbol={word(s.playLabel)}
             label={word(s.playLabel)}
             isWide
-            part="play"
+            isEnabled={nextMeeting(s) <= MAX_TIME}
             {...does(lapRace.actions.play)}
           />
         )}
         <SymbolButton
           symbol="↺"
           label="Start again"
-          part="startAgain"
           isEnabled={s.time > 0 || isRunning}
           {...does(lapRace.actions.startAgain)}
         />

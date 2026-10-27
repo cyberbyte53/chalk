@@ -2,7 +2,7 @@ import { localizedSchema } from "@chalk/content";
 import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, gcd, primesIn } from "./arithmetic";
-import { button, sup } from "./seen";
+import { sup } from "./seen";
 
 export const MAX_TERM = 99_999;
 
@@ -87,6 +87,22 @@ export function primesText(n: number): string {
   return parts.length === 0 ? String(n) : parts.join(" × ");
 }
 
+/** What the beads show, in words: the denominator's primes, then the tens once paired. */
+export function beadsText(s: TenMakerState): string {
+  const t = tensOf(s.numerator, s.denominator);
+  const isPaired = s.stage === TenStage.Paired || s.stage === TenStage.ToppedUp;
+  const isTopped = s.stage === TenStage.ToppedUp;
+  if (!isPaired)
+    return `the denominator's primes: ${primesText(s.stage === TenStage.Given ? s.denominator : t.low.denominator)}`;
+  const tens = isTopped ? t.places : Math.min(t.twos, t.fives);
+  const others = primesIn(t.others).flatMap((p) =>
+    Array.from({ length: t.others[p] ?? 0 }, () => p),
+  );
+  const leftover =
+    t.twos > t.fives ? `${t.twos - t.fives} 2s` : t.fives > t.twos ? `${t.fives - t.twos} 5s` : "";
+  return `${tens} tens${!isTopped && leftover !== "" ? `; ${leftover} without a partner` : ""}${others.length > 0 ? `; no partner possible: ${others.join(", ")}` : ""}`;
+}
+
 /** The working, one line per step taken: "7/40", "= 7/(2³ × 5)", "= (7 × 5²)/(2³ × 5³)", … */
 export function workingOf(s: TenMakerState): string[] {
   const t = tensOf(s.numerator, s.denominator);
@@ -142,6 +158,8 @@ export const tenMaker = defineProp({
     pairLabel: { en: "Pair into tens", hi: "दहाई में जोड़ो" },
     topUpLabel: { en: "Add {p}s", hi: "{p} जोड़ो" },
   },
+  // The decimal, until the learner tops it up to a power of ten.
+  offScreen: ["decimal"],
   derived: {
     lowest: {
       describe: "p/q in lowest terms: { numerator, denominator }",
@@ -247,53 +265,6 @@ export const tenMaker = defineProp({
     }),
   },
   signals,
-  observe: (s) => {
-    const t = tensOf(s.numerator, s.denominator);
-    const working = workingOf(s);
-    const isPaired = s.stage === TenStage.Paired || s.stage === TenStage.ToppedUp;
-    const isTopped = s.stage === TenStage.ToppedUp;
-    const tens = isTopped ? t.places : Math.min(t.twos, t.fives);
-    const others = primesIn(t.others).flatMap((p) =>
-      Array.from({ length: t.others[p] ?? 0 }, () => p),
-    );
-    const leftover =
-      t.twos > t.fives
-        ? `${t.twos - t.fives} 2s`
-        : t.fives > t.twos
-          ? `${t.fives - t.twos} 5s`
-          : "";
-    const below = !isPaired
-      ? `the denominator's primes: ${primesText(s.stage === TenStage.Given ? s.denominator : t.low.denominator)}`
-      : `${tens} tens${!isTopped && leftover !== "" ? `; ${leftover} without a partner` : ""}${others.length > 0 ? `; no partner possible: ${others.join(", ")}` : ""}`;
-    const next =
-      s.stage === TenStage.Given
-        ? button("cancel")
-        : s.stage === TenStage.Cancelled
-          ? button("pair")
-          : s.stage === TenStage.Paired
-            ? button("topUp", t.canEnd)
-            : null;
-    return {
-      summary: `the fraction ${working.join(" ")} as prime beads, numerator above the bar and denominator below`,
-      elements: [
-        ...(s.isEditable
-          ? [
-              { id: "p", value: s.numerator },
-              { id: "q", value: s.denominator },
-            ]
-          : []),
-        { id: "beads", value: below },
-        { id: "working", value: working },
-        ...(next === null ? [] : [next]),
-        button("startAgain", s.stage !== TenStage.Given),
-      ],
-      ...(isTopped
-        ? {}
-        : {
-            hidden: {
-              decimal: terminatingDecimal(s.numerator, s.denominator) ?? "does not terminate",
-            },
-          }),
-    };
-  },
+  summary: (s) =>
+    `the fraction ${workingOf(s).join(" ")} as prime beads, numerator above the bar and denominator below`,
 });

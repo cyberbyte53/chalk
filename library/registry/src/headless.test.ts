@@ -1,12 +1,12 @@
 import { Actor } from "@chalk/content";
 import { headlessBoard } from "@chalk/player";
 import { describe, expect, it } from "vitest";
-import { propDefs } from "./index";
+import { propModules } from "./modules";
 import { testLesson } from "./test-lesson";
 
 const [share, race] = testLesson().boards;
 if (share === undefined || race === undefined) throw new Error("no test boards");
-const lookup = (type: string) => propDefs[type];
+const lookup = (type: string) => propModules[type];
 
 describe("a board with no screen (Jugnu's copy on the server)", () => {
   it("is put into the state the phone sent, with its IS rules true", () => {

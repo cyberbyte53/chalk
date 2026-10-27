@@ -28,22 +28,26 @@ const mirror = asAnyProp(
     actions: {
       moveObjectTo: act({
         describe: "Move the object; keeps f",
+        changes: ["u"],
         args: z.object({ u: z.number() }).strict(),
         run: (_s, a) => set({ u: a.u }, raise(mirrorSignals.objectMoved, { u: a.u })),
       }),
       slideObjectTo: act({
         describe: "Slide the object over time; keeps f",
+        changes: ["u"],
         args: z.object({ u: z.number(), over: z.number().positive() }).strict(),
         run: (_s, a) => tween(a.over, { u: a.u }),
       }),
       moveObjectSoImageIsAt: act({
         describe: "Move the object so the image forms at v; keeps f",
+        changes: ["u"],
         args: z.object({ v: z.number() }).strict(),
         reveals: true,
         run: (s, a) => set({ u: 1 / (1 / s.f - 1 / a.v) }),
       }),
       moveObjectBehind: act({
         describe: "Always refuses: there is nothing behind a mirror",
+        changes: [],
         args: z.object({}).strict(),
         run: () => {
           throw new Error("nothing behind a mirror");

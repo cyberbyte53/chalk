@@ -1,15 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { EffectKind, actionsFor, defineProp, raise, set, signal } from "./define";
-import { defineGroup, groupOf, refuse } from "./group";
-import {
-  applyPatch,
-  initialState,
-  observationOf,
-  prepareAction,
-  setStateChecks,
-  viewOf,
-} from "./state";
+import { defineGroup, groupOf, refuse, shownOf } from "./group";
+import { applyPatch, initialState, prepareAction, setStateChecks, viewOf } from "./state";
 
 /** A view read by path in a test (its shape is the prop's). */
 type Seen = { readonly [key: string]: Seen };
@@ -39,13 +32,6 @@ const stepper = defineProp({
     }),
   },
   signals: stepperSignals,
-  observe: (s) => ({
-    summary: "",
-    elements: [
-      { id: "value", value: s.value },
-      { id: "more", does: "change" },
-    ],
-  }),
 });
 
 const text = defineProp({
@@ -54,7 +40,6 @@ const text = defineProp({
   state: z.object({ tex: z.string() }).strict(),
   defaults: { tex: "" },
   actions: {},
-  observe: (s) => ({ summary: "", elements: [{ id: "line", value: s.tex }] }),
 });
 
 const handleState = z.object({ x: z.number() }).strict();
@@ -75,7 +60,6 @@ const handle = defineProp({
     }),
   },
   signals: handleSignals,
-  observe: (s) => ({ summary: "", elements: [{ id: "handle", value: s.x, does: "move" }] }),
 });
 
 const machineOwn = z.object({ tried: z.array(z.number()).max(5) }).strict();
@@ -243,7 +227,7 @@ describe("groups", () => {
     ).toThrow(/text has no field "words"/);
   });
 
-  it("shows a child or not: a hidden child keeps its facts but isn't described", () => {
+  it("shows a child or not: a hidden child keeps its facts", () => {
     const shy = defineGroup({
       type: "shy",
       describe: "",
@@ -255,22 +239,19 @@ describe("groups", () => {
     });
     const hidden = initialState(shy, {});
     if (!hidden.isOk) throw new Error();
-    expect(observationOf(shy, hidden.state).elements.map((e) => e.id)).not.toContain("note/line");
+    expect(shownOf(viewOf(shy, hidden.state))?.note).toBe(false);
     const shown = initialState(shy, { input: { value: 2 } });
     if (!shown.isOk) throw new Error();
-    expect(observationOf(shy, shown.state).elements).toContainEqual({
-      id: "note/line",
-      value: "x = 2",
-    });
+    const view = viewOf(shy, shown.state);
+    expect(shownOf(view)?.note).toBe(true);
+    expect(view.note).toEqual({ tex: "x = 2" });
   });
 
   it("lets a placement leave out an optional child, which then does nothing", () => {
     const placed = initialState(machine, { note: null });
     if (!placed.isOk) throw new Error(placed.errors.join());
     expect(placed.state.note).toBeNull();
-    expect(observationOf(machine, placed.state).elements.map((e) => e.id)).not.toContain(
-      "note/line",
-    );
+    expect(viewOf(machine, placed.state).note).toBeNull();
     expect(initialState(machine, { input: null }).isOk).toBe(false);
   });
 
@@ -302,15 +283,6 @@ describe("groups", () => {
     const next = applyPatch(outer, start.state, prepared.effect.set);
     if (!next.isOk) throw new Error(next.errors.join());
     expect((viewOf(outer, next.state) as unknown as Seen)?.pane?.dial).toEqual({ x: -2 });
-  });
-
-  it("describes itself as a tree: each child's elements under its name, controls by path", () => {
-    const start = initialState(machine, {});
-    if (!start.isOk) throw new Error();
-    const seen = observationOf(machine, start.state);
-    expect(seen.summary).toBe("the machine, 0 tried");
-    expect(seen.elements).toContainEqual({ id: "input/more", does: "input.change" });
-    expect(seen.elements).toContainEqual({ id: "dial/handle", value: 0, does: "dial.move" });
   });
 
   it("is fast enough to drag: a change costs well under a frame, checked fully or lightly", () => {

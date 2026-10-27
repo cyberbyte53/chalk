@@ -210,7 +210,7 @@ export type ActionSpec<S extends StoredState, Ar = unknown> = {
    * The stored fields it can change, and no others: the runtime refuses a change outside them.
    * What tells setup (fixed where placed) from live (changes on this board) in the board model.
    */
-  changes?: readonly string[];
+  changes: readonly string[];
   /** Pure: reads the prop's view and the checked arguments, says what changes. */
   run: (view: PropView & S, args: never) => Effect<S>;
 };
@@ -226,7 +226,7 @@ export function actionsFor<S extends StoredState>() {
     reveals?: boolean;
     byLearner?: boolean;
     internal?: boolean;
-    changes?: readonly (keyof S & string)[];
+    changes: readonly (keyof S & string)[];
     run: (view: PropView & S, args: A) => Effect<S>;
   }): ActionSpec<S, A> => spec as ActionSpec<S, A>;
 }
@@ -283,24 +283,26 @@ export type Box = { x: number; y: number; width: number; height: number };
 
 /** One thing the student can see and tell apart, with what it shows them right now. */
 export type Element = {
-  /** What `point` takes: stable while the element is there. */
+  /** Its name under the piece: what `point`, steps and comments take. */
   id: string;
-  /**
-   * What it shows, typed: a number as a number, a point as { x, y }, an id as its id. Left out for
-   * a thing with no value (a button).
-   */
+  /** What it shows, typed: a number as a number, a point as { x, y }. None for an input. */
   value?: unknown;
   /** The value as the screen writes it ("1.40", "½"), when that isn't just the value printed. */
   words?: string;
-  /** For a control: the action(s) touching it does (a button's press; a handle's drag, then its let-go). */
+  /** For an input that's on: the action(s) touching it does. */
   does?: string | readonly string[];
+  /** For an input that does an action with fixed arguments: those arguments. */
+  args?: Readonly<Record<string, unknown>>;
+  /** For an input whose own handler works out the arguments when it's used (a stepper, a typed number). */
+  isByHand?: true;
+  /** For an input: it is drawn, but turned off now. */
+  isOff?: true;
 };
 
 /**
- * What a student sees of a prop right now, in the prop's own words: the only way Jugnu sees it.
- * Faithful: every element is drawn right now, with the value it shows (a hidden dot has no
- * element). Addressable: an element's id can be pointed at. What the prop knows but the screen
- * doesn't show goes under `hidden`, labelled.
+ * What a student sees of a prop right now, read from what its view draws (tags.ts): the only way
+ * agents and Jugnu see it. Every element is drawn right now, with the value it shows. What the
+ * prop knows but the screen doesn't show goes under `hidden`, labelled.
  */
 export type Observation = {
   /** One line: what this is and where it stands. */
@@ -337,19 +339,12 @@ export type PropDef<
   /** Stored fields an IS may own (e.g. a text's words). An owned field can't be set by actions. */
   inputs?: readonly (keyof S & string)[];
   /**
-   * Fields the learner can't see on screen; Jugnu must not mention them as if they could. Only
-   * for a prop without `observe`: the default observation leaves them out of the elements and
-   * lists them under `hidden`.
+   * Fields (stored or derived) the learner can't see on screen; Jugnu must not mention them as if
+   * they could. The description lists them under `hidden`.
    */
-  offScreen?: readonly string[];
+  offScreen?: readonly NoInfer<(keyof S & string) | D>[];
   actions: Readonly<Record<A, ActionSpec<S>>>;
   signals?: Readonly<Record<G, SignalSpec>>;
-  /**
-   * What the student sees right now, as the prop describes it (see `Observation`). Without it, the
-   * default is every field as an element (minus `offScreen`), plus each part: a prop should define
-   * its own once it can show something that isn't on screen (a hidden marker, a wire's current).
-   */
-  observe?: (view: PropView & S) => Observation;
   /** Its one line in the description. */
   summary?: (view: PropView & S) => string;
   /** Rules that span fields (e.g. from < to). Returns a message when broken. */

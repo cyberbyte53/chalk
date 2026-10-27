@@ -1,6 +1,8 @@
 import type { ConceptLine, LessonLibrary } from "@chalk/jugnu";
 import { lessonText, readable } from "@chalk/jugnu";
-import { propDefs } from "@chalk/library";
+import { preloadProps, propDefs, propLibrary } from "@chalk/library";
+import { describeView } from "@chalk/player";
+import { initialState, viewOf } from "@chalk/prop";
 import { loadChapter } from "./content-store";
 import type { CourseChapter, CourseConcept } from "./course";
 import { courses } from "./lessons";
@@ -22,11 +24,27 @@ export const lessonLibrary: LessonLibrary = {
   lesson: async (conceptId, locale) => {
     const place = where.get(conceptId);
     if (place === undefined) return undefined;
-    const content = await loadChapter(place.chapter);
+    const [content] = await Promise.all([
+      loadChapter(place.chapter),
+      preloadProps(place.chapter.props),
+    ]);
     const pages = content.get(conceptId)?.pages;
     if (pages === undefined) return undefined;
     const title = String(readable(place.concept.title, locale));
-    return lessonText(title, pages.boards, (type) => propDefs[type], locale);
+    return lessonText(
+      title,
+      pages.boards,
+      {
+        def: (type) => propDefs[type],
+        describeStart: (type, given, at) => {
+          const module = propLibrary[type];
+          const start = module === undefined ? undefined : initialState(module.def, given);
+          if (module === undefined || start === undefined || !start.isOk) return undefined;
+          return describeView(module, viewOf(module.def, start.state), at);
+        },
+      },
+      locale,
+    );
   },
   map: async (conceptIds, locale) => {
     const lines: ConceptLine[] = [];

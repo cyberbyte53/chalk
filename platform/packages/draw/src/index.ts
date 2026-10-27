@@ -120,3 +120,4 @@ export {
   Wire,
   type WireProps,
 } from "./circuit";
+export { NumberField, Stepper, SymbolButton } from "./inputs";

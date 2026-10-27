@@ -2,7 +2,7 @@
    Each prime keeps one colour on every page: 2 the primary blue, 3 teal, 5 saffron, 7 violet,
    any other prime grey. The prime is always written on its bead too. */
 
-/* ---- shared: beads, buttons, steppers ---- */
+/* ---- shared: beads, and the rows inputs sit in ---- */
 .pr-bead {
   --bead: var(--color-on-surface-variant);
   display: inline-flex;
@@ -87,86 +87,12 @@
   font: 700 var(--text-body) var(--font-display);
   color: var(--color-on-surface-variant);
 }
-.pr-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  height: 46px;
-  padding: 0 12px;
-  border: none;
-  border-radius: var(--shape-radius-m);
-  background: var(--color-surface-container);
-  box-shadow: 0 var(--shape-press) 0 var(--color-surface-press);
-  color: var(--color-on-surface);
-  font: 800 20px / 1 var(--font-display);
-  cursor: pointer;
-  touch-action: manipulation;
-  white-space: nowrap;
-}
-.pr-button.is-wide {
-  font-size: 17px;
-}
-.pr-button.is-on {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  box-shadow: 0 var(--shape-press) 0 var(--color-primary-press);
-}
-.pr-button:active:not(:disabled) {
-  transform: translateY(var(--shape-press));
-  box-shadow: none;
-}
-.pr-button:disabled {
-  color: var(--color-outline-variant);
-  box-shadow: none;
-  cursor: default;
-}
-.pr-button:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
-}
 .pr-controls,
 .pr-steppers {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 12px;
   align-items: center;
-}
-.pr-stepper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.pr-stepper-value {
-  min-width: 64px;
-  text-align: center;
-  font: 800 19px var(--font-display);
-  color: var(--color-on-surface);
-}
-.pr-name {
-  font-style: italic;
-  font-weight: 700;
-  color: var(--color-on-surface-variant);
-}
-.pr-numberbox {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font: 700 var(--text-body) var(--font-display);
-}
-.pr-numberbox input {
-  width: 92px;
-  height: 42px;
-  padding: 0 10px;
-  border: 2px solid var(--color-outline-variant);
-  border-radius: var(--shape-radius-s);
-  background: var(--color-surface);
-  color: var(--color-on-surface);
-  font: 800 18px var(--font-display);
-}
-.pr-numberbox input:focus {
-  outline: none;
-  border-color: var(--color-primary);
 }
 .pr-equation {
   margin: 0;
@@ -494,7 +420,7 @@
   color: var(--color-on-secondary-container);
   font-variant-numeric: tabular-nums;
 }
-.pr-share .pr-button.is-wide {
+.pr-share .draw-button.is-wide {
   padding: 0 18px;
   font-size: 16px;
 }

@@ -268,23 +268,6 @@
   gap: 12px;
   margin-bottom: 8px;
 }
-.dx-field {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font: 700 var(--text-note) var(--font-display);
-  color: var(--color-on-surface-variant);
-}
-.dx-field input {
-  width: 64px;
-  height: 40px;
-  border: 2px solid var(--color-outline-variant);
-  border-radius: var(--shape-radius-m);
-  font: 700 var(--text-body) var(--font-display);
-  text-align: center;
-  color: var(--color-on-surface);
-  background: var(--color-surface);
-}
 .dx-again {
   width: 44px;
   height: 40px;

@@ -6,7 +6,7 @@ import {
   type BoundSnapshot,
   type CanSnapshot,
   type NodeSnapshot,
-  PATH,
+  type Observation,
   type PartSnapshot,
   PropRole,
   type PropView,
@@ -14,15 +14,10 @@ import {
   type StoredState,
   compileRule,
   compileTemplate,
-  groupOf,
-  layoutChildren,
-  observationOfView,
   segment,
-  shownOf,
 } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
-import { inputsIn } from "./does";
-import { findNode, partPathsIn } from "./part-paths";
+import { findNode } from "./part-paths";
 import type { BoardRuntime } from "./runtime";
 
 /**
@@ -104,94 +99,66 @@ export function takes(schema: ZodTypeAny): unknown {
   }
 }
 
-/** The actions an element's control does. */
+/** The actions a part does, when it's an input that's on. */
 function controlActions(e: SeenElement): readonly string[] {
   return e.does === undefined ? [] : typeof e.does === "string" ? [e.does] : e.does;
 }
 
-/** A value's dotted path in a group's view as an address: "objectArrow.x" → "mirror/objectArrow.x". */
-function addressIn(def: AnyPropDef, path: string, dotted: string): string {
-  const [first = "", ...rest] = dotted.split(".");
-  const child = groupOf(def)?.children[first] as AnyPropDef | undefined;
-  if (child !== undefined && rest.length > 0)
-    return addressIn(child, `${path}/${segment(first)}`, rest.join("."));
-  return `${path}.${dotted}`;
-}
-
 type Context = {
-  runtime: BoardRuntime;
-  /** The board on the page, when there is one (the dev preview): what's drawn and where. */
+  /** The board on the page, when there is one (the dev preview): where each part's drawing is written. */
   page: ParentNode | undefined;
   /** What the lesson's rules call on this node: its own action names. */
   rules: ReadonlySet<string>;
   /** Fields bound into this node, and what each is worked out from. */
   bound: ReadonlyMap<string, readonly string[]>;
   isShown: boolean;
-  /** Its own actions its group turns into its own changes. */
-  routed: ReadonlySet<string>;
 };
 
-function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): NodeSnapshot {
-  const group = groupOf(def);
-  const problems: string[] = [];
-  const seen = observationOfView(def, view);
-  const fields = group !== undefined ? group.own : Object.keys(def.defaults);
-  const onScreen = c.page === undefined ? undefined : findNode(c.page, path);
+/** One placed prop as agents read it: what it shows and does (from its view), its values, what can act on it. */
+function nodeOf(
+  def: AnyPropDef,
+  view: PropView,
+  seen: Observation,
+  path: string,
+  c: Context,
+): NodeSnapshot {
+  const fields = Object.keys(def.defaults);
 
-  // What can act on it here: its controls on screen (a leaf's), and the lesson's rules.
+  // Its parts, as its view draws them, and which inputs do each action.
   const fromControls = new Map<string, string[]>();
-  const parts: PartSnapshot[] = [];
-  if (group === undefined)
-    for (const e of seen.elements) {
-      const at = `${path}/${e.id}`;
-      const { id: _id, ...rest } = e;
-      parts.push({ ...rest, path: at });
-      for (const action of controlActions(e))
-        fromControls.set(action, [...(fromControls.get(action) ?? []), at]);
-    }
-  // And what its inputs on the page say they do (does / says): the input is the source.
-  if (group === undefined && onScreen !== undefined)
-    for (const input of inputsIn(onScreen)) {
-      const at = input.at ?? path;
-      const known = fromControls.get(input.action) ?? [];
-      if (!known.includes(at)) fromControls.set(input.action, [...known, at]);
-    }
+  const parts: PartSnapshot[] = seen.elements.map((e) => {
+    const at = `${path}/${segment(e.id)}`;
+    for (const action of controlActions(e))
+      fromControls.set(action, [...(fromControls.get(action) ?? []), at]);
+    const { id: _id, ...rest } = e;
+    const drawnAt =
+      c.page === undefined ? undefined : findNode(c.page, at)?.getAttribute("data-code");
+    return { ...rest, path: at, ...(drawnAt ? { drawnAt } : {}) };
+  });
 
-  // A field is live when something here can change it: what a control or rule does (its declared
-  // changes), a route into its group, a question's own bookkeeping.
+  // A field is live when something here can change it: what an input or a rule does (its declared
+  // changes), a question's own bookkeeping.
   const live = new Set<string>();
   const reachable = new Set([...fromControls.keys(), ...c.rules]);
-  for (const action of reachable) {
-    const spec = def.actions[action];
-    if (spec === undefined) continue;
-    if (spec.changes === undefined) {
-      problems.push(`${action} doesn't declare what it changes: every field counted as live`);
-      for (const f of fields) live.add(f);
-    } else for (const f of spec.changes) live.add(f);
-  }
+  for (const action of reachable) for (const f of def.actions[action]?.changes ?? []) live.add(f);
   if (def.role === PropRole.Question)
     for (const f of ["status", "attempts", "feedback"]) live.add(f);
-  if (group !== undefined && group.routes.length > 0) for (const f of fields) live.add(f);
 
-  const shown = fields;
   const setup: Record<string, unknown> = {};
   const liveValues: Record<string, unknown> = {};
   const bound: Record<string, BoundSnapshot> = {};
-  for (const f of shown) {
+  for (const f of fields) {
     const sources = c.bound.get(f);
     if (sources !== undefined) bound[f] = { value: view[f], from: sources };
     else (live.has(f) ? liveValues : setup)[f] = view[f];
   }
   for (const [d, spec] of Object.entries(def.derived ?? {})) {
-    if (group !== undefined) {
-      liveValues[d] = view[d];
-      continue;
-    }
     const reads = fieldsRead(spec.compute as (s: StoredState) => unknown, view as StoredState);
     if (reads.some((f) => live.has(f) || c.bound.has(f))) liveValues[d] = view[d];
   }
 
-  // What can be done to it: each action once, with who does it and the controls that reach it.
+  // What can be done to it: each action once, with who does it and the inputs that reach it.
+  const problems: string[] = [];
   const can: CanSnapshot[] = [...reachable].map((action) => {
     const spec = def.actions[action];
     const via = fromControls.get(action) ?? [];
@@ -201,74 +168,12 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
       ...(via.length > 0 ? (["learner"] as const) : []),
       ...(c.rules.has(action) ? (["lesson"] as const) : []),
     ];
-    return {
-      action,
-      takes: spec === undefined ? "?" : takes(spec.args as ZodTypeAny),
-      who,
-      via,
-      ...(c.routed.has(action) ? { routed: true as const } : {}),
-    };
+    return { action, takes: spec === undefined ? "?" : takes(spec.args as ZodTypeAny), who, via };
   });
-  // The learner's actions no control offers right now (a button that's off until there are dots).
-  const noControlNow =
-    group !== undefined
-      ? []
-      : Object.entries(def.actions)
-          .filter(([a, spec]) => spec.byLearner === true && !fromControls.has(a))
-          .map(([a]) => a);
-
-  // Drawn must equal described, for props that describe themselves.
-  const describesItself = def.observe !== undefined;
-  if (
-    onScreen !== undefined &&
-    group === undefined &&
-    describesItself &&
-    def.role !== PropRole.Question
-  ) {
-    const drawn = partPathsIn(onScreen);
-    const described = new Set(parts.map((p) => p.path.slice(path.length + 1)));
-    for (const p of parts) {
-      const id = p.path.slice(path.length + 1);
-      const el = drawn.get(id);
-      const code = el?.getAttribute("data-code");
-      if (code) p.drawnAt = code;
-      if (el === undefined) problems.push(`${id} is described but not drawn (no data-part)`);
-    }
-    for (const id of drawn.keys())
-      if (!described.has(id)) problems.push(`${id} is drawn but not described`);
-  }
-
-  // A group's children, each a node of its own with what the group binds into it.
-  const children: NodeSnapshot[] = [];
-  if (group !== undefined) {
-    const showing = shownOf(view) ?? {};
-    for (const name of layoutChildren(group.layout)) {
-      const childView = view[name];
-      if (childView === null || childView === undefined) continue;
-      const childDef = group.children[name] as AnyPropDef;
-      const childPath = `${path}/${segment(name)}`;
-      const tree = group.boundTree[name] ?? {};
-      const boundHere = new Map<string, readonly string[]>();
-      for (const [field, sub] of Object.entries(tree))
-        if (sub === true)
-          boundHere.set(
-            field,
-            (group.sources[name] ?? []).map((d) => addressIn(def, path, d)),
-          );
-      const prefix = `${name}.`;
-      const own = (names: Iterable<string>) =>
-        new Set([...names].filter((n) => n.startsWith(prefix)).map((n) => n.slice(prefix.length)));
-      children.push(
-        nodeOf(childDef, childView as PropView, childPath, {
-          ...c,
-          rules: own(c.rules),
-          bound: boundHere,
-          isShown: showing[name] !== false,
-          routed: own(group.routes),
-        }),
-      );
-    }
-  }
+  // The learner's actions no input offers right now (a button that's off until there are dots).
+  const noControlNow = Object.entries(def.actions)
+    .filter(([a, spec]) => spec.byLearner === true && !fromControls.has(a))
+    .map(([a]) => a);
 
   return {
     path,
@@ -281,8 +186,7 @@ function nodeOf(def: AnyPropDef, view: PropView, path: string, c: Context): Node
     parts,
     can,
     ...(seen.hidden !== undefined ? { hidden: seen.hidden } : {}),
-    ...(children.length > 0 ? { children } : {}),
-    ...(describesItself && noControlNow.length > 0 ? { noControlNow } : {}),
+    ...(noControlNow.length > 0 ? { noControlNow } : {}),
     problems,
   };
 }
@@ -304,15 +208,13 @@ export function snapshotOf(runtime: BoardRuntime, page?: ParentNode): BoardSnaps
           : Object.values(rule.text).flatMap((t) => compileTemplate(t).refs);
       bound.set(member, [...new Set(refs.map((r) => `${r[0]}.${r.slice(1).join(".")}`))]);
     }
-    return nodeOf(def, runtime.getView(name), segment(name), {
-      runtime,
+    return nodeOf(def, runtime.getView(name), runtime.describe(name), segment(name), {
       page,
       rules: new Set(
         ruleCalls.filter((c) => c.startsWith(prefix)).map((c) => c.slice(prefix.length)),
       ),
       bound,
       isShown: !runtime.isHidden(name),
-      routed: new Set(),
     });
   });
   const open = runtime

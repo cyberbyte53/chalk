@@ -1,5 +1,5 @@
 import type { Board, SavedBoard } from "@chalk/content";
-import type { AnyPropDef } from "@chalk/prop";
+import type { PropModule } from "./prop-module";
 import { BoardRuntime, type RuntimeServices } from "./runtime";
 
 /** Each frame jumps this far: further than any wait or glide, so each finishes in one frame. */
@@ -32,7 +32,7 @@ const nextTurn = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
  */
 export function headlessBoard(
   board: Board,
-  lookup: (type: string) => AnyPropDef | undefined,
+  lookup: (type: string) => PropModule | undefined,
   saved?: SavedBoard,
 ): HeadlessBoard {
   const errors: string[] = [];

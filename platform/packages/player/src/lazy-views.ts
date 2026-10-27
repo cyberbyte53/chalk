@@ -82,6 +82,8 @@ export function lazyRegistry(
       return h("div", {
         class: "prop-waiting",
         "aria-busy": "true",
+        // What it would show isn't known yet: describing it now is refused (tags.ts).
+        "data-waiting": "",
         style: {
           width: `${props.width}px`,
           height: `${Math.round(props.width * WAITING_ASPECT)}px`,

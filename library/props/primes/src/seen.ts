@@ -1,6 +1,5 @@
 /**
- * How the props write what they show: shared by each view (which draws it) and its `observe`
- * (which says it), so the two can't drift apart.
+ * How the props write what they show: shared by their views and their one-line summaries.
  */
 
 /** The factor pairs offered for splitting v: 2 × 180, 3 × 120, … (smaller factor first). */
@@ -41,14 +40,4 @@ export function count(n: number, one: string, many = `${one}s`): string {
 export function sup(k: number): string {
   const SUP = "⁰¹²³⁴⁵⁶⁷⁸⁹";
   return [...String(k)].map((d) => SUP[Number(d)]).join("");
-}
-
-/** A button as the student sees it: its id, and "disabled" when it can't be pressed now. */
-export function button(id: string, isEnabled = true): { id: string; value?: string } {
-  return isEnabled ? { id } : { id, value: "disabled" };
-}
-
-/** A choice among buttons: its id, and "chosen" on the one pressed in. */
-export function option(id: string, isOn: boolean): { id: string; value?: string } {
-  return isOn ? { id, value: "chosen" } : { id };
 }

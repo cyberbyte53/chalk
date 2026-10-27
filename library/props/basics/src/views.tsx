@@ -2,18 +2,16 @@ import {
   AnswerFeedback,
   type PropViewProps,
   RichText,
-  does,
   plainText,
-  says,
   t,
   useFitColumns,
   usePlayMode,
 } from "@chalk/player";
-import { AnswerStatus, cssColor } from "@chalk/prop";
+import { AnswerStatus, cssColor, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type ChoiceState, choice } from "./choice";
 import { type MultiChoiceState, multiChoice } from "./multi-choice";
-import { type OrderStepsState, orderSteps } from "./order-steps";
+import { orderSteps } from "./order-steps";
 import type { text } from "./text";
 
 // The player hands each view its own prop's state, already checked against that prop's schema.
@@ -32,6 +30,7 @@ export function TextView({ view, locale }: PropViewProps<typeof text>): JSX.Elem
     <p
       class={`piece-text text-${s.style}${s.color === null ? "" : " has-color"}`}
       style={s.color === null ? undefined : { "--tone": cssColor(s.color) }}
+      {...shows("text", s.text[locale] ?? "")}
     >
       <RichText text={s.text[locale]} />
     </p>
@@ -68,7 +67,7 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
   );
   return (
     <div class="piece-question">
-      <p class="question-prompt">
+      <p class="question-prompt" {...shows("prompt", s.prompt[locale] ?? "")}>
         <RichText text={s.prompt[locale]} />
       </p>
       <fieldset ref={fit} class="choices" style={{ "--columns": String(columns) }}>
@@ -80,7 +79,8 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
             aria-label={plainText(option.label[locale] ?? "")}
             class={choiceClass(s, option.id)}
             disabled={isLocked}
-            {...says(choice.actions.select, choice.actions.check)}
+            {...says([choice.actions.select, choice.actions.check])}
+            {...shows(`option:${option.id}`, option.label[locale] ?? "")}
             onClick={() => answer(option.id)}
           >
             <RichText text={option.label[locale]} />
@@ -111,7 +111,7 @@ export function MultiChoiceView({ view, locale }: PropViewProps<typeof multiChoi
   );
   return (
     <div class="piece-question">
-      <p class="question-prompt">
+      <p class="question-prompt" {...shows("prompt", s.prompt[locale] ?? "")}>
         <RichText text={s.prompt[locale]} />
       </p>
       <fieldset ref={fit} class="choices" style={{ "--columns": String(columns) }}>
@@ -124,6 +124,10 @@ export function MultiChoiceView({ view, locale }: PropViewProps<typeof multiChoi
             class={multiClass(s, option.id)}
             disabled={isLocked}
             {...does(multiChoice.actions.toggle, { option: option.id })}
+            {...shows(`option:${option.id}`, {
+              label: option.label[locale] ?? "",
+              isPicked: s.selected.includes(option.id),
+            })}
           >
             <RichText text={option.label[locale]} />
           </button>
@@ -156,7 +160,7 @@ export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps
   const rest = s.steps.filter((st) => !s.placed.includes(st.id));
   return (
     <div class="piece-question">
-      <p class="question-prompt">
+      <p class="question-prompt" {...shows("prompt", s.prompt[locale] ?? "")}>
         <RichText text={s.prompt[locale]} />
       </p>
       <ol class={isLocked ? "order-lines is-right" : "order-lines"}>
@@ -171,6 +175,10 @@ export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps
                 disabled={isLocked}
                 aria-label={`Take back: ${plainText(step.label[locale] ?? "")}`}
                 {...does(orderSteps.actions.remove, { step: id })}
+                {...shows(`step:${id}`, {
+                  label: step.label[locale] ?? "",
+                  line: s.placed.indexOf(id) + 1,
+                })}
               >
                 <RichText text={step.label[locale]} />
               </button>
@@ -192,6 +200,7 @@ export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps
               class="choice order-step"
               aria-label={plainText(step.label[locale] ?? "")}
               {...does(orderSteps.actions.place, { step: step.id })}
+              {...shows(`step:${step.id}`, { label: step.label[locale] ?? "", line: null })}
             >
               <RichText text={step.label[locale]} />
             </button>

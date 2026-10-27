@@ -46,7 +46,6 @@ export {
   MAX_SWEETS,
   type SweetShareState,
   sweetShare as sweetShareDef,
-  sweetSum,
 } from "./sweet-share";
 export {
   type BillSplitState,

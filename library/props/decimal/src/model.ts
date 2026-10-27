@@ -2,18 +2,6 @@ import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/pr
 import { z } from "zod";
 import { divide, isTerminating, repeatingBlock, step } from "./division";
 
-export const DecimalExpansionPart = {
-  DigitPrefix: "digit:",
-  RemainderPrefix: "remainder:",
-  RepeatBar: "repeatBar",
-  Clock: "clock",
-  SlotPrefix: "slot:",
-  NextDigit: "nextDigit",
-  DigitPad: "digitPad",
-  Numerator: "p",
-  Denominator: "q",
-} as const;
-
 export const MAX_NUMERATOR = 99_999;
 export const MAX_DENOMINATOR = 999;
 /** The most digits after the point it will work out. */
@@ -166,6 +154,10 @@ export const decimalExpansion = defineProp({
     },
   },
   offScreen: ["isTerminating", "repeatStart", "repeatLength"],
+  summary: (s) =>
+    `${s.numerator} ÷ ${s.denominator} worked out to ${s.digitsShown} digits: ${s.decimalText}${
+      s.hasEnded ? ", and it ends" : s.hasRepeated ? ", and a remainder came back: it repeats" : ""
+    }`,
   actions: {
     nextDigit: act({
       describe:

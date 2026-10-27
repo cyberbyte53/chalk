@@ -1,7 +1,6 @@
-import { type Element, type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, bagText, isPrime } from "./arithmetic";
-import { button, factorPairs } from "./seen";
 
 export const MAX_TREE_NUMBER = 999_999;
 export const ROOT = "r";
@@ -125,6 +124,8 @@ export const factorTree = defineProp({
     "A factor tree. The number at the top is split into two factors, and each factor that isn't prime is split again, until every end is a prime. The primes at the ends are the number's prime factorisation; whichever splits are chosen, the ends are the same primes (the Fundamental Theorem of Arithmetic).",
   state: factorTreeState,
   defaults: { number: 360, splits: [], selected: null, isEditable: false },
+  // The factorisation, until the tree gets there.
+  offScreen: ["primes"],
   derived: {
     nodes: {
       describe: "The tree: { id, value, isPrime, depth, children }, root first",
@@ -214,44 +215,8 @@ export const factorTree = defineProp({
     }
     return undefined;
   },
-  observe: (s) => {
-    const nodes = nodesOf(s);
-    const byId = new Map(nodes.map((n) => [n.id, n]));
-    const ends = leavesOf(nodes);
-    const isComplete = ends.every((n) => n.isPrime);
-    const elements: Element[] = s.isEditable ? [{ id: "n", value: s.number }] : [];
-    for (const n of nodes) {
-      const kids = n.children?.map((c) => byId.get(c)?.value);
-      const value =
-        kids !== undefined
-          ? `${n.value}, split into ${kids.join(" × ")}`
-          : n.isPrime
-            ? `${n.value}, prime`
-            : `${n.value}, not split yet${n.id === s.selected ? " (picked)" : ""}`;
-      elements.push({ id: `node:${n.id}`, value });
-    }
-    const selected = nodes.find((n) => n.id === s.selected);
-    if (selected !== undefined) {
-      const pairs = factorPairs(selected.value);
-      elements.push({ id: "pairs", value: `ways to split ${selected.value}` });
-      for (const [d, e] of pairs) elements.push({ id: `pair:${d}`, value: `${d} × ${e}` });
-    }
-    if (s.splits.length > 0) {
-      const bag = bagText(primeBagOf(nodes));
-      elements.push(
-        { id: "primes", value: `primes so far: ${bag}` },
-        {
-          id: "equation",
-          value: `${s.number} = ${isComplete ? bag : ends.map((n) => n.value).join(" × ")}`,
-        },
-      );
-    }
-    elements.push(button("startAgain", s.splits.length > 0));
-    return {
-      summary: `a factor tree of ${s.number}${s.splits.length === 0 ? ", not split yet" : `: its ends are ${ends.map((n) => n.value).join(" × ")}${isComplete ? ", every one prime" : ""}`}`,
-      elements,
-      // The factorisation shows once every end is prime.
-      ...(isComplete ? {} : { hidden: { factorisation: bagText(bagOf(s.number)) } }),
-    };
+  summary: (s) => {
+    const ends = leavesOf(nodesOf(s));
+    return `a factor tree of ${s.number}${s.splits.length === 0 ? ", not split yet" : `: its ends are ${ends.map((n) => n.value).join(" × ")}${ends.every((n) => n.isPrime) ? ", every one prime" : ""}`}`;
   },
 });

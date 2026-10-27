@@ -1,10 +1,11 @@
-import { Stage } from "@chalk/draw";
-import { type PropViewProps, does, says } from "@chalk/player";
+import { NumberField, Stage, SymbolButton } from "@chalk/draw";
+import type { PropViewProps } from "@chalk/player";
+import { does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type Bag, toneOf } from "./arithmetic";
-import { type FactorTreeState, MAX_TREE_NUMBER, type TreeNode, factorTree } from "./factor-tree";
+import { toneOf } from "./arithmetic";
+import { MAX_TREE_NUMBER, type TreeNode, factorTree } from "./factor-tree";
 import { factorPairs } from "./seen";
-import { BagTowers, NumberBox, SymbolButton } from "./ui";
+import { BagTowers } from "./ui";
 
 const LEVEL = 66;
 const TOP = 30;
@@ -38,6 +39,26 @@ function place(nodes: readonly TreeNode[], width: number): Map<string, number> {
 }
 
 /** Every way to write v as two factors bigger than 1, smaller factor first. */
+/** What a node shows: its number, and what became of it. */
+function nodeSeen(n: TreeNode, nodes: readonly TreeNode[], selected: string | null) {
+  const kids = n.children?.map((c) => nodes.find((m) => m.id === c)?.value);
+  return {
+    value: n.value,
+    ...(kids !== undefined ? { splitInto: kids } : { isPrime: n.isPrime }),
+    ...(n.id === selected ? { isPicked: true } : {}),
+  };
+}
+
+/** The same in words: "180, split into 2 × 90", "5, prime", "90, not split yet". */
+function nodeWords(n: TreeNode, nodes: readonly TreeNode[], selected: string | null): string {
+  const kids = n.children?.map((c) => nodes.find((m) => m.id === c)?.value);
+  return kids !== undefined
+    ? `${n.value}, split into ${kids.join(" × ")}`
+    : n.isPrime
+      ? `${n.value}, prime`
+      : `${n.value}, not split yet${n.id === selected ? " (picked)" : ""}`;
+}
+
 /**
  * The factor tree, top down. A number not yet split is dashed: tap it, then pick one of its factor
  * pairs to split it. Primes are beads in their colour; they collect in the bag underneath, which is
@@ -59,12 +80,11 @@ export function FactorTreeView({
     <div class="pr-tree">
       {s.isEditable && (
         <div class="pr-steppers">
-          <NumberBox
+          <NumberField
             name="n"
             value={s.number}
             min={2}
             max={MAX_TREE_NUMBER}
-            part="n"
             {...says(factorTree.actions.setNumber)}
             onChange={(number) => call(factorTree.actions.setNumber, { number })}
           />
@@ -108,9 +128,13 @@ export function FactorTreeView({
             <g
               key={n.id}
               class={classes.join(" ")}
-              data-part={`node:${n.id}`}
               transform={`translate(${x} ${y})`}
-              {...(isOpen ? does(factorTree.actions.select, { node: n.id }) : {})}
+              {...(isOpen ? does(factorTree.actions.select, { node: n.id }, n.id) : {})}
+              {...shows(
+                `node:${n.id}`,
+                nodeSeen(n, s.nodes, s.selected),
+                nodeWords(n, s.nodes, s.selected),
+              )}
               role={isOpen ? "button" : undefined}
               aria-label={isOpen ? `Split ${n.value}` : undefined}
               tabIndex={isOpen ? 0 : undefined}
@@ -136,15 +160,17 @@ export function FactorTreeView({
         })}
       </Stage>
       {selected !== undefined && (
-        <div class="pr-pairs" data-part="pairs">
+        <div
+          class="pr-pairs"
+          {...shows("pairs", selected.value, `ways to split ${selected.value}`)}
+        >
           {factorPairs(selected.value).map(([d, e]) => (
             <SymbolButton
               key={d}
               symbol={`${d} × ${e}`}
               label={`${selected.value} = ${d} × ${e}`}
               isWide
-              part={`pair:${d}`}
-              {...does(factorTree.actions.split, { node: selected.id, factor: d })}
+              {...does(factorTree.actions.split, { node: selected.id, factor: d }, d)}
             />
           ))}
         </div>
@@ -152,8 +178,19 @@ export function FactorTreeView({
       <div class="pr-tree-foot">
         {s.splits.length > 0 && (
           <>
-            <BagTowers bag={s.bag} label={`Primes so far: ${s.bagText}`} part="primes" />
-            <p class={`pr-equation${s.isComplete ? " is-done" : ""}`} data-part="equation">
+            <BagTowers
+              bag={s.bag}
+              label={`Primes so far: ${s.bagText}`}
+              {...shows("primes", s.bag, `primes so far: ${s.bagText}`)}
+            />
+            <p
+              class={`pr-equation${s.isComplete ? " is-done" : ""}`}
+              {...shows(
+                "equation",
+                s.isComplete ? s.bagText : ends.map((n) => n.value),
+                `${s.number} = ${s.isComplete ? s.bagText : ends.map((n) => n.value).join(" × ")}`,
+              )}
+            >
               {s.number} = {s.isComplete ? s.bagText : ends.map((n) => n.value).join(" × ")}
             </p>
           </>
@@ -161,7 +198,6 @@ export function FactorTreeView({
         <SymbolButton
           symbol="↺"
           label="Start the tree again"
-          part="startAgain"
           isEnabled={s.splits.length > 0}
           {...does(factorTree.actions.startAgain)}
         />

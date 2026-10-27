@@ -1,6 +1,7 @@
 import {
   Actor,
   type Board,
+  type Locale,
   type SavedBoard,
   type Script,
   type WhenRule,
@@ -19,6 +20,7 @@ import {
   type Change,
   EffectKind,
   type Expression,
+  type Observation,
   PropRole,
   type PropView,
   type Raised,
@@ -46,6 +48,8 @@ import {
   without,
 } from "@chalk/prop";
 import { type ReadonlySignal, type Signal, batch, computed, signal } from "@preact/signals-core";
+import { describeView } from "./describe";
+import type { PropModule } from "./prop-module";
 import { snapshotOf } from "./snapshot";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
@@ -393,6 +397,8 @@ export class BoardRuntime {
   private isDispatching = false;
   /** What is running over time on each prop, and who started it. */
   private readonly timelines = new Map<string, Set<Timeline>>();
+  /** Each placed prop's definition and view, by name. */
+  private readonly modules = new Map<string, PropModule>();
   private readonly clock: Clock;
   private readonly touchedProps = signal<ReadonlySet<string>>(new Set());
   private isDisposed = false;
@@ -401,7 +407,7 @@ export class BoardRuntime {
 
   constructor(
     readonly board: Board,
-    private readonly lookup: (type: string) => AnyPropDef | undefined,
+    private readonly lookup: (type: string) => PropModule | undefined,
     private readonly services: RuntimeServices,
     /** Start from these facts instead of the placements (a fork). */
     from?: Root,
@@ -411,9 +417,11 @@ export class BoardRuntime {
     const starts = new Map<string, StoredState>();
     const hidden: string[] = [];
     for (const piece of propPieces(board.root)) {
-      const def = lookup(piece.prop);
-      if (def === undefined)
+      const module = lookup(piece.prop);
+      if (module === undefined)
         throw new Error(`Board ${board.name}: no prop type "${piece.prop}" in the library`);
+      const def = module.def;
+      this.modules.set(piece.name, module);
       const start = initialState(def, piece.with);
       if (!start.isOk)
         throw new Error(`Board ${board.name}, ${piece.name}: ${start.errors.join("; ")}`);
@@ -494,6 +502,13 @@ export class BoardRuntime {
 
   getDef(name: string): AnyPropDef {
     return this.piece(name).def;
+  }
+
+  /** A placed prop as the student sees it right now, read from what its view draws. */
+  describe(name: string, locale: Locale = "en"): Observation {
+    const module = this.modules.get(name);
+    if (module === undefined) throw new Error(`no prop "${name}" on this board`);
+    return describeView(module, this.getView(name), locale);
   }
 
   /** Every placed prop's name (not the board). */

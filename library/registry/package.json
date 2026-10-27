@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css",
-    "./test-lesson": "./src/test-lesson.ts"
+    "./test-lesson": "./src/test-lesson.ts",
+    "./modules": "./src/modules.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"

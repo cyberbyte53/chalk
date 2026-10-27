@@ -1,16 +1,9 @@
 import { type Step, StepKind, asRuleFn } from "@chalk/author";
 import { Actor, type Board, type Localized, PieceKind } from "@chalk/content";
-import { BoardRuntime, type RuntimeServices } from "@chalk/player";
-import {
-  AnswerStatus,
-  type AnyPropDef,
-  BOARD,
-  type BoardFn,
-  PropRole,
-  compileRule,
-} from "@chalk/prop";
+import { BoardRuntime, type PropModule, type RuntimeServices } from "@chalk/player";
+import { AnswerStatus, BOARD, type BoardFn, PropRole, compileRule } from "@chalk/prop";
 
-type Defs = Readonly<Record<string, AnyPropDef>>;
+type Defs = Readonly<Record<string, PropModule>>;
 
 /** A board running on fake time: nothing moves unless `advance` moves it. */
 function startOnFakeTime(board: Board, defs: Defs) {
@@ -52,7 +45,7 @@ function startOnFakeTime(board: Board, defs: Defs) {
 export function questionsOf(board: Board, defs: Defs): string[] {
   const out: string[] = [];
   const visit = (piece: Board["root"]): void => {
-    if (piece.kind === PieceKind.Prop && defs[piece.prop]?.role === PropRole.Question)
+    if (piece.kind === PieceKind.Prop && defs[piece.prop]?.def.role === PropRole.Question)
       out.push(piece.name);
     if ("children" in piece) for (const child of piece.children) visit(child);
   };

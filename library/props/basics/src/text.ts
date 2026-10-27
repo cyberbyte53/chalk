@@ -35,9 +35,11 @@ export const text = defineProp({
   state: textState,
   defaults: { text: { en: "", hi: "" }, speak: null, style: TextStyle.Body, color: null },
   inputs: ["text"],
+  summary: (s) => `words: ${s.text.en}`,
   actions: {
     say: act({
       describe: "Read the words aloud (narrator)",
+      changes: [],
       args: z.object({}).strict(),
       run: () => say(),
     }),

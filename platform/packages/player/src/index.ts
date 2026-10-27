@@ -24,8 +24,9 @@ export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource } from "./narration";
 export { type PropModule, type PropRegistry, type PropViewProps, propModule } from "./prop-module";
+export { checkProp } from "./check-prop";
+export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
-export { type DoesAttrs, does, doesOf, says } from "./does";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";
 // Addresses, for apps that find nodes on screen (the helpers live with the props).
 export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";

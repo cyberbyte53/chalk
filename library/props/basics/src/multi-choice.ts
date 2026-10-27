@@ -148,5 +148,7 @@ export const multiChoice = defineProp({
     const missing = s.answers.find((a) => !s.options.some((o) => o.id === a));
     return missing === undefined ? undefined : `answer "${missing}" is not an option`;
   },
+  summary: (s) =>
+    `a question with several right options, ${s.status === "open" ? "not answered yet" : s.status}: ${s.prompt.en}`,
   speech: (s) => ({ say: s.prompt, speak: s.speak ?? undefined }),
 });

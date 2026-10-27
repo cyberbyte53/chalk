@@ -20,11 +20,11 @@
     "@preact/signals": "2.11.3",
     "@preact/signals-core": "1.14.4",
     "katex": "0.16.22",
-    "preact": "10.29.8"
+    "preact": "10.29.8",
+    "preact-render-to-string": "6.5.13"
   },
   "devDependencies": {
     "@types/katex": "0.16.7",
-    "zod": "3.25.76",
-    "preact-render-to-string": "6.5.13"
+    "zod": "3.25.76"
   }
 }

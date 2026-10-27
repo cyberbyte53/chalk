@@ -22,6 +22,7 @@ const dial = defineProp({
   actions: {
     turn: act({
       describe: "turn",
+      changes: ["at"],
       byLearner: true,
       args: z.object({ to: z.number() }).strict(),
       run: (_s, a) => set({ at: a.to }),

@@ -43,21 +43,25 @@ export const boardProp = defineProp({
   actions: {
     [BoardAction.Pass]: act({
       describe: "Let the learner move on (shows Continue)",
+      changes: ["isPassed"],
       args: z.object({}).strict(),
       run: () => set({ isPassed: true }),
     }),
     [BoardAction.Show]: act({
       describe: "Show a hidden prop",
+      changes: ["hidden"],
       args: named,
       run: (s, a) => set({ hidden: s.hidden.filter((n) => n !== a.name) }),
     }),
     [BoardAction.Hide]: act({
       describe: "Hide a prop",
+      changes: ["hidden"],
       args: named,
       run: (s, a) => set({ hidden: s.hidden.includes(a.name) ? s.hidden : [...s.hidden, a.name] }),
     }),
     [BoardAction.Continue]: act({
       describe: "The learner pressed Continue",
+      changes: [],
       args: z.object({}).strict(),
       run: (s) => (s.isPassed ? set({}, raise(signals.continued)) : set({})),
     }),

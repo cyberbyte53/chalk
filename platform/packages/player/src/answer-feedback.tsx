@@ -1,5 +1,5 @@
 import type { Locale } from "@chalk/content";
-import { AnswerStatus } from "@chalk/prop";
+import { AnswerStatus, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { usePlayMode } from "./play-mode";
 import { RichText } from "./rich-text-view";
@@ -24,7 +24,10 @@ export function AnswerFeedback({
   if (mode !== undefined || status === AnswerStatus.Open) return null;
   const isCorrect = status === AnswerStatus.Correct;
   return (
-    <output class={isCorrect ? "feedback is-correct" : "feedback is-wrong"}>
+    <output
+      class={isCorrect ? "feedback is-correct" : "feedback is-wrong"}
+      {...shows("result", { status, note: feedback?.[locale] ?? null })}
+    >
       <strong>{t(locale, isCorrect ? "correct" : "notQuite")}</strong>
       {feedback !== null && (
         <span>

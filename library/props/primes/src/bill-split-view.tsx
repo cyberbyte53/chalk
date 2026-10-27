@@ -1,7 +1,8 @@
-import { type PropViewProps, does, useFitColumns } from "@chalk/player";
+import { SymbolButton } from "@chalk/draw";
+import { type PropViewProps, useFitColumns } from "@chalk/player";
+import { does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type BillSplitState, billSplit, shareOf } from "./bill-split";
-import { SymbolButton } from "./ui";
+import { billSplit, shareOf, shareText } from "./bill-split";
 
 /** At least `count` digits after the point, the repeating block written out again as needed. */
 function digitsOf(share: { once: string; repeats: string }, count: number): string {
@@ -33,14 +34,22 @@ export function BillSplitView({
             key={n}
             symbol={String(n)}
             label={`Share among ${n}`}
-            part={`size-${n}`}
             isOn={s.chosen === n}
-            {...does(billSplit.actions.split, { n })}
+            {...does(billSplit.actions.split, { n }, n)}
           />
         ))}
       </div>
       {s.tried.length > 0 && (
-        <ul class="pr-bill-list" data-part="shares">
+        <ul
+          class="pr-bill-list"
+          {...shows(
+            "shares",
+            s.tried.map((n) => {
+              const share = shareOf(s.amount, n);
+              return { n, share: `₹${shareText(share)}`, ends: share.repeats === "" };
+            }),
+          )}
+        >
           {s.tried.map((n) => {
             const share = shareOf(s.amount, n);
             const ends = share.repeats === "";

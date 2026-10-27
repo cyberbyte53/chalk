@@ -17,7 +17,7 @@ import {
 } from "@chalk/api";
 import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION } from "@chalk/content";
 import { type ChatMessage, scriptedProvider } from "@chalk/jugnu";
-import { propDefs } from "@chalk/library";
+import { propModules } from "@chalk/library/modules";
 import { testLesson } from "@chalk/library/test-lesson";
 import { headlessBoard } from "@chalk/player";
 import { PGlite } from "@electric-sql/pglite";
@@ -403,7 +403,7 @@ describe("server", () => {
   };
   const place = { lessonTitle: "A lesson for tests", boardNumber: 1, boardCount: 3, locale: "en" };
   const turnRequest = (chat: readonly unknown[], text = "help") => {
-    const phone = headlessBoard(guess, (type) => propDefs[type]);
+    const phone = headlessBoard(guess, (type) => propModules[type]);
     const state = phone.runtime.save();
     phone.dispose();
     return { item: GUESS, place, state, chat, input: { kind: "typed", text } };

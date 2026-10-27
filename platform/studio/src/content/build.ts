@@ -54,7 +54,8 @@ import {
   walkPieces,
 } from "@chalk/content";
 import { propPackages } from "@chalk/library";
-import { type AnyPropDef, PropRole, segment } from "@chalk/prop";
+import type { PropModule } from "@chalk/player";
+import { type AnyPropDef, BOARD, PropRole, asAnyProp, boardProp, segment } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateBoard } from "../validate";
@@ -71,6 +72,7 @@ import { filesUnder, fingerprint, importClosure, isRecordingImports, recordImpor
 import { checkNote, checkWitness } from "./witness";
 
 type Defs = Readonly<Record<string, AnyPropDef>>;
+type Modules = Readonly<Record<string, PropModule>>;
 
 /** What a build makes: every output file by its path in build/, and what went wrong or was left out. */
 export type BuildResult = {
@@ -142,6 +144,7 @@ type Context = {
   propDirs: Readonly<Record<string, string>>;
   contentDir: string;
   defs: Defs;
+  modules: Modules;
   readings: Readings;
   commit: string;
   files: Map<string, unknown>;
@@ -437,9 +440,10 @@ async function checkBoard(
   for (const p of validateBoard(board, c.defs, c.readings))
     report(c, where, `${p.where}: ${p.message}`);
   if (c.problems.length > before) return false;
-  for (const failure of await checkWitness(board, c.defs, built.witness)) report(c, where, failure);
+  for (const failure of await checkWitness(board, c.modules, built.witness))
+    report(c, where, failure);
   for (const note of built.noteChecks) {
-    for (const failure of await checkNote(board, c.defs, note.steps, note.feedback)) {
+    for (const failure of await checkNote(board, c.modules, note.steps, note.feedback)) {
       report(c, where, `note "${note.feedback.en}": ${failure}`);
     }
   }
@@ -1055,7 +1059,8 @@ function checkGraph(c: Context, graph: GraphFile): BuiltGraph {
  */
 export async function buildContent(options: {
   contentDir: string;
-  defs: Defs;
+  /** Every prop with its view (drawing a prop is how it's described: witnesses read descriptions). */
+  modules: Modules;
   readings: Readings;
   commit: string;
   /** The modules.gen.ts the app and the server load (platform/content-source/ by default). */
@@ -1063,9 +1068,14 @@ export async function buildContent(options: {
   /** Where built chapters are kept between runs (with what they read); no cache when absent. */
   cache?: { dir: string; root: string; propDirs: Readonly<Record<string, string>> };
 }): Promise<BuildResult> {
-  const { cache, modulesFile, ...rest } = options;
+  const { cache, modulesFile, modules, ...rest } = options;
   const c: Context = {
     ...rest,
+    modules,
+    defs: {
+      ...Object.fromEntries(Object.entries(modules).map(([type, m]) => [type, m.def])),
+      [BOARD]: asAnyProp(boardProp),
+    },
     propDirs: PROP_DIRS,
     imported: [],
     chapters: { built: [], reused: 0 },
@@ -1095,9 +1105,11 @@ export async function buildContent(options: {
   }
   c.files.set(BuiltFile.Graph, checkGraph(c, graph));
   // The app and the server load boards' code through modules.gen.ts: it must list what this builds.
-  const modules = modulesFile ?? modulesFileOf(c.contentDir);
-  const modulesText = existsSync(modules) ? readFileSync(modules, "utf8") : undefined;
-  if (modulesText !== modulesModule(boardModules(c.contentDir), contentFrom(modules, c.contentDir)))
+  const modulesGen = modulesFile ?? modulesFileOf(c.contentDir);
+  const modulesText = existsSync(modulesGen) ? readFileSync(modulesGen, "utf8") : undefined;
+  if (
+    modulesText !== modulesModule(boardModules(c.contentDir), contentFrom(modulesGen, c.contentDir))
+  )
     report(
       c,
       MODULES_FILE,

@@ -1,5 +1,4 @@
-import { SEP, segment } from "./address";
-import type { AnyPropDef, Effect, Element, Observation, PropView, StoredState } from "./define";
+import type { AnyPropDef, Effect, PropView, StoredState } from "./define";
 import { EffectKind } from "./define";
 
 export type StateResult =
@@ -14,42 +13,6 @@ export function viewOf(def: AnyPropDef, stored: StoredState): PropView {
   const derived: Record<string, unknown> = {};
   for (const [key, spec] of Object.entries(def.derived ?? {})) derived[key] = spec.compute(stored);
   return { ...stored, ...derived };
-}
-
-/**
- * What the student sees of a prop right now: its own `observe`, or the default made from its view
- * (every field an element, `offScreen` ones under `hidden`).
- */
-export function observationOf(def: AnyPropDef, stored: StoredState): Observation {
-  return observationOfView(def, viewOf(def, stored));
-}
-
-/**
- * The same, from a view already worked out (a group's child, with what is bound into it). Element
- * ids are addresses under the prop: a leaf's names are written as segments (a "/" in a name taken
- * from data becomes "%2F"); a group's and a composite's are already paths.
- */
-export function observationOfView(def: AnyPropDef, view: PropView): Observation {
-  const seen = leafObservation(def, view);
-  const isTree = "group" in def || "composite" in def;
-  if (isTree || !seen.elements.some((e) => e.id.includes(SEP) || e.id.includes("%"))) return seen;
-  return { ...seen, elements: seen.elements.map((e) => ({ ...e, id: segment(e.id) })) };
-}
-
-function leafObservation(def: AnyPropDef, view: PropView): Observation {
-  if (def.observe !== undefined) return def.observe(view as never);
-  const hiddenFields = new Set(def.offScreen ?? []);
-  const elements: Element[] = [];
-  const hidden: Record<string, unknown> = {};
-  for (const [field, value] of Object.entries(view)) {
-    if (hiddenFields.has(field)) hidden[field] = value;
-    else elements.push({ id: field, value });
-  }
-  return {
-    summary: def.describe,
-    elements,
-    ...(Object.keys(hidden).length > 0 ? { hidden } : {}),
-  };
 }
 
 /**

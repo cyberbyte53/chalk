@@ -1,16 +1,17 @@
-import { type PropViewProps, does, says, useFitColumns } from "@chalk/player";
+import { NumberField, SymbolButton } from "@chalk/draw";
+import { type PropViewProps, useFitColumns } from "@chalk/player";
+import { does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import {
   MAX_STICK,
-  type StickMeasureState,
   fillStep,
   fitLines,
   pieceGap,
   stickMeasure,
+  sticksText,
   workingOf,
 } from "./stick-measure";
-import { NumberBox, SymbolButton } from "./ui";
 
 /** Px: the sticks' thickness, the room for a length above or below, and the side margin. */
 const BAR = 22;
@@ -178,24 +179,22 @@ export function StickMeasureView({
     <div class="pr-sticks">
       {s.isEditable && (
         <div class="pr-steppers">
-          <NumberBox
+          <NumberField
             name="a"
             value={s.stickA}
             min={1}
             max={MAX_STICK}
-            part="a"
-            {...says(stickMeasure.actions.setSticks)}
+            {...says(stickMeasure.actions.setSticks, "a")}
             onChange={(value) =>
               call(stickMeasure.actions.setSticks, { stickA: value, stickB: s.stickB })
             }
           />
-          <NumberBox
+          <NumberField
             name="b"
             value={s.stickB}
             min={1}
             max={MAX_STICK}
-            part="b"
-            {...says(stickMeasure.actions.setSticks)}
+            {...says(stickMeasure.actions.setSticks, "b")}
             onChange={(value) =>
               call(stickMeasure.actions.setSticks, { stickA: s.stickA, stickB: value })
             }
@@ -203,7 +202,13 @@ export function StickMeasureView({
         </div>
       )}
       {step !== undefined && (
-        <div data-part="sticks">
+        <div
+          {...shows(
+            "sticks",
+            { long: step.a, short: step.b, left: step.r, isLaid: s.isLaid, piece: s.piece },
+            sticksText(s),
+          )}
+        >
           <Sticks
             step={step}
             isLaid={s.isLaid}
@@ -222,15 +227,20 @@ export function StickMeasureView({
               key={n}
               symbol={String(n)}
               label={`Mark pieces of ${n}`}
-              part={`piece-${n}`}
               isOn={s.piece === n}
-              {...does(stickMeasure.actions.tryPiece, { length: s.piece === n ? 0 : n })}
+              {...does(stickMeasure.actions.tryPiece, { length: s.piece === n ? 0 : n }, n)}
             />
           ))}
         </div>
       )}
       {fitLines(s, locale).length > 0 && (
-        <ul class="pr-fit" data-part="fit">
+        <ul
+          class="pr-fit"
+          {...shows(
+            "fit",
+            fitLines(s, locale).map((line) => line.text),
+          )}
+        >
           {fitLines(s, locale).map((line, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: one line per stick, in order
             <li key={i} class={line.fits ? "is-fit" : "is-gap"}>
@@ -240,7 +250,7 @@ export function StickMeasureView({
         </ul>
       )}
       {working.length > 0 && L === null && s.canLay && (
-        <ol class="pr-working" data-part="working">
+        <ol class="pr-working" {...shows("working", working)}>
           {working.map((line, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: one line per step, in order
             <li key={i} class={i === working.length - 1 ? "is-latest" : undefined}>
@@ -256,7 +266,6 @@ export function StickMeasureView({
               symbol={word(s.words.keep)}
               label={word(s.words.keep)}
               isWide
-              part="keep"
               {...does(stickMeasure.actions.keep)}
             />
           ) : (
@@ -264,7 +273,6 @@ export function StickMeasureView({
               symbol={fillStep(word(s.words.lay), step)}
               label={fillStep(word(s.words.lay), step)}
               isWide
-              part="lay"
               isEnabled={!s.isLaid}
               {...does(stickMeasure.actions.lay)}
             />
@@ -272,7 +280,6 @@ export function StickMeasureView({
           <SymbolButton
             symbol="↺"
             label="Start again"
-            part="startAgain"
             isEnabled={s.rounds > 0 || s.isLaid}
             {...does(stickMeasure.actions.startAgain)}
           />

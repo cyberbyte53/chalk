@@ -2,7 +2,7 @@ import { localizedSchema } from "@chalk/content";
 import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { divide } from "./arithmetic";
-import { button, count } from "./seen";
+import { count } from "./seen";
 
 /** The most sweets in the box, and the most friends round the table. */
 export const MAX_SWEETS = 120;
@@ -39,18 +39,6 @@ const value = (max: number, min: number) =>
 const boxOf = (s: SweetShareState) => s.sweets - s.friends * s.rounds;
 const isOverOf = (s: SweetShareState) => boxOf(s) < s.friends;
 
-/** The sum as the student sees it: what's on the plates plus what's in the box. */
-export function sweetSum(s: SweetShareState): string {
-  return `${s.sweets} = ${s.friends} × ${s.rounds} + ${boxOf(s)}`;
-}
-
-/** One line per round so far, from 0: "2 rounds: 8 left in the box". */
-export function logOf(s: SweetShareState): string[] {
-  return Array.from({ length: s.rounds + 1 }, (_, k) => {
-    return `${count(k, "round")}: ${s.sweets - s.friends * k} left in the box`;
-  });
-}
-
 const signals = {
   round: signal("A round was given; `rounds` so far and the `box` left"),
   over: signal("The box holds fewer sweets than friends: no round is possible; `q` and `r`"),
@@ -77,6 +65,8 @@ export const sweetShare = defineProp({
     boxLabel: { en: "Left in the box", hi: "डिब्बे में बचीं" },
   },
   inputs: ["isEditable", "showSum", "showLog"],
+  // The answer, before the game gets there.
+  offScreen: ["quotient", "remainder"],
   derived: {
     box: {
       describe: "The sweets still in the box",
@@ -153,27 +143,6 @@ export const sweetShare = defineProp({
     boxOf(s) >= 0
       ? undefined
       : `${s.rounds} rounds for ${s.friends} friends needs ${s.friends * s.rounds} sweets, more than ${s.sweets}`,
-  observe: (s) => {
-    const box = boxOf(s);
-    const isOver = isOverOf(s);
-    const { q, r } = divide(s.sweets, s.friends);
-    return {
-      summary: `${count(s.sweets, "sweet")} shared among ${count(s.friends, "friend")}: ${count(s.rounds, "round")} given, each friend has ${s.rounds}, ${box} in the box${isOver ? "; no round is possible" : ""}`,
-      elements: [
-        ...(s.isEditable
-          ? [
-              { id: "a", value: s.sweets },
-              { id: "b", value: s.friends },
-            ]
-          : []),
-        { id: "plates", value: `${count(s.friends, "friend")}, ${count(s.rounds, "sweet")} each` },
-        { id: "box", value: count(box, "sweet") },
-        ...(s.showSum ? [{ id: "sum", value: sweetSum(s) }] : []),
-        ...(s.showLog ? [{ id: "log", value: logOf(s) }] : []),
-        button("giveRound", !isOver),
-        button("startAgain", s.rounds > 0),
-      ],
-      ...(isOver ? {} : { hidden: { rounds: q, box: r } }),
-    };
-  },
+  summary: (s) =>
+    `${count(s.sweets, "sweet")} shared among ${count(s.friends, "friend")}: ${count(s.rounds, "round")} given, each friend has ${s.rounds}, ${s.box} in the box${s.isOver ? "; no round is possible" : ""}`,
 });

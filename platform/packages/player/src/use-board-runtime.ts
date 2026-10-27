@@ -18,7 +18,7 @@ export function useBoardRuntime(board: Board, registry: PropRegistry, speak: Spe
   speakRef.current = speak;
   const [runtime] = useState(
     () =>
-      new BoardRuntime(board, (type) => registry[type]?.def, {
+      new BoardRuntime(board, (type) => registry[type], {
         speak: (prop, line) => speakRef.current(prop, line),
         frame: (callback) => {
           const handle = requestAnimationFrame(callback);

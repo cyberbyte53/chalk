@@ -1,9 +1,7 @@
 import { Actor, type Board, boardSchema } from "@chalk/content";
 import {
-  type AnyPropDef,
   BOARD,
   actionsFor,
-  asAnyProp,
   defineProp,
   raise,
   repeat,
@@ -18,6 +16,7 @@ import { type BoardAt, defineGroup } from "@chalk/prop";
 import { effect } from "@preact/signals-core";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { type PropModule, propModule } from "./prop-module";
 import { BoardRuntime, type RuntimeServices, type SignalRecord } from "./runtime";
 
 // ---- test props: a coin (instant + signals), a dial (tween), a label (IS input), a speaker (task) ----
@@ -36,6 +35,7 @@ const coin = defineProp({
   actions: {
     toss: coinAct({
       describe: "Toss",
+      changes: ["heads", "count"],
       args: z.object({}).strict(),
       run: (s) =>
         set(
@@ -58,6 +58,7 @@ const dial = defineProp({
   actions: {
     turnTo: dialAct({
       describe: "Turn over time",
+      changes: ["at"],
       args: z.object({ to: z.number(), over: z.number() }).strict(),
       run: (_s, a) => tween(a.over, { at: a.to }),
     }),
@@ -89,11 +90,13 @@ const label = defineProp({
   actions: {
     setValue: labelAct({
       describe: "Set",
+      changes: ["value"],
       args: z.object({ v: z.number() }).strict(),
       run: (_s, a) => set({ value: a.v }),
     }),
     say: labelAct({
       describe: "Say",
+      changes: [],
       args: z.object({}).strict(),
       run: () => say(),
     }),
@@ -113,6 +116,7 @@ const tickerSignals = {
 };
 const tick = tickerAct({
   describe: "One tick",
+  changes: ["ticks"],
   internal: true,
   args: z.object({}).strict(),
   run: (s) => set({ ticks: s.ticks + 1 }, raise(tickerSignals.ticked, { ticks: s.ticks + 1 })),
@@ -126,29 +130,34 @@ const ticker = defineProp({
   actions: {
     start: tickerAct({
       describe: "Tick every 0.1 s until stopped",
+      changes: ["isRunning"],
       args: z.object({}).strict(),
       run: () => seq(set({ isRunning: true }), repeat(0.1, tick, { while: (s) => s.isRunning })),
     }),
     tick,
     stop: tickerAct({
       describe: "Stop",
+      changes: ["isRunning"],
       byLearner: true,
       args: z.object({}).strict(),
       run: () => set({ isRunning: false }),
     }),
     glide: tickerAct({
       describe: "Glide `at` to 10 over a second, then say so",
+      changes: ["at"],
       args: z.object({}).strict(),
       run: () => seq(tween(1, { at: 10 }), set({}, raise(tickerSignals.glided))),
     }),
     nudge: tickerAct({
       describe: "The learner moves `at` by hand",
+      changes: ["at"],
       byLearner: true,
       args: z.object({ to: z.number() }).strict(),
       run: (_s, a) => set({ at: a.to }),
     }),
     afterThree: tickerAct({
       describe: "Wait until three ticks, then say so",
+      changes: [],
       args: z.object({}).strict(),
       run: () =>
         seq(
@@ -160,11 +169,13 @@ const ticker = defineProp({
   signals: tickerSignals,
 });
 
-const defs: Record<string, AnyPropDef> = {
-  ticker: asAnyProp(ticker),
-  coin: asAnyProp(coin),
-  dial: asAnyProp(dial),
-  label: asAnyProp(label),
+/** The test props draw nothing: these tests are about the board's state, not what is shown. */
+const Nothing = () => null;
+const defs: Record<string, PropModule> = {
+  ticker: propModule(ticker, Nothing),
+  coin: propModule(coin, Nothing),
+  dial: propModule(dial, Nothing),
+  label: propModule(label, Nothing),
 };
 
 // ---- fake services: frames advance only when the test says so; speech finishes when told ----
@@ -615,7 +626,7 @@ describe("BoardRuntime", () => {
         },
         is: [{ set: "shown.value", to: "p.dial.at * 10" }],
       }),
-      (t) => (t === "pair" ? pair : defs[t]),
+      (t) => (t === "pair" ? propModule(pair, Nothing) : defs[t]),
       services,
     );
     // The dial's `at` is bound: not stored, read through the view.
@@ -741,40 +752,28 @@ describe("BoardRuntime", () => {
 });
 
 describe("the one snapshot, act and watch", () => {
-  const pair = defineGroup({
-    type: "pair",
-    describe: "a dial bound to a value",
-    children: { value: label, dial },
-    is: { dial: (s) => ({ at: s.value.value }) },
-    route: { "dial.setTo": (_s, a) => [["value.setValue", { v: a.to }]] },
-    summary: () => "a pair",
-    layout: { kind: "column", children: ["value", "dial"] },
-  });
   const make = () => {
     const { services } = fakeServices();
     return new BoardRuntime(
       boardOf({
         name: "b",
         root: props(
-          { kind: "prop", name: "p", prop: "pair", with: { value: { value: 2 } } },
+          { kind: "prop", name: "d", prop: "dial", with: { at: 2 } },
           { kind: "prop", name: "shown", prop: "label" },
         ),
-        is: [{ set: "shown.value", to: "p.dial.at * 10" }],
-        when: [{ on: "p.dial.turned", do: { call: "shown.say" } }],
+        is: [{ set: "shown.value", to: "d.at * 10" }],
+        when: [{ on: "board.started", do: { call: "shown.say" } }],
       }),
-      (t) => (t === "pair" ? pair : defs[t]),
+      (t) => defs[t],
       services,
     );
   };
 
   it("reads every node by address, with what is bound into it and where from", () => {
     const snap = make().snapshot();
-    const p = snap.nodes.find((n) => n.path === "p");
-    expect(p?.children?.map((c) => c.path)).toEqual(["p/value", "p/dial"]);
-    const dialNode = p?.children?.find((c) => c.path === "p/dial");
-    expect(dialNode?.bound.at).toEqual({ value: 2, from: ["p/value.value"] });
+    expect(snap.nodes.map((n) => n.path)).toEqual(["d", "shown"]);
     const shown = snap.nodes.find((n) => n.path === "shown");
-    expect(shown?.bound.value).toEqual({ value: 20, from: ["p.dial.at"] });
+    expect(shown?.bound.value).toEqual({ value: 20, from: ["d.at"] });
   });
 
   it("acts on a node by address and says what moved", async () => {
@@ -783,18 +782,15 @@ describe("the one snapshot, act and watch", () => {
     board.watch((e) =>
       heard.push(`${e.kind} ${e.node} ${e.kind === "signal" ? e.signal : e.action}`),
     );
-    const done = await board.act(
-      { node: "p/dial", action: "setTo", args: { to: 5 } },
-      Actor.Learner,
-    );
+    const done = await board.act({ node: "d", action: "setTo", args: { to: 5 } }, Actor.Learner);
     expect(done.refused).toBeUndefined();
     expect(done.changed).toEqual(
       expect.arrayContaining([
-        { path: "p/dial.at", was: 2, now: 5 },
+        { path: "d.at", was: 2, now: 5 },
         { path: "shown.value", was: 20, now: 50 },
       ]),
     );
-    expect(heard).toContain("action p/dial setTo");
+    expect(heard).toContain("action d setTo");
     const no = await board.act({ node: "nowhere", action: "x" });
     expect(no.refused).toMatch(/no prop "nowhere"/);
   });

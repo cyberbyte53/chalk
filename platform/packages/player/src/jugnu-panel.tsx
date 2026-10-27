@@ -5,7 +5,6 @@ import {
   JugnuSession,
   type JugnuThink,
   type JugnuTurn,
-  type PlayedCue,
 } from "@chalk/jugnu";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";

@@ -21,7 +21,7 @@ import {
 } from "@chalk/api";
 import { type Board, type ChalkEvent, type ItemRef, eventSchema } from "@chalk/content";
 import { type LlmProvider, chatMessageSchema, jugnuTurn } from "@chalk/jugnu";
-import { propDefs } from "@chalk/library";
+import { propModules } from "@chalk/library/modules";
 import { type HeadlessBoard, headlessBoard } from "@chalk/player";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { sql } from "drizzle-orm";
@@ -356,7 +356,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
       try {
         if (deps.boards === undefined) throw new Error("no boards here");
         const board = await deps.boards(request.item);
-        copy = headlessBoard(board, (type) => propDefs[type], request.state);
+        copy = headlessBoard(board, (type) => propModules[type], request.state);
       } catch (error) {
         throw new ApiFailure(
           400,

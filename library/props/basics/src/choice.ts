@@ -128,5 +128,7 @@ export const choice = defineProp({
   signals,
   invariant: (s) =>
     s.options.some((o) => o.id === s.answer) ? undefined : `answer "${s.answer}" is not an option`,
+  summary: (s) =>
+    `a multiple-choice question, ${s.status === "open" ? "not answered yet" : s.status}: ${s.prompt.en}`,
   speech: (s) => ({ say: s.prompt, speak: s.speak ?? undefined }),
 });

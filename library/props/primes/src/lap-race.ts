@@ -2,7 +2,6 @@ import { localizedSchema } from "@chalk/content";
 import { actionsFor, call, defineProp, raise, seq, set, signal, tween } from "@chalk/prop";
 import { z } from "zod";
 import { lcm } from "./arithmetic";
-import { button } from "./seen";
 
 export const MAX_LAP = 120;
 /** Race minutes per second of watching. */
@@ -94,6 +93,8 @@ export const lapRace = defineProp({
     playLabel: { en: "Play", hi: "चलाओ" },
     pauseLabel: { en: "Pause", hi: "रोको" },
   },
+  // The answer, before the race gets there.
+  offScreen: ["lcm"],
   derived: {
     isMet: {
       describe: "Both are at the start at this minute",
@@ -153,26 +154,8 @@ export const lapRace = defineProp({
     }),
   },
   signals,
-  observe: (s) => {
-    const met = isMetOf(s);
-    return {
-      summary: `${s.nameA.en} takes ${s.lapA} minutes a round, ${s.nameB.en} ${s.lapB}; the clock shows ${Math.floor(s.time + 1e-9)} minutes${
-        met ? ", and both are at the start together" : ""
-      }${s.isRunning ? "; the race is running" : ""}`,
-      elements: [
-        {
-          id: "track",
-          value: met
-            ? "both runners at the start line"
-            : `minute ${Math.floor(s.time + 1e-9)} of the race`,
-        },
-        { id: "clock", value: `${Math.floor(s.time + 1e-9)} min` },
-        { id: "logA", value: logText(s.nameA.en, s.lapA, s.time) },
-        { id: "logB", value: logText(s.nameB.en, s.lapB, s.time) },
-        s.isRunning ? button("pause") : button("play", nextMeeting(s) <= MAX_TIME),
-        button("startAgain", s.time > 0 || s.isRunning),
-      ],
-      ...(met ? {} : { hidden: { lcm: lcm(s.lapA, s.lapB) } }),
-    };
-  },
+  summary: (s) =>
+    `${s.nameA.en} takes ${s.lapA} minutes a round, ${s.nameB.en} ${s.lapB}; the clock shows ${Math.floor(s.time + 1e-9)} minutes${
+      isMetOf(s) ? ", and both are at the start together" : ""
+    }${s.isRunning ? "; the race is running" : ""}`,
 });

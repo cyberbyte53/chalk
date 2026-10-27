@@ -20,6 +20,7 @@ export {
   type ConceptLine,
   type LessonLibrary,
   conceptsOnBoard,
+  type LessonProps,
   lessonText,
   mapText,
 } from "./lessons";

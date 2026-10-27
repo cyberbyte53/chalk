@@ -1,5 +1,5 @@
 import type { About, Locale } from "@chalk/content";
-import { PropRole, SEP, namesOf, observationOfView } from "@chalk/prop";
+import { PropRole, SEP } from "@chalk/prop";
 import type { RefObject } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { addressOf } from "./part-paths";
@@ -13,8 +13,6 @@ export type Picked = About & { label: string };
 const HOLD_MS = 450;
 /** A finger that moves further than this is dragging, not holding. */
 const SLOP_PX = 10;
-/** A part's box counts this much bigger: fingers are wider than ticks. */
-const REACH_PX = 12;
 const TEXT_MAX = 120;
 const LABEL_MAX = 28;
 
@@ -47,8 +45,7 @@ function wordsAt(target: Element, piece: Element): string | undefined {
 
 /**
  * What is under the finger, in the names Jugnu points with: the prop (`data-piece`), and the part,
- * tagged in the view (`data-part`) or found where the prop says it draws it (`locate`); the
- * part centred nearest the finger wins. Only what the prop shows can be picked.
+ * tagged in the view (`data-part`). Only what the prop shows can be picked.
  */
 export function pickAt(
   runtime: BoardRuntime,
@@ -61,7 +58,7 @@ export function pickAt(
   const prop = piece?.getAttribute("data-piece");
   if (piece == null || prop == null || !runtime.propNames().includes(prop)) return undefined;
   const def = runtime.getDef(prop);
-  const elements = observationOfView(def, runtime.getView(prop)).elements;
+  const elements = runtime.describe(prop).elements;
   const ids = new Set(elements.map((e) => e.id));
   let part: string | undefined;
   // Its address under the piece ("objectArrow/object"): what the description calls it.

@@ -1,7 +1,6 @@
 import { type Emit, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type Bag, bagOf, gcd, lcm, primesIn } from "./arithmetic";
-import { option } from "./seen";
 
 export const MAX_TOWERED = 99_999;
 
@@ -81,6 +80,8 @@ export const primeTowers = defineProp({
     isEditable: false,
   },
   inputs: ["show"],
+  // The answers, until the learner shows them.
+  offScreen: ["hcf", "lcm"],
   derived: {
     hcf: {
       describe: "HCF of the two numbers",
@@ -117,35 +118,6 @@ export const primeTowers = defineProp({
     }),
   },
   signals,
-  observe: (s) => {
-    const towers = towersOf(s.numberA, s.numberB);
-    const result =
-      s.show === TowerShow.Hcf
-        ? `HCF = ${hcfLine(s.numberA, s.numberB)}`
-        : s.show === TowerShow.Lcm
-          ? `LCM = ${lcmLine(s.numberA, s.numberB)}`
-          : s.show === TowerShow.Product
-            ? `HCF × LCM = ${gcd(s.numberA, s.numberB)} × ${lcm(s.numberA, s.numberB)} = ${s.numberA * s.numberB} = ${s.numberA} × ${s.numberB}`
-            : null;
-    return {
-      summary: `${s.numberA} and ${s.numberB} as towers of primes, side by side${s.show === TowerShow.Apart ? "" : `, marking the ${s.show}`}`,
-      elements: [
-        ...(s.isEditable
-          ? [
-              { id: "a", value: s.numberA },
-              { id: "b", value: s.numberB },
-            ]
-          : []),
-        ...towers.map((t) => ({
-          id: `tower:${t.prime}`,
-          value: towerText(t, s.numberA, s.numberB),
-        })),
-        ...(result === null ? [] : [{ id: "result", value: result }]),
-        ...s.choices.map((c) => option(c, s.show === c)),
-      ],
-      ...(s.show === TowerShow.Apart
-        ? { hidden: { hcf: gcd(s.numberA, s.numberB), lcm: lcm(s.numberA, s.numberB) } }
-        : {}),
-    };
-  },
+  summary: (s) =>
+    `${s.numberA} and ${s.numberB} as towers of primes, side by side${s.show === TowerShow.Apart ? "" : `, marking the ${s.show}`}`,
 });

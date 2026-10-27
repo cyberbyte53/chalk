@@ -1,16 +1,18 @@
-import { type PropViewProps, does, says } from "@chalk/player";
+import { NumberField, SymbolButton } from "@chalk/draw";
+import type { PropViewProps } from "@chalk/player";
+import { does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { gcd, lcm } from "./arithmetic";
 import {
   MAX_TOWERED,
-  type PrimeTowersState,
   TowerShow,
   hcfLine,
   lcmLine,
   primeTowers,
+  towerText,
   towersOf,
 } from "./prime-towers";
-import { Bead, NumberBox, SymbolButton } from "./ui";
+import { Bead } from "./ui";
 
 /** Px from one bead to the next up a tower, and below the first. */
 const STEP = 34;
@@ -57,28 +59,33 @@ export function PrimeTowersView({ view, call }: PropViewProps<typeof primeTowers
     lcm: "LCM",
     product: "HCF × LCM",
   };
+  const result = isHcf
+    ? `HCF = ${hcfLine(s.numberA, s.numberB)}`
+    : isLcm
+      ? `LCM = ${lcmLine(s.numberA, s.numberB)}`
+      : isProduct
+        ? `HCF × LCM = ${gcd(s.numberA, s.numberB)} × ${lcm(s.numberA, s.numberB)} = ${s.numberA * s.numberB}`
+        : null;
   return (
     <div class="pr-towers">
       {s.isEditable && (
         <div class="pr-steppers">
-          <NumberBox
+          <NumberField
             name="a"
             value={s.numberA}
             min={2}
             max={MAX_TOWERED}
-            part="a"
-            {...says(primeTowers.actions.setNumbers)}
+            {...says(primeTowers.actions.setNumbers, "a")}
             onChange={(value) =>
               call(primeTowers.actions.setNumbers, { numberA: value, numberB: s.numberB })
             }
           />
-          <NumberBox
+          <NumberField
             name="b"
             value={s.numberB}
             min={2}
             max={MAX_TOWERED}
-            part="b"
-            {...says(primeTowers.actions.setNumbers)}
+            {...says(primeTowers.actions.setNumbers, "b")}
             onChange={(value) =>
               call(primeTowers.actions.setNumbers, { numberA: s.numberA, numberB: value })
             }
@@ -90,7 +97,15 @@ export function PrimeTowersView({ view, call }: PropViewProps<typeof primeTowers
           const low = Math.min(t.inA, t.inB);
           const high = Math.max(t.inA, t.inB);
           return (
-            <div class="pr-sbs-group" key={t.prime} data-part={`tower:${t.prime}`}>
+            <div
+              class="pr-sbs-group"
+              key={t.prime}
+              {...shows(
+                `tower:${t.prime}`,
+                { prime: t.prime, inA: t.inA, inB: t.inB },
+                towerText(t, s.numberA, s.numberB),
+              )}
+            >
               <div class="pr-sbs-stage" style={{ height: `${FOOT + tallest * STEP + 8}px` }}>
                 <Tower prime={t.prime} height={t.inA} litTo={isHcf ? low : t.inA} />
                 <Tower prime={t.prime} height={t.inB} litTo={isHcf ? low : t.inB} />
@@ -106,13 +121,9 @@ export function PrimeTowersView({ view, call }: PropViewProps<typeof primeTowers
           );
         })}
       </div>
-      {s.show !== TowerShow.Apart && (
-        <p class="pr-equation is-done" data-part="result">
-          {isHcf
-            ? `HCF = ${hcfLine(s.numberA, s.numberB)}`
-            : isLcm
-              ? `LCM = ${lcmLine(s.numberA, s.numberB)}`
-              : `HCF × LCM = ${gcd(s.numberA, s.numberB)} × ${lcm(s.numberA, s.numberB)} = ${s.numberA * s.numberB}`}
+      {result !== null && (
+        <p class="pr-equation is-done" {...shows("result", result)}>
+          {result}
         </p>
       )}
       {s.choices.length > 0 && (
@@ -124,8 +135,7 @@ export function PrimeTowersView({ view, call }: PropViewProps<typeof primeTowers
               label={`Show the ${names[c]}`}
               isWide
               isOn={s.show === c}
-              part={c}
-              {...does(primeTowers.actions.show, { show: c })}
+              {...does(primeTowers.actions.show, { show: c }, c)}
             />
           ))}
         </div>

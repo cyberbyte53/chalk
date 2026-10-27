@@ -11,6 +11,7 @@ import {
   builtQuestionSchema,
 } from "@chalk/content";
 import { propDefs } from "@chalk/library";
+import { propModules } from "@chalk/library/modules";
 import { afterAll, describe, expect, it } from "vitest";
 import { stringify as stringifyYaml } from "yaml";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
@@ -158,7 +159,7 @@ function realBook(): string {
 const build = (dir: string, commit = "test") =>
   buildContent({
     contentDir: dir,
-    defs: propDefs,
+    modules: propModules,
     readings,
     commit,
     modulesFile: join(dir, MODULES_FILE),

@@ -1,7 +1,9 @@
-import { type PropViewProps, does, says } from "@chalk/player";
+import { NumberField, Stepper, SymbolButton } from "@chalk/draw";
+import type { PropViewProps } from "@chalk/player";
+import { does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { MAX_FRIENDS, MAX_SWEETS, type SweetShareState, sweetShare } from "./sweet-share";
-import { NumberBox, Stepper, SymbolButton } from "./ui";
+import { count } from "./seen";
+import { MAX_FRIENDS, MAX_SWEETS, sweetShare } from "./sweet-share";
 
 /** One wrapped sweet: a round middle with a twist of wrapper either side. */
 function Sweet({ isBig = false }: { isBig?: boolean }): JSX.Element {
@@ -63,12 +65,11 @@ export function SweetShareView({
     <div class="pr-share">
       {s.isEditable && (
         <div class="pr-steppers">
-          <NumberBox
+          <NumberField
             name="a"
             value={s.sweets}
             min={0}
             max={MAX_SWEETS}
-            part="a"
             {...says(sweetShare.actions.setSweets)}
             onChange={(value) => call(sweetShare.actions.setSweets, { value })}
           />
@@ -77,7 +78,6 @@ export function SweetShareView({
             value={s.friends}
             min={1}
             max={MAX_FRIENDS}
-            part="b"
             {...says(sweetShare.actions.setFriends)}
             onChange={(value) => call(sweetShare.actions.setFriends, { value })}
           />
@@ -86,7 +86,7 @@ export function SweetShareView({
       <div class="pr-box-row">
         <div
           class={s.isOver ? "pr-box is-over" : "pr-box"}
-          data-part="box"
+          {...shows("box", s.box, count(s.box, "sweet"))}
           role="img"
           aria-label={`${s.box} sweets in the box`}
         >
@@ -97,7 +97,11 @@ export function SweetShareView({
       <div
         class="pr-friends"
         style={{ "--friends": String(s.friends) }}
-        data-part="plates"
+        {...shows(
+          "plates",
+          { friends: s.friends, each: s.rounds },
+          `${count(s.friends, "friend")}, ${count(s.rounds, "sweet")} each`,
+        )}
         role="img"
         aria-label={`${s.friends} friends, ${s.rounds} sweets each`}
       >
@@ -116,20 +120,27 @@ export function SweetShareView({
           symbol={s.shareLabel[locale] ?? s.shareLabel.en ?? "Give everyone one"}
           label={s.shareLabel[locale] ?? s.shareLabel.en ?? "Give everyone one"}
           isWide
-          part="giveRound"
           isEnabled={s.canGiveRound}
           {...does(sweetShare.actions.giveRound)}
         />
         <SymbolButton
           symbol="↺"
           label="Put every sweet back in the box"
-          part="startAgain"
           isEnabled={s.rounds > 0}
           {...does(sweetShare.actions.startAgain)}
         />
       </div>
       {s.showLog && (
-        <table class="pr-log" data-part="log">
+        <table
+          class="pr-log"
+          {...shows(
+            "log",
+            Array.from({ length: s.rounds + 1 }, (_, k) => ({
+              rounds: k,
+              box: s.sweets - s.friends * k,
+            })),
+          )}
+        >
           <thead>
             <tr>
               <th>{s.roundsLabel[locale] ?? s.roundsLabel.en}</th>
@@ -154,7 +165,14 @@ export function SweetShareView({
         </table>
       )}
       {s.showSum && (
-        <p class={s.isOver ? "pr-equation is-done" : "pr-equation"} data-part="sum">
+        <p
+          class={s.isOver ? "pr-equation is-done" : "pr-equation"}
+          {...shows(
+            "sum",
+            { a: s.sweets, b: s.friends, q: s.rounds, r: s.box },
+            `${s.sweets} = ${s.friends} × ${s.rounds} + ${s.box}`,
+          )}
+        >
           <span class="pr-a">{s.sweets}</span> = <span class="pr-b">{s.friends}</span> ×{" "}
           <span class="pr-q">{s.rounds}</span> + <span class="pr-r">{s.box}</span>
           {s.isOver && (
