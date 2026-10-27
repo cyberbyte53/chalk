@@ -337,7 +337,7 @@
       status: closed
 - id: cmvq7tt4qndv
   label: finding
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-27T04:58:51.194Z
@@ -351,6 +351,8 @@
     what overflow:hidden clips, or the option should clip it. Possibly older than this change
     (before it these options were one column, and the same SVG was there), so filed as a finding,
     not a regression."
+  changed:
+    - platform/studio/src/mcp/preview.ts
   messages:
     - by: fixer
       role: fixer
@@ -385,3 +387,122 @@
         The fix belongs in the checker, not the boards: skip what a parent clips (anything inside
         overflow:hidden), or measure only the visible bounds. It's about 5 lines in preview.ts. Say
         if you want it done now, in this review, or kept separate.
+    - by: you
+      role: person
+      at: 2026-10-27T08:14:13.223Z
+      text: i don't want fixs , what is permanent solution because there might be cases which we have not
+        yet detected?
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:15:17.715Z
+      text: >-
+        The permanent fix is to measure what the student can actually see, not every box in the
+        page, and to have the check prove that with tests.
+
+
+        Right now every check in preview.ts measures an element's full box. An element can be bigger
+        than what shows: something around it may cut it off (overflow hidden, clip, scroll), or it
+        may be invisible. KaTeX's √ is one case. Others we haven't hit yet are ellipsis text, a
+        scrolling strip and a hidden tail on a fraction bar. A box-based check gets all of these
+        wrong.
+
+
+        1. **One rule for every check: the visible box.** Start from the element's box and cut it
+        down by each parent that clips, until reaching the thing it's measured against (the button,
+        the piece or the card). Skip anything invisible or with no size. The button, maths and
+        piece-edge checks all use this one function. So any future clipping trick is handled, and
+        nobody has to keep a list of KaTeX classes.
+
+        2. **The other half: content the student can't see.** If the button itself clips its content
+        (overflow hidden), text cut off inside it is a real problem the current check misses. Here
+        the check compares the button's own scrollWidth against its width, so hidden text gets
+        reported instead of passing silently.
+
+        3. **Tests that pin it down.** Add a small fixture page with known cases: √, a fraction,
+        ellipsis, a scrolling row and zoom, which must not be reported, plus a long label, a clipped
+        label and maths past the edge, which must be reported. Run it in `pnpm check`. A false alarm
+        or a miss found later becomes one more fixture, so a case found once stays fixed.
+
+
+        Say go and I'll do it as its own change to preview.ts.
+    - by: you
+      role: person
+      at: 2026-10-27T08:17:45.300Z
+      text: these cases in test are not the solution right ? tests are just checks ??
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:18:03.394Z
+      text: >-
+        Right, the tests aren't the solution. The solution is point 1 alone: change what the check
+        measures.
+
+
+        Today it asks "how big is every element inside the button?". It will ask "how much of it can
+        the student actually see?". It gets that the way the browser does when it paints: take the
+        element's box and cut away whatever each parent hides.
+
+
+        That's why it covers cases we haven't found yet. It doesn't know anything about √ or KaTeX
+        or any other special case. It follows the same rule the browser uses to decide what shows.
+        Anything hidden, by any library and in any way, is left out automatically. Anything that
+        really shows past the edge is still reported.
+
+
+        Point 2 is the same idea the other way round: text the button itself cuts off is reported,
+        because the student can't read it.
+
+
+        The tests only make sure the rule keeps working when someone changes preview.ts later. They
+        don't fix anything, and you could leave them out.
+    - by: you
+      role: person
+      at: 2026-10-27T08:18:45.572Z
+      text: cool
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:19:00.650Z
+      text: "Layout check in preview.ts measures what's visible: each box cut down by the parents that
+        clip it, for the button, maths and piece-edge checks; plus text a button clips itself is
+        reported."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:21:10.946Z
+      text: "The layout check now measures what shows: each box cut by the parents that clip it, axis by
+        axis (preview.ts). The √ boards here and 0101bb0e at 640 report nothing. A real overflow is
+        still caught: with the lemma table's \\scriptsize briefly removed, it said \"maths runs 35px
+        past the edge\". Text a button clips itself is now reported too."
+      status: ready
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:28:30.072Z
+      text: "Added: text cut off anywhere is now reported, measured by the text itself rather than boxes,
+        so KaTeX's hidden √ line (a shape) is ignored. Screen-reader text and KaTeX's hidden copy
+        (boxes 1px or smaller) are skipped. Tested: 644 boards (every real-numbers lesson with its
+        questions, en and hi, at 360 and 640) show no false alarms; labels deliberately cut off in
+        the bill board were all caught (\"text cut off by 151px\")."
+- id: cmvqfl8tdsbf
+  label: comment
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-27T08:36:08.546Z
+  board: class10-maths/real-numbers/division-lemma/lemma
+  target: w2
+  commit: b792913c73b3b2fe5c13a6295b19ff609b3140f8
+  from: chat
+  text: The "in the box" header makes the table 20px wider than the text column in English at 360.
+    Shorten it to "box".
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:36:11.882Z
+      text: English header "in the box" → "box"; Hindi unchanged.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-27T08:36:12.345Z
+      text: Header is now "box". The table fits at 360 in English with no layout problems; Hindi was
+        already fine.
+      status: ready
+  changed: []

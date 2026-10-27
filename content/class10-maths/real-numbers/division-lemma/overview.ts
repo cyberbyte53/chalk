@@ -121,7 +121,7 @@ const lemma = page("lemma", (b) => {
     w.title(t("From sweets to numbers", "मिठाइयों से संख्याओं तक")),
     w.body(
       t(
-        r`After every round, each sweet is on a plate or in the box: $$\begin{array}{ccccccc} \scriptsize\text{sweets} & & \scriptsize\text{friends} & & \scriptsize\text{rounds} & & \scriptsize\text{in the box} \\ 20 & = & 6 & \times & 0 & + & 20 \\ 20 & = & 6 & \times & 1 & + & 14 \\ 20 & = & 6 & \times & 2 & + & 8 \\ 20 & = & 6 & \times & 3 & + & \mathbf{2} \end{array}$$ 2 is fewer than 6, so the sharing stops: 2 are left over.`,
+        r`After every round, each sweet is on a plate or in the box: $$\begin{array}{ccccccc} \scriptsize\text{sweets} & & \scriptsize\text{friends} & & \scriptsize\text{rounds} & & \scriptsize\text{box} \\ 20 & = & 6 & \times & 0 & + & 20 \\ 20 & = & 6 & \times & 1 & + & 14 \\ 20 & = & 6 & \times & 2 & + & 8 \\ 20 & = & 6 & \times & 3 & + & \mathbf{2} \end{array}$$ 2 is fewer than 6, so the sharing stops: 2 are left over.`,
         r`हर बारी के बाद, हर मिठाई या तो प्लेट पर है या डिब्बे में: $$\begin{array}{ccccccc} \scriptsize\text{मिठाइयाँ} & & \scriptsize\text{दोस्त} & & \scriptsize\text{बारियाँ} & & \scriptsize\text{डिब्बे में} \\ 20 & = & 6 & \times & 0 & + & 20 \\ 20 & = & 6 & \times & 1 & + & 14 \\ 20 & = & 6 & \times & 2 & + & 8 \\ 20 & = & 6 & \times & 3 & + & \mathbf{2} \end{array}$$ 2, 6 से कम है, तो बँटवारा रुक जाता है: 2 बचती हैं।`,
       ),
     ),

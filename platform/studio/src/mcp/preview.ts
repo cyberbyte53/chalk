@@ -143,46 +143,109 @@ function liveChanges(was: BoardModel | undefined, now: BoardModel | undefined) {
 
 /**
  * Layout problems on one drawn board, found by measuring (runs in the page). Each names the piece
- * and its source line. Maths is measured by its glyph boxes (KaTeX's own box can be narrower).
+ * and its source line. Everything is measured as the student sees it: a box cut down by each
+ * parent that clips it (overflow hidden or clip, as the browser paints), so what a library draws
+ * and then hides (KaTeX's long √ bar) is never counted, whatever draws it. Maths is measured by its
+ * glyph boxes (KaTeX's own box can be narrower). Scrolling boxes don't cut: maths that needs
+ * scrolling is still reported.
  */
 function layoutProblems(card: Element): string[] {
   const found: string[] = [];
-  const box = card.getBoundingClientRect();
   const labelOf = (node: Element) => {
     const piece = node.closest<HTMLElement>("[data-piece]");
     return `${piece?.dataset.piece ?? "?"} (${piece?.dataset.source ?? "?"})`;
   };
-  const rightOf = (nodes: Iterable<Element>) => {
-    let right = Number.NEGATIVE_INFINITY;
-    for (const n of nodes) {
-      const r = n.getBoundingClientRect();
-      if (r.width > 0) right = Math.max(right, r.right);
+  // Each axis on its own: a box that scrolls sideways but clips its height still shows (by
+  // scrolling) what runs past its sides.
+  const cut = (o: string) => o === "hidden" || o === "clip";
+  const clips = (node: Element) => {
+    const style = getComputedStyle(node);
+    return { x: cut(style.overflowX), y: cut(style.overflowY) };
+  };
+  /** What shows of a node, cut by the parents that clip it, up to `within` (not cut by it). */
+  const visible = (node: Element, within: Element) => {
+    const style = getComputedStyle(node);
+    if (style.visibility === "hidden" || Number(style.opacity) === 0) return undefined;
+    const r = node.getBoundingClientRect();
+    let { left, right, top, bottom } = r;
+    for (let p = node.parentElement; p !== null && p !== within; p = p.parentElement) {
+      const { x, y } = clips(p);
+      if (!x && !y) continue;
+      const c = p.getBoundingClientRect();
+      if (x) {
+        left = Math.max(left, c.left);
+        right = Math.min(right, c.right);
+      }
+      if (y) {
+        top = Math.max(top, c.top);
+        bottom = Math.min(bottom, c.bottom);
+      }
     }
+    return right - left > 0 && bottom - top > 0 ? { left, right, top, bottom } : undefined;
+  };
+  const rightOf = (nodes: Iterable<Element>, within: Element) => {
+    let right = Number.NEGATIVE_INFINITY;
+    for (const n of nodes) right = Math.max(right, visible(n, within)?.right ?? right);
     return right;
   };
   for (const maths of card.querySelectorAll(".katex")) {
     const piece = maths.closest("[data-piece]");
     if (piece === null) continue;
-    const over = rightOf(maths.querySelectorAll(".base")) - piece.getBoundingClientRect().right;
+    const over =
+      rightOf(maths.querySelectorAll(".base"), piece) - piece.getBoundingClientRect().right;
     if (over > 2) found.push(`${labelOf(maths)}: maths runs ${Math.round(over)}px past the edge`);
   }
   const buttons = [...card.querySelectorAll("button")];
   for (const button of buttons) {
-    const over = rightOf(button.querySelectorAll("*")) - button.getBoundingClientRect().right;
+    const over =
+      rightOf(button.querySelectorAll("*"), button) - button.getBoundingClientRect().right;
     if (over > 2)
       found.push(`${labelOf(button)}: text spills ${Math.round(over)}px out of its button`);
   }
-  for (const [i, a] of buttons.entries())
-    for (const b of buttons.slice(i + 1)) {
-      const r = a.getBoundingClientRect();
-      const q = b.getBoundingClientRect();
+  // Text a parent cuts off, anywhere: the student can't read it. Measured by the text itself, not
+  // boxes, so a drawing a library hides on purpose (KaTeX's √ bar is a shape) is never counted,
+  // while words, numbers and maths glyphs are. A parent that shows nothing (1px or less: text for
+  // screen readers, KaTeX's MathML copy) hides on purpose.
+  const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
+  for (let text = walker.nextNode(); text !== null; text = walker.nextNode()) {
+    const owner = text.parentElement;
+    if (owner === null || (text.textContent ?? "").trim() === "") continue;
+    if (getComputedStyle(owner).visibility === "hidden") continue;
+    const range = document.createRange();
+    range.selectNodeContents(text);
+    const glyphs = [...range.getClientRects()].filter((r) => r.width > 0);
+    let hidden = 0;
+    let isOnPurpose = false;
+    for (let p: Element | null = owner; p !== null && p !== card; p = p.parentElement) {
+      const { x, y } = clips(p);
+      if (!x && !y) continue;
+      const c = p.getBoundingClientRect();
+      if (c.width <= 1 || c.height <= 1) {
+        isOnPurpose = true;
+        break;
+      }
+      for (const g of glyphs) {
+        if (x) hidden = Math.max(hidden, c.left - g.left, g.right - c.right);
+        if (y) hidden = Math.max(hidden, c.top - g.top, g.bottom - c.bottom);
+      }
+    }
+    if (!isOnPurpose && hidden > 2)
+      found.push(`${labelOf(owner)}: text cut off by ${Math.round(hidden)}px, hidden from view`);
+  }
+  const shown = buttons.flatMap((b) => {
+    const r = visible(b, card);
+    return r === undefined ? [] : [{ b, r }];
+  });
+  for (const [i, { b: a, r }] of shown.entries())
+    for (const { r: q } of shown.slice(i + 1)) {
       const w = Math.min(r.right, q.right) - Math.max(r.left, q.left);
       const h = Math.min(r.bottom, q.bottom) - Math.max(r.top, q.top);
       if (w > 2 && h > 2) found.push(`${labelOf(a)}: two buttons overlap`);
     }
+  const box = card.getBoundingClientRect();
   for (const node of card.querySelectorAll("[data-piece]")) {
-    const r = node.getBoundingClientRect();
-    if (r.width > 0 && (r.right > box.right + 1 || r.left < box.left - 1))
+    const r = visible(node, card);
+    if (r !== undefined && (r.right > box.right + 1 || r.left < box.left - 1))
       found.push(`${labelOf(node)}: drawn outside the phone`);
   }
   return [...new Set(found)].slice(0, 20);
