@@ -1,5 +1,5 @@
 /**
- * The board as agents read it: one snapshot, the same for render_board, Jugnu and tests. A tree of
+ * The board as agents read it: one snapshot, the same for the chalk MCP's look and play, Jugnu and tests. A tree of
  * nodes by address (a placed prop, and inside a group its children), each with what was fixed where
  * it was placed (setup), what can change here (live), what is worked out from other values
  * (bound, with where from), what is on screen (parts), and what can be done to it (can). Made from
@@ -87,7 +87,7 @@ export function nodeAt(snapshot: BoardSnapshot, path: string): NodeSnapshot | un
 /** One value that moved, by address ("lens/imageArrow.tip"). */
 export type Change = { path: string; was: unknown; now: unknown };
 
-/** Every live or bound value that moved between two snapshots, and nodes shown or hidden. */
+/** Every value that moved between two snapshots (setup, live or bound), and nodes shown or hidden. */
 export function changesBetween(was: BoardSnapshot, now: BoardSnapshot): Change[] {
   const flat = (nodes: readonly NodeSnapshot[]): NodeSnapshot[] =>
     nodes.flatMap((n) => [n, ...flat(n.children ?? [])]);
@@ -103,7 +103,10 @@ export function changesBetween(was: BoardSnapshot, now: BoardSnapshot): Change[]
   const out: Change[] = [];
   for (const node of flat(now.nodes)) {
     const old = before.get(node.path);
+    // Setup too: a value described as fixed that moved is a change all the same (and a sign the
+    // prop doesn't say which control does it).
     const fields: [string, unknown][] = [
+      ...Object.entries(node.setup),
       ...Object.entries(node.live),
       ...Object.entries(node.bound).map(([k, b]) => [k, b.value] as [string, unknown]),
     ];

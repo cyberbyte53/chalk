@@ -43,7 +43,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 
 - **`label`**: `comment` (the person's, or a teacher's), `finding` (a reviewer's, about something it saw), `regression` (something a change broke).
 - **`by`, `role`**: who started it.
-- **`board`**: the board, by its build path. Open it at `?dev&board=<board>`, or with `render_board`. Absent for a thread on a plan (then `source` points at `plan.md` and `quote` has the exact words).
+- **`board`**: the board, by its build path. Open it at `?dev&board=<board>`, or `look` at it. Absent for a thread on a plan (then `source` points at `plan.md` and `quote` has the exact words).
 - **`target`**: what was picked on the board, by address: the piece's name, then the groups and the part, joined by `/` (`which/option`). Absent for the whole board. If the board changes and the address no longer finds anything, the preview shows the thread as detached.
 - **`prop`**: the prop's type, for a thread on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`.

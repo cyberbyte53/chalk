@@ -177,7 +177,7 @@ function watchAndRebuild(): void {
 }
 
 /**
- * One build at a time: the dev server's rebuild-on-save and an agent's render_board may both start
+ * One build at a time: the dev server's rebuild-on-save and an agent's look or play may both start
  * one, and two writing build/ at once would mix. The lock is a file only one process can create;
  * a lock left by a process that died is taken over.
  */

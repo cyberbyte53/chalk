@@ -3,14 +3,14 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { type BoardSnapshot, changesBetween } from "@chalk/prop";
-import type { Browser, Page } from "playwright-core";
+import type { Browser, Locator, Page } from "playwright-core";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
- * The learner app's own dev server and a headless browser, for looking at boards. Uses the one
- * dev server (CHALK_PREVIEW_URL to point elsewhere), starting it in this process if nothing
- * answers on its port. Nothing here draws a board: the
- * page at `?dev&board=` does, with the app's player.
+ * Drives the real learner app in a headless browser: it opens the app's own dev-server page
+ * (`?dev&board=`), where the app's player draws the board, then measures, reads and acts on what
+ * the page shows. Nothing here draws a board. Uses the one dev server (CHALK_PREVIEW_URL to point
+ * elsewhere), starting it in this process if nothing answers on its port.
  */
 
 export const PHONE_WIDTH = 390;
@@ -81,6 +81,7 @@ export async function closeBrowser(): Promise<void> {
   lanes.clear();
   queues.clear();
   used.clear();
+  composer = undefined;
   if (open !== undefined) await (await open.catch(() => undefined))?.close().catch(() => {});
 }
 
@@ -107,9 +108,29 @@ async function launch(): Promise<Browser> {
   }
 }
 
+/**
+ * Where a piece or a part is on a picture, in CSS pixels from the picture's top left (the picture
+ * itself is at twice that). Measured on the same drawing the picture was taken of.
+ */
+export type Box = {
+  kind: "piece" | "part";
+  /** The piece's name, or the part's address ("game/plates"). */
+  name: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
+
+/** A picture of one drawn board, with where each piece and part is on it. */
+export type Picture = { png: Buffer; width: number; boxes: Box[] };
+
 export type Shot = {
   board: string;
   png: Buffer;
+  /** The picture's width in CSS pixels, and where each piece and part is on it. */
+  width: number;
+  boxes: Box[];
   /** Each piece's parts by address: what a step can name ("machine/plane/handle"). */
   parts: Record<string, string[]>;
   /** Pieces drawn wider than the phone or cut off by their box. */
@@ -253,6 +274,37 @@ function layoutProblems(card: Element): string[] {
   return [...new Set(found)].slice(0, 20);
 }
 
+/** Where each drawn piece and part is on a card (runs in the page). Hidden ones have no box. */
+function boxesIn(card: Element): { width: number; boxes: Box[] } {
+  const c = card.getBoundingClientRect();
+  const boxes: Box[] = [];
+  const add = (el: HTMLElement, kind: Box["kind"], name: string | undefined) => {
+    const r = el.getBoundingClientRect();
+    if (name === undefined || name === "" || r.width < 1 || r.height < 1) return;
+    boxes.push({ kind, name, x: r.left - c.left, y: r.top - c.top, w: r.width, h: r.height });
+  };
+  for (const el of card.querySelectorAll<HTMLElement>("[data-piece]"))
+    add(el, "piece", el.dataset.piece);
+  const seen = new Set<string>();
+  for (const el of card.querySelectorAll<HTMLElement>("[data-part]")) {
+    const name = el.dataset.path ?? el.dataset.part;
+    // A part drawn in pieces (one per option) keeps each; the same address twice is one part.
+    if (name !== undefined && seen.has(`${name}@${el.getBoundingClientRect().top}`)) continue;
+    if (name !== undefined) seen.add(`${name}@${el.getBoundingClientRect().top}`);
+    add(el, "part", name);
+  }
+  return { width: c.width, boxes };
+}
+
+/** A picture of a card: the screenshot and, measured on the same drawing, its boxes. */
+async function pictureOf(card: Locator): Promise<Picture> {
+  const { width, boxes } = await card.evaluate(boxesIn);
+  return { png: await card.screenshot({ type: "png" }), width, boxes };
+}
+
+/** What one call drew: each board, what each step did, and the board before the first step. */
+export type Drawn = { shots: Shot[]; steps: StepResult[]; before?: Picture };
+
 export type ShotOptions = {
   locale?: "en" | "hi";
   play?: boolean;
@@ -277,7 +329,8 @@ export type StepResult = {
   events: string[];
   passed: boolean;
   errors: string[];
-  png?: Buffer;
+  /** The board after the step, when asked for. */
+  picture?: Picture;
   /** Live values the step changed ("machine.input": was 0, now 2). */
   changed?: Record<string, { was: unknown; now: unknown }>;
 };
@@ -316,7 +369,7 @@ const lanes = new Map<string, Lane>();
 const queues = new Map<string, Promise<unknown>>();
 const used = new Map<string, number>();
 /** Pages kept open at once; the one used longest ago (and idle) is closed for a new one. */
-const MAX_LANES = 4;
+const MAX_LANES = 8;
 /** The lane of a caller that doesn't name one (scripts, tests). */
 export const DEFAULT_LANE = "default";
 
@@ -347,6 +400,35 @@ async function openPage(lane: string, base: string): Promise<Lane> {
   });
   lanes.set(lane, opened);
   return opened;
+}
+
+/**
+ * A blank page of its own, for putting pictures together (picture.ts): never one of the app's
+ * pages, so composing can't touch what was drawn or measured. Calls take turns.
+ */
+let composer: Promise<Page> | undefined;
+let composing: Promise<unknown> = Promise.resolve();
+export function onComposer<T>(fn: (page: Page) => Promise<T>): Promise<T> {
+  const next = composing.then(async () => {
+    browser ??= launch();
+    const open = async () => {
+      const page = await (await (browser as Promise<Browser>)).newPage({
+        viewport: { width: 800, height: 600 },
+      });
+      // tsx keeps function names with a helper the page doesn't have; give it one.
+      await page.evaluate("globalThis.__name = (f) => f;");
+      return page;
+    };
+    composer ??= open();
+    let page = await composer;
+    if (page.isClosed()) {
+      composer = open();
+      page = await composer;
+    }
+    return fn(page);
+  });
+  composing = next.catch(() => {});
+  return next;
 }
 
 /** Closes a lane's page (its connection ended). */
@@ -411,7 +493,7 @@ export function shoot(
   o: ShotOptions = {},
   act?: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean },
   lane: string = DEFAULT_LANE,
-): Promise<{ shots: Shot[]; steps: StepResult[] }> {
+): Promise<Drawn> {
   const once = () => shootNow(root, board, o, act, lane);
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
     asDraw(async () => {
@@ -548,7 +630,7 @@ async function shootNow(
   o: ShotOptions,
   act: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean } | undefined,
   lane: string,
-): Promise<{ shots: Shot[]; steps: StepResult[] }> {
+): Promise<Drawn> {
   // Acting starts from a fresh board (a new run) unless it continues this lane's last board.
   const isContinued = act?.isContinued === true;
   const run = act !== undefined && !isContinued ? `&run=${Date.now()}` : "";
@@ -617,9 +699,11 @@ async function shootNow(
   await settle(page);
   at.lastBoard = board;
   const steps: StepResult[] = [];
+  let before: Picture | undefined;
   if (act !== undefined && act.steps.length > 0) {
     if ((await page.$$(".preview-card")).length !== 1)
       throw new Error("Steps act on one board: name a board, not a lesson.");
+    if (act.shots !== "none") before = await pictureOf(page.locator(".preview-card").first());
     let seen = await recorded(page);
     let modelWas = [...(await readModels(page)).values()][0];
     for (const [i, step] of act.steps.entries()) {
@@ -660,20 +744,17 @@ async function shootNow(
         changed,
         events: now.events
           .slice(seen.events.length)
-          .map(
-            (e) =>
-              `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null).slice(0, 160)}`,
-          ),
+          .map((e) => `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null)}`),
         passed: now.passed.length > seen.passed.length,
         errors: [...at.errors],
         ...(act.shots === "each" || (act.shots === "last" && isLast)
-          ? { png: await page.locator(".preview-card").first().screenshot({ type: "png" }) }
+          ? { picture: await pictureOf(page.locator(".preview-card").first()) }
           : {}),
       });
       seen = now;
     }
   }
-  const cards = await page.$$(".preview-card");
+  const cards = await page.locator(".preview-card").all();
   const shots: Shot[] = [];
   const models = await readModels(page);
   for (const card of cards) {
@@ -689,13 +770,14 @@ async function shootNow(
       }
       return out;
     });
+    // After steps, the picture is the steps' to give (or not): don't take another.
+    const isActed = act !== undefined && act.steps.length > 0;
+    const picture = isActed ? undefined : await pictureOf(card);
     shots.push({
       board: name.replace(/\.json$/, ""),
-      // After steps, the picture is the steps' to give (or not): don't take another.
-      png:
-        act !== undefined && act.steps.length > 0
-          ? Buffer.alloc(0)
-          : await card.screenshot({ type: "png" }),
+      png: picture?.png ?? Buffer.alloc(0),
+      width: picture?.width ?? 0,
+      boxes: picture?.boxes ?? (await card.evaluate(boxesIn)).boxes,
       parts,
       overflow,
       errors: [...at.errors],
@@ -704,5 +786,5 @@ async function shootNow(
         : {}),
     });
   }
-  return { shots, steps };
+  return { shots, steps, ...(before === undefined ? {} : { before }) };
 }

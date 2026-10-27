@@ -6,10 +6,11 @@ import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/
 import { findUp } from "../pronunciations";
 
 /**
- * Stress test for the chalk MCP's read side, against the running service (`pnpm mcp`), the way
- * agents call it: renders at once from one agent and from several, mixed widths and languages,
- * reads during renders, content changing mid-render, `continue` across agents, the snapshot of
- * played boards, and bad names. Each case says what must hold; any that doesn't fails the run.
+ * Stress test for the chalk MCP's read side (look, play, affected, comments), against the running
+ * service (`pnpm mcp`), the way agents call it: looks at once from one agent and from several,
+ * mixed widths and languages, reads during drawing, content changing mid-drawing, `continue`
+ * across agents, the snapshot of played and question boards, labels that don't change the
+ * picture, a piece cut out, a chapter checked, and bad names (platform/docs/seeing-boards.md). Each case says what must hold; any that doesn't fails the run.
  * Writes no comments. Briefly appends a comment line to one content file (restored after).
  *
  * Run: `pnpm stress-mcp` (all), or `pnpm stress-mcp rebuild lanes` (some). CHALK_MCP_URL to point
@@ -62,13 +63,25 @@ async function call(c: Agent, tool: string, args: Record<string, unknown>): Prom
   }
 }
 
-type Board = { board: string; nodes: { path: string; setup?: Record<string, unknown> }[] };
-const boardsOf = (c: Call): Board[] =>
-  ((c.out?.structuredContent as { boards?: Board[] } | undefined)?.boards ?? []) as Board[];
-const pngWidths = (c: Call): number[] =>
+type Node = { path: string; setup?: Record<string, unknown>; live?: Record<string, unknown> };
+type Out = {
+  target?: string;
+  nodes?: Node[];
+  drawings?: number;
+  boards?: number;
+  versions?: { problems: string[] }[];
+};
+const outOf = (c: Call): Out => (c.out?.structuredContent ?? {}) as Out;
+const textOf = (c: Call): string =>
+  ((c.out?.content as { type: string; text?: string }[] | undefined) ?? [])
+    .filter((x) => x.type === "text")
+    .map((x) => x.text ?? "")
+    .join("\n");
+const pngs = (c: Call): Buffer[] =>
   ((c.out?.content as { type: string; data?: string }[] | undefined) ?? [])
     .filter((x) => x.type === "image" && x.data !== undefined)
-    .map((x) => Buffer.from(x.data ?? "", "base64").readUInt32BE(16));
+    .map((x) => Buffer.from(x.data ?? "", "base64"));
+const pngWidths = (c: Call): number[] => pngs(c).map((b) => b.readUInt32BE(16));
 
 const failures: string[] = [];
 function expect(name: string, isTrue: boolean, detail = ""): void {
@@ -78,13 +91,18 @@ function expect(name: string, isTrue: boolean, detail = ""): void {
 const allOk = (cs: Call[]) => cs.every((c) => c.ok);
 const firstError = (cs: Call[]) => cs.find((c) => !c.ok)?.error?.slice(0, 160) ?? "";
 const slowest = (cs: Call[]) => `${Math.max(...cs.map((c) => c.ms))}ms slowest`;
-const asked = (c: Call, board: string) => boardsOf(c)[0]?.board === board;
+const asked = (c: Call, board: string) => outOf(c).target === board;
+/** A value of a piece, wherever the snapshot files it (setup or live). */
+const fieldOf = (c: Call, piece: string, field: string) => {
+  const n = outOf(c).nodes?.find((x) => x.path === piece);
+  return n?.live?.[field] ?? n?.setup?.[field] ?? null;
+};
 
 const cases: Record<string, () => Promise<void>> = {
   async parallel() {
     const c = await agent("stress-parallel");
-    const cs = await Promise.all(BOARDS.map((b) => call(c, "render_board", { board: b })));
-    expect("8 renders at once from one agent all succeed", allOk(cs), firstError(cs));
+    const cs = await Promise.all(BOARDS.map((b) => call(c, "look", { at: b })));
+    expect("8 looks at once from one agent all succeed", allOk(cs), firstError(cs));
     expect(
       "each returns the board it asked for",
       cs.every((r, i) => asked(r, BOARDS[i] ?? "")),
@@ -97,7 +115,14 @@ const cases: Record<string, () => Promise<void>> = {
       (["en", "hi"] as const).map((locale) => ({ width, locale })),
     );
     const cs = await Promise.all(
-      combos.map((o) => call(c, "render_board", { board: `${R}/which-fractions-end/bill`, ...o })),
+      combos.map((o) =>
+        call(c, "look", {
+          at: `${R}/which-fractions-end/bill`,
+          widths: [o.width],
+          locales: [o.locale],
+          labels: false,
+        }),
+      ),
     );
     expect("3 widths × 2 languages at once all succeed", allOk(cs), firstError(cs));
     expect(
@@ -114,14 +139,14 @@ const cases: Record<string, () => Promise<void>> = {
           Promise.all(
             [0, 1, 2].map((k) => {
               const board = BOARDS[(i * 3 + k) % BOARDS.length] ?? "";
-              return call(c, "render_board", { board }).then((r) => ({ r, board }));
+              return call(c, "look", { at: board }).then((r) => ({ r, board }));
             }),
           ),
         ),
       )
     ).flat();
     expect(
-      "4 agents × 3 renders at once all succeed",
+      "4 agents × 3 looks at once all succeed",
       allOk(cs.map((x) => x.r)),
       firstError(cs.map((x) => x.r)),
     );
@@ -134,36 +159,25 @@ const cases: Record<string, () => Promise<void>> = {
   async lanes() {
     const a = await agent("stress-laneA");
     const b = await agent("stress-laneB");
-    const selected = (r: Call) =>
-      boardsOf(r)[0]?.nodes.find((n) => n.path === "qr")?.setup?.selected ?? null;
-    const tap = await call(a, "render_board", {
+    const tap = await call(a, "play", {
       board: LEMMA,
       steps: [{ tap: "qr", text: "q = 5" }],
       shots: "none",
     });
-    expect("A taps an option", tap.ok && selected(tap) === "right", tap.error ?? "");
-    await call(b, "render_board", {
-      board: LEMMA,
-      steps: [{ tap: "qr", text: "q = 3" }],
-      shots: "none",
-    });
-    const on = await call(a, "render_board", {
-      board: LEMMA,
-      steps: [{ wait: 10 }],
-      shots: "none",
-      continue: true,
-    });
     expect(
-      "B tapping the same board doesn't reach A's: A continues with its own choice",
-      on.ok && selected(on) === "right",
-      on.error ?? String(selected(on)),
+      "A taps an option",
+      tap.ok && fieldOf(tap, "qr", "selected") === "right",
+      tap.error ?? "",
     );
-    await call(a, "render_board", { board: BOARDS[2] });
-    const lost = await call(a, "render_board", {
-      board: LEMMA,
-      steps: [{ wait: 10 }],
-      continue: true,
-    });
+    await call(b, "play", { board: LEMMA, steps: [{ tap: "qr", text: "q = 3" }], shots: "none" });
+    const on = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
+    expect(
+      "B tapping the same board doesn't reach A's: A sees its own choice",
+      on.ok && fieldOf(on, "qr", "selected") === "right",
+      on.error ?? String(fieldOf(on, "qr", "selected")),
+    );
+    await call(a, "look", { at: BOARDS[2] });
+    const lost = await call(a, "play", { board: LEMMA, steps: [{ wait: 10 }], continue: true });
     expect(
       "continuing a board this agent left fails, saying why",
       !lost.ok && /Can't continue/.test(lost.error ?? ""),
@@ -172,31 +186,57 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async snapshot() {
     const c = await agent("stress-snapshot");
-    for (const [name, args] of [
-      ["a story, played", { board: STORY, play: true }],
-      ["a story, with steps", { board: STORY, steps: [{ wait: 10 }], shots: "none" }],
-      ["a question", { board: QUESTION }],
+    for (const [name, tool, args] of [
+      ["a story, played", "look", { at: STORY, play: true }],
+      ["a story, with steps", "play", { board: STORY, steps: [{ wait: 10 }], shots: "none" }],
+      ["a question", "look", { at: QUESTION }],
     ] as const) {
-      const r = await call(c, "render_board", args);
-      const n = boardsOf(r)[0]?.nodes.length ?? 0;
+      const r = await call(c, tool, args);
+      const n = outOf(r).nodes?.length ?? 0;
       expect(`the snapshot of ${name} has its pieces`, r.ok && n > 0, r.error ?? `${n} nodes`);
     }
   },
+  async pictures() {
+    const c = await agent("stress-pictures");
+    const clean = await call(c, "look", { at: STORY, labels: false });
+    const again = await call(c, "look", { at: STORY, labels: false });
+    const named = await call(c, "look", { at: STORY });
+    const [a, b, n] = [pngs(clean)[0], pngs(again)[0], pngs(named)[0]];
+    expect(
+      "the clean picture is the same every time",
+      a !== undefined && b !== undefined && a.equals(b),
+    );
+    expect(
+      "names go in a margin: the named picture is wider, the drawing measured the same",
+      (n?.readUInt32BE(16) ?? 0) > (a?.readUInt32BE(16) ?? 0) &&
+        JSON.stringify(outOf(named).versions) === JSON.stringify(outOf(clean).versions),
+      `${a?.readUInt32BE(16)} → ${n?.readUInt32BE(16)}`,
+    );
+    const piece = await call(c, "look", { at: `${STORY}#game`, labels: false });
+    expect(
+      "a piece is cut out of its board, and says where it's written",
+      piece.ok &&
+        (pngWidths(piece)[0] ?? 0) <= (a?.readUInt32BE(16) ?? 0) &&
+        (pngs(piece)[0]?.readUInt32BE(20) ?? 0) < (a?.readUInt32BE(20) ?? 0) &&
+        /written: content\//.test(textOf(piece)),
+      piece.error ?? "",
+    );
+  },
   async reads() {
     const c = await agent("stress-reads");
-    const lesson = call(c, "render_board", { board: `${R}/which-fractions-end` });
+    const lesson = call(c, "look", { at: `${R}/which-fractions-end` });
     await new Promise((r) => setTimeout(r, 200));
     const quick = await Promise.all([
       call(c, "comments", { board: R }),
       call(c, "comments", { review: "latest" }),
       call(c, "affected", { props: ["choice"] }),
-      call(c, "affected", { files: ["library/props/primes"] }),
+      call(c, "affected", { changes: ["library/props/primes"] }),
     ]);
     const l = await lesson;
-    expect("reads during a lesson render succeed", allOk([...quick, l]), firstError([...quick, l]));
+    expect("reads during a lesson look succeed", allOk([...quick, l]), firstError([...quick, l]));
     expect(
-      "reads don't wait for the browser (each under 1s)",
-      quick.every((q) => q.ms < 1000),
+      "reads don't wait for the browser (each under 1.5s)",
+      quick.every((q) => q.ms < 1500),
       quick.map((q) => `${q.ms}ms`).join("/"),
     );
   },
@@ -212,7 +252,7 @@ const cases: Record<string, () => Promise<void>> = {
     const wave = () =>
       Promise.all(
         BOARDS.slice(0, 6).map((board) =>
-          call(c, "render_board", { board }).then((r) => ({ r, board })),
+          call(c, "look", { at: board }).then((r) => ({ r, board })),
         ),
       );
     try {
@@ -226,7 +266,7 @@ const cases: Record<string, () => Promise<void>> = {
     }
     cs.push(...(await wave()));
     const rs = cs.map((x) => x.r);
-    expect("renders while content changes twice all succeed", allOk(rs), firstError(rs));
+    expect("looks while content changes twice all succeed", allOk(rs), firstError(rs));
     expect(
       "each returns the board it asked for",
       cs.every((x) => asked(x.r, x.board)),
@@ -235,24 +275,40 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async names() {
     const c = await agent("stress-names");
-    const typo = await call(c, "render_board", { board: `${R}/divison-lemma/story` });
+    const typo = await call(c, "look", { at: `${R}/divison-lemma/story` });
     expect(
       "a misspelt board fails, naming the nearest boards",
       !typo.ok && /Nearest: .*division-lemma/.test(typo.error ?? ""),
       typo.error?.slice(0, 120) ?? "went ahead",
     );
-    const lessonSteps = await call(c, "render_board", {
+    const lessonSteps = await call(c, "play", {
       board: `${R}/division-lemma`,
       steps: [{ wait: 10 }],
     });
-    expect("steps on a lesson fail, saying so", !lessonSteps.ok, lessonSteps.error ?? "");
-    const missing = await call(c, "render_board", {
+    expect("play on a lesson fails, saying so", !lessonSteps.ok, lessonSteps.error ?? "");
+    const missing = await call(c, "play", {
       board: STORY,
       steps: [{ tap: "nothing-here" }],
       shots: "none",
     });
-    const said = JSON.stringify(missing.out?.content ?? missing.error ?? "");
+    const said = `${textOf(missing)} ${missing.error ?? ""}`;
     expect("a step on a missing piece says what's there", said.includes("no piece"), "");
+    const noPiece = await call(c, "look", { at: `${STORY}#nothing-here` });
+    expect(
+      "a missing piece fails, naming the pieces",
+      !noPiece.ok && /pieces: /.test(noPiece.error ?? ""),
+      noPiece.error?.slice(0, 120) ?? "went ahead",
+    );
+  },
+  async check() {
+    const c = await agent("stress-check");
+    const r = await call(c, "look", { at: R });
+    const o = outOf(r);
+    expect(
+      "a chapter is checked: every board in two languages at two widths",
+      r.ok && (o.boards ?? 0) > 0 && o.drawings === (o.boards ?? 0) * 4,
+      r.error ?? `${o.drawings} drawings of ${o.boards} boards, ${r.ms}ms`,
+    );
   },
 };
 

@@ -56,7 +56,7 @@ import {
  * Book and chapter screens are the app's own; tapping a chapter or a lesson goes one level down.
  * `&play` plays it as the app does (play-in-app.tsx): the chapter's path, its lessons one board at
  * a time, results, from the board or lesson named. `&earned` keeps the boards side by side but
- * plays them as a student meets them (hidden pieces stay hidden until earned; render_board's
+ * plays them as a student meets them (hidden pieces stay hidden until earned; the chalk MCP's
  * steps); without either everything is shown. `&locale=hi` for Hindi. `&shot` drops the chrome (for screenshots).
  * Each piece carries `data-source="content/…/overview.ts:42"` (from build/sources.json), so an
  * editor's browser or an agent pointed at a piece knows the line; Alt-click opens it in the editor.
@@ -950,7 +950,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
   useLayoutEffect(() => {
     document.body.dataset.previewShown = search;
   }, [search]);
-  // The board model of every board on the page, for the chalk MCP's render_board: made from the
+  // The board model of every board on the page, for the chalk MCP's look and play: made from the
   // prop definitions and the running boards, with what's drawn and where each part's code is.
   useEffect(() => {
     stampCodePaths();
@@ -992,7 +992,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       w.__chalkModel = undefined;
     };
   }, []);
-  // What the app did, for a tool acting on the board (the chalk MCP's render_board steps): every
+  // What the app did, for a tool acting on the board (the chalk MCP's play): every
   // event the bus carries, and each board passed. Kept on window, recent ones only.
   useEffect(() => {
     const w = window as Window & { __chalkEvents?: unknown[] };

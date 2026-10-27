@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 /**
- * The board's snapshot as render_board returns it: its output schema, and what the preview's
+ * The board's snapshot as the page gives it: what the preview's
  * `__chalkModel` is read as (made by @chalk/player's snapshot.ts, in the page). The same snapshot
- * Jugnu and tests read; render_board only adds where things are written (file:line).
+ * Jugnu and tests read; look and play add where things are written (file:line).
  */
 const partSchema = z.object({
   path: z.string().describe("Its address: what steps, comments and Jugnu call it."),

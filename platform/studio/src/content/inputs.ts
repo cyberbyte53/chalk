@@ -6,7 +6,7 @@ import { join } from "node:path";
  * Everything a content build could read, as one hash: every file under content/, library/ and
  * platform/ (paths and bytes) and the repo's root files. A superset of what any build reads, so
  * when it is unchanged since the last good build, build/ is already what a build would write and
- * the build can be skipped (render_board does). Never cached between calls: a long-lived process
+ * the build can be skipped (look and play do). Never cached between calls: a long-lived process
  * (the MCP server) must see edits.
  */
 

@@ -22,8 +22,8 @@ import {
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
-import { type NodeShape, nodeSchema } from "./model-schema";
-import { DEFAULT_LANE, previewBase, previewUrl, shoot, withNothingDrawing } from "./preview";
+import { DEFAULT_LANE, previewBase, withNothingDrawing } from "./app-driver";
+import { type Answer, check, look, play, targetOf } from "./look";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
 
 /**
@@ -176,79 +176,6 @@ function threadLine(c: Filed): string {
   ].join("\n");
 }
 
-/** The package folder a prop type is defined in (library/props/<name>), from the catalogue. */
-function packageOfType(type: string): string | undefined {
-  const catalogue = join(root, "library", "catalogue.md");
-  if (!existsSync(catalogue)) return undefined;
-  let current: string | undefined;
-  for (const line of readFileSync(catalogue, "utf8").split("\n")) {
-    const section = /^## `([^`]+)`/.exec(line);
-    if (section) current = section[1];
-    if (current !== undefined && line.startsWith(`| \`${type}\``))
-      return `library/props/${current}`;
-  }
-  return undefined;
-}
-
-/** Files inside one prop package that `file` reaches by relative imports, it included. */
-function closureIn(dir: string, file: string, seen = new Set<string>()): Set<string> {
-  if (seen.has(file) || !existsSync(file)) return seen;
-  seen.add(file);
-  const code = readFileSync(file, "utf8");
-  for (const m of code.matchAll(/(?:from|import)\s*["'](\.{1,2}\/[^"']+)["']/g)) {
-    const spec = resolve(dirname(file), m[1] ?? "");
-    const next = [spec, `${spec}.ts`, `${spec}.tsx`, join(spec, "index.ts")].find(
-      (f) => existsSync(f) && statSync(f).isFile() && f.startsWith(dir),
-    );
-    if (next !== undefined) closureIn(dir, next, seen);
-  }
-  return seen;
-}
-
-/**
- * Where each of a prop's actions is written (file:line), from its package's source: the line that
- * keys it (`[NumberLineAction.ZoomIn]: on…(`, or `zoomIn: act(`), among the files its definition
- * reaches. An action written in more than one of them is left out: exact, or nothing.
- */
-const actionSitesCache = new Map<string, Map<string, string>>();
-function actionSites(type: string): Map<string, string> {
-  const cached = actionSitesCache.get(type);
-  if (cached !== undefined) return cached;
-  const out = new Map<string, string>();
-  actionSitesCache.set(type, out);
-  const pkg = packageOfType(type);
-  if (pkg === undefined) return out;
-  const src = join(root, pkg, "src");
-  if (!existsSync(src)) return out;
-  const files = readdirSync(src)
-    .filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))
-    .map((n) => join(src, n));
-  const defFile = files.find((f) =>
-    new RegExp(`\\btype:\\s*"${type}"`).test(readFileSync(f, "utf8")),
-  );
-  if (defFile === undefined) return out;
-  const reach = closureIn(src, defFile);
-  // Name maps (`export const XAction = { ZoomIn: "zoomIn" }`) in the package, to read keys.
-  const names = new Map<string, string>();
-  for (const f of files)
-    for (const m of readFileSync(f, "utf8").matchAll(/export const (\w+) = \{([^}]*)\}/g))
-      for (const e of (m[2] ?? "").matchAll(/(\w+):\s*"([^"]+)"/g))
-        names.set(`${m[1]}.${e[1]}`, e[2] ?? "");
-  const found = new Map<string, string[]>();
-  for (const f of reach) {
-    readFileSync(f, "utf8")
-      .split("\n")
-      .forEach((line, i) => {
-        const m = /^\s*(?:\[(\w+\.\w+)\]|(\w+)):\s*(?:act|on\w*)\(\{?\s*$/.exec(line);
-        const action = m === null ? undefined : m[1] !== undefined ? names.get(m[1]) : m[2];
-        if (action !== undefined)
-          found.set(action, [...(found.get(action) ?? []), `${relative(root, f)}:${i + 1}`]);
-      });
-  }
-  for (const [action, sites] of found) if (sites.length === 1) out.set(action, sites[0] as string);
-  return out;
-}
-
 /** Who is calling: an agent's role (fixer, reviewer) and its name in threads. */
 export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string };
 
@@ -259,7 +186,7 @@ export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string
  */
 /**
  * The tools for one connection. `lane` is the connection's own page for drawing boards
- * (preview.ts): its `continue` goes on from its own last board, and connections draw at once.
+ * (app-driver.ts): its `continue` goes on from its own last board, and connections draw at once.
  */
 export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const server = createServer();
@@ -271,8 +198,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
    * sees; the writer still checks every call.
    */
   const SEES: Readonly<Record<Who["role"], readonly string[]>> = {
-    [Role.Fixer]: ["render_board", "affected", "comments", "comment"],
-    [Role.Reviewer]: ["render_board", "affected", "comments", "comment"],
+    [Role.Fixer]: ["look", "play", "affected", "comments", "comment"],
+    [Role.Reviewer]: ["look", "play", "affected", "comments", "comment"],
   };
   const MY_MOVES = [...new Set(MOVES[ROLE].map((m) => m.to))] as Status[];
   const MY_LABELS = ACTS[ROLE].starts;
@@ -288,7 +215,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "What a change reaches",
         description:
-          'Every piece a change can make look or behave differently, down to `book/chapter/lesson/page#piece`, worked out from what the build recorded (every line of the author\'s code each piece was made through) and from who uses what in the code; nothing declared by hand. Ask before changing shared code, with what you plan to touch: `changes` takes files ("library/props/basics/src/views.tsx"), lines ("content/…/overview.ts:40-52") or one declaration ("content/…/kit.ts#sweetsQuestion", "library/props/basics/src/views.tsx#MultiChoiceView"); `props` takes prop types. After changing, `diff: true` reads what git says changed (since HEAD, or `diff: "<ref>"`). `depth` rolls it up: book, chapter (default), lesson, board or piece; `under` keeps to one branch ("class10-maths/real-numbers"). Then render_board what it lists.',
+          'Every piece a change can make look or behave differently, down to `book/chapter/lesson/page#piece`, worked out from what the build recorded (every line of the author\'s code each piece was made through) and from who uses what in the code; nothing declared by hand. Ask before changing shared code, with what you plan to touch: `changes` takes files ("library/props/basics/src/views.tsx"), lines ("content/…/overview.ts:40-52") or one declaration ("content/…/kit.ts#sweetsQuestion", "library/props/basics/src/views.tsx#MultiChoiceView"); `props` takes prop types. After changing, `diff: true` reads what git says changed (since HEAD, or `diff: "<ref>"`). `depth` rolls it up: book, chapter (default), lesson, board or piece; `under` keeps to one branch ("class10-maths/real-numbers"). Then look at what it lists.',
         inputSchema: {
           changes: z
             .array(z.string())
@@ -343,264 +270,147 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     z.object({ wait: z.number().int().min(0).max(10000).describe("Milliseconds.") }).strict(),
   ]);
 
-  const renderOutput = {
-    boards: z.array(
-      z.object({
-        board: z.string(),
-        source: z.string().optional(),
-        isPassed: z.boolean().optional(),
-        openQuestion: z.string().optional(),
-        nodes: z.array(nodeSchema),
-        layoutProblems: z.array(z.string()),
-        pageErrors: z.array(z.string()),
-      }),
-    ),
-    steps: z.array(
-      z.object({
-        step: z.string(),
-        passed: z.boolean(),
-        events: z.array(z.string()),
-        changed: z.record(z.object({ was: z.unknown(), now: z.unknown() })),
-        errors: z.array(z.string()),
-      }),
-    ),
-    openAt: z.string(),
+  /** Rebuilds content first when anything changed, never while a board is being drawn. */
+  const rebuildIfChanged = async (extra: Extra): Promise<string[]> => {
+    if (isBuildCurrent(root)) return [];
+    await progressOf(extra)("building content");
+    // Once for calls that ask together: the check is made again when it's this call's turn.
+    const built = await withNothingDrawing(() =>
+      isBuildCurrent(root) ? Promise.resolve(undefined) : buildContent(extra.signal),
+    );
+    if (built === undefined || built.code === 0) return [];
+    return [
+      `build-content failed:\n${built.out
+        .split("\n")
+        .filter((l) => l.includes("✗") || l.startsWith("    "))
+        .join("\n")}`,
+    ];
   };
 
-  /** A value in a line of text: short JSON, words in English only. */
-  const brief = (v: unknown) => {
-    const english = (x: unknown): unknown =>
-      Array.isArray(x)
-        ? x.map(english)
-        : x !== null && typeof x === "object"
-          ? "en" in x && typeof (x as { en: unknown }).en === "string"
-            ? (x as { en: string }).en
-            : Object.fromEntries(Object.entries(x).map(([k, y]) => [k, english(y)]))
-          : x;
-    const t = JSON.stringify(english(v));
-    return t === undefined ? "—" : t.length > 120 ? `${t.slice(0, 117)}…` : t;
-  };
+  const answer = (a: Answer, notes: readonly string[]) => ({
+    content: [
+      text([a.text, ...notes].join("\n")),
+      ...(a.image === undefined
+        ? []
+        : [{ type: "image" as const, data: a.image.toString("base64"), mimeType: "image/png" }]),
+    ],
+    structuredContent: a.structured,
+  });
 
-  /** The snapshot of one board, as readable lines (the structured result has all of it). */
-  function modelText(nodes: readonly NodeShape[], indent = ""): string[] {
-    const out: string[] = [];
-    for (const p of nodes) {
-      out.push(
-        `${indent}${p.path} (${p.prop})${p.source ? ` → ${p.source}` : ""}${p.isShown ? "" : " [hidden]"}`,
-        `${indent}  ${p.summary}`,
-      );
-      const fields = (r: Record<string, unknown>) =>
-        Object.entries(r)
-          .map(([k, v]) => `${k} ${brief(v)}`)
-          .join(" · ");
-      if (Object.keys(p.setup).length > 0) out.push(`${indent}  setup: ${fields(p.setup)}`);
-      if (Object.keys(p.live).length > 0) out.push(`${indent}  live: ${fields(p.live)}`);
-      for (const [field, b] of Object.entries(p.bound))
-        out.push(`${indent}  bound: ${field} ${brief(b.value)} ← ${b.from.join(", ") || "?"}`);
-      // A prop without its own description lists its fields as parts: already shown above.
-      const own = (path: string) => path.slice(p.path.length + 1);
-      const isFieldsOnly = p.parts.every(
-        (e) => own(e.path) in p.setup || own(e.path) in p.live || own(e.path) === "canCheck",
-      );
-      for (const e of isFieldsOnly ? [] : p.parts)
-        out.push(
-          `${indent}  • ${e.path}${e.value !== undefined ? ` = ${brief(e.value)}` : ""}${e.words !== undefined ? ` “${e.words}”` : ""}${e.does !== undefined ? ` → ${[e.does].flat().join(", ")}` : ""}${e.drawnAt ? `  (${e.drawnAt})` : ""}`,
-        );
-      for (const c of p.can)
-        out.push(
-          `${indent}  can: ${c.action} ${brief(c.takes)} (${c.who.join(", ")})${c.via.length > 0 ? ` via ${c.via.join(", ")}` : ""}${c.routed ? " [routed]" : ""}${c.codeAt ? `  (${c.codeAt})` : ""}`,
-        );
-      if (p.noControlNow?.length)
-        out.push(`${indent}  no control now: ${p.noControlNow.join(", ")}`);
-      if (p.hidden !== undefined) out.push(`${indent}  hidden: ${brief(p.hidden)}`);
-      for (const problem of p.problems) out.push(`${indent}  ⚠ ${problem}`);
-      if (p.children !== undefined) out.push(...modelText(p.children, `${indent}  `));
-    }
-    return out;
-  }
-
-  /** Adds where each action is written (file:line) to a node and its children. */
-  function withSites(node: NodeShape): NodeShape {
-    const sites = actionSites(node.prop);
-    return {
-      ...node,
-      parts: node.parts.map((e) => (Array.isArray(e.does) ? { ...e, does: [...e.does] } : e)),
-      can: node.can.map((c) => (sites.has(c.action) ? { ...c, codeAt: sites.get(c.action) } : c)),
-      ...(node.children !== undefined ? { children: node.children.map(withSites) } : {}),
-    };
-  }
+  const locales = z
+    .array(z.enum(["en", "hi"]))
+    .min(1)
+    .max(2);
+  const widths = z.array(z.number().int().min(320).max(640)).min(1).max(3);
 
   offer(
     server.registerTool(
-      "render_board",
+      "look",
       {
-        title: "See (and use) boards",
+        title: "Look at boards",
         description:
-          "See boards exactly as a phone draws them (the app's own player, 390px wide), and use them the way a student does. `board` is a board name (its path, e.g. class10-maths/real-numbers/division-lemma/story) or a lesson for all its pages. Returns a PNG per board and its snapshot (structured; the same one Jugnu and tests read): every node by address (a placed prop and, inside a group, its children) with where it's placed (file:line), setup (fixed where placed), live values (what can change here) and bound values (worked out from others, with where from), each part on screen with its typed value, the words the screen shows, what it does and where it's drawn (file:line), what can be done to it (who: learner or lesson, the controls that reach it, routed or not, with limits and the action's file:line), and problems (drawn but not described, or the reverse); plus layout problems found by measuring and page errors. With `steps` (one board): taps and drags on the real page, in order (targets are addresses: piece/element id, e.g. machine/plane/handle), starting from a fresh board (`continue: true` keeps this connection's last board as it was left; each connection draws on its own page, so agents can render at the same time); after each, the live values that changed, the events the app recorded, whether the board was passed, and a picture (`shots`: last, each or none). The app's own player decides what happens; nothing is simulated. Rebuilds content first if anything changed. Use it after every content or prop change, and before saying something looks or works right.",
+          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`<board>#game`, `<board>#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A board (`class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi at 360 and 640 by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `widths` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
         inputSchema: {
-          board: z.string().min(1).describe("A board (its path) or a lesson."),
-          steps: z.array(step).max(40).optional().describe("What a finger does, in order."),
-          shots: z
-            .enum(["last", "each", "none"])
+          at: z
+            .string()
+            .min(1)
+            .describe(
+              "A piece (<board>#piece or #piece/part), a board, a lesson, a chapter or a book.",
+            ),
+          locales: locales
             .optional()
-            .describe("With steps: a picture after the last step (default), after each, or none."),
-          continue: z
-            .boolean()
+            .describe('Languages, side by side: ["en", "hi"]. Default en.'),
+          widths: widths
             .optional()
-            .describe("With steps: go on from the board as this connection last left it."),
-          locale: z.enum(["en", "hi"]).optional(),
+            .describe(
+              "Column widths in px, side by side: 360 small phone, 390 phone (default), 640 tablet or laptop.",
+            ),
           play: z
             .boolean()
             .optional()
-            .describe(
-              "Hidden pieces stay hidden until earned, as a student meets them. Default: true with steps, false without.",
-            ),
-          questions: z.boolean().optional().describe("For a lesson: its questions too."),
+            .describe("As a student meets it: pieces not earned yet hidden."),
+          continue: z.boolean().optional().describe("The board as your last `play` left it."),
+          labels: z
+            .boolean()
+            .optional()
+            .describe("Name the pieces (or parts) on the picture. Default true."),
+        },
+        // Rebuilding writes build/, which is generated: nothing the person wrote changes.
+        annotations: { readOnlyHint: true, openWorldHint: false },
+      },
+      async (args, extra: Extra) => {
+        const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
+        const all = listBoards(root);
+        const target = targetOf(boardName(args.at), all);
+        if (target === undefined)
+          throw new Error(
+            unknownBoard(boardName(args.at).split("#")[0] ?? "") ??
+              `Nothing built at "${args.at}".`,
+          );
+        const where = { sources: readSources(root) };
+        if (target.kind === "many") {
+          if (args.continue === true) throw new Error("continue looks at one board.");
+          const a = await check(root, target, args, lane, progressOf(extra), extra.signal);
+          return answer(a, notes);
+        }
+        await progressOf(extra)("drawing");
+        return answer(await look(root, target, args, where, lane), notes);
+      },
+    ),
+    "look",
+  );
+
+  offer(
+    server.registerTool(
+      "play",
+      {
+        title: "Play a board",
+        description:
+          'Use a board the way a student does, in the real learner app: taps and drags on the page, in order (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, every value that changed (was → now, in full), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
+        inputSchema: {
+          board: z.string().min(1).describe("A board (its path)."),
+          steps: z.array(step).min(1).max(40).describe("What a finger does, in order."),
+          continue: z
+            .boolean()
+            .optional()
+            .describe("Go on from where your last call left this board."),
+          shots: z
+            .enum(["last", "each", "none"])
+            .optional()
+            .describe("Before | after (default), every step, or none."),
+          full: z
+            .boolean()
+            .optional()
+            .describe("Whole boards in the picture, not cut to what changed."),
+          locale: z.enum(["en", "hi"]).optional(),
           width: z
             .number()
             .int()
             .min(320)
             .max(640)
             .optional()
-            .describe(
-              "The column's width in px: 390 (a phone) by default; 360 a small phone, 640 a tablet or laptop.",
-            ),
-          rebuild: z
-            .boolean()
-            .optional()
-            .describe("Rebuild content first if it changed (default true)."),
+            .describe("Column width in px (default 390)."),
+          labels: z.boolean().optional().describe("Name the pieces on the picture. Default true."),
         },
-        outputSchema: renderOutput,
-        // Rebuilding writes build/, which is generated: nothing the person wrote changes.
         annotations: { readOnlyHint: true, openWorldHint: false },
       },
       async (args, extra: Extra) => {
-        const progress = progressOf(extra);
+        const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
         const board = boardName(args.board);
-        const notes: string[] = [];
-        // Skipped when build/ is already the last good build of exactly what is on disk. Never
-        // while a board is being drawn (the dev server reloads pages when build/ changes), and
-        // once for calls that ask together: the check is made again when it's this call's turn.
-        if (args.rebuild !== false && args.continue !== true && !isBuildCurrent(root)) {
-          await progress("building content");
-          const built = await withNothingDrawing(() =>
-            isBuildCurrent(root) ? Promise.resolve(undefined) : buildContent(extra.signal),
+        const all = listBoards(root);
+        if (!all.some((b) => b.board === board)) {
+          const target = targetOf(board, all);
+          throw new Error(
+            target !== undefined
+              ? "Steps act on one board: name a board, not a lesson, chapter or piece."
+              : (unknownBoard(board) ?? `No board "${board}".`),
           );
-          if (built !== undefined && built.code !== 0)
-            notes.push(
-              `build-content failed:\n${built.out
-                .split("\n")
-                .filter((l) => l.includes("✗") || l.startsWith("    "))
-                .join("\n")}`,
-            );
         }
-        const unknown = unknownBoard(board);
-        if (unknown !== undefined) throw new Error(unknown);
-        const steps = args.steps ?? [];
-        const options = {
-          locale: args.locale ?? ("en" as const),
-          play: args.play ?? steps.length > 0,
-          questions: args.questions === true,
-          ...(args.width !== undefined ? { width: args.width } : {}),
-        };
-        await progress(steps.length > 0 ? "acting" : "drawing");
-        const drawn = await shoot(
-          root,
-          board,
-          options,
-          steps.length > 0
-            ? { steps, shots: args.shots ?? "last", isContinued: args.continue === true }
-            : undefined,
-          lane,
-        );
-        const sources = readSources(root);
-        const out: Content[] = [];
-        const image = (png: Buffer): Content => ({
-          type: "image",
-          data: png.toString("base64"),
-          mimeType: "image/png",
-        });
-        const boards: z.infer<typeof renderOutput.boards> = [];
-        for (const s of drawn.shots) {
-          const where = sources[s.board];
-          const nodes = (s.model?.nodes ?? []).map((p) => ({
-            ...withSites(p),
-            ...(where?.pieces[p.path] !== undefined ? { source: where.pieces[p.path] } : {}),
-          }));
-          boards.push({
-            board: s.board,
-            ...(where?.board !== undefined ? { source: where.board } : {}),
-            ...(s.model !== undefined
-              ? {
-                  isPassed: s.model.isPassed,
-                  ...(s.model.openQuestion !== undefined
-                    ? { openQuestion: s.model.openQuestion }
-                    : {}),
-                }
-              : {}),
-            nodes,
-            layoutProblems: s.overflow,
-            pageErrors: s.errors,
-          });
-        }
-        for (const [i, b] of boards.entries()) {
-          if (i >= 10) break;
-          out.push(
-            text(
-              [
-                `## ${b.board}`,
-                `board → ${b.source ?? "?"}`,
-                ...(b.nodes.length > 0
-                  ? modelText(b.nodes)
-                  : ["(no board model: is the dev preview up to date?)"]),
-                b.layoutProblems.length > 0
-                  ? `Layout problems:\n${b.layoutProblems.join("\n")}`
-                  : "Layout problems: none",
-                ...(b.pageErrors.length > 0 ? [`Page errors:\n${b.pageErrors.join("\n")}`] : []),
-              ].join("\n"),
-            ),
-          );
-          const png = drawn.shots[i]?.png;
-          if (png !== undefined && png.length > 0) out.push(image(png));
-        }
-        const stepsDone = drawn.steps.map((r) => ({
-          step: r.step,
-          passed: r.passed,
-          events: r.events,
-          changed: r.changed ?? {},
-          errors: r.errors,
-        }));
-        for (const [i, r] of drawn.steps.entries()) {
-          out.push(
-            text(
-              [
-                `${i + 1}. ${r.step}${r.passed ? "  ✓ board passed" : ""}`,
-                ...Object.entries(r.changed ?? {}).map(
-                  ([k, v]) => `   ${k}: ${brief(v.was)} → ${brief(v.now)}`,
-                ),
-                ...r.events.map((e) => `   event: ${e}`),
-                ...(r.events.length === 0 &&
-                Object.keys(r.changed ?? {}).length === 0 &&
-                r.errors.length === 0
-                  ? ["   (nothing changed)"]
-                  : []),
-                ...r.errors.map((e) => `   ${e}`),
-              ].join("\n"),
-            ),
-          );
-          if (r.png !== undefined) out.push(image(r.png));
-        }
-        if (drawn.shots.length > 10)
-          notes.push(`${drawn.shots.length - 10} more boards not shown; render them one by one.`);
-        const openAt = await previewUrl(root, board, options);
-        notes.push(`Open it yourself: ${openAt}`);
-        return {
-          content: [...out, text(notes.join("\n"))],
-          structuredContent: { boards, steps: stepsDone, openAt },
-        };
+        await progressOf(extra)("playing");
+        return answer(await play(root, { ...args, board }, lane), notes);
       },
     ),
-    "render_board",
+    "play",
   );
 
   offer(
