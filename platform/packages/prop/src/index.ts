@@ -2,7 +2,6 @@ export { SEP, joinPath, namesOf, pathOf, segment } from "./address";
 export {
   changesBetween,
   nodeAt,
-  partsUnder,
   type Change,
   type BoardSnapshot,
   type BoundSnapshot,

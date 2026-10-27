@@ -1,9 +1,8 @@
 /**
- * The board as agents read it: one snapshot, the same for the chalk MCP's look and play, Jugnu and tests. A tree of
- * nodes by address (a placed prop, and inside a group its children), each with what was fixed where
- * it was placed (setup), what can change here (live), what is worked out from other values
- * (bound, with where from), what is on screen (parts), and what can be done to it (can). Made from
- * the definitions and the running board; nothing is written by hand. The types live here so every
+ * The board as agents read it: one snapshot, the same for the chalk MCP's look and play, Jugnu and
+ * tests. Each placed prop by address, with what was fixed where it was placed (setup), what can
+ * change here (live), what is worked out from other values (bound, with where from), what is on
+ * screen (parts, read from what its view draws), and what can be done to it (can). The types live here so every
  * package can read a snapshot; the player makes them.
  */
 
@@ -12,8 +11,14 @@ export type PartSnapshot = {
   path: string;
   value?: unknown;
   words?: string;
-  /** For a control: the action(s) touching it does, on its node. */
+  /** For an input that's on: the action(s) touching it does, on its node. */
   does?: string | readonly string[];
+  /** For an input that does an action with fixed arguments: those arguments. */
+  args?: Readonly<Record<string, unknown>>;
+  /** For an input whose own handler works out the arguments when it's used. */
+  isByHand?: true;
+  /** For an input: drawn, but turned off now. */
+  isOff?: true;
   /** Where its drawing is written: file:line (in the dev preview). */
   drawnAt?: string;
 };
@@ -25,10 +30,8 @@ export type CanSnapshot = {
   takes: unknown;
   /** Who does it here: the learner (a control on screen), the lesson (its rules), or both. */
   who: readonly ("learner" | "lesson")[];
-  /** The controls that reach it, by address. */
+  /** The inputs that reach it, by address. */
   via: readonly string[];
-  /** It doesn't run as itself: the group it is in turns it into its own change (a route). */
-  routed?: true;
 };
 
 /** A field worked out from other values: its value now, and what it is worked out from. */
@@ -51,8 +54,6 @@ export type NodeSnapshot = {
   can: readonly CanSnapshot[];
   /** What it knows that the screen doesn't show. */
   hidden?: Readonly<Record<string, unknown>>;
-  /** Inside a group: its children, in drawing order. */
-  children?: readonly NodeSnapshot[];
   /** The learner's actions no control on screen offers right now. */
   noControlNow?: readonly string[];
   /** Where the description and the screen disagree, and other gaps. */
@@ -67,21 +68,9 @@ export type BoardSnapshot = {
   nodes: readonly NodeSnapshot[];
 };
 
-/** Every part under a node (its own and its children's), in drawing order. */
-export function partsUnder(node: NodeSnapshot): PartSnapshot[] {
-  return [...node.parts, ...(node.children ?? []).flatMap((c) => (c.isShown ? partsUnder(c) : []))];
-}
-
-/** A node by address, anywhere in the snapshot. */
+/** A node by address. */
 export function nodeAt(snapshot: BoardSnapshot, path: string): NodeSnapshot | undefined {
-  const walk = (nodes: readonly NodeSnapshot[]): NodeSnapshot | undefined => {
-    for (const n of nodes) {
-      if (n.path === path) return n;
-      if (path.startsWith(`${n.path}/`)) return walk(n.children ?? []);
-    }
-    return undefined;
-  };
-  return walk(snapshot.nodes);
+  return snapshot.nodes.find((n) => n.path === path);
 }
 
 /** One value that moved, by address ("lens/imageArrow.tip"). */
@@ -89,9 +78,7 @@ export type Change = { path: string; was: unknown; now: unknown };
 
 /** Every value that moved between two snapshots (setup, live or bound), and nodes shown or hidden. */
 export function changesBetween(was: BoardSnapshot, now: BoardSnapshot): Change[] {
-  const flat = (nodes: readonly NodeSnapshot[]): NodeSnapshot[] =>
-    nodes.flatMap((n) => [n, ...flat(n.children ?? [])]);
-  const before = new Map(flat(was.nodes).map((n) => [n.path, n]));
+  const before = new Map(was.nodes.map((n) => [n.path, n]));
   const valueIn = (n: NodeSnapshot | undefined, field: string) =>
     n === undefined
       ? undefined
@@ -101,7 +88,7 @@ export function changesBetween(was: BoardSnapshot, now: BoardSnapshot): Change[]
           ? n.bound[field]?.value
           : n.setup[field];
   const out: Change[] = [];
-  for (const node of flat(now.nodes)) {
+  for (const node of now.nodes) {
     const old = before.get(node.path);
     // Setup too: a value described as fixed that moved is a change all the same (and a sign the
     // prop doesn't say which control does it).

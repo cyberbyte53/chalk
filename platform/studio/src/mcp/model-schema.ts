@@ -10,6 +10,9 @@ const partSchema = z.object({
   value: z.unknown().optional(),
   words: z.string().optional().describe("How the screen writes it."),
   does: z.union([z.string(), z.array(z.string())]).optional(),
+  args: z.record(z.unknown()).optional().describe("What the input sends when pressed."),
+  isByHand: z.literal(true).optional().describe("The input works out what it sends when used."),
+  isOff: z.literal(true).optional().describe("The input is drawn, but off now."),
   drawnAt: z.string().optional().describe("file:line of its drawing."),
 });
 
@@ -18,7 +21,6 @@ const canSchema = z.object({
   takes: z.unknown(),
   who: z.array(z.enum(["learner", "lesson"])),
   via: z.array(z.string()).describe("The controls that reach it, by address."),
-  routed: z.literal(true).optional().describe("Its group turns it into its own change."),
   codeAt: z.string().optional().describe("file:line of the action."),
 });
 
@@ -34,7 +36,6 @@ export type NodeShape = {
   parts: z.infer<typeof partSchema>[];
   can: z.infer<typeof canSchema>[];
   hidden?: Record<string, unknown>;
-  children?: NodeShape[];
   noControlNow?: string[];
   problems: string[];
 };

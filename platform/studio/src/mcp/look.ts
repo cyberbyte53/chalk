@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
 import { FactsCache } from "../reach/facts";
 import {
@@ -232,11 +233,6 @@ const block = (head: string, lines: readonly string[]) =>
 
 type Where = { sources: Record<string, { board?: string; pieces: Record<string, string> }> };
 
-/** Every node of a board, groups' children after their group. */
-function flat(nodes: readonly NodeShape[]): NodeShape[] {
-  return nodes.flatMap((n) => [n, ...flat(n.children ?? [])]);
-}
-
 /** One version's heading: "ok · 390 · en" or "2 problems · 360 · hi". */
 const versionWords = (shot: Shot, o: { width: number; locale: Locale; play?: boolean }) =>
   `${shot.overflow.length === 0 ? "ok" : `${shot.overflow.length} problem${shot.overflow.length === 1 ? "" : "s"}`} · ${o.width} · ${o.locale}${o.play ? " · played" : ""}`;
@@ -249,7 +245,7 @@ export function boardText(
   extra: { errors: readonly string[] },
 ): string {
   const site = where.sources[shot.board];
-  const nodes = flat(shot.model?.nodes ?? []);
+  const nodes = shot.model?.nodes ?? [];
   const width = Math.max(6, ...nodes.map((n) => n.path.length + 2));
   const typeWidth = Math.max(6, ...nodes.map((n) => n.prop.length + 2));
   const out = [
@@ -285,9 +281,9 @@ export function pieceText(
   versions: string,
 ): string {
   const pieceName = address.split("/")[0] ?? address;
-  const node = flat(shot.model?.nodes ?? []).find((n) => n.path === pieceName);
+  const node = (shot.model?.nodes ?? []).find((n) => n.path === pieceName);
   if (node === undefined) {
-    const names = flat(shot.model?.nodes ?? []).map((n) => n.path);
+    const names = (shot.model?.nodes ?? []).map((n) => n.path);
     throw new Error(
       `No piece "${pieceName}" on ${shot.board} (pieces: ${names.join(", ") || "none described"}).`,
     );
@@ -328,29 +324,28 @@ export function pieceText(
         ? ` takes ${full(c.takes)}`
         : "";
     const at = c.codeAt ?? sites.get(c.action);
-    return `${c.action}  (${c.who.join(", ")}${c.via.length > 0 ? `, via ${c.via.join(", ")}` : ""})${c.routed ? " routed by its group" : ""}${takes}${at ? `  → ${at}` : ""}`;
+    return `${c.action}  (${c.who.join(", ")}${c.via.length > 0 ? `, via ${c.via.join(", ")}` : ""})${takes}${at ? `  → ${at}` : ""}`;
   });
   if (node.noControlNow?.length) can.push(`not reachable now: ${node.noControlNow.join(", ")}`);
   if (can.length > 0) out.push("", ...block("can:", can));
-  // Parts, grouped by where they're drawn. A prop with no drawing of its own lists its fields as
-  // parts: those are its setup and state, already above.
-  const own = (path: string) => path.slice(pieceName.length + 1);
-  const isFieldsOnly = node.parts.every(
-    (p) => own(p.path) in node.setup || own(p.path) in node.live || own(p.path) === "canCheck",
-  );
-  const drawn = new Map<string, string[]>();
-  for (const p of isFieldsOnly ? [] : node.parts) {
-    const at = p.drawnAt ?? "?";
-    drawn.set(at, [...(drawn.get(at) ?? []), p.path.slice(pieceName.length + 1) || p.path]);
-  }
-  if (drawn.size > 0)
-    out.push(
-      "",
-      ...block(
-        "parts:",
-        [...drawn].map(([at, names]) => `${names.join(", ")} → ${at}`),
-      ),
-    );
+  // Parts, as the view draws them: what each shows or does, and where it's drawn.
+  const partLine = (p: PartSnapshot): string => {
+    const name = p.path.slice(pieceName.length + 1) || p.path;
+    const shown =
+      p.words !== undefined
+        ? ` shows "${p.words}"`
+        : p.value !== undefined
+          ? ` shows ${JSON.stringify(p.value)}`
+          : "";
+    const does =
+      p.does !== undefined
+        ? ` does ${[p.does].flat().join(", ")}${p.args !== undefined ? ` ${JSON.stringify(p.args)}` : ""}${p.isByHand ? " (its own values)" : ""}`
+        : p.isOff
+          ? " (off now)"
+          : "";
+    return `${name}${shown}${does}${p.drawnAt !== undefined ? `  → ${p.drawnAt}` : ""}`;
+  };
+  if (node.parts.length > 0) out.push("", ...block("parts:", node.parts.map(partLine)));
   const mine = shot.overflow.filter((p) => p.startsWith(`${pieceName} (`));
   if (mine.length > 0 || node.problems.length > 0)
     out.push("", ...block("problems:", [...mine, ...node.problems]));

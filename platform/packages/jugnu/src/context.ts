@@ -1,11 +1,4 @@
-import {
-  type BoardSnapshot,
-  type PartSnapshot,
-  PropRole,
-  SAY,
-  partsUnder,
-  segment,
-} from "@chalk/prop";
+import { type BoardSnapshot, type PartSnapshot, PropRole, SAY, segment } from "@chalk/prop";
 import type { JugnuBoard, JugnuPlace } from "./board";
 
 const LANGUAGE: Record<JugnuPlace["locale"], string> = {
@@ -139,7 +132,7 @@ export function partsNow(
 ): (PartSnapshot & { id: string })[] {
   const node = snapshot.nodes.find((n) => n.path === segment(name));
   if (node === undefined) return [];
-  return partsUnder(node).map((p) => ({ ...p, id: p.path.slice(node.path.length + 1) }));
+  return node.parts.map((p) => ({ ...p, id: p.path.slice(node.path.length + 1) }));
 }
 
 /**
@@ -157,7 +150,7 @@ export function propNow(
   const node = snapshot.nodes.find((n) => n.path === segment(name));
   if (node === undefined) throw new Error(`no prop "${name}" on the board`);
   const elements: Record<string, unknown> = {};
-  for (const part of partsUnder(node))
+  for (const part of node.parts)
     elements[part.path.slice(node.path.length + 1)] = shown(part, locale);
   if (def.role === PropRole.Question) withoutNotes(elements);
   return {
