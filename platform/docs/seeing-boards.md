@@ -4,7 +4,7 @@ Two chalk MCP tools show agents boards as the student's phone draws them. They d
 
 ## The rule
 
-Return what only the running board knows. Point at the code for what the code says. Never shorten anything.
+Return what only the running board knows. Point at the code for what the code says. Never shorten anything. The answer is the text (and a picture): no second copy as data, which a client may show instead of the text.
 
 | Kind | Lives in | In the answer |
 |---|---|---|
@@ -30,7 +30,7 @@ Each thing appears once. Values are written in full, strings quoted as written.
 
 ## `play`: what happens when a student uses it
 
-Taps and drags on the real page, in order, by address (`game/giveRound`; `qr` with `text: "q = 5"` for the option saying it). One line per step: what it set off, every value that changed (was → now), signals, "board passed", errors. Then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for whole boards, `shots: "each"` for a strip of every step).
+Taps and drags on the real page, in order, by address (`game/giveRound`; `qr` with `text: "q = 5"` for the option saying it). One line per step: what it set off, everything the student sees that changed (each part was → now, `+` appeared, `−` gone, an input off → on, and what a prop knows but doesn't show), signals, "board passed", errors. Then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for whole boards, `shots: "each"` for a strip of every step).
 
 `continue: true` goes on from where this agent's last call left the board. If that board isn't there (another board since, content rebuilt), it fails and says why; it never starts fresh as if it had worked.
 

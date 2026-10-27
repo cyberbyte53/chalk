@@ -98,7 +98,7 @@ export function takes(schema: ZodTypeAny): unknown {
   }
 }
 
-/** The actions a part does, when it's an input that's on. */
+/** The actions a part does, when it's an input (on now or not). */
 function controlActions(e: SeenElement): readonly string[] {
   return e.does === undefined ? [] : typeof e.does === "string" ? [e.does] : e.does;
 }
@@ -131,11 +131,16 @@ function nodeOf(
   const fields = Object.keys(def.defaults);
 
   // Its parts, as its view draws them, and which inputs do each action.
+  // An input that's off now is drawn all the same: what it does is live on this board, though
+  // nothing reaches it until it's on.
   const fromControls = new Map<string, string[]>();
+  const drawnActions = new Set<string>();
   const parts: PartSnapshot[] = seen.elements.map((e) => {
     const at = `${path}/${segment(e.id)}`;
-    for (const action of controlActions(e))
-      fromControls.set(action, [...(fromControls.get(action) ?? []), at]);
+    for (const action of controlActions(e)) {
+      drawnActions.add(action);
+      if (e.isOff !== true) fromControls.set(action, [...(fromControls.get(action) ?? []), at]);
+    }
     const { id: _id, ...rest } = e;
     const drawnAt =
       c.page === undefined ? undefined : findNode(c.page, at)?.getAttribute("data-code");
@@ -146,7 +151,8 @@ function nodeOf(
   // changes), a question's own bookkeeping.
   const live = new Set<string>();
   const reachable = new Set([...fromControls.keys(), ...c.rules]);
-  for (const action of reachable) for (const f of def.actions[action]?.changes ?? []) live.add(f);
+  for (const action of [...reachable, ...drawnActions])
+    for (const f of def.actions[action]?.changes ?? []) live.add(f);
   if (def.role === PropRole.Question)
     for (const f of ["status", "attempts", "feedback"]) live.add(f);
 

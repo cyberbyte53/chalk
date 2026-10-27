@@ -294,7 +294,6 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         ? []
         : [{ type: "image" as const, data: a.image.toString("base64"), mimeType: "image/png" }]),
     ],
-    structuredContent: a.structured,
   });
 
   const locales = z
@@ -366,7 +365,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Play a board",
         description:
-          'Use a board the way a student does, in the real learner app: taps and drags on the page, in order (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, every value that changed (was → now, in full), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
+          'Use a board the way a student does, in the real learner app: taps and drags on the page, in order (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, everything the student sees that changed (each part was → now in full, + appeared, − gone, an input off → on, and hidden facts), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
         inputSchema: {
           board: z.string().min(1).describe("A board (its path)."),
           steps: z.array(step).min(1).max(40).describe("What a finger does, in order."),

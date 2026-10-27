@@ -65,15 +65,6 @@ async function call(c: Agent, tool: string, args: Record<string, unknown>): Prom
   }
 }
 
-type Node = { path: string; setup?: Record<string, unknown>; live?: Record<string, unknown> };
-type Out = {
-  target?: string;
-  nodes?: Node[];
-  drawings?: number;
-  boards?: number;
-  versions?: { problems: string[] }[];
-};
-const outOf = (c: Call): Out => (c.out?.structuredContent ?? {}) as Out;
 const textOf = (c: Call): string =>
   ((c.out?.content as { type: string; text?: string }[] | undefined) ?? [])
     .filter((x) => x.type === "text")
@@ -93,12 +84,13 @@ function expect(name: string, isTrue: boolean, detail = ""): void {
 const allOk = (cs: Call[]) => cs.every((c) => c.ok);
 const firstError = (cs: Call[]) => cs.find((c) => !c.ok)?.error?.slice(0, 160) ?? "";
 const slowest = (cs: Call[]) => `${Math.max(...cs.map((c) => c.ms))}ms slowest`;
-const asked = (c: Call, board: string) => outOf(c).target === board;
-/** A value of a piece, wherever the snapshot files it (setup or live). */
-const fieldOf = (c: Call, piece: string, field: string) => {
-  const n = outOf(c).nodes?.find((x) => x.path === piece);
-  return n?.live?.[field] ?? n?.setup?.[field] ?? null;
-};
+/** The answer is the text alone: no second copy for a client to show instead. */
+const isTextOnly = (c: Call) => c.out !== undefined && c.out.structuredContent === undefined;
+/** Whether the answer is about this board (its first line names it). */
+const asked = (c: Call, board: string) =>
+  (textOf(c).split("\n")[0] ?? "").split(/[\s#:]/)[0] === board;
+/** The pieces a board's answer lists (one line each, with where it's written). */
+const piecesListed = (c: Call) => textOf(c).match(/→ content\//g)?.length ?? 0;
 
 const cases: Record<string, () => Promise<void>> = {
   async parallel() {
@@ -166,17 +158,20 @@ const cases: Record<string, () => Promise<void>> = {
       steps: [{ tap: "qr", text: "q = 5" }],
       shots: "none",
     });
+    // The choice is the learner's: it is listed with what changed now, not with the setup.
+    const chosen = /now:[\s\S]*selected "right"/;
+    const mine = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
     expect(
-      "A taps an option",
-      tap.ok && fieldOf(tap, "qr", "selected") === "right",
-      tap.error ?? "",
+      "A taps an option, and sees it chosen, as now",
+      tap.ok && mine.ok && chosen.test(textOf(mine)),
+      tap.error ?? mine.error ?? "",
     );
     await call(b, "play", { board: LEMMA, steps: [{ tap: "qr", text: "q = 3" }], shots: "none" });
     const on = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
     expect(
       "B tapping the same board doesn't reach A's: A sees its own choice",
-      on.ok && fieldOf(on, "qr", "selected") === "right",
-      on.error ?? String(fieldOf(on, "qr", "selected")),
+      on.ok && chosen.test(textOf(on)),
+      on.error ?? "",
     );
     await call(a, "look", { at: BOARDS[2] });
     const lost = await call(a, "play", { board: LEMMA, steps: [{ wait: 10 }], continue: true });
@@ -194,8 +189,13 @@ const cases: Record<string, () => Promise<void>> = {
       ["a question", "look", { at: QUESTION }],
     ] as const) {
       const r = await call(c, tool, args);
-      const n = outOf(r).nodes?.length ?? 0;
-      expect(`the snapshot of ${name} has its pieces`, r.ok && n > 0, r.error ?? `${n} nodes`);
+      // A look lists the pieces; play says whether the board is passed (read from its snapshot).
+      const isRead = tool === "look" ? piecesListed(r) > 0 : /\n(not )?passed/.test(textOf(r));
+      expect(
+        `the snapshot of ${name} is read, as text only`,
+        r.ok && isRead && isTextOnly(r),
+        r.error ?? textOf(r).slice(0, 200),
+      );
     }
   },
   async pictures() {
@@ -210,8 +210,7 @@ const cases: Record<string, () => Promise<void>> = {
     );
     expect(
       "names go in a margin: the named picture is wider, the drawing measured the same",
-      (n?.readUInt32BE(16) ?? 0) > (a?.readUInt32BE(16) ?? 0) &&
-        JSON.stringify(outOf(named).versions) === JSON.stringify(outOf(clean).versions),
+      (n?.readUInt32BE(16) ?? 0) > (a?.readUInt32BE(16) ?? 0) && textOf(named) === textOf(clean),
       `${a?.readUInt32BE(16)} → ${n?.readUInt32BE(16)}`,
     );
     const piece = await call(c, "look", { at: `${STORY}#game`, labels: false });
@@ -321,8 +320,8 @@ const cases: Record<string, () => Promise<void>> = {
       shots: "none",
     });
     expect(
-      "pressing one runs what it says (the player presses it, not a handler)",
-      p.ok && /game\.rounds 0 → 1/.test(textOf(p)),
+      "pressing one runs what it says, and play lists what the student sees change",
+      p.ok && /game\/plates "6 friends, 0 sweets each" → "6 friends, 1 sweet each"/.test(textOf(p)),
       p.error ?? textOf(p),
     );
   },
@@ -380,11 +379,12 @@ const cases: Record<string, () => Promise<void>> = {
   async check() {
     const c = await agent("stress-check");
     const r = await call(c, "look", { at: R });
-    const o = outOf(r);
+    const m = /(\d+) boards · (\d+) drawings/.exec(textOf(r));
+    const [boards, drawings] = [Number(m?.[1] ?? 0), Number(m?.[2] ?? 0)];
     expect(
       "a chapter is checked: every board in two languages at two widths",
-      r.ok && (o.boards ?? 0) > 0 && o.drawings === (o.boards ?? 0) * 4,
-      r.error ?? `${o.drawings} drawings of ${o.boards} boards, ${r.ms}ms`,
+      r.ok && boards > 0 && drawings === boards * 4,
+      r.error ?? `${drawings} drawings of ${boards} boards, ${r.ms}ms`,
     );
   },
 };

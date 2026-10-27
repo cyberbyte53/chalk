@@ -223,7 +223,7 @@ export function describe(def: AnyPropDef, view: PropView, tags: readonly Tag[]):
       id: t.part,
       ...(t.value !== undefined ? { value: t.value } : {}),
       ...(t.words !== undefined ? { words: t.words } : {}),
-      ...(t.does !== undefined && t.isOff !== true
+      ...(t.does !== undefined
         ? { does: t.does.length === 1 ? (t.does[0] as string) : t.does }
         : {}),
       ...(t.args !== undefined ? { args: t.args } : {}),

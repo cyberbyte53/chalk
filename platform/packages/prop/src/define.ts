@@ -316,7 +316,7 @@ export type Element = {
   value?: unknown;
   /** The value as the screen writes it ("1.40", "½"), when that isn't just the value printed. */
   words?: string;
-  /** For an input that's on: the action(s) touching it does. */
+  /** For an input: the action(s) touching it does (when it's on: see isOff). */
   does?: string | readonly string[];
   /** For an input that does an action with fixed arguments: those arguments. */
   args?: Readonly<Record<string, unknown>>;

@@ -54,7 +54,7 @@ export function checkProp(
       continue;
     }
     for (const e of described.elements) {
-      if (e.does === undefined) continue;
+      if (e.does === undefined || e.isOff === true) continue;
       const actions = typeof e.does === "string" ? [e.does] : e.does;
       for (const action of actions) {
         const spec = def.actions[action];

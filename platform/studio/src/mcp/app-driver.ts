@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, openSync } from "node:fs";
 import { join } from "node:path";
-import { type BoardSnapshot, changesBetween } from "@chalk/prop";
+import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
@@ -143,11 +143,11 @@ async function readModels(page: Page): Promise<Map<string, BoardModel>> {
   return new Map(all.map((m) => [m.path, boardModelSchema.parse(m.model)]));
 }
 
-/** What a step changed: each live or bound value that moved, by address ("lens/imageArrow.tip"). */
-function liveChanges(was: BoardModel | undefined, now: BoardModel | undefined) {
+/** What a step changed on screen: each part that moved, by address ("game/plates"). */
+function seenChanges(was: BoardModel | undefined, now: BoardModel | undefined) {
   if (was === undefined || now === undefined) return {};
   return Object.fromEntries(
-    changesBetween(was as BoardSnapshot, now as BoardSnapshot).map((c) => [
+    seenBetween(was as BoardSnapshot, now as BoardSnapshot).map((c) => [
       c.path,
       { was: c.was, now: c.now },
     ]),
@@ -321,7 +321,7 @@ export type StepResult = {
   errors: string[];
   /** The board after the step, when asked for. */
   picture?: Picture;
-  /** Live values the step changed ("machine.input": was 0, now 2). */
+  /** What the step changed on screen ("game/plates": was "…0 each", now "…1 each"). */
   changed?: Record<string, { was: unknown; now: unknown }>;
 };
 
@@ -741,7 +741,7 @@ async function shootNow(
       const now = await recorded(page);
       const isLast = i === act.steps.length - 1;
       const modelNow = [...(await readModels(page)).values()][0];
-      const changed = liveChanges(modelWas, modelNow);
+      const changed = seenChanges(modelWas, modelNow);
       modelWas = modelNow;
       steps.push({
         step: words,

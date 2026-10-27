@@ -308,6 +308,9 @@ function checkChildren(
  * The line (from 1) where a params.yaml's row starts: its `- ` at the top level, else 1 (or, with
  * `pastEnd`, one past the file's last line: where a row after the last would start).
  */
+/** Lines `from`–`to`, or one line when they're the same. */
+const lineRange = (from: number, to: number) => (to > from ? `${from}-${to}` : `${from}`);
+
 function rowLine(c: Context, file: string, row: number, pastEnd = false): number {
   let text: string;
   try {
@@ -621,7 +624,7 @@ async function buildFamily(
       board: `content/${paramsFile}:${rowLine(c, paramsFile, row)}`,
     });
     c.reach.boards[path] = reachOf(built.board, familyFile, {
-      rows: `content/${paramsFile}:${rowLine(c, paramsFile, row)}-${rowLine(c, paramsFile, row + 1, true) - 1}`,
+      rows: `content/${paramsFile}:${lineRange(rowLine(c, paramsFile, row), rowLine(c, paramsFile, row + 1, true) - 1)}`,
     });
     const ref = emit(c, item, builtQuestionSchema);
     banked.push({

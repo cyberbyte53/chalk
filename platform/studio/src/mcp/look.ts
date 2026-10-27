@@ -188,6 +188,8 @@ function setupLines(
   root: string,
   setup: Record<string, unknown>,
   frame: string | undefined,
+  /** What the piece's parts show: a value shown there isn't written here again. */
+  onScreen: ReadonlySet<string>,
 ): string[] {
   const out: string[] = [];
   const plain: Record<string, unknown> = {};
@@ -200,7 +202,9 @@ function setupLines(
     if (isItems) lists.push([k, v as Record<string, unknown>[]]);
     else plain[k] = v;
   }
-  for (const [k, v] of Object.entries(plain)) out.push(`${k} ${full(v)}`);
+  // A value a part shows is written once, with the part.
+  for (const [k, v] of Object.entries(plain))
+    if (!(typeof v === "string" && onScreen.has(v))) out.push(`${k} ${full(v)}`);
   for (const [k, items] of lists) {
     const ids = items.map((i) => String(i.id));
     const lines = frame === undefined ? new Map<string, number>() : itemLines(root, frame, ids);
@@ -217,8 +221,9 @@ function setupLines(
     for (const item of items) {
       const { id, label, ...rest } = item;
       const where = lines.get(String(id));
+      const isShown = typeof label === "string" && onScreen.has(label);
       out.push(
-        `  ${pad(String(id), width)}${label !== undefined ? `${full(label)}  ` : ""}${fields(rest)}${where !== undefined ? `  → ${shortLine(file, where)}` : ""}`.trimEnd(),
+        `  ${pad(String(id), width)}${label !== undefined && !isShown ? `${full(label)}  ` : ""}${fields(rest)}${where !== undefined ? `  → ${shortLine(file, where)}` : ""}`.trimEnd(),
       );
     }
   }
@@ -299,7 +304,17 @@ export function pieceText(
   if (reach?.rows !== undefined) out.push(`${pad("  row:", 9)}${reach.rows}`);
   out.push("");
   if (Object.keys(node.setup).length > 0)
-    out.push(...block("setup:", setupLines(root, node.setup, written)));
+    out.push(
+      ...block(
+        "setup:",
+        setupLines(
+          root,
+          node.setup,
+          written,
+          new Set(node.parts.flatMap((p) => (typeof p.value === "string" ? [p.value] : []))),
+        ),
+      ),
+    );
   if (Object.keys(node.live).length > 0)
     out.push(
       ...block(
@@ -335,14 +350,12 @@ export function pieceText(
       p.words !== undefined
         ? ` shows "${p.words}"`
         : p.value !== undefined
-          ? ` shows ${JSON.stringify(p.value)}`
+          ? ` shows ${full(p.value)}`
           : "";
     const does =
       p.does !== undefined
-        ? ` does ${[p.does].flat().join(", ")}${p.args !== undefined ? ` ${JSON.stringify(p.args)}` : ""}${p.isByHand ? " (its own values)" : ""}`
-        : p.isOff
-          ? " (off now)"
-          : "";
+        ? ` does ${[p.does].flat().join(", ")}${p.args !== undefined ? ` ${full(p.args)}` : ""}${p.isByHand ? " (its own values)" : ""}${p.isOff ? " (off now)" : ""}`
+        : "";
     return `${name}${shown}${does}${p.drawnAt !== undefined ? `  → ${p.drawnAt}` : ""}`;
   };
   if (node.parts.length > 0) out.push("", ...block("parts:", node.parts.map(partLine)));
@@ -362,10 +375,10 @@ export type LookArgs = {
   continue?: boolean;
 };
 
+/** What a tool answers: text, and a picture. Nothing else: the text is the whole answer. */
 export type Answer = {
   text: string;
   image?: Buffer;
-  structured: Record<string, unknown>;
 };
 
 const PHONE = 390;
@@ -445,7 +458,6 @@ export async function look(
         "Look at a board for its pieces: …/<board>.",
       ].join("\n"),
       ...(image === undefined ? {} : { image }),
-      structured: { target: target.path, boards: target.boards, problems },
     };
   }
   const shots = drawn.map((d) => d.shots[0]).filter((s): s is Shot => s !== undefined);
@@ -481,11 +493,6 @@ export async function look(
   return {
     text: [text, ...otherProblems].join("\n"),
     image,
-    structured: {
-      target: target.kind === "piece" ? `${target.board}#${target.address}` : target.board,
-      versions: shots.map((s, i) => ({ ...versions[i], problems: s.overflow })),
-      nodes: first.model?.nodes ?? [],
-    },
   };
 }
 
@@ -559,18 +566,6 @@ export async function check(
   if (badBoards.size > 0) lines.push("Look at a board to see it: look at …/<board>.");
   return {
     text: lines.join("\n"),
-    structured: {
-      target: target.path,
-      boards: target.boards.length,
-      drawings: seen.size,
-      problems: found.map((f) => ({
-        board: f.board,
-        locale: f.v.locale,
-        width: f.v.width,
-        problems: f.problems,
-      })),
-      cancelled: isCancelled,
-    },
   };
 }
 
@@ -630,7 +625,13 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     for (const [path] of changed) changedPieces.add(pieceOfPath(path));
     const parts = [
       ...r.events.map((e) => eventWords(e, locale)),
-      ...changed.map(([path, c]) => `${path} ${full(c.was)} → ${full(c.now)}`),
+      ...changed.map(([path, c]) =>
+        c.was === undefined
+          ? `+ ${path} ${full(c.now)}`
+          : c.now === undefined
+            ? `− ${path}`
+            : `${path} ${full(c.was)} → ${full(c.now)}`,
+      ),
     ];
     lines.push(
       `${i + 1}. ${r.step}${parts.length > 0 ? ` → ${parts.join(" · ")}` : " → nothing changed"}`,
@@ -691,17 +692,5 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   return {
     text: lines.join("\n"),
     ...(image === undefined ? {} : { image }),
-    structured: {
-      board: a.board,
-      steps: d.steps.map((r) => ({
-        step: r.step,
-        passed: r.passed,
-        events: r.events,
-        changed: r.changed ?? {},
-        errors: r.errors,
-      })),
-      isPassed: model?.isPassed ?? false,
-      nodes: model?.nodes ?? [],
-    },
   };
 }

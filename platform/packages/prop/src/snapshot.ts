@@ -11,7 +11,7 @@ export type PartSnapshot = {
   path: string;
   value?: unknown;
   words?: string;
-  /** For an input that's on: the action(s) touching it does, on its node. */
+  /** For an input: the action(s) touching it does, on its node (when it's on: see isOff). */
   does?: string | readonly string[];
   /** For an input that does an action with fixed arguments: those arguments. */
   args?: Readonly<Record<string, unknown>>;
@@ -75,6 +75,55 @@ export function nodeAt(snapshot: BoardSnapshot, path: string): NodeSnapshot | un
 
 /** One value that moved, by address ("lens/imageArrow.tip"). */
 export type Change = { path: string; was: unknown; now: unknown };
+
+/** A part as the student sees it: its words (or value), and for an input whether it's on. */
+function seenOf(p: PartSnapshot | undefined): unknown {
+  if (p === undefined) return undefined;
+  const shown = p.words ?? p.value;
+  if (p.does === undefined && p.isOff !== true) return shown ?? null;
+  const state = p.isOff === true ? "off" : "on";
+  if (shown === undefined) return state;
+  return `${typeof shown === "string" ? shown : JSON.stringify(shown)} (${state})`;
+}
+
+/**
+ * What the student sees that changed between two snapshots: each part whose words, value or
+ * on/off moved (one that appeared was nothing, one that went is nothing), what each prop knows but
+ * doesn't show, and pieces shown or hidden. Read from the parts every view tags, so it holds for
+ * every prop.
+ */
+export function seenBetween(was: BoardSnapshot, now: BoardSnapshot): Change[] {
+  const before = new Map(was.nodes.map((n) => [n.path, n]));
+  const out: Change[] = [];
+  for (const node of now.nodes) {
+    const old = before.get(node.path);
+    if (old !== undefined && old.isShown !== node.isShown)
+      out.push({
+        path: node.path,
+        was: old.isShown ? "shown" : "hidden",
+        now: node.isShown ? "shown" : "hidden",
+      });
+    const oldParts = new Map((old?.parts ?? []).map((p) => [p.path, p]));
+    const paths = [
+      ...new Set([...(old?.parts ?? []).map((p) => p.path), ...node.parts.map((p) => p.path)]),
+    ];
+    const nowParts = new Map(node.parts.map((p) => [p.path, p]));
+    for (const p of paths) {
+      const then = seenOf(oldParts.get(p));
+      const value = seenOf(nowParts.get(p));
+      if (JSON.stringify(then) !== JSON.stringify(value))
+        out.push({ path: p, was: then, now: value });
+    }
+    const keys = new Set([...Object.keys(old?.hidden ?? {}), ...Object.keys(node.hidden ?? {})]);
+    for (const k of keys) {
+      const then = old?.hidden?.[k];
+      const value = node.hidden?.[k];
+      if (JSON.stringify(then) !== JSON.stringify(value))
+        out.push({ path: `${node.path}.${k} (hidden)`, was: then, now: value });
+    }
+  }
+  return out;
+}
 
 /** Every value that moved between two snapshots (setup, live or bound), and nodes shown or hidden. */
 export function changesBetween(was: BoardSnapshot, now: BoardSnapshot): Change[] {

@@ -44,7 +44,7 @@ describe("sweetShare: what the student sees", () => {
     expect(s.ids).toEqual(["box", "plates", "giveRound", "startAgain"]);
     expect(s.at("box")).toEqual({ id: "box", value: 17, words: "17 sweets" });
     expect(s.at("giveRound")?.does).toBe("giveRound");
-    expect(s.at("startAgain")).toEqual({ id: "startAgain", isOff: true });
+    expect(s.at("startAgain")).toEqual({ id: "startAgain", does: "startAgain", isOff: true });
     expect(s.hidden).toEqual({ quotient: 3, remainder: 2 });
   });
   it("the sum and the log when the page wants them; a and b when they can be changed", () => {
