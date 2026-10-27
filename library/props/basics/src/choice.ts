@@ -74,6 +74,7 @@ export const choice = defineProp({
   actions: {
     [ChoiceAction.Select]: act({
       describe: "Pick an option (what the learner's tap does)",
+      changes: ["selected", "status", "feedback"],
       byLearner: true,
       args: z.object({ option: z.string() }).strict(),
       run: (s, a) =>
@@ -83,6 +84,7 @@ export const choice = defineProp({
     }),
     [QuestionAction.Check]: act({
       describe: "Check the picked option",
+      changes: ["status", "attempts", "feedback"],
       byLearner: true,
       args: noArgs,
       run: (s) => {
@@ -103,6 +105,7 @@ export const choice = defineProp({
     }),
     [QuestionAction.Retry]: act({
       describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
+      changes: ["status", "feedback", "selected"],
       byLearner: true,
       args: noArgs,
       run: (s) =>
@@ -112,11 +115,13 @@ export const choice = defineProp({
     }),
     [QuestionAction.GiveFeedback]: act({
       describe: "Show words under the question (e.g. a hint)",
+      changes: ["feedback"],
       args: z.object({ text: localizedSchema }).strict(),
       run: (_s, a) => set({ feedback: a.text }),
     }),
     [SAY]: act({
       describe: "Read the prompt aloud (narrator)",
+      changes: [],
       args: noArgs,
       run: () => say(),
     }),

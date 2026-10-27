@@ -164,6 +164,7 @@ export const factorTree = defineProp({
   actions: {
     [FactorTreeAction.Select]: act({
       describe: "Pick an end to split (the learner's tap; again to put it down)",
+      changes: ["selected"],
       byLearner: true,
       args: z.object({ node: z.string() }).strict(),
       run: (s, a) => {
@@ -174,6 +175,7 @@ export const factorTree = defineProp({
     }),
     [FactorTreeAction.Split]: act({
       describe: "Split an end into two factors: `factor` and value ÷ factor (the learner's tap)",
+      changes: ["splits", "selected"],
       byLearner: true,
       args: z.object({ node: z.string(), factor: z.number().int() }).strict(),
       run: (s, a) => {
@@ -194,6 +196,7 @@ export const factorTree = defineProp({
     }),
     [FactorTreeAction.SplitAll]: act({
       describe: "Finish the tree, splitting each end at its smallest prime",
+      changes: ["splits", "selected"],
       reveals: true,
       args: none,
       run: (s) => {
@@ -207,12 +210,14 @@ export const factorTree = defineProp({
     }),
     [FactorTreeAction.SetNumber]: act({
       describe: "A new number at the top, unsplit",
+      changes: ["number", "splits", "selected"],
       byLearner: true,
       args: z.object({ number: z.number().int().min(2).max(MAX_TREE_NUMBER) }).strict(),
       run: (_s, a) => set({ number: a.number, splits: [], selected: null }),
     }),
     [FactorTreeAction.StartAgain]: act({
       describe: "Take every split back",
+      changes: ["splits", "selected"],
       byLearner: true,
       args: none,
       run: () => set({ splits: [], selected: null }),

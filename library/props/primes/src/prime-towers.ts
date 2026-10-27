@@ -95,6 +95,7 @@ export const primeTowers = defineProp({
   actions: {
     [PrimeTowersAction.Show]: act({
       describe: "Mark the HCF, the LCM or HCF × LCM on the towers (the learner's buttons)",
+      changes: ["show"],
       byLearner: true,
       args: z.object({ show: z.nativeEnum(TowerShow) }).strict(),
       run: (s, a) => {
@@ -105,6 +106,7 @@ export const primeTowers = defineProp({
     }),
     [PrimeTowersAction.SetNumbers]: act({
       describe: "Two new numbers (the learner types them); nothing marked",
+      changes: ["numberA", "numberB", "show"],
       byLearner: true,
       args: z
         .object({

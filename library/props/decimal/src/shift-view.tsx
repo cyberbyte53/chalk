@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does } from "@chalk/player";
 import type { JSX } from "preact";
 import { DIGITS_DRAWN, DecimalShiftPart, type DecimalShiftState, MAX_POWER, Tape } from "./shift";
 import {
@@ -288,7 +288,7 @@ export function DecimalShiftView({ view, width, call }: PropViewProps): JSX.Elem
         class="dsh-button"
         aria-label={`${multipleLabel(powerOfTen(power))} ÷ 10`}
         disabled={power <= 0}
-        onClick={() => call("shift", { tape, by: -1 })}
+        {...does("shift", { tape, by: -1 })}
       >
         ÷10
       </button>
@@ -297,7 +297,7 @@ export function DecimalShiftView({ view, width, call }: PropViewProps): JSX.Elem
         class="dsh-button"
         aria-label={`${multipleLabel(powerOfTen(power))} × 10`}
         disabled={power >= MAX_POWER}
-        onClick={() => call("shift", { tape, by: 1 })}
+        {...does("shift", { tape, by: 1 })}
       >
         ×10
       </button>
@@ -333,7 +333,7 @@ export function DecimalShiftView({ view, width, call }: PropViewProps): JSX.Elem
           aria-label={`${multipleLabel(powerOfTen(s.topPower))} − ${multipleLabel(powerOfTen(s.bottomPower))}`}
           data-part={DecimalShiftPart.Minus}
           disabled={!canSubtract}
-          onClick={() => call("subtract")}
+          {...does("subtract")}
         >
           −
         </button>

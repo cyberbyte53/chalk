@@ -2,7 +2,9 @@ import {
   AnswerFeedback,
   type PropViewProps,
   RichText,
+  does,
   plainText,
+  says,
   t,
   useFitColumns,
   usePlayMode,
@@ -95,6 +97,7 @@ export function ChoiceView({ view, locale, call }: PropViewProps): JSX.Element {
             aria-label={plainText(option.label[locale] ?? "")}
             class={choiceClass(s, option.id)}
             disabled={isLocked}
+            {...says(ChoiceAction.Select, QuestionAction.Check)}
             onClick={() => answer(option.id)}
           >
             <RichText text={option.label[locale]} />
@@ -115,7 +118,7 @@ function multiClass(s: MultiChoiceState, option: string): string {
 }
 
 /** Pick every right option, then Check: tapping only picks, so one tap gives nothing away. */
-export function MultiChoiceView({ view, locale, call }: PropViewProps): JSX.Element {
+export function MultiChoiceView({ view, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as MultiChoiceState & { canCheck: boolean };
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
@@ -137,7 +140,7 @@ export function MultiChoiceView({ view, locale, call }: PropViewProps): JSX.Elem
             aria-label={plainText(option.label[locale] ?? "")}
             class={multiClass(s, option.id)}
             disabled={isLocked}
-            onClick={() => call(MultiChoiceAction.Toggle, { option: option.id })}
+            {...does(MultiChoiceAction.Toggle, { option: option.id })}
           >
             <RichText text={option.label[locale]} />
           </button>
@@ -148,7 +151,7 @@ export function MultiChoiceView({ view, locale, call }: PropViewProps): JSX.Elem
           type="button"
           class="question-check"
           disabled={!s.canCheck || isHeld}
-          onClick={() => call(QuestionAction.Check)}
+          {...does(QuestionAction.Check)}
         >
           {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
         </button>
@@ -162,7 +165,7 @@ export function MultiChoiceView({ view, locale, call }: PropViewProps): JSX.Elem
  * Put a proof's steps in order: the lines placed so far, numbered, then the steps still to place.
  * Tap a step to add it as the next line; tap a line to take it back.
  */
-export function OrderStepsView({ view, locale, call }: PropViewProps): JSX.Element {
+export function OrderStepsView({ view, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as OrderStepsState & { canCheck: boolean };
   const isHeld = useIsHeld(s.status);
   const isLocked = s.status === AnswerStatus.Correct || isHeld;
@@ -184,7 +187,7 @@ export function OrderStepsView({ view, locale, call }: PropViewProps): JSX.Eleme
                 class="order-line"
                 disabled={isLocked}
                 aria-label={`Take back: ${plainText(step.label[locale] ?? "")}`}
-                onClick={() => call(OrderStepsAction.Remove, { step: id })}
+                {...does(OrderStepsAction.Remove, { step: id })}
               >
                 <RichText text={step.label[locale]} />
               </button>
@@ -205,7 +208,7 @@ export function OrderStepsView({ view, locale, call }: PropViewProps): JSX.Eleme
               key={step.id}
               class="choice order-step"
               aria-label={plainText(step.label[locale] ?? "")}
-              onClick={() => call(OrderStepsAction.Place, { step: step.id })}
+              {...does(OrderStepsAction.Place, { step: step.id })}
             >
               <RichText text={step.label[locale]} />
             </button>
@@ -217,7 +220,7 @@ export function OrderStepsView({ view, locale, call }: PropViewProps): JSX.Eleme
           type="button"
           class="question-check"
           disabled={!s.canCheck || isHeld}
-          onClick={() => call(QuestionAction.Check)}
+          {...does(QuestionAction.Check)}
         >
           {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
         </button>
@@ -228,7 +231,7 @@ export function OrderStepsView({ view, locale, call }: PropViewProps): JSX.Eleme
 }
 
 /** "Get that prop into the goal": the learner works the prop, then presses this question's Check. */
-export function GoalView({ view, locale, call }: PropViewProps): JSX.Element {
+export function GoalView({ view, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as GoalState & { canCheck: boolean };
   const isHeld = useIsHeld(s.status);
   return (
@@ -240,7 +243,7 @@ export function GoalView({ view, locale, call }: PropViewProps): JSX.Element {
         type="button"
         class="question-check"
         disabled={!s.canCheck || isHeld}
-        onClick={() => call(QuestionAction.Check)}
+        {...does(QuestionAction.Check)}
       >
         {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
       </button>
@@ -249,7 +252,7 @@ export function GoalView({ view, locale, call }: PropViewProps): JSX.Element {
   );
 }
 
-export function ButtonView({ view, locale, call }: PropViewProps): JSX.Element {
+export function ButtonView({ view, locale }: PropViewProps): JSX.Element {
   const s = view as unknown as ButtonState;
   return (
     <button
@@ -257,7 +260,7 @@ export function ButtonView({ view, locale, call }: PropViewProps): JSX.Element {
       class="button"
       aria-label={plainText(s.label[locale] ?? "")}
       disabled={!s.isEnabled}
-      onClick={() => call(ButtonAction.Press)}
+      {...does(ButtonAction.Press)}
     >
       <RichText text={s.label[locale]} />
     </button>

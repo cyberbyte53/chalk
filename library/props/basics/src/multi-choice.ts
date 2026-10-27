@@ -81,6 +81,7 @@ export const multiChoice = defineProp({
   actions: {
     [MultiChoiceAction.Toggle]: act({
       describe: "Pick or unpick an option (what the learner's tap does)",
+      changes: ["selected", "status", "feedback"],
       byLearner: true,
       args: z.object({ option: z.string() }).strict(),
       run: (s, a) => {
@@ -93,6 +94,7 @@ export const multiChoice = defineProp({
     }),
     [QuestionAction.Check]: act({
       describe: "Check the picked options",
+      changes: ["status", "attempts", "feedback"],
       byLearner: true,
       args: noArgs,
       run: (s) => {
@@ -116,6 +118,7 @@ export const multiChoice = defineProp({
     }),
     [QuestionAction.Retry]: act({
       describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
+      changes: ["status", "feedback"],
       byLearner: true,
       args: noArgs,
       run: (s) =>
@@ -125,11 +128,13 @@ export const multiChoice = defineProp({
     }),
     [QuestionAction.GiveFeedback]: act({
       describe: "Show words under the question (e.g. a hint)",
+      changes: ["feedback"],
       args: z.object({ text: localizedSchema }).strict(),
       run: (_s, a) => set({ feedback: a.text }),
     }),
     [SAY]: act({
       describe: "Read the prompt aloud (narrator)",
+      changes: [],
       args: noArgs,
       run: () => say(),
     }),

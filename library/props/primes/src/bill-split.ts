@@ -86,6 +86,7 @@ export const billSplit = defineProp({
   actions: {
     [BillSplitAction.Split]: act({
       describe: "Share the bill among n friends (the learner's button)",
+      changes: ["tried", "chosen"],
       byLearner: true,
       args: z.object({ n: z.number().int().min(2).max(99) }).strict(),
       run: (s, a) => {
@@ -103,6 +104,7 @@ export const billSplit = defineProp({
     }),
     [BillSplitAction.StartAgain]: act({
       describe: "Clear the list",
+      changes: ["tried", "chosen"],
       byLearner: true,
       args: z.object({}).strict(),
       run: () => set({ tried: [], chosen: null }),

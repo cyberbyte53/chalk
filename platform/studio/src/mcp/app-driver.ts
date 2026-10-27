@@ -710,6 +710,20 @@ async function shootNow(
           break;
         }
         const target = page.locator("[data-chalk-target]").first();
+        // A control that is turned off can't be tapped: say so, rather than wait for it.
+        const isOff = await target.evaluate(
+          (el) =>
+            el.closest("[disabled]") !== null || el.closest('[aria-disabled="true"]') !== null,
+        );
+        if (isOff) {
+          steps.push({
+            step: words,
+            events: [],
+            passed: false,
+            errors: [`✗ ${"tap" in step ? step.tap : step.drag} is turned off now (disabled)`],
+          });
+          break;
+        }
         if ("tap" in step) await target.click({ timeout: 5000 });
         else {
           await target.scrollIntoViewIfNeeded({ timeout: 5000 });

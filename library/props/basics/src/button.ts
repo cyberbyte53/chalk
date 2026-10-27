@@ -29,6 +29,7 @@ export const button = defineProp({
   actions: {
     [ButtonAction.Press]: act({
       describe: "Press it (what the learner's tap does)",
+      changes: [],
       byLearner: true,
       args: z.object({}).strict(),
       run: (s) => (s.isEnabled ? set({}, { signal: ButtonSignal.Pressed }) : set({})),

@@ -27,9 +27,12 @@ export function does(action: string, args?: Readonly<Record<string, unknown>>): 
     : { "data-does": action, "data-with": JSON.stringify(args) };
 }
 
-/** An input whose own handler calls `action` (its arguments known only when it's used). */
-export function says(action: string): DoesAttrs {
-  return { "data-does": action, "data-by-hand": "" };
+/**
+ * An input whose own handler calls `action` (its arguments known only when it's used), or calls
+ * several in turn (a choice's option picks, then checks: `says(Select, Check)`).
+ */
+export function says(...actions: readonly string[]): DoesAttrs {
+  return { "data-does": actions.join(" "), "data-by-hand": "" };
 }
 
 /** The does-attributes among a component's props, to pass on to the element that is pressed. */
@@ -82,12 +85,13 @@ export function pressHandler(
  * action, arguments, and address on the board. Inputs of a child inside it are the child's.
  */
 export function inputsIn(box: Element): { action: string; args?: unknown; at?: string }[] {
+  // (each input once for each action it says it does)
   const isOwn = (el: Element) => {
     for (let p = el.parentElement; p !== null && p !== box; p = p.parentElement)
       if (p.hasAttribute("data-child")) return false;
     return true;
   };
-  return [...box.querySelectorAll("[data-does]")].filter(isOwn).map((el) => {
+  return [...box.querySelectorAll("[data-does]")].filter(isOwn).flatMap((el) => {
     const raw = el.getAttribute("data-with");
     let args: unknown;
     try {
@@ -96,11 +100,15 @@ export function inputsIn(box: Element): { action: string; args?: unknown; at?: s
       args = undefined;
     }
     const at = addressOf(el);
-    return {
-      action: el.getAttribute("data-does") ?? "",
-      ...(args === undefined ? {} : { args }),
-      ...(at === undefined ? {} : { at }),
-    };
+    // An input that says several actions (says(a, b)) does each.
+    return (el.getAttribute("data-does") ?? "")
+      .split(/\s+/)
+      .filter((action) => action !== "")
+      .map((action) => ({
+        action,
+        ...(args === undefined ? {} : { args }),
+        ...(at === undefined ? {} : { at }),
+      }));
   });
 }
 

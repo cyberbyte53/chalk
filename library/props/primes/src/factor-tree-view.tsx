@@ -1,5 +1,5 @@
 import { Stage } from "@chalk/draw";
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
 import { type Bag, toneOf } from "./arithmetic";
 import {
@@ -71,6 +71,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
             min={2}
             max={MAX_TREE_NUMBER}
             part="n"
+            {...says(FactorTreeAction.SetNumber)}
             onChange={(number) => call(FactorTreeAction.SetNumber, { number })}
           />
         </div>
@@ -115,7 +116,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
               class={classes.join(" ")}
               data-part={`node:${n.id}`}
               transform={`translate(${x} ${y})`}
-              onClick={isOpen ? () => call(FactorTreeAction.Select, { node: n.id }) : undefined}
+              {...(isOpen ? does(FactorTreeAction.Select, { node: n.id }) : {})}
               role={isOpen ? "button" : undefined}
               aria-label={isOpen ? `Split ${n.value}` : undefined}
               tabIndex={isOpen ? 0 : undefined}
@@ -149,7 +150,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
               label={`${selected.value} = ${d} × ${e}`}
               isWide
               part={`pair:${d}`}
-              onPress={() => call(FactorTreeAction.Split, { node: selected.id, factor: d })}
+              {...does(FactorTreeAction.Split, { node: selected.id, factor: d })}
             />
           ))}
         </div>
@@ -168,7 +169,7 @@ export function FactorTreeView({ view, width, call }: PropViewProps): JSX.Elemen
           label="Start the tree again"
           part="startAgain"
           isEnabled={s.splits.length > 0}
-          onPress={() => call(FactorTreeAction.StartAgain)}
+          {...does(FactorTreeAction.StartAgain)}
         />
       </div>
     </div>

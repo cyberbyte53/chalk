@@ -1,4 +1,4 @@
-import { type PropViewProps, useFitColumns } from "@chalk/player";
+import { type PropViewProps, does, says, useFitColumns } from "@chalk/player";
 import type { JSX } from "preact";
 import { type DivisionStep, euclidSteps } from "./arithmetic";
 import {
@@ -179,6 +179,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
             min={1}
             max={MAX_STICK}
             part="a"
+            {...says(StickMeasureAction.SetSticks)}
             onChange={(value) =>
               call(StickMeasureAction.SetSticks, { stickA: value, stickB: s.stickB })
             }
@@ -189,6 +190,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
             min={1}
             max={MAX_STICK}
             part="b"
+            {...says(StickMeasureAction.SetSticks)}
             onChange={(value) =>
               call(StickMeasureAction.SetSticks, { stickA: s.stickA, stickB: value })
             }
@@ -217,7 +219,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
               label={`Mark pieces of ${n}`}
               part={`piece-${n}`}
               isOn={s.piece === n}
-              onPress={() => call(StickMeasureAction.TryPiece, { length: s.piece === n ? 0 : n })}
+              {...does(StickMeasureAction.TryPiece, { length: s.piece === n ? 0 : n })}
             />
           ))}
         </div>
@@ -250,7 +252,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
               label={word(s.words.keep)}
               isWide
               part="keep"
-              onPress={() => call(StickMeasureAction.Keep)}
+              {...does(StickMeasureAction.Keep)}
             />
           ) : (
             <SymbolButton
@@ -259,7 +261,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
               isWide
               part="lay"
               isEnabled={!s.isLaid}
-              onPress={() => call(StickMeasureAction.Lay)}
+              {...does(StickMeasureAction.Lay)}
             />
           )}
           <SymbolButton
@@ -267,7 +269,7 @@ export function StickMeasureView({ view, width, call, locale }: PropViewProps): 
             label="Start again"
             part="startAgain"
             isEnabled={s.rounds > 0 || s.isLaid}
-            onPress={() => call(StickMeasureAction.StartAgain)}
+            {...does(StickMeasureAction.StartAgain)}
           />
         </div>
       )}

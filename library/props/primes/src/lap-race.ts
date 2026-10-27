@@ -103,6 +103,7 @@ export const lapRace = defineProp({
     [LapRaceAction.Play]: act({
       describe:
         "Start the clock: both run until they are at the start together (the learner's button)",
+      changes: ["isRunning", "time"],
       byLearner: true,
       args: none,
       run: (s) => {
@@ -122,6 +123,7 @@ export const lapRace = defineProp({
     }),
     [LapRaceAction.Pause]: act({
       describe: "Stop the clock at the minute it shows (the learner's button)",
+      changes: ["isRunning", "time"],
       byLearner: true,
       args: none,
       run: (s) => set({ isRunning: false, time: Math.floor(s.time + 1e-9) }),
@@ -129,7 +131,9 @@ export const lapRace = defineProp({
     [LapRaceAction.Arrive]: act({
       describe:
         "The running clock reaches the next minute both are at the start together; it stops there",
-      byLearner: true,
+      changes: ["isRunning", "time"],
+      // Play's own step when the clock gets there: no finger does it.
+      internal: true,
       args: none,
       run: (s) => {
         if (!s.isRunning) return set({});
@@ -140,12 +144,14 @@ export const lapRace = defineProp({
     }),
     [LapRaceAction.StartAgain]: act({
       describe: "Both back at the start line, the clock at 0",
+      changes: ["time", "isRunning"],
       byLearner: true,
       args: none,
       run: () => set({ time: 0, isRunning: false }),
     }),
     [LapRaceAction.RunToMeet]: act({
       describe: "Run until they are first at the start together",
+      changes: ["time", "isRunning"],
       reveals: true,
       args: none,
       run: (s) => {

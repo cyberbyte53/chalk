@@ -197,6 +197,7 @@ export const tenMaker = defineProp({
   actions: {
     [TenMakerAction.SetFraction]: act({
       describe: "A new fraction, as given",
+      changes: ["numerator", "denominator", "stage"],
       byLearner: true,
       args: z
         .object({
@@ -209,6 +210,7 @@ export const tenMaker = defineProp({
     }),
     [TenMakerAction.Cancel]: act({
       describe: "Cross out the primes top and bottom share: lowest terms (the learner's button)",
+      changes: ["stage"],
       byLearner: true,
       args: none,
       run: (s) =>
@@ -222,6 +224,7 @@ export const tenMaker = defineProp({
     [TenMakerAction.Pair]: act({
       describe:
         "Link each 2 in the denominator with a 5 into a ten (the learner's button). If every bead is then in a ten, the denominator is already 10ⁿ; a prime other than 2 or 5 can't pair.",
+      changes: ["stage"],
       byLearner: true,
       args: none,
       run: (s) => {
@@ -248,6 +251,7 @@ export const tenMaker = defineProp({
     [TenMakerAction.TopUp]: act({
       describe:
         "Add the missing 2s or 5s, top and bottom alike, so every bead below is in a ten (the learner's button)",
+      changes: ["stage"],
       byLearner: true,
       reveals: true,
       args: none,
@@ -265,6 +269,7 @@ export const tenMaker = defineProp({
     }),
     [TenMakerAction.StartAgain]: act({
       describe: "Back to the fraction as given",
+      changes: ["stage"],
       byLearner: true,
       args: none,
       run: () => set({ stage: TenStage.Given }),

@@ -1,4 +1,4 @@
-import { type PropViewProps, useFitColumns } from "@chalk/player";
+import { type PropViewProps, does, useFitColumns } from "@chalk/player";
 import type { JSX } from "preact";
 import { BillSplitAction, type BillSplitState, shareOf } from "./bill-split";
 import { SymbolButton } from "./ui";
@@ -31,7 +31,7 @@ export function BillSplitView({ view, call, locale }: PropViewProps): JSX.Elemen
             label={`Share among ${n}`}
             part={`size-${n}`}
             isOn={s.chosen === n}
-            onPress={() => call(BillSplitAction.Split, { n })}
+            {...does(BillSplitAction.Split, { n })}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
 import { gcd, lcm } from "./arithmetic";
 import {
@@ -67,6 +67,7 @@ export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
             min={2}
             max={MAX_TOWERED}
             part="a"
+            {...says(PrimeTowersAction.SetNumbers)}
             onChange={(value) =>
               call(PrimeTowersAction.SetNumbers, { numberA: value, numberB: s.numberB })
             }
@@ -77,6 +78,7 @@ export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
             min={2}
             max={MAX_TOWERED}
             part="b"
+            {...says(PrimeTowersAction.SetNumbers)}
             onChange={(value) =>
               call(PrimeTowersAction.SetNumbers, { numberA: s.numberA, numberB: value })
             }
@@ -123,7 +125,7 @@ export function PrimeTowersView({ view, call }: PropViewProps): JSX.Element {
               isWide
               isOn={s.show === c}
               part={c}
-              onPress={() => call(PrimeTowersAction.Show, { show: c })}
+              {...does(PrimeTowersAction.Show, { show: c })}
             />
           ))}
         </div>

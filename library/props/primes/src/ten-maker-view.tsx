@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does, says } from "@chalk/player";
 import type { JSX } from "preact";
 import { bagOf, primesIn } from "./arithmetic";
 import {
@@ -139,6 +139,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             min={0}
             max={MAX_TERM}
             part="p"
+            {...says(TenMakerAction.SetFraction)}
             onChange={(value) =>
               call(TenMakerAction.SetFraction, { numerator: value, denominator: s.denominator })
             }
@@ -149,6 +150,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             min={1}
             max={MAX_TERM}
             part="q"
+            {...says(TenMakerAction.SetFraction)}
             onChange={(value) =>
               call(TenMakerAction.SetFraction, { numerator: s.numerator, denominator: value })
             }
@@ -192,7 +194,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             label={word(s.cancelLabel)}
             isWide
             part="cancel"
-            onPress={() => call(TenMakerAction.Cancel)}
+            {...does(TenMakerAction.Cancel)}
           />
         )}
         {s.stage === TenStage.Cancelled && (
@@ -201,7 +203,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             label={word(s.pairLabel)}
             isWide
             part="pair"
-            onPress={() => call(TenMakerAction.Pair)}
+            {...does(TenMakerAction.Pair)}
           />
         )}
         {s.stage === TenStage.Paired && (
@@ -211,7 +213,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
             isWide
             part="topUp"
             isEnabled={t.canEnd}
-            onPress={() => call(TenMakerAction.TopUp)}
+            {...does(TenMakerAction.TopUp)}
           />
         )}
         <SymbolButton
@@ -219,7 +221,7 @@ export function TenMakerView({ view, call, locale }: PropViewProps): JSX.Element
           label="Start again"
           part="startAgain"
           isEnabled={s.stage !== TenStage.Given}
-          onPress={() => call(TenMakerAction.StartAgain)}
+          {...does(TenMakerAction.StartAgain)}
         />
       </div>
     </div>

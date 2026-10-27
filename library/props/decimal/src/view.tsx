@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does, says } from "@chalk/player";
 import { Fragment, type JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
 import { DecimalExpansionPart, type DecimalExpansionState } from "./model";
@@ -284,6 +284,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             value={s.numerator}
             min={0}
             part={DecimalExpansionPart.Numerator}
+            {...says(SET_FRACTION)}
             onChange={(value) =>
               call(SET_FRACTION, { numerator: value, denominator: s.denominator })
             }
@@ -293,6 +294,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             value={s.denominator}
             min={2}
             part={DecimalExpansionPart.Denominator}
+            {...says(SET_FRACTION)}
             onChange={(value) => call(SET_FRACTION, { numerator: s.numerator, denominator: value })}
           />
           <button
@@ -300,7 +302,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             class="dx-again"
             aria-label="Start again"
             disabled={s.digitsShown === 0}
-            onClick={() => call(START_AGAIN)}
+            {...does(START_AGAIN)}
           >
             ↺
           </button>
@@ -317,7 +319,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
             class="dx-sheet is-tappable"
             ref={tapSheet}
             aria-label={label}
-            onClick={() => call(NEXT_DIGIT)}
+            {...does(NEXT_DIGIT)}
           >
             {paperGrid}
           </button>
@@ -331,7 +333,7 @@ export function DecimalExpansionView({ view, call }: PropViewProps): JSX.Element
               type="button"
               key={digit}
               class={rejected === digit ? "dx-key is-rejected" : "dx-key"}
-              onClick={() => call(TRY_DIGIT, { digit })}
+              {...does(TRY_DIGIT, { digit })}
             >
               {digit}
             </button>

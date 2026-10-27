@@ -1,4 +1,4 @@
-import type { PropViewProps } from "@chalk/player";
+import { type PropViewProps, does } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { lcm } from "./arithmetic";
@@ -150,7 +150,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
             label={word(s.pauseLabel)}
             isWide
             part="pause"
-            onPress={() => call(LapRaceAction.Pause)}
+            {...does(LapRaceAction.Pause)}
           />
         ) : (
           <SymbolButton
@@ -158,7 +158,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
             label={word(s.playLabel)}
             isWide
             part="play"
-            onPress={() => call(LapRaceAction.Play)}
+            {...does(LapRaceAction.Play)}
           />
         )}
         <SymbolButton
@@ -166,7 +166,7 @@ export function LapRaceView({ view, width, call, locale }: PropViewProps): JSX.E
           label="Start again"
           part="startAgain"
           isEnabled={s.time > 0 || isRunning}
-          onPress={() => call(LapRaceAction.StartAgain)}
+          {...does(LapRaceAction.StartAgain)}
         />
       </div>
     </div>

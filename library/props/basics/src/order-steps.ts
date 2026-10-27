@@ -98,6 +98,7 @@ export const orderSteps = defineProp({
   actions: {
     [OrderStepsAction.Place]: act({
       describe: "Add a step as the next line (what the learner's tap on a step does)",
+      changes: ["placed", "status", "feedback"],
       byLearner: true,
       args: z.object({ step: z.string() }).strict(),
       run: (s, a) => {
@@ -108,6 +109,7 @@ export const orderSteps = defineProp({
     }),
     [OrderStepsAction.Remove]: act({
       describe: "Take a placed line back (what the learner's tap on a placed line does)",
+      changes: ["placed", "status", "feedback"],
       byLearner: true,
       args: z.object({ step: z.string() }).strict(),
       run: (s, a) => {
@@ -121,6 +123,7 @@ export const orderSteps = defineProp({
     }),
     [QuestionAction.Check]: act({
       describe: "Check the order",
+      changes: ["status", "attempts", "feedback"],
       byLearner: true,
       args: noArgs,
       run: (s) => {
@@ -144,6 +147,7 @@ export const orderSteps = defineProp({
     }),
     [QuestionAction.Retry]: act({
       describe: "Clear a wrong answer's result to answer again (the learner's Try again)",
+      changes: ["status", "feedback"],
       byLearner: true,
       args: noArgs,
       run: (s) =>
@@ -153,11 +157,13 @@ export const orderSteps = defineProp({
     }),
     [QuestionAction.GiveFeedback]: act({
       describe: "Show words under the question (e.g. a hint)",
+      changes: ["feedback"],
       args: z.object({ text: localizedSchema }).strict(),
       run: (_s, a) => set({ feedback: a.text }),
     }),
     [SAY]: act({
       describe: "Read the prompt aloud (narrator)",
+      changes: [],
       args: noArgs,
       run: () => say(),
     }),

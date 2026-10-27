@@ -221,6 +221,7 @@ export const stickMeasure = defineProp({
     [StickMeasureAction.Lay]: act({
       describe:
         "Lay the shorter stick along the longer as many times as it fits (the learner's button)",
+      changes: ["isLaid"],
       byLearner: true,
       args: none,
       run: (s) => {
@@ -234,6 +235,7 @@ export const stickMeasure = defineProp({
     }),
     [StickMeasureAction.Keep]: act({
       describe: "Keep the shorter stick and the leftover, and set the rest aside",
+      changes: ["rounds", "isLaid"],
       byLearner: true,
       args: none,
       run: (s) => {
@@ -247,6 +249,7 @@ export const stickMeasure = defineProp({
     }),
     [StickMeasureAction.LayAll]: act({
       describe: "Do every step at once",
+      changes: ["rounds", "isLaid"],
       reveals: true,
       args: none,
       run: (s) => {
@@ -261,12 +264,14 @@ export const stickMeasure = defineProp({
     }),
     [StickMeasureAction.StartAgain]: act({
       describe: "Back to the two sticks the learner started with",
+      changes: ["rounds", "isLaid"],
       byLearner: true,
       args: none,
       run: () => set({ rounds: 0, isLaid: false }),
     }),
     [StickMeasureAction.SetSticks]: act({
       describe: "Two new sticks",
+      changes: ["stickA", "stickB", "rounds", "isLaid", "piece"],
       byLearner: true,
       args: z
         .object({
@@ -279,6 +284,7 @@ export const stickMeasure = defineProp({
     }),
     [StickMeasureAction.TryPiece]: act({
       describe: "Mark pieces of this length along every stick (0 takes the marks off)",
+      changes: ["piece"],
       byLearner: true,
       args: z.object({ length: z.number().int().min(0) }).strict(),
       run: (s, a) => {

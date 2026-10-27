@@ -165,6 +165,7 @@ export const decimalExpansion = defineProp({
     nextDigit: act({
       describe:
         "Work out one more digit (the learner's tap). Keeps the fraction. Does nothing once it has ended.",
+      changes: ["digitsShown", "rejectedDigit"],
       byLearner: true,
       args: z.object({}).strict(),
       run: (s) => {
@@ -188,6 +189,7 @@ export const decimalExpansion = defineProp({
     tryDigit: act({
       describe:
         'The learner\'s answer to "how many times does the denominator go into the partial dividend?". If it is the next digit, the step is done (as nextDigit); if not, nothing moves and `digitRejected` says whether it was too big or too small.',
+      changes: ["rejectedDigit", "digitsShown"],
       byLearner: true,
       args: z.object({ digit: z.number().int().min(0).max(9) }).strict(),
       run: (s, a) => {
@@ -223,17 +225,20 @@ export const decimalExpansion = defineProp({
     }),
     askForDigits: act({
       describe: "Turn the digit pad on (the learner works out each digit) or off (a tap does it)",
+      changes: ["isAskingDigit", "rejectedDigit"],
       args: z.object({ isAsking: z.boolean() }).strict(),
       run: (_s, a) => set({ isAskingDigit: a.isAsking, rejectedDigit: null }),
     }),
     showClock: act({
       describe: "Show or hide the remainder clock",
+      changes: ["isClockShown"],
       args: z.object({ isShown: z.boolean() }).strict(),
       run: (_s, a) => set({ isClockShown: a.isShown }),
     }),
     showDigits: act({
       describe:
         "Show this many digits after the point (no more than it has, if it terminates). Keeps the fraction.",
+      changes: ["digitsShown", "rejectedDigit"],
       args: z.object({ count: z.number().int().min(0).max(MAX_DIGITS) }).strict(),
       run: (s, a) => {
         const after = { ...s, digitsShown: Math.min(a.count, lastDigit(s)) };
@@ -246,6 +251,7 @@ export const decimalExpansion = defineProp({
     completeDivision: act({
       describe:
         "Carry on until the division ends or a remainder comes back (or the most digits it shows). Keeps the fraction.",
+      changes: ["digitsShown", "rejectedDigit"],
       args: z.object({}).strict(),
       reveals: true,
       run: (s) => {
@@ -259,6 +265,7 @@ export const decimalExpansion = defineProp({
     }),
     startAgain: act({
       describe: "Go back to no digits worked out. Keeps the fraction.",
+      changes: ["digitsShown", "rejectedDigit"],
       byLearner: true,
       args: z.object({}).strict(),
       run: () => set({ digitsShown: 0, rejectedDigit: null }),
@@ -266,6 +273,7 @@ export const decimalExpansion = defineProp({
     setFraction: act({
       describe:
         "Divide a new fraction, with no digits worked out yet (the learner types it when editable)",
+      changes: ["numerator", "denominator", "digitsShown", "rejectedDigit"],
       byLearner: true,
       args: z.object({ numerator, denominator }).strict(),
       run: (_s, a) =>
