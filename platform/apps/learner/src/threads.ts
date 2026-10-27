@@ -38,8 +38,18 @@ export type Thread = {
   about?: string;
   from?: string;
   changed?: string[];
+  /** What the changes reach, worked out when it became ready (platform/studio/src/reach). */
+  reaches?: { pieces: number; boards: number; lessons: string[]; everything?: string };
   messages: Message[];
 };
+
+/** "reaches 12 boards (31 pieces) in 3 lessons", or every board and why. */
+export function reachWords(r: NonNullable<Thread["reaches"]>): string {
+  const n = (count: number, one: string) => `${count} ${one}${count === 1 ? "" : "s"}`;
+  if (r.everything !== undefined) return `reaches every board (${n(r.boards, "board")})`;
+  if (r.pieces === 0) return "reaches no built board";
+  return `reaches ${n(r.boards, "board")} (${n(r.pieces, "piece")}) in ${n(r.lessons.length, "lesson")}`;
+}
 
 /** One participant's sitting, handed over (reviews/<id>.yaml). */
 export type Review = {

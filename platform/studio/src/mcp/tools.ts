@@ -21,6 +21,7 @@ import {
 } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
+import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
 import { type NodeShape, nodeSchema } from "./model-schema";
 import { previewBase, previewUrl, shoot } from "./preview";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
@@ -145,27 +146,6 @@ function threadLine(c: Filed): string {
   ].join("\n");
 }
 
-/** Prop types in the prop packages these files are in, from library/catalogue.md. */
-function propTypesIn(files: readonly string[]): Set<string> {
-  const catalogue = join(root, "library", "catalogue.md");
-  const out = new Set<string>();
-  if (!existsSync(catalogue)) return out;
-  const packages = new Set(
-    files
-      .map((f) => /^library\/props\/([^/]+)/.exec(f)?.[1])
-      .filter((n): n is string => n !== undefined),
-  );
-  if (packages.size === 0) return out;
-  let current: string | undefined;
-  for (const line of readFileSync(catalogue, "utf8").split("\n")) {
-    const section = /^## `([^`]+)`/.exec(line);
-    if (section) current = section[1];
-    const row = /^\| `([^`]+)`/.exec(line);
-    if (row?.[1] && current && packages.has(current)) out.add(row[1]);
-  }
-  return out;
-}
-
 /** The package folder a prop type is defined in (library/props/<name>), from the catalogue. */
 function packageOfType(type: string): string | undefined {
   const catalogue = join(root, "library", "catalogue.md");
@@ -178,54 +158,6 @@ function packageOfType(type: string): string | undefined {
       return `library/props/${current}`;
   }
   return undefined;
-}
-
-/** Every built board piece of these prop types, with where it was written. */
-function placesOf(
-  types: ReadonlySet<string>,
-): { board: string; piece: string; type: string; site?: string }[] {
-  const sources = readSources(root);
-  const out: { board: string; piece: string; type: string; site?: string }[] = [];
-  for (const b of listBoards(root)) {
-    const where = sources[b.board];
-    for (const [piece, type] of Object.entries(where?.props ?? {}))
-      if (types.has(type))
-        out.push({
-          board: b.board,
-          piece,
-          type,
-          ...(where?.pieces[piece] !== undefined ? { site: where.pieces[piece] } : {}),
-        });
-  }
-  return out;
-}
-
-/**
- * Which chapters a set of files feeds, from what each chapter's last build recorded reading (the
- * content build's cache: platform/studio/src/content/build.ts). Exact for chapters built since
- * their files last changed; a chapter never built yet is listed as unknown.
- */
-function chaptersReading(files: readonly string[]): { chapter: string; because: string[] }[] {
-  const dir = join(root, "node_modules", ".cache", "chalk-content");
-  if (!existsSync(dir)) return [];
-  const wanted = files.map((f) => join(root, f));
-  const out: { chapter: string; because: string[] }[] = [];
-  for (const name of readdirSync(dir).filter((n) => n.endsWith(".json"))) {
-    const chapter = name.replace(/\.json$/, "").replace(/__/g, "/");
-    let deps: string[] = [];
-    try {
-      deps = (JSON.parse(readFileSync(join(dir, name), "utf8")) as { deps?: string[] }).deps ?? [];
-    } catch {
-      continue;
-    }
-    const inside = (f: string) => f.startsWith(`${join(root, "content", chapter)}/`);
-    const because = wanted.filter(
-      (w) => inside(w) || deps.some((d) => d === w || d.startsWith(`${w}/`)),
-    );
-    if (because.length > 0)
-      out.push({ chapter, because: because.map((b) => b.slice(root.length + 1)) });
-  }
-  return out.sort((a, b) => a.chapter.localeCompare(b.chapter));
 }
 
 /** Files inside one prop package that `file` reaches by relative imports, it included. */
@@ -241,26 +173,6 @@ function closureIn(dir: string, file: string, seen = new Set<string>()): Set<str
     if (next !== undefined) closureIn(dir, next, seen);
   }
   return seen;
-}
-
-/** The prop types a file in a prop package reaches: those whose definition or view imports it. */
-function propsReaching(file: string): Set<string> {
-  const pkg = /^library\/props\/([^/]+)/.exec(file)?.[1];
-  if (pkg === undefined) return new Set();
-  const src = join(root, "library", "props", pkg, "src");
-  const whole = join(root, file);
-  if (!existsSync(whole) || statSync(whole).isDirectory() || file === `library/props/${pkg}`)
-    return propTypesIn([file]);
-  const out = new Set<string>();
-  for (const name of readdirSync(src).filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))) {
-    const def = join(src, name);
-    const type = /\btype:\s*"([A-Za-z0-9]+)"/.exec(readFileSync(def, "utf8"))?.[1];
-    if (type === undefined || !propTypesIn([file]).has(type)) continue;
-    const view = def.replace(/\.tsx?$/, "-view.tsx");
-    const reach = new Set([...closureIn(src, def), ...closureIn(src, view)]);
-    if (reach.has(whole)) out.add(type);
-  }
-  return out;
 }
 
 /**
@@ -307,48 +219,6 @@ function actionSites(type: string): Map<string, string> {
   return out;
 }
 
-type Place = { board: string; piece: string; type: string; site?: string };
-
-/** A board's lesson: "value-and-zeroes", or "questions/count-zeroes" for a question family. */
-const lessonOf = (board: string) => {
-  const [, , third, fourth] = board.split("/");
-  return third === "questions" ? `questions/${fourth}` : (third ?? "?");
-};
-
-/** A tree of places: chapters, then lessons, then boards; opened as far as asked (or fully if small). */
-function tree(places: readonly Place[], open: string | undefined): string[] {
-  const out: string[] = [];
-  const isSmall = places.length <= 30;
-  const chapters = new Map<string, Place[]>();
-  for (const p of places) {
-    const chapter = p.board.split("/").slice(0, 2).join("/");
-    chapters.set(chapter, [...(chapters.get(chapter) ?? []), p]);
-  }
-  for (const [chapter, inChapter] of chapters) {
-    const lessons = new Map<string, Place[]>();
-    for (const p of inChapter)
-      lessons.set(lessonOf(p.board), [...(lessons.get(lessonOf(p.board)) ?? []), p]);
-    out.push(
-      `└─ ${chapter} — ${inChapter.length} board${inChapter.length === 1 ? "" : "s"}, ${lessons.size} lesson${lessons.size === 1 ? "" : "s"}`,
-    );
-    const isChapterOpen = isSmall || open === chapter || open?.startsWith(`${chapter}/`);
-    if (!isChapterOpen) continue;
-    for (const [lesson, inLesson] of lessons) {
-      out.push(`   ├─ ${lesson} — ${inLesson.length} board${inLesson.length === 1 ? "" : "s"}`);
-      if (!(isSmall || open === `${chapter}/${lesson}`)) continue;
-      for (const p of inLesson)
-        out.push(
-          `   │   • ${p.board.slice(chapter.length + 1)} · ${p.piece} (${p.type}) → ${p.site ?? "?"}`,
-        );
-    }
-  }
-  if (!isSmall && open === undefined)
-    out.push(
-      `(${places.length} boards: open one branch with open: "<book/chapter>" or "<book/chapter/lesson>")`,
-    );
-  return out;
-}
-
 /** Who is calling: an agent's role (fixer, reviewer) and its name in threads. */
 export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string };
 
@@ -384,62 +254,35 @@ export function chalkMcp(who: Who): McpServer {
       {
         title: "What a change reaches",
         description:
-          'What a change to shared code reaches, before you make it, as a tree you can open branch by branch. Give prop types (`props`: ["valueMachine"]) or files and folders: a prop package or a file in one (its props are found from what imports it), a content file (the boards written in it), or other code (the chapters whose last build read it). Each prop\'s tree: chapters → lessons → boards (piece, file:line). Small trees come back fully open; otherwise `open` a chapter or lesson. Use it before changing a prop, a pattern or shared code, then render_board the boards it lists.',
+          'Every piece a change can make look or behave differently, down to `book/chapter/lesson/page#piece`, worked out from what the build recorded (every line of the author\'s code each piece was made through) and from who uses what in the code; nothing declared by hand. Ask before changing shared code, with what you plan to touch: `changes` takes files ("library/props/basics/src/views.tsx"), lines ("content/…/overview.ts:40-52") or one declaration ("content/…/kit.ts#sweetsQuestion", "library/props/basics/src/views.tsx#MultiChoiceView"); `props` takes prop types. After changing, `diff: true` reads what git says changed (since HEAD, or `diff: "<ref>"`). `depth` rolls it up: book, chapter (default), lesson, board or piece; `under` keeps to one branch ("class10-maths/real-numbers"). Then render_board what it lists.',
         inputSchema: {
-          props: z.array(z.string()).optional().describe("Prop types, e.g. valueMachine."),
-          files: z.array(z.string()).optional().describe("Files or folders, repo-relative."),
-          open: z
-            .string()
+          changes: z
+            .array(z.string())
             .optional()
-            .describe(
-              "A branch to open: book/chapter, or book/chapter/lesson (questions/<family> for questions).",
-            ),
+            .describe("Files, file:from-to, or file#declaration, repo-relative."),
+          props: z.array(z.string()).optional().describe("Prop types, e.g. multiChoice."),
+          diff: z
+            .union([z.boolean(), z.string()])
+            .optional()
+            .describe("What git says changed: true (since HEAD), or a ref."),
+          depth: z.enum(DEPTHS).optional().describe("How far down to list (default chapter)."),
+          under: z.string().optional().describe("Only paths under this one."),
         },
         annotations: { readOnlyHint: true, openWorldHint: false },
       },
-      async ({ props, files, open }) => {
-        if ((props?.length ?? 0) === 0 && (files?.length ?? 0) === 0)
-          throw new Error("say what is changing: props (types) or files");
-        const out: string[] = [];
-        const sources = readSources(root);
-        const types = new Set(props ?? []);
-        for (const file of files ?? []) {
-          const f = file.replace(/\/$/, "");
-          if (f.startsWith("library/props/")) for (const t of propsReaching(f)) types.add(t);
-          else if (f.startsWith("content/")) {
-            const boards = Object.entries(sources)
-              .filter(([, w]) =>
-                [w.board, ...Object.values(w.pieces)].some(
-                  (site) =>
-                    site !== undefined &&
-                    (site.replace(/:\d+$/, "") === f || site.startsWith(`${f}/`)),
-                ),
-              )
-              .map(([b]) => b.replace(/\.json$/, ""));
-            out.push(
-              `${f} — ${boards.length} board${boards.length === 1 ? "" : "s"} written here`,
-              ...boards.slice(0, 60).map((b) => `   • ${b}`),
-              "",
-            );
-          } else {
-            const hits = chaptersReading([f]);
-            out.push(
-              hits.length >= 25
-                ? `${f} — read by every chapter's build (${hits.length}): every board can change`
-                : `${f} — read by ${hits.length} chapter${hits.length === 1 ? "" : "s"}: ${hits.map((h) => h.chapter).join(", ") || "none (as of each chapter's last build)"}`,
-              "",
-            );
-          }
-        }
-        for (const type of types) {
-          const places = placesOf(new Set([type]));
-          const chapters = new Set(places.map((p) => p.board.split("/").slice(0, 2).join("/")));
-          out.push(
-            `${type} (${packageOfType(type) ?? "?"}) — ${places.length} board${places.length === 1 ? "" : "s"} in ${chapters.size} chapter${chapters.size === 1 ? "" : "s"}`,
-          );
-          out.push(...(places.length === 0 ? ["   (no board places it)"] : tree(places, open)), "");
-        }
-        return result([text(out.join("\n").trim())]);
+      async ({ changes, props, diff, depth, under }) => {
+        if ((changes?.length ?? 0) === 0 && (props?.length ?? 0) === 0 && !diff)
+          throw new Error("say what is changing: changes, props, or diff: true");
+        const index = reachIndex(root);
+        const named = [
+          ...(diff ? changesFromGit(root, typeof diff === "string" ? diff : "HEAD") : []),
+          ...changesFrom(index, changes ?? []),
+        ];
+        const reached = index.reach(named);
+        const hits = [...reached.hits, ...index.ofTypes(props ?? [])];
+        return result([
+          text(describeReach({ ...reached, hits }, depth ?? "chapter", under, named.length)),
+        ]);
       },
     ),
     "affected",

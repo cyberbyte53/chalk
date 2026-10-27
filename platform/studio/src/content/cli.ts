@@ -15,7 +15,7 @@ import { parseArgs } from "node:util";
 import { propDefs } from "@chalk/library";
 import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
-import { type BuildResult, PROP_DIRS, SOURCES_FILE, buildContent } from "./build";
+import { type BuildResult, PROP_DIRS, REACH_FILE, SOURCES_FILE, buildContent } from "./build";
 import { MODULES_FILE, writeConceptModules, writeModulesModule } from "./concepts";
 import { buildInputsKey, inputsKeyFile } from "./inputs";
 
@@ -87,6 +87,8 @@ function write(result: BuildResult): void {
   for (const [path, json] of result.files) wanted.set(path, `${JSON.stringify(json, null, 2)}\n`);
   // Where each board was written, for the preview's "open in editor"; not part of the content.
   wanted.set(SOURCES_FILE, `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`);
+  // What each board was made from, for tracing a change to what it reaches; not part of the content.
+  wanted.set(REACH_FILE, `${JSON.stringify(result.reach)}\n`);
   // Written last, every time (only changed files are written, so nothing else always changes):
   // the dev server watches it to tell open previews to redraw.
   wanted.set(BUILT_FILE, `${new Date().toISOString()}\n`);
@@ -223,6 +225,7 @@ async function publish(): Promise<void> {
   rmSync(kept, { recursive: true, force: true });
   cpSync(buildDir, kept, { recursive: true });
   rmSync(join(kept, SOURCES_FILE), { force: true });
+  rmSync(join(kept, REACH_FILE), { force: true });
   console.log(`✓ published ${commit.slice(0, 7)} → ${kept}`);
 }
 

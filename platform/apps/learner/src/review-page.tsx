@@ -14,7 +14,14 @@ import {
   shownAt,
   toEditor,
 } from "./preview-shell";
-import { type Review, type Thread, changeComments, isFinished, useThreads } from "./threads";
+import {
+  type Review,
+  type Thread,
+  changeComments,
+  isFinished,
+  reachWords,
+  useThreads,
+} from "./threads";
 
 /**
  * Reviews in the preview (development only; platform/docs/comments.md).
@@ -331,6 +338,16 @@ function ThreadFold({
                 {t.changed.map((f) => (
                   <div key={f}>{f}</div>
                 ))}
+              </details>
+            )}
+            {t.reaches && (
+              <details class="rv-changed">
+                <summary>{reachWords(t.reaches)}</summary>
+                {t.reaches.everything !== undefined ? (
+                  <div>{t.reaches.everything}</div>
+                ) : (
+                  t.reaches.lessons.map((l) => <div key={l}>{l}</div>)
+                )}
               </details>
             )}
             <form

@@ -1,5 +1,5 @@
 import { type BoardKit, type BuiltBoard, type Child, buildBoard } from "./board";
-import { siteHere } from "./site";
+import { framesHere, siteFrom } from "./site";
 
 const PAGE = Symbol("page");
 
@@ -9,6 +9,8 @@ export type Page = {
   readonly key: string;
   /** Where the page(...) call is: `content/<path>/overview.ts:12` (for editors; may be absent). */
   readonly site?: string;
+  /** Every frame of the author's code the page(...) call was made through (see framesHere). */
+  readonly stack?: readonly string[];
   readonly build: () => BuiltBoard;
 };
 
@@ -26,11 +28,13 @@ export function camel(key: string): string {
  */
 export function page(key: string, build: (b: BoardKit) => readonly Child[]): Page {
   if (!KEY.test(key)) throw new Error(`Page "${key}": use kebab-case, like decimal-zoom`);
-  const site = siteHere();
+  const stack = framesHere();
+  const site = siteFrom(stack);
   return {
     [PAGE]: true,
     key,
     ...(site === undefined ? {} : { site }),
+    ...(stack.length === 0 ? {} : { stack }),
     build: () => buildBoard(camel(key), build),
   };
 }

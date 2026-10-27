@@ -22,7 +22,7 @@ import {
   type StoredState,
 } from "@chalk/prop";
 import { Expr } from "./expr";
-import { noteSite, siteHere } from "./site";
+import { framesHere, noteStack } from "./site";
 
 /** A field's value as an author may give it: anywhere a number goes, an exact Dec may go too. */
 export type Loose<T> = T extends number
@@ -252,7 +252,7 @@ export class BoardKit {
     if (Object.keys(fields).length > 0) piece.with = fields;
     if (options.isHidden === true) piece.isHidden = true;
     if (options.size !== undefined) piece.size = { ...options.size };
-    noteSite(piece, siteHere());
+    noteStack(piece, framesHere());
     const placed = new Placed(name, def, piece);
     this.placed.push(placed as unknown as Placed<StoredState, string, string, string>);
     return placed;

@@ -11,6 +11,7 @@ import {
 import { dirname, join, relative } from "node:path";
 import { parse, stringify } from "yaml";
 import { z } from "zod";
+import { changesFromGit, reachIndex, rollUp } from "./reach";
 
 /**
  * Comments and reviews (platform/docs/comments.md).
@@ -138,6 +139,19 @@ export const threadSchema = z
     text: z.string(),
     /** Files changed for it, recorded from git when it became ready. */
     changed: z.array(z.string()).optional(),
+    /**
+     * What those changes reach (platform/studio/src/reach), worked out when it became ready: how many
+     * pieces and boards, and the lessons they are in; `everything` says why when it is every board.
+     */
+    reaches: z
+      .object({
+        pieces: z.number(),
+        boards: z.number(),
+        lessons: z.array(z.string()),
+        everything: z.string().optional(),
+      })
+      .strict()
+      .optional(),
     messages: z.array(messageSchema).default([]),
   })
   .strict();
@@ -584,6 +598,8 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       return refuse(`fix the regressions it caused first: ${blocking.map((x) => x.id).join(", ")}`);
     const since = lastMove(t, Status.Planned)?.at ?? t.createdAt;
     t.changed = changedSince(root, since);
+    // Undefined fields aren't written to the file.
+    t.reaches = reachOf(root, t.changed);
   }
   t.messages.push({
     by: who.name,
@@ -594,6 +610,25 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   });
   if (to !== undefined) t.status = to;
   return save(t);
+}
+
+/** What changed files reach, from git's lines for them; undefined when nothing changed or it can't tell. */
+function reachOf(root: string, files: readonly string[]): Thread["reaches"] {
+  if (files.length === 0) return undefined;
+  try {
+    const wanted = new Set(files);
+    const changes = changesFromGit(root).filter((c) => wanted.has(c.file));
+    const reached = reachIndex(root).reach(changes);
+    const boards = new Set(reached.hits.map((h) => h.board));
+    return {
+      pieces: reached.hits.length,
+      boards: boards.size,
+      lessons: reached.everything ? [] : rollUp(reached.hits, "lesson").map((r) => r.path),
+      ...(reached.everything === undefined ? {} : { everything: reached.everything }),
+    };
+  } catch {
+    return undefined;
+  }
 }
 
 /** A comments file's path relative to the repo, for messages. */

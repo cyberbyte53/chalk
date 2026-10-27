@@ -22,6 +22,7 @@ import {
   paramsFileSchema,
   rootManifestSchema,
   siteOf,
+  stackOf,
 } from "@chalk/author";
 import { hashOf, idOf, rowKey, versionOf } from "@chalk/author/id";
 import {
@@ -83,12 +84,39 @@ export type BuildResult = {
    * `content/<path>/<file>:<line>`. Written to build/sources.json for the preview; never shipped.
    */
   sources: Map<string, ItemSources>;
+  /** What each board was made from, for tracing a change to what it reaches (build/reach.json). */
+  reach: Reach;
   /** Chapters built this run, and how many were reused unchanged from the cache. */
   chapters: { built: string[]; reused: number };
 };
 
 /** build/sources.json: node path → where its board was written. */
 export const SOURCES_FILE = "sources.json";
+
+/** build/reach.json: what each board was made from (see Reach). Never shipped. */
+export const REACH_FILE = "reach.json";
+
+/**
+ * What every board was made from, recorded while building, so a change can be traced to the pieces
+ * it reaches (platform/studio/src/reach): for each board, the module that made it and every line of
+ * the author's code each piece was made through; for each module, the files it imported.
+ * Paths are from the repo root (content/…, library/patterns/…).
+ */
+export type Reach = {
+  boards: Record<string, BoardReach>;
+  modules: Record<string, string[]>;
+};
+
+export type BoardReach = {
+  /** The file whose code made it: an overview.ts or a family.ts. */
+  module: string;
+  /** Frames of the call that made the board itself (a page's page(...)), innermost first. */
+  stack?: readonly string[];
+  /** A question's row: `content/…/params.yaml:12-18`. */
+  rows?: string;
+  /** Each named piece: its prop type (absent for words and groups) and the frames it was made through. */
+  pieces: Record<string, { type?: string; stack: readonly string[] }>;
+};
 
 /** Where one built board's parts were written, and each placed prop's type. */
 export type ItemSources = {
@@ -126,6 +154,7 @@ type Context = {
   /** Concept paths built, for checking the graph. */
   concepts: Set<string>;
   sources: Map<string, ItemSources>;
+  reach: Reach;
   /** Built item path → its board as played, for checks across a chapter (this run only). */
   boards: Map<string, Board>;
   /** Module file (absolute) → the hash of its code, and each file's hash, computed once. */
@@ -149,6 +178,34 @@ function sitesOf(board: Board, boardSite: string | undefined): ItemSources {
   return top === undefined ? { pieces, props } : { board: top, pieces, props };
 }
 
+/** What a board was made from (see Reach), read from the board as authored. */
+function reachOf(
+  board: Board,
+  module: string,
+  more: { stack?: readonly string[]; rows?: string },
+): BoardReach {
+  const types = new Map(propPieces(board.root).map((p) => [p.name, p.prop]));
+  const pieces: BoardReach["pieces"] = {};
+  for (const piece of walkPieces(board.root)) {
+    if (piece.name === "") continue;
+    const type = types.get(piece.name);
+    pieces[piece.name] = { ...(type === undefined ? {} : { type }), stack: stackOf(piece) };
+  }
+  return {
+    module: `content/${module}`,
+    ...(more.stack === undefined || more.stack.length === 0 ? {} : { stack: more.stack }),
+    ...(more.rows === undefined ? {} : { rows: more.rows }),
+    pieces,
+  };
+}
+
+/** A path read while building, from the repo root, if it is the author's code (content/, library/patterns/). */
+function authoredPath(c: Context, path: string): string | undefined {
+  if (path.startsWith(`${c.contentDir}/`)) return `content/${relative(c.contentDir, path)}`;
+  const fromRoot = relative(REPO_ROOT, path);
+  return fromRoot.startsWith("library/patterns/") ? fromRoot : undefined;
+}
+
 /**
  * The hash of the code that makes a module's boards: the module and every file it imports, as
  * Node resolved them while building (outside node_modules; libraries change with the lockfile).
@@ -167,6 +224,9 @@ function codeHash(c: Context, module: string): string {
     return hash;
   };
   const closure = [...importClosure([file])].sort();
+  c.reach.modules[`content/${module}`] = closure
+    .map((path) => authoredPath(c, path))
+    .filter((path): path is string => path !== undefined && path !== `content/${module}`);
   const hash = hashOf(closure.map((path) => [relative(c.contentDir, path), fileHash(path)]));
   c.codeHashes.set(file, hash);
   return hash;
@@ -241,8 +301,11 @@ function checkChildren(
   return listed.filter((name) => present.has(name));
 }
 
-/** The line (from 1) where a params.yaml's row starts: its `- ` at the top level, else 1. */
-function rowLine(c: Context, file: string, row: number): number {
+/**
+ * The line (from 1) where a params.yaml's row starts: its `- ` at the top level, else 1 (or, with
+ * `pastEnd`, one past the file's last line: where a row after the last would start).
+ */
+function rowLine(c: Context, file: string, row: number, pastEnd = false): number {
   let text: string;
   try {
     text = readFileSync(join(c.contentDir, file), "utf8");
@@ -255,7 +318,7 @@ function rowLine(c: Context, file: string, row: number): number {
     if (/^-( |$)/.test(line)) seen += 1;
     if (seen === row) return i + 1;
   }
-  return 1;
+  return pastEnd ? lines.length + 1 : 1;
 }
 
 /** Hands out an item's id, refusing one already taken. */
@@ -454,6 +517,9 @@ async function buildPages(
     for (const type of propTypesOf(made.board)) used.add(type);
     claimId(c, item.id, where);
     c.sources.set(path, sitesOf(made.built.board, p.site));
+    c.reach.boards[path] = reachOf(made.built.board, file, {
+      ...(p.stack === undefined ? {} : { stack: p.stack }),
+    });
     refs.push(emit(c, item, builtPageSchema));
   }
   return refs;
@@ -549,6 +615,9 @@ async function buildFamily(
     c.sources.set(path, {
       ...sitesOf(built.board, undefined),
       board: `content/${paramsFile}:${rowLine(c, paramsFile, row)}`,
+    });
+    c.reach.boards[path] = reachOf(built.board, familyFile, {
+      rows: `content/${paramsFile}:${rowLine(c, paramsFile, row)}-${rowLine(c, paramsFile, row + 1, true) - 1}`,
     });
     const ref = emit(c, item, builtQuestionSchema);
     banked.push({
@@ -805,6 +874,7 @@ type ChapterEntry = {
   ids: [string, string][];
   concepts: string[];
   sources: [string, ItemSources][];
+  reach: Reach;
 };
 
 /** What inside a chapter the build never reads: its comments, runs and source. */
@@ -829,7 +899,7 @@ function entryFile(cache: ChapterCache, chapterPath: string): string {
 }
 
 /** Bump when what an entry records changes: every older entry is then rebuilt. */
-const CACHE_FORMAT = "3";
+const CACHE_FORMAT = "4";
 
 function keyOf(c: Context, deps: readonly string[]): string {
   return fingerprint(deps, [CACHE_FORMAT, process.version, c.contentDir]);
@@ -863,6 +933,8 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
     for (const [id, where] of entry.ids) claimId(c, id, where);
     for (const concept of entry.concepts) c.concepts.add(concept);
     for (const [path, where] of entry.sources) c.sources.set(path, where);
+    Object.assign(c.reach.boards, entry.reach.boards);
+    Object.assign(c.reach.modules, entry.reach.modules);
     c.chapters.reused += 1;
     return entry.ref;
   }
@@ -873,6 +945,8 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
     ids: new Set(c.ids.keys()),
     concepts: new Set(c.concepts),
     sources: new Set(c.sources.keys()),
+    boards: new Set(Object.keys(c.reach.boards)),
+    modules: new Set(Object.keys(c.reach.modules)),
     imported: c.imported.length,
   };
   const ref = await buildChapter(c, chapterPath);
@@ -905,6 +979,14 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
     ids: [...c.ids].filter(([id]) => !before.ids.has(id)),
     concepts: [...c.concepts].filter((x) => !before.concepts.has(x)),
     sources: [...c.sources].filter(([path]) => !before.sources.has(path)),
+    reach: {
+      boards: Object.fromEntries(
+        Object.entries(c.reach.boards).filter(([path]) => !before.boards.has(path)),
+      ),
+      modules: Object.fromEntries(
+        Object.entries(c.reach.modules).filter(([path]) => !before.modules.has(path)),
+      ),
+    },
   };
   // A chapter with problems is rebuilt every time: some problems (a repeated id) depend on others.
   if (fresh.problems.length === 0) {
@@ -995,6 +1077,7 @@ export async function buildContent(options: {
     parents: new Map(),
     concepts: new Set(),
     sources: new Map(),
+    reach: { boards: {}, modules: {} },
     boards: new Map(),
     codeHashes: new Map(),
   };
@@ -1028,6 +1111,7 @@ export async function buildContent(options: {
     problems: c.problems,
     notices: c.notices,
     sources: c.sources,
+    reach: c.reach,
     chapters: c.chapters,
   };
 }

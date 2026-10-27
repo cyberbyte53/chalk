@@ -34,6 +34,7 @@ import {
   changeComments,
   isKept,
   planOf,
+  reachWords,
   useThreads,
 } from "./threads";
 
@@ -272,6 +273,16 @@ function BoardThreads({
             {t.changed.map((f) => (
               <div key={f}>{f}</div>
             ))}
+          </details>
+        )}
+        {isOpen && t.reaches && (
+          <details class="preview-changed">
+            <summary>{reachWords(t.reaches)}</summary>
+            {t.reaches.everything !== undefined ? (
+              <div>{t.reaches.everything}</div>
+            ) : (
+              t.reaches.lessons.map((l) => <div key={l}>{l}</div>)
+            )}
           </details>
         )}
         {!isOpen ? null : replyingTo === t.id ? (

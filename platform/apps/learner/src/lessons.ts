@@ -17,6 +17,7 @@ export const skeleton = import.meta.glob<unknown>(
     "!../../../../build/graph.json",
     "!../../../../build/ids.json",
     "!../../../../build/sources.json",
+    "!../../../../build/reach.json",
   ],
   { eager: true, import: "default" },
 );

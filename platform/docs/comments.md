@@ -51,6 +51,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 - **`about`**: another thread this one is about. A regression names the thread whose change broke it.
 - **`from`**: `chat` for feedback the person gave in an agent's chat, filed in their name.
 - **`changed`**: the files changed for it, recorded from git when it became ready.
+- **`reaches`**: what those changes reach, worked out at the same time: how many pieces and boards, and the lessons they are in, or every board and why ([reach.md](reach.md)).
 - **`messages`**: everything written on it since, oldest first. A message may move the thread's **`status`**; the last message that moved it to `planned` is its plan.
 
 ## Status
@@ -129,11 +130,11 @@ Reviews point to threads; threads don't point back. A thread can be in several r
 
 ## Threads on a prop
 
-In the preview's pick mode (`c`) a click takes the finest thing under the pointer: a part of a prop, else the piece, else the whole board, and the label says which. A pick on a prop or one of its parts (any prop but the basics: words, choices and buttons are the lesson's own) is about the prop, wherever it is used, and is filed in the prop package's comments.yaml with `prop`, and still `board`, `target` and `source` for the board it was seen on. The preview shows it under every board that places the prop. Whoever handles it decides where the fix goes: the prop's code (then `affected` lists every place to check), or just how that one board uses it.
+In the preview's pick mode (`c`) a click takes the finest thing under the pointer: a part of a prop, else the piece, else the whole board, and the label says which. A pick on a prop or one of its parts (any prop but the basics: words, choices and buttons are the lesson's own) is about the prop, wherever it is used, and is filed in the prop package's comments.yaml with `prop`, and still `board`, `target` and `source` for the board it was seen on. The preview shows it under every board that places the prop. Whoever handles it decides where the fix goes: the prop's code (then `affected` lists every piece it reaches), or just how that one board uses it.
 
 ## Where a piece's line comes from
 
-The build records where each prop was placed: the first stack frame inside `content/` when `b.prop(...)` runs (`platform/packages/author/src/site.ts`). It writes them to `build/sources.json`, which is never published. The preview puts them on the page as `data-source="content/…:42"` on every piece, so an editor's browser, Cursor's design mode or an agent pointing at a piece knows the line. Alt-click a piece in the preview to open that line.
+The build records where each prop was placed, from the call stack when `b.prop(...)` runs (`platform/packages/author/src/site.ts`): the lesson's line when there is one, else the first frame inside `content/`. It writes them to `build/sources.json`, and every frame to `build/reach.json` ([reach.md](reach.md)); neither is published. The preview puts them on the page as `data-source="content/…:42"` on every piece, so an editor's browser, Cursor's design mode or an agent pointing at a piece knows the line. Alt-click a piece in the preview to open that line.
 
 ## Moving files over
 
