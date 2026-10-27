@@ -1,7 +1,6 @@
-import { existsSync } from "node:fs";
-import { createRequire } from "node:module";
-import { dirname, join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { spawn } from "node:child_process";
+import { existsSync, mkdirSync, openSync } from "node:fs";
+import { join } from "node:path";
 import { type BoardSnapshot, changesBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import { type BoardModel, boardModelSchema } from "./model-schema";
@@ -34,41 +33,32 @@ export const DEV_URL = `http://localhost:${process.env.CHALK_DEV_PORT ?? 5173}`;
 
 /**
  * The one dev server: the one already running (the editor's, `pnpm dev`, another agent's), else
- * started here, in this process, with the content rebuild inside it. Never a second one: the port
- * is fixed, so if another starts it first, that one is used.
+ * started here as a process of its own (so this service restarting doesn't stop it), its output
+ * in node_modules/.cache/chalk-dev.log. Never a second one: the port is fixed, so if another
+ * starts it first, that one is used.
  */
 async function startServer(root: string): Promise<string> {
   const given = process.env.CHALK_PREVIEW_URL;
   if (given !== undefined && given !== "") return given;
   if (await isChalk(DEV_URL)) return DEV_URL;
   const app = join(root, "platform", "apps", "learner");
-  const require = createRequire(join(app, "package.json"));
-  const viteDir = dirname(require.resolve("vite/package.json"));
-  const vite = (await import(pathToFileURL(join(viteDir, "dist", "node", "index.js")).href)) as {
-    createServer: (config: Record<string, unknown>) => Promise<{
-      listen: () => Promise<{ resolvedUrls?: { local: string[] } }>;
-    }>;
-  };
-  try {
-    const server = await vite.createServer({
-      root: app,
-      configFile: join(app, "vite.config.ts"),
-      logLevel: "silent",
-      clearScreen: false,
-      server: { open: false },
-    });
-    await server.listen();
-    return DEV_URL;
-  } catch (error) {
-    // Someone else started it a moment ago: use theirs.
-    for (let i = 0; i < 20; i++) {
-      if (await isChalk(DEV_URL)) return DEV_URL;
-      await new Promise((r) => setTimeout(r, 500));
-    }
-    throw new Error(
-      `Couldn't start the dev server on ${DEV_URL} (${error instanceof Error ? error.message.split("\n")[0] : String(error)}). Is something else using that port? Set CHALK_DEV_PORT to move it.`,
-    );
+  const cache = join(root, "node_modules", ".cache");
+  mkdirSync(cache, { recursive: true });
+  const out = openSync(join(cache, "chalk-dev.log"), "a");
+  const child = spawn(join(app, "node_modules", ".bin", "vite"), [], {
+    cwd: app,
+    detached: true,
+    stdio: ["ignore", out, out],
+    env: process.env,
+  });
+  child.unref();
+  for (let i = 0; i < 90; i++) {
+    await new Promise((r) => setTimeout(r, 500));
+    if (await isChalk(DEV_URL)) return DEV_URL;
   }
+  throw new Error(
+    `Couldn't start the dev server on ${DEV_URL} (see node_modules/.cache/chalk-dev.log). Is something else using that port? Set CHALK_DEV_PORT to move it.`,
+  );
 }
 
 /**

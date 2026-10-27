@@ -46,6 +46,7 @@ The layout check runs first on the untouched page, and the screenshot is taken c
 - **Rebuilds never land mid-drawing.** A content rebuild waits for the drawings running, and drawings asked for after it wait for it; pages load afresh after. A drawing the page is pulled away from is tried once more, unless it was continuing a board.
 - **Settled pictures.** Fonts, images and finite animations finish before anything is measured or taken.
 - Content is rebuilt first when anything changed.
+- **Nothing to start.** Agents reach the service through a relay their harness starts (`connect.ts`): it starts the service if it isn't running and reconnects when it restarts (it runs under `tsx watch`, so a code change takes effect on the next call). The service starts the dev server, as a process of its own, when a tool needs it ([comments.md](comments.md#who-may-do-what)).
 
 ## Held to it
 
