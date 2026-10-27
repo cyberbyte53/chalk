@@ -8,7 +8,6 @@ import {
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { choice } from "./choice";
-import { goal } from "./goal";
 import { multiChoice } from "./multi-choice";
 import { firstWrong, orderSteps } from "./order-steps";
 
@@ -127,29 +126,5 @@ describe("orderSteps", () => {
   it("finds the first line that leaves every right order", () => {
     expect(firstWrong(["a", "c", "b"], [["a", "b", "c"]])).toBe(1);
     expect(firstWrong(["a", "b", "c"], [["a", "b", "c"]])).toBe(-1);
-  });
-});
-
-describe("goal", () => {
-  it("is right exactly when the lesson says the goal is met", () => {
-    const def = asAnyProp(goal);
-    const start = stateOf(
-      initialState(def, {
-        prompt: { en: "Find √2", hi: "√2 खोजो" },
-        about: "line",
-        concepts: ["sqrt-estimation"],
-      }),
-    );
-    const miss = prepareAction(def, { ...start, isMet: false }, "check");
-    const hit = prepareAction(def, { ...start, isMet: true }, "check");
-    expect(miss.isOk && miss.effect.kind === EffectKind.Set && miss.effect.set.status).toBe(
-      AnswerStatus.Wrong,
-    );
-    expect(hit.isOk && hit.effect.kind === EffectKind.Set && hit.effect.emit[0]?.payload).toEqual({
-      status: AnswerStatus.Correct,
-      attempts: 1,
-      isGraded: false,
-      about: "line",
-    });
   });
 });

@@ -26,96 +26,15 @@ importers:
       '@chalk/prop':
         specifier: workspace:*
         version: link:platform/packages/prop
-      '@chalk/prop-ap':
-        specifier: workspace:*
-        version: link:library/props/ap
       '@chalk/prop-basics':
         specifier: workspace:*
         version: link:library/props/basics
-      '@chalk/prop-carbon':
-        specifier: workspace:*
-        version: link:library/props/carbon
-      '@chalk/prop-chemistry':
-        specifier: workspace:*
-        version: link:library/props/chemistry
-      '@chalk/prop-circles':
-        specifier: workspace:*
-        version: link:library/props/circles
-      '@chalk/prop-circuit':
-        specifier: workspace:*
-        version: link:library/props/circuit
-      '@chalk/prop-control':
-        specifier: workspace:*
-        version: link:library/props/control
-      '@chalk/prop-coordinates':
-        specifier: workspace:*
-        version: link:library/props/coordinates
-      '@chalk/prop-data':
-        specifier: workspace:*
-        version: link:library/props/data
       '@chalk/prop-decimal':
         specifier: workspace:*
         version: link:library/props/decimal
-      '@chalk/prop-electricity':
-        specifier: workspace:*
-        version: link:library/props/electricity
-      '@chalk/prop-energy':
-        specifier: workspace:*
-        version: link:library/props/energy
-      '@chalk/prop-environment':
-        specifier: workspace:*
-        version: link:library/props/environment
-      '@chalk/prop-eye':
-        specifier: workspace:*
-        version: link:library/props/eye
-      '@chalk/prop-heredity':
-        specifier: workspace:*
-        version: link:library/props/heredity
-      '@chalk/prop-life':
-        specifier: workspace:*
-        version: link:library/props/life
-      '@chalk/prop-light':
-        specifier: workspace:*
-        version: link:library/props/light
-      '@chalk/prop-linear-equations':
-        specifier: workspace:*
-        version: link:library/props/linear-equations
-      '@chalk/prop-magnetism':
-        specifier: workspace:*
-        version: link:library/props/magnetism
-      '@chalk/prop-number-line':
-        specifier: workspace:*
-        version: link:library/props/number-line
-      '@chalk/prop-number-sets':
-        specifier: workspace:*
-        version: link:library/props/number-sets
-      '@chalk/prop-periodic':
-        specifier: workspace:*
-        version: link:library/props/periodic
-      '@chalk/prop-polynomials':
-        specifier: workspace:*
-        version: link:library/props/polynomials
       '@chalk/prop-primes':
         specifier: workspace:*
         version: link:library/props/primes
-      '@chalk/prop-quadratics':
-        specifier: workspace:*
-        version: link:library/props/quadratics
-      '@chalk/prop-reproduction':
-        specifier: workspace:*
-        version: link:library/props/reproduction
-      '@chalk/prop-resources':
-        specifier: workspace:*
-        version: link:library/props/resources
-      '@chalk/prop-solids':
-        specifier: workspace:*
-        version: link:library/props/solids
-      '@chalk/prop-triangles':
-        specifier: workspace:*
-        version: link:library/props/triangles
-      '@chalk/prop-trigonometry':
-        specifier: workspace:*
-        version: link:library/props/trigonometry
       nerdamer:
         specifier: 2.0.0
         version: 2.0.0
@@ -159,18 +78,9 @@ importers:
       '@chalk/prop-basics':
         specifier: workspace:*
         version: link:../props/basics
-      '@chalk/prop-number-line':
-        specifier: workspace:*
-        version: link:../props/number-line
-      '@chalk/prop-polynomials':
-        specifier: workspace:*
-        version: link:../props/polynomials
       '@chalk/prop-primes':
         specifier: workspace:*
         version: link:../props/primes
-      nerdamer:
-        specifier: 2.0.0
-        version: 2.0.0
       preact:
         specifier: 10.29.8
         version: 10.29.8(preact-render-to-string@6.5.13)
@@ -181,28 +91,6 @@ importers:
       '@types/node':
         specifier: 22.10.2
         version: 22.10.2
-
-  library/props/ap:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
 
   library/props/basics:
     dependencies:
@@ -222,223 +110,6 @@ importers:
         specifier: 3.25.76
         version: 3.25.76
 
-  library/props/blocks:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      '@chalk/prop-circles':
-        specifier: workspace:*
-        version: link:../circles
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/carbon:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/chance:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/chemistry:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/circles:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/circuit:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/collision:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/control:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/coordinates:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      '@chalk/prop-blocks':
-        specifier: workspace:*
-        version: link:../blocks
-      '@chalk/prop-circles':
-        specifier: workspace:*
-        version: link:../circles
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/data:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
   library/props/decimal:
     dependencies:
       '@chalk/content':
@@ -456,374 +127,6 @@ importers:
       zod:
         specifier: 3.25.76
         version: 3.25.76
-
-  library/props/electricity:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/energy:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/environment:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/exponents:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/eye:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/gas:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/heredity:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/life:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/light:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/linear-equations:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      fraction.js:
-        specifier: 5.3.4
-        version: 5.3.4
-      mafs:
-        specifier: 0.21.0
-        version: 0.21.0(@preact/compat@18.3.1(preact@10.29.8))(@preact/compat@18.3.1(preact@10.29.8))
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      react:
-        specifier: npm:@preact/compat@18.3.1
-        version: '@preact/compat@18.3.1(preact@10.29.8)'
-      react-dom:
-        specifier: npm:@preact/compat@18.3.1
-        version: '@preact/compat@18.3.1(preact@10.29.8)'
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/magnetism:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/number-line:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/number-sets:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/periodic:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/plot:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/polynomials:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      '@chalk/prop-blocks':
-        specifier: workspace:*
-        version: link:../blocks
-      fraction.js:
-        specifier: 5.3.4
-        version: 5.3.4
-      mafs:
-        specifier: 0.21.0
-        version: 0.21.0(@preact/compat@18.3.1(preact@10.29.8))(@preact/compat@18.3.1(preact@10.29.8))
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      react:
-        specifier: npm:@preact/compat@18.3.1
-        version: '@preact/compat@18.3.1(preact@10.29.8)'
-      react-dom:
-        specifier: npm:@preact/compat@18.3.1
-        version: '@preact/compat@18.3.1(preact@10.29.8)'
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
 
   library/props/primes:
     dependencies:
@@ -850,311 +153,35 @@ importers:
         specifier: 6.5.13
         version: 6.5.13(preact@10.29.8)
 
-  library/props/quadratics:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      mafs:
-        specifier: 0.21.0
-        version: 0.21.0(@preact/compat@18.3.1(preact@10.29.8))(@preact/compat@18.3.1(preact@10.29.8))
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      react:
-        specifier: npm:@preact/compat@18.3.1
-        version: '@preact/compat@18.3.1(preact@10.29.8)'
-      react-dom:
-        specifier: npm:@preact/compat@18.3.1
-        version: '@preact/compat@18.3.1(preact@10.29.8)'
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/reproduction:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/resources:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/roots:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/solids:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/surds:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/triangles:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
-  library/props/trigonometry:
-    dependencies:
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
   library/registry:
     dependencies:
+      '@chalk/author':
+        specifier: workspace:*
+        version: link:../../platform/packages/author
       '@chalk/content':
         specifier: workspace:*
         version: link:../../platform/packages/content
       '@chalk/draw':
         specifier: workspace:*
         version: link:../../platform/packages/draw
+      '@chalk/patterns':
+        specifier: workspace:*
+        version: link:../patterns
       '@chalk/player':
         specifier: workspace:*
         version: link:../../platform/packages/player
       '@chalk/prop':
         specifier: workspace:*
         version: link:../../platform/packages/prop
-      '@chalk/prop-ap':
-        specifier: workspace:*
-        version: link:../props/ap
       '@chalk/prop-basics':
         specifier: workspace:*
         version: link:../props/basics
-      '@chalk/prop-blocks':
-        specifier: workspace:*
-        version: link:../props/blocks
-      '@chalk/prop-carbon':
-        specifier: workspace:*
-        version: link:../props/carbon
-      '@chalk/prop-chance':
-        specifier: workspace:*
-        version: link:../props/chance
-      '@chalk/prop-chemistry':
-        specifier: workspace:*
-        version: link:../props/chemistry
-      '@chalk/prop-circles':
-        specifier: workspace:*
-        version: link:../props/circles
-      '@chalk/prop-circuit':
-        specifier: workspace:*
-        version: link:../props/circuit
-      '@chalk/prop-collision':
-        specifier: workspace:*
-        version: link:../props/collision
-      '@chalk/prop-control':
-        specifier: workspace:*
-        version: link:../props/control
-      '@chalk/prop-coordinates':
-        specifier: workspace:*
-        version: link:../props/coordinates
-      '@chalk/prop-data':
-        specifier: workspace:*
-        version: link:../props/data
       '@chalk/prop-decimal':
         specifier: workspace:*
         version: link:../props/decimal
-      '@chalk/prop-electricity':
-        specifier: workspace:*
-        version: link:../props/electricity
-      '@chalk/prop-energy':
-        specifier: workspace:*
-        version: link:../props/energy
-      '@chalk/prop-environment':
-        specifier: workspace:*
-        version: link:../props/environment
-      '@chalk/prop-exponents':
-        specifier: workspace:*
-        version: link:../props/exponents
-      '@chalk/prop-eye':
-        specifier: workspace:*
-        version: link:../props/eye
-      '@chalk/prop-gas':
-        specifier: workspace:*
-        version: link:../props/gas
-      '@chalk/prop-heredity':
-        specifier: workspace:*
-        version: link:../props/heredity
-      '@chalk/prop-life':
-        specifier: workspace:*
-        version: link:../props/life
-      '@chalk/prop-light':
-        specifier: workspace:*
-        version: link:../props/light
-      '@chalk/prop-linear-equations':
-        specifier: workspace:*
-        version: link:../props/linear-equations
-      '@chalk/prop-magnetism':
-        specifier: workspace:*
-        version: link:../props/magnetism
-      '@chalk/prop-number-line':
-        specifier: workspace:*
-        version: link:../props/number-line
-      '@chalk/prop-number-sets':
-        specifier: workspace:*
-        version: link:../props/number-sets
-      '@chalk/prop-periodic':
-        specifier: workspace:*
-        version: link:../props/periodic
-      '@chalk/prop-plot':
-        specifier: workspace:*
-        version: link:../props/plot
-      '@chalk/prop-polynomials':
-        specifier: workspace:*
-        version: link:../props/polynomials
       '@chalk/prop-primes':
         specifier: workspace:*
         version: link:../props/primes
-      '@chalk/prop-quadratics':
-        specifier: workspace:*
-        version: link:../props/quadratics
-      '@chalk/prop-reproduction':
-        specifier: workspace:*
-        version: link:../props/reproduction
-      '@chalk/prop-resources':
-        specifier: workspace:*
-        version: link:../props/resources
-      '@chalk/prop-roots':
-        specifier: workspace:*
-        version: link:../props/roots
-      '@chalk/prop-solids':
-        specifier: workspace:*
-        version: link:../props/solids
-      '@chalk/prop-surds':
-        specifier: workspace:*
-        version: link:../props/surds
-      '@chalk/prop-triangles':
-        specifier: workspace:*
-        version: link:../props/triangles
-      '@chalk/prop-trigonometry':
-        specifier: workspace:*
-        version: link:../props/trigonometry
     devDependencies:
       '@chalk/jugnu':
         specifier: workspace:*
@@ -2677,9 +1704,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@juggle/resize-observer@3.4.0':
-    resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
-
   '@modelcontextprotocol/sdk@1.32.1':
     resolution: {integrity: sha512-2DdE+SJDtzLEEWzY1ZjY7Q+VcPhcV1KisD3zI4u0XZyktsjHum1mwbMI+JaulUBi2OZk+KJAi2uPXzxichPkdw==}
     engines: {node: '>=18'}
@@ -2695,11 +1719,6 @@ packages:
     engines: {node: ^22.20 || ^24.12 || >=25}
     cpu: [x64]
     os: [linux]
-
-  '@preact/compat@18.3.1':
-    resolution: {integrity: sha512-Kog4PSRxtT4COtOXjsuQPV1vMXpUzREQfv+6Dmcy9/rMk0HOPK0HTE9fspFjAmY8R80T/T8gtgmZ68u5bOSngw==}
-    peerDependencies:
-      preact: '*'
 
   '@preact/signals-core@1.14.4':
     resolution: {integrity: sha512-HNB6HYeYKhQbJ1aKl+YRjrS4+QWHLKX6qKoUsfS/m0vqzsVaEBiZiaKbG/e+NKk2ch5ALQr/ihWaMHxiCuuWHA==}
@@ -2914,14 +1933,6 @@ packages:
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
-  '@use-gesture/core@10.3.1':
-    resolution: {integrity: sha512-WcINiDt8WjqBdUXye25anHiNxPc0VOrlT8F6LLkU6cycrOGUDyY/yyFmsg3k8i5OLvv25llc0QC45GhR/C8llw==}
-
-  '@use-gesture/react@10.3.1':
-    resolution: {integrity: sha512-Yy19y6O2GJq8f7CHf7L0nxL8bf4PZCPaVOCgJrusOeFHY1LvHgYXnmnXg6N5iwAnbgbZCDjo60SiM6IPJi9C5g==}
-    peerDependencies:
-      react: '>= 16.8.0'
-
   '@vitest/expect@2.1.8':
     resolution: {integrity: sha512-8ytZ/fFHq2g4PJVAtDX57mayemKgDR6X3Oa2Foro+EygiOJHUXhCqBAAKQYYajZpFoIfvBCF1j6R6IYRSIUFuw==}
 
@@ -3101,9 +2112,6 @@ packages:
   common-tags@1.8.2:
     resolution: {integrity: sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==}
     engines: {node: '>=4.0.0'}
-
-  computer-modern@0.1.3:
-    resolution: {integrity: sha512-tJz506hr2RPksqdYs0VJz98gE1TcpYs/L/kk5MTkEbtgCLRJ1xwcL8rXkzsSnyBqNCyrI+1paZE8Jat6d7wN2Q==}
 
   content-disposition@2.0.1:
     resolution: {integrity: sha512-e+H0ZXHSWYrENhQzw1LPuP4oF5MzVKmDU6d3hxlvaPEYLLg62MxtQNPRx4SYSuYJSBUgnQIG4HIN2tEtNv7Dog==}
@@ -3495,9 +2503,6 @@ packages:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
 
-  fraction.js@5.3.4:
-    resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
-
   fresh@2.0.0:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
@@ -3828,13 +2833,6 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
-
-  mafs@0.21.0:
-    resolution: {integrity: sha512-STRvoHPY2Pa7iOPVH5QRP5hqgSh4OEBZWp4kpW8XUElaPJpirFMhKbEG863o0f5uQ1Ho+qexKqEAtNZkmdk29w==}
-    engines: {node: '>=20.11.0'}
-    peerDependencies:
-      react: '>=18'
-      react-dom: '>=18'
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -4226,9 +3224,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  tiny-invariant@1.3.3:
-    resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
-
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
@@ -4333,12 +3328,6 @@ packages:
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
-
-  use-resize-observer@9.1.0:
-    resolution: {integrity: sha512-R25VqO9Wb3asSD4eqtcxk8sJalvIOYBqS8MNZlpDSQ4l4xMQxC/J7Id9HoTqPq8FwULIn0PVW+OAqF2dyYbjow==}
-    peerDependencies:
-      react: 16.8.0 - 18
-      react-dom: 16.8.0 - 18
 
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
@@ -5558,8 +4547,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@juggle/resize-observer@3.4.0': {}
-
   '@modelcontextprotocol/sdk@1.32.1(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 2.1.3(hono@4.13.12)
@@ -5584,10 +4571,6 @@ snapshots:
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
-
-  '@preact/compat@18.3.1(preact@10.29.8)':
-    dependencies:
-      preact: 10.29.8(preact-render-to-string@6.5.13)
 
   '@preact/signals-core@1.14.4': {}
 
@@ -5744,13 +4727,6 @@ snapshots:
   '@types/resolve@1.20.2': {}
 
   '@types/trusted-types@2.0.7': {}
-
-  '@use-gesture/core@10.3.1': {}
-
-  '@use-gesture/react@10.3.1(@preact/compat@18.3.1(preact@10.29.8))':
-    dependencies:
-      '@use-gesture/core': 10.3.1
-      react: '@preact/compat@18.3.1(preact@10.29.8)'
 
   '@vitest/expect@2.1.8':
     dependencies:
@@ -5949,8 +4925,6 @@ snapshots:
   commander@8.3.0: {}
 
   common-tags@1.8.2: {}
-
-  computer-modern@0.1.3: {}
 
   content-disposition@2.0.1: {}
 
@@ -6402,8 +5376,6 @@ snapshots:
 
   forwarded@0.2.0: {}
 
-  fraction.js@5.3.4: {}
-
   fresh@2.0.0: {}
 
   fs-extra@9.1.0:
@@ -6756,16 +5728,6 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
-
-  mafs@0.21.0(@preact/compat@18.3.1(preact@10.29.8))(@preact/compat@18.3.1(preact@10.29.8)):
-    dependencies:
-      '@use-gesture/react': 10.3.1(@preact/compat@18.3.1(preact@10.29.8))
-      computer-modern: 0.1.3
-      katex: 0.16.22
-      react: '@preact/compat@18.3.1(preact@10.29.8)'
-      react-dom: '@preact/compat@18.3.1(preact@10.29.8)'
-      tiny-invariant: 1.3.3
-      use-resize-observer: 9.1.0(@preact/compat@18.3.1(preact@10.29.8))(@preact/compat@18.3.1(preact@10.29.8))
 
   magic-string@0.30.21:
     dependencies:
@@ -7213,8 +6175,6 @@ snapshots:
       commander: 2.20.3
       source-map-support: 0.5.21
 
-  tiny-invariant@1.3.3: {}
-
   tinybench@2.9.0: {}
 
   tinyexec@0.3.2: {}
@@ -7315,12 +6275,6 @@ snapshots:
       browserslist: 4.29.4
       escalade: 3.2.0
       picocolors: 1.1.1
-
-  use-resize-observer@9.1.0(@preact/compat@18.3.1(preact@10.29.8))(@preact/compat@18.3.1(preact@10.29.8)):
-    dependencies:
-      '@juggle/resize-observer': 3.4.0
-      react: '@preact/compat@18.3.1(preact@10.29.8)'
-      react-dom: '@preact/compat@18.3.1(preact@10.29.8)'
 
   vary@1.1.2: {}
 

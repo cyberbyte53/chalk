@@ -21,50 +21,44 @@ const contentDir = join(dirname(findUp("pnpm-workspace.yaml", import.meta.dirnam
 const readings = loadReadings(join(contentDir, "..", "authoring", PRONUNCIATIONS_FILE));
 const fixturesDir = join(import.meta.dirname, ".fixtures");
 const CHAPTER = "book/chapter";
-/** Named as in the real chapter: the real locate-on-line family tests it. */
-const CONCEPT = `${CHAPTER}/successive-magnification`;
+/** The concept the fixtures' family tests. */
+const CONCEPT = `${CHAPTER}/reading-decimals`;
 const BASICS = join(contentDir, "../library/props/basics/src/index.ts");
-const PATTERNS = join(contentDir, "../library/patterns/index.ts");
-const NUMBER_LINE = join(contentDir, "../library/props/number-line/src/index.ts");
 
-/** A family for the fixtures: put the marker exactly on a decimal, zooming in as far as it needs. */
-const locateOnLine = (from: (file: string) => string) => `
+/**
+ * A family for the fixtures: pick the option that reads the target decimal, between two whole
+ * numbers. The other option swaps its last two digits, and says so when picked. The answer is the
+ * option that reads the target, so a target whose swap changes nothing (7.388) has a "wrong"
+ * option that is right: the build catches it.
+ */
+const pickDecimal = (from: (file: string) => string) => `
 import { decimal, family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { goalQuestion, reach } from "${from(PATTERNS)}";
-import { NumberLineAction, numberLineDef } from "${from(NUMBER_LINE)}";
+import { QuestionAction } from "@chalk/prop";
+import { ChoiceAction, choiceDef } from "${from(BASICS)}";
 import { z } from "zod";
-export const locateOnLine = family({
+export const pickDecimal = family({
   level: Level.Medium,
-  tests: ["successive-magnification"],
+  tests: ["reading-decimals"],
   params: z.object({ target: decimal, from: z.number(), to: z.number() }).strict(),
   build: ({ target, from, to }, b) => {
-    const line = b.prop(numberLineDef, "line", {
-      from, to, showMarker: true, marker: (from + to) / 2, isZoomable: true,
-    });
-    b.studentOnly(line.action(NumberLineAction.MoveMarker));
-    const marker = line.field("marker");
-    const early = target.round(target.places - 1);
     const swapped = target.swapLastTwo();
-    const goal = goalQuestion(b, {
-      about: line,
-      prompt: t(\`Put the marker exactly on \${target}.\`, \`मार्कर को ठीक \${target} पर रखो।\`),
-      isMet: marker.isAt(target),
-      solve: reach(line, target),
-      notes: [
-        {
-          when: marker.isAt(early.at(target.places)),
-          say: t(\`That's \${early}: one zoom early.\`, \`यह \${early} है: एक ज़ूम पहले।\`),
-          reach: reach(line, early),
-        },
-        {
-          when: marker.isAt(swapped),
-          say: t(\`That's \${swapped}.\`, \`यह \${swapped} है।\`),
-          reach: reach(line, swapped),
-        },
-      ],
+    const options = [
+      { id: "swapped", label: t(String(swapped), String(swapped)), feedback: t(\`That's \${swapped}.\`, \`यह \${swapped} है।\`) },
+      { id: "target", label: t(String(target), String(target)) },
+    ];
+    const answer = options.find((o) => o.label.en === String(target))?.id ?? "target";
+    const ask = b.prop(choiceDef, "ask", {
+      prompt: t(\`Between \${from} and \${to}: which is \${target}?\`, \`\${from} और \${to} के बीच: \${target} कौन-सा है?\`),
+      options,
+      answer,
     });
-    return [line, goal];
+    b.witness(ask.learner(ChoiceAction.Select, { option: answer }), ask.learner(QuestionAction.Check));
+    b.noteCheck({
+      steps: [ask.learner(ChoiceAction.Select, { option: "swapped" }), ask.learner(QuestionAction.Check)],
+      feedback: options[0]!.feedback!,
+    });
+    return [ask];
   },
 });
 `;
@@ -97,7 +91,7 @@ let fixtureCount = 0;
 
 /**
  * A small content tree: one book, one chapter with one overview-less concept, and a bank holding
- * locate-on-line (re-exported from the real one) whose params.yaml rows are given.
+ * pick-decimal whose params.yaml rows are given.
  */
 function fixture(spec: {
   rows: unknown[];
@@ -111,9 +105,9 @@ function fixture(spec: {
   overview?: (basics: string) => string;
 }): string {
   const dir = join(fixturesDir, `t${++fixtureCount}`);
-  const chapter = spec.chapter ?? "concepts: [successive-magnification]\nquestions: all\n";
+  const chapter = spec.chapter ?? "concepts: [reading-decimals]\nquestions: all\n";
   const concepts = /concepts: \[([^\]]*)\]/.exec(chapter)?.[1]?.split(", ") ?? [];
-  const familyDir = `${CHAPTER}/questions/locate`;
+  const familyDir = `${CHAPTER}/questions/pick`;
   const files: Record<string, string> = {
     "build.yaml": "books: [book]\n",
     "book/build.yaml": "title: { en: Book, hi: पुस्तक }\nchapters: [chapter]\n",
@@ -123,7 +117,7 @@ function fixture(spec: {
     [`${CONCEPT}/overview.ts`]:
       spec.overview?.(relative(join(dir, CONCEPT), BASICS).replace(/\.ts$/, "")) ??
       "export const overview = [];\n",
-    [`${familyDir}/family.ts`]: locateOnLine((file) =>
+    [`${familyDir}/family.ts`]: pickDecimal((file) =>
       relative(join(dir, familyDir), file).replace(/\.ts$/, ""),
     ),
     [`${familyDir}/${ContentFile.Params}`]: stringifyYaml(spec.rows),
@@ -220,13 +214,13 @@ describe("building content", () => {
     const dir = fixture({ rows: [{ params: { target: "7.384", from: 7, to: 8 }, level: "hard" }] });
     const result = await build(dir);
     expect(result.problems).toEqual([]);
-    const file = [...result.files.keys()].find((k) => k.startsWith(`${CHAPTER}/questions/locate/`));
+    const file = [...result.files.keys()].find((k) => k.startsWith(`${CHAPTER}/questions/pick/`));
     const q = builtQuestionSchema.parse(result.files.get(file ?? ""));
-    expect(q.path).toMatch(new RegExp(`^${CHAPTER}/questions/locate/[0-9a-f]{8}$`));
+    expect(q.path).toMatch(new RegExp(`^${CHAPTER}/questions/pick/[0-9a-f]{8}$`));
     expect(q.level).toBe("hard");
     expect(q.params).toEqual({ target: "7.384", from: 7, to: 8 });
     expect(q.source).toEqual({
-      path: `${CHAPTER}/questions/locate`,
+      path: `${CHAPTER}/questions/pick`,
       file: ContentFile.Params,
       row: 0,
     });
@@ -236,10 +230,10 @@ describe("building content", () => {
       `"concepts":["${concept.id}"],"isGraded":true`,
     );
     const family = builtFamilySchema.parse(
-      result.files.get(builtFile(`${CHAPTER}/questions/locate`)),
+      result.files.get(builtFile(`${CHAPTER}/questions/pick`)),
     );
     expect(family.tests).toEqual([concept.id]);
-    expect(concept.props).toEqual(["numberLine"]); // from the question that tests it
+    expect(concept.props).toEqual([]); // the explainers its questions use: a choice is not one
   }, 60_000);
 
   it("a board may ask several questions; its witness must answer every one", async () => {
@@ -270,7 +264,7 @@ describe("building content", () => {
     );
     expect(messages(result)).toMatch(/row 0: .*fewer than 2 decimal places/);
     expect(messages(result)).toMatch(/row 1: params\.from/);
-    const questions = [...result.files.keys()].filter((k) => k.includes("/questions/locate/"));
+    const questions = [...result.files.keys()].filter((k) => k.includes("/questions/pick/"));
     expect(questions).toHaveLength(1);
   }, 60_000);
 
@@ -302,7 +296,7 @@ describe("building content", () => {
     const missing = await build(
       fixture({
         rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
-        chapter: "concepts: [successive-magnification, ghost]\nquestions: all\n",
+        chapter: "concepts: [reading-decimals, ghost]\nquestions: all\n",
       }),
     );
     expect(messages(missing)).toMatch(/lists "ghost", but there is no folder/);
@@ -316,7 +310,7 @@ describe("building content", () => {
     const both = await build(
       fixture({
         rows: [{ params: { target: "2.665", from: 2, to: 3 } }],
-        chapter: "concepts: [successive-magnification]\nquestions: [locate]\nexclude: [locate]\n",
+        chapter: "concepts: [reading-decimals]\nquestions: [pick]\nexclude: [pick]\n",
       }),
     );
     expect(messages(both)).toMatch(/`exclude` only goes with `questions: all`/);
@@ -353,7 +347,7 @@ describe("building content", () => {
     writeFileSync(join(dir, CHAPTER, "concepts.gen.ts"), conceptsModule([]));
     const result = await build(dir);
     expect(messages(result)).toMatch(
-      /tests "successive-magnification", which isn't a concept of book\/chapter/,
+      /tests "reading-decimals", which isn't a concept of book\/chapter/,
     );
   }, 60_000);
 

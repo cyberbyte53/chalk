@@ -15,16 +15,16 @@ import {
   groupLearnerPath,
   groupPath,
 } from "@chalk/api";
-import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, lessonSchema } from "@chalk/content";
+import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION } from "@chalk/content";
 import { type ChatMessage, scriptedProvider } from "@chalk/jugnu";
 import { propDefs } from "@chalk/library";
+import { testLesson } from "@chalk/library/test-lesson";
 import { headlessBoard } from "@chalk/player";
 import { PGlite } from "@electric-sql/pglite";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import rootTwo from "../../../studio/evals/boards/where-is-root-2.json";
 import {
   type AppDeps,
   JUGNU_TURNS_PER_HOUR,
@@ -191,17 +191,14 @@ describe("server", () => {
           {
             name: "try",
             args: {
-              calls: [{ call: "line.placeMark", args: { at: 1.3, label: "1.3", color: null } }],
+              calls: [{ call: "game.giveRound", args: {} }],
             },
           },
         ],
       },
       (request) =>
-        request.messages.some((m) => m.role === "tool" && m.content.includes('"mark:1.3":1.3'))
-          ? reply([
-              { show: { call: "line.placeMark", args: { at: 1.3, label: "1.3", color: null } } },
-              { say: "Look at 1.3." },
-            ])
+        request.messages.some((m) => m.role === "tool" && m.content.includes("12 sweets"))
+          ? reply([{ show: { call: "game.giveRound", args: {} } }, { say: "Look at the box." }])
           : reply([{ say: "?" }]),
       reply([{ say: "Try the midpoint." }]),
     ]);
@@ -396,15 +393,15 @@ describe("server", () => {
     expect(response.status).toBe(403);
   });
 
-  const guessBoard = lessonSchema.parse(rootTwo).boards[1];
-  if (guessBoard === undefined) throw new Error("no guess board");
-  const guess = guessBoard;
+  const shareBoard = testLesson().boards[0];
+  if (shareBoard === undefined) throw new Error("no share board");
+  const guess = shareBoard;
   const GUESS = {
     id: "aaaaaaaaaaaaaaaa",
-    path: "book/chapter/lesson/guess",
+    path: "book/chapter/lesson/share",
     version: "abc123",
   };
-  const place = { lessonTitle: "Where does √2 live?", boardNumber: 2, boardCount: 4, locale: "en" };
+  const place = { lessonTitle: "A lesson for tests", boardNumber: 1, boardCount: 3, locale: "en" };
   const turnRequest = (chat: readonly unknown[], text = "help") => {
     const phone = headlessBoard(guess, (type) => propDefs[type]);
     const state = phone.runtime.save();
@@ -420,8 +417,8 @@ describe("server", () => {
       turnRequest([]),
     );
     expect(reply.cues).toEqual([
-      { kind: "act", prop: "line", action: "placeMark", args: { at: 1.3, label: "1.3" } },
-      { kind: "say", text: "Look at 1.3." },
+      { kind: "act", prop: "game", action: "giveRound", args: {} },
+      { kind: "say", text: "Look at the box." },
     ]);
     expect(reply.modelCalls).toBe(2);
     // The next turn carries the chat back; the server checks it and goes on from it.
@@ -489,7 +486,7 @@ describe("server", () => {
     const { learner } = await teacherAndLearner();
     const { state } = turnRequest([]);
     const flag = {
-      lessonId: "where-is-root-2",
+      lessonId: "test-lesson",
       board: guess.name,
       item: GUESS,
       place,

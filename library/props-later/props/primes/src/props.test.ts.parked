@@ -1,0 +1,281 @@
+import { describe, expect, it } from "vitest";
+import { bagOf } from "./arithmetic";
+import { BagShow, bagCompare } from "./bag-compare";
+import { beadPair } from "./bead-pair";
+import { billSplit, shareOf, shareText } from "./bill-split";
+import { divisionRows } from "./division-rows";
+import { factorTree, nodesOf } from "./factor-tree";
+import { gearPair } from "./gear-pair";
+import { lapRace } from "./lap-race";
+import { primeBag } from "./prime-bag";
+import { primeTowers } from "./prime-towers";
+import { remainderShelves } from "./remainder-shelves";
+import { squareBalance } from "./square-balance";
+import { type SquareCutterState, squareCutter, zoomStep } from "./square-cutter";
+import { fitLines, stickMeasure } from "./stick-measure";
+import { sweetShare } from "./sweet-share";
+import { TenStage, primesText, tenMaker, terminatingDecimal, workingOf } from "./ten-maker";
+import { door } from "./test-door";
+
+const extra = {
+  isEditable: false,
+  cancelLabel: { en: "Cancel", hi: "काटो" },
+  pairLabel: { en: "Pair into tens", hi: "दहाई में जोड़ो" },
+  topUpLabel: { en: "Add {p}s", hi: "{p} जोड़ो" },
+};
+
+describe("divisionRows: a counters in rows of b", () => {
+  const d = door(divisionRows);
+  it("17 in rows of 5: 3 full rows and 2 over", () => {
+    const v = d.look({ dividend: 17, divisor: 5 });
+    expect([v.quotient, v.remainder]).toEqual([3, 2]);
+  });
+  it("fewer than b: no full row, all left over (5 = 12 × 0 + 5)", () => {
+    expect(d.look({ dividend: 5, divisor: 12 }).quotient).toBe(0);
+    expect(d.look({ dividend: 5, divisor: 12 }).remainder).toBe(5);
+  });
+  it("changing b keeps a; announces the new q and r", () => {
+    const { state, emit } = d.run({ dividend: 20, divisor: 3 }, "setDivisor", { value: 4 });
+    expect(state).toEqual({ dividend: 20, divisor: 4 });
+    expect(emit).toEqual([{ signal: "changed", payload: { q: 5, r: 0 } }]);
+  });
+  it("refuses a row of 0", () => {
+    expect(d.refuses({ dividend: 20, divisor: 3 }, "setDivisor", { value: 0 })).toBe(true);
+  });
+});
+
+describe("squareCutter: Euclid's algorithm as squares", () => {
+  const d = door(squareCutter);
+  const base = {
+    tile: 0,
+    tileChoices: [] as number[],
+    canCut: true,
+    isEditable: false,
+    cutLabel: { en: "Cut squares", hi: "वर्ग काटो" },
+    isZoomedOut: false,
+    letters: null as SquareCutterState["letters"],
+    words: {
+      showWhole: { en: "Show the whole floor", hi: "पूरा फ़र्श दिखाओ" },
+      zoomIn: { en: "Zoom in", hi: "पास से दिखाओ" },
+      along: { en: "Along {side}:", hi: "भुजा {side} पर:" },
+      gap: { en: "gap of {r}", hi: "{r} ख़ाली" },
+      fits: { en: "fits", hi: "ठीक बैठती है" },
+    },
+  };
+  const start = { ...base, sideA: 12576, sideB: 4052, cuts: 0 };
+  it("takes 7 rounds for 4052 and 12576 and ends on squares of side 4", () => {
+    let s = start;
+    const finished: unknown[] = [];
+    for (let i = 0; i < 7; i++) {
+      const out = d.run(s, "cut");
+      s = out.state;
+      finished.push(...out.emit.filter((e) => e.signal === "finished"));
+    }
+    expect(d.look(s).isDone).toBe(true);
+    expect(d.look(s).hcf).toBe(4);
+    expect(finished).toEqual([{ signal: "finished", payload: { hcf: 4 } }]);
+    expect(d.run(s, "cut").state).toEqual(s);
+  });
+  it("each round's piece is the previous short side by the remainder", () => {
+    const one = d.run(start, "cut");
+    expect(one.emit[0]).toEqual({ signal: "cut", payload: { a: 12576, b: 4052, q: 3, r: 420 } });
+    expect(d.look(one.state).piece).toEqual({ long: 4052, short: 420 });
+  });
+  it("a square is done before any cut; a new rectangle starts uncut", () => {
+    expect(d.look({ ...base, sideA: 7, sideB: 7, cuts: 0 }).stepCount).toBe(1);
+    expect(d.run({ ...start, cuts: 3 }, "setSides", { sideA: 6, sideB: 16 }).state.cuts).toBe(0);
+  });
+  it("a trial tile fits exactly when its side divides both sides, cut or not", () => {
+    const floor = { ...base, sideA: 16, sideB: 6, cuts: 0 };
+    for (const t of [1, 2, 3, 4, 5, 6]) {
+      const fits = 16 % t === 0 && 6 % t === 0;
+      expect(d.run(floor, "tryTile", { side: t }).emit).toEqual([
+        { signal: "tried", payload: { side: t, fits } },
+      ]);
+      // The floor and what is left after a cut take the same tiles: HCF(16, 6) = HCF(6, 4).
+      expect(fits).toBe(6 % t === 0 && 4 % t === 0);
+    }
+    expect(d.run({ ...floor, tile: 3 }, "tryTile", { side: 0 }).state.tile).toBe(0);
+    expect(d.run({ ...floor, tile: 3 }, "setSides", { sideA: 9, sideB: 6 }).state.tile).toBe(0);
+  });
+  it("zooms in on a piece too small to see, until the learner zooms out; a cut zooms back in", () => {
+    // 12576 × 4052: after one cut the 4052 × 420 strip is already a tiny share of the floor.
+    expect(zoomStep({ ...start, cuts: 0 })).toBeNull();
+    expect(zoomStep({ ...start, cuts: 1 })).toBe(1);
+    expect(zoomStep({ ...start, cuts: 3 })).toBe(3);
+    expect(zoomStep({ ...start, cuts: 7 })).toBe(6);
+    const out = d.run({ ...start, cuts: 3 }, "toggleZoom").state;
+    expect(out.isZoomedOut).toBe(true);
+    expect(d.run(out, "cut").state.isZoomedOut).toBe(false);
+    // 18 × 12 never needs it: its pieces are big.
+    for (let k = 0; k <= 2; k++)
+      expect(zoomStep({ ...base, sideA: 18, sideB: 12, cuts: k })).toBeNull();
+  });
+  it("cutAll reveals the HCF; more cuts than rounds are refused", () => {
+    expect(d.run(start, "cutAll").state.cuts).toBe(7);
+    expect(d.rejects(start, { cuts: 8 })).toBe(true);
+  });
+});
+
+describe("remainderShelves: every number has one remainder", () => {
+  const d = door(remainderShelves);
+  it("1 to 9 on 3 shelves fill all three, three each", () => {
+    const v = d.look({ divisor: 3, power: 1, placed: 9 });
+    expect(v.litShelves).toEqual([0, 1, 2]);
+  });
+  it("squares on 3 shelves reach only 0 and 1 (NCERT Ex 1.1 Q4)", () => {
+    expect(d.look({ divisor: 3, power: 2, placed: 60 }).litShelves).toEqual([0, 1]);
+  });
+  it("cubes on 9 shelves reach only 0, 1 and 8 (NCERT Ex 1.1 Q5)", () => {
+    expect(d.look({ divisor: 9, power: 3, placed: 60 }).litShelves).toEqual([0, 1, 8]);
+  });
+  it("odd numbers on 4 shelves land on 1 and 3 only (NCERT Example 3)", () => {
+    const placements = d.look({ divisor: 4, power: 1, placed: 40 }).placements as {
+      n: number;
+      shelf: number;
+    }[];
+    const odd = new Set(placements.filter((p) => p.n % 2 === 1).map((p) => p.shelf));
+    expect([...odd].sort()).toEqual([1, 3]);
+  });
+  it("placeNext drops n + 1 and says where", () => {
+    const { state, emit } = d.run({ divisor: 4, power: 2, placed: 2 }, "placeNext");
+    expect(state.placed).toBe(3);
+    expect(emit).toEqual([{ signal: "placed", payload: { n: 3, value: 9, shelf: 1 } }]);
+  });
+});
+
+describe("primeBag: the bag of nᵏ", () => {
+  const d = door(primeBag);
+  it("4ⁿ has only 2s, so it never ends in 0 (NCERT Example 5)", () => {
+    for (let k = 1; k <= 12; k++) {
+      const v = d.look({
+        base: 4,
+        power: k,
+        isPowerShown: true,
+        isBaseEditable: true,
+        powerName: "k",
+      });
+      expect(Object.keys(v.bag as object)).toEqual(["2"]);
+      expect(v.lastDigit).not.toBe(0);
+    }
+  });
+  it("6ⁿ never ends in 0; 10ⁿ always does; a 2 and a 5 is exactly ending in 0", () => {
+    for (let base = 1; base <= 200; base++) {
+      for (const k of [1, 2, 5]) {
+        const v = d.look({
+          base,
+          power: k,
+          isPowerShown: true,
+          isBaseEditable: true,
+          powerName: "k",
+        });
+        expect(v.lastDigit === 0).toBe(v.hasTwoAndFive);
+      }
+    }
+  });
+  it("writes huge powers exactly", () => {
+    expect(
+      d.look({ base: 999, power: 12, isPowerShown: true, isBaseEditable: true, powerName: "k" })
+        .valueText,
+    ).toBe((999n ** 12n).toString());
+  });
+});
+
+describe("bagCompare: HCF and LCM from the bags", () => {
+  const d = door(bagCompare);
+  it("26 and 91: HCF 13, LCM 182, and 13 × 182 = 26 × 91 (NCERT Ex 1.2 Q2)", () => {
+    const v = d.look({
+      numbers: [26, 91],
+      show: BagShow.Apart,
+      isEditable: false,
+      names: bagCompare.defaults.names,
+    });
+    expect([v.hcf, v.lcm, v.hcfTimesLcm, v.product]).toEqual([13, 182, 2366, 2366]);
+    expect(v.primes).toEqual([2, 7, 13]);
+  });
+  it("12, 15 and 21: HCF 3, LCM 420 (NCERT Ex 1.2 Q3)", () => {
+    const v = d.look({
+      numbers: [12, 15, 21],
+      show: BagShow.Lcm,
+      isEditable: false,
+      names: bagCompare.defaults.names,
+    });
+    expect([v.hcf, v.lcm, v.hcfBag, v.lcmBag]).toEqual([3, 420, "3", "2² × 3 × 5 × 7"]);
+  });
+  it("show changes only what is shown", () => {
+    const s = {
+      numbers: [12, 18],
+      show: BagShow.Apart,
+      isEditable: false,
+      names: bagCompare.defaults.names,
+    };
+    expect(d.run(s, "show", { show: BagShow.Hcf }).state).toEqual({ ...s, show: BagShow.Hcf });
+  });
+});
+
+describe("gearPair: the painted teeth meet after the LCM", () => {
+  const d = door(gearPair);
+  it("18 and 12 teeth meet again after 36 teeth: 2 turns and 3 turns (NCERT Ex 1.2 Q7, as gears)", async () => {
+    const out = await d.play({ teethA: 18, teethB: 12, turned: 0 }, "turnToMeet");
+    expect(out.state.turned).toBe(36);
+    expect(d.look(out.state).isMarkMet).toBe(true);
+    expect(out.emit.at(-1)).toEqual({
+      signal: "met",
+      payload: { turned: 36, turnsA: 2, turnsB: 3 },
+    });
+    // every frame went through the door, smoothly forward
+    const turned = out.frames.map((f) => f.turned);
+    expect(turned.every((t, i) => i === 0 || t >= (turned[i - 1] ?? 0))).toBe(true);
+  });
+  it("12 teeth on is not a meeting for 18 and 12", async () => {
+    const out = await d.play({ teethA: 18, teethB: 12, turned: 0 }, "turnBy", { teeth: 12 });
+    expect(d.look(out.state).isMarkMet).toBe(false);
+    expect(out.emit.map((e) => e.signal)).toEqual(["stopped"]);
+  });
+  it("meets at every multiple of the LCM and nowhere else", () => {
+    for (let t = 1; t <= 200; t++) {
+      expect(d.look({ teethA: 8, teethB: 12, turned: t }).isMarkMet).toBe(t % 24 === 0);
+    }
+  });
+});
+
+describe("squareBalance: a² never equals 2b²", () => {
+  const d = door(squareBalance);
+  it("17/12: 289 against 288, the 2s are even on the left and odd on the right", () => {
+    const v = d.look({ root: 2, a: 17, b: 12 });
+    expect([v.left, v.right, v.isBalanced]).toEqual([289, 288, false]);
+    expect(v.oddOnRight).toEqual([2]);
+  });
+  it("never balances for √2, √3, √5, √6 with a, b up to 300", () => {
+    for (const root of [2, 3, 5, 6]) {
+      for (let a = 1; a <= 300; a++) {
+        for (let b = 1; b <= 300; b++) {
+          if (a * a === root * b * b) throw new Error(`${a}/${b} = √${root}?`);
+        }
+      }
+      expect(d.look({ root, a: 7, b: 5 }).oddOnRight).not.toEqual([]);
+    }
+  });
+  it("balances for √4 = 2/1: a perfect square has no odd prime", () => {
+    const v = d.look({ root: 4, a: 2, b: 1 });
+    expect(v.isBalanced).toBe(true);
+    expect(v.oddOnRight).toEqual([]);
+  });
+});
+
+describe("beadPair: pairing primes gives the HCF and LCM", () => {
+  const d = door(beadPair);
+  const start = { ...beadPair.defaults };
+  it("18 and 12: pair a 2 and a 3, and it's done", () => {
+    const one = d.run(start, "pair", { prime: 2 });
+    expect(one.emit).toEqual([{ signal: "paired", payload: { prime: 2 } }]);
+    const two = d.run(one.state, "pair", { prime: 3 });
+    expect(two.emit.at(-1)).toEqual({ signal: "done", payload: { hcf: 6, lcm: 36 } });
+  });
+  it("a second 2 has no partner left", () => {
+    const one = d.run(start, "pair", { prime: 2 }).state;
+    expect(d.run(one, "pair", { prime: 2 }).emit).toEqual([
+      { signal: "noMatch", payload: { prime: 2 } },
+    ]);
+  });
+});

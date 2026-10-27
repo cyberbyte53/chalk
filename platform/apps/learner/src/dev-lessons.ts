@@ -1,17 +1,15 @@
-import { type Lesson, parseLesson } from "@chalk/content";
+import type { Lesson } from "@chalk/content";
 import { preloadProps } from "@chalk/library";
 import type { AudioSource } from "@chalk/player";
-import { collisionLab } from "./collision-lab";
 import { type ChapterContent, loadChapter } from "./content-store";
 import type { CourseChapter } from "./course";
-import { gasLab } from "./gas-lab";
 import { courses } from "./lessons";
 import { specimen } from "./specimen";
 
 /**
  * Lessons for the development shells (`?dev`, `?dev&board`), fetched when asked for: a book's
  * chapter one at a time from /content/ (build/, as the app does), and the lessons in no book
- * (specimens, labs, test boards) only when that list is opened.
+ * (the specimen) only when that list is opened.
  */
 
 /**
@@ -21,23 +19,11 @@ import { specimen } from "./specimen";
  */
 export type PlayableLesson = { lesson: Lesson; audio: AudioSource | undefined };
 
-/** Test-only boards for trying Jugnu (platform/studio/evals/boards). */
-const testBoards = import.meta.env.DEV
-  ? import.meta.glob<unknown>("../../../studio/evals/boards/*.json", { import: "default" })
-  : {};
-
 const playable = (lesson: Lesson): PlayableLesson => ({ lesson, audio: undefined });
 
-let others: Promise<PlayableLesson[]> | undefined;
-/** Every lesson in no book: specimens and labs, then the test boards. */
+/** Every lesson in no book: the specimen. */
 export function otherLessons(): Promise<PlayableLesson[]> {
-  others ??= Promise.all(Object.values(testBoards).map((load) => load())).then((files) => [
-    playable(specimen),
-    playable(gasLab),
-    playable(collisionLab),
-    ...files.map((json) => playable(parseLesson(json))),
-  ]);
-  return others;
+  return Promise.resolve([playable(specimen)]);
 }
 
 /** A chapter's lessons, each concept's pages, practice and bank in order, its props ready to draw. */

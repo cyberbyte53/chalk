@@ -1,13 +1,10 @@
-import { readFileSync } from "node:fs";
+import type { Lesson } from "@chalk/content";
 import { propDefs } from "@chalk/library";
+import { testLesson } from "@chalk/library/test-lesson";
 import { describe, expect, it } from "vitest";
 import { loadReadings } from "./pronunciations";
 import { validateLesson } from "./validate";
 
-const lesson = JSON.parse(
-  readFileSync(new URL("../evals/boards/where-is-root-2.json", import.meta.url), "utf8"),
-);
-const clone = () => structuredClone(lesson);
 const readings = loadReadings(
   new URL("../../../authoring/pronunciations.json", import.meta.url).pathname,
 );
@@ -16,119 +13,119 @@ const messages = (input: unknown) =>
 const has = (input: unknown, pattern: RegExp) =>
   expect(messages(input).some((m) => pattern.test(m))).toBe(true);
 
+// The test lesson, as plain data to change: boards by name, pieces by name.
+// biome-ignore lint/suspicious/noExplicitAny: a lesson changed in place to break it
+type Loose = Record<string, any>;
+const fresh = () => testLesson() as unknown as Loose;
+const board = (lesson: Loose, name: string): Loose =>
+  lesson.boards.find((b: Loose) => b.name === name);
+const piece = (lesson: Loose, boardName: string, name: string): Loose => {
+  const walk = (p: Loose): Loose | undefined =>
+    p.name === name ? p : (p.children ?? []).map(walk).find((x: Loose | undefined) => x);
+  return walk(board(lesson, boardName).root) as Loose;
+};
+
 describe("validateLesson", () => {
-  it("passes the real √2 lesson", () => {
-    expect(messages(lesson)).toEqual([]);
+  it("passes the test lesson", () => {
+    expect(messages(testLesson() satisfies Lesson)).toEqual([]);
   });
 
   it("checks rich text everywhere: maths must typeset, in every language", () => {
-    const bad = clone();
-    bad.boards[0].root.children[0].with.text.hi = "आधा $\\frac{1}{$";
-    bad.boards[0].when.push({
+    const bad = fresh();
+    piece(bad, "share", "title").with.text.hi = "आधा $\\frac{1}{$";
+    board(bad, "share").when.push({
       on: "board.started",
-      do: { call: "board.show", args: { name: "line", note: { en: "$x^{2", hi: "ठीक" } } },
+      do: { call: "board.show", args: { name: "left", note: { en: "$x^{2", hi: "ठीक" } } },
     });
     has(bad, /text\.hi: .*frac/);
     has(bad, /note\.en: .*never closed/);
   });
 
   it("checks a prop's starting state at its one door", () => {
-    const bad = clone();
-    bad.boards[0].root.children[2].with.to = 2_000_000;
-    has(bad, /line: .*to/);
+    const bad = fresh();
+    piece(bad, "share", "game").with.sweets = 2_000_000;
+    has(bad, /game: .*sweets/);
   });
 
   it("catches unknown prop types and fields", () => {
-    const bad = clone();
-    bad.boards[0].root.children[2].prop = "mirror";
-    bad.boards[1].root.children[1].with.rootOf = 2;
+    const bad = fresh();
+    piece(bad, "share", "game").prop = "mirror";
+    piece(bad, "race", "runners").with.rootOf = 2;
     has(bad, /unknown prop type "mirror"/);
-    has(bad, /numberLine has no field "rootOf"/);
+    has(bad, /lapRace has no field "rootOf"/);
   });
 
   it("checks IS: an input of a real prop, real fields read, one writer", () => {
-    const bad = clone();
-    bad.boards[1].is.push({ set: "line.marker", to: "1.5" });
-    bad.boards[1].is.push({ set: "guessRoot.isMet", to: "line.markerSquared > 2" });
-    has(bad, /numberLine.marker can't be set by IS/);
-    has(bad, /numberLine has no field "markerSquared"|has no field "markerSquared"/);
-    has(bad, /2 IS rules set guessRoot.isMet/);
+    const bad = fresh();
+    board(bad, "share").is.push({ set: "game.sweets", to: "1" });
+    board(bad, "share").is.push({ set: "box.text", to: "game.nowhere" });
+    has(bad, /sweetShare.sweets can't be set by IS/);
+    has(bad, /has no field "nowhere"/);
+    has(bad, /2 IS rules set box.text/);
   });
 
   it("checks WHEN: real signals, actions and arguments", () => {
-    const bad = clone();
-    bad.boards[0].when.push({
-      on: "line.exploded",
-      do: { call: "line.zoomTo", args: { from: 1 } },
+    const bad = fresh();
+    board(bad, "share").when.push({
+      on: "game.exploded",
+      do: { call: "game.setSweets", args: { from: 1 } },
     });
-    bad.boards[0].when.push({ on: "board.started", do: { call: "line.fly" } });
+    board(bad, "share").when.push({ on: "board.started", do: { call: "game.fly" } });
     has(bad, /no signal "exploded"/);
-    has(bad, /line.zoomTo\(to\)/);
+    has(bad, /game.setSweets\(value\)/);
     has(bad, /no action "fly"/);
   });
 
   it("checks expression arguments: real fields, and a value the action accepts", () => {
-    const bad = clone();
-    bad.boards[1].when.push({
+    const bad = fresh();
+    board(bad, "share").when.push({
       on: "board.started",
       do: [
-        { call: "line.moveMarker", args: { to: { expr: "line.nowhere" } } },
-        { call: "line.moveMarker", args: { to: { expr: '"far"' } } },
+        { call: "game.setSweets", args: { value: { expr: "game.nowhere" } } },
+        { call: "game.setSweets", args: { value: { expr: '"far"' } } },
       ],
     });
     has(bad, /no field "nowhere"/);
-    has(bad, /line.moveMarker\(to\)/);
-    const fine = clone();
-    fine.boards[1].when.push({
+    has(bad, /game.setSweets\(value\)/);
+    const fine = fresh();
+    board(fine, "share").when.push({
       on: "board.started",
-      do: { call: "line.moveMarker", args: { to: { expr: "line.from + 0.4" } } },
+      do: { call: "game.setSweets", args: { value: { expr: "game.sweets + 1" } } },
     });
     expect(messages(fine)).toEqual([]);
   });
 
   it("needs a way on: something must call board.pass", () => {
-    const bad = clone();
-    bad.boards[3].when = bad.boards[3].when.filter(
-      (r: { on: string }) => r.on !== "whatIsRoot2.correct",
-    );
+    const bad = fresh();
+    const divide = board(bad, "divide");
+    divide.when = divide.when.filter((r: Loose) => !JSON.stringify(r.do).includes("board.pass"));
     has(bad, /nothing ever calls board.pass/);
   });
 
   it("refuses answer-revealing actions on a board with a question", () => {
-    const numberLine = propDefs.numberLine;
-    if (numberLine === undefined) throw new Error("no numberLine in the library");
-    const action = numberLine.actions.zoomIn;
-    if (action === undefined) throw new Error("no zoomIn");
-    const defs = {
-      ...propDefs,
-      numberLine: {
-        ...numberLine,
-        actions: { ...numberLine.actions, peek: { ...action, reveals: true } },
-      },
-    };
-    const bad = clone();
-    bad.boards[1].when.push({ on: "board.started", do: { call: "line.peek" } });
-    expect(
-      validateLesson(bad, defs, readings).some((p) => /reveals the answer/.test(p.message)),
-    ).toBe(true);
-    const fine = clone();
-    fine.boards[1].when.push({ on: "board.started", do: { call: "line.zoomIn" } });
+    // giveAll gives every round at once: the question's answer, on the board that asks it.
+    const bad = fresh();
+    board(bad, "share").when.push({ on: "board.started", do: { call: "game.giveAll" } });
+    has(bad, /reveals the answer/);
+    const fine = fresh();
+    board(fine, "share").when.push({ on: "board.started", do: { call: "game.startAgain" } });
     expect(messages(fine)).toEqual([]);
   });
 
   it("refuses any character the voice can't read, not just known maths symbols", () => {
-    const bad = clone();
-    bad.boards[0].root.children[0].with.text.en = "What is ∜16 → λ?";
+    const bad = fresh();
+    piece(bad, "share", "title").with.text.en = "What is ∜16 → λ?";
+    piece(bad, "share", "title").with.speak = null;
     has(bad, /can't read/);
     has(bad, /∜ → λ/);
   });
 
   it("only cares about the voice for lines a script actually says", () => {
-    const quiet = clone();
-    quiet.boards[0].root.children[0].with.text.en = "What is ∜16 → λ?";
-    quiet.boards[0].when[0].do = quiet.boards[0].when[0].do.filter(
-      (s: { call?: string }) => s.call !== "title.say",
-    );
+    const quiet = fresh();
+    piece(quiet, "share", "title").with.text.en = "What is ∜16 → λ?";
+    piece(quiet, "share", "title").with.speak = null;
+    const share = board(quiet, "share");
+    share.when = share.when.filter((r: Loose) => !JSON.stringify(r.do).includes("title.say"));
     expect(messages(quiet)).toEqual([]);
   });
 });

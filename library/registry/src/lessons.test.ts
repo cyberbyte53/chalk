@@ -1,12 +1,11 @@
-import { Actor, type EventEntry, lessonSchema } from "@chalk/content";
+import { Actor, type EventEntry } from "@chalk/content";
 import { BoardRuntime, type RuntimeServices, recordBoard } from "@chalk/player";
 import { BOARD } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import coinLesson from "../../../platform/studio/evals/boards/does-a-coin-settle.json";
-import doesItEnd from "../../../platform/studio/evals/boards/does-it-end.json";
 import { propDefs } from "./index";
+import { testLesson } from "./test-lesson";
 
-// Real lessons, real props, fake time: the whole board model end to end, without a browser.
+// A lesson built as content is, real props, fake time: the whole board model end to end, without a browser.
 
 function fakeTime() {
   let now = 0;
@@ -39,102 +38,80 @@ function fakeTime() {
   return { services, advance, spoken };
 }
 
-describe("does a coin settle?", () => {
-  const lesson = lessonSchema.parse(coinLesson);
-  const tossing = lesson.boards[0];
-  if (tossing === undefined) throw new Error("no first board");
+const [, race, divide] = testLesson().boards;
+if (race === undefined || divide === undefined) throw new Error("no test boards");
 
-  it("one press tosses once and plots the point", async () => {
-    const { services, advance } = fakeTime();
-    const runtime = new BoardRuntime(tossing, (type) => propDefs[type], services);
-    runtime.start();
-    await runtime.call("tossOnce", "press", {}, Actor.Learner);
-    await advance(0.1);
-    expect(runtime.getView("coin").count).toBe(1);
-    expect(runtime.getView("chart").points).toEqual([[1, runtime.getView("coin").headsFraction]]);
-  });
-
-  it("toss 100: the timer drives the coin, the coin drives the graph, Maya speaks at 100", async () => {
+describe("two runners", () => {
+  it("play glides the clock on the board's time; at 12 they meet, the note is said, the board passes", async () => {
     const { services, advance, spoken } = fakeTime();
-    const runtime = new BoardRuntime(tossing, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(race, (type) => propDefs[type], services);
     runtime.start();
-    await runtime.call("tossMany", "press", {}, Actor.Learner);
-    await advance(0.5);
-    // Buttons are off while the timer runs (an IS rule), so a second press does nothing.
-    expect(runtime.getView("tossMany").isEnabled).toBe(false);
-    expect(runtime.getView("clock").isRunning).toBe(true);
-    await advance(5);
-    const coin = runtime.getView("coin");
-    expect(coin.count).toBe(100);
-    expect(runtime.getView("chart").points).toHaveLength(100);
-    expect(runtime.getView("clock").isRunning).toBe(false);
-    expect(runtime.getView("tossOnce").isEnabled).toBe(true);
-    expect(runtime.isHidden("mayaSettles")).toBe(false);
-    expect(spoken).toContain("mayaSettles");
+    // Play resolves when the clock arrives, on the board's time: don't wait for it here.
+    void runtime.call("runners", "play", {}, Actor.Learner);
+    await advance(0.1);
+    const early = runtime.getView("runners");
+    expect(early.isRunning).toBe(true);
+    expect(early.time as number).toBeGreaterThan(0);
+    expect(early.time as number).toBeLessThan(12);
+    await advance(10);
+    expect(runtime.getView("runners")).toMatchObject({ time: 12, isRunning: false });
+    expect(runtime.isHidden("met")).toBe(false);
+    expect(spoken).toContain("met");
     expect(runtime.getView(BOARD).isPassed).toBe(true);
-    // A fair coin after 100 tosses: near a half, not exactly a half every time.
-    expect(Math.abs((coin.headsFraction as number) - 0.5)).toBeLessThan(0.15);
   });
 
-  it("records what the learner did and every signal, linked to its cause; not the coin's own steps", async () => {
+  it("records what the learner did and every signal, linked to its cause; not the props' own steps", async () => {
     const { services, advance } = fakeTime();
-    const runtime = new BoardRuntime(tossing, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(race, (type) => propDefs[type], services);
     // The channel, as the board sees it: each entry gets the next seq.
     const seen: (EventEntry & { seq: number })[] = [];
     const record = (entry: EventEntry) => seen.push({ ...entry, seq: seen.length }) - 1;
     const recorder = recordBoard(runtime, record, "o1");
     recorder.open({ locale: "en" });
     runtime.start();
-    await runtime.call("tossMany", "press", {}, Actor.Learner);
-    await advance(5);
+    void runtime.call("runners", "play", {}, Actor.Learner);
+    await advance(10);
     recorder.close();
     expect(seen[0]?.kind).toBe("open");
     expect(seen.at(-1)?.kind).toBe("close");
-    // One cause: the press. The hundred tosses it set off are the props' own steps and the
-    // lesson's rules, so they aren't causes; their signals point back to the press.
+    // One cause: the press. Arriving is the race's own step, and the board passing is the
+    // lesson's rule, so they aren't causes; their signals point back to the press.
     const causes = seen.filter((e) => e.kind === "cause");
-    expect(causes.map((e) => e.payload)).toEqual([{ action: "press", args: {} }]);
+    expect(causes.map((e) => e.payload)).toEqual([{ action: "play", args: {} }]);
     const press = causes[0]?.seq;
     const signals = seen.filter((e) => e.kind === "signal");
     expect(signals[0]?.payload).toMatchObject({ signal: "started", from: null });
     const after = signals.slice(1);
-    expect(after.length).toBeGreaterThan(1);
+    expect(after.map((e) => e.kind === "signal" && e.payload.signal)).toContain("met");
     expect(after.every((e) => e.kind === "signal" && e.payload.from === press)).toBe(true);
     expect(new Set(seen.map((e) => e.opening))).toEqual(new Set(["o1"]));
   });
 
-  it("stops ticking when the board goes away", async () => {
+  it("stops the clock when the board goes away", async () => {
     const { services, advance } = fakeTime();
-    const runtime = new BoardRuntime(tossing, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(race, (type) => propDefs[type], services);
     runtime.start();
-    await runtime.call("tossMany", "press", {}, Actor.Learner);
-    await advance(1);
-    const count = runtime.getView("coin").count;
+    void runtime.call("runners", "play", {}, Actor.Learner);
+    await advance(0.5);
+    const time = runtime.getView("runners").time;
     runtime.dispose();
     await advance(2);
-    expect(runtime.getView("coin").count).toBe(count);
+    expect(runtime.getView("runners").time).toBe(time);
   });
 });
 
-describe("does the decimal ever end?", () => {
-  const lesson = lessonSchema.parse(doesItEnd);
-  const board = lesson.boards[2];
-  if (board === undefined) throw new Error("no 22 ÷ 7 board");
-
-  it("the timer divides 22 by 7 until a remainder comes back, then stops and passes", async () => {
+describe("does 22 ÷ 7 end?", () => {
+  it("a digit a tap, until a remainder comes back; then the note is said and the board passes", async () => {
     const { services, advance, spoken } = fakeTime();
-    const runtime = new BoardRuntime(board, (type) => propDefs[type], services);
+    const runtime = new BoardRuntime(divide, (type) => propDefs[type], services);
     runtime.start();
-    await runtime.call("divide", "press", {}, Actor.Learner);
-    expect(runtime.getView("divide").isEnabled).toBe(false);
-    await advance(5);
+    for (let i = 0; i < 7 && runtime.getView("division").hasRepeated !== true; i++)
+      await runtime.call("division", "nextDigit", {}, Actor.Learner);
+    await advance(0.1);
     const division = runtime.getView("division");
     expect(division.hasRepeated).toBe(true);
     expect(division.digits).toBe("142857");
-    expect(runtime.getView("clock").isRunning).toBe(false);
-    expect(spoken).toContain("mayaPi");
+    expect(spoken).toContain("repeats");
     expect(runtime.getView(BOARD).isPassed).toBe(true);
-    // Done: the button stays off, since there is nothing left to show.
-    expect(runtime.getView("divide").isEnabled).toBe(false);
   });
 });

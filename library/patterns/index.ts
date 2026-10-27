@@ -1,10 +1,5 @@
 export { type Option, type Wrong, choice, choiceQuestion, settle } from "./choice-question";
 export { multiChoiceQuestion } from "./multi-choice-question";
 export { type OrderStep, orderQuestion } from "./order-question";
-export { NumberColor } from "./colors";
-export { type GoalNote, type Note, goal, goalQuestion } from "./goal-question";
 export { bagTex, frac, primesTex } from "./latex";
-export { magnifier } from "./magnifier";
-export { reach } from "./number-line";
 export { wordsOn } from "./words";
-export { distinctOptions, exprTex, numberOf, parsePoly, zeroesLabel } from "./polynomials";

@@ -1,46 +1,46 @@
-import { Actor, lessonSchema } from "@chalk/content";
+import { Actor } from "@chalk/content";
 import { headlessBoard } from "@chalk/player";
 import { describe, expect, it } from "vitest";
-import rootTwo from "../../../platform/studio/evals/boards/where-is-root-2.json";
 import { propDefs } from "./index";
+import { testLesson } from "./test-lesson";
 
-const guess = lessonSchema.parse(rootTwo).boards[1];
-if (guess === undefined) throw new Error("no guess board");
+const [share, race] = testLesson().boards;
+if (share === undefined || race === undefined) throw new Error("no test boards");
 const lookup = (type: string) => propDefs[type];
 
 describe("a board with no screen (Jugnu's copy on the server)", () => {
   it("is put into the state the phone sent, with its IS rules true", () => {
-    const phone = headlessBoard(guess, lookup);
+    const phone = headlessBoard(share, lookup);
     phone.runtime.restoreFacts(
-      new Map([["line", { ...phone.runtime.getStored("line"), marker: 1.3 }]]),
+      new Map([["game", { ...phone.runtime.getStored("game"), rounds: 2 }]]),
     );
-    const copy = headlessBoard(guess, lookup, phone.runtime.save());
-    expect(copy.runtime.getStored("line").marker).toBe(1.3);
-    expect(copy.runtime.getView("squareLabel").text).toMatchObject({ en: "1.30 × 1.30 = 1.6900" });
-    expect(copy.runtime.getView("guessRoot").isMet).toBe(false);
+    const copy = headlessBoard(share, lookup, phone.runtime.save());
+    expect(copy.runtime.getStored("game").rounds).toBe(2);
+    expect(copy.runtime.getView("box").text).toMatchObject({ en: "7 in the box" });
     phone.dispose();
     copy.dispose();
   });
 
   it("finishes a glide at once: an action resolves at its end state", async () => {
-    const copy = headlessBoard(guess, lookup);
-    await copy.runtime.call("line", "magnify", { value: 1.41 }, Actor.Jugnu);
+    const copy = headlessBoard(race, lookup);
+    await copy.runtime.call("runners", "play", {}, Actor.Jugnu);
     expect(await copy.settle()).toBe(true);
-    const line = copy.runtime.getStored("line");
-    expect(line.from).toBeCloseTo(1.4);
-    expect(line.to).toBeCloseTo(1.5);
+    expect(copy.runtime.getStored("runners")).toMatchObject({ time: 12, isRunning: false });
     expect(copy.errors).toEqual([]);
     copy.dispose();
   });
 
   it("runs what an action sets off through the lesson's rules", async () => {
-    const copy = headlessBoard(guess, lookup);
-    await copy.runtime.call("line", "moveMarker", { to: 1.7 }, Actor.Learner);
-    await copy.runtime.call("guessRoot", "check", {}, Actor.Learner);
+    const copy = headlessBoard(share, lookup);
+    for (let i = 0; i < 3; i++) await copy.runtime.call("game", "giveRound", {}, Actor.Learner);
     await copy.settle();
-    expect(copy.runtime.getStored("guessRoot")).toMatchObject({
+    expect(copy.runtime.isHidden("left")).toBe(false);
+    await copy.runtime.call("left", "select", { option: "three" }, Actor.Learner);
+    await copy.runtime.call("left", "check", {}, Actor.Learner);
+    await copy.settle();
+    expect(copy.runtime.getStored("left")).toMatchObject({
       status: "wrong",
-      feedback: { en: "Its square is more than 2. Move left." },
+      feedback: { en: "Count the box again." },
     });
     copy.dispose();
   });

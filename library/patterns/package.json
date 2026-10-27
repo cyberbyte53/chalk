@@ -17,10 +17,7 @@
     "@chalk/exact": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
-    "@chalk/prop-number-line": "workspace:*",
-    "@chalk/prop-polynomials": "workspace:*",
     "@chalk/prop-primes": "workspace:*",
-    "nerdamer": "2.0.0",
     "preact": "10.29.8",
     "zod": "3.25.76"
   },

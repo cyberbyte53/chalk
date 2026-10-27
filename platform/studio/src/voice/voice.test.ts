@@ -1,8 +1,9 @@
-import { existsSync, mkdtempSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { type Lesson, lessonSchema } from "@chalk/content";
+import type { Lesson } from "@chalk/content";
 import { propDefs } from "@chalk/library";
+import { testLesson } from "@chalk/library/test-lesson";
 import { describe, expect, it } from "vitest";
 import { loadReadings } from "../pronunciations";
 import { generateAudio } from "./generate";
@@ -10,17 +11,11 @@ import { parseSayVoices } from "./macos";
 import { parlerProvider } from "./parler";
 import { toneProvider } from "./tone";
 
-const lesson: Lesson = lessonSchema.parse(
-  JSON.parse(
-    readFileSync(new URL("../../evals/boards/where-is-root-2.json", import.meta.url), "utf8"),
-  ),
-);
+const lesson: Lesson = testLesson();
 const readings = loadReadings(
   new URL("../../../../authoring/pronunciations.json", import.meta.url).pathname,
 );
-const voices = {
-  tone: { narrator: { en: "n", hi: "n" }, maya: { en: "m", hi: "m" }, arjun: { en: "a", hi: "a" } },
-};
+const voices = { tone: { narrator: { en: "n", hi: "n" } } };
 
 describe("generateAudio", () => {
   it("speaks every spoken piece in both languages, keyed by board and address", async () => {
@@ -32,13 +27,13 @@ describe("generateAudio", () => {
       toneProvider,
       voices,
       dir,
-      "where-is-root-2",
+      "test-lesson",
     );
     expect(result.manifest.provider).toBe("tone");
-    expect(result.manifest.files["guess.guessRoot.en"]).toMatch(
-      /^audio\/where-is-root-2\/[0-9a-f]{16}\.wav$/,
-    ); // question "guess-root"
-    expect(result.manifest.files["between.mayaSquares.hi"]).toBeDefined(); // Maya's first line, in Hindi
+    expect(result.manifest.files["share.title.en"]).toMatch(
+      /^audio\/test-lesson\/[0-9a-f]{16}\.wav$/,
+    ); // the title, said when the board starts
+    expect(result.manifest.files["race.met.hi"]).toBeDefined(); // a note the board says, in Hindi
     for (const file of Object.values(result.manifest.files))
       expect(existsSync(join(dir, file))).toBe(true);
     expect(result.reused).toBe(0);
@@ -58,11 +53,11 @@ describe("generateAudio", () => {
         readings,
         propDefs,
         toneProvider,
-        { tone: { narrator: { en: "n", hi: "n" } } },
+        { tone: { teacher: { en: "t", hi: "t" } } },
         dir,
         "x",
       ),
-    ).rejects.toThrow(/no voice for "maya"/);
+    ).rejects.toThrow(/no voice for "narrator"/);
   });
 });
 
