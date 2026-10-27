@@ -105,14 +105,14 @@
       "editor/title": [
         {
           "command": "chalk.preview",
-          "when": "resourcePath =~ /[\\\\/]content[\\\\/]/",
+          "when": "resourcePath =~ /[\\\\/](content|reviews)([\\\\/]|$)/",
           "group": "navigation"
         }
       ],
       "explorer/context": [
         {
           "command": "chalk.preview",
-          "when": "resourcePath =~ /[\\\\/]content[\\\\/]/",
+          "when": "resourcePath =~ /[\\\\/](content|reviews)([\\\\/]|$)/",
           "group": "navigation"
         }
       ],

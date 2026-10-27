@@ -96,6 +96,10 @@ async function ensureServer(): Promise<boolean> {
 /** What the preview should show for a file or folder in content/ (a `?dev&…` query), or null. */
 function queryFor(file: string): string | null {
   const path = rel(file);
+  // A review file shows its boards with its threads; the folder, every review.
+  if (path === "reviews" || path === "reviews/") return "reviews";
+  const review = /^reviews\/([^/]+)\.yaml$/.exec(path);
+  if (review?.[1] !== undefined) return `review=${review[1]}`;
   if (!path.startsWith("content/")) return null;
   const parts = path.slice("content/".length).split("/").filter(Boolean);
   let isDir = false;
@@ -144,7 +148,7 @@ function html(webview: vscode.Webview, query: string): string {
   const state = { query: ${JSON.stringify(query)}, play: false, hindi: false, picked: null };
   const urlOf = () => ${JSON.stringify(base)} + "?dev&" + state.query + (state.play ? "&play" : "") + (state.hindi ? "&locale=hi" : "");
   const where = document.getElementById("where");
-  where.textContent = state.query.replace(/^(board|source)=/, "") || "all books";
+  where.textContent = state.query.replace(/^(board|source|review)=/, "") || "all books";
   const toFrame = (m) => frame.contentWindow && frame.contentWindow.postMessage({ ...m, chalk: true }, "*");
   const reload = () => { frame.src = urlOf(); };
   document.getElementById("play").onclick = (e) => { state.play = !state.play; e.target.classList.toggle("on", state.play); reload(); };
@@ -172,7 +176,7 @@ function html(webview: vscode.Webview, query: string): string {
       return;
     }
     // From the extension.
-    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(board|source)=/, "") || "all books"; reload(); }
+    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(board|source|review)=/, "") || "all books"; reload(); }
     else if (m.type === "pick") setSelecting(true);
     else if (m.type === "review") { copy.style.display = m.count > 0 ? "" : "none"; copy.textContent = "Copy for agent (" + m.count + ")"; }
     else toFrame(m);

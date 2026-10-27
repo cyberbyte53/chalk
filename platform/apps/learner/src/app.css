@@ -1535,16 +1535,43 @@ body.is-selecting .is-pick-target {
   left: 0;
   right: 0;
 }
-/* A finished one is one line until pointed at. */
-.preview-thread.is-closed:not(:hover) > :not(:first-child),
-.preview-thread.is-withdrawn:not(:hover) > :not(:first-child) {
-  display: none;
+/* A thread is a card until tapped: what was said (two lines), the latest answer (one); open, all of it. */
+.preview-thread-head,
+.preview-latest {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
-.preview-thread.is-closed:not(:hover) > :first-child,
-.preview-thread.is-withdrawn:not(:hover) > :first-child {
+.preview-thread:not(.is-open) .preview-thread-head {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.preview-latest {
+  margin-top: 4px;
+  color: #9a9aa4;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+/* A finished one is one line. */
+.preview-thread.is-closed:not(.is-open) > :not(:first-child),
+.preview-thread.is-withdrawn:not(.is-open) > :not(:first-child) {
+  display: none;
+}
+.preview-thread.is-closed:not(.is-open) .preview-thread-head,
+.preview-thread.is-withdrawn:not(.is-open) .preview-thread-head {
+  -webkit-line-clamp: 1;
+}
+.preview-changed summary {
+  cursor: pointer;
 }
 @media (max-width: 720px) {
   .preview-body {
@@ -1782,4 +1809,41 @@ body.is-selecting .is-pick-target {
   .activity-line > :nth-child(n + 3) {
     grid-column: 2;
   }
+}
+
+/* A review in the preview (`?dev&review=<id>`) and the list of them (`?dev&reviews`). */
+.preview-review-head {
+  flex-basis: 100%;
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  font: 14px system-ui, sans-serif;
+  color: #b4b4bc;
+}
+.preview-review-head strong {
+  color: #fff;
+}
+.preview-review-head a,
+.preview-reviews a {
+  color: #a5b4fc;
+}
+.preview-reviews {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  width: min(640px, 100%);
+  font: 14px system-ui, sans-serif;
+}
+.preview-reviews li a {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #2a2a2e;
+  text-decoration: none;
+}
+.preview-reviews strong {
+  color: #fff;
+}
+.preview-reviews span {
+  color: #b4b4bc;
 }

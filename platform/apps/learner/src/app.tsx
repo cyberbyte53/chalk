@@ -229,7 +229,8 @@ export function App(): JSX.Element {
     if (next !== undefined) setSession({ kind: "signedIn", me: next });
   };
 
-  if (isDevShell && new URLSearchParams(window.location.search).has("board"))
+  const query = new URLSearchParams(window.location.search);
+  if (isDevShell && (query.has("board") || query.has("review") || query.has("reviews")))
     return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
     return <ActivityFeed />;

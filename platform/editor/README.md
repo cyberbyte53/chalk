@@ -8,7 +8,8 @@ app's own `?dev&board=` page, so what you see is what the phone draws.
   - a chapter shows its path of lessons;
   - a lesson shows its boards and questions;
   - a question family shows its questions;
-  - a comment shows the board it's on.
+  - a comment shows the board it's on;
+  - a file in `reviews/` shows that review: the boards its threads are on, with only its threads beside them; the `reviews` folder lists every review.
 
   Tapping a chapter or lesson goes one level down and opens its file.
 - **Follows you:** switch files and the preview switches; move the cursor in `overview.ts` and the piece written there is outlined. Alt-click a piece and the editor jumps to its line.

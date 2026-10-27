@@ -191,6 +191,8 @@ function BoardThreads({
   const open = threads.filter((t) => !isDone(t));
   const closed = threads.filter(isDone);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  // One thread open at a time: the others are a card each (what was said, the latest answer).
+  const [openId, setOpenId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
   const act = async (change: Record<string, unknown>) => {
@@ -215,109 +217,129 @@ function BoardThreads({
   };
   const isDetached = (t: Thread) =>
     t.target !== undefined && phone.current !== null && anchorOf(phone.current, t) === null;
-  const one = (t: Thread) => (
-    <li
-      key={t.id}
-      data-id={t.id}
-      class={`preview-thread is-${t.status}`}
-      onMouseEnter={() => reveal(t, true)}
-      onMouseLeave={() => reveal(t, false)}
-    >
-      <div>
-        <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
-        {t.label !== "comment" && (
-          <span
-            class={`preview-kind is-${t.label}`}
-          >{`${t.label}${t.by === "you" ? "" : ` · ${t.by}`}`}</span>
-        )}
-        {t.prop !== undefined ? (
-          <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
-        ) : (
-          t.target && <span class="preview-piece">{t.target}</span>
-        )}
-        {t.from === "chat" && <span class="preview-piece">from chat</span>}
-        {t.text}
-      </div>
-      {isDetached(t) && (
-        <div class="preview-detached">{`Not on this board any more. It said: ${t.snapshot ?? "?"}`}</div>
-      )}
-      {planOf(t) && <div class="preview-plan">Plan: {planOf(t)?.text}</div>}
-      {t.messages
-        .filter((m) => m.status !== "planned")
-        .map((m) => (
-          <div class="preview-reply" key={`${m.at}·${m.by}`}>
-            {`${m.by}${m.status ? ` → ${m.status}` : ""}${m.text ? `: ${m.text}` : ""}`}
-          </div>
-        ))}
-      {t.changed && t.changed.length > 0 && (
-        <div class="preview-changed">{`Changed: ${t.changed.join(", ")}`}</div>
-      )}
-      {replyingTo === t.id ? (
-        <form
-          class="preview-reply-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void send(t);
-          }}
+  const one = (t: Thread) => {
+    const isOpen = openId === t.id || replyingTo === t.id;
+    const latest = [...t.messages].reverse().find((m) => m.text !== "");
+    return (
+      <li
+        key={t.id}
+        data-id={t.id}
+        class={`preview-thread is-${t.status}${isOpen ? " is-open" : ""}`}
+        onMouseEnter={() => reveal(t, true)}
+        onMouseLeave={() => reveal(t, false)}
+      >
+        <button
+          type="button"
+          class="preview-thread-head"
+          aria-expanded={isOpen}
+          onClick={() => setOpenId(isOpen ? null : t.id)}
         >
-          <textarea
-            value={draft}
-            placeholder={isDone(t) ? "Reopen it with…" : "Add to this comment…"}
-            ref={(el) => el?.focus()}
-            onInput={(e) => setDraft((e.target as HTMLTextAreaElement).value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                void send(t);
-              } else if (e.key === "Escape") setReplyingTo(null);
-            }}
-          />
-          <div>
-            <button type="submit" disabled={draft.trim() === ""}>
-              Reply
-            </button>
-            <button type="button" onClick={() => setReplyingTo(null)}>
-              Cancel
-            </button>
-          </div>
-        </form>
-      ) : (
-        <div class="preview-actions">
-          <button
-            type="button"
-            onClick={() => {
-              setDraft("");
-              setReplyingTo(t.id);
+          <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
+          {t.label !== "comment" && (
+            <span
+              class={`preview-kind is-${t.label}`}
+            >{`${t.label}${t.by === "you" ? "" : ` · ${t.by}`}`}</span>
+          )}
+          {t.prop !== undefined ? (
+            <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
+          ) : (
+            t.target && <span class="preview-piece">{t.target}</span>
+          )}
+          {t.from === "chat" && <span class="preview-piece">from chat</span>}
+          {t.text}
+        </button>
+        {isDetached(t) && (
+          <div class="preview-detached">{`Not on this board any more. It said: ${t.snapshot ?? "?"}`}</div>
+        )}
+        {!isOpen && latest !== undefined && (
+          <button type="button" class="preview-latest" onClick={() => setOpenId(t.id)}>
+            {`${latest.by}${latest.status ? ` → ${latest.status}` : ""}: ${latest.text}`}
+          </button>
+        )}
+        {isOpen && planOf(t) && <div class="preview-plan">Plan: {planOf(t)?.text}</div>}
+        {isOpen &&
+          t.messages
+            .filter((m) => m.status !== "planned")
+            .map((m) => (
+              <div class="preview-reply" key={`${m.at}·${m.by}`}>
+                {`${m.by}${m.status ? ` → ${m.status}` : ""}${m.text ? `: ${m.text}` : ""}`}
+              </div>
+            ))}
+        {isOpen && t.changed && t.changed.length > 0 && (
+          <details class="preview-changed">
+            <summary>{`${t.changed.length} file${t.changed.length === 1 ? "" : "s"} changed`}</summary>
+            {t.changed.map((f) => (
+              <div key={f}>{f}</div>
+            ))}
+          </details>
+        )}
+        {!isOpen ? null : replyingTo === t.id ? (
+          <form
+            class="preview-reply-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void send(t);
             }}
           >
-            Reply
-          </button>
-          {!isDone(t) && (
+            <textarea
+              value={draft}
+              placeholder={isDone(t) ? "Reopen it with…" : "Add to this comment…"}
+              ref={(el) => el?.focus()}
+              onInput={(e) => setDraft((e.target as HTMLTextAreaElement).value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  void send(t);
+                } else if (e.key === "Escape") setReplyingTo(null);
+              }}
+            />
+            <div>
+              <button type="submit" disabled={draft.trim() === ""}>
+                Reply
+              </button>
+              <button type="button" onClick={() => setReplyingTo(null)}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div class="preview-actions">
             <button
               type="button"
-              onClick={() => void act({ op: "write", id: t.id, text: "", status: "closed" })}
+              onClick={() => {
+                setDraft("");
+                setReplyingTo(t.id);
+              }}
             >
-              Close
+              Reply
             </button>
-          )}
-          {!isDone(t) &&
-            (isKept(t, reviews) ? (
+            {!isDone(t) && (
               <button
                 type="button"
-                onClick={() => void act({ op: "write", id: t.id, text: "", status: "withdrawn" })}
+                onClick={() => void act({ op: "write", id: t.id, text: "", status: "closed" })}
               >
-                Withdraw
+                Close
               </button>
-            ) : (
-              <button type="button" onClick={() => void act({ op: "delete", id: t.id })}>
-                Delete
-              </button>
-            ))}
-        </div>
-      )}
-      {problem !== null && replyingTo !== t.id && <div class="preview-problem">{problem}</div>}
-    </li>
-  );
+            )}
+            {!isDone(t) &&
+              (isKept(t, reviews) ? (
+                <button
+                  type="button"
+                  onClick={() => void act({ op: "write", id: t.id, text: "", status: "withdrawn" })}
+                >
+                  Withdraw
+                </button>
+              ) : (
+                <button type="button" onClick={() => void act({ op: "delete", id: t.id })}>
+                  Delete
+                </button>
+              ))}
+          </div>
+        )}
+        {problem !== null && replyingTo !== t.id && <div class="preview-problem">{problem}</div>}
+      </li>
+    );
+  };
   // Beside the board, each level with what it is about (its piece, its prop's part), pushed
   // down only as far as needed not to overlap; under the board when the window is narrow.
   useLayoutEffect(() => {
@@ -816,6 +838,49 @@ function keptZoom(): number {
   }
 }
 
+/** "1 open, 3 ready": how a review stands, from its threads as they are now. */
+function standingOf(review: Review, threads: readonly Thread[]): string {
+  const order = ["open", "planned", "ready", "closed", "withdrawn"];
+  const counts = new Map<string, number>();
+  for (const x of review.threads) {
+    const status = threads.find((t) => t.id === x.id)?.status;
+    if (status !== undefined) counts.set(status, (counts.get(status) ?? 0) + 1);
+  }
+  return order
+    .filter((k) => counts.has(k))
+    .map((k) => `${counts.get(k)} ${k}`)
+    .join(", ");
+}
+
+/** Every review (`?dev&reviews`, the reviews/ folder), newest first; one opens its boards. */
+function ReviewList({
+  threads,
+  reviews,
+}: {
+  threads: readonly Thread[];
+  reviews: readonly Review[];
+}): JSX.Element {
+  useLayoutEffect(() => {
+    document.body.dataset.previewReady = window.location.search;
+  });
+  if (reviews.length === 0)
+    return <div class="preview-empty">No reviews yet: Copy for agent hands one over.</div>;
+  return (
+    <main class="preview">
+      <ul class="preview-reviews">
+        {[...reviews].reverse().map((r) => (
+          <li key={r.id}>
+            <a href={`?dev&review=${encodeURIComponent(r.id)}`}>
+              <strong>{r.id}</strong>
+              <span>{`${r.by} · ${r.threads.length} thread${r.threads.length === 1 ? "" : "s"} · ${standingOf(r, threads)}`}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+
 /**
  * The preview, drawn afresh for each URL. A tool can move it to another board without reloading
  * the page (history.pushState, then a popstate event), which is much faster than a page load.
@@ -895,7 +960,15 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const params = new URLSearchParams(window.location.search);
   const path = (params.get("board") ?? "").replace(/\/$/, "");
   const source = params.get("source");
-  const isTree = source === null && path.split("/").filter(Boolean).length < 3;
+  // A review (`review=<id>`): the boards its threads are on, with only its threads beside them.
+  const reviewId = params.get("review");
+  // Every review (`reviews`): the list.
+  const isReviewList = params.has("reviews");
+  const isTree =
+    source === null &&
+    reviewId === null &&
+    !isReviewList &&
+    path.split("/").filter(Boolean).length < 3;
   const withQuestions = params.get("show") === "questions";
   const isPlaying = params.has("earned");
   const isShot = params.has("shot");
@@ -935,6 +1008,13 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     all: { threads, reviews },
     set: setThreads,
   } = useThreads();
+  const review = reviewId === null ? undefined : reviews.find((r) => r.id === reviewId);
+  const reviewIds = useMemo(() => new Set(review?.threads.map((t) => t.id) ?? []), [review]);
+  // The boards the review's threads are on, in the review's order, once each.
+  const reviewBoards = useMemo(() => {
+    const boards = review?.threads.flatMap((x) => threads.find((t) => t.id === x.id)?.board ?? []);
+    return [...new Set(boards ?? [])].join("\n");
+  }, [review, threads]);
   const [zoom, setZoomState] = useState(keptZoom);
   const setZoom = useCallback(
     (next: (z: number) => number) =>
@@ -1016,11 +1096,17 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   // biome-ignore lint/correctness/useExhaustiveDependencies: `build` is the trigger: a rebuild fetches the boards again.
   useEffect(() => {
     let isLive = true;
-    if (isTree) return;
+    if (isTree || isReviewList) return;
+    // A review waits for the threads and reviews to arrive.
+    if (reviewId !== null && review === undefined) return;
     (async () => {
       const where = (await json("sources.json").catch(() => ({}))) as Sources;
       const boards =
-        source !== null ? await boardsFrom(source, where) : await boardsAt(path, withQuestions);
+        reviewId !== null
+          ? await Promise.all(reviewBoards.split("\n").filter(Boolean).map(shownAt))
+          : source !== null
+            ? await boardsFrom(source, where)
+            : await boardsAt(path, withQuestions);
       const types = new Set<string>();
       for (const s of boards) propTypes(s.board.root, types);
       await preloadProps([...types]);
@@ -1039,7 +1125,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     return () => {
       isLive = false;
     };
-  }, [path, source, isTree, withQuestions, build]);
+  }, [path, source, isTree, withQuestions, build, reviewId, reviewBoards, isReviewList]);
 
   // Ready once the boards are on screen (this runs after they are drawn), not when they arrive.
   useEffect(() => {
@@ -1056,6 +1142,13 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   }, []);
 
   if (isTree) return <TreeScreen path={path} locale={locale} />;
+  if (isReviewList) return <ReviewList threads={threads} reviews={reviews} />;
+  if (reviewId !== null && review === undefined)
+    return reviews.length === 0 ? (
+      <div class="preview-loading">Loading review {reviewId}…</div>
+    ) : (
+      <div class="preview-empty">{`No review ${reviewId}.`}</div>
+    );
   if (error !== null) return <div class="preview-empty">{error}</div>;
   // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.
   if (shown === null) return <div class="preview-loading">Loading {source ?? path}…</div>;
@@ -1075,6 +1168,14 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       key={build}
       style={width === undefined ? undefined : { "--phone-width": `${width}px` }}
     >
+      {!isShot && review !== undefined && (
+        <header class="preview-review-head">
+          <strong>{`Review ${review.id}`}</strong>
+          <span>{`${review.by} · ${standingOf(review, threads)}`}</span>
+          <a href="?dev&reviews">All reviews</a>
+          <a href={`?dev&activity&review=${encodeURIComponent(review.id)}`}>Activity</a>
+        </header>
+      )}
       {!isShot && count > 1 && (
         <nav class="preview-nav">
           <button type="button" class={isOne ? "" : "is-on"} onClick={() => setIsOne(false)}>
@@ -1129,7 +1230,11 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
           <PreviewBoard
             shown={s}
             where={sources[s.path]}
-            threads={threadsOn(threads, s)}
+            threads={
+              review === undefined
+                ? threadsOn(threads, s)
+                : threadsOn(threads, s).filter((t) => reviewIds.has(t.id))
+            }
             reviews={reviews}
             onThreads={setThreads}
             locale={locale}
