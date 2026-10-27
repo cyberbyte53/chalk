@@ -154,7 +154,8 @@ async function readAll(): Promise<{ threads: Filed[]; reviews: Review[] }> {
   };
 }
 
-const oneLine = (t: string, n: number) => t.replace(/\s+/g, " ").slice(0, n);
+/** Words on one line, in full: never cut. */
+const oneLine = (t: string) => t.replace(/\s+/g, " ");
 
 function threadLine(c: Filed): string {
   const where = [c.board ?? `${c.home} (plan)`, c.target, c.prop ? `prop ${c.prop}` : undefined]
@@ -164,13 +165,12 @@ function threadLine(c: Filed): string {
   return [
     `• ${c.id} [${c.status}]${c.label === Label.Comment ? "" : ` ${c.label}`}${c.about ? ` about ${c.about}` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
     `  source: ${c.source ?? "?"}`,
-    ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot, 200)}`] : []),
-    `  ${c.by}: “${oneLine(c.text, 400)}”`,
-    ...(c.quote ? [`  quote: ${c.quote.slice(0, 200)}`] : []),
-    ...(plan ? [`  plan: ${oneLine(plan.text, 300)}`] : []),
+    ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot)}`] : []),
+    `  ${c.by}: “${oneLine(c.text)}”`,
+    ...(c.quote ? [`  quote: ${oneLine(c.quote)}`] : []),
+    ...(plan ? [`  plan: ${oneLine(plan.text)}`] : []),
     ...c.messages.map(
-      (m) =>
-        `  ${m.by}${m.status ? ` → ${m.status}` : ""}: ${oneLine(m.text, 300) || "(no words)"}`,
+      (m) => `  ${m.by}${m.status ? ` → ${m.status}` : ""}: ${oneLine(m.text) || "(no words)"}`,
     ),
     ...(c.changed?.length ? [`  changed: ${c.changed.join(", ")}`] : []),
   ].join("\n");
@@ -520,6 +520,16 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           }
         : {}),
       ...(MY_LABELS.includes(Label.Comment) ? { from: z.literal("chat").optional() } : {}),
+      ...(MY_MOVES.includes(Status.Planned)
+        ? {
+            plan: z
+              .string()
+              .optional()
+              .describe(
+                "A new thread: its plan, written on it at once (planned), when the person agreed to it in chat.",
+              ),
+          }
+        : {}),
     })
     .strict();
   type Write = {
@@ -532,6 +542,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     label?: Label;
     about?: string;
     from?: "chat";
+    plan?: string;
   };
 
   offer(
@@ -571,7 +582,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           }
           const on = boardName(item.board);
           const piece = item.target?.split("/")[0];
-          const where = readSources(root)[`${on}.json`];
+          const where = readSources(root)[on];
           const source = (piece && where?.pieces[piece]) || where?.board;
           const done = await changeComments(who, {
             op: "start",
@@ -586,7 +597,25 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               text: item.text,
             },
           });
-          lines.push(done.ok ? `✓ ${done.thread?.id} on ${on}` : `✗ ${done.error}`);
+          if (!done.ok || done.thread === undefined) {
+            lines.push(`✗ ${done.error}`);
+            continue;
+          }
+          if (item.plan === undefined) {
+            lines.push(`✓ ${done.thread.id} on ${on}`);
+            continue;
+          }
+          const planned = await changeComments(who, {
+            op: "write",
+            id: done.thread.id,
+            text: item.plan,
+            status: Status.Planned,
+          });
+          lines.push(
+            planned.ok
+              ? `✓ ${done.thread.id} on ${on} [planned]`
+              : `✓ ${done.thread.id} on ${on}, but its plan wasn't written: ${planned.error}`,
+          );
         }
         if (handover) {
           const done = await changeComments(who, { op: "handover" });
@@ -594,7 +623,9 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             !done.ok
               ? `✗ ${done.error}`
               : done.review
-                ? `✓ handed over review ${done.review.id} (${done.count} threads)`
+                ? done.review.added?.length
+                  ? `✓ added to review ${done.review.id}, still in progress (${done.count} threads)`
+                  : `✓ handed over review ${done.review.id} (${done.count} threads)`
                 : "Nothing to hand over: no thread started or written on since your last handover.",
           );
         }

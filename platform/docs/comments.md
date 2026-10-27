@@ -114,7 +114,9 @@ threads:
     id: cmvpi4adan2w
 ```
 
-Reviews point to threads; threads don't point back. A thread can be in several reviews (handed over, reopened, handed over again); each review keeps it as history. How a review stands is worked out from its threads, never stored: done when every thread is ready, closed or withdrawn. A reviewer agent's pass is a review too: it hands over when it finishes (`comment` with `handover: true`).
+Reviews point to threads; threads don't point back. How a review stands is worked out from its threads, never stored: done when every thread is ready, closed or withdrawn.
+
+**One review in progress per person.** A handover while your last review isn't done adds to it and keeps its id: your new threads are appended, a reply on one of its threads is already in it, and the time is added to its `added` list. So a conversation on one thread stays one review, however many times it goes back and forth. A new review starts once the last one is done. A thread can still be in several reviews (replied to again after a later review began): each keeps it as history. A reviewer agent's pass is a review too: it hands over when it finishes (`comment` with `handover: true`).
 
 ## Watching
 
@@ -126,7 +128,7 @@ Reviews point to threads; threads don't point back. A thread can be in several r
 ## The tools (chalk MCP)
 
 - **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `board` (a path prefix), `prop`, `unanswered` (open or planned) filter.
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `board` (and `target`, `prop`, `label`, `about`, `from`): start a thread. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the board.
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `board` (and `target`, `prop`, `label`, `about`, `from`): start a thread; a fixer's `plan` writes its plan on it at once. Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the board.
 
 ## Threads on a prop
 

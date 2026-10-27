@@ -308,10 +308,10 @@ describe("reviews", () => {
     ).toEqual([a.id, b.id]);
   });
 
-  it("puts a reopened thread in the next sitting, once, with the new ones", () => {
+  it("keeps one review while it isn't done: a reply and a new thread add to it", () => {
     const root = repo();
     const old = start(root);
-    apply(root, { op: "handover" }, YOU);
+    const first = apply(root, { op: "handover" }, YOU);
     expect(applyChange(root, { op: "handover" }, YOU)).toEqual({ ok: true, count: 0 });
     write(root, old.id, FIXER, "x", Status.Planned);
     write(root, old.id, FIXER, "done", Status.Ready);
@@ -319,10 +319,36 @@ describe("reviews", () => {
     write(root, old.id, YOU, "and too low");
     const fresh = start(root);
     const second = apply(root, { op: "handover" }, YOU);
+    expect(second.review?.id).toBe(first.review?.id);
     expect(second.review?.threads.map((t) => t.id)).toEqual([old.id, fresh.id]);
-    expect(second.review?.id).toMatch(/^\d{8}-\d{4}(-2)?$/);
-    // Both reviews are kept; the first still lists the thread, as history.
+    write(root, fresh.id, YOU, "one more thing");
+    expect(apply(root, { op: "handover" }, YOU).review?.added).toHaveLength(2);
+    expect(readComments(root).reviews).toHaveLength(1);
+  });
+
+  it("starts a new review once the last one is done", () => {
+    const root = repo();
+    const old = start(root);
+    const first = apply(root, { op: "handover" }, YOU);
+    write(root, old.id, FIXER, "x", Status.Planned);
+    write(root, old.id, FIXER, "done", Status.Ready);
+    const fresh = start(root);
+    const second = apply(root, { op: "handover" }, YOU);
+    expect(second.review?.id).not.toBe(first.review?.id);
+    expect(second.review?.threads.map((t) => t.id)).toEqual([fresh.id]);
     expect(readComments(root).reviews).toHaveLength(2);
+  });
+
+  it("says how to add a message to a thread already at that status", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, FIXER, "x", Status.Planned);
+    expect(write(root, t.id, FIXER, "and this", Status.Planned)).toMatchObject({ ok: true });
+    write(root, t.id, FIXER, "done", Status.Ready);
+    expect(write(root, t.id, FIXER, "note", Status.Ready)).toMatchObject({
+      ok: false,
+      error: expect.stringContaining("leave the status out"),
+    });
   });
 
   it("leaves out threads only closed or withdrawn in the sitting", () => {

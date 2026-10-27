@@ -65,16 +65,21 @@ function linesOf({ threads, reviews }: Threads, only: string | null): Line[] {
   }
   for (const r of reviews)
     if (review === undefined || r.id === review.id)
-      lines.push({
-        at: r.at,
-        by: r.by,
-        role: r.role,
-        what: "handed over",
-        where: `review ${r.id}`,
-        words: `${r.threads.length} thread${r.threads.length === 1 ? "" : "s"}`,
-        href: `?dev&activity&review=${encodeURIComponent(r.id)}`,
-        tone: "review",
-      });
+      for (const [i, at] of [r.at, ...(r.added ?? [])].entries())
+        lines.push({
+          at,
+          by: r.by,
+          role: r.role,
+          what: i === 0 ? "handed over" : "added to",
+          where: `review ${r.id}`,
+          // How many it holds is known for now, not for each time: said on the latest.
+          words:
+            i === (r.added ?? []).length
+              ? `${r.threads.length} thread${r.threads.length === 1 ? "" : "s"}`
+              : "",
+          href: `?dev&activity&review=${encodeURIComponent(r.id)}`,
+          tone: "review",
+        });
   return lines.sort((a, b) => b.at.localeCompare(a.at));
 }
 

@@ -166,6 +166,8 @@ export const reviewSchema = z
     by: z.string().min(1),
     role: roleSchema,
     at: z.string(),
+    /** Later handovers that added to it while it wasn't done, oldest first. */
+    added: z.array(z.string()).optional(),
     /** Its threads, in the order they were written: the comments file each is in, and its id. */
     threads: z.array(z.object({ file: z.string(), id: z.string() }).strict()).min(1),
   })
@@ -320,12 +322,29 @@ export const lastMove = (t: Thread, status: Status): Message | undefined =>
 
 // ---- The sitting ----
 
+/** When a review was last handed over: its first handover, or the last that added to it. */
+export const handedOverAt = (r: Review): string => r.added?.at(-1) ?? r.at;
+
 /** When `name` last handed over (an ISO time), or "" if never. */
 function lastHandover(reviews: readonly Review[], name: string): string {
   return reviews
     .filter((r) => r.by === name)
-    .map((r) => r.at)
+    .map(handedOverAt)
     .reduce((a, b) => (a > b ? a : b), "");
+}
+
+/**
+ * `name`'s review still in progress: their latest, while any of its threads waits on a fixer (open
+ * or planned). A handover adds to it; a new review starts once it's done.
+ */
+export function openReviewOf(read: Read, name: string): Review | undefined {
+  const latest = read.reviews
+    .filter((r) => r.by === name)
+    .sort((a, b) => a.at.localeCompare(b.at))
+    .at(-1);
+  if (latest === undefined) return undefined;
+  const mine = threadsOf(latest, read.threads);
+  return mine.some(isUnanswered) ? latest : undefined;
 }
 
 /**
@@ -536,6 +555,24 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     const sitting = sittingOf(read, who);
     if (sitting.length === 0) return { ok: true, count: 0 };
     const at = now();
+    // One review in progress per person: a handover while it isn't done adds to it (a reply on
+    // one of its threads is already in it), and keeps its id.
+    const open = openReviewOf(read, who.name);
+    if (open !== undefined) {
+      const known = new Set(open.threads.map((x) => x.id));
+      const review: Review = {
+        ...open,
+        added: [...(open.added ?? []), at],
+        threads: [
+          ...open.threads,
+          ...sitting
+            .filter((t) => !known.has(t.id))
+            .map((t) => ({ file: fileOf(t.home), id: t.id })),
+        ],
+      };
+      writeReview(root, review);
+      return { ok: true, review, count: review.threads.length };
+    }
     const review: Review = {
       id: reviewId(root, at),
       by: who.name,
@@ -583,7 +620,11 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     if (mayMove(Status.Open)) to = Status.Open;
   if (to === undefined && change.text === "") return refuse("say something, or move its status");
   if (to !== undefined && !mayMove(to))
-    return refuse(`a ${who.role} can't move a thread from ${t.status} to ${to}`);
+    return refuse(
+      to === t.status
+        ? `it's already ${to}: leave the status out to just add a message`
+        : `a ${who.role} can't move a thread from ${t.status} to ${to}`,
+    );
   if (to === Status.Ready) {
     // A reviewer's words on the thread wait for an answer (a message or a new plan) before it's ready.
     const last = t.messages.at(-1);

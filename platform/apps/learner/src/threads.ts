@@ -57,6 +57,8 @@ export type Review = {
   by: string;
   role: string;
   at: string;
+  /** Later handovers that added to it while it wasn't done. */
+  added?: string[];
   threads: { id: string }[];
 };
 
