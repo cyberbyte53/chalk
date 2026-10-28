@@ -126,6 +126,25 @@ export class FileComments implements vscode.Disposable {
     }
   }
 
+  /** Opens the file a thread is on, with the words it is about selected and the thread unfolded. */
+  async reveal(t: Thread): Promise<void> {
+    const file = (t.source ?? "").replace(/:\d+(-\d+)?$/, "");
+    try {
+      const doc = await vscode.workspace.openTextDocument(join(this.root, file));
+      const range = rangeOf(doc, t);
+      const editor = await vscode.window.showTextDocument(doc, {
+        selection: new vscode.Selection(range.start, range.end),
+        preserveFocus: false,
+      });
+      editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
+      const drawn = this.shown.get(t.id);
+      if (drawn !== undefined)
+        drawn.collapsibleState = vscode.CommentThreadCollapsibleState.Expanded;
+    } catch (e) {
+      void vscode.window.showErrorMessage(`Chalk: couldn't open ${file}: ${(e as Error).message}`);
+    }
+  }
+
   /** A reply on a thread, or a new thread from the +: sent, then everything is read again. */
   async reply(r: vscode.CommentReply): Promise<void> {
     const text = r.text.trim();

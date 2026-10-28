@@ -694,12 +694,15 @@ async function writeThread(id: string, text: string, status?: string): Promise<b
 }
 
 /** The Reviews view's commands: open, reply, close, withdraw a thread; copy or close a review. */
-function reviewCommands(): vscode.Disposable[] {
+function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
   const thread = ReviewsTree.threadOf;
   return [
     vscode.commands.registerCommand("chalk.thread.open", async (item: unknown) => {
       const t = thread(item);
       if (t === undefined) return;
+      // A thread on a planning file: the file, at its words.
+      if (t.board === undefined && t.source?.startsWith("authoring/books/"))
+        return fileComments.reveal(t);
       // The thread on its review's page (or your sitting's), opened at it.
       await showQuery(`review=${ReviewsTree.reviewIdOf(item) ?? "sitting"}&thread=${t.id}`);
     }),
@@ -822,7 +825,7 @@ export function activate(context: vscode.ExtensionContext): void {
     problems,
     vscode.commands.registerCommand("chalk.copyReview", () => copyReview()),
     chalkView(),
-    ...reviewCommands(),
+    ...reviewCommands(fileComments),
     // The preview follows the file you're in, and the line your cursor is on.
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       if (panel === undefined || editor === undefined) return;
