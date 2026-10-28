@@ -37,8 +37,10 @@ const LEMMA = `${R}/division-lemma/lemma`;
 const QUESTION = `${R}/questions/which-is-irrational/a3543885`;
 const EDITED = join(root, "content", R, "which-fractions-end", "overview.ts");
 
-type Agent = Client;
-async function agent(name: string): Promise<Agent> {
+/** An agent's connection: replaced when the service restarts under it (as the relay does). */
+type Agent = { name: string; client: Client };
+
+async function connectAs(name: string): Promise<Client> {
   const c = new Client({ name, version: "0" });
   await c.connect(
     new StreamableHTTPClientTransport(URL_, {
@@ -50,18 +52,65 @@ async function agent(name: string): Promise<Agent> {
   return c;
 }
 
+async function agent(name: string): Promise<Agent> {
+  return { name, client: await connectAs(name) };
+}
+
+/** Service restarts seen during this run (the service reloads itself when its code changes). */
+const restarts: string[] = [];
+
+/** The call never reached the service: it was restarting (connection refused, session gone). */
+const isUnreached = (message: string) =>
+  /fetch failed|ECONNREFUSED|ECONNRESET|socket hang up|session/i.test(message);
+
 type Call = { ok: boolean; ms: number; error?: string; out?: Record<string, unknown> };
-async function call(c: Agent, tool: string, args: Record<string, unknown>): Promise<Call> {
+/**
+ * One call. Through an agent, a call the service restarted under is connected again and tried once
+ * more, as the relay does; through a bare client (the relay's own case), never, so the relay is
+ * what's tested.
+ */
+async function call(
+  to: Agent | Client,
+  tool: string,
+  args: Record<string, unknown>,
+): Promise<Call> {
   const t = Date.now();
-  try {
-    const r = (await c.callTool({ name: tool, arguments: args }, undefined, {
+  const a: Agent | undefined = to instanceof Client ? undefined : to;
+  const client = () => (a === undefined ? (to as Client) : a.client);
+  const once = async (): Promise<Call> => {
+    const r = (await client().callTool({ name: tool, arguments: args }, undefined, {
       timeout: 300000,
     })) as Record<string, unknown> & { isError?: boolean; content?: { text?: string }[] };
     const ms = Date.now() - t;
     if (r.isError === true) return { ok: false, ms, error: r.content?.[0]?.text ?? "error" };
     return { ok: true, ms, out: r };
+  };
+  try {
+    return await once();
   } catch (e) {
-    return { ok: false, ms: Date.now() - t, error: String(e instanceof Error ? e.message : e) };
+    const message = String(e instanceof Error ? e.message : e);
+    if (a === undefined || !isUnreached(message))
+      return { ok: false, ms: Date.now() - t, error: message };
+    // The service restarted under the call: connect again, once it answers, and try once more,
+    // as an agent's relay does. A service that doesn't come back fails here.
+    restarts.push(`${tool} (${a.name}): ${message.slice(0, 60)}`);
+    for (let i = 0; i < 60; i++) {
+      try {
+        a.client = await connectAs(a.name);
+        break;
+      } catch {
+        await new Promise((r) => setTimeout(r, 500));
+      }
+    }
+    try {
+      return await once();
+    } catch (again) {
+      return {
+        ok: false,
+        ms: Date.now() - t,
+        error: String(again instanceof Error ? again.message : again),
+      };
+    }
   }
 }
 
@@ -179,6 +228,31 @@ const cases: Record<string, () => Promise<void>> = {
       "continuing a board this agent left fails, saying why",
       !lost.ok && /Can't continue/.test(lost.error ?? ""),
       lost.error?.slice(0, 120) ?? "went ahead",
+    );
+  },
+  async frames() {
+    const c = await agent("stress-frames");
+    // Nothing moves after a wait on a settled board, on every kind of screen: it must say still.
+    const quiet = await Promise.all(
+      [{}, { width: 640, height: 720 }, { width: 360, height: 640 }].map((screen) =>
+        call(c, "play", { board: STORY, ...screen, steps: [{ wait: 10 }], frames: {} }),
+      ),
+    );
+    expect(
+      "a still board says still, on every screen",
+      quiet.every((r) => r.ok && /still after [\d.]+s \(nothing moved\)/.test(textOf(r))),
+      quiet.map((r) => r.error ?? textOf(r).split("\n")[1]).join(" | "),
+    );
+    // The race's Play glides the clock: its frames show it moving, in order.
+    const race = await call(c, "play", {
+      board: `${R}/hcf-and-lcm/story`,
+      steps: [{ tap: "race/play" }],
+      frames: { every: 300, most: 4 },
+    });
+    expect(
+      "a moving board comes back as frames, and says it wasn't watched to the end",
+      race.ok && /4 different frames by [\d.]+s, the most asked for/.test(textOf(race)),
+      race.error ?? textOf(race).split("\n")[1] ?? "",
     );
   },
   async snapshot() {
@@ -377,6 +451,18 @@ const cases: Record<string, () => Promise<void>> = {
         again.ok,
         again.error ?? "",
       );
+      // A call in flight when the service restarts is answered, not left waiting: the relay sees
+      // the service's run change, connects again and sends it once more.
+      const inFlight = call(relay, "look", { at: `${R}/which-fractions-end` });
+      await new Promise((r) => setTimeout(r, 1500));
+      const t2 = new Date();
+      utimesSync(main, t2, t2);
+      const answered = await inFlight;
+      expect(
+        "a call in flight across a restart is answered, not left waiting",
+        answered.ok && answered.ms < 60000,
+        answered.error ?? `${answered.ms}ms`,
+      );
     } finally {
       await relay.close().catch(() => {});
     }
@@ -410,6 +496,10 @@ for (const [name, run] of Object.entries(cases)) {
     expect(`${name} ran`, false, String(e));
   }
 }
+if (restarts.length > 0)
+  console.log(
+    `\nthe service restarted under ${restarts.length} call${restarts.length === 1 ? "" : "s"} (each connected again and was tried once more):\n  ${restarts.join("\n  ")}`,
+  );
 console.log(
   `\n${failures.length === 0 ? "✓ every case held" : `✗ ${failures.length} failed:\n  ${failures.join("\n  ")}`} (${Math.round((Date.now() - t0) / 1000)}s)`,
 );

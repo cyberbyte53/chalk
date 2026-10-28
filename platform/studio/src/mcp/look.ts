@@ -642,7 +642,7 @@ function readEvent(e: string, locale: Locale): Event {
   } catch {
     payload = raw;
   }
-  const p = (payload ?? {}) as Record<string, unknown>;
+  const p = rounded(payload ?? {}) as Record<string, unknown>;
   if (kind === "cause" && typeof p.action === "string") {
     const args = p.args as Record<string, unknown> | undefined;
     return {
@@ -685,6 +685,22 @@ export function eventLines(events: readonly string[], locale: Locale): string[] 
   });
 }
 
+/** Frames in a strip: four to a row, each this wide (CSS pixels), so a frame stays readable. */
+const FRAMES_PER_ROW = 4;
+const FRAME_WIDTH = 320;
+
+/**
+ * A value for reading in play's lines: numbers to 3 decimals (a glide caught midway is
+ * 1.0198540144593176). Only what is written; values sent to actions and look's state stay exact.
+ */
+function rounded(v: unknown): unknown {
+  if (typeof v === "number") return Number.isInteger(v) ? v : Number(v.toFixed(3));
+  if (Array.isArray(v)) return v.map(rounded);
+  if (v !== null && typeof v === "object")
+    return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, rounded(x)]));
+  return v;
+}
+
 /** The piece a changed value belongs to: "game.rounds" or "game/plates.count" → game. */
 const pieceOfPath = (path: string) => path.split(/[./]/)[0] ?? path;
 
@@ -699,7 +715,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     speed: a.speed ?? (a.frames === undefined ? DEFAULT_SPEED : 1),
   };
   const frames =
-    a.frames === undefined ? undefined : { every: a.frames.every ?? 100, most: a.frames.most ?? 8 };
+    a.frames === undefined ? undefined : { every: a.frames.every ?? 100, most: a.frames.most ?? 6 };
   const d = await shoot(
     root,
     a.board,
@@ -709,7 +725,8 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   );
   const locale = o.locale ?? "en";
   for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, locale);
-  for (const r of d.steps) if (r.changed !== undefined) r.changed = shown(r.changed, locale);
+  for (const r of d.steps)
+    if (r.changed !== undefined) r.changed = rounded(shown(r.changed, locale)) as typeof r.changed;
   const lines = [
     `${a.board}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
   ];
@@ -731,8 +748,12 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     if (r.motion !== undefined)
       parts.push(
         r.motion.stillAfter !== undefined
-          ? `still after ${r.motion.stillAfter}s (${r.motion.frames.length} frame${r.motion.frames.length === 1 ? "" : "s"} differed)`
-          : `still changing at ${r.motion.stillChangingAt}s (${r.motion.frames.length} frames kept)`,
+          ? r.motion.frames.length === 1
+            ? `still after ${r.motion.stillAfter}s (nothing moved)`
+            : `still after ${r.motion.stillAfter}s (${r.motion.frames.length} different frames)`
+          : r.motion.stoppedBy === "most"
+            ? `${r.motion.frames.length} different frames by ${r.motion.stillChangingAt}s, the most asked for: not watched to the end (ask for more frames)`
+            : `still changing after ${r.motion.stillChangingAt}s`,
       );
     lines.push(
       `${i + 1}. ${r.step}${parts.length > 0 ? ` → ${parts.join(" · ")}` : " → nothing changed"}`,
@@ -768,7 +789,13 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
           caption: `${d.steps.length > 1 ? `${i + 1}. ` : ""}${f.t}s`,
           ...(crop !== undefined && has(f.picture, crop) ? { crop } : {}),
         });
-    if (tiles.length > 0) image = await compose(tiles, { kind: "row" });
+    // A grid, four to a row, so each frame stays big enough to read.
+    if (tiles.length > 0)
+      image = await compose(tiles, {
+        kind: "grid",
+        columns: Math.min(FRAMES_PER_ROW, tiles.length),
+        width: FRAME_WIDTH,
+      });
   } else if (shots === "each") {
     const tiles: Tile[] = [];
     if (d.before !== undefined) tiles.push({ picture: d.before, labels, caption: "before" });

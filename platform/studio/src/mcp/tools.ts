@@ -424,7 +424,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .strict()
             .optional()
             .describe(
-              "Watch the board move after each step, at real speed: a picture about every `every` ms (default 100), keeping the ones that differ, at most `most` (default 8); the strip comes back in order with each frame's time, and each step says `still after 1.2s` or `still changing at 3s`. Ask for it when the motion is the point (a walk, a glide), or something should stay still; the default is the settled board only.",
+              "Watch the board move after each step, at real speed: a picture about every `every` ms (default 100), keeping the ones that differ, at most `most` (default 6); the frames come back in order, four to a row, with each frame's time, and each step says `still after 1.2s` or `still changing at 3s`. Ask for it when the motion is the point (a walk, a glide), or something should stay still; the default is the settled board only.",
             ),
           speed: z
             .number()

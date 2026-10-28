@@ -44,6 +44,17 @@ const headers: Record<string, string> = {
 
 const log = (...words: unknown[]) => console.error("[chalk connect]", ...words);
 
+/** Which run of the service answers now (undefined: none does). */
+async function bootNow(): Promise<string | undefined> {
+  try {
+    const res = await fetch(new URL("/health", URL_), { signal: AbortSignal.timeout(1000) });
+    if (!res.ok) return undefined;
+    return String(((await res.json()) as { boot?: unknown }).boot ?? "");
+  } catch {
+    return undefined;
+  }
+}
+
 async function isUp(): Promise<boolean> {
   try {
     const res = await fetch(new URL("/health", URL_), { signal: AbortSignal.timeout(1000) });
@@ -146,10 +157,24 @@ const isCutOff = (e: unknown) =>
  * call that may have been carried out before the service went (`isSafe` false: a write) is only
  * sent again if it never reached it.
  */
-async function relay<T>(run: (c: Client) => Promise<T>, isSafe = true): Promise<T> {
+async function relay<T>(
+  run: (c: Client, cutOff: AbortSignal) => Promise<T>,
+  isSafe = true,
+): Promise<T> {
   const c = await current();
+  // A call in flight when the service restarts would wait for an answer that never comes (the
+  // connection dies quietly): watch which run of the service is up, and end the call when it
+  // changes, so it is sent again (or, for a write, said so).
+  const watch = new AbortController();
+  const boot = await bootNow();
+  const timer = setInterval(() => {
+    void bootNow().then((now) => {
+      if (now !== undefined && now !== boot)
+        watch.abort(new Error("terminated: the chalk MCP service restarted"));
+    });
+  }, 1000);
   try {
-    return await run(c);
+    return await run(c, watch.signal);
   } catch (e) {
     if (!(isUnreached(e) || (isSafe && isCutOff(e)))) {
       if (isCutOff(e)) {
@@ -164,7 +189,9 @@ async function relay<T>(run: (c: Client) => Promise<T>, isSafe = true): Promise<
     await c.close().catch(() => {});
     const fresh = await current();
     void stdio.sendToolListChanged().catch(() => {});
-    return run(fresh);
+    return run(fresh, new AbortController().signal);
+  } finally {
+    clearInterval(timer);
   }
 }
 
@@ -182,9 +209,9 @@ stdio.setRequestHandler(CallToolRequestSchema, async (req, extra) => {
   // Writing a thread isn't sent twice; looking is.
   const isSafe = req.params.name !== "comment";
   return relay(
-    (c) =>
+    (c, cutOff) =>
       c.callTool(req.params, undefined, {
-        signal: extra.signal,
+        signal: AbortSignal.any([extra.signal, cutOff]),
         timeout: 30 * 60 * 1000,
         resetTimeoutOnProgress: true,
         ...(token === undefined

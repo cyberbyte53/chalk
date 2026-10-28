@@ -19,11 +19,13 @@ const PORT = Number(process.env.CHALK_MCP_PORT ?? 5174);
 const HOST = process.env.CHALK_MCP_HOST ?? "127.0.0.1";
 
 const mcp = mcpMiddleware();
+/** This run of the service: a relay with a call in flight sees it change when the service restarts. */
+const BOOT = `${process.pid}:${Date.now()}`;
 const server = createServer((req, res) => {
   const path = (req.url ?? "").split("?")[0];
   if (path === "/health") {
     res.setHeader("content-type", "application/json");
-    res.end(JSON.stringify({ ok: true, service: "chalk-mcp" }));
+    res.end(JSON.stringify({ ok: true, service: "chalk-mcp", boot: BOOT }));
     return;
   }
   if (path !== "/mcp") {

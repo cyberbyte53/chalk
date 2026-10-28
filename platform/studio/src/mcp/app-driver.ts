@@ -389,8 +389,10 @@ export type Motion = {
   frames: { picture: Picture; t: number }[];
   /** When the picture last changed, once it had gone still and the board had settled. */
   stillAfter?: number;
-  /** The picture was still changing when sampling stopped (the frames filled, or the cap). */
+  /** The picture was still changing when watching stopped, and why it stopped. */
   stillChangingAt?: number;
+  /** Why watching stopped before the board went still: the frames asked for were all kept, or the cap. */
+  stoppedBy?: "most" | "cap";
 };
 
 /** How a step's motion is sampled: about every `every` ms (real time), keeping at most `most` frames. */
@@ -399,11 +401,64 @@ export type FramesSpec = { every: number; most: number };
 /** The longest a step's motion is watched, in real seconds. */
 const MOTION_CAP = 30;
 
+/** Two pictures differ when more than this share of their pixels differ visibly. */
+const CHANGED_SHARE = 0.001;
+/** A pixel differs visibly when a channel moved by more than this (of 255). */
+const CHANNEL_STEP = 16;
+
 /**
- * Watches the board after a step: a picture about every `every` ms, kept when it differs from the
- * last one kept (Chromium draws a still page to the same bytes every time, so differing bytes mean
- * a differing picture). Stops once the board has settled and two pictures in a row were the same,
- * or when `most` frames are kept, or at the cap; says which.
+ * How many pixels of two same-size pictures differ visibly, decoded in the composer page (bytes
+ * alone can differ for the same picture: a resampled capture, a GPU's rounding). A different size
+ * counts as every pixel.
+ */
+async function pixelsChanged(a: Buffer, b: Buffer): Promise<{ changed: number; total: number }> {
+  return onComposer((page) =>
+    page.evaluate(
+      async ({ a, b, step }) => {
+        const load = (src: string) =>
+          new Promise<HTMLImageElement>((done, fail) => {
+            const img = new Image();
+            img.onload = () => done(img);
+            img.onerror = () => fail(new Error("a frame didn't load"));
+            img.src = src;
+          });
+        const [x, y] = await Promise.all([load(a), load(b)]);
+        const total = x.width * x.height;
+        if (x.width !== y.width || x.height !== y.height) return { changed: total, total };
+        const pixels = (img: HTMLImageElement) => {
+          const c = document.createElement("canvas");
+          c.width = img.width;
+          c.height = img.height;
+          const g = c.getContext("2d") as CanvasRenderingContext2D;
+          g.drawImage(img, 0, 0);
+          return g.getImageData(0, 0, img.width, img.height).data;
+        };
+        const [p, q] = [pixels(x), pixels(y)];
+        let changed = 0;
+        for (let i = 0; i < p.length; i += 4)
+          if (
+            Math.abs((p[i] ?? 0) - (q[i] ?? 0)) > step ||
+            Math.abs((p[i + 1] ?? 0) - (q[i + 1] ?? 0)) > step ||
+            Math.abs((p[i + 2] ?? 0) - (q[i + 2] ?? 0)) > step ||
+            Math.abs((p[i + 3] ?? 0) - (q[i + 3] ?? 0)) > step
+          )
+            changed++;
+        return { changed, total };
+      },
+      {
+        a: `data:image/png;base64,${a.toString("base64")}`,
+        b: `data:image/png;base64,${b.toString("base64")}`,
+        step: CHANNEL_STEP,
+      },
+    ),
+  );
+}
+
+/**
+ * Watches the board after a step: a picture about every `every` ms of one fixed region (the board
+ * as it was when watching began, so nothing moves the frame but the board itself), kept when its
+ * pixels differ visibly from the last one kept. Stops once the board has settled and two pictures
+ * in a row were the same, or when `most` frames are kept, or at the cap; says which.
  */
 async function watchMotion(
   page: Page,
@@ -413,20 +468,34 @@ async function watchMotion(
 ): Promise<Motion> {
   const frames: Motion["frames"] = [];
   const t0 = Date.now();
+  const box = await card.boundingBox();
+  if (box === null) throw new Error("the board isn't on screen to watch");
+  const clip = {
+    x: Math.round(box.x),
+    y: Math.round(box.y),
+    width: Math.round(box.width),
+    height: Math.round(box.height),
+  };
+  const { boxes } = await card.evaluate(boxesIn);
   let last: Buffer | undefined;
   let same = 0;
   let lastChange = 0;
   for (;;) {
-    const picture = await pictureOf(card, "thumb");
+    const png = await page.screenshot({ type: "png", clip });
     const t = Number(((Date.now() - t0) / 1000).toFixed(2));
-    if (last === undefined || !picture.png.equals(last)) {
-      frames.push({ picture, t });
-      last = picture.png;
+    const isNew =
+      last === undefined ||
+      (!png.equals(last) &&
+        (await pixelsChanged(png, last).then((d) => d.changed > d.total * CHANGED_SHARE)));
+    if (isNew) {
+      frames.push({ picture: { png, width: clip.width, boxes }, t });
+      last = png;
       same = 0;
       lastChange = t;
     } else same += 1;
     if (same >= 2 && (await isSettled())) return { frames, stillAfter: lastChange };
-    if (frames.length >= spec.most || t >= MOTION_CAP) return { frames, stillChangingAt: t };
+    if (frames.length >= spec.most) return { frames, stillChangingAt: t, stoppedBy: "most" };
+    if (t >= MOTION_CAP) return { frames, stillChangingAt: t, stoppedBy: "cap" };
     await page.waitForTimeout(spec.every);
   }
 }
