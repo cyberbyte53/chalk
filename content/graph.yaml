@@ -12,10 +12,3 @@ edges:
     parents: [class10-maths/real-numbers/fundamental-theorem, class10-maths/real-numbers/hcf-and-lcm]
   - concept: class10-maths/real-numbers/which-fractions-end
     parents: [class10-maths/real-numbers/fundamental-theorem]
-  # Class 9 Coordinate Geometry: each lesson builds on the one before.
-  - concept: class9-maths/coordinate-geometry/the-cartesian-plane
-    parents: [class9-maths/coordinate-geometry/two-numbers-for-a-place]
-  - concept: class9-maths/coordinate-geometry/coordinates-of-a-point
-    parents: [class9-maths/coordinate-geometry/the-cartesian-plane]
-  - concept: class9-maths/coordinate-geometry/plotting-points
-    parents: [class9-maths/coordinate-geometry/coordinates-of-a-point]

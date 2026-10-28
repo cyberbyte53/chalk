@@ -1,6 +1,5 @@
 import type { PropModule } from "@chalk/player";
 import { basicProps } from "@chalk/prop-basics";
-import { coordinateProps } from "@chalk/prop-coordinates";
 import { decimalExpansionProp } from "@chalk/prop-decimal";
 import { primeProps } from "@chalk/prop-primes";
 
@@ -10,7 +9,5 @@ import { primeProps } from "@chalk/prop-primes";
  * instead (`propLibrary`).
  */
 export const propModules: Readonly<Record<string, PropModule>> = Object.fromEntries(
-  [...basicProps, ...coordinateProps, ...primeProps, decimalExpansionProp].map(
-    (m) => [m.def.type, m] as const,
-  ),
+  [...basicProps, ...primeProps, decimalExpansionProp].map((m) => [m.def.type, m] as const),
 );

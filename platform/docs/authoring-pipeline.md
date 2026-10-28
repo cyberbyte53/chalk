@@ -219,7 +219,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 4. ~~An agent splits each existing `plan.md`~~ (dropped: class 9 is remade from its source instead): Mission → `brief.md` (scope and screens), Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
 5. Each prop's `describe` is checked to open with what it is for (a few open with only what it shows: "A factor tree.", "Two sticks, a and b.").
 6. `outline.yaml` generated for each chapter with a source.
-7. `coordinatePlane` is the first prop run through field use: no board sets ten of its words fields or calls `leaveMark`, and one board each uses `canAddYAxis`, `snap`, `showSigns`, `canPick`, `canWalkBoth` and `walkLabel`. Each is split out or kept, on purpose.
+7. ~~`coordinatePlane` run through field use~~: removed with class 9 Coordinate Geometry, its old threads and reviews, to remake the chapter from its source through the pipeline.
 
 ## Build order
 

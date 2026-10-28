@@ -389,48 +389,45 @@ const cases: Record<string, () => Promise<void>> = {
   async props() {
     // A prop on its own, at its address: seen, played and called like any board.
     const c = await agent("stress-props");
-    const PLANE = "library/props/coordinates/coordinatePlane";
-    const bare = await call(c, "look", { at: PLANE });
+    const STICKS = "library/props/primes/stickMeasure";
+    const bare = await call(c, "look", { at: STICKS });
     const first = textOf(bare).split("\n")[0] ?? "";
     expect(
       "a prop opens at its address, alone, saying where it is defined",
       bare.ok &&
-        first.startsWith(`${PLANE} `) &&
-        /written: library\/props\/coordinates\/src\/coordinate-plane\.ts:\d+/.test(textOf(bare)),
+        first.startsWith(`${STICKS} `) &&
+        /written: library\/props\/primes\/src\/stick-measure\.ts:\d+/.test(textOf(bare)),
       bare.error ?? first,
     );
-    const set = await call(c, "look", { at: PLANE, state: { x: -2, y: 5 } });
+    const set = await call(c, "look", { at: STICKS, state: { stickA: 20, stickB: 8 } });
     expect(
       "it starts from the fields given, over its defaults",
-      set.ok && /\bx -2\b/.test(textOf(set)) && /\by 5\b/.test(textOf(set)),
+      set.ok && /\bstickA 20\b/.test(textOf(set)) && /\bstickB 8\b/.test(textOf(set)),
       set.error ?? textOf(set).slice(0, 200),
     );
-    const wrong = await call(c, "look", { at: "library/props/coordinates/nothing" });
+    const wrong = await call(c, "look", { at: "library/props/primes/nothing" });
     expect(
       "a prop its package hasn't fails, naming the package's props",
-      !wrong.ok && /its props: .*coordinatePlane/.test(wrong.error ?? ""),
+      !wrong.ok && /its props: .*stickMeasure/.test(wrong.error ?? ""),
       wrong.error?.slice(0, 120) ?? "went ahead",
     );
-    const badState = await call(c, "look", { at: PLANE, state: { x: "far" } });
+    const badState = await call(c, "look", { at: STICKS, state: { stickA: "far" } });
     expect(
       "fields that don't fit the prop fail, saying which",
-      !badState.ok && /can't start from that state: x/.test(badState.error ?? ""),
+      !badState.ok && /can't start from that state: stickA/.test(badState.error ?? ""),
       badState.error?.slice(0, 120) ?? "went ahead",
     );
     const called = await call(c, "play", {
-      at: PLANE,
-      state: { x: 2, y: 1 },
-      steps: [{ call: "setX", args: { value: -3 } }, { call: "nothing" }],
+      at: STICKS,
+      steps: [{ call: "setSticks", args: { stickA: 9, stickB: 6 } }, { call: "nothing" }],
       shots: "none",
     });
     const lines = textOf(called);
     expect(
       "a call step does the prop's action as a lesson would, and an unknown one says what there is",
       called.ok &&
-        /call setX .* → setX \{value: -3\} \(lesson\) .*point "\(2, 1\)" → "\(−3, 1\)"/.test(
-          lines,
-        ) &&
-        /has no action "nothing" \(its actions: movePoint/.test(lines),
+        /call setSticks .* → setSticks \{stickA: 9, stickB: 6\} \(lesson\)/.test(lines) &&
+        /has no action "nothing" \(its actions: lay/.test(lines),
       called.error ?? lines.slice(0, 300),
     );
     const library = await call(c, "look", { at: "library/props/" });
@@ -445,7 +442,7 @@ const cases: Record<string, () => Promise<void>> = {
     expect(
       "a prop's page lists every board that uses it, and what no board uses",
       /used on: {2}\d+ boards/.test(textOf(bare)) &&
-        /content\/class9-maths\/.*#\w+ {2}sets /.test(textOf(bare)),
+        /content\/class10-maths\/.*#\w+ {2}sets /.test(textOf(bare)),
       textOf(bare).split("\n").slice(-6).join(" | "),
     );
     const onBoard = await call(c, "play", { at: STORY, steps: [{ call: "giveRound" }] });

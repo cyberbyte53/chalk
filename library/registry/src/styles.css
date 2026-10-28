@@ -2,6 +2,5 @@
    so load @chalk/look's look.css first. A new prop adds its line here. */
 @import "@chalk/draw/styles.css";
 @import "@chalk/prop-basics/styles.css";
-@import "@chalk/prop-coordinates/styles.css";
 @import "@chalk/prop-decimal/styles.css";
 @import "@chalk/prop-primes/styles.css";
