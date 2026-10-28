@@ -545,6 +545,38 @@ describe("BoardRuntime", () => {
     expect(runtime.getView("coin").count).toBe(1);
   });
 
+  it("says what is still going on until the board has settled", async () => {
+    const { services, advance } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props(
+        { kind: "prop", name: "dial", prop: "dial" },
+        { kind: "prop", name: "coin", prop: "coin" },
+      ),
+      when: [
+        {
+          on: "board.started",
+          do: [
+            { call: "dial.turnTo", args: { to: 10, over: 1 } },
+            { wait: 1 },
+            { call: "coin.toss" },
+          ],
+        },
+      ],
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    expect(runtime.busyWith()).toEqual([]);
+    runtime.start();
+    await flush();
+    expect(runtime.busyWith()).toEqual(["a script answering board.started", "dial"]);
+    await advance(1100);
+    // The glide is done; the script is waiting its second.
+    expect(runtime.busyWith()).toEqual(["a script answering board.started"]);
+    await advance(1100);
+    expect(runtime.getView("coin").count).toBe(1);
+    expect(runtime.busyWith()).toEqual([]);
+  });
+
   it("lets the learner win: touching a prop stops the lesson's tween on it", async () => {
     const { services, advance } = fakeServices();
     const board = boardOf({

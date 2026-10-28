@@ -129,7 +129,35 @@ export type Shot = {
   errors: string[];
   /** The board's snapshot (see @chalk/player snapshot.ts), when the page could make it. */
   model?: BoardModel;
+  /** What was still going on when it was read, if the board hadn't settled by the cap. */
+  running?: string[];
 };
+
+/** How long a board may take to settle after it opens or after a step, in its own seconds. */
+export const SETTLE_CAP = 30;
+
+/**
+ * Waits until every board on the page has settled (no lesson script and no prop's timeline
+ * running), at most SETTLE_CAP of board time. Returns what was still going on at the cap, if any.
+ */
+async function untilIdle(page: Page, speed: number): Promise<string[]> {
+  const busy = () =>
+    page.evaluate(() => (window as { __chalkBusy?: () => string[] }).__chalkBusy?.() ?? []);
+  try {
+    await page.waitForFunction(
+      () => ((window as { __chalkBusy?: () => string[] }).__chalkBusy?.() ?? []).length === 0,
+      undefined,
+      { timeout: (SETTLE_CAP / speed) * 1000, polling: "raf" },
+    );
+    return [];
+  } catch {
+    return await busy();
+  }
+}
+
+/** The line for a board still busy at the cap. */
+export const stillRunning = (running: readonly string[]) =>
+  `still running after ${SETTLE_CAP}s of board time: ${running.join(", ")}`;
 
 /** The board model of each board on the page, by its build path (the preview keeps it on window). */
 async function readModels(page: Page): Promise<Map<string, BoardModel>> {
@@ -301,7 +329,13 @@ async function pictureOf(card: Locator, resolution: "full" | "thumb" = "full"): 
 }
 
 /** What one call drew: each board, what each step did, and the board before the first step. */
-export type Drawn = { shots: Shot[]; steps: StepResult[]; before?: Picture };
+export type Drawn = {
+  shots: Shot[];
+  steps: StepResult[];
+  before?: Picture;
+  /** What was still going on when the board opened, if it hadn't settled by the cap. */
+  runningAtOpen?: string[];
+};
 
 export type ShotOptions = {
   locale?: "en" | "hi";
@@ -311,6 +345,8 @@ export type ShotOptions = {
   width?: number;
   /** The pictures taken: at double resolution (default), as thumbnails, or none (a check). */
   pictures?: "full" | "thumb" | "none";
+  /** How fast the board's clock runs (1: real time). */
+  speed?: number;
 };
 
 /**
@@ -341,7 +377,7 @@ export async function previewUrl(
   o: ShotOptions = {},
 ): Promise<string> {
   const url = new URL(await previewBase(root));
-  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}`;
+  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
   return url.toString();
 }
 
@@ -707,6 +743,9 @@ async function shootNow(
   const empty = await page.$(".preview-empty");
   if (empty !== null)
     throw new Error(`${(await empty.textContent()) ?? "Nothing to show"} (at ${url}).`);
+  // The board as it opens has settled: its opening script done, anything it set going finished.
+  const speed = o.speed ?? 1;
+  const runningAtOpen = isContinued ? [] : await untilIdle(page, speed);
   await settle(page);
   at.lastBoard = board;
   const steps: StepResult[] = [];
@@ -760,6 +799,8 @@ async function shootNow(
       }
       const isLast = i === act.steps.length - 1;
       const isPictured = act.shots === "each" || (act.shots === "last" && isLast);
+      const running = await untilIdle(page, speed);
+      if (running.length > 0) at.errors.push(stillRunning(running));
       await settle(page, isPictured);
       const now = await recorded(page);
       const modelNow = [...(await readModels(page)).values()][0];
@@ -809,7 +850,13 @@ async function shootNow(
       ...(models.has(name.replace(/\.json$/, ""))
         ? { model: models.get(name.replace(/\.json$/, "")) }
         : {}),
+      ...(runningAtOpen.length > 0 && !isActed ? { running: runningAtOpen } : {}),
     });
   }
-  return { shots, steps, ...(before === undefined ? {} : { before }) };
+  return {
+    shots,
+    steps,
+    ...(before === undefined ? {} : { before }),
+    ...(runningAtOpen.length > 0 ? { runningAtOpen } : {}),
+  };
 }

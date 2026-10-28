@@ -10,6 +10,7 @@ import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
   BoardPlayer,
+  BoardSpeedContext,
   SEP,
   addressOf,
   findNode,
@@ -988,8 +989,13 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
           },
         ];
       });
+    // What is still going on, on every board here (a script, a prop's timeline): empty once all
+    // have settled. A tool acting on a board waits for this before reading it.
+    const busy = window as Window & { __chalkBusy?: () => string[] };
+    busy.__chalkBusy = () => runningBoards().flatMap((runtime) => runtime.busyWith());
     return () => {
       w.__chalkModel = undefined;
+      busy.__chalkBusy = undefined;
     };
   }, []);
   // What the app did, for a tool acting on the board (the chalk MCP's play): every
@@ -1035,6 +1041,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const withQuestions = params.get("show") === "questions";
   const isPlaying = params.has("earned");
   const isShot = params.has("shot");
+  // How fast the boards' clocks run (`&speed=10`): a tool watching boards runs them faster.
+  const speed = Number(params.get("speed")) || 1;
   // The column's width, to see the board as another device draws it (a phone by default).
   const width = Number(params.get("width")) || undefined;
   const locale = params.get("locale") === "hi" ? Locale.Hi : Locale.En;
@@ -1263,25 +1271,27 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
           <b>?</b> keys
         </div>
       )}
-      {shown.map((s, i) => (
-        <div
-          class={isOne && i !== at ? "preview-away" : "preview-slot"}
-          key={s.path}
-          style={zoom === 1 ? undefined : { zoom }}
-        >
-          <PreviewBoard
-            shown={s}
-            where={sources[s.path]}
-            threads={threadsOn(threads, s)}
-            reviews={reviews}
-            onThreads={setThreads}
-            locale={locale}
-            isPlaying={isPlaying}
-            bus={bus}
-            isShot={isShot}
-          />
-        </div>
-      ))}
+      <BoardSpeedContext.Provider value={speed}>
+        {shown.map((s, i) => (
+          <div
+            class={isOne && i !== at ? "preview-away" : "preview-slot"}
+            key={s.path}
+            style={zoom === 1 ? undefined : { zoom }}
+          >
+            <PreviewBoard
+              shown={s}
+              where={sources[s.path]}
+              threads={threadsOn(threads, s)}
+              reviews={reviews}
+              onThreads={setThreads}
+              locale={locale}
+              isPlaying={isPlaying}
+              bus={bus}
+              isShot={isShot}
+            />
+          </div>
+        ))}
+      </BoardSpeedContext.Provider>
       {!isShot && !isOne && (beside.before !== undefined || beside.after !== undefined) && (
         <nav class="preview-lessons">
           {beside.before !== undefined && (

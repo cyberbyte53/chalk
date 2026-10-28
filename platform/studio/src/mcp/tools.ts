@@ -333,6 +333,14 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .boolean()
             .optional()
             .describe("Name the pieces (or parts) on the picture. Default true."),
+          speed: z
+            .number()
+            .min(1)
+            .max(100)
+            .optional()
+            .describe(
+              "How fast the board's clock runs: waits, glides and timers end sooner, in the same order with the same values. Default 10; 1 for real time. Boards are read once they've settled (at most 30s of board time; what's still running then is named).",
+            ),
         },
         // Rebuilding writes build/, which is generated: nothing the person wrote changes.
         annotations: { readOnlyHint: true, openWorldHint: false },
@@ -390,6 +398,14 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .optional()
             .describe("Column width in px (default 390)."),
           labels: z.boolean().optional().describe("Name the pieces on the picture. Default true."),
+          speed: z
+            .number()
+            .min(1)
+            .max(100)
+            .optional()
+            .describe(
+              "How fast the board's clock runs: waits, glides and timers end sooner, in the same order with the same values. Default 10; 1 for real time. Boards are read once they've settled (at most 30s of board time; what's still running then is named).",
+            ),
         },
         annotations: { readOnlyHint: true, openWorldHint: false },
       },

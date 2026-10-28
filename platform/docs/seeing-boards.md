@@ -32,6 +32,8 @@ Each thing appears once. Values are written in full, strings quoted as written.
 
 Taps and drags on the real page, in order, by address (`game/giveRound`; `qr` with `text: "q = 5"` for the option saying it). One line per step: what it set off, everything the student sees that changed (each part was → now, `+` appeared, `−` gone, an input off → on, and what a prop knows but doesn't show), signals, "board passed", errors. Then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for whole boards, `shots: "each"` for a strip of every step).
 
+**Settled, fast.** A board is read once it has settled: no lesson script and no prop's timeline (a glide, a timed action, a repeat) still running. The runtime knows (`busyWith`), the page says (`__chalkBusy`), and `look` and `play` wait for it after the board opens and after every step, so a reveal the lesson delays is never missed. The board's clock runs 10× by default (`speed`, 1 for real time): waits, glides and timers end sooner, in the same order with the same values. A board still busy after 30s of its own time (a timer left running) is read as it is, and the answer says what is still running.
+
 `continue: true` goes on from where this agent's last call left the board. If that board isn't there (another board since, content rebuilt), it fails and says why; it never starts fresh as if it had worked.
 
 ## The picture

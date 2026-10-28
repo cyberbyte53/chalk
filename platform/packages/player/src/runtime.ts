@@ -852,7 +852,41 @@ export class BoardRuntime {
    * same door as the lesson's own scripts; resolves when it has finished.
    */
   perform(script: Script, actor: Actor): Promise<void> {
-    return this.run(script, actor);
+    return this.runScript(script, actor, actor);
+  }
+
+  /** Scripts running now, by what each answers ("game.over", or who runs it). */
+  private readonly scripts = new Map<number, string>();
+  private scriptCount = 0;
+
+  /** Runs a whole script, counted as running until it ends (however it ends). */
+  private async runScript(
+    script: Script,
+    answering: string,
+    actor: Actor,
+    isSetOff = false,
+    cause: number | undefined = undefined,
+  ): Promise<void> {
+    const id = ++this.scriptCount;
+    this.scripts.set(id, answering);
+    try {
+      await this.run(script, actor, isSetOff, cause);
+    } finally {
+      this.scripts.delete(id);
+    }
+  }
+
+  /**
+   * What is still going on: a lesson script running, or a prop's timeline (a glide, a timed action,
+   * a repeat, a line being said). Every wait on the board's clock happens inside one of these, so
+   * none is running exactly when the board has settled. Empty then.
+   */
+  busyWith(): string[] {
+    const out: string[] = [];
+    for (const answering of new Set(this.scripts.values()))
+      out.push(`a script answering ${answering}`);
+    for (const [name, running] of this.timelines) if (running.size > 0) out.push(name);
+    return out;
   }
 
   /** A prop's view raises one of its signals (e.g. the learner let go of the marker): an act itself. */
@@ -1066,8 +1100,10 @@ export class BoardRuntime {
       // Jugnu sets off stays Jugnu's, so his limits hold through the lesson's own rules too.
       // Everything it does is a consequence of the act that raised the signal.
       const cause = record.from ?? record.n;
-      if (record.actor === Actor.Jugnu) void this.run(rule.script, Actor.Jugnu, true, cause);
-      else void this.run(rule.script, Actor.Lesson, false, cause);
+      const answering = `${record.prop}.${record.signal}`;
+      if (record.actor === Actor.Jugnu)
+        void this.runScript(rule.script, answering, Actor.Jugnu, true, cause);
+      else void this.runScript(rule.script, answering, Actor.Lesson, false, cause);
     }
   }
 

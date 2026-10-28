@@ -11,6 +11,7 @@ import {
   type Step,
   closeLane,
   shoot,
+  stillRunning,
 } from "./app-driver";
 import type { NodeShape } from "./model-schema";
 import { type Labels, type Tile, compose } from "./picture";
@@ -269,6 +270,7 @@ export function boardText(
       out.push(`${" ".repeat(width)}now: ${boardFields(live, `${shot.board}#${n.path}`)}`);
   }
   if (shot.overflow.length > 0) out.push("problems:", ...shot.overflow.map((p) => `  ${p}`));
+  if (shot.running !== undefined) out.push(stillRunning(shot.running));
   if (extra.errors.length > 0) out.push("page errors:", ...extra.errors.map((e) => `  ${e}`));
   if (nodes.length > 0)
     out.push(
@@ -359,6 +361,7 @@ export function pieceText(
     return `${name}${shown}${does}${p.drawnAt !== undefined ? `  → ${p.drawnAt}` : ""}`;
   };
   if (node.parts.length > 0) out.push("", ...block("parts:", node.parts.map(partLine)));
+  if (shot.running !== undefined) out.push("", stillRunning(shot.running));
   const mine = shot.overflow.filter((p) => p.startsWith(`${pieceName} (`));
   if (mine.length > 0 || node.problems.length > 0)
     out.push("", ...block("problems:", [...mine, ...node.problems]));
@@ -367,7 +370,12 @@ export function pieceText(
 
 // ---- Drawing ----
 
+/** How fast boards' clocks run when looked at or played, unless asked otherwise. */
+export const DEFAULT_SPEED = 10;
+
 export type LookArgs = {
+  /** How fast the board's clock runs (1: real time; default DEFAULT_SPEED). */
+  speed?: number;
   locales?: Locale[];
   widths?: number[];
   play?: boolean;
@@ -410,6 +418,7 @@ export async function look(
     width: v.width,
     play: a.play === true,
     questions: target.kind === "group",
+    speed: a.speed ?? DEFAULT_SPEED,
     // A lesson's boards are thumbnails: no need for double resolution.
     pictures: target.kind === "group" ? "thumb" : "full",
   });
@@ -538,6 +547,7 @@ export async function check(
             width: job.v.width,
             questions: true,
             play: a.play === true,
+            speed: a.speed ?? DEFAULT_SPEED,
             // A check reads the layout; it shows no pictures.
             pictures: "none",
           },
@@ -582,6 +592,8 @@ export async function check(
 
 export type PlayArgs = {
   board: string;
+  /** How fast the board's clock runs (1: real time; default DEFAULT_SPEED). */
+  speed?: number;
   steps: Step[];
   continue?: boolean;
   shots?: "each" | "last" | "none";
@@ -616,7 +628,12 @@ const pieceOfPath = (path: string) => path.split(/[./]/)[0] ?? path;
 
 export async function play(root: string, a: PlayArgs, lane: string): Promise<Answer> {
   const shots = a.shots ?? "last";
-  const o: ShotOptions = { locale: a.locale ?? "en", width: a.width ?? PHONE, play: true };
+  const o: ShotOptions = {
+    locale: a.locale ?? "en",
+    width: a.width ?? PHONE,
+    play: true,
+    speed: a.speed ?? DEFAULT_SPEED,
+  };
   const d = await shoot(
     root,
     a.board,
@@ -627,7 +644,10 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   const locale = o.locale ?? "en";
   for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, locale);
   for (const r of d.steps) if (r.changed !== undefined) r.changed = shown(r.changed, locale);
-  const lines = [`${a.board}   play · ${o.width} · ${o.locale}${a.continue ? " · continued" : ""}`];
+  const lines = [
+    `${a.board}   play · ${o.width} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
+  ];
+  if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
   const changedPieces = new Set<string>();
   for (const [i, r] of d.steps.entries()) {
     const changed = Object.entries(r.changed ?? {});
