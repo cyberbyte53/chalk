@@ -7,6 +7,7 @@ const node = (parts: PartSnapshot[], extra: Partial<NodeSnapshot> = {}): NodeSna
   isShown: true,
   summary: "",
   setup: {},
+  given: [],
   live: {},
   bound: {},
   parts,

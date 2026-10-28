@@ -1,4 +1,4 @@
-import { type Script, splitTarget } from "@chalk/content";
+import { type Script, propPieces, splitTarget } from "@chalk/content";
 import {
   type AnyPropDef,
   BOARD,
@@ -111,6 +111,8 @@ type Context = {
   /** Fields bound into this node, and what each is worked out from. */
   bound: ReadonlyMap<string, readonly string[]>;
   isShown: boolean;
+  /** The fields the board gave where it placed the prop. */
+  given: readonly string[];
 };
 
 /** One placed prop as agents read it: what it shows and does (from its view), its values, what can act on it. */
@@ -194,6 +196,7 @@ function nodeOf(
     isShown: c.isShown,
     summary: seen.summary,
     setup,
+    given: c.given.filter((f) => f in setup),
     live: liveValues,
     bound,
     parts,
@@ -208,6 +211,7 @@ function nodeOf(
 export function snapshotOf(runtime: BoardRuntime, page?: ParentNode): BoardSnapshot {
   const board = runtime.board;
   const ruleCalls = board.when.flatMap((r) => calls(r.do));
+  const givenOf = new Map(propPieces(board.root).map((p) => [p.name, Object.keys(p.with ?? {})]));
   const nodes = runtime.propNames().map((name) => {
     const def = runtime.getDef(name);
     const prefix = `${name}.`;
@@ -220,6 +224,7 @@ export function snapshotOf(runtime: BoardRuntime, page?: ParentNode): BoardSnaps
       ),
       bound,
       isShown: !runtime.isHidden(name),
+      given: givenOf.get(name) ?? [],
     });
   });
   const open = runtime

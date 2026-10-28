@@ -9,7 +9,7 @@ Return what only the running board knows. Point at the code for what the code sa
 | Kind | Lives in | In the answer |
 |---|---|---|
 | How a piece was written | the code | full repo path and line, every kit or pattern function it went through, a question's `params.yaml` row (all recorded by the build: [reach.md](reach.md)) |
-| Its setup | the running app (shuffled options, a question's values, what a helper worked out) | at a piece: in full, in the language shown; options in the order shown, each with its id and its own line, and whether they were shuffled |
+| Its setup | the running app (shuffled options, a question's values, what a helper worked out) | at a piece: what the board gave where it placed it, in the language shown, and one line pointing at the prop's defaults for the rest; options in the order shown, each with its id and its own line, and whether they were shuffled |
 | Its current state, values worked out from others | only the running app | in full, every field |
 | What can be done to it now | the running app | action, who, via which control, the action's line |
 | How it looks | the picture | one picture, plus layout problems found by measuring, or "ok" |

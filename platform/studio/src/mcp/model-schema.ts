@@ -31,6 +31,7 @@ export type NodeShape = {
   isShown: boolean;
   summary: string;
   setup: Record<string, unknown>;
+  given: string[];
   live: Record<string, unknown>;
   bound: Record<string, { value?: unknown; from: string[] }>;
   parts: z.infer<typeof partSchema>[];
@@ -50,6 +51,7 @@ export const nodeSchema: z.ZodType<NodeShape> = z.lazy(() =>
     setup: z
       .record(z.unknown())
       .describe("Fixed where placed: nothing on this board changes them."),
+    given: z.array(z.string()).describe("The setup fields the board gave; the rest are defaults."),
     live: z
       .record(z.unknown())
       .describe("Can change on this board (learner, rules), and derived values that follow."),

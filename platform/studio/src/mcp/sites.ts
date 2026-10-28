@@ -41,22 +41,38 @@ function closureIn(dir: string, file: string, seen = new Set<string>()): Set<str
  * definition reaches. An action written in more than one of them is left out: exact, or nothing.
  */
 const actionSitesCache = new Map<string, Map<string, string>>();
+/** The file a prop type is defined in (the one with `type: "<type>"`), repo-relative. */
+export function defFileOf(root: string, type: string): string | undefined {
+  const pkg = packageOfType(root, type);
+  if (pkg === undefined) return undefined;
+  const src = join(root, pkg, "src");
+  if (!existsSync(src)) return undefined;
+  const found = readdirSync(src)
+    .filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))
+    .map((n) => join(src, n))
+    .find((f) => new RegExp(`\\btype:\\s*"${type}"`).test(readFileSync(f, "utf8")));
+  return found === undefined ? undefined : relative(root, found);
+}
+
+/** Where a prop type's defaults are written: file:line of its `defaults:`. */
+export function defaultsSite(root: string, type: string): string | undefined {
+  const file = defFileOf(root, type);
+  if (file === undefined) return undefined;
+  const line = readFileSync(join(root, file), "utf8")
+    .split("\n")
+    .findIndex((l) => /^\s*defaults:/.test(l));
+  return line < 0 ? file : `${file}:${line + 1}`;
+}
+
 export function actionSites(root: string, type: string): Map<string, string> {
   const cached = actionSitesCache.get(`${root}:${type}`);
   if (cached !== undefined) return cached;
   const out = new Map<string, string>();
   actionSitesCache.set(`${root}:${type}`, out);
-  const pkg = packageOfType(root, type);
-  if (pkg === undefined) return out;
-  const src = join(root, pkg, "src");
-  if (!existsSync(src)) return out;
-  const files = readdirSync(src)
-    .filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))
-    .map((n) => join(src, n));
-  const defFile = files.find((f) =>
-    new RegExp(`\\btype:\\s*"${type}"`).test(readFileSync(f, "utf8")),
-  );
-  if (defFile === undefined) return out;
+  const rel = defFileOf(root, type);
+  if (rel === undefined) return out;
+  const defFile = join(root, rel);
+  const src = join(root, packageOfType(root, type) ?? "", "src");
   const reach = closureIn(src, defFile);
   const found = new Map<string, string[]>();
   for (const f of reach) {

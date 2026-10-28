@@ -15,7 +15,7 @@ import {
 } from "./app-driver";
 import type { NodeShape } from "./model-schema";
 import { type Labels, type Tile, compose } from "./picture";
-import { actionSites } from "./sites";
+import { actionSites, defaultsSite } from "./sites";
 
 /**
  * What `look` and `play` answer (platform/docs/seeing-boards.md). The rule: return what only the
@@ -305,18 +305,22 @@ export function pieceText(
   if (via.length > 0) out.push(...block("   via:", via));
   if (reach?.rows !== undefined) out.push(`${pad("  row:", 9)}${reach.rows}`);
   out.push("");
-  if (Object.keys(node.setup).length > 0)
-    out.push(
-      ...block(
-        "setup:",
-        setupLines(
-          root,
-          node.setup,
-          written,
-          new Set(node.parts.flatMap((p) => (typeof p.value === "string" ? [p.value] : []))),
-        ),
-      ),
-    );
+  // Its setup: what the board gave where it placed it; the rest are the prop's defaults, pointed at.
+  const given = Object.fromEntries(
+    Object.entries(node.setup).filter(([k]) => node.given.includes(k)),
+  );
+  const defaultCount = Object.keys(node.setup).length - Object.keys(given).length;
+  const setup = setupLines(
+    root,
+    given,
+    written,
+    new Set(node.parts.flatMap((p) => (typeof p.value === "string" ? [p.value] : []))),
+  );
+  if (defaultCount > 0) {
+    const at = defaultsSite(root, node.prop);
+    setup.push(`${defaultCount} more as the prop's defaults${at === undefined ? "" : `  → ${at}`}`);
+  }
+  if (setup.length > 0) out.push(...block("setup:", setup));
   if (Object.keys(node.live).length > 0)
     out.push(
       ...block(
@@ -603,8 +607,10 @@ export type PlayArgs = {
   labels?: boolean;
 };
 
-/** A recorded event in words: what a tap set off, a signal, anything else. */
-function eventWords(e: string, locale: Locale): string {
+/** A recorded event, read: its kind, who, and what it carries (an action's arguments, a signal's payload). */
+type Event = { kind: string; actor: string; name: string; data: unknown; extra: string };
+
+function readEvent(e: string, locale: Locale): Event {
   const [kind = "", actor = "", ...rest] = e.split(" ");
   const raw = rest.join(" ");
   let payload: unknown;
@@ -616,11 +622,44 @@ function eventWords(e: string, locale: Locale): string {
   const p = (payload ?? {}) as Record<string, unknown>;
   if (kind === "cause" && typeof p.action === "string") {
     const args = p.args as Record<string, unknown> | undefined;
-    return `${p.action}${args !== undefined && Object.keys(args).length > 0 ? ` ${full(args)}` : ""}${actor === "learner" ? "" : ` (${actor})`}`;
+    return {
+      kind,
+      actor,
+      name: p.action,
+      data: args !== undefined && Object.keys(args).length > 0 ? args : undefined,
+      extra: actor === "learner" ? "" : ` (${actor})`,
+    };
   }
   if (kind === "signal" && typeof p.signal === "string")
-    return `signal ${p.signal}${p.payload !== undefined ? ` ${full(p.payload)}` : ""}`;
-  return `${kind} ${actor} ${full(payload)}`;
+    return { kind, actor, name: `signal ${p.signal}`, data: p.payload, extra: "" };
+  return { kind, actor, name: `${kind} ${actor}`, data: payload, extra: "" };
+}
+
+const eventWords = (e: Event) =>
+  `${e.name}${e.data !== undefined ? ` ${full(e.data)}` : ""}${e.extra}`;
+
+/**
+ * Events in words, a run of the same one folded into one line: a drag through seven squares is
+ * `movePoint ×7: {x: 4, y: 3} → {x: -2, y: 4}` and `signal moved ×7`, not fourteen lines.
+ */
+export function eventLines(events: readonly string[], locale: Locale): string[] {
+  const read = events.map((e) => readEvent(e, locale));
+  // Actions and signals interleave (move, moved, move, moved…): fold each name's run on its own.
+  const runs: { first: Event; last: Event; count: number }[] = [];
+  for (const e of read) {
+    // One of the last two runs (so an action and the signal it raises fold side by side).
+    const run = runs.slice(-2).find((r) => r.first.name === e.name && r.first.extra === e.extra);
+    if (run !== undefined) {
+      run.last = e;
+      run.count += 1;
+    } else runs.push({ first: e, last: e, count: 1 });
+  }
+  return runs.map(({ first, last, count }) => {
+    if (count === 1) return eventWords(first);
+    const from = first.data === undefined ? "" : ` ${full(first.data)}`;
+    const to = last.data === undefined ? "" : ` → ${full(last.data)}`;
+    return `${first.name} ×${count}${from === "" && to === "" ? "" : `:${from}${to}`}${first.extra}`;
+  });
 }
 
 /** The piece a changed value belongs to: "game.rounds" or "game/plates.count" → game. */
@@ -653,7 +692,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     const changed = Object.entries(r.changed ?? {});
     for (const [path] of changed) changedPieces.add(pieceOfPath(path));
     const parts = [
-      ...r.events.map((e) => eventWords(e, locale)),
+      ...eventLines(r.events, locale),
       ...changed.map(([path, c]) =>
         c.was === undefined
           ? `+ ${path} ${full(c.now)}`

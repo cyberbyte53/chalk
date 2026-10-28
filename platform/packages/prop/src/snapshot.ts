@@ -46,6 +46,8 @@ export type NodeSnapshot = {
   summary: string;
   /** Fixed where it was placed: nothing on this board changes them. */
   setup: Readonly<Record<string, unknown>>;
+  /** The fields the board gave where it placed the prop; the rest of `setup` are the prop's defaults. */
+  given: readonly string[];
   /** Can change on this board, and derived values that follow them. */
   live: Readonly<Record<string, unknown>>;
   /** Worked out from other values (by its group, or the board's rules): never set directly. */
