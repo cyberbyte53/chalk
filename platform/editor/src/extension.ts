@@ -15,7 +15,7 @@ import {
   stateDetail,
   stateWords,
 } from "./planning";
-import { ReviewsTree } from "./reviews";
+import { type ReviewItem, ReviewsTree } from "./reviews";
 
 /**
  * Chalk in the editor (Cursor, VS Code): content seen as boards beside its code.
@@ -449,7 +449,7 @@ function revealCursor(): void {
 type Node = {
   label: string;
   path: string;
-  kind: "book" | "chapter" | "planning" | "planfile" | "lesson";
+  kind: "reviews" | "book" | "chapter" | "planning" | "planfile" | "lesson";
   file: string;
   /** A planning file's state, as the dev server reads it. */
   plan?: PlanningFile;
@@ -475,14 +475,35 @@ function openComments(chapter: string): number {
   return (readFileSync(file, "utf8").match(/^ {2}status: (open|planned)$/gm) ?? []).length;
 }
 
-class ChalkTree implements vscode.TreeDataProvider<Node> {
+/** Anything in the Chalk tree: the content and its planning, or the reviews (reviews.ts). */
+type Element = Node | ReviewItem;
+const isReview = (e: Element): e is ReviewItem =>
+  e.kind === "sitting" || e.kind === "review" || e.kind === "thread";
+
+/**
+ * The one Chalk tree: Reviews at the top (your threads not handed over, then each review), then
+ * book → chapter → its planning files and lessons.
+ */
+class ChalkTree implements vscode.TreeDataProvider<Element> {
   private readonly changed = new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData = this.changed.event;
+  constructor(private readonly reviews: ReviewsTree) {
+    reviews.onDidChangeTreeData(() => this.changed.fire());
+  }
   refresh(): void {
     this.changed.fire();
   }
 
-  getTreeItem(node: Node): vscode.TreeItem {
+  getTreeItem(element: Element): vscode.TreeItem {
+    if (isReview(element)) return this.reviews.getTreeItem(element);
+    const node = element;
+    if (node.kind === "reviews") {
+      const item = new vscode.TreeItem("Reviews", vscode.TreeItemCollapsibleState.Expanded);
+      item.iconPath = new vscode.ThemeIcon("comment-discussion");
+      item.description = this.reviews.summary;
+      item.contextValue = "reviews";
+      return item;
+    }
     const isLeaf = node.kind === "lesson" || node.kind === "planfile";
     const item = new vscode.TreeItem(
       node.label,
@@ -530,7 +551,10 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
     return item;
   }
 
-  async getChildren(node?: Node): Promise<Node[]> {
+  async getChildren(element?: Element): Promise<Element[]> {
+    if (element !== undefined && isReview(element)) return this.reviews.getChildren(element);
+    if (element?.kind === "reviews") return this.reviews.getChildren(undefined);
+    const node = element;
     const build = join(root, "build");
     const authoring = join(root, "authoring", "books");
     type Ref = { path: string };
@@ -542,12 +566,18 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
       const books = [
         ...new Set([...(index?.books ?? []).map((r) => r.path), ...dirsIn(authoring)]),
       ];
-      return books.map((slug) => ({
-        label: title(readJson(join(build, `${slug}.json`)), slug),
-        path: slug,
-        kind: "book",
-        file: join(root, "content", slug, "build.yaml"),
-      }));
+      const top: Node = { label: "Reviews", path: "", kind: "reviews", file: "" };
+      return [
+        top,
+        ...books.map(
+          (slug): Node => ({
+            label: title(readJson(join(build, `${slug}.json`)), slug),
+            path: slug,
+            kind: "book",
+            file: join(root, "content", slug, "build.yaml"),
+          }),
+        ),
+      ];
     }
     if (node.kind === "book") {
       const book = readJson<{ chapters: Ref[] }>(join(build, `${node.path}.json`));
@@ -606,7 +636,8 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
   }
 }
 
-const tree = new ChalkTree();
+const reviews = new ReviewsTree(() => base);
+const tree = new ChalkTree(reviews);
 
 /** The planning files' failing checks, as problems on their lines (planning.ts). */
 const problems = vscode.languages.createDiagnosticCollection("chalk");
@@ -647,8 +678,6 @@ async function approveFile(node: Node | undefined, isApproved: boolean): Promise
   tree.refresh();
   void refreshProblems();
 }
-const reviews = new ReviewsTree(() => base);
-
 /** Writes on a thread as you, then redraws what shows threads. Says why, if it was refused. */
 async function writeThread(id: string, text: string, status?: string): Promise<boolean> {
   const done = await changeComments({ op: "write", id, text, ...(status ? { status } : {}) });
@@ -662,7 +691,6 @@ async function writeThread(id: string, text: string, status?: string): Promise<b
 function reviewCommands(): vscode.Disposable[] {
   const thread = ReviewsTree.threadOf;
   return [
-    vscode.commands.registerCommand("chalk.reviews.refresh", () => reviews.refresh()),
     vscode.commands.registerCommand("chalk.thread.open", async (item: unknown) => {
       const t = thread(item);
       if (t === undefined) return;
@@ -728,9 +756,9 @@ function reviewCommands(): vscode.Disposable[] {
   ];
 }
 
-/** The Reviews view, with a note in it when the dev server isn't answering. */
-function reviewsView(): vscode.Disposable {
-  const view = vscode.window.createTreeView("chalk.reviews", { treeDataProvider: reviews });
+/** The Chalk tree, with a note in it when the dev server isn't answering. */
+function chalkView(): vscode.Disposable {
+  const view = vscode.window.createTreeView("chalk.tree", { treeDataProvider: tree });
   const note = reviews.onDidChangeTreeData(() => {
     view.message = reviews.message;
   });
@@ -760,6 +788,7 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
     vscode.commands.registerCommand("chalk.refresh", () => {
       tree.refresh();
+      void reviews.refresh();
       void refreshProblems();
     }),
     vscode.commands.registerCommand("chalk.planning.approve", (node?: Node) =>
@@ -777,8 +806,7 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
     problems,
     vscode.commands.registerCommand("chalk.copyReview", () => copyReview()),
-    vscode.window.registerTreeDataProvider("chalk.tree", tree),
-    reviewsView(),
+    chalkView(),
     ...reviewCommands(),
     // The preview follows the file you're in, and the line your cursor is on.
     vscode.window.onDidChangeActiveTextEditor((editor) => {

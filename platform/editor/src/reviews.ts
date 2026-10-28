@@ -26,6 +26,8 @@ export type Thread = {
 type Review = { id: string; by: string; role: string; at: string; threads: { id: string }[] };
 type Read = { threads: Thread[]; reviews: Review[] };
 
+export type ReviewItem = Item;
+
 type Item =
   | { kind: "sitting"; threads: Thread[] }
   | { kind: "review"; review: Review; threads: Thread[]; isLatest: boolean }
@@ -179,6 +181,19 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     t.contextValue = `thread-${thread.status}`;
     t.command = { command: "chalk.thread.open", title: "Open", arguments: [item] };
     return t;
+  }
+
+  /** Where the reviews stand, in a few words: for the Reviews entry at the top of the Chalk tree. */
+  get summary(): string {
+    const waiting = this.read.threads.filter(isWaiting).length;
+    const ready = this.read.threads.filter((t) => t.status === "ready").length;
+    return [
+      this.sitting.length > 0 ? `${this.sitting.length} not handed over` : "",
+      waiting > 0 ? `${waiting} with the agent` : "",
+      ready > 0 ? `${ready} ready` : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
   }
 
   /** Shown when the dev server didn't answer. */

@@ -16,13 +16,13 @@ app's own `?dev&at=` page, so what you see is what the phone draws.
 - **Pick** a piece (`c`, or the Pick button; ↑ ↓ for wider or finer): a box opens next to it. Write what should change and press ⌘↵: it's a thread on that board (or on the prop, wherever it's used). Esc cancels.
 - **Text boxes** in the preview (the comment box, replies) take ⌘C, ⌘X, ⌘V, ⌘A and ⌘Z / ⌘⇧Z, and ⌘↵ sends. The editor keeps those keys from the panel, so the preview handles them itself, with the clipboard through the extension.
 - **Play** plays it exactly as the app does, in a phone's frame: the chapter's path, one board at a time with Continue, practice, results, from the board or lesson you're on. **हि** shows it in Hindi.
-- **The Chalk tree** (in the explorer): book → chapter → its **Planning** files and its lessons, with each chapter's open threads counted.
+- **The Chalk tree** (in the explorer), one tree for everything: **Reviews** at the top, then book → chapter → its **Planning** files and its lessons, with each chapter's open threads counted.
   - Each planning file (`brief.md`, `outline.yaml`, `objectives.md`, `flow.md`, `props.md`) shows its state: not written, checks fail, to approve, approved, changed since approved, to check again; its tooltip says why. Click it to open it.
   - **Approve** (✓ on the file, or "Chalk: Approve this planning file" in the open file's title bar or right-click): in order, once it is committed; the dev server writes `approved: <commit>`. **Take back** undoes it.
   - **Add a chapter's source** (the tree's title bar): copies a PDF or text into `authoring/books/<book>/<chapter>/source/`. Then ask your agent to run `plan-chapter`.
 - **Problems on planning files:** a failing check (an objective citing what the outline hasn't, a board serving no objective, a need without a verdict) is a problem on the line it is about.
 - **Comment on words:** select words in a planning file, right-click, "Chalk: Comment on the selected words": a thread on those words, in the chapter's comments.
-- **Chalk Reviews** (in the explorer): every review in one place. At the top, your threads not handed over yet (Copy for agent hands them over); then each review, newest first, with where it stands ("1 open, 3 ready") and its threads, each with its status, the latest plan or answer, and the whole thread in its tooltip.
+- **Reviews**, at the top of the Chalk tree: every review in one place. At the top, your threads not handed over yet (Copy for agent hands them over); then each review, newest first, with where it stands ("1 open, 3 ready") and its threads, each with its status, the latest plan or answer, and the whole thread in its tooltip.
   - Click a review: its page in the preview. Click a thread: the review's page, opened at that thread.
   - On a thread: Reply (sends a planned or ready one back to the agent), Close, Withdraw, Open board, Open source line.
   - On a review: Copy for agent (`apply review <id>`), Close all ready, Show its activity.
