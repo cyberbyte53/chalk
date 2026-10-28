@@ -1,0 +1,25 @@
+{
+  "name": "@chalk/prop-coordinates",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./defs": "./src/defs.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*",
+    "@chalk/draw": "workspace:*",
+    "@chalk/player": "workspace:*",
+    "@chalk/prop": "workspace:*",
+    "preact": "10.29.8",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "preact-render-to-string": "6.5.13"
+  }
+}

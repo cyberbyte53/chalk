@@ -337,7 +337,7 @@
       status: closed
 - id: cmvq7tt4qndv
   label: finding
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-27T04:58:51.194Z
@@ -481,9 +481,14 @@
         (boxes 1px or smaller) are skipped. Tested: 644 boards (every real-numbers lesson with its
         questions, en and hi, at 360 and 640) show no false alarms; labels deliberately cut off in
         the bill board were all caught (\"text cut off by 151px\")."
+    - by: you
+      role: person
+      at: 2026-10-27T08:37:31.571Z
+      text: ""
+      status: closed
 - id: cmvqfl8tdsbf
   label: comment
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-27T08:36:08.546Z
@@ -493,6 +498,7 @@
   from: chat
   text: The "in the box" header makes the table 20px wider than the text column in English at 360.
     Shorten it to "box".
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -505,4 +511,8 @@
       text: Header is now "box". The table fits at 360 in English with no layout problems; Hindi was
         already fine.
       status: ready
-  changed: []
+    - by: you
+      role: person
+      at: 2026-10-27T08:37:24.174Z
+      text: ""
+      status: closed

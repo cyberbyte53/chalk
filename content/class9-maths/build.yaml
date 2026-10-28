@@ -1,0 +1,4 @@
+title: { en: Maths IX, hi: गणित IX }
+# Chapters in book order. Each is listed by build-lesson with its first lesson.
+chapters:
+  - coordinate-geometry

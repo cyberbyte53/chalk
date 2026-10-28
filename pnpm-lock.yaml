@@ -29,6 +29,9 @@ importers:
       '@chalk/prop-basics':
         specifier: workspace:*
         version: link:library/props/basics
+      '@chalk/prop-coordinates':
+        specifier: workspace:*
+        version: link:library/props/coordinates
       '@chalk/prop-decimal':
         specifier: workspace:*
         version: link:library/props/decimal
@@ -110,6 +113,31 @@ importers:
         specifier: 3.25.76
         version: 3.25.76
 
+  library/props/coordinates:
+    dependencies:
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../../../platform/packages/content
+      '@chalk/draw':
+        specifier: workspace:*
+        version: link:../../../platform/packages/draw
+      '@chalk/player':
+        specifier: workspace:*
+        version: link:../../../platform/packages/player
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../../../platform/packages/prop
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
+      zod:
+        specifier: 3.25.76
+        version: 3.25.76
+    devDependencies:
+      preact-render-to-string:
+        specifier: 6.5.13
+        version: 6.5.13(preact@10.29.8)
+
   library/props/decimal:
     dependencies:
       '@chalk/content':
@@ -176,6 +204,9 @@ importers:
       '@chalk/prop-basics':
         specifier: workspace:*
         version: link:../props/basics
+      '@chalk/prop-coordinates':
+        specifier: workspace:*
+        version: link:../props/coordinates
       '@chalk/prop-decimal':
         specifier: workspace:*
         version: link:../props/decimal
@@ -222,6 +253,9 @@ importers:
       '@chalk/player':
         specifier: workspace:*
         version: link:../../packages/player
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../../packages/prop
       '@fontsource/baloo-2':
         specifier: 5.2.5
         version: 5.2.5

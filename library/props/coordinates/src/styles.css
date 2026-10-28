@@ -1,0 +1,416 @@
+/* @chalk/prop-coordinates: drawn only with the look's tokens (@chalk/look).
+   x-coordinates are always the x colour (blue) and y-coordinates the y colour (saffron), on the
+   plane, in the readout and on the steppers, so the two numbers never blur together. */
+
+.cp-plane {
+  --cp-x: var(--color-category-2);
+  --cp-y: var(--color-category-1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---- the readout: P = (x, y) and where it is ---- */
+.cp-readout {
+  margin: 0;
+  text-align: center;
+  white-space: pre-wrap;
+  font: 800 var(--text-title-l) / 1.2 var(--font-display);
+  color: var(--color-on-surface);
+}
+.cp-readout .cp-x {
+  color: var(--cp-x);
+}
+.cp-readout .cp-y {
+  color: var(--cp-y);
+}
+.cp-readout-name {
+  font-style: italic;
+}
+.cp-readout-pair {
+  display: block;
+}
+.cp-readout-where {
+  display: block;
+  margin-top: 4px;
+  font: 700 var(--text-body) / 1.3 var(--font-body);
+  color: var(--color-on-surface-variant);
+}
+.cp-readout-signs {
+  font-weight: 800;
+  color: var(--color-on-surface);
+}
+
+.cp-frame {
+  align-self: center;
+  max-width: 100%;
+}
+
+/* ---- the paper ---- */
+.cp-svg {
+  overflow: visible;
+  user-select: none;
+}
+.cp-grid {
+  stroke: var(--color-outline-variant);
+  stroke-width: 1;
+}
+.cp-quadrant rect {
+  fill: color-mix(in srgb, var(--color-primary) 5%, transparent);
+}
+.cp-quadrant.is-here rect {
+  fill: color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+.cp-quadrant-name {
+  text-anchor: middle;
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-surface));
+  font: 800 clamp(22px, calc(var(--cp-unit) * 0.8), 44px) / 1 var(--font-display);
+}
+.cp-quadrant.is-here .cp-quadrant-name {
+  fill: var(--color-primary);
+}
+.cp-quadrant-signs {
+  text-anchor: middle;
+  fill: var(--color-on-surface-variant);
+  font: 700 clamp(14px, calc(var(--cp-unit) * 0.48), 26px) / 1 var(--font-display);
+}
+.cp-axis line {
+  stroke: var(--color-on-surface);
+  stroke-width: 2.5;
+}
+.cp-axis path {
+  fill: var(--color-on-surface);
+}
+.cp-tick {
+  text-anchor: middle;
+  fill: var(--color-on-surface-variant);
+  font: 600 clamp(12px, calc(var(--cp-unit) * 0.42), 22px) / 1 var(--font-body);
+}
+.cp-tick.is-y {
+  text-anchor: end;
+}
+.cp-axis-name {
+  font: italic 800 clamp(16px, calc(var(--cp-unit) * 0.6), 30px) / 1 var(--font-display);
+}
+.cp-axis-name.cp-x {
+  fill: var(--cp-x);
+  text-anchor: end;
+}
+.cp-axis-name.cp-x.is-start {
+  text-anchor: start;
+}
+.cp-axis-name.cp-y {
+  fill: var(--cp-y);
+}
+.cp-line-tick {
+  stroke: var(--color-on-surface);
+  stroke-width: 2;
+}
+.cp-line-tick.is-zero {
+  stroke-width: 3;
+}
+.cp-origin.is-line {
+  text-anchor: middle;
+}
+.cp-origin {
+  text-anchor: end;
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+  fill: var(--color-on-surface);
+  font: italic 800 clamp(14px, calc(var(--cp-unit) * 0.5), 26px) / 1 var(--font-display);
+}
+
+/* ---- the lines one number stands for, and the places on them ---- */
+.cp-line line {
+  stroke-width: 3;
+  stroke-dasharray: 9 6;
+}
+.cp-line.cp-x line {
+  stroke: var(--cp-x);
+}
+.cp-line.cp-y line {
+  stroke: var(--cp-y);
+}
+.cp-line text {
+  font: 800 clamp(16px, calc(var(--cp-unit) * 0.55), 28px) / 1 var(--font-display);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+}
+.cp-line text.is-end {
+  text-anchor: end;
+}
+.cp-line.cp-x text {
+  fill: var(--cp-x);
+}
+.cp-line.cp-y text {
+  fill: var(--cp-y);
+}
+.cp-candidate {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5;
+  animation: cp-pop 0.3s ease-out;
+}
+
+/* ---- P's perpendiculars to the axes, each with its signed length ---- */
+.cp-drop line {
+  stroke-width: 3;
+  stroke-dasharray: 6 5;
+}
+.cp-drop.cp-x line,
+.cp-drop.cp-x circle {
+  stroke: var(--cp-x);
+  fill: var(--cp-x);
+}
+.cp-drop.cp-y line,
+.cp-drop.cp-y circle {
+  stroke: var(--cp-y);
+  fill: var(--cp-y);
+}
+.cp-drop text {
+  font: 800 clamp(16px, calc(var(--cp-unit) * 0.6), 30px) / 1 var(--font-display);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+}
+.cp-drop text.is-end {
+  text-anchor: end;
+}
+.cp-drop text.is-mid {
+  text-anchor: middle;
+}
+.cp-drop.cp-x text {
+  fill: var(--cp-x);
+  stroke: var(--color-surface);
+}
+.cp-drop.cp-y text {
+  fill: var(--cp-y);
+  stroke: var(--color-surface);
+}
+
+/* ---- P ---- */
+.cp-point-halo {
+  fill: color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+.cp-point-dot {
+  fill: var(--color-primary);
+  stroke: var(--color-surface);
+  stroke-width: 2.5;
+  pointer-events: none;
+}
+.cp-point-grab {
+  fill: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+.cp-point-grab:active {
+  cursor: grabbing;
+}
+.cp-point-grab[aria-disabled="true"] {
+  cursor: default;
+}
+.cp-point-grab:focus {
+  outline: none;
+}
+.cp-point-grab:focus-visible {
+  stroke: var(--color-on-surface);
+  stroke-width: 2;
+}
+.cp-point-name {
+  fill: var(--color-on-surface);
+  font: 800 clamp(17px, calc(var(--cp-unit) * 0.6), 30px) / 1 var(--font-display);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 5px;
+}
+
+/* ---- the walk from O, and the dots it leaves ---- */
+.cp-walk line {
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.cp-walk line.cp-x {
+  stroke: var(--cp-x);
+}
+.cp-walk line.cp-y {
+  stroke: var(--cp-y);
+}
+.cp-pick {
+  fill: transparent;
+  cursor: crosshair;
+  touch-action: none;
+}
+.cp-pick:focus {
+  outline: none;
+}
+/* The second friend (y first): the same colours, dashed, with a hollow marker. */
+.cp-walk.is-second line {
+  stroke-dasharray: 2 9;
+}
+.cp-walk.is-second .cp-walker {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface);
+  stroke-width: 3;
+}
+.cp-walker {
+  fill: var(--color-on-surface);
+  stroke: var(--color-surface);
+  stroke-width: 3;
+}
+.cp-mark circle {
+  stroke: var(--color-surface);
+  stroke-width: 2.5;
+  animation: cp-pop 0.3s ease-out;
+}
+.cp-mark-0 circle {
+  fill: var(--color-category-3);
+}
+.cp-mark.is-named circle {
+  fill: var(--color-primary);
+}
+.cp-mark-1 circle {
+  fill: var(--color-category-4);
+}
+.cp-point-name.is-end,
+.cp-mark text.is-end {
+  text-anchor: end;
+}
+.cp-mark text {
+  fill: var(--color-on-surface);
+  font: 800 clamp(14px, calc(var(--cp-unit) * 0.5), 26px) / 1 var(--font-display);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+}
+
+/* ---- steppers and buttons ---- */
+.cp-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+/* One number per row, each row the same height whether it holds a "= ?" button or a stepper, so
+   giving a number never changes the prop's height (the player would rescale the whole picture). */
+.cp-steppers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.cp-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+}
+.cp-stepper.cp-x {
+  --tone: var(--cp-x);
+}
+.cp-stepper.cp-y {
+  --tone: var(--cp-y);
+}
+.cp-stepper .draw-stepper-value {
+  color: var(--tone);
+}
+.cp-pairs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.cp-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+@keyframes cp-pop {
+  from {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.2);
+  }
+}
+
+/* ---- scenes: a notebook page, a colony, a cinema hall ---- */
+.cp-page {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+  stroke-width: 1.5;
+}
+.cp-square {
+  stroke: color-mix(in srgb, var(--color-category-2) 30%, var(--color-surface));
+  stroke-width: 1;
+}
+.cp-square.is-half {
+  stroke: color-mix(in srgb, var(--color-category-2) 14%, var(--color-surface));
+}
+.cp-grass {
+  fill: color-mix(in srgb, var(--color-right) 14%, var(--color-surface));
+}
+.cp-road rect,
+rect.cp-road {
+  fill: color-mix(in srgb, var(--color-on-surface) 22%, var(--color-surface));
+}
+.cp-road-mid {
+  stroke: var(--color-surface);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+.cp-house path,
+.cp-house rect {
+  fill: color-mix(in srgb, var(--color-category-1) 30%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-on-surface) 45%, var(--color-surface));
+  stroke-width: 1;
+}
+.cp-house .cp-house-door {
+  fill: color-mix(in srgb, var(--color-on-surface) 35%, var(--color-surface));
+}
+.cp-house.is-marked path,
+.cp-house.is-marked rect {
+  fill: var(--color-category-3);
+  stroke: var(--color-on-surface);
+}
+.cp-house.is-maybe path,
+.cp-house.is-maybe rect {
+  fill: color-mix(in srgb, var(--cp-y) 70%, var(--color-surface));
+  stroke: var(--color-on-surface);
+}
+.cp-house.is-it path,
+.cp-house.is-it rect {
+  fill: var(--color-primary);
+  stroke: var(--color-on-surface);
+  stroke-width: 1.5;
+}
+.cp-house.is-it .cp-house-door {
+  fill: var(--color-surface);
+}
+.cp-hall {
+  fill: color-mix(in srgb, var(--color-on-surface) 6%, var(--color-surface));
+}
+.cp-screen {
+  fill: color-mix(in srgb, var(--color-category-2) 35%, var(--color-surface));
+}
+.cp-screen-label {
+  text-anchor: middle;
+  fill: var(--color-on-surface-variant);
+  font: 800 clamp(11px, calc(var(--cp-unit) * 0.32), 18px) / 1 var(--font-body);
+  letter-spacing: 0.15em;
+}
+.cp-seat rect {
+  fill: color-mix(in srgb, var(--color-wrong) 35%, var(--color-surface));
+  stroke: color-mix(in srgb, var(--color-on-surface) 40%, var(--color-surface));
+  stroke-width: 1;
+}
+.cp-seat .cp-seat-back {
+  fill: color-mix(in srgb, var(--color-wrong) 50%, var(--color-surface));
+}
+.cp-seat.is-it rect,
+.cp-seat.is-it .cp-seat-back {
+  fill: var(--color-primary);
+  stroke: var(--color-on-surface);
+}

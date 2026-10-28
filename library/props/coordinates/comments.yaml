@@ -1,0 +1,28 @@
+# Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
+- id: cmvrm474u8rd
+  label: finding
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-28T04:26:36.702Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/signs
+  target: plane
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:243
+  commit: 699a7f6d31cfa23c0656318e3020082a0bd41ffe
+  text: "[Medium, prop] Labels collide or run off the grid near the edges and axes (played): at (6, 5)
+    and (6, −1) P's label sits outside the grid on the x-axis arrow and the \"x\" name, and the −1
+    perpendicular label touches \"P\"; at (−3, 4) \"P\" and \"−3\" read as one label \"P −3\"; near
+    the origin (distances, (−1, 0) at 640) \"P\", \"−1\" and \"O\" overlap; the signed-length label
+    for the vertical perpendicular at x = −6 is drawn left of the grid, outside the plane (distances
+    at 640, definition at 390: \"−2\"); a walked mark's label \"(5, −4)\" overflows the right edge
+    onto the \"IV\" numeral (plotting); on paper, after both distances are set, \"from left = 5\"
+    overlaps the \"from left\" axis name. Also the axis tick label under a perpendicular's foot is
+    hidden (4 and 3 missing on distances), so the student can't check the scale exactly where it
+    matters. On a projector these are what the class looks at."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-28T04:42:11.625Z
+      text: "Partly done: axis numbers are no longer hidden; perpendicular labels sit inside the grid; P's
+        and the dots' names flip left near the right edge. The crowding next to O is not done."

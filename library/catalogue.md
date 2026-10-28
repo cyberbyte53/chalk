@@ -15,6 +15,12 @@ The props every lesson uses.
 | `multiChoice` *(not an explainer)* | A question with several right options: pick all of them, then Check. | `toggle`, `check`, `retry` | — |
 | `orderSteps` *(not an explainer)* | A proof's steps, shuffled: the learner taps them into order, one line at a time, then checks. A step placed too early gets its hint: what has to come before it. | `place`, `remove`, `check`, `retry` | — |
 
+## `coordinates` — `@chalk/prop-coordinates`
+
+| Prop | Shows | Learner can | Used in |
+|---|---|---|---|
+| `coordinatePlane` | A plane with an x-axis and a y-axis crossing at the origin O, and a point P. P's x-coordinate is its signed distance from the y-axis and its y-coordinate its signed distance from the x-axis, written (x, y). Each number alone is a line of places; two numbers meet at one point. The axes make four quadrants, I to IV anticlockwise, with signs (+, +), (−, +), (−, −), (+, −); a point on the x-axis has y = 0, on the y-axis x = 0, and O is (0, 0). Plotting (x, y) is walking x along the x-axis, then y up: (x, y) and (y, x) differ unless x = y. | `movePoint`, `setX`, `setY`, `swap`, `walk`, `walkBoth`, `addYAxis`, `startAgain` | class9-maths/coordinate-geometry |
+
 ## `decimal` — `@chalk/prop-decimal`
 
 Turning a fraction p/q into a decimal by long division, one digit at a time. Each step multiplies the remainder by 10 and divides by q; the remainder is always less than q, so either a remainder becomes 0 (the expansion terminates) or a remainder comes back and the digits repeat from there (non-terminating recurring). It knows division, nothing about any lesson.

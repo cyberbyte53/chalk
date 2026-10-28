@@ -3,6 +3,14 @@ import type { ContentModules } from "@chalk/author";
 
 /** Every module that makes boards, by its path under content/: chapters ship as code. */
 export const modules: ContentModules = {
+  "class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview"),
+  "class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/the-cartesian-plane/overview"),
+  "class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview"),
+  "class9-maths/coordinate-geometry/plotting-points/overview.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/plotting-points/overview"),
   "class10-maths/real-numbers/division-lemma/overview.ts": () =>
     import("../../content/class10-maths/real-numbers/division-lemma/overview"),
   "class10-maths/real-numbers/euclid-algorithm/overview.ts": () =>
