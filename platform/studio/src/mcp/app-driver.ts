@@ -713,6 +713,9 @@ async function shootNow(
       }, `${target.pathname}${target.search}`);
     else await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
   } catch (error) {
+    // The page was reloaded under us (the dev server after a code or style edit): the retry
+    // around every drawing handles that, so it must see the error as it is.
+    if (isPulledAway(error)) throw error;
     await closeLane(lane);
     throw new Error(
       `The preview server didn't answer at ${url} (${firstLine(error)}). Start it with \`pnpm dev\` in platform/apps/learner (or set CHALK_PREVIEW_URL), then retry.`,

@@ -67,22 +67,23 @@ const argsOf = (axis: DragSpec["axis"], p: Point) =>
  * Drags in one view, drawn inside a frame: `const drag = useDrags()`, then `<circle {...drag({ …
  * })} />` (with a key when several drag by one action). The element says which action it does
  * (`says`), so it is described and named like any input.
+ *
+ * A drag turns the finger's pixels into the prop's units, and only a frame knows how (the prop's
+ * own `FrameStage`, or its group's frame layout). Drawn outside one, it is refused here, as the
+ * view draws: so a prop's own check (`checkProp`) catches it, not a student's finger.
  */
 export function useDrags(): (spec: DragSpec, key?: Key) => DragAttrs {
   const frame = useFrame();
+  if (frame === null)
+    throw new Error(
+      "a drag is drawn inside a frame: the prop's own FrameStage, or its group's frame layout",
+    );
   const door = useDoor();
   // Where each drag last put its part (a move to the same place isn't sent).
   const last = useRef(new Map<string, Point>());
 
-  /** The model window the frame shows now (everything, outside a frame). */
+  /** The model window the frame shows now. */
   const shown = (inset = 0) => {
-    if (frame === null)
-      return {
-        xMin: Number.NEGATIVE_INFINITY,
-        xMax: Number.POSITIVE_INFINITY,
-        yMin: Number.NEGATIVE_INFINITY,
-        yMax: Number.POSITIVE_INFINITY,
-      };
     const [x0, y0] = frame.px.fromPx(inset, frame.px.height - inset);
     const [x1, y1] = frame.px.fromPx(frame.px.width - inset, inset);
     return {
@@ -142,8 +143,6 @@ export function useDrags(): (spec: DragSpec, key?: Key) => DragAttrs {
         letGo(id, spec);
       },
       onPointerDown: (e) => {
-        if (frame === null)
-          throw new Error(`${id}: a drag is drawn inside a frame (a group's frame layout)`);
         const start = spec.at;
         last.current.set(id, start);
         let first: readonly [number, number] | null = null;

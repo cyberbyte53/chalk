@@ -13,6 +13,7 @@ import type { JSX } from "preact";
 import { render } from "preact-render-to-string";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { checkProp } from "./check-prop";
 import { describeView } from "./describe";
 import { useDrags } from "./drag";
 import { useFrame, useFrameLabels } from "./frame";
@@ -159,6 +160,14 @@ describe("groups drawn", () => {
       value: { x: 1, y: 1 },
     });
     expect(seen.elements.find((e) => e.id === "count/n")?.value).toBeCloseTo(2.2);
+  });
+});
+
+describe("a drag outside any frame", () => {
+  it("is refused as the view draws, so the prop's own check reports it", () => {
+    // The dot alone: its drag has no frame to turn pixels into units.
+    const alone = propModule(dot, DotView as never);
+    expect(checkProp(alone, [{}])[0]).toMatch(/a drag is drawn inside a frame/);
   });
 });
 
