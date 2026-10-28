@@ -253,8 +253,10 @@ type Picked = {
   /** The part of the prop picked (a slider, a stepper), when a part was. */
   part?: string;
   prop?: string;
-  /** Set when the pick is a prop's (not the basics): the comment is filed with the prop. */
+  /** Set when the pick is a prop's (not the basics). */
   propPackage?: string;
+  /** What the comment is about: the board it was seen on, or the prop wherever it is used. */
+  scope?: "board" | "prop";
   site?: string;
   text?: string;
   note?: string;
@@ -336,18 +338,24 @@ async function askForComment(p: Picked): Promise<void> {
     placeHolder: "What's wrong, or what should change?",
     ignoreFocusOut: true,
   });
-  if (note?.trim()) await leaveComment({ ...p, note });
+  if (note?.trim()) await leaveComment({ ...p, note, scope: p.propPackage ? "prop" : "board" });
 }
 
-/** Files the comment through the dev server: on the board, or on the prop when one was picked. */
+/**
+ * Files the comment through the dev server: on the board, or on the prop wherever it is used when
+ * the person said so (a prop's own page is only the prop). A prop's thread keeps the board it was
+ * seen on, when it was seen on one.
+ */
 async function leaveComment(p: Picked): Promise<void> {
   const target = p.piece ? (p.part ? `${p.piece}/${p.part}` : p.piece) : undefined;
+  const isPropPage = (p.board ?? "").startsWith("library/props/");
+  const isProp = p.scope === "prop" && p.prop !== undefined;
   const done = await changeComments({
     op: "start",
     thread: {
-      board: p.board,
+      ...(isPropPage ? {} : { board: p.board }),
       ...(target ? { target } : {}),
-      ...(p.propPackage && p.prop ? { prop: p.prop } : {}),
+      ...(isProp ? { prop: p.prop } : {}),
       ...(p.site ? { source: p.site } : {}),
       ...(p.text ? { snapshot: p.text } : {}),
       text: p.note?.trim() ?? "",

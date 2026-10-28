@@ -721,7 +721,11 @@ const packageOfProp = new Map(
 
 /** Asks for a comment box next to a picked element (PickComposer). */
 const COMPOSE = "chalk:compose";
-type Composing = { el: HTMLElement; words: string; pick: Record<string, string | undefined> };
+type Composing = {
+  el: HTMLElement;
+  words: string;
+  pick: Record<string, string | undefined> & { board?: string; propPackage?: string };
+};
 
 /**
  * The box for a comment, next to what was picked: under it, or above it when there's no room
@@ -731,11 +735,22 @@ type Composing = { el: HTMLElement; words: string; pick: Record<string, string |
 function PickComposer(): JSX.Element | null {
   const [at, setAt] = useState<Composing | null>(null);
   const [note, setNote] = useState("");
+  // A prop picked on a board: is this about this board, or the prop wherever it is used?
+  const [scope, setScope] = useState<"board" | "prop" | undefined>(undefined);
   const [, setTick] = useState(0);
   useEffect(() => {
     const open = (e: Event) => {
-      setAt((e as CustomEvent<Composing>).detail);
+      const detail = (e as CustomEvent<Composing>).detail;
+      setAt(detail);
       setNote("");
+      // On a prop's own page there is only the prop; elsewhere the person says which.
+      setScope(
+        detail.pick.propPackage === undefined
+          ? "board"
+          : (detail.pick.board ?? "").startsWith(PROPS_ROOT)
+            ? "prop"
+            : undefined,
+      );
     };
     const move = () => setTick((n) => n + 1);
     window.addEventListener(COMPOSE, open);
@@ -755,10 +770,12 @@ function PickComposer(): JSX.Element | null {
   if (at === null || !at.el.isConnected) return null;
   const close = () => setAt(null);
   const send = () => {
-    if (note.trim() === "") return;
-    toEditor({ type: "comment", ...at.pick, note: note.trim() });
+    if (note.trim() === "" || scope === undefined) return;
+    toEditor({ type: "comment", ...at.pick, scope, note: note.trim() });
     close();
   };
+  const isAsking =
+    at.pick.propPackage !== undefined && !(at.pick.board ?? "").startsWith(PROPS_ROOT);
   const box = at.el.getBoundingClientRect();
   const HEIGHT = 150;
   const WIDTH = Math.min(360, window.innerWidth - 16);
@@ -777,6 +794,27 @@ function PickComposer(): JSX.Element | null {
       }}
     >
       <div class="pick-composer-what">{`Comment on ${at.words}`}</div>
+      {isAsking && (
+        <fieldset class="pick-composer-scope">
+          <legend>What is it about?</legend>
+          {(
+            [
+              ["board", "This board"],
+              ["prop", "The prop, everywhere"],
+            ] as const
+          ).map(([value, words]) => (
+            <label key={value} class={scope === value ? "is-on" : ""}>
+              <input
+                type="radio"
+                name="scope"
+                checked={scope === value}
+                onChange={() => setScope(value)}
+              />
+              {words}
+            </label>
+          ))}
+        </fieldset>
+      )}
       <textarea
         value={note}
         placeholder="What's wrong, or what should change?"
@@ -789,7 +827,7 @@ function PickComposer(): JSX.Element | null {
         <button type="button" onClick={close}>
           Cancel
         </button>
-        <button type="submit" disabled={note.trim() === ""}>
+        <button type="submit" disabled={note.trim() === "" || scope === undefined}>
           Comment
         </button>
       </div>
@@ -812,9 +850,11 @@ type PickTarget = {
 /**
  * What a click can pick at a point, finest first: each part of a prop under the pointer (a
  * slider, a stepper, one bar; inner before outer), the piece, the whole board. The click takes the
- * finest; ↑ widens it, ↓ narrows it again. A comment on a prop or its part is about the prop,
- * filed with it (library/props/<package>/comments.yaml) and shown wherever it is used; the basics
- * (words, choices, buttons) are the lesson's own, so those stay with the board.
+ * finest; ↑ widens it, ↓ narrows it again. A comment on a prop or its part on a board asks whether
+ * it is about this board or the prop wherever it is used (then filed with the prop,
+ * library/props/<package>/comments.yaml, and shown wherever it is used); the basics (words,
+ * choices, buttons) are the lesson's own, so those stay with the board. On a prop's own page,
+ * everything is the prop's.
  */
 /** An element's address under its piece ("objectArrow/object"). */
 function underPiece(el: Element): string | undefined {
@@ -833,7 +873,9 @@ function picksAt(target: HTMLElement): PickTarget[] {
   const prop = /(?:^|\s)prop-(\S+)/.exec(pieceEl.className)?.[1];
   const pkg = prop === undefined ? undefined : packageOfProp.get(prop);
   const piece = pieceEl.dataset.piece;
-  const isProp = pkg !== undefined && pkg !== "basics";
+  // On a prop's own page everything is the prop's; on a board, the basics (words, choices,
+  // buttons) are the lesson's own.
+  const isProp = pkg !== undefined && (pkg !== "basics" || (board ?? "").startsWith(PROPS_ROOT));
   const of = (el: HTMLElement, part?: string): PickTarget => ({
     el,
     pieceEl,

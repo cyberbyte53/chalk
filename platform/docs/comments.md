@@ -132,7 +132,7 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 
 ## Threads on a prop
 
-In the preview's pick mode (`c`) a click takes the finest thing under the pointer: a part of a prop, else the piece, else the whole board, and the label says which. A pick on a prop or one of its parts (any prop but the basics: words, choices and buttons are the lesson's own) is about the prop, wherever it is used, and is filed in the prop package's comments.yaml with `prop`, and still `board`, `target` and `source` for the board it was seen on. The preview shows it under every board that places the prop. Whoever handles it decides where the fix goes: the prop's code (then `affected` lists every piece it reaches), or just how that one board uses it.
+In the preview's pick mode (`c`) a click takes the finest thing under the pointer: a part of a prop, else the piece, else the whole board, and the label says which. A pick on a prop or one of its parts on a board (any prop but the basics: words, choices and buttons are the lesson's own) asks what it is about: **this board** (a board's thread, fixed in the lesson) or **the prop, everywhere** (filed in the prop package's comments.yaml with `prop`, and still `board`, `target` and `source` for the board it was seen on; shown under every board that places the prop and on the prop's own page; fixed in the prop, through its definition, with `affected` listing every piece the fix reaches). On a prop's own page (`?dev&at=library/props/<package>/<type>`) every pick is the prop's, with no board. A prop's thread's address is the prop's, with its part after `#` (`library/props/coordinates/coordinatePlane#handle`).
 
 ## Where a piece's line comes from
 

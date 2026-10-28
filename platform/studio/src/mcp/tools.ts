@@ -8,6 +8,7 @@ import {
   formatAddress,
   parseAddress,
   propAddress,
+  shownAddress,
 } from "@chalk/content/address";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
@@ -33,6 +34,7 @@ import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "
 import { DEFAULT_LANE, type Step, previewBase, shoot, withNothingDrawing } from "./app-driver";
 import { type Answer, check, look, play, readReach, targetOf } from "./look";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
+import { typeSite } from "./sites";
 
 /**
  * `chalk` MCP server: what an agent in any harness (Cursor, VS Code, Claude Code, Codex…) needs to
@@ -169,7 +171,10 @@ const oneLine = (t: string) => t.replace(/\s+/g, " ");
 /** Where a thread is, as an address: its board or prop, and what on it; a plan's thread by its home. */
 export function threadAt(c: Filed): string {
   if (c.board !== undefined) return contentAddress(c.board, c.target);
-  if (c.prop !== undefined) return propAddress(c.home.split("/").at(-1) ?? "", c.prop, c.target);
+  // A prop's thread is on the prop wherever it is used: its part comes after # (target is
+  // "piece/part" as seen, the piece being whichever placed the prop).
+  if (c.prop !== undefined)
+    return shownAddress(propAddress(c.home.split("/").at(-1) ?? "", c.prop), c.target);
   return `${c.home} (plan)`;
 }
 
@@ -801,7 +806,15 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
                     ...(source ? { source } : {}),
                   };
                 })()
-              : { prop: a.type, ...(a.part ? { target: a.part } : {}) };
+              : (() => {
+                  // A prop's thread is written where the prop is defined.
+                  const source = typeSite(root, a.type);
+                  return {
+                    prop: a.type,
+                    ...(a.part ? { target: `${a.type}/${a.part}` } : {}),
+                    ...(source ? { source } : {}),
+                  };
+                })();
           const done = await changeComments(who, {
             op: "start",
             thread: {
