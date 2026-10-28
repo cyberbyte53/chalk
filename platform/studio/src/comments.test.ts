@@ -22,6 +22,7 @@ import {
   threadsOf,
 } from "./comments";
 import { migrateEntry } from "./comments-migrate";
+import { goneThreads } from "./thread-places";
 
 const BOARD = "class10-maths/polynomials/value-and-zeroes/value";
 const FIXER: Who = { name: "fixer", role: Role.Fixer };
@@ -431,5 +432,60 @@ describe("moving over", () => {
       ],
     });
     expect(thread).not.toHaveProperty("review");
+  });
+});
+
+describe("threads whose place is gone", () => {
+  const reach = (pieces: string[]) => ({
+    boards: {
+      [BOARD]: { module: "m", pieces: Object.fromEntries(pieces.map((p) => [p, { stack: [] }])) },
+    },
+    modules: {},
+  });
+
+  it("are listed while open, until re-pointed by a fixer saying where they went", () => {
+    const root = repo();
+    const t = start(root);
+    expect(goneThreads(root, readComments(root).threads, reach(["machine"]))).toEqual([]);
+    expect(goneThreads(root, readComments(root).threads, reach(["dial"]))).toEqual([
+      `${t.id} [open]: ${BOARD} has no piece machine now`,
+    ]);
+    expect(
+      applyChange(
+        root,
+        { op: "move", id: t.id, to: { board: BOARD, target: "dial" }, text: "" },
+        FIXER,
+      ),
+    ).toMatchObject({ ok: false });
+    expect(
+      applyChange(
+        root,
+        { op: "move", id: t.id, to: { board: BOARD, target: "dial" }, text: "x" },
+        REVIEWER,
+      ),
+    ).toMatchObject({ ok: false });
+    const moved = apply(
+      root,
+      {
+        op: "move",
+        id: t.id,
+        to: { board: BOARD, target: "dial" },
+        text: "the machine is the dial now",
+      },
+      FIXER,
+    ).thread;
+    expect(moved?.target).toBe("dial");
+    expect(moved?.messages.at(-1)?.text).toBe(
+      `moved from content/${BOARD}#machine/put to content/${BOARD}#dial: the machine is the dial now`,
+    );
+    expect(goneThreads(root, readComments(root).threads, reach(["dial"]))).toEqual([]);
+  });
+
+  it("are history once answered", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, FIXER, "gone with the old board", Status.Planned);
+    write(root, t.id, FIXER, "removed: the board is text now", Status.Ready);
+    expect(goneThreads(root, readComments(root).threads, reach([]))).toEqual([]);
   });
 });

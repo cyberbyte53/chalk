@@ -81,16 +81,26 @@ export const MOVES: Readonly<Record<Role, readonly Move[]>> = {
 
 /** What else each role may do: the labels it starts threads with, deleting its own, handing over. */
 export const ACTS: Readonly<
-  Record<Role, { starts: readonly Label[]; deletesOwn: boolean; handsOver: boolean }>
+  Record<
+    Role,
+    { starts: readonly Label[]; deletesOwn: boolean; handsOver: boolean; moves: boolean }
+  >
 > = {
-  [Role.Person]: { starts: [Label.Comment], deletesOwn: true, handsOver: true },
-  [Role.Teacher]: { starts: [Label.Comment], deletesOwn: true, handsOver: true },
-  // A fixer files a regression, or a comment the person made in its chat (from: chat, in their name).
-  [Role.Fixer]: { starts: [Label.Comment, Label.Regression], deletesOwn: false, handsOver: true },
+  [Role.Person]: { starts: [Label.Comment], deletesOwn: true, handsOver: true, moves: true },
+  [Role.Teacher]: { starts: [Label.Comment], deletesOwn: true, handsOver: true, moves: false },
+  // A fixer files a regression, or a comment the person made in its chat (from: chat, in their name);
+  // it re-points a thread whose place is gone (merged, renamed), saying where it went.
+  [Role.Fixer]: {
+    starts: [Label.Comment, Label.Regression],
+    deletesOwn: false,
+    handsOver: true,
+    moves: true,
+  },
   [Role.Reviewer]: {
     starts: [Label.Finding, Label.Regression],
     deletesOwn: false,
     handsOver: true,
+    moves: false,
   },
 };
 
@@ -183,7 +193,7 @@ export type Review = z.infer<typeof reviewSchema>;
  * kept current by `pnpm check`). Read from the file rather than imported, so the dev server's
  * config can use this without loading every prop.
  */
-function propHomes(root: string): Map<string, string> {
+export function propHomes(root: string): Map<string, string> {
   const out = new Map<string, string>();
   const file = join(root, "library", "catalogue.md");
   if (!existsSync(file)) return out;
@@ -499,6 +509,13 @@ export type Change =
   | { op: "write"; id: string; text: string; status?: Status }
   /** Delete a thread no one else has touched and that was never handed over. */
   | { op: "delete"; id: string }
+  /** Re-point a thread whose place is gone (a piece renamed, a board merged), saying where it went. */
+  | {
+      op: "move";
+      id: string;
+      to: Pick<Thread, "board" | "target" | "prop" | "source" | "quote">;
+      text: string;
+    }
   /** Hand over the sitting as a review. */
   | { op: "handover" };
 
@@ -611,6 +628,35 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   const isOwn = t.by === who.name;
   const refuse = (why: string): Applied => ({ ok: false, error: `${t.id}: ${why}` });
 
+  if (change.op === "move") {
+    if (!acts.moves) return refuse(`a ${who.role} doesn't re-point threads`);
+    if (change.text.trim() === "") return refuse("say where it went and why");
+    const placed: Filed = {
+      ...t,
+      board: change.to.board,
+      target: change.to.target,
+      prop: change.to.prop,
+      source: change.to.source ?? t.source,
+      quote: change.to.quote,
+    };
+    for (const k of ["board", "target", "prop", "quote"] as const)
+      if (placed[k] === undefined) delete placed[k];
+    const home = homeOf(root, placed);
+    if (home === undefined) return refuse("can't tell which chapter or prop it now is about");
+    const was = placeWords(t);
+    placed.home = home;
+    placed.messages.push({
+      by: who.name,
+      role: who.role,
+      at: now(),
+      text: `moved from ${was} to ${placeWords(placed)}: ${change.text.trim()}`,
+    });
+    const all = threads.map((x) => (x.id === t.id ? placed : x));
+    if (t.home !== home) writeHome(root, t.home, all);
+    writeHome(root, home, all);
+    return { ok: true, thread: placed };
+  }
+
   if (change.op === "delete") {
     if (!acts.deletesOwn || !isOwn) return refuse(`a ${who.role} can't delete this thread`);
     if (reviews.some((r) => r.threads.some((x) => x.id === t.id)))
@@ -672,6 +718,13 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   });
   if (to !== undefined) t.status = to;
   return save(t);
+}
+
+/** Where a thread is, in words: its board and what on it, its prop, or its file and words. */
+function placeWords(t: Pick<Thread, "board" | "target" | "prop" | "source" | "quote">): string {
+  if (t.prop !== undefined) return `prop ${t.prop}${t.target ? `#${t.target}` : ""}`;
+  if (t.board !== undefined) return `content/${t.board}${t.target ? `#${t.target}` : ""}`;
+  return `${t.source ?? "?"}${t.quote ? ` "${t.quote.slice(0, 60)}"` : ""}`;
 }
 
 /** What changed files reach, from git's lines for them; undefined when nothing changed or it can't tell. */

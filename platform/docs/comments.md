@@ -128,7 +128,15 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 ## The tools (chalk MCP)
 
 - **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop) and `unanswered` (open or planned) filter.
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, or a prop wherever it is used, `library/props/<package>/<type>`), and `label`, `about`, `from`: start a thread; a fixer's `plan` writes its plan on it at once. Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `label`, `about`, `from`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
+
+## A thread whose place is gone
+
+A board renamed, a piece merged, a prop removed, a planning file's words rewritten: an open or planned thread can be left pointing at nothing. `pnpm check`'s threads step (after the content build, `platform/studio/src/thread-places.ts`) fails on each, and the fixer either **re-points** it (`comment` with its `id` and its new `at`; the writer adds "moved from … to …: <why>" to it, and moves it to another chapter's file if it must; the person or a fixer may) or **answers** it (ready: "removed: the dice game is text now"). Closed and withdrawn threads are history and need nothing. A piece's parts aren't checked: only drawing a board says what parts it has.
+
+## Threads on planning files
+
+The planning files (`brief.md`, `objectives.md`, `flow.md`, `props.md`: [authoring-pipeline.md](authoring-pipeline.md)) take threads like the plan did: on the exact words (`quote`), with the line they were at (`source: authoring/books/<book>/<chapter>/flow.md:12`), filed in the chapter's comments.yaml. Studio's chapter page makes them from a selection; an agent with `comment`. An agent's question at a gate is such a thread, on the words it is about: answered where everything else is, never left in a section someone forgot to empty.
 
 ## Threads on a prop
 

@@ -58,6 +58,8 @@ const steps: [string, () => Promise<boolean>][] = [
         studio,
       ),
   ],
+  // After the content build, which records every board's pieces.
+  ["threads", () => run("threads", tsx, [...tsconfig, "src/threads-cli.ts"], studio)],
   ["lint", () => lint(root, { force })],
 ];
 

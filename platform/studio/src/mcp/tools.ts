@@ -176,7 +176,8 @@ export function threadAt(c: Filed): string {
   // "piece/part" as seen, the piece being whichever placed the prop).
   if (c.prop !== undefined)
     return shownAddress(propAddress(c.home.split("/").at(-1) ?? "", c.prop), c.target);
-  return `${c.home} (plan)`;
+  // A thread on a planning file: the file (its words are under quote).
+  return (c.source ?? c.home).replace(/:\d+(-\d+)?$/, "");
 }
 
 function threadLine(c: Filed): string {
@@ -706,6 +707,57 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     [Label.Comment]: "comment: what the person said in your chat (with from: chat)",
   };
 
+  /**
+   * Where a thread is, from an address: a board or something on it, a prop or a part of it, or a
+   * planning file in authoring/books/ with the exact words it is about (`quote`). Says what's wrong
+   * when it names none of these.
+   */
+  const placeOf = (
+    at: string,
+    quote: string | undefined,
+  ):
+    | { board?: string; target?: string; prop?: string; source?: string; quote?: string }
+    | string => {
+    const clean = at.trim();
+    if (clean.startsWith("authoring/books/")) {
+      const file = clean.split("#")[0] ?? clean;
+      if (!/^authoring\/books\/[^/]+\/[^/]+\/.+/.test(file) || !existsSync(join(root, file)))
+        return `no file ${file}`;
+      if (quote === undefined || quote.trim() === "")
+        return "a thread on a file quotes the words it is about (quote)";
+      const lines = readFileSync(join(root, file), "utf8").split("\n");
+      const first = quote.trim().split("\n")[0] ?? "";
+      const line = lines.findIndex((l) => l.includes(first));
+      if (line === -1) return `${file} doesn't have those words: quote them as written`;
+      return { source: `${file}:${line + 1}`, quote: quote.trim() };
+    }
+    let a: ReturnType<typeof parseAddress>;
+    try {
+      a = parseAddress(clean);
+    } catch (e) {
+      return (e as Error).message;
+    }
+    if (a.root === "library")
+      return "a thread is on a board, a prop or a planning file: give one's address, not the library's";
+    if (a.root === "content") {
+      const piece = a.part?.split("/")[0];
+      const where = readSources(root)[a.path];
+      const source = (piece && where?.pieces[piece]) || where?.board;
+      return {
+        board: a.path,
+        ...(a.part ? { target: a.part } : {}),
+        ...(source ? { source } : {}),
+      };
+    }
+    // A prop's thread is written where the prop is defined.
+    const source = typeSite(root, a.type);
+    return {
+      prop: a.type,
+      ...(a.part ? { target: `${a.type}/${a.part}` } : {}),
+      ...(source ? { source } : {}),
+    };
+  };
+
   /** One write, shaped for this role: on a thread by its id, or a new thread on a board. */
   const write = z
     .object({
@@ -731,8 +783,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         .string()
         .optional()
         .describe(
-          'A new thread: where, by address. A board or something on it ("content/…/<board>#piece/part"), or a prop wherever it is used ("library/props/<package>/<type>", or #part).',
+          'Where, by address. A board or something on it ("content/…/<board>#piece/part"), a prop wherever it is used ("library/props/<package>/<type>", or #part), or a planning file ("authoring/books/<book>/<chapter>/flow.md", with quote). With id: re-point that thread here, its place being gone (the text says where it went and why).',
         ),
+      quote: z
+        .string()
+        .optional()
+        .describe("On a planning file: the exact words the thread is about, as written."),
       label: z
         .enum(MY_LABELS as unknown as [Label, ...Label[]])
         .optional()
@@ -763,6 +819,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     text: string;
     status?: Status;
     at?: string;
+    quote?: string;
     label?: Label;
     about?: string;
     from?: "chat";
@@ -790,6 +847,22 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const items = given as Write[];
         const lines: string[] = [];
         for (const item of items) {
+          if (item.id !== undefined && item.at !== undefined) {
+            // Re-pointing a thread whose place is gone: the text says where it went and why.
+            const place = placeOf(item.at, item.quote);
+            if (typeof place === "string") {
+              lines.push(`✗ ${place}`);
+              continue;
+            }
+            const done = await changeComments(who, {
+              op: "move",
+              id: item.id,
+              to: place,
+              text: item.text,
+            });
+            lines.push(done.ok ? `✓ ${item.id} now at ${item.at.trim()}` : `✗ ${done.error}`);
+            continue;
+          }
           if (item.id !== undefined) {
             const done = await changeComments(who, {
               op: "write",
@@ -804,39 +877,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             lines.push("✗ give the thread's id, or an address to start one at");
             continue;
           }
-          let a: ReturnType<typeof parseAddress>;
-          try {
-            a = parseAddress(item.at);
-          } catch (e) {
-            lines.push(`✗ ${(e as Error).message}`);
-            continue;
-          }
-          if (a.root === "library") {
-            lines.push("✗ a thread is on a board or a prop: give one's address, not the library's");
+          const place = placeOf(item.at, item.quote);
+          if (typeof place === "string") {
+            lines.push(`✗ ${place}`);
             continue;
           }
           const on = item.at.trim();
-          const place =
-            a.root === "content"
-              ? (() => {
-                  const piece = a.part?.split("/")[0];
-                  const where = readSources(root)[a.path];
-                  const source = (piece && where?.pieces[piece]) || where?.board;
-                  return {
-                    board: a.path,
-                    ...(a.part ? { target: a.part } : {}),
-                    ...(source ? { source } : {}),
-                  };
-                })()
-              : (() => {
-                  // A prop's thread is written where the prop is defined.
-                  const source = typeSite(root, a.type);
-                  return {
-                    prop: a.type,
-                    ...(a.part ? { target: `${a.type}/${a.part}` } : {}),
-                    ...(source ? { source } : {}),
-                  };
-                })();
           const done = await changeComments(who, {
             op: "start",
             thread: {
