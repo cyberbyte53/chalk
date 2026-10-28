@@ -1,0 +1,71 @@
+# NCERT Class 9 Mathematics, Chapter 3 Coordinate Geometry (2020-21), iemh103.pdf. page: the PDF's page (book pages 51-65).
+- { id: epigraph, kind: quote, page: 1, text: "What's the good of Mercator's North Poles and Equators, Tropics, Zones and Meridian Lines? So the Bellman would cry; and crew would reply 'They are merely conventional signs!' (Lewis Carroll, The Hunting of the Snark)" }
+
+- { id: s3.1, kind: section, page: 1, title: Introduction }
+- { id: s3.1-number-line, kind: remark, page: 1, says: "You can already locate a point on a number line; many situations need its position with reference to more than one line." }
+- { id: s3.1-I, kind: situation, page: 1, says: "Street plan: a main road runs East-West, streets numbered West to East, houses numbered on each street. Knowing only the street is not enough; street and house number together find the house." }
+- { id: fig3.1, kind: figure, page: 1, says: "Streets 1-8 crossing an East-West main road, houses numbered 1-5 along each; H is Street 2, House 5; P is Street 7, House 4." }
+- { id: s3.1-II, kind: situation, page: 2, says: "A dot on a sheet of paper: 'upper half', 'near the left edge' don't fix it; 5 cm from the left edge and 9 cm above the bottom line do. Two independent pieces of information are needed." }
+- { id: fig3.2, kind: figure, page: 2, says: "(a) a dot on a sheet; (b) the same dot marked 5 cm from the left edge and 9 cm above the bottom edge." }
+- { id: activity1, kind: activity, page: 2, title: Seating Plan, says: "Draw the classroom's desks as squares; each student's position is (column, row), column first. Is (5, 3) the same as (3, 5)? Sonia in column 4, row 1 is S(4, 1). The teacher's desk is not part of the plan." }
+- { id: fig3.3, kind: figure, page: 3, says: "A seating grid of 10 columns and 7 rows; the shaded desk is column 5, row 3; S marks Sonia's desk at (4, 1); T, the teacher's desk, sits outside the grid." }
+- { id: s3.1-idea, kind: remark, page: 3, says: "The position of any object in a plane can be given with two perpendicular lines (the dot: distances from the bottom line and the left edge; the seats: column and row). This idea is the start of Coordinate Geometry." }
+- { id: box-descartes, kind: box, page: 3, says: "René Descartes (1596-1650), French mathematician, liked to think lying in bed; he solved describing a point's position in a plane, developing the older idea of latitude and longitude. In his honour it is called the Cartesian system." }
+- { id: fig3.4, kind: figure, page: 3, says: "Portrait of René Descartes (1596-1650)." }
+
+- { id: ex3.1, kind: exercise, page: 3 }
+- { id: ex3.1-q1, kind: question, page: 3, text: "How will you describe the position of a table lamp on your study table to another person?" }
+- { id: ex3.1-q2, kind: question, page: 4, title: Street Plan, text: "Two main roads cross at the city centre, North-South and East-West; other streets run parallel to them, 200 m apart, 5 streets each way. Using 1 cm = 200 m, draw a model of the city. The 2nd North-South street and 5th East-West street meet at cross-street (2, 5). Find (i) how many cross-streets can be referred to as (4, 3); (ii) how many as (3, 4).", answer: "(i) one; (ii) one; and they are different crossings" }
+
+- { id: s3.2, kind: section, page: 4, title: Cartesian System }
+- { id: s3.2-number-line, kind: remark, page: 4, says: "Recap: on the number line, equal units are marked positively one way and negatively the other from a fixed point, the origin; distance r on the positive side is r, on the negative side -r." }
+- { id: fig3.5, kind: figure, page: 4, says: "A number line from -5 to 5 with the origin at 0 and one unit distance marked." }
+- { id: s3.2-perpendicular, kind: remark, page: 4, says: "Descartes placed two such lines perpendicular to each other and located points by referring them to these lines; they can point any way, but in this chapter one is horizontal and one vertical." }
+- { id: fig3.6, kind: figure, page: 4, says: "Pairs of perpendicular lines: (a) and (b) tilted, (c) one horizontal and one vertical." }
+- { id: fig3.7, kind: figure, page: 5, says: "(a) a horizontal number line X'X from -5 to 5; (b) a vertical number line Y'Y from -4 to 4; each with its origin at 0." }
+- { id: def-axes, kind: definition, page: 5, text: "The two number lines are combined so they cross at their zeroes. The horizontal line X'X is the x-axis and the vertical line YY' is the y-axis." }
+- { id: def-origin, kind: definition, page: 5, text: "The point where X'X and Y'Y cross is called the origin, denoted by O." }
+- { id: def-directions, kind: definition, page: 5, text: "OX and OY are the positive directions of the x-axis and y-axis (the positive numbers lie on them); OX' and OY' are the negative directions." }
+- { id: fig3.8, kind: figure, page: 5, says: "The x-axis and y-axis crossing at O, marked -6 to 6 and -5 to 5, labelled positive and negative x-axis and y-axis." }
+- { id: def-quadrants, kind: definition, page: 6, text: "The axes divide the plane into four parts called quadrants (one fourth part), numbered I, II, III and IV anticlockwise from OX." }
+- { id: def-cartesian-plane, kind: definition, page: 6, text: "The plane consists of the axes and the quadrants. It is called the Cartesian plane, or the coordinate plane, or the xy-plane; the axes are called the coordinate axes." }
+- { id: fig3.9, kind: figure, page: 6, says: "The axes with Quadrants I (top right), II (top left), III (bottom left) and IV (bottom right) labelled." }
+- { id: s3.2-distances, kind: remark, page: 6, says: "On graph paper, perpendiculars from P to the axes give PN = OM = 4 units from the y-axis and PM = ON = 3 units from the x-axis, both along positive directions; for Q, OR = SQ = 6 units and OS = RQ = 2 units, along negative directions." }
+- { id: fig3.10, kind: figure, page: 6, says: "Graph-paper axes; P at (4, 3) with perpendiculars PM to the x-axis and PN to the y-axis; Q at (-6, -2) with perpendiculars QR and QS." }
+- { id: def-abscissa, kind: definition, page: 7, text: "The x-coordinate of a point is its perpendicular distance from the y-axis measured along the x-axis (positive along the positive direction of the x-axis and negative along the negative direction). For P it is +4 and for Q, -6. The x-coordinate is also called the abscissa." }
+- { id: def-ordinate, kind: definition, page: 7, text: "The y-coordinate of a point is its perpendicular distance from the x-axis measured along the y-axis (positive along the positive direction of the y-axis and negative along the negative direction). For P it is +3 and for Q, -2. The y-coordinate is also called the ordinate." }
+- { id: def-coordinates, kind: definition, page: 7, text: "In stating the coordinates of a point, the x-coordinate comes first, then the y-coordinate, in brackets: P is (4, 3) and Q is (-6, -2)." }
+- { id: note-unique, kind: note, page: 7, says: "The coordinates describe a point in the plane uniquely. (3, 4) is not the same as (4, 3)." }
+- { id: example1, kind: example, page: 7, says: "From Fig. 3.11, complete the abscissa, ordinate and coordinates of B, M, L and S.", answer: "B (4, 3), M (-3, 4), L (-5, -4), S (3, -4)" }
+- { id: fig3.11, kind: figure, page: 8, says: "Graph-paper axes with B (4, 3), M (-3, 4), L (-5, -4) and S (3, -4), each joined to the axes by dashed perpendiculars." }
+- { id: example2, kind: example, page: 9, says: "Write the coordinates of the points marked on the axes in Fig. 3.12, each with its 'Why?'.", answer: "A (4, 0), B (0, 3), C (-5, 0), D (0, -4), E (2/3, 0)" }
+- { id: fig3.12, kind: figure, page: 9, says: "Axes with A, C and E on the x-axis at 4, -5 and 2/3, and B and D on the y-axis at 3 and -4." }
+- { id: rule-on-axes, kind: rule, page: 9, says: "Every point on the x-axis is at zero distance from the x-axis, so it is (x, 0); every point on the y-axis is (0, y). Why?" }
+- { id: rule-origin, kind: rule, page: 9, says: "The origin is at zero distance from both axes, so its coordinates are (0, 0)." }
+- { id: rule-signs, kind: rule, page: 9, says: "Quadrant I points are (+, +), II (-, +), III (-, -), IV (+, -), because each quadrant is enclosed by those halves of the axes." }
+- { id: fig3.13, kind: figure, page: 10, says: "The axes with the four quadrants marked I (+, +), II (-, +), III (-, -), IV (+, -)." }
+- { id: remark-convention, kind: remark, page: 10, says: "This system is only a convention, accepted all over the world; it could have been ordinate first, but everyone sticks to abscissa first to avoid confusion." }
+
+- { id: ex3.2, kind: exercise, page: 10 }
+- { id: ex3.2-q1, kind: question, page: 10, text: "(i) What is the name of the horizontal and the vertical lines drawn to determine the position of any point in the Cartesian plane? (ii) What is the name of each part of the plane formed by these two lines? (iii) Write the name of the point where these two lines intersect.", answer: "(i) the x-axis and the y-axis; (ii) a quadrant; (iii) the origin" }
+- { id: ex3.2-q2, kind: question, page: 10, text: "See Fig. 3.14 and write: (i) the coordinates of B; (ii) the coordinates of C; (iii) the point identified by (-3, -5); (iv) the point identified by (2, -4); (v) the abscissa of D; (vi) the ordinate of H; (vii) the coordinates of L; (viii) the coordinates of M.", answer: "(i) (-5, 2); (ii) (5, -5); (iii) E; (iv) G; (v) 6; (vi) -3; (vii) (0, 5); (viii) (-3, 0)" }
+- { id: fig3.14, kind: figure, page: 11, says: "Axes with B (-5, 2), D (6, 2), L (0, 5), M (-3, 0), H (-5, -3), G (2, -4), E (-3, -5) and C (5, -5), joined to the axes by dashed lines." }
+
+- { id: s3.3, kind: section, page: 11, title: Plotting a Point in the Plane if its Coordinates are Given }
+- { id: def-plotting, kind: definition, page: 11, text: "Placing a point in the plane from its coordinates is called plotting the point." }
+- { id: s3.3-method, kind: method, page: 12, says: "To plot (3, 5) with 1 cm = 1 unit on both axes: from O count 3 units along the positive x-axis to A, then from A count 5 units in the positive y direction to P. P is 3 units from the y-axis and 5 from the x-axis, and lies in Quadrant I. Q (5, -4) is plotted the same way, 4 units along the negative y direction; it lies in Quadrant IV. Why?" }
+- { id: fig3.15, kind: figure, page: 12, says: "P (3, 5) reached from O via A at 3 on the x-axis, and Q (5, -4) via B at 5 on the x-axis, with right angles marked at A and B." }
+- { id: example3, kind: example, page: 12, says: "Locate (5, 0), (0, 5), (2, 5), (5, 2), (-3, 5), (-3, -5), (5, -3) and (6, 1) in the Cartesian plane, taking 1 cm = 1 unit." }
+- { id: fig3.16, kind: figure, page: 13, says: "The eight points of Example 3 shown as dots, each labelled with its coordinates." }
+- { id: note-ordered-pair, kind: note, page: 13, says: "(5, 0) and (0, 5), (5, 2) and (2, 5), (-3, 5) and (5, -3) are at different positions: if x ≠ y, (x, y) and (y, x) are different points, so the order matters and (x, y) is called an ordered pair. (x, y) = (y, x) if x = y." }
+- { id: example4, kind: example, page: 13, says: "Plot the ordered pairs from the table x: -3, 0, -1, 4, 2; y: 7, -3.5, -3, 4, -3, with 1 cm = 1 unit.", answer: "(-3, 7), (0, -3.5), (-1, -3), (4, 4), (2, -3)" }
+- { id: fig3.17, kind: figure, page: 14, says: "The five points of Example 4 shown as dots, (0, -3.5) on the negative y-axis." }
+- { id: activity2, kind: activity, page: 14, title: A game for two persons, says: "Counters start at (0, 0). Each throw of a red and a green die adds the red number to the x-coordinate and the green number to the y-coordinate (first throw 3 and 1 moves to (3, 1); then 1 and 4 moves to (4, 5)). First to (10, 10) wins; no coordinate may pass 10 (a move that would overshoot misses the turn); landing on the other counter sends it back to (0, 0)." }
+- { id: remark-graphs, kind: remark, page: 15, says: "Plotting points is like drawing the time-distance or side-perimeter graphs of earlier classes; there the axes may be called the t-axis, d-axis, s-axis or p-axis instead of x and y." }
+
+- { id: ex3.3, kind: exercise, page: 15 }
+- { id: ex3.3-q1, kind: question, page: 15, text: "In which quadrant or on which axis do each of the points (-2, 4), (3, -1), (-1, 0), (1, 2) and (-3, -5) lie? Verify your answer by locating them on the Cartesian plane.", answer: "(-2, 4) II; (3, -1) IV; (-1, 0) on the negative x-axis; (1, 2) I; (-3, -5) III" }
+- { id: ex3.3-q2, kind: question, page: 15, text: "Plot the points (x, y) from the table x: -2, -1, 0, 1, 3; y: 8, 7, -1.25, 3, -1, choosing suitable units of distance on the axes." }
+
+- { id: s3.4, kind: section, page: 15, title: Summary }
+- { id: summary, kind: summary, page: 15, says: "Eleven points: two perpendicular lines locate a point; the Cartesian (coordinate) plane and coordinate axes; x-axis horizontal, y-axis vertical; four quadrants; the origin; abscissa and ordinate as distances from the axes; (x, y) as the coordinates; (x, 0) and (0, y) on the axes; the origin (0, 0); the sign pattern of each quadrant; (x, y) ≠ (y, x) if x ≠ y, equal if x = y." }
