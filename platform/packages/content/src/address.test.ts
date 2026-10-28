@@ -29,14 +29,25 @@ describe("addresses", () => {
     });
   });
 
+  it("reads the library: every prop, or one package's", () => {
+    expect(parseAddress("library/props/")).toEqual({ root: "library" });
+    expect(parseAddress("library/props")).toEqual({ root: "library" });
+    expect(parseAddress("library/props/basics")).toEqual({ root: "library", pkg: "basics" });
+  });
+
   it("refuses an address without a root, a prop without its type, and nothing after #", () => {
     expect(() => parseAddress("b/c/l/story")).toThrow(/starts with content\/ or library\/props\//);
-    expect(() => parseAddress("library/props/basics")).toThrow(/<package>\/<type>/);
+    expect(() => parseAddress("library/props/basics/choice/more")).toThrow(/<package>\/<type>/);
     expect(() => parseAddress("content/b/c/l/story#")).toThrow(/nothing after #/);
   });
 
   it("writes what it reads", () => {
-    for (const a of ["content/b/c/l/story#game", "library/props/basics/choice#option:1"])
+    for (const a of [
+      "content/b/c/l/story#game",
+      "library/props/basics/choice#option:1",
+      "library/props/basics",
+      "library/props/",
+    ])
       expect(formatAddress(parseAddress(a))).toBe(a);
     expect(contentAddress("b/c", "x")).toBe("content/b/c#x");
     expect(propAddress("basics", "choice")).toBe("library/props/basics/choice");

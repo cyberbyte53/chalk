@@ -2,7 +2,13 @@ import { spawn } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { contentAddress, contentPath, parseAddress, propAddress } from "@chalk/content/address";
+import {
+  contentAddress,
+  contentPath,
+  formatAddress,
+  parseAddress,
+  propAddress,
+} from "@chalk/content/address";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { listBoards, readSources } from "../boards";
@@ -22,9 +28,10 @@ import {
 } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
+import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
-import { DEFAULT_LANE, type Step, previewBase, withNothingDrawing } from "./app-driver";
-import { type Answer, check, look, play, targetOf } from "./look";
+import { DEFAULT_LANE, type Step, previewBase, shoot, withNothingDrawing } from "./app-driver";
+import { type Answer, check, look, play, readReach, targetOf } from "./look";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
 
 /**
@@ -395,7 +402,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Look at boards",
         description:
-          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`content/…/<board>#game`, `…#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A prop on its own (`library/props/coordinates/coordinatePlane`, from its defaults or `state`): everything about it, as for a piece. A board (`content/class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
+          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`content/…/<board>#game`, `…#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. The library (`library/props/`, or one package, `library/props/basics`): a line per prop, its address, role, what it is for, and how many boards use it. A prop on its own (`library/props/coordinates/coordinatePlane`, from its defaults or `state`): everything about it, as for a piece, then what it is for, every board that uses it with the fields it sets, the inputs it feeds and the actions it calls, and what no board or only one board uses. A board (`content/class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
         inputSchema: {
           at: z
             .string()
@@ -442,6 +449,20 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
         const address = parseAddress(args.at);
         const given = stateOf(args, address.root === "props");
+        if (address.root === "library") {
+          // Props are read through the app, the one place their definitions are loaded.
+          const d = await shoot(
+            root,
+            formatAddress(address),
+            { pictures: "none", withProps: true },
+            undefined,
+            lane,
+          );
+          return answer(
+            { text: libraryText(d.props ?? [], usesOf(readReach(root)), address.pkg) },
+            [],
+          );
+        }
         if (address.root === "props") {
           await progressOf(extra)("drawing");
           const prop = onProp(address);
@@ -617,11 +638,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           ]);
         let found = review === undefined ? threads : threadsOf(review, threads);
         if (args.at !== undefined) {
-          const want = parseAddress(args.at);
-          const prefix =
-            want.root === "content"
-              ? contentAddress(want.path, want.part)
-              : propAddress(want.pkg, want.type, want.part);
+          const prefix = formatAddress(parseAddress(args.at)).replace(/\/$/, "");
           found = found.filter((c) => {
             const at = threadAt(c);
             return at === prefix || at.startsWith(`${prefix}/`) || at.startsWith(`${prefix}#`);
@@ -765,6 +782,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             a = parseAddress(item.at);
           } catch (e) {
             lines.push(`✗ ${(e as Error).message}`);
+            continue;
+          }
+          if (a.root === "library") {
+            lines.push("✗ a thread is on a board or a prop: give one's address, not the library's");
             continue;
           }
           const on = item.at.trim();

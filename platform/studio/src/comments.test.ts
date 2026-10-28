@@ -33,7 +33,7 @@ function repo(): string {
   mkdirSync(join(root, "library", "props", "polynomials"), { recursive: true });
   writeFileSync(
     join(root, "library", "catalogue.md"),
-    "## `polynomials` — `@chalk/prop-polynomials`\n\n| Prop | Shows |\n|---|---|\n| `valueMachine` | a machine |\n",
+    "## `polynomials` — `@chalk/prop-polynomials`\n\n### `valueMachine` · explainer\n\n`library/props/polynomials/valueMachine` · used in no chapter yet\n",
   );
   return root;
 }

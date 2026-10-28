@@ -63,6 +63,7 @@ export {
   type SignalRecord,
 } from "./runtime";
 export { type HeadlessBoard, headlessBoard } from "./headless";
+export { type PropPage, propPages } from "./prop-pages";
 export { t, UiText, type UiTextKey } from "./ui-text";
 
 /** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */

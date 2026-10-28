@@ -25,6 +25,7 @@ import {
   findNode,
   joinPath,
   namesOf,
+  propPages,
   runningBoards,
   segment,
   stampCodePaths,
@@ -36,6 +37,7 @@ import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
 import { installTextKeys, isInEditor, sendKeys, toEditor } from "./editor-link";
 import { courses } from "./lessons";
+import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
 import { PropPanel } from "./prop-panel";
 import { ReviewList, ReviewPage } from "./review-page";
@@ -114,6 +116,14 @@ function atPath(params: URLSearchParams): string | undefined {
   if (at === null) return undefined;
   const a = parseAddress(at);
   return a.root === "content" ? a.path : undefined;
+}
+
+/** The library the page's `at` names (`library/props/`, or a package), if it names it. */
+function atLibrary(params: URLSearchParams): { pkg?: string } | undefined {
+  const at = params.get("at");
+  if (at === null) return undefined;
+  const a = parseAddress(at);
+  return a.root === "library" ? (a.pkg === undefined ? {} : { pkg: a.pkg }) : undefined;
 }
 
 /** The prop the page's `at` names (`library/props/<package>/<type>`), if it names one. */
@@ -1084,10 +1094,15 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       void runtime.call(piece, action, args).catch(() => {});
       return undefined;
     };
+    // Every prop's page (its definition, written out: @chalk/player's prop-pages.ts), for the
+    // chalk MCP, which reads props only through the app.
+    const props = window as Window & { __chalkProps?: () => unknown };
+    props.__chalkProps = () => propPages(propPackages);
     return () => {
       w.__chalkModel = undefined;
       busy.__chalkBusy = undefined;
       call.__chalkCall = undefined;
+      props.__chalkProps = undefined;
     };
   }, []);
   // What the app did, for a tool acting on the board (the chalk MCP's play): every
@@ -1127,9 +1142,13 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const path = (atPath(params) ?? "").replace(/\/$/, "");
   const source = params.get("source");
   const prop = atProp(params);
+  const library = atLibrary(params);
   const state = params.get("state");
   const isTree =
-    prop === undefined && source === null && path.split("/").filter(Boolean).length < 3;
+    prop === undefined &&
+    library === undefined &&
+    source === null &&
+    path.split("/").filter(Boolean).length < 3;
   // Opened from a review page (`back=<its query>`): a way back to it.
   const back = params.get("back");
   const withQuestions = params.get("show") === "questions";
@@ -1256,7 +1275,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   // biome-ignore lint/correctness/useExhaustiveDependencies: `build` is the trigger: a rebuild fetches the boards again.
   useEffect(() => {
     let isLive = true;
-    if (isTree) return;
+    if (isTree || library !== undefined) return;
     (async () => {
       const where = (await json("sources.json").catch(() => ({}))) as Sources;
       const boards =
@@ -1287,8 +1306,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
 
   // Ready once the boards are on screen (this runs after they are drawn), not when they arrive.
   useEffect(() => {
-    if (isTree || shown !== null) document.body.dataset.previewReady = search;
-  }, [isTree, shown, search]);
+    if (isTree || library !== undefined || shown !== null)
+      document.body.dataset.previewReady = search;
+  }, [isTree, library, shown, search]);
 
   // A rebuild (pnpm preview / build-content) redraws the boards without a reload.
   useEffect(() => {
@@ -1299,6 +1319,10 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     return () => hot.off?.("chalk:build", redraw);
   }, []);
 
+  if (library !== undefined)
+    return (
+      <LibraryScreen pkg={library.pkg} locale={locale} bus={bus} reach={() => json("reach.json")} />
+    );
   if (isTree) return <TreeScreen path={path} locale={locale} />;
   if (error !== null) return <div class="preview-empty">{error}</div>;
   // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.

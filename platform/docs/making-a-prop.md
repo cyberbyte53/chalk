@@ -4,7 +4,7 @@ How to add a prop, step by step. Written so a person or an AI agent can follow i
 
 ## 0. Build from what exists first
 
-Before writing a new prop, check whether it is:
+Before writing a new prop, `look` at `library/props/` (a line per prop: its address, role, what it is for, how many boards use it), then at the address of any that might fit (everything about it, and every board that uses it), or open `?dev&at=library/props/` in the preview to see them all and play with each. Then check whether it is:
 
 - **one more feature on a prop that exists** (a number line, graph paper): write a **layer** for that host;
 - **existing props together**, each with its own laws, joined by links (a stepper, a line of maths and a plane showing one polynomial): write a **group**;
@@ -17,7 +17,7 @@ Before writing a new prop, check whether it is:
 
 Write the prop's `README.md` first. It answers:
 
-- **What world is this?** One sentence. A prop knows the laws of its own world and nothing about any lesson ("a number line", not "a √2 finder").
+- **What world is this?** One sentence. A prop knows the laws of its own world and nothing about any lesson ("a number line", not "a √2 finder"). That sentence opens the prop's `describe`: it is what the prop is for wherever props are listed to choose from (`purposeOf`).
 - **Stored state:** the fewest independent quantities. If a field can be worked out from others, it's derived, not stored.
 - **Derived state:** what follows from the stored state by the prop's laws (a bulb's brightness, the fraction of heads).
 - **Actions:** every way the state can change. For each: what it changes, what it keeps fixed, and whether it reveals an answer. If a lesson will ask the inverse question ("where must the object be for the image to be here?"), give that its own named action.

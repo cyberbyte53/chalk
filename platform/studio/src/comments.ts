@@ -185,12 +185,10 @@ function propHomes(root: string): Map<string, string> {
   const out = new Map<string, string>();
   const file = join(root, "library", "catalogue.md");
   if (!existsSync(file)) return out;
-  let pkg: string | undefined;
+  // Each prop's page opens with its address: `library/props/<package>/<type>`.
   for (const line of readFileSync(file, "utf8").split("\n")) {
-    const section = /^## `([^`]+)`/.exec(line);
-    if (section) pkg = section[1];
-    const row = /^\| `([^`]+)`/.exec(line);
-    if (row?.[1] && pkg) out.set(row[1], `library/props/${pkg}`);
+    const m = /^`library\/props\/([^/`]+)\/([^`]+)`/.exec(line);
+    if (m?.[1] && m[2]) out.set(m[2], `library/props/${m[1]}`);
   }
   return out;
 }

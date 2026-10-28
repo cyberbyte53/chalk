@@ -1,8 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PROPS_ROOT, contentAddress, shownAddress } from "@chalk/content/address";
+import { full } from "@chalk/content/words";
 import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
+import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
 import {
   type Drawn,
@@ -71,19 +73,9 @@ export function targetOf(path: string, all: readonly BoardEntry[]): Target | und
   return { kind: "many", path: clean, units, boards: under.map((b) => b.board) };
 }
 
-// ---- Words for values: in full, as they are ----
+// ---- Words for values: in full, as they are (../words.ts) ----
 
-/** A value written out in full: strings quoted, lists and objects as they are. */
-export function full(v: unknown): string {
-  // Quoted as written: only a quote inside and line breaks are marked.
-  if (typeof v === "string") return `"${v.replace(/"/g, '\\"').replace(/\n/g, "\\n")}"`;
-  if (v === null || v === undefined) return "none";
-  if (typeof v !== "object") return String(v);
-  if (Array.isArray(v)) return `[${v.map(full).join(", ")}]`;
-  return `{${Object.entries(v as Record<string, unknown>)
-    .map(([k, x]) => `${k}: ${full(x)}`)
-    .join(", ")}}`;
-}
+export { full };
 
 /**
  * A value in the language shown: words written in both ({en, hi}) become the one on screen, at
@@ -137,7 +129,7 @@ export function problemsByPiece(overflow: readonly string[]): Map<string, string
 // ---- Where things are written ----
 
 /** The build's record of what each board was made from (build/reach.json). */
-function readReach(root: string): Reach {
+export function readReach(root: string): Reach {
   const file = join(root, "build", "reach.json");
   if (!existsSync(file)) return { boards: {}, modules: {} };
   try {
@@ -436,6 +428,8 @@ export async function look(
   if (a.continue === true && versions.length > 1)
     throw new Error("continue looks at the board as you left it: one language and one width.");
   const labels: Labels = a.labels === false ? "none" : target.kind === "piece" ? "parts" : "pieces";
+  const isWholeProp =
+    target.kind === "piece" && target.board.startsWith(PROPS_ROOT) && !target.address.includes("/");
   const options = (v: Version): ShotOptions => ({
     locale: v.locale,
     width: v.width,
@@ -444,6 +438,8 @@ export async function look(
     questions: target.kind === "group",
     speed: a.speed ?? DEFAULT_SPEED,
     ...(a.state === undefined ? {} : { state: a.state }),
+    // A whole prop on its own page: its page too (what it is for, every board that uses it).
+    ...(isWholeProp ? { withProps: true } : {}),
     // A lesson's boards are thumbnails: no need for double resolution.
     pictures: target.kind === "group" ? "thumb" : "full",
   });
@@ -502,9 +498,17 @@ export async function look(
   const heading = shots
     .map((s, i) => versionWords(s, { ...(versions[i] as Version), play: a.play === true }))
     .join(" | ");
+  const page = isWholeProp
+    ? drawn[0]?.props?.find((p) => p.address === (target as { board: string }).board)
+    : undefined;
   const text =
     target.kind === "piece"
-      ? pieceText(root, first, target.address, where, heading)
+      ? [
+          pieceText(root, first, target.address, where, heading),
+          ...(page === undefined
+            ? []
+            : ["", useText(page, usesOf(readReach(root)).get(page.type) ?? [])]),
+        ].join("\n")
       : boardText(first, where, heading, { errors: drawn[0]?.shots[0]?.errors ?? [] });
   const otherProblems = shots
     .slice(1)

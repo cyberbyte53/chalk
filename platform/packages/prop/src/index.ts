@@ -22,6 +22,7 @@ export {
   SAY,
   call,
   nameOf,
+  purposeOf,
   raise,
   signal,
   par,

@@ -6,6 +6,7 @@
  *   content/<book>/<chapter>                                  anything above a board
  *   content/                                                  every book
  *   library/props/<package>/<type>#part                       a prop, or a part of it
+ *   library/props/<package>, library/props/                   a package's props, every prop
  *
  * Below `content/` is the board's name in the course (what the build, the app and events use); the
  * root is only in the address. An address without a root is refused, so which kind of thing it
@@ -22,6 +23,11 @@ export type Address =
       path: string;
       /** What on the board: "piece" or "piece/part". */
       part?: string;
+    }
+  | {
+      /** The library: every prop, or one package's. */
+      root: "library";
+      pkg?: string;
     }
   | {
       root: "props";
@@ -49,8 +55,12 @@ export function parseAddress(text: string): Address {
     if (path === "" && part !== undefined) throw new Error(`"${text}": a board before #`);
     return withPart({ root: "content", path });
   }
-  if (where.startsWith(PROPS_ROOT)) {
-    const [pkg, type, ...rest] = where.slice(PROPS_ROOT.length).split("/");
+  if (`${where}/`.startsWith(PROPS_ROOT)) {
+    const [pkg, type, ...rest] = `${where}/`.slice(PROPS_ROOT.length).split("/").filter(Boolean);
+    if (type === undefined && rest.length === 0) {
+      if (part !== undefined) throw new Error(`"${text}": a prop before #`);
+      return pkg === undefined ? { root: "library" } : { root: "library", pkg };
+    }
     if (!pkg || !type || rest.length > 0)
       throw new Error(
         `"${text}": a prop is ${PROPS_ROOT}<package>/<type>, e.g. ${PROPS_ROOT}basics/choice`,
@@ -67,7 +77,7 @@ export function contentPath(text: string): { path: string; part?: string } {
   const a = parseAddress(text);
   if (a.root !== "content")
     throw new Error(
-      `"${text}" is a prop; this takes a board, lesson, chapter or book under ${CONTENT_ROOT}`,
+      `"${text}" is in the library; this takes a board, lesson, chapter or book under ${CONTENT_ROOT}`,
     );
   return a.part === undefined ? { path: a.path } : { path: a.path, part: a.part };
 }
@@ -82,7 +92,9 @@ export const propAddress = (pkg: string, type: string, part?: string): string =>
 
 /** Any address, written. */
 export function formatAddress(a: Address): string {
-  return a.root === "content" ? contentAddress(a.path, a.part) : propAddress(a.pkg, a.type, a.part);
+  if (a.root === "content") return contentAddress(a.path, a.part);
+  if (a.root === "library") return `${PROPS_ROOT}${a.pkg === undefined ? "" : a.pkg}`;
+  return propAddress(a.pkg, a.type, a.part);
 }
 
 /**

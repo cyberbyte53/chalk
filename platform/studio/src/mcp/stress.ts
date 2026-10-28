@@ -433,6 +433,21 @@ const cases: Record<string, () => Promise<void>> = {
         /has no action "nothing" \(its actions: movePoint/.test(lines),
       called.error ?? lines.slice(0, 300),
     );
+    const library = await call(c, "look", { at: "library/props/" });
+    expect(
+      "the library is a line per prop: its address, role, what it is for, how many boards use it",
+      library.ok &&
+        /library\/props\/basics\/choice · question · A multiple-choice question\. · used on \d+ boards/.test(
+          textOf(library),
+        ),
+      library.error ?? textOf(library).slice(0, 200),
+    );
+    expect(
+      "a prop's page lists every board that uses it, and what no board uses",
+      /used on: {2}\d+ boards/.test(textOf(bare)) &&
+        /content\/class9-maths\/.*#\w+ {2}sets /.test(textOf(bare)),
+      textOf(bare).split("\n").slice(-6).join(" | "),
+    );
     const onBoard = await call(c, "play", { at: STORY, steps: [{ call: "giveRound" }] });
     expect(
       "a call step on a board is refused: there the lesson calls actions",

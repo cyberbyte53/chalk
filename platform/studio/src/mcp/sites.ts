@@ -6,16 +6,13 @@ import { dirname, join, relative, resolve } from "node:path";
  * is written at. Read from the package's source, for the answers of `look` and `play`.
  */
 
-/** The package folder a prop type is defined in (library/props/<name>), from the catalogue. */
+/** The package folder a prop type is defined in (library/props/<name>), from its address in the catalogue. */
 export function packageOfType(root: string, type: string): string | undefined {
   const catalogue = join(root, "library", "catalogue.md");
   if (!existsSync(catalogue)) return undefined;
-  let current: string | undefined;
   for (const line of readFileSync(catalogue, "utf8").split("\n")) {
-    const section = /^## `([^`]+)`/.exec(line);
-    if (section) current = section[1];
-    if (current !== undefined && line.startsWith(`| \`${type}\``))
-      return `library/props/${current}`;
+    const m = /^`library\/props\/([^/`]+)\/([^`]+)`/.exec(line);
+    if (m?.[2] === type) return `library/props/${m[1]}`;
   }
   return undefined;
 }

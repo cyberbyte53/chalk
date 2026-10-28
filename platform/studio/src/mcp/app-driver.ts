@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { previewQuery, shownAddress } from "@chalk/content/address";
 import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
+import type { PropPage } from "../prop-text";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
@@ -341,6 +342,8 @@ export type Drawn = {
   before?: Picture;
   /** What was still going on when the board opened, if it hadn't settled by the cap. */
   runningAtOpen?: string[];
+  /** Every prop's page, read from the app's prop definitions, when asked for (`withProps`). */
+  props?: PropPage[];
 };
 
 export type ShotOptions = {
@@ -357,6 +360,8 @@ export type ShotOptions = {
   speed?: number;
   /** A prop on its own page: the fields it starts from, over its defaults. */
   state?: Readonly<Record<string, unknown>>;
+  /** Also read every prop's page from the app (its prop definitions: the props' one writer). */
+  withProps?: boolean;
 };
 
 /**
@@ -1081,10 +1086,17 @@ async function shootNow(
       ...(runningAtOpen.length > 0 && !isActed ? { running: runningAtOpen } : {}),
     });
   }
+  const props =
+    o.withProps === true
+      ? await page.evaluate(
+          () => (window as { __chalkProps?: () => unknown }).__chalkProps?.() as PropPage[],
+        )
+      : undefined;
   return {
     shots,
     steps,
     ...(before === undefined ? {} : { before }),
     ...(runningAtOpen.length > 0 ? { runningAtOpen } : {}),
+    ...(props === undefined ? {} : { props }),
   };
 }

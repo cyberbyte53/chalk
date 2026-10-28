@@ -458,3 +458,14 @@ export function asAnyProp<
   // Safe: everything that touches the state goes through the def's own schema first.
   return def as unknown as AnyPropDef;
 }
+
+/**
+ * What a prop is for: the first sentence of its `describe`, which is written to say it. Shown
+ * where props are listed to be chosen from (the chalk MCP's `look` at library/props/, the
+ * catalogue, Studio's library); the rest of `describe` is its world, in full.
+ */
+export function purposeOf(def: { readonly describe: string }): string {
+  const text = def.describe.trim().replace(/\s+/g, " ");
+  const end = text.search(/[.!?](\s|$)/);
+  return end === -1 ? text : text.slice(0, end + 1);
+}

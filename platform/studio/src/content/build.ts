@@ -41,6 +41,7 @@ import {
   Kind,
   type Readings,
   type Ref,
+  type Script,
   type Source,
   builtBookSchema,
   builtChapterSchema,
@@ -51,6 +52,7 @@ import {
   builtQuestionSchema,
   piecePath,
   propPieces,
+  splitTarget,
   walkPieces,
 } from "@chalk/content";
 import { propPackages } from "@chalk/library";
@@ -116,8 +118,22 @@ export type BoardReach = {
   stack?: readonly string[];
   /** A question's row: `content/…/params.yaml:12-18`. */
   rows?: string;
-  /** Each named piece: its prop type (absent for words and groups) and the frames it was made through. */
-  pieces: Record<string, { type?: string; stack: readonly string[] }>;
+  /**
+   * Each named piece: its prop type (absent for words and groups), the frames it was made through,
+   * and how the board uses it: the fields it sets where it places it (`given`), the inputs its rules
+   * feed (`binds`) and the actions its scripts call (`calls`). What a prop's page lists under where
+   * it is used, and what says which of its fields and actions any board uses.
+   */
+  pieces: Record<
+    string,
+    {
+      type?: string;
+      stack: readonly string[];
+      given?: readonly string[];
+      binds?: readonly string[];
+      calls?: readonly string[];
+    }
+  >;
 };
 
 /** Where one built board's parts were written, and each placed prop's type. */
@@ -181,18 +197,51 @@ function sitesOf(board: Board, boardSite: string | undefined): ItemSources {
   return top === undefined ? { pieces, props } : { board: top, pieces, props };
 }
 
+/** Each piece's inputs a board's rules feed, and its actions the board's scripts call. */
+function usesOf(board: Board): {
+  binds: Map<string, Set<string>>;
+  calls: Map<string, Set<string>>;
+} {
+  const binds = new Map<string, Set<string>>();
+  const calls = new Map<string, Set<string>>();
+  const note = (into: Map<string, Set<string>>, target: string) => {
+    const { prop, member } = splitTarget(target);
+    if (!into.has(prop)) into.set(prop, new Set());
+    into.get(prop)?.add(member);
+  };
+  const walk = (script: Script): void => {
+    if (Array.isArray(script)) script.forEach(walk);
+    else if ("call" in script) note(calls, script.call);
+    else if ("seq" in script) script.seq.forEach(walk);
+    else if ("par" in script) script.par.forEach(walk);
+  };
+  for (const rule of board.is) note(binds, rule.set);
+  for (const rule of board.when) walk(rule.do);
+  return { binds, calls };
+}
+
 /** What a board was made from (see Reach), read from the board as authored. */
 function reachOf(
   board: Board,
   module: string,
   more: { stack?: readonly string[]; rows?: string },
 ): BoardReach {
-  const types = new Map(propPieces(board.root).map((p) => [p.name, p.prop]));
+  const placed = new Map(propPieces(board.root).map((p) => [p.name, p]));
+  const uses = usesOf(board);
   const pieces: BoardReach["pieces"] = {};
   for (const piece of walkPieces(board.root)) {
     if (piece.name === "") continue;
-    const type = types.get(piece.name);
-    pieces[piece.name] = { ...(type === undefined ? {} : { type }), stack: stackOf(piece) };
+    const prop = placed.get(piece.name);
+    const given = Object.keys(prop?.with ?? {}).sort();
+    const binds = [...(uses.binds.get(piece.name) ?? [])].sort();
+    const calls = [...(uses.calls.get(piece.name) ?? [])].sort();
+    pieces[piece.name] = {
+      ...(prop === undefined ? {} : { type: prop.prop }),
+      stack: stackOf(piece),
+      ...(given.length > 0 ? { given } : {}),
+      ...(binds.length > 0 ? { binds } : {}),
+      ...(calls.length > 0 ? { calls } : {}),
+    };
   }
   return {
     module: `content/${module}`,
