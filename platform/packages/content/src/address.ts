@@ -1,0 +1,93 @@
+/**
+ * Addresses: how a person, an agent and a thread name a thing, by where it lives. Two roots, the
+ * real folders:
+ *
+ *   content/<book>/<chapter>/<lesson>/<board>#piece/part     a board, or something on it
+ *   content/<book>/<chapter>                                  anything above a board
+ *   content/                                                  every book
+ *   library/props/<package>/<type>#part                       a prop, or a part of it
+ *
+ * Below `content/` is the board's name in the course (what the build, the app and events use); the
+ * root is only in the address. An address without a root is refused, so which kind of thing it
+ * names is never guessed.
+ */
+
+export const CONTENT_ROOT = "content/";
+export const PROPS_ROOT = "library/props/";
+
+export type Address =
+  | {
+      root: "content";
+      /** The course path: a board's name, or a lesson, chapter or book above it. */
+      path: string;
+      /** What on the board: "piece" or "piece/part". */
+      part?: string;
+    }
+  | {
+      root: "props";
+      /** The package folder under library/props. */
+      pkg: string;
+      /** The prop's type. */
+      type: string;
+      /** What on the prop: "part" or "child/part". */
+      part?: string;
+    };
+
+const ROOTS = `${CONTENT_ROOT} or ${PROPS_ROOT}`;
+
+/** An address, read; throws saying what's wrong. */
+export function parseAddress(text: string): Address {
+  const clean = text.trim().replace(/\.json$/, "");
+  const hash = clean.indexOf("#");
+  const where = (hash === -1 ? clean : clean.slice(0, hash)).replace(/\/$/, "");
+  const part = hash === -1 ? undefined : clean.slice(hash + 1);
+  if (part === "") throw new Error(`"${text}": nothing after #`);
+  const withPart = <A extends Address>(a: A): A => (part === undefined ? a : { ...a, part });
+  if (`${where}/`.startsWith(CONTENT_ROOT)) {
+    // "content/" alone is every book.
+    const path = `${where}/`.slice(CONTENT_ROOT.length).replace(/\/$/, "");
+    if (path === "" && part !== undefined) throw new Error(`"${text}": a board before #`);
+    return withPart({ root: "content", path });
+  }
+  if (where.startsWith(PROPS_ROOT)) {
+    const [pkg, type, ...rest] = where.slice(PROPS_ROOT.length).split("/");
+    if (!pkg || !type || rest.length > 0)
+      throw new Error(
+        `"${text}": a prop is ${PROPS_ROOT}<package>/<type>, e.g. ${PROPS_ROOT}basics/choice`,
+      );
+    return withPart({ root: "props", pkg, type });
+  }
+  throw new Error(
+    `"${text}": an address starts with ${ROOTS} (${CONTENT_ROOT}class10-maths/real-numbers/…, ${PROPS_ROOT}basics/choice)`,
+  );
+}
+
+/** A content address, read; throws when it names a prop or has no root. */
+export function contentPath(text: string): { path: string; part?: string } {
+  const a = parseAddress(text);
+  if (a.root !== "content")
+    throw new Error(
+      `"${text}" is a prop; this takes a board, lesson, chapter or book under ${CONTENT_ROOT}`,
+    );
+  return a.part === undefined ? { path: a.path } : { path: a.path, part: a.part };
+}
+
+/** The address of a course path (a board's name, or above), and maybe something on it. */
+export const contentAddress = (path: string, part?: string): string =>
+  `${CONTENT_ROOT}${path}${part === undefined ? "" : `#${part}`}`;
+
+/** The address of a prop, and maybe a part of it. */
+export const propAddress = (pkg: string, type: string, part?: string): string =>
+  `${PROPS_ROOT}${pkg}/${type}${part === undefined ? "" : `#${part}`}`;
+
+/** Any address, written. */
+export function formatAddress(a: Address): string {
+  return a.root === "content" ? contentAddress(a.path, a.part) : propAddress(a.pkg, a.type, a.part);
+}
+
+/**
+ * The preview's query for an address (`at=…`), kept readable: only what a query can't hold as is
+ * (`#`, `&`, `%`, spaces) is escaped.
+ */
+export const previewQuery = (address: string): string =>
+  `at=${address.replace(/[%#& ]/g, (c) => encodeURIComponent(c))}`;

@@ -1,13 +1,14 @@
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, openSync } from "node:fs";
 import { join } from "node:path";
+import { contentAddress, previewQuery } from "@chalk/content/address";
 import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
  * Drives the real learner app in a headless browser: it opens the app's own dev-server page
- * (`?dev&board=`), where the app's player draws the board, then measures, reads and acts on what
+ * (`?dev&at=`), where the app's player draws the board, then measures, reads and acts on what
  * the page shows. Nothing here draws a board. Uses the one dev server (CHALK_PREVIEW_URL to point
  * elsewhere), starting it in this process if nothing answers on its port.
  */
@@ -500,13 +501,14 @@ async function watchMotion(
   }
 }
 
+/** The preview page for an address (`content/…` or `library/props/…`). */
 export async function previewUrl(
   root: string,
-  board: string,
+  address: string,
   o: ShotOptions = {},
 ): Promise<string> {
   const url = new URL(await previewBase(root));
-  url.search = `?dev&board=${board}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
+  url.search = `?dev&${previewQuery(address)}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
   return url.toString();
 }
 
@@ -855,7 +857,7 @@ async function shootNow(
   // Acting starts from a fresh board (a new run) unless it continues this lane's last board.
   const isContinued = act?.isContinued === true;
   const run = act !== undefined && !isContinued ? `&run=${Date.now()}` : "";
-  const url = `${await previewUrl(root, board, o)}&shot${run}`;
+  const url = `${await previewUrl(root, contentAddress(board), o)}&shot${run}`;
   const target = new URL(url);
   const base = target.origin;
   const at = await openPage(lane, base);
@@ -871,7 +873,9 @@ async function shootNow(
             ? "content was rebuilt since, so the board was reloaded"
             : undefined;
     if (why !== undefined)
-      throw new Error(`Can't continue ${board}: ${why}. Run the steps again without continue.`);
+      throw new Error(
+        `Can't continue ${contentAddress(board)}: ${why}. Run the steps again without continue.`,
+      );
   }
   at.errors.length = 0;
   await page.setViewportSize({

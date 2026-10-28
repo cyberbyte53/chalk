@@ -230,7 +230,7 @@ export function App(): JSX.Element {
   };
 
   const query = new URLSearchParams(window.location.search);
-  if (isDevShell && (query.has("board") || query.has("review") || query.has("reviews")))
+  if (isDevShell && (query.has("at") || query.has("review") || query.has("reviews")))
     return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
     return <ActivityFeed />;

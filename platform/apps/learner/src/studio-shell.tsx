@@ -5,6 +5,7 @@
  * in `.claude/skills/`, and this page is how a person watches and steers. Data comes from
  * /dev-studio (see ../dev-studio.ts) and comments from /dev-review.
  */
+import { contentAddress, previewQuery } from "@chalk/content/address";
 import { marked } from "marked";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -565,7 +566,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
             {detail.lessons.map((l) => (
               <li key={l.slug}>
                 {l.id !== null ? (
-                  <a href={`?dev&board=${encodeURIComponent(`${book}/${chapter}/${l.slug}`)}`}>
+                  <a href={`?dev&${previewQuery(contentAddress(`${book}/${chapter}/${l.slug}`))}`}>
                     {l.title}
                   </a>
                 ) : (

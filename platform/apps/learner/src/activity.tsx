@@ -1,3 +1,4 @@
+import { contentAddress, previewQuery } from "@chalk/content/address";
 import type { JSX } from "preact";
 import { useMemo } from "preact/hooks";
 import { type Thread, type Threads, useThreads } from "./threads";
@@ -26,7 +27,7 @@ const whereOf = (t: Thread): string =>
     : `${t.board.split("/").slice(-2).join("/")}${t.target ? ` · ${t.target}` : ""}${t.prop ? ` · prop ${t.prop}` : ""}`;
 
 const hrefOf = (t: Thread): string | null => {
-  if (t.board !== undefined) return `?dev&board=${encodeURIComponent(t.board)}`;
+  if (t.board !== undefined) return `?dev&${previewQuery(contentAddress(t.board))}`;
   const [book, chapter] = (t.source ?? "").replace(/^content\//, "").split("/");
   return book && chapter
     ? `?dev&studio&book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(chapter)}`

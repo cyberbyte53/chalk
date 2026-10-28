@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { contentAddress } from "@chalk/content/address";
 import type { BoardReach, Reach } from "../content/build";
 import type { Range } from "./facts";
 import { type CodeGraph, codeGraph, graphSources } from "./graph";
@@ -531,7 +532,7 @@ export function describeReach(
   const out = [
     hits.length === 0
       ? `reaches nothing built${changes === 0 ? "" : ` (${count(changes, "changed file")})`}`
-      : `reaches ${count(hits.length, "piece")} on ${count(boards.size, "board")} in ${count(chapters.size, "chapter")}${under ? ` under ${under}` : ""}`,
+      : `reaches ${count(hits.length, "piece")} on ${count(boards.size, "board")} in ${count(chapters.size, "chapter")}${under ? ` under ${contentAddress(under)}` : ""}`,
   ];
   if (reached.everything !== undefined) out.push(`every board: ${reached.everything}`);
   if (reached.touched.length > 0)
@@ -546,14 +547,14 @@ export function describeReach(
   out.push("");
   if (depth === "piece") {
     for (const h of hits.slice(0, MOST_ROWS))
-      out.push(`${h.board}#${h.piece}${h.type ? ` (${h.type})` : ""} ← ${h.why}`);
+      out.push(`${contentAddress(h.board, h.piece)}${h.type ? ` (${h.type})` : ""} ← ${h.why}`);
   } else {
     const rows = rollUp(hits, depth);
     for (const r of rows.slice(0, MOST_ROWS))
       out.push(
         depth === "board"
-          ? `${r.path} — ${count(r.pieces, "piece")}`
-          : `${r.path} — ${count(r.pieces, "piece")} on ${count(r.boards, "board")}`,
+          ? `${contentAddress(r.path)} — ${count(r.pieces, "piece")}`
+          : `${contentAddress(r.path)} — ${count(r.pieces, "piece")} on ${count(r.boards, "board")}`,
       );
   }
   const total = depth === "piece" ? hits.length : rollUp(hits, depth).length;

@@ -1,7 +1,7 @@
 # Chalk for Cursor / VS Code
 
 Content seen as boards, beside its code. Nothing here draws a board: the panel frames the learner
-app's own `?dev&board=` page, so what you see is what the phone draws.
+app's own `?dev&at=` page, so what you see is what the phone draws.
 
 - **Preview** (the preview icon in an editor's title bar, right-click a folder in `content/`, or ⌥⌘P):
   - a book shows its book screen;

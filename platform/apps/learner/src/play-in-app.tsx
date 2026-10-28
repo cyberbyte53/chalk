@@ -54,7 +54,7 @@ const jugnu = jugnuLink();
 const prepare = (chapter: CourseChapter): Promise<void> => preloadProps(chapter.props);
 
 /**
- * Play as the app plays (`?dev&board=<path>&play`), in a phone's frame: the chapter's path, each
+ * Play as the app plays (`?dev&at=<address>&play`), in a phone's frame: the chapter's path, each
  * concept's pages then its practice in the app's own player and modes, its result, the chapter's
  * end. Opens at the board, lesson or chapter the path names. Progress is worked out from this
  * session's events as the app works out a learner's own; nothing is signed in or kept.

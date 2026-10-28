@@ -2,9 +2,10 @@ import { spawn } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { contentAddress, contentPath, parseAddress, propAddress } from "@chalk/content/address";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { boardName, listBoards, readSources } from "../boards";
+import { listBoards, readSources } from "../boards";
 import {
   ACTS,
   type Filed,
@@ -118,7 +119,8 @@ function unknownBoard(board: string): string | undefined {
     ];
     near = lessons.length > 0 ? lessons : under;
   }
-  return `No board or lesson "${board}" in the build.${near.length > 0 ? ` Nearest: ${near.slice(0, 8).join(", ")}${near.length > 8 ? ", …" : ""}.` : ""}`;
+  const shown = near.slice(0, 8).map((n) => contentAddress(n));
+  return `No board or lesson "${contentAddress(board)}" in the build.${near.length > 0 ? ` Nearest: ${shown.join(", ")}${near.length > 8 ? ", …" : ""}.` : ""}`;
 }
 
 // ---- Comments, through the dev server (their one writer) ----
@@ -157,10 +159,15 @@ async function readAll(): Promise<{ threads: Filed[]; reviews: Review[] }> {
 /** Words on one line, in full: never cut. */
 const oneLine = (t: string) => t.replace(/\s+/g, " ");
 
+/** Where a thread is, as an address: its board or prop, and what on it; a plan's thread by its home. */
+export function threadAt(c: Filed): string {
+  if (c.board !== undefined) return contentAddress(c.board, c.target);
+  if (c.prop !== undefined) return propAddress(c.home.split("/").at(-1) ?? "", c.prop, c.target);
+  return `${c.home} (plan)`;
+}
+
 function threadLine(c: Filed): string {
-  const where = [c.board ?? `${c.home} (plan)`, c.target, c.prop ? `prop ${c.prop}` : undefined]
-    .filter(Boolean)
-    .join(" · ");
+  const where = threadAt(c);
   const plan = lastMove(c, Status.Planned);
   return [
     `• ${c.id} [${c.status}]${c.label === Label.Comment ? "" : ` ${c.label}`}${c.about ? ` about ${c.about}` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
@@ -215,19 +222,25 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "What a change reaches",
         description:
-          'Every piece a change can make look or behave differently, down to `book/chapter/lesson/page#piece`, worked out from what the build recorded (every line of the author\'s code each piece was made through) and from who uses what in the code; nothing declared by hand. Ask before changing shared code, with what you plan to touch: `changes` takes files ("library/props/basics/src/views.tsx"), lines ("content/…/overview.ts:40-52") or one declaration ("content/…/kit.ts#sweetsQuestion", "library/props/basics/src/views.tsx#MultiChoiceView"); `props` takes prop types. After changing, `diff: true` reads what git says changed (since HEAD, or `diff: "<ref>"`). `depth` rolls it up: book, chapter (default), lesson, board or piece; `under` keeps to one branch ("class10-maths/real-numbers"). Then look at what it lists.',
+          'Every piece a change can make look or behave differently, down to `content/<book>/<chapter>/<lesson>/<board>#piece`, worked out from what the build recorded (every line of the author\'s code each piece was made through) and from who uses what in the code; nothing declared by hand. Ask before changing shared code, with what you plan to touch: `changes` takes files ("library/props/basics/src/views.tsx"), lines ("content/…/overview.ts:40-52") or one declaration ("content/…/kit.ts#sweetsQuestion", "library/props/basics/src/views.tsx#MultiChoiceView"); `props` takes props by address ("library/props/basics/choice"). After changing, `diff: true` reads what git says changed (since HEAD, or `diff: "<ref>"`). `depth` rolls it up: book, chapter (default), lesson, board or piece; `under` keeps to one branch ("content/class10-maths/real-numbers"). Then look at what it lists.',
         inputSchema: {
           changes: z
             .array(z.string())
             .optional()
             .describe("Files, file:from-to, or file#declaration, repo-relative."),
-          props: z.array(z.string()).optional().describe("Prop types, e.g. multiChoice."),
+          props: z
+            .array(z.string())
+            .optional()
+            .describe('Props, by address: "library/props/basics/multiChoice".'),
           diff: z
             .union([z.boolean(), z.string()])
             .optional()
             .describe("What git says changed: true (since HEAD), or a ref."),
           depth: z.enum(DEPTHS).optional().describe("How far down to list (default chapter)."),
-          under: z.string().optional().describe("Only paths under this one."),
+          under: z
+            .string()
+            .optional()
+            .describe('Only what is under this address: "content/class10-maths/real-numbers".'),
         },
         annotations: { readOnlyHint: true, openWorldHint: false },
       },
@@ -240,9 +253,22 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           ...changesFrom(index, changes ?? []),
         ];
         const reached = index.reach(named);
-        const hits = [...reached.hits, ...index.ofTypes(props ?? [])];
+        const types = (props ?? []).map((p) => {
+          const a = parseAddress(p);
+          if (a.root !== "props")
+            throw new Error(`"${p}" is not a prop; props are library/props/<package>/<type>`);
+          return a.type;
+        });
+        const hits = [...reached.hits, ...index.ofTypes(types)];
         return result([
-          text(describeReach({ ...reached, hits }, depth ?? "chapter", under, named.length)),
+          text(
+            describeReach(
+              { ...reached, hits },
+              depth ?? "chapter",
+              under === undefined ? undefined : contentPath(under).path,
+              named.length,
+            ),
+          ),
         ]);
       },
     ),
@@ -329,13 +355,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Look at boards",
         description:
-          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`<board>#game`, `<board>#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A board (`class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
+          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`content/…/<board>#game`, `…#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A board (`content/class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
         inputSchema: {
           at: z
             .string()
             .min(1)
             .describe(
-              "A piece (<board>#piece or #piece/part), a board, a lesson, a chapter or a book.",
+              'An address: a piece ("content/<book>/<chapter>/<lesson>/<board>#piece", or #piece/part), a board, a lesson, a chapter or a book.',
             ),
           locales: locales
             .optional()
@@ -369,12 +395,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       async (args, extra: Extra) => {
         const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
         const all = listBoards(root);
-        const target = targetOf(boardName(args.at), all);
+        const at = contentPath(args.at);
+        const target = targetOf(at.part === undefined ? at.path : `${at.path}#${at.part}`, all);
         if (target === undefined)
-          throw new Error(
-            unknownBoard(boardName(args.at).split("#")[0] ?? "") ??
-              `Nothing built at "${args.at}".`,
-          );
+          throw new Error(unknownBoard(at.path) ?? `Nothing built at "${args.at}".`);
         const where = { sources: readSources(root) };
         if (target.kind === "many") {
           if (args.continue === true) throw new Error("continue looks at one board.");
@@ -396,7 +420,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         description:
           'Use a board the way a student does, in the real learner app: taps and drags on the page, in order (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, everything the student sees that changed (each part was → now in full, + appeared, − gone, an input off → on, and hidden facts), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
         inputSchema: {
-          board: z.string().min(1).describe("A board (its path)."),
+          at: z
+            .string()
+            .min(1)
+            .describe(
+              'A board, by address: "content/class10-maths/real-numbers/division-lemma/story".',
+            ),
           steps: z.array(step).min(1).max(40).describe("What a finger does, in order."),
           continue: z
             .boolean()
@@ -439,9 +468,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       },
       async (args, extra: Extra) => {
         const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
-        const board = boardName(args.board);
+        const at = contentPath(args.at);
+        const board = at.path;
         const all = listBoards(root);
-        if (!all.some((b) => b.board === board)) {
+        if (at.part !== undefined || !all.some((b) => b.board === board)) {
           const target = targetOf(board, all);
           throw new Error(
             target !== undefined
@@ -450,7 +480,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           );
         }
         await progressOf(extra)("playing");
-        return answer(await play(root, { ...args, board }, lane), notes);
+        const { at: _, ...rest } = args;
+        return answer(await play(root, { ...rest, board }, lane), notes);
       },
     ),
     "play",
@@ -462,11 +493,15 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Read comments",
         description:
-          'Read threads: the person\'s comments from the preview, reviewers\' findings and regressions, and chat feedback filed as comments. `review`: a review\'s id ("apply review 20261026-1734"), or "latest": exactly the threads it handed over, in order, with how it stands. Or filter by `board` (path prefix) or `prop`. `unanswered: true`: only what still waits on a fixer (open or planned). Each shows its board, target (an address: piece/part), source line, what it showed, its plan and every message.',
+          'Read threads: the person\'s comments from the preview, reviewers\' findings and regressions, and chat feedback filed as comments. `review`: a review\'s id ("apply review 20261026-1734"), or "latest": exactly the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). `unanswered: true`: only what still waits on a fixer (open or planned). Each shows its address, source line, what it showed, its plan and every message.',
         inputSchema: {
           review: z.string().optional().describe('A review id, or "latest".'),
-          board: z.string().optional().describe("A board, lesson or chapter path prefix."),
-          prop: z.string().optional(),
+          at: z
+            .string()
+            .optional()
+            .describe(
+              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice").',
+            ),
           unanswered: z.boolean().optional(),
         },
         annotations: { readOnlyHint: true, openWorldHint: false },
@@ -488,9 +523,17 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             ),
           ]);
         let found = review === undefined ? threads : threadsOf(review, threads);
-        if (args.board)
-          found = found.filter((c) => (c.board ?? c.home).startsWith(args.board ?? ""));
-        if (args.prop) found = found.filter((c) => c.prop === args.prop);
+        if (args.at !== undefined) {
+          const want = parseAddress(args.at);
+          const prefix =
+            want.root === "content"
+              ? contentAddress(want.path, want.part)
+              : propAddress(want.pkg, want.type, want.part);
+          found = found.filter((c) => {
+            const at = threadAt(c);
+            return at === prefix || at.startsWith(`${prefix}/`) || at.startsWith(`${prefix}#`);
+          });
+        }
         if (args.unanswered) found = found.filter(isUnanswered);
         const head =
           review !== undefined
@@ -547,9 +590,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               ),
           }
         : {}),
-      board: z.string().optional().describe("A new thread: its board."),
-      target: z.string().optional().describe('A new thread: "piece" or "piece/part" on the board.'),
-      prop: z.string().optional().describe("A new thread about that prop wherever it is used."),
+      at: z
+        .string()
+        .optional()
+        .describe(
+          'A new thread: where, by address. A board or something on it ("content/…/<board>#piece/part"), or a prop wherever it is used ("library/props/<package>/<type>", or #part).',
+        ),
       label: z
         .enum(MY_LABELS as unknown as [Label, ...Label[]])
         .optional()
@@ -579,9 +625,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     id?: string;
     text: string;
     status?: Status;
-    board?: string;
-    target?: string;
-    prop?: string;
+    at?: string;
     label?: Label;
     about?: string;
     from?: "chat";
@@ -593,7 +637,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       "comment",
       {
         title: "Write on threads",
-        description: `Write on threads, or start them; one or many at once. With \`id\`: write on that thread${MY_MOVES.length > 0 ? ", maybe moving its status" : ""}. With \`board\` (no id): start a thread. You write as a ${ROLE}${NAME === ROLE ? "" : ` (${NAME})`}: this tool offers only what a ${ROLE} may do, and the writer refuses anything else. When you finish a pass, \`handover: true\` hands what you started or wrote on as one review.`,
+        description: `Write on threads, or start them; one or many at once. With \`id\`: write on that thread${MY_MOVES.length > 0 ? ", maybe moving its status" : ""}. With \`at\` (no id): start a thread there. You write as a ${ROLE}${NAME === ROLE ? "" : ` (${NAME})`}: this tool offers only what a ${ROLE} may do, and the writer refuses anything else. When you finish a pass, \`handover: true\` hands what you started or wrote on as one review.`,
         inputSchema: {
           items: z.array(write).default([]),
           handover: z.boolean().optional(),
@@ -619,21 +663,35 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             lines.push(done.ok ? `✓ ${item.id} [${done.thread?.status}]` : `✗ ${done.error}`);
             continue;
           }
-          if (item.board === undefined) {
-            lines.push("✗ give the thread's id, or a board to start one on");
+          if (item.at === undefined) {
+            lines.push("✗ give the thread's id, or an address to start one at");
             continue;
           }
-          const on = boardName(item.board);
-          const piece = item.target?.split("/")[0];
-          const where = readSources(root)[on];
-          const source = (piece && where?.pieces[piece]) || where?.board;
+          let a: ReturnType<typeof parseAddress>;
+          try {
+            a = parseAddress(item.at);
+          } catch (e) {
+            lines.push(`✗ ${(e as Error).message}`);
+            continue;
+          }
+          const on = item.at.trim();
+          const place =
+            a.root === "content"
+              ? (() => {
+                  const piece = a.part?.split("/")[0];
+                  const where = readSources(root)[a.path];
+                  const source = (piece && where?.pieces[piece]) || where?.board;
+                  return {
+                    board: a.path,
+                    ...(a.part ? { target: a.part } : {}),
+                    ...(source ? { source } : {}),
+                  };
+                })()
+              : { prop: a.type, ...(a.part ? { target: a.part } : {}) };
           const done = await changeComments(who, {
             op: "start",
             thread: {
-              board: on,
-              ...(item.target ? { target: item.target } : {}),
-              ...(item.prop ? { prop: item.prop } : {}),
-              ...(source ? { source } : {}),
+              ...place,
               ...(item.label ? { label: item.label } : {}),
               ...(item.about ? { about: item.about } : {}),
               ...(item.from ? { from: item.from } : {}),

@@ -21,8 +21,8 @@ Each thing appears once. Values are written in full, strings quoted as written.
 
 | Pointed at | Returns |
 |---|---|
-| a piece or part (`<board>#game`, `<board>#game/plates`) | a picture of just it (cut from the board, at double resolution, its parts named); ok or its problems; everything about the piece (the table above) |
-| a board | its picture with each piece named; ok or its problems; one line per piece: name, type, full path:line, current state. A field too long for a line is named, not printed (`log (14 items) → <board>#game`): its full value is one call away. |
+| a piece or part (`content/…/<board>#game`, `…#game/plates`) | a picture of just it (cut from the board, at double resolution, its parts named); ok or its problems; everything about the piece (the table above) |
+| a board | its picture with each piece named; ok or its problems; one line per piece: name, type, full path:line, current state. A field too long for a line is named, not printed (`log (14 items) → content/…/<board>#game`): its full value is one call away. |
 | a lesson or a question family | its boards as thumbnails; only the boards with problems |
 | a chapter or book | no pictures: a check of every board, in English and Hindi on three screens by default: a small phone (360×640), a laptop column (640) and a projector (640×720) ("161 boards · 966 drawings · 161 ok · 0 with problems", then the boards with problems). About 40 seconds for a chapter; it reports progress, can be cancelled, and draws on its own pages |
 

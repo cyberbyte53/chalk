@@ -1,4 +1,5 @@
 import { Locale } from "@chalk/content";
+import { contentAddress, previewQuery } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps } from "@chalk/library";
 import type { JSX } from "preact";
@@ -398,7 +399,7 @@ function ThreadFold({
                   </button>
                 )}
                 {t.board !== undefined && (
-                  <a href={`?dev&board=${encodeURIComponent(t.board)}&back=${back}`}>
+                  <a href={`?dev&${previewQuery(contentAddress(t.board))}&back=${back}`}>
                     Open board ↗
                   </a>
                 )}

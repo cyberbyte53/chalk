@@ -6,6 +6,7 @@ import {
   builtConceptSchema,
   builtFile,
 } from "@chalk/content";
+import { contentAddress, parseAddress, previewQuery } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
@@ -41,16 +42,16 @@ import {
 } from "./threads";
 
 /**
- * Development only (`?dev&board=<path>`): boards exactly as a phone draws them (the real player,
- * the real props, the app's CSS), one URL per board, for people and agents alike.
+ * Development only (`?dev&at=<address>`): boards exactly as a phone draws them (the real player,
+ * the real props, the app's CSS), one URL per address, for people and agents alike.
  *
- *   ?dev&board=                                                      every book, as its book screen
- *   ?dev&board=class10-maths                                         a book's screen (its chapters)
- *   ?dev&board=class10-maths/real-numbers                            a chapter's screen (its lessons)
- *   ?dev&board=class10-maths/real-numbers/division-lemma            every page of a lesson
- *   ?dev&board=class10-maths/real-numbers/division-lemma&show=questions   …then its questions
- *   ?dev&board=class10-maths/real-numbers/division-lemma/story            one page
- *   ?dev&board=class10-maths/real-numbers/questions/euclid-hcf/<id>       one question
+ *   ?dev&at=content/                                                    every book, as its book screen
+ *   ?dev&at=content/class10-maths                                       a book's screen (its chapters)
+ *   ?dev&at=content/class10-maths/real-numbers                          a chapter's screen (its lessons)
+ *   ?dev&at=content/class10-maths/real-numbers/division-lemma          every page of a lesson
+ *   ?dev&at=content/class10-maths/real-numbers/division-lemma&show=questions   …then its questions
+ *   ?dev&at=content/class10-maths/real-numbers/division-lemma/story          one page
+ *   ?dev&at=content/class10-maths/real-numbers/questions/euclid-hcf/<id>     one question
  *   ?dev&source=content/class10-maths/real-numbers/questions/euclid-hcf   boards written in a file
  *                                                                    or folder (from sources.json)
  *
@@ -95,7 +96,18 @@ export const shownAt = async (path: string): Promise<Shown> => ({
   board: await boardOfFile(await item(path)),
 });
 
-/** The boards a `board=` path names, in order: one page or question, or a concept's. */
+/**
+ * The course path the page's `at` names (`content/…`), or undefined when it names none. A prop's
+ * address is handled by its own page.
+ */
+function atPath(params: URLSearchParams): string | undefined {
+  const at = params.get("at");
+  if (at === null) return undefined;
+  const a = parseAddress(at);
+  return a.root === "content" ? a.path : undefined;
+}
+
+/** The boards a course path names, in order: one page or question, or a concept's. */
 async function boardsAt(path: string, withQuestions: boolean): Promise<Shown[]> {
   const clean = path.replace(/\.json$/, "").replace(/\/$/, "");
   const parts = clean.split("/");
@@ -472,7 +484,7 @@ export function PreviewBoard({
     >
       {!isShot && (
         <div class="preview-tag">
-          <a href={`?dev&board=${shown.path}`}>{board.name}</a>
+          <a href={`?dev&${previewQuery(contentAddress(shown.path))}`}>{board.name}</a>
           {where?.board !== undefined && (
             <button type="button" onClick={() => where.board && openInEditor(where.board)}>
               {where.board.replace(/^content\//, "")}
@@ -523,9 +535,9 @@ function go(board: string, isAtEnd = false): void {
   toEditor({ type: "follow", follow: board });
   const params = new URLSearchParams(window.location.search);
   params.delete("source");
-  params.set("board", board);
-  if (isAtEnd) params.set("at", "end");
-  else params.delete("at");
+  params.set("at", contentAddress(board));
+  if (isAtEnd) params.set("end", "");
+  else params.delete("end");
   window.location.search = params
     .toString()
     .replace(/%2F/g, "/")
@@ -573,7 +585,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
           return (
             <section class="preview-card" key={course.id} data-board={bookSlug}>
               <div class="preview-tag">
-                <a href={`?dev&board=${bookSlug}`}>{bookSlug}</a>
+                <a href={`?dev&${previewQuery(contentAddress(bookSlug))}`}>{bookSlug}</a>
               </div>
               <div class="preview-phone" data-source={`content/${bookSlug}/build.yaml:1`}>
                 <CourseScreen
@@ -599,7 +611,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
     <main class="preview">
       <section class="preview-card" data-board={path}>
         <div class="preview-tag">
-          <a href={`?dev&board=${book}`}>{book}</a>
+          <a href={`?dev&${previewQuery(contentAddress(book ?? ""))}`}>{book}</a>
           <span>{chapter}</span>
         </div>
         <div class="preview-phone" data-source={`content/${path}/build.yaml:1`}>
@@ -1018,11 +1030,10 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     return (
       <PlayInApp
         key={search}
-        path={(
-          params.get("board") ??
-          params.get("source")?.replace(/^content\//, "") ??
-          ""
-        ).replace(/\/$/, "")}
+        path={(atPath(params) ?? params.get("source")?.replace(/^content\//, "") ?? "").replace(
+          /\/$/,
+          "",
+        )}
         locale={params.get("locale") === "hi" ? Locale.Hi : Locale.En}
         bus={bus}
         width={Number(params.get("width")) || undefined}
@@ -1033,7 +1044,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
 
 function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.Element {
   const params = new URLSearchParams(window.location.search);
-  const path = (params.get("board") ?? "").replace(/\/$/, "");
+  const path = (atPath(params) ?? "").replace(/\/$/, "");
   const source = params.get("source");
   const isTree = source === null && path.split("/").filter(Boolean).length < 3;
   // Opened from a review page (`back=<its query>`): a way back to it.
@@ -1174,9 +1185,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       setShown(boards);
       // Come back from the next lesson: start on this one's last board.
       const now = new URLSearchParams(window.location.search);
-      if (now.get("at") === "end") {
+      if (now.has("end")) {
         setIndex(boards.length - 1);
-        now.delete("at");
+        now.delete("end");
         history.replaceState(null, "", `?${now.toString().replace(/=(&|$)/g, "$1")}`);
       }
       setError(null);

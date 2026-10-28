@@ -9,7 +9,7 @@ import { ReviewsTree } from "./reviews";
  *
  * - A preview panel shows whatever the open file or folder is, as the student sees it: a book's
  *   screen, a chapter's path, a lesson's boards, a question family's questions. It is the learner
- *   app's own `?dev&board=` page in a frame: the app's player draws everything; this draws nothing.
+ *   app's own `?dev&at=` page in a frame: the app's player draws everything; this draws nothing.
  * - The panel follows the editor: move the cursor in overview.ts and the piece written there is
  *   outlined; click a piece (Alt-click, or after "Pick") and the editor goes to its line.
  * - Pick a piece, then ask the agent about it (it goes to the chat with its board, line and words)
@@ -108,15 +108,15 @@ function queryFor(file: string): string | null {
   } catch {}
   const folders = isDir ? parts : parts.slice(0, -1);
   const [book, chapter, third, family] = folders;
-  if (book === undefined) return "board=";
-  if (chapter === undefined) return `board=${book}`;
-  if (third === undefined) return `board=${book}/${chapter}`;
+  if (book === undefined) return "at=content/";
+  if (chapter === undefined) return `at=content/${book}`;
+  if (third === undefined) return `at=content/${book}/${chapter}`;
   if (third === "questions")
     return family === undefined
-      ? `board=${book}/${chapter}`
+      ? `at=content/${book}/${chapter}`
       : `source=content/${book}/${chapter}/questions/${family}`;
-  if (third === "runs" || third === "source") return `board=${book}/${chapter}`;
-  return `board=${book}/${chapter}/${third}&show=questions`;
+  if (third === "runs" || third === "source") return `at=content/${book}/${chapter}`;
+  return `at=content/${book}/${chapter}/${third}&show=questions`;
 }
 
 function html(webview: vscode.Webview, query: string): string {
@@ -171,12 +171,12 @@ function html(webview: vscode.Webview, query: string): string {
       if (m.type === "selecting") { select.classList.toggle("on", !!m.on); return; }
       if (m.type === "toggle") { document.getElementById(m.what === "play" ? "play" : "hindi").click(); return; }
       if (m.type === "pick") select.classList.remove("on");
-      if (m.follow !== undefined) { state.query = "board=" + m.follow; where.textContent = m.follow || "all books"; }
+      if (m.follow !== undefined) { state.query = "at=content/" + m.follow; where.textContent = m.follow || "all books"; }
       vscode.postMessage(m);
       return;
     }
     // From the extension.
-    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(board|source|review)=/, "") || "all books"; reload(); }
+    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(at=content\/|source=|review=)/, "") || "all books"; reload(); }
     else if (m.type === "pick") setSelecting(true);
     else if (m.type === "review") { copy.style.display = m.count > 0 ? "" : "none"; copy.textContent = "Copy for agent (" + m.count + ")"; }
     else toFrame(m);
@@ -186,13 +186,13 @@ function html(webview: vscode.Webview, query: string): string {
 
 async function showPreview(target?: vscode.Uri): Promise<void> {
   const file = target?.fsPath ?? vscode.window.activeTextEditor?.document.uri.fsPath;
-  await showQuery((file && queryFor(file)) ?? "board=");
+  await showQuery((file && queryFor(file)) ?? "at=content/");
 }
 
 /** A place to outline once the preview has drawn: a source line (content/…:42). */
 let pendingReveal: { file: string; line: number } | undefined;
 
-/** Shows a preview query (`board=…`, `activity…`); `reveal` outlines the piece written at that line. */
+/** Shows a preview query (`at=content/…`, `activity…`); `reveal` outlines the piece written at that line. */
 async function showQuery(query: string, reveal?: string): Promise<void> {
   if (reveal !== undefined) {
     const [file, line] = reveal.split(/:(?=\d+$)/);
@@ -392,7 +392,9 @@ function onMessage(
   // The preview went to another level by itself (a chapter or lesson was tapped).
   if (m.follow !== undefined) {
     shown =
-      m.follow.split("/").length >= 3 ? `board=${m.follow}&show=questions` : `board=${m.follow}`;
+      m.follow.split("/").length >= 3
+        ? `at=content/${m.follow}&show=questions`
+        : `at=content/${m.follow}`;
   }
 }
 
@@ -543,7 +545,7 @@ function reviewCommands(): vscode.Disposable[] {
     }),
     vscode.commands.registerCommand("chalk.thread.board", async (item: unknown) => {
       const t = thread(item);
-      if (t?.board !== undefined) await showQuery(`board=${t.board}`, t.source);
+      if (t?.board !== undefined) await showQuery(`at=content/${t.board}`, t.source);
     }),
     vscode.commands.registerCommand("chalk.review.open", async (item: unknown) => {
       const r = ReviewsTree.reviewOf(item);

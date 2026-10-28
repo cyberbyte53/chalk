@@ -43,7 +43,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 
 - **`label`**: `comment` (the person's, or a teacher's), `finding` (a reviewer's, about something it saw), `regression` (something a change broke).
 - **`by`, `role`**: who started it.
-- **`board`**: the board, by its build path. Open it at `?dev&board=<board>`, or `look` at it. Absent for a thread on a plan (then `source` points at `plan.md` and `quote` has the exact words).
+- **`board`**: the board, by its build path. Its address is `content/<board>` (with `#<target>` for what on it): open it at `?dev&at=content/<board>`, or `look` at it. Absent for a thread on a plan (then `source` points at `plan.md` and `quote` has the exact words).
 - **`target`**: what was picked on the board, by address: the piece's name, then the groups and the part, joined by `/` (`which/option`). Absent for the whole board. If the board changes and the address no longer finds anything, the preview shows the thread as detached.
 - **`prop`**: the prop's type, for a thread on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`.
@@ -127,8 +127,8 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 
 ## The tools (chalk MCP)
 
-- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `board` (a path prefix), `prop`, `unanswered` (open or planned) filter.
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `board` (and `target`, `prop`, `label`, `about`, `from`): start a thread; a fixer's `plan` writes its plan on it at once. Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the board.
+- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop) and `unanswered` (open or planned) filter.
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, or a prop wherever it is used, `library/props/<package>/<type>`), and `label`, `about`, `from`: start a thread; a fixer's `plan` writes its plan on it at once. Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
 
 ## Threads on a prop
 

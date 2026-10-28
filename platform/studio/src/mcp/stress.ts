@@ -21,7 +21,7 @@ import { findUp } from "../pronunciations";
 
 const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
 const URL_ = new URL(process.env.CHALK_MCP_URL ?? "http://127.0.0.1:5174/mcp");
-const R = "class10-maths/real-numbers";
+const R = "content/class10-maths/real-numbers";
 const BOARDS = [
   `${R}/division-lemma/story`,
   `${R}/division-lemma/lemma`,
@@ -35,7 +35,7 @@ const BOARDS = [
 const STORY = `${R}/division-lemma/story`;
 const LEMMA = `${R}/division-lemma/lemma`;
 const QUESTION = `${R}/questions/which-is-irrational/a3543885`;
-const EDITED = join(root, "content", R, "which-fractions-end", "overview.ts");
+const EDITED = join(root, R, "which-fractions-end", "overview.ts");
 
 /** An agent's connection: replaced when the service restarts under it (as the relay does). */
 type Agent = { name: string; client: Client };
@@ -203,7 +203,7 @@ const cases: Record<string, () => Promise<void>> = {
     const a = await agent("stress-laneA");
     const b = await agent("stress-laneB");
     const tap = await call(a, "play", {
-      board: LEMMA,
+      at: LEMMA,
       steps: [{ tap: "qr", text: "q = 5" }],
       shots: "none",
     });
@@ -215,7 +215,7 @@ const cases: Record<string, () => Promise<void>> = {
       tap.ok && mine.ok && chosen.test(textOf(mine)),
       tap.error ?? mine.error ?? "",
     );
-    await call(b, "play", { board: LEMMA, steps: [{ tap: "qr", text: "q = 3" }], shots: "none" });
+    await call(b, "play", { at: LEMMA, steps: [{ tap: "qr", text: "q = 3" }], shots: "none" });
     const on = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
     expect(
       "B tapping the same board doesn't reach A's: A sees its own choice",
@@ -223,7 +223,7 @@ const cases: Record<string, () => Promise<void>> = {
       on.error ?? "",
     );
     await call(a, "look", { at: BOARDS[2] });
-    const lost = await call(a, "play", { board: LEMMA, steps: [{ wait: 10 }], continue: true });
+    const lost = await call(a, "play", { at: LEMMA, steps: [{ wait: 10 }], continue: true });
     expect(
       "continuing a board this agent left fails, saying why",
       !lost.ok && /Can't continue/.test(lost.error ?? ""),
@@ -235,7 +235,7 @@ const cases: Record<string, () => Promise<void>> = {
     // Nothing moves after a wait on a settled board, on every kind of screen: it must say still.
     const quiet = await Promise.all(
       [{}, { width: 640, height: 720 }, { width: 360, height: 640 }].map((screen) =>
-        call(c, "play", { board: STORY, ...screen, steps: [{ wait: 10 }], frames: {} }),
+        call(c, "play", { at: STORY, ...screen, steps: [{ wait: 10 }], frames: {} }),
       ),
     );
     expect(
@@ -245,7 +245,7 @@ const cases: Record<string, () => Promise<void>> = {
     );
     // The race's Play glides the clock: its frames show it moving, in order.
     const race = await call(c, "play", {
-      board: `${R}/hcf-and-lcm/story`,
+      at: `${R}/hcf-and-lcm/story`,
       steps: [{ tap: "race/play" }],
       frames: { every: 300, most: 4 },
     });
@@ -259,7 +259,7 @@ const cases: Record<string, () => Promise<void>> = {
     const c = await agent("stress-snapshot");
     for (const [name, tool, args] of [
       ["a story, played", "look", { at: STORY, play: true }],
-      ["a story, with steps", "play", { board: STORY, steps: [{ wait: 10 }], shots: "none" }],
+      ["a story, with steps", "play", { at: STORY, steps: [{ wait: 10 }], shots: "none" }],
       ["a question", "look", { at: QUESTION }],
     ] as const) {
       const r = await call(c, tool, args);
@@ -304,9 +304,9 @@ const cases: Record<string, () => Promise<void>> = {
     await new Promise((r) => setTimeout(r, 200));
     const readsFrom = Date.now();
     const quick = await Promise.all([
-      call(c, "comments", { board: R }),
+      call(c, "comments", { at: R }),
       call(c, "comments", { review: "latest" }),
-      call(c, "affected", { props: ["choice"] }),
+      call(c, "affected", { props: ["library/props/basics/choice"] }),
       call(c, "affected", { changes: ["library/props/primes"] }),
     ]);
     const l = await lesson;
@@ -361,13 +361,19 @@ const cases: Record<string, () => Promise<void>> = {
       !typo.ok && /Nearest: .*division-lemma/.test(typo.error ?? ""),
       typo.error?.slice(0, 120) ?? "went ahead",
     );
+    const bare = await call(c, "look", { at: STORY.slice("content/".length) });
+    expect(
+      "an address without its root is refused, naming the roots",
+      !bare.ok && /starts with content\/ or library\/props\//.test(bare.error ?? ""),
+      bare.error?.slice(0, 120) ?? "went ahead",
+    );
     const lessonSteps = await call(c, "play", {
-      board: `${R}/division-lemma`,
+      at: `${R}/division-lemma`,
       steps: [{ wait: 10 }],
     });
     expect("play on a lesson fails, saying so", !lessonSteps.ok, lessonSteps.error ?? "");
     const missing = await call(c, "play", {
-      board: STORY,
+      at: STORY,
       steps: [{ tap: "nothing-here" }],
       shots: "none",
     });
@@ -394,7 +400,7 @@ const cases: Record<string, () => Promise<void>> = {
         "no can line",
     );
     const p = await call(c, "play", {
-      board: STORY,
+      at: STORY,
       steps: [{ tap: "game/giveRound" }],
       shots: "none",
     });
@@ -423,7 +429,7 @@ const cases: Record<string, () => Promise<void>> = {
     try {
       const first = await call(relay, "look", { at: STORY });
       expect("the relay reaches the service", first.ok && asked(first, STORY), first.error ?? "");
-      await call(relay, "play", { board: STORY, steps: [{ wait: 10 }], shots: "none" });
+      await call(relay, "play", { at: STORY, steps: [{ wait: 10 }], shots: "none" });
       const main = join(root, "platform", "studio", "src", "mcp", "main.ts");
       const health = new URL("/health", URL_);
       const isUp = () =>

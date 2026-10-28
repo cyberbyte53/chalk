@@ -1,0 +1,38 @@
+import { describe, expect, it } from "vitest";
+import { contentAddress, formatAddress, parseAddress, previewQuery, propAddress } from "./address";
+
+describe("addresses", () => {
+  it("reads a board, a piece on it, and anything above a board", () => {
+    expect(parseAddress("content/b/c/l/story#game/plates")).toEqual({
+      root: "content",
+      path: "b/c/l/story",
+      part: "game/plates",
+    });
+    expect(parseAddress("content/b/c/")).toEqual({ root: "content", path: "b/c" });
+    expect(parseAddress("content/")).toEqual({ root: "content", path: "" });
+    expect(parseAddress("content")).toEqual({ root: "content", path: "" });
+  });
+
+  it("reads a prop and a part of it", () => {
+    expect(parseAddress("library/props/coordinates/coordinatePlane#handle")).toEqual({
+      root: "props",
+      pkg: "coordinates",
+      type: "coordinatePlane",
+      part: "handle",
+    });
+  });
+
+  it("refuses an address without a root, a prop without its type, and nothing after #", () => {
+    expect(() => parseAddress("b/c/l/story")).toThrow(/starts with content\/ or library\/props\//);
+    expect(() => parseAddress("library/props/basics")).toThrow(/<package>\/<type>/);
+    expect(() => parseAddress("content/b/c/l/story#")).toThrow(/nothing after #/);
+  });
+
+  it("writes what it reads", () => {
+    for (const a of ["content/b/c/l/story#game", "library/props/basics/choice#option:1"])
+      expect(formatAddress(parseAddress(a))).toBe(a);
+    expect(contentAddress("b/c", "x")).toBe("content/b/c#x");
+    expect(propAddress("basics", "choice")).toBe("library/props/basics/choice");
+    expect(previewQuery("content/b/c/l/story#game")).toBe("at=content/b/c/l/story%23game");
+  });
+});
