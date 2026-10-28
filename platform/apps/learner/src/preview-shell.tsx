@@ -5,8 +5,9 @@ import {
   builtChapterSchema,
   builtConceptSchema,
   builtFile,
+  propBoard,
 } from "@chalk/content";
-import { contentAddress, parseAddress, previewQuery } from "@chalk/content/address";
+import { contentAddress, parseAddress, previewQuery, propAddress } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
@@ -105,6 +106,50 @@ function atPath(params: URLSearchParams): string | undefined {
   if (at === null) return undefined;
   const a = parseAddress(at);
   return a.root === "content" ? a.path : undefined;
+}
+
+/** The prop the page's `at` names (`library/props/<package>/<type>`), if it names one. */
+function atProp(params: URLSearchParams): { pkg: string; type: string } | undefined {
+  const at = params.get("at");
+  if (at === null) return undefined;
+  const a = parseAddress(at);
+  return a.root === "props" ? { pkg: a.pkg, type: a.type } : undefined;
+}
+
+/**
+ * A prop on its own (its address): a board with only it on it, at its defaults or the fields in
+ * `state`. Says what's wrong when the package has no such prop, the fields don't fit it, or it only
+ * draws inside another prop's frame.
+ */
+function propShown(at: { pkg: string; type: string }, state: string | null): Shown {
+  const defs = propPackages.get(at.pkg);
+  if (defs === undefined)
+    throw new Error(
+      `No prop package "${at.pkg}" under library/props (packages: ${[...propPackages.keys()].join(", ")})`,
+    );
+  const def = defs.find((d) => d.type === at.type);
+  if (def === undefined)
+    throw new Error(
+      `No prop "${at.type}" in library/props/${at.pkg} (its props: ${defs.map((d) => d.type).join(", ")})`,
+    );
+  if (def.drawsOn !== undefined)
+    throw new Error(
+      `${at.type} only draws inside a ${def.drawsOn} frame: look at it in a group that provides one`,
+    );
+  let given: Record<string, unknown> = {};
+  if (state !== null) {
+    try {
+      given = JSON.parse(state) as Record<string, unknown>;
+    } catch {
+      throw new Error(`state isn't JSON: ${state}`);
+    }
+  }
+  const checked = def.state.safeParse({ ...def.defaults, ...given });
+  if (!checked.success)
+    throw new Error(
+      `${at.type} can't start from that state: ${checked.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`,
+    );
+  return { path: propAddress(at.pkg, at.type), board: propBoard(at.type, given) };
 }
 
 /** The boards a course path names, in order: one page or question, or a concept's. */
@@ -1005,9 +1050,29 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     // have settled. A tool acting on a board waits for this before reading it.
     const busy = window as Window & { __chalkBusy?: () => string[] };
     busy.__chalkBusy = () => runningBoards().flatMap((runtime) => runtime.busyWith());
+    // One of a piece's actions, as the lesson would call it (a prop on its own page has no lesson:
+    // the person or a tool stands in). Says what went wrong, or nothing.
+    const call = window as Window & {
+      __chalkCall?: (piece: string, action: string, args: unknown) => string | undefined;
+    };
+    call.__chalkCall = (piece, action, args) => {
+      const boards = runningBoards();
+      if (boards.length !== 1) return `a call acts on one board; ${boards.length} are drawn`;
+      const runtime = boards[0] as (typeof boards)[number];
+      const def = runtime.getDef(piece);
+      const spec = def.actions[action];
+      if (spec === undefined)
+        return `${def.type} has no action "${action}" (its actions: ${Object.keys(def.actions).join(", ") || "none"})`;
+      const checked = spec.args?.safeParse(args);
+      if (checked !== undefined && !checked.success)
+        return `${action}: ${checked.error.issues.map((i) => `${i.path.join(".") || "args"}: ${i.message}`).join("; ")}`;
+      void runtime.call(piece, action, args).catch(() => {});
+      return undefined;
+    };
     return () => {
       w.__chalkModel = undefined;
       busy.__chalkBusy = undefined;
+      call.__chalkCall = undefined;
     };
   }, []);
   // What the app did, for a tool acting on the board (the chalk MCP's play): every
@@ -1046,7 +1111,10 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const params = new URLSearchParams(window.location.search);
   const path = (atPath(params) ?? "").replace(/\/$/, "");
   const source = params.get("source");
-  const isTree = source === null && path.split("/").filter(Boolean).length < 3;
+  const prop = atProp(params);
+  const state = params.get("state");
+  const isTree =
+    prop === undefined && source === null && path.split("/").filter(Boolean).length < 3;
   // Opened from a review page (`back=<its query>`): a way back to it.
   const back = params.get("back");
   const withQuestions = params.get("show") === "questions";
@@ -1071,7 +1139,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const [isHelp, setIsHelp] = useState(false);
   const [, setSelecting] = useEditorLink();
   // A lesson's neighbours: the arrows carry on past its last board into the next lesson.
-  const isLesson = source === null && path.split("/").filter(Boolean).length === 3;
+  const isLesson =
+    prop === undefined && source === null && path.split("/").filter(Boolean).length === 3;
   const [beside, setBeside] = useState<{ before?: string; after?: string }>({});
   const besideRef = useRef(beside);
   besideRef.current = beside;
@@ -1176,7 +1245,11 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     (async () => {
       const where = (await json("sources.json").catch(() => ({}))) as Sources;
       const boards =
-        source !== null ? await boardsFrom(source, where) : await boardsAt(path, withQuestions);
+        prop !== undefined
+          ? [propShown(prop, state)]
+          : source !== null
+            ? await boardsFrom(source, where)
+            : await boardsAt(path, withQuestions);
       const types = new Set<string>();
       for (const s of boards) propTypes(s.board.root, types);
       await preloadProps([...types]);
@@ -1195,7 +1268,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     return () => {
       isLive = false;
     };
-  }, [path, source, isTree, withQuestions, build]);
+  }, [path, source, prop?.pkg, prop?.type, state, isTree, withQuestions, build]);
 
   // Ready once the boards are on screen (this runs after they are drawn), not when they arrive.
   useEffect(() => {
@@ -1214,7 +1287,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   if (isTree) return <TreeScreen path={path} locale={locale} />;
   if (error !== null) return <div class="preview-empty">{error}</div>;
   // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.
-  if (shown === null) return <div class="preview-loading">Loading {source ?? path}…</div>;
+  if (shown === null)
+    return <div class="preview-loading">Loading {source ?? params.get("at") ?? path}…</div>;
   if (shown.length === 0)
     return <div class="preview-empty">No boards are written in {source}.</div>;
   const count = shown.length;

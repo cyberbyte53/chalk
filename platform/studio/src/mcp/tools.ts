@@ -23,7 +23,7 @@ import {
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
-import { DEFAULT_LANE, previewBase, withNothingDrawing } from "./app-driver";
+import { DEFAULT_LANE, type Step, previewBase, withNothingDrawing } from "./app-driver";
 import { type Answer, check, look, play, targetOf } from "./look";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
 
@@ -310,7 +310,47 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           "a drag says where to: `to` (in the prop's units) or `by` (in pixels), one of them",
       }),
     z.object({ wait: z.number().int().min(0).max(10000).describe("Milliseconds.") }).strict(),
+    z
+      .object({
+        call: z
+          .string()
+          .describe(
+            "On a prop's own page: one of its actions, as a lesson would call it (zoomTo, walkBoth).",
+          ),
+        args: z.record(z.unknown()).optional().describe("Its arguments: { at: 2 }."),
+      })
+      .strict(),
   ]);
+  type GivenStep = z.infer<typeof step>;
+
+  /**
+   * A prop's address, read for drawing: its page's name, and its steps aimed under its one piece
+   * (the prop itself), so a step names a part as the prop's address does ("handle").
+   */
+  const onProp = (a: { pkg: string; type: string }) => {
+    const under = (t: string) =>
+      t === a.type || t.startsWith(`${a.type}/`) ? t : `${a.type}/${t}`;
+    return {
+      board: propAddress(a.pkg, a.type),
+      steps: (given: readonly GivenStep[]): Step[] =>
+        given.map((s) =>
+          "tap" in s
+            ? { ...s, tap: under(s.tap) }
+            : "drag" in s
+              ? { ...s, drag: under(s.drag) }
+              : "call" in s
+                ? { call: s.call, on: a.type, ...(s.args ? { args: s.args } : {}) }
+                : s,
+        ),
+    };
+  };
+  const stateOf = (a: { state?: Record<string, unknown> }, isProp: boolean) => {
+    if (a.state !== undefined && !isProp)
+      throw new Error(
+        "state is for a prop on its own page (library/props/…): a board sets its own",
+      );
+    return a.state === undefined ? {} : { state: a.state };
+  };
 
   /** Rebuilds content first when anything changed, never while a board is being drawn. */
   const rebuildIfChanged = async (extra: Extra): Promise<string[]> => {
@@ -355,13 +395,19 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Look at boards",
         description:
-          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`content/…/<board>#game`, `…#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A board (`content/class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
+          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`content/…/<board>#game`, `…#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A prop on its own (`library/props/coordinates/coordinatePlane`, from its defaults or `state`): everything about it, as for a piece. A board (`content/class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
         inputSchema: {
           at: z
             .string()
             .min(1)
             .describe(
-              'An address: a piece ("content/<book>/<chapter>/<lesson>/<board>#piece", or #piece/part), a board, a lesson, a chapter or a book.',
+              'An address: a piece ("content/<book>/<chapter>/<lesson>/<board>#piece", or #piece/part), a board, a lesson, a chapter or a book; or a prop on its own ("library/props/<package>/<type>", or #part).',
+            ),
+          state: z
+            .record(z.unknown())
+            .optional()
+            .describe(
+              "A prop on its own: the fields it starts from, over its defaults ({ from: -5, to: 5 }).",
             ),
           locales: locales
             .optional()
@@ -394,6 +440,21 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       },
       async (args, extra: Extra) => {
         const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
+        const address = parseAddress(args.at);
+        const given = stateOf(args, address.root === "props");
+        if (address.root === "props") {
+          await progressOf(extra)("drawing");
+          const prop = onProp(address);
+          const target = {
+            kind: "piece" as const,
+            board: prop.board,
+            address: address.part === undefined ? address.type : `${address.type}/${address.part}`,
+          };
+          return answer(
+            await look(root, target, { ...args, ...given }, { sources: readSources(root) }, lane),
+            [],
+          );
+        }
         const all = listBoards(root);
         const at = contentPath(args.at);
         const target = targetOf(at.part === undefined ? at.path : `${at.path}#${at.part}`, all);
@@ -418,14 +479,18 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Play a board",
         description:
-          'Use a board the way a student does, in the real learner app: taps and drags on the page, in order (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, everything the student sees that changed (each part was → now in full, + appeared, − gone, an input off → on, and hidden facts), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
+          'Use a board the way a student does, in the real learner app: taps and drags on the page, in order. A prop on its own page (`library/props/<package>/<type>`) takes the same steps, its parts named as in its address ("handle"), and `call` steps that do its actions as a lesson would (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, everything the student sees that changed (each part was → now in full, + appeared, − gone, an input off → on, and hidden facts), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
         inputSchema: {
           at: z
             .string()
             .min(1)
             .describe(
-              'A board, by address: "content/class10-maths/real-numbers/division-lemma/story".',
+              'A board, by address ("content/class10-maths/real-numbers/division-lemma/story"), or a prop on its own ("library/props/coordinates/coordinatePlane").',
             ),
+          state: z
+            .record(z.unknown())
+            .optional()
+            .describe("A prop on its own: the fields it starts from, over its defaults."),
           steps: z.array(step).min(1).max(40).describe("What a finger does, in order."),
           continue: z
             .boolean()
@@ -468,6 +533,27 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       },
       async (args, extra: Extra) => {
         const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
+        const address = parseAddress(args.at);
+        const given = stateOf(args, address.root === "props");
+        if (address.root === "props") {
+          if (address.part !== undefined)
+            throw new Error("Steps act on the whole prop: its address without #part.");
+          const prop = onProp(address);
+          await progressOf(extra)("playing");
+          const { at: _, steps, ...rest } = args;
+          return answer(
+            await play(
+              root,
+              { ...rest, ...given, board: prop.board, steps: prop.steps(steps) },
+              lane,
+            ),
+            [],
+          );
+        }
+        if (args.steps.some((s) => "call" in s))
+          throw new Error(
+            "call is for a prop on its own page (library/props/…); on a board the lesson calls actions",
+          );
         const at = contentPath(args.at);
         const board = at.path;
         const all = listBoards(root);
@@ -480,8 +566,15 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           );
         }
         await progressOf(extra)("playing");
-        const { at: _, ...rest } = args;
-        return answer(await play(root, { ...rest, board }, lane), notes);
+        const { at: _, steps, ...rest } = args;
+        return answer(
+          await play(
+            root,
+            { ...rest, board, steps: steps.filter((s): s is Step => !("call" in s)) },
+            lane,
+          ),
+          notes,
+        );
       },
     ),
     "play",

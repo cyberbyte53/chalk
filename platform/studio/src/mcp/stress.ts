@@ -386,6 +386,60 @@ const cases: Record<string, () => Promise<void>> = {
       noPiece.error?.slice(0, 120) ?? "went ahead",
     );
   },
+  async props() {
+    // A prop on its own, at its address: seen, played and called like any board.
+    const c = await agent("stress-props");
+    const PLANE = "library/props/coordinates/coordinatePlane";
+    const bare = await call(c, "look", { at: PLANE });
+    const first = textOf(bare).split("\n")[0] ?? "";
+    expect(
+      "a prop opens at its address, alone, saying where it is defined",
+      bare.ok &&
+        first.startsWith(`${PLANE} `) &&
+        /written: library\/props\/coordinates\/src\/coordinate-plane\.ts:\d+/.test(textOf(bare)),
+      bare.error ?? first,
+    );
+    const set = await call(c, "look", { at: PLANE, state: { x: -2, y: 5 } });
+    expect(
+      "it starts from the fields given, over its defaults",
+      set.ok && /\bx -2\b/.test(textOf(set)) && /\by 5\b/.test(textOf(set)),
+      set.error ?? textOf(set).slice(0, 200),
+    );
+    const wrong = await call(c, "look", { at: "library/props/coordinates/nothing" });
+    expect(
+      "a prop its package hasn't fails, naming the package's props",
+      !wrong.ok && /its props: .*coordinatePlane/.test(wrong.error ?? ""),
+      wrong.error?.slice(0, 120) ?? "went ahead",
+    );
+    const badState = await call(c, "look", { at: PLANE, state: { x: "far" } });
+    expect(
+      "fields that don't fit the prop fail, saying which",
+      !badState.ok && /can't start from that state: x/.test(badState.error ?? ""),
+      badState.error?.slice(0, 120) ?? "went ahead",
+    );
+    const called = await call(c, "play", {
+      at: PLANE,
+      state: { x: 2, y: 1 },
+      steps: [{ call: "setX", args: { value: -3 } }, { call: "nothing" }],
+      shots: "none",
+    });
+    const lines = textOf(called);
+    expect(
+      "a call step does the prop's action as a lesson would, and an unknown one says what there is",
+      called.ok &&
+        /call setX .* → setX \{value: -3\} \(lesson\) .*point "\(2, 1\)" → "\(−3, 1\)"/.test(
+          lines,
+        ) &&
+        /has no action "nothing" \(its actions: movePoint/.test(lines),
+      called.error ?? lines.slice(0, 300),
+    );
+    const onBoard = await call(c, "play", { at: STORY, steps: [{ call: "giveRound" }] });
+    expect(
+      "a call step on a board is refused: there the lesson calls actions",
+      !onBoard.ok && /call is for a prop on its own page/.test(onBoard.error ?? ""),
+      onBoard.error?.slice(0, 120) ?? "went ahead",
+    );
+  },
   async inputs() {
     // Inputs say what they do (does / says): read off the page, without pressing anything.
     const c = await agent("stress-inputs");

@@ -38,6 +38,10 @@ Taps and drags on the real page, in order, by address (`game/giveRound`; `qr` wi
 
 `continue: true` goes on from where this agent's last call left the board. If that board isn't there (another board since, content rebuilt), it fails and says why; it never starts fresh as if it had worked.
 
+## A prop on its own
+
+A prop has an address like a board: `library/props/<package>/<type>` (`library/props/coordinates/coordinatePlane`), with a part after `#` (`…/coordinatePlane#readout`). It opens as a board with only that prop on it, at its defaults, or from `state` (fields over its defaults: `{ x: -2, y: 5 }`). From there it is any board: `look` answers as for a piece (where it is defined, its setup, state, what can be done, its parts), and `play` takes the same steps, its parts named as in its address (`drag: "movePoint", to: { x: -1, y: -4 }`), plus `call`: one of its actions as a lesson would call it (`{ call: "setX", args: { value: -3 } }`), which a student can't do and a board leaves to its lesson. A prop its package doesn't have, fields that don't fit it, an action it hasn't or arguments that don't fit are each refused, saying what there is. The preview opens it at `?dev&at=library/props/<package>/<type>` (`&state=` its fields, as JSON).
+
 ## The picture
 
 Each piece (or, in a piece's picture, each part) has a thin outline and its name in a margin beside the board, joined by a line, so nothing covers the content. A piece with a problem is outlined in red, and its tag says the problem. The names are the addresses `play` steps and comments use.

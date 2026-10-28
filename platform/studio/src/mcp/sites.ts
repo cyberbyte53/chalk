@@ -54,6 +54,16 @@ export function defFileOf(root: string, type: string): string | undefined {
   return found === undefined ? undefined : relative(root, found);
 }
 
+/** Where a prop type is defined: file:line of its `type: "<type>"`. */
+export function typeSite(root: string, type: string): string | undefined {
+  const file = defFileOf(root, type);
+  if (file === undefined) return undefined;
+  const line = readFileSync(join(root, file), "utf8")
+    .split("\n")
+    .findIndex((l) => new RegExp(`\\btype:\\s*"${type}"`).test(l));
+  return line < 0 ? file : `${file}:${line + 1}`;
+}
+
 /** Where a prop type's defaults are written: file:line of its `defaults:`. */
 export function defaultsSite(root: string, type: string): string | undefined {
   const file = defFileOf(root, type);

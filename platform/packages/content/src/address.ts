@@ -91,3 +91,14 @@ export function formatAddress(a: Address): string {
  */
 export const previewQuery = (address: string): string =>
   `at=${address.replace(/[%#& ]/g, (c) => encodeURIComponent(c))}`;
+
+/**
+ * The address of a board a page shows, and maybe something on it (`part`, an address on the board:
+ * "piece/part"). A board's name is a course path; a prop on its own page is named by its address
+ * already, and its one piece is the prop itself, so its parts come straight after `#`.
+ */
+export function shownAddress(name: string, part?: string): string {
+  if (!name.startsWith(PROPS_ROOT)) return contentAddress(name, part);
+  const under = part?.split("/").slice(1).join("/");
+  return under === undefined || under === "" ? name : `${name}#${under}`;
+}

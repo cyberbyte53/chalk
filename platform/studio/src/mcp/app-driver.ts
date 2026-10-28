@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, openSync } from "node:fs";
 import { join } from "node:path";
-import { contentAddress, previewQuery } from "@chalk/content/address";
+import { previewQuery, shownAddress } from "@chalk/content/address";
 import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import { type BoardModel, boardModelSchema } from "./model-schema";
@@ -355,6 +355,8 @@ export type ShotOptions = {
   pictures?: "full" | "thumb" | "none";
   /** How fast the board's clock runs (1: real time). */
   speed?: number;
+  /** A prop on its own page: the fields it starts from, over its defaults. */
+  state?: Readonly<Record<string, unknown>>;
 };
 
 /**
@@ -368,7 +370,9 @@ export type Point = { x: number; y?: number };
 export type Step =
   | { tap: string; text?: string; at?: Point }
   | { drag: string; by?: [number, number]; to?: Point }
-  | { wait: number };
+  | { wait: number }
+  /** One of a piece's actions, as a lesson would call it (on a prop's own page, which has none). */
+  | { call: string; on: string; args?: Readonly<Record<string, unknown>> };
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
 export type StepResult = {
@@ -508,7 +512,11 @@ export async function previewUrl(
   o: ShotOptions = {},
 ): Promise<string> {
   const url = new URL(await previewBase(root));
-  url.search = `?dev&${previewQuery(address)}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
+  const state =
+    o.state === undefined || Object.keys(o.state).length === 0
+      ? ""
+      : `&state=${encodeURIComponent(JSON.stringify(o.state))}`;
+  url.search = `?dev&${previewQuery(address)}${state}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
   return url.toString();
 }
 
@@ -765,7 +773,9 @@ const stepWords = (step: Step): string =>
     ? `tap ${step.tap}${step.text ? ` "${step.text}"` : ""}`
     : "drag" in step
       ? `drag ${step.drag} ${step.to !== undefined ? `to ${pointWords(step.to)}` : `by ${(step.by ?? [0, 0]).join(", ")}`}`
-      : `wait ${step.wait}ms`;
+      : "call" in step
+        ? `call ${step.call}${step.args !== undefined && Object.keys(step.args).length > 0 ? ` ${JSON.stringify(step.args)}` : ""}`
+        : `wait ${step.wait}ms`;
 const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y})`);
 
 /**
@@ -857,7 +867,7 @@ async function shootNow(
   // Acting starts from a fresh board (a new run) unless it continues this lane's last board.
   const isContinued = act?.isContinued === true;
   const run = act !== undefined && !isContinued ? `&run=${Date.now()}` : "";
-  const url = `${await previewUrl(root, contentAddress(board), o)}&shot${run}`;
+  const url = `${await previewUrl(root, shownAddress(board), o)}&shot${run}`;
   const target = new URL(url);
   const base = target.origin;
   const at = await openPage(lane, base);
@@ -874,7 +884,7 @@ async function shootNow(
             : undefined;
     if (why !== undefined)
       throw new Error(
-        `Can't continue ${contentAddress(board)}: ${why}. Run the steps again without continue.`,
+        `Can't continue ${shownAddress(board)}: ${why}. Run the steps again without continue.`,
       );
   }
   at.errors.length = 0;
@@ -944,7 +954,21 @@ async function shootNow(
       at.errors.length = 0;
       const words = stepWords(step);
       if ("wait" in step) await page.waitForTimeout(Math.min(step.wait, 10000));
-      else {
+      else if ("call" in step) {
+        const refused = await page.evaluate(
+          ([on, action, args]) =>
+            (
+              window as {
+                __chalkCall?: (piece: string, a: string, x: unknown) => string | undefined;
+              }
+            ).__chalkCall?.(on, action, args) ?? undefined,
+          [step.on, step.call, step.args ?? {}] as const,
+        );
+        if (refused !== undefined) {
+          steps.push({ step: words, events: [], passed: false, errors: [`✗ ${refused}`] });
+          break;
+        }
+      } else {
         const found = await page.evaluate(markTarget, {
           target: "tap" in step ? step.tap : step.drag,
           text: "tap" in step ? step.text : undefined,

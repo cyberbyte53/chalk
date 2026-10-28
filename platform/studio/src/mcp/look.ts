@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { contentAddress } from "@chalk/content/address";
+import { PROPS_ROOT, contentAddress, shownAddress } from "@chalk/content/address";
 import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
 import { FactsCache } from "../reach/facts";
@@ -16,7 +16,7 @@ import {
 } from "./app-driver";
 import type { NodeShape } from "./model-schema";
 import { type Labels, type Tile, compose } from "./picture";
-import { actionSites, defaultsSite } from "./sites";
+import { actionSites, defaultsSite, typeSite } from "./sites";
 
 /**
  * What `look` and `play` answer (platform/docs/seeing-boards.md). The rule: return what only the
@@ -260,7 +260,7 @@ export function boardText(
   const width = Math.max(6, ...nodes.map((n) => n.path.length + 2));
   const typeWidth = Math.max(6, ...nodes.map((n) => n.prop.length + 2));
   const out = [
-    `${contentAddress(shot.board)}   ${versions}`,
+    `${shownAddress(shot.board)}   ${versions}`,
     `${pad("board", width)}${pad("", typeWidth)}→ ${site?.board ?? "?"}`,
   ];
   if (nodes.length === 0) out.push("(no board model: the page couldn't describe this board)");
@@ -272,14 +272,14 @@ export function boardText(
     const live = { ...n.live };
     for (const [k, b] of Object.entries(n.bound)) live[k] = b.value;
     if (Object.keys(live).length > 0)
-      out.push(`${" ".repeat(width)}now: ${boardFields(live, contentAddress(shot.board, n.path))}`);
+      out.push(`${" ".repeat(width)}now: ${boardFields(live, shownAddress(shot.board, n.path))}`);
   }
   if (shot.overflow.length > 0) out.push("problems:", ...shot.overflow.map((p) => `  ${p}`));
   if (shot.running !== undefined) out.push(stillRunning(shot.running));
   if (extra.errors.length > 0) out.push("page errors:", ...extra.errors.map((e) => `  ${e}`));
   if (nodes.length > 0)
     out.push(
-      `A piece's setup, parts and what can be done to it: look at ${contentAddress(shot.board, nodes[0]?.path)}.`,
+      `A piece's setup, parts and what can be done to it: look at ${shownAddress(shot.board, nodes[0]?.path)}.`,
     );
   return out.join("\n");
 }
@@ -297,14 +297,16 @@ export function pieceText(
   if (node === undefined) {
     const names = (shot.model?.nodes ?? []).map((n) => n.path);
     throw new Error(
-      `No piece "${pieceName}" on ${contentAddress(shot.board)} (pieces: ${names.join(", ") || "none described"}).`,
+      `No piece "${pieceName}" on ${shownAddress(shot.board)} (pieces: ${names.join(", ") || "none described"}).`,
     );
   }
   const reach = readReach(root).boards[shot.board];
   const stack = reach?.pieces[pieceName]?.stack ?? [];
   const site = where.sources[shot.board]?.pieces[pieceName];
-  const written = site ?? stack[0];
-  const out = [`${contentAddress(shot.board, address)}   ${node.prop}   ${versions}`];
+  // A prop on its own page is written where it is defined; a piece, where the board places it.
+  const written =
+    site ?? stack[0] ?? (shot.board.startsWith(PROPS_ROOT) ? typeSite(root, node.prop) : undefined);
+  const out = [`${shownAddress(shot.board, address)}   ${node.prop}   ${versions}`];
   out.push(`${pad("written:", 9)}${written ?? "?"}`);
   const via = stack.filter((f) => f !== written);
   if (via.length > 0) out.push(...block("   via:", via));
@@ -400,6 +402,8 @@ export type LookArgs = {
   play?: boolean;
   labels?: boolean;
   continue?: boolean;
+  /** A prop on its own page: the fields it starts from, over its defaults. */
+  state?: Readonly<Record<string, unknown>>;
 };
 
 /** What a tool answers: text, and a picture. Nothing else: the text is the whole answer. */
@@ -439,6 +443,7 @@ export async function look(
     play: a.play === true,
     questions: target.kind === "group",
     speed: a.speed ?? DEFAULT_SPEED,
+    ...(a.state === undefined ? {} : { state: a.state }),
     // A lesson's boards are thumbnails: no need for double resolution.
     pictures: target.kind === "group" ? "thumb" : "full",
   });
@@ -466,7 +471,7 @@ export async function look(
         if (s.overflow.length > 0) {
           problems += 1;
           lines.push(
-            `${contentAddress(s.board)}${versions.length > 1 ? ` (${v.locale} · ${screenWords(v)})` : ""}`,
+            `${shownAddress(s.board)}${versions.length > 1 ? ` (${v.locale} · ${screenWords(v)})` : ""}`,
             ...s.overflow.map((p) => `  ${p}`),
           );
         }
@@ -493,7 +498,7 @@ export async function look(
   }
   const shots = drawn.map((d) => d.shots[0]).filter((s): s is Shot => s !== undefined);
   const first = shots[0];
-  if (first === undefined) throw new Error(`Nothing was drawn for ${contentAddress(board)}.`);
+  if (first === undefined) throw new Error(`Nothing was drawn for ${shownAddress(board)}.`);
   const heading = shots
     .map((s, i) => versionWords(s, { ...(versions[i] as Version), play: a.play === true }))
     .join(" | ");
@@ -599,7 +604,7 @@ export async function check(
       `${missing} drawings didn't come back (a board its lesson's page doesn't show): look at them one by one.`,
     );
   for (const board of badBoards) {
-    lines.push(contentAddress(board));
+    lines.push(shownAddress(board));
     for (const f of found.filter((x) => x.board === board))
       lines.push(...f.problems.map((p) => `  ${f.v.locale} · ${screenWords(f.v)}: ${p}`));
   }
@@ -629,6 +634,8 @@ export type PlayArgs = {
   locale?: Locale;
   width?: number;
   labels?: boolean;
+  /** A prop on its own page: the fields it starts from, over its defaults. */
+  state?: Readonly<Record<string, unknown>>;
 };
 
 /** A recorded event, read: its kind, who, and what it carries (an action's arguments, a signal's payload). */
@@ -714,7 +721,13 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     play: true,
     // Motion is watched at real speed: at 10× there would be nothing to see.
     speed: a.speed ?? (a.frames === undefined ? DEFAULT_SPEED : 1),
+    ...(a.state === undefined ? {} : { state: a.state }),
   };
+  // A prop on its own page: its parts are named under it, without the piece (which is the prop).
+  const isProp = a.board.startsWith(PROPS_ROOT);
+  const local = (path: string) => (isProp ? path.split("/").slice(1).join("/") || path : path);
+  const piece = `${a.board.split("/").at(-1)}/`;
+  const stepAsked = (words: string) => (isProp ? words.replace(` ${piece}`, " ") : words);
   const frames =
     a.frames === undefined ? undefined : { every: a.frames.every ?? 100, most: a.frames.most ?? 6 };
   const d = await shoot(
@@ -729,7 +742,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   for (const r of d.steps)
     if (r.changed !== undefined) r.changed = rounded(shown(r.changed, locale)) as typeof r.changed;
   const lines = [
-    `${contentAddress(a.board)}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
+    `${shownAddress(a.board)}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
   ];
   if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
   const changedPieces = new Set<string>();
@@ -740,10 +753,10 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
       ...eventLines(r.events, locale),
       ...changed.map(([path, c]) =>
         c.was === undefined
-          ? `+ ${path} ${full(c.now)}`
+          ? `+ ${local(path)} ${full(c.now)}`
           : c.now === undefined
-            ? `− ${path}`
-            : `${path} ${full(c.was)} → ${full(c.now)}`,
+            ? `− ${local(path)}`
+            : `${local(path)} ${full(c.was)} → ${full(c.now)}`,
       ),
     ];
     if (r.motion !== undefined)
@@ -757,14 +770,14 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
             : `still changing after ${r.motion.stillChangingAt}s`,
       );
     lines.push(
-      `${i + 1}. ${r.step}${parts.length > 0 ? ` → ${parts.join(" · ")}` : " → nothing changed"}`,
+      `${i + 1}. ${stepAsked(r.step)}${parts.length > 0 ? ` → ${parts.join(" · ")}` : " → nothing changed"}`,
     );
     if (r.passed) lines.push("   ✓ board passed");
     for (const e of r.errors) lines.push(`   ${e}`);
   }
   const shot = d.shots[0];
   const model = shot?.model;
-  if (model !== undefined)
+  if (model !== undefined && !isProp)
     lines.push(
       model.isPassed
         ? "passed"
