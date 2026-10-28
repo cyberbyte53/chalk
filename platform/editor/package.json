@@ -2,7 +2,7 @@
   "name": "chalk-editor",
   "displayName": "Chalk",
   "description": "See Chalk content as boards beside its code: the book, chapter and lesson screens, every board as a phone draws it, pick a piece to ask the agent or leave a comment.",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "publisher": "chalk",
   "private": true,
   "license": "UNLICENSED",
@@ -301,9 +301,9 @@
       },
       {
         "command": "chalk.commentSelection",
-        "key": "ctrl+alt+m",
-        "mac": "cmd+alt+m",
-        "when": "editorTextFocus && editorHasSelection && resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/]/"
+        "key": "ctrl+alt+/",
+        "mac": "cmd+alt+/",
+        "when": "editorTextFocus && resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/]/"
       }
     ]
   },
