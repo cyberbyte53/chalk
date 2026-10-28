@@ -9,7 +9,7 @@ A chapter is planned in files that each answer one question and end at a gate (`
 
 | # | File | Question | Its gate |
 |---|---|---|---|
-| 1 | `brief.md` | Who is it for, on what screens, what is in or out? | the person |
+| 1 | `brief.md` | Who is it for, what is in or out? | the person |
 | 2 | `source/outline.yaml` | What exactly does the source contain? | the machine: the outline has every figure, example, activity and exercise the text numbers |
 | 3 | `objectives.md` | What can a student do at the end? | every objective cites outline ids that exist; then the person |
 | 4 | `flow.md` | In what order, and which board drives each objective home? | every board serves an objective, cites what exists and says what it needs; every objective has a board; then the person |
@@ -26,7 +26,7 @@ A chapter is planned in files that each answer one question and end at a gate (`
 Work on **one file at a time**, the first not done:
 
 1. **Missing:** write it, from the person's words and the files before it.
-   - `brief.md`: `## Scope` (who, languages, story or none, questions or none, what must be kept) and `## Screens` (each `W×H, device, input`, the screens the chapter is taught on). Written from the conversation; if the person hasn't said, ask in chat before writing.
+   - `brief.md`: a short list: who, languages, story or none, questions or none, what must be kept. Written from the conversation; if the person hasn't said, ask in chat before writing.
    - `source/outline.yaml`: every section, figure, example, activity, definition, remark, note and exercise, each `{ id, kind, … }` with the ids the checks expect (`fig3.10`, `example2`, `activity1`, `ex3.2`, and your own for the rest: `s3.2`, `def-abscissa`). A line saying what a figure shows, a definition's words.
    - `objectives.md`: `- **o5** what a student can do. (ids it cites)`. Something a student does, each citing the outline. Leaving a source item out is a decision: say it on a thread.
    - `flow.md`: `## <lesson>`, then per board `### <board-id>  (o5, o9; fig3.15)` with `Purpose:` and `Needs:` (what the student sees or does, in words, never a prop name). Board ids are the ids the boards will have in `content/`.

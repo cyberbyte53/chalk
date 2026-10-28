@@ -33,7 +33,7 @@ For each **extend** or **new**, before any view or run body:
 ## 3. The build
 
 1. Run bodies and the view, to the definition (`making-a-prop.md`): law tests, the view tagging what the student sees, `checkProp`. Register a new package in `library/registry/src/index.ts`.
-2. **Look at it and play it, on its own.** `look` at its address from its defaults and from the `state`s the boards will give it, at every screen in the chapter's brief (`screens`): everything about it comes back, as for a piece. Every part drawn where it says, setup and state as you expect, no problems listed. Then `play` at its address as a student would (tap its parts, drag, try wrong things) and as a lesson would (`{ call: "zoomTo", args: { … } }`), with `frames` where it moves. Fix what doesn't respond, jumps or doesn't make sense.
+2. **Look at it and play it, on its own.** `look` at its address from its defaults and from the `state`s the boards will give it, at the check screens (360×640, 640, 640×720): everything about it comes back, as for a piece. Every part drawn where it says, setup and state as you expect, no problems listed. Then `play` at its address as a student would (tap its parts, drag, try wrong things) and as a lesson would (`{ call: "zoomTo", args: { … } }`), with `frames` where it moves. Fix what doesn't respond, jumps or doesn't make sense.
 3. `pnpm catalogue`, then `pnpm check`. It must pass.
 4. Append to the run note: reused, extended, built, the tests. Tell the person to play with it at `?dev&at=library/props/<package>/<type>` (its panel sets every field and runs every action) before any lesson uses it.
 

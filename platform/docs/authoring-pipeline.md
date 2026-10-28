@@ -19,7 +19,7 @@ Only what is built lives in `content/` and `library/`. What is written about the
 
 ```text
 authoring/books/<book>/<chapter>/
-  brief.md          1  scope (who, languages, what is in or out) and screens
+  brief.md          1  scope (who, languages, what is in or out)
   source/           2  the source as handed over (or a pointer into authoring/sources/), plus outline.yaml
   objectives.md     3  what a student can do at the end
   flow.md           4  lessons and boards in order, each with its objectives, figures and need
@@ -83,7 +83,7 @@ A prop that only draws inside another's frame (`drawsOn`) is shown as needing on
 
 | # | Step | Question | Output | Gate |
 |---|---|---|---|---|
-| 1 | Brief | Who is it for, on what screens, and what is in or out? | `brief.md` | person |
+| 1 | Brief | Who is it for, and what is in or out? | `brief.md` | person |
 | 2 | Source | What exactly does the source contain? | `source/outline.yaml` | machine |
 | 3 | Objectives | What can a student do at the end? | `objectives.md` | machine, then person |
 | 4 | Flow | In what order, and which board drives each objective home? | `flow.md` | machine, then person |
@@ -97,25 +97,20 @@ A step starts only when the one before it is approved. Only the person approves.
 
 ### 1. Brief
 
-Short, in the person's words, written by the agent from the conversation. Two sections, because they reach different things:
+Short, in the person's words, written by the agent from the conversation:
 
 ```markdown
 ---
-status: approved
+approved: 1a2b3c4
 ---
-## Scope
 - For: class 9; taught live on a projector, then self-study on phones
 - Languages: English and Hindi, every string
 - Story: none
 - Questions: none in this pass
 - Must keep: every NCERT example and figure
-
-## Screens
-- 1280×600, projector, mouse
-- 390×844, phone, touch
 ```
 
-**Scope** shapes objectives and flow. **Screens** shape nothing upstream: every machine gate that looks at boards or props (`look`, layout, `play`) runs at exactly these, plus the platform's fixed check screens. The projector glitch is caught here.
+It shapes the objectives and flow. Screens are not the chapter's: every check that draws boards or props (`look`, layout, `play`) runs at the platform's check screens (360×640 phone, 640 column, 640×720 projector).
 
 ### 2. Source
 
@@ -160,11 +155,11 @@ Needs are words, never prop names. Board ids are the ids used in `content/` late
 
 ### 6. Build props
 
-Run bodies and the view, to the definition ([making-a-prop.md](making-a-prop.md)). **Gate (machine):** tests, `checkProp`, `look` at the prop's address at every screen in the brief, `play` over its actions (the learner's gestures and `call`s) with frames to show nothing jumps. **Then person:** opens `?dev&at=library/props/<package>/<type>`, plays with it and its panel, and comments on it there, before any lesson uses it.
+Run bodies and the view, to the definition ([making-a-prop.md](making-a-prop.md)). **Gate (machine):** tests, `checkProp`, `look` at the prop's address at the check screens, `play` over its actions (the learner's gestures and `call`s) with frames to show nothing jumps. **Then person:** opens `?dev&at=library/props/<package>/<type>`, plays with it and its panel, and comments on it there, before any lesson uses it.
 
 ### 7. Boards
 
-Today's `build-lesson`. **Gate (machine):** build, layout, both languages, every screen in the brief, and **field use** for each prop the chapter uses (its page's list: what no board uses and what only one does), across all content. **Then agent:** a fresh `self-review`.
+Today's `build-lesson`. **Gate (machine):** build, layout, both languages, the check screens, and **field use** for each prop the chapter uses (its page's list: what no board uses and what only one does), across all content. **Then agent:** a fresh `self-review`.
 
 ### 8 and 9. Review and wrap-up
 
@@ -180,8 +175,7 @@ Any change to a prop's fields, actions or signals, at any step after 5 and from 
 
 | Changed | To recheck |
 |---|---|
-| brief, scope | objectives, flow, props |
-| brief, screens | nothing to approve; the machine gates of steps 6 and 7 run again |
+| brief | objectives, flow, props |
 | outline | objectives |
 | objectives | flow, props |
 | flow | props |
@@ -216,7 +210,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 1. ~~Addresses gain their root.~~ Done.
 2. ~~Threads and reviews move to `authoring/`.~~ Done.
 3. ~~`content/<book>/<chapter>/{plan.md, runs/, source/}` move to `authoring/books/<book>/<chapter>/`.~~ Done.
-4. ~~An agent splits each existing `plan.md`~~ (dropped: class 9 is remade from its source instead): Mission → `brief.md` (scope and screens), Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
+4. ~~An agent splits each existing `plan.md`~~ (dropped: class 9 is remade from its source instead): Mission → `brief.md`, Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
 5. Each prop's `describe` is checked to open with what it is for (a few open with only what it shows: "A factor tree.", "Two sticks, a and b.").
 6. `outline.yaml` generated for each chapter with a source.
 7. ~~`coordinatePlane` run through field use~~: removed with class 9 Coordinate Geometry, its old threads and reviews, to remake the chapter from its source through the pipeline.

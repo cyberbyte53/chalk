@@ -15,13 +15,8 @@ import {
   readObjectives,
 } from "./pipeline";
 
-const BRIEF = `## Scope
-- For: class 9
+const BRIEF = `- For: class 9
 - Must keep: every figure
-
-## Screens
-- 1280×600, projector, mouse
-- 390×844, phone, touch
 `;
 const OUTLINE = `- { id: fig3.1, kind: figure }
 - { id: fig3.2, kind: figure }
@@ -82,11 +77,9 @@ const state = (root: string, step: Step) =>
   readChapter(root, "b", "c").files.find((f) => f.step === step);
 
 describe("reading the planning files", () => {
-  it("reads the brief's screens, objectives with what they cite, the flow and the props match", () => {
-    expect(readBrief(BRIEF).screens.map((s) => [s.width, s.height])).toEqual([
-      [1280, 600],
-      [390, 844],
-    ]);
+  it("reads the brief, objectives with what they cite, the flow and the props match", () => {
+    expect(readBrief(BRIEF).problems).toEqual([]);
+    expect(readBrief("\n").problems).toEqual(["the brief is empty"]);
     expect(readObjectives(OBJECTIVES)).toEqual([
       {
         id: "o1",
@@ -162,13 +155,6 @@ describe("approval and what a change reaches", () => {
       commit(root, `${step} approved`);
     }
     expect(state(root, Step.Flow)).toMatchObject({ status: "approved", recheck: [] });
-    // The screens reach no file; the scope reaches every file after it.
-    writeFileSync(
-      file(root, "brief.md"),
-      readFileSync(file(root, "brief.md"), "utf8").replace("1280×600", "1280×720"),
-    );
-    expect(state(root, Step.Brief)?.status).toBe("changed");
-    expect(state(root, Step.Flow)?.recheck).toEqual([]);
     writeFileSync(
       file(root, "objectives.md"),
       readFileSync(file(root, "objectives.md"), "utf8").replace("Read", "Read and say"),

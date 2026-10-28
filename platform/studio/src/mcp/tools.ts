@@ -28,7 +28,6 @@ import {
   threadsOf,
 } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
-import { briefScreens } from "../pipeline";
 import { findUp } from "../pronunciations";
 import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
@@ -429,7 +428,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           screens: screens
             .optional()
             .describe(
-              "Screens, side by side: the column's width (360 small phone, 390 phone, 640 tablet or laptop column) and the screen's height when it matters (a projector: { width: 640, height: 720 }). Default a phone (390, 844 tall). A chapter check draws 360×640, 640, and 640×720, and the screens in the chapter's brief (authoring/books/…/brief.md).",
+              "Screens, side by side: the column's width (360 small phone, 390 phone, 640 tablet or laptop column) and the screen's height when it matters (a projector: { width: 640, height: 720 }). Default a phone (390, 844 tall). A chapter check draws 360×640, 640, and 640×720.",
             ),
           play: z
             .boolean()
@@ -491,20 +490,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const where = { sources: readSources(root) };
         if (target.kind === "many") {
           if (args.continue === true) throw new Error("continue looks at one board.");
-          // A chapter is checked on the platform's screens and on its brief's (the screens it is
-          // taught on), unless screens are asked for.
-          const [book, chapter] = target.path.split("/");
-          const taught =
-            book !== undefined && chapter !== undefined ? briefScreens(root, book, chapter) : [];
-          const screens =
-            args.screens ??
-            [
-              ...CHECK_SCREENS,
-              ...taught.map((t) => ({ width: Math.min(640, t.width), height: t.height })),
-            ].filter(
-              (x, i, all) =>
-                all.findIndex((y) => y.width === x.width && y.height === x.height) === i,
-            );
+          // A chapter is checked on the platform's screens, unless screens are asked for.
+          const screens = args.screens ?? [...CHECK_SCREENS];
           const a = await check(
             root,
             target,

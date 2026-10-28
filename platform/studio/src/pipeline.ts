@@ -32,8 +32,7 @@ export const FILES: readonly { step: Step; file: string; isApproved: boolean }[]
 
 /**
  * What each file is written from: an approved file whose sources changed since it was approved is
- * to be checked again. The brief's screens reach no file (only the checks that draw), so a file
- * reads the brief's scope.
+ * to be checked again.
  */
 const READS: Readonly<Record<Step, readonly Step[]>> = {
   [Step.Brief]: [],
@@ -57,37 +56,9 @@ export function splitFront(text: string): { front: Record<string, string>; body:
   return { front, body: text.slice(m[0].length) };
 }
 
-/** A section of a markdown body, by its `## ` heading, without the heading. */
-function section(body: string, heading: string): string | undefined {
-  const lines = body.split("\n");
-  const at = lines.findIndex((l) => l.trim().toLowerCase() === `## ${heading.toLowerCase()}`);
-  if (at === -1) return undefined;
-  const end = lines.findIndex((l, i) => i > at && /^## /.test(l));
-  return lines.slice(at + 1, end === -1 ? undefined : end).join("\n");
-}
-
-export type Screen = { width: number; height: number; words: string };
-
-/** The brief: its scope (what the objectives and flow are written from) and its screens. */
-export function readBrief(body: string): { scope?: string; screens: Screen[]; problems: string[] } {
-  const problems: string[] = [];
-  const scope = section(body, "Scope");
-  const screensText = section(body, "Screens");
-  if (scope === undefined) problems.push("no ## Scope");
-  if (screensText === undefined) problems.push("no ## Screens");
-  const screens: Screen[] = [];
-  for (const line of (screensText ?? "").split("\n").filter((l) => /^\s*-\s/.test(l))) {
-    const m = /(\d+)\s*[×x]\s*(\d+)/.exec(line);
-    if (m === null) problems.push(`a screen without its size (W×H): ${line.trim()}`);
-    else
-      screens.push({
-        width: Number(m[1]),
-        height: Number(m[2]),
-        words: line.replace(/^\s*-\s*/, "").trim(),
-      });
-  }
-  if (screensText !== undefined && screens.length === 0) problems.push("no screens listed");
-  return { ...(scope === undefined ? {} : { scope }), screens, problems };
+/** The brief: who the chapter is for and what is in or out, in the person's words. */
+export function readBrief(body: string): { problems: string[] } {
+  return { problems: body.trim() === "" ? ["the brief is empty"] : [] };
 }
 
 export type OutlineItem = { id: string; kind: string } & Record<string, unknown>;
@@ -236,11 +207,9 @@ const git = (root: string, ...args: string[]): string | undefined => {
 const atCommit = (root: string, commit: string, rel: string) =>
   git(root, "show", `${commit}:${rel}`);
 
-/** What of a file a later one is written from: its body, and of the brief only its scope. */
-function content(step: Step, text: string | undefined): string | undefined {
-  if (text === undefined) return undefined;
-  const body = splitFront(text).body;
-  return (step === Step.Brief ? (section(body, "Scope") ?? "") : body).trim();
+/** What of a file a later one is written from: its body. */
+function content(text: string | undefined): string | undefined {
+  return text === undefined ? undefined : splitFront(text).body.trim();
 }
 
 /** Everything about one chapter's planning files. */
@@ -361,9 +330,7 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
     const recheck = READS[step].filter((from) => {
       const f = FILES.find((x) => x.step === from);
       if (f === undefined) return false;
-      return (
-        content(from, atCommit(root, approvedAt, join(dir, f.file))) !== content(from, texts[from])
-      );
+      return content(atCommit(root, approvedAt, join(dir, f.file))) !== content(texts[from]);
     });
     return { ...base, status: isChanged ? "changed" : "approved", approvedAt, recheck };
   });
@@ -444,11 +411,4 @@ export function takeBack(root: string, book: string, chapter: string, step: Step
     file,
     lines.length > 0 ? `---\n${lines.join("\n")}\n---\n${body}` : body.replace(/^\n/, ""),
   );
-}
-
-/** The brief's screens for a chapter, if it has a brief: what every check that draws its boards uses. */
-export function briefScreens(root: string, book: string, chapter: string): Screen[] {
-  const file = join(root, "authoring", "books", book, chapter, "brief.md");
-  if (!existsSync(file)) return [];
-  return readBrief(splitFront(readFileSync(file, "utf8")).body).screens;
 }
