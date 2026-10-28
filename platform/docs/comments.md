@@ -136,7 +136,7 @@ A board renamed, a piece merged, a prop removed, a planning file's words rewritt
 
 ## Threads on planning files
 
-The planning files (`brief.md`, `objectives.md`, `flow.md`, `props.md`: [authoring-pipeline.md](authoring-pipeline.md)) take threads like the plan did: on the exact words (`quote`), with the line they were at (`source: authoring/books/<book>/<chapter>/flow.md:12`), filed in the chapter's comments.yaml. Studio's chapter page makes them from a selection; an agent with `comment`. An agent's question at a gate is such a thread, on the words it is about: answered where everything else is, never left in a section someone forgot to empty.
+The planning files (`brief.md`, `objectives.md`, `flow.md`, `props.md`: [authoring-pipeline.md](authoring-pipeline.md)) take threads like the plan did: on the exact words (`quote`), with the line they were at (`source: authoring/books/<book>/<chapter>/flow.md:12`), filed in the chapter's comments.yaml. In the editor, select the words and run "Chalk: Comment on the selected words"; an agent with `comment`. An agent's question at a gate is such a thread, on the words it is about: answered where everything else is, never left in a section someone forgot to empty.
 
 ## Threads on a prop
 

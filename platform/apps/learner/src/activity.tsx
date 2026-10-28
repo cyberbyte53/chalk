@@ -7,7 +7,7 @@ import { type Thread, type Threads, useThreads } from "./threads";
  * Development only (`?dev&activity`): everything written on threads, newest first, across every
  * board: who started what, every message and status move, every review handed over. Live, so you
  * can watch a reviewer or a fixer work. `&review=<id>` keeps to one review's threads. A line opens
- * its board in the preview (a plan's thread, its chapter in the studio).
+ * its board in the preview (a planning file's thread: open it in the editor).
  */
 
 type Line = {
@@ -28,10 +28,8 @@ const whereOf = (t: Thread): string =>
 
 const hrefOf = (t: Thread): string | null => {
   if (t.board !== undefined) return `?dev&${previewQuery(contentAddress(t.board))}`;
-  const [book, chapter] = (t.source ?? "").replace(/^content\//, "").split("/");
-  return book && chapter
-    ? `?dev&studio&book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(chapter)}`
-    : null;
+  // A thread on a planning file: opened in the editor (its line is the thread's source).
+  return null;
 };
 
 function linesOf({ threads, reviews }: Threads, only: string | null): Line[] {

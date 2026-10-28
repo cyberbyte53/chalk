@@ -2,6 +2,19 @@ import { type ChildProcess, execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import * as vscode from "vscode";
+import {
+  type PlanningFile,
+  addSource,
+  commentOnSelection,
+  isApprovable,
+  planningFileOf,
+  readAll,
+  readOne,
+  setApproval,
+  showProblems,
+  stateDetail,
+  stateWords,
+} from "./planning";
 import { ReviewsTree } from "./reviews";
 
 /**
@@ -15,7 +28,9 @@ import { ReviewsTree } from "./reviews";
  * - Pick a piece, then ask the agent about it (it goes to the chat with its board, line and words)
  *   or leave a comment (sent to the dev server, which files it under authoring/: the chapter's comments.yaml, or
  *   the prop's for a pick on a prop).
- * - The Chalk tree (in the explorer): book → chapter → lesson, with open comments counted.
+ * - The Chalk tree (in the explorer): book → chapter → its planning files (with their state; approve,
+ *   take back) and its lessons, with open comments counted. A planning file's failing checks are
+ *   problems on its lines; select words in one to comment on them (planning.ts).
  *
  * It uses a dev server already running on :5173, or starts the learner app's (and the content
  * rebuild on save) itself.
@@ -429,9 +444,16 @@ function revealCursor(): void {
   void panel.webview.postMessage({ type: "reveal", file, line: editor.selection.active.line + 1 });
 }
 
-// ---- The tree: book → chapter → lesson ----
+// ---- The tree: book → chapter → its planning files and lessons ----
 
-type Node = { label: string; path: string; kind: "book" | "chapter" | "lesson"; file: string };
+type Node = {
+  label: string;
+  path: string;
+  kind: "book" | "chapter" | "planning" | "planfile" | "lesson";
+  file: string;
+  /** A planning file's state, as the dev server reads it. */
+  plan?: PlanningFile;
+};
 
 const readJson = <T>(file: string): T | null => {
   try {
@@ -440,6 +462,11 @@ const readJson = <T>(file: string): T | null => {
     return null;
   }
 };
+
+const dirsIn = (dir: string): string[] =>
+  existsSync(dir)
+    ? readdirSync(dir).filter((n) => !n.startsWith(".") && statSync(join(dir, n)).isDirectory())
+    : [];
 
 /** Comments on a chapter still waiting on the agent (open or planned), from its comments file. */
 function openComments(chapter: string): number {
@@ -456,18 +483,44 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
   }
 
   getTreeItem(node: Node): vscode.TreeItem {
+    const isLeaf = node.kind === "lesson" || node.kind === "planfile";
     const item = new vscode.TreeItem(
       node.label,
-      node.kind === "lesson"
-        ? vscode.TreeItemCollapsibleState.None
-        : vscode.TreeItemCollapsibleState.Collapsed,
+      isLeaf ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
     );
-    item.resourceUri = vscode.Uri.file(node.file);
     item.tooltip = node.path;
     if (node.kind === "chapter") {
       const n = openComments(node.path);
       if (n > 0) item.description = `${n} open`;
     }
+    if (node.kind === "planfile" && node.plan !== undefined) {
+      const f = node.plan;
+      item.description = stateWords(f);
+      item.tooltip = [f.file, stateDetail(f)].filter(Boolean).join("\n\n");
+      item.iconPath = new vscode.ThemeIcon(
+        f.status === "missing"
+          ? "circle-outline"
+          : f.problems.length > 0 || f.recheck.length > 0 || f.status === "changed"
+            ? "warning"
+            : f.status === "approved"
+              ? "pass-filled"
+              : "circle-large-outline",
+      );
+      item.contextValue = `planfile-${f.status}${isApprovable(f) ? "-approvable" : ""}`;
+      if (f.status !== "missing")
+        item.command = {
+          command: "vscode.open",
+          title: "Open",
+          arguments: [vscode.Uri.file(node.file)],
+        };
+      return item;
+    }
+    if (node.kind === "planning") {
+      item.iconPath = new vscode.ThemeIcon("checklist");
+      item.contextValue = "planning";
+      return item;
+    }
+    item.resourceUri = vscode.Uri.file(node.file);
     item.command = {
       command: "chalk.preview",
       title: "Preview",
@@ -477,54 +530,123 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
     return item;
   }
 
-  getChildren(node?: Node): Node[] {
+  async getChildren(node?: Node): Promise<Node[]> {
     const build = join(root, "build");
+    const authoring = join(root, "authoring", "books");
     type Ref = { path: string };
     const title = (json: { title?: { en?: string } } | null, fallback: string) =>
       json?.title?.en ?? fallback;
     if (node === undefined) {
+      // Books built, and books being planned.
       const index = readJson<{ books: Ref[] }>(join(build, "index.json"));
-      return (index?.books ?? []).map((ref) => {
-        const slug = ref.path;
-        return {
-          label: title(readJson(join(build, `${ref.path}.json`)), slug),
-          path: slug,
-          kind: "book",
-          file: join(root, "content", slug, "build.yaml"),
-        };
-      });
+      const books = [
+        ...new Set([...(index?.books ?? []).map((r) => r.path), ...dirsIn(authoring)]),
+      ];
+      return books.map((slug) => ({
+        label: title(readJson(join(build, `${slug}.json`)), slug),
+        path: slug,
+        kind: "book",
+        file: join(root, "content", slug, "build.yaml"),
+      }));
     }
     if (node.kind === "book") {
       const book = readJson<{ chapters: Ref[] }>(join(build, `${node.path}.json`));
-      return (book?.chapters ?? []).map((ref, i) => {
-        const slug = ref.path;
-        return {
-          label: `${i + 1}. ${title(readJson(join(build, `${ref.path}.json`)), slug)}`,
-          path: slug,
-          kind: "chapter",
-          file: existsSync(join(root, "authoring", "books", slug, "plan.md"))
-            ? join(root, "authoring", "books", slug, "plan.md")
-            : join(root, "content", slug, "build.yaml"),
-        };
-      });
+      const chapters = [
+        ...new Set([
+          ...(book?.chapters ?? []).map((r) => r.path),
+          ...dirsIn(join(authoring, node.path)).map((c) => `${node.path}/${c}`),
+        ]),
+      ];
+      return chapters.map((slug, i) => ({
+        label: `${i + 1}. ${title(readJson(join(build, `${slug}.json`)), slug.split("/").at(-1) ?? slug)}`,
+        path: slug,
+        kind: "chapter",
+        file: join(root, "content", slug, "build.yaml"),
+      }));
     }
     if (node.kind === "chapter") {
       const chapter = readJson<{ concepts: Ref[] }>(join(build, `${node.path}.json`));
-      return (chapter?.concepts ?? []).map((ref) => {
-        const slug = ref.path;
-        return {
-          label: title(readJson(join(build, `${ref.path}.json`)), slug),
-          path: slug,
-          kind: "lesson",
-          file: join(root, "content", slug, "overview.ts"),
-        };
-      });
+      const planning: Node = {
+        label: "Planning",
+        path: node.path,
+        kind: "planning",
+        file: join(authoring, node.path),
+      };
+      return [
+        planning,
+        ...(chapter?.concepts ?? []).map((ref): Node => {
+          const slug = ref.path;
+          return {
+            label: title(readJson(join(build, `${ref.path}.json`)), slug),
+            path: slug,
+            kind: "lesson",
+            file: join(root, "content", slug, "overview.ts"),
+          };
+        }),
+      ];
+    }
+    if (node.kind === "planning") {
+      if (!(await ensureServer())) return [];
+      const [book = "", chapter = ""] = node.path.split("/");
+      try {
+        const c = await readOne(base, book, chapter);
+        return c.files.map((f, i) => ({
+          label: `${i + 1}. ${f.file.replace(/^source\//, "")}`,
+          path: `${node.path}/${f.file}`,
+          kind: "planfile",
+          file: join(root, c.dir, f.file),
+          plan: f,
+        }));
+      } catch (e) {
+        log.appendLine(`Chalk: the planning files of ${node.path} couldn't be read: ${String(e)}`);
+        return [];
+      }
     }
     return [];
   }
 }
 
 const tree = new ChalkTree();
+
+/** The planning files' failing checks, as problems on their lines (planning.ts). */
+const problems = vscode.languages.createDiagnosticCollection("chalk");
+async function refreshProblems(): Promise<void> {
+  try {
+    showProblems(root, await readAll(base), problems);
+  } catch {
+    // The dev server isn't up yet: shown once it is.
+  }
+}
+
+/**
+ * The person approves a planning file (the tree's item, or the file open in the editor), or takes
+ * the approval back.
+ */
+async function approveFile(node: Node | undefined, isApproved: boolean): Promise<void> {
+  const file = node?.file ?? vscode.window.activeTextEditor?.document.uri.fsPath;
+  const where = file === undefined ? undefined : planningFileOf(root, file);
+  if (file === undefined || where === undefined) {
+    void vscode.window.showInformationMessage(
+      "Chalk: open a chapter's planning file, or pick one in the Chalk tree.",
+    );
+    return;
+  }
+  if (!(await ensureServer())) return;
+  const c = await readOne(base, where.book, where.chapter);
+  const f = c.files.find((x) => x.file === where.name);
+  if (f === undefined) {
+    void vscode.window.showInformationMessage(`Chalk: ${where.name} isn't a planning file.`);
+    return;
+  }
+  if (
+    await setApproval(base, { book: where.book, chapter: where.chapter, step: f.step }, isApproved)
+  )
+    void vscode.window.showInformationMessage(
+      `Chalk: ${f.file} ${isApproved ? "approved" : "is a draft again"}.`,
+    );
+  tree.refresh();
+  void refreshProblems();
+}
 const reviews = new ReviewsTree(() => base);
 
 /** Writes on a thread as you, then redraws what shows threads. Says why, if it was refused. */
@@ -636,7 +758,24 @@ export function activate(context: vscode.ExtensionContext): void {
       await showPreview();
       void panel?.webview.postMessage({ type: "pick" });
     }),
-    vscode.commands.registerCommand("chalk.refresh", () => tree.refresh()),
+    vscode.commands.registerCommand("chalk.refresh", () => {
+      tree.refresh();
+      void refreshProblems();
+    }),
+    vscode.commands.registerCommand("chalk.planning.approve", (node?: Node) =>
+      approveFile(node, true),
+    ),
+    vscode.commands.registerCommand("chalk.planning.takeBack", (node?: Node) =>
+      approveFile(node, false),
+    ),
+    vscode.commands.registerCommand("chalk.commentSelection", () =>
+      commentOnSelection(root, changeComments),
+    ),
+    vscode.commands.registerCommand("chalk.addSource", async () => {
+      await addSource(root);
+      tree.refresh();
+    }),
+    problems,
     vscode.commands.registerCommand("chalk.copyReview", () => copyReview()),
     vscode.window.registerTreeDataProvider("chalk.tree", tree),
     reviewsView(),
@@ -655,7 +794,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,authoring/books/*/*/comments.yaml,authoring/props/*/comments.yaml,authoring/reviews/*.yaml}",
+      "{build/index.json,authoring/books/**,authoring/props/*/comments.yaml,authoring/reviews/*.yaml}",
     ),
   );
   // A thread or a review changed (a reply in the preview, an agent's answer): the tree's counts
@@ -664,7 +803,9 @@ export function activate(context: vscode.ExtensionContext): void {
     tree.refresh();
     void tellReview();
     void reviews.refresh();
+    void refreshProblems();
   };
+  void ensureServer().then(() => refreshProblems());
   watcher.onDidChange(refresh);
   watcher.onDidCreate(refresh);
   watcher.onDidDelete(refresh);

@@ -31,7 +31,6 @@ import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { PreviewShell } from "./preview-shell";
 import { settings } from "./settings";
-import { StudioShell } from "./studio-shell";
 import { TeacherApp } from "./teacher-screens";
 import { type Uploader, deviceStore, startUploader } from "./uploader";
 
@@ -234,8 +233,6 @@ export function App(): JSX.Element {
     return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
     return <ActivityFeed />;
-  if (isDevShell && new URLSearchParams(window.location.search).has("studio"))
-    return <StudioShell />;
   if (isDevShell) return <DevShell bus={bus} />;
   if (import.meta.env.DEV && new URLSearchParams(window.location.search).has("screens"))
     return <ScreenSamples locale={locale} />;

@@ -132,9 +132,13 @@ describe("a chapter's gates", () => {
       file(root, "flow.md"),
       `${FLOW}### plotting  (o1)\nPurpose: p.\nNeeds: a plane.\n`,
     );
-    expect(state(root, Step.Objectives)?.problems).toEqual(["o2 cites fig9.9, not in the outline"]);
-    expect(state(root, Step.Flow)?.problems).toEqual(["no board serves o2"]);
-    expect(state(root, Step.Props)?.problems).toEqual(["board plotting's need has no verdict"]);
+    expect(state(root, Step.Objectives)?.problems).toEqual([
+      { text: "o2 cites fig9.9, not in the outline", about: "o2" },
+    ]);
+    expect(state(root, Step.Flow)?.problems).toEqual([{ text: "no board serves o2" }]);
+    expect(state(root, Step.Props)?.problems).toEqual([
+      { text: "board plotting's need has no verdict" },
+    ]);
   });
 });
 

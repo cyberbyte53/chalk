@@ -201,14 +201,17 @@ export function readMatch(body: string): { rows: MatchRow[]; problems: string[] 
 
 // ---- A chapter's files, their gates, and what they reach ----
 
+/** A failing check, and the id it is about (an objective, a board, an outline item), when one. */
+export type Problem = { text: string; about?: string };
+
 export type FileState = {
   step: Step;
   file: string;
   /** missing; draft (not approved); approved; changed (since it was approved). */
   status: "missing" | "draft" | "approved" | "changed";
   approvedAt?: string;
-  /** Where its gate fails: the machine's checks of what it reads and cites. */
-  problems: string[];
+  /** Where its gate fails: the machine's checks of what it reads and cites, each with the id it is about. */
+  problems: Problem[];
   /** Facts the gate lists, for the person to decide on (what nothing cites). */
   notes: string[];
   /** Approved, but a file it is written from changed since: which. */
@@ -266,8 +269,11 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
   const flow = readFlow(splitFront(texts.flow ?? "").body);
   const boardIds = new Set(flow.map((b) => b.id));
 
-  const gate: Record<Step, { problems: string[]; notes: string[] }> = {
-    brief: { problems: readBrief(splitFront(texts.brief ?? "").body).problems, notes: [] },
+  const gate: Record<Step, { problems: Problem[]; notes: string[] }> = {
+    brief: {
+      problems: readBrief(splitFront(texts.brief ?? "").body).problems.map((text) => ({ text })),
+      notes: [],
+    },
     outline: { problems: [], notes: [] },
     objectives: { problems: [], notes: [] },
     flow: { problems: [], notes: [] },
@@ -280,15 +286,19 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
           .filter((n) => n.endsWith(".txt"))
           .map((n) => readFileSync(join(sourceDir, n), "utf8"))
       : [];
-    gate.outline.problems.push(...checkOutline(outline, txts));
+    gate.outline.problems.push(...checkOutline(outline, txts).map((text) => ({ text })));
     if (txts.length === 0)
       gate.outline.notes.push("no text in source/ to check the outline against");
   }
   for (const o of objectives) {
-    if (o.cites.length === 0) gate.objectives.problems.push(`${o.id} cites nothing in the outline`);
+    if (o.cites.length === 0)
+      gate.objectives.problems.push({ text: `${o.id} cites nothing in the outline`, about: o.id });
     for (const c of o.cites)
       if (!outlineIds.has(c))
-        gate.objectives.problems.push(`${o.id} cites ${c}, not in the outline`);
+        gate.objectives.problems.push({
+          text: `${o.id} cites ${c}, not in the outline`,
+          about: o.id,
+        });
   }
   const citedByObjectives = new Set(objectives.flatMap((o) => o.cites));
   const uncited = outline.filter((i) => !citedByObjectives.has(i.id)).map((i) => i.id);
@@ -296,20 +306,27 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
     gate.objectives.notes.push(`no objective cites: ${uncited.join(", ")}`);
   const seenBoards = new Set<string>();
   for (const b of flow) {
-    if (seenBoards.has(b.id)) gate.flow.problems.push(`board ${b.id} is listed twice`);
+    if (seenBoards.has(b.id))
+      gate.flow.problems.push({ text: `board ${b.id} is listed twice`, about: b.id });
     seenBoards.add(b.id);
     if (!b.cites.some((c) => objectiveIds.has(c)))
-      gate.flow.problems.push(`board ${b.id} serves no objective`);
+      gate.flow.problems.push({ text: `board ${b.id} serves no objective`, about: b.id });
     for (const c of b.cites)
       if (!objectiveIds.has(c) && !outlineIds.has(c))
-        gate.flow.problems.push(`board ${b.id} cites ${c}: not an objective or in the outline`);
+        gate.flow.problems.push({
+          text: `board ${b.id} cites ${c}: not an objective or in the outline`,
+          about: b.id,
+        });
     if (b.needs === undefined || b.needs.trim() === "")
-      gate.flow.problems.push(`board ${b.id} says nothing it needs (Needs:)`);
+      gate.flow.problems.push({
+        text: `board ${b.id} says nothing it needs (Needs:)`,
+        about: b.id,
+      });
   }
   if (texts.flow !== undefined) {
     const served = new Set(flow.flatMap((b) => b.cites));
     for (const o of objectives)
-      if (!served.has(o.id)) gate.flow.problems.push(`no board serves ${o.id}`);
+      if (!served.has(o.id)) gate.flow.problems.push({ text: `no board serves ${o.id}` });
     const shown = outline
       .filter((i) => ["figure", "example", "activity"].includes(i.kind) && !served.has(i.id))
       .map((i) => i.id);
@@ -317,12 +334,14 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
   }
   if (texts.props !== undefined) {
     const match = readMatch(splitFront(texts.props).body);
-    gate.props.problems.push(...match.problems);
+    gate.props.problems.push(...match.problems.map((text) => ({ text })));
     const matched = new Set(match.rows.flatMap((r) => r.boards));
     for (const b of flow)
-      if (!matched.has(b.id)) gate.props.problems.push(`board ${b.id}'s need has no verdict`);
+      if (!matched.has(b.id))
+        gate.props.problems.push({ text: `board ${b.id}'s need has no verdict` });
     for (const b of matched)
-      if (!boardIds.has(b)) gate.props.problems.push(`${b} is not a board in the flow`);
+      if (!boardIds.has(b))
+        gate.props.problems.push({ text: `${b} is not a board in the flow`, about: b });
   }
 
   const files: FileState[] = FILES.map(({ step, file, isApproved }) => {
@@ -391,7 +410,8 @@ export function approve(root: string, book: string, chapter: string, step: Step)
       throw new Error(
         `${before.file} comes first: it is ${before.status}${before.problems.length > 0 ? ", and its checks fail" : ""}${before.recheck.length > 0 ? ", and to be checked again" : ""}`,
       );
-  if (f.problems.length > 0) throw new Error(`${f.file}'s checks fail: ${f.problems.join("; ")}`);
+  if (f.problems.length > 0)
+    throw new Error(`${f.file}'s checks fail: ${f.problems.map((p) => p.text).join("; ")}`);
   const rel = join(c.dir, f.file);
   const head = (git(root, "rev-parse", "HEAD") ?? "").trim();
   const committed = atCommit(root, head, rel);
@@ -409,6 +429,21 @@ export function approve(root: string, book: string, chapter: string, step: Step)
     `---\n${lines.join("\n")}\n---\n${body.startsWith("\n") ? body : `\n${body}`}`,
   );
   return head.slice(0, 12);
+}
+
+/** The person takes an approval back: the file's `approved:` line removed, nothing else. */
+export function takeBack(root: string, book: string, chapter: string, step: Step): void {
+  const spec = FILES.find((f) => f.step === step);
+  if (spec === undefined || !spec.isApproved) throw new Error(`nothing to take back: ${step}`);
+  const file = join(root, "authoring", "books", book, chapter, spec.file);
+  if (!existsSync(file)) throw new Error(`no ${spec.file}`);
+  const { front, body } = splitFront(readFileSync(file, "utf8"));
+  const { approved: _, ...rest } = front;
+  const lines = Object.entries(rest).map(([k, v]) => `${k}: ${v}`);
+  writeFileSync(
+    file,
+    lines.length > 0 ? `---\n${lines.join("\n")}\n---\n${body}` : body.replace(/^\n/, ""),
+  );
 }
 
 /** The brief's screens for a chapter, if it has a brief: what every check that draws its boards uses. */

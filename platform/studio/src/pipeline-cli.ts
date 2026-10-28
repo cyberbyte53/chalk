@@ -17,7 +17,7 @@ for (const c of chapters) {
     const isHeld = f.status !== "draft" || spec?.isApproved === false;
     const mark = f.problems.length > 0 ? (isHeld ? "✗" : "·") : "✓";
     console.log(`    ${mark} ${f.file}: ${f.status}${f.approvedAt ? ` at ${f.approvedAt}` : ""}`);
-    for (const p of f.problems) console.log(`        ${p}`);
+    for (const p of f.problems) console.log(`        ${p.text}`);
     for (const n of f.notes) console.log(`        note: ${n}`);
     if (f.recheck.length > 0)
       console.log(`        to check again: ${f.recheck.join(", ")} changed since it was approved`);

@@ -13,7 +13,7 @@ Arguments: the chapter (`content/<book>/<chapter>`) and the lesson's slug from i
 
 ## Pre-conditions
 
-- Every planning file is approved and holds (Studio, or `pnpm check`'s pipeline step), and every prop `props.md` names exists (otherwise run `build-props`).
+- Every planning file is approved and holds (the Chalk tree, or `pnpm check`'s pipeline step), and every prop `props.md` names exists (otherwise run `build-props`).
 - The chapter's first lesson is built alone, reviewed (`self-review`), and shown to the person before any other.
 
 ## Steps

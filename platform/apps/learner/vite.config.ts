@@ -23,7 +23,7 @@ import {
   readComments,
   sittingOf,
 } from "../../studio/src/comments";
-import { studioMiddleware } from "./dev-studio";
+import { pipelineMiddleware } from "./dev-pipeline";
 
 /** The one dev server's port (CHALK_DEV_PORT to change it). */
 const DEV_PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
@@ -227,13 +227,13 @@ function devRebuild(): Plugin {
   };
 }
 
-/** In development, Studio (`?dev&studio`) reads the content tree through /dev-studio; see dev-studio.ts. */
-function devStudio(): Plugin {
+/** In development, the planning files' state and approval for the editor extension; see dev-pipeline.ts. */
+function devPipeline(): Plugin {
   return {
-    name: "chalk-dev-studio",
+    name: "chalk-dev-pipeline",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use("/dev-studio", studioMiddleware(ROOT));
+      server.middlewares.use("/dev-pipeline", pipelineMiddleware(ROOT));
     },
   };
 }
@@ -327,7 +327,7 @@ export default defineConfig(({ mode }): UserConfig => {
       devLog(),
       devRebuild(),
       devReview(),
-      devStudio(),
+      devPipeline(),
       devContent(),
       // The app installs to the home screen and works offline: the app and its fonts are cached
       // on first visit, and each chapter's content (and its props' drawing code) the first time

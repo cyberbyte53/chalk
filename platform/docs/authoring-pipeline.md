@@ -228,4 +228,4 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 3. ~~The panel, from the schemas.~~
 4. ~~Purpose (the first sentence of `describe`), the one generator: prop pages, `look` at the library, the preview's library, the catalogue.~~
 5. ~~Comments on props; this board or the prop everywhere; threads and reviews under `authoring/`.~~
-6. ~~The pipeline: the files (moving `plan.md`, `runs/`, `source/`), gates and staleness (`pnpm check`'s pipeline step, Studio's chapter page), threads on planning files, the check on threads whose place is gone, before → after, the skills.~~
+6. ~~The pipeline: the files (moving `plan.md`, `runs/`, `source/`), gates and staleness (`pnpm check`'s pipeline step, the editor's Chalk tree), threads on planning files, the check on threads whose place is gone, before → after, the skills.~~

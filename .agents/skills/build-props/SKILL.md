@@ -1,6 +1,6 @@
 ---
 name: build-props
-description: Match a chapter's needs to props and build or extend the props it needs, before any lesson is written - the props match (props.md), each new or changed prop's definition first, then its view. Use when Studio's next step is build-props, after flow.md is approved, or when a review asks for a prop change. Follows platform/docs/making-a-prop.md and leaves pnpm check green.
+description: Match a chapter's needs to props and build or extend the props it needs, before any lesson is written - the props match (props.md), each new or changed prop's definition first, then its view. Use after flow.md is approved, or when a review asks for a prop change. Follows platform/docs/making-a-prop.md and leaves pnpm check green.
 ---
 
 # Match and build the props
@@ -13,13 +13,13 @@ Props come first: lessons are written against their actions and fields. A prop's
 
 ## Pre-conditions
 
-`flow.md` is approved and holds (Studio, or the pipeline step). Otherwise stop and say so.
+`flow.md` is approved and holds (the Chalk tree, or the pipeline step). Otherwise stop and say so.
 
 ## 1. The match: `props.md`
 
 1. **Find what exists.** `look` at `library/props/` (a line per prop: address, role, what it is for, how many boards use it), then at the address of each that might fit: everything about it, every board that uses it, and what no board uses or only one does.
 2. **Every need in `flow.md`, grouped, gets one verdict** in a table with `Need`, `Boards` (board ids, comma-separated), `Verdict` and `Why` columns: **reuse** (as it is), **configure** (fields it has), **extend** (a new field or action), **new**, or **no prop** (words or a picture do it better). "One prop or three" is decided here: a prop isn't stretched to a need it wasn't made for because it is close.
-3. The pipeline step holds when every board's need has a verdict. Questions go on `props.md` as threads (`quote`). Commit, append `runs/<YYYY-MM-DD-HHMM>-props.md`, and stop for the person's approval in Studio.
+3. The pipeline step holds when every board's need has a verdict. Questions go on `props.md` as threads (`quote`). Commit, append `runs/<YYYY-MM-DD-HHMM>-props.md`, and stop for the person's approval in the editor (the Chalk tree).
 
 ## 2. The design: each extend or new, its definition first
 
