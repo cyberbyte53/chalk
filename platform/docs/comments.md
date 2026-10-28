@@ -60,7 +60,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 4. **closed**: the person is happy. Only the person closes.
 5. **withdrawn**: taken back by the person, or by the agent that started it when it became moot (a question settled in chat); its messages are kept as history.
 
-**Whose turn it is** (`waitsOn` in comments.ts; the dev server adds it to every thread it gives out): ready waits on the person, planned on the agent. Open waits on the agent, unless the fixer spoke last (it started the thread, or answered without moving it): then it is a question, a decision or a reason, for the person, and the person's reply gives it back. A thread `about` another is always the agent's. The editor's Reviews list opens with **Waiting on you**.
+**Whose turn it is** (`waitsOn` in comments.ts; the dev server adds it to every thread it gives out): ready waits on the person, planned on the agent. Open waits on the agent, unless the fixer spoke last (it started the thread, or answered without moving it): then it is a question, a decision or a reason, for the person, and the person's reply gives it back. A thread `about` another is always the agent's. The editor's Reviews list opens with **Waiting on you**, and a thread on a planning file also shows in the file, on the words it is about (VS Code's comments): reply or close it there, or start one with ⌥⌘/ on selected words or the + in the margin.
 
 Approving a planning file needs every thread on it closed or withdrawn.
 

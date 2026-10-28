@@ -22,6 +22,8 @@ export type Thread = {
   target?: string;
   prop?: string;
   source?: string;
+  /** On a planning file: the exact words it is about. */
+  quote?: string;
   snapshot?: string;
   changed?: string[];
   messages: Message[];
@@ -223,6 +225,11 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     ]
       .filter(Boolean)
       .join(" · ");
+  }
+
+  /** Every thread, as last read. */
+  get allThreads(): readonly Thread[] {
+    return this.read.threads;
   }
 
   /** Shown when the dev server didn't answer. */

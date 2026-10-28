@@ -147,50 +147,6 @@ export async function setApproval(
   }
 }
 
-/**
- * A thread on the words selected in a planning file: its line and the exact words (`quote`), filed
- * in the chapter's comments by the dev server.
- */
-export async function commentOnSelection(
-  root: string,
-  send: (change: Record<string, unknown>) => Promise<{ ok: boolean; error?: string }>,
-): Promise<void> {
-  const editor = vscode.window.activeTextEditor;
-  const where = editor === undefined ? undefined : planningFileOf(root, editor.document.uri.fsPath);
-  if (editor === undefined || where === undefined) {
-    void vscode.window.showInformationMessage(
-      "Chalk: comments here are on a chapter's planning files (authoring/books/…).",
-    );
-    return;
-  }
-  const quote = editor.document.getText(editor.selection).trim();
-  if (quote === "") {
-    void vscode.window.showInformationMessage(
-      "Chalk: select the words the comment is about first.",
-    );
-    return;
-  }
-  const text = await vscode.window.showInputBox({
-    title: `Comment on ${where.name}`,
-    prompt: quote.slice(0, 140),
-    placeHolder: "What's wrong, or what should change?",
-    ignoreFocusOut: true,
-  });
-  if (!text?.trim()) return;
-  const from = editor.selection.start.line + 1;
-  const to = editor.selection.end.line + 1;
-  const done = await send({
-    op: "start",
-    thread: {
-      source: `authoring/books/${where.book}/${where.chapter}/${where.name}:${from === to ? from : `${from}-${to}`}`,
-      quote,
-      text: text.trim(),
-    },
-  });
-  if (!done.ok)
-    void vscode.window.showErrorMessage(`Chalk: the comment wasn't saved: ${done.error}`);
-}
-
 /** A new chapter's source: a file copied into authoring/books/<book>/<chapter>/source/. */
 export async function addSource(root: string): Promise<void> {
   const picked = await vscode.window.showOpenDialog({

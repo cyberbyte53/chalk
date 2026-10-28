@@ -2,7 +2,7 @@
   "name": "chalk-editor",
   "displayName": "Chalk",
   "description": "See Chalk content as boards beside its code: the book, chapter and lesson screens, every board as a phone draws it, pick a piece to ask the agent or leave a comment.",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "publisher": "chalk",
   "private": true,
   "license": "UNLICENSED",
@@ -94,14 +94,19 @@
         "icon": "$(discard)"
       },
       {
-        "command": "chalk.commentSelection",
-        "title": "Chalk: Comment on the selected words",
-        "icon": "$(comment)"
-      },
-      {
         "command": "chalk.addSource",
         "title": "Chalk: Add a chapter's source",
         "icon": "$(new-file)"
+      },
+      {
+        "command": "chalk.fileComment.reply",
+        "title": "Comment",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "chalk.fileComment.close",
+        "title": "Close",
+        "icon": "$(check)"
       }
     ],
     "configuration": {
@@ -277,18 +282,35 @@
         {
           "command": "chalk.review.open",
           "when": "false"
+        },
+        {
+          "command": "chalk.fileComment.reply",
+          "when": "false"
+        },
+        {
+          "command": "chalk.fileComment.close",
+          "when": "false"
         }
       ],
       "editor/context": [
         {
-          "command": "chalk.commentSelection",
-          "when": "editorHasSelection && resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/]/",
-          "group": "chalk@1"
-        },
-        {
           "command": "chalk.planning.approve",
           "when": "resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/][^\\\\/]+[\\\\/][^\\\\/]+[\\\\/](brief|objectives|flow|props)\\.md$/",
           "group": "chalk@2"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "chalk.fileComment.reply",
+          "group": "inline",
+          "when": "commentController == chalk"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "chalk.fileComment.close",
+          "group": "inline",
+          "when": "commentController == chalk && commentThread =~ /^chalk-/"
         }
       ]
     },
@@ -300,7 +322,7 @@
         "when": "editorTextFocus"
       },
       {
-        "command": "chalk.commentSelection",
+        "command": "workbench.action.addComment",
         "key": "ctrl+alt+/",
         "mac": "cmd+alt+/",
         "when": "editorTextFocus && resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/]/"

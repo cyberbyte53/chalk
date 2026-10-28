@@ -2,10 +2,10 @@ import { type ChildProcess, execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import * as vscode from "vscode";
+import { FileComments } from "./file-comments";
 import {
   type PlanningFile,
   addSource,
-  commentOnSelection,
   isApprovable,
   planningFileOf,
   readAll,
@@ -784,6 +784,11 @@ export function activate(context: vscode.ExtensionContext): void {
   void ensureMcp();
 
   let timer: NodeJS.Timeout | undefined;
+  // Threads on planning files, in the files themselves.
+  const fileComments = new FileComments(root, changeComments, () => {
+    void reviews.refresh();
+    void tellReview();
+  });
   context.subscriptions.push(
     log,
     vscode.commands.registerCommand("chalk.preview", (uri?: vscode.Uri) => showPreview(uri)),
@@ -802,9 +807,14 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("chalk.planning.takeBack", (node?: Node) =>
       approveFile(node, false),
     ),
-    vscode.commands.registerCommand("chalk.commentSelection", () =>
-      commentOnSelection(root, changeComments),
+    fileComments,
+    vscode.commands.registerCommand("chalk.fileComment.reply", (r: vscode.CommentReply) =>
+      fileComments.reply(r),
     ),
+    vscode.commands.registerCommand("chalk.fileComment.close", (t: vscode.CommentThread) =>
+      fileComments.close(t),
+    ),
+    reviews.onDidChangeTreeData(() => void fileComments.show(reviews.allThreads)),
     vscode.commands.registerCommand("chalk.addSource", async () => {
       await addSource(root);
       tree.refresh();
