@@ -3,9 +3,9 @@
 Everything said about content goes in one place: the person's comments, a reviewer agent's findings, what a change broke, feedback given in an agent's chat. Each is a **thread**; a **review** is one participant's sitting, handed to another.
 
 ```text
-content/<book>/<chapter>/comments.yaml     threads on a chapter's boards (and its plan)
-library/props/<package>/comments.yaml      threads on a prop, wherever it is used
-reviews/<id>.yaml                          one review: the threads it hands over
+authoring/books/<book>/<chapter>/comments.yaml   threads on a chapter's boards (and its plan)
+authoring/props/<package>/comments.yaml          threads on a prop, wherever it is used
+authoring/reviews/<id>.yaml                      one review: the threads it hands over
 ```
 
 They are versioned with the content they are about. **One writer** (`platform/studio/src/comments.ts`) makes every change, and checks it against what the writer's role may do. The preview, the editor extension and the chalk MCP tools all reach it through the dev server (`/dev-review`). Never edit the files by hand: if one is broken, the reader names the entry and every write is refused until it is fixed.
@@ -102,7 +102,7 @@ What this doesn't stop: on a laptop the tokens sit in config files, so anything 
 
 A **sitting** is every thread a participant started or wrote on since their last handover, in the order they did: new comments, and old threads they replied to (reopened). Closing or withdrawing alone doesn't count.
 
-In the editor's preview, pick a piece (`c`): a box opens next to it; type, press ⌘↵, and a thread is started. Reply on any thread under its board. When you're done, **Copy for agent (n)** hands the sitting over: the writer writes `reviews/<id>.yaml` and copies `apply review <id> (n threads)`. Paste it into the agent's chat; the agent reads it with `comments` (`review: "<id>"`) and follows the `apply-review` skill.
+In the editor's preview, pick a piece (`c`): a box opens next to it; type, press ⌘↵, and a thread is started. Reply on any thread under its board. When you're done, **Copy for agent (n)** hands the sitting over: the writer writes `authoring/reviews/<id>.yaml` and copies `apply review <id> (n threads)`. Paste it into the agent's chat; the agent reads it with `comments` (`review: "<id>"`) and follows the `apply-review` skill.
 
 ```yaml
 id: 20261026-1734
@@ -110,7 +110,7 @@ by: you
 role: person
 at: 2026-10-26T17:34:00.000Z
 threads:
-  - file: content/class10-maths/real-numbers/comments.yaml
+  - file: authoring/books/class10-maths/real-numbers/comments.yaml
     id: cmvpi4adan2w
 ```
 
@@ -121,7 +121,7 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 ## Watching
 
 - **Chalk Reviews**, in the editor's sidebar: every review and its threads in one place, with Reply, Close, Withdraw and Copy for agent (platform/editor/README.md).
-- **A review's page:** select a file in `reviews/`, click a review in Chalk Reviews, or open `?dev&review=<id>` (`review=sitting`: yours not handed over yet). One page, a list of the review's threads, each a fold: what was said and every message since, then its board as it is now, drawn live with the piece outlined; Reply, Close, Withdraw, and Open board (which comes back to the review). Fold all, Unfold all, Close all ready, Copy for agent at the top. The `reviews` folder (`?dev&reviews`) lists every review.
+- **A review's page:** select a file in `authoring/reviews/`, click a review in Chalk Reviews, or open `?dev&review=<id>` (`review=sitting`: yours not handed over yet). One page, a list of the review's threads, each a fold: what was said and every message since, then its board as it is now, drawn live with the piece outlined; Reply, Close, Withdraw, and Open board (which comes back to the review). Fold all, Unfold all, Close all ready, Copy for agent at the top. The `reviews` folder (`?dev&reviews`) lists every review.
 - Under each board in the preview: its threads, live, each a card until tapped (what was said, the latest answer); open, the whole thread, with the plan, the messages and the files changed; closed ones fold away as the board's history.
 - **`?dev&activity`** (or `f` in the preview): everything written, newest first, across every board: who started what, every message and move, every review handed over. `&review=<id>` keeps to one review. A line opens its board.
 
@@ -140,4 +140,4 @@ The build records where each prop was placed, from the call stack when `b.prop(.
 
 ## Moving files over
 
-Files from before threads and reviews (`kind`, `causedBy`, `plan`, `thread`, a `review` stamp on each comment) are moved once with `cd platform/studio && npx tsx --tsconfig ../../tsconfig.base.json src/comments-migrate.ts` (`--dry` to only report). It turns stamps into `reviews/<id>.yaml` files and leaves entries already in today's shape alone.
+Files from before threads and reviews (`kind`, `causedBy`, `plan`, `thread`, a `review` stamp on each comment) are moved once with `cd platform/studio && npx tsx --tsconfig ../../tsconfig.base.json src/comments-migrate.ts` (`--dry` to only report). It turns stamps into `authoring/reviews/<id>.yaml` files and leaves entries already in today's shape alone.

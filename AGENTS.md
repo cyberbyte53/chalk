@@ -31,7 +31,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
   For people and agents alike, the same boards are at `?dev&at=content/<book>/<chapter>/<lesson>` in the learner app's dev server; add `&play` and use them in a browser as a student would (Cursor's browser, or a browser MCP). Every piece carries `data-source="content/…:line"`, and Alt-click opens the line.
 - **In the editor**, the Chalk extension (`platform/editor`, install `chalk-editor.vsix`) previews whatever file or folder is open as the student sees it (book screen, chapter path, lesson boards), follows the cursor, and lets the person pick a piece to send to you.
 - **Reviews:** when the person says "apply review <id>", use `apply-review`: one plan agreed in chat, a plan line and an answer on every thread, commit after their yes.
-- **Threads** live in `content/<book>/<chapter>/comments.yaml`, or `library/props/<package>/comments.yaml` for one on a prop; **reviews** in `reviews/<id>.yaml`. Both are written only through the one writer ([platform/docs/comments.md](platform/docs/comments.md)). Never edit them by hand. Only the person closes a thread.
+- **Threads** are about the work, not part of it, so they live under `authoring/`: `authoring/books/<book>/<chapter>/comments.yaml`, or `authoring/props/<package>/comments.yaml` for one on a prop; **reviews** in `authoring/reviews/<id>.yaml`. Both are written only through the one writer ([platform/docs/comments.md](platform/docs/comments.md)). Never edit them by hand. Only the person closes a thread.
 - `plan.md` approval is the person's gate. Never set `status: approved` yourself.
 - **Commit only what the person has seen and is happy with.** Finish, show it, wait for their yes, then commit.
 

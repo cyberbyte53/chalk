@@ -2,7 +2,6 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join } from "node:path";
 import { parse, stringify } from "yaml";
 import {
-  COMMENTS_FILE,
   Label,
   type Message,
   REVIEWS_DIR,
@@ -99,11 +98,11 @@ if (process.argv[1]?.endsWith("comments-migrate.ts")) {
     ...readdirSync(join(root, "library", "props"), { withFileTypes: true })
       .filter((d) => d.isDirectory())
       .map((d) => `library/props/${d.name}`),
-  ].filter((home) => existsSync(join(root, home, COMMENTS_FILE)));
+  ].filter((home) => existsSync(join(root, fileOf(home))));
 
   const reviews = new Map<string, Review>();
   for (const home of files) {
-    const path = join(root, home, COMMENTS_FILE);
+    const path = join(root, fileOf(home));
     const olds = (parse(readFileSync(path, "utf8")) ?? []) as Old[];
     const threads = olds.map(migrateEntry);
     for (const old of olds) {

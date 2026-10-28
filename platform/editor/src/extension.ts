@@ -13,7 +13,7 @@ import { ReviewsTree } from "./reviews";
  * - The panel follows the editor: move the cursor in overview.ts and the piece written there is
  *   outlined; click a piece (Alt-click, or after "Pick") and the editor goes to its line.
  * - Pick a piece, then ask the agent about it (it goes to the chat with its board, line and words)
- *   or leave a comment (sent to the dev server, which files it in the chapter's comments.yaml, or
+ *   or leave a comment (sent to the dev server, which files it under authoring/: the chapter's comments.yaml, or
  *   the prop's for a pick on a prop).
  * - The Chalk tree (in the explorer): book → chapter → lesson, with open comments counted.
  *
@@ -97,8 +97,8 @@ async function ensureServer(): Promise<boolean> {
 function queryFor(file: string): string | null {
   const path = rel(file);
   // A review file shows its boards with its threads; the folder, every review.
-  if (path === "reviews" || path === "reviews/") return "reviews";
-  const review = /^reviews\/([^/]+)\.yaml$/.exec(path);
+  if (path === "authoring/reviews" || path === "authoring/reviews/") return "reviews";
+  const review = /^authoring\/reviews\/([^/]+)\.yaml$/.exec(path);
   if (review?.[1] !== undefined) return `review=${review[1]}`;
   if (!path.startsWith("content/")) return null;
   const parts = path.slice("content/".length).split("/").filter(Boolean);
@@ -442,9 +442,9 @@ const readJson = <T>(file: string): T | null => {
   }
 };
 
-/** Comments in a chapter still waiting on the agent (open or planned), from its comments.yaml. */
-function openComments(chapterDir: string): number {
-  const file = join(chapterDir, "comments.yaml");
+/** Comments on a chapter still waiting on the agent (open or planned), from its comments file. */
+function openComments(chapter: string): number {
+  const file = join(root, "authoring", "books", chapter, "comments.yaml");
   if (!existsSync(file)) return 0;
   return (readFileSync(file, "utf8").match(/^ {2}status: (open|planned)$/gm) ?? []).length;
 }
@@ -466,7 +466,7 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
     item.resourceUri = vscode.Uri.file(node.file);
     item.tooltip = node.path;
     if (node.kind === "chapter") {
-      const n = openComments(join(root, "content", node.path));
+      const n = openComments(node.path);
       if (n > 0) item.description = `${n} open`;
     }
     item.command = {
@@ -659,7 +659,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,content/*/*/comments.yaml,library/props/*/comments.yaml,reviews/*.yaml}",
+      "{build/index.json,authoring/books/*/*/comments.yaml,authoring/props/*/comments.yaml,authoring/reviews/*.yaml}",
     ),
   );
   // A thread or a review changed (a reply in the preview, an agent's answer): the tree's counts

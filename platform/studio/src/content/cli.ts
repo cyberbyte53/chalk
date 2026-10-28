@@ -165,8 +165,7 @@ function watchAndRebuild(): void {
   rebuild();
   watch(contentDir, { recursive: true }, (_event, file) => {
     // Comments aren't content: a new comment rebuilds nothing.
-    if (file === null || !/\.(tsx?|yaml|json)$/.test(file) || file.endsWith("comments.yaml"))
-      return;
+    if (file === null || !/\.(tsx?|yaml|json)$/.test(file)) return;
     clearTimeout(timer);
     timer = setTimeout(() => {
       console.log(`\n↻ ${file} changed`);

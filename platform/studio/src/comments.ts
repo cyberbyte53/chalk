@@ -17,9 +17,11 @@ import { changesFromGit, reachIndex, rollUp } from "./reach";
  * Comments and reviews (platform/docs/comments.md).
  *
  * A **thread** is one thing said about a board, a piece or a prop, and everything written on it
- * since: its messages. Threads live in one file per place they are about:
- * content/<book>/<chapter>/comments.yaml, or library/props/<package>/comments.yaml for a prop.
- * A **review** is one participant's sitting handed to another: reviews/<id>.yaml lists its threads.
+ * since: its messages. A thread's **home** is what it is about: a chapter (content/<book>/<chapter>)
+ * or a prop package (library/props/<package>). Threads are about the work, not part of it, so they
+ * are kept under authoring/, one file per home: authoring/books/<book>/<chapter>/comments.yaml, or
+ * authoring/props/<package>/comments.yaml. A **review** is one participant's sitting handed to
+ * another: authoring/reviews/<id>.yaml lists its threads.
  * Reviews point to threads; threads know nothing of reviews.
  *
  * Everyone who writes is a participant with a role (the person, a teacher, a fixer agent, a
@@ -30,7 +32,7 @@ import { changesFromGit, reachIndex, rollUp } from "./reach";
  */
 
 export const COMMENTS_FILE = "comments.yaml";
-export const REVIEWS_DIR = "reviews";
+export const REVIEWS_DIR = "authoring/reviews";
 
 export const Status = {
   Open: "open",
@@ -214,18 +216,39 @@ const dirsIn = (dir: string): string[] =>
         .map((d) => d.name)
     : [];
 
-/** Every folder a comments file can be in. */
+/**
+ * Every home a thread can be about: each chapter and prop package there is, and any that still has
+ * threads kept under authoring/ (its folder since removed: its threads are still read).
+ */
 function homes(root: string): string[] {
-  return [
-    ...dirsIn(join(root, "content")).flatMap((book) =>
-      dirsIn(join(root, "content", book)).map((chapter) => `content/${book}/${chapter}`),
+  const kept = [
+    ...dirsIn(join(root, "authoring", "books")).flatMap((book) =>
+      dirsIn(join(root, "authoring", "books", book)).map((chapter) => `content/${book}/${chapter}`),
     ),
-    ...dirsIn(join(root, "library", "props")).map((name) => `library/props/${name}`),
+    ...dirsIn(join(root, "authoring", "props")).map((name) => `library/props/${name}`),
+  ];
+  return [
+    ...new Set([
+      ...dirsIn(join(root, "content")).flatMap((book) =>
+        dirsIn(join(root, "content", book)).map((chapter) => `content/${book}/${chapter}`),
+      ),
+      ...dirsIn(join(root, "library", "props")).map((name) => `library/props/${name}`),
+      ...kept,
+    ]),
   ];
 }
 
-/** A home's comments file, relative to the repo: what a review lists. */
-export const fileOf = (home: string): string => `${home}/${COMMENTS_FILE}`;
+/**
+ * A home's comments file, relative to the repo (what a review lists): content/<book>/<chapter> is
+ * kept in authoring/books/<book>/<chapter>, library/props/<package> in authoring/props/<package>.
+ */
+export function fileOf(home: string): string {
+  if (home.startsWith("content/"))
+    return `authoring/books/${home.slice("content/".length)}/${COMMENTS_FILE}`;
+  if (home.startsWith("library/props/"))
+    return `authoring/props/${home.slice("library/props/".length)}/${COMMENTS_FILE}`;
+  throw new Error(`no home ${home}: threads are about a chapter or a prop package`);
+}
 
 // ---- Reading ----
 
@@ -251,7 +274,7 @@ export function readComments(root: string): Read {
   const threads: Filed[] = [];
   const problems: string[] = [];
   for (const home of homes(root)) {
-    const file = join(root, home, COMMENTS_FILE);
+    const file = join(root, fileOf(home));
     if (!existsSync(file)) continue;
     const raw = readYaml(file, fileOf(home), problems);
     if (raw === undefined) continue;
@@ -381,7 +404,7 @@ const HEADER =
   "# Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.\n";
 
 function writeHome(root: string, home: string, all: readonly Filed[]): void {
-  const file = join(root, home, COMMENTS_FILE);
+  const file = join(root, fileOf(home));
   const mine = all
     .filter((c) => c.home === home)
     .map(({ home: _, ...c }) => c)
@@ -671,5 +694,4 @@ function reachOf(root: string, files: readonly string[]): Thread["reaches"] {
 }
 
 /** A comments file's path relative to the repo, for messages. */
-export const pathOf = (root: string, home: string): string =>
-  relative(root, join(root, home, COMMENTS_FILE));
+export const pathOf = (_root: string, home: string): string => fileOf(home);

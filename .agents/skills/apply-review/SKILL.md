@@ -7,7 +7,7 @@ description: Work through a review (the threads the person started or replied to
 
 A **review** is one sitting of the person's, handed over in one line: `apply review 20261026-1734 (4 threads)`. It lists every thread they started or replied to since their last handover: new comments, and old ones they reopened. Read it with the `comments` tool (`review: "<id>"`; `"latest"` when the line names none). Each thread has its board, its target (an address: `piece/part`), the piece's source line, what the piece showed (`snapshot`), the commit it was made on, what the person said, and every message since. Format and rules: `platform/docs/comments.md`.
 
-You read and write threads only with the tools: `comments` to read, `comment` to write (the `chalk` server writes as a fixer). Never edit comments.yaml or reviews/. The writer refuses what a fixer may not do (close, reopen, withdraw, delete) and says why: tell the person rather than working around it.
+You read and write threads only with the tools: `comments` to read, `comment` to write (the `chalk` server writes as a fixer). Never edit the comments.yaml files or authoring/reviews/. The writer refuses what a fixer may not do (close, reopen, withdraw, delete) and says why: tell the person rather than working around it.
 
 A thread with `prop` is about that prop wherever it is used, not one board: decide whether the fix belongs in the prop (follow the build-props skill, and check every place `affected` lists) or only in how the board uses it, and say which in the plan.
 

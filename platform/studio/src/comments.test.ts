@@ -14,6 +14,7 @@ import {
   type Who,
   YOU,
   applyChange,
+  fileOf,
   latestReview,
   readComments,
   sittingOf,
@@ -261,7 +262,7 @@ describe("threads", () => {
   it("reports an entry that doesn't fit, instead of skipping it, and refuses to write over it", () => {
     const root = repo();
     start(root);
-    const file = join(root, "content", "class10-maths", "polynomials", "comments.yaml");
+    const file = join(root, "authoring", "books", "class10-maths", "polynomials", "comments.yaml");
     writeFileSync(file, `${readFileSync(file, "utf8")}- id: broken\n  status: maybe\n`);
     const read = readComments(root);
     expect(read.problems).toHaveLength(1);
@@ -277,7 +278,7 @@ describe("threads", () => {
 });
 
 describe("reviews", () => {
-  it("hands a sitting over as reviews/<id>.yaml, listing its threads in order", () => {
+  it("hands a sitting over as authoring/reviews/<id>.yaml, listing its threads in order", () => {
     const root = repo();
     const a = start(root);
     const b = start(root, { prop: "valueMachine" });
@@ -285,18 +286,18 @@ describe("reviews", () => {
     expect(done).toMatchObject({ count: 2 });
     const id = done.review?.id ?? "";
     expect(id).toMatch(/^\d{8}-\d{4}$/);
-    const file = parse(readFileSync(join(root, "reviews", `${id}.yaml`), "utf8"));
+    const file = parse(readFileSync(join(root, "authoring", "reviews", `${id}.yaml`), "utf8"));
     expect(file).toMatchObject({
       id,
       by: "you",
       role: Role.Person,
       threads: [
-        { file: "content/class10-maths/polynomials/comments.yaml", id: a.id },
-        { file: "library/props/polynomials/comments.yaml", id: b.id },
+        { file: "authoring/books/class10-maths/polynomials/comments.yaml", id: a.id },
+        { file: "authoring/props/polynomials/comments.yaml", id: b.id },
       ],
     });
     // The threads themselves know nothing of it.
-    expect(readFileSync(join(root, a.home, "comments.yaml"), "utf8")).not.toContain(id);
+    expect(readFileSync(join(root, fileOf(a.home)), "utf8")).not.toContain(id);
     const read = readComments(root);
     expect(read.problems).toEqual([]);
     expect(latestReview(read.reviews)?.id).toBe(id);
@@ -394,7 +395,7 @@ describe("reviews", () => {
     const root = repo();
     start(root);
     const done = apply(root, { op: "handover" }, YOU);
-    const file = join(root, "reviews", `${done.review?.id}.yaml`);
+    const file = join(root, "authoring", "reviews", `${done.review?.id}.yaml`);
     writeFileSync(file, readFileSync(file, "utf8").replace(/id: c\w+/, "id: cgone"));
     expect(readComments(root).problems[0]).toMatch(/no thread cgone/);
   });

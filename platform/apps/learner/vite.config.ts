@@ -185,8 +185,8 @@ function devReview(): Plugin {
         timer = setTimeout(() => server.ws.send({ type: "custom", event: "chalk:comments" }), 50);
       };
       server.watcher.add([
-        join(ROOT, "content", "*", "*", COMMENTS_FILE),
-        join(ROOT, "library", "props", "*", COMMENTS_FILE),
+        join(ROOT, "authoring", "books", "*", "*", COMMENTS_FILE),
+        join(ROOT, "authoring", "props", "*", COMMENTS_FILE),
         join(ROOT, REVIEWS_DIR, "*.yaml"),
       ]);
       for (const event of ["change", "add", "unlink"] as const) server.watcher.on(event, changed);

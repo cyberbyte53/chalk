@@ -934,7 +934,7 @@ type ChapterEntry = {
 };
 
 /** What inside a chapter the build never reads: its comments, runs and source. */
-const UNREAD = new Set(["comments.yaml", "runs", "source"]);
+const UNREAD = new Set(["runs", "source"]);
 
 function chapterCache(o: {
   dir: string;
