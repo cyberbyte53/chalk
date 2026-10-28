@@ -203,7 +203,7 @@ export function homeOf(
   if (c.prop !== undefined) return propHomes(root).get(c.prop);
   for (const value of [c.board, c.source]) {
     if (value === undefined) continue;
-    const [book, chapter] = value.replace(/^content\//, "").split("/");
+    const [book, chapter] = value.replace(/^content\/|^authoring\/books\//, "").split("/");
     if (book && chapter) return `content/${book}/${chapter}`;
   }
   return undefined;

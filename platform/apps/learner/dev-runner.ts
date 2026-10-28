@@ -60,12 +60,12 @@ export function nextStep(row: ChapterRow): Next {
 export function promptFor(book: string, chapter: string, step: Step, lesson?: string): string {
   const place = `content/${book}/${chapter}`;
   const lines = [
-    `Use the \`${step}\` skill on \`${place}\`.`,
+    `Use the \`${step}\` skill on \`${place}\` (its plan, runs and source: authoring/books/${book}/${chapter}).`,
     lesson !== undefined ? `The lesson to build is \`${lesson}\`.` : "",
     step === Step.ApplyReview
       ? "Handle this chapter's open threads (the comments tool, unanswered: true); see platform/docs/comments.md."
       : "",
-    "Work only in this repo. Run the checks the skill names. Write the run note in the chapter's runs/.",
+    `Work only in this repo. Run the checks the skill names. Write the run note in authoring/books/${book}/${chapter}/runs/.`,
     "End with a short summary for the person: what changed, what passed, what needs their decision.",
   ];
   return lines.filter((l) => l !== "").join("\n");

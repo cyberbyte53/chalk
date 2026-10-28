@@ -115,7 +115,6 @@ function queryFor(file: string): string | null {
     return family === undefined
       ? `at=content/${book}/${chapter}`
       : `source=content/${book}/${chapter}/questions/${family}`;
-  if (third === "runs" || third === "source") return `at=content/${book}/${chapter}`;
   return `at=content/${book}/${chapter}/${third}&show=questions`;
 }
 
@@ -503,12 +502,9 @@ class ChalkTree implements vscode.TreeDataProvider<Node> {
           label: `${i + 1}. ${title(readJson(join(build, `${ref.path}.json`)), slug)}`,
           path: slug,
           kind: "chapter",
-          file: join(
-            root,
-            "content",
-            slug,
-            existsSync(join(root, "content", slug, "plan.md")) ? "plan.md" : "build.yaml",
-          ),
+          file: existsSync(join(root, "authoring", "books", slug, "plan.md"))
+            ? join(root, "authoring", "books", slug, "plan.md")
+            : join(root, "content", slug, "build.yaml"),
         };
       });
     }

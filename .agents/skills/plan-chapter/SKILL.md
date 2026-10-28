@@ -1,6 +1,6 @@
 ---
 name: plan-chapter
-description: Plan a chapter from its source before anything is built. Use when a chapter folder has a source/ (or a source path) and no plan, or when the person asks to plan or re-plan a chapter. Writes content/<book>/<chapter>/plan.md as a draft for approval; builds nothing.
+description: Plan a chapter from its source before anything is built. Use when a chapter folder has a source/ (or a source path) and no plan, or when the person asks to plan or re-plan a chapter. Writes authoring/books/<book>/<chapter>/plan.md as a draft for approval; builds nothing.
 ---
 
 # Plan a chapter

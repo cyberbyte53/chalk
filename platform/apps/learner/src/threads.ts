@@ -31,7 +31,7 @@ export type Thread = {
   target?: string;
   /** A thread on a prop wherever it is used: shown under every board that places it. */
   prop?: string;
-  /** The line it is about: content/…/overview.ts:42, or a plan's content/…/plan.md:12. */
+  /** The line it is about: content/…/overview.ts:42, or a plan's authoring/books/…/plan.md:12. */
   source?: string;
   snapshot?: string;
   quote?: string;

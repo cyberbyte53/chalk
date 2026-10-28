@@ -354,7 +354,8 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
   const planComments = useMemo(
     () =>
       threads.filter(
-        (t) => t.board === undefined && t.source?.startsWith(`content/${chapterId}/plan.md`),
+        (t) =>
+          t.board === undefined && t.source?.startsWith(`authoring/books/${chapterId}/plan.md`),
       ),
     [threads, chapterId],
   );
@@ -465,7 +466,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
     const problem = await send({
       op: "start",
       thread: {
-        source: `content/${book}/${chapter}/plan.md${draft.lines === null ? "" : `:${draft.lines}`}`,
+        source: `authoring/books/${book}/${chapter}/plan.md${draft.lines === null ? "" : `:${draft.lines}`}`,
         ...(draft.section === "" ? {} : { snapshot: draft.section }),
         ...(draft.quote === "" ? {} : { quote: draft.quote }),
         text: draft.text,

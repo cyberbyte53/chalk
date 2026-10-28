@@ -32,7 +32,7 @@ content/
 
 ## A chapter's own files: `source/`, `plan.md`, `runs/`
 
-Besides its concepts and questions, a chapter folder holds the pipeline's artefacts. They are plain files, so any harness and any agent can read and write them, and git keeps their history.
+A chapter's pipeline artefacts live apart from what is built, in `authoring/books/<book>/<chapter>/` (with its threads, `comments.yaml`). `content/<book>/<chapter>/` holds only its concepts and questions. They are plain files, so any harness and any agent can read and write them, and git keeps their history.
 
 - **`source/`**: what the chapter is built from, as handed over (a PDF, a text extract, notes). The plan skill reads everything in it. Older chapters point at `authoring/sources/text/<file>` from their plan instead.
 - **`plan.md`**: the chapter plan, written before anything is built and approved before building starts. Front matter, then the sections Studio reads:

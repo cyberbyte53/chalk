@@ -933,9 +933,6 @@ type ChapterEntry = {
   reach: Reach;
 };
 
-/** What inside a chapter the build never reads: its comments, runs and source. */
-const UNREAD = new Set(["runs", "source"]);
-
 function chapterCache(o: {
   dir: string;
   root: string;
@@ -980,7 +977,7 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
   } catch {
     entry = undefined;
   }
-  const chapterFiles = filesUnder(join(c.contentDir, chapterPath), UNREAD);
+  const chapterFiles = filesUnder(join(c.contentDir, chapterPath));
   // The folder's own files are listed afresh: a file added or removed changes the key.
   if (entry !== undefined && keyOf(c, [...entry.deps, ...chapterFiles]) === entry.key) {
     for (const [path, json] of entry.files) c.files.set(path, json);

@@ -21,7 +21,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
   When a chat with the person ends, run `wrap-up`: corrections that could recur become checks, examples or guide lines, with the person's yes.
 
-  Each step writes a note to the chapter's `runs/`.
+  Each step writes a note to the chapter's `runs/`. A chapter's plan, run notes and source are in `authoring/books/<book>/<chapter>/`, apart from its built content.
 - **Look at what you make.** The chalk MCP (one service, `127.0.0.1:5174/mcp`; the configs in `.cursor/mcp.json`, `.vscode/mcp.json`, `.mcp.json` start a relay that starts the service if it isn't running and reconnects when it restarts, so there's nothing to start by hand) gives you:
   - `look`: boards drawn by the real learner app in Chrome. What you point at decides how much comes back: a piece (`<board>#game`) gives a picture of just it and everything about it (where it's written, its setup as the app has it, its current state, what can be done now, where each part is drawn); a board, its picture with each piece named and one line per piece; a lesson, thumbnails; a chapter or book, a check of every board in both languages at two widths. Problems found by measuring, or "ok" ([platform/docs/seeing-boards.md](platform/docs/seeing-boards.md));
   - `play`: taps and drags the real board as a student would, and says what each step set off and changed (in full), and whether the board was passed, with one picture: before | after;

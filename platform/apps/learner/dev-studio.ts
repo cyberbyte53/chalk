@@ -215,13 +215,13 @@ function chapterRow(
     });
   };
   for (const slug of listed) add(slug);
-  for (const slug of dirsIn(dir)) {
-    if (["source", "runs", "lessons", "published"].includes(slug)) continue;
-    if (existsSync(join(dir, slug, "build.yaml"))) add(slug);
-  }
-  const planFile = join(dir, "plan.md");
+  for (const slug of dirsIn(dir)) if (existsSync(join(dir, slug, "build.yaml"))) add(slug);
+  const authoring = authoringOf(root, book, chapter);
+  const planFile = join(authoring, "plan.md");
   const plan = existsSync(planFile) ? readPlan(planFile) : null;
-  const runNames = existsSync(join(dir, "runs")) ? readdirSync(join(dir, "runs")).sort() : [];
+  const runNames = existsSync(join(authoring, "runs"))
+    ? readdirSync(join(authoring, "runs")).sort()
+    : [];
   const mine = chapterComments(comments, byConcept, book, chapter);
   const row: Omit<ChapterRow, "next"> = {
     book,
@@ -231,7 +231,7 @@ function chapterRow(
     isListed,
     status: plan?.status ?? PlanStatus.None,
     approvedOn: plan?.approvedOn ?? null,
-    source: plan?.source ?? (existsSync(join(dir, "source")) ? "source/" : null),
+    source: plan?.source ?? (existsSync(join(authoring, "source")) ? "source/" : null),
     lessonsPlanned: plan?.lessonsPlanned ?? 0,
     plannedLessons: plan?.plannedLessons ?? [],
     runNames,
@@ -263,10 +263,12 @@ export function studioBoard(root: string): Board {
   for (const book of books) {
     const dir = join(content, book.id);
     const listed = readManifest(dir).chapters ?? [];
-    const all = [...listed, ...dirsIn(dir).filter((c) => !listed.includes(c))];
+    const all = [
+      ...new Set([...listed, ...dirsIn(dir), ...dirsIn(join(root, "authoring", "books", book.id))]),
+    ];
     for (const chapter of all) {
-      const cdir = join(dir, chapter);
-      if (!existsSync(join(cdir, "build.yaml")) && !existsSync(join(cdir, "plan.md"))) continue;
+      const isBuilt = existsSync(join(dir, chapter, "build.yaml"));
+      if (!isBuilt && !existsSync(join(authoringOf(root, book.id, chapter), "plan.md"))) continue;
       chapters.push(
         chapterRow(
           root,
@@ -286,7 +288,8 @@ export function studioBoard(root: string): Board {
 /** One chapter with its plan, runs and comments. */
 export function studioChapter(root: string, book: string, chapter: string): ChapterDetail | null {
   const dir = join(root, "content", book, chapter);
-  if (!existsSync(dir)) return null;
+  const authoring = authoringOf(root, book, chapter);
+  if (!existsSync(dir) && !existsSync(authoring)) return null;
   const content = join(root, "content");
   const bookManifest = readManifest(join(content, book));
   const comments = readComments(root);
@@ -300,9 +303,9 @@ export function studioChapter(root: string, book: string, chapter: string): Chap
     comments,
     byConcept,
   );
-  const planFile = join(dir, "plan.md");
-  const runsDir = join(dir, "runs");
-  const sourceDir = join(dir, "source");
+  const planFile = join(authoring, "plan.md");
+  const runsDir = join(authoring, "runs");
+  const sourceDir = join(authoring, "source");
   return {
     ...row,
     plan: existsSync(planFile) ? readFileSync(planFile, "utf8") : null,
@@ -324,7 +327,7 @@ export function setPlanStatus(
   chapter: string,
   status: typeof PlanStatus.Approved | typeof PlanStatus.Draft,
 ): string {
-  const file = join(root, "content", book, chapter, "plan.md");
+  const file = join(authoringOf(root, book, chapter), "plan.md");
   if (!existsSync(file)) throw new Error("no plan.md");
   let text = readFileSync(file, "utf8");
   if (!/^---\n[\s\S]*?\n---\n/.test(text)) text = `---\nstatus: draft\n---\n\n${text}`;
@@ -339,6 +342,13 @@ export function setPlanStatus(
   return text;
 }
 
+/**
+ * Where a chapter's authoring lives (its plan, run notes and source as handed over): under
+ * authoring/books/, apart from content/, which holds only what is built.
+ */
+export const authoringOf = (root: string, book: string, chapter: string): string =>
+  join(root, "authoring", "books", book, chapter);
+
 const slugify = (s: string) =>
   s
     .toLowerCase()
@@ -348,7 +358,8 @@ const slugify = (s: string) =>
 
 /**
  * A dropped source: a new or existing book, a new or existing chapter, one file into its
- * `source/`, and a queued plan.md if the chapter has none. The build manifests are not touched:
+ * `source/` (under authoring/books/<book>/<chapter>), and a queued plan.md there if the chapter has
+ * none. The build manifests are not touched:
  * the plan skill lists the chapter and its lessons once there is a plan.
  */
 export function dropSource(
@@ -376,7 +387,7 @@ export function dropSource(
       `title: { en: "${title}", hi: "${title}" }\n# Chapters in book order. A chapter is added here by its plan.\nchapters: []\n`,
     );
   }
-  const dir = join(bookDir, chapter);
+  const dir = authoringOf(root, book, chapter);
   mkdirSync(join(dir, "source"), { recursive: true });
   const safeName = drop.fileName.replace(/[^A-Za-z0-9._-]+/g, "-");
   writeFileSync(join(dir, "source", safeName), Buffer.from(drop.base64, "base64"));
@@ -385,7 +396,7 @@ export function dropSource(
     const title = drop.chapterTitle ?? titleOf(chapter);
     writeFileSync(
       planFile,
-      `---\nstatus: queued\nsource: source/\n---\n\n# ${title} (plan)\n\nQueued: run the \`plan-chapter\` skill on \`content/${book}/${chapter}\`.\n`,
+      `---\nstatus: queued\nsource: source/\n---\n\n# ${title} (plan)\n\nQueued: run the \`plan-chapter\` skill on \`authoring/books/${book}/${chapter}\`.\n`,
     );
   }
   return { book, chapter };
