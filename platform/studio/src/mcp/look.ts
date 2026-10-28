@@ -240,8 +240,12 @@ const block = (head: string, lines: readonly string[]) =>
 type Where = { sources: Record<string, { board?: string; pieces: Record<string, string> }> };
 
 /** One version's heading: "ok · 390 · en" or "2 problems · 360 · hi". */
-const versionWords = (shot: Shot, o: { width: number; locale: Locale; play?: boolean }) =>
-  `${shot.overflow.length === 0 ? "ok" : `${shot.overflow.length} problem${shot.overflow.length === 1 ? "" : "s"}`} · ${o.width} · ${o.locale}${o.play ? " · played" : ""}`;
+/** A screen in words: "390" for a phone-height column, "640×720" when the height is given. */
+export const screenWords = (s: { width: number; height?: number }) =>
+  s.height === undefined ? `${s.width}` : `${s.width}×${s.height}`;
+
+const versionWords = (shot: Shot, o: Version & { play?: boolean }) =>
+  `${shot.overflow.length === 0 ? "ok" : `${shot.overflow.length} problem${shot.overflow.length === 1 ? "" : "s"}`} · ${screenWords(o)} · ${o.locale}${o.play ? " · played" : ""}`;
 
 /** The board's answer: one line per piece, with its current state. */
 export function boardText(
@@ -377,11 +381,21 @@ export function pieceText(
 /** How fast boards' clocks run when looked at or played, unless asked otherwise. */
 export const DEFAULT_SPEED = 10;
 
+/** A screen to draw on: the column's width, and the screen's height when it matters. */
+export type Screen = { width: number; height?: number };
+
+/** The screens a check draws every board on: a small phone, a laptop column, and a projector. */
+export const CHECK_SCREENS: readonly Screen[] = [
+  { width: 360, height: 640 },
+  { width: 640 },
+  { width: 640, height: 720 },
+];
+
 export type LookArgs = {
   /** How fast the board's clock runs (1: real time; default DEFAULT_SPEED). */
   speed?: number;
   locales?: Locale[];
-  widths?: number[];
+  screens?: Screen[];
   play?: boolean;
   labels?: boolean;
   continue?: boolean;
@@ -395,15 +409,15 @@ export type Answer = {
 
 const PHONE = 390;
 
-type Version = { locale: Locale; width: number };
+type Version = Screen & { locale: Locale };
 
-function versionsOf(a: { locales?: Locale[]; widths?: number[] }, isMany: boolean): Version[] {
+function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }, isMany: boolean): Version[] {
   const locales = a.locales ?? (isMany ? (["en", "hi"] as Locale[]) : (["en"] as Locale[]));
-  const widths = a.widths ?? (isMany ? [360, 640] : [PHONE]);
-  return locales.flatMap((locale) => widths.map((width) => ({ locale, width })));
+  const screens = a.screens ?? (isMany ? CHECK_SCREENS : [{ width: PHONE }]);
+  return locales.flatMap((locale) => screens.map((screen) => ({ ...screen, locale })));
 }
 
-const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${v.width}` : "");
+const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${screenWords(v)}` : "");
 
 /** `look` at a piece, a board or a group. A chapter or book goes to `check`. */
 export async function look(
@@ -420,6 +434,7 @@ export async function look(
   const options = (v: Version): ShotOptions => ({
     locale: v.locale,
     width: v.width,
+    ...(v.height === undefined ? {} : { height: v.height }),
     play: a.play === true,
     questions: target.kind === "group",
     speed: a.speed ?? DEFAULT_SPEED,
@@ -450,7 +465,7 @@ export async function look(
         if (s.overflow.length > 0) {
           problems += 1;
           lines.push(
-            `${s.board}${versions.length > 1 ? ` (${v.locale} · ${v.width})` : ""}`,
+            `${s.board}${versions.length > 1 ? ` (${v.locale} · ${screenWords(v)})` : ""}`,
             ...s.overflow.map((p) => `  ${p}`),
           );
         }
@@ -458,7 +473,7 @@ export async function look(
           tiles.push({
             picture: pictureOf(s),
             labels: "none",
-            caption: `${s.board.split("/").at(-1)}${versions.length > 1 ? ` · ${v.locale} ${v.width}` : ""}`,
+            caption: `${s.board.split("/").at(-1)}${versions.length > 1 ? ` · ${v.locale} ${screenWords(v)}` : ""}`,
           });
       }
     }
@@ -491,7 +506,7 @@ export async function look(
       s.overflow.length === 0
         ? []
         : [
-            `problems at ${versions[i + 1]?.locale} · ${versions[i + 1]?.width}:`,
+            `problems at ${versions[i + 1]?.locale} · ${screenWords(versions[i + 1] as Version)}:`,
             ...s.overflow.map((p) => `  ${p}`),
           ],
     );
@@ -549,6 +564,7 @@ export async function check(
           {
             locale: job.v.locale,
             width: job.v.width,
+            ...(job.v.height === undefined ? {} : { height: job.v.height }),
             questions: true,
             play: a.play === true,
             speed: a.speed ?? DEFAULT_SPEED,
@@ -560,7 +576,7 @@ export async function check(
         );
         for (const s of d.shots) {
           if (!wanted.has(s.board)) continue;
-          seen.add(`${s.board}@${job.v.locale}${job.v.width}`);
+          seen.add(`${s.board}@${job.v.locale}${screenWords(job.v)}`);
           if (s.overflow.length > 0) found.push({ board: s.board, v: job.v, problems: s.overflow });
         }
         done += 1;
@@ -575,7 +591,7 @@ export async function check(
   const badBoards = new Set(found.map((f) => f.board));
   const missing = total - seen.size;
   const lines = [
-    `${target.path}: ${target.boards.length} boards · ${seen.size} drawings (${[...new Set(versions.map((v) => v.locale))].join(", ")} × ${[...new Set(versions.map((v) => v.width))].join(", ")}) · ${target.boards.length - badBoards.size} ok · ${badBoards.size} with problems${isCancelled ? ` · cancelled after ${done} of ${done + jobs.length} lessons` : ""}`,
+    `${target.path}: ${target.boards.length} boards · ${seen.size} drawings (${[...new Set(versions.map((v) => v.locale))].join(", ")} × ${[...new Set(versions.map((v) => screenWords(v)))].join(", ")}) · ${target.boards.length - badBoards.size} ok · ${badBoards.size} with problems${isCancelled ? ` · cancelled after ${done} of ${done + jobs.length} lessons` : ""}`,
   ];
   if (missing > 0 && !isCancelled)
     lines.push(
@@ -584,7 +600,7 @@ export async function check(
   for (const board of badBoards) {
     lines.push(board);
     for (const f of found.filter((x) => x.board === board))
-      lines.push(...f.problems.map((p) => `  ${f.v.locale} · ${f.v.width}: ${p}`));
+      lines.push(...f.problems.map((p) => `  ${f.v.locale} · ${screenWords(f.v)}: ${p}`));
   }
   if (badBoards.size > 0) lines.push("Look at a board to see it: look at …/<board>.");
   return {
@@ -596,6 +612,8 @@ export async function check(
 
 export type PlayArgs = {
   board: string;
+  /** The screen's height in px (default a phone's). */
+  height?: number;
   /** How fast the board's clock runs (1: real time; default DEFAULT_SPEED). */
   speed?: number;
   steps: Step[];
@@ -670,6 +688,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   const o: ShotOptions = {
     locale: a.locale ?? "en",
     width: a.width ?? PHONE,
+    ...(a.height === undefined ? {} : { height: a.height }),
     play: true,
     speed: a.speed ?? DEFAULT_SPEED,
   };
@@ -684,7 +703,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, locale);
   for (const r of d.steps) if (r.changed !== undefined) r.changed = shown(r.changed, locale);
   const lines = [
-    `${a.board}   play · ${o.width} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
+    `${a.board}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
   ];
   if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
   const changedPieces = new Set<string>();

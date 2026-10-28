@@ -300,7 +300,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     .array(z.enum(["en", "hi"]))
     .min(1)
     .max(2);
-  const widths = z.array(z.number().int().min(320).max(640)).min(1).max(3);
+  const width = z.number().int().min(320).max(640);
+  const height = z.number().int().min(480).max(1200);
+  const screens = z
+    .array(z.object({ width, height: height.optional() }).strict())
+    .min(1)
+    .max(3);
 
   offer(
     server.registerTool(
@@ -308,7 +313,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Look at boards",
         description:
-          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`<board>#game`, `<board>#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A board (`class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi at 360 and 640 by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `widths` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
+          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`<board>#game`, `<board>#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. A board (`class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
         inputSchema: {
           at: z
             .string()
@@ -319,10 +324,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           locales: locales
             .optional()
             .describe('Languages, side by side: ["en", "hi"]. Default en.'),
-          widths: widths
+          screens: screens
             .optional()
             .describe(
-              "Column widths in px, side by side: 360 small phone, 390 phone (default), 640 tablet or laptop.",
+              "Screens, side by side: the column's width (360 small phone, 390 phone, 640 tablet or laptop column) and the screen's height when it matters (a projector: { width: 640, height: 720 }). Default a phone (390, 844 tall). A chapter check draws 360×640, 640, and 640×720.",
             ),
           play: z
             .boolean()
@@ -390,13 +395,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .optional()
             .describe("Whole boards in the picture, not cut to what changed."),
           locale: z.enum(["en", "hi"]).optional(),
-          width: z
-            .number()
-            .int()
-            .min(320)
-            .max(640)
+          width: width.optional().describe("Column width in px (default 390)."),
+          height: height
             .optional()
-            .describe("Column width in px (default 390)."),
+            .describe("Screen height in px (default 844, a phone; a projector is 720)."),
           labels: z.boolean().optional().describe("Name the pieces on the picture. Default true."),
           speed: z
             .number()

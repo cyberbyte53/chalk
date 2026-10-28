@@ -105,23 +105,23 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async settings() {
     const c = await agent("stress-settings");
-    const combos = [360, 390, 640].flatMap((width) =>
-      (["en", "hi"] as const).map((locale) => ({ width, locale })),
+    const combos = [{ width: 360 }, { width: 390 }, { width: 640, height: 720 }].flatMap((screen) =>
+      (["en", "hi"] as const).map((locale) => ({ screen, locale })),
     );
     const cs = await Promise.all(
       combos.map((o) =>
         call(c, "look", {
           at: `${R}/which-fractions-end/bill`,
-          widths: [o.width],
+          screens: [o.screen],
           locales: [o.locale],
           labels: false,
         }),
       ),
     );
-    expect("3 widths × 2 languages at once all succeed", allOk(cs), firstError(cs));
+    expect("3 screens × 2 languages at once all succeed", allOk(cs), firstError(cs));
     expect(
       "each picture is drawn at its own width (2× pixels)",
-      cs.every((r, i) => pngWidths(r)[0] === (combos[i]?.width ?? 0) * 2),
+      cs.every((r, i) => pngWidths(r)[0] === (combos[i]?.screen.width ?? 0) * 2),
       cs.map((r) => pngWidths(r)[0]).join("/"),
     );
   },
@@ -387,8 +387,8 @@ const cases: Record<string, () => Promise<void>> = {
     const m = /(\d+) boards · (\d+) drawings/.exec(textOf(r));
     const [boards, drawings] = [Number(m?.[1] ?? 0), Number(m?.[2] ?? 0)];
     expect(
-      "a chapter is checked: every board in two languages at two widths",
-      r.ok && boards > 0 && drawings === boards * 4,
+      "a chapter is checked: every board in two languages on three screens",
+      r.ok && boards > 0 && drawings === boards * 6,
       r.error ?? `${drawings} drawings of ${boards} boards, ${r.ms}ms`,
     );
   },

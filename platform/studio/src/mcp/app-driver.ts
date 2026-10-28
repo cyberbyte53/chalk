@@ -13,6 +13,8 @@ import { type BoardModel, boardModelSchema } from "./model-schema";
  */
 
 export const PHONE_WIDTH = 390;
+/** A phone\'s screen height in px: what a board is checked against unless a screen is given. */
+export const PHONE_HEIGHT = 844;
 
 let base: Promise<string> | undefined;
 let browser: Promise<Browser> | undefined;
@@ -343,6 +345,8 @@ export type ShotOptions = {
   questions?: boolean;
   /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
   width?: number;
+  /** The screen's height in px: what a prop may take 60% of (a phone ~840, a projector 720). */
+  height?: number;
   /** The pictures taken: at double resolution (default), as thumbnails, or none (a check). */
   pictures?: "full" | "thumb" | "none";
   /** How fast the board's clock runs (1: real time). */
@@ -700,7 +704,10 @@ async function shootNow(
       throw new Error(`Can't continue ${board}: ${why}. Run the steps again without continue.`);
   }
   at.errors.length = 0;
-  await page.setViewportSize({ width: (o.width ?? PHONE_WIDTH) + 48, height: 900 });
+  await page.setViewportSize({
+    width: (o.width ?? PHONE_WIDTH) + 48,
+    height: o.height ?? PHONE_HEIGHT,
+  });
   const isOnApp = page.url().startsWith(base) && !at.isStale;
   at.isStale = false;
   try {
