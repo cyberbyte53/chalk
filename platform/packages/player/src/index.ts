@@ -27,6 +27,8 @@ export { type PropModule, type PropRegistry, type PropViewProps, propModule } fr
 export { checkProp } from "./check-prop";
 export { groupView, useTheme, type GroupViewOptions } from "./group-view";
 export {
+  FRAME_MAP,
+  type FrameMap,
   type FrameContextValue,
   type FrameLabel,
   FrameStage,

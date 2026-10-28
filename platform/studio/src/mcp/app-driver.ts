@@ -358,9 +358,12 @@ export type ShotOptions = {
  * presses, taps or drags the real page, found by the tags the player puts on it (data-piece,
  * data-part); the app's own player and props do the rest.
  */
+/** A point in a prop's own units, inside a frame (a plane's (x, y), a number line's x). */
+export type Point = { x: number; y?: number };
+
 export type Step =
-  | { tap: string; text?: string }
-  | { drag: string; by: [number, number] }
+  | { tap: string; text?: string; at?: Point }
+  | { drag: string; by?: [number, number]; to?: Point }
   | { wait: number };
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
@@ -629,15 +632,22 @@ const stepWords = (step: Step): string =>
   "tap" in step
     ? `tap ${step.tap}${step.text ? ` "${step.text}"` : ""}`
     : "drag" in step
-      ? `drag ${step.drag} by ${step.by.join(", ")}`
+      ? `drag ${step.drag} ${step.to !== undefined ? `to ${pointWords(step.to)}` : `by ${(step.by ?? [0, 0]).join(", ")}`}`
       : `wait ${step.wait}ms`;
+const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y})`);
 
 /**
  * Finds what a step names on the board and marks it (data-chalk-target), or says what is there.
  * `text` picks, inside the piece or part, the clickable thing whose words include it (maths read
- * as its TeX too, so "x^2 - 4" or "x² − 4" both work).
+ * as its TeX too, so "x^2 - 4" or "x² − 4" both work). `at`: a point in the prop's own units,
+ * placed through the frame the target is drawn in (the frame's picture carries its map); the
+ * answer is then where that point is on the page, in CSS pixels.
  */
-function markTarget(arg: { target: string; text?: string }): string | null {
+function markTarget(arg: {
+  target: string;
+  text?: string;
+  at?: { x: number; y?: number };
+}): string | { x: number; y: number } | null {
   for (const old of document.querySelectorAll("[data-chalk-target]"))
     old.removeAttribute("data-chalk-target");
   // The player writes each node's address on it (data-path): one exact match.
@@ -684,7 +694,25 @@ function markTarget(arg: { target: string; text?: string }): string | null {
     el = found;
   }
   (el as HTMLElement).setAttribute("data-chalk-target", "");
-  return null;
+  if (arg.at === undefined) return null;
+  // Aiming: the frame this is drawn in, or the one it draws (a plane aimed at directly).
+  type Mapped = Element & {
+    __chalkFrame?: {
+      toPx: (x: number, y: number) => readonly [number, number];
+      width: number;
+      height: number;
+    };
+  };
+  const frameEl = (el.closest("[data-frame]") ?? el.querySelector("[data-frame]")) as Mapped | null;
+  const map = frameEl?.__chalkFrame;
+  if (frameEl === null || map === undefined)
+    return `${arg.target} has no coordinate system to aim in (no frame drawn there)`;
+  const [fx, fy] = map.toPx(arg.at.x, arg.at.y ?? 0);
+  const box = frameEl.getBoundingClientRect();
+  return {
+    x: box.left + (fx / map.width) * box.width,
+    y: box.top + (fy / map.height) * box.height,
+  };
 }
 
 async function shootNow(
@@ -783,14 +811,17 @@ async function shootNow(
       const words = stepWords(step);
       if ("wait" in step) await page.waitForTimeout(Math.min(step.wait, 10000));
       else {
-        const missing = await page.evaluate(markTarget, {
+        const found = await page.evaluate(markTarget, {
           target: "tap" in step ? step.tap : step.drag,
           text: "tap" in step ? step.text : undefined,
+          at: "tap" in step ? step.at : step.to,
         });
-        if (missing !== null) {
-          steps.push({ step: words, events: [], passed: false, errors: [`✗ ${missing}`] });
+        if (typeof found === "string") {
+          steps.push({ step: words, events: [], passed: false, errors: [`✗ ${found}`] });
           break;
         }
+        // Where the step is aimed, when it names a point: on the page, in CSS pixels.
+        const aimed = found ?? undefined;
         const target = page.locator("[data-chalk-target]").first();
         // A control that is turned off can't be tapped: say so, rather than wait for it.
         const isOff = await target.evaluate(
@@ -806,16 +837,19 @@ async function shootNow(
           });
           break;
         }
-        if ("tap" in step) await target.click({ timeout: 5000 });
-        else {
+        if ("tap" in step) {
+          if (aimed === undefined) await target.click({ timeout: 5000 });
+          else await page.mouse.click(aimed.x, aimed.y);
+        } else {
           await target.scrollIntoViewIfNeeded({ timeout: 5000 });
           const box = await target.boundingBox();
           if (box === null) throw new Error(`${step.drag} isn't on screen`);
           const x = box.x + box.width / 2;
           const y = box.y + box.height / 2;
+          const to = aimed ?? { x: x + (step.by?.[0] ?? 0), y: y + (step.by?.[1] ?? 0) };
           await page.mouse.move(x, y);
           await page.mouse.down();
-          await page.mouse.move(x + step.by[0], y + step.by[1], { steps: 12 });
+          await page.mouse.move(to.x, to.y, { steps: 12 });
           await page.mouse.up();
         }
       }

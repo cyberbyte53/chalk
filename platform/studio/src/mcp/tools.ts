@@ -249,6 +249,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     "affected",
   );
 
+  const point = z.object({ x: z.number(), y: z.number().optional() }).strict();
   const step = z.union([
     z
       .object({
@@ -259,14 +260,29 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           .string()
           .optional()
           .describe('Inside it, the button or option whose words include this: "−6", "Check".'),
+        at: point
+          .optional()
+          .describe(
+            "A point in the prop's own units to tap, inside its frame: { x: -4, y: 2 } on a plane, { x: 1.5 } on a number line.",
+          ),
       })
       .strict(),
     z
       .object({
         drag: z.string().describe('A piece or part to drag, by address: "graph/point".'),
-        by: z.tuple([z.number(), z.number()]).describe("How far, in pixels: [right, down]."),
+        by: z
+          .tuple([z.number(), z.number()])
+          .optional()
+          .describe("How far, in pixels: [right, down]."),
+        to: point
+          .optional()
+          .describe("Where to, in the prop's own units, inside its frame: { x: -4, y: 2 }."),
       })
-      .strict(),
+      .strict()
+      .refine((s) => (s.by === undefined) !== (s.to === undefined), {
+        message:
+          "a drag says where to: `to` (in the prop's units) or `by` (in pixels), one of them",
+      }),
     z.object({ wait: z.number().int().min(0).max(10000).describe("Milliseconds.") }).strict(),
   ]);
 

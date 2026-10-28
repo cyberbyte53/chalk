@@ -1,7 +1,7 @@
 import { type Obstacles, type PixelPoint, Stage, placeLabels } from "@chalk/draw";
 import { type FramePixels, shows } from "@chalk/prop";
 import { type ComponentChildren, type JSX, createContext } from "preact";
-import { useContext, useRef } from "preact/hooks";
+import { useContext, useLayoutEffect, useRef } from "preact/hooks";
 
 /**
  * Frames: several props drawing into one picture (plans/props-composition.md § 5). The frame's
@@ -55,6 +55,15 @@ export type FrameContextValue = {
 
 const FrameContext = createContext<FrameContextValue | null>(null);
 
+/** The property a frame's picture carries its map under (see `frameMapOf`). */
+export const FRAME_MAP = "__chalkFrame";
+/** A frame's map as its picture carries it: model units to the picture's own pixels. */
+export type FrameMap = {
+  toPx: (x: number, y: number) => readonly [number, number];
+  width: number;
+  height: number;
+};
+
 /** The frame a prop is drawing in, or null when it is drawn on its own. */
 export function useFrame(): FrameContextValue | null {
   return useContext(FrameContext);
@@ -84,6 +93,14 @@ export function FrameStage({
 }): JSX.Element {
   const store = useRef<LabelStore>(new Map()).current;
   const svg = useRef<SVGSVGElement>(null);
+  // The frame's map, on its own element: a tool outside the app (the chalk MCP's play) aims a tap
+  // or a drag at a point in the prop's units ("put P at (−4, 2)") by asking the picture where it is.
+  useLayoutEffect(() => {
+    const el = svg.current as (SVGSVGElement & { [FRAME_MAP]?: FrameMap }) | null;
+    if (el === null) return;
+    el[FRAME_MAP] = { toPx: (x, y) => px.toPx(x, y), width: px.width, height: px.height };
+    el.setAttribute("data-frame", "");
+  }, [px]);
   const toModel = (clientX: number, clientY: number, at: FramePixels) => {
     const box = svg.current?.getBoundingClientRect();
     if (box === undefined || box.width === 0) return at.fromPx(0, 0);
