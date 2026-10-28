@@ -21,7 +21,7 @@ app's own `?dev&at=` page, so what you see is what the phone draws.
   - **Approve** (✓ on the file, or "Chalk: Approve this planning file" in the open file's title bar or right-click): in order, once it is committed; the dev server writes `approved: <commit>`. **Take back** undoes it.
   - **Add a chapter's source** (the tree's title bar): copies a PDF or text into `authoring/books/<book>/<chapter>/source/`. Then ask your agent to run `plan-chapter`.
 - **Problems on planning files:** a failing check (an objective citing what the outline hasn't, a board serving no objective, a need without a verdict) is a problem on the line it is about.
-- **Comment on words:** select words in a planning file, right-click, "Chalk: Comment on the selected words": a thread on those words, in the chapter's comments.
+- **Comment on words:** select words in a planning file and press ⌥⌘M (Ctrl+Alt+M), or right-click → "Chalk: Comment on the selected words": a thread on those words, in the chapter's comments.
 - **Reviews**, at the top of the Chalk tree: every review in one place. At the top, your threads not handed over yet (Copy for agent hands them over); then each review, newest first, with where it stands ("1 open, 3 ready") and its threads, each with its status, the latest plan or answer, and the whole thread in its tooltip.
   - Click a review: its page in the preview. Click a thread: the review's page, opened at that thread.
   - On a thread: Reply (sends a planned or ready one back to the agent), Close, Withdraw, Open board, Open source line.
