@@ -1,6 +1,7 @@
 /**
  * Studio (`?dev&studio`): the content pipeline as the files say it is. A board of every chapter
- * with its stage; a chapter's plan, rendered, with comments and the approve switch; its runs; a
+ * with its stage; a chapter's planning files in order, each rendered with its checks, comments and
+ * the approve switch; its runs; a
  * drop zone for a new chapter's source. Studio builds nothing: agents build, through the skills
  * in `.claude/skills/`, and this page is how a person watches and steers. Data comes from
  * /dev-studio (see ../dev-studio.ts) and comments from /dev-review.
@@ -10,12 +11,11 @@ import { marked } from "marked";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RunState, Step } from "../dev-runner";
-import type { Board, ChapterDetail, ChapterRow, PlanStatus } from "../dev-studio";
+import type { Board, ChapterDetail, ChapterRow, PlanningFile } from "../dev-studio";
 import { type Thread, isFinished, useThreads } from "./threads";
 
 const Stage = {
   None: "none",
-  Queued: "queued",
   Draft: "draft",
   Approved: "approved",
   Building: "building",
@@ -25,19 +25,17 @@ type Stage = (typeof Stage)[keyof typeof Stage];
 
 const stageLabel: Record<Stage, string> = {
   none: "No plan",
-  queued: "Queued",
-  draft: "Plan to review",
+  draft: "Planning",
   approved: "Approved",
   building: "Building",
   built: "Built",
 };
 
-/** Where a chapter stands, from its plan's status and how many of its lessons exist. */
+/** Where a chapter stands, from its planning files and how many of its lessons exist. */
 function stageOf(row: ChapterRow): Stage {
   const written = row.lessons.filter((l) => l.isWritten).length;
   if (row.status === "none") return written > 0 ? Stage.Built : Stage.None;
-  if (row.status === "queued" || row.status === "draft") return row.status;
-  if (row.status === "built") return Stage.Built;
+  if (row.status === "draft") return Stage.Draft;
   if (written === 0) return Stage.Approved;
   return row.lessonsPlanned > 0 && written < row.lessonsPlanned ? Stage.Building : Stage.Built;
 }
@@ -217,7 +215,7 @@ function DropZone({ books, onDone }: { books: Board["books"]; onDone: () => void
         base64: btoa(binary),
       });
       setNote(
-        `Queued content/${where.book}/${where.chapter}. Next: run the plan-chapter skill on it.`,
+        `Dropped into authoring/books/${where.book}/${where.chapter}/source. Next: run the plan-chapter skill on it.`,
       );
       setChapter("");
       setFile(null);
@@ -232,7 +230,7 @@ function DropZone({ books, onDone }: { books: Board["books"]; onDone: () => void
     <section class="studio-drop">
       <h2>New chapter</h2>
       <p class="review-hint">
-        Drop the source (a PDF, a text extract, notes) and the chapter is queued with an empty plan.
+        Drop the source (a PDF, a text extract, notes) and the chapter's next step is to plan it.
         Nothing is built here; the plan skill picks it up.
       </p>
       <div class="studio-drop-row">
@@ -274,7 +272,7 @@ function DropZone({ books, onDone }: { books: Board["books"]; onDone: () => void
   );
 }
 
-/** The plan's markdown with an id on each heading, so comments can point at sections. */
+/** A planning file's markdown with an id on each heading, so comments can point at sections. */
 function renderPlan(plan: string): { html: string; sections: string[] } {
   const body = plan.replace(/^---\n[\s\S]*?\n---\n/, "");
   const sections: string[] = [];
@@ -289,7 +287,7 @@ function renderPlan(plan: string): { html: string; sections: string[] } {
 }
 
 /**
- * Where a quoted passage sits in plan.md, as 1-based lines ("12" or "12-14"), so an agent can
+ * Where a quoted passage sits in a planning file, as 1-based lines ("12" or "12-14"), so an agent can
  * open the file at the place. Markdown marks are ignored when matching, and the quote may run
  * over several lines.
  */
@@ -318,6 +316,16 @@ export function linesOf(plan: string, quote: string): string | null {
   }
   if (best === null) return null;
   return best.start === best.end ? `${best.start + 1}` : `${best.start + 1}-${best.end + 1}`;
+}
+
+/** A planning file's state in words. */
+function fileWords(f: PlanningFile): string {
+  if (f.status === "missing") return "not written";
+  if (f.problems.length > 0) return "checks fail";
+  if (f.recheck.length > 0) return "to check again";
+  if (!f.isApproved) return "checks hold";
+  if (f.status === "changed") return "changed since approved";
+  return f.status === "approved" ? `approved ${f.approvedAt ?? ""}`.trim() : "to approve";
 }
 
 type Draft = {
@@ -351,15 +359,32 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
     return () => window.clearInterval(timer);
   }, [load]);
   const chapterId = `${book}/${chapter}`;
+  // The planning file shown: the one asked for, else the first not done, else the brief.
+  const [chosen, setChosen] = useState<string | null>(null);
+  const shown: PlanningFile | undefined =
+    detail?.pipeline.find((f) => f.step === chosen) ??
+    detail?.pipeline.find(
+      (f) => f.status !== "approved" || f.problems.length > 0 || f.recheck.length > 0,
+    ) ??
+    detail?.pipeline[0];
+  const shownPath = shown === undefined ? "" : `authoring/books/${chapterId}/${shown.file}`;
   const planComments = useMemo(
-    () =>
-      threads.filter(
-        (t) =>
-          t.board === undefined && t.source?.startsWith(`authoring/books/${chapterId}/plan.md`),
-      ),
-    [threads, chapterId],
+    () => threads.filter((t) => t.board === undefined && t.source?.startsWith(shownPath)),
+    [threads, shownPath],
   );
-  const rendered = useMemo(() => (detail?.plan ? renderPlan(detail.plan) : null), [detail?.plan]);
+  const text = shown?.text ?? null;
+  const rendered = useMemo(
+    () =>
+      text === null
+        ? null
+        : shown?.file.endsWith(".md")
+          ? renderPlan(text)
+          : {
+              html: `<pre>${text.replace(/[&<>]/g, (c) => `&#${c.charCodeAt(0)};`)}</pre>`,
+              sections: [],
+            },
+    [text, shown?.file],
+  );
   const [draft, setDraft] = useState<Draft | null>(null);
   /** A "Comment" button floating by the words just selected in the plan. */
   const [pick, setPick] = useState<{ quote: string; section: string; x: number; y: number } | null>(
@@ -441,12 +466,19 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
   if (error !== null) return <p class="review-msg">{error}</p>;
   if (detail === null) return <p class="review-msg">Reading the chapter…</p>;
   const stage = stageOf(detail);
-  const setStatus = async (status: Extract<PlanStatus, "approved" | "draft">) => {
-    const next = await post<ChapterDetail>(status === "approved" ? "approve" : "reopen", {
-      book,
-      chapter,
-    });
-    setDetail(next);
+  const setApproval = async (isApproved: boolean) => {
+    if (shown === undefined) return;
+    try {
+      const next = await post<ChapterDetail>(isApproved ? "approve" : "reopen", {
+        book,
+        chapter,
+        step: shown.step,
+      });
+      setDetail(next);
+      setError(null);
+    } catch (e) {
+      window.alert(e instanceof Error ? e.message : String(e));
+    }
   };
   const startComment = (from?: { quote: string; section: string; x: number; y: number }) => {
     const quote = from?.quote ?? "";
@@ -454,7 +486,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
     setDraft({
       section,
       quote,
-      lines: detail?.plan ? linesOf(detail.plan, quote) : null,
+      lines: text !== null ? linesOf(text, quote) : null,
       text: "",
       at: from === undefined ? null : { x: from.x, y: from.y },
     });
@@ -466,7 +498,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
     const problem = await send({
       op: "start",
       thread: {
-        source: `authoring/books/${book}/${chapter}/plan.md${draft.lines === null ? "" : `:${draft.lines}`}`,
+        source: `${shownPath}${draft.lines === null ? "" : `:${draft.lines}`}`,
         ...(draft.section === "" ? {} : { snapshot: draft.section }),
         ...(draft.quote === "" ? {} : { quote: draft.quote }),
         text: draft.text,
@@ -483,36 +515,72 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
         <h1>{detail.title}</h1>
         <p class="review-hint">
           {detail.bookTitle} · <span class={`studio-stage is-${stage}`}>{stageLabel[stage]}</span>
-          {detail.approvedOn !== null && ` · approved ${detail.approvedOn}`}
           {detail.source !== null && ` · source: ${detail.source}`}
           {detail.files.length > 0 && ` (${detail.files.join(", ")})`}
         </p>
+        <nav class="studio-files" aria-label="Planning files, in order">
+          {detail.pipeline.map((f, i) => (
+            <button
+              type="button"
+              key={f.step}
+              class={`studio-file is-${f.status}${f.problems.length > 0 ? " is-failing" : ""}${f.recheck.length > 0 ? " is-recheck" : ""}${f.step === shown?.step ? " is-shown" : ""}`}
+              onClick={() => setChosen(f.step)}
+            >
+              {i + 1}. {f.file.replace(/^source\//, "")}
+              <span class="studio-file-state">{fileWords(f)}</span>
+            </button>
+          ))}
+        </nav>
+        {shown !== undefined && (
+          <div class="studio-gate">
+            {shown.problems.map((p) => (
+              <p key={p} class="studio-gate-problem">
+                ✗ {p}
+              </p>
+            ))}
+            {shown.recheck.length > 0 && (
+              <p class="studio-gate-problem">
+                To check again: {shown.recheck.join(", ")} changed since it was approved.
+              </p>
+            )}
+            {shown.notes.map((n) => (
+              <p key={n} class="review-hint">
+                {n}
+              </p>
+            ))}
+          </div>
+        )}
         <div class="review-chips">
-          {detail.status === "draft" && (
-            <button type="button" class="review-primary" onClick={() => void setStatus("approved")}>
-              Approve the plan
+          {shown?.isApproved && shown.status === "draft" && (
+            <button type="button" class="review-primary" onClick={() => void setApproval(true)}>
+              Approve {shown.file}
             </button>
           )}
-          {detail.status === "approved" && (
-            <button type="button" class="review-chip" onClick={() => void setStatus("draft")}>
-              Reopen the plan
+          {shown?.isApproved && shown.status === "changed" && (
+            <button type="button" class="review-primary" onClick={() => void setApproval(true)}>
+              Approve {shown.file} again
             </button>
           )}
-          {detail.plan !== null && (
+          {shown?.isApproved && shown.status === "approved" && (
+            <button type="button" class="review-chip" onClick={() => void setApproval(false)}>
+              Take back the approval
+            </button>
+          )}
+          {text !== null && (
             <button type="button" class="review-chip" onClick={() => startComment()}>
-              Comment on the whole plan
+              Comment on the whole file
             </button>
           )}
-          {detail.plan !== null && (
-            <span class="review-hint">Select words in the plan to comment on that place.</span>
-          )}
+          {text !== null && <span class="review-hint">Select words to comment on that place.</span>}
         </div>
       </section>
 
       <div class="studio-columns">
         <section class="studio-plan" ref={planRef}>
           {rendered === null ? (
-            <p class="review-msg">No plan yet.</p>
+            <p class="review-msg">
+              {shown === undefined ? "No planning files yet." : `${shown.file} isn't written yet.`}
+            </p>
           ) : (
             // biome-ignore lint/security/noDangerouslySetInnerHtml: the plan is this repo's own markdown, not user input
             <div class="studio-md" dangerouslySetInnerHTML={{ __html: rendered.html }} />
@@ -534,8 +602,13 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
           {draft !== null && (
             <div class="review-sheet is-near studio-sheet">
               <div class="review-sheet-where">
-                {draft.section === "" ? "The plan" : draft.section}
-                {draft.lines !== null && <span class="review-hint"> · plan.md:{draft.lines}</span>}
+                {draft.section === "" ? shown?.file : draft.section}
+                {draft.lines !== null && (
+                  <span class="review-hint">
+                    {" "}
+                    · {shown?.file}:{draft.lines}
+                  </span>
+                )}
               </div>
               {draft.quote !== "" && <blockquote class="review-quote">{draft.quote}</blockquote>}
               <textarea
@@ -583,7 +656,7 @@ function ChapterView({ book, chapter }: { book: string; chapter: string }): JSX.
             {detail.lessons.length === 0 && <li class="review-hint">None built.</li>}
           </ol>
 
-          <h3>Plan comments</h3>
+          <h3>Comments on {shown?.file ?? "the planning files"}</h3>
           <ul class="review-list">
             {planComments.length === 0 && <li class="review-hint">None.</li>}
             {planComments.map((c) => (
@@ -678,7 +751,7 @@ function RunPanel({
       {detail.next === null ? (
         <p class="review-hint">
           {detail.status === "draft"
-            ? "Nothing to run: the plan waits for your review and approval."
+            ? "Nothing to run: a planning file waits for your review and approval."
             : "Nothing to run: the chapter is up to date."}
         </p>
       ) : (

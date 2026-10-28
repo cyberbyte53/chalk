@@ -30,28 +30,13 @@ content/
 - **Every name is checked** against the folders on disk; a listed folder that doesn't exist fails the build.
 - **Questions are the chapter's pool**: `questions: all` takes every family folder under the chapter's `questions/`, minus `exclude`; or list the families to take. `exclude` only goes with `all`. Each family says which concepts it tests; a question is served once all of them are taught.
 
-## A chapter's own files: `source/`, `plan.md`, `runs/`
+## A chapter's own files: its planning files, `source/`, `runs/`
 
 A chapter's pipeline artefacts live apart from what is built, in `authoring/books/<book>/<chapter>/` (with its threads, `comments.yaml`). `content/<book>/<chapter>/` holds only its concepts and questions. They are plain files, so any harness and any agent can read and write them, and git keeps their history.
 
-- **`source/`**: what the chapter is built from, as handed over (a PDF, a text extract, notes). The plan skill reads everything in it. Older chapters point at `authoring/sources/text/<file>` from their plan instead.
-- **`plan.md`**: the chapter plan, written before anything is built and approved before building starts. Front matter, then the sections Studio reads:
-
-  ```markdown
-  ---
-  status: draft          # queued | draft | approved | built
-  source: source/        # or a path under authoring/sources/
-  approved: 2026-10-24   # once approved
-  ---
-  # <Book>, <Chapter>: <Title> (plan)
-  ## Mission            # the story and the "why this chapter"
-  ## Lessons            # a numbered list, one lesson (concept folder) per item, in book order
-  ## Props              # reused (from library/catalogue.md) and new, each with its reason
-  ## Open questions     # what the author wants decided before building; emptied on approval
-  ```
-
-  `status` is the gate: `queued` (dropped, not planned), `draft` (planned, awaiting review), `approved` (build may start), `built` (every lesson in the plan exists and `pnpm check` passes). Only a person moves a plan to `approved`.
-- **Running a step from Studio**: the chapter page says what the pipeline would do next (from the files: no plan → `plan-chapter`; open comments → `apply-review`; approved and nothing built → `build-props`; then `build-lesson` per lesson; then `self-review`) and runs it with the coding harness installed on the machine, one run at a time. The transcript streams to the page and is kept in `tmp/studio-runs/`. The same skills work from a terminal; Studio adds nothing the files don't say.
+- **The planning files**, written before anything is built, each answering one question and ending at a gate ([authoring-pipeline.md](authoring-pipeline.md) has their formats): `brief.md` (scope and screens), `source/outline.yaml` (everything in the source, with ids), `objectives.md` (what a student can do, citing the outline), `flow.md` (lessons and boards, each with the objectives it serves and what it needs), `props.md` (each need matched to a prop). The machine's gate (`pnpm check`'s pipeline step, `platform/studio/src/pipeline.ts`): every citation is an id that exists, every objective has a board, every board's need has a verdict, the outline has every figure, example, activity and exercise in the text. The person's gate: approving it in Studio, in order, once it is committed, which writes `approved: <commit>` into its front matter. Nothing else about its state is stored: a file changed since it was approved, and a later file written from one that changed (to be checked again), are worked out from git.
+- **`source/`**: what the chapter is built from, as handed over (a PDF, a text extract, notes). The plan skill reads everything in it.
+- **Running a step from Studio**: the chapter page shows the planning files in order with their state and checks, and says what the pipeline would do next (from the files: open comments → `apply-review`; a planning file missing, failing its checks or to be checked again → `plan-chapter`, or `build-props` for the props match; a draft waits for the person; then `build-props`, `build-lesson` per lesson, `self-review`) and runs it with the coding harness installed on the machine, one run at a time. The transcript streams to the page and is kept in `tmp/studio-runs/`. The same skills work from a terminal; Studio adds nothing the files don't say.
 - **`runs/`**: one short append-only note per pipeline run, named `<YYYY-MM-DD-HHMM>-<stage>.md` (stages: `plan`, `props`, `lesson-<slug>`, `self-review`, `review`): what was asked, what was produced, which checks passed, what is left. This is the chapter's history; Studio shows it, chat does not keep it.
 
 ## Manifests (`build.yaml`)

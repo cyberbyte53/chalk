@@ -13,14 +13,26 @@ import {
   isUnanswered,
   readComments as readAll,
 } from "../../studio/src/comments";
+import {
+  FILES,
+  type FileState,
+  type Step as PipelineStep,
+  approve,
+  readChapter,
+  readFlow,
+  splitFront,
+} from "../../studio/src/pipeline";
 import { type Next, type Step, nextStep, runs, startRun, steps, stopRun } from "./dev-runner";
 
+/**
+ * Where a chapter's planning stands, from its planning files (studio/src/pipeline.ts): none yet,
+ * a draft (a file missing, not approved, changed, failing its checks or to be checked again), or
+ * approved through the props match.
+ */
 export const PlanStatus = {
   None: "none",
-  Queued: "queued",
   Draft: "draft",
   Approved: "approved",
-  Built: "built",
 } as const;
 export type PlanStatus = (typeof PlanStatus)[keyof typeof PlanStatus];
 
@@ -47,15 +59,16 @@ export type ChapterRow = {
   status: PlanStatus;
   approvedOn: string | null;
   source: string | null;
-  /** Lessons the plan lists (numbered items under "## Lessons"). */
+  /** Lessons the flow lists (its `## <lesson>` headings). */
   lessonsPlanned: number;
-  /** Their slugs, when the plan writes them as `1. **slug** …`. */
+  /** Their slugs, in order. */
   plannedLessons: string[];
   /** The notes in runs/, by file name. */
   runNames: string[];
   lessons: Lesson[];
   runs: number;
   openComments: number;
+  /** Threads on the planning files still waiting on a fixer: a gate's questions among them. */
   openQuestions: number;
 };
 
@@ -64,8 +77,11 @@ export type Board = {
   chapters: ChapterRow[];
 };
 
+/** One planning file as Studio shows it: its state (pipeline.ts) and its words. */
+export type PlanningFile = FileState & { isApproved: boolean; text: string | null };
+
 export type ChapterDetail = ChapterRow & {
-  plan: string | null;
+  pipeline: PlanningFile[];
   runList: { name: string; text: string }[];
   comments: Record<string, unknown>[];
   files: string[];
@@ -102,48 +118,12 @@ const titleOf = (name: string): string =>
     .replace(/-/g, " ")
     .replace(/^\w/, (c) => c.toUpperCase());
 
-/** The plan's front matter and the counts Studio shows, read leniently. */
-export function readPlan(file: string): {
-  text: string;
-  status: PlanStatus;
-  approvedOn: string | null;
-  source: string | null;
-  lessonsPlanned: number;
-  plannedLessons: string[];
-  openQuestions: number;
-} {
-  const text = readFileSync(file, "utf8");
-  const fm = /^---\n([\s\S]*?)\n---\n/.exec(text);
-  const field = (name: string): string | null => {
-    const m = fm === null ? null : new RegExp(`^${name}:\\s*(.+)$`, "m").exec(fm[1] ?? "");
-    return m?.[1]?.trim() ?? null;
-  };
-  const statusRaw = field("status");
-  const status = (Object.values(PlanStatus) as string[]).includes(statusRaw ?? "")
-    ? (statusRaw as PlanStatus)
-    : PlanStatus.Draft;
-  const section = (heading: RegExp): string => {
-    const lines = text.split("\n");
-    const start = lines.findIndex((l) => heading.test(l));
-    if (start < 0) return "";
-    const rest = lines.slice(start + 1);
-    const end = rest.findIndex((l) => /^## /.test(l));
-    return (end < 0 ? rest : rest.slice(0, end)).join("\n");
-  };
-  const count = (body: string, item: RegExp) => body.split("\n").filter((l) => item.test(l)).length;
-  const plannedLessons = [
-    ...section(/^## Lessons/i).matchAll(/^(?:\d+\.|### \d+\.)\s+\*\*([a-z0-9][a-z0-9-]*)\*\*/gm),
-  ].map((m) => m[1] ?? "");
-  return {
-    text,
-    status,
-    approvedOn: field("approved"),
-    source: field("source"),
-    lessonsPlanned: count(section(/^## Lessons/i), /^(\d+\.|### \d+\.|\| \d+ \|)/),
-    plannedLessons,
-    openQuestions: count(section(/^## Open questions/i), /^\s*[-*\d]/),
-  };
-}
+/**
+ * Where a chapter's authoring lives (its planning files, run notes and source as handed over):
+ * under authoring/books/, apart from content/, which holds only what is built.
+ */
+export const authoringOf = (root: string, book: string, chapter: string): string =>
+  join(root, "authoring", "books", book, chapter);
 
 /** Which chapter each built concept id belongs to, from build/. */
 function conceptChapters(root: string): Map<string, { book: string; chapter: string }> {
@@ -217,8 +197,15 @@ function chapterRow(
   for (const slug of listed) add(slug);
   for (const slug of dirsIn(dir)) if (existsSync(join(dir, slug, "build.yaml"))) add(slug);
   const authoring = authoringOf(root, book, chapter);
-  const planFile = join(authoring, "plan.md");
-  const plan = existsSync(planFile) ? readPlan(planFile) : null;
+  const planning = readChapter(root, book, chapter);
+  const hasPlanning = planning.files.some((f) => f.status !== "missing");
+  const isApproved = planning.files.every(
+    (f) => f.status === "approved" && f.problems.length === 0 && f.recheck.length === 0,
+  );
+  const flowFile = join(authoring, "flow.md");
+  const plannedLessons = existsSync(flowFile)
+    ? [...new Set(readFlow(splitFront(readFileSync(flowFile, "utf8")).body).map((b) => b.lesson))]
+    : [];
   const runNames = existsSync(join(authoring, "runs"))
     ? readdirSync(join(authoring, "runs")).sort()
     : [];
@@ -229,18 +216,23 @@ function chapterRow(
     chapter,
     title: manifest.title?.en ?? titleOf(chapter),
     isListed,
-    status: plan?.status ?? PlanStatus.None,
-    approvedOn: plan?.approvedOn ?? null,
-    source: plan?.source ?? (existsSync(join(authoring, "source")) ? "source/" : null),
-    lessonsPlanned: plan?.lessonsPlanned ?? 0,
-    plannedLessons: plan?.plannedLessons ?? [],
+    status: !hasPlanning ? PlanStatus.None : isApproved ? PlanStatus.Approved : PlanStatus.Draft,
+    approvedOn: planning.files.at(-1)?.approvedAt ?? null,
+    source: existsSync(join(authoring, "source")) ? "source/" : null,
+    lessonsPlanned: plannedLessons.length,
+    plannedLessons,
     runNames,
     lessons,
     runs: runNames.length,
     openComments: mine.filter(isUnanswered).length,
-    openQuestions: plan?.openQuestions ?? 0,
+    openQuestions: mine.filter(
+      (c) =>
+        c.board === undefined &&
+        (c.source ?? "").startsWith(`authoring/books/${book}/${chapter}/`) &&
+        isUnanswered(c),
+    ).length,
   };
-  return { ...row, next: nextStep({ ...row, next: null }) };
+  return { ...row, next: nextStep({ ...row, next: null }, planning.files) };
 }
 
 /** Every book and chapter on disk, listed or not, with where each stands. */
@@ -268,7 +260,7 @@ export function studioBoard(root: string): Board {
     ];
     for (const chapter of all) {
       const isBuilt = existsSync(join(dir, chapter, "build.yaml"));
-      if (!isBuilt && !existsSync(join(authoringOf(root, book.id, chapter), "plan.md"))) continue;
+      if (!isBuilt && !existsSync(authoringOf(root, book.id, chapter))) continue;
       chapters.push(
         chapterRow(
           root,
@@ -303,12 +295,19 @@ export function studioChapter(root: string, book: string, chapter: string): Chap
     comments,
     byConcept,
   );
-  const planFile = join(authoring, "plan.md");
   const runsDir = join(authoring, "runs");
   const sourceDir = join(authoring, "source");
+  const planning = readChapter(root, book, chapter);
   return {
     ...row,
-    plan: existsSync(planFile) ? readFileSync(planFile, "utf8") : null,
+    pipeline: planning.files.map((f) => {
+      const file = join(authoring, f.file);
+      return {
+        ...f,
+        isApproved: FILES.find((x) => x.step === f.step)?.isApproved ?? false,
+        text: existsSync(file) ? readFileSync(file, "utf8") : null,
+      };
+    }),
     runList: existsSync(runsDir)
       ? readdirSync(runsDir)
           .sort()
@@ -320,34 +319,34 @@ export function studioChapter(root: string, book: string, chapter: string): Chap
   };
 }
 
-/** Move a plan between draft and approved; the only edit Studio makes to a plan. */
-export function setPlanStatus(
+/**
+ * The person approves a planning file (pipeline.ts `approve`: in order, committed, its checks
+ * holding), or takes an approval back (its `approved:` line removed): the only edits Studio makes
+ * to them.
+ */
+export function setApproval(
   root: string,
   book: string,
   chapter: string,
-  status: typeof PlanStatus.Approved | typeof PlanStatus.Draft,
-): string {
-  const file = join(authoringOf(root, book, chapter), "plan.md");
-  if (!existsSync(file)) throw new Error("no plan.md");
-  let text = readFileSync(file, "utf8");
-  if (!/^---\n[\s\S]*?\n---\n/.test(text)) text = `---\nstatus: draft\n---\n\n${text}`;
-  const today = new Date().toISOString().slice(0, 10);
-  text = text.replace(/^status:.*$/m, `status: ${status}`);
-  if (status === PlanStatus.Approved) {
-    text = /^approved:/m.test(text)
-      ? text.replace(/^approved:.*$/m, `approved: ${today}`)
-      : text.replace(/^(status:.*\n)/m, `$1approved: ${today}\n`);
+  step: PipelineStep,
+  isApproved: boolean,
+): void {
+  if (isApproved) {
+    approve(root, book, chapter, step);
+    return;
   }
-  writeFileSync(file, text);
-  return text;
+  const spec = FILES.find((f) => f.step === step);
+  if (spec === undefined || !spec.isApproved) throw new Error(`nothing to reopen: ${step}`);
+  const file = join(authoringOf(root, book, chapter), spec.file);
+  if (!existsSync(file)) throw new Error(`no ${spec.file}`);
+  const { front, body } = splitFront(readFileSync(file, "utf8"));
+  const { approved: _, ...rest } = front;
+  const lines = Object.entries(rest).map(([k, v]) => `${k}: ${v}`);
+  writeFileSync(
+    file,
+    lines.length > 0 ? `---\n${lines.join("\n")}\n---\n${body}` : body.replace(/^\n/, ""),
+  );
 }
-
-/**
- * Where a chapter's authoring lives (its plan, run notes and source as handed over): under
- * authoring/books/, apart from content/, which holds only what is built.
- */
-export const authoringOf = (root: string, book: string, chapter: string): string =>
-  join(root, "authoring", "books", book, chapter);
 
 const slugify = (s: string) =>
   s
@@ -358,8 +357,8 @@ const slugify = (s: string) =>
 
 /**
  * A dropped source: a new or existing book, a new or existing chapter, one file into its
- * `source/` (under authoring/books/<book>/<chapter>), and a queued plan.md there if the chapter has
- * none. The build manifests are not touched:
+ * `source/` (under authoring/books/<book>/<chapter>). With no brief yet, the chapter's next step is
+ * to plan it. The build manifests are not touched:
  * the plan skill lists the chapter and its lessons once there is a plan.
  */
 export function dropSource(
@@ -391,14 +390,6 @@ export function dropSource(
   mkdirSync(join(dir, "source"), { recursive: true });
   const safeName = drop.fileName.replace(/[^A-Za-z0-9._-]+/g, "-");
   writeFileSync(join(dir, "source", safeName), Buffer.from(drop.base64, "base64"));
-  const planFile = join(dir, "plan.md");
-  if (!existsSync(planFile)) {
-    const title = drop.chapterTitle ?? titleOf(chapter);
-    writeFileSync(
-      planFile,
-      `---\nstatus: queued\nsource: source/\n---\n\n# ${title} (plan)\n\nQueued: run the \`plan-chapter\` skill on \`authoring/books/${book}/${chapter}\`.\n`,
-    );
-  }
   return { book, chapter };
 }
 
@@ -435,8 +426,13 @@ export function studioMiddleware(root: string) {
       try {
         const data = JSON.parse(body || "{}") as Record<string, string>;
         if (url.pathname === "/approve" || url.pathname === "/reopen") {
-          const status = url.pathname === "/approve" ? PlanStatus.Approved : PlanStatus.Draft;
-          setPlanStatus(root, data.book ?? "", data.chapter ?? "", status);
+          setApproval(
+            root,
+            data.book ?? "",
+            data.chapter ?? "",
+            (data.step ?? "") as PipelineStep,
+            url.pathname === "/approve",
+          );
           return send(200, studioChapter(root, data.book ?? "", data.chapter ?? ""));
         }
         if (url.pathname === "/run") {

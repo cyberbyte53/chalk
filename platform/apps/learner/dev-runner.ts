@@ -11,6 +11,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
 import { appendFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import type { FileState } from "../../studio/src/pipeline";
 import { type ChapterRow, PlanStatus } from "./dev-studio";
 
 export const Step = {
@@ -26,21 +27,36 @@ export const steps: readonly Step[] = Object.values(Step);
 export type Next = { step: Step; reason: string; lesson?: string } | null;
 
 /** What the pipeline says should happen next for a chapter, from its files. */
-export function nextStep(row: ChapterRow): Next {
-  if (row.status === PlanStatus.Queued || row.status === PlanStatus.None)
-    return row.source === null
-      ? null
-      : { step: Step.Plan, reason: "a source is dropped and there is no plan" };
+export function nextStep(row: ChapterRow, pipeline: readonly FileState[] = []): Next {
   if (row.openComments > 0)
     return {
       step: Step.ApplyReview,
       reason: `${row.openComments} open comment${row.openComments > 1 ? "s" : ""}`,
     };
-  if (row.status === PlanStatus.Draft) return null; // the plan waits for the person
+  if (row.status !== PlanStatus.Approved) {
+    // The first planning file not done: written next, fixed, checked again, or the person's to approve.
+    const next = pipeline.find(
+      (f) => f.status !== "approved" || f.problems.length > 0 || f.recheck.length > 0,
+    );
+    if (next === undefined)
+      return row.source === null
+        ? null
+        : { step: Step.Plan, reason: "a source is dropped and there is no brief" };
+    const step = next.step === "props" ? Step.Props : Step.Plan;
+    if (next.status === "missing") return { step, reason: `${next.file} isn't written yet` };
+    if (next.problems.length > 0) return { step, reason: `${next.file}'s checks fail` };
+    if (next.recheck.length > 0)
+      return {
+        step,
+        reason: `${next.file} is to be checked again: ${next.recheck.join(", ")} changed`,
+      };
+    if (next.status === "changed") return null; // changed since approved: the person approves again
+    return null; // a draft: the person's to approve
+  }
   const written = row.lessons.filter((l) => l.isWritten).map((l) => l.slug);
   const planned = row.plannedLessons;
   if (written.length === 0 && !row.runNames.some((n) => n.endsWith("-props.md")))
-    return { step: Step.Props, reason: "the plan is approved and nothing is built" };
+    return { step: Step.Props, reason: "the props match is approved and no prop is built" };
   const missing = planned.find((slug) => !written.includes(slug));
   if (missing !== undefined)
     return {
@@ -51,7 +67,7 @@ export function nextStep(row: ChapterRow): Next {
           : `${written.length} of ${planned.length} lessons built`,
       lesson: missing,
     };
-  if (row.status !== PlanStatus.Built)
+  if (!row.runNames.some((n) => n.endsWith("-self-review.md")))
     return { step: Step.SelfReview, reason: "every lesson exists; review before the screen" };
   return null;
 }
