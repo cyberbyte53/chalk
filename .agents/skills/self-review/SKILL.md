@@ -14,7 +14,7 @@ The person's review is the expensive part; this pass catches everything a fresh 
 ## Steps
 
 1. Run `pnpm check`; if it fails, that is the first finding.
-2. `look` at the lesson (thumbnails and any problems), then at each board, in English and Hindi (`locales: ["en", "hi"]`): read every board in the pictures, not the source. Then play each board as a student with `play`: tap, drag, answer right and wrong, and check what each step did (what it changed, "board passed", the picture).
+2. `look` at the lesson (thumbnails and any problems), then at each board, in English and Hindi (`locales: ["en", "hi"]`) and on the screens in the chapter's brief (`authoring/books/<book>/<chapter>/brief.md`): read every board in the pictures, not the source. Hold each board to what `flow.md` says it is for. Then play each board as a student with `play`: tap, drag, answer right and wrong, and check what each step did (what it changed, "board passed", the picture).
 3. Go through `reviewer.md` board by board: as the student, as the teacher, on the screen. Put the source passage beside it.
 4. Say each item where it belongs, with your `comment` tool (it writes as a reviewer): the principle, and what a student would get wrong.
    - **About a thread already there** (reviewing an applied review: its fix isn't right yet, or you checked it and it's good): **write on that thread** (`id`). The fixer must answer your words before it can mark that thread ready.

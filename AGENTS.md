@@ -12,8 +12,8 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
 - **The taste is `authoring/taste/`.** Read `constitution.md` always. Then read only the guide for your step (`guides/plan.md`, `pages.md`, `questions.md` or `props.md`) and the exemplars. `checks.md` is enforced by the build, and `reviewer.md` is for reviewers.
 - **The steps are skills** in `.agents/skills/` (`.claude/skills` points there). In order:
-  1. `plan-chapter`, then the person approves `plan.md`.
-  2. `build-props`.
+  1. `plan-chapter`: `brief.md`, `source/outline.yaml`, `objectives.md`, `flow.md`, one at a time, each approved by the person in Studio ([platform/docs/authoring-pipeline.md](platform/docs/authoring-pipeline.md)).
+  2. `build-props`: the props match (`props.md`, approved by the person), each new or changed prop's definition first, then its build.
   3. `build-lesson`: the first lesson alone, then the rest.
   4. `self-review`, run by a fresh agent.
   5. The person's review.
@@ -32,7 +32,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 - **In the editor**, the Chalk extension (`platform/editor`, install `chalk-editor.vsix`) previews whatever file or folder is open as the student sees it (book screen, chapter path, lesson boards), follows the cursor, and lets the person pick a piece to send to you.
 - **Reviews:** when the person says "apply review <id>", use `apply-review`: one plan agreed in chat, a plan line and an answer on every thread, commit after their yes.
 - **Threads** are about the work, not part of it, so they live under `authoring/`: `authoring/books/<book>/<chapter>/comments.yaml`, or `authoring/props/<package>/comments.yaml` for one on a prop; **reviews** in `authoring/reviews/<id>.yaml`. Both are written only through the one writer ([platform/docs/comments.md](platform/docs/comments.md)). Never edit them by hand. Only the person closes a thread.
-- `plan.md` approval is the person's gate. Never set `status: approved` yourself.
+- Approving a planning file is the person's gate (Studio writes `approved: <commit>`). Never approve one yourself.
 - **Commit only what the person has seen and is happy with.** Finish, show it, wait for their yes, then commit.
 
 ## Code work
