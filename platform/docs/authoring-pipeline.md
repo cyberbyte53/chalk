@@ -1,6 +1,6 @@
 # Authoring pipeline
 
-Status: **seeing and finding props is built** (build order 1–5, below); **the pipeline files, gates and staleness are next** (6). Replaces the one-file `plan.md` with steps that each answer one question, write one file and end at a gate.
+Status: **built**, but for splitting class 9's `plan.md` into the planning files (Moving over, 4). Replaces the one-file `plan.md` with steps that each answer one question, write one file and end at a gate.
 
 ## Why
 
@@ -192,15 +192,15 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 
 ## Threads on everything
 
-**The address** (built). A thread's address is worked out from what it stores (its board and target, or its prop and part), never stored twice: `content/…/two-ways#plane/walkBoth`, `library/props/coordinates/coordinatePlane#readout`. Threads on text files (next): the file, a heading anchor and the exact words, filed in the chapter's comments.yaml.
+**The address** (built). A thread's address is worked out from what it stores (its board and target, or its prop and part), never stored twice: `content/…/two-ways#plane/walkBoth`, `library/props/coordinates/coordinatePlane#readout`. Threads on planning files (built): the file and line, and the exact words (`quote`), filed in the chapter's comments.yaml.
 
 **Board or prop** (built). A pick on a prop on a board asks: this board (fixed in the lesson), or the prop, everywhere (fixed in the prop through its definition, `affected` showing every board the fix reaches). On a prop's own page every comment is the prop's.
 
-**A thread whose target is gone must be answered** (next). If an open or planned thread's address no longer resolves, `pnpm check` fails on it, and the fixer either re-points it (with a message: "merged into the axes board") or answers it ("removed: the dice game is text now"). Closed threads are history. The preview shows an unresolved thread at the deepest part of its address that still exists, with its saved copy; that is display only.
+**A thread whose target is gone must be answered** (built). If an open or planned thread's address no longer resolves, `pnpm check` fails on it, and the fixer either re-points it (with a message: "merged into the axes board") or answers it ("removed: the dice game is text now"). Closed threads are history. The preview shows an unresolved thread at the deepest part of its address that still exists, with its saved copy; that is display only.
 
-**Before → after** (next). A fixer's `ready` message carries the thing before and after: a picture, its generated page, or the old and new words.
+**Before → after** (built, in `apply-review`). A fixer's `ready` message carries the thing before and after: a picture, its generated page, or the old and new words.
 
-**Gate questions are threads** (next). An agent's question at a gate is a thread on that file. No "Open questions" section.
+**Gate questions are threads** (built). An agent's question at a gate is a thread on that file. No "Open questions" section.
 
 ## Skills
 
@@ -215,7 +215,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 
 1. ~~Addresses gain their root.~~ Done.
 2. ~~Threads and reviews move to `authoring/`.~~ Done.
-3. `content/<book>/<chapter>/{plan.md, runs/, source/}` move to `authoring/books/<book>/<chapter>/`; `writing-content.md` and Studio's chapter page read them there.
+3. ~~`content/<book>/<chapter>/{plan.md, runs/, source/}` move to `authoring/books/<book>/<chapter>/`.~~ Done.
 4. An agent splits each existing `plan.md`: Mission → `brief.md` (scope and screens), Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
 5. Each prop's `describe` is checked to open with what it is for (a few open with only what it shows: "A factor tree.", "Two sticks, a and b.").
 6. `outline.yaml` generated for each chapter with a source.
@@ -228,4 +228,4 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 3. ~~The panel, from the schemas.~~
 4. ~~Purpose (the first sentence of `describe`), the one generator: prop pages, `look` at the library, the preview's library, the catalogue.~~
 5. ~~Comments on props; this board or the prop everywhere; threads and reviews under `authoring/`.~~
-6. The pipeline: the files (moving `plan.md`, `runs/`, `source/`), gates and staleness, threads on text files, the check on threads whose target is gone, before → after, the skills.
+6. ~~The pipeline: the files (moving `plan.md`, `runs/`, `source/`), gates and staleness (`pnpm check`'s pipeline step, Studio's chapter page), threads on planning files, the check on threads whose place is gone, before → after, the skills.~~
