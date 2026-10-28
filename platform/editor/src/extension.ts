@@ -248,17 +248,23 @@ async function openSite(site: string | undefined): Promise<void> {
   if (!site) return;
   const [file, line] = site.split(/:(?=\d+$)/);
   if (file === undefined) return;
-  const doc = await vscode.workspace.openTextDocument(join(root, file));
-  const at = new vscode.Position(Math.max(0, Number(line ?? 1) - 1), 0);
-  const column =
-    vscode.window.visibleTextEditors.find((e) => e.viewColumn !== panel?.viewColumn)?.viewColumn ??
-    vscode.ViewColumn.One;
-  const editor = await vscode.window.showTextDocument(doc, {
-    viewColumn: column,
-    preserveFocus: false,
-  });
-  editor.selection = new vscode.Selection(at, at);
-  editor.revealRange(new vscode.Range(at, at), vscode.TextEditorRevealType.InCenter);
+  try {
+    const doc = await vscode.workspace.openTextDocument(join(root, file));
+    const at = new vscode.Position(Math.max(0, Number(line ?? 1) - 1), 0);
+    // Beside the panel: in a text editor's column if one shows, else a new column next to it.
+    const column =
+      vscode.window.visibleTextEditors.find(
+        (e) => e.viewColumn !== undefined && e.viewColumn !== panel?.viewColumn,
+      )?.viewColumn ?? vscode.ViewColumn.Beside;
+    const editor = await vscode.window.showTextDocument(doc, {
+      viewColumn: column,
+      preserveFocus: false,
+    });
+    editor.selection = new vscode.Selection(at, at);
+    editor.revealRange(new vscode.Range(at, at), vscode.TextEditorRevealType.InCenter);
+  } catch (e) {
+    void vscode.window.showErrorMessage(`Chalk: couldn't open ${site}: ${(e as Error).message}`);
+  }
 }
 
 type Picked = {
