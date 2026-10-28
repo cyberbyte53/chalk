@@ -38,10 +38,26 @@ export function sizeOf(...rules: (Size | undefined)[]): Required<Size> {
   return Object.assign({}, DEFAULT_SIZE, ...rules.filter((r) => r !== undefined));
 }
 
+/** The zoom a column alone asks for: 1× on a phone, up to `maxZoom` on a wide column. */
+function zoomByWidth(rule: Required<Size>, column: number): number {
+  return Math.min(rule.maxZoom, Math.max(1, column / PHONE_COLUMN));
+}
+
 /**
- * The zoom for a prop: by the column's width (1× on a phone, up to `maxZoom`), then down to fit
- * `maxHeight` of the screen if its drawing at that zoom would be taller, never below `minZoom`.
- * `naturalHeight` is its height at 1×.
+ * The width a prop lays out at. It depends on the column alone, never on the zoom chosen for it:
+ * so the height it then has is a fact about the column, and the zoom that fits that height is
+ * decided once (nothing feeds back). A phone's width on a phone (narrower on a narrower column);
+ * on a wide column, what fills it at `maxZoom`.
+ */
+export function layoutWidthFor(rule: Required<Size>, column: number): number {
+  if (rule.fit === SizeFit.Fill) return column;
+  return Math.max(200, Math.round(column / zoomByWidth(rule, column)));
+}
+
+/**
+ * The zoom for a prop laid out at `layoutWidthFor`: by the column's width (1× on a phone, up to
+ * `maxZoom`), then down to fit `maxHeight` of the screen if its drawing at that zoom would be
+ * taller, never below `minZoom`. `naturalHeight` is its height as laid out (at 1×).
  */
 export function zoomFor(
   rule: Required<Size>,
@@ -50,7 +66,7 @@ export function zoomFor(
   naturalHeight: number,
 ): number {
   if (rule.fit === SizeFit.Fill) return 1;
-  const byWidth = Math.min(rule.maxZoom, Math.max(1, column / PHONE_COLUMN));
+  const byWidth = zoomByWidth(rule, column);
   const room = rule.maxHeight * screenHeight;
   const byHeight = naturalHeight > 0 ? room / naturalHeight : byWidth;
   return Math.max(rule.minZoom, Math.min(byWidth, byHeight));

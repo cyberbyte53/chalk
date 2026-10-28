@@ -78,7 +78,7 @@ Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.m
 
 **Sizing is the player's, not the view's.** Draw for a phone: the `width` you get is about 390 (never under 200), and nothing in a view knows the device. The player sizes each prop by a rule (`size` in `@chalk/prop`), with defaults a prop type can change and a board can change again where it places the prop (`b.prop(def, name, given, { size })`):
 
-- **`fit: "scale"`** (the default): drawn for a phone and zoomed as one picture with the column, 1× on a phone up to `maxZoom` (1.2) on a 640px column, in step with the text. If that would take more than `maxHeight` of the screen's height (0.6), it is zoomed down to fit, never below `minZoom` (0.75). SVG and HTML props alike.
+- **`fit: "scale"`** (the default): drawn for a phone and zoomed as one picture with the column, 1× on a phone up to `maxZoom` (1.2) on a 640px column, in step with the text. If that would take more than `maxHeight` of the screen's height (0.6), it is zoomed down to fit, never below `minZoom` (0.75). SVG and HTML props alike. The width a prop lays out at depends on the column alone, so its height is a fact about the column and the zoom is decided once, when the column or the window changes (a prop whose height follows its width can't feed back on itself; a row of controls appearing doesn't rescale the picture).
 - **`fit: "fill"`**: no zoom; the view gets the column's whole width and uses it. For words and controls (they reflow, and text sizes grow on their own), and for props that should show more rather than grow (a number line showing more axis).
 
 Use the look's text tokens for words (they grow with the column), no fixed widths or max-widths in px, and lay out to the `width` given.

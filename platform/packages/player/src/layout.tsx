@@ -1,8 +1,17 @@
 import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/content";
 import { Actor } from "@chalk/content";
-import { type Box, PHONE_COLUMN, joinPath, nameOf, segment, sizeOf, zoomFor } from "@chalk/prop";
+import {
+  type Box,
+  PHONE_COLUMN,
+  joinPath,
+  layoutWidthFor,
+  nameOf,
+  segment,
+  sizeOf,
+  zoomFor,
+} from "@chalk/prop";
 import type { JSX } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type BoardClock, BoardClockContext } from "./board-clock";
 import { heard, pressHandler } from "./does";
 import { type Door, DoorContext } from "./door";
@@ -51,35 +60,40 @@ function PropPieceView({
   // Sized by the player (size.ts): the default, over it the prop type's rule, then the board's.
   const rule = useRef(sizeOf(module.def.size, piece.size));
   rule.current = sizeOf(module.def.size, piece.size);
-  // The column's width, and the zoom the prop is drawn at; the prop lays out at column ÷ zoom.
-  const [column, setColumn] = useState(PHONE_COLUMN);
+  // The column and the screen decide the layout width and the zoom (size.ts). The prop lays out at
+  // a width the column alone sets; its height is then measured once and the zoom chosen to fit it.
+  // Nothing inside the prop re-decides the zoom, so a prop whose height follows its width can't
+  // feed back on itself, and a row of controls appearing doesn't rescale the picture.
+  const [screen, setScreen] = useState({ column: PHONE_COLUMN, height: 0 });
   const [zoom, setZoom] = useState(1);
   useEffect(() => {
     const element = box.current;
-    const inner = drawn.current;
-    if (element === null || inner === null) return;
-    const fit = () => {
-      const width = Math.round(element.getBoundingClientRect().width);
-      // Its height as drawn now, back at 1× (zoom scales it).
-      const current = Number(inner.style.zoom) || 1;
-      const natural = inner.getBoundingClientRect().height / current;
-      const next = zoomFor(rule.current, width, window.innerHeight, natural);
-      setColumn(width);
-      // Small changes are left alone, so a prop that grows as it lays out doesn't flicker.
-      setZoom((was) => (Math.abs(was - next) < 0.02 ? was : Number(next.toFixed(3))));
-    };
-    const observer = new ResizeObserver(fit);
+    if (element === null) return;
+    const measure = () =>
+      setScreen((was) => {
+        const column = Math.round(element.getBoundingClientRect().width);
+        const height = window.innerHeight;
+        return was.column === column && was.height === height ? was : { column, height };
+      });
+    const observer = new ResizeObserver(measure);
     observer.observe(element);
-    observer.observe(inner);
-    window.addEventListener("resize", fit);
+    window.addEventListener("resize", measure);
     const stopStamping = stampPaths(element);
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", fit);
+      window.removeEventListener("resize", measure);
       stopStamping();
     };
   }, []);
-  const width = Math.max(200, Math.round(column / zoom));
+  const width = layoutWidthFor(rule.current, screen.column);
+  // Once the prop has laid out at `width`: its height at 1×, and the zoom that fits it.
+  useLayoutEffect(() => {
+    const inner = drawn.current;
+    if (inner === null || screen.height === 0) return;
+    const current = Number(inner.style.zoom) || 1;
+    const natural = inner.getBoundingClientRect().height / current;
+    setZoom(Number(zoomFor(rule.current, screen.column, screen.height, natural).toFixed(3)));
+  }, [screen.column, screen.height]);
   const { View } = module;
   const { runtime } = context;
   const clock = useMemo<BoardClock>(
@@ -144,7 +158,7 @@ function PropPieceView({
       <div
         class="piece-drawn"
         ref={drawn}
-        style={zoom === 1 ? undefined : { zoom }}
+        style={{ ...(zoom === 1 ? {} : { zoom }), width: `${width}px`, marginInline: "auto" }}
         onClick={pressHandler(door.call)}
       >
         <BoardClockContext.Provider value={clock}>

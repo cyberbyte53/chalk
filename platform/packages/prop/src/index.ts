@@ -136,6 +136,7 @@ export {
   type Size,
   SizeFit,
   sizeOf,
+  layoutWidthFor,
   zoomFor,
 } from "./size";
 export {
