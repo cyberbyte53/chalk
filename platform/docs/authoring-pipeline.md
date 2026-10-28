@@ -1,6 +1,6 @@
 # Authoring pipeline
 
-Status: **built**, but for splitting class 9's `plan.md` into the planning files (Moving over, 4). Replaces the one-file `plan.md` with steps that each answer one question, write one file and end at a gate.
+Status: **built**. Planning happens in the editor (the Chalk extension); the agent runs the skills in its chat. Class 9 Coordinate Geometry will be remade through the pipeline from its source, so its old `plan.md` isn't split. Replaces the one-file `plan.md` with steps that each answer one question, write one file and end at a gate.
 
 ## Why
 
@@ -216,7 +216,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 1. ~~Addresses gain their root.~~ Done.
 2. ~~Threads and reviews move to `authoring/`.~~ Done.
 3. ~~`content/<book>/<chapter>/{plan.md, runs/, source/}` move to `authoring/books/<book>/<chapter>/`.~~ Done.
-4. An agent splits each existing `plan.md`: Mission → `brief.md` (scope and screens), Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
+4. ~~An agent splits each existing `plan.md`~~ (dropped: class 9 is remade from its source instead): Mission → `brief.md` (scope and screens), Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
 5. Each prop's `describe` is checked to open with what it is for (a few open with only what it shows: "A factor tree.", "Two sticks, a and b.").
 6. `outline.yaml` generated for each chapter with a source.
 7. `coordinatePlane` is the first prop run through field use: no board sets ten of its words fields or calls `leaveMark`, and one board each uses `canAddYAxis`, `snap`, `showSigns`, `canPick`, `canWalkBoth` and `walkLabel`. Each is split out or kept, on purpose.
