@@ -68,7 +68,10 @@ function standing(threads: readonly Thread[]): string {
 
 const where = (t: Thread) =>
   t.board === undefined
-    ? `${(t.source ?? "plan").replace(/^content\//, "").replace(/:\d.*$/, "")}`
+    ? // A planning file: its chapter and name (coordinate-geometry · outline.yaml).
+      (t.source ?? "plan")
+        .replace(/:\d.*$/, "")
+        .replace(/^authoring\/books\/[^/]+\/([^/]+)\/(?:source\/)?/, "$1 · ")
     : `${t.board.split("/").at(-1)}${t.target ? ` · ${t.target}` : ""}${t.prop ? ` · prop ${t.prop}` : ""}`;
 
 const planOf = (t: Thread) => [...t.messages].reverse().find((m) => m.status === "planned");

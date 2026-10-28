@@ -1950,6 +1950,17 @@ body.is-selecting .is-pick-target {
 .rv-status.is-withdrawn {
   color: #6b6b75;
 }
+.rv-status.is-yours {
+  color: #f0b45a;
+}
+.rv-quote {
+  margin: 0 0 8px;
+  padding: 4px 10px;
+  border-left: 3px solid #f0b45a;
+  font: 12px ui-monospace, monospace;
+  color: #d4d4d8;
+  white-space: pre-wrap;
+}
 .rv-place {
   flex: none;
   font: 12px ui-monospace, monospace;

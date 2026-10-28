@@ -64,7 +64,11 @@ function standing(threads: readonly Thread[]): string {
 
 const placeOf = (t: Thread): string =>
   t.board === undefined
-    ? (t.source ?? "plan").replace(/^content\//, "").replace(/:\d.*$/, "")
+    ? // A planning file: its name in the chapter (outline.yaml, flow.md).
+      (t.source ?? "plan")
+        .replace(/:\d.*$/, "")
+        .replace(/^authoring\/books\/[^/]+\/[^/]+\//, "")
+        .replace(/^source\//, "")
     : `${t.board.split("/").at(-1)}${t.target ? ` · ${t.target}` : ""}${t.prop ? ` · prop ${t.prop}` : ""}`;
 
 /** Copies a line for the agent: through the editor when the page is in its panel. */
@@ -331,18 +335,25 @@ function ThreadFold({
         onClick={() => onFold(!isFolded)}
       >
         <span class="rv-chevron">{isFolded ? "▸" : "▾"}</span>
-        <span class={`rv-status is-${t.status}`}>{STATUS_WORDS[t.status] ?? t.status}</span>
-        <span class="rv-place">{placeOf(t)}</span>
-        {t.waitsOn === "person" && <span class="rv-label is-yours">your turn</span>}
-        {t.role !== "person" && <span class={`rv-label is-${t.role}`}>{t.by}</span>}
-        {t.about !== undefined && <span class="rv-label is-broken">broken by a change</span>}
-        <span class="rv-said">
-          {isFolded && latest !== undefined ? `${latest.by}: ${latest.text}` : t.text}
+        <span class={`rv-status is-${t.status}${t.waitsOn === "person" ? " is-yours" : ""}`}>
+          {t.status === "open"
+            ? t.waitsOn === "person"
+              ? "your turn"
+              : "with the agent"
+            : (STATUS_WORDS[t.status] ?? t.status)}
         </span>
+        <span class="rv-place">{placeOf(t)}</span>
+        {t.about !== undefined && <span class="rv-label is-broken">broken by a change</span>}
+        {isFolded && (
+          <span class="rv-said">
+            {latest !== undefined ? `${latest.by}: ${latest.text}` : `${t.by}: ${t.text}`}
+          </span>
+        )}
       </button>
       {!isFolded && (
         <div class="rv-body">
           <div class="rv-talk">
+            {t.quote !== undefined && <blockquote class="rv-quote">{t.quote}</blockquote>}
             <p class="rv-msg is-first">
               <b>{t.by}</b>
               {t.text}
@@ -406,7 +417,7 @@ function ThreadFold({
                     Close
                   </button>
                 )}
-                {isLive && (
+                {isLive && t.role === "person" && (
                   <button
                     type="button"
                     onClick={() =>
@@ -414,6 +425,11 @@ function ThreadFold({
                     }
                   >
                     Withdraw
+                  </button>
+                )}
+                {t.board === undefined && t.source !== undefined && isInEditor && (
+                  <button type="button" onClick={() => toEditor({ type: "open", site: t.source })}>
+                    Open in file ↗
                   </button>
                 )}
                 {t.board !== undefined && (
