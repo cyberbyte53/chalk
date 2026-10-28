@@ -315,9 +315,9 @@ function ThreadFold({
         <span class="rv-chevron">{isFolded ? "▸" : "▾"}</span>
         <span class={`rv-status is-${t.status}`}>{STATUS_WORDS[t.status] ?? t.status}</span>
         <span class="rv-place">{placeOf(t)}</span>
-        {t.label !== "comment" && (
-          <span class={`rv-label is-${t.label}`}>{`${t.label} · ${t.by}`}</span>
-        )}
+        {t.waitsOn === "person" && <span class="rv-label is-yours">your turn</span>}
+        {t.role !== "person" && <span class={`rv-label is-${t.role}`}>{t.by}</span>}
+        {t.about !== undefined && <span class="rv-label is-broken">broken by a change</span>}
         <span class="rv-said">
           {isFolded && latest !== undefined ? `${latest.by}: ${latest.text}` : t.text}
         </span>

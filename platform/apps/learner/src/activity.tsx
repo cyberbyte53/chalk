@@ -44,11 +44,11 @@ function linesOf({ threads, reviews }: Threads, only: string | null): Line[] {
       at: t.createdAt,
       by: t.by,
       role: t.role,
-      what: t.label,
+      what: t.role === "person" ? "comment" : t.about !== undefined ? "broke" : t.role,
       where,
       words: t.text,
       href,
-      tone: t.label,
+      tone: t.about !== undefined ? "broken" : t.role,
     });
     for (const m of t.messages)
       lines.push({

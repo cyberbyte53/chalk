@@ -18,8 +18,8 @@ The person's review is the expensive part; this pass catches everything a fresh 
 3. Go through `reviewer.md` board by board: as the student, as the teacher, on the screen. Put the source passage beside it.
 4. Say each item where it belongs, with your `comment` tool (it writes as a reviewer): the principle, and what a student would get wrong.
    - **About a thread already there** (reviewing an applied review: its fix isn't right yet, or you checked it and it's good): **write on that thread** (`id`). The fixer must answer your words before it can mark that thread ready.
-   - **A new problem** with the lesson: a new thread, `label: "finding"`, on its board and target.
-   - **Something a thread's change broke elsewhere** (another board or piece: what the thread reaches is recorded on it, `reaches`, and `affected` with `diff: true` lists the pieces; check those boards): a new thread, `label: "regression"`, `about: <that thread's id>`. That thread can't be ready until it's fixed. The writer refuses a regression on the thread's own piece: that goes on the thread.
+   - **A new problem** with the lesson: a new thread on its board and target.
+   - **Something a thread's change broke elsewhere** (another board or piece: what the thread reaches is recorded on it, `reaches`, and `affected` with `diff: true` lists the pieces; check those boards): a new thread with `about: <that thread's id>`. That thread can't be ready until it's fixed. The writer refuses an `about` on the thread's own piece: that goes on the thread.
 
    When you have filed everything, hand your pass over: `comment` with `handover: true`. It becomes a review of its own (`by: reviewer`) the person can open in the activity feed (`?dev&activity`).
 5. Say which findings are mechanical (overflow, a give-away option, an undefined term, maths inside a sentence). The agent that asked for the review fixes those as a fixer (`status: "planned"`, fix, render again, `status: "ready"`); a reviewer can't move a thread. Taste decisions stay open for the person.

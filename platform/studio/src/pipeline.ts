@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
+import { readComments, waitsOn } from "./comments";
 
 /**
  * A chapter's planning files (platform/docs/authoring-pipeline.md), in authoring/books/<book>/<chapter>/:
@@ -380,6 +381,14 @@ export function approve(root: string, book: string, chapter: string, step: Step)
   if (f.problems.length > 0)
     throw new Error(`${f.file}'s checks fail: ${f.problems.map((p) => p.text).join("; ")}`);
   const rel = join(c.dir, f.file);
+  // Approving settles the file: nothing on it may still be talked about.
+  const unsettled = readComments(root).threads.filter(
+    (t) => t.source?.startsWith(`${rel}:`) && waitsOn(t) !== undefined,
+  );
+  if (unsettled.length > 0)
+    throw new Error(
+      `${unsettled.length} thread${unsettled.length === 1 ? " is" : "s are"} still open on ${f.file} (${unsettled.map((t) => t.id).join(", ")}): answer and close ${unsettled.length === 1 ? "it" : "them"} first`,
+    );
   const head = (git(root, "rev-parse", "HEAD") ?? "").trim();
   const committed = atCommit(root, head, rel);
   const now = readFileSync(join(root, rel), "utf8");

@@ -24,8 +24,10 @@ import { changesFromGit, reachIndex, rollUp } from "./reach";
  * another: authoring/reviews/<id>.yaml lists its threads.
  * Reviews point to threads; threads know nothing of reviews.
  *
- * Everyone who writes is a participant with a role (the person, a teacher, a fixer agent, a
- * reviewer agent). Every write goes through `applyChange`, which checks it against two tables: the
+ * Everyone who writes is a participant with a role (the person, a fixer agent, a reviewer agent).
+ * Anyone starts a thread; what it is follows from who started it and whether it is `about` another
+ * (something that thread's change broke). Whose turn it is follows from its status and who spoke
+ * last (`waitsOn`). Only the person closes. Every write goes through `applyChange`, which checks it against two tables: the
  * status moves each role may make, and what else each role may do. The caller never picks its own
  * role: the person writes through the preview, an agent through the chalk MCP with its role fixed
  * when it connects.
@@ -43,13 +45,8 @@ export const Status = {
 } as const;
 export type Status = (typeof Status)[keyof typeof Status];
 
-/** What a thread is: the person's comment, a reviewer's finding, or something a change broke. */
-export const Label = { Comment: "comment", Finding: "finding", Regression: "regression" } as const;
-export type Label = (typeof Label)[keyof typeof Label];
-
 export const Role = {
   Person: "person",
-  Teacher: "teacher",
   Fixer: "fixer",
   Reviewer: "reviewer",
 } as const;
@@ -67,45 +64,24 @@ type Move = { to: Status; from?: readonly Status[]; own?: boolean };
 /** The status moves each role may make. A message with no move is open to everyone. */
 export const MOVES: Readonly<Record<Role, readonly Move[]>> = {
   [Role.Person]: [{ to: Status.Open }, { to: Status.Closed }, { to: Status.Withdrawn }],
-  [Role.Teacher]: [
-    { to: Status.Open, own: true },
-    { to: Status.Closed, own: true },
-    { to: Status.Withdrawn, own: true },
-  ],
+  // An agent takes back a thread of its own that became moot (a question settled in chat).
   [Role.Fixer]: [
     { to: Status.Planned, from: [Status.Open, Status.Planned] },
     { to: Status.Ready, from: [Status.Planned] },
+    { to: Status.Withdrawn, from: [Status.Open, Status.Planned], own: true },
   ],
-  [Role.Reviewer]: [],
+  [Role.Reviewer]: [{ to: Status.Withdrawn, from: [Status.Open], own: true }],
 };
 
-/** What else each role may do: the labels it starts threads with, deleting its own, handing over. */
-export const ACTS: Readonly<
-  Record<
-    Role,
-    { starts: readonly Label[]; deletesOwn: boolean; handsOver: boolean; moves: boolean }
-  >
-> = {
-  [Role.Person]: { starts: [Label.Comment], deletesOwn: true, handsOver: true, moves: true },
-  [Role.Teacher]: { starts: [Label.Comment], deletesOwn: true, handsOver: true, moves: false },
-  // A fixer files a regression, or a comment the person made in its chat (from: chat, in their name);
-  // it re-points a thread whose place is gone (merged, renamed), saying where it went.
-  [Role.Fixer]: {
-    starts: [Label.Comment, Label.Regression],
-    deletesOwn: false,
-    handsOver: true,
-    moves: true,
-  },
-  [Role.Reviewer]: {
-    starts: [Label.Finding, Label.Regression],
-    deletesOwn: false,
-    handsOver: true,
-    moves: false,
-  },
+/**
+ * What else each role may do: deleting its own, and re-pointing a thread whose place is gone
+ * (merged, renamed), saying where it went. Everyone starts threads and hands over.
+ */
+export const ACTS: Readonly<Record<Role, { deletesOwn: boolean; moves: boolean }>> = {
+  [Role.Person]: { deletesOwn: true, moves: true },
+  [Role.Fixer]: { deletesOwn: false, moves: true },
+  [Role.Reviewer]: { deletesOwn: false, moves: false },
 };
-
-/** The roles whose words send a planned or ready thread back to open. */
-const isAsker = (role: Role) => role === Role.Person || role === Role.Teacher;
 
 // ---- The shapes ----
 
@@ -126,7 +102,6 @@ export type Message = z.infer<typeof messageSchema>;
 export const threadSchema = z
   .object({
     id: z.string().min(1),
-    label: z.nativeEnum(Label),
     status: z.nativeEnum(Status),
     by: z.string().min(1),
     role: roleSchema,
@@ -331,9 +306,22 @@ export function threadsOf(review: Review, threads: readonly Filed[]): Filed[] {
 /** The most recent review, if any. */
 export const latestReview = (reviews: readonly Review[]): Review | undefined => reviews.at(-1);
 
-/** Threads still waiting on the agent: not ready, closed or withdrawn. */
-export const isUnanswered = (t: Thread): boolean =>
-  t.status === Status.Open || t.status === Status.Planned;
+/**
+ * Whose turn it is on a thread: the agent's (to fix, answer or plan), the person's (to answer,
+ * decide or close), or no one's (closed, withdrawn). Ready is the person's; planned the agent's. An
+ * open thread waits on the agent, unless the fixer spoke last (started it, or answered without
+ * moving it): then it's a question or a reason, for the person. One `about` another is something
+ * that thread's change broke: the agent's.
+ */
+export function waitsOn(t: Thread): "agent" | "person" | undefined {
+  if (t.status === Status.Closed || t.status === Status.Withdrawn) return undefined;
+  if (t.status === Status.Ready) return "person";
+  if (t.status === Status.Planned || t.about !== undefined) return "agent";
+  return (t.messages.at(-1)?.role ?? t.role) === Role.Fixer ? "person" : "agent";
+}
+
+/** Threads still waiting on the agent. */
+export const isUnanswered = (t: Thread): boolean => waitsOn(t) === "agent";
 
 /** How a review stands, worked out from its threads: "3 ready, 1 open", and whether it's done. */
 export function standing(threads: readonly Thread[]): { text: string; isDone: boolean } {
@@ -495,11 +483,11 @@ function changedSince(root: string, since: string): string[] {
   });
 }
 
-/** What a new thread says: where it is, its label, its words. The writer adds the rest. */
+/** What a new thread says: where it is, its words. The writer adds the rest. */
 export type NewThread = Pick<
   Thread,
   "board" | "target" | "prop" | "source" | "snapshot" | "commit" | "about" | "from" | "quote"
-> & { label?: Label; text: string };
+> & { text: string };
 
 /** One change. Every write goes through here. */
 export type Change =
@@ -539,18 +527,10 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   };
 
   if (change.op === "start") {
-    const label = change.thread.label ?? Label.Comment;
-    if (!acts.starts.includes(label))
-      return { ok: false, error: `a ${who.role} doesn't start a ${label}` };
-    // A fixer's comment is the person's words from its chat, filed in their name.
-    const isFromChat = who.role === Role.Fixer && label === Label.Comment;
-    if (isFromChat && change.thread.from !== "chat")
-      return {
-        ok: false,
-        error: "a fixer files a comment only for what the person said in its chat (from: chat)",
-      };
-    if (label === Label.Regression && change.thread.about === undefined)
-      return { ok: false, error: "a regression names the thread whose change caused it (about)" };
+    // What the person said in a fixer's chat is filed in their name.
+    const isFromChat = change.thread.from === "chat";
+    if (isFromChat && who.role !== Role.Fixer)
+      return { ok: false, error: "only a fixer files what the person said in its chat" };
     const aboutThread =
       change.thread.about === undefined
         ? undefined
@@ -563,7 +543,7 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       aboutThread.board === change.thread.board &&
       (aboutThread.target ?? "") === (change.thread.target ?? "") &&
       (aboutThread.prop ?? "") === (change.thread.prop ?? "");
-    if (label === Label.Regression && isSamePlace)
+    if (isSamePlace)
       return {
         ok: false,
         error: `that is the piece ${aboutThread.id} is about: write on that thread instead (a regression is something its change broke elsewhere)`,
@@ -572,7 +552,6 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     const draft = {
       ...change.thread,
       id: newId(),
-      label,
       by: author.name,
       role: author.role,
       status: Status.Open,
@@ -589,7 +568,6 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   }
 
   if (change.op === "handover") {
-    if (!acts.handsOver) return { ok: false, error: `a ${who.role} doesn't hand over reviews` };
     const sitting = sittingOf(read, who);
     if (sitting.length === 0) return { ok: true, count: 0 };
     const at = now();
@@ -671,8 +649,8 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     return { ok: true };
   }
 
-  // A message, maybe with a move. The person's (or a teacher's) words on a thread the agent has
-  // answered send it back to open.
+  // A message, maybe with a move. The person's words on a thread the agent has answered send it
+  // back to open.
   const mayMove = (to: Status): boolean =>
     MOVES[who.role].some(
       (m) =>
@@ -683,7 +661,7 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   let to = change.status;
   const isAnswered =
     t.status === Status.Planned || t.status === Status.Ready || t.status === Status.Closed;
-  if (to === undefined && isAsker(who.role) && isAnswered && change.text !== "")
+  if (to === undefined && who.role === Role.Person && isAnswered && change.text !== "")
     if (mayMove(Status.Open)) to = Status.Open;
   if (to === undefined && change.text === "") return refuse("say something, or move its status");
   if (to !== undefined && !mayMove(to))
@@ -699,9 +677,7 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       return refuse(
         `answer the reviewer first (${last.by}: "${last.text.slice(0, 80)}"): write a message or a new plan, then mark it ready`,
       );
-    const blocking = threads.filter(
-      (x) => x.label === Label.Regression && x.about === t.id && isUnanswered(x),
-    );
+    const blocking = threads.filter((x) => x.about === t.id && isUnanswered(x));
     if (blocking.length > 0)
       return refuse(`fix the regressions it caused first: ${blocking.map((x) => x.id).join(", ")}`);
     const since = lastMove(t, Status.Planned)?.at ?? t.createdAt;

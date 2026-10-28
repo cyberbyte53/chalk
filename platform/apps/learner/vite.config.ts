@@ -17,11 +17,13 @@ import {
   type Change,
   REVIEWS_DIR,
   Role,
+  type Thread,
   type Who,
   YOU,
   applyChange,
   readComments,
   sittingOf,
+  waitsOn,
 } from "../../studio/src/comments";
 import { pipelineMiddleware } from "./dev-pipeline";
 
@@ -142,12 +144,15 @@ function devReview(): Plugin {
           res.setHeader("content-type", "application/json");
           res.end(JSON.stringify(value));
         };
+        // Each thread with whose turn it is (worked out here, so pages don't work it out again).
+        const withTurn = <T extends Thread>(ts: readonly T[]) =>
+          ts.map((t) => ({ ...t, waitsOn: waitsOn(t) ?? null }));
         if (req.method !== "POST") {
           const read = readComments(ROOT);
           const url = req.url ?? "";
           if (url.includes("problems")) return send(200, read.problems);
-          if (url.includes("sitting")) return send(200, sittingOf(read, whoOf(req)));
-          return send(200, { threads: read.threads, reviews: read.reviews });
+          if (url.includes("sitting")) return send(200, withTurn(sittingOf(read, whoOf(req))));
+          return send(200, { threads: withTurn(read.threads), reviews: read.reviews });
         }
         let body = "";
         req.on("data", (chunk) => {
@@ -168,7 +173,7 @@ function devReview(): Plugin {
           const read = readComments(ROOT);
           send(applied.ok ? 200 : 409, {
             ...applied,
-            threads: read.threads,
+            threads: withTurn(read.threads),
             reviews: read.reviews,
           });
           if (applied.ok) server.ws.send({ type: "custom", event: "chalk:comments" });

@@ -478,7 +478,7 @@ function openComments(chapter: string): number {
 /** Anything in the Chalk tree: the content and its planning, or the reviews (reviews.ts). */
 type Element = Node | ReviewItem;
 const isReview = (e: Element): e is ReviewItem =>
-  e.kind === "sitting" || e.kind === "review" || e.kind === "thread";
+  e.kind === "yours" || e.kind === "sitting" || e.kind === "review" || e.kind === "thread";
 
 /**
  * The one Chalk tree: Reviews at the top (your threads not handed over, then each review), then

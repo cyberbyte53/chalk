@@ -6,7 +6,6 @@ import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import {
   type Change,
-  Label,
   MOVES,
   type NewThread,
   Role,
@@ -20,14 +19,13 @@ import {
   sittingOf,
   standing,
   threadsOf,
+  waitsOn,
 } from "./comments";
-import { migrateEntry } from "./comments-migrate";
 import { goneThreads } from "./thread-places";
 
 const BOARD = "class10-maths/polynomials/value-and-zeroes/value";
 const FIXER: Who = { name: "fixer", role: Role.Fixer };
 const REVIEWER: Who = { name: "reviewer", role: Role.Reviewer };
-const ASHA: Who = { name: "asha", role: Role.Teacher };
 
 function repo(): string {
   const root = mkdtempSync(join(tmpdir(), "comments-"));
@@ -68,7 +66,6 @@ describe("threads", () => {
     expect(onProp.home).toBe("library/props/polynomials");
     expect(onBoard).toMatchObject({
       status: Status.Open,
-      label: Label.Comment,
       by: "you",
       role: Role.Person,
       messages: [],
@@ -119,46 +116,65 @@ describe("threads", () => {
     ]);
   });
 
-  it("lets a teacher reopen, close and withdraw only her own threads", () => {
+  it("lets anyone start a thread, and says whose turn it is", () => {
     const root = repo();
-    const hers = start(root, {}, ASHA);
-    const mine = start(root);
-    expect(write(root, hers.id, ASHA, "", Status.Withdrawn)).toMatchObject({ ok: true });
-    expect(write(root, mine.id, ASHA, "", Status.Closed)).toMatchObject({ ok: false });
-    // Her words on someone else's answered thread are just words: no reopening it.
-    write(root, mine.id, FIXER, "x", Status.Planned);
-    expect(write(root, mine.id, ASHA, "agree")).toMatchObject({
-      thread: { status: Status.Planned },
-    });
+    // The person's comment and a reviewer's finding wait on the agent.
+    const comment = start(root);
+    const finding = start(root, {}, REVIEWER);
+    expect(waitsOn(comment)).toBe("agent");
+    expect(waitsOn(finding)).toBe("agent");
+    // The fixer's question waits on the person; their answer gives it back to the agent.
+    const question = start(root, { text: "keep the summary?" }, FIXER);
+    expect(question).toMatchObject({ by: "fixer", role: Role.Fixer });
+    expect(waitsOn(question)).toBe("person");
+    const answered = write(root, question.id, YOU, "yes, at each lesson's end");
+    if (!answered.ok || answered.thread === undefined) throw new Error("not written");
+    expect(waitsOn(answered.thread)).toBe("agent");
+    // The fixer's reason, without a move, is for the person.
+    const reason = write(root, comment.id, FIXER, "it is already 44px");
+    if (!reason.ok || reason.thread === undefined) throw new Error("not written");
+    expect(waitsOn(reason.thread)).toBe("person");
+    // Planned is the agent's, ready the person's, closed no one's.
+    write(root, question.id, FIXER, "will add it", Status.Planned);
+    expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
+      "agent",
+    );
+    write(root, question.id, FIXER, "added", Status.Ready);
+    expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
+      "person",
+    );
+    write(root, question.id, YOU, "", Status.Closed);
+    expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
+      undefined,
+    );
+    // Something a change broke, whoever filed it, is the agent's.
+    expect(waitsOn(start(root, { target: "machine/out", about: comment.id }, FIXER))).toBe("agent");
   });
 
-  it("starts threads only with the labels each role may use", () => {
+  it("files what the person said in a fixer's chat in their name; only a fixer does", () => {
     const root = repo();
-    expect(
-      applyChange(
-        root,
-        { op: "start", thread: { board: BOARD, text: "x", label: Label.Finding } },
-        YOU,
-      ),
-    ).toMatchObject({ ok: false });
-    expect(start(root, { label: Label.Finding }, REVIEWER)).toMatchObject({
-      by: "reviewer",
-      role: Role.Reviewer,
-    });
-    expect(
-      applyChange(root, { op: "start", thread: { board: BOARD, text: "x" } }, REVIEWER),
-    ).toMatchObject({ ok: false });
-    expect(
-      applyChange(root, { op: "start", thread: { board: BOARD, text: "x" } }, FIXER),
-    ).toMatchObject({
-      ok: false,
-      error: expect.stringContaining("from: chat"),
-    });
-    // What the person said in the fixer's chat is filed in their name.
     expect(start(root, { from: "chat" }, FIXER)).toMatchObject({
       by: "you",
       role: Role.Person,
       from: "chat",
+    });
+    expect(
+      applyChange(
+        root,
+        { op: "start", thread: { board: BOARD, text: "x", from: "chat" } },
+        REVIEWER,
+      ),
+    ).toMatchObject({ ok: false });
+  });
+
+  it("lets an agent withdraw a thread of its own that became moot, and no one else's", () => {
+    const root = repo();
+    const question = start(root, {}, FIXER);
+    const comment = start(root);
+    expect(write(root, comment.id, FIXER, "", Status.Withdrawn)).toMatchObject({ ok: false });
+    expect(write(root, question.id, REVIEWER, "", Status.Withdrawn)).toMatchObject({ ok: false });
+    expect(write(root, question.id, FIXER, "settled in chat", Status.Withdrawn)).toMatchObject({
+      thread: { status: Status.Withdrawn },
     });
   });
 
@@ -185,12 +201,7 @@ describe("threads", () => {
     const root = repo();
     const t = start(root);
     write(root, t.id, FIXER, "x", Status.Planned);
-    expect(() => start(root, { label: Label.Regression }, REVIEWER)).toThrow(/about/);
-    const broke = start(
-      root,
-      { target: "machine/out", label: Label.Regression, about: t.id },
-      REVIEWER,
-    );
+    const broke = start(root, { target: "machine/out", about: t.id }, REVIEWER);
     expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
       ok: false,
       error: expect.stringContaining(broke.id),
@@ -213,7 +224,6 @@ describe("threads", () => {
           thread: {
             board: BOARD,
             target: "machine/put",
-            label: Label.Regression,
             about: t.id,
             text: "still small",
           },
@@ -222,10 +232,8 @@ describe("threads", () => {
       ),
     ).toMatchObject({ ok: false, error: expect.stringContaining("write on that thread instead") });
     // Elsewhere: a regression.
-    expect(
-      start(root, { target: "machine/out", label: Label.Regression, about: t.id }, REVIEWER),
-    ).toMatchObject({
-      label: Label.Regression,
+    expect(start(root, { target: "machine/out", about: t.id }, REVIEWER)).toMatchObject({
+      about: t.id,
     });
   });
 
@@ -271,8 +279,8 @@ describe("threads", () => {
     expect(() => start(root)).toThrow(/fix the comments files first/);
   });
 
-  it("has a status move for every status, and none for a reviewer", () => {
-    expect(MOVES[Role.Reviewer]).toEqual([]);
+  it("has a status move for every status; a reviewer only withdraws its own", () => {
+    expect(MOVES[Role.Reviewer].map((m) => [m.to, m.own])).toEqual([[Status.Withdrawn, true]]);
     const reachable = new Set(Object.values(MOVES).flatMap((moves) => moves.map((m) => m.to)));
     expect([...reachable].sort()).toEqual(Object.values(Status).sort());
   });
@@ -364,7 +372,7 @@ describe("reviews", () => {
   it("gives each participant their own sitting: a reviewer's pass is a review too", () => {
     const root = repo();
     const mine = start(root);
-    const found = start(root, { label: Label.Finding }, REVIEWER);
+    const found = start(root, {}, REVIEWER);
     write(root, mine.id, REVIEWER, "the label is cut off at 360");
     const done = apply(root, { op: "handover" }, REVIEWER);
     expect(done.review).toMatchObject({ by: "reviewer", role: Role.Reviewer });
@@ -399,39 +407,6 @@ describe("reviews", () => {
     const file = join(root, "authoring", "reviews", `${done.review?.id}.yaml`);
     writeFileSync(file, readFileSync(file, "utf8").replace(/id: c\w+/, "id: cgone"));
     expect(readComments(root).problems[0]).toMatch(/no thread cgone/);
-  });
-});
-
-describe("moving over", () => {
-  it("turns an old comment (kind, causedBy, plan, thread, review) into a thread with messages", () => {
-    const thread = migrateEntry({
-      id: "c1",
-      kind: "regression",
-      status: "ready",
-      by: "reviewer",
-      createdAt: "2026-10-26T16:00:00.000Z",
-      board: BOARD,
-      causedBy: "c0",
-      review: "20261026-1600",
-      text: "broke it",
-      plan: { by: "agent", at: "2026-10-26T16:05:00.000Z", text: "undo" },
-      thread: [
-        { by: "you", at: "2026-10-26T16:01:00.000Z", text: "yes" },
-        { by: "agent", at: "2026-10-26T16:10:00.000Z", text: "undone" },
-      ],
-    });
-    expect(thread).toMatchObject({
-      label: Label.Regression,
-      about: "c0",
-      by: "reviewer",
-      role: Role.Reviewer,
-      messages: [
-        { by: "you", role: Role.Person, text: "yes" },
-        { by: "fixer", role: Role.Fixer, text: "undo", status: Status.Planned },
-        { by: "fixer", role: Role.Fixer, text: "undone", status: Status.Ready },
-      ],
-    });
-    expect(thread).not.toHaveProperty("review");
   });
 });
 

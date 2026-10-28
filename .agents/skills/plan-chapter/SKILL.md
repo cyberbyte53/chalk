@@ -32,7 +32,7 @@ Work on **one file at a time**, the first not done:
    - `flow.md`: `## <lesson>`, then per board `### <board-id>  (o5, o9; fig3.15)` with `Purpose:` and `Needs:` (what the student sees or does, in words, never a prop name). Board ids are the ids the boards will have in `content/`.
 2. **Its checks fail, or it is to be checked again:** fix it, or (to be checked again) say on a thread on the file why it still holds.
 3. **Run the checks** (the pipeline step) until this file holds.
-4. **Questions only the person can answer** go on the file as threads (`comment` with `at: "authoring/books/<book>/<chapter>/<file>"` and `quote`: the exact words they are about), each with your recommendation. Never a section of open questions.
+4. **Questions only the person can answer** go on the file as threads (`comment` with `at: "authoring/books/<book>/<chapter>/<file>"` and `quote`: the exact words they are about), each with your recommendation. Never a section of open questions. The thread waits on the person; when they answer, put the answer in the file and answer the thread (`planned`, then `ready` with the old words and the new); a question settled in chat instead you withdraw, saying so. The file can't be approved while a thread on it is open.
 5. **Commit the file** (the person approves what is committed), append `runs/<YYYY-MM-DD-HHMM>-plan.md` (the file, what it decided, its threads), and **stop**: reply with the threads' questions and ask the person to approve it in the editor (the Chalk tree). The next file starts after they do.
 
 The outline is the machine's alone: once it holds, go on to the objectives without waiting.

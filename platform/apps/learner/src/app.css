@@ -1616,11 +1616,15 @@ body.is-selecting .is-pick-target {
   margin-right: 6px;
   text-transform: uppercase;
 }
-.preview-kind.is-regression {
+.preview-kind.is-broken {
   color: #ff7a7a;
 }
-.preview-kind.is-finding {
+.preview-kind.is-reviewer,
+.preview-kind.is-fixer {
   color: #8fb8ff;
+}
+.preview-kind.is-yours {
+  color: #f0b45a;
 }
 .preview-thread.is-ready .preview-status {
   color: #7fcf8a;
@@ -1772,8 +1776,7 @@ body.is-selecting .is-pick-target {
 .activity-what {
   color: #b4b4bc;
 }
-.activity-line.is-finding .activity-what,
-.activity-line.is-regression .activity-what {
+.activity-line.is-broken .activity-what {
   color: #fca5a5;
 }
 .activity-line.is-ready .activity-what {
@@ -1955,6 +1958,12 @@ body.is-selecting .is-pick-target {
 .rv-label {
   flex: none;
   font-size: 12px;
+  color: #8fb8ff;
+}
+.rv-label.is-yours {
+  color: #f0b45a;
+}
+.rv-label.is-broken {
   color: #fca5a5;
 }
 .rv-said {

@@ -1,6 +1,6 @@
 # Comments and reviews
 
-Everything said about content goes in one place: the person's comments, a reviewer agent's findings, what a change broke, feedback given in an agent's chat. Each is a **thread**; a **review** is one participant's sitting, handed to another.
+Everything said about content goes in one place: the person's comments, a reviewer agent's findings, an agent's questions, decisions and proposals, what a change broke, feedback given in an agent's chat. Each is a **thread**: someone said something about a place, and it waits on someone. Anyone starts one; what it is follows from who started it (`by`, `role`) and whether it is `about` another. A **review** is one participant's sitting, handed to another. a **review** is one participant's sitting, handed to another.
 
 ```text
 authoring/books/<book>/<chapter>/comments.yaml   threads on a chapter's boards (and its plan)
@@ -16,7 +16,6 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 
 ```yaml
 - id: cmvpi4adan2w
-  label: comment
   status: ready
   by: you
   role: person
@@ -41,14 +40,13 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
       status: ready
 ```
 
-- **`label`**: `comment` (the person's, or a teacher's), `finding` (a reviewer's, about something it saw), `regression` (something a change broke).
-- **`by`, `role`**: who started it.
+- **`by`, `role`**: who started it: the person (a comment), a reviewer (a finding), a fixer (a question, a decision, a proposal; or, `from: chat`, the person's words filed in their name).
 - **`board`**: the board, by its build path. Its address is `content/<board>` (with `#<target>` for what on it): open it at `?dev&at=content/<board>`, or `look` at it. Absent for a thread on a planning file (then `source` points at the file and line, `authoring/books/<book>/<chapter>/flow.md:12`, and `quote` has the exact words).
 - **`target`**: what was picked on the board, by address: the piece's name, then the groups and the part, joined by `/` (`which/option`). Absent for the whole board. If the board changes and the address no longer finds anything, the preview shows the thread as detached.
 - **`prop`**: the prop's type, for a thread on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`.
 - **`snapshot`**: what the piece showed when the thread was started. **`commit`**: the commit it was started on.
-- **`about`**: another thread this one is about. A regression names the thread whose change broke it.
+- **`about`**: the thread whose change broke this (a regression): that thread can't be ready until this one is answered.
 - **`from`**: `chat` for feedback the person gave in an agent's chat, filed in their name.
 - **`changed`**: the files changed for it, recorded from git when it became ready.
 - **`reaches`**: what those changes reach, worked out at the same time: how many pieces and boards, and the lessons they are in, or every board and why ([reach.md](reach.md)).
@@ -56,36 +54,41 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 
 ## Status
 
-1. **open**: waiting for a fixer. The person's words on a planned, ready or closed thread send it back here.
+1. **open**: being talked about. The person's words on a planned, ready or closed thread send it back here.
 2. **planned**: a fixer wrote its plan, after the person agreed to the plan in chat.
-3. **ready**: done, rendered and checked; the message says what changed. Waiting for the person.
-4. **closed**: the person is happy.
-5. **withdrawn**: the person took it back; its messages are kept as history.
+3. **ready**: done, rendered and checked; the message says what changed.
+4. **closed**: the person is happy. Only the person closes.
+5. **withdrawn**: taken back by the person, or by the agent that started it when it became moot (a question settled in chat); its messages are kept as history.
+
+**Whose turn it is** (`waitsOn` in comments.ts; the dev server adds it to every thread it gives out): ready waits on the person, planned on the agent. Open waits on the agent, unless the fixer spoke last (it started the thread, or answered without moving it): then it is a question, a decision or a reason, for the person, and the person's reply gives it back. A thread `about` another is always the agent's. The editor's Reviews list opens with **Waiting on you**.
+
+Approving a planning file needs every thread on it closed or withdrawn.
 
 ## Who may do what
 
-Everyone who writes is a participant with a role: the **person** (you), a **teacher** (later), a **fixer** (the agent applying a review), a **reviewer** (an agent reviewing). The writer checks every write against two tables (`MOVES` and `ACTS` in comments.ts), so a rule holds whatever an agent's prompt says.
+Everyone who writes is a participant with a role: the **person** (you), a **fixer** (the agent doing the work), a **reviewer** (an agent reviewing). The writer checks every write against two tables (`MOVES` and `ACTS` in comments.ts), so a rule holds whatever an agent's prompt says.
 
 Status moves:
 
-| Move | person | teacher | fixer | reviewer |
-|---|---|---|---|---|
-| no move (just a message) | ✅ | ✅ | ✅ | ✅ |
-| → open (reopen) | ✅ | ✅ own | | |
-| open or planned → planned | | | ✅ | |
-| planned → ready | | | ✅ | |
-| → closed | ✅ | ✅ own | | |
-| → withdrawn | ✅ | ✅ own | | |
+| Move | person | fixer | reviewer |
+|---|---|---|---|
+| no move (just a message) | ✅ | ✅ | ✅ |
+| → open (reopen) | ✅ | | |
+| open or planned → planned | | ✅ | |
+| planned → ready | | ✅ | |
+| → closed | ✅ | | |
+| → withdrawn | ✅ | own, open or planned | own, open |
 
 Other acts:
 
-| | person | teacher | fixer | reviewer |
-|---|---|---|---|---|
-| Start a thread | comment | comment | comment (from chat), regression | finding, regression |
-| Delete a thread | own, untouched, never handed over | the same | | |
-| Hand over a review | ✅ | ✅ | ✅ | ✅ |
+| | person | fixer | reviewer |
+|---|---|---|---|
+| Start a thread | ✅ | ✅ (and `from: chat`) | ✅ |
+| Delete a thread | own, untouched, never handed over | | |
+| Re-point a thread whose place is gone | ✅ | ✅ | |
+| Hand over a review | ✅ | ✅ | ✅ |
 
-Also: a thread can't become ready while a regression about it is open or planned, or while a reviewer's message is the last word on it (the fixer answers first). What's wrong with a thread's own fix is said **on that thread**; a regression is something its change broke **elsewhere**, so the writer refuses a regression on the thread's own piece. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
+Also: a thread can't become ready while one `about` it waits on the agent, or while a reviewer's message is the last word on it (the fixer answers first). What's wrong with a thread's own fix is said **on that thread**; a regression is something its change broke **elsewhere**, so the writer refuses an `about` on the thread's own piece. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
 
 **Each agent holds one role, and is shown only what it may do.** This is the standard shape for MCP: one server, every caller identified by its token, the server deciding what that caller sees and may do.
 
@@ -93,7 +96,7 @@ Also: a thread can't become ready while a regression about it is open or planned
 - Agents use **one endpoint**, `http://127.0.0.1:5174/mcp`: the chalk MCP service (`platform/studio/src/mcp/main.ts`, `http.ts`). Each connection sends a bearer token, and the token gives its role. Nobody picks a role per call.
 - Where it listens and who may connect are settings: `CHALK_MCP_HOST` (default `127.0.0.1`, unreachable from the network), `CHALK_MCP_PORT` (5174), `CHALK_MCP_ALLOW` (addresses, or `*`; default this machine), `CHALK_TOKENS`. The same service can run on a server by changing them.
 - Development tokens are one per role (`chalk-dev-fixer`, `chalk-dev-reviewer`, in `http.ts`; `CHALK_TOKENS` to set others). The shared configs (`.mcp.json`, `.cursor/mcp.json`, `.vscode/mcp.json`) start the **relay** (`platform/studio/src/mcp/connect.ts`) over stdio with the fixer's token (`CHALK_TOKEN`). The **`reviewer` subagent** (`.claude/agents/reviewer.md`) starts it with the reviewer's token and has none of the fixer's tools. Without subagents, a reviewer is a chat whose config sets `CHALK_TOKEN` to the reviewer's. `CHALK_NAME` (or the `x-chalk-name` header) names an agent in threads.
-- Each connection gets its own session, showing only the tools its role uses; its `comment` tool offers only the status moves and labels its role may use (from the same `MOVES` and `ACTS` tables). An agent can't pick what it never sees; the writer still checks every call.
+- Each connection gets its own session, showing only the tools its role uses; its `comment` tool offers only the status moves its role may make (from the same `MOVES` table). An agent can't pick what it never sees; the writer still checks every call.
 - **Nothing to start by hand.** The relay starts the service if nothing answers (once per machine), then passes every call through. The service runs under `tsx watch`, so it restarts when its code changes; the relay connects again and sends the call again, so agents don't notice (a `comment` write cut off mid-call isn't resent: it says so). The relay gives its agent an id (`x-chalk-agent`) that keys the agent's page for drawing boards, so two agents with one token never share a board. `pnpm mcp`, `pnpm dev` and the editor start the same service. It starts the dev server itself when a tool needs it. Its output is in `node_modules/.cache/chalk-mcp.log` when the relay started it.
 
 What this doesn't stop: on a laptop the tokens sit in config files, so anything on the machine can read them and call the dev server, and an agent with a shell can edit the files (the reader catches a broken file the next time it reads it). Closing that means the same endpoint on the Chalk server, with tokens from sign-in.
@@ -127,8 +130,8 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 
 ## The tools (chalk MCP)
 
-- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop) and `unanswered` (open or planned) filter.
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `label`, `about`, `from`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
+- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop) and `unanswered` (what waits on the agent) filter. Each thread says whose turn it is.
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `about`, `from`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
 
 ## A thread whose place is gone
 

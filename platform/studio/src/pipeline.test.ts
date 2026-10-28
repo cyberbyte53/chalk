@@ -3,6 +3,7 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { Role, Status, YOU, applyChange } from "./comments";
 import {
   Step,
   approve,
@@ -146,6 +147,22 @@ describe("approval and what a change reaches", () => {
     commit(root, "brief approved");
     writeFileSync(file(root, "objectives.md"), OBJECTIVES.replace("Read", "Read off"));
     expect(() => approve(root, "b", "c", Step.Objectives)).toThrow(/not committed/);
+  });
+
+  it("doesn't approve a file while a thread on it is open", () => {
+    const root = chapter();
+    const asked = applyChange(
+      root,
+      {
+        op: "start",
+        thread: { source: "authoring/books/b/c/brief.md:1", quote: "class 9", text: "which term?" },
+      },
+      { name: "fixer", role: Role.Fixer },
+    );
+    if (!asked.ok || asked.thread === undefined) throw new Error("not started");
+    expect(() => approve(root, "b", "c", Step.Brief)).toThrow(/still open on brief.md/);
+    applyChange(root, { op: "write", id: asked.thread.id, text: "", status: Status.Closed }, YOU);
+    expect(() => approve(root, "b", "c", Step.Brief)).not.toThrow();
   });
 
   it("a changed file says so, and what was written from it is to be checked again", () => {

@@ -19,8 +19,9 @@ export type Message = {
 
 export type Thread = {
   id: string;
-  label: "comment" | "finding" | "regression";
   status: ThreadStatus;
+  /** Whose turn it is (the dev server works it out): the agent's, the person's, or no one's. */
+  waitsOn: "agent" | "person" | null;
   by: string;
   role: string;
   createdAt: string;

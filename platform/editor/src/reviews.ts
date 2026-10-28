@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 
 /**
- * The Reviews view (Chalk sidebar): your sitting not handed over yet, then every review, newest
- * first, each with its threads and where it stands. Everything is read from and written through
+ * The Reviews view (Chalk sidebar): what waits on you (an agent's question, decision or proposal, a
+ * fix ready to check), your sitting not handed over yet, then every review, newest first, each with its threads and where it stands. Everything is read from and written through
  * the dev server (/dev-review), the one writer, as the person (platform/docs/comments.md).
  */
 
@@ -10,9 +10,12 @@ type Status = "open" | "planned" | "ready" | "closed" | "withdrawn";
 type Message = { by: string; role: string; at: string; text: string; status?: Status };
 export type Thread = {
   id: string;
-  label: string;
   status: Status;
+  /** Whose turn it is, as the dev server works it out. */
+  waitsOn: "agent" | "person" | null;
   by: string;
+  role: string;
+  about?: string;
   createdAt: string;
   text: string;
   board?: string;
@@ -29,6 +32,7 @@ type Read = { threads: Thread[]; reviews: Review[] };
 export type ReviewItem = Item;
 
 type Item =
+  | { kind: "yours"; threads: Thread[] }
   | { kind: "sitting"; threads: Thread[] }
   | { kind: "review"; review: Review; threads: Thread[]; isLatest: boolean }
   | { kind: "thread"; thread: Thread; review?: string };
@@ -48,7 +52,8 @@ const WORDS: Record<Status, string> = {
   withdrawn: "withdrawn",
 };
 
-const isWaiting = (t: Thread) => t.status === "open" || t.status === "planned";
+const isWaiting = (t: Thread) => t.waitsOn === "agent";
+const isYours = (t: Thread) => t.waitsOn === "person";
 
 /** "1 open, 3 ready", from the threads as they are now. */
 function standing(threads: readonly Thread[]): string {
@@ -72,7 +77,12 @@ const answerOf = (t: Thread) =>
 
 function tooltip(t: Thread): vscode.MarkdownString {
   const md = new vscode.MarkdownString(undefined, true);
-  md.appendMarkdown(`**${WORDS[t.status]}** · ${t.label} · ${t.board ?? t.source ?? ""}\n\n`);
+  const who = t.role === "person" ? "" : ` · ${t.by === t.role ? t.role : `${t.by} (${t.role})`}`;
+  const turn = isYours(t) ? " · your turn" : "";
+  const broke = t.about ? ` · broken by ${t.about}'s change` : "";
+  md.appendMarkdown(
+    `**${WORDS[t.status]}**${turn}${who}${broke} · ${t.board ?? t.source ?? ""}\n\n`,
+  );
   md.appendMarkdown(`**${t.by}:** ${t.text}\n\n`);
   const plan = planOf(t);
   if (plan) md.appendMarkdown(`**Plan (${plan.by}):** ${plan.text}\n\n`);
@@ -118,7 +128,9 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
   getChildren(item?: Item): Item[] {
     if (item === undefined) {
       const reviews = [...this.read.reviews].reverse();
+      const yours = this.read.threads.filter(isYours);
       return [
+        ...(yours.length > 0 ? [{ kind: "yours", threads: yours } as const] : []),
         ...(this.sitting.length > 0 ? [{ kind: "sitting", threads: this.sitting } as const] : []),
         ...reviews.map(
           (review, i) =>
@@ -131,7 +143,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
         ),
       ];
     }
-    if (item.kind === "sitting")
+    if (item.kind === "sitting" || item.kind === "yours")
       return item.threads.map((thread) => ({ kind: "thread", thread }) as const);
     if (item.kind === "review")
       return item.threads.map(
@@ -141,6 +153,16 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
   }
 
   getTreeItem(item: Item): vscode.TreeItem {
+    if (item.kind === "yours") {
+      const t = new vscode.TreeItem(
+        `Waiting on you (${item.threads.length})`,
+        vscode.TreeItemCollapsibleState.Expanded,
+      );
+      t.iconPath = new vscode.ThemeIcon("bell", new vscode.ThemeColor("charts.yellow"));
+      t.tooltip =
+        "An agent's question, decision or proposal to answer, or a fix ready to check: reply on it (it goes back to the agent) or close it.";
+      return t;
+    }
     if (item.kind === "sitting") {
       const t = new vscode.TreeItem(
         `Not handed over yet (${item.threads.length})`,
@@ -174,7 +196,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     const { thread } = item;
     const t = new vscode.TreeItem(where(thread), vscode.TreeItemCollapsibleState.None);
     const latest = answerOf(thread) ?? planOf(thread);
-    t.description = `${WORDS[thread.status]} · ${(latest?.text || thread.text).replace(/\s+/g, " ").slice(0, 80)}`;
+    t.description = `${isYours(thread) && thread.status === "open" ? "your turn" : WORDS[thread.status]} · ${(latest?.text || thread.text).replace(/\s+/g, " ").slice(0, 80)}`;
     const [icon, color] = ICONS[thread.status];
     t.iconPath = new vscode.ThemeIcon(icon, color ? new vscode.ThemeColor(color) : undefined);
     t.tooltip = tooltip(thread);
@@ -186,11 +208,11 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
   /** Where the reviews stand, in a few words: for the Reviews entry at the top of the Chalk tree. */
   get summary(): string {
     const waiting = this.read.threads.filter(isWaiting).length;
-    const ready = this.read.threads.filter((t) => t.status === "ready").length;
+    const yours = this.read.threads.filter(isYours).length;
     return [
+      yours > 0 ? `${yours} waiting on you` : "",
       this.sitting.length > 0 ? `${this.sitting.length} not handed over` : "",
       waiting > 0 ? `${waiting} with the agent` : "",
-      ready > 0 ? `${ready} ready` : "",
     ]
       .filter(Boolean)
       .join(" · ");

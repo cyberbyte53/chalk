@@ -14,9 +14,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { listBoards, readSources } from "../boards";
 import {
-  ACTS,
   type Filed,
-  Label,
   MOVES,
   type Review,
   Role,
@@ -26,6 +24,7 @@ import {
   latestReview,
   standing,
   threadsOf,
+  waitsOn,
 } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
 import { findUp } from "../pronunciations";
@@ -179,11 +178,17 @@ export function threadAt(c: Filed): string {
   return (c.source ?? c.home).replace(/:\d+(-\d+)?$/, "");
 }
 
+/** Whose turn it is, in words. */
+function turnWords(c: Filed): string {
+  const on = waitsOn(c);
+  return on === undefined ? "" : ` waits on the ${on} ·`;
+}
+
 function threadLine(c: Filed): string {
   const where = threadAt(c);
   const plan = lastMove(c, Status.Planned);
   return [
-    `• ${c.id} [${c.status}]${c.label === Label.Comment ? "" : ` ${c.label}`}${c.about ? ` about ${c.about}` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
+    `• ${c.id} [${c.status}]${turnWords(c)} ${c.by}${c.by === c.role ? "" : ` (${c.role})`}${c.about ? `, broken by ${c.about}'s change` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
     `  source: ${c.source ?? "?"}`,
     ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot)}`] : []),
     `  ${c.by}: “${oneLine(c.text)}”`,
@@ -201,7 +206,7 @@ export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string
 
 /**
  * The chalk tools for one caller: a fresh MCP server per connection, showing only what the caller's
- * role uses (`SEES`, and in `comment` only the moves and labels the writer's tables allow it). The
+ * role uses (`SEES`, and in `comment` only the moves the writer's table allows it). The
  * MCP service (main.ts, http.ts) says who is calling from their token.
  */
 /**
@@ -214,7 +219,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const NAME = who.name;
   /**
    * What this connection is shown: the tools its role uses, and in \`comment\` only the status moves
-   * and labels the writer's tables (MOVES, ACTS) allow its role. An agent can't pick what it never
+   * the writer's table (MOVES) allows its role. An agent can't pick what it never
    * sees; the writer still checks every call.
    */
   const SEES: Readonly<Record<Who["role"], readonly string[]>> = {
@@ -222,7 +227,6 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     [Role.Reviewer]: ["look", "play", "affected", "comments", "comment"],
   };
   const MY_MOVES = [...new Set(MOVES[ROLE].map((m) => m.to))] as Status[];
-  const MY_LABELS = ACTS[ROLE].starts;
 
   /** Registers a tool, and lists it only when this role uses it (SEES). */
   const offer = (registered: { remove: () => void }, name: string) => {
@@ -622,7 +626,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Read comments",
         description:
-          'Read threads: the person\'s comments from the preview, reviewers\' findings and regressions, and chat feedback filed as comments. `review`: a review\'s id ("apply review 20261026-1734"), or "latest": exactly the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). `unanswered: true`: only what still waits on a fixer (open or planned). Each shows its address, source line, what it showed, its plan and every message.',
+          "Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' and fixers' (questions, decisions, proposals); a thread `about` another is something that one's change broke. Each says whose turn it is. `review`: a review's id (\"apply review 20261026-1734\"), or \"latest\": exactly the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). `unanswered: true`: only what waits on the agent. Each shows its address, source line, what it showed, its plan and every message.",
         inputSchema: {
           review: z.string().optional().describe('A review id, or "latest".'),
           at: z
@@ -684,14 +688,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       "ready: what you did; needs a plan first, an answer to any reviewer's words on it, and no open regression it caused; the files you changed are recorded from git",
     [Status.Open]: "open: reopen it",
     [Status.Closed]: "closed: done",
-    [Status.Withdrawn]: "withdrawn: take it back",
-  };
-  const LABEL_WORDS: Record<Label, string> = {
-    [Label.Finding]:
-      "finding: a new problem (the principle, and what a student would get wrong); about a thread already there, write on it instead",
-    [Label.Regression]:
-      "regression: what a thread's change broke elsewhere (with about); what's wrong with its own fix goes on that thread",
-    [Label.Comment]: "comment: what the person said in your chat (with from: chat)",
+    [Status.Withdrawn]: "withdrawn: take back a thread you started that became moot (say why)",
   };
 
   /**
@@ -776,19 +773,20 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         .string()
         .optional()
         .describe("On a planning file: the exact words the thread is about, as written."),
-      label: z
-        .enum(MY_LABELS as unknown as [Label, ...Label[]])
+      about: z
+        .string()
         .optional()
-        .describe(`A new thread: ${MY_LABELS.map((l) => LABEL_WORDS[l]).join("; ")}.`),
-      ...(MY_LABELS.includes(Label.Regression)
+        .describe(
+          "A new thread about something another thread's change broke elsewhere: that thread's id (it can't be ready until this is answered). What's wrong with its own fix goes on that thread.",
+        ),
+      ...(ROLE === Role.Fixer
         ? {
-            about: z
-              .string()
+            from: z
+              .literal("chat")
               .optional()
-              .describe("A regression: the thread whose change broke this."),
+              .describe("A new thread: what the person said in your chat, filed in their name."),
           }
         : {}),
-      ...(MY_LABELS.includes(Label.Comment) ? { from: z.literal("chat").optional() } : {}),
       ...(MY_MOVES.includes(Status.Planned)
         ? {
             plan: z
@@ -807,7 +805,6 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     status?: Status;
     at?: string;
     quote?: string;
-    label?: Label;
     about?: string;
     from?: "chat";
     plan?: string;
@@ -874,7 +871,6 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             op: "start",
             thread: {
               ...place,
-              ...(item.label ? { label: item.label } : {}),
               ...(item.about ? { about: item.about } : {}),
               ...(item.from ? { from: item.from } : {}),
               text: item.text,

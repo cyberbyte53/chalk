@@ -312,10 +312,14 @@ function BoardThreads({
           onClick={() => setOpenId(isOpen ? null : t.id)}
         >
           <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
-          {t.label !== "comment" && (
-            <span
-              class={`preview-kind is-${t.label}`}
-            >{`${t.label}${t.by === "you" ? "" : ` · ${t.by}`}`}</span>
+          {t.waitsOn === "person" && <span class="preview-kind is-yours">your turn</span>}
+          {t.role !== "person" && (
+            <span class={`preview-kind is-${t.role}`}>
+              {t.by === t.role ? t.role : `${t.by} (${t.role})`}
+            </span>
+          )}
+          {t.about !== undefined && (
+            <span class="preview-kind is-broken">broken by another thread's change</span>
           )}
           {t.prop !== undefined ? (
             <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
