@@ -225,8 +225,10 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async reads() {
     const c = await agent("stress-reads");
+    const lookFrom = Date.now();
     const lesson = call(c, "look", { at: `${R}/which-fractions-end` });
     await new Promise((r) => setTimeout(r, 200));
+    const readsFrom = Date.now();
     const quick = await Promise.all([
       call(c, "comments", { board: R }),
       call(c, "comments", { review: "latest" }),
@@ -235,10 +237,13 @@ const cases: Record<string, () => Promise<void>> = {
     ]);
     const l = await lesson;
     expect("reads during a lesson look succeed", allOk([...quick, l]), firstError([...quick, l]));
+    // Waiting is what's checked, not speed: each read is answered while the look is still drawing.
+    // The times are measured and shown, never held to a number (a slow machine is still right).
+    const lookEnd = lookFrom + l.ms;
     expect(
-      "reads don't wait for the browser (each under 1s)",
-      quick.every((q) => q.ms < 1000),
-      quick.map((q) => `${q.ms}ms`).join("/"),
+      "reads don't wait for the browser: each is answered before the look is done",
+      quick.every((q) => readsFrom + q.ms < lookEnd),
+      `reads ${quick.map((q) => `${q.ms}ms`).join("/")} · look ${l.ms}ms`,
     );
   },
   async rebuild() {
