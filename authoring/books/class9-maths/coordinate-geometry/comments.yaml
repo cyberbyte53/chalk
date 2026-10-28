@@ -1,0 +1,48 @@
+# Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
+- id: cmvsh2v2vwor
+  status: planned
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-28T18:53:22.519Z
+  source: authoring/books/class9-maths/coordinate-geometry/source/outline.yaml:71
+  commit: b759d5c651f814f21f021c165b7bbad501b0c608
+  quote: "id: summary"
+  text: "No objective cites §3.4, the Summary. It repeats o1–o12 and teaches nothing new. My
+    recommendation: no objective of its own. Each lesson ends with its share of the summary's points
+    (for example, the lesson on the axes ends with points 1–5), so all eleven are still kept. The
+    alternative is a closing recap board for the whole chapter, which would need an objective like
+    \"recall the chapter's results together\". Which do you want?"
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-28T19:12:31.945Z
+      text: I don;t understand what your question is
+    - by: fixer
+      role: fixer
+      at: 2026-10-28T19:12:49.992Z
+      text: >-
+        Sorry, I put that badly. The chapter ends with a Summary: a list of 11 facts the chapter has
+        already taught ("the horizontal line is called the x-axis", "the origin is (0, 0)" and so
+        on). Where should those 11 facts appear in our lessons?
+
+
+        A (my recommendation): no separate summary page. At the end of each lesson, show the facts
+        that lesson taught. For example, the lesson on the axes ends with "the horizontal line is
+        the x-axis, the vertical one the y-axis, they meet at the origin".
+
+
+        B: one summary page at the very end of the chapter, listing all 11 facts together.
+
+
+        Just reply A or B.
+    - by: you
+      role: person
+      at: 2026-10-28T19:13:21.841Z
+      text: A
+    - by: fixer
+      role: fixer
+      at: 2026-10-28T19:13:38.381Z
+      text: A, thanks. The summary gets no objective and no page of its own. In flow.md, each lesson's
+        last board will carry the summary points that lesson taught, and all eleven points will be
+        covered across the lessons. I'll mark this ready once flow.md is written.
+      status: planned
