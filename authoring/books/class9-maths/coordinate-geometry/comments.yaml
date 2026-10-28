@@ -1,6 +1,6 @@
 # Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
 - id: cmvsh2v2vwor
-  status: planned
+  status: ready
   by: fixer
   role: fixer
   createdAt: 2026-10-28T18:53:22.519Z
@@ -46,3 +46,40 @@
         last board will carry the summary points that lesson taught, and all eleven points will be
         covered across the lessons. I'll mark this ready once flow.md is written.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-28T19:16:43.702Z
+      text: "Done in flow.md: two-lines ends with summary point 1, quadrants with 2–5, find-the-point with
+        6–10, and graphs-you-know with 11. Each of those boards cites s3.4 and summary."
+      status: ready
+  changed: []
+- id: cmvshww5ilqx
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-28T19:16:43.590Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:1
+  commit: 311865c8a18262e0b46368df6d6612a7f31f9b2f
+  quote: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and
+    their class runs a stall fair on the school ground.
+  text: "The story. I've reused Riya and Aman from class 10 Real Numbers, a year younger, so the two
+    books join up. Their mission is a plan of the school fair ground, so that a message like
+    \"snacks at (3, 2)\" puts every stall in the right spot. It uses the source's own events: the
+    street map, the seating plan, the dice game as the fair's game stall, and Aman's swapped pair as
+    the mistake that shows why order matters. My recommendation: keep it. Do you want these
+    characters and this mission, or something else?"
+  messages: []
+- id: cmvshww63zm0
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-28T19:16:43.611Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:47
+  commit: 311865c8a18262e0b46368df6d6612a7f31f9b2f
+  quote: "## coordinates-of-a-point"
+  text: 'Lessons. There are four: two numbers for a place, the Cartesian plane, coordinates of a
+    point, plotting points. "Coordinates of a point" is the longest, with six boards. Points on the
+    axes and the quadrant signs stay in it as applications of coordinates, not lessons of their own.
+    My recommendation: four lessons. Or do you want that lesson split in two (reading coordinates /
+    axes and signs)?'
+  messages: []
