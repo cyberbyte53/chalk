@@ -514,7 +514,10 @@ export function withNothingDrawing<T>(fn: () => Promise<T>): Promise<T> {
   return run;
 }
 
-/** A page pulled away mid-call (a reload, a navigation): worth one more try on a fresh load. */
+/** How many times a drawing is tried when the page keeps being pulled away under it. */
+const PULLED_AWAY_TRIES = 4;
+
+/** A page pulled away mid-call (a reload, a navigation): worth another try on a fresh load. */
 const isPulledAway = (error: unknown): boolean =>
   /Execution context was destroyed|not attached to the DOM|Target (page, context or browser )?(has been )?closed|frame was detached|navigation/i.test(
     firstLine(error),
@@ -524,8 +527,8 @@ const isPulledAway = (error: unknown): boolean =>
  * Each board at `board` (one board, or a whole lesson) drawn at phone width; with `steps`, a
  * single board acted on first, a picture after each step if asked. A lane's calls run one at a
  * time; different lanes (agent connections) draw at once, each on its own page. A call that the
- * page is pulled away from (content reloaded under it) is tried once more from a fresh load,
- * unless it continued a board, whose state is then gone.
+ * page is pulled away from (content reloaded under it) is tried again from a fresh load, a few
+ * times at most, unless it continued a board, whose state is then gone.
  */
 export function shoot(
   root: string,
@@ -540,12 +543,21 @@ export function shoot(
       busy.add(lane);
       used.set(lane, Date.now());
       try {
-        return await once();
-      } catch (error) {
-        if (act?.isContinued === true || !isPulledAway(error)) throw error;
-        const at = lanes.get(lane);
-        if (at !== undefined) at.isStale = true;
-        return await once();
+        // A page pulled away (the dev server reloading it after a rebuild or an edit, which can
+        // land more than once) is tried again from a fresh load, a few times at most.
+        for (let attempt = 1; ; attempt++) {
+          try {
+            return await once();
+          } catch (error) {
+            if (act?.isContinued === true || !isPulledAway(error) || attempt >= PULLED_AWAY_TRIES)
+              throw error;
+            const at = lanes.get(lane);
+            if (at !== undefined) {
+              at.isStale = true;
+              await at.page.waitForLoadState("load", { timeout: 5000 }).catch(() => {});
+            }
+          }
+        }
       } finally {
         busy.delete(lane);
       }
