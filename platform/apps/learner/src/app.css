@@ -1573,8 +1573,115 @@ body.is-selecting .is-pick-target {
 .preview-help b {
   color: #fff;
 }
-.preview-card.has-threads {
+.preview-card.has-threads,
+.preview-card.has-panel {
   width: auto;
+}
+/* Beside a prop on its own page: what a lesson controls (prop-panel.tsx). Chrome, not content. */
+.prop-panel {
+  width: 300px;
+  flex: none;
+  /* Its own scroll, so the prop stays in view while its fields are set. */
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  font: 13px / 1.4 system-ui, sans-serif;
+  color: #d4d4da;
+}
+.prop-panel section {
+  background: #2a2a30;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.prop-panel h3 {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+.prop-panel-note {
+  margin: 2px 0 8px;
+  color: #9a9aa2;
+}
+.prop-panel-problem {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #4a2226;
+  color: #ffd7da;
+}
+.prop-panel-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 4px 0;
+}
+.prop-panel-label {
+  min-width: 96px;
+  color: #b4b4bc;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+.prop-panel input[type="number"] {
+  width: 64px;
+}
+.prop-panel input[type="range"] {
+  width: 96px;
+  padding: 0;
+}
+.prop-panel input[type="text"],
+.prop-panel textarea {
+  flex: 1;
+  min-width: 120px;
+}
+.prop-panel input,
+.prop-panel select,
+.prop-panel textarea,
+.prop-panel button {
+  font: inherit;
+  color: #f0f0f4;
+  background: #1c1c21;
+  border: 1px solid #44444c;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+.prop-panel button {
+  cursor: pointer;
+}
+.prop-panel button:hover {
+  border-color: #8a8aff;
+}
+.prop-panel-range {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.prop-panel-object,
+.prop-panel-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 10px;
+  border-left: 1px solid #3a3a42;
+}
+.prop-panel-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prop-panel-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+}
+.prop-panel-action > button {
+  font-family: ui-monospace, monospace;
 }
 .preview-body {
   display: flex;
@@ -1653,6 +1760,9 @@ body.is-selecting .is-pick-target {
   }
   .preview-threads > .preview-thread {
     position: static;
+  }
+  .prop-panel {
+    width: auto;
   }
 }
 .preview-thread {

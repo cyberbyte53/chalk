@@ -7,11 +7,18 @@ import {
   builtFile,
   propBoard,
 } from "@chalk/content";
-import { contentAddress, parseAddress, previewQuery, propAddress } from "@chalk/content/address";
+import {
+  PROPS_ROOT,
+  contentAddress,
+  parseAddress,
+  previewQuery,
+  propAddress,
+} from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
   BoardPlayer,
+  type BoardRuntime,
   BoardSpeedContext,
   SEP,
   addressOf,
@@ -30,6 +37,7 @@ import { ChapterScreen, CourseScreen } from "./course-screens";
 import { installTextKeys, isInEditor, sendKeys, toEditor } from "./editor-link";
 import { courses } from "./lessons";
 import { PlayInApp } from "./play-in-app";
+import { PropPanel } from "./prop-panel";
 import { ReviewList, ReviewPage } from "./review-page";
 import {
   type Review,
@@ -514,6 +522,9 @@ export function PreviewBoard({
   );
   const phone = useRef<HTMLDivElement>(null);
   useSourceTags(phone, where, shown.path);
+  // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
+  const isProp = shown.path.startsWith(PROPS_ROOT);
+  const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
   const onClick = (e: MouseEvent) => {
     if (!e.altKey) return;
     const site = (e.target as HTMLElement).closest<HTMLElement>("[data-source]")?.dataset.source;
@@ -524,7 +535,7 @@ export function PreviewBoard({
   };
   return (
     <section
-      class={`preview-card${!isShot && threads.length > 0 ? " has-threads" : ""}`}
+      class={`preview-card${!isShot && threads.length > 0 ? " has-threads" : ""}${!isShot && isProp ? " has-panel" : ""}`}
       data-board={shown.path}
     >
       {!isShot && (
@@ -540,6 +551,7 @@ export function PreviewBoard({
       <div class="preview-body">
         <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
           <BoardPlayer
+            onRuntime={isProp ? setRuntime : undefined}
             board={board}
             registry={propLibrary}
             locale={locale}
@@ -552,6 +564,9 @@ export function PreviewBoard({
             }}
           />
         </div>
+        {!isShot && isProp && runtime !== undefined && (
+          <PropPanel runtime={runtime} piece={board.name} />
+        )}
         {!isShot && threads.length > 0 && (
           <BoardThreads threads={threads} reviews={reviews} onChange={onThreads} phone={phone} />
         )}

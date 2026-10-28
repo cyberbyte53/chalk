@@ -58,6 +58,8 @@ export type BoardPlayerProps = {
    * question shows its own note under it instead.
    */
   mode?: PlayMode | undefined;
+  /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
+  onRuntime?: ((runtime: BoardRuntime) => void) | undefined;
 };
 
 /**
@@ -85,6 +87,7 @@ export function BoardPlayer({
   wasPassed = false,
   jugnu: given,
   mode,
+  onRuntime,
 }: BoardPlayerProps): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
@@ -98,6 +101,8 @@ export function BoardPlayer({
   );
   const narrator = useNarrator(board.item?.id ?? board.name, locale, audio, reportAudioFailure);
   const runtime = useBoardRuntime(board, registry, narrator.speak);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: told once per runtime
+  useEffect(() => onRuntime?.(runtime), [runtime]);
   // Everything that happens on the board is recorded; it opens before its first signal.
   // biome-ignore lint/correctness/useExhaustiveDependencies: one recorder per board on screen
   const recorder = useMemo(() => {
