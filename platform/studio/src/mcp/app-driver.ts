@@ -142,9 +142,12 @@ export const SETTLE_CAP = 30;
  * Waits until every board on the page has settled (no lesson script and no prop's timeline
  * running), at most SETTLE_CAP of board time. Returns what was still going on at the cap, if any.
  */
+/** What is still going on, on every board on the page, right now. */
+const busyNow = (page: Page) =>
+  page.evaluate(() => (window as { __chalkBusy?: () => string[] }).__chalkBusy?.() ?? []);
+
 async function untilIdle(page: Page, speed: number): Promise<string[]> {
-  const busy = () =>
-    page.evaluate(() => (window as { __chalkBusy?: () => string[] }).__chalkBusy?.() ?? []);
+  const busy = () => busyNow(page);
   try {
     await page.waitForFunction(
       () => ((window as { __chalkBusy?: () => string[] }).__chalkBusy?.() ?? []).length === 0,
@@ -376,7 +379,57 @@ export type StepResult = {
   picture?: Picture;
   /** What the step changed on screen ("game/plates": was "…0 each", now "…1 each"). */
   changed?: Record<string, { was: unknown; now: unknown }>;
+  /** The board over time after the step, when frames were asked for. */
+  motion?: Motion;
 };
+
+/** How the board moved after a step: the frames that differed, and when it went still (if it did). */
+export type Motion = {
+  /** Each frame kept (one that differs from the one before it), with its time after the step, s. */
+  frames: { picture: Picture; t: number }[];
+  /** When the picture last changed, once it had gone still and the board had settled. */
+  stillAfter?: number;
+  /** The picture was still changing when sampling stopped (the frames filled, or the cap). */
+  stillChangingAt?: number;
+};
+
+/** How a step's motion is sampled: about every `every` ms (real time), keeping at most `most` frames. */
+export type FramesSpec = { every: number; most: number };
+
+/** The longest a step's motion is watched, in real seconds. */
+const MOTION_CAP = 30;
+
+/**
+ * Watches the board after a step: a picture about every `every` ms, kept when it differs from the
+ * last one kept (Chromium draws a still page to the same bytes every time, so differing bytes mean
+ * a differing picture). Stops once the board has settled and two pictures in a row were the same,
+ * or when `most` frames are kept, or at the cap; says which.
+ */
+async function watchMotion(
+  page: Page,
+  card: Locator,
+  spec: FramesSpec,
+  isSettled: () => Promise<boolean>,
+): Promise<Motion> {
+  const frames: Motion["frames"] = [];
+  const t0 = Date.now();
+  let last: Buffer | undefined;
+  let same = 0;
+  let lastChange = 0;
+  for (;;) {
+    const picture = await pictureOf(card, "thumb");
+    const t = Number(((Date.now() - t0) / 1000).toFixed(2));
+    if (last === undefined || !picture.png.equals(last)) {
+      frames.push({ picture, t });
+      last = picture.png;
+      same = 0;
+      lastChange = t;
+    } else same += 1;
+    if (same >= 2 && (await isSettled())) return { frames, stillAfter: lastChange };
+    if (frames.length >= spec.most || t >= MOTION_CAP) return { frames, stillChangingAt: t };
+    await page.waitForTimeout(spec.every);
+  }
+}
 
 export async function previewUrl(
   root: string,
@@ -533,11 +586,19 @@ const isPulledAway = (error: unknown): boolean =>
  * page is pulled away from (content reloaded under it) is tried again from a fresh load, a few
  * times at most, unless it continued a board, whose state is then gone.
  */
+/** What play asks of a board: its steps, which pictures, whether it goes on from the last call, and frames over time. */
+export type Act = {
+  steps: Step[];
+  shots: "each" | "last" | "none";
+  isContinued: boolean;
+  frames?: FramesSpec;
+};
+
 export function shoot(
   root: string,
   board: string,
   o: ShotOptions = {},
-  act?: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean },
+  act?: Act,
   lane: string = DEFAULT_LANE,
 ): Promise<Drawn> {
   const once = () => shootNow(root, board, o, act, lane);
@@ -719,7 +780,7 @@ async function shootNow(
   root: string,
   board: string,
   o: ShotOptions,
-  act: { steps: Step[]; shots: "each" | "last" | "none"; isContinued: boolean } | undefined,
+  act: Act | undefined,
   lane: string,
 ): Promise<Drawn> {
   // Acting starts from a fresh board (a new run) unless it continues this lane's last board.
@@ -855,8 +916,21 @@ async function shootNow(
       }
       const isLast = i === act.steps.length - 1;
       const isPictured = act.shots === "each" || (act.shots === "last" && isLast);
-      const running = await untilIdle(page, speed);
-      if (running.length > 0) at.errors.push(stillRunning(running));
+      // With frames asked for, the board is watched as it moves; else read once it has settled.
+      const motion =
+        act.frames === undefined
+          ? undefined
+          : await watchMotion(
+              page,
+              page.locator(".preview-card").first(),
+              act.frames,
+              async () => (await busyNow(page)).length === 0,
+            );
+      const running = motion === undefined ? await untilIdle(page, speed) : await busyNow(page);
+      if (running.length > 0)
+        at.errors.push(
+          motion === undefined ? stillRunning(running) : `still running: ${running.join(", ")}`,
+        );
       await settle(page, isPictured);
       const now = await recorded(page);
       const modelNow = [...(await readModels(page)).values()][0];
@@ -865,6 +939,7 @@ async function shootNow(
       steps.push({
         step: words,
         changed,
+        ...(motion === undefined ? {} : { motion }),
         events: now.events
           .slice(seen.events.length)
           .map((e) => `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null)}`),

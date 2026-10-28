@@ -34,6 +34,8 @@ Taps and drags on the real page, in order, by address (`game/giveRound`; `qr` wi
 
 **Settled, fast.** A board is read once it has settled: no lesson script and no prop's timeline (a glide, a timed action, a repeat) still running. The runtime knows (`busyWith`), the page says (`__chalkBusy`), and `look` and `play` wait for it after the board opens and after every step, so a reveal the lesson delays is never missed. The board's clock runs 10× by default (`speed`, 1 for real time): waits, glides and timers end sooner, in the same order with the same values. A board still busy after 30s of its own time (a timer left running) is read as it is, and the answer says what is still running.
 
+**Motion, on request.** `frames: { every, most }` watches the board after each step at real speed: a picture about every `every` ms (default 100), kept when it differs from the last kept (Chromium draws a still page to the same bytes), at most `most` (default 8). The strip comes back in order with each frame's time, and the step says `still after 1.2s` (the picture stopped changing and the board settled) or `still changing at 3s` (frames full, or the cap). A fact for the agent to judge, never a verdict: a walk that teaches and a flicker that shouldn't be there look the same to the tool. The default stays the settled board only.
+
 `continue: true` goes on from where this agent's last call left the board. If that board isn't there (another board since, content rebuilt), it fails and says why; it never starts fresh as if it had worked.
 
 ## The picture

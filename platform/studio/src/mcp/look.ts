@@ -612,6 +612,11 @@ export async function check(
 
 export type PlayArgs = {
   board: string;
+  /**
+   * Watch the board move after each step: a frame about every `every` ms (real time), at most
+   * `most` kept (those that differ). The clock runs at real speed unless `speed` says otherwise.
+   */
+  frames?: { every?: number; most?: number };
   /** The screen's height in px (default a phone's). */
   height?: number;
   /** How fast the board's clock runs (1: real time; default DEFAULT_SPEED). */
@@ -690,13 +695,16 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     width: a.width ?? PHONE,
     ...(a.height === undefined ? {} : { height: a.height }),
     play: true,
-    speed: a.speed ?? DEFAULT_SPEED,
+    // Motion is watched at real speed: at 10× there would be nothing to see.
+    speed: a.speed ?? (a.frames === undefined ? DEFAULT_SPEED : 1),
   };
+  const frames =
+    a.frames === undefined ? undefined : { every: a.frames.every ?? 100, most: a.frames.most ?? 8 };
   const d = await shoot(
     root,
     a.board,
     o,
-    { steps: a.steps, shots, isContinued: a.continue === true },
+    { steps: a.steps, shots, isContinued: a.continue === true, ...(frames ? { frames } : {}) },
     lane,
   );
   const locale = o.locale ?? "en";
@@ -720,6 +728,12 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
             : `${path} ${full(c.was)} → ${full(c.now)}`,
       ),
     ];
+    if (r.motion !== undefined)
+      parts.push(
+        r.motion.stillAfter !== undefined
+          ? `still after ${r.motion.stillAfter}s (${r.motion.frames.length} frame${r.motion.frames.length === 1 ? "" : "s"} differed)`
+          : `still changing at ${r.motion.stillChangingAt}s (${r.motion.frames.length} frames kept)`,
+      );
     lines.push(
       `${i + 1}. ${r.step}${parts.length > 0 ? ` → ${parts.join(" · ")}` : " → nothing changed"}`,
     );
@@ -742,7 +756,20 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   let image: Buffer | undefined;
   const has = (p: Picture, names: string[] | undefined) =>
     names === undefined || names.some((n) => p.boxes.some((b) => b.name === n));
-  if (shots === "each") {
+  const motions = d.steps.filter((r) => r.motion !== undefined);
+  if (motions.length > 0) {
+    // The frames, in order, each at its time after its step; cut to what the steps changed.
+    const tiles: Tile[] = [];
+    for (const [i, r] of d.steps.entries())
+      for (const f of r.motion?.frames ?? [])
+        tiles.push({
+          picture: f.picture,
+          labels: "none",
+          caption: `${d.steps.length > 1 ? `${i + 1}. ` : ""}${f.t}s`,
+          ...(crop !== undefined && has(f.picture, crop) ? { crop } : {}),
+        });
+    if (tiles.length > 0) image = await compose(tiles, { kind: "row" });
+  } else if (shots === "each") {
     const tiles: Tile[] = [];
     if (d.before !== undefined) tiles.push({ picture: d.before, labels, caption: "before" });
     for (const [i, r] of d.steps.entries())
@@ -774,7 +801,9 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   }
   if (image !== undefined && crop !== undefined)
     lines.push(
-      `picture: before | after, cut to ${crop.join(", ")} (full: true for the whole board)`,
+      motions.length > 0
+        ? `picture: the frames that differed, in order, cut to ${crop.join(", ")} (full: true for the whole board)`
+        : `picture: before | after, cut to ${crop.join(", ")} (full: true for the whole board)`,
     );
   return {
     text: lines.join("\n"),
