@@ -1,9 +1,9 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import type { BoardReach, Reach } from "../content/build";
 import type { Range } from "./facts";
-import { type CodeGraph, codeGraph } from "./graph";
+import { type CodeGraph, codeGraph, graphSources } from "./graph";
 
 /**
  * What a change reaches: the pieces (`book/chapter/lesson/page#piece`) it can make look or behave
@@ -328,12 +328,32 @@ function safeRead(file: string): string {
 }
 
 /** The repo's index: what the last content build recorded, and the code graph as the files are now. */
+/** The last index made, and what it was made from (every file's time and size). */
+let last: { root: string; stamp: string; index: ReachIndex } | undefined;
+
+/**
+ * The index of what reaches what: made again only when the build's record or a source file
+ * changed (checked by time and size, which is cheap), else the one already made.
+ */
 export function reachIndex(root: string): ReachIndex {
   const file = join(root, "build", "reach.json");
+  const files = graphSources(root);
+  const stampOf = (f: string) => {
+    try {
+      const s = statSync(f);
+      return `${f}:${s.mtimeMs}:${s.size}`;
+    } catch {
+      return `${f}:-`;
+    }
+  };
+  const stamp = [file, ...files].map(stampOf).join("\n");
+  if (last !== undefined && last.root === root && last.stamp === stamp) return last.index;
   const built: Reach = existsSync(file)
     ? (JSON.parse(readFileSync(file, "utf8")) as Reach)
     : { boards: {}, modules: {} };
-  return new ReachIndex(root, built, codeGraph(root));
+  const index = new ReachIndex(root, built, codeGraph(root, files));
+  last = { root, stamp, index };
+  return index;
 }
 
 /**
@@ -341,22 +361,38 @@ export function reachIndex(root: string): ReachIndex {
  * top-level declaration).
  */
 export function changesFrom(index: ReachIndex, specs: readonly string[]): Change[] {
-  return specs.map((spec) => {
+  return specs.flatMap((spec): Change[] => {
     const s = spec.trim().replace(/\/$/, "");
+    // A folder: every file in it.
+    const dir = join(index.root, s);
+    if (existsSync(dir) && statSync(dir).isDirectory())
+      return filesUnder(dir).map((f) => ({ file: f.slice(index.root.length + 1) }));
     const named = /^(.*)#(\w+)$/.exec(s);
     if (named !== null) {
       const [, file = "", name = ""] = named;
       const decl = index.graph.facts.get(file)?.decls[name];
       if (decl === undefined) throw new Error(`${file} has no top-level ${name}`);
-      return { file, lines: [decl.lines] };
+      return [{ file, lines: [decl.lines] }];
     }
     const ranged = /^(.*):(\d+)(?:-(\d+))?$/.exec(s);
     if (ranged !== null) {
       const [, file = "", from = "0", to] = ranged;
-      return { file, lines: [[Number(from), Number(to ?? from)]] };
+      return [{ file, lines: [[Number(from), Number(to ?? from)]] }];
     }
-    return { file: s };
+    return [{ file: s }];
   });
+}
+
+/** Every file under a folder (node_modules and dot folders aside). */
+function filesUnder(dir: string): string[] {
+  const out: string[] = [];
+  for (const name of readdirSync(dir)) {
+    if (name === "node_modules" || name.startsWith(".")) continue;
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) out.push(...filesUnder(path));
+    else out.push(path);
+  }
+  return out;
 }
 
 /** Folders a change can reach boards from. */

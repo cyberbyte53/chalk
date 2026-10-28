@@ -236,8 +236,8 @@ const cases: Record<string, () => Promise<void>> = {
     const l = await lesson;
     expect("reads during a lesson look succeed", allOk([...quick, l]), firstError([...quick, l]));
     expect(
-      "reads don't wait for the browser (each under 1.5s)",
-      quick.every((q) => q.ms < 1500),
+      "reads don't wait for the browser (each under 1s)",
+      quick.every((q) => q.ms < 1000),
       quick.map((q) => `${q.ms}ms`).join("/"),
     );
   },

@@ -193,6 +193,8 @@ export function factsOf(file: string, text: string): Facts {
 /** Facts for many files, read again only when a file changed (kept on disk between runs). */
 export class FactsCache {
   private readonly entries = new Map<string, { key: string; facts: Facts }>();
+  /** Files read this time: only these are kept when saved (a file gone or left out drops out). */
+  private readonly used = new Set<string>();
   private isDirty = false;
 
   constructor(private readonly file: string) {
@@ -216,6 +218,7 @@ export class FactsCache {
     } catch {
       return undefined;
     }
+    this.used.add(path);
     const key = `${stat.mtimeMs}:${stat.size}`;
     const known = this.entries.get(path);
     if (known?.key === key) return known.facts;
@@ -234,6 +237,11 @@ export class FactsCache {
 
   /** Writes what was read, if anything new was. */
   save(): void {
+    for (const path of this.entries.keys())
+      if (!this.used.has(path)) {
+        this.entries.delete(path);
+        this.isDirty = true;
+      }
     if (!this.isDirty) return;
     mkdirSync(dirname(this.file), { recursive: true });
     writeFileSync(this.file, JSON.stringify({ version: FORMAT, entries: [...this.entries] }));
@@ -244,11 +252,19 @@ export class FactsCache {
 /** Bump when Facts changes shape. */
 const FORMAT = "1";
 
-/** Every TypeScript source file under these folders (not tests, not node_modules). */
-export function sourcesUnder(root: string, folders: readonly string[]): string[] {
+/**
+ * Every TypeScript source file under these folders (not tests, not node_modules), leaving out the
+ * folders in `skip` (repo-relative).
+ */
+export function sourcesUnder(
+  root: string,
+  folders: readonly string[],
+  skip: readonly string[] = [],
+): string[] {
   const out: string[] = [];
+  const skipped = new Set(skip.map((s) => join(root, s)));
   const walk = (dir: string) => {
-    if (!existsSync(dir)) return;
+    if (!existsSync(dir) || skipped.has(dir)) return;
     for (const name of readdirSync(dir)) {
       if (name === "node_modules" || name.startsWith(".")) continue;
       const path = join(dir, name);

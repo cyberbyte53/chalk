@@ -410,6 +410,8 @@ export async function look(
     width: v.width,
     play: a.play === true,
     questions: target.kind === "group",
+    // A lesson's boards are thumbnails: no need for double resolution.
+    pictures: target.kind === "group" ? "thumb" : "full",
   });
   const board = target.kind === "group" ? target.unit : target.board;
   const drawn: Drawn[] = [];
@@ -531,7 +533,14 @@ export async function check(
         const d = await shoot(
           root,
           job.unit,
-          { locale: job.v.locale, width: job.v.width, questions: true, play: a.play === true },
+          {
+            locale: job.v.locale,
+            width: job.v.width,
+            questions: true,
+            play: a.play === true,
+            // A check reads the layout; it shows no pictures.
+            pictures: "none",
+          },
           undefined,
           myLane,
         );

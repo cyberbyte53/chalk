@@ -287,9 +287,17 @@ function boxesIn(card: Element): { width: number; boxes: Box[] } {
 }
 
 /** A picture of a card: the screenshot and, measured on the same drawing, its boxes. */
-async function pictureOf(card: Locator): Promise<Picture> {
+/**
+ * A board's picture: at double resolution (for a piece cut out of it), or at the page's own
+ * resolution for a thumbnail.
+ */
+async function pictureOf(card: Locator, resolution: "full" | "thumb" = "full"): Promise<Picture> {
   const { width, boxes } = await card.evaluate(boxesIn);
-  return { png: await card.screenshot({ type: "png" }), width, boxes };
+  const png = await card.screenshot({
+    type: "png",
+    scale: resolution === "full" ? "device" : "css",
+  });
+  return { png, width, boxes };
 }
 
 /** What one call drew: each board, what each step did, and the board before the first step. */
@@ -301,6 +309,8 @@ export type ShotOptions = {
   questions?: boolean;
   /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
   width?: number;
+  /** The pictures taken: at double resolution (default), as thumbnails, or none (a check). */
+  pictures?: "full" | "thumb" | "none";
 };
 
 /**
@@ -508,8 +518,19 @@ export function shoot(
   return next;
 }
 
-/** Waits until the page has drawn: fonts, images, finite animations, then two frames. */
-async function settle(page: Page): Promise<void> {
+/**
+ * Waits until the page has drawn: fonts, images, finite animations, then two frames. Without
+ * `isForPicture`, only the frames: what the page says doesn't wait for an animation to end.
+ */
+async function settle(page: Page, isForPicture = true): Promise<void> {
+  if (!isForPicture) {
+    await page.evaluate(async () => {
+      const frame = () => new Promise((done) => requestAnimationFrame(() => done(null)));
+      await frame();
+      await frame();
+    });
+    return;
+  }
   await page.evaluate(async () => {
     const frame = () => new Promise((done) => requestAnimationFrame(() => done(null)));
     const atMost = (ms: number) => new Promise((done) => setTimeout(done, ms));
@@ -737,9 +758,10 @@ async function shootNow(
           await page.mouse.up();
         }
       }
-      await settle(page);
-      const now = await recorded(page);
       const isLast = i === act.steps.length - 1;
+      const isPictured = act.shots === "each" || (act.shots === "last" && isLast);
+      await settle(page, isPictured);
+      const now = await recorded(page);
       const modelNow = [...(await readModels(page)).values()][0];
       const changed = seenChanges(modelWas, modelNow);
       modelWas = modelNow;
@@ -751,9 +773,7 @@ async function shootNow(
           .map((e) => `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null)}`),
         passed: now.passed.length > seen.passed.length,
         errors: [...at.errors],
-        ...(act.shots === "each" || (act.shots === "last" && isLast)
-          ? { picture: await pictureOf(page.locator(".preview-card").first()) }
-          : {}),
+        ...(isPictured ? { picture: await pictureOf(page.locator(".preview-card").first()) } : {}),
       });
       seen = now;
     }
@@ -776,7 +796,8 @@ async function shootNow(
     });
     // After steps, the picture is the steps' to give (or not): don't take another.
     const isActed = act !== undefined && act.steps.length > 0;
-    const picture = isActed ? undefined : await pictureOf(card);
+    const pictures = o.pictures ?? "full";
+    const picture = isActed || pictures === "none" ? undefined : await pictureOf(card, pictures);
     shots.push({
       board: name.replace(/\.json$/, ""),
       png: picture?.png ?? Buffer.alloc(0),
