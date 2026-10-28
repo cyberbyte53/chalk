@@ -29,13 +29,20 @@ import {
  * Reviews in the preview (development only; platform/docs/comments.md).
  *
  * - `?dev&reviews`: every review, newest first (and your threads not handed over yet).
- * - `?dev&review=<id>` (`review=sitting`: yours not handed over yet): the review as one page, a
+ * - `?dev&review=<id>` (`review=sitting`: yours not handed over yet; `review=yours`: every thread
+ *   waiting on you, an agent's question or a fix to check): the review as one page, a
  *   list of its threads. Each is a fold: what was said and every message since, then its board as
  *   it is now, drawn live with the piece outlined, and Reply, Close, Withdraw, Open board (which
  *   comes back here). `&thread=<id>` opens at that thread.
  */
 
 const SITTING = "sitting";
+const YOURS = "yours";
+/** The pages that are not a handed-over review, by their title. */
+const PAGES: Record<string, string> = {
+  [SITTING]: "Not handed over yet",
+  [YOURS]: "Waiting on you",
+};
 const STATUS_WORDS: Record<string, string> = {
   open: "waiting",
   planned: "planned",
@@ -105,6 +112,7 @@ export function ReviewList(): JSX.Element {
   useLayoutEffect(() => {
     document.body.dataset.previewReady = window.location.search;
   });
+  const yours = threads.filter((t) => t.waitsOn === "person").length;
   const of = (r: Review) => r.threads.flatMap((x) => threads.find((t) => t.id === x.id) ?? []);
   return (
     <main class="rv">
@@ -113,6 +121,14 @@ export function ReviewList(): JSX.Element {
         <a href="?dev&activity">Activity</a>
       </header>
       <ul class="rv-list">
+        {yours > 0 && (
+          <li>
+            <a href={`?dev&review=${YOURS}`}>
+              <strong>Waiting on you</strong>
+              <span>{`${yours} thread${yours === 1 ? "" : "s"}`}</span>
+            </a>
+          </li>
+        )}
         {sitting.length > 0 && (
           <li>
             <a href={`?dev&review=${SITTING}`}>
@@ -161,8 +177,10 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
     () =>
       id === SITTING
         ? (sitting ?? []).map((s) => threads.find((t) => t.id === s.id) ?? s)
-        : (review?.threads.flatMap((x) => threads.find((t) => t.id === x.id) ?? []) ?? []),
-    [id, sitting, review, threads],
+        : id === YOURS
+          ? threads.filter((t) => t.waitsOn === "person" || t.id === focus)
+          : (review?.threads.flatMap((x) => threads.find((t) => t.id === x.id) ?? []) ?? []),
+    [id, sitting, review, threads, focus],
   );
   const [folds, setFolds] = useState<Record<string, boolean>>(readFolds);
   const isFolded = (t: Thread) => (t.id === focus ? false : (folds[t.id] ?? isFinished(t)));
@@ -193,20 +211,20 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
     if (shown.length > 0) document.body.dataset.previewReady = window.location.search;
   });
 
-  const isLoading = id === SITTING ? sitting === null : reviews.length === 0;
+  const isLoading = id === SITTING ? sitting === null : id === YOURS ? false : reviews.length === 0;
   if (isLoading) return <div class="preview-loading">Loading the review…</div>;
-  if (id !== SITTING && review === undefined)
+  if (PAGES[id] === undefined && review === undefined)
     return <div class="preview-empty">{`No review ${id}.`}</div>;
   const ready = shown.filter((t) => t.status === "ready");
   const copyLine =
-    id === SITTING
+    PAGES[id] !== undefined
       ? null
       : `apply review ${id} (${shown.length} thread${shown.length === 1 ? "" : "s"})`;
   return (
     <main class="rv">
       <header class="rv-bar">
         <a href="?dev&reviews">← Reviews</a>
-        <strong>{id === SITTING ? "Not handed over yet" : `Review ${id}`}</strong>
+        <strong>{PAGES[id] ?? `Review ${id}`}</strong>
         <span>{`${review ? `${review.by} · ` : ""}${standing(shown)}`}</span>
         <span class="rv-grow" />
         <button

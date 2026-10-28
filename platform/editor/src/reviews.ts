@@ -143,8 +143,11 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
         ),
       ];
     }
-    if (item.kind === "sitting" || item.kind === "yours")
+    if (item.kind === "sitting")
       return item.threads.map((thread) => ({ kind: "thread", thread }) as const);
+    // Opened on the preview's page of what waits on you.
+    if (item.kind === "yours")
+      return item.threads.map((thread) => ({ kind: "thread", thread, review: "yours" }) as const);
     if (item.kind === "review")
       return item.threads.map(
         (thread) => ({ kind: "thread", thread, review: item.review.id }) as const,
@@ -159,6 +162,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
         vscode.TreeItemCollapsibleState.Expanded,
       );
       t.iconPath = new vscode.ThemeIcon("bell", new vscode.ThemeColor("charts.yellow"));
+      t.command = { command: "chalk.review.open", title: "Open", arguments: [item] };
       t.tooltip =
         "An agent's question, decision or proposal to answer, or a fix ready to check: reply on it (it goes back to the agent) or close it.";
       return t;
@@ -229,7 +233,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     return i?.kind === "thread" ? i.thread : undefined;
   }
 
-  /** The review a thread item was listed under (undefined: your sitting). */
+  /** The review a thread item was listed under ("yours": what waits on you; undefined: your sitting). */
   static reviewIdOf(item: unknown): string | undefined {
     const i = item as Item | undefined;
     return i?.kind === "thread" ? i.review : undefined;
@@ -238,5 +242,11 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
   static reviewOf(item: unknown): { review: Review; threads: Thread[] } | undefined {
     const i = item as Item | undefined;
     return i?.kind === "review" ? { review: i.review, threads: i.threads } : undefined;
+  }
+
+  /** The preview's page a group opens: what waits on you, or your sitting. */
+  static pageOf(item: unknown): string {
+    const i = item as Item | undefined;
+    return i?.kind === "review" ? i.review.id : i?.kind === "yours" ? "yours" : "sitting";
   }
 }

@@ -702,8 +702,7 @@ function reviewCommands(): vscode.Disposable[] {
       if (t?.board !== undefined) await showQuery(`at=content/${t.board}`, t.source);
     }),
     vscode.commands.registerCommand("chalk.review.open", async (item: unknown) => {
-      const r = ReviewsTree.reviewOf(item);
-      await showQuery(`review=${r?.review.id ?? "sitting"}`);
+      await showQuery(`review=${ReviewsTree.pageOf(item)}`);
     }),
     vscode.commands.registerCommand("chalk.thread.source", (item: unknown) =>
       openSite(thread(item)?.source),
