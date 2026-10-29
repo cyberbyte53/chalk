@@ -1,4 +1,3 @@
-import { spawn } from "node:child_process";
 import {
   appendFileSync,
   existsSync,
@@ -12,20 +11,7 @@ import { join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import {
-  COMMENTS_FILE,
-  type Change,
-  REVIEWS_DIR,
-  Role,
-  type Thread,
-  type Who,
-  YOU,
-  applyChange,
-  readComments,
-  sittingOf,
-  waitsOn,
-} from "../../studio/src/comments";
-import { pipelineMiddleware } from "./dev-pipeline";
+import { ensureStudio } from "../../studio/start.mjs";
 
 /** The one dev server's port (CHALK_DEV_PORT to change it). */
 const DEV_PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
@@ -117,128 +103,73 @@ function devContent(): Plugin {
 }
 
 /**
- * In development, comments and reviews (platform/studio/src/comments.ts) are read and written here
- * and only here: the dev server is their one writer, so two writers can never collide and every
- * change is checked against what the writer's role may do. GET /dev-review gives the threads and
- * reviews (?problems: anything a file holds that doesn't fit; ?sitting: the person's threads not
- * yet handed over); POST /dev-review applies one change. An agent says its role in
- * x-chalk-role (fixer or reviewer, fixed by the chalk MCP when it starts) and may give its name in
- * x-chalk-name; anything else writes as the person. A comments or review file that changes on disk
- * is pushed to open previews at once (chalk:comments).
+ * In development, threads, approvals and plan state live in the studio service
+ * (platform/studio/src/dev-endpoints.ts): /dev-review and /dev-pipeline are passed on to it, as
+ * they are, and it is started first if it isn't running (platform/studio/start.mjs). Nothing of the
+ * studio's code runs in this config, so this server can't fail to start because of it. If the
+ * studio service can't come up, the page gets its log's last lines, not an empty view.
+ *
+ * A threads or reviews file that changes on disk (written by the studio service, or git) is pushed
+ * to open previews at once (chalk:comments).
  */
-function devReview(): Plugin {
-  const AGENT_ROLES: readonly string[] = [Role.Fixer, Role.Reviewer];
-  const whoOf = (req: IncomingMessage): Who => {
-    const role = String(req.headers["x-chalk-role"] ?? "");
-    if (!AGENT_ROLES.includes(role)) return YOU;
-    const name = String(req.headers["x-chalk-name"] ?? "").trim();
-    return { name: name !== "" && name !== YOU.name ? name : role, role: role as Role };
+function devStudio(): Plugin {
+  const bodyOf = (req: IncomingMessage): Promise<string> =>
+    new Promise((resolve) => {
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk;
+      });
+      req.on("end", () => resolve(body));
+    });
+  const forward = async (req: IncomingMessage, res: ServerResponse) => {
+    const send = (status: number, text: string) => {
+      res.statusCode = status;
+      res.setHeader("content-type", "application/json");
+      res.end(text);
+    };
+    try {
+      const base = await ensureStudio();
+      const answer = await fetch(new URL(req.url ?? "/", base), {
+        method: req.method ?? "GET",
+        headers: { "content-type": "application/json" },
+        ...(req.method === "POST" ? { body: await bodyOf(req) } : {}),
+      });
+      send(answer.status, await answer.text());
+    } catch (error) {
+      send(
+        503,
+        JSON.stringify({
+          ok: false,
+          error: String(error instanceof Error ? error.message : error),
+        }),
+      );
+    }
   };
   return {
-    name: "chalk-dev-review",
+    name: "chalk-dev-studio",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use("/dev-review", (req, res) => {
-        const send = (status: number, value: unknown) => {
-          res.statusCode = status;
-          res.setHeader("content-type", "application/json");
-          res.end(JSON.stringify(value));
-        };
-        // Each thread with whose turn it is (worked out here, so pages don't work it out again).
-        const withTurn = <T extends Thread>(ts: readonly T[]) =>
-          ts.map((t) => ({ ...t, waitsOn: waitsOn(t) ?? null }));
-        if (req.method !== "POST") {
-          const read = readComments(ROOT);
-          const url = req.url ?? "";
-          if (url.includes("problems")) return send(200, read.problems);
-          if (url.includes("sitting")) return send(200, withTurn(sittingOf(read, whoOf(req))));
-          return send(200, { threads: withTurn(read.threads), reviews: read.reviews });
-        }
-        let body = "";
-        req.on("data", (chunk) => {
-          body += chunk;
-        });
-        req.on("end", () => {
-          let change: Change;
-          try {
-            const parsed = JSON.parse(body) as Record<string, unknown>;
-            // An editor extension from before threads files a comment as "add".
-            change = (
-              parsed.op === "add" ? { op: "start", thread: parsed.comment } : parsed
-            ) as Change;
-          } catch {
-            return send(400, { ok: false, error: "not JSON" });
-          }
-          const applied = applyChange(ROOT, change, whoOf(req));
-          const read = readComments(ROOT);
-          send(applied.ok ? 200 : 409, {
-            ...applied,
-            threads: withTurn(read.threads),
-            reviews: read.reviews,
-          });
-          if (applied.ok) server.ws.send({ type: "custom", event: "chalk:comments" });
-        });
+      server.middlewares.use((req, res, next) => {
+        const url = req.url ?? "";
+        if (url.startsWith("/dev-review") || url.startsWith("/dev-pipeline"))
+          void forward(req, res);
+        else next();
       });
-      // A comments or review file changed (by this server, or git): open previews reload them.
-      const isComments = (file: string) =>
-        file.endsWith(`${sep}${COMMENTS_FILE}`) ||
-        (file.includes(`${sep}${REVIEWS_DIR}${sep}`) && file.endsWith(".yaml"));
+      const isThreads = (file: string) =>
+        file.endsWith(`${sep}comments.yaml`) ||
+        (file.includes(`${sep}authoring${sep}reviews${sep}`) && file.endsWith(".yaml"));
       let timer: NodeJS.Timeout | undefined;
       const changed = (file: string) => {
-        if (!isComments(file)) return;
+        if (!isThreads(file)) return;
         clearTimeout(timer);
         timer = setTimeout(() => server.ws.send({ type: "custom", event: "chalk:comments" }), 50);
       };
       server.watcher.add([
-        join(ROOT, "authoring", "books", "*", "*", COMMENTS_FILE),
-        join(ROOT, "authoring", "props", "*", COMMENTS_FILE),
-        join(ROOT, REVIEWS_DIR, "*.yaml"),
+        join(ROOT, "authoring", "books", "*", "*", "comments.yaml"),
+        join(ROOT, "authoring", "props", "*", "comments.yaml"),
+        join(ROOT, "authoring", "reviews", "*.yaml"),
       ]);
       for (const event of ["change", "add", "unlink"] as const) server.watcher.on(event, changed);
-    },
-  };
-}
-
-/**
- * In development, the content rebuild runs inside the dev server (one watcher, one build/): every
- * save under content/ rebuilds what it touched, and open previews redraw (see devContent).
- * Whoever starts the dev server (the editor, the chalk MCP server, `pnpm dev`) gets it.
- */
-function devRebuild(): Plugin {
-  return {
-    name: "chalk-dev-rebuild",
-    apply: "serve",
-    configureServer(server) {
-      if (process.env.VITEST || process.env.CHALK_NO_REBUILD) return;
-      const studio = join(ROOT, "platform", "studio");
-      const child = spawn(
-        join(studio, "node_modules", ".bin", "tsx"),
-        [
-          "--tsconfig",
-          "../../tsconfig.base.json",
-          "--import",
-          "./src/content/record-imports.ts",
-          "src/content/cli.ts",
-          "preview",
-        ],
-        { cwd: studio, stdio: ["ignore", "inherit", "inherit"] },
-      );
-      const stop = () => {
-        if (child.exitCode === null) child.kill();
-      };
-      server.httpServer?.on("close", stop);
-      process.on("exit", stop);
-    },
-  };
-}
-
-/** In development, the planning files' state and approval for the editor extension; see dev-pipeline.ts. */
-function devPipeline(): Plugin {
-  return {
-    name: "chalk-dev-pipeline",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use("/dev-pipeline", pipelineMiddleware(ROOT));
     },
   };
 }
@@ -330,9 +261,7 @@ export default defineConfig(({ mode }): UserConfig => {
     define: { __CHALK__: JSON.stringify(chalk) },
     plugins: [
       devLog(),
-      devRebuild(),
-      devReview(),
-      devPipeline(),
+      devStudio(),
       devContent(),
       // The app installs to the home screen and works offline: the app and its fonts are cached
       // on first visit, and each chapter's content (and its props' drawing code) the first time

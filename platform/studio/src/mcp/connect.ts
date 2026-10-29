@@ -1,8 +1,4 @@
-import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { mkdirSync, openSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -12,13 +8,13 @@ import {
   ListToolsRequestSchema,
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { findUp } from "../pronunciations";
+import { ensureStudio } from "../../start.mjs";
 
 /**
  * How an agent reaches the chalk MCP: its harness starts this over stdio (.mcp.json and the Cursor
- * and VS Code configs), and it relays every call to the one chalk MCP service (main.ts), starting
- * that service if nothing answers. So a fresh session can call the tools with nothing started by
- * hand, and there is still one service.
+ * and VS Code configs), and it relays every call to the studio service (main.ts), started through
+ * platform/studio/start.mjs if nothing answers. So a fresh session can call the tools with nothing
+ * started by hand, and there is still one service.
  *
  * - The service runs under `tsx watch` and restarts when its code changes. A call that finds it
  *   gone (restarting, or a new session it doesn't know) connects again and is sent again, so a
@@ -31,7 +27,6 @@ import { findUp } from "../pronunciations";
  *   agent in threads. CHALK_MCP_URL points at another service (then nothing is started here).
  */
 
-const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
 const given = process.env.CHALK_MCP_URL;
 const URL_ = new URL(given ?? `http://127.0.0.1:${process.env.CHALK_MCP_PORT ?? 5174}/mcp`);
 const TOKEN = process.env.CHALK_TOKEN ?? "chalk-dev-fixer";
@@ -55,63 +50,10 @@ async function bootNow(): Promise<string | undefined> {
   }
 }
 
-async function isUp(): Promise<boolean> {
-  try {
-    const res = await fetch(new URL("/health", URL_), { signal: AbortSignal.timeout(1000) });
-    return res.ok;
-  } catch {
-    return false;
-  }
-}
-
-const CACHE = join(root, "node_modules", ".cache");
-/** The process id of the service this machine started (its tsx watch), so it's started once. */
-const PID_FILE = join(CACHE, "chalk-mcp.pid");
-
-/** Whether a service started here is still running (restarting counts: tsx watch is alive). */
-function isStarted(): boolean {
-  try {
-    const pid = Number(readFileSync(PID_FILE, "utf8"));
-    if (!Number.isInteger(pid) || pid <= 0) return false;
-    process.kill(pid, 0);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Starts the service (under tsx watch), detached, its output in node_modules/.cache/chalk-mcp.log. */
-function startService(): void {
-  const studio = join(root, "platform", "studio");
-  mkdirSync(CACHE, { recursive: true });
-  const out = openSync(join(CACHE, "chalk-mcp.log"), "a");
-  const child = spawn(
-    join(studio, "node_modules", ".bin", "tsx"),
-    ["watch", "--clear-screen=false", "--tsconfig", "../../tsconfig.base.json", "src/mcp/main.ts"],
-    { cwd: studio, detached: true, stdio: ["ignore", out, out], env: process.env },
-  );
-  if (child.pid !== undefined) writeFileSync(PID_FILE, String(child.pid));
-  child.unref();
-}
-
-/** Waits for the service, starting it once if nothing answers (and this isn't pointed elsewhere). */
+/** The studio service is up (platform/studio/start.mjs: the one way it is started); or the one given. */
 async function ensureService(): Promise<void> {
-  if (await isUp()) return;
-  // A service that is restarting (its code changed) is back in a moment: never start a second.
-  if (given === undefined && !isStarted()) {
-    for (let i = 0; i < 6 && !(await isUp()); i++) await new Promise((r) => setTimeout(r, 500));
-    if (!(await isUp()) && !isStarted()) {
-      log("starting the chalk MCP service");
-      startService();
-    }
-  }
-  for (let i = 0; i < 60; i++) {
-    await new Promise((r) => setTimeout(r, 500));
-    if (await isUp()) return;
-  }
-  throw new Error(
-    `The chalk MCP service didn't answer at ${URL_.origin} (see node_modules/.cache/chalk-mcp.log, or run \`pnpm mcp\`).`,
-  );
+  if (given !== undefined) return;
+  await ensureStudio();
 }
 
 let client: Client | undefined;

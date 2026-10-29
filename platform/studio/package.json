@@ -16,9 +16,9 @@
     "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts",
     "catalogue": "tsx --tsconfig ../../tsconfig.base.json src/catalogue-cli.ts",
     "check": "tsx --tsconfig ../../tsconfig.base.json src/check/all.ts",
-    "mcp": "tsx watch --clear-screen=false --tsconfig ../../tsconfig.base.json src/mcp/main.ts",
+    "mcp": "node start.mjs",
     "stress-mcp": "tsx --tsconfig ../../tsconfig.base.json src/mcp/stress.ts",
-    "dev": "tsx watch --clear-screen=false --tsconfig ../../tsconfig.base.json src/mcp/main.ts"
+    "dev": "node start.mjs"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

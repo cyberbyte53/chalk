@@ -28,6 +28,6 @@ app's own `?dev&at=` page, so what you see is what the phone draws.
   - On a review: Copy for agent (`apply review <id>`), Close all ready, Show its activity.
   - It follows the files: an agent's plans and answers show up as they're written.
 
-It uses the dev server on :5173 if one is running. Otherwise it starts the learner app's server and the content rebuild-on-save itself (output in the "Chalk" channel). It also starts the chalk MCP service agents connect to (127.0.0.1:5174/mcp) if it isn't running.
+It uses the dev server on :5173 if one is running. Otherwise it starts the studio service (`platform/studio/start.mjs`, the one way it is started), which starts the dev server; if it can't come up, its log's last lines are in the "Chalk" output channel. Both outlive the editor.
 
 Install: `pnpm editor:install` (bumps the version, packages `chalk-editor.vsix`, installs it into Cursor). What it installs is a loader (`src/loader.ts`): it runs the extension from the open repo's build, and when that is rebuilt (`pnpm editor:build`) swaps the new code in, so a change to the editor never needs a window reload. Only a change to `package.json`'s contributions (commands, menus, views) needs `pnpm editor:install` and one reload.

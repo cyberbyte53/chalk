@@ -1,23 +1,36 @@
+import { type ChildProcess, spawn } from "node:child_process";
 import { createServer } from "node:http";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
+import { findUp } from "../pronunciations";
+import { previewBase } from "./app-driver";
 import { mcpMiddleware } from "./http";
 
 /**
- * The chalk MCP, as its own service, at /mcp. Where it listens and who may connect are settings,
- * so the same service runs on a laptop now and on a server later:
+ * The studio service: everything authoring runs here, in one process, so studio code runs one way
+ * (under tsx, as pnpm check runs it). Started only through platform/studio/start.mjs, by whoever
+ * needs it (the editor, an agent's connection, the dev server, `pnpm dev`).
+ *
+ * - /dev-review and /dev-pipeline: threads, approvals and plan state (dev-endpoints.ts), reached by
+ *   the editor and the preview through the dev server, which passes /dev-* on.
+ * - /mcp: the chalk MCP's tools, for agents.
+ * - On start, the dev server (the app and its preview pages) is made sure of, and the content
+ *   rebuild on save runs as a child process (in this process, every saved lesson would restart it).
+ *
+ * Where it listens and who may connect are settings, so it runs on a laptop now and a server later:
  *
  * - CHALK_MCP_HOST: the address to listen on. Default 127.0.0.1, this machine's loopback, which
  *   nothing on the network can reach.
  * - CHALK_MCP_PORT: default 5174.
  * - CHALK_MCP_ALLOW: who may connect (http.ts). Default this machine only.
  * - CHALK_TOKENS: which token gives which role (http.ts).
- *
- * The tools use the dev server for boards and comments, and start it when it isn't running.
- * Start: `pnpm mcp` (or `pnpm dev`, or the editor).
  */
 
 const PORT = Number(process.env.CHALK_MCP_PORT ?? 5174);
 const HOST = process.env.CHALK_MCP_HOST ?? "127.0.0.1";
 
+const ROOT = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
 const mcp = mcpMiddleware();
 /** This run of the service: a relay with a call in flight sees it change when the service restarts. */
 const BOOT = `${process.pid}:${Date.now()}`;
@@ -25,7 +38,15 @@ const server = createServer((req, res) => {
   const path = (req.url ?? "").split("?")[0];
   if (path === "/health") {
     res.setHeader("content-type", "application/json");
-    res.end(JSON.stringify({ ok: true, service: "chalk-mcp", boot: BOOT }));
+    res.end(JSON.stringify({ ok: true, service: "chalk-studio", boot: BOOT }));
+    return;
+  }
+  if (path?.startsWith("/dev-review")) {
+    void reviewEndpoint(ROOT, req, res);
+    return;
+  }
+  if (path?.startsWith("/dev-pipeline")) {
+    void pipelineEndpoint(ROOT, req, res);
     return;
   }
   if (path !== "/mcp") {
@@ -43,15 +64,39 @@ const server = createServer((req, res) => {
 server.on("error", (error: NodeJS.ErrnoException) => {
   console.error(
     error.code === "EADDRINUSE"
-      ? `Port ${PORT} is taken: the chalk MCP is probably running already (or set CHALK_MCP_PORT).`
+      ? `Port ${PORT} is taken: the studio service is probably running already (or set CHALK_MCP_PORT).`
       : String(error),
   );
   process.exit(1);
 });
 
-server.listen(PORT, HOST, () => console.error(`chalk MCP on http://${HOST}:${PORT}/mcp`));
+/** Rebuilds content on save, for open previews: a child, so a lesson's save doesn't restart this. */
+function startRebuild(): ChildProcess {
+  const studio = join(ROOT, "platform", "studio");
+  return spawn(
+    join(studio, "node_modules", ".bin", "tsx"),
+    [
+      "--tsconfig",
+      "../../tsconfig.base.json",
+      "--import",
+      "./src/content/record-imports.ts",
+      "src/content/cli.ts",
+      "preview",
+    ],
+    { cwd: studio, stdio: ["ignore", "inherit", "inherit"] },
+  );
+}
+
+let rebuild: ChildProcess | undefined;
+server.listen(PORT, HOST, () => {
+  console.error(`studio service on http://${HOST}:${PORT} (the chalk MCP at /mcp)`);
+  rebuild = startRebuild();
+  // The app and its preview pages: the person's editor and look/play need them.
+  previewBase(ROOT).catch((error: unknown) => console.error(String(error)));
+});
 
 const stop = () => {
+  if (rebuild !== undefined && rebuild.exitCode === null) rebuild.kill();
   server.close();
   void mcp.close().finally(() => process.exit(0));
 };

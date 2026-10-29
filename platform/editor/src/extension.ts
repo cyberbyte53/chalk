@@ -1,4 +1,4 @@
-import { type ChildProcess, execFileSync, spawn } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import * as vscode from "vscode";
@@ -41,12 +41,6 @@ import { type ReviewItem, ReviewsTree } from "./reviews";
 const PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
 let root = "";
 let base = `http://localhost:${PORT}/`;
-/**
- * The processes this editor started (the dev server). Kept on the global object, so they outlive a
- * reload of this code (loader.ts) and are stopped once, when the editor closes.
- */
-const g = globalThis as { chalkStarted?: ChildProcess[] };
-g.chalkStarted ??= [];
 let log: vscode.OutputChannel;
 let panel: vscode.WebviewPanel | undefined;
 let shown = "";
@@ -65,43 +59,23 @@ async function isUp(url: string): Promise<boolean> {
   }
 }
 
-function startProcess(cmd: string, args: string[], cwd: string): ChildProcess {
-  const child = spawn(cmd, args, { cwd, env: { ...process.env, FORCE_COLOR: "0" } });
-  child.stdout?.on("data", (d) => log.append(String(d)));
-  child.stderr?.on("data", (d) => log.append(String(d)));
-  child.on("exit", (code) => log.appendLine(`[${cmd}] exited ${code}`));
-  g.chalkStarted?.push(child);
-  return child;
-}
-
-/** The chalk MCP service agents connect to (platform/studio/src/mcp/main.ts). */
-const MCP_HEALTH = "http://127.0.0.1:5174/health";
-
-/** Starts the chalk MCP service for this repo's agents, unless one is already running. */
-async function ensureMcp(): Promise<void> {
-  try {
-    if ((await fetch(MCP_HEALTH, { signal: AbortSignal.timeout(1200) })).ok) return;
-  } catch {}
-  log.appendLine("Starting the chalk MCP service for agents (127.0.0.1:5174/mcp)…");
-  const studio = join(root, "platform", "studio");
-  startProcess(
-    join(studio, "node_modules", ".bin", "tsx"),
-    ["watch", "--clear-screen=false", "--tsconfig", "../../tsconfig.base.json", "src/mcp/main.ts"],
-    studio,
-  );
-}
-
 let starting: Promise<boolean> | undefined;
 /**
- * The one dev server is up: the one already running (started by the chalk MCP tools, `pnpm dev`,
- * or another window), else one started here. It runs the content rebuild itself.
+ * The dev server is up. If not, the studio service is made sure of, the one way it is started
+ * (platform/studio/start.mjs, run with the editor's own Node), and it starts the dev server: one
+ * start path for everything, whoever asks first (this editor, an agent, `pnpm dev`). If it can't
+ * come up, its log's last lines are in the Chalk output.
  */
 async function ensureServer(): Promise<boolean> {
   if (await isUp(base)) return true;
   starting ??= (async () => {
-    log.appendLine("Starting the dev server (it rebuilds content on save)…");
-    const app = join(root, "platform", "apps", "learner");
-    startProcess(join(app, "node_modules", ".bin", "vite"), [], app);
+    log.appendLine("Starting the studio service (it starts the dev server)…");
+    const starter = spawn(process.execPath, [join(root, "platform", "studio", "start.mjs")], {
+      cwd: root,
+      env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" },
+    });
+    starter.stdout?.on("data", (d) => log.append(String(d)));
+    starter.stderr?.on("data", (d) => log.append(String(d)));
     for (let i = 0; i < 90; i++) {
       if (await isUp(base)) return true;
       await new Promise((r) => setTimeout(r, 1000));
@@ -887,7 +861,6 @@ export function activate(context: vscode.ExtensionContext): void {
   base = vscode.workspace.getConfiguration("chalk").get<string>("previewUrl") ?? base;
   log = vscode.window.createOutputChannel("Chalk");
   // Agents in this window (Cursor's, Claude Code's) connect to the chalk MCP service.
-  void ensureMcp();
 
   let timer: NodeJS.Timeout | undefined;
   // Threads on planning files, in the files themselves.
@@ -965,10 +938,8 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(watcher);
 }
 
-export function deactivate(): void {
-  for (const child of g.chalkStarted ?? []) child.kill();
-  g.chalkStarted = [];
-}
+/** Nothing to stop: the studio service and the dev server outlive the editor (start.mjs). */
+export function deactivate(): void {}
 
 /** Before new code takes over (loader.ts): the preview panel isn't a subscription, so close it. */
 export function unload(): void {

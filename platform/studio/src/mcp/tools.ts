@@ -14,14 +14,17 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { listBoards, readSources } from "../boards";
 import {
+  type Change,
   type Filed,
   MOVES,
   type Review,
   Role,
   Status,
+  applyChange,
   isUnanswered,
   lastMove,
   latestReview,
+  readComments,
   standing,
   threadsOf,
   waitsOn,
@@ -143,27 +146,14 @@ type Applied = {
   count?: number;
 };
 
-/** One change, as the caller's role; the dev server says what it did or why not. */
+/** One change, as the caller's role: the writer (comments.ts) says what it did or why not. */
 async function changeComments(who: Who, change: Record<string, unknown>): Promise<Applied> {
-  const base = await previewBase(root);
-  const res = await fetch(new URL("/dev-review", base), {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-chalk-role": who.role,
-      "x-chalk-name": who.name,
-    },
-    body: JSON.stringify(change),
-  });
-  return (await res.json()) as Applied;
+  return applyChange(root, change as Change, who);
 }
 
 async function readAll(): Promise<{ threads: Filed[]; reviews: Review[] }> {
-  const base = await previewBase(root);
-  return (await (await fetch(new URL("/dev-review", base))).json()) as {
-    threads: Filed[];
-    reviews: Review[];
-  };
+  const { threads, reviews } = readComments(root);
+  return { threads, reviews };
 }
 
 /** Words on one line, in full: never cut. */
