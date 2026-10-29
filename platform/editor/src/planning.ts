@@ -21,7 +21,16 @@ export type PlanningFile = {
   notes: string[];
   recheck: string[];
 };
-export type PlanningChapter = { book: string; chapter: string; dir: string; files: PlanningFile[] };
+/** A built lesson, and whether it waits on a self-review (platform/studio/src/pipeline.ts). */
+export type PlanningLesson = { slug: string; isToSelfReview: boolean; why?: string };
+
+export type PlanningChapter = {
+  book: string;
+  chapter: string;
+  dir: string;
+  files: PlanningFile[];
+  lessons?: PlanningLesson[];
+};
 
 /** The outline is the machine's alone; the rest the person approves. */
 export const isApprovable = (f: PlanningFile): boolean => !f.file.startsWith("source/");

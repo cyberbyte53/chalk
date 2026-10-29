@@ -23,6 +23,13 @@ for (const c of chapters) {
       console.log(`        to check again: ${f.recheck.join(", ")} changed since it was approved`);
     if (isHeld && f.problems.length > 0) failed += 1;
   }
+  // Not a failure (lessons change while they're built); a lesson isn't shown to the person like this.
+  for (const l of c.lessons)
+    console.log(
+      l.isToSelfReview
+        ? `    · ${l.slug}: to self-review (${l.why})`
+        : `    ✓ ${l.slug}: self-reviewed`,
+    );
 }
 if (chapters.length === 0) console.log("  no chapter has planning files yet");
 if (failed > 0) {

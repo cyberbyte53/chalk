@@ -23,5 +23,5 @@ The person's review is the expensive part; this pass catches everything a fresh 
 
    When you have filed everything, hand your pass over: `comment` with `handover: true`. It becomes a review of its own (`by: reviewer`) the person can open in the activity feed (`?dev&activity`).
 5. Say which findings are mechanical (overflow, a give-away option, an undefined term, maths inside a sentence). The agent that asked for the review fixes those as a fixer (`status: "planned"`, fix, render again, `status: "ready"`); a reviewer can't move a thread. Taste decisions stay open for the person.
-6. Append `runs/<YYYY-MM-DD-HHMM>-self-review.md`: what was checked, fixed and still open, and a verdict: ready for the person, or needs another pass.
+6. Append `runs/<YYYY-MM-DD-HHMM>-self-review.md`: each lesson reviewed by its folder name (`two-numbers-for-a-place`), what was checked, fixed and still open, and a verdict: ready for the person, or needs another pass. Commit it: a committed note naming a lesson is what clears its **to self-review** mark in the Chalk tree (until the lesson changes again).
 7. Reply with the open items and the verdict.

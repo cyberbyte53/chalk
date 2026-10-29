@@ -402,6 +402,8 @@ type Node = {
     | "props"
     | "package"
     | "prop";
+  /** A lesson changed since a reviewer last looked: why. */
+  toReview?: string;
   /** A prop's line under its name: its role and the chapters that place it; a package's, how many props. */
   description?: string;
   file: string;
@@ -561,6 +563,11 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       return item;
     }
     item.resourceUri = vscode.Uri.file(node.file);
+    if (node.toReview !== undefined) {
+      item.description = "to self-review";
+      item.tooltip = `${node.path}\n\nTo self-review before you see it: ${node.toReview}.`;
+      item.iconPath = new vscode.ThemeIcon("warning");
+    }
     item.command = {
       command: "chalk.preview",
       title: "Preview",
@@ -643,15 +650,22 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
         kind: "planning",
         file: join(authoring, node.path),
       };
+      // Which lessons wait on a self-review (a lesson changed since a reviewer last looked).
+      const [book = "", name = ""] = node.path.split("/");
+      const lessons = await readOne(base, book, name)
+        .then((c) => c.lessons ?? [])
+        .catch(() => []);
       return [
         planning,
         ...(chapter?.concepts ?? []).map((ref): Node => {
           const slug = ref.path;
+          const state = lessons.find((l) => slug.endsWith(`/${l.slug}`));
           return {
             label: title(readJson(join(build, `${ref.path}.json`)), slug),
             path: slug,
             kind: "lesson",
             file: join(root, "content", slug, "overview.ts"),
+            ...(state?.isToSelfReview === true ? { toReview: state.why ?? "" } : {}),
           };
         }),
       ];

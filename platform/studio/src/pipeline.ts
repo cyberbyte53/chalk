@@ -190,7 +190,83 @@ export type FileState = {
   recheck: Step[];
 };
 
-export type Chapter = { book: string; chapter: string; dir: string; files: FileState[] };
+/**
+ * A built lesson, and whether a reviewer has looked at it since it last changed: a lesson whose
+ * folder changed (in a commit, or not yet committed) after the last self-review run note naming it
+ * (`runs/*-self-review.md`, committed) is to be self-reviewed before the person sees it.
+ */
+export type LessonState = { slug: string; isToSelfReview: boolean; why?: string };
+
+export type Chapter = {
+  book: string;
+  chapter: string;
+  dir: string;
+  files: FileState[];
+  lessons: LessonState[];
+};
+
+/** The commit time of the last commit touching these paths, in seconds, or 0. */
+function lastCommitTime(root: string, paths: readonly string[]): number {
+  if (paths.length === 0) return 0;
+  try {
+    const out = execFileSync("git", ["log", "-1", "--format=%ct", "--", ...paths], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    return out === "" ? 0 : Number(out);
+  } catch {
+    return 0;
+  }
+}
+
+/** Whether these paths have changes not yet committed. */
+function isDirty(root: string, path: string): boolean {
+  try {
+    return (
+      execFileSync("git", ["status", "--porcelain", "--", path], {
+        cwd: root,
+        encoding: "utf8",
+      }).trim() !== ""
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** Each lesson the chapter builds, and whether it waits on a self-review (see `LessonState`). */
+export function readLessons(root: string, book: string, chapter: string): LessonState[] {
+  const manifest = join(root, "content", book, chapter, "build.yaml");
+  if (!existsSync(manifest)) return [];
+  let slugs: string[] = [];
+  try {
+    const raw = parseYaml(readFileSync(manifest, "utf8")) as { concepts?: unknown };
+    slugs = Array.isArray(raw.concepts) ? raw.concepts.map(String) : [];
+  } catch {
+    return [];
+  }
+  const runs = join(root, "authoring", "books", book, chapter, "runs");
+  const notes = existsSync(runs)
+    ? readdirSync(runs)
+        .filter((f) => f.endsWith("-self-review.md"))
+        .map((f) => ({
+          path: join("authoring", "books", book, chapter, "runs", f),
+          text: readFileSync(join(runs, f), "utf8"),
+        }))
+    : [];
+  return slugs.map((slug) => {
+    const folder = join("content", book, chapter, slug);
+    const reviewed = lastCommitTime(
+      root,
+      notes.filter((n) => n.text.includes(slug)).map((n) => n.path),
+    );
+    if (isDirty(root, folder))
+      return { slug, isToSelfReview: true, why: "changed, not committed or reviewed yet" };
+    if (reviewed === 0) return { slug, isToSelfReview: true, why: "never self-reviewed" };
+    if (lastCommitTime(root, [folder]) > reviewed)
+      return { slug, isToSelfReview: true, why: "changed since its last self-review" };
+    return { slug, isToSelfReview: false };
+  });
+}
 
 const git = (root: string, ...args: string[]): string | undefined => {
   try {
@@ -335,7 +411,7 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
     });
     return { ...base, status: isChanged ? "changed" : "approved", approvedAt, recheck };
   });
-  return { book, chapter, dir, files };
+  return { book, chapter, dir, files, lessons: readLessons(root, book, chapter) };
 }
 
 /** Every chapter with planning files. */

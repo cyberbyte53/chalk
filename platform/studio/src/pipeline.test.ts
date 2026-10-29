@@ -12,6 +12,7 @@ import {
   readBrief,
   readChapter,
   readFlow,
+  readLessons,
   readMatch,
   readObjectives,
 } from "./pipeline";
@@ -178,5 +179,67 @@ describe("approval and what a change reaches", () => {
     );
     expect(state(root, Step.Objectives)?.status).toBe("changed");
     expect(state(root, Step.Flow)?.recheck).toEqual([Step.Objectives]);
+  });
+});
+
+describe("a lesson waits on a self-review", () => {
+  /** A commit at a given time, so one change can be told from the next within a second. */
+  const commitAt = (root: string, m: string, seconds: number) => {
+    const date = `${1_700_000_000 + seconds} +0000`;
+    const env = {
+      ...process.env,
+      GIT_AUTHOR_NAME: "t",
+      GIT_AUTHOR_EMAIL: "t@t",
+      GIT_COMMITTER_NAME: "t",
+      GIT_COMMITTER_EMAIL: "t@t",
+      GIT_AUTHOR_DATE: date,
+      GIT_COMMITTER_DATE: date,
+    };
+    execFileSync("git", ["add", "-A"], { cwd: root, env });
+    execFileSync("git", ["commit", "-qm", m], { cwd: root, env });
+  };
+  const lesson = (root: string) => {
+    mkdirSync(join(root, "content", "b", "c", "first"), { recursive: true });
+    writeFileSync(join(root, "content", "b", "c", "build.yaml"), "concepts:\n  - first\n");
+    writeFileSync(join(root, "content", "b", "c", "first", "overview.ts"), "// v1\n");
+  };
+  const review = (root: string, name: string, text: string) => {
+    mkdirSync(join(root, "authoring", "books", "b", "c", "runs"), { recursive: true });
+    writeFileSync(file(root, `runs/${name}-self-review.md`), text);
+  };
+  const first = (root: string) => readLessons(root, "b", "c")[0];
+
+  it("a lesson never reviewed waits; a committed self-review naming it clears it", () => {
+    const root = chapter();
+    lesson(root);
+    commitAt(root, "lesson", 10);
+    expect(first(root)).toMatchObject({
+      slug: "first",
+      isToSelfReview: true,
+      why: "never self-reviewed",
+    });
+    review(root, "2026-10-29-1500", "Reviewed: first. Verdict: ready.");
+    commitAt(root, "review", 20);
+    expect(first(root)).toEqual({ slug: "first", isToSelfReview: false });
+  });
+  it("a change after the review waits again, committed or not; a note about another lesson doesn't count", () => {
+    const root = chapter();
+    lesson(root);
+    commitAt(root, "lesson", 10);
+    review(root, "2026-10-29-1500", "Reviewed: first.");
+    commitAt(root, "review", 20);
+    writeFileSync(join(root, "content", "b", "c", "first", "overview.ts"), "// v2\n");
+    expect(first(root)).toMatchObject({
+      isToSelfReview: true,
+      why: "changed, not committed or reviewed yet",
+    });
+    commitAt(root, "v2", 30);
+    expect(first(root)).toMatchObject({
+      isToSelfReview: true,
+      why: "changed since its last self-review",
+    });
+    review(root, "2026-10-29-1600", "Reviewed: second.");
+    commitAt(root, "other review", 40);
+    expect(first(root)?.isToSelfReview).toBe(true);
   });
 });
