@@ -1,0 +1,5 @@
+# Column and row differ, so the swapped desk is another desk (and gets its note).
+- params: { column: 5, row: 3 }
+- params: { column: 2, row: 6 }
+- params: { column: 7, row: 4 }
+- params: { column: 1, row: 5 }

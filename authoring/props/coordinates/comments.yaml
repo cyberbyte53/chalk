@@ -184,7 +184,7 @@
       text: ""
       status: closed
 - id: cmvt9hejjpcc
-  status: open
+  status: ready
   by: fixer
   role: fixer
   createdAt: 2026-10-29T08:08:30.175Z
@@ -209,8 +209,20 @@
       role: person
       at: 2026-10-29T08:19:37.769Z
       text: makes sense
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:59.472Z
+      text: "Approved ('makes sense'), and part of thread cmvtaw00zp17: a `unit` field on the reading
+        layer."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:03.398Z
+      text: "Done: `unit` on the reading layer; the stall's distances read '30 m' and '20 m'."
+      status: ready
+  changed: []
 - id: cmvtaw00zp17
-  status: open
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T08:47:50.819Z
@@ -264,3 +276,15 @@
         the walker's name ('The bus'). On a single line the walker gets only ← and →; that needs no
         change (the plane's window has no room above or below the line, so ↑ and ↓ are greyed out).
         Default person, so every board stays as it is."
+    - by: you
+      role: person
+      at: 2026-10-29T09:00:29.407Z
+      text: ""
+      status: closed
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:05:52.330Z
+      text: "One refinement while building item 5: choosing a house sends Riya back to the corner only
+        when another house was already chosen (a new round). The first time a house is marked, she
+        stays where she is. Otherwise, when Aman's reply marks his house, she'd be pulled back from
+        the foot of Street 4 mid-story. Tested both ways."

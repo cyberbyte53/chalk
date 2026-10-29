@@ -17,6 +17,7 @@
     "@chalk/exact": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
+    "@chalk/prop-coordinates": "workspace:*",
     "@chalk/prop-primes": "workspace:*",
     "preact": "10.29.8",
     "zod": "3.25.76"

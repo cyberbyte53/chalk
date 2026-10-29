@@ -33,6 +33,14 @@ type PlaceCoreFields = {
   targetName: z.infer<typeof localizedSchema>;
   canChooseTarget: boolean;
   lit: z.infer<typeof lineSchema> | null;
+  showAddress: boolean;
+} & Partial<WalkerBack>;
+/** The walker's fields a new target resets (when there is a walker): back to her start. */
+type WalkerBack = {
+  walkFrom: Point | null;
+  at: Point;
+  trail: Point[];
+  isWalking: boolean;
 };
 
 const MAX_PLACES = 120;
@@ -71,6 +79,8 @@ export const places = layersFor<PlacesState>()({
     canChooseTarget: z.boolean(),
     /** One number alone, and every place that has it lit, or null. */
     lit: lineSchema.nullable(),
+    /** Whether the target's address is written above the plane (off when it is the answer). */
+    showAddress: z.boolean(),
   },
   defaults: {
     placeKind: PlaceKind.House,
@@ -79,18 +89,27 @@ export const places = layersFor<PlacesState>()({
     targetName: { en: "Aman's house", hi: "अमन का घर" },
     canChooseTarget: true,
     lit: null,
+    showAddress: true,
   },
   isOn: (s) => s.places.length > 0,
   actions: {
     chooseTarget: act({
-      describe: "Make the place at (x, y) the target; its address is shown (the learner's tap)",
+      describe:
+        "Make the place at (x, y) the target; its address is shown, and if another was chosen before, a walker goes back to her start (the learner's tap)",
       byLearner: true,
       args: pointSchema,
-      changes: ["target", "lit"],
-      run: (s, p) =>
-        !s.canChooseTarget || !isPlace(s, p)
-          ? set({})
-          : set({ target: { x: p.x, y: p.y }, lit: null }, raise(placesSignals.targetChosen, p)),
+      changes: ["target", "lit", "at", "trail", "isWalking"],
+      run: (s, p) => {
+        if (!s.canChooseTarget || !isPlace(s, p)) return set({});
+        const target = { x: p.x, y: p.y };
+        const emit = raise(placesSignals.targetChosen, p);
+        // Another house, once one was chosen, is a new walk, from the corner. (The first one is
+        // only marked: Riya may be on her way to it.)
+        const start = s.walkFrom ?? null;
+        return start === null || s.target === null
+          ? set({ target, lit: null }, emit)
+          : set({ target, lit: null, at: start, trail: [], isWalking: false }, emit);
+      },
     }),
     lightLine: act({
       describe:

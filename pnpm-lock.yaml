@@ -81,6 +81,9 @@ importers:
       '@chalk/prop-basics':
         specifier: workspace:*
         version: link:../props/basics
+      '@chalk/prop-coordinates':
+        specifier: workspace:*
+        version: link:../props/coordinates
       '@chalk/prop-primes':
         specifier: workspace:*
         version: link:../props/primes

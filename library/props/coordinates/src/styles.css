@@ -213,6 +213,17 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.cp-bus-body {
+  fill: var(--color-primary);
+}
+.cp-bus-window {
+  fill: var(--color-surface);
+}
+.cp-bus-wheel {
+  fill: var(--color-on-surface);
+  stroke: var(--color-surface);
+  stroke-width: 1.5;
+}
 .cp-walker-body {
   fill: var(--color-primary);
 }
@@ -293,6 +304,20 @@
   stroke: color-mix(in srgb, var(--color-primary) 55%, transparent);
   stroke-width: 6;
   stroke-linecap: round;
+}
+.cp-still-full {
+  stroke: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+}
+.cp-measure line {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 3;
+}
+.cp-frame .cp-measure text {
+  font: 700 var(--text-caption) var(--font-body);
+  fill: var(--color-on-surface);
 }
 .cp-still-point {
   fill: none;

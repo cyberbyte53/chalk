@@ -1,0 +1,4 @@
+- params: { stop: 4 }
+- params: { stop: -3 }
+- params: { stop: -5 }
+- params: { stop: 2 }

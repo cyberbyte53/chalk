@@ -458,3 +458,49 @@ describe("the dice game", () => {
     ]);
   });
 });
+
+describe("streets rise from the road: the number line first, then the town", () => {
+  const road = () => ({ ...town(), upLines: [] as number[] });
+  it("with no street risen, Riya can walk the road but not up it", () => {
+    const s = { ...road(), at: { x: 4, y: 0 } };
+    expect(stepFrom(s, Direction.Up)).toEqual({ blocked: "this street isn't there yet" });
+    expect("to" in stepFrom(s, Direction.Right)).toBe(true);
+  });
+  it("Street 4 rises: it grows, then counts as risen, and Riya can walk up it", async () => {
+    const played = await d.play({ ...road(), at: { x: 4, y: 0 } }, "raiseUpLine", { at: 4 });
+    expect(played.state).toMatchObject({ upLines: [4], rising: null });
+    const heights = played.frames.flatMap((f) => (f.rising === null ? [] : [f.rising.height]));
+    for (let i = 1; i < heights.length; i++)
+      expect(heights[i]).toBeGreaterThanOrEqual(heights[i - 1] ?? 0);
+    expect(signals(played.emit)).toEqual(["risen"]);
+    expect("to" in stepFrom(played.state, Direction.Up)).toBe(true);
+  });
+  it("then every street rises, one after another, and the town is as usual", async () => {
+    const played = await d.play({ ...road(), upLines: [4] }, "raiseAllUpLines");
+    expect(played.state.upLines).toBe(null);
+    expect(signals(played.emit)).toEqual(Array(5).fill("risen"));
+  });
+});
+
+describe("a new house is a new walk", () => {
+  it("the first house is only marked: Riya stays where she is", () => {
+    const s = { ...town(), at: { x: 4, y: 0 }, trail: [{ x: 1, y: 0 }] };
+    expect(d.run(s, "chooseTarget", { x: 4, y: 3 }).state.at).toEqual({ x: 4, y: 0 });
+  });
+  it("making another house Aman's sends Riya back to the corner", () => {
+    const s = {
+      ...town(),
+      target: { x: 1, y: 1 },
+      at: { x: 2, y: 3 },
+      trail: [
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
+        { x: 2, y: 1 },
+        { x: 2, y: 2 },
+        { x: 2, y: 3 },
+      ],
+    };
+    const out = d.run(s, "chooseTarget", { x: 4, y: 3 });
+    expect(out.state).toMatchObject({ target: { x: 4, y: 3 }, at: { x: 0, y: 0 }, trail: [] });
+  });
+});

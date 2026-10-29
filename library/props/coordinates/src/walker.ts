@@ -25,8 +25,14 @@ export type Roads = (typeof Roads)[keyof typeof Roads];
 export const Direction = { Up: "up", Down: "down", Left: "left", Right: "right" } as const;
 export type Direction = (typeof Direction)[keyof typeof Direction];
 
+/** What the walker is drawn as. */
+export const WalkerKind = { Person: "person", Bus: "bus" } as const;
+export type WalkerKind = (typeof WalkerKind)[keyof typeof WalkerKind];
+
 export type WalkerState = PlaneCore & {
   walkerName: z.infer<typeof localizedSchema>;
+  walkerKind: WalkerKind;
+  showWhere: boolean;
   walkFrom: Point | null;
   at: Point;
   roads: Roads;
@@ -54,7 +60,7 @@ const MOVE: Record<Direction, Point> = {
  * below the main road.
  */
 export function stepFrom(
-  s: Pick<WalkerState, "walkFrom" | "at" | "roads" | "window">,
+  s: Pick<WalkerState, "walkFrom" | "at" | "roads" | "window" | "upLines">,
   direction: Direction,
 ): { to: Point } | { blocked: string } {
   const d = MOVE[direction];
@@ -66,6 +72,8 @@ export function stepFrom(
       return { blocked: "no road across here: back down to the main road" };
     if (!isAcross && (!Number.isInteger(s.at.x) || s.at.x === s.walkFrom.x))
       return { blocked: "no street going up here" };
+    if (!isAcross && s.upLines !== null && !s.upLines.includes(s.at.x))
+      return { blocked: "this street isn't there yet" };
     if (!isAcross && to.y < s.walkFrom.y) return { blocked: "nothing below the main road" };
   }
   return { to };
@@ -128,6 +136,10 @@ export const walker = layersFor<WalkerState>()({
     "A walker (Riya) moved one block per tap of an arrow, from wherever she is, on roads only: in a town, along the main road and up the streets; in a city or on graph paper, along any line. Her route is drawn and her address shown as she moves. A lesson can also walk her to a point, along then up.",
   fields: {
     walkerName: localizedSchema,
+    /** Drawn as a person (Riya) or a bus. */
+    walkerKind: z.nativeEnum(WalkerKind),
+    /** Whether her line under the plane says where she is (off when that is the answer). */
+    showWhere: z.boolean(),
     /** Where she starts (Riya's corner, O), or null: no walker. */
     walkFrom: pointSchema.nullable(),
     /** Where she stands now. */
@@ -142,6 +154,8 @@ export const walker = layersFor<WalkerState>()({
   },
   defaults: {
     walkerName: { en: "Riya", hi: "रिया" },
+    walkerKind: WalkerKind.Person,
+    showWhere: true,
     walkFrom: null,
     at: { x: 0, y: 0 },
     roads: Roads.Grid,

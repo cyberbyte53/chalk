@@ -5,14 +5,18 @@ import type { ContentModules } from "@chalk/author";
 export const modules: ContentModules = {
   "class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview"),
+  "class9-maths/coordinate-geometry/questions/bus-to-stop/family.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/questions/bus-to-stop/family"),
   "class9-maths/coordinate-geometry/questions/cross-street-count/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/cross-street-count/family"),
-  "class9-maths/coordinate-geometry/questions/desk-pair/family.ts": () =>
-    import("../../content/class9-maths/coordinate-geometry/questions/desk-pair/family"),
+  "class9-maths/coordinate-geometry/questions/place-the-stall/family.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/questions/place-the-stall/family"),
   "class9-maths/coordinate-geometry/questions/table-lamp/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/table-lamp/family"),
-  "class9-maths/coordinate-geometry/questions/two-steps/family.ts": () =>
-    import("../../content/class9-maths/coordinate-geometry/questions/two-steps/family"),
+  "class9-maths/coordinate-geometry/questions/tap-the-desk/family.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/questions/tap-the-desk/family"),
+  "class9-maths/coordinate-geometry/questions/walk-to-address/family.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/questions/walk-to-address/family"),
   "class10-maths/real-numbers/division-lemma/overview.ts": () =>
     import("../../content/class10-maths/real-numbers/division-lemma/overview"),
   "class10-maths/real-numbers/euclid-algorithm/overview.ts": () =>

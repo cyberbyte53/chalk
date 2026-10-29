@@ -1,0 +1,7 @@
+# Any address in the town; where the swapped pair is also a house, its note is checked too.
+- params: { street: 3, house: 5 }
+- params: { street: 6, house: 2 }
+- params: { street: 2, house: 4 }
+- params: { street: 7, house: 1 }
+- params: { street: 5, house: 5 }
+  level: easy

@@ -642,7 +642,7 @@
       text: ""
       status: closed
 - id: cmvt95txziko
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.263Z
@@ -659,11 +659,25 @@
     ('she's standing there and still can't tell?'). Suggested fix: on Street 4, light only the five
     houses. Mark Aman's house and show his full address only once 'House 5' has been said, or at her
     first ↑ tap."
+  changed: []
   messages:
     - by: you
       role: person
       at: 2026-10-29T08:18:57.139Z
       text: makes sense
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.319Z
+      text: "Agreed in chat: on Street 4, light its five houses and ask which; Aman's reply and the mark
+        come a beat later."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:00.021Z
+      text: "Before: on reaching Street 4, House 5 was circled at once, with its address. After: Street 4
+        rises from the 4 and its five houses light up with 'Which one is Aman's?'; about two seconds
+        later his reply, 'House 5', marks it and its address appears (played with timed frames)."
+      status: ready
 - id: cmvt95u1bhzc
   status: ready
   by: reviewer
@@ -759,7 +773,7 @@
         बंद' say what they do. 'Lights off' now sits on its own row under the pad, so the arrows no
         longer shift sideways when it appears.
 - id: cmvt95u30850
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.444Z
@@ -774,14 +788,27 @@
     number is how far up the street. That only holds when the walk starts from the corner. Suggested
     fix: send Riya back to the corner when a new house is chosen, or say so in the text ('Send her
     back to the corner with ↺, then…')."
+  changed: []
   messages:
     - by: you
       role: person
       at: 2026-10-29T08:20:48.731Z
       text: yes makes sense ; because this is like we are repeating the exercise ; kind of like now
         students can play with the prop and this time they can see the aman house and go to it ?
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.413Z
+      text: "Agreed in chat: choosing another house sends Riya back to the corner, so each round is a walk
+        from the corner."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:00.206Z
+      text: "Before: a new house was walked to from wherever Riya stood. After: choosing another house
+        sends her back to the corner (the first time a house is marked, she stays put, mid-story)."
+      status: ready
 - id: cmvt95u3sdis
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.472Z
@@ -795,14 +822,28 @@
     makes that link. So 'one number isn't enough' arrives without the contrast that makes it
     surprising: on a number line, one number is enough. Suggested fix: one line, before or after
     'Street 4', e.g. 'On a number line, one number fixes a point. Will one number fix a house?'"
+  changed: []
   messages:
     - by: you
       role: person
       at: 2026-10-29T08:18:14.245Z
       text: Actually this makes sense , we should connect the earlier thing (the number line) , how should
         we do it? should we have a prop , because this is sort of extending from 1D to 2D
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.508Z
+      text: "Agreed in chat: lesson 1 opens with a number line, a bus on a straight road (its own short
+        story), and Riya's main road starts as a number line too, with Street 4 rising from the 4."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:00.547Z
+      text: "Before: no link to the number line. After: a new first board, a bus on a straight road (0 at
+        the stand, stops both ways, moved with ← →): on a line, one number is enough. Riya's main
+        road then starts alone, as a number line, and Street 4 rises from its 4."
+      status: ready
 - id: cmvt95u4k0x9
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.500Z
@@ -820,11 +861,25 @@
     distance left a whole line of spots'. Suggested fix: mark the fences every 10 m. Draw each
     distance as a measured dashed line from its fence with its value. Let the 30 m line run the full
     height of the ground, so the picture shows 'a whole line'."
+  changed: []
   messages:
     - by: you
       role: person
       at: 2026-10-29T08:21:55.920Z
       text: makes sense
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.585Z
+      text: "Agreed in chat: the fences marked every 10 m; each given distance drawn measured from its
+        fence; one distance draws a line the full length; the student places the stall."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:00.850Z
+      text: "Before: no metres on the ground; a clipped line. After: both fences marked every 10 m; each
+        given distance drawn as a measured dashed line ('30 m'); the one-distance line runs the full
+        length, bold where the patch allows; then the student drags the stall to the spot."
+      status: ready
 - id: cmvt95u7jze7
   status: withdrawn
   by: reviewer
@@ -969,7 +1024,7 @@
         read '(5, 3)' and '(3, 5)', a marked desk can be tapped again, and the header follows it.
         The '(5, 3)' label touches the orange ring of the chosen desk but stays readable."
 - id: cmvt95uqpuyu
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.297Z
@@ -983,11 +1038,25 @@
     side is 'left', and the source's point that the teacher's desk is not part of the plan isn't
     visible. Suggested fix: draw the teacher's desk (and the blackboard) below row 1, outside the
     grid, as in Fig. 3.3."
+  changed: []
   messages:
     - by: you
       role: person
       at: 2026-10-29T08:23:56.376Z
       text: or don't mention teacher at all
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.675Z
+      text: "Agreed in chat (the person's reply: 'or don't mention teacher at all'): no teacher; rows
+        counted from the front, said and named on the plan."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:01.179Z
+      text: "Before: the teacher and 'the front' in the text, not on the plan. After: no teacher; the rows
+        are 'counted from the front (row 1 is the front row)', and the row line is named 'Row (from
+        the front)'."
+      status: ready
 - id: cmvt95urhs5f
   status: ready
   by: reviewer
@@ -1030,7 +1099,7 @@
       text: "Rechecked en and hi with both desks tapped. Fixed. Hindi '…दूसरी स्तंभ 3, पंक्ति' / '5 में'
         keeps '5 में' together. English is one line for 'Yes: both use 3 and 5'."
 - id: cmvt95us8mz8
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.352Z
@@ -1048,7 +1117,18 @@
     source's centre isn't needed without negative numbers yet), e.g. 'Riya starts where the two main
     roads meet'. Name each street at its own end ('E–W 3' at the right end of that line) or put
     'East–west street no.' beside the numbers, not on top of the north–south line."
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.933Z
+      text: "Agreed in chat: the cross-streets board is dropped (thread cmvta35y51hi)."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:01.876Z
+      text: The cross-streets board is dropped, so this no longer applies.
+      status: ready
 - id: cmvt95ut05k9
   status: ready
   by: reviewer
@@ -1122,7 +1202,7 @@
         whole. The other pairs on the board (text, marks, options, feedback) stay whole in both
         languages.
 - id: cmvt95uywdnd
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.592Z
@@ -1140,7 +1220,20 @@
     picture, colour the across line and the up line (one colour for across, one for up, the same on
     all three), and draw the route along, then up, to the place. Smaller: the tick numbers in these
     three small planes are much smaller than the text."
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:59.204Z
+      text: "Agreed in chat: each picture shows its route along, then up, or its two distances drawn."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:02.680Z
+      text: "Before: no picture singled out its lines. After: the house shows Riya's route along the main
+        road, then up Street 4; the stall its two measured distances (30 m, 20 m); the desk its two
+        distances to the front row and the first column."
+      status: ready
 - id: cmvt95v8aal3
   status: ready
   by: reviewer
@@ -1189,6 +1282,10 @@
         The caption: the house and the desk have one because they're places with an address; I'd add
         the stall as a place too (a stall picture with 'The stall' and its distances) once units
         exist, so all three read the same."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:03.806Z
+      text: "The 'm' is in now (the unit field): the stall reads 30 m and 20 m."
 - id: cmvt9616nax5
   status: ready
   by: reviewer
@@ -1270,7 +1367,7 @@
         4: English keeps the two lines its header needs, Hindi keeps one, and in both the map and
         the arrow pad stay put on the first step and at Street 4."
 - id: cmvt9zxu43g1
-  status: open
+  status: ready
   by: you
   role: person
   createdAt: 2026-10-29T08:22:54.988Z
@@ -1283,9 +1380,20 @@
     teacher's desk stands in front, outside the plan."
   commit: d76d797a1c787544931005e0a280a692cfc57d5a
   text: bro why we talking about teacher if she is not important
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:58.849Z
+      text: "Agreed in chat: the teacher is dropped."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:01.567Z
+      text: "Done: the teacher is gone from the seating plan."
+      status: ready
 - id: cmvta35y51hi
-  status: open
+  status: ready
   by: you
   role: person
   createdAt: 2026-10-29T08:25:25.469Z
@@ -1299,9 +1407,21 @@
   commit: d76d797a1c787544931005e0a280a692cfc57d5a
   text: bro do we need this example at all ? is this driving some point home that others are not?
     because this is hard to comprehend and i feel not helping
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:59.010Z
+      text: "Agreed in chat: drop the board; Ex 3.1 Q2 stays as a written question in the book's words."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:02.284Z
+      text: "Done: the board is dropped. Ex 3.1 Q2 is a written question in the book's own words
+        (questions/cross-street-count)."
+      status: ready
 - id: cmvta61jy5hb
-  status: open
+  status: ready
   by: you
   role: person
   createdAt: 2026-10-29T08:27:39.742Z
@@ -1316,4 +1436,20 @@
     understanding of the child from the boards we just made. Like, shouldn't we put questions using
     them, at least if possible. I am not saying that we throw away anxiety altogether, but like this
     is a, like not a very good question to ask. Like see it for yourself.
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:10:59.280Z
+      text: "Agreed in chat: our questions are done in the props (walk Riya to an address, tap a desk,
+        place the stall, take the bus to a stop); the source's own Ex 3.1 Q2 stays as a written
+        question, in its own words."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:11:03.089Z
+      text: "Before: text questions set in our world. After: walk-to-address, tap-the-desk,
+        place-the-stall and bus-to-stop are done in the prop and checked by its state, with a note
+        for the swapped answer; cross-street-count is Ex 3.1 Q2 in the book's own words; two-steps
+        and desk-pair are gone."
+      status: ready

@@ -145,6 +145,26 @@ describe("what the student sees", () => {
       "Riya is at Aman's house! Street number 3, House number 2",
     );
   });
+  it("a measured distance carries its unit", () => {
+    const s = seen({ point: { x: 3, y: 2 }, reading: Reading.Distances, unit: "m" });
+    expect(s.at("point")?.words).toBe("3 m, 2 m");
+  });
+  it("a question can turn the readouts off: no address above, no line under", () => {
+    const s = seen({
+      ...town,
+      target: { x: 3, y: 2 },
+      showAddress: false,
+      showWhere: false,
+      at: { x: 3, y: 0 },
+      trail: [
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
+        { x: 3, y: 0 },
+      ],
+    });
+    expect(s.ids).not.toContain("target");
+    expect(s.ids).not.toContain("whereWalker");
+  });
   it("a point read as far as the board writes it; in a guessing round, only ?", () => {
     expect(seen(reading).at("point")).toMatchObject({ value: { x: 2, y: -1 }, words: "(2, −1)" });
     const g = seen(guessing);

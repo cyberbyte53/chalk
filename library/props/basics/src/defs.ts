@@ -1,5 +1,6 @@
 import { type AnyPropDef, asAnyProp } from "@chalk/prop";
 import { choice } from "./choice";
+import { goal } from "./goal";
 import { multiChoice } from "./multi-choice";
 import { orderSteps } from "./order-steps";
 import { text } from "./text";
@@ -11,6 +12,7 @@ import { text } from "./text";
 export const defs: readonly AnyPropDef[] = [
   asAnyProp(text),
   asAnyProp(choice),
+  asAnyProp(goal),
   asAnyProp(multiChoice),
   asAnyProp(orderSteps),
 ];

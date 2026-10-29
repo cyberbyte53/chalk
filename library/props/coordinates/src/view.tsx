@@ -5,7 +5,7 @@ import { type FramePixels, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type Still, stillPossible } from "./clues";
 import { coordinatePlane } from "./coordinate-plane";
-import { Counter, PlacePicture, Walker } from "./pictures";
+import { Bus, Counter, PlacePicture, Walker } from "./pictures";
 import { type Point, isInWindow, planeFrame } from "./plane";
 import {
   AxesDraw,
@@ -16,6 +16,7 @@ import {
   type PlaneView,
   SceneDraw,
   canNameParts,
+  isRisen,
   unitOf,
 } from "./plane-view";
 import { Reading, snapped } from "./reading";
@@ -47,13 +48,16 @@ function walkWords(s: PlaneView, locale: Locale): string {
     .filter(Boolean)
     .join(", ");
   const where =
-    s.marks === "numbers"
-      ? pair(now)
-      : isOnMainRoad
-        ? `${s.axisNames[0][locale]} ${now.x}`
-        : s.marks === "counts"
-          ? counted
-          : addressOf(s.axisNames, now, locale);
+    // On a single line (a number line), one number says where.
+    s.axes === "horizontal"
+      ? num(now.x)
+      : s.marks === "numbers"
+        ? pair(now)
+        : isOnMainRoad
+          ? `${s.axisNames[0][locale]} ${now.x}`
+          : s.marks === "counts"
+            ? counted
+            : addressOf(s.axisNames, now, locale);
   const isThere = s.target !== null && now.x === s.target.x && now.y === s.target.y;
   if (!isThere || s.isWalking) return `${name}: ${where}`;
   const target = word(s.targetName, locale);
@@ -73,6 +77,13 @@ function PlacesDraw({
   return (
     <g class="cp-places">
       {s.places.map((p) => {
+        // A place stands on a line only once that line has risen (or as high as it has grown).
+        const rise = s.rising;
+        const isUp =
+          p.y === 0 ||
+          isRisen(s, p.x) ||
+          (rise !== null && rise.at === p.x && p.y <= s.window.yMax * rise.height);
+        if (!isUp) return null;
         const [x, y] = px.toPx(p.x, p.y);
         const isTarget = s.target !== null && s.target.x === p.x && s.target.y === p.y;
         const classes = ["cp-place", `is-${s.placeKind}`];
@@ -131,7 +142,7 @@ function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: 
         transform={`translate(${x}, ${y - size * 0.45})`}
         {...shows("walker", now, `${name} ${pair(now)}`)}
       >
-        <Walker size={size} />
+        {s.walkerKind === "bus" ? <Bus size={size} /> : <Walker size={size} />}
         <text
           class="cp-walker-name"
           // Beside her, not above: above, her name would leave the map at the top row.
@@ -147,23 +158,90 @@ function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: 
 }
 
 /** Where the hidden point could still be: a shaded region, a line, or one point. */
-function StillDraw({ still, px }: { still: Still; px: FramePixels }): JSX.Element | null {
-  if (still.kind === "anywhere" || still.kind === "nowhere") return null;
+function StillDraw({
+  s,
+  still,
+  px,
+}: { s: PlaneView; still: Still; px: FramePixels }): JSX.Element | null {
+  const w = s.window;
+  const unit = s.unit === "" ? "" : `\u00a0${s.unit}`;
+  // Each distance given, measured from its line: dashed, with its value.
+  const given = s.given.flatMap((g) => {
+    const c = s.clueChoices[g];
+    return c === undefined ? [] : [c];
+  });
+  const measured = given.flatMap((c, i) => {
+    const out: JSX.Element[] = [];
+    if (c.x !== undefined) {
+      const y = w.yMin + (w.yMax - w.yMin) * 0.85;
+      const [x0, py] = px.toPx(0, y);
+      const [x1] = px.toPx(c.x, y);
+      out.push(
+        <g key={`x${i}`} class="cp-measure">
+          <line x1={x0} y1={py} x2={x1} y2={py} />
+          <text x={(x0 + x1) / 2} y={py - 6} text-anchor="middle">
+            {`${num(c.x)}${unit}`}
+          </text>
+        </g>,
+      );
+    }
+    if (c.y !== undefined) {
+      const x = w.xMin + (w.xMax - w.xMin) * 0.85;
+      const [px0, y0] = px.toPx(x, 0);
+      const [, y1] = px.toPx(x, c.y);
+      out.push(
+        <g key={`y${i}`} class="cp-measure">
+          <line x1={px0} y1={y0} x2={px0} y2={y1} />
+          <text x={px0 + 6} y={(y0 + y1) / 2} dominant-baseline="central">
+            {`${num(c.y)}${unit}`}
+          </text>
+        </g>,
+      );
+    }
+    return out;
+  });
+  // Every line a distance alone leaves, the full length of the plane (a whole line of spots).
+  const fullLines = given.flatMap((c, i) => {
+    const out: JSX.Element[] = [];
+    if (c.x !== undefined) {
+      const [a, b] = [px.toPx(c.x, w.yMin), px.toPx(c.x, w.yMax)];
+      out.push(
+        <line key={`fx${i}`} class="cp-still-full" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />,
+      );
+    }
+    if (c.y !== undefined) {
+      const [a, b] = [px.toPx(w.xMin, c.y), px.toPx(w.xMax, c.y)];
+      out.push(
+        <line key={`fy${i}`} class="cp-still-full" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />,
+      );
+    }
+    return out;
+  });
+  let shape: JSX.Element | null = null;
   if (still.kind === "point") {
     const [x, y] = px.toPx(still.x, still.y);
-    return <circle class="cp-still-point" cx={x} cy={y} r={9} />;
-  }
-  const r = still.region;
-  if (still.kind === "region") {
+    shape = <circle class="cp-still-point" cx={x} cy={y} r={9} />;
+  } else if (still.kind === "region") {
+    const r = still.region;
     const [x0, y0] = px.toPx(r.xMin, r.yMax);
     const [x1, y1] = px.toPx(r.xMax, r.yMin);
-    return <rect class="cp-still-region" x={x0} y={y0} width={x1 - x0} height={y1 - y0} />;
+    shape = <rect class="cp-still-region" x={x0} y={y0} width={x1 - x0} height={y1 - y0} />;
+  } else if (still.kind === "line") {
+    // Bold where the patch given before still allows it.
+    const r = still.region;
+    const [a, b] =
+      still.axis === "x"
+        ? [px.toPx(still.value, r.yMin), px.toPx(still.value, r.yMax)]
+        : [px.toPx(r.xMin, still.value), px.toPx(r.xMax, still.value)];
+    shape = <line class="cp-still-line" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />;
   }
-  const [a, b] =
-    still.axis === "x"
-      ? [px.toPx(still.value, r.yMin), px.toPx(still.value, r.yMax)]
-      : [px.toPx(r.xMin, still.value), px.toPx(r.xMax, still.value)];
-  return <line class="cp-still-line" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />;
+  return (
+    <g class="cp-still">
+      {still.kind !== "point" && fullLines}
+      {shape}
+      {measured}
+    </g>
+  );
 }
 
 /** The point the learner drags, read off the axes as far as the board writes it. */
@@ -179,8 +257,9 @@ function ReadingDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
   const hasLines = stage !== Reading.None && !isHidden;
   const hasLengths = (stage === Reading.Distances || stage === Reading.Abscissa) && !isHidden;
   const signed = stage === Reading.Abscissa;
-  const xWords = signed ? `x = ${num(p.x)}` : num(Math.abs(p.x));
-  const yWords = signed ? `y = ${num(p.y)}` : num(Math.abs(p.y));
+  const unit = s.unit === "" ? "" : `\u00a0${s.unit}`;
+  const xWords = signed ? `x = ${num(p.x)}${unit}` : `${num(Math.abs(p.x))}${unit}`;
+  const yWords = signed ? `y = ${num(p.y)}${unit}` : `${num(Math.abs(p.y))}${unit}`;
   const words = isHidden
     ? "?"
     : stage === Reading.Pair
@@ -391,7 +470,7 @@ export function CoordinatePlaneView({
   const from = s.walkFrom;
   return (
     <div class="cp">
-      {hasPlaces && s.target !== null && (
+      {hasPlaces && s.showAddress && s.target !== null && (
         <p
           class="cp-line cp-address"
           {...shows(
@@ -405,7 +484,7 @@ export function CoordinatePlaneView({
       )}
       {/* Room for the address before there is one, so the map doesn't move when it appears: an
           unseen copy of the longest address this board can show (its farthest place). */}
-      {hasPlaces && s.target === null && s.canChooseTarget && (
+      {hasPlaces && s.showAddress && s.target === null && s.canChooseTarget && (
         <p class="cp-line cp-address is-room" aria-hidden="true">
           <strong>{word(s.targetName, locale)}</strong>:{" "}
           {addressOf(
@@ -445,7 +524,7 @@ export function CoordinatePlaneView({
       <FrameStage px={px} label={planeFrame.label?.(s) ?? "A plane"} present={[""]} look="cp-frame">
         <SceneDraw s={s} px={px} />
         <GridDraw s={s} px={px} />
-        {hasClues && <StillDraw still={still} px={px} />}
+        {hasClues && <StillDraw s={s} still={still} px={px} />}
         {isNaming && <PartTaps s={s} px={px} />}
         <AxesDraw s={s} px={px} locale={locale} canLight={hasPlaces} />
         <ApartHandle s={s} px={px} />
@@ -474,6 +553,7 @@ export function CoordinatePlaneView({
       )}
       {/* Riya's line keeps its room from the start, so her first step doesn't move the arrows. */}
       {hasWalker &&
+        s.showWhere &&
         (s.trail.length > 0 ? (
           <p class="cp-line" {...shows("whereWalker", blockOf(s), walkWords(s, locale))}>
             {walkWords(s, locale)}

@@ -31,6 +31,7 @@ export type ReadingState = PlaneCore & {
   reading: Reading;
   isReadingHidden: boolean;
   visited: Quadrant[];
+  unit: string;
 };
 
 /** A point snapped to the step and kept inside the window. */
@@ -76,6 +77,8 @@ export const reading = layersFor<ReadingState>()({
     isReadingHidden: z.boolean(),
     /** The quadrants the point has been in, in order. */
     visited: z.array(z.nativeEnum(PlanePart)).max(4),
+    /** Written after a measured distance ("30 m"); empty for none. The same in both languages. */
+    unit: z.string().max(4),
   },
   defaults: {
     point: null,
@@ -83,6 +86,7 @@ export const reading = layersFor<ReadingState>()({
     reading: Reading.None,
     isReadingHidden: false,
     visited: [],
+    unit: "",
   },
   isOn: (s) => s.point !== null,
   actions: {

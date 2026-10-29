@@ -86,6 +86,36 @@ export function Walker({ size }: { size: number }): JSX.Element {
   );
 }
 
+/** A bus, seen from the side: a body with windows and two wheels, its front to the right. */
+export function Bus({ size }: { size: number }): JSX.Element {
+  const h = size / 2;
+  return (
+    <>
+      <rect
+        class="cp-bus-body"
+        x={-h * 1.1}
+        y={-h * 0.55}
+        width={h * 2.2}
+        height={h * 1.05}
+        rx={h * 0.22}
+      />
+      {[-0.75, -0.25, 0.25].map((x) => (
+        <rect
+          key={x}
+          class="cp-bus-window"
+          x={h * x}
+          y={-h * 0.38}
+          width={h * 0.38}
+          height={h * 0.34}
+          rx={2}
+        />
+      ))}
+      <circle class="cp-bus-wheel" cx={-h * 0.6} cy={h * 0.5} r={h * 0.22} />
+      <circle class="cp-bus-wheel" cx={h * 0.6} cy={h * 0.5} r={h * 0.22} />
+    </>
+  );
+}
+
 /** A player's counter: a coin with the player's initial. */
 export function Counter({
   size,

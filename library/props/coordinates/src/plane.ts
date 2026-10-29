@@ -1,5 +1,6 @@
 import { localizedSchema } from "@chalk/content";
 import {
+  type Effect,
   type FrameSpec,
   actionsFor,
   layersFor,
@@ -87,6 +88,41 @@ export const namedPointSchema = z
 export type NamedPoint = z.infer<typeof namedPointSchema>;
 
 const MAX_SPAN = 200;
+/** Seconds one line takes to rise, alone or in turn with the rest. */
+const RISE = 1.2;
+const RISE_EACH = 0.35;
+
+/** The whole numbers a line can rise from: those on the horizontal line, inside the window, but 0. */
+const marksUp = (s: Pick<PlaneCore, "window">): number[] => {
+  const out: number[] = [];
+  for (let x = Math.ceil(s.window.xMin); x <= s.window.xMax && out.length < MAX_SPAN; x++)
+    if (x !== 0) out.push(x);
+  return out;
+};
+
+/** Lines growing up one after another: each from 0 to full height, then counted as risen. */
+function riseSteps(
+  risen: readonly number[],
+  ats: readonly number[],
+  seconds: number,
+): Effect<PlaneCore>[] {
+  const done = [...risen];
+  return ats.flatMap((at) => {
+    done.push(at);
+    const upLines = [...done];
+    return [
+      set<PlaneCore>({ rising: { at, height: 0 } }),
+      tween<PlaneCore>(
+        seconds,
+        { rising: { at, height: 1 } },
+        {
+          interpolate: (_, __, t) => ({ rising: { at, height: t } }),
+        },
+      ),
+      set<PlaneCore>({ upLines, rising: null }, raise(planeSignals.risen, { at })),
+    ];
+  });
+}
 /** Seconds between one quadrant's name and the next in the sweep; seconds the line takes to glide. */
 const SWEEP_STEP = 0.6;
 const GLIDE = 1.2;
@@ -120,6 +156,16 @@ const planeFields = {
    * cross at their zeroes, and they are the axes.
    */
   apart: pointSchema,
+  /**
+   * The whole numbers on the horizontal line that have a line rising from them (a town's streets),
+   * or null: every one has (the plane as usual). Empty: only the horizontal line, a number line.
+   */
+  upLines: z.array(z.number().int()).max(MAX_SPAN).nullable(),
+  /** A line rising now: where it stands, and how far up it has grown (0 to 1), or null. */
+  rising: z
+    .object({ at: z.number().int(), height: z.number().min(0).max(1) })
+    .strict()
+    .nullable(),
   /** The part a tap named last (a half of an axis, a quadrant, O), or null. */
   named: z.nativeEnum(PlanePart).nullable(),
   /** The points a figure names. */
@@ -145,6 +191,8 @@ export type PlaneCore = {
   showQuadrantSigns: boolean;
   scene: Scene;
   apart: Point;
+  upLines: number[] | null;
+  rising: { at: number; height: number } | null;
   named: PlanePart | null;
   points: NamedPoint[];
   canShowPoints: boolean;
@@ -167,6 +215,7 @@ const act = actionsFor<PlaneCore>();
 const none = z.object({}).strict();
 
 export const planeSignals = {
+  risen: signal("A line has risen from `at` on the horizontal line (a street, with its places)"),
   crossed: signal("The two number lines cross at their zeroes: they are the axes, and O is named"),
   named: signal("A tap named a part of the plane: `part`"),
   quadrantsNumbered: signal("The sweep has named all four quadrants, I to IV"),
@@ -195,6 +244,8 @@ export const core = layersFor<PlaneCore>()({
     showQuadrantSigns: false,
     scene: Scene.None,
     apart: { x: 0, y: 0 },
+    upLines: null,
+    rising: null,
     named: null,
     points: [],
     canShowPoints: false,
@@ -272,6 +323,29 @@ export const core = layersFor<PlaneCore>()({
         return set({ points: s.points.map((p, i) => (i === at ? { ...p, isShown: true } : p)) });
       },
     }),
+    raiseUpLine: act({
+      describe:
+        "Raise a line from a whole number on the horizontal line: it grows upward, its places appearing on it as it grows (timed)",
+      args: z.object({ at: z.number().int() }).strict(),
+      changes: ["upLines", "rising"],
+      run: (s, { at }) =>
+        s.upLines === null || s.upLines.includes(at)
+          ? set({})
+          : seq(...riseSteps(s.upLines, [at], RISE)),
+    }),
+    raiseAllUpLines: act({
+      describe: "Raise every line not risen yet, one after another, left to right (timed)",
+      args: none,
+      changes: ["upLines", "rising"],
+      run: (s) => {
+        if (s.upLines === null) return set({});
+        const risen = s.upLines;
+        const rest = marksUp(s).filter((x) => !risen.includes(x));
+        return rest.length === 0
+          ? set({})
+          : seq(...riseSteps(risen, rest, RISE_EACH), set({ upLines: null }));
+      },
+    }),
     showAllPoints: act({
       describe: "Show every point the figure names",
       args: none,
@@ -313,7 +387,9 @@ export const planeFrame: FrameSpec<PlaneCore> = {
       (width - pad.left - pad.right) / (xMax - xMin),
       (420 - pad.top - pad.bottom) / (yMax - yMin),
     );
-    const height = Math.round(Math.max(200, unit * (yMax - yMin) + pad.top + pad.bottom));
+    // A single line (a number line) needs only room for itself and its numbers.
+    const least = s.axes === Axes.Horizontal ? 110 : 200;
+    const height = Math.round(Math.max(least, unit * (yMax - yMin) + pad.top + pad.bottom));
     const left = pad.left + (width - pad.left - pad.right - unit * (xMax - xMin)) / 2;
     const top = pad.top + (height - pad.top - pad.bottom - unit * (yMax - yMin)) / 2;
     return {

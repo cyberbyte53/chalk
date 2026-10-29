@@ -10,6 +10,7 @@ import {
 import { AnswerStatus, cssColor, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type ChoiceState, choice } from "./choice";
+import { goal } from "./goal";
 import { type MultiChoiceState, multiChoice } from "./multi-choice";
 import { orderSteps } from "./order-steps";
 import type { text } from "./text";
@@ -87,6 +88,34 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
           </button>
         ))}
       </fieldset>
+      <AnswerFeedback status={s.status} feedback={s.feedback} locale={locale} />
+    </div>
+  );
+}
+
+/**
+ * A question answered in another prop: its prompt, then Check (or Try again), then the result. The
+ * prop the learner works in is drawn beside it on the board; this only says "this is my answer".
+ */
+export function GoalView({ view, locale }: PropViewProps<typeof goal>): JSX.Element {
+  const s = view;
+  const isHeld = useIsHeld(s.status);
+  const isLocked = s.status === AnswerStatus.Correct || isHeld;
+  return (
+    <div class="piece-question">
+      <p class="question-prompt" {...shows("prompt", s.prompt[locale])}>
+        <RichText text={s.prompt[locale]} />
+      </p>
+      {!isLocked && (
+        <button
+          type="button"
+          class="question-check"
+          disabled={isHeld}
+          {...does(s.status === AnswerStatus.Wrong ? goal.actions.retry : goal.actions.check)}
+        >
+          {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
+        </button>
+      )}
       <AnswerFeedback status={s.status} feedback={s.feedback} locale={locale} />
     </div>
   );

@@ -9,6 +9,7 @@ import {
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { choice } from "./choice";
+import { goal } from "./goal";
 import { basicProps } from "./index";
 import { multiChoice } from "./multi-choice";
 import { firstWrong, orderSteps } from "./order-steps";
@@ -146,6 +147,7 @@ describe("every basic prop, used the way a lesson uses it", () => {
     ["choice", { prompt, options, answer: "a" }],
     ["multiChoice", { prompt, options, answers: ["a"] }],
     ["orderSteps", { prompt, steps, answers: [["one", "two"]] }],
+    ["goal", { prompt, about: "town" }],
   ] as const)(
     "%s: every input says what it does, and every learner's action has one",
     (type, given) => {
@@ -154,4 +156,29 @@ describe("every basic prop, used the way a lesson uses it", () => {
       expect(checkProp(module, [given])).toEqual([]);
     },
   );
+});
+
+describe("goal: the answer is another prop's state", () => {
+  const def = asAnyProp(goal);
+  const ask = stateOf(
+    initialState(def, {
+      prompt: { en: "Walk Riya there.", hi: "रिया को वहाँ ले जाओ।" },
+      about: "town",
+    }),
+  );
+  const check = (state: typeof ask) => {
+    const prepared = prepareAction(def, state, "check", {});
+    if (!prepared.isOk || prepared.effect.kind !== EffectKind.Set) throw new Error("check refused");
+    return prepared.effect;
+  };
+  it("Check reads whether the prop is right now, and records the attempt", () => {
+    const wrong = check({ ...ask, isMet: false });
+    expect(wrong.set).toMatchObject({ status: AnswerStatus.Wrong, attempts: 1 });
+    expect(wrong.emit.map((e) => e.signal)).toEqual([QuestionSignal.Checked, QuestionSignal.Wrong]);
+    const right = check({ ...ask, isMet: true, attempts: 1 });
+    expect(right.set).toMatchObject({ status: AnswerStatus.Correct, attempts: 2 });
+  });
+  it("whether it's right is known but never on screen", () => {
+    expect(goal.offScreen).toContain("isMet");
+  });
 });

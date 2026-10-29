@@ -1,6 +1,0 @@
-# Two numbers in order: the street along the main road, then the house up it.
-- params: { street: 4, house: 5 }
-- params: { street: 3, house: 2 }
-- params: { street: 7, house: 4 }
-- params: { street: 2, house: 5 }
-- params: { street: 6, house: 1 }

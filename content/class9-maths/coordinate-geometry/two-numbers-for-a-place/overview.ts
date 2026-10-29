@@ -1,91 +1,179 @@
-import { type At, type Step, inOrder, page, t, wait } from "@chalk/author";
-import { choiceQuestion, wordsOn } from "@chalk/patterns";
+import { type At, inOrder, page, t, wait } from "@chalk/author";
 import {
-  Direction,
+  bareClassroom,
+  bareGround,
+  bareTown,
+  choiceQuestion,
+  gridOf,
+  isAt,
+  isPlaced,
+  walkTo,
+  wordsOn,
+} from "@chalk/patterns";
+import {
+  Axes,
   Marks,
   PlaceKind,
   Reading,
   Roads,
-  Scene,
   Tone,
+  WalkerKind,
   coordinatePlaneDef,
 } from "@chalk/prop-coordinates";
 
-/** Every whole-number point from (1, 1) to (across, up): the houses of a town, the desks of a class. */
-const grid = (across: number, up: number) =>
-  Array.from({ length: across }, (_, i) =>
-    Array.from({ length: up }, (_, j) => ({ x: i + 1, y: j + 1 })),
-  ).flat();
+/** A bus on a straight road: the number line they know, its own short story. */
+const busStops = page("bus-stops", (b) => {
+  const w = wordsOn(b);
+  b.purpose(
+    "A refresher on the number line: from the bus stand at 0, the bus moves stop by stop either way, and one number (how far, and which side) fixes where it is.",
+  );
+  const road = b.prop(coordinatePlaneDef, "road", {
+    window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
+    axes: Axes.Horizontal,
+    marks: Marks.Numbers,
+    showAxisNames: false,
+    showOrigin: false,
+    places: [
+      { x: 0, y: 0, label: t("bus stand", "बस अड्डा") },
+      ...[-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
+    ],
+    placeKind: PlaceKind.Crossing,
+    canChooseTarget: false,
+    walkFrom: { x: 0, y: 0 },
+    at: { x: 0, y: 0 },
+    roads: Roads.Grid,
+    walkerKind: WalkerKind.Bus,
+    walkerName: t("The bus", "बस"),
+  });
+  b.standsFor(road, "a straight road as a number line: the bus stand at 0, stops both ways");
+  b.witness(...walkTo(road, 3, 0), ...walkTo(road, -5, 0));
+  const atThree = w.body(
+    t(
+      "The bus is at **3**: three stops from the stand, to the right. Now take it to **−2**.",
+      "बस **3** पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे **−2** पर ले जाओ।",
+    ),
+    "atThree",
+  );
+  const side = choiceQuestion(b, {
+    name: "side",
+    prompt: t("The bus is at −2. Where is it?", "बस −2 पर है। वह कहाँ है?"),
+    options: [
+      { id: "left", label: t("2 stops from the stand, to the left", "अड्डे से 2 स्टॉप, बाईं ओर") },
+      {
+        id: "right",
+        label: t("2 stops from the stand, to the right", "अड्डे से 2 स्टॉप, दाईं ओर"),
+        feedback: t(
+          "Look at the bus: it went left from 0. The minus sign says which side.",
+          "बस को देखो: वह 0 से बाईं ओर गई। ऋण चिह्न बताता है कि किस ओर।",
+        ),
+      },
+      {
+        id: "minus",
+        label: t("−2 stops from the stand", "अड्डे से −2 स्टॉप"),
+        feedback: t(
+          "It is 2 stops away; the − only says which way, left.",
+          "वह 2 स्टॉप दूर है; − केवल दिशा बताता है, बाईं ओर।",
+        ),
+      },
+    ],
+    answer: "left",
+  });
+  const enough = w.definition(
+    t(
+      "**On a line, one number is enough.** Its size says how far from 0, and its sign which side.",
+      "**एक रेखा पर एक संख्या काफ़ी है।** उसका मान बताता है कि 0 से कितनी दूर, और उसका चिह्न किस ओर।",
+    ),
+    "enough",
+  );
+  b.after(road.on.stepped, atThree, { if: isAt(road, 3, 0) });
+  b.after(road.on.stepped, side, { if: isAt(road, -2, 0) });
+  b.after(side, enough);
+  return [
+    w.title(t("A bus on a straight road", "सीधी सड़क पर एक बस")),
+    w.body(
+      t(
+        "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, …: a number line.",
+        "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …: एक संख्या रेखा।",
+      ),
+    ),
+    w.body(
+      t(
+        "Move the bus one stop at a time with ← and →. Take it to stop **3**.",
+        "बस को ← और → से एक-एक स्टॉप चलाओ। इसे स्टॉप **3** पर ले जाओ।",
+      ),
+    ),
+    road,
+    atThree,
+    side,
+    enough,
+  ];
+});
 
-/** Whether Riya stands at (x, y). (When she announces a step, she is exactly on its block.) */
-const isAt = (s: { at: { x: number; y: number } }, x: number, y: number) =>
-  s.at.x === x && s.at.y === y;
-
-/** A learner's taps on Riya's arrows, each waited out (a tap while she is still moving is ignored). */
-const taps = (...steps: Step[]): (Step | ReturnType<typeof wait>)[] =>
-  steps.flatMap((step) => [step, wait(0.4)]);
-
-/** The town of Fig. 3.1: streets 1 to 8 leave the main road, five houses up each. */
-const town = {
-  // To half past the last street and house, so no number is written for a street that isn't there.
-  window: { xMin: 0, xMax: 8.5, yMin: 0, yMax: 5.5 },
-  marks: Marks.Counts,
-  scene: Scene.Town,
-  axisNames: [t("Street number", "गली नंबर"), t("House number", "मकान नंबर")] as [
-    ReturnType<typeof t>,
-    ReturnType<typeof t>,
-  ],
-  places: grid(8, 5),
-  placeKind: PlaceKind.House,
-  walkFrom: { x: 0, y: 0 },
-  at: { x: 0, y: 0 },
-  roads: Roads.Town,
-};
-
-/** Riya walks to Aman's house: "Street 4" gets her to five houses; "House 5" picks his. */
+/** Riya walks to Aman's house: "Street 4" on the road; Street 4 rises; "House 5" on it. */
 const streetAndHouse = page("street-and-house", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "Find that one number isn't enough: 'Street 4' brings Riya to a street with five houses on it, and only the second number, 'House 5', picks Aman's. Walking there is along the main road, then up the street.",
+    "The main road is a number line, and 'Street 4' is one number on it. Then Street 4 rises from the 4, a second number line with five houses, and one number can't say which: 'House 5' is a number on the line that rose. A pair is how far along, then how far up the line that rises there.",
   );
-  const plane = b.prop(coordinatePlaneDef, "town", town);
-  b.standsFor(plane, "the town's map: Riya at the corner where the main road begins");
-  const right = plane.learner.step({ direction: Direction.Right });
-  const up = plane.learner.step({ direction: Direction.Up });
-  b.witness(...taps(right, right, right, right, up, up, up, up, up));
-  const onStreet4 = (at: At) => isAt(at(plane), 4, 0);
-  // At the foot of Street 4, its five houses light up, and Aman sends the second number.
-  // Aman's house first (choosing it clears what is lit), then his street's five houses light up.
+  const town = b.prop(coordinatePlaneDef, "town", {
+    ...bareTown(),
+    showAddress: true,
+    showWhere: true,
+    canChooseTarget: true,
+    upLines: [],
+  });
+  b.standsFor(
+    town,
+    "the town's main road, a number line from Riya's corner; the streets not risen yet",
+  );
+  b.witness(...walkTo(town, 4, 0), wait(5), ...walkTo(town, 0, 5), wait(3));
+  const atStreet4 = isAt(town, 4, 0);
+  // At the foot of Street 4, the street rises from the road, with its houses.
+  b.when(town.on.stepped, town.call.raiseUpLine({ at: 4 }), atStreet4);
+  // Its five houses light up; a beat later, Aman's reply marks his house.
   b.when(
-    plane.on.stepped,
-    inOrder(plane.call.chooseTarget({ x: 4, y: 5 }), plane.call.lightLine({ axis: "x", value: 4 })),
-    onStreet4,
+    town.on.risen,
+    inOrder(
+      town.call.lightLine({ axis: "x", value: 4 }),
+      wait(2.5),
+      town.call.chooseTarget({ x: 4, y: 5 }),
+    ),
+    (at) => at(town).upLines?.length === 1,
   );
   const fiveHouses = w.body(
     t(
-      "Riya is on Street 4, and **five houses** stand on it. Which one is Aman's? She messages him again. He replies: **House 5**. The house numbers go up the street from the main road.",
-      "रिया गली 4 पर है, और उस पर **पाँच मकान** हैं। अमन का कौन-सा है? वह उसे फिर संदेश भेजती है। वह जवाब देता है: **मकान 5**। मकान नंबर मुख्य सड़क से गली में ऊपर की ओर बढ़ते हैं।",
+      "Street 4 rises from the 4: a second number line, going up, with **five houses** on it. Which one is Aman's?",
+      "4 से गली 4 ऊपर उठती है: एक दूसरी संख्या रेखा, ऊपर की ओर, जिस पर **पाँच मकान** हैं। अमन का कौन-सा है?",
     ),
     "fiveHouses",
   );
+  const reply = w.body(
+    t(
+      "Riya messages him again. He replies: **House 5**, a number on the street that rose. Walk her up to it.",
+      "रिया उसे फिर संदेश भेजती है। वह जवाब देता है: **मकान 5**, उठी हुई गली पर एक संख्या। उसे वहाँ तक ऊपर चलाओ।",
+    ),
+    "reply",
+  );
   const found = w.definition(
     t(
-      "**It took two numbers to find the house:** the street, how far along the main road, and then the house, how far up the street.",
-      "**घर ढूँढने में दो संख्याएँ लगीं:** गली, यानी मुख्य सड़क पर कितनी दूर, और फिर मकान, यानी गली में कितना ऊपर।",
+      "**It took two numbers to find the house:** how far along the main road (Street 4), then how far up the street that rises there (House 5).",
+      "**घर ढूँढने में दो संख्याएँ लगीं:** मुख्य सड़क पर कितनी दूर (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
     ),
     "found",
   );
   const anyHouse = w.body(
     t(
-      "Now **tap any house** to make it Aman's. Before you move Riya, say how she gets there. Then walk her and check.",
-      "अब **किसी भी मकान को दबाओ** ताकि वह अमन का घर बन जाए। रिया को चलाने से पहले बोलो कि वह वहाँ कैसे पहुँचेगी। फिर उसे चलाकर जाँचो।",
+      "Now every street rises, and the town is there. **Tap any house** to make it Aman's: Riya goes back to the corner. Say how she gets there, then walk her and check.",
+      "अब हर गली उठती है, और शहर बन जाता है। **किसी भी मकान को दबाओ** ताकि वह अमन का घर बन जाए: रिया कोने पर लौट जाती है। बोलो कि वह वहाँ कैसे पहुँचेगी, फिर उसे चलाकर जाँचो।",
     ),
     "anyHouse",
   );
-  const atAmans = (at: At) => isAt(at(plane), 4, 5);
-  b.after(plane.on.stepped, fiveHouses, { if: onStreet4 });
-  b.after(plane.on.arrived, [found, anyHouse], { if: atAmans });
-  b.passWhen(plane.on.arrived, { if: atAmans });
+  const atAmans = isAt(town, 4, 5);
+  b.after(town.on.risen, fiveHouses, { if: (at) => at(town).upLines?.length === 1 });
+  b.after(town.on.targetChosen, reply, { if: (at) => at(town).target?.x === 4 });
+  b.after(town.on.arrived, [found, anyHouse], { if: atAmans });
+  b.when(town.on.arrived, town.call.raiseAllUpLines(), atAmans);
+  b.passWhen(town.on.arrived, { if: atAmans });
   return [
     w.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
     w.body(
@@ -96,116 +184,81 @@ const streetAndHouse = page("street-and-house", (b) => {
     ),
     w.body(
       t(
-        "In their town a main road runs from west to east. Streets leave it going north, numbered 1, 2, 3, … from the west. Riya starts at the corner where the main road begins. Move her with the arrows: she can walk only on roads.",
-        "उनके शहर में एक मुख्य सड़क पश्चिम से पूर्व जाती है। उससे गलियाँ उत्तर की ओर निकलती हैं, पश्चिम से 1, 2, 3, … गिनी हुई। रिया उस कोने से चलती है जहाँ मुख्य सड़क शुरू होती है। उसे तीरों से चलाओ: वह केवल सड़कों पर चल सकती है।",
+        "Their town has a main road, and the streets leave it numbered 1, 2, 3, … from Riya's corner: like a number line. Move her along it with →.",
+        "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, … गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे → से उस पर चलाओ।",
       ),
     ),
-    plane,
+    town,
     fiveHouses,
+    reply,
     found,
     anyHouse,
   ];
 });
 
-/** The fair ground has no roads: distances from its two fences do the job of the street and the house. */
+/** The fair ground has no roads: distances from its two fences do the job; the student places the stall. */
 const dotOnPaper = page("dot-on-paper", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "On ground with no roads, a phrase leaves a patch and one distance leaves a whole line; two distances, from the west fence and the south fence, fix one spot. The fences do what the main road and the street did.",
+    "On ground with no roads, a phrase fits a patch, one distance a whole line, and two distances, from the west fence and the south fence, one spot, where the student puts the stall.",
   );
   const ground = b.prop(coordinatePlaneDef, "ground", {
-    window: { xMin: 0, xMax: 60, yMin: 0, yMax: 40 },
-    marks: Marks.None,
-    scene: Scene.FairGround,
-    axisNames: [t("south fence", "दक्षिणी बाड़"), t("west fence", "पश्चिमी बाड़")],
+    ...bareGround(),
+    reading: Reading.None,
     hidden: { x: 30, y: 20 },
     clueChoices: [
       {
-        words: t("In the middle of the ground", "मैदान के बीच में"),
-        region: { xMin: 15, xMax: 45, yMin: 10, yMax: 30 },
+        words: t("Near the gate", "गेट के पास"),
+        region: { xMin: 15, xMax: 45, yMin: 0, yMax: 25 },
       },
-      { words: t("30\u00a0m from the west fence", "पश्चिमी बाड़ से 30\u00a0m"), x: 30 },
-      { words: t("20\u00a0m from the south fence", "दक्षिणी बाड़ से 20\u00a0m"), y: 20 },
+      { words: t("30 m from the west fence", "पश्चिमी बाड़ से 30 m"), x: 30 },
+      { words: t("20 m from the south fence", "दक्षिणी बाड़ से 20 m"), y: 20 },
     ],
   });
   b.standsFor(
     ground,
-    "the fair ground, with its west and south fences; the snacks stall's spot is 30\u00a0m from the west fence and 20\u00a0m from the south fence",
+    "the fair ground, its west and south fences marked every 10 m, and the snacks stall waiting by the north-east corner",
   );
   b.witness(
     ground.learner.giveClue({ clue: 0 }),
     ground.learner.giveClue({ clue: 1 }),
     ground.learner.giveClue({ clue: 2 }),
+    ground.learner.movePoint({ x: 30, y: 20 }),
+  );
+  const putIt = w.body(
+    t(
+      "Only one spot fits both distances. **Drag the stall there.**",
+      "दोनों दूरियों पर केवल एक जगह ठीक बैठती है। **स्टॉल को वहाँ खींचो।**",
+    ),
+    "putIt",
   );
   const fixed = w.definition(
     t(
-      "**Two distances fixed the spot:** 30\u00a0m from the west fence and 20\u00a0m from the south fence. *In the middle* left a whole patch, and one distance left a whole line of spots.",
-      "**दो दूरियों ने जगह तय कर दी:** पश्चिमी बाड़ से 30\u00a0m और दक्षिणी बाड़ से 20\u00a0m। *बीच में* से पूरा इलाका बचा, और एक दूरी से जगहों की पूरी रेखा।",
+      "**Two distances fixed the spot:** 30 m from the west fence and 20 m from the south fence. *Near the gate* fitted a whole patch, and one distance a whole line of spots.",
+      "**दो दूरियों ने जगह तय कर दी:** पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m। *गेट के पास* से पूरा इलाका बचा, और एक दूरी से जगहों की पूरी रेखा।",
     ),
     "fixed",
   );
-  const lamp = choiceQuestion(b, {
-    name: "lamp",
-    prompt: t(
-      "At home, Riya wants to tell her brother exactly where her table lamp stands on her study table. Which tells him?",
-      "घर पर रिया अपने भाई को बताना चाहती है कि उसका टेबल लैंप पढ़ाई की मेज़ पर ठीक कहाँ है। कौन-सा बताता है?",
-    ),
-    options: [
-      {
-        id: "two",
-        label: t(
-          "20\u00a0cm from the left edge and 15\u00a0cm from the front edge",
-          "बाएँ किनारे से 20\u00a0cm और आगे के किनारे से 15\u00a0cm",
-        ),
-      },
-      {
-        id: "one",
-        label: t("20\u00a0cm from the left edge", "बाएँ किनारे से 20\u00a0cm"),
-        feedback: t(
-          "Every spot 20\u00a0cm from the left edge fits: a whole line of them, like the line on the fair ground. It needs a second distance.",
-          "बाएँ किनारे से 20\u00a0cm पर हर जगह ठीक बैठती है: उनकी पूरी रेखा, जैसे मेले के मैदान पर। दूसरी दूरी चाहिए।",
-        ),
-      },
-      {
-        id: "parallel",
-        label: t(
-          "20\u00a0cm from the left edge and 60\u00a0cm from the right edge",
-          "बाएँ किनारे से 20\u00a0cm और दाएँ किनारे से 60\u00a0cm",
-        ),
-        feedback: t(
-          "Those two edges face each other, so the second distance adds nothing: every spot 20\u00a0cm from the left edge is 60\u00a0cm from the right. The two edges must meet at a corner.",
-          "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से 20\u00a0cm पर हर जगह दाएँ से 60\u00a0cm पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
-        ),
-      },
-      {
-        id: "near",
-        label: t("Near the back, on the left", "पीछे की ओर, बाईं तरफ़"),
-        feedback: t(
-          "That is a patch, like *in the middle of the ground*: many spots fit it. Distances from two edges fix one spot.",
-          "यह एक इलाका है, जैसे *मैदान के बीच में*: कई जगहें ठीक बैठती हैं। दो किनारों से दूरियाँ एक जगह तय करती हैं।",
-        ),
-      },
-    ],
-    answer: "two",
-  });
-  b.after(ground.on.pinned, [fixed, lamp]);
+  b.after(ground.on.pinned, putIt);
+  b.after(ground.on.moved, fixed, { if: isPlaced(ground, 30, 20) });
+  b.passWhen(ground.on.moved, { if: isPlaced(ground, 30, 20) });
   return [
     w.title(t("A spot on the fair ground", "मेले के मैदान पर एक जगह")),
     w.body(
       t(
-        "Back at school, the stalls go up on the fair ground. It has no roads: just a fence along the west side and one along the south side. So how does Riya tell the volunteers where the snacks stall goes?",
-        "स्कूल लौटकर, मेले के मैदान पर स्टॉल लगने हैं। वहाँ कोई सड़क नहीं: बस पश्चिम की ओर एक बाड़ और दक्षिण की ओर एक। तो रिया स्वयंसेवकों को कैसे बताए कि नाश्ते का स्टॉल कहाँ लगेगा?",
+        "Back at school, the stalls go up on the fair ground. It has no roads: just a fence along the west side and one along the south side, marked every 10 m, with the gate in the middle of the south fence. Riya has to tell the volunteers where the snacks stall goes.",
+        "स्कूल लौटकर, मेले के मैदान पर स्टॉल लगने हैं। वहाँ कोई सड़क नहीं: बस पश्चिम की ओर एक बाड़ और दक्षिण की ओर एक, हर 10 m पर निशान के साथ, और दक्षिणी बाड़ के बीच में गेट। रिया को स्वयंसेवकों को बताना है कि नाश्ते का स्टॉल कहाँ लगेगा।",
       ),
     ),
     w.body(
       t(
-        "Give her messages one at a time, and watch where the stall could still go.",
-        "उसके संदेश एक-एक करके दो, और देखो कि स्टॉल अब भी कहाँ लग सकता है।",
+        "Her messages come one at a time. Give each, and watch where the stall could still go.",
+        "उसके संदेश एक-एक करके आते हैं। हर एक दो, और देखो कि स्टॉल अब भी कहाँ लग सकता है।",
       ),
     ),
     ground,
+    putIt,
     fixed,
-    lamp,
   ];
 });
 
@@ -213,27 +266,23 @@ const dotOnPaper = page("dot-on-paper", (b) => {
 const seatingPlan = page("seating-plan", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "A desk is named by its column, then its row: (5,\u00a03) and (3,\u00a05) use the same numbers and are two different desks.",
+    "A desk is named by its column, then its row: (5, 3) and (3, 5) use the same numbers and are two different desks. The one place the lesson asks about the order.",
   );
   const room = b.prop(coordinatePlaneDef, "room", {
-    window: { xMin: 0, xMax: 10.5, yMin: 0, yMax: 7.5 },
-    marks: Marks.Counts,
-    scene: Scene.Classroom,
-    axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")],
-    places: grid(10, 7).map((p) =>
+    ...bareClassroom(),
+    places: gridOf(10, 7).map((p) =>
       p.x === 4 && p.y === 1 ? { ...p, label: t("Sonia", "सोनिया") } : p,
     ),
-    placeKind: PlaceKind.Desk,
+    showAddress: true,
     targetName: t("This desk", "यह डेस्क"),
-    // (5, 3) and (3, 5), each marked once tapped, so both stay in view.
     points: [
-      { name: "(5,\u00a03)", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "(3,\u00a05)", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(5, 3)", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(3, 5)", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
     ],
   });
   for (const [name, x, y] of [
-    ["(5,\u00a03)", 5, 3],
-    ["(3,\u00a05)", 3, 5],
+    ["(5, 3)", 5, 3],
+    ["(3, 5)", 3, 5],
   ] as const)
     b.when(room.on.targetChosen, room.call.showPoint({ name }), (at) => {
       const target = at(room).target;
@@ -244,29 +293,28 @@ const seatingPlan = page("seating-plan", (b) => {
   const same = choiceQuestion(b, {
     name: "same",
     prompt: t(
-      "Are the desks (5,\u00a03) and (3,\u00a05) the same desk?",
-      "क्या डेस्क (5,\u00a03) और (3,\u00a05) एक ही डेस्क हैं?",
+      "Are the desks (5, 3) and (3, 5) the same desk?",
+      "क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?",
     ),
     options: [
       {
         id: "no",
         label: t(
           "No: one is in column 5, row 3; the other in column 3, row 5",
-          "नहीं: एक स्तंभ 5, पंक्ति 3 में है; दूसरी स्तंभ 3, पंक्ति 5\u00a0में",
+          "नहीं: एक स्तंभ 5, पंक्ति 3 में है; दूसरी स्तंभ 3, पंक्ति 5 में",
         ),
       },
       {
         id: "yes",
         label: t("Yes: both use 3 and 5", "हाँ: दोनों में 3 और 5 हैं"),
         feedback: t(
-          "The column comes first. Tap (5,\u00a03), then (3,\u00a05): they are in different places.",
-          "स्तंभ पहले आता है। (5,\u00a03) दबाओ, फिर (3,\u00a05): वे अलग जगह हैं।",
+          "The column comes first. Tap (5, 3), then (3, 5): they are in different places.",
+          "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।",
         ),
       },
     ],
     answer: "no",
   });
-  // Asked once both desks are marked.
   b.after(room.on.targetChosen, same, {
     if: (at) =>
       at(room).points.every(
@@ -277,115 +325,18 @@ const seatingPlan = page("seating-plan", (b) => {
     w.title(t("Desks in a classroom", "कक्षा में डेस्क")),
     w.body(
       t(
-        "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its **column**, counted from the left, then its **row**, counted from the front. Sonia sits in column 4, row 1, so her desk is **(4,\u00a01)**. The teacher's desk stands in front, outside the plan.",
-        "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका **स्तंभ**, बाईं ओर से गिना हुआ, फिर उसकी **पंक्ति**, आगे से गिनी हुई। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क **(4,\u00a01)** है। शिक्षक की मेज़ आगे है, योजना से बाहर।",
+        "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its **column**, counted from the left, then its **row**, counted from the front (row 1 is the front row). Sonia sits in column 4, row 1, so her desk is **(4, 1)**.",
+        "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका **स्तंभ**, बाईं ओर से गिना हुआ, फिर उसकी **पंक्ति**, आगे से गिनी हुई (पंक्ति 1 सबसे आगे की है)। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क **(4, 1)** है।",
       ),
     ),
     w.body(
       t(
-        "Tap the desk at **(5,\u00a03)**, then the one at **(3,\u00a05)**.",
-        "**(5,\u00a03)** वाली डेस्क दबाओ, फिर **(3,\u00a05)** वाली।",
+        "Tap the desk at **(5, 3)**, then the one at **(3, 5)**.",
+        "**(5, 3)** वाली डेस्क दबाओ, फिर **(3, 5)** वाली।",
       ),
     ),
     room,
     same,
-  ];
-});
-
-/** Ex 3.1 Q2: in a city of crossing streets, (4, 3) and (3, 4) are one crossing each, and different. */
-const crossStreets = page("cross-streets", (b) => {
-  const w = wordsOn(b);
-  b.purpose(
-    "In a city of 5 numbered streets each way, only one crossing is (4,\u00a03) and only one is (3,\u00a04), and they are different crossings.",
-  );
-  const city = b.prop(coordinatePlaneDef, "city", {
-    window: { xMin: 0, xMax: 5.5, yMin: 0, yMax: 5.5 },
-    marks: Marks.Counts,
-    // Its streets drawn as roads both ways (the town's look, with a road across at every count).
-    scene: Scene.Town,
-    axisNames: [t("North–south street", "उत्तर–दक्षिण गली"), t("East–west street", "पूर्व–पश्चिम गली")],
-    places: grid(5, 5),
-    placeKind: PlaceKind.Crossing,
-    canChooseTarget: false,
-    walkFrom: { x: 0, y: 0 },
-    at: { x: 0, y: 0 },
-    roads: Roads.Grid,
-    points: [
-      { name: "(2,\u00a05)", x: 2, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "(4,\u00a03)", x: 4, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "(3,\u00a04)", x: 3, y: 4, isShown: false, hasDropLines: false, tone: Tone.Accent },
-    ],
-  });
-  b.standsFor(city, "the city: 5 north–south and 5 east–west streets, Riya at the centre");
-  // Each crossing she reaches stays marked.
-  for (const [name, x, y] of [
-    ["(2,\u00a05)", 2, 5],
-    ["(4,\u00a03)", 4, 3],
-    ["(3,\u00a04)", 3, 4],
-  ] as const)
-    b.when(city.on.stepped, city.call.showPoint({ name }), (at) => isAt(at(city), x, y));
-  const go = (direction: Direction) => city.learner.step({ direction });
-  const R = go(Direction.Right);
-  const L = go(Direction.Left);
-  const U = go(Direction.Up);
-  const D = go(Direction.Down);
-  b.witness(...taps(R, R, U, U, U, U, U, R, R, D, D, L, U));
-  const shown = (at: At, name: string) => at(city).points.some((p) => p.name === name && p.isShown);
-  const which = choiceQuestion(b, {
-    name: "which",
-    prompt: t(
-      "How many cross-streets in this city can be called (4,\u00a03), and how many (3,\u00a04)?",
-      "इस शहर में कितने चौराहों को (4,\u00a03) कहा जा सकता है, और कितनों को (3,\u00a04)?",
-    ),
-    options: [
-      {
-        id: "oneEach",
-        label: t("One each, and they are different crossings", "एक-एक, और वे अलग चौराहे हैं"),
-      },
-      {
-        id: "same",
-        label: t(
-          "One: (4,\u00a03) and (3,\u00a04) are the same crossing",
-          "एक: (4,\u00a03) और (3,\u00a04) एक ही चौराहा है",
-        ),
-        feedback: t(
-          "Look at the two marks: (4,\u00a03) is on the 4th north–south street, (3,\u00a04) on the 3rd. Two different crossings.",
-          "दोनों निशान देखो: (4,\u00a03) चौथी उत्तर–दक्षिण गली पर है, (3,\u00a04) तीसरी पर। दो अलग चौराहे।",
-        ),
-      },
-      {
-        id: "five",
-        label: t("Five each: every crossing on that street", "पाँच-पाँच: उस गली का हर चौराहा"),
-        feedback: t(
-          "That's what the first number alone would leave. The second number picks one crossing on that street.",
-          "यह केवल पहली संख्या से बचता। दूसरी संख्या उस गली का एक चौराहा चुनती है।",
-        ),
-      },
-    ],
-    answer: "oneEach",
-  });
-  // Asked once she has reached both (4, 3) and (3, 4), in either order.
-  b.after(city.on.stepped, which, {
-    if: (at) =>
-      (isAt(at(city), 3, 4) && shown(at, "(4,\u00a03)")) ||
-      (isAt(at(city), 4, 3) && shown(at, "(3,\u00a04)")),
-  });
-  return [
-    w.title(t("Cross-streets", "चौराहे")),
-    w.body(
-      t(
-        "Aman's cousin lives in a city where two main roads cross at the centre, one north–south and one east–west. Other streets run beside them: 5 each way, numbered from the main roads. Where the 2nd north–south street meets the 5th east–west street is the cross-street **(2,\u00a05)**.",
-        "अमन का चचेरा भाई एक ऐसे शहर में रहता है जहाँ दो मुख्य सड़कें बीच में मिलती हैं, एक उत्तर–दक्षिण और एक पूर्व–पश्चिम। उनके साथ-साथ और गलियाँ हैं: हर तरफ़ 5, मुख्य सड़कों से गिनी हुई। जहाँ दूसरी उत्तर–दक्षिण गली पाँचवीं पूर्व–पश्चिम गली से मिलती है, वह चौराहा **(2,\u00a05)** है।",
-      ),
-    ),
-    w.body(
-      t(
-        "Riya starts at the centre. Walk her to **(2,\u00a05)**, then to **(4,\u00a03)**, then to **(3,\u00a04)**. Each crossing she reaches stays marked.",
-        "रिया बीच से चलती है। उसे **(2,\u00a05)** तक चलाओ, फिर **(4,\u00a03)** तक, फिर **(3,\u00a04)** तक। जिस चौराहे पर वह पहुँचती है, वह चिह्नित रहता है।",
-      ),
-    ),
-    city,
-    which,
   ];
 });
 
@@ -395,62 +346,51 @@ const twoLines = page("two-lines", (b) => {
   b.purpose(
     "The house, the stall's spot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry.",
   );
-  /** A picture of one place found earlier: its plane, still, with the place's two distances drawn. */
-  const still = (
-    name: string,
-    given: Parameters<typeof b.prop<typeof coordinatePlaneDef>>[2],
-    says: ReturnType<typeof t>,
-  ) => b.prop(coordinatePlaneDef, name, given, { still: says, size: { maxHeight: 0.35 } });
+  const still = (name: string, given: Record<string, unknown>, says: ReturnType<typeof t>) =>
+    b.prop(coordinatePlaneDef, name, given, { still: says, size: { maxHeight: 0.35 } });
+  const route = (x: number, y: number) => [
+    ...Array.from({ length: x }, (_, i) => ({ x: i + 1, y: 0 })),
+    ...Array.from({ length: y }, (_, j) => ({ x, y: j + 1 })),
+  ];
   const house = still(
     "house",
     {
-      window: { xMin: 0, xMax: 5.5, yMin: 0, yMax: 5.5 },
-      marks: Marks.Counts,
-      scene: Scene.Town,
-      axisNames: town.axisNames,
-      showAxisNames: false,
-      places: [{ x: 4, y: 5 }],
+      ...bareTown(5, 5),
+      showAddress: true,
       target: { x: 4, y: 5 },
-      canChooseTarget: false,
+      at: { x: 4, y: 5 },
+      trail: route(4, 5),
+      canStep: false,
+      showAxisNames: false,
     },
     t(
-      "The town: the main road across, the street up, and Aman's house at Street 4, House 5.",
-      "शहर: मुख्य सड़क आड़ी, गली खड़ी, और अमन का घर गली 4, मकान 5 पर।",
+      "The town: Riya's route along the main road to Street 4, then up it to House 5.",
+      "शहर: रिया का रास्ता, मुख्य सड़क पर गली 4 तक, फिर उसमें मकान 5 तक।",
     ),
   );
   const spot = still(
     "spot",
-    {
-      window: { xMin: 0, xMax: 60, yMin: 0, yMax: 40 },
-      marks: Marks.None,
-      scene: Scene.FairGround,
-      axisNames: [t("south fence", "दक्षिणी बाड़"), t("west fence", "पश्चिमी बाड़")],
-      // The stall\'s spot with its two distances measured to the fences: 30 and 20.
-      point: { x: 30, y: 20 },
-      reading: Reading.Distances,
-    },
+    { ...bareGround(), point: { x: 30, y: 20 }, reading: Reading.Distances },
     t(
-      "The fair ground: the south fence across, the west fence up, and the stall 30\u00a0m from one and 20\u00a0m from the other.",
-      "मेले का मैदान: दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी, और स्टॉल एक से 30\u00a0m और दूसरी से 20\u00a0m पर।",
+      "The fair ground: the stall 30 m from the west fence and 20 m from the south fence, each distance drawn.",
+      "मेले का मैदान: स्टॉल पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m पर, हर दूरी खिंची हुई।",
     ),
   );
   const desk = still(
     "desk",
     {
-      window: { xMin: 0, xMax: 6.5, yMin: 0, yMax: 4.5 },
-      marks: Marks.Counts,
-      scene: Scene.Classroom,
-      showAxisNames: false,
-      places: [{ x: 5, y: 3 }],
-      placeKind: PlaceKind.Desk,
-      axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")],
+      ...bareClassroom(6, 4),
+      showAddress: true,
       targetName: t("The desk", "डेस्क"),
       target: { x: 5, y: 3 },
       canChooseTarget: false,
+      points: [
+        { name: "(5, 3)", x: 5, y: 3, isShown: true, hasDropLines: true, tone: Tone.Accent },
+      ],
     },
     t(
-      "The classroom: the front row across, the first column up, and the desk at column 5, row 3.",
-      "कक्षा: आगे की पंक्ति आड़ी, पहला स्तंभ खड़ा, और डेस्क स्तंभ 5, पंक्ति 3 पर।",
+      "The classroom: the desk at column 5, row 3, with its distances to the front row and the first column drawn.",
+      "कक्षा: स्तंभ 5, पंक्ति 3 वाली डेस्क, आगे की पंक्ति और पहले स्तंभ से उसकी दूरियाँ खिंची हुई।",
     ),
   );
   return [
@@ -458,22 +398,22 @@ const twoLines = page("two-lines", (b) => {
     w.body(t("Look back at the three places you found:", "उन तीन जगहों को फिर देखो जो तुमने ढूँढीं:")),
     w.body(
       t(
-        "**The house:** the main road across, the street up. Street 4, House 5.",
-        "**घर:** मुख्य सड़क आड़ी, गली खड़ी। गली 4, मकान 5।",
+        "**The house:** along the main road to Street 4, then up Street 4 to House 5.",
+        "**घर:** मुख्य सड़क पर गली 4 तक, फिर गली 4 में मकान 5 तक।",
       ),
     ),
     house,
     w.body(
       t(
-        "**The stall:** the south fence across, the west fence up. 30\u00a0m, then 20\u00a0m.",
-        "**स्टॉल:** दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी। 30\u00a0m, फिर 20\u00a0m।",
+        "**The stall:** 30 m across from the west fence, then 20 m up from the south fence.",
+        "**स्टॉल:** पश्चिमी बाड़ से 30 m आड़े, फिर दक्षिणी बाड़ से 20 m ऊपर।",
       ),
     ),
     spot,
     w.body(
       t(
-        "**The desk:** the front row across, the first column up. Column 5, row 3.",
-        "**डेस्क:** आगे की पंक्ति आड़ी, पहला स्तंभ खड़ा। स्तंभ 5, पंक्ति 3।",
+        "**The desk:** column 5 across, then row 3 up from the front.",
+        "**डेस्क:** स्तंभ 5 आड़े, फिर आगे से पंक्ति 3 ऊपर।",
       ),
     ),
     desk,
@@ -499,4 +439,4 @@ const twoLines = page("two-lines", (b) => {
 });
 
 /** The pages, in reading order. */
-export const overview = [streetAndHouse, dotOnPaper, seatingPlan, crossStreets, twoLines];
+export const overview = [busStops, streetAndHouse, dotOnPaper, seatingPlan, twoLines];

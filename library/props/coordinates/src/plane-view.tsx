@@ -20,6 +20,14 @@ export function marksOn(marks: Marks, lo: number, hi: number, step: number): num
   return out;
 }
 
+/** Whether a line rises from x on the horizontal line (every one does, unless the lesson raises them). */
+export const isRisen = (s: Pick<PlaneView, "upLines">, x: number): boolean =>
+  s.upLines === null || s.upLines.includes(x);
+
+/** Whether the plane has an up direction yet: both lines drawn, and some line risen or rising. */
+export const hasUp = (s: PlaneView): boolean =>
+  s.axes === Axes.Both && (s.upLines === null || s.upLines.length > 0 || s.rising !== null);
+
 /** Each quadrant's corner sign pattern, as the book writes it. */
 const SIGNS: Record<Quadrant, string> = {
   I: "(+, +)",
@@ -72,8 +80,9 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
   // The town: the main road along the bottom, a street up from it at every count.
   const unit = unitOf(px);
   const road = Math.max(6, Math.min(16, unit * 0.32));
-  const streets = marksOn(Marks.Counts, w.xMin, w.xMax, 1);
+  const streets = marksOn(Marks.Counts, w.xMin, w.xMax, 1).filter((x) => isRisen(s, x));
   const [, base] = px.toPx(0, 0);
+  const rise = s.rising;
   // A city of crossing streets (Riya may walk every line) has streets across as well.
   const across =
     s.walkFrom !== null && s.roads === "grid" ? marksOn(Marks.Counts, w.yMin, w.yMax, 1) : [];
@@ -94,6 +103,16 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
           />
         );
       })}
+      {rise !== null && (
+        <line
+          class="cp-street is-rising"
+          x1={px.toPx(rise.at, 0)[0]}
+          y1={base}
+          x2={px.toPx(rise.at, 0)[0]}
+          y2={base + (y0 - base) * rise.height}
+          stroke-width={road * 0.7}
+        />
+      )}
       {across.map((y) => {
         const [, sy] = px.toPx(0, y);
         return (
@@ -178,7 +197,7 @@ export function AxesDraw({
         x2={right}
         y2={base}
       />
-      {s.axes === Axes.Both && <line class="cp-axis" x1={vx} y1={top} x2={vx} y2={bottom} />}
+      {hasUp(s) && <line class="cp-axis" x1={vx} y1={top} x2={vx} y2={bottom} />}
       {named?.startsWith("O") && named !== "O" && <NamedHalf s={s} px={px} part={named} />}
       {xMarks.map((v, i) => {
         const [x] = px.toPx(v, 0);
@@ -206,7 +225,7 @@ export function AxesDraw({
           </g>
         );
       })}
-      {s.axes === Axes.Both &&
+      {hasUp(s) &&
         yMarks.map((v, i) => {
           const [, y] = px.toPx(s.apart.x, v + s.apart.y);
           const text = label(v, i);
@@ -251,7 +270,7 @@ export function AxesDraw({
           >
             {s.axisNames[0][locale]}
           </text>
-          {s.axes === Axes.Both && (
+          {hasUp(s) && (
             <text
               class="cp-axis-name"
               {...shows("yName", s.axisNames[1][locale])}

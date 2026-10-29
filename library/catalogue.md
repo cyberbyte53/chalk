@@ -54,6 +54,33 @@ A multiple-choice question.
 
 Signals: `checked`, `correct`, `wrong`
 
+### `goal` · question
+
+`library/props/basics/goal` · used in no chapter yet
+
+A question answered by getting another prop into the right state, then pressing Check.
+
+| Field | Takes | |
+|---|---|---|
+| `prompt` | {en: "text", hi: "text"} | setting |
+| `speak` | {orNull: {en: "text", hi: "text"}} | setting |
+| `about` | text | setting |
+| `isMet` | true or false | input |
+| `status` | ["open", "correct", "wrong"] | changed by check, retry |
+| `attempts` | whole number 0 to … | changed by check |
+| `feedback` | {orNull: "ZodRecord"} | changed by check, retry, giveFeedback |
+| `concepts` | ["text"] | setting |
+| `isGraded` | true or false | setting |
+
+| Action | Takes | |
+|---|---|---|
+| `check` | — | learner · Check the prop's state as the answer (the learner's Check) |
+| `retry` | — | learner · Clear a wrong answer's result to answer again (the learner's Try again) |
+| `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under the question (the note for a known wrong answer) |
+| `say` | — | Read the prompt aloud (narrator) |
+
+Signals: `checked`, `correct`, `wrong`
+
 ### `multiChoice` · question
 
 `library/props/basics/multiChoice` · used in no chapter yet
@@ -140,6 +167,8 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `showQuadrantSigns` | true or false | setting |
 | `scene` | ["none", "paper", "town", "classroom", "fairGround"] | setting |
 | `apart` | {x: "number", y: "number"} | changed by moveApart, bringTogether |
+| `upLines` | {orNull: ["whole number"]} | changed by raiseUpLine, raiseAllUpLines |
+| `rising` | {orNull: {at: "whole number", height: "number 0 to 1"}} | changed by raiseUpLine, raiseAllUpLines |
 | `named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by namePart |
 | `points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by showPoint, showAllPoints |
 | `canShowPoints` | true or false | setting |
@@ -148,18 +177,22 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | setting |
 | `isReadingHidden` | true or false | changed by showReading, askAt |
 | `visited` | [["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]] | changed by movePoint, askAt |
+| `unit` | text | setting |
 | `placeKind` | ["house", "desk", "crossing", "stall"] | setting |
 | `places` | [{x: "number", y: "number", label: {optional: {en: "text", hi: "text"}}}] | setting |
 | `target` | {orNull: {x: "number", y: "number"}} | changed by chooseTarget |
 | `targetName` | {en: "text", hi: "text"} | setting |
 | `canChooseTarget` | true or false | setting |
 | `lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by chooseTarget, lightLine, clearLight |
+| `showAddress` | true or false | setting |
 | `walkerName` | {en: "text", hi: "text"} | setting |
+| `walkerKind` | ["person", "bus"] | setting |
+| `showWhere` | true or false | setting |
 | `walkFrom` | {orNull: {x: "number", y: "number"}} | setting |
-| `at` | {x: "number", y: "number"} | changed by step, walkTo, backToStart |
+| `at` | {x: "number", y: "number"} | changed by chooseTarget, step, walkTo, backToStart |
 | `roads` | ["town", "grid"] | setting |
-| `trail` | [{x: "number", y: "number"}] | changed by step, walkTo, backToStart |
-| `isWalking` | true or false | changed by step, walkTo, backToStart |
+| `trail` | [{x: "number", y: "number"}] | changed by chooseTarget, step, walkTo, backToStart |
+| `isWalking` | true or false | changed by chooseTarget, step, walkTo, backToStart |
 | `canStep` | true or false | setting |
 | `hidden` | {orNull: {x: "number", y: "number"}} | changed by hideAt |
 | `clueChoices` | [{words: {en: "text", hi: "text"}, region: {optional: {xMin: "number", xMax: "number", yMin: "number", yMax: "number"}}, x: {optional: "number"}, y: {optional: "number"}}] | setting |
@@ -187,11 +220,13 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `moveApart` | {x: "number", y: "number"} | learner · Slide the vertical number line: its zero this far from the horizontal line's zero (the learner's drag) |
 | `bringTogether` | — | learner · Glide the vertical number line until the two zeroes meet; there they are the axes, and O is named (timed) |
 | `showPoint` | {name: {optional: "text"}} | learner · Show the next of a figure's points, or the one named (the learner's Next) |
+| `raiseUpLine` | {at: "whole number"} | Raise a line from a whole number on the horizontal line: it grows upward, its places appearing on it as it grows (timed) |
+| `raiseAllUpLines` | — | Raise every line not risen yet, one after another, left to right (timed) |
 | `showAllPoints` | — | Show every point the figure names |
 | `movePoint` | {x: "number", y: "number"} | learner · Put the point at (x, y), snapped to the step (the learner's drag or tap) |
 | `showReading` | — | learner · Show the reading kept hidden in a guessing round (the learner's Show) |
 | `askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
-| `chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target; its address is shown (the learner's tap) |
+| `chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target; its address is shown, and if another was chosen before, a walker goes back to her start (the learner's tap) |
 | `lightLine` | {axis: ["x", "y"], value: "number"} | learner · Light every place with this one number: all the houses on Street 4 (the learner's button) |
 | `clearLight` | — | learner · Turn the lit places off |
 | `step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right from where she is, on roads only (the learner's arrow; timed) |
@@ -208,7 +243,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 
-Signals: `crossed`, `named`, `quadrantsNumbered`, `moved`, `enteredQuadrant`, `readingShown`, `targetChosen`, `lineLit`, `stepped`, `arrived`, `blocked`, `clueGiven`, `pinned`, `plotted`, `fellOff`, `allPlotted`, `thrown`, `counterMoved`, `missed`, `sentHome`, `won`
+Signals: `risen`, `crossed`, `named`, `quadrantsNumbered`, `moved`, `enteredQuadrant`, `readingShown`, `targetChosen`, `lineLit`, `stepped`, `arrived`, `blocked`, `clueGiven`, `pinned`, `plotted`, `fellOff`, `allPlotted`, `thrown`, `counterMoved`, `missed`, `sentHome`, `won`
 
 ## `decimal` — `@chalk/prop-decimal`
 
