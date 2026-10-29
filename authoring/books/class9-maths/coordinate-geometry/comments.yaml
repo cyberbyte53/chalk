@@ -129,7 +129,7 @@
       text: ""
       status: closed
 - id: cmvszrwa6ro7
-  status: ready
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T03:36:43.566Z
@@ -158,8 +158,13 @@
       text: Done in props.md (one host, coordinatePlane, with places, walker, clues, plotting and
         dice-game layers) and in flow.md (street-and-house).
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T03:59:25.538Z
+      text: ""
+      status: closed
 - id: cmvszrwaupw7
-  status: ready
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T03:36:43.590Z
@@ -185,6 +190,11 @@
       at: 2026-10-29T03:55:36.206Z
       text: Done in props.md.
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T03:59:31.743Z
+      text: ""
+      status: closed
 - id: cmvt0g68mve3
   status: open
   by: fixer
@@ -198,4 +208,39 @@
     always along, then up. The south side comes back in lesson 2 (town-grows, a new board), when the
     town grows past Riya's corner and needs negative numbers. My recommendation: keep it this way.
     Or do you want the source's layout from the start?"
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T04:00:10.740Z
+      text: Can you elaborate?
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T04:00:27.284Z
+      text: >-
+        Sure. Here's what the textbook's street map (Fig. 3.1, page 1 of the PDF) looks like.
+        There's one main road running West–East. Streets 1, 3, 5 and 7 go UP from it (north), with
+        houses 1–5 counted upward. Streets 2, 4, 6 and 8 go DOWN from it (south), with houses 1–5
+        counted downward. So Aman's house at Street 2, House 5 is BELOW the road.
+
+
+        Why that's awkward for Riya's walk: to some houses she walks along and then up, and to
+        others along and then down. In both cases House 5 is just 'the 5th house from the road'; the
+        textbook doesn't use minus signs here. Later, on the plane, 'down' means a negative number.
+        A student who learned 'down 5 = House 5' in lesson 1 then has to unlearn it in lesson 2.
+
+
+        What I proposed instead: all eight streets go UP from the road, with houses 1–5 counted
+        upward. The walk is always 'along, then up', and the town is exactly the top-right quarter
+        of the plane (quadrant I). Aman's house H is still Street 2, House 5 and P is still Street
+        7, House 4, just drawn above the road.
+
+
+        Then in lesson 2 (town-grows), the town gets new houses south of the road and new streets
+        west of Riya's corner. Now 'down' and 'west' really are the other direction, so they get
+        minus signs: House −2 is two houses south of the road. That's where negative coordinates
+        come from.
+
+
+        So the question is: (A) all streets up in lesson 1, and the south side arrives in lesson 2
+        with minus signs (my recommendation), or (B) the textbook's map with streets up and down
+        from the start?
