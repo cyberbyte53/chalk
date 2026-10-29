@@ -125,9 +125,13 @@ function PropPieceView({
   const isWholePicked = picks.some((p) => ringOf(p.part) === undefined);
   return (
     <div
-      class={`piece-prop prop-${piece.prop}${isWholeGlow ? " is-pointed" : ""}${isWholePicked ? " is-picked" : ""}`}
+      class={`piece-prop prop-${piece.prop}${isWholeGlow ? " is-pointed" : ""}${isWholePicked ? " is-picked" : ""}${piece.still !== undefined ? " is-still" : ""}`}
       ref={box}
       data-piece={piece.name}
+      // A prop drawn still is a picture: nothing in it can be tapped, dragged or focused.
+      {...(piece.still === undefined
+        ? {}
+        : { inert: true, role: "img", "aria-label": piece.still[context.locale] })}
     >
       {pickRings.map((at) => (
         <span

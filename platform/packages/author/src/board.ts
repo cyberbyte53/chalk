@@ -279,7 +279,12 @@ export class BoardKit {
     def: P,
     name: string,
     given: Given<StateOfDef<P>> = {},
-    options: { isHidden?: boolean; size?: Size } = {},
+    options: {
+      isHidden?: boolean;
+      size?: Size;
+      /** Drawn still, as a picture of what it shows (in words): nothing on it responds. */
+      still?: Localized;
+    } = {},
   ): Placed<P> {
     if (this.names.has(name)) throw new Error(`Two props named "${name}" on one board`);
     if (name === BOARD) throw new Error(`"${BOARD}" is the board itself; pick another name`);
@@ -289,6 +294,7 @@ export class BoardKit {
     if (Object.keys(fields).length > 0) piece.with = fields;
     if (options.isHidden === true) piece.isHidden = true;
     if (options.size !== undefined) piece.size = { ...options.size };
+    if (options.still !== undefined) piece.still = { ...options.still };
     noteStack(piece, framesHere());
     const placed = new Placed(name, def, piece);
     this.placed.push(placed as unknown as Placed);

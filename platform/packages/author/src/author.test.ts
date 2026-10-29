@@ -205,6 +205,16 @@ describe("a page", () => {
   });
 });
 
+describe("a prop drawn still", () => {
+  it("carries what it shows, in words, on its piece", () => {
+    const shows = { en: "The dial at 3", hi: "डायल 3 पर" };
+    const built = page("still", (b) => [b.prop(dial, "d", {}, { still: shows })]).build().board;
+    expect(built.root).toMatchObject({
+      children: [{ name: "d", still: shows }, { kind: "space" }],
+    });
+  });
+});
+
 describe("question families", () => {
   const turnTo = family({
     level: Level.Easy,

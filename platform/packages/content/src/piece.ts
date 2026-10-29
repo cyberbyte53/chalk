@@ -1,5 +1,6 @@
 import type { Size } from "@chalk/prop";
 import { z } from "zod";
+import { type Localized, localizedSchema } from "./localized";
 
 export const PieceKind = {
   Column: "column",
@@ -63,6 +64,11 @@ export type Piece =
       size?: Size;
       /** Its starting fields; anything left out uses the prop's defaults. */
       with?: Record<string, unknown>;
+      /**
+       * Drawn still, as a picture: nothing on it can be tapped, dragged or focused. What it shows, in
+       * words, for a screen reader and for Jugnu.
+       */
+      still?: Localized;
     };
 
 export type PropPiece = Extract<Piece, { kind: "prop" }>;
@@ -103,6 +109,7 @@ export const pieceSchema: z.ZodType<Piece, z.ZodTypeDef, unknown> = z.lazy(() =>
         .strict()
         .optional(),
       with: z.record(z.string(), z.unknown()).optional(),
+      still: localizedSchema.optional(),
     }),
   ]),
 );
