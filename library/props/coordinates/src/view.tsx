@@ -110,8 +110,8 @@ function PlacesDraw({
             {p.label !== undefined && (
               <text
                 class="cp-place-label"
-                // On the horizontal line, above: below it are the line's numbers.
-                y={p.y === 0 ? -size * 0.62 - 4 : size * 0.62 + 10}
+                // On the horizontal line, under its numbers (above it is where the walker stands).
+                y={p.y === 0 ? 34 : size * 0.62 + 10}
                 text-anchor="middle"
               >
                 {word(p.label, locale)}

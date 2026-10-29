@@ -28,6 +28,10 @@ export const tableLamp = family({
             "Its distance from the left edge of the table and its distance from the right edge",
             "मेज़ के बाएँ किनारे से उसकी दूरी और दाएँ किनारे से उसकी दूरी",
           ),
+          feedback: t(
+            "Those two edges face each other, so the second distance adds nothing: every spot the same distance from the left edge is the same distance from the right. The two edges must meet at a corner.",
+            "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से बराबर दूरी पर हर जगह दाएँ से भी बराबर दूरी पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
+          ),
         },
         {
           id: "one",
