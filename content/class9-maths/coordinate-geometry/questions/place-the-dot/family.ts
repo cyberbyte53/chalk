@@ -20,8 +20,8 @@ export const placeTheDot = family({
     const ask = check(b, {
       about: sheet,
       prompt: t(
-        `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Drag it there, then press Check.`,
-        `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
+        `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1\u00a0cm. Drag it there, then press Check.`,
+        `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1\u00a0cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       isRight: isPlaced(sheet, left, bottom),
       solve: [sheet.learner.movePoint({ x: left, y: bottom })],

@@ -176,10 +176,14 @@ function StillDraw({
     const c = s.clueChoices[g];
     return c === undefined ? [] : [c];
   });
+  // Each measure runs through the point once the other distance is given; before that, along a
+  // whole-number line near the far edge.
+  const knownX = given.find((c) => c.x !== undefined)?.x;
+  const knownY = given.find((c) => c.y !== undefined)?.y;
   const measured = given.flatMap((c) => {
     const out: JSX.Element[] = [];
     if (c.x !== undefined) {
-      const y = w.yMin + (w.yMax - w.yMin) * 0.85;
+      const y = knownY ?? Math.round(w.yMin + (w.yMax - w.yMin) * 0.85);
       const [x0, py] = px.toPx(0, y);
       const [x1] = px.toPx(c.x, y);
       out.push(
@@ -192,7 +196,7 @@ function StillDraw({
       );
     }
     if (c.y !== undefined) {
-      const x = w.xMin + (w.xMax - w.xMin) * 0.85;
+      const x = knownX ?? Math.round(w.xMin + (w.xMax - w.xMin) * 0.85);
       const [px0, y0] = px.toPx(x, 0);
       const [, y1] = px.toPx(x, c.y);
       out.push(

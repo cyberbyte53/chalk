@@ -27,10 +27,10 @@ Purpose: a desk is given by its column and row, column first, so (5, 3) and (3, 
 Needs: the classroom as desks in 10 columns and 7 rows, columns numbered from the left and rows from the front, both named; tap a desk to see its pair; (5, 3) and (3, 5) both stay marked once tapped. Sonia's desk is (4, 1), labelled.
 
 ### two-lines  (o3; s3.1-idea, box-descartes, fig3.4, s3.4, summary)
-Purpose: each time, two lines at right angles did it: one across (the main road, the south fence, the front row) and one up (the street, the west fence, a column). The first number says how far across, the second how far up. That idea, Descartes', is coordinate geometry. The lesson ends with summary point 1.
-Needs: the house, the stall's spot and the desk again, each with its route along, then up, drawn in colour so its two lines stand out, and its two numbers; Descartes' story in words (no portrait).
+Purpose: each time, two lines at right angles did it: one across (the main road, the bottom of the page, the front row) and one up (the street, the left edge, a column). The first number says how far across, the second how far up. That idea, Descartes', is coordinate geometry. The lesson ends with summary point 1.
+Needs: the house, the dot and the desk again, each with its route along, then up, drawn in colour so its two lines stand out, and its two numbers; Descartes' story in words (no portrait).
 
-Questions: the source's own (Ex 3.1 Q1, the table lamp; Ex 3.1 Q2, the cross-streets) as written questions, in its words. Ours are done in the prop: walk Riya to an address, tap a desk by its pair, place a stall from its two distances, each checked by the prop's state, with a note for a named wrong state (the swapped pair).
+Questions: the source's own (Ex 3.1 Q1, the table lamp; Ex 3.1 Q2, the cross-streets) as written questions, in its words. Ours are done in the prop: walk Riya to an address, tap a desk by its pair, place a dot on a notebook page from its two distances, each checked by the prop's state, with a note for a named wrong state (the swapped pair).
 
 ## the-cartesian-plane
 

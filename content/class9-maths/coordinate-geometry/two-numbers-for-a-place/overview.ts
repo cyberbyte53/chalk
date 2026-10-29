@@ -243,8 +243,8 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   );
   const fixed = w.definition(
     t(
-      "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is both, where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
-      "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों बातें केवल एक बिंदु पर सही हैं, जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
+      "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+      "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
     ),
     "fixed",
   );
@@ -256,8 +256,8 @@ const dotOnPaper = page("dot-on-paper", (b) => {
     w.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
     w.body(
       t(
-        "Here is a dot on a page of your notebook. How would you say exactly where it is? Try these, one at a time, and watch where the dot could still be.",
-        "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है। तुम ठीक-ठीक कैसे बताओगे कि यह कहाँ है? ये एक-एक करके आज़माओ, और देखो कि बिंदु अब भी कहाँ हो सकता है।",
+        "In the town, the roads told Riya where to go. A page of your notebook has no roads. Here is a dot on one, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+        "शहर में, सड़कों ने रिया को रास्ता बताया। कॉपी के पन्ने पर कोई सड़क नहीं होती। यह एक पन्ने पर बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
       ),
     ),
     sheet,

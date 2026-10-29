@@ -1684,6 +1684,7 @@
     the whole 20 m line from the south fence, so the two lines meet. Let the student find the
     crossing and drag the stall there, with no ring until it's placed. When the stall is dropped at
     the swapped spot (20, 30), give a note."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1710,7 +1711,28 @@
         the left edge (a line), 9 cm above the bottom (the crossing), in centimetres on 1 cm
         squares."
       status: ready
-  changed: []
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:09:13.864Z
+      text: "Rechecked in en and hi by playing all four clues. The main point is fixed. After '9 cm above
+        the bottom', the 5 cm line stays drawn the full height, the 9 cm line is drawn the full
+        width, and they visibly cross at the dot. There is no ring, and the picture now shows 'only
+        one point is both'. The other half of my thread (the student finds the spot and drags it,
+        with a note for the swapped pair) has moved to questions/place-the-dot. I played it:
+        dragging to (3, 7) for '7 cm from the left, 3 cm up' gives the swapped note in both
+        languages, and (7, 3) passes. One small mechanical thing is left on this board. The two
+        measure marks sit at odd places off the squares: '5 cm' is drawn at about 10.2 cm up, and '9
+        cm' at about 12.8 cm across, between grid lines and far from the dot. On a page the student
+        is told to count in centimetres, a measure that starts between two squares looks like a
+        different distance, and the '9 cm' mark is nowhere near the dot it is about. Suggested: draw
+        each measure through the dot (from the left edge to the dot, and from the bottom to the
+        dot), as two-lines#spot already does, or at least on a grid line."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:11:04.984Z
+      text: "Measures fixed: each now runs through the dot once the other distance is given (5 cm along
+        row 9, 9 cm up column 5); before that, along a whole-number line near the far edge, not
+        between grid lines. Played all four clues at 390."
 - id: cmvtc0wsk0re
   status: ready
   by: reviewer
@@ -2114,3 +2136,179 @@
         two lines at right angles.' / 'बस एक ही रेखा, यानी सड़क, पर रही… ये तीनों जगहें एक रेखा पर
         नहीं हैं…' The contrast can only be read one way now. It matches the bus and
         street-and-house lines, and 'along' is 'आगे' throughout."
+- id: cmvtfxtv3sxn
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:14.223Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  text: "Mechanical (undefined term). Principle 1, and flow.md ('the page is squared in centimetres,
+    so the student counts them'). Nothing on the board says the squares are centimetres. The edges
+    are numbered 1 to 15 and 1 to 12 with no unit, and the text says only 'a page of your notebook'.
+    Then the clue buttons say '5 cm' and '9 cm'. A student has to guess that one square is 1 cm, and
+    one who counts grid lines from 1 rather than from the edge is off by one. The same bareNotebook
+    page is used by questions/place-the-dot, where the question has to make sense on its own ('Put
+    the dot 7 cm from the left edge…' over bare numbers). Suggested: one sentence in w2, 'The page
+    is squared in centimetres: each small square is 1 cm across.' / 'पन्ने पर सेंटीमीटर के खाने बने
+    हैं: हर छोटा खाना 1 cm का है।'. Or put 'cm' at the end of each numbered edge, so both the board
+    and the questions get it."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:10:57.392Z
+      text: Say the squares are 1 cm, in the opening and in place-the-dot's prompt.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:11:05.166Z
+      text: The opening now says 'each small square is 1 cm across', and place-the-dot's prompt 'Each
+        small square is 1 cm.', in English and Hindi.
+      status: ready
+- id: cmvtfxu06wkt
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:14.406Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  text: "Taste call for the person. Principle 4 (let them find it) and s3.1-II. The board asks 'How
+    would you say exactly where it is?', but both edges are already numbered like a ruler, and the
+    dot sits on the crossing of 5 and 9. A student can read off '5 and 9' before trying any clue, so
+    the vague descriptions ('upper half', 'near the left edge') never feel like they're failing. The
+    source's point, that you need two independent pieces of information, gets answered by the
+    picture before it is asked. A real notebook page has squares but no numbers on its edges.
+    Possible fix: show the squares with no numbers at first, and bring in the numbered edge (or just
+    the measure) when a distance clue is given. The flow asks for 'left edge and bottom marked in
+    centimetres', so this is the person's call."
+  messages: []
+- id: cmvtfxu502ru
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:14.580Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: w2
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:257
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  text: "Close to mechanical. Principle 2 (each page opens from the question the last one left).
+    street-and-house ends in the town, with roads, houses and Riya walking. This board opens with
+    'Here is a dot on a page of your notebook' and no link back. The board's purpose says the point
+    is that the page 'has no roads', but the student is never told that, so the change of scene
+    feels arbitrary. Suggested opening: 'In the town, the roads told Riya where to go. A page of
+    your notebook has no roads. Here is a dot on one: how would you say exactly where it is?' / 'शहर
+    में सड़कों ने रिया को रास्ता बताया। कॉपी के पन्ने पर कोई सड़क नहीं होती। यह उस पर एक बिंदु है:
+    तुम ठीक-ठीक कैसे बताओगे कि यह कहाँ है?'"
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:10:57.434Z
+      text: "Open from the town: the roads told Riya where to go; a page has no roads."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:11:05.355Z
+      text: The opening now starts 'In the town, the roads told Riya where to go. A page of your notebook
+        has no roads. Here is a dot on one…', with the Hindi to match.
+      status: ready
+- id: cmvtfxuakdp7
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:14.780Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: fixed
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:244
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  text: "Mechanical (wording, principle 12). 'Only one point is both, where the two lines cross.' Read
+    literally by a second-language student, 'is both' has nothing to attach to: both what?
+    Suggested: 'Only one point is at both distances: where the two lines cross.' The Hindi ('दोनों
+    बातें केवल एक बिंदु पर सही हैं') is already clear."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:10:57.482Z
+      text: "Reword to 'Only one point is at both distances: where the two lines cross.'"
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:11:05.555Z
+      text: "Now 'Only one point is at both distances: where the two lines cross.' Hindi: 'दोनों दूरियों
+        पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं।'"
+      status: ready
+- id: cmvtfxuf63j6
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:14.946Z
+  board: class9-maths/coordinate-geometry/questions/place-the-dot
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  text: "Mechanical (screen). The prompt bolds '**7 cm from the left edge**' and '**3 cm above the
+    bottom**', but the question prompt is drawn bold all through, so the emphasis doesn't show in en
+    or hi. The two distances, which are the whole question, don't stand out from 'Drag it there,
+    then press Check.' Suggested: put the instruction on its own line ('Drag it there, then press
+    Check.' as a second sentence block), or make the prompt regular weight with the bold showing.
+    That is the goal view, so other check questions have it too. Otherwise the family is good. I
+    played 2128bc63 (en) and 7a88de39 (hi): the swapped spot gets the 'two distances are swapped'
+    note, another wrong spot gets 'Not quite', and the right spot passes. All four param rows have a
+    swap on the page."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:11:05.956Z
+      text: "Left open for the person: every question prompt is drawn at weight 800 (basics
+        .question-prompt), so bold inside any prompt can't show, in every book. Making prompts
+        lighter is a look decision for all questions, not this family."
+- id: cmvtfxunxm6v
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:15.261Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: spot
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:352
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  text: "Small, taste. The house and the desk each have an orange caption on the picture ('Aman's
+    house: Street number 4, House number 5', 'The desk: Column 5, Row 3'). The dot has none, so the
+    three pictures don't read alike, and the board's claim is that they are the same idea. The dot
+    is also blue here, but it was orange on dot-on-paper, so a student may not take it as the same
+    dot. Suggested: draw the dot in the same colour as on dot-on-paper, and if the plane can caption
+    a point, add 'The dot: 5 cm from the left edge, 9 cm above the bottom'."
+  messages: []
+- id: cmvtfxushdqn
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T11:09:15.425Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:31
+  commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  quote: the house, the stall's spot and the desk again
+  text: "Mechanical (the plan no longer matches the boards). The dot on a notebook page has replaced
+    the fair ground, but two-lines' Purpose still says 'the main road, the south fence, the front
+    row' and 'the street, the west fence, a column', and its Needs say 'the stall's spot'. The
+    Questions line still says 'place a stall from its two distances'. props.md line 18 says 'The
+    house, the stall's spot and the desk again' too. A builder or reviewer working from the plan
+    will look for fences and a stall. Suggested: 'the left edge' / 'the bottom', 'the dot', and
+    'place the dot from its two distances'."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:10:57.558Z
+      text: Replace the stall and fences in flow.md (two-lines Purpose and Needs, the Questions line) and
+        props.md line 18 with the dot and the page's edges; the person re-approves both.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:11:05.756Z
+      text: "flow.md: two-lines now says the bottom of the page and the left edge; its Needs say the
+        house, the dot and the desk; the Questions line says place a dot on a notebook page.
+        props.md line 18: the house, the dot and the desk. Both wait for the person's re-approval."
+      status: ready
