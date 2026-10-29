@@ -1414,6 +1414,33 @@ body.is-selecting .is-pick-target {
   letter-spacing: 0.04em;
   color: #fff;
 }
+.prop-panel-contract p {
+  margin: 6px 0 0;
+  color: #d4d4da;
+}
+.prop-panel-describe {
+  flex-basis: 100%;
+  margin: 4px 0 8px;
+  color: #b4b4bc;
+}
+.prop-panel-changes {
+  color: #8a8a92;
+}
+.prop-panel-term {
+  margin: 0 0 6px;
+  color: #b4b4bc;
+}
+.prop-panel-term code {
+  color: #fff;
+}
+.prop-panel-tag {
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: #3a3a42;
+  color: #c9c9d1;
+  font-size: 11px;
+}
 .prop-panel-note {
   margin: 2px 0 8px;
   color: #9a9aa2;

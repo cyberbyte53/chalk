@@ -9,7 +9,8 @@ import { ZodFirstPartyTypeKind as Kind, type ZodTypeAny } from "zod";
  * per action, each with its arguments. Built from what the prop declares, its state schema and each
  * action's argument schema, so nothing is written per prop. A field is set on the live prop, as a
  * rule would set it; Run does the action as a lesson would. The fields show the live values: drag
- * a point and its field follows.
+ * a point and its field follows. Above them, its contract as the definition writes it: what it is
+ * for, what each action does and changes, its signals and what it works out.
  */
 export function PropPanel({
   runtime,
@@ -46,10 +47,19 @@ export function PropPanel({
           onChange={(v) => setField(name, v)}
         />
       ));
-  const actions = Object.entries(def.actions);
+  const actions = Object.entries(def.actions).filter(([, spec]) => spec.internal !== true);
+  const signals = Object.entries(def.signals ?? {});
+  const derived = Object.entries(def.derived ?? {});
+  const hidden = new Set<string>(def.offScreen ?? []);
   return (
     <aside class="prop-panel" aria-label={`${def.type}: what a lesson controls`}>
       {problem !== undefined && <p class="prop-panel-problem">{problem}</p>}
+      <section class="prop-panel-contract">
+        <h3>
+          {def.type} · {def.role}
+        </h3>
+        <p>{def.describe}</p>
+      </section>
       {inputs.size > 0 && (
         <section>
           <h3>Inputs</h3>
@@ -71,6 +81,9 @@ export function PropPanel({
               key={name}
               name={name}
               describe={spec.describe}
+              changes={spec.changes}
+              isLearners={spec.byLearner === true}
+              reveals={spec.reveals === true}
               args={spec.args as ZodTypeAny}
               onRun={(args) => {
                 const checked = (spec.args as ZodTypeAny).safeParse(args);
@@ -87,6 +100,29 @@ export function PropPanel({
           ))}
         </section>
       )}
+      {derived.length > 0 && (
+        <section>
+          <h3>Worked out</h3>
+          <p class="prop-panel-note">From its fields, by its laws.</p>
+          {derived.map(([name, spec]) => (
+            <p key={name} class="prop-panel-term">
+              <code>{name}</code>
+              {hidden.has(name) && <span class="prop-panel-tag">off screen</span>} {spec.describe}
+            </p>
+          ))}
+        </section>
+      )}
+      {signals.length > 0 && (
+        <section>
+          <h3>Signals</h3>
+          <p class="prop-panel-note">What it announces, for a lesson to wait on.</p>
+          {signals.map(([name, spec]) => (
+            <p key={name} class="prop-panel-term">
+              <code>{name}</code> {spec.describe}
+            </p>
+          ))}
+        </section>
+      )}
     </aside>
   );
 }
@@ -94,11 +130,20 @@ export function PropPanel({
 function ActionRow({
   name,
   describe,
+  changes,
+  isLearners,
+  reveals,
   args,
   onRun,
 }: {
   name: string;
   describe: string;
+  /** The fields it may change. */
+  changes: readonly string[];
+  /** A learner's finger does it (through the prop's view). */
+  isLearners: boolean;
+  /** It gives an answer away. */
+  reveals: boolean;
   args: ZodTypeAny;
   onRun: (args: unknown) => void;
 }): JSX.Element {
@@ -110,7 +155,15 @@ function ActionRow({
       <button type="button" title={describe} onClick={() => onRun(value)}>
         {name}
       </button>
+      {isLearners && <span class="prop-panel-tag">learner</span>}
+      {reveals && <span class="prop-panel-tag">reveals</span>}
       {hasArgs && <Field label="" schema={args} value={value} onChange={setValue} />}
+      <p class="prop-panel-describe">
+        {describe}
+        {changes.length > 0 && (
+          <span class="prop-panel-changes"> Changes {changes.join(", ")}.</span>
+        )}
+      </p>
     </div>
   );
 }
