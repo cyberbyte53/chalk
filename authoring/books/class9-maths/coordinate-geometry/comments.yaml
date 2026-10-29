@@ -2579,6 +2579,14 @@
       text: The prompt is now 'Tap the desk **(5, 3)**, then press Check.' (Hindi to match). The order is
         taught on seating-plan and named in the wrong-answer note, 'The column comes first'.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:33:15.890Z
+      text: "Rechecked all 4 tap-the-desk boards in en and hi, and played 2e01e032 (en). Done as the
+        person decided. The prompt is only 'Tap the desk **(5, 3)**, then press Check.' / 'डेस्क
+        **(5, 3)** दबाओ, फिर जाँचो दबाओ।', and the axes are still named Column and Row. Tapping (3,
+        5) and pressing Check now reaches the note 'That desk is (3, 5): column 3, row 5. The column
+        comes first.' Tapping (5, 3) then passes."
 - id: cmvtcmn0pvkm
   status: closed
   by: reviewer
@@ -2772,6 +2780,15 @@
         cm' and '9 cm' appear only as each distance clue's measure. flow.md's Needs changed to
         match, so it waits on re-approval."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:33:16.143Z
+      text: "Rechecked dot-on-paper in en and hi by playing all four clues. Done as the person decided.
+        The page is squared with no numbers on its edges, so nothing reads off '5 and 9' before the
+        clues. The only numbers that appear are the measures: '5 cm' after the third clue, then '5
+        cm' and '9 cm' through the dot after the fourth. The opening still says each square is 1 cm,
+        so a student can count them to check. The patch, the line and the crossing all read clearly
+        without the numbers."
 - id: cmvtfxu502ru
   status: closed
   by: reviewer
@@ -2903,6 +2920,17 @@
         On place-the-dot the two distances now stand out from 'Each small square is 1 cm. Drag it
         there, then press Check.' This applies to every question in every book.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:33:16.382Z
+      text: "Rechecked place-the-dot 2128bc63 in en and hi. Fixed. The prompt is now at normal weight, and
+        '7 cm from the left edge' and '3 cm above the bottom' (Hindi 'बाएँ किनारे से 7 cm', 'नीचे के
+        किनारे से 3 cm ऊपर') stand out in bold. Since this changes every question, I also looked at
+        class10 real-numbers questions: does-it-terminate (9 boards, en and hi), euclid-hcf-ribbons
+        (en and hi), hcf-story, is-root-rational and order-the-proof. Nothing looks wrong. The
+        prompts read as plain text, the KaTeX in them (HCF(225, 135), √2, fractions) sits more
+        evenly with the words than before, and the option buttons stay bold, so options and prompt
+        are still told apart. No regression to file."
 - id: cmvtfxunxm6v
   status: ready
   by: reviewer
@@ -2918,6 +2946,7 @@
     is also blue here, but it was orange on dot-on-paper, so a student may not take it as the same
     dot. Suggested: draw the dot in the same colour as on dot-on-paper, and if the plane can caption
     a point, add 'The dot: 5 cm from the left edge, 9 cm above the bottom'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -2933,7 +2962,16 @@
         above the bottom'. This needed a small clues-layer setting, canGiveClues: off means no
         buttons, and the given clues become the caption. The thread for it is on the prop."
       status: ready
-  changed: []
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:33:16.655Z
+      text: "Rechecked two-lines#spot in en and hi. Done. The dot is orange, as on dot-on-paper, with both
+        lines crossing at it and '5 cm' and '9 cm' measured through it, the picture the student
+        left. The edges carry no numbers, matching dot-on-paper. It has a caption, 'The dot: 5 cm
+        from the left edge, 9 cm above the bottom' / 'बिंदु: बाएँ किनारे से 5 cm, नीचे के किनारे से
+        9 cm ऊपर', and no buttons or ↺. Two small things, not blocking. The caption is all one
+        colour, while the house and the desk start with an orange name ('Aman's house:', 'The
+        desk:'). It also nearly repeats the sentence just above it. Fine to leave as is."
 - id: cmvtfxushdqn
   status: closed
   by: reviewer

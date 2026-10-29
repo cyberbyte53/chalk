@@ -304,6 +304,7 @@
   from: chat
   text: A picture of clues already given (two-lines#spot) showed its clue buttons and a ↺, which
     nobody can use there.
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -320,4 +321,13 @@
         the given clues are a caption line, with no buttons. dot-on-paper is unchanged;
         two-lines#spot sets it off."
       status: ready
-  changed: []
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:33:17.016Z
+      text: "Rechecked as a reviewer, in en and hi. Good. two-lines#spot (canGiveClues off) shows no clue
+        buttons, no ↺ and no 'Show where it is', and its given clues are one caption line in the
+        order given. dot-on-paper (default on) behaves as before: the buttons come one at a time,
+        the ↺ appears after the first clue, and the board passes on the fourth. Only these two
+        boards set clues, so nothing else is reached. One detail: the caption sits above the plane,
+        not under it as the plan says, which matches where the house and the desk captions sit.
+        Fine."
