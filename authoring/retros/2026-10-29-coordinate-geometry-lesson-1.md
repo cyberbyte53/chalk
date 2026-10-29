@@ -153,7 +153,7 @@ The habits are the agent's to change now (kept in its memory); the rest is the w
 
 0. **Finish lesson 1** (the person): approve `props.md`, close the five ready threads, review the lesson as a whole.
 1. **The environment holds itself up**: the wrong pnpm refuses; servers and the extension reload themselves. First, because a broken environment caused the worst episode and looks like every other bug.
-2. **Threads**: whose turn is one stored fact, set by whoever writes; one list for the person, grouped by board, closed ones folded; a pass is a line in a thread, not a review; `about` goes; blockers shown where they block; the reviewer's instructions corrected.
+2. **Threads**: whose turn is one stored fact, set by whoever writes; one list for the person, grouped by board, closed ones folded; a pass is a line in a thread, not a review; `about` goes; blockers shown where they block; the reviewer's instructions corrected; thread text shown formatted everywhere (line breaks, bullets, bold: the app prints it as one raw string today), and written one point per line with a short first line.
 3. **Tools never fail silently**; `pipeline` and `check` tools; `pnpm editor:install`.
 4. **The editor has one owner**, the app: no copied address or routing; the panel's script in its own file; one router test; the editor's state file.
 5. **The review loop**: fingerprints of what the student sees, the per-board gate (this also makes the gate notice prop changes).
