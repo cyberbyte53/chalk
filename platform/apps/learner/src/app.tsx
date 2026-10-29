@@ -29,6 +29,7 @@ import { HomeScreen } from "./home-screen";
 import { jugnuLink } from "./jugnu";
 import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
+import { isPreviewAddress } from "./preview-address";
 import { PreviewShell } from "./preview-shell";
 import { settings } from "./settings";
 import { TeacherApp } from "./teacher-screens";
@@ -228,12 +229,7 @@ export function App(): JSX.Element {
     if (next !== undefined) setSession({ kind: "signedIn", me: next });
   };
 
-  const query = new URLSearchParams(window.location.search);
-  // `source` too: the boards written in a file or folder (a question family, from the editor).
-  if (
-    isDevShell &&
-    (query.has("at") || query.has("source") || query.has("review") || query.has("reviews"))
-  )
+  if (isDevShell && isPreviewAddress(new URLSearchParams(window.location.search)))
     return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
     return <ActivityFeed />;
