@@ -147,104 +147,94 @@ const streetAndHouse = page("street-and-house", (b) => {
   ];
 });
 
-/** On paper there are no roads: the same two numbers are distances from two edges. */
+/** The fair ground has no roads: distances from its two fences do the job of the street and the house. */
 const dotOnPaper = page("dot-on-paper", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "On a sheet with no roads, words like 'upper half' leave a region and one distance leaves a whole line; two distances, from the left edge and the bottom edge, fix the dot.",
+    "On ground with no roads, a phrase leaves a patch and one distance leaves a whole line; two distances, from the west fence and the south fence, fix one spot. The fences do what the main road and the street did.",
   );
-  const sheet = b.prop(coordinatePlaneDef, "sheet", {
-    window: { xMin: 0, xMax: 12, yMin: 0, yMax: 16 },
+  const ground = b.prop(coordinatePlaneDef, "ground", {
+    window: { xMin: 0, xMax: 60, yMin: 0, yMax: 40 },
     marks: Marks.None,
-    scene: Scene.Paper,
-    axisNames: [t("bottom edge", "नीचे का किनारा"), t("left edge", "बायाँ किनारा")],
-    hidden: { x: 5, y: 9 },
+    scene: Scene.FairGround,
+    axisNames: [t("south fence", "दक्षिणी बाड़"), t("west fence", "पश्चिमी बाड़")],
+    hidden: { x: 30, y: 20 },
     clueChoices: [
       {
-        words: t("In the upper half", "ऊपरी आधे में"),
-        region: { xMin: 0, xMax: 12, yMin: 8, yMax: 16 },
+        words: t("In the middle of the ground", "मैदान के बीच में"),
+        region: { xMin: 15, xMax: 45, yMin: 10, yMax: 30 },
       },
-      {
-        words: t("Near the left edge", "बाएँ किनारे के पास"),
-        region: { xMin: 0, xMax: 6, yMin: 0, yMax: 16 },
-      },
-      { words: t("5 cm from the left edge", "बाएँ किनारे से 5 cm"), x: 5 },
-      { words: t("9 cm above the bottom edge", "नीचे के किनारे से 9 cm ऊपर"), y: 9 },
+      { words: t("30 m from the west fence", "पश्चिमी बाड़ से 30 m"), x: 30 },
+      { words: t("20 m from the south fence", "दक्षिणी बाड़ से 20 m"), y: 20 },
     ],
-    canHide: true,
   });
   b.standsFor(
-    sheet,
-    "a sheet of paper with a dot hidden 5 cm from the left edge and 9 cm above the bottom edge",
+    ground,
+    "the fair ground, with its west and south fences; the snacks stall's spot is 30 m from the west fence and 20 m from the south fence",
   );
-  b.witness(sheet.learner.giveClue({ clue: 2 }), sheet.learner.giveClue({ clue: 3 }));
+  b.witness(
+    ground.learner.giveClue({ clue: 0 }),
+    ground.learner.giveClue({ clue: 1 }),
+    ground.learner.giveClue({ clue: 2 }),
+  );
   const fixed = w.definition(
     t(
-      "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom edge. Words like *upper half* left a whole region, and one distance left a whole line.",
-      "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। *ऊपरी आधा* जैसे शब्दों से पूरा इलाका बचा, और एक दूरी से पूरी रेखा।",
+      "**Two distances fixed the spot:** 30 m from the west fence and 20 m from the south fence. *In the middle* left a whole patch, and one distance left a whole line of spots.",
+      "**दो दूरियों ने जगह तय कर दी:** पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m। *बीच में* से पूरा इलाका बचा, और एक दूरी से जगहों की पूरी रेखा।",
     ),
     "fixed",
   );
-  const message = choiceQuestion(b, {
-    name: "message",
+  const lamp = choiceQuestion(b, {
+    name: "lamp",
     prompt: t(
-      "The fair is on the school ground, which has a fence on the west side and one on the south side. Which message puts the snacks stall in exactly one place?",
-      "मेला स्कूल के मैदान में है, जिसकी पश्चिम और दक्षिण ओर बाड़ है। कौन-सा संदेश नाश्ते के स्टॉल को ठीक एक जगह रखता है?",
+      "At home, Riya wants to tell her brother exactly where her table lamp stands on her study table. Which tells him?",
+      "घर पर रिया अपने भाई को बताना चाहती है कि उसका टेबल लैंप पढ़ाई की मेज़ पर ठीक कहाँ है। कौन-सा बताता है?",
     ),
     options: [
       {
         id: "two",
         label: t(
-          "30 m from the west fence and 20 m from the south fence",
-          "पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m",
+          "20 cm from the left edge and 15 cm from the front edge",
+          "बाएँ किनारे से 20 cm और आगे के किनारे से 15 cm",
         ),
       },
       {
         id: "one",
-        label: t("30 m from the west fence", "पश्चिमी बाड़ से 30 m"),
+        label: t("20 cm from the left edge", "बाएँ किनारे से 20 cm"),
         feedback: t(
-          "Every spot 30 m from the west fence fits: a whole line of them, like the upright line on the sheet. It needs a second distance.",
-          "पश्चिमी बाड़ से 30 m पर हर जगह ठीक बैठती है: उनकी पूरी रेखा, जैसे कागज़ पर खड़ी रेखा। दूसरी दूरी चाहिए।",
+          "Every spot 20 cm from the left edge fits: a whole line of them, like the line on the fair ground. It needs a second distance.",
+          "बाएँ किनारे से 20 cm पर हर जगह ठीक बैठती है: उनकी पूरी रेखा, जैसे मेले के मैदान पर। दूसरी दूरी चाहिए।",
         ),
       },
       {
         id: "near",
-        label: t("Near the gate, in the north-east corner", "गेट के पास, उत्तर-पूर्वी कोने में"),
+        label: t("Near the back, on the left", "पीछे की ओर, बाईं तरफ़"),
         feedback: t(
-          "'Near the gate' is a region, like 'upper half' on the sheet: many spots fit it. Distances from the two fences fix one spot.",
-          "'गेट के पास' एक इलाका है, जैसे कागज़ पर 'ऊपरी आधा': कई जगहें ठीक बैठती हैं। दोनों बाड़ों से दूरियाँ एक जगह तय करती हैं।",
+          "That is a patch, like *in the middle of the ground*: many spots fit it. Distances from two edges fix one spot.",
+          "यह एक इलाका है, जैसे *मैदान के बीच में*: कई जगहें ठीक बैठती हैं। दो किनारों से दूरियाँ एक जगह तय करती हैं।",
         ),
       },
     ],
     answer: "two",
   });
-  const yours = w.body(
-    t(
-      "Now hide a dot of your own: tap anywhere on the sheet. Tell a friend where it is with two distances, and let them find it.",
-      "अब अपना एक बिंदु छिपाओ: कागज़ पर कहीं भी दबाओ। किसी दोस्त को दो दूरियों से बताओ कि वह कहाँ है, और उसे ढूँढने दो।",
-    ),
-    "yours",
-  );
-  b.after(sheet.on.pinned, [fixed, message]);
-  b.after(message, yours);
+  b.after(ground.on.pinned, [fixed, lamp]);
   return [
-    w.title(t("A dot on a sheet", "कागज़ पर एक बिंदु")),
+    w.title(t("A spot on the fair ground", "मेले के मैदान पर एक जगह")),
     w.body(
       t(
-        "Back at school, Riya sends the class group a message: *Our stall goes near the gate.* Three friends carry tables to three different places. The message didn't fix the place.",
-        "स्कूल लौटकर रिया कक्षा के ग्रुप में संदेश भेजती है: *हमारा स्टॉल गेट के पास लगेगा।* तीन दोस्त तीन अलग जगह मेज़ ले जाते हैं। संदेश से जगह तय नहीं हुई।",
+        "Back at school, the stalls go up on the fair ground. It has no roads: just a fence along the west side and one along the south side. So how does Riya tell the volunteers where the snacks stall goes?",
+        "स्कूल लौटकर, मेले के मैदान पर स्टॉल लगने हैं। वहाँ कोई सड़क नहीं: बस पश्चिम की ओर एक बाड़ और दक्षिण की ओर एक। तो रिया स्वयंसेवकों को कैसे बताए कि नाश्ते का स्टॉल कहाँ लगेगा?",
       ),
     ),
     w.body(
       t(
-        "A sheet of paper has no streets. A dot is hidden on this one. Give the clues one at a time, and watch where the dot could still be.",
-        "कागज़ पर कोई गली नहीं होती। इस कागज़ पर एक बिंदु छिपा है। सुराग एक-एक करके दो, और देखो कि बिंदु अब भी कहाँ हो सकता है।",
+        "Give her messages one at a time, and watch where the stall could still go.",
+        "उसके संदेश एक-एक करके दो, और देखो कि स्टॉल अब भी कहाँ लग सकता है।",
       ),
     ),
-    sheet,
+    ground,
     fixed,
-    message,
-    yours,
+    lamp,
   ];
 });
 
@@ -264,9 +254,22 @@ const seatingPlan = page("seating-plan", (b) => {
     ),
     placeKind: PlaceKind.Desk,
     targetName: t("This desk", "यह डेस्क"),
+    // (5, 3) and (3, 5), each marked once tapped, so both stay in view.
+    points: [
+      { name: "P", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "Q", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
+    ],
   });
+  for (const [name, x, y] of [
+    ["P", 5, 3],
+    ["Q", 3, 5],
+  ] as const)
+    b.when(room.on.targetChosen, room.call.showPoint({ name }), (at) => {
+      const target = at(room).target;
+      return target !== null && target.x === x && target.y === y;
+    });
   b.standsFor(room, "the classroom's 10 columns and 7 rows of desks, Sonia's at column 4, row 1");
-  b.witness(room.learner.chooseTarget({ x: 5, y: 3 }));
+  b.witness(room.learner.chooseTarget({ x: 5, y: 3 }), room.learner.chooseTarget({ x: 3, y: 5 }));
   const same = choiceQuestion(b, {
     name: "same",
     prompt: t(
@@ -292,7 +295,13 @@ const seatingPlan = page("seating-plan", (b) => {
     ],
     answer: "no",
   });
-  b.after(room.on.targetChosen, same);
+  // Asked once both desks are marked.
+  b.after(room.on.targetChosen, same, {
+    if: (at) =>
+      at(room).points.every(
+        (p) => p.isShown || (at(room).target?.x === p.x && at(room).target?.y === p.y),
+      ),
+  });
   return [
     w.title(t("Desks in a classroom", "कक्षा में डेस्क")),
     w.body(
@@ -437,37 +446,105 @@ const crossStreets = page("cross-streets", (b) => {
   ];
 });
 
-/** Every time, two perpendicular lines did it. Descartes, and summary point 1. */
+/** Every time, two lines at right angles did it: one across, one up. Descartes, and summary point 1. */
 const twoLines = page("two-lines", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "The house, the dot and the desk were each found with two lines at right angles and two numbers in order: that idea, Descartes', starts coordinate geometry.",
+    "The house, the stall's spot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry.",
+  );
+  /** A picture of one place found earlier: its plane, still, with the place's two distances drawn. */
+  const still = (
+    name: string,
+    given: Parameters<typeof b.prop<typeof coordinatePlaneDef>>[2],
+    says: ReturnType<typeof t>,
+  ) => b.prop(coordinatePlaneDef, name, given, { still: says, size: { maxHeight: 0.35 } });
+  const mark = (x: number, y: number) => [
+    { name: "", x, y, isShown: true, hasDropLines: true, tone: Tone.Accent },
+  ];
+  const house = still(
+    "house",
+    {
+      window: { xMin: 0, xMax: 5.5, yMin: 0, yMax: 5.5 },
+      marks: Marks.Counts,
+      scene: Scene.Town,
+      axisNames: town.axisNames,
+      showAxisNames: false,
+      places: [{ x: 4, y: 5 }],
+      target: { x: 4, y: 5 },
+      canChooseTarget: false,
+    },
+    t(
+      "The town: the main road across, the street up, and Aman's house at Street 4, House 5.",
+      "शहर: मुख्य सड़क आड़ी, गली खड़ी, और अमन का घर गली 4, मकान 5 पर।",
+    ),
+  );
+  const spot = still(
+    "spot",
+    {
+      window: { xMin: 0, xMax: 60, yMin: 0, yMax: 40 },
+      marks: Marks.None,
+      scene: Scene.FairGround,
+      showAxisNames: false,
+      points: mark(30, 20).map((p) => ({ ...p, name: "S" })),
+    },
+    t(
+      "The fair ground: the south fence across, the west fence up, and the stall 30 m from one and 20 m from the other.",
+      "मेले का मैदान: दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी, और स्टॉल एक से 30 m और दूसरी से 20 m पर।",
+    ),
+  );
+  const desk = still(
+    "desk",
+    {
+      window: { xMin: 0, xMax: 6.5, yMin: 0, yMax: 4.5 },
+      marks: Marks.Counts,
+      scene: Scene.Classroom,
+      showAxisNames: false,
+      places: [{ x: 5, y: 3 }],
+      placeKind: PlaceKind.Desk,
+      axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")],
+      targetName: t("The desk", "डेस्क"),
+      target: { x: 5, y: 3 },
+      canChooseTarget: false,
+    },
+    t(
+      "The classroom: the front row across, the first column up, and the desk at column 5, row 3.",
+      "कक्षा: आगे की पंक्ति आड़ी, पहला स्तंभ खड़ा, और डेस्क स्तंभ 5, पंक्ति 3 पर।",
+    ),
   );
   return [
     w.title(t("Two lines did it every time", "हर बार दो रेखाओं ने काम किया")),
-    w.body(t("Look back at how each place was found:", "देखो हर जगह कैसे मिली:")),
+    w.body(t("Look back at the three places you found:", "उन तीन जगहों को फिर देखो जो तुमने ढूँढीं:")),
     w.body(
       t(
-        "**The house:** the main road and the street, at right angles. Street 4, House 5.",
-        "**घर:** मुख्य सड़क और गली, एक-दूसरे से समकोण पर। गली 4, मकान 5।",
+        "**The house:** the main road across, the street up. Street 4, House 5.",
+        "**घर:** मुख्य सड़क आड़ी, गली खड़ी। गली 4, मकान 5।",
       ),
     ),
+    house,
     w.body(
       t(
-        "**The dot:** the bottom edge and the left edge of the sheet, at right angles. 5 cm from one, 9 cm from the other.",
-        "**बिंदु:** कागज़ का नीचे का और बायाँ किनारा, समकोण पर। एक से 5 cm, दूसरे से 9 cm।",
+        "**The stall:** the south fence across, the west fence up. 30 m, then 20 m.",
+        "**स्टॉल:** दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी। 30 m, फिर 20 m।",
       ),
     ),
+    spot,
     w.body(
       t(
-        "**The desk:** the columns and the rows, at right angles. Column 5, row 3.",
-        "**डेस्क:** स्तंभ और पंक्तियाँ, समकोण पर। स्तंभ 5, पंक्ति 3।",
+        "**The desk:** the front row across, the first column up. Column 5, row 3.",
+        "**डेस्क:** आगे की पंक्ति आड़ी, पहला स्तंभ खड़ा। स्तंभ 5, पंक्ति 3।",
+      ),
+    ),
+    desk,
+    w.body(
+      t(
+        "Each time, two lines at right angles did it: **one across** and **one up**. The first number says how far across, the second how far up.",
+        "हर बार दो समकोण रेखाओं ने काम किया: **एक आड़ी** और **एक खड़ी**। पहली संख्या बताती है कि आड़े कितनी दूर, दूसरी कि ऊपर कितनी।",
       ),
     ),
     w.definition(
       t(
-        "**To locate a point in a plane, we need two perpendicular lines.** Its position is then given by two numbers, in order.",
-        "**किसी तल में एक बिंदु का स्थान बताने के लिए हमें दो लंब रेखाएँ चाहिए।** तब उसका स्थान क्रम से दो संख्याओं से बताया जाता है।",
+        "**To locate a point in a plane, we need two perpendicular lines: one horizontal, one vertical.** The point is then given by two numbers, in order: how far along the horizontal line, then how far up the vertical one.",
+        "**किसी तल में एक बिंदु का स्थान बताने के लिए हमें दो लंब रेखाएँ चाहिए: एक क्षैतिज, एक ऊर्ध्वाधर।** तब बिंदु क्रम से दो संख्याओं से बताया जाता है: क्षैतिज रेखा पर कितनी दूर, फिर ऊर्ध्वाधर रेखा पर कितना ऊपर।",
       ),
     ),
     w.body(

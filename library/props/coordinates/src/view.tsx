@@ -377,6 +377,7 @@ export function CoordinatePlaneView({
   const still = stillPossible(s, s.given);
   const hiddenPoint = s.hidden;
   const next = s.toPlot[s.plotted.length];
+  const nextClue = s.clueChoices.findIndex((_, i) => !s.given.includes(i));
   const unshown = s.canShowPoints && s.points.some((p) => !p.isShown);
   const total = Math.abs(s.along) + Math.abs(s.up);
   const from = s.walkFrom;
@@ -559,17 +560,20 @@ export function CoordinatePlaneView({
           />
         )}
         {hasClues &&
-          s.clueChoices.map((c, i) => (
-            <SymbolButton
-              // biome-ignore lint/suspicious/noArrayIndexKey: the lesson's clues, in order
-              key={i}
-              symbol={word(c.words, locale)}
-              label={word(c.words, locale)}
-              isWide
-              isOn={s.given.includes(i)}
-              {...does(actions.giveClue, { clue: i }, i)}
-            />
-          ))}
+          s.clueChoices.map((c, i) =>
+            // One clue at a time, in the lesson's order: those given, and the next.
+            !s.given.includes(i) && i !== nextClue ? null : (
+              <SymbolButton
+                // biome-ignore lint/suspicious/noArrayIndexKey: the lesson's clues, in order
+                key={i}
+                symbol={word(c.words, locale)}
+                label={word(c.words, locale)}
+                isWide
+                isOn={s.given.includes(i)}
+                {...does(actions.giveClue, { clue: i }, i)}
+              />
+            ),
+          )}
         {hasClues && hiddenPoint !== null && !s.isHiddenShown && (
           <SymbolButton
             symbol={word(WORDS.showPoint, locale)}
