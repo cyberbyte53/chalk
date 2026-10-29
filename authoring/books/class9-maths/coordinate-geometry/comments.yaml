@@ -196,7 +196,7 @@
       text: ""
       status: closed
 - id: cmvt0g68mve3
-  status: ready
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T03:55:36.214Z
@@ -208,6 +208,7 @@
     always along, then up. The south side comes back in lesson 2 (town-grows, a new board), when the
     town grows past Riya's corner and needs negative numbers. My recommendation: keep it this way.
     Or do you want the source's layout from the start?"
+  changed: []
   messages:
     - by: you
       role: person
@@ -259,4 +260,8 @@
       at: 2026-10-29T04:02:38.191Z
       text: "No change needed: flow.md already says this (street-and-house and town-grows)."
       status: ready
-  changed: []
+    - by: you
+      role: person
+      at: 2026-10-29T04:02:56.520Z
+      text: ""
+      status: closed
