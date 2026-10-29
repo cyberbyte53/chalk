@@ -255,4 +255,12 @@
 
     Nothing else changes; boards outside lesson 1 don't use any of this yet. Close this to approve,
     and I'll build it with its tests.
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:59:00.744Z
+      text: "One more, for the bus board added to lesson 1 (agreed in chat): **7. What the walker is drawn
+        as.** New walker field `walkerKind`: person (Riya, as now) or bus, a small bus picture, with
+        the walker's name ('The bus'). On a single line the walker gets only ← and →; that needs no
+        change (the plane's window has no room above or below the line, so ↑ and ↓ are greyed out).
+        Default person, so every board stays as it is."
