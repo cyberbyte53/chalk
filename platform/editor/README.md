@@ -30,4 +30,4 @@ app's own `?dev&at=` page, so what you see is what the phone draws.
 
 It uses the dev server on :5173 if one is running. Otherwise it starts the learner app's server and the content rebuild-on-save itself (output in the "Chalk" channel). It also starts the chalk MCP service agents connect to (127.0.0.1:5174/mcp) if it isn't running.
 
-Build and package: `npm install && npm run package` → `chalk-editor.vsix`. Install it with the command "Extensions: Install from VSIX…".
+Install: `pnpm editor:install` (bumps the version, packages `chalk-editor.vsix`, installs it into Cursor). What it installs is a loader (`src/loader.ts`): it runs the extension from the open repo's build, and when that is rebuilt (`pnpm editor:build`) swaps the new code in, so a change to the editor never needs a window reload. Only a change to `package.json`'s contributions (commands, menus, views) needs `pnpm editor:install` and one reload.

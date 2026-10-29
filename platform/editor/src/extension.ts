@@ -41,7 +41,12 @@ import { type ReviewItem, ReviewsTree } from "./reviews";
 const PORT = Number(process.env.CHALK_DEV_PORT ?? 5173);
 let root = "";
 let base = `http://localhost:${PORT}/`;
-let started: ChildProcess[] = [];
+/**
+ * The processes this editor started (the dev server). Kept on the global object, so they outlive a
+ * reload of this code (loader.ts) and are stopped once, when the editor closes.
+ */
+const g = globalThis as { chalkStarted?: ChildProcess[] };
+g.chalkStarted ??= [];
 let log: vscode.OutputChannel;
 let panel: vscode.WebviewPanel | undefined;
 let shown = "";
@@ -65,7 +70,7 @@ function startProcess(cmd: string, args: string[], cwd: string): ChildProcess {
   child.stdout?.on("data", (d) => log.append(String(d)));
   child.stderr?.on("data", (d) => log.append(String(d)));
   child.on("exit", (code) => log.appendLine(`[${cmd}] exited ${code}`));
-  started.push(child);
+  g.chalkStarted?.push(child);
   return child;
 }
 
@@ -951,6 +956,12 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate(): void {
-  for (const child of started) child.kill();
-  started = [];
+  for (const child of g.chalkStarted ?? []) child.kill();
+  g.chalkStarted = [];
+}
+
+/** Before new code takes over (loader.ts): the preview panel isn't a subscription, so close it. */
+export function unload(): void {
+  panel?.dispose();
+  panel = undefined;
 }

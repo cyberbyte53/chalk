@@ -6,6 +6,8 @@
   "type": "module",
   "packageManager": "pnpm@10.28.0",
   "scripts": {
+    "editor:build": "cd platform/editor && npm run build",
+    "editor:install": "cd platform/editor && npm run install-editor",
     "dev": "pnpm --parallel --filter @chalk/server --filter @chalk/learner-app --filter @chalk/studio dev",
     "mcp": "pnpm --filter @chalk/studio mcp",
     "stress-mcp": "pnpm --filter @chalk/studio stress-mcp",
