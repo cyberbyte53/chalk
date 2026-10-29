@@ -377,7 +377,7 @@ export function CoordinatePlaneView({
   const still = stillPossible(s, s.given);
   const hiddenPoint = s.hidden;
   const next = s.toPlot[s.plotted.length];
-  const unshown = s.points.some((p) => !p.isShown);
+  const unshown = s.canShowPoints && s.points.some((p) => !p.isShown);
   const total = Math.abs(s.along) + Math.abs(s.up);
   const from = s.walkFrom;
   return (

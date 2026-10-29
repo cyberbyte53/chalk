@@ -1,6 +1,6 @@
 # Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
 - id: cmvt761awv96
-  status: open
+  status: planned
   by: fixer
   role: fixer
   createdAt: 2026-10-29T07:03:40.568Z
@@ -25,4 +25,45 @@
 
 
     Close this to approve, and I'll add the field, its test, and the two uses in lesson 1.
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T07:16:42.424Z
+      text: Make sense.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.534Z
+      text: "Approved in chat ('Make sense'): adding `canShowPoints`, off by default, with its test.
+        Lesson 1's boards leave it off."
+      status: planned
+- id: cmvt7i171acg
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:13:00.301Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:46
+  snapshot: "Aman's house: Street number 4, House number 5 1234567812345Street numberHouse
+    numberRiyaRiya: Street number 2, House number 0. That isn't Aman's house. − → = 2+ − ↑ = 0+ Walk
+    ↺"
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: |-
+    why do i have to tap walk ?? also why are there + and - signs , we just need 4 buttons on 
+    up down left right and tapping on them does things
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T07:19:39.208Z
+      text: also why is it starting from the start everytime , if i am a location i should have only 4
+        options right up donw left right
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.360Z
+      text: "Plan, agreed in chat: Riya gets four arrow buttons, ↑ ↓ ← →. Each tap moves her one block
+        from wherever she is: no Walk button and no going back to the corner. She moves only on
+        roads (← → along the main road, ↑ ↓ up and down a street), so the roads make 'along, then
+        up' happen without a rule for it. Her address updates as she moves. This replaces the
+        steppers, so it's a change to the prop's definition: it goes on a thread on the prop first."
+      status: planned

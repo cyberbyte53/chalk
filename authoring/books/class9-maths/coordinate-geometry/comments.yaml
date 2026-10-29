@@ -408,4 +408,150 @@
 
     A changes this row's verdict to "configure coordinatePlane" for the house, dot and desk, and
     re-approval of props.md.
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T07:16:17.193Z
+      text: It actually makes sense. So, and I am thinking like the art that we are making for chapter
+        icon should know different than like we should also be able to put a picture in the chapter
+        that is very nice and like we actually needed. So let's plan this properly first.
+- id: cmvt7rnfzkig
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:20:29.039Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: w1/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:122
+  snapshot: Two numbers for a place
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: we are forcing 2 numbers, this is not naturally following
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.378Z
+      text: "Plan, agreed in chat: the need for two numbers comes out of the story instead of the title.
+        Riya asks where Aman lives; he says 'Street 4'; she gets there and finds five houses (Street
+        4 lit). Which one? He adds 'House 5', and she finds it. The title becomes 'Finding Aman's
+        house'; 'two numbers' is named only at the end. The swap question on this board goes: the
+        order is taught once, on the seating plan, as the source does (Activity 1)."
+      status: planned
+- id: cmvt7u0yb9vw
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:22:19.859Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: oneNumber/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:101
+  snapshot: What if Aman had said only Street 4? Tap the 4 under the main road.
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: we already made a prop for this we should use it(that specifing only street does not fixes the
+    house ) need a natural flow
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.397Z
+      text: "Plan, agreed in chat: 'Street 4' alone comes first, as the story's turning point. Riya
+        reaches Street 4 and the prop lights its five houses, so the second number is needed before
+        it's given (see the plan on the title thread)."
+      status: planned
+- id: cmvt7uzh1ssz
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:23:04.597Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: w3/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:238
+  snapshot: A sheet of paper has no streets. A dot is hidden on this one. Give the clues one at a
+    time, and watch where the dot could still be.
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: connection from the earlier text??
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.417Z
+      text: "Plan, agreed in chat: the board moves into the story. The stall goes on the school ground,
+        which has no roads, so distances from its two fences do the job the street and house numbers
+        did. That's the link from the town."
+      status: planned
+- id: cmvt7w33gd4i
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:23:55.948Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:156
+  snapshot: bottom edgeleft edgeIn the upper half Near the left edge 5 cm from the left edge 9 cm
+    above the bottom edge ↺
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: this is confusing, not driving the point home
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.450Z
+      text: "Plan, agreed in chat: one clue at a time instead of four buttons together. Riya's 'near the
+        gate' lights a patch; '30 m from the west fence' leaves a line; '20 m from the south fence'
+        leaves one spot. Each clue appears after the one before it."
+      status: planned
+- id: cmvt7x0e8iyg
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:24:39.104Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: yours/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:221
+  snapshot: "Now hide a dot of your own: tap anywhere on the sheet. Tell a friend where it is with two
+    distances, and let them find it."
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: this is kind of useless activity
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.468Z
+      text: "Plan, agreed in chat: dropped."
+      status: planned
+- id: cmvt80s90x5o
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:27:35.172Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/cross-streets
+  target: w2/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:422
+  snapshot: "Aman's cousin lives in a city where two main roads cross at the centre, one north–south
+    and one east–west. Other streets run beside them, 200 m apart: 5 each way. Where the 2nd
+    north–south street meets the 5th east–west street is the cross-street (2, 5)."
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: bro why u mentionin 200m apart, this will confuse the kids because then what is (4,5) in 4
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.492Z
+      text: "Plan, agreed in chat: '200 m apart' goes, so the streets are only numbered. The two questions
+        become one."
+      status: planned
+- id: cmvt82dk91ym
+  status: planned
+  by: you
+  role: person
+  createdAt: 2026-10-29T07:28:49.449Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: w6/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:467
+  snapshot: To locate a point in a plane, we need two perpendicular lines. Its position is then given
+    by two numbers, in order.
+  commit: 4cf5e880d092d21b5982bfa4ee094216233664da
+  text: very vague
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:33:08.513Z
+      text: "Plan, agreed in chat: tie it to what they did. 'Each time, two lines at right angles did it:
+        one across (the main road, the bottom fence, the front row) and one up (the street, the side
+        fence, a column). The first number says how far across, the second how far up.' With the
+        pictures from thread cmvt767mgcu9."
+      status: planned

@@ -142,6 +142,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `apart` | {x: "number", y: "number"} | changed by moveApart, bringTogether |
 | `named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by namePart |
 | `points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by showPoint, showAllPoints |
+| `canShowPoints` | true or false | setting |
 | `point` | {orNull: {x: "number", y: "number"}} | changed by movePoint, askAt |
 | `pointStep` | number 0 to … | setting |
 | `reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | setting |

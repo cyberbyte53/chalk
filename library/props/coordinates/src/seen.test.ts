@@ -63,6 +63,7 @@ const dice = {
   hasGrid: true,
 };
 const figure = {
+  canShowPoints: true,
   points: [
     { name: "B", x: -2, y: 2, isShown: false, hasDropLines: true, tone: "main" },
     { name: "D", x: 2, y: 2, isShown: true, hasDropLines: false, tone: "main" },
@@ -133,6 +134,9 @@ describe("what the student sees", () => {
     expect(s.at("counter1")?.words).toBe("Riya (0, 0)");
     expect(s.at("counter2")?.words).toBe("Aman (0, 0)");
     expect(s.ids).toContain("throwDice");
+  });
+  it("no Next point button unless the board gives one: the lesson shows the points itself", () => {
+    expect(seen({ ...figure, canShowPoints: false }).ids).not.toContain("showPoint");
   });
   it("a figure's points show one at a time, by name, with the next behind a button", () => {
     const s = seen(figure);

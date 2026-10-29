@@ -123,6 +123,11 @@ const planeFields = {
   named: z.nativeEnum(PlanePart).nullable(),
   /** The points a figure names. */
   points: z.array(namedPointSchema).max(MAX_POINTS),
+  /**
+   * Whether the learner gets a Next point button for a figure's hidden points. Off when the lesson
+   * shows them itself (a crossing marked when Riya reaches it).
+   */
+  canShowPoints: z.boolean(),
 };
 
 export type PlaneCore = {
@@ -141,6 +146,7 @@ export type PlaneCore = {
   apart: Point;
   named: PlanePart | null;
   points: NamedPoint[];
+  canShowPoints: boolean;
 };
 
 /** Where a point is: in a quadrant, on an axis, or at O. */
@@ -190,6 +196,7 @@ export const core = layersFor<PlaneCore>()({
     apart: { x: 0, y: 0 },
     named: null,
     points: [],
+    canShowPoints: false,
   },
   actions: {
     namePart: act({
