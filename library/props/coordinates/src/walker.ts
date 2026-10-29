@@ -1,5 +1,15 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, layersFor, set, signal } from "@chalk/prop";
+import {
+  type Effect,
+  actionsFor,
+  call,
+  layersFor,
+  raise,
+  seq,
+  set,
+  signal,
+  tween,
+} from "@chalk/prop";
 import { z } from "zod";
 import { type PlaneCore, type Point, pointSchema } from "./plane";
 
@@ -14,6 +24,8 @@ export type WalkerState = PlaneCore & {
 };
 
 const MAX_STEPS = 50;
+/** Seconds she takes from one line to the next. */
+export const SECONDS_PER_LINE = 0.4;
 const act = actionsFor<WalkerState>();
 const none = z.object({}).strict();
 const count = z.object({ value: z.number().int().min(-MAX_STEPS).max(MAX_STEPS) }).strict();
@@ -33,6 +45,52 @@ export const walkerSignals = {
   turned: signal("The walker went `along` along the first line and turned"),
   arrived: signal("The walker arrived at (`x`, `y`); `isAtTarget` when that is the target place"),
 };
+
+/** The target place another layer marks (Aman's house), if there is one. */
+const targetOf = (s: WalkerState): Point | null =>
+  (s as WalkerState & { target?: Point | null }).target ?? null;
+
+/**
+ * Walks her from where she stands to the end, one line at a time: along first, then she turns,
+ * then up or down. Each line passed is announced with how many so far.
+ */
+const walkOn = act({
+  describe:
+    "Walk: along by the first number, counting each line passed, turn, then up or down by the second (the learner's Walk; timed)",
+  byLearner: true,
+  args: none,
+  changes: ["walked", "isWalking"],
+  run: (s) => {
+    const total = Math.abs(s.along) + Math.abs(s.up);
+    if (s.walkFrom === null || total === 0) return set({});
+    // From the start again once she has arrived; else on from where she stopped.
+    const from = s.walked >= total ? 0 : Math.floor(s.walked);
+    const steps: Effect<WalkerState>[] = [set({ walked: from, isWalking: true })];
+    for (let k = from + 1; k <= total; k++) {
+      const isAlong = k <= Math.abs(s.along);
+      steps.push(
+        tween(SECONDS_PER_LINE, { walked: k }, { ease: (x) => x, while: (now) => now.isWalking }),
+        set(
+          {},
+          raise(walkerSignals.passed, {
+            axis: isAlong ? "along" : "up",
+            count: isAlong ? k : k - Math.abs(s.along),
+          }),
+          ...(k === Math.abs(s.along) && s.up !== 0
+            ? [raise(walkerSignals.turned, { along: s.along })]
+            : []),
+        ),
+      );
+    }
+    const end = walkerAt({ ...s, walked: total }) ?? s.walkFrom;
+    const target = targetOf(s);
+    const isAtTarget = target !== null && target.x === end.x && target.y === end.y;
+    steps.push(
+      set({ isWalking: false }, raise(walkerSignals.arrived, { x: end.x, y: end.y, isAtTarget })),
+    );
+    return seq(...steps);
+  },
+});
 
 export const walker = layersFor<WalkerState>()({
   name: "walker",
@@ -70,7 +128,7 @@ export const walker = layersFor<WalkerState>()({
       byLearner: true,
       args: count,
       changes: ["along", "walked", "isWalking"],
-      run: () => set({}),
+      run: (_, { value }) => set({ along: value, walked: 0, isWalking: false }),
     }),
     setUp: act({
       describe:
@@ -78,29 +136,33 @@ export const walker = layersFor<WalkerState>()({
       byLearner: true,
       args: count,
       changes: ["up", "walked", "isWalking"],
-      run: () => set({}),
+      run: (_, { value }) => set({ up: value, walked: 0, isWalking: false }),
     }),
-    walk: act({
-      describe:
-        "Walk: along by the first number, counting each line passed, turn, then up or down by the second (the learner's Walk; timed)",
-      byLearner: true,
-      args: none,
-      changes: ["walked", "isWalking"],
-      run: () => set({}),
-    }),
+    walk: walkOn,
     walkTo: act({
       describe: "Set both numbers to reach (x, y) from the start, and walk there (timed)",
       reveals: true,
       args: pointSchema,
       changes: ["along", "up", "walked", "isWalking"],
-      run: () => set({}),
+      run: (s, p) =>
+        s.walkFrom === null
+          ? set({})
+          : seq(
+              set({
+                along: p.x - s.walkFrom.x,
+                up: p.y - s.walkFrom.y,
+                walked: 0,
+                isWalking: false,
+              }),
+              call(walkOn),
+            ),
     }),
     backToStart: act({
       describe: "Back to where she started (the learner's ↺)",
       byLearner: true,
       args: none,
       changes: ["walked", "isWalking"],
-      run: () => set({}),
+      run: () => set({ walked: 0, isWalking: false }),
     }),
   },
   signals: walkerSignals,

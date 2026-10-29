@@ -115,6 +115,102 @@ A proof's steps, shuffled: the learner taps them into order, one line at a time,
 
 Signals: `checked`, `correct`, `wrong`
 
+## `coordinates` — `@chalk/prop-coordinates`
+
+The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a host whose layers a board turns on. Built for Class 9 Coordinate Geometry, but it knows only its own world.
+
+### `coordinatePlane` · explainer
+
+`library/props/coordinates/coordinatePlane` · used in no chapter yet
+
+A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.
+
+| Field | Takes | |
+|---|---|---|
+| `window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | changed by setScale |
+| `axes` | ["both", "horizontal"] | setting |
+| `marks` | ["none", "counts", "numbers"] | setting |
+| `tickEvery` | number 0 to … | changed by setScale |
+| `hasGrid` | true or false | setting |
+| `axisNames` | ZodTuple | setting |
+| `showAxisNames` | true or false | setting |
+| `showOrigin` | true or false | changed by bringTogether |
+| `showDirections` | true or false | setting |
+| `quadrantsNamed` | whole number 0 to 4 | changed by numberQuadrants |
+| `showQuadrantSigns` | true or false | setting |
+| `scene` | ["none", "paper", "town", "classroom", "fairGround"] | setting |
+| `apart` | {x: "number", y: "number"} | changed by moveApart, bringTogether |
+| `named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by namePart |
+| `points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by showPoint, showAllPoints |
+| `point` | {orNull: {x: "number", y: "number"}} | changed by movePoint, askAt |
+| `pointStep` | number 0 to … | setting |
+| `reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | setting |
+| `isReadingHidden` | true or false | changed by showReading, askAt |
+| `visited` | [["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]] | changed by movePoint, askAt |
+| `placeKind` | ["house", "desk", "crossing", "stall"] | setting |
+| `places` | [{x: "number", y: "number", label: {optional: {en: "text", hi: "text"}}}] | setting |
+| `target` | {orNull: {x: "number", y: "number"}} | changed by chooseTarget |
+| `targetName` | {en: "text", hi: "text"} | setting |
+| `canChooseTarget` | true or false | setting |
+| `lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by chooseTarget, lightLine, clearLight |
+| `walkerName` | {en: "text", hi: "text"} | setting |
+| `walkFrom` | {orNull: {x: "number", y: "number"}} | setting |
+| `along` | whole number -50 to 50 | changed by setAlong, walkTo |
+| `up` | whole number -50 to 50 | changed by setUp, walkTo |
+| `walked` | number 0 to … | changed by setAlong, setUp, walk, walkTo, backToStart |
+| `isWalking` | true or false | changed by setAlong, setUp, walk, walkTo, backToStart |
+| `canSetSteps` | true or false | setting |
+| `hidden` | {orNull: {x: "number", y: "number"}} | changed by hideAt |
+| `clueChoices` | [{words: {en: "text", hi: "text"}, region: {optional: {xMin: "number", xMax: "number", yMin: "number", yMax: "number"}}, x: {optional: "number"}, y: {optional: "number"}}] | setting |
+| `given` | ["whole number 0 to 5"] | changed by giveClue, clearClues, hideAt |
+| `isHiddenShown` | true or false | changed by clearClues, hideAt, showHidden |
+| `canHide` | true or false | setting |
+| `toPlot` | [{x: "number", y: "number", name: {optional: "text"}}] | setting |
+| `plotted` | [{x: "number", y: "number", isRight: "true or false"}] | changed by plotAt, plotNext, clearPlotted |
+| `showSwaps` | true or false | setting |
+| `showTable` | true or false | setting |
+| `scaleChoices` | ["number 0 to …"] | setting |
+| `counters` | [{x: "number", y: "number"}] | changed by throwDice, startAgain |
+| `playerNames` | [{en: "text", hi: "text"}] | setting |
+| `turn` | whole number 0 to 1 | changed by throwDice, startAgain |
+| `lastThrow` | {orNull: {red: "whole number 1 to 6", green: "whole number 1 to 6"}} | changed by throwDice, startAgain |
+| `seed` | whole number 0 to … | setting |
+| `throwsMade` | whole number 0 to … | changed by throwDice, startAgain |
+| `goal` | whole number 2 to 20 | setting |
+| `winner` | {orNull: "whole number 0 to 1"} | changed by throwDice, startAgain |
+
+| Action | Takes | |
+|---|---|---|
+| `namePart` | {part: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | learner · Name the part of the plane tapped: a half of an axis with its sign, a quadrant, or O (the learner's tap) |
+| `numberQuadrants` | — | learner · Sweep anticlockwise from OX, naming the quadrants I, II, III, IV one after another (timed) |
+| `moveApart` | {x: "number", y: "number"} | learner · Slide the vertical number line: its zero this far from the horizontal line's zero (the learner's drag) |
+| `bringTogether` | — | learner · Glide the vertical number line until the two zeroes meet; there they are the axes, and O is named (timed) |
+| `showPoint` | {name: {optional: "text"}} | learner · Show the next of a figure's points, or the one named (the learner's Next) |
+| `showAllPoints` | — | Show every point the figure names |
+| `movePoint` | {x: "number", y: "number"} | learner · Put the point at (x, y), snapped to the step (the learner's drag or tap) |
+| `showReading` | — | learner · Show the reading kept hidden in a guessing round (the learner's Show) |
+| `askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
+| `chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target; its address is shown (the learner's tap) |
+| `lightLine` | {axis: ["x", "y"], value: "number"} | learner · Light every place with this one number: all the houses on Street 4 (the learner's button) |
+| `clearLight` | — | learner · Turn the lit places off |
+| `setAlong` | {value: "whole number -50 to 50"} | learner · Set the first number, how far along (the learner's stepper); she goes back to the start |
+| `setUp` | {value: "whole number -50 to 50"} | learner · Set the second number, how far up or down (the learner's stepper); she goes back to the start |
+| `walk` | — | learner · Walk: along by the first number, counting each line passed, turn, then up or down by the second (the learner's Walk; timed) |
+| `walkTo` | {x: "number", y: "number"} | Set both numbers to reach (x, y) from the start, and walk there (timed) |
+| `backToStart` | — | learner · Back to where she started (the learner's ↺) |
+| `giveClue` | {clue: "whole number 0 to 5"} | learner · Give a clue, by its place among the choices; where the point could be narrows (the learner's button) |
+| `clearClues` | — | learner · Take back every clue (the learner's ↺) |
+| `hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |
+| `showHidden` | — | learner · Show the hidden point |
+| `plotAt` | {x: "number", y: "number"} | learner · Put the next pair's dot at (x, y) (the learner's tap); it is right if that is where the pair says |
+| `plotNext` | — | Put the next pair's dot where it goes |
+| `setScale` | {every: "number 0 to …"} | learner · Choose the scale: a number every this many units, the window grown to match (the learner's choice) |
+| `clearPlotted` | — | learner · Take every dot off (the learner's ↺) |
+| `throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green (the learner's Throw; timed) |
+| `startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
+
+Signals: `crossed`, `named`, `quadrantsNumbered`, `moved`, `enteredQuadrant`, `readingShown`, `targetChosen`, `lineLit`, `passed`, `turned`, `arrived`, `clueGiven`, `pinned`, `plotted`, `fellOff`, `allPlotted`, `thrown`, `counterMoved`, `missed`, `sentHome`, `won`
+
 ## `decimal` — `@chalk/prop-decimal`
 
 Turning a fraction p/q into a decimal by long division, one digit at a time. Each step multiplies the remainder by 10 and divides by q; the remainder is always less than q, so either a remainder becomes 0 (the expansion terminates) or a remainder comes back and the digits repeat from there (non-terminating recurring). It knows division, nothing about any lesson.

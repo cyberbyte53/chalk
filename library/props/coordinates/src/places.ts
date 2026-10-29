@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, layersFor, set, signal } from "@chalk/prop";
+import { actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type PlaneCore, type Point, pointSchema } from "./plane";
 
@@ -36,6 +36,16 @@ type PlaceCoreFields = {
 };
 
 const MAX_PLACES = 120;
+
+/** The places with one number: every house on a street (x), or along a row (y). */
+export const placesOn = (
+  s: Pick<PlacesState, "places">,
+  line: { axis: "x" | "y"; value: number },
+): Place[] => s.places.filter((p) => p[line.axis] === line.value);
+
+/** Whether there is a place at p. */
+export const isPlace = (s: Pick<PlacesState, "places">, p: Point) =>
+  s.places.some((q) => q.x === p.x && q.y === p.y);
 const act = actionsFor<PlacesState>();
 const none = z.object({}).strict();
 
@@ -77,7 +87,10 @@ export const places = layersFor<PlacesState>()({
       byLearner: true,
       args: pointSchema,
       changes: ["target", "lit"],
-      run: () => set({}),
+      run: (s, p) =>
+        !s.canChooseTarget || !isPlace(s, p)
+          ? set({})
+          : set({ target: { x: p.x, y: p.y }, lit: null }, raise(placesSignals.targetChosen, p)),
     }),
     lightLine: act({
       describe:
@@ -85,22 +98,24 @@ export const places = layersFor<PlacesState>()({
       byLearner: true,
       args: lineSchema,
       changes: ["lit"],
-      run: () => set({}),
+      run: (s, line) => {
+        const count = placesOn(s, line).length;
+        return set({ lit: line }, raise(placesSignals.lineLit, { ...line, count }));
+      },
     }),
     clearLight: act({
       describe: "Turn the lit places off",
       byLearner: true,
       args: none,
       changes: ["lit"],
-      run: () => set({}),
+      run: () => set({ lit: null }),
     }),
   },
   signals: placesSignals,
   derived: {
     litCount: {
       describe: "How many places the lit number leaves",
-      compute: (s) =>
-        s.lit === null ? 0 : s.places.filter((p) => p[s.lit?.axis ?? "x"] === s.lit?.value).length,
+      compute: (s) => (s.lit === null ? 0 : placesOn(s, s.lit).length),
     },
   },
   invariant: (s) =>

@@ -1,9 +1,10 @@
-import { actionsFor, layersFor, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import {
   type PlaneCore,
   PlanePart,
   type Point,
+  QUADRANTS,
   type Quadrant,
   placeOf,
   pointSchema,
@@ -31,6 +32,25 @@ export type ReadingState = PlaneCore & {
   isReadingHidden: boolean;
   visited: Quadrant[];
 };
+
+/** A point snapped to the step and kept inside the window. */
+export function snapped(s: Pick<ReadingState, "pointStep" | "window">, p: Point): Point {
+  const snap = (v: number, lo: number, hi: number) =>
+    Math.min(hi, Math.max(lo, Number((Math.round(v / s.pointStep) * s.pointStep).toFixed(6))));
+  return { x: snap(p.x, s.window.xMin, s.window.xMax), y: snap(p.y, s.window.yMin, s.window.yMax) };
+}
+
+/** The point put down at p: where it is, the quadrants it has now been in, and what it announces. */
+function putAt(s: ReadingState, p: Point) {
+  const point = snapped(s, p);
+  const place = placeOf(point);
+  const quadrant = (QUADRANTS as readonly string[]).includes(place) ? (place as Quadrant) : null;
+  const isNew = quadrant !== null && !s.visited.includes(quadrant);
+  const visited = isNew && quadrant !== null ? [...s.visited, quadrant] : s.visited;
+  const emit: Emit[] = [raise(readingSignals.moved, { x: point.x, y: point.y, place })];
+  if (isNew) emit.push(raise(readingSignals.enteredQuadrant, { quadrant }));
+  return { point, visited, emit };
+}
 
 const act = actionsFor<ReadingState>();
 const none = z.object({}).strict();
@@ -71,7 +91,10 @@ export const reading = layersFor<ReadingState>()({
       byLearner: true,
       args: pointSchema,
       changes: ["point", "visited"],
-      run: () => set({}),
+      run: (s, p) => {
+        const { point, visited, emit } = putAt(s, p);
+        return set({ point, visited }, ...emit);
+      },
     }),
     showReading: act({
       describe: "Show the reading kept hidden in a guessing round (the learner's Show)",
@@ -79,13 +102,22 @@ export const reading = layersFor<ReadingState>()({
       reveals: true,
       args: none,
       changes: ["isReadingHidden"],
-      run: () => set({}),
+      run: (s) =>
+        s.point === null || !s.isReadingHidden
+          ? set({})
+          : set(
+              { isReadingHidden: false },
+              raise(readingSignals.readingShown, { x: s.point.x, y: s.point.y }),
+            ),
     }),
     askAt: act({
       describe: "Put the point at (x, y) with its reading hidden: a guessing round",
       args: pointSchema,
       changes: ["point", "isReadingHidden", "visited"],
-      run: () => set({}),
+      run: (s, p) => {
+        const { point, visited, emit } = putAt(s, p);
+        return set({ point, visited, isReadingHidden: true }, ...emit);
+      },
     }),
   },
   signals: readingSignals,

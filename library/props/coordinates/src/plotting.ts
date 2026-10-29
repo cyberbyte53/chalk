@@ -1,6 +1,6 @@
-import { actionsFor, layersFor, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import type { PlaneCore } from "./plane";
+import { type PlaneCore, isInWindow } from "./plane";
 
 /** A pair to plot, from a table or a list. */
 export const pairSchema = z
@@ -22,6 +22,21 @@ export type PlottingState = PlaneCore & {
 };
 
 const MAX_PAIRS = 12;
+/** Two numbers the same, to a millionth (a tap snaps to quarters; pairs carry decimals). */
+const same = (a: number, b: number) => Math.abs(a - b) < 1e-6;
+
+/** A dot for the next pair at (x, y), and what it announces. */
+function dotFor(s: PlottingState, x: number, y: number) {
+  const n = s.plotted.length;
+  const pair = s.toPlot[n];
+  if (pair === undefined) return null;
+  const isRight = same(pair.x, x) && same(pair.y, y);
+  const plotted = [...s.plotted, { x, y, isRight }];
+  const emit: Emit[] = [raise(plottingSignals.plotted, { n, x, y, isRight })];
+  if (plotted.length === s.toPlot.length) emit.push(raise(plottingSignals.allPlotted));
+  return { plotted, emit };
+}
+
 const act = actionsFor<PlottingState>();
 const none = z.object({}).strict();
 
@@ -65,14 +80,21 @@ export const plotting = layersFor<PlottingState>()({
       byLearner: true,
       args: z.object({ x: z.number(), y: z.number() }).strict(),
       changes: ["plotted"],
-      run: () => set({}),
+      run: (s, { x, y }) => {
+        const dot = dotFor(s, x, y);
+        return dot === null ? set({}) : set({ plotted: dot.plotted }, ...dot.emit);
+      },
     }),
     plotNext: act({
       describe: "Put the next pair's dot where it goes",
       reveals: true,
       args: none,
       changes: ["plotted"],
-      run: () => set({}),
+      run: (s) => {
+        const pair = s.toPlot[s.plotted.length];
+        const dot = pair === undefined ? null : dotFor(s, pair.x, pair.y);
+        return dot === null ? set({}) : set({ plotted: dot.plotted }, ...dot.emit);
+      },
     }),
     setScale: act({
       describe:
@@ -80,14 +102,25 @@ export const plotting = layersFor<PlottingState>()({
       byLearner: true,
       args: z.object({ every: z.number().positive() }).strict(),
       changes: ["tickEvery", "window"],
-      run: () => set({}),
+      run: (s, { every }) => {
+        if (every === s.tickEvery) return set({});
+        // The plane keeps its marks where they are: a number every `every` units, so the window
+        // grows or shrinks with the scale.
+        const k = every / s.tickEvery;
+        const w = s.window;
+        const window = { xMin: w.xMin * k, xMax: w.xMax * k, yMin: w.yMin * k, yMax: w.yMax * k };
+        const off = s.toPlot.flatMap((p, n) =>
+          isInWindow(window, p) ? [] : [raise(plottingSignals.fellOff, { n, x: p.x, y: p.y })],
+        );
+        return set({ tickEvery: every, window }, ...off);
+      },
     }),
     clearPlotted: act({
       describe: "Take every dot off (the learner's ↺)",
       byLearner: true,
       args: none,
       changes: ["plotted"],
-      run: () => set({}),
+      run: () => set({ plotted: [] }),
     }),
   },
   signals: plottingSignals,

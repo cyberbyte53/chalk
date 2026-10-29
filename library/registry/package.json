@@ -20,6 +20,7 @@
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
+    "@chalk/prop-coordinates": "workspace:*",
     "@chalk/prop-decimal": "workspace:*",
     "@chalk/prop-primes": "workspace:*"
   },

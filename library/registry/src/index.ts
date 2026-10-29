@@ -2,6 +2,7 @@ import { type PropPack, lazyRegistry } from "@chalk/player";
 import { type AnyPropDef, BOARD, asAnyProp, boardProp } from "@chalk/prop";
 import { basicProps } from "@chalk/prop-basics";
 import { defs as basicsDefs } from "@chalk/prop-basics/defs";
+import { defs as coordinatesDefs } from "@chalk/prop-coordinates/defs";
 import { defs as decimalDefs } from "@chalk/prop-decimal/defs";
 import { defs as primesDefs } from "@chalk/prop-primes/defs";
 
@@ -12,6 +13,7 @@ import { defs as primesDefs } from "@chalk/prop-primes/defs";
  * one line here, its `defs.ts`, and its styles.
  */
 const packs: readonly (PropPack & { name: string })[] = [
+  { name: "coordinates", defs: coordinatesDefs, load: () => import("@chalk/prop-coordinates") },
   { name: "decimal", defs: decimalDefs, load: () => import("@chalk/prop-decimal") },
   { name: "primes", defs: primesDefs, load: () => import("@chalk/prop-primes") },
 ];

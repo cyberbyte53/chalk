@@ -1,0 +1,326 @@
+/* @chalk/prop-coordinates: drawn only with the look's tokens (@chalk/look).
+   Riya and her route are the primary colour; Aman's house is the secondary; what is lit or still
+   possible is a soft tint; right and wrong dots are the look's right and wrong. */
+
+.cp {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cp-line {
+  margin: 0;
+  font: var(--text-body) / var(--text-body-leading) var(--font-body);
+  color: var(--color-on-surface);
+}
+.cp-address strong {
+  color: var(--color-secondary);
+}
+.cp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ---- the plane: scene, grid, lines and marks ---- */
+.cp-frame text {
+  font: 600 var(--text-caption) var(--font-body);
+  fill: var(--color-on-surface);
+}
+.cp-scene {
+  fill: var(--color-surface-container);
+}
+.cp-scene.is-paper {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+}
+.cp-scene.is-fairGround {
+  fill: color-mix(in srgb, var(--color-right-container) 60%, var(--color-surface));
+}
+.cp-scene.is-classroom {
+  fill: color-mix(in srgb, var(--color-category-1) 10%, var(--color-surface));
+}
+.cp-main-road,
+.cp-street {
+  stroke: color-mix(in srgb, var(--color-on-surface-variant) 30%, var(--color-surface));
+  stroke-linecap: round;
+}
+.cp-grid line {
+  stroke: var(--color-outline-variant);
+  stroke-width: 0.6;
+}
+.cp-axis {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.6;
+}
+.cp-apart {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 3;
+  cursor: grab;
+}
+.cp-axis-half {
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.cp-mark line {
+  stroke: var(--color-on-surface);
+  stroke-width: 1.2;
+}
+.cp-mark-button {
+  cursor: pointer;
+}
+.cp-mark-button circle {
+  fill: var(--color-surface);
+  stroke: var(--color-outline-variant);
+}
+.cp-mark-button.is-lit circle {
+  fill: var(--color-primary-container);
+  stroke: var(--color-primary);
+}
+.cp-frame .cp-origin,
+.cp-frame .cp-directions text {
+  font: 700 var(--text-note) var(--font-display);
+}
+.cp-frame .cp-axis-name {
+  font: 700 var(--text-caption) var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+.cp-frame .cp-quadrant text {
+  font: 800 var(--text-title) var(--font-display);
+  fill: color-mix(in srgb, var(--color-on-surface) 45%, transparent);
+}
+.cp-frame .cp-quadrant .cp-signs {
+  font: 600 var(--text-caption) var(--font-body);
+}
+.cp-frame .cp-quadrant.is-named text {
+  fill: var(--color-primary);
+}
+.cp-part-tap,
+.cp-plane-tap {
+  fill: transparent;
+  cursor: pointer;
+}
+.cp-part-tap.is-named {
+  fill: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+.cp-part-tap-line {
+  stroke: transparent;
+  stroke-width: 18;
+  cursor: pointer;
+}
+.cp-part-tap-o {
+  fill: transparent;
+  cursor: pointer;
+}
+
+/* ---- places ---- */
+.cp-place {
+  cursor: pointer;
+}
+.cp-hit {
+  fill: transparent;
+}
+.cp-house-wall {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2;
+}
+.cp-house-roof {
+  fill: color-mix(in srgb, var(--color-wrong) 55%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+.cp-house-door {
+  fill: var(--color-on-surface-variant);
+}
+.cp-desk-top {
+  fill: color-mix(in srgb, var(--color-category-1) 45%, var(--color-surface));
+  stroke: var(--color-on-surface-variant);
+}
+.cp-desk-chair {
+  fill: var(--color-surface-container);
+  stroke: var(--color-on-surface-variant);
+}
+.cp-crossing {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2;
+}
+.cp-stall-counter {
+  fill: var(--color-surface);
+  stroke: var(--color-on-surface-variant);
+}
+.cp-stall-awning {
+  fill: var(--color-category-2);
+  stroke: var(--color-on-surface-variant);
+}
+.cp-stall-stripe {
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+.cp-place.is-lit .cp-house-wall,
+.cp-place.is-lit .cp-desk-top,
+.cp-place.is-lit .cp-crossing,
+.cp-place.is-lit .cp-stall-counter {
+  fill: var(--color-primary-container);
+}
+.cp-place.is-target .cp-house-wall,
+.cp-place.is-target .cp-desk-top,
+.cp-place.is-target .cp-crossing,
+.cp-place.is-target .cp-stall-counter {
+  fill: var(--color-secondary-container);
+  stroke: var(--color-secondary);
+  stroke-width: 2.4;
+}
+
+.cp-target-halo {
+  fill: color-mix(in srgb, var(--color-secondary) 22%, transparent);
+  stroke: var(--color-secondary);
+  stroke-width: 2.5;
+}
+
+/* ---- Riya's walk ---- */
+.cp-walk-start {
+  fill: var(--color-primary);
+}
+.cp-route {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  opacity: 0.6;
+}
+.cp-route-done {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cp-walker-body {
+  fill: var(--color-primary);
+}
+.cp-walker-head {
+  fill: color-mix(in srgb, var(--color-category-1) 50%, var(--color-surface));
+  stroke: var(--color-primary);
+  stroke-width: 1.5;
+}
+.cp-frame .cp-walker-name {
+  font: 700 var(--text-caption) var(--font-body);
+  fill: var(--color-primary);
+}
+
+/* ---- points: a figure's, the one to read, clues, plotted dots ---- */
+.cp-named-point circle {
+  fill: var(--color-on-surface);
+}
+.cp-named-point.is-accent circle {
+  fill: var(--color-primary);
+}
+.cp-named-point.is-muted circle {
+  fill: var(--color-on-surface-variant);
+}
+.cp-drop {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+}
+.cp-point {
+  fill: var(--color-primary);
+  stroke: var(--color-surface);
+  stroke-width: 3;
+  cursor: grab;
+}
+.cp-frame .cp-length,
+.cp-frame .cp-pair {
+  font: 700 var(--text-note) var(--font-display);
+  fill: var(--color-primary);
+}
+.cp-still-region {
+  fill: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+.cp-still-line {
+  stroke: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.cp-still-point {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 3;
+}
+.cp-hidden {
+  fill: var(--color-secondary);
+}
+.cp-dot.is-right circle {
+  fill: var(--color-right);
+}
+.cp-dot.is-wrong circle {
+  fill: var(--color-surface);
+  stroke: var(--color-wrong);
+  stroke-width: 2.5;
+}
+.cp-dot.is-wrong text {
+  fill: var(--color-wrong);
+}
+.cp-swap {
+  fill: var(--color-on-surface-variant);
+}
+.cp-swap-line {
+  stroke: var(--color-on-surface-variant);
+  stroke-dasharray: 3 4;
+}
+.cp-table {
+  border-collapse: collapse;
+  font: var(--text-body) var(--font-body);
+  color: var(--color-on-surface);
+}
+.cp-table th,
+.cp-table td {
+  border: 1px solid var(--color-outline-variant);
+  padding: 4px 10px;
+  text-align: center;
+}
+.cp-table td.is-next {
+  background: var(--color-primary-container);
+}
+
+/* ---- the dice game ---- */
+.cp-counter circle {
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+.cp-counter.is-a circle {
+  fill: var(--color-primary);
+}
+.cp-counter.is-b circle {
+  fill: var(--color-secondary);
+}
+.cp-frame .cp-counter text {
+  font: 800 var(--text-caption) var(--font-display);
+  fill: var(--color-on-primary);
+}
+.cp-dice {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.cp-die {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font: 800 var(--text-note) var(--font-display);
+  color: var(--color-on-primary);
+}
+.cp-die.is-red {
+  background: var(--color-wrong);
+}
+.cp-die.is-green {
+  background: var(--color-right);
+}

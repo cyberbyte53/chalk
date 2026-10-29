@@ -1,7 +1,7 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, layersFor, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, type Point, pointSchema, windowSchema } from "./plane";
+import { type PlaneCore, type PlaneWindow, type Point, pointSchema, windowSchema } from "./plane";
 
 /**
  * A clue about where a point is: words, and what they allow. A region ("upper half"), one distance
@@ -24,6 +24,58 @@ export type CluesState = PlaneCore & {
   isHiddenShown: boolean;
   canHide: boolean;
 };
+
+/**
+ * Where the point could still be after these clues: anywhere in the window, a region, a line
+ * (x = 5, or y = 0), one point, or nowhere (clues that disagree).
+ */
+export type Still =
+  | { kind: "anywhere" }
+  | { kind: "region"; region: PlaneWindow }
+  | { kind: "line"; axis: "x" | "y"; value: number; region: PlaneWindow }
+  | { kind: "point"; x: number; y: number }
+  | { kind: "nowhere" };
+
+export function stillPossible(
+  s: Pick<CluesState, "window" | "clueChoices">,
+  given: readonly number[],
+): Still {
+  let r: PlaneWindow = { ...s.window };
+  let x: number | undefined;
+  let y: number | undefined;
+  for (const g of given) {
+    const c = s.clueChoices[g];
+    if (c === undefined) continue;
+    if (c.region !== undefined)
+      r = {
+        xMin: Math.max(r.xMin, c.region.xMin),
+        xMax: Math.min(r.xMax, c.region.xMax),
+        yMin: Math.max(r.yMin, c.region.yMin),
+        yMax: Math.min(r.yMax, c.region.yMax),
+      };
+    if (c.x !== undefined) {
+      if (x !== undefined && x !== c.x) return { kind: "nowhere" };
+      x = c.x;
+    }
+    if (c.y !== undefined) {
+      if (y !== undefined && y !== c.y) return { kind: "nowhere" };
+      y = c.y;
+    }
+  }
+  if (r.xMin > r.xMax || r.yMin > r.yMax) return { kind: "nowhere" };
+  const isIn = (v: number, lo: number, hi: number) => v >= lo && v <= hi;
+  if (x !== undefined && !isIn(x, r.xMin, r.xMax)) return { kind: "nowhere" };
+  if (y !== undefined && !isIn(y, r.yMin, r.yMax)) return { kind: "nowhere" };
+  if (x !== undefined && y !== undefined) return { kind: "point", x, y };
+  if (x !== undefined) return { kind: "line", axis: "x", value: x, region: r };
+  if (y !== undefined) return { kind: "line", axis: "y", value: y, region: r };
+  const isWhole =
+    r.xMin === s.window.xMin &&
+    r.xMax === s.window.xMax &&
+    r.yMin === s.window.yMin &&
+    r.yMax === s.window.yMax;
+  return isWhole ? { kind: "anywhere" } : { kind: "region", region: r };
+}
 
 const act = actionsFor<CluesState>();
 const none = z.object({}).strict();
@@ -67,14 +119,22 @@ export const clues = layersFor<CluesState>()({
       byLearner: true,
       args: z.object({ clue: z.number().int().min(0).max(5) }).strict(),
       changes: ["given"],
-      run: () => set({}),
+      run: (s, { clue }) => {
+        if (clue >= s.clueChoices.length || s.given.includes(clue)) return set({});
+        const given = [...s.given, clue];
+        const still = stillPossible(s, given);
+        const emit: Emit[] = [raise(cluesSignals.clueGiven, { still: still.kind })];
+        if (still.kind === "point")
+          emit.push(raise(cluesSignals.pinned, { x: still.x, y: still.y }));
+        return set({ given }, ...emit);
+      },
     }),
     clearClues: act({
       describe: "Take back every clue (the learner's ↺)",
       byLearner: true,
       args: none,
       changes: ["given", "isHiddenShown"],
-      run: () => set({}),
+      run: () => set({ given: [], isHiddenShown: false }),
     }),
     hideAt: act({
       describe:
@@ -82,7 +142,8 @@ export const clues = layersFor<CluesState>()({
       byLearner: true,
       args: pointSchema,
       changes: ["hidden", "given", "isHiddenShown"],
-      run: () => set({}),
+      run: (s, p) =>
+        s.canHide ? set({ hidden: { x: p.x, y: p.y }, given: [], isHiddenShown: false }) : set({}),
     }),
     showHidden: act({
       describe: "Show the hidden point",
@@ -90,10 +151,16 @@ export const clues = layersFor<CluesState>()({
       reveals: true,
       args: none,
       changes: ["isHiddenShown"],
-      run: () => set({}),
+      run: (s) => (s.hidden === null ? set({}) : set({ isHiddenShown: true })),
     }),
   },
   signals: cluesSignals,
+  derived: {
+    still: {
+      describe: "Where the point could still be: anywhere, a region, a line, one point, or nowhere",
+      compute: (s) => stillPossible(s, s.given),
+    },
+  },
   invariant: (s) =>
     s.given.some((g) => g >= s.clueChoices.length)
       ? "a clue given is not among the choices"

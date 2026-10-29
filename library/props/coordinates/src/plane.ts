@@ -1,5 +1,15 @@
 import { localizedSchema } from "@chalk/content";
-import { type FrameSpec, actionsFor, layersFor, set, signal } from "@chalk/prop";
+import {
+  type FrameSpec,
+  actionsFor,
+  layersFor,
+  raise,
+  seq,
+  set,
+  signal,
+  tween,
+  wait,
+} from "@chalk/prop";
 import { z } from "zod";
 
 /**
@@ -76,6 +86,9 @@ export const namedPointSchema = z
 export type NamedPoint = z.infer<typeof namedPointSchema>;
 
 const MAX_SPAN = 200;
+/** Seconds between one quadrant's name and the next in the sweep; seconds the line takes to glide. */
+const SWEEP_STEP = 0.6;
+const GLIDE = 1.2;
 const MAX_POINTS = 24;
 
 const planeFields = {
@@ -185,7 +198,7 @@ export const core = layersFor<PlaneCore>()({
       byLearner: true,
       args: z.object({ part: z.nativeEnum(PlanePart) }).strict(),
       changes: ["named"],
-      run: () => set({}),
+      run: (_, { part }) => set({ named: part }, raise(planeSignals.named, { part })),
     }),
     numberQuadrants: act({
       describe:
@@ -193,7 +206,16 @@ export const core = layersFor<PlaneCore>()({
       byLearner: true,
       args: none,
       changes: ["quadrantsNamed"],
-      run: () => set({}),
+      run: () =>
+        seq(
+          set({ quadrantsNamed: 0 }),
+          ...[1, 2, 3, 4].flatMap((n) => [
+            wait<PlaneCore>(SWEEP_STEP),
+            n === 4
+              ? set<PlaneCore>({ quadrantsNamed: n }, raise(planeSignals.quadrantsNumbered))
+              : set<PlaneCore>({ quadrantsNamed: n }),
+          ]),
+        ),
     }),
     moveApart: act({
       describe:
@@ -201,7 +223,10 @@ export const core = layersFor<PlaneCore>()({
       byLearner: true,
       args: pointSchema,
       changes: ["apart"],
-      run: () => set({}),
+      run: (_, apart) =>
+        apart.x === 0 && apart.y === 0
+          ? set({ apart }, raise(planeSignals.crossed))
+          : set({ apart }),
     }),
     bringTogether: act({
       describe:
@@ -209,20 +234,41 @@ export const core = layersFor<PlaneCore>()({
       byLearner: true,
       args: none,
       changes: ["apart", "showOrigin"],
-      run: () => set({}),
+      run: (s) =>
+        s.apart.x === 0 && s.apart.y === 0
+          ? set({ showOrigin: true })
+          : seq(
+              tween(
+                GLIDE,
+                { apart: { x: 0, y: 0 } },
+                {
+                  interpolate: (from, _to, t) => ({
+                    apart: { x: from.apart.x * (1 - t), y: from.apart.y * (1 - t) },
+                  }),
+                },
+              ),
+              set({ apart: { x: 0, y: 0 }, showOrigin: true }, raise(planeSignals.crossed)),
+            ),
     }),
     showPoint: act({
       describe: "Show the next of a figure's points, or the one named (the learner's Next)",
       byLearner: true,
       args: z.object({ name: z.string().min(1).max(3).optional() }).strict(),
       changes: ["points"],
-      run: () => set({}),
+      run: (s, { name }) => {
+        const at =
+          name === undefined
+            ? s.points.findIndex((p) => !p.isShown)
+            : s.points.findIndex((p) => p.name === name);
+        if (at === -1) return set({});
+        return set({ points: s.points.map((p, i) => (i === at ? { ...p, isShown: true } : p)) });
+      },
     }),
     showAllPoints: act({
       describe: "Show every point the figure names",
       args: none,
       changes: ["points"],
-      run: () => set({}),
+      run: (s) => set({ points: s.points.map((p) => ({ ...p, isShown: true })) }),
     }),
   },
   signals: planeSignals,
@@ -252,11 +298,16 @@ export const planeFrame: FrameSpec<PlaneCore> = {
   kind: "plane",
   pixels: (s, width) => {
     const { xMin, xMax, yMin, yMax } = s.window;
-    const margin = 24;
-    const unit = Math.min((width - 2 * margin) / (xMax - xMin), (420 - 2 * margin) / (yMax - yMin));
-    const height = Math.round(Math.max(200, unit * (yMax - yMin) + 2 * margin));
-    const left = (width - unit * (xMax - xMin)) / 2;
-    const top = (height - unit * (yMax - yMin)) / 2;
+    // Room round the plane for what is written outside it: the numbers up the left, the numbers
+    // and the horizontal line's name along the bottom, the vertical line's name on top.
+    const pad = { left: 36, right: 16, top: 24, bottom: 44 };
+    const unit = Math.min(
+      (width - pad.left - pad.right) / (xMax - xMin),
+      (420 - pad.top - pad.bottom) / (yMax - yMin),
+    );
+    const height = Math.round(Math.max(200, unit * (yMax - yMin) + pad.top + pad.bottom));
+    const left = pad.left + (width - pad.left - pad.right - unit * (xMax - xMin)) / 2;
+    const top = pad.top + (height - pad.top - pad.bottom - unit * (yMax - yMin)) / 2;
     return {
       width,
       height,

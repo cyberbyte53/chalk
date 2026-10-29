@@ -266,7 +266,7 @@
       text: ""
       status: closed
 - id: cmvt1adgqnip
-  status: open
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T04:19:05.258Z
@@ -320,4 +320,41 @@
     What I'd like you to check: is anything missing from what you want to do in class (for example,
     should you be able to drag Riya instead of using the steppers?), and is anything here that you
     don't want? Close this thread to approve, and I'll write the run bodies and draw it.
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T05:40:53.374Z
+      text: "From chat: Riya moves by the steppers, not by dragging. The two numbers set along, then up or
+        down, so the direction of each step is explicit and visible. The definition already does
+        this (walker: setAlong and setUp with canSetSteps; no drag action), so nothing changes."
+    - by: you
+      role: person
+      at: 2026-10-29T05:41:07.014Z
+      text: ""
+      status: closed
+- id: cmvt4fa6103h
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T05:46:53.113Z
+  source: authoring/books/class9-maths/coordinate-geometry/props.md:15
+  commit: 468c978431badfb391f588cdce404a30dc1aee35
+  quote: overshooting misses the turn
+  text: >-
+    The dice game as the book states it can get stuck. Neither coordinate may go past 10, and a move
+    that would overshoot misses the turn. Once a counter reaches x = 10 with y below 10 (say (10,
+    6)), every throw adds at least 1 to x, so every throw overshoots and that counter never moves
+    again. The same happens at y = 10. In a class, the game can end with one player stuck for ever.
+
+
+    A. (Recommended) A die that would overshoot isn't used, and the counter moves by the other die
+    alone. From (10, 6), red 3 and green 2 goes to (10, 8). Only a throw where both dice overshoot
+    is missed. Nothing ever passes 10, and every game can finish.
+
+    B. Keep the book's rule exactly, and the game can get stuck.
+
+    C. Once a counter is at 10 on one coordinate, that player throws only the other die.
+
+
+    Until you choose, the code follows the book (B). The rest of the prop doesn't depend on this.
   messages: []

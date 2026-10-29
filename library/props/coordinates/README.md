@@ -19,10 +19,16 @@ The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a ho
 | reading | `reading.ts` | `point`, `pointStep`, `reading` (none → perpendiculars → distances → abscissa → pair), `isReadingHidden`, `visited` | `movePoint` (learner), `showReading` (learner, reveals), `askAt` | there is a point |
 | places | `places.ts` | `placeKind`, `places`, `target`, `targetName`, `canChooseTarget`, `lit` | `chooseTarget` (learner tap), `lightLine` (learner), `clearLight` (learner) | there are places |
 | walker | `walker.ts` | `walkerName`, `walkFrom`, `along`, `up`, `walked`, `isWalking`, `canSetSteps` | `setAlong`, `setUp`, `walk` (timed), `backToStart` (all learner); `walkTo` (reveals) | she has a start |
-| clues | `clues.ts` | `hidden` (off screen), `clueChoices`, `given`, `isHiddenShown`, `canHide` | `giveClue`, `clearClues`, `hideAt`, `showHidden` (reveals) (all learner) | there are clues |
+| clues | `clues.ts` | `hidden` (off screen), `clueChoices`, `given`, `isHiddenShown`, `canHide` | `giveClue`, `clearClues`, `hideAt`, `showHidden` (reveals) (all learner); derived `still`: anywhere, a region, a line, one point or nowhere | there are clues |
 | plotting | `plotting.ts` | `toPlot`, `plotted`, `showSwaps`, `showTable`, `scaleChoices` | `plotAt`, `setScale`, `clearPlotted` (learner); `plotNext` (reveals) | there are pairs |
 | dice | `dice.ts` | `counters`, `playerNames`, `turn`, `lastThrow`, `seed` (off screen), `throwsMade`, `goal`, `winner` | `throwDice` (learner, timed), `startAgain` (learner) | there are counters |
 
-Chance is seeded: the same seed gives the same throws. No `Math.random`.
+Chance is seeded: the same seed gives the same throws. No `Math.random`. `throwsMade` counts every throw across games, so a new game goes on along the seed's throws instead of repeating the last one. A move that would take a coordinate past the goal is missed, as the book has it (an open thread asks whether a counter at 10 on one coordinate should move by the other die alone, since the book's rule can leave it stuck).
+
+## The view
+
+`view.tsx` draws everything in the plane's own frame (`FrameStage`, with `planeFrame`), so drags and taps are in the plane's units: the point to read and the vertical line's zero are drags (`useDrags`); a tap on the plane plots the next pair (to the nearest quarter) or hides the learner's point. `plane-view.tsx` draws the core (scene, grid, lines and only the marks defined so far, O, X/X′/Y/Y′, the quadrants and their signs, a figure's points); `pictures.tsx` the houses, desks, crossings, stalls, Riya and the counters. In the town, every street and house number is a button that lights the places with it. Riya's two numbers are steppers, → and ↑; she walks along first, then up. Words on the prop's own buttons are in `words.ts`, in English and Hindi.
+
+Tests: `model.test.ts` (the laws, against the book's figures and answers), `seen.test.ts` (`checkProp` from each kind of board, and what the student sees).
 
 May import: `@chalk/content`, `@chalk/prop`, `zod` (and, with the view, `@chalk/draw`, `@chalk/player`, `preact`).

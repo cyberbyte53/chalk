@@ -1,7 +1,17 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, layersFor, set, signal } from "@chalk/prop";
+import {
+  type Effect,
+  type Emit,
+  actionsFor,
+  layersFor,
+  raise,
+  seq,
+  set,
+  signal,
+  wait,
+} from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, pointSchema } from "./plane";
+import { type PlaneCore, type Point, pointSchema } from "./plane";
 
 export const throwSchema = z
   .object({ red: z.number().int().min(1).max(6), green: z.number().int().min(1).max(6) })
@@ -17,6 +27,25 @@ export type DiceState = PlaneCore & {
   goal: number;
   winner: number | null;
 };
+
+/** Seconds a counter takes from one line to the next. */
+const SECONDS_PER_LINE = 0.18;
+
+/** A number from 0 to 1, the same for the same seed and n (mulberry32). */
+function chance(seed: number, n: number): number {
+  let t = (seed * 2654435761 + n * 40503 + 0x6d2b79f5) >>> 0;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+/** The n-th throw of a game with this seed: red and green, 1 to 6 each. */
+export function throwOf(seed: number, n: number): { red: number; green: number } {
+  return {
+    red: 1 + Math.floor(chance(seed, 2 * n) * 6),
+    green: 1 + Math.floor(chance(seed, 2 * n + 1) * 6),
+  };
+}
 
 const act = actionsFor<DiceState>();
 const none = z.object({}).strict();
@@ -43,6 +72,7 @@ export const dice = layersFor<DiceState>()({
     lastThrow: throwSchema.nullable(),
     /** The dice's seed: the same seed, the same throws. */
     seed: z.number().int().min(0),
+    /** Every throw so far, across games: the next throw is the seed's next. */
     throwsMade: z.number().int().min(0),
     goal: z.number().int().min(2).max(20),
     winner: z.number().int().min(0).max(1).nullable(),
@@ -69,14 +99,63 @@ export const dice = layersFor<DiceState>()({
       byLearner: true,
       args: none,
       changes: ["counters", "turn", "lastThrow", "throwsMade", "winner"],
-      run: () => set({}),
+      run: (s) => {
+        const me = s.turn;
+        const from = s.counters[me];
+        if (s.winner !== null || from === undefined) return set({});
+        const thrown = throwOf(s.seed, s.throwsMade);
+        const other = 1 - me;
+        const rolled = set<DiceState>(
+          { lastThrow: thrown, throwsMade: s.throwsMade + 1 },
+          raise(diceSignals.thrown, { player: me, ...thrown }),
+        );
+        const to = { x: from.x + thrown.red, y: from.y + thrown.green };
+        if (to.x > s.goal || to.y > s.goal)
+          return set(
+            { lastThrow: thrown, throwsMade: s.throwsMade + 1, turn: other },
+            raise(diceSignals.thrown, { player: me, ...thrown }),
+            raise(diceSignals.missed, { player: me, goal: s.goal }),
+          );
+        // The counter walks along by red, then up by green, a line at a time.
+        const at = (p: Point) => s.counters.map((c, i) => (i === me ? p : c));
+        const walk: Effect<DiceState>[] = [];
+        for (let k = 1; k <= thrown.red + thrown.green; k++) {
+          const p =
+            k <= thrown.red
+              ? { x: from.x + k, y: from.y }
+              : { x: to.x, y: from.y + k - thrown.red };
+          walk.push(wait(SECONDS_PER_LINE), set({ counters: at(p) }));
+        }
+        const them = s.counters[other];
+        const isOnThem =
+          them !== undefined && them.x === to.x && them.y === to.y && (to.x !== 0 || to.y !== 0);
+        const isWon = to.x === s.goal && to.y === s.goal;
+        const counters = s.counters.map((c, i) =>
+          i === me ? to : i === other && isOnThem ? { x: 0, y: 0 } : c,
+        );
+        const emit: Emit[] = [raise(diceSignals.counterMoved, { player: me, ...to })];
+        if (isOnThem) emit.push(raise(diceSignals.sentHome, { player: other }));
+        if (isWon) emit.push(raise(diceSignals.won, { player: me }));
+        return seq(
+          rolled,
+          ...walk,
+          set({ counters, turn: isWon ? me : other, winner: isWon ? me : null }, ...emit),
+        );
+      },
     }),
     startAgain: act({
       describe: "Both counters back to (0, 0), a new game (the learner's ↺)",
       byLearner: true,
       args: none,
       changes: ["counters", "turn", "lastThrow", "throwsMade", "winner"],
-      run: () => set({}),
+      run: (s) =>
+        // throwsMade isn't reset: the next game goes on along the seed's throws, so it differs.
+        set({
+          counters: s.counters.map(() => ({ x: 0, y: 0 })),
+          turn: 0,
+          lastThrow: null,
+          winner: null,
+        }),
     }),
   },
   signals: diceSignals,
