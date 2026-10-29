@@ -15,7 +15,9 @@ try {
     [
       "grep",
       "-n",
-      "biome-ignore",
+      "-E",
+      // A suppression comment, not the word written about.
+      "(//|/\\*)\\s*biome-ignore",
       "--",
       "platform",
       "library",
