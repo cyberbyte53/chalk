@@ -8,27 +8,25 @@ How we teach: the source fixes what a student can do (the objectives); the board
 
 ## two-numbers-for-a-place
 
-Order: discover → state. The need for a second number comes out of the story: one number gets Riya to a street with five houses on it, and only the second picks his. "Two numbers, in order" is named at the end of the lesson, not announced at the start. The order of the two numbers is taught once, where the source teaches it (the seating plan), not checked on every board.
+Order: discover → state. The lesson starts from what the student knows, a number line: one number fixes a point on it. Then a second number line rises from that point, and the plane is built from number lines standing on one: a pair is how far along the first line, then how far up the line that rises there. The need for the second number comes out of the story (one number brings Riya to a street with five houses on it), and "two numbers, in order" is named at the end, not announced at the start. The order of the two numbers is taught once, where the source teaches it (the seating plan).
 
 ### street-and-house  (o1, o2; s3.1, s3.1-number-line, s3.1-I, fig3.1)
-Purpose: Riya asks where Aman lives. He says "Street 4", and she walks there with the arrows: along the main road, then the road turns up Street 4. Five houses stand on it: which is his? He adds "House 5", and she walks up to it. Then any house can be Aman's, and the class says how to get there before walking. Departs from Fig. 3.1: every street runs north of the main road, so the walk is always along, then up; H (Street 2, House 5) and P (Street 7, House 4) keep their numbers.
-Needs: a town map: a main road with the streets leaving it, each numbered, and houses drawn as small houses along each street, numbered from the road; the main road is named "Street number" and each street "House number". Riya moves one block per tap of ↑ ↓ ← →, from where she is, on roads only (← → along the main road, ↑ ↓ up and down a street), and her address shows as she moves. Reaching Street 4 lights its five houses. The teacher or student taps any house to make it Aman's, and his address appears.
+Purpose: the main road is a number line, and "Street 4" walks Riya to 4 on it: on a line, one number is enough. Then Street 4 rises from the 4, a second number line going up, with five houses on it: which is Aman's? A beat later he replies "House 5", a number on the line that rose, and she walks up to it. Then every street rises, and the town is there. Any house can be made Aman's; Riya goes back to the corner, and the class says how she gets there before walking. Departs from Fig. 3.1: every street runs north of the main road, so the walk is always along, then up; H (Street 2, House 5) and P (Street 7, House 4) keep their numbers.
+Needs: the main road drawn as a number line from the corner (Riya there), with no streets yet; a street rising as a number line from one mark, its houses appearing on it; then every street rising. Riya moves one block per tap of ↑ ↓ ← →, on roads only, and her address shows as she moves. On Street 4 its five houses light, and Aman's house is marked only once "House 5" is said. Tapping any house makes it Aman's and sends Riya back to the corner.
 
 ### dot-on-paper  (o1; s3.1-II, fig3.2, ex3.1, ex3.1-q1)
-Purpose: the stall goes on the school ground, which has no roads, so distances from its two fences do what the street and house numbers did. Riya's first message, "near the gate", leaves a whole patch; "30 m from the west fence" leaves a line of spots; adding "20 m from the south fence" leaves one spot. Departs from Fig. 3.2's sheet of paper: the fair ground carries the story; the sheet's distances from its left and bottom edges are the same idea.
-Needs: the fair ground with its west and south fences; one clue at a time, each appearing after the one before, and each showing where the stall could still go: a phrase a patch, one distance a whole line, two distances one spot.
+Purpose: the stall goes on the school ground, which has no roads, so distances from its two fences do what the road and the street did. Riya's first message, "near the gate", fits a whole patch; "30 m from the west fence" fits a whole line of spots, which the student sees drawn the full length of the ground; only adding "20 m from the south fence" fits one spot, and the student puts the stall there. Departs from Fig. 3.2's sheet of paper: the fair ground carries the story; the sheet's distances from its left and bottom edges are the same idea.
+Needs: the fair ground with its west and south fences, each marked every 10 m; Riya's messages one at a time, each showing where the stall could still go, with each given distance drawn as a measured dashed line from its fence; the student places the stall on the spot.
 
 ### seating-plan  (o2; activity1, fig3.3)
 Purpose: a desk is given by its column and row, column first, so (5, 3) and (3, 5) are two different desks. This is where the lesson teaches the order of the two numbers.
-Needs: the classroom as desks in 10 columns and 7 rows, columns and rows numbered and named; tap a desk to see its pair; (5, 3) and (3, 5) both stay marked once tapped. Sonia's desk is S(4, 1); the teacher's desk sits outside the plan. The teacher can put a student's name on any desk.
-
-### cross-streets  (o2; ex3.1-q2)
-Purpose: in a city of 5 numbered streets each way, only one crossing is (4, 3) and only one is (3, 4), and they are different crossings. Departs from Ex 3.1 Q2: the streets are only numbered, without "200 m apart", so the pair names streets and nothing else.
-Needs: the city as single-line streets crossing; Riya walks there with the arrows, and each of (4, 3) and (3, 4) stays marked once she reaches it; one question on both.
+Needs: the classroom as desks in 10 columns and 7 rows, columns numbered from the left and rows from the front, both named; tap a desk to see its pair; (5, 3) and (3, 5) both stay marked once tapped. Sonia's desk is (4, 1), labelled.
 
 ### two-lines  (o3; s3.1-idea, box-descartes, fig3.4, s3.4, summary)
 Purpose: each time, two lines at right angles did it: one across (the main road, the south fence, the front row) and one up (the street, the west fence, a column). The first number says how far across, the second how far up. That idea, Descartes', is coordinate geometry. The lesson ends with summary point 1.
-Needs: the house, the stall spot and the desk side by side, each with its two lines drawn; Descartes' story in words (no portrait).
+Needs: the house, the stall's spot and the desk again, each with its route along, then up, drawn in colour so its two lines stand out, and its two numbers; Descartes' story in words (no portrait).
+
+Questions: the source's own (Ex 3.1 Q1, the table lamp; Ex 3.1 Q2, the cross-streets) as written questions, in its words. Ours are done in the prop: walk Riya to an address, tap a desk by its pair, place a stall from its two distances, each checked by the prop's state, with a note for a named wrong state (the swapped pair).
 
 ## the-cartesian-plane
 

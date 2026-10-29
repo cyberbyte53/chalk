@@ -659,7 +659,11 @@
     ('she's standing there and still can't tell?'). Suggested fix: on Street 4, light only the five
     houses. Mark Aman's house and show his full address only once 'House 5' has been said, or at her
     first ↑ tap."
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T08:18:57.139Z
+      text: makes sense
 - id: cmvt95u1bhzc
   status: ready
   by: reviewer
@@ -770,7 +774,12 @@
     number is how far up the street. That only holds when the walk starts from the corner. Suggested
     fix: send Riya back to the corner when a new house is chosen, or say so in the text ('Send her
     back to the corner with ↺, then…')."
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T08:20:48.731Z
+      text: yes makes sense ; because this is like we are repeating the exercise ; kind of like now
+        students can play with the prop and this time they can see the aman house and go to it ?
 - id: cmvt95u3sdis
   status: open
   by: reviewer
@@ -786,7 +795,12 @@
     makes that link. So 'one number isn't enough' arrives without the contrast that makes it
     surprising: on a number line, one number is enough. Suggested fix: one line, before or after
     'Street 4', e.g. 'On a number line, one number fixes a point. Will one number fix a house?'"
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T08:18:14.245Z
+      text: Actually this makes sense , we should connect the earlier thing (the number line) , how should
+        we do it? should we have a prop , because this is sort of extending from 1D to 2D
 - id: cmvt95u4k0x9
   status: open
   by: reviewer
@@ -806,7 +820,11 @@
     distance left a whole line of spots'. Suggested fix: mark the fences every 10 m. Draw each
     distance as a measured dashed line from its fence with its value. Let the 30 m line run the full
     height of the ground, so the picture shows 'a whole line'."
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T08:21:55.920Z
+      text: makes sense
 - id: cmvt95u7jze7
   status: withdrawn
   by: reviewer
@@ -965,7 +983,11 @@
     side is 'left', and the source's point that the teacher's desk is not part of the plan isn't
     visible. Suggested fix: draw the teacher's desk (and the blackboard) below row 1, outside the
     grid, as in Fig. 3.3."
-  messages: []
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T08:23:56.376Z
+      text: or don't mention teacher at all
 - id: cmvt95urhs5f
   status: ready
   by: reviewer
@@ -1202,7 +1224,7 @@
         where it is' / 'दिखाओ कहाँ है' appears only after the third clue, and tapping it marks the
         spot the clues already fixed.
 - id: cmvt9j3r3330
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T08:09:49.503Z
@@ -1218,6 +1240,7 @@
     scrolls past white space to reach the plan the text tells them to tap. Hindi street-and-house
     shows the same spare line. Suggested fix: keep room for the header's actual length (one line
     where it fits), or keep two lines only on the board whose header needs them."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1225,3 +1248,72 @@
       text: "Keep exactly the room the address will need: hold the space with an invisible copy of the
         longest address that board can show (its farthest place), instead of a fixed two lines."
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:11:14.230Z
+      text: "Fixed in 1d4a1bc (the commit before this message): the room above the plane is an unseen copy
+        of the longest address that board can show, so it's one line on the seating plan ('This
+        desk: Column 10, Row 7') and on the Hindi town, two on the English town. Played:
+        seating-plan (tap (5, 3)) and street-and-house in Hindi to Street 4; the map doesn't move,
+        and no empty band is left."
+      status: ready
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:11:20.092Z
+      text: "Correction: the commit is d76d797, not 1d4a1bc."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:11:46.667Z
+      text: "Rechecked at 390 in en and hi after d76d797. Fixed. On seating-plan, before any tap, only one
+        line is kept above 'Row' / 'पंक्ति'. 'This desk: Column 5, Row 3' / 'यह डेस्क: स्तंभ 5,
+        पंक्ति 3' fills it exactly, and the plan doesn't move. On street-and-house, walked to Street
+        4: English keeps the two lines its header needs, Hindi keeps one, and in both the map and
+        the arrow pad stay put on the first step and at Street 4."
+- id: cmvt9zxu43g1
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-10-29T08:22:54.988Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: w2/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:278
+  snapshot: "For the fair, the class plans who sits where to make the posters. Their classroom has 10
+    columns of desks and 7 rows. A desk is named by two numbers: its column, counted from the left,
+    then its row, counted from the front. Sonia sits in column 4, row 1, so her desk is (4, 1). The
+    teacher's desk stands in front, outside the plan."
+  commit: d76d797a1c787544931005e0a280a692cfc57d5a
+  text: bro why we talking about teacher if she is not important
+  messages: []
+- id: cmvta35y51hi
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-10-29T08:25:25.469Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/cross-streets
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:296
+  snapshot: "Cross-streets Aman's cousin lives in a city where two main roads cross at the centre, one
+    north–south and one east–west. Other streets run beside them: 5 each way, numbered from the main
+    roads. Where the 2nd north–south street meets the 5th east–west street is the cross-street (2,
+    5). Riya starts at the centre. Walk her to (2, 5), then to (4, 3), then to (3, 4). Each crossing
+    she reaches stays mar"
+  commit: d76d797a1c787544931005e0a280a692cfc57d5a
+  text: bro do we need this example at all ? is this driving some point home that others are not?
+    because this is hard to comprehend and i feel not helping
+  messages: []
+- id: cmvta61jy5hb
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-10-29T08:27:39.742Z
+  board: class9-maths/coordinate-geometry/questions/cross-street-count/7b0d9a01
+  source: content/class9-maths/coordinate-geometry/questions/cross-street-count/params.yaml:2
+  snapshot: "A city has 5 streets running north–south and 5 running east–west, 200 m apart. The
+    cross-street (a, b) is where the a-th north–south street meets the b-th east–west street. How
+    many cross-streets can be called (4, 3)? One Two: (4, 3) and (3, 4) Five"
+  commit: d76d797a1c787544931005e0a280a692cfc57d5a
+  text: What kind of question is this? This is such a known question. First of all, I don't see like,
+    question is hard to comprehend first of all. And why see, our whole goal is to test the
+    understanding of the child from the boards we just made. Like, shouldn't we put questions using
+    them, at least if possible. I am not saying that we throw away anxiety altogether, but like this
+    is a, like not a very good question to ask. Like see it for yourself.
+  messages: []

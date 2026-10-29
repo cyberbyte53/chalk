@@ -204,4 +204,55 @@
 
     Close this to approve, and I'll add it with a test, then give the stall picture '30 m' and '20
     m' and its own caption like the house and the desk.
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T08:19:37.769Z
+      text: makes sense
+- id: cmvtaw00zp17
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T08:47:50.819Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:16
+  commit: d76d797a1c787544931005e0a280a692cfc57d5a
+  text: >-
+    The changes lesson 1's rework needs, together, before any code (the plan we agreed in chat).
+
+
+    **1. Streets rise from the road (the number line opening).** New core field `upLines`: which
+    whole numbers on the horizontal line have a line rising from them; empty means only the
+    horizontal line, drawn as a number line. New actions `raiseUpLine { at }` (one line grows up
+    from that mark, its places appearing on it as it grows; timed) and `raiseAllUpLines` (the rest,
+    one after another). In the town, a street exists only once it has risen: Riya can't walk up a
+    street that isn't there yet. Default: every line risen, so every board works as today.
+
+
+    **2. Readouts as settings, for question families to turn off.** `showAddress` (the target's
+    address above the plane) and `showWhere` (Riya's line under it), both on by default.
+
+
+    **3. Units** (approved on cmvt9hejjpcc): `unit` on the reading layer, written after a measured
+    distance.
+
+
+    **4. Measured distances for clues.** A clue's distance is drawn as a dashed, measured line from
+    its fence ('30 m'), and a one-distance line runs the full length of the plane, with its part
+    inside any patch drawn bold. The fences can be marked every 10 m with the existing marks
+    setting.
+
+
+    **5. A new house sends Riya back to the corner.** `chooseTarget` also returns Riya to her start
+    and clears her route, when there is a walker, so each round is a walk from the corner.
+
+
+    **6. Helpers for question families,** in the package, not the definition: starting setups
+    (`bareTown`, `bareClassroom`, `bareGround`), conditions (`isAt(prop, x, y)`, `isChosen(prop, x,
+    y)`, `isPlaced(prop, x, y)`), and `walkTo(prop, x, y)` giving the arrow taps that walk her
+    there.
+
+
+    Nothing else changes; boards outside lesson 1 don't use any of this yet. Close this to approve,
+    and I'll build it with its tests.
   messages: []
