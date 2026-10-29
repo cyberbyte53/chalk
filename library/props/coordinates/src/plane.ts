@@ -389,7 +389,7 @@ export const core = layersFor<PlaneCore>()({
 
 /**
  * The plane's picture: one unit across is one unit up, fitted to the width with a margin. Its height
- * follows the window, from 200 to 420 pixels.
+ * follows the window (at least 200 pixels; a number line, 110).
  */
 export const planeFrame: FrameSpec<PlaneCore> = {
   kind: "plane",
@@ -398,10 +398,9 @@ export const planeFrame: FrameSpec<PlaneCore> = {
     // Room round the plane for what is written outside it: the numbers up the left, the numbers
     // and the horizontal line's name along the bottom, the vertical line's name on top.
     const pad = { left: 36, right: 16, top: 24, bottom: 44 };
-    const unit = Math.min(
-      (width - pad.left - pad.right) / (xMax - xMin),
-      (420 - pad.top - pad.bottom) / (yMax - yMin),
-    );
+    // As wide as it is given: how tall it may be on a screen is the player's rule (size.ts, a share
+    // of the screen's height), not a number of its own here.
+    const unit = (width - pad.left - pad.right) / (xMax - xMin);
     // A single line (a number line) needs only room for itself and its numbers.
     const least = s.axes === Axes.Horizontal ? 110 : 200;
     const height = Math.round(Math.max(least, unit * (yMax - yMin) + pad.top + pad.bottom));
