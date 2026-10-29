@@ -156,8 +156,8 @@ const streetAndHouse = page("street-and-house", (b) => {
   );
   const found = w.definition(
     t(
-      "**Riya can go along and up, so one number couldn't say where Aman lives.** It took how far along the main road (Street 4), then how far up the street that rises there (House 5).",
-      "**रिया आगे और ऊपर दोनों ओर जा सकती है, इसलिए एक संख्या नहीं बता सकी कि अमन कहाँ रहता है।** लगा: मुख्य सड़क पर कितनी दूर (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
+      "**Aman's house isn't on one line: it's along the main road and then up a street, so one number couldn't say where it is.** It took two numbers: how far along the main road (Street 4), then how far up the street that rises there (House 5).",
+      "**अमन का घर एक रेखा पर नहीं है: वह मुख्य सड़क पर आगे और फिर एक गली में ऊपर है, इसलिए एक संख्या नहीं बता सकी कि वह कहाँ है।** इसके लिए दो संख्याएँ लगीं: मुख्य सड़क पर कितना आगे (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
     ),
     "found",
   );
@@ -420,8 +420,8 @@ const twoLines = page("two-lines", (b) => {
     desk,
     w.body(
       t(
-        "Each time, there were two ways to move, **across** and **up**, along two lines at right angles, and each way needed its own number: the first says how far across, the second how far up.",
-        "हर बार चलने की दो दिशाएँ थीं, **आड़े** और **ऊपर**, दो समकोण रेखाओं के साथ-साथ, और हर दिशा को अपनी संख्या चाहिए थी: पहली बताती है कि आड़े कितनी दूर, दूसरी कि ऊपर कितनी।",
+        "Each time, the place wasn't on one line, as the bus was. It took **two distances, along two lines at right angles**: the first says how far along, the second how far up.",
+        "हर बार जगह एक रेखा पर नहीं थी, जैसे बस थी। उसके लिए **दो समकोण रेखाओं के साथ दो दूरियाँ** लगीं: पहली बताती है कि कितना आगे, दूसरी कि कितना ऊपर।",
       ),
     ),
     w.definition(
