@@ -1,4 +1,8 @@
-import { hashOf } from "@chalk/author/id";
+import { createHash } from "node:crypto";
+
+// Node's own hash, not a workspace package's: the dev server's config runs this code directly.
+const hashOf = (value: unknown): string =>
+  createHash("sha256").update(JSON.stringify(value)).digest("hex").slice(0, 16);
 
 /**
  * What a board is, as plain data, for knowing what changed since it was reviewed: its pieces, each
@@ -37,7 +41,8 @@ export function recordOf(board: object, props: Readonly<Record<string, string>>)
   // neighbouring board does.
   const { item: _, ...itself } = board as { item?: unknown };
   const content = plain(itself);
-  return { stamp: hashOf({ content, props }), props, content };
+  // Plain data has its keys in one order, so the same board always gives the same stamp.
+  return { stamp: hashOf(plain({ content, props })), props, content };
 }
 
 /** One difference between two records' content: where, and what it was and is. */
