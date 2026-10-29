@@ -64,6 +64,8 @@ export type Layer<S extends StoredState> = {
   signals?: Readonly<Record<string, SignalSpec>>;
   derived?: Readonly<Record<string, DerivedSpec<S>>>;
   inputs?: readonly string[];
+  /** Its fields or derived values the student can't see on screen (a hidden dot, the next throw). */
+  offScreen?: readonly string[];
   invariant?: (s: S) => string | undefined;
 };
 
@@ -217,6 +219,7 @@ export function defineHost<C extends AnyLayer, const L extends readonly AnyLayer
     defaults: merge((p) => p.defaults) as StoredState,
     derived: merge((p) => p.derived),
     inputs: parts.flatMap((p) => p.inputs ?? []),
+    offScreen: parts.flatMap((p) => p.offScreen ?? []),
     actions,
     signals,
     frame: spec.frame as unknown as FrameSpec<StoredState>,

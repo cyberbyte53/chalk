@@ -36,6 +36,7 @@ const fixed = layersFor<Fixed>()({
   describe: "whole numbers only",
   fields: { isFixed: z.boolean() },
   defaults: { isFixed: false },
+  offScreen: ["isFixed"],
   excludes: { dot: "a fixed scale has no free points" },
   isOn: (s) => s.isFixed,
 });
@@ -68,6 +69,7 @@ describe("hosts and layers", () => {
     expect(host.host.ownerOf("put")).toBe("dot");
     expect(host.host.ownerOf("from")).toBeUndefined();
     expect(host.frame?.kind).toBe("axis");
+    expect(host.offScreen).toEqual(["isFixed"]);
   });
 
   it("refuses two parts claiming one field, a layer on another frame, and one needing a missing layer", () => {

@@ -1,0 +1,271 @@
+import { localizedSchema } from "@chalk/content";
+import { type FrameSpec, actionsFor, layersFor, set, signal } from "@chalk/prop";
+import { z } from "zod";
+
+/**
+ * The core of the coordinate plane: two perpendicular lines and their marks, drawn only as far as
+ * the lesson has defined them, and the points a figure names. Every layer draws on it.
+ */
+
+export const pointSchema = z.object({ x: z.number(), y: z.number() }).strict();
+export type Point = z.infer<typeof pointSchema>;
+
+/** The part of the plane shown, in its own units. */
+export const windowSchema = z
+  .object({ xMin: z.number(), xMax: z.number(), yMin: z.number(), yMax: z.number() })
+  .strict();
+export type PlaneWindow = z.infer<typeof windowSchema>;
+
+/** What the lines carry: nothing (a sheet's edges), counts from 1, or number lines. */
+export const Marks = {
+  /** Plain lines: a sheet's left and bottom edges. */
+  None: "none",
+  /** 1, 2, 3 … from the corner: no 0, no negatives (a street's houses, a row of desks). */
+  Counts: "counts",
+  /** Number lines: 0 where they cross, positive one way and negative the other. */
+  Numbers: "numbers",
+} as const;
+export type Marks = (typeof Marks)[keyof typeof Marks];
+
+/** Which lines are drawn. */
+export const Axes = { Both: "both", Horizontal: "horizontal" } as const;
+export type Axes = (typeof Axes)[keyof typeof Axes];
+
+/** What is drawn behind the plane. */
+export const Scene = {
+  None: "none",
+  Paper: "paper",
+  Town: "town",
+  Classroom: "classroom",
+  FairGround: "fairGround",
+} as const;
+export type Scene = (typeof Scene)[keyof typeof Scene];
+
+/** The parts of the plane a tap can name. */
+export const PlanePart = {
+  O: "O",
+  OX: "OX",
+  OXDash: "OX′",
+  OY: "OY",
+  OYDash: "OY′",
+  I: "I",
+  II: "II",
+  III: "III",
+  IV: "IV",
+} as const;
+export type PlanePart = (typeof PlanePart)[keyof typeof PlanePart];
+export const QUADRANTS = [PlanePart.I, PlanePart.II, PlanePart.III, PlanePart.IV] as const;
+export type Quadrant = (typeof QUADRANTS)[number];
+
+export const Tone = { Main: "main", Accent: "accent", Muted: "muted" } as const;
+export type Tone = (typeof Tone)[keyof typeof Tone];
+
+/** A point a figure names (P, B, M …): fixed where the figure has it. */
+export const namedPointSchema = z
+  .object({
+    name: z.string().min(1).max(3),
+    x: z.number(),
+    y: z.number(),
+    /** Shown now: a figure's points can be read one at a time. */
+    isShown: z.boolean(),
+    /** Dashed perpendiculars from it to both axes. */
+    hasDropLines: z.boolean(),
+    tone: z.nativeEnum(Tone),
+  })
+  .strict();
+export type NamedPoint = z.infer<typeof namedPointSchema>;
+
+const MAX_SPAN = 200;
+const MAX_POINTS = 24;
+
+const planeFields = {
+  window: windowSchema,
+  /** Which lines are drawn: both, or only the horizontal one (a number line). */
+  axes: z.nativeEnum(Axes),
+  /** What the lines carry. */
+  marks: z.nativeEnum(Marks),
+  /** A number every this many units along each line. */
+  tickEvery: z.number().positive(),
+  /** Graph paper: a faint line every unit. */
+  hasGrid: z.boolean(),
+  /** The lines' names, in the lesson's words: Street number and House number; x and y; t and d. */
+  axisNames: z.tuple([localizedSchema, localizedSchema]),
+  showAxisNames: z.boolean(),
+  /** O written where the lines cross. */
+  showOrigin: z.boolean(),
+  /** OX, OX′, OY, OY′ written on the halves of the axes, each with its sign. */
+  showDirections: z.boolean(),
+  /** How many quadrants are named so far, I to IV anticlockwise from OX (0: none). */
+  quadrantsNamed: z.number().int().min(0).max(4),
+  /** Each named quadrant's sign pattern written in it: (+, +), (−, +) … */
+  showQuadrantSigns: z.boolean(),
+  /** What is drawn behind: a sheet, the town, the classroom, the fair ground. */
+  scene: z.nativeEnum(Scene),
+  /**
+   * How far the vertical line's zero is from the horizontal line's zero, in units. (0, 0): they
+   * cross at their zeroes, and they are the axes.
+   */
+  apart: pointSchema,
+  /** The part a tap named last (a half of an axis, a quadrant, O), or null. */
+  named: z.nativeEnum(PlanePart).nullable(),
+  /** The points a figure names. */
+  points: z.array(namedPointSchema).max(MAX_POINTS),
+};
+
+export type PlaneCore = {
+  window: PlaneWindow;
+  axes: Axes;
+  marks: Marks;
+  tickEvery: number;
+  hasGrid: boolean;
+  axisNames: [z.infer<typeof localizedSchema>, z.infer<typeof localizedSchema>];
+  showAxisNames: boolean;
+  showOrigin: boolean;
+  showDirections: boolean;
+  quadrantsNamed: number;
+  showQuadrantSigns: boolean;
+  scene: Scene;
+  apart: Point;
+  named: PlanePart | null;
+  points: NamedPoint[];
+};
+
+/** Where a point is: in a quadrant, on an axis, or at O. */
+export function placeOf(p: Point): Quadrant | "x-axis" | "y-axis" | "O" {
+  if (p.x === 0 && p.y === 0) return PlanePart.O;
+  if (p.y === 0) return "x-axis";
+  if (p.x === 0) return "y-axis";
+  if (p.x > 0) return p.y > 0 ? PlanePart.I : PlanePart.IV;
+  return p.y > 0 ? PlanePart.II : PlanePart.III;
+}
+
+/** Whether a point is inside the window. */
+export const isInWindow = (w: PlaneWindow, p: Point) =>
+  p.x >= w.xMin && p.x <= w.xMax && p.y >= w.yMin && p.y <= w.yMax;
+
+const act = actionsFor<PlaneCore>();
+const none = z.object({}).strict();
+
+export const planeSignals = {
+  crossed: signal("The two number lines cross at their zeroes: they are the axes, and O is named"),
+  named: signal("A tap named a part of the plane: `part`"),
+  quadrantsNumbered: signal("The sweep has named all four quadrants, I to IV"),
+};
+
+export const core = layersFor<PlaneCore>()({
+  name: "plane",
+  frame: "plane",
+  describe:
+    "Two perpendicular lines and their marks, drawn only as far as the lesson has defined them: plain lines, counts from 1, or number lines with O, the directions and the quadrants; and the points a figure names.",
+  fields: planeFields,
+  defaults: {
+    window: { xMin: -6, xMax: 6, yMin: -5, yMax: 5 },
+    axes: Axes.Both,
+    marks: Marks.Numbers,
+    tickEvery: 1,
+    hasGrid: false,
+    axisNames: [
+      { en: "x", hi: "x" },
+      { en: "y", hi: "y" },
+    ],
+    showAxisNames: true,
+    showOrigin: true,
+    showDirections: false,
+    quadrantsNamed: 0,
+    showQuadrantSigns: false,
+    scene: Scene.None,
+    apart: { x: 0, y: 0 },
+    named: null,
+    points: [],
+  },
+  actions: {
+    namePart: act({
+      describe:
+        "Name the part of the plane tapped: a half of an axis with its sign, a quadrant, or O (the learner's tap)",
+      byLearner: true,
+      args: z.object({ part: z.nativeEnum(PlanePart) }).strict(),
+      changes: ["named"],
+      run: () => set({}),
+    }),
+    numberQuadrants: act({
+      describe:
+        "Sweep anticlockwise from OX, naming the quadrants I, II, III, IV one after another (timed)",
+      byLearner: true,
+      args: none,
+      changes: ["quadrantsNamed"],
+      run: () => set({}),
+    }),
+    moveApart: act({
+      describe:
+        "Slide the vertical number line: its zero this far from the horizontal line's zero (the learner's drag)",
+      byLearner: true,
+      args: pointSchema,
+      changes: ["apart"],
+      run: () => set({}),
+    }),
+    bringTogether: act({
+      describe:
+        "Glide the vertical number line until the two zeroes meet; there they are the axes, and O is named (timed)",
+      byLearner: true,
+      args: none,
+      changes: ["apart", "showOrigin"],
+      run: () => set({}),
+    }),
+    showPoint: act({
+      describe: "Show the next of a figure's points, or the one named (the learner's Next)",
+      byLearner: true,
+      args: z.object({ name: z.string().min(1).max(3).optional() }).strict(),
+      changes: ["points"],
+      run: () => set({}),
+    }),
+    showAllPoints: act({
+      describe: "Show every point the figure names",
+      args: none,
+      changes: ["points"],
+      run: () => set({}),
+    }),
+  },
+  signals: planeSignals,
+  derived: {
+    isCrossed: {
+      describe: "The two number lines cross at their zeroes",
+      compute: (s) => s.apart.x === 0 && s.apart.y === 0,
+    },
+  },
+  invariant: (s) => {
+    const w = s.window;
+    if (w.xMin >= w.xMax || w.yMin >= w.yMax)
+      return "the window must have xMin < xMax and yMin < yMax";
+    if (w.xMax - w.xMin > MAX_SPAN || w.yMax - w.yMin > MAX_SPAN)
+      return `the window is at most ${MAX_SPAN} units across and up`;
+    if (s.marks === Marks.Counts && (w.xMin < 0 || w.yMin < 0))
+      return "counts start from 1 at the corner: the window can't go below 0";
+    return undefined;
+  },
+});
+
+/**
+ * The plane's picture: one unit across is one unit up, fitted to the width with a margin. Its height
+ * follows the window, from 200 to 420 pixels.
+ */
+export const planeFrame: FrameSpec<PlaneCore> = {
+  kind: "plane",
+  pixels: (s, width) => {
+    const { xMin, xMax, yMin, yMax } = s.window;
+    const margin = 24;
+    const unit = Math.min((width - 2 * margin) / (xMax - xMin), (420 - 2 * margin) / (yMax - yMin));
+    const height = Math.round(Math.max(200, unit * (yMax - yMin) + 2 * margin));
+    const left = (width - unit * (xMax - xMin)) / 2;
+    const top = (height - unit * (yMax - yMin)) / 2;
+    return {
+      width,
+      height,
+      toPx: (x, y = 0) => [left + (x - xMin) * unit, top + (yMax - y) * unit],
+      fromPx: (px, py = 0) => [xMin + (px - left) / unit, yMax - (py - top) / unit],
+    };
+  },
+  label: (s) =>
+    `${s.axes === Axes.Horizontal ? "A number line" : "A plane"} from ${s.window.xMin} to ${s.window.xMax} across${
+      s.axes === Axes.Both ? ` and ${s.window.yMin} to ${s.window.yMax} up` : ""
+    }`,
+};

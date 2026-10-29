@@ -110,6 +110,18 @@ importers:
         specifier: 3.25.76
         version: 3.25.76
 
+  library/props/coordinates:
+    dependencies:
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../../../platform/packages/content
+      '@chalk/prop':
+        specifier: workspace:*
+        version: link:../../../platform/packages/prop
+      zod:
+        specifier: 3.25.76
+        version: 3.25.76
+
   library/props/decimal:
     dependencies:
       '@chalk/content':

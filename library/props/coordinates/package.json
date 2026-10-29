@@ -1,0 +1,18 @@
+{
+  "name": "@chalk/prop-coordinates",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/defs.ts",
+    "./defs": "./src/defs.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*",
+    "@chalk/prop": "workspace:*",
+    "zod": "3.25.76"
+  }
+}
