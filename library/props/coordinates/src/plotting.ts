@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type PlaneCore, isInWindow } from "./plane";
 
@@ -72,8 +72,7 @@ export const plotting = layersFor<PlottingState>()({
     showTable: false,
     scaleChoices: [],
   },
-  isOn: (s) => s.toPlot.length > 0,
-  onWhen: ["toPlot"],
+  on: onWhen(["toPlot"], (s) => s.toPlot.length > 0),
   actions: {
     plotAt: act({
       describe:

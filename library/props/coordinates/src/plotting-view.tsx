@@ -1,5 +1,5 @@
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, shows } from "@chalk/prop";
+import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type LayerView, actions } from "./layer-view";
 import { isInWindow } from "./plane";
@@ -42,7 +42,7 @@ function PlottedDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
 
 /** The plotting layer's drawing: the table, the dots plotted, the next pair, the scales. */
 export const plottingView: LayerView = {
-  isOn: (s) => plotting.isOn?.(s) ?? true,
+  isOn: (s) => isLayerOn(plotting, s),
   above: ({ s }) =>
     !s.showTable ? null : (
       <table class="cp-table" {...shows("table", s.toPlot)}>

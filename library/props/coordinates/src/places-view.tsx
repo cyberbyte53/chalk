@@ -1,6 +1,6 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, shows } from "@chalk/prop";
+import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type LayerView, actions } from "./layer-view";
 import { PlacePicture } from "./pictures";
@@ -69,7 +69,7 @@ function PlacesDraw({
 
 /** The places layer's drawing: the places, the chosen one's address over the plane, Lights off. */
 export const placesView: LayerView = {
-  isOn: (s) => places.isOn?.(s) ?? true,
+  isOn: (s) => isLayerOn(places, s),
   above: ({ s, locale }) => {
     if (!s.showAddress) return null;
     if (s.target !== null)

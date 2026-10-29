@@ -4,6 +4,7 @@ import {
   type Emit,
   actionsFor,
   layersFor,
+  onWhen,
   raise,
   seq,
   set,
@@ -174,8 +175,7 @@ export const walker = layersFor<WalkerState>()({
     isWalking: false,
     canStep: true,
   },
-  isOn: (s) => s.walkFrom !== null,
-  onWhen: ["walkFrom"],
+  on: onWhen(["walkFrom"], (s) => s.walkFrom !== null),
   actions: {
     step,
     walkTo: act({

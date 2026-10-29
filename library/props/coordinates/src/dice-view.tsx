@@ -1,6 +1,6 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, shows } from "@chalk/prop";
+import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
 import { dice } from "./dice";
 import { type LayerView, actions } from "./layer-view";
 import { Counter } from "./pictures";
@@ -34,7 +34,7 @@ function CountersDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale
 
 /** The dice game's drawing: the counters, the throw and whose turn, Throw and New game. */
 export const diceView: LayerView = {
-  isOn: (s) => dice.isOn?.(s) ?? true,
+  isOn: (s) => isLayerOn(dice, s),
   over: ({ s, px, locale }) => <CountersDraw s={s} px={px} locale={locale} />,
   lines: ({ s, locale }) => (
     <p

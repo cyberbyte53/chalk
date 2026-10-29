@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type PlaneCore, type PlaneWindow, type Point, pointSchema, windowSchema } from "./plane";
 
@@ -115,8 +115,7 @@ export const clues = layersFor<CluesState>()({
     canGiveClues: true,
   },
   offScreen: ["hidden"],
-  isOn: (s) => s.clueChoices.length > 0,
-  onWhen: ["clueChoices"],
+  on: onWhen(["clueChoices"], (s) => s.clueChoices.length > 0),
   actions: {
     giveClue: act({
       describe:

@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
+import { actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import { type PlaneCore, type Point, pointSchema } from "./plane";
 
@@ -91,8 +91,7 @@ export const places = layersFor<PlacesState>()({
     lit: null,
     showAddress: true,
   },
-  isOn: (s) => s.places.length > 0,
-  onWhen: ["places"],
+  on: onWhen(["places"], (s) => s.places.length > 0),
   actions: {
     chooseTarget: act({
       describe:

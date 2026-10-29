@@ -121,7 +121,9 @@ export {
 export {
   defineHost,
   hostOf,
-  onWhenUnsaid,
+  isLayerOn,
+  onWhen,
+  type OnRule,
   isInAxis,
   isInPlane,
   layersFor,

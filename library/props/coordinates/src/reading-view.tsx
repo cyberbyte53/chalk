@@ -1,6 +1,6 @@
 import { SymbolButton } from "@chalk/draw";
 import { useDrags } from "@chalk/player";
-import { type FramePixels, does, shows } from "@chalk/prop";
+import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type LayerView, actions } from "./layer-view";
 import type { PlaneView } from "./plane-view";
@@ -75,7 +75,7 @@ function ReadingDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
 
 /** The reading layer's drawing: the point read off the axes, and Show when it is hidden. */
 export const readingView: LayerView = {
-  isOn: (s) => reading.isOn?.(s) ?? true,
+  isOn: (s) => isLayerOn(reading, s),
   over: ({ s, px }) => <ReadingDraw s={s} px={px} />,
   controls: ({ s, locale }) =>
     !s.isReadingHidden ? null : (

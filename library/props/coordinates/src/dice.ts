@@ -4,6 +4,7 @@ import {
   type Emit,
   actionsFor,
   layersFor,
+  onWhen,
   raise,
   seq,
   set,
@@ -91,8 +92,7 @@ export const dice = layersFor<DiceState>()({
     winner: null,
   },
   offScreen: ["seed"],
-  isOn: (s) => s.counters.length > 0,
-  onWhen: ["counters"],
+  on: onWhen(["counters"], (s) => s.counters.length > 0),
   actions: {
     throwDice: act({
       describe:

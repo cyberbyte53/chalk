@@ -1,6 +1,6 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, shows } from "@chalk/prop";
+import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type Still, clues, stillPossible } from "./clues";
 import { type LayerView, actions } from "./layer-view";
@@ -104,7 +104,7 @@ function StillDraw({
 
 /** The clues layer's drawing: where the point could be, the hidden dot, the clues' buttons. */
 export const cluesView: LayerView = {
-  isOn: (s) => clues.isOn?.(s) ?? true,
+  isOn: (s) => isLayerOn(clues, s),
   // A picture of clues already given: they are its caption, in the order given.
   above: ({ s, locale }) =>
     s.canGiveClues || s.given.length === 0 ? null : (

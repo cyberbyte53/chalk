@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { defineHost, layersFor } from "./compose";
-import { type FrameSpec, PropRole, actionsFor, nameOf, set } from "./define";
+import { defineHost, hostOf, isLayerOn, layersFor, onWhen } from "./compose";
+import { type FrameSpec, PropRole, actionsFor, asAnyProp, nameOf, set } from "./define";
 
 type Axis = { from: number; to: number };
 const axis = layersFor<Axis>()({
@@ -19,7 +19,7 @@ const dot = layersFor<Dot>()({
   describe: "a dot",
   fields: { dot: z.number().nullable() },
   defaults: { dot: null },
-  isOn: (s) => s.dot !== null,
+  on: onWhen(["dot"], (s) => s.dot !== null),
   actions: {
     put: onDot({
       describe: "Put the dot",
@@ -38,7 +38,7 @@ const fixed = layersFor<Fixed>()({
   defaults: { isFixed: false },
   offScreen: ["isFixed"],
   excludes: { dot: "a fixed scale has no free points" },
-  isOn: (s) => s.isFixed,
+  on: onWhen(["isFixed"], (s) => s.isFixed),
 });
 
 const frame: FrameSpec<Axis> = {
@@ -94,5 +94,44 @@ describe("hosts and layers", () => {
       /fixed and dot can't be on together/,
     );
     expect(host.host.clashes({ ...host.defaults, isFixed: true }, ["put"])).toHaveLength(1);
+  });
+});
+
+describe("a layer's on-rule", () => {
+  it("is given only the fields it names, so what it reads is known", () => {
+    // A rule reading a field it didn't name doesn't compile, and at run time the field isn't there.
+    // @ts-expect-error: `from` is not named
+    const sly = onWhen<Dot, "dot">(["dot"], (s) => s.dot !== null || s.from === 0);
+    expect(sly.is({ from: 0, to: 10, dot: null })).toBe(false);
+    expect(isLayerOn(dot, { from: 0, to: 10, dot: 3 })).toBe(true);
+  });
+
+  it("a layer whose fields an action changes or a rule feeds may come on; else it stays off", () => {
+    type Mark = Axis & { mark: number | null };
+    const mark = (inputs: ("mark" | "from")[]) =>
+      layersFor<Mark>()({
+        name: "mark",
+        frame: "axis",
+        describe: "a mark",
+        fields: { mark: z.number().nullable() },
+        defaults: { mark: null },
+        inputs,
+        on: onWhen(["mark"], (s) => s.mark !== null),
+      });
+    const everOn = (inputs: ("mark" | "from")[]) =>
+      hostOf(
+        asAnyProp(
+          defineHost({
+            type: "ruler",
+            role: PropRole.Explainer,
+            describe: "a ruler",
+            frame,
+            core: axis,
+            layers: [mark(inputs)],
+          }),
+        ),
+      )?.layersEverOn({ from: 0, to: 10, mark: null });
+    expect(everOn([])).not.toContain("mark");
+    expect(everOn(["mark"])).toContain("mark");
   });
 });

@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, layersFor, raise, set, signal } from "@chalk/prop";
+import { type Emit, actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import {
   type PlaneCore,
@@ -88,8 +88,7 @@ export const reading = layersFor<ReadingState>()({
     visited: [],
     unit: "",
   },
-  isOn: (s) => s.point !== null,
-  onWhen: ["point"],
+  on: onWhen(["point"], (s) => s.point !== null),
   actions: {
     movePoint: act({
       describe: "Put the point at (x, y), snapped to the step (the learner's drag or tap)",

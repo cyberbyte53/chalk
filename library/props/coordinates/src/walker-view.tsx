@@ -1,6 +1,6 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, says, shows } from "@chalk/prop";
+import { type FramePixels, does, isLayerOn, says, shows } from "@chalk/prop";
 import { type LayerView, actions } from "./layer-view";
 import { Bus, Walker } from "./pictures";
 import type { Point } from "./plane";
@@ -106,7 +106,7 @@ function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: 
 
 /** The walker layer's drawing: Riya and her route, her line under the plane, the arrows. */
 export const walkerView: LayerView = {
-  isOn: (s) => walker.isOn?.(s) ?? true,
+  isOn: (s) => isLayerOn(walker, s),
   picture: ({ s, px, locale }) => <WalkerDraw s={s} px={px} locale={locale} />,
   // Her line keeps room for the most it can say, from the start: no step moves the arrows.
   lines: ({ s, locale }) =>
