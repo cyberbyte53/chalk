@@ -5,6 +5,7 @@ import { previewQuery, shownAddress } from "@chalk/content/address";
 import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import type { PropPage } from "../prop-text";
+import { RanReader, addRan } from "../reach/ran";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
@@ -575,6 +576,8 @@ async function openPage(lane: string, base: string): Promise<Lane> {
   });
   // tsx keeps function names with a helper the page doesn't have; give it one.
   await page.addInitScript("globalThis.__name = (f) => f;");
+  // What runs on it, for what a review saw (recordRan).
+  await page.coverage.startJSCoverage({ resetOnNavigation: false }).catch(() => {});
   const opened: Lane = { page, base, errors: [], isStale: false };
   page.on("console", (m) => {
     // The app asks the API who is signed in; previews don't need a server, so that one is noise.
@@ -621,6 +624,7 @@ export function onComposer<T>(fn: (page: Page) => Promise<T>): Promise<T> {
 export async function closeLane(lane: string): Promise<void> {
   const open = lanes.get(lane);
   lanes.delete(lane);
+  ranReaders.delete(lane);
   queues.delete(lane);
   used.delete(lane);
   await open?.page.close().catch(() => {});
@@ -691,7 +695,12 @@ export function shoot(
   act?: Act,
   lane: string = DEFAULT_LANE,
 ): Promise<Drawn> {
-  const once = () => shootNow(root, board, o, act, lane);
+  const once = async () => {
+    await takeRan(lane); // what ran before this call isn't this board's
+    const drawn = await shootNow(root, board, o, act, lane);
+    await recordRan(root, board, lane);
+    return drawn;
+  };
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
     asDraw(async () => {
       busy.add(lane);
@@ -722,6 +731,38 @@ export function shoot(
     next.catch(() => {}),
   );
   return next;
+}
+
+const ranReaders = new Map<string, RanReader>();
+
+/** What ran on a lane's page since this was last asked (coverage taken and started again). */
+async function takeRan(lane: string) {
+  const page = lanes.get(lane)?.page;
+  if (page === undefined || page.isClosed()) return [];
+  try {
+    const coverage = await page.coverage.stopJSCoverage();
+    await page.coverage.startJSCoverage({ resetOnNavigation: false });
+    return coverage;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Keeps what ran while one built board was looked at or played (reach/ran.ts): a hint for the
+ * next review, so never a reason for a call to fail.
+ */
+async function recordRan(root: string, board: string, lane: string): Promise<void> {
+  const coverage = await takeRan(lane);
+  const path = board.replace(/^content\//, "");
+  if (coverage.length === 0 || !existsSync(join(root, "build", "review", `${path}.json`))) return;
+  try {
+    const reader = ranReaders.get(lane) ?? new RanReader(root);
+    ranReaders.set(lane, reader);
+    addRan(root, path, reader.linesOf(coverage));
+  } catch {
+    // only a hint
+  }
 }
 
 /**

@@ -28,6 +28,7 @@
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
+    "@jridgewell/trace-mapping": "0.3.31",
     "@modelcontextprotocol/sdk": "1.32.1",
     "playwright-core": "1.63.0",
     "preact": "10.29.8",

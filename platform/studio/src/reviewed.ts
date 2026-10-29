@@ -6,8 +6,10 @@ import { propHomes } from "./comments";
 import { type BoardRecord, type Change, changesBetween } from "./content/board-record";
 import type { Reach } from "./content/build";
 import { type BoardCode, boardCode } from "./reach/board-code";
-import { factsOf } from "./reach/facts";
+import { type Range, factsOf } from "./reach/facts";
 import { codeGraph, fingerprintIn } from "./reach/graph";
+import { parseDiff } from "./reach/index";
+import { type Ran, anyRan, passRan, ranAtPass } from "./reach/ran";
 
 /**
  * What was reviewed, so a review is never done twice. When a reviewer (or the person) passes a
@@ -26,6 +28,9 @@ export const REVIEWED_FILE = "reviewed.yaml";
 /** `code`: the fingerprint of the code the board ran when passed (absent: passed before it was kept). */
 export type Passed = BoardRecord & { by: string; commit: string; at: string; code?: string };
 
+/** Whether a change's lines ran while the board was reviewed: a hint, never a reason to skip it. */
+export type InReview = "ran" | "didn't run" | "new";
+
 export type BoardChange =
   | { board: string; status: "unchanged"; passed: Passed }
   | { board: string; status: "new" }
@@ -37,9 +42,10 @@ export type BoardChange =
       content: Change[];
       /**
        * The code it runs that changed since (`file#name`; `file#` is a file's own statements), or
-       * one line saying the code changed when which part can't be told.
+       * one line saying the code changed when which part can't be told. `inReview`, when this
+       * machine saw the review (reach/ran.ts): whether the changed lines ran in it, or are new.
        */
-      code: string[];
+      code: { node: string; inReview?: InReview }[];
     }
   /** Passed once, and no longer built. */
   | { board: string; status: "gone"; passed: Passed };
@@ -140,11 +146,50 @@ function changedSince(root: string, commit: string, code: ReadonlyMap<string, st
     .map(([node]) => node);
 }
 
+/**
+ * Whether a changed node's changed lines ran in the review: its lines at the review's commit that
+ * git says changed (all of them if none do: an import it uses changed), against what ran then.
+ * Undefined when that can't be told (a stylesheet: the browser's coverage is of scripts).
+ */
+function inReview(
+  root: string,
+  commit: string,
+  ran: Ran,
+  node: string,
+  diffs: Map<string, Range[]>,
+): InReview | undefined {
+  const [file = "", name = ""] = node.split("#");
+  const then = fileAt(root, commit, file);
+  if (then.text === undefined) return "new";
+  if (then.facts === undefined) return undefined;
+  const lines = name === "" ? then.facts.module.lines : [then.facts.decls[name]?.lines];
+  const own = lines.filter((r): r is Range => r !== undefined);
+  if (own.length === 0) return "new";
+  let changed = diffs.get(`${commit}\0${file}`);
+  if (changed === undefined) {
+    changed = parseDiff(git(root, "diff", "-U0", commit, "--", file))[0]?.was ?? [];
+    diffs.set(`${commit}\0${file}`, changed);
+  }
+  const hits = own.flatMap(([a, b]) =>
+    (changed ?? [])
+      .filter(([c, d]) => c <= b && a <= d)
+      .map(([c, d]): Range => [Math.max(a, c), Math.min(b, d)]),
+  );
+  return anyRan(ran, file, hits.length > 0 ? hits : own) ? "ran" : "didn't run";
+}
+
+const IN_REVIEW_WORDS: Record<InReview, string> = {
+  ran: "ran in the review: look here",
+  "didn't run": "didn't run in the review: none of what was looked at used it",
+  new: "new since the review",
+};
+
 /** What changed on every board at or under `under` since each was passed. */
 export function changesUnder(root: string, under: string): BoardChange[] {
   const now = builtUnder(root, under);
   const passed = readPassed(root, chapterOf(under));
   const codeOf = codeNow(root);
+  const diffs = new Map<string, Range[]>();
   const out: BoardChange[] = [];
   for (const [board, record] of now) {
     const was = passed[board];
@@ -161,6 +206,11 @@ export function changesUnder(root: string, under: string): BoardChange[] {
     }
     const named =
       code === undefined || isSameCode ? [] : changedSince(root, was.commit, code.nodes());
+    const ran = ranAtPass(root, board);
+    const hinted = named.map((node) => {
+      const seen = ran === undefined ? undefined : inReview(root, was.commit, ran, node, diffs);
+      return seen === undefined ? { node } : { node, inReview: seen };
+    });
     out.push({
       board,
       status: "changed",
@@ -168,14 +218,17 @@ export function changesUnder(root: string, under: string): BoardChange[] {
       content,
       code: isSameCode
         ? []
-        : named.length > 0
-          ? named
+        : hinted.length > 0
+          ? hinted
           : [
-              code === undefined
-                ? "its code isn't known (build/reach.json): counted as changed"
-                : was.code === undefined
-                  ? "no code fingerprint was kept when it was passed: counted as changed"
-                  : `its code changed since ${was.commit} (which part: not found in that commit)`,
+              {
+                node:
+                  code === undefined
+                    ? "its code isn't known (build/reach.json): counted as changed"
+                    : was.code === undefined
+                      ? "no code fingerprint was kept when it was passed: counted as changed"
+                      : `its code changed since ${was.commit} (which part: not found in that commit)`,
+              },
             ],
     });
   }
@@ -200,6 +253,7 @@ export function passUnder(root: string, under: string, by: string): number {
   const codeOf = codeNow(root);
   const fresh = [...now].map(([board, record]): [string, Passed] => {
     const code = codeOf(board, record);
+    passRan(root, board);
     return [
       board,
       { ...record, by, commit, at, ...(code === undefined ? {} : { code: code.digest }) },
@@ -236,7 +290,10 @@ export function changesWords(changes: readonly BoardChange[]): string {
     if (c.status !== "changed") continue;
     lines.push(`${c.board}   changed since passed by ${c.passed.by} at ${c.passed.commit}`);
     for (const change of c.content) lines.push(`  ${changeWords(change)}`);
-    for (const node of c.code) lines.push(`  code: ${node}`);
+    for (const { node, inReview } of c.code)
+      lines.push(
+        `  code: ${node}${inReview === undefined ? "" : ` (${IN_REVIEW_WORDS[inReview]})`}`,
+      );
   }
   for (const c of of("new")) lines.push(`${c.board}   new: never passed`);
   for (const c of of("gone")) lines.push(`${c.board}   gone: passed once, no longer built`);

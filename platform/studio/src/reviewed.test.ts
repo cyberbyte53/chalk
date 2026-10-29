@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { changesBetween, recordOf } from "./content/board-record";
+import { addRan } from "./reach/ran";
 import { changesUnder, changesWords, passUnder } from "./reviewed";
 
 const LESSON = "class9-maths/geometry/a-lesson";
@@ -105,7 +106,7 @@ describe("what changed since a board was passed", () => {
     expect(changesUnder(root, LESSON)[0]).toMatchObject({
       status: "changed",
       content: [],
-      code: [`${SRC}/text.ts#text`],
+      code: [{ node: `${SRC}/text.ts#text` }],
     });
     expect(changesBetween({ do: "ƒ () => 1" }, { do: "ƒ () => 2" })).toEqual([
       { at: "do", was: "ƒ () => 1", now: "ƒ () => 2" },
@@ -129,7 +130,7 @@ describe("what changed since a board was passed", () => {
     passUnder(root, LESSON, "reviewer");
     edit(root, `${SRC}/clues-view.tsx`, "export const cluesView = () => 2;\n");
     expect(changesUnder(root, LESSON)[0]).toMatchObject({
-      code: [`${SRC}/clues-view.tsx#cluesView`],
+      code: [{ node: `${SRC}/clues-view.tsx#cluesView` }],
     });
     execFileSync("git", ["commit", "-qam", "clues"], { cwd: root, env: ENV });
     passUnder(root, LESSON, "reviewer");
@@ -140,7 +141,7 @@ describe("what changed since a board was passed", () => {
     );
     edit(root, `${SRC}/styles.css`, ".plane { color: red }\n");
     expect(changesUnder(root, LESSON)[0]).toMatchObject({
-      code: [`${SRC}/plane.ts#plane`, `${SRC}/styles.css#`],
+      code: [{ node: `${SRC}/plane.ts#plane` }, { node: `${SRC}/styles.css#` }],
     });
   });
 
@@ -149,5 +150,47 @@ describe("what changed since a board was passed", () => {
     passUnder(root, LESSON, "reviewer");
     writeFileSync(join(root, "build/reach.json"), JSON.stringify({ boards: {}, modules: {} }));
     expect(changesUnder(root, LESSON)[0]?.status).toBe("changed");
+  });
+
+  it("says whether a change's lines ran in the review, when this machine saw it", () => {
+    const root = repo({ town: board("A town", "counts") });
+    edit(
+      root,
+      `${SRC}/text.ts`,
+      'export const text = () => {\n  if (Math.PI > 4) return "never";\n  return "t";\n};\n',
+    );
+    execFileSync("git", ["commit", "-qam", "text"], { cwd: root, env: ENV });
+    // The review played it: lines 1 and 3 ran, not 2 (its branch never taken).
+    addRan(root, `${LESSON}/town`, {
+      [`${SRC}/text.ts`]: [
+        [1, 1],
+        [3, 4],
+      ],
+    });
+    passUnder(root, LESSON, "reviewer");
+    edit(
+      root,
+      `${SRC}/text.ts`,
+      'export const text = () => {\n  if (Math.PI > 4) return "not ever";\n  return "t";\n};\n',
+    );
+    expect(changesUnder(root, LESSON)[0]).toMatchObject({
+      code: [{ node: `${SRC}/text.ts#text`, inReview: "didn't run" }],
+    });
+    edit(
+      root,
+      `${SRC}/text.ts`,
+      'export const text = () => {\n  if (Math.PI > 4) return "never";\n  return "u";\n};\n',
+    );
+    expect(changesUnder(root, LESSON)[0]).toMatchObject({
+      code: [{ node: `${SRC}/text.ts#text`, inReview: "ran" }],
+    });
+    // Passed again without being played here: nothing is known, so no hint.
+    passUnder(root, LESSON, "reviewer");
+    edit(root, `${SRC}/text.ts`, 'export const text = () => "v";\n');
+    expect(changesUnder(root, LESSON)[0]).toMatchObject({
+      code: [{ node: `${SRC}/text.ts#text` }],
+    });
+    const [change] = changesUnder(root, LESSON);
+    expect(change?.status === "changed" && change.code[0]?.inReview).toBe(undefined);
   });
 });
