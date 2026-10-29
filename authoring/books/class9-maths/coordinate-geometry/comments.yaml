@@ -59,7 +59,7 @@
       text: ""
       status: closed
 - id: cmvshww5ilqx
-  status: ready
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-28T19:16:43.590Z
@@ -89,8 +89,13 @@
       at: 2026-10-29T03:32:32.279Z
       text: No change needed; flow.md already says this.
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T03:33:38.369Z
+      text: ""
+      status: closed
 - id: cmvshww63zm0
-  status: ready
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-28T19:16:43.611Z
@@ -102,6 +107,7 @@
     axes and the quadrant signs stay in it as applications of coordinates, not lessons of their own.
     My recommendation: four lessons. Or do you want that lesson split in two (reading coordinates /
     axes and signs)?'
+  changed: []
   messages:
     - by: you
       role: person
@@ -117,4 +123,38 @@
       at: 2026-10-29T03:32:32.308Z
       text: No change needed; flow.md already has four lessons.
       status: ready
-  changed: []
+    - by: you
+      role: person
+      at: 2026-10-29T03:33:34.549Z
+      text: ""
+      status: closed
+- id: cmvszrwa6ro7
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T03:36:43.566Z
+  source: authoring/books/class9-maths/coordinate-geometry/props.md:5
+  commit: 84c5ee4d7ccdcdd3fa471f03003a0437cc988715
+  quote: "new: `placeGrid`"
+  text: "One prop or two? Lesson 1 (street map, seating plan, cross-streets) needs a grid of places
+    counted from 1. I've made that a small prop of its own, separate from the coordinate plane,
+    because the plane brings an origin, zero and negatives that lesson 1 hasn't met yet. The
+    alternative is to draw lesson 1 on the plane too (desks at points in the first quadrant), so the
+    chapter has one model fewer but shows the origin before it's defined. My recommendation: the
+    separate `placeGrid`."
+  messages: []
+- id: cmvszrwaupw7
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T03:36:43.590Z
+  source: authoring/books/class9-maths/coordinate-geometry/props.md:15
+  commit: 84c5ee4d7ccdcdd3fa471f03003a0437cc988715
+  quote: "new: `diceGame`"
+  text: "The dice game (Activity 2) as a playable game: two counters, seeded dice, the overshoot and
+    send-home rules, played against a friend on the same phone. That's the most work of the three
+    props for one board. The cheaper option is a worked example: the source's throws (3 and 1, then
+    1 and 4) stepped through on the plane, with no game of its own. My recommendation: build it.
+    It's the one place the student plays with coordinates for fun, and it's the fair's game stall in
+    the story."
+  messages: []
