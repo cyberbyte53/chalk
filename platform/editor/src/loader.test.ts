@@ -28,7 +28,9 @@ describe("the editor's loader", () => {
     writeFileSync(join(out, "extension.js"), extensionCode(1));
     const { activate } = await import("./loader");
     const subscriptions: { dispose(): void }[] = [];
-    activate({ subscriptions } as never);
+    // As the editor makes it: subscriptions is fixed (read-only, non-configurable), like Cursor's.
+    const context = Object.freeze({ subscriptions, extensionPath: "/x" });
+    activate(context as never);
     const log = (globalThis as { loaderLog?: string[] }).loaderLog ?? [];
     expect(log).toEqual(["activate 1"]);
 

@@ -34,10 +34,12 @@ export function activate(context: vscode.ExtensionContext): void {
   const dir = repoBuild() ?? __dirname;
   let subscriptions: vscode.Disposable[] = [];
   let running: Extension | undefined;
-  // The extension's own context, but with subscriptions the loader can dispose on a reload.
-  const own = new Proxy(context, {
-    get: (target, key) => (key === "subscriptions" ? subscriptions : Reflect.get(target, key)),
-  });
+  // The extension's own context, but with subscriptions the loader can dispose on a reload. Built on
+  // the real one (everything else is read from it), not a Proxy: the editor makes `subscriptions`
+  // fixed, and a Proxy may not answer a fixed property with another value.
+  const own = Object.create(context, {
+    subscriptions: { get: () => subscriptions },
+  }) as vscode.ExtensionContext;
 
   // Node keys its module cache by real path: a folder reached through a symlink is cached under
   // where it really is.
