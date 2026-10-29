@@ -420,8 +420,8 @@ const twoLines = page("two-lines", (b) => {
     desk,
     w.body(
       t(
-        "Each time, the place wasn't on one line, as the bus was. It took **two distances, along two lines at right angles**: the first says how far along, the second how far up.",
-        "हर बार जगह एक रेखा पर नहीं थी, जैसे बस थी। उसके लिए **दो समकोण रेखाओं के साथ दो दूरियाँ** लगीं: पहली बताती है कि कितना आगे, दूसरी कि कितना ऊपर।",
+        "The bus stayed on one line, the road, and one number said where it was. These three places are not on one line: each took **two distances, along two lines at right angles**. The first says how far along, the second how far up.",
+        "बस एक ही रेखा, यानी सड़क, पर रही, और एक संख्या ने बता दिया कि वह कहाँ है। ये तीनों जगहें एक रेखा पर नहीं हैं: हर एक के लिए **दो समकोण रेखाओं के साथ दो दूरियाँ** लगीं। पहली बताती है कि कितना आगे, दूसरी कि कितना ऊपर।",
       ),
     ),
     w.definition(
