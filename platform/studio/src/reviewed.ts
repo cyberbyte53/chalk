@@ -75,6 +75,28 @@ function builtUnder(root: string, under: string): Map<string, BoardRecord> {
   return out;
 }
 
+/** A file's layer, by name: walker.ts and walker-view.tsx are the walker's; any other, the core's. */
+const layerOfFile = (file: string, layers: readonly string[]): string | undefined => {
+  const stem = (file.split("/").at(-1) ?? "").replace(/\.(test\.)?tsx?$/, "").replace(/-view$/, "");
+  return layers.includes(stem) ? stem : undefined;
+};
+
+/**
+ * Whether a change to a prop's files reaches this board: always for a prop that isn't built of
+ * layers, or when the files aren't known; for a host, when a core file changed (every board has
+ * the core) or a file of a layer this board has on.
+ */
+function reaches(type: string, files: readonly string[], layers: BoardRecord["layers"]): boolean {
+  const pieces = Object.values(layers ?? {}).filter((p) => p.prop === type);
+  if (pieces.length === 0 || files.length === 0) return true;
+  const all = pieces[0]?.all ?? [];
+  const on = new Set(pieces.flatMap((p) => p.on));
+  return files.some((f) => {
+    const layer = layerOfFile(f, all);
+    return layer === undefined || on.has(layer);
+  });
+}
+
 /** What changed on every board at or under `under` since each was passed. */
 export function changesUnder(root: string, under: string): BoardChange[] {
   const now = builtUnder(root, under);
@@ -101,14 +123,15 @@ export function changesUnder(root: string, under: string): BoardChange[] {
             ? []
             : git(root, "diff", "--name-only", was.commit, "--", home).split("\n").filter(Boolean);
         return { type, files };
-      });
-    out.push({
-      board,
-      status: "changed",
-      passed: was,
-      content: changesBetween(was.content, record.content),
-      props,
-    });
+      })
+      .filter((p) => reaches(p.type, p.files, record.layers));
+    const content = changesBetween(was.content, record.content);
+    // Its own content is the same, and no prop change reaches a layer it has: nothing to look at.
+    if (content.length === 0 && props.length === 0) {
+      out.push({ board, status: "unchanged", passed: was });
+      continue;
+    }
+    out.push({ board, status: "changed", passed: was, content, props });
   }
   for (const [board, was] of Object.entries(passed))
     if ((board === under || board.startsWith(`${under}/`)) && !now.has(board))

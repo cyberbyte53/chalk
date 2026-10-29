@@ -57,7 +57,15 @@ import {
 } from "@chalk/content";
 import { propPackages } from "@chalk/library";
 import type { PropModule } from "@chalk/player";
-import { type AnyPropDef, BOARD, PropRole, asAnyProp, boardProp, segment } from "@chalk/prop";
+import {
+  type AnyPropDef,
+  BOARD,
+  PropRole,
+  asAnyProp,
+  boardProp,
+  hostOf,
+  segment,
+} from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateBoard } from "../validate";
@@ -531,7 +539,19 @@ function makeBoard(
 
 /** A good board's record, for knowing what changed since it was reviewed (the changes tool). */
 function keepRecord(c: Context, item: BuiltPage | BuiltQuestion, board: Board): void {
-  c.files.set(`${REVIEW_DIR}/${item.path}.json`, recordOf(board, item.props));
+  // Each host piece's layers, and those on as the board starts (its defaults with its setup).
+  const layers = Object.fromEntries(
+    propPieces(board.root).flatMap((p) => {
+      const def = c.defs[p.prop];
+      const host = def === undefined ? undefined : hostOf(def);
+      if (def === undefined || host === undefined) return [];
+      const start = { ...(def.defaults as Record<string, unknown>), ...(p.with ?? {}) };
+      return [
+        [p.name, { prop: p.prop, all: host.layers.map((l) => l.name), on: host.layersOn(start) }],
+      ];
+    }),
+  );
+  c.files.set(`${REVIEW_DIR}/${item.path}.json`, recordOf(board, item.props, layers));
 }
 
 function propTypesOf(board: Board): string[] {
