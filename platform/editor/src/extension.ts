@@ -464,8 +464,9 @@ type Node = {
     | "lesson"
     | "content"
     | "props"
+    | "package"
     | "prop";
-  /** A prop's line under its name: its package, its role, and the chapters that place it. */
+  /** A prop's line under its name: its role and the chapters that place it; a package's, how many props. */
   description?: string;
   file: string;
   /** A planning file's state, as the dev server reads it. */
@@ -527,8 +528,9 @@ function propsIn(catalogue: string): Node[] {
         label: type,
         path: a[1],
         kind: "prop",
-        file: "",
-        description: `${pkg} · ${role} · ${a[2] ?? ""}`,
+        // The package it is in (the folder it is listed under).
+        file: pkg,
+        description: `${role} · ${a[2] ?? ""}`,
       });
   }
   return out;
@@ -566,6 +568,14 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       item.iconPath = new vscode.ThemeIcon("extensions");
       item.tooltip = "Every prop in library/props, each on its own page";
       item.contextValue = "props";
+      return item;
+    }
+    if (node.kind === "package") {
+      const item = new vscode.TreeItem(node.label, vscode.TreeItemCollapsibleState.Collapsed);
+      item.iconPath = vscode.ThemeIcon.Folder;
+      item.description = node.description;
+      item.tooltip = `library/props/${node.path}`;
+      item.contextValue = "package";
       return item;
     }
     if (node.kind === "prop") {
@@ -627,7 +637,22 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
   async getChildren(element?: Element): Promise<Element[]> {
     if (element !== undefined && isReview(element)) return this.reviews.getChildren(element);
     if (element?.kind === "reviews") return this.reviews.getChildren(undefined);
-    if (element?.kind === "props") return propsIn(join(root, "library", "catalogue.md"));
+    if (element?.kind === "props" || element?.kind === "package") {
+      const all = propsIn(join(root, "library", "catalogue.md"));
+      // Props: a folder per package; a package: its props.
+      if (element.kind === "package") return all.filter((p) => p.file === element.path);
+      return [...new Set(all.map((p) => p.file))].map(
+        (pkg): Node => ({
+          label: pkg,
+          path: pkg,
+          kind: "package",
+          file: "",
+          description: ((n) => `${n} ${n === 1 ? "prop" : "props"}`)(
+            all.filter((p) => p.file === pkg).length,
+          ),
+        }),
+      );
+    }
     const node = element;
     const build = join(root, "build");
     const authoring = join(root, "authoring", "books");
