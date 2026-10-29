@@ -45,6 +45,15 @@ function runPanel(page: string) {
     fromExtension: (data: unknown) => {
       for (const f of listeners) f({ data, source: null });
     },
+    /** A message from the page in the frame (it went somewhere by itself). */
+    fromFrame: (data: unknown) => {
+      for (const f of listeners) f({ data, source: frame.contentWindow });
+    },
+    /** Clicks a button on the panel's bar. */
+    click: (id: string) => {
+      const button = elements.get(id) as { onclick: ((e: unknown) => void) | null } | undefined;
+      button?.onclick?.({ target: element() });
+    },
   };
 }
 
@@ -66,5 +75,20 @@ describe("the preview panel's page", () => {
       panel.fromExtension({ type: "show", query });
       expect(panel.frame.src).toBe(`${BASE}?dev&${query}`);
     }
+  });
+  it("a lesson the preview went to keeps its questions when the panel reloads (Play)", () => {
+    const panel = runPanel(page);
+    panel.fromFrame({
+      chalk: true,
+      type: "follow",
+      follow: "class9-maths/coordinate-geometry/two-numbers-for-a-place",
+    });
+    panel.click("play");
+    expect(panel.frame.src).toBe(
+      `${BASE}?dev&at=content/class9-maths/coordinate-geometry/two-numbers-for-a-place&show=questions&play`,
+    );
+    panel.fromFrame({ chalk: true, type: "follow", follow: "class9-maths/coordinate-geometry" });
+    panel.click("play");
+    expect(panel.frame.src).toBe(`${BASE}?dev&at=content/class9-maths/coordinate-geometry`);
   });
 });

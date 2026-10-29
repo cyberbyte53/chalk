@@ -56,7 +56,8 @@ export function panelHtml(base: string, query: string): string {
       if (m.type === "selecting") { select.classList.toggle("on", !!m.on); return; }
       if (m.type === "toggle") { document.getElementById(m.what === "play" ? "play" : "hindi").click(); return; }
       if (m.type === "pick") select.classList.remove("on");
-      if (m.follow !== undefined) { state.query = "at=content/" + m.follow; where.textContent = m.follow || "all books"; }
+      // A lesson keeps its questions (as the extension's own copy does): a reload must not drop them.
+      if (m.follow !== undefined) { state.query = "at=content/" + m.follow + (m.follow.split("/").length >= 3 ? "&show=questions" : ""); where.textContent = m.follow || "all books"; }
       vscode.postMessage(m);
       return;
     }

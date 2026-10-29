@@ -398,6 +398,8 @@ type Node = {
     | "planning"
     | "planfile"
     | "lesson"
+    | "questions"
+    | "family"
     | "content"
     | "props"
     | "package"
@@ -525,7 +527,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       item.command = { command: "chalk.prop.open", title: "Open", arguments: [node.path] };
       return item;
     }
-    const isLeaf = node.kind === "lesson" || node.kind === "planfile";
+    const isLeaf = node.kind === "lesson" || node.kind === "planfile" || node.kind === "family";
     const item = new vscode.TreeItem(
       node.label,
       isLeaf ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
@@ -562,7 +564,13 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       item.contextValue = "planning";
       return item;
     }
+    if (node.kind === "questions") {
+      item.iconPath = new vscode.ThemeIcon("question");
+      item.contextValue = "questions";
+      return item;
+    }
     item.resourceUri = vscode.Uri.file(node.file);
+    if (node.description !== undefined) item.description = node.description;
     if (node.toReview !== undefined) {
       item.description = "to self-review";
       item.tooltip = `${node.path}\n\nTo self-review before you see it: ${node.toReview}.`;
@@ -655,6 +663,20 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       const lessons = await readOne(base, book, name)
         .then((c) => c.lessons ?? [])
         .catch(() => []);
+      // The chapter's question bank: a family per folder under questions/.
+      const families = dirsIn(join(root, "content", node.path, "questions"));
+      const questions: Node[] =
+        families.length === 0
+          ? []
+          : [
+              {
+                label: "Questions",
+                path: `${node.path}/questions`,
+                kind: "questions",
+                file: join(root, "content", node.path, "questions"),
+                description: `${families.length} ${families.length === 1 ? "family" : "families"}`,
+              },
+            ];
       return [
         planning,
         ...(chapter?.concepts ?? []).map((ref): Node => {
@@ -668,7 +690,24 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
             ...(state?.isToSelfReview === true ? { toReview: state.why ?? "" } : {}),
           };
         }),
+        ...questions,
       ];
+    }
+    if (node.kind === "questions") {
+      // Each family: its questions in the preview, as many as its params give.
+      return dirsIn(node.file).map((family): Node => {
+        const built = readJson<{ questions?: unknown[] }>(
+          join(build, `${node.path}/${family}.json`),
+        );
+        const n = built?.questions?.length;
+        return {
+          label: family,
+          path: `${node.path}/${family}`,
+          kind: "family",
+          file: join(node.file, family, "family.ts"),
+          ...(n === undefined ? {} : { description: `${n} ${n === 1 ? "question" : "questions"}` }),
+        };
+      });
     }
     if (node.kind === "planning") {
       if (!(await ensureServer())) return [];
