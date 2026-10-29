@@ -67,6 +67,23 @@ function walkWords(s: PlaneView, locale: Locale): string {
     : `${name} is at ${target}! ${where}`;
 }
 
+/**
+ * The longest the walker's line can be: what it says on arriving at the target, or standing at
+ * the window's far corner. The line keeps this much room, so what is under it never moves.
+ */
+function longestWalkWords(s: PlaneView, locale: Locale): string {
+  const w = s.window;
+  const far = { x: Math.floor(w.xMax), y: Math.floor(w.yMax) };
+  // A board that has a target, or can be given one, may say it has arrived: from the start.
+  const canArrive = s.target !== null || s.canChooseTarget;
+  const said = [
+    walkWords({ ...s, at: far, isWalking: false }, locale),
+    ...(canArrive ? [walkWords({ ...s, at: far, target: far, isWalking: false }, locale)] : []),
+    ...(s.target !== null ? [walkWords({ ...s, at: s.target, isWalking: false }, locale)] : []),
+  ];
+  return said.reduce((a, b) => (b.length > a.length ? b : a), "");
+}
+
 /** The places, each a small picture; a tap makes one the target when the board allows it. */
 function PlacesDraw({
   s,
@@ -567,18 +584,21 @@ export function CoordinatePlaneView({
           {PART_WORDS[s.named][locale]}
         </p>
       )}
-      {/* Riya's line keeps its room from the start, so her first step doesn't move the arrows. */}
-      {hasWalker &&
-        s.showWhere &&
-        (s.trail.length > 0 ? (
-          <p class="cp-line" {...shows("whereWalker", blockOf(s), walkWords(s, locale))}>
-            {walkWords(s, locale)}
-          </p>
-        ) : (
-          <p class="cp-line" aria-hidden="true">
-            &nbsp;
-          </p>
-        ))}
+      {/* Riya's line keeps room for the most it can say, from the start: no step moves the arrows. */}
+      {hasWalker && s.showWhere && (
+        <p class="cp-line cp-roomy">
+          {s.trail.length > 0 ? (
+            <span {...shows("whereWalker", blockOf(s), walkWords(s, locale))}>
+              {walkWords(s, locale)}
+            </span>
+          ) : (
+            <span />
+          )}
+          <span class="cp-room" aria-hidden="true">
+            {longestWalkWords(s, locale)}
+          </span>
+        </p>
+      )}
       {hasPlotting && next !== undefined && (
         <p class="cp-line" {...shows("next", next, pair(next))}>
           {pair(next)}

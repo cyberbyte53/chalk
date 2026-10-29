@@ -384,7 +384,6 @@ const twoLines = page("two-lines", (b) => {
     "spot",
     {
       ...bareNotebook(),
-      marks: Marks.None,
       point: null,
       // The dot as the student left it on dot-on-paper: both distances given, their lines crossing.
       hidden: { x: 5, y: 9 },

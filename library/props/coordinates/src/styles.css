@@ -15,6 +15,16 @@
 .cp-address.is-room {
   visibility: hidden;
 }
+/* A line that keeps room for the most it can say: what it says now, over an unseen copy of that. */
+.cp-roomy {
+  display: grid;
+}
+.cp-roomy > * {
+  grid-area: 1 / 1;
+}
+.cp-room {
+  visibility: hidden;
+}
 .cp-address strong {
   color: var(--color-secondary);
 }
