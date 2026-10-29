@@ -170,14 +170,14 @@ function StillDraw({
     const c = s.clueChoices[g];
     return c === undefined ? [] : [c];
   });
-  const measured = given.flatMap((c, i) => {
+  const measured = given.flatMap((c) => {
     const out: JSX.Element[] = [];
     if (c.x !== undefined) {
       const y = w.yMin + (w.yMax - w.yMin) * 0.85;
       const [x0, py] = px.toPx(0, y);
       const [x1] = px.toPx(c.x, y);
       out.push(
-        <g key={`x${i}`} class="cp-measure">
+        <g key={`mx${c.x}`} class="cp-measure">
           <line x1={x0} y1={py} x2={x1} y2={py} />
           <text x={(x0 + x1) / 2} y={py - 6} text-anchor="middle">
             {`${num(c.x)}${unit}`}
@@ -190,7 +190,7 @@ function StillDraw({
       const [px0, y0] = px.toPx(x, 0);
       const [, y1] = px.toPx(x, c.y);
       out.push(
-        <g key={`y${i}`} class="cp-measure">
+        <g key={`my${c.y}`} class="cp-measure">
           <line x1={px0} y1={y0} x2={px0} y2={y1} />
           <text x={px0 + 6} y={(y0 + y1) / 2} dominant-baseline="central">
             {`${num(c.y)}${unit}`}
@@ -201,18 +201,18 @@ function StillDraw({
     return out;
   });
   // Every line a distance alone leaves, the full length of the plane (a whole line of spots).
-  const fullLines = given.flatMap((c, i) => {
+  const fullLines = given.flatMap((c) => {
     const out: JSX.Element[] = [];
     if (c.x !== undefined) {
       const [a, b] = [px.toPx(c.x, w.yMin), px.toPx(c.x, w.yMax)];
       out.push(
-        <line key={`fx${i}`} class="cp-still-full" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />,
+        <line key={`fx${c.x}`} class="cp-still-full" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />,
       );
     }
     if (c.y !== undefined) {
       const [a, b] = [px.toPx(w.xMin, c.y), px.toPx(w.xMax, c.y)];
       out.push(
-        <line key={`fy${i}`} class="cp-still-full" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />,
+        <line key={`fy${c.y}`} class="cp-still-full" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />,
       );
     }
     return out;
