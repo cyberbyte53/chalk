@@ -18,7 +18,7 @@ export {
   type Point,
 } from "./plane";
 export { Reading } from "./reading";
-export { walkerAt } from "./walker";
+export { Direction, Roads, stepFrom } from "./walker";
 export { coordinatePlane as coordinatePlaneDef };
 
 export const coordinatePlaneProp = propModule(coordinatePlane, CoordinatePlaneView);

@@ -156,11 +156,11 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by chooseTarget, lightLine, clearLight |
 | `walkerName` | {en: "text", hi: "text"} | setting |
 | `walkFrom` | {orNull: {x: "number", y: "number"}} | setting |
-| `along` | whole number -50 to 50 | changed by setAlong, walkTo |
-| `up` | whole number -50 to 50 | changed by setUp, walkTo |
-| `walked` | number 0 to … | changed by setAlong, setUp, walk, walkTo, backToStart |
-| `isWalking` | true or false | changed by setAlong, setUp, walk, walkTo, backToStart |
-| `canSetSteps` | true or false | setting |
+| `at` | {x: "number", y: "number"} | changed by step, walkTo, backToStart |
+| `roads` | ["town", "grid"] | setting |
+| `trail` | [{x: "number", y: "number"}] | changed by step, walkTo, backToStart |
+| `isWalking` | true or false | changed by step, walkTo, backToStart |
+| `canStep` | true or false | setting |
 | `hidden` | {orNull: {x: "number", y: "number"}} | changed by hideAt |
 | `clueChoices` | [{words: {en: "text", hi: "text"}, region: {optional: {xMin: "number", xMax: "number", yMin: "number", yMax: "number"}}, x: {optional: "number"}, y: {optional: "number"}}] | setting |
 | `given` | ["whole number 0 to 5"] | changed by giveClue, clearClues, hideAt |
@@ -194,11 +194,9 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target; its address is shown (the learner's tap) |
 | `lightLine` | {axis: ["x", "y"], value: "number"} | learner · Light every place with this one number: all the houses on Street 4 (the learner's button) |
 | `clearLight` | — | learner · Turn the lit places off |
-| `setAlong` | {value: "whole number -50 to 50"} | learner · Set the first number, how far along (the learner's stepper); she goes back to the start |
-| `setUp` | {value: "whole number -50 to 50"} | learner · Set the second number, how far up or down (the learner's stepper); she goes back to the start |
-| `walk` | — | learner · Walk: along by the first number, counting each line passed, turn, then up or down by the second (the learner's Walk; timed) |
-| `walkTo` | {x: "number", y: "number"} | Set both numbers to reach (x, y) from the start, and walk there (timed) |
-| `backToStart` | — | learner · Back to where she started (the learner's ↺) |
+| `step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right from where she is, on roads only (the learner's arrow; timed) |
+| `walkTo` | {x: "number", y: "number"} | Walk Riya from her start to (x, y): along, then up or down, block by block (timed) |
+| `backToStart` | — | learner · Riya back to where she started, her route cleared (the learner's ↺) |
 | `giveClue` | {clue: "whole number 0 to 5"} | learner · Give a clue, by its place among the choices; where the point could be narrows (the learner's button) |
 | `clearClues` | — | learner · Take back every clue (the learner's ↺) |
 | `hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |
@@ -210,7 +208,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 
-Signals: `crossed`, `named`, `quadrantsNumbered`, `moved`, `enteredQuadrant`, `readingShown`, `targetChosen`, `lineLit`, `passed`, `turned`, `arrived`, `clueGiven`, `pinned`, `plotted`, `fellOff`, `allPlotted`, `thrown`, `counterMoved`, `missed`, `sentHome`, `won`
+Signals: `crossed`, `named`, `quadrantsNumbered`, `moved`, `enteredQuadrant`, `readingShown`, `targetChosen`, `lineLit`, `stepped`, `arrived`, `blocked`, `clueGiven`, `pinned`, `plotted`, `fellOff`, `allPlotted`, `thrown`, `counterMoved`, `missed`, `sentHome`, `won`
 
 ## `decimal` — `@chalk/prop-decimal`
 

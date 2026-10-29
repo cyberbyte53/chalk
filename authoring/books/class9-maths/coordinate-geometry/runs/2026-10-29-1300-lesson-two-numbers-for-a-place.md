@@ -29,3 +29,19 @@ The chapter's first lesson, built alone for review. `content/class9-maths/coordi
 - Thread cmvt761awv96 (on the prop): the plane offers a Next point button whenever a figure has hidden points, so on cross-streets a student can reveal the crossings before walking. Recommended: a `canShowPoints` field, off by default. It would also let the seating plan keep (5, 3) and (3, 5) marked together, as the flow asks (today only one desk is marked at a time).
 - Thread cmvt767mgcu9 (on props.md): there is no picture piece, so two-lines is words only. Recommended: three small coordinatePlanes side by side (town, sheet, classroom), Descartes' portrait left as words.
 - self-review hasn't run yet.
+
+## Reworked after the person's review (2026-10-29, afternoon)
+
+Ten threads, agreed in chat; flow.md and props.md re-approved first.
+
+- **Platform:** a prop can be placed still, as a picture (`still`: inert, with what it shows in words), with a test and a line in writing-content.md. Of the pictures plan, only "a prop, still" is built; drawn figures wait for a board that needs one. A row of props can't shrink below 200px each, so pictures go one under each sentence instead of side by side.
+- **coordinatePlane:** `canShowPoints` (no Next point button unless a board asks); the walker redone for arrows (`step`, `roads` town or grid, `at`, `trail`, `canStep`; signals stepped, arrived, blocked; `walkTo` and `backToStart` kept); an arrow greys out where there's no road; clues offered one at a time; a place's label drawn; lit houses drawn plainly; Riya's line says "Street number 3" on the main road (no house 0) and leaves out a counted 0. 47 tests.
+- **street-and-house** ("Finding Aman's house"): "Street 4" first; reaching its foot lights its five houses and Aman adds "House 5"; walking up to it says she's there and names the two numbers; then any house. No order question here.
+- **dot-on-paper** ("A spot on the fair ground"): the stall's spot, one clue at a time (a patch, a line, one spot); then the table-lamp question; "hide your own" gone.
+- **seating-plan:** (5, 3) and (3, 5) both stay marked; the one place the order of the numbers is asked.
+- **cross-streets:** no "200 m"; arrows; one question on (4, 3) and (3, 4) once both are reached.
+- **two-lines:** the three places as still pictures, one under each sentence; the statement says what across and up mean; Descartes in words.
+
+Found while building: the witness's taps came faster than Riya's glide, and a tap mid-glide is ignored, so the witness waits out each step (a student tapping quickly would see the same).
+
+Looked at: the lesson at 360×640, 640 and 640×720, English and Hindi: 30 drawings, no problems. Played as a student: every board passes. `pnpm build-content` and `pnpm check` pass.

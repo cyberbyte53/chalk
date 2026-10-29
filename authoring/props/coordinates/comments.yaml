@@ -1,6 +1,6 @@
 # Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
 - id: cmvt761awv96
-  status: planned
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T07:03:40.568Z
@@ -36,8 +36,13 @@
       text: "Approved in chat ('Make sense'): adding `canShowPoints`, off by default, with its test.
         Lesson 1's boards leave it off."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:06.681Z
+      text: ""
+      status: closed
 - id: cmvt7i171acg
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:13:00.301Z
@@ -67,3 +72,114 @@
         up' happen without a rule for it. Her address updates as she moves. This replaces the
         steppers, so it's a change to the prop's definition: it goes on a thread on the prop first."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:03.854Z
+      text: ""
+      status: closed
+- id: cmvt88qpx50h
+  status: withdrawn
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T07:33:46.437Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:16
+  commit: 00a9da2b6d0375275ae6c7c4fb7558fdf07b73ea
+  about: cmvt7i171acg
+  text: >-
+    The walker's definition, redone for the arrow pad (your comment on street-and-house). Here is
+    what changes, before any code.
+
+
+    **Riya moves by arrows, one block per tap, from where she is.**
+
+    • New action `step { direction: up | down | left | right }`, done by the learner. She glides one
+    block (about a third of a second). If there's no road that way, or it leaves the map, she stays
+    put and the plane says why (signal `blocked`, e.g. 'no road going up from the main road between
+    streets').
+
+    • New field `roads`. **town** means the main road plus a street up from each whole number, so ←
+    → only on the main road and ↑ ↓ only on a street. **grid** means every whole-number line is a
+    road, as in cross-streets and later lessons. The roads make 'along, then up' happen in the town
+    without a rule for it.
+
+    • New field `at`: where she stands. New field `trail`: the blocks she has walked, drawn as her
+    route.
+
+    • New field `canStep`: whether the learner gets the pad (it replaces `canSetSteps`).
+
+    • Signals: `stepped` (where she is now), `arrived` (she stepped onto the target place: Aman's
+    house), `blocked`.
+
+    • Her address shows under the plane as she moves (Street 4, House 2 …).
+
+
+    **Removed:** `along`, `up`, `walked`, `setAlong`, `setUp`, `walk` and the steppers.
+
+
+    **Kept for lessons:** `walkTo (x, y)` (a lesson walks her there: along, then up, step by step,
+    for lesson 4's plotting and the timed walk), and `backToStart`, now a ↺ on the pad that also
+    clears the trail.
+
+
+    Nothing outside lesson 1 uses the walker yet; lesson 1's two walking boards change with it.
+    Close this to approve, and I'll build it with its tests.
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:44:58.790Z
+      text: Opened wrongly as a regression ('about'), so it waited on the agent and never reached the
+        person. Opened again as a plain proposal.
+      status: withdrawn
+- id: cmvt8n5jypzw
+  status: closed
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T07:44:58.846Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:16
+  commit: cc6f3906fe4e2e34b4538deb04f51d054049d8e7
+  text: >-
+    The walker's definition, redone for the arrow pad (your comment on street-and-house, thread
+    cmvt7i171acg). Here is what changes, before any code.
+
+
+    **Riya moves by arrows, one block per tap, from where she is.**
+
+    • New action `step { direction: up | down | left | right }`, done by the learner. She glides one
+    block (about a third of a second). If there's no road that way, or it leaves the map, she stays
+    put and the plane says why (signal `blocked`, e.g. 'no road going up from the main road between
+    streets').
+
+    • New field `roads`. **town** means the main road plus a street up from each whole number, so ←
+    → only on the main road and ↑ ↓ only on a street. **grid** means every whole-number line is a
+    road, as in cross-streets and later lessons. The roads make 'along, then up' happen in the town
+    without a rule for it.
+
+    • New field `at`: where she stands. New field `trail`: the blocks she has walked, drawn as her
+    route.
+
+    • New field `canStep`: whether the learner gets the pad (it replaces `canSetSteps`).
+
+    • Signals: `stepped` (where she is now), `arrived` (she stepped onto the target place: Aman's
+    house), `blocked`.
+
+    • Her address shows under the plane as she moves (Street 4, House 2 …).
+
+
+    **Removed:** `along`, `up`, `walked`, `setAlong`, `setUp`, `walk` and the steppers.
+
+
+    **Kept for lessons:** `walkTo (x, y)` (a lesson walks her there: along, then up, step by step,
+    for lesson 4's plotting and the timed walk), and `backToStart`, now a ↺ on the pad that also
+    clears the trail.
+
+
+    Nothing outside lesson 1 uses the walker yet; lesson 1's two walking boards change with it.
+    Close this to approve, and I'll build it with its tests.
+  messages:
+    - by: you
+      role: person
+      at: 2026-10-29T07:45:57.613Z
+      text: ""
+      status: closed

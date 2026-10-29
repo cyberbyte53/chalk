@@ -1,12 +1,13 @@
-import { type At, page, t, wait } from "@chalk/author";
+import { type At, type Step, inOrder, page, t, wait } from "@chalk/author";
 import { choiceQuestion, wordsOn } from "@chalk/patterns";
 import {
+  Direction,
   Marks,
   PlaceKind,
+  Roads,
   Scene,
   Tone,
   coordinatePlaneDef,
-  walkerAt,
 } from "@chalk/prop-coordinates";
 
 /** Every whole-number point from (1, 1) to (across, up): the houses of a town, the desks of a class. */
@@ -15,12 +16,13 @@ const grid = (across: number, up: number) =>
     Array.from({ length: up }, (_, j) => ({ x: i + 1, y: j + 1 })),
   ).flat();
 
-/** Where Riya stands now on this plane, and whether it is (x, y). */
-type Walking = Parameters<typeof walkerAt>[0];
-const isAt = (s: Walking, x: number, y: number) => {
-  const p = walkerAt(s);
-  return p !== null && p.x === x && p.y === y && s.walked > 0;
-};
+/** Whether Riya stands at (x, y). (When she announces a step, she is exactly on its block.) */
+const isAt = (s: { at: { x: number; y: number } }, x: number, y: number) =>
+  s.at.x === x && s.at.y === y;
+
+/** A learner's taps on Riya's arrows, each waited out (a tap while she is still moving is ignored). */
+const taps = (...steps: Step[]): (Step | ReturnType<typeof wait>)[] =>
+  steps.flatMap((step) => [step, wait(0.4)]);
 
 /** The town of Fig. 3.1: streets 1 to 8 leave the main road, five houses up each. */
 const town = {
@@ -35,115 +37,72 @@ const town = {
   places: grid(8, 5),
   placeKind: PlaceKind.House,
   walkFrom: { x: 0, y: 0 },
+  at: { x: 0, y: 0 },
+  roads: Roads.Town,
 };
 
-/** Riya walks to Aman's house by his address: along the main road to his street, then up it. */
+/** Riya walks to Aman's house: "Street 4" gets her to five houses; "House 5" picks his. */
 const streetAndHouse = page("street-and-house", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "Find, by walking Riya there, that an address needs two numbers in a fixed order: along the main road to the street, then up it to the house. The swapped pair reaches someone else's house; the street alone leaves five houses.",
+    "Find that one number isn't enough: 'Street 4' brings Riya to a street with five houses on it, and only the second number, 'House 5', picks Aman's. Walking there is along the main road, then up the street.",
   );
-  const plane = b.prop(coordinatePlaneDef, "town", { ...town, target: { x: 4, y: 5 } });
-  b.standsFor(plane, "the town's map: Riya at the corner, Aman's house at Street 4, House 5");
-  b.witness(
-    plane.learner.setAlong({ value: 4 }),
-    plane.learner.setUp({ value: 5 }),
-    plane.learner.walk(),
-    wait(5),
+  const plane = b.prop(coordinatePlaneDef, "town", town);
+  b.standsFor(plane, "the town's map: Riya at the corner where the main road begins");
+  const right = plane.learner.step({ direction: Direction.Right });
+  const up = plane.learner.step({ direction: Direction.Up });
+  b.witness(...taps(right, right, right, right, up, up, up, up, up));
+  const onStreet4 = (at: At) => isAt(at(plane), 4, 0);
+  // At the foot of Street 4, its five houses light up, and Aman sends the second number.
+  // Aman's house first (choosing it clears what is lit), then his street's five houses light up.
+  b.when(
+    plane.on.stepped,
+    inOrder(plane.call.chooseTarget({ x: 4, y: 5 }), plane.call.lightLine({ axis: "x", value: 4 })),
+    onStreet4,
   );
-  const swapped = choiceQuestion(b, {
-    name: "swapped",
-    prompt: t(
-      "Riya mixes up the two numbers: she walks along the main road to Street 5, then up it to House 4. Where does she end up?",
-      "रिया दोनों संख्याएँ उलट देती है: वह मुख्य सड़क पर गली 5 तक जाती है, फिर उसमें मकान 4 तक। वह कहाँ पहुँचती है?",
+  const fiveHouses = w.body(
+    t(
+      "Riya is on Street 4, and **five houses** stand on it. Which one is Aman's? She messages him again. He replies: **House 5**. The house numbers go up the street from the main road.",
+      "रिया गली 4 पर है, और उस पर **पाँच मकान** हैं। अमन का कौन-सा है? वह उसे फिर संदेश भेजती है। वह जवाब देता है: **मकान 5**। मकान नंबर मुख्य सड़क से गली में ऊपर की ओर बढ़ते हैं।",
     ),
-    options: [
-      {
-        id: "other",
-        label: t("At Street 5, House 4: somebody else's house", "गली 5, मकान 4 पर: किसी और के घर"),
-      },
-      {
-        id: "same",
-        label: t(
-          "At Aman's house: she used the same two numbers",
-          "अमन के घर: उसने वही दो संख्याएँ इस्तेमाल कीं",
-        ),
-        feedback: t(
-          "The first number is the street and the second is the house. Street 5, House 4 is on a different street. Set → to 5 and ↑ to 4 and walk to see.",
-          "पहली संख्या गली है और दूसरी मकान। गली 5, मकान 4 दूसरी गली पर है। → को 5 और ↑ को 4 करके चलाकर देखो।",
-        ),
-      },
-      {
-        id: "lost",
-        label: t("Nowhere: there is no Street 5", "कहीं नहीं: गली 5 है ही नहीं"),
-        feedback: t(
-          "Look under the main road: the streets go from 1 to 8, so Street 5 is there. She reaches its 4th house.",
-          "मुख्य सड़क के नीचे देखो: गलियाँ 1 से 8 तक हैं, तो गली 5 है। वह उसके चौथे मकान पर पहुँचती है।",
-        ),
-      },
-    ],
-    answer: "other",
-  });
+    "fiveHouses",
+  );
   const found = w.definition(
     t(
-      "**Two numbers, in order, found the house.** The first says how far along the main road: the street. The second says how far up the street: the house.",
-      "**दो संख्याओं ने, क्रम से, घर ढूँढ दिया।** पहली बताती है कि मुख्य सड़क पर कितनी दूर: गली। दूसरी बताती है कि गली में कितनी दूर: मकान।",
+      "**It took two numbers to find the house:** the street, how far along the main road, and then the house, how far up the street.",
+      "**घर ढूँढने में दो संख्याएँ लगीं:** गली, यानी मुख्य सड़क पर कितनी दूर, और फिर मकान, यानी गली में कितना ऊपर।",
     ),
     "found",
   );
   const anyHouse = w.body(
     t(
-      "Now **tap any house** to make it Aman's. Before you walk, say the two steps out loud. Then check by walking Riya there.",
-      "अब **किसी भी मकान को दबाओ** ताकि वह अमन का घर बन जाए। चलाने से पहले दोनों कदम ज़ोर से बोलो। फिर रिया को वहाँ चलाकर जाँचो।",
+      "Now **tap any house** to make it Aman's. Before you move Riya, say how she gets there. Then walk her and check.",
+      "अब **किसी भी मकान को दबाओ** ताकि वह अमन का घर बन जाए। रिया को चलाने से पहले बोलो कि वह वहाँ कैसे पहुँचेगी। फिर उसे चलाकर जाँचो।",
     ),
     "anyHouse",
   );
-  const oneNumber = w.body(
-    t(
-      "What if Aman had said only **Street 4**? Tap the **4** under the main road.",
-      "अगर अमन ने केवल **गली 4** कहा होता? मुख्य सड़क के नीचे **4** दबाओ।",
-    ),
-    "oneNumber",
-  );
-  const five = w.body(
-    t(
-      "**Five houses** stand on Street 4, and any of them could be his. One number isn't enough: we need both.",
-      "गली 4 पर **पाँच मकान** हैं, और उनमें से कोई भी उसका हो सकता है। एक संख्या काफ़ी नहीं: हमें दोनों चाहिए।",
-    ),
-    "five",
-  );
   const atAmans = (at: At) => isAt(at(plane), 4, 5);
-  b.after(plane.on.arrived, [found, swapped], { if: atAmans });
-  b.after(swapped, [anyHouse, oneNumber]);
-  b.after(plane.on.lineLit, five, {
-    if: (at) => at(plane).lit?.axis === "x" && at(plane).lit?.value === 4,
-  });
+  b.after(plane.on.stepped, fiveHouses, { if: onStreet4 });
+  b.after(plane.on.arrived, [found, anyHouse], { if: atAmans });
+  b.passWhen(plane.on.arrived, { if: atAmans });
   return [
-    w.title(t("Two numbers for a place", "एक जगह के लिए दो संख्याएँ")),
+    w.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
     w.body(
       t(
-        "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. Aman sends her his address: **Street 4, House 5**.",
-        "रिया और अमन कक्षा 9 में हैं, और उनकी कक्षा एक स्टॉल मेला लगा रही है। वे अपना स्टॉल अमन के घर पर तय करेंगे, पर रिया वहाँ कभी नहीं गई। अमन उसे अपना पता भेजता है: **गली 4, मकान 5**।",
+        "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. She asks him where he lives. He replies: **Street 4**.",
+        "रिया और अमन कक्षा 9 में हैं, और उनकी कक्षा एक स्टॉल मेला लगा रही है। वे अपना स्टॉल अमन के घर पर तय करेंगे, पर रिया वहाँ कभी नहीं गई। वह उससे पूछती है कि वह कहाँ रहता है। वह जवाब देता है: **गली 4**।",
       ),
     ),
     w.body(
       t(
-        "In their town a main road runs from west to east. Streets leave it going north, numbered 1, 2, 3, … from the west. On each street the houses are numbered 1, 2, 3, … from the main road. Riya starts at the corner where the main road begins, and she can walk only on roads.",
-        "उनके शहर में एक मुख्य सड़क पश्चिम से पूर्व जाती है। उससे गलियाँ उत्तर की ओर निकलती हैं, पश्चिम से 1, 2, 3, … गिनी हुई। हर गली में मकान मुख्य सड़क से 1, 2, 3, … गिने जाते हैं। रिया उस कोने से चलती है जहाँ मुख्य सड़क शुरू होती है, और वह केवल सड़कों पर चल सकती है।",
-      ),
-    ),
-    w.body(
-      t(
-        "Set how far she goes **along** the main road (→) and how far **up** the street (↑), then tap **Walk**.",
-        "तय करो कि वह मुख्य सड़क पर कितना **आगे** जाए (→) और गली में कितना **ऊपर** (↑), फिर **चलो** दबाओ।",
+        "In their town a main road runs from west to east. Streets leave it going north, numbered 1, 2, 3, … from the west. Riya starts at the corner where the main road begins. Move her with the arrows: she can walk only on roads.",
+        "उनके शहर में एक मुख्य सड़क पश्चिम से पूर्व जाती है। उससे गलियाँ उत्तर की ओर निकलती हैं, पश्चिम से 1, 2, 3, … गिनी हुई। रिया उस कोने से चलती है जहाँ मुख्य सड़क शुरू होती है। उसे तीरों से चलाओ: वह केवल सड़कों पर चल सकती है।",
       ),
     ),
     plane,
+    fiveHouses,
     found,
-    swapped,
     anyHouse,
-    oneNumber,
-    five,
   ];
 });
 
@@ -325,7 +284,7 @@ const seatingPlan = page("seating-plan", (b) => {
 const crossStreets = page("cross-streets", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "In a city of 5 streets each way, only one crossing is (4, 3) and only one is (3, 4), and they are different crossings.",
+    "In a city of 5 numbered streets each way, only one crossing is (4, 3) and only one is (3, 4), and they are different crossings.",
   );
   const city = b.prop(coordinatePlaneDef, "city", {
     window: { xMin: 0, xMax: 5.5, yMin: 0, yMax: 5.5 },
@@ -336,102 +295,73 @@ const crossStreets = page("cross-streets", (b) => {
     placeKind: PlaceKind.Crossing,
     canChooseTarget: false,
     walkFrom: { x: 0, y: 0 },
+    at: { x: 0, y: 0 },
+    roads: Roads.Grid,
     points: [
       { name: "A", x: 2, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
       { name: "B", x: 4, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
       { name: "C", x: 3, y: 4, isShown: false, hasDropLines: false, tone: Tone.Accent },
     ],
   });
-  b.standsFor(
-    city,
-    "the city: 5 north–south and 5 east–west streets, 200 m apart, Riya at the centre",
-  );
+  b.standsFor(city, "the city: 5 north–south and 5 east–west streets, Riya at the centre");
   // Each crossing she reaches stays marked.
   for (const [name, x, y] of [
     ["A", 2, 5],
     ["B", 4, 3],
     ["C", 3, 4],
   ] as const)
-    b.when(city.on.arrived, city.call.showPoint({ name }), (at) => isAt(at(city), x, y));
-  b.witness(
-    city.learner.setAlong({ value: 2 }),
-    city.learner.setUp({ value: 5 }),
-    city.learner.walk(),
-    wait(5),
-    city.learner.setAlong({ value: 4 }),
-    city.learner.setUp({ value: 3 }),
-    city.learner.walk(),
-    wait(5),
-  );
-  const one = choiceQuestion(b, {
-    name: "one",
+    b.when(city.on.stepped, city.call.showPoint({ name }), (at) => isAt(at(city), x, y));
+  const go = (direction: Direction) => city.learner.step({ direction });
+  const R = go(Direction.Right);
+  const L = go(Direction.Left);
+  const U = go(Direction.Up);
+  const D = go(Direction.Down);
+  b.witness(...taps(R, R, U, U, U, U, U, R, R, D, D, L, U));
+  const shown = (at: At, name: string) => at(city).points.some((p) => p.name === name && p.isShown);
+  const which = choiceQuestion(b, {
+    name: "which",
     prompt: t(
-      "How many cross-streets in this city can be called (4, 3)?",
-      "इस शहर में कितने चौराहों को (4, 3) कहा जा सकता है?",
+      "How many cross-streets in this city can be called (4, 3), and how many (3, 4)?",
+      "इस शहर में कितने चौराहों को (4, 3) कहा जा सकता है, और कितनों को (3, 4)?",
     ),
     options: [
-      { id: "one", label: t("One", "एक") },
       {
-        id: "two",
-        label: t("Two: (4, 3) and (3, 4)", "दो: (4, 3) और (3, 4)"),
+        id: "oneEach",
+        label: t("One each, and they are different crossings", "एक-एक, और वे अलग चौराहे हैं"),
+      },
+      {
+        id: "same",
+        label: t(
+          "One: (4, 3) and (3, 4) are the same crossing",
+          "एक: (4, 3) और (3, 4) एक ही चौराहा है",
+        ),
         feedback: t(
-          "(4, 3) means the 4th north–south street and the 3rd east–west street. Those two streets cross only once.",
-          "(4, 3) का मतलब है चौथी उत्तर–दक्षिण गली और तीसरी पूर्व–पश्चिम गली। ये दो गलियाँ केवल एक बार मिलती हैं।",
+          "Look at B and C: B is on the 4th north–south street, C on the 3rd. Two different crossings.",
+          "B और C देखो: B चौथी उत्तर–दक्षिण गली पर है, C तीसरी पर। दो अलग चौराहे।",
         ),
       },
       {
         id: "five",
-        label: t("Five: every crossing on the 4th street", "पाँच: चौथी गली का हर चौराहा"),
+        label: t("Five each: every crossing on that street", "पाँच-पाँच: उस गली का हर चौराहा"),
         feedback: t(
-          "That is what 4 alone would leave. The 3 picks one of those five crossings.",
-          "यह केवल 4 से बचता। 3 उन पाँच चौराहों में से एक चुनता है।",
+          "That's what the first number alone would leave. The second number picks one crossing on that street.",
+          "यह केवल पहली संख्या से बचता। दूसरी संख्या उस गली का एक चौराहा चुनती है।",
         ),
       },
     ],
-    answer: "one",
-    keepOrder: true,
+    answer: "oneEach",
   });
-  b.after(city.on.arrived, one, { if: (at) => isAt(at(city), 4, 3) });
-  b.witness(
-    city.learner.setAlong({ value: 3 }),
-    city.learner.setUp({ value: 4 }),
-    city.learner.walk(),
-    wait(5),
-  );
-  const other = choiceQuestion(b, {
-    name: "other",
-    prompt: t(
-      "And how many can be called (3, 4)? Is it the same crossing as (4, 3)?",
-      "और कितनों को (3, 4) कहा जा सकता है? क्या यह (4, 3) वाला ही चौराहा है?",
-    ),
-    options: [
-      { id: "oneOther", label: t("One, and a different crossing", "एक, और अलग चौराहा") },
-      {
-        id: "oneSame",
-        label: t("One, the same crossing as (4, 3)", "एक, (4, 3) वाला ही चौराहा"),
-        feedback: t(
-          "Look where Riya stopped: B is on the 4th north–south street, C on the 3rd. Two crossings.",
-          "देखो रिया कहाँ रुकी: B चौथी उत्तर–दक्षिण गली पर है, C तीसरी पर। दो चौराहे।",
-        ),
-      },
-      {
-        id: "none",
-        label: t("None: (3, 4) is (4, 3) written wrongly", "कोई नहीं: (3, 4) तो (4, 3) गलत लिखा है"),
-        feedback: t(
-          "(3, 4) is a crossing of its own: the 3rd north–south street meets the 4th east–west street there.",
-          "(3, 4) अपना अलग चौराहा है: वहाँ तीसरी उत्तर–दक्षिण गली चौथी पूर्व–पश्चिम गली से मिलती है।",
-        ),
-      },
-    ],
-    answer: "oneOther",
+  // Asked once she has reached both (4, 3) and (3, 4), in either order.
+  b.after(city.on.stepped, which, {
+    if: (at) =>
+      (isAt(at(city), 3, 4) && shown(at, "B")) || (isAt(at(city), 4, 3) && shown(at, "C")),
   });
-  b.after(city.on.arrived, other, { if: (at) => isAt(at(city), 3, 4) });
   return [
     w.title(t("Cross-streets", "चौराहे")),
     w.body(
       t(
-        "Aman's cousin lives in a city where two main roads cross at the centre, one north–south and one east–west. Other streets run beside them, 200 m apart: 5 each way. Where the 2nd north–south street meets the 5th east–west street is the cross-street **(2, 5)**.",
-        "अमन का चचेरा भाई एक ऐसे शहर में रहता है जहाँ दो मुख्य सड़कें बीच में मिलती हैं, एक उत्तर–दक्षिण और एक पूर्व–पश्चिम। उनके साथ-साथ और गलियाँ हैं, 200 m दूर: हर तरफ़ 5। जहाँ दूसरी उत्तर–दक्षिण गली पाँचवीं पूर्व–पश्चिम गली से मिलती है, वह चौराहा **(2, 5)** है।",
+        "Aman's cousin lives in a city where two main roads cross at the centre, one north–south and one east–west. Other streets run beside them: 5 each way, numbered from the main roads. Where the 2nd north–south street meets the 5th east–west street is the cross-street **(2, 5)**.",
+        "अमन का चचेरा भाई एक ऐसे शहर में रहता है जहाँ दो मुख्य सड़कें बीच में मिलती हैं, एक उत्तर–दक्षिण और एक पूर्व–पश्चिम। उनके साथ-साथ और गलियाँ हैं: हर तरफ़ 5, मुख्य सड़कों से गिनी हुई। जहाँ दूसरी उत्तर–दक्षिण गली पाँचवीं पूर्व–पश्चिम गली से मिलती है, वह चौराहा **(2, 5)** है।",
       ),
     ),
     w.body(
@@ -441,8 +371,7 @@ const crossStreets = page("cross-streets", (b) => {
       ),
     ),
     city,
-    one,
-    other,
+    which,
   ];
 });
 

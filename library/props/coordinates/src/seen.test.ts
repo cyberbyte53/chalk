@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { coordinatePlaneProp } from "./index";
 import { Marks, Scene } from "./plane";
 import { Reading } from "./reading";
+import { Roads } from "./walker";
 
 /** The plane placed with these fields, as the student sees it (read from what its view draws). */
 function seen(
@@ -32,6 +33,7 @@ const town = {
   ],
   places: houses,
   walkFrom: { x: 0, y: 0 },
+  roads: Roads.Town,
 };
 const axes = { showDirections: true, window: { xMin: -3, xMax: 3, yMin: -3, yMax: 3 } };
 const apart = { apart: { x: 2, y: 1 }, showOrigin: false };
@@ -75,7 +77,14 @@ describe("coordinatePlane, used the way the boards use it", () => {
     expect(
       checkProp(coordinatePlaneProp, [
         town,
-        { ...town, along: 2, up: 1 },
+        {
+          ...town,
+          at: { x: 2, y: 0 },
+          trail: [
+            { x: 1, y: 0 },
+            { x: 2, y: 0 },
+          ],
+        },
         axes,
         apart,
         reading,
@@ -98,7 +107,10 @@ describe("what the student sees", () => {
     expect(s.ids).toContain("lightLine:x2");
     expect(s.ids).toContain("chooseTarget:2,1");
     expect(s.at("walker")).toMatchObject({ value: { x: 0, y: 0 }, words: "Riya (0, 0)" });
-    expect(s.at("setAlong")).toMatchObject({ value: 0, isByHand: true });
+    // The arrows: only → leads anywhere from the corner (no street goes up there).
+    expect(s.at("step:right")?.isOff).toBeUndefined();
+    expect(s.at("step:up")?.isOff).toBe(true);
+    expect(s.at("step:left")?.isOff).toBe(true);
   });
   it("Aman's house, once chosen, is written by its full address", () => {
     const s = seen({ ...town, target: { x: 3, y: 2 } });
@@ -107,14 +119,23 @@ describe("what the student sees", () => {
       words: "Aman's house: Street number 3, House number 2",
     });
   });
-  it("Riya at the end of her walk says where she is, and whether it is Aman's house", () => {
-    const there = seen({ ...town, target: { x: 3, y: 2 }, along: 3, up: 2, walked: 5 });
+  it("Riya's line says where she is as she walks, and that she's there at Aman's house", () => {
+    const route = [
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 3, y: 0 },
+      { x: 3, y: 1 },
+    ];
+    const onTheWay = seen({ ...town, target: { x: 3, y: 2 }, at: { x: 3, y: 1 }, trail: route });
+    expect(onTheWay.at("whereWalker")?.words).toBe("Riya: Street number 3, House number 1");
+    const there = seen({
+      ...town,
+      target: { x: 3, y: 2 },
+      at: { x: 3, y: 2 },
+      trail: [...route, { x: 3, y: 2 }],
+    });
     expect(there.at("whereWalker")?.words).toBe(
       "Riya is at Aman's house! Street number 3, House number 2",
-    );
-    const wrong = seen({ ...town, target: { x: 3, y: 2 }, along: 2, up: 3, walked: 5 });
-    expect(wrong.at("whereWalker")?.words).toBe(
-      "Riya: Street number 2, House number 3. That isn't Aman's house.",
     );
   });
   it("a point read as far as the board writes it; in a guessing round, only ?", () => {

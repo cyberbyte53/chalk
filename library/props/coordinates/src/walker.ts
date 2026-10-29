@@ -1,8 +1,8 @@
 import { localizedSchema } from "@chalk/content";
 import {
   type Effect,
+  type Emit,
   actionsFor,
-  call,
   layersFor,
   raise,
   seq,
@@ -11,84 +11,113 @@ import {
   tween,
 } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, type Point, pointSchema } from "./plane";
+import { type PlaneCore, type Point, isInWindow, pointSchema } from "./plane";
+
+/** Which lines are roads Riya can walk on. */
+export const Roads = {
+  /** A main road through her start, and a street up from it at every whole number but the start. */
+  Town: "town",
+  /** Every whole-number line, both ways: a city of crossing streets, graph paper. */
+  Grid: "grid",
+} as const;
+export type Roads = (typeof Roads)[keyof typeof Roads];
+
+export const Direction = { Up: "up", Down: "down", Left: "left", Right: "right" } as const;
+export type Direction = (typeof Direction)[keyof typeof Direction];
 
 export type WalkerState = PlaneCore & {
   walkerName: z.infer<typeof localizedSchema>;
   walkFrom: Point | null;
-  along: number;
-  up: number;
-  walked: number;
+  at: Point;
+  roads: Roads;
+  trail: Point[];
   isWalking: boolean;
-  canSetSteps: boolean;
+  canStep: boolean;
 };
 
-const MAX_STEPS = 50;
-/** Seconds she takes from one line to the next. */
-export const SECONDS_PER_LINE = 0.4;
+/** Seconds she takes from one block to the next. */
+export const SECONDS_PER_BLOCK = 0.3;
+const MAX_TRAIL = 200;
 const act = actionsFor<WalkerState>();
 const none = z.object({}).strict();
-const count = z.object({ value: z.number().int().min(-MAX_STEPS).max(MAX_STEPS) }).strict();
 
-/** Where the walker stands after `walked` units: along first, then up. */
-export function walkerAt(
-  s: Pick<WalkerState, "walkFrom" | "along" | "up" | "walked">,
-): Point | null {
-  if (s.walkFrom === null) return null;
-  const a = Math.min(s.walked, Math.abs(s.along));
-  const u = Math.max(0, s.walked - Math.abs(s.along));
-  return { x: s.walkFrom.x + Math.sign(s.along) * a, y: s.walkFrom.y + Math.sign(s.up) * u };
-}
-
-export const walkerSignals = {
-  passed: signal("The walker passed a line: `axis`, counted `count` so far"),
-  turned: signal("The walker went `along` along the first line and turned"),
-  arrived: signal("The walker arrived at (`x`, `y`); `isAtTarget` when that is the target place"),
+const MOVE: Record<Direction, Point> = {
+  up: { x: 0, y: 1 },
+  down: { x: 0, y: -1 },
+  left: { x: -1, y: 0 },
+  right: { x: 1, y: 0 },
 };
 
-/** The target place another layer marks (Aman's house), if there is one. */
+/**
+ * Where one block that way takes her, or why it can't: off the map, or no road. In the town, ← →
+ * only on the main road, and ↑ ↓ only on a street (a whole number other than the start), never
+ * below the main road.
+ */
+export function stepFrom(
+  s: Pick<WalkerState, "walkFrom" | "at" | "roads" | "window">,
+  direction: Direction,
+): { to: Point } | { blocked: string } {
+  const d = MOVE[direction];
+  const to = { x: s.at.x + d.x, y: s.at.y + d.y };
+  if (!isInWindow(s.window, to)) return { blocked: "the edge of the map" };
+  if (s.roads === Roads.Town && s.walkFrom !== null) {
+    const isAcross = d.y === 0;
+    if (isAcross && s.at.y !== s.walkFrom.y)
+      return { blocked: "no road across here: back down to the main road" };
+    if (!isAcross && (!Number.isInteger(s.at.x) || s.at.x === s.walkFrom.x))
+      return { blocked: "no street going up here" };
+    if (!isAcross && to.y < s.walkFrom.y) return { blocked: "nothing below the main road" };
+  }
+  return { to };
+}
+
+/** The target another layer marks (Aman's house), if there is one. */
 const targetOf = (s: WalkerState): Point | null =>
   (s as WalkerState & { target?: Point | null }).target ?? null;
 
-/**
- * Walks her from where she stands to the end, one line at a time: along first, then she turns,
- * then up or down. Each line passed is announced with how many so far.
- */
-const walkOn = act({
+const isSame = (a: Point | null, b: Point) => a !== null && a.x === b.x && a.y === b.y;
+
+export const walkerSignals = {
+  stepped: signal("Riya stepped one block, to (`x`, `y`)"),
+  arrived: signal("Riya stepped onto the target place (Aman's house), at (`x`, `y`)"),
+  blocked: signal("Riya can't go `direction`: `why`"),
+};
+
+/** One block's glide, then where she is announced (and that she has arrived, at the target). */
+function glide(s: WalkerState, from: Point, to: Point, trail: Point[]): Effect<WalkerState>[] {
+  const emit: Emit[] = [raise(walkerSignals.stepped, { x: to.x, y: to.y })];
+  if (isSame(targetOf(s), to)) emit.push(raise(walkerSignals.arrived, { x: to.x, y: to.y }));
+  return [
+    tween(
+      SECONDS_PER_BLOCK,
+      { at: to },
+      {
+        ease: (x) => x,
+        interpolate: (_, __, t) => ({
+          at: { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t },
+        }),
+      },
+    ),
+    set({ at: to, trail: trail.slice(-MAX_TRAIL) }, ...emit),
+  ];
+}
+
+const step = act({
   describe:
-    "Walk: along by the first number, counting each line passed, turn, then up or down by the second (the learner's Walk; timed)",
+    "Move Riya one block up, down, left or right from where she is, on roads only (the learner's arrow; timed)",
   byLearner: true,
-  args: none,
-  changes: ["walked", "isWalking"],
-  run: (s) => {
-    const total = Math.abs(s.along) + Math.abs(s.up);
-    if (s.walkFrom === null || total === 0) return set({});
-    // From the start again once she has arrived; else on from where she stopped.
-    const from = s.walked >= total ? 0 : Math.floor(s.walked);
-    const steps: Effect<WalkerState>[] = [set({ walked: from, isWalking: true })];
-    for (let k = from + 1; k <= total; k++) {
-      const isAlong = k <= Math.abs(s.along);
-      steps.push(
-        tween(SECONDS_PER_LINE, { walked: k }, { ease: (x) => x, while: (now) => now.isWalking }),
-        set(
-          {},
-          raise(walkerSignals.passed, {
-            axis: isAlong ? "along" : "up",
-            count: isAlong ? k : k - Math.abs(s.along),
-          }),
-          ...(k === Math.abs(s.along) && s.up !== 0
-            ? [raise(walkerSignals.turned, { along: s.along })]
-            : []),
-        ),
-      );
-    }
-    const end = walkerAt({ ...s, walked: total }) ?? s.walkFrom;
-    const target = targetOf(s);
-    const isAtTarget = target !== null && target.x === end.x && target.y === end.y;
-    steps.push(
-      set({ isWalking: false }, raise(walkerSignals.arrived, { x: end.x, y: end.y, isAtTarget })),
+  args: z.object({ direction: z.nativeEnum(Direction) }).strict(),
+  changes: ["at", "trail", "isWalking"],
+  run: (s, { direction }) => {
+    if (s.walkFrom === null || s.isWalking) return set({});
+    const next = stepFrom(s, direction);
+    if ("blocked" in next)
+      return set({}, raise(walkerSignals.blocked, { direction, why: next.blocked }));
+    return seq(
+      set({ isWalking: true }),
+      ...glide(s, s.at, next.to, [...s.trail, next.to]),
+      set({ isWalking: false }),
     );
-    return seq(...steps);
   },
 });
 
@@ -96,88 +125,67 @@ export const walker = layersFor<WalkerState>()({
   name: "walker",
   frame: "plane",
   describe:
-    "A walker (Riya) who goes from where she starts along the horizontal line by one number, then turns and goes up or down by the other, on the lines only, counting each line she passes. She always goes where the two numbers say, so swapped numbers end somewhere else.",
+    "A walker (Riya) moved one block per tap of an arrow, from wherever she is, on roads only: in a town, along the main road and up the streets; in a city or on graph paper, along any line. Her route is drawn and her address shown as she moves. A lesson can also walk her to a point, along then up.",
   fields: {
     walkerName: localizedSchema,
     /** Where she starts (Riya's corner, O), or null: no walker. */
     walkFrom: pointSchema.nullable(),
-    /** The first number: how far along, + to the right, − to the left. */
-    along: z.number().int().min(-MAX_STEPS).max(MAX_STEPS),
-    /** The second number: how far up (+) or down (−) after she turns. */
-    up: z.number().int().min(-MAX_STEPS).max(MAX_STEPS),
-    /** How far she has walked so far, in units: along first, then up. */
-    walked: z.number().min(0),
+    /** Where she stands now. */
+    at: pointSchema,
+    /** Which lines are roads: a town's main road and streets, or every grid line. */
+    roads: z.nativeEnum(Roads),
+    /** The blocks she has walked since the start, in order (her route). */
+    trail: z.array(pointSchema).max(MAX_TRAIL),
     isWalking: z.boolean(),
-    /** Whether the learner sets the two numbers (steppers). */
-    canSetSteps: z.boolean(),
+    /** Whether the learner gets the arrows. */
+    canStep: z.boolean(),
   },
   defaults: {
     walkerName: { en: "Riya", hi: "रिया" },
     walkFrom: null,
-    along: 0,
-    up: 0,
-    walked: 0,
+    at: { x: 0, y: 0 },
+    roads: Roads.Grid,
+    trail: [],
     isWalking: false,
-    canSetSteps: true,
+    canStep: true,
   },
   isOn: (s) => s.walkFrom !== null,
   actions: {
-    setAlong: act({
-      describe:
-        "Set the first number, how far along (the learner's stepper); she goes back to the start",
-      byLearner: true,
-      args: count,
-      changes: ["along", "walked", "isWalking"],
-      run: (_, { value }) => set({ along: value, walked: 0, isWalking: false }),
-    }),
-    setUp: act({
-      describe:
-        "Set the second number, how far up or down (the learner's stepper); she goes back to the start",
-      byLearner: true,
-      args: count,
-      changes: ["up", "walked", "isWalking"],
-      run: (_, { value }) => set({ up: value, walked: 0, isWalking: false }),
-    }),
-    walk: walkOn,
+    step,
     walkTo: act({
-      describe: "Set both numbers to reach (x, y) from the start, and walk there (timed)",
+      describe:
+        "Walk Riya from her start to (x, y): along, then up or down, block by block (timed)",
       reveals: true,
       args: pointSchema,
-      changes: ["along", "up", "walked", "isWalking"],
-      run: (s, p) =>
-        s.walkFrom === null
-          ? set({})
-          : seq(
-              set({
-                along: p.x - s.walkFrom.x,
-                up: p.y - s.walkFrom.y,
-                walked: 0,
-                isWalking: false,
-              }),
-              call(walkOn),
-            ),
+      changes: ["at", "trail", "isWalking"],
+      run: (s, p) => {
+        const start = s.walkFrom;
+        if (start === null || !Number.isInteger(p.x - start.x) || !Number.isInteger(p.y - start.y))
+          return set({});
+        const route: Point[] = [];
+        const dx = Math.sign(p.x - start.x);
+        const dy = Math.sign(p.y - start.y);
+        for (let x = start.x; x !== p.x; x += dx) route.push({ x: x + dx, y: start.y });
+        for (let y = start.y; y !== p.y; y += dy) route.push({ x: p.x, y: y + dy });
+        const steps: Effect<WalkerState>[] = [set({ at: start, trail: [], isWalking: true })];
+        let from = start;
+        route.forEach((to, i) => {
+          steps.push(...glide(s, from, to, route.slice(0, i + 1)));
+          from = to;
+        });
+        return seq(...steps, set({ isWalking: false }));
+      },
     }),
     backToStart: act({
-      describe: "Back to where she started (the learner's ↺)",
+      describe: "Riya back to where she started, her route cleared (the learner's ↺)",
       byLearner: true,
       args: none,
-      changes: ["walked", "isWalking"],
-      run: () => set({ walked: 0, isWalking: false }),
+      changes: ["at", "trail", "isWalking"],
+      run: (s) =>
+        s.walkFrom === null ? set({}) : set({ at: s.walkFrom, trail: [], isWalking: false }),
     }),
   },
   signals: walkerSignals,
-  derived: {
-    position: {
-      describe: "Where she stands now",
-      compute: walkerAt,
-    },
-    isArrived: {
-      describe: "She has walked both numbers",
-      compute: (s) => s.walked >= Math.abs(s.along) + Math.abs(s.up),
-    },
-  },
   invariant: (s) =>
-    s.walked > Math.abs(s.along) + Math.abs(s.up) + 1e-9
-      ? "she can't have walked further than the two numbers say"
-      : undefined,
+    s.walkFrom !== null && !isInWindow(s.window, s.at) ? "Riya is off the map" : undefined,
 });

@@ -1,5 +1,5 @@
 import type { Locale } from "@chalk/content";
-import { Stepper, SymbolButton } from "@chalk/draw";
+import { SymbolButton } from "@chalk/draw";
 import { FrameStage, type PropViewProps, useDrags, useFrame } from "@chalk/player";
 import { type FramePixels, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
@@ -19,37 +19,47 @@ import {
   unitOf,
 } from "./plane-view";
 import { Reading, snapped } from "./reading";
-import { walkerAt } from "./walker";
+import { Direction, stepFrom } from "./walker";
 import { WORDS, addressOf, num, pair, word } from "./words";
 
 const actions = coordinatePlane.actions;
 /** A tap that plots lands on the nearest quarter: the book's pairs go to 1.25. */
 const PLOT_STEP = 0.25;
 
-/** Where the walker is now, and where she ends, in units. */
-function walkOf(s: PlaneView) {
-  const now = walkerAt(s);
-  const end = walkerAt({ ...s, walked: Math.abs(s.along) + Math.abs(s.up) });
-  return { now, end };
-}
+/** Where Riya stands, to the block: mid-glide, the block she is leaving. */
+const blockOf = (s: PlaneView): Point =>
+  s.isWalking ? (s.trail.at(-2) ?? s.walkFrom ?? s.at) : s.at;
 
-/** What the walker's line says: where she is and, once there, whether it is the target. */
+/** What the walker's line says: where she is and, at the target, that she is there. */
 function walkWords(s: PlaneView, locale: Locale): string {
   const name = word(s.walkerName, locale);
-  // Mid-walk, where she is is the last line she passed.
-  const now = walkerAt({ ...s, walked: Math.floor(s.walked + 1e-9) });
-  if (now === null) return "";
-  const where = s.marks === "numbers" ? pair(now) : addressOf(s.axisNames, now, locale);
-  if (s.isWalking) return `${name}: ${where}`;
-  if (s.isArrived !== true || s.walked === 0) return `${name}: ${where}`;
-  if (s.target === null) return `${name}: ${where}`;
-  const isThere = now.x === s.target.x && now.y === s.target.y;
+  const now = blockOf(s);
+  const from = s.walkFrom;
+  if (from !== null && now.x === from.x && now.y === from.y)
+    return locale === "hi" ? `${name}: शुरू की जगह पर` : `${name}: at the start`;
+  // On a town's main road there is no house yet: only the street she is at.
+  const isOnMainRoad = s.roads === "town" && from !== null && now.y === from.y;
+  // Counted streets start at 1: a 0 means she is on a main road, so that part isn't said.
+  const counted = [
+    now.x === 0 ? "" : `${s.axisNames[0][locale]} ${now.x}`,
+    now.y === 0 ? "" : `${s.axisNames[1][locale]} ${now.y}`,
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const where =
+    s.marks === "numbers"
+      ? pair(now)
+      : isOnMainRoad
+        ? `${s.axisNames[0][locale]} ${now.x}`
+        : s.marks === "counts"
+          ? counted
+          : addressOf(s.axisNames, now, locale);
+  const isThere = s.target !== null && now.x === s.target.x && now.y === s.target.y;
+  if (!isThere || s.isWalking) return `${name}: ${where}`;
   const target = word(s.targetName, locale);
-  if (locale === "hi")
-    return isThere
-      ? `${name} ${target} पहुँच गई! ${where}`
-      : `${name}: ${where}। यह ${target} नहीं है।`;
-  return isThere ? `${name} is at ${target}! ${where}` : `${name}: ${where}. That isn't ${target}.`;
+  return locale === "hi"
+    ? `${name} ${target} पहुँच गई! ${where}`
+    : `${name} is at ${target}! ${where}`;
 }
 
 /** The places, each a small picture; a tap makes one the target when the board allows it. */
@@ -97,39 +107,38 @@ function PlacesDraw({
   );
 }
 
-/** Riya's route (the rest of it dashed) and Riya where she stands now. */
+/** Riya's route so far and Riya where she stands now. */
 function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: Locale }) {
   const from = s.walkFrom;
-  const { now } = walkOf(s);
-  if (from === null || now === null) return null;
-  const corner = { x: from.x + s.along, y: from.y };
-  const end = { x: corner.x, y: from.y + s.up };
-  const line = (a: Point, b: Point) => {
-    const [x1, y1] = px.toPx(a.x, a.y);
-    const [x2, y2] = px.toPx(b.x, b.y);
-    return `M ${x1} ${y1} L ${x2} ${y2}`;
-  };
-  const route = `${line(from, corner)} ${line(corner, end).replace("M", "L")}`;
-  const isPastCorner = s.walked > Math.abs(s.along);
-  const done = isPastCorner
-    ? `${line(from, corner)} ${line(corner, now).replace("M", "L")}`
-    : line(from, now);
+  if (from === null) return null;
+  const path = [from, ...s.trail.slice(0, s.isWalking ? -1 : undefined), s.at]
+    .map((p, i) => {
+      const [x, y] = px.toPx(p.x, p.y);
+      return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+    })
+    .join(" ");
   const size = Math.max(24, Math.min(46, unitOf(px) * 0.7));
-  const [x, y] = px.toPx(now.x, now.y);
+  const [x, y] = px.toPx(s.at.x, s.at.y);
   const [sx, sy] = px.toPx(from.x, from.y);
   const name = word(s.walkerName, locale);
+  const now = blockOf(s);
   return (
     <g class="cp-walk">
       <circle class="cp-walk-start" cx={sx} cy={sy} r={5} />
-      {(s.along !== 0 || s.up !== 0) && <path class="cp-route" d={route} />}
-      {s.walked > 0 && <path class="cp-route-done" d={done} />}
+      {s.trail.length > 0 && <path class="cp-route-done" d={path} />}
       <g
         class="cp-walker"
         transform={`translate(${x}, ${y - size * 0.45})`}
         {...shows("walker", now, `${name} ${pair(now)}`)}
       >
         <Walker size={size} />
-        <text class="cp-walker-name" y={-size * 0.95} text-anchor="middle">
+        <text
+          class="cp-walker-name"
+          // Beside her, not above: above, her name would leave the map at the top row.
+          x={x > px.width * 0.7 ? -size * 0.55 : size * 0.55}
+          y={-size * 0.2}
+          text-anchor={x > px.width * 0.7 ? "end" : "start"}
+        >
           {name}
         </text>
       </g>
@@ -379,7 +388,6 @@ export function CoordinatePlaneView({
   const next = s.toPlot[s.plotted.length];
   const nextClue = s.clueChoices.findIndex((_, i) => !s.given.includes(i));
   const unshown = s.canShowPoints && s.points.some((p) => !p.isShown);
-  const total = Math.abs(s.along) + Math.abs(s.up);
   const from = s.walkFrom;
   return (
     <div class="cp">
@@ -448,7 +456,7 @@ export function CoordinatePlaneView({
           {PART_WORDS[s.named][locale]}
         </p>
       )}
-      {hasWalker && s.walked > 0 && (
+      {hasWalker && s.trail.length > 0 && (
         <p
           class="cp-line"
           {...shows(
@@ -486,38 +494,34 @@ export function CoordinatePlaneView({
         </p>
       )}
       <div class="cp-controls">
-        {hasWalker && s.canSetSteps && from !== null && (
-          <>
-            <Stepper
-              name="→"
-              value={s.along}
-              min={Math.max(-50, Math.ceil(s.window.xMin - from.x))}
-              max={Math.min(50, Math.floor(s.window.xMax - from.x))}
-              {...says(actions.setAlong)}
-              onChange={(value) => call(actions.setAlong, { value })}
-            />
-            <Stepper
-              name="↑"
-              value={s.up}
-              min={Math.max(-50, Math.ceil(s.window.yMin - from.y))}
-              max={Math.min(50, Math.floor(s.window.yMax - from.y))}
-              {...says(actions.setUp)}
-              onChange={(value) => call(actions.setUp, { value })}
-            />
-            <SymbolButton
-              symbol={word(WORDS.walk, locale)}
-              label={word(WORDS.walk, locale)}
-              isWide
-              isEnabled={total > 0 && !s.isWalking && s.walked < total}
-              {...does(actions.walk)}
-            />
-            <SymbolButton
-              symbol="↺"
-              label={word(WORDS.back, locale)}
-              isEnabled={s.walked > 0}
-              {...does(actions.backToStart)}
-            />
-          </>
+        {hasWalker && s.canStep && from !== null && (
+          <div class="cp-pad">
+            {(
+              [
+                [Direction.Up, "↑"],
+                [Direction.Left, "←"],
+                [Direction.Right, "→"],
+                [Direction.Down, "↓"],
+              ] as const
+            ).map(([direction, symbol]) => (
+              <span key={direction} class={`cp-pad-${direction}`}>
+                <SymbolButton
+                  symbol={symbol}
+                  label={word(WORDS[direction], locale)}
+                  isEnabled={!s.isWalking && "to" in stepFrom(s, direction)}
+                  {...does(actions.step, { direction }, direction)}
+                />
+              </span>
+            ))}
+            <span class="cp-pad-back">
+              <SymbolButton
+                symbol="↺"
+                label={word(WORDS.back, locale)}
+                isEnabled={s.trail.length > 0 && !s.isWalking}
+                {...does(actions.backToStart)}
+              />
+            </span>
+          </div>
         )}
         {hasPlaces && s.lit !== null && (
           <SymbolButton

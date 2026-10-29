@@ -5,7 +5,7 @@ import { coordinatePlane } from "./coordinate-plane";
 import { throwOf } from "./dice";
 import { Marks, Scene, placeOf } from "./plane";
 import { door } from "./test-door";
-import { walkerAt } from "./walker";
+import { Direction, Roads, stepFrom } from "./walker";
 
 type State = ReturnType<typeof start>;
 const d = door(coordinatePlane);
@@ -34,6 +34,7 @@ const town = () =>
     ],
     places: houses,
     walkFrom: { x: 0, y: 0 },
+    roads: Roads.Town,
   });
 
 describe("the town: Aman's house is any house a tap makes it, and Riya walks there on the roads", () => {
@@ -50,55 +51,105 @@ describe("the town: Aman's house is any house a tap makes it, and Riya walks the
   it("the target must be a house: a state with it elsewhere is refused", () => {
     expect(d.rejects(town(), { target: { x: 6, y: 5 } })).toBe(true);
   });
-  it("4 along then 3 up: four lines, a turn, three lines, and she is at Aman's house", async () => {
-    let s = d.run(town(), "chooseTarget", { x: 4, y: 3 }).state;
-    s = d.run(s, "setAlong", { value: 4 }).state;
-    s = d.run(s, "setUp", { value: 3 }).state;
-    const played = await d.play(s, "walk");
-    expect(played.state.walked).toBe(7);
-    expect(played.state.isWalking).toBe(false);
-    expect(d.look(played.state).position).toEqual({ x: 4, y: 3 });
-    expect(signals(played.emit)).toEqual([
-      ...Array(4).fill("passed"),
-      "turned",
-      ...Array(3).fill("passed"),
-      "arrived",
-    ]);
-    expect(played.emit.at(-1)?.payload).toEqual({ x: 4, y: 3, isAtTarget: true });
+  /** Riya taps her way along: each tap one block, played to its end. */
+  const walk = async (s: State, ...directions: Direction[]) => {
+    let now = s;
+    const emitted: string[] = [];
+    for (const direction of directions) {
+      const effect = d.refuses(now, "step", { direction });
+      if (effect) throw new Error(`step ${direction} refused`);
+      try {
+        const played = await d.play(now, "step", { direction });
+        now = played.state;
+        emitted.push(...signals(played.emit));
+      } catch {
+        // A blocked step doesn't take time: it stays put and says so.
+        const out = d.run(now, "step", { direction });
+        now = out.state;
+        emitted.push(...signals(out.emit));
+      }
+    }
+    return { state: now, emitted };
+  };
+  const along = (n: number) => Array<Direction>(n).fill(Direction.Right);
+  const up = (n: number) => Array<Direction>(n).fill(Direction.Up);
+
+  it("4 blocks right, then 3 up: she stands at Aman's house, and says she has arrived", async () => {
+    const s = d.run(town(), "chooseTarget", { x: 4, y: 3 }).state;
+    const { state, emitted } = await walk(s, ...along(4), ...up(3));
+    expect(state.at).toEqual({ x: 4, y: 3 });
+    expect(state.isWalking).toBe(false);
+    expect(emitted).toEqual([...Array(7).fill("stepped"), "arrived"]);
+    expect(state.trail).toHaveLength(7);
   });
-  it("the same two numbers swapped, 3 then 4, end at another house: not Aman's", async () => {
-    let s = d.run(town(), "chooseTarget", { x: 4, y: 3 }).state;
-    s = d.run(s, "setAlong", { value: 3 }).state;
-    s = d.run(s, "setUp", { value: 4 }).state;
-    const played = await d.play(s, "walk");
-    expect(played.emit.at(-1)?.payload).toEqual({ x: 3, y: 4, isAtTarget: false });
+  it("each tap goes on from where she is: no going back to the corner", async () => {
+    const first = await walk(town(), ...along(2));
+    const then = await walk(first.state, ...along(1), ...up(2));
+    expect(then.state.at).toEqual({ x: 3, y: 2 });
+    expect(then.state.trail).toHaveLength(5);
   });
-  it("she is always on a road: along first, then up, and has gone exactly as far as she walked", () => {
-    const from = { x: 0, y: 0 };
-    for (let along = -5; along <= 5; along++)
-      for (let up = -5; up <= 5; up++)
-        for (let walked = 0; walked <= Math.abs(along) + Math.abs(up); walked++) {
-          const p = walkerAt({ walkFrom: from, along, up, walked });
-          if (p === null) throw new Error("no walker");
-          expect(Math.abs(p.x) + Math.abs(p.y)).toBe(walked);
-          // Still on the main road until the along is done, then on the street x = along.
-          if (walked <= Math.abs(along)) expect(p.y).toBe(0);
-          else expect(p.x).toBe(along);
-        }
+  it("in the town she walks only on roads: across on the main road, up and down a street", async () => {
+    // From the corner there is no street going up; from up a street there's no road across.
+    expect(stepFrom(town(), Direction.Up)).toEqual({ blocked: "no street going up here" });
+    const onStreet = (await walk(town(), ...along(2), ...up(1))).state;
+    expect("blocked" in stepFrom(onStreet, Direction.Right)).toBe(true);
+    expect("blocked" in stepFrom(onStreet, Direction.Left)).toBe(true);
+    const blocked = await walk(onStreet, Direction.Right);
+    expect(blocked.state.at).toEqual({ x: 2, y: 1 });
+    expect(blocked.emitted).toEqual(["blocked"]);
+    // Nothing below the main road, and nothing off the map.
+    expect("blocked" in stepFrom(town(), Direction.Down)).toBe(true);
+    expect("blocked" in stepFrom(town(), Direction.Left)).toBe(true);
   });
-  it("changing a number takes her back to the corner", () => {
-    const s = { ...town(), along: 4, up: 3, walked: 7 };
-    expect(d.run(s, "setUp", { value: 2 }).state).toMatchObject({ up: 2, walked: 0 });
-    expect(d.run(s, "backToStart").state.walked).toBe(0);
+  it("so in the town, any walk to a house is along the main road first, then up its street", async () => {
+    // Every road route from the corner to (a, b): her x changes only while y is 0.
+    for (const [a, b] of [
+      [4, 3],
+      [1, 4],
+      [5, 1],
+    ] as const) {
+      const { state } = await walk(town(), ...along(a), ...up(b));
+      let lastAcross = -1;
+      state.trail.forEach((p, i) => {
+        if (p.y === 0) lastAcross = i;
+      });
+      expect(state.trail.slice(lastAcross + 1).every((p) => p.x === a)).toBe(true);
+      expect(state.at).toEqual({ x: a, y: b });
+    }
   });
-  it("she can't have walked further than the numbers say", () => {
-    expect(d.rejects(town(), { along: 2, up: 1, walked: 4 })).toBe(true);
+  it("on a grid every line is a road: she can turn anywhere", async () => {
+    const city = start({
+      window: { xMin: 0, xMax: 5, yMin: 0, yMax: 5 },
+      walkFrom: { x: 0, y: 0 },
+    });
+    const { state } = await walk(
+      city,
+      Direction.Up,
+      Direction.Right,
+      Direction.Up,
+      Direction.Right,
+    );
+    expect(state.at).toEqual({ x: 2, y: 2 });
   });
-  it("walkTo sets both numbers from where she starts, signed, and walks there", async () => {
+  it("↺ takes her back to the start and clears her route", async () => {
+    const { state } = await walk(town(), ...along(3));
+    expect(d.run(state, "backToStart").state).toMatchObject({ at: { x: 0, y: 0 }, trail: [] });
+  });
+  it("she can't stand off the map", () => {
+    expect(d.rejects(town(), { at: { x: 9, y: 0 } })).toBe(true);
+  });
+  it("walkTo: a lesson walks her from the start to (x, y), along then up, block by block", async () => {
     const s = start({ walkFrom: { x: 0, y: 0 } });
     const played = await d.play(s, "walkTo", { x: -3, y: 2 });
-    expect(played.state).toMatchObject({ along: -3, up: 2, walked: 5 });
-    expect(d.look(played.state).position).toEqual({ x: -3, y: 2 });
+    expect(played.state.at).toEqual({ x: -3, y: 2 });
+    expect(played.state.trail).toEqual([
+      { x: -1, y: 0 },
+      { x: -2, y: 0 },
+      { x: -3, y: 0 },
+      { x: -3, y: 1 },
+      { x: -3, y: 2 },
+    ]);
+    expect(signals(played.emit)).toEqual(Array(5).fill("stepped"));
   });
   it("Street 4 lit: the four houses on it", () => {
     const out = d.run(town(), "lightLine", { axis: "x", value: 4 });

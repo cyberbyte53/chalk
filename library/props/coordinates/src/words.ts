@@ -13,8 +13,10 @@ export const WORDS = {
   throw: { en: "Throw", hi: "फेंको" },
   newGame: { en: "New game", hi: "नया खेल" },
   scale: { en: "A mark every", hi: "हर निशान" },
-  along: { en: "along", hi: "आगे" },
-  up: { en: "up", hi: "ऊपर" },
+  up: { en: "Up", hi: "ऊपर" },
+  down: { en: "Down", hi: "नीचे" },
+  left: { en: "Left", hi: "बाएँ" },
+  right: { en: "Right", hi: "दाएँ" },
 } satisfies Record<string, Localized>;
 
 export const word = (w: Localized, locale: Locale): string => w[locale];

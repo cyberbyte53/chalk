@@ -381,7 +381,7 @@
       text: ""
       status: closed
 - id: cmvt767mgcu9
-  status: planned
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T07:03:48.760Z
@@ -461,8 +461,13 @@
         Reply if you'd change anything; otherwise close this to approve and I'll build it after the
         walker.
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:05.238Z
+      text: ""
+      status: closed
 - id: cmvt7rnfzkig
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:20:29.039Z
@@ -482,8 +487,13 @@
         house'; 'two numbers' is named only at the end. The swap question on this board goes: the
         order is taught once, on the seating plan, as the source does (Activity 1)."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:07.938Z
+      text: ""
+      status: closed
 - id: cmvt7u0yb9vw
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:22:19.859Z
@@ -502,8 +512,13 @@
         reaches Street 4 and the prop lights its five houses, so the second number is needed before
         it's given (see the plan on the title thread)."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:12.210Z
+      text: ""
+      status: closed
 - id: cmvt7uzh1ssz
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:23:04.597Z
@@ -522,8 +537,13 @@
         which has no roads, so distances from its two fences do the job the street and house numbers
         did. That's the link from the town."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:13.217Z
+      text: ""
+      status: closed
 - id: cmvt7w33gd4i
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:23:55.948Z
@@ -542,8 +562,13 @@
         gate' lights a patch; '30 m from the west fence' leaves a line; '20 m from the south fence'
         leaves one spot. Each clue appears after the one before it."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:14.146Z
+      text: ""
+      status: closed
 - id: cmvt7x0e8iyg
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:24:39.104Z
@@ -560,8 +585,13 @@
       at: 2026-10-29T07:33:08.468Z
       text: "Plan, agreed in chat: dropped."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:15.278Z
+      text: ""
+      status: closed
 - id: cmvt80s90x5o
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:27:35.172Z
@@ -580,8 +610,13 @@
       text: "Plan, agreed in chat: '200 m apart' goes, so the streets are only numbered. The two questions
         become one."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:16.332Z
+      text: ""
+      status: closed
 - id: cmvt82dk91ym
-  status: planned
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T07:28:49.449Z
@@ -601,3 +636,8 @@
         fence, a column). The first number says how far across, the second how far up.' With the
         pictures from thread cmvt767mgcu9."
       status: planned
+    - by: you
+      role: person
+      at: 2026-10-29T07:37:17.667Z
+      text: ""
+      status: closed

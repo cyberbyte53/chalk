@@ -166,6 +166,11 @@
 .cp-place.is-lit .cp-crossing,
 .cp-place.is-lit .cp-stall-counter {
   fill: var(--color-primary-container);
+  stroke: var(--color-primary);
+  stroke-width: 2.4;
+}
+.cp-place.is-lit .cp-house-roof {
+  fill: var(--color-primary);
 }
 .cp-place.is-target .cp-house-wall,
 .cp-place.is-target .cp-desk-top,
@@ -216,6 +221,36 @@
 .cp-frame .cp-walker-name {
   font: 700 var(--text-caption) var(--font-body);
   fill: var(--color-primary);
+}
+
+/* Riya's arrows: a cross, with ↺ beside it. */
+.cp-pad {
+  display: grid;
+  grid-template-columns: repeat(3, auto) 1fr;
+  grid-template-areas:
+    ". up . back"
+    "left . right back"
+    ". down . back";
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+}
+.cp-pad-up {
+  grid-area: up;
+}
+.cp-pad-down {
+  grid-area: down;
+}
+.cp-pad-left {
+  grid-area: left;
+}
+.cp-pad-right {
+  grid-area: right;
+}
+.cp-pad-back {
+  grid-area: back;
+  justify-self: start;
+  margin-left: 12px;
 }
 
 /* ---- points: a figure's, the one to read, clues, plotted dots ---- */
