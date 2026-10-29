@@ -110,6 +110,17 @@ function glide(s: WalkerState, from: Point, to: Point, trail: Point[]): Effect<W
   ];
 }
 
+/**
+ * The route after a step to `to`: the step added, or, when it goes back onto the block before this
+ * one, this block taken off. So the route always runs from the start to where the walker is now.
+ */
+export function routeAfter(s: Pick<WalkerState, "walkFrom" | "trail">, to: Point): Point[] {
+  const before = s.trail.length >= 2 ? s.trail.at(-2) : s.walkFrom;
+  return before !== null && before !== undefined && isSame(before, to)
+    ? s.trail.slice(0, -1)
+    : [...s.trail, to];
+}
+
 const step = act({
   describe:
     "Move Riya one block up, down, left or right from where she is, on roads only (the learner's arrow; timed)",
@@ -123,7 +134,7 @@ const step = act({
       return set({}, raise(walkerSignals.blocked, { direction, why: next.blocked }));
     return seq(
       set({ isWalking: true }),
-      ...glide(s, s.at, next.to, [...s.trail, next.to]),
+      ...glide(s, s.at, next.to, routeAfter(s, next.to)),
       set({ isWalking: false }),
     );
   },

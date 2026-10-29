@@ -88,6 +88,13 @@ describe("the town: Aman's house is any house a tap makes it, and Riya walks the
     expect(then.state.at).toEqual({ x: 3, y: 2 });
     expect(then.state.trail).toHaveLength(5);
   });
+  it("going back the way she came takes those blocks off her route: it runs from the start to her", async () => {
+    const out = await walk(town(), ...along(3), Direction.Left, Direction.Left);
+    expect(out.state.at).toEqual({ x: 1, y: 0 });
+    expect(out.state.trail).toEqual([{ x: 1, y: 0 }]);
+    const back = await walk(out.state, Direction.Left);
+    expect(back.state.trail).toEqual([]);
+  });
   it("in the town she walks only on roads: across on the main road, up and down a street", async () => {
     // From the corner there is no street going up; from up a street there's no road across.
     expect(stepFrom(town(), Direction.Up)).toEqual({ blocked: "no street going up here" });

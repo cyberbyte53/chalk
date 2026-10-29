@@ -168,6 +168,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `scene` | ["none", "paper", "town", "classroom", "fairGround"] | setting |
 | `apart` | {x: "number", y: "number"} | changed by moveApart, bringTogether |
 | `upLines` | {orNull: ["whole number"]} | changed by raiseUpLine, raiseAllUpLines |
+| `numbered` | [["x", "y"]] | changed by numberLine |
 | `rising` | {orNull: {at: "whole number", height: "number 0 to 1"}} | changed by raiseUpLine, raiseAllUpLines |
 | `named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by namePart |
 | `points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by showPoint, showAllPoints |
@@ -222,6 +223,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `bringTogether` | — | learner · Glide the vertical number line until the two zeroes meet; there they are the axes, and O is named (timed) |
 | `showPoint` | {name: {optional: "text"}} | learner · Show the next of a figure's points, or the one named (the learner's Next) |
 | `raiseUpLine` | {at: "whole number"} | Raise a line from a whole number on the horizontal line: it grows upward, its places appearing on it as it grows (timed) |
+| `numberLine` | {axis: ["x", "y"]} | Number one line: its marks and numbers appear (a page's edge becomes a ruler once a distance along it is given) |
 | `raiseAllUpLines` | — | Raise every line not risen yet, one after another, left to right (timed) |
 | `showAllPoints` | — | Show every point the figure names |
 | `movePoint` | {x: "number", y: "number"} | learner · Put the point at (x, y), snapped to the step (the learner's drag or tap) |

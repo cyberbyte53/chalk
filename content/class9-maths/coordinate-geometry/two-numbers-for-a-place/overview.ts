@@ -204,8 +204,9 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   );
   const sheet = b.prop(coordinatePlaneDef, "sheet", {
     ...bareNotebook(),
-    // No numbers on the edges: a notebook's page has none, and they would say where the dot is.
-    marks: Marks.None,
+    // No numbers on the edges at first: they would say where the dot is. An edge becomes a ruler
+    // once a distance along it is given (the rules below).
+    numbered: [],
     point: null,
     reading: Reading.None,
     // The dot is on the page from the start: the question is how to say where it is.
@@ -252,14 +253,21 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   );
   b.after(sheet.on.clueGiven, patch, { if: (at: At) => at(sheet).given.length === 2 });
   b.after(sheet.on.clueGiven, line, { if: (at: At) => at(sheet).given.length === 3 });
+  // "5 cm from the left edge" numbers the bottom edge; "9 cm above the bottom", the left edge.
+  b.when(sheet.on.clueGiven, sheet.call.numberLine({ axis: "x" }), (at: At) =>
+    at(sheet).given.includes(2),
+  );
+  b.when(sheet.on.clueGiven, sheet.call.numberLine({ axis: "y" }), (at: At) =>
+    at(sheet).given.includes(3),
+  );
   b.after(sheet.on.pinned, fixed);
   b.passWhen(sheet.on.pinned);
   return [
     w.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
     w.body(
       t(
-        "In the town, the roads told Riya where to go. A page of your notebook has no roads. Here is a dot on one, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
-        "शहर में, सड़कों ने रिया को रास्ता बताया। कॉपी के पन्ने पर कोई सड़क नहीं होती। यह एक पन्ने पर बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
+        "Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+        "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
       ),
     ),
     sheet,

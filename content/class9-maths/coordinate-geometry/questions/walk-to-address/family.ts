@@ -1,6 +1,6 @@
 import { family, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { bareTown, check, isAt, walkTo } from "@chalk/patterns";
+import { TOWN, bareTown, check, isAt, walkTo } from "@chalk/patterns";
 import { coordinatePlaneDef } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -10,11 +10,14 @@ export const walkToAddress = family({
   level: Level.Easy,
   tests: [Concept.TwoNumbersForAPlace],
   params: z
-    .object({ street: z.number().int().min(1).max(8), house: z.number().int().min(1).max(5) })
+    .object({
+      street: z.number().int().min(1).max(TOWN.streets),
+      house: z.number().int().min(1).max(TOWN.houses),
+    })
     .strict(),
   build: ({ street, house }, b) => {
     const town = b.prop(coordinatePlaneDef, "town", bareTown());
-    const isSwapped = street !== house && house <= 8 && street <= 5;
+    const isSwapped = street !== house && house <= TOWN.streets && street <= TOWN.houses;
     const ask = check(b, {
       about: town,
       prompt: t(

@@ -22,8 +22,14 @@ export const gridOf = (across: number, up: number) =>
     Array.from({ length: up }, (_, j) => ({ x: i + 1, y: j + 1 })),
   ).flat();
 
+/**
+ * Riya's town, its size: six streets (fewer than the book's map's eight, so each block is big enough
+ * to tap on a phone), five houses up each.
+ */
+export const TOWN = { streets: 6, houses: 5 } as const;
+
 /** Riya's town: streets 1 to `streets` from the main road, `houses` up each; she at the corner. */
-export const bareTown = (streets = 8, houses = 5) => ({
+export const bareTown = (streets: number = TOWN.streets, houses: number = TOWN.houses) => ({
   window: { xMin: 0, xMax: streets + 0.5, yMin: 0, yMax: houses + 0.5 },
   marks: Marks.Counts,
   scene: Scene.Town,

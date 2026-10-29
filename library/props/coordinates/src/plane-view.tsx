@@ -175,9 +175,12 @@ export function AxesDraw({
   const unit = unitOf(px);
   // Numbers every mark when there's room, else every other.
   const every = unit * s.tickEvery >= 18 ? 1 : 2;
-  const xMarks = marksOn(s.marks, w.xMin, w.xMax, s.tickEvery);
+  // Only the lines numbered so far carry their marks (a page's edge, once a distance along it is given).
+  const xMarks = s.numbered.includes("x") ? marksOn(s.marks, w.xMin, w.xMax, s.tickEvery) : [];
   // The vertical line's zero is `apart` from the horizontal one's: it reads y − apart.y.
-  const yMarks = marksOn(s.marks, w.yMin - s.apart.y, w.yMax - s.apart.y, s.tickEvery);
+  const yMarks = s.numbered.includes("y")
+    ? marksOn(s.marks, w.yMin - s.apart.y, w.yMax - s.apart.y, s.tickEvery)
+    : [];
   const [left, base] = px.toPx(w.xMin, 0);
   const [right] = px.toPx(w.xMax, 0);
   const [vx, top] = px.toPx(s.apart.x, w.yMax);

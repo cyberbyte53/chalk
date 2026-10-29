@@ -7,6 +7,7 @@ export { wordsOn } from "./words";
 export {
   bareClassroom,
   bareNotebook,
+  TOWN,
   bareTown,
   gridOf,
   isAt,

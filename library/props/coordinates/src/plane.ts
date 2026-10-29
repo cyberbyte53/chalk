@@ -161,6 +161,11 @@ const planeFields = {
    * or null: every one has (the plane as usual). Empty: only the horizontal line, a number line.
    */
   upLines: z.array(z.number().int()).max(MAX_SPAN).nullable(),
+  /**
+   * Which lines carry their numbers (with the marks): both as usual; on a page that becomes a ruler
+   * only when a distance along it is given, none at first, each numbered by `numberLine`.
+   */
+  numbered: z.array(z.enum(["x", "y"])).max(2),
   /** A line rising now: where it stands, and how far up it has grown (0 to 1), or null. */
   rising: z
     .object({ at: z.number().int(), height: z.number().min(0).max(1) })
@@ -192,6 +197,7 @@ export type PlaneCore = {
   scene: Scene;
   apart: Point;
   upLines: number[] | null;
+  numbered: ("x" | "y")[];
   rising: { at: number; height: number } | null;
   named: PlanePart | null;
   points: NamedPoint[];
@@ -245,6 +251,7 @@ export const core = layersFor<PlaneCore>()({
     scene: Scene.None,
     apart: { x: 0, y: 0 },
     upLines: null,
+    numbered: ["x", "y"],
     rising: null,
     named: null,
     points: [],
@@ -332,6 +339,14 @@ export const core = layersFor<PlaneCore>()({
         s.upLines === null || s.upLines.includes(at)
           ? set({})
           : seq(...riseSteps(s.upLines, [at], RISE)),
+    }),
+    numberLine: act({
+      describe:
+        "Number one line: its marks and numbers appear (a page's edge becomes a ruler once a distance along it is given)",
+      args: z.object({ axis: z.enum(["x", "y"]) }).strict(),
+      changes: ["numbered"],
+      run: (s, { axis }) =>
+        s.numbered.includes(axis) ? set({}) : set({ numbered: [...s.numbered, axis] }),
     }),
     raiseAllUpLines: act({
       describe: "Raise every line not risen yet, one after another, left to right (timed)",
