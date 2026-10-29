@@ -519,3 +519,38 @@ export function takeBack(root: string, book: string, chapter: string, step: Step
     lines.length > 0 ? `---\n${lines.join("\n")}\n---\n${body}` : body.replace(/^\n/, ""),
   );
 }
+
+/**
+ * Where every chapter stands, in lines: each planning file's state, its failing checks, what to
+ * check again and what blocks its approval, and each lesson's self-review. The pipeline CLI prints
+ * it; the chalk MCP's `pipeline` tool returns it. `failed`: approved files whose checks fail.
+ */
+export function pipelineLines(chapters: readonly Chapter[]): { lines: string[]; failed: number } {
+  const lines: string[] = [];
+  let failed = 0;
+  for (const c of chapters) {
+    lines.push(`  ${c.dir}`);
+    for (const f of c.files) {
+      if (f.status === "missing") continue;
+      const spec = FILES.find((x) => x.step === f.step);
+      const isHeld = f.status !== "draft" || spec?.isApproved === false;
+      const mark = f.problems.length > 0 ? (isHeld ? "✗" : "·") : "✓";
+      lines.push(`    ${mark} ${f.file}: ${f.status}${f.approvedAt ? ` at ${f.approvedAt}` : ""}`);
+      for (const p of f.problems) lines.push(`        ${p.text}`);
+      for (const n of f.notes) lines.push(`        note: ${n}`);
+      if (f.recheck.length > 0)
+        lines.push(`        to check again: ${f.recheck.join(", ")} changed since it was approved`);
+      if (f.blocked !== undefined) lines.push(`        can't approve yet: ${f.blocked}`);
+      if (isHeld && f.problems.length > 0) failed += 1;
+    }
+    // Not a failure (lessons change while they're built); a lesson isn't shown to the person like this.
+    for (const l of c.lessons ?? [])
+      lines.push(
+        l.isToSelfReview
+          ? `    · ${l.slug}: to self-review (${l.why})`
+          : `    ✓ ${l.slug}: self-reviewed`,
+      );
+  }
+  if (chapters.length === 0) lines.push("  no chapter has planning files yet");
+  return { lines, failed };
+}

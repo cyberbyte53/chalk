@@ -27,6 +27,7 @@ import {
   waitsOn,
 } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
+import { pipelineLines, readChapters } from "../pipeline";
 import { findUp } from "../pronunciations";
 import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
@@ -230,8 +231,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
    * sees; the writer still checks every call.
    */
   const SEES: Readonly<Record<Who["role"], readonly string[]>> = {
-    [Role.Fixer]: ["look", "play", "affected", "comments", "comment"],
-    [Role.Reviewer]: ["look", "play", "affected", "comments", "comment"],
+    [Role.Fixer]: ["look", "play", "affected", "comments", "comment", "pipeline"],
+    [Role.Reviewer]: ["look", "play", "affected", "comments", "comment", "pipeline"],
   };
   const MY_MOVES = [...new Set(MOVES[ROLE].map((m) => m.to))] as Status[];
 
@@ -297,6 +298,34 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       },
     ),
     "affected",
+  );
+
+  offer(
+    server.registerTool(
+      "pipeline",
+      {
+        title: "Where the chapters stand",
+        description:
+          "Every chapter's planning files and lessons: each file's state (draft, approved, changed since approved), its failing checks, what is to be checked again, why an approval can't be given yet, and which lessons wait on a self-review. `at` keeps to one book or chapter (\"authoring/books/class9-maths/coordinate-geometry\").",
+        inputSchema: {
+          at: z
+            .string()
+            .optional()
+            .describe("A book or chapter: authoring/books/<book>[/<chapter>]."),
+        },
+        annotations: { readOnlyHint: true, openWorldHint: false },
+      },
+      async ({ at }) => {
+        const under = at?.replace(/\/$/, "");
+        const chapters = readChapters(root).filter(
+          (c) => under === undefined || c.dir === under || c.dir.startsWith(`${under}/`),
+        );
+        if (chapters.length === 0)
+          return result([text(`No chapter with planning files${under ? ` under ${under}` : ""}.`)]);
+        return result([text(pipelineLines(chapters).lines.join("\n"))]);
+      },
+    ),
+    "pipeline",
   );
 
   const point = z.object({ x: z.number(), y: z.number().optional() }).strict();
