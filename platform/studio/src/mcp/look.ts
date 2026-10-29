@@ -774,7 +774,8 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
             : `still changing after ${r.motion.stillChangingAt}s`,
       );
     lines.push(
-      `${i + 1}. ${stepAsked(r.step)}${parts.length > 0 ? ` → ${parts.join(" · ")}` : " → nothing changed"}`,
+      // A step that failed says only that: "nothing changed" would read as a step that ran.
+      `${i + 1}. ${stepAsked(r.step)}${parts.length > 0 ? ` → ${parts.join(" · ")}` : r.errors.length > 0 ? " → didn't run" : " → nothing changed"}`,
     );
     if (r.passed) lines.push("   ✓ board passed");
     for (const e of r.errors) lines.push(`   ${e}`);

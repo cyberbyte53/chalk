@@ -84,7 +84,7 @@ export const previewBase = (root: string): Promise<string> => {
   return base;
 };
 
-async function launch(): Promise<Browser> {
+export async function launch(): Promise<Browser> {
   const { chromium } = await import("playwright-core");
   const path = process.env.CHALK_CHROMIUM;
   if (path !== undefined && existsSync(path)) return chromium.launch({ executablePath: path });
@@ -790,7 +790,7 @@ const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y
  * placed through the frame the target is drawn in (the frame's picture carries its map); the
  * answer is then where that point is on the page, in CSS pixels.
  */
-function markTarget(arg: {
+export function markTarget(arg: {
   target: string;
   text?: string;
   at?: { x: number; y?: number };
@@ -831,7 +831,32 @@ function markTarget(arg: {
         "button, [role=button], [data-part], label, a",
       ),
     ];
-    const found = choices.find((c) => norm(wordsOf(c)).includes(want));
+    // The best match, never the first: something to press before plain text (a prompt that says
+    // "press Check" is not the Check button), the exact words before words that only contain them.
+    // A tie is an error that names them: a tap never guesses.
+    const rank = (c: HTMLElement) => {
+      const words = norm(wordsOf(c));
+      if (!words.includes(want)) return undefined;
+      const isPressable = c.matches("button, [role=button], a, label");
+      return (isPressable ? 0 : 2) + (words === want ? 0 : 1);
+    };
+    const ranked = choices
+      .map((c) => ({ c, r: rank(c) }))
+      .filter((x): x is { c: HTMLElement; r: number } => x.r !== undefined);
+    const best = Math.min(...ranked.map((x) => x.r));
+    // The innermost of each match: a button inside a matching part is the one to press.
+    const top = ranked
+      .filter((x) => x.r === best)
+      .map((x) => x.c)
+      .filter((c, _, all) => !all.some((o) => o !== c && c.contains(o)));
+    if (top.length > 1)
+      return `"${arg.text}" matches ${top.length} things in ${arg.target}: ${top
+        .map(
+          (c) =>
+            `${c.dataset.path ?? c.tagName.toLowerCase()} "${wordsOf(c).replace(/\s+/g, " ").trim().slice(0, 40)}"`,
+        )
+        .join(" | ")}. Say which by its part, or with more of its words.`;
+    const found = top[0];
     if (found === undefined)
       return `nothing saying "${arg.text}" in ${arg.target} (it has: ${choices
         .map((c) => wordsOf(c).replace(/\s+/g, " ").trim())
