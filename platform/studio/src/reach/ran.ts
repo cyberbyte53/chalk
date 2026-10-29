@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
+import { TraceMap, decodedMappings } from "@jridgewell/trace-mapping";
 import type { Range } from "./facts";
 
 /**
@@ -35,54 +35,111 @@ const fileOf = (root: string, kind: "open" | "passed", board: string) =>
  * gets a new one).
  */
 export class RanReader {
-  private readonly maps = new Map<string, { map: TraceMap; starts: number[] } | null>();
+  private readonly maps = new Map<string, Known | null>();
+  /**
+   * What ran as each script loaded (its own top-level statements, not its functions): it ran once
+   * for the page, and every board drawn on the page after stands on it.
+   */
+  private loaded: Ran = {};
 
   constructor(private readonly root: string) {}
 
+  /** Takes in coverage that belongs to no board (before a call): its maps and what ran on load. */
+  see(coverage: readonly Coverage[]): void {
+    this.read(coverage);
+  }
+
+  /** The lines that ran: in this coverage, and everything that ran as the page's scripts loaded. */
   linesOf(coverage: readonly Coverage[]): Ran {
+    const out = this.read(coverage);
+    for (const [file, lines] of Object.entries(this.loaded))
+      out[file] = merged([...(out[file] ?? []), ...lines]);
+    return out;
+  }
+
+  private read(coverage: readonly Coverage[]): Ran {
     const out: Ran = {};
     for (const script of coverage) {
       const known = this.mapOf(script);
       if (known === null) continue;
-      for (const [from, to] of ranSegments(script.functions.flatMap((f) => f.ranges))) {
-        const a = this.at(script.url, known, from);
-        const b = this.at(script.url, known, Math.max(from, to - 1));
-        if (a === undefined) continue;
-        const end = b !== undefined && b.file === a.file && b.line >= a.line ? b.line : a.line;
-        out[a.file] = [...(out[a.file] ?? []), [a.line, end]];
-      }
+      const add = (to: Ran, ranges: Coverage["functions"][number]["ranges"]) => {
+        for (const [from, end] of ranSegments(ranges))
+          for (const [file, line] of linesIn(known, from, end))
+            to[file] = merged([...(to[file] ?? []), [line, line]]);
+      };
+      add(
+        out,
+        script.functions.flatMap((f) => f.ranges),
+      );
+      // The script's own top level ran (it loaded now): its lines, every function's body aside.
+      const [top, ...inner] = [...script.functions].sort(
+        (x, y) =>
+          (x.ranges[0]?.startOffset ?? 0) - (y.ranges[0]?.startOffset ?? 0) ||
+          (y.ranges[0]?.endOffset ?? 0) - (x.ranges[0]?.endOffset ?? 0),
+      );
+      if (top !== undefined && (top.ranges[0]?.count ?? 0) > 0)
+        add(this.loaded, [
+          ...top.ranges,
+          ...inner.flatMap((f) =>
+            f.ranges[0] === undefined ? [] : [{ ...f.ranges[0], count: 0 }],
+          ),
+        ]);
     }
-    for (const file of Object.keys(out)) out[file] = merged(out[file] ?? []);
     return out;
   }
 
-  private mapOf(script: Coverage) {
+  private mapOf(script: Coverage): Known | null {
     let known = this.maps.get(script.url);
     if (known === undefined && script.source !== undefined) {
       const m =
         /sourceMappingURL=data:application\/json;(?:charset=utf-8;)?base64,([A-Za-z0-9+/=]+)/.exec(
           script.source,
         );
-      known =
-        m?.[1] === undefined
-          ? null
-          : {
-              map: new TraceMap(JSON.parse(Buffer.from(m[1], "base64").toString("utf8"))),
-              starts: lineStarts(script.source),
-            };
+      if (m?.[1] === undefined) known = null;
+      else {
+        const map = new TraceMap(JSON.parse(Buffer.from(m[1], "base64").toString("utf8")));
+        known = {
+          lines: decodedMappings(map),
+          starts: lineStarts(script.source),
+          files: map.sources.map((source) => this.fileOf(source, script.url)),
+        };
+      }
       this.maps.set(script.url, known);
     }
     return known ?? null;
   }
 
-  /** Where an offset of a served script comes from: our file and line, or undefined. */
-  private at(url: string, known: { map: TraceMap; starts: number[] }, offset: number) {
-    const o = originalPositionFor(known.map, positionOf(known.starts, offset));
-    if (o.source === null || o.line === null) return undefined;
-    const path = decodeURIComponent(new URL(o.source, url).pathname).replace(/^\/@fs/, "");
+  /** Our file (from the repo root) a map's source is, or undefined (a library, generated code). */
+  private fileOf(source: string | null, url: string): string | undefined {
+    if (source === null) return undefined;
+    const path = decodeURIComponent(new URL(source, url).pathname).replace(/^\/@fs/, "");
     if (!path.startsWith(`${this.root}/`) || path.includes("/node_modules/")) return undefined;
-    return { file: path.slice(this.root.length + 1), line: o.line };
+    return path.slice(this.root.length + 1);
   }
+}
+
+/** A served script's map: per generated line, its mappings; where each line starts; our files. */
+type Known = {
+  lines: readonly (readonly (readonly number[])[])[];
+  starts: number[];
+  files: (string | undefined)[];
+};
+
+/**
+ * Every line of ours that a stretch of a served script comes from: each mapping inside it, not
+ * only its ends (generated code, as a module's imports, maps to nothing).
+ */
+function* linesIn(known: Known, from: number, end: number): Generator<[string, number]> {
+  const a = positionOf(known.starts, from);
+  const b = positionOf(known.starts, end);
+  for (let line = a.line; line <= b.line; line++)
+    for (const m of known.lines[line - 1] ?? []) {
+      const [column = 0, source, original] = m;
+      if (line === a.line && column < a.column) continue;
+      if (line === b.line && column >= b.column) continue;
+      const file = source === undefined ? undefined : known.files[source];
+      if (file !== undefined && original !== undefined) yield [file, original + 1];
+    }
 }
 
 /**

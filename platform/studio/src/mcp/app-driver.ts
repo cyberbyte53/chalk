@@ -579,6 +579,7 @@ async function openPage(lane: string, base: string): Promise<Lane> {
   // What runs on it, for what a review saw (recordRan).
   await page.coverage.startJSCoverage({ resetOnNavigation: false }).catch(() => {});
   const opened: Lane = { page, base, errors: [], isStale: false };
+  ranReaders.delete(lane); // a new page loads its scripts afresh
   page.on("console", (m) => {
     // The app asks the API who is signed in; previews don't need a server, so that one is noise.
     if (m.type() === "error" && !m.location().url.includes("/api/")) opened.errors.push(m.text());
@@ -696,7 +697,8 @@ export function shoot(
   lane: string = DEFAULT_LANE,
 ): Promise<Drawn> {
   const once = async () => {
-    await takeRan(lane); // what ran before this call isn't this board's
+    // What ran before this call isn't this board's, but what loaded then is under it.
+    readerOf(lane, root).see(await takeRan(lane));
     const drawn = await shootNow(root, board, o, act, lane);
     await recordRan(root, board, lane);
     return drawn;
@@ -734,6 +736,12 @@ export function shoot(
 }
 
 const ranReaders = new Map<string, RanReader>();
+/** A lane's reader: one per page, as what loaded is the page's. */
+function readerOf(lane: string, root: string): RanReader {
+  const reader = ranReaders.get(lane) ?? new RanReader(root);
+  ranReaders.set(lane, reader);
+  return reader;
+}
 
 /** What ran on a lane's page since this was last asked (coverage taken and started again). */
 async function takeRan(lane: string) {
@@ -755,11 +763,12 @@ async function takeRan(lane: string) {
 async function recordRan(root: string, board: string, lane: string): Promise<void> {
   const coverage = await takeRan(lane);
   const path = board.replace(/^content\//, "");
-  if (coverage.length === 0 || !existsSync(join(root, "build", "review", `${path}.json`))) return;
+  if (!existsSync(join(root, "build", "review", `${path}.json`))) {
+    readerOf(lane, root).see(coverage);
+    return;
+  }
   try {
-    const reader = ranReaders.get(lane) ?? new RanReader(root);
-    ranReaders.set(lane, reader);
-    addRan(root, path, reader.linesOf(coverage));
+    addRan(root, path, readerOf(lane, root).linesOf(coverage));
   } catch {
     // only a hint
   }
