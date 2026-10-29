@@ -129,7 +129,7 @@
       text: ""
       status: closed
 - id: cmvszrwa6ro7
-  status: open
+  status: ready
   by: fixer
   role: fixer
   createdAt: 2026-10-29T03:36:43.566Z
@@ -142,9 +142,24 @@
     alternative is to draw lesson 1 on the plane too (desks at points in the first quadrant), so the
     chapter has one model fewer but shows the origin before it's defined. My recommendation: the
     separate `placeGrid`."
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T03:55:36.151Z
+      text: "Your idea, from chat: no placeGrid. Lesson 1 is a places layer on the coordinate plane. The
+        roads are named in words (Street number, House number) and numbered from 1, the houses are
+        small pictures, and tapping one makes it Aman's house. A walker layer takes Riya there
+        along, then up, on roads only."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T03:55:36.179Z
+      text: Done in props.md (one host, coordinatePlane, with places, walker, clues, plotting and
+        dice-game layers) and in flow.md (street-and-house).
+      status: ready
 - id: cmvszrwaupw7
-  status: open
+  status: ready
   by: fixer
   role: fixer
   createdAt: 2026-10-29T03:36:43.590Z
@@ -157,4 +172,30 @@
     1 and 4) stepped through on the plane, with no game of its own. My recommendation: build it.
     It's the one place the student plays with coordinates for fun, and it's the fair's game stall in
     the story."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T03:55:36.187Z
+      text: "Kept as a playable game, but no longer a separate prop: it's a dice-game layer on the plane,
+        where each counter walks its throw along, then up, with Riya's walk."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T03:55:36.206Z
+      text: Done in props.md.
+      status: ready
+- id: cmvt0g68mve3
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T03:55:36.214Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:14
+  commit: b06c0dd1331040beaf2beb292b83ef7311c79579
+  quote: "Departs from Fig. 3.1: every street runs north of the main road"
+  text: "In Fig. 3.1, Streets 2, 4, 6 and 8 run south of the road, with houses counted downward. I've
+    put every street on one side, so lesson 1's town is exactly the first quadrant and the walk is
+    always along, then up. The south side comes back in lesson 2 (town-grows, a new board), when the
+    town grows past Riya's corner and needs negative numbers. My recommendation: keep it this way.
+    Or do you want the source's layout from the start?"
   messages: []

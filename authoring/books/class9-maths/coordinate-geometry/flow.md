@@ -2,104 +2,110 @@
 approved: fac07298b203
 ---
 
-Story: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and their class runs a stall fair on the school ground. Their mission: a plan of the ground, so that a message like "the snacks stall goes at (3, 2)" puts every stall in exactly the right spot, with no one walking over to point. Each lesson is a stop on it: "near the gate" fails, so they need two numbers (1); the two crossing main paths, with the flagpole where they meet, become the axes (2); they write down where every stall stands (3); volunteers set the stalls up from the numbers alone, and Aman's swapped pair puts the snacks in the wrong place (4). The fair's game stall is the dice game. Each lesson ends with the summary points it taught.
+Story: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and their class runs a stall fair on the school ground. It starts at Aman's house, where the two plan their stall: Riya has to get there. Their mission: a plan of the fair ground, so that a message like "the snacks stall goes at (3, 2)" puts every stall in exactly the right spot, with no one walking over to point. Each lesson is a stop on it: Riya walks to Aman's house by his address, two numbers (1); the town grows past the corner she started from, and the two roads she walked become the axes (2); they write down where every stall stands (3); volunteers set the stalls up from the numbers alone, and Aman's swapped pair puts the snacks in the wrong place (4). The fair's game stall is the dice game. Each lesson ends with the summary points it taught.
+
+How we teach: the source fixes what a student can do (the objectives); the boards are ours. One walk carries the chapter: Riya moves along the first road, then turns and moves along the second, on roads only. It is lesson 1's way to a house, lesson 2's way to any point, lesson 3's reading of coordinates and lesson 4's plotting. Where a board departs from the source's figure, it says so.
 
 ## two-numbers-for-a-place
 
-Order: discover → state. One number fixes a point on a line; in a plane the student finds that one piece of information leaves too many places, and two fix it.
+Order: discover → state. The class finds, by walking Riya there, that an address needs two numbers in a fixed order.
 
-### street-and-house  (o1; s3.1, s3.1-number-line, s3.1-I, fig3.1)
-Purpose: a point on a line needs one number, but a house in a town needs two: knowing only "Street 2" leaves five houses, and street and house number together find one.
-Needs: the street map; the student picks only a street and every house on it lights up; then picks a house number too and one house, H, is left. P (Street 7, House 4) is found the same way.
+### street-and-house  (o1, o2; s3.1, s3.1-number-line, s3.1-I, fig3.1)
+Purpose: Aman's address, "Street 4, House 5", gets Riya to his door: along the main road to Street 4, turn up it, on to House 5. Any house can be Aman's, and the class says the steps for each. The wrong order ("along 5, up 4") reaches somebody else's house. If he had said only "Street 4", any of five houses could be his. Departs from Fig. 3.1: every street runs north of the main road, so the walk is always along, then up; H (Street 2, House 5) and P (Street 7, House 4) keep their numbers.
+Needs: a town map: a main road with the streets leaving it, each numbered, and houses drawn as small houses along each street, numbered from the road; the main road is named "Street number" and each street "House number". The teacher or student taps any house to make it Aman's, and his address appears. The two steps ("along", "up") are set and Riya walks them, counting the streets as she passes and then the houses, on roads only. A walk with the numbers swapped ends at another house. Showing only the street lights all five of its houses.
 
 ### dot-on-paper  (o1; s3.1-II, fig3.2, ex3.1, ex3.1-q1)
-Purpose: words like "upper half" or "near the left edge" don't fix a dot; one distance leaves a whole line of places; two distances, from the left edge and the bottom, fix it. Riya's first message for a stall ("near the gate") fails the same way.
-Needs: a sheet with a dot; each vague phrase shows the region it still allows; "5 cm from the left edge" shows a whole upright line of possible dots; adding "9 cm above the bottom" leaves one.
+Purpose: in a plane with no roads, the same two numbers are distances from two edges. "Upper half" or "near the left edge" doesn't fix a dot; one distance leaves a whole line of places; two distances fix it. Riya's first message for a stall ("near the gate") fails the same way.
+Needs: a sheet with a dot, hidden from the class; the student gives clues one at a time, and each shows where the dot could still be: a phrase a region, "5 cm from the left edge" a whole upright line, adding "9 cm above the bottom" one point. Then the class hides a dot of its own and describes it.
 
 ### seating-plan  (o2; activity1, fig3.3)
-Purpose: a desk is given by its column and its row, column first, so (5, 3) and (3, 5) are two different desks.
-Needs: the classroom's desks as a grid of 10 columns and 7 rows; the student taps a desk and sees its pair; Sonia's desk is S(4, 1); the student finds (5, 3), then (3, 5), and sees they are different desks. The teacher's desk sits outside the grid.
+Purpose: a desk is given by its column and row, column first, so (5, 3) and (3, 5) are two different desks.
+Needs: the classroom as desks in 10 columns and 7 rows, columns and rows numbered and named; tap a desk to see its pair; "sit at (5, 3)" and "sit at (3, 5)" are two desks, both marked. Sonia's desk is S(4, 1); the teacher's desk sits outside the plan. The teacher can put a student's name on any desk.
 
 ### cross-streets  (o2; ex3.1-q2)
 Purpose: in a city of 5 streets each way, 200 m apart, only one crossing is (4, 3) and only one is (3, 4), and they are different crossings.
-Needs: the city drawn to scale (1 cm for 200 m), streets as single lines; the student finds (2, 5), then (4, 3) and (3, 4).
+Needs: the city as single-line streets, 200 m apart; Riya walks to (2, 5), then (4, 3), then (3, 4), and each crossing she reaches stays marked.
 
 ### two-lines  (o3; s3.1-idea, box-descartes, fig3.4, s3.4, summary)
-Purpose: in every case so far the place was fixed by two perpendicular lines (the paper's edges, the rows and columns), and that idea, Descartes', is coordinate geometry. The lesson ends with summary point 1.
-Needs: the dot, the desk and the house side by side, each with its two reference lines drawn; Descartes' portrait with his story.
+Purpose: each time, two perpendicular lines did it: the main road and a street, the paper's edges, a row and a column. That idea, Descartes', is coordinate geometry. The lesson ends with summary point 1.
+Needs: the house, the dot and the desk side by side, each with its two lines drawn; Descartes' portrait with his story.
 
 ## the-cartesian-plane
 
-Order: state → see it hold. The axes, origin, directions and quadrants are names to be said plainly, then the student builds and explores them.
+Order: discover → state for why the lines need negative numbers and a zero; state → see it hold for the names (axes, origin, directions, quadrants).
 
 ### number-line  (o4; s3.2, s3.2-number-line, fig3.5)
 Purpose: recap: on a number line, distance r from the origin on the positive side is r, on the negative side −r.
-Needs: a number line from −5 to 5 with the origin and one unit marked; the student taps a point and reads its number.
+Needs: a number line from −5 to 5 with the origin and one unit marked; tap a point to read its number.
+
+### town-grows  (o4, o5; def-directions)
+Purpose: the town grows past Riya's corner: new streets to the west of where she started, and houses south of the main road. Counting from her corner, those go the other way, so they get negative numbers, and her corner is 0 on both roads. Not in the source; it is why the axes are number lines, with a zero and both signs.
+Needs: lesson 1's town, whose map extends west and south of Riya's corner; new houses appear there; numbering them from the corner gives −1, −2, … west along the road and south down a street; tap one to see its address, both numbers signed; Riya walks to one, going west or south as a sign says.
 
 ### two-number-lines  (o4; s3.2-perpendicular, fig3.6, fig3.7, def-axes, def-origin)
-Purpose: two perpendicular lines can face any way; we take one horizontal and one vertical, two number lines that cross at their zeroes: the x-axis, the y-axis and the origin O. On the fair ground, these are the two main paths and the flagpole.
-Needs: tilted perpendicular pairs, then the upright one; two number lines, one horizontal (X′X) and one vertical (Y′Y), that the student moves until their zeroes meet; the crossing is named O.
+Purpose: two perpendicular lines can face any way; we take one horizontal and one vertical, two number lines crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from.
+Needs: tilted perpendicular pairs, then the upright one; two number lines, one horizontal (X′X) and one vertical (Y′Y), brought together until their zeroes meet; the crossing named O; the town map fading in behind and out again.
 
 ### axes-and-directions  (o4; def-directions, fig3.8)
 Purpose: OX and OY are the positive directions of the axes, OX′ and OY′ the negative ones.
-Needs: the axes; the student taps each half of each axis and sees its name and sign.
+Needs: the axes; tap each half of each axis to see its name and sign.
 
 ### quadrants  (o5; def-quadrants, def-cartesian-plane, fig3.9, ex3.2, ex3.2-q1, s3.4, summary)
-Purpose: the axes divide the plane into four quadrants, numbered I to IV anticlockwise from OX; the plane is the Cartesian, coordinate or xy-plane, and the axes are the coordinate axes. The lesson ends with summary points 2 to 5.
-Needs: the plane; a sweep from OX anticlockwise numbers the quadrants I to IV; the student taps a part of the plane to see its name.
+Purpose: the axes divide the plane into four quadrants, numbered I to IV anticlockwise from OX: the town's four parts. The plane is the Cartesian, coordinate or xy-plane, and the axes are the coordinate axes. The lesson ends with summary points 2 to 5.
+Needs: the plane; a sweep from OX anticlockwise numbers the quadrants I to IV; tap a part to see its name; the town's four parts shaded to match, the corner at O.
 
 ## coordinates-of-a-point
 
 Order: state → see it hold for the abscissa and ordinate (a definition); discover → state for the signs in each quadrant (found by moving a point through them).
 
 ### distances-from-axes  (o6; s3.2-distances, fig3.10)
-Purpose: a point's distance from the y-axis is measured along the x-axis, and its distance from the x-axis along the y-axis: P is 4 and 3 units away, along the positive directions; Q is 6 and 2 units away, along the negative ones.
-Needs: graph-paper axes with P and Q; the perpendiculars from each point to both axes, with their lengths and the direction each is measured in.
+Purpose: a point's distance from the y-axis is measured along the x-axis, and its distance from the x-axis along the y-axis. P is 4 and 3 units away, along the positive directions; Q is 6 and 2 units away, along the negative ones. That is Riya's walk: along, then up or down.
+Needs: graph-paper axes with P and Q; the perpendiculars from each point to both axes, with their lengths and the direction each is measured in; Riya walks from O to P, and to Q, along the same lines.
 
 ### abscissa-and-ordinate  (o6; def-abscissa, def-ordinate)
-Purpose: the x-coordinate (abscissa) is the distance from the y-axis with a sign, + along OX and − along OX′; the y-coordinate (ordinate) likewise: P has +4 and +3, Q has −6 and −2.
-Needs: a point the student moves on graph paper, with its perpendiculars to the axes and its signed distances named abscissa and ordinate; the signs change as the point crosses an axis.
+Purpose: the x-coordinate (abscissa) is the distance from the y-axis with a sign, + along OX and − along OX′; the y-coordinate (ordinate) likewise. P has +4 and +3, Q has −6 and −2.
+Needs: a point the student drags on graph paper, with its perpendiculars to the axes and its signed distances named abscissa and ordinate; the signs change as the point crosses an axis.
 
 ### writing-coordinates  (o7, o10; def-coordinates, note-unique, remark-convention, epigraph)
-Purpose: the coordinates are written x first, in brackets: P is (4, 3) and Q is (−6, −2). (3, 4) is not (4, 3). x first is not a fact but an agreement the whole world keeps, so a message means the same thing to everyone. Riya writes down where the first stalls stand.
-Needs: a point with its coordinates written beside it; the swapped pair shown as a different point; the fair plan with two stalls and their coordinates.
+Purpose: the coordinates are written x first, in brackets: P is (4, 3) and Q is (−6, −2). (3, 4) is not (4, 3). x first is not a fact but an agreement the whole world keeps, so a message means the same thing to everyone, as Aman's address did. Riya writes down where the first stalls stand.
+Needs: tap anywhere and a point appears with its coordinates; the swapped pair shown as a different point; the fair ground's plan with two stalls and their coordinates.
 
 ### reading-points  (o7; example1, fig3.11)
 Purpose: worked example: read the abscissa, ordinate and coordinates of B, M, L and S.
 Needs: the figure's four points with dashed perpendiculars to both axes, read one at a time.
 
 ### points-on-axes  (o8; example2, fig3.12, rule-on-axes, rule-origin)
-Purpose: a point on the x-axis is at zero distance from it, so it is (x, 0); a point on the y-axis is (0, y); the origin is (0, 0). Worked example: A, B, C, D and E on the axes, E at (2/3, 0).
-Needs: a point the student moves onto an axis and sees one coordinate become 0, and onto O to see (0, 0); the figure's five points on the axes, with each one's "why".
+Purpose: a point on the x-axis is at zero distance from it, so it is (x, 0); a point on the y-axis is (0, y); the origin is (0, 0). In the town: a house on the main road needs no walk up, so its second number is 0. Worked example: A, B, C, D and E on the axes, E at (2/3, 0).
+Needs: a point dragged onto an axis, one coordinate becoming 0, and onto O for (0, 0); "every point with y = 0" lights the whole x-axis; the figure's five points with each one's "why".
 
 ### signs-and-quadrants  (o9; rule-signs, fig3.13)
 Purpose: every point in quadrant I is (+, +), II (−, +), III (−, −) and IV (+, −), because each quadrant is bounded by those halves of the axes.
-Needs: a point the student moves through all four quadrants, the signs of its coordinates shown; each quadrant's sign pattern is filled in once the student has been there.
+Needs: a point dragged through all four quadrants, the signs of its coordinates shown; each quadrant's pattern filled in once the point has been there. Then a guessing round: a point appears, the class calls its quadrant from its signs before it is shown.
 
 ### find-the-point  (o7; ex3.2-q2, fig3.14, s3.4, summary)
 Purpose: read coordinates from a figure, and find the point with given coordinates, including points on the axes (L, M). The lesson ends with summary points 6 to 10.
-Needs: the figure's eight points with dashed lines to the axes; the student reads a point's coordinates, and names the point at given coordinates.
+Needs: the figure's eight points with dashed lines to the axes; read a point's coordinates, and name the point at given coordinates.
 
 ## plotting-points
 
-Order: state → see it hold for plotting (a method); discover → state for the ordered pair (found when swapped numbers land in different places).
+Order: state → see it hold for plotting (a method: Riya's walk); discover → state for the ordered pair (found when swapped numbers land in different places).
 
 ### plot-a-point  (o11; s3.3, def-plotting, s3.3-method, fig3.15)
-Purpose: to plot (3, 5), count 3 units along the x-axis from O to A, then 5 units from A in the y direction to P; Q (5, −4) the same way, downward. P is in quadrant I and Q in quadrant IV, from their signs. Volunteers set up the stalls from Riya's numbers.
-Needs: empty axes on which the student counts out the x-coordinate along the x-axis, then the y-coordinate up or down, and places the point; the right angle at A is marked.
+Purpose: to plot (3, 5), walk 3 units along the x-axis from O to A, then 5 units in the y direction to P; Q (5, −4) the same way, downward. P is in quadrant I and Q in quadrant IV, from their signs. Volunteers set up the stalls from Riya's numbers.
+Needs: empty axes; the student gives a pair and Riya walks it from O, counting along the x-axis and then up or down, and marks the point; the right angle at A is marked. Then the student plots by tapping, and the walk checks it.
 
 ### swap-the-numbers  (o12; example3, fig3.16, note-ordered-pair)
 Purpose: Aman writes the snacks stall as (2, 5) instead of (5, 2), and it stands in the wrong place. Plotting (5, 0) and (0, 5), (5, 2) and (2, 5), (−3, 5) and (5, −3) shows that swapping the numbers moves the point unless they are equal; so (x, y) is an ordered pair.
-Needs: the student plots Example 3's eight points; each pair and its swap are shown together; a pair with equal numbers, swapped, stays put.
+Needs: the student plots Example 3's eight points; each pair and its swap shown together; a pair with equal numbers, swapped, stays put.
 
 ### plot-from-a-table  (o11, o9; example4, fig3.17, ex3.3, ex3.3-q1, ex3.3-q2)
-Purpose: points can come from a table and can fall between grid lines, like (0, −3.5); the scale is chosen so every point fits, as with y = 8 in Exercise 3.3; a point's quadrant or axis can be told from its signs, then checked by plotting.
-Needs: a table of x and y; the student plots each pair, including a decimal one between the marks; a choice of scale for the axes, too small and right.
+Purpose: points can come from a table and fall between grid lines, like (0, −3.5); the scale is chosen so every point fits, as with y = 8 in Exercise 3.3; a point's quadrant or axis can be told from its signs, then checked by plotting.
+Needs: a table of x and y; the student plots each pair, including a decimal one between the marks; a choice of scale, first too small (a point falls off), then right.
 
 ### dice-game  (o13; activity2)
 Purpose: the fair's game stall: each throw adds the red die to x and the green die to y; first to (10, 10) wins, with no coordinate over 10.
-Needs: two counters at (0, 0) on a 10 × 10 grid; red and green dice; each counter moves by adding the throw; an overshooting move is missed; landing on the other counter sends it back to (0, 0).
+Needs: two counters at (0, 0) on a 0-to-10 grid; red and green dice; each counter walks its throw, along then up; an overshooting move is missed; landing on the other counter sends it back to (0, 0).
 
 ### graphs-you-know  (o14; remark-graphs, s3.4, summary)
-Purpose: a time-distance graph from earlier classes is the same plotting, with the axes called t and d instead of x and y. The lesson ends with summary point 11.
-Needs: a small time-distance table plotted as points on axes named t and d.
+Purpose: a time-distance graph from earlier classes is the same plotting, with the axes called t and d instead of x and y: Riya's walk to Aman's house, a point each minute. The lesson ends with summary point 11.
+Needs: Riya's walk timed, its time and distance in a table, plotted as points on axes named t and d.
