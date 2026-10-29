@@ -455,7 +455,16 @@ function revealCursor(): void {
 type Node = {
   label: string;
   path: string;
-  kind: "reviews" | "book" | "chapter" | "planning" | "planfile" | "lesson" | "props" | "prop";
+  kind:
+    | "reviews"
+    | "book"
+    | "chapter"
+    | "planning"
+    | "planfile"
+    | "lesson"
+    | "content"
+    | "props"
+    | "prop";
   /** A prop's line under its name: its package, its role, and the chapters that place it. */
   description?: string;
   file: string;
@@ -545,6 +554,13 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       item.contextValue = "reviews";
       return item;
     }
+    if (node.kind === "content") {
+      const item = new vscode.TreeItem("Content", vscode.TreeItemCollapsibleState.Expanded);
+      item.iconPath = new vscode.ThemeIcon("book");
+      item.tooltip = "Every book: its chapters, their planning files and lessons";
+      item.contextValue = "content";
+      return item;
+    }
     if (node.kind === "props") {
       const item = new vscode.TreeItem("Props", vscode.TreeItemCollapsibleState.Collapsed);
       item.iconPath = new vscode.ThemeIcon("extensions");
@@ -619,16 +635,20 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
     const title = (json: { title?: { en?: string } } | null, fallback: string) =>
       json?.title?.en ?? fallback;
     if (node === undefined) {
+      // Three sections: the threads, the books, the props.
+      return [
+        { label: "Reviews", path: "", kind: "reviews", file: "" },
+        { label: "Content", path: "content", kind: "content", file: "" },
+        { label: "Props", path: "library/props", kind: "props", file: "" },
+      ];
+    }
+    if (node.kind === "content") {
       // Books built, and books being planned.
       const index = readJson<{ books: Ref[] }>(join(build, "index.json"));
       const books = [
         ...new Set([...(index?.books ?? []).map((r) => r.path), ...dirsIn(authoring)]),
       ];
-      const top: Node = { label: "Reviews", path: "", kind: "reviews", file: "" };
-      const props: Node = { label: "Props", path: "library/props", kind: "props", file: "" };
       return [
-        top,
-        props,
         ...books.map(
           (slug): Node => ({
             label: title(readJson(join(build, `${slug}.json`)), slug),
