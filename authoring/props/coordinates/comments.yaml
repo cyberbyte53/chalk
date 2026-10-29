@@ -1,0 +1,28 @@
+# Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
+- id: cmvt761awv96
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T07:03:40.568Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:16
+  commit: c40f86934ff5fab379af4103c905e1f1ce40afd4
+  text: >-
+    A small change to the definition, which lesson 1 needs.
+
+
+    Today the plane shows a **Next point** button whenever a figure has points not yet shown. In
+    lesson 1's cross-streets, the crossings A (2, 5), B (4, 3) and C (3, 4) start hidden and appear
+    as Riya reaches each one. But the button sits under the plane from the start, so a student can
+    reveal all three before walking. The seating plan has the same need: to keep (5, 3) and (3, 5)
+    marked together, as the flow asks, they would be points shown as each desk is tapped.
+
+
+    Recommended: a new core field, `canShowPoints` (default false): whether the learner gets the
+    Next point button. It's off unless a board turns it on, so lesson 3's figure boards (reading
+    points one at a time) set it to true and lesson 1's boards leave it off. Nothing else changes,
+    and no board uses the button yet.
+
+
+    Close this to approve, and I'll add the field, its test, and the two uses in lesson 1.
+  messages: []

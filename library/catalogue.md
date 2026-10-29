@@ -121,7 +121,7 @@ The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a ho
 
 ### `coordinatePlane` · explainer
 
-`library/props/coordinates/coordinatePlane` · used in no chapter yet
+`library/props/coordinates/coordinatePlane` · used in class9-maths/coordinate-geometry
 
 A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.
 

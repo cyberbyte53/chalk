@@ -1,0 +1,5 @@
+# Activity 1: the row is said first in the prompt, so writing the column first is the skill.
+- params: { column: 5, row: 3 }
+- params: { column: 2, row: 6 }
+- params: { column: 9, row: 1 }
+- params: { column: 7, row: 4 }

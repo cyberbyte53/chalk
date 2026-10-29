@@ -53,7 +53,11 @@ function walkWords(s: PlaneView, locale: Locale): string {
 }
 
 /** The places, each a small picture; a tap makes one the target when the board allows it. */
-function PlacesDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element {
+function PlacesDraw({
+  s,
+  px,
+  locale,
+}: { s: PlaneView; px: FramePixels; locale: Locale }): JSX.Element {
   const size = Math.max(16, Math.min(34, unitOf(px) * 0.62));
   const isLit = (p: Point) => s.lit !== null && p[s.lit.axis] === s.lit.value;
   return (
@@ -81,6 +85,11 @@ function PlacesDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element {
             />
             {isTarget && <circle class="cp-target-halo" r={size * 0.8} />}
             <PlacePicture kind={s.placeKind} size={size} />
+            {p.label !== undefined && (
+              <text class="cp-place-label" y={size * 0.62 + 10} text-anchor="middle">
+                {word(p.label, locale)}
+              </text>
+            )}
           </g>
         );
       })}
@@ -417,7 +426,7 @@ export function CoordinatePlaneView({
         <AxesDraw s={s} px={px} locale={locale} canLight={hasPlaces} />
         <ApartHandle s={s} px={px} />
         <PlaneTap s={s} px={px} call={call} />
-        {hasPlaces && <PlacesDraw s={s} px={px} />}
+        {hasPlaces && <PlacesDraw s={s} px={px} locale={locale} />}
         {hasWalker && <WalkerDraw s={s} px={px} locale={locale} />}
         <NamedPointsDraw s={s} px={px} />
         {hasPlotting && <PlottedDraw s={s} px={px} />}

@@ -182,6 +182,11 @@
   stroke-width: 2.5;
 }
 
+.cp-frame .cp-place-label {
+  font: 600 10px var(--font-body);
+  fill: var(--color-on-surface-variant);
+}
+
 /* ---- Riya's walk ---- */
 .cp-walk-start {
   fill: var(--color-primary);

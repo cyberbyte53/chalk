@@ -380,3 +380,32 @@
       at: 2026-10-29T06:06:34.536Z
       text: ""
       status: closed
+- id: cmvt767mgcu9
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T07:03:48.760Z
+  source: authoring/books/class9-maths/coordinate-geometry/props.md:17
+  commit: c40f86934ff5fab379af4103c905e1f1ce40afd4
+  quote: Tilted perpendicular pairs, Descartes' portrait, the house, the dot and the desk side by side.
+  text: >-
+    This row says "no prop: pictures", but nothing in Chalk can put a picture on a page yet. The
+    basics are text, choice, multi-choice and ordering, and `art.tsx` is only a lesson's cover
+    picture. So lesson 1's last board, two-lines, is words only for now: the house, the dot and the
+    desk are described, with summary point 1 and Descartes' story, but not drawn.
+
+
+    A. (Recommended) Draw the side-by-side pictures with `coordinatePlane` itself: three small
+    planes in a row (the town, the sheet, the classroom), each showing just its two lines and its
+    one place, nothing to tap. They're the same pictures the student just used, so the point (two
+    perpendicular lines every time) is seen, not just read. Descartes' portrait stays words: a
+    portrait of a real person isn't something we should draw.
+
+    B. Keep two-lines words only.
+
+    C. Add a picture piece to the library first (a bigger job, for later chapters too).
+
+
+    A changes this row's verdict to "configure coordinatePlane" for the house, dot and desk, and
+    re-approval of props.md.
+  messages: []
