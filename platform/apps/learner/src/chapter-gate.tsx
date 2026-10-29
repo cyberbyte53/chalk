@@ -1,5 +1,6 @@
 import type { Locale } from "@chalk/content";
 import { JugnuFigure, JugnuMood } from "@chalk/player";
+import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { say } from "./app-text";
@@ -42,8 +43,7 @@ export function ChapterGate({
   const shownAt = useRef<number | null>(null);
 
   // A new chapter, or Try again, starts a fetch; the chapter object itself is rebuilt each render.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: keyed on the chapter's path and the attempt
-  useEffect(() => {
+  useWhenChanged([chapter.path, attempt], () => {
     if (content !== undefined) return;
     let isLive = true;
     let latest = { done: 0, total: 0 };
@@ -75,7 +75,7 @@ export function ChapterGate({
       isLive = false;
       window.clearTimeout(show);
     };
-  }, [chapter.path, attempt]);
+  });
 
   if (content !== undefined) return children(content);
   if (wait.kind === "failed")

@@ -339,7 +339,6 @@ export function Bubbles({
         } as JSX.CSSProperties;
         return (
           <circle
-            // biome-ignore lint/suspicious/noArrayIndexKey: the bubbles are identical and never reorder
             key={i}
             class="kit-bubble"
             cx={x + dx}

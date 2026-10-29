@@ -122,7 +122,6 @@ function Sticks({
       {Array.from({ length: copies }, (_, k) => {
         const x = SIDE + k * step.b * scale;
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: identical copies that never reorder
           <g key={k}>
             <rect
               class={k % 2 === 0 ? "pr-stick is-short" : "pr-stick is-short is-alt"}
@@ -243,7 +242,6 @@ export function StickMeasureView({
           )}
         >
           {fitLines(s, locale).map((line, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: one line per stick, in order
             <li key={i} class={line.fits ? "is-fit" : "is-gap"}>
               {line.text}
             </li>
@@ -253,7 +251,6 @@ export function StickMeasureView({
       {working.length > 0 && L === null && s.canLay && (
         <ol class="pr-working" {...shows("working", working)}>
           {working.map((line, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: one line per step, in order
             <li key={i} class={i === working.length - 1 ? "is-latest" : undefined}>
               {line}
             </li>

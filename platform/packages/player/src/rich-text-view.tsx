@@ -1,7 +1,9 @@
 /** @jsxImportSource preact */
 import type { ComponentChildren, JSX } from "preact";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { OwnHtml, type OwnMarkup } from "./own-markup";
 import { SpanKind, mathHtml, parseRich } from "./rich-text";
+import { useLayoutWhenChanged } from "./when-changed";
 
 /**
  * Safari 26 lays out KaTeX's stacks (braces with labels, tables, fractions) wrongly because of the
@@ -40,11 +42,10 @@ function checkStacking(): void {
 function DisplayMath({
   html,
   trailing,
-}: { html: string; trailing: ComponentChildren }): JSX.Element {
+}: { html: OwnMarkup; trailing: ComponentChildren }): JSX.Element {
   const ref = useRef<HTMLSpanElement>(null);
   const [isWide, setIsWide] = useState(false);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: measured again when the formula changes
-  useLayoutEffect(() => {
+  useLayoutWhenChanged([html], () => {
     checkStacking();
     const el = ref.current;
     if (el === null) return;
@@ -58,14 +59,10 @@ function DisplayMath({
     const watch = new ResizeObserver(measure);
     watch.observe(el);
     return () => watch.disconnect();
-  }, [html]);
+  });
   return (
     <span ref={ref} class={isWide ? "rich-display-math is-wide" : "rich-display-math"}>
-      <span
-        // Trusted: KaTeX's own output for content that passed the build's maths check.
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: KaTeX renders to HTML
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <OwnHtml markup={html} />
       {trailing}
     </span>
   );
@@ -84,29 +81,17 @@ export function RichText({ text }: { text: string }): JSX.Element {
           case SpanKind.Text:
             return span.text;
           case SpanKind.Bold:
-            // biome-ignore lint/suspicious/noArrayIndexKey: spans are a fixed split of the text
             return <strong key={i}>{span.text}</strong>;
           case SpanKind.Emphasis:
-            // biome-ignore lint/suspicious/noArrayIndexKey: spans are a fixed split of the text
             return <em key={i}>{span.text}</em>;
           case SpanKind.DisplayMath:
             return (
-              <DisplayMath
-                // biome-ignore lint/suspicious/noArrayIndexKey: spans are a fixed split of the text
-                key={i}
-                html={mathHtml(span.text, true)}
-                trailing={span.trailing}
-              />
+              <DisplayMath key={i} html={mathHtml(span.text, true)} trailing={span.trailing} />
             );
           case SpanKind.Math:
             return (
-              // biome-ignore lint/suspicious/noArrayIndexKey: spans are a fixed split of the text
               <span key={i} class="rich-math">
-                <span
-                  // Trusted: KaTeX's own output for content that passed the build's maths check.
-                  // biome-ignore lint/security/noDangerouslySetInnerHtml: KaTeX renders to HTML
-                  dangerouslySetInnerHTML={{ __html: mathHtml(span.text, false) }}
-                />
+                <OwnHtml markup={mathHtml(span.text, false)} />
                 {span.trailing}
               </span>
             );

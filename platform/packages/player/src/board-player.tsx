@@ -26,6 +26,7 @@ import { recordBoard } from "./recorder";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
+import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
 
 /** How long Jugnu's pointing glow stays. */
 const POINT_SECONDS = 5;
@@ -102,11 +103,9 @@ export function BoardPlayer({
   );
   const narrator = useNarrator(board.item?.id ?? board.name, locale, audio, reportAudioFailure);
   const runtime = useBoardRuntime(board, registry, narrator.speak);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: told once per runtime
-  useEffect(() => onRuntime?.(runtime), [runtime]);
+  useWhenChanged([runtime], () => onRuntime?.(runtime));
   // Everything that happens on the board is recorded; it opens before its first signal.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: one recorder per board on screen
-  const recorder = useMemo(() => {
+  const recorder = useMadeWhenChanged([runtime, record], () => {
     const made = recordBoard(runtime, record, makeId());
     made.open({
       locale,
@@ -116,7 +115,7 @@ export function BoardPlayer({
     });
     recorderRef.current = made;
     return made;
-  }, [runtime, record]);
+  });
   useEffect(() => () => recorder.close(), [recorder]);
   // A drag is one entry: the board tells its recorder when a pointer is down on it.
   useEffect(() => {

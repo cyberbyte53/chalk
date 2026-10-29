@@ -366,7 +366,6 @@ function PlottedDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
         const isSwapShown = s.showSwaps && d.isRight && d.x !== d.y && isInWindow(s.window, swap);
         const [sx, sy] = px.toPx(swap.x, swap.y);
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: one dot per pair, in order
           <g key={i} class={`cp-dot${d.isRight ? " is-right" : " is-wrong"}`}>
             {isSwapShown && (
               <>
@@ -401,7 +400,6 @@ function CountersDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale
         const name = s.playerNames[i] === undefined ? `${i + 1}` : word(s.playerNames[i], locale);
         return (
           <g
-            // biome-ignore lint/suspicious/noArrayIndexKey: one counter per player
             key={i}
             transform={`translate(${x + dx}, ${y})`}
             {...shows(`counter${i + 1}`, c, `${name} ${pair(c)}`)}
@@ -523,7 +521,6 @@ export function CoordinatePlaneView({
             <tr>
               <th>x</th>
               {s.toPlot.map((p, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: the table's columns, in order
                 <td key={i} class={i === s.plotted.length ? "is-next" : undefined}>
                   {num(p.x)}
                 </td>
@@ -532,7 +529,6 @@ export function CoordinatePlaneView({
             <tr>
               <th>y</th>
               {s.toPlot.map((p, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: the table's columns, in order
                 <td key={i} class={i === s.plotted.length ? "is-next" : undefined}>
                   {num(p.y)}
                 </td>
@@ -693,7 +689,6 @@ export function CoordinatePlaneView({
             // One clue at a time, in the lesson's order: those given, and the next.
             !s.given.includes(i) && i !== nextClue ? null : (
               <SymbolButton
-                // biome-ignore lint/suspicious/noArrayIndexKey: the lesson's clues, in order
                 key={i}
                 symbol={word(c.words, locale)}
                 label={word(c.words, locale)}
@@ -726,7 +721,6 @@ export function CoordinatePlaneView({
         {hasPlotting &&
           s.scaleChoices.map((every, i) => (
             <SymbolButton
-              // biome-ignore lint/suspicious/noArrayIndexKey: the scales offered, in order
               key={i}
               symbol={`${word(WORDS.scale, locale)} ${num(every)}`}
               label={`${word(WORDS.scale, locale)} ${num(every)}`}

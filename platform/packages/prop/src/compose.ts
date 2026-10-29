@@ -11,6 +11,7 @@ import {
   type StoredState,
   noteNames,
 } from "./define";
+import type { Unchecked } from "./unchecked";
 
 /**
  * Hosts: a prop made of a small core plus optional **layers**. A number line is an axis, and the
@@ -70,8 +71,7 @@ export type Layer<S extends StoredState> = {
 };
 
 /** A layer of any state, as a host holds its list. */
-// biome-ignore lint/suspicious/noExplicitAny: any state
-export type AnyLayer = Layer<any>;
+export type AnyLayer = Layer<Unchecked>;
 
 /**
  * Layers on one state, checked against the contract with their names kept: `const layer =

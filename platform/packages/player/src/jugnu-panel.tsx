@@ -16,6 +16,7 @@ import { RichText } from "./rich-text-view";
 import type { BoardRuntime } from "./runtime";
 import { canSpeak, hush, speak, useSpeech } from "./speech";
 import { t } from "./ui-text";
+import { useWhenChanged } from "./when-changed";
 
 /** One line of the chat as the student saw it. */
 export type ShownMessage = {
@@ -256,8 +257,7 @@ export function JugnuPanel({
   }, [isOpen, about.length]);
 
   // Keep the latest exchange in view: the chat always opens on it.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: runs on purpose when these change
-  useEffect(() => showLatest(list.current), [messages, isThinking, options, isOpen, sheet]);
+  useWhenChanged([messages, isThinking, options, isOpen, sheet], () => showLatest(list.current));
 
   const log = (
     asked: { text: string; about?: { prop: string; part?: string; text?: string }[] },
@@ -315,12 +315,11 @@ export function JugnuPanel({
 
   // The banner asked for them: send it as their message, once per key.
   const sentOpening = useRef(0);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: once per key
-  useEffect(() => {
+  useWhenChanged([opening?.key], () => {
     if (opening === undefined || opening.key === sentOpening.current) return;
     sentOpening.current = opening.key;
     ask(opening.text, false);
-  }, [opening?.key]);
+  });
 
   // Voice: what they say goes into the box, to check and send.
   const speech = useSpeech(locale, (heard) =>
@@ -485,7 +484,6 @@ export function JugnuPanel({
       <div class="jugnu-messages" aria-live="polite" ref={list}>
         {shown.map((message, i) => (
           // Messages are only ever appended, so the index is a stable key.
-          // biome-ignore lint/suspicious/noArrayIndexKey: append-only list
           <p key={i} class={`jugnu-message is-${message.from}`}>
             {message.about?.map((label) => (
               <span key={label} class="jugnu-chip">

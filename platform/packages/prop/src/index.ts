@@ -154,3 +154,4 @@ export {
   type ShownTags,
   type Tag,
 } from "./tags";
+export type { Unchecked } from "./unchecked";

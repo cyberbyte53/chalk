@@ -1,5 +1,6 @@
 import type { RefObject } from "preact";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useLayoutWhenChanged } from "./when-changed";
 
 /**
  * How many equal columns a row of options gets, measured rather than guessed: the widest
@@ -16,8 +17,7 @@ export function useFitColumns<T extends HTMLElement>(
 ): [RefObject<T>, number] {
   const ref = useRef<T>(null);
   const [columns, setColumns] = useState(1);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` is when to measure again, not read
-  useLayoutEffect(() => {
+  useLayoutWhenChanged([count, key], () => {
     const grid = ref.current;
     if (!grid) return;
     const measure = () => setColumns(fitColumns(grid, count));
@@ -26,7 +26,7 @@ export function useFitColumns<T extends HTMLElement>(
     observer.observe(grid);
     document.fonts?.ready.then(measure);
     return () => observer.disconnect();
-  }, [count, key]);
+  });
   return [ref, columns];
 }
 

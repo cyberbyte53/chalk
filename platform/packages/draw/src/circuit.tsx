@@ -79,7 +79,6 @@ export function Battery({ at, angle, cells = 2, part, class: extra }: BatteryPro
       {Array.from({ length: cells }, (_, i) => {
         const x = -w / 2 + i * step;
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: the cells are identical and never reorder
           <g key={i}>
             <line class="kit-plate-minus" x1={x - 3} y1={-6} x2={x - 3} y2={6} />
             <line class="kit-plate-plus" x1={x + 3} y1={-12} x2={x + 3} y2={12} />
@@ -307,7 +306,6 @@ export function Dial({
         const [t2x, t2y] = on(a, r - 10);
         const [lx, ly] = on(a, r - 16);
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: ticks never reorder
           <g key={i}>
             <line class="kit-dial-tick" x1={t1x} y1={t1y} x2={t2x} y2={t2y} />
             {(i === 0 || i === ticks || 2 * i === ticks) && (

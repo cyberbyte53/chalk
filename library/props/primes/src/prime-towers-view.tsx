@@ -23,7 +23,6 @@ function Tower({ prime, height, litTo }: { prime: number; height: number; litTo:
   return (
     <div class="pr-sbs-tower">
       {Array.from({ length: height }, (_, k) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: identical beads that never reorder
         <span key={k} class={k >= litTo ? "pr-tower-bead is-faded" : "pr-tower-bead"}>
           <Bead prime={prime} />
         </span>

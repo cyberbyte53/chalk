@@ -218,7 +218,6 @@ export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps
         })}
         {!isLocked &&
           Array.from({ length: s.steps.length - s.placed.length }, (_, k) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: empty slots, in order
             <li key={`slot${k}`} class="order-slot" />
           ))}
       </ol>

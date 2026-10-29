@@ -204,7 +204,6 @@ export function DecimalExpansionView({
       ))}
       {paper.work.map((row, r) => (
         // A row is its place in the division: the index is its identity, and rows only grow.
-        // biome-ignore lint/suspicious/noArrayIndexKey: see above
         <Fragment key={r}>
           {row.rule !== undefined && (
             <span
@@ -387,7 +386,6 @@ function RemainderClock({ s }: { s: Seen }): JSX.Element {
         const mid = { x: (a.x + b.x) / 2 - uy * 9, y: (a.y + b.y) / 2 + ux * 9 };
         return (
           // A step of the path is its place in the division.
-          // biome-ignore lint/suspicious/noArrayIndexKey: see above
           <g key={i} class={`dx-step is-${tone}`}>
             <line
               class={`dx-chord${tone === "plain" ? "" : ` is-${tone === "loop" ? "loop" : "newest"}`}`}

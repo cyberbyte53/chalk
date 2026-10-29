@@ -1,7 +1,7 @@
 import { type Progress, isConceptDone } from "@chalk/api";
 import type { BuiltArt, Locale } from "@chalk/content";
 import { Stage, Trail } from "@chalk/draw";
-import { RichText } from "@chalk/player";
+import { OwnHtml, RichText, ours } from "@chalk/player";
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";
 import { say } from "./app-text";
@@ -10,8 +10,7 @@ import type { Course, CourseChapter } from "./course";
 /** Art from the build: checked SVG (see studio's art checks), so it is inlined as it is. */
 export function ArtView({ art }: { art: BuiltArt | null }): JSX.Element | null {
   if (art === null) return null;
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: built art is checked markup, never user input
-  return <div class={`art is-${art.frame}`} dangerouslySetInnerHTML={{ __html: art.svg }} />;
+  return <OwnHtml tag="div" class={`art is-${art.frame}`} markup={ours(art.svg)} />;
 }
 
 function BackButton({ label, onBack }: { label: string; onBack: () => void }): JSX.Element {

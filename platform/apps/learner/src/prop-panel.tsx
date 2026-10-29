@@ -309,7 +309,6 @@ function controlFor(
       return (
         <span class="prop-panel-list">
           {list.map((v, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: an item's place is all it has
             <span key={i} class="prop-panel-item">
               <Field
                 label={String(i + 1)}
@@ -339,7 +338,6 @@ function controlFor(
         <span class="prop-panel-object">
           {items.map((s, i) => (
             <Field
-              // biome-ignore lint/suspicious/noArrayIndexKey: a tuple's places are fixed
               key={i}
               label={String(i + 1)}
               schema={s}
@@ -393,7 +391,6 @@ function controlFor(
             onChange={(e) => onChange(blank(options[Number(e.currentTarget.value)] as ZodTypeAny))}
           >
             {options.map((o, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: options are known by their place
               <option key={i} value={String(i)}>
                 {optionWords(o, i)}
               </option>

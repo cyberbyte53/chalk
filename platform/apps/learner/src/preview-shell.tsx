@@ -30,6 +30,7 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
+import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { CONTENT_ROUTE, boardOfFile } from "./content-store";
@@ -1354,8 +1355,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     };
   }, [isOne, isLesson, setIsOne, setZoom, setSelecting]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `build` is the trigger: a rebuild fetches the boards again.
-  useEffect(() => {
+  useWhenChanged([path, source, prop?.pkg, prop?.type, state, isTree, withQuestions, build], () => {
     let isLive = true;
     if (isTree || library !== undefined) return;
     (async () => {
@@ -1384,7 +1384,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     return () => {
       isLive = false;
     };
-  }, [path, source, prop?.pkg, prop?.type, state, isTree, withQuestions, build]);
+  });
 
   // Ready once the boards are on screen (this runs after they are drawn), not when they arrive.
   useEffect(() => {

@@ -1,6 +1,7 @@
 import type { BoardAt as At, Lesson } from "@chalk/content";
 import { propDefs } from "@chalk/library";
 import { testLesson } from "@chalk/library/test-lesson";
+import type { Unchecked } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { loadReadings } from "./pronunciations";
 import { validateLesson } from "./validate";
@@ -14,8 +15,7 @@ const has = (input: unknown, pattern: RegExp) =>
   expect(messages(input).some((m) => pattern.test(m))).toBe(true);
 
 // The test lesson, as plain data to change: boards by name, pieces by name.
-// biome-ignore lint/suspicious/noExplicitAny: a lesson changed in place to break it
-type Loose = Record<string, any>;
+type Loose = Record<string, Unchecked>;
 const fresh = () => testLesson() as unknown as Loose;
 const board = (lesson: Loose, name: string): Loose =>
   lesson.boards.find((b: Loose) => b.name === name);

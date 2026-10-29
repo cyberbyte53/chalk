@@ -10,7 +10,6 @@ function Marks({ marks }: { marks: readonly Mark[] }): JSX.Element {
   return (
     <div class="marks" aria-hidden="true">
       {marks.map((mark, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: one mark per question, in order
         <i key={i} class={mark === Mark.Right ? "is-right" : "is-wrong"} />
       ))}
     </div>

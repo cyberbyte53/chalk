@@ -20,7 +20,6 @@ function Sweets({ n, isBig = false }: { n: number; isBig?: boolean }): JSX.Eleme
   return (
     <>
       {Array.from({ length: n }, (_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: identical items that never reorder
         <Sweet key={i} isBig={isBig} />
       ))}
     </>

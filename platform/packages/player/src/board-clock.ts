@@ -1,5 +1,6 @@
 import { createContext } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useWhenChanged } from "./when-changed";
 
 /**
  * The board's clock, for a view whose look eases (a camera gliding to what changed). The state is
@@ -26,8 +27,7 @@ export function useBoardTween<T extends Readonly<Record<string, number>>>(
   const [now, setNow] = useState(target);
   const from = useRef(target);
   const key = JSON.stringify(target);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the target's numbers are the key
-  useEffect(() => {
+  useWhenChanged([key, clock, seconds], () => {
     const start = from.current;
     if (JSON.stringify(start) === key) return;
     if (clock === null || seconds <= 0) {
@@ -52,6 +52,6 @@ export function useBoardTween<T extends Readonly<Record<string, number>>>(
     };
     cancel = clock.frame(step);
     return () => cancel();
-  }, [key, clock, seconds]);
+  });
   return now;
 }

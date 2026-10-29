@@ -1,6 +1,7 @@
 import katex from "katex";
 // Registers \ce{…} (chemistry) and \pu{…} (physical units) with KaTeX.
 import "katex/contrib/mhchem";
+import { type OwnMarkup, ours } from "./own-markup";
 
 /**
  * Rich text: what every learner-facing string may hold beyond plain words. Deliberately small:
@@ -138,7 +139,7 @@ const CACHE_SIZE = 500;
 const cache = new Map<string, string>();
 
 /** KaTeX's HTML for one formula, cached. Broken maths renders as KaTeX's red error text. */
-export function mathHtml(math: string, isDisplay: boolean): string {
+export function mathHtml(math: string, isDisplay: boolean): OwnMarkup {
   const key = `${isDisplay ? "D" : "I"}${math}`;
   let html = cache.get(key);
   if (html === undefined) {
@@ -151,7 +152,8 @@ export function mathHtml(math: string, isDisplay: boolean): string {
     if (cache.size >= CACHE_SIZE && oldest.done !== true) cache.delete(oldest.value);
   } else cache.delete(key); // re-inserted below: a Map keeps insertion order, so this marks it recent
   cache.set(key, html);
-  return html;
+  // KaTeX made it, from a formula that passed the build's maths check.
+  return ours(html);
 }
 
 /** Everything wrong with a rich string: unclosed markers, and maths KaTeX can't typeset. For the validator. */

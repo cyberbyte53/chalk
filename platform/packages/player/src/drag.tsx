@@ -1,18 +1,21 @@
-/** @jsxImportSource preact */
-import {
-  type ActionSpec,
-  type InputTags,
-  type Key,
-  type SignalSpec,
-  nameOf,
-  says,
-} from "@chalk/prop";
+import { type InputTags, type Key, type SignalSpec, nameOf, says } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useRef } from "preact/hooks";
+/** @jsxImportSource preact */
+import type { ZodType, ZodTypeDef } from "zod";
 import { useDoor } from "./door";
 import { useFrame } from "./frame";
 
 type Point = { x: number; y: number };
+
+/**
+ * Any prop's action that takes a point, or one of its coordinates: what a drag runs as it moves
+ * and on let-go. Checked by what its arguments accept, whatever the prop's state.
+ */
+type PointAction = {
+  readonly describe: string;
+  readonly args: ZodType<{ x?: number; y?: number }, ZodTypeDef, unknown>;
+};
 
 /**
  * A drag: the player wires the pointer (against the frame's transform as it was when the drag
@@ -39,11 +42,9 @@ export type DragSpec = {
   /** How far inside the frame's edges `shown` stops, px (so a round handle isn't cut off). */
   inset?: number;
   /** The action each move runs, with `{ x }`, `{ y }` or `{ x, y }`. */
-  // biome-ignore lint/suspicious/noExplicitAny: any prop's action taking a point
-  move: ActionSpec<any, any>;
+  move: PointAction;
   /** On let-go (and after a key): an action to run and/or a signal to raise, with the same. */
-  // biome-ignore lint/suspicious/noExplicitAny: any prop's action taking a point
-  release?: { action?: ActionSpec<any, any>; signal?: SignalSpec };
+  release?: { action?: PointAction; signal?: SignalSpec };
   /** How far one arrow key moves it, model units. */
   step: number;
   /** What it shows, for a screen reader ("1.75"). */

@@ -1,6 +1,7 @@
 import type { Localized } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
 import type { PropViewProps } from "@chalk/player";
+import { useWhenChanged } from "@chalk/player";
 import { does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef } from "preact/hooks";
@@ -37,11 +38,10 @@ function Logs({
   const box = useRef<HTMLDivElement>(null);
   const columns = minutes.length;
   // Keep the newest minutes in view as the race runs on.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll again each time a column is added
-  useEffect(() => {
+  useWhenChanged([columns], () => {
     const el = box.current;
     if (el !== null) el.scrollLeft = el.scrollWidth;
-  }, [columns]);
+  });
   return (
     <div class="pr-race-logs" ref={box}>
       <div

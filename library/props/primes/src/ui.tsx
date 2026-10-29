@@ -39,7 +39,6 @@ export function BagTowers({
         <div class="pr-btower" key={p} {...shows(`prime:${p}`, bag[p] ?? 0)}>
           <div class="pr-btower-stack">
             {Array.from({ length: bag[p] ?? 0 }, (_, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: identical items that never reorder
               <Bead key={i} prime={p} />
             ))}
           </div>

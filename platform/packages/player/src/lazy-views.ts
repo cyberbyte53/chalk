@@ -2,6 +2,7 @@ import type { AnyPropDef } from "@chalk/prop";
 import { type ComponentType, type JSX, h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import type { PropModule, PropRegistry, PropViewProps } from "./prop-module";
+import { useWhenChanged } from "./when-changed";
 
 /**
  * One prop package as the app loads it: its definitions now (they are small, and a board can't run
@@ -66,8 +67,7 @@ export function lazyRegistry(
       const View = views.get(type);
       const [, setArrived] = useState(0);
       // `pack` belongs to this prop type, fixed for the component's whole life.
-      // biome-ignore lint/correctness/useExhaustiveDependencies: re-run only when the view arrives
-      useEffect(() => {
+      useWhenChanged([View], () => {
         if (View !== undefined) return;
         let isLive = true;
         load(pack).then(
@@ -77,7 +77,7 @@ export function lazyRegistry(
         return () => {
           isLive = false;
         };
-      }, [View]);
+      });
       if (View !== undefined) return h(View, props);
       return h("div", {
         class: "prop-waiting",

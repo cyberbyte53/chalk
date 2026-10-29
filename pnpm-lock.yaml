@@ -492,6 +492,9 @@ importers:
       '@chalk/look':
         specifier: workspace:*
         version: link:../look
+      preact:
+        specifier: 10.29.8
+        version: 10.29.8(preact-render-to-string@6.5.13)
       zod:
         specifier: 3.25.76
         version: 3.25.76

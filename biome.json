@@ -35,7 +35,8 @@
       },
       "suspicious": {
         "noExplicitAny": "error",
-        "noApproximativeNumericConstant": "off"
+        "noApproximativeNumericConstant": "off",
+        "noArrayIndexKey": "off"
       },
       "nursery": {
         "noRestrictedImports": {
@@ -106,6 +107,26 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    {
+      "include": ["platform/packages/prop/src/unchecked.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": ["platform/packages/player/src/own-markup.tsx"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
           }
         }
       }

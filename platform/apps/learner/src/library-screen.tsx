@@ -3,6 +3,7 @@ import { previewQuery, propAddress } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import { BoardPlayer } from "@chalk/player";
+import { useWhenChanged } from "@chalk/player";
 import { BOARD, PropRole, purposeOf } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
@@ -36,8 +37,7 @@ export function LibraryScreen({
   const [uses, setUses] = useState<Map<string, number> | undefined>(undefined);
   const [isReady, setIsReady] = useState(false);
   const packages = [...propPackages].filter(([name]) => pkg === undefined || name === pkg);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the package named is the trigger
-  useEffect(() => {
+  useWhenChanged([pkg], () => {
     let isLive = true;
     const types = packages.flatMap(([, defs]) => defs.map((d) => d.type));
     void Promise.all([
@@ -60,7 +60,7 @@ export function LibraryScreen({
     return () => {
       isLive = false;
     };
-  }, [pkg]);
+  });
   if (pkg !== undefined && packages.length === 0)
     return (
       <div class="preview-empty">

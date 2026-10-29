@@ -55,7 +55,6 @@ function Side({
           const five = cols.five[k];
           const isTen = k < pairedLevels;
           return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: one row per level, in order
             <div key={k} class={isTen ? "pr-tm-level is-ten" : "pr-tm-level"}>
               <span class="pr-tm-cell">{two !== undefined && <BeadAt prime={2} kind={two} />}</span>
               <span class="pr-tm-cell">
@@ -69,7 +68,6 @@ function Side({
       {others.map((o) => (
         <div class="pr-tm-col" key={o.prime}>
           {o.beads.map((kind, k) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: identical beads that never reorder
             <span key={k} class="pr-tm-cell">
               <BeadAt
                 prime={o.prime}
@@ -179,7 +177,6 @@ export function TenMakerView({ view, call, locale }: PropViewProps<typeof tenMak
       </div>
       <ol class="pr-working" {...shows("working", working)}>
         {working.map((line, i) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: one line per step, in order
           <li key={i} class={i === working.length - 1 ? "is-latest" : undefined}>
             {line}
           </li>

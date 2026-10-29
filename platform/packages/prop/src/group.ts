@@ -20,6 +20,7 @@ import {
 } from "./define";
 import { isFullChecking, prepareAction, viewOf } from "./state";
 import { flatten, isInstant, runEffect } from "./steps";
+import type { Unchecked } from "./unchecked";
 
 /**
  * Groups: a prop made of other props joined by links (plans/props-composition.md,
@@ -83,8 +84,9 @@ export type Runs<C extends GroupChildren, X> = {
 export type GroupView = PropView;
 
 /** Any props, leaves or groups (their own state types are kept by their definitions). */
-// biome-ignore lint/suspicious/noExplicitAny: a child of any state type
-export type GroupChildren = Readonly<Record<string, PropDef<any, any, any, any>>>;
+export type GroupChildren = Readonly<
+  Record<string, PropDef<Unchecked, Unchecked, Unchecked, Unchecked>>
+>;
 
 /** The state of a prop definition (a group's from its carried type, a leaf's from its schema). */
 export type StateOf<P> = P extends { readonly stateType?: infer G }

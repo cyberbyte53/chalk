@@ -2,6 +2,7 @@ import { Locale } from "@chalk/content";
 import { contentAddress, previewQuery } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps } from "@chalk/library";
+import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useState } from "preact/hooks";
 import { sendKeys } from "./editor-link";
@@ -100,13 +101,12 @@ export function ReviewList(): JSX.Element {
     all: { threads, reviews },
   } = useThreads();
   const [sitting, setSitting] = useState<Thread[]>([]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `threads` is the trigger: read the sitting again when a thread changes.
-  useEffect(() => {
+  useWhenChanged([threads], () => {
     fetch("/dev-review?sitting")
       .then((r) => r.json() as Promise<Thread[]>)
       .then(setSitting)
       .catch(() => {});
-  }, [threads]);
+  });
   useLayoutEffect(() => {
     document.body.dataset.previewReady = window.location.search;
   });
@@ -163,14 +163,13 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
     set,
   } = useThreads();
   const [sitting, setSitting] = useState<Thread[] | null>(null);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `threads` is the trigger: read the sitting again when a thread changes.
-  useEffect(() => {
+  useWhenChanged([id, threads], () => {
     if (id !== SITTING) return;
     fetch("/dev-review?sitting")
       .then((r) => r.json() as Promise<Thread[]>)
       .then(setSitting)
       .catch(() => setSitting([]));
-  }, [id, threads]);
+  });
   const review = reviews.find((r) => r.id === id);
   const shown = useMemo(
     () =>
@@ -203,12 +202,11 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
     return true;
   };
   // Opened at a thread: bring it into view once drawn.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `shown.length` is the trigger: scroll once the threads are there.
-  useEffect(() => {
+  useWhenChanged([focus, shown.length], () => {
     if (focus === null) return;
     const el = document.getElementById(`thread-${focus}`);
     el?.scrollIntoView({ block: "start" });
-  }, [focus, shown.length]);
+  });
   useLayoutEffect(() => {
     if (shown.length > 0) document.body.dataset.previewReady = window.location.search;
   });

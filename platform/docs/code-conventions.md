@@ -107,3 +107,5 @@ Files are kebab-case even when they hold a component; the component inside is st
 - Tests sit next to the code. Pure logic (contract, runtime, prop definitions, validator) must have tests.
 - `pnpm check` (typecheck, tests, validate, Biome) passes before a change is done.
 - One formatter and linter: Biome (`pnpm format` fixes formatting).
+- **A lint rule is met, never skipped.** `pnpm check` fails on any `biome-ignore`. If a rule is wrong for our code, it is turned off once in `biome.json`, with the reason here:
+  - `noArrayIndexKey` is off. Biome also requires a key on every list item (`useJsxKeyInIterable`), and many of our lists are positional: identical beads, tick marks, the pieces of a split text, a table's columns. There, position is the item's identity, and no other key exists. The rule that still holds: a list whose items can be added, removed or reordered is keyed by its items' ids (options, steps, desks), never by position.

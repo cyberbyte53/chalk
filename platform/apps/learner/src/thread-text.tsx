@@ -34,7 +34,6 @@ export function ThreadText({ text }: { text: string }): JSX.Element {
     <div class="thread-text">
       {blocksOf(text).map((b, i) =>
         b.kind === "p" ? (
-          // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed split of the text
           <p key={i}>
             <RichText text={b.text} />
           </p>
@@ -42,10 +41,8 @@ export function ThreadText({ text }: { text: string }): JSX.Element {
           (() => {
             const List = b.kind;
             return (
-              // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed split of the text
               <List key={i}>
                 {b.items.map((item, j) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: a list's points, in order
                   <li key={j}>
                     <RichText text={item} />
                   </li>

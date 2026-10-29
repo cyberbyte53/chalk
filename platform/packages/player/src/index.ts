@@ -1,6 +1,7 @@
 export { BoardPlayer, type BoardPlayerProps } from "./board-player";
 export { AnswerFeedback } from "./answer-feedback";
 export { useFitColumns } from "./fit-columns";
+export { useLayoutWhenChanged, useMadeWhenChanged, useWhenChanged } from "./when-changed";
 export {
   type ModePolicy,
   PlayMode,
@@ -68,3 +69,4 @@ export { t, UiText, type UiTextKey } from "./ui-text";
 
 /** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */
 export { setStateChecks } from "@chalk/prop";
+export { OwnHtml, type OwnMarkup, ours } from "./own-markup";

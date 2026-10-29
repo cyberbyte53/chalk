@@ -38,6 +38,11 @@ const steps: [string, () => Promise<boolean>][] = [
   ["typecheck", () => typecheck(root, { force })],
   ["tests", () => test(root, { force })],
   ["boundaries", stamped("boundaries", ["src/boundaries-cli.ts"])],
+  // Not stamped: it reads every source file, and is fast.
+  [
+    "suppressions",
+    () => run("suppressions", tsx, [...tsconfig, "src/suppressions-cli.ts"], studio),
+  ],
   ["catalogue", stamped("catalogue", ["src/catalogue-cli.ts", "--check"])],
   // Not stamped: what it reports depends on git history, which a stamp doesn't see.
   ["pipeline", () => run("pipeline", tsx, [...tsconfig, "src/pipeline-cli.ts"], studio)],
