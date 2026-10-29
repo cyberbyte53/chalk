@@ -119,14 +119,49 @@ The lesson's glyph "4,5" was chosen by the builder alone; Riya and Aman, carried
 
 ---
 
+## 3. From reading the whole session back
+
+A read-through of every person message over 27–29 October (about 180), ranked by messages lost. Most matches the causes above (threads: ~18 messages; editor bugs and blind patching: ~12; approval churn: ~15, eleven of them a bare "done" or "approved"). It found two causes the list above missed, and a set of the agent's own habits.
+
+### The environment isn't guaranteed
+
+A pnpm 8 run wiped node_modules mid-session (the start of the worst thread episode); the MCP server wasn't running three times and the person had to restart it; the dev server served old code until restarted by hand; the person was asked to Reload Window eleven times.
+
+**Root cause.** `package.json` names pnpm 10.28.0, but nothing refuses another version; nothing starts or reloads the servers and the extension when their code changes.
+
+**Fix.**
+- The wrong pnpm refuses to run instead of rewriting the install (`engines` plus `engine-strict`).
+- The dev server and the MCP restart themselves when their code changes; the extension reloads its own code after `pnpm editor:install`. The person never restarts or reloads anything.
+
+### A new review for every pass or reply
+
+Raised on 27 October ("we are creating new reviews every time we are replying to an existing thread"), not fixed, back on 29 October as "three reviewers".
+
+**Root cause.** The same as threads: a review is a unit of the system's bookkeeping (a handover), shown to the person as if it were theirs. Fixed by section 1's threads fix: the person sees one list of what waits on them; a pass is a line inside a thread.
+
+### The agent's habits
+
+- **Questions in the agent's own words** ("helpers", "reveals", "the hybrid"): "So what do you mean by helper?", "I didn't get this". Ask as a concrete choice between two things the person can picture.
+- **Long replies that end by asking permission**: half of the closing replies over 300 words, twelve ending "Shall I…?"; "just tell me yes or no". Short replies; act when the next step is clear.
+- **Handing the person work a tool could do**: approve in the editor, Reload Window, paste the Output panel. Each one is a gap in the tools (sections 1 and 3).
+- **Guessing instead of diagnosing**, asked about at least six times ("diagnose first", "root cause, not patches").
+- **Skipping a process step** (self-review, twice): fixed by making it a gate the pipeline checks, not a sentence in a skill.
+
+The habits are the agent's to change now (kept in its memory); the rest is the work below.
+
 ## What next
 
-0. Finish lesson 1 (the person): approve `props.md`, close the five ready threads, review the lesson as a whole.
-1. Threads: named turns, the person sees everything open, `about` gone, blockers shown in the tree.
-2. Tools: no silent no-ops; `pipeline` and `check` tools; `pnpm editor:install`.
-3. The editor: one owner (the app), the panel's script in its own file, the router test, the editor's state file.
-4. The loop: fingerprints and the per-board gate.
-5. The plan: one approval per round; the book file; pictures in the plan.
-6. Questions: typed and written answers, the questions guide, Ex 3.1 Q1 and Q2 redone.
-7. Components that enforce: units, spacing, prompt style.
-8. Lesson 2, the Cartesian plane.
+0. **Finish lesson 1** (the person): approve `props.md`, close the five ready threads, review the lesson as a whole.
+1. **The environment holds itself up**: the wrong pnpm refuses; servers and the extension reload themselves. First, because a broken environment caused the worst episode and looks like every other bug.
+2. **Threads**: whose turn is one stored fact, set by whoever writes; one list for the person, grouped by board, closed ones folded; a pass is a line in a thread, not a review; `about` goes; blockers shown where they block; the reviewer's instructions corrected.
+3. **Tools never fail silently**; `pipeline` and `check` tools; `pnpm editor:install`.
+4. **The editor has one owner**, the app: no copied address or routing; the panel's script in its own file; one router test; the editor's state file.
+5. **The review loop**: fingerprints of what the student sees, the per-board gate (this also makes the gate notice prop changes).
+6. **The plan's shape**: one approval per round for flow and props; the book file; pictures in the plan.
+7. **Questions**: typed answers (with a pair mode, for backward questions) and written answers; then the questions guide.
+8. **Components enforce the rules**: units, numbers kept with units, one prompt style.
+9. **Clean-ups**: remove `reveals` from code and docs; fix `board-model.md`.
+10. **Prompts and skills** (plan-chapter, build-lesson, self-review, the reviewer's rubric), iterated once 1–8 hold.
+11. **Lesson 2**, the Cartesian plane.
+
+On hold: approving from chat.
