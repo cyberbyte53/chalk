@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/content";
 import { Actor } from "@chalk/content";
 import {
@@ -158,12 +159,12 @@ function PropPieceView({
           }}
         />
       )}
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: the inputs inside are buttons (Enter and Space press them); this only hears their clicks to run what they say they do */}
       <div
         class="piece-drawn"
         ref={drawn}
         style={{ ...(zoom === 1 ? {} : { zoom }), width: `${width}px`, marginInline: "auto" }}
         onClick={pressHandler(door.call)}
+        onKeyDown={pressHandler(door.call)}
       >
         <BoardClockContext.Provider value={clock}>
           <DoorContext.Provider value={door}>

@@ -65,6 +65,17 @@ group("a view's tags", () => {
     );
   });
 
+  it("make an input that sends arguments say which one it is, when written (a type error)", () => {
+    const a = shelf.actions;
+    // Checked by the type checker: each line below must fail to compile.
+    // @ts-expect-error arguments without a key: every copy would get the same name
+    does(a.placeMany, { count: 2 });
+    // @ts-expect-error an action that takes arguments, given none
+    does(a.placeMany);
+    expect(does(a.placeMany, { count: 2 }, 2)["data-part"]).toBe("placeMany:2");
+    expect(does(a.placeOne)["data-part"]).toBe("placeOne");
+  });
+
   it("name an action only as itself: one not in a defined prop is refused", () => {
     const loose = act({
       describe: "Loose",

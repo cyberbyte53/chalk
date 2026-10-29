@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { type InputTags, tagsOf } from "@chalk/prop";
 import type { ComponentChildren, JSX } from "preact";
 
@@ -42,24 +43,29 @@ export function SymbolButton({
   );
 }
 
-/** One of a stepper's own − and + buttons: part of the stepper, not an input of its own. */
+/**
+ * One of a stepper's own − and + buttons, named under its stepper (`setFriends/less`,
+ * `setFriends/more`), so it is pressed by name like any input.
+ */
 function StepButton({
   symbol,
   label,
   isEnabled,
   onPress,
+  ...tags
 }: {
   symbol: string;
   label: string;
   isEnabled: boolean;
   onPress: () => void;
-}): JSX.Element {
+} & InputTags): JSX.Element {
   return (
     <button
       type="button"
       class="draw-button"
       aria-label={label}
       disabled={!isEnabled}
+      {...tagsOf(tags)}
       onClick={onPress}
     >
       {symbol}
@@ -90,6 +96,8 @@ export function Stepper({
       <StepButton
         symbol="−"
         label={`${name} − ${step}`}
+        {...tags}
+        data-part={`${tags["data-part"]}/less`}
         isEnabled={value > min}
         onPress={() => onChange(Math.max(min, value - step))}
       />
@@ -99,6 +107,8 @@ export function Stepper({
       <StepButton
         symbol="+"
         label={`${name} + ${step}`}
+        {...tags}
+        data-part={`${tags["data-part"]}/more`}
         isEnabled={value < max}
         onPress={() => onChange(Math.min(max, value + step))}
       />

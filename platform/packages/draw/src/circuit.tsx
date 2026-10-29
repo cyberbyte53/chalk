@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import type { JSX } from "preact";
 import { type KitProps, kitClass, placeAt } from "./kit";
 import type { Pt } from "./labels";

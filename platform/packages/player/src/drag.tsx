@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import {
   type ActionSpec,
   type InputTags,

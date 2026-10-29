@@ -44,7 +44,16 @@ export function inputName(action: string, key?: Key): string {
   return key === undefined ? action : `${action}:${String(key).replace(/[/\s]/g, "-")}`;
 }
 
-type DoesParams<Ar> = [keyof Ar] extends [never] ? [args?: Ar, key?: Key] : [args: Ar, key?: Key];
+/**
+ * An input that sends arguments says which one it is (its key), so it has a name of its own that
+ * never changes with what it sends: a type error without one. One with none is named by its action.
+ */
+type DoesParams<Ar> = unknown extends Ar
+  ? // A host's action, whose arguments its type doesn't carry: the same rule.
+    [] | [args: Readonly<Record<string, unknown>>, key: Key]
+  : [keyof Ar] extends [never]
+    ? [args?: Ar]
+    : [args: Ar, key: Key];
 
 /**
  * An input that does `action` (with its arguments) when pressed: the player runs it. Named by the

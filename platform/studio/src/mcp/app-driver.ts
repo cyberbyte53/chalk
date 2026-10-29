@@ -373,7 +373,7 @@ export type ShotOptions = {
 export type Point = { x: number; y?: number };
 
 export type Step =
-  | { tap: string; text?: string; at?: Point }
+  | { tap: string; at?: Point }
   | { drag: string; by?: [number, number]; to?: Point }
   | { wait: number }
   /** One of a piece's actions, as a lesson would call it (on a prop's own page, which has none). */
@@ -775,7 +775,7 @@ const recorded = (page: Page): Promise<Recorded> =>
 
 const stepWords = (step: Step): string =>
   "tap" in step
-    ? `tap ${step.tap}${step.text ? ` "${step.text}"` : ""}`
+    ? `tap ${step.tap}`
     : "drag" in step
       ? `drag ${step.drag} ${step.to !== undefined ? `to ${pointWords(step.to)}` : `by ${(step.by ?? [0, 0]).join(", ")}`}`
       : "call" in step
@@ -792,7 +792,6 @@ const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y
  */
 export function markTarget(arg: {
   target: string;
-  text?: string;
   at?: { x: number; y?: number };
 }): string | { x: number; y: number } | null {
   for (const old of document.querySelectorAll("[data-chalk-target]"))
@@ -806,64 +805,18 @@ export function markTarget(arg: {
     );
     return `no piece "${piece}" on screen (shown now: ${names.join(", ")}). In play, a piece can stay hidden until the ones before it are answered.`;
   }
-  let el: HTMLElement | null = document.querySelector<HTMLElement>(
-    `[data-path="${CSS.escape(arg.target)}"]`,
-  );
+  // One name, one thing: two with the same name is an error, never the first of them.
+  const named = [
+    ...document.querySelectorAll<HTMLElement>(`[data-path="${CSS.escape(arg.target)}"]`),
+  ];
+  if (named.length > 1)
+    return `${named.length} things are named "${arg.target}": a name must be unique on the board (give each a key)`;
+  const el: HTMLElement | null = named[0] ?? null;
   if (el === null) {
     const paths = [...pieceEl.querySelectorAll<HTMLElement>("[data-part]")].map(
       (e) => e.dataset.path ?? "",
     );
     return `no part "${arg.target}" (parts: ${[...new Set(paths)].join(", ") || "none"})`;
-  }
-  if (arg.text !== undefined) {
-    const norm = (t: string) => t.replace(/[−–]/g, "-").replace(/\s+/g, "").toLowerCase();
-    const wordsOf = (node: HTMLElement) => {
-      const copy = node.cloneNode(true) as HTMLElement;
-      for (const m of copy.querySelectorAll(".katex")) {
-        const tex = m.querySelector('annotation[encoding="application/x-tex"]')?.textContent ?? "";
-        m.replaceWith(`${m.querySelector(".katex-html")?.textContent ?? ""} ${tex}`);
-      }
-      return copy.textContent ?? "";
-    };
-    const want = norm(arg.text);
-    const choices = [
-      ...(el as HTMLElement).querySelectorAll<HTMLElement>(
-        "button, [role=button], [data-part], label, a",
-      ),
-    ];
-    // The best match, never the first: something to press before plain text (a prompt that says
-    // "press Check" is not the Check button), the exact words before words that only contain them.
-    // A tie is an error that names them: a tap never guesses.
-    const rank = (c: HTMLElement) => {
-      const words = norm(wordsOf(c));
-      if (!words.includes(want)) return undefined;
-      const isPressable = c.matches("button, [role=button], a, label");
-      return (isPressable ? 0 : 2) + (words === want ? 0 : 1);
-    };
-    const ranked = choices
-      .map((c) => ({ c, r: rank(c) }))
-      .filter((x): x is { c: HTMLElement; r: number } => x.r !== undefined);
-    const best = Math.min(...ranked.map((x) => x.r));
-    // The innermost of each match: a button inside a matching part is the one to press.
-    const top = ranked
-      .filter((x) => x.r === best)
-      .map((x) => x.c)
-      .filter((c, _, all) => !all.some((o) => o !== c && c.contains(o)));
-    if (top.length > 1)
-      return `"${arg.text}" matches ${top.length} things in ${arg.target}: ${top
-        .map(
-          (c) =>
-            `${c.dataset.path ?? c.tagName.toLowerCase()} "${wordsOf(c).replace(/\s+/g, " ").trim().slice(0, 40)}"`,
-        )
-        .join(" | ")}. Say which by its part, or with more of its words.`;
-    const found = top[0];
-    if (found === undefined)
-      return `nothing saying "${arg.text}" in ${arg.target} (it has: ${choices
-        .map((c) => wordsOf(c).replace(/\s+/g, " ").trim())
-        .filter(Boolean)
-        .slice(0, 12)
-        .join(" | ")})`;
-    el = found;
   }
   (el as HTMLElement).setAttribute("data-chalk-target", "");
   if (arg.at === undefined) return null;
@@ -1001,7 +954,6 @@ async function shootNow(
       } else {
         const found = await page.evaluate(markTarget, {
           target: "tap" in step ? step.tap : step.drag,
-          text: "tap" in step ? step.text : undefined,
           at: "tap" in step ? step.at : step.to,
         });
         if (typeof found === "string") {

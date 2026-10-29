@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { Actor, AppWhat, type Board, type Locale } from "@chalk/content";
 import { type RecordEvent, makeId } from "@chalk/events";
 import type { JugnuPlace } from "@chalk/jugnu";

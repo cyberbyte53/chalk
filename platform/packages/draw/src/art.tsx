@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { ART_SIZE, ArtFrame } from "@chalk/content";
 import type { JSX } from "preact";
 

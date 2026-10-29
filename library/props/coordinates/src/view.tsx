@@ -676,7 +676,7 @@ export function CoordinatePlaneView({
             symbol={word(WORDS.nextPoint, locale)}
             label={word(WORDS.nextPoint, locale)}
             isWide
-            {...does(actions.showPoint, {})}
+            {...does(actions.showPoint)}
           />
         )}
         {hasReading && s.isReadingHidden && (

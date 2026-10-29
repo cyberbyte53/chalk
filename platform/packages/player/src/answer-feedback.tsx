@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import type { Locale } from "@chalk/content";
 import { AnswerStatus, shows } from "@chalk/prop";
 import type { JSX } from "preact";

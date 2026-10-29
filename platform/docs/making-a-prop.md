@@ -60,12 +60,13 @@ Names: camelCase, the textbook's own words, booleans start with `is`/`has`/`can`
 
 ```tsx
 <SymbolButton {...does(sweetShare.actions.giveRound)} />                         // a button
-<SymbolButton {...does(stickMeasure.actions.tryPiece, { length: 3 }, 3)} />     // with its values, and a key
+<SymbolButton {...does(stickMeasure.actions.tryPiece, { length: 3 }, 3)} />     // with its values, and its key
 <Stepper {...says(sweetShare.actions.setFriends)} onChange={(value) => call(sweetShare.actions.setFriends, { value })} />
 <div {...shows("box", s.box, "17 sweets")}>…</div>                               // something read
 ```
 
-- `does(action, args?, key?)`: the player presses it (no `onClick`). Named by the action, and the key when several inputs do one action.
+- **Everything a student can press or drag has a name**, its address under the piece (`ask/check`, `room/chooseTarget:5,3`), and is pointed at by that name only, never by its words: `play` taps by name, comments and Jugnu point by name. The type checker keeps it while you write: a prop package's views use `@chalk/prop`'s element types (`jsxImportSource` in its tsconfig), where an element with an event handler must also carry `does(…)` or `says(…)`. The framework's own files (`@chalk/draw`, `@chalk/player`) start with `/** @jsxImportSource preact */`.
+- `does(action, args, key)`: the player presses it, by click, or by Enter or Space for an element the browser doesn't press itself (no `onClick`, no `onKeyDown`). Named by the action and its key; an input that sends arguments must give a key (a type error otherwise), so its name never changes with what it sends. One with no arguments: `does(action)`.
 - `says(action, key?)`: an input whose own handler works the arguments out when it's used (a stepper, a typed number).
 - `shows(name, value, words?)`: anything else the student reads. A part inside something `disabled` is off.
 - A component passes the tags on to the element that is pressed (`{...tagsOf(props)}`).

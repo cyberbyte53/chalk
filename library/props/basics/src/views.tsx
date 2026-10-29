@@ -80,7 +80,7 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
             aria-label={plainText(option.label[locale])}
             class={choiceClass(s, option.id)}
             disabled={isLocked}
-            {...says([choice.actions.select, choice.actions.check])}
+            {...says([choice.actions.select, choice.actions.check], option.id)}
             {...shows(`option:${option.id}`, option.label[locale])}
             onClick={() => answer(option.id)}
           >
@@ -154,7 +154,7 @@ export function MultiChoiceView({ view, locale }: PropViewProps<typeof multiChoi
             aria-label={plainText(option.label[locale])}
             class={multiClass(s, option.id)}
             disabled={isLocked}
-            {...does(multiChoice.actions.toggle, { option: option.id })}
+            {...does(multiChoice.actions.toggle, { option: option.id }, option.id)}
             {...shows(`option:${option.id}`, {
               label: option.label[locale],
               isPicked: s.selected.includes(option.id),
@@ -205,7 +205,7 @@ export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps
                 class="order-line"
                 disabled={isLocked}
                 aria-label={`Take back: ${plainText(step.label[locale])}`}
-                {...does(orderSteps.actions.remove, { step: id })}
+                {...does(orderSteps.actions.remove, { step: id }, id)}
                 {...shows(`step:${id}`, {
                   label: step.label[locale],
                   line: s.placed.indexOf(id) + 1,
@@ -230,7 +230,7 @@ export function OrderStepsView({ view, locale }: PropViewProps<typeof orderSteps
               key={step.id}
               class="choice order-step"
               aria-label={plainText(step.label[locale])}
-              {...does(orderSteps.actions.place, { step: step.id })}
+              {...does(orderSteps.actions.place, { step: step.id }, step.id)}
               {...shows(`step:${step.id}`, { label: step.label[locale], line: null })}
             >
               <RichText text={step.label[locale]} />

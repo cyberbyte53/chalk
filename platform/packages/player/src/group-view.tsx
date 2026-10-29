@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { type AnyPropDef, type StoredState, groupOf, shownOf } from "@chalk/prop";
 import { nameOf } from "@chalk/prop";
 import { type ComponentType, type JSX, createContext } from "preact";

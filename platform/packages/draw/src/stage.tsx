@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { type ScaleLinear, scaleLinear } from "d3-scale";
 import { type ComponentChildren, type JSX, type Ref, createContext } from "preact";
 import { createPortal } from "preact/compat";

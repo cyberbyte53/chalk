@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { cssColor } from "@chalk/look";
 import { curveCatmullRom, curveNatural, line, symbol } from "d3-shape";
 import type { JSX } from "preact";

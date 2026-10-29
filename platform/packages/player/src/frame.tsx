@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { type Obstacles, type PixelPoint, Stage, placeLabels } from "@chalk/draw";
 import { type FramePixels, shows } from "@chalk/prop";
 import { type ComponentChildren, type JSX, createContext } from "preact";

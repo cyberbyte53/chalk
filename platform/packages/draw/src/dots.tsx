@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { cssColor } from "@chalk/look";
 import type { JSX } from "preact";
 import { createPortal } from "preact/compat";

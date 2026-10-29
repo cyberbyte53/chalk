@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import type { Lesson, Locale } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import type { JSX } from "preact";

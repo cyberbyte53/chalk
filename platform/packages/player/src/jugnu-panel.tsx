@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import type { ItemRef, Locale, SavedBoard } from "@chalk/content";
 import {
   type ChatMessage,

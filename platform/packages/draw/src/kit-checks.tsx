@@ -1,3 +1,4 @@
+/** @jsxImportSource preact */
 import { readFileSync } from "node:fs";
 import type { JSX } from "preact";
 import { renderToString } from "preact-render-to-string";

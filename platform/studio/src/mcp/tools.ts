@@ -334,11 +334,9 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       .object({
         tap: z
           .string()
-          .describe('A piece, or a part of one, by address: "machine" or "machine/plane/handle".'),
-        text: z
-          .string()
-          .optional()
-          .describe('Inside it, the button or option whose words include this: "−6", "Check".'),
+          .describe(
+            'What to press, by name: a piece or one of its parts ("ask/check", "room/chooseTarget:5,3", "ask/select:oneEach"). Never by its words: a wrong name is an error listing the names there are.',
+          ),
         at: point
           .optional()
           .describe(

@@ -138,16 +138,6 @@ export function FactorTreeView({
               role={isOpen ? "button" : undefined}
               aria-label={isOpen ? `Split ${n.value}` : undefined}
               tabIndex={isOpen ? 0 : undefined}
-              onKeyDown={
-                isOpen
-                  ? (event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        call(factorTree.actions.select, { node: n.id });
-                      }
-                    }
-                  : undefined
-              }
             >
               {n.isPrime ? (
                 <circle r={RADIUS - 3} />
