@@ -455,7 +455,9 @@ function revealCursor(): void {
 type Node = {
   label: string;
   path: string;
-  kind: "reviews" | "book" | "chapter" | "planning" | "planfile" | "lesson";
+  kind: "reviews" | "book" | "chapter" | "planning" | "planfile" | "lesson" | "props" | "prop";
+  /** A prop's line under its name: its package, its role, and the chapters that place it. */
+  description?: string;
   file: string;
   /** A planning file's state, as the dev server reads it. */
   plan?: PlanningFile;
@@ -490,6 +492,39 @@ const isReview = (e: Element): e is ReviewItem =>
  * The one Chalk tree: Reviews at the top (your threads not handed over, then each review), then
  * book → chapter → its planning files and lessons.
  */
+/**
+ * Every prop, as the catalogue lists them (`pnpm catalogue` writes it from the definitions): a
+ * line per prop, `### \`type\` · role` then its address and the chapters that place it.
+ */
+function propsIn(catalogue: string): Node[] {
+  let text: string;
+  try {
+    text = readFileSync(catalogue, "utf8");
+  } catch {
+    return [];
+  }
+  const out: Node[] = [];
+  let pkg = "";
+  let type = "";
+  let role = "";
+  for (const line of text.split("\n")) {
+    const p = /^## `([^`]+)`/.exec(line);
+    if (p?.[1] !== undefined) pkg = p[1];
+    const t = /^### `([^`]+)` · (\S+)/.exec(line);
+    if (t?.[1] !== undefined) [type, role] = [t[1], t[2] ?? ""];
+    const a = /^`(library\/props\/[^`]+)` · (.*)$/.exec(line);
+    if (a?.[1] !== undefined && type !== "")
+      out.push({
+        label: type,
+        path: a[1],
+        kind: "prop",
+        file: "",
+        description: `${pkg} · ${role} · ${a[2] ?? ""}`,
+      });
+  }
+  return out;
+}
+
 class ChalkTree implements vscode.TreeDataProvider<Element> {
   private readonly changed = new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData = this.changed.event;
@@ -508,6 +543,22 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       item.iconPath = new vscode.ThemeIcon("comment-discussion");
       item.description = this.reviews.summary;
       item.contextValue = "reviews";
+      return item;
+    }
+    if (node.kind === "props") {
+      const item = new vscode.TreeItem("Props", vscode.TreeItemCollapsibleState.Collapsed);
+      item.iconPath = new vscode.ThemeIcon("extensions");
+      item.tooltip = "Every prop in library/props, each on its own page";
+      item.contextValue = "props";
+      return item;
+    }
+    if (node.kind === "prop") {
+      const item = new vscode.TreeItem(node.label, vscode.TreeItemCollapsibleState.None);
+      item.iconPath = new vscode.ThemeIcon("symbol-misc");
+      item.description = node.description;
+      item.tooltip = `${node.path}\n${node.description ?? ""}`;
+      item.contextValue = "prop";
+      item.command = { command: "chalk.prop.open", title: "Open", arguments: [node.path] };
       return item;
     }
     const isLeaf = node.kind === "lesson" || node.kind === "planfile";
@@ -560,6 +611,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
   async getChildren(element?: Element): Promise<Element[]> {
     if (element !== undefined && isReview(element)) return this.reviews.getChildren(element);
     if (element?.kind === "reviews") return this.reviews.getChildren(undefined);
+    if (element?.kind === "props") return propsIn(join(root, "library", "catalogue.md"));
     const node = element;
     const build = join(root, "build");
     const authoring = join(root, "authoring", "books");
@@ -573,8 +625,10 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
         ...new Set([...(index?.books ?? []).map((r) => r.path), ...dirsIn(authoring)]),
       ];
       const top: Node = { label: "Reviews", path: "", kind: "reviews", file: "" };
+      const props: Node = { label: "Props", path: "library/props", kind: "props", file: "" };
       return [
         top,
+        props,
         ...books.map(
           (slug): Node => ({
             label: title(readJson(join(build, `${slug}.json`)), slug),
@@ -799,6 +853,9 @@ export function activate(context: vscode.ExtensionContext): void {
       await showPreview();
       void panel?.webview.postMessage({ type: "pick" });
     }),
+    vscode.commands.registerCommand("chalk.prop.open", (address: string) =>
+      showQuery(`at=${address}`),
+    ),
     vscode.commands.registerCommand("chalk.refresh", () => {
       tree.refresh();
       void reviews.refresh();
@@ -840,7 +897,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,authoring/books/**,authoring/props/*/comments.yaml,authoring/reviews/*.yaml}",
+      "{build/index.json,library/catalogue.md,authoring/books/**,authoring/props/*/comments.yaml,authoring/reviews/*.yaml}",
     ),
   );
   // A thread or a review changed (a reply in the preview, an agent's answer): the tree's counts

@@ -333,7 +333,7 @@
       text: ""
       status: closed
 - id: cmvt4fa6103h
-  status: planned
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T05:46:53.113Z
@@ -357,6 +357,7 @@
 
 
     Until you choose, the code follows the book (B). The rest of the prop doesn't depend on this.
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -366,3 +367,16 @@
         change the dice layer's throw and its description, add tests for the stuck case, and update
         the README."
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T06:03:59.757Z
+      text: "Done in 48c11da. A die that would pass 10 isn't used, and the counter moves by the other
+        alone; only when both dice would pass 10 is the turn missed. Tests: from (10, 0) only green
+        moves the counter; five seeded games starting from (10, 0) all reach (10, 10); a throw where
+        both dice would pass 10 is a miss. pnpm check passes. Close this if it's right."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T06:06:34.536Z
+      text: ""
+      status: closed
