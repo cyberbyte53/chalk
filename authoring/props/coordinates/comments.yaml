@@ -342,7 +342,7 @@
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
   snapshot: "−6−5−4−3−2−10123456bus standThe busThe bus: 0 ← → ↺ Back to the start"
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
-  turn: person
+  turn: agent
   text: when bus is returning it's path trail is still behind , like take bus from 0 to 3 and then
     back , i am still seeing blue line to 3
   changed: []
@@ -369,6 +369,21 @@
 
         - Same rule for Riya in the town.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:29:24.228Z
+      text: >-
+        Rechecked bus-stops in en and hi by playing. Fixed.
+
+        - 0 → 3 → 1: the line runs 0 to 1, not 0 to 3 (trail [(1, 0)]).
+
+        - 0 → 3 → 0 → −2: the line runs from 0 to −2 only; nothing is left on the right side.
+
+        - The question after it plays as before: '−2 stops from the stand' gets its note, '2 stops
+        from the stand, to the left' passes.
+
+        - Same rule in the town: walk-to-address, up to House 5 and back down to House 3, the line
+        stops at House 3.
 - id: cmvtqgem9cga
   status: ready
   by: you
@@ -381,7 +396,7 @@
   snapshot: "Aman's house: Street number 4, House number 5 1234567812345Street numberHouse
     numberRiyaRiya: Street number 4 ↑ ← → ↓ ↺ Back to the start"
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
-  turn: person
+  turn: agent
   text: i feel we can make the grid a bit larger no ? we are leaving so much space and it feels tiny
   changed: []
   messages:
@@ -411,6 +426,25 @@
         - On a phone it now fills the width apart from the house-number margin and the room for the
         last house's ring.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:29:24.254Z
+      text: >-
+        Rechecked street-and-house in en and hi at 390, and walk-to-address at 360×640 and 640×720.
+        Done as planned.
+
+        - The town is 6 streets, and each block is clearly bigger. The town now fills the column
+        apart from the house-number axis on the left.
+
+        - At 640×720 the town is large and the prompt and Check still fit on the screen.
+
+        - walk-to-address uses the same 6-street town, and its addresses (up to Street 6) all fit.
+
+        - two-lines#house is still a small 5-street still, like the 6×4 classroom there. I read that
+        as a deliberate summary, not a regression.
+
+        - Left over: flow.md still says P (Street 7, House 4) keeps its number, and a 6-street town
+        has no Street 7. Filed on flow.md separately.
 - id: cmvtqi7psx10
   status: ready
   by: you
@@ -424,6 +458,7 @@
     is 9 cm above the bottom ↺
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
   text: why in this prop we have not added axis showing the numbers?
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -456,5 +491,23 @@
 
         - New on the plane: which lines carry their numbers, and an action that numbers one.
       status: ready
-  changed: []
-  turn: person
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:29:24.307Z
+      text: >-
+        Rechecked dot-on-paper in en and hi by giving all four clues. Done as planned (option c).
+
+        - Before any clue, the page has squares and no numbers, so nothing reads off '5 and 9'.
+
+        - '5 cm from the left edge' numbers the bottom edge 1 to 15; the line through 5 and its '5
+        cm' measure agree with the numbers.
+
+        - '9 cm above the bottom' numbers the left edge 1 to 12; the two lines cross at the dot, at
+        5 and 9.
+
+        - The page doesn't move or shrink when an edge gets its numbers.
+
+        - Two things it left elsewhere, filed separately: two-lines#spot still shows the page with
+        no numbers, so it's no longer the picture the student left. flow.md's Needs still says 'no
+        numbers on its edges'.
+  turn: agent

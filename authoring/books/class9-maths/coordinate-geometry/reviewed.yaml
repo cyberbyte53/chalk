@@ -1,0 +1,2207 @@
+# Written only by the chalk MCP's changes tool (platform/studio/src/reviewed.ts). Don't edit by hand.
+class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
+  stamp: 7f36877e2fcd4258
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axes: horizontal
+            canChooseTarget: false
+            marks: numbers
+            placeKind: crossing
+            places:
+              - x: -6
+                y: 0
+              - x: -5
+                y: 0
+              - x: -4
+                y: 0
+              - x: -3
+                y: 0
+              - x: -2
+                y: 0
+              - x: -1
+                y: 0
+              - x: 0
+                y: 0
+              - x: 1
+                y: 0
+              - x: 2
+                y: 0
+              - x: 3
+                y: 0
+              - x: 4
+                y: 0
+              - x: 5
+                y: 0
+              - x: 6
+                y: 0
+            roads: grid
+            showAxisNames: false
+            showOrigin: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            walkerKind: bus
+            walkerName:
+              en: The bus
+              hi: बस
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: road
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: The bus starts at the stand, 0. Take it to stop **−3**, then press Check.
+              hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **−3** पर ले जाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's stop 3: the right distance, on the wrong side. The sign says which side of 0."
+              hi: "यह स्टॉप 3 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
+  stamp: 952c98167ce3530b
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axes: horizontal
+            canChooseTarget: false
+            marks: numbers
+            placeKind: crossing
+            places:
+              - x: -6
+                y: 0
+              - x: -5
+                y: 0
+              - x: -4
+                y: 0
+              - x: -3
+                y: 0
+              - x: -2
+                y: 0
+              - x: -1
+                y: 0
+              - x: 0
+                y: 0
+              - x: 1
+                y: 0
+              - x: 2
+                y: 0
+              - x: 3
+                y: 0
+              - x: 4
+                y: 0
+              - x: 5
+                y: 0
+              - x: 6
+                y: 0
+            roads: grid
+            showAxisNames: false
+            showOrigin: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            walkerKind: bus
+            walkerName:
+              en: The bus
+              hi: बस
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: road
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: The bus starts at the stand, 0. Take it to stop **4**, then press Check.
+              hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **4** पर ले जाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's stop −4: the right distance, on the wrong side. The sign says which side of 0."
+              hi: "यह स्टॉप −4 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
+  stamp: 31c84b910567c8ea
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axes: horizontal
+            canChooseTarget: false
+            marks: numbers
+            placeKind: crossing
+            places:
+              - x: -6
+                y: 0
+              - x: -5
+                y: 0
+              - x: -4
+                y: 0
+              - x: -3
+                y: 0
+              - x: -2
+                y: 0
+              - x: -1
+                y: 0
+              - x: 0
+                y: 0
+              - x: 1
+                y: 0
+              - x: 2
+                y: 0
+              - x: 3
+                y: 0
+              - x: 4
+                y: 0
+              - x: 5
+                y: 0
+              - x: 6
+                y: 0
+            roads: grid
+            showAxisNames: false
+            showOrigin: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            walkerKind: bus
+            walkerName:
+              en: The bus
+              hi: बस
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: road
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: The bus starts at the stand, 0. Take it to stop **−5**, then press Check.
+              hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **−5** पर ले जाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's stop 5: the right distance, on the wrong side. The sign says which side of 0."
+              hi: "यह स्टॉप 5 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
+  stamp: 54da855a86f882cb
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axes: horizontal
+            canChooseTarget: false
+            marks: numbers
+            placeKind: crossing
+            places:
+              - x: -6
+                y: 0
+              - x: -5
+                y: 0
+              - x: -4
+                y: 0
+              - x: -3
+                y: 0
+              - x: -2
+                y: 0
+              - x: -1
+                y: 0
+              - x: 0
+                y: 0
+              - x: 1
+                y: 0
+              - x: 2
+                y: 0
+              - x: 3
+                y: 0
+              - x: 4
+                y: 0
+              - x: 5
+                y: 0
+              - x: 6
+                y: 0
+            roads: grid
+            showAxisNames: false
+            showOrigin: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            walkerKind: bus
+            walkerName:
+              en: The bus
+              hi: बस
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: road
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: The bus starts at the stand, 0. Take it to stop **2**, then press Check.
+              hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **2** पर ले जाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's stop −2: the right distance, on the wrong side. The sign says which side of 0."
+              hi: "यह स्टॉप −2 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
+  stamp: 03e3e317d8b10bd4
+  props:
+    choice: 79b6e0fab9e596c9
+  content:
+    is: []
+    name: crossStreetCount
+    root:
+      children:
+        - kind: prop
+          name: ask
+          prop: choice
+          with:
+            answer: oneEach
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            options:
+              - feedback:
+                  en: (4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.
+                  hi: (4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।
+                id: sameOne
+                label:
+                  en: (i) one; (ii) the same one as (i)
+                  hi: (i) एक; (ii) वही जो (i) में है
+              - feedback:
+                  en: Two streets cross only once. The 4th North-South street and the 3rd East-West street meet at one crossing.
+                  hi: दो गलियाँ केवल एक बार मिलती हैं। चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली एक ही चौराहे पर मिलती हैं।
+                id: twoEach
+                label:
+                  en: (i) two; (ii) two
+                  hi: (i) दो; (ii) दो
+              - id: oneEach
+                label:
+                  en: (i) one; (ii) one, a different crossing
+                  hi: (i) एक; (ii) एक, अलग चौराहा
+            prompt:
+              en: "(Street Plan): A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 m apart. There are 5 streets in each direction. Using 1 cm = 200 m, draw a model of the city on your notebook. Represent the roads/streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many cross-streets can be referred to as (4, 3); (ii) how many cross-streets can be referred to as (3, 4)."
+              hi: "(गली योजना): एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 m की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 cm = 200 m लेकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों/गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: (i) कितने चौराहों को (4, 3) कहा जा सकता है; (ii) कितने चौराहों को (3, 4) कहा जा सकता है।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
+  stamp: 9039fad5eb72729d
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: left edge
+                hi: बायाँ किनारा
+              - en: bottom
+                hi: नीचे का किनारा
+            hasGrid: true
+            marks: counts
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            scene: paper
+            showAxisNames: false
+            tickEvery: 1
+            unit: cm
+            window:
+              xMax: 15
+              xMin: 0
+              yMax: 12
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Put the dot **7 cm from the left edge** and **3 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 7 cm** और **नीचे के किनारे से 3 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That spot is 3 cm from the left edge and 7 cm above the bottom: the two distances are swapped."
+              hi: "वह जगह बाएँ किनारे से 3 cm और नीचे के किनारे से 7 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
+  stamp: 5c2ab0eeb1a3a15b
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: left edge
+                hi: बायाँ किनारा
+              - en: bottom
+                hi: नीचे का किनारा
+            hasGrid: true
+            marks: counts
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            scene: paper
+            showAxisNames: false
+            tickEvery: 1
+            unit: cm
+            window:
+              xMax: 15
+              xMin: 0
+              yMax: 12
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Put the dot **4 cm from the left edge** and **10 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 4 cm** और **नीचे के किनारे से 10 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That spot is 10 cm from the left edge and 4 cm above the bottom: the two distances are swapped."
+              hi: "वह जगह बाएँ किनारे से 10 cm और नीचे के किनारे से 4 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
+  stamp: f05d1518789a7f85
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: left edge
+                hi: बायाँ किनारा
+              - en: bottom
+                hi: नीचे का किनारा
+            hasGrid: true
+            marks: counts
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            scene: paper
+            showAxisNames: false
+            tickEvery: 1
+            unit: cm
+            window:
+              xMax: 15
+              xMin: 0
+              yMax: 12
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Put the dot **2 cm from the left edge** and **8 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 2 cm** और **नीचे के किनारे से 8 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That spot is 8 cm from the left edge and 2 cm above the bottom: the two distances are swapped."
+              hi: "वह जगह बाएँ किनारे से 8 cm और नीचे के किनारे से 2 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
+  stamp: 77d8dda42e6325b3
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: left edge
+                hi: बायाँ किनारा
+              - en: bottom
+                hi: नीचे का किनारा
+            hasGrid: true
+            marks: counts
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            scene: paper
+            showAxisNames: false
+            tickEvery: 1
+            unit: cm
+            window:
+              xMax: 15
+              xMin: 0
+              yMax: 12
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Put the dot **11 cm from the left edge** and **5 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 11 cm** और **नीचे के किनारे से 5 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That spot is 5 cm from the left edge and 11 cm above the bottom: the two distances are swapped."
+              hi: "वह जगह बाएँ किनारे से 5 cm और नीचे के किनारे से 11 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
+  stamp: ae83557f14015018
+  props:
+    choice: 79b6e0fab9e596c9
+  content:
+    is: []
+    name: tableLamp
+    root:
+      children:
+        - kind: prop
+          name: ask
+          prop: choice
+          with:
+            answer: two
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            options:
+              - id: one
+                label:
+                  en: Its distance from the left edge of the table
+                  hi: मेज़ के बाएँ किनारे से उसकी दूरी
+              - id: side
+                label:
+                  en: Which side of the table it is on, and that it is near the back
+                  hi: वह मेज़ की किस तरफ़ है, और यह कि वह पीछे की ओर है
+              - feedback:
+                  en: "Those two edges face each other, so the second distance adds nothing: every spot the same distance from the left edge is the same distance from the right. The two edges must meet at a corner."
+                  hi: "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से बराबर दूरी पर हर जगह दाएँ से भी बराबर दूरी पर है। दोनों किनारे एक कोने पर मिलने चाहिए।"
+                id: facing
+                label:
+                  en: Its distance from the left edge of the table and its distance from the right edge
+                  hi: मेज़ के बाएँ किनारे से उसकी दूरी और दाएँ किनारे से उसकी दूरी
+              - id: two
+                label:
+                  en: Its distance from the left edge of the table and its distance from the front edge
+                  hi: मेज़ के बाएँ किनारे से उसकी दूरी और आगे के किनारे से उसकी दूरी
+            prompt:
+              en: How will you describe the position of a table lamp on your study table to another person?
+              hi: आप अपनी पढ़ाई की मेज़ पर रखे टेबल लैंप की स्थिति किसी अन्य व्यक्ति को कैसे बताएँगे?
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
+  stamp: 522ee6fa21e3c54c
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            placeKind: desk
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 1
+                y: 6
+              - x: 1
+                y: 7
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 2
+                y: 6
+              - x: 2
+                y: 7
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 3
+                y: 6
+              - x: 3
+                y: 7
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 4
+                y: 6
+              - x: 4
+                y: 7
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 5
+                y: 6
+              - x: 5
+                y: 7
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+              - x: 6
+                y: 6
+              - x: 6
+                y: 7
+              - x: 7
+                y: 1
+              - x: 7
+                y: 2
+              - x: 7
+                y: 3
+              - x: 7
+                y: 4
+              - x: 7
+                y: 5
+              - x: 7
+                y: 6
+              - x: 7
+                y: 7
+              - x: 8
+                y: 1
+              - x: 8
+                y: 2
+              - x: 8
+                y: 3
+              - x: 8
+                y: 4
+              - x: 8
+                y: 5
+              - x: 8
+                y: 6
+              - x: 8
+                y: 7
+              - x: 9
+                y: 1
+              - x: 9
+                y: 2
+              - x: 9
+                y: 3
+              - x: 9
+                y: 4
+              - x: 9
+                y: 5
+              - x: 9
+                y: 6
+              - x: 9
+                y: 7
+              - x: 10
+                y: 1
+              - x: 10
+                y: 2
+              - x: 10
+                y: 3
+              - x: 10
+                y: 4
+              - x: 10
+                y: 5
+              - x: 10
+                y: 6
+              - x: 10
+                y: 7
+            scene: classroom
+            showAddress: false
+            window:
+              xMax: 10.5
+              xMin: 0
+              yMax: 7.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: room
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Tap the desk **(5, 3)**, then press Check.
+              hi: डेस्क **(5, 3)** दबाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That desk is (3, 5): column 3, row 5. The column comes first."
+              hi: "वह डेस्क (3, 5) है: स्तंभ 3, पंक्ति 5। स्तंभ पहले आता है।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
+  stamp: 340ee725c4fb917d
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            placeKind: desk
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 1
+                y: 6
+              - x: 1
+                y: 7
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 2
+                y: 6
+              - x: 2
+                y: 7
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 3
+                y: 6
+              - x: 3
+                y: 7
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 4
+                y: 6
+              - x: 4
+                y: 7
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 5
+                y: 6
+              - x: 5
+                y: 7
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+              - x: 6
+                y: 6
+              - x: 6
+                y: 7
+              - x: 7
+                y: 1
+              - x: 7
+                y: 2
+              - x: 7
+                y: 3
+              - x: 7
+                y: 4
+              - x: 7
+                y: 5
+              - x: 7
+                y: 6
+              - x: 7
+                y: 7
+              - x: 8
+                y: 1
+              - x: 8
+                y: 2
+              - x: 8
+                y: 3
+              - x: 8
+                y: 4
+              - x: 8
+                y: 5
+              - x: 8
+                y: 6
+              - x: 8
+                y: 7
+              - x: 9
+                y: 1
+              - x: 9
+                y: 2
+              - x: 9
+                y: 3
+              - x: 9
+                y: 4
+              - x: 9
+                y: 5
+              - x: 9
+                y: 6
+              - x: 9
+                y: 7
+              - x: 10
+                y: 1
+              - x: 10
+                y: 2
+              - x: 10
+                y: 3
+              - x: 10
+                y: 4
+              - x: 10
+                y: 5
+              - x: 10
+                y: 6
+              - x: 10
+                y: 7
+            scene: classroom
+            showAddress: false
+            window:
+              xMax: 10.5
+              xMin: 0
+              yMax: 7.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: room
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Tap the desk **(7, 4)**, then press Check.
+              hi: डेस्क **(7, 4)** दबाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That desk is (4, 7): column 4, row 7. The column comes first."
+              hi: "वह डेस्क (4, 7) है: स्तंभ 4, पंक्ति 7। स्तंभ पहले आता है।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
+  stamp: 476a4795350b5b40
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            placeKind: desk
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 1
+                y: 6
+              - x: 1
+                y: 7
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 2
+                y: 6
+              - x: 2
+                y: 7
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 3
+                y: 6
+              - x: 3
+                y: 7
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 4
+                y: 6
+              - x: 4
+                y: 7
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 5
+                y: 6
+              - x: 5
+                y: 7
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+              - x: 6
+                y: 6
+              - x: 6
+                y: 7
+              - x: 7
+                y: 1
+              - x: 7
+                y: 2
+              - x: 7
+                y: 3
+              - x: 7
+                y: 4
+              - x: 7
+                y: 5
+              - x: 7
+                y: 6
+              - x: 7
+                y: 7
+              - x: 8
+                y: 1
+              - x: 8
+                y: 2
+              - x: 8
+                y: 3
+              - x: 8
+                y: 4
+              - x: 8
+                y: 5
+              - x: 8
+                y: 6
+              - x: 8
+                y: 7
+              - x: 9
+                y: 1
+              - x: 9
+                y: 2
+              - x: 9
+                y: 3
+              - x: 9
+                y: 4
+              - x: 9
+                y: 5
+              - x: 9
+                y: 6
+              - x: 9
+                y: 7
+              - x: 10
+                y: 1
+              - x: 10
+                y: 2
+              - x: 10
+                y: 3
+              - x: 10
+                y: 4
+              - x: 10
+                y: 5
+              - x: 10
+                y: 6
+              - x: 10
+                y: 7
+            scene: classroom
+            showAddress: false
+            window:
+              xMax: 10.5
+              xMin: 0
+              yMax: 7.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: room
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Tap the desk **(1, 5)**, then press Check.
+              hi: डेस्क **(1, 5)** दबाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That desk is (5, 1): column 5, row 1. The column comes first."
+              hi: "वह डेस्क (5, 1) है: स्तंभ 5, पंक्ति 1। स्तंभ पहले आता है।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
+  stamp: 49aabcc3ae63b6d6
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            placeKind: desk
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 1
+                y: 6
+              - x: 1
+                y: 7
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 2
+                y: 6
+              - x: 2
+                y: 7
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 3
+                y: 6
+              - x: 3
+                y: 7
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 4
+                y: 6
+              - x: 4
+                y: 7
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 5
+                y: 6
+              - x: 5
+                y: 7
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+              - x: 6
+                y: 6
+              - x: 6
+                y: 7
+              - x: 7
+                y: 1
+              - x: 7
+                y: 2
+              - x: 7
+                y: 3
+              - x: 7
+                y: 4
+              - x: 7
+                y: 5
+              - x: 7
+                y: 6
+              - x: 7
+                y: 7
+              - x: 8
+                y: 1
+              - x: 8
+                y: 2
+              - x: 8
+                y: 3
+              - x: 8
+                y: 4
+              - x: 8
+                y: 5
+              - x: 8
+                y: 6
+              - x: 8
+                y: 7
+              - x: 9
+                y: 1
+              - x: 9
+                y: 2
+              - x: 9
+                y: 3
+              - x: 9
+                y: 4
+              - x: 9
+                y: 5
+              - x: 9
+                y: 6
+              - x: 9
+                y: 7
+              - x: 10
+                y: 1
+              - x: 10
+                y: 2
+              - x: 10
+                y: 3
+              - x: 10
+                y: 4
+              - x: 10
+                y: 5
+              - x: 10
+                y: 6
+              - x: 10
+                y: 7
+            scene: classroom
+            showAddress: false
+            window:
+              xMax: 10.5
+              xMin: 0
+              yMax: 7.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: room
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Tap the desk **(2, 6)**, then press Check.
+              hi: डेस्क **(2, 6)** दबाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That desk is (6, 2): column 6, row 2. The column comes first."
+              hi: "वह डेस्क (6, 2) है: स्तंभ 6, पंक्ति 2। स्तंभ पहले आता है।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
+  stamp: 22028b837798150b
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: false
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+            roads: town
+            scene: town
+            showAddress: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: town
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Aman lives at **Street 3, House 5**. Walk Riya there from the corner, then press Check.
+              hi: अमन **गली 3, मकान 5** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's Street 5, House 3. The street comes first: how far along the main road."
+              hi: "यह गली 5, मकान 3 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
+  stamp: 35ffeb769255934e
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: false
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+            roads: town
+            scene: town
+            showAddress: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: town
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Aman lives at **Street 1, House 4**. Walk Riya there from the corner, then press Check.
+              hi: अमन **गली 1, मकान 4** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's Street 4, House 1. The street comes first: how far along the main road."
+              hi: "यह गली 4, मकान 1 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
+  stamp: 5e0942ed9ca1dc82
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: false
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+            roads: town
+            scene: town
+            showAddress: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: town
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Aman lives at **Street 5, House 5**. Walk Riya there from the corner, then press Check.
+              hi: अमन **गली 5, मकान 5** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
+  stamp: ab37d5f3cbd9ae5e
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: false
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+            roads: town
+            scene: town
+            showAddress: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: town
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Aman lives at **Street 6, House 2**. Walk Riya there from the corner, then press Check.
+              hi: अमन **गली 6, मकान 2** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z
+class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
+  stamp: 2432159db1c87a97
+  props:
+    coordinatePlane: ab0f786d4b625494
+    goal: 79b6e0fab9e596c9
+  content:
+    is:
+      - set: ask.isMet
+        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: false
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+            roads: town
+            scene: town
+            showAddress: false
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: town
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: true
+            prompt:
+              en: Aman lives at **Street 2, House 4**. Walk Riya there from the corner, then press Check.
+              hi: अमन **गली 2, मकान 4** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            text:
+              en: "That's Street 4, House 2. The street comes first: how far along the main road."
+              hi: "यह गली 4, मकान 2 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।"
+          call: ask.giveFeedback
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: ask.wrong
+      - do:
+          call: board.pass
+        on: ask.correct
+  by: reviewer
+  commit: 91bd9a26314b
+  at: 2026-10-29T16:29:45.599Z

@@ -3031,7 +3031,9 @@
     is a dot on one, and each small square is 1 cm across. How would you say exactly where the dot
     is? Try these, one at a time, and watch where it could still be.
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
+  turn: agent
   text: why the first 2 sentences bro , like no real connection
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -3055,5 +3057,110 @@
         - It now opens: "Here is a dot on a page of your notebook, and each small square is 1 cm
         across." Hindi to match.
       status: ready
-  changed: []
-  turn: person
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:29:24.277Z
+      text: >-
+        Rechecked dot-on-paper in en and hi. Fixed.
+
+        - It opens at the dot: 'Here is a dot on a page of your notebook, and each small square is 1
+        cm across. How would you say exactly where the dot is?'
+
+        - Hindi: 'यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है।'
+
+        - The two town sentences are gone, and the 1 cm comes before any clue uses cm.
+- id: cmvtrdv76ig7
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T16:29:38.226Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: spot
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:362
+  commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
+  turn: agent
+  text: >-
+    Mechanical (regression from cmvtqi7psx10). Picture and the last board don't agree.
+
+    - dot-on-paper now ends with both edges numbered: the bottom 1 to 15 and the left edge 1 to 12,
+    crossing at 5 and 9.
+
+    - two-lines#spot is meant to be 'the dot as the student left it on dot-on-paper' (its own
+    comment in overview.ts), but it still draws the page with marks: None, so no numbers on either
+    edge.
+
+    - A student who just read 5 and 9 off the edges sees the same dot with the rulers gone, while
+    the house and the desk beside it keep their numbered axes.
+
+    - Suggested: number both edges on this still (numbered: x and y), as dot-on-paper leaves them,
+    in en and hi.
+  messages: []
+- id: cmvtrdv8rqpu
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T16:29:38.283Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town/whereWalker
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
+  commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
+  turn: agent
+  text: >-
+    Mechanical (screen, a jump). On a 390 phone in English:
+
+    - Riya's line under the map is one line on the walk ('Riya: Street number 4, House number 4').
+
+    - At the house it becomes 'Riya is at Aman's house! Street number 4, House number 5', which
+    wraps to two lines.
+
+    - So the arrow pad drops by a line at the very moment she arrives. In the same tap, found and
+    anyHouse appear below.
+
+    - The room kept for this line is one line, which the arrival line doesn't fit.
+
+    - Suggested: keep room for the longest line this board can show (the arrival line), as was done
+    for the address header. Or shorten it so it fits one line, e.g. 'At Aman's house: Street number
+    4, House number 5'. Check the Hindi too.
+  messages: []
+- id: cmvtrdv9ru7w
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T16:29:38.319Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:23
+  commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
+  turn: agent
+  quote: a notebook page squared in centimetres, with no numbers on its edges, and the dot on it
+  text: >-
+    Mechanical (flow and board disagree, from cmvtqi7psx10).
+
+    - dot-on-paper now numbers an edge when a distance along it is given ('5 cm from the left edge'
+    numbers the bottom, '9 cm above the bottom' the left edge).
+
+    - flow.md's Needs still says only 'with no numbers on its edges', so the next builder or
+    reviewer reads the numbered edges as a departure.
+
+    - Suggested: add 'an edge is numbered, like a ruler, once a distance along it is given'. The
+    flow then needs the person's re-approval.
+  messages: []
+- id: cmvtrdvatype
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T16:29:38.357Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:18
+  commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
+  turn: agent
+  quote: H (Street 2, House 5) and P (Street 7, House 4) keep their numbers
+  text: >-
+    Mechanical (flow and board disagree, from cmvtqgem9cga).
+
+    - The town now has 6 streets, so there is no Street 7, and P (Street 7, House 4) can't keep its
+    number.
+
+    - No board in lesson 1 uses H or P now, so nothing on screen is wrong. But the flow promises a
+    figure the town can't show.
+
+    - Suggested: drop P, or keep only H (Street 2, House 5), or say the town is 6 streets wide. The
+    flow then needs the person's re-approval.
+  messages: []
