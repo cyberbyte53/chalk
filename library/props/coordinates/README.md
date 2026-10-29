@@ -23,7 +23,7 @@ The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a ho
 | plotting | `plotting.ts` | `toPlot`, `plotted`, `showSwaps`, `showTable`, `scaleChoices` | `plotAt`, `setScale`, `clearPlotted` (learner); `plotNext` (reveals) | there are pairs |
 | dice | `dice.ts` | `counters`, `playerNames`, `turn`, `lastThrow`, `seed` (off screen), `throwsMade`, `goal`, `winner` | `throwDice` (learner, timed), `startAgain` (learner) | there are counters |
 
-Chance is seeded: the same seed gives the same throws. No `Math.random`. `throwsMade` counts every throw across games, so a new game goes on along the seed's throws instead of repeating the last one. A move that would take a coordinate past the goal is missed, as the book has it (an open thread asks whether a counter at 10 on one coordinate should move by the other die alone, since the book's rule can leave it stuck).
+Chance is seeded: the same seed gives the same throws. No `Math.random`. `throwsMade` counts every throw across games, so a new game goes on along the seed's throws instead of repeating the last one. A die that would take its coordinate past the goal isn't used and the counter moves by the other alone; only when both would is the turn missed. (The book misses the turn whenever either would, which leaves a counter at 10 on one coordinate stuck for ever; the person chose this instead.)
 
 ## The view
 

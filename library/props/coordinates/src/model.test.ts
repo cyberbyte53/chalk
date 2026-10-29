@@ -331,12 +331,39 @@ describe("the dice game", () => {
     const path = played.frames.map((f) => f.counters[0]);
     expect(path.filter((p) => p !== undefined && p.y > 0 && p.x < t.red)).toEqual([]);
   });
-  it("past 10 the turn is missed and the counter stays", () => {
+  it("a die that would pass 10 isn't used: the counter moves by the other alone", async () => {
+    const t = throwOf(5, 0);
+    // At 10 across: red can't be used, so only green moves it (if green fits).
+    const s = {
+      ...game(5),
+      counters: [
+        { x: 10, y: 0 },
+        { x: 0, y: 0 },
+      ],
+    };
+    const played = await d.play(s, "throwDice");
+    expect(played.state.counters[0]).toEqual({ x: 10, y: t.green });
+    expect(signals(played.emit)).not.toContain("missed");
+  });
+  it("a counter at 10 on one line still gets to (10, 10): no game is stuck", async () => {
+    for (const seed of [1, 2, 3, 4, 5]) {
+      let s: State = {
+        ...game(seed),
+        counters: [
+          { x: 10, y: 0 },
+          { x: 0, y: 0 },
+        ],
+      };
+      for (let n = 0; n < 400 && s.winner === null; n++) s = await throwOnce(s);
+      expect(s.winner).not.toBe(null);
+    }
+  });
+  it("only when both dice would pass 10 is the turn missed, and the counter stays", () => {
     const t = throwOf(5, 0);
     const s = {
       ...game(5),
       counters: [
-        { x: 11 - t.red, y: 0 },
+        { x: 11 - t.red, y: 11 - t.green },
         { x: 0, y: 0 },
       ],
     };

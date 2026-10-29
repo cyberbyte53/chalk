@@ -53,7 +53,7 @@ const none = z.object({}).strict();
 export const diceSignals = {
   thrown: signal("Player `player` threw red `red` and green `green`"),
   counterMoved: signal("Player `player`'s counter walked to (`x`, `y`)"),
-  missed: signal("Player `player` misses the turn: the move would pass `goal`"),
+  missed: signal("Player `player` misses the turn: both dice would take the counter past `goal`"),
   sentHome: signal("Player `player`'s counter was landed on and goes back to (0, 0)"),
   won: signal("Player `player` reached (`goal`, `goal`) first"),
 };
@@ -62,7 +62,7 @@ export const dice = layersFor<DiceState>()({
   name: "dice",
   frame: "plane",
   describe:
-    "The dice game for two: both counters start at (0, 0). A throw of a red and a green die walks the player's counter along by red, then up by green. A move that would take either coordinate past the goal is missed; landing on the other counter sends it back to (0, 0). First to (goal, goal) wins. The dice are seeded, so a game can be played again exactly.",
+    "The dice game for two: both counters start at (0, 0). A throw of a red and a green die walks the player's counter along by red, then up by green. A die that would take its coordinate past the goal isn't used, and the counter moves by the other alone; when both would, the turn is missed; landing on the other counter sends it back to (0, 0). First to (goal, goal) wins. The dice are seeded, so a game can be played again exactly.",
   fields: {
     /** Each player's counter, or none: no game. */
     counters: z.array(pointSchema).max(2),
@@ -95,7 +95,7 @@ export const dice = layersFor<DiceState>()({
   actions: {
     throwDice: act({
       describe:
-        "Throw both dice for the player whose turn it is; the counter walks along by red, then up by green (the learner's Throw; timed)",
+        "Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed)",
       byLearner: true,
       args: none,
       changes: ["counters", "turn", "lastThrow", "throwsMade", "winner"],
@@ -109,8 +109,12 @@ export const dice = layersFor<DiceState>()({
           { lastThrow: thrown, throwsMade: s.throwsMade + 1 },
           raise(diceSignals.thrown, { player: me, ...thrown }),
         );
-        const to = { x: from.x + thrown.red, y: from.y + thrown.green };
-        if (to.x > s.goal || to.y > s.goal)
+        // A die that would take its coordinate past the goal isn't used (else a counter at 10 on
+        // one coordinate could never move again); when neither can be used, the turn is missed.
+        const along = from.x + thrown.red <= s.goal ? thrown.red : 0;
+        const up = from.y + thrown.green <= s.goal ? thrown.green : 0;
+        const to = { x: from.x + along, y: from.y + up };
+        if (along === 0 && up === 0)
           return set(
             { lastThrow: thrown, throwsMade: s.throwsMade + 1, turn: other },
             raise(diceSignals.thrown, { player: me, ...thrown }),
@@ -119,11 +123,8 @@ export const dice = layersFor<DiceState>()({
         // The counter walks along by red, then up by green, a line at a time.
         const at = (p: Point) => s.counters.map((c, i) => (i === me ? p : c));
         const walk: Effect<DiceState>[] = [];
-        for (let k = 1; k <= thrown.red + thrown.green; k++) {
-          const p =
-            k <= thrown.red
-              ? { x: from.x + k, y: from.y }
-              : { x: to.x, y: from.y + k - thrown.red };
+        for (let k = 1; k <= along + up; k++) {
+          const p = k <= along ? { x: from.x + k, y: from.y } : { x: to.x, y: from.y + k - along };
           walk.push(wait(SECONDS_PER_LINE), set({ counters: at(p) }));
         }
         const them = s.counters[other];

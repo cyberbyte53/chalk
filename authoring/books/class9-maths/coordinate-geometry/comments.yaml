@@ -333,7 +333,7 @@
       text: ""
       status: closed
 - id: cmvt4fa6103h
-  status: open
+  status: planned
   by: fixer
   role: fixer
   createdAt: 2026-10-29T05:46:53.113Z
@@ -357,4 +357,12 @@
 
 
     Until you choose, the code follows the book (B). The rest of the prop doesn't depend on this.
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T06:03:13.690Z
+      text: "From chat: A. A die that would take its coordinate past 10 isn't used, and the counter moves
+        by the other die alone. Only a throw where both dice would overshoot is a missed turn. I'll
+        change the dice layer's throw and its description, add tests for the stuck case, and update
+        the README."
+      status: planned

@@ -206,7 +206,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plotNext` | — | Put the next pair's dot where it goes |
 | `setScale` | {every: "number 0 to …"} | learner · Choose the scale: a number every this many units, the window grown to match (the learner's choice) |
 | `clearPlotted` | — | learner · Take every dot off (the learner's ↺) |
-| `throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green (the learner's Throw; timed) |
+| `throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 
 Signals: `crossed`, `named`, `quadrantsNumbered`, `moved`, `enteredQuadrant`, `readingShown`, `targetChosen`, `lineLit`, `passed`, `turned`, `arrived`, `clueGiven`, `pinned`, `plotted`, `fellOff`, `allPlotted`, `thrown`, `counterMoved`, `missed`, `sentHome`, `won`
