@@ -73,6 +73,7 @@ export const plotting = layersFor<PlottingState>()({
     scaleChoices: [],
   },
   isOn: (s) => s.toPlot.length > 0,
+  onWhen: ["toPlot"],
   actions: {
     plotAt: act({
       describe:

@@ -89,6 +89,7 @@ export const reading = layersFor<ReadingState>()({
     unit: "",
   },
   isOn: (s) => s.point !== null,
+  onWhen: ["point"],
   actions: {
     movePoint: act({
       describe: "Put the point at (x, y), snapped to the step (the learner's drag or tap)",

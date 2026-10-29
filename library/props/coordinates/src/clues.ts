@@ -116,6 +116,7 @@ export const clues = layersFor<CluesState>()({
   },
   offScreen: ["hidden"],
   isOn: (s) => s.clueChoices.length > 0,
+  onWhen: ["clueChoices"],
   actions: {
     giveClue: act({
       describe:

@@ -12,9 +12,9 @@ import ts from "typescript";
  */
 export type Facts = {
   /** Top-level declarations by name. `isType`: types and interfaces, which change nothing when run. */
-  decls: Record<string, { lines: Range; isType: boolean; uses: string[] }>;
+  decls: Record<string, { lines: Range; isType: boolean; uses: string[]; hash: string }>;
   /** What the file's own top-level statements run (anything that isn't a declaration). */
-  module: { lines: Range[]; uses: string[] };
+  module: { lines: Range[]; uses: string[]; hash: string };
   /** Local name → where it comes from (`name`: "*" for `import * as x`) and the import's first line. */
   imports: Record<string, { from: string; name: string; line: number }>;
   /** Lines of import statements. */
@@ -44,7 +44,7 @@ export function factsOf(file: string, text: string): Facts {
 
   const facts: Facts = {
     decls: {},
-    module: { lines: [], uses: [] },
+    module: { lines: [], uses: [], hash: "" },
     imports: {},
     importLines: [],
     loads: [],
@@ -86,6 +86,12 @@ export function factsOf(file: string, text: string): Facts {
     visit(node);
     return [...out];
   };
+
+  // What a statement is, to tell if it changed: its code as TypeScript reads it, without comments
+  // or layout (rewording a comment or reformatting changes nothing that runs).
+  const printer = ts.createPrinter({ removeComments: true });
+  const codeOf = (node: ts.Node) => printer.printNode(ts.EmitHint.Unspecified, node, sf);
+  const moduleCode: string[] = [];
 
   const bindingNames = (name: ts.BindingName): string[] =>
     ts.isIdentifier(name)
@@ -134,8 +140,9 @@ export function factsOf(file: string, text: string): Facts {
     }
     const declare = (names: string[], isType: boolean) => {
       const uses = namesIn(st);
+      const code = codeOf(st);
       for (const name of names) {
-        facts.decls[name] = { lines: range(st), isType, uses };
+        facts.decls[name] = { lines: range(st), isType, uses, hash: code };
         if (isExported(st)) facts.exports[isDefault(st) ? "default" : name] = { local: name };
       }
     };
@@ -151,23 +158,51 @@ export function factsOf(file: string, text: string): Facts {
         false,
       );
     else if (ts.isExportAssignment(st)) {
-      facts.decls.default = { lines: range(st), isType: false, uses: namesIn(st) };
+      facts.decls.default = {
+        lines: range(st),
+        isType: false,
+        uses: namesIn(st),
+        hash: codeOf(st),
+      };
       facts.exports.default = { local: "default" };
     } else if (
       (ts.isFunctionDeclaration(st) || ts.isClassDeclaration(st)) &&
       st.name === undefined
     ) {
-      facts.decls.default = { lines: range(st), isType: false, uses: namesIn(st) };
+      facts.decls.default = {
+        lines: range(st),
+        isType: false,
+        uses: namesIn(st),
+        hash: codeOf(st),
+      };
       facts.exports.default = { local: "default" };
     } else {
       facts.module.lines.push(range(st));
       facts.module.uses.push(...namesIn(st));
+      moduleCode.push(codeOf(st));
     }
   }
 
   const known = new Set([...Object.keys(facts.decls), ...Object.keys(facts.imports)]);
   for (const decl of Object.values(facts.decls)) decl.uses = decl.uses.filter((n) => known.has(n));
   facts.module.uses = [...new Set(facts.module.uses.filter((n) => known.has(n)))];
+  // A fingerprint of each one's code and of where every name it uses comes from: the same text
+  // using a name now imported from somewhere else is a change too.
+  const sourceOf = (n: string) => {
+    const i = facts.imports[n];
+    return i === undefined ? n : `${n}=${i.from}#${i.name}`;
+  };
+  const fingerprint = (code: string, uses: readonly string[]) =>
+    createHash("sha256")
+      .update(code)
+      .update(uses.map(sourceOf).sort().join("\n"))
+      .digest("hex")
+      .slice(0, 16);
+  for (const decl of Object.values(facts.decls)) decl.hash = fingerprint(decl.hash, decl.uses);
+  facts.module.hash = fingerprint(
+    moduleCode.join("\n") + facts.loads.sort().join("\n"),
+    facts.module.uses,
+  );
 
   const walk = (n: ts.Node) => {
     if (
@@ -250,7 +285,7 @@ export class FactsCache {
 }
 
 /** Bump when Facts changes shape. */
-const FORMAT = "1";
+const FORMAT = "2";
 
 /**
  * Every TypeScript source file under these folders (not tests, not node_modules), leaving out the

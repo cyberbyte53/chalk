@@ -17,13 +17,13 @@ export type BoardRecord = {
   /** The board as plain data, keys sorted. */
   content: unknown;
   /**
-   * For each piece that is a host prop (built of layers): its type, the layers it has, and those on
-   * as the board starts. A change to one layer's code reaches only boards with that layer on.
+   * For each piece that is a host prop (built of layers): its type, its layers, and those it may
+   * ever have on (layersEverOn). A change to one layer's code reaches only boards that may have it.
    */
   layers?: Readonly<Record<string, PieceLayers>>;
 };
 
-export type PieceLayers = { prop: string; all: readonly string[]; on: readonly string[] };
+export type PieceLayers = { prop: string; all: readonly string[]; everOn: readonly string[] };
 
 /** A value as plain data: functions as their source text, keys sorted, nothing undefined. */
 export function plain(value: unknown): unknown {

@@ -14,7 +14,7 @@ The person's review is the expensive part; this pass catches everything a fresh 
 ## Steps
 
 1. Run `pnpm check`; if it fails, that is the first finding.
-2. Ask `changes` (at the lesson, or the chapter) what changed since it was last passed. A board **unchanged since passed** is not looked at again. For a **changed** board, the list says exactly what changed (each piece's setup, words and rules, and which props' code, with the files): look there first, with the board around it. A **new** board gets a full review.
+2. Ask `changes` (at the lesson, or the chapter) what changed since it was last passed. A board **unchanged since passed** is not looked at again. For a **changed** board, the list says exactly what changed (each piece's setup, words and rules, and each function of the code it runs that changed, as `file#name`): look there first, with the board around it. A **new** board gets a full review.
 3. `look` at each new or changed board, in English and Hindi (`locales: ["en", "hi"]`): read every board in the pictures, not the source. Hold each board to what `flow.md` says it is for. Then play each board as a student with `play`: tap, drag, answer right and wrong, and check what each step did (what it changed, "board passed", the picture).
 4. Go through `reviewer.md` for each of those boards: as the student, as the teacher, on the screen. Put the source passage beside it.
 5. Say each item where it belongs, with your `comment` tool (it writes as a reviewer): the principle, and what a student would get wrong.

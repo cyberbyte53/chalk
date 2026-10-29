@@ -539,7 +539,8 @@ function makeBoard(
 
 /** A good board's record, for knowing what changed since it was reviewed (the changes tool). */
 function keepRecord(c: Context, item: BuiltPage | BuiltQuestion, board: Board): void {
-  // Each host piece's layers, and those on as the board starts (its defaults with its setup).
+  // Each host piece's layers, and those it may ever have on (on as the board starts, from its
+  // defaults with its setup, or ones an action can turn on): the others provably stay off.
   const layers = Object.fromEntries(
     propPieces(board.root).flatMap((p) => {
       const def = c.defs[p.prop];
@@ -547,7 +548,10 @@ function keepRecord(c: Context, item: BuiltPage | BuiltQuestion, board: Board): 
       if (def === undefined || host === undefined) return [];
       const start = { ...(def.defaults as Record<string, unknown>), ...(p.with ?? {}) };
       return [
-        [p.name, { prop: p.prop, all: host.layers.map((l) => l.name), on: host.layersOn(start) }],
+        [
+          p.name,
+          { prop: p.prop, all: host.layers.map((l) => l.name), everOn: host.layersEverOn(start) },
+        ],
       ];
     }),
   );

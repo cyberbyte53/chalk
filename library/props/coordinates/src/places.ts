@@ -92,6 +92,7 @@ export const places = layersFor<PlacesState>()({
     showAddress: true,
   },
   isOn: (s) => s.places.length > 0,
+  onWhen: ["places"],
   actions: {
     chooseTarget: act({
       describe:

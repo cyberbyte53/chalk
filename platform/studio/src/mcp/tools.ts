@@ -325,7 +325,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "What changed since it was reviewed",
         description:
-          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (exactly which pieces' setup, words or rules, and which props' code changed, with the files), new (never passed), or gone. Start a review here: look and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you.",
+          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (exactly which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name), new (never passed), or gone. Start a review here: look and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you.",
         inputSchema: {
           at: z
             .string()

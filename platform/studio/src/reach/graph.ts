@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { type Facts, FactsCache, type Range, sourcesUnder } from "./facts";
@@ -12,6 +13,8 @@ import { type Facts, FactsCache, type Range, sourcesUnder } from "./facts";
 export class CodeGraph {
   /** node → nodes that use it. */
   private readonly users = new Map<string, Set<string>>();
+  /** node → nodes it uses: the same edges, the other way. */
+  private readonly uses = new Map<string, Set<string>>();
   readonly facts = new Map<string, Facts>();
   /** Workspace package name → its folder (from the root). */
   private readonly packages = new Map<string, { dir: string; exports: Record<string, string> }>();
@@ -47,6 +50,40 @@ export class CodeGraph {
     const set = this.users.get(used) ?? new Set<string>();
     set.add(user);
     this.users.set(used, set);
+    const forward = this.uses.get(user) ?? new Set<string>();
+    forward.add(used);
+    this.uses.set(user, forward);
+  }
+
+  /**
+   * Everything these nodes use, directly or not, them included; a declaration brings its file's
+   * own top-level statements (they run when the file is loaded). `keep` leaves a node out, and
+   * what only it reaches.
+   */
+  dependenciesOf(
+    nodes: Iterable<string>,
+    keep: (node: string) => boolean = () => true,
+  ): Set<string> {
+    const seen = new Set<string>();
+    const todo = [...nodes];
+    while (todo.length > 0) {
+      const n = todo.pop() as string;
+      if (seen.has(n) || !keep(n)) continue;
+      seen.add(n);
+      const file = n.slice(0, n.indexOf("#"));
+      if (!seen.has(`${file}#`)) todo.push(`${file}#`);
+      for (const u of this.uses.get(n) ?? []) if (!seen.has(u)) todo.push(u);
+    }
+    return seen;
+  }
+
+  /**
+   * A node's fingerprint now: a declaration's or a file's own statements' (facts.ts), or for a file
+   * that isn't code (a stylesheet), its whole text. Undefined: no such node.
+   */
+  fingerprintOf(node: string): string | undefined {
+    const [file = "", name = ""] = node.split("#");
+    return fingerprintIn(this.facts.get(file), name, join(this.root, file));
   }
 
   /** Every node that uses any of these, directly or not, them included. */
@@ -219,4 +256,21 @@ export const graphSources = (root: string): string[] =>
 export function codeGraph(root: string, files: readonly string[] = graphSources(root)): CodeGraph {
   const cache = new FactsCache(join(root, "node_modules", ".cache", "chalk-reach", "facts.json"));
   return new CodeGraph(root, files, cache);
+}
+
+/** A node's fingerprint in a file's facts, or its whole text when it isn't code. */
+export function fingerprintIn(
+  facts: Facts | undefined,
+  name: string,
+  file: string,
+  text?: string,
+): string | undefined {
+  if (facts === undefined) {
+    const body = text ?? (existsSync(file) ? readFileSync(file, "utf8") : undefined);
+    return body === undefined
+      ? undefined
+      : createHash("sha256").update(body).digest("hex").slice(0, 16);
+  }
+  if (name === "") return facts.module.hash;
+  return facts.decls[name]?.hash;
 }

@@ -61,6 +61,12 @@ export type Layer<S extends StoredState> = {
   excludes?: Readonly<Record<string, string>>;
   /** Whether it is on: showing something (default: always, for a core). */
   isOn?: (s: S) => boolean;
+  /**
+   * The fields `isOn` reads (its test checks it reads no others). With them, a board can be shown
+   * never to turn the layer on: off as it starts, and no action changes these fields. Without them,
+   * any board may turn it on.
+   */
+  onWhen?: readonly string[];
   actions?: Readonly<Record<string, ActionSpec<S>>>;
   signals?: Readonly<Record<string, SignalSpec>>;
   derived?: Readonly<Record<string, DerivedSpec<S>>>;
@@ -90,7 +96,15 @@ export type HostLayout = {
     fields: readonly string[];
     actions: readonly string[];
     derived: readonly string[];
+    /** The fields its on-rule reads (`onWhen`); undefined: not said. */
+    onWhen?: readonly string[];
   }[];
+  /**
+   * The layers a board placing this prop with `start` may ever have on: on as it starts, or one
+   * whose on-rule reads a field some action changes (or doesn't say what it reads). The others
+   * provably stay off on that board.
+   */
+  layersEverOn: (start: StoredState) => string[];
   /** The layers on now. */
   layersOn: (s: StoredState) => string[];
   /** The layer that owns an action, field or derived value (undefined: the core's). */
@@ -210,7 +224,21 @@ export function defineHost<C extends AnyLayer, const L extends readonly AnyLayer
       fields: Object.keys(l.fields),
       actions: Object.keys(l.actions ?? {}),
       derived: Object.keys(l.derived ?? {}),
+      ...(l.onWhen === undefined ? {} : { onWhen: l.onWhen }),
     })),
+    layersEverOn: (start) => {
+      const changed = new Set(
+        parts.flatMap((p) => Object.values(p.actions ?? {}).flatMap((a) => [...(a.changes ?? [])])),
+      );
+      return spec.layers
+        .filter(
+          (l) =>
+            isOn(l, start) ||
+            l.onWhen === undefined ||
+            l.onWhen.some((f) => changed.has(f as never)),
+        )
+        .map((l) => l.name);
+    },
     layersOn: (s) => spec.layers.filter((l) => isOn(l, s)).map((l) => l.name),
     ownerOf: (name) =>
       spec.layers.find(
@@ -262,4 +290,22 @@ export function defineHost<C extends AnyLayer, const L extends readonly AnyLayer
 /** A host's layout, if the prop is a host. */
 export function hostOf(def: AnyPropDef): HostLayout | undefined {
   return (def as { host?: HostLayout }).host;
+}
+
+/**
+ * The fields a layer's on-rule reads, from a state, beyond those it says (`onWhen`): for its test.
+ * Empty: what it says is true for that state.
+ */
+export function onWhenUnsaid(layer: AnyLayer, state: StoredState): string[] {
+  if (layer.isOn === undefined) return [];
+  const read = new Set<string>();
+  const watched = new Proxy(state, {
+    get: (target, key) => {
+      if (typeof key === "string") read.add(key);
+      return Reflect.get(target, key);
+    },
+  });
+  layer.isOn(watched);
+  const said = new Set(layer.onWhen ?? []);
+  return [...read].filter((k) => !said.has(k));
 }

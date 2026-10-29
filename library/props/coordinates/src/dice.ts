@@ -92,6 +92,7 @@ export const dice = layersFor<DiceState>()({
   },
   offScreen: ["seed"],
   isOn: (s) => s.counters.length > 0,
+  onWhen: ["counters"],
   actions: {
     throwDice: act({
       describe:

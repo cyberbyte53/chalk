@@ -175,6 +175,7 @@ export const walker = layersFor<WalkerState>()({
     canStep: true,
   },
   isOn: (s) => s.walkFrom !== null,
+  onWhen: ["walkFrom"],
   actions: {
     step,
     walkTo: act({

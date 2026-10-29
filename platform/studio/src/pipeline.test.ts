@@ -188,12 +188,22 @@ describe("a lesson waits on a self-review", () => {
   const lesson = (root: string) => {
     mkdirSync(join(root, "content", "b", "c", "first"), { recursive: true });
     writeFileSync(join(root, "content", "b", "c", "build.yaml"), "concepts:\n  - first\n");
+    writeFileSync(join(root, "content", "b", "c", "first", "overview.ts"), "export const o = 1;\n");
   };
-  /** What the build writes for a board (board-record.ts). */
+  /** What the build writes for a board: its record (board-record.ts) and what made it (reach). */
   const built = (root: string, key: string, words: string) => {
     const dir = join(root, "build", "review", "b", "c", "first");
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, `${key}.json`), JSON.stringify(recordOf({ words }, { text: "v1" })));
+    writeFileSync(join(dir, `${key}.json`), JSON.stringify(recordOf({ words }, {})));
+    const file = join(root, "build", "reach.json");
+    let reach = { boards: {} as Record<string, unknown>, modules: {} };
+    try {
+      reach = JSON.parse(readFileSync(file, "utf8"));
+    } catch {
+      // the first board
+    }
+    reach.boards[`b/c/first/${key}`] = { module: "content/b/c/first/overview.ts", pieces: {} };
+    writeFileSync(file, JSON.stringify(reach));
   };
   const first = (root: string) => readLessons(root, "b", "c")[0];
 

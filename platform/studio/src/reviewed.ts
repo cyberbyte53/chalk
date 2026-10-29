@@ -4,18 +4,27 @@ import { join, relative } from "node:path";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { propHomes } from "./comments";
 import { type BoardRecord, type Change, changesBetween } from "./content/board-record";
+import type { Reach } from "./content/build";
+import { boardCode, digestOf } from "./reach/board-code";
+import { factsOf } from "./reach/facts";
+import { codeGraph, fingerprintIn } from "./reach/graph";
 
 /**
  * What was reviewed, so a review is never done twice. When a reviewer (or the person) passes a
- * board, its record from the build (board-record.ts: its content and its props' code versions) is
- * kept, with who passed it and at which commit: `authoring/books/<book>/<chapter>/reviewed.yaml`.
- * A board whose record is the same now is still passed; one that differs shows exactly what
- * changed. Written only here, by the chalk MCP's `changes` tool.
+ * board, its record from the build (board-record.ts: its content) is kept, with one fingerprint of
+ * all the code it runs (reach/board-code.ts), who passed it and at which commit:
+ * `authoring/books/<book>/<chapter>/reviewed.yaml`. A board whose content and code are the same
+ * now is still passed; one that differs shows exactly what changed: its content, and each function
+ * it runs that changed. Written only here, by the chalk MCP's `changes` tool.
+ *
+ * Sound before precise: a board is unchanged only when that is shown; anything not known (no
+ * code fingerprint kept, the board's code not found) counts as changed.
  */
 
 export const REVIEWED_FILE = "reviewed.yaml";
 
-export type Passed = BoardRecord & { by: string; commit: string; at: string };
+/** `code`: the fingerprint of the code the board ran when passed (absent: passed before it was kept). */
+export type Passed = BoardRecord & { by: string; commit: string; at: string; code?: string };
 
 export type BoardChange =
   | { board: string; status: "unchanged"; passed: Passed }
@@ -26,8 +35,11 @@ export type BoardChange =
       passed: Passed;
       /** What differs on the board itself: its pieces' setup and words, its rules. */
       content: Change[];
-      /** Props whose code changed since, with the files that changed. */
-      props: { type: string; files: string[] }[];
+      /**
+       * The code it runs that changed since (`file#name`; `file#` is a file's own statements), or
+       * one line saying the code changed when which part can't be told.
+       */
+      code: string[];
     }
   /** Passed once, and no longer built. */
   | { board: string; status: "gone"; passed: Passed };
@@ -75,33 +87,63 @@ function builtUnder(root: string, under: string): Map<string, BoardRecord> {
   return out;
 }
 
-/** A file's layer, by name: walker.ts and walker-view.tsx are the walker's; any other, the core's. */
-const layerOfFile = (file: string, layers: readonly string[]): string | undefined => {
-  const stem = (file.split("/").at(-1) ?? "").replace(/\.(test\.)?tsx?$/, "").replace(/-view$/, "");
-  return layers.includes(stem) ? stem : undefined;
-};
-
-/**
- * Whether a change to a prop's files reaches this board: always for a prop that isn't built of
- * layers, or when the files aren't known; for a host, when a core file changed (every board has
- * the core) or a file of a layer this board has on.
- */
-function reaches(type: string, files: readonly string[], layers: BoardRecord["layers"]): boolean {
-  const pieces = Object.values(layers ?? {}).filter((p) => p.prop === type);
-  if (pieces.length === 0 || files.length === 0) return true;
-  const all = pieces[0]?.all ?? [];
-  const on = new Set(pieces.flatMap((p) => p.on));
-  return files.some((f) => {
-    const layer = layerOfFile(f, all);
-    return layer === undefined || on.has(layer);
-  });
+/** Each built board's code now, by the code graph: what it runs, with fingerprints. */
+function codeNow(
+  root: string,
+): (board: string, record: BoardRecord) => Map<string, string> | undefined {
+  const file = join(root, "build", "reach.json");
+  const reach = existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Reach) : undefined;
+  let graph: ReturnType<typeof codeGraph> | undefined;
+  const homes = propHomes(root);
+  return (board, record) => {
+    const made = reach?.boards[board];
+    if (made === undefined) return undefined;
+    graph ??= codeGraph(root);
+    return boardCode(graph, made, record.layers, homes);
+  };
 }
+
+/** The code that differs from `commit`: each node whose fingerprint was different then, or absent. */
+function changedSince(root: string, commit: string, code: ReadonlyMap<string, string>): string[] {
+  const files = new Map<string, { facts?: ReturnType<typeof factsOf>; text?: string }>();
+  const at = (file: string) => {
+    let known = files.get(file);
+    if (known === undefined) {
+      const text = hasAt(root, commit, file) ? git(root, "show", `${commit}:${file}`) : undefined;
+      known =
+        text === undefined
+          ? {}
+          : /\.tsx?$/.test(file)
+            ? { facts: factsOf(file, text), text }
+            : { text };
+      files.set(file, known);
+    }
+    return known;
+  };
+  return [...code]
+    .filter(([node, now]) => {
+      const [file = "", name = ""] = node.split("#");
+      const then = at(file);
+      if (then.text === undefined) return true;
+      return fingerprintIn(then.facts, name, file, then.text) !== now;
+    })
+    .map(([node]) => node);
+}
+
+const hasAt = (root: string, commit: string, file: string) => {
+  try {
+    execFileSync("git", ["cat-file", "-e", `${commit}:${file}`], { cwd: root, stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 /** What changed on every board at or under `under` since each was passed. */
 export function changesUnder(root: string, under: string): BoardChange[] {
   const now = builtUnder(root, under);
   const passed = readPassed(root, chapterOf(under));
-  const homes = propHomes(root);
+  const codeOf = codeNow(root);
   const out: BoardChange[] = [];
   for (const [board, record] of now) {
     const was = passed[board];
@@ -109,29 +151,31 @@ export function changesUnder(root: string, under: string): BoardChange[] {
       out.push({ board, status: "new" });
       continue;
     }
-    if (was.stamp === record.stamp) {
-      out.push({ board, status: "unchanged", passed: was });
-      continue;
-    }
-    const props = Object.keys({ ...was.props, ...record.props })
-      .filter((type) => was.props[type] !== record.props[type])
-      .sort()
-      .map((type) => {
-        const home = homes.get(type);
-        const files =
-          home === undefined
-            ? []
-            : git(root, "diff", "--name-only", was.commit, "--", home).split("\n").filter(Boolean);
-        return { type, files };
-      })
-      .filter((p) => reaches(p.type, p.files, record.layers));
     const content = changesBetween(was.content, record.content);
-    // Its own content is the same, and no prop change reaches a layer it has: nothing to look at.
-    if (content.length === 0 && props.length === 0) {
+    const code = codeOf(board, record);
+    const isSameCode = code !== undefined && was.code === digestOf(code);
+    if (content.length === 0 && isSameCode) {
       out.push({ board, status: "unchanged", passed: was });
       continue;
     }
-    out.push({ board, status: "changed", passed: was, content, props });
+    const named = code === undefined || isSameCode ? [] : changedSince(root, was.commit, code);
+    out.push({
+      board,
+      status: "changed",
+      passed: was,
+      content,
+      code: isSameCode
+        ? []
+        : named.length > 0
+          ? named
+          : [
+              code === undefined
+                ? "its code isn't known (build/reach.json): counted as changed"
+                : was.code === undefined
+                  ? "no code fingerprint was kept when it was passed: counted as changed"
+                  : `its code changed since ${was.commit} (which part: not found in that commit)`,
+            ],
+    });
   }
   for (const [board, was] of Object.entries(passed))
     if ((board === under || board.startsWith(`${under}/`)) && !now.has(board))
@@ -151,10 +195,14 @@ export function passUnder(root: string, under: string, by: string): number {
   const at = new Date().toISOString();
   // Elsewhere in the chapter, as it was; here, every board as built now (one no longer built goes).
   const kept = Object.entries(readPassed(root, chapter)).filter(([board]) => !isHere(board));
-  const fresh = [...now].map(([board, record]): [string, Passed] => [
-    board,
-    { ...record, by, commit, at },
-  ]);
+  const codeOf = codeNow(root);
+  const fresh = [...now].map(([board, record]): [string, Passed] => {
+    const code = codeOf(board, record);
+    return [
+      board,
+      { ...record, by, commit, at, ...(code === undefined ? {} : { code: digestOf(code) }) },
+    ];
+  });
   const sorted = Object.fromEntries([...kept, ...fresh].sort(([a], [b]) => a.localeCompare(b)));
   writeFileSync(
     fileOf(root, chapter),
@@ -186,10 +234,7 @@ export function changesWords(changes: readonly BoardChange[]): string {
     if (c.status !== "changed") continue;
     lines.push(`${c.board}   changed since passed by ${c.passed.by} at ${c.passed.commit}`);
     for (const change of c.content) lines.push(`  ${changeWords(change)}`);
-    for (const p of c.props)
-      lines.push(
-        `  prop ${p.type}: code changed${p.files.length > 0 ? `: ${p.files.join(", ")}` : ""}`,
-      );
+    for (const node of c.code) lines.push(`  code: ${node}`);
   }
   for (const c of of("new")) lines.push(`${c.board}   new: never passed`);
   for (const c of of("gone")) lines.push(`${c.board}   gone: passed once, no longer built`);
