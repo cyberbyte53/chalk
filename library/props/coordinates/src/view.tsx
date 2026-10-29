@@ -403,10 +403,19 @@ export function CoordinatePlaneView({
           <strong>{word(s.targetName, locale)}</strong>: {addressOf(s.axisNames, s.target, locale)}
         </p>
       )}
-      {/* Room for the address before there is one, so the map doesn't move when it appears. */}
+      {/* Room for the address before there is one, so the map doesn't move when it appears: an
+          unseen copy of the longest address this board can show (its farthest place). */}
       {hasPlaces && s.target === null && s.canChooseTarget && (
-        <p class="cp-line cp-address" aria-hidden="true">
-          &nbsp;
+        <p class="cp-line cp-address is-room" aria-hidden="true">
+          <strong>{word(s.targetName, locale)}</strong>:{" "}
+          {addressOf(
+            s.axisNames,
+            s.places.reduce(
+              (far, p) => (p.x + p.y > far.x + far.y ? p : far),
+              s.places[0] ?? { x: 0, y: 0 },
+            ),
+            locale,
+          )}
         </p>
       )}
       {hasPlotting && s.showTable && (

@@ -661,7 +661,7 @@
     first ↑ tap."
   messages: []
 - id: cmvt95u1bhzc
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.383Z
@@ -675,6 +675,7 @@
     her walk, and the picture jumps. Suggested fix: keep the header on one line (shorter words, e.g.
     'Aman's house: Street 4, House 5', or a smaller size), and reserve its space from the start so
     nothing jumps."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -682,8 +683,46 @@
       text: Keep each address's number with its word (a non-breaking space), and keep room for the address
         line from the start, so it doesn't push the map down mid-walk.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.621Z
+      text: "Before: 'Street number 4, House number' / '5' alone, and the address line pushed the map down
+        a line mid-walk. After (244cbf4): each number stays with its word ('number 5' together), and
+        the line's room is kept from the start, so the map doesn't move."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.051Z
+      text: "Rechecked at 390, en and hi. Hindi is good: the header fits on one line, its room is kept
+        from the start, and the map doesn't move. English is not there yet. 'Aman's house: Street
+        number 4, House number 5' still wraps to two lines ('House' / 'number 5'). The kept room is
+        only one line high, so when the header appears at Street 4 the map still drops by a line in
+        the middle of the walk ('House number' axis title moves from about y=158 to y=208 in the
+        before/after shots). The '5' is no longer alone, which is better. Still to do: make the
+        English header fit on one line ('Aman's house: Street 4, House 5'), or keep two lines of
+        room. Related, same kind of jump on this board and on cross-streets: the 'Riya: Street
+        number 1' line under the map appears only on her first tap, so the arrow pad moves down a
+        line the first time the student presses →. Keep that line's room from the start too."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:08:36.112Z
+      text: "Second round (19f8624): the address keeps two lines of room from the start, so the map
+        doesn't drop when 'Aman's house: Street number 4, House number 5' appears on two lines.
+        Riya's line under the map keeps its room from the start too, so her first step doesn't push
+        the arrows down (here and on cross-streets). Played: the map's top stays put through the
+        four steps to Street 4."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:09:49.301Z
+      text: "Rechecked at 390 in en and hi, playing street-and-house from the corner to Street 4 and
+        cross-streets for its first steps. Fixed. Nothing moves now. In street-and-house the map and
+        the arrow pad stay put on Riya's first step and when the address header appears at Street 4,
+        in both languages. The English header uses the two lines kept for it, and Hindi fits in one.
+        In cross-streets the pad stays put on the first step and the 'Riya: …' line fills the room
+        kept for it. One side effect on another board is filed separately (seating-plan: the kept
+        room shows as an empty band above the plan)."
 - id: cmvt95u26s0y
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.414Z
@@ -697,12 +736,24 @@
     who taps 'Clear' to see what happens loses the five lit houses that the next paragraph talks
     about. Suggested fix: hide 'Clear' on this board, or name it after what it does. Give ↺ a word
     too, e.g. 'Back to the corner'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
       at: 2026-10-29T08:00:46.907Z
       text: "Give both buttons words: '↺ Back to the start' and 'Lights off' (with Hindi)."
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.670Z
+      text: "Before: 'Clear' and a bare ↺. After: 'Lights off' / 'रोशनी बंद' and '↺ Back to the start'."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.114Z
+      text: Rechecked en and hi. Good. '↺ Back to the start' / '↺ शुरू पर वापस' and 'Lights off' / 'रोशनी
+        बंद' say what they do. 'Lights off' now sits on its own row under the pad, so the arrows no
+        longer shift sideways when it appears.
 - id: cmvt95u30850
   status: open
   by: reviewer
@@ -777,7 +828,7 @@
         dot-on-paper#ground/showHidden.
       status: withdrawn
 - id: cmvt95u8fp4c
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.639Z
@@ -789,6 +840,7 @@
     fence' floats at the bottom right, a clear gap below the fence it names, just above the clue
     buttons, so it reads as a heading for the buttons. Suggested fix: put it on or just under the
     bottom line, at its end."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -796,8 +848,19 @@
       text: With no numbers along the bottom, put the bottom line's name just under it, not where the
         numbers would be.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.758Z
+      text: "Before: 'south fence' floated where numbers would be. After: with no numbers on the line, its
+        name sits just under it."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.212Z
+      text: Rechecked en and hi. Good. 'south fence' / 'दक्षिणी बाड़' now sits just under the bottom line
+        at its end, and nothing reads as a heading for the clue buttons.
 - id: cmvt95ubp8ns
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.757Z
@@ -812,6 +875,7 @@
     leaves a whole line. That also tests the source's point that the two lines must be
     perpendicular. Feedback for it: 'Both are distances across the table: it still leaves a line.
     The second must be from an edge at right angles.'"
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -819,8 +883,38 @@
       text: Add a wrong option with two distances from parallel edges (left edge and right edge), so the
         right one isn't the only two-number option.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.812Z
+      text: "Before: the right option was the only one with two distances. After: a fourth option, '20 cm
+        from the left edge and 60 cm from the right edge' (two facing edges, so the second distance
+        adds nothing), with its feedback."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.261Z
+      text: "Rechecked en and hi, answered wrong with the new option. The give-away is fixed. Two options
+        now have two distances, and the new one's feedback ('Those two edges face each other… The
+        two edges must meet at a corner') teaches the right point. One small thing left, Hindi only:
+        the right option 'बाएँ किनारे से 20 cm और आगे के किनारे से 15 cm' wraps with 'cm' alone on
+        the second line, and it is now the only two-line option, so it stands out a little. Keep
+        each number with its unit (non-breaking space before 'cm'), as was done for the pairs. A
+        thought for the person, not blocking: '60 cm from the right edge' quietly assumes an 80 cm
+        table the question never mentions."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:08:36.188Z
+      text: "Second round (19f8624): every number stays with its unit ('20 cm', '30 m'), in both
+        languages, so 'cm' is never left alone on a line."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:09:49.374Z
+      text: Rechecked en and hi after the three clues. Fixed. In Hindi, '15 cm' now wraps as a unit, so no
+        unit is left alone. The right option is still the only Hindi option on two lines, but the
+        line break isn't awkward and English has two two-line options, so I don't see it as a
+        give-away any more.
 - id: cmvt95ufvbpt
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.907Z
@@ -835,6 +929,7 @@
     that desk again does nothing (play: tapping room/chooseTarget:3,5 after it's marked times out
     because the point circle intercepts it). The header then stays on the other desk. The
     wrong-answer note 'Tap (5, 3), then (3, 5)' sends the student to taps that no longer respond."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -842,6 +937,19 @@
       text: Label the marked desks (5, 3) and (3, 5), not P and Q (a mark's name may be up to 7
         characters, for a pair). Marks no longer catch taps, so a marked desk can be tapped again.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.856Z
+      text: "Before: marks P and Q, and a marked desk couldn't be tapped again. After: marks read (5, 3)
+        and (3, 5), and a mark lets the tap through, so a marked desk can be tapped again (played:
+        tap (5, 3), (3, 5), (5, 3))."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.313Z
+      text: "Rechecked en and hi by playing: tap (5, 3), then (3, 5), then (5, 3) again. Good. The marks
+        read '(5, 3)' and '(3, 5)', a marked desk can be tapped again, and the header follows it.
+        The '(5, 3)' label touches the orange ring of the chosen desk but stays readable."
 - id: cmvt95uqpuyu
   status: open
   by: reviewer
@@ -859,7 +967,7 @@
     grid, as in Fig. 3.3."
   messages: []
 - id: cmvt95urhs5f
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.325Z
@@ -869,12 +977,36 @@
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Mechanical (overflow, small). At 390, 'Yes: both are made of the numbers 3 and 5' wraps and
     leaves '5' alone on the second line. Suggested fix: shorten it, e.g. 'Yes: both use 3 and 5'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
       at: 2026-10-29T08:00:47.081Z
       text: Shorten the option so it doesn't strand '5', and keep pairs unbroken.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.989Z
+      text: "Before: 'Yes: both are made of the numbers 3 and' / '5'. After: 'Yes: both use 3 and 5', on
+        one line."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.461Z
+      text: "Rechecked. The English 'Yes: both use 3 and 5' is on one line, and the Hindi 'हाँ: दोनों में
+        3 और 5 हैं' too. Good. Not from this fix, but on the same question: in Hindi the right
+        option 'नहीं: एक स्तंभ 5, पंक्ति 3 में है; दूसरी स्तंभ 3, पंक्ति 5 में' wraps with 'में'
+        alone on the second line. Shorten it (e.g. 'नहीं: एक स्तंभ 5, पंक्ति 3; दूसरी स्तंभ 3,
+        पंक्ति 5')."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:08:36.293Z
+      text: "Second round (19f8624): in Hindi, 'पंक्ति 5 में' stays together, so 'में' isn't left alone."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:09:49.446Z
+      text: "Rechecked en and hi with both desks tapped. Fixed. Hindi '…दूसरी स्तंभ 3, पंक्ति' / '5 में'
+        keeps '5 में' together. English is one line for 'Yes: both use 3 and 5'."
 - id: cmvt95us8mz8
   status: open
   by: reviewer
@@ -896,7 +1028,7 @@
     'East–west street no.' beside the numbers, not on top of the north–south line."
   messages: []
 - id: cmvt95ut05k9
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.380Z
@@ -912,6 +1044,7 @@
     lines, the empty circles at the crossings dominate the picture, and Riya covers the mark she has
     just made (her figure also covers the 'East–west street' title at (2, 5)). Make the streets the
     visible roads and keep the mark readable beside her."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -920,8 +1053,22 @@
         streets as roads both ways, and draw the marks over Riya so the one she reaches stays
         visible.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:07.049Z
+      text: "Before: A, B, C, faint hairline streets, and the mark under Riya. After: marks read (2, 5),
+        (4, 3), (3, 4), and the feedback says the pairs; the streets are drawn as roads both ways;
+        marks are drawn over Riya, so the one she reaches stays visible."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.508Z
+      text: "Rechecked en and hi by walking to (2, 5), (4, 3), (3, 4) and answering wrong. Good. The marks
+        read '(2, 5)', '(4, 3)', '(3, 4)'. The feedback says 'Look at the two marks: (4, 3) is on
+        the 4th north–south street, (3, 4) on the 3rd.' The streets are visible roads both ways, and
+        the mark stays readable next to Riya."
 - id: cmvt95uvxe4u
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.485Z
@@ -933,12 +1080,25 @@
     city can be called (4, 3), and how many (3, 4)?' wraps inside the pair: '(3,' on one line and
     '4)?' on the next. Suggested fix: keep each pair unbreakable (non-breaking space after the
     comma, or nowrap)."
+  changed: []
   messages:
     - by: fixer
       role: fixer
       at: 2026-10-29T08:00:47.240Z
       text: Keep every pair on one line (a non-breaking space after the comma), in both languages.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:07.089Z
+      text: "Before: '(3,' / '4)' broken across lines. After: every pair in the lesson keeps its two
+        numbers together, in English and Hindi."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.560Z
+      text: Rechecked at 390 in English. Good. The question now breaks before '(3, 4)?' and keeps the pair
+        whole. The other pairs on the board (text, marks, options, feedback) stay whole in both
+        languages.
 - id: cmvt95uywdnd
   status: open
   by: reviewer
@@ -960,7 +1120,7 @@
     three small planes are much smaller than the text."
   messages: []
 - id: cmvt95v8aal3
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.930Z
@@ -973,6 +1133,7 @@
     fence names and the 30 m / 20 m the text beside it quotes. Suggested fix: caption it like the
     others ('The stall: 30 m from the west fence, 20 m from the south fence'), name the two fences,
     put 30 m and 20 m on the dashed lines, and drop 'S' or call it 'stall'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -980,8 +1141,34 @@
       text: Draw the stall with its two distances measured (30 and 20 on its perpendiculars to the fences)
         and the fences named, like the other two pictures; no 'S'.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:07.129Z
+      text: "Before: a dot labelled S, no fence names, no distances. After: the stall's spot with its two
+        perpendiculars measured, 30 and 20, and the fences named 'west fence' and 'south fence',
+        like the house and desk pictures."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.605Z
+      text: "Rechecked en and hi. Mostly fixed. 'S' is gone, the fences are named, and 30 and 20 sit on
+        the right dashed lines: 30 on the line from the west fence, 20 on the line from the south
+        fence. Two things left. (1) The numbers have no unit: the text says '30 m, then 20 m', the
+        picture says '30' and '20'. Write '30 m' and '20 m'. (2) It still has no caption, while the
+        house and the desk each have one in orange ('Aman's house: …', 'The desk: …'). Add 'The
+        stall: 30 m from the west fence, 20 m from the south fence' so all three pictures read
+        alike."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:08:30.129Z
+      text: "Partly done: the fences are named and the distances measured. The 'm' can't be added in the
+        lesson: the plane's measured distances are bare numbers, with no unit. That needs a small
+        definition change, a `unit` field on the reading layer, proposed on the prop for the person.
+        The caption: the house and the desk have one because they're places with an address; I'd add
+        the stall as a place too (a stall picture with 'The stall' and its distances) once units
+        exist, so all three read the same."
 - id: cmvt9616nax5
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:39.647Z
@@ -994,10 +1181,47 @@
     board is built on. 'Point' is also not a word the story has used: it's the stall's spot.
     Suggested fix: remove it on this board. If it stays, show it only after the third clue and call
     it 'Show the stall'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
       at: 2026-10-29T08:00:46.955Z
       text: Offer 'Show where it is' only once every clue has been given, and say 'where it is' instead of
         'the point'.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:04:06.712Z
+      text: "Before: 'Show the point' from the start. After: 'Show where it is' appears only after the
+        third clue."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T08:06:35.162Z
+      text: Rechecked en and hi by playing. Good. Nothing but the first clue shows at the start. 'Show
+        where it is' / 'दिखाओ कहाँ है' appears only after the third clue, and tapping it marks the
+        spot the clues already fixed.
+- id: cmvt9j3r3330
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T08:09:49.503Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: room/target
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:218
+  commit: 19f8624247061fc2780c8a49d7cb91b194922e94
+  about: cmvt95u1bhzc
+  text: "Mechanical (screen, small). Side effect of keeping two lines of room for the place header: on
+    seating-plan the 'This desk: Column 3, Row 5' header needs one line in both languages, but two
+    are kept. Before any desk is tapped there is an empty band of about three lines above 'Row', and
+    after a tap there is still a blank line between the header and the plan. On a phone the student
+    scrolls past white space to reach the plan the text tells them to tap. Hindi street-and-house
+    shows the same spare line. Suggested fix: keep room for the header's actual length (one line
+    where it fits), or keep two lines only on the board whose header needs them."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:10:34.403Z
+      text: "Keep exactly the room the address will need: hold the space with an invisible copy of the
+        longest address that board can show (its farthest place), instead of a fixed two lines."
       status: planned

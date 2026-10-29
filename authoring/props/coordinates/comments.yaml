@@ -183,3 +183,25 @@
       at: 2026-10-29T07:45:57.613Z
       text: ""
       status: closed
+- id: cmvt9hejjpcc
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T08:08:30.175Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:16
+  commit: 19f8624247061fc2780c8a49d7cb91b194922e94
+  text: >-
+    A small definition change, for lesson 1's two-lines picture of the stall (self-review thread
+    cmvt95v8aal3): its measured distances show '30' and '20' with no 'm'.
+
+
+    Proposed: a new field on the reading layer, `unit` (default empty): the unit written after a
+    measured distance, abscissa and ordinate ('30 m', 'x = 30 m'). It's a short string the lesson
+    gives ('m', 'cm'), the same in both languages, and empty keeps every board as it is today.
+    Nothing else changes.
+
+
+    Close this to approve, and I'll add it with a test, then give the stall picture '30 m' and '20
+    m' and its own caption like the house and the desk.
+  messages: []
