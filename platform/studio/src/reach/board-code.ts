@@ -16,11 +16,17 @@ import { splitFrame } from "./index";
  *   for each prop it places, everything that prop's package exports (the player finds a prop by
  *   its type, not by an import).
  */
+/**
+ * A board's code: one fingerprint of all of it (its roots' deep fingerprints, graph.ts), and, to
+ * name what changed, every node it reaches with its own fingerprint.
+ */
+export type BoardCode = { digest: string; nodes: () => Map<string, string> };
+
 export function boardCode(
   graph: CodeGraph,
   reach: BoardReach,
   homes: ReadonlyMap<string, string>,
-): Map<string, string> | undefined {
+): BoardCode | undefined {
   const roots = new Set<string>([`${reach.module}#`]);
   const frames = [...(reach.stack ?? []), ...Object.values(reach.pieces).flatMap((p) => p.stack)];
   for (const frame of frames) {
@@ -41,18 +47,18 @@ export function boardCode(
     }
   }
 
-  const out = new Map<string, string>();
-  for (const node of [...graph.dependenciesOf(roots)].sort())
-    out.set(node, graph.fingerprintOf(node) ?? "-");
-  return out;
+  const sorted = [...roots].sort();
+  return {
+    digest: createHash("sha256")
+      .update(sorted.map((r) => `${r}=${graph.deepFingerprintOf(r)}`).join("\n"))
+      .digest("hex")
+      .slice(0, 16),
+    nodes: () =>
+      new Map(
+        [...graph.dependenciesOf(sorted)].sort().map((n) => [n, graph.fingerprintOf(n) ?? "-"]),
+      ),
+  };
 }
-
-/** One fingerprint for all of a board's code: what a review keeps. */
-export const digestOf = (code: ReadonlyMap<string, string>): string =>
-  createHash("sha256")
-    .update([...code].map(([n, h]) => `${n}=${h}`).join("\n"))
-    .digest("hex")
-    .slice(0, 16);
 
 /** The files a prop package offers (its package.json `exports`), from the repo root. */
 function packageEntries(root: string, home: string): string[] {

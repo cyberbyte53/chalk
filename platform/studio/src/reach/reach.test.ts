@@ -238,3 +238,48 @@ describe("reading git's changes", () => {
     ]);
   });
 });
+
+describe("fingerprints", () => {
+  /** A repo of one package: a uses b, b uses c; d and e use each other. */
+  const small = (files: Record<string, string>) => {
+    const root = mkdtempSync(join(tmpdir(), "chalk-deep-"));
+    const all: Record<string, string> = {
+      "library/props/p/package.json": JSON.stringify({
+        name: "@t/p",
+        exports: { ".": "./src/a.ts" },
+      }),
+      "library/props/p/src/a.ts": 'import { b } from "./b";\nexport const a = () => b();\n',
+      "library/props/p/src/b.ts": 'import { c } from "./c";\nexport const b = () => c();\n',
+      "library/props/p/src/c.ts": "export const c = () => 1;\n",
+      "library/props/p/src/d.ts":
+        "export const d = (n: number): number => (n > 0 ? e(n - 1) : 0);\nexport const e = (n: number): number => d(n);\n",
+      ...files,
+    };
+    for (const [path, text] of Object.entries(all)) {
+      mkdirSync(dirname(join(root, path)), { recursive: true });
+      writeFileSync(join(root, path), text);
+    }
+    return codeGraph(root);
+  };
+  const A = "library/props/p/src/a.ts#a";
+  const D = "library/props/p/src/d.ts#d";
+
+  it("a deep fingerprint changes when anything below changes, not for a comment", () => {
+    const before = small({});
+    const deeper = small({ "library/props/p/src/c.ts": "export const c = () => 2;\n" });
+    const comment = small({ "library/props/p/src/c.ts": "// one\nexport const c = () =>\n  1;\n" });
+    expect(deeper.fingerprintOf(A)).toBe(before.fingerprintOf(A));
+    expect(deeper.deepFingerprintOf(A)).not.toBe(before.deepFingerprintOf(A));
+    expect(comment.deepFingerprintOf(A)).toBe(before.deepFingerprintOf(A));
+  });
+
+  it("nodes in a loop share one, made from all of their code", () => {
+    const g = small({});
+    expect(g.deepFingerprintOf(D)).toBe(g.deepFingerprintOf("library/props/p/src/d.ts#e"));
+    const changed = small({
+      "library/props/p/src/d.ts":
+        "export const d = (n: number): number => (n > 0 ? e(n - 1) : 0);\nexport const e = (n: number): number => d(n + 0);\n",
+    });
+    expect(changed.deepFingerprintOf(D)).not.toBe(g.deepFingerprintOf(D));
+  });
+});

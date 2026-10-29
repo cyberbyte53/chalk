@@ -82,6 +82,96 @@ export class CodeGraph {
     return fingerprintIn(this.facts.get(file), name, join(this.root, file));
   }
 
+  /** Deep fingerprints, worked out once for the graph as it is (deepFingerprintOf). */
+  private deep: Map<string, string> | undefined;
+
+  /**
+   * A node's deep fingerprint: its own code and the deep fingerprints of everything it uses, so it
+   * changes when anything below it does (a Merkle hash, as git hashes a folder). Nodes that use each
+   * other in a loop share one, made from all of their code. Two nodes with the same deep
+   * fingerprint run the same code.
+   */
+  deepFingerprintOf(node: string): string {
+    this.deep ??= this.deepFingerprints();
+    return this.deep.get(node) ?? this.deepFingerprints([node]).get(node) ?? "-";
+  }
+
+  /** What a node depends on directly: what it uses, and its file's own statements. */
+  private directOf(n: string): string[] {
+    const file = n.slice(0, n.indexOf("#"));
+    const out = [...(this.uses.get(n) ?? [])];
+    if (n !== `${file}#`) out.push(`${file}#`);
+    return out;
+  }
+
+  /** Deep fingerprints for every node reached from these (default: all), loops found by Tarjan's. */
+  private deepFingerprints(from?: readonly string[]): Map<string, string> {
+    const starts = from ?? [...new Set([...this.uses.keys(), ...this.users.keys()])];
+    const out = new Map<string, string>();
+    const index = new Map<string, number>();
+    const low = new Map<string, number>();
+    const stack: string[] = [];
+    const onStack = new Set<string>();
+    let next = 0;
+    const own = (n: string) => this.fingerprintOf(n) ?? "-";
+    const close = (root: string) => {
+      const loop: string[] = [];
+      let n: string;
+      do {
+        n = stack.pop() as string;
+        onStack.delete(n);
+        loop.push(n);
+      } while (n !== root);
+      const members = new Set(loop);
+      const below = [...members]
+        .flatMap((m) => this.directOf(m))
+        .filter((d) => !members.has(d))
+        .map((d) => `${d}=${out.get(d) ?? "-"}`);
+      const hash = createHash("sha256")
+        .update(
+          [...members]
+            .map((m) => `${m}=${own(m)}`)
+            .sort()
+            .join("\n"),
+        )
+        .update("\n--\n")
+        .update([...new Set(below)].sort().join("\n"))
+        .digest("hex")
+        .slice(0, 16);
+      for (const m of members) out.set(m, hash);
+    };
+    // Tarjan's strongly connected components, without recursion (the graph can be deep).
+    for (const start of starts) {
+      if (index.has(start)) continue;
+      const frames: { n: string; deps: string[]; i: number }[] = [];
+      const enter = (n: string) => {
+        index.set(n, next);
+        low.set(n, next);
+        next++;
+        stack.push(n);
+        onStack.add(n);
+        frames.push({ n, deps: this.directOf(n), i: 0 });
+      };
+      enter(start);
+      while (frames.length > 0) {
+        const f = frames[frames.length - 1] as (typeof frames)[number];
+        if (f.i < f.deps.length) {
+          const d = f.deps[f.i++] as string;
+          if (!index.has(d)) enter(d);
+          else if (onStack.has(d))
+            low.set(f.n, Math.min(low.get(f.n) as number, index.get(d) as number));
+          continue;
+        }
+        frames.pop();
+        const parent = frames[frames.length - 1];
+        if (parent !== undefined)
+          low.set(parent.n, Math.min(low.get(parent.n) as number, low.get(f.n) as number));
+        if (low.get(f.n) === index.get(f.n)) close(f.n);
+      }
+    }
+    return out;
+  }
+
   /** Every node that uses any of these, directly or not, them included. */
   usersOf(nodes: Iterable<string>): Set<string> {
     const seen = new Set<string>();

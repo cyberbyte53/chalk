@@ -5,7 +5,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { propHomes } from "./comments";
 import { type BoardRecord, type Change, changesBetween } from "./content/board-record";
 import type { Reach } from "./content/build";
-import { boardCode, digestOf } from "./reach/board-code";
+import { type BoardCode, boardCode } from "./reach/board-code";
 import { factsOf } from "./reach/facts";
 import { codeGraph, fingerprintIn } from "./reach/graph";
 
@@ -88,9 +88,7 @@ function builtUnder(root: string, under: string): Map<string, BoardRecord> {
 }
 
 /** Each built board's code now, by the code graph: what it runs, with fingerprints. */
-function codeNow(
-  root: string,
-): (board: string, record: BoardRecord) => Map<string, string> | undefined {
+function codeNow(root: string): (board: string, record: BoardRecord) => BoardCode | undefined {
   const file = join(root, "build", "reach.json");
   const reach = existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Reach) : undefined;
   let graph: ReturnType<typeof codeGraph> | undefined;
@@ -103,41 +101,44 @@ function codeNow(
   };
 }
 
+/** A file as it was at a commit, read once (a commit never changes): its facts if it is code. */
+const atCommit = new Map<string, { facts?: ReturnType<typeof factsOf>; text?: string }>();
+function fileAt(root: string, commit: string, file: string) {
+  const key = `${root}\0${commit}\0${file}`;
+  let known = atCommit.get(key);
+  if (known === undefined) {
+    let text: string | undefined;
+    try {
+      text = execFileSync("git", ["show", `${commit}:${file}`], {
+        cwd: root,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      });
+    } catch {
+      text = undefined; // not there then
+    }
+    known =
+      text === undefined
+        ? {}
+        : /\.tsx?$/.test(file)
+          ? { facts: factsOf(file, text), text }
+          : { text };
+    atCommit.set(key, known);
+  }
+  return known;
+}
+
 /** The code that differs from `commit`: each node whose fingerprint was different then, or absent. */
 function changedSince(root: string, commit: string, code: ReadonlyMap<string, string>): string[] {
-  const files = new Map<string, { facts?: ReturnType<typeof factsOf>; text?: string }>();
-  const at = (file: string) => {
-    let known = files.get(file);
-    if (known === undefined) {
-      const text = hasAt(root, commit, file) ? git(root, "show", `${commit}:${file}`) : undefined;
-      known =
-        text === undefined
-          ? {}
-          : /\.tsx?$/.test(file)
-            ? { facts: factsOf(file, text), text }
-            : { text };
-      files.set(file, known);
-    }
-    return known;
-  };
   return [...code]
     .filter(([node, now]) => {
       const [file = "", name = ""] = node.split("#");
-      const then = at(file);
+      const then = fileAt(root, commit, file);
       if (then.text === undefined) return true;
       return fingerprintIn(then.facts, name, file, then.text) !== now;
     })
     .map(([node]) => node);
 }
-
-const hasAt = (root: string, commit: string, file: string) => {
-  try {
-    execFileSync("git", ["cat-file", "-e", `${commit}:${file}`], { cwd: root, stdio: "ignore" });
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 /** What changed on every board at or under `under` since each was passed. */
 export function changesUnder(root: string, under: string): BoardChange[] {
@@ -153,12 +154,13 @@ export function changesUnder(root: string, under: string): BoardChange[] {
     }
     const content = changesBetween(was.content, record.content);
     const code = codeOf(board, record);
-    const isSameCode = code !== undefined && was.code === digestOf(code);
+    const isSameCode = code !== undefined && was.code === code.digest;
     if (content.length === 0 && isSameCode) {
       out.push({ board, status: "unchanged", passed: was });
       continue;
     }
-    const named = code === undefined || isSameCode ? [] : changedSince(root, was.commit, code);
+    const named =
+      code === undefined || isSameCode ? [] : changedSince(root, was.commit, code.nodes());
     out.push({
       board,
       status: "changed",
@@ -200,7 +202,7 @@ export function passUnder(root: string, under: string, by: string): number {
     const code = codeOf(board, record);
     return [
       board,
-      { ...record, by, commit, at, ...(code === undefined ? {} : { code: digestOf(code) }) },
+      { ...record, by, commit, at, ...(code === undefined ? {} : { code: code.digest }) },
     ];
   });
   const sorted = Object.fromEntries([...kept, ...fresh].sort(([a], [b]) => a.localeCompare(b)));
