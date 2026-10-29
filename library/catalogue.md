@@ -199,6 +199,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `given` | ["whole number 0 to 5"] | changed by giveClue, clearClues, hideAt |
 | `isHiddenShown` | true or false | changed by clearClues, hideAt, showHidden |
 | `canHide` | true or false | setting |
+| `canGiveClues` | true or false | setting |
 | `toPlot` | [{x: "number", y: "number", name: {optional: "text"}}] | setting |
 | `plotted` | [{x: "number", y: "number", isRight: "true or false"}] | changed by plotAt, plotNext, clearPlotted |
 | `showSwaps` | true or false | setting |

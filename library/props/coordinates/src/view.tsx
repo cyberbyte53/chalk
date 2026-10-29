@@ -163,6 +163,12 @@ function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: 
   );
 }
 
+/** The clues given so far, in their words, in the order given. */
+const givenWords = (s: PlaneView, locale: Locale): string =>
+  s.given
+    .flatMap((g) => (s.clueChoices[g] === undefined ? [] : [s.clueChoices[g].words[locale]]))
+    .join(", ");
+
 /** Where the hidden point could still be: a shaded region, a line, or one point. */
 function StillDraw({
   s,
@@ -505,6 +511,12 @@ export function CoordinatePlaneView({
           )}
         </p>
       )}
+      {/* A picture of clues already given: they are its caption, in the order given. */}
+      {hasClues && !s.canGiveClues && s.given.length > 0 && (
+        <p class="cp-line cp-address" {...shows("given", s.given, givenWords(s, locale))}>
+          {givenWords(s, locale)}
+        </p>
+      )}
       {hasPlotting && s.showTable && (
         <table class="cp-table" {...shows("table", s.toPlot)}>
           <tbody>
@@ -676,6 +688,7 @@ export function CoordinatePlaneView({
           />
         )}
         {hasClues &&
+          s.canGiveClues &&
           s.clueChoices.map((c, i) =>
             // One clue at a time, in the lesson's order: those given, and the next.
             !s.given.includes(i) && i !== nextClue ? null : (
@@ -691,15 +704,19 @@ export function CoordinatePlaneView({
             ),
           )}
         {/* Where it is, only once every clue is given: before that it would give the answer away. */}
-        {hasClues && hiddenPoint !== null && !s.isHiddenShown && nextClue === -1 && (
-          <SymbolButton
-            symbol={word(WORDS.showPoint, locale)}
-            label={word(WORDS.showPoint, locale)}
-            isWide
-            {...does(actions.showHidden)}
-          />
-        )}
-        {hasClues && s.given.length > 0 && (
+        {hasClues &&
+          s.canGiveClues &&
+          hiddenPoint !== null &&
+          !s.isHiddenShown &&
+          nextClue === -1 && (
+            <SymbolButton
+              symbol={word(WORDS.showPoint, locale)}
+              label={word(WORDS.showPoint, locale)}
+              isWide
+              {...does(actions.showHidden)}
+            />
+          )}
+        {hasClues && s.canGiveClues && s.given.length > 0 && (
           <SymbolButton
             symbol="↺"
             label={word(WORDS.clear, locale)}

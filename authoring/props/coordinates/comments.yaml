@@ -184,7 +184,7 @@
       text: ""
       status: closed
 - id: cmvt9hejjpcc
-  status: ready
+  status: closed
   by: fixer
   role: fixer
   createdAt: 2026-10-29T08:08:30.175Z
@@ -204,6 +204,7 @@
 
     Close this to approve, and I'll add it with a test, then give the stall picture '30 m' and '20
     m' and its own caption like the house and the desk.
+  changed: []
   messages:
     - by: you
       role: person
@@ -220,7 +221,11 @@
       at: 2026-10-29T09:11:03.398Z
       text: "Done: `unit` on the reading layer; the stall's distances read '30 m' and '20 m'."
       status: ready
-  changed: []
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:42.787Z
+      text: ""
+      status: closed
 - id: cmvtaw00zp17
   status: closed
   by: fixer
@@ -288,3 +293,31 @@
         when another house was already chosen (a new round). The first time a house is marked, she
         stays where she is. Otherwise, when Aman's reply marks his house, she'd be pulled back from
         the foot of Street 4 mid-story. Tested both ways."
+- id: cmvtgqaw2s6s
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-29T11:31:22.658Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:16
+  commit: bfc7cf2d7ca653ce96a7284be3e4172a96f790bb
+  from: chat
+  text: A picture of clues already given (two-lines#spot) showed its clue buttons and a ↺, which
+    nobody can use there.
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:22.874Z
+      text: "Clues layer: a new field canGiveClues (default true). When it is off, there are no clue
+        buttons, no ↺ and no 'Show where it is', and the clues given are drawn as a caption line
+        under the plane, in the order given. affected: only dot-on-paper (unchanged, default on) and
+        two-lines#spot (off) set clues."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:29.828Z
+      text: "Done: canGiveClues added to the clues layer (clues.ts) and its view (view.tsx). With it off,
+        the given clues are a caption line, with no buttons. dot-on-paper is unchanged;
+        two-lines#spot sets it off."
+      status: ready
+  changed: []

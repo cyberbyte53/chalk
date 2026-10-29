@@ -45,8 +45,12 @@
 .question-prompt {
   margin: 0;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.35;
+}
+/* What the question turns on stands out from the instructions around it. */
+.question-prompt strong {
+  font-weight: 800;
 }
 .choices {
   border: 0;

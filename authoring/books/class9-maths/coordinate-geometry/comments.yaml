@@ -642,7 +642,7 @@
       text: ""
       status: closed
 - id: cmvt95txziko
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.263Z
@@ -678,8 +678,13 @@
         rises from the 4 and its five houses light up with 'Which one is Aman's?'; about two seconds
         later his reply, 'House 5', marks it and its address appears (played with timed frames)."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:00.285Z
+      text: ""
+      status: closed
 - id: cmvt95u1bhzc
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.383Z
@@ -739,8 +744,13 @@
         In cross-streets the pad stays put on the first step and the 'Riya: …' line fills the room
         kept for it. One side effect on another board is filed separately (seating-plan: the kept
         room shows as an empty band above the plan)."
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:02.739Z
+      text: ""
+      status: closed
 - id: cmvt95u26s0y
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.414Z
@@ -772,8 +782,13 @@
       text: Rechecked en and hi. Good. '↺ Back to the start' / '↺ शुरू पर वापस' and 'Lights off' / 'रोशनी
         बंद' say what they do. 'Lights off' now sits on its own row under the pad, so the arrows no
         longer shift sideways when it appears.
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:04.797Z
+      text: ""
+      status: closed
 - id: cmvt95u30850
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.444Z
@@ -807,6 +822,11 @@
       text: "Before: a new house was walked to from wherever Riya stood. After: choosing another house
         sends her back to the corner (the first time a house is marked, she stays put, mid-story)."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:06.331Z
+      text: ""
+      status: closed
 - id: cmvt95u3sdis
   status: closed
   by: reviewer
@@ -848,7 +868,7 @@
       text: ""
       status: closed
 - id: cmvt95u4k0x9
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.500Z
@@ -885,6 +905,11 @@
         given distance drawn as a measured dashed line ('30 m'); the one-distance line runs the full
         length, bold where the patch allows; then the student drags the stall to the spot."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:07.620Z
+      text: ""
+      status: closed
 - id: cmvt95u7jze7
   status: withdrawn
   by: reviewer
@@ -906,7 +931,7 @@
         dot-on-paper#ground/showHidden.
       status: withdrawn
 - id: cmvt95u8fp4c
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.639Z
@@ -937,8 +962,13 @@
       at: 2026-10-29T08:06:35.212Z
       text: Rechecked en and hi. Good. 'south fence' / 'दक्षिणी बाड़' now sits just under the bottom line
         at its end, and nothing reads as a heading for the clue buttons.
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:08.942Z
+      text: ""
+      status: closed
 - id: cmvt95ubp8ns
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.757Z
@@ -1003,8 +1033,13 @@
       at: 2026-10-29T09:26:17.196Z
       text: Rechecked on questions/table-lamp. The facing-edges option is back and the give-away is gone.
         Its note is still missing, filed on cmvtc1bzt6ws.
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:10.370Z
+      text: ""
+      status: closed
 - id: cmvt95ufvbpt
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.907Z
@@ -1040,8 +1075,13 @@
       text: "Rechecked en and hi by playing: tap (5, 3), then (3, 5), then (5, 3) again. Good. The marks
         read '(5, 3)' and '(3, 5)', a marked desk can be tapped again, and the header follows it.
         The '(5, 3)' label touches the orange ring of the chosen desk but stays readable."
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:11.614Z
+      text: ""
+      status: closed
 - id: cmvt95uqpuyu
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.297Z
@@ -1074,8 +1114,13 @@
         are 'counted from the front (row 1 is the front row)', and the row line is named 'Row (from
         the front)'."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:12.530Z
+      text: ""
+      status: closed
 - id: cmvt95urhs5f
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.325Z
@@ -1115,8 +1160,18 @@
       at: 2026-10-29T08:09:49.446Z
       text: "Rechecked en and hi with both desks tapped. Fixed. Hindi '…दूसरी स्तंभ 3, पंक्ति' / '5 में'
         keeps '5 में' together. English is one line for 'Yes: both use 3 and 5'."
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:13.479Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:14.261Z
+      text: ""
+      status: closed
 - id: cmvt95us8mz8
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.352Z
@@ -1146,8 +1201,48 @@
       at: 2026-10-29T09:11:01.876Z
       text: The cross-streets board is dropped, so this no longer applies.
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:14.762Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:14.797Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:15.536Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:15.907Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:16.147Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:16.669Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:16.782Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:22.869Z
+      text: ""
+      status: closed
 - id: cmvt95ut05k9
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.380Z
@@ -1186,8 +1281,68 @@
         read '(2, 5)', '(4, 3)', '(3, 4)'. The feedback says 'Look at the two marks: (4, 3) is on
         the 4th north–south street, (3, 4) on the 3rd.' The streets are visible roads both ways, and
         the mark stays readable next to Riya."
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:17.576Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:17.709Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:17.746Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:18.349Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:18.567Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:18.615Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:18.649Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:19.277Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:23.027Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:23.079Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:24.092Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:24.777Z
+      text: ""
+      status: closed
 - id: cmvt95uvxe4u
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.485Z
@@ -1218,8 +1373,28 @@
       text: Rechecked at 390 in English. Good. The question now breaks before '(3, 4)?' and keeps the pair
         whole. The other pairs on the board (text, marks, options, feedback) stay whole in both
         languages.
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:20.251Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:20.522Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:21.000Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:21.426Z
+      text: ""
+      status: closed
 - id: cmvt95uywdnd
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.592Z
@@ -1251,8 +1426,28 @@
         road, then up Street 4; the stall its two measured distances (30 m, 20 m); the desk its two
         distances to the front row and the first column."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:25.796Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:26.616Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:26.786Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:38.915Z
+      text: ""
+      status: closed
 - id: cmvt95v8aal3
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:31.930Z
@@ -1303,8 +1498,48 @@
       role: fixer
       at: 2026-10-29T09:11:03.806Z
       text: "The 'm' is in now (the unit field): the stall reads 30 m and 20 m."
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:28.573Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:28.764Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:29.044Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:29.837Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:30.203Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:30.240Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:30.307Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:40.108Z
+      text: ""
+      status: closed
 - id: cmvt9616nax5
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:39.647Z
@@ -1337,8 +1572,68 @@
       text: Rechecked en and hi by playing. Good. Nothing but the first clue shows at the start. 'Show
         where it is' / 'दिखाओ कहाँ है' appears only after the third clue, and tapping it marks the
         spot the clues already fixed.
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:31.955Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:32.024Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:32.864Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:33.383Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:33.900Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:33.940Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:34.122Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:34.161Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:34.649Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:34.736Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:35.515Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:35.758Z
+      text: ""
+      status: closed
 - id: cmvt9j3r3330
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T08:09:49.503Z
@@ -1383,8 +1678,13 @@
         पंक्ति 3' fills it exactly, and the plan doesn't move. On street-and-house, walked to Street
         4: English keeps the two lines its header needs, Hindi keeps one, and in both the map and
         the arrow pad stay put on the first step and at Street 4."
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:43.917Z
+      text: ""
+      status: closed
 - id: cmvt9zxu43g1
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T08:22:54.988Z
@@ -1409,8 +1709,28 @@
       at: 2026-10-29T09:11:01.567Z
       text: "Done: the teacher is gone from the seating plan."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:44.962Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:45.601Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:45.813Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:46.487Z
+      text: ""
+      status: closed
 - id: cmvta35y51hi
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T08:25:25.469Z
@@ -1437,8 +1757,58 @@
       text: "Done: the board is dropped. Ex 3.1 Q2 is a written question in the book's own words
         (questions/cross-street-count)."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:47.450Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:47.806Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:48.335Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:48.763Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:48.978Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:49.486Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:49.525Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:50.029Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:50.159Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:53.002Z
+      text: ""
+      status: closed
 - id: cmvta61jy5hb
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T08:27:39.742Z
@@ -1503,8 +1873,78 @@
         (i) and (ii) together. The options are '(i) one; (ii) one, a different crossing' (right),
         '(i) one; (ii) the same one as (i)' and '(i) two; (ii) two', and both wrong ones have notes
         that say why. One question now, so (ii) isn't answered from memory of (i).
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:51.524Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:51.894Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:52.427Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:52.963Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:53.042Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:53.082Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:53.894Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:53.933Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:53.973Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:54.447Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:54.688Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:55.222Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:55.263Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:57.029Z
+      text: ""
+      status: closed
 - id: cmvtc0w9dwio
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:38.833Z
@@ -1559,8 +1999,13 @@
         going 0→1→0. Fixed. 'bus stand' / 'बस अड्डा' now sits under the 0, below the numbers, where
         the bus never goes. −1, 0 and 1 and the stand's name all read, and the bus and 'The bus' sit
         clear above the line.
+    - by: you
+      role: person
+      at: 2026-10-29T11:26:59.925Z
+      text: ""
+      status: closed
 - id: cmvtc0wcoluj
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:38.952Z
@@ -1601,8 +2046,28 @@
         Nothing wrong flashes. At the stand it reads 'The bus: 0', which matches the text. 'Back to
         the start' still says start where the text says stand. That's small now that the readout
         reads 0, so I leave it for the person."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:01.060Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:01.747Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:01.888Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:02.435Z
+      text: ""
+      status: closed
 - id: cmvtc0wfkzo8
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.056Z
@@ -1632,6 +2097,16 @@
       at: 2026-10-29T09:26:15.545Z
       text: Rechecked in bus-stops (en and hi) and in bus-to-stop. Fixed. A one-line road has only ← and
         →, and the pad is one row.
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:06.409Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:07.123Z
+      text: ""
+      status: closed
 - id: cmvtc0wium1p
   status: withdrawn
   by: reviewer
@@ -1665,7 +2140,7 @@
         address off the map, it's one setting (showAddress)."
       status: withdrawn
 - id: cmvtc0wm31a5
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.291Z
@@ -1733,8 +2208,31 @@
       text: "Measures fixed: each now runs through the dot once the other distance is given (5 cm along
         row 9, 9 cm up column 5); before that, along a whole-number line near the far edge, not
         between grid lines. Played all four clues at 390."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:12:08.139Z
+      text: Rechecked after f70ec74 in en and hi by playing all four clues. Fixed. After '5 cm from the
+        left edge', the measure runs along row 10, a whole grid line, not between squares. After '9
+        cm above the bottom', '5 cm' runs along row 9 from the left edge to the dot, and '9 cm' runs
+        up column 5 from the bottom to the dot. Both measures end at the dot, on the two lines that
+        cross there. It now reads the same as two-lines#spot. Nothing left on this thread.
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:08.065Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:08.829Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:09.053Z
+      text: ""
+      status: closed
 - id: cmvtc0wsk0re
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.524Z
@@ -1772,8 +2270,13 @@
         it. The text names the dot ('the dot waiting in the north-east corner' / 'उत्तर-पूर्वी कोने
         में रखा बिंदु'). A small thought for the person, not blocking: the gate is drawn as a hollow
         ring, the same mark the third clue later uses for the stall's spot."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:12.335Z
+      text: ""
+      status: closed
 - id: cmvtc0wwc6lz
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.660Z
@@ -1807,8 +2310,18 @@
         the same desk' and 'No: they are two different desks' (Hindi 'हाँ: वे एक ही डेस्क हैं' and
         'नहीं: वे दो अलग डेस्क हैं') are the same shape, each on one line. The wrong answer's note
         still gives the reason."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:13.919Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:14.653Z
+      text: ""
+      status: closed
 - id: cmvtc0wz5ye9
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.761Z
@@ -1841,6 +2354,16 @@
       text: "Rechecked in seating-plan (en and hi, by playing) and in two-lines#desk (en and hi). Fixed.
         'This desk: Column 3, Row 5' / 'यह डेस्क: स्तंभ 3, पंक्ति 5' and 'The desk: Column 5, Row
         3'. The axis is named 'Row' / 'पंक्ति', and 'counted from the front' is still in the text."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:16.104Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:16.834Z
+      text: ""
+      status: closed
 - id: cmvtc0x88qa6
   status: withdrawn
   by: reviewer
@@ -1874,7 +2397,7 @@
         ends with it, as flow.md says. My 'false need' reading was wrong for this book."
       status: withdrawn
 - id: cmvtc1btvwn3
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.011Z
@@ -1915,8 +2438,13 @@
         south fence: the two distances are swapped.' / 'वह जगह पश्चिमी बाड़ से 10 m और दक्षिणी बाड़
         से 40 m है: दोनों दूरियाँ उलट गईं।' At (40, 10), Check gives 'That's it!'. A stall at 40 m
         now sits below the 'west fence' title and no longer covers it."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:18.368Z
+      text: ""
+      status: closed
 - id: cmvtc1bx0poq
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.124Z
@@ -1957,8 +2485,13 @@
         Check, the old note still shows under the new place, e.g. 'That's Street 5, House 3' while
         Riya walks up Street 3. Now that Check is right there, it's minor. Clearing the note on the
         first move would make it clean."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:20.209Z
+      text: ""
+      status: closed
 - id: cmvtc1bzt6ws
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.225Z
@@ -2012,8 +2545,13 @@
         edges must meet at a corner.' / 'ये दोनों किनारे आमने-सामने हैं… दोनों किनारे एक कोने पर
         मिलने चाहिए।' The prompt is the book's sentence, and the four options don't give the right
         one away."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:21.725Z
+      text: ""
+      status: closed
 - id: cmvtc1c2j6sf
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.323Z
@@ -2028,9 +2566,21 @@
     lesson already taught the order on seating-plan. Suggested: 'Tap the desk (5, 3), then press
     Check', with the axes named Column and Row as they are. Keep the rule for the wrong-answer note,
     which already says 'The column comes first'."
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:19.790Z
+      text: "Agreed in chat: the prompt gives only the pair."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:21.181Z
+      text: The prompt is now 'Tap the desk **(5, 3)**, then press Check.' (Hindi to match). The order is
+        taught on seating-plan and named in the wrong-answer note, 'The column comes first'.
+      status: ready
 - id: cmvtcmn0pvkm
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:36:33.289Z
@@ -2070,8 +2620,13 @@
         ऊपर (मकान 5)।' reads naturally. The new opening ('Aman's house isn't on one line…') is true
         and sets up the contrast with the bus. 'Along' is now 'आगे' here and on two-lines, so the
         word is consistent."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:23.140Z
+      text: ""
+      status: closed
 - id: cmvtcmn5szvz
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:36:33.472Z
@@ -2136,8 +2691,13 @@
         two lines at right angles.' / 'बस एक ही रेखा, यानी सड़क, पर रही… ये तीनों जगहें एक रेखा पर
         नहीं हैं…' The contrast can only be read one way now. It matches the bus and
         street-and-house lines, and 'along' is 'आगे' throughout."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:24.437Z
+      text: ""
+      status: closed
 - id: cmvtfxtv3sxn
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.223Z
@@ -2168,8 +2728,20 @@
       text: The opening now says 'each small square is 1 cm across', and place-the-dot's prompt 'Each
         small square is 1 cm.', in English and Hindi.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:12:08.189Z
+      text: Rechecked in en and hi. Fixed. The dot-on-paper opening says 'each small square is 1 cm
+        across' / 'हर छोटा खाना 1 cm चौड़ा है', before the clues use cm. The place-the-dot prompt
+        says 'Each small square is 1 cm.' / 'हर छोटा खाना 1 cm है।' (looked at f68b6eb5 in both
+        languages), so the question makes sense on its own.
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:25.913Z
+      text: ""
+      status: closed
 - id: cmvtfxu06wkt
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.406Z
@@ -2186,9 +2758,22 @@
     Possible fix: show the squares with no numbers at first, and bring in the numbered edge (or just
     the measure) when a distance clue is given. The flow asks for 'left edge and bottom marked in
     centimetres', so this is the person's call."
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:20.125Z
+      text: "Agreed in chat: no numbers on the page's edges; each distance clue labels its own line."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:21.673Z
+      text: "dot-on-paper's page now has its squares and its two edges, with no numbers (marks: none). '5
+        cm' and '9 cm' appear only as each distance clue's measure. flow.md's Needs changed to
+        match, so it waits on re-approval."
+      status: ready
 - id: cmvtfxu502ru
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.580Z
@@ -2217,8 +2802,20 @@
       text: The opening now starts 'In the town, the roads told Riya where to go. A page of your notebook
         has no roads. Here is a dot on one…', with the Hindi to match.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:12:08.447Z
+      text: Rechecked in en and hi. Fixed. 'In the town, the roads told Riya where to go. A page of your
+        notebook has no roads. Here is a dot on one…' / 'शहर में, सड़कों ने रिया को रास्ता बताया।
+        कॉपी के पन्ने पर कोई सड़क नहीं होती।…' The page now follows on from street-and-house, and
+        the student is told why this scene is different.
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:27.339Z
+      text: ""
+      status: closed
 - id: cmvtfxuakdp7
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.780Z
@@ -2243,12 +2840,26 @@
       text: "Now 'Only one point is at both distances: where the two lines cross.' Hindi: 'दोनों दूरियों
         पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं।'"
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:12:08.629Z
+      text: "Rechecked in en and hi after the fourth clue. Fixed. 'Only one point is at both distances:
+        where the two lines cross.' / 'दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती
+        हैं।' It reads plainly, and it matches the picture, where the two lines now cross at the
+        dot."
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:28.699Z
+      text: ""
+      status: closed
 - id: cmvtfxuf63j6
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.946Z
-  board: class9-maths/coordinate-geometry/questions/place-the-dot
+  board: class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63
+  target: ask
+  source: content/class9-maths/coordinate-geometry/questions/place-the-dot/family.ts:20
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
   text: "Mechanical (screen). The prompt bolds '**7 cm from the left edge**' and '**3 cm above the
     bottom**', but the question prompt is drawn bold all through, so the emphasis doesn't show in en
@@ -2259,6 +2870,7 @@
     played 2128bc63 (en) and 7a88de39 (hi): the swapped spot gets the 'two distances are swapped'
     note, another wrong spot gets 'Not quite', and the right spot passes. All four param rows have a
     swap on the page."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -2266,8 +2878,33 @@
       text: "Left open for the person: every question prompt is drawn at weight 800 (basics
         .question-prompt), so bold inside any prompt can't show, in every book. Making prompts
         lighter is a look decision for all questions, not this family."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:12:08.913Z
+      text: I accept the fixer's reason. Every question prompt is drawn at weight 800, so the bold can't
+        show in any of them, in any book. That makes it a decision about how all questions look, not
+        a fix to this family, and it rightly stays open for the person. Nothing else on
+        place-the-dot is wrong.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:19.440Z
+      text: "moved from content/class9-maths/coordinate-geometry/questions/place-the-dot to
+        content/class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63#ask: Re-pointed to
+        one of the family's boards: the family address no longer resolves to a built board."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:19.650Z
+      text: "Agreed in chat: question prompts drawn at normal weight, with bold showing."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:20.903Z
+      text: Every question prompt (basics .question-prompt) is now weight 500, and **bold** inside it 800.
+        On place-the-dot the two distances now stand out from 'Each small square is 1 cm. Drag it
+        there, then press Check.' This applies to every question in every book.
+      status: ready
 - id: cmvtfxunxm6v
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:15.261Z
@@ -2281,9 +2918,24 @@
     is also blue here, but it was orange on dot-on-paper, so a student may not take it as the same
     dot. Suggested: draw the dot in the same colour as on dot-on-paper, and if the plane can caption
     a point, add 'The dot: 5 cm from the left edge, 9 cm above the bottom'."
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:20.353Z
+      text: "Agreed in chat: the dot orange, as on dot-on-paper, with a caption like the house and the
+        desk."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:31:21.887Z
+      text: "two-lines#spot now draws the dot as it was left on dot-on-paper: orange, both lines crossing,
+        with '5 cm' and '9 cm'. The caption above it reads 'The dot: 5 cm from the left edge, 9 cm
+        above the bottom'. This needed a small clues-layer setting, canGiveClues: off means no
+        buttons, and the given clues become the caption. The thread for it is on the prop."
+      status: ready
+  changed: []
 - id: cmvtfxushdqn
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:15.425Z
@@ -2312,3 +2964,17 @@
         house, the dot and the desk; the Questions line says place a dot on a notebook page.
         props.md line 18: the house, the dot and the desk. Both wait for the person's re-approval."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T11:12:08.775Z
+      text: Rechecked the diff in f70ec74. Fixed. In flow.md, two-lines now names 'the bottom of the page'
+        and 'the left edge', its Needs say 'the house, the dot and the desk', and the Questions line
+        says 'place a dot on a notebook page'. props.md line 18 says 'the house, the dot and the
+        desk'. Lesson 1's plan no longer mentions the stall or the fences. The chapter story line
+        and the later lessons' fair-ground stalls are a different matter and right to stay. Waiting
+        only on the person's re-approval.
+    - by: you
+      role: person
+      at: 2026-10-29T11:27:35.530Z
+      text: ""
+      status: closed

@@ -18,8 +18,8 @@ export const tapTheDesk = family({
     const ask = check(b, {
       about: room,
       prompt: t(
-        `Desks are named (column, row): the column counted from the left, the row from the front. Tap the desk **(${column}, ${row})**, then press Check.`,
-        `डेस्क (स्तंभ, पंक्ति) से पहचानी जाती हैं: स्तंभ बाईं ओर से, पंक्ति आगे से। डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
+        `Tap the desk **(${column}, ${row})**, then press Check.`,
+        `डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isChosen(room, column, row),
       solve: [room.learner.chooseTarget({ x: column, y: row })],

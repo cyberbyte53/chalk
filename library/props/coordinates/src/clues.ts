@@ -23,6 +23,7 @@ export type CluesState = PlaneCore & {
   given: number[];
   isHiddenShown: boolean;
   canHide: boolean;
+  canGiveClues: boolean;
 };
 
 /**
@@ -102,6 +103,8 @@ export const clues = layersFor<CluesState>()({
     isHiddenShown: z.boolean(),
     /** Whether the learner can hide a point of their own (a tap). */
     canHide: z.boolean(),
+    /** Whether the clues are buttons; off for a picture of clues already given (nothing to tap). */
+    canGiveClues: z.boolean(),
   },
   defaults: {
     hidden: null,
@@ -109,6 +112,7 @@ export const clues = layersFor<CluesState>()({
     given: [],
     isHiddenShown: false,
     canHide: false,
+    canGiveClues: true,
   },
   offScreen: ["hidden"],
   isOn: (s) => s.clueChoices.length > 0,

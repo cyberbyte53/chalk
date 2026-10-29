@@ -1,5 +1,5 @@
 ---
-approved: 559846b494e0
+approved: bfc7cf2d7ca6
 ---
 
 Story: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and their class runs a stall fair on the school ground. It starts at Aman's house, where the two plan their stall: Riya has to get there. Their mission: a plan of the fair ground, so that a message like "the snacks stall goes at (3, 2)" puts every stall in exactly the right spot, with no one walking over to point. Each lesson is a stop on it: Riya walks to Aman's house by his address, two numbers (1); the town grows past the corner she started from, and the two roads she walked become the axes (2); they write down where every stall stands (3); volunteers set the stalls up from the numbers alone, and Aman's swapped pair puts the snacks in the wrong place (4). The fair's game stall is the dice game. Each lesson ends with the summary points it taught.
@@ -20,7 +20,7 @@ Needs: the main road drawn as a number line from the corner (Riya there), with n
 
 ### dot-on-paper  (o1; s3.1-II, fig3.2, ex3.1, ex3.1-q1)
 Purpose: a dot on a notebook page, which has no roads: how do you say exactly where it is? The book's own ways, one at a time, each shading where the dot could still be: "in the upper half" leaves half the page, "near the left edge" as well still a patch; "5 cm from the left edge" a whole line, drawn the full height of the page; only "9 cm above the bottom" as well leaves one point, the dot, where the two lines cross. Two distances from two fixed lines, the left edge and the bottom, fix it (Fig. 3.2). No story, and small numbers: the page is squared in centimetres, so the student counts them.
-Needs: a squared notebook page with its left edge and bottom marked in centimetres, and the dot on it; the four descriptions one at a time, each shading where the dot could still be, each distance drawn as a full-length line and measured from its edge; once both are given, both lines stay drawn, crossing at the dot.
+Needs: a notebook page squared in centimetres, with no numbers on its edges, and the dot on it; the four descriptions one at a time, each shading where the dot could still be, each distance drawn as a full-length line and measured from its edge; once both are given, both lines stay drawn, crossing at the dot.
 
 ### seating-plan  (o2; activity1, fig3.3)
 Purpose: a desk is given by its column and row, column first, so (5, 3) and (3, 5) are two different desks. This is where the lesson teaches the order of the two numbers.

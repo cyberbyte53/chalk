@@ -204,6 +204,8 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   );
   const sheet = b.prop(coordinatePlaneDef, "sheet", {
     ...bareNotebook(),
+    // No numbers on the edges: a notebook's page has none, and they would say where the dot is.
+    marks: Marks.None,
     point: null,
     reading: Reading.None,
     // The dot is on the page from the start: the question is how to say where it is.
@@ -372,7 +374,20 @@ const twoLines = page("two-lines", (b) => {
   );
   const spot = still(
     "spot",
-    { ...bareNotebook(), point: { x: 5, y: 9 }, reading: Reading.Distances },
+    {
+      ...bareNotebook(),
+      marks: Marks.None,
+      point: null,
+      // The dot as the student left it on dot-on-paper: both distances given, their lines crossing.
+      hidden: { x: 5, y: 9 },
+      isHiddenShown: true,
+      clueChoices: [
+        { words: t("The dot: 5\u00a0cm from the left edge", "बिंदु: बाएँ किनारे से 5\u00a0cm"), x: 5 },
+        { words: t("9\u00a0cm above the bottom", "नीचे के किनारे से 9\u00a0cm ऊपर"), y: 9 },
+      ],
+      given: [0, 1],
+      canGiveClues: false,
+    },
     t(
       "The notebook page: the dot 5 cm from the left edge and 9 cm above the bottom, each distance drawn.",
       "कॉपी का पन्ना: बिंदु बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर, हर दूरी खिंची हुई।",
