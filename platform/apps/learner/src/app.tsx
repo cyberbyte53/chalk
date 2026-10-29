@@ -229,7 +229,11 @@ export function App(): JSX.Element {
   };
 
   const query = new URLSearchParams(window.location.search);
-  if (isDevShell && (query.has("at") || query.has("review") || query.has("reviews")))
+  // `source` too: the boards written in a file or folder (a question family, from the editor).
+  if (
+    isDevShell &&
+    (query.has("at") || query.has("source") || query.has("review") || query.has("reviews"))
+  )
     return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
     return <ActivityFeed />;
