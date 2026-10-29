@@ -986,6 +986,13 @@
         unit is left alone. The right option is still the only Hindi option on two lines, but the
         line break isn't awkward and English has two two-line options, so I don't see it as a
         give-away any more.
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:20:00.150Z
+      text: "Reviewer: this fix was lost in a later move. The lamp question is now questions/table-lamp,
+        and it has three options again: the two-distance right answer is the only two-distance
+        option and the longest, and the facing-edges option and its feedback are gone. Filed on the
+        table-lamp question as a new thread, with the wording issue."
 - id: cmvt95ufvbpt
   status: ready
   by: reviewer
@@ -1453,3 +1460,313 @@
         for the swapped answer; cross-street-count is Ex 3.1 Q2 in the book's own words; two-steps
         and desk-pair are gone."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:20:00.052Z
+      text: "Reviewer, on the cross-street-count half of this fix: not there yet. The agreed principle is
+        that the source's own question is in the book's words, and it isn't. (1) The wording has
+        drifted. The book says 'If the 2nd street running in the North - South direction and 5th in
+        the East - West direction meet at some crossing, then we will call this cross-street (2,
+        5)'. Ours says 'The street in the 2nd North-South direction and 5th in the East-West
+        direction meet at some crossing', which doesn't parse ('the 2nd North-South direction'). It
+        also drops 'Using 1cm = 200 m, draw a model of the city on your notebook. Represent the
+        roads/streets by single lines.' and 'A particular cross-street is made by two streets, one
+        running in the North - South direction and another in the East - West direction.' Without
+        the drawing instruction, a student has nothing to count on. (2) The book asks (i) and (ii)
+        together, and its answer is 'one each, and they are different crossings'. Split into two
+        rows with the same options in a fixed order and the same answer 'One', the second row is
+        answered by memory. The real mistake, 'Two' (thinking (4, 3) and (3, 4) are the same
+        crossing), gets only 'Not quite.' Suggested: the book's text verbatim, one question asking
+        (i) and (ii), and a note on 'Two' that says (4, 3) and (3, 4) are different crossings."
+- id: cmvtc0w9dwio
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:38.833Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: road
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (overlap). On the screen. The 'bus stand' label under 0 sits on top of the tick
+    numbers: at 390 it reads '−1bus stand1', and the 0 itself is hidden under 'stand'. Hindi is the
+    same ('−1 बसअड्डा 1'). The 0 is the number this board is about ('Its stand is at 0', 'how far
+    from 0'). A student looking for 0 on the line can't find it. Suggested fix: put 'bus stand'
+    above the line at 0 (or under the 0 on a second row), so −1, 0 and 1 stay readable."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.146Z
+      text: A place's label goes above it when the place is on the horizontal line, so it never covers the
+        numbers under the line.
+      status: planned
+- id: cmvtc0wcoluj
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:38.952Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: road/whereWalker
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (wrong value flashes, and one name per thing). Played at speed 1 with frames.
+    While the bus moves from 1 to 2, the line under the road reads 'The bus: at the start' for about
+    0.3 s, then 'The bus: 2'. Each step flashes a wrong place: it shows the stop before the one it
+    is leaving. The same happens on street-and-house: walking from Street 1 to Street 2, 'Riya: at
+    the start' shows mid-step. It's the same coordinatePlane readout, so it may be a prop fix.
+    Principle 10, one name per thing: the text calls 0 'the stand' ('Its stand is at 0', '2 stops
+    from the stand'), but the readout says 'at the start' and the button 'Back to the start'. A
+    student reads 'start' and 'stand' as two places. Suggested fix: the readout keeps the last stop
+    until the move ends (or shows the new one at once). On this board, say 'at the stand' / 'Back to
+    the stand'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.259Z
+      text: Mid-step, the readout gives the stop being left (it read one step behind); at the start a
+        single-line walker reads '0', not 'at the start'.
+      status: planned
+- id: cmvtc0wfkzo8
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:39.056Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: road/step:up
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (screen). On a straight road the pad still shows ↑ and ↓, greyed, here and in
+    every bus-to-stop question. A bus on a line can only go ← or →, and the text says so ('with ←
+    and →'). The two dead buttons make the pad twice as tall and draw the eye to moves that don't
+    exist. Suggested fix: when the plane is one line (Axes.Horizontal), show only ← and →."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.361Z
+      text: On a single line (a number line), the pad has only ← and →.
+      status: planned
+- id: cmvtc0wium1p
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:39.174Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town/target
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (give-away). Principle: the screen mustn't give the answer away. After Aman's
+    house is found, the text says 'Tap any house to make it Aman's: Riya goes back to the corner.
+    Say how she gets there, then walk her and check.' Tapping Street 2, House 5 at once writes
+    'Aman's house: Street number 2, House number 5' above the map. What the student is asked to say
+    (along 2, up 5) is printed before they say it, so the 'say it' step is reading, not finding.
+    Suggested fix: in this phase, mark the house on the map but hold back the address line until
+    Riya arrives (then 'Riya is at Aman's house! Street number 2, House number 5' confirms it)."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:32.902Z
+      text: "Not changed, as I read it: the address is what Aman gives (the given), and what the student
+        says is the walk: along the main road to that street, then up. Turning the address off would
+        leave nothing to work from. If the person reads it differently, it's one setting
+        (showAddress)."
+- id: cmvtc0wm31a5
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:39.291Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ground
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Taste call, and it matters. Principles 4 and 6, and the source's 'two independent
+    informations' (s3.1-II). After '30 m from the west fence' the ground shows the whole line of
+    spots at 30 m. After '20 m from the south fence' that line disappears. A hollow ring appears on
+    the one spot, with a short dashed '20 m' at the right edge (x ≈ 52), away from the spot. The
+    student never sees the 20 m line cross the 30 m line, so 'only one spot fits both distances'
+    isn't shown. It's announced by a ring. And 'Drag the stall there' becomes 'drag the dot onto the
+    ring': the prop has placed it for them. A student who swaps the numbers is never caught, because
+    the ring shows them where to go. Suggested fix: on the third clue, keep the 30 m line and draw
+    the whole 20 m line from the south fence, so the two lines meet. Let the student find the
+    crossing and drag the stall there, with no ring until it's placed. When the stall is dropped at
+    the swapped spot (20, 30), give a note."
+  messages: []
+- id: cmvtc0wsk0re
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:39.524Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ground/hidden
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (missing labels). Principle 1 and 'can I see what the text points at?'. The text
+    says 'with the gate in the middle of the south fence', and Riya's first message is 'Near the
+    gate', but no gate is drawn on the ground. The student has to take the shaded patch on trust.
+    The blue dot in the top-right corner is the snacks stall (the board says 'the snacks stall
+    waiting by the north-east corner'), but it has no label. A student doesn't know that the dot is
+    the thing to drag until 'Drag the stall there' appears much later. Suggested fix: draw the gate
+    at 30 m on the south fence, named 'gate', and label the dot 'stall' (Hindi 'स्टॉल')."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.479Z
+      text: Draw the gate (a labelled mark in the middle of the south fence), and say in the text that the
+        dot in the corner is the stall.
+      status: planned
+- id: cmvtc0wwc6lz
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:39.660Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: same
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:293
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (give-away option). Principle 8. 'Are the desks (5, 3) and (3, 5) the same desk?'
+    The right option is the long one that gives the reason ('No: one is in column 5, row 3; the
+    other in column 3, row 5'). The wrong one is short ('Yes: both use 3 and 5'). The right option
+    can be picked by its look. Suggested fix: make them alike, e.g. 'Yes: both are 3 and 5' / 'No:
+    they are two different desks'. Then put the reason in the right answer's feedback."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.608Z
+      text: "Make the two options the same shape: 'No: they are two different desks' and 'Yes: they are
+        the same desk'."
+      status: planned
+- id: cmvtc0wz5ye9
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:39.761Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: room/target
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:271
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (wording). Principle 10. Tapping a desk shows 'This desk: Column 3, Row (from the
+    front) 5'. The axis title has been pasted into the sentence, so a second-language reader
+    stumbles on 'Row (from the front) 5'. two-lines#desk shows the same: 'The desk: Column 5, Row
+    (from the front) 3'. Suggested fix: keep the axis title for the axis, and give the address its
+    own words: 'This desk: column 3, row 5'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.841Z
+      text: The row line is named 'Row' again, so addresses read 'Column 5, Row 3'; 'counted from the
+        front' stays in the text.
+      status: planned
+- id: cmvtc0x88qa6
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:40.088Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: w7
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:426
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (a false 'need'). Principles 5 and 11, s3.1-idea and s3.2-perpendicular. The box
+    says 'To locate a point in a plane, we need two perpendicular lines: one horizontal, one
+    vertical.' The source says only two perpendicular lines are needed. In 3.2 it says they 'can
+    point any way, but in this chapter one is horizontal and one vertical', and the next lesson
+    (two-number-lines) teaches exactly that, with tilted pairs. Saying 'we need … one horizontal,
+    one vertical' here gives a reason the next lesson has to take back. Suggested fix: 'we need two
+    perpendicular lines (here, one across and one up)'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:32.696Z
+      text: "Not changed: this is the book's own summary point 1, word for word: 'To locate the position
+        of an object or a point in a plane, we require two perpendicular lines. One of them is
+        horizontal, and the other is vertical.' (source line 478). Lesson 2's 'any direction' (line
+        143) is taught there."
+- id: cmvtc1btvwn3
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:59.011Z
+  board: class9-maths/coordinate-geometry/questions/place-the-stall/59740b50
+  target: ask
+  source: content/class9-maths/coordinate-geometry/questions/place-the-stall/family.ts:19
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (missing note, a bug in the family). The flow asks for a note on the named wrong
+    state, the swapped pair. On this row (40 m from the west fence, 10 m from the south fence),
+    dragging the stall to the swapped spot (10, 40) and pressing Check says only 'Not quite.', with
+    no note. The guard in place-the-stall/family.ts is `isSwapped = west !== south && south <= 55 &&
+    west <= 35`. But the ground goes up to 40 m, so the swapped spot (10, 40) is on the ground, and
+    `west <= 35` drops it. A student who swaps the distances, the mistake this question exists to
+    catch, gets no hint. Suggested fix: compare with the ground's real top and right (west <= 40,
+    south <= 60). Smaller, same row: a stall at 40 m sits on the 'west fence' title at the top of
+    the left line and covers it."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:31.948Z
+      text: The swapped spot gets its note wherever it is on the ground (the guard matched the ground's
+        real size), and the ground keeps a margin above its last mark so a stall at 40 m doesn't
+        cover the fence's name.
+      status: planned
+- id: cmvtc1bx0poq
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:59.124Z
+  board: class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0
+  target: ask/result
+  source: content/class9-maths/coordinate-geometry/questions/walk-to-address/family.ts:18
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical (stale feedback). Played: walk Riya to Street 5, House 3 and press Check, which
+    gives 'Not quite. That's Street 5, House 3. The street comes first…'. The arrows still work, so
+    the student walks back and up to Street 3, House 5 without pressing 'Try again'. Riya now stands
+    at the right house, and the screen still says 'Not quite. That's Street 5, House 3' under her.
+    Check has gone, so the student thinks the right house is wrong. The same goal pattern is used in
+    bus-to-stop, tap-the-desk and place-the-stall. Suggested fix: any move in the prop after a check
+    clears the result and brings Check back (an implicit 'Try again'), or the prop is locked until
+    'Try again' is pressed."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:32.048Z
+      text: "After a wrong answer, Check stays: the student moves the prop and presses Check again, and
+        the old note is replaced by the new result (no separate Try again)."
+      status: planned
+- id: cmvtc1bzt6ws
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:59.225Z
+  board: class9-maths/coordinate-geometry/questions/table-lamp/44136fa3
+  target: ask
+  source: content/class9-maths/coordinate-geometry/questions/table-lamp/family.ts:12
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Mechanical, two things. (1) Not in the book's words (the agreed principle: the textbook's own
+    questions are in the book's words). Ex 3.1 Q1 is 'How will you describe the position of a table
+    lamp on your study table to another person?'. Ours adds ', so that they can put it in exactly
+    the same place?' and changes 'will' to 'can'. (2) Give-away option (principle 8), a regression.
+    The right option is again the only one with two distances, and the longest ('Its distance from
+    the left edge of the table and its distance from the front edge'). The fix on thread
+    cmvt95ubp8ns, a fourth option with two distances from facing edges, plus its feedback, didn't
+    come along when the lamp question moved from dot-on-paper to this family. Suggested fix: the
+    book's sentence as the prompt, and bring back the facing-edges option and its note."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:21:32.294Z
+      text: The prompt in the book's exact words, and the fourth option (two distances from facing edges)
+        back.
+      status: planned
+- id: cmvtc1c2j6sf
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:19:59.323Z
+  board: class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032
+  target: ask/prompt
+  source: content/class9-maths/coordinate-geometry/questions/tap-the-desk/family.ts:18
+  commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  text: "Taste call for the person. The agreed principle: the screen mustn't give the answer away. The
+    question checks one thing, column first. The prompt states it: 'Desks are named (column, row):
+    the column counted from the left, the row from the front. Tap the desk (5, 3)'. A student who
+    has forgotten the order reads it off the prompt, and the swapped-desk note is never reached. The
+    lesson already taught the order on seating-plan. Suggested: 'Tap the desk (5, 3), then press
+    Check', with the axes named Column and Row as they are. Keep the rule for the wrong-answer note,
+    which already says 'The column comes first'."
+  messages: []

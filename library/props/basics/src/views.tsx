@@ -106,14 +106,16 @@ export function GoalView({ view, locale }: PropViewProps<typeof goal>): JSX.Elem
       <p class="question-prompt" {...shows("prompt", s.prompt[locale])}>
         <RichText text={s.prompt[locale]} />
       </p>
+      {/* Check stays after a wrong answer: change the prop, then check again (the new result
+          replaces the old note). */}
       {!isLocked && (
         <button
           type="button"
           class="question-check"
           disabled={isHeld}
-          {...does(s.status === AnswerStatus.Wrong ? goal.actions.retry : goal.actions.check)}
+          {...does(goal.actions.check)}
         >
-          {t(locale, s.status === AnswerStatus.Wrong ? "tryAgain" : "check")}
+          {t(locale, "check")}
         </button>
       )}
       <AnswerFeedback status={s.status} feedback={s.feedback} locale={locale} />

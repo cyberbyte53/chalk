@@ -46,10 +46,7 @@ export const bareClassroom = (columns = 10, rows = 7) => ({
   window: { xMin: 0, xMax: columns + 0.5, yMin: 0, yMax: rows + 0.5 },
   marks: Marks.Counts,
   scene: Scene.Classroom,
-  axisNames: [t("Column", "स्तंभ"), t("Row (from the front)", "पंक्ति (आगे से)")] as [
-    ReturnType<typeof t>,
-    ReturnType<typeof t>,
-  ],
+  axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")] as [ReturnType<typeof t>, ReturnType<typeof t>],
   places: gridOf(columns, rows),
   placeKind: PlaceKind.Desk,
   showAddress: false,
@@ -57,7 +54,8 @@ export const bareClassroom = (columns = 10, rows = 7) => ({
 
 /** The fair ground: its south and west fences, marked every 10 m; a stall to drag into place. */
 export const bareGround = (width = 60, depth = 40) => ({
-  window: { xMin: 0, xMax: width, yMin: 0, yMax: depth },
+  // A margin past the last marks, so a stall at the edge doesn't cover a fence's name.
+  window: { xMin: 0, xMax: width + 3, yMin: 0, yMax: depth + 4 },
   marks: Marks.Counts,
   tickEvery: 10,
   scene: Scene.FairGround,

@@ -29,14 +29,15 @@ const PLOT_STEP = 0.25;
 
 /** Where Riya stands, to the block: mid-glide, the block she is leaving. */
 const blockOf = (s: PlaneView): Point =>
-  s.isWalking ? (s.trail.at(-2) ?? s.walkFrom ?? s.at) : s.at;
+  s.isWalking ? (s.trail.at(-1) ?? s.walkFrom ?? s.at) : s.at;
 
 /** What the walker's line says: where she is and, at the target, that she is there. */
 function walkWords(s: PlaneView, locale: Locale): string {
   const name = word(s.walkerName, locale);
   const now = blockOf(s);
   const from = s.walkFrom;
-  if (from !== null && now.x === from.x && now.y === from.y)
+  // On a single line the start is a number like any other (the bus stand is 0).
+  if (s.axes !== "horizontal" && from !== null && now.x === from.x && now.y === from.y)
     return locale === "hi" ? `${name}: शुरू की जगह पर` : `${name}: at the start`;
   // On a town's main road there is no house yet: only the street she is at.
   const isOnMainRoad = s.roads === "town" && from !== null && now.y === from.y;
@@ -107,7 +108,12 @@ function PlacesDraw({
             {isTarget && <circle class="cp-target-halo" r={size * 0.8} />}
             <PlacePicture kind={s.placeKind} size={size} />
             {p.label !== undefined && (
-              <text class="cp-place-label" y={size * 0.62 + 10} text-anchor="middle">
+              <text
+                class="cp-place-label"
+                // On the horizontal line, above: below it are the line's numbers.
+                y={p.y === 0 ? -size * 0.62 - 4 : size * 0.62 + 10}
+                text-anchor="middle"
+              >
                 {word(p.label, locale)}
               </text>
             )}
@@ -598,16 +604,24 @@ export function CoordinatePlaneView({
                 [Direction.Right, "→"],
                 [Direction.Down, "↓"],
               ] as const
-            ).map(([direction, symbol]) => (
-              <span key={direction} class={`cp-pad-${direction}`}>
-                <SymbolButton
-                  symbol={symbol}
-                  label={word(WORDS[direction], locale)}
-                  isEnabled={!s.isWalking && "to" in stepFrom(s, direction)}
-                  {...does(actions.step, { direction }, direction)}
-                />
-              </span>
-            ))}
+            )
+              // On a single line (a number line) there is no up or down.
+              .filter(
+                ([direction]) =>
+                  s.axes !== "horizontal" ||
+                  direction === Direction.Left ||
+                  direction === Direction.Right,
+              )
+              .map(([direction, symbol]) => (
+                <span key={direction} class={`cp-pad-${direction}`}>
+                  <SymbolButton
+                    symbol={symbol}
+                    label={word(WORDS[direction], locale)}
+                    isEnabled={!s.isWalking && "to" in stepFrom(s, direction)}
+                    {...does(actions.step, { direction }, direction)}
+                  />
+                </span>
+              ))}
             <span class="cp-pad-back">
               <SymbolButton
                 symbol={`↺ ${word(WORDS.back, locale)}`}

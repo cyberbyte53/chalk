@@ -15,7 +15,8 @@ export const placeTheStall = family({
     .refine((p) => p.west % 5 === 0 && p.south % 5 === 0, "on the 5 m steps the stall moves by"),
   build: ({ west, south }, b) => {
     const ground = b.prop(coordinatePlaneDef, "ground", bareGround());
-    const isSwapped = west !== south && south <= 55 && west <= 35;
+    // The swapped spot, when it is on the ground too (60 m across, 40 m up).
+    const isSwapped = west !== south && south <= 60 && west <= 40;
     const ask = check(b, {
       about: ground,
       prompt: t(

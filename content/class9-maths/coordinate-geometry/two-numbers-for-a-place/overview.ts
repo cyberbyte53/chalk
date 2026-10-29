@@ -205,6 +205,10 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   const ground = b.prop(coordinatePlaneDef, "ground", {
     ...bareGround(),
     reading: Reading.None,
+    // The gate, in the middle of the south fence ("near the gate" is about it).
+    places: [{ x: 30, y: 0, label: t("gate", "गेट") }],
+    placeKind: PlaceKind.Crossing,
+    canChooseTarget: false,
     hidden: { x: 30, y: 20 },
     clueChoices: [
       {
@@ -246,8 +250,8 @@ const dotOnPaper = page("dot-on-paper", (b) => {
     w.title(t("A spot on the fair ground", "मेले के मैदान पर एक जगह")),
     w.body(
       t(
-        "Back at school, the stalls go up on the fair ground. It has no roads: just a fence along the west side and one along the south side, marked every 10 m, with the gate in the middle of the south fence. Riya has to tell the volunteers where the snacks stall goes.",
-        "स्कूल लौटकर, मेले के मैदान पर स्टॉल लगने हैं। वहाँ कोई सड़क नहीं: बस पश्चिम की ओर एक बाड़ और दक्षिण की ओर एक, हर 10 m पर निशान के साथ, और दक्षिणी बाड़ के बीच में गेट। रिया को स्वयंसेवकों को बताना है कि नाश्ते का स्टॉल कहाँ लगेगा।",
+        "Back at school, the stalls go up on the fair ground. It has no roads: just a fence along the west side and one along the south side, marked every 10 m, with the gate in the middle of the south fence. Riya has to tell the volunteers where the snacks stall goes: it is the dot waiting in the north-east corner.",
+        "स्कूल लौटकर, मेले के मैदान पर स्टॉल लगने हैं। वहाँ कोई सड़क नहीं: बस पश्चिम की ओर एक बाड़ और दक्षिण की ओर एक, हर 10 m पर निशान के साथ, और दक्षिणी बाड़ के बीच में गेट। रिया को स्वयंसेवकों को बताना है कि नाश्ते का स्टॉल कहाँ लगेगा: वह उत्तर-पूर्वी कोने में रखा बिंदु है।",
       ),
     ),
     w.body(
@@ -299,14 +303,11 @@ const seatingPlan = page("seating-plan", (b) => {
     options: [
       {
         id: "no",
-        label: t(
-          "No: one is in column 5, row 3; the other in column 3, row 5",
-          "नहीं: एक स्तंभ 5, पंक्ति 3 में है; दूसरी स्तंभ 3, पंक्ति 5 में",
-        ),
+        label: t("No: they are two different desks", "नहीं: वे दो अलग डेस्क हैं"),
       },
       {
         id: "yes",
-        label: t("Yes: both use 3 and 5", "हाँ: दोनों में 3 और 5 हैं"),
+        label: t("Yes: they are the same desk", "हाँ: वे एक ही डेस्क हैं"),
         feedback: t(
           "The column comes first. Tap (5, 3), then (3, 5): they are in different places.",
           "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।",
