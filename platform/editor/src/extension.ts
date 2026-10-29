@@ -190,7 +190,7 @@ function html(webview: vscode.Webview, query: string): string {
       return;
     }
     // From the extension.
-    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(at=content\/|source=|review=)/, "") || "all books"; reload(); }
+    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(at=content[/]|source=|review=)/, "") || "all books"; reload(); }
     else if (m.type === "pick") setSelecting(true);
     else if (m.type === "review") { copy.style.display = m.count > 0 ? "" : "none"; copy.textContent = "Copy for agent (" + m.count + ")"; }
     else toFrame(m);
@@ -502,26 +502,6 @@ const isReview = (e: Element): e is ReviewItem =>
  * The one Chalk tree: Reviews at the top (your threads not handed over, then each review), then
  * book → chapter → its planning files and lessons.
  */
-/** The scheme of a prop's contract, read from the catalogue (`chalk-prop:/<type>.md?<address>`). */
-const CONTRACT = "chalk-prop";
-
-/** One prop's section of the catalogue: from its heading to the next prop's or package's. */
-function contractOf(catalogue: string, address: string): string {
-  let lines: string[];
-  try {
-    lines = readFileSync(catalogue, "utf8").split("\n");
-  } catch {
-    return `The catalogue isn't there: run \`pnpm catalogue\`.`;
-  }
-  const at = lines.findIndex((l) => l.startsWith(`\`${address}\``));
-  if (at === -1) return `${address} isn't in the catalogue: run \`pnpm catalogue\`.`;
-  let start = at;
-  while (start > 0 && !lines[start]?.startsWith("### ")) start--;
-  let end = at + 1;
-  while (end < lines.length && !/^#{2,3} /.test(lines[end] ?? "")) end++;
-  return lines.slice(start, end).join("\n").replace(/^### /, "# ");
-}
-
 /**
  * Every prop, as the catalogue lists them (`pnpm catalogue` writes it from the definitions): a
  * line per prop, `### \`type\` · role` then its address and the chapters that place it.
@@ -918,19 +898,10 @@ export function activate(context: vscode.ExtensionContext): void {
       await showPreview();
       void panel?.webview.postMessage({ type: "pick" });
     }),
-    // A prop: its live page in the preview to see and play with, and its contract to read.
-    vscode.workspace.registerTextDocumentContentProvider(CONTRACT, {
-      provideTextDocumentContent: (uri) =>
-        contractOf(join(root, "library", "catalogue.md"), uri.query),
-    }),
-    vscode.commands.registerCommand("chalk.prop.open", async (address: string) => {
-      const type = address.split("/").at(-1) ?? address;
-      await vscode.commands.executeCommand(
-        "markdown.showPreview",
-        vscode.Uri.from({ scheme: CONTRACT, path: `/${type}.md`, query: address }),
-      );
-      await showQuery(`at=${address}`);
-    }),
+    // A prop: its own page in the preview, the same page as `?dev&at=library/props/…`.
+    vscode.commands.registerCommand("chalk.prop.open", (address: string) =>
+      showQuery(`at=${address}`),
+    ),
     vscode.commands.registerCommand("chalk.refresh", () => {
       tree.refresh();
       void reviews.refresh();

@@ -2,7 +2,7 @@
   "name": "chalk-editor",
   "displayName": "Chalk",
   "description": "See Chalk content as boards beside its code: the book, chapter and lesson screens, every board as a phone draws it, pick a piece to ask the agent or leave a comment.",
-  "version": "0.6.5",
+  "version": "0.6.9",
   "publisher": "chalk",
   "private": true,
   "license": "UNLICENSED",
