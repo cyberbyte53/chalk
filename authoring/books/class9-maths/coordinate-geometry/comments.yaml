@@ -381,7 +381,7 @@
       text: ""
       status: closed
 - id: cmvt767mgcu9
-  status: open
+  status: planned
   by: fixer
   role: fixer
   createdAt: 2026-10-29T07:03:48.760Z
@@ -415,6 +415,52 @@
       text: It actually makes sense. So, and I am thinking like the art that we are making for chapter
         icon should know different than like we should also be able to put a picture in the chapter
         that is very nice and like we actually needed. So let's plan this properly first.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T07:34:07.499Z
+      text: >-
+        Plan for pictures in a lesson, separate from the chapter's cover art (agreed in chat to plan
+        it first).
+
+
+        **What a picture is.** Something on a page to look at: no state, nothing to tap. It's drawn
+        with the same drawing kit and look as props and art, so it matches the lesson and follows
+        the theme. Every picture carries a sentence saying what it shows; that's what a screen
+        reader and Jugnu read, the way a prop's parts are described.
+
+
+        **Two kinds, one piece:**
+
+        1. **Drawn:** a figure written in code, in a `pictures.tsx` next to the lesson's
+        `overview.ts` (e.g. Fig. 3.2's sheet with the dot and its two distances). Same rules as art:
+        drawing pieces, look colours only, exact by numbers, no raw colours or scripts, size-checked
+        by the build. It's drawn at the column's width, with the height the figure asks for.
+
+        2. **A prop, still:** a prop drawn from a state you give it, with its controls hidden and
+        nothing tappable. For two-lines: the town, the sheet and the classroom, each a
+        `coordinatePlane` showing just its two lines and its one place, side by side. The student
+        sees the same picture they just used.
+
+
+        **On a page:** `b.picture(figure, "name", { says: t(…) })`, placed in the column like any
+        piece, `row(…)` for side by side.
+
+
+        **Checked:** the build draws every picture (as `pnpm art` does), refuses a broken one, and
+        `look` shows them like any piece. `pnpm art` gets a section listing each lesson's pictures.
+
+
+        **Not in it:** photographs and portraits of real people. Descartes stays words.
+
+
+        **Order:** the picture piece first (player, build, checks, docs), then two-lines uses kind
+        2, then `props.md`'s row becomes 'configure coordinatePlane (still) and drawn pictures', for
+        you to re-approve.
+
+
+        Reply if you'd change anything; otherwise close this to approve and I'll build it after the
+        walker.
+      status: planned
 - id: cmvt7rnfzkig
   status: planned
   by: you
