@@ -1,4 +1,4 @@
-import { type ZodType, z } from "zod";
+import { type ZodType, type ZodTypeDef, z } from "zod";
 import {
   type ActionSpec,
   type AnyPropDef,
@@ -107,6 +107,22 @@ type KeysOf<L, K extends "actions" | "signals" | "derived"> = L extends { [P in 
   ? keyof NonNullable<R> & string
   : never;
 
+/** Each layer's actions, as written (each with the arguments it takes). */
+type ActionsOf<L> = L extends { readonly actions?: infer R } ? NonNullable<R> : never;
+
+/**
+ * A host's actions: its core's and every layer's, side by side, each keeping the arguments it
+ * takes, so a view's `does`/`call` and content's steps are checked against them as they're written.
+ */
+export type HostActions<C extends AnyLayer, L extends readonly AnyLayer[]> = {
+  // Each written against its layer's own fields; on the host, against all of them.
+  [K in keyof Both<ActionsOf<C> | ActionsOf<L[number]>>]: Both<
+    ActionsOf<C> | ActionsOf<L[number]>
+  >[K] extends { readonly args: ZodType<infer Ar, ZodTypeDef, unknown> }
+    ? ActionSpec<HostState<C, L>, Ar>
+    : never;
+};
+
 /** A host's whole state: its core's and every layer's fields, side by side. */
 export type HostState<C extends AnyLayer, L extends readonly AnyLayer[]> = Both<
   StateOf<C> | StateOf<L[number]>
@@ -130,7 +146,12 @@ export type HostDef<
   A extends string,
   G extends string,
   D extends string,
-> = PropDef<S, A, G, D> & { host: HostLayout };
+  Ac = unknown,
+> = Omit<PropDef<S, A, G, D>, "actions"> & {
+  host: HostLayout;
+  /** Every layer's actions, each with the arguments it takes. */
+  actions: Readonly<Ac>;
+};
 
 /**
  * A host prop from a core and its layers. Throws if two parts claim the same field or name, a
@@ -142,7 +163,8 @@ export function defineHost<C extends AnyLayer, const L extends readonly AnyLayer
   HostState<C, L>,
   KeysOf<C | L[number], "actions">,
   KeysOf<C | L[number], "signals">,
-  KeysOf<C | L[number], "derived">
+  KeysOf<C | L[number], "derived">,
+  HostActions<C, L>
 > {
   const parts: readonly AnyLayer[] = [spec.core, ...spec.layers];
   const claim = (what: string, keys: Iterable<string>, seen: Map<string, string>, by: string) => {

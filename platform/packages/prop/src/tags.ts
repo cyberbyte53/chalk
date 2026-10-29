@@ -51,8 +51,9 @@ export function inputName(action: string, key?: Key): string {
 type DoesParams<Ar> = unknown extends Ar
   ? // A host's action, whose arguments its type doesn't carry: the same rule.
     [] | [args: Readonly<Record<string, unknown>>, key: Key]
-  : [keyof Ar] extends [never]
-    ? [args?: Ar]
+  : // Nothing it must be sent (no arguments, or only optional ones): none, or arguments and a key.
+    Partial<Ar> extends Ar
+    ? [] | [args: Ar, key: Key]
     : [args: Ar, key: Key];
 
 /**
@@ -62,7 +63,7 @@ type DoesParams<Ar> = unknown extends Ar
  */
 export function does<S extends StoredState, Ar>(
   action: ActionSpec<S, Ar>,
-  ...params: DoesParams<Ar>
+  ...params: DoesParams<NoInfer<Ar>>
 ): InputTags {
   const [args, key] = params as [Ar | undefined, Key | undefined];
   const name = nameOf(action);

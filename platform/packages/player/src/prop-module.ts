@@ -27,7 +27,8 @@ export type PropViewProps<P = AnyPropDef> = {
   signal: (signal: SignalSpec, payload?: Readonly<Record<string, unknown>>) => void;
 };
 
-type StateOfDef<P> = P extends PropDef<infer S> ? S : StoredState;
+/** A definition's state: what its defaults are (a host's joins its layers'). */
+type StateOfDef<P> = P extends { readonly defaults: infer S extends StoredState } ? S : StoredState;
 
 /** A prop as the player knows it: the definition plus a view. */
 export type PropModule = { def: AnyPropDef; View: ComponentType<PropViewProps> };
