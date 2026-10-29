@@ -1,8 +1,8 @@
 # Written only by the chalk MCP's changes tool (platform/studio/src/reviewed.ts). Don't edit by hand.
 class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
-  stamp: 7f36877e2fcd4258
+  stamp: 667e41c0168cc557
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -94,12 +94,12 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
-  stamp: 952c98167ce3530b
+  stamp: 4104dc077705254e
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -191,12 +191,12 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
-  stamp: 31c84b910567c8ea
+  stamp: 413c8032a0c489f7
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -288,12 +288,12 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
-  stamp: 54da855a86f882cb
+  stamp: a80f84997656e73e
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -385,8 +385,8 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
   stamp: 03e3e317d8b10bd4
   props:
@@ -436,12 +436,12 @@ class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
-  stamp: 9039fad5eb72729d
+  stamp: ec7e624b0d013d86
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -503,12 +503,12 @@ class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
-  stamp: 5c2ab0eeb1a3a15b
+  stamp: d92e758e21490ea4
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -570,12 +570,12 @@ class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
-  stamp: f05d1518789a7f85
+  stamp: 98eb86c5f0395821
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -637,12 +637,12 @@ class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
-  stamp: 77d8dda42e6325b3
+  stamp: 7aa036d5a6a59014
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -704,8 +704,8 @@ class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
   stamp: ae83557f14015018
   props:
@@ -756,12 +756,12 @@ class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
-  stamp: 522ee6fa21e3c54c
+  stamp: 229d48223f6f61ef
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -958,12 +958,12 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
-  stamp: 340ee725c4fb917d
+  stamp: 96231219469ce591
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -1160,12 +1160,12 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
-  stamp: 476a4795350b5b40
+  stamp: 437602b958a52da5
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -1362,12 +1362,12 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
-  stamp: 49aabcc3ae63b6d6
+  stamp: a1737516b6f7488a
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -1564,12 +1564,12 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
-  stamp: 22028b837798150b
+  stamp: e0eaa5abb91f250d
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -1695,12 +1695,12 @@ class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
-  stamp: 35ffeb769255934e
+  stamp: 5022e0a0a10125b4
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -1826,12 +1826,12 @@ class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
-  stamp: 5e0942ed9ca1dc82
+  stamp: 44eea1b2e5618de9
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -1949,12 +1949,12 @@ class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
-  stamp: ab37d5f3cbd9ae5e
+  stamp: 341ee13416c18670
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -2072,12 +2072,12 @@ class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
 class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
-  stamp: 2432159db1c87a97
+  stamp: 262f988e89435294
   props:
-    coordinatePlane: ab0f786d4b625494
+    coordinatePlane: 70e1c5edb94b96be
     goal: 79b6e0fab9e596c9
   content:
     is:
@@ -2203,5 +2203,1145 @@ class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
           call: board.pass
         on: ask.correct
   by: reviewer
-  commit: 91bd9a26314b
-  at: 2026-10-29T16:29:45.599Z
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:42.028Z
+class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
+  stamp: 833c8a75c85efca1
+  props:
+    choice: 79b6e0fab9e596c9
+    coordinatePlane: 70e1c5edb94b96be
+    text: 79b6e0fab9e596c9
+  content:
+    is: []
+    jugnu:
+      props:
+        road: "a straight road as a number line: the bus stand at 0, stops both ways"
+      purpose: "A refresher on the number line: from the bus stand at 0, the bus moves stop by stop either way, and one number (how far, and which side) fixes where it is."
+    name: busStops
+    root:
+      children:
+        - kind: prop
+          name: w1
+          prop: text
+          with:
+            style: title
+            text:
+              en: A bus on a straight road
+              hi: सीधी सड़क पर एक बस
+        - kind: prop
+          name: w2
+          prop: text
+          with:
+            style: body
+            text:
+              en: "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, …: a number line."
+              hi: "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …: एक संख्या रेखा।"
+        - kind: prop
+          name: w3
+          prop: text
+          with:
+            style: body
+            text:
+              en: Move the bus one stop at a time with ← and →. Take it to stop **3**.
+              hi: बस को ← और → से एक-एक स्टॉप चलाओ। इसे स्टॉप **3** पर ले जाओ।
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axes: horizontal
+            canChooseTarget: false
+            marks: numbers
+            placeKind: crossing
+            places:
+              - label:
+                  en: bus stand
+                  hi: बस अड्डा
+                x: 0
+                y: 0
+              - x: -6
+                y: 0
+              - x: -5
+                y: 0
+              - x: -4
+                y: 0
+              - x: -3
+                y: 0
+              - x: -2
+                y: 0
+              - x: -1
+                y: 0
+              - x: 1
+                y: 0
+              - x: 2
+                y: 0
+              - x: 3
+                y: 0
+              - x: 4
+                y: 0
+              - x: 5
+                y: 0
+              - x: 6
+                y: 0
+            roads: grid
+            showAxisNames: false
+            showOrigin: false
+            walkFrom:
+              x: 0
+              y: 0
+            walkerKind: bus
+            walkerName:
+              en: The bus
+              hi: बस
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+        - isHidden: true
+          kind: prop
+          name: atThree
+          prop: text
+          with:
+            style: body
+            text:
+              en: "The bus is at **3**: three stops from the stand, to the right. Now take it to **−2**."
+              hi: "बस **3** पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे **−2** पर ले जाओ।"
+        - isHidden: true
+          kind: prop
+          name: side
+          prop: choice
+          with:
+            answer: left
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: false
+            options:
+              - feedback:
+                  en: "Look at the bus: it went left from 0. The minus sign says which side."
+                  hi: "बस को देखो: वह 0 से बाईं ओर गई। ऋण चिह्न बताता है कि किस ओर।"
+                id: right
+                label:
+                  en: 2 stops from the stand, to the right
+                  hi: अड्डे से 2 स्टॉप, दाईं ओर
+              - feedback:
+                  en: It is 2 stops away; the − only says which way, left.
+                  hi: वह 2 स्टॉप दूर है; − केवल दिशा बताता है, बाईं ओर।
+                id: minus
+                label:
+                  en: −2 stops from the stand
+                  hi: अड्डे से −2 स्टॉप
+              - id: left
+                label:
+                  en: 2 stops from the stand, to the left
+                  hi: अड्डे से 2 स्टॉप, बाईं ओर
+            prompt:
+              en: The bus is at −2. Where is it?
+              hi: बस −2 पर है। वह कहाँ है?
+        - isHidden: true
+          kind: prop
+          name: enough
+          prop: text
+          with:
+            style: definition
+            text:
+              en: "**The bus can only go along the road, so one number tells you exactly where it is:** how far from the stand, and which side."
+              hi: "**बस केवल सड़क के साथ-साथ चल सकती है, इसलिए एक संख्या ठीक-ठीक बता देती है कि वह कहाँ है:** अड्डे से कितनी दूर, और किस ओर।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          - args:
+              name: atThree
+            call: board.show
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: road.stepped
+      - do:
+          - args:
+              name: side
+            call: board.show
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: road.stepped
+      - do:
+          - args:
+              name: enough
+            call: board.show
+        on: side.correct
+      - do:
+          call: board.pass
+        on: side.correct
+  by: reviewer
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:41.412Z
+class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
+  stamp: c4c09cc572c76989
+  props:
+    coordinatePlane: 70e1c5edb94b96be
+    text: 79b6e0fab9e596c9
+  content:
+    is: []
+    jugnu:
+      props:
+        sheet: a notebook page squared in centimetres, with a dot on it, and the ways of saying where it is
+      purpose: "A dot on a notebook page, which has no roads. The book's ways of saying where it is, one at a time, each shading where it could still be: \"upper half\" half the page, \"near the left edge\" a patch, 5 cm from the left edge a whole line, and 9 cm above the bottom one point, where the two lines cross."
+    name: dotOnPaper
+    root:
+      children:
+        - kind: prop
+          name: w1
+          prop: text
+          with:
+            style: title
+            text:
+              en: A dot on a page
+              hi: पन्ने पर एक बिंदु
+        - kind: prop
+          name: w2
+          prop: text
+          with:
+            style: body
+            text:
+              en: Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.
+              hi: यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: left edge
+                hi: बायाँ किनारा
+              - en: bottom
+                hi: नीचे का किनारा
+            clueChoices:
+              - region:
+                  xMax: 15
+                  xMin: 0
+                  yMax: 12
+                  yMin: 6
+                words:
+                  en: It is in the upper half
+                  hi: यह ऊपरी आधे भाग में है
+              - region:
+                  xMax: 6
+                  xMin: 0
+                  yMax: 12
+                  yMin: 0
+                words:
+                  en: It is near the left edge
+                  hi: यह बाएँ किनारे के पास है
+              - words:
+                  en: It is 5 cm from the left edge
+                  hi: यह बाएँ किनारे से 5 cm पर है
+                x: 5
+              - words:
+                  en: It is 9 cm above the bottom
+                  hi: यह नीचे के किनारे से 9 cm ऊपर है
+                y: 9
+            hasGrid: true
+            hidden:
+              x: 5
+              y: 9
+            isHiddenShown: true
+            marks: counts
+            numbered: []
+            point: null
+            pointStep: 1
+            reading: none
+            scene: paper
+            showAxisNames: false
+            tickEvery: 1
+            unit: cm
+            window:
+              xMax: 15
+              xMin: 0
+              yMax: 12
+              yMin: 0
+        - isHidden: true
+          kind: prop
+          name: patch
+          prop: text
+          with:
+            style: body
+            text:
+              en: Both are true, and the dot could still be anywhere in that patch.
+              hi: दोनों सही हैं, और बिंदु अब भी उस हिस्से में कहीं भी हो सकता है।
+        - isHidden: true
+          kind: prop
+          name: line
+          prop: text
+          with:
+            style: body
+            text:
+              en: Closer, but every spot on that line is 5 cm from the left edge.
+              hi: पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।
+        - isHidden: true
+          kind: prop
+          name: fixed
+          prop: text
+          with:
+            style: definition
+            text:
+              en: "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom."
+              hi: "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          - args:
+              name: patch
+            call: board.show
+        if: ƒ at=>at(sheet).given.length===2
+        on: sheet.clueGiven
+      - do:
+          - args:
+              name: line
+            call: board.show
+        if: ƒ at=>at(sheet).given.length===3
+        on: sheet.clueGiven
+      - do:
+          args:
+            axis: x
+          call: sheet.numberLine
+        if: ƒ at=>at(sheet).given.includes(2)
+        on: sheet.clueGiven
+      - do:
+          args:
+            axis: y
+          call: sheet.numberLine
+        if: ƒ at=>at(sheet).given.includes(3)
+        on: sheet.clueGiven
+      - do:
+          - args:
+              name: fixed
+            call: board.show
+        on: sheet.pinned
+      - do:
+          call: board.pass
+        on: sheet.pinned
+  by: reviewer
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:41.412Z
+class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
+  stamp: d24d1ea7f6524161
+  props:
+    choice: 79b6e0fab9e596c9
+    coordinatePlane: 70e1c5edb94b96be
+    text: 79b6e0fab9e596c9
+  content:
+    is: []
+    jugnu:
+      props:
+        room: the classroom's 10 columns and 7 rows of desks, Sonia's at column 4, row 1
+      purpose: "A desk is named by its column, then its row: (5, 3) and (3, 5) use the same numbers and are two different desks. The one place the lesson asks about the order."
+    name: seatingPlan
+    root:
+      children:
+        - kind: prop
+          name: w1
+          prop: text
+          with:
+            style: title
+            text:
+              en: Desks in a classroom
+              hi: कक्षा में डेस्क
+        - kind: prop
+          name: w2
+          prop: text
+          with:
+            style: body
+            text:
+              en: "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its **column**, counted from the left, then its **row**, counted from the front (row 1 is the front row). Sonia sits in column 4, row 1, so her desk is **(4, 1)**."
+              hi: "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका **स्तंभ**, बाईं ओर से गिना हुआ, फिर उसकी **पंक्ति**, आगे से गिनी हुई (पंक्ति 1 सबसे आगे की है)। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क **(4, 1)** है।"
+        - kind: prop
+          name: w3
+          prop: text
+          with:
+            style: body
+            text:
+              en: Tap the desk at **(5, 3)**, then the one at **(3, 5)**.
+              hi: "**(5, 3)** वाली डेस्क दबाओ, फिर **(3, 5)** वाली।"
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            placeKind: desk
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 1
+                y: 6
+              - x: 1
+                y: 7
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 2
+                y: 6
+              - x: 2
+                y: 7
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 3
+                y: 6
+              - x: 3
+                y: 7
+              - label:
+                  en: Sonia
+                  hi: सोनिया
+                x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 4
+                y: 6
+              - x: 4
+                y: 7
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 5
+                y: 6
+              - x: 5
+                y: 7
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+              - x: 6
+                y: 6
+              - x: 6
+                y: 7
+              - x: 7
+                y: 1
+              - x: 7
+                y: 2
+              - x: 7
+                y: 3
+              - x: 7
+                y: 4
+              - x: 7
+                y: 5
+              - x: 7
+                y: 6
+              - x: 7
+                y: 7
+              - x: 8
+                y: 1
+              - x: 8
+                y: 2
+              - x: 8
+                y: 3
+              - x: 8
+                y: 4
+              - x: 8
+                y: 5
+              - x: 8
+                y: 6
+              - x: 8
+                y: 7
+              - x: 9
+                y: 1
+              - x: 9
+                y: 2
+              - x: 9
+                y: 3
+              - x: 9
+                y: 4
+              - x: 9
+                y: 5
+              - x: 9
+                y: 6
+              - x: 9
+                y: 7
+              - x: 10
+                y: 1
+              - x: 10
+                y: 2
+              - x: 10
+                y: 3
+              - x: 10
+                y: 4
+              - x: 10
+                y: 5
+              - x: 10
+                y: 6
+              - x: 10
+                y: 7
+            points:
+              - hasDropLines: false
+                isShown: false
+                name: (5, 3)
+                tone: accent
+                x: 5
+                y: 3
+              - hasDropLines: false
+                isShown: false
+                name: (3, 5)
+                tone: accent
+                x: 3
+                y: 5
+            scene: classroom
+            showAddress: true
+            targetName:
+              en: This desk
+              hi: यह डेस्क
+            window:
+              xMax: 10.5
+              xMin: 0
+              yMax: 7.5
+              yMin: 0
+        - isHidden: true
+          kind: prop
+          name: same
+          prop: choice
+          with:
+            answer: no
+            concepts:
+              - fab4d618fc2c9277
+            isGraded: false
+            options:
+              - feedback:
+                  en: "The column comes first. Tap (5, 3), then (3, 5): they are in different places."
+                  hi: "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।"
+                id: yes
+                label:
+                  en: "Yes: they are the same desk"
+                  hi: "हाँ: वे एक ही डेस्क हैं"
+              - id: no
+                label:
+                  en: "No: they are two different desks"
+                  hi: "नहीं: वे दो अलग डेस्क हैं"
+            prompt:
+              en: Are the desks (5, 3) and (3, 5) the same desk?
+              hi: क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            name: (5, 3)
+          call: room.showPoint
+        if: ƒ at=>{const target=at(room).target;return target!==null&&target.x===x&&target.y===y}
+        on: room.targetChosen
+      - do:
+          args:
+            name: (3, 5)
+          call: room.showPoint
+        if: ƒ at=>{const target=at(room).target;return target!==null&&target.x===x&&target.y===y}
+        on: room.targetChosen
+      - do:
+          - args:
+              name: same
+            call: board.show
+        if: ƒ at=>at(room).points.every(p=>p.isShown||at(room).target?.x===p.x&&at(room).target?.y===p.y)
+        on: room.targetChosen
+      - do:
+          call: board.pass
+        on: same.correct
+  by: reviewer
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:41.412Z
+class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
+  stamp: 5d636c789ab6587c
+  props:
+    coordinatePlane: 70e1c5edb94b96be
+    text: 79b6e0fab9e596c9
+  content:
+    is: []
+    jugnu:
+      props:
+        town: the town's main road, a number line from Riya's corner; the streets not risen yet
+      purpose: "The main road is a number line, and 'Street 4' is one number on it. Then Street 4 rises from the 4, a second number line with five houses, and one number can't say which: 'House 5' is a number on the line that rose. A pair is how far along, then how far up the line that rises there."
+    name: streetAndHouse
+    root:
+      children:
+        - kind: prop
+          name: w1
+          prop: text
+          with:
+            style: title
+            text:
+              en: Finding Aman's house
+              hi: अमन का घर ढूँढना
+        - kind: prop
+          name: w2
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. She asks him where he lives. He replies: **Street 4**."
+              hi: "रिया और अमन कक्षा 9 में हैं, और उनकी कक्षा एक स्टॉल मेला लगा रही है। वे अपना स्टॉल अमन के घर पर तय करेंगे, पर रिया वहाँ कभी नहीं गई। वह उससे पूछती है कि वह कहाँ रहता है। वह जवाब देता है: **गली 4**।"
+        - kind: prop
+          name: w3
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Their town has a main road, and the streets leave it numbered 1, 2, 3, … from Riya's corner: like a number line. Move her along it with →."
+              hi: "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, … गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे → से उस पर चलाओ।"
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            at:
+              x: 0
+              y: 0
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: true
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+              - x: 6
+                y: 5
+            roads: town
+            scene: town
+            showAddress: true
+            showWhere: true
+            upLines: []
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - isHidden: true
+          kind: prop
+          name: fiveHouses
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Street 4 rises from the 4: a second number line, going up, with **five houses** on it. Which one is Aman's?"
+              hi: "4 से गली 4 ऊपर उठती है: एक दूसरी संख्या रेखा, ऊपर की ओर, जिस पर **पाँच मकान** हैं। अमन का कौन-सा है?"
+        - isHidden: true
+          kind: prop
+          name: reply
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Riya messages him again. He replies: **House 5**, a number on the street that rose. Walk her up to it."
+              hi: "रिया उसे फिर संदेश भेजती है। वह जवाब देता है: **मकान 5**, उठी हुई गली पर एक संख्या। उसे वहाँ तक ऊपर चलाओ।"
+        - isHidden: true
+          kind: prop
+          name: found
+          prop: text
+          with:
+            style: definition
+            text:
+              en: "**Aman's house isn't on one line: it's along the main road and then up a street, so one number couldn't say where it is.** It took two numbers: how far along the main road (Street 4), then how far up the street that rises there (House 5)."
+              hi: "**अमन का घर एक रेखा पर नहीं है: वह मुख्य सड़क पर आगे और फिर एक गली में ऊपर है, इसलिए एक संख्या नहीं बता सकी कि वह कहाँ है।** इसके लिए दो संख्याएँ लगीं: मुख्य सड़क पर कितना आगे (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।"
+        - isHidden: true
+          kind: prop
+          name: anyHouse
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Now every street rises, and the town is there. **Tap any house** to make it Aman's: Riya goes back to the corner. Say how she gets there, then walk her and check."
+              hi: "अब हर गली उठती है, और शहर बन जाता है। **किसी भी मकान को दबाओ** ताकि वह अमन का घर बन जाए: रिया कोने पर लौट जाती है। बोलो कि वह वहाँ कैसे पहुँचेगी, फिर उसे चलाकर जाँचो।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          args:
+            at: 4
+          call: town.raiseUpLine
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: town.stepped
+      - do:
+          seq:
+            - args:
+                axis: x
+                value: 4
+              call: town.lightLine
+            - wait: 2.5
+            - args:
+                x: 4
+                y: 5
+              call: town.chooseTarget
+        if: ƒ at=>at(town).upLines?.length===1
+        on: town.risen
+      - do:
+          - args:
+              name: fiveHouses
+            call: board.show
+        if: ƒ at=>at(town).upLines?.length===1
+        on: town.risen
+      - do:
+          - args:
+              name: reply
+            call: board.show
+        if: ƒ at=>at(town).target?.x===4
+        on: town.targetChosen
+      - do:
+          - args:
+              name: found
+            call: board.show
+          - args:
+              name: anyHouse
+            call: board.show
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: town.arrived
+      - do:
+          call: town.raiseAllUpLines
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: town.arrived
+      - do:
+          call: board.pass
+        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
+        on: town.arrived
+  by: reviewer
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:41.412Z
+class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
+  stamp: 69fec01242bef81d
+  props:
+    coordinatePlane: 70e1c5edb94b96be
+    text: 79b6e0fab9e596c9
+  content:
+    is: []
+    jugnu:
+      purpose: "The house, the dot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry."
+    name: twoLines
+    root:
+      children:
+        - kind: prop
+          name: w1
+          prop: text
+          with:
+            style: title
+            text:
+              en: Two lines did it every time
+              hi: हर बार दो रेखाओं ने काम किया
+        - kind: prop
+          name: w2
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Look back at the three places:"
+              hi: "उन तीन जगहों को फिर देखो:"
+        - kind: prop
+          name: w3
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**The house:** along the main road to Street 4, then up Street 4 to House 5."
+              hi: "**घर:** मुख्य सड़क पर गली 4 तक, फिर गली 4 में मकान 5 तक।"
+        - kind: prop
+          name: house
+          prop: coordinatePlane
+          size:
+            maxHeight: 0.35
+          still:
+            en: "The town: Riya's route along the main road to Street 4, then up it to House 5."
+            hi: "शहर: रिया का रास्ता, मुख्य सड़क पर गली 4 तक, फिर उसमें मकान 5 तक।"
+          with:
+            at:
+              x: 4
+              y: 5
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            canChooseTarget: false
+            canStep: false
+            marks: counts
+            placeKind: house
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+            roads: town
+            scene: town
+            showAddress: true
+            showAxisNames: false
+            showWhere: false
+            target:
+              x: 4
+              y: 5
+            trail:
+              - x: 1
+                y: 0
+              - x: 2
+                y: 0
+              - x: 3
+                y: 0
+              - x: 4
+                y: 0
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+            walkFrom:
+              x: 0
+              y: 0
+            window:
+              xMax: 5.5
+              xMin: 0
+              yMax: 5.5
+              yMin: 0
+        - kind: prop
+          name: w4
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**The dot:** 5 cm across from the left edge, then 9 cm up from the bottom."
+              hi: "**बिंदु:** बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।"
+        - kind: prop
+          name: spot
+          prop: coordinatePlane
+          size:
+            maxHeight: 0.35
+          still:
+            en: "The notebook page: the dot 5 cm from the left edge and 9 cm above the bottom, each distance drawn."
+            hi: "कॉपी का पन्ना: बिंदु बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर, हर दूरी खिंची हुई।"
+          with:
+            axisNames:
+              - en: left edge
+                hi: बायाँ किनारा
+              - en: bottom
+                hi: नीचे का किनारा
+            canGiveClues: false
+            clueChoices:
+              - words:
+                  en: "The dot: 5 cm from the left edge"
+                  hi: "बिंदु: बाएँ किनारे से 5 cm"
+                x: 5
+              - words:
+                  en: 9 cm above the bottom
+                  hi: नीचे के किनारे से 9 cm ऊपर
+                y: 9
+            given:
+              - 0
+              - 1
+            hasGrid: true
+            hidden:
+              x: 5
+              y: 9
+            isHiddenShown: true
+            marks: counts
+            point: null
+            pointStep: 1
+            scene: paper
+            showAxisNames: false
+            tickEvery: 1
+            unit: cm
+            window:
+              xMax: 15
+              xMin: 0
+              yMax: 12
+              yMin: 0
+        - kind: prop
+          name: w5
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**The desk:** column 5 across, then row 3 up from the front."
+              hi: "**डेस्क:** स्तंभ 5 आड़े, फिर आगे से पंक्ति 3 ऊपर।"
+        - kind: prop
+          name: desk
+          prop: coordinatePlane
+          size:
+            maxHeight: 0.35
+          still:
+            en: "The classroom: the desk at column 5, row 3, with its distances to the front row and the first column drawn."
+            hi: "कक्षा: स्तंभ 5, पंक्ति 3 वाली डेस्क, आगे की पंक्ति और पहले स्तंभ से उसकी दूरियाँ खिंची हुई।"
+          with:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            canChooseTarget: false
+            marks: counts
+            placeKind: desk
+            places:
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 6
+                y: 1
+              - x: 6
+                y: 2
+              - x: 6
+                y: 3
+              - x: 6
+                y: 4
+            points:
+              - hasDropLines: true
+                isShown: true
+                name: (5, 3)
+                tone: accent
+                x: 5
+                y: 3
+            scene: classroom
+            showAddress: true
+            target:
+              x: 5
+              y: 3
+            targetName:
+              en: The desk
+              hi: डेस्क
+            window:
+              xMax: 6.5
+              xMin: 0
+              yMax: 4.5
+              yMin: 0
+        - kind: prop
+          name: w6
+          prop: text
+          with:
+            style: body
+            text:
+              en: "The bus stayed on one line, the road, and one number said where it was. These three places are not on one line: each took **two distances, along two lines at right angles**. The first says how far along, the second how far up."
+              hi: "बस एक ही रेखा, यानी सड़क, पर रही, और एक संख्या ने बता दिया कि वह कहाँ है। ये तीनों जगहें एक रेखा पर नहीं हैं: हर एक के लिए **दो समकोण रेखाओं के साथ दो दूरियाँ** लगीं। पहली बताती है कि कितना आगे, दूसरी कि कितना ऊपर।"
+        - kind: prop
+          name: w7
+          prop: text
+          with:
+            style: definition
+            text:
+              en: "**To locate a point in a plane, we need two perpendicular lines: one horizontal, one vertical.** The point is then given by two numbers, in order: how far along the horizontal line, then how far up the vertical one."
+              hi: "**किसी तल में एक बिंदु का स्थान बताने के लिए हमें दो लंब रेखाएँ चाहिए: एक क्षैतिज, एक ऊर्ध्वाधर।** तब बिंदु क्रम से दो संख्याओं से बताया जाता है: क्षैतिज रेखा पर कितनी दूर, फिर ऊर्ध्वाधर रेखा पर कितना ऊपर।"
+        - kind: prop
+          name: w8
+          prop: text
+          with:
+            style: body
+            text:
+              en: This idea is the start of **coordinate geometry**. It grew from **René Descartes** (1596–1650), a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the **Cartesian system**.
+              hi: यही विचार **निर्देशांक ज्यामिति** की शुरुआत है। यह **रेने देकार्त** (1596–1650) से आया, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को **कार्तीय पद्धति** कहते हैं।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+    studentOnly: []
+    when:
+      - do:
+          call: board.pass
+        on: board.started
+  by: reviewer
+  commit: c83ba8052ce2
+  at: 2026-10-29T16:34:41.412Z

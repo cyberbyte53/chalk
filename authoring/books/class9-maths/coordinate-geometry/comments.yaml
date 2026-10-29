@@ -3078,7 +3078,7 @@
   target: spot
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:362
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: person
+  turn: agent
   text: >-
     Mechanical (regression from cmvtqi7psx10). Picture and the last board don't agree.
 
@@ -3110,6 +3110,17 @@
         - The page in two-lines#spot now has both edges numbered (the plane's default), matching how
         dot-on-paper ends.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:34:37.284Z
+      text: >-
+        Rechecked two-lines#spot in en and hi. Fixed.
+
+        - Both edges are numbered, the bottom 1 to 15 and the left edge 1 to 12. The two lines cross
+        at 5 and 9, where dot-on-paper leaves them.
+
+        - The caption, the '5 cm' and '9 cm' measures and the orange dot are unchanged, and nothing
+        overlaps the numbers.
 - id: cmvtrdv8rqpu
   status: ready
   by: reviewer
@@ -3119,7 +3130,7 @@
   target: town/whereWalker
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: person
+  turn: agent
   text: >-
     Mechanical (screen, a jump). On a 390 phone in English:
 
@@ -3157,6 +3168,22 @@
         - Measured at 390 in English: the arrows sit 116px below the town at the start, when the
         target appears, and on arriving.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:34:37.320Z
+      text: >-
+        Rechecked street-and-house at 390 in English, playing from the corner to Street 4, waiting
+        for the reply, then up to House 5. Fixed.
+
+        - The arrow pad stays at the same height on every step, when Aman's house is marked, and on
+        arriving.
+
+        - 'Riya is at Aman's house! Street number 4, House number 5' uses two lines that were
+        already kept for it.
+
+        - Other boards that use the walker: bus-stops and the walk-to-address and bus-to-stop
+        questions, in en and hi. Nothing moved or broke. The questions don't show the line, and no
+        empty band appears there.
 - id: cmvtrdv9ru7w
   status: ready
   by: reviewer
@@ -3164,7 +3191,7 @@
   createdAt: 2026-10-29T16:29:38.319Z
   source: authoring/books/class9-maths/coordinate-geometry/flow.md:23
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: person
+  turn: agent
   quote: a notebook page squared in centimetres, with no numbers on its edges, and the dot on it
   text: >-
     Mechanical (flow and board disagree, from cmvtqi7psx10).
@@ -3195,6 +3222,12 @@
 
         - flow.md waits on the person's re-approval.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:34:37.350Z
+      text: Read flow.md. Fixed. dot-on-paper's Needs now says 'with no numbers on its edges at first (an
+        edge is numbered once a distance along it is given)', which matches the board. It waits on
+        the person's re-approval.
 - id: cmvtrdvatype
   status: ready
   by: reviewer
@@ -3214,6 +3247,7 @@
 
     - Suggested: drop P, or keep only H (Street 2, House 5), or say the town is 6 streets wide. The
     flow then needs the person's re-approval.
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -3233,5 +3267,10 @@
 
         - flow.md waits on the person's re-approval.
       status: ready
-  changed: []
-  turn: person
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T16:34:37.381Z
+      text: Read flow.md. Fixed. street-and-house's Purpose now says the town has six streets, not eight,
+        so each block is big enough to tap on a phone. P (Street 7) is gone, and H (Street 2, House
+        5) keeps its numbers. This matches the board. It waits on the person's re-approval.
+  turn: agent
