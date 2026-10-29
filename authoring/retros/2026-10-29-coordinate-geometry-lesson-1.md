@@ -13,6 +13,8 @@ Everything around that work has two targets:
 
 Each fix below is the simplest one that removes a cause, not a check added on top of it.
 
+The prompts and skills (how chapters are planned, how lessons are built) come after: once the systematic things hold, we iterate on them, keeping the rules that help and dropping the ones that don't.
+
 ## What worked
 
 - `look` and `play` run the real app: picture, source line, state, and what each step changed. They found real bugs.
