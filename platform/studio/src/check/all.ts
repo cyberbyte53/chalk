@@ -44,8 +44,6 @@ const steps: [string, () => Promise<boolean>][] = [
     () => run("suppressions", tsx, [...tsconfig, "src/suppressions-cli.ts"], studio),
   ],
   ["catalogue", stamped("catalogue", ["src/catalogue-cli.ts", "--check"])],
-  // Not stamped: what it reports depends on git history, which a stamp doesn't see.
-  ["pipeline", () => run("pipeline", tsx, [...tsconfig, "src/pipeline-cli.ts"], studio)],
   [
     "content",
     () =>
@@ -63,6 +61,9 @@ const steps: [string, () => Promise<boolean>][] = [
         studio,
       ),
   ],
+  // After the content build: a lesson's self-review reads its boards' records from it. Not stamped:
+  // what it reports depends on git history, which a stamp doesn't see.
+  ["pipeline", () => run("pipeline", tsx, [...tsconfig, "src/pipeline-cli.ts"], studio)],
   // After the content build, which records every board's pieces.
   ["threads", () => run("threads", tsx, [...tsconfig, "src/threads-cli.ts"], studio)],
   ["lint", () => lint(root, { force })],

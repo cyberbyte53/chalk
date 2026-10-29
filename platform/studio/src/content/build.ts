@@ -62,6 +62,7 @@ import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateBoard } from "../validate";
 import { renderArt } from "./art";
+import { recordOf } from "./board-record";
 import {
   MODULES_FILE,
   boardModules,
@@ -72,6 +73,9 @@ import {
 } from "./concepts";
 import { filesUnder, fingerprint, importClosure, isRecordingImports, recordImports } from "./deps";
 import { checkNote, checkWitness } from "./witness";
+
+/** Where each board's record is written in build/ (board-record.ts). */
+export const REVIEW_DIR = "review";
 
 type Defs = Readonly<Record<string, AnyPropDef>>;
 type Modules = Readonly<Record<string, PropModule>>;
@@ -525,6 +529,11 @@ function makeBoard(
   }
 }
 
+/** A good board's record, for knowing what changed since it was reviewed (the changes tool). */
+function keepRecord(c: Context, item: BuiltPage | BuiltQuestion, board: Board): void {
+  c.files.set(`${REVIEW_DIR}/${item.path}.json`, recordOf(board, item.props));
+}
+
 function propTypesOf(board: Board): string[] {
   return propPieces(board.root).map((p) => p.prop);
 }
@@ -570,6 +579,7 @@ async function buildPages(
     };
     const made = makeBoard(c, where, item, module, file);
     if (made === undefined || !(await checkBoard(c, where, made.built, made.board))) continue;
+    keepRecord(c, item, made.board);
     for (const type of propTypesOf(made.board)) used.add(type);
     claimId(c, item.id, where);
     c.sources.set(path, sitesOf(made.built.board, p.site));
@@ -667,6 +677,7 @@ async function buildFamily(
       report(c, where, "a question needs a witness: how a learner gets it right");
       continue;
     }
+    keepRecord(c, item, board);
     claimId(c, id, where);
     c.sources.set(path, {
       ...sitesOf(built.board, undefined),

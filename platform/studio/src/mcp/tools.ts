@@ -31,6 +31,7 @@ import { pipelineLines, readChapters } from "../pipeline";
 import { findUp } from "../pronunciations";
 import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
+import { changesUnder, changesWords, passUnder } from "../reviewed";
 import { DEFAULT_LANE, type Step, previewBase, shoot, withNothingDrawing } from "./app-driver";
 import { type Answer, CHECK_SCREENS, check, look, play, readReach, targetOf } from "./look";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
@@ -231,8 +232,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
    * sees; the writer still checks every call.
    */
   const SEES: Readonly<Record<Who["role"], readonly string[]>> = {
-    [Role.Fixer]: ["look", "play", "affected", "comments", "comment", "pipeline"],
-    [Role.Reviewer]: ["look", "play", "affected", "comments", "comment", "pipeline"],
+    [Role.Fixer]: ["look", "play", "affected", "comments", "comment", "pipeline", "changes"],
+    [Role.Reviewer]: ["look", "play", "affected", "comments", "comment", "pipeline", "changes"],
   };
   const MY_MOVES = [...new Set(MOVES[ROLE].map((m) => m.to))] as Status[];
 
@@ -326,6 +327,42 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       },
     ),
     "pipeline",
+  );
+
+  offer(
+    server.registerTool(
+      "changes",
+      {
+        title: "What changed since it was reviewed",
+        description:
+          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (exactly which pieces' setup, words or rules, and which props' code changed, with the files), new (never passed), or gone. Start a review here: look and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you.",
+        inputSchema: {
+          at: z
+            .string()
+            .describe(
+              'A lesson, chapter or board: "content/class9-maths/coordinate-geometry/two-numbers-for-a-place".',
+            ),
+          pass: z
+            .boolean()
+            .optional()
+            .describe("Record every board there as passed, as built now."),
+        },
+        annotations: { readOnlyHint: false, openWorldHint: false },
+      },
+      async ({ at, pass }) => {
+        const under = contentPath(at).path.replace(/\/$/, "");
+        if (under.split("/").length < 2)
+          return result([text("Give a chapter, a lesson or a board: content/<book>/<chapter>/…")]);
+        if (pass === true) {
+          const n = passUnder(root, under, NAME);
+          return result([
+            text(`✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now.`),
+          ]);
+        }
+        return result([text(changesWords(changesUnder(root, under)))]);
+      },
+    ),
+    "changes",
   );
 
   const point = z.object({ x: z.number(), y: z.number().optional() }).strict();

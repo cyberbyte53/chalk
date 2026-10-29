@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { readComments, waitsOn } from "./comments";
+import { changesUnder } from "./reviewed";
 
 /**
  * A chapter's planning files (platform/docs/authoring-pipeline.md), in authoring/books/<book>/<chapter>/:
@@ -207,34 +208,6 @@ export type Chapter = {
   lessons: LessonState[];
 };
 
-/** The commit time of the last commit touching these paths, in seconds, or 0. */
-function lastCommitTime(root: string, paths: readonly string[]): number {
-  if (paths.length === 0) return 0;
-  try {
-    const out = execFileSync("git", ["log", "-1", "--format=%ct", "--", ...paths], {
-      cwd: root,
-      encoding: "utf8",
-    }).trim();
-    return out === "" ? 0 : Number(out);
-  } catch {
-    return 0;
-  }
-}
-
-/** Whether these paths have changes not yet committed. */
-function isDirty(root: string, path: string): boolean {
-  try {
-    return (
-      execFileSync("git", ["status", "--porcelain", "--", path], {
-        cwd: root,
-        encoding: "utf8",
-      }).trim() !== ""
-    );
-  } catch {
-    return false;
-  }
-}
-
 /** Each lesson the chapter builds, and whether it waits on a self-review (see `LessonState`). */
 export function readLessons(root: string, book: string, chapter: string): LessonState[] {
   const manifest = join(root, "content", book, chapter, "build.yaml");
@@ -246,27 +219,15 @@ export function readLessons(root: string, book: string, chapter: string): Lesson
   } catch {
     return [];
   }
-  const runs = join(root, "authoring", "books", book, chapter, "runs");
-  const notes = existsSync(runs)
-    ? readdirSync(runs)
-        .filter((f) => f.endsWith("-self-review.md"))
-        .map((f) => ({
-          path: join("authoring", "books", book, chapter, "runs", f),
-          text: readFileSync(join(runs, f), "utf8"),
-        }))
-    : [];
+  // A lesson waits on a self-review while any of its boards is new or changed since it was passed
+  // (reviewed.ts: the board as built now, against its record when passed).
   return slugs.map((slug) => {
-    const folder = join("content", book, chapter, slug);
-    const reviewed = lastCommitTime(
-      root,
-      notes.filter((n) => n.text.includes(slug)).map((n) => n.path),
+    const pending = changesUnder(root, `${book}/${chapter}/${slug}`).filter(
+      (c) => c.status === "new" || c.status === "changed" || c.status === "gone",
     );
-    if (isDirty(root, folder))
-      return { slug, isToSelfReview: true, why: "changed, not committed or reviewed yet" };
-    if (reviewed === 0) return { slug, isToSelfReview: true, why: "never self-reviewed" };
-    if (lastCommitTime(root, [folder]) > reviewed)
-      return { slug, isToSelfReview: true, why: "changed since its last self-review" };
-    return { slug, isToSelfReview: false };
+    if (pending.length === 0) return { slug, isToSelfReview: false };
+    const names = pending.map((c) => `${c.board.split("/").at(-1)} (${c.status})`).join(", ");
+    return { slug, isToSelfReview: true, why: names };
   });
 }
 

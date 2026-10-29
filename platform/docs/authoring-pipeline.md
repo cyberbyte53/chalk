@@ -184,7 +184,7 @@ Any change to a prop's fields, actions or signals, at any step after 5 and from 
 
 The agent rechecks each and either changes it or says why it still holds; the person approves again. (Id-level diffing, marking only what cites a changed id, is added later only if this proves too noisy.) Coming into an existing chapter works the same way.
 
-**Lessons are self-reviewed before the person sees them.** A built lesson whose folder changed (committed or not) after the last committed `runs/*-self-review.md` that names it is **to self-review**: the Chalk tree marks it, and `pnpm check`'s pipeline step lists it (a note, not a failure: lessons change while they're built). `build-lesson` and `apply-review` end with a self-review by the `reviewer` agent, and only then hand the lesson over.
+**Lessons are self-reviewed before the person sees them.** A built lesson with a board that is new, or changed since it was last passed (`authoring/books/<book>/<chapter>/reviewed.yaml`: each board's record from the build when the reviewer passed it, written only by the chalk MCP's `changes` tool), is **to self-review**: the Chalk tree marks it, and `pnpm check`'s pipeline step lists it (a note, not a failure: lessons change while they're built). `build-lesson` and `apply-review` end with a self-review by the `reviewer` agent, and only then hand the lesson over.
 
 ## Threads on everything
 

@@ -263,7 +263,9 @@ describe("building content", () => {
     );
     expect(messages(result)).toMatch(/row 0: .*fewer than 2 decimal places/);
     expect(messages(result)).toMatch(/row 1: params\.from/);
-    const questions = [...result.files.keys()].filter((k) => k.includes("/questions/pick/"));
+    const questions = [...result.files.keys()].filter(
+      (k) => k.includes("/questions/pick/") && !k.startsWith("review/"),
+    );
     expect(questions).toHaveLength(1);
   }, 60_000);
 
