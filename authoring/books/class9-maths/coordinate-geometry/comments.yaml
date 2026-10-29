@@ -3070,7 +3070,7 @@
 
         - The two town sentences are gone, and the 1 cm comes before any clue uses cm.
 - id: cmvtrdv76ig7
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.226Z
@@ -3078,7 +3078,7 @@
   target: spot
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:362
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
+  turn: person
   text: >-
     Mechanical (regression from cmvtqi7psx10). Picture and the last board don't agree.
 
@@ -3094,9 +3094,24 @@
 
     - Suggested: number both edges on this still (numbered: x and y), as dot-on-paper leaves them,
     in en and hi.
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:24.855Z
+      text: "Plan: draw two-lines#spot with both edges numbered, as dot-on-paper now ends."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:24.919Z
+      text: >-
+        Done (2a4d366):
+
+        - The page in two-lines#spot now has both edges numbered (the plane's default), matching how
+        dot-on-paper ends.
+      status: ready
 - id: cmvtrdv8rqpu
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.283Z
@@ -3104,7 +3119,7 @@
   target: town/whereWalker
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
+  turn: person
   text: >-
     Mechanical (screen, a jump). On a 390 phone in English:
 
@@ -3121,15 +3136,35 @@
     - Suggested: keep room for the longest line this board can show (the arrival line), as was done
     for the address header. Or shorten it so it fits one line, e.g. 'At Aman's house: Street number
     4, House number 5'. Check the Hindi too.
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:24.949Z
+      text: "Plan: the walker's line keeps room for the longest thing it can say, from the start."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:24.992Z
+      text: >-
+        Done (2a4d366):
+
+        - The line keeps room for its longest message (arriving at the target, or standing at the
+        far corner), drawn unseen under the words.
+
+        - A board that can have a target reserves the arrival message from the start.
+
+        - Measured at 390 in English: the arrows sit 116px below the town at the start, when the
+        target appears, and on arriving.
+      status: ready
 - id: cmvtrdv9ru7w
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.319Z
   source: authoring/books/class9-maths/coordinate-geometry/flow.md:23
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
+  turn: person
   quote: a notebook page squared in centimetres, with no numbers on its edges, and the dot on it
   text: >-
     Mechanical (flow and board disagree, from cmvtqi7psx10).
@@ -3142,15 +3177,31 @@
 
     - Suggested: add 'an edge is numbered, like a ruler, once a distance along it is given'. The
     flow then needs the person's re-approval.
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:25.020Z
+      text: "Plan: dot-on-paper's Needs says an edge is numbered once a distance along it is given."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:25.062Z
+      text: >-
+        Done (2a4d366):
+
+        - Needs now reads: no numbers on its edges at first (an edge is numbered once a distance
+        along it is given).
+
+        - flow.md waits on the person's re-approval.
+      status: ready
 - id: cmvtrdvatype
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.357Z
   source: authoring/books/class9-maths/coordinate-geometry/flow.md:18
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
   quote: H (Street 2, House 5) and P (Street 7, House 4) keep their numbers
   text: >-
     Mechanical (flow and board disagree, from cmvtqgem9cga).
@@ -3163,4 +3214,24 @@
 
     - Suggested: drop P, or keep only H (Street 2, House 5), or say the town is 6 streets wide. The
     flow then needs the person's re-approval.
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:25.091Z
+      text: "Plan: say the town has six streets; drop P (Street 7)."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:33:25.133Z
+      text: >-
+        Done (2a4d366):
+
+        - street-and-house's Purpose says the town has six streets, not eight, so blocks are big
+        enough to tap on a phone.
+
+        - P (Street 7, House 4) is gone; H (Street 2, House 5) keeps its numbers.
+
+        - flow.md waits on the person's re-approval.
+      status: ready
+  changed: []
+  turn: person
