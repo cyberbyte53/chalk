@@ -196,7 +196,7 @@
       text: ""
       status: closed
 - id: cmvt0g68mve3
-  status: open
+  status: ready
   by: fixer
   role: fixer
   createdAt: 2026-10-29T03:55:36.214Z
@@ -244,3 +244,19 @@
         So the question is: (A) all streets up in lesson 1, and the south side arrives in lesson 2
         with minus signs (my recommendation), or (B) the textbook's map with streets up and down
         from the start?
+    - by: you
+      role: person
+      at: 2026-10-29T04:02:24.237Z
+      text: Yeah, I like your idea, let's go with A.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T04:02:38.164Z
+      text: "A: all streets go up in lesson 1; the south and west side arrive in lesson 2 (town-grows)
+        with minus signs."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T04:02:38.191Z
+      text: "No change needed: flow.md already says this (street-and-house and town-grows)."
+      status: ready
+  changed: []
