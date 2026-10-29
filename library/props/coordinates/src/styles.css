@@ -12,6 +12,10 @@
   font: var(--text-body) / var(--text-body-leading) var(--font-body);
   color: var(--color-on-surface);
 }
+.cp-address {
+  /* Two lines of room, kept before Aman's house is known, so the map doesn't move when it is. */
+  min-height: 2lh;
+}
 .cp-address strong {
   color: var(--color-secondary);
 }

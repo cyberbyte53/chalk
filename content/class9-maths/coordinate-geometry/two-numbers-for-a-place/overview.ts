@@ -124,13 +124,13 @@ const dotOnPaper = page("dot-on-paper", (b) => {
         words: t("In the middle of the ground", "मैदान के बीच में"),
         region: { xMin: 15, xMax: 45, yMin: 10, yMax: 30 },
       },
-      { words: t("30 m from the west fence", "पश्चिमी बाड़ से 30 m"), x: 30 },
-      { words: t("20 m from the south fence", "दक्षिणी बाड़ से 20 m"), y: 20 },
+      { words: t("30\u00a0m from the west fence", "पश्चिमी बाड़ से 30\u00a0m"), x: 30 },
+      { words: t("20\u00a0m from the south fence", "दक्षिणी बाड़ से 20\u00a0m"), y: 20 },
     ],
   });
   b.standsFor(
     ground,
-    "the fair ground, with its west and south fences; the snacks stall's spot is 30 m from the west fence and 20 m from the south fence",
+    "the fair ground, with its west and south fences; the snacks stall's spot is 30\u00a0m from the west fence and 20\u00a0m from the south fence",
   );
   b.witness(
     ground.learner.giveClue({ clue: 0 }),
@@ -139,8 +139,8 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   );
   const fixed = w.definition(
     t(
-      "**Two distances fixed the spot:** 30 m from the west fence and 20 m from the south fence. *In the middle* left a whole patch, and one distance left a whole line of spots.",
-      "**दो दूरियों ने जगह तय कर दी:** पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m। *बीच में* से पूरा इलाका बचा, और एक दूरी से जगहों की पूरी रेखा।",
+      "**Two distances fixed the spot:** 30\u00a0m from the west fence and 20\u00a0m from the south fence. *In the middle* left a whole patch, and one distance left a whole line of spots.",
+      "**दो दूरियों ने जगह तय कर दी:** पश्चिमी बाड़ से 30\u00a0m और दक्षिणी बाड़ से 20\u00a0m। *बीच में* से पूरा इलाका बचा, और एक दूरी से जगहों की पूरी रेखा।",
     ),
     "fixed",
   );
@@ -154,27 +154,27 @@ const dotOnPaper = page("dot-on-paper", (b) => {
       {
         id: "two",
         label: t(
-          "20 cm from the left edge and 15 cm from the front edge",
-          "बाएँ किनारे से 20 cm और आगे के किनारे से 15 cm",
+          "20\u00a0cm from the left edge and 15\u00a0cm from the front edge",
+          "बाएँ किनारे से 20\u00a0cm और आगे के किनारे से 15\u00a0cm",
         ),
       },
       {
         id: "one",
-        label: t("20 cm from the left edge", "बाएँ किनारे से 20 cm"),
+        label: t("20\u00a0cm from the left edge", "बाएँ किनारे से 20\u00a0cm"),
         feedback: t(
-          "Every spot 20 cm from the left edge fits: a whole line of them, like the line on the fair ground. It needs a second distance.",
-          "बाएँ किनारे से 20 cm पर हर जगह ठीक बैठती है: उनकी पूरी रेखा, जैसे मेले के मैदान पर। दूसरी दूरी चाहिए।",
+          "Every spot 20\u00a0cm from the left edge fits: a whole line of them, like the line on the fair ground. It needs a second distance.",
+          "बाएँ किनारे से 20\u00a0cm पर हर जगह ठीक बैठती है: उनकी पूरी रेखा, जैसे मेले के मैदान पर। दूसरी दूरी चाहिए।",
         ),
       },
       {
         id: "parallel",
         label: t(
-          "20 cm from the left edge and 60 cm from the right edge",
-          "बाएँ किनारे से 20 cm और दाएँ किनारे से 60 cm",
+          "20\u00a0cm from the left edge and 60\u00a0cm from the right edge",
+          "बाएँ किनारे से 20\u00a0cm और दाएँ किनारे से 60\u00a0cm",
         ),
         feedback: t(
-          "Those two edges face each other, so the second distance adds nothing: every spot 20 cm from the left edge is 60 cm from the right. The two edges must meet at a corner.",
-          "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से 20 cm पर हर जगह दाएँ से 60 cm पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
+          "Those two edges face each other, so the second distance adds nothing: every spot 20\u00a0cm from the left edge is 60\u00a0cm from the right. The two edges must meet at a corner.",
+          "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से 20\u00a0cm पर हर जगह दाएँ से 60\u00a0cm पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
         ),
       },
       {
@@ -252,7 +252,7 @@ const seatingPlan = page("seating-plan", (b) => {
         id: "no",
         label: t(
           "No: one is in column 5, row 3; the other in column 3, row 5",
-          "नहीं: एक स्तंभ 5, पंक्ति 3 में है; दूसरी स्तंभ 3, पंक्ति 5 में",
+          "नहीं: एक स्तंभ 5, पंक्ति 3 में है; दूसरी स्तंभ 3, पंक्ति 5\u00a0में",
         ),
       },
       {
@@ -430,8 +430,8 @@ const twoLines = page("two-lines", (b) => {
       reading: Reading.Distances,
     },
     t(
-      "The fair ground: the south fence across, the west fence up, and the stall 30 m from one and 20 m from the other.",
-      "मेले का मैदान: दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी, और स्टॉल एक से 30 m और दूसरी से 20 m पर।",
+      "The fair ground: the south fence across, the west fence up, and the stall 30\u00a0m from one and 20\u00a0m from the other.",
+      "मेले का मैदान: दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी, और स्टॉल एक से 30\u00a0m और दूसरी से 20\u00a0m पर।",
     ),
   );
   const desk = still(
@@ -465,8 +465,8 @@ const twoLines = page("two-lines", (b) => {
     house,
     w.body(
       t(
-        "**The stall:** the south fence across, the west fence up. 30 m, then 20 m.",
-        "**स्टॉल:** दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी। 30 m, फिर 20 m।",
+        "**The stall:** the south fence across, the west fence up. 30\u00a0m, then 20\u00a0m.",
+        "**स्टॉल:** दक्षिणी बाड़ आड़ी, पश्चिमी बाड़ खड़ी। 30\u00a0m, फिर 20\u00a0m।",
       ),
     ),
     spot,

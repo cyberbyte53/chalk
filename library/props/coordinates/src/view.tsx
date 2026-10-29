@@ -463,18 +463,17 @@ export function CoordinatePlaneView({
           {PART_WORDS[s.named][locale]}
         </p>
       )}
-      {hasWalker && s.trail.length > 0 && (
-        <p
-          class="cp-line"
-          {...shows(
-            "whereWalker",
-            { along: s.along, up: s.up, walked: s.walked },
-            walkWords(s, locale),
-          )}
-        >
-          {walkWords(s, locale)}
-        </p>
-      )}
+      {/* Riya's line keeps its room from the start, so her first step doesn't move the arrows. */}
+      {hasWalker &&
+        (s.trail.length > 0 ? (
+          <p class="cp-line" {...shows("whereWalker", blockOf(s), walkWords(s, locale))}>
+            {walkWords(s, locale)}
+          </p>
+        ) : (
+          <p class="cp-line" aria-hidden="true">
+            &nbsp;
+          </p>
+        ))}
       {hasPlotting && next !== undefined && (
         <p class="cp-line" {...shows("next", next, pair(next))}>
           {pair(next)}
