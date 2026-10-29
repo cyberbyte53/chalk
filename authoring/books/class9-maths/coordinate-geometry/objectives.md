@@ -1,3 +1,7 @@
+---
+approved: 9406618dfcc5
+---
+
 - **o1** Explain why one number fixes a point on a line but not in a plane, and give a position in a plane with two independent pieces of information (street and house, distances from two edges). (s3.1, s3.1-number-line, s3.1-I, fig3.1, s3.1-II, fig3.2, ex3.1, ex3.1-q1)
 - **o2** Write a position as a pair in an agreed order (column first, then row) and tell (5, 3) from (3, 5). (activity1, fig3.3, ex3.1-q2)
 - **o3** Say that two perpendicular lines can locate any point in a plane, and that this idea, Descartes', is coordinate geometry and the Cartesian system. (s3.1-idea, box-descartes, fig3.4)
