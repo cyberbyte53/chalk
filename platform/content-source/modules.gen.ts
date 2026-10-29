@@ -9,8 +9,8 @@ export const modules: ContentModules = {
     import("../../content/class9-maths/coordinate-geometry/questions/bus-to-stop/family"),
   "class9-maths/coordinate-geometry/questions/cross-street-count/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/cross-street-count/family"),
-  "class9-maths/coordinate-geometry/questions/place-the-stall/family.ts": () =>
-    import("../../content/class9-maths/coordinate-geometry/questions/place-the-stall/family"),
+  "class9-maths/coordinate-geometry/questions/place-the-dot/family.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/questions/place-the-dot/family"),
   "class9-maths/coordinate-geometry/questions/table-lamp/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/table-lamp/family"),
   "class9-maths/coordinate-geometry/questions/tap-the-desk/family.ts": () =>
