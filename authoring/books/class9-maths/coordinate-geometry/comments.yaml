@@ -265,3 +265,59 @@
       at: 2026-10-29T04:02:56.520Z
       text: ""
       status: closed
+- id: cmvt1adgqnip
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-10-29T04:19:05.258Z
+  source: authoring/books/class9-maths/coordinate-geometry/props.md:9
+  commit: 8eb77221243d7e73f95500194fbdfdb7c6c90676
+  quote: "new: `coordinatePlane` (the core)"
+  text: >-
+    coordinatePlane's definition is written, before any view or run body (commit 8eb7722,
+    library/props/coordinates; its README lists every field and action). The thread is here because
+    the prop's own address only works once it's registered, and that needs its view, which is the
+    next step.
+
+
+    One host, the plane, and six parts a board turns on:
+
+    • Core (plane.ts): the two lines and only the marks the lesson has defined. `marks` is none (a
+    sheet's edges), counts (1, 2, 3 …, no zero: lesson 1's town) or numbers (number lines with 0 and
+    negatives). The axis names are in the lesson's words (Street number / House number, x / y, t /
+    d). O, the OX/OX′ directions and the quadrants (named I→IV by a sweep) each switch on
+    separately. `scene` draws the town, the classroom, the paper or the fair ground behind.
+    bringTogether is the two number lines meeting at their zeroes. Tapping names a part. A figure's
+    named points can be shown one at a time.
+
+    • reading: a point to drag or tap. How much is written grows board by board: perpendiculars →
+    distances → abscissa/ordinate → (x, y). It remembers the quadrants visited (to fill in the sign
+    patterns) and has a guessing round with the reading hidden.
+
+    • places: houses, desks, crossings or stalls as small pictures. Tap one to make it the target
+    (Aman's house) and see its address. lightLine shows every place with one number (all of Street
+    4).
+
+    • walker: Riya. Two numbers, along then up, set with steppers. Walk goes along, turns, then goes
+    up or down, counting each line, on the lines only. Swapped numbers end at another place. walkTo
+    walks to a given point.
+
+    • clues: a hidden point (off screen) and clue buttons. Each clue shades where it could still be:
+    a region, a line, then one point. With no hidden point, a clue like y = 0 lights the whole
+    x-axis. The class can hide its own point.
+
+    • plotting: pairs from a table or a list. Tap to plot each one, and it's marked right or wrong.
+    A pair can be shown with its swap, and you choose the scale, so a point can fall off the plane.
+
+    • dice: two counters, seeded red and green dice. Each throw walks along by red, then up by
+    green. Overshooting misses the turn, and landing on the other counter sends it home.
+
+
+    One platform change came with it: a host's layers can now keep fields off screen (the hidden
+    dot, the dice's seed). Nothing else uses hosts.
+
+
+    What I'd like you to check: is anything missing from what you want to do in class (for example,
+    should you be able to drag Riya instead of using the steppers?), and is anything here that you
+    don't want? Close this thread to approve, and I'll write the run bodies and draw it.
+  messages: []
