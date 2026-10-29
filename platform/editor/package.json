@@ -9,13 +9,9 @@
   "engines": {
     "vscode": "^1.90.0"
   },
-  "categories": [
-    "Other"
-  ],
+  "categories": ["Other"],
   "main": "./out/loader.js",
-  "activationEvents": [
-    "workspaceContains:content/build.yaml"
-  ],
+  "activationEvents": ["workspaceContains:content/build.yaml"],
   "contributes": {
     "commands": [
       {
@@ -335,7 +331,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "install-editor": "npm version patch --no-git-tag-version && npm run package && cursor --install-extension chalk-editor.vsix --force",
+    "install-editor": "npm version patch --no-git-tag-version && npx biome format --write package.json && npm run package && cursor --install-extension chalk-editor.vsix --force",
     "package": "tsc -p tsconfig.json && npx -y @vscode/vsce@3.6.0 package --no-dependencies --allow-missing-repository --skip-license -o chalk-editor.vsix"
   },
   "devDependencies": {
