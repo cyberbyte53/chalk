@@ -808,7 +808,7 @@
         sends her back to the corner (the first time a house is marked, she stays put, mid-story)."
       status: ready
 - id: cmvt95u3sdis
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T07:59:30.472Z
@@ -842,6 +842,11 @@
         the stand, stops both ways, moved with ← →): on a line, one number is enough. Riya's main
         road then starts alone, as a number line, and Street 4 rises from its 4."
       status: ready
+    - by: you
+      role: person
+      at: 2026-10-29T10:42:39.794Z
+      text: ""
+      status: closed
 - id: cmvt95u4k0x9
   status: ready
   by: reviewer
@@ -993,6 +998,11 @@
         and it has three options again: the two-distance right answer is the only two-distance
         option and the longest, and the facing-edges option and its feedback are gone. Filed on the
         table-lamp question as a new thread, with the wording issue."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:17.196Z
+      text: Rechecked on questions/table-lamp. The facing-edges option is back and the give-away is gone.
+        Its note is still missing, filed on cmvtc1bzt6ws.
 - id: cmvt95ufvbpt
   status: ready
   by: reviewer
@@ -1478,8 +1488,23 @@
         answered by memory. The real mistake, 'Two' (thinking (4, 3) and (3, 4) are the same
         crossing), gets only 'Not quite.' Suggested: the book's text verbatim, one question asking
         (i) and (ii), and a note on 'Two' that says (4, 3) and (3, 4) are different crossings."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:30.826Z
+      text: "Second round, from the self-review: cross-street-count is now Ex 3.1 Q2 in the book's exact
+        words, including 'Using 1 cm = 200 m, draw a model of the city on your notebook', as one
+        question with both parts ('(i) one; (ii) one, a different crossing'), so (ii) isn't answered
+        from memory of (i). The two wrong options ('the same one as (i)', 'two; two') have notes."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:17.075Z
+      text: Rechecked cross-street-count in en and hi. Fixed. The prompt is Ex 3.1 Q2 in the book's words,
+        with '(Street Plan)', the 1 cm = 200 m model instruction, the cross-street definition and
+        (i) and (ii) together. The options are '(i) one; (ii) one, a different crossing' (right),
+        '(i) one; (ii) the same one as (i)' and '(i) two; (ii) two', and both wrong ones have notes
+        that say why. One question now, so (ii) isn't answered from memory of (i).
 - id: cmvtc0w9dwio
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:38.833Z
@@ -1492,6 +1517,7 @@
     same ('−1 बसअड्डा 1'). The 0 is the number this board is about ('Its stand is at 0', 'how far
     from 0'). A student looking for 0 on the line can't find it. Suggested fix: put 'bus stand'
     above the line at 0 (or under the 0 on a second row), so −1, 0 and 1 stay readable."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1499,8 +1525,42 @@
       text: A place's label goes above it when the place is on the horizontal line, so it never covers the
         numbers under the line.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:29.449Z
+      text: "Before: 'bus stand' covered −1, 0 and 1. After (2d5a1f0, see below): a place on the
+        horizontal line has its label above it; the numbers under the line are clear."
+      status: ready
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:40.324Z
+      text: "Correction: the commit for all of this round is a7781a8."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:15.231Z
+      text: "Rechecked at 390 in en and hi, and played. Half fixed. The numbers under the line are clear
+        now, and −1, 0 and 1 all read. But the label now sits above 0, exactly where the bus parks.
+        Whenever the bus is at the stand (at the start, and each time it comes back), the bus and
+        'The bus' are drawn over it. In English it reads 'bus stand' with the bus over 'stand'. In
+        Hindi 'बस अड्डा' and 'बस' merge into one smudge. So at the one moment the stand matters, its
+        name can't be read. Still to do: put the stand's label where the bus never goes. One option
+        is under the 0 on a second row, below the numbers. Or name it once in the walker's place:
+        when the bus is at 0, its label reads 'The bus: at the stand'."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:27:42.153Z
+      text: "Third round (f9aacf3): 'bus stand' is now under the 0, below the numbers, where the bus never
+        goes (it parks above the line). Looked at in English and Hindi: the bus, its name, 0 and
+        'bus stand' all read separately."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:28:05.282Z
+      text: Rechecked after f9aacf3 at 390 in en and hi, with the bus at 0, both at the start and after
+        going 0→1→0. Fixed. 'bus stand' / 'बस अड्डा' now sits under the 0, below the numbers, where
+        the bus never goes. −1, 0 and 1 and the stand's name all read, and the bus and 'The bus' sit
+        clear above the line.
 - id: cmvtc0wcoluj
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:38.952Z
@@ -1518,6 +1578,7 @@
     student reads 'start' and 'stand' as two places. Suggested fix: the readout keeps the last stop
     until the move ends (or shows the new one at once). On this board, say 'at the stand' / 'Back to
     the stand'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1525,8 +1586,23 @@
       text: Mid-step, the readout gives the stop being left (it read one step behind); at the start a
         single-line walker reads '0', not 'at the start'.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:29.588Z
+      text: "Before: mid-step the readout was one stop behind ('at the start' while moving 1→2). After:
+        mid-step it gives the stop being left, then the new one (played with frames: 1, then 2). A
+        single-line walker never says 'start': the stand reads 0."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:15.412Z
+      text: "Rechecked at speed 1 with frames: 0→1→2→1→0 on bus-stops (en), and 0→1→2 on street-and-house
+        (hi). Fixed. While moving, the line keeps the stop being left, then shows the new one.
+        Nothing wrong flashes. At the stand it reads 'The bus: 0', which matches the text. 'Back to
+        the start' still says start where the text says stand. That's small now that the readout
+        reads 0, so I leave it for the person."
 - id: cmvtc0wfkzo8
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.056Z
@@ -1538,14 +1614,26 @@
     every bus-to-stop question. A bus on a line can only go ← or →, and the text says so ('with ←
     and →'). The two dead buttons make the pad twice as tall and draw the eye to moves that don't
     exist. Suggested fix: when the plane is one line (Axes.Horizontal), show only ← and →."
+  changed: []
   messages:
     - by: fixer
       role: fixer
       at: 2026-10-29T09:21:31.361Z
       text: On a single line (a number line), the pad has only ← and →.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:29.714Z
+      text: "Before: greyed ↑ and ↓ on a one-line road. After: a single line's pad has only ← and →
+        (bus-stops and bus-to-stop)."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:15.545Z
+      text: Rechecked in bus-stops (en and hi) and in bus-to-stop. Fixed. A one-line road has only ← and
+        →, and the pad is one row.
 - id: cmvtc0wium1p
-  status: open
+  status: withdrawn
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.174Z
@@ -1568,6 +1656,14 @@
         says is the walk: along the main road to that street, then up. Turning the address off would
         leave nothing to work from. If the person reads it differently, it's one setting
         (showAddress)."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:17.846Z
+      text: "Withdrawn. I accept the fixer's reading. Aman gives the address (the given), and what the
+        student says and does is the walk: along the main road to that street, then up. Hiding the
+        address would leave nothing to work from. If the person wants the student to read the
+        address off the map, it's one setting (showAddress)."
+      status: withdrawn
 - id: cmvtc0wm31a5
   status: open
   by: reviewer
@@ -1590,7 +1686,7 @@
     the swapped spot (20, 30), give a note."
   messages: []
 - id: cmvtc0wsk0re
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.524Z
@@ -1605,6 +1701,7 @@
     waiting by the north-east corner'), but it has no label. A student doesn't know that the dot is
     the thing to drag until 'Drag the stall there' appears much later. Suggested fix: draw the gate
     at 30 m on the south fence, named 'gate', and label the dot 'stall' (Hindi 'स्टॉल')."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1612,8 +1709,23 @@
       text: Draw the gate (a labelled mark in the middle of the south fence), and say in the text that the
         dot in the corner is the stall.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:29.819Z
+      text: "Before: no gate drawn; the stall dot unnamed. After: the gate is a labelled mark in the
+        middle of the south fence, and the text says the stall is the dot waiting in the north-east
+        corner."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:15.677Z
+      text: "Rechecked in en and hi, played through the first clue. Fixed. The gate is a labelled mark
+        ('gate' / 'गेट') at 30 m on the south fence, and the 'Near the gate' patch is visibly around
+        it. The text names the dot ('the dot waiting in the north-east corner' / 'उत्तर-पूर्वी कोने
+        में रखा बिंदु'). A small thought for the person, not blocking: the gate is drawn as a hollow
+        ring, the same mark the third clue later uses for the stall's spot."
 - id: cmvtc0wwc6lz
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.660Z
@@ -1626,6 +1738,7 @@
     other in column 3, row 5'). The wrong one is short ('Yes: both use 3 and 5'). The right option
     can be picked by its look. Suggested fix: make them alike, e.g. 'Yes: both are 3 and 5' / 'No:
     they are two different desks'. Then put the reason in the right answer's feedback."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1633,8 +1746,21 @@
       text: "Make the two options the same shape: 'No: they are two different desks' and 'Yes: they are
         the same desk'."
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:29.932Z
+      text: "Before: the right option was the long one with the reason. After: 'No: they are two different
+        desks' / 'Yes: they are the same desk', the same shape."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:15.959Z
+      text: "Rechecked in en and hi, both desks tapped, answered wrong then right. Fixed. 'Yes: they are
+        the same desk' and 'No: they are two different desks' (Hindi 'हाँ: वे एक ही डेस्क हैं' and
+        'नहीं: वे दो अलग डेस्क हैं') are the same shape, each on one line. The wrong answer's note
+        still gives the reason."
 - id: cmvtc0wz5ye9
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.761Z
@@ -1647,6 +1773,7 @@
     stumbles on 'Row (from the front) 5'. two-lines#desk shows the same: 'The desk: Column 5, Row
     (from the front) 3'. Suggested fix: keep the axis title for the axis, and give the address its
     own words: 'This desk: column 3, row 5'."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1654,8 +1781,20 @@
       text: The row line is named 'Row' again, so addresses read 'Column 5, Row 3'; 'counted from the
         front' stays in the text.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:30.158Z
+      text: "Before: 'Row (from the front) 5'. After: the row line is named 'Row', so addresses read
+        'Column 5, Row 3' (seating-plan and two-lines); 'counted from the front' stays in the text."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:16.097Z
+      text: "Rechecked in seating-plan (en and hi, by playing) and in two-lines#desk (en and hi). Fixed.
+        'This desk: Column 3, Row 5' / 'यह डेस्क: स्तंभ 3, पंक्ति 5' and 'The desk: Column 5, Row
+        3'. The axis is named 'Row' / 'पंक्ति', and 'counted from the front' is still in the text."
 - id: cmvtc0x88qa6
-  status: open
+  status: withdrawn
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:40.088Z
@@ -1678,8 +1817,16 @@
         of an object or a point in a plane, we require two perpendicular lines. One of them is
         horizontal, and the other is vertical.' (source line 478). Lesson 2's 'any direction' (line
         143) is taught there."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:17.587Z
+      text: "Withdrawn. The fixer is right: this is the book's own summary point 1, near word for word
+        ('To locate the position of an object or a point in a plane, we require two perpendicular
+        lines. One of them is horizontal, and the other is vertical.', iemh103 line 478). The lesson
+        ends with it, as flow.md says. My 'false need' reading was wrong for this book."
+      status: withdrawn
 - id: cmvtc1btvwn3
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.011Z
@@ -1696,6 +1843,7 @@
     catch, gets no hint. Suggested fix: compare with the ground's real top and right (west <= 40,
     south <= 60). Smaller, same row: a stall at 40 m sits on the 'west fence' title at the top of
     the left line and covers it."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1704,8 +1852,23 @@
         real size), and the ground keeps a margin above its last mark so a stall at 40 m doesn't
         cover the fence's name.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:30.269Z
+      text: "Before: the swapped spot got no note for (40, 10), and a stall at 40 m covered the fence's
+        name. After: the note's guard matches the ground (60 m across, 40 m up), and the ground
+        keeps a margin past its last mark."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:16.232Z
+      text: "Rechecked on the (40, 10) row in en and hi: swapped spot, Check, then the right spot, Check.
+        Fixed. At (10, 40), Check gives 'That spot is 10 m from the west fence and 40 m from the
+        south fence: the two distances are swapped.' / 'वह जगह पश्चिमी बाड़ से 10 m और दक्षिणी बाड़
+        से 40 m है: दोनों दूरियाँ उलट गईं।' At (40, 10), Check gives 'That's it!'. A stall at 40 m
+        now sits below the 'west fence' title and no longer covers it."
 - id: cmvtc1bx0poq
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.124Z
@@ -1721,6 +1884,7 @@
     bus-to-stop, tap-the-desk and place-the-stall. Suggested fix: any move in the prop after a check
     clears the result and brings Check back (an implicit 'Try again'), or the prop is locked until
     'Try again' is pressed."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1728,8 +1892,25 @@
       text: "After a wrong answer, Check stays: the student moves the prop and presses Check again, and
         the old note is replaced by the new result (no separate Try again)."
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:30.373Z
+      text: "Before: after a wrong Check, Check was gone and the old note stayed while Riya could still
+        walk. After: Check stays; the student moves her and checks again, and the new result
+        replaces the note. Played: wrong at (1, 0), walked on to (3, 5), Check → correct."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:16.531Z
+      text: "Rechecked in all four prop questions, each with a wrong Check, then moving to the right
+        answer and Check again: walk-to-address (5, 3)→(3, 5), bus-to-stop −4→4, tap-the-desk (3,
+        5)→(5, 3), place-the-stall (10, 40)→(40, 10). Fixed. Check stays after a wrong answer, and
+        the new result replaces the old note. One leftover, small. Between moving and pressing
+        Check, the old note still shows under the new place, e.g. 'That's Street 5, House 3' while
+        Riya walks up Street 3. Now that Check is right there, it's minor. Clearing the note on the
+        first move would make it clean."
 - id: cmvtc1bzt6ws
-  status: planned
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.225Z
@@ -1746,6 +1927,7 @@
     cmvt95ubp8ns, a fourth option with two distances from facing edges, plus its feedback, didn't
     come along when the lamp question moved from dot-on-paper to this family. Suggested fix: the
     book's sentence as the prompt, and bring back the facing-edges option and its note."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -1753,6 +1935,35 @@
       text: The prompt in the book's exact words, and the fourth option (two distances from facing edges)
         back.
       status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:23:30.721Z
+      text: "Before: an added clause, and the facing-edges option lost. After: the prompt is the book's
+        exact words; four options, including 'from the left edge and from the right edge'."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:26:16.921Z
+      text: "Rechecked in en and hi. Fixed. The prompt is the book's exact sentence ('How will you
+        describe the position of a table lamp on your study table to another person?'). There are
+        four options, and the right one and 'left edge and right edge' are the same length and
+        shape, so the right one no longer stands out. One thing that didn't come back: the
+        facing-edges option had a note on cmvt95ubp8ns ('Those two edges face each other… The two
+        edges must meet at a corner'), and here it has none. So a student who picks it gets only
+        'Not quite', on the very point the option exists to teach. Add the note back."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:27:42.294Z
+      text: "Third round (f9aacf3): the facing-edges option has its note again: 'Those two edges face each
+        other, so the second distance adds nothing… The two edges must meet at a corner.'"
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:28:05.433Z
+      text: "Rechecked after f9aacf3 in en and hi by picking the facing-edges option. Fixed. It now gives
+        its note: 'Those two edges face each other, so the second distance adds nothing… The two
+        edges must meet at a corner.' / 'ये दोनों किनारे आमने-सामने हैं… दोनों किनारे एक कोने पर
+        मिलने चाहिए।' The prompt is the book's sentence, and the four options don't give the right
+        one away."
 - id: cmvtc1c2j6sf
   status: open
   by: reviewer
@@ -1770,3 +1981,110 @@
     Check', with the axes named Column and Row as they are. Keep the rule for the wrong-answer note,
     which already says 'The column comes first'."
   messages: []
+- id: cmvtcmn0pvkm
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:36:33.289Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: found
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:157
+  commit: 8b5951de889bad5a3591ef7c1642c555d1c6ee84
+  text: "Mechanical (wording, mostly Hindi). Principle 10, read as a second-language student. Hindi:
+    the second sentence opens with a bare 'लगा:', which reads as 'it seemed:' (the other sense of
+    लगना), not 'it took'. It isn't natural Hindi on its own. English: 'It took how far along the
+    main road (Street 4), then how far up…' is hard to parse, because 'took' has no object a class 9
+    reader can find. Suggested: 'It took two numbers: how far along the main road (Street 4), then
+    how far up the street that rises there (House 5).' / 'इसके लिए दो संख्याएँ लगीं: मुख्य सड़क पर
+    कितनी दूर (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।' Smaller: 'along' is 'आगे' here
+    and 'आड़े' on two-lines. Pick one word for the same move."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:37:04.345Z
+      text: Say 'it took two numbers' plainly in both languages, and use one Hindi word for 'along' (आगे)
+        on both boards.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:37:28.934Z
+      text: "Before: 'It took how far along…' / a bare 'लगा:'. After (6ea1c81): 'Aman's house isn't on one
+        line: it's along the main road and then up a street, so one number couldn't say where it is.
+        It took two numbers: how far along the main road (Street 4), then how far up…' / '…इसके लिए
+        दो संख्याएँ लगीं: …'. 'Along' is आगे on both boards."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:37:57.854Z
+      text: "Rechecked at 390 in en and hi. Fixed. 'It took two numbers: how far along the main road
+        (Street 4), then how far up…' / 'इसके लिए दो संख्याएँ लगीं: … कितना आगे (गली 4), फिर … कितना
+        ऊपर (मकान 5)।' reads naturally. The new opening ('Aman's house isn't on one line…') is true
+        and sets up the contrast with the bus. 'Along' is now 'आगे' here and on two-lines, so the
+        word is consistent."
+- id: cmvtcmn5szvz
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T09:36:33.472Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: w6
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:421
+  commit: 8b5951de889bad5a3591ef7c1642c555d1c6ee84
+  text: "Taste call for the person, close to mechanical. Principle 12, read literally. 'Each time,
+    there were two ways to move, across and up' / 'हर बार चलने की दो दिशाएँ थीं'. A student who has
+    just played bus-stops knows the bus also had two ways to move, ← and →, and the board told them
+    one number was enough there. So 'two ways to move' doesn't separate the line from the town, and
+    a careful student will spot the contradiction. Also, on the seating plan and the fair ground
+    nothing moved along the lines: the desk was tapped and the stall was dragged. The real contrast
+    is two lines to measure along, not two ways to move. Suggested: 'Each time, the place was fixed
+    by two distances along two lines at right angles, one across and one up, and each needed its own
+    number…' / 'हर बार जगह दो समकोण रेखाओं के साथ दो दूरियों से तय हुई, एक आड़े और एक ऊपर, और हर एक
+    को अपनी संख्या चाहिए थी…'. The same thought applies to the new lines on bus-stops#enough ('can
+    only go along the road') and street-and-house#found ('can go along and up'). They are true and
+    clear as written, because 'along' vs 'along and up' is the contrast. Keep two-lines in the same
+    terms: one line vs two lines."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:37:04.567Z
+      text: "Agreed, and it's more than taste: the difference is lines, not ways to move (the bus moves
+        two ways along one line). The sentence becomes two distances along two lines at right
+        angles, which is also true of the desk and the stall."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:37:29.147Z
+      text: "Before: 'two ways to move, across and up'. After (6ea1c81): 'Each time, the place wasn't on
+        one line, as the bus was. It took two distances, along two lines at right angles: the first
+        says how far along, the second how far up.' True of the bus (one line), the house, the desk
+        and the stall."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:37:58.179Z
+      text: "Rechecked at 390 in en and hi. The idea is fixed: 'two distances, along two lines at right
+        angles', contrasted with the bus's one line, no longer clashes with the bus's two ways. One
+        wording snag, mechanical. 'Each time, the place wasn't on one line, as the bus was.' / 'हर
+        बार जगह एक रेखा पर नहीं थी, जैसे बस थी।' After a 'not', 'as the bus was' / 'जैसे बस थी' can
+        be read as 'just like the bus (it wasn't on one line)', the opposite of what's meant. That
+        is the likely reading for a second-language student, and in Hindi especially. Suggested:
+        'The bus was on one line. Each time here, the place wasn't.' / 'बस एक रेखा पर थी; यहाँ हर
+        बार जगह एक रेखा पर नहीं थी।' The rest of the sentence is good."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T09:38:36.437Z
+      text: "Third round (see the commit after 19c4140): two sentences, so 'like the bus' can't be read
+        into it: 'The bus stayed on one line, the road, and one number said where it was. These
+        three places are not on one line: each took two distances, along two lines at right angles.
+        The first says how far along, the second how far up.' Hindi likewise: 'बस एक ही रेखा, यानी
+        सड़क, पर रही, … ये तीनों जगहें एक रेखा पर नहीं हैं: …'"
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T09:38:54.530Z
+      text: "Rechecked at 390 in en and hi. Fixed. 'The bus stayed on one line, the road, and one number
+        said where it was. These three places are not on one line: each took two distances, along
+        two lines at right angles.' / 'बस एक ही रेखा, यानी सड़क, पर रही… ये तीनों जगहें एक रेखा पर
+        नहीं हैं…' The contrast can only be read one way now. It matches the bus and
+        street-and-house lines, and 'along' is 'आगे' throughout."
