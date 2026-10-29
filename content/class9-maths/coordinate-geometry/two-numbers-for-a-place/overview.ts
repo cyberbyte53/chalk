@@ -80,8 +80,8 @@ const busStops = page("bus-stops", (b) => {
   });
   const enough = w.definition(
     t(
-      "**On a line, one number is enough.** Its size says how far from 0, and its sign which side.",
-      "**एक रेखा पर एक संख्या काफ़ी है।** उसका मान बताता है कि 0 से कितनी दूर, और उसका चिह्न किस ओर।",
+      "**The bus can only go along the road, so one number tells you exactly where it is:** how far from the stand, and which side.",
+      "**बस केवल सड़क के साथ-साथ चल सकती है, इसलिए एक संख्या ठीक-ठीक बता देती है कि वह कहाँ है:** अड्डे से कितनी दूर, और किस ओर।",
     ),
     "enough",
   );
@@ -156,8 +156,8 @@ const streetAndHouse = page("street-and-house", (b) => {
   );
   const found = w.definition(
     t(
-      "**It took two numbers to find the house:** how far along the main road (Street 4), then how far up the street that rises there (House 5).",
-      "**घर ढूँढने में दो संख्याएँ लगीं:** मुख्य सड़क पर कितनी दूर (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
+      "**Riya can go along and up, so one number couldn't say where Aman lives.** It took how far along the main road (Street 4), then how far up the street that rises there (House 5).",
+      "**रिया आगे और ऊपर दोनों ओर जा सकती है, इसलिए एक संख्या नहीं बता सकी कि अमन कहाँ रहता है।** लगा: मुख्य सड़क पर कितनी दूर (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
     ),
     "found",
   );
@@ -420,8 +420,8 @@ const twoLines = page("two-lines", (b) => {
     desk,
     w.body(
       t(
-        "Each time, two lines at right angles did it: **one across** and **one up**. The first number says how far across, the second how far up.",
-        "हर बार दो समकोण रेखाओं ने काम किया: **एक आड़ी** और **एक खड़ी**। पहली संख्या बताती है कि आड़े कितनी दूर, दूसरी कि ऊपर कितनी।",
+        "Each time, there were two ways to move, **across** and **up**, along two lines at right angles, and each way needed its own number: the first says how far across, the second how far up.",
+        "हर बार चलने की दो दिशाएँ थीं, **आड़े** और **ऊपर**, दो समकोण रेखाओं के साथ-साथ, और हर दिशा को अपनी संख्या चाहिए थी: पहली बताती है कि आड़े कितनी दूर, दूसरी कि ऊपर कितनी।",
       ),
     ),
     w.definition(
