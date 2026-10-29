@@ -194,7 +194,7 @@ describe("a lesson waits on a self-review", () => {
   const built = (root: string, key: string, words: string) => {
     const dir = join(root, "build", "review", "b", "c", "first");
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, `${key}.json`), JSON.stringify(recordOf({ words }, {})));
+    writeFileSync(join(dir, `${key}.json`), JSON.stringify(recordOf({ words })));
     const file = join(root, "build", "reach.json");
     let reach = { boards: {} as Record<string, unknown>, modules: {} };
     try {

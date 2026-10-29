@@ -99,7 +99,7 @@ function codeNow(
     const made = reach?.boards[board];
     if (made === undefined) return undefined;
     graph ??= codeGraph(root);
-    return boardCode(graph, made, record.layers, homes);
+    return boardCode(graph, made, homes);
   };
 }
 

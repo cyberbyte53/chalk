@@ -1,7 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { BoardRecord } from "../content/board-record";
 import type { BoardReach } from "../content/build";
 import type { CodeGraph } from "./graph";
 import { splitFrame } from "./index";
@@ -16,13 +15,10 @@ import { splitFrame } from "./index";
  * - Roots: the lines that made the board and its pieces (they reach the helpers they call), and,
  *   for each prop it places, everything that prop's package exports (the player finds a prop by
  *   its type, not by an import).
- * - The one thing left out: a host's layer the board provably never has on (`everOn`, from each
- *   layer's on-rule). A layer's files are known by name: walker.ts, walker-view.tsx.
  */
 export function boardCode(
   graph: CodeGraph,
   reach: BoardReach,
-  layers: BoardRecord["layers"],
   homes: ReadonlyMap<string, string>,
 ): Map<string, string> | undefined {
   const roots = new Set<string>([`${reach.module}#`]);
@@ -45,33 +41,11 @@ export function boardCode(
     }
   }
 
-  // Layers the board can't ever have on, per prop folder: their files are left out.
-  const off: { home: string; layers: Set<string> }[] = [];
-  for (const type of types) {
-    const home = homes.get(type);
-    const pieces = Object.values(layers ?? {}).filter((p) => p.prop === type);
-    if (home === undefined || pieces.length === 0) continue;
-    const everOn = new Set(pieces.flatMap((p) => p.everOn));
-    off.push({ home, layers: new Set(pieces[0]?.all.filter((l) => !everOn.has(l))) });
-  }
-  const keep = (node: string) => {
-    const file = node.slice(0, node.indexOf("#"));
-    return !off.some((o) => file.startsWith(`${o.home}/`) && o.layers.has(layerOfFile(file) ?? ""));
-  };
-
   const out = new Map<string, string>();
-  for (const node of [...graph.dependenciesOf(roots, keep)].sort())
+  for (const node of [...graph.dependenciesOf(roots)].sort())
     out.set(node, graph.fingerprintOf(node) ?? "-");
   return out;
 }
-
-/** A file's layer name, if it is one's: walker.ts and walker-view.tsx are the walker's. */
-export const layerOfFile = (file: string): string | undefined =>
-  file
-    .split("/")
-    .at(-1)
-    ?.replace(/\.tsx?$/, "")
-    .replace(/-view$/, "");
 
 /** One fingerprint for all of a board's code: what a review keeps. */
 export const digestOf = (code: ReadonlyMap<string, string>): string =>

@@ -1,29 +1,12 @@
-import { createHash } from "node:crypto";
-
-// Node's own hash, not a workspace package's: the dev server's config runs this code directly.
-const hashOf = (value: unknown): string =>
-  createHash("sha256").update(JSON.stringify(value)).digest("hex").slice(0, 16);
-
 /**
  * What a board is, as plain data, for knowing what changed since it was reviewed: its pieces, each
- * one's setup and words, its rules (a rule's code as its source text), and the version of each
- * prop's code it places. Made by the build from the board itself, so it can't drift from it.
+ * one's setup and words, its rules (a rule's code as its source text). Made by the build from the
+ * board itself, so it can't drift from it. The code it runs is the code graph's (reach/board-code.ts).
  */
 export type BoardRecord = {
-  /** A hash of all of it: the same stamp, the same board. */
-  stamp: string;
-  /** Each prop type it places, and its package's code version. */
-  props: Readonly<Record<string, string>>;
   /** The board as plain data, keys sorted. */
   content: unknown;
-  /**
-   * For each piece that is a host prop (built of layers): its type, its layers, and those it may
-   * ever have on (layersEverOn). A change to one layer's code reaches only boards that may have it.
-   */
-  layers?: Readonly<Record<string, PieceLayers>>;
 };
-
-export type PieceLayers = { prop: string; all: readonly string[]; everOn: readonly string[] };
 
 /** A value as plain data: functions as their source text, keys sorted, nothing undefined. */
 export function plain(value: unknown): unknown {
@@ -43,22 +26,11 @@ export function plain(value: unknown): unknown {
   return value;
 }
 
-export function recordOf(
-  board: object,
-  props: Readonly<Record<string, string>>,
-  layers?: Readonly<Record<string, PieceLayers>>,
-): BoardRecord {
+export function recordOf(board: object): BoardRecord {
   // Not its build item: its version hashes the whole file that makes it, so it changes when a
   // neighbouring board does.
   const { item: _, ...itself } = board as { item?: unknown };
-  const content = plain(itself);
-  // Plain data has its keys in one order, so the same board always gives the same stamp.
-  return {
-    stamp: hashOf(plain({ content, props })),
-    props,
-    content,
-    ...(layers === undefined || Object.keys(layers).length === 0 ? {} : { layers }),
-  };
+  return { content: plain(itself) };
 }
 
 /** One difference between two records' content: where, and what it was and is. */

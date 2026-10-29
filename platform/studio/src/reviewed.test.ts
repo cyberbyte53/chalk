@@ -16,8 +16,6 @@ const ENV = {
   GIT_COMMITTER_EMAIL: "t@t",
 };
 const SRC = "library/props/coords/src";
-/** Each board's sheet is a host with walker and clues layers; the walker may be on, clues never. */
-const LAYERS = { sheet: { prop: "plane", all: ["walker", "clues"], everOn: ["walker"] } };
 
 /**
  * A repo with a prop package (a host `plane` built of walker and clues layers, and `text`) and a
@@ -59,10 +57,7 @@ function build(root: string, boards: Record<string, unknown>) {
   const dir = join(root, "build/review", LESSON);
   mkdirSync(dir, { recursive: true });
   for (const [key, board] of Object.entries(boards)) {
-    writeFileSync(
-      join(dir, `${key}.json`),
-      JSON.stringify(recordOf(board as object, { text: "v1", plane: "v1" }, LAYERS)),
-    );
+    writeFileSync(join(dir, `${key}.json`), JSON.stringify(recordOf(board as object)));
     reach.boards[`${LESSON}/${key}`] = {
       module: `content/${LESSON}/overview.ts`,
       stack: [`content/${LESSON}/overview.ts:1`],
@@ -129,18 +124,14 @@ describe("what changed since a board was passed", () => {
     expect(changesBetween(was, now)).toEqual([]);
   });
 
-  it("a layer's change reaches only boards that may have it on; the core's and styles, every board", () => {
+  it("any of a prop's code reaches every board placing it: a layer's, the core's, its styles", () => {
     const root = repo({ town: board("A town", "counts") });
     passUnder(root, LESSON, "reviewer");
-    // Clues: provably never on here.
     edit(root, `${SRC}/clues-view.tsx`, "export const cluesView = () => 2;\n");
-    expect(changesUnder(root, LESSON)[0]?.status).toBe("unchanged");
-    // The walker may be on.
-    edit(root, `${SRC}/walker-view.tsx`, "export const walkerView = () => 2;\n");
     expect(changesUnder(root, LESSON)[0]).toMatchObject({
-      code: [`${SRC}/walker-view.tsx#walkerView`],
+      code: [`${SRC}/clues-view.tsx#cluesView`],
     });
-    execFileSync("git", ["commit", "-qam", "walker"], { cwd: root, env: ENV });
+    execFileSync("git", ["commit", "-qam", "clues"], { cwd: root, env: ENV });
     passUnder(root, LESSON, "reviewer");
     edit(
       root,

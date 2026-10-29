@@ -57,18 +57,14 @@ export class CodeGraph {
 
   /**
    * Everything these nodes use, directly or not, them included; a declaration brings its file's
-   * own top-level statements (they run when the file is loaded). `keep` leaves a node out, and
-   * what only it reaches.
+   * own top-level statements (they run when the file is loaded).
    */
-  dependenciesOf(
-    nodes: Iterable<string>,
-    keep: (node: string) => boolean = () => true,
-  ): Set<string> {
+  dependenciesOf(nodes: Iterable<string>): Set<string> {
     const seen = new Set<string>();
     const todo = [...nodes];
     while (todo.length > 0) {
       const n = todo.pop() as string;
-      if (seen.has(n) || !keep(n)) continue;
+      if (seen.has(n)) continue;
       seen.add(n);
       const file = n.slice(0, n.indexOf("#"));
       if (!seen.has(`${file}#`)) todo.push(`${file}#`);

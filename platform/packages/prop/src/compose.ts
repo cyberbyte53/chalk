@@ -71,9 +71,8 @@ export type Layer<S extends StoredState> = {
 };
 
 /**
- * When a layer is on: a rule given only the fields it names, so what it reads is known for sure.
- * That is what lets a board be shown never to turn the layer on: off as it starts, and no action
- * changes those fields (layersEverOn).
+ * When a layer is on: a rule given only the fields it names, so what it reads is plain from the
+ * rule itself.
  */
 export type OnRule<S> = { reads: readonly string[]; is: (s: S) => boolean };
 
@@ -112,16 +111,7 @@ export type HostLayout = {
     fields: readonly string[];
     actions: readonly string[];
     derived: readonly string[];
-    /** The fields its on-rule reads (`onWhen`); undefined: always on. */
-    onWhen?: readonly string[];
   }[];
-  /**
-   * The layers a board placing this prop with `start` may ever have on: on as it starts, or one
-   * whose on-rule reads a field an action changes or a rule feeds (an input). The others provably
-   * stay off on that board: the rule is given only the fields it names (onWhen), and the runtime
-   * refuses a change outside an action's `changes`.
-   */
-  layersEverOn: (start: StoredState) => string[];
   /** The layers on now. */
   layersOn: (s: StoredState) => string[];
   /** The layer that owns an action, field or derived value (undefined: the core's). */
@@ -241,18 +231,7 @@ export function defineHost<C extends AnyLayer, const L extends readonly AnyLayer
       fields: Object.keys(l.fields),
       actions: Object.keys(l.actions ?? {}),
       derived: Object.keys(l.derived ?? {}),
-      ...(l.on === undefined ? {} : { onWhen: l.on.reads }),
     })),
-    layersEverOn: (start) => {
-      // What can change on a board: what any action changes, and the inputs a lesson's rules feed.
-      const changed = new Set([
-        ...parts.flatMap((p) => Object.values(p.actions ?? {}).flatMap((a) => [...a.changes])),
-        ...parts.flatMap((p) => p.inputs ?? []),
-      ]);
-      return spec.layers
-        .filter((l) => isOn(l, start) || (l.on?.reads ?? []).some((f) => changed.has(f as never)))
-        .map((l) => l.name);
-    },
     layersOn: (s) => spec.layers.filter((l) => isOn(l, s)).map((l) => l.name),
     ownerOf: (name) =>
       spec.layers.find(
