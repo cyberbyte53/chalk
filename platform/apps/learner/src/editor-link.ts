@@ -7,6 +7,32 @@ export const isInEditor = window.parent !== window;
 export const toEditor = (message: Record<string, unknown>) =>
   isInEditor && window.parent.postMessage({ ...message, chalk: true }, "*");
 
+/** What the editor's own buttons add to an address (play, Hindi), and the preview's own marks. */
+const NOT_THE_PLACE = ["dev", "play", "locale", "shot", "run", "end"];
+
+/**
+ * Tells an editor showing this page exactly where it is, whenever that changes: on every load, and
+ * on every change of address within the page. The editor keeps no address of its own; it shows
+ * what the page says, so a reload of the panel can't lose anything the page knew (`&show=questions`).
+ */
+export function installAddressReports(): void {
+  if (!isInEditor) return;
+  const report = () => {
+    const params = new URLSearchParams(window.location.search);
+    for (const k of NOT_THE_PLACE) params.delete(k);
+    toEditor({ type: "at", query: params.toString().replace(/=(&|$)/g, "$1") });
+  };
+  for (const method of ["pushState", "replaceState"] as const) {
+    const original = history[method].bind(history);
+    history[method] = (...args: Parameters<History["pushState"]>) => {
+      original(...args);
+      report();
+    };
+  }
+  window.addEventListener("popstate", report);
+  report();
+}
+
 type Field = HTMLTextAreaElement | HTMLInputElement;
 
 const isField = (el: EventTarget | null): el is Field =>

@@ -35,7 +35,13 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
-import { installTextKeys, isInEditor, sendKeys, toEditor } from "./editor-link";
+import {
+  installAddressReports,
+  installTextKeys,
+  isInEditor,
+  sendKeys,
+  toEditor,
+} from "./editor-link";
 import { courses } from "./lessons";
 import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
@@ -204,6 +210,7 @@ async function boardsFrom(source: string, sources: Sources): Promise<Shown[]> {
 
 export { isInEditor, toEditor };
 installTextKeys();
+installAddressReports();
 
 /** Puts `data-source` on every piece of one drawn board; Alt-click opens that line. */
 function useSourceTags(
@@ -635,7 +642,7 @@ const SHOW_CARD = "chalk:show-card";
 /** Goes to another level of the tree (and tells an editor showing this page). */
 function go(board: string, isAtEnd = false): void {
   // Only the preview moves; the editor stays on the file you're in (Alt-click a piece to open it).
-  toEditor({ type: "follow", follow: board });
+  // The new page tells the editor where it is (installAddressReports).
   const params = new URLSearchParams(window.location.search);
   params.delete("source");
   params.set("at", contentAddress(board));

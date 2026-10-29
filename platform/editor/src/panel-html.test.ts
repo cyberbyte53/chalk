@@ -76,19 +76,19 @@ describe("the preview panel's page", () => {
       expect(panel.frame.src).toBe(`${BASE}?dev&${query}`);
     }
   });
-  it("a lesson the preview went to keeps its questions when the panel reloads (Play)", () => {
+  it("keeps the address the page reports, whole, when the panel reloads (Play)", () => {
     const panel = runPanel(page);
+    const lesson =
+      "at=content/class9-maths/coordinate-geometry/two-numbers-for-a-place&show=questions";
+    panel.fromFrame({ chalk: true, type: "at", query: lesson });
+    panel.click("play");
+    expect(panel.frame.src).toBe(`${BASE}?dev&${lesson}&play`);
     panel.fromFrame({
       chalk: true,
-      type: "follow",
-      follow: "class9-maths/coordinate-geometry/two-numbers-for-a-place",
+      type: "at",
+      query: "source=content/class9-maths/q/place-the-dot",
     });
     panel.click("play");
-    expect(panel.frame.src).toBe(
-      `${BASE}?dev&at=content/class9-maths/coordinate-geometry/two-numbers-for-a-place&show=questions&play`,
-    );
-    panel.fromFrame({ chalk: true, type: "follow", follow: "class9-maths/coordinate-geometry" });
-    panel.click("play");
-    expect(panel.frame.src).toBe(`${BASE}?dev&at=content/class9-maths/coordinate-geometry`);
+    expect(panel.frame.src).toBe(`${BASE}?dev&source=content/class9-maths/q/place-the-dot`);
   });
 });

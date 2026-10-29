@@ -331,7 +331,7 @@ async function leaveComment(p: Picked): Promise<void> {
 }
 
 function onMessage(
-  m: { type?: string; site?: string; url?: string; follow?: string; file?: string } & Picked,
+  m: { type?: string; site?: string; url?: string; query?: string; file?: string } & Picked,
 ): void {
   if (m.type === "ready") {
     isReady = true;
@@ -358,13 +358,8 @@ function onMessage(
   // A pick with nowhere to write in the preview (an older page): ask here.
   else if (m.type === "pick") void askForComment(m);
   else if (m.type === "external" && m.url) void openInBrowser(m.url);
-  // The preview went to another level by itself (a chapter or lesson was tapped).
-  if (m.follow !== undefined) {
-    shown =
-      m.follow.split("/").length >= 3
-        ? `at=content/${m.follow}&show=questions`
-        : `at=content/${m.follow}`;
-  }
+  // Where the page is now, as it says: the one address there is.
+  if (m.type === "at" && typeof m.query === "string") shown = m.query;
 }
 
 /**
