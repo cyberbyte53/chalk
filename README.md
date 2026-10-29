@@ -3,6 +3,7 @@
 Interactive lessons built from props, and Jugnu, an AI tutor (an agent on the board, on a hosted model). First target: NCERT Class 9 Maths, Chapter 1, in Hindi and English.
 
 ```bash
+corepack enable pnpm   # once per machine: `pnpm` then runs the version package.json names
 pnpm install
 pnpm dev        # the learner app at http://localhost:5173 (phone width), already signed in
                 # (needs .env from .env.example and Postgres at DATABASE_URL)
