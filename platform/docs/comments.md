@@ -1,6 +1,6 @@
 # Comments and reviews
 
-Everything said about content goes in one place: the person's comments, a reviewer agent's findings, an agent's questions, decisions and proposals, what a change broke, feedback given in an agent's chat. Each is a **thread**: someone said something about a place, and it waits on someone. Anyone starts one; what it is follows from who started it (`by`, `role`) and whether it is `about` another. A **review** is one participant's sitting, handed to another. a **review** is one participant's sitting, handed to another.
+Everything said about content goes in one place: the person's comments, a reviewer agent's findings, an agent's questions, decisions and proposals, what a change broke, feedback given in an agent's chat. Each is a **thread**: someone said something about a place, and it waits on someone. Anyone starts one; what it is follows from who started it (`by`, `role`). Each thread keeps whose turn it is (`turn`). A **review** is one participant's sitting, handed to another.
 
 ```text
 authoring/books/<book>/<chapter>/comments.yaml   threads on a chapter's boards (and its plan)
@@ -46,7 +46,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 - **`prop`**: the prop's type, for a thread on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`.
 - **`snapshot`**: what the piece showed when the thread was started. **`commit`**: the commit it was started on.
-- **`about`**: the thread whose change broke this (a regression): that thread can't be ready until this one is answered.
+- **`turn`**: whose turn it is while it is open, planned or ready: `person` or `agent`. Absent once closed or withdrawn.
 - **`from`**: `chat` for feedback the person gave in an agent's chat, filed in their name.
 - **`changed`**: the files changed for it, recorded from git when it became ready.
 - **`reaches`**: what those changes reach, worked out at the same time: how many pieces and boards, and the lessons they are in, or every board and why ([reach.md](reach.md)).
@@ -60,7 +60,7 @@ The dev server is one per repo, on port 5173 (`CHALK_DEV_PORT` to change it), an
 4. **closed**: the person is happy. Only the person closes.
 5. **withdrawn**: taken back by the person, or by the agent that started it when it became moot (a question settled in chat); its messages are kept as history.
 
-**Whose turn it is** (`waitsOn` in comments.ts; the dev server adds it to every thread it gives out): ready waits on the person, planned on the agent. Open waits on the agent, unless the fixer spoke last (it started the thread, or answered without moving it): then it is a question, a decision or a reason, for the person, and the person's reply gives it back. A thread `about` another is always the agent's. The editor's Reviews list opens with **Waiting on you**, and a thread on a planning file also shows in the file, on the words it is about (VS Code's comments): reply or close it there, or start one with ⌥⌘/ on selected words or the + in the margin.
+**Whose turn it is** is kept on the thread (`turn`), and every view reads that one field (`waitsOn` in comments.ts; the dev server gives it out as `waitsOn`). Every write sets it (`turnAfter`): ready is the person's, planned the agent's; the person's words and a reviewer's are the agent's to answer; a fixer's question, decision or reason (a message without a move) is the person's. The writer may say it instead (`turn`): a reviewer's taste call, which only the person decides, starts as the person's. A thread written before turns were kept gets its turn worked out once, when read. Nothing is ever hidden by turn: the editor's Reviews list opens with **Your turn**, then **Agent's turn**, then the sitting, then **Past reviews** (folded); a board's threads show the live ones beside it and fold the settled ones into one line. A review stays in progress, and a handover adds to it, until every thread in it is closed or withdrawn, and a thread on a planning file also shows in the file, on the words it is about (VS Code's comments): reply or close it there, or start one with ⌥⌘/ on selected words or the + in the margin.
 
 Approving a planning file needs every thread on it closed or withdrawn.
 
@@ -88,7 +88,7 @@ Other acts:
 | Re-point a thread whose place is gone | ✅ | ✅ | |
 | Hand over a review | ✅ | ✅ | ✅ |
 
-Also: a thread can't become ready while one `about` it waits on the agent, or while a reviewer's message is the last word on it (the fixer answers first). What's wrong with a thread's own fix is said **on that thread**; a regression is something its change broke **elsewhere**, so the writer refuses an `about` on the thread's own piece. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
+Also: a thread can't become ready while a reviewer's message is the last word on it (the fixer answers first). What's wrong with a thread's own fix is said **on that thread**; something its change broke **elsewhere** is a new thread there, naming the thread in its words. A thread that has been handed over can't be deleted, only withdrawn, so a review never points at nothing.
 
 **Each agent holds one role, and is shown only what it may do.** This is the standard shape for MCP: one server, every caller identified by its token, the server deciding what that caller sees and may do.
 
@@ -130,8 +130,8 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 
 ## The tools (chalk MCP)
 
-- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop) and `unanswered` (what waits on the agent) filter. Each thread says whose turn it is.
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `about`, `from`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
+- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop, or a planning file or folder, `authoring/books/…`) and `unanswered` (what waits on the agent) filter. Each thread says whose turn it is.
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `from`, `turn`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
 
 ## A thread whose place is gone
 

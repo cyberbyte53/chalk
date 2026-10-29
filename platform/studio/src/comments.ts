@@ -25,9 +25,9 @@ import { changesFromGit, reachIndex, rollUp } from "./reach";
  * Reviews point to threads; threads know nothing of reviews.
  *
  * Everyone who writes is a participant with a role (the person, a fixer agent, a reviewer agent).
- * Anyone starts a thread; what it is follows from who started it and whether it is `about` another
- * (something that thread's change broke). Whose turn it is follows from its status and who spoke
- * last (`waitsOn`). Only the person closes. Every write goes through `applyChange`, which checks it against two tables: the
+ * Anyone starts a thread. Each thread says whose turn it is (`turn`): every write sets it, from what
+ * the write does (`turnAfter`), or as the writer says (a reviewer's taste question is the person's).
+ * Every view reads that one field; nothing works it out again. Only the person closes. Every write goes through `applyChange`, which checks it against two tables: the
  * status moves each role may make, and what else each role may do. The caller never picks its own
  * role: the person writes through the preview, an agent through the chalk MCP with its role fixed
  * when it connects.
@@ -117,8 +117,8 @@ export const threadSchema = z
     /** What the target said when the thread was started, so it can be found if lines move. */
     snapshot: z.string().optional(),
     commit: z.string().optional(),
-    /** Another thread this one is about: for a regression, the thread whose change broke it. */
-    about: z.string().optional(),
+    /** Whose turn it is while it is open, planned or ready; absent once closed or withdrawn. */
+    turn: z.enum(["person", "agent"]).optional(),
     /** Where it came from when not the preview: "chat" for feedback given in an agent's chat. */
     from: z.string().optional(),
     /** For a thread on a plan: the words picked. */
@@ -143,6 +143,7 @@ export const threadSchema = z
   })
   .strict();
 export type Thread = z.infer<typeof threadSchema>;
+export type Turn = NonNullable<Thread["turn"]>;
 
 /** A thread and where it is filed: "content/<book>/<chapter>" or "library/props/<package>". */
 export type Filed = Thread & { home: string };
@@ -268,7 +269,7 @@ export function readComments(root: string): Read {
       continue;
     }
     for (const [i, entry] of raw.entries()) {
-      const checked = threadSchema.safeParse(entry);
+      const checked = threadSchema.safeParse(withTurn(entry));
       if (checked.success) threads.push({ ...checked.data, home });
       else problems.push(`${fileOf(home)} #${i + 1}: ${issues(checked.error)}`);
     }
@@ -306,18 +307,42 @@ export function threadsOf(review: Review, threads: readonly Filed[]): Filed[] {
 /** The most recent review, if any. */
 export const latestReview = (reviews: readonly Review[]): Review | undefined => reviews.at(-1);
 
-/**
- * Whose turn it is on a thread: the agent's (to fix, answer or plan), the person's (to answer,
- * decide or close), or no one's (closed, withdrawn). Ready is the person's; planned the agent's. An
- * open thread waits on the agent, unless the fixer spoke last (started it, or answered without
- * moving it): then it's a question or a reason, for the person. One `about` another is something
- * that thread's change broke: the agent's.
- */
-export function waitsOn(t: Thread): "agent" | "person" | undefined {
+/** Whose turn it is on a thread: as it says, and no one's once closed or withdrawn. */
+export function waitsOn(t: Thread): Turn | undefined {
   if (t.status === Status.Closed || t.status === Status.Withdrawn) return undefined;
-  if (t.status === Status.Ready) return "person";
-  if (t.status === Status.Planned || t.about !== undefined) return "agent";
-  return (t.messages.at(-1)?.role ?? t.role) === Role.Fixer ? "person" : "agent";
+  return t.turn;
+}
+
+/**
+ * Whose turn it is after a write, from what the write does. The person's words are the agent's to
+ * answer; a plan is the agent's to carry out; ready, or an agent's question or reason, is the
+ * person's; a reviewer's words are the fixer's to answer. Closed and withdrawn: no one's.
+ */
+export function turnAfter(role: Role, to: Status | undefined): Turn | undefined {
+  if (to === Status.Closed || to === Status.Withdrawn) return undefined;
+  if (to === Status.Ready) return "person";
+  if (to === Status.Planned) return "agent";
+  return role === Role.Fixer ? "person" : "agent";
+}
+
+/**
+ * A thread written before threads kept their turn: its turn, worked out once from how it stands
+ * (who spoke last), and `about` (a regression, the agent's) dropped.
+ */
+function withTurn(entry: unknown): unknown {
+  if (typeof entry !== "object" || entry === null) return entry;
+  const { about, ...t } = entry as Record<string, unknown> & {
+    status?: Status;
+    role?: Role;
+    messages?: { role?: Role; status?: Status }[];
+  };
+  if ("turn" in t || t.status === Status.Closed || t.status === Status.Withdrawn) return t;
+  const last = t.messages?.at(-1)?.role ?? t.role ?? Role.Person;
+  const turn =
+    about !== undefined && t.status === Status.Open
+      ? "agent"
+      : turnAfter(last, t.status === Status.Open ? undefined : t.status);
+  return turn === undefined ? t : { ...t, turn };
 }
 
 /** Threads still waiting on the agent. */
@@ -332,7 +357,7 @@ export function standing(threads: readonly Thread[]): { text: string; isDone: bo
     .filter((s) => counts.has(s))
     .map((s) => `${counts.get(s)} ${s}`)
     .join(", ");
-  return { text, isDone: threads.every((t) => !isUnanswered(t)) };
+  return { text, isDone: threads.every((t) => waitsOn(t) === undefined) };
 }
 
 /** The last message that moved the thread to `status`: its plan (planned), its answer (ready). */
@@ -353,8 +378,9 @@ function lastHandover(reviews: readonly Review[], name: string): string {
 }
 
 /**
- * `name`'s review still in progress: their latest, while any of its threads waits on a fixer (open
- * or planned). A handover adds to it; a new review starts once it's done.
+ * `name`'s review still in progress: their latest, while any of its threads isn't closed or
+ * withdrawn. A handover adds to it (a reviewer's next pass is the same review); a new review starts
+ * once the person has settled every thread in it.
  */
 export function openReviewOf(read: Read, name: string): Review | undefined {
   const latest = read.reviews
@@ -363,7 +389,7 @@ export function openReviewOf(read: Read, name: string): Review | undefined {
     .at(-1);
   if (latest === undefined) return undefined;
   const mine = threadsOf(latest, read.threads);
-  return mine.some(isUnanswered) ? latest : undefined;
+  return mine.some((t) => waitsOn(t) !== undefined) ? latest : undefined;
 }
 
 /**
@@ -486,15 +512,19 @@ function changedSince(root: string, since: string): string[] {
 /** What a new thread says: where it is, its words. The writer adds the rest. */
 export type NewThread = Pick<
   Thread,
-  "board" | "target" | "prop" | "source" | "snapshot" | "commit" | "about" | "from" | "quote"
-> & { text: string };
+  "board" | "target" | "prop" | "source" | "snapshot" | "commit" | "from" | "quote"
+> & {
+  text: string;
+  /** Whose turn it starts as, when not what starting it says (a reviewer's taste question: "person"). */
+  turn?: Turn;
+};
 
 /** One change. Every write goes through here. */
 export type Change =
   /** Start a thread. */
   | { op: "start"; thread: NewThread }
   /** Write on a thread, maybe moving its status. */
-  | { op: "write"; id: string; text: string; status?: Status }
+  | { op: "write"; id: string; text: string; status?: Status; turn?: Turn }
   /** Delete a thread no one else has touched and that was never handed over. */
   | { op: "delete"; id: string }
   /** Re-point a thread whose place is gone (a piece renamed, a board merged), saying where it went. */
@@ -531,30 +561,15 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     const isFromChat = change.thread.from === "chat";
     if (isFromChat && who.role !== Role.Fixer)
       return { ok: false, error: "only a fixer files what the person said in its chat" };
-    const aboutThread =
-      change.thread.about === undefined
-        ? undefined
-        : threads.find((x) => x.id === change.thread.about);
-    if (change.thread.about !== undefined && aboutThread === undefined)
-      return { ok: false, error: `no thread ${change.thread.about} to be about` };
-    // What's wrong with a thread's own fix is said on that thread; a regression is a break elsewhere.
-    const isSamePlace =
-      aboutThread !== undefined &&
-      aboutThread.board === change.thread.board &&
-      (aboutThread.target ?? "") === (change.thread.target ?? "") &&
-      (aboutThread.prop ?? "") === (change.thread.prop ?? "");
-    if (isSamePlace)
-      return {
-        ok: false,
-        error: `that is the piece ${aboutThread.id} is about: write on that thread instead (a regression is something its change broke elsewhere)`,
-      };
     const author = isFromChat ? YOU : who;
+    const { turn, ...placed } = change.thread;
     const draft = {
-      ...change.thread,
+      ...placed,
       id: newId(),
       by: author.name,
       role: author.role,
       status: Status.Open,
+      turn: turn ?? turnAfter(author.role, undefined),
       createdAt: now(),
       commit: change.thread.commit ?? (git(root, "rev-parse", "HEAD") || undefined),
       messages: [],
@@ -677,9 +692,6 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       return refuse(
         `answer the reviewer first (${last.by}: "${last.text.slice(0, 80)}"): write a message or a new plan, then mark it ready`,
       );
-    const blocking = threads.filter((x) => x.about === t.id && isUnanswered(x));
-    if (blocking.length > 0)
-      return refuse(`fix the regressions it caused first: ${blocking.map((x) => x.id).join(", ")}`);
     const since = lastMove(t, Status.Planned)?.at ?? t.createdAt;
     t.changed = changedSince(root, since);
     // Undefined fields aren't written to the file.
@@ -693,7 +705,13 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     ...(to !== undefined ? { status: to } : {}),
   });
   if (to !== undefined) t.status = to;
-  return save(t);
+  const turn =
+    to === Status.Closed || to === Status.Withdrawn
+      ? undefined
+      : (change.turn ?? turnAfter(who.role, to));
+  // Settled: no one's turn, and nothing written for it.
+  const { turn: _, ...rest } = t;
+  return save(turn === undefined ? rest : { ...rest, turn });
 }
 
 /** Where a thread is, in words: its board and what on it, its prop, or its file and words. */

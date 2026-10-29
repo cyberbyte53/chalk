@@ -1542,7 +1542,8 @@ body.is-selecting .is-pick-target {
   font: 13px / 1.4 system-ui, sans-serif;
   color: #d4d4da;
 }
-.preview-threads > .preview-thread {
+.preview-threads > .preview-thread,
+.preview-threads > .preview-history {
   position: absolute;
   left: 0;
   right: 0;
@@ -1561,17 +1562,52 @@ body.is-selecting .is-pick-target {
   cursor: pointer;
 }
 .preview-thread:not(.is-open) .preview-thread-head {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  max-height: calc(1.4em * 4);
   overflow: hidden;
 }
 .preview-latest {
+  display: flex;
+  gap: 6px;
   margin-top: 4px;
   color: #9a9aa4;
+}
+/* The latest answer is one line until the thread is opened. */
+.preview-latest .thread-text {
+  min-width: 0;
+}
+.preview-latest .thread-text > :not(:first-child) {
+  display: none;
+}
+.preview-latest .thread-text > * {
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.preview-who {
+  font-weight: 600;
+  color: #b4b4bc;
+}
+/* A thread's own text: a paragraph per line, lists as lists. */
+.thread-text p,
+.thread-text ul,
+.thread-text ol {
+  margin: 0 0 4px;
+}
+.thread-text ul,
+.thread-text ol {
+  padding-left: 18px;
+}
+.preview-history button {
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: #24242a;
+  color: #9a9aa4;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 /* A finished one is one line. */
 .preview-thread.is-closed:not(.is-open) > :not(:first-child),
@@ -1597,7 +1633,8 @@ body.is-selecting .is-pick-target {
     flex-direction: column;
     gap: 6px;
   }
-  .preview-threads > .preview-thread {
+  .preview-threads > .preview-thread,
+  .preview-threads > .preview-history {
     position: static;
   }
   .prop-panel {
@@ -1609,15 +1646,16 @@ body.is-selecting .is-pick-target {
   border-radius: 10px;
   padding: 8px 10px;
 }
-.preview-status {
+.preview-turn {
+  display: block;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  margin-right: 6px;
-  color: #f0b45a;
+  margin-bottom: 2px;
+  color: #9a9aa4;
 }
-.preview-thread.is-closed .preview-status {
-  color: #7fcf8a;
+.preview-turn.is-person {
+  color: #f0b45a;
 }
 .preview-piece {
   font-family: ui-monospace, monospace;
@@ -1636,25 +1674,6 @@ body.is-selecting .is-pick-target {
 }
 .preview-piece.is-prop {
   color: #f0b45a;
-}
-.preview-kind {
-  font-size: 11px;
-  font-weight: 700;
-  margin-right: 6px;
-  text-transform: uppercase;
-}
-.preview-kind.is-broken {
-  color: #ff7a7a;
-}
-.preview-kind.is-reviewer,
-.preview-kind.is-fixer {
-  color: #8fb8ff;
-}
-.preview-kind.is-yours {
-  color: #f0b45a;
-}
-.preview-thread.is-ready .preview-status {
-  color: #7fcf8a;
 }
 .preview-detached,
 .preview-problem {

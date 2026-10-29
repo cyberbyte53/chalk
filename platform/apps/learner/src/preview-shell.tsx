@@ -41,6 +41,7 @@ import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
 import { PropPanel } from "./prop-panel";
 import { ReviewList, ReviewPage } from "./review-page";
+import { ThreadText } from "./thread-text";
 import {
   type Review,
   type Thread,
@@ -239,13 +240,17 @@ function openInEditor(site: string): void {
 }
 
 /** Where a comment stands, in words: waiting for the agent, planned, done. */
-const STATUS_WORDS: Record<Thread["status"], string> = {
-  open: "waiting",
-  planned: "planned",
-  ready: "ready for you",
-  closed: "closed",
-  withdrawn: "withdrawn",
-};
+/** A thread's one label: whose turn it is, or how it was settled. */
+const turnWords = (t: Thread): string =>
+  t.waitsOn === "person"
+    ? t.status === "ready"
+      ? "your turn: ready"
+      : "your turn"
+    : t.waitsOn === "agent"
+      ? t.status === "planned"
+        ? "agent: planned"
+        : "agent's turn"
+      : t.status;
 
 /**
  * The board's comments under it, newest first, each with its whole thread: what was said, what the
@@ -268,6 +273,8 @@ function BoardThreads({
   const open = threads.filter((t) => !isDone(t));
   const closed = threads.filter(isDone);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  // Settled threads are history: folded into one line at the end, opened on demand.
+  const [isHistory, setIsHistory] = useState(false);
   // One thread open at a time: the others are a card each (what was said, the latest answer).
   const [openId, setOpenId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -311,39 +318,43 @@ function BoardThreads({
           aria-expanded={isOpen}
           onClick={() => setOpenId(isOpen ? null : t.id)}
         >
-          <span class="preview-status">{STATUS_WORDS[t.status] ?? t.status}</span>
-          {t.waitsOn === "person" && <span class="preview-kind is-yours">your turn</span>}
-          {t.role !== "person" && (
-            <span class={`preview-kind is-${t.role}`}>
-              {t.by === t.role ? t.role : `${t.by} (${t.role})`}
-            </span>
-          )}
-          {t.about !== undefined && (
-            <span class="preview-kind is-broken">broken by another thread's change</span>
-          )}
+          <span class={`preview-turn is-${t.waitsOn ?? t.status}`}>{turnWords(t)}</span>
           {t.prop !== undefined ? (
             <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
           ) : (
             t.target && <span class="preview-piece">{t.target}</span>
           )}
-          {t.from === "chat" && <span class="preview-piece">from chat</span>}
-          {t.text}
+          <span class="preview-thread-text">
+            <ThreadText text={t.text} />
+          </span>
         </button>
         {isDetached(t) && (
           <div class="preview-detached">{`Not on this board any more. It said: ${t.snapshot ?? "?"}`}</div>
         )}
         {!isOpen && latest !== undefined && (
           <button type="button" class="preview-latest" onClick={() => setOpenId(t.id)}>
-            {`${latest.by}${latest.status ? ` → ${latest.status}` : ""}: ${latest.text}`}
+            <span class="preview-who">{latest.by}</span>
+            <ThreadText text={latest.text} />
           </button>
         )}
-        {isOpen && planOf(t) && <div class="preview-plan">Plan: {planOf(t)?.text}</div>}
+        {isOpen && (
+          <div class="preview-reply">
+            <span class="preview-who">{`${t.by}${t.from === "chat" ? " (in chat)" : ""}`}</span>
+          </div>
+        )}
+        {isOpen && planOf(t) && (
+          <div class="preview-plan">
+            <span class="preview-who">plan</span>
+            <ThreadText text={planOf(t)?.text ?? ""} />
+          </div>
+        )}
         {isOpen &&
           t.messages
             .filter((m) => m.status !== "planned")
             .map((m) => (
               <div class="preview-reply" key={`${m.at}·${m.by}`}>
-                {`${m.by}${m.status ? ` → ${m.status}` : ""}${m.text ? `: ${m.text}` : ""}`}
+                <span class="preview-who">{`${m.by}${m.status ? ` → ${m.status}` : ""}`}</span>
+                {m.text !== "" && <ThreadText text={m.text} />}
               </div>
             ))}
         {isOpen && t.changed && t.changed.length > 0 && (
@@ -436,6 +447,10 @@ function BoardThreads({
     const ph = phone.current;
     if (ul === null || ph === null) return;
     const byId = new Map(threads.map((t) => [t.id, t]));
+    const isSettled = (li: HTMLElement) => {
+      const t = byId.get(li.dataset.id ?? "");
+      return t !== undefined && isDone(t);
+    };
     let frame = 0;
     const place = () => {
       const items = [...ul.children] as HTMLElement[];
@@ -445,13 +460,19 @@ function BoardThreads({
         return;
       }
       const base = ul.getBoundingClientRect().top;
-      const wanted = items.map((li) => {
+      // Live threads beside what they are about; the settled line and history after them all.
+      const live = items.filter((li) => li.dataset.fold === undefined && !isSettled(li));
+      const after = items.filter((li) => !live.includes(li));
+      const wanted = live.map((li) => {
         const t = byId.get(li.dataset.id ?? "");
         const el = t === undefined ? null : anchorOf(ph, t);
         return { li, top: el === null ? 0 : el.getBoundingClientRect().top - base };
       });
       let bottom = 0;
-      for (const { li, top } of wanted.sort((x, y) => x.top - y.top)) {
+      for (const { li, top } of [
+        ...wanted.sort((x, y) => x.top - y.top),
+        ...after.map((li) => ({ li, top: 0 })),
+      ]) {
         const at = Math.max(top, bottom);
         li.style.top = `${at}px`;
         bottom = at + li.offsetHeight + 8;
@@ -478,7 +499,15 @@ function BoardThreads({
   });
   return (
     <ul class="preview-threads" ref={list}>
-      {[...open, ...closed].map(one)}
+      {open.map(one)}
+      {closed.length > 0 && (
+        <li class="preview-history" data-fold="">
+          <button type="button" aria-expanded={isHistory} onClick={() => setIsHistory(!isHistory)}>
+            {`${closed.length} settled ${closed.length === 1 ? "thread" : "threads"}`}
+          </button>
+        </li>
+      )}
+      {isHistory && closed.map(one)}
     </ul>
   );
 }

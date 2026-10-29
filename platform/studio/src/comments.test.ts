@@ -147,8 +147,36 @@ describe("threads", () => {
     expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
       undefined,
     );
-    // Something a change broke, whoever filed it, is the agent's.
-    expect(waitsOn(start(root, { target: "machine/out", about: comment.id }, FIXER))).toBe("agent");
+    // The turn is kept on the thread: every view reads that one field.
+    const kept = readComments(root).threads.find((t) => t.id === comment.id);
+    expect(kept?.turn).toBe("person");
+  });
+
+  it("lets the writer say whose turn it is: a reviewer's taste call is the person's", () => {
+    const root = repo();
+    const taste = start(root, { text: "taste: the ring or no ring?", turn: "person" }, REVIEWER);
+    expect(waitsOn(taste)).toBe("person");
+    // A write can hand it on as well, whatever the write would say by itself.
+    const handed = applyChange(
+      root,
+      { op: "write", id: taste.id, text: "this one is mechanical after all", turn: "agent" },
+      REVIEWER,
+    );
+    expect(handed).toMatchObject({ thread: { turn: "agent" } });
+  });
+
+  it("works out once the turn of a thread written before turns were kept, and drops about", () => {
+    const root = repo();
+    const t = start(root);
+    const file = join(root, "authoring/books/class10-maths/polynomials/comments.yaml");
+    const old = readFileSync(file, "utf8")
+      .replace(/^ {2}turn: \w+\n/m, "")
+      .replace(/^ {2}text:/m, "  about: cmvzzz\n  text:");
+    writeFileSync(file, old);
+    const read = readComments(root);
+    expect(read.problems).toEqual([]);
+    expect(read.threads.find((x) => x.id === t.id)).toMatchObject({ turn: "agent" });
+    expect(read.threads.find((x) => x.id === t.id)).not.toHaveProperty("about");
   });
 
   it("files what the person said in a fixer's chat in their name; only a fixer does", () => {
@@ -194,46 +222,6 @@ describe("threads", () => {
     expect(applyChange(root, { op: "delete", id: handed.id }, FIXER)).toMatchObject({ ok: false });
     expect(write(root, handed.id, YOU, "", Status.Withdrawn)).toMatchObject({
       thread: { status: Status.Withdrawn },
-    });
-  });
-
-  it("holds a thread back from ready while a regression it caused is open", () => {
-    const root = repo();
-    const t = start(root);
-    write(root, t.id, FIXER, "x", Status.Planned);
-    const broke = start(root, { target: "machine/out", about: t.id }, REVIEWER);
-    expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
-      ok: false,
-      error: expect.stringContaining(broke.id),
-    });
-    write(root, broke.id, FIXER, "fix", Status.Planned);
-    write(root, broke.id, FIXER, "fixed", Status.Ready);
-    expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({ ok: true });
-  });
-
-  it("keeps what's wrong with a fix on its own thread: a regression is a break elsewhere", () => {
-    const root = repo();
-    const t = start(root);
-    write(root, t.id, FIXER, "bigger", Status.Planned);
-    // The same piece: refused, write on the thread.
-    expect(
-      applyChange(
-        root,
-        {
-          op: "start",
-          thread: {
-            board: BOARD,
-            target: "machine/put",
-            about: t.id,
-            text: "still small",
-          },
-        },
-        REVIEWER,
-      ),
-    ).toMatchObject({ ok: false, error: expect.stringContaining("write on that thread instead") });
-    // Elsewhere: a regression.
-    expect(start(root, { target: "machine/out", about: t.id }, REVIEWER)).toMatchObject({
-      about: t.id,
     });
   });
 
@@ -336,12 +324,17 @@ describe("reviews", () => {
     expect(readComments(root).reviews).toHaveLength(1);
   });
 
-  it("starts a new review once the last one is done", () => {
+  it("adds a handover to the review in progress, and starts a new one once every thread is settled", () => {
     const root = repo();
     const old = start(root);
     const first = apply(root, { op: "handover" }, YOU);
     write(root, old.id, FIXER, "x", Status.Planned);
     write(root, old.id, FIXER, "done", Status.Ready);
+    // Ready isn't settled: the next pass is the same review.
+    const more = start(root);
+    expect(apply(root, { op: "handover" }, YOU).review?.id).toBe(first.review?.id);
+    write(root, old.id, YOU, "", Status.Closed);
+    write(root, more.id, YOU, "", Status.Withdrawn);
     const fresh = start(root);
     const second = apply(root, { op: "handover" }, YOU);
     expect(second.review?.id).not.toBe(first.review?.id);
@@ -396,8 +389,10 @@ describe("reviews", () => {
       isDone: false,
     });
     write(root, b.id, YOU, "", Status.Withdrawn);
-    const after = readComments(root);
-    expect(standing(threadsOf(review, after.threads)).isDone).toBe(true);
+    // Ready is still the person's to settle.
+    expect(standing(threadsOf(review, readComments(root).threads)).isDone).toBe(false);
+    write(root, a.id, YOU, "", Status.Closed);
+    expect(standing(threadsOf(review, readComments(root).threads)).isDone).toBe(true);
   });
 
   it("reports a review that lists a thread that isn't there", () => {

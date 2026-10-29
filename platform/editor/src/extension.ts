@@ -431,17 +431,27 @@ const dirsIn = (dir: string): string[] =>
     ? readdirSync(dir).filter((n) => !n.startsWith(".") && statSync(join(dir, n)).isDirectory())
     : [];
 
-/** Comments on a chapter still waiting on the agent (open or planned), from its comments file. */
-function openComments(chapter: string): number {
-  const file = join(root, "authoring", "books", chapter, "comments.yaml");
-  if (!existsSync(file)) return 0;
-  return (readFileSync(file, "utf8").match(/^ {2}status: (open|planned)$/gm) ?? []).length;
+/** A chapter's threads not yet settled, as the dev server gives them: how many are whose turn. */
+function openComments(chapter: string): { yours: number; agents: number } {
+  const on = (t: { board?: string; source?: string }) =>
+    (t.board ?? "").startsWith(`${chapter}/`) ||
+    (t.source ?? "").startsWith(`authoring/books/${chapter}/`) ||
+    (t.source ?? "").startsWith(`content/${chapter}/`);
+  const mine = reviews.allThreads.filter(on);
+  return {
+    yours: mine.filter((t) => t.waitsOn === "person").length,
+    agents: mine.filter((t) => t.waitsOn === "agent").length,
+  };
 }
 
 /** Anything in the Chalk tree: the content and its planning, or the reviews (reviews.ts). */
 type Element = Node | ReviewItem;
 const isReview = (e: Element): e is ReviewItem =>
-  e.kind === "yours" || e.kind === "sitting" || e.kind === "review" || e.kind === "thread";
+  e.kind === "yours" ||
+  e.kind === "past" ||
+  e.kind === "sitting" ||
+  e.kind === "review" ||
+  e.kind === "thread";
 
 /**
  * The one Chalk tree: Reviews at the top (your threads not handed over, then each review), then
@@ -540,7 +550,12 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
     item.tooltip = node.path;
     if (node.kind === "chapter") {
       const n = openComments(node.path);
-      if (n > 0) item.description = `${n} open`;
+      item.description = [
+        n.yours > 0 ? `${n.yours} your turn` : "",
+        n.agents > 0 ? `${n.agents} agent's turn` : "",
+      ]
+        .filter(Boolean)
+        .join(" · ");
     }
     if (node.kind === "planfile" && node.plan !== undefined) {
       const f = node.plan;

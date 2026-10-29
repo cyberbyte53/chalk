@@ -188,6 +188,8 @@ export type FileState = {
   notes: string[];
   /** Approved, but a file it is written from changed since: which. */
   recheck: Step[];
+  /** Waiting on the person's approval, but it can't be given yet: why (`approvalBlocker`). */
+  blocked?: string;
 };
 
 /**
@@ -411,7 +413,18 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
     });
     return { ...base, status: isChanged ? "changed" : "approved", approvedAt, recheck };
   });
-  return { book, chapter, dir, files, lessons: readLessons(root, book, chapter) };
+  const whole: Chapter = { book, chapter, dir, files, lessons: readLessons(root, book, chapter) };
+  // What stands in the way of each approval the person is asked for: the same rule approve() keeps.
+  for (const f of files) {
+    const isAsked =
+      FILES.find((x) => x.step === f.step)?.isApproved === true &&
+      f.status !== "missing" &&
+      (f.status !== "approved" || f.recheck.length > 0);
+    if (!isAsked) continue;
+    const why = approvalBlocker(root, whole, f.step);
+    if (why !== undefined) f.blocked = why;
+  }
+  return whole;
 }
 
 /** Every chapter with planning files. */
@@ -437,41 +450,50 @@ export function nextStep(c: Chapter): FileState | undefined {
 }
 
 /**
- * The person approves a file: refused unless every file before it is approved and holds, its own
- * gate holds, and it is committed as it is (the approval names that commit). Writes
- * `approved: <commit>` into its front matter; nothing else.
+ * Why the person can't approve a file yet, or undefined when they can: every file before it
+ * approved and holding, its own gate holding, nothing on it still being talked about, and it
+ * committed as it is (the approval names that commit). The tree shows it; approve() refuses with it.
  */
-export function approve(root: string, book: string, chapter: string, step: Step): string {
-  const c = readChapter(root, book, chapter);
+export function approvalBlocker(root: string, c: Chapter, step: Step): string | undefined {
   const at = c.files.findIndex((f) => f.step === step);
   const f = c.files[at];
   const spec = FILES[at];
-  if (f === undefined || spec === undefined) throw new Error(`no step ${step}`);
-  if (!spec.isApproved) throw new Error(`${f.file} is checked by the machine, not approved`);
-  if (f.status === "missing") throw new Error(`${f.file} isn't written yet`);
+  if (f === undefined || spec === undefined) return `no step ${step}`;
+  if (!spec.isApproved) return `${f.file} is checked by the machine, not approved`;
+  if (f.status === "missing") return `${f.file} isn't written yet`;
   for (const before of c.files.slice(0, at))
     if (before.status !== "approved" || before.recheck.length > 0 || before.problems.length > 0)
-      throw new Error(
-        `${before.file} comes first: it is ${before.status}${before.problems.length > 0 ? ", and its checks fail" : ""}${before.recheck.length > 0 ? ", and to be checked again" : ""}`,
-      );
+      return `${before.file} comes first: it is ${before.status}${before.problems.length > 0 ? ", and its checks fail" : ""}${before.recheck.length > 0 ? ", and to be checked again" : ""}`;
   if (f.problems.length > 0)
-    throw new Error(`${f.file}'s checks fail: ${f.problems.map((p) => p.text).join("; ")}`);
+    return `${f.file}'s checks fail: ${f.problems.map((p) => p.text).join("; ")}`;
   const rel = join(c.dir, f.file);
   // Approving settles the file: nothing on it may still be talked about.
   const unsettled = readComments(root).threads.filter(
     (t) => t.source?.startsWith(`${rel}:`) && waitsOn(t) !== undefined,
   );
   if (unsettled.length > 0)
-    throw new Error(
-      `${unsettled.length} thread${unsettled.length === 1 ? " is" : "s are"} still open on ${f.file} (${unsettled.map((t) => t.id).join(", ")}): answer and close ${unsettled.length === 1 ? "it" : "them"} first`,
-    );
+    return `${unsettled.length} thread${unsettled.length === 1 ? " is" : "s are"} still open on ${f.file} (${unsettled.map((t) => t.id).join(", ")}): answer and close ${unsettled.length === 1 ? "it" : "them"} first`;
   const head = (git(root, "rev-parse", "HEAD") ?? "").trim();
   const committed = atCommit(root, head, rel);
   const now = readFileSync(join(root, rel), "utf8");
   if (committed === undefined || splitFront(committed).body.trim() !== splitFront(now).body.trim())
-    throw new Error(
-      `${f.file} has changes not committed: commit it first, so the approval names what was approved`,
-    );
+    return `${f.file} has changes not committed: commit it first, so the approval names what was approved`;
+  return undefined;
+}
+
+/**
+ * The person approves a file: refused (with `approvalBlocker`'s reason) unless it can be. Writes
+ * `approved: <commit>` into its front matter; nothing else.
+ */
+export function approve(root: string, book: string, chapter: string, step: Step): string {
+  const c = readChapter(root, book, chapter);
+  const why = approvalBlocker(root, c, step);
+  if (why !== undefined) throw new Error(why);
+  const f = c.files.find((x) => x.step === step);
+  if (f === undefined) throw new Error(`no step ${step}`);
+  const rel = join(c.dir, f.file);
+  const head = (git(root, "rev-parse", "HEAD") ?? "").trim();
+  const now = readFileSync(join(root, rel), "utf8");
   const { front, body } = splitFront(now);
   const lines = Object.entries({ ...front, approved: head.slice(0, 12) }).map(
     ([k, v]) => `${k}: ${v}`,

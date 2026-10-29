@@ -178,6 +178,13 @@ export function threadAt(c: Filed): string {
   return (c.source ?? c.home).replace(/:\d+(-\d+)?$/, "");
 }
 
+/** A write's result: the thread's status and whose turn it is now. */
+function turnOf(t: Filed | undefined): string {
+  if (t === undefined) return "";
+  const on = waitsOn(t);
+  return ` [${t.status}${on === undefined ? "" : `, ${on === "person" ? "the person's turn" : "the agent's turn"}`}]`;
+}
+
 /** Whose turn it is, in words. */
 function turnWords(c: Filed): string {
   const on = waitsOn(c);
@@ -188,7 +195,7 @@ function threadLine(c: Filed): string {
   const where = threadAt(c);
   const plan = lastMove(c, Status.Planned);
   return [
-    `• ${c.id} [${c.status}]${turnWords(c)} ${c.by}${c.by === c.role ? "" : ` (${c.role})`}${c.about ? `, broken by ${c.about}'s change` : ""}${c.from ? ` (from ${c.from})` : ""} ${where}`,
+    `• ${c.id} [${c.status}]${turnWords(c)} ${c.by}${c.by === c.role ? "" : ` (${c.role})`}${c.from ? ` (from ${c.from})` : ""} ${where}`,
     `  source: ${c.source ?? "?"}`,
     ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot)}`] : []),
     `  ${c.by}: “${oneLine(c.text)}”`,
@@ -626,14 +633,14 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Read comments",
         description:
-          "Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' and fixers' (questions, decisions, proposals); a thread `about` another is something that one's change broke. Each says whose turn it is. `review`: a review's id (\"apply review 20261026-1734\"), or \"latest\": exactly the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). `unanswered: true`: only what waits on the agent. Each shows its address, source line, what it showed, its plan and every message.",
+          "Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' and fixers' (questions, decisions, proposals). Each says whose turn it is. `review`: a review's id (\"apply review 20261026-1734\"), or \"latest\": exactly the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). `unanswered: true`: only what waits on the agent. Each shows its address, source line, what it showed, its plan and every message.",
         inputSchema: {
           review: z.string().optional().describe('A review id, or "latest".'),
           at: z
             .string()
             .optional()
             .describe(
-              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice").',
+              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a planning file or folder ("authoring/books/class9-maths/coordinate-geometry/flow.md").',
             ),
           unanswered: z.boolean().optional(),
         },
@@ -656,7 +663,11 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             ),
           ]);
         let found = review === undefined ? threads : threadsOf(review, threads);
-        if (args.at !== undefined) {
+        if (args.at?.startsWith("authoring/")) {
+          // A planning file or folder: the threads written on it, by their source line.
+          const prefix = args.at.replace(/\/$/, "");
+          found = found.filter((c) => (c.source ?? "").startsWith(prefix));
+        } else if (args.at !== undefined) {
           const prefix = formatAddress(parseAddress(args.at)).replace(/\/$/, "");
           found = found.filter((c) => {
             const at = threadAt(c);
@@ -773,11 +784,11 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         .string()
         .optional()
         .describe("On a planning file: the exact words the thread is about, as written."),
-      about: z
-        .string()
+      turn: z
+        .enum(["person", "agent"])
         .optional()
         .describe(
-          "A new thread about something another thread's change broke elsewhere: that thread's id (it can't be ready until this is answered). What's wrong with its own fix goes on that thread.",
+          "Whose turn it is after this write, when not what the write says by itself: \"person\" for something only the person can decide (a taste call), \"agent\" for something an agent fixes. Left out: the person's words and a reviewer's are the agent's to answer; a fixer's question, reason or ready is the person's; a plan is the agent's.",
         ),
       ...(ROLE === Role.Fixer
         ? {
@@ -805,7 +816,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     status?: Status;
     at?: string;
     quote?: string;
-    about?: string;
+    turn?: "person" | "agent";
     from?: "chat";
     plan?: string;
   };
@@ -844,7 +855,21 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               to: place,
               text: item.text,
             });
-            lines.push(done.ok ? `✓ ${item.id} now at ${item.at.trim()}` : `✗ ${done.error}`);
+            if (!done.ok) {
+              lines.push(`✗ ${done.error}`);
+              continue;
+            }
+            lines.push(`✓ ${item.id} now at ${item.at.trim()}`);
+            // The rest of the item still applies: its status move, or whose turn it is.
+            if (item.status === undefined && item.turn === undefined) continue;
+            const moved = await changeComments(who, {
+              op: "write",
+              id: item.id,
+              text: "",
+              ...(item.status ? { status: item.status } : {}),
+              ...(item.turn ? { turn: item.turn } : {}),
+            });
+            lines.push(moved.ok ? `✓ ${item.id}${turnOf(moved.thread)}` : `✗ ${moved.error}`);
             continue;
           }
           if (item.id !== undefined) {
@@ -853,8 +878,9 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               id: item.id,
               text: item.text,
               ...(item.status ? { status: item.status } : {}),
+              ...(item.turn ? { turn: item.turn } : {}),
             });
-            lines.push(done.ok ? `✓ ${item.id} [${done.thread?.status}]` : `✗ ${done.error}`);
+            lines.push(done.ok ? `✓ ${item.id}${turnOf(done.thread)}` : `✗ ${done.error}`);
             continue;
           }
           if (item.at === undefined) {
@@ -871,7 +897,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             op: "start",
             thread: {
               ...place,
-              ...(item.about ? { about: item.about } : {}),
+              ...(item.turn ? { turn: item.turn } : {}),
               ...(item.from ? { from: item.from } : {}),
               text: item.text,
             },
@@ -881,7 +907,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             continue;
           }
           if (item.plan === undefined) {
-            lines.push(`✓ ${done.thread.id} on ${on}`);
+            lines.push(`✓ ${done.thread.id} on ${on}${turnOf(done.thread)}`);
             continue;
           }
           const planned = await changeComments(who, {

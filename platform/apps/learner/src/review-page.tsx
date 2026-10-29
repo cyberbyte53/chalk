@@ -16,6 +16,7 @@ import {
   shownAt,
   toEditor,
 } from "./preview-shell";
+import { ThreadText } from "./thread-text";
 import {
   type Review,
   type Thread,
@@ -30,7 +31,7 @@ import {
  *
  * - `?dev&reviews`: every review, newest first (and your threads not handed over yet).
  * - `?dev&review=<id>` (`review=sitting`: yours not handed over yet; `review=yours`: every thread
- *   waiting on you, an agent's question or a fix to check): the review as one page, a
+ *   not yet settled, yours to answer first, then the agent's): the review as one page, a
  *   list of its threads. Each is a fold: what was said and every message since, then its board as
  *   it is now, drawn live with the piece outlined, and Reply, Close, Withdraw, Open board (which
  *   comes back here). `&thread=<id>` opens at that thread.
@@ -41,14 +42,7 @@ const YOURS = "yours";
 /** The pages that are not a handed-over review, by their title. */
 const PAGES: Record<string, string> = {
   [SITTING]: "Not handed over yet",
-  [YOURS]: "Waiting on you",
-};
-const STATUS_WORDS: Record<string, string> = {
-  open: "waiting",
-  planned: "planned",
-  ready: "ready for you",
-  closed: "closed",
-  withdrawn: "withdrawn",
+  [YOURS]: "Open threads",
 };
 
 /** "1 open, 3 ready": how a set of threads stands. */
@@ -117,6 +111,7 @@ export function ReviewList(): JSX.Element {
     document.body.dataset.previewReady = window.location.search;
   });
   const yours = threads.filter((t) => t.waitsOn === "person").length;
+  const agents = threads.filter((t) => t.waitsOn === "agent").length;
   const of = (r: Review) => r.threads.flatMap((x) => threads.find((t) => t.id === x.id) ?? []);
   return (
     <main class="rv">
@@ -125,11 +120,11 @@ export function ReviewList(): JSX.Element {
         <a href="?dev&activity">Activity</a>
       </header>
       <ul class="rv-list">
-        {yours > 0 && (
+        {yours + agents > 0 && (
           <li>
             <a href={`?dev&review=${YOURS}`}>
-              <strong>Waiting on you</strong>
-              <span>{`${yours} thread${yours === 1 ? "" : "s"}`}</span>
+              <strong>Open threads</strong>
+              <span>{`${yours} your turn · ${agents} the agent's`}</span>
             </a>
           </li>
         )}
@@ -182,7 +177,10 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
       id === SITTING
         ? (sitting ?? []).map((s) => threads.find((t) => t.id === s.id) ?? s)
         : id === YOURS
-          ? threads.filter((t) => t.waitsOn === "person" || t.id === focus)
+          ? [
+              ...threads.filter((t) => t.waitsOn === "person" || t.id === focus),
+              ...threads.filter((t) => t.waitsOn === "agent" && t.id !== focus),
+            ]
           : (review?.threads.flatMap((x) => threads.find((t) => t.id === x.id) ?? []) ?? []),
     [id, sitting, review, threads, focus],
   );
@@ -336,17 +334,22 @@ function ThreadFold({
       >
         <span class="rv-chevron">{isFolded ? "▸" : "▾"}</span>
         <span class={`rv-status is-${t.status}${t.waitsOn === "person" ? " is-yours" : ""}`}>
-          {t.status === "open"
-            ? t.waitsOn === "person"
-              ? "your turn"
-              : "with the agent"
-            : (STATUS_WORDS[t.status] ?? t.status)}
+          {t.waitsOn === "person"
+            ? t.status === "ready"
+              ? "your turn: ready"
+              : "your turn"
+            : t.waitsOn === "agent"
+              ? t.status === "planned"
+                ? "agent: planned"
+                : "agent's turn"
+              : t.status}
         </span>
         <span class="rv-place">{placeOf(t)}</span>
-        {t.about !== undefined && <span class="rv-label is-broken">broken by a change</span>}
         {isFolded && (
           <span class="rv-said">
-            {latest !== undefined ? `${latest.by}: ${latest.text}` : `${t.by}: ${t.text}`}
+            {latest !== undefined
+              ? `${latest.by}: ${latest.text.split("\n")[0]}`
+              : `${t.by}: ${t.text.split("\n")[0]}`}
           </span>
         )}
       </button>
@@ -354,18 +357,18 @@ function ThreadFold({
         <div class="rv-body">
           <div class="rv-talk">
             {t.quote !== undefined && <blockquote class="rv-quote">{t.quote}</blockquote>}
-            <p class="rv-msg is-first">
+            <div class="rv-msg is-first">
               <b>{t.by}</b>
-              {t.text}
-            </p>
+              <ThreadText text={t.text} />
+            </div>
             {t.messages.map((m) => (
-              <p
+              <div
                 key={`${m.at}·${m.by}`}
                 class={`rv-msg is-${m.role}${m.status ? ` moves-${m.status}` : ""}`}
               >
                 <b>{`${m.by}${m.status === "planned" ? " · plan" : m.status ? ` → ${m.status}` : ""}`}</b>
-                {m.text || "—"}
-              </p>
+                {m.text === "" ? "—" : <ThreadText text={m.text} />}
+              </div>
             ))}
             {t.changed !== undefined && t.changed.length > 0 && (
               <details class="rv-changed">

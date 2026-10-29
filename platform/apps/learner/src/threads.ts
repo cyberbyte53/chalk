@@ -20,7 +20,7 @@ export type Message = {
 export type Thread = {
   id: string;
   status: ThreadStatus;
-  /** Whose turn it is (the dev server works it out): the agent's, the person's, or no one's. */
+  /** Whose turn it is, as the thread keeps it: the agent's, the person's, or no one's (settled). */
   waitsOn: "agent" | "person" | null;
   by: string;
   role: string;
@@ -36,7 +36,6 @@ export type Thread = {
   source?: string;
   snapshot?: string;
   quote?: string;
-  about?: string;
   from?: string;
   changed?: string[];
   /** What the changes reach, worked out when it became ready (platform/studio/src/reach). */

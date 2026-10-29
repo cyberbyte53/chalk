@@ -1,10 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { type Filed, isUnanswered, propHomes } from "./comments";
+import { type Filed, Status, propHomes } from "./comments";
 import type { Reach } from "./content/build";
 
 /**
- * Threads still waiting on a fixer (open or planned) whose place is gone: a board or piece no
+ * Threads not yet answered (open or planned, whoever's turn it is) whose place is gone: a board or piece no
  * longer built, a prop no longer in the library, a planning file or the words it quoted no longer
  * there. Each must be re-pointed (the comment tool with the thread's id and its new address) or
  * answered (ready, saying what happened to it); a thread is never left pointing at nothing.
@@ -14,7 +14,7 @@ import type { Reach } from "./content/build";
 export function goneThreads(root: string, threads: readonly Filed[], reach: Reach): string[] {
   const props = propHomes(root);
   const out: string[] = [];
-  for (const t of threads.filter(isUnanswered)) {
+  for (const t of threads.filter((x) => x.status === Status.Open || x.status === Status.Planned)) {
     const why = ((): string | undefined => {
       if (t.prop !== undefined)
         return props.has(t.prop) ? undefined : `prop ${t.prop} is no longer in the library`;

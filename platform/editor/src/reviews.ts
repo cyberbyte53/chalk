@@ -15,7 +15,6 @@ export type Thread = {
   waitsOn: "agent" | "person" | null;
   by: string;
   role: string;
-  about?: string;
   createdAt: string;
   text: string;
   board?: string;
@@ -34,7 +33,10 @@ type Read = { threads: Thread[]; reviews: Review[] };
 export type ReviewItem = Item;
 
 type Item =
-  | { kind: "yours"; threads: Thread[] }
+  /** Threads not yet settled, by whose turn: the person's, or the agent's. */
+  | { kind: "yours"; threads: Thread[]; turn: "person" | "agent" }
+  /** Every review handed over, folded: a record of who handed what over, not a to-do list. */
+  | { kind: "past"; reviews: Review[] }
   | { kind: "sitting"; threads: Thread[] }
   | { kind: "review"; review: Review; threads: Thread[]; isLatest: boolean }
   | { kind: "thread"; thread: Thread; review?: string };
@@ -84,7 +86,7 @@ function tooltip(t: Thread): vscode.MarkdownString {
   const md = new vscode.MarkdownString(undefined, true);
   const who = t.role === "person" ? "" : ` · ${t.by === t.role ? t.role : `${t.by} (${t.role})`}`;
   const turn = isYours(t) ? " · your turn" : "";
-  const broke = t.about ? ` · broken by ${t.about}'s change` : "";
+  const broke = "";
   md.appendMarkdown(
     `**${WORDS[t.status]}**${turn}${who}${broke} · ${t.board ?? t.source ?? ""}\n\n`,
   );
@@ -134,20 +136,19 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     if (item === undefined) {
       const reviews = [...this.read.reviews].reverse();
       const yours = this.read.threads.filter(isYours);
+      const agents = this.read.threads.filter(isWaiting);
       return [
-        ...(yours.length > 0 ? [{ kind: "yours", threads: yours } as const] : []),
+        ...(yours.length > 0 ? [{ kind: "yours", threads: yours, turn: "person" } as const] : []),
+        ...(agents.length > 0 ? [{ kind: "yours", threads: agents, turn: "agent" } as const] : []),
         ...(this.sitting.length > 0 ? [{ kind: "sitting", threads: this.sitting } as const] : []),
-        ...reviews.map(
-          (review, i) =>
-            ({
-              kind: "review",
-              review,
-              threads: this.threadsOf(review),
-              isLatest: i === 0,
-            }) as const,
-        ),
+        ...(reviews.length > 0 ? [{ kind: "past", reviews } as const] : []),
       ];
     }
+    if (item.kind === "past")
+      return item.reviews.map(
+        (review) =>
+          ({ kind: "review", review, threads: this.threadsOf(review), isLatest: false }) as const,
+      );
     if (item.kind === "sitting")
       return item.threads.map((thread) => ({ kind: "thread", thread }) as const);
     // Opened on the preview's page of what waits on you.
@@ -162,14 +163,29 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
 
   getTreeItem(item: Item): vscode.TreeItem {
     if (item.kind === "yours") {
+      const isMine = item.turn === "person";
       const t = new vscode.TreeItem(
-        `Waiting on you (${item.threads.length})`,
-        vscode.TreeItemCollapsibleState.Expanded,
+        `${isMine ? "Your turn" : "Agent's turn"} (${item.threads.length})`,
+        isMine
+          ? vscode.TreeItemCollapsibleState.Expanded
+          : vscode.TreeItemCollapsibleState.Collapsed,
       );
-      t.iconPath = new vscode.ThemeIcon("bell", new vscode.ThemeColor("charts.yellow"));
+      t.iconPath = isMine
+        ? new vscode.ThemeIcon("bell", new vscode.ThemeColor("charts.yellow"))
+        : new vscode.ThemeIcon("sync");
       t.command = { command: "chalk.review.open", title: "Open", arguments: [item] };
-      t.tooltip =
-        "An agent's question, decision or proposal to answer, or a fix ready to check: reply on it (it goes back to the agent) or close it.";
+      t.tooltip = isMine
+        ? "An agent's question, decision or proposal to answer, or a fix ready to check: reply on it (it goes back to the agent) or close it."
+        : "Threads an agent is answering or fixing.";
+      return t;
+    }
+    if (item.kind === "past") {
+      const t = new vscode.TreeItem(
+        `Past reviews (${item.reviews.length})`,
+        vscode.TreeItemCollapsibleState.Collapsed,
+      );
+      t.iconPath = new vscode.ThemeIcon("history");
+      t.tooltip = "Every review handed over, newest first.";
       return t;
     }
     if (item.kind === "sitting") {
@@ -186,7 +202,8 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     }
     if (item.kind === "review") {
       const { review, threads } = item;
-      const isDone = threads.every((x) => !isWaiting(x) && x.status !== "ready");
+      // Done once every thread in it is settled (closed or withdrawn).
+      const isDone = threads.every((x) => x.waitsOn === null);
       const t = new vscode.TreeItem(
         review.id,
         item.isLatest && !isDone
@@ -205,7 +222,7 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
     const { thread } = item;
     const t = new vscode.TreeItem(where(thread), vscode.TreeItemCollapsibleState.None);
     const latest = answerOf(thread) ?? planOf(thread);
-    t.description = `${isYours(thread) && thread.status === "open" ? "your turn" : WORDS[thread.status]} · ${(latest?.text || thread.text).replace(/\s+/g, " ").slice(0, 80)}`;
+    t.description = `${isYours(thread) ? "your turn" : isWaiting(thread) ? "agent's turn" : WORDS[thread.status]} · ${(latest?.text || thread.text).replace(/\s+/g, " ").slice(0, 80)}`;
     const [icon, color] = ICONS[thread.status];
     t.iconPath = new vscode.ThemeIcon(icon, color ? new vscode.ThemeColor(color) : undefined);
     t.tooltip = tooltip(thread);

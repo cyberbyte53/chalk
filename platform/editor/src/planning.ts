@@ -20,6 +20,8 @@ export type PlanningFile = {
   problems: { text: string; about?: string }[];
   notes: string[];
   recheck: string[];
+  /** Waiting on your approval, but it can't be given yet: why. */
+  blocked?: string;
 };
 /** A built lesson, and whether it waits on a self-review (platform/studio/src/pipeline.ts). */
 export type PlanningLesson = { slug: string; isToSelfReview: boolean; why?: string };
@@ -39,6 +41,7 @@ export const isApprovable = (f: PlanningFile): boolean => !f.file.startsWith("so
 export function stateWords(f: PlanningFile): string {
   if (f.status === "missing") return "not written";
   if (f.problems.length > 0) return "checks fail";
+  if (f.blocked !== undefined) return "can't approve yet";
   if (f.recheck.length > 0) return "to check again";
   if (!isApprovable(f)) return "checks hold";
   if (f.status === "changed") return "changed since approved";
@@ -48,6 +51,7 @@ export function stateWords(f: PlanningFile): string {
 /** Everything a planning file's tooltip says: its checks, what to check again, its notes. */
 export function stateDetail(f: PlanningFile): string {
   return [
+    ...(f.blocked !== undefined ? [`Can't approve yet: ${f.blocked}`] : []),
     ...f.problems.map((p) => `✗ ${p.text}`),
     ...(f.recheck.length > 0
       ? [`To check again: ${f.recheck.join(", ")} changed since it was approved.`]
