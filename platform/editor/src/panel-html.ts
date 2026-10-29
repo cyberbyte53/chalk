@@ -1,8 +1,9 @@
+import { type PanelStart, panelMain } from "./panel-script";
+
 /**
- * The preview panel's page: a bar of buttons and the app's own `?dev&…` page in a frame. Its script
- * is written inside a template string, so a backslash in it is eaten: a regex's `\/` reaches the
- * page as `/`, and one bad character stops the whole script (the panel then never switches pages).
- * `panel-html.test.ts` checks the script parses and that "show" moves the frame.
+ * The preview panel's page: a bar of buttons and the app's own `?dev&…` page in a frame. Its
+ * script is panel-script.ts, checked code, put in as that function's compiled text with where to
+ * start. `panel-html.test.ts` checks the script runs and that the frame follows.
  */
 export function panelHtml(base: string, query: string): string {
   const nonce = Math.random().toString(36).slice(2);
@@ -27,45 +28,5 @@ export function panelHtml(base: string, query: string): string {
   <button id="out" title="Open in Cursor\'s browser (design mode: ⌘⇧D, click a piece, ⌘L adds it to the chat)">↗</button>
 </div>
 <iframe id="frame" src="${src}"></iframe>
-<script nonce="${nonce}">
-  const vscode = acquireVsCodeApi();
-  const frame = document.getElementById("frame");
-  const state = { query: ${JSON.stringify(query)}, play: false, hindi: false, picked: null };
-  const urlOf = () => ${JSON.stringify(base)} + "?dev&" + state.query + (state.play ? "&play" : "") + (state.hindi ? "&locale=hi" : "");
-  const where = document.getElementById("where");
-  where.textContent = state.query.replace(/^(board|source|review)=/, "") || "all books";
-  const toFrame = (m) => frame.contentWindow && frame.contentWindow.postMessage({ ...m, chalk: true }, "*");
-  const reload = () => { frame.src = urlOf(); };
-  document.getElementById("play").onclick = (e) => { state.play = !state.play; e.target.classList.toggle("on", state.play); reload(); };
-  document.getElementById("hindi").onclick = (e) => { state.hindi = !state.hindi; e.target.classList.toggle("on", state.hindi); reload(); };
-  document.getElementById("out").onclick = () => vscode.postMessage({ type: "external", url: urlOf() });
-  const select = document.getElementById("select");
-  const setSelecting = (on) => { select.classList.toggle("on", on); toFrame({ type: "select", on }); };
-  select.onclick = () => setSelecting(!select.classList.contains("on"));
-  const copy = document.getElementById("copy");
-  copy.onclick = () => vscode.postMessage({ type: "copy" });
-  // The same keys as inside the preview, when the panel's bar has focus.
-  document.addEventListener("keydown", (e) => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key === "a") vscode.postMessage({ type: "copy" });
-    if (e.key === "c") setSelecting(!select.classList.contains("on"));
-  });
-  window.addEventListener("message", (e) => {
-    const m = e.data || {};
-    if (e.source === frame.contentWindow && m.chalk) {
-      if (m.type === "selecting") { select.classList.toggle("on", !!m.on); return; }
-      if (m.type === "toggle") { document.getElementById(m.what === "play" ? "play" : "hindi").click(); return; }
-      if (m.type === "pick") select.classList.remove("on");
-      // The page says where it is: the panel keeps exactly that, so a reload can't drop anything.
-      if (m.type === "at" && typeof m.query === "string") { state.query = m.query; where.textContent = m.query.replace(/^(at=content[/]|source=|review=)/, "") || "all books"; }
-      vscode.postMessage(m);
-      return;
-    }
-    // From the extension.
-    if (m.type === "show") { state.query = m.query; where.textContent = m.query.replace(/^(at=content[/]|source=|review=)/, "") || "all books"; reload(); }
-    else if (m.type === "pick") setSelecting(true);
-    else if (m.type === "review") { copy.style.display = m.count > 0 ? "" : "none"; copy.textContent = "Copy for agent (" + m.count + ")"; }
-    else toFrame(m);
-  });
-</script></body></html>`;
+<script nonce="${nonce}">(${panelMain.toString()})(${JSON.stringify({ base, query } satisfies PanelStart)});</script></body></html>`;
 }
