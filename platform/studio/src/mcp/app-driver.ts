@@ -18,7 +18,8 @@ export const PHONE_WIDTH = 390;
 /** A phone\'s screen height in px: what a board is checked against unless a screen is given. */
 export const PHONE_HEIGHT = 844;
 
-let base: Promise<string> | undefined;
+/** A start of the dev server under way, so two callers never start two. */
+let starting: Promise<string> | undefined;
 let browser: Promise<Browser> | undefined;
 
 async function isChalk(url: string): Promise<boolean> {
@@ -79,11 +80,16 @@ export async function closeBrowser(): Promise<void> {
   if (open !== undefined) await (await open.catch(() => undefined))?.close().catch(() => {});
 }
 
-export const previewBase = (root: string): Promise<string> => {
-  base ??= startServer(root);
-  return base;
+/** The dev server, up: asked each time, so one that stopped is started again (one start at a time). */
+export const previewBase = async (root: string): Promise<string> => {
+  const given = process.env.CHALK_PREVIEW_URL;
+  if (given !== undefined && given !== "") return given;
+  if (await isChalk(DEV_URL)) return DEV_URL;
+  starting ??= startServer(root).finally(() => {
+    starting = undefined;
+  });
+  return starting;
 };
-
 export async function launch(): Promise<Browser> {
   const { chromium } = await import("playwright-core");
   const path = process.env.CHALK_CHROMIUM;

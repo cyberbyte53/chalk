@@ -70,10 +70,14 @@ async function ensureServer(): Promise<boolean> {
   if (await isUp(base)) return true;
   starting ??= (async () => {
     log.appendLine("Starting the studio service (it starts the dev server)…");
-    const starter = spawn(process.execPath, [join(root, "platform", "studio", "start.mjs")], {
-      cwd: root,
-      env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" },
-    });
+    const starter = spawn(
+      process.execPath,
+      [join(root, "platform", "studio", "start.mjs"), "--app"],
+      {
+        cwd: root,
+        env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" },
+      },
+    );
     starter.stdout?.on("data", (d) => log.append(String(d)));
     starter.stderr?.on("data", (d) => log.append(String(d)));
     for (let i = 0; i < 90; i++) {

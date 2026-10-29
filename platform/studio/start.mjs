@@ -74,21 +74,33 @@ const lastLines = () => {
   return readFileSync(LOG_FILE, "utf8").trimEnd().split("\n").slice(-12).join("\n");
 };
 
-/** The studio service is up, started if it wasn't; throws with its log when it can't come up. */
-export async function ensureStudio() {
-  if (await isUp()) return STUDIO_URL;
-  if (!isStarted()) start();
-  for (let i = 0; i < 60; i++) {
-    await new Promise((r) => setTimeout(r, 500));
-    if (await isUp()) return STUDIO_URL;
+/**
+ * The studio service is up, started if it wasn't; throws with its log when it can't come up.
+ * `{ app: true }`: the dev server too (the studio service starts it, again if it stopped).
+ */
+export async function ensureStudio({ app = false } = {}) {
+  if (!(await isUp())) {
+    if (!isStarted()) start();
+    let up = false;
+    for (let i = 0; i < 60 && !up; i++) {
+      await new Promise((r) => setTimeout(r, 500));
+      up = await isUp();
+    }
+    if (!up)
+      throw new Error(
+        `The studio service didn't come up at ${STUDIO_URL}. The end of its log (${LOG_FILE}):\n${lastLines()}`,
+      );
   }
-  throw new Error(
-    `The studio service didn't come up at ${STUDIO_URL}. The end of its log (${LOG_FILE}):\n${lastLines()}`,
-  );
+  if (app) {
+    const res = await fetch(`${STUDIO_URL}/health?app`, { signal: AbortSignal.timeout(60_000) });
+    const answer = await res.json();
+    if (!res.ok) throw new Error(`The dev server didn't come up: ${answer.error ?? res.status}`);
+  }
+  return STUDIO_URL;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url))
-  ensureStudio().then(
+  ensureStudio({ app: process.argv.includes("--app") }).then(
     (url) => console.log(`studio service up at ${url}`),
     (error) => {
       console.error(String(error instanceof Error ? error.message : error));

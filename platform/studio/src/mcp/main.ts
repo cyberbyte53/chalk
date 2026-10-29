@@ -38,7 +38,16 @@ const server = createServer((req, res) => {
   const path = (req.url ?? "").split("?")[0];
   if (path === "/health") {
     res.setHeader("content-type", "application/json");
-    res.end(JSON.stringify({ ok: true, service: "chalk-studio", boot: BOOT }));
+    const answer = { ok: true, service: "chalk-studio", boot: BOOT };
+    // ?app: the dev server too (started again if it stopped), for whoever needs the app's pages.
+    if (!(req.url ?? "").includes("app")) return void res.end(JSON.stringify(answer));
+    previewBase(ROOT).then(
+      (app) => res.end(JSON.stringify({ ...answer, app })),
+      (error: unknown) => {
+        res.statusCode = 503;
+        res.end(JSON.stringify({ ok: false, error: String(error) }));
+      },
+    );
     return;
   }
   if (path?.startsWith("/dev-review")) {
