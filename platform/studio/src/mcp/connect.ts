@@ -16,13 +16,14 @@ import { ensureStudio } from "../../start.mjs";
  * platform/studio/start.mjs if nothing answers. So a fresh session can call the tools with nothing
  * started by hand, and there is still one service.
  *
- * - The service runs under `tsx watch` and restarts when its code changes. A call that finds it
- *   gone (restarting, or a new session it doesn't know) connects again and is sent again, so a
- *   restart is invisible here. The tool list is fetched again, and the harness told it changed.
+ * - The service runs under `tsx watch` and restarts when its code changes. Its requests stand
+ *   alone (no session to lose), so a restart between calls changes nothing here but the harness
+ *   is told the tool list may have changed. A call cut off by a restart is sent again if it only
+ *   looks; a write says it may or may not have been saved. A service not running is started.
  * - This agent gets an id, made once when this process starts and sent with every call
  *   (`x-chalk-agent`). The service keys the agent's page by it (app-driver.ts), so two agents
- *   with the same token never share a board, and the page survives a reconnect. After a restart
- *   the page is gone, so `continue` fails, saying why.
+ *   with the same token never share a board. After a restart the page is gone, so `continue`
+ *   fails, saying why.
  * - The role comes from the token: CHALK_TOKEN (default chalk-dev-fixer). CHALK_NAME names the
  *   agent in threads. CHALK_MCP_URL points at another service (then nothing is started here).
  */
@@ -56,82 +57,71 @@ async function ensureService(): Promise<void> {
   await ensureStudio();
 }
 
-let client: Client | undefined;
+/**
+ * The one connection to the service. Each request stands alone there (stateless, http.ts), so it
+ * outlives the service restarting: nothing it holds can go stale.
+ */
 let connecting: Promise<Client> | undefined;
-
-async function connect(): Promise<Client> {
-  await ensureService();
-  const c = new Client({ name: "chalk-connect", version: "1" });
-  await c.connect(new StreamableHTTPClientTransport(URL_, { requestInit: { headers } }));
-  c.setNotificationHandler(ToolListChangedNotificationSchema, async () => {
-    await stdio.sendToolListChanged().catch(() => {});
-  });
-  return c;
-}
-
 function current(): Promise<Client> {
-  if (client !== undefined) return Promise.resolve(client);
-  connecting ??= connect().then(
-    (c) => {
-      client = c;
-      connecting = undefined;
-      return c;
-    },
-    (e: unknown) => {
-      connecting = undefined;
-      throw e;
-    },
-  );
+  connecting ??= (async () => {
+    await ensureService();
+    const c = new Client({ name: "chalk-connect", version: "1" });
+    await c.connect(new StreamableHTTPClientTransport(URL_, { requestInit: { headers } }));
+    return c;
+  })().catch((e: unknown) => {
+    connecting = undefined; // the next call tries again
+    throw e;
+  });
   return connecting;
 }
 
 const words = (e: unknown) =>
   String(e instanceof Error ? `${e.message} ${(e as { code?: unknown }).code ?? ""}` : e);
-/** The call never reached the service (it was down, or doesn't know this session). */
-const isUnreached = (e: unknown) =>
-  /ECONNREFUSED|fetch failed|session|404|not connected/i.test(words(e));
+/** The call never reached the service: it isn't running. */
+const isDown = (e: unknown) => /ECONNREFUSED|fetch failed/i.test(words(e));
 /** The service went away during the call (it restarted). */
 const isCutOff = (e: unknown) =>
   /ECONNRESET|socket hang up|terminated|other side closed/i.test(words(e));
 
+/** The run of the service the last call saw: a new one may offer other tools. */
+let lastBoot: string | undefined;
+
 /**
- * Runs a call on the service; if the service has gone, connects again and runs it once more. A
- * call that may have been carried out before the service went (`isSafe` false: a write) is only
- * sent again if it never reached it.
+ * Runs a call on the service. Not running: started, and the call sent again. Restarted during the
+ * call: a call that only looks is sent again; a write may or may not have been done, so it says so.
  */
 async function relay<T>(
   run: (c: Client, cutOff: AbortSignal) => Promise<T>,
   isSafe = true,
 ): Promise<T> {
   const c = await current();
-  // A call in flight when the service restarts would wait for an answer that never comes (the
-  // connection dies quietly): watch which run of the service is up, and end the call when it
-  // changes, so it is sent again (or, for a write, said so).
-  const watch = new AbortController();
   const boot = await bootNow();
+  if (boot !== undefined && lastBoot !== undefined && boot !== lastBoot)
+    void stdio.sendToolListChanged().catch(() => {});
+  if (boot !== undefined) lastBoot = boot;
+  // A call in flight when the service restarts would wait for an answer that never comes (the
+  // connection dies quietly): watch which run of the service is up, and end the call when it changes.
+  const watch = new AbortController();
   const timer = setInterval(() => {
     void bootNow().then((now) => {
-      if (now !== undefined && now !== boot)
+      if (now !== undefined && boot !== undefined && now !== boot)
         watch.abort(new Error("terminated: the chalk MCP service restarted"));
     });
   }, 1000);
   try {
     return await run(c, watch.signal);
   } catch (e) {
-    if (!(isUnreached(e) || (isSafe && isCutOff(e)))) {
-      if (isCutOff(e)) {
-        if (client === c) client = undefined;
-        throw new Error(
-          "The chalk MCP service restarted during this call, so it may or may not have been saved: read the threads with `comments` before writing again.",
-        );
-      }
-      throw e;
+    if (isDown(e)) {
+      await ensureService();
+      return run(c, new AbortController().signal);
     }
-    if (client === c) client = undefined;
-    await c.close().catch(() => {});
-    const fresh = await current();
-    void stdio.sendToolListChanged().catch(() => {});
-    return run(fresh, new AbortController().signal);
+    if (isCutOff(e) || watch.signal.aborted) {
+      if (isSafe) return relay(run, isSafe);
+      throw new Error(
+        "The chalk MCP service restarted during this call, so it may or may not have been saved: read the threads with `comments` before writing again.",
+      );
+    }
+    throw e;
   } finally {
     clearInterval(timer);
   }

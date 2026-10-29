@@ -61,14 +61,16 @@ export function whoOf(req: IncomingMessage): Who | null {
   return { role, name: name !== "" && name !== "you" ? name : role };
 }
 
-type Session = { transport: StreamableHTTPServerTransport; who: Who };
-
-/** The /mcp middleware: a session per connection, each held to its token's role. */
+/**
+ * The /mcp middleware: each request on its own (MCP's stateless HTTP), held to its token's role.
+ * No session lives here, so the service restarting (its code changed) loses nothing a caller holds:
+ * who it is comes with every request (its token), and its page for drawing boards too (the agent
+ * id its relay, connect.ts, sends).
+ */
 export function mcpMiddleware(): {
   handle: (req: IncomingMessage, res: ServerResponse) => Promise<void>;
   close: () => Promise<void>;
 } {
-  const sessions = new Map<string, Session>();
   const refuse = (res: ServerResponse, status: number, message: string) => {
     res.statusCode = status;
     res.setHeader("content-type", "application/json");
@@ -99,39 +101,24 @@ export function mcpMiddleware(): {
     const who = whoOf(req);
     if (who === null)
       return refuse(res, 401, "a chalk token is needed: Authorization: Bearer <token>");
-    const id = req.headers["mcp-session-id"];
     const body = req.method === "POST" ? await readBody(req).catch(() => null) : undefined;
     if (body === null) return refuse(res, 400, "not JSON");
-    const known = typeof id === "string" ? sessions.get(id) : undefined;
-    if (known !== undefined) {
-      // A session stays with the token that opened it.
-      if (known.who.role !== who.role)
-        return refuse(res, 403, "this session belongs to another role");
-      return known.transport.handleRequest(req, res, body);
-    }
-    if (typeof id === "string") return refuse(res, 404, "no such session: connect again");
-    // A new connection: its own server, showing only what its role may do.
-    const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: () => randomUUID(),
-      onsessioninitialized: (sessionId) => {
-        sessions.set(sessionId, { transport, who });
-      },
-    });
-    // The agent's own page for drawing boards (app-driver.ts): by the id its relay (connect.ts)
-    // sends with every call, so it outlives a reconnect; else this connection's own, closed with it.
+    // The agent's own page for drawing boards (app-driver.ts), by the id its relay sends with every
+    // call; without one, a page for this request alone (nothing to go on from).
     const agent = String(req.headers["x-chalk-agent"] ?? "").trim();
     const lane = agent !== "" ? `agent:${agent}` : randomUUID();
-    transport.onclose = () => {
-      if (transport.sessionId !== undefined) sessions.delete(transport.sessionId);
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    const server = chalkMcp(who, lane);
+    res.on("close", () => {
+      void transport.close().catch(() => {});
+      void server.close().catch(() => {});
       if (agent === "") void closeLane(lane);
-    };
-    await chalkMcp(who, lane).connect(transport);
+    });
+    await server.connect(transport);
     await transport.handleRequest(req, res, body);
   };
 
   const close = async () => {
-    for (const { transport } of sessions.values()) await transport.close().catch(() => {});
-    sessions.clear();
     await closeBrowser().catch(() => {});
   };
   return { handle, close };
