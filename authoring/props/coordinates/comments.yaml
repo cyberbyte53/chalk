@@ -85,7 +85,6 @@
   prop: coordinatePlane
   source: library/props/coordinates/src/coordinate-plane.ts:16
   commit: 00a9da2b6d0375275ae6c7c4fb7558fdf07b73ea
-  about: cmvt7i171acg
   text: >-
     The walker's definition, redone for the arrow pad (your comment on street-and-house). Here is
     what changes, before any code.
@@ -301,6 +300,7 @@
   prop: coordinatePlane
   source: library/props/coordinates/src/coordinate-plane.ts:16
   commit: bfc7cf2d7ca653ce96a7284be3e4172a96f790bb
+  turn: person
   from: chat
   text: A picture of clues already given (two-lines#spot) showed its clue buttons and a ↺, which
     nobody can use there.
@@ -331,3 +331,130 @@
         boards set clues, so nothing else is reached. One detail: the caption sits above the plane,
         not under it as the plan says, which matches where the house and the desk captions sit.
         Fine."
+- id: cmvtqe2j1wgl
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-29T16:01:48.109Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: road
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
+  snapshot: "−6−5−4−3−2−10123456bus standThe busThe bus: 0 ← → ↺ Back to the start"
+  commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
+  turn: person
+  text: when bus is returning it's path trail is still behind , like take bus from 0 to 3 and then
+    back , i am still seeing blue line to 3
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:08:13.121Z
+      text: >-
+        Plan, agreed in chat:
+
+        - A step back onto the previous block takes that block off the route, so the line always
+        runs from the start to where the walker is now.
+
+        - One rule in the walker: Riya's route in the town does the same.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:20:08.197Z
+      text: >-
+        Done (3841b29):
+
+        - Going back the way you came now takes those blocks off the route: the bus 0 → 3 → 1 shows
+        the line 0–1, not 0–3.
+
+        - Same rule for Riya in the town.
+      status: ready
+- id: cmvtqgem9cga
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-29T16:03:37.089Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
+  snapshot: "Aman's house: Street number 4, House number 5 1234567812345Street numberHouse
+    numberRiyaRiya: Street number 4 ↑ ← → ↓ ↺ Back to the start"
+  commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
+  turn: person
+  text: i feel we can make the grid a bit larger no ? we are leaving so much space and it feels tiny
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:08:13.158Z
+      text: >-
+        Plan, agreed in chat:
+
+        - Measure where the town's box loses space (margins, the half-house of room at the edges,
+        any height limit).
+
+        - Make the town fill the width, so every block is bigger.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:20:08.234Z
+      text: >-
+        Done (3841b29, cd1e476):
+
+        - The town has 6 streets instead of 8: each block is about 30% bigger on a phone (36px →
+        46px).
+
+        - The plane's fixed 420px height limit is gone; on wide screens the player's screen-height
+        rule decides.
+
+        - On a phone it now fills the width apart from the house-number margin and the room for the
+        last house's ring.
+      status: ready
+- id: cmvtqi7psx10
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-29T16:05:01.456Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
+  snapshot: 5 cm9 cmIt is in the upper half It is near the left edge It is 5 cm from the left edge It
+    is 9 cm above the bottom ↺
+  commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
+  text: why in this prop we have not added axis showing the numbers?
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:08:13.239Z
+      text: >-
+        Plan, agreed in chat (option c):
+
+        - No numbers on the edges at first.
+
+        - When a distance is given, its edge becomes a ruler: "5 cm from the left edge" numbers the
+        bottom edge, "9 cm above the bottom" numbers the left edge.
+
+        - Needs a small plane addition: which lines show their numbers, and an action that numbers
+        one.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:08:17.372Z
+      text: ""
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:20:08.322Z
+      text: >-
+        Done (3841b29), option (c):
+
+        - No numbers on the edges at first.
+
+        - "5 cm from the left edge" numbers the bottom edge; "9 cm above the bottom" numbers the
+        left edge.
+
+        - New on the plane: which lines carry their numbers, and an action that numbers one.
+      status: ready
+  changed: []
+  turn: person

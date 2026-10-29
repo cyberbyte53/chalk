@@ -1641,7 +1641,6 @@
   target: room/target
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:218
   commit: 19f8624247061fc2780c8a49d7cb91b194922e94
-  about: cmvt95u1bhzc
   text: "Mechanical (screen, small). Side effect of keeping two lines of room for the place header: on
     seating-plan the 'This desk: Column 3, Row 5' header needs one line in both languages, but two
     are kept. Before any desk is tapped there is an empty band of about three lines above 'Row', and
@@ -2559,6 +2558,7 @@
   target: ask/prompt
   source: content/class9-maths/coordinate-geometry/questions/tap-the-desk/family.ts:18
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
+  turn: person
   text: "Taste call for the person. The agreed principle: the screen mustn't give the answer away. The
     question checks one thing, column first. The prompt states it: 'Desks are named (column, row):
     the column counted from the left, the row from the front. Tap the desk (5, 3)'. A student who
@@ -2757,6 +2757,7 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  turn: person
   text: "Taste call for the person. Principle 4 (let them find it) and s3.1-II. The board asks 'How
     would you say exactly where it is?', but both edges are already numbered like a ruler, and the
     dot sits on the crossing of 5 and 9. A student can read off '5 and 9' before trying any clue, so
@@ -2878,6 +2879,7 @@
   target: ask
   source: content/class9-maths/coordinate-geometry/questions/place-the-dot/family.ts:20
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  turn: person
   text: "Mechanical (screen). The prompt bolds '**7 cm from the left edge**' and '**3 cm above the
     bottom**', but the question prompt is drawn bold all through, so the emphasis doesn't show in en
     or hi. The two distances, which are the whole question, don't stand out from 'Drag it there,
@@ -2940,6 +2942,7 @@
   target: spot
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:352
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
+  turn: person
   text: "Small, taste. The house and the desk each have an orange caption on the picture ('Aman's
     house: Street number 4, House number 5', 'The desk: Column 5, Row 3'). The dot has none, so the
     three pictures don't read alike, and the board's claim is that they are the same idea. The dot
@@ -3016,3 +3019,41 @@
       at: 2026-10-29T11:27:35.530Z
       text: ""
       status: closed
+- id: cmvtqhenv3mu
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-29T16:04:23.803Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: w2/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:259
+  snapshot: In the town, the roads told Riya where to go. A page of your notebook has no roads. Here
+    is a dot on one, and each small square is 1 cm across. How would you say exactly where the dot
+    is? Try these, one at a time, and watch where it could still be.
+  commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
+  text: why the first 2 sentences bro , like no real connection
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:08:13.200Z
+      text: >-
+        Plan, agreed in chat:
+
+        - Drop the two town sentences.
+
+        - Start at the dot: "Here is a dot on a page of your notebook; each small square is 1 cm
+        across." Hindi to match.
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:20:08.271Z
+      text: >-
+        Done (3841b29):
+
+        - The two town sentences are gone.
+
+        - It now opens: "Here is a dot on a page of your notebook, and each small square is 1 cm
+        across." Hindi to match.
+      status: ready
+  changed: []
+  turn: person
