@@ -403,6 +403,12 @@ export function CoordinatePlaneView({
           <strong>{word(s.targetName, locale)}</strong>: {addressOf(s.axisNames, s.target, locale)}
         </p>
       )}
+      {/* Room for the address before there is one, so the map doesn't move when it appears. */}
+      {hasPlaces && s.target === null && s.canChooseTarget && (
+        <p class="cp-line cp-address" aria-hidden="true">
+          &nbsp;
+        </p>
+      )}
       {hasPlotting && s.showTable && (
         <table class="cp-table" {...shows("table", s.toPlot)}>
           <tbody>
@@ -437,6 +443,7 @@ export function CoordinatePlaneView({
         <PlaneTap s={s} px={px} call={call} />
         {hasPlaces && <PlacesDraw s={s} px={px} locale={locale} />}
         {hasWalker && <WalkerDraw s={s} px={px} locale={locale} />}
+        {/* Over Riya, so the mark she has just made stays in view. */}
         <NamedPointsDraw s={s} px={px} />
         {hasPlotting && <PlottedDraw s={s} px={px} />}
         {hasClues && hiddenPoint !== null && s.isHiddenShown && (
@@ -515,7 +522,8 @@ export function CoordinatePlaneView({
             ))}
             <span class="cp-pad-back">
               <SymbolButton
-                symbol="↺"
+                symbol={`↺ ${word(WORDS.back, locale)}`}
+                isWide
                 label={word(WORDS.back, locale)}
                 isEnabled={s.trail.length > 0 && !s.isWalking}
                 {...does(actions.backToStart)}
@@ -525,8 +533,8 @@ export function CoordinatePlaneView({
         )}
         {hasPlaces && s.lit !== null && (
           <SymbolButton
-            symbol={word(WORDS.clear, locale)}
-            label={word(WORDS.clear, locale)}
+            symbol={word(WORDS.lightsOff, locale)}
+            label={word(WORDS.lightsOff, locale)}
             isWide
             {...does(actions.clearLight)}
           />
@@ -578,7 +586,8 @@ export function CoordinatePlaneView({
               />
             ),
           )}
-        {hasClues && hiddenPoint !== null && !s.isHiddenShown && (
+        {/* Where it is, only once every clue is given: before that it would give the answer away. */}
+        {hasClues && hiddenPoint !== null && !s.isHiddenShown && nextClue === -1 && (
           <SymbolButton
             symbol={word(WORDS.showPoint, locale)}
             label={word(WORDS.showPoint, locale)}

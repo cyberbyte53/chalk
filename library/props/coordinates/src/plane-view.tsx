@@ -74,6 +74,9 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
   const road = Math.max(6, Math.min(16, unit * 0.32));
   const streets = marksOn(Marks.Counts, w.xMin, w.xMax, 1);
   const [, base] = px.toPx(0, 0);
+  // A city of crossing streets (Riya may walk every line) has streets across as well.
+  const across =
+    s.walkFrom !== null && s.roads === "grid" ? marksOn(Marks.Counts, w.yMin, w.yMax, 1) : [];
   return (
     <g class="cp-town">
       <rect class="cp-scene is-town" {...box} rx={6} />
@@ -87,6 +90,20 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
             y1={base}
             x2={sx}
             y2={y0}
+            stroke-width={road * 0.7}
+          />
+        );
+      })}
+      {across.map((y) => {
+        const [, sy] = px.toPx(0, y);
+        return (
+          <line
+            key={`a${y}`}
+            class="cp-street"
+            x1={x0}
+            y1={sy}
+            x2={x1}
+            y2={sy}
             stroke-width={road * 0.7}
           />
         );
@@ -228,7 +245,8 @@ export function AxesDraw({
             {...shows("xName", s.axisNames[0][locale])}
             x={right}
             // Along the bottom, under the numbers; through the middle, just above its right end.
-            y={w.yMin >= 0 ? base + 36 : base - 8}
+            // Along the bottom: under its numbers, or just under the line when it has none.
+            y={w.yMin < 0 ? base - 8 : s.marks === Marks.None ? base + 16 : base + 36}
             text-anchor="end"
           >
             {s.axisNames[0][locale]}

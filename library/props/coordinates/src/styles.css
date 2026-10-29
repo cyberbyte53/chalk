@@ -254,6 +254,10 @@
 }
 
 /* ---- points: a figure's, the one to read, clues, plotted dots ---- */
+.cp-named-points {
+  /* Marks are to see: a tap goes through to the desk or house under them. */
+  pointer-events: none;
+}
 .cp-named-point circle {
   fill: var(--color-on-surface);
 }

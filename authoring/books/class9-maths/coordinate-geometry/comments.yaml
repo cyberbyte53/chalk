@@ -641,3 +641,363 @@
       at: 2026-10-29T07:37:17.667Z
       text: ""
       status: closed
+- id: cmvt95txziko
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.263Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town/target
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:50
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call (the order things appear in), and it matters. Principle 4 (let them find it) and
+    the rubric's 'do the picture and the text agree?'. When Riya steps onto Street 4, the map
+    circles House 5 and a header appears: 'Aman's house: Street number 4, House number 5'. On the
+    same tap, the text below asks 'Which one is Aman's? She messages him again. He replies: House
+    5.' So the student reads the question while the answer is already circled above it. The moment
+    the second number is supposed to be needed never happens, and the story stops making sense
+    ('she's standing there and still can't tell?'). Suggested fix: on Street 4, light only the five
+    houses. Mark Aman's house and show his full address only once 'House 5' has been said, or at her
+    first ↑ tap."
+  messages: []
+- id: cmvt95u1bhzc
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.383Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town/target
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:50
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (overflow). On a 390 phone, 'Aman's house: Street number 4, House number 5' wraps
+    and leaves the '5' alone on its own line. The same header is in two-lines#house. The header also
+    appears only when Riya reaches Street 4, so it pushes the whole map down a line in the middle of
+    her walk, and the picture jumps. Suggested fix: keep the header on one line (shorter words, e.g.
+    'Aman's house: Street 4, House 5', or a smaller size), and reserve its space from the start so
+    nothing jumps."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:46.844Z
+      text: Keep each address's number with its word (a non-breaking space), and keep room for the address
+        line from the start, so it doesn't push the map down mid-walk.
+      status: planned
+- id: cmvt95u26s0y
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.414Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town/clearLight
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:50
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (undefined term). Principle 1. When Riya reaches Street 4, a 'Clear' button
+    appears (Hindi 'हटाओ'), and the arrow pad shifts to make room for it. Nothing on the board says
+    what it clears. It turns off the five lit houses. ↺ next to it isn't explained either. A student
+    who taps 'Clear' to see what happens loses the five lit houses that the next paragraph talks
+    about. Suggested fix: hide 'Clear' on this board, or name it after what it does. Give ↺ a word
+    too, e.g. 'Back to the corner'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:46.907Z
+      text: "Give both buttons words: '↺ Back to the start' and 'Lights off' (with Hindi)."
+      status: planned
+- id: cmvt95u30850
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.444Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: anyHouse
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:77
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call. Principle 5 (the true reason for each step). After 'tap any house to make it
+    Aman's', Riya stays at Street 4, House 5. Tap Street 7, House 4, and the route from where she
+    stands is down 5, right 3, up 4. That route doesn't read as the address. The idea this board
+    builds is that the street number is how far along the main road from the corner, and the house
+    number is how far up the street. That only holds when the walk starts from the corner. Suggested
+    fix: send Riya back to the corner when a new house is chosen, or say so in the text ('Send her
+    back to the corner with ↺, then…')."
+  messages: []
+- id: cmvt95u3sdis
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.472Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: w2
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:90
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call. Principles 2 and 11. The source opens §3.1 from what they know: 'You have already
+    studied how to locate a point on a number line… many situations need its position with reference
+    to more than one line' (s3.1-number-line, which flow.md cites for this board). The lesson never
+    makes that link. So 'one number isn't enough' arrives without the contrast that makes it
+    surprising: on a number line, one number is enough. Suggested fix: one line, before or after
+    'Street 4', e.g. 'On a number line, one number fixes a point. Will one number fix a house?'"
+  messages: []
+- id: cmvt95u4k0x9
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.500Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ground
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:115
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call, and an important one. Principle 6 (show, don't describe) and fig3.2(b). The clues
+    say '30 m from the west fence' and '20 m from the south fence', but the ground has no metres on
+    it. There is no scale along the fences, and no dashed line from the fence to the line or the
+    spot marked 30 m or 20 m. The student sees a line appear and has to take it on trust that it is
+    30 m from the west fence. The board exists to show that two distances from two fences fix a
+    spot, and the distances themselves never appear in the picture. Also, after the second clue the
+    picture shows a short segment clipped to the middle patch, while the 'fixed' box says 'one
+    distance left a whole line of spots'. Suggested fix: mark the fences every 10 m. Draw each
+    distance as a measured dashed line from its fence with its value. Let the 30 m line run the full
+    height of the ground, so the picture shows 'a whole line'."
+  messages: []
+- id: cmvt95u7jze7
+  status: withdrawn
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.607Z
+  board: class9-maths/coordinate-geometry/dot-on-paper
+  target: ground/showHidden
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (undefined term / give-away). 'Show the point' is there from the very start.
+    Tapped before any clue, it drops an orange dot on the stall's spot, which skips the clues the
+    board is built on. 'Point' is also not a word the story has used: it's the stall's spot.
+    Suggested fix: remove it on this board. If it stays, show it only after the third clue and call
+    it 'Show the stall'."
+  messages:
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-29T07:59:39.627Z
+      text: Filed at a wrong address (the lesson segment was missing from the path). Filed again at
+        dot-on-paper#ground/showHidden.
+      status: withdrawn
+- id: cmvt95u8fp4c
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.639Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ground/xName
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:115
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (screen). 'west fence' sits at the top of the left line, which is fine. 'south
+    fence' floats at the bottom right, a clear gap below the fence it names, just above the clue
+    buttons, so it reads as a heading for the buttons. Suggested fix: put it on or just under the
+    bottom line, at its end."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:46.986Z
+      text: With no numbers along the bottom, put the bottom line's name just under it, not where the
+        numbers would be.
+      status: planned
+- id: cmvt95ubp8ns
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.757Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: lamp
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:146
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (give-away option). Principle 8. The right option is the only one with two pieces
+    of information, and the longest by far, so it can be picked without thinking. Suggested fix: add
+    a wrong option that is a real mistake and also has two numbers, e.g. '20 cm from the left edge
+    and 30 cm from the right edge'. Both distances are measured from parallel edges, so it still
+    leaves a whole line. That also tests the source's point that the two lines must be
+    perpendicular. Feedback for it: 'Both are distances across the table: it still leaves a line.
+    The second must be from an edge at right angles.'"
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:47.020Z
+      text: Add a wrong option with two distances from parallel edges (left edge and right edge), so the
+        right one isn't the only two-number option.
+      status: planned
+- id: cmvt95ufvbpt
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:30.907Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: room
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:206
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (undefined term), plus a prop bug. Principle 1. A tapped desk is marked with a
+    blue dot labelled 'P' or 'Q'. Those letters are never introduced, and they hide which desk is
+    (5, 3) and which is (3, 5), which is the very thing the question then asks. Suggested fix: label
+    the marks '(5, 3)' and '(3, 5)'. Bug: once a desk is marked, the dot catches the tap, so tapping
+    that desk again does nothing (play: tapping room/chooseTarget:3,5 after it's marked times out
+    because the point circle intercepts it). The header then stays on the other desk. The
+    wrong-answer note 'Tap (5, 3), then (3, 5)' sends the student to taps that no longer respond."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:47.051Z
+      text: Label the marked desks (5, 3) and (3, 5), not P and Q (a mark's name may be up to 7
+        characters, for a pair). Marks no longer catch taps, so a marked desk can be tapped again.
+      status: planned
+- id: cmvt95uqpuyu
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.297Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: room
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:206
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call. The rubric's 'picture and text agree' and fig3.3. The text says rows are 'counted
+    from the front' and 'the teacher's desk stands in front, outside the plan'. The plan shows
+    neither: no front, no teacher's desk T. A student can't tell that row 1 is the front or which
+    side is 'left', and the source's point that the teacher's desk is not part of the plan isn't
+    visible. Suggested fix: draw the teacher's desk (and the blackboard) below row 1, outside the
+    grid, as in Fig. 3.3."
+  messages: []
+- id: cmvt95urhs5f
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.325Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: same
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:232
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (overflow, small). At 390, 'Yes: both are made of the numbers 3 and 5' wraps and
+    leaves '5' alone on the second line. Suggested fix: shorten it, e.g. 'Yes: both use 3 and 5'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:47.081Z
+      text: Shorten the option so it doesn't strand '5', and keep pairs unbroken.
+      status: planned
+- id: cmvt95us8mz8
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.352Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/cross-streets
+  target: city
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:289
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call. The rubric's 'do the picture and the text agree? does the story make sense
+    literally?'. The text says two main roads 'cross at the centre' and 'Riya starts at the centre'.
+    The picture puts her in the bottom-left corner and shows only the streets north and east of it,
+    so the student looks for the centre of the city and finds a corner. The vertical axis is also
+    titled 'East–west street' at its top, but that vertical line is itself a north–south road. A
+    student reads the title as the name of the line under it and gets the two directions backwards,
+    on the board whose whole point is not swapping them. Suggested fix: drop 'at the centre' (the
+    source's centre isn't needed without negative numbers yet), e.g. 'Riya starts where the two main
+    roads meet'. Name each street at its own end ('E–W 3' at the right end of that line) or put
+    'East–west street no.' beside the numbers, not on top of the north–south line."
+  messages: []
+- id: cmvt95ut05k9
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.380Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/cross-streets
+  target: city
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:289
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (undefined term). Principle 1. Each crossing Riya reaches is marked 'A', 'B', 'C'.
+    Those letters are never introduced, yet the wrong-answer feedback leans on them: 'Look at B and
+    C: B is on the 4th north–south street, C on the 3rd.' The student has to remember which letter
+    came from which pair. Suggested fix: label the marks with their pairs, '(2, 5)', '(4, 3)', '(3,
+    4)', and use the pairs in the feedback. Smaller (screen): the streets are drawn as hairline grey
+    lines, the empty circles at the crossings dominate the picture, and Riya covers the mark she has
+    just made (her figure also covers the 'East–west street' title at (2, 5)). Make the streets the
+    visible roads and keep the mark readable beside her."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:47.209Z
+      text: Label the crossings with their pairs and say the pairs in the feedback. Draw the city's
+        streets as roads both ways, and draw the marks over Riya so the one she reaches stays
+        visible.
+      status: planned
+- id: cmvt95uvxe4u
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.485Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/cross-streets
+  target: which
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:321
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (maths broken across a line). At 390 the question 'How many cross-streets in this
+    city can be called (4, 3), and how many (3, 4)?' wraps inside the pair: '(3,' on one line and
+    '4)?' on the next. Suggested fix: keep each pair unbreakable (non-breaking space after the
+    comma, or nowrap)."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:47.240Z
+      text: Keep every pair on one line (a non-breaking space after the comma), in both languages.
+      status: planned
+- id: cmvt95uywdnd
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.592Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: house
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:389
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Taste call. Principle 6 and flow.md ('the house, the stall spot and the desk side by side,
+    each with its two lines drawn'). The board's claim is 'each time, two lines at right angles did
+    it', but none of the three pictures singles out its two lines. In the house picture the main
+    road is the same grey as every street. In the desk picture the front row and the first column
+    aren't marked. In the stall picture the fences are plain axes with no names. 'The main road
+    across, the street up' is also unclear about which street: Street 4, or a line at the corner? A
+    student reads the summary box without seeing the two lines it names. Suggested fix: in each
+    picture, colour the across line and the up line (one colour for across, one for up, the same on
+    all three), and draw the route along, then up, to the place. Smaller: the tick numbers in these
+    three small planes are much smaller than the text."
+  messages: []
+- id: cmvt95v8aal3
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:31.930Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: spot
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:389
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (undefined term / missing label). The stall picture labels its point 'S', which
+    has not been used anywhere. Unlike the house and the desk, it has no caption, and it drops the
+    fence names and the 30 m / 20 m the text beside it quotes. Suggested fix: caption it like the
+    others ('The stall: 30 m from the west fence, 20 m from the south fence'), name the two fences,
+    put 30 m and 20 m on the dashed lines, and drop 'S' or call it 'stall'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:47.381Z
+      text: Draw the stall with its two distances measured (30 and 20 on its perpendiculars to the fences)
+        and the fences named, like the other two pictures; no 'S'.
+      status: planned
+- id: cmvt9616nax5
+  status: planned
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-29T07:59:39.647Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ground/showHidden
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:115
+  commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
+  text: "Mechanical (undefined term / give-away). 'Show the point' is there from the very start.
+    Tapped before any clue, it drops an orange dot on the stall's spot, which skips the clues the
+    board is built on. 'Point' is also not a word the story has used: it's the stall's spot.
+    Suggested fix: remove it on this board. If it stays, show it only after the third clue and call
+    it 'Show the stall'."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T08:00:46.955Z
+      text: Offer 'Show where it is' only once every clue has been given, and say 'where it is' instead of
+        'the point'.
+      status: planned

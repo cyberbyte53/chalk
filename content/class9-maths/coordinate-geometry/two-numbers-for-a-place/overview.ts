@@ -4,6 +4,7 @@ import {
   Direction,
   Marks,
   PlaceKind,
+  Reading,
   Roads,
   Scene,
   Tone,
@@ -166,6 +167,17 @@ const dotOnPaper = page("dot-on-paper", (b) => {
         ),
       },
       {
+        id: "parallel",
+        label: t(
+          "20 cm from the left edge and 60 cm from the right edge",
+          "बाएँ किनारे से 20 cm और दाएँ किनारे से 60 cm",
+        ),
+        feedback: t(
+          "Those two edges face each other, so the second distance adds nothing: every spot 20 cm from the left edge is 60 cm from the right. The two edges must meet at a corner.",
+          "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से 20 cm पर हर जगह दाएँ से 60 cm पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
+        ),
+      },
+      {
         id: "near",
         label: t("Near the back, on the left", "पीछे की ओर, बाईं तरफ़"),
         feedback: t(
@@ -201,7 +213,7 @@ const dotOnPaper = page("dot-on-paper", (b) => {
 const seatingPlan = page("seating-plan", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "A desk is named by its column, then its row: (5, 3) and (3, 5) use the same numbers and are two different desks.",
+    "A desk is named by its column, then its row: (5,\u00a03) and (3,\u00a05) use the same numbers and are two different desks.",
   );
   const room = b.prop(coordinatePlaneDef, "room", {
     window: { xMin: 0, xMax: 10.5, yMin: 0, yMax: 7.5 },
@@ -215,13 +227,13 @@ const seatingPlan = page("seating-plan", (b) => {
     targetName: t("This desk", "यह डेस्क"),
     // (5, 3) and (3, 5), each marked once tapped, so both stay in view.
     points: [
-      { name: "P", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "Q", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(5,\u00a03)", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(3,\u00a05)", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
     ],
   });
   for (const [name, x, y] of [
-    ["P", 5, 3],
-    ["Q", 3, 5],
+    ["(5,\u00a03)", 5, 3],
+    ["(3,\u00a05)", 3, 5],
   ] as const)
     b.when(room.on.targetChosen, room.call.showPoint({ name }), (at) => {
       const target = at(room).target;
@@ -232,8 +244,8 @@ const seatingPlan = page("seating-plan", (b) => {
   const same = choiceQuestion(b, {
     name: "same",
     prompt: t(
-      "Are the desks (5, 3) and (3, 5) the same desk?",
-      "क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?",
+      "Are the desks (5,\u00a03) and (3,\u00a05) the same desk?",
+      "क्या डेस्क (5,\u00a03) और (3,\u00a05) एक ही डेस्क हैं?",
     ),
     options: [
       {
@@ -245,10 +257,10 @@ const seatingPlan = page("seating-plan", (b) => {
       },
       {
         id: "yes",
-        label: t("Yes: both are made of the numbers 3 and 5", "हाँ: दोनों 3 और 5 से बनी हैं"),
+        label: t("Yes: both use 3 and 5", "हाँ: दोनों में 3 और 5 हैं"),
         feedback: t(
-          "The column comes first. Tap (5, 3), then (3, 5): they are in different places.",
-          "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।",
+          "The column comes first. Tap (5,\u00a03), then (3,\u00a05): they are in different places.",
+          "स्तंभ पहले आता है। (5,\u00a03) दबाओ, फिर (3,\u00a05): वे अलग जगह हैं।",
         ),
       },
     ],
@@ -265,14 +277,14 @@ const seatingPlan = page("seating-plan", (b) => {
     w.title(t("Desks in a classroom", "कक्षा में डेस्क")),
     w.body(
       t(
-        "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its **column**, counted from the left, then its **row**, counted from the front. Sonia sits in column 4, row 1, so her desk is **(4, 1)**. The teacher's desk stands in front, outside the plan.",
-        "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका **स्तंभ**, बाईं ओर से गिना हुआ, फिर उसकी **पंक्ति**, आगे से गिनी हुई। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क **(4, 1)** है। शिक्षक की मेज़ आगे है, योजना से बाहर।",
+        "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its **column**, counted from the left, then its **row**, counted from the front. Sonia sits in column 4, row 1, so her desk is **(4,\u00a01)**. The teacher's desk stands in front, outside the plan.",
+        "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका **स्तंभ**, बाईं ओर से गिना हुआ, फिर उसकी **पंक्ति**, आगे से गिनी हुई। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क **(4,\u00a01)** है। शिक्षक की मेज़ आगे है, योजना से बाहर।",
       ),
     ),
     w.body(
       t(
-        "Tap the desk at **(5, 3)**, then the one at **(3, 5)**.",
-        "**(5, 3)** वाली डेस्क दबाओ, फिर **(3, 5)** वाली।",
+        "Tap the desk at **(5,\u00a03)**, then the one at **(3,\u00a05)**.",
+        "**(5,\u00a03)** वाली डेस्क दबाओ, फिर **(3,\u00a05)** वाली।",
       ),
     ),
     room,
@@ -284,12 +296,13 @@ const seatingPlan = page("seating-plan", (b) => {
 const crossStreets = page("cross-streets", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "In a city of 5 numbered streets each way, only one crossing is (4, 3) and only one is (3, 4), and they are different crossings.",
+    "In a city of 5 numbered streets each way, only one crossing is (4,\u00a03) and only one is (3,\u00a04), and they are different crossings.",
   );
   const city = b.prop(coordinatePlaneDef, "city", {
     window: { xMin: 0, xMax: 5.5, yMin: 0, yMax: 5.5 },
     marks: Marks.Counts,
-    hasGrid: true,
+    // Its streets drawn as roads both ways (the town's look, with a road across at every count).
+    scene: Scene.Town,
     axisNames: [t("North–south street", "उत्तर–दक्षिण गली"), t("East–west street", "पूर्व–पश्चिम गली")],
     places: grid(5, 5),
     placeKind: PlaceKind.Crossing,
@@ -298,17 +311,17 @@ const crossStreets = page("cross-streets", (b) => {
     at: { x: 0, y: 0 },
     roads: Roads.Grid,
     points: [
-      { name: "A", x: 2, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "B", x: 4, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "C", x: 3, y: 4, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(2,\u00a05)", x: 2, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(4,\u00a03)", x: 4, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
+      { name: "(3,\u00a04)", x: 3, y: 4, isShown: false, hasDropLines: false, tone: Tone.Accent },
     ],
   });
   b.standsFor(city, "the city: 5 north–south and 5 east–west streets, Riya at the centre");
   // Each crossing she reaches stays marked.
   for (const [name, x, y] of [
-    ["A", 2, 5],
-    ["B", 4, 3],
-    ["C", 3, 4],
+    ["(2,\u00a05)", 2, 5],
+    ["(4,\u00a03)", 4, 3],
+    ["(3,\u00a04)", 3, 4],
   ] as const)
     b.when(city.on.stepped, city.call.showPoint({ name }), (at) => isAt(at(city), x, y));
   const go = (direction: Direction) => city.learner.step({ direction });
@@ -321,8 +334,8 @@ const crossStreets = page("cross-streets", (b) => {
   const which = choiceQuestion(b, {
     name: "which",
     prompt: t(
-      "How many cross-streets in this city can be called (4, 3), and how many (3, 4)?",
-      "इस शहर में कितने चौराहों को (4, 3) कहा जा सकता है, और कितनों को (3, 4)?",
+      "How many cross-streets in this city can be called (4,\u00a03), and how many (3,\u00a04)?",
+      "इस शहर में कितने चौराहों को (4,\u00a03) कहा जा सकता है, और कितनों को (3,\u00a04)?",
     ),
     options: [
       {
@@ -332,12 +345,12 @@ const crossStreets = page("cross-streets", (b) => {
       {
         id: "same",
         label: t(
-          "One: (4, 3) and (3, 4) are the same crossing",
-          "एक: (4, 3) और (3, 4) एक ही चौराहा है",
+          "One: (4,\u00a03) and (3,\u00a04) are the same crossing",
+          "एक: (4,\u00a03) और (3,\u00a04) एक ही चौराहा है",
         ),
         feedback: t(
-          "Look at B and C: B is on the 4th north–south street, C on the 3rd. Two different crossings.",
-          "B और C देखो: B चौथी उत्तर–दक्षिण गली पर है, C तीसरी पर। दो अलग चौराहे।",
+          "Look at the two marks: (4,\u00a03) is on the 4th north–south street, (3,\u00a04) on the 3rd. Two different crossings.",
+          "दोनों निशान देखो: (4,\u00a03) चौथी उत्तर–दक्षिण गली पर है, (3,\u00a04) तीसरी पर। दो अलग चौराहे।",
         ),
       },
       {
@@ -354,20 +367,21 @@ const crossStreets = page("cross-streets", (b) => {
   // Asked once she has reached both (4, 3) and (3, 4), in either order.
   b.after(city.on.stepped, which, {
     if: (at) =>
-      (isAt(at(city), 3, 4) && shown(at, "B")) || (isAt(at(city), 4, 3) && shown(at, "C")),
+      (isAt(at(city), 3, 4) && shown(at, "(4,\u00a03)")) ||
+      (isAt(at(city), 4, 3) && shown(at, "(3,\u00a04)")),
   });
   return [
     w.title(t("Cross-streets", "चौराहे")),
     w.body(
       t(
-        "Aman's cousin lives in a city where two main roads cross at the centre, one north–south and one east–west. Other streets run beside them: 5 each way, numbered from the main roads. Where the 2nd north–south street meets the 5th east–west street is the cross-street **(2, 5)**.",
-        "अमन का चचेरा भाई एक ऐसे शहर में रहता है जहाँ दो मुख्य सड़कें बीच में मिलती हैं, एक उत्तर–दक्षिण और एक पूर्व–पश्चिम। उनके साथ-साथ और गलियाँ हैं: हर तरफ़ 5, मुख्य सड़कों से गिनी हुई। जहाँ दूसरी उत्तर–दक्षिण गली पाँचवीं पूर्व–पश्चिम गली से मिलती है, वह चौराहा **(2, 5)** है।",
+        "Aman's cousin lives in a city where two main roads cross at the centre, one north–south and one east–west. Other streets run beside them: 5 each way, numbered from the main roads. Where the 2nd north–south street meets the 5th east–west street is the cross-street **(2,\u00a05)**.",
+        "अमन का चचेरा भाई एक ऐसे शहर में रहता है जहाँ दो मुख्य सड़कें बीच में मिलती हैं, एक उत्तर–दक्षिण और एक पूर्व–पश्चिम। उनके साथ-साथ और गलियाँ हैं: हर तरफ़ 5, मुख्य सड़कों से गिनी हुई। जहाँ दूसरी उत्तर–दक्षिण गली पाँचवीं पूर्व–पश्चिम गली से मिलती है, वह चौराहा **(2,\u00a05)** है।",
       ),
     ),
     w.body(
       t(
-        "Riya starts at the centre. Walk her to **(2, 5)**, then to **(4, 3)**, then to **(3, 4)**. Each crossing she reaches stays marked.",
-        "रिया बीच से चलती है। उसे **(2, 5)** तक चलाओ, फिर **(4, 3)** तक, फिर **(3, 4)** तक। जिस चौराहे पर वह पहुँचती है, वह चिह्नित रहता है।",
+        "Riya starts at the centre. Walk her to **(2,\u00a05)**, then to **(4,\u00a03)**, then to **(3,\u00a04)**. Each crossing she reaches stays marked.",
+        "रिया बीच से चलती है। उसे **(2,\u00a05)** तक चलाओ, फिर **(4,\u00a03)** तक, फिर **(3,\u00a04)** तक। जिस चौराहे पर वह पहुँचती है, वह चिह्नित रहता है।",
       ),
     ),
     city,
@@ -387,9 +401,6 @@ const twoLines = page("two-lines", (b) => {
     given: Parameters<typeof b.prop<typeof coordinatePlaneDef>>[2],
     says: ReturnType<typeof t>,
   ) => b.prop(coordinatePlaneDef, name, given, { still: says, size: { maxHeight: 0.35 } });
-  const mark = (x: number, y: number) => [
-    { name: "", x, y, isShown: true, hasDropLines: true, tone: Tone.Accent },
-  ];
   const house = still(
     "house",
     {
@@ -413,8 +424,10 @@ const twoLines = page("two-lines", (b) => {
       window: { xMin: 0, xMax: 60, yMin: 0, yMax: 40 },
       marks: Marks.None,
       scene: Scene.FairGround,
-      showAxisNames: false,
-      points: mark(30, 20).map((p) => ({ ...p, name: "S" })),
+      axisNames: [t("south fence", "दक्षिणी बाड़"), t("west fence", "पश्चिमी बाड़")],
+      // The stall\'s spot with its two distances measured to the fences: 30 and 20.
+      point: { x: 30, y: 20 },
+      reading: Reading.Distances,
     },
     t(
       "The fair ground: the south fence across, the west fence up, and the stall 30 m from one and 20 m from the other.",

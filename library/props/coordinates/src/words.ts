@@ -8,8 +8,9 @@ export const WORDS = {
   nameQuadrants: { en: "Name the quadrants", hi: "चतुर्थांशों के नाम" },
   bringTogether: { en: "Bring the zeroes together", hi: "दोनों शून्य मिलाओ" },
   show: { en: "Show", hi: "दिखाओ" },
-  showPoint: { en: "Show the point", hi: "बिंदु दिखाओ" },
+  showPoint: { en: "Show where it is", hi: "दिखाओ कहाँ है" },
   clear: { en: "Clear", hi: "हटाओ" },
+  lightsOff: { en: "Lights off", hi: "रोशनी बंद" },
   throw: { en: "Throw", hi: "फेंको" },
   newGame: { en: "New game", hi: "नया खेल" },
   scale: { en: "A mark every", hi: "हर निशान" },
@@ -27,7 +28,8 @@ export function addressOf(
   p: { x: number; y: number },
   locale: Locale,
 ): string {
-  return `${names[0][locale]} ${p.x}, ${names[1][locale]} ${p.y}`;
+  // Each number stays on the line with its word.
+  return `${names[0][locale]}\u00a0${p.x}, ${names[1][locale]}\u00a0${p.y}`;
 }
 
 /** A number as the book writes it: a true minus sign, and no trailing zeros. */
@@ -35,4 +37,4 @@ export const num = (v: number): string =>
   (Math.abs(v) < 1e-9 ? "0" : String(Number(v.toFixed(4)))).replace("-", "−");
 
 /** A pair as the book writes it: (−3, 2). */
-export const pair = (p: { x: number; y: number }): string => `(${num(p.x)}, ${num(p.y)})`;
+export const pair = (p: { x: number; y: number }): string => `(${num(p.x)},\u00a0${num(p.y)})`;

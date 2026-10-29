@@ -73,7 +73,8 @@ export type Tone = (typeof Tone)[keyof typeof Tone];
 /** A point a figure names (P, B, M …): fixed where the figure has it. */
 export const namedPointSchema = z
   .object({
-    name: z.string().min(1).max(3),
+    /** What it is called on the plane: a letter (P), or a pair ((10, 7)). */
+    name: z.string().min(1).max(7),
     x: z.number(),
     y: z.number(),
     /** Shown now: a figure's points can be read one at a time. */
@@ -260,7 +261,7 @@ export const core = layersFor<PlaneCore>()({
     showPoint: act({
       describe: "Show the next of a figure's points, or the one named (the learner's Next)",
       byLearner: true,
-      args: z.object({ name: z.string().min(1).max(3).optional() }).strict(),
+      args: z.object({ name: z.string().min(1).max(7).optional() }).strict(),
       changes: ["points"],
       run: (s, { name }) => {
         const at =

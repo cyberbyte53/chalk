@@ -13,7 +13,14 @@ function seen(
 ) {
   const start = initialState(module.def, given);
   if (!start.isOk) throw new Error(start.errors.join("; "));
-  const described = describeView(module, viewOf(module.def, start.state));
+  const raw = describeView(module, viewOf(module.def, start.state));
+  // A non-breaking space keeps a pair on one line; read it as the space it is.
+  const described = {
+    ...raw,
+    elements: raw.elements.map((e) =>
+      e.words === undefined ? e : { ...e, words: e.words.replace(/\u00a0/g, " ") },
+    ),
+  };
   const at = (id: string): Element | undefined => described.elements.find((e) => e.id === id);
   return { ...described, ids: described.elements.map((e) => e.id), at };
 }
