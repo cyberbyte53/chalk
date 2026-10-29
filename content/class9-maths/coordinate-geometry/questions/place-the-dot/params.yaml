@@ -1,0 +1,4 @@
+- params: { left: 7, bottom: 3 }
+- params: { left: 2, bottom: 8 }
+- params: { left: 11, bottom: 5 }
+- params: { left: 4, bottom: 10 }

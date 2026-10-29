@@ -6,7 +6,7 @@ export { bagTex, frac, primesTex } from "./latex";
 export { wordsOn } from "./words";
 export {
   bareClassroom,
-  bareGround,
+  bareNotebook,
   bareTown,
   gridOf,
   isAt,

@@ -52,20 +52,21 @@ export const bareClassroom = (columns = 10, rows = 7) => ({
   showAddress: false,
 });
 
-/** The fair ground: its south and west fences, marked every 10 m; a stall to drag into place. */
-export const bareGround = (width = 60, depth = 40) => ({
-  // A margin past the last marks, so a stall at the edge doesn't cover a fence's name.
-  window: { xMin: 0, xMax: width + 3, yMin: 0, yMax: depth + 4 },
+/** A notebook page squared in centimetres, measured from its left edge and its bottom; a dot to drag. */
+export const bareNotebook = (width = 15, height = 12) => ({
+  window: { xMin: 0, xMax: width, yMin: 0, yMax: height },
   marks: Marks.Counts,
-  tickEvery: 10,
-  scene: Scene.FairGround,
-  axisNames: [t("south fence", "दक्षिणी बाड़"), t("west fence", "पश्चिमी बाड़")] as [
+  tickEvery: 1,
+  hasGrid: true,
+  scene: Scene.Paper,
+  axisNames: [t("left edge", "बायाँ किनारा"), t("bottom", "नीचे का किनारा")] as [
     ReturnType<typeof t>,
     ReturnType<typeof t>,
   ],
-  unit: "m",
-  point: { x: width - 5, y: depth - 5 },
-  pointStep: 5,
+  showAxisNames: false,
+  unit: "cm",
+  point: { x: width - 1, y: height - 1 },
+  pointStep: 1,
 });
 
 /** Riya stands at (x, y). (When she announces a step, she is exactly on its block.) */
@@ -84,7 +85,7 @@ export const isChosen =
     return target !== null && target.x === x && target.y === y;
   };
 
-/** The point dragged (the stall) is at (x, y). */
+/** The point dragged (the dot) is at (x, y). */
 export const isPlaced =
   (plane: Plane, x: number, y: number) =>
   (at: At): boolean => {

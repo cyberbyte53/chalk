@@ -310,6 +310,10 @@
   stroke-width: 2;
   stroke-dasharray: 6 5;
 }
+.cp-still.is-point .cp-still-full {
+  stroke: color-mix(in srgb, var(--color-primary) 70%, transparent);
+  stroke-width: 2.4;
+}
 .cp-measure line {
   stroke: var(--color-on-surface-variant);
   stroke-width: 1.4;
@@ -318,11 +322,6 @@
 .cp-frame .cp-measure text {
   font: 700 var(--text-caption) var(--font-body);
   fill: var(--color-on-surface);
-}
-.cp-still-point {
-  fill: none;
-  stroke: var(--color-primary);
-  stroke-width: 3;
 }
 .cp-hidden {
   fill: var(--color-secondary);

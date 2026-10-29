@@ -1,0 +1,43 @@
+import { family, t } from "@chalk/author";
+import { Level } from "@chalk/content";
+import { bareNotebook, check, isPlaced } from "@chalk/patterns";
+import { coordinatePlaneDef } from "@chalk/prop-coordinates";
+import { z } from "zod";
+import { Concept } from "../../concepts.gen";
+
+/** On a notebook page: put a dot at two distances, from the left edge and from the bottom. */
+export const placeTheDot = family({
+  level: Level.Medium,
+  tests: [Concept.TwoNumbersForAPlace],
+  // The page is 15 cm across and 12 cm up; the dot starts in the top right corner, at (14, 11).
+  params: z
+    .object({ left: z.number().int().min(1).max(13), bottom: z.number().int().min(1).max(10) })
+    .strict(),
+  build: ({ left, bottom }, b) => {
+    const sheet = b.prop(coordinatePlaneDef, "sheet", bareNotebook());
+    // The swapped spot, when it is on the page too.
+    const isSwapped = left !== bottom && bottom <= 15 && left <= 12;
+    const ask = check(b, {
+      about: sheet,
+      prompt: t(
+        `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Drag it there, then press Check.`,
+        `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
+      ),
+      isRight: isPlaced(sheet, left, bottom),
+      solve: [sheet.learner.movePoint({ x: left, y: bottom })],
+      notes: isSwapped
+        ? [
+            {
+              when: isPlaced(sheet, bottom, left),
+              say: t(
+                `That spot is ${bottom} cm from the left edge and ${left} cm above the bottom: the two distances are swapped.`,
+                `वह जगह बाएँ किनारे से ${bottom} cm और नीचे के किनारे से ${left} cm ऊपर है: दोनों दूरियाँ उलट गईं।`,
+              ),
+              reach: [sheet.learner.movePoint({ x: bottom, y: left })],
+            },
+          ]
+        : [],
+    });
+    return [sheet, ask];
+  },
+});

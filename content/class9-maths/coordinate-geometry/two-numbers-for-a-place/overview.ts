@@ -1,7 +1,7 @@
 import { type At, inOrder, page, t, wait } from "@chalk/author";
 import {
   bareClassroom,
-  bareGround,
+  bareNotebook,
   bareTown,
   choiceQuestion,
   gridOf,
@@ -196,72 +196,73 @@ const streetAndHouse = page("street-and-house", (b) => {
   ];
 });
 
-/** The fair ground has no roads: distances from its two fences do the job; the student places the stall. */
+/** A dot on a notebook page: the book's ways of saying where it is narrow it to a patch, a line, then one point. */
 const dotOnPaper = page("dot-on-paper", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "On ground with no roads, a phrase fits a patch, one distance a whole line, and two distances, from the west fence and the south fence, one spot, where the student puts the stall.",
+    'A dot on a notebook page, which has no roads. The book\'s ways of saying where it is, one at a time, each shading where it could still be: "upper half" half the page, "near the left edge" a patch, 5 cm from the left edge a whole line, and 9 cm above the bottom one point, where the two lines cross.',
   );
-  const ground = b.prop(coordinatePlaneDef, "ground", {
-    ...bareGround(),
+  const sheet = b.prop(coordinatePlaneDef, "sheet", {
+    ...bareNotebook(),
+    point: null,
     reading: Reading.None,
-    // The gate, in the middle of the south fence ("near the gate" is about it).
-    places: [{ x: 30, y: 0, label: t("gate", "गेट") }],
-    placeKind: PlaceKind.Crossing,
-    canChooseTarget: false,
-    hidden: { x: 30, y: 20 },
+    // The dot is on the page from the start: the question is how to say where it is.
+    hidden: { x: 5, y: 9 },
+    isHiddenShown: true,
     clueChoices: [
       {
-        words: t("Near the gate", "गेट के पास"),
-        region: { xMin: 15, xMax: 45, yMin: 0, yMax: 25 },
+        words: t("It is in the upper half", "यह ऊपरी आधे भाग में है"),
+        region: { xMin: 0, xMax: 15, yMin: 6, yMax: 12 },
       },
-      { words: t("30 m from the west fence", "पश्चिमी बाड़ से 30 m"), x: 30 },
-      { words: t("20 m from the south fence", "दक्षिणी बाड़ से 20 m"), y: 20 },
+      {
+        words: t("It is near the left edge", "यह बाएँ किनारे के पास है"),
+        region: { xMin: 0, xMax: 6, yMin: 0, yMax: 12 },
+      },
+      { words: t("It is 5 cm from the left edge", "यह बाएँ किनारे से 5 cm पर है"), x: 5 },
+      { words: t("It is 9 cm above the bottom", "यह नीचे के किनारे से 9 cm ऊपर है"), y: 9 },
     ],
   });
   b.standsFor(
-    ground,
-    "the fair ground, its west and south fences marked every 10 m, and the snacks stall waiting by the north-east corner",
+    sheet,
+    "a notebook page squared in centimetres, with a dot on it, and the ways of saying where it is",
   );
-  b.witness(
-    ground.learner.giveClue({ clue: 0 }),
-    ground.learner.giveClue({ clue: 1 }),
-    ground.learner.giveClue({ clue: 2 }),
-    ground.learner.movePoint({ x: 30, y: 20 }),
-  );
-  const putIt = w.body(
+  b.witness(...[0, 1, 2, 3].map((clue) => sheet.learner.giveClue({ clue })));
+  const patch = w.body(
     t(
-      "Only one spot fits both distances. **Drag the stall there.**",
-      "दोनों दूरियों पर केवल एक जगह ठीक बैठती है। **स्टॉल को वहाँ खींचो।**",
+      "Both are true, and the dot could still be anywhere in that patch.",
+      "दोनों सही हैं, और बिंदु अब भी उस हिस्से में कहीं भी हो सकता है।",
     ),
-    "putIt",
+    "patch",
+  );
+  const line = w.body(
+    t(
+      "Closer, but every spot on that line is 5 cm from the left edge.",
+      "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।",
+    ),
+    "line",
   );
   const fixed = w.definition(
     t(
-      "**Two distances fixed the spot:** 30 m from the west fence and 20 m from the south fence. *Near the gate* fitted a whole patch, and one distance a whole line of spots.",
-      "**दो दूरियों ने जगह तय कर दी:** पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m। *गेट के पास* से पूरा इलाका बचा, और एक दूरी से जगहों की पूरी रेखा।",
+      "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is both, where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+      "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों बातें केवल एक बिंदु पर सही हैं, जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
     ),
     "fixed",
   );
-  b.after(ground.on.pinned, putIt);
-  b.after(ground.on.moved, fixed, { if: isPlaced(ground, 30, 20) });
-  b.passWhen(ground.on.moved, { if: isPlaced(ground, 30, 20) });
+  b.after(sheet.on.clueGiven, patch, { if: (at: At) => at(sheet).given.length === 2 });
+  b.after(sheet.on.clueGiven, line, { if: (at: At) => at(sheet).given.length === 3 });
+  b.after(sheet.on.pinned, fixed);
+  b.passWhen(sheet.on.pinned);
   return [
-    w.title(t("A spot on the fair ground", "मेले के मैदान पर एक जगह")),
+    w.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
     w.body(
       t(
-        "Back at school, the stalls go up on the fair ground. It has no roads: just a fence along the west side and one along the south side, marked every 10 m, with the gate in the middle of the south fence. Riya has to tell the volunteers where the snacks stall goes: it is the dot waiting in the north-east corner.",
-        "स्कूल लौटकर, मेले के मैदान पर स्टॉल लगने हैं। वहाँ कोई सड़क नहीं: बस पश्चिम की ओर एक बाड़ और दक्षिण की ओर एक, हर 10 m पर निशान के साथ, और दक्षिणी बाड़ के बीच में गेट। रिया को स्वयंसेवकों को बताना है कि नाश्ते का स्टॉल कहाँ लगेगा: वह उत्तर-पूर्वी कोने में रखा बिंदु है।",
+        "Here is a dot on a page of your notebook. How would you say exactly where it is? Try these, one at a time, and watch where the dot could still be.",
+        "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है। तुम ठीक-ठीक कैसे बताओगे कि यह कहाँ है? ये एक-एक करके आज़माओ, और देखो कि बिंदु अब भी कहाँ हो सकता है।",
       ),
     ),
-    w.body(
-      t(
-        "Her messages come one at a time. Give each, and watch where the stall could still go.",
-        "उसके संदेश एक-एक करके आते हैं। हर एक दो, और देखो कि स्टॉल अब भी कहाँ लग सकता है।",
-      ),
-    ),
-    ground,
-    putIt,
+    sheet,
+    patch,
+    line,
     fixed,
   ];
 });
@@ -345,7 +346,7 @@ const seatingPlan = page("seating-plan", (b) => {
 const twoLines = page("two-lines", (b) => {
   const w = wordsOn(b);
   b.purpose(
-    "The house, the stall's spot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry.",
+    "The house, the dot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry.",
   );
   const still = (name: string, given: Record<string, unknown>, says: ReturnType<typeof t>) =>
     b.prop(coordinatePlaneDef, name, given, { still: says, size: { maxHeight: 0.35 } });
@@ -371,10 +372,10 @@ const twoLines = page("two-lines", (b) => {
   );
   const spot = still(
     "spot",
-    { ...bareGround(), point: { x: 30, y: 20 }, reading: Reading.Distances },
+    { ...bareNotebook(), point: { x: 5, y: 9 }, reading: Reading.Distances },
     t(
-      "The fair ground: the stall 30 m from the west fence and 20 m from the south fence, each distance drawn.",
-      "मेले का मैदान: स्टॉल पश्चिमी बाड़ से 30 m और दक्षिणी बाड़ से 20 m पर, हर दूरी खिंची हुई।",
+      "The notebook page: the dot 5 cm from the left edge and 9 cm above the bottom, each distance drawn.",
+      "कॉपी का पन्ना: बिंदु बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर, हर दूरी खिंची हुई।",
     ),
   );
   const desk = still(
@@ -396,7 +397,7 @@ const twoLines = page("two-lines", (b) => {
   );
   return [
     w.title(t("Two lines did it every time", "हर बार दो रेखाओं ने काम किया")),
-    w.body(t("Look back at the three places you found:", "उन तीन जगहों को फिर देखो जो तुमने ढूँढीं:")),
+    w.body(t("Look back at the three places:", "उन तीन जगहों को फिर देखो:")),
     w.body(
       t(
         "**The house:** along the main road to Street 4, then up Street 4 to House 5.",
@@ -406,8 +407,8 @@ const twoLines = page("two-lines", (b) => {
     house,
     w.body(
       t(
-        "**The stall:** 30 m across from the west fence, then 20 m up from the south fence.",
-        "**स्टॉल:** पश्चिमी बाड़ से 30 m आड़े, फिर दक्षिणी बाड़ से 20 m ऊपर।",
+        "**The dot:** 5 cm across from the left edge, then 9 cm up from the bottom.",
+        "**बिंदु:** बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।",
       ),
     ),
     spot,

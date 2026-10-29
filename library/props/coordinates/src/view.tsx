@@ -223,11 +223,9 @@ function StillDraw({
     }
     return out;
   });
+  // One point left: the two full lines stay, crossing there; nothing else marks it.
   let shape: JSX.Element | null = null;
-  if (still.kind === "point") {
-    const [x, y] = px.toPx(still.x, still.y);
-    shape = <circle class="cp-still-point" cx={x} cy={y} r={9} />;
-  } else if (still.kind === "region") {
+  if (still.kind === "region") {
     const r = still.region;
     const [x0, y0] = px.toPx(r.xMin, r.yMax);
     const [x1, y1] = px.toPx(r.xMax, r.yMin);
@@ -242,8 +240,8 @@ function StillDraw({
     shape = <line class="cp-still-line" x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />;
   }
   return (
-    <g class="cp-still">
-      {still.kind !== "point" && fullLines}
+    <g class={still.kind === "point" ? "cp-still is-point" : "cp-still"}>
+      {fullLines}
       {shape}
       {measured}
     </g>

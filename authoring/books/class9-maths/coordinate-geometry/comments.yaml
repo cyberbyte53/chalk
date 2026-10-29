@@ -1665,12 +1665,12 @@
         address off the map, it's one setting (showAddress)."
       status: withdrawn
 - id: cmvtc0wm31a5
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:39.291Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
-  target: ground
+  target: sheet
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
   text: "Taste call, and it matters. Principles 4 and 6, and the source's 'two independent
@@ -1684,7 +1684,33 @@
     the whole 20 m line from the south fence, so the two lines meet. Let the student find the
     crossing and drag the stall there, with no ring until it's placed. When the stall is dropped at
     the swapped spot (20, 30), give a note."
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:04:59.525Z
+      text: "moved from
+        content/class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper#ground to
+        content/class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper#sheet:
+        Re-pointed: the fair ground ('ground') is gone. In chat we replaced it with the book's dot
+        on a squared notebook page (flow and props re-approved at 559846b), so this thread now sits
+        on the page, 'sheet'."
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:05:04.981Z
+      text: "Plan, as agreed in chat: keep both full lines drawn when two distances leave one point, drop
+        the ring, and make the board NCERT's dot on a notebook page in centimetres."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T11:05:05.524Z
+      text: "Before: on the last clue the 30 m line vanished and a ring marked the spot, so the lines were
+        never seen to cross. After: once two distances leave one point, both full-length lines stay
+        drawn, stronger, crossing at the dot; the ring is gone (the clues layer's view, for every
+        board). The board is now NCERT's dot: upper half, near the left edge (a patch), 5 cm from
+        the left edge (a line), 9 cm above the bottom (the crossing), in centimetres on 1 cm
+        squares."
+      status: ready
+  changed: []
 - id: cmvtc0wsk0re
   status: ready
   by: reviewer
