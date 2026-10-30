@@ -20,7 +20,7 @@ Then:
 - Motivate by understanding, never speed.
 - Every string has its Hindi.
 
-**Writing for the voice.** Every line on a board is also said aloud. Write its spoken words with it whenever the screen words aren't how a teacher would say them (`words.body(t(…), { speak: t(…) })`), in both languages. Nothing turns symbols into speech for you: a line whose screen words have a symbol and no spoken words stops the voice.
+**Writing for the voice.** Every line on a board is also said aloud. Write its spoken words with it whenever the screen words aren't how a teacher would say them (`words.body(t(…), { speak: t(…) })`), in both languages. Nothing turns maths or symbols into words for you, so nothing can change their meaning: a line whose screen words have maths or a sign and no spoken words stops the voice, naming the line.
 - Maths is said in words: "√2 ≈ 1.41" → "the square root of 2 is about 1.41"; "x²" → "x squared"; "3/4" → "three quarters"; "(4, 5)" → "4 comma 5" or "the point 4, 5".
 - Units and signs in full: "25°C" → "25 degrees Celsius"; "5 cm" → "5 centimetres"; "−2" → "minus 2"; "≥" → "is at least".
 - Say a name or term the way the class says it, in Hindi too ("H₂O" → "H 2 O"; "देकार्त", not the spelling).

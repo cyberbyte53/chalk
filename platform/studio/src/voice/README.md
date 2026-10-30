@@ -21,4 +21,4 @@ Every line a board shows is also said aloud. This module makes the clips; the pl
 
 ## What is said
 
-A line's spoken words (`speak`), written with it when the lesson is written; else its screen words, bold marks dropped. A voice gets only words (`unspeakable` refuses anything else), so a line with a symbol and no spoken words stops here, naming the line.
+Exactly words a person wrote, never rewritten (`said.ts`): a line's spoken words (`speak`), written with it when the lesson is written (guides/pages.md); else its screen words when they are words already, formatting left out by the rich-text parser (structure, not patterns on the words). Nothing turns maths or a sign into words: such a line stops here, every one listed at once, until it has its spoken words.

@@ -92,7 +92,7 @@ describe("the voice: cast, speak, keep", () => {
         providers,
         outDir: mkdtempSync(join(tmpdir(), "v-")),
       }),
-    ).rejects.toThrow(/write how each is said, as its "speak"[\s\S]*tiny, x \(en\): "α/);
+    ).rejects.toThrow(/write how each is said, as its "speak"[\s\S]*tiny, x \(en\): it has "α/);
   });
 });
 

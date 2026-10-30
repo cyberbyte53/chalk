@@ -4,7 +4,7 @@ import { type Cast, voiceFor } from "./cast";
 import { type Line, speakLines } from "./clips";
 import type { BoardLines } from "./lines";
 import type { TtsProvider } from "./providers/provider";
-import { spokenText, unspeakable } from "./said";
+import { said } from "./said";
 
 /**
  * Make: a chapter's lines into clips. Each line, in each language, is cast (who says it → which
@@ -27,13 +27,14 @@ export async function makeVoice(spec: {
     byFolder.set(folder, into);
     for (const { piece, speaker, line } of lines)
       for (const locale of LOCALES) {
-        const text = spokenText(line, locale);
-        if (text === undefined || text === "") continue;
-        const odd = unspeakable(text);
-        if (odd.length > 0) {
-          unsaid.push(`${item.path}, ${piece} (${locale}): "${odd.join(" ")}" in "${text}"`);
+        const what = said(line, locale);
+        if (what === undefined) continue;
+        if ("needs" in what) {
+          unsaid.push(`${item.path}, ${piece} (${locale}): ${what.needs}: "${line.say[locale]}"`);
           continue;
         }
+        const text = what.words;
+        if (text.trim() === "") continue;
         into.push({
           key: audioKey(item.id, segment(piece), locale),
           text,

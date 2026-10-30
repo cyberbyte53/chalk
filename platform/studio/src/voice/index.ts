@@ -8,7 +8,7 @@ export { type Cast, castSchema, type VoiceOf, voiceFor } from "./cast";
 export { type GenerateResult, type Line, speakLines } from "./clips";
 export { type BoardLines, chapterLines } from "./lines";
 export { makeVoice } from "./make";
-export { spokenText, unspeakable } from "./said";
+export { type Said, said, unspeakable } from "./said";
 export { parseSayVoices } from "./providers/macos";
 export { parlerProvider } from "./providers/parler";
 export { piperProvider } from "./providers/piper";

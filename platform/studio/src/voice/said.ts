@@ -1,23 +1,35 @@
 import type { Locale } from "@chalk/content";
-import { plainText } from "@chalk/player";
+import { SpanKind, parseRich } from "@chalk/player";
 import type { Spoken } from "@chalk/prop";
 
 /**
- * What a voice says for a line, and whether it can. A line's spoken words (`speak`) are written
- * with it when its screen words aren't how it is said ("√2" is said "the square root of 2"); else
- * it says the screen words, read from the rich text by the same parser that draws them.
+ * What a voice says for a line: exactly words a person wrote, never rewritten. A line's spoken
+ * words (`speak`), written with it when its screen words aren't how it is said ("√2" is said
+ * "the square root of 2"); else its screen words, when they are words already. Formatting (bold,
+ * emphasis) is left out by the parser that draws it, so nothing touches the words themselves;
+ * anything that would have to be turned into words (maths, a sign) never is: that line needs its
+ * spoken words, and says why.
  */
-export function spokenText(line: Spoken, locale: Locale): string | undefined {
+export type Said = { words: string } | { needs: string };
+
+export function said(line: Spoken, locale: Locale): Said | undefined {
   const speak = line.speak?.[locale];
-  if (speak !== undefined) return speak;
+  if (speak !== undefined) return { words: speak };
   const say = line.say[locale];
-  return say === undefined ? undefined : plainText(say);
+  if (say === undefined) return undefined;
+  const { spans, problems } = parseRich(say);
+  if (problems.length > 0)
+    return { needs: `its text doesn't read cleanly (${problems.join("; ")})` };
+  if (spans.some((s) => s.kind === SpanKind.Math || s.kind === SpanKind.DisplayMath))
+    return { needs: "it has maths" };
+  const words = spans.map((s) => s.text).join("");
+  const odd = unspeakable(words);
+  return odd.length > 0 ? { needs: `it has "${odd.join(" ")}"` } : { words };
 }
 
 /**
  * What a voice may be given: letters (Latin and Devanagari, with their marks), digits, spaces and
- * ordinary punctuation. Anything else (a symbol, a subscript, a Greek letter) needs the line's
- * spoken words: it is refused, never guessed.
+ * ordinary punctuation. A line with anything else needs its spoken words: refused, never guessed.
  */
 const SPEAKABLE = /[\p{Script=Latin}\p{Script=Devanagari}\p{M}0-9\s.,!?;:'"’‘“”()\-–—।…]/u;
 

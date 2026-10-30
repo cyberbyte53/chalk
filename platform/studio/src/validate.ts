@@ -21,7 +21,7 @@ import {
   initialState,
   viewOf,
 } from "@chalk/prop";
-import { spokenText, unspeakable } from "./voice/said";
+import { said } from "./voice/said";
 
 export type Problem = { where: string; message: string };
 
@@ -290,22 +290,20 @@ export function validateBoard(board: Board, allDefs: Defs): Problem[] {
       if (typeof call.args !== "function") checkRich(`when ${rule.on} → ${call.call}`, call.args);
   }
 
-  // Voice: every line that is said must reach the voice as plain words. Anything else needs its
-  // spoken words written with it (`speak`); unknown characters are refused, not guessed.
+  // Voice: a line said aloud is said in words a person wrote: its screen words when they are words,
+  // else its spoken words (`speak`). Nothing is turned into words for it.
   for (const name of spokenProps) {
     const def = defs.get(name);
     const state = states.get(name);
     const line = def === undefined || state === undefined ? undefined : def.speech?.(state);
     if (line === undefined) continue;
     for (const locale of LOCALES) {
-      const said = spokenText(line, locale);
-      const odd = said === undefined ? [] : unspeakable(said);
-      if (odd.length > 0) {
+      const what = said(line, locale);
+      if (what !== undefined && "needs" in what)
         report(
           name,
-          `the ${locale} voice would get "${odd.join(" ")}" it can't read ("${said}"); write how it is said in plain words, as the line's "speak"`,
+          `the ${locale} voice can't say it as shown (${what.needs}); write how it is said, as the line's "speak"`,
         );
-      }
     }
   }
   return problems;

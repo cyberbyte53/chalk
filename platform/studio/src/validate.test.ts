@@ -120,12 +120,15 @@ describe("validateLesson", () => {
     expect(messages(fine)).toEqual([]);
   });
 
-  it("refuses any character the voice can't read, not just known maths symbols", () => {
+  it("never turns a sign or maths into words: such a line needs its spoken words", () => {
     const bad = fresh();
     piece(bad, "share", "title").with.text.en = "What is ∜16 → λ?";
     piece(bad, "share", "title").with.speak = null;
-    has(bad, /can't read/);
-    has(bad, /∜ → λ/);
+    has(bad, /can't say it as shown \(it has "∜ → λ"\); write how it is said/);
+    const maths = fresh();
+    piece(maths, "share", "title").with.text.en = "Is $x^2$ even?";
+    piece(maths, "share", "title").with.speak = null;
+    has(maths, /can't say it as shown \(it has maths\)/);
   });
 
   it("only cares about the voice for lines a script actually says", () => {
