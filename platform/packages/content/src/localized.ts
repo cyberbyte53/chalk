@@ -4,6 +4,12 @@ export const Locale = { En: "en", Hi: "hi" } as const;
 export type Locale = (typeof Locale)[keyof typeof Locale];
 export const LOCALES: readonly Locale[] = [Locale.En, Locale.Hi];
 
+/**
+ * The language agents read and write in (Jugnu's tools, `look`, the reviewer, a prop's one-line
+ * summary for them): one choice, named here, not a language picked anew in each place.
+ */
+export const AGENT_LOCALE: Locale = Locale.En;
+
 /** Text in every supported language. */
 export const localizedSchema = z.object({ en: z.string().min(1), hi: z.string().min(1) });
 export type Localized = z.infer<typeof localizedSchema>;

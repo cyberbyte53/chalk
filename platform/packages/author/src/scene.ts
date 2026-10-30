@@ -9,13 +9,14 @@ import {
   type Outs,
   type Prop,
   type Rule,
+  type SignalDef,
   type Tools,
   type VarsOf,
   action,
   prop,
   signal,
 } from "@chalk/prop/next";
-import { z } from "zod";
+import { type ZodTypeAny, z } from "zod";
 import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
 
 /**
@@ -29,6 +30,24 @@ import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
  *   (`passBy: "rules"`, then `t.self.pass()`);
  * - Continue (`continue`) tells `continued`, and the player goes on.
  */
+
+/** The signal `path` ("town.walker.arrived") names: of a piece, or of a part inside one. */
+function signalAt(pieces: Pieces, path: string): SignalDef | undefined {
+  const names = path.split(".");
+  const signal = names.pop();
+  const [first, ...rest] = names;
+  let def: AnyProp | undefined =
+    first === undefined || !Object.hasOwn(pieces, first) ? undefined : pieces[first]?.def;
+  for (const part of rest) def = def?.children?.[part];
+  return signal === undefined ? undefined : def?.signals?.[signal];
+}
+
+/** A signal's fields, each with its kind. */
+const shapeOf = (signal: SignalDef): Readonly<Record<string, ZodTypeAny>> =>
+  (signal.payload as unknown as { shape?: Record<string, ZodTypeAny> }).shape ?? {};
+
+/** Whether a told value is the one `where` asks for (plain values: numbers, words, points). */
+const sameValue = (a: unknown, b: unknown): boolean => JSON.stringify(a) === JSON.stringify(b);
 
 /** What a piece starts with: some of its variables, and of its children's, by name. */
 export type GivenFor<D> = Partial<VarsOf<D>> & {
@@ -52,12 +71,33 @@ export type Placed<D extends AnyProp = AnyProp> = Says & {
   readonly still?: Localized;
 };
 
-/** A line the board says with nothing on screen of its own (narration), said by a rule. */
-export type FreeLine = { readonly says: Localized; readonly speaker?: string };
+/**
+ * A line the board says with nothing on screen of its own: narration, or a character's line. Its
+ * moment is written with it as data, so every view shows exactly what runs: `when` a piece's signal
+ * is told, `where` it carries these values (`town.walker.arrived · x 4, y 5`). Without a moment, a
+ * rule says it (`t.self.say`). `about`: the piece it is about, which glows while it plays.
+ */
+export type FreeLine = {
+  readonly says: Localized;
+  readonly speaker?: string;
+  /** The moment: a piece's signal, by path ("town.walker.arrived"). */
+  readonly when?: string;
+  /** Which of those moments: the values the signal must carry (`{ x: 4, y: 5 }`). */
+  readonly where?: Readonly<Record<string, unknown>>;
+  /**
+   * Which of those moments, when values can't say it (it depends on the board as it is): code,
+   * which the script can only show as a condition in code. Prefer `where`.
+   */
+  readonly if?: (
+    payload: Readonly<Record<string, unknown>>,
+    me: Readonly<Record<string, unknown>>,
+  ) => boolean;
+  readonly about?: string;
+};
 
 /** A narration line: `lines: { watch: line(t("Watch the street…", "…")) }`. */
-export function line(says: Localized, options: { speaker?: string } = {}): FreeLine {
-  return { says, ...(options.speaker === undefined ? {} : { speaker: options.speaker }) };
+export function line(says: Localized, options: Omit<FreeLine, "says"> = {}): FreeLine {
+  return { says, ...options };
 }
 
 /** Places a prop: `place(coordinatePlane, { plane: { upLines: [] } })`. */
@@ -220,9 +260,30 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   const names = Object.keys(spec.pieces);
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
   const freeLines = spec.lines ?? {};
-  for (const line of Object.keys(freeLines))
+  for (const [line, free] of Object.entries(freeLines)) {
     if (Object.hasOwn(spec.pieces, line))
       throw new Error(`Board ${name}: "${line}" is both a piece and a line; name the line apart`);
+    const signal = free.when === undefined ? undefined : signalAt(spec.pieces, free.when);
+    if (free.when !== undefined && signal === undefined)
+      throw new Error(
+        `Board ${name}, line ${line}: when "${free.when}" isn't a signal of a piece here ("town.walker.arrived")`,
+      );
+    if (free.where !== undefined) {
+      if (signal === undefined)
+        throw new Error(`Board ${name}, line ${line}: where needs a when (the signal it is about)`);
+      // The values must be what the signal carries: its own fields, each of its own kind.
+      const shape = shapeOf(signal);
+      const isFit = Object.entries(free.where).every(
+        ([k, v]) => shape[k]?.safeParse(v).success === true,
+      );
+      if (!isFit)
+        throw new Error(
+          `Board ${name}, line ${line}: where ${JSON.stringify(free.where)} isn't what ${free.when} carries (${Object.keys(shape).join(", ")})`,
+        );
+    }
+    if (free.about !== undefined && !Object.hasOwn(spec.pieces, free.about.split(".")[0] ?? ""))
+      throw new Error(`Board ${name}, line ${line}: about "${free.about}" isn't a piece here`);
+  }
   const questions = names.filter((n) => (defs[n] as AnyProp).role === PropRole.Question);
   const isHidden = (n: string) => (spec.pieces[n] as Placed).isHidden;
 
@@ -250,14 +311,28 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   const sayNext = (t: T, line: string): Out =>
     t.say(line, { atEnd: [t.self.lineEnded({ line })], after: BETWEEN_LINES });
 
-  // Every board's own rules (its questions pass it), then the lesson's on the same signal.
-  const own: Record<string, (me: Me, payload: unknown, t: T) => Out[]> = {};
+  // Every board's own rules (its questions pass it, its lines are said at their moments), then the
+  // lesson's on the same signal.
+  const own: Record<string, ((me: Me, payload: unknown, t: T) => Out[])[]> = {};
+  const addOwn = (key: string, rule: (me: Me, payload: unknown, t: T) => Out[]) => {
+    own[key] = [...(own[key] ?? []), rule];
+  };
   if (spec.passBy !== "rules")
     for (const q of questions)
-      own[`${q}.correct`] = (me, _, t) =>
+      addOwn(`${q}.correct`, (me, _, t) =>
         questions.every((other) => me[other]?.status === AnswerStatus.Correct) && !me.isPassed
           ? [t.self.pass()]
-          : [];
+          : [],
+      );
+  for (const [line, free] of Object.entries(freeLines))
+    if (free.when !== undefined)
+      addOwn(free.when, (me, payload, t) => {
+        const told = payload as Readonly<Record<string, unknown>>;
+        const isThis =
+          Object.entries(free.where ?? {}).every(([k, v]) => sameValue(told[k], v)) &&
+          (free.if === undefined || free.if(told, me));
+        return isThis ? [t.set({ saying: [line] }), sayNow(t, line)] : [];
+      });
   const uses = spec.uses ?? [];
   const rulesFrom = [spec.hear ?? {}, ...uses.map((u) => u.hear ?? {})] as Record<
     string,
@@ -268,7 +343,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   for (const key of keys) {
     const mine = own[key];
     hear[key] = (me: Me, payload: unknown, t: T) => [
-      ...(mine?.(me, payload, t) ?? []),
+      ...(mine ?? []).flatMap((rule) => rule(me, payload, t)),
       ...rulesFrom.flatMap((r) =>
         list(r[key]?.(me as never, payload as never, t as never) as Outs),
       ),
@@ -369,7 +444,15 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         ...(placed.speaker === undefined ? {} : { speaker: placed.speaker }),
       };
   }
-  for (const [n, free] of Object.entries(freeLines)) lines[n] = { ...free };
+  for (const [n, free] of Object.entries(freeLines))
+    lines[n] = {
+      says: free.says,
+      ...(free.speaker === undefined ? {} : { speaker: free.speaker }),
+      ...(free.when === undefined ? {} : { when: free.when }),
+      ...(free.where === undefined ? {} : { where: free.where }),
+      ...(free.if === undefined ? {} : { hasCondition: true }),
+      ...(free.about === undefined ? {} : { about: free.about }),
+    };
   const model: SceneModel = { scene: root, given, lines, freeLines: Object.keys(freeLines) };
   const standsFor = Object.fromEntries(
     Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),

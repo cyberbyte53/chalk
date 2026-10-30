@@ -1,4 +1,4 @@
-import { localizedSchema } from "@chalk/content";
+import { AGENT_LOCALE, localizedSchema } from "@chalk/content";
 import {
   AnswerStatus,
   PropRole,
@@ -37,7 +37,7 @@ export const sceneText = prop({
     })
     .strict(),
   start: { text: UNSET, style: TextStyle.Body, color: null },
-  summary: (me) => `words: ${me.text.en}`,
+  summary: (me) => `words: ${me.text[AGENT_LOCALE]}`,
 });
 
 const questionVariables = { prompt: localizedSchema, ...questionFields };
@@ -91,7 +91,7 @@ export const sceneGoal = prop({
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
   },
   summary: (me) =>
-    `a question answered in ${me.about}, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt.en}`,
+    `a question answered in ${me.about}, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt[AGENT_LOCALE]}`,
 });
 
 const optionSchema = z
@@ -162,5 +162,5 @@ export const sceneChoice = prop({
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
   },
   summary: (me) =>
-    `a multiple-choice question, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt.en}`,
+    `a multiple-choice question, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt[AGENT_LOCALE]}`,
 });

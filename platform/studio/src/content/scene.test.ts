@@ -1,7 +1,7 @@
-import { hidden, place, scene, tap } from "@chalk/author";
+import { hidden, line, place, scene, tap } from "@chalk/author";
 import { Actor } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
-import { SceneRuntime } from "@chalk/player";
+import { SceneRuntime, scriptOf } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
 import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
 import { describe, expect, it } from "vitest";
@@ -10,6 +10,7 @@ import { checkWitness, play } from "./witness";
 // A board on the event model, end to end: written as a scene, checked the way the build checks
 // any board (its witness played on the real props, the clock jumping), lines said and waited for.
 
+const t = (en: string, hi: string) => ({ en, hi });
 const ask = place(sceneChoice, {
   prompt: { en: "Which comes first?", hi: "पहले क्या आता है?" },
   options: [
@@ -52,6 +53,7 @@ describe("a scene, built and checked like any board", () => {
   it("a line shown cuts off what is being said: the newest line wins", () => {
     const heard: string[] = [];
     const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+      locale: "en",
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void heard.push(`say ${line.name}`),
@@ -94,6 +96,7 @@ describe("a scene, built and checked like any board", () => {
     }).build("quiet");
     const said: string[] = [];
     const runtime = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
+      locale: "en",
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void said.push(`${line.name} at ${runtime.time().toFixed(1)}`),
@@ -107,6 +110,7 @@ describe("a scene, built and checked like any board", () => {
     expect(said.slice(0, 2)).toEqual(["first at 0.0", "second at 3.1"]);
 
     const hiding = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
+      locale: "en",
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void said.push(line.name),
@@ -120,5 +124,37 @@ describe("a scene, built and checked like any board", () => {
     hiding.settle(0);
     // "first" is cut; the plane, next, has nothing to say; "second" goes on at once.
     expect(said).toEqual(["first", "second"]);
+  });
+
+  it("a line of its own is said at its moment, and the runs say which lines they hear", async () => {
+    const moments = scene({
+      pieces: { ask },
+      lines: {
+        well: line(t("Well done!", "शाबाश!"), {
+          speaker: "riya",
+          when: "ask.correct",
+          about: "ask",
+        }),
+        never: line(t("Never said.", "कभी नहीं।"), { when: "ask.wrong", if: () => false }),
+      },
+      witness: [tap("ask", "select", { option: "street" }), tap("ask", "check")],
+    }).build("moments");
+    const heard = new Set<string>();
+    expect(
+      await checkWitness(moments.board, propLibrary, moments.witness, (l) => void heard.add(l)),
+    ).toEqual([]);
+    expect([...heard].sort()).toEqual(["ask", "well"]);
+    // Every line a board can say, with its moment: "never" is one no run reaches.
+    expect(
+      scriptOf(moments.board, (type) => propLibrary[type]).map((l) => `${l.line}: ${l.cue}`),
+    ).toEqual(["ask: opening", "well: moment", "never: moment"]);
+  });
+
+  it("a moment that isn't a signal here is refused when the board is built", () => {
+    expect(() =>
+      scene({ pieces: { ask }, lines: { x: line(t("x", "x"), { when: "ask.landed" }) } }).build(
+        "bad",
+      ),
+    ).toThrow(/when "ask.landed" isn't a signal of a piece here/);
   });
 });

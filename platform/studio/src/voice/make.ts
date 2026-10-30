@@ -1,4 +1,5 @@
 import { type AudioManifest, LOCALES, type Locale, audioKey } from "@chalk/content";
+import type { ScriptLine } from "@chalk/player";
 import { segment } from "@chalk/prop";
 import { type Cast, voiceFor } from "./cast";
 import { type Line, speakLines } from "./clips";
@@ -21,8 +22,12 @@ export type ScriptEntry = {
   /** Its piece; none for narration. */
   piece?: string;
   speaker: string;
-  /** When it is heard: the board opening, its piece appearing, or a rule saying it. */
-  cue: "opening" | "appears" | "rule";
+  /** When it is heard: the board opening, its piece appearing, a moment, or a rule saying it. */
+  cue: ScriptLine["cue"];
+  /** When it is heard, as the event it waits for (`town.walker.arrived · x 4, y 5`). */
+  moment: string;
+  /** The piece it is about. */
+  about?: string;
   /** What its piece says of itself (a text's words), shown beside what is said. */
   shown: Readonly<Record<Locale, string | undefined>>;
   said: Readonly<Record<Locale, Said | undefined>>;
@@ -74,6 +79,8 @@ export async function makeVoice(spec: {
         ...(line.piece === undefined ? {} : { piece: line.piece }),
         speaker,
         cue,
+        moment: line.moment,
+        ...(line.about === undefined ? {} : { about: line.about }),
         shown: Object.fromEntries(LOCALES.map((l) => [l, line.own?.[l]])) as Record<Locale, string>,
         said: saidBy,
         keys,

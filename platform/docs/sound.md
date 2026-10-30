@@ -61,18 +61,22 @@ A character, never a voice (`speaker: "aman"`; the narrator when no one is named
 A line is a node of the board, like a piece: it has an address, and everything that works on a piece works on it (comments and threads, `look`, `changes`, review).
 
 - **A piece's line:** `board#fiveHouses/said`. Its words are the piece's own, or the lesson's (`says`).
-- **A declared line:** `board#finally`. It has its moment written with it, so every view can show when it is heard:
+- **A declared line:** `board#finally`. Its moment is written with it **as data**, so every view shows exactly what runs:
   ```ts
   lines: {
     finally: line(t("Finally, I'm here!", "आख़िरकार, पहुँच गई!"), {
       speaker: "riya",
-      when: "town.walker.arrived",
-      if: (p) => p.x === 4 && p.y === 5,
+      when: "town.walker.arrived",   // the signal
+      where: { x: 4, y: 5 },         // the values it must carry
       about: "town",
     }),
   },
   ```
-  A rule may still say a line (`t.self.say`), but a declared moment is the normal way: a line said from deep inside a rule can't be shown before it is heard.
+  The build checks the signal exists and `where` is what it carries. A condition values can't say (it depends on the board as it is) may be code (`if`), shown only as "a condition in code". A rule may still say a line (`t.self.say`), but a declared moment is the normal way: a line said from inside a rule can't be shown before it is heard.
+
+### Moments are events
+
+Every moment is shown as the event it waits for, written the way events are everywhere (`play` prints them so): `board.started` (as the board opens), `fiveHouses.appears` (a piece shown), `town.walker.arrived · x 4, y 5` (a line's own). One form, worked out in one place (`scriptOf`); no words written beside it that could drift from what runs.
 
 ### Its place: in time, and on the board
 
@@ -87,6 +91,10 @@ A line is a node of the board, like a piece: it has an address, and everything t
 - **While a line plays,** its piece (or what it is about) glows on the board, as a teacher points at what they are talking about.
 - `look` lists the track; `play` lists what each step was heard to say.
 
+### Languages
+
+A board has its language; nothing assumes one. The build plays every scene's runs in every language (each line takes its own time in each), and a board that ends differently in one is a failure. Where one language is chosen on purpose, it is named once: agents read and write in `AGENT_LOCALE`; a choice's options are ordered by `ORDER_LOCALE`, so they come in the same order in every language.
+
 ### Which lines are heard: known by playing
 
 Which lines a board *can* say is known in advance: each is data on the board. Whether and when each *is* said depends on what the student does. The build already plays every board (its witness, each wrong-answer note); it records which lines were heard on those runs, and reports lines heard on no run: a moment that is never true, or a path no run takes (the author says which).
@@ -94,7 +102,7 @@ Which lines a board *can* say is known in advance: each is data on the board. Wh
 ## Order of work
 
 1. **Lines on the scene; sound out of the props' models.** `says` on a placement, `lines` said by rules; a text's line is its words. The engine's voice bus. *(Done.)*
-2. **Lines are nodes:** declared moments (`when`, `if`, `about`); addresses; the sound track grouped by moment, picked for comments; the 🔊 marks; the glow while a line plays; heard-on-no-run in the build.
+2. **Lines are nodes:** declared moments as data (`when`, `where`, `about`); addresses; the sound track grouped by moment, picked for comments; the 🔊 marks; the glow while a line plays; heard-on-no-run in the build. *(Done but the 🔊 marks.)*
 3. **Each book's cast.**
 4. **Effects:** the library, the effects bus, sound views (the walker's footstep first).
 5. **Templates:** every version made at build for known values; the server's made-on-first-use clips and the phone's voice for open ones.

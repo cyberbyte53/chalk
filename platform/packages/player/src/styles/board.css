@@ -199,3 +199,10 @@
   width: auto;
   flex: 1;
 }
+
+/* The piece the line being said is about: a soft light, as a teacher points at what they say. */
+.piece-prop.is-spoken {
+  border-radius: 12px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  transition: box-shadow 0.3s;
+}

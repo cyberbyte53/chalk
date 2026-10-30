@@ -2,7 +2,7 @@ import { type Says, type ScenePlaced, type SceneUse, type Step, place, tap } fro
 import type { Localized } from "@chalk/content";
 import type { Color } from "@chalk/prop";
 import { TextStyle, sceneChoice, sceneGoal, sceneText } from "@chalk/prop-basics";
-import { type Option, seedOf, settle } from "./choice-question";
+import { ORDER_LOCALE, type Option, seedOf, settle } from "./choice-question";
 
 /**
  * Words and questions for scenes (boards on the event model). A question comes with what it adds
@@ -96,7 +96,7 @@ export function choice(spec: {
   const shown =
     spec.keepOrder === true
       ? spec.options
-      : settle(spec.options, seedOf(`${name}|${spec.prompt.en}|${ids.join(",")}`));
+      : settle(spec.options, seedOf(`${name}|${spec.prompt[ORDER_LOCALE]}|${ids.join(",")}`));
   const piece = place(
     sceneChoice,
     {

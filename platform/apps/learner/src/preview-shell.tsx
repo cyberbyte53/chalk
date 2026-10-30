@@ -923,6 +923,22 @@ function underPiece(el: Element): string | undefined {
 
 function picksAt(target: HTMLElement): PickTarget[] {
   const card = target.closest<HTMLElement>("[data-board]");
+  // A line on the board's sound track (script-view.tsx) is part of the board like a piece: a
+  // piece's line is "<piece>/said", a line of its own its name.
+  const lineEl = target.closest<HTMLElement>("[data-script-line]");
+  if (card !== null && lineEl !== null) {
+    const line = lineEl.dataset.scriptLine ?? "";
+    const piece = lineEl.dataset.scriptPiece;
+    return [
+      {
+        el: lineEl,
+        board: card.dataset.board,
+        piece: piece ?? line,
+        ...(piece === undefined ? {} : { part: "said" }),
+        words: piece === undefined ? `line ${line}` : `${piece}${SEP}said`,
+      },
+    ];
+  }
   const phone = target.closest<HTMLElement>(".preview-phone");
   if (card === null || phone === null) return [];
   const board = card.dataset.board;

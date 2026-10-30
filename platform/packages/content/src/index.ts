@@ -91,6 +91,7 @@ export {
 } from "./jugnu";
 export { lessonSchema, parseLesson, type Lesson } from "./lesson";
 export {
+  AGENT_LOCALE,
   Locale,
   LOCALES,
   localizedSchema,

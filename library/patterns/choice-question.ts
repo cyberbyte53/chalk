@@ -1,5 +1,5 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
-import type { Localized } from "@chalk/content";
+import { Locale, type Localized } from "@chalk/content";
 import { choiceDef } from "@chalk/prop-basics";
 
 /** One option of a multiple-choice question; a wrong one says what it shows the learner missed. */
@@ -35,7 +35,10 @@ export function choiceQuestion(
   const shown =
     spec.keepOrder === true
       ? spec.options
-      : settle(spec.options, seedOf(`${spec.name ?? "ask"}|${spec.prompt.en}|${ids.join(",")}`));
+      : settle(
+          spec.options,
+          seedOf(`${spec.name ?? "ask"}|${spec.prompt[ORDER_LOCALE]}|${ids.join(",")}`),
+        );
   const ask = b.prop(
     choiceDef,
     spec.name ?? "ask",
@@ -60,6 +63,12 @@ export function choiceQuestion(
 }
 
 /** A stable whole number from a string (FNV-1a), to seed `settle`. */
+/**
+ * The language a choice's options are shuffled by: one, so they come in the same order in every
+ * language (a student who switches language sees the same layout).
+ */
+export const ORDER_LOCALE: Locale = Locale.En;
+
 export function seedOf(text: string): number {
   let h = 2166136261;
   for (let i = 0; i < text.length; i++) {

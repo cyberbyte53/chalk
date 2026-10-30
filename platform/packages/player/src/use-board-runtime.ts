@@ -27,10 +27,11 @@ export function useBoardRuntime(
   registry: PropRegistry,
   speak: Speak,
   voice: {
-    locale?: Locale;
+    /** The board's language (a scene says its lines in it). */
+    locale: Locale;
     lineSeconds?: (prop: string, line: Spoken) => number | undefined;
     hush?: () => void;
-  } = {},
+  },
 ): LiveBoard {
   const speed = useContext(BoardSpeedContext);
   const speakRef = useRef(speak);

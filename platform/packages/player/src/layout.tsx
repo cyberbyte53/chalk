@@ -113,6 +113,8 @@ function PropPieceView({
     [runtime, piece.name],
   );
   const pointed = context.pointed?.prop === piece.name ? context.pointed : undefined;
+  // The line being said is about this piece: it glows, as a teacher points at what they say.
+  const isSpoken = "speakingAbout" in runtime && runtime.speakingAbout() === piece.name;
   // A part is ringed where the view tagged it (`data-part`); without that, the whole prop glows.
   const ringOf = (part: string | undefined): Box | undefined =>
     part === undefined ? undefined : tagged(box.current, part);
@@ -126,7 +128,7 @@ function PropPieceView({
   const isWholePicked = picks.some((p) => ringOf(p.part) === undefined);
   return (
     <div
-      class={`piece-prop prop-${piece.prop}${isWholeGlow ? " is-pointed" : ""}${isWholePicked ? " is-picked" : ""}${piece.still !== undefined ? " is-still" : ""}`}
+      class={`piece-prop prop-${piece.prop}${isWholeGlow ? " is-pointed" : ""}${isSpoken ? " is-spoken" : ""}${isWholePicked ? " is-picked" : ""}${piece.still !== undefined ? " is-still" : ""}`}
       ref={box}
       data-piece={piece.name}
       // A prop drawn still is a picture: nothing in it can be tapped, dragged or focused.

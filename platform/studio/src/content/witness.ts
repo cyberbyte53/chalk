@@ -1,5 +1,5 @@
 import { type Step, StepKind, asRuleFn } from "@chalk/author";
-import { Actor, type Board, type Localized, PieceKind } from "@chalk/content";
+import { Actor, type Board, LOCALES, type Locale, type Localized, PieceKind } from "@chalk/content";
 import { BoardRuntime, type PropModule, type RuntimeServices, SceneRuntime } from "@chalk/player";
 import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
 
@@ -62,9 +62,16 @@ export type Played = {
  * A scene (a board on the event model) played the same way, with no waiting at all: after each
  * step, what it set off plays out on the board's clock (moves, waits, lines said), jumping.
  */
-function playScene(board: Board, defs: Defs, steps: readonly Step[]): Played {
+function playScene(
+  board: Board,
+  defs: Defs,
+  steps: readonly Step[],
+  onHeard: ((line: string) => void) | undefined,
+  locale: Locale,
+): Played {
   const errors: string[] = [];
   const runtime = new SceneRuntime(board, (type) => defs[type], {
+    locale,
     now: () => 0,
     frame: () => () => undefined,
     speak: async () => {},
@@ -99,6 +106,7 @@ function playScene(board: Board, defs: Defs, steps: readonly Step[]): Played {
     }
   }
   runtime.settle();
+  for (const heard of runtime.heard()) onHeard?.(heard.line);
   failures.push(...errors);
   const views = new Map<string, Readonly<Record<string, unknown>>>();
   for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));
@@ -107,8 +115,27 @@ function playScene(board: Board, defs: Defs, steps: readonly Step[]): Played {
 }
 
 /** Plays a learner's steps on the real props, as a student would, and reports what went wrong. */
-export async function play(board: Board, defs: Defs, steps: readonly Step[]): Promise<Played> {
-  if (board.model !== undefined) return playScene(board, defs, steps);
+export async function play(
+  board: Board,
+  defs: Defs,
+  steps: readonly Step[],
+  /** Each line heard on the way (a scene's), for which lines no run reaches. */
+  onHeard?: (line: string) => void,
+): Promise<Played> {
+  // A scene is played in every language: its lines take different times in each, and what is said
+  // when (and what a student can still do meanwhile) must hold in all of them.
+  if (board.model !== undefined) {
+    const runs = LOCALES.map((locale) => playScene(board, defs, steps, onHeard, locale));
+    const failures = runs.flatMap((run, i) =>
+      run.failures.map((f) => (i === 0 ? f : `in ${LOCALES[i]}: ${f}`)),
+    );
+    const first = runs[0] as Played;
+    // A board that ends differently in another language is a failure of its own.
+    for (const [i, run] of runs.entries())
+      if (i > 0 && JSON.stringify(run.view(BOARD)) !== JSON.stringify(first.view(BOARD)))
+        failures.push(`in ${LOCALES[i]}, the board ends differently than in ${LOCALES[0]}`);
+    return { failures: [...new Set(failures)], view: first.view };
+  }
   const { runtime, advance, errors, refused } = startOnFakeTime(board, defs);
   const failures: string[] = [];
   runtime.start();
@@ -146,8 +173,9 @@ export async function checkWitness(
   board: Board,
   defs: Defs,
   steps: readonly Step[],
+  onHeard?: (line: string) => void,
 ): Promise<string[]> {
-  const played = await play(board, defs, steps);
+  const played = await play(board, defs, steps, onHeard);
   const failures = [...played.failures];
   for (const question of questionsOf(board, defs)) {
     if (played.view(question).status !== AnswerStatus.Correct)
@@ -166,8 +194,9 @@ export async function checkNote(
   defs: Defs,
   steps: readonly Step[],
   feedback: Localized,
+  onHeard?: (line: string) => void,
 ): Promise<string[]> {
-  const played = await play(board, defs, steps);
+  const played = await play(board, defs, steps, onHeard);
   const failures = [...played.failures];
   const questions = questionsOf(board, defs);
   if (questions.length === 0) return [...failures, "a note check needs a question on the board"];

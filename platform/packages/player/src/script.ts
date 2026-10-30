@@ -1,4 +1,4 @@
-import { type Board, type Localized, NARRATOR, propPieces } from "@chalk/content";
+import { type Board, type Localized, NARRATOR, type SceneLine, propPieces } from "@chalk/content";
 import { Board as Core } from "@chalk/prop/next";
 import type { PropModule } from "./prop-module";
 
@@ -18,9 +18,30 @@ export type ScriptLine = {
   own?: Localized;
   /** The lesson's own words for it, when it gives them. */
   says?: Localized;
-  /** When it is heard: the board opening, its piece appearing, or a rule saying it. */
-  cue: "opening" | "appears" | "rule";
+  /** When it is heard: the board opening, its piece appearing, a moment, or a rule saying it. */
+  cue: "opening" | "appears" | "moment" | "rule";
+  /** Its moment: a piece's signal ("town.walker.arrived"). */
+  when?: string;
+  /** The values its moment's signal must carry. */
+  where?: Readonly<Record<string, unknown>>;
+  /**
+   * When it is heard, as the event it waits for, written as events are everywhere: `board.started`,
+   * `fiveHouses.appears`, `town.walker.arrived · x 4, y 5`. What the track groups lines by.
+   */
+  moment: string;
+  /** The piece it is about (it glows while the line plays): its own piece for a piece's line. */
+  about?: string;
 };
+
+/** A line's own moment as an event: its signal, the values it must carry, and any condition. */
+function momentOf(line: SceneLine): string {
+  const values = Object.entries(line.where ?? {})
+    .map(([k, v]) => `${k} ${typeof v === "object" ? JSON.stringify(v) : String(v)}`)
+    .join(", ");
+  return [line.when, values, line.hasCondition === true ? "a condition in code" : ""]
+    .filter((p) => p !== undefined && p !== "")
+    .join(" · ");
+}
 
 /** The words a piece says of itself, as it is now (its sound view; nothing for one without). */
 export function ownLine(
@@ -54,12 +75,23 @@ export function scriptOf(
       ...(own === undefined ? {} : { own }),
       ...(given?.says === undefined ? {} : { says: given.says }),
       cue: piece.isHidden === true ? "appears" : "opening",
+      moment: piece.isHidden === true ? `${piece.name}.appears` : "board.started",
+      about: piece.name,
     });
   }
   for (const name of model.freeLines) {
     const free = model.lines[name];
     if (free?.says === undefined) continue;
-    out.push({ line: name, speaker: free.speaker ?? NARRATOR, says: free.says, cue: "rule" });
+    out.push({
+      line: name,
+      speaker: free.speaker ?? NARRATOR,
+      says: free.says,
+      cue: free.when === undefined ? "rule" : "moment",
+      moment: free.when === undefined ? "said by a rule" : momentOf(free),
+      ...(free.when === undefined ? {} : { when: free.when }),
+      ...(free.where === undefined ? {} : { where: free.where }),
+      ...(free.about === undefined ? {} : { about: free.about }),
+    });
   }
   return out;
 }

@@ -2174,6 +2174,26 @@ body.is-selecting .is-pick-target {
 .script-view.is-empty {
   color: var(--color-on-surface-variant);
 }
+.script-moment h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+.script-moment ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* The piece a line on the track is about, while the line is pointed at. */
+.is-line-about {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
 .script-line {
   padding: 8px 10px;
   border: 1px solid var(--color-outline-variant);
@@ -2214,4 +2234,8 @@ body.is-selecting .is-pick-target {
 .script-play:disabled {
   color: var(--color-on-surface-variant);
   cursor: default;
+}
+/* A tool's picture is the board as it stands, not a line in passing. */
+.is-shot .piece-prop.is-spoken {
+  box-shadow: none;
 }

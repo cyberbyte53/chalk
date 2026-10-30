@@ -135,8 +135,20 @@ export type SceneModel = {
   readonly freeLines: readonly string[];
 };
 
-/** A line's words (per language) and who says them; words left out: the piece says its own. */
-export type SceneLine = { readonly says?: Localized; readonly speaker?: string };
+/**
+ * A line's words (per language) and who says them (words left out: the piece says its own); for a
+ * line of its own, its moment (a piece's signal, "town.walker.arrived") and the piece it is about.
+ */
+export type SceneLine = {
+  readonly says?: Localized;
+  readonly speaker?: string;
+  readonly when?: string;
+  /** The values its moment's signal must carry. */
+  readonly where?: Readonly<Record<string, unknown>>;
+  /** Its moment also has a condition in code (only shown as such). */
+  readonly hasCondition?: true;
+  readonly about?: string;
+};
 
 /** Splits "line.zoomTo" / "guess.wrong" / "line.marker" into the prop name and the member. */
 export function splitTarget(target: string): { prop: string; member: string } {

@@ -55,7 +55,7 @@ import {
   walkPieces,
 } from "@chalk/content";
 import { propPackages } from "@chalk/library";
-import type { PropModule } from "@chalk/player";
+import { type PropModule, scriptOf } from "@chalk/player";
 import {
   type AnyPropDef,
   BOARD,
@@ -520,13 +520,23 @@ async function checkBoard(
   if (board.model === undefined)
     for (const p of validateBoard(board, c.defs)) report(c, where, `${p.where}: ${p.message}`);
   if (c.problems.length > before) return false;
-  for (const failure of await checkWitness(board, c.modules, built.witness))
+  // Which of the board's lines its runs are heard to say: a line on no run is worth a look.
+  const heard = new Set<string>();
+  const onHeard = (line: string) => void heard.add(line);
+  for (const failure of await checkWitness(board, c.modules, built.witness, onHeard))
     report(c, where, failure);
   for (const note of built.noteChecks) {
-    for (const failure of await checkNote(board, c.modules, note.steps, note.feedback)) {
+    for (const failure of await checkNote(board, c.modules, note.steps, note.feedback, onHeard)) {
       report(c, where, `note "${note.feedback.en}": ${failure}`);
     }
   }
+  const unheard = scriptOf(board, (type) => c.modules[type])
+    .map((l) => l.line)
+    .filter((l) => !heard.has(l));
+  if (unheard.length > 0)
+    c.notices.push(
+      `${where}: no run says ${unheard.join(", ")} (a moment never true, or a path no witness or note takes)`,
+    );
   return c.problems.length === before;
 }
 

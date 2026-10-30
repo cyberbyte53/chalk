@@ -282,7 +282,8 @@ type ScriptSaid = { words: string; from: string } | { needs: string; suggested?:
 type ScriptLine = {
   line: string;
   speaker: string;
-  cue: string;
+  /** When it is heard, as the event it waits for. */
+  moment: string;
   said: Readonly<Record<string, ScriptSaid | undefined>>;
 };
 
@@ -318,7 +319,7 @@ export function scriptText(root: string, board: string): string[] {
   return [
     "script (what the voice says, in order):",
     ...lines.flatMap((l) => [
-      `  ${l.line} · ${l.speaker} · ${l.cue}`,
+      `  ${l.moment}: ${l.line} · ${l.speaker}`,
       ...Object.entries(l.said).map(([locale, s]) => `    ${locale}: ${said(s)}`),
     ]),
   ];

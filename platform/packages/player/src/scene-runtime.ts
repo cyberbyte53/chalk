@@ -1,4 +1,5 @@
 import {
+  AGENT_LOCALE,
   Actor,
   type Board,
   type Locale,
@@ -63,13 +64,14 @@ export class SceneRuntime {
       hush?: () => void;
       /** How long a line plays, when its audio's length is known (publish); else from its words. */
       lineSeconds?: (prop: string, line: Spoken) => number | undefined;
-      locale?: Locale;
+      /** The board's language: what it says, and how long each line takes. */
+      locale: Locale;
     },
   ) {
     const model = board.model;
     if (model === undefined) throw new Error(`Board ${board.name} isn't a scene`);
     this.scene = model.scene;
-    const locale = services.locale ?? "en";
+    const locale = services.locale;
     // What starts hidden is the board's to say (a preview shows every piece at once).
     const hidden = propPieces(board.root)
       .filter((p) => p.isHidden === true)
@@ -89,10 +91,17 @@ export class SceneRuntime {
             const seconds =
               services.lineSeconds?.(name, line) ??
               estimatedSeconds(plainText(words[locale] ?? ""));
+            const lineOf = model.lines[name];
+            const isPiece = propPieces(board.root).some((p) => p.name === name);
             this.heardLines.push({
               line: name,
+              ...(lineOf?.about !== undefined
+                ? { about: lineOf.about }
+                : isPiece
+                  ? { about: name }
+                  : {}),
               speaker: line.speaker ?? NARRATOR,
-              words: spokenWords(words[locale] ?? ""),
+              words: spokenWords(words[locale] ?? "", locale),
               at: this.core.now,
               seconds,
             });
@@ -164,6 +173,14 @@ export class SceneRuntime {
     return this.heardLines;
   }
 
+  /** The piece the line being said now is about (it glows, as a teacher points), if any. */
+  speakingAbout(): string | undefined {
+    void this.version.value;
+    const last = this.heardLines.at(-1);
+    if (last === undefined || last.cutAt !== undefined) return undefined;
+    return this.core.now < last.at + last.seconds ? last.about?.split(".")[0] : undefined;
+  }
+
   // ---- reading ----
 
   propNames(): string[] {
@@ -205,7 +222,7 @@ export class SceneRuntime {
   }
 
   /** A piece as the student sees it now, read from what its view draws. */
-  describe(name: string, locale: Locale = "en"): Observation {
+  describe(name: string, locale: Locale = AGENT_LOCALE): Observation {
     const module = this.lookup(this.typeOf(name));
     if (module === undefined) throw new Error(`no prop type "${this.typeOf(name)}" in the library`);
     return describeView(module, this.getView(name), locale);
@@ -434,6 +451,8 @@ export class SceneRuntime {
 /** A line as it was heard on a board. */
 export type HeardLine = {
   line: string;
+  /** The piece it is about (its own piece for a piece's line). */
+  about?: string;
   speaker: string;
   /** The words the voice was given (formatting left out; maths kept as written). */
   words: string;
@@ -443,8 +462,8 @@ export type HeardLine = {
 };
 
 /** A line's words as the voice gets them: its rich text read for speech, maths left as written. */
-function spokenWords(source: string): string {
-  return richSpeech(source, "en")
+function spokenWords(source: string, locale: Locale): string {
+  return richSpeech(source, locale)
     .pieces.map((p) => (p.kind === "words" ? p.text : `$${p.latex}$`))
     .join("")
     .trim();
