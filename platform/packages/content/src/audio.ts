@@ -24,6 +24,11 @@ export const audioManifestSchema = z
     files: z.record(z.string(), z.string().min(1)),
     /** audioKey → how long its file plays, in seconds (a board knows when a line ends without playing it). */
     seconds: z.record(z.string(), z.number().positive()).optional(),
+    /**
+     * audioKey → the words its clip was made from (the line as written). A line whose words are
+     * not these now (a rule changed a text) doesn't play the clip: it says its words otherwise.
+     */
+    words: z.record(z.string(), z.string()).optional(),
   })
   .strict();
 export type AudioManifest = z.infer<typeof audioManifestSchema>;

@@ -208,6 +208,14 @@ export type Tools<V, A, S, C> = {
   ) => Out;
   /** Drops everything this prop has queued, and stops its moves where they are. */
   readonly stop: () => Out;
+};
+
+/**
+ * The board's voice bus, for the one that keeps a board's lines (the scene): not for props, whose
+ * models know nothing of sound, nor for a lesson's rules, which say lines through the scene
+ * (`t.self.say`), so what waits for a line always hears it end.
+ */
+export type VoiceTools = {
   /** Says a line of the board (cutting the one being said); `atEnd` is done when it ends. */
   readonly say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
   /** Stops the line being said. */

@@ -5,8 +5,8 @@ import { type MathsReader, richSpeech } from "@chalk/player";
  * What a voice says for a line: words a person wrote, never rewritten.
  *
  * - `written`: the lesson's words for the line (`says`): anything, not only the screen's.
- * - `screen`: what its piece says of itself (a text's words, a question's prompt), when they are
- *   words already (bold and emphasis said as their words, rich-text-speech.ts).
+ * - `screen`: what its piece says of itself (a text's words, a question's prompt).
+ * Either is said as rich text is (rich-text-speech.ts): bold and emphasis as their words.
  * - Anything else needs its spoken words: maths (with a `suggested` draft from a maths reader, to
  *   write in as it is or edit), or a sign outside maths (write it as maths, `$-2$`, or write its words).
  */
@@ -22,9 +22,10 @@ export function said(
   locale: Locale,
   readMaths?: MathsReader,
 ): Said | undefined {
+  // The lesson's words for it, else what its piece says of itself: both read the same way.
   const written = line.says?.[locale];
-  if (written !== undefined) return { words: written, from: "written" };
-  const say = line.own?.[locale];
+  const from = written === undefined ? "screen" : "written";
+  const say = written ?? line.own?.[locale];
   if (say === undefined) return undefined;
   const { pieces, problems } = richSpeech(say, locale, readMaths);
   if (problems.length > 0)
@@ -39,7 +40,7 @@ export function said(
   const odd = unspeakable(words);
   return odd.length > 0
     ? { needs: `it has "${odd.join(" ")}" outside maths: write it as maths, or write its words` }
-    : { words, from: "screen" };
+    : { words, from };
 }
 
 /**

@@ -54,6 +54,8 @@ export async function makeVoice(spec: {
   const byFolder = new Map<string, Line[]>();
   const unsaid: string[] = [];
   const script: ChapterScript = { boards: [] };
+  /** The words each clip is made from (a line saying other words now skips its clip). */
+  const clipWords: Record<string, string> = {};
   for (const { item, folder, lines } of spec.boards) {
     const into = byFolder.get(folder) ?? [];
     byFolder.set(folder, into);
@@ -86,6 +88,7 @@ export async function makeVoice(spec: {
           continue;
         }
         if (what.words.trim() === "") continue;
+        clipWords[keys[locale]] = line.says?.[locale] ?? line.own?.[locale] ?? "";
         into.push({
           key: keys[locale],
           text: what.words,
@@ -121,7 +124,12 @@ export async function makeVoice(spec: {
     for (const provider of providers) await provider.close?.();
   }
   return {
-    manifest: { provider: providers.map((p) => p.id).join("+") || "none", files, seconds },
+    manifest: {
+      provider: providers.map((p) => p.id).join("+") || "none",
+      files,
+      seconds,
+      words: clipWords,
+    },
     script,
     unsaid,
     made,

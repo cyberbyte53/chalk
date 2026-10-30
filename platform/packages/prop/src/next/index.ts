@@ -28,6 +28,7 @@ export {
   type Rule,
   type SignalDef,
   type Tools,
+  type VoiceTools,
 } from "./define";
 export { Board, type BoardEvent, type Given, type Input } from "./board";
 export { sequence } from "./helpers";

@@ -3,6 +3,7 @@ import { Actor } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
 import { SceneRuntime } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
+import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
 
@@ -64,8 +65,10 @@ describe("a scene, built and checked like any board", () => {
     void runtime.call("ask", "select", { option: "street" }, Actor.Learner);
     void runtime.call("ask", "check", {}, Actor.Learner);
     runtime.settle();
-    // "found" is said at once, cutting the title; the question, still waiting, is never said.
-    expect(heard).toEqual(["say title", "say found"]);
+    // "found" is said at once, cutting the title (its audio stopped first); the question, still
+    // waiting, is never said.
+    expect(heard.filter((h) => h.startsWith("say"))).toEqual(["say title", "say found"]);
+    expect(heard.slice(heard.indexOf("say found") - 1)).toEqual(["hush", "say found"]);
     expect(runtime.getView("board").saying).toEqual([]);
   });
 
@@ -76,5 +79,46 @@ describe("a scene, built and checked like any board", () => {
     ]);
     expect(played.view("board").hidden).toEqual([]);
     expect(played.view("board").saying).toEqual([]);
+  });
+
+  it("a piece with nothing to say adds no pause; a line hidden while said moves on to the next", () => {
+    const quiet = scene({
+      pieces: {
+        first: place(sceneText, {
+          text: { en: "One two three four five.", hi: "एक दो तीन चार पाँच।" },
+        }),
+        plane: place(sceneCoordinatePlane),
+        second: place(sceneText, { text: { en: "Six.", hi: "छह।" } }),
+        third: place(sceneText, { text: { en: "Seven.", hi: "सात।" } }),
+      },
+    }).build("quiet");
+    const said: string[] = [];
+    const runtime = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async (line) => void said.push(`${line.name} at ${runtime.time().toFixed(1)}`),
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    runtime.start();
+    runtime.settle();
+    // "first" takes 0.4 + 5 / 2.5 = 2.4 s, then one breath (0.7): the plane says nothing, no second.
+    expect(said.slice(0, 2)).toEqual(["first at 0.0", "second at 3.1"]);
+
+    const hiding = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async (line) => void said.push(line.name),
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    said.length = 0;
+    hiding.start();
+    void hiding.call("board", "hide", { name: "first" });
+    hiding.settle(0);
+    // "first" is cut; the plane, next, has nothing to say; "second" goes on at once.
+    expect(said).toEqual(["first", "second"]);
   });
 });

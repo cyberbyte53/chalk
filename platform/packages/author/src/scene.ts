@@ -102,6 +102,8 @@ const sceneActions = {
   hide: action({ name: z.string().min(1) }),
   /** Says a line now (a piece's, or a narration line), cutting the one being said. */
   say: action({ line: z.string().min(1) }),
+  /** Stops the line being said, and drops the lines waiting. */
+  hush: action(),
   /** A line has ended (the voice bus): the next waiting is said, and what waits for it runs. */
   lineEnded: action({ line: z.string().min(1) }),
   pass: action(),
@@ -219,7 +221,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
   const freeLines = spec.lines ?? {};
   for (const line of Object.keys(freeLines))
-    if (line in spec.pieces)
+    if (Object.hasOwn(spec.pieces, line))
       throw new Error(`Board ${name}: "${line}" is both a piece and a line; name the line apart`);
   const questions = names.filter((n) => (defs[n] as AnyProp).role === PropRole.Question);
   const isHidden = (n: string) => (spec.pieces[n] as Placed).isHidden;
@@ -235,6 +237,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     };
     to: Record<string, Record<string, (payload?: object) => Out>>;
     say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
+    hush: () => Out;
   };
   const onSaid = (spec.onSaid ?? {}) as Record<string, AnyFn | undefined>;
   /**
@@ -306,7 +309,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
           sayNow(t as unknown as T, piece),
         ],
       say: (_, { line }, t) => {
-        if (!(line in spec.pieces) && !(line in freeLines))
+        if (!Object.hasOwn(spec.pieces, line) && !Object.hasOwn(freeLines, line))
           throw new Error(`Board ${name}: no line "${line}" (a piece's name, or one of its lines)`);
         return [t.set({ saying: [line] }), sayNow(t as unknown as T, line)];
       },
@@ -319,8 +322,23 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
           ...list(onSaid[line]?.(me as never, t as never) as Outs),
         ];
       },
-      hide: (me, { name: piece }, t) =>
-        !me.hidden.includes(piece) && t.set({ hidden: [...me.hidden, piece] }),
+      // A piece hidden is no longer heard: its line is dropped, and cut if it is being said.
+      hide: (me, { name: piece }, t) => {
+        if (me.hidden.includes(piece)) return;
+        const rest = me.saying.filter((n) => n !== piece);
+        const isBeingSaid = me.saying[0] === piece;
+        return [
+          t.set({ hidden: [...me.hidden, piece], saying: rest }),
+          // The line being said is cut; the next waiting goes on.
+          ...(isBeingSaid
+            ? [
+                (t as unknown as T).hush(),
+                ...(rest[0] === undefined ? [] : [sayNow(t as unknown as T, rest[0])]),
+              ]
+            : []),
+        ];
+      },
+      hush: (_, __, t) => [t.set({ saying: [] }), (t as unknown as T).hush()],
       pass: (me, _, t) => !me.isPassed && [t.set({ isPassed: true }), t.tell.passed()],
       continue: (me, _, t) => me.isPassed && t.tell.continued(),
     },

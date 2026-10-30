@@ -34,7 +34,12 @@ export function useChapterVoice(
           const file = manifest.files[key];
           return file === undefined ? undefined : `${base}/${file}`;
         };
-        setSource(() => Object.assign(url, { seconds: (key: string) => manifest.seconds?.[key] }));
+        setSource(() =>
+          Object.assign(url, {
+            seconds: (key: string) => manifest.seconds?.[key],
+            words: (key: string) => manifest.words?.[key],
+          }),
+        );
         setIsReady(true);
       })
       .catch(() => isLive && setIsReady(true));

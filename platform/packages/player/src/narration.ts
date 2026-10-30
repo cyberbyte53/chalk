@@ -1,5 +1,5 @@
 import { type Locale, audioKey } from "@chalk/content";
-import { segment } from "@chalk/prop";
+import { type Spoken, segment } from "@chalk/prop";
 import { signal } from "@preact/signals";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
@@ -30,6 +30,8 @@ export function setMuted(isOn: boolean): void {
 export type AudioSource = ((key: string) => string | undefined) & {
   /** How long the line's file plays, in seconds (publish measures it), when known. */
   readonly seconds?: (key: string) => number | undefined;
+  /** The words the line's clip was made from, when known: a line saying other words now skips it. */
+  readonly words?: (key: string) => string | undefined;
 };
 
 /** A prop that is speaking: its name (for the retry mark and, as its address, its audio file). */
@@ -37,9 +39,9 @@ export type SpokenProp = { name: string };
 
 export type Narrator = {
   /** Plays a prop's line and resolves when it ends (or fails; the text is on screen either way). */
-  speak: (prop: SpokenProp) => Promise<void>;
-  /** How long a prop's line plays here, when its audio's length is known. */
-  seconds: (prop: string) => number | undefined;
+  speak: (prop: SpokenProp, line?: Spoken) => Promise<void>;
+  /** How long a prop's line plays here, when its audio's length is known (and its words its clip's). */
+  seconds: (prop: string, line?: Spoken) => number | undefined;
   /** Stops the line being said. */
   hush: () => void;
   /** Props whose audio couldn't play, by name. */
@@ -71,11 +73,23 @@ export function useNarrator(
     [],
   );
 
+  /** Whether the clip for `key` says `line`'s words (a line changed since the clip was made doesn't). */
+  const isClipOf = useCallback(
+    (key: string, line: Spoken | undefined) => {
+      const made = source?.words?.(key);
+      const now = line?.say[locale];
+      return made === undefined || now === undefined || made === now;
+    },
+    [source, locale],
+  );
+
   const speak = useCallback(
-    (prop: SpokenProp) =>
+    (prop: SpokenProp, line?: Spoken) =>
       new Promise<void>((resolve) => {
         if (source === undefined) return resolve(); // this lesson has no audio yet
         if (isMuted.peek()) return resolve();
+        // Its words aren't its clip's any more: nothing to play (until a live voice says them).
+        if (!isClipOf(audioKey(board, segment(prop.name), locale), line)) return resolve();
         const fail = (reason: string) => {
           setFailed((prev) => new Set(prev).add(prop.name));
           onFailure(prop, reason);
@@ -114,7 +128,7 @@ export function useNarrator(
           fail(error instanceof Error ? error.name : "audio could not play");
         });
       }),
-    [board, locale, source, onFailure],
+    [board, locale, source, onFailure, isClipOf],
   );
 
   // Muting stops the line being said.
@@ -127,8 +141,11 @@ export function useNarrator(
   );
 
   const seconds = useCallback(
-    (prop: string) => source?.seconds?.(audioKey(board, segment(prop), locale)),
-    [board, locale, source],
+    (prop: string, line?: Spoken) => {
+      const key = audioKey(board, segment(prop), locale);
+      return isClipOf(key, line) ? source?.seconds?.(key) : undefined;
+    },
+    [board, locale, source, isClipOf],
   );
 
   const hush = useCallback(() => audio.current?.pause(), []);

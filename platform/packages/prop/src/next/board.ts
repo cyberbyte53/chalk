@@ -395,9 +395,10 @@ export class Board {
           this.stopAll(node);
           break;
         case "say":
-          if (out.after !== undefined && out.after > 0) {
+          // The quiet before a line follows one that said something: after nothing, no pause.
+          if (out.after !== undefined && out.after > 0 && this.lastHadWords) {
             // The quiet before it is part of the line: a line said meanwhile cuts both.
-            this.queue.drop((e) => e.what.isLine === true);
+            this.cutLine();
             this.queue.add(this.clock + seconds(node, "say after", out.after), node.path, {
               outs: [{ kind: "say", line: out.line, atEnd: out.atEnd }],
               isLine: true,
@@ -464,8 +465,9 @@ export class Board {
    * this one and says how long it plays; its `atEnd` is done then, as the prop that said it.
    */
   private say(node: Node, line: string, atEnd: readonly Out[]): void {
-    this.queue.drop((e) => e.what.isLine === true);
+    this.cutLine();
     const seconds = this.voice.say(line);
+    this.lastHadWords = seconds !== undefined;
     this.queue.add(this.clock + Math.max(0, seconds ?? 0), node.path, {
       outs: atEnd,
       isLine: true,
@@ -474,9 +476,17 @@ export class Board {
 
   /** Stops the line being said. */
   private hush(): void {
+    this.cutLine();
+  }
+
+  /** The line being said (or its quiet before) stops: its end never comes, its audio stops. */
+  private cutLine(): void {
     this.queue.drop((e) => e.what.isLine === true);
     this.voice.hush();
   }
+
+  /** Whether the last line said had words (a pause follows only one that did). */
+  private lastHadWords = false;
 
   private stopAll(node: Node): void {
     if (node.moves.size > 0) {
