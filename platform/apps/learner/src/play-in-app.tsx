@@ -6,6 +6,7 @@ import { LessonPlayer, PlayMode } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 import { ChapterGate } from "./chapter-gate";
+import { useChapterVoice } from "./chapter-voice";
 import type { ChapterContent } from "./content-store";
 import type { Course, CourseChapter } from "./course";
 import { ChapterScreen, currentConcept } from "./course-screens";
@@ -75,6 +76,8 @@ export function PlayInApp({
   const [events, setEvents] = useState<readonly ChalkEvent[]>([]);
   useEffect(() => bus.subscribe((e) => setEvents((was) => [...was, e])), [bus]);
   const progress: Progress = useMemo(() => progressFrom(boardFactsFrom(events), plans), [events]);
+  // The chapter's voice (pnpm voice <book>/<chapter>), when it has one.
+  const voice = useChapterVoice(found?.chapter.path ?? "", found !== undefined);
 
   // A phone: its width, and a phone's height where the screen has room for it.
   const frame = {
@@ -96,7 +99,7 @@ export function PlayInApp({
             if (now.kind === "lesson") {
               const lessons = content.get(now.concept);
               const lesson = now.part === "pages" ? lessons?.pages : lessons?.practice;
-              if (lessons !== undefined && lesson != null)
+              if (lessons !== undefined && lesson != null && voice.isReady)
                 return (
                   <LessonPlayer
                     key={`${lesson.id}-${locale}-${now.start}`}
@@ -105,6 +108,7 @@ export function PlayInApp({
                     registry={propLibrary}
                     locale={locale}
                     bus={bus}
+                    {...(voice.source === undefined ? {} : { audio: voice.source })}
                     jugnu={jugnu}
                     startBoard={now.start}
                     onExit={() => setScreen({ kind: "chapter" })}

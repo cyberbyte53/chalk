@@ -25,13 +25,17 @@ export function useChapterVoice(
       .then((r) => (r.ok ? (r.json() as Promise<AudioManifest>) : undefined))
       .then((manifest) => {
         if (!isLive) return;
-        setIsReady(true);
-        if (manifest === undefined) return;
+        // The clips first, then ready: a board must never start before its voice is known.
+        if (manifest === undefined) {
+          setIsReady(true);
+          return;
+        }
         const url = (key: string) => {
           const file = manifest.files[key];
           return file === undefined ? undefined : `${base}/${file}`;
         };
-        setSource(Object.assign(url, { seconds: (key: string) => manifest.seconds?.[key] }));
+        setSource(() => Object.assign(url, { seconds: (key: string) => manifest.seconds?.[key] }));
+        setIsReady(true);
       })
       .catch(() => isLive && setIsReady(true));
     return () => {
