@@ -61,6 +61,8 @@ export type BoardPlayerProps = {
    * question shows its own note under it instead.
    */
   mode?: PlayMode | undefined;
+  /** Drawn as a picture of the board as it stands (a tool's): nothing passing shows on it. */
+  isPicture?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
   onRuntime?: ((runtime: LiveBoard) => void) | undefined;
 };
@@ -91,6 +93,7 @@ export function BoardPlayer({
   jugnu: given,
   mode,
   onRuntime,
+  isPicture = false,
 }: BoardPlayerProps): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
@@ -232,6 +235,7 @@ export function BoardPlayer({
     onRetryAudio: (name) => void runtime.call(name, SAY, {}, Actor.Learner),
     pointed,
     picked: picks,
+    isPicture,
   };
 
   const banner =

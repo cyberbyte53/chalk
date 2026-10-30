@@ -58,7 +58,7 @@ A character, never a voice (`speaker: "aman"`; the narrator when no one is named
 
 ### Lines are part of the board
 
-A line is a node of the board, like a piece: it has an address, and everything that works on a piece works on it (comments and threads, `look`, `changes`, review).
+A line is a node of the board, like a piece: it has an address, and everything that works on a piece works on it (comments and threads, `look`, `changes`, review). The build lists each board's lines in its index beside its pieces, so a comment, `look` and the gone-check resolve a line's address as they do a piece's.
 
 - **A piece's line:** `board#fiveHouses/said`. Its words are the piece's own, or the lesson's (`says`).
 - **A declared line:** `board#finally`. Its moment is written with it **as data**, so every view shows exactly what runs:
@@ -76,7 +76,14 @@ A line is a node of the board, like a piece: it has an address, and everything t
 
 ### Moments are events
 
-Every moment is shown as the event it waits for, written the way events are everywhere (`play` prints them so): `board.started` (as the board opens), `fiveHouses.appears` (a piece shown), `town.walker.arrived · x 4, y 5` (a line's own). One form, worked out in one place (`scriptOf`); no words written beside it that could drift from what runs.
+Every moment is a real event, written the way events are everywhere (`play` prints them so), and a line can be declared on any of them:
+
+- the board's own: `board.started`, `board.said · line title` (a line ended; the opening is said this way, one after another), `board.shown · name fiveHouses`, `board.passed`;
+- a piece's, or a part's inside one: `ask.checked · status correct`, `town.walker.arrived · x 4, y 5`.
+
+One form, worked out in one place (`scriptOf`); no words written beside it that could drift from what runs.
+
+**How a declared line is said:** next. After the line being said, if any, and ahead of the lines waiting; nothing is cut or dropped. (A piece shown is different: the student has moved on, so it cuts what is being said.) A line on the board's own event is placed by the board in the same step, so "after the title" really is straight after it.
 
 ### Its place: in time, and on the board
 
@@ -93,11 +100,11 @@ Every moment is shown as the event it waits for, written the way events are ever
 
 ### Languages
 
-A board has its language; nothing assumes one. The build plays every scene's runs in every language (each line takes its own time in each), and a board that ends differently in one is a failure. Where one language is chosen on purpose, it is named once: agents read and write in `AGENT_LOCALE`; a choice's options are ordered by `ORDER_LOCALE`, so they come in the same order in every language.
+A board has its language; nothing assumes one. The build plays every scene's witness and notes in every language (each line takes its own time in each) and judges each run on its own: a failure in some languages only says which; a note must be the same in every language. Agents read and write in `AGENT_LOCALE`, the one language chosen on purpose. A choice's options are shuffled by the question's name, its words in every language and its options' ids, so the order is the same in every language.
 
 ### Which lines are heard: known by playing
 
-Which lines a board *can* say is known in advance: each is data on the board. Whether and when each *is* said depends on what the student does. The build already plays every board (its witness, each wrong-answer note); it records which lines were heard on those runs, and reports lines heard on no run: a moment that is never true, or a path no run takes (the author says which).
+Which lines a board *can* say is known in advance: each is data on the board. Whether and when each *is* said depends on what the student does. The build already plays every board (its witness, each wrong-answer note); it records which lines were heard on the runs that passed, in each language, and reports lines heard on no run (or in some language only): a moment that is never true, or a path no run takes (the author says which).
 
 ## Order of work
 

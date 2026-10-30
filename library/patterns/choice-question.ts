@@ -1,5 +1,5 @@
 import type { BoardKit, PlacedOf } from "@chalk/author";
-import { Locale, type Localized } from "@chalk/content";
+import type { Localized } from "@chalk/content";
 import { choiceDef } from "@chalk/prop-basics";
 
 /** One option of a multiple-choice question; a wrong one says what it shows the learner missed. */
@@ -37,7 +37,7 @@ export function choiceQuestion(
       ? spec.options
       : settle(
           spec.options,
-          seedOf(`${spec.name ?? "ask"}|${spec.prompt[ORDER_LOCALE]}|${ids.join(",")}`),
+          seedOf(`${spec.name ?? "ask"}|${wordsOf(spec.prompt)}|${ids.join(",")}`),
         );
   const ask = b.prop(
     choiceDef,
@@ -62,13 +62,19 @@ export function choiceQuestion(
   return ask;
 }
 
-/** A stable whole number from a string (FNV-1a), to seed `settle`. */
 /**
- * The language a choice's options are shuffled by: one, so they come in the same order in every
- * language (a student who switches language sees the same layout).
+ * A question's words in every language, in one fixed order: what its options' order is seeded by,
+ * so the order differs from question to question, is the same in every language, and changes only
+ * when the question does.
  */
-export const ORDER_LOCALE: Locale = Locale.En;
+export function wordsOf(prompt: Localized): string {
+  return Object.keys(prompt)
+    .sort()
+    .map((locale) => prompt[locale as keyof Localized])
+    .join("|");
+}
 
+/** A stable whole number from a string (FNV-1a), to seed `settle`. */
 export function seedOf(text: string): number {
   let h = 2166136261;
   for (let i = 0; i < text.length; i++) {

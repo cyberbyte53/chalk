@@ -48,6 +48,8 @@ export type LayoutContext = {
   pointed?: { prop: string; part?: string | undefined } | undefined;
   /** What the student held to ask Jugnu about: they glow until asked. */
   picked?: readonly { prop: string; part?: string | undefined }[];
+  /** Drawn as a picture of the board as it stands (a tool's): nothing passing shows on it. */
+  isPicture?: boolean;
 };
 
 function PropPieceView({
@@ -114,7 +116,9 @@ function PropPieceView({
   );
   const pointed = context.pointed?.prop === piece.name ? context.pointed : undefined;
   // The line being said is about this piece: it glows, as a teacher points at what they say.
-  const isSpoken = "speakingAbout" in runtime && runtime.speakingAbout() === piece.name;
+  // A line about a part inside a piece glows the piece: a piece is what the board draws as one.
+  const about = context.isPicture === true ? undefined : runtime.speakingAbout();
+  const isSpoken = about !== undefined && about.split(".")[0] === piece.name;
   // A part is ringed where the view tagged it (`data-part`); without that, the whole prop glows.
   const ringOf = (part: string | undefined): Box | undefined =>
     part === undefined ? undefined : tagged(box.current, part);

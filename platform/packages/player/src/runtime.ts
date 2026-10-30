@@ -980,6 +980,11 @@ export class BoardRuntime {
     return undefined;
   }
 
+  /** What the line being said now is about: today's boards say no lines of their own. */
+  speakingAbout(): string | undefined {
+    return undefined;
+  }
+
   /** True while some question on the board isn't answered correctly yet. */
   hasOpenQuestion(): boolean {
     return [...this.pieces.values()].some(

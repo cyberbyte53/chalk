@@ -31,7 +31,7 @@ import type { PropModule } from "./prop-module";
 import { plainText } from "./rich-text";
 import { richSpeech } from "./rich-text-speech";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
-import { ownLine } from "./script";
+import { aboutOf, ownLine } from "./script";
 import { takes } from "./snapshot";
 
 /**
@@ -91,15 +91,14 @@ export class SceneRuntime {
             const seconds =
               services.lineSeconds?.(name, line) ??
               estimatedSeconds(plainText(words[locale] ?? ""));
-            const lineOf = model.lines[name];
-            const isPiece = propPieces(board.root).some((p) => p.name === name);
+            const about = aboutOf(
+              model,
+              name,
+              propPieces(board.root).some((p) => p.name === name),
+            );
             this.heardLines.push({
               line: name,
-              ...(lineOf?.about !== undefined
-                ? { about: lineOf.about }
-                : isPiece
-                  ? { about: name }
-                  : {}),
+              ...(about === undefined ? {} : { about }),
               speaker: line.speaker ?? NARRATOR,
               words: spokenWords(words[locale] ?? "", locale),
               at: this.core.now,
@@ -173,12 +172,23 @@ export class SceneRuntime {
     return this.heardLines;
   }
 
-  /** The piece the line being said now is about (it glows, as a teacher points), if any. */
+  /**
+   * What the line being said now is about (a piece, or a part in one: "town.walker"): it glows, as
+   * a teacher points. Undefined when nothing is said, or the line is about nothing on the board.
+   */
   speakingAbout(): string | undefined {
     void this.version.value;
-    const last = this.heardLines.at(-1);
-    if (last === undefined || last.cutAt !== undefined) return undefined;
-    return this.core.now < last.at + last.seconds ? last.about?.split(".")[0] : undefined;
+    const model = this.board.model;
+    if (model === undefined) return undefined;
+    // What the board is saying is the scene's own: the first of its `saying`.
+    const saying = (this.core.read("") as { saying?: readonly string[] }).saying ?? [];
+    const line = saying[0];
+    if (line === undefined) return undefined;
+    return aboutOf(
+      model,
+      line,
+      propPieces(this.board.root).some((p) => p.name === line),
+    );
   }
 
   // ---- reading ----

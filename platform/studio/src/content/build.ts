@@ -26,6 +26,7 @@ import {
 } from "@chalk/author";
 import { hashOf, idOf, rowKey, versionOf } from "@chalk/author/id";
 import {
+  AGENT_LOCALE,
   type BankRef,
   type Board,
   type BuildIndex,
@@ -39,6 +40,8 @@ import {
   type BuiltPage,
   type BuiltQuestion,
   Kind,
+  LOCALES,
+  type Locale,
   type Ref,
   type Script,
   type Source,
@@ -145,6 +148,13 @@ export type BoardReach = {
       calls?: readonly string[];
     }
   >;
+  /**
+   * Each line it says (platform/docs/sound.md), by its name: a piece's line is its piece's name
+   * (addressed `board#piece/said`), a line of its own its own (`board#name`). Its piece, what it is
+   * about, who says it, and its moment as the event it waits for. Lines are part of the board, so
+   * comments on them, `look` at them and gone-checks resolve them as they do pieces.
+   */
+  lines?: Record<string, { piece?: string; about?: string; speaker: string; moment: string }>;
 };
 
 /** Where one built board's parts were written, and each placed prop's type. */
@@ -252,6 +262,7 @@ function reachOf(
   module: string,
   more: { stack?: readonly string[]; rows?: string },
   defs: Defs,
+  modules: Readonly<Record<string, PropModule>>,
 ): BoardReach {
   const placed = new Map(propPieces(board.root).map((p) => [p.name, p]));
   const uses = usesOf(board);
@@ -270,11 +281,20 @@ function reachOf(
       ...(calls.length > 0 ? { calls } : {}),
     };
   }
+  const lines: NonNullable<BoardReach["lines"]> = {};
+  for (const l of scriptOf(board, (type) => modules[type]))
+    lines[l.line] = {
+      ...(l.piece === undefined ? {} : { piece: l.piece }),
+      ...(l.about === undefined ? {} : { about: l.about }),
+      speaker: l.speaker,
+      moment: l.moment,
+    };
   return {
     module: `content/${module}`,
     ...(more.stack === undefined || more.stack.length === 0 ? {} : { stack: more.stack }),
     ...(more.rows === undefined ? {} : { rows: more.rows }),
     pieces,
+    ...(Object.keys(lines).length > 0 ? { lines } : {}),
   };
 }
 
@@ -520,9 +540,11 @@ async function checkBoard(
   if (board.model === undefined)
     for (const p of validateBoard(board, c.defs)) report(c, where, `${p.where}: ${p.message}`);
   if (c.problems.length > before) return false;
-  // Which of the board's lines its runs are heard to say: a line on no run is worth a look.
-  const heard = new Set<string>();
-  const onHeard = (line: string) => void heard.add(line);
+  // Which of the board's lines its passing runs are heard to say, in each language: a line no run
+  // says (in some language) is worth a look.
+  const heard = new Map<Locale, Set<string>>();
+  const onHeard = (line: string, locale: Locale) =>
+    void heard.set(locale, (heard.get(locale) ?? new Set()).add(line));
   for (const failure of await checkWitness(board, c.modules, built.witness, onHeard))
     report(c, where, failure);
   for (const note of built.noteChecks) {
@@ -530,13 +552,14 @@ async function checkBoard(
       report(c, where, `note "${note.feedback.en}": ${failure}`);
     }
   }
-  const unheard = scriptOf(board, (type) => c.modules[type])
-    .map((l) => l.line)
-    .filter((l) => !heard.has(l));
-  if (unheard.length > 0)
-    c.notices.push(
-      `${where}: no run says ${unheard.join(", ")} (a moment never true, or a path no witness or note takes)`,
-    );
+  if (board.model !== undefined)
+    for (const { line } of scriptOf(board, (type) => c.modules[type])) {
+      const missing = LOCALES.filter((l) => heard.get(l)?.has(line) !== true);
+      if (missing.length > 0)
+        c.notices.push(
+          `${where}: no passing run says ${line}${missing.length < LOCALES.length ? ` in ${missing.join(", ")}` : ""} (a moment never true, or a path no witness or note takes)`,
+        );
+    }
   return c.problems.length === before;
 }
 
@@ -622,6 +645,7 @@ async function buildPages(
       file,
       { ...(p.stack === undefined ? {} : { stack: p.stack }) },
       c.defs,
+      c.modules,
     );
     refs.push(emit(c, item, builtPageSchema));
   }
@@ -727,6 +751,7 @@ async function buildFamily(
         rows: `content/${paramsFile}:${lineRange(rowLine(c, paramsFile, row), rowLine(c, paramsFile, row + 1, true) - 1)}`,
       },
       c.defs,
+      c.modules,
     );
     const ref = emit(c, item, builtQuestionSchema);
     banked.push({

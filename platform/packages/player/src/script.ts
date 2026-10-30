@@ -43,6 +43,18 @@ function momentOf(line: SceneLine): string {
     .join(" · ");
 }
 
+/**
+ * What a line is about (it glows while the line plays): what the lesson says it is about, else, for
+ * a piece's line, that piece. The one place this is decided: the script and the player both ask.
+ */
+export function aboutOf(
+  model: NonNullable<Board["model"]>,
+  line: string,
+  isPiece: boolean,
+): string | undefined {
+  return model.lines[line]?.about ?? (isPiece ? line : undefined);
+}
+
 /** The words a piece says of itself, as it is now (its sound view; nothing for one without). */
 export function ownLine(
   module: PropModule | undefined,
@@ -64,9 +76,15 @@ export function scriptOf(
   if (model === undefined) return [];
   const core = new Core(model.scene, model.given);
   const out: ScriptLine[] = [];
+  // The opening is said in order: the first when the board starts, each next when the one before is
+  // said (the board tells `said`). A piece shown later is said when the board tells `shown`.
+  let before: string | undefined;
   for (const piece of propPieces(board.root)) {
     const given = model.lines[piece.name];
     const own = ownLine(lookup(piece.prop), core.read(piece.name));
+    const after = before;
+    // A piece with nothing to say is still said (at once): the next waits for it all the same.
+    if (piece.isHidden !== true) before = piece.name;
     if (own === undefined && given?.says === undefined) continue;
     out.push({
       line: piece.name,
@@ -75,8 +93,13 @@ export function scriptOf(
       ...(own === undefined ? {} : { own }),
       ...(given?.says === undefined ? {} : { says: given.says }),
       cue: piece.isHidden === true ? "appears" : "opening",
-      moment: piece.isHidden === true ? `${piece.name}.appears` : "board.started",
-      about: piece.name,
+      moment:
+        piece.isHidden === true
+          ? `board.shown · name ${piece.name}`
+          : after === undefined
+            ? "board.started"
+            : `board.said · line ${after}`,
+      about: aboutOf(model, piece.name, true) ?? piece.name,
     });
   }
   for (const name of model.freeLines) {

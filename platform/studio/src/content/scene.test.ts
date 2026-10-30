@@ -40,10 +40,12 @@ describe("a scene, built and checked like any board", () => {
   });
 
   it("a wrong answer gets its note, and no Continue", async () => {
-    const played = await play(board.board, propLibrary, [
-      tap("ask", "select", { option: "house" }),
-      tap("ask", "check"),
-    ]);
+    const played = await play(
+      board.board,
+      propLibrary,
+      [tap("ask", "select", { option: "house" }), tap("ask", "check")],
+      "en",
+    );
     expect(played.failures).toEqual([]);
     expect(played.view("ask").feedback).toEqual({ en: "Along first.", hi: "पहले आगे।" });
     expect(played.view("board").isPassed).toBe(false);
@@ -75,10 +77,12 @@ describe("a scene, built and checked like any board", () => {
   });
 
   it("lines are said in order and waited for: the title, the question, then what is shown", async () => {
-    const played = await play(board.board, propLibrary, [
-      tap("ask", "select", { option: "street" }),
-      tap("ask", "check"),
-    ]);
+    const played = await play(
+      board.board,
+      propLibrary,
+      [tap("ask", "select", { option: "street" }), tap("ask", "check")],
+      "hi",
+    );
     expect(played.view("board").hidden).toEqual([]);
     expect(played.view("board").saying).toEqual([]);
   });
@@ -148,6 +152,75 @@ describe("a scene, built and checked like any board", () => {
     expect(
       scriptOf(moments.board, (type) => propLibrary[type]).map((l) => `${l.line}: ${l.cue}`),
     ).toEqual(["ask: opening", "well: moment", "never: moment"]);
+  });
+
+  it("lines wait for real events, the board's own too, and the script shows each as one", async () => {
+    const events = scene({
+      pieces: {
+        title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
+        plane: place(sceneCoordinatePlane),
+        ask,
+        hint: hidden(place(sceneText, { text: t("Look along", "आगे देखो") })),
+      },
+      lines: {
+        afterTitle: line(t("Now this.", "अब यह।"), {
+          when: "board.said",
+          where: { line: "title" },
+        }),
+        afterPlane: line(t("See the plane.", "तल देखो।"), {
+          when: "board.said",
+          where: { line: "plane" },
+        }),
+        well: line(t("Well done!", "शाबाश!"), {
+          speaker: "riya",
+          when: "ask.checked",
+          where: { status: "correct" },
+          about: "ask",
+        }),
+      },
+      witness: [tap("ask", "select", { option: "street" }), tap("ask", "check")],
+    }).build("events");
+    expect(
+      scriptOf(events.board, (type) => propLibrary[type]).map((l) => `${l.line}: ${l.moment}`),
+    ).toEqual([
+      "title: board.started",
+      "ask: board.said · line plane",
+      "hint: board.shown · name hint",
+      "afterTitle: board.said · line title",
+      "afterPlane: board.said · line plane",
+      "well: ask.checked · status correct",
+    ]);
+    // Heard in every language, on the passing run.
+    const heard: string[] = [];
+    expect(
+      await checkWitness(events.board, propLibrary, events.witness, (l, locale) =>
+        heard.push(`${locale} ${l}`),
+      ),
+    ).toEqual([]);
+    // A line on the board's own event goes in its speech, ahead of what waits: nothing is cut.
+    expect(heard.filter((h) => h.startsWith("en ")).map((h) => h.slice(3))).toEqual([
+      "title",
+      "afterTitle",
+      "afterPlane",
+      "ask",
+      "well",
+    ]);
+    for (const locale of ["en", "hi"])
+      for (const l of ["title", "afterTitle", "afterPlane", "well"])
+        expect(heard).toContain(`${locale} ${l}`);
+  });
+
+  it("a line about something not on the board is refused; a part inside a piece is fine", () => {
+    expect(() =>
+      scene({ pieces: { ask }, lines: { x: line(t("x", "x"), { about: "nowhere" }) } }).build(
+        "bad",
+      ),
+    ).toThrow(/about "nowhere" isn't a piece here/);
+    expect(() =>
+      scene({ pieces: { ask }, lines: { x: line(t("x", "x"), { about: "ask.nothing" }) } }).build(
+        "bad",
+      ),
+    ).toThrow(/about "ask.nothing"/);
   });
 
   it("a moment that isn't a signal here is refused when the board is built", () => {

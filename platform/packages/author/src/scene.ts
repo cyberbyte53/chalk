@@ -31,9 +31,14 @@ import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
  * - Continue (`continue`) tells `continued`, and the player goes on.
  */
 
-/** The signal `path` ("town.walker.arrived") names: of a piece, or of a part inside one. */
+/**
+ * The signal `path` names: the board's own ("board.said"), a piece's ("ask.checked"), or one of a
+ * part inside a piece ("town.walker.arrived").
+ */
 function signalAt(pieces: Pieces, path: string): SignalDef | undefined {
   const names = path.split(".");
+  if (names[0] === BOARD_EVENTS && names.length === 2)
+    return (sceneSignals as Readonly<Record<string, SignalDef>>)[names[1] ?? ""];
   const signal = names.pop();
   const [first, ...rest] = names;
   let def: AnyProp | undefined =
@@ -42,12 +47,31 @@ function signalAt(pieces: Pieces, path: string): SignalDef | undefined {
   return signal === undefined ? undefined : def?.signals?.[signal];
 }
 
+/** Whether `path` names a piece ("town") or a part inside one ("town.walker"). */
+function isPartAt(pieces: Pieces, path: string): boolean {
+  const [first, ...rest] = path.split(".");
+  let def: AnyProp | undefined =
+    first === undefined || !Object.hasOwn(pieces, first) ? undefined : pieces[first]?.def;
+  for (const part of rest) def = def?.children?.[part];
+  return def !== undefined;
+}
+
 /** A signal's fields, each with its kind. */
 const shapeOf = (signal: SignalDef): Readonly<Record<string, ZodTypeAny>> =>
   (signal.payload as unknown as { shape?: Record<string, ZodTypeAny> }).shape ?? {};
 
-/** Whether a told value is the one `where` asks for (plain values: numbers, words, points). */
-const sameValue = (a: unknown, b: unknown): boolean => JSON.stringify(a) === JSON.stringify(b);
+/** Whether a told value is the one `where` asks for: the same value, field by field, in any order. */
+function sameValue(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  const ka = Object.keys(a);
+  const kb = Object.keys(b);
+  return (
+    ka.length === kb.length &&
+    ka.every((k) => sameValue((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]))
+  );
+}
 
 /** What a piece starts with: some of its variables, and of its children's, by name. */
 export type GivenFor<D> = Partial<VarsOf<D>> & {
@@ -142,6 +166,11 @@ const sceneActions = {
   hide: action({ name: z.string().min(1) }),
   /** Says a line now (a piece's, or a narration line), cutting the one being said. */
   say: action({ line: z.string().min(1) }),
+  /**
+   * Says a line next: after the line being said (if any), ahead of those waiting. How a line
+   * declared on a moment is said: the board's speech goes on around it, nothing is dropped.
+   */
+  sayNext: action({ line: z.string().min(1) }),
   /** Stops the line being said, and drops the lines waiting. */
   hush: action(),
   /** A line has ended (the voice bus): the next waiting is said, and what waits for it runs. */
@@ -150,7 +179,18 @@ const sceneActions = {
   continue: action({}, { from: "screen" }),
 };
 type SceneActions = typeof sceneActions;
-const sceneSignals = { started: signal(), passed: signal(), continued: signal() };
+/**
+ * What the board itself tells: it opened, a piece was shown, a line was said (it ended), it passed,
+ * Continue. Real events, written `board.<signal>`: lines can be declared on them, and the script
+ * shows every moment as one of them.
+ */
+const sceneSignals = {
+  started: signal(),
+  shown: signal({ name: z.string().min(1) }),
+  said: signal({ line: z.string().min(1) }),
+  passed: signal(),
+  continued: signal(),
+};
 type SceneSignals = typeof sceneSignals;
 
 /** What a scene's rules read: its own variables and every piece by name. */
@@ -229,6 +269,8 @@ export type SceneUse = {
 };
 
 const SCENE = Symbol("scene");
+/** How the board's own events are written: `board.said`. */
+const BOARD_EVENTS = "board";
 /** Seconds of quiet between one line and the next, as a reader takes a breath between paragraphs. */
 const BETWEEN_LINES = 0.7;
 /** A scene, ready to be built as a board (by `page` or a family). */
@@ -281,8 +323,10 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
           `Board ${name}, line ${line}: where ${JSON.stringify(free.where)} isn't what ${free.when} carries (${Object.keys(shape).join(", ")})`,
         );
     }
-    if (free.about !== undefined && !Object.hasOwn(spec.pieces, free.about.split(".")[0] ?? ""))
-      throw new Error(`Board ${name}, line ${line}: about "${free.about}" isn't a piece here`);
+    if (free.about !== undefined && !isPartAt(spec.pieces, free.about))
+      throw new Error(
+        `Board ${name}, line ${line}: about "${free.about}" isn't a piece here, or a part inside one ("town.walker")`,
+      );
   }
   const questions = names.filter((n) => (defs[n] as AnyProp).role === PropRole.Question);
   const isHidden = (n: string) => (spec.pieces[n] as Placed).isHidden;
@@ -290,11 +334,12 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   type Me = SceneVars & Readonly<Record<string, Readonly<Record<string, unknown>>>>;
   type T = {
     set: (patch: Partial<SceneVars>) => Out;
-    tell: Record<keyof SceneSignals, () => Out>;
+    tell: Record<keyof SceneSignals, (payload?: object) => Out>;
     self: {
       pass: () => Out;
       show: (p: { name: string }) => Out;
       lineEnded: (p: { line: string }) => Out;
+      sayNext: (p: { line: string }) => Out;
     };
     to: Record<string, Record<string, (payload?: object) => Out>>;
     say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
@@ -308,14 +353,21 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
    * with a breath between.
    */
   const sayNow = (t: T, line: string): Out => t.say(line, { atEnd: [t.self.lineEnded({ line })] });
-  const sayNext = (t: T, line: string): Out =>
+  const sayAfterBreath = (t: T, line: string): Out =>
     t.say(line, { atEnd: [t.self.lineEnded({ line })], after: BETWEEN_LINES });
 
-  // Every board's own rules (its questions pass it, its lines are said at their moments), then the
-  // lesson's on the same signal.
-  const own: Record<string, ((me: Me, payload: unknown, t: T) => Out[])[]> = {};
-  const addOwn = (key: string, rule: (me: Me, payload: unknown, t: T) => Out[]) => {
+  // The board's own rules run first, the lesson's next, and the lines declared on a moment last:
+  // a line written for a moment is what is heard at it (a piece the lesson shows then doesn't cut it).
+  type OwnRule = (me: Me, payload: unknown, t: T) => Out[];
+  const own: Record<string, OwnRule[]> = {};
+  const addOwn = (key: string, rule: OwnRule) => {
     own[key] = [...(own[key] ?? []), rule];
+  };
+  /** The lines declared on a moment that are due when it is told with this payload. */
+  type LineRule = (me: Me, payload: unknown) => string[];
+  const linesAt: Record<string, LineRule[]> = {};
+  const addLine = (key: string, rule: LineRule) => {
+    linesAt[key] = [...(linesAt[key] ?? []), rule];
   };
   if (spec.passBy !== "rules")
     for (const q of questions)
@@ -326,12 +378,12 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       );
   for (const [line, free] of Object.entries(freeLines))
     if (free.when !== undefined)
-      addOwn(free.when, (me, payload, t) => {
+      addLine(free.when, (me, payload) => {
         const told = payload as Readonly<Record<string, unknown>>;
         const isThis =
           Object.entries(free.where ?? {}).every(([k, v]) => sameValue(told[k], v)) &&
           (free.if === undefined || free.if(told, me));
-        return isThis ? [t.set({ saying: [line] }), sayNow(t, line)] : [];
+        return isThis ? [line] : [];
       });
   const uses = spec.uses ?? [];
   const rulesFrom = [spec.hear ?? {}, ...uses.map((u) => u.hear ?? {})] as Record<
@@ -339,16 +391,32 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     AnyFn | undefined
   >[];
   const hear: Record<string, AnyFn> = {};
-  const keys = new Set([...Object.keys(own), ...rulesFrom.flatMap((r) => Object.keys(r))]);
-  for (const key of keys) {
-    const mine = own[key];
+  // The board's own events are told by the scene itself: lines declared on them run where it tells
+  // them (below); the rest are its pieces' signals, heard.
+  const isBoardEvent = (key: string) => key.startsWith(`${BOARD_EVENTS}.`);
+  const dueAt = (key: string, me: Me, payload: unknown): string[] =>
+    (linesAt[key] ?? []).flatMap((rule) => rule(me, payload));
+  // The lines due at one of the board's own events: the board places them in what it says itself.
+  const dueAtBoard = (event: keyof typeof sceneSignals, me: unknown, payload: object) =>
+    dueAt(`${BOARD_EVENTS}.${event}`, me as Me, payload);
+  const tell = (t: unknown, event: keyof typeof sceneSignals, payload: object): Out =>
+    ((t as T).tell[event] as (p?: object) => Out)(payload);
+  const keys = new Set(
+    [
+      ...Object.keys(own),
+      ...Object.keys(linesAt),
+      ...rulesFrom.flatMap((r) => Object.keys(r)),
+    ].filter((k) => !isBoardEvent(k)),
+  );
+  for (const key of keys)
     hear[key] = (me: Me, payload: unknown, t: T) => [
-      ...(mine ?? []).flatMap((rule) => rule(me, payload, t)),
+      ...(own[key] ?? []).flatMap((rule) => rule(me, payload, t)),
       ...rulesFrom.flatMap((r) =>
         list(r[key]?.(me as never, payload as never, t as never) as Outs),
       ),
+      // A piece's signal: its due lines are said next (after the line being said).
+      ...dueAt(key, me, payload).map((line) => (t as T).self.sayNext({ line })),
     ];
-  }
   const give: Record<string, Record<string, unknown>> = {};
   for (const one of [spec.give ?? {}, ...uses.map((u) => u.give ?? {})])
     for (const [piece, needs] of Object.entries(one as Record<string, Record<string, unknown>>))
@@ -369,10 +437,11 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         const shown = names.filter((n) => !me.hidden.includes(n));
         const atOnce = spec.passBy !== "rules" && questions.length === 0;
         const tt = t as unknown as T;
+        const saying = [...dueAtBoard("started", me, {}), ...shown];
         return [
-          t.tell.started(),
-          t.set({ saying: shown }),
-          ...(shown[0] === undefined ? [] : [sayNow(tt, shown[0])]),
+          tell(t, "started", {}),
+          t.set({ saying }),
+          ...(saying[0] === undefined ? [] : [sayNow(tt, saying[0])]),
           ...(atOnce ? [t.self.pass()] : []),
         ];
       },
@@ -380,8 +449,12 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       // cut, and what was waiting to be said is dropped.
       show: (me, { name: piece }, t) =>
         me.hidden.includes(piece) && [
-          t.set({ hidden: me.hidden.filter((n) => n !== piece), saying: [piece] }),
+          t.set({
+            hidden: me.hidden.filter((n) => n !== piece),
+            saying: [piece, ...dueAtBoard("shown", me, { name: piece })],
+          }),
           sayNow(t as unknown as T, piece),
+          tell(t, "shown", { name: piece }),
         ],
       say: (_, { line }, t) => {
         if (!Object.hasOwn(spec.pieces, line) && !Object.hasOwn(freeLines, line))
@@ -389,13 +462,27 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         return [t.set({ saying: [line] }), sayNow(t as unknown as T, line)];
       },
       lineEnded: (me, { line }, t) => {
-        const rest = me.saying[0] === line ? me.saying.slice(1) : me.saying;
+        // The lines due now that this one is said go first, ahead of those waiting.
+        const rest = [
+          ...dueAtBoard("said", me, { line }),
+          ...(me.saying[0] === line ? me.saying.slice(1) : me.saying),
+        ];
         const next = rest[0];
         return [
           t.set({ saying: rest }),
-          ...(next === undefined ? [] : [sayNext(t as unknown as T, next)]),
+          ...(next === undefined ? [] : [sayAfterBreath(t as unknown as T, next)]),
+          tell(t, "said", { line }),
           ...list(onSaid[line]?.(me as never, t as never) as Outs),
         ];
+      },
+      sayNext: (me, { line }, t) => {
+        if (!Object.hasOwn(freeLines, line))
+          throw new Error(`Board ${name}: no line "${line}" of its own`);
+        const [head, ...waiting] = me.saying;
+        // Nothing is being said: it is said now. Otherwise it waits for the line being said.
+        return head === undefined
+          ? [t.set({ saying: [line] }), sayNow(t as unknown as T, line)]
+          : t.set({ saying: [head, line, ...waiting] });
       },
       // A piece hidden is no longer heard: its line is dropped, and cut if it is being said.
       hide: (me, { name: piece }, t) => {
@@ -414,7 +501,12 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         ];
       },
       hush: (_, __, t) => [t.set({ saying: [] }), (t as unknown as T).hush()],
-      pass: (me, _, t) => !me.isPassed && [t.set({ isPassed: true }), t.tell.passed()],
+      pass: (me, _, t) =>
+        !me.isPassed && [
+          t.set({ isPassed: true }),
+          tell(t, "passed", {}),
+          ...dueAtBoard("passed", me, {}).map((line) => t.self.sayNext({ line })),
+        ],
       continue: (me, _, t) => me.isPassed && t.tell.continued(),
     },
     hear: hear as never,

@@ -6,6 +6,8 @@ import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
 import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
+import type { ChapterScript, ScriptEntry } from "../voice/make";
+import type { Said } from "../voice/said";
 import {
   type Drawn,
   type Heard,
@@ -277,21 +279,8 @@ export function boardText(
   return out.join("\n");
 }
 
-/** What is said for a line in one language (voice/said.ts), as script.json keeps it. */
-type ScriptSaid = { words: string; from: string } | { needs: string; suggested?: string };
-type ScriptLine = {
-  line: string;
-  speaker: string;
-  /** When it is heard, as the event it waits for. */
-  moment: string;
-  said: Readonly<Record<string, ScriptSaid | undefined>>;
-};
-
-/**
- * A board's script, as `pnpm voice` made it: each line in order, who says it, and what the voice
- * says (or what it still needs, with the suggested words). Nothing when the chapter has no voice yet.
- */
-export function scriptText(root: string, board: string): string[] {
+/** A board's script as `pnpm voice` made it (its chapter's script.json): nothing yet without one. */
+function scriptEntries(root: string, board: string): readonly ScriptEntry[] {
   const [book, chapter] = board.split("/");
   const file = join(
     root,
@@ -305,23 +294,63 @@ export function scriptText(root: string, board: string): string[] {
     "script.json",
   );
   if (!existsSync(file)) return [];
-  const script = JSON.parse(readFileSync(file, "utf8")) as {
-    boards: { path: string; lines: ScriptLine[] }[];
-  };
-  const lines = script.boards.find((b) => b.path === board)?.lines ?? [];
-  if (lines.length === 0) return [];
-  const said = (s: ScriptSaid | undefined) =>
+  const script = JSON.parse(readFileSync(file, "utf8")) as ChapterScript;
+  return script.boards.find((b) => b.path === board)?.lines ?? [];
+}
+
+/** One line in words: its moment, who says it, and what is said in each language (or is missing). */
+function entryLines(e: ScriptEntry): string[] {
+  const said = (s: Said | undefined) =>
     s === undefined
       ? "—"
       : "words" in s
         ? `"${s.words}" (${s.from})`
         : `NEEDS its spoken words: ${s.needs}${s.suggested === undefined ? "" : `; suggested "${s.suggested}"`}`;
   return [
-    "script (what the voice says, in order):",
-    ...lines.flatMap((l) => [
-      `  ${l.moment}: ${l.line} · ${l.speaker}`,
-      ...Object.entries(l.said).map(([locale, s]) => `    ${locale}: ${said(s)}`),
-    ]),
+    `${e.moment}: ${e.line} · ${e.speaker}`,
+    ...Object.entries(e.said).map(([locale, s]) => `  ${locale}: ${said(s)}`),
+  ];
+}
+
+/** A board's script: each line in order, its moment, who says it, and what the voice says. */
+export function scriptText(root: string, board: string): string[] {
+  const entries = scriptEntries(root, board);
+  return entries.length === 0
+    ? []
+    : [
+        "script (what the voice says, in order):",
+        ...entries.flatMap((e) => entryLines(e).map((l) => `  ${l}`)),
+      ];
+}
+
+/**
+ * The line an address names on a board, if it names one: a line of its own by its name
+ * (`board#finally`), a piece's as `board#fiveHouses/said`.
+ */
+function lineAt(
+  root: string,
+  board: string,
+  address: string,
+): { name: string; about?: string } | undefined {
+  const lines = readReach(root).boards[board]?.lines;
+  const [first, part, ...more] = address.split("/");
+  if (lines === undefined || first === undefined || more.length > 0) return undefined;
+  if (part !== undefined && part !== "said") return undefined;
+  const entry = lines[first];
+  // A piece's own name is the piece; its line is "<piece>/said". A line of its own has no piece.
+  if (entry === undefined || (entry.piece !== undefined && part !== "said")) return undefined;
+  return { name: first, ...(entry.about === undefined ? {} : { about: entry.about }) };
+}
+
+/** One line of a board, everything about it. */
+function lineText(root: string, board: string, name: string): string[] {
+  const reach = readReach(root).boards[board]?.lines?.[name];
+  const entry = scriptEntries(root, board).find((e) => e.line === name);
+  return [
+    `${shownAddress(board, reach?.piece === undefined ? name : `${name}/said`)}   line`,
+    ...(entry !== undefined
+      ? entryLines(entry)
+      : [`${reach?.moment ?? "?"}: ${name} · ${reach?.speaker ?? "?"} (no clips yet: pnpm voice)`]),
   ];
 }
 
@@ -473,6 +502,25 @@ export async function look(
   where: Where,
   lane: string,
 ): Promise<Answer> {
+  // A line is part of the board: its answer is the line (its moment, who says it, what is said in
+  // each language, its clips), with a picture of what it is about.
+  const line = target.kind === "piece" ? lineAt(root, target.board, target.address) : undefined;
+  if (line !== undefined && target.kind === "piece") {
+    const about = line.about?.split(".")[0];
+    const shown = await look(
+      root,
+      about === undefined
+        ? { kind: "board", board: target.board }
+        : { kind: "piece", board: target.board, address: about },
+      a,
+      where,
+      lane,
+    );
+    return {
+      ...shown,
+      text: [...lineText(root, target.board, line.name), "", shown.text].join("\n"),
+    };
+  }
   const versions = versionsOf(a, false);
   if (a.continue === true && versions.length > 1)
     throw new Error("continue looks at the board as you left it: one language and one width.");

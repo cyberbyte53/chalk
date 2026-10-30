@@ -622,6 +622,7 @@ export function PreviewBoard({
               locale={locale}
               record={bus.record}
               audio={voice.source}
+              isPicture={isShot}
               onPass={() => {
                 const w = window as Window & { __chalkPassed?: string[] };
                 w.__chalkPassed ??= [];

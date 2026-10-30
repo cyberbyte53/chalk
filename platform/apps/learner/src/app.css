@@ -2235,7 +2235,3 @@ body.is-selecting .is-pick-target {
   color: var(--color-on-surface-variant);
   cursor: default;
 }
-/* A tool's picture is the board as it stands, not a line in passing. */
-.is-shot .piece-prop.is-spoken {
-  box-shadow: none;
-}
