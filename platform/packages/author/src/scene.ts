@@ -158,6 +158,8 @@ export type SceneUse = {
 };
 
 const SCENE = Symbol("scene");
+/** Seconds of quiet between one line and the next, as a reader takes a breath between paragraphs. */
+const BETWEEN_LINES = 0.7;
 /** A scene, ready to be built as a board (by `page` or a family). */
 export type Scene = { readonly [SCENE]: true; readonly build: (name: string) => BuiltBoard };
 
@@ -203,7 +205,8 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
     const first = next[0] as string;
     return [t.set({ saying }), ...(me.saying.length === 0 ? [askSay(t, first)] : [])];
   };
-  const askSay = (t: T, piece: string): Out => (t.to[piece]?.say as () => Out)();
+  const askSay = (t: T, piece: string, after?: number): Out =>
+    (t.to[piece]?.say as (p: { after?: number }) => Out)(after === undefined ? {} : { after });
 
   // Every board's own rules, then the lesson's on the same signal.
   const own: Record<string, (me: Me, payload: unknown, t: T) => Out[]> = {};
@@ -211,7 +214,11 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
     own[`${piece}.said`] = (me, _, t) => {
       const rest = me.saying.slice(1);
       const next = rest[0];
-      return [t.set({ saying: rest }), ...(next === undefined ? [] : [askSay(t, next)])];
+      // A breath between one paragraph and the next.
+      return [
+        t.set({ saying: rest }),
+        ...(next === undefined ? [] : [askSay(t, next, BETWEEN_LINES)]),
+      ];
     };
   if (spec.passBy !== "rules")
     for (const q of questions)

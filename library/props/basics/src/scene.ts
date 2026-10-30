@@ -18,7 +18,10 @@ import { TextStyle } from "./text";
  * them. Each says its line when asked (`say`) and tells `said` when the line ends.
  */
 
-const say = action({}, { describe: "Read it aloud (the narrator)" });
+const say = action(
+  { after: z.number().min(0).max(5).optional() },
+  { describe: "Read it aloud (the narrator), after a breath of `after` seconds if given" },
+);
 /** Stop saying it (another line has come): its `said` never comes. */
 const hush = action({}, { describe: "Stop reading it aloud" });
 /** Words a lesson hasn't given yet (it always gives its own). */
@@ -44,7 +47,10 @@ export const sceneText = prop({
   start: { text: UNSET, speak: null, style: TextStyle.Body, color: null },
   actions: { say, hush },
   signals: { said },
-  on: { say: (_, __, t) => t.speak(), hush: (_, __, t) => t.stop() },
+  on: {
+    say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
+    hush: (_, __, t) => t.stop(),
+  },
   speech: (me) => ({ say: me.text, ...(me.speak === null ? {} : { speak: me.speak }) }),
   summary: (me) => `words: ${me.text.en}`,
 });
@@ -105,7 +111,7 @@ export const sceneGoal = prop({
     retry: (me, _, t) =>
       me.status === AnswerStatus.Wrong && t.set({ status: AnswerStatus.Open, feedback: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
-    say: (_, __, t) => t.speak(),
+    say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
     hush: (_, __, t) => t.stop(),
   },
   speech: (me) => ({ say: me.prompt, ...(me.speak === null ? {} : { speak: me.speak }) }),
@@ -182,7 +188,7 @@ export const sceneChoice = prop({
       me.status === AnswerStatus.Wrong &&
       t.set({ status: AnswerStatus.Open, feedback: null, selected: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
-    say: (_, __, t) => t.speak(),
+    say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
     hush: (_, __, t) => t.stop(),
   },
   speech: (me) => ({ say: me.prompt, ...(me.speak === null ? {} : { speak: me.speak }) }),

@@ -19,7 +19,7 @@ import { type Picked, isSamePick, useHoldToAsk } from "./ask-about";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { type JugnuLink, JugnuPanel } from "./jugnu-panel";
 import { Layout, type LayoutContext } from "./layout";
-import { type AudioSource, type SpokenProp, useNarrator } from "./narration";
+import { type AudioSource, type SpokenProp, isMuted, setMuted, useNarrator } from "./narration";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
@@ -316,6 +316,24 @@ export function BoardPlayer({
             <button type="button" class="back" aria-label={t(locale, "back")} onClick={onBack}>
               <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
                 <path d="M11 3 L5 9 L11 15" />
+              </svg>
+            </button>
+          )}
+          {audio !== undefined && (
+            <button
+              type="button"
+              class="back mute"
+              aria-label={t(locale, isMuted.value ? "unmute" : "mute")}
+              aria-pressed={isMuted.value}
+              onClick={() => setMuted(!isMuted.value)}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path class="speaker" d="M3 8 H6 L10 4.5 V15.5 L6 12 H3 Z" />
+                {isMuted.value ? (
+                  <path d="M13 7.5 L17.5 12 M17.5 7.5 L13 12" />
+                ) : (
+                  <path d="M13 7 Q15 10 13 13 M15.5 5 Q19 10 15.5 15" />
+                )}
               </svg>
             </button>
           )}

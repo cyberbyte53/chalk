@@ -46,6 +46,10 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.board-footer .mute .speaker {
+  fill: currentColor;
+  stroke-width: 1.6;
+}
 .board-footer .back:active {
   transform: translateY(var(--shape-press));
   box-shadow: none;

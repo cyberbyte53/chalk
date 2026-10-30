@@ -1,6 +1,30 @@
 import { type Locale, audioKey } from "@chalk/content";
 import { segment } from "@chalk/prop";
+import { signal } from "@preact/signals";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+
+const MUTED_KEY = "chalk.isMuted";
+const remembered = (): boolean => {
+  try {
+    return localStorage.getItem(MUTED_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Whether the voice is off, for every board until the learner turns it on again (kept on this
+ * device). Muted, lines aren't played, but the board keeps its timing: a line still takes as long
+ * as its clip, so what waits for it comes when it would have.
+ */
+export const isMuted = signal(remembered());
+
+export function setMuted(isOn: boolean): void {
+  isMuted.value = isOn;
+  try {
+    localStorage.setItem(MUTED_KEY, isOn ? "1" : "0");
+  } catch {}
+}
 
 /** Where a spoken line's audio file is, by audio key; undefined when the lesson has no audio at all. */
 export type AudioSource = ((key: string) => string | undefined) & {
@@ -49,6 +73,7 @@ export function useNarrator(
     (prop: SpokenProp) =>
       new Promise<void>((resolve) => {
         if (source === undefined) return resolve(); // this lesson has no audio yet
+        if (isMuted.peek()) return resolve();
         const fail = (reason: string) => {
           setFailed((prev) => new Set(prev).add(prop.name));
           onFailure(prop, reason);
@@ -88,6 +113,15 @@ export function useNarrator(
         });
       }),
     [board, locale, source, onFailure],
+  );
+
+  // Muting stops the line being said.
+  useEffect(
+    () =>
+      isMuted.subscribe((muted) => {
+        if (muted) audio.current?.pause();
+      }),
+    [],
   );
 
   const seconds = useCallback(

@@ -157,7 +157,7 @@ Words on the board, in the learner's language.
 
 | Action | Takes | |
 |---|---|---|
-| `say` | — | Read it aloud (the narrator) |
+| `say` | {after: {optional: "number 0 to 5"}} | Read it aloud (the narrator), after a breath of `after` seconds if given |
 | `hush` | — | Stop reading it aloud |
 
 Signals: `said`
@@ -187,7 +187,7 @@ A multiple-choice question.
 | `check` | — | learner · Check the picked option |
 | `retry` | — | learner · Clear a wrong answer to try again |
 | `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
-| `say` | — | Read it aloud (the narrator) |
+| `say` | {after: {optional: "number 0 to 5"}} | Read it aloud (the narrator), after a breath of `after` seconds if given |
 | `hush` | — | Stop reading it aloud |
 
 Signals: `checked`, `correct`, `wrong`, `said`
@@ -215,7 +215,7 @@ A question answered by getting another prop into the right state, then pressing 
 | `check` | — | learner · Check the prop's state as the answer |
 | `retry` | — | learner · Clear a wrong answer to try again |
 | `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
-| `say` | — | Read it aloud (the narrator) |
+| `say` | {after: {optional: "number 0 to 5"}} | Read it aloud (the narrator), after a breath of `after` seconds if given |
 | `hush` | — | Stop reading it aloud |
 
 Signals: `checked`, `correct`, `wrong`, `said`
