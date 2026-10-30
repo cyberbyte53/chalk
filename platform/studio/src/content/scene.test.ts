@@ -1,5 +1,7 @@
 import { hidden, place, scene, tap } from "@chalk/author";
+import { Actor } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
+import { SceneRuntime } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
@@ -44,6 +46,29 @@ describe("a scene, built and checked like any board", () => {
     expect(played.view("ask").feedback).toEqual({ en: "Along first.", hi: "पहले आगे।" });
     expect(played.view("board").isPassed).toBe(false);
     expect(played.view("board").hidden).toEqual(["found"]);
+  });
+
+  it("a line shown cuts off what is being said: the newest line wins", () => {
+    const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async () => {},
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    const asked: string[] = [];
+    runtime.onAction((a) => {
+      if (a.action === "say" || a.action === "hush") asked.push(`${a.prop}.${a.action}`);
+    });
+    runtime.start();
+    // While the title is being said (the question waits its turn), the student answers.
+    void runtime.call("ask", "select", { option: "street" }, Actor.Learner);
+    void runtime.call("ask", "check", {}, Actor.Learner);
+    runtime.settle();
+    // "found" is said at once; the title stops, and the question, still waiting, is never said.
+    expect(asked).toEqual(["title.say", "title.hush", "found.say"]);
+    expect(runtime.getView("board").saying).toEqual([]);
   });
 
   it("lines are said in order and waited for: the title, the question, then what is shown", async () => {

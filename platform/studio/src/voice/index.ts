@@ -3,7 +3,14 @@ import { parlerProvider } from "./parler";
 import type { TtsProvider } from "./provider";
 import { toneProvider } from "./tone";
 
-export { generateAudio, type GenerateResult, type Voices, voicesSchema } from "./generate";
+export {
+  generateAudio,
+  type GenerateResult,
+  type Line,
+  speakLines,
+  type Voices,
+  voicesSchema,
+} from "./generate";
 export { parseSayVoices } from "./macos";
 export { parlerProvider } from "./parler";
 export type { TtsProvider } from "./provider";

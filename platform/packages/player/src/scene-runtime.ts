@@ -58,16 +58,24 @@ export class SceneRuntime {
     if (model === undefined) throw new Error(`Board ${board.name} isn't a scene`);
     this.scene = model.scene;
     const locale = services.locale ?? "en";
-    this.core = new Core(model.scene, model.given, {
-      voice: {
-        start: (path, line) => {
-          void services.speak({ name: path }, line);
+    // What starts hidden is the board's to say (a preview shows every piece at once).
+    const hidden = propPieces(board.root)
+      .filter((p) => p.isHidden === true)
+      .map((p) => p.name);
+    this.core = new Core(
+      model.scene,
+      { ...model.given, hidden },
+      {
+        voice: {
+          start: (path, line) => {
+            void services.speak({ name: path }, line);
+          },
+          seconds: (path, line) =>
+            services.lineSeconds?.(path, line) ??
+            estimatedSeconds(line.speak?.[locale] ?? line.say[locale] ?? ""),
         },
-        seconds: (path, line) =>
-          services.lineSeconds?.(path, line) ??
-          estimatedSeconds(line.speak?.[locale] ?? line.say[locale] ?? ""),
       },
-    });
+    );
     this.core.watch(() => {
       this.version.value++;
     });

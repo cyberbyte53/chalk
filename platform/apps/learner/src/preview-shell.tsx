@@ -34,6 +34,7 @@ import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
+import { useChapterVoice } from "./chapter-voice";
 import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
@@ -574,6 +575,8 @@ export function PreviewBoard({
   );
   const phone = useRef<HTMLDivElement>(null);
   useSourceTags(phone, where, shown.path);
+  // Played as a student would (not a tool's picture): the chapter's voice, when it has one.
+  const voice = useChapterVoice(shown.path, isPlaying && !isShot);
   // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
   const isProp = shown.path.startsWith(PROPS_ROOT);
   const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
@@ -602,23 +605,25 @@ export function PreviewBoard({
       )}
       <div class="preview-body">
         <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
-          <BoardPlayer
-            onRuntime={
-              isProp
-                ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)
-                : undefined
-            }
-            board={board}
-            registry={propLibrary}
-            locale={locale}
-            record={bus.record}
-            audio={undefined}
-            onPass={() => {
-              const w = window as Window & { __chalkPassed?: string[] };
-              w.__chalkPassed ??= [];
-              w.__chalkPassed.push(shown.path);
-            }}
-          />
+          {voice.isReady && (
+            <BoardPlayer
+              onRuntime={
+                isProp
+                  ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)
+                  : undefined
+              }
+              board={board}
+              registry={propLibrary}
+              locale={locale}
+              record={bus.record}
+              audio={voice.source}
+              onPass={() => {
+                const w = window as Window & { __chalkPassed?: string[] };
+                w.__chalkPassed ??= [];
+                w.__chalkPassed.push(shown.path);
+              }}
+            />
+          )}
         </div>
         {!isShot && isProp && runtime !== undefined && (
           <PropPanel runtime={runtime} piece={board.name} />

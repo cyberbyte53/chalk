@@ -21,3 +21,4 @@ _to_delete/
 /build/
 studio/src/content/.fixtures/
 .chalk-*
+platform/apps/learner/public/voice/

@@ -259,11 +259,23 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
           ...(atOnce ? [t.self.pass()] : []),
         ];
       },
-      show: (me, { name: piece }, t) =>
-        me.hidden.includes(piece) && [
-          t.set({ hidden: me.hidden.filter((n) => n !== piece) }),
-          ...(speaking.includes(piece) ? say(me as unknown as Me, t as unknown as T, [piece]) : []),
-        ],
+      // A piece shown says its line at once: the student has moved on, so whatever was being said
+      // stops, and what was waiting to be said is dropped.
+      show: (me, { name: piece }, t) => {
+        if (!me.hidden.includes(piece)) return;
+        const shown = t.set({ hidden: me.hidden.filter((n) => n !== piece) });
+        if (!speaking.includes(piece)) return shown;
+        const now = me.saying[0];
+        const tt = t as unknown as T;
+        return [
+          shown,
+          t.set({ saying: [piece] }),
+          ...(now === undefined || tt.to[now]?.hush === undefined
+            ? []
+            : [(tt.to[now].hush as () => Out)()]),
+          askSay(tt, piece),
+        ];
+      },
       hide: (me, { name: piece }, t) =>
         !me.hidden.includes(piece) && t.set({ hidden: [...me.hidden, piece] }),
       pass: (me, _, t) => !me.isPassed && [t.set({ isPassed: true }), t.tell.passed()],

@@ -55,7 +55,8 @@ export function compileReadings(input: unknown): Readings {
 
 /** Turns screen text into what the voice says ("√2" → "square root of 2", "25°C" → "25 degrees Celsius"). */
 export function toSpoken(text: string, locale: Locale, readings: Readings): string {
-  let out = text;
+  // Bold (**…**) is how the screen stresses words; the voice gets the words.
+  let out = text.replaceAll("**", "");
   for (const reading of readings) out = out.replace(reading.pattern, reading.wording[locale]);
   return out
     .replace(/\s+([,.?!।])/g, "$1")

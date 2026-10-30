@@ -158,6 +158,7 @@ Words on the board, in the learner's language.
 | Action | Takes | |
 |---|---|---|
 | `say` | — | Read it aloud (the narrator) |
+| `hush` | — | Stop reading it aloud |
 
 Signals: `said`
 
@@ -187,6 +188,7 @@ A multiple-choice question.
 | `retry` | — | learner · Clear a wrong answer to try again |
 | `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
 | `say` | — | Read it aloud (the narrator) |
+| `hush` | — | Stop reading it aloud |
 
 Signals: `checked`, `correct`, `wrong`, `said`
 
@@ -214,6 +216,7 @@ A question answered by getting another prop into the right state, then pressing 
 | `retry` | — | learner · Clear a wrong answer to try again |
 | `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
 | `say` | — | Read it aloud (the narrator) |
+| `hush` | — | Stop reading it aloud |
 
 Signals: `checked`, `correct`, `wrong`, `said`
 

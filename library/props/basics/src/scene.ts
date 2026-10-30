@@ -19,6 +19,8 @@ import { TextStyle } from "./text";
  */
 
 const say = action({}, { describe: "Read it aloud (the narrator)" });
+/** Stop saying it (another line has come): its `said` never comes. */
+const hush = action({}, { describe: "Stop reading it aloud" });
 /** Words a lesson hasn't given yet (it always gives its own). */
 const UNSET = { en: "…", hi: "…" };
 const said = signal();
@@ -40,9 +42,9 @@ export const sceneText = prop({
     })
     .strict(),
   start: { text: UNSET, speak: null, style: TextStyle.Body, color: null },
-  actions: { say },
+  actions: { say, hush },
   signals: { said },
-  on: { say: (_, __, t) => t.speak() },
+  on: { say: (_, __, t) => t.speak(), hush: (_, __, t) => t.stop() },
   speech: (me) => ({ say: me.text, ...(me.speak === null ? {} : { speak: me.speak }) }),
   summary: (me) => `words: ${me.text.en}`,
 });
@@ -81,6 +83,7 @@ export const sceneGoal = prop({
     retry,
     giveFeedback,
     say,
+    hush,
   },
   signals: {
     checked: signal({ ...checkedFields, about: z.string().min(1) }),
@@ -103,6 +106,7 @@ export const sceneGoal = prop({
       me.status === AnswerStatus.Wrong && t.set({ status: AnswerStatus.Open, feedback: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
     say: (_, __, t) => t.speak(),
+    hush: (_, __, t) => t.stop(),
   },
   speech: (me) => ({ say: me.prompt, ...(me.speak === null ? {} : { speak: me.speak }) }),
   summary: (me) =>
@@ -150,6 +154,7 @@ export const sceneChoice = prop({
     retry,
     giveFeedback,
     say,
+    hush,
   },
   signals: {
     checked: signal({ ...checkedFields, optionId: z.string().min(1) }),
@@ -178,6 +183,7 @@ export const sceneChoice = prop({
       t.set({ status: AnswerStatus.Open, feedback: null, selected: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
     say: (_, __, t) => t.speak(),
+    hush: (_, __, t) => t.stop(),
   },
   speech: (me) => ({ say: me.prompt, ...(me.speak === null ? {} : { speak: me.speak }) }),
   summary: (me) =>

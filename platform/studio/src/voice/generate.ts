@@ -32,7 +32,8 @@ export type Voices = z.infer<typeof voicesSchema>;
 
 export type GenerateResult = { manifest: AudioManifest; made: number; reused: number };
 
-type Line = { key: string; text: string; voice: string };
+/** One line to say: its audio key, its words, and the voice that says them. */
+export type Line = { key: string; text: string; voice: string };
 
 /** Every line a script tells a prop to `say`: only those need audio. */
 function linesOf(
@@ -96,7 +97,21 @@ export async function generateAudio(
       `These ${provider.id} voices aren't installed: ${missing.join(", ")}. On a Mac: System Settings → Accessibility → Spoken Content → System voice → Manage Voices.`,
     );
   }
-  const folder = join("audio", lessonName);
+  return speakLines(lines, provider, publishedDir, join("audio", lessonName), onSpeak);
+}
+
+/**
+ * Says each line into `<dir>/<folder>/`, once: files are named by what is said and by whom, so
+ * unchanged lines are reused and only new or edited lines are spoken again. Each file's length is
+ * measured and kept with it.
+ */
+export async function speakLines(
+  lines: readonly Line[],
+  provider: TtsProvider,
+  publishedDir: string,
+  folder: string,
+  onSpeak?: (done: number, toMake: number, text: string) => void,
+): Promise<GenerateResult> {
   mkdirSync(join(publishedDir, folder), { recursive: true });
   const files: Record<string, string> = {};
   const seconds: Record<string, number> = {};
@@ -107,9 +122,13 @@ export async function generateAudio(
       .update([provider.id, line.voice, line.text].join("\u0000"))
       .digest("hex")
       .slice(0, 16);
-    return `${folder}/${hash}.${provider.extension}`;
+    return folder === "."
+      ? `${hash}.${provider.extension}`
+      : `${folder}/${hash}.${provider.extension}`;
   };
-  const toMake = lines.filter((line) => !existsSync(join(publishedDir, fileOf(line)))).length;
+  const toMake = new Set(
+    lines.filter((line) => !existsSync(join(publishedDir, fileOf(line)))).map(fileOf),
+  ).size;
   try {
     for (const line of lines) {
       const relative = fileOf(line);
