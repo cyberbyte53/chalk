@@ -37,7 +37,10 @@ const LEMMA = `${R}/division-lemma/lemma`;
 const QUESTION = `${R}/questions/which-is-irrational/a3543885`;
 const EDITED = join(root, R, "which-fractions-end", "overview.ts");
 
-/** An agent's connection: replaced when the service restarts under it (as the relay does). */
+/**
+ * An agent's connection. It says who it is with every request (its id, as the relay sends), which is
+ * what keeps its page, so `continue` goes on from its own board.
+ */
 type Agent = { name: string; client: Client };
 
 async function connectAs(name: string): Promise<Client> {
@@ -45,7 +48,11 @@ async function connectAs(name: string): Promise<Client> {
   await c.connect(
     new StreamableHTTPClientTransport(URL_, {
       requestInit: {
-        headers: { authorization: "Bearer chalk-dev-reviewer", "x-chalk-name": name },
+        headers: {
+          authorization: "Bearer chalk-dev-reviewer",
+          "x-chalk-name": name,
+          "x-chalk-agent": `${name}-${process.pid}`,
+        },
       },
     }),
   );
@@ -59,9 +66,9 @@ async function agent(name: string): Promise<Agent> {
 /** Service restarts seen during this run (the service reloads itself when its code changes). */
 const restarts: string[] = [];
 
-/** The call never reached the service: it was restarting (connection refused, session gone). */
+/** The call never reached the service, or it went away mid-call: it was restarting. */
 const isUnreached = (message: string) =>
-  /fetch failed|ECONNREFUSED|ECONNRESET|socket hang up|session/i.test(message);
+  /fetch failed|ECONNREFUSED|ECONNRESET|socket hang up/i.test(message);
 
 type Call = { ok: boolean; ms: number; error?: string; out?: Record<string, unknown> };
 /**
@@ -204,7 +211,7 @@ const cases: Record<string, () => Promise<void>> = {
     const b = await agent("stress-laneB");
     const tap = await call(a, "play", {
       at: LEMMA,
-      steps: [{ tap: "qr", text: "q = 5" }],
+      steps: [{ tap: "qr/option:right" }],
       shots: "none",
     });
     // The choice is the learner's: it is listed with what changed now, not with the setup.
@@ -215,7 +222,7 @@ const cases: Record<string, () => Promise<void>> = {
       tap.ok && mine.ok && chosen.test(textOf(mine)),
       tap.error ?? mine.error ?? "",
     );
-    await call(b, "play", { at: LEMMA, steps: [{ tap: "qr", text: "q = 3" }], shots: "none" });
+    await call(b, "play", { at: LEMMA, steps: [{ tap: "qr/option:swap" }], shots: "none" });
     const on = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
     expect(
       "B tapping the same board doesn't reach A's: A sees its own choice",
