@@ -95,9 +95,10 @@ const none = z.object({}).strict();
 
 export const cluesSignals = {
   clueGiven: signal(
-    "A clue was given; what is still possible: `still` (anywhere, a region, a line or one point)",
+    "A clue was given; what is still possible: `still` (anywhere, a region, a line, one point or nowhere)",
+    { still: z.enum(["anywhere", "region", "line", "point", "nowhere"]) },
   ),
-  pinned: signal("The clues leave one point: (`x`, `y`)"),
+  pinned: signal("The clues leave one point: (`x`, `y`)", pointSchema.shape),
 };
 
 /** Whether it is drawn on the plane. */

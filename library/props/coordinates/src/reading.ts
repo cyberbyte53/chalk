@@ -53,7 +53,7 @@ function putAt(s: ReadingState, p: Point) {
   const isNew = quadrant !== null && !s.visited.includes(quadrant);
   const visited = isNew && quadrant !== null ? [...s.visited, quadrant] : s.visited;
   const emit: Emit[] = [raise(readingSignals.moved, { x: point.x, y: point.y, place })];
-  if (isNew) emit.push(raise(readingSignals.enteredQuadrant, { quadrant }));
+  if (isNew && quadrant !== null) emit.push(raise(readingSignals.enteredQuadrant, { quadrant }));
   return { point, visited, emit };
 }
 
@@ -61,9 +61,14 @@ const act = actionsFor<ReadingState>();
 const none = z.object({}).strict();
 
 export const readingSignals = {
-  moved: signal("The point was put down at (`x`, `y`), `place`: a quadrant, an axis or O"),
-  enteredQuadrant: signal("The point is in a quadrant it hadn't been in: `quadrant`"),
-  readingShown: signal("The hidden reading was shown: (`x`, `y`)"),
+  moved: signal("The point was put down at (`x`, `y`), `place`: a quadrant, an axis or O", {
+    ...pointSchema.shape,
+    place: z.enum([...QUADRANTS, "x-axis", "y-axis", PlanePart.O]),
+  }),
+  enteredQuadrant: signal("The point is in a quadrant it hadn't been in: `quadrant`", {
+    quadrant: z.enum(QUADRANTS),
+  }),
+  readingShown: signal("The hidden reading was shown: (`x`, `y`)", pointSchema.shape),
 };
 
 /** Whether it is drawn on the plane. */

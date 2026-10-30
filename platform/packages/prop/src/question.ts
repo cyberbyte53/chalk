@@ -43,6 +43,16 @@ export const questionDefaults = {
   isGraded: false,
 } as const;
 
+/**
+ * What every question's `checked` signal carries besides what was submitted (CheckedPayload): the
+ * result, how many checks so far, and whether it counts.
+ */
+export const checkedFields = {
+  status: z.enum([AnswerStatus.Correct, AnswerStatus.Wrong]),
+  attempts: z.number().int().min(1),
+  isGraded: z.boolean(),
+};
+
 /** What the player reads from any question. `canCheck` is derived by each question prop. */
 export type QuestionView = {
   status: AnswerStatus;

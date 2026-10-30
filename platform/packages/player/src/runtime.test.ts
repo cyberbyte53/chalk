@@ -27,7 +27,7 @@ const coinState = z
   .strict();
 type CoinState = z.infer<typeof coinState>;
 const coinAct = actionsFor<CoinState>();
-const coinSignals = { landed: signal("Landed") };
+const coinSignals = { landed: signal("Landed `face` up", { face: z.enum(["H", "T"]) }) };
 const coin = defineProp({
   type: "coin",
   role: PropRole.Explainer,
@@ -114,7 +114,7 @@ const tickerState = z
 type TickerState = z.infer<typeof tickerState>;
 const tickerAct = actionsFor<TickerState>();
 const tickerSignals = {
-  ticked: signal("A tick"),
+  ticked: signal("A tick: `ticks` so far", { ticks: z.number() }),
   glided: signal("Glided"),
   three: signal("Three"),
 };
@@ -395,6 +395,27 @@ describe("BoardRuntime", () => {
     const raised = signals[2];
     expect(raised?.from).toBeUndefined();
     expect(actions[2]).toMatchObject({ action: "glide", cause: raised?.n });
+  });
+
+  it("refuses a signal that doesn't carry what its prop says, wherever it was raised", () => {
+    const { services, errors } = fakeServices();
+    const board = boardOf({
+      name: "b",
+      root: props({ kind: "prop", name: "coin", prop: "coin" }),
+    });
+    const runtime = new BoardRuntime(board, (t) => defs[t], services);
+    const heard: string[] = [];
+    runtime.onSignal(({ signal }) => heard.push(signal));
+    // A view raising it with a face that isn't one: reported, and nothing answers it.
+    runtime.signal("coin", "landed", { face: "edge" });
+    runtime.signal("coin", "landed", {});
+    expect(heard).toEqual([]);
+    expect(errors).toEqual([
+      expect.stringMatching(/coin.landed carries {"face":"edge"}: face/),
+      expect.stringMatching(/coin.landed carries {}: face/),
+    ]);
+    runtime.signal("coin", "landed", { face: "H" });
+    expect(heard).toEqual(["landed"]);
   });
 
   it("marks a prop's own steps over time as steps, not acts", async () => {

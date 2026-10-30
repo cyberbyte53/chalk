@@ -40,8 +40,14 @@ const boxOf = (s: SweetShareState) => s.sweets - s.friends * s.rounds;
 const isOverOf = (s: SweetShareState) => boxOf(s) < s.friends;
 
 const signals = {
-  round: signal("A round was given; `rounds` so far and the `box` left"),
-  over: signal("The box holds fewer sweets than friends: no round is possible; `q` and `r`"),
+  round: signal("A round was given; `rounds` so far and the `box` left", {
+    rounds: z.number().int().min(1),
+    box: z.number().int().min(0),
+  }),
+  over: signal("The box holds fewer sweets than friends: no round is possible; `q` and `r`", {
+    q: z.number().int().min(1),
+    r: z.number().int().min(0),
+  }),
 };
 /**
  * Euclid's division lemma as a game: a sweets shared among b friends one round at a time, every

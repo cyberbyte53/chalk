@@ -7,6 +7,7 @@ import {
   type ArgsParam,
   type Effect,
   EffectKind,
+  type PayloadOf,
   type PropDef,
   type PropRole,
   type PropView,
@@ -162,7 +163,7 @@ export type GroupSpec<
     readonly [K in keyof C]?: {
       readonly [G in keyof SignalsOfDef<C[K]> & string]?: (
         s: GroupViewOf<O, C, Opt, D>,
-        payload: Readonly<Record<string, unknown>>,
+        payload: PayloadOf<SignalsOfDef<C[K]>[G]>,
         run: Runs<C, X>,
       ) => Steps;
     };

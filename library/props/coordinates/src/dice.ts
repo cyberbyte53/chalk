@@ -51,12 +51,28 @@ export function throwOf(seed: number, n: number): { red: number; green: number }
 const act = actionsFor<DiceState>();
 const none = z.object({}).strict();
 
+/** Who: player 0 or 1. A die's face: 1 to 6. A counter's coordinate: a whole number from 0. */
+const player = z.number().int().min(0).max(1);
+const face = z.number().int().min(1).max(6);
+const coordinate = z.number().int().min(0);
+
 export const diceSignals = {
-  thrown: signal("Player `player` threw red `red` and green `green`"),
-  counterMoved: signal("Player `player`'s counter walked to (`x`, `y`)"),
-  missed: signal("Player `player` misses the turn: both dice would take the counter past `goal`"),
-  sentHome: signal("Player `player`'s counter was landed on and goes back to (0, 0)"),
-  won: signal("Player `player` reached (`goal`, `goal`) first"),
+  thrown: signal("Player `player` threw red `red` and green `green`", {
+    player,
+    red: face,
+    green: face,
+  }),
+  counterMoved: signal("Player `player`'s counter walked to (`x`, `y`)", {
+    player,
+    x: coordinate,
+    y: coordinate,
+  }),
+  missed: signal("Player `player` misses the turn: both dice would take the counter past `goal`", {
+    player,
+    goal: z.number().int().min(2),
+  }),
+  sentHome: signal("Player `player`'s counter was landed on and goes back to (0, 0)", { player }),
+  won: signal("Player `player` reached the far corner (goal, goal) first", { player }),
 };
 
 /** Whether it is drawn on the plane. */

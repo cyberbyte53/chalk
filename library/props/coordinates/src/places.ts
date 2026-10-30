@@ -52,8 +52,12 @@ const none = z.object({}).strict();
 export const placesSignals = {
   targetChosen: signal(
     "A place was made the target (Aman's house): its address (`x`, `y`); `isAnother` when another was the target before",
+    { ...pointSchema.shape, isAnother: z.boolean() },
   ),
-  lineLit: signal("Every place with one number is lit: `axis` = `value`, `count` places"),
+  lineLit: signal("Every place with one number is lit: `axis` = `value`, `count` places", {
+    ...lineSchema.shape,
+    count: z.number().int().min(0),
+  }),
 };
 
 /** Whether the places are drawn: there are some. */

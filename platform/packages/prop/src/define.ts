@@ -1,4 +1,4 @@
-import type { ZodType, ZodTypeDef } from "zod";
+import { type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
 import type { Size } from "./size";
 
 /** Text in every supported language, by locale ("en", "hi"). */
@@ -123,10 +123,14 @@ export function setRaised<S extends StoredState>(
   return { kind: EffectKind.Set, set: patch, emit };
 }
 
-/** One of this prop's signals raised, with its data: `raise(signals.over, { q, r })`. */
-export function raise(signal: SignalSpec, payload?: Readonly<Record<string, unknown>>): Emit {
+/** One of this prop's signals raised, with its data, as the signal declares it: `raise(signals.over, { q, r })`. */
+export function raise<P extends Payload>(
+  signal: SignalSpec<P>,
+  ...payload: keyof P extends never ? [] : [payload: P]
+): Emit {
   const name = nameOf(signal);
-  return (payload === undefined ? { signal: name } : { signal: name, payload }) as Emit;
+  const data = payload[0];
+  return (data === undefined ? { signal: name } : { signal: name, payload: data }) as Emit;
 }
 
 export function tween<S extends StoredState>(
@@ -242,13 +246,36 @@ export type DerivedSpec<S extends StoredState> = {
   compute: (state: S) => unknown;
 };
 
-export type SignalSpec = {
+/** What a signal carries: named plain values. */
+export type Payload = Readonly<Record<string, unknown>>;
+
+export type SignalSpec<P extends Payload = Payload> = {
   describe: string;
+  /** What it carries, checked when it is raised (as an action's arguments are). */
+  payload: ZodType<P, ZodTypeDef, unknown>;
 };
 
-/** A signal: what it announces. Its name is its key in the prop's `signals`. */
-export function signal(describe: string): SignalSpec {
-  return { describe };
+/** The data a signal carries. */
+export type PayloadOf<G> = G extends SignalSpec<infer P> ? P : Payload;
+
+/**
+ * A signal: what it announces, and what it carries (`signal("Riya stepped to (`x`, `y`)", { x:
+ * z.number(), y: z.number() })`). Its name is its key in the prop's `signals`. The words name
+ * every field it carries, in backticks, and only those: what is said and what is sent are one.
+ */
+export function signal<const Sh extends ZodRawShape = Record<never, never>>(
+  describe: string,
+  payload?: Sh,
+): SignalSpec<z.infer<z.ZodObject<Sh, "strict">>> {
+  const fields = Object.keys(payload ?? {}).sort();
+  const said = [
+    ...new Set([...describe.matchAll(/`([A-Za-z_]\w*)`/g)].map((m) => m[1] as string)),
+  ].sort();
+  if (fields.join() !== said.join())
+    throw new Error(
+      `signal "${describe}": its words name ${said.join(", ") || "nothing"} in backticks, it carries ${fields.join(", ") || "nothing"}: they must be the same`,
+    );
+  return { describe, payload: z.object(payload ?? ({} as Sh)).strict() };
 }
 
 /**
@@ -409,16 +436,20 @@ export function defineProp<
   const Dv extends Readonly<Record<string, DerivedSpec<S>>> = Record<never, DerivedSpec<S>>,
   G extends string = never,
   const In extends readonly (keyof S & string)[] = [],
+  /** Its signals as written, so each keeps its payload's type (for `when` links and views). */
+  const Sg extends Readonly<Record<G, SignalSpec>> = Readonly<Record<G, SignalSpec>>,
 >(
   def: PropDef<S, keyof X & string, G, keyof Dv & string> & {
     actions: X;
     derived?: Dv;
     inputs?: In;
+    signals?: Sg;
   },
 ): PropDef<S, keyof X & string, G, keyof Dv & string> & {
   actions: X;
   derived?: Dv;
   inputs?: In;
+  signals?: Sg;
 } {
   noteNames(def.type, def.actions);
   noteNames(def.type, def.signals);

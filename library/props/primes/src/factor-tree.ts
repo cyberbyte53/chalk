@@ -110,8 +110,13 @@ function splitEverything(s: Pick<FactorTreeState, "number" | "splits">): FactorT
 }
 
 const signals = {
-  split: signal("An end was split: { node, factor }"),
-  completed: signal("Every end is prime: `primes` is the factorisation"),
+  split: signal("An end, `node`, was split by `factor`", {
+    node: z.string().min(1),
+    factor: z.number().int().min(2),
+  }),
+  completed: signal("Every end is prime: `primes` is the factorisation", {
+    primes: z.string().min(1),
+  }),
 };
 /**
  * A factor tree: the number at the top, split into two factors, each split again until every end is

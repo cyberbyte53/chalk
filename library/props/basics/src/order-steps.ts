@@ -4,6 +4,7 @@ import {
   PropRole,
   SizeFit,
   actionsFor,
+  checkedFields,
   defineProp,
   questionDefaults,
   questionFields,
@@ -58,7 +59,10 @@ export function firstWrong(
 }
 
 const signals = {
-  checked: signal("The learner pressed Check"),
+  checked: signal(
+    "The learner pressed Check: the `status` it got, its `attempts` so far, whether it `isGraded`, and the `optionIds` of the steps in the learner's order",
+    { ...checkedFields, optionIds: z.array(z.string().min(1)).min(1) },
+  ),
   correct: signal("Checked, and in a right order"),
   wrong: signal("Checked, and out of order"),
 };

@@ -245,11 +245,16 @@ const act = actionsFor<PlaneCore>();
 const none = z.object({}).strict();
 
 export const planeSignals = {
-  risen: signal("A line has risen from `at` on the horizontal line (a street, with its places)"),
+  risen: signal("A line has risen from `at` on the horizontal line (a street, with its places)", {
+    at: z.number().int(),
+  }),
   crossed: signal("The two number lines cross at their zeroes: they are the axes, and O is named"),
-  named: signal("A tap named a part of the plane: `part`"),
+  named: signal("A tap named a part of the plane: `part`", { part: z.nativeEnum(PlanePart) }),
   quadrantsNumbered: signal("The sweep has named all four quadrants, I to IV"),
-  numberTapped: signal("The learner tapped the number `value` on the `axis` line"),
+  numberTapped: signal(
+    "The learner tapped the number `value` on the `axis` line",
+    lineSchema.shape,
+  ),
 };
 
 /**

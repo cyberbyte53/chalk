@@ -4,6 +4,7 @@ import {
   PropRole,
   SizeFit,
   actionsFor,
+  checkedFields,
   defineProp,
   questionDefaults,
   questionFields,
@@ -42,7 +43,10 @@ const act = actionsFor<ChoiceState>();
 const noArgs = z.object({}).strict();
 
 const signals = {
-  checked: signal("The learner pressed Check"),
+  checked: signal(
+    "The learner pressed Check: the `status` it got, its `attempts` so far, whether it `isGraded`, and the `optionId` picked",
+    { ...checkedFields, optionId: z.string().min(1) },
+  ),
   correct: signal("Checked, and right"),
   wrong: signal("Checked, and wrong"),
 };

@@ -36,6 +36,7 @@ import {
   invariantOfView,
   isFullChecking,
   namesOf,
+  payloadProblem,
   prepareOnView,
   runEffect,
   schemaWithout,
@@ -1062,6 +1063,15 @@ export class BoardRuntime {
    */
   private enqueue(name: string, emit: Raised, actor: Actor, from: number | undefined): void {
     if (this.isDisposed) return;
+    // A signal carries what its prop says it does, whoever raised it (an action, a task, a view):
+    // one that doesn't is a bug where it was raised, not something to answer.
+    if (isFullChecking()) {
+      const problem = payloadProblem(this.top, `${name}.${emit.signal}`, emit.payload);
+      if (problem !== undefined) {
+        this.services.onError(`Board ${this.board.name}: ${problem}`);
+        return;
+      }
+    }
     const record: SignalRecord = {
       n: ++this.count,
       prop: name,

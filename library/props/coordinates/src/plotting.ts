@@ -46,8 +46,11 @@ const none = z.object({}).strict();
 export const plottingSignals = {
   plotted: signal(
     "A dot was put down for pair `n` at (`x`, `y`); `isRight` when that is where the pair says",
+    { n: z.number().int().min(0), x: z.number(), y: z.number(), isRight: z.boolean() },
   ),
-  scaleChosen: signal("The learner chose a number every `every` units"),
+  scaleChosen: signal("The learner chose a number every `every` units", {
+    every: z.number().positive(),
+  }),
   allPlotted: signal("Every pair is plotted"),
 };
 

@@ -66,14 +66,12 @@ export const coordinatePlane = defineGroup({
     // Another house, once one was chosen, is a new walk, from her start. (The first one is only
     // marked: she may be on her way to it.)
     places: {
-      targetChosen: (_s, p, run) => (p.isAnother === true ? [run.walker.backToStart()] : []),
+      targetChosen: (_s, p, run) => (p.isAnother ? [run.walker.backToStart()] : []),
     },
     plane: {
-      numberTapped: (_s, p, run) => [
-        run.places.lightLine({ axis: p.axis as "x" | "y", value: p.value as number }),
-      ],
+      numberTapped: (_s, p, run) => [run.places.lightLine({ axis: p.axis, value: p.value })],
     },
-    plotting: { scaleChosen: (_s, p, run) => [run.plane.setScale({ every: p.every as number })] },
+    plotting: { scaleChosen: (_s, p, run) => [run.plane.setScale({ every: p.every })] },
   },
   summary: (s) =>
     `the coordinate plane from ${s.plane.window.xMin} to ${s.plane.window.xMax} across and ${s.plane.window.yMin} to ${s.plane.window.yMax} up`,

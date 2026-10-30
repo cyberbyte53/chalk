@@ -71,16 +71,22 @@ function decimalText(s: DecimalExpansionState): string {
   return after === "" ? `${wholePart}…` : `${wholePart}.${after}…`;
 }
 
+const digit = z.number().int().min(0).max(9);
+const whole = z.number().int().min(0);
+
 const signals = {
   digitFound: signal(
     "One more digit was worked out; `position` (from 1 after the point), `digit`, and the `remainder` left",
+    { position: z.number().int().min(1), digit, remainder: whole },
   ),
   ended: signal("The remainder became 0: the expansion terminates"),
   repeated: signal(
     "A remainder came back: the `length` digits after the first `start` repeat from here on",
+    { start: whole, length: z.number().int().min(1) },
   ),
   digitRejected: signal(
     "The learner tried a digit that doesn't fit: `digit`, the `dividend` it was for, `product` (digit × denominator) and `isTooBig` (the product is more than the dividend; otherwise the remainder would be too big)",
+    { digit, dividend: whole, product: whole, isTooBig: z.boolean() },
   ),
 };
 /** Turning p/q into a decimal by long division, one digit at a time. It knows division, nothing about any lesson. */
@@ -169,13 +175,13 @@ export const decimalExpansion = defineProp({
       run: (s) => {
         if (hasEnded(s) || s.digitsShown >= MAX_DIGITS) return set({});
         const after = { ...s, digitsShown: s.digitsShown + 1 };
-        const { digits, remainders } = divide(s.numerator, s.denominator, after.digitsShown);
+        const next = step(partialDividend(s) / 10, s.denominator);
         return set(
           { digitsShown: after.digitsShown, rejectedDigit: null },
           raise(signals.digitFound, {
             position: after.digitsShown,
-            digit: digits.at(-1),
-            remainder: remainders.at(-1),
+            digit: next.digit,
+            remainder: next.remainder,
           }),
           ...milestones(s, after),
         );
@@ -190,7 +196,8 @@ export const decimalExpansion = defineProp({
       run: (s, a) => {
         if (hasEnded(s) || s.digitsShown >= MAX_DIGITS) return set({});
         const dividend = partialDividend(s);
-        const right = step(dividend / 10, s.denominator).digit;
+        const next = step(dividend / 10, s.denominator);
+        const right = next.digit;
         if (a.digit !== right) {
           const product = a.digit * s.denominator;
           return set(
@@ -204,13 +211,12 @@ export const decimalExpansion = defineProp({
           );
         }
         const after = { ...s, digitsShown: s.digitsShown + 1 };
-        const { remainders } = divide(s.numerator, s.denominator, after.digitsShown);
         return set(
           { digitsShown: after.digitsShown, rejectedDigit: null },
           raise(signals.digitFound, {
             position: after.digitsShown,
             digit: right,
-            remainder: remainders.at(-1),
+            remainder: next.remainder,
           }),
           ...milestones(s, after),
         );

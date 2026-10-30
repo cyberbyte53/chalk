@@ -53,7 +53,11 @@ export type BillSplitState = z.infer<typeof billSplitState>;
 const act = actionsFor<BillSplitState>();
 
 const signals = {
-  split: signal("The bill was shared among `n`: each `share`, and whether it `ends`"),
+  split: signal("The bill was shared among `n`: each `share`, and whether it `ends`", {
+    n: z.number().int().min(2).max(99),
+    share: z.string().min(1),
+    ends: z.boolean(),
+  }),
 };
 /**
  * A bill shared equally by n friends: each tap of a group size writes each friend's share. Some

@@ -64,7 +64,9 @@ export function logText(name: string, lap: number, time: number): string {
 }
 
 const signals = {
-  met: signal("Both are at the start together, at minute `time`"),
+  met: signal("Both are at the start together, at minute `time`", {
+    time: z.number().int().min(1),
+  }),
 };
 
 /** Play's own last step, when the running clock gets to a meeting: no finger does it. */

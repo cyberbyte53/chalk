@@ -20,7 +20,7 @@ const mirrorState = z
   .strict();
 type MirrorState = z.infer<typeof mirrorState>;
 const act = actionsFor<MirrorState>();
-const mirrorSignals = { objectMoved: signal("The object moved") };
+const mirrorSignals = { objectMoved: signal("The object moved to `u`", { u: z.number() }) };
 const imageAt = (s: MirrorState) => 1 / (1 / s.f - 1 / s.u);
 
 const mirror = asAnyProp(

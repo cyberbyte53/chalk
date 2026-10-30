@@ -4,6 +4,7 @@ import {
   PropRole,
   SizeFit,
   actionsFor,
+  checkedFields,
   defineProp,
   questionDefaults,
   questionFields,
@@ -31,7 +32,10 @@ const act = actionsFor<GoalState>();
 const noArgs = z.object({}).strict();
 
 const signals = {
-  checked: signal("The learner pressed Check"),
+  checked: signal(
+    "The learner pressed Check: the `status` it got, its `attempts` so far, whether it `isGraded`, and the prop it is `about`",
+    { ...checkedFields, about: z.string().min(1) },
+  ),
   correct: signal("Checked, and the prop's state was right"),
   wrong: signal("Checked, and the prop's state wasn't right"),
 };

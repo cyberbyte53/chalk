@@ -130,12 +130,24 @@ export function workingOf(s: TenMakerState): string[] {
 const act = actionsFor<TenMakerState>();
 const none = z.object({}).strict();
 
+/** Primes other than 2 and 5, smallest first. */
+const otherPrimes = z.array(z.number().int().min(3));
+
 const signals = {
-  cancelled: signal("Common primes crossed out: lowest terms"),
-  paired: signal("The denominator's 2s and 5s linked into `tens`; `others` have no partner"),
-  toppedUp: signal("The denominator is a power of 10: `decimal`"),
+  cancelled: signal("Common primes crossed out: lowest terms, `numerator`/`denominator`", {
+    numerator: z.number().int().min(0),
+    denominator: z.number().int().min(1),
+  }),
+  paired: signal("The denominator's 2s and 5s linked into `tens`; `others` have no partner", {
+    tens: z.number().int().min(0),
+    others: otherPrimes,
+  }),
+  toppedUp: signal("The denominator is a power of 10: `decimal`", {
+    decimal: z.string().regex(/^\d+(\.\d+)?$/),
+  }),
   cantTopUp: signal(
     "A prime other than 2 or 5 is in the denominator: `others`, so it never terminates",
+    { others: otherPrimes.min(1) },
   ),
 };
 /**
@@ -232,10 +244,9 @@ export const tenMaker = defineProp({
           raise(signals.paired, { tens: Math.min(t.twos, t.fives), others: primesIn(t.others) }),
         ];
         if (!t.canEnd) emits.push(raise(signals.cantTopUp, { others: primesIn(t.others) }));
-        if (t.canEnd && t.missing === null) {
-          emits.push(
-            raise(signals.toppedUp, { decimal: terminatingDecimal(s.numerator, s.denominator) }),
-          );
+        const decimal = terminatingDecimal(s.numerator, s.denominator);
+        if (decimal !== null && t.missing === null) {
+          emits.push(raise(signals.toppedUp, { decimal }));
           return set({ stage: TenStage.ToppedUp }, ...emits);
         }
         return set({ stage: TenStage.Paired }, ...emits);
@@ -249,12 +260,9 @@ export const tenMaker = defineProp({
       reveals: true,
       args: none,
       run: (s) => {
-        const t = tensOf(s.numerator, s.denominator);
-        if (s.stage !== TenStage.Paired || !t.canEnd) return set({});
-        return set(
-          { stage: TenStage.ToppedUp },
-          raise(signals.toppedUp, { decimal: terminatingDecimal(s.numerator, s.denominator) }),
-        );
+        const decimal = terminatingDecimal(s.numerator, s.denominator);
+        if (s.stage !== TenStage.Paired || decimal === null) return set({});
+        return set({ stage: TenStage.ToppedUp }, raise(signals.toppedUp, { decimal }));
       },
     }),
     startAgain: act({

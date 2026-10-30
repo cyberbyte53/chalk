@@ -4,6 +4,7 @@ import {
   PropRole,
   SizeFit,
   actionsFor,
+  checkedFields,
   defineProp,
   questionDefaults,
   questionFields,
@@ -48,7 +49,10 @@ const sameSet = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && a.every((x) => b.includes(x));
 
 const signals = {
-  checked: signal("The learner pressed Check"),
+  checked: signal(
+    "The learner pressed Check: the `status` it got, its `attempts` so far, whether it `isGraded`, and the `optionIds` picked",
+    { ...checkedFields, optionIds: z.array(z.string().min(1)).min(1) },
+  ),
   correct: signal("Checked, and right"),
   wrong: signal("Checked, and wrong"),
 };

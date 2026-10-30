@@ -139,11 +139,24 @@ export function sticksText(s: StickMeasureState): string {
   return parts.join("; ");
 }
 
+const length = z.number().int().min(1);
+
 const signals = {
-  laid: signal("The shorter stick was laid along the longer; the division"),
-  kept: signal("The leftover was kept: the new `long` and `short`"),
-  finished: signal("Nothing was left over; `hcf` is the last stick laid"),
-  tried: signal("A piece `length` was marked; `fitsBoth` sticks"),
+  laid: signal("The shorter stick was laid along the longer; the division `a` = `b` × `q` + `r`", {
+    a: length,
+    b: length,
+    q: length,
+    r: z.number().int().min(0),
+  }),
+  kept: signal("The leftover was kept: the new `long` and `short`", {
+    long: length,
+    short: length,
+  }),
+  finished: signal("Nothing was left over; `hcf` is the last stick laid", { hcf: length }),
+  tried: signal("A piece `length` was marked; `fitsBoth` sticks", {
+    length,
+    fitsBoth: z.boolean(),
+  }),
 };
 /**
  * Euclid's method with two sticks: lay the shorter along the longer as many times as it fits, keep
@@ -213,7 +226,7 @@ export const stickMeasure = defineProp({
       run: (s) => {
         const step = stepNow(s);
         if (s.isLaid || step === undefined) return set({});
-        const emits: Emit[] = [raise(signals.laid, { ...step })];
+        const emits: Emit[] = [raise(signals.laid, step)];
         if (step.r === 0) emits.push(raise(signals.finished, { hcf: step.b }));
         return set({ isLaid: true }, ...emits);
       },

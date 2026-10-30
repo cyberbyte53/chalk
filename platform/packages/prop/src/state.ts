@@ -1,4 +1,4 @@
-import type { AnyPropDef, Effect, PropView, StoredState } from "./define";
+import type { AnyPropDef, Effect, PropView, SignalSpec, StoredState } from "./define";
 import { EffectKind } from "./define";
 
 export type StateResult =
@@ -28,6 +28,24 @@ export function setStateChecks(mode: StateChecks): void {
 }
 export function isFullChecking(): boolean {
   return checks === "full";
+}
+
+/**
+ * Whether a signal raised by a prop carries what the prop says it does (its spec's payload): the
+ * problem, or undefined. A signal the prop doesn't declare is the prop's own business (the board's,
+ * a question's), not checked here.
+ */
+export function payloadProblem(
+  def: AnyPropDef,
+  signal: string,
+  payload: Readonly<Record<string, unknown>> | undefined,
+): string | undefined {
+  const spec = (def.signals as Readonly<Record<string, SignalSpec>> | undefined)?.[signal];
+  if (spec === undefined) return undefined;
+  const parsed = spec.payload.safeParse(payload ?? {});
+  return parsed.success
+    ? undefined
+    : `${def.type}.${signal} carries ${JSON.stringify(payload ?? {})}: ${parsed.error.issues.map((i) => `${i.path.join(".") || "it"} ${i.message}`).join("; ")}`;
 }
 
 /** Checks a whole stored state against the prop's schema and invariant. */

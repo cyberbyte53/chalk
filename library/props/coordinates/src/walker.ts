@@ -99,9 +99,15 @@ export function stepFrom(
 const isSame = (a: Point | null, b: Point) => a !== null && a.x === b.x && a.y === b.y;
 
 export const walkerSignals = {
-  stepped: signal("Riya stepped one block, to (`x`, `y`)"),
-  arrived: signal("Riya stepped onto the target place (Aman's house), at (`x`, `y`)"),
-  blocked: signal("Riya can't go `direction`: `why`"),
+  stepped: signal("Riya stepped one block, to (`x`, `y`)", pointSchema.shape),
+  arrived: signal(
+    "Riya stepped onto the target place (Aman's house), at (`x`, `y`)",
+    pointSchema.shape,
+  ),
+  blocked: signal("Riya can't go `direction`: `why`", {
+    direction: z.nativeEnum(Direction),
+    why: z.string().min(1),
+  }),
 };
 
 /** One block's glide, then where she is announced (and that she has arrived, at the target). */

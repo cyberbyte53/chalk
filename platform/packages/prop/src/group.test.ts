@@ -13,7 +13,7 @@ type Seen = { readonly [key: string]: Seen };
 const stepperState = z.object({ value: z.number(), min: z.number(), max: z.number() }).strict();
 type Stepper = z.infer<typeof stepperState>;
 const onStepper = actionsFor<Stepper>();
-const stepperSignals = { changed: signal("") };
+const stepperSignals = { changed: signal("Changed `to`", { to: z.number() }) };
 const stepper = defineProp({
   type: "stepper",
   role: PropRole.Explainer,
@@ -91,7 +91,7 @@ const machine = defineGroup({
         Math.abs(a.x) > 10 ? refuse("x is limited to −10…10") : [run.input.change({ to: a.x })],
     },
   },
-  when: { input: { changed: (_s, p, run) => [run.put({ x: Number(p.to) })] } },
+  when: { input: { changed: (_s, p, run) => [run.put({ x: p.to })] } },
   actions: {
     put: onMachine({
       describe: "",

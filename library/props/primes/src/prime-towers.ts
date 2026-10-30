@@ -59,7 +59,7 @@ export function towerText(t: { prime: number; inA: number; inB: number }, a: num
 }
 
 const signals = {
-  shown: signal("The towers now mark `show`"),
+  shown: signal("The towers now mark `show`", { show: z.nativeEnum(TowerShow) }),
 };
 /**
  * Two numbers as towers of primes: for each prime, the two numbers' towers stand side by side, as

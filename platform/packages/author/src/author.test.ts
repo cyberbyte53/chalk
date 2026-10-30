@@ -7,7 +7,9 @@ import {
   actionsFor,
   defineGroup,
   defineProp,
+  raise,
   set,
+  signal,
 } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
@@ -20,6 +22,7 @@ import { decimal } from "./params";
 const dialState = z.object({ at: z.number(), isOn: z.boolean() }).strict();
 type DialState = z.infer<typeof dialState>;
 const act = actionsFor<DialState>();
+const dialSignals = { turned: signal("turned to `to`", { to: z.number() }) };
 const dial = defineProp({
   type: "dial",
   role: PropRole.Explainer,
@@ -34,10 +37,10 @@ const dial = defineProp({
       changes: ["at"],
       byLearner: true,
       args: z.object({ to: z.number() }).strict(),
-      run: (_s, a) => set({ at: a.to }),
+      run: (_s, a) => set({ at: a.to }, raise(dialSignals.turned, { to: a.to })),
     }),
   },
-  signals: { turned: { describe: "turned" } },
+  signals: dialSignals,
 });
 
 describe("building a board", () => {
@@ -141,7 +144,7 @@ describe("building a board", () => {
       describe: "Two dials",
       role: PropRole.Explainer,
       children: { left: dial, right: dial },
-      when: { left: { turned: (_s, p, run) => [run.right.turn({ to: p.to as number })] } },
+      when: { left: { turned: (_s, p, run) => [run.right.turn({ to: p.to })] } },
       summary: () => "two dials",
       layout: { kind: "row", children: ["left", "right"] },
     });
@@ -184,7 +187,7 @@ const ask = defineProp({
   state: askState,
   defaults: { status: "open" },
   actions: {},
-  signals: { [QuestionSignal.Correct]: { describe: "right" } },
+  signals: { [QuestionSignal.Correct]: signal("right") },
 });
 
 describe("a page", () => {
