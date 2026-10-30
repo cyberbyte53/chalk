@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { type BoardItem, boardOf, moduleOf } from "@chalk/author";
 import { Kind } from "@chalk/content";
-import { type ScriptLine, scriptOf } from "@chalk/player";
+import { type PropModule, type ScriptLine, scriptOf } from "@chalk/player";
 
 /**
  * Collect: every line a chapter's boards say. The boards are made from the built chapter (build/),
@@ -33,6 +33,8 @@ export async function chapterLines(spec: {
   /** Loads a module under content/ ("class9-maths/…/overview.ts"). */
   load: (module: string) => Promise<Readonly<Record<string, unknown>>>;
   roleOf: (type: string) => string | undefined;
+  /** The props as the player knows them: their sound views say what a piece says of itself. */
+  lookup: (type: string) => PropModule | undefined;
 }): Promise<BoardLines[]> {
   const out: BoardLines[] = [];
   for (const item of itemsUnder(join(spec.root, "build", spec.chapter))) {
@@ -40,7 +42,7 @@ export async function chapterLines(spec: {
     out.push({
       item,
       folder: item.source.path.slice(spec.chapter.length + 1),
-      lines: scriptOf(board),
+      lines: scriptOf(board, spec.lookup),
     });
   }
   return out;

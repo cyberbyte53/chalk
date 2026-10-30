@@ -40,6 +40,8 @@ export type Narrator = {
   speak: (prop: SpokenProp) => Promise<void>;
   /** How long a prop's line plays here, when its audio's length is known. */
   seconds: (prop: string) => number | undefined;
+  /** Stops the line being said. */
+  hush: () => void;
   /** Props whose audio couldn't play, by name. */
   failed: ReadonlySet<string>;
 };
@@ -129,5 +131,7 @@ export function useNarrator(
     [board, locale, source],
   );
 
-  return { speak, failed, seconds };
+  const hush = useCallback(() => audio.current?.pause(), []);
+
+  return { speak, failed, seconds, hush };
 }

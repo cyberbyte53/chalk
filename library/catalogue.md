@@ -151,17 +151,8 @@ Words on the board, in the learner's language.
 | Field | Takes | |
 |---|---|---|
 | `text` | {en: "text", hi: "text"} | changed by its own rules |
-| `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
 | `style` | ["title", "body", "note", "definition"] | changed by its own rules |
 | `color` | {orNull: "text"} | changed by its own rules |
-| `speaker` | {orNull: "text"} | changed by its own rules |
-
-| Action | Takes | |
-|---|---|---|
-| `say` | {after: {optional: "number 0 to 5"}} | Read it aloud (the narrator), after a breath of `after` seconds if given |
-| `hush` | — | Stop reading it aloud |
-
-Signals: `said`
 
 ### `sceneChoice` · question
 
@@ -172,7 +163,6 @@ A multiple-choice question.
 | Field | Takes | |
 |---|---|---|
 | `prompt` | {en: "text", hi: "text"} | changed by its own rules |
-| `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
 | `status` | ["open", "correct", "wrong"] | changed by its own rules |
 | `attempts` | whole number 0 to … | changed by its own rules |
 | `feedback` | {orNull: "ZodRecord"} | changed by its own rules |
@@ -188,10 +178,8 @@ A multiple-choice question.
 | `check` | — | learner · Check the picked option |
 | `retry` | — | learner · Clear a wrong answer to try again |
 | `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
-| `say` | {after: {optional: "number 0 to 5"}} | Read it aloud (the narrator), after a breath of `after` seconds if given |
-| `hush` | — | Stop reading it aloud |
 
-Signals: `checked`, `correct`, `wrong`, `said`
+Signals: `checked`, `correct`, `wrong`
 
 ### `sceneGoal` · question
 
@@ -202,7 +190,6 @@ A question answered by getting another prop into the right state, then pressing 
 | Field | Takes | |
 |---|---|---|
 | `prompt` | {en: "text", hi: "text"} | changed by its own rules |
-| `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
 | `status` | ["open", "correct", "wrong"] | changed by its own rules |
 | `attempts` | whole number 0 to … | changed by its own rules |
 | `feedback` | {orNull: "ZodRecord"} | changed by its own rules |
@@ -216,10 +203,8 @@ A question answered by getting another prop into the right state, then pressing 
 | `check` | — | learner · Check the prop's state as the answer |
 | `retry` | — | learner · Clear a wrong answer to try again |
 | `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
-| `say` | {after: {optional: "number 0 to 5"}} | Read it aloud (the narrator), after a breath of `after` seconds if given |
-| `hush` | — | Stop reading it aloud |
 
-Signals: `checked`, `correct`, `wrong`, `said`
+Signals: `checked`, `correct`, `wrong`
 
 ## `coordinates` — `@chalk/prop-coordinates`
 

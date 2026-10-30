@@ -1,4 +1,4 @@
-import { type ScenePlaced, type SceneUse, type Step, place, tap } from "@chalk/author";
+import { type Says, type ScenePlaced, type SceneUse, type Step, place, tap } from "@chalk/author";
 import type { Localized } from "@chalk/content";
 import type { Color } from "@chalk/prop";
 import { TextStyle, sceneChoice, sceneGoal, sceneText } from "@chalk/prop-basics";
@@ -11,25 +11,18 @@ import { type Option, seedOf, settle } from "./choice-question";
  */
 
 /**
- * How a line is said, when it isn't just its screen words: `speak`, the words for the ear ("√2" is
- * said "square root of 2"), and `speaker`, a character of the cast (the narrator when left out).
+ * What a line says, when it isn't the words shown (`says`: any words, for the ear), and who says it
+ * (`speaker`, a character of the book's cast; the narrator when left out). platform/docs/sound.md.
  */
-export type Said = { speak?: Localized; speaker?: string };
-const said = (s: Said) => ({
-  ...(s.speak === undefined ? {} : { speak: s.speak }),
-  ...(s.speaker === undefined ? {} : { speaker: s.speaker }),
-});
+export type { Says } from "@chalk/author";
 
 /** Words on a board: a title, a paragraph, a note, a definition set apart. */
 export const words = {
-  title: (text: Localized, s: Said = {}) =>
-    place(sceneText, { text, style: TextStyle.Title, ...said(s) }),
-  body: (text: Localized, s: Said = {}) =>
-    place(sceneText, { text, style: TextStyle.Body, ...said(s) }),
-  note: (text: Localized, s: Said = {}) =>
-    place(sceneText, { text, style: TextStyle.Note, ...said(s) }),
-  definition: (text: Localized, color: Color | null = null, s: Said = {}) =>
-    place(sceneText, { text, style: TextStyle.Definition, color, ...said(s) }),
+  title: (text: Localized, s: Says = {}) => place(sceneText, { text, style: TextStyle.Title }, s),
+  body: (text: Localized, s: Says = {}) => place(sceneText, { text, style: TextStyle.Body }, s),
+  note: (text: Localized, s: Says = {}) => place(sceneText, { text, style: TextStyle.Note }, s),
+  definition: (text: Localized, color: Color | null = null, s: Says = {}) =>
+    place(sceneText, { text, style: TextStyle.Definition, color }, s),
 };
 
 /** How a scene reads a piece: by its name. */
@@ -46,18 +39,18 @@ export function check(spec: {
   name?: string;
   about: string;
   prompt: Localized;
-  /** The prompt's spoken words, when they aren't its screen words. */
-  speak?: Localized;
+  /** What the question says, when it isn't its prompt as shown. */
+  says?: Localized;
   isRight: (read: Read) => boolean;
   solve: readonly Step[];
   notes?: readonly SceneNote[];
 }): { piece: ScenePlaced<typeof sceneGoal>; use: SceneUse } {
   const name = spec.name ?? "ask";
-  const piece = place(sceneGoal, {
-    prompt: spec.prompt,
-    about: spec.about,
-    ...(spec.speak === undefined ? {} : { speak: spec.speak }),
-  });
+  const piece = place(
+    sceneGoal,
+    { prompt: spec.prompt, about: spec.about },
+    spec.says === undefined ? {} : { says: spec.says },
+  );
   const reader = (me: Readonly<Record<string, Readonly<Record<string, unknown>>>>) =>
     ((piece: string) => me[piece] ?? {}) as Read;
   const notes = spec.notes ?? [];
@@ -89,8 +82,8 @@ export function check(spec: {
 export function choice(spec: {
   name?: string;
   prompt: Localized;
-  /** The prompt's spoken words, when they aren't its screen words. */
-  speak?: Localized;
+  /** What the question says, when it isn't its prompt as shown. */
+  says?: Localized;
   options: readonly Option[];
   answer: string;
   keepOrder?: boolean;
@@ -104,12 +97,17 @@ export function choice(spec: {
     spec.keepOrder === true
       ? spec.options
       : settle(spec.options, seedOf(`${name}|${spec.prompt.en}|${ids.join(",")}`));
-  const piece = place(sceneChoice, {
-    prompt: spec.prompt,
-    ...(spec.speak === undefined ? {} : { speak: spec.speak }),
-    options: shown.map((o) => (o.feedback === undefined ? { id: o.id, label: o.label } : { ...o })),
-    answer: spec.answer,
-  });
+  const piece = place(
+    sceneChoice,
+    {
+      prompt: spec.prompt,
+      options: shown.map((o) =>
+        o.feedback === undefined ? { id: o.id, label: o.label } : { ...o },
+      ),
+      answer: spec.answer,
+    },
+    spec.says === undefined ? {} : { says: spec.says },
+  );
   return {
     piece,
     use: {

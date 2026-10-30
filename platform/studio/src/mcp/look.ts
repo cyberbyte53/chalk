@@ -279,9 +279,9 @@ export function boardText(
 /** What is said for a line in one language (voice/said.ts), as script.json keeps it. */
 type ScriptSaid = { words: string; from: string } | { needs: string; suggested?: string };
 type ScriptLine = {
-  piece: string;
+  line: string;
   speaker: string;
-  isLater: boolean;
+  cue: string;
   said: Readonly<Record<string, ScriptSaid | undefined>>;
 };
 
@@ -317,7 +317,7 @@ export function scriptText(root: string, board: string): string[] {
   return [
     "script (what the voice says, in order):",
     ...lines.flatMap((l) => [
-      `  ${l.piece} · ${l.speaker}${l.isLater ? " · when shown" : ""}`,
+      `  ${l.line} · ${l.speaker} · ${l.cue}`,
       ...Object.entries(l.said).map(([locale, s]) => `    ${locale}: ${said(s)}`),
     ]),
   ];

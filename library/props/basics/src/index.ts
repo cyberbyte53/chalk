@@ -4,6 +4,7 @@ import { goal } from "./goal";
 import { multiChoice } from "./multi-choice";
 import { orderSteps } from "./order-steps";
 import { sceneChoice, sceneGoal, sceneText } from "./scene";
+import { questionSound, textSound } from "./scene-sound";
 import { text } from "./text";
 import { ChoiceView, GoalView, MultiChoiceView, OrderStepsView, TextView } from "./views";
 
@@ -31,7 +32,7 @@ export const basicProps: readonly PropModule[] = [
   propModule(multiChoice, MultiChoiceView),
   propModule(orderSteps, OrderStepsView),
   // On the event model: the same variables and actions, drawn by the same views.
-  propModule(sceneText, TextView as never),
-  propModule(sceneChoice, ChoiceView as never),
-  propModule(sceneGoal, GoalView as never),
+  propModule(sceneText, TextView as never, textSound),
+  propModule(sceneChoice, ChoiceView as never, questionSound),
+  propModule(sceneGoal, GoalView as never, questionSound),
 ];

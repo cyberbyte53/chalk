@@ -2,6 +2,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { place, scene } from "@chalk/author";
+import { propLibrary } from "@chalk/library";
 import { scriptOf } from "@chalk/player";
 import { sceneText } from "@chalk/prop-basics";
 import { describe, expect, it } from "vitest";
@@ -23,19 +24,21 @@ const t = (en: string, hi: string) => ({ en, hi });
 const built = scene({
   pieces: {
     title: place(sceneText, { text: t("Finding **Aman's** house", "अमन का घर") }),
-    root: place(sceneText, {
-      text: t("√2 is about 1.41", "√2 लगभग 1.41 है"),
-      speak: t("The square root of 2 is about 1.41", "2 का वर्गमूल लगभग 1.41 है"),
-    }),
-    reply: place(sceneText, { text: t("House 5.", "मकान 5।"), speaker: "aman" }),
+    root: place(
+      sceneText,
+      { text: t("√2 is about 1.41", "√2 लगभग 1.41 है") },
+      { says: t("The square root of 2 is about 1.41", "2 का वर्गमूल लगभग 1.41 है") },
+    ),
+    reply: place(sceneText, { text: t("House 5.", "मकान 5।") }, { speaker: "aman" }),
   },
 }).build("tiny");
 const item = { id: "b1", path: "book/chapter/lesson/tiny" } as never;
-const boards = [{ item, folder: "lesson", lines: scriptOf(built.board) }];
+const lookup = (type: string) => propLibrary[type];
+const boards = [{ item, folder: "lesson", lines: scriptOf(built.board, lookup) }];
 
 describe("a board's script", () => {
   it("is every line it says, in order, with who says it", () => {
-    expect(scriptOf(built.board).map((l) => `${l.piece}: ${l.speaker}`)).toEqual([
+    expect(scriptOf(built.board, lookup).map((l) => `${l.line}: ${l.speaker}`)).toEqual([
       "title: narrator",
       "root: narrator",
       "reply: aman",
@@ -89,7 +92,7 @@ describe("the voice: cast, speak, keep", () => {
       },
     }).build("odd");
     const made = await makeVoice({
-      boards: [{ item, folder: "lesson", lines: scriptOf(odd.board) }],
+      boards: [{ item, folder: "lesson", lines: scriptOf(odd.board, lookup) }],
       cast,
       providers,
       outDir: mkdtempSync(join(tmpdir(), "v-")),

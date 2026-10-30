@@ -1,9 +1,10 @@
-import type { Locale } from "@chalk/content";
+import type { Locale, Localized } from "@chalk/content";
 import type {
   ActionSpec,
   AnyPropDef,
   ArgsParam,
   PropDef,
+  PropView,
   SignalSpec,
   StoredState,
   ViewOf,
@@ -30,17 +31,32 @@ export type PropViewProps<P = AnyPropDef> = {
 /** A definition's state: what its defaults are (a host's joins its layers'). */
 type StateOfDef<P> = P extends { readonly defaults: infer S extends StoredState } ? S : StoredState;
 
-/** A prop as the player knows it: the definition plus a view. */
-export type PropModule = { def: AnyPropDef; View: ComponentType<PropViewProps> };
+/**
+ * How a prop sounds (platform/docs/sound.md), beside how it looks: its auditory view. Its `line` is
+ * what it says when it appears on a board, unless the lesson gives it other words: a text's words,
+ * a question's prompt. Worked out from its view, like its drawing.
+ */
+export type SoundView = {
+  line?: (view: PropView) => Localized | undefined;
+};
+
+/** A prop as the player knows it: the definition, how it looks, and how it sounds. */
+export type PropModule = {
+  def: AnyPropDef;
+  View: ComponentType<PropViewProps>;
+  sound?: SoundView;
+};
 
 /** A prop's definition and its view, as the player holds them (their types erased together). */
 export function propModule<P extends { readonly type: string }>(
   def: P,
   View: ComponentType<PropViewProps<P>>,
+  sound?: SoundView,
 ): PropModule {
   return {
     def: def as unknown as AnyPropDef,
     View: View as unknown as ComponentType<PropViewProps>,
+    ...(sound === undefined ? {} : { sound }),
   };
 }
 

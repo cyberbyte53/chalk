@@ -17,10 +17,13 @@ import { type Said, said } from "./said";
 
 /** One line of a board's script, as made: what is shown, what is said, and its clip's key. */
 export type ScriptEntry = {
-  piece: string;
+  line: string;
+  /** Its piece; none for narration. */
+  piece?: string;
   speaker: string;
-  /** Said when a rule shows it, not when the board opens. */
-  isLater: boolean;
+  /** When it is heard: the board opening, its piece appearing, or a rule saying it. */
+  cue: "opening" | "appears" | "rule";
+  /** What its piece says of itself (a text's words), shown beside what is said. */
   shown: Readonly<Record<Locale, string | undefined>>;
   said: Readonly<Record<Locale, Said | undefined>>;
   /** Its clips' keys in the manifest, by language. */
@@ -55,18 +58,21 @@ export async function makeVoice(spec: {
     const into = byFolder.get(folder) ?? [];
     byFolder.set(folder, into);
     const entries: ScriptEntry[] = [];
-    for (const { piece, speaker, line, isLater } of lines) {
+    for (const line of lines) {
+      const { speaker, cue } = line;
+      const name = line.line;
       const keys = Object.fromEntries(
-        LOCALES.map((l) => [l, audioKey(item.id, segment(piece), l)]),
+        LOCALES.map((l) => [l, audioKey(item.id, segment(name), l)]),
       ) as Record<Locale, string>;
       const saidBy = Object.fromEntries(
         LOCALES.map((l) => [l, said(line, l, readMaths)]),
       ) as Record<Locale, Said | undefined>;
       entries.push({
-        piece,
+        line: name,
+        ...(line.piece === undefined ? {} : { piece: line.piece }),
         speaker,
-        isLater,
-        shown: Object.fromEntries(LOCALES.map((l) => [l, line.say[l]])) as Record<Locale, string>,
+        cue,
+        shown: Object.fromEntries(LOCALES.map((l) => [l, line.own?.[l]])) as Record<Locale, string>,
         said: saidBy,
         keys,
       });
@@ -75,7 +81,7 @@ export async function makeVoice(spec: {
         if (what === undefined) continue;
         if ("needs" in what) {
           unsaid.push(
-            `${item.path}, ${piece} (${locale}): ${what.needs}: "${line.say[locale]}"${what.suggested === undefined ? "" : `\n      suggested: "${what.suggested}"`}`,
+            `${item.path}, ${name} (${locale}): ${what.needs}: "${line.own?.[locale] ?? line.says?.[locale]}"${what.suggested === undefined ? "" : `\n      suggested: "${what.suggested}"`}`,
           );
           continue;
         }

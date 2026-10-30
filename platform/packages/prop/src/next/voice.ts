@@ -1,30 +1,26 @@
-import type { Spoken } from "../define";
-
 /**
- * How a board speaks: a line starts, and how long it plays. The player plays the line's audio and
- * knows its length from publish (each file's seconds); without audio (a check, a test, a failed
- * file) the length is worked out from the words. A line is a "later" like any other.
+ * How a board is heard: the host (the player, a check, a test) says a line by its name and says
+ * how long it plays, so the board can wait for it (a "later" of that length). Where the words and
+ * the audio come from (a clip made in advance, the phone's own voice) is the host's: the board only
+ * knows lines by name and their length. platform/docs/sound.md.
  */
 export type Voice = {
-  /** Starts saying `line` (the prop at `path`). */
-  start: (path: string, line: Spoken) => void;
-  /** How long `line` plays, in seconds. */
-  seconds: (path: string, line: Spoken) => number;
+  /** Starts saying `line` (cutting any line being said); how long it plays, or undefined: nothing to say. */
+  say: (line: string) => number | undefined;
+  /** Stops the line being said. */
+  hush: () => void;
 };
 
-/** Words a second a voice says, roughly: for a line with no audio. */
+/** Words a second a voice says, roughly: for a line with no audio of its own. */
 const WORDS_PER_SECOND = 2.5;
 /** A short breath before and after any line. */
 const LINE_PAUSE = 0.4;
 
-/** How long a line would take to say, from its words, when there is no audio to measure. */
+/** How long words would take to say, when there is no audio to measure. */
 export function estimatedSeconds(text: string): number {
   const words = text.split(/\s+/).filter((w) => w !== "").length;
   return LINE_PAUSE + words / WORDS_PER_SECOND;
 }
 
-/** No audio: nothing plays, and each line takes as long as its English words would. */
-export const silentVoice: Voice = {
-  start: () => undefined,
-  seconds: (_, line) => estimatedSeconds(line.speak?.en ?? line.say.en ?? ""),
-};
+/** A board with no voice: every line has nothing to say, and ends at once. */
+export const silentVoice: Voice = { say: () => undefined, hush: () => undefined };

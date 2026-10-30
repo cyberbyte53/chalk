@@ -49,25 +49,23 @@ describe("a scene, built and checked like any board", () => {
   });
 
   it("a line shown cuts off what is being said: the newest line wins", () => {
+    const heard: string[] = [];
     const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
       now: () => 0,
       frame: () => () => undefined,
-      speak: async () => {},
+      speak: async (line) => void heard.push(`say ${line.name}`),
+      hush: () => void heard.push("hush"),
       onError: (message) => {
         throw new Error(message);
       },
-    });
-    const asked: string[] = [];
-    runtime.onAction((a) => {
-      if (a.action === "say" || a.action === "hush") asked.push(`${a.prop}.${a.action}`);
     });
     runtime.start();
     // While the title is being said (the question waits its turn), the student answers.
     void runtime.call("ask", "select", { option: "street" }, Actor.Learner);
     void runtime.call("ask", "check", {}, Actor.Learner);
     runtime.settle();
-    // "found" is said at once; the title stops, and the question, still waiting, is never said.
-    expect(asked).toEqual(["title.say", "title.hush", "found.say"]);
+    // "found" is said at once, cutting the title; the question, still waiting, is never said.
+    expect(heard).toEqual(["say title", "say found"]);
     expect(runtime.getView("board").saying).toEqual([]);
   });
 

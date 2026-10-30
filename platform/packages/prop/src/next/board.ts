@@ -1,6 +1,5 @@
 import type { ZodType } from "zod";
 import { joinPath } from "../address";
-import type { Spoken } from "../define";
 import { withShown } from "../group";
 import {
   type AnyProp,
@@ -53,7 +52,13 @@ export type BoardEvent =
     };
 
 /** What waits in the queue: outs to do as the prop that queued them. */
-type Later = { readonly outs: readonly Out[]; readonly move?: string };
+type Later = {
+  readonly outs: readonly Out[];
+  /** The move this is the end of. */
+  readonly move?: string;
+  /** The end of a line being said (dropped when it is hushed or cut). */
+  readonly isLine?: true;
+};
 
 type Node = {
   readonly path: string;
@@ -389,8 +394,18 @@ export class Board {
         case "stop":
           this.stopAll(node);
           break;
-        case "speak":
-          this.speak(node);
+        case "say":
+          if (out.after !== undefined && out.after > 0) {
+            // The quiet before it is part of the line: a line said meanwhile cuts both.
+            this.queue.drop((e) => e.what.isLine === true);
+            this.queue.add(this.clock + seconds(node, "say after", out.after), node.path, {
+              outs: [{ kind: "say", line: out.line, atEnd: out.atEnd }],
+              isLine: true,
+            });
+          } else this.say(node, out.line, out.atEnd);
+          break;
+        case "hush":
+          this.hush();
           break;
       }
     }
@@ -444,19 +459,23 @@ export class Board {
     });
   }
 
-  /** Says the prop's line; its `said` is told when the line ends (a "later" of the line's length). */
-  private speak(node: Node): void {
-    const line = (node.def.speech as AnyFn | undefined)?.(this.reader(node) as never) as
-      | Spoken
-      | undefined;
-    if (line === undefined) throw new Error(`${where(node.path, node.def)} has no line to say`);
-    if (node.def.signals?.said === undefined)
-      throw new Error(`${where(node.path, node.def)} speaks, so it needs a signal "said"`);
-    this.voice.start(node.path, line);
-    const seconds = this.voice.seconds(node.path, line);
-    this.queue.add(this.clock + Math.max(0, seconds), node.path, {
-      outs: [{ kind: "tell", signal: "said", payload: {} }],
+  /**
+   * Says a line on the voice bus: the line being said is cut (its end never comes), the host starts
+   * this one and says how long it plays; its `atEnd` is done then, as the prop that said it.
+   */
+  private say(node: Node, line: string, atEnd: readonly Out[]): void {
+    this.queue.drop((e) => e.what.isLine === true);
+    const seconds = this.voice.say(line);
+    this.queue.add(this.clock + Math.max(0, seconds ?? 0), node.path, {
+      outs: atEnd,
+      isLine: true,
     });
+  }
+
+  /** Stops the line being said. */
+  private hush(): void {
+    this.queue.drop((e) => e.what.isLine === true);
+    this.voice.hush();
   }
 
   private stopAll(node: Node): void {
@@ -579,7 +598,13 @@ export class Board {
         atEnd: options.atEnd ?? [],
       }),
       stop: (): Out => ({ kind: "stop" }),
-      speak: (): Out => ({ kind: "speak" }),
+      say: (line: string, options: { atEnd?: readonly Out[]; after?: number } = {}): Out => ({
+        kind: "say",
+        line,
+        atEnd: options.atEnd ?? [],
+        ...(options.after === undefined ? {} : { after: options.after }),
+      }),
+      hush: (): Out => ({ kind: "hush" }),
     };
   }
 }

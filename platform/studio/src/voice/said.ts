@@ -1,14 +1,12 @@
 import type { Locale } from "@chalk/content";
 import { type MathsReader, richSpeech } from "@chalk/player";
-import type { Spoken } from "@chalk/prop";
 
 /**
  * What a voice says for a line: words a person wrote, never rewritten.
  *
- * - `written`: the line's spoken words (`speak`), written with it when its screen words aren't how it
- *   is said.
- * - `screen`: its screen words, when they are words already (bold and emphasis said as their words,
- *   rich-text-speech.ts).
+ * - `written`: the lesson's words for the line (`says`): anything, not only the screen's.
+ * - `screen`: what its piece says of itself (a text's words, a question's prompt), when they are
+ *   words already (bold and emphasis said as their words, rich-text-speech.ts).
  * - Anything else needs its spoken words: maths (with a `suggested` draft from a maths reader, to
  *   write in as it is or edit), or a sign outside maths (write it as maths, `$-2$`, or write its words).
  */
@@ -16,10 +14,17 @@ export type Said =
   | { words: string; from: "written" | "screen" }
   | { needs: string; suggested?: string };
 
-export function said(line: Spoken, locale: Locale, readMaths?: MathsReader): Said | undefined {
-  const speak = line.speak?.[locale];
-  if (speak !== undefined) return { words: speak, from: "written" };
-  const say = line.say[locale];
+export function said(
+  line: {
+    readonly own?: Readonly<Record<string, string>>;
+    readonly says?: Readonly<Record<string, string>>;
+  },
+  locale: Locale,
+  readMaths?: MathsReader,
+): Said | undefined {
+  const written = line.says?.[locale];
+  if (written !== undefined) return { words: written, from: "written" };
+  const say = line.own?.[locale];
   if (say === undefined) return undefined;
   const { pieces, problems } = richSpeech(say, locale, readMaths);
   if (problems.length > 0)

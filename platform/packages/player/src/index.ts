@@ -24,7 +24,13 @@ export { JugnuFigure, JugnuMood } from "./jugnu-figure";
 export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource } from "./narration";
-export { type PropModule, type PropRegistry, type PropViewProps, propModule } from "./prop-module";
+export {
+  type PropModule,
+  type PropRegistry,
+  type PropViewProps,
+  type SoundView,
+  propModule,
+} from "./prop-module";
 export { checkProp } from "./check-prop";
 export { groupView, useTheme, type GroupViewOptions, type PartDrawing } from "./group-view";
 export {

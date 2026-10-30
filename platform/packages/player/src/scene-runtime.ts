@@ -1,4 +1,11 @@
-import { Actor, type Board, type Locale, propPieces } from "@chalk/content";
+import {
+  Actor,
+  type Board,
+  type Locale,
+  type Localized,
+  NARRATOR,
+  propPieces,
+} from "@chalk/content";
 import {
   AnswerStatus,
   BOARD,
@@ -20,7 +27,9 @@ import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
 import { findNode } from "./part-paths";
 import type { PropModule } from "./prop-module";
+import { plainText } from "./rich-text";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
+import { ownLine } from "./script";
 import { takes } from "./snapshot";
 
 /**
@@ -49,6 +58,8 @@ export class SceneRuntime {
     readonly board: Board,
     private readonly lookup: (type: string) => PropModule | undefined,
     private readonly services: RuntimeServices & {
+      /** Stops the line being said. */
+      hush?: () => void;
       /** How long a line plays, when its audio's length is known (publish); else from its words. */
       lineSeconds?: (prop: string, line: Spoken) => number | undefined;
       locale?: Locale;
@@ -66,13 +77,19 @@ export class SceneRuntime {
       model.scene,
       { ...model.given, hidden },
       {
+        // A line by its name: the lesson's words for it, else what its piece says of itself (its
+        // sound view); its clip plays, and it lasts as long as the clip (or its words would take).
         voice: {
-          start: (path, line) => {
-            void services.speak({ name: path }, line);
+          say: (name) => {
+            const words = this.lineWords(name);
+            if (words === undefined) return undefined;
+            const line: Spoken = { say: words, speaker: model.lines[name]?.speaker ?? NARRATOR };
+            void services.speak({ name }, line);
+            return (
+              services.lineSeconds?.(name, line) ?? estimatedSeconds(plainText(words[locale] ?? ""))
+            );
           },
-          seconds: (path, line) =>
-            services.lineSeconds?.(path, line) ??
-            estimatedSeconds(line.speak?.[locale] ?? line.say[locale] ?? ""),
+          hush: () => services.hush?.(),
         },
       },
     );
@@ -107,6 +124,14 @@ export class SceneRuntime {
         for (const fn of this.signalListeners) fn(record);
       }
     });
+  }
+
+  /** A line's words: the lesson's own for it, else what its piece says of itself, as it is now. */
+  private lineWords(name: string): Localized | undefined {
+    const given = this.board.model?.lines[name]?.says;
+    if (given !== undefined) return given;
+    const piece = propPieces(this.board.root).find((p) => p.name === name);
+    return piece === undefined ? undefined : ownLine(this.lookup(piece.prop), this.core.read(name));
   }
 
   // ---- reading ----

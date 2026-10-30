@@ -20,6 +20,7 @@ export {
   splitTarget,
   whenRuleSchema,
   type Board,
+  type SceneLine,
   type SceneModel,
   type IsRule,
   type Script,

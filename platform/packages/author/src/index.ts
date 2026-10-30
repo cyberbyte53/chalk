@@ -34,13 +34,16 @@ export {
 } from "./board";
 export { type Family, family, isFamily } from "./family";
 export {
+  type FreeLine,
   type GivenFor,
   type Placed as ScenePlaced,
+  type Says,
   type Scene,
   type SceneSpec,
   type SceneUse,
   hidden,
   isScene,
+  line,
   place,
   scene,
   tap,

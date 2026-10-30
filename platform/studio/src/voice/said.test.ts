@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { mathsReader } from "./maths";
 import { said, unspeakable } from "./said";
 
-const line = (en: string, speak?: string) => ({
-  say: { en, hi: en },
-  ...(speak === undefined ? {} : { speak: { en: speak, hi: speak } }),
+/** A line: what its piece says of itself, and the lesson's own words for it, if any. */
+const line = (en: string, says?: string) => ({
+  own: { en, hi: en },
+  ...(says === undefined ? {} : { says: { en: says, hi: says } }),
 });
 
 describe("what a voice says: words a person wrote, never rewritten", () => {

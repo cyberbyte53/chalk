@@ -109,6 +109,7 @@ export function BoardPlayer({
   const runtime = useBoardRuntime(board, registry, narrator.speak, {
     locale,
     lineSeconds: (prop) => narratorRef.current.seconds(prop),
+    hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).
   const jugnuRuntime = runtime instanceof BoardRuntime ? runtime : undefined;

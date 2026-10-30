@@ -13,9 +13,10 @@ import { useEffect, useRef, useState } from "preact/hooks";
 /** What is said for a line in one language (platform/studio/src/voice/said.ts). */
 type Said = { words: string; from: "written" | "screen" } | { needs: string; suggested?: string };
 type Entry = {
-  piece: string;
+  line: string;
+  piece?: string;
   speaker: string;
-  isLater: boolean;
+  cue: "opening" | "appears" | "rule";
   shown: Readonly<Record<Locale, string | undefined>>;
   said: Readonly<Record<Locale, Said | undefined>>;
   keys: Readonly<Record<Locale, string>>;
@@ -23,8 +24,13 @@ type Entry = {
 type Script = { boards: { id: string; path: string; lines: Entry[] }[] };
 
 const FROM_WORDS: Readonly<Record<"written" | "screen", string>> = {
-  written: "written",
-  screen: "screen words",
+  written: "the lesson's words",
+  screen: "its own words",
+};
+const CUE_WORDS: Readonly<Record<Entry["cue"], string>> = {
+  opening: "as the board opens",
+  appears: "when it appears",
+  rule: "narration, said by a rule",
 };
 
 /** The chapter's script and clips, loaded once per chapter. */
@@ -92,10 +98,10 @@ export function ScriptView({
         const seconds = loaded.manifest.seconds?.[key];
         const shown = line.shown[locale];
         return (
-          <li key={line.piece} class="script-line" data-script-piece={line.piece}>
+          <li key={line.line} class="script-line" data-script-line={line.line}>
             <div class="script-who">
-              <b>{line.speaker}</b> · {line.piece}
-              {line.isLater && <span class="script-tag">when shown</span>}
+              <b>{line.speaker}</b> · {line.line}
+              <span class="script-tag">{CUE_WORDS[line.cue]}</span>
             </div>
             <div class="script-shown">{shown !== undefined && <RichText text={shown} />}</div>
             {said === undefined ? null : "words" in said ? (

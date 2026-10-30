@@ -20,11 +20,11 @@ Then:
 - Motivate by understanding, never speed.
 - Every string has its Hindi.
 
-**Writing for the voice.** Every line on a board is also said aloud. Write its spoken words with it whenever the screen words aren't how a teacher would say them (`words.body(t(…), { speak: t(…) })`), in both languages. Nothing turns maths or symbols into words for you, so nothing can change their meaning: a line whose screen words have maths or a sign and no spoken words stops the voice, naming the line.
+**Writing for the voice.** Every line on a board is also said aloud (platform/docs/sound.md). Give a piece its own words to say whenever its screen words aren't how a teacher would say them (`words.body(t(…), { says: t(…) })`), in both languages. They can be anything, not only the screen words read out: a shorter version, a question to the student. Narration with nothing on screen is a line of the board (`lines: { watch: line(t(…)) }`), said by a rule (`t.self.say({ line: "watch" })`). Nothing turns maths or symbols into words for you, so nothing can change their meaning: a line whose screen words have maths or a sign and no spoken words stops the voice, naming the line.
 - Maths is said in words: "√2 ≈ 1.41" → "the square root of 2 is about 1.41"; "x²" → "x squared"; "3/4" → "three quarters"; "(4, 5)" → "4 comma 5" or "the point 4, 5".
 - Units and signs in full: "25°C" → "25 degrees Celsius"; "5 cm" → "5 centimetres"; "−2" → "minus 2"; "≥" → "is at least".
 - Say a name or term the way the class says it, in Hindi too ("H₂O" → "H 2 O"; "देकार्त", not the spelling).
-- A line someone in the story says names them (`speaker: "aman"`): the cast (`authoring/voices.json`) gives each character a voice. Everything else is the narrator's.
-- The spoken words say the same thing, never more: they are read, not reworded. Short sentences sound better than long ones.
+- A line someone in the story says names them (`{ speaker: "aman" }`): the cast gives each character a voice. Everything else is the narrator's.
+- Short sentences sound better than long ones.
 
 **Pictures:** scenes drawn with the look's tokens; physically right; never spoil a reveal; marks not yet defined are hidden.

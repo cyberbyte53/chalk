@@ -298,7 +298,10 @@ export function validateBoard(board: Board, allDefs: Defs): Problem[] {
     const line = def === undefined || state === undefined ? undefined : def.speech?.(state);
     if (line === undefined) continue;
     for (const locale of LOCALES) {
-      const what = said(line, locale);
+      const what = said(
+        { own: line.say, ...(line.speak === undefined ? {} : { says: line.speak }) },
+        locale,
+      );
       if (what !== undefined && "needs" in what)
         report(
           name,

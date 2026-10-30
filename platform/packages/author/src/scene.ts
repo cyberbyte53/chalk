@@ -35,8 +35,15 @@ export type GivenFor<D> = Partial<VarsOf<D>> & {
   readonly [K in keyof ChildrenOf<D>]?: GivenFor<ChildrenOf<D>[K]>;
 };
 
-/** A prop placed on a board: what it is, what it starts with, how it is shown. */
-export type Placed<D extends AnyProp = AnyProp> = {
+/**
+ * What a piece says when it appears (platform/docs/sound.md): the lesson's own words for it, when
+ * they aren't what the piece itself says (a text its words, a question its prompt), and who says
+ * them (a character of the book's cast; the narrator when no one is named).
+ */
+export type Says = { readonly says?: Localized; readonly speaker?: string };
+
+/** A prop placed on a board: what it is, what it starts with, how it is shown and heard. */
+export type Placed<D extends AnyProp = AnyProp> = Says & {
   readonly def: D;
   readonly given: Given;
   readonly isHidden: boolean;
@@ -45,11 +52,19 @@ export type Placed<D extends AnyProp = AnyProp> = {
   readonly still?: Localized;
 };
 
+/** A line the board says with nothing on screen of its own (narration), said by a rule. */
+export type FreeLine = { readonly says: Localized; readonly speaker?: string };
+
+/** A narration line: `lines: { watch: line(t("Watch the street…", "…")) }`. */
+export function line(says: Localized, options: { speaker?: string } = {}): FreeLine {
+  return { says, ...(options.speaker === undefined ? {} : { speaker: options.speaker }) };
+}
+
 /** Places a prop: `place(coordinatePlane, { plane: { upLines: [] } })`. */
 export function place<D extends AnyProp>(
   def: D,
   given: GivenFor<D> = {} as GivenFor<D>,
-  options: { isHidden?: boolean; size?: Size; still?: Localized } = {},
+  options: { isHidden?: boolean; size?: Size; still?: Localized } & Says = {},
 ): Placed<D> {
   return {
     def,
@@ -57,6 +72,8 @@ export function place<D extends AnyProp>(
     isHidden: options.isHidden === true,
     ...(options.size === undefined ? {} : { size: options.size }),
     ...(options.still === undefined ? {} : { still: options.still }),
+    ...(options.says === undefined ? {} : { says: options.says }),
+    ...(options.speaker === undefined ? {} : { speaker: options.speaker }),
   };
 }
 
@@ -83,6 +100,10 @@ const sceneActions = {
   start: action(),
   show: action({ name: z.string().min(1) }),
   hide: action({ name: z.string().min(1) }),
+  /** Says a line now (a piece's, or a narration line), cutting the one being said. */
+  say: action({ line: z.string().min(1) }),
+  /** A line has ended (the voice bus): the next waiting is said, and what waits for it runs. */
+  lineEnded: action({ line: z.string().min(1) }),
   pass: action(),
   continue: action({}, { from: "screen" }),
 };
@@ -101,9 +122,17 @@ type SceneTools<P extends Pieces> = Tools<
   ChildrenOfPieces<P>
 >;
 
-export type SceneSpec<P extends Pieces> = {
+type Lines = Readonly<Record<string, FreeLine>>;
+
+export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> = {
   /** The pieces, top to bottom. */
   readonly pieces: P;
+  /** Narration: lines with nothing on screen of their own, said by rules (`t.self.say({ line })`). */
+  readonly lines?: L;
+  /** When a line has been said (a piece's, or a narration line), do these things. */
+  readonly onSaid?: {
+    readonly [K in (keyof P | keyof L) & string]?: (me: SceneMe<P>, t: SceneTools<P>) => Outs;
+  };
   /** The lesson's rules: on a piece's signal ("town.walker.arrived"), do these things. */
   readonly hear?: {
     readonly [K in HeardPaths<ChildrenOfPieces<P>>]?: Rule<
@@ -167,10 +196,6 @@ export function isScene(value: unknown): value is Scene {
   return typeof value === "object" && value !== null && SCENE in value;
 }
 
-/** Whether a prop says lines: it has one (`speech`), an action `say` and a signal `said`. */
-const speaks = (def: AnyProp) =>
-  def.speech !== undefined && def.actions?.say !== undefined && def.signals?.said !== undefined;
-
 type AnyFn = (...args: never[]) => unknown;
 const list = (outs: Outs): Out[] =>
   outs === undefined || outs === false || outs === null
@@ -180,14 +205,22 @@ const list = (outs: Outs): Out[] =>
       : [outs as Out];
 
 /** A board as its pieces and rules: `page("street-and-house", scene({ pieces, hear, witness }))`. */
-export function scene<const P extends Pieces>(spec: SceneSpec<P>): Scene {
-  return { [SCENE]: true, build: (name) => buildScene(name, spec as unknown as SceneSpec<Pieces>) };
+export function scene<const P extends Pieces, const L extends Lines = Record<never, never>>(
+  spec: SceneSpec<P, L>,
+): Scene {
+  return {
+    [SCENE]: true,
+    build: (name) => buildScene(name, spec as unknown as SceneSpec<Pieces, Lines>),
+  };
 }
 
-function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
+function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   const names = Object.keys(spec.pieces);
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
-  const speaking = names.filter((n) => speaks(defs[n] as AnyProp));
+  const freeLines = spec.lines ?? {};
+  for (const line of Object.keys(freeLines))
+    if (line in spec.pieces)
+      throw new Error(`Board ${name}: "${line}" is both a piece and a line; name the line apart`);
   const questions = names.filter((n) => (defs[n] as AnyProp).role === PropRole.Question);
   const isHidden = (n: string) => (spec.pieces[n] as Placed).isHidden;
 
@@ -195,31 +228,27 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
   type T = {
     set: (patch: Partial<SceneVars>) => Out;
     tell: Record<keyof SceneSignals, () => Out>;
-    self: { pass: () => Out; show: (p: { name: string }) => Out };
-    to: Record<string, Record<string, (payload?: object) => Out>>;
-  };
-  /** Says `next` lines after what is being said: the first starts now if nothing is. */
-  const say = (me: Me, t: T, next: readonly string[]): Out[] => {
-    if (next.length === 0) return [];
-    const saying = [...me.saying, ...next];
-    const first = next[0] as string;
-    return [t.set({ saying }), ...(me.saying.length === 0 ? [askSay(t, first)] : [])];
-  };
-  const askSay = (t: T, piece: string, after?: number): Out =>
-    (t.to[piece]?.say as (p: { after?: number }) => Out)(after === undefined ? {} : { after });
-
-  // Every board's own rules, then the lesson's on the same signal.
-  const own: Record<string, (me: Me, payload: unknown, t: T) => Out[]> = {};
-  for (const piece of speaking)
-    own[`${piece}.said`] = (me, _, t) => {
-      const rest = me.saying.slice(1);
-      const next = rest[0];
-      // A breath between one paragraph and the next.
-      return [
-        t.set({ saying: rest }),
-        ...(next === undefined ? [] : [askSay(t, next, BETWEEN_LINES)]),
-      ];
+    self: {
+      pass: () => Out;
+      show: (p: { name: string }) => Out;
+      lineEnded: (p: { line: string }) => Out;
     };
+    to: Record<string, Record<string, (payload?: object) => Out>>;
+    say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
+  };
+  const onSaid = (spec.onSaid ?? {}) as Record<string, AnyFn | undefined>;
+  /**
+   * The voice bus, line by line: each piece's line (what the piece says, or the lesson's words for
+   * it) and the narration lines. The host finds a line's words and audio by its name; a piece with
+   * nothing to say ends at once. Lines waiting (the opening, read top to bottom) follow each other
+   * with a breath between.
+   */
+  const sayNow = (t: T, line: string): Out => t.say(line, { atEnd: [t.self.lineEnded({ line })] });
+  const sayNext = (t: T, line: string): Out =>
+    t.say(line, { atEnd: [t.self.lineEnded({ line })], after: BETWEEN_LINES });
+
+  // Every board's own rules (its questions pass it), then the lesson's on the same signal.
+  const own: Record<string, (me: Me, payload: unknown, t: T) => Out[]> = {};
   if (spec.passBy !== "rules")
     for (const q of questions)
       own[`${q}.correct`] = (me, _, t) =>
@@ -257,30 +286,37 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
     children: defs as Readonly<Record<string, AnyProp>>,
     ...(Object.keys(give).length === 0 ? {} : { give: give as never }),
     on: {
+      // The board opens: the pieces showing are said top to bottom, one after another.
       start: (me, _, t) => {
-        const shown = speaking.filter((n) => !me.hidden.includes(n));
+        const shown = names.filter((n) => !me.hidden.includes(n));
         const atOnce = spec.passBy !== "rules" && questions.length === 0;
+        const tt = t as unknown as T;
         return [
           t.tell.started(),
-          ...say(me as unknown as Me, t as unknown as T, shown),
+          t.set({ saying: shown }),
+          ...(shown[0] === undefined ? [] : [sayNow(tt, shown[0])]),
           ...(atOnce ? [t.self.pass()] : []),
         ];
       },
-      // A piece shown says its line at once: the student has moved on, so whatever was being said
-      // stops, and what was waiting to be said is dropped.
-      show: (me, { name: piece }, t) => {
-        if (!me.hidden.includes(piece)) return;
-        const shown = t.set({ hidden: me.hidden.filter((n) => n !== piece) });
-        if (!speaking.includes(piece)) return shown;
-        const now = me.saying[0];
-        const tt = t as unknown as T;
+      // A piece shown says its line at once: the student has moved on, so the line being said is
+      // cut, and what was waiting to be said is dropped.
+      show: (me, { name: piece }, t) =>
+        me.hidden.includes(piece) && [
+          t.set({ hidden: me.hidden.filter((n) => n !== piece), saying: [piece] }),
+          sayNow(t as unknown as T, piece),
+        ],
+      say: (_, { line }, t) => {
+        if (!(line in spec.pieces) && !(line in freeLines))
+          throw new Error(`Board ${name}: no line "${line}" (a piece's name, or one of its lines)`);
+        return [t.set({ saying: [line] }), sayNow(t as unknown as T, line)];
+      },
+      lineEnded: (me, { line }, t) => {
+        const rest = me.saying[0] === line ? me.saying.slice(1) : me.saying;
+        const next = rest[0];
         return [
-          shown,
-          t.set({ saying: [piece] }),
-          ...(now === undefined || tt.to[now]?.hush === undefined
-            ? []
-            : [(tt.to[now].hush as () => Out)()]),
-          askSay(tt, piece),
+          t.set({ saying: rest }),
+          ...(next === undefined ? [] : [sayNext(t as unknown as T, next)]),
+          ...list(onSaid[line]?.(me as never, t as never) as Outs),
         ];
       },
       hide: (me, { name: piece }, t) =>
@@ -305,7 +341,18 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
       ...(placed.still === undefined ? {} : { still: placed.still }),
     };
   });
-  const model: SceneModel = { scene: root, given };
+  // What each piece says, when the lesson gives its own words, and the narration lines.
+  const lines: Record<string, { says?: Localized; speaker?: string }> = {};
+  for (const n of names) {
+    const placed = spec.pieces[n] as Placed;
+    if (placed.says !== undefined || placed.speaker !== undefined)
+      lines[n] = {
+        ...(placed.says === undefined ? {} : { says: placed.says }),
+        ...(placed.speaker === undefined ? {} : { speaker: placed.speaker }),
+      };
+  }
+  for (const [n, free] of Object.entries(freeLines)) lines[n] = { ...free };
+  const model: SceneModel = { scene: root, given, lines, freeLines: Object.keys(freeLines) };
   const standsFor = Object.fromEntries(
     Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),
   ) as Record<string, string>;

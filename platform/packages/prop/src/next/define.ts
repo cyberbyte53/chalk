@@ -1,11 +1,5 @@
 import { type ZodObject, type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
-import {
-  type FrameKindName,
-  type FramePixels,
-  type PropRole,
-  type Spoken,
-  noteNames,
-} from "../define";
+import { type FrameKindName, type FramePixels, type PropRole, noteNames } from "../define";
 import type { GroupLayoutSpec } from "../group";
 import type { Size } from "../size";
 
@@ -93,8 +87,20 @@ export type Out =
     }
   /** Drops what this prop has queued for later, and stops its moves where they are. */
   | { readonly kind: "stop" }
-  /** Says this prop's line (its `speech`) aloud; `said` is told when it ends. */
-  | { readonly kind: "speak" };
+  /**
+   * Says a line of the board aloud (by its name: a piece's line, or one of the scene's own), on the
+   * voice bus: it cuts the line being said. `atEnd` is done, as this prop, when the line ends; a
+   * line with nothing to say ends at once. Where its words and audio come from is the host's.
+   */
+  | {
+      readonly kind: "say";
+      readonly line: string;
+      readonly atEnd: readonly Out[];
+      /** Seconds of quiet first (a breath between lines); cutting the line cuts its quiet too. */
+      readonly after?: number;
+    }
+  /** Stops the line being said: its `atEnd` never comes. */
+  | { readonly kind: "hush" };
 
 /** What a rule returns: one out, several, or nothing (`p.x === 4 && t.tell.arrived(p)`). */
 export type Outs = Out | readonly Out[] | undefined | false | null;
@@ -202,8 +208,10 @@ export type Tools<V, A, S, C> = {
   ) => Out;
   /** Drops everything this prop has queued, and stops its moves where they are. */
   readonly stop: () => Out;
-  /** Says its line (`speech`) aloud; the board tells this prop's `said` when the line ends. */
-  readonly speak: () => Out;
+  /** Says a line of the board (cutting the one being said); `atEnd` is done when it ends. */
+  readonly say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
+  /** Stops the line being said. */
+  readonly hush: () => Out;
 };
 
 export type Rule<Me, P, T> = (me: Me, payload: P, t: T) => Outs;
@@ -261,8 +269,6 @@ export type PropSpec<
   readonly layout?: GroupLayoutSpec<keyof C & string>;
   /** Whether a child is drawn now (a child not shown draws nothing). */
   readonly show?: { readonly [K in keyof C]?: (me: Me<V, N, F, C>) => boolean };
-  /** Its line, shown and spoken (a text, a question's prompt). */
-  readonly speech?: (me: Me<V, N, F, C>) => Spoken | undefined;
   /** One line saying what it is now, for agents. */
   readonly summary?: (me: Me<V, N, F, C>) => string;
   /** What must always hold of its variables beyond their types: why not, or undefined. */
@@ -307,7 +313,6 @@ export type AnyProp = {
   };
   readonly layout?: GroupLayoutSpec;
   readonly show?: Readonly<Record<string, ((me: never) => boolean) | undefined>>;
-  readonly speech?: (me: never) => Spoken | undefined;
   readonly summary?: (me: never) => string;
   readonly invariant?: (variables: never) => string | undefined;
   readonly offScreen?: readonly string[];

@@ -15,20 +15,14 @@ import { TextStyle } from "./text";
 /**
  * The words and questions every lesson uses, on the event model (platform/docs/event-model.md),
  * for scenes: the same variables and actions as text, goal and choice, so the same views draw
- * them. Each says its line when asked (`say`) and tells `said` when the line ends.
+ * them. How they sound (a text says its words, a question its prompt) is their sound view
+ * (scene-sound.ts), beside their drawing: nothing here knows about sound.
  */
 
-const say = action(
-  { after: z.number().min(0).max(5).optional() },
-  { describe: "Read it aloud (the narrator), after a breath of `after` seconds if given" },
-);
-/** Stop saying it (another line has come): its `said` never comes. */
-const hush = action({}, { describe: "Stop reading it aloud" });
 /** Words a lesson hasn't given yet (it always gives its own). */
 const UNSET = { en: "…", hi: "…" };
-const said = signal();
 
-/** Words on the board, said when they are shown. */
+/** Words on the board. */
 export const sceneText = prop({
   type: "sceneText",
   describe: "Words on the board, in the learner's language.",
@@ -37,36 +31,17 @@ export const sceneText = prop({
   variables: z
     .object({
       text: localizedSchema,
-      /** Plain words for the voice when the text has maths glyphs. */
-      speak: localizedSchema.nullable(),
       style: z.nativeEnum(TextStyle),
       /** The colour a definition is drawn in, or null for none. */
       color: colorSchema.nullable(),
-      /** Who says it: a character of the cast (authoring/voices.json), or null for the narrator. */
-      speaker: z.string().min(1).nullable(),
     })
     .strict(),
-  start: { text: UNSET, speak: null, style: TextStyle.Body, color: null, speaker: null },
-  actions: { say, hush },
-  signals: { said },
-  on: {
-    say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
-    hush: (_, __, t) => t.stop(),
-  },
-  speech: (me) => ({
-    say: me.text,
-    ...(me.speak === null ? {} : { speak: me.speak }),
-    ...(me.speaker === null ? {} : { speaker: me.speaker }),
-  }),
+  start: { text: UNSET, style: TextStyle.Body, color: null },
   summary: (me) => `words: ${me.text.en}`,
 });
 
-const questionVariables = {
-  prompt: localizedSchema,
-  speak: localizedSchema.nullable(),
-  ...questionFields,
-};
-const questionStart = { prompt: UNSET, speak: null, ...questionDefaults };
+const questionVariables = { prompt: localizedSchema, ...questionFields };
+const questionStart = { prompt: UNSET, ...questionDefaults };
 const retry = action({}, { from: "screen", describe: "Clear a wrong answer to try again" });
 const giveFeedback = action({ text: localizedSchema }, { describe: "Show words under it" });
 
@@ -94,14 +69,11 @@ export const sceneGoal = prop({
     check: action({}, { from: "screen", describe: "Check the prop's state as the answer" }),
     retry,
     giveFeedback,
-    say,
-    hush,
   },
   signals: {
     checked: signal({ ...checkedFields, about: z.string().min(1) }),
     correct: signal(),
     wrong: signal(),
-    said,
   },
   on: {
     check: (me, _, t) => {
@@ -117,10 +89,7 @@ export const sceneGoal = prop({
     retry: (me, _, t) =>
       me.status === AnswerStatus.Wrong && t.set({ status: AnswerStatus.Open, feedback: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
-    say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
-    hush: (_, __, t) => t.stop(),
   },
-  speech: (me) => ({ say: me.prompt, ...(me.speak === null ? {} : { speak: me.speak }) }),
   summary: (me) =>
     `a question answered in ${me.about}, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt.en}`,
 });
@@ -165,14 +134,11 @@ export const sceneChoice = prop({
     check: action({}, { from: "screen", describe: "Check the picked option" }),
     retry,
     giveFeedback,
-    say,
-    hush,
   },
   signals: {
     checked: signal({ ...checkedFields, optionId: z.string().min(1) }),
     correct: signal(),
     wrong: signal(),
-    said,
   },
   on: {
     select: (me, { option }, t) =>
@@ -194,10 +160,7 @@ export const sceneChoice = prop({
       me.status === AnswerStatus.Wrong &&
       t.set({ status: AnswerStatus.Open, feedback: null, selected: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
-    say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
-    hush: (_, __, t) => t.stop(),
   },
-  speech: (me) => ({ say: me.prompt, ...(me.speak === null ? {} : { speak: me.speak }) }),
   summary: (me) =>
     `a multiple-choice question, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt.en}`,
 });

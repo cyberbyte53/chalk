@@ -1,6 +1,7 @@
 import type { AnyProp, Given } from "@chalk/prop/next";
 import { z } from "zod";
 import { jugnuNotesSchema } from "./jugnu";
+import type { Localized } from "./localized";
 import { pieceSchema } from "./piece";
 
 /**
@@ -121,8 +122,21 @@ export const boardSchema = z.object({
 });
 export type Board = z.infer<typeof boardSchema>;
 
-/** A board on the event model: its scene, and what each piece starts with. */
-export type SceneModel = { readonly scene: AnyProp; readonly given: Given };
+/**
+ * A board on the event model: its scene, what each piece starts with, and its lines
+ * (platform/docs/sound.md): the lesson's own words for a piece, and its narration lines (said by
+ * rules), each with who says it. A piece without its own words says what it says itself.
+ */
+export type SceneModel = {
+  readonly scene: AnyProp;
+  readonly given: Given;
+  readonly lines: Readonly<Record<string, SceneLine>>;
+  /** The narration lines' names, in the order written. */
+  readonly freeLines: readonly string[];
+};
+
+/** A line's words (per language) and who says them; words left out: the piece says its own. */
+export type SceneLine = { readonly says?: Localized; readonly speaker?: string };
 
 /** Splits "line.zoomTo" / "guess.wrong" / "line.marker" into the prop name and the member. */
 export function splitTarget(target: string): { prop: string; member: string } {

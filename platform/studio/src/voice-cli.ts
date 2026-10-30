@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
-import { propDefs } from "@chalk/library";
+import { propDefs, propLibrary } from "@chalk/library";
 import { castSchema, chapterLines, makeVoice, providers } from "./voice";
 
 /**
@@ -25,6 +25,7 @@ const boards = await chapterLines({
   chapter,
   load: (module) => import(pathToFileURL(join(root, "content", module)).href),
   roleOf: (type) => propDefs[type]?.role,
+  lookup: (type) => propLibrary[type],
 });
 const result = await makeVoice({
   boards,
