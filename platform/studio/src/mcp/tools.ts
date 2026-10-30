@@ -34,7 +34,14 @@ import { pipelineLines, readChapters } from "../pipeline";
 import { findUp } from "../pronunciations";
 import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
-import { changesUnder, changesWords, passUnder } from "../reviewed";
+import {
+  REVIEW_SCREEN,
+  comparePictures,
+  dropPassedPicture,
+  keepPassedPicture,
+  passedPicture,
+} from "../reach/pictures";
+import { type BoardChange, changesUnder, changesWords, passUnder } from "../reviewed";
 import { DEFAULT_LANE, type Step, previewBase, shoot, withNothingDrawing } from "./app-driver";
 import { type Answer, CHECK_SCREENS, check, look, play, readReach, targetOf } from "./look";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
@@ -319,13 +326,39 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     "pipeline",
   );
 
+  /**
+   * A board drawn whole on the review's screen (pictures.ts), with where each piece is: its picture
+   * as passed, or now. Undefined when it can't be drawn.
+   */
+  const reviewPicture = async (board: string) => {
+    try {
+      const d = await shoot(
+        root,
+        board,
+        { locale: REVIEW_SCREEN.locale, width: REVIEW_SCREEN.width, pictures: "full" },
+        undefined,
+        lane,
+      );
+      const shot = d.shots[0];
+      if (shot === undefined) return undefined;
+      return {
+        png: shot.png,
+        boxes: shot.boxes.filter((b) => b.kind === "piece"),
+        // A PNG's width is at byte 16; the picture is at device pixels, the boxes at CSS pixels.
+        scale: shot.png.readUInt32BE(16) / shot.width,
+      };
+    } catch {
+      return undefined;
+    }
+  };
+
   offer(
     server.registerTool(
       "changes",
       {
         title: "What changed since it was reviewed",
         description:
-          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (exactly which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name), new (never passed), or gone. Start a review here: look and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you.",
+          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (exactly which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name), new (never passed), or gone. Each board passed on this machine is also drawn now beside its picture as passed (whole, a phone, English): what differs, how much, in which pieces, marked in red; a board that looks different is changed even when its content and code are the same. Start a review here: look and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you, and keeps its picture.",
         inputSchema: {
           at: z
             .string()
@@ -339,17 +372,84 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         },
         annotations: { readOnlyHint: false, openWorldHint: false },
       },
-      async ({ at, pass }) => {
+      async ({ at, pass }, extra: Extra) => {
         const under = contentPath(at).path.replace(/\/$/, "");
         if (under.split("/").length < 2)
           return result([text("Give a chapter, a lesson or a board: content/<book>/<chapter>/…")]);
+        const notes = await rebuildIfChanged(extra);
+        const progress = progressOf(extra);
         if (pass === true) {
           const n = passUnder(root, under, NAME);
+          // Each board's picture as passed, for the next review to set beside it.
+          const boards = changesUnder(root, under).flatMap((c) =>
+            c.status === "unchanged" ? [c.board] : [],
+          );
+          let kept = 0;
+          for (const [i, board] of boards.entries()) {
+            await progress(`keeping its picture (${i + 1} of ${boards.length}): ${board}`);
+            const png = await reviewPicture(board);
+            if (png === undefined) dropPassedPicture(root, board);
+            else {
+              keepPassedPicture(root, board, png.png);
+              kept++;
+            }
+          }
           return result([
-            text(`✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now.`),
+            text(
+              [
+                `✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now; ${kept} picture${kept === 1 ? "" : "s"} kept to set beside the next review's.`,
+                ...notes,
+              ].join("\n"),
+            ),
           ]);
         }
-        return result([text(changesWords(changesUnder(root, under)))]);
+        const changes = changesUnder(root, under);
+        const images: Content[] = [];
+        // Each passed board drawn now, beside its picture as passed: what changed to the eye. The
+        // unchanged ones too: code and content can be the same while what it draws with (the
+        // player, its styles) changed, and then the picture is what shows it.
+        const seen = new Map<string, string>();
+        const looked = changes.filter((c) => c.status === "changed" || c.status === "unchanged");
+        for (const [i, c] of looked.entries()) {
+          await progress(`drawing (${i + 1} of ${looked.length}): ${c.board}`);
+          const passed = passedPicture(root, c.board);
+          if (passed === undefined) {
+            if (c.status === "changed")
+              seen.set(c.board, "none kept from its review on this machine");
+            continue;
+          }
+          const now = await reviewPicture(c.board);
+          if (now === undefined) {
+            seen.set(c.board, "couldn't be drawn now");
+            continue;
+          }
+          const diff = comparePictures(passed, now.png, now.boxes, now.scale);
+          if (diff.isSame) {
+            if (c.status === "changed") seen.set(c.board, "the same as passed");
+            continue;
+          }
+          seen.set(
+            c.board,
+            `${(diff.share * 100).toFixed(1)}% differs${diff.pieces.length > 0 ? `, in ${diff.pieces.join(", ")}` : ""} (as passed | now, what differs in red)${c.status === "unchanged" ? ": its content and known code are the same, so what changed is something it draws with that isn't counted as its code (the player, its styles)" : ""}`,
+          );
+          images.push({
+            type: "image",
+            data: diff.image.toString("base64"),
+            mimeType: "image/png",
+          } as Content);
+        }
+        // A board that looks different is changed, whatever else says it isn't.
+        const marked = changes.map(
+          (c): BoardChange =>
+            c.status === "unchanged" && seen.has(c.board)
+              ? { board: c.board, status: "changed", passed: c.passed, content: [], code: [] }
+              : c,
+        );
+        const lines = [
+          changesWords(marked),
+          ...[...seen].map(([board, words]) => `${board}   picture: ${words}`),
+        ];
+        return result([text([...lines, ...notes].join("\n")), ...images]);
       },
     ),
     "changes",
