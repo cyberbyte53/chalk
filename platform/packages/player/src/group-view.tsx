@@ -1,5 +1,12 @@
 /** @jsxImportSource preact */
-import { type AnyPropDef, type StoredState, groupOf, shownOf } from "@chalk/prop";
+import {
+  type AnyPropDef,
+  IN_PICTURE,
+  Place,
+  type StoredState,
+  groupOf,
+  shownOf,
+} from "@chalk/prop";
 import { nameOf } from "@chalk/prop";
 import { type ComponentType, type JSX, createContext } from "preact";
 import { memo } from "preact/compat";
@@ -99,9 +106,19 @@ export type GroupViewOptions = {
   ) => JSX.Element | null;
 };
 
+/**
+ * What a child draws in each place round a frame's picture (`Place`): `{ on: Walker, below:
+ * WhereSheIs, controls: Steps }`. A child given as one view draws on the lines (or, if it is a
+ * `below` child, below the picture).
+ */
+export type PartDrawing = { readonly [P in Place]?: ComponentType<PropViewProps> };
+
+const isDrawing = (v: ComponentType<PropViewProps> | PartDrawing): v is PartDrawing =>
+  typeof v !== "function";
+
 export function groupView(
   def: AnyPropDef,
-  views: Readonly<Record<string, ComponentType<PropViewProps>>>,
+  views: Readonly<Record<string, ComponentType<PropViewProps> | PartDrawing>>,
   options: GroupViewOptions = {},
 ): ComponentType<PropViewProps> {
   const wide = options.wide ?? [];
@@ -109,6 +126,22 @@ export function groupView(
   if (layout === undefined) throw new Error(`${def.type} is not a group`);
   for (const name of layout.layout.children)
     if (views[name] === undefined) throw new Error(`${def.type}: no view for child ${name}`);
+  const l = layout.layout;
+  const below = l.kind === "frame" ? (l.below ?? []) : [];
+  /** A child's drawing in one place (a single view draws on the lines, or below if it's below). */
+  const drawingOf = (name: string, place: Place): ComponentType<PropViewProps> | undefined => {
+    const v = views[name];
+    if (v === undefined) return undefined;
+    if (isDrawing(v)) return v[place];
+    return place === (below.includes(name) ? Place.Below : Place.On) ? v : undefined;
+  };
+  /** Who draws in a place, in order: as the layout says, else provider, children, below. */
+  const drawersIn = (place: Place): readonly string[] => {
+    if (l.kind !== "frame") return [];
+    const named = l.order?.[place];
+    const all = named ?? [l.provider, ...l.children, ...below];
+    return all.filter((name) => drawingOf(name, place) !== undefined);
+  };
   const withTheme = (tree: JSX.Element) =>
     options.theme === undefined ? (
       tree
@@ -120,12 +153,17 @@ export function groupView(
     const shown = shownOf(view);
     const isThere = (name: string) =>
       view[name] !== null && view[name] !== undefined && shown?.[name] !== false;
-    const slot = (name: string, inFrame: boolean) =>
-      !isThere(name) ? null : (
+    const slot = (
+      name: string,
+      View: ComponentType<PropViewProps> | undefined,
+      inFrame: boolean,
+      key: string = name,
+    ) =>
+      !isThere(name) || View === undefined ? null : (
         <ChildSlot
-          key={name}
+          key={key}
           name={name}
-          View={views[name] as ComponentType<PropViewProps>}
+          View={View}
           view={view[name] as PropViewProps["view"]}
           width={width}
           locale={locale}
@@ -134,39 +172,51 @@ export function groupView(
           inFrame={inFrame}
         />
       );
-    const l = layout?.layout;
-    if (l?.kind === "frame") {
+    if (l.kind === "frame") {
       const provider = layout?.children[l.provider] as AnyPropDef;
       const providerState = view[l.provider] as StoredState;
       const px = provider.frame?.pixels(providerState, width);
       if (px === undefined) throw new Error(`${def.type}: ${l.provider} provides no frame`);
       const inside = [l.provider, ...l.children].filter(isThere);
+      /** Each drawing inside the picture, back to front, by its key (the child, or child:place). */
+      const drawings = IN_PICTURE.flatMap((place) =>
+        drawersIn(place)
+          .filter(isThere)
+          .map((name) => ({ name, place, key: place === Place.On ? name : `${name}:${place}` })),
+      );
+      const around = (place: Place) =>
+        drawersIn(place).map((name) =>
+          slot(name, drawingOf(name, place), false, `${name}:${place}`),
+        );
+      const controls = around(Place.Controls).filter((c) => c !== null);
       return withTheme(
         <div class={`group group-frame group-${def.type}`}>
+          {around(Place.Above)}
           <div class="group-picture">
-            {l.backdrop !== undefined && slot(l.backdrop, false)}
+            {l.backdrop !== undefined && slot(l.backdrop, drawingOf(l.backdrop, Place.On), false)}
             <FrameStage
               px={px}
               label={provider.frame?.label?.(providerState) ?? def.describe}
-              present={inside}
+              present={drawings.map((d) => d.key)}
               look={options.look?.(view) ?? ""}
             >
-              {inside.map((name) => (
-                <InFrame key={name} owner={name} px={px}>
-                  {slot(name, true)}
+              {drawings.map(({ name, place, key }) => (
+                <InFrame key={key} owner={name} slot={key} px={px}>
+                  {slot(name, drawingOf(name, place), true)}
                 </InFrame>
               ))}
             </FrameStage>
           </div>
           {options.below !== undefined
-            ? options.below((name) => slot(name, false), view)
-            : (l.below ?? []).map((name) => slot(name, false))}
+            ? options.below((name) => slot(name, drawingOf(name, Place.Below), false), view)
+            : around(Place.Below)}
+          {controls.length > 0 && <div class="group-controls">{controls}</div>}
         </div>,
       );
     }
     return withTheme(
-      <div class={`group group-${layout?.layout.kind} group-${def.type}`}>
-        {layout?.layout.children.map((name) => slot(name, false))}
+      <div class={`group group-${l.kind} group-${def.type}`}>
+        {l.children.map((name) => slot(name, drawingOf(name, Place.On), false))}
       </div>,
     );
   }

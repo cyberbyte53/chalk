@@ -100,6 +100,8 @@ export {
   groupOf,
   invariantOfView,
   layoutChildren,
+  IN_PICTURE,
+  Place,
   mergeGiven,
   PATH,
   refuse,

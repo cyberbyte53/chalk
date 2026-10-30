@@ -1,6 +1,14 @@
 import { Level, type RuleFn } from "@chalk/content";
 import { dec } from "@chalk/exact";
-import { AnswerStatus, PropRole, QuestionSignal, actionsFor, defineProp, set } from "@chalk/prop";
+import {
+  AnswerStatus,
+  PropRole,
+  QuestionSignal,
+  actionsFor,
+  defineGroup,
+  defineProp,
+  set,
+} from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { buildBoard, column, inOrder, theBoard, wait } from "./board";
@@ -125,6 +133,42 @@ describe("building a board", () => {
       expect(typeof never).toBe("function");
       return [d];
     });
+  });
+
+  it("reaches a group's parts by name: their actions, signals and fields, typed", () => {
+    const pair = defineGroup({
+      type: "pair",
+      describe: "Two dials",
+      role: PropRole.Explainer,
+      children: { left: dial, right: dial },
+      when: { left: { turned: (_s, p, run) => [run.right.turn({ to: p.to as number })] } },
+      summary: () => "two dials",
+      layout: { kind: "row", children: ["left", "right"] },
+    });
+    const built = buildBoard("x", (b) => {
+      const p = b.prop(pair, "p");
+      b.when(p.on.left.turned, p.call.right.turn({ to: 2 }), (at) => at(p).left.at > 1);
+      b.witness(p.learner.left.turn({ to: 3 }));
+      const never = () => {
+        // @ts-expect-error the pair has no part "middle"
+        p.call.middle.turn({ to: 1 });
+        // @ts-expect-error a part's action takes its own arguments
+        p.call.left.turn({ from: 1 });
+        // @ts-expect-error a part's fields are under its name
+        b.when(p.on.left.turned, p.call.left.turn({ to: 1 }), (at) => at(p).at > 0);
+      };
+      expect(typeof never).toBe("function");
+      return [p];
+    });
+    expect(built.board.when).toContainEqual(
+      expect.objectContaining({
+        on: "p.left.turned",
+        do: { call: "p.right.turn", args: { to: 2 } },
+      }),
+    );
+    expect(built.witness).toContainEqual(
+      expect.objectContaining({ prop: "p", action: "left.turn", args: { to: 3 } }),
+    );
   });
 });
 

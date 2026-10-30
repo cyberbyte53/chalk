@@ -37,7 +37,11 @@ export type FrameLabel = {
   part?: string;
 };
 
-type LabelStore = Map<string, { labels: readonly FrameLabel[]; obstacles: Obstacles }>;
+/** By the drawing that gave them (a child, or one of its places), with the child they belong to. */
+type LabelStore = Map<
+  string,
+  { owner: string; labels: readonly FrameLabel[]; obstacles: Obstacles }
+>;
 
 export type FrameContextValue = {
   px: FramePixels;
@@ -48,10 +52,17 @@ export type FrameContextValue = {
     end?: (at: readonly [number, number]) => void,
   ) => void;
   /** This child's labels and the lines they should keep off (replaces what it gave before). */
-  labels: (owner: string, labels: readonly FrameLabel[], obstacles?: Obstacles) => void;
+  labels: (
+    key: string,
+    owner: string,
+    labels: readonly FrameLabel[],
+    obstacles?: Obstacles,
+  ) => void;
   store: LabelStore;
   /** The child drawing now (set by the frame around each child). */
   owner: string;
+  /** Its drawing now: the child, or the child in one place (a child may draw in several). */
+  key: string;
 };
 
 const FrameContext = createContext<FrameContextValue | null>(null);
@@ -73,7 +84,7 @@ export function useFrame(): FrameContextValue | null {
 /** Hands this child's labels to the frame for the one placing pass. */
 export function useFrameLabels(labels: readonly FrameLabel[], obstacles: Obstacles = {}): void {
   const frame = useContext(FrameContext);
-  frame?.labels(frame.owner, labels, obstacles);
+  frame?.labels(frame.key, frame.owner, labels, obstacles);
 }
 
 /** Draws one picture for a frame and gives its children the frame's services. */
@@ -86,7 +97,7 @@ export function FrameStage({
 }: {
   px: FramePixels;
   label: string;
-  /** The children drawn now: labels of any other are dropped (a child left out, or hidden). */
+  /** The drawings there now (by `InFrame` key): labels of any other are dropped (a child left out, or hidden). */
   present: readonly string[];
   /** Extra classes on the picture's SVG. */
   look?: string;
@@ -109,10 +120,10 @@ export function FrameStage({
     const y = ((clientY - box.top) / box.height) * at.height;
     return at.fromPx(x, y);
   };
-  const base: Omit<FrameContextValue, "owner"> = {
+  const base: Omit<FrameContextValue, "owner" | "key"> = {
     px,
     store,
-    labels: (owner, labels, obstacles = {}) => store.set(owner, { labels, obstacles }),
+    labels: (key, owner, labels, obstacles = {}) => store.set(key, { owner, labels, obstacles }),
     drag: (event, move, end) => {
       const target = event.currentTarget as Element;
       // The transform as it is now: a window that refits during the drag doesn't move the finger.
@@ -133,7 +144,7 @@ export function FrameStage({
     },
   };
   const inside = (
-    <FrameContext.Provider value={{ ...base, owner: "" }}>
+    <FrameContext.Provider value={{ ...base, owner: "", key: "" }}>
       {children}
       <LabelLayer present={present} />
     </FrameContext.Provider>
@@ -171,10 +182,13 @@ export function FrameStage({
 /** Draws one child inside the frame, with the frame's services named for it. */
 export function InFrame({
   owner,
+  slot,
   px,
   children,
 }: {
   owner: string;
+  /** Which of the child's drawings this is, when it draws in several places. */
+  slot?: string;
   px: FramePixels;
   children: ComponentChildren;
 }): JSX.Element {
@@ -188,6 +202,7 @@ export function InFrame({
               ...parent,
               px,
               owner,
+              key: slot ?? owner,
             }
       }
     >
@@ -200,9 +215,8 @@ export function InFrame({
 function LabelLayer({ present }: { present: readonly string[] }): JSX.Element | null {
   const frame = useContext(FrameContext);
   if (frame === null) return null;
-  for (const owner of [...frame.store.keys()])
-    if (!present.includes(owner)) frame.store.delete(owner);
-  const all = [...frame.store.entries()].flatMap(([owner, { labels }]) =>
+  for (const key of [...frame.store.keys()]) if (!present.includes(key)) frame.store.delete(key);
+  const all = [...frame.store.values()].flatMap(({ owner, labels }) =>
     labels.map((l) => ({ ...l, owner })),
   );
   if (all.length === 0) return null;

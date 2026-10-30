@@ -132,6 +132,7 @@ export type GroupSpec<
   X extends Readonly<Record<string, ActionSpec<O, unknown>>> = Readonly<
     Record<string, ActionSpec<O, unknown>>
   >,
+  Gs extends Readonly<Record<string, SignalSpec>> = Readonly<Record<string, SignalSpec>>,
 > = {
   type: string;
   describe: string;
@@ -182,7 +183,7 @@ export type GroupSpec<
   };
   /** The group's own actions: they change its own fields. */
   actions?: X;
-  signals?: Readonly<Record<string, SignalSpec>>;
+  signals?: Gs;
   /** Derived values over the whole group (they can read children). */
   derived?: Readonly<
     Record<D, { describe: string; compute: (s: GroupViewOf<O, C, Opt, D>) => unknown }>
@@ -201,6 +202,23 @@ export type GroupSpec<
   role: PropRole;
 };
 
+/**
+ * Where a child draws around a frame's picture. A child may draw in several (a walker: herself on
+ * the lines, where she is in words below, her buttons): above the picture, inside it (back, on the
+ * lines, front), below it, and among the controls.
+ */
+export const Place = {
+  Above: "above",
+  Back: "back",
+  On: "on",
+  Front: "front",
+  Below: "below",
+  Controls: "controls",
+} as const;
+export type Place = (typeof Place)[keyof typeof Place];
+/** The places inside the picture, back to front. */
+export const IN_PICTURE: readonly Place[] = [Place.Back, Place.On, Place.Front];
+
 export type GroupLayoutSpec<N extends string = string> =
   | { kind: "column" | "row"; children: readonly N[] }
   | {
@@ -209,6 +227,11 @@ export type GroupLayoutSpec<N extends string = string> =
       children: readonly N[];
       backdrop?: N;
       below?: readonly N[];
+      /**
+       * Who draws first in each place, when it isn't the provider, then `children`, then `below`
+       * (`{ front: ["plotting", "clues"] }`): each list names every child drawing there.
+       */
+      order?: { readonly [P in Place]?: readonly N[] };
     };
 
 /** The fields bound into a child: `true` for a leaf's field (or a child group's own field), nested for a grandchild. */
@@ -292,12 +315,41 @@ function lazily(o: {
   return out;
 }
 
-/** A group: an ordinary prop (its state typed, nested) that also knows its children and links. */
-export type GroupDef<S extends StoredState = StoredState> = AnyPropDef & {
+/**
+ * A group: an ordinary prop (its state typed, nested) that also knows its children and links. Its
+ * actions and signals are its own and each child's by path ("walker.step"), typed, so content
+ * reaches a child's as `town.call.walker.step()`.
+ */
+export type GroupDef<
+  S extends StoredState = StoredState,
+  A extends object = Readonly<Record<string, ActionSpec<StoredState>>>,
+  G extends object = Readonly<Record<string, SignalSpec>>,
+> = Omit<AnyPropDef, "state" | "actions" | "signals"> & {
+  state: ZodType<S>;
+  actions: A;
+  signals: G;
   group: GroupLayout;
   /** Never set: carries the group's state type, so a parent group reads its child typed. */
   readonly stateType?: S;
 };
+
+type Both<U> = (U extends unknown ? (x: U) => void : never) extends (x: infer I) => void
+  ? I
+  : never;
+/** Each child's actions (or signals) under its name: { "walker.step": … }. */
+type ByPath<C, Of extends "actions" | "signals"> = Both<
+  {
+    [K in keyof C & string]: C[K] extends { readonly [P in Of]?: infer R }
+      ? { readonly [N in keyof NonNullable<R> & string as `${K}.${N}`]: NonNullable<R>[N] }
+      : never;
+  }[keyof C & string]
+>;
+/** Actions as the group runs them: on its whole state, each keeping the arguments it takes. */
+type OnGroup<X> = { readonly [K in keyof X]: ActionSpec<StoredState, ArgsOf<X[K]>> };
+/** A group's actions: its own, and each child's by path. */
+export type GroupActions<C, X> = OnGroup<X & ByPath<C, "actions">>;
+/** A group's signals: its own, and each child's by path. */
+export type GroupSignals<C, Gs> = Gs & ByPath<C, "signals">;
 
 /** What a group adds to its prop for its parent and the engine (not for authors). */
 type GroupInternals = {
@@ -490,7 +542,10 @@ export function defineGroup<
   Opt extends keyof C & string = never,
   D extends string = never,
   const X extends Readonly<Record<string, ActionSpec<O, unknown>>> = Record<never, never>,
->(typed: GroupSpec<O, C, Opt, D, X>): GroupDef<GroupState<O, C, Opt>> {
+  const Gs extends Readonly<Record<string, SignalSpec>> = Record<never, never>,
+>(
+  typed: GroupSpec<O, C, Opt, D, X, Gs>,
+): GroupDef<GroupState<O, C, Opt>, GroupActions<C, X>, GroupSignals<C, Gs>> {
   // Inside, the state is handled untyped; the types are for the links an author writes.
   type Link<R> = (s: PropView, given: Readonly<Record<string, unknown>>, run: never) => R;
   const spec = typed as unknown as Omit<GroupSpec<StoredState>, "when" | "route"> & {
@@ -509,6 +564,10 @@ export function defineGroup<
   for (const name of childNames)
     if (ownFields.includes(name))
       throw new Error(`${spec.type}: "${name}" is both an own field and a child`);
+  // A child's actions and signals are reached under its name: an own one by that name would hide them.
+  for (const name of [...Object.keys(spec.actions ?? {}), ...Object.keys(spec.signals ?? {})])
+    if (childNames.includes(name))
+      throw new Error(`${spec.type}: "${name}" is both its own action or signal and a child`);
   for (const name of Object.keys(spec.derived ?? {}))
     if (childNames.includes(name) || ownFields.includes(name))
       throw new Error(`${spec.type}: derived "${name}" has the name of a child or an own field`);
@@ -563,6 +622,15 @@ export function defineGroup<
     for (const name of spec.layout.below ?? [])
       if (childDef(name).drawsOn !== undefined)
         throw new Error(`${spec.type}: ${name} draws on a frame; it can't go below it`);
+    const drawn = new Set([
+      spec.layout.provider,
+      ...spec.layout.children,
+      ...(spec.layout.below ?? []),
+    ]);
+    for (const [place, names] of Object.entries(spec.layout.order ?? {}))
+      for (const name of names)
+        if (!drawn.has(name))
+          throw new Error(`${spec.type}: order.${place} names "${name}", not drawn in the frame`);
   }
 
   // ---- each child's facts before bindings: its defaults, with the group's overrides ----
@@ -1015,7 +1083,11 @@ export function defineGroup<
   });
   noteNames(spec.type, spec.actions);
   noteNames(spec.type, spec.signals);
-  return groupDef as unknown as GroupDef<GroupState<O, C, Opt>>;
+  return groupDef as unknown as GroupDef<
+    GroupState<O, C, Opt>,
+    GroupActions<C, X>,
+    GroupSignals<C, Gs>
+  >;
 }
 
 function mergeTrees(a: BoundTree | undefined, b: BoundTree | undefined): BoundTree | undefined {

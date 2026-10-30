@@ -115,10 +115,37 @@ type CallTakes<P, K extends ActionNames<P>> =
   | TakesOf<P, K>
   | [args: Rule<Loose<ArgsOf<ActionsOf<P>[K]>>>];
 
-/** One entry per name: `byName(names, (n) => …)`, typed by the caller. */
+/**
+ * One entry per name: `byName(names, (n) => …)`, typed by the caller. A name by path (a group's
+ * child's, "walker.step") is nested under the child: `town.call.walker.step()`.
+ */
 function byName<T>(names: readonly string[], make: (name: string) => T): Record<string, T> {
-  return Object.fromEntries(names.map((n) => [n, make(n)]));
+  const out: Record<string, unknown> = {};
+  for (const n of names) {
+    const path = n.split(".");
+    let at = out;
+    for (const part of path.slice(0, -1)) {
+      at[part] ??= {};
+      at = at[part] as Record<string, unknown>;
+    }
+    at[path.at(-1) as string] = make(n);
+  }
+  return out as Record<string, T>;
 }
+
+/** Entries named by path ("walker.step"), nested by their first parts: `{ walker: { step } }`. */
+export type Nested<M, P extends string = ""> = {
+  readonly [K in keyof M & string as K extends `${P}${infer R}`
+    ? R extends `${string}.${string}`
+      ? never
+      : R
+    : never]: M[K];
+} & {
+  readonly [K in keyof M & string as K extends `${P}${infer H}.${string}` ? H : never]: Nested<
+    M,
+    `${P}${K extends `${P}${infer H}.${string}` ? H : never}.`
+  >;
+};
 
 /**
  * A prop placed on a board, by name. Its actions and signals are reached by name from its
@@ -126,17 +153,19 @@ function byName<T>(names: readonly string[], make: (name: string) => T): Record<
  * one the prop doesn't have, or giving it the wrong arguments, is a compile error.
  */
 export class Placed<P extends DefLike = DefLike> implements AnyPlaced {
-  /** Its signals, for a WHEN rule: `game.on.over`. */
-  readonly on: { readonly [K in SignalNames<P>]: Signal };
+  /** Its signals, for a WHEN rule: `game.on.over` (a group's child's: `town.on.walker.arrived`). */
+  readonly on: Nested<{ readonly [K in SignalNames<P>]: Signal }>;
   /**
    * The lesson (or a rule) runs one of its actions: `game.call.giveRound()`, or with arguments
    * worked out when it runs: `chart.call.addPoint((at) => ({ x: at(coin).count, y: 0 }))`.
    */
-  readonly call: { readonly [K in ActionNames<P>]: (...args: CallTakes<P, K>) => Script };
+  readonly call: Nested<{
+    readonly [K in ActionNames<P>]: (...args: CallTakes<P, K>) => Script;
+  }>;
   /** A witness step, the learner doing one of its actions: `split.learner.split({ n: 4 })`. */
-  readonly learner: { readonly [K in ActionNames<P>]: (...args: TakesOf<P, K>) => Step };
+  readonly learner: Nested<{ readonly [K in ActionNames<P>]: (...args: TakesOf<P, K>) => Step }>;
   /** One of its actions as a reference (to make it the student's alone): `line.action.moveMarker`. */
-  readonly action: { readonly [K in ActionNames<P>]: ActionRef };
+  readonly action: Nested<{ readonly [K in ActionNames<P>]: ActionRef }>;
 
   constructor(
     readonly name: string,
