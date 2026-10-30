@@ -8,6 +8,7 @@ import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
 import {
   type Drawn,
+  type Heard,
   type Picture,
   type Shot,
   type ShotOptions,
@@ -766,6 +767,12 @@ function rounded(v: unknown): unknown {
 /** The piece a changed value belongs to: "game.rounds" or "game/plates.count" → game. */
 const pieceOfPath = (path: string) => path.split(/[./]/)[0] ?? path;
 
+/** A line heard, in words: `   said · narrator · fiveHouses: "Street 4 rises…" (6.8 s, cut at 2.1 s)`. */
+function heardLine(h: Heard): string {
+  const cut = h.cutAt === undefined ? "" : `, cut after ${(h.cutAt - h.at).toFixed(1)} s`;
+  return `   said · ${h.speaker} · ${h.line}: "${h.words}" (${h.seconds.toFixed(1)} s${cut})`;
+}
+
 export async function play(root: string, a: PlayArgs, lane: string): Promise<Answer> {
   const shots = a.shots ?? "last";
   const o: ShotOptions = {
@@ -799,6 +806,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     `${shownAddress(a.board)}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
   ];
   if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
+  if (d.heardAtOpen !== undefined) lines.push("as it opened:", ...d.heardAtOpen.map(heardLine));
   const changedPieces = new Set<string>();
   for (const [i, r] of d.steps.entries()) {
     const changed = Object.entries(r.changed ?? {});
@@ -827,6 +835,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
       // A step that failed says only that: "nothing changed" would read as a step that ran.
       `${i + 1}. ${stepAsked(r.step)}${parts.length > 0 ? ` → ${parts.join(" · ")}` : r.errors.length > 0 ? " → didn't run" : " → nothing changed"}`,
     );
+    for (const h of r.heard ?? []) lines.push(heardLine(h));
     if (r.passed) lines.push("   ✓ board passed");
     for (const e of r.errors) lines.push(`   ${e}`);
   }

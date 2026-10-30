@@ -21,6 +21,7 @@ import {
   BoardRuntime,
   BoardSpeedContext,
   SEP,
+  SceneRuntime,
   addressOf,
   findNode,
   joinPath,
@@ -1181,6 +1182,12 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     // have settled. A tool acting on a board waits for this before reading it.
     const busy = window as Window & { __chalkBusy?: () => string[] };
     busy.__chalkBusy = () => runningBoards().flatMap((runtime) => runtime.busyWith());
+    // What the boards were heard to say, in order (the chalk MCP's play prints each step's).
+    const heard = window as Window & { __chalkHeard?: () => unknown[] };
+    heard.__chalkHeard = () =>
+      runningBoards().flatMap((runtime) =>
+        runtime instanceof SceneRuntime ? runtime.heard() : [],
+      );
     // One of a piece's actions, as the lesson would call it (a prop on its own page has no lesson:
     // the person or a tool stands in). Says what went wrong, or nothing.
     const call = window as Window & {
@@ -1211,6 +1218,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     return () => {
       w.__chalkModel = undefined;
       busy.__chalkBusy = undefined;
+      heard.__chalkHeard = undefined;
       call.__chalkCall = undefined;
       props.__chalkProps = undefined;
     };

@@ -349,6 +349,8 @@ export type Drawn = {
   before?: Picture;
   /** What was still going on when the board opened, if it hadn't settled by the cap. */
   runningAtOpen?: string[];
+  /** The lines heard as the board opened, before any step. */
+  heardAtOpen?: Heard[];
   /** Every prop's page, read from the app's prop definitions, when asked for (`withProps`). */
   props?: PropPage[];
 };
@@ -387,9 +389,21 @@ export type Step =
   | { call: string; on: string; args?: Readonly<Record<string, unknown>> };
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
+/** A line heard on the board (the player's HeardLine): what an agent reviews of the sound. */
+export type Heard = {
+  line: string;
+  speaker: string;
+  words: string;
+  at: number;
+  seconds: number;
+  cutAt?: number;
+};
+
 export type StepResult = {
   step: string;
   events: string[];
+  /** The lines the step set off, as heard (who said what, for how long, cut or not). */
+  heard?: Heard[];
   passed: boolean;
   errors: string[];
   /** The board after the step, when asked for. */
@@ -822,11 +836,21 @@ async function settle(page: Page, isForPicture = true): Promise<void> {
 type Recorded = {
   events: { kind?: string; actor?: string; payload?: unknown }[];
   passed: string[];
+  heard: Heard[];
 };
 const recorded = (page: Page): Promise<Recorded> =>
   page.evaluate(() => {
-    const w = window as unknown as { __chalkEvents?: unknown[]; __chalkPassed?: string[] };
-    return { events: [...(w.__chalkEvents ?? [])], passed: [...(w.__chalkPassed ?? [])] } as never;
+    const w = window as unknown as {
+      __chalkEvents?: unknown[];
+      __chalkPassed?: string[];
+      __chalkHeard?: () => unknown[];
+    };
+    return {
+      events: [...(w.__chalkEvents ?? [])],
+      passed: [...(w.__chalkPassed ?? [])],
+      // Copies: a line cut later is marked on the board's own record, not on this one.
+      heard: JSON.parse(JSON.stringify(w.__chalkHeard?.() ?? [])),
+    } as never;
   });
 
 const stepWords = (step: Step): string =>
@@ -983,11 +1007,13 @@ async function shootNow(
   at.lastBoard = board;
   const steps: StepResult[] = [];
   let before: Picture | undefined;
+  let heardAtOpen: Heard[] = [];
   if (act !== undefined && act.steps.length > 0) {
     if ((await page.$$(".preview-card")).length !== 1)
       throw new Error("Steps act on one board: name a board, not a lesson.");
     if (act.shots !== "none") before = await pictureOf(page.locator(".preview-card").first());
     let seen = await recorded(page);
+    heardAtOpen = seen.heard;
     let modelWas = [...(await readModels(page)).values()][0];
     for (const [i, step] of act.steps.entries()) {
       at.errors.length = 0;
@@ -1078,6 +1104,7 @@ async function shootNow(
         events: now.events
           .slice(seen.events.length)
           .map((e) => `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null)}`),
+        heard: now.heard.slice(seen.heard.length),
         passed: now.passed.length > seen.passed.length,
         errors: [...at.errors],
         ...(isPictured ? { picture: await pictureOf(page.locator(".preview-card").first()) } : {}),
@@ -1130,6 +1157,7 @@ async function shootNow(
     steps,
     ...(before === undefined ? {} : { before }),
     ...(runningAtOpen.length > 0 ? { runningAtOpen } : {}),
+    ...(heardAtOpen.length > 0 ? { heardAtOpen } : {}),
     ...(props === undefined ? {} : { props }),
   };
 }

@@ -28,6 +28,7 @@ import { describeView } from "./describe";
 import { findNode } from "./part-paths";
 import type { PropModule } from "./prop-module";
 import { plainText } from "./rich-text";
+import { richSpeech } from "./rich-text-speech";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
 import { ownLine } from "./script";
 import { takes } from "./snapshot";
@@ -85,11 +86,29 @@ export class SceneRuntime {
             if (words === undefined) return undefined;
             const line: Spoken = { say: words, speaker: model.lines[name]?.speaker ?? NARRATOR };
             void services.speak({ name }, line);
-            return (
-              services.lineSeconds?.(name, line) ?? estimatedSeconds(plainText(words[locale] ?? ""))
-            );
+            const seconds =
+              services.lineSeconds?.(name, line) ??
+              estimatedSeconds(plainText(words[locale] ?? ""));
+            this.heardLines.push({
+              line: name,
+              speaker: line.speaker ?? NARRATOR,
+              words: spokenWords(words[locale] ?? ""),
+              at: this.core.now,
+              seconds,
+            });
+            return seconds;
           },
-          hush: () => services.hush?.(),
+          hush: () => {
+            // A line stopped before its end was cut: what was heard says so.
+            const last = this.heardLines.at(-1);
+            if (
+              last !== undefined &&
+              last.cutAt === undefined &&
+              this.core.now < last.at + last.seconds
+            )
+              last.cutAt = this.core.now;
+            services.hush?.();
+          },
         },
       },
     );
@@ -132,6 +151,17 @@ export class SceneRuntime {
     if (given !== undefined) return given;
     const piece = propPieces(this.board.root).find((p) => p.name === name);
     return piece === undefined ? undefined : ownLine(this.lookup(piece.prop), this.core.read(name));
+  }
+
+  private readonly heardLines: HeardLine[] = [];
+
+  /**
+   * Every line heard on this board so far, in order: who said it, the words the voice was given,
+   * when (board seconds), for how long, and when it was cut, if it was. What an agent reviews of the
+   * sound (`play` prints each step's), before anyone listens to the clips.
+   */
+  heard(): readonly HeardLine[] {
+    return this.heardLines;
   }
 
   // ---- reading ----
@@ -399,6 +429,25 @@ export class SceneRuntime {
       problems,
     };
   }
+}
+
+/** A line as it was heard on a board. */
+export type HeardLine = {
+  line: string;
+  speaker: string;
+  /** The words the voice was given (formatting left out; maths kept as written). */
+  words: string;
+  at: number;
+  seconds: number;
+  cutAt?: number;
+};
+
+/** A line's words as the voice gets them: its rich text read for speech, maths left as written. */
+function spokenWords(source: string): string {
+  return richSpeech(source, "en")
+    .pieces.map((p) => (p.kind === "words" ? p.text : `$${p.latex}$`))
+    .join("")
+    .trim();
 }
 
 /** The action at "walker.step" under a prop. */
