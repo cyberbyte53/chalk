@@ -265,6 +265,10 @@ export type PropSpec<
   readonly speech?: (me: Me<V, N, F, C>) => Spoken | undefined;
   /** One line saying what it is now, for agents. */
   readonly summary?: (me: Me<V, N, F, C>) => string;
+  /** What must always hold of its variables beyond their types: why not, or undefined. */
+  readonly invariant?: (variables: V) => string | undefined;
+  /** Variables it knows but doesn't show (the answer): kept from the student and from agents' view of the screen. */
+  readonly offScreen?: readonly (keyof V & string)[];
 };
 
 /** A defined prop. */
@@ -305,6 +309,8 @@ export type AnyProp = {
   readonly show?: Readonly<Record<string, ((me: never) => boolean) | undefined>>;
   readonly speech?: (me: never) => Spoken | undefined;
   readonly summary?: (me: never) => string;
+  readonly invariant?: (variables: never) => string | undefined;
+  readonly offScreen?: readonly string[];
 };
 
 /**
@@ -372,7 +378,12 @@ export function prop<
       ? {}
       : { group: { layout: spec.layout, children: spec.children ?? {} } };
   // Safe: only fields today's drawing reads are added; the prop's own parts are as written.
-  return { ...spec, ...compat, defaults: spec.start ?? {} } as unknown as Prop<V, N, F, A, S, C>;
+  return {
+    ...spec,
+    ...compat,
+    start: spec.start ?? {},
+    defaults: spec.start ?? {},
+  } as unknown as Prop<V, N, F, A, S, C>;
 }
 
 /** The keys of an object schema (variables, needs). */

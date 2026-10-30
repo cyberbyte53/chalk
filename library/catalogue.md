@@ -223,7 +223,7 @@ The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a ho
 
 ### `coordinatePlane` · explainer
 
-`library/props/coordinates/coordinatePlane` · used in class9-maths/coordinate-geometry
+`library/props/coordinates/coordinatePlane` · used in no chapter yet
 
 A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.
 
@@ -312,6 +312,135 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `walker.step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right from where she is, on roads only (the learner's arrow; timed) |
 | `walker.walkTo` | {x: "number", y: "number"} | Walk Riya from her start to (x, y): along, then up or down, block by block (timed) |
 | `walker.backToStart` | — | learner · Riya back to where she started, her route cleared (the learner's ↺) |
+| `clues.giveClue` | {clue: "whole number 0 to 5"} | learner · Give a clue, by its place among the choices; where the point could be narrows (the learner's button) |
+| `clues.clearClues` | — | learner · Take back every clue (the learner's ↺) |
+| `clues.hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |
+| `clues.showHidden` | — | learner · Show the hidden point |
+| `plotting.plotAt` | {x: "number", y: "number"} | learner · Put the next pair's dot at (x, y) (the learner's tap); it is right if that is where the pair says |
+| `plotting.plotNext` | — | Put the next pair's dot where it goes |
+| `plotting.chooseScale` | {every: "number 0 to …"} | learner · Ask for a scale: a number every this many units (the learner's choice); the plane changes its own scale, and the pairs off it then are `offPlane` |
+| `plotting.clearPlotted` | — | learner · Take every dot off (the learner's ↺) |
+| `dice.throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
+| `dice.startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
+
+Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
+
+The group answers (each with another part's actions, which change that part): `places.targetChosen`, `plane.numberTapped`, `plotting.scaleChosen`
+
+### `sceneCoordinatePlane` · explainer
+
+`library/props/coordinates/sceneCoordinatePlane` · used in no chapter yet
+
+A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.
+
+| Field | Takes | |
+|---|---|---|
+| `plane.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | changed by plane.its own rules |
+| `plane.axes` | ["both", "horizontal"] | changed by plane.its own rules |
+| `plane.marks` | ["none", "counts", "numbers"] | changed by plane.its own rules |
+| `plane.tickEvery` | number 0 to … | changed by plane.its own rules |
+| `plane.hasGrid` | true or false | changed by plane.its own rules |
+| `plane.axisNames` | ZodTuple | changed by plane.its own rules |
+| `plane.showAxisNames` | true or false | changed by plane.its own rules |
+| `plane.showOrigin` | true or false | changed by plane.its own rules |
+| `plane.showDirections` | true or false | changed by plane.its own rules |
+| `plane.quadrantsNamed` | whole number 0 to 4 | changed by plane.its own rules |
+| `plane.showQuadrantSigns` | true or false | changed by plane.its own rules |
+| `plane.scene` | ["none", "paper", "town", "classroom", "fairGround"] | changed by plane.its own rules |
+| `plane.apart` | {x: "number", y: "number"} | changed by plane.its own rules |
+| `plane.upLines` | {orNull: ["whole number"]} | changed by plane.its own rules |
+| `plane.numbered` | [["x", "y"]] | changed by plane.its own rules |
+| `plane.rising` | {orNull: {at: "whole number", height: "number 0 to 1"}} | changed by plane.its own rules |
+| `plane.named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by plane.its own rules |
+| `plane.points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by plane.its own rules |
+| `plane.canShowPoints` | true or false | changed by plane.its own rules |
+| `plane.isAlone` | true or false | input |
+| `plane.canTapNumbers` | true or false | input |
+| `plane.lit` | {orNull: {axis: ["x", "y"], value: "number"}} | input |
+| `reading.point` | {orNull: {x: "number", y: "number"}} | changed by reading.its own rules |
+| `reading.pointStep` | number 0 to … | changed by reading.its own rules |
+| `reading.reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | changed by reading.its own rules |
+| `reading.isReadingHidden` | true or false | changed by reading.its own rules |
+| `reading.visited` | [["I", "II", "III", "IV"]] | changed by reading.its own rules |
+| `reading.unit` | text | changed by reading.its own rules |
+| `reading.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
+| `places.placeKind` | ["house", "desk", "crossing", "stall"] | changed by places.its own rules |
+| `places.places` | [{x: "number", y: "number", label: {optional: {en: "text", hi: "text"}}}] | changed by places.its own rules |
+| `places.target` | {orNull: {x: "number", y: "number"}} | changed by places.its own rules |
+| `places.targetName` | {en: "text", hi: "text"} | changed by places.its own rules |
+| `places.canChooseTarget` | true or false | changed by places.its own rules |
+| `places.lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by places.its own rules |
+| `places.showAddress` | true or false | changed by places.its own rules |
+| `places.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
+| `places.axisNames` | ZodTuple | input |
+| `places.rising` | {orNull: {at: "whole number", height: "number"}} | input |
+| `places.upLines` | {orNull: ["whole number"]} | input |
+| `walker.walkerName` | {en: "text", hi: "text"} | changed by walker.its own rules |
+| `walker.walkerKind` | ["person", "bus"] | changed by walker.its own rules |
+| `walker.showWhere` | true or false | changed by walker.its own rules |
+| `walker.walkFrom` | {orNull: {x: "number", y: "number"}} | changed by walker.its own rules |
+| `walker.at` | {x: "number", y: "number"} | changed by walker.its own rules |
+| `walker.roads` | ["town", "grid"] | changed by walker.its own rules |
+| `walker.trail` | [{x: "number", y: "number"}] | changed by walker.its own rules |
+| `walker.isWalking` | true or false | changed by walker.its own rules |
+| `walker.canStep` | true or false | changed by walker.its own rules |
+| `walker.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
+| `walker.upLines` | {orNull: ["whole number"]} | input |
+| `walker.axes` | ["both", "horizontal"] | input |
+| `walker.marks` | ["none", "counts", "numbers"] | input |
+| `walker.axisNames` | ZodTuple | input |
+| `walker.scene` | ["none", "paper", "town", "classroom", "fairGround"] | input |
+| `walker.target` | {orNull: {x: "number", y: "number"}} | input |
+| `walker.targetName` | {en: "text", hi: "text"} | input |
+| `walker.canChooseTarget` | true or false | input |
+| `clues.hidden` | {orNull: {x: "number", y: "number"}} | changed by clues.its own rules |
+| `clues.clueChoices` | [{words: {en: "text", hi: "text"}, region: {optional: {xMin: "number", xMax: "number", yMin: "number", yMax: "number"}}, x: {optional: "number"}, y: {optional: "number"}}] | changed by clues.its own rules |
+| `clues.given` | ["whole number 0 to 5"] | changed by clues.its own rules |
+| `clues.isHiddenShown` | true or false | changed by clues.its own rules |
+| `clues.canHide` | true or false | changed by clues.its own rules |
+| `clues.canGiveClues` | true or false | changed by clues.its own rules |
+| `clues.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
+| `clues.unit` | text | input |
+| `clues.isPlaneFree` | true or false | input |
+| `plotting.toPlot` | [{x: "number", y: "number", name: {optional: "text"}}] | changed by plotting.its own rules |
+| `plotting.plotted` | [{x: "number", y: "number", isRight: "true or false"}] | changed by plotting.its own rules |
+| `plotting.showSwaps` | true or false | changed by plotting.its own rules |
+| `plotting.showTable` | true or false | changed by plotting.its own rules |
+| `plotting.scaleChoices` | ["number 0 to …"] | changed by plotting.its own rules |
+| `plotting.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
+| `plotting.tickEvery` | number 0 to … | input |
+| `dice.counters` | [{x: "number", y: "number"}] | changed by dice.its own rules |
+| `dice.playerNames` | [{en: "text", hi: "text"}] | changed by dice.its own rules |
+| `dice.turn` | whole number 0 to 1 | changed by dice.its own rules |
+| `dice.lastThrow` | {orNull: {red: "whole number 1 to 6", green: "whole number 1 to 6"}} | changed by dice.its own rules |
+| `dice.seed` | whole number 0 to … | changed by dice.its own rules |
+| `dice.throwsMade` | whole number 0 to … | changed by dice.its own rules |
+| `dice.goal` | whole number 2 to 20 | changed by dice.its own rules |
+| `dice.winner` | {orNull: "whole number 0 to 1"} | changed by dice.its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `plane.namePart` | {part: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | learner · Name the part tapped |
+| `plane.numberQuadrants` | — | learner · Name the quadrants I to IV, one after another |
+| `plane.moveApart` | {x: "number", y: "number"} | learner · Slide the vertical line's zero |
+| `plane.bringTogether` | — | learner · Glide the zeroes together: the axes, and O |
+| `plane.showPoint` | {name: {optional: "text"}} | learner · Show the next point |
+| `plane.raiseUpLine` | {at: "whole number"} | Raise a line from a whole number |
+| `plane.raiseAllUpLines` | — | Raise every line not risen yet, left to right |
+| `plane.raiseNext` | {ats: ["whole number"], seconds: "number 0 to …", isAll: "true or false"} | raiseNext |
+| `plane.numberLine` | {axis: ["x", "y"]} | Number one line |
+| `plane.setScale` | {every: "number 0 to …"} | A number every this many units |
+| `plane.tapNumber` | {axis: ["x", "y"], value: "number"} | learner · Tap a number on a counted line |
+| `plane.showAllPoints` | — | Show every point |
+| `reading.movePoint` | {x: "number", y: "number"} | learner · Put the point at (x, y), snapped to the step (the learner's drag or tap) |
+| `reading.showReading` | — | learner · Show the reading kept hidden in a guessing round (the learner's Show) |
+| `reading.askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
+| `places.chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target |
+| `places.lightLine` | {axis: ["x", "y"], value: "number"} | Light every place with this one number |
+| `places.clearLight` | — | learner · Turn the lit places off |
+| `walker.step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right, on roads only |
+| `walker.walkTo` | {x: "number", y: "number"} | Walk Riya from her start to (x, y): along, then up |
+| `walker.backToStart` | — | learner · Riya back to where she started |
 | `clues.giveClue` | {clue: "whole number 0 to 5"} | learner · Give a clue, by its place among the choices; where the point could be narrows (the learner's button) |
 | `clues.clearClues` | — | learner · Take back every clue (the learner's ↺) |
 | `clues.hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |

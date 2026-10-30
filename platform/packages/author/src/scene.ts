@@ -16,7 +16,7 @@ import {
   signal,
 } from "@chalk/prop/next";
 import { z } from "zod";
-import { type BuiltBoard, type Step, StepKind } from "./board";
+import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
 
 /**
  * A board on the event model (platform/docs/event-model.md): the scene is the outermost prop. Its
@@ -133,13 +133,28 @@ export type SceneSpec<P extends Pieces> = {
       ) => import("@chalk/prop/next").NeedsOf<P[K]["def"]>[J];
     };
   };
+  /**
+   * Ready-made parts a pattern brings (a question with its check, its notes and its witness): their
+   * rules, what they give, their witness steps and note checks, joined with the scene's own.
+   */
+  readonly uses?: readonly SceneUse[];
   /** "rules": the board passes only when a rule says `t.self.pass()`. Else by its questions. */
   readonly passBy?: "rules";
   /** How a learner gets this board right, played on the real props at publish. */
   readonly witness?: readonly Step[];
+  /** Wrong answers and the note each should get, played at publish too. */
+  readonly noteChecks?: readonly NoteCheck[];
   /** For Jugnu: what the board is for, and what its pieces stand for. */
   readonly purpose?: string;
   readonly standsFor?: { readonly [K in keyof P]?: string };
+};
+
+/** What a pattern adds to a scene, untyped: it names its own pieces' paths. */
+export type SceneUse = {
+  readonly give?: Readonly<Record<string, Readonly<Record<string, (me: never) => unknown>>>>;
+  readonly hear?: Readonly<Record<string, (me: never, payload: never, t: never) => Outs>>;
+  readonly witness?: readonly Step[];
+  readonly noteChecks?: readonly NoteCheck[];
 };
 
 const SCENE = Symbol("scene");
@@ -204,15 +219,26 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
         questions.every((other) => me[other]?.status === AnswerStatus.Correct) && !me.isPassed
           ? [t.self.pass()]
           : [];
+  const uses = spec.uses ?? [];
+  const rulesFrom = [spec.hear ?? {}, ...uses.map((u) => u.hear ?? {})] as Record<
+    string,
+    AnyFn | undefined
+  >[];
   const hear: Record<string, AnyFn> = {};
-  for (const key of new Set([...Object.keys(own), ...Object.keys(spec.hear ?? {})])) {
+  const keys = new Set([...Object.keys(own), ...rulesFrom.flatMap((r) => Object.keys(r))]);
+  for (const key of keys) {
     const mine = own[key];
-    const theirs = (spec.hear as Record<string, AnyFn | undefined> | undefined)?.[key];
     hear[key] = (me: Me, payload: unknown, t: T) => [
       ...(mine?.(me, payload, t) ?? []),
-      ...list(theirs?.(me as never, payload as never, t as never) as Outs),
+      ...rulesFrom.flatMap((r) =>
+        list(r[key]?.(me as never, payload as never, t as never) as Outs),
+      ),
     ];
   }
+  const give: Record<string, Record<string, unknown>> = {};
+  for (const one of [spec.give ?? {}, ...uses.map((u) => u.give ?? {})])
+    for (const [piece, needs] of Object.entries(one as Record<string, Record<string, unknown>>))
+      give[piece] = { ...(give[piece] ?? {}), ...needs };
 
   const root = prop({
     type: "scene",
@@ -222,7 +248,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
     actions: sceneActions,
     signals: sceneSignals,
     children: defs as Readonly<Record<string, AnyProp>>,
-    ...(spec.give === undefined ? {} : { give: spec.give as never }),
+    ...(Object.keys(give).length === 0 ? {} : { give: give as never }),
     on: {
       start: (me, _, t) => {
         const shown = speaking.filter((n) => !me.hidden.includes(n));
@@ -285,8 +311,8 @@ function buildScene(name: string, spec: SceneSpec<Pieces>): BuiltBoard {
           }
         : {}),
     },
-    witness: spec.witness ?? [],
-    noteChecks: [],
+    witness: [...(spec.witness ?? []), ...uses.flatMap((u) => u.witness ?? [])],
+    noteChecks: [...(spec.noteChecks ?? []), ...uses.flatMap((u) => u.noteChecks ?? [])],
   };
 }
 

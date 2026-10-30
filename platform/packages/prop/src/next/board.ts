@@ -151,6 +151,10 @@ export class Board {
       throw new Error(
         `${where(path, def)}: ${parsed.error.issues.map((i) => `${i.path.join(".") || "variables"} ${i.message}`).join("; ")}`,
       );
+    const broken = (def.invariant as ((v: unknown) => string | undefined) | undefined)?.(
+      parsed.data,
+    );
+    if (broken !== undefined) throw new Error(`${where(path, def)}: ${broken}`);
     return parsed.data as Readonly<Record<string, unknown>>;
   }
 

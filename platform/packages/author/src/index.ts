@@ -38,6 +38,7 @@ export {
   type Placed as ScenePlaced,
   type Scene,
   type SceneSpec,
+  type SceneUse,
   hidden,
   isScene,
   place,

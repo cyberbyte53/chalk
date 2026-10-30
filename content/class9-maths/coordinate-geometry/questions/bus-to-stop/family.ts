@@ -1,13 +1,13 @@
-import { family, t } from "@chalk/author";
+import { family, place, scene, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { check, isAt, walkTo } from "@chalk/patterns";
+import { scenePlane, sceneWith } from "@chalk/patterns";
 import {
   Axes,
   Marks,
   PlaceKind,
   Roads,
   WalkerKind,
-  coordinatePlaneDef,
+  sceneCoordinatePlane,
 } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -20,8 +20,9 @@ export const busToStop = family({
     .object({ stop: z.number().int().min(-6).max(6) })
     .strict()
     .refine((p) => p.stop !== 0, "a stop, not the stand"),
-  build: ({ stop }, b) => {
-    const road = b.prop(coordinatePlaneDef, "road", {
+  build: ({ stop }) => {
+    const { isAt, walkTo } = scenePlane;
+    const road = place(sceneCoordinatePlane, {
       plane: {
         window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
         axes: Axes.Horizontal,
@@ -43,25 +44,25 @@ export const busToStop = family({
         showWhere: false,
       },
     });
-    const ask = check(b, {
-      about: road,
+    const ask = sceneWith.check({
+      about: "road",
       prompt: t(
         `The bus starts at the stand, 0. Take it to stop **${stop < 0 ? `−${-stop}` : stop}**, then press Check.`,
         `बस अड्डे, 0, से चलती है। इसे स्टॉप **${stop < 0 ? `−${-stop}` : stop}** पर ले जाओ, फिर जाँचो दबाओ।`,
       ),
-      isRight: isAt(road, stop, 0),
-      solve: walkTo(road, stop, 0),
+      isRight: isAt("road", stop, 0),
+      solve: walkTo("road", stop, 0),
       notes: [
         {
-          when: isAt(road, -stop, 0),
+          when: isAt("road", -stop, 0),
           say: t(
             `That's stop ${-stop < 0 ? `−${stop}` : -stop}: the right distance, on the wrong side. The sign says which side of 0.`,
             `यह स्टॉप ${-stop < 0 ? `−${stop}` : -stop} है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।`,
           ),
-          reach: walkTo(road, -stop, 0),
+          reach: walkTo("road", -stop, 0),
         },
       ],
     });
-    return [road, ask];
+    return scene({ pieces: { road, ask: ask.piece }, uses: [ask.use] });
   },
 });

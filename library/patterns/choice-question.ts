@@ -60,7 +60,7 @@ export function choiceQuestion(
 }
 
 /** A stable whole number from a string (FNV-1a), to seed `settle`. */
-function seedOf(text: string): number {
+export function seedOf(text: string): number {
   let h = 2166136261;
   for (let i = 0; i < text.length; i++) {
     h ^= text.charCodeAt(i);

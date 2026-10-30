@@ -31,9 +31,7 @@ export function family<Params extends z.ZodTypeAny, C extends string>(spec: {
   tests: readonly [C, ...C[]];
   params: Params;
   /** One question's board: its pieces (and rules on `b`), or a scene on the event model. */
-  build:
-    | ((params: z.output<Params>, b: BoardKit) => readonly Child[])
-    | ((params: z.output<Params>) => Scene);
+  build: (params: z.output<Params>, b: BoardKit) => readonly Child[] | Scene;
 }): Family<Params> {
   return {
     [FAMILY]: true,
@@ -43,10 +41,7 @@ export function family<Params extends z.ZodTypeAny, C extends string>(spec: {
     build: (params, name) => {
       let made: Scene | undefined;
       const built = buildBoard(camel(name), (b) => {
-        const out = (spec.build as (p: unknown, b: BoardKit) => readonly Child[] | Scene)(
-          params,
-          b,
-        );
+        const out = spec.build(params, b);
         if (isScene(out)) {
           made = out;
           return [];

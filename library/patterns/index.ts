@@ -17,3 +17,7 @@ export {
   isPlaced,
   walkTo,
 } from "./coordinates";
+
+/** For scenes (boards on the event model): words, questions, and the coordinate plane's helpers. */
+export * as sceneWith from "./scene-questions";
+export * as scenePlane from "./scene-coordinates";

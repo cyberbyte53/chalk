@@ -1,7 +1,7 @@
-import { family, t } from "@chalk/author";
+import { family, place, scene, t, tap } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { bareClassroom, check, isChosen } from "@chalk/patterns";
-import { coordinatePlaneDef } from "@chalk/prop-coordinates";
+import { scenePlane, sceneWith } from "@chalk/patterns";
+import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -13,27 +13,28 @@ export const tapTheDesk = family({
     .object({ column: z.number().int().min(1).max(7), row: z.number().int().min(1).max(7) })
     .strict()
     .refine((p) => p.column !== p.row, "the column and the row differ, so the order shows"),
-  build: ({ column, row }, b) => {
-    const room = b.prop(coordinatePlaneDef, "room", bareClassroom());
-    const ask = check(b, {
-      about: room,
+  build: ({ column, row }) => {
+    const { isChosen, sceneClassroom } = scenePlane;
+    const room = place(sceneCoordinatePlane, sceneClassroom());
+    const ask = sceneWith.check({
+      about: "room",
       prompt: t(
         `Tap the desk **(${column}, ${row})**, then press Check.`,
         `डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
       ),
-      isRight: isChosen(room, column, row),
-      solve: [room.learner.places.chooseTarget({ x: column, y: row })],
+      isRight: isChosen("room", column, row),
+      solve: [tap("room.places", "chooseTarget", { x: column, y: row })],
       notes: [
         {
-          when: isChosen(room, row, column),
+          when: isChosen("room", row, column),
           say: t(
             `That desk is (${row}, ${column}): column ${row}, row ${column}. The column comes first.`,
             `वह डेस्क (${row}, ${column}) है: स्तंभ ${row}, पंक्ति ${column}। स्तंभ पहले आता है।`,
           ),
-          reach: [room.learner.places.chooseTarget({ x: row, y: column })],
+          reach: [tap("room.places", "chooseTarget", { x: row, y: column })],
         },
       ],
     });
-    return [room, ask];
+    return scene({ pieces: { room, ask: ask.piece }, uses: [ask.use] });
   },
 });

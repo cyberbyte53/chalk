@@ -1,7 +1,7 @@
-import { family, t } from "@chalk/author";
+import { family, place, scene, t, tap } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { bareNotebook, check, isPlaced } from "@chalk/patterns";
-import { coordinatePlaneDef } from "@chalk/prop-coordinates";
+import { scenePlane, sceneWith } from "@chalk/patterns";
+import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -13,31 +13,32 @@ export const placeTheDot = family({
   params: z
     .object({ left: z.number().int().min(1).max(13), bottom: z.number().int().min(1).max(10) })
     .strict(),
-  build: ({ left, bottom }, b) => {
-    const sheet = b.prop(coordinatePlaneDef, "sheet", bareNotebook());
+  build: ({ left, bottom }) => {
+    const { isPlaced, sceneNotebook } = scenePlane;
+    const sheet = place(sceneCoordinatePlane, sceneNotebook());
     // The swapped spot, when it is on the page too.
     const isSwapped = left !== bottom && bottom <= 15 && left <= 12;
-    const ask = check(b, {
-      about: sheet,
+    const ask = sceneWith.check({
+      about: "sheet",
       prompt: t(
         `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1\u00a0cm. Drag it there, then press Check.`,
         `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1\u00a0cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
-      isRight: isPlaced(sheet, left, bottom),
-      solve: [sheet.learner.reading.movePoint({ x: left, y: bottom })],
+      isRight: isPlaced("sheet", left, bottom),
+      solve: [tap("sheet.reading", "movePoint", { x: left, y: bottom })],
       notes: isSwapped
         ? [
             {
-              when: isPlaced(sheet, bottom, left),
+              when: isPlaced("sheet", bottom, left),
               say: t(
                 `That spot is ${bottom} cm from the left edge and ${left} cm above the bottom: the two distances are swapped.`,
                 `वह जगह बाएँ किनारे से ${bottom} cm और नीचे के किनारे से ${left} cm ऊपर है: दोनों दूरियाँ उलट गईं।`,
               ),
-              reach: [sheet.learner.reading.movePoint({ x: bottom, y: left })],
+              reach: [tap("sheet.reading", "movePoint", { x: bottom, y: left })],
             },
           ]
         : [],
     });
-    return [sheet, ask];
+    return scene({ pieces: { sheet, ask: ask.piece }, uses: [ask.use] });
   },
 });
