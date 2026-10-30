@@ -32,6 +32,11 @@ export type PropPage = {
   }[];
   actions: { name: string; takes: string; describe: string; isByLearner: boolean }[];
   signals: string[];
+  /**
+   * A group's: the parts' signals it answers with another part's action (`places.targetChosen`).
+   * A field is changed only by its own part's actions; these are what else sets those off.
+   */
+  answers: string[];
 };
 
 const ROLE_WORDS: Record<string, string> = {
@@ -117,6 +122,7 @@ export function propPages(defsByPackage: ReadonlyMap<string, readonly AnyPropDef
           };
         }),
         signals: Object.keys(def.signals ?? {}),
+        answers: [...(groupOf(def)?.answers ?? [])],
       });
     }
   return out;

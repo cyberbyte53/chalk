@@ -116,7 +116,7 @@ export const cluesDrawing = drawing(clues, {
   back: ({ s, px }) => <StillDraw s={s} still={stillPossible(s, s.given)} px={px} />,
   // The learner hides their own point with a tap on the plane, on a whole-number point.
   on: ({ s, px, call }) =>
-    !s.canHide ? null : (
+    !s.canHide || !s.isPlaneFree ? null : (
       <PlaneTap window={s.window} px={px} step={1} action={actions.hideAt} call={call} />
     ),
   front: ({ s, px }) => {

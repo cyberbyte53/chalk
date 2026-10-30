@@ -2,11 +2,6 @@
    Riya and her route are the primary colour; Aman's house is the secondary; what is lit or still
    possible is a soft tint; right and wrong dots are the look's right and wrong. */
 
-.cp {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 .cp-line {
   margin: 0;
   font: var(--text-body) / var(--text-body-leading) var(--font-body);
@@ -27,12 +22,6 @@
 }
 .cp-address strong {
   color: var(--color-secondary);
-}
-.cp-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
 }
 
 /* ---- the plane: scene, grid, lines and marks ---- */

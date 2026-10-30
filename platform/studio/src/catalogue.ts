@@ -132,6 +132,11 @@ export function catalogueMarkdown(rows: PackageRow[]): string {
         );
       if (p.signals.length > 0)
         out.push(`Signals: ${p.signals.map((x) => `\`${x}\``).join(", ")}`, "");
+      if (p.answers.length > 0)
+        out.push(
+          `The group answers (each with another part's actions, which change that part): ${p.answers.map((x) => `\`${x}\``).join(", ")}`,
+          "",
+        );
     }
   }
   return `${out.join("\n").trimEnd()}\n`;

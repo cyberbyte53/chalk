@@ -45,7 +45,13 @@ export const coordinatePlane = defineGroup({
       targetName: s.places.targetName,
       canChooseTarget: arePlacesOn(s.places) && s.places.canChooseTarget,
     }),
-    clues: (s) => ({ ...pick(s.plane, cluesReads.keys), unit: s.reading.unit }),
+    // A tap on the plane plots the next pair while there are pairs to plot; else it is the clues'.
+    clues: (s) => ({
+      ...pick(s.plane, cluesReads.keys),
+      unit: s.reading.unit,
+      isPlaneFree:
+        !isPlottingOn(s.plotting) || s.plotting.plotted.length >= s.plotting.toPlot.length,
+    }),
     plotting: (s) => pick(s.plane, plottingReads.keys),
   },
   show: {
@@ -78,7 +84,6 @@ export const coordinatePlane = defineGroup({
     order: {
       above: ["places", "clues", "plotting"],
       back: ["plane", "walker", "clues"],
-      // The next pair to plot over a hidden point's tap: plotting on top.
       on: ["plane", "clues", "plotting", "places", "walker"],
       // The plane's named points over Riya, so the mark she has just made stays in view.
       front: ["plane", "plotting", "clues", "dice", "reading"],

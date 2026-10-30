@@ -156,6 +156,10 @@ describe("building a board", () => {
         p.call.left.turn({ from: 1 });
         // @ts-expect-error a part's fields are under its name
         b.when(p.on.left.turned, p.call.left.turn({ to: 1 }), (at) => at(p).at > 0);
+        // @ts-expect-error a part that can't be left out isn't null
+        b.prop(pair, "p2", { left: null });
+        // Some of a part's fields, over its defaults.
+        b.prop(pair, "p3", { left: { at: 2 } });
       };
       expect(typeof never).toBe("function");
       return [p];

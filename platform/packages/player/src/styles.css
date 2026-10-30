@@ -29,6 +29,22 @@
 .group-picture {
   width: 100%;
 }
+/* A frame's group: what is above the picture, the picture, what is below it, then the buttons. */
+.group-frame {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Every part's buttons in one row that wraps, as if one prop drew them all. */
+.group-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.group-controls > .group-child {
+  display: contents;
+}
 .frame-svg {
   display: block;
   overflow: hidden;

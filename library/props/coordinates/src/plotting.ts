@@ -1,6 +1,6 @@
 import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, fromPlane, isInWindow, scaledWindow } from "./plane";
+import { type PlaneCore, fromPlane, isInWindow } from "./plane";
 
 /** A pair to plot, from a table or a list. */
 export const pairSchema = z
@@ -48,7 +48,6 @@ export const plottingSignals = {
     "A dot was put down for pair `n` at (`x`, `y`); `isRight` when that is where the pair says",
   ),
   scaleChosen: signal("The learner chose a number every `every` units"),
-  fellOff: signal("At this scale pair `n`, (`x`, `y`), is off the plane"),
   allPlotted: signal("Every pair is plotted"),
 };
 
@@ -109,18 +108,11 @@ export const plotting = defineProp({
     }),
     chooseScale: act({
       describe:
-        "Choose the scale: a number every this many units, the plane grown to match (the learner's choice); the plane changes its own scale",
+        "Ask for a scale: a number every this many units (the learner's choice); the plane changes its own scale, and the pairs off it then are `offPlane`",
       byLearner: true,
       args: z.object({ every: z.number().positive() }).strict(),
       changes: [],
-      run: (s, { every }) => {
-        if (every === s.tickEvery) return set({});
-        const window = scaledWindow(s.window, s.tickEvery, every);
-        const off = s.toPlot.flatMap((p, n) =>
-          isInWindow(window, p) ? [] : [raise(plottingSignals.fellOff, { n, x: p.x, y: p.y })],
-        );
-        return set({}, raise(plottingSignals.scaleChosen, { every }), ...off);
-      },
+      run: (_s, { every }) => set({}, raise(plottingSignals.scaleChosen, { every })),
     }),
     clearPlotted: act({
       describe: "Take every dot off (the learner's ↺)",
@@ -132,6 +124,11 @@ export const plotting = defineProp({
   },
   signals: plottingSignals,
   derived: {
+    offPlane: {
+      describe: "The pairs off the plane at its scale now: each pair's number n, and (x, y)",
+      compute: (s) =>
+        s.toPlot.flatMap((p, n) => (isInWindow(s.window, p) ? [] : [{ n, x: p.x, y: p.y }])),
+    },
     next: {
       describe: "The next pair to plot, or null when all are",
       compute: (s) => s.toPlot[s.plotted.length] ?? null,

@@ -243,12 +243,14 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `clues.showHidden` | — | learner · Show the hidden point |
 | `plotting.plotAt` | {x: "number", y: "number"} | learner · Put the next pair's dot at (x, y) (the learner's tap); it is right if that is where the pair says |
 | `plotting.plotNext` | — | Put the next pair's dot where it goes |
-| `plotting.chooseScale` | {every: "number 0 to …"} | learner · Choose the scale: a number every this many units, the plane grown to match (the learner's choice); the plane changes its own scale |
+| `plotting.chooseScale` | {every: "number 0 to …"} | learner · Ask for a scale: a number every this many units (the learner's choice); the plane changes its own scale, and the pairs off it then are `offPlane` |
 | `plotting.clearPlotted` | — | learner · Take every dot off (the learner's ↺) |
 | `dice.throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `dice.startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 
-Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.scaleChosen`, `plotting.fellOff`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
+Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
+
+The group answers (each with another part's actions, which change that part): `places.targetChosen`, `plane.numberTapped`, `plotting.scaleChosen`
 
 ## `decimal` — `@chalk/prop-decimal`
 

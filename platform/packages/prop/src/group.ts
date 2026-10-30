@@ -249,6 +249,8 @@ export type GroupLayout = {
   own: readonly string[];
   /** Children's actions the group turns into its own changes ("objectArrow.move"). */
   routes: readonly string[];
+  /** Children's signals the group answers (WHEN): what one part does that sets off another's action. */
+  answers: readonly string[];
 };
 
 /**
@@ -341,6 +343,7 @@ export type GroupDef<
   S extends StoredState = StoredState,
   A extends object = Readonly<Record<string, ActionSpec<StoredState>>>,
   G extends object = Readonly<Record<string, SignalSpec>>,
+  Parts extends GroupParts = GroupParts,
 > = Omit<AnyPropDef, "state" | "actions" | "signals"> & {
   state: ZodType<S>;
   actions: A;
@@ -348,7 +351,12 @@ export type GroupDef<
   group: GroupLayout;
   /** Never set: carries the group's state type, so a parent group reads its child typed. */
   readonly stateType?: S;
+  /** Never set: carries its own fields, children and optional ones, for what a placement gives. */
+  readonly partTypes?: Parts;
 };
+
+/** A group's own fields, its children, and which children a placement may leave out. */
+export type GroupParts = { own: StoredState; children: GroupChildren; optional: string };
 
 type Both<U> = (U extends unknown ? (x: U) => void : never) extends (x: infer I) => void
   ? I
@@ -562,7 +570,12 @@ export function defineGroup<
   const Gs extends Readonly<Record<string, SignalSpec>> = Record<never, never>,
 >(
   typed: GroupSpec<O, C, Opt, D, X, Gs>,
-): GroupDef<GroupState<O, C, Opt>, GroupActions<C, X>, GroupSignals<C, Gs>> {
+): GroupDef<
+  GroupState<O, C, Opt>,
+  GroupActions<C, X>,
+  GroupSignals<C, Gs>,
+  { own: O; children: C; optional: Opt }
+> {
   // Inside, the state is handled untyped; the types are for the links an author writes.
   type Link<R> = (s: PropView, given: Readonly<Record<string, unknown>>, run: never) => R;
   const spec = typed as unknown as Omit<GroupSpec<StoredState>, "when" | "route"> & {
@@ -1128,6 +1141,7 @@ export function defineGroup<
       boundTree,
       own: ownFields,
       routes: Object.keys(routeLinks),
+      answers: Object.keys(whenLinks),
     },
     /** A placement's facts: defaults merged child by child with what it gives. */
     place: (given: Readonly<Record<string, unknown>>) => mergeGiven(groupDef, given),
@@ -1137,7 +1151,8 @@ export function defineGroup<
   return groupDef as unknown as GroupDef<
     GroupState<O, C, Opt>,
     GroupActions<C, X>,
-    GroupSignals<C, Gs>
+    GroupSignals<C, Gs>,
+    { own: O; children: C; optional: Opt }
   >;
 }
 

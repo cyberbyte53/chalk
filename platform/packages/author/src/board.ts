@@ -42,8 +42,11 @@ export type Given<S> = { [K in keyof S]?: Loose<S[K]> };
  * What a placement gives a prop: some of its fields; for a group, some of each part's, by part
  * (`{ walker: { walkFrom } }`), each over that part's defaults.
  */
-export type GivenOf<P> = P extends { readonly group: unknown }
-  ? { [K in keyof StateOfDef<P>]?: Given<NonNullable<StateOfDef<P>[K]>> | null }
+export type GivenOf<P> = P extends {
+  readonly partTypes?: { own: infer O; children: infer C; optional: infer Opt };
+}
+  ? // Its own fields whole (they aren't merged), each part's some (null: left out, if it may be).
+    Given<O> & { [K in keyof C]?: GivenOf<C[K]> | (K extends Opt ? null : never) }
   : Given<StateOfDef<P>>;
 
 /** Action arguments: plain values, exact Decs, or expressions worked out when the action runs. */

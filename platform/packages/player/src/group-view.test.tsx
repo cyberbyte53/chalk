@@ -266,6 +266,30 @@ describe("a part drawing in several places", () => {
     );
   });
 
+  it("refuses a drawing its layout's order leaves out, rather than not drawing it", () => {
+    const hidden = { ...views, q: { on: DotView, front: words } } as unknown as Parameters<
+      typeof groupView
+    >[1];
+    expect(() => groupView(layered, hidden)).not.toThrow();
+    const left = { ...views, q: { on: DotView } } as unknown as Parameters<typeof groupView>[1];
+    const ordered = defineGroup({
+      type: "ordered",
+      role: PropRole.Explainer,
+      describe: "",
+      children: { paper, p: dot, q: dot },
+      summary: () => "",
+      layout: {
+        kind: "frame",
+        provider: "paper",
+        children: ["p", "q"],
+        order: { on: ["paper", "p"] },
+      },
+    });
+    expect(() => groupView(ordered, left)).toThrow(
+      /q draws on, but the layout's order.on leaves it out/,
+    );
+  });
+
   it("refuses an order naming a child the frame doesn't draw", () => {
     expect(() =>
       defineGroup({

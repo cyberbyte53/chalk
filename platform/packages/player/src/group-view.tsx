@@ -135,6 +135,15 @@ export function groupView(
     if (isDrawing(v)) return v[place];
     return place === (below.includes(name) ? Place.Below : Place.On) ? v : undefined;
   };
+  // A layout's order for a place names everyone drawing there: a drawing it leaves out is refused
+  // here, not dropped from the screen.
+  if (l.kind === "frame")
+    for (const [place, named] of Object.entries(l.order ?? {}))
+      for (const name of [l.provider, ...l.children, ...below])
+        if (drawingOf(name, place as Place) !== undefined && !named.includes(name))
+          throw new Error(
+            `${def.type}: ${name} draws ${place}, but the layout's order.${place} leaves it out`,
+          );
   /** Who draws in a place, in order: as the layout says, else provider, children, below. */
   const drawersIn = (place: Place): readonly string[] => {
     if (l.kind !== "frame") return [];
@@ -177,7 +186,6 @@ export function groupView(
       const providerState = view[l.provider] as StoredState;
       const px = provider.frame?.pixels(providerState, width);
       if (px === undefined) throw new Error(`${def.type}: ${l.provider} provides no frame`);
-      const inside = [l.provider, ...l.children].filter(isThere);
       /** Each drawing inside the picture, back to front, by its key (the child, or child:place). */
       const drawings = IN_PICTURE.flatMap((place) =>
         drawersIn(place)

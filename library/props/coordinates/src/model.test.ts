@@ -402,10 +402,11 @@ describe("plotting: Exercise 3.3's table", () => {
       tickEvery: 2,
       window: { xMin: -8, xMax: 8, yMin: -6, yMax: 18 },
     });
+    expect(whole.look(doubled).plotting).toMatchObject({ offPlane: [] });
     const halved = whole.run(onTable(), "plotting.chooseScale", { every: 0.5 });
     expect(halved.state.plane.tickEvery).toBe(0.5);
-    const off = halved.emit.filter((e) => e.signal === "plotting.fellOff").map((e) => e.payload);
-    expect(off).toEqual([
+    // Off the window the plotting is given now, whatever the plane made of the scale.
+    expect((whole.look(halved.state).plotting as { offPlane: unknown }).offPlane).toEqual([
       { n: 0, x: -2, y: 8 },
       { n: 1, x: -1, y: 7 },
       { n: 4, x: 3, y: -1 },

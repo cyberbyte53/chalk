@@ -21,6 +21,7 @@ const page: PropPage = {
     { name: "zoom", takes: "", describe: "", isByLearner: false },
   ],
   signals: [],
+  answers: [],
 };
 
 describe("a prop's page", () => {

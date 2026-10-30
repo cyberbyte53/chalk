@@ -112,6 +112,7 @@ export {
   type StateOf,
   type BoundTree,
   type GroupDef,
+  type GroupParts,
   type GroupLayout,
   type GroupSpec,
   type GroupView,

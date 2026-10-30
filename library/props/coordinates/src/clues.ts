@@ -29,6 +29,7 @@ export const cluesReads = fromPlane("window");
 
 export type CluesState = Pick<PlaneCore, (typeof cluesReads.keys)[number]> & {
   unit: string;
+  isPlaneFree: boolean;
   hidden: Point | null;
   clueChoices: Clue[];
   given: number[];
@@ -113,6 +114,8 @@ export const clues = defineProp({
       ...cluesReads.fields,
       /** Written after a distance in a clue ("30 m"), as the point's reading has it. */
       unit: z.string().max(4),
+      /** A tap on the plane is the clues' to take (on the coordinate plane, unless pairs are being plotted). */
+      isPlaneFree: z.boolean(),
       /** The point no one sees, or null. */
       hidden: pointSchema.nullable(),
       /** The clues offered as buttons, from the lesson. */
@@ -129,6 +132,7 @@ export const clues = defineProp({
   defaults: {
     ...cluesReads.defaults,
     unit: "",
+    isPlaneFree: true,
     hidden: null,
     clueChoices: [],
     given: [],
