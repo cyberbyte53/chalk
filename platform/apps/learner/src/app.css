@@ -2184,11 +2184,6 @@ body.is-selecting .is-pick-target {
   color: var(--color-on-surface-variant);
   margin-bottom: 4px;
 }
-.script-lang + .script-lang {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px dashed var(--color-outline-variant);
-}
 .script-shown {
   color: var(--color-on-surface-variant);
 }

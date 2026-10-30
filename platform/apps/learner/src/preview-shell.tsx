@@ -632,7 +632,7 @@ export function PreviewBoard({
           <PropPanel runtime={runtime} piece={board.name} />
         )}
         {!isShot && isScript && !isProp && (
-          <ScriptView path={shown.path} boardId={board.item?.id} />
+          <ScriptView path={shown.path} boardId={board.item?.id} locale={locale} />
         )}
         {!isShot && threads.length > 0 && (
           <BoardThreads threads={threads} reviews={reviews} onChange={onThreads} phone={phone} />

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 /**
  * A board's script, beside the board in the preview (`&script`, or `v`): every line it says, in
  * order, who says it, what is shown and what the voice says (and where those words came from), with
- * each clip to play. A line that still needs its spoken words says so, with the suggested draft to
+ * its clip to play, in the board's language (`h` switches both). A line that still needs its spoken words says so, with the suggested draft to
  * write into its `speak`. Read from what `pnpm voice` made (public/voice/<book>/<chapter>/).
  */
 
@@ -65,7 +65,13 @@ function usePlayer(): (url: string) => void {
 export function ScriptView({
   path,
   boardId,
-}: { path: string; boardId: string | undefined }): JSX.Element {
+  locale,
+}: {
+  path: string;
+  boardId: string | undefined;
+  /** The board's language: the script follows it. */
+  locale: Locale;
+}): JSX.Element {
   const loaded = useScript(path);
   const play = usePlayer();
   if (loaded === null)
@@ -79,56 +85,52 @@ export function ScriptView({
     return <div class="script-view is-empty">This board says nothing.</div>;
   return (
     <ol class="script-view">
-      {board.lines.map((line) => (
-        <li key={line.piece} class="script-line" data-script-piece={line.piece}>
-          <div class="script-who">
-            <b>{line.speaker}</b> · {line.piece}
-            {line.isLater && <span class="script-tag">when shown</span>}
-          </div>
-          {(["en", "hi"] as const).map((locale) => {
-            const said = line.said[locale];
-            const clip = loaded.manifest.files[line.keys[locale]];
-            const seconds = loaded.manifest.seconds?.[line.keys[locale]];
-            return (
-              <div class="script-lang" key={locale}>
-                <div class="script-shown">
-                  {line.shown[locale] !== undefined && <RichText text={line.shown[locale]} />}
-                </div>
-                {said === undefined ? null : "words" in said ? (
-                  <div class="script-said">
-                    <button
-                      type="button"
-                      class="script-play"
-                      disabled={clip === undefined}
-                      aria-label={`Play the ${locale} clip`}
-                      onClick={() => clip !== undefined && play(`${loaded.base}/${clip}`)}
-                    >
-                      ▶ {locale.toUpperCase()}
-                    </button>
-                    <span>{said.words}</span>
-                    <span class="script-tag">
-                      {FROM_WORDS[said.from]}
-                      {seconds === undefined ? "" : ` · ${seconds.toFixed(1)} s`}
-                    </span>
-                  </div>
-                ) : (
-                  <div class="script-said is-missing">
-                    <span>
-                      Needs its spoken words ({said.needs}).
-                      {said.suggested !== undefined && (
-                        <>
-                          {" "}
-                          Suggested: <q>{said.suggested}</q>
-                        </>
-                      )}
-                    </span>
-                  </div>
-                )}
+      {board.lines.map((line) => {
+        const said = line.said[locale];
+        const key = line.keys[locale];
+        const clip = loaded.manifest.files[key];
+        const seconds = loaded.manifest.seconds?.[key];
+        const shown = line.shown[locale];
+        return (
+          <li key={line.piece} class="script-line" data-script-piece={line.piece}>
+            <div class="script-who">
+              <b>{line.speaker}</b> · {line.piece}
+              {line.isLater && <span class="script-tag">when shown</span>}
+            </div>
+            <div class="script-shown">{shown !== undefined && <RichText text={shown} />}</div>
+            {said === undefined ? null : "words" in said ? (
+              <div class="script-said">
+                <button
+                  type="button"
+                  class="script-play"
+                  disabled={clip === undefined}
+                  aria-label="Play its clip"
+                  onClick={() => clip !== undefined && play(`${loaded.base}/${clip}`)}
+                >
+                  ▶
+                </button>
+                <span>{said.words}</span>
+                <span class="script-tag">
+                  {FROM_WORDS[said.from]}
+                  {seconds === undefined ? "" : ` · ${seconds.toFixed(1)} s`}
+                </span>
               </div>
-            );
-          })}
-        </li>
-      ))}
+            ) : (
+              <div class="script-said is-missing">
+                <span>
+                  Needs its spoken words ({said.needs}).
+                  {said.suggested !== undefined && (
+                    <>
+                      {" "}
+                      Suggested: <q>{said.suggested}</q>
+                    </>
+                  )}
+                </span>
+              </div>
+            )}
+          </li>
+        );
+      })}
     </ol>
   );
 }
