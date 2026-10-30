@@ -73,7 +73,7 @@ describe("a scene, built and checked like any board", () => {
     // waiting, is never said.
     expect(heard.filter((h) => h.startsWith("say"))).toEqual(["say title", "say found"]);
     expect(heard.slice(heard.indexOf("say found") - 1)).toEqual(["hush", "say found"]);
-    expect(runtime.getView("board").saying).toEqual([]);
+    expect(runtime.getView("board").waiting).toEqual([]);
   });
 
   it("lines are said in order and waited for: the title, the question, then what is shown", async () => {
@@ -84,7 +84,8 @@ describe("a scene, built and checked like any board", () => {
       "hi",
     );
     expect(played.view("board").hidden).toEqual([]);
-    expect(played.view("board").saying).toEqual([]);
+    expect(played.view("board").speaking).toBeNull();
+    expect(played.view("board").waiting).toEqual([]);
   });
 
   it("a piece with nothing to say adds no pause; a line hidden while said moves on to the next", () => {
@@ -184,7 +185,7 @@ describe("a scene, built and checked like any board", () => {
       scriptOf(events.board, (type) => propLibrary[type]).map((l) => `${l.line}: ${l.moment}`),
     ).toEqual([
       "title: board.started",
-      "ask: board.said · line plane",
+      "ask: board.said · line afterPlane",
       "hint: board.shown · name hint",
       "afterTitle: board.said · line title",
       "afterPlane: board.said · line plane",
@@ -208,6 +209,46 @@ describe("a scene, built and checked like any board", () => {
     for (const locale of ["en", "hi"])
       for (const l of ["title", "afterTitle", "afterPlane", "well"])
         expect(heard).toContain(`${locale} ${l}`);
+  });
+
+  it("lines due are never lost: a piece shown at the same moment goes first, they follow in order", async () => {
+    const busy = scene({
+      pieces: {
+        title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
+        ask,
+        hint: hidden(place(sceneText, { text: t("Look along", "आगे देखो") })),
+      },
+      lines: {
+        first: line(t("First.", "पहला।"), { when: "board.said", where: { line: "title" } }),
+        second: line(t("Second.", "दूसरा।"), { when: "board.said", where: { line: "title" } }),
+      },
+      // The lesson shows a piece the moment the title is said: it cuts in, the lines due follow.
+      onSaid: { title: (_, t) => t.self.show({ name: "hint" }) },
+      witness: [tap("ask", "select", { option: "street" }), tap("ask", "check")],
+    }).build("busy");
+    const heard: string[] = [];
+    expect(
+      await checkWitness(busy.board, propLibrary, busy.witness, (l, locale) =>
+        heard.push(`${locale} ${l}`),
+      ),
+    ).toEqual([]);
+    // The question's read was waiting: the piece shown drops it (the student has moved on).
+    expect(heard.filter((h) => h.startsWith("en ")).map((h) => h.slice(3))).toEqual([
+      "title",
+      "hint",
+      "first",
+      "second",
+    ]);
+  });
+
+  it("refuses a line on Continue (nothing is heard after it) and a piece named board", () => {
+    expect(() =>
+      scene({
+        pieces: { ask },
+        lines: { x: line(t("x", "x"), { when: "board.continued" }) },
+      }).build("bad"),
+    ).toThrow(/when "board.continued"/);
+    expect(() => scene({ pieces: { board: ask } }).build("bad")).toThrow(/can't be named "board"/);
   });
 
   it("a line about something not on the board is refused; a part inside a piece is fine", () => {

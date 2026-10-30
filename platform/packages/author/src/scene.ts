@@ -37,8 +37,11 @@ import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
  */
 function signalAt(pieces: Pieces, path: string): SignalDef | undefined {
   const names = path.split(".");
-  if (names[0] === BOARD_EVENTS && names.length === 2)
-    return (sceneSignals as Readonly<Record<string, SignalDef>>)[names[1] ?? ""];
+  // Continue moves the student on: nothing on this board is heard after it.
+  if (names[0] === BOARD_EVENTS)
+    return names.length === 2 && names[1] !== "continued"
+      ? (sceneSignals as Readonly<Record<string, SignalDef>>)[names[1] ?? ""]
+      : undefined;
   const signal = names.pop();
   const [first, ...rest] = names;
   let def: AnyProp | undefined =
@@ -154,8 +157,15 @@ const sceneVariables = z
     /** The pieces not shown yet. */
     hidden: z.array(z.string()),
     isPassed: z.boolean(),
-    /** Lines waiting to be said, in order; the first is being said. */
-    saying: z.array(z.string()),
+    /** The line in turn: being said, or in the breath before it. */
+    speaking: z.string().nullable(),
+    /**
+     * Lines declared on a moment that came, in order: said before the opening goes on. Only hush
+     * drops them.
+     */
+    next: z.array(z.string()),
+    /** The pieces' lines still to be read (the opening, top to bottom): a piece shown drops them. */
+    waiting: z.array(z.string()),
   })
   .strict();
 type SceneVars = z.infer<typeof sceneVariables>;
@@ -167,11 +177,16 @@ const sceneActions = {
   /** Says a line now (a piece's, or a narration line), cutting the one being said. */
   say: action({ line: z.string().min(1) }),
   /**
-   * Says a line next: after the line being said (if any), ahead of those waiting. How a line
-   * declared on a moment is said: the board's speech goes on around it, nothing is dropped.
+   * A line declared on a moment is due: it is said after the line in turn, before the opening goes
+   * on, in the order lines came due. Nothing is cut or dropped.
    */
   sayNext: action({ line: z.string().min(1) }),
-  /** Stops the line being said, and drops the lines waiting. */
+  /**
+   * If no line is in turn, the next is said: a line due, else the next piece waiting (after a
+   * breath, when a line has just ended). Every step that adds lines ends with it.
+   */
+  goOn: action({ isAfterLine: z.boolean() }),
+  /** Stops the line being said, and drops every line due or waiting. */
   hush: action(),
   /** A line has ended (the voice bus): the next waiting is said, and what waits for it runs. */
   lineEnded: action({ line: z.string().min(1) }),
@@ -300,6 +315,9 @@ export function scene<const P extends Pieces, const L extends Lines = Record<nev
 
 function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   const names = Object.keys(spec.pieces);
+  // "board" names the board's own events (board.said): a piece can't have that name.
+  if (names.includes(BOARD_EVENTS))
+    throw new Error(`Board ${name}: a piece can't be named "${BOARD_EVENTS}" (the board's own)`);
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
   const freeLines = spec.lines ?? {};
   for (const [line, free] of Object.entries(freeLines)) {
@@ -340,6 +358,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       show: (p: { name: string }) => Out;
       lineEnded: (p: { line: string }) => Out;
       sayNext: (p: { line: string }) => Out;
+      goOn: (p: { isAfterLine: boolean }) => Out;
     };
     to: Record<string, Record<string, (payload?: object) => Out>>;
     say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
@@ -414,8 +433,9 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       ...rulesFrom.flatMap((r) =>
         list(r[key]?.(me as never, payload as never, t as never) as Outs),
       ),
-      // A piece's signal: its due lines are said next (after the line being said).
+      // Last, the lines due at this moment: after what the board and the lesson did at it.
       ...dueAt(key, me, payload).map((line) => (t as T).self.sayNext({ line })),
+      (t as T).self.goOn({ isAfterLine: false }),
     ];
   const give: Record<string, Record<string, unknown>> = {};
   for (const one of [spec.give ?? {}, ...uses.map((u) => u.give ?? {})])
@@ -426,81 +446,96 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     type: "scene",
     describe: spec.purpose ?? `The board ${name}.`,
     variables: sceneVariables,
-    start: { hidden: names.filter(isHidden), isPassed: false, saying: [] },
+    start: {
+      hidden: names.filter(isHidden),
+      isPassed: false,
+      speaking: null,
+      next: [],
+      waiting: [],
+    },
     actions: sceneActions,
     signals: sceneSignals,
     children: defs as Readonly<Record<string, AnyProp>>,
     ...(Object.keys(give).length === 0 ? {} : { give: give as never }),
     on: {
-      // The board opens: the pieces showing are said top to bottom, one after another.
+      // The board opens: the pieces showing are read top to bottom, one after another.
       start: (me, _, t) => {
-        const shown = names.filter((n) => !me.hidden.includes(n));
         const atOnce = spec.passBy !== "rules" && questions.length === 0;
-        const tt = t as unknown as T;
-        const saying = [...dueAtBoard("started", me, {}), ...shown];
         return [
+          t.set({ waiting: names.filter((n) => !me.hidden.includes(n)) }),
           tell(t, "started", {}),
-          t.set({ saying }),
-          ...(saying[0] === undefined ? [] : [sayNow(tt, saying[0])]),
+          ...dueAtBoard("started", me, {}).map((line) => t.self.sayNext({ line })),
           ...(atOnce ? [t.self.pass()] : []),
+          t.self.goOn({ isAfterLine: false }),
         ];
       },
-      // A piece shown says its line at once: the student has moved on, so the line being said is
-      // cut, and what was waiting to be said is dropped.
+      // A piece shown says its line at once: the student has moved on, so the line in turn is cut
+      // and the opening's reads are dropped. Lines due stay due: they follow it.
       show: (me, { name: piece }, t) =>
         me.hidden.includes(piece) && [
-          t.set({
-            hidden: me.hidden.filter((n) => n !== piece),
-            saying: [piece, ...dueAtBoard("shown", me, { name: piece })],
-          }),
+          t.set({ hidden: me.hidden.filter((n) => n !== piece), speaking: piece, waiting: [] }),
           sayNow(t as unknown as T, piece),
           tell(t, "shown", { name: piece }),
+          ...dueAtBoard("shown", me, { name: piece }).map((line) => t.self.sayNext({ line })),
         ],
+      // A rule says a line now: as a piece shown, it cuts the line in turn and the opening's reads.
       say: (_, { line }, t) => {
         if (!Object.hasOwn(spec.pieces, line) && !Object.hasOwn(freeLines, line))
           throw new Error(`Board ${name}: no line "${line}" (a piece's name, or one of its lines)`);
-        return [t.set({ saying: [line] }), sayNow(t as unknown as T, line)];
+        return [t.set({ speaking: line, waiting: [] }), sayNow(t as unknown as T, line)];
       },
-      lineEnded: (me, { line }, t) => {
-        // The lines due now that this one is said go first, ahead of those waiting.
-        const rest = [
-          ...dueAtBoard("said", me, { line }),
-          ...(me.saying[0] === line ? me.saying.slice(1) : me.saying),
-        ];
-        const next = rest[0];
-        return [
-          t.set({ saying: rest }),
-          ...(next === undefined ? [] : [sayAfterBreath(t as unknown as T, next)]),
+      // The line in turn ended: the board tells it, the lesson's rules on it run, the lines due at it
+      // come due, and the board goes on. (A line cut before it ended is no longer in turn.)
+      lineEnded: (me, { line }, t) =>
+        me.speaking === line && [
+          t.set({ speaking: null }),
           tell(t, "said", { line }),
           ...list(onSaid[line]?.(me as never, t as never) as Outs),
-        ];
-      },
+          ...dueAtBoard("said", me, { line }).map((due) => t.self.sayNext({ line: due })),
+          t.self.goOn({ isAfterLine: true }),
+        ],
       sayNext: (me, { line }, t) => {
         if (!Object.hasOwn(freeLines, line))
           throw new Error(`Board ${name}: no line "${line}" of its own`);
-        const [head, ...waiting] = me.saying;
-        // Nothing is being said: it is said now. Otherwise it waits for the line being said.
-        return head === undefined
-          ? [t.set({ saying: [line] }), sayNow(t as unknown as T, line)]
-          : t.set({ saying: [head, line, ...waiting] });
+        return t.set({ next: [...me.next, line] });
       },
-      // A piece hidden is no longer heard: its line is dropped, and cut if it is being said.
-      hide: (me, { name: piece }, t) => {
-        if (me.hidden.includes(piece)) return;
-        const rest = me.saying.filter((n) => n !== piece);
-        const isBeingSaid = me.saying[0] === piece;
+      goOn: (me, { isAfterLine }, t) => {
+        if (me.speaking !== null) return;
+        const [due, ...moreDue] = me.next;
+        const [read, ...moreReads] = me.waiting;
+        const line = due ?? read;
+        if (line === undefined) return;
+        const tt = t as unknown as T;
         return [
-          t.set({ hidden: [...me.hidden, piece], saying: rest }),
-          // The line being said is cut; the next waiting goes on.
-          ...(isBeingSaid
-            ? [
-                (t as unknown as T).hush(),
-                ...(rest[0] === undefined ? [] : [sayNow(t as unknown as T, rest[0])]),
-              ]
-            : []),
+          t.set(
+            due === undefined
+              ? { speaking: line, waiting: moreReads }
+              : { speaking: line, next: moreDue },
+          ),
+          isAfterLine ? sayAfterBreath(tt, line) : sayNow(tt, line),
         ];
       },
-      hush: (_, __, t) => [t.set({ saying: [] }), (t as unknown as T).hush()],
+      // A piece hidden is no longer heard: its read is dropped, and cut if it is in turn.
+      hide: (me, { name: piece }, t) =>
+        !me.hidden.includes(piece) && [
+          t.set({
+            hidden: [...me.hidden, piece],
+            waiting: me.waiting.filter((n) => n !== piece),
+          }),
+          ...(me.speaking === piece
+            ? [
+                (t as unknown as T).hush(),
+                t.set({ speaking: null }),
+                t.self.goOn({ isAfterLine: false }),
+              ]
+            : []),
+        ],
+      hush: (_, __, t) => [
+        t.set({ speaking: null, next: [], waiting: [] }),
+        (t as unknown as T).hush(),
+      ],
+      // Passed: the lines due at it are said after what the lesson does at the same moment (the
+      // step that passed the board goes on).
       pass: (me, _, t) =>
         !me.isPassed && [
           t.set({ isPassed: true }),

@@ -35,12 +35,57 @@ export type ScriptLine = {
 
 /** A line's own moment as an event: its signal, the values it must carry, and any condition. */
 function momentOf(line: SceneLine): string {
-  const values = Object.entries(line.where ?? {})
+  return [
+    eventText(line.when ?? "", line.where ?? {}),
+    line.hasCondition === true ? "a condition in code" : "",
+  ]
+    .filter((p) => p !== "")
+    .join(" · ");
+}
+
+/** An event in words, as everywhere: `board.said · line title`, `town.walker.arrived · x 4, y 5`. */
+function eventText(path: string, values: Readonly<Record<string, unknown>>): string {
+  const told = Object.entries(values)
     .map(([k, v]) => `${k} ${typeof v === "object" ? JSON.stringify(v) : String(v)}`)
     .join(", ");
-  return [line.when, values, line.hasCondition === true ? "a condition in code" : ""]
-    .filter((p) => p !== undefined && p !== "")
-    .join(" · ");
+  return told === "" ? path : `${path} · ${told}`;
+}
+
+/** The board's own events are written so (the scene tells them at its root). */
+const BOARD_EVENTS = "board";
+
+/**
+ * When each line of the opening is said, as the board says it: the board is opened with a voice
+ * that only listens (each line with words takes a second, one with none ends at once), and each
+ * line's moment is the board's own event told last before the voice began it. Nothing is worked
+ * out beside the board: the moments are what runs. A line the opening never reaches (a piece shown
+ * first dropped it) has none.
+ */
+function openingMoments(
+  model: NonNullable<Board["model"]>,
+  hasWords: (line: string) => boolean,
+): ReadonlyMap<string, string> {
+  const moments = new Map<string, string>();
+  let last: string | undefined;
+  const voice = {
+    say: (line: string) => {
+      if (last !== undefined && !moments.has(line)) moments.set(line, last);
+      return hasWords(line) ? 1 : undefined;
+    },
+    hush: () => undefined,
+  };
+  const core = new Core(model.scene, model.given, { voice });
+  core.listen((event) => {
+    if (event.kind === "tell" && event.path === "")
+      last = eventText(`${BOARD_EVENTS}.${event.signal}`, event.payload);
+  });
+  try {
+    core.send("", "start");
+    core.runUntilIdle();
+  } catch {
+    // A board that never goes quiet on its own (a clock that ticks): what was said by then stands.
+  }
+  return moments;
 }
 
 /**
@@ -75,17 +120,22 @@ export function scriptOf(
   const model = board.model;
   if (model === undefined) return [];
   const core = new Core(model.scene, model.given);
-  const out: ScriptLine[] = [];
-  // The opening is said in order: the first when the board starts, each next when the one before is
-  // said (the board tells `said`). A piece shown later is said when the board tells `shown`.
-  let before: string | undefined;
-  for (const piece of propPieces(board.root)) {
+  const pieces = propPieces(board.root).map((piece) => {
     const given = model.lines[piece.name];
     const own = ownLine(lookup(piece.prop), core.read(piece.name));
-    const after = before;
-    // A piece with nothing to say is still said (at once): the next waits for it all the same.
-    if (piece.isHidden !== true) before = piece.name;
-    if (own === undefined && given?.says === undefined) continue;
+    return { piece, given, own, hasWords: own !== undefined || given?.says !== undefined };
+  });
+  const opening = openingMoments(
+    model,
+    (line) =>
+      pieces.some((p) => p.piece.name === line && p.hasWords) ||
+      model.lines[line]?.says !== undefined,
+  );
+  const out: ScriptLine[] = [];
+  // A piece showing is read in the opening, at the moment the board reaches it; a piece shown later
+  // is said as it is shown (the board tells `shown`).
+  for (const { piece, given, own, hasWords } of pieces) {
+    if (!hasWords) continue;
     out.push({
       line: piece.name,
       piece: piece.name,
@@ -95,10 +145,8 @@ export function scriptOf(
       cue: piece.isHidden === true ? "appears" : "opening",
       moment:
         piece.isHidden === true
-          ? `board.shown · name ${piece.name}`
-          : after === undefined
-            ? "board.started"
-            : `board.said · line ${after}`,
+          ? eventText(`${BOARD_EVENTS}.shown`, { name: piece.name })
+          : (opening.get(piece.name) ?? "never: a piece shown first drops it"),
       about: aboutOf(model, piece.name, true) ?? piece.name,
     });
   }

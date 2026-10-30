@@ -180,10 +180,11 @@ export class SceneRuntime {
     void this.version.value;
     const model = this.board.model;
     if (model === undefined) return undefined;
-    // What the board is saying is the scene's own: the first of its `saying`.
-    const saying = (this.core.read("") as { saying?: readonly string[] }).saying ?? [];
-    const line = saying[0];
-    if (line === undefined) return undefined;
+    // Which line is in turn is the scene's (`speaking`); whether it is heard yet is the voice's: in
+    // the breath before it, nothing is said, so nothing glows.
+    const line = (this.core.read("") as { speaking?: string | null }).speaking ?? undefined;
+    const last = this.heardLines.at(-1);
+    if (line === undefined || last?.line !== line || last.cutAt !== undefined) return undefined;
     return aboutOf(
       model,
       line,

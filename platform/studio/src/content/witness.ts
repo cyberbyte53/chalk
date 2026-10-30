@@ -53,8 +53,17 @@ export function questionsOf(board: Board, defs: Defs): string[] {
   return out;
 }
 
+/**
+ * Something that went wrong on a run: which check (the same words in every language: what was
+ * expected, which question), and what was seen (which may differ by language).
+ */
+export type Failure = { check: string; seen?: string };
+
+const failureText = (f: Failure): string =>
+  f.seen === undefined ? f.check : `${f.check} (${f.seen})`;
+
 export type Played = {
-  failures: string[];
+  failures: Failure[];
   view: (prop: string) => Readonly<Record<string, unknown>>;
 };
 
@@ -82,7 +91,7 @@ function playScene(
           : message,
       ),
   });
-  const failures: string[] = [];
+  const failures: Failure[] = [];
   runtime.start();
   runtime.settle();
   for (const step of steps) {
@@ -100,14 +109,17 @@ function playScene(
           runtime.getView(typeof piece === "string" ? piece : piece.name),
         );
         if (value !== true)
-          failures.push(`expected ${step.says} (${step.that.toString()} was ${String(value)})`);
+          failures.push({
+            check: `expected ${step.says}`,
+            seen: `${step.that.toString()} was ${String(value)}`,
+          });
         break;
       }
     }
   }
   runtime.settle();
   for (const heard of runtime.heard()) onHeard?.(heard.line);
-  failures.push(...errors);
+  failures.push(...errors.map((check) => ({ check })));
   const views = new Map<string, Readonly<Record<string, unknown>>>();
   for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));
   runtime.dispose();
@@ -131,7 +143,7 @@ export async function play(
     return playScene(board, defs, steps, onHeard, locale);
   }
   const { runtime, advance, errors, refused } = startOnFakeTime(board, defs);
-  const failures: string[] = [];
+  const failures: Failure[] = [];
   runtime.start();
   await advance(1);
   for (const step of steps) {
@@ -149,13 +161,16 @@ export async function play(
           runtime.getView(typeof piece === "string" ? piece : piece.name),
         );
         if (value !== true)
-          failures.push(`expected ${step.says} (${step.that.toString()} was ${String(value)})`);
+          failures.push({
+            check: `expected ${step.says}`,
+            seen: `${step.that.toString()} was ${String(value)}`,
+          });
         break;
       }
     }
   }
   await advance(6);
-  failures.push(...refused, ...errors);
+  failures.push(...[...refused, ...errors].map((check) => ({ check })));
   const views = new Map<string, Readonly<Record<string, unknown>>>();
   for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));
   runtime.dispose();
@@ -167,16 +182,17 @@ const runsOf = (board: Board): readonly (Locale | undefined)[] =>
   board.model === undefined ? [undefined] : LOCALES;
 
 /**
- * One check, run in each language its board is checked in. A failure in every language is said
- * once; one in some only says which ("in hi: …"). What each passing run was heard to say is handed
- * on, by language.
+ * One check, run in each language its board is checked in. Failures are matched by their check, not
+ * their words: a check failing in every language is said once (with what each saw, when that
+ * differs); one failing in some only says which ("in hi: …"). What each passing run was heard to
+ * say is handed on, by language.
  */
 async function inEveryLanguage(
   board: Board,
-  check: (locale: Locale | undefined, onHeard: (line: string) => void) => Promise<string[]>,
+  check: (locale: Locale | undefined, onHeard: (line: string) => void) => Promise<Failure[]>,
   onHeard?: (line: string, locale: Locale) => void,
 ): Promise<string[]> {
-  const byRun: { locale: Locale | undefined; failures: string[] }[] = [];
+  const byRun: { locale: Locale | undefined; failures: Failure[] }[] = [];
   for (const locale of runsOf(board)) {
     const heard: string[] = [];
     const failures = await check(locale, (line) => void heard.push(line));
@@ -184,12 +200,21 @@ async function inEveryLanguage(
     if (failures.length === 0 && locale !== undefined)
       for (const line of heard) onHeard?.(line, locale);
   }
-  const all = [...new Set(byRun.flatMap((r) => r.failures))];
-  return all.map((f) => {
-    const inRuns = byRun.filter((r) => r.failures.includes(f));
-    return inRuns.length === byRun.length || byRun.length === 1
-      ? f
-      : `in ${inRuns.map((r) => r.locale).join(", ")}: ${f}`;
+  const checks = [...new Set(byRun.flatMap((r) => r.failures.map((f) => f.check)))];
+  return checks.map((check) => {
+    const inRuns = byRun.flatMap((r) => {
+      const f = r.failures.find((x) => x.check === check);
+      return f === undefined ? [] : [{ locale: r.locale, seen: f.seen }];
+    });
+    const seens = new Set(inRuns.map((r) => r.seen));
+    const seen =
+      seens.size <= 1
+        ? inRuns[0]?.seen
+        : inRuns.map((r) => `${r.locale}: ${r.seen ?? "—"}`).join("; ");
+    const text = failureText({ check, ...(seen === undefined ? {} : { seen }) });
+    return inRuns.length === byRun.length
+      ? text
+      : `in ${inRuns.map((r) => r.locale).join(", ")}: ${text}`;
   });
 }
 
@@ -219,11 +244,12 @@ export function checkWitness(
       const failures = [...played.failures];
       for (const question of questionsOf(board, defs))
         if (played.view(question).status !== AnswerStatus.Correct)
-          failures.push(
-            `the witness doesn't answer "${question}" correctly (status ${String(played.view(question).status)})`,
-          );
+          failures.push({
+            check: `the witness doesn't answer "${question}" correctly`,
+            seen: `status ${String(played.view(question).status)}`,
+          });
       if (played.view(BOARD).isPassed !== true)
-        failures.push("a learner doing the witness never gets Continue");
+        failures.push({ check: "a learner doing the witness never gets Continue" });
       return failures;
     },
     onHeard,
@@ -245,7 +271,7 @@ export function checkNote(
       const failures = [...played.failures];
       const questions = questionsOf(board, defs);
       if (questions.length === 0)
-        return [...failures, "a note check needs a question on the board"];
+        return [...failures, { check: "a note check needs a question on the board" }];
       // The note shows on whichever question the wrong answer was given to, the same in every
       // language.
       const shown = questions.map((q) => played.view(q).feedback as Localized | null | undefined);
@@ -253,11 +279,13 @@ export function checkNote(
         const got = shown.flatMap((note) =>
           note === null || note === undefined ? [] : [noteWords(note)],
         );
-        failures.push(
-          `expected the note ${noteWords(feedback)}, got ${got.length === 0 ? "no note" : got.join("; ")}`,
-        );
+        failures.push({
+          check: `expected the note ${noteWords(feedback)}`,
+          seen: `got ${got.length === 0 ? "no note" : got.join("; ")}`,
+        });
       }
-      if (played.view(BOARD).isPassed === true) failures.push("a wrong answer got Continue");
+      if (played.view(BOARD).isPassed === true)
+        failures.push({ check: "a wrong answer got Continue" });
       return failures;
     },
     onHeard,

@@ -78,12 +78,14 @@ A line is a node of the board, like a piece: it has an address, and everything t
 
 Every moment is a real event, written the way events are everywhere (`play` prints them so), and a line can be declared on any of them:
 
-- the board's own: `board.started`, `board.said · line title` (a line ended; the opening is said this way, one after another), `board.shown · name fiveHouses`, `board.passed`;
+- the board's own (not `board.continued`: nothing on a board is heard after it): `board.started`, `board.said · line title` (a line ended; the opening is said this way, one after another), `board.shown · name fiveHouses`, `board.passed`;
 - a piece's, or a part's inside one: `ask.checked · status correct`, `town.walker.arrived · x 4, y 5`.
 
 One form, worked out in one place (`scriptOf`); no words written beside it that could drift from what runs.
 
-**How a declared line is said:** next. After the line being said, if any, and ahead of the lines waiting; nothing is cut or dropped. (A piece shown is different: the student has moved on, so it cuts what is being said.) A line on the board's own event is placed by the board in the same step, so "after the title" really is straight after it.
+**How lines are said.** The board keeps three things: the line **in turn** (being said, or in the breath before it), the lines **due** (declared on a moment that came, in order), and the opening's **reads** still waiting. When the line in turn ends, the board tells `said`, the lesson's rules on it run, the lines due at it join the due, and the board goes on: a line due first, else the next read. A piece shown (or a line a rule says now) cuts the line in turn and drops the reads, since the student has moved on; lines due are never dropped but by hush. Lines due at a moment are added after everything the board and the lesson do at it, so nothing in the same step loses them.
+
+**The script's moments are what runs:** the build opens each board with a voice that only listens and records which of the board's events came last before each line began. A read the opening never reaches is shown as such.
 
 ### Its place: in time, and on the board
 
