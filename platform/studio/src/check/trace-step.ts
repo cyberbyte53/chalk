@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { importedFiles, recordImports } from "../content/deps";
-import { findUp } from "../pronunciations";
+import { findUp } from "../find-up";
 import { type ReadKind, watchReads } from "./reads";
 
 /**

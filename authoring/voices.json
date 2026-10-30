@@ -1,42 +1,8 @@
 {
-  "macos": {
-    "default": {
-      "en": "Rishi",
-      "hi": "Lekha"
-    }
-  },
-  "parler": {
-    "narrator": {
-      "en": "Rani speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio.",
-      "hi": "Rani speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio."
-    },
-    "maya": {
-      "en": "Divya speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio.",
-      "hi": "Divya speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio."
-    },
-    "arjun": {
-      "en": "Rohit speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio.",
-      "hi": "Rohit speaks at a moderate pace with a warm, expressive tone, in a very close recording with very clear audio."
-    }
-  },
-  "tone": {
-    "narrator": {
-      "en": "narrator",
-      "hi": "narrator"
-    },
-    "maya": {
-      "en": "maya",
-      "hi": "maya"
-    },
-    "arjun": {
-      "en": "arjun",
-      "hi": "arjun"
-    }
-  },
-  "piper": {
-    "default": {
-      "en": "en_GB-alan-medium",
-      "hi": "hi_IN-priyamvada-medium"
-    }
+  "$comment": "Who speaks, in which voice: each character, per language, a voice named with its provider (provider:voice). Lessons name characters (a line's speaker), never voices; a line that names no one is the narrator's. Piper voices are files in platform/studio/voice-piper/voices/.",
+  "cast": {
+    "narrator": { "en": "piper:en_US-lessac-high", "hi": "piper:hi_IN-rohan-medium" },
+    "riya": { "en": "piper:en_US-amy-medium", "hi": "piper:hi_IN-priyamvada-medium" },
+    "aman": { "en": "piper:en_US-ryan-high", "hi": "piper:hi_IN-pratham-medium" }
   }
 }

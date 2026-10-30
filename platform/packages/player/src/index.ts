@@ -41,6 +41,7 @@ export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
 export { BoardSpeedContext } from "./use-board-runtime";
 export { type LiveBoard, SceneRuntime, isSceneBoard } from "./scene-runtime";
+export { type ScriptLine, scriptOf } from "./script";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";
 // Addresses, for apps that find nodes on screen (the helpers live with the props).
 export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";

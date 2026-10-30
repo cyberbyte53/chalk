@@ -1,9 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { type Readings, compileReadings } from "@chalk/content";
-
-/** Where the pronunciation rules live: authoring/pronunciations.json. */
-export const PRONUNCIATIONS_FILE = "pronunciations.json";
 
 /**
  * The nearest file with this name, looking up from `from`: beside it, or in an authoring/ folder
@@ -17,9 +13,4 @@ export function findUp(name: string, from: string): string {
     dir = dirname(dir);
   }
   throw new Error(`No ${name} found above ${from}`);
-}
-
-/** authoring/pronunciations.json, compiled: how screen text is said aloud. */
-export function loadReadings(file: string): Readings {
-  return compileReadings(JSON.parse(readFileSync(file, "utf8")));
 }

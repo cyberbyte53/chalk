@@ -3,14 +3,10 @@ import { propDefs } from "@chalk/library";
 import { testLesson } from "@chalk/library/test-lesson";
 import type { Unchecked } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import { loadReadings } from "./pronunciations";
 import { validateLesson } from "./validate";
 
-const readings = loadReadings(
-  new URL("../../../authoring/pronunciations.json", import.meta.url).pathname,
-);
 const messages = (input: unknown) =>
-  validateLesson(input, propDefs, readings).map((p) => `${p.where}: ${p.message}`);
+  validateLesson(input, propDefs).map((p) => `${p.where}: ${p.message}`);
 const has = (input: unknown, pattern: RegExp) =>
   expect(messages(input).some((m) => pattern.test(m))).toBe(true);
 

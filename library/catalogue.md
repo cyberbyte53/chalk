@@ -154,6 +154,7 @@ Words on the board, in the learner's language.
 | `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
 | `style` | ["title", "body", "note", "definition"] | changed by its own rules |
 | `color` | {orNull: "text"} | changed by its own rules |
+| `speaker` | {orNull: "text"} | changed by its own rules |
 
 | Action | Takes | |
 |---|---|---|

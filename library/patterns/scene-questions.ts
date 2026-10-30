@@ -10,13 +10,26 @@ import { type Option, seedOf, settle } from "./choice-question";
  * the scene gives) and the note for each wrong state worth one.
  */
 
+/**
+ * How a line is said, when it isn't just its screen words: `speak`, the words for the ear ("√2" is
+ * said "square root of 2"), and `speaker`, a character of the cast (the narrator when left out).
+ */
+export type Said = { speak?: Localized; speaker?: string };
+const said = (s: Said) => ({
+  ...(s.speak === undefined ? {} : { speak: s.speak }),
+  ...(s.speaker === undefined ? {} : { speaker: s.speaker }),
+});
+
 /** Words on a board: a title, a paragraph, a note, a definition set apart. */
 export const words = {
-  title: (text: Localized) => place(sceneText, { text, style: TextStyle.Title }),
-  body: (text: Localized) => place(sceneText, { text, style: TextStyle.Body }),
-  note: (text: Localized) => place(sceneText, { text, style: TextStyle.Note }),
-  definition: (text: Localized, color: Color | null = null) =>
-    place(sceneText, { text, style: TextStyle.Definition, color }),
+  title: (text: Localized, s: Said = {}) =>
+    place(sceneText, { text, style: TextStyle.Title, ...said(s) }),
+  body: (text: Localized, s: Said = {}) =>
+    place(sceneText, { text, style: TextStyle.Body, ...said(s) }),
+  note: (text: Localized, s: Said = {}) =>
+    place(sceneText, { text, style: TextStyle.Note, ...said(s) }),
+  definition: (text: Localized, color: Color | null = null, s: Said = {}) =>
+    place(sceneText, { text, style: TextStyle.Definition, color, ...said(s) }),
 };
 
 /** How a scene reads a piece: by its name. */
@@ -33,12 +46,18 @@ export function check(spec: {
   name?: string;
   about: string;
   prompt: Localized;
+  /** The prompt's spoken words, when they aren't its screen words. */
+  speak?: Localized;
   isRight: (read: Read) => boolean;
   solve: readonly Step[];
   notes?: readonly SceneNote[];
 }): { piece: ScenePlaced<typeof sceneGoal>; use: SceneUse } {
   const name = spec.name ?? "ask";
-  const piece = place(sceneGoal, { prompt: spec.prompt, about: spec.about });
+  const piece = place(sceneGoal, {
+    prompt: spec.prompt,
+    about: spec.about,
+    ...(spec.speak === undefined ? {} : { speak: spec.speak }),
+  });
   const reader = (me: Readonly<Record<string, Readonly<Record<string, unknown>>>>) =>
     ((piece: string) => me[piece] ?? {}) as Read;
   const notes = spec.notes ?? [];
@@ -70,6 +89,8 @@ export function check(spec: {
 export function choice(spec: {
   name?: string;
   prompt: Localized;
+  /** The prompt's spoken words, when they aren't its screen words. */
+  speak?: Localized;
   options: readonly Option[];
   answer: string;
   keepOrder?: boolean;
@@ -85,6 +106,7 @@ export function choice(spec: {
       : settle(spec.options, seedOf(`${name}|${spec.prompt.en}|${ids.join(",")}`));
   const piece = place(sceneChoice, {
     prompt: spec.prompt,
+    ...(spec.speak === undefined ? {} : { speak: spec.speak }),
     options: shown.map((o) => (o.feedback === undefined ? { id: o.id, label: o.label } : { ...o })),
     answer: spec.answer,
   });

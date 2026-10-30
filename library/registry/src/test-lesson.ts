@@ -70,6 +70,7 @@ export function testLesson(): Lesson {
     const title = b.prop(textDef, "title", {
       style: TextStyle.Title,
       text: t("Does 22 ÷ 7 end?", "क्या 22 ÷ 7 ख़त्म होता है?"),
+      speak: t("Does 22 divided by 7 end?", "क्या 22 भाग 7 ख़त्म होता है?"),
     });
     const division = b.prop(decimalExpansionDef, "division", { numerator: 22, denominator: 7 });
     const repeats = b.prop(

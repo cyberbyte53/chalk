@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname } from "node:path";
-import { findUp } from "./pronunciations";
+import { findUp } from "./find-up";
 
 const biome = createRequire(import.meta.url).resolve("@biomejs/biome/bin/biome");
 

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { findUp } from "../pronunciations";
+import { findUp } from "../find-up";
 
 /**
  * Stress test for the chalk MCP's read side (look, play, affected, comments), against the running

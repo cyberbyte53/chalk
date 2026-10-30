@@ -30,8 +30,8 @@ import {
   waitsOn,
 } from "../comments";
 import { isBuildCurrent } from "../content/inputs";
+import { findUp } from "../find-up";
 import { pipelineLines, readChapters } from "../pipeline";
-import { findUp } from "../pronunciations";
 import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
 import {

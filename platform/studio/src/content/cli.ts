@@ -13,7 +13,7 @@ import {
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 import { propModules } from "@chalk/library/modules";
-import { PRONUNCIATIONS_FILE, findUp, loadReadings } from "../pronunciations";
+import { findUp } from "../find-up";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
 import { type BuildResult, PROP_DIRS, REACH_FILE, SOURCES_FILE, buildContent } from "./build";
 import { MODULES_FILE, writeConceptModules, writeModulesModule } from "./concepts";
@@ -42,7 +42,6 @@ const command = positionals[0];
 const root = dirname(findUp("pnpm-workspace.yaml", process.cwd()));
 const contentDir = join(root, "content");
 const buildDir = join(root, "build");
-const readings = loadReadings(join(root, "authoring", PRONUNCIATIONS_FILE));
 
 function git(...args: string[]): string {
   return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
@@ -129,7 +128,6 @@ async function build(commit: string): Promise<BuildResult> {
   const result = await buildContent({
     contentDir,
     modules: propModules,
-    readings,
     commit,
     cache: { dir: cacheDir, root, propDirs },
   });

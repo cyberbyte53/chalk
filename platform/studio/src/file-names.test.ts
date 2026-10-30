@@ -1,7 +1,7 @@
 import { readdirSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
-import { findUp } from "./pronunciations";
+import { findUp } from "./find-up";
 
 const root = dirname(findUp("pnpm-workspace.yaml", import.meta.dirname));
 /** Folders .gitignore keeps out of the repo: generated, installed, or parked (tmp/). */

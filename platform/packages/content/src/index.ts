@@ -2,14 +2,7 @@ export {
   type AudioManifest,
   audioKey,
   audioManifestSchema,
-  compileReadings,
   NARRATOR,
-  type Pronunciations,
-  pronunciationsSchema,
-  type Readings,
-  spokenText,
-  toSpoken,
-  unspeakable,
 } from "./audio";
 export {
   type BoardAt,

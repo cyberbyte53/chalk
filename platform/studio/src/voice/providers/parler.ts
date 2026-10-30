@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import type { TtsProvider } from "./provider";
 import { Worker } from "./python-worker";
 
-const WORKER_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../voice-parler");
+const WORKER_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../../voice-parler");
 const SETUP = "Set up Indic Parler-TTS first: see studio/voice-parler/README.md";
 
 function pythonPath(): string {

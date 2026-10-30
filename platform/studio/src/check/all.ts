@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
-import { findUp } from "../pronunciations";
+import { findUp } from "../find-up";
 import { lint } from "./lint";
 import { stampedStep } from "./steps";
 import { test } from "./test";

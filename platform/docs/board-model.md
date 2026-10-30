@@ -110,7 +110,7 @@ Everything the learner does on a board is recorded on its own: each action they 
 
 Speaking props (`text`, `line`, questions) have `say`: it reads the line aloud and finishes when the line ends. Nothing is spoken unless a script says so. Publish makes audio only for lines some script tells to `say`.
 
-What's shown and what's said can differ (√2 is said "square root of 2", H₂O "H 2 O", 25°C "25 degrees Celsius"). Screen text goes through the pronunciation rules in `authoring/pronunciations.json`, unless the line has its own `speak`. The voice only ever gets letters, digits and ordinary punctuation: anything else stops publish, so nothing nobody thought of is read out wrong. Which voice speaks for whom is `authoring/voices.json`.
+What's shown and what's said can differ (√2 is said "the square root of 2", 25°C "25 degrees Celsius"): a line's spoken words are written with it, as its `speak`, when the lesson is written (guides/pages.md). The voice only ever gets letters, digits and ordinary punctuation: a line with anything else and no spoken words stops the voice, so nothing is read out wrong. Who says each line, in which voice, is the cast (`authoring/voices.json`); how the clips are made is platform/studio/src/voice/README.md.
 
 ## One prop driving another
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { audioSeconds } from "./length";
-import { toneWav } from "./tone";
+import { toneWav } from "./providers/tone";
 
 /** A bare MP4: an `ftyp`, then a `moov` holding only its movie header. */
 function mp4(timescale: number, duration: number): Uint8Array {

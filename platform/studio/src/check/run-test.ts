@@ -1,5 +1,5 @@
 import { dirname } from "node:path";
-import { findUp } from "../pronunciations";
+import { findUp } from "../find-up";
 import { test } from "./test";
 
 /** `tsx src/check/run-test.ts [--force]`: the tests step of `pnpm check` on its own. */

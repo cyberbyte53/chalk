@@ -50,6 +50,10 @@ export const busToStop = family({
         `The bus starts at the stand, 0. Take it to stop **${stop < 0 ? `−${-stop}` : stop}**, then press Check.`,
         `बस अड्डे, 0, से चलती है। इसे स्टॉप **${stop < 0 ? `−${-stop}` : stop}** पर ले जाओ, फिर जाँचो दबाओ।`,
       ),
+      speak: t(
+        `The bus starts at the stand, 0. Take it to stop ${stop < 0 ? `minus ${-stop}` : stop}, then press Check.`,
+        `बस अड्डे, 0, से चलती है। इसे स्टॉप ${stop < 0 ? `माइनस ${-stop}` : stop} पर ले जाओ, फिर जाँचो दबाओ।`,
+      ),
       isRight: isAt("road", stop, 0),
       solve: walkTo("road", stop, 0),
       notes: [

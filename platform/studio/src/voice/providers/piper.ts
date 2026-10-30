@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import type { TtsProvider } from "./provider";
 import { Worker } from "./python-worker";
 
-const WORKER_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../voice-piper");
+const WORKER_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../../voice-piper");
 const SETUP = "Set up Piper first: see studio/voice-piper/README.md";
 
 function pythonPath(): string {

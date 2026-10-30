@@ -1,84 +1,111 @@
-import { existsSync, mkdtempSync } from "node:fs";
+import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Lesson } from "@chalk/content";
-import { propDefs } from "@chalk/library";
-import { testLesson } from "@chalk/library/test-lesson";
+import { place, scene } from "@chalk/author";
+import { scriptOf } from "@chalk/player";
+import { sceneText } from "@chalk/prop-basics";
 import { describe, expect, it } from "vitest";
-import { loadReadings } from "../pronunciations";
-import { generateAudio } from "./generate";
-import { parseSayVoices } from "./macos";
-import { parlerProvider } from "./parler";
-import { toneProvider } from "./tone";
+import { voiceFor } from "./cast";
+import { makeVoice } from "./make";
+import { parseSayVoices } from "./providers/macos";
+import { parlerProvider } from "./providers/parler";
+import { toneProvider } from "./providers/tone";
 
-const lesson: Lesson = testLesson();
-const readings = loadReadings(
-  new URL("../../../../authoring/pronunciations.json", import.meta.url).pathname,
-);
-const voices = { tone: { narrator: { en: "n", hi: "n" } } };
+// The voice module, end to end on a small board: collect its script, cast each line, speak it with
+// a stand-in voice (a tone as long as the line), keep the clips.
 
-describe("generateAudio", () => {
-  it("speaks every spoken piece in both languages, keyed by board and address", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "chalk-audio-"));
-    const result = await generateAudio(
-      lesson,
-      readings,
-      propDefs,
-      toneProvider,
-      voices,
-      dir,
-      "test-lesson",
-    );
-    expect(result.manifest.provider).toBe("tone");
-    expect(result.manifest.files["share.title.en"]).toMatch(
-      /^audio\/test-lesson\/[0-9a-f]{16}\.wav$/,
-    ); // the title, said when the board starts
-    expect(result.manifest.files["race.met.hi"]).toBeDefined(); // a note the board says, in Hindi
-    for (const file of Object.values(result.manifest.files))
-      expect(existsSync(join(dir, file))).toBe(true);
-    // How long each line plays, measured from its file, for every line.
-    expect(Object.keys(result.manifest.seconds ?? {}).sort()).toEqual(
-      Object.keys(result.manifest.files).sort(),
-    );
-    expect(result.manifest.seconds?.["share.title.en"]).toBeGreaterThan(0);
-    expect(result.reused).toBe(0);
-  });
-  it("only speaks lines that changed", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "chalk-audio-"));
-    const first = await generateAudio(lesson, readings, propDefs, toneProvider, voices, dir, "x");
-    const again = await generateAudio(lesson, readings, propDefs, toneProvider, voices, dir, "x");
-    expect(again.made).toBe(0);
-    expect(again.reused).toBe(first.made + first.reused);
-  });
-  it("needs a voice for every speaker", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "chalk-audio-"));
-    await expect(
-      generateAudio(
-        lesson,
-        readings,
-        propDefs,
-        toneProvider,
-        { tone: { teacher: { en: "t", hi: "t" } } },
-        dir,
-        "x",
-      ),
-    ).rejects.toThrow(/no voice for "narrator"/);
+const providers = { tone: toneProvider };
+const cast = {
+  narrator: { en: "tone:narrator", hi: "tone:narrator" },
+  aman: { en: "tone:aman", hi: "tone:aman-hi" },
+};
+const t = (en: string, hi: string) => ({ en, hi });
+const built = scene({
+  pieces: {
+    title: place(sceneText, { text: t("Finding **Aman's** house", "अमन का घर") }),
+    root: place(sceneText, {
+      text: t("√2 is about 1.41", "√2 लगभग 1.41 है"),
+      speak: t("The square root of 2 is about 1.41", "2 का वर्गमूल लगभग 1.41 है"),
+    }),
+    reply: place(sceneText, { text: t("House 5.", "मकान 5।"), speaker: "aman" }),
+  },
+}).build("tiny");
+const item = { id: "b1", path: "book/chapter/lesson/tiny" } as never;
+const boards = [{ item, folder: "lesson", lines: scriptOf(built.board) }];
+
+describe("a board's script", () => {
+  it("is every line it says, in order, with who says it", () => {
+    expect(scriptOf(built.board).map((l) => `${l.piece}: ${l.speaker}`)).toEqual([
+      "title: narrator",
+      "root: narrator",
+      "reply: aman",
+    ]);
   });
 });
 
-describe("default speaker", () => {
-  it("lets one voice speak for the whole cast", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "chalk-audio-"));
-    const result = await generateAudio(
-      lesson,
-      readings,
-      propDefs,
-      toneProvider,
-      { tone: { default: { en: "d", hi: "d" } } },
-      dir,
-      "x",
+describe("the voice: cast, speak, keep", () => {
+  it("makes a clip per line and language, in its lesson's folder, with its length", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "chalk-voice-"));
+    const { manifest, made } = await makeVoice({ boards, cast, providers, outDir: dir });
+    expect(made).toBe(6);
+    expect(manifest.files["b1.title.en"]).toMatch(/^lesson\/[0-9a-f]{16}\.wav$/);
+    expect(manifest.seconds?.["b1.reply.hi"]).toBeGreaterThan(0);
+  });
+
+  it("says the screen words without bold marks, or the line's own spoken words", async () => {
+    const said: string[] = [];
+    const listening = {
+      tone: {
+        ...toneProvider,
+        synthesize: async (text: string, voice: string, out: string) => {
+          said.push(`${voice}: ${text}`);
+          await toneProvider.synthesize(text, voice, out);
+        },
+      },
+    };
+    await makeVoice({
+      boards,
+      cast,
+      providers: listening,
+      outDir: mkdtempSync(join(tmpdir(), "v-")),
+    });
+    expect(said).toContain("narrator: Finding Aman's house");
+    expect(said).toContain("narrator: The square root of 2 is about 1.41");
+    expect(said).toContain("aman-hi: मकान 5।");
+  });
+
+  it("only makes lines that changed", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "chalk-voice-"));
+    await makeVoice({ boards, cast, providers, outDir: dir });
+    const again = await makeVoice({ boards, cast, providers, outDir: dir });
+    expect(again).toMatchObject({ made: 0, reused: 6 });
+  });
+
+  it("refuses screen words a voice can't say, when the line has no spoken words", async () => {
+    const odd = scene({ pieces: { x: place(sceneText, { text: t("α + β", "α + β") }) } }).build(
+      "odd",
     );
-    expect(result.made).toBeGreaterThan(0);
+    await expect(
+      makeVoice({
+        boards: [{ item, folder: "lesson", lines: scriptOf(odd.board) }],
+        cast,
+        providers,
+        outDir: mkdtempSync(join(tmpdir(), "v-")),
+      }),
+    ).rejects.toThrow(/write how each is said, as its "speak"[\s\S]*tiny, x \(en\): "α/);
+  });
+});
+
+describe("the cast", () => {
+  it("names a voice with its provider, per character and language", () => {
+    expect(voiceFor(cast, providers, "aman", "hi")).toMatchObject({ voice: "aman-hi" });
+    expect(voiceFor(cast, providers, undefined, "en")).toMatchObject({ voice: "narrator" });
+  });
+  it("says who is missing, and which providers there are", () => {
+    expect(() => voiceFor(cast, providers, "riya", "en")).toThrow(/no "riya" in its cast/);
+    expect(() =>
+      voiceFor({ narrator: { en: "cloud:x", hi: "cloud:x" } }, providers, undefined, "en"),
+    ).toThrow(/"cloud", which isn't a voice provider/);
   });
 });
 
@@ -87,11 +114,6 @@ describe("parseSayVoices", () => {
     const out =
       "Lekha               hi_IN    # नमस्ते\nEddy (English (US)) en_US    # Hello\nRishi               en_IN    # Hello\n";
     expect(parseSayVoices(out)).toEqual(["Lekha", "Eddy", "Rishi"]);
-  });
-  it("reads the newer macOS format, where the language follows the name", () => {
-    const out =
-      "Lekha (Hindi (India)) hi_IN    # नमस्ते, मेरा नाम लेखा है।\nLekha (Hindi (India)) hi_IN    # नमस्ते\nSamantha (English (US)) en_US    # Hello! My name is Samantha.\n";
-    expect(parseSayVoices(out)).toEqual(["Lekha", "Samantha"]);
   });
 });
 

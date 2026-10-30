@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
-import { findUp } from "../pronunciations";
+import { findUp } from "../find-up";
 import { previewBase } from "./app-driver";
 import { mcpMiddleware } from "./http";
 

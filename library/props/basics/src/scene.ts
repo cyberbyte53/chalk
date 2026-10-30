@@ -42,16 +42,22 @@ export const sceneText = prop({
       style: z.nativeEnum(TextStyle),
       /** The colour a definition is drawn in, or null for none. */
       color: colorSchema.nullable(),
+      /** Who says it: a character of the cast (authoring/voices.json), or null for the narrator. */
+      speaker: z.string().min(1).nullable(),
     })
     .strict(),
-  start: { text: UNSET, speak: null, style: TextStyle.Body, color: null },
+  start: { text: UNSET, speak: null, style: TextStyle.Body, color: null, speaker: null },
   actions: { say, hush },
   signals: { said },
   on: {
     say: (_, { after }, t) => (after === undefined ? t.speak() : t.later(after, t.speak())),
     hush: (_, __, t) => t.stop(),
   },
-  speech: (me) => ({ say: me.text, ...(me.speak === null ? {} : { speak: me.speak }) }),
+  speech: (me) => ({
+    say: me.text,
+    ...(me.speak === null ? {} : { speak: me.speak }),
+    ...(me.speaker === null ? {} : { speaker: me.speaker }),
+  }),
   summary: (me) => `words: ${me.text.en}`,
 });
 

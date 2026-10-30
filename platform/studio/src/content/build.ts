@@ -39,7 +39,6 @@ import {
   type BuiltPage,
   type BuiltQuestion,
   Kind,
-  type Readings,
   type Ref,
   type Script,
   type Source,
@@ -173,7 +172,6 @@ type Context = {
   contentDir: string;
   defs: Defs;
   modules: Modules;
-  readings: Readings;
   commit: string;
   files: Map<string, unknown>;
   problems: Problem[];
@@ -520,8 +518,7 @@ async function checkBoard(
   const before = c.problems.length;
   // A scene's wiring is its code, checked when it is defined and as it plays (its witness).
   if (board.model === undefined)
-    for (const p of validateBoard(board, c.defs, c.readings))
-      report(c, where, `${p.where}: ${p.message}`);
+    for (const p of validateBoard(board, c.defs)) report(c, where, `${p.where}: ${p.message}`);
   if (c.problems.length > before) return false;
   for (const failure of await checkWitness(board, c.modules, built.witness))
     report(c, where, failure);
@@ -954,7 +951,7 @@ function noteLongAnswers(c: Context, chapterPath: string): void {
  *   defs, the platform), from the imports Node actually resolved;
  * - the whole source of each prop package its boards place (their witnesses run that code);
  * - the builder's own code, and the inputs every chapter shares (root manifests, graph,
- *   pronunciations, root files of the repo, the Node version, the commit being built).
+ *   root files of the repo, the Node version, the commit being built).
  * If every one of those files is byte-for-byte as it was, the entry is replayed; otherwise the
  * chapter is built and its entry rewritten.
  */
@@ -1005,9 +1002,7 @@ function keyOf(c: Context, deps: readonly string[]): string {
 }
 
 function sharedContentFiles(c: Context): string[] {
-  return [ContentFile.Manifest, ContentFile.Graph, "pronunciations.json"].map((f) =>
-    join(c.contentDir, f),
-  );
+  return [ContentFile.Manifest, ContentFile.Graph].map((f) => join(c.contentDir, f));
 }
 
 async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | undefined> {
@@ -1156,7 +1151,6 @@ export async function buildContent(options: {
   contentDir: string;
   /** Every prop with its view (drawing a prop is how it's described: witnesses read descriptions). */
   modules: Modules;
-  readings: Readings;
   commit: string;
   /** The modules.gen.ts the app and the server load (platform/content-source/ by default). */
   modulesFile?: string;

@@ -18,6 +18,7 @@ const { sceneSetup: setup, sceneTown, sceneNotebook, sceneClassroom, walkTo } = 
 const side = sceneWith.choice({
   name: "side",
   prompt: t("The bus is at −2. Where is it?", "बस −2 पर है। वह कहाँ है?"),
+  speak: t("The bus is at minus 2. Where is it?", "बस माइनस 2 पर है। वह कहाँ है?"),
   options: [
     { id: "left", label: t("2 stops from the stand, to the left", "अड्डे से 2 स्टॉप, बाईं ओर") },
     {
@@ -52,12 +53,24 @@ const busStops = page(
           "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, …: a number line.",
           "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …: एक संख्या रेखा।",
         ),
+        {
+          speak: t(
+            "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on: a number line.",
+            "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे: एक संख्या रेखा।",
+          ),
+        },
       ),
       move: words.body(
         t(
           "Move the bus one stop at a time with ← and →. Take it to stop **3**.",
           "बस को ← और → से एक-एक स्टॉप चलाओ। इसे स्टॉप **3** पर ले जाओ।",
         ),
+        {
+          speak: t(
+            "Move the bus one stop at a time with the left and right arrows. Take it to stop 3.",
+            "बस को बाएँ और दाएँ तीर से एक-एक स्टॉप चलाओ। इसे स्टॉप 3 पर ले जाओ।",
+          ),
+        },
       ),
       line: place(plane, {
         plane: {
@@ -89,6 +102,12 @@ const busStops = page(
             "The bus is at **3**: three stops from the stand, to the right. Now take it to **−2**.",
             "बस **3** पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे **−2** पर ले जाओ।",
           ),
+          {
+            speak: t(
+              "The bus is at 3: three stops from the stand, to the right. Now take it to minus 2.",
+              "बस 3 पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे माइनस 2 पर ले जाओ।",
+            ),
+          },
         ),
       ),
       side: hidden(side.piece),
@@ -133,6 +152,12 @@ const streetAndHouse = page(
           "Their town has a main road, and the streets leave it numbered 1, 2, 3, … from Riya's corner: like a number line. Move her along it with →.",
           "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, … गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे → से उस पर चलाओ।",
         ),
+        {
+          speak: t(
+            "Their town has a main road, and the streets leave it numbered 1, 2, 3, and so on, from Riya's corner: like a number line. Move her along it with the right arrow.",
+            "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, और आगे गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे दाएँ तीर से उस पर चलाओ।",
+          ),
+        },
       ),
       town: place(
         plane,

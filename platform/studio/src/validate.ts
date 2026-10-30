@@ -4,12 +4,9 @@ import {
   type CallArgs,
   LOCALES,
   type Lesson,
-  type Readings,
   type Script,
   lessonSchema,
   propPieces,
-  spokenText,
-  unspeakable,
   walkPieces,
 } from "@chalk/content";
 import { richProblems } from "@chalk/player";
@@ -24,13 +21,14 @@ import {
   initialState,
   viewOf,
 } from "@chalk/prop";
+import { spokenText, unspeakable } from "./voice/said";
 
 export type Problem = { where: string; message: string };
 
 type Defs = Readonly<Record<string, AnyPropDef>>;
 
 /** A hand-made run of boards (a test lesson): its format, unique board names, and each board. */
-export function validateLesson(input: unknown, defs: Defs, readings: Readings): Problem[] {
+export function validateLesson(input: unknown, defs: Defs): Problem[] {
   const parsed = lessonSchema.safeParse(input);
   if (!parsed.success) {
     return parsed.error.issues.map((issue) => ({
@@ -45,7 +43,7 @@ export function validateLesson(input: unknown, defs: Defs, readings: Readings): 
     if (boardNames.has(board.name))
       problems.push({ where: board.name, message: "duplicate board name" });
     boardNames.add(board.name);
-    problems.push(...validateBoard(board, defs, readings));
+    problems.push(...validateBoard(board, defs));
   }
   return problems;
 }
@@ -67,7 +65,7 @@ function split(target: string): { prop: string; member: string } | undefined {
 }
 
 /** Checks a board against the content formats, every prop's contract, and its own wiring. */
-export function validateBoard(board: Board, allDefs: Defs, readings: Readings): Problem[] {
+export function validateBoard(board: Board, allDefs: Defs): Problem[] {
   const problems: Problem[] = [];
   const report = (where: string, message: string) =>
     problems.push({ where: `${board.name}/${where}`, message });
@@ -292,20 +290,20 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
       if (typeof call.args !== "function") checkRich(`when ${rule.on} → ${call.call}`, call.args);
   }
 
-  // Voice: every line that is said must reach the voice as plain words. Anything else needs a `speak`
-  // line or a pronunciation rule; unknown characters are refused, not guessed.
+  // Voice: every line that is said must reach the voice as plain words. Anything else needs its
+  // spoken words written with it (`speak`); unknown characters are refused, not guessed.
   for (const name of spokenProps) {
     const def = defs.get(name);
     const state = states.get(name);
     const line = def === undefined || state === undefined ? undefined : def.speech?.(state);
     if (line === undefined) continue;
     for (const locale of LOCALES) {
-      const said = spokenText(line, locale, readings);
+      const said = spokenText(line, locale);
       const odd = said === undefined ? [] : unspeakable(said);
       if (odd.length > 0) {
         report(
           name,
-          `the ${locale} voice would get "${odd.join(" ")}" it can't read ("${said}"); add a "speak" line in plain words, or a rule to authoring/pronunciations.json`,
+          `the ${locale} voice would get "${odd.join(" ")}" it can't read ("${said}"); write how it is said in plain words, as the line's "speak"`,
         );
       }
     }
