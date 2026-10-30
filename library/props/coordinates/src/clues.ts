@@ -1,7 +1,14 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, type PlaneWindow, type Point, pointSchema, windowSchema } from "./plane";
+import {
+  type PlaneCore,
+  type PlaneWindow,
+  type Point,
+  fromPlane,
+  pointSchema,
+  windowSchema,
+} from "./plane";
 
 /**
  * A clue about where a point is: words, and what they allow. A region ("upper half"), one distance
@@ -17,7 +24,11 @@ export const clueSchema = z
   .strict();
 export type Clue = z.infer<typeof clueSchema>;
 
-export type CluesState = PlaneCore & {
+/** The plane's fields it draws or decides by. */
+export const cluesReads = fromPlane("window");
+
+export type CluesState = Pick<PlaneCore, (typeof cluesReads.keys)[number]> & {
+  unit: string;
   hidden: Point | null;
   clueChoices: Clue[];
   given: number[];
@@ -88,25 +99,36 @@ export const cluesSignals = {
   pinned: signal("The clues leave one point: (`x`, `y`)"),
 };
 
-export const clues = layersFor<CluesState>()({
-  name: "clues",
-  frame: "plane",
+/** Whether it is drawn on the plane. */
+export const areCluesOn = (s: Pick<CluesState, "clueChoices">) => s.clueChoices.length > 0;
+
+export const clues = defineProp({
+  type: "planeClues",
+  role: PropRole.Explainer,
+  drawsOn: "plane",
   describe:
     'A hidden point and clues about it. Each clue given shades where the point could still be: words like "upper half" leave a region, one distance a whole line, two distances one point. Without a hidden point, a clue alone shows every point it describes (every point with y = 0: the x-axis).',
-  fields: {
-    /** The point no one sees, or null. */
-    hidden: pointSchema.nullable(),
-    /** The clues offered as buttons, from the lesson. */
-    clueChoices: z.array(clueSchema).max(6),
-    /** The clues given so far, by their place in `clueChoices`. */
-    given: z.array(z.number().int().min(0).max(5)).max(6),
-    isHiddenShown: z.boolean(),
-    /** Whether the learner can hide a point of their own (a tap). */
-    canHide: z.boolean(),
-    /** Whether the clues are buttons; off for a picture of clues already given (nothing to tap). */
-    canGiveClues: z.boolean(),
-  },
+  state: z
+    .object({
+      ...cluesReads.fields,
+      /** Written after a distance in a clue ("30 m"), as the point's reading has it. */
+      unit: z.string().max(4),
+      /** The point no one sees, or null. */
+      hidden: pointSchema.nullable(),
+      /** The clues offered as buttons, from the lesson. */
+      clueChoices: z.array(clueSchema).max(6),
+      /** The clues given so far, by their place in `clueChoices`. */
+      given: z.array(z.number().int().min(0).max(5)).max(6),
+      isHiddenShown: z.boolean(),
+      /** Whether the learner can hide a point of their own (a tap). */
+      canHide: z.boolean(),
+      /** Whether the clues are buttons; off for a picture of clues already given (nothing to tap). */
+      canGiveClues: z.boolean(),
+    })
+    .strict(),
   defaults: {
+    ...cluesReads.defaults,
+    unit: "",
     hidden: null,
     clueChoices: [],
     given: [],
@@ -115,7 +137,6 @@ export const clues = layersFor<CluesState>()({
     canGiveClues: true,
   },
   offScreen: ["hidden"],
-  on: onWhen(["clueChoices"], (s) => s.clueChoices.length > 0),
   actions: {
     giveClue: act({
       describe:

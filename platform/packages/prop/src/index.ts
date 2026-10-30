@@ -121,22 +121,6 @@ export {
   type Steps,
 } from "./group";
 export {
-  defineHost,
-  hostOf,
-  isLayerOn,
-  onWhen,
-  type OnRule,
-  isInAxis,
-  isInPlane,
-  layersFor,
-  type AnyLayer,
-  type HostDef,
-  type HostLayout,
-  type HostSpec,
-  type HostState,
-  type Layer,
-} from "./compose";
-export {
   DEFAULT_SIZE,
   PHONE_COLUMN,
   type Size,

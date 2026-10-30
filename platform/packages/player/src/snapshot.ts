@@ -12,8 +12,8 @@ import {
   type PropView,
   type Element as SeenElement,
   type StoredState,
-  hostOf,
   segment,
+  shownOf,
 } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
 import { findNode } from "./part-paths";
@@ -123,13 +123,10 @@ function nodeOf(
   path: string,
   c: Context,
 ): NodeSnapshot {
-  // A host's layers that are off show nothing: their fields and controls aren't meant to be there.
-  const host = hostOf(def);
-  const layersOn = host?.layersOn(view as StoredState) ?? [];
-  const isOff = (name: string) => {
-    const owner = host?.ownerOf(name);
-    return owner !== undefined && !layersOn.includes(owner);
-  };
+  // A group's parts that aren't shown now show nothing: their fields and controls (by path,
+  // "walker.step") aren't meant to be there.
+  const shown = shownOf(view);
+  const isOff = (name: string) => shown?.[name.split(".")[0] ?? ""] === false;
   const fields = Object.keys(def.defaults);
 
   // Its parts, as its view draws them, and which inputs do each action.

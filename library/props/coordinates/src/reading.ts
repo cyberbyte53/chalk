@@ -1,4 +1,4 @@
-import { type Emit, actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
+import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
 import {
   type PlaneCore,
@@ -6,6 +6,7 @@ import {
   type Point,
   QUADRANTS,
   type Quadrant,
+  fromPlane,
   placeOf,
   pointSchema,
 } from "./plane";
@@ -25,7 +26,10 @@ export const Reading = {
 } as const;
 export type Reading = (typeof Reading)[keyof typeof Reading];
 
-export type ReadingState = PlaneCore & {
+/** The plane's fields it draws or decides by. */
+export const readingReads = fromPlane("window");
+
+export type ReadingState = Pick<PlaneCore, (typeof readingReads.keys)[number]> & {
   point: Point | null;
   pointStep: number;
   reading: Reading;
@@ -62,25 +66,33 @@ export const readingSignals = {
   readingShown: signal("The hidden reading was shown: (`x`, `y`)"),
 };
 
-export const reading = layersFor<ReadingState>()({
-  name: "reading",
-  frame: "plane",
+/** Whether it is drawn on the plane. */
+export const isReadingOn = (s: Pick<ReadingState, "point">) => s.point !== null;
+
+export const reading = defineProp({
+  type: "planeReading",
+  role: PropRole.Explainer,
+  drawsOn: "plane",
   describe:
     "A point the learner drags or taps, read off the axes: its perpendiculars to both axes, their lengths and directions, its abscissa and ordinate, and (x, y), as far as the board writes them. A crossed axis flips a sign; on an axis one coordinate is 0. The quadrants it has been in are remembered. In a guessing round the reading stays hidden until shown.",
-  fields: {
-    /** The point, or null when there is none. */
-    point: pointSchema.nullable(),
-    /** What the point snaps to: 1 (whole numbers), 0.5, 0.25. */
-    pointStep: z.number().positive(),
-    reading: z.nativeEnum(Reading),
-    /** A guessing round: the reading is kept from the screen until it is shown. */
-    isReadingHidden: z.boolean(),
-    /** The quadrants the point has been in, in order. */
-    visited: z.array(z.nativeEnum(PlanePart)).max(4),
-    /** Written after a measured distance ("30 m"); empty for none. The same in both languages. */
-    unit: z.string().max(4),
-  },
+  state: z
+    .object({
+      ...readingReads.fields,
+      /** The point, or null when there is none. */
+      point: pointSchema.nullable(),
+      /** What the point snaps to: 1 (whole numbers), 0.5, 0.25. */
+      pointStep: z.number().positive(),
+      reading: z.nativeEnum(Reading),
+      /** A guessing round: the reading is kept from the screen until it is shown. */
+      isReadingHidden: z.boolean(),
+      /** The quadrants the point has been in, in order. */
+      visited: z.array(z.enum(QUADRANTS)).max(4),
+      /** Written after a measured distance ("30 m"); empty for none. The same in both languages. */
+      unit: z.string().max(4),
+    })
+    .strict(),
   defaults: {
+    ...readingReads.defaults,
     point: null,
     pointStep: 1,
     reading: Reading.None,
@@ -88,7 +100,6 @@ export const reading = layersFor<ReadingState>()({
     visited: [],
     unit: "",
   },
-  on: onWhen(["point"], (s) => s.point !== null),
   actions: {
     movePoint: act({
       describe: "Put the point at (x, y), snapped to the step (the learner's drag or tap)",

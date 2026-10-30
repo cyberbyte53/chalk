@@ -38,6 +38,13 @@ export type Loose<T> = T extends number
 
 /** What an author gives a placed prop: any of its stored fields, the rest from its defaults. */
 export type Given<S> = { [K in keyof S]?: Loose<S[K]> };
+/**
+ * What a placement gives a prop: some of its fields; for a group, some of each part's, by part
+ * (`{ walker: { walkFrom } }`), each over that part's defaults.
+ */
+export type GivenOf<P> = P extends { readonly group: unknown }
+  ? { [K in keyof StateOfDef<P>]?: Given<NonNullable<StateOfDef<P>[K]>> | null }
+  : Given<StateOfDef<P>>;
 
 /** Action arguments: plain values, exact Decs, or expressions worked out when the action runs. */
 export type Args = Readonly<Record<string, unknown>>;
@@ -307,7 +314,7 @@ export class BoardKit {
   prop<P extends DefLike>(
     def: P,
     name: string,
-    given: Given<StateOfDef<P>> = {},
+    given: GivenOf<P> = {} as GivenOf<P>,
     options: {
       isHidden?: boolean;
       size?: Size;

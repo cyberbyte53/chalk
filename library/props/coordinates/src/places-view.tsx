@@ -1,21 +1,24 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
+import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type LayerView, actions } from "./layer-view";
+import { drawing } from "./layer-view";
 import { PlacePicture } from "./pictures";
 import { places } from "./places";
 import type { Point } from "./plane";
-import { type PlaneView, isRisen, unitOf } from "./plane-view";
+import { isRisen, unitOf } from "./plane-view";
 import { walker } from "./walker";
 import { WORDS, addressOf, word } from "./words";
+
+type PlacesView = ViewOf<typeof places>;
+const actions = places.actions;
 
 /** The places, each a small picture; a tap makes one the target when the board allows it. */
 function PlacesDraw({
   s,
   px,
   locale,
-}: { s: PlaneView; px: FramePixels; locale: Locale }): JSX.Element {
+}: { s: PlacesView; px: FramePixels; locale: Locale }): JSX.Element {
   const size = Math.max(16, Math.min(34, unitOf(px) * 0.62));
   const isLit = (p: Point) => s.lit !== null && p[s.lit.axis] === s.lit.value;
   return (
@@ -68,8 +71,7 @@ function PlacesDraw({
 }
 
 /** The places layer's drawing: the places, the chosen one's address over the plane, Lights off. */
-export const placesView: LayerView = {
-  isOn: (s) => isLayerOn(places, s),
+export const placesDrawing = drawing(places, {
   above: ({ s, locale }) => {
     if (!s.showAddress) return null;
     if (s.target !== null)
@@ -102,7 +104,7 @@ export const placesView: LayerView = {
       </p>
     );
   },
-  picture: ({ s, px, locale }) => <PlacesDraw s={s} px={px} locale={locale} />,
+  on: ({ s, px, locale }) => <PlacesDraw s={s} px={px} locale={locale} />,
   controls: ({ s, locale }) =>
     s.lit === null ? null : (
       <SymbolButton
@@ -112,4 +114,4 @@ export const placesView: LayerView = {
         {...does(actions.clearLight)}
       />
     ),
-};
+});

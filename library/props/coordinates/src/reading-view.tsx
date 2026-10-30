@@ -1,14 +1,16 @@
 import { SymbolButton } from "@chalk/draw";
 import { useDrags } from "@chalk/player";
-import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
+import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type LayerView, actions } from "./layer-view";
-import type { PlaneView } from "./plane-view";
+import { drawing } from "./layer-view";
 import { Reading, reading, snapped } from "./reading";
 import { WORDS, num, pair, word } from "./words";
 
+type ReadingView = ViewOf<typeof reading>;
+const actions = reading.actions;
+
 /** The point the learner drags, read off the axes as far as the board writes it. */
-function ReadingDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
+function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Element | null {
   const drag = useDrags();
   const p = s.point;
   if (p === null) return null;
@@ -74,9 +76,8 @@ function ReadingDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
 }
 
 /** The reading layer's drawing: the point read off the axes, and Show when it is hidden. */
-export const readingView: LayerView = {
-  isOn: (s) => isLayerOn(reading, s),
-  over: ({ s, px }) => <ReadingDraw s={s} px={px} />,
+export const readingDrawing = drawing(reading, {
+  front: ({ s, px }) => <ReadingDraw s={s} px={px} />,
   controls: ({ s, locale }) =>
     !s.isReadingHidden ? null : (
       <SymbolButton
@@ -86,4 +87,4 @@ export const readingView: LayerView = {
         {...does(actions.showReading)}
       />
     ),
-};
+});

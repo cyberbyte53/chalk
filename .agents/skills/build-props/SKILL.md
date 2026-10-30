@@ -25,8 +25,8 @@ Props come first: lessons are written against their actions and fields. A prop's
 
 For each **extend** or **new**, before any view or run body:
 
-1. **Extend:** ask `affected` what the change reaches (`props: ["library/props/<package>/<type>"]`, or the file and declaration): those are the boards it can break. A host's new feature is a new layer; otherwise a field or action.
-2. **New:** `making-a-prop.md` § 0 first (a layer on an existing host, or a group of existing props, before a prop of its own). It goes in `library/props/`, never in a chapter.
+1. **Extend:** ask `affected` what the change reaches (`props: ["library/props/<package>/<type>"]`, or the file and declaration): those are the boards it can break. A group's new feature is a new part (a prop of its own, joined in the group); otherwise a field or action.
+2. **New:** `making-a-prop.md` § 0 first (a new part in an existing group, or a group of existing props, before a prop of its own). It goes in `library/props/`, never in a chapter.
 3. Write or change the **definition**: state (each field and what it means), actions with their arguments and what each `changes`, signals, invariant, and a `describe` whose first sentence says what it is for. Leave run bodies and the view for later; it must type-check.
 4. Start **one thread on the prop** (`comment` with `at: "library/props/<package>/<type>"`): what changes and why, its page before and after (`look` at its address, before your change and after), and for an extension what `affected` lists and why nothing there changes. The person approves by closing it. Wait.
 

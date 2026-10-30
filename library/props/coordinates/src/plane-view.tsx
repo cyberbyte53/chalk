@@ -2,11 +2,10 @@ import type { Locale } from "@chalk/content";
 import type { ViewOf } from "@chalk/prop";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { coordinatePlane } from "./coordinate-plane";
-import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene } from "./plane";
+import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene, plane } from "./plane";
 import { num } from "./words";
 
-export type PlaneView = ViewOf<typeof coordinatePlane>;
+export type PlaneView = ViewOf<typeof plane>;
 
 /** Px across one unit of the plane. */
 export const unitOf = (px: FramePixels): number => px.toPx(1, 0)[0] - px.toPx(0, 0)[0];
@@ -83,9 +82,6 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
   const streets = marksOn(Marks.Counts, w.xMin, w.xMax, 1).filter((x) => isRisen(s, x));
   const [, base] = px.toPx(0, 0);
   const rise = s.rising;
-  // A city of crossing streets (Riya may walk every line) has streets across as well.
-  const across =
-    s.walkFrom !== null && s.roads === "grid" ? marksOn(Marks.Counts, w.yMin, w.yMax, 1) : [];
   return (
     <g class="cp-town">
       <rect class="cp-scene is-town" {...box} rx={6} />
@@ -113,20 +109,6 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
           stroke-width={road * 0.7}
         />
       )}
-      {across.map((y) => {
-        const [, sy] = px.toPx(0, y);
-        return (
-          <line
-            key={`a${y}`}
-            class="cp-street"
-            x1={x0}
-            y1={sy}
-            x2={x1}
-            y2={sy}
-            stroke-width={road * 0.7}
-          />
-        );
-      })}
       <line class="cp-main-road" x1={x0} y1={base} x2={x1} y2={base} stroke-width={road} />
     </g>
   );
@@ -212,7 +194,7 @@ export function AxesDraw({
             {isButton ? (
               <g
                 class={`cp-mark-button${s.lit?.axis === "x" && s.lit.value === v ? " is-lit" : ""}`}
-                {...does(coordinatePlane.actions.lightLine, { axis: "x", value: v }, `x${v}`)}
+                {...does(plane.actions.tapNumber, { axis: "x", value: v }, `x${v}`)}
                 transform={`translate(${x}, ${base + 16})`}
               >
                 <circle r={11} />
@@ -239,7 +221,7 @@ export function AxesDraw({
               {isButton ? (
                 <g
                   class={`cp-mark-button${s.lit?.axis === "y" && s.lit.value === v ? " is-lit" : ""}`}
-                  {...does(coordinatePlane.actions.lightLine, { axis: "y", value: v }, `y${v}`)}
+                  {...does(plane.actions.tapNumber, { axis: "y", value: v }, `y${v}`)}
                   transform={`translate(${vx - 16}, ${y})`}
                 >
                   <circle r={11} />
@@ -362,7 +344,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
           <rect
             key={q}
             class={`cp-part-tap${s.named === q ? " is-named" : ""}`}
-            {...does(coordinatePlane.actions.namePart, { part: q }, q)}
+            {...does(plane.actions.namePart, { part: q }, q)}
             x={x0}
             y={y0}
             width={x1 - x0}
@@ -378,7 +360,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
           <line
             key={part}
             class="cp-part-tap-line"
-            {...does(coordinatePlane.actions.namePart, { part }, part)}
+            {...does(plane.actions.namePart, { part }, part)}
             x1={x0}
             y1={y0}
             x2={x1}
@@ -388,7 +370,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
       })}
       <circle
         class="cp-part-tap-o"
-        {...does(coordinatePlane.actions.namePart, { part: PlanePart.O }, "O")}
+        {...does(plane.actions.namePart, { part: PlanePart.O }, "O")}
         cx={ox}
         cy={oy}
         r={12}

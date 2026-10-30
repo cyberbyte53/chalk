@@ -2,9 +2,9 @@ import { localizedSchema } from "@chalk/content";
 import {
   type Effect,
   type Emit,
+  PropRole,
   actionsFor,
-  layersFor,
-  onWhen,
+  defineProp,
   raise,
   seq,
   set,
@@ -12,13 +12,13 @@ import {
   wait,
 } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, type Point, pointSchema } from "./plane";
+import { type Point, pointSchema } from "./plane";
 
 export const throwSchema = z
   .object({ red: z.number().int().min(1).max(6), green: z.number().int().min(1).max(6) })
   .strict();
 
-export type DiceState = PlaneCore & {
+export type DiceState = {
   counters: z.infer<typeof pointSchema>[];
   playerNames: z.infer<typeof localizedSchema>[];
   turn: number;
@@ -59,25 +59,31 @@ export const diceSignals = {
   won: signal("Player `player` reached (`goal`, `goal`) first"),
 };
 
-export const dice = layersFor<DiceState>()({
-  name: "dice",
-  frame: "plane",
+/** Whether it is drawn on the plane. */
+export const isDiceOn = (s: Pick<DiceState, "counters">) => s.counters.length > 0;
+
+export const dice = defineProp({
+  type: "planeDice",
+  role: PropRole.Explainer,
+  drawsOn: "plane",
   describe:
     "The dice game for two: both counters start at (0, 0). A throw of a red and a green die walks the player's counter along by red, then up by green. A die that would take its coordinate past the goal isn't used, and the counter moves by the other alone; when both would, the turn is missed; landing on the other counter sends it back to (0, 0). First to (goal, goal) wins. The dice are seeded, so a game can be played again exactly.",
-  fields: {
-    /** Each player's counter, or none: no game. */
-    counters: z.array(pointSchema).max(2),
-    playerNames: z.array(localizedSchema).max(2),
-    /** Whose turn: 0 or 1. */
-    turn: z.number().int().min(0).max(1),
-    lastThrow: throwSchema.nullable(),
-    /** The dice's seed: the same seed, the same throws. */
-    seed: z.number().int().min(0),
-    /** Every throw so far, across games: the next throw is the seed's next. */
-    throwsMade: z.number().int().min(0),
-    goal: z.number().int().min(2).max(20),
-    winner: z.number().int().min(0).max(1).nullable(),
-  },
+  state: z
+    .object({
+      /** Each player's counter, or none: no game. */
+      counters: z.array(pointSchema).max(2),
+      playerNames: z.array(localizedSchema).max(2),
+      /** Whose turn: 0 or 1. */
+      turn: z.number().int().min(0).max(1),
+      lastThrow: throwSchema.nullable(),
+      /** The dice's seed: the same seed, the same throws. */
+      seed: z.number().int().min(0),
+      /** Every throw so far, across games: the next throw is the seed's next. */
+      throwsMade: z.number().int().min(0),
+      goal: z.number().int().min(2).max(20),
+      winner: z.number().int().min(0).max(1).nullable(),
+    })
+    .strict(),
   defaults: {
     counters: [],
     playerNames: [
@@ -92,7 +98,6 @@ export const dice = layersFor<DiceState>()({
     winner: null,
   },
   offScreen: ["seed"],
-  on: onWhen(["counters"], (s) => s.counters.length > 0),
   actions: {
     throwDice: act({
       describe:
@@ -164,5 +169,7 @@ export const dice = layersFor<DiceState>()({
   invariant: (s) =>
     s.counters.some((c) => c.x < 0 || c.y < 0 || c.x > s.goal || c.y > s.goal)
       ? `a counter is off the board: both coordinates stay from 0 to ${s.goal}`
-      : undefined,
+      : s.counters.length > s.playerNames.length
+        ? "every counter needs its player's name"
+        : undefined,
 });

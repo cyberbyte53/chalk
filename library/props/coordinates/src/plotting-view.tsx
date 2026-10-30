@@ -1,14 +1,18 @@
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
+import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type LayerView, actions } from "./layer-view";
+import { PlaneTap, drawing } from "./layer-view";
 import { isInWindow } from "./plane";
-import type { PlaneView } from "./plane-view";
 import { plotting } from "./plotting";
 import { WORDS, num, pair, word } from "./words";
 
+type PlottingView = ViewOf<typeof plotting>;
+const actions = plotting.actions;
+/** A tap that plots lands on the nearest quarter. */
+const PLOT_STEP = 0.25;
+
 /** The dots plotted so far, right or wrong, each with its swap when asked. */
-function PlottedDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element {
+function PlottedDraw({ s, px }: { s: PlottingView; px: FramePixels }): JSX.Element {
   return (
     <g class="cp-plotted">
       {s.plotted.map((d, i) => {
@@ -41,8 +45,7 @@ function PlottedDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
 }
 
 /** The plotting layer's drawing: the table, the dots plotted, the next pair, the scales. */
-export const plottingView: LayerView = {
-  isOn: (s) => isLayerOn(plotting, s),
+export const plottingDrawing = drawing(plotting, {
   above: ({ s }) =>
     !s.showTable ? null : (
       <table class="cp-table" {...shows("table", s.toPlot)}>
@@ -66,8 +69,13 @@ export const plottingView: LayerView = {
         </tbody>
       </table>
     ),
-  over: ({ s, px }) => <PlottedDraw s={s} px={px} />,
-  lines: ({ s }) => {
+  // A tap on the plane puts the next pair's dot down, on the nearest quarter (the book's pairs go to 1.25).
+  on: ({ s, px, call }) =>
+    s.plotted.length >= s.toPlot.length ? null : (
+      <PlaneTap window={s.window} px={px} step={PLOT_STEP} action={actions.plotAt} call={call} />
+    ),
+  front: ({ s, px }) => <PlottedDraw s={s} px={px} />,
+  below: ({ s }) => {
     const next = s.toPlot[s.plotted.length];
     return next === undefined ? null : (
       <p class="cp-line" {...shows("next", next, pair(next))}>
@@ -84,7 +92,7 @@ export const plottingView: LayerView = {
           label={`${word(WORDS.scale, locale)} ${num(every)}`}
           isWide
           isOn={s.tickEvery === every}
-          {...does(actions.setScale, { every }, i)}
+          {...does(actions.chooseScale, { every }, i)}
         />
       ))}
       {s.plotted.length > 0 && (
@@ -96,4 +104,4 @@ export const plottingView: LayerView = {
       )}
     </>
   ),
-};
+});

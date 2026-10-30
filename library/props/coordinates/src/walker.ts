@@ -2,9 +2,9 @@ import { localizedSchema } from "@chalk/content";
 import {
   type Effect,
   type Emit,
+  PropRole,
   actionsFor,
-  layersFor,
-  onWhen,
+  defineProp,
   raise,
   seq,
   set,
@@ -12,7 +12,7 @@ import {
   tween,
 } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, type Point, isInWindow, pointSchema } from "./plane";
+import { type PlaneCore, type Point, fromPlane, isInWindow, pointSchema } from "./plane";
 
 /** Which lines are roads Riya can walk on. */
 export const Roads = {
@@ -30,7 +30,23 @@ export type Direction = (typeof Direction)[keyof typeof Direction];
 export const WalkerKind = { Person: "person", Bus: "bus" } as const;
 export type WalkerKind = (typeof WalkerKind)[keyof typeof WalkerKind];
 
-export type WalkerState = PlaneCore & {
+/** The plane's fields she walks and is drawn by: its edge, its streets, its lines' names. */
+export const walkerReads = fromPlane("window", "upLines", "axes", "marks", "axisNames", "scene");
+
+/** Where she is headed, as the places say (Aman's house): passed in, never hers to change. */
+const goalFields = {
+  /** The target place, or null. */
+  target: pointSchema.nullable(),
+  /** What it is called on screen. */
+  targetName: localizedSchema,
+  /** Whether the learner can still choose one (so she may yet arrive somewhere). */
+  canChooseTarget: z.boolean(),
+};
+
+export type WalkerState = Pick<PlaneCore, (typeof walkerReads.keys)[number]> & {
+  target: Point | null;
+  targetName: z.infer<typeof localizedSchema>;
+  canChooseTarget: boolean;
   walkerName: z.infer<typeof localizedSchema>;
   walkerKind: WalkerKind;
   showWhere: boolean;
@@ -80,10 +96,6 @@ export function stepFrom(
   return { to };
 }
 
-/** The target another layer marks (Aman's house), if there is one. */
-const targetOf = (s: WalkerState): Point | null =>
-  (s as WalkerState & { target?: Point | null }).target ?? null;
-
 const isSame = (a: Point | null, b: Point) => a !== null && a.x === b.x && a.y === b.y;
 
 export const walkerSignals = {
@@ -95,7 +107,7 @@ export const walkerSignals = {
 /** One block's glide, then where she is announced (and that she has arrived, at the target). */
 function glide(s: WalkerState, from: Point, to: Point, trail: Point[]): Effect<WalkerState>[] {
   const emit: Emit[] = [raise(walkerSignals.stepped, { x: to.x, y: to.y })];
-  if (isSame(targetOf(s), to)) emit.push(raise(walkerSignals.arrived, { x: to.x, y: to.y }));
+  if (isSame(s.target, to)) emit.push(raise(walkerSignals.arrived, { x: to.x, y: to.y }));
   return [
     tween(
       SECONDS_PER_BLOCK,
@@ -141,30 +153,42 @@ const step = act({
   },
 });
 
-export const walker = layersFor<WalkerState>()({
-  name: "walker",
-  frame: "plane",
+/** Whether she is on the plane: she has a start. */
+export const isWalkerOn = (s: Pick<WalkerState, "walkFrom">) => s.walkFrom !== null;
+
+export const walker = defineProp({
+  type: "planeWalker",
+  role: PropRole.Explainer,
+  drawsOn: "plane",
   describe:
     "A walker (Riya) moved one block per tap of an arrow, from wherever she is, on roads only: in a town, along the main road and up the streets; in a city or on graph paper, along any line. Her route is drawn and her address shown as she moves. A lesson can also walk her to a point, along then up.",
-  fields: {
-    walkerName: localizedSchema,
-    /** Drawn as a person (Riya) or a bus. */
-    walkerKind: z.nativeEnum(WalkerKind),
-    /** Whether her line under the plane says where she is (off when that is the answer). */
-    showWhere: z.boolean(),
-    /** Where she starts (Riya's corner, O), or null: no walker. */
-    walkFrom: pointSchema.nullable(),
-    /** Where she stands now. */
-    at: pointSchema,
-    /** Which lines are roads: a town's main road and streets, or every grid line. */
-    roads: z.nativeEnum(Roads),
-    /** The blocks she has walked since the start, in order (her route). */
-    trail: z.array(pointSchema).max(MAX_TRAIL),
-    isWalking: z.boolean(),
-    /** Whether the learner gets the arrows. */
-    canStep: z.boolean(),
-  },
+  state: z
+    .object({
+      ...walkerReads.fields,
+      ...goalFields,
+      walkerName: localizedSchema,
+      /** Drawn as a person (Riya) or a bus. */
+      walkerKind: z.nativeEnum(WalkerKind),
+      /** Whether her line under the plane says where she is (off when that is the answer). */
+      showWhere: z.boolean(),
+      /** Where she starts (Riya's corner, O), or null: no walker. */
+      walkFrom: pointSchema.nullable(),
+      /** Where she stands now. */
+      at: pointSchema,
+      /** Which lines are roads: a town's main road and streets, or every grid line. */
+      roads: z.nativeEnum(Roads),
+      /** The blocks she has walked since the start, in order (her route). */
+      trail: z.array(pointSchema).max(MAX_TRAIL),
+      isWalking: z.boolean(),
+      /** Whether the learner gets the arrows. */
+      canStep: z.boolean(),
+    })
+    .strict(),
   defaults: {
+    ...walkerReads.defaults,
+    target: null,
+    targetName: { en: "Aman's house", hi: "अमन का घर" },
+    canChooseTarget: false,
     walkerName: { en: "Riya", hi: "रिया" },
     walkerKind: WalkerKind.Person,
     showWhere: true,
@@ -175,7 +199,6 @@ export const walker = layersFor<WalkerState>()({
     isWalking: false,
     canStep: true,
   },
-  on: onWhen(["walkFrom"], (s) => s.walkFrom !== null),
   actions: {
     step,
     walkTo: act({

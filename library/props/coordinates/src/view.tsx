@@ -1,13 +1,13 @@
 import { SymbolButton } from "@chalk/draw";
-import { FrameStage, type PropViewProps, useDrags } from "@chalk/player";
+import { groupView, useDrags } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
-import { Fragment, type JSX } from "preact";
-import { cluesView } from "./clues-view";
-import type { coordinatePlane } from "./coordinate-plane";
-import { diceView } from "./dice-view";
-import { type LayerView, type LayerViewProps, PlaneTap, actions } from "./layer-view";
-import { placesView } from "./places-view";
-import { planeFrame } from "./plane";
+import type { JSX } from "preact";
+import { cluesDrawing } from "./clues-view";
+import { coordinatePlane } from "./coordinate-plane";
+import { diceDrawing } from "./dice-view";
+import { drawing } from "./layer-view";
+import { placesDrawing } from "./places-view";
+import { plane } from "./plane";
 import {
   AxesDraw,
   GridDraw,
@@ -18,9 +18,9 @@ import {
   SceneDraw,
   canNameParts,
 } from "./plane-view";
-import { plottingView } from "./plotting-view";
-import { readingView } from "./reading-view";
-import { walkerView } from "./walker-view";
+import { plottingDrawing } from "./plotting-view";
+import { readingDrawing } from "./reading-view";
+import { walkerDrawing } from "./walker-view";
 import { WORDS, pair, word } from "./words";
 
 /**
@@ -42,7 +42,7 @@ function ApartHandle({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
           x: Math.min(w.xMax, Math.max(w.xMin, Math.round(to.x))),
           y: Math.min(w.yMax, Math.max(w.yMin, Math.round(to.y))),
         }),
-        move: actions.moveApart,
+        move: plane.actions.moveApart,
         step: 1,
         words: pair(s.apart),
       })}
@@ -53,76 +53,40 @@ function ApartHandle({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
   );
 }
 
-/**
- * Where each layer's drawing goes, in order. A layer's drawing is its own file (layer-view.tsx);
- * these lists only say what lies over what, and which lines and buttons come first.
- */
-const ABOVE: readonly LayerView[] = [placesView, cluesView, plottingView];
-const UNDER: readonly LayerView[] = [cluesView];
-const PICTURE: readonly LayerView[] = [placesView, walkerView];
-const OVER: readonly LayerView[] = [plottingView, cluesView, diceView, readingView];
-const LINES: readonly LayerView[] = [walkerView, plottingView, diceView];
-const CONTROLS_FIRST: readonly LayerView[] = [walkerView, placesView];
-const CONTROLS_AFTER: readonly LayerView[] = [readingView, cluesView, plottingView, diceView];
-
-type SlotName = "above" | "under" | "picture" | "over" | "lines" | "controls";
-
-/** One slot of every layer in `views` that is on, in order. */
-function slot(views: readonly LayerView[], name: SlotName, p: LayerViewProps): JSX.Element[] {
-  return views.flatMap((v, i) => {
-    const draw = v[name];
-    if (draw === undefined || !v.isOn(p.s)) return [];
-    const drawn = draw(p);
-    // A layer appears once per slot: its place in the list is its key.
-    return drawn === null ? [] : [<Fragment key={i}>{drawn}</Fragment>];
-  });
-}
-
-/**
- * The coordinate plane: the core (scene, grid, axes, naming its parts, moving its lines apart) and
- * each layer's drawing in its slots.
- */
-export function CoordinatePlaneView({
-  view: s,
-  width,
-  call,
-  locale,
-}: PropViewProps<typeof coordinatePlane>): JSX.Element {
-  const px = planeFrame.pixels(s, width);
-  const p: LayerViewProps = { s, px, call, locale };
-  const isLayered = [placesView, plottingView, cluesView, diceView].some((v) => v.isOn(s));
-  const isNaming = canNameParts(s) && !isLayered;
-  const unshown = s.canShowPoints && s.points.some((pt) => !pt.isShown);
-  return (
-    <div class="cp">
-      {slot(ABOVE, "above", p)}
-      <FrameStage px={px} label={planeFrame.label?.(s) ?? "A plane"} present={[""]} look="cp-frame">
-        <SceneDraw s={s} px={px} />
-        <GridDraw s={s} px={px} />
-        {slot(UNDER, "under", p)}
-        {isNaming && <PartTaps s={s} px={px} />}
-        <AxesDraw s={s} px={px} locale={locale} canLight={placesView.isOn(s)} />
-        <ApartHandle s={s} px={px} />
-        <PlaneTap s={s} px={px} call={call} />
-        {slot(PICTURE, "picture", p)}
-        {/* Over Riya, so the mark she has just made stays in view. */}
-        <NamedPointsDraw s={s} px={px} />
-        {slot(OVER, "over", p)}
-      </FrameStage>
-      {s.named !== null && isNaming && (
-        <p class="cp-line" {...shows("named", s.named, PART_WORDS[s.named][locale])}>
-          {PART_WORDS[s.named][locale]}
-        </p>
-      )}
-      {slot(LINES, "lines", p)}
-      <div class="cp-controls">
-        {slot(CONTROLS_FIRST, "controls", p)}
+/** The plane's own drawing: its scene and grid behind, its lines and numbers, its named points. */
+export const planeDrawing = drawing(plane, {
+  back: ({ s, px }) => (
+    <>
+      <SceneDraw s={s} px={px} />
+      <GridDraw s={s} px={px} />
+    </>
+  ),
+  on: ({ s, px, locale }) => (
+    <>
+      {canNameParts(s) && s.isAlone && <PartTaps s={s} px={px} />}
+      <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} />
+      <ApartHandle s={s} px={px} />
+    </>
+  ),
+  // Over Riya, so the mark she has just made stays in view.
+  front: ({ s, px }) => <NamedPointsDraw s={s} px={px} />,
+  below: ({ s, locale }) =>
+    s.named === null || !(canNameParts(s) && s.isAlone) ? null : (
+      <p class="cp-line" {...shows("named", s.named, PART_WORDS[s.named][locale])}>
+        {PART_WORDS[s.named][locale]}
+      </p>
+    ),
+  controls: ({ s, locale }) => {
+    const isNaming = canNameParts(s) && s.isAlone;
+    const unshown = s.canShowPoints && s.points.some((pt) => !pt.isShown);
+    return (
+      <>
         {!(s.isCrossed === true) && s.axes === "both" && (
           <SymbolButton
             symbol={word(WORDS.bringTogether, locale)}
             label={word(WORDS.bringTogether, locale)}
             isWide
-            {...does(actions.bringTogether)}
+            {...does(plane.actions.bringTogether)}
           />
         )}
         {isNaming && s.showDirections && s.quadrantsNamed < 4 && (
@@ -130,7 +94,7 @@ export function CoordinatePlaneView({
             symbol={word(WORDS.nameQuadrants, locale)}
             label={word(WORDS.nameQuadrants, locale)}
             isWide
-            {...does(actions.numberQuadrants)}
+            {...does(plane.actions.numberQuadrants)}
           />
         )}
         {unshown && (
@@ -138,11 +102,25 @@ export function CoordinatePlaneView({
             symbol={word(WORDS.nextPoint, locale)}
             label={word(WORDS.nextPoint, locale)}
             isWide
-            {...does(actions.showPoint)}
+            {...does(plane.actions.showPoint)}
           />
         )}
-        {slot(CONTROLS_AFTER, "controls", p)}
-      </div>
-    </div>
-  );
-}
+      </>
+    );
+  },
+});
+
+/** The coordinate plane: the plane and every part on it, each drawn in its places. */
+export const CoordinatePlaneView = groupView(
+  coordinatePlane,
+  {
+    plane: planeDrawing,
+    reading: readingDrawing,
+    places: placesDrawing,
+    walker: walkerDrawing,
+    clues: cluesDrawing,
+    plotting: plottingDrawing,
+    dice: diceDrawing,
+  },
+  { look: () => "cp-frame" },
+);

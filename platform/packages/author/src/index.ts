@@ -7,6 +7,7 @@ export {
   type BuiltBoard,
   type Child,
   type Given,
+  type GivenOf,
   type NoteCheck,
   Placed,
   type PlacedOf,

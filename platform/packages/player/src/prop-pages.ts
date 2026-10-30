@@ -1,7 +1,7 @@
 import { propAddress } from "@chalk/content/address";
 import { full } from "@chalk/content/words";
-import { type AnyPropDef, BOARD, PropRole, purposeOf } from "@chalk/prop";
-import type { ZodTypeAny } from "zod";
+import { type AnyPropDef, BOARD, PropRole, groupOf, purposeOf } from "@chalk/prop";
+import { ZodNullable, type ZodTypeAny } from "zod";
 import { takes } from "./snapshot";
 
 /**
@@ -46,6 +46,42 @@ const shape = (schema: ZodTypeAny): string => {
   return typeof t === "string" ? t : full(t);
 };
 
+/** The fields of a stored schema: a part's under its name, by path ("walker.walkFrom"). */
+const shapeOf = (schema: ZodTypeAny): Record<string, ZodTypeAny> | undefined => {
+  const inner = schema instanceof ZodNullable ? schema.unwrap() : schema;
+  return (inner as unknown as { shape?: Record<string, ZodTypeAny> }).shape;
+};
+
+/**
+ * A prop's fields, each with the actions that change it. A group's parts' fields are listed part
+ * by part ("walker.walkFrom", changed by "walker.step"), each changed by its own part's actions.
+ */
+function fieldsOf(
+  def: AnyPropDef,
+  stateShape: Record<string, ZodTypeAny>,
+  inputs: ReadonlySet<string>,
+  prefix: string,
+): PropPage["fields"] {
+  const parts = groupOf(def)?.children ?? {};
+  return Object.entries(stateShape).flatMap(([name, schema]) => {
+    const part = parts[name] as AnyPropDef | undefined;
+    const sub = part === undefined ? undefined : shapeOf(schema);
+    if (part !== undefined && sub !== undefined)
+      return fieldsOf(part, sub, new Set(part.inputs ?? []), `${prefix}${name}.`);
+    return [
+      {
+        name: `${prefix}${name}`,
+        takes: shape(schema),
+        ...(schema.description ? { meaning: schema.description } : {}),
+        isInput: inputs.has(name),
+        changedBy: Object.entries(def.actions)
+          .filter(([, a]) => (a as { changes?: readonly string[] }).changes?.includes(name))
+          .map(([n]) => `${prefix}${n}`),
+      },
+    ];
+  });
+}
+
 /** Every prop's page, package by package, in the order packages and props are declared. */
 export function propPages(defsByPackage: ReadonlyMap<string, readonly AnyPropDef[]>): PropPage[] {
   const out: PropPage[] = [];
@@ -66,13 +102,7 @@ export function propPages(defsByPackage: ReadonlyMap<string, readonly AnyPropDef
         role: ROLE_WORDS[def.role] ?? String(def.role),
         purpose: purposeOf(def),
         describe: def.describe.trim().replace(/\s+/g, " "),
-        fields: Object.entries(stateShape).map(([name, schema]) => ({
-          name,
-          takes: shape(schema),
-          ...(schema.description ? { meaning: schema.description } : {}),
-          isInput: inputs.has(name),
-          changedBy: actions.filter(([, a]) => a.changes?.includes(name)).map(([n]) => n),
-        })),
+        fields: fieldsOf(def, stateShape, inputs, ""),
         actions: actions.map(([name, a]) => {
           const args = takes(a.args);
           const isNone =

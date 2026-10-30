@@ -2,8 +2,9 @@ import { localizedSchema } from "@chalk/content";
 import {
   type Effect,
   type FrameSpec,
+  PropRole,
   actionsFor,
-  layersFor,
+  defineProp,
   raise,
   seq,
   set,
@@ -14,8 +15,9 @@ import {
 import { z } from "zod";
 
 /**
- * The core of the coordinate plane: two perpendicular lines and their marks, drawn only as far as
- * the lesson has defined them, and the points a figure names. Every layer draws on it.
+ * The plane itself: two perpendicular lines and their marks, drawn only as far as the lesson has
+ * defined them, and the points a figure names. It provides the picture every other part of the
+ * coordinate plane draws on (coordinate-plane.ts).
  */
 
 export const pointSchema = z.object({ x: z.number(), y: z.number() }).strict();
@@ -26,6 +28,10 @@ export const windowSchema = z
   .object({ xMin: z.number(), xMax: z.number(), yMin: z.number(), yMax: z.number() })
   .strict();
 export type PlaneWindow = z.infer<typeof windowSchema>;
+
+/** Every place with one number: all the houses on a street (x), or along a row (y). */
+export const lineSchema = z.object({ axis: z.enum(["x", "y"]), value: z.number() }).strict();
+export type Line = z.infer<typeof lineSchema>;
 
 /** What the lines carry: nothing (a sheet's edges), counts from 1, or number lines. */
 export const Marks = {
@@ -180,6 +186,12 @@ const planeFields = {
    * shows them itself (a crossing marked when Riya reaches it).
    */
   canShowPoints: z.boolean(),
+  /** Nothing else is drawn on it: a tap on a part of it names that part. */
+  isAlone: z.boolean(),
+  /** A counted line's numbers are buttons (each lights the places with that number). */
+  canTapNumbers: z.boolean(),
+  /** The number lit now, shown pressed. */
+  lit: lineSchema.nullable(),
 };
 
 export type PlaneCore = {
@@ -202,6 +214,9 @@ export type PlaneCore = {
   named: PlanePart | null;
   points: NamedPoint[];
   canShowPoints: boolean;
+  isAlone: boolean;
+  canTapNumbers: boolean;
+  lit: Line | null;
 };
 
 /** Where a point is: in a quadrant, on an axis, or at O. */
@@ -211,6 +226,15 @@ export function placeOf(p: Point): Quadrant | "x-axis" | "y-axis" | "O" {
   if (p.x === 0) return "y-axis";
   if (p.x > 0) return p.y > 0 ? PlanePart.I : PlanePart.IV;
   return p.y > 0 ? PlanePart.II : PlanePart.III;
+}
+
+/**
+ * The window at a new scale: the marks stay where they are on screen, a number every `to` units
+ * instead of `from`, so the window grows or shrinks with the scale.
+ */
+export function scaledWindow(w: PlaneWindow, from: number, to: number): PlaneWindow {
+  const k = to / from;
+  return { xMin: w.xMin * k, xMax: w.xMax * k, yMin: w.yMin * k, yMax: w.yMax * k };
 }
 
 /** Whether a point is inside the window. */
@@ -225,14 +249,48 @@ export const planeSignals = {
   crossed: signal("The two number lines cross at their zeroes: they are the axes, and O is named"),
   named: signal("A tap named a part of the plane: `part`"),
   quadrantsNumbered: signal("The sweep has named all four quadrants, I to IV"),
+  numberTapped: signal("The learner tapped the number `value` on the `axis` line"),
 };
 
-export const core = layersFor<PlaneCore>()({
-  name: "plane",
-  frame: "plane",
+/**
+ * The plane's picture: one unit across is one unit up, fitted to the width with a margin. Its height
+ * follows the window (at least 200 pixels; a number line, 110).
+ */
+export const planeFrame: FrameSpec<PlaneCore> = {
+  kind: "plane",
+  pixels: (s, width) => {
+    const { xMin, xMax, yMin, yMax } = s.window;
+    // Room round the plane for what is written outside it: the numbers up the left, the numbers
+    // and the horizontal line's name along the bottom, the vertical line's name on top.
+    const pad = { left: 36, right: 16, top: 24, bottom: 44 };
+    // As wide as it is given: how tall it may be on a screen is the player's rule (size.ts, a share
+    // of the screen's height), not a number of its own here.
+    const unit = (width - pad.left - pad.right) / (xMax - xMin);
+    // A single line (a number line) needs only room for itself and its numbers.
+    const least = s.axes === Axes.Horizontal ? 110 : 200;
+    const height = Math.round(Math.max(least, unit * (yMax - yMin) + pad.top + pad.bottom));
+    const left = pad.left + (width - pad.left - pad.right - unit * (xMax - xMin)) / 2;
+    const top = pad.top + (height - pad.top - pad.bottom - unit * (yMax - yMin)) / 2;
+    return {
+      width,
+      height,
+      toPx: (x, y = 0) => [left + (x - xMin) * unit, top + (yMax - y) * unit],
+      fromPx: (px, py = 0) => [xMin + (px - left) / unit, yMax - (py - top) / unit],
+    };
+  },
+  label: (s) =>
+    `${s.axes === Axes.Horizontal ? "A number line" : "A plane"} from ${s.window.xMin} to ${s.window.xMax} across${
+      s.axes === Axes.Both ? ` and ${s.window.yMin} to ${s.window.yMax} up` : ""
+    }`,
+};
+
+export const plane = defineProp({
+  type: "plane",
+  role: PropRole.Explainer,
+  frame: planeFrame,
   describe:
     "Two perpendicular lines and their marks, drawn only as far as the lesson has defined them: plain lines, counts from 1, or number lines with O, the directions and the quadrants; and the points a figure names.",
-  fields: planeFields,
+  state: z.object(planeFields).strict(),
   defaults: {
     window: { xMin: -6, xMax: 6, yMin: -5, yMax: 5 },
     axes: Axes.Both,
@@ -256,6 +314,9 @@ export const core = layersFor<PlaneCore>()({
     named: null,
     points: [],
     canShowPoints: false,
+    isAlone: true,
+    canTapNumbers: false,
+    lit: null,
   },
   actions: {
     namePart: act({
@@ -361,6 +422,24 @@ export const core = layersFor<PlaneCore>()({
           : seq(...riseSteps(risen, rest, RISE_EACH), set({ upLines: null }));
       },
     }),
+    setScale: act({
+      describe: "A number every this many units, the window grown to match",
+      args: z.object({ every: z.number().positive() }).strict(),
+      changes: ["tickEvery", "window"],
+      run: (s, { every }) =>
+        every === s.tickEvery
+          ? set({})
+          : set({ tickEvery: every, window: scaledWindow(s.window, s.tickEvery, every) }),
+    }),
+    tapNumber: act({
+      describe:
+        "Tap a number on a counted line (when its numbers are buttons): what it does is the places' (the learner's tap)",
+      byLearner: true,
+      args: lineSchema,
+      changes: [],
+      run: (s, line) =>
+        set({}, ...(s.canTapNumbers ? [raise(planeSignals.numberTapped, line)] : [])),
+    }),
     showAllPoints: act({
       describe: "Show every point the figure names",
       args: none,
@@ -388,33 +467,16 @@ export const core = layersFor<PlaneCore>()({
 });
 
 /**
- * The plane's picture: one unit across is one unit up, fitted to the width with a margin. Its height
- * follows the window (at least 200 pixels; a number line, 110).
+ * Some of the plane's fields, for a part that draws or decides by them (where the edge is, which
+ * streets are up): the part keeps them among its own, and the coordinate plane passes the plane's
+ * in (coordinate-plane.ts). On its own, a part has the plane's defaults.
  */
-export const planeFrame: FrameSpec<PlaneCore> = {
-  kind: "plane",
-  pixels: (s, width) => {
-    const { xMin, xMax, yMin, yMax } = s.window;
-    // Room round the plane for what is written outside it: the numbers up the left, the numbers
-    // and the horizontal line's name along the bottom, the vertical line's name on top.
-    const pad = { left: 36, right: 16, top: 24, bottom: 44 };
-    // As wide as it is given: how tall it may be on a screen is the player's rule (size.ts, a share
-    // of the screen's height), not a number of its own here.
-    const unit = (width - pad.left - pad.right) / (xMax - xMin);
-    // A single line (a number line) needs only room for itself and its numbers.
-    const least = s.axes === Axes.Horizontal ? 110 : 200;
-    const height = Math.round(Math.max(least, unit * (yMax - yMin) + pad.top + pad.bottom));
-    const left = pad.left + (width - pad.left - pad.right - unit * (xMax - xMin)) / 2;
-    const top = pad.top + (height - pad.top - pad.bottom - unit * (yMax - yMin)) / 2;
-    return {
-      width,
-      height,
-      toPx: (x, y = 0) => [left + (x - xMin) * unit, top + (yMax - y) * unit],
-      fromPx: (px, py = 0) => [xMin + (px - left) / unit, yMax - (py - top) / unit],
-    };
-  },
-  label: (s) =>
-    `${s.axes === Axes.Horizontal ? "A number line" : "A plane"} from ${s.window.xMin} to ${s.window.xMax} across${
-      s.axes === Axes.Both ? ` and ${s.window.yMin} to ${s.window.yMax} up` : ""
-    }`,
-};
+export function fromPlane<const K extends keyof PlaneCore>(...keys: K[]) {
+  return {
+    keys,
+    fields: Object.fromEntries(keys.map((k) => [k, planeFields[k]])) as {
+      [P in K]: (typeof planeFields)[P];
+    },
+    defaults: Object.fromEntries(keys.map((k) => [k, plane.defaults[k]])) as Pick<PlaneCore, K>,
+  };
+}

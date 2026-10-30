@@ -24,7 +24,7 @@ export const placeTheDot = family({
         `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1\u00a0cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       isRight: isPlaced(sheet, left, bottom),
-      solve: [sheet.learner.movePoint({ x: left, y: bottom })],
+      solve: [sheet.learner.reading.movePoint({ x: left, y: bottom })],
       notes: isSwapped
         ? [
             {
@@ -33,7 +33,7 @@ export const placeTheDot = family({
                 `That spot is ${bottom} cm from the left edge and ${left} cm above the bottom: the two distances are swapped.`,
                 `वह जगह बाएँ किनारे से ${bottom} cm और नीचे के किनारे से ${left} cm ऊपर है: दोनों दूरियाँ उलट गईं।`,
               ),
-              reach: [sheet.learner.movePoint({ x: bottom, y: left })],
+              reach: [sheet.learner.reading.movePoint({ x: bottom, y: left })],
             },
           ]
         : [],

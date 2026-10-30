@@ -256,6 +256,11 @@ export type GroupLayout = {
  * when first read; a derived value is worked out when first read. So bindings and derived values
  * may read each other in any order, and each runs once per reading. A binding that reads its own
  * child sees it unbound; anything else that reads itself (directly or not) throws.
+ *
+ * A leaf child's own facts (its stored fields no binding gives) are what they are before any
+ * binding: reading one needs no binding run. So two children may each be given the other's facts
+ * (the places the plane's window, the plane the places' lit street); only reading a bound field,
+ * or a derived value, runs the child's binding.
  */
 function lazily(o: {
   type: string;
@@ -267,6 +272,8 @@ function lazily(o: {
   bind: (name: string, value: unknown) => PropView;
   bindings: Readonly<Record<string, (s: never) => unknown>>;
   derived: Readonly<Record<string, { compute: (s: never) => unknown }>>;
+  /** A leaf child's facts readable before its binding runs (undefined: read it whole). */
+  facts?: (name: string) => ReadonlySet<string> | undefined;
 }): Record<string, unknown> {
   const out: Record<string, unknown> = { ...o.own };
   const done = new Set<string>();
@@ -285,7 +292,8 @@ function lazily(o: {
     done.add(key);
     return out[key];
   };
-  const get = (key: string): unknown => {
+  /** A key's value; `whole`: a child bound, never only its facts. */
+  const get = (key: string, whole = false): unknown => {
     if (done.has(key)) return out[key];
     if (children.has(key)) {
       const base = o.base(key);
@@ -297,6 +305,15 @@ function lazily(o: {
       }
       // A binding reads its own child as it is before the binding; any other way round is a loop.
       if (busy.at(-1) === key) return base;
+      const facts = o.facts?.(key);
+      // Read while something else is worked out: its facts as they are, the rest once bound.
+      if (!whole && busy.length > 0 && facts !== undefined)
+        return new Proxy(base, {
+          get: (target, field) =>
+            typeof field === "string" && !facts.has(field)
+              ? (get(key, true) as Record<string, unknown>)[field]
+              : Reflect.get(target, field),
+        });
       if (busy.includes(key)) throw loop(key);
       return work(key, () => o.bind(key, binding(view as never)));
     }
@@ -644,10 +661,31 @@ export function defineGroup<
     (s: never) => unknown
   >;
   const boundTree: Record<string, BoundTree> = {};
+  // A leaf child's facts no binding gives (read before its binding runs, see `lazily`): which
+  // fields a binding gives is the same whatever it reads, so each is run once on the children as
+  // they are by default. One that can't be run so is read whole.
+  const plain: Record<string, unknown> = { ...ownDefaults };
+  for (const name of childNames)
+    plain[name] = viewOf(childDef(name), fullDefaults[name] as StoredState);
+  const factsOf = new Map<string, ReadonlySet<string>>();
+  for (const [name, binding] of Object.entries(bindings)) {
+    if (groupOf(childDef(name)) !== undefined) continue;
+    try {
+      const given = Object.keys(binding(plain as never) as object);
+      factsOf.set(
+        name,
+        new Set(Object.keys(childDef(name).defaults).filter((f) => !given.includes(f))),
+      );
+    } catch {
+      // Read whole.
+    }
+  }
+  const facts = (name: string) => factsOf.get(name);
   lazily({
     type: spec.type,
     own: ownDefaults,
     children: childNames,
+    facts,
     base: (name) => viewOf(childDef(name), fullDefaults[name] as StoredState),
     bind: (name, value) => {
       const tree = shapeOf(`${spec.type}: IS ${name}`, childDef(name), value);
@@ -760,9 +798,13 @@ export function defineGroup<
       type: spec.type,
       own,
       children: childNames,
+      // Before its binding, what is bound has the child's own defaults (so its view is whole).
       base: (name) => {
         const input = inputs[name];
-        return input == null ? null : childView(name, input.slice, input.injected);
+        if (input == null) return null;
+        if (bindings[name] === undefined) return childView(name, input.slice, input.injected);
+        const unbound = { ...(fullDefaults[name] as StoredState), ...input.slice };
+        return childView(name, unbound, input.injected);
       },
       bind: (name, value) => {
         const input = inputs[name] as NonNullable<Reading["inputs"][string]>;
@@ -781,6 +823,7 @@ export function defineGroup<
       },
       bindings,
       derived: spec.derived ?? {},
+      facts,
     });
     const shown: Record<string, boolean> = {};
     for (const name of childNames)
@@ -831,6 +874,8 @@ export function defineGroup<
         );
       const slice = state[name] as StoredState;
       for (const e of effect.emit) out.emits.push({ ...e, signal: `${name}.${e.signal}` });
+      // Nothing set: the child's facts stay as they are (the same object, so nothing reads as changed).
+      if (Object.keys(effect.set).length === 0) return state;
       return { ...state, [name]: { ...slice, ...effect.set } };
     }
     // Over time: runs after the instant part, writing the child's facts through the group's door.
@@ -1007,13 +1052,19 @@ export function defineGroup<
       a as ActionSpec<StoredState>,
       (a as ActionSpec<StoredState>).changes,
     );
-  // A routed action can change anything in the group; a child's own changes only that child.
+  // A child's action changes that child, and, when the group answers one of its signals (WHEN),
+  // whatever the answer may change: anything in the group, as a routed action may (which steps a
+  // link runs is only known when it runs, so it is counted whole: more, never less).
+  const isAnswered = (name: string) =>
+    Object.keys(whenLinks).some((signal) => signal.startsWith(`${name}.`));
   for (const name of childNames)
     for (const [action, a] of Object.entries(childDef(name).actions))
       actions[`${name}.${action}`] = actionFor(
         `${name}.${action}`,
         a,
-        routes.has(`${name}.${action}`) ? [...ownFields, ...childNames] : [name],
+        routes.has(`${name}.${action}`) || isAnswered(name)
+          ? [...ownFields, ...childNames]
+          : [name],
       );
 
   // Signals: the group's own, and each child's by path.
@@ -1115,6 +1166,9 @@ export function mergeGiven(
   for (const [key, value] of Object.entries(given)) {
     const child = layout.children[key];
     if (child === undefined || value === null || !isObject(value)) out[key] = value;
+    // The group's defaults for a child leave out what it binds: merge over those, not the child's.
+    else if (groupOf(child) === undefined)
+      out[key] = { ...(def.defaults[key] as object), ...value };
     else out[key] = mergeGiven(child, { ...(def.defaults[key] as object), ...value } as never);
   }
   return out;

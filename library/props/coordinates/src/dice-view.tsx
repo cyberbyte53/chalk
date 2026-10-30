@@ -1,14 +1,19 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
+import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
 import { dice } from "./dice";
-import { type LayerView, actions } from "./layer-view";
+import { drawing } from "./layer-view";
 import { Counter } from "./pictures";
-import { type PlaneView, unitOf } from "./plane-view";
+import { unitOf } from "./plane-view";
 import { WORDS, pair, word } from "./words";
 
+type DiceView = ViewOf<typeof dice>;
+const actions = dice.actions;
+/** Never shown: every counter has its player's name (the dice's invariant). */
+const NO_NAME = { en: "", hi: "" };
+
 /** Both players' counters on the board, side by side when they share a point. */
-function CountersDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: Locale }) {
+function CountersDraw({ s, px, locale }: { s: DiceView; px: FramePixels; locale: Locale }) {
   const size = Math.max(14, Math.min(24, unitOf(px) * 0.6));
   return (
     <g class="cp-counters">
@@ -33,10 +38,9 @@ function CountersDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale
 }
 
 /** The dice game's drawing: the counters, the throw and whose turn, Throw and New game. */
-export const diceView: LayerView = {
-  isOn: (s) => isLayerOn(dice, s),
-  over: ({ s, px, locale }) => <CountersDraw s={s} px={px} locale={locale} />,
-  lines: ({ s, locale }) => (
+export const diceDrawing = drawing(dice, {
+  front: ({ s, px, locale }) => <CountersDraw s={s} px={px} locale={locale} />,
+  below: ({ s, locale }) => (
     <p
       class="cp-line cp-dice"
       {...shows(
@@ -49,10 +53,10 @@ export const diceView: LayerView = {
       <span class="cp-die is-green">{s.lastThrow?.green ?? "–"}</span>
       <span class="cp-turn">
         {s.winner !== null
-          ? `${word(s.playerNames[s.winner] ?? s.walkerName, locale)} 🏁`
+          ? `${word(s.playerNames[s.winner] ?? NO_NAME, locale)} 🏁`
           : locale === "hi"
-            ? `${word(s.playerNames[s.turn] ?? s.walkerName, locale)} की बारी`
-            : `${word(s.playerNames[s.turn] ?? s.walkerName, locale)}'s turn`}
+            ? `${word(s.playerNames[s.turn] ?? NO_NAME, locale)} की बारी`
+            : `${word(s.playerNames[s.turn] ?? NO_NAME, locale)}'s turn`}
       </span>
     </p>
   ),
@@ -73,4 +77,4 @@ export const diceView: LayerView = {
       />
     </>
   ),
-};
+});

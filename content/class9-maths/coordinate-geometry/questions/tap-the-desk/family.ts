@@ -22,7 +22,7 @@ export const tapTheDesk = family({
         `डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isChosen(room, column, row),
-      solve: [room.learner.chooseTarget({ x: column, y: row })],
+      solve: [room.learner.places.chooseTarget({ x: column, y: row })],
       notes: [
         {
           when: isChosen(room, row, column),
@@ -30,7 +30,7 @@ export const tapTheDesk = family({
             `That desk is (${row}, ${column}): column ${row}, row ${column}. The column comes first.`,
             `वह डेस्क (${row}, ${column}) है: स्तंभ ${row}, पंक्ति ${column}। स्तंभ पहले आता है।`,
           ),
-          reach: [room.learner.chooseTarget({ x: row, y: column })],
+          reach: [room.learner.places.chooseTarget({ x: row, y: column })],
         },
       ],
     });

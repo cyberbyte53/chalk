@@ -22,20 +22,26 @@ export const busToStop = family({
     .refine((p) => p.stop !== 0, "a stop, not the stand"),
   build: ({ stop }, b) => {
     const road = b.prop(coordinatePlaneDef, "road", {
-      window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
-      axes: Axes.Horizontal,
-      marks: Marks.Numbers,
-      showAxisNames: false,
-      showOrigin: false,
-      places: [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
-      placeKind: PlaceKind.Crossing,
-      canChooseTarget: false,
-      walkFrom: { x: 0, y: 0 },
-      at: { x: 0, y: 0 },
-      roads: Roads.Grid,
-      walkerKind: WalkerKind.Bus,
-      walkerName: t("The bus", "बस"),
-      showWhere: false,
+      plane: {
+        window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
+        axes: Axes.Horizontal,
+        marks: Marks.Numbers,
+        showAxisNames: false,
+        showOrigin: false,
+      },
+      places: {
+        places: [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
+        placeKind: PlaceKind.Crossing,
+        canChooseTarget: false,
+      },
+      walker: {
+        walkFrom: { x: 0, y: 0 },
+        at: { x: 0, y: 0 },
+        roads: Roads.Grid,
+        walkerKind: WalkerKind.Bus,
+        walkerName: t("The bus", "बस"),
+        showWhere: false,
+      },
     });
     const ask = check(b, {
       about: road,

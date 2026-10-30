@@ -21,7 +21,6 @@ import {
   SAY,
   type StoredState,
   applyPatch,
-  hostOf,
   initialState,
   viewOf,
 } from "@chalk/prop";
@@ -210,19 +209,6 @@ export function validateBoard(board: Board, allDefs: Defs, readings: Readings): 
   };
   for (const node of edges.keys())
     if (hasLoop(node)) report(`is ${node}`, "IS rules feed each other in a loop");
-
-  // Layers that exclude each other can't both be on: from where it's placed, or the actions its rules call.
-  const called = board.when.flatMap((rule) => callsIn(rule.do));
-  for (const [name, def] of defs) {
-    const host = hostOf(def);
-    const state = states.get(name);
-    if (host === undefined || state === undefined) continue;
-    const used = called.flatMap((c) => {
-      const t = split(c.call);
-      return t?.prop === name ? [t.member] : [];
-    });
-    for (const clash of host.clashes(state, used)) report(name, clash);
-  }
 
   // studentOnly: real actions on this board.
   for (const entry of board.studentOnly) {

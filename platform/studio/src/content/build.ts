@@ -63,7 +63,7 @@ import {
   PropRole,
   asAnyProp,
   boardProp,
-  hostOf,
+  groupOf,
   segment,
 } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
@@ -232,11 +232,28 @@ function usesOf(board: Board): {
   return { binds, calls };
 }
 
+/** The fields a placement sets: a group's part by part ("walker.walkFrom"). */
+function givenFields(
+  def: AnyPropDef | undefined,
+  given: Readonly<Record<string, unknown>>,
+): string[] {
+  const parts = def === undefined ? undefined : groupOf(def)?.children;
+  return Object.entries(given)
+    .flatMap(([name, value]) => {
+      const part = parts?.[name] as AnyPropDef | undefined;
+      return part !== undefined && value !== null && typeof value === "object"
+        ? givenFields(part, value as Record<string, unknown>).map((f) => `${name}.${f}`)
+        : [name];
+    })
+    .sort();
+}
+
 /** What a board was made from (see Reach), read from the board as authored. */
 function reachOf(
   board: Board,
   module: string,
   more: { stack?: readonly string[]; rows?: string },
+  defs: Defs,
 ): BoardReach {
   const placed = new Map(propPieces(board.root).map((p) => [p.name, p]));
   const uses = usesOf(board);
@@ -244,7 +261,7 @@ function reachOf(
   for (const piece of walkPieces(board.root)) {
     if (piece.name === "") continue;
     const prop = placed.get(piece.name);
-    const given = Object.keys(prop?.with ?? {}).sort();
+    const given = givenFields(prop === undefined ? undefined : defs[prop.prop], prop?.with ?? {});
     const binds = [...(uses.binds.get(piece.name) ?? [])].sort();
     const calls = [...(uses.calls.get(piece.name) ?? [])].sort();
     pieces[piece.name] = {
@@ -591,9 +608,12 @@ async function buildPages(
     for (const type of propTypesOf(made.board)) used.add(type);
     claimId(c, item.id, where);
     c.sources.set(path, sitesOf(made.built.board, p.site));
-    c.reach.boards[path] = reachOf(made.built.board, file, {
-      ...(p.stack === undefined ? {} : { stack: p.stack }),
-    });
+    c.reach.boards[path] = reachOf(
+      made.built.board,
+      file,
+      { ...(p.stack === undefined ? {} : { stack: p.stack }) },
+      c.defs,
+    );
     refs.push(emit(c, item, builtPageSchema));
   }
   return refs;
@@ -691,9 +711,14 @@ async function buildFamily(
       ...sitesOf(built.board, undefined),
       board: `content/${paramsFile}:${rowLine(c, paramsFile, row)}`,
     });
-    c.reach.boards[path] = reachOf(built.board, familyFile, {
-      rows: `content/${paramsFile}:${lineRange(rowLine(c, paramsFile, row), rowLine(c, paramsFile, row + 1, true) - 1)}`,
-    });
+    c.reach.boards[path] = reachOf(
+      built.board,
+      familyFile,
+      {
+        rows: `content/${paramsFile}:${lineRange(rowLine(c, paramsFile, row), rowLine(c, paramsFile, row + 1, true) - 1)}`,
+      },
+      c.defs,
+    );
     const ref = emit(c, item, builtQuestionSchema);
     banked.push({
       ...ref,

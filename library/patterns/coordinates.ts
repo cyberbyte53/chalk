@@ -1,4 +1,4 @@
-import { type At, type Placed, type Step, t, wait } from "@chalk/author";
+import { type At, type GivenOf, type Placed, type Step, t, wait } from "@chalk/author";
 import {
   Direction,
   Marks,
@@ -15,6 +15,20 @@ import {
  */
 
 type Plane = Placed<typeof coordinatePlaneDef>;
+/** What a board gives the coordinate plane, part by part: `{ walker: { walkFrom } }`. */
+export type PlaneSetup = GivenOf<typeof coordinatePlaneDef>;
+
+/**
+ * Setups put together part by part, later ones over earlier: `setup(bareTown(), { places: {
+ * showAddress: true } })` keeps the town's places and walker, with the address shown.
+ */
+export function setup(...setups: readonly PlaneSetup[]): PlaneSetup {
+  const out: Record<string, Record<string, unknown>> = {};
+  for (const one of setups)
+    for (const [part, fields] of Object.entries(one))
+      out[part] = { ...(out[part] ?? {}), ...(fields as Record<string, unknown>) };
+  return out as PlaneSetup;
+}
 
 /** Every whole-number point from (1, 1) to (across, up): a town's houses, a classroom's desks. */
 export const gridOf = (across: number, up: number) =>
@@ -29,57 +43,55 @@ export const gridOf = (across: number, up: number) =>
 export const TOWN = { streets: 6, houses: 5 } as const;
 
 /** Riya's town: streets 1 to `streets` from the main road, `houses` up each; she at the corner. */
-export const bareTown = (streets: number = TOWN.streets, houses: number = TOWN.houses) => ({
-  window: { xMin: 0, xMax: streets + 0.5, yMin: 0, yMax: houses + 0.5 },
-  marks: Marks.Counts,
-  scene: Scene.Town,
-  axisNames: [t("Street number", "गली नंबर"), t("House number", "मकान नंबर")] as [
-    ReturnType<typeof t>,
-    ReturnType<typeof t>,
-  ],
-  places: gridOf(streets, houses),
-  placeKind: PlaceKind.House,
-  canChooseTarget: false,
-  showAddress: false,
-  showWhere: false,
-  walkFrom: { x: 0, y: 0 },
-  at: { x: 0, y: 0 },
-  roads: Roads.Town,
+export const bareTown = (
+  streets: number = TOWN.streets,
+  houses: number = TOWN.houses,
+): PlaneSetup => ({
+  plane: {
+    window: { xMin: 0, xMax: streets + 0.5, yMin: 0, yMax: houses + 0.5 },
+    marks: Marks.Counts,
+    scene: Scene.Town,
+    axisNames: [t("Street number", "गली नंबर"), t("House number", "मकान नंबर")],
+  },
+  places: {
+    places: gridOf(streets, houses),
+    placeKind: PlaceKind.House,
+    canChooseTarget: false,
+    showAddress: false,
+  },
+  walker: { showWhere: false, walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 }, roads: Roads.Town },
 });
 
 /** The classroom: `columns` × `rows` desks, numbered from the left and from the front. */
-export const bareClassroom = (columns = 10, rows = 7) => ({
-  window: { xMin: 0, xMax: columns + 0.5, yMin: 0, yMax: rows + 0.5 },
-  marks: Marks.Counts,
-  scene: Scene.Classroom,
-  axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")] as [ReturnType<typeof t>, ReturnType<typeof t>],
-  places: gridOf(columns, rows),
-  placeKind: PlaceKind.Desk,
-  showAddress: false,
+export const bareClassroom = (columns = 10, rows = 7): PlaneSetup => ({
+  plane: {
+    window: { xMin: 0, xMax: columns + 0.5, yMin: 0, yMax: rows + 0.5 },
+    marks: Marks.Counts,
+    scene: Scene.Classroom,
+    axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")],
+  },
+  places: { places: gridOf(columns, rows), placeKind: PlaceKind.Desk, showAddress: false },
 });
 
 /** A notebook page squared in centimetres, measured from its left edge and its bottom; a dot to drag. */
-export const bareNotebook = (width = 15, height = 12) => ({
-  window: { xMin: 0, xMax: width, yMin: 0, yMax: height },
-  marks: Marks.Counts,
-  tickEvery: 1,
-  hasGrid: true,
-  scene: Scene.Paper,
-  axisNames: [t("left edge", "बायाँ किनारा"), t("bottom", "नीचे का किनारा")] as [
-    ReturnType<typeof t>,
-    ReturnType<typeof t>,
-  ],
-  showAxisNames: false,
-  unit: "cm",
-  point: { x: width - 1, y: height - 1 },
-  pointStep: 1,
+export const bareNotebook = (width = 15, height = 12): PlaneSetup => ({
+  plane: {
+    window: { xMin: 0, xMax: width, yMin: 0, yMax: height },
+    marks: Marks.Counts,
+    tickEvery: 1,
+    hasGrid: true,
+    scene: Scene.Paper,
+    axisNames: [t("left edge", "बायाँ किनारा"), t("bottom", "नीचे का किनारा")],
+    showAxisNames: false,
+  },
+  reading: { unit: "cm", point: { x: width - 1, y: height - 1 }, pointStep: 1 },
 });
 
 /** Riya stands at (x, y). (When she announces a step, she is exactly on its block.) */
 export const isAt =
   (plane: Plane, x: number, y: number) =>
   (at: At): boolean => {
-    const p = at(plane).at;
+    const p = at(plane).walker.at;
     return p.x === x && p.y === y;
   };
 
@@ -87,7 +99,7 @@ export const isAt =
 export const isChosen =
   (plane: Plane, x: number, y: number) =>
   (at: At): boolean => {
-    const target = at(plane).target;
+    const target = at(plane).places.target;
     return target !== null && target.x === x && target.y === y;
   };
 
@@ -95,7 +107,7 @@ export const isChosen =
 export const isPlaced =
   (plane: Plane, x: number, y: number) =>
   (at: At): boolean => {
-    const p = at(plane).point;
+    const p = at(plane).reading.point;
     return p !== null && p.x === x && p.y === y;
   };
 
@@ -104,7 +116,7 @@ export const isPlaced =
  * she is still moving is ignored).
  */
 export function walkTo(plane: Plane, x: number, y: number): (Step | ReturnType<typeof wait>)[] {
-  const tap = (direction: Direction) => [plane.learner.step({ direction }), wait(0.4)];
+  const tap = (direction: Direction) => [plane.learner.walker.step({ direction }), wait(0.4)];
   return [
     ...Array.from({ length: Math.abs(x) }, () => tap(x > 0 ? Direction.Right : Direction.Left)),
     ...Array.from({ length: Math.abs(y) }, () => tap(y > 0 ? Direction.Up : Direction.Down)),

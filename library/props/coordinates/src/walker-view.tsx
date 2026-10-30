@@ -1,19 +1,23 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, isLayerOn, says, shows } from "@chalk/prop";
-import { type LayerView, actions } from "./layer-view";
+import { type FramePixels, type ViewOf, does, says, shows } from "@chalk/prop";
+import type { JSX } from "preact";
+import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
-import type { Point } from "./plane";
-import { type PlaneView, unitOf } from "./plane-view";
-import { Direction, stepFrom, walker } from "./walker";
+import { Marks, type Point, Scene } from "./plane";
+import { marksOn, unitOf } from "./plane-view";
+import { Direction, Roads, stepFrom, walker } from "./walker";
 import { WORDS, addressOf, num, pair, word } from "./words";
 
+type WalkerView = ViewOf<typeof walker>;
+const actions = walker.actions;
+
 /** Where Riya stands, to the block: mid-glide, the block she is leaving. */
-const blockOf = (s: PlaneView): Point =>
+const blockOf = (s: WalkerView): Point =>
   s.isWalking ? (s.trail.at(-1) ?? s.walkFrom ?? s.at) : s.at;
 
 /** What the walker's line says: where she is and, at the target, that she is there. */
-function walkWords(s: PlaneView, locale: Locale): string {
+function walkWords(s: WalkerView, locale: Locale): string {
   const name = word(s.walkerName, locale);
   const now = blockOf(s);
   const from = s.walkFrom;
@@ -52,7 +56,7 @@ function walkWords(s: PlaneView, locale: Locale): string {
  * The longest the walker's line can be: what it says on arriving at the target, or standing at
  * the window's far corner. The line keeps this much room, so what is under it never moves.
  */
-function longestWalkWords(s: PlaneView, locale: Locale): string {
+function longestWalkWords(s: WalkerView, locale: Locale): string {
   const w = s.window;
   const far = { x: Math.floor(w.xMax), y: Math.floor(w.yMax) };
   // A board that has a target, or can be given one, may say it has arrived: from the start.
@@ -65,8 +69,38 @@ function longestWalkWords(s: PlaneView, locale: Locale): string {
   return said.reduce((a, b) => (b.length > a.length ? b : a), "");
 }
 
+/**
+ * A city of crossing streets: where she may walk every line, the town has streets across as well
+ * (behind the lines, as the town's own streets are).
+ */
+function StreetsAcross({ s, px }: { s: WalkerView; px: FramePixels }): JSX.Element | null {
+  if (s.scene !== Scene.Town || s.roads !== Roads.Grid) return null;
+  const w = s.window;
+  const [x0] = px.toPx(w.xMin, 0);
+  const [x1] = px.toPx(w.xMax, 0);
+  const road = Math.max(6, Math.min(16, unitOf(px) * 0.32));
+  return (
+    <g class="cp-town">
+      {marksOn(Marks.Counts, w.yMin, w.yMax, 1).map((y) => {
+        const [, sy] = px.toPx(0, y);
+        return (
+          <line
+            key={`a${y}`}
+            class="cp-street"
+            x1={x0}
+            y1={sy}
+            x2={x1}
+            y2={sy}
+            stroke-width={road * 0.7}
+          />
+        );
+      })}
+    </g>
+  );
+}
+
 /** Riya's route so far and Riya where she stands now. */
-function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: Locale }) {
+function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale: Locale }) {
   const from = s.walkFrom;
   if (from === null) return null;
   const path = [from, ...s.trail.slice(0, s.isWalking ? -1 : undefined), s.at]
@@ -105,11 +139,11 @@ function WalkerDraw({ s, px, locale }: { s: PlaneView; px: FramePixels; locale: 
 }
 
 /** The walker layer's drawing: Riya and her route, her line under the plane, the arrows. */
-export const walkerView: LayerView = {
-  isOn: (s) => isLayerOn(walker, s),
-  picture: ({ s, px, locale }) => <WalkerDraw s={s} px={px} locale={locale} />,
+export const walkerDrawing = drawing(walker, {
+  back: ({ s, px }) => <StreetsAcross s={s} px={px} />,
+  on: ({ s, px, locale }) => <WalkerDraw s={s} px={px} locale={locale} />,
   // Her line keeps room for the most it can say, from the start: no step moves the arrows.
-  lines: ({ s, locale }) =>
+  below: ({ s, locale }) =>
     !s.showWhere ? null : (
       <p class="cp-line cp-roomy">
         {s.trail.length > 0 ? (
@@ -163,4 +197,4 @@ export const walkerView: LayerView = {
         </span>
       </div>
     ),
-};
+});

@@ -1,14 +1,16 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, does, isLayerOn, shows } from "@chalk/prop";
+import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type Still, clues, stillPossible } from "./clues";
-import { type LayerView, actions } from "./layer-view";
-import type { PlaneView } from "./plane-view";
+import { PlaneTap, drawing } from "./layer-view";
 import { WORDS, num, pair, word } from "./words";
 
+type CluesView = ViewOf<typeof clues>;
+const actions = clues.actions;
+
 /** The clues given so far, in their words, in the order given. */
-const givenWords = (s: PlaneView, locale: Locale): string =>
+const givenWords = (s: CluesView, locale: Locale): string =>
   s.given
     .flatMap((g) => (s.clueChoices[g] === undefined ? [] : [s.clueChoices[g].words[locale]]))
     .join(", ");
@@ -18,7 +20,7 @@ function StillDraw({
   s,
   still,
   px,
-}: { s: PlaneView; still: Still; px: FramePixels }): JSX.Element | null {
+}: { s: CluesView; still: Still; px: FramePixels }): JSX.Element | null {
   const w = s.window;
   const unit = s.unit === "" ? "" : `\u00a0${s.unit}`;
   // Each distance given, measured from its line: dashed, with its value.
@@ -103,8 +105,7 @@ function StillDraw({
 }
 
 /** The clues layer's drawing: where the point could be, the hidden dot, the clues' buttons. */
-export const cluesView: LayerView = {
-  isOn: (s) => isLayerOn(clues, s),
+export const cluesDrawing = drawing(clues, {
   // A picture of clues already given: they are its caption, in the order given.
   above: ({ s, locale }) =>
     s.canGiveClues || s.given.length === 0 ? null : (
@@ -112,8 +113,13 @@ export const cluesView: LayerView = {
         {givenWords(s, locale)}
       </p>
     ),
-  under: ({ s, px }) => <StillDraw s={s} still={stillPossible(s, s.given)} px={px} />,
-  over: ({ s, px }) => {
+  back: ({ s, px }) => <StillDraw s={s} still={stillPossible(s, s.given)} px={px} />,
+  // The learner hides their own point with a tap on the plane, on a whole-number point.
+  on: ({ s, px, call }) =>
+    !s.canHide ? null : (
+      <PlaneTap window={s.window} px={px} step={1} action={actions.hideAt} call={call} />
+    ),
+  front: ({ s, px }) => {
     const hidden = s.hidden;
     if (hidden === null || !s.isHiddenShown) return null;
     const [cx, cy] = px.toPx(hidden.x, hidden.y);
@@ -158,4 +164,4 @@ export const cluesView: LayerView = {
       </>
     );
   },
-};
+});

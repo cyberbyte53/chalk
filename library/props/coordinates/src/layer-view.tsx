@@ -1,69 +1,94 @@
 import type { Locale } from "@chalk/content";
-import { type PropViewProps, useFrame } from "@chalk/player";
-import { type FramePixels, says } from "@chalk/prop";
+import { type PartDrawing, type PropViewProps, useFrame } from "@chalk/player";
+import {
+  type ActionSpec,
+  type FramePixels,
+  type StoredState,
+  type ViewOf,
+  says,
+} from "@chalk/prop";
 import type { JSX } from "preact";
-import { coordinatePlane } from "./coordinate-plane";
-import { isInWindow } from "./plane";
-import type { PlaneView } from "./plane-view";
+import { type PlaneWindow, isInWindow } from "./plane";
 
 /**
- * What every layer's view draws with (view.tsx composes them). A layer's drawing lives in its own
- * file, next to its logic (walker.ts, walker-view.tsx), and fills the slots it uses:
+ * What every part of the coordinate plane draws with. A part's drawing lives in its own file,
+ * next to its logic (walker.ts, walker-view.tsx), and fills the places it uses (the group orders
+ * them, coordinate-plane.ts):
  *
  * - above: lines over the plane (the address, a caption, the table to plot);
- * - under: the picture's back, under the lines and numbers (where a hidden point could be);
- * - picture: on the lines (the places, the walker);
- * - over: on top of everything (plotted dots, a hidden dot, counters, the point read);
- * - lines: lines under the plane (where the walker is, the next pair, the dice);
+ * - back: the picture's back, under the lines and numbers (where a hidden point could be);
+ * - on: on the lines (the places, the walker);
+ * - front: on top of everything (plotted dots, a hidden dot, counters, the point read);
+ * - below: lines under the plane (where the walker is, the next pair, the dice);
  * - controls: its buttons.
  *
- * Whether a layer is drawn is its own rule (the layer's isOn), not worked out again here.
+ * Whether a part is drawn at all is the group's `show`, not worked out again here.
  */
-export type LayerViewProps = {
-  s: PlaneView;
-  px: FramePixels;
-  call: PropViewProps<typeof coordinatePlane>["call"];
+type Def = { readonly actions: object; readonly state: unknown };
+export type SlotProps<P extends Def> = {
+  s: ViewOf<P>;
+  call: PropViewProps<P>["call"];
   locale: Locale;
 };
+/** In the picture, also the frame's map from the plane's units to pixels. */
+export type PictureProps<P extends Def> = SlotProps<P> & { px: FramePixels };
 
-type Slot = (p: LayerViewProps) => JSX.Element | null;
-
-export type LayerView = {
-  isOn: (s: PlaneView) => boolean;
-  above?: Slot;
-  under?: Slot;
-  picture?: Slot;
-  over?: Slot;
-  lines?: Slot;
-  controls?: Slot;
+type Slot<Q> = (p: Q) => JSX.Element | null;
+type Slots<P extends Def> = {
+  above?: Slot<SlotProps<P>>;
+  back?: Slot<PictureProps<P>>;
+  on?: Slot<PictureProps<P>>;
+  front?: Slot<PictureProps<P>>;
+  below?: Slot<SlotProps<P>>;
+  controls?: Slot<SlotProps<P>>;
 };
 
-export const actions = coordinatePlane.actions;
-/** A tap that plots lands on the nearest quarter: the book's pairs go to 1.25. */
-export const PLOT_STEP = 0.25;
+const PICTURE = new Set(["back", "on", "front"]);
 
-/** A tap anywhere on the plane: plots the next pair, or hides the learner's own point. */
-export function PlaneTap({
-  s,
+/** A part's drawing in each of its places, from functions of its own view. */
+export function drawing<P extends Def>(_def: P, slots: Slots<P>): PartDrawing {
+  const out: Record<string, (p: PropViewProps) => JSX.Element | null> = {};
+  for (const [place, draw] of Object.entries(slots) as [string, Slot<PictureProps<P>>][]) {
+    out[place] = function Part({ view, call, locale }: PropViewProps) {
+      const px = useFrame()?.px;
+      // Inside the picture a part draws through the frame; there is none when drawn alone.
+      if (PICTURE.has(place) && px === undefined) return null;
+      return draw({
+        s: view as ViewOf<P>,
+        call: call as never,
+        locale,
+        px: px as FramePixels,
+      });
+    };
+  }
+  return out as PartDrawing;
+}
+
+/**
+ * A tap anywhere on the plane, snapped to `step`, doing `action` there: the next pair plotted, the
+ * learner's own hidden point.
+ */
+export function PlaneTap<S extends StoredState>({
+  window: w,
   px,
+  step,
+  action,
   call,
 }: {
-  s: PlaneView;
+  window: PlaneWindow;
   px: FramePixels;
-  call: PropViewProps<typeof coordinatePlane>["call"];
-}): JSX.Element | null {
+  step: number;
+  action: ActionSpec<S, { x: number; y: number }>;
+  call: (action: ActionSpec<S, { x: number; y: number }>, at: { x: number; y: number }) => void;
+}): JSX.Element {
   const frame = useFrame();
-  const isPlotting = s.toPlot.length > 0 && s.plotted.length < s.toPlot.length;
-  const isHiding = !isPlotting && s.canHide && s.clueChoices.length > 0;
-  if (!isPlotting && !isHiding) return null;
-  const w = s.window;
   const [x0, y0] = px.toPx(w.xMin, w.yMax);
   const [x1, y1] = px.toPx(w.xMax, w.yMin);
-  const snap = (v: number, step: number) => Number((Math.round(v / step) * step).toFixed(6));
+  const snap = (v: number) => Number((Math.round(v / step) * step).toFixed(6));
   return (
     <rect
       class="cp-plane-tap"
-      {...says(isPlotting ? actions.plotAt : actions.hideAt)}
+      {...says(action)}
       x={x0}
       y={y0}
       width={x1 - x0}
@@ -73,11 +98,8 @@ export function PlaneTap({
           e,
           () => {},
           ([x, y]) => {
-            const step = isPlotting ? PLOT_STEP : 1;
-            const at = { x: snap(x, step), y: snap(y, step) };
-            if (!isInWindow(w, at)) return;
-            if (isPlotting) call(actions.plotAt, at);
-            else call(actions.hideAt, at);
+            const at = { x: snap(x), y: snap(y) };
+            if (isInWindow(w, at)) call(action, at);
           },
         )
       }

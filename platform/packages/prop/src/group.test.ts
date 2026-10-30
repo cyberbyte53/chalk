@@ -337,6 +337,37 @@ describe("groups", () => {
     );
   });
 
+  it("lets two children each be given the other's facts: only a loop of bound fields is one", () => {
+    // a gets b's own text, b gets a's own value: neither reads what the other is given.
+    const pair = defineGroup({
+      type: "pair",
+      role: PropRole.Explainer,
+      describe: "",
+      children: { a: stepper, b: text, c: text },
+      is: { c: (s) => ({ tex: `${s.a.value}` }), a: (s) => ({ min: s.c.tex === "" ? -1 : -2 }) },
+      summary: () => "",
+      layout: { kind: "column", children: ["a", "b", "c"] },
+    });
+    const start = initialState(pair, { a: { value: 2 } });
+    if (!start.isOk) throw new Error(start.errors.join());
+    const v = viewOf(pair, start.state) as unknown as { a: { min: number }; c: { tex: string } };
+    expect(v.c.tex).toBe("2");
+    expect(v.a.min).toBe(-2);
+  });
+
+  it("an action the group answers (WHEN) may change any child; one that sets nothing changes none", () => {
+    // The stepper's change is answered by put, which changes the group's own facts.
+    expect(machine.actions["input.change"]?.changes).toEqual(
+      expect.arrayContaining(["tried", "input", "working", "dial", "note"]),
+    );
+    const start = initialState(machine, {});
+    if (!start.isOk) throw new Error(start.errors.join());
+    const prepared = prepareAction(machine, start.state, "input.change", { to: 1 });
+    if (!prepared.isOk || prepared.effect.kind !== EffectKind.Set) throw new Error("instant");
+    // What changed is the stepper and what put tried; the rest isn't in the change at all.
+    expect(Object.keys(prepared.effect.set).sort()).toEqual(["input", "tried"]);
+  });
+
   it("refuses bindings that read each other in a loop", () => {
     expect(() =>
       defineGroup({

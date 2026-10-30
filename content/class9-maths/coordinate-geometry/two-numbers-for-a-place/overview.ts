@@ -1,5 +1,6 @@
 import { type At, inOrder, page, t, wait } from "@chalk/author";
 import {
+  type PlaneSetup,
   bareClassroom,
   bareNotebook,
   bareTown,
@@ -7,6 +8,7 @@ import {
   gridOf,
   isAt,
   isPlaced,
+  setup,
   walkTo,
   wordsOn,
 } from "@chalk/patterns";
@@ -28,22 +30,28 @@ const busStops = page("bus-stops", (b) => {
     "A refresher on the number line: from the bus stand at 0, the bus moves stop by stop either way, and one number (how far, and which side) fixes where it is.",
   );
   const road = b.prop(coordinatePlaneDef, "road", {
-    window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
-    axes: Axes.Horizontal,
-    marks: Marks.Numbers,
-    showAxisNames: false,
-    showOrigin: false,
-    places: [
-      { x: 0, y: 0, label: t("bus stand", "बस अड्डा") },
-      ...[-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
-    ],
-    placeKind: PlaceKind.Crossing,
-    canChooseTarget: false,
-    walkFrom: { x: 0, y: 0 },
-    at: { x: 0, y: 0 },
-    roads: Roads.Grid,
-    walkerKind: WalkerKind.Bus,
-    walkerName: t("The bus", "बस"),
+    plane: {
+      window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
+      axes: Axes.Horizontal,
+      marks: Marks.Numbers,
+      showAxisNames: false,
+      showOrigin: false,
+    },
+    places: {
+      places: [
+        { x: 0, y: 0, label: t("bus stand", "बस अड्डा") },
+        ...[-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
+      ],
+      placeKind: PlaceKind.Crossing,
+      canChooseTarget: false,
+    },
+    walker: {
+      walkFrom: { x: 0, y: 0 },
+      at: { x: 0, y: 0 },
+      roads: Roads.Grid,
+      walkerKind: WalkerKind.Bus,
+      walkerName: t("The bus", "बस"),
+    },
   });
   b.standsFor(road, "a straight road as a number line: the bus stand at 0, stops both ways");
   b.witness(...walkTo(road, 3, 0), ...walkTo(road, -5, 0));
@@ -85,8 +93,8 @@ const busStops = page("bus-stops", (b) => {
     ),
     "enough",
   );
-  b.after(road.on.stepped, atThree, { if: isAt(road, 3, 0) });
-  b.after(road.on.stepped, side, { if: isAt(road, -2, 0) });
+  b.after(road.on.walker.stepped, atThree, { if: isAt(road, 3, 0) });
+  b.after(road.on.walker.stepped, side, { if: isAt(road, -2, 0) });
   b.after(side, enough);
   return [
     w.title(t("A bus on a straight road", "सीधी सड़क पर एक बस")),
@@ -115,13 +123,22 @@ const streetAndHouse = page("street-and-house", (b) => {
   b.purpose(
     "The main road is a number line, and 'Street 4' is one number on it. Then Street 4 rises from the 4, a second number line with five houses, and one number can't say which: 'House 5' is a number on the line that rose. A pair is how far along, then how far up the line that rises there.",
   );
-  const town = b.prop(coordinatePlaneDef, "town", {
-    ...bareTown(),
-    showAddress: true,
-    showWhere: true,
-    canChooseTarget: true,
-    upLines: [],
-  });
+  const town = b.prop(
+    coordinatePlaneDef,
+    "town",
+    setup(bareTown(), {
+      plane: {
+        upLines: [],
+      },
+      places: {
+        showAddress: true,
+        canChooseTarget: true,
+      },
+      walker: {
+        showWhere: true,
+      },
+    }),
+  );
   b.standsFor(
     town,
     "the town's main road, a number line from Riya's corner; the streets not risen yet",
@@ -129,16 +146,16 @@ const streetAndHouse = page("street-and-house", (b) => {
   b.witness(...walkTo(town, 4, 0), wait(5), ...walkTo(town, 0, 5), wait(3));
   const atStreet4 = isAt(town, 4, 0);
   // At the foot of Street 4, the street rises from the road, with its houses.
-  b.when(town.on.stepped, town.call.raiseUpLine({ at: 4 }), atStreet4);
+  b.when(town.on.walker.stepped, town.call.plane.raiseUpLine({ at: 4 }), atStreet4);
   // Its five houses light up; a beat later, Aman's reply marks his house.
   b.when(
-    town.on.risen,
+    town.on.plane.risen,
     inOrder(
-      town.call.lightLine({ axis: "x", value: 4 }),
+      town.call.places.lightLine({ axis: "x", value: 4 }),
       wait(2.5),
-      town.call.chooseTarget({ x: 4, y: 5 }),
+      town.call.places.chooseTarget({ x: 4, y: 5 }),
     ),
-    (at) => at(town).upLines?.length === 1,
+    (at) => at(town).plane.upLines?.length === 1,
   );
   const fiveHouses = w.body(
     t(
@@ -169,11 +186,11 @@ const streetAndHouse = page("street-and-house", (b) => {
     "anyHouse",
   );
   const atAmans = isAt(town, 4, 5);
-  b.after(town.on.risen, fiveHouses, { if: (at) => at(town).upLines?.length === 1 });
-  b.after(town.on.targetChosen, reply, { if: (at) => at(town).target?.x === 4 });
-  b.after(town.on.arrived, [found, anyHouse], { if: atAmans });
-  b.when(town.on.arrived, town.call.raiseAllUpLines(), atAmans);
-  b.passWhen(town.on.arrived, { if: atAmans });
+  b.after(town.on.plane.risen, fiveHouses, { if: (at) => at(town).plane.upLines?.length === 1 });
+  b.after(town.on.places.targetChosen, reply, { if: (at) => at(town).places.target?.x === 4 });
+  b.after(town.on.walker.arrived, [found, anyHouse], { if: atAmans });
+  b.when(town.on.walker.arrived, town.call.plane.raiseAllUpLines(), atAmans);
+  b.passWhen(town.on.walker.arrived, { if: atAmans });
   return [
     w.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
     w.body(
@@ -202,34 +219,43 @@ const dotOnPaper = page("dot-on-paper", (b) => {
   b.purpose(
     'A dot on a notebook page, which has no roads. The book\'s ways of saying where it is, one at a time, each shading where it could still be: "upper half" half the page, "near the left edge" a patch, 5 cm from the left edge a whole line, and 9 cm above the bottom one point, where the two lines cross.',
   );
-  const sheet = b.prop(coordinatePlaneDef, "sheet", {
-    ...bareNotebook(),
-    // No numbers on the edges at first: they would say where the dot is. An edge becomes a ruler
-    // once a distance along it is given (the rules below).
-    numbered: [],
-    point: null,
-    reading: Reading.None,
-    // The dot is on the page from the start: the question is how to say where it is.
-    hidden: { x: 5, y: 9 },
-    isHiddenShown: true,
-    clueChoices: [
-      {
-        words: t("It is in the upper half", "यह ऊपरी आधे भाग में है"),
-        region: { xMin: 0, xMax: 15, yMin: 6, yMax: 12 },
+  const sheet = b.prop(
+    coordinatePlaneDef,
+    "sheet",
+    setup(bareNotebook(), {
+      plane: {
+        // No numbers on the edges at first: they would say where the dot is. An edge becomes a ruler
+        // once a distance along it is given (the rules below).
+        numbered: [],
       },
-      {
-        words: t("It is near the left edge", "यह बाएँ किनारे के पास है"),
-        region: { xMin: 0, xMax: 6, yMin: 0, yMax: 12 },
+      reading: {
+        point: null,
+        reading: Reading.None,
       },
-      { words: t("It is 5 cm from the left edge", "यह बाएँ किनारे से 5 cm पर है"), x: 5 },
-      { words: t("It is 9 cm above the bottom", "यह नीचे के किनारे से 9 cm ऊपर है"), y: 9 },
-    ],
-  });
+      clues: {
+        // The dot is on the page from the start: the question is how to say where it is.
+        hidden: { x: 5, y: 9 },
+        isHiddenShown: true,
+        clueChoices: [
+          {
+            words: t("It is in the upper half", "यह ऊपरी आधे भाग में है"),
+            region: { xMin: 0, xMax: 15, yMin: 6, yMax: 12 },
+          },
+          {
+            words: t("It is near the left edge", "यह बाएँ किनारे के पास है"),
+            region: { xMin: 0, xMax: 6, yMin: 0, yMax: 12 },
+          },
+          { words: t("It is 5 cm from the left edge", "यह बाएँ किनारे से 5 cm पर है"), x: 5 },
+          { words: t("It is 9 cm above the bottom", "यह नीचे के किनारे से 9 cm ऊपर है"), y: 9 },
+        ],
+      },
+    }),
+  );
   b.standsFor(
     sheet,
     "a notebook page squared in centimetres, with a dot on it, and the ways of saying where it is",
   );
-  b.witness(...[0, 1, 2, 3].map((clue) => sheet.learner.giveClue({ clue })));
+  b.witness(...[0, 1, 2, 3].map((clue) => sheet.learner.clues.giveClue({ clue })));
   const patch = w.body(
     t(
       "Both are true, and the dot could still be anywhere in that patch.",
@@ -251,17 +277,17 @@ const dotOnPaper = page("dot-on-paper", (b) => {
     ),
     "fixed",
   );
-  b.after(sheet.on.clueGiven, patch, { if: (at: At) => at(sheet).given.length === 2 });
-  b.after(sheet.on.clueGiven, line, { if: (at: At) => at(sheet).given.length === 3 });
+  b.after(sheet.on.clues.clueGiven, patch, { if: (at: At) => at(sheet).clues.given.length === 2 });
+  b.after(sheet.on.clues.clueGiven, line, { if: (at: At) => at(sheet).clues.given.length === 3 });
   // "5 cm from the left edge" numbers the bottom edge; "9 cm above the bottom", the left edge.
-  b.when(sheet.on.clueGiven, sheet.call.numberLine({ axis: "x" }), (at: At) =>
-    at(sheet).given.includes(2),
+  b.when(sheet.on.clues.clueGiven, sheet.call.plane.numberLine({ axis: "x" }), (at: At) =>
+    at(sheet).clues.given.includes(2),
   );
-  b.when(sheet.on.clueGiven, sheet.call.numberLine({ axis: "y" }), (at: At) =>
-    at(sheet).given.includes(3),
+  b.when(sheet.on.clues.clueGiven, sheet.call.plane.numberLine({ axis: "y" }), (at: At) =>
+    at(sheet).clues.given.includes(3),
   );
-  b.after(sheet.on.pinned, fixed);
-  b.passWhen(sheet.on.pinned);
+  b.after(sheet.on.clues.pinned, fixed);
+  b.passWhen(sheet.on.clues.pinned);
   return [
     w.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
     w.body(
@@ -283,28 +309,38 @@ const seatingPlan = page("seating-plan", (b) => {
   b.purpose(
     "A desk is named by its column, then its row: (5, 3) and (3, 5) use the same numbers and are two different desks. The one place the lesson asks about the order.",
   );
-  const room = b.prop(coordinatePlaneDef, "room", {
-    ...bareClassroom(),
-    places: gridOf(10, 7).map((p) =>
-      p.x === 4 && p.y === 1 ? { ...p, label: t("Sonia", "सोनिया") } : p,
-    ),
-    showAddress: true,
-    targetName: t("This desk", "यह डेस्क"),
-    points: [
-      { name: "(5, 3)", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
-      { name: "(3, 5)", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
-    ],
-  });
+  const room = b.prop(
+    coordinatePlaneDef,
+    "room",
+    setup(bareClassroom(), {
+      plane: {
+        points: [
+          { name: "(5, 3)", x: 5, y: 3, isShown: false, hasDropLines: false, tone: Tone.Accent },
+          { name: "(3, 5)", x: 3, y: 5, isShown: false, hasDropLines: false, tone: Tone.Accent },
+        ],
+      },
+      places: {
+        places: gridOf(10, 7).map((p) =>
+          p.x === 4 && p.y === 1 ? { ...p, label: t("Sonia", "सोनिया") } : p,
+        ),
+        showAddress: true,
+        targetName: t("This desk", "यह डेस्क"),
+      },
+    }),
+  );
   for (const [name, x, y] of [
     ["(5, 3)", 5, 3],
     ["(3, 5)", 3, 5],
   ] as const)
-    b.when(room.on.targetChosen, room.call.showPoint({ name }), (at) => {
-      const target = at(room).target;
+    b.when(room.on.places.targetChosen, room.call.plane.showPoint({ name }), (at) => {
+      const target = at(room).places.target;
       return target !== null && target.x === x && target.y === y;
     });
   b.standsFor(room, "the classroom's 10 columns and 7 rows of desks, Sonia's at column 4, row 1");
-  b.witness(room.learner.chooseTarget({ x: 5, y: 3 }), room.learner.chooseTarget({ x: 3, y: 5 }));
+  b.witness(
+    room.learner.places.chooseTarget({ x: 5, y: 3 }),
+    room.learner.places.chooseTarget({ x: 3, y: 5 }),
+  );
   const same = choiceQuestion(b, {
     name: "same",
     prompt: t(
@@ -327,10 +363,11 @@ const seatingPlan = page("seating-plan", (b) => {
     ],
     answer: "no",
   });
-  b.after(room.on.targetChosen, same, {
+  b.after(room.on.places.targetChosen, same, {
     if: (at) =>
-      at(room).points.every(
-        (p) => p.isShown || (at(room).target?.x === p.x && at(room).target?.y === p.y),
+      at(room).plane.points.every(
+        (p) =>
+          p.isShown || (at(room).places.target?.x === p.x && at(room).places.target?.y === p.y),
       ),
   });
   return [
@@ -358,7 +395,7 @@ const twoLines = page("two-lines", (b) => {
   b.purpose(
     "The house, the dot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry.",
   );
-  const still = (name: string, given: Record<string, unknown>, says: ReturnType<typeof t>) =>
+  const still = (name: string, given: PlaneSetup, says: ReturnType<typeof t>) =>
     b.prop(coordinatePlaneDef, name, given, { still: says, size: { maxHeight: 0.35 } });
   const route = (x: number, y: number) => [
     ...Array.from({ length: x }, (_, i) => ({ x: i + 1, y: 0 })),
@@ -366,15 +403,20 @@ const twoLines = page("two-lines", (b) => {
   ];
   const house = still(
     "house",
-    {
-      ...bareTown(5, 5),
-      showAddress: true,
-      target: { x: 4, y: 5 },
-      at: { x: 4, y: 5 },
-      trail: route(4, 5),
-      canStep: false,
-      showAxisNames: false,
-    },
+    setup(bareTown(5, 5), {
+      plane: {
+        showAxisNames: false,
+      },
+      places: {
+        showAddress: true,
+        target: { x: 4, y: 5 },
+      },
+      walker: {
+        at: { x: 4, y: 5 },
+        trail: route(4, 5),
+        canStep: false,
+      },
+    }),
     t(
       "The town: Riya's route along the main road to Street 4, then up it to House 5.",
       "शहर: रिया का रास्ता, मुख्य सड़क पर गली 4 तक, फिर उसमें मकान 5 तक।",
@@ -382,19 +424,22 @@ const twoLines = page("two-lines", (b) => {
   );
   const spot = still(
     "spot",
-    {
-      ...bareNotebook(),
-      point: null,
-      // The dot as the student left it on dot-on-paper: both distances given, their lines crossing.
-      hidden: { x: 5, y: 9 },
-      isHiddenShown: true,
-      clueChoices: [
-        { words: t("The dot: 5\u00a0cm from the left edge", "बिंदु: बाएँ किनारे से 5\u00a0cm"), x: 5 },
-        { words: t("9\u00a0cm above the bottom", "नीचे के किनारे से 9\u00a0cm ऊपर"), y: 9 },
-      ],
-      given: [0, 1],
-      canGiveClues: false,
-    },
+    setup(bareNotebook(), {
+      reading: {
+        point: null,
+      },
+      clues: {
+        // The dot as the student left it on dot-on-paper: both distances given, their lines crossing.
+        hidden: { x: 5, y: 9 },
+        isHiddenShown: true,
+        clueChoices: [
+          { words: t("The dot: 5\u00a0cm from the left edge", "बिंदु: बाएँ किनारे से 5\u00a0cm"), x: 5 },
+          { words: t("9\u00a0cm above the bottom", "नीचे के किनारे से 9\u00a0cm ऊपर"), y: 9 },
+        ],
+        given: [0, 1],
+        canGiveClues: false,
+      },
+    }),
     t(
       "The notebook page: the dot 5 cm from the left edge and 9 cm above the bottom, each distance drawn.",
       "कॉपी का पन्ना: बिंदु बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर, हर दूरी खिंची हुई।",
@@ -402,16 +447,19 @@ const twoLines = page("two-lines", (b) => {
   );
   const desk = still(
     "desk",
-    {
-      ...bareClassroom(6, 4),
-      showAddress: true,
-      targetName: t("The desk", "डेस्क"),
-      target: { x: 5, y: 3 },
-      canChooseTarget: false,
-      points: [
-        { name: "(5, 3)", x: 5, y: 3, isShown: true, hasDropLines: true, tone: Tone.Accent },
-      ],
-    },
+    setup(bareClassroom(6, 4), {
+      plane: {
+        points: [
+          { name: "(5, 3)", x: 5, y: 3, isShown: true, hasDropLines: true, tone: Tone.Accent },
+        ],
+      },
+      places: {
+        showAddress: true,
+        targetName: t("The desk", "डेस्क"),
+        target: { x: 5, y: 3 },
+        canChooseTarget: false,
+      },
+    }),
     t(
       "The classroom: the desk at column 5, row 3, with its distances to the front row and the first column drawn.",
       "कक्षा: स्तंभ 5, पंक्ति 3 वाली डेस्क, आगे की पंक्ति और पहले स्तंभ से उसकी दूरियाँ खिंची हुई।",

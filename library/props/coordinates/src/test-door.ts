@@ -1,22 +1,23 @@
 import {
   type AnyPropDef,
   EffectKind,
-  type PropDef,
   type Raised,
-  type StoredState,
   applyPatch,
-  asAnyProp,
   isInstant,
   playAction,
   prepareAction,
   viewOf,
 } from "@chalk/prop";
+import type { ZodType, z } from "zod";
 
-/** For tests: runs actions through the one door, as the player does. */
-export function door<S extends StoredState, A extends string, G extends string, D extends string>(
-  prop: PropDef<S, A, G, D>,
-) {
-  const def: AnyPropDef = asAnyProp(prop);
+/**
+ * For tests: runs actions through the one door, as the player does. A part on its own, or the
+ * whole coordinate plane (its parts' actions by path: "walker.step").
+ */
+export function door<P extends { readonly state: ZodType; readonly actions: object }>(prop: P) {
+  type S = z.infer<P["state"]>;
+  type A = keyof P["actions"] & string;
+  const def = prop as unknown as AnyPropDef;
   const effectOf = (state: S, name: A, args: Record<string, unknown>) => {
     const result = prepareAction(def, state, name, args);
     if (!result.isOk) throw new Error(result.errors.join("; "));

@@ -6,6 +6,8 @@ export { bagTex, frac, primesTex } from "./latex";
 export { wordsOn } from "./words";
 export {
   bareClassroom,
+  type PlaneSetup,
+  setup,
   bareNotebook,
   TOWN,
   bareTown,

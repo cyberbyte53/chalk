@@ -1,7 +1,7 @@
 import { localizedSchema } from "@chalk/content";
-import { actionsFor, layersFor, onWhen, raise, set, signal } from "@chalk/prop";
+import { PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import { type PlaneCore, type Point, pointSchema } from "./plane";
+import { type Line, type PlaneCore, type Point, fromPlane, lineSchema, pointSchema } from "./plane";
 
 /** What a place is drawn as. */
 export const PlaceKind = {
@@ -22,25 +22,17 @@ export const placeSchema = z
   .strict();
 export type Place = z.infer<typeof placeSchema>;
 
-/** Every place with one number: all the houses on a street (x), or along a row (y). */
-export const lineSchema = z.object({ axis: z.enum(["x", "y"]), value: z.number() }).strict();
+/** The plane's fields the places are drawn by. */
+export const placesReads = fromPlane("window", "axisNames", "rising", "upLines");
 
-export type PlacesState = PlaceCoreFields & PlaneCore;
-type PlaceCoreFields = {
+export type PlacesState = Pick<PlaneCore, (typeof placesReads.keys)[number]> & {
   placeKind: PlaceKind;
   places: Place[];
   target: Point | null;
   targetName: z.infer<typeof localizedSchema>;
   canChooseTarget: boolean;
-  lit: z.infer<typeof lineSchema> | null;
+  lit: Line | null;
   showAddress: boolean;
-} & Partial<WalkerBack>;
-/** The walker's fields a new target resets (when there is a walker): back to her start. */
-type WalkerBack = {
-  walkFrom: Point | null;
-  at: Point;
-  trail: Point[];
-  isWalking: boolean;
 };
 
 const MAX_PLACES = 120;
@@ -58,31 +50,41 @@ const act = actionsFor<PlacesState>();
 const none = z.object({}).strict();
 
 export const placesSignals = {
-  targetChosen: signal("A place was made the target (Aman's house): its address (`x`, `y`)"),
+  targetChosen: signal(
+    "A place was made the target (Aman's house): its address (`x`, `y`); `isAnother` when another was the target before",
+  ),
   lineLit: signal("Every place with one number is lit: `axis` = `value`, `count` places"),
 };
 
-export const places = layersFor<PlacesState>()({
-  name: "places",
-  frame: "plane",
+/** Whether the places are drawn: there are some. */
+export const arePlacesOn = (s: Pick<PlacesState, "places">) => s.places.length > 0;
+
+export const places = defineProp({
+  type: "planePlaces",
+  role: PropRole.Explainer,
+  drawsOn: "plane",
   describe:
     "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target, whose address (its two numbers) is shown; showing one number alone lights every place that has it.",
-  fields: {
-    placeKind: z.nativeEnum(PlaceKind),
-    /** The places, at whole-number points. */
-    places: z.array(placeSchema).max(MAX_PLACES),
-    /** The place someone is looking for (Aman's house), or null. */
-    target: pointSchema.nullable(),
-    /** What the target is called on screen ("Aman's house"). */
-    targetName: localizedSchema,
-    /** Whether a tap on a place makes it the target. */
-    canChooseTarget: z.boolean(),
-    /** One number alone, and every place that has it lit, or null. */
-    lit: lineSchema.nullable(),
-    /** Whether the target's address is written above the plane (off when it is the answer). */
-    showAddress: z.boolean(),
-  },
+  state: z
+    .object({
+      ...placesReads.fields,
+      placeKind: z.nativeEnum(PlaceKind),
+      /** The places, at whole-number points. */
+      places: z.array(placeSchema).max(MAX_PLACES),
+      /** The place someone is looking for (Aman's house), or null. */
+      target: pointSchema.nullable(),
+      /** What the target is called on screen ("Aman's house"). */
+      targetName: localizedSchema,
+      /** Whether a tap on a place makes it the target. */
+      canChooseTarget: z.boolean(),
+      /** One number alone, and every place that has it lit, or null. */
+      lit: lineSchema.nullable(),
+      /** Whether the target's address is written above the plane (off when it is the answer). */
+      showAddress: z.boolean(),
+    })
+    .strict(),
   defaults: {
+    ...placesReads.defaults,
     placeKind: PlaceKind.House,
     places: [],
     target: null,
@@ -91,30 +93,25 @@ export const places = layersFor<PlacesState>()({
     lit: null,
     showAddress: true,
   },
-  on: onWhen(["places"], (s) => s.places.length > 0),
   actions: {
     chooseTarget: act({
-      describe:
-        "Make the place at (x, y) the target; its address is shown, and if another was chosen before, a walker goes back to her start (the learner's tap)",
+      describe: "Make the place at (x, y) the target; its address is shown (the learner's tap)",
       byLearner: true,
       args: pointSchema,
-      changes: ["target", "lit", "at", "trail", "isWalking"],
+      changes: ["target", "lit"],
       run: (s, p) => {
         if (!s.canChooseTarget || !isPlace(s, p)) return set({});
         const target = { x: p.x, y: p.y };
-        const emit = raise(placesSignals.targetChosen, p);
-        // Another house, once one was chosen, is a new walk, from the corner. (The first one is
-        // only marked: Riya may be on her way to it.)
-        const start = s.walkFrom ?? null;
-        return start === null || s.target === null
-          ? set({ target, lit: null }, emit)
-          : set({ target, lit: null, at: start, trail: [], isWalking: false }, emit);
+        const isAnother = s.target !== null;
+        return set(
+          { target, lit: null },
+          raise(placesSignals.targetChosen, { ...target, isAnother }),
+        );
       },
     }),
     lightLine: act({
       describe:
-        "Light every place with this one number: all the houses on Street 4 (the learner's button)",
-      byLearner: true,
+        "Light every place with this one number: all the houses on Street 4 (on the coordinate plane, the learner taps the number)",
       args: lineSchema,
       changes: ["lit"],
       run: (s, line) => {
