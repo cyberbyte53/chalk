@@ -7,6 +7,7 @@
 | [making-a-prop.md](./making-a-prop.md) | Adding a prop, step by step (for people and AI agents) |
 | [glossary.md](./glossary.md) | The one name for each concept |
 | [architecture.md](./architecture.md) | The repo map, layers, and how a lesson plays |
+| [event-model.md](./event-model.md) | Proposal: elements, events, values and one time queue in place of today's ten concepts |
 | [code-conventions.md](./code-conventions.md) | How code is written here |
 | [events.md](./events.md) | Events: what is recorded, the shape, a real example, processors on the server |
 | [authoring-pipeline.md](./authoring-pipeline.md) | Proposal: the authoring steps and gates, threads on every file with path pointers |
