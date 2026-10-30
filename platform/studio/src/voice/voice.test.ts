@@ -36,6 +36,11 @@ describe("generateAudio", () => {
     expect(result.manifest.files["race.met.hi"]).toBeDefined(); // a note the board says, in Hindi
     for (const file of Object.values(result.manifest.files))
       expect(existsSync(join(dir, file))).toBe(true);
+    // How long each line plays, measured from its file, for every line.
+    expect(Object.keys(result.manifest.seconds ?? {}).sort()).toEqual(
+      Object.keys(result.manifest.files).sort(),
+    );
+    expect(result.manifest.seconds?.["share.title.en"]).toBeGreaterThan(0);
     expect(result.reused).toBe(0);
   });
   it("only speaks lines that changed", async () => {

@@ -7,6 +7,7 @@ The prop contract (see [docs/board-model.md](../../docs/board-model.md)). Every 
 - `board.ts`: the board itself as a prop (`pass`, `show`, `hide`, `continue`; `started`, `continued`).
 - `question.ts`: the question role every question prop shares.
 - `color.ts`: `colorSchema`, a colour a prop can be drawn in: a role of the look (`Color.Primary`, follows the theme) or any `#rrggbb`. `Color` and `cssColor` are re-exported from `@chalk/look`.
+- `next/`: the event model (platform/docs/event-model.md), built beside the above until props move over (`@chalk/prop/next`): `prop`, `action`, `signal`, needs, the `Board` (one door, instant events as calls, the time queue, planned moves, replay).
 - `expression.ts`: the read-only expression language used in rules (parsed, never run as code).
 
 May import: `@chalk/look` (names only), `zod`. No UI.

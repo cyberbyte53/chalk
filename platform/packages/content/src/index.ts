@@ -2,6 +2,7 @@ export {
   type AudioManifest,
   audioKey,
   audioManifestSchema,
+  estimatedSeconds,
   compileReadings,
   NARRATOR,
   type Pronunciations,

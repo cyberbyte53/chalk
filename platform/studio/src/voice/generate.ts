@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   type AudioManifest,
@@ -14,6 +14,7 @@ import {
 import { type AnyPropDef, initialState, segment } from "@chalk/prop";
 import { z } from "zod";
 import { spokenPropsOf } from "../validate";
+import { audioSeconds } from "./length";
 import type { TtsProvider } from "./provider";
 
 /** The speaker anyone without their own entry falls back to (e.g. one voice for the whole cast). */
@@ -98,6 +99,7 @@ export async function generateAudio(
   const folder = join("audio", lessonName);
   mkdirSync(join(publishedDir, folder), { recursive: true });
   const files: Record<string, string> = {};
+  const seconds: Record<string, number> = {};
   let made = 0;
   let reused = 0;
   const fileOf = (line: Line) => {
@@ -119,9 +121,10 @@ export async function generateAudio(
         made++;
       }
       files[line.key] = relative;
+      seconds[line.key] = audioSeconds(readFileSync(absolute), provider.extension);
     }
   } finally {
     await provider.close?.();
   }
-  return { manifest: { provider: provider.id, files }, made, reused };
+  return { manifest: { provider: provider.id, files, seconds }, made, reused };
 }

@@ -62,9 +62,9 @@ export const walker = prop({
 
 A prop that is used in more than one place says what it needs and nothing more. Any holder that can give it those things works with it. The white screen is used in both the lens bench and the mirror bench, and works the same in each.
 - **When the names match**, the holder writes nothing: the lens has `isSharp`, so the screen gets the lens's `isSharp`.
-- **When a name differs**, the holder writes one line: `screen: { isSharp: (s) => s.imageIsSharp }`.
-- **A holder that can't give a need** fails `pnpm check`, the same way a template that doesn't fit fails to compile.
-- **Needs are read live, every time.** They are never copied, so they can never go stale.
+- **When a name differs**, the holder writes one line for that need: `give: { screen: { isSharp: (me) => me.imageIsSharp } }`. A child's name never counts as a value it gives.
+- **A holder that can't give a need** fails `pnpm check`, the same way a template that doesn't fit fails to compile. A need given by name is also checked against what the child says it is, as it is read.
+- **Needs are read live, every time,** one at a time. They are never copied, so they can never go stale.
 
 This is today's `is` (the coordinate plane's `pick(s.plane, walkerReads.keys)`), but you write a line only when a name differs. It is the one way to read another prop: Riya needs `upLines` the same way the screen needs `isSharp`, so any prop can later be reused unchanged.
 
@@ -72,7 +72,7 @@ This is today's `is` (the coordinate plane's `pick(s.plane, walkerReads.keys)`),
 
 - **An action** asks one prop to do something, and the prop may refuse ("this street isn't there yet").
 - **A signal** is news that something has happened. The prop that sends it doesn't know who listens.
-- **Who hears what.** A prop listens to signals from inside the prop that holds it. A lesson listens to its pieces' signals by name (`town.walker.arrived`). With three planes on one board, each plane's signals stay with that plane.
+- **Who hears what.** A signal goes **up**: to the prop holding the one that told it, then to the prop holding that one, and on to the board, nearest first. Each one with a rule for it (`hear: { "places.targetChosen": … }`, `"town.walker.arrived"`) hears it. **Siblings don't hear each other.** The town hears `places.targetChosen` and asks Riya to go back, so Riya never has to know that a "places" exists, and she can be reused as she is (the same reason as needs). With three planes on one board, each plane's signals stay with that plane.
 - **Payloads are typed** and checked when they are sent, as they are today.
 - **The student's events** are the actions marked `from: "screen"`. Agents and Jugnu read "what can the student do" from that list. A drag that ends ("marker let go") is a screen action too, never a signal sent from the drawing.
 
@@ -94,23 +94,25 @@ The order is always the same, so a replay or a check gives the same result every
 - **The queue** holds only events for later, each one with the time it's due. Instant events never go in it.
 - **The loop.** On the student's screen it is the browser's frame loop (about every 16 ms). Each frame, it moves the board clock to now, delivers every entry that is due (earliest first, and same-time entries in the order they were queued), then redraws.
 - **Checks, tests and the build** don't wait: they jump the clock straight to the next entry, so a 36 s board is checked in a blink. `look` and `play` can run the clock faster for watching.
-- **Helpers.** These are functions that only put things in the queue:
-  - `wait(0.3, X)`: X, 0.3 s from now.
-  - `sequence([A, 2.5, B])`: A now, B 2.5 s later.
-  - `repeat(1, X)`: X now, and the next one queued each time it runs.
-  - `glide(…)`: below.
+- **The tools a rule gets.** These only build what the board then does:
+  - `t.later(0.3, X)`: X, 0.3 s from now (a wait). Times below 0 are refused, and a "later" of 0 that keeps coming back is stopped.
+  - `sequence(A, 2.5, B)`: A now, B 2.5 s later.
+  - A repeat is a rule that queues itself again: `tick: (me, _, t) => [..., t.later(1 / 60, t.self.tick())]`.
+  - `t.move(…)`: below.
+  - `t.stop()`: drops everything the prop has queued, and stops its moves where they are.
+- **Replay.** `Board.replay(root, setup, log, until)` plays the student's logged taps again, at their times.
 
 ### Planned moves and ticks
 
 **The test:** when a motion starts, can you say where it will be at every moment?
-- **Yes, a planned move.** Store `{ from, to, startedAt, takes, ease }` and queue its end. The drawing works out where it is each frame. Examples: Riya's glide, a street rising, the number line's zoom, the semicircle's swing, the lap-race clock, the electrolysis cell filling, the motor spinning, the gas (where every particle is follows from `travel`).
+- **Yes, a planned move.** `t.move("at", to, 0.3, { atEnd: [...] })` stores `{ from, to, startedAt, takes, ease }` and queues its end. The drawing works out where it is each frame. Examples: Riya's glide, a street rising, the number line's zoom, the semicircle's swing, the lap-race clock, the electrolysis cell filling, the motor spinning, the gas (where every particle is follows from `travel`).
 - **No, an evolving system.** Each moment depends on the one before, so the prop queues a tick for itself (every 1/60 s) and works out the next small step. Today's only example is collision. A pendulum or bumping particles would be ticks too.
 
 **Rules for moves:**
 - **Reading a moving variable gives its value now.** That holds for rules, facts, checks and drawings alike: mid-glide, Riya is where she is drawn.
-- **Easings have names** (`"linear"`, `"smooth"`, `"log"`), never functions.
+- **Easings have names** (`"linear"`, `"smooth"`; `"log"` comes with the number line), never functions.
 - **Changing a moving variable stops its move** and drops the move's end event. A drag mid-swing stops the swing.
-- **A student action on a prop drops the lesson's queued steps for that prop**, as it does today.
+- **A student action on a prop drops what the props holding it queued for it**, as it does today. Only those steps are dropped; the rest of each queued entry stays.
 - **Ticking on purpose is done in the formula.** A counter that steps by 0.25 s rounds its value: `floor(t / 0.25) * 0.25`.
 
 ### CSS is only decoration
@@ -189,8 +191,8 @@ The same board, step by step:
 
 ## Order of work (each step ends with `pnpm check` green)
 
-1. **The core, beside today's.** `prop` with the parts above; `needs` and their check; instant events and the loop guard; the queue, the loop, jumping and rate; planned moves; the helpers. Tests for order, scope, cancelling, jumping and needs. **Voice:** publish saves each line's length.
-2. **The coordinate plane, its lessons and voice.** Its 7 props and 6 question families, and the lesson's boards, all spoken. Then compare them with today: every board's picture as passed beside now (`changes`), `play` of each board as a student (in English and Hindi, with sound and muted, tapping ahead mid-line), and the chapter's `look`. **If it doesn't read clearly simpler, stop here.**
+1. **The core, beside today's** (`@chalk/prop/next`, which becomes `@chalk/prop` in step 5). `prop` with the parts above; `needs` and their check; instant events and the loop guard; the queue, jumping and replay; planned moves; the tools. Tests for order, scope, cancelling, jumping and needs. **Voice:** publish saves each line's length. *(Done.)*
+2. **The player, the coordinate plane, its lessons and voice.** In the player: `draw`, the frame loop (`advanceTo(now × rate)` each frame, faster for `look` and `play`), and `say` as a "later" of the line's length. Its 7 props and 6 question families, and the lesson's boards, all spoken. Then compare them with today: every board's picture as passed beside now (`changes`), `play` of each board as a student (in English and Hindi, with sound and muted, tapping ahead mid-line), and the chapter's `look`. **If it doesn't read clearly simpler, stop here.**
 3. **The other live props** (basics, decimal, primes) **and their lessons.**
 4. **Tools.** `play`, `look`, snapshots, Jugnu's context and the catalogue read actions, signals, needs and the queue ("in 0.3 s: stepped (4, 0)").
 5. **Remove the old**, and rewrite the docs (`making-a-prop.md`, `writing-content.md`, the glossary).
