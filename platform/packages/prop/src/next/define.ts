@@ -1,4 +1,13 @@
 import { type ZodObject, type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
+import {
+  type FrameKindName,
+  type FramePixels,
+  type PropRole,
+  type Spoken,
+  noteNames,
+} from "../define";
+import type { GroupLayoutSpec } from "../group";
+import type { Size } from "../size";
 
 /**
  * The event model's one building block (platform/docs/event-model.md). Every prop has the same
@@ -21,6 +30,8 @@ export type Payload = Readonly<Record<string, unknown>>;
 
 export type ActionDef<P extends Payload = Payload> = {
   readonly payload: ZodType<P, ZodTypeDef, unknown>;
+  /** Phantom: what it carries, for typing a view's `call` (never set). */
+  readonly carries?: P;
   /** The student can ask for it (a tap, a drag, a key). */
   readonly isFromScreen: boolean;
   /** What it does, for an agent reading what the student can do. */
@@ -81,7 +92,9 @@ export type Out =
       readonly atEnd: readonly Out[];
     }
   /** Drops what this prop has queued for later, and stops its moves where they are. */
-  | { readonly kind: "stop" };
+  | { readonly kind: "stop" }
+  /** Says this prop's line (its `speech`) aloud; `said` is told when it ends. */
+  | { readonly kind: "speak" };
 
 /** What a rule returns: one out, several, or nothing (`p.x === 4 && t.tell.arrived(p)`). */
 export type Outs = Out | readonly Out[] | undefined | false | null;
@@ -95,44 +108,44 @@ type Signals = Readonly<Record<string, SignalDef>>;
 declare const parts: unique symbol;
 /** A defined prop's types, kept on it (never set) so they can be read back out. */
 type Parts<V, N, F, A, S, C> = { v: V; n: N; f: F; a: A; s: S; c: C };
-type VarsOf<P> = P extends {
+export type VarsOf<P> = P extends {
   readonly [parts]?: Parts<infer V, unknown, unknown, unknown, unknown, unknown>;
 }
   ? V
   : never;
-type NeedsOf<P> = P extends {
+export type NeedsOf<P> = P extends {
   readonly [parts]?: Parts<unknown, infer N, unknown, unknown, unknown, unknown>;
 }
   ? N
   : never;
-type FactsOf<P> = P extends {
+export type FactsOf<P> = P extends {
   readonly [parts]?: Parts<unknown, unknown, infer F, unknown, unknown, unknown>;
 }
   ? F
   : never;
-type ActionsOf<P> = P extends {
+export type ActionsOf<P> = P extends {
   readonly [parts]?: Parts<unknown, unknown, unknown, infer A, unknown, unknown>;
 }
   ? A
   : never;
-type SignalsOf<P> = P extends {
+export type SignalsOf<P> = P extends {
   readonly [parts]?: Parts<unknown, unknown, unknown, unknown, infer S, unknown>;
 }
   ? S
   : never;
-type ChildrenOf<P> = P extends {
+export type ChildrenOf<P> = P extends {
   readonly [parts]?: Parts<unknown, unknown, unknown, unknown, unknown, infer C>;
 }
   ? C
   : never;
 
-type PayloadOf<D> = D extends { payload: ZodType<infer P, ZodTypeDef, unknown> } ? P : never;
+export type PayloadOf<D> = D extends { payload: ZodType<infer P, ZodTypeDef, unknown> } ? P : never;
 type PayloadArgs<D> = Record<never, never> extends PayloadOf<D>
   ? [payload?: PayloadOf<D>]
   : [payload: PayloadOf<D>];
 
 /** What a prop reads of itself (and its holder of it): variables, needs, facts, children by name. */
-type Me<V, N, F, C> = Readonly<V & N & F> & { readonly [K in keyof C]: ReaderOf<C[K]> };
+export type Me<V, N, F, C> = Readonly<V & N & F> & { readonly [K in keyof C]: ReaderOf<C[K]> };
 
 /** What anyone reads from a prop. */
 export type ReaderOf<P> = Me<VarsOf<P>, NeedsOf<P>, FactsOf<P>, ChildrenOf<P>>;
@@ -189,6 +202,8 @@ export type Tools<V, A, S, C> = {
   ) => Out;
   /** Drops everything this prop has queued, and stops its moves where they are. */
   readonly stop: () => Out;
+  /** Says its line (`speech`) aloud; the board tells this prop's `said` when the line ends. */
+  readonly speak: () => Out;
 };
 
 export type Rule<Me, P, T> = (me: Me, payload: P, t: T) => Outs;
@@ -230,6 +245,26 @@ export type PropSpec<
   readonly hear?: {
     readonly [K in HeardPaths<C>]?: Rule<Me<V, N, F, C>, HeardPayload<C, K>, Tools<V, A, S, C>>;
   };
+
+  // ---- what stays as it is today: how it is drawn, sized and read ----
+
+  /** Its role: a question (the board's chrome reads its status), an explainer, … */
+  readonly role?: PropRole;
+  readonly size?: Size;
+  /** It is a frame others draw on: the plane, a number line's axis. */
+  readonly frame?: {
+    readonly kind: FrameKindName;
+    readonly pixels: (me: Me<V, N, F, C>, width: number) => FramePixels;
+    readonly label?: (me: Me<V, N, F, C>) => string;
+  };
+  /** How its children are laid out (a frame and the places round it, a column). */
+  readonly layout?: GroupLayoutSpec<keyof C & string>;
+  /** Whether a child is drawn now (a child not shown draws nothing). */
+  readonly show?: { readonly [K in keyof C]?: (me: Me<V, N, F, C>) => boolean };
+  /** Its line, shown and spoken (a text, a question's prompt). */
+  readonly speech?: (me: Me<V, N, F, C>) => Spoken | undefined;
+  /** One line saying what it is now, for agents. */
+  readonly summary?: (me: Me<V, N, F, C>) => string;
 };
 
 /** A defined prop. */
@@ -259,6 +294,17 @@ export type AnyProp = {
   >;
   readonly on?: Readonly<Record<string, AnyRule | undefined>>;
   readonly hear?: Readonly<Record<string, AnyRule | undefined>>;
+  readonly role?: PropRole;
+  readonly size?: Size;
+  readonly frame?: {
+    readonly kind: FrameKindName;
+    readonly pixels: (me: never, width: number) => FramePixels;
+    readonly label?: (me: never) => string;
+  };
+  readonly layout?: GroupLayoutSpec;
+  readonly show?: Readonly<Record<string, ((me: never) => boolean) | undefined>>;
+  readonly speech?: (me: never) => Spoken | undefined;
+  readonly summary?: (me: never) => string;
 };
 
 /**
@@ -317,7 +363,16 @@ export function prop<
         `${where}: its child ${name} (${child.type}) needs ${missing.join(", ")}, which ${spec.type} doesn't have: add them, or give them (give.${name})`,
       );
   }
-  return spec as Prop<V, N, F, A, S, C>;
+  // Views, tags and scripts pass actions and signals as themselves: their names are noted here.
+  noteNames(spec.type, spec.actions);
+  noteNames(spec.type, spec.signals);
+  // Today's drawing reads a group's layout and children (`groupOf`) and a state's `defaults`.
+  const compat =
+    spec.layout === undefined
+      ? {}
+      : { group: { layout: spec.layout, children: spec.children ?? {} } };
+  // Safe: only fields today's drawing reads are added; the prop's own parts are as written.
+  return { ...spec, ...compat, defaults: spec.start ?? {} } as unknown as Prop<V, N, F, A, S, C>;
 }
 
 /** The keys of an object schema (variables, needs). */

@@ -3,7 +3,7 @@ import { PropRole, SEP } from "@chalk/prop";
 import type { RefObject } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { addressOf } from "./part-paths";
-import type { BoardRuntime } from "./runtime";
+import type { LiveBoard } from "./scene-runtime";
 import { t } from "./ui-text";
 
 /** Something the student held to ask Jugnu about, with the name its chip shows. */
@@ -48,7 +48,7 @@ function wordsAt(target: Element, piece: Element): string | undefined {
  * tagged in the view (`data-part`). Only what the prop shows can be picked.
  */
 export function pickAt(
-  runtime: BoardRuntime,
+  runtime: LiveBoard,
   target: Element,
   x: number,
   y: number,
@@ -103,7 +103,7 @@ export type HoldHandlers = {
  */
 export function useHoldToAsk(
   body: RefObject<HTMLElement>,
-  runtime: BoardRuntime,
+  runtime: LiveBoard,
   locale: Locale,
   isOn: boolean,
   handlers: HoldHandlers,

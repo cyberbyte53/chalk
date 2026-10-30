@@ -3,6 +3,7 @@ import { choice } from "./choice";
 import { goal } from "./goal";
 import { multiChoice } from "./multi-choice";
 import { orderSteps } from "./order-steps";
+import { sceneChoice, sceneGoal, sceneText } from "./scene";
 import { text } from "./text";
 import { ChoiceView, GoalView, MultiChoiceView, OrderStepsView, TextView } from "./views";
 
@@ -20,6 +21,7 @@ export {
   orderSteps as orderStepsDef,
   text as textDef,
 };
+export { sceneChoice, sceneGoal, sceneText };
 
 /** The props every lesson uses: words and questions. */
 export const basicProps: readonly PropModule[] = [
@@ -28,4 +30,8 @@ export const basicProps: readonly PropModule[] = [
   propModule(goal, GoalView),
   propModule(multiChoice, MultiChoiceView),
   propModule(orderSteps, OrderStepsView),
+  // On the event model: the same variables and actions, drawn by the same views.
+  propModule(sceneText, TextView as never),
+  propModule(sceneChoice, ChoiceView as never),
+  propModule(sceneGoal, GoalView as never),
 ];

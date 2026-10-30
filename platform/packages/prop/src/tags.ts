@@ -2,6 +2,7 @@ import { SEP } from "./address";
 import { type ActionSpec, type Element, type Observation, nameOf } from "./define";
 import type { AnyPropDef, PropView, StoredState } from "./define";
 import { groupOf, shownOf } from "./group";
+import type { ActionDef } from "./next/define";
 
 /**
  * What is on screen is written once, in the view: each part the student can tell apart says what
@@ -62,7 +63,7 @@ type DoesParams<Ar> = unknown extends Ar
  * the input currently sends.
  */
 export function does<S extends StoredState, Ar>(
-  action: ActionSpec<S, Ar>,
+  action: ActionSpec<S, Ar> | ActionDef<Ar & Readonly<Record<string, unknown>>>,
   ...params: DoesParams<NoInfer<Ar>>
 ): InputTags {
   const [args, key] = params as [Ar | undefined, Key | undefined];
@@ -83,10 +84,7 @@ export function does<S extends StoredState, Ar>(
  * `says([choice.actions.select, choice.actions.check], option.id)`. Named by the first action and
  * the key.
  */
-export function says(
-  action: { readonly describe: string } | readonly { readonly describe: string }[],
-  key?: Key,
-): InputTags {
+export function says(action: object | readonly object[], key?: Key): InputTags {
   const names = (Array.isArray(action) ? action : [action]).map(nameOf);
   return {
     "data-part": inputName(names[0] ?? "", key),

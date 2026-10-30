@@ -2,6 +2,7 @@ import type { Level } from "@chalk/content";
 import type { z } from "zod";
 import { type BoardKit, type BuiltBoard, type Child, buildBoard } from "./board";
 import { camel } from "./page";
+import { type Scene, isScene } from "./scene";
 
 const FAMILY = Symbol("family");
 
@@ -29,14 +30,31 @@ export function family<Params extends z.ZodTypeAny, C extends string>(spec: {
   level: Level;
   tests: readonly [C, ...C[]];
   params: Params;
-  build: (params: z.output<Params>, b: BoardKit) => readonly Child[];
+  /** One question's board: its pieces (and rules on `b`), or a scene on the event model. */
+  build:
+    | ((params: z.output<Params>, b: BoardKit) => readonly Child[])
+    | ((params: z.output<Params>) => Scene);
 }): Family<Params> {
   return {
     [FAMILY]: true,
     level: spec.level,
     tests: spec.tests,
     params: spec.params,
-    build: (params, name) => buildBoard(camel(name), (b) => spec.build(params, b)),
+    build: (params, name) => {
+      let made: Scene | undefined;
+      const built = buildBoard(camel(name), (b) => {
+        const out = (spec.build as (p: unknown, b: BoardKit) => readonly Child[] | Scene)(
+          params,
+          b,
+        );
+        if (isScene(out)) {
+          made = out;
+          return [];
+        }
+        return out;
+      });
+      return made === undefined ? built : made.build(camel(name));
+    },
   };
 }
 

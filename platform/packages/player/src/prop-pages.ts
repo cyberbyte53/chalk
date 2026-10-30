@@ -87,12 +87,91 @@ function fieldsOf(
   });
 }
 
+/** A prop on the event model (it has a `start`): its variables, needs, actions, signals. */
+type SceneDef = {
+  type: string;
+  describe: string;
+  role?: string;
+  variables?: ZodTypeAny;
+  needs?: ZodTypeAny;
+  actions?: Readonly<
+    Record<string, { payload: ZodTypeAny; describe?: string; isFromScreen: boolean }>
+  >;
+  signals?: Readonly<Record<string, unknown>>;
+  children?: Readonly<Record<string, SceneDef>>;
+  hear?: Readonly<Record<string, unknown>>;
+};
+const isSceneDef = (def: unknown): def is SceneDef =>
+  typeof def === "object" && def !== null && "start" in def;
+
+/** A scene prop's fields: its variables (changed only by its own rules), its needs, its parts'. */
+function sceneFields(def: SceneDef, prefix: string): PropPage["fields"] {
+  const own = Object.entries(shapeOf(def.variables ?? ({} as ZodTypeAny)) ?? {}).map(
+    ([name, schema]) => ({
+      name: `${prefix}${name}`,
+      takes: shape(schema),
+      ...(schema.description ? { meaning: schema.description } : {}),
+      isInput: false,
+      changedBy: [`${prefix}its own rules`],
+    }),
+  );
+  const needs = Object.entries(shapeOf(def.needs ?? ({} as ZodTypeAny)) ?? {}).map(
+    ([name, schema]) => ({
+      name: `${prefix}${name}`,
+      takes: shape(schema),
+      ...(schema.description ? { meaning: schema.description } : {}),
+      isInput: true,
+      changedBy: [],
+    }),
+  );
+  const parts = Object.entries(def.children ?? {}).flatMap(([name, child]) =>
+    sceneFields(child, `${prefix}${name}.`),
+  );
+  return [...own, ...needs, ...parts];
+}
+
+function scenePage(pkg: string, def: SceneDef): PropPage {
+  const actions = (d: SceneDef, prefix: string): PropPage["actions"] => [
+    ...Object.entries(d.actions ?? {}).map(([name, a]) => {
+      const args = takes(a.payload);
+      const isNone = typeof args === "object" && args !== null && Object.keys(args).length === 0;
+      return {
+        name: `${prefix}${name}`,
+        takes: isNone ? "" : typeof args === "string" ? args : full(args),
+        describe: a.describe ?? name,
+        isByLearner: a.isFromScreen,
+      };
+    }),
+    ...Object.entries(d.children ?? {}).flatMap(([name, c]) => actions(c, `${prefix}${name}.`)),
+  ];
+  const signals = (d: SceneDef, prefix: string): string[] => [
+    ...Object.keys(d.signals ?? {}).map((s) => `${prefix}${s}`),
+    ...Object.entries(d.children ?? {}).flatMap(([name, c]) => signals(c, `${prefix}${name}.`)),
+  ];
+  return {
+    address: propAddress(pkg, def.type),
+    pkg,
+    type: def.type,
+    role: ROLE_WORDS[def.role ?? ""] ?? String(def.role),
+    purpose: purposeOf(def as unknown as AnyPropDef),
+    describe: def.describe.trim().replace(/\s+/g, " "),
+    fields: sceneFields(def, ""),
+    actions: actions(def, ""),
+    signals: signals(def, ""),
+    answers: Object.keys(def.hear ?? {}),
+  };
+}
+
 /** Every prop's page, package by package, in the order packages and props are declared. */
 export function propPages(defsByPackage: ReadonlyMap<string, readonly AnyPropDef[]>): PropPage[] {
   const out: PropPage[] = [];
   for (const [pkg, defs] of [...defsByPackage].sort(([a], [b]) => a.localeCompare(b)))
     for (const def of defs) {
       if (def.type === BOARD) continue;
+      if (isSceneDef(def)) {
+        out.push(scenePage(pkg, def));
+        continue;
+      }
       const stateShape =
         (def.state as unknown as { shape?: Record<string, ZodTypeAny> }).shape ?? {};
       const inputs = new Set(def.inputs ?? []);

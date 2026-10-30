@@ -23,7 +23,8 @@ import { type AudioSource, type SpokenProp, useNarrator } from "./narration";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
-import type { BoardRuntime } from "./runtime";
+import { BoardRuntime } from "./runtime";
+import type { LiveBoard } from "./scene-runtime";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
 import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
@@ -32,7 +33,7 @@ import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
 const POINT_SECONDS = 5;
 
 /** The props playing the question role: a board may ask any number of questions. */
-function questionsOf(runtime: BoardRuntime): string[] {
+function questionsOf(runtime: LiveBoard): string[] {
   return runtime.propNames().filter((name) => runtime.getDef(name).role === PropRole.Question);
 }
 
@@ -61,7 +62,7 @@ export type BoardPlayerProps = {
    */
   mode?: PlayMode | undefined;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
-  onRuntime?: ((runtime: BoardRuntime) => void) | undefined;
+  onRuntime?: ((runtime: LiveBoard) => void) | undefined;
 };
 
 /**
@@ -93,7 +94,7 @@ export function BoardPlayer({
 }: BoardPlayerProps): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
-  const jugnu = policy?.hasJugnu === false ? undefined : given;
+  const jugnu = policy?.hasJugnu === false || board.model !== undefined ? undefined : given;
   // Set once the recorder exists (the narrator is made first, and reports through it).
   const recorderRef = useRef<ReturnType<typeof recordBoard> | undefined>(undefined);
   const reportAudioFailure = useCallback(
@@ -102,7 +103,12 @@ export function BoardPlayer({
     [],
   );
   const narrator = useNarrator(board.item?.id ?? board.name, locale, audio, reportAudioFailure);
-  const runtime = useBoardRuntime(board, registry, narrator.speak);
+  const runtime = useBoardRuntime(board, registry, narrator.speak, {
+    locale,
+    lineSeconds: (prop) => narrator.seconds(prop),
+  });
+  // Jugnu runs on today's boards only, for now (scene-runtime.ts).
+  const jugnuRuntime = runtime instanceof BoardRuntime ? runtime : undefined;
   useWhenChanged([runtime], () => onRuntime?.(runtime));
   // Everything that happens on the board is recorded; it opens before its first signal.
   const recorder = useMadeWhenChanged([runtime, record], () => {
@@ -253,9 +259,9 @@ export function BoardPlayer({
             </button>
           )}
         </main>
-        {jugnu !== undefined && (
+        {jugnu !== undefined && jugnuRuntime !== undefined && (
           <JugnuPanel
-            runtime={runtime}
+            runtime={jugnuRuntime}
             link={jugnu.link}
             place={mode === undefined ? jugnu.place : { ...jugnu.place, mode }}
             lessonId={jugnu.lessonId}

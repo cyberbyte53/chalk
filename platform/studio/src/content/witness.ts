@@ -1,6 +1,6 @@
 import { type Step, StepKind, asRuleFn } from "@chalk/author";
 import { Actor, type Board, type Localized, PieceKind } from "@chalk/content";
-import { BoardRuntime, type PropModule, type RuntimeServices } from "@chalk/player";
+import { BoardRuntime, type PropModule, type RuntimeServices, SceneRuntime } from "@chalk/player";
 import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
 
 type Defs = Readonly<Record<string, PropModule>>;
@@ -58,8 +58,57 @@ export type Played = {
   view: (prop: string) => Readonly<Record<string, unknown>>;
 };
 
+/**
+ * A scene (a board on the event model) played the same way, with no waiting at all: after each
+ * step, what it set off plays out on the board's clock (moves, waits, lines said), jumping.
+ */
+function playScene(board: Board, defs: Defs, steps: readonly Step[]): Played {
+  const errors: string[] = [];
+  const runtime = new SceneRuntime(board, (type) => defs[type], {
+    now: () => 0,
+    frame: () => () => undefined,
+    speak: async () => {},
+    onError: (message, error) =>
+      errors.push(
+        error instanceof Error && !message.includes(error.message)
+          ? `${message}: ${error.message}`
+          : message,
+      ),
+  });
+  const failures: string[] = [];
+  runtime.start();
+  runtime.settle();
+  for (const step of steps) {
+    if ("wait" in step) {
+      runtime.settle(step.wait, true);
+      continue;
+    }
+    switch (step.kind) {
+      case StepKind.Act:
+        void runtime.call(step.prop, step.action, step.args, Actor.Learner);
+        runtime.settle();
+        break;
+      case StepKind.Expect: {
+        const value = asRuleFn(step.that)((piece) =>
+          runtime.getView(typeof piece === "string" ? piece : piece.name),
+        );
+        if (value !== true)
+          failures.push(`expected ${step.says} (${step.that.toString()} was ${String(value)})`);
+        break;
+      }
+    }
+  }
+  runtime.settle();
+  failures.push(...errors);
+  const views = new Map<string, Readonly<Record<string, unknown>>>();
+  for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));
+  runtime.dispose();
+  return { failures, view: (prop) => views.get(prop) ?? {} };
+}
+
 /** Plays a learner's steps on the real props, as a student would, and reports what went wrong. */
 export async function play(board: Board, defs: Defs, steps: readonly Step[]): Promise<Played> {
+  if (board.model !== undefined) return playScene(board, defs, steps);
   const { runtime, advance, errors, refused } = startOnFakeTime(board, defs);
   const failures: string[] = [];
   runtime.start();

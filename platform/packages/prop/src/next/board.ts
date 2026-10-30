@@ -1,5 +1,7 @@
 import type { ZodType } from "zod";
 import { joinPath } from "../address";
+import type { Spoken } from "../define";
+import { withShown } from "../group";
 import {
   type AnyProp,
   Ease,
@@ -11,6 +13,7 @@ import {
 } from "./define";
 import { type Move, moveAt } from "./move";
 import { type Entry, TimeQueue } from "./queue";
+import { type Voice, silentVoice } from "./voice";
 
 /**
  * A board running: the tree of props and their variables, one door every event goes through
@@ -31,6 +34,23 @@ export type Input = {
   readonly action: string;
   readonly payload: Payload;
 };
+
+/** Something that happened on the board, for whoever watches it (the recorder, the player's chrome). */
+export type BoardEvent =
+  | {
+      readonly kind: "ask";
+      readonly path: string;
+      readonly action: string;
+      readonly payload: Payload;
+      /** The student asked (a tap), not a rule. */
+      readonly isInput: boolean;
+    }
+  | {
+      readonly kind: "tell";
+      readonly path: string;
+      readonly signal: string;
+      readonly payload: Payload;
+    };
 
 /** What waits in the queue: outs to do as the prop that queued them. */
 type Later = { readonly outs: readonly Out[]; readonly move?: string };
@@ -64,10 +84,16 @@ export class Board {
   private clock = 0;
   private readonly inputs: Input[] = [];
   private readonly watchers = new Set<() => void>();
+  private readonly listeners = new Set<(event: BoardEvent) => void>();
+  /** The student's tap being handled (its ask is the input; what it sets off is not). */
+  private inputting = false;
   /** The events being handled, outermost first (to name a loop's path). */
   private readonly chain: string[] = [];
 
-  constructor(root: AnyProp, given: Given = {}) {
+  private readonly voice: Voice;
+
+  constructor(root: AnyProp, given: Given = {}, options: { voice?: Voice } = {}) {
+    this.voice = options.voice ?? silentVoice;
     this.root = this.build(root, "", "", undefined, given);
   }
 
@@ -161,6 +187,19 @@ export class Board {
         this.guarded(`${node.path || "board"}.${key}`, () => (fact as AnyFn)(view as never)),
       );
     for (const [name, child] of node.children) define(name, () => this.reader(child));
+    // Which children are drawn now, read the way a group's view says it (`shownOf`).
+    const show = node.def.show;
+    if (show !== undefined) {
+      const shown: Record<string, boolean> = {};
+      for (const name of node.children.keys()) {
+        const rule = show[name];
+        Object.defineProperty(shown, name, {
+          enumerable: true,
+          get: () => (rule === undefined ? true : (rule as AnyFn)(view as never) === true),
+        });
+      }
+      withShown(view, shown);
+    }
     return Object.freeze(view);
   }
 
@@ -225,7 +264,18 @@ export class Board {
       const outs = without(e.owner, e.what.outs, path);
       return outs.length === 0 && e.what.move === undefined ? undefined : { ...e.what, outs };
     });
+    this.inputting = true;
     this.changed(() => this.ask(node, action, payload));
+  }
+
+  /** Hears everything asked and told on the board, in order. */
+  listen(fn: (event: BoardEvent) => void): () => void {
+    this.listeners.add(fn);
+    return () => this.listeners.delete(fn);
+  }
+
+  private emit(event: BoardEvent): void {
+    for (const fn of this.listeners) fn(event);
   }
 
   /** The lesson, a test or a tool asks a prop to act (no screen check, not logged). */
@@ -238,6 +288,9 @@ export class Board {
     if (spec === undefined)
       throw new Error(`${where(node.path, node.def)} has no action ${action}`);
     const data = this.payload(node, action, spec.payload, payload);
+    const isInput = this.inputting;
+    this.inputting = false;
+    this.emit({ kind: "ask", path: node.path, action, payload: data as Payload, isInput });
     const rule = node.def.on?.[action];
     this.step(`${node.path || "board"}.${action}`, () => {
       if (rule !== undefined)
@@ -258,6 +311,7 @@ export class Board {
     if (spec === undefined)
       throw new Error(`${where(node.path, node.def)} has no signal ${signal}`);
     const data = this.payload(node, signal, spec.payload, payload);
+    this.emit({ kind: "tell", path: node.path, signal, payload: data as Payload });
     let heard = signal;
     let from = node;
     for (let holder = node.holder; holder !== undefined; holder = holder.holder) {
@@ -331,6 +385,9 @@ export class Board {
         case "stop":
           this.stopAll(node);
           break;
+        case "speak":
+          this.speak(node);
+          break;
       }
     }
   }
@@ -383,6 +440,21 @@ export class Board {
     });
   }
 
+  /** Says the prop's line; its `said` is told when the line ends (a "later" of the line's length). */
+  private speak(node: Node): void {
+    const line = (node.def.speech as AnyFn | undefined)?.(this.reader(node) as never) as
+      | Spoken
+      | undefined;
+    if (line === undefined) throw new Error(`${where(node.path, node.def)} has no line to say`);
+    if (node.def.signals?.said === undefined)
+      throw new Error(`${where(node.path, node.def)} speaks, so it needs a signal "said"`);
+    this.voice.start(node.path, line);
+    const seconds = this.voice.seconds(node.path, line);
+    this.queue.add(this.clock + Math.max(0, seconds), node.path, {
+      outs: [{ kind: "tell", signal: "said", payload: {} }],
+    });
+  }
+
   private stopAll(node: Node): void {
     if (node.moves.size > 0) {
       node.vars = this.settled(node);
@@ -429,6 +501,11 @@ export class Board {
         );
       this.advanceTo(this.queue.nextAt);
     }
+  }
+
+  /** Whether anything is still due (a move, a wait, a line being said). */
+  get isBusy(): boolean {
+    return this.queue.nextAt !== undefined;
   }
 
   /** What waits, in order: when, and who queued it. */
@@ -498,6 +575,7 @@ export class Board {
         atEnd: options.atEnd ?? [],
       }),
       stop: (): Out => ({ kind: "stop" }),
+      speak: (): Out => ({ kind: "speak" }),
     };
   }
 }

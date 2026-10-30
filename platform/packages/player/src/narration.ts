@@ -3,7 +3,10 @@ import { segment } from "@chalk/prop";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
 /** Where a spoken line's audio file is, by audio key; undefined when the lesson has no audio at all. */
-export type AudioSource = (key: string) => string | undefined;
+export type AudioSource = ((key: string) => string | undefined) & {
+  /** How long the line's file plays, in seconds (publish measures it), when known. */
+  readonly seconds?: (key: string) => number | undefined;
+};
 
 /** A prop that is speaking: its name (for the retry mark and, as its address, its audio file). */
 export type SpokenProp = { name: string };
@@ -11,6 +14,8 @@ export type SpokenProp = { name: string };
 export type Narrator = {
   /** Plays a prop's line and resolves when it ends (or fails; the text is on screen either way). */
   speak: (prop: SpokenProp) => Promise<void>;
+  /** How long a prop's line plays here, when its audio's length is known. */
+  seconds: (prop: string) => number | undefined;
   /** Props whose audio couldn't play, by name. */
   failed: ReadonlySet<string>;
 };
@@ -85,5 +90,10 @@ export function useNarrator(
     [board, locale, source, onFailure],
   );
 
-  return { speak, failed };
+  const seconds = useCallback(
+    (prop: string) => source?.seconds?.(audioKey(board, segment(prop), locale)),
+    [board, locale, source],
+  );
+
+  return { speak, failed, seconds };
 }

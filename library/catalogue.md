@@ -142,6 +142,81 @@ A proof's steps, shuffled: the learner taps them into order, one line at a time,
 
 Signals: `checked`, `correct`, `wrong`
 
+### `sceneText` · page
+
+`library/props/basics/sceneText` · used in no chapter yet
+
+Words on the board, in the learner's language.
+
+| Field | Takes | |
+|---|---|---|
+| `text` | {en: "text", hi: "text"} | changed by its own rules |
+| `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
+| `style` | ["title", "body", "note", "definition"] | changed by its own rules |
+| `color` | {orNull: "text"} | changed by its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `say` | — | Read it aloud (the narrator) |
+
+Signals: `said`
+
+### `sceneChoice` · question
+
+`library/props/basics/sceneChoice` · used in no chapter yet
+
+A multiple-choice question.
+
+| Field | Takes | |
+|---|---|---|
+| `prompt` | {en: "text", hi: "text"} | changed by its own rules |
+| `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
+| `status` | ["open", "correct", "wrong"] | changed by its own rules |
+| `attempts` | whole number 0 to … | changed by its own rules |
+| `feedback` | {orNull: "ZodRecord"} | changed by its own rules |
+| `concepts` | ["text"] | changed by its own rules |
+| `isGraded` | true or false | changed by its own rules |
+| `options` | [{id: "text", label: {en: "text", hi: "text"}, feedback: {optional: {en: "text", hi: "text"}}, misconception: {optional: "text"}}] | changed by its own rules |
+| `answer` | text | changed by its own rules |
+| `selected` | {orNull: "text"} | changed by its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `select` | {option: "text"} | learner · Pick an option |
+| `check` | — | learner · Check the picked option |
+| `retry` | — | learner · Clear a wrong answer to try again |
+| `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
+| `say` | — | Read it aloud (the narrator) |
+
+Signals: `checked`, `correct`, `wrong`, `said`
+
+### `sceneGoal` · question
+
+`library/props/basics/sceneGoal` · used in no chapter yet
+
+A question answered by getting another prop into the right state, then pressing Check.
+
+| Field | Takes | |
+|---|---|---|
+| `prompt` | {en: "text", hi: "text"} | changed by its own rules |
+| `speak` | {orNull: {en: "text", hi: "text"}} | changed by its own rules |
+| `status` | ["open", "correct", "wrong"] | changed by its own rules |
+| `attempts` | whole number 0 to … | changed by its own rules |
+| `feedback` | {orNull: "ZodRecord"} | changed by its own rules |
+| `concepts` | ["text"] | changed by its own rules |
+| `isGraded` | true or false | changed by its own rules |
+| `about` | text | changed by its own rules |
+| `isMet` | true or false | input |
+
+| Action | Takes | |
+|---|---|---|
+| `check` | — | learner · Check the prop's state as the answer |
+| `retry` | — | learner · Clear a wrong answer to try again |
+| `giveFeedback` | {text: {en: "text", hi: "text"}} | Show words under it |
+| `say` | — | Read it aloud (the narrator) |
+
+Signals: `checked`, `correct`, `wrong`, `said`
+
 ## `coordinates` — `@chalk/prop-coordinates`
 
 The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a host whose layers a board turns on. Built for Class 9 Coordinate Geometry, but it knows only its own world.

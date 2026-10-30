@@ -34,6 +34,17 @@ export {
 } from "./board";
 export { type Family, family, isFamily } from "./family";
 export {
+  type GivenFor,
+  type Placed as ScenePlaced,
+  type Scene,
+  type SceneSpec,
+  hidden,
+  isScene,
+  place,
+  scene,
+  tap,
+} from "./scene";
+export {
   type BoardItem,
   type ContentModules,
   type RoleOf,

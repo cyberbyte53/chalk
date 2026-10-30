@@ -416,6 +416,11 @@ const INJECTED = Symbol("injected");
 const SHOWN = Symbol("shown");
 
 /** Which children of a group are there right now, from its view (all, when it isn't a group's). */
+/** Notes on a view which children are drawn now (the event model's readers, as groups' views do). */
+export function withShown(view: object, shown: Readonly<Record<string, boolean>>): void {
+  Object.defineProperty(view, SHOWN, { value: shown });
+}
+
 export function shownOf(view: PropView): Readonly<Record<string, boolean>> | undefined {
   return (view as Record<symbol, Record<string, boolean>>)[SHOWN];
 }

@@ -100,14 +100,3 @@ export const audioManifestSchema = z
   })
   .strict();
 export type AudioManifest = z.infer<typeof audioManifestSchema>;
-
-/** Words a second a voice says, roughly: for a line with no audio (failed, muted, not made yet). */
-const WORDS_PER_SECOND = 2.5;
-/** A short breath before and after any line. */
-const LINE_PAUSE = 0.4;
-
-/** How long a line would take to say, from its words, when there is no audio to measure. */
-export function estimatedSeconds(text: string): number {
-  const words = text.split(/\s+/).filter((w) => w !== "").length;
-  return LINE_PAUSE + words / WORDS_PER_SECOND;
-}

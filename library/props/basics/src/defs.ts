@@ -3,6 +3,7 @@ import { choice } from "./choice";
 import { goal } from "./goal";
 import { multiChoice } from "./multi-choice";
 import { orderSteps } from "./order-steps";
+import { sceneChoice, sceneGoal, sceneText } from "./scene";
 import { text } from "./text";
 
 /**
@@ -15,4 +16,8 @@ export const defs: readonly AnyPropDef[] = [
   asAnyProp(goal),
   asAnyProp(multiChoice),
   asAnyProp(orderSteps),
+  // On the event model (scene.ts); erased the same way until today's props are gone.
+  sceneText as unknown as AnyPropDef,
+  sceneChoice as unknown as AnyPropDef,
+  sceneGoal as unknown as AnyPropDef,
 ];

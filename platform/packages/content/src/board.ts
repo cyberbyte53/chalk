@@ -1,3 +1,4 @@
+import type { AnyProp, Given } from "@chalk/prop/next";
 import { z } from "zod";
 import { jugnuNotesSchema } from "./jugnu";
 import { pieceSchema } from "./piece";
@@ -106,8 +107,22 @@ export const boardSchema = z.object({
    * on the phone or on the server, is made again from its code.
    */
   item: itemRefSchema.optional(),
+  /**
+   * A board on the event model (platform/docs/event-model.md): the scene, the outermost prop, whose
+   * children are the pieces (`root` lays them out), and what each piece starts with. Its rules are
+   * the scene's own; `is` and `when` stay empty.
+   */
+  model: z
+    .custom<SceneModel>(
+      (v) => typeof v === "object" && v !== null && "scene" in v,
+      "should be a scene and its pieces' setup",
+    )
+    .optional(),
 });
 export type Board = z.infer<typeof boardSchema>;
+
+/** A board on the event model: its scene, and what each piece starts with. */
+export type SceneModel = { readonly scene: AnyProp; readonly given: Given };
 
 /** Splits "line.zoomTo" / "guess.wrong" / "line.marker" into the prop name and the member. */
 export function splitTarget(target: string): { prop: string; member: string } {

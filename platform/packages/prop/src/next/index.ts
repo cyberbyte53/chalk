@@ -9,6 +9,14 @@ export {
   SCREEN,
   signal,
   type ActionDef,
+  type ActionsOf,
+  type ChildrenOf,
+  type FactsOf,
+  type Me,
+  type NeedsOf,
+  type PayloadOf,
+  type SignalsOf,
+  type VarsOf,
   type AnyProp,
   type HeardPaths,
   type Out,
@@ -21,7 +29,8 @@ export {
   type SignalDef,
   type Tools,
 } from "./define";
-export { Board, type Given, type Input } from "./board";
+export { Board, type BoardEvent, type Given, type Input } from "./board";
 export { sequence } from "./helpers";
 export { moveAt, type Move } from "./move";
 export { TimeQueue, type Entry } from "./queue";
+export { estimatedSeconds, silentVoice, type Voice } from "./voice";

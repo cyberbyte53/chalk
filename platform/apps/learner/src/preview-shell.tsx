@@ -18,7 +18,7 @@ import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
   BoardPlayer,
-  type BoardRuntime,
+  BoardRuntime,
   BoardSpeedContext,
   SEP,
   addressOf,
@@ -33,6 +33,7 @@ import {
 import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import type { ZodTypeAny } from "zod";
 import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
@@ -602,7 +603,11 @@ export function PreviewBoard({
       <div class="preview-body">
         <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
           <BoardPlayer
-            onRuntime={isProp ? setRuntime : undefined}
+            onRuntime={
+              isProp
+                ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)
+                : undefined
+            }
             board={board}
             registry={propLibrary}
             locale={locale}
@@ -1168,12 +1173,16 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       if (boards.length !== 1) return `a call acts on one board; ${boards.length} are drawn`;
       const runtime = boards[0] as (typeof boards)[number];
       const def = runtime.getDef(piece);
-      const spec = def.actions[action];
+      const actions = (def.actions ?? {}) as Readonly<
+        Record<string, { args?: ZodTypeAny; payload?: ZodTypeAny }>
+      >;
+      // A scene's piece answers a dotted path ("walker.step"): its own action is checked when it runs.
+      const spec = action.includes(".") ? { payload: undefined } : actions[action];
       if (spec === undefined)
-        return `${def.type} has no action "${action}" (its actions: ${Object.keys(def.actions).join(", ") || "none"})`;
-      const checked = spec.args?.safeParse(args);
+        return `${def.type} has no action "${action}" (its actions: ${Object.keys(actions).join(", ") || "none"})`;
+      const checked = ("args" in spec ? spec.args : spec.payload)?.safeParse(args);
       if (checked !== undefined && !checked.success)
-        return `${action}: ${checked.error.issues.map((i) => `${i.path.join(".") || "args"}: ${i.message}`).join("; ")}`;
+        return `${action}: ${checked.error.issues.map((i: { path: (string | number)[]; message: string }) => `${i.path.join(".") || "args"}: ${i.message}`).join("; ")}`;
       void runtime.call(piece, action, args).catch(() => {});
       return undefined;
     };

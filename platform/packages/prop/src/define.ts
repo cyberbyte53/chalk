@@ -286,11 +286,11 @@ export function signal<const Sh extends ZodRawShape = Record<never, never>>(
 const names = new WeakMap<object, string>();
 
 /** The name of an action or signal in its prop. */
-export function nameOf(spec: { readonly describe: string }): string {
+export function nameOf(spec: object): string {
   const name = names.get(spec);
   if (name === undefined)
     throw new Error(
-      `"${spec.describe}" isn't an action or signal of a defined prop: pass the prop's own (defineProp notes their names)`,
+      `"${(spec as { describe?: string }).describe ?? "this"}" isn't an action or signal of a defined prop: pass the prop's own (defineProp notes their names)`,
     );
   return name;
 }

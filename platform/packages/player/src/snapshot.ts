@@ -18,6 +18,7 @@ import {
 import type { ZodTypeAny } from "zod";
 import { findNode } from "./part-paths";
 import type { BoardRuntime } from "./runtime";
+import type { LiveBoard } from "./scene-runtime";
 
 /**
  * The one snapshot (see @chalk/prop's snapshot.ts): every node by address, its setup, live and
@@ -25,12 +26,12 @@ import type { BoardRuntime } from "./runtime";
  */
 
 /** Every board running on the page, newest last (the dev preview reads it). */
-const running = new Set<BoardRuntime>();
-export function trackBoard(runtime: BoardRuntime): () => void {
+const running = new Set<LiveBoard>();
+export function trackBoard(runtime: LiveBoard): () => void {
   running.add(runtime);
   return () => running.delete(runtime);
 }
-export function runningBoards(): BoardRuntime[] {
+export function runningBoards(): LiveBoard[] {
   return [...running];
 }
 

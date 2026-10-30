@@ -518,8 +518,10 @@ async function checkBoard(
   board: Board,
 ): Promise<boolean> {
   const before = c.problems.length;
-  for (const p of validateBoard(board, c.defs, c.readings))
-    report(c, where, `${p.where}: ${p.message}`);
+  // A scene's wiring is its code, checked when it is defined and as it plays (its witness).
+  if (board.model === undefined)
+    for (const p of validateBoard(board, c.defs, c.readings))
+      report(c, where, `${p.where}: ${p.message}`);
   if (c.problems.length > before) return false;
   for (const failure of await checkWitness(board, c.modules, built.witness))
     report(c, where, failure);
