@@ -31,11 +31,13 @@
     "@chalk/prop": "workspace:*",
     "@jridgewell/trace-mapping": "0.3.31",
     "@modelcontextprotocol/sdk": "1.32.1",
+    "katex": "0.16.22",
     "pixelmatch": "5.3.0",
     "playwright-core": "1.63.0",
     "pngjs": "7.0.0",
     "preact": "10.29.8",
     "preact-render-to-string": "6.5.13",
+    "speech-rule-engine": "4.1.5",
     "typescript": "5.6.3",
     "yaml": "2.6.1",
     "zod": "3.25.76"

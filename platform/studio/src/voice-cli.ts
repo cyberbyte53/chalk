@@ -34,6 +34,14 @@ const result = await makeVoice({
   onSpeak: (done, toMake, text) => console.log(`  ${done + 1}/${toMake} ${text.slice(0, 70)}`),
 });
 writeFileSync(join(outDir, "manifest.json"), `${JSON.stringify(result.manifest, null, 2)}\n`);
+// The chapter's script: what every board shows and says (the preview's script view and look read it).
+writeFileSync(join(outDir, "script.json"), `${JSON.stringify(result.script, null, 2)}\n`);
+if (result.unsaid.length > 0) {
+  console.log(
+    `These lines need their spoken words, as their "speak" (guides/pages.md); they have no clip yet:\n${result.unsaid.map((u) => `  ${u}`).join("\n")}`,
+  );
+  process.exitCode = 1;
+}
 console.log(
   `✓ ${chapter}: ${boards.length} boards, ${Object.keys(result.manifest.files).length} lines (${result.made} made, ${result.reused} kept) → ${outDir}`,
 );

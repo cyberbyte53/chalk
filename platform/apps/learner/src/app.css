@@ -2152,3 +2152,71 @@ body.is-selecting .is-pick-target {
   color: #5c5c66;
   font: 13px / 1.4 system-ui, sans-serif;
 }
+
+/* A board's script, beside it in the preview (script-view.tsx). */
+.script-view {
+  width: 420px;
+  flex: none;
+  /* Its own scroll, so the board stays in view while the script is read. */
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--color-on-surface);
+}
+.script-view.is-empty {
+  color: var(--color-on-surface-variant);
+}
+.script-line {
+  padding: 8px 10px;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+.script-who {
+  color: var(--color-on-surface-variant);
+  margin-bottom: 4px;
+}
+.script-lang + .script-lang {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--color-outline-variant);
+}
+.script-shown {
+  color: var(--color-on-surface-variant);
+}
+.script-said {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+.script-said.is-missing {
+  color: var(--color-wrong);
+}
+.script-tag {
+  font-size: 11px;
+  color: var(--color-on-surface-variant);
+  margin-left: 6px;
+}
+.script-play {
+  border: none;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 11px;
+  background: var(--color-surface-container);
+  color: var(--color-primary);
+  cursor: pointer;
+}
+.script-play:disabled {
+  color: var(--color-on-surface-variant);
+  cursor: default;
+}

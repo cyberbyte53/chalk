@@ -276,6 +276,53 @@ export function boardText(
   return out.join("\n");
 }
 
+/** What is said for a line in one language (voice/said.ts), as script.json keeps it. */
+type ScriptSaid = { words: string; from: string } | { needs: string; suggested?: string };
+type ScriptLine = {
+  piece: string;
+  speaker: string;
+  isLater: boolean;
+  said: Readonly<Record<string, ScriptSaid | undefined>>;
+};
+
+/**
+ * A board's script, as `pnpm voice` made it: each line in order, who says it, and what the voice
+ * says (or what it still needs, with the suggested words). Nothing when the chapter has no voice yet.
+ */
+export function scriptText(root: string, board: string): string[] {
+  const [book, chapter] = board.split("/");
+  const file = join(
+    root,
+    "platform",
+    "apps",
+    "learner",
+    "public",
+    "voice",
+    `${book}`,
+    `${chapter}`,
+    "script.json",
+  );
+  if (!existsSync(file)) return [];
+  const script = JSON.parse(readFileSync(file, "utf8")) as {
+    boards: { path: string; lines: ScriptLine[] }[];
+  };
+  const lines = script.boards.find((b) => b.path === board)?.lines ?? [];
+  if (lines.length === 0) return [];
+  const said = (s: ScriptSaid | undefined) =>
+    s === undefined
+      ? "—"
+      : "words" in s
+        ? `"${s.words}" (${s.from})`
+        : `NEEDS its spoken words: ${s.needs}${s.suggested === undefined ? "" : `; suggested "${s.suggested}"`}`;
+  return [
+    "script (what the voice says, in order):",
+    ...lines.flatMap((l) => [
+      `  ${l.piece} · ${l.speaker}${l.isLater ? " · when shown" : ""}`,
+      ...Object.entries(l.said).map(([locale, s]) => `    ${locale}: ${said(s)}`),
+    ]),
+  ];
+}
+
 /** A piece's answer: everything about it, each thing once. */
 export function pieceText(
   root: string,
@@ -509,7 +556,10 @@ export async function look(
             ? []
             : ["", useText(page, usesOf(readReach(root)).get(page.type) ?? [])]),
         ].join("\n")
-      : boardText(first, where, heading, { errors: drawn[0]?.shots[0]?.errors ?? [] });
+      : [
+          boardText(first, where, heading, { errors: drawn[0]?.shots[0]?.errors ?? [] }),
+          ...scriptText(root, first.board),
+        ].join("\n");
   const otherProblems = shots
     .slice(1)
     .flatMap((s, i) =>

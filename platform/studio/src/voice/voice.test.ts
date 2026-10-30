@@ -81,18 +81,29 @@ describe("the voice: cast, speak, keep", () => {
     expect(again).toMatchObject({ made: 0, reused: 6 });
   });
 
-  it("refuses screen words a voice can't say, when the line has no spoken words", async () => {
-    const odd = scene({ pieces: { x: place(sceneText, { text: t("α + β", "α + β") }) } }).build(
-      "odd",
+  it("gives no clip to a line a voice can't say as shown: it lists it, with a suggestion for maths", async () => {
+    const odd = scene({
+      pieces: {
+        sign: place(sceneText, { text: t("α + β", "α + β") }),
+        maths: place(sceneText, { text: t("Is $x^2$ even?", "क्या $x^2$ सम है?") }),
+      },
+    }).build("odd");
+    const made = await makeVoice({
+      boards: [{ item, folder: "lesson", lines: scriptOf(odd.board) }],
+      cast,
+      providers,
+      outDir: mkdtempSync(join(tmpdir(), "v-")),
+    });
+    expect(made.made).toBe(0);
+    expect(made.unsaid.join("\n")).toMatch(/sign \(en\): it has "α \+ β" outside maths/);
+    expect(made.unsaid.join("\n")).toMatch(
+      /maths \(en\): it has maths[\s\S]*suggested: "Is x squared even\?"/,
     );
-    await expect(
-      makeVoice({
-        boards: [{ item, folder: "lesson", lines: scriptOf(odd.board) }],
-        cast,
-        providers,
-        outDir: mkdtempSync(join(tmpdir(), "v-")),
-      }),
-    ).rejects.toThrow(/write how each is said, as its "speak"[\s\S]*tiny, x \(en\): it has "α/);
+    // The script has them all the same: what is shown, and what is missing.
+    expect(made.script.boards[0]?.lines[1]?.said.en).toEqual({
+      needs: "it has maths",
+      suggested: "Is x squared even?",
+    });
   });
 });
 

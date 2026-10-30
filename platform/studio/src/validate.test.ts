@@ -124,7 +124,7 @@ describe("validateLesson", () => {
     const bad = fresh();
     piece(bad, "share", "title").with.text.en = "What is ∜16 → λ?";
     piece(bad, "share", "title").with.speak = null;
-    has(bad, /can't say it as shown \(it has "∜ → λ"\); write how it is said/);
+    has(bad, /can't say it as shown \(it has "∜ → λ" outside maths/);
     const maths = fresh();
     piece(maths, "share", "title").with.text.en = "Is $x^2$ even?";
     piece(maths, "share", "title").with.speak = null;

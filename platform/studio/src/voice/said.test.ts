@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { mathsReader } from "./maths";
 import { said, unspeakable } from "./said";
 
 const line = (en: string, speak?: string) => ({
@@ -10,16 +11,26 @@ describe("what a voice says: words a person wrote, never rewritten", () => {
   it("the line's own spoken words, as written", () => {
     expect(
       said(line("$\\sqrt{2} \\approx 1.41$", "the square root of 2 is about 1.41"), "en"),
-    ).toEqual({
-      words: "the square root of 2 is about 1.41",
-    });
+    ).toEqual({ words: "the square root of 2 is about 1.41", from: "written" });
   });
   it("the screen words, formatting left out by the parser, the words untouched", () => {
-    expect(said(line("Street **4** rises, *up*"), "en")).toEqual({ words: "Street 4 rises, up" });
+    expect(said(line("Street **4** rises, *up*"), "en")).toEqual({
+      words: "Street 4 rises, up",
+      from: "screen",
+    });
   });
-  it("never turns maths or a sign into words: that line needs its spoken words", () => {
+  it("never says maths itself: it drafts the words, for the line's spoken words", async () => {
+    const read = await mathsReader();
+    expect(said(line("Is $x^2 + 1$ even?"), "en", read)).toEqual({
+      needs: "it has maths",
+      suggested: "Is x squared plus 1 even?",
+    });
     expect(said(line("Is $x^2$ even?"), "en")).toEqual({ needs: "it has maths" });
-    expect(said(line("stop −2, ← →"), "en")).toEqual({ needs: 'it has "− ← →"' });
+  });
+  it("never says a sign outside maths: write it as maths, or its words", () => {
+    expect(said(line("stop −2, ← →"), "en")).toMatchObject({
+      needs: expect.stringMatching(/"− ← →" outside maths/),
+    });
   });
 });
 

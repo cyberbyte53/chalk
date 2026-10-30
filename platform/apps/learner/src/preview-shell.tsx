@@ -50,6 +50,7 @@ import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
 import { PropPanel } from "./prop-panel";
 import { ReviewList, ReviewPage } from "./review-page";
+import { ScriptView } from "./script-view";
 import { ThreadText } from "./thread-text";
 import {
   type Review,
@@ -577,6 +578,8 @@ export function PreviewBoard({
   useSourceTags(phone, where, shown.path);
   // Played as a student would (not a tool's picture): the chapter's voice, when it has one.
   const voice = useChapterVoice(shown.path, isPlaying && !isShot);
+  // The board's script beside it (`&script`, or v): what it says, and each clip.
+  const isScript = new URLSearchParams(window.location.search).has("script");
   // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
   const isProp = shown.path.startsWith(PROPS_ROOT);
   const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
@@ -590,7 +593,7 @@ export function PreviewBoard({
   };
   return (
     <section
-      class={`preview-card${!isShot && threads.length > 0 ? " has-threads" : ""}${!isShot && isProp ? " has-panel" : ""}`}
+      class={`preview-card${!isShot && threads.length > 0 ? " has-threads" : ""}${!isShot && (isProp || isScript) ? " has-panel" : ""}`}
       data-board={shown.path}
     >
       {!isShot && (
@@ -627,6 +630,9 @@ export function PreviewBoard({
         </div>
         {!isShot && isProp && runtime !== undefined && (
           <PropPanel runtime={runtime} piece={board.name} />
+        )}
+        {!isShot && isScript && !isProp && (
+          <ScriptView path={shown.path} boardId={board.item?.id} />
         )}
         {!isShot && threads.length > 0 && (
           <BoardThreads threads={threads} reviews={reviews} onChange={onThreads} phone={phone} />
@@ -1085,7 +1091,14 @@ function useEditorLink(): [boolean, (on: boolean | ((was: boolean) => boolean)) 
 }
 
 /** A view setting kept in the URL (play as the app, Hindi): the editor's panel owns it when there is one. */
-function toggleParam(name: "play" | "locale"): void {
+function toggleParam(name: "play" | "locale" | "script"): void {
+  if (name === "script") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("script")) params.delete("script");
+    else params.set("script", "");
+    window.location.search = params.toString().replace(/=(&|$)/g, "$1");
+    return;
+  }
   if (isInEditor) {
     toEditor({ type: "toggle", what: name === "play" ? "play" : "hindi" });
     return;
@@ -1348,6 +1361,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       else if (e.key === "f") window.location.search = "?dev&activity";
       else if (e.key === "p") toggleParam("play");
       else if (e.key === "h") toggleParam("locale");
+      else if (e.key === "v") toggleParam("script");
       else if (e.key === "+" || e.key === "=") setZoom((z) => Math.min(2, z + 0.1));
       else if (e.key === "-") setZoom((z) => Math.max(0.5, z - 0.1));
       else if (e.key === "?") setIsHelp((on) => !on);
@@ -1487,8 +1501,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
           <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play as
-          the app · <b>h</b> Hindi · <b>f</b> activity · <b>+ −</b> zoom · <b>Esc</b> leave ·{" "}
-          <b>?</b> keys
+          the app · <b>h</b> Hindi · <b>v</b> script (what is said) · <b>f</b> activity · <b>+ −</b>{" "}
+          zoom · <b>Esc</b> leave · <b>?</b> keys
         </div>
       )}
       <BoardSpeedContext.Provider value={speed}>
