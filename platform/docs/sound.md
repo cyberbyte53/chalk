@@ -41,8 +41,9 @@ A board is understood through two senses. Props are drawn for the eyes; sound is
 
 | Line | Audio | Its length |
 |---|---|---|
-| Fixed words (almost all today) | a clip made in advance (`pnpm voice`, the cast's voice), named by its words | measured from the clip |
-| Worked out from state ("Riya is at Street {x}") | the phone's own voice, live | estimated from its words |
+| Fixed words (almost all today; a question family's row is fixed too) | a clip made at build (`pnpm voice`, the cast's voice), named by its words | measured from the clip |
+| A template with a known set of values ("Aman lives at Street {x}, House {y}", one of 30 houses) | every version made at build | measured |
+| A template with open values (a measured length, a typed number) | made by the server on first use and kept; the phone's own voice meanwhile and offline | measured, or estimated from its words |
 | Effect | a file from the sound library | measured from the file |
 
 The source is behind one interface: clips for reachable states, or a better live voice, replace it later without touching lessons or props.
@@ -55,14 +56,45 @@ Exactly words a person wrote, never rewritten: a line's own words, or a text's s
 
 A character, never a voice (`speaker: "aman"`; the narrator when no one is named). Each book has its cast (`authoring/books/<book>/cast.json`: its characters' voices per language); the narrator is shared. A line naming someone the book's cast lacks fails the build.
 
-### Seeing and reviewing it
+### Lines are part of the board
 
-The board's **sound track**: every sound in the order it can be heard (the opening, each piece as it appears, each rule's), what is shown beside what is said, who says it, each clip to play. In the preview (`&script`), in `look`, and open to comments: a piece's line is `board#piece/said`, a free line `board#<name>`.
+A line is a node of the board, like a piece: it has an address, and everything that works on a piece works on it (comments and threads, `look`, `changes`, review).
+
+- **A piece's line:** `board#fiveHouses/said`. Its words are the piece's own, or the lesson's (`says`).
+- **A declared line:** `board#finally`. It has its moment written with it, so every view can show when it is heard:
+  ```ts
+  lines: {
+    finally: line(t("Finally, I'm here!", "आख़िरकार, पहुँच गई!"), {
+      speaker: "riya",
+      when: "town.walker.arrived",
+      if: (p) => p.x === 4 && p.y === 5,
+      about: "town",
+    }),
+  },
+  ```
+  A rule may still say a line (`t.self.say`), but a declared moment is the normal way: a line said from deep inside a rule can't be shown before it is heard.
+
+### Its place: in time, and on the board
+
+| Line | Place in time (the sound track) | Place on the board (a 🔊 mark, review only) |
+|---|---|---|
+| a piece's words | when the piece appears (or as the board opens) | on that piece |
+| narration about something | its moment | on what it is `about` |
+| a character's line | its moment | on that character, else what it is about |
+| free narration | its moment | none: only on the track |
+
+- **The sound track** is drawn beside the board while reviewing (the preview shows it by default; `v` hides it), grouped by moment: as the board opens…, when street 4 rises…, when Riya arrives…. It lists every line that can be said, including those only an interaction sets off. Each has its words, its speaker, its clip to play, and is picked for a comment like any part.
+- **While a line plays,** its piece (or what it is about) glows on the board, as a teacher points at what they are talking about.
+- `look` lists the track; `play` lists what each step was heard to say.
+
+### Which lines are heard: known by playing
+
+Which lines a board *can* say is known in advance: each is data on the board. Whether and when each *is* said depends on what the student does. The build already plays every board (its witness, each wrong-answer note); it records which lines were heard on those runs, and reports lines heard on no run: a moment that is never true, or a path no run takes (the author says which).
 
 ## Order of work
 
-1. **Lines on the scene; sound out of the props' models.** `says` on a placement, `lines` said by rules; a text's line is its words. The engine's voice bus (what exists today, moved).
-2. **Each book's cast.**
-3. **Comments on lines.**
+1. **Lines on the scene; sound out of the props' models.** `says` on a placement, `lines` said by rules; a text's line is its words. The engine's voice bus. *(Done.)*
+2. **Lines are nodes:** declared moments (`when`, `if`, `about`); addresses; the sound track grouped by moment, picked for comments; the 🔊 marks; the glow while a line plays; heard-on-no-run in the build.
+3. **Each book's cast.**
 4. **Effects:** the library, the effects bus, sound views (the walker's footstep first).
-5. **Live lines** from state, on the phone's voice.
+5. **Templates:** every version made at build for known values; the server's made-on-first-use clips and the phone's voice for open ones.

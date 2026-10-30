@@ -579,8 +579,9 @@ export function PreviewBoard({
   useSourceTags(phone, where, shown.path);
   // Played as a student would (not a tool's picture): the chapter's voice, when it has one.
   const voice = useChapterVoice(shown.path, isPlaying && !isShot);
-  // The board's script beside it (`&script`, or v): what it says, and each clip.
-  const isScript = new URLSearchParams(window.location.search).has("script");
+  // The board's script beside it, while reviewing (`&noscript`, or v, hides it): every line it can
+  // say, including those only an interaction sets off, and each clip.
+  const isScript = !new URLSearchParams(window.location.search).has("noscript");
   // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
   const isProp = shown.path.startsWith(PROPS_ROOT);
   const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
@@ -1095,8 +1096,8 @@ function useEditorLink(): [boolean, (on: boolean | ((was: boolean) => boolean)) 
 function toggleParam(name: "play" | "locale" | "script"): void {
   if (name === "script") {
     const params = new URLSearchParams(window.location.search);
-    if (params.has("script")) params.delete("script");
-    else params.set("script", "");
+    if (params.has("noscript")) params.delete("noscript");
+    else params.set("noscript", "");
     window.location.search = params.toString().replace(/=(&|$)/g, "$1");
     return;
   }
@@ -1509,8 +1510,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
           <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play as
-          the app · <b>h</b> Hindi · <b>v</b> script (what is said) · <b>f</b> activity · <b>+ −</b>{" "}
-          zoom · <b>Esc</b> leave · <b>?</b> keys
+          the app · <b>h</b> Hindi · <b>v</b> script beside the board (what it can say) · <b>f</b>{" "}
+          activity · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
         </div>
       )}
       <BoardSpeedContext.Provider value={speed}>

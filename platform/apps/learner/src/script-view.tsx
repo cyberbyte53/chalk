@@ -4,7 +4,7 @@ import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 /**
- * A board's script, beside the board in the preview (`&script`, or `v`): every line it says, in
+ * A board's script, beside the board in the preview (on while reviewing; `v` hides it): every line it can say, in
  * order, who says it, what is shown and what the voice says (and where those words came from), with
  * its clip to play, in the board's language (`h` switches both). A line that still needs its spoken words says so, with the suggested draft to
  * write into its `speak`. Read from what `pnpm voice` made (public/voice/<book>/<chapter>/).
