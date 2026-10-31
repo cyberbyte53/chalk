@@ -16,7 +16,9 @@ Status: **design agreed in conversation (2026-10-31); the code moves to it next.
 
 Words take a turn and sounds play alongside, unless the cue says otherwise. Without `until` a cue plays once.
 
-**Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum, a step and Riya speaking). A repeat of the same sound replaces itself, so fast taps don't pile up. Nothing is said that a person didn't write: words are a lesson's, never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it).
+**Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum, a step and Riya speaking). A repeat of the same sound replaces itself, so fast taps don't pile up.
+
+**Words are said as written.** A lesson's words are never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it). Jugnu's words are his own: what is reviewed for him is his rules.
 
 **Defaults help, nothing forces.** Props bring their own cues, the app's settings bring voices and sounds, the engine a sensible order for finding a clip: a board is heard without anyone writing a cue. A lesson changes or silences any cue; a book or chapter overrides any setting; a voice makes its clips as it sees fit.
 
@@ -55,7 +57,7 @@ A sound ships with what uses it: a chapter's clips with the chapter (`content/<b
 
 - **The store** holds clips keyed by **voice and words**. Changing a voice changes the key: its clips are made again.
 - **One list per chapter** (`content/<book>/<chapter>/sound/sound.json`): each clip (its file, voice, language, words, length) and each library sound its cues use. It is the store's index, what review reads, and what the chapter's download fetches.
-- **Building content makes a chapter's missing clips** with the configured voice (Piper), only the new ones. `pnpm check` fails when a clip is missing or stale, naming the line: a lesson never ships silent.
+- **Building content makes a chapter's missing clips** with each speaker's voice, only the new ones. `pnpm check` fails when a clip is missing or stale, naming the line: a lesson never ships silent.
 - **Chosen clips** (step, chimes) are picked, not voiced: chosen by ear from options, kept in the library with their source and licence (`library/sounds/`), each brought to the same loudness with its shrill top trimmed when added.
 - **The build checks every cue:** its moment is an event there is, and its `where` is what that event carries; its words are speakable (or have their spoken words); its speaker is defined; its sound exists.
 
