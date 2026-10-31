@@ -395,6 +395,33 @@ describe("a scene, built and checked like any board", () => {
     ).toThrow(/no effect "boom"/);
   });
 
+  it("the student can hear the screen again: what is showing now, from the top", () => {
+    const screen = scene({
+      pieces: {
+        title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
+        found: hidden(place(sceneText, { text: t("Found it.", "मिल गया।") })),
+        later: hidden(place(sceneText, { text: t("Not yet.", "अभी नहीं।") })),
+      },
+    }).build("screen");
+    const said: string[] = [];
+    const runtime = new SceneRuntime(screen.board, (type) => propLibrary[type], {
+      locale: "en",
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async (line) => void said.push(line.name),
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    runtime.start();
+    void runtime.call("board", "show", { name: "found" });
+    runtime.settle();
+    said.length = 0;
+    void runtime.call("board", "hearAgain", {}, Actor.Learner);
+    runtime.settle();
+    expect(said).toEqual(["title", "found"]);
+  });
+
   it("refuses a line on Continue (nothing is heard after it) and a piece named board", () => {
     expect(() =>
       scene({

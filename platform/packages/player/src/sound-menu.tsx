@@ -1,10 +1,12 @@
 /** @jsxImportSource preact */
-import { type Board, type Locale, propPieces } from "@chalk/content";
+import { Actor, type Board, type Locale, propPieces } from "@chalk/content";
+import { BOARD } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { isEffectsMuted, setEffectsMuted } from "./effects";
 import { isMuted, setMuted } from "./narration";
 import type { PropRegistry } from "./prop-module";
+import { type LiveBoard, SceneRuntime } from "./scene-runtime";
 import { t } from "./ui-text";
 
 /**
@@ -15,9 +17,12 @@ import { t } from "./ui-text";
 export function SoundMenu({
   locale,
   hasSounds,
+  onHearAgain,
 }: {
   locale: Locale;
   hasSounds: boolean;
+  /** Reads the screen again, from the top (a board on the event model). */
+  onHearAgain?: (() => void) | undefined;
 }): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const menu = useRef<HTMLDivElement>(null);
@@ -50,6 +55,20 @@ export function SoundMenu({
       </button>
       {isOpen && (
         <div class="board-menu-panel" role="menu">
+          {onHearAgain !== undefined && (
+            <button
+              type="button"
+              role="menuitem"
+              class="board-menu-switch"
+              onClick={() => {
+                setIsOpen(false);
+                onHearAgain();
+              }}
+            >
+              <span>{t(locale, "hearAgain")}</span>
+              <span aria-hidden="true">↻</span>
+            </button>
+          )}
           <Switch
             label={t(locale, "voice")}
             isOn={!isMuted.value}
@@ -98,4 +117,11 @@ export function hasEffects(board: Board, registry: PropRegistry): boolean {
   return propPieces(board.root).some(
     (piece) => Object.keys(registry[piece.prop]?.sound?.effects ?? {}).length > 0,
   );
+}
+
+/** How to hear a board's screen again, when it can (a scene: today's boards have no queue to restart). */
+export function hearAgainOf(runtime: LiveBoard | undefined): (() => void) | undefined {
+  return runtime instanceof SceneRuntime
+    ? () => void runtime.call(BOARD, "hearAgain", {}, Actor.Learner)
+    : undefined;
 }

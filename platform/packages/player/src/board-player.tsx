@@ -27,7 +27,7 @@ import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
 import { BoardRuntime } from "./runtime";
 import type { LiveBoard } from "./scene-runtime";
-import { SoundMenu, hasEffects } from "./sound-menu";
+import { SoundMenu, hasEffects, hearAgainOf } from "./sound-menu";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
 import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
@@ -284,15 +284,12 @@ function BoardPlay({
           ref={body}
           onPointerDownCapture={() => recorder.gesture(true)}
         >
-          {narrator.isWaitingForTap && !isPicture && (
-            // The browser refused the board's sound until the page is touched: tapping this is that
-            // touch, and the line plays.
-            <button type="button" class="tap-to-hear">
-              {t(locale, "tapToHear")}
-            </button>
-          )}
           {!isPicture && !keepsTime && !isInLesson && (
-            <SoundMenu locale={locale} hasSounds={hasEffects(board, registry)} />
+            <SoundMenu
+              locale={locale}
+              hasSounds={hasEffects(board, registry)}
+              onHearAgain={hearAgainOf(runtime)}
+            />
           )}
           <Layout piece={board.root} context={context} />
           {pill !== undefined && (

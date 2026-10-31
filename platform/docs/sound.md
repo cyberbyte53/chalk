@@ -11,7 +11,8 @@ A board is understood through two senses. Props are drawn for the eyes; sound is
 A student's phone, the preview and the editor's panel are screens onto one system: what is heard in review is what a student hears. So no screen sets sound up: **the player finds a board's sound itself**, from the board's address (`player/board-sound.ts`), and every screen plays boards through it. The only differences are a person's choices (the menu's switches) and what a screen is: a tool's board keeps time without sound (`timed`); of several boards on one review screen, only the one looked at speaks (a device never shows two).
 
 - **The same sources everywhere:** the chapter's clips (`/voice/<book>/<chapter>/`, shipped with the app), then the phone's voice. A live voice is used only where the shipped app has one too (none yet: the studio's `/dev-voice` waits for a server), so review never sounds better than a phone.
-- **The browser's rule, on every screen:** a page can't sound until it has been touched. A sound refused for that waits, with a "🔊 Tap to hear" button, and plays on the touch: the line isn't lost (a student who refreshes mid-lesson). Where sound is allowed (a lesson opened by a tap, the editor's panel), nothing waits.
+- **The browser's rule, on every screen:** a page can't sound until it has been touched. A sound refused for that waits, silently, and plays on the first touch anywhere: the line isn't lost (a student who refreshes mid-lesson). Where sound is allowed (a lesson opened by a tap, the editor's panel), nothing waits.
+- **Hear again** (the ☰ menu): the screen as it is now is read again from the top, pieces shown since included, as the opening is read.
 
 ## Three parts that know nothing of each other's insides
 

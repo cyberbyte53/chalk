@@ -207,6 +207,8 @@ const sceneActions = {
   goOn: action(),
   /** Stops the line being said, and drops every line to come. */
   hush: action(),
+  /** The student asks to hear the screen again: what is showing now is read, top to bottom. */
+  hearAgain: action({}, { from: "screen" }),
   /** A line is done (the voice: ended, or cut): the board tells `said`, and goes on. */
   lineEnded: action({ line: z.string().min(1), step: z.number() }),
   pass: action(),
@@ -615,6 +617,12 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         ];
       },
       hush: (_, __, t) => [t.set({ saying: [], reads: [] }), (t as unknown as T).hush()],
+      // As the opening is read, but of the screen as it is now (pieces shown since included).
+      hearAgain: (me, _, t) => [
+        t.set({ saying: [], reads: names.filter((n) => !me.hidden.includes(n)) }),
+        (t as unknown as T).hush(),
+        t.self.goOn(),
+      ],
       pass: (me, _, t) =>
         !me.isPassed && [
           t.set({ isPassed: true }),

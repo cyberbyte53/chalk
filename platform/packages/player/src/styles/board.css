@@ -300,17 +300,3 @@
   background: var(--color-surface-container);
   color: var(--color-on-surface-variant);
 }
-
-/* The voice waits for the page's first touch (the browser's rule): this is the touch. */
-.tap-to-hear {
-  align-self: center;
-  margin: 0 0 12px;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}

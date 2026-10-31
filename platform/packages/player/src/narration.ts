@@ -74,8 +74,6 @@ export type Narrator = {
   hush: () => void;
   /** Lines whose audio couldn't play, by name. */
   failed: ReadonlySet<string>;
-  /** A line the browser refused waits for the page's first touch (its rule) to be heard. */
-  isWaitingForTap: boolean;
 };
 
 /** What became of a sound: heard, refused by the browser until the page's first touch, or broken. */
@@ -106,7 +104,6 @@ export function useNarrator(
   /** The line being said: a newer one (or a hush) ends its clips. */
   const saying = useRef(0);
   const [failed, setFailed] = useState<ReadonlySet<string>>(new Set());
-  const [isWaitingForTap, setIsWaitingForTap] = useState(false);
 
   const clipsFor = useCallback(
     (line: Utterance) => {
@@ -250,9 +247,7 @@ export function useNarrator(
         for (;;) {
           const played = await play();
           if (played !== "blocked" || !isMine()) return played;
-          setIsWaitingForTap(true);
           await firstTouch();
-          setIsWaitingForTap(false);
           if (!isMine()) return played;
         }
       };
@@ -313,5 +308,5 @@ export function useNarrator(
 
   const hush = stop;
 
-  return { speak, failed, seconds, hush, isWaitingForTap };
+  return { speak, failed, seconds, hush };
 }

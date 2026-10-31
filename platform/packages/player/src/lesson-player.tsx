@@ -9,7 +9,8 @@ import type { JugnuLink } from "./jugnu-panel";
 import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { RichText } from "./rich-text-view";
-import { SoundMenu, hasEffects } from "./sound-menu";
+import type { LiveBoard } from "./scene-runtime";
+import { SoundMenu, hasEffects, hearAgainOf } from "./sound-menu";
 import { t } from "./ui-text";
 
 export type LessonPlayerProps = {
@@ -52,6 +53,8 @@ export function LessonPlayer({
   // The furthest board reached: every board before it has been passed.
   const [furthest, setFurthest] = useState(startBoard);
   const board = lesson.boards[index];
+  // The board being played: the header's menu asks it to read its screen again.
+  const [runtime, setRuntime] = useState<LiveBoard | undefined>(undefined);
   const onBoardRef = useRef(onBoard);
   onBoardRef.current = onBoard;
   useEffect(() => onBoardRef.current?.(index), [index]);
@@ -85,7 +88,11 @@ export function LessonPlayer({
         </div>
         <span class="sr-only">{`${Math.min(index + 1, lesson.boards.length)} / ${lesson.boards.length}`}</span>
         {board !== undefined && (
-          <SoundMenu locale={locale} hasSounds={hasEffects(board, registry)} />
+          <SoundMenu
+            locale={locale}
+            hasSounds={hasEffects(board, registry)}
+            onHearAgain={hearAgainOf(runtime)}
+          />
         )}
       </header>
       {board === undefined && onComplete !== undefined ? null : board === undefined ? (
@@ -107,6 +114,7 @@ export function LessonPlayer({
           locale={locale}
           record={bus.record}
           isInLesson
+          onRuntime={setRuntime}
           onPass={() => {
             setIndex(index + 1);
             setFurthest(Math.max(furthest, index + 1));
