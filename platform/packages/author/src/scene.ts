@@ -30,7 +30,17 @@ import {
 } from "@chalk/prop/next";
 import { type ZodTypeAny, z } from "zod";
 import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
-import { type Cue, NOT_FOR_SOUNDS, type SoundCue, type WordsCue } from "./sound";
+import {
+  type Cue,
+  NOT_FOR_SOUNDS,
+  type Queued,
+  type SoundCue,
+  type WordsCue,
+  lineDue,
+  lineEnded,
+  pieceHidden,
+  queuedSchema,
+} from "./sound";
 
 /**
  * A board on the event model (platform/docs/event-model.md): the scene is the outermost prop. Its
@@ -133,21 +143,13 @@ type ChildrenOfPieces<P extends Pieces> = { readonly [K in keyof P]: P[K]["def"]
 /** A line come due: its name, and its moment's values when its words have blanks. */
 type Due = { line: string; values?: Readonly<Record<string, unknown>> };
 
-/** A line in the board's queue, with the step that brought it (platform/docs/sound.md). */
-/** The values of a line's moment, for the blanks in its words. */
-const lineValues = z.record(z.string(), z.unknown());
-const queued = z
-  .object({ line: z.string().min(1), step: z.number(), values: lineValues.optional() })
-  .strict();
-type Queued = z.infer<typeof queued>;
-
 const sceneVariables = z
   .object({
     /** The pieces not shown yet. */
     hidden: z.array(z.string()),
     isPassed: z.boolean(),
     /** The lines to say, in order: the first is being said (or in its quiet). */
-    saying: z.array(queued),
+    saying: z.array(queuedSchema),
     /** The opening's reads still to come: said when the board has nothing else to say. */
     reads: z.array(z.string()),
   })
@@ -162,7 +164,7 @@ const sceneActions = {
    * A line (a piece's, or one of the board's own) is to be said, by the two rules: the board talks
    * in turn; what the student caused stops it and is said instead.
    */
-  say: action({ line: z.string().min(1), values: lineValues.optional() }),
+  say: action({ line: z.string().min(1), values: queuedSchema.shape.values }),
   /** If nothing is being said, the opening goes on: its next read. */
   goOn: action(),
   /** Stops the line being said, and drops every line to come. */
@@ -550,24 +552,22 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
           throw new Error(`Board ${name}: no line "${line}" (a piece's name, or one of its lines)`);
         const tt = t as unknown as T;
         const { byStudent, step } = tt.cause;
-        const head = me.saying[0];
         const mine: Queued = { line, step, ...(values === undefined ? {} : { values }) };
-        if (byStudent && head?.step !== step)
-          return [t.set({ saying: [mine], reads: [] }), sayNow(tt, mine)];
-        if (head === undefined) return [t.set({ saying: [mine] }), sayNow(tt, mine)];
-        return t.set({ saying: [...me.saying, mine] });
+        const next = lineDue(me.saying, mine, byStudent);
+        return [
+          t.set({ saying: next.saying, ...(next.isCut ? { reads: [] } : {}) }),
+          ...(next.say === undefined ? [] : [sayNow(tt, next.say)]),
+        ];
       },
       // A line is done, heard or cut: the board tells it and what waits on it runs either way.
       // The line being said (not one cut and replaced) leaves the queue, and the next is said.
       lineEnded: (me, { line, step }, t) => {
-        const head = me.saying[0];
-        const isHead = head?.line === line && head.step === step;
-        const rest = isHead ? me.saying.slice(1) : me.saying;
+        const after = lineEnded(me.saying, line, step);
         const tt = t as unknown as T;
         return [
           tell(t, "said", { line }),
-          ...(isHead ? [t.set({ saying: rest })] : []),
-          ...(isHead && rest[0] !== undefined ? [sayAfterBreath(tt, rest[0])] : []),
+          ...(after === undefined ? [] : [t.set({ saying: after.saying })]),
+          ...(after?.next === undefined ? [] : [sayAfterBreath(tt, after.next)]),
           ...dueAtBoard("said", me, { line }).map((due) => t.self.say(due)),
           ...list(onSaid[line]?.(me as never, t as never) as Outs),
           t.self.goOn(),
@@ -585,19 +585,15 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       // A piece hidden is no longer heard: its lines are dropped, and cut if being said.
       hide: (me, { name: piece }, t) => {
         if (me.hidden.includes(piece)) return;
-        const isBeingSaid = me.saying[0]?.line === piece;
-        const saying = me.saying.filter((q) => q.line !== piece);
+        const { saying, isCut, next } = pieceHidden(me.saying, piece);
         const tt = t as unknown as T;
-        const next = saying[0];
         return [
           t.set({
             hidden: [...me.hidden, piece],
             saying,
             reads: me.reads.filter((n) => n !== piece),
           }),
-          ...(isBeingSaid
-            ? [tt.hush(), next === undefined ? t.self.goOn() : sayNow(tt, next)]
-            : []),
+          ...(isCut ? [tt.hush(), next === undefined ? t.self.goOn() : sayNow(tt, next)] : []),
         ];
       },
       hush: (_, __, t) => [t.set({ saying: [], reads: [] }), (t as unknown as T).hush()],

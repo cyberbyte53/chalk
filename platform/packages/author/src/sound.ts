@@ -1,4 +1,5 @@
 import type { Localized, Sound } from "@chalk/content";
+import { z } from "zod";
 
 /**
  * A cue (platform/docs/sound.md): when a moment comes, play something. Its moment is written with
@@ -65,3 +66,62 @@ export function cue(
 
 /** What a cue was given that its kind doesn't have (a sound with a speaker, words that last). */
 export const NOT_FOR_SOUNDS = ["says", "speaker", "about", "if"] as const;
+
+/*
+ * The two rules (platform/docs/sound.md), over the board's queue of lines: the first is being said,
+ * the rest wait. 1. The board talks in turn. 2. When the student acts, the board stops and responds.
+ */
+
+/** A line in the board's queue, with the step that brought it. */
+export const queuedSchema = z
+  .object({
+    line: z.string().min(1),
+    step: z.number(),
+    /** The values of its moment, for the blanks in its words. */
+    values: z.record(z.string(), z.unknown()).optional(),
+  })
+  .strict();
+export type Queued = z.infer<typeof queuedSchema>;
+
+/**
+ * A line comes due. What the student caused, in a step of theirs, cuts in: the line being said is
+ * cut, everything waiting is dropped (the opening's reads too), and it is said now. Else it waits
+ * its turn, or is said now if nothing is. `say`: the line to start now, if any.
+ */
+export function lineDue(
+  saying: readonly Queued[],
+  line: Queued,
+  byStudent: boolean,
+): { saying: Queued[]; say?: Queued; isCut: boolean } {
+  const head = saying[0];
+  if (byStudent && head?.step !== line.step) return { saying: [line], say: line, isCut: true };
+  if (head === undefined) return { saying: [line], say: line, isCut: false };
+  return { saying: [...saying, line], isCut: false };
+}
+
+/**
+ * A line is done, heard or cut. The one being said leaves the queue, and the next is said;
+ * undefined when it wasn't the one being said (it was cut and replaced: the queue is the new one's).
+ */
+export function lineEnded(
+  saying: readonly Queued[],
+  line: string,
+  step: number,
+): { saying: Queued[]; next?: Queued } | undefined {
+  const head = saying[0];
+  if (head?.line !== line || head.step !== step) return undefined;
+  const rest = saying.slice(1);
+  return rest[0] === undefined ? { saying: rest } : { saying: rest, next: rest[0] };
+}
+
+/** A piece hidden: its lines leave the queue; if it was being said, it is cut and the next said. */
+export function pieceHidden(
+  saying: readonly Queued[],
+  piece: string,
+): { saying: Queued[]; isCut: boolean; next?: Queued } {
+  const rest = saying.filter((q) => q.line !== piece);
+  const isCut = saying[0]?.line === piece;
+  return isCut && rest[0] !== undefined
+    ? { saying: rest, isCut, next: rest[0] }
+    : { saying: rest, isCut };
+}

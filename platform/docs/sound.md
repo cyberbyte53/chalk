@@ -90,7 +90,7 @@ One `sound` home per layer; elsewhere code only connects to it. One name per ide
 | Layer | Home | Holds |
 |---|---|---|
 | Contract | `content/src/sound/` | a sound, a chapter's clips and their list, a cue as built, words → phrases |
-| Lessons | `author/src/sound.ts` | `cue(…)`: writing cues (the queue and the two rules are still in `scene.ts`) |
+| Lessons | `author/src/sound.ts` | `cue(…)`: writing cues; the two rules, over the board's queue (`lineDue`, `lineEnded`, `pieceHidden`) |
 | Player | `player/src/sound/` | the engine, the narrator (finding a line's clips), the phone's voice, the board's store, the menu |
 | Build | `studio/src/sound/` | voicing a chapter's clips (`voice/`); the sound library's command (`pnpm sound`) |
 | Chosen clips | `library/sounds/` | the sounds, each a role, with `sounds.json` (the one definition; `index.ts` is written from it) |
@@ -102,7 +102,6 @@ The app's own sounds ship with the app and are kept for offline with it; a chapt
 
 - Sound cues shown in the script before they are heard (today `play` shows them as heard).
 - Settings with overrides (app → book → chapter): voices have one level today (`authoring/voices.json`); sounds need none until a book wants its own.
-- The queue in its own file.
 
 ## Not now
 
