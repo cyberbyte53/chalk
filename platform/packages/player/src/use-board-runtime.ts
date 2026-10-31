@@ -1,3 +1,4 @@
+import type { Effect } from "@chalk/content";
 import type { Board, Locale } from "@chalk/content";
 import type { Utterance } from "./narration";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
@@ -33,6 +34,8 @@ export function useBoardRuntime(
     hush?: () => void;
     /** A tool's board: lines keep their lengths; nothing waits for real sound (board-player.tsx). */
     isTimed?: boolean;
+    /** Plays a sound effect (effects.ts). */
+    effect?: (effect: Effect) => void;
   },
 ): LiveBoard {
   const speed = useContext(BoardSpeedContext);

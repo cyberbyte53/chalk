@@ -1,6 +1,8 @@
 export {
   type AudioManifest,
   type Clip,
+  EFFECTS,
+  Effect,
   NARRATOR,
   audioManifestSchema,
   clipsOf,

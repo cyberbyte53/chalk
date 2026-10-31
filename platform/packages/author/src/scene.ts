@@ -1,4 +1,6 @@
 import {
+  EFFECTS,
+  type Effect,
   LOCALES,
   type Localized,
   type Piece,
@@ -247,6 +249,16 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
   readonly onSaid?: {
     readonly [K in (keyof P | keyof L) & string]?: (me: SceneMe<P>, t: SceneTools<P>) => Outs;
   };
+  /**
+   * Sound effects at moments (platform/docs/sound.md): by a signal ("line.walker.stepped", or the
+   * board's own, "board.passed"), the effect heard then; added to its pieces' own, or replacing
+   * them; null silences one.
+   */
+  readonly effects?: {
+    readonly [K in
+      | HeardPaths<ChildrenOfPieces<P>>
+      | `board.${keyof typeof sceneSignals}`]?: Effect | null;
+  };
   /** The lesson's rules: on a piece's signal ("town.walker.arrived"), do these things. */
   readonly hear?: {
     readonly [K in HeardPaths<ChildrenOfPieces<P>>]?: Rule<
@@ -337,6 +349,17 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     throw new Error(`Board ${name}: a piece can't be named "${BOARD_EVENTS}" (the board's own)`);
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
   const freeLines = spec.lines ?? {};
+  // Each effect is at a signal there is, and is an effect there is.
+  for (const [at, effect] of Object.entries(spec.effects ?? {})) {
+    if (signalAt(spec.pieces, at) === undefined)
+      throw new Error(
+        `Board ${name}: the effect at "${at}" isn't at a signal here ("line.walker.stepped", "board.passed")`,
+      );
+    if (effect !== null && !EFFECTS.includes(effect as Effect))
+      throw new Error(
+        `Board ${name}: no effect "${String(effect)}" (there are ${EFFECTS.join(", ")})`,
+      );
+  }
   // A piece's line is said as it appears: no moment's values to fill blanks with.
   for (const [piece, placed] of Object.entries(spec.pieces))
     if (placed.says !== undefined && isTemplate(placed.says))
@@ -627,7 +650,15 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       ...(free.if === undefined ? {} : { hasCondition: true }),
       ...(free.about === undefined ? {} : { about: free.about }),
     };
-  const model: SceneModel = { scene: root, given, lines, freeLines: Object.keys(freeLines) };
+  const model: SceneModel = {
+    scene: root,
+    given,
+    lines,
+    freeLines: Object.keys(freeLines),
+    ...(spec.effects === undefined
+      ? {}
+      : { effects: spec.effects as Record<string, Effect | null> }),
+  };
   const standsFor = Object.fromEntries(
     Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),
   ) as Record<string, string>;

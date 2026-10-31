@@ -346,6 +346,55 @@ describe("a scene, built and checked like any board", () => {
     expect(said).toEqual(["title", "ask"]);
   });
 
+  it("sounds effects at signals: a prop's own, and the lesson's (adding, replacing, silencing)", async () => {
+    const walking = (effects?: Record<string, string | null>) =>
+      scene({
+        pieces: {
+          plane: place(sceneCoordinatePlane, {
+            walker: { walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 } },
+          }),
+          ask,
+        },
+        ...(effects === undefined ? {} : { effects: effects as never }),
+      }).build("walking");
+    const effectsOf = async (built: ReturnType<typeof walking>) => {
+      const played: string[] = [];
+      const runtime = new SceneRuntime(built.board, (type) => propLibrary[type], {
+        locale: "en",
+        now: () => 0,
+        frame: () => () => undefined,
+        speak: async () => undefined,
+        effect: (e) => void played.push(e),
+        onError: (message) => {
+          throw new Error(message);
+        },
+      });
+      runtime.start();
+      await runtime.call("plane", "walker.step", { direction: "right" }, Actor.Learner);
+      runtime.settle(1, true);
+      await runtime.call("ask", "select", { option: "house" }, Actor.Learner);
+      await runtime.call("ask", "check", {}, Actor.Learner);
+      runtime.settle();
+      expect(runtime.effects().map((e) => e.effect)).toEqual(played);
+      return played;
+    };
+    // The props' own: the walker's step, the question answered wrong.
+    expect(await effectsOf(walking())).toEqual(["step", "wrong"]);
+    // The lesson's: a tap for each step instead, and no sound for a wrong answer.
+    expect(await effectsOf(walking({ "plane.walker.stepped": "tap", "ask.wrong": null }))).toEqual([
+      "tap",
+    ]);
+  });
+
+  it("refuses an effect at no signal, or one there isn't", () => {
+    expect(() =>
+      scene({ pieces: { ask }, effects: { "ask.landed": "step" } as never }).build("bad"),
+    ).toThrow(/the effect at "ask.landed" isn't at a signal here/);
+    expect(() =>
+      scene({ pieces: { ask }, effects: { "ask.wrong": "boom" } as never }).build("bad"),
+    ).toThrow(/no effect "boom"/);
+  });
+
   it("refuses a line on Continue (nothing is heard after it) and a piece named board", () => {
     expect(() =>
       scene({

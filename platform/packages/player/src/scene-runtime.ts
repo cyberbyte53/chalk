@@ -2,6 +2,7 @@ import {
   AGENT_LOCALE,
   Actor,
   type Board,
+  type Effect,
   LOCALES,
   type Locale,
   type Localized,
@@ -73,6 +74,8 @@ export class SceneRuntime {
       lineSeconds?: (line: Utterance) => number | undefined;
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
+      /** Plays a sound effect (effects.ts): at once, never waited for. */
+      effect?: (effect: Effect) => void;
       /**
        * A line is over when its sound is (`speak` resolves): a student's board, at real speed. Else
        * it lasts as long as its clips, or its words would take, on the board's clock (a check, a
@@ -199,8 +202,39 @@ export class SceneRuntime {
           actor: Actor.Lesson,
         };
         for (const fn of this.signalListeners) fn(record);
+        this.sound(piece, rest, event.signal, event.payload);
       }
     });
+  }
+
+  /**
+   * The effect a signal sounds, if any: the lesson's for it (null: none), else its piece's sound
+   * view's. Played on the effects' own channel, and logged.
+   */
+  private sound(
+    piece: string,
+    inside: readonly string[],
+    signal: string,
+    told: Readonly<Record<string, unknown>>,
+  ): void {
+    const at = [piece === "" ? "board" : piece, ...inside, signal].join(".");
+    const lesson = this.board.model?.effects?.[at];
+    const type = propPieces(this.board.root).find((p) => p.name === piece)?.prop;
+    const own =
+      type === undefined
+        ? undefined
+        : this.lookup(type)?.sound?.effects?.[[...inside, signal].join(".")];
+    const effect = lesson !== undefined ? lesson : typeof own === "function" ? own(told) : own;
+    if (effect === null || effect === undefined) return;
+    this.soundedEffects.push({ effect, at, time: this.core.now });
+    this.services.effect?.(effect);
+  }
+
+  private readonly soundedEffects: SoundedEffect[] = [];
+
+  /** Every effect heard on this board so far, in order: which, at which signal, when. */
+  effects(): readonly SoundedEffect[] {
+    return this.soundedEffects;
   }
 
   /** A line's words: the lesson's own for it, else what its piece says of itself, as it is now. */
@@ -510,6 +544,9 @@ export class SceneRuntime {
 }
 
 /** A line as it was heard on a board. */
+/** An effect heard on the board: which, at which signal ("line.walker.stepped"), when. */
+export type SoundedEffect = { effect: Effect; at: string; time: number };
+
 export type HeardLine = {
   line: string;
   /** The piece it is about (its own piece for a piece's line). */

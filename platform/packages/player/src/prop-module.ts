@@ -1,4 +1,4 @@
-import type { Locale, Localized } from "@chalk/content";
+import type { Effect, Locale, Localized } from "@chalk/content";
 import type {
   ActionSpec,
   AnyPropDef,
@@ -38,6 +38,13 @@ type StateOfDef<P> = P extends { readonly defaults: infer S extends StoredState 
  */
 export type SoundView = {
   line?: (view: PropView) => Localized | undefined;
+  /**
+   * Its own effects, by the signal they sound at, inside the piece: its own ("correct") or a part's
+   * ("walker.stepped"); from what the signal carries when the effect depends on it.
+   */
+  effects?: Readonly<
+    Record<string, Effect | ((told: Readonly<Record<string, unknown>>) => Effect | undefined)>
+  >;
 };
 
 /** A prop as the player knows it: the definition, how it looks, and how it sounds. */

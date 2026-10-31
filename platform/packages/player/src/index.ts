@@ -25,6 +25,7 @@ export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource, PlayableClip, Utterance } from "./narration";
 export { linePhrases, spokenWords } from "./spoken-line";
+export { isEffectsMuted, playEffect, setEffectsMuted } from "./effects";
 export {
   type PropModule,
   type PropRegistry,
@@ -47,7 +48,13 @@ export { type DragAttrs, type DragSpec, useDrags } from "./drag";
 export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
 export { BoardSpeedContext } from "./use-board-runtime";
-export { type HeardLine, type LiveBoard, SceneRuntime, isSceneBoard } from "./scene-runtime";
+export {
+  type HeardLine,
+  type LiveBoard,
+  SceneRuntime,
+  type SoundedEffect,
+  isSceneBoard,
+} from "./scene-runtime";
 export { type ScriptLine, scriptOf } from "./script";
 export { type MathsReader, type RichSpeech, type SaidPiece, richSpeech } from "./rich-text-speech";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";

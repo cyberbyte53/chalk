@@ -1,5 +1,6 @@
 import type { AnyProp, Given } from "@chalk/prop/next";
 import { z } from "zod";
+import type { Effect } from "./audio";
 import { jugnuNotesSchema } from "./jugnu";
 import type { Localized } from "./localized";
 import { pieceSchema } from "./piece";
@@ -133,6 +134,11 @@ export type SceneModel = {
   readonly lines: Readonly<Record<string, SceneLine>>;
   /** The narration lines' names, in the order written. */
   readonly freeLines: readonly string[];
+  /**
+   * The lesson's effects, by the signal they sound at ("line.walker.stepped"): added to its pieces'
+   * own, or replacing them; null silences one.
+   */
+  readonly effects?: Readonly<Record<string, Effect | null>>;
 };
 
 /**

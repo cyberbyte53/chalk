@@ -1,7 +1,7 @@
 import type { AnyPropDef } from "@chalk/prop";
 import { type ComponentType, type JSX, h } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import type { PropModule, PropRegistry, PropViewProps } from "./prop-module";
+import type { PropModule, PropRegistry, PropViewProps, SoundView } from "./prop-module";
 import { useWhenChanged } from "./when-changed";
 
 /**
@@ -11,6 +11,11 @@ import { useWhenChanged } from "./when-changed";
  */
 export type PropPack = {
   defs: readonly AnyPropDef[];
+  /**
+   * How its props sound, by type (platform/docs/sound.md): small, and needed before any drawing
+   * loads (the script, the build, a board's first line), so it comes with the definitions.
+   */
+  sounds?: Readonly<Record<string, SoundView>>;
   load: () => Promise<Readonly<Record<string, unknown>>>;
 };
 
@@ -94,7 +99,15 @@ export function lazyRegistry(
   const registry: PropRegistry = Object.fromEntries([
     ...eager.map((module) => [module.def.type, module] as const),
     ...packs.flatMap((pack) =>
-      pack.defs.map((def) => [def.type, { def, View: lazyView(def.type, pack) }] as const),
+      pack.defs.map((def) => {
+        const sound = pack.sounds?.[def.type];
+        const module: PropModule = {
+          def,
+          View: lazyView(def.type, pack),
+          ...(sound === undefined ? {} : { sound }),
+        };
+        return [def.type, module] as const;
+      }),
     ),
   ]);
 

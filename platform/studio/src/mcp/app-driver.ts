@@ -389,15 +389,20 @@ export type Step =
   | { call: string; on: string; args?: Readonly<Record<string, unknown>> };
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
-/** A line heard on the board (the player's HeardLine): what an agent reviews of the sound. */
-export type Heard = {
-  line: string;
-  speaker: string;
-  words: string;
-  at: number;
-  seconds: number;
-  cutAt?: number;
-};
+/**
+ * What was heard on the board: a line (the player's HeardLine), or an effect at a signal (its
+ * SoundedEffect). What an agent reviews of the sound.
+ */
+export type Heard =
+  | {
+      line: string;
+      speaker: string;
+      words: string;
+      at: number;
+      seconds: number;
+      cutAt?: number;
+    }
+  | { effect: string; signal: string; at: number };
 
 export type StepResult = {
   step: string;

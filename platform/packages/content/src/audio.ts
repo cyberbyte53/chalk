@@ -52,3 +52,23 @@ export function clipsOf(
   }
   return clips;
 }
+
+/**
+ * The sound effects there are, by name (platform/docs/sound.md): lessons and props name effects,
+ * the player makes them (player/effects.ts).
+ */
+export const Effect = {
+  /** A footstep, a bus moving a stop: something taking one step. */
+  Step: "step",
+  /** Something pressed or chosen. */
+  Tap: "tap",
+  /** An answer that is right. */
+  Correct: "correct",
+  /** An answer that isn't. */
+  Wrong: "wrong",
+  /** Something rising or appearing (a street rising from the road). */
+  Rise: "rise",
+} as const;
+export type Effect = (typeof Effect)[keyof typeof Effect];
+
+export const EFFECTS: readonly Effect[] = Object.values(Effect);

@@ -47,6 +47,11 @@ Any other source (an AI voice agent) is one more in the list. On a student's boa
 
 **An effect** is a named sound at a moment (a footstep on `walker.stepped`). Effects are not lines: they play at once, overlap each other, are never waited for, and are muted on their own. A repeat of the same effect replaces itself.
 
+- **Its name** is from a short list (`Effect` in content: step, tap, correct, wrong, rise); the player makes each from a small recipe in the browser (`player/effects.ts`), nothing stored. A recipe can become a recorded file under the same name.
+- **A prop says its own** in its sound view, by its signal inside the piece: the coordinate plane's `walker.stepped` is a step, `plane.risen` a rise; a question's `correct` and `wrong`. Sound views come with a package's definitions, not its drawing: they are needed before any drawing loads.
+- **A lesson adds or replaces** them by signal (`effects: { "line.walker.stepped": "tap", "ask.wrong": null }`); null silences one. The build checks each is at a signal there is, and an effect there is.
+- `play` shows each: `sound · step (line.walker.stepped)`.
+
 ## Which line is heard: two rules
 
 1. **The board talks in turn.** One line at a time, in the order they come due: the opening read top to bottom, a line after another, a reply the lesson shows, lines set off by Jugnu's actions.
@@ -100,7 +105,7 @@ A character, never a voice. Each book has its cast (characters' voices per langu
 1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going. *(Done. Today's voice keeps time on the board's clock with each clip's length (`timedVoice`): the length lives in the voice. Real audio telling its own end comes with step 3.)*
 2. **Templates and sayers,** with one real line in the chapter (the bus board's "Stop {x}."); clips glued from phrases; the phone's voice when a phrase has none. *(Done: numbers only, as the number sayer; others (fractions, powers, measures, counts) as lessons need them.)*
 3. **The live source and the never-stuck promise:** a live voice between clips and the phone; real sound telling its own end; every sound bounded. *(Done, in development: the studio's `/dev-voice`. A deployed server is the same door.)*
-4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops).
+4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops). *(Done: the library, its channel and mute, sound views and lessons' effects. Props telling more moments come as lessons need them.)*
 5. **Each book's cast.**
 6. **Jugnu as a speaker.**
 

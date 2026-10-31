@@ -16,6 +16,7 @@ import {
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type Picked, isSamePick, useHoldToAsk } from "./ask-about";
+import { isEffectsMuted, playEffect, setEffectsMuted } from "./effects";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { type JugnuLink, JugnuPanel } from "./jugnu-panel";
 import { Layout, type LayoutContext } from "./layout";
@@ -119,6 +120,8 @@ export function BoardPlayer({
     locale,
     lineSeconds: (line) => narratorRef.current.seconds(line),
     isTimed,
+    // A tool's board keeps its effects in the log only: nothing is played.
+    ...(isTimed ? {} : { effect: playEffect }),
     hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).
@@ -346,6 +349,22 @@ export function BoardPlayer({
                 ) : (
                   <path d="M13 7 Q15 10 13 13 M15.5 5 Q19 10 15.5 15" />
                 )}
+              </svg>
+            </button>
+          )}
+          {board.model !== undefined && !isTimed && (
+            <button
+              type="button"
+              class="back mute"
+              aria-label={t(locale, isEffectsMuted.value ? "soundsOn" : "soundsOff")}
+              aria-pressed={isEffectsMuted.value}
+              onClick={() => setEffectsMuted(!isEffectsMuted.value)}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path class="speaker" d="M8 14.5 V5 L15 3.5 V13" />
+                <circle cx="6" cy="14.5" r="2" />
+                <circle cx="13" cy="13" r="2" />
+                {isEffectsMuted.value && <path d="M3 3 L17 17" />}
               </svg>
             </button>
           )}

@@ -816,8 +816,9 @@ function rounded(v: unknown): unknown {
 /** The piece a changed value belongs to: "game.rounds" or "game/plates.count" → game. */
 const pieceOfPath = (path: string) => path.split(/[./]/)[0] ?? path;
 
-/** A line heard, in words: `   said · narrator · fiveHouses: "Street 4 rises…" (6.8 s, cut at 2.1 s)`. */
+/** What was heard, in words: `   said · narrator · fiveHouses: "Street 4 rises…" (6.8 s)`, `   sound · step (line.walker.stepped)`. */
 function heardLine(h: Heard): string {
+  if ("effect" in h) return `   sound · ${h.effect} (${h.signal})`;
   const cut = h.cutAt === undefined ? "" : `, cut after ${(h.cutAt - h.at).toFixed(1)} s`;
   return `   said · ${h.speaker} · ${h.line}: "${h.words}" (${h.seconds.toFixed(1)} s${cut})`;
 }
