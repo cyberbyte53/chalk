@@ -1,4 +1,4 @@
-import { type AudioManifest, type Locale, clipsOf } from "@chalk/content";
+import { type Locale, type SoundList, clipsOf } from "@chalk/content";
 import { RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
  * A board's script, beside the board in the preview (on while reviewing; `v` hides it): every line it can say, in
  * order, who says it, what is shown and what the voice says (and where those words came from), with
  * its clip to play, in the board's language (`h` switches both). A line that still needs its spoken words says so, with the suggested draft to
- * write into its `speak`. Read from what `pnpm voice` made (public/voice/<book>/<chapter>/).
+ * write into its `speak`. Read from the chapter's built content: its script, and its sound list.
  */
 
 /** What is said for a line in one language (platform/studio/src/voice/said.ts). */
@@ -54,20 +54,20 @@ function glow(from: HTMLElement, piece: string | undefined, isOn: boolean): void
 }
 
 /** The chapter's script and clips, loaded once per chapter. */
-function useScript(path: string): { script: Script; manifest: AudioManifest; base: string } | null {
+function useScript(path: string): { script: Script; sound: SoundList; base: string } | null {
   const [book, chapter] = path.split("/");
-  const base = `/voice/${book}/${chapter}`;
-  const [loaded, setLoaded] = useState<{ script: Script; manifest: AudioManifest } | null>(null);
+  const base = `/content/${book}/${chapter}`;
+  const [loaded, setLoaded] = useState<{ script: Script; sound: SoundList } | null>(null);
   useEffect(() => {
     let isLive = true;
     Promise.all([
       fetch(`${base}/script.json`).then((r) => (r.ok ? (r.json() as Promise<Script>) : null)),
-      fetch(`${base}/manifest.json`).then((r) =>
-        r.ok ? (r.json() as Promise<AudioManifest>) : null,
+      fetch(`${base}/sound/sound.json`).then((r) =>
+        r.ok ? (r.json() as Promise<SoundList>) : null,
       ),
     ])
-      .then(([script, manifest]) => {
-        if (isLive && script !== null && manifest !== null) setLoaded({ script, manifest });
+      .then(([script, sound]) => {
+        if (isLive && script !== null && sound !== null) setLoaded({ script, sound });
       })
       .catch(() => undefined);
     return () => {
@@ -130,7 +130,7 @@ export function ScriptView({
               const clips =
                 phrases === undefined
                   ? undefined
-                  : clipsOf(loaded.manifest, line.speaker, locale, phrases);
+                  : clipsOf(loaded.sound, line.speaker, locale, phrases);
               const seconds = clips?.reduce((sum, c) => sum + c.seconds, 0);
               const shown = line.shown[locale];
               return (
@@ -161,7 +161,8 @@ export function ScriptView({
                         disabled={clips === undefined}
                         aria-label="Play its clips"
                         onClick={() =>
-                          clips !== undefined && play(clips.map((c) => `${loaded.base}/${c.file}`))
+                          clips !== undefined &&
+                          play(clips.map((c) => `${loaded.base}/sound/${c.file}`))
                         }
                       >
                         ▶

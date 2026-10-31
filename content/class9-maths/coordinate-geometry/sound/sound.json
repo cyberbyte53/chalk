@@ -1,0 +1,780 @@
+{
+  "speakers": {
+    "narrator": {
+      "en": "piper:en_US-lessac-high",
+      "hi": "piper:hi_IN-rohan-medium"
+    }
+  },
+  "clips": [
+    {
+      "file": "c8ada71708acda47.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "(4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.",
+      "seconds": 9.172
+    },
+    {
+      "file": "1312c0d36dce3b25.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A bus on a straight road",
+      "seconds": 1.429
+    },
+    {
+      "file": "7448a05890f491a0.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on: a number line.",
+      "seconds": 12.818
+    },
+    {
+      "file": "d34cb0e3dc456a01.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A dot on a page",
+      "seconds": 1.266
+    },
+    {
+      "file": "4de3580c8540155f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman lives at Street 1, House 4. Walk Riya there from the corner, then press Check.",
+      "seconds": 5.527
+    },
+    {
+      "file": "9b34f946c665b0cf.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman lives at Street 2, House 4. Walk Riya there from the corner, then press Check.",
+      "seconds": 5.562
+    },
+    {
+      "file": "53d02354a3326598.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman lives at Street 3, House 5. Walk Riya there from the corner, then press Check.",
+      "seconds": 5.55
+    },
+    {
+      "file": "2be58e7b8c61b827.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman lives at Street 5, House 5. Walk Riya there from the corner, then press Check.",
+      "seconds": 5.585
+    },
+    {
+      "file": "2fa84bfe1f7ebe20.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman lives at Street 6, House 2. Walk Riya there from the corner, then press Check.",
+      "seconds": 5.376
+    },
+    {
+      "file": "8af3e620e577aeba.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman's house isn't on one line: it's along the main road and then up a street, so one number couldn't say where it is. It took two numbers: how far along the main road (Street 4), then how far up the street that rises there (House 5).",
+      "seconds": 13.445
+    },
+    {
+      "file": "80320bf348e52571.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Are the desks (5, 3) and (3, 5) the same desk?",
+      "seconds": 3.518
+    },
+    {
+      "file": "f3db11c33e8205b2.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Both are true, and the dot could still be anywhere in that patch.",
+      "seconds": 3.495
+    },
+    {
+      "file": "11d9154c081958bb.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Closer, but every spot on that line is 5 cm from the left edge.",
+      "seconds": 3.809
+    },
+    {
+      "file": "ccc9072f01457dc7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Desks in a classroom",
+      "seconds": 1.312
+    },
+    {
+      "file": "ad45b4f598d344de.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Finding Aman's house",
+      "seconds": 1.37
+    },
+    {
+      "file": "674a5dcb0291a011.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its column, counted from the left, then its row, counted from the front (row 1 is the front row). Sonia sits in column 4, row 1, so her desk is (4, 1).",
+      "seconds": 18.437
+    },
+    {
+      "file": "2be8bd814c6f9eed.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+      "seconds": 11.123
+    },
+    {
+      "file": "e1c366a5667986b5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "How will you describe the position of a table lamp on your study table to another person?",
+      "seconds": 4.621
+    },
+    {
+      "file": "c301a630c292d29a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "It is 2 stops away; the minus only says which way, left.",
+      "seconds": 3.716
+    },
+    {
+      "file": "d18be6f61cd47f09.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Look at the bus: it went left from 0. The minus sign says which side.",
+      "seconds": 4.795
+    },
+    {
+      "file": "04a54e9396e5363b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Look back at the three places:",
+      "seconds": 1.812
+    },
+    {
+      "file": "8dfc456d5f7ee8db.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Move the bus one stop at a time with the left and right arrows. Take it to stop 3.",
+      "seconds": 4.691
+    },
+    {
+      "file": "2d6c261eea907cc8.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Now every street rises, and the town is there. Tap any house to make it Aman's: Riya goes back to the corner. Say how she gets there, then walk her and check.",
+      "seconds": 8.453
+    },
+    {
+      "file": "fe994da98e640e72.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Put the dot 11 cm from the left edge and 5 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
+      "seconds": 8.336
+    },
+    {
+      "file": "93bf1ae937dfc2f6.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Put the dot 2 cm from the left edge and 8 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
+      "seconds": 8.429
+    },
+    {
+      "file": "2cfefefd954a0e1b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Put the dot 4 cm from the left edge and 10 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
+      "seconds": 8.29
+    },
+    {
+      "file": "f9cc5ce5dce0902e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Put the dot 7 cm from the left edge and 3 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
+      "seconds": 8.093
+    },
+    {
+      "file": "8dc51a803bff5704.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. She asks him where he lives. He replies: Street 4.",
+      "seconds": 11.703
+    },
+    {
+      "file": "af0448c79f2220b1.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Riya messages him again. He replies: House 5, a number on the street that rose. Walk her up to it.",
+      "seconds": 6.409
+    },
+    {
+      "file": "3ad304767bf5bc1a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Street 4 rises from the 4: a second number line, going up, with five houses on it. Which one is Aman's?",
+      "seconds": 6.781
+    },
+    {
+      "file": "d622d0403331cc72.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Street plan. A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 metres apart. There are 5 streets in each direction. Using 1 centimetre for 200 metres, draw a model of the city on your notebook. Represent the roads and streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many cross-streets can be referred to as (4, 3); (ii) how many cross-streets can be referred to as (3, 4).",
+      "seconds": 50.69
+    },
+    {
+      "file": "572ea53664772c80.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap the desk (1, 5), then press Check.",
+      "seconds": 2.682
+    },
+    {
+      "file": "1477e14dc2ac8ddd.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap the desk (2, 6), then press Check.",
+      "seconds": 2.926
+    },
+    {
+      "file": "1cfe0839955edf04.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap the desk (5, 3), then press Check.",
+      "seconds": 2.694
+    },
+    {
+      "file": "93e51b519ed71d98.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap the desk (7, 4), then press Check.",
+      "seconds": 2.845
+    },
+    {
+      "file": "61fde4640fc2fb30.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap the desk at (5, 3), then the one at (3, 5).",
+      "seconds": 3.379
+    },
+    {
+      "file": "3fc3af2b6d011d61.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus can only go along the road, so one number tells you exactly where it is: how far from the stand, and which side.",
+      "seconds": 7.245
+    },
+    {
+      "file": "0bdddb1defc419cc.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus is at 3: three stops from the stand, to the right. Now take it to minus 2.",
+      "seconds": 5.388
+    },
+    {
+      "file": "08bb6270cb65d780.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus is at minus 2. Where is it?",
+      "seconds": 2.613
+    },
+    {
+      "file": "cd7cbb69f73d273e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus starts at the stand, 0. Take it to stop 2, then press Check.",
+      "seconds": 4.575
+    },
+    {
+      "file": "4ae80b85060b4cb5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus starts at the stand, 0. Take it to stop 4, then press Check.",
+      "seconds": 4.412
+    },
+    {
+      "file": "aa54fa7f365f6a04.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus starts at the stand, 0. Take it to stop minus 3, then press Check.",
+      "seconds": 5.016
+    },
+    {
+      "file": "8f172c6b43f3d58b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus starts at the stand, 0. Take it to stop minus 5, then press Check.",
+      "seconds": 4.9
+    },
+    {
+      "file": "d1661da73557db63.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The bus stayed on one line, the road, and one number said where it was. These three places are not on one line: each took two distances, along two lines at right angles. The first says how far along, the second how far up.",
+      "seconds": 13.375
+    },
+    {
+      "file": "35b9fd07b3dc6b83.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The column comes first. Tap (5, 3), then (3, 5): they are in different places.",
+      "seconds": 6.189
+    },
+    {
+      "file": "a6ea6b3c6b7469f1.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The desk: column 5 across, then row 3 up from the front.",
+      "seconds": 3.878
+    },
+    {
+      "file": "d83343e45fa4d465.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The dot: 5 cm across from the left edge, then 9 cm up from the bottom.",
+      "seconds": 4.9
+    },
+    {
+      "file": "18407a483c8527f4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The house: along the main road to Street 4, then up Street 4 to House 5.",
+      "seconds": 4.726
+    },
+    {
+      "file": "c0f1407e1417b182.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Their town has a main road, and the streets leave it numbered 1, 2, 3, and so on, from Riya's corner: like a number line. Move her along it with the right arrow.",
+      "seconds": 9.683
+    },
+    {
+      "file": "e299392bb7dc4d2a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This idea is the start of coordinate geometry. It grew from René Descartes (1596–1650), a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the Cartesian system.",
+      "seconds": 22.245
+    },
+    {
+      "file": "712409b554b7be3b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Those two edges face each other, so the second distance adds nothing: every spot the same distance from the left edge is the same distance from the right. The two edges must meet at a corner.",
+      "seconds": 10.171
+    },
+    {
+      "file": "7d169eebd4c410cd.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "To locate a point in a plane, we need two perpendicular lines: one horizontal, one vertical. The point is then given by two numbers, in order: how far along the horizontal line, then how far up the vertical one.",
+      "seconds": 12.145
+    },
+    {
+      "file": "94eccafafc453059.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Two distances fixed the dot: 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+      "seconds": 14.165
+    },
+    {
+      "file": "b987c01cf8de0d33.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Two lines did it every time",
+      "seconds": 1.614
+    },
+    {
+      "file": "0904dd6061fc4a49.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Two streets cross only once. The 4th North-South street and the 3rd East-West street meet at one crossing.",
+      "seconds": 5.898
+    },
+    {
+      "file": "b98a8c5bb79b8d32.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "(4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।",
+      "seconds": 11.785
+    },
+    {
+      "file": "018758e5b26dc81f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "(5, 3) वाली डेस्क दबाओ, फिर (3, 5) वाली।",
+      "seconds": 4.377
+    },
+    {
+      "file": "f58ebe06498f2bca.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "4 से गली 4 ऊपर उठती है: एक दूसरी संख्या रेखा, ऊपर की ओर, जिस पर पाँच मकान हैं। अमन का कौन-सा है?",
+      "seconds": 9.172
+    },
+    {
+      "file": "dce7c532f69ffe86.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अब हर गली उठती है, और शहर बन जाता है। किसी भी मकान को दबाओ ताकि वह अमन का घर बन जाए: रिया कोने पर लौट जाती है। बोलो कि वह वहाँ कैसे पहुँचेगी, फिर उसे चलाकर जाँचो।",
+      "seconds": 13.782
+    },
+    {
+      "file": "2e34629bcd418d2d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन का घर एक रेखा पर नहीं है: वह मुख्य सड़क पर आगे और फिर एक गली में ऊपर है, इसलिए एक संख्या नहीं बता सकी कि वह कहाँ है। इसके लिए दो संख्याएँ लगीं: मुख्य सड़क पर कितना आगे (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
+      "seconds": 17.682
+    },
+    {
+      "file": "711798f3603aa03b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन का घर ढूँढना",
+      "seconds": 1.696
+    },
+    {
+      "file": "55d11bf70dcfdfc4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन गली 1, मकान 4 पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.653
+    },
+    {
+      "file": "2808d5123849c66c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन गली 2, मकान 4 पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.467
+    },
+    {
+      "file": "a699168effdb12ba.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन गली 3, मकान 5 पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.85
+    },
+    {
+      "file": "008d18fa40543f9d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन गली 5, मकान 5 पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।",
+      "seconds": 7.234
+    },
+    {
+      "file": "dd5b46719c44d18a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन गली 6, मकान 2 पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.386
+    },
+    {
+      "file": "5d978aa484892440.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "आप अपनी पढ़ाई की मेज़ पर रखे टेबल लैंप की स्थिति किसी अन्य व्यक्ति को कैसे बताएँगे?",
+      "seconds": 6.723
+    },
+    {
+      "file": "70e52824e67c057b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "उन तीन जगहों को फिर देखो:",
+      "seconds": 2.357
+    },
+    {
+      "file": "c3de49f25e60d5f2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, और आगे गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे दाएँ तीर से उस पर चलाओ।",
+      "seconds": 12.609
+    },
+    {
+      "file": "32d67f7d860e71c0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे: एक संख्या रेखा।",
+      "seconds": 16.463
+    },
+    {
+      "file": "930145e19775259d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "कक्षा में डेस्क",
+      "seconds": 1.429
+    },
+    {
+      "file": "f8bde418bc7e036d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "किसी तल में एक बिंदु का स्थान बताने के लिए हमें दो लंब रेखाएँ चाहिए: एक क्षैतिज, एक ऊर्ध्वाधर। तब बिंदु क्रम से दो संख्याओं से बताया जाता है: क्षैतिज रेखा पर कितनी दूर, फिर ऊर्ध्वाधर रेखा पर कितना ऊपर।",
+      "seconds": 15.651
+    },
+    {
+      "file": "9f1f3dce47dddfdd.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?",
+      "seconds": 5.225
+    },
+    {
+      "file": "d0edce569d4804fd.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "गली योजना। एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 मीटर की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 सेंटीमीटर को 200 मीटर मानकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों और गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: (i) कितने चौराहों को (4, 3) कहा जा सकता है; (ii) कितने चौराहों को (3, 4) कहा जा सकता है।",
+      "seconds": 62.729
+    },
+    {
+      "file": "e24b389c409ee70d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "घर: मुख्य सड़क पर गली 4 तक, फिर गली 4 में मकान 5 तक।",
+      "seconds": 5.329
+    },
+    {
+      "file": "671456616c2834e1.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "डेस्क (1, 5) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.263
+    },
+    {
+      "file": "73f2a99bcc6dbd1b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "डेस्क (2, 6) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.205
+    },
+    {
+      "file": "a10476fead1c1a0a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "डेस्क (5, 3) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.228
+    },
+    {
+      "file": "cf5f9320b2477f6d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "डेस्क (7, 4) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.228
+    },
+    {
+      "file": "812dbb9e6c69da5d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "डेस्क: स्तंभ 5 आड़े, फिर आगे से पंक्ति 3 ऊपर।",
+      "seconds": 4.586
+    },
+    {
+      "file": "f8b871e442e05a77.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दो गलियाँ केवल एक बार मिलती हैं। चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली एक ही चौराहे पर मिलती हैं।",
+      "seconds": 9.683
+    },
+    {
+      "file": "4058b2e7cfc8a612.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दो दूरियों ने बिंदु तय कर दिया: बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
+      "seconds": 18.333
+    },
+    {
+      "file": "0805cb96ebc4c2e9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दोनों सही हैं, और बिंदु अब भी उस हिस्से में कहीं भी हो सकता है।",
+      "seconds": 4.494
+    },
+    {
+      "file": "353811e64b11efd1.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पन्ने पर एक बिंदु",
+      "seconds": 1.893
+    },
+    {
+      "file": "53ef231446852362.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।",
+      "seconds": 5.155
+    },
+    {
+      "file": "dd87716a7f50950c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस 3 पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे माइनस 2 पर ले जाओ।",
+      "seconds": 6.27
+    },
+    {
+      "file": "aec1575f47013039.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस अड्डे, 0, से चलती है। इसे स्टॉप 2 पर ले जाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.212
+    },
+    {
+      "file": "1f257e9e5944b65d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस अड्डे, 0, से चलती है। इसे स्टॉप 4 पर ले जाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.56
+    },
+    {
+      "file": "e08613e2fbc095b4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस अड्डे, 0, से चलती है। इसे स्टॉप माइनस 3 पर ले जाओ, फिर जाँचो दबाओ।",
+      "seconds": 6.804
+    },
+    {
+      "file": "539e190a0dc690c6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस अड्डे, 0, से चलती है। इसे स्टॉप माइनस 5 पर ले जाओ, फिर जाँचो दबाओ।",
+      "seconds": 7.129
+    },
+    {
+      "file": "ca99c1276ea534e8.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस एक ही रेखा, यानी सड़क, पर रही, और एक संख्या ने बता दिया कि वह कहाँ है। ये तीनों जगहें एक रेखा पर नहीं हैं: हर एक के लिए दो समकोण रेखाओं के साथ दो दूरियाँ लगीं। पहली बताती है कि कितना आगे, दूसरी कि कितना ऊपर।",
+      "seconds": 18.286
+    },
+    {
+      "file": "cee199935b94e552.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस केवल सड़क के साथ-साथ चल सकती है, इसलिए एक संख्या ठीक-ठीक बता देती है कि वह कहाँ है: अड्डे से कितनी दूर, और किस ओर।",
+      "seconds": 9.567
+    },
+    {
+      "file": "0a6bbc63364b223d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस को देखो: वह 0 से बाईं ओर गई। ऋण चिह्न बताता है कि किस ओर।",
+      "seconds": 6.189
+    },
+    {
+      "file": "7ee5a6744877825a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस को बाएँ और दाएँ तीर से एक-एक स्टॉप चलाओ। इसे स्टॉप 3 पर ले जाओ।",
+      "seconds": 6.003
+    },
+    {
+      "file": "1a22b3e138b302ab.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बस माइनस 2 पर है। वह कहाँ है?",
+      "seconds": 2.996
+    },
+    {
+      "file": "972e14b0bcb7cc11.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु को बाएँ किनारे से 11 cm और नीचे के किनारे से 5 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 10.542
+    },
+    {
+      "file": "8d1c2619b54a9c3c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु को बाएँ किनारे से 2 cm और नीचे के किनारे से 8 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 10.844
+    },
+    {
+      "file": "87732da353027fe6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु को बाएँ किनारे से 4 cm और नीचे के किनारे से 10 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 11.401
+    },
+    {
+      "file": "571feaff2291aa08.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु को बाएँ किनारे से 7 cm और नीचे के किनारे से 3 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 10.879
+    },
+    {
+      "file": "6147774e922797fb.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु: बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।",
+      "seconds": 5.504
+    },
+    {
+      "file": "b394d9bfdea9d244.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका स्तंभ, बाईं ओर से गिना हुआ, फिर उसकी पंक्ति, आगे से गिनी हुई (पंक्ति 1 सबसे आगे की है)। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क (4, 1) है।",
+      "seconds": 26.622
+    },
+    {
+      "file": "323181be4acd1439.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
+      "seconds": 14.083
+    },
+    {
+      "file": "823f7b16ee026f5a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त (1596–1650) से आया, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
+      "seconds": 27.806
+    },
+    {
+      "file": "86a9953761f41820.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से बराबर दूरी पर हर जगह दाएँ से भी बराबर दूरी पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
+      "seconds": 13.05
+    },
+    {
+      "file": "d3a692bc0feb5259.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया उसे फिर संदेश भेजती है। वह जवाब देता है: मकान 5, उठी हुई गली पर एक संख्या। उसे वहाँ तक ऊपर चलाओ।",
+      "seconds": 9.846
+    },
+    {
+      "file": "18efe5190abb5f2e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया और अमन कक्षा 9 में हैं, और उनकी कक्षा एक स्टॉल मेला लगा रही है। वे अपना स्टॉल अमन के घर पर तय करेंगे, पर रिया वहाँ कभी नहीं गई। वह उससे पूछती है कि वह कहाँ रहता है। वह जवाब देता है: गली 4।",
+      "seconds": 16.881
+    },
+    {
+      "file": "02f46a764e29fb8b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह 2 स्टॉप दूर है; माइनस केवल दिशा बताता है, बाईं ओर।",
+      "seconds": 5.062
+    },
+    {
+      "file": "ed09f2ef043c4fa9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "सीधी सड़क पर एक बस",
+      "seconds": 1.881
+    },
+    {
+      "file": "c082e8c9c0b4bbc4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।",
+      "seconds": 6.409
+    },
+    {
+      "file": "6fb7afbf5096f780.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "हर बार दो रेखाओं ने काम किया",
+      "seconds": 2.508
+    }
+  ]
+}

@@ -11,42 +11,52 @@ import type { Locale } from "./localized";
 /** Who reads a line when the prop doesn't name a speaker. */
 export const NARRATOR = "narrator";
 
-/** A phrase's key: who says it, in which language, in which words. */
-export function phraseKey(speaker: string, locale: Locale, words: string): string {
-  return [speaker, locale, words].join("|");
-}
-
+/** A clip of a chapter's store: one phrase, in one voice and language (spoken.ts). */
 const clipSchema = z
   .object({
-    /** Its file, relative to the manifest. */
+    /** Its file, in the chapter's sound folder. */
     file: z.string().min(1),
-    /** How long it plays, in seconds. */
+    /** The voice that made it ("piper:en_US-lessac-medium"). */
+    voice: z.string().min(1),
+    locale: z.enum(["en", "hi"]),
+    /** What it says. */
+    words: z.string(),
+    /** How long it plays. */
     seconds: z.number().positive(),
   })
   .strict();
 export type Clip = z.infer<typeof clipSchema>;
 
-/** Written by `pnpm voice` beside the clips: which clip says each phrase. */
-export const audioManifestSchema = z
+/**
+ * A chapter's sound list (`sound/sound.json`): who voices whom in it, and every clip it holds,
+ * each saying what it says. Made by the content build, committed with the chapter, shipped with
+ * it; the store's index, what review reads, and what the chapter's download fetches.
+ */
+export const soundListSchema = z
   .object({
-    /** The voice providers that made these clips (e.g. "piper+macos"). */
-    provider: z.string().min(1),
-    /** phraseKey → its clip. */
-    phrases: z.record(z.string(), clipSchema),
+    /** Each speaker's voice, by language, as the chapter's settings resolve it. */
+    speakers: z.record(z.string(), z.object({ en: z.string(), hi: z.string() }).strict()),
+    clips: z.array(clipSchema),
   })
   .strict();
-export type AudioManifest = z.infer<typeof audioManifestSchema>;
+export type SoundList = z.infer<typeof soundListSchema>;
 
-/** The clips that say `phrases` one after another, or undefined when one has none. */
+/** A clip's key in the store: the voice, and the words. */
+export const clipKey = (voice: string, words: string): string => `${voice}|${words}`;
+
+/** The clips that say `phrases` one after another in a speaker's voice, or undefined when one has none. */
 export function clipsOf(
-  manifest: AudioManifest,
+  list: SoundList,
   speaker: string,
   locale: Locale,
   phrases: readonly string[],
 ): Clip[] | undefined {
+  const voice = list.speakers[speaker]?.[locale];
+  if (voice === undefined) return undefined;
+  const byKey = new Map(list.clips.map((c) => [clipKey(c.voice, c.words), c]));
   const clips: Clip[] = [];
   for (const words of phrases) {
-    const clip = manifest.phrases[phraseKey(speaker, locale, words)];
+    const clip = byKey.get(clipKey(voice, words));
     if (clip === undefined) return undefined;
     clips.push(clip);
   }

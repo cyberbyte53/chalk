@@ -6,8 +6,13 @@ import { toneProvider } from "./providers/tone";
 
 export { type Cast, castSchema, type VoiceOf, voiceFor } from "./cast";
 export { type GenerateResult, type Line, speakLines } from "./clips";
-export { type BoardLines, chapterLines } from "./lines";
-export { type ChapterScript, type ScriptEntry, makeVoice } from "./make";
+export {
+  type BoardLines,
+  type ChapterScript,
+  type ScriptEntry,
+  SOUND_LIST,
+  voiceChapter,
+} from "./make";
 export { mathsReader } from "./maths";
 export { type Said, said, unspeakable } from "./said";
 export { parseSayVoices } from "./providers/macos";

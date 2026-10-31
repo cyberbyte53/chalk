@@ -1,19 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { type AudioManifest, clipsOf, phraseKey } from "./audio";
+import { type SoundList, clipsOf } from "./audio";
 import { blanksOf, fixedParts, numberPieces, phrasesOf } from "./spoken";
 
-describe("the voice's contract", () => {
-  it("finds a line's clips by its phrases, or says one is missing", () => {
-    const manifest: AudioManifest = {
-      provider: "test",
-      phrases: {
-        [phraseKey("riya", "en", "You're at street")]: { file: "a.wav", seconds: 1 },
-        [phraseKey("riya", "en", "4")]: { file: "b.wav", seconds: 0.4 },
-      },
+describe("a chapter's sound list", () => {
+  it("finds a line's clips by its speaker's voice and its phrases, or says one is missing", () => {
+    const list: SoundList = {
+      speakers: { riya: { en: "piper:amy", hi: "piper:priyamvada" } },
+      clips: [
+        { file: "a.m4a", voice: "piper:amy", locale: "en", words: "You're at street", seconds: 1 },
+        { file: "b.m4a", voice: "piper:amy", locale: "en", words: "4", seconds: 0.4 },
+      ],
     };
-    expect(clipsOf(manifest, "riya", "en", ["You're at street", "4"])).toHaveLength(2);
-    expect(clipsOf(manifest, "riya", "en", ["You're at street", "5"])).toBeUndefined();
-    expect(clipsOf(manifest, "aman", "en", ["4"])).toBeUndefined();
+    expect(clipsOf(list, "riya", "en", ["You're at street", "4"])).toHaveLength(2);
+    expect(clipsOf(list, "riya", "en", ["You're at street", "5"])).toBeUndefined();
+    expect(clipsOf(list, "aman", "en", ["4"])).toBeUndefined();
+    // Another voice for Riya: her old clips are no longer hers.
+    expect(
+      clipsOf({ ...list, speakers: { riya: { en: "piper:kristin", hi: "x" } } }, "riya", "en", [
+        "4",
+      ]),
+    ).toBeUndefined();
   });
 });
 

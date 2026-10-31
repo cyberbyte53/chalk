@@ -1,14 +1,27 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { AudioManifest } from "@chalk/content";
 import type { VoiceOf } from "./cast";
 import { audioSeconds } from "./length";
 
-export type GenerateResult = { manifest: AudioManifest; made: number; reused: number };
+/** Each phrase's clip, by its key: the file and how long it plays. */
+export type GenerateResult = {
+  phrases: Record<string, { file: string; seconds: number }>;
+  made: number;
+  reused: number;
+};
 
-/** One phrase to say: its key (`phraseKey`), its words, and the voice that says them. */
+/** One phrase to say: its key (`clipKey`: voice and words), its words, and the voice that says them. */
 export type Line = { key: string; text: string; voice: VoiceOf };
+
+/** A clip's file name: named by its voice and words, so the same words in the same voice are one file. */
+export function clipFile(line: Line): string {
+  const hash = createHash("sha1")
+    .update([line.voice.ref, line.text].join("\u0000"))
+    .digest("hex")
+    .slice(0, 16);
+  return `${hash}.${line.voice.provider.extension}`;
+}
 
 /**
  * Keep: says each line into `<dir>/<folder>/`, once: a clip is named by what is said and in which voice,
@@ -22,17 +35,10 @@ export async function speakLines(
   onSpeak?: (done: number, toMake: number, text: string) => void,
 ): Promise<GenerateResult> {
   mkdirSync(join(dir, folder), { recursive: true });
-  const phrases: AudioManifest["phrases"] = {};
+  const phrases: GenerateResult["phrases"] = {};
   let made = 0;
   let reused = 0;
-  const fileOf = (line: Line) => {
-    const hash = createHash("sha1")
-      .update([line.voice.ref, line.text].join("\u0000"))
-      .digest("hex")
-      .slice(0, 16);
-    const name = `${hash}.${line.voice.provider.extension}`;
-    return folder === "." ? name : `${folder}/${name}`;
-  };
+  const fileOf = (line: Line) => (folder === "." ? clipFile(line) : `${folder}/${clipFile(line)}`);
   const toMake = new Set(lines.filter((l) => !existsSync(join(dir, fileOf(l)))).map(fileOf)).size;
   for (const line of lines) {
     const relative = fileOf(line);
@@ -48,6 +54,5 @@ export async function speakLines(
       seconds: audioSeconds(readFileSync(absolute), line.voice.provider.extension),
     };
   }
-  const used = [...new Set(lines.map((l) => l.voice.provider.id))];
-  return { manifest: { provider: used.join("+") || "none", phrases }, made, reused };
+  return { phrases, made, reused };
 }

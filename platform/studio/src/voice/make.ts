@@ -1,32 +1,37 @@
+import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import {
-  type AudioManifest,
   LOCALES,
   type Locale,
+  NARRATOR,
+  type SoundList,
   blanksOf,
+  clipKey,
   fixedParts,
   numberLibrary,
-  phraseKey,
 } from "@chalk/content";
 import { type ScriptLine, linePhrases, spokenWords } from "@chalk/player";
 import { type Cast, voiceFor } from "./cast";
-import { type Line, speakLines } from "./clips";
-import type { BoardLines } from "./lines";
+import { type Line, clipFile, speakLines } from "./clips";
 import { mathsReader } from "./maths";
 import type { TtsProvider } from "./providers/provider";
 import { type Said, said } from "./said";
 
 /**
- * Make: a chapter's lines into clips, and its script. Each line, in each language, is read for what
- * is said (`said`: words a person wrote, or what is missing and a suggested draft) and cast (who
- * says it → which voice). A clip says a phrase (spoken.ts): a fixed line is one; a line with blanks
- * has its fixed parts made, and its values are said from each voice's number library (made once,
- * shared by every line that voice says). One manifest says which clip says each phrase, and how long
- * it plays. Lines that still need their spoken words get no clip; they are in the script with what
- * to write, and listed.
+ * Voicing a chapter (platform/docs/sound.md): its lines into clips in its own sound folder, and its
+ * script. Each line, in each language, is read for what is said (`said`: words a person wrote, or
+ * what is missing and a suggested draft) and cast (who says it → which voice). A clip says a phrase
+ * (spoken.ts), keyed by its voice and words: a fixed line is one; a line with blanks has its fixed
+ * parts made, and its values are said from its voice's number pieces. Only missing clips are made;
+ * clips nothing says any more are removed. The folder's `sound.json` lists every clip, saying what
+ * it says. Lines that still need their spoken words get no clip, and are listed.
  */
 
-/** Where a chapter's clips go, beside its manifest: one folder, shared by its lessons. */
-const CLIPS = "clips";
+/** The chapter's sound list, in its sound folder. */
+export const SOUND_LIST = "sound.json";
+
+/** One board's lines (its script, as the player reads it). */
+export type BoardLines = { id: string; path: string; lines: readonly ScriptLine[] };
 
 /** One line of a board's script, as made: what is shown, what is said, and its clip's key. */
 export type ScriptEntry = {
@@ -54,33 +59,36 @@ export type ChapterScript = {
   boards: { id: string; path: string; lines: ScriptEntry[] }[];
 };
 
-export async function makeVoice(spec: {
+export async function voiceChapter(spec: {
+  /** The chapter's sound folder: content/<book>/<chapter>/sound. */
+  soundDir: string;
   boards: readonly BoardLines[];
   cast: Cast;
   providers: Readonly<Record<string, TtsProvider>>;
-  /** Where the folders and the manifest go. */
-  outDir: string;
   onSpeak?: (done: number, toMake: number, text: string) => void;
 }): Promise<{
-  manifest: AudioManifest;
+  list: SoundList;
   script: ChapterScript;
   /** Lines that need their spoken words written, each with what is missing (and a suggestion). */
   unsaid: string[];
   made: number;
-  reused: number;
 }> {
   const readMaths = await mathsReader();
-  /** Every phrase to make, by its key. */
-  const toMake = new Map<string, Line>();
-  const make = (speaker: string, locale: Locale, words: string) =>
-    void toMake.set(phraseKey(speaker, locale, words), {
-      key: phraseKey(speaker, locale, words),
-      text: words,
-      voice: voiceFor(spec.cast, spec.providers, speaker, locale),
-    });
+  /** Every clip to have, by its key (voice and words). */
+  const toHave = new Map<string, Line & { locale: Locale }>();
+  const speakers = new Map<string, Record<Locale, string>>();
+  const have = (speaker: string, locale: Locale, words: string) => {
+    const voice = voiceFor(spec.cast, spec.providers, speaker, locale);
+    speakers.set(speaker, { ...(speakers.get(speaker) ?? {}), [locale]: voice.ref } as Record<
+      Locale,
+      string
+    >);
+    const key = clipKey(voice.ref, words);
+    toHave.set(key, { key, text: words, voice, locale });
+  };
   const unsaid: string[] = [];
   const script: ChapterScript = { boards: [] };
-  for (const { item, lines } of spec.boards) {
+  for (const { id, path, lines } of spec.boards) {
     const entries: ScriptEntry[] = [];
     for (const line of lines) {
       const { speaker, cue } = line;
@@ -119,37 +127,72 @@ export async function makeVoice(spec: {
         if (what === undefined) continue;
         if ("needs" in what) {
           unsaid.push(
-            `${item.path}, ${name} (${locale}): ${what.needs}: "${written(locale)}"${what.suggested === undefined ? "" : `\n      suggested: "${what.suggested}"`}`,
+            `${path}, ${name} (${locale}): ${what.needs}: "${written(locale)}"${what.suggested === undefined ? "" : ` (suggested: "${what.suggested}")`}`,
           );
           continue;
         }
         if (example === undefined) {
           for (const words of linePhrases(written(locale), locale) ?? [])
-            make(speaker, locale, words);
+            have(speaker, locale, words);
           continue;
         }
         // A line with blanks: its own words, and the pieces any value is said with.
         for (const words of fixedParts(spokenWords(written(locale), locale) ?? ""))
-          make(speaker, locale, words);
-        for (const words of numberLibrary(locale)) make(speaker, locale, words);
+          have(speaker, locale, words);
+        for (const words of numberLibrary(locale)) have(speaker, locale, words);
       }
     }
-    script.boards.push({ id: item.id, path: item.path, lines: entries });
+    script.boards.push({ id, path, lines: entries });
   }
-  const all = [...toMake.values()];
-  const providers = [...new Set(all.map((l) => l.voice.provider))];
+  // The narrator is every chapter's, said or not.
+  for (const locale of LOCALES)
+    speakers.set(NARRATOR, {
+      ...(speakers.get(NARRATOR) ?? {}),
+      [locale]: voiceFor(spec.cast, spec.providers, NARRATOR, locale).ref,
+    } as Record<Locale, string>);
+  const all = [...toHave.values()];
+  const kept = (line: Line) => existsSync(join(spec.soundDir, clipFile(line)));
+  const missing = all.filter((l) => !kept(l));
+  const providers = [...new Set(missing.map((l) => l.voice.provider))];
   for (const provider of providers) {
-    const voices = new Set(
-      all.filter((l) => l.voice.provider === provider).map((l) => l.voice.voice),
-    );
-    const missing = await provider.missingVoices([...voices]);
-    if (missing.length > 0)
-      throw new Error(`These ${provider.id} voices aren't installed: ${missing.join(", ")}`);
+    const voices = [
+      ...new Set(missing.filter((l) => l.voice.provider === provider).map((l) => l.voice.voice)),
+    ];
+    const absent = await provider.missingVoices(voices);
+    if (absent.length > 0)
+      throw new Error(`These ${provider.id} voices aren't installed: ${absent.join(", ")}`);
   }
+  let made = 0;
+  let phrases: Awaited<ReturnType<typeof speakLines>>["phrases"] = {};
   try {
-    const done = await speakLines(all, spec.outDir, CLIPS, spec.onSpeak);
-    return { manifest: done.manifest, script, unsaid, made: done.made, reused: done.reused };
+    const done = await speakLines(all, spec.soundDir, ".", spec.onSpeak);
+    phrases = done.phrases;
+    made = done.made;
   } finally {
     for (const provider of providers) await provider.close?.();
   }
+  const list: SoundList = {
+    speakers: Object.fromEntries([...speakers].sort(([a], [b]) => a.localeCompare(b))),
+    clips: all
+      .map((l) => {
+        const clip = phrases[l.key];
+        if (clip === undefined) throw new Error(`No clip was made for "${l.text}"`);
+        return {
+          file: clip.file,
+          voice: l.voice.ref,
+          locale: l.locale,
+          words: l.text,
+          seconds: clip.seconds,
+        };
+      })
+      .sort((a, b) => a.voice.localeCompare(b.voice) || a.words.localeCompare(b.words)),
+  };
+  // Clips nothing says any more go; the list is written only when it changed.
+  const wanted = new Set([SOUND_LIST, ...list.clips.map((c) => c.file)]);
+  for (const name of readdirSync(spec.soundDir))
+    if (!wanted.has(name)) rmSync(join(spec.soundDir, name));
+  const text = `${JSON.stringify(list, null, 2)}\n`;
+  const file = join(spec.soundDir, SOUND_LIST);
+  if (!existsSync(file) || readFileSync(file, "utf8") !== text) writeFileSync(file, text);
+  return { list, script, unsaid, made };
 }

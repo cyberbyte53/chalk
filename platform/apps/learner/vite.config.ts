@@ -66,17 +66,26 @@ function devLog(): Plugin {
  * in production. Read fresh on every request, so `pnpm preview` / `build-content` show without a
  * restart. Also in `vite preview`, to try the built app (and its offline cache) on a laptop.
  */
+/** What the built content holds: its JSON, and each chapter's clips (sound/). */
+const CONTENT_TYPES: Readonly<Record<string, string>> = {
+  json: "application/json",
+  m4a: "audio/mp4",
+  mp3: "audio/mpeg",
+  wav: "audio/wav",
+};
+
 function devContent(): Plugin {
   const dir = join(ROOT, "build");
   const handle = (req: IncomingMessage, res: ServerResponse) => {
     const path = decodeURIComponent((req.url ?? "/").split("?")[0] ?? "/");
     const file = normalize(join(dir, path));
-    if (!file.startsWith(dir + sep) || !file.endsWith(".json") || !existsSync(file)) {
+    const type = CONTENT_TYPES[file.slice(file.lastIndexOf(".") + 1)];
+    if (!file.startsWith(dir + sep) || type === undefined || !existsSync(file)) {
       res.statusCode = 404;
       res.end();
       return;
     }
-    res.setHeader("content-type", "application/json");
+    res.setHeader("content-type", type);
     res.setHeader("cache-control", "no-cache");
     res.end(readFileSync(file));
   };
@@ -112,10 +121,6 @@ function devContent(): Plugin {
  * A threads or reviews file that changes on disk (written by the studio service, or git) is pushed
  * to open previews at once (chalk:comments).
  */
-/** Whether a request comes from this machine. */
-const isLoopback = (address: string | undefined) =>
-  address === "127.0.0.1" || address === "::1" || address === "::ffff:127.0.0.1";
-
 function devStudio(): Plugin {
   const bodyOf = (req: IncomingMessage): Promise<string> =>
     new Promise((resolve) => {
@@ -155,16 +160,7 @@ function devStudio(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url ?? "";
-        // The live voice makes clips on this machine for this machine only: a phone on the Wi-Fi
-        // (dev sign-in) uses its own voice.
-        if (url.startsWith("/dev-voice") && !isLoopback(req.socket.remoteAddress)) {
-          res.statusCode = 403;
-          res.end();
-        } else if (
-          url.startsWith("/dev-review") ||
-          url.startsWith("/dev-pipeline") ||
-          url.startsWith("/dev-voice")
-        )
+        if (url.startsWith("/dev-review") || url.startsWith("/dev-pipeline"))
           void forward(req, res);
         else next();
       });

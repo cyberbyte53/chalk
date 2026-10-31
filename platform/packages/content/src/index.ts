@@ -1,12 +1,12 @@
 export {
-  type AudioManifest,
   type Clip,
   type Effect,
   NARRATOR,
-  audioManifestSchema,
+  type SoundList,
+  clipKey,
   clipsOf,
   effect,
-  phraseKey,
+  soundListSchema,
 } from "./audio";
 export {
   type BoardAt,

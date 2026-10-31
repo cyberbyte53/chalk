@@ -279,20 +279,10 @@ export function boardText(
   return out.join("\n");
 }
 
-/** A board's script as `pnpm voice` made it (its chapter's script.json): nothing yet without one. */
+/** A board's script, as the content build made it (build/<book>/<chapter>/script.json). */
 function scriptEntries(root: string, board: string): readonly ScriptEntry[] {
   const [book, chapter] = board.split("/");
-  const file = join(
-    root,
-    "platform",
-    "apps",
-    "learner",
-    "public",
-    "voice",
-    `${book}`,
-    `${chapter}`,
-    "script.json",
-  );
+  const file = join(root, "build", `${book}`, `${chapter}`, "script.json");
   if (!existsSync(file)) return [];
   const script = JSON.parse(readFileSync(file, "utf8")) as ChapterScript;
   return script.boards.find((b) => b.path === board)?.lines ?? [];

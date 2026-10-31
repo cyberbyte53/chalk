@@ -18,8 +18,7 @@
     "check": "tsx --tsconfig ../../tsconfig.base.json src/check/all.ts",
     "mcp": "node start.mjs",
     "stress-mcp": "tsx --tsconfig ../../tsconfig.base.json src/mcp/stress.ts",
-    "dev": "node start.mjs",
-    "voice": "tsx --tsconfig ../../tsconfig.base.json src/voice-cli.ts"
+    "dev": "node start.mjs"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

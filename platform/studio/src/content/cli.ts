@@ -1,5 +1,6 @@
 import { execFileSync, spawn } from "node:child_process";
 import {
+  copyFileSync,
   cpSync,
   existsSync,
   mkdirSync,
@@ -99,6 +100,23 @@ function write(result: BuildResult): void {
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, text);
   }
+  // Each chapter's sound folder (its clips and their list, content/<book>/<chapter>/sound), as it
+  // is: served and shipped with the chapter, beside its built content.
+  for (const book of readdirSync(contentDir, { withFileTypes: true }))
+    if (book.isDirectory())
+      for (const chapter of readdirSync(join(contentDir, book.name), { withFileTypes: true })) {
+        const from = join(contentDir, book.name, chapter.name, "sound");
+        if (!chapter.isDirectory() || !existsSync(from)) continue;
+        for (const name of readdirSync(from)) {
+          const path = `${book.name}/${chapter.name}/sound/${name}`;
+          const to = join(buildDir, path);
+          if (!existsSync(to) || !readFileSync(to).equals(readFileSync(join(from, name)))) {
+            mkdirSync(dirname(to), { recursive: true });
+            copyFileSync(join(from, name), to);
+          }
+          wanted.set(path, "");
+        }
+      }
   // Removes what is no longer built; says whether `dir` was left empty.
   const prune = (dir: string, rel: string): boolean => {
     let isEmpty = true;

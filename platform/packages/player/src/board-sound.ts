@@ -1,4 +1,4 @@
-import { type AudioManifest, type Board, clipsOf } from "@chalk/content";
+import { type Board, type SoundList, clipsOf } from "@chalk/content";
 import { useEffect, useState } from "preact/hooks";
 import type { AudioSource } from "./narration";
 
@@ -7,9 +7,8 @@ import type { AudioSource } from "./narration";
  * board's address, so every screen that plays a board (a student's phone, the preview, the editor's
  * panel) hears exactly the same: no screen sets sound up, so none can leave it out.
  *
- * Its chapter's clips (made by `pnpm voice` into /voice/<book>/<chapter>/, shipped with the app),
- * then the phone's own voice (narration.ts). A live voice is a source only where the shipped app
- * has one too (none yet): the preview never sounds better than a phone.
+ * Its chapter's clips (voiced by the content build into the chapter's sound folder, shipped with
+ * the chapter: /content/<book>/<chapter>/sound/), then the phone's own voice (narration.ts).
  */
 
 /** Each chapter's clips, fetched once: undefined when it has none. */
@@ -18,15 +17,15 @@ const chapters = new Map<string, Promise<AudioSource | undefined>>();
 function chapterSound(chapter: string): Promise<AudioSource | undefined> {
   const known = chapters.get(chapter);
   if (known !== undefined) return known;
-  const base = `/voice/${chapter}`;
-  const loading = fetch(`${base}/manifest.json`)
-    .then((r) => (r.ok ? (r.json() as Promise<AudioManifest>) : undefined))
-    .then((manifest): AudioSource | undefined =>
-      manifest === undefined
+  const base = `/content/${chapter}/sound`;
+  const loading = fetch(`${base}/sound.json`)
+    .then((r) => (r.ok ? (r.json() as Promise<SoundList>) : undefined))
+    .then((list): AudioSource | undefined =>
+      list === undefined
         ? undefined
         : {
             clipsOf: (speaker, locale, phrases) =>
-              clipsOf(manifest, speaker, locale, phrases)?.map((clip) => ({
+              clipsOf(list, speaker, locale, phrases)?.map((clip) => ({
                 url: `${base}/${clip.file}`,
                 seconds: clip.seconds,
               })),

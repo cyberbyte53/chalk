@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   ALL,
@@ -54,6 +54,7 @@ import {
   builtQuestionSchema,
   piecePath,
   propPieces,
+  soundListSchema,
   splitTarget,
   walkPieces,
 } from "@chalk/content";
@@ -71,6 +72,7 @@ import {
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import { type Problem, validateBoard } from "../validate";
+import { SOUND_LIST, castSchema, voiceChapter, providers as voiceProviders } from "../voice";
 import { renderArt } from "./art";
 import { recordOf } from "./board-record";
 import {
@@ -929,7 +931,52 @@ async function buildChapter(c: Context, chapterPath: string): Promise<Ref | unde
     props: explainers(c, [...drafts.flatMap((d) => [...d.used]), ...bank.flatMap((q) => q.props)]),
   };
   noteLongAnswers(c, chapterPath);
+  await voiceOf(c, chapterPath);
   return emit(c, item, builtChapterSchema);
+}
+
+/** Whether every clip a chapter's sound list names is there (a chapter reused as built must still sound). */
+function isSoundComplete(c: Context, chapterPath: string): boolean {
+  const list = join(c.contentDir, chapterPath, "sound", SOUND_LIST);
+  if (!existsSync(list)) return true;
+  const { clips } = soundListSchema.parse(JSON.parse(readFileSync(list, "utf8")));
+  return clips.every((clip) => existsSync(join(c.contentDir, chapterPath, "sound", clip.file)));
+}
+
+/** A chapter's script beside its built content: every line its boards can say (the preview's script view, look). */
+export const SCRIPT_FILE = "script.json";
+
+/** The voices (who voices whom): the app's settings. */
+const voicesFile = (c: Context) => join(dirname(c.contentDir), "authoring", "voices.json");
+
+/**
+ * A chapter's sound (platform/docs/sound.md): its boards' lines voiced into its own sound folder
+ * (content/<book>/<chapter>/sound: only missing clips made; one list, sound.json), its script built
+ * beside it. A line that can't be voiced (it needs its spoken words; no voice to make it) is a
+ * problem: a chapter never ships silent.
+ */
+async function voiceOf(c: Context, chapterPath: string): Promise<void> {
+  const where = `${chapterPath}/sound`;
+  const boards = [...c.boards]
+    .filter(([path]) => path.startsWith(`${chapterPath}/`))
+    .map(([path, board]) => ({
+      id: board.item?.id ?? path,
+      path,
+      lines: scriptOf(board, (type) => c.modules[type]),
+    }));
+  // A chapter whose boards say nothing has nothing to voice.
+  if (boards.every((b) => b.lines.length === 0)) return;
+  const soundDir = join(c.contentDir, chapterPath, "sound");
+  mkdirSync(soundDir, { recursive: true });
+  try {
+    const { cast } = castSchema.parse(JSON.parse(readFileSync(voicesFile(c), "utf8")));
+    const voiced = await voiceChapter({ soundDir, boards, cast, providers: voiceProviders });
+    c.files.set(`${chapterPath}/${SCRIPT_FILE}`, voiced.script);
+    for (const line of voiced.unsaid) report(c, where, line);
+    if (voiced.made > 0) c.notices.push(`${where}: ${voiced.made} clips made`);
+  } catch (error) {
+    report(c, where, error instanceof Error ? error.message : String(error));
+  }
 }
 
 /** Above this share, "pick the longest option" works too often: say so (it doesn't stop the build). */
@@ -1053,9 +1100,17 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
   } catch {
     entry = undefined;
   }
-  const chapterFiles = filesUnder(join(c.contentDir, chapterPath));
+  // Its sound folder is what voicing writes, not what the chapter is built from; the voices are.
+  const chapterFiles = [
+    ...filesUnder(join(c.contentDir, chapterPath)).filter((f) => !f.includes(`${sep}sound${sep}`)),
+    voicesFile(c),
+  ];
   // The folder's own files are listed afresh: a file added or removed changes the key.
-  if (entry !== undefined && keyOf(c, [...entry.deps, ...chapterFiles]) === entry.key) {
+  if (
+    entry !== undefined &&
+    keyOf(c, [...entry.deps, ...chapterFiles]) === entry.key &&
+    isSoundComplete(c, chapterPath)
+  ) {
     for (const [path, json] of entry.files) c.files.set(path, json);
     c.problems.push(...entry.problems);
     c.notices.push(...entry.notices);
