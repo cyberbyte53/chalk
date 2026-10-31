@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { type AudioManifest, clipsOf, phraseKey } from "./audio";
-import { fixedParts, numberPieces, phrasesOf } from "./spoken";
+import { blanksOf, fixedParts, numberPieces, phrasesOf } from "./spoken";
 
 describe("the voice's contract", () => {
   it("finds a line's clips by its phrases, or says one is missing", () => {
@@ -35,5 +35,16 @@ describe("a line said in phrases", () => {
   it("says a number by its pieces: the sign and the point in words, digits as digits", () => {
     expect(numberPieces(0.375, "en")).toEqual(["0", "point", "3", "7", "5"]);
     expect(numberPieces(-12, "hi")).toEqual(["माइनस", "12"]);
+    expect(numberPieces(0.1 + 0.2, "en")).toEqual(["0", "point", "3"]);
+    expect(numberPieces(12_305, "hi")).toEqual(["12", "हज़ार", "3", "सौ", "5"]);
+    expect(numberPieces(-0, "en")).toEqual(["0"]);
+    expect(numberPieces(123_456, "en")).toBeUndefined();
+  });
+
+  it("finds blanks in words only: braces in maths are maths", () => {
+    expect(blanksOf("Is $x^{2}$ at {x}?")).toEqual(["x"]);
+    expect(fixedParts("Is $x^{2}$ at {x}?")).toEqual(["Is $x^{2}$ at"]);
+    // A number it doesn't say is written in full, for a voice that reads any words.
+    expect(phrasesOf("Stop {x}.", { x: 123_456 }, "en")).toEqual(["Stop", "1,23,456"]);
   });
 });

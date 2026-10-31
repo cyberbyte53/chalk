@@ -129,7 +129,7 @@ export async function makeVoice(spec: {
           continue;
         }
         // A line with blanks: its own words, and the pieces any value is said with.
-        for (const words of fixedParts(spokenWords(written(locale), locale)))
+        for (const words of fixedParts(spokenWords(written(locale), locale) ?? ""))
           make(speaker, locale, words);
         for (const words of numberLibrary(locale)) make(speaker, locale, words);
       }

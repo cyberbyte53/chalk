@@ -65,7 +65,7 @@ export type Narrator = {
   failed: ReadonlySet<string>;
 };
 
-/** Longest a single clip may take before we stop waiting for it. */
+/** Longest one sound (a clip, or the phone saying a line) may take before we stop waiting for it. */
 const MAX_CLIP_MS = 20_000;
 
 /**
@@ -79,18 +79,9 @@ export function useNarrator(
   source: AudioSource | undefined,
   onFailure: (prop: SpokenProp, reason: string) => void,
 ): Narrator {
-  const audio = useRef<HTMLAudioElement | null>(null);
   /** The line being said: a newer one (or a hush) ends its clips. */
   const saying = useRef(0);
   const [failed, setFailed] = useState<ReadonlySet<string>>(new Set());
-
-  useEffect(
-    () => () => {
-      audio.current?.pause();
-      audio.current = null;
-    },
-    [],
-  );
 
   const clipsFor = useCallback(
     (line: Utterance) => {
@@ -100,40 +91,81 @@ export function useNarrator(
     [source, locale],
   );
 
-  /** Plays clips one after another; false if one fails to play. */
-  const playClips = useCallback(async (clips: readonly PlayableClip[], mine: number) => {
-    for (const clip of clips) {
-      if (saying.current !== mine) return true;
-      const isOk = await new Promise<boolean>((resolve) => {
-        const player = new Audio(clip.url);
-        audio.current = player;
-        const timer = setTimeout(() => resolve(true), MAX_CLIP_MS);
+  /** Ends the clip or phone line playing now (a hush, a newer line, mute). */
+  const stopNow = useRef<(() => void) | undefined>(undefined);
+
+  /**
+   * Plays one sound until it ends, fails, is stopped, or runs past the longest a line may take:
+   * whatever happens, it is over when this resolves (the voice never keeps the board waiting).
+   */
+  const playOne = useCallback(
+    (start: (done: (isFine: boolean) => void) => () => void) =>
+      new Promise<boolean>((resolve) => {
+        let isOver = false;
+        // How to stop the sound: known once it has started (it may be over before then).
+        const sound: { halt?: () => void } = {};
         const done = (isFine: boolean) => {
+          if (isOver) return;
+          isOver = true;
           clearTimeout(timer);
+          stopNow.current = undefined;
+          sound.halt?.();
           resolve(isFine);
         };
+        const timer = setTimeout(() => done(true), MAX_CLIP_MS);
+        stopNow.current = () => done(true);
+        sound.halt = start(done);
+        if (isOver) sound.halt();
+      }),
+    [],
+  );
+
+  const playClip = useCallback(
+    (url: string) =>
+      playOne((done) => {
+        const player = new Audio(url);
         player.addEventListener("ended", () => done(true));
-        player.addEventListener("pause", () => done(true));
         player.addEventListener("error", () => done(false));
         player.play().catch(() => done(false));
-      });
-      if (!isOk) return false;
-    }
-    return true;
+        return () => player.pause();
+      }),
+    [playOne],
+  );
+
+  const playPhone = useCallback(
+    (words: string) =>
+      playOne((done) => {
+        void phoneSpeak(words, locale).then(() => done(true));
+        return phoneHush;
+      }),
+    [playOne, locale],
+  );
+
+  const stop = useCallback(() => {
+    saying.current++;
+    stopNow.current?.();
   }, []);
+
+  // Gone from the screen: nothing more is said.
+  useEffect(() => stop, [stop]);
 
   const speak = useCallback(
     async (line: Utterance) => {
-      const mine = ++saying.current;
-      audio.current?.pause();
-      phoneHush();
+      stop();
+      const mine = saying.current;
       if (isMuted.peek()) return;
       const phrases = line.phrases[locale];
       if (phrases === undefined || phrases.length === 0) return;
-      // 1. Its clips, glued.
+      // 1. Its clips, glued. A clip that fails leaves the rest of the line to the next source.
+      let from = 0;
       const clips = clipsFor(line);
       if (clips !== undefined) {
-        if (await playClips(clips, mine)) {
+        for (const clip of clips) {
+          if (saying.current !== mine) return;
+          if (!(await playClip(clip.url))) break;
+          from++;
+        }
+        if (from === clips.length) {
           setFailed((prev) => {
             if (!prev.has(line.name)) return prev;
             const next = new Set(prev);
@@ -145,22 +177,19 @@ export function useNarrator(
         setFailed((prev) => new Set(prev).add(line.name));
         onFailure({ name: line.name }, "a clip failed to play");
       }
-      // 2. A live voice from the server: not yet. 3. The phone's own voice.
-      if (saying.current === mine) await phoneSpeak(phrases.join(" "), locale);
+      // 2. A live voice from the server: not yet. 3. The phone's own voice, for what is left.
+      if (saying.current === mine) await playPhone(phrases.slice(from).join(" "));
     },
-    [locale, clipsFor, playClips, onFailure],
+    [locale, clipsFor, playClip, playPhone, stop, onFailure],
   );
 
   // Muting stops the line being said.
   useEffect(
     () =>
       isMuted.subscribe((muted) => {
-        if (!muted) return;
-        saying.current++;
-        audio.current?.pause();
-        phoneHush();
+        if (muted) stop();
       }),
-    [],
+    [stop],
   );
 
   const seconds = useCallback(
@@ -168,11 +197,7 @@ export function useNarrator(
     [clipsFor],
   );
 
-  const hush = useCallback(() => {
-    saying.current++;
-    audio.current?.pause();
-    phoneHush();
-  }, []);
+  const hush = stop;
 
   return { speak, failed, seconds, hush };
 }

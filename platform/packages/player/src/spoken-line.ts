@@ -6,10 +6,16 @@ import { richSpeech } from "./rich-text-speech";
  * (which clips to play), so the two always agree.
  */
 
-/** A line's words as the voice gets them: its rich text read for speech, maths left as written. */
-export function spokenWords(source: string, locale: Locale): string {
-  return richSpeech(source, locale)
-    .pieces.map((p) => (p.kind === "words" ? p.text : `$${p.latex}$`))
+/**
+ * A line's words as the voice gets them: its rich text read for speech (bold and emphasis as their
+ * words). Undefined when it has maths: nothing turns maths into words, so it has none to say (the
+ * build lists it, to have its spoken words written).
+ */
+export function spokenWords(source: string, locale: Locale): string | undefined {
+  const { pieces } = richSpeech(source, locale);
+  if (pieces.some((p) => p.kind !== "words")) return undefined;
+  return pieces
+    .map((p) => (p.kind === "words" ? p.text : ""))
     .join("")
     .trim();
 }
@@ -25,6 +31,7 @@ export function linePhrases(
   values: Readonly<Record<string, unknown>> = {},
 ): string[] | undefined {
   const spoken = spokenWords(words, locale);
+  if (spoken === undefined) return undefined;
   if (spoken === "") return [];
   return blanksOf(words).length > 0 ? phrasesOf(spoken, values, locale) : [spoken];
 }

@@ -3,6 +3,7 @@ import {
   type Board,
   type BoardAt,
   type CallArgs,
+  LOCALES,
   type Locale,
   NARRATOR,
   type SavedBoard,
@@ -50,6 +51,7 @@ import { describeView } from "./describe";
 import type { Utterance } from "./narration";
 import type { PropModule } from "./prop-module";
 import { snapshotOf } from "./snapshot";
+import { linePhrases } from "./spoken-line";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
@@ -1170,12 +1172,18 @@ export class BoardRuntime {
   }
 }
 
-/** A prop's line on today's boards, as something to say: one phrase per language, its words. */
+/** A prop's line on today's boards, as something to say: its words, split as every line is. */
 function utteranceOf(name: string, spoken: Spoken): Utterance {
   const words = spoken.speak ?? spoken.say;
   return {
     name,
     speaker: spoken.speaker ?? NARRATOR,
-    phrases: Object.fromEntries(Object.entries(words).map(([l, w]) => [l, [w]])),
+    phrases: Object.fromEntries(
+      LOCALES.flatMap((l) => {
+        const said = words[l];
+        const phrases = said === undefined ? undefined : linePhrases(said, l);
+        return phrases === undefined ? [] : [[l, phrases]];
+      }),
+    ),
   };
 }

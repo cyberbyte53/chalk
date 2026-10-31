@@ -59,6 +59,13 @@ function signalAt(pieces: Pieces, path: string): SignalDef | undefined {
   return signal === undefined ? undefined : def?.signals?.[signal];
 }
 
+/** Whether a signal's field is a number (one with a default too; one that may be missing or null is not). */
+function isNumberField(field: z.ZodTypeAny | undefined): boolean {
+  let at = field;
+  while (at instanceof z.ZodDefault) at = at._def.innerType as z.ZodTypeAny;
+  return at instanceof z.ZodNumber;
+}
+
 /** Whether `path` names a piece ("town") or a part inside one ("town.walker"). */
 function isPartAt(pieces: Pieces, path: string): boolean {
   const [first, ...rest] = path.split(".");
@@ -368,7 +375,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         );
       const shape = shapeOf(signal);
       for (const blank of blanks)
-        if (shape[blank] === undefined || shape[blank].safeParse(1).success !== true)
+        if (!isNumberField(shape[blank]))
           throw new Error(
             `Board ${name}, line ${line}: {${blank}} isn't a number ${free.when} carries (${Object.keys(shape).join(", ") || "it carries nothing"})`,
           );
