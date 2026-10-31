@@ -9,12 +9,12 @@ Status: **design agreed in conversation (2026-10-31); the code moves to it next.
 | Part | What it says | Example |
 |---|---|---|
 | **When** | a moment: an event on the board, and maybe its data | `line.walker.stepped`; `ask.checked` where `status` is `wrong` |
-| **What** | **words**, said by a speaker (their voice makes a clip), or **a file** (a recorded sound) | "The bus is at minus 2. Where is it?"; `step` |
+| **What** | **words**, said by a speaker (a **voiced** clip, made from them by the speaker's voice), or **a sound** (a **chosen** clip, picked from the library) | "The bus is at minus 2. Where is it?"; `step` |
 | **How** | **takes a turn** (one at a time, by the two rules), **when free** (only when nothing else is due), or **plays alongside** (at once, over anything) | words take a turn; the opening's reads are when free; a step plays alongside |
-| **Until** | for a sound that lasts: the moment it stops (its recording loops, seamlessly, till then) | rain `until: "scene.hidden"`; the bus's hum until it arrives |
+| **Until** | for a sound that lasts: the moment it stops (its clip loops, seamlessly, till then) | rain `until: "scene.hidden"`; the bus's hum until it arrives |
 | **About** | the piece it concerns: it glows while heard | the question `side` |
 
-Words take a turn and files play alongside, unless the cue says otherwise. Without `until` a cue plays once.
+Words take a turn and sounds play alongside, unless the cue says otherwise. Without `until` a cue plays once.
 
 **Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum, a step and Riya speaking). A repeat of the same sound replaces itself, so fast taps don't pile up. Nothing is said that a person didn't write: words are a lesson's, never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it).
 
@@ -47,14 +47,15 @@ A sound ships with what uses it: a chapter's clips with the chapter (`content/<b
  ───────────────────────              ──────────────────────────────────               ─────────────────────
  cues' words + settings     ───►  words → phrases → store[voice + words] ─┐
  (speaker → voice)                (missing clips made; stale ones caught)   ├─► the chapter's sound list ──► review ──► ships ──► engine
- cues' files (the library)  ──────────────────────────────────────────────┘
+ cues' sounds (chosen clips, ─────────────────────────────────────────────┘
+  in the library)
 ```
 
 - **The store** holds clips keyed by **voice and words**. Changing a voice changes the key: its clips are made again.
 - **One list per chapter** (`content/<book>/<chapter>/sound/sound.json`): each clip (its file, voice, language, words, length) and each library sound its cues use. It is the store's index, what review reads, and what the chapter's download fetches.
 - **Building content makes a chapter's missing clips** with the configured voice (Piper), only the new ones. `pnpm check` fails when a clip is missing or stale, naming the line: a lesson never ships silent.
-- **Recordings** (step, chimes) are chosen, not made: picked by ear from options, kept in the library with their source and licence (`library/sounds/`), each brought to the same loudness with its shrill top trimmed when added.
-- **The build checks every cue:** its moment is an event there is, and its `where` is what that event carries; its words are speakable (or have their spoken words); its speaker is defined; its file exists.
+- **Chosen clips** (step, chimes) are picked, not voiced: chosen by ear from options, kept in the library with their source and licence (`library/sounds/`), each brought to the same loudness with its shrill top trimmed when added.
+- **The build checks every cue:** its moment is an event there is, and its `where` is what that event carries; its words are speakable (or have their spoken words); its speaker is defined; its sound exists.
 
 ### Words known only when played
 
@@ -64,8 +65,8 @@ Lines with blanks ("Stop {x}") are made from pieces in the store (fixed words, a
 
 One engine plays every cue, on every screen (a phone, the preview, the editor's panel): what is reviewed is what a student hears.
 
-- **Finds its clip:** for words, the store; else glued pieces; else the phone's own voice; else quiet for as long as the words would take. For a file, the file (a missing one plays nothing: the build catches it).
-- **Two channels,** by what is played: **words are the voice, files are sounds**, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
+- **Finds its clip:** for words, the store; else glued pieces; else the phone's own voice; else quiet for as long as the words would take. For a sound, its chosen clip (a missing one plays nothing: the build catches it).
+- **Two channels,** by what is played: **words are the voice; sounds are sounds**, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
 - **The browser's first-touch rule,** once: a sound refused before the page is touched waits and plays on the first touch.
 - **Reports** to the board when a cue started, ended or was cut; the board never knows lengths or sources.
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
@@ -85,8 +86,8 @@ One `sound` home per layer; elsewhere code only connects to it.
 | Contract | `content/src/sound/` | cue, clip, the store's list; words → phrases (one function, for the build and the player) |
 | Board | `author/src/scene/sound.ts` | declaring cues; the queue and the two rules |
 | Player | `player/src/sound/` | the engine, its sources, the menu |
-| Build | `studio/src/sound/` | making and checking a chapter's clips; adding a recording |
-| Recordings | `library/sounds/` | shared and app sounds, with `sounds.json` |
+| Build | `studio/src/sound/` | voicing and checking a chapter's clips; adding a chosen clip to the library |
+| Chosen clips | `library/sounds/` | shared and app sounds, with `sounds.json` |
 | A chapter's clips | `content/<book>/<chapter>/sound/` | its clips, and its one list (`sound.json`) |
 
 ## From today's code
