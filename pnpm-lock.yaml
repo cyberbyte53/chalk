@@ -109,6 +109,9 @@ importers:
       '@chalk/prop':
         specifier: workspace:*
         version: link:../../../platform/packages/prop
+      '@chalk/sounds':
+        specifier: workspace:*
+        version: link:../../sounds
       preact:
         specifier: 10.29.8
         version: 10.29.8(preact-render-to-string@6.5.13)
