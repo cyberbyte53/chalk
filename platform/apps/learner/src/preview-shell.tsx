@@ -1,3 +1,4 @@
+import { place, scene } from "@chalk/author";
 import {
   type Board,
   Locale,
@@ -32,6 +33,7 @@ import {
   stampCodePaths,
 } from "@chalk/player";
 import { useWhenChanged } from "@chalk/player";
+import type { AnyProp } from "@chalk/prop/next";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
@@ -176,6 +178,20 @@ function propShown(at: { pkg: string; type: string }, state: string | null): Sho
       given = JSON.parse(state) as Record<string, unknown>;
     } catch {
       throw new Error(`state isn't JSON: ${state}`);
+    }
+  }
+  // A prop on the event model (a scene's piece) has no state schema: it is placed on a scene of its
+  // own, as a lesson places it, starting from the given fields (by layer: { plane: { … } }).
+  if (!("state" in def) || def.state === undefined) {
+    try {
+      const built = scene({
+        pieces: { [at.type]: place(def as unknown as AnyProp, given as never) },
+      }).build(at.type);
+      return { path: propAddress(at.pkg, at.type), board: built.board };
+    } catch (error) {
+      throw new Error(
+        `${at.type} can't start from that state: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
   const checked = def.state.safeParse({ ...def.defaults, ...given });

@@ -87,11 +87,15 @@ export function stepFrom(
     const isAcross = d.y === 0;
     if (isAcross && s.at.y !== s.walkFrom.y)
       return { blocked: "no road across here: back down to the main road" };
-    if (!isAcross && (!Number.isInteger(s.at.x) || s.at.x === s.walkFrom.x))
+    // Grown past the corner, the town has a street at the corner too, and its streets go south.
+    const hasCornerStreet = s.window.xMin < s.walkFrom.x;
+    const hasSouth = s.window.yMin < s.walkFrom.y;
+    if (!isAcross && (!Number.isInteger(s.at.x) || (s.at.x === s.walkFrom.x && !hasCornerStreet)))
       return { blocked: "no street going up here" };
     if (!isAcross && s.upLines !== null && !s.upLines.includes(s.at.x))
       return { blocked: "this street isn't there yet" };
-    if (!isAcross && to.y < s.walkFrom.y) return { blocked: "nothing below the main road" };
+    if (!isAcross && to.y < s.walkFrom.y && !hasSouth)
+      return { blocked: "nothing below the main road" };
   }
   return { to };
 }

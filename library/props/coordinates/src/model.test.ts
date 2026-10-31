@@ -138,6 +138,20 @@ describe("the town: Aman's house is any house a tap makes it, and Riya walks the
     const back = await walk(out.state, Direction.Left);
     expect(back.state.trail).toEqual([]);
   });
+  it("the town grown past the corner: west along the road, south on a street, up her corner's street", () => {
+    const grown = (at: { x: number; y: number }) => ({
+      ...walkerInTown(),
+      window: { xMin: -4.5, xMax: 4.5, yMin: -3.5, yMax: 3.5 },
+      at,
+    });
+    expect(stepFrom(grown({ x: 0, y: 0 }), Direction.Left)).toEqual({ to: { x: -1, y: 0 } });
+    expect(stepFrom(grown({ x: 0, y: 0 }), Direction.Up)).toEqual({ to: { x: 0, y: 1 } });
+    expect(stepFrom(grown({ x: -2, y: 0 }), Direction.Down)).toEqual({ to: { x: -2, y: -1 } });
+    // Lesson 1's town, which starts at the corner: none of that.
+    expect("blocked" in stepFrom({ ...walkerInTown(), at: { x: 2, y: 0 } }, Direction.Down)).toBe(
+      true,
+    );
+  });
   it("in the town she walks only on roads: across on the main road, up and down a street", async () => {
     // From the corner there is no street going up; from up a street there's no road across.
     expect(stepFrom(walkerInTown(), Direction.Up)).toEqual({ blocked: "no street going up here" });

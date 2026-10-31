@@ -109,11 +109,17 @@ export function SceneDraw({
     );
   }
   if (s.scene !== Scene.Town) return <rect class={`cp-scene is-${s.scene}`} {...box} rx={6} />;
-  // The town: the main road along the bottom, a street up from it at every count.
+  // The town: the main road, a street up from it at every count. Grown past Riya's corner (its
+  // window reaching west of 0, or south of the road), its streets are at every whole number, the
+  // corner's own included, and run south of the road as well.
   const unit = unitOf(px);
   const road = Math.max(6, Math.min(16, unit * 0.32));
-  const streets = marksOn(Marks.Counts, w.xMin, w.xMax, 1).filter((x) => isRisen(s, x));
+  const growsWest = w.xMin < 0;
+  const streets = marksOn(growsWest ? Marks.Numbers : Marks.Counts, w.xMin, w.xMax, 1).filter((x) =>
+    isRisen(s, x),
+  );
   const [, base] = px.toPx(0, 0);
+  const foot = w.yMin < 0 ? y1 : base;
   const rise = s.rising;
   return (
     <g class="cp-town">
@@ -125,7 +131,7 @@ export function SceneDraw({
             key={x}
             class="cp-street"
             x1={sx}
-            y1={base}
+            y1={foot}
             x2={sx}
             y2={y0}
             stroke-width={road * 0.7}
