@@ -4,7 +4,7 @@ import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode } from "@chalk/player";
 import type { JSX } from "preact";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ChapterGate } from "./chapter-gate";
 import type { ChapterContent } from "./content-store";
 import type { Course, CourseChapter } from "./course";
@@ -31,9 +31,10 @@ function chapterAt(path: string): Found | undefined {
 
 type Part = "pages" | "practice";
 /** The app's screens inside a chapter (app.tsx), and the board a lesson opens at. */
+type LessonScreen = { kind: "lesson"; concept: string; part: Part; start: number };
 type Screen =
   | { kind: "chapter" }
-  | { kind: "lesson"; concept: string; part: Part; start: number }
+  | LessonScreen
   | { kind: "result"; concept: string }
   | { kind: "chapterDone" };
 
@@ -48,6 +49,15 @@ function screenAt(path: string, content: ChapterContent): Screen {
         return { kind: "lesson", concept, part, start: 0 };
     }
   return { kind: "chapter" };
+}
+
+/** The board played is part of the address (`&board=bus-stops`): a reload or the editor's buttons keep it. */
+function keepBoardInAddress(path: string | undefined): void {
+  if (path === undefined) return;
+  const next = new URLSearchParams(window.location.search);
+  next.set("board", path.split("/").at(-1) ?? path);
+  const query = `?${next.toString().replace(/=(&|$)/g, "$1")}`;
+  if (query !== window.location.search) history.replaceState(null, "", query);
 }
 
 const jugnu = jugnuLink();
@@ -75,6 +85,24 @@ export function PlayInApp({
   const [events, setEvents] = useState<readonly ChalkEvent[]>([]);
   useEffect(() => bus.subscribe((e) => setEvents((was) => [...was, e])), [bus]);
   const progress: Progress = useMemo(() => progressFrom(boardFactsFrom(events), plans), [events]);
+  // The lesson being played and its board: ← / → open the board before or after it, fresh, as a
+  // student meets it (an author's way round, which a student doesn't have).
+  const here = useRef<{ now: LessonScreen; index: number; count: number } | undefined>(undefined);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+      if ((e.target as HTMLElement).closest("input, textarea, select") !== null) return;
+      const by = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      const at = here.current;
+      if (by === 0 || at === undefined) return;
+      const to = at.index + by;
+      if (to < 0 || to >= at.count) return;
+      e.preventDefault();
+      setScreen({ ...at.now, start: to });
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // A phone: its width, and a phone's height where the screen has room for it.
   const frame = {
@@ -107,6 +135,10 @@ export function PlayInApp({
                     bus={bus}
                     jugnu={jugnu}
                     startBoard={now.start}
+                    onBoard={(index) => {
+                      here.current = { now, index, count: lesson.boards.length };
+                      keepBoardInAddress(lesson.boards[index]?.item?.path);
+                    }}
                     onExit={() => setScreen({ kind: "chapter" })}
                     onComplete={() => {
                       if (now.part === "pages" && lessons.practice !== null)

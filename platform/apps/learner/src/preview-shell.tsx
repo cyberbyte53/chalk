@@ -185,6 +185,24 @@ function propShown(at: { pkg: string; type: string }, state: string | null): Sho
 }
 
 /** The boards a course path names, in order: one page or question, or a concept's. */
+/** A board's name in an address (`&board=bus-stops`): the last part of its path. */
+const boardName = (shown: Shown): string => shown.path.split("/").at(-1) ?? shown.path;
+
+/**
+ * Where play opens: the address's lesson, at the board `&board` names (where the reviewer was, one
+ * by one, or played to with the arrows); an address naming a board stands for its lesson and it.
+ */
+function playPath(params: URLSearchParams): string {
+  const at = (atPath(params) ?? params.get("source")?.replace(/^content\//, "") ?? "").replace(
+    /\/$/,
+    "",
+  );
+  const board = params.get("board");
+  if (board === null) return at;
+  const parts = at.split("/");
+  return [...(parts.length >= 4 ? parts.slice(0, 3) : parts), board].join("/");
+}
+
 async function boardsAt(path: string, withQuestions: boolean): Promise<Shown[]> {
   const clean = path.replace(/\.json$/, "").replace(/\/$/, "");
   const parts = clean.split("/");
@@ -1265,10 +1283,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     return (
       <PlayInApp
         key={search}
-        path={(atPath(params) ?? params.get("source")?.replace(/^content\//, "") ?? "").replace(
-          /\/$/,
-          "",
-        )}
+        path={playPath(params)}
         locale={params.get("locale") === "hi" ? Locale.Hi : Locale.En}
         bus={bus}
         width={Number(params.get("width")) || undefined}
@@ -1353,6 +1368,18 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     else next.delete("one");
     history.replaceState(null, "", `?${next.toString().replace(/=(&|$)/g, "$1")}`);
   }, []);
+  // One by one, the board looked at is part of the address: a reload, Play or Hindi (the editor's
+  // buttons reload what the page says) keeps it.
+  useEffect(() => {
+    // Until the boards are in, the address is what the page was opened with: it says where to start.
+    if (shown === null) return;
+    const board = shown[Math.min(index, shown.length - 1)];
+    const next = new URLSearchParams(window.location.search);
+    if (isOne && board !== undefined) next.set("board", boardName(board));
+    else next.delete("board");
+    const query = `?${next.toString().replace(/=(&|$)/g, "$1")}`;
+    if (query !== window.location.search) history.replaceState(null, "", query);
+  }, [isOne, index, shown]);
   useEffect(() => {
     // s: one by one · → / j next · ← / k previous · c: pick a piece · p: play · h: Hindi ·
     // + / −: zoom · Esc: leave · ?: these keys.
@@ -1430,8 +1457,12 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       if (!isLive) return;
       setSources(where);
       setShown(boards);
-      // Come back from the next lesson: start on this one's last board.
+      // Come back from the next lesson: start on this one's last board. Else on the board the
+      // address names (one by one: where the reviewer was, kept through a reload or Play).
       const now = new URLSearchParams(window.location.search);
+      const named = now.get("board");
+      const at = named === null ? -1 : boards.findIndex((s) => boardName(s) === named);
+      if (at !== -1) setIndex(at);
       if (now.has("end")) {
         setIndex(boards.length - 1);
         now.delete("end");
