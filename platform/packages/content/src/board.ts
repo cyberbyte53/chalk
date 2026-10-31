@@ -1,69 +1,8 @@
 import type { AnyProp, Given } from "@chalk/prop";
 import { z } from "zod";
-import { jugnuNotesSchema } from "./jugnu";
 import type { Localized } from "./localized";
 import { pieceSchema } from "./piece";
 import type { SceneSound, SceneWords } from "./sound/cue";
-
-/**
- * A script: actions over time. `call` runs one action ("line.zoomTo") and finishes when the action
- * does; `wait` pauses; `seq` runs one after another ("then"); `par` runs together ("with") and
- * finishes when all do. A plain list is a `seq`.
- */
-export type Script =
-  | { call: string; args?: CallArgs }
-  | { wait: number }
-  | { seq: Script[] }
-  | { par: Script[] }
-  | Script[];
-
-/**
- * A call's arguments: plain values, or a function of the board worked out when the call runs
- * (`(at) => ({ to: at(coin).count })`).
- */
-export type CallArgs = Record<string, unknown> | ((at: BoardAt) => Record<string, unknown>);
-
-const callArgsSchema = z.union([
-  z.record(z.string(), z.unknown()),
-  z.custom<(at: BoardAt) => Record<string, unknown>>((value) => typeof value === "function", {
-    message: "should be values, or a function of the board",
-  }),
-]);
-
-export const scriptSchema: z.ZodType<Script, z.ZodTypeDef, unknown> = z.lazy(() =>
-  z.union([
-    z.object({ call: z.string().min(1), args: callArgsSchema.optional() }).strict(),
-    z.object({ wait: z.number().positive().max(30) }).strict(),
-    z.object({ seq: z.array(scriptSchema) }).strict(),
-    z.object({ par: z.array(scriptSchema) }).strict(),
-    z.array(scriptSchema),
-  ]),
-);
-
-/** How a rule reads the board: `at(piece)` is that piece's view (its stored and derived fields). */
-export type BoardAt = (
-  piece: string | { readonly name: string },
-) => Readonly<Record<string, unknown>>;
-
-/**
- * A rule's value or condition: code, a function of the board (`(at) => at(race).time > 36`). Authors
- * write it typed (@chalk/author's `Rule`); the board keeps it as this.
- */
-export type RuleFn = (at: BoardAt) => unknown;
-
-const ruleFnSchema = z.custom<RuleFn>((value) => typeof value === "function", {
-  message: "should be a function of the board",
-});
-
-/** IS: one of a prop's inputs ("box.text") is always what a rule of the board works out. */
-export const isRuleSchema = z.object({ set: z.string().min(1), to: ruleFnSchema }).strict();
-export type IsRule = z.infer<typeof isRuleSchema>;
-
-/** WHEN: a prop's signal (and, if given, a condition on the board) runs a script. */
-export const whenRuleSchema = z
-  .object({ on: z.string().min(1), if: ruleFnSchema.optional(), do: scriptSchema })
-  .strict();
-export type WhenRule = z.infer<typeof whenRuleSchema>;
 
 /** A built page or question, by its file under build/ and its version: what its board is made from. */
 export const itemRefSchema = z
@@ -76,50 +15,21 @@ export const itemRefSchema = z
   .strict();
 export type ItemRef = z.infer<typeof itemRefSchema>;
 
-/** One node of a board as plain facts: its stored facts, and whether the learner touched it. */
-export const savedNodeSchema = z
-  .object({ facts: z.record(z.string(), z.unknown()), isTouched: z.boolean() })
-  .strict();
-export type SavedNode = z.infer<typeof savedNodeSchema>;
-
-/**
- * A board as plain facts, each node by its address (the phone's board sent to Jugnu's server).
- * Written and read by one function each (the runtime's save and load); load checks every node's
- * facts against its prop.
- */
-export const savedBoardSchema = z.record(z.string(), savedNodeSchema);
-export type SavedBoard = z.infer<typeof savedBoardSchema>;
-
-/** One screen: a layout tree of props, and the IS and WHEN rules that wire them. */
+/** One screen: its scene (the event model, platform/docs/event-model.md), and how its pieces are laid out. */
 export const boardSchema = z.object({
   /** Unique within the lesson; free to rename. */
   name: z.string().min(1),
   root: pieceSchema,
-  is: z.array(isRuleSchema).default([]),
-  when: z.array(whenRuleSchema).default([]),
-  /**
-   * Actions only the student may do on this board, as "prop.action" (taking the bulb out, when that
-   * is what the board asks of them). Jugnu can never do these for them.
-   */
-  studentOnly: z.array(z.string()).default([]),
-  /** For Jugnu: what the board is for and what its props stand for (plain English). */
-  jugnu: jugnuNotesSchema.optional(),
   /**
    * The built item it was made from (build/<path>, at that version): where any copy of the board,
    * on the phone or on the server, is made again from its code.
    */
   item: itemRefSchema.optional(),
-  /**
-   * A board on the event model (platform/docs/event-model.md): the scene, the outermost prop, whose
-   * children are the pieces (`root` lays them out), and what each piece starts with. Its rules are
-   * the scene's own; `is` and `when` stay empty.
-   */
-  model: z
-    .custom<SceneModel>(
-      (v) => typeof v === "object" && v !== null && "scene" in v,
-      "should be a scene and its pieces' setup",
-    )
-    .optional(),
+  /** The scene, the outermost prop, whose children are the pieces (`root` lays them out), and what each starts with. */
+  model: z.custom<SceneModel>(
+    (v) => typeof v === "object" && v !== null && "scene" in v,
+    "should be a scene and its pieces' setup",
+  ),
 });
 export type Board = z.infer<typeof boardSchema>;
 
@@ -139,13 +49,6 @@ export type SceneModel = {
    * pieces' own sound there; null only silences it.
    */
   readonly sounds?: Readonly<Record<string, SceneSound>>;
+  /** What each piece stands for on this board, in the author's words (`standsFor`). */
+  readonly standsFor?: Readonly<Record<string, string>>;
 };
-
-/** Splits "line.zoomTo" / "guess.wrong" / "line.marker" into the prop name and the member. */
-export function splitTarget(target: string): { prop: string; member: string } {
-  const dot = target.indexOf(".");
-  if (dot <= 0 || dot === target.length - 1) {
-    throw new Error(`"${target}" should be <prop>.<name>, e.g. line.zoomTo`);
-  }
-  return { prop: target.slice(0, dot), member: target.slice(dot + 1) };
-}

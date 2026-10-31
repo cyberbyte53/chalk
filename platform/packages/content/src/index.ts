@@ -18,25 +18,11 @@ export {
   carries,
 } from "./sound/cue";
 export {
-  type BoardAt,
-  type CallArgs,
+  type Board,
+  boardSchema,
   type ItemRef,
   itemRefSchema,
-  type RuleFn,
-  type SavedBoard,
-  type SavedNode,
-  savedBoardSchema,
-  savedNodeSchema,
-  boardSchema,
-  isRuleSchema,
-  scriptSchema,
-  splitTarget,
-  whenRuleSchema,
-  type Board,
   type SceneModel,
-  type IsRule,
-  type Script,
-  type WhenRule,
 } from "./board";
 export {
   Actor,
@@ -87,20 +73,6 @@ export {
   refSchema,
   sourceSchema,
 } from "./built";
-export {
-  CueKind,
-  MAX_OPTIONS,
-  OPTION_MAX,
-  TurnInputKind,
-  aboutSchema,
-  cueSchema,
-  jugnuNotesSchema,
-  turnInputSchema,
-  type About,
-  type Cue,
-  type JugnuNotes,
-  type TurnInput,
-} from "./jugnu";
 export { lessonSchema, parseLesson, type Lesson } from "./lesson";
 export {
   AGENT_LOCALE,

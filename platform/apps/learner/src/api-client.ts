@@ -4,9 +4,6 @@ import {
   type EventsReply,
   type GroupReply,
   type JoinedGroup,
-  type JugnuFlagRequest,
-  type JugnuTurnReply,
-  type JugnuTurnRequest,
   type MeReply,
   type Progress,
   type Role,
@@ -18,7 +15,6 @@ import {
   groupPath,
   groupReplySchema,
   joinedGroupSchema,
-  jugnuTurnReplySchema,
   meReplySchema,
   progressSchema,
   teacherGroupSchema,
@@ -80,16 +76,6 @@ async function call<S extends z.ZodTypeAny>(
 
 /** The server, as the app calls it; every reply is parsed with the shared schemas. */
 export const api = {
-  /** One of Jugnu's turns, thought through on the server. */
-  jugnuTurn(request: JugnuTurnRequest): Promise<JugnuTurnReply> {
-    return call("POST", ApiPath.JugnuTurn, jugnuTurnReplySchema, request);
-  },
-
-  /** Keeps a chat with Jugnu someone wasn't happy with. */
-  async flagJugnu(flag: JugnuFlagRequest): Promise<void> {
-    await send("POST", ApiPath.JugnuFlags, flag);
-  },
-
   /** Who's signed in on this device; undefined if no one. */
   async me(): Promise<MeReply | undefined> {
     try {

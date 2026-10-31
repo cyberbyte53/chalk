@@ -9,9 +9,6 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo",
     "content": "tsx --tsconfig ../../tsconfig.base.json --import ./src/content/record-imports.ts src/content/cli.ts",
-    "cache-check": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/cache-check.ts",
-    "trace": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/trace.ts",
-    "chat-log": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/chat-log.ts",
     "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts",
     "catalogue": "tsx --tsconfig ../../tsconfig.base.json src/catalogue-cli.ts",
     "sound": "tsx --tsconfig ../../tsconfig.base.json src/sound/cli.ts",

@@ -20,25 +20,20 @@ export const PlayMode = {
 export type PlayMode = (typeof PlayMode)[keyof typeof PlayMode];
 
 export type ModePolicy = {
-  hasJugnu: boolean;
   /** A wrong answer can be tried again (else it locks and Continue shows). */
   canRetry: boolean;
-  /** "Why?" after a right answer (asks Jugnu). */
-  hasWhy: boolean;
   /** The banner's word after a wrong answer. */
   wrongWord: "notQuite" | "incorrect" | "letsReview";
 };
 
 export const modePolicy: Readonly<Record<PlayMode, ModePolicy>> = {
-  [PlayMode.Lesson]: { hasJugnu: true, canRetry: true, hasWhy: true, wrongWord: "notQuite" },
-  [PlayMode.Guided]: { hasJugnu: true, canRetry: true, hasWhy: true, wrongWord: "notQuite" },
+  [PlayMode.Lesson]: { canRetry: true, wrongWord: "notQuite" },
+  [PlayMode.Guided]: { canRetry: true, wrongWord: "notQuite" },
   [PlayMode.SkillCheck]: {
-    hasJugnu: false,
     canRetry: false,
-    hasWhy: false,
     wrongWord: "incorrect",
   },
-  [PlayMode.Review]: { hasJugnu: true, canRetry: true, hasWhy: true, wrongWord: "letsReview" },
+  [PlayMode.Review]: { canRetry: true, wrongWord: "letsReview" },
 };
 
 /**

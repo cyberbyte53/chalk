@@ -1,12 +1,5 @@
-import {
-  appendFileSync,
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  renameSync,
-  writeFileSync,
-} from "node:fs";
-import type { ClientRequest, IncomingMessage, ServerResponse } from "node:http";
+import { existsSync, readFileSync } from "node:fs";
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, type UserConfig, defineConfig, loadEnv } from "vite";
@@ -30,36 +23,6 @@ function builtCommit(): string {
 /** The content's source, and where a chunk made only of it is written (and served) in the build. */
 const CONTENT_SOURCE = join(ROOT, "content") + sep;
 const CONTENT_CHUNKS = "assets/content/";
-
-/**
- * In development, what Jugnu heard and said on the dev shell is appended, one JSON line per
- * model call and per turn, to tmp/jugnu-chat.jsonl at the repo's root: `pnpm --filter
- * @chalk/studio chat-log` prints it readably, so a chat can be read without copying it out.
- */
-function devLog(): Plugin {
-  // /dev-log: Jugnu's turns (tmp/jugnu-chat.jsonl); /dev-llm-log: every model call exactly as it
-  // was sent and answered (tmp/llm-calls.jsonl).
-  const appendTo = (file: string) => (req: IncomingMessage, res: ServerResponse) => {
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk;
-    });
-    req.on("end", () => {
-      mkdirSync(join(ROOT, "tmp"), { recursive: true });
-      appendFileSync(join(ROOT, "tmp", file), `${body.trim()}\n`);
-      res.statusCode = 204;
-      res.end();
-    });
-  };
-  return {
-    name: "chalk-dev-log",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use("/dev-log", appendTo("jugnu-chat.jsonl"));
-      server.middlewares.use("/dev-llm-log", appendTo("llm-calls.jsonl"));
-    },
-  };
-}
 
 /**
  * /content/<path>: a file of the built content (build/ at the repo's root), as the server serves it
@@ -184,71 +147,16 @@ function devStudio(): Plugin {
 }
 
 /**
- * The model servers are called by this machine, not a browser: the page's Origin is dropped, or
- * Anthropic treats the call as one from a browser holding a key.
- */
-const dropOrigin = (proxy: { on: (event: "proxyReq", fn: (req: ClientRequest) => void) => void }) =>
-  proxy.on("proxyReq", (req) => req.removeHeader("origin"));
-
-/**
- * The app's settings come from the repo's .env when it is built: the Google client id and Jugnu's
- * on/off. In development, /api goes on to the server (`pnpm dev` runs both); Jugnu thinks on the
- * server, so his model's key never reaches the browser.
+ * The app's settings come from the repo's .env when it is built: the Google client id, and whether
+ * dev sign-in is on. In development, /api goes on to the server (`pnpm dev` runs both).
  */
 export default defineConfig(({ mode }): UserConfig => {
-  const env = loadEnv(mode, ROOT, [
-    "GOOGLE_CLIENT_ID",
-    "DEV_SIGN_IN",
-    "JUGNU_",
-    "PORT",
-    "ANTHROPIC_API_KEY",
-    "CLAUDE_MODELS",
-  ]);
+  const env = loadEnv(mode, ROOT, ["GOOGLE_CLIENT_ID", "DEV_SIGN_IN", "PORT"]);
   const isDev = mode === "development";
-  const primaryProvider = env.JUGNU_PROVIDER === "anthropic" ? "anthropic" : "openai-compatible";
-  // Models the dev shell can switch Jugnu between: the .env's own, and Claude's when
-  // ANTHROPIC_API_KEY is set (CLAUDE_MODELS, comma-separated, overrides which).
-  const claudeModels = (env.CLAUDE_MODELS ?? "claude-haiku-5-5,claude-sonnet-5-5")
-    .split(",")
-    .map((m) => m.trim())
-    .filter((m) => m !== "");
-  const devModels = !isDev
-    ? []
-    : [
-        ...(env.JUGNU_MODEL_SERVER !== undefined && env.JUGNU_MODEL
-          ? [
-              {
-                id: env.JUGNU_MODEL,
-                provider: primaryProvider,
-                path: "/dev-model",
-                model: env.JUGNU_MODEL,
-                think: env.JUGNU_THINK === "on",
-              },
-            ]
-          : []),
-        // Each Claude model twice: thinking off, and on (" +think").
-        ...(env.ANTHROPIC_API_KEY
-          ? claudeModels.flatMap((model) =>
-              [false, true].map((think) => ({
-                id: think ? `${model}+think` : model,
-                provider: "anthropic",
-                path: "/dev-anthropic",
-                model,
-                think,
-              })),
-            )
-          : []),
-      ];
   const chalk = {
     commit: builtCommit(),
     googleClientId: env.GOOGLE_CLIENT_ID ?? "",
     isDevSignIn: mode === "development" && env.DEV_SIGN_IN === "on",
-    jugnu: {
-      isOn: env.JUGNU_PROVIDER !== "off",
-      // In the dev shell Jugnu thinks on this device, calling the model through /dev-model
-      // below (the key is added there, never in the page): no server, no sign-in, no database.
-      devModels,
-    },
   };
   const server = `http://127.0.0.1:${env.PORT ?? "8080"}`;
   return {
@@ -269,13 +177,12 @@ export default defineConfig(({ mode }): UserConfig => {
     },
     define: { __CHALK__: JSON.stringify(chalk) },
     plugins: [
-      devLog(),
       devStudio(),
       devContent(),
       // The app installs to the home screen and works offline: the app and its fonts are cached
       // on first visit, and each chapter's content (and its props' drawing code) the first time
       // it is opened; a new version is fetched in the background and used from the next open.
-      // /api and Jugnu always go to the network.
+      // /api always goes to the network.
       VitePWA({
         registerType: "autoUpdate",
         injectRegister: "auto",
@@ -361,32 +268,6 @@ export default defineConfig(({ mode }): UserConfig => {
       fs: { allow: ["../../.."] },
       proxy: {
         "/api": server,
-        ...(env.JUGNU_MODEL_SERVER !== undefined
-          ? {
-              "/dev-model": {
-                target: env.JUGNU_MODEL_SERVER,
-                changeOrigin: true,
-                rewrite: (path: string) => path.replace(/^\/dev-model/, ""),
-                headers: !env.JUGNU_API_KEY
-                  ? {}
-                  : primaryProvider === "anthropic"
-                    ? { "x-api-key": env.JUGNU_API_KEY }
-                    : { authorization: `Bearer ${env.JUGNU_API_KEY}` },
-                configure: dropOrigin,
-              },
-            }
-          : {}),
-        ...(env.ANTHROPIC_API_KEY
-          ? {
-              "/dev-anthropic": {
-                target: "https://api.anthropic.com",
-                changeOrigin: true,
-                rewrite: (path: string) => path.replace(/^\/dev-anthropic/, ""),
-                headers: { "x-api-key": env.ANTHROPIC_API_KEY },
-                configure: dropOrigin,
-              },
-            }
-          : {}),
       },
     },
   };

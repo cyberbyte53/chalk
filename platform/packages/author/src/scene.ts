@@ -254,7 +254,10 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
   readonly witness?: readonly Step[];
   /** Wrong answers and the note each should get, played at publish too. */
   readonly noteChecks?: readonly NoteCheck[];
-  /** For Jugnu: what the board is for, and what its pieces stand for. */
+  /**
+   * What the board is for (its scene's describe), and what its pieces stand for here: the author's
+   * words, for whoever reads the board (an agent, a reviewer).
+   */
   readonly purpose?: string;
   readonly standsFor?: { readonly [K in keyof P]?: string };
 };
@@ -652,16 +655,17 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       ...(free.if === undefined ? {} : { hasCondition: true }),
       ...(free.about === undefined ? {} : { about: free.about }),
     };
+  const standsFor = Object.fromEntries(
+    Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),
+  ) as Record<string, string>;
   const model: SceneModel = {
     scene: root,
     given,
     lines,
     freeLines: Object.keys(freeLines),
     ...(Object.keys(sounds).length === 0 ? {} : { sounds }),
+    ...(Object.keys(standsFor).length > 0 ? { standsFor } : {}),
   };
-  const standsFor = Object.fromEntries(
-    Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),
-  ) as Record<string, string>;
   return {
     board: {
       name,
@@ -670,18 +674,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         name: "page",
         children: [...pieces, { kind: PieceKind.Space, name: "space1" }],
       },
-      is: [],
-      when: [],
-      studentOnly: [],
       model,
-      ...(spec.purpose !== undefined || Object.keys(standsFor).length > 0
-        ? {
-            jugnu: {
-              ...(spec.purpose !== undefined ? { purpose: spec.purpose } : {}),
-              ...(Object.keys(standsFor).length > 0 ? { props: standsFor } : {}),
-            },
-          }
-        : {}),
     },
     witness: [...(spec.witness ?? []), ...uses.flatMap((u) => u.witness ?? [])],
     noteChecks: [...(spec.noteChecks ?? []), ...uses.flatMap((u) => u.noteChecks ?? [])],
