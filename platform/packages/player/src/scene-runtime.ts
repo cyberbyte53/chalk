@@ -227,7 +227,12 @@ export class SceneRuntime {
         : this.lookup(type)?.sound?.effects?.[[...inside, signal].join(".")];
     const effect = lesson !== undefined ? lesson : typeof own === "function" ? own(told) : own;
     if (effect === null || effect === undefined) return;
-    this.soundedEffects.push({ n: ++this.heardCount, effect, at, time: this.core.now });
+    this.soundedEffects.push({
+      n: ++this.heardCount,
+      effect: effect.name,
+      at,
+      time: this.core.now,
+    });
     this.services.effect?.(effect);
   }
 
@@ -548,7 +553,7 @@ export class SceneRuntime {
 
 /** A line as it was heard on a board. */
 /** An effect heard on the board: which, at which signal ("line.walker.stepped"), when. */
-export type SoundedEffect = { n: number; effect: Effect; at: string; time: number };
+export type SoundedEffect = { n: number; effect: string; at: string; time: number };
 
 export type HeardLine = {
   /** Its place among everything heard on the board (lines and effects). */

@@ -1,9 +1,10 @@
 import { hidden, line, place, scene, tap } from "@chalk/author";
-import { Actor } from "@chalk/content";
+import { Actor, type Effect } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
 import { SceneRuntime, scriptOf } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
 import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
+import { tap as tapSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
 
@@ -347,7 +348,7 @@ describe("a scene, built and checked like any board", () => {
   });
 
   it("sounds effects at signals: a prop's own, and the lesson's (adding, replacing, silencing)", async () => {
-    const walking = (effects?: Record<string, string | null>) =>
+    const walking = (effects?: Record<string, Effect | null>) =>
       scene({
         pieces: {
           plane: place(sceneCoordinatePlane, {
@@ -364,7 +365,7 @@ describe("a scene, built and checked like any board", () => {
         now: () => 0,
         frame: () => () => undefined,
         speak: async () => undefined,
-        effect: (e) => void played.push(e),
+        effect: (e) => void played.push(e.name),
         onError: (message) => {
           throw new Error(message);
         },
@@ -378,12 +379,11 @@ describe("a scene, built and checked like any board", () => {
       expect(runtime.effects().map((e) => e.effect)).toEqual(played);
       return played;
     };
-    // The props' own: the walker's step, the question answered wrong.
-    expect(await effectsOf(walking())).toEqual(["step", "wrong"]);
+    // The props' own: the walker's step (right and wrong come once chosen).
+    expect(await effectsOf(walking())).toEqual(["step"]);
     // The lesson's: a tap for each step instead, and no sound for a wrong answer.
-    expect(
-      await effectsOf(walking({ "plane.walker.stepped": "tap", "ask.checked": null })),
-    ).toEqual(["tap"]);
+    expect(await effectsOf(walking({ "plane.walker.stepped": tapSound }))).toEqual(["tap"]);
+    expect(await effectsOf(walking({ "plane.walker.stepped": null }))).toEqual([]);
   });
 
   it("refuses an effect at no signal, or one there isn't", () => {
@@ -392,7 +392,7 @@ describe("a scene, built and checked like any board", () => {
     ).toThrow(/the effect at "ask.landed" isn't at a signal here/);
     expect(() =>
       scene({ pieces: { ask }, effects: { "ask.wrong": "boom" } as never }).build("bad"),
-    ).toThrow(/no effect "boom"/);
+    ).toThrow(/isn't a sound/);
   });
 
   it("the student can hear the screen again: what is showing now, from the top", () => {

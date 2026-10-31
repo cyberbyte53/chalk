@@ -54,21 +54,14 @@ export function clipsOf(
 }
 
 /**
- * The sound effects there are, by name (platform/docs/sound.md): lessons and props name effects,
- * the player makes them (player/effects.ts).
+ * A sound effect (platform/docs/sound.md): its name (what `play` and the log show) and where its
+ * recording is. A package declares its own, beside its code (`new URL("./sounds/step.mp3",
+ * import.meta.url)`), so a sound ships with the code that uses it: a lesson's props load theirs
+ * when its chapter opens, the app's own (right, wrong) come with the app.
  */
-export const Effect = {
-  /** A footstep, a bus moving a stop: something taking one step. */
-  Step: "step",
-  /** Something pressed or chosen. */
-  Tap: "tap",
-  /** An answer that is right. */
-  Correct: "correct",
-  /** An answer that isn't. */
-  Wrong: "wrong",
-  /** Something rising or appearing (a street rising from the road). */
-  Rise: "rise",
-} as const;
-export type Effect = (typeof Effect)[keyof typeof Effect];
+export type Effect = { readonly name: string; readonly url: string };
 
-export const EFFECTS: readonly Effect[] = Object.values(Effect);
+/** An effect, from its name and its recording. */
+export function effect(name: string, url: URL | string): Effect {
+  return { name, url: String(url) };
+}

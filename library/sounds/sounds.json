@@ -1,0 +1,32 @@
+{
+  "$comment": "Every sound in the library: what it is for, where its recording came from, and its licence. `pnpm sound add <name> freesound:<id>` adds one (fetched, made as loud as the rest, its shrill top trimmed); index.ts exports it.",
+  "sounds": [
+    {
+      "name": "step",
+      "file": "sounds/step.mp3",
+      "for": "a thing taking one step: the bus moving a stop, Riya walking",
+      "source": "https://freesound.org/s/221091/",
+      "title": "cartoon pop or drip",
+      "author": "AlaskaRobotics",
+      "license": "CC0 1.0"
+    },
+    {
+      "name": "tap",
+      "file": "sounds/tap.mp3",
+      "for": "something pressed or chosen",
+      "source": "https://freesound.org/s/186669/",
+      "title": "Computer Boop",
+      "author": "fordps3",
+      "license": "CC0 1.0"
+    },
+    {
+      "name": "rise",
+      "file": "sounds/rise.mp3",
+      "for": "something rising or appearing: a street rising from the road",
+      "source": "https://freesound.org/s/419341/",
+      "title": "Swoosh.ogg",
+      "author": "WizardOZ",
+      "license": "CC0 1.0"
+    }
+  ]
+}

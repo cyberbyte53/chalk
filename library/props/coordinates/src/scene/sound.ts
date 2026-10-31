@@ -1,10 +1,11 @@
-import { Effect } from "@chalk/content";
 import type { SoundView } from "@chalk/player";
+import { rise, step } from "@chalk/sounds";
 
 /**
- * How the coordinate plane sounds (platform/docs/sound.md), beside how it looks: the walker's
- * footstep each step it takes, a line rising from the axis. Its model knows nothing of sound.
+ * How the coordinate plane sounds (platform/docs/sound.md), beside how it looks: a step for each
+ * step the walker takes, a rise as a line rises from the axis (both from the sound library). Its
+ * model knows nothing of sound.
  */
 export const coordinatePlaneSound: SoundView = {
-  effects: { "walker.stepped": Effect.Step, "plane.risen": Effect.Rise },
+  effects: { "walker.stepped": step, "plane.risen": rise },
 };

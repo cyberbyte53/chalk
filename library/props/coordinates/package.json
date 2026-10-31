@@ -16,6 +16,7 @@
     "@chalk/draw": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
+    "@chalk/sounds": "workspace:*",
     "preact": "10.29.8",
     "zod": "3.25.76"
   },

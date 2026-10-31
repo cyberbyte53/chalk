@@ -5,32 +5,11 @@ import { signal } from "@preact/signals";
  * once, overlap one another, are never waited for, and are muted on their own. A repeat of the same
  * effect replaces itself (steps in quick succession don't pile up).
  *
- * Each is a small recipe the browser plays (Web Audio): nothing to store or license. A recipe can
- * be replaced by a recorded file under the same name; lessons and props name effects, never sounds.
+ * Each is a recording that ships with the code that uses it (a package's sounds/, with SOURCES.md):
+ * its sound view names it (content's `effect`), and this plays whatever it points at.
  */
 
-import { Effect } from "@chalk/content";
-
-/** One tone of a recipe: a wave from one pitch to another, starting `at` seconds in. */
-type Tone = {
-  wave: OscillatorType | "noise";
-  from: number;
-  to?: number;
-  at?: number;
-  seconds: number;
-  volume: number;
-};
-
-const RECIPES: Readonly<Record<Effect, readonly Tone[]>> = {
-  [Effect.Step]: [{ wave: "noise", from: 1400, seconds: 0.05, volume: 0.25 }],
-  [Effect.Tap]: [{ wave: "sine", from: 900, seconds: 0.05, volume: 0.2 }],
-  [Effect.Correct]: [
-    { wave: "sine", from: 660, seconds: 0.09, volume: 0.25 },
-    { wave: "sine", from: 990, at: 0.09, seconds: 0.14, volume: 0.25 },
-  ],
-  [Effect.Wrong]: [{ wave: "triangle", from: 220, to: 170, seconds: 0.22, volume: 0.25 }],
-  [Effect.Rise]: [{ wave: "sine", from: 300, to: 700, seconds: 0.35, volume: 0.18 }],
-};
+import type { Effect } from "@chalk/content";
 
 const MUTED_KEY = "chalk.isEffectsMuted";
 const remembered = (): boolean => {
@@ -52,14 +31,26 @@ export function setEffectsMuted(isOn: boolean): void {
 }
 
 let context: AudioContext | undefined;
+/** Each recording, by its address: loading, decoded, or missing (null). */
+const sounds = new Map<string, Promise<AudioBuffer | null>>();
 /** The sounds playing, by effect: a repeat stops the one before. */
-const playing = new Map<Effect, () => void>();
-/** One second of noise, made once: what a step or a tick is shaped from. */
-let noiseBuffer: AudioBuffer | undefined;
+const playing = new Map<string, () => void>();
+
+/** A recording, fetched and decoded once. */
+function load(audio: AudioContext, url: string): Promise<AudioBuffer | null> {
+  const known = sounds.get(url);
+  if (known !== undefined) return known;
+  const loading = fetch(url)
+    .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error(String(r.status)))))
+    .then((bytes) => audio.decodeAudioData(bytes))
+    .catch(() => null);
+  sounds.set(url, loading);
+  return loading;
+}
 
 /**
- * The browser lets a page make sound only after the student has touched it. The audio is made then,
- * on the first touch or key; until then effects are dropped, never saved up (an effect is a moment:
+ * The browser lets a page make sound only after the student has touched it. The audio starts on
+ * the first touch or key; until then effects are dropped, never saved up (an effect is a moment:
  * one that couldn't sound then is old news later).
  */
 function unlock(): void {
@@ -71,58 +62,35 @@ if (typeof window !== "undefined" && typeof AudioContext !== "undefined") {
   window.addEventListener("keydown", unlock, { capture: true });
 }
 
-/** Plays an effect now: nothing when effects are muted, or the page can't sound yet. */
+/** How loud effects play, under the voice. */
+const VOLUME = 0.8;
+/** How late a sound may still start, the first time it is fetched: later, its moment has passed. */
+const LATE = 0.25;
+
+/**
+ * Plays an effect now: nothing when effects are muted or the page can't sound yet. Its recording is
+ * fetched the first time it is needed (it ships with the code that uses it) and kept.
+ */
 export function playEffect(effect: Effect): void {
   const audio = context;
   if (isEffectsMuted.peek() || audio === undefined || audio.state !== "running") return;
-  playing.get(effect)?.();
-  const now = audio.currentTime;
-  const stops = RECIPES[effect].map((tone) => {
-    const start = now + (tone.at ?? 0);
-    const end = start + tone.seconds;
+  const asked = audio.currentTime;
+  void load(audio, effect.url).then((buffer) => {
+    if (buffer === null || audio.currentTime - asked > LATE) return;
+    playing.get(effect.name)?.();
     const gain = audio.createGain();
-    // A quick rise and a fall to silence: no clicks at either end.
-    gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(tone.volume, start + 0.005);
-    gain.gain.exponentialRampToValueAtTime(0.0001, end);
+    gain.gain.value = VOLUME;
     gain.connect(audio.destination);
-    const node = tone.wave === "noise" ? noiseSource(audio) : audio.createOscillator();
-    if (node instanceof OscillatorNode) {
-      node.type = tone.wave as OscillatorType;
-      node.frequency.setValueAtTime(tone.from, start);
-      if (tone.to !== undefined) node.frequency.exponentialRampToValueAtTime(tone.to, end);
-      node.connect(gain);
-    } else {
-      const filter = audio.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.value = tone.from;
-      node.connect(filter).connect(gain);
-    }
-    node.start(start);
-    node.stop(end);
+    const source = audio.createBufferSource();
+    source.buffer = buffer;
+    source.connect(gain);
+    source.start();
     // Stopped early (a repeat): a short fade, never a click.
-    return () => {
+    playing.set(effect.name, () => {
       const at = audio.currentTime;
-      if (at >= end) return;
-      gain.gain.cancelScheduledValues(at);
       gain.gain.setValueAtTime(gain.gain.value, at);
-      gain.gain.linearRampToValueAtTime(0, at + 0.01);
-      node.stop(at + 0.01);
-    };
+      gain.gain.linearRampToValueAtTime(0, at + 0.02);
+      source.stop(at + 0.02);
+    });
   });
-  playing.set(effect, () => {
-    for (const stop of stops) stop();
-  });
-}
-
-/** A source playing the noise (made once per page). */
-function noiseSource(audio: AudioContext): AudioBufferSourceNode {
-  if (noiseBuffer === undefined) {
-    noiseBuffer = audio.createBuffer(1, audio.sampleRate, audio.sampleRate);
-    const data = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-  }
-  const source = audio.createBufferSource();
-  source.buffer = noiseBuffer;
-  return source;
 }

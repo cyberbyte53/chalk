@@ -1,0 +1,19 @@
+{
+  "name": "@chalk/sounds",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The sound library: short recordings any prop or lesson uses (a step, right, wrong), each with its source and licence",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2"
+  }
+}

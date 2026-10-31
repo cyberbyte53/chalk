@@ -7,5 +7,6 @@ packages:
   - platform/studio
   - library/props/*
   - library/patterns
+  - library/sounds
   - library/registry
   - platform/content-source

@@ -1,11 +1,11 @@
 export {
   type AudioManifest,
   type Clip,
-  EFFECTS,
-  Effect,
+  type Effect,
   NARRATOR,
   audioManifestSchema,
   clipsOf,
+  effect,
   phraseKey,
 } from "./audio";
 export {

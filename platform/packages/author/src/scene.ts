@@ -1,5 +1,4 @@
 import {
-  EFFECTS,
   type Effect,
   LOCALES,
   type Localized,
@@ -360,15 +359,15 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         throw new Error(`Board ${name}: two lines are named "${line}"`);
       freeLines[line] = free;
     }
-  // Each effect is at a signal there is, and is an effect there is.
+  // Each effect is at a signal there is, and is a sound (from the sound library), or null.
   for (const [at, effect] of Object.entries(spec.effects ?? {})) {
     if (signalAt(spec.pieces, at) === undefined)
       throw new Error(
         `Board ${name}: the effect at "${at}" isn't at a signal here ("line.walker.stepped", "board.passed")`,
       );
-    if (effect !== null && !EFFECTS.includes(effect as Effect))
+    if (effect !== null && (typeof effect?.name !== "string" || typeof effect.url !== "string"))
       throw new Error(
-        `Board ${name}: no effect "${String(effect)}" (there are ${EFFECTS.join(", ")})`,
+        `Board ${name}: the effect at "${at}" isn't a sound (import one from @chalk/sounds), or null`,
       );
   }
   // A piece's line is said as it appears: no moment's values to fill blanks with.

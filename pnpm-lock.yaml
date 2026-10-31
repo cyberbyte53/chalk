@@ -130,6 +130,9 @@ importers:
       '@chalk/prop':
         specifier: workspace:*
         version: link:../../../platform/packages/prop
+      '@chalk/sounds':
+        specifier: workspace:*
+        version: link:../../sounds
       preact:
         specifier: 10.29.8
         version: 10.29.8(preact-render-to-string@6.5.13)
@@ -220,6 +223,16 @@ importers:
       '@chalk/jugnu':
         specifier: workspace:*
         version: link:../../platform/packages/jugnu
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
+
+  library/sounds:
+    dependencies:
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../../platform/packages/content
+    devDependencies:
       '@types/node':
         specifier: 22.10.2
         version: 22.10.2
@@ -522,6 +535,9 @@ importers:
       '@chalk/prop':
         specifier: workspace:*
         version: link:../packages/prop
+      '@chalk/sounds':
+        specifier: workspace:*
+        version: link:../../library/sounds
       '@jridgewell/trace-mapping':
         specifier: 0.3.31
         version: 0.3.31
