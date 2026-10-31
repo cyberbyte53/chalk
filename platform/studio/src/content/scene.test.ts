@@ -4,6 +4,7 @@ import { propLibrary } from "@chalk/library";
 import { SceneRuntime, scriptOf } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
 import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
+import { estimatedSeconds } from "@chalk/prop/next";
 import { appear, tap as tapSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
@@ -35,6 +36,10 @@ const board = scene({
   witness: [tap("ask", "select", { option: "street" }), tap("ask", "check")],
 }).build("tiny");
 
+/** The boards here have no clips: each line stands in as long as its words would take to say. */
+const lineSeconds = (line: { phrases: Readonly<Record<string, readonly string[] | undefined>> }) =>
+  estimatedSeconds((line.phrases.en ?? line.phrases.hi ?? []).join(" "));
+
 describe("a scene, built and checked like any board", () => {
   it("its witness answers the question and gets Continue", async () => {
     expect(await checkWitness(board.board, propLibrary, board.witness)).toEqual([]);
@@ -57,6 +62,7 @@ describe("a scene, built and checked like any board", () => {
     const heard: string[] = [];
     const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
       locale: "en",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void heard.push(`say ${line.name}`),
@@ -103,6 +109,7 @@ describe("a scene, built and checked like any board", () => {
     const said: string[] = [];
     const runtime = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
       locale: "en",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void said.push(`${line.name} at ${runtime.time().toFixed(1)}`),
@@ -117,6 +124,7 @@ describe("a scene, built and checked like any board", () => {
 
     const hiding = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
       locale: "en",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void said.push(line.name),
@@ -256,6 +264,7 @@ describe("a scene, built and checked like any board", () => {
     const said: string[] = [];
     const runtime = new SceneRuntime(reply.board, (type) => propLibrary[type], {
       locale: "en",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void said.push(line.name),
@@ -285,6 +294,7 @@ describe("a scene, built and checked like any board", () => {
     }).build("walk");
     const runtime = new SceneRuntime(walk.board, (type) => propLibrary[type], {
       locale: "hi",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: async () => undefined,
@@ -325,6 +335,7 @@ describe("a scene, built and checked like any board", () => {
     const said: string[] = [];
     const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
       locale: "en",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: (line) =>
@@ -362,6 +373,7 @@ describe("a scene, built and checked like any board", () => {
       const played: string[] = [];
       const runtime = new SceneRuntime(built.board, (type) => propLibrary[type], {
         locale: "en",
+        lineSeconds,
         now: () => 0,
         frame: () => () => undefined,
         speak: async () => undefined,
@@ -460,6 +472,7 @@ describe("a scene, built and checked like any board", () => {
     const said: string[] = [];
     const runtime = new SceneRuntime(screen.board, (type) => propLibrary[type], {
       locale: "en",
+      lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
       speak: async (line) => void said.push(line.name),

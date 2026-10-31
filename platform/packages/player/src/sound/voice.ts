@@ -130,16 +130,6 @@ export function useVoice(
     [playOne, locale],
   );
 
-  /** Nothing heard, for as long as `words` would take to say. */
-  const playQuiet = useCallback(
-    (words: string) =>
-      playOne(estimatedSeconds(words), (done) => {
-        const timer = setTimeout(() => done(true), estimatedSeconds(words) * 1000);
-        return () => clearTimeout(timer);
-      }),
-    [playOne],
-  );
-
   const stop = useCallback(() => {
     saying.current++;
     stopNow.current?.();
@@ -205,9 +195,9 @@ export function useVoice(
       // be heard still takes its time.
       if (!isMine()) return;
       if (canSpeak() && (await whenAllowed(() => playPhone(rest))) === "heard") return;
-      if (isMine()) await playQuiet(rest);
+      // Nothing could say it (no clip, no phone voice): the line is over, its words on screen.
     },
-    [locale, clipsFor, playClip, playPhone, playQuiet, firstTouch, stop, onFailure],
+    [locale, clipsFor, playClip, playPhone, firstTouch, stop, onFailure],
   );
 
   /** A line that played: no longer marked as failed. */

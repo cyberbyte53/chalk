@@ -73,7 +73,7 @@ export class SceneRuntime {
     private readonly services: RuntimeServices & {
       /** Stops the line being said. */
       hush?: () => void;
-      /** How long a line plays, when its clips are known; else from its words. */
+      /** How long a line's clips play (a silent board waits that long); none: it is over at once. */
       lineSeconds?: (line: WordsToSay) => number | undefined;
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
@@ -127,7 +127,8 @@ export class SceneRuntime {
               speaker: line.speaker,
               words: said.join(" "),
               at: core.now,
-              seconds: services.lineSeconds?.(line) ?? estimatedSeconds(plainText(said.join(" "))),
+              // On a silent board, its clips' length (a fact of the clips); none, nothing to wait for.
+              seconds: services.lineSeconds?.(line) ?? 0,
             };
             this.log.push(heard);
             return { line, heard };
