@@ -32,7 +32,7 @@ export type WordsToSay = {
 /** A prop that is speaking: its name (for the retry mark). */
 export type SpokenProp = { name: string };
 
-export type Narrator = {
+export type Voice = {
   /** Says a line and resolves when it ends (or fails; the text is on screen either way). */
   speak: (line: WordsToSay) => Promise<void>;
   /** How long a line plays here, when its clips are known. */
@@ -53,11 +53,11 @@ const MARGIN = 2;
  * marked, reported, and the board carries on. (A voice server, for words known only as they are
  * played, would be one more source here, when there is one.)
  */
-export function useNarrator(
+export function useVoice(
   locale: Locale,
   source: ClipStore | undefined,
   onFailure: (prop: SpokenProp, reason: string) => void,
-): Narrator {
+): Voice {
   /** The line being said: a newer one (or a hush) ends its clips. */
   const saying = useRef(0);
   const [failed, setFailed] = useState<ReadonlySet<string>>(new Set());

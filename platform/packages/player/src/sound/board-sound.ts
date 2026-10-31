@@ -1,6 +1,6 @@
 import { type Board, type SoundList, clipsOf } from "@chalk/content";
 import { useEffect, useState } from "preact/hooks";
-import type { ClipStore } from "./narration";
+import type { ClipStore } from "./voice";
 
 /**
  * Where a board's sound comes from (platform/docs/sound.md), found by the player itself from the

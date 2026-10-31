@@ -50,8 +50,8 @@ import { type ReadonlySignal, type Signal, batch, computed, signal } from "@prea
 import { describeView } from "./describe";
 import type { PropModule } from "./prop-module";
 import { snapshotOf } from "./snapshot";
-import type { WordsToSay } from "./sound/narration";
 import { linePhrases } from "./sound/spoken-line";
+import type { WordsToSay } from "./sound/voice";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {

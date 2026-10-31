@@ -42,8 +42,8 @@ import { plainText } from "./rich-text";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
 import { aboutOf, ownLine } from "./script";
 import { takes } from "./snapshot";
-import type { WordsToSay } from "./sound/narration";
 import { linePhrases } from "./sound/spoken-line";
+import type { WordsToSay } from "./sound/voice";
 
 /**
  * A board on the event model (platform/docs/event-model.md), running: the scene and its pieces on

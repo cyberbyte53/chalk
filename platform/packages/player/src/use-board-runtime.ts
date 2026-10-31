@@ -1,6 +1,6 @@
 import type { Sound } from "@chalk/content";
 import type { Board, Locale } from "@chalk/content";
-import type { WordsToSay } from "./sound/narration";
+import type { WordsToSay } from "./sound/voice";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
 import "@preact/signals";
 import { createContext } from "preact";

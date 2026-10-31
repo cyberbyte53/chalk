@@ -26,8 +26,8 @@ import { BoardRuntime } from "./runtime";
 import type { LiveBoard } from "./scene-runtime";
 import { useBoardSound } from "./sound/board-sound";
 import { playSound } from "./sound/engine";
-import { type ClipStore, type SpokenProp, useNarrator } from "./sound/narration";
 import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
+import { type ClipStore, type SpokenProp, useVoice } from "./sound/voice";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
 import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
@@ -119,23 +119,23 @@ function BoardPlay({
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
   const jugnu = policy?.hasJugnu === false || board.model !== undefined ? undefined : given;
-  // Set once the recorder exists (the narrator is made first, and reports through it).
+  // Set once the recorder exists (the voice is made first, and reports through it).
   const recorderRef = useRef<ReturnType<typeof recordBoard> | undefined>(undefined);
   const reportAudioFailure = useCallback(
     (prop: SpokenProp, reason: string) =>
       recorderRef.current?.app(AppWhat.AudioFailed, { reason }, segment(prop.name)),
     [],
   );
-  const narrator = useNarrator(locale, audio, reportAudioFailure);
-  // The board reads each line's length when it says it: from the narrator as it is then.
-  const narratorRef = useRef(narrator);
-  narratorRef.current = narrator;
-  const runtime = useBoardRuntime(board, registry, narrator.speak, {
+  const voice = useVoice(locale, audio, reportAudioFailure);
+  // The board reads each line's length when it says it: from the voice as it is then.
+  const voiceRef = useRef(voice);
+  voiceRef.current = voice;
+  const runtime = useBoardRuntime(board, registry, voice.speak, {
     locale,
-    lineSeconds: (line) => narratorRef.current.seconds(line),
+    lineSeconds: (line) => voiceRef.current.seconds(line),
     isSilent,
     playSound,
-    hush: () => narratorRef.current.hush(),
+    hush: () => voiceRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).
   const jugnuRuntime = runtime instanceof BoardRuntime ? runtime : undefined;
@@ -254,7 +254,7 @@ function BoardPlay({
     locale,
     registry,
     runtime,
-    audioFailed: narrator.failed,
+    audioFailed: voice.failed,
     onRetryAudio: (name) => void runtime.call(name, SAY, {}, Actor.Learner),
     pointed,
     picked: picks,
