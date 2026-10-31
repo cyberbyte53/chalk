@@ -3,7 +3,14 @@ import type { Localized } from "@chalk/content";
 import { choiceDef } from "@chalk/prop-basics";
 
 /** One option of a multiple-choice question; a wrong one says what it shows the learner missed. */
-export type Option = { id: string; label: Localized; feedback?: Localized };
+export type Option = {
+  id: string;
+  label: Localized;
+  /** The note a student who picks it (wrongly) gets. */
+  feedback?: Localized;
+  /** What the voice says for the note, when it isn't the note as shown (it has maths, a sign). */
+  feedbackSays?: Localized;
+};
 
 /**
  * A multiple-choice question that lets the learner go on once it is answered right: the choice prop,

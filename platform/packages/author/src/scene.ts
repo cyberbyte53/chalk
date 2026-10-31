@@ -307,6 +307,8 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
 /** What a pattern adds to a scene, untyped: it names its own pieces' paths. */
 export type SceneUse = {
   readonly give?: Readonly<Record<string, Readonly<Record<string, (me: never) => unknown>>>>;
+  /** Lines it brings (a question's notes, said when it is answered wrong), joined with the scene's. */
+  readonly lines?: Lines;
   readonly hear?: Readonly<Record<string, (me: never, payload: never, t: never) => Outs>>;
   readonly witness?: readonly Step[];
   readonly noteChecks?: readonly NoteCheck[];
@@ -348,7 +350,14 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   if (names.includes(BOARD_EVENTS))
     throw new Error(`Board ${name}: a piece can't be named "${BOARD_EVENTS}" (the board's own)`);
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
-  const freeLines = spec.lines ?? {};
+  // The scene's own lines, and those its patterns bring: one set, each name once.
+  const freeLines: Record<string, FreeLine> = { ...spec.lines };
+  for (const use of spec.uses ?? [])
+    for (const [line, free] of Object.entries(use.lines ?? {})) {
+      if (Object.hasOwn(freeLines, line))
+        throw new Error(`Board ${name}: two lines are named "${line}"`);
+      freeLines[line] = free;
+    }
   // Each effect is at a signal there is, and is an effect there is.
   for (const [at, effect] of Object.entries(spec.effects ?? {})) {
     if (signalAt(spec.pieces, at) === undefined)

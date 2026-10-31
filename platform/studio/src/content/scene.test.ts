@@ -381,9 +381,9 @@ describe("a scene, built and checked like any board", () => {
     // The props' own: the walker's step, the question answered wrong.
     expect(await effectsOf(walking())).toEqual(["step", "wrong"]);
     // The lesson's: a tap for each step instead, and no sound for a wrong answer.
-    expect(await effectsOf(walking({ "plane.walker.stepped": "tap", "ask.wrong": null }))).toEqual([
-      "tap",
-    ]);
+    expect(
+      await effectsOf(walking({ "plane.walker.stepped": "tap", "ask.checked": null })),
+    ).toEqual(["tap"]);
   });
 
   it("refuses an effect at no signal, or one there isn't", () => {

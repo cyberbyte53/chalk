@@ -1,6 +1,14 @@
-import { type Says, type ScenePlaced, type SceneUse, type Step, place, tap } from "@chalk/author";
+import {
+  type Says,
+  type ScenePlaced,
+  type SceneUse,
+  type Step,
+  line,
+  place,
+  tap,
+} from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import type { Color } from "@chalk/prop";
+import { AnswerStatus, type Color } from "@chalk/prop";
 import { TextStyle, sceneChoice, sceneGoal, sceneText } from "@chalk/prop-basics";
 import { type Option, seedOf, settle, wordsOf } from "./choice-question";
 
@@ -102,22 +110,34 @@ export function choice(spec: {
     {
       prompt: spec.prompt,
       options: shown.map((o) =>
-        o.feedback === undefined ? { id: o.id, label: o.label } : { ...o },
+        o.feedback === undefined
+          ? { id: o.id, label: o.label }
+          : { id: o.id, label: o.label, feedback: o.feedback },
       ),
       answer: spec.answer,
     },
     spec.says === undefined ? {} : { says: spec.says },
   );
+  const notes = spec.options.filter((o) => o.id !== spec.answer && o.feedback !== undefined);
   return {
     piece,
     use: {
+      // Each wrong option's note is said when that option is checked: the student hears why.
+      lines: Object.fromEntries(
+        notes.map((o) => [
+          `${name}-${o.id}-note`,
+          line(o.feedbackSays ?? (o.feedback as Localized), {
+            when: `${name}.checked`,
+            where: { optionId: o.id, status: AnswerStatus.Wrong },
+            about: name,
+          }),
+        ]),
+      ),
       witness: [tap(name, "select", { option: spec.answer }), tap(name, "check")],
-      noteChecks: spec.options
-        .filter((o) => o.id !== spec.answer && o.feedback !== undefined)
-        .map((o) => ({
-          steps: [tap(name, "select", { option: o.id }), tap(name, "check")],
-          feedback: o.feedback as Localized,
-        })),
+      noteChecks: notes.map((o) => ({
+        steps: [tap(name, "select", { option: o.id }), tap(name, "check")],
+        feedback: o.feedback as Localized,
+      })),
     },
   };
 }

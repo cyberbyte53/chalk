@@ -1,5 +1,6 @@
 import { Effect, type Localized } from "@chalk/content";
 import type { SoundView } from "@chalk/player";
+import { AnswerStatus } from "@chalk/prop";
 
 /**
  * How the words and questions sound (platform/docs/sound.md), beside how they look: a text says its
@@ -9,5 +10,13 @@ import type { SoundView } from "@chalk/player";
 export const textSound: SoundView = { line: (view) => view.text as Localized };
 export const questionSound: SoundView = {
   line: (view) => view.prompt as Localized,
-  effects: { correct: Effect.Correct, wrong: Effect.Wrong },
+  // At the check itself: right or wrong is heard first, then anything said about it (its note).
+  effects: {
+    checked: (told) =>
+      told.status === AnswerStatus.Correct
+        ? Effect.Correct
+        : told.status === AnswerStatus.Wrong
+          ? Effect.Wrong
+          : undefined,
+  },
 };

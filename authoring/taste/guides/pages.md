@@ -24,6 +24,7 @@ Then:
 - Maths is said in words: "√2 ≈ 1.41" → "the square root of 2 is about 1.41"; "x²" → "x squared"; "3/4" → "three quarters"; "(4, 5)" → "4 comma 5" or "the point 4, 5".
 - Units and signs in full: "25°C" → "25 degrees Celsius"; "5 cm" → "5 centimetres"; "−2" → "minus 2"; "≥" → "is at least".
 - Say a name or term the way the class says it, in Hindi too ("H₂O" → "H 2 O"; "देकार्त", not the spelling).
+- A question's notes are said too, when a student picks that option: a note with a sign or maths gives its spoken words (`feedbackSays`), like any line.
 - A line someone in the story says names them (`{ speaker: "aman" }`): the cast gives each character a voice. Everything else is the narrator's.
 - Short sentences sound better than long ones.
 

@@ -36,6 +36,10 @@ const side = sceneWith.choice({
         "It is 2 stops away; the − only says which way, left.",
         "वह 2 स्टॉप दूर है; − केवल दिशा बताता है, बाईं ओर।",
       ),
+      feedbackSays: t(
+        "It is 2 stops away; the minus only says which way, left.",
+        "वह 2 स्टॉप दूर है; माइनस केवल दिशा बताता है, बाईं ओर।",
+      ),
     },
   ],
   answer: "left",
