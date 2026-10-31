@@ -142,6 +142,9 @@
   fill: color-mix(in srgb, var(--color-category-1) 45%, var(--color-surface));
   stroke: var(--color-on-surface-variant);
 }
+.cp-blackboard {
+  fill: color-mix(in srgb, var(--color-on-surface) 80%, var(--color-right));
+}
 .cp-desk-chair {
   fill: var(--color-surface-container);
   stroke: var(--color-on-surface-variant);

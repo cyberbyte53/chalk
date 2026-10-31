@@ -75,6 +75,24 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
   const [x1, y1] = px.toPx(w.xMax, w.yMin);
   const box = { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
   if (s.scene === Scene.None) return null;
+  if (s.scene === Scene.Classroom) {
+    // The blackboard along the bottom edge: the front of the room, which row 1 is nearest.
+    const unit = unitOf(px);
+    const thick = Math.max(3, Math.min(7, unit * 0.11));
+    return (
+      <g class="cp-classroom">
+        <rect class="cp-scene is-classroom" {...box} rx={6} />
+        <rect
+          class="cp-blackboard"
+          x={box.x + box.width * 0.15}
+          y={box.y + box.height - thick - 1}
+          width={box.width * 0.7}
+          height={thick}
+          rx={2}
+        />
+      </g>
+    );
+  }
   if (s.scene !== Scene.Town) return <rect class={`cp-scene is-${s.scene}`} {...box} rx={6} />;
   // The town: the main road along the bottom, a street up from it at every count.
   const unit = unitOf(px);

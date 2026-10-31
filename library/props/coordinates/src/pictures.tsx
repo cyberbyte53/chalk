@@ -18,7 +18,10 @@ function House({ size }: { size: number }): JSX.Element {
   );
 }
 
-/** A desk seen from above: a top with a chair behind it. */
+/**
+ * A desk seen from above: a top with its chair behind it, the side away from the blackboard (the
+ * bottom edge, the front): its student faces the front.
+ */
 function Desk({ size }: { size: number }): JSX.Element {
   const h = size / 2;
   return (
@@ -26,12 +29,12 @@ function Desk({ size }: { size: number }): JSX.Element {
       <rect
         class="cp-desk-chair"
         x={-h * 0.4}
-        y={h * 0.25}
+        y={-h * 0.8}
         width={h * 0.8}
         height={h * 0.55}
         rx={2}
       />
-      <rect class="cp-desk-top" x={-h * 0.9} y={-h * 0.6} width={h * 1.8} height={h * 0.8} rx={2} />
+      <rect class="cp-desk-top" x={-h * 0.9} y={-h * 0.2} width={h * 1.8} height={h * 0.8} rx={2} />
     </>
   );
 }
