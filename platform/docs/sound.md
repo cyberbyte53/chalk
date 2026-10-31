@@ -16,7 +16,7 @@ Status: **built (2026-10-31).** What is left is under "Not done yet". Words and 
 
 Words take a turn and sounds play alongside, unless the cue says otherwise. Without `until` a cue plays once.
 
-**Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum, a step and Riya speaking). A repeat of the same sound replaces itself, so fast taps don't pile up.
+**Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum). A repeat of the same sound replaces itself, so fast taps don't pile up. **Words wait for a moment's sound:** words starting while a short sound plays begin when it ends (a wrong answer's buzz, then its note), timed by the engine on the audio clock; a lasting sound never delays words.
 
 **Words are said as written.** A lesson's words are never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it). Jugnu's words are his own: what is reviewed for him is his rules.
 

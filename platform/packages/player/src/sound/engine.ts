@@ -118,8 +118,22 @@ async function load(url: string): Promise<AudioBuffer | null> {
   return audio.decodeAudioData(bytes.slice(0)).catch(() => null);
 }
 
+/**
+ * Words wait for a moment's sound: a voice clip starts when the short sounds playing end (a
+ * wrong answer's buzz, then its note), on the audio clock, to the millisecond. `soundsEnd`: when
+ * the last one ends; `soundsComing`: those asked for and not yet started (or dropped), which a
+ * voice clip waits to know about. Lasting sounds (rain) never delay words.
+ */
+let soundsEnd = 0;
+const soundsComing = new Set<Promise<unknown>>();
+
 /** A clip playing: when it is over (and how), and how to stop it. */
-export type Playing = { done: Promise<Played>; stop: () => void };
+export type Playing = {
+  done: Promise<Played>;
+  /** Once it has started, or won't (stopped, broken, refused). */
+  started: Promise<void>;
+  stop: () => void;
+};
 
 /** How loud each channel plays: sounds a little under the voice. */
 const VOLUME: Readonly<Record<Channel, number>> = { voice: 1, sounds: 0.8 };
@@ -144,6 +158,10 @@ function channelOf(audio: AudioContext, channel: Channel): GainNode {
 /** Plays a clip on a channel, from its start (looping, seamlessly, until stopped, if it lasts). Refused (blocked) until the page may sound. */
 export function playClip(url: string, channel: Channel, lasts = false): Playing {
   let stopNow = (): void => undefined;
+  let hasStarted = (): void => undefined;
+  const started = new Promise<void>((resolve) => {
+    hasStarted = resolve;
+  });
   const done = new Promise<Played>((resolve) => {
     if (AudioContextClass === undefined) return resolve("broken");
     if (!isAudible()) return resolve("blocked");
@@ -152,7 +170,8 @@ export function playClip(url: string, channel: Channel, lasts = false): Playing 
       isOver = true;
       resolve("heard");
     };
-    void load(url).then((buffer) => {
+    const after = channel === "voice" ? [...soundsComing] : [];
+    void Promise.all([load(url), ...after]).then(([buffer]) => {
       if (isOver) return;
       const audio = audioContext();
       if (buffer === null || audio === undefined) return resolve("broken");
@@ -164,7 +183,10 @@ export function playClip(url: string, channel: Channel, lasts = false): Playing 
       source.loop = lasts;
       source.connect(gain);
       source.onended = () => resolve("heard");
-      source.start();
+      const at = channel === "voice" ? Math.max(audio.currentTime, soundsEnd) : audio.currentTime;
+      source.start(at);
+      if (channel === "sounds" && !lasts) soundsEnd = Math.max(soundsEnd, at + buffer.duration);
+      hasStarted();
       // Stopped early: a short fade, never a click.
       stopNow = () => {
         if (isOver) return;
@@ -177,7 +199,8 @@ export function playClip(url: string, channel: Channel, lasts = false): Playing 
       };
     });
   });
-  return { done, stop: () => stopNow() };
+  void done.then(() => hasStarted());
+  return { done, started, stop: () => stopNow() };
 }
 
 /** Sounds playing, by name: a repeat of the same one replaces it (fast taps don't pile up). */
@@ -196,13 +219,18 @@ export function playSound(sound: Sound, lasts = false): () => void {
   const asked = Date.now();
   let isStopped = false;
   let playing: Playing | undefined;
-  void load(sound.url).then((buffer) => {
+  const starting = load(sound.url).then((buffer) => {
     if (isStopped || buffer === null) return;
     if (Date.now() - asked > LATE_MS) return;
     playingSounds.get(sound.name)?.stop();
     playing = playClip(sound.url, "sounds");
     playingSounds.set(sound.name, playing);
+    return playing.started;
   });
+  // Words asked for meanwhile wait to know when it ends: until it has started (milliseconds).
+  const known = starting.then(() => undefined);
+  soundsComing.add(known);
+  void known.finally(() => soundsComing.delete(known));
   return () => {
     isStopped = true;
     playing?.stop();
