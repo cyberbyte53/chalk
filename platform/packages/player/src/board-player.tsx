@@ -1,5 +1,5 @@
 /** @jsxImportSource preact */
-import { Actor, AppWhat, type Board, type Locale, propPieces } from "@chalk/content";
+import { Actor, AppWhat, type Board, type Locale } from "@chalk/content";
 import { type RecordEvent, makeId } from "@chalk/events";
 import {
   AnswerStatus,
@@ -9,7 +9,6 @@ import {
   PropRole,
   QuestionAction,
   QuestionSignal,
-  SAY,
   segment,
 } from "@chalk/prop";
 import type { JSX } from "preact";
@@ -178,7 +177,10 @@ function BoardPlay({
     registry,
     runtime,
     audioFailed: voice.failed,
-    onRetryAudio: (name) => void runtime.call(name, SAY, {}, Actor.Learner),
+    onRetryAudio: (name) => {
+      const line = voice.failed.get(name);
+      if (line !== undefined) void voice.speak(line);
+    },
     isPicture,
   };
 

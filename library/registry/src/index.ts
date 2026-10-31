@@ -1,8 +1,8 @@
 import { type PropPack, lazyRegistry } from "@chalk/player";
+import type { AnyProp } from "@chalk/prop";
 import { basicProps } from "@chalk/prop-basics";
 import { defs as basicsDefs } from "@chalk/prop-basics/defs";
 import { defs as coordinatesDefs, sounds as coordinatesSounds } from "@chalk/prop-coordinates/defs";
-import type { AnyProp } from "@chalk/prop/next";
 
 /**
  * Every prop package, by what the app needs when: its definitions up front (small; boards and

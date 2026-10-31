@@ -1,8 +1,7 @@
 import { SEP } from "./address";
-import { type ActionSpec, type Element, type Observation, nameOf } from "./define";
-import type { AnyPropDef, PropView, StoredState } from "./define";
-import { groupOf, shownOf } from "./group";
-import type { ActionDef } from "./next/define";
+import type { ActionDef, Payload } from "./define";
+import { shownOf } from "./layout";
+import { type Element, type Observation, type PropView, nameOf } from "./vocabulary";
 
 /**
  * What is on screen is written once, in the view: each part the student can tell apart says what
@@ -62,8 +61,8 @@ type DoesParams<Ar> = unknown extends Ar
  * action, and by `key` when the prop has several inputs doing it; the name never changes with what
  * the input currently sends.
  */
-export function does<S extends StoredState, Ar>(
-  action: ActionSpec<S, Ar> | ActionDef<Ar & Readonly<Record<string, unknown>>>,
+export function does<Ar extends Payload>(
+  action: ActionDef<Ar>,
   ...params: DoesParams<NoInfer<Ar>>
 ): InputTags {
   const [args, key] = params as [Ar | undefined, Key | undefined];

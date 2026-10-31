@@ -1,5 +1,5 @@
 import type { RefObject } from "preact";
-import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import { useLayoutWhenChanged } from "./when-changed";
 
 /**

@@ -9,13 +9,8 @@ import "@chalk/player/styles.css";
 import "@chalk/player/rich-text.css";
 import "@chalk/library/styles.css";
 import "./app.css";
-import { setStateChecks } from "@chalk/player";
 import { render } from "preact";
 import { App } from "./app";
-
-// The shipped app checks each change lightly; development checks every change fully (bugs fail
-// loudly where they happen). Saved state is always checked fully.
-if (import.meta.env.PROD) setStateChecks("light");
 
 const root = document.getElementById("app");
 if (root === null) throw new Error("#app is missing from index.html");

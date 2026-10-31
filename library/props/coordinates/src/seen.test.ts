@@ -1,6 +1,6 @@
 import { type PropModule, type PropView, checkProp, describeView } from "@chalk/player";
 import type { Element } from "@chalk/prop";
-import { Board } from "@chalk/prop/next";
+import { Board } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { coordinatePlaneProp } from "./index";
 import { Marks, Scene } from "./plane";

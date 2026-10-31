@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
 import { nameOf } from "@chalk/prop";
-import { type AnyProp, IN_PICTURE, Place, shownOf } from "@chalk/prop/next";
+import { type AnyProp, IN_PICTURE, Place, shownOf } from "@chalk/prop";
 import { type ComponentType, type JSX, createContext } from "preact";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";

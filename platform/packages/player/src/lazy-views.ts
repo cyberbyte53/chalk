@@ -1,6 +1,6 @@
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import { type ComponentType, type JSX, h } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import type { PropModule, PropRegistry, PropViewProps, SoundView } from "./prop-module";
 import { useWhenChanged } from "./when-changed";
 

@@ -1,4 +1,3 @@
-import { place, scene } from "@chalk/author";
 import {
   type Board,
   Locale,
@@ -31,7 +30,6 @@ import {
   stampCodePaths,
 } from "@chalk/player";
 import { type LiveBoard, useWhenChanged } from "@chalk/player";
-import type { AnyProp } from "@chalk/prop/next";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";

@@ -1,4 +1,4 @@
-import type { AnyProp, Given } from "@chalk/prop/next";
+import type { AnyProp, Given } from "@chalk/prop";
 import { z } from "zod";
 import { jugnuNotesSchema } from "./jugnu";
 import type { Localized } from "./localized";

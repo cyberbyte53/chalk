@@ -1,5 +1,5 @@
 import { type Observation, PropRole, QuestionAction } from "@chalk/prop";
-import { type AnyProp, Board, prop } from "@chalk/prop/next";
+import { type AnyProp, Board, prop } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
 import type { PropModule, PropView } from "./prop-module";

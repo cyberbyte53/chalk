@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { purposeOf } from "./define";
+import { purposeOf } from "./vocabulary";
 
 describe("what a prop is for", () => {
   it("is the first sentence of its describe, whole numbers and all", () => {

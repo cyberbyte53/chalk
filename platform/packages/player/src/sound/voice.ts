@@ -1,5 +1,5 @@
 import type { Locale } from "@chalk/content";
-import { estimatedSeconds } from "@chalk/prop/next";
+import { estimatedSeconds } from "@chalk/prop";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { type Played, isAudible, playClip as playOnEngine, prepare, whenAudible } from "./engine";
 import { canSpeak, hush as phoneHush, speak as phoneSpeak } from "./speech";
@@ -39,8 +39,8 @@ export type Voice = {
   seconds: (line: WordsToSay) => number | undefined;
   /** Stops the line being said. */
   hush: () => void;
-  /** Lines whose audio couldn't play, by name. */
-  failed: ReadonlySet<string>;
+  /** Lines whose audio couldn't play, by name: each kept, so the student can ask for it again. */
+  failed: ReadonlyMap<string, WordsToSay>;
 };
 
 /** How much longer than its length a sound may take before we stop waiting for it, in seconds. */
@@ -60,7 +60,7 @@ export function useVoice(
 ): Voice {
   /** The line being said: a newer one (or a hush) ends its clips. */
   const saying = useRef(0);
-  const [failed, setFailed] = useState<ReadonlySet<string>>(new Set());
+  const [failed, setFailed] = useState<ReadonlyMap<string, WordsToSay>>(new Map());
 
   const clipsFor = useCallback(
     (line: WordsToSay) => {
@@ -187,7 +187,7 @@ export function useVoice(
       }
       if (clips !== undefined && from === clips.length) return void forget(line.name);
       if (isBroken) {
-        setFailed((prev) => new Set(prev).add(line.name));
+        setFailed((prev) => new Map(prev).set(line.name, line));
         onFailure({ name: line.name }, "a clip failed to play");
       }
       const rest = phrases.slice(from).join(" ");
@@ -203,7 +203,7 @@ export function useVoice(
   const forget = (name: string) =>
     setFailed((prev) => {
       if (!prev.has(name)) return prev;
-      const next = new Set(prev);
+      const next = new Map(prev);
       next.delete(name);
       return next;
     });

@@ -1,5 +1,5 @@
 import { type FramePixels, PropRole, shows } from "@chalk/prop";
-import { Board, action, prop } from "@chalk/prop/next";
+import { Board, action, prop } from "@chalk/prop";
 import type { JSX } from "preact";
 import { render } from "preact-render-to-string";
 import { describe, expect, it } from "vitest";

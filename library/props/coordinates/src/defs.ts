@@ -1,5 +1,5 @@
 import type { SoundView } from "@chalk/player";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import { coordinatePlane } from "./scene/coordinate-plane";
 import { coordinatePlaneSound } from "./scene/sound";
 

@@ -1,4 +1,4 @@
-import { type InputTags, type Key, type SignalSpec, nameOf, says } from "@chalk/prop";
+import { type InputTags, type Key, type SignalDef, nameOf, says } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useRef } from "preact/hooks";
 /** @jsxImportSource preact */
@@ -42,7 +42,7 @@ export type DragSpec = {
   /** The action each move runs, with `{ x }`, `{ y }` or `{ x, y }`. */
   move: PointAction;
   /** On let-go (and after a key): an action to run and/or a signal to raise, with the same. */
-  release?: { action?: PointAction; signal?: SignalSpec };
+  release?: { action?: PointAction; signal?: SignalDef };
   /** How far one arrow key moves it, model units. */
   step: number;
   /** What it shows, for a screen reader ("1.75"). */

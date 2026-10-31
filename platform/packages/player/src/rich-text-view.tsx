@@ -1,5 +1,5 @@
 import type { ComponentChildren, JSX } from "preact";
-import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 /** @jsxImportSource preact */
 import { joinsNext, keepTogether } from "./keep-together";
 import { OwnHtml, type OwnMarkup } from "./own-markup";

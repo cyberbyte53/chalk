@@ -60,7 +60,6 @@ export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-
 export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";
 export { type Change, changesBetween } from "@chalk/prop";
 export {
-  fieldsRead,
   runningBoards,
   takes,
   trackBoard,
@@ -73,6 +72,5 @@ export { type PropPage, propPages } from "./prop-pages";
 export { t, UiText, type UiTextKey } from "./ui-text";
 
 /** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */
-export { setStateChecks } from "@chalk/prop";
 export { OwnHtml, type OwnMarkup, ours } from "./own-markup";
 export type { Heard, HeardSound, HeardWords } from "@chalk/content";

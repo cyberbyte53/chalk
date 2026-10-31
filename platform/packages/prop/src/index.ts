@@ -1,3 +1,25 @@
+/**
+ * Props (platform/docs/event-model.md): one building block (`prop`), actions in and signals out,
+ * needs, one queue for later, the board; and what every prop shares (its role, its frame, the tags
+ * that say what its view shows and does).
+ */
+export {
+  BOARD,
+  BoardAction,
+  BoardSignal,
+  nameOf,
+  noteNames,
+  PropRole,
+  purposeOf,
+  type Box,
+  type Element,
+  type FrameKindName,
+  type FramePixels,
+  type FrameSpec,
+  type Observation,
+  type PropView,
+  type StoredState,
+} from "./vocabulary";
 export { SEP, joinPath, namesOf, pathOf, segment } from "./address";
 export {
   changesBetween,
@@ -10,85 +32,8 @@ export {
   type NodeSnapshot,
   type PartSnapshot,
 } from "./snapshot";
-export { BOARD, BoardAction, BoardSignal, boardProp } from "./board";
 export { Color, cssColor } from "@chalk/look";
 export { colorSchema } from "./color";
-export {
-  actionsFor,
-  asAnyProp,
-  defineProp,
-  EffectKind,
-  PropRole,
-  SAY,
-  call,
-  nameOf,
-  purposeOf,
-  raise,
-  signal,
-  par,
-  repeat,
-  say,
-  seq,
-  set,
-  task,
-  tween,
-  wait,
-  waitUntil,
-  type Easing,
-  type ActionSpec,
-  type ArgsOf,
-  type ViewOf,
-  type ArgsParam,
-  type ActionOf,
-  type AnyPropDef,
-  type DerivedOf,
-  type SignalOf,
-  type Box,
-  type DerivedSpec,
-  type Effect,
-  type Element,
-  type Emit,
-  type FrameKindName,
-  type FramePixels,
-  type FrameSpec,
-  type Raised,
-  type Observation,
-  type PropDef,
-  type PropView,
-  type SignalSpec,
-  type Payload,
-  type PayloadOf,
-  type Spoken,
-  type StoredState,
-  type TaskContext,
-  type Texts,
-} from "./define";
-export {
-  FRAMES_PER_SECOND,
-  flatten,
-  isInstant,
-  playAction,
-  runEffect,
-  tweenFrame,
-  type Played,
-} from "./steps";
-export {
-  applyPatch,
-  checkStored,
-  ease,
-  initialState,
-  isFullChecking,
-  payloadProblem,
-  setStateChecks,
-  type StateChecks,
-  prepareAction,
-  prepareOnView,
-  settle,
-  tweenAt,
-  viewOf,
-  type ActionResult,
-  type StateResult,
-} from "./state";
 export {
   AnswerStatus,
   QuestionAction,
@@ -99,32 +44,6 @@ export {
   type CheckedPayload,
   type QuestionView,
 } from "./question";
-export {
-  defineGroup,
-  groupOf,
-  invariantOfView,
-  layoutChildren,
-  IN_PICTURE,
-  Place,
-  mergeGiven,
-  PATH,
-  refuse,
-  schemaWithout,
-  shownOf,
-  without,
-  type BindOf,
-  type StateOf,
-  type BoundTree,
-  type GroupDef,
-  type GroupParts,
-  type GroupLayout,
-  type GroupSpec,
-  type GroupView,
-  type Refusal,
-  type Runs,
-  type Step,
-  type Steps,
-} from "./group";
 export {
   DEFAULT_SIZE,
   PHONE_COLUMN,
@@ -149,3 +68,45 @@ export {
   type Tag,
 } from "./tags";
 export type { Unchecked } from "./unchecked";
+export {
+  action,
+  Ease,
+  prop,
+  SCREEN,
+  signal,
+  type ActionDef,
+  type ActionsOf,
+  type ChildrenOf,
+  type FactsOf,
+  type Me,
+  type NeedsOf,
+  type PayloadOf,
+  type SignalsOf,
+  type VarsOf,
+  type AnyProp,
+  type HeardPaths,
+  type Out,
+  type Outs,
+  type Payload,
+  type Prop,
+  type PropSpec,
+  type ReaderOf,
+  type Rule,
+  type SignalDef,
+  type Cause,
+  type Tools,
+  type VoiceTools,
+} from "./define";
+export { Board, type BoardEvent, type Given, type Input } from "./board";
+export { sequence } from "./helpers";
+export { moveAt, type Move } from "./move";
+export { TimeQueue, type Entry } from "./queue";
+export {
+  estimatedSeconds,
+  type Heard,
+  type LineCall,
+  silentVoice,
+  timedVoice,
+  type Voice,
+} from "./voice";
+export { type GroupLayoutSpec, IN_PICTURE, Place, shownOf, withShown } from "./layout";

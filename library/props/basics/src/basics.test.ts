@@ -1,6 +1,6 @@
 import { checkProp } from "@chalk/player";
 import { AnswerStatus } from "@chalk/prop";
-import { Board, type BoardEvent, prop } from "@chalk/prop/next";
+import { Board, type BoardEvent, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { basicProps } from "./index";

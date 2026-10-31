@@ -42,7 +42,7 @@ export type LayoutContext = {
   registry: PropRegistry;
   runtime: LiveBoard;
   /** Props whose audio couldn't play; they show a small retry mark. */
-  audioFailed: ReadonlySet<string>;
+  audioFailed: ReadonlyMap<string, unknown>;
   onRetryAudio: (name: string) => void;
   /** What Jugnu is pointing at: a prop, or one named part of it. */
   pointed?: { prop: string; part?: string | undefined } | undefined;

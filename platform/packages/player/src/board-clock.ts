@@ -1,5 +1,5 @@
 import { createContext } from "preact";
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useContext, useRef, useState } from "preact/hooks";
 import { useWhenChanged } from "./when-changed";
 
 /**

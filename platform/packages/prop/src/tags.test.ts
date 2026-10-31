@@ -1,33 +1,26 @@
 import { expect, describe as group, it } from "vitest";
 import { z } from "zod";
-import { PropRole, actionsFor, asAnyProp, defineProp, set } from "./define";
+import { action, prop } from "./define";
 import { describe, does, says, shows, tagsInMarkup, tagsOf } from "./tags";
+import { PropRole } from "./vocabulary";
 
-const act = actionsFor<{ count: number; isOpen: boolean }>();
-const shelf = defineProp({
+const shelf = prop({
   type: "shelf",
   role: PropRole.Explainer,
   describe: "A shelf of counters",
-  state: z.object({ count: z.number().int(), isOpen: z.boolean() }).strict(),
-  defaults: { count: 0, isOpen: true },
-  derived: { isFull: { describe: "Ten or more", compute: (s) => s.count >= 10 } },
-  offScreen: ["isFull"],
-  summary: (s) => `${s.count} on the shelf`,
+  variables: z
+    .object({ count: z.number().int(), isOpen: z.boolean(), isLocked: z.boolean() })
+    .strict(),
+  start: { count: 0, isOpen: true, isLocked: false },
+  offScreen: ["isLocked"],
+  summary: (me) => `${me.count} on the shelf`,
   actions: {
-    placeOne: act({
-      describe: "Put one on",
-      byLearner: true,
-      changes: ["count"],
-      args: z.object({}).strict(),
-      run: (s) => set({ count: s.count + 1 }),
-    }),
-    placeMany: act({
-      describe: "Put several on",
-      byLearner: true,
-      changes: ["count"],
-      args: z.object({ count: z.number().int() }).strict(),
-      run: (s, a) => set({ count: s.count + a.count }),
-    }),
+    placeOne: action({}, { from: "screen", describe: "Put one on" }),
+    placeMany: action({ count: z.number().int() }, { from: "screen", describe: "Put several on" }),
+  },
+  on: {
+    placeOne: (me, _, t) => t.set({ count: me.count + 1 }),
+    placeMany: (me, { count }, t) => t.set({ count: me.count + count }),
   },
 });
 
@@ -77,12 +70,7 @@ group("a view's tags", () => {
   });
 
   it("name an action only as itself: one not in a defined prop is refused", () => {
-    const loose = act({
-      describe: "Loose",
-      changes: [],
-      args: z.object({}).strict(),
-      run: () => set({}),
-    });
+    const loose = action({}, { describe: "Loose" });
     expect(() => does(loose)).toThrow(/isn't an action or signal of a defined prop/);
   });
 
@@ -96,21 +84,21 @@ group("a view's tags", () => {
   });
 
   it("make the description: the summary, each part, and what is known but not shown", () => {
-    const view = { count: 12, isOpen: true, isFull: true };
+    const view = { count: 12, isOpen: true, isLocked: true };
     const html = `<span ${attrs(shows("count", 12))}></span><button ${attrs(does(shelf.actions.placeOne))}></button>`;
-    expect(describe(asAnyProp(shelf), view, tagsInMarkup(html))).toEqual({
+    expect(describe(shelf, view, tagsInMarkup(html))).toEqual({
       summary: "12 on the shelf",
       elements: [
         { id: "count", value: 12 },
         { id: "placeOne", does: "placeOne" },
       ],
-      hidden: { isFull: true },
+      hidden: { isLocked: true },
     });
   });
 
   it("refuse two parts with one name, a part that says nothing, and a view still loading", () => {
     const twice = `<button ${attrs(does(shelf.actions.placeOne))}></button><button ${attrs(does(shelf.actions.placeOne))}></button>`;
-    expect(() => describe(asAnyProp(shelf), {}, tagsInMarkup(twice))).toThrow(
+    expect(() => describe(shelf, {}, tagsInMarkup(twice))).toThrow(
       /two parts are named "placeOne"/,
     );
     expect(() => tagsInMarkup('<g data-part="dot"></g>')).toThrow(/neither what it does/);

@@ -1,4 +1,4 @@
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import { sceneChoice, sceneGoal, sceneText } from "./scene";
 
 /**

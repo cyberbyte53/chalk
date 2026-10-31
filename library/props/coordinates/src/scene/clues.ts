@@ -1,5 +1,5 @@
 import { PropRole } from "@chalk/prop";
-import { action, prop, signal } from "@chalk/prop/next";
+import { action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
 import { clueSchema, cluesReads, stillPossible } from "../clues";
 import { pointSchema } from "../plane";

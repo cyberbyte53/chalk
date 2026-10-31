@@ -1,5 +1,5 @@
 import { readdirSync } from "node:fs";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { preloadProps, propDefs, propLibrary } from "./index";
 import { propModules } from "./modules";

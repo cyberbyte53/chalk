@@ -1,22 +1,4 @@
-import { type Script, propPieces, splitTarget } from "@chalk/content";
-import {
-  type AnyPropDef,
-  BOARD,
-  type BoardSnapshot,
-  type BoundSnapshot,
-  type CanSnapshot,
-  type NodeSnapshot,
-  type Observation,
-  type PartSnapshot,
-  PropRole,
-  type PropView,
-  type Element as SeenElement,
-  type StoredState,
-  segment,
-  shownOf,
-} from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
-import { findNode } from "./part-paths";
 import type { LiveBoard } from "./scene-runtime";
 
 /**
@@ -32,21 +14,6 @@ export function trackBoard(runtime: LiveBoard): () => void {
 }
 export function runningBoards(): LiveBoard[] {
   return [...running];
-}
-
-/** The stored fields a derived value reads, found by running it on a state that notes each read. */
-export function fieldsRead(compute: (s: StoredState) => unknown, stored: StoredState): string[] {
-  const read = new Set<string>();
-  const watched = new Proxy(stored as Record<string, unknown>, {
-    get: (target, key) => {
-      if (typeof key === "string") read.add(key);
-      return target[key as string];
-    },
-  });
-  try {
-    compute(watched);
-  } catch {}
-  return [...read].filter((k) => k in stored);
 }
 
 /** What an action takes, from its argument schema, in a few words per field. */

@@ -1,7 +1,7 @@
 import { propAddress } from "@chalk/content/address";
 import { full } from "@chalk/content/words";
 import { PropRole, purposeOf } from "@chalk/prop";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import { ZodNullable, type ZodTypeAny } from "zod";
 import { takes } from "./snapshot";
 

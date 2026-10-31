@@ -1,5 +1,5 @@
 import { PropRole } from "@chalk/prop";
-import { prop } from "@chalk/prop/next";
+import { prop } from "@chalk/prop";
 import { areCluesOn } from "../clues";
 import { isDiceOn } from "../dice";
 import { arePlacesOn } from "../places";

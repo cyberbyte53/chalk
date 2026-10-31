@@ -1,6 +1,6 @@
 import { place, scene } from "@chalk/author";
 import type { Board } from "@chalk/content";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 
 /**
  * A prop on its own: a board with only it on it, named after its type, placed as a lesson places

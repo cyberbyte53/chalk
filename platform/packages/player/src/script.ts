@@ -1,5 +1,5 @@
 import { type Board, type Localized, NARRATOR, type SceneWords, propPieces } from "@chalk/content";
-import { Board as Core, timedVoice } from "@chalk/prop/next";
+import { Board as Core, timedVoice } from "@chalk/prop";
 import type { PropModule } from "./prop-module";
 
 /**

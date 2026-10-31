@@ -3,11 +3,10 @@ import type { EventBus } from "@chalk/events";
 import { propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode, RichText } from "@chalk/player";
 import type { JSX } from "preact";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { CourseScreen } from "./course-screens";
 import { type PlayableLesson, findLesson, otherLessons } from "./dev-lessons";
 import { courses } from "./lessons";
-import { settings } from "./settings";
 
 /**
  * How a lesson plays here: `?mode=` (lesson, guided, skillCheck, review) if given, else a concept's

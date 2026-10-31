@@ -1,6 +1,6 @@
 import { Actor } from "@chalk/content";
 import type { LiveBoard } from "@chalk/player";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { ZodFirstPartyTypeKind as Kind, type ZodTypeAny } from "zod";

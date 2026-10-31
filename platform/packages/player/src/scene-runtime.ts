@@ -27,7 +27,7 @@ import {
   segment,
   shownOf,
 } from "@chalk/prop";
-import { type AnyProp, Board as Core, type LineCall, timedVoice } from "@chalk/prop/next";
+import { type AnyProp, Board as Core, type LineCall, timedVoice } from "@chalk/prop";
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./board-records";

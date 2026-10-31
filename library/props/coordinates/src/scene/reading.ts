@@ -1,5 +1,5 @@
 import { PropRole } from "@chalk/prop";
-import { type Out, action, prop, signal } from "@chalk/prop/next";
+import { type Out, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
 import {
   PlanePart,

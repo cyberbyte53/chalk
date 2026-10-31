@@ -28,7 +28,7 @@ import {
   action,
   prop,
   signal,
-} from "@chalk/prop/next";
+} from "@chalk/prop";
 import { type ZodTypeAny, z } from "zod";
 import {
   type Cue,
@@ -194,7 +194,7 @@ type SceneSignals = typeof sceneSignals;
 
 /** What a scene's rules read: its own variables and every piece by name. */
 type SceneMe<P extends Pieces> = Readonly<SceneVars> & {
-  readonly [K in keyof P]: import("@chalk/prop/next").ReaderOf<P[K]["def"]>;
+  readonly [K in keyof P]: import("@chalk/prop").ReaderOf<P[K]["def"]>;
 };
 type SceneTools<P extends Pieces> = Tools<
   SceneVars,
@@ -238,9 +238,9 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
   /** What the scene gives a piece for a need (a question's `isMet`). */
   readonly give?: {
     readonly [K in keyof P]?: {
-      readonly [J in keyof import("@chalk/prop/next").NeedsOf<P[K]["def"]>]?: (
+      readonly [J in keyof import("@chalk/prop").NeedsOf<P[K]["def"]>]?: (
         me: SceneMe<P>,
-      ) => import("@chalk/prop/next").NeedsOf<P[K]["def"]>[J];
+      ) => import("@chalk/prop").NeedsOf<P[K]["def"]>[J];
     };
   };
   /**

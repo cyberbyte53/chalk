@@ -1,7 +1,7 @@
 import { Level } from "@chalk/content";
 import { dec } from "@chalk/exact";
 import { PropRole } from "@chalk/prop";
-import { action, prop } from "@chalk/prop/next";
+import { action, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { family, isFamily } from "./family";

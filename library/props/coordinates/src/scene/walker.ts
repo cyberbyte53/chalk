@@ -1,6 +1,6 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole } from "@chalk/prop";
-import { type Out, action, prop, signal } from "@chalk/prop/next";
+import { type Out, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
 import { Axes, Marks, type Point, Scene, pointSchema, windowSchema } from "../plane";
 import { Direction, Roads, SECONDS_PER_BLOCK, WalkerKind, routeAfter, stepFrom } from "../walker";

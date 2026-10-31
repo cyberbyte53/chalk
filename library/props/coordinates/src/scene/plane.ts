@@ -1,6 +1,6 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole } from "@chalk/prop";
-import { action, prop, signal } from "@chalk/prop/next";
+import { action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
 import {
   Axes,

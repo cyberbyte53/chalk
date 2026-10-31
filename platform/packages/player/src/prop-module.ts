@@ -1,5 +1,5 @@
 import type { Locale, Localized, Sound } from "@chalk/content";
-import type { ActionDef, AnyProp, Payload, ReaderOf, SignalDef } from "@chalk/prop/next";
+import type { ActionDef, AnyProp, Payload, ReaderOf, SignalDef } from "@chalk/prop";
 import type { ComponentType } from "preact";
 
 /**

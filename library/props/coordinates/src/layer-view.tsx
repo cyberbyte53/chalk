@@ -1,7 +1,7 @@
 import type { Locale } from "@chalk/content";
 import { type PartDrawing, type PropView, type PropViewProps, useFrame } from "@chalk/player";
 import { type FramePixels, says } from "@chalk/prop";
-import type { ActionDef, AnyProp } from "@chalk/prop/next";
+import type { ActionDef, AnyProp } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type PlaneWindow, isInWindow } from "./plane";
 

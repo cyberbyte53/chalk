@@ -58,7 +58,7 @@ import {
 import { propPackages } from "@chalk/library";
 import { type PropModule, scriptOf } from "@chalk/player";
 import { PropRole, segment } from "@chalk/prop";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import type { Problem } from "../problem";

@@ -1,4 +1,4 @@
-import { Board, type BoardEvent } from "@chalk/prop/next";
+import { Board, type BoardEvent } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { Marks, Scene } from "../plane";
 import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "../walker";

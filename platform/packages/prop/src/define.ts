@@ -1,502 +1,432 @@
-import { type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
+import { type ZodObject, type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
+import type { GroupLayoutSpec } from "./layout";
 import type { Size } from "./size";
-
-/** Text in every supported language, by locale ("en", "hi"). */
-export type Texts = Readonly<Record<string, string>>;
+import { type FrameKindName, type FramePixels, type PropRole, noteNames } from "./vocabulary";
 
 /**
- * A line that is shown and spoken. `speak` is plain words for the voice when `say` has maths glyphs;
- * `speaker` is whose voice reads it (a cast character), or the narrator when left out.
+ * The event model's one building block (platform/docs/event-model.md). Every prop has the same
+ * parts; a prop that doesn't need one leaves it out:
+ *
+ * - `variables`: its own data. Anyone reads them; only its own rules change them.
+ * - `facts`: worked out from its variables, needs and children; read like variables.
+ * - `needs`: what whatever holds it must give it (a template's requirements). Read live, never copied.
+ * - `actions`: in, what it can be asked to do; `from: "screen"` means the student can ask.
+ * - `signals`: out, news it tells. Whatever holds it (and so on up to the board) may hear it.
+ * - `on`: one rule per action. `hear`: one rule per child signal it listens to.
+ * - `children`: the props it holds; `give`: what it gives a child whose need isn't one of its own names.
  */
-export type Spoken = { say: Texts; speak?: Texts; speaker?: string };
 
-/** A prop's stored fields. Values are plain JSON so state can be logged and read by Jugnu. */
-export type StoredState = Readonly<Record<string, unknown>>;
+/** Where a student's event comes from. */
+export const SCREEN = "screen";
 
-/** What anyone reads from a prop: stored fields plus derived ones. A reader can't tell them apart. */
-export type PropView = Readonly<Record<string, unknown>>;
-
-/** A signal raised, by name, with its data: what the runtime passes along. */
-export type Raised = {
-  readonly signal: string;
-  readonly payload?: Readonly<Record<string, unknown>>;
-};
-
-declare const byRaise: unique symbol;
-/** One signal a prop raises, with its data: made only by `raise(signals.over, { q, r })`. */
-export type Emit = Raised & { readonly [byRaise]: true };
-
-/**
- * What an effect running over time can do. The player supplies it; a prop never touches the clock
- * or audio itself.
- */
-export type TaskContext<S extends StoredState> = {
-  /** Reads this prop's spoken line aloud; resolves when it ends (or fails: the text stays on screen). */
-  speak: () => Promise<void>;
-  /** Waits on the board's clock (so pausing the board pauses it). */
-  wait: (seconds: number) => Promise<void>;
-  /** Changes stored fields through the one door. */
-  set: (patch: Partial<S>) => void;
-  /** This prop's state right now (a long effect reads it to know when to stop). */
-  get: () => S;
-  emit: (signal: string, payload?: Readonly<Record<string, unknown>>) => void;
-  /** Runs one of this prop's own actions through the one door; resolves when it finishes. */
-  call?: (action: string, args: Readonly<Record<string, unknown>>) => Promise<void>;
-  /** False once the effect was stopped (the learner took over, the board closed). */
-  isLive?: () => boolean;
-  /** Seconds on the board's clock (not counting pauses): tweens follow it, so a slow frame skips ahead. */
-  now?: () => number;
-};
-
-/** The action every speaking prop has: read its line aloud, finishing when the line ends. */
-export const SAY = "say";
-
-export const EffectKind = {
-  Set: "set",
-  Tween: "tween",
-  Wait: "wait",
-  Say: "say",
-  Call: "call",
-  Seq: "seq",
-  Par: "par",
-  Until: "until",
-  Repeat: "repeat",
-  /** Old form: a function run over time. Being replaced by the steps above. */
-  Task: "task",
-} as const;
-export type EffectKind = (typeof EffectKind)[keyof typeof EffectKind];
-
-/** How far along a tween is, 0 to 1, from how much of its time has gone, 0 to 1. */
-export type Easing = (t: number) => number;
-
-/**
- * What an action does, as data: one step, or steps in order and together. `set` is instant (and
- * steps that only set fold into one change); the others take time. The player runs them on the
- * board's clock, so pausing the board pauses them, and a script waits for them to finish.
- */
-export type Effect<S extends StoredState> =
-  | { kind: typeof EffectKind.Set; set: Partial<S>; emit: readonly Raised[] }
-  /**
-   * Moves fields from where they are to `to` over `duration` seconds: numbers eased, anything else
-   * switching at the end, or `interpolate` (a zoom that scales evenly in log). Stops the whole
-   * effect if anything else changes those fields meanwhile (the learner wins).
-   */
-  | {
-      kind: typeof EffectKind.Tween;
-      duration: number;
-      to: Partial<S>;
-      ease?: Easing;
-      interpolate?: (from: S, to: Partial<S>, t: number) => Partial<S>;
-      /** It stops (and so does the effect) once this fails (the race was paused). */
-      while?: (s: S) => boolean;
-    }
-  | { kind: typeof EffectKind.Wait; seconds: number }
-  /** Reads this prop's line aloud. */
-  | { kind: typeof EffectKind.Say }
-  /** Runs one of this prop's own actions (through the one door), and waits for it. */
-  | { kind: typeof EffectKind.Call; action: string; args: Readonly<Record<string, unknown>> }
-  | { kind: typeof EffectKind.Seq; steps: readonly Effect<S>[] }
-  | { kind: typeof EffectKind.Par; steps: readonly Effect<S>[] }
-  /** Waits until the prop's state passes the test (at once if it already does). */
-  | { kind: typeof EffectKind.Until; test: (state: S) => boolean }
-  /** While the test passes: wait `every` seconds, then run `action` (a tick). */
-  | {
-      kind: typeof EffectKind.Repeat;
-      every: number;
-      action: string;
-      args: Readonly<Record<string, unknown>>;
-      while: (state: S) => boolean;
-    }
-  | { kind: typeof EffectKind.Task; run: (context: TaskContext<S>) => Promise<void> };
-
-// `NoInfer`: the state type comes from the action being written, not from the patch.
-/** Changes stored fields at once, raising signals (`raise(signals.over, { q, r })`) with them. */
-export function set<S extends StoredState>(patch: NoInfer<Partial<S>>, ...emit: Emit[]): Effect<S> {
-  return { kind: EffectKind.Set, set: patch, emit };
-}
-
-/** The same, from signals already raised (the runtime folding steps together). */
-export function setRaised<S extends StoredState>(
-  patch: Partial<S>,
-  emit: readonly Raised[],
-): Effect<S> {
-  return { kind: EffectKind.Set, set: patch, emit };
-}
-
-/** One of this prop's signals raised, with its data, as the signal declares it: `raise(signals.over, { q, r })`. */
-export function raise<P extends Payload>(
-  signal: SignalSpec<P>,
-  ...payload: keyof P extends never ? [] : [payload: P]
-): Emit {
-  const name = nameOf(signal);
-  const data = payload[0];
-  return (data === undefined ? { signal: name } : { signal: name, payload: data }) as Emit;
-}
-
-export function tween<S extends StoredState>(
-  duration: number,
-  to: NoInfer<Partial<S>>,
-  options: {
-    ease?: Easing;
-    interpolate?: (from: NoInfer<S>, to: NoInfer<Partial<S>>, t: number) => NoInfer<Partial<S>>;
-    while?: (s: NoInfer<S>) => boolean;
-  } = {},
-): Effect<S> {
-  return { kind: EffectKind.Tween, duration, to, ...options } as Effect<S>;
-}
-
-export function wait<S extends StoredState>(seconds: number): Effect<S> {
-  return { kind: EffectKind.Wait, seconds };
-}
-
-export function say<S extends StoredState>(): Effect<S> {
-  return { kind: EffectKind.Say };
-}
-
-/** Runs one of this prop's own actions, passed as itself: `call(arrive)`. */
-export function call<S extends StoredState, Ar>(
-  action: ActionSpec<NoInfer<S>, Ar>,
-  ...args: ArgsParam<Ar>
-): Effect<S> {
-  return { kind: EffectKind.Call, action: nameOf(action), args: args[0] ?? {} };
-}
-
-/** Steps one after another. */
-export function seq<S extends StoredState>(...steps: Effect<NoInfer<S>>[]): Effect<S> {
-  return { kind: EffectKind.Seq, steps };
-}
-
-/** Steps together; finishes when all have. */
-export function par<S extends StoredState>(...steps: Effect<NoInfer<S>>[]): Effect<S> {
-  return { kind: EffectKind.Par, steps };
-}
-
-export function waitUntil<S extends StoredState>(test: (state: NoInfer<S>) => boolean): Effect<S> {
-  return { kind: EffectKind.Until, test };
-}
-
-/** While `test` passes: wait `every` seconds, then run the tick `action` (mark it `internal`). */
-export function repeat<S extends StoredState, Ar>(
-  every: number,
-  action: ActionSpec<NoInfer<S>, Ar>,
-  options: { while: (state: NoInfer<S>) => boolean; args?: Ar },
-): Effect<S> {
-  return {
-    kind: EffectKind.Repeat,
-    every,
-    action: nameOf(action),
-    args: (options.args ?? {}) as Readonly<Record<string, unknown>>,
-    while: options.while,
-  } as Effect<S>;
-}
-
-export function task<S extends StoredState>(
-  run: (context: TaskContext<NoInfer<S>>) => Promise<void>,
-): Effect<S> {
-  return { kind: EffectKind.Task, run };
-}
-
-/**
- * One action of a prop. `Ar` is what it takes, from its `args` schema: whoever calls it (a view,
- * content, another action) passes the action itself and gets its arguments checked by the compiler.
- */
-export type ActionSpec<S extends StoredState, Ar = unknown> = {
-  describe: string;
-  /** Arguments, checked before the action runs. */
-  args: ZodType<Ar, ZodTypeDef, unknown>;
-  /** Gives an answer away: never allowed on a board with a question, never offered to Jugnu there. */
-  reveals?: boolean;
-  /** The learner's finger does this (through the prop's view, or the player's Check). */
-  byLearner?: boolean;
-  /** A step of the prop's own effects (a tick): not offered to anyone as something to do. */
-  internal?: boolean;
-  /**
-   * The stored fields it can change, and no others: the runtime refuses a change outside them.
-   * What tells setup (fixed where placed) from live (changes on this board) in the board model.
-   */
-  changes: readonly string[];
-  /** Pure: reads the prop's view and the checked arguments, says what changes. */
-  run: (view: PropView & S, args: never) => Effect<S>;
-};
-
-/**
- * Typed action helper for one prop's state: `const act = actionsFor<MyState>()`, then
- * `act({ args: z.object(...), run: (view, args) => ... })` infers `args` from the schema.
- */
-export function actionsFor<S extends StoredState>() {
-  return <A>(spec: {
-    describe: string;
-    args: ZodType<A, ZodTypeDef, unknown>;
-    reveals?: boolean;
-    byLearner?: boolean;
-    internal?: boolean;
-    changes: readonly (keyof S & string)[];
-    run: (view: PropView & S, args: A) => Effect<S>;
-  }): ActionSpec<S, A> => spec as ActionSpec<S, A>;
-}
-
-/** What an action takes, as a rest parameter: nothing when its arguments are empty. */
-export type ArgsParam<Ar> = [keyof Ar] extends [never] ? [args?: Ar] : [args: Ar];
-
-/** An action's arguments, from the action itself. */
-export type ArgsOf<X> = X extends ActionSpec<infer _S, infer Ar> ? Ar : never;
-
-export type DerivedSpec<S extends StoredState> = {
-  describe: string;
-  compute: (state: S) => unknown;
-};
-
-/** What a signal carries: named plain values. */
+/** A payload: plain data, so it can be logged, replayed and read by an agent. */
 export type Payload = Readonly<Record<string, unknown>>;
 
-export type SignalSpec<P extends Payload = Payload> = {
-  describe: string;
-  /** What it carries, checked when it is raised (as an action's arguments are). */
-  payload: ZodType<P, ZodTypeDef, unknown>;
+export type ActionDef<P extends Payload = Payload> = {
+  readonly payload: ZodType<P, ZodTypeDef, unknown>;
+  /** Phantom: what it carries, for typing a view's `call` (never set). */
+  readonly carries?: P;
+  /** The student can ask for it (a tap, a drag, a key). */
+  readonly isFromScreen: boolean;
+  /** What it does, for an agent reading what the student can do. */
+  readonly describe?: string;
 };
 
-/** The data a signal carries. */
-export type PayloadOf<G> = G extends SignalSpec<infer P> ? P : Payload;
+export type SignalDef<P extends Payload = Payload> = {
+  readonly payload: ZodType<P, ZodTypeDef, unknown>;
+};
 
-/**
- * A signal: what it announces, and what it carries (`signal("Riya stepped to (`x`, `y`)", { x:
- * z.number(), y: z.number() })`). Its name is its key in the prop's `signals`. The words name
- * every field it carries, in backticks, and only those: what is said and what is sent are one.
- */
-export function signal<const Sh extends ZodRawShape = Record<never, never>>(
-  describe: string,
+type Strict<Sh extends ZodRawShape> = z.infer<ZodObject<Sh, "strict">>;
+
+/** Something a prop can be asked to do, and what it carries: `action({ direction }, { from: "screen" })`. */
+export function action<const Sh extends ZodRawShape = Record<never, never>>(
   payload?: Sh,
-): SignalSpec<z.infer<z.ZodObject<Sh, "strict">>> {
-  const fields = Object.keys(payload ?? {}).sort();
-  const said = [
-    ...new Set([...describe.matchAll(/`([A-Za-z_]\w*)`/g)].map((m) => m[1] as string)),
-  ].sort();
-  if (fields.join() !== said.join())
-    throw new Error(
-      `signal "${describe}": its words name ${said.join(", ") || "nothing"} in backticks, it carries ${fields.join(", ") || "nothing"}: they must be the same`,
-    );
-  return { describe, payload: z.object(payload ?? ({} as Sh)).strict() };
+  options: { from?: typeof SCREEN; describe?: string } = {},
+): ActionDef<Strict<Sh>> {
+  return {
+    payload: z.object(payload ?? ({} as Sh)).strict(),
+    isFromScreen: options.from === SCREEN,
+    ...(options.describe === undefined ? {} : { describe: options.describe }),
+  };
 }
+
+/** News a prop tells, and what it carries: `signal({ x: z.number(), y: z.number() })`. */
+export function signal<const Sh extends ZodRawShape = Record<never, never>>(
+  payload?: Sh,
+): SignalDef<Strict<Sh>> {
+  return { payload: z.object(payload ?? ({} as Sh)).strict() };
+}
+
+/** How a planned move eases from start to end. Named, so a move is plain data. */
+export const Ease = { Linear: "linear", Smooth: "smooth" } as const;
+export type Ease = (typeof Ease)[keyof typeof Ease];
 
 /**
- * The name each action and signal has in its prop: its key there, noted when the prop is defined.
- * So views, content and a prop's own actions pass actions and signals as themselves, never as
- * names, and the name is looked up only where it becomes data (a press on the page, a script).
+ * What a rule asks for, as data: built only by the tools a rule is handed (`t.set`, `t.tell`, …),
+ * applied by the board.
  */
-const names = new WeakMap<object, string>();
-
-/** The name of an action or signal in its prop. */
-export function nameOf(spec: object): string {
-  const name = names.get(spec);
-  if (name === undefined)
-    throw new Error(
-      `"${(spec as { describe?: string }).describe ?? "this"}" isn't an action or signal of a defined prop: pass the prop's own (defineProp notes their names)`,
-    );
-  return name;
-}
-
-/** Notes the names of a prop's actions or signals (their keys), for `nameOf`. */
-export function noteNames(type: string, specs: Readonly<Record<string, object>> | undefined): void {
-  for (const [name, spec] of Object.entries(specs ?? {})) {
-    const known = names.get(spec);
-    if (known !== undefined && known !== name)
-      throw new Error(`${type}: one action or signal can't be both "${known}" and "${name}"`);
-    names.set(spec, name);
-  }
-}
-
-/** A screen-space box, in the prop's own pixels at the given width. */
-export type Box = { x: number; y: number; width: number; height: number };
-
-/** What a frame offers: a 1-D axis (numbers along a line), a 2-D plane, or an optical bench. */
-export type FrameKindName = "axis" | "plane" | "bench";
-
-/** Where things are drawn in a frame at a width: its height, and model ↔ pixels (y down). */
-export type FramePixels = {
-  width: number;
-  height: number;
+export type Out =
+  | { readonly kind: "set"; readonly patch: Payload }
+  | { readonly kind: "tell"; readonly signal: string; readonly payload: Payload }
+  /** An action of this prop (`path` empty) or of a prop it holds. */
+  | {
+      readonly kind: "ask";
+      readonly path: readonly string[];
+      readonly action: string;
+      readonly payload: Payload;
+    }
+  | { readonly kind: "later"; readonly seconds: number; readonly outs: readonly Out[] }
+  | {
+      readonly kind: "move";
+      readonly variable: string;
+      readonly to: unknown;
+      readonly takes: number;
+      readonly ease: Ease;
+      /** Done as this prop when the move ends. */
+      readonly atEnd: readonly Out[];
+    }
+  /** Drops what this prop has queued for later, and stops its moves where they are. */
+  | { readonly kind: "stop" }
   /**
-   * The model stretch across (and up) the picture, when the transform is linear: the frame is then
-   * also a drawing stage, so drawing-kit pieces and grids that take the stage's scales draw in it.
+   * Says a line of the board aloud (by its name: a piece's line, or one of the scene's own), on the
+   * voice bus: it cuts the line being said. `atEnd` is done, as this prop, when the line ends; a
+   * line with nothing to say ends at once. Where its words and audio come from is the host's.
    */
-  domain?: { x: readonly [number, number]; y?: readonly [number, number] };
-  toPx: (x: number, y?: number) => readonly [number, number];
-  fromPx: (px: number, py?: number) => readonly [number, number];
+  | {
+      readonly kind: "say";
+      readonly line: string;
+      /** The values of its moment, for the blanks in its words. */
+      readonly values?: Payload;
+      readonly atEnd: readonly Out[];
+      /** Seconds of quiet first (a breath between lines); cutting the line cuts its quiet too. */
+      readonly after?: number;
+    }
+  /** Stops the line being said: it is cut, and its `atEnd` is done. */
+  | { readonly kind: "hush" };
+
+/** What a rule returns: one out, several, or nothing (`p.x === 4 && t.tell.arrived(p)`). */
+export type Outs = Out | readonly Out[] | undefined | false | null;
+
+// ---- the types a prop's parts are read and written through ----
+
+type Rec = Readonly<Record<string, unknown>>;
+type Actions = Readonly<Record<string, ActionDef>>;
+type Signals = Readonly<Record<string, SignalDef>>;
+
+declare const parts: unique symbol;
+/** A defined prop's types, kept on it (never set) so they can be read back out. */
+type Parts<V, N, F, A, S, C> = { v: V; n: N; f: F; a: A; s: S; c: C };
+export type VarsOf<P> = P extends {
+  readonly [parts]?: Parts<infer V, unknown, unknown, unknown, unknown, unknown>;
+}
+  ? V
+  : never;
+export type NeedsOf<P> = P extends {
+  readonly [parts]?: Parts<unknown, infer N, unknown, unknown, unknown, unknown>;
+}
+  ? N
+  : never;
+export type FactsOf<P> = P extends {
+  readonly [parts]?: Parts<unknown, unknown, infer F, unknown, unknown, unknown>;
+}
+  ? F
+  : never;
+export type ActionsOf<P> = P extends {
+  readonly [parts]?: Parts<unknown, unknown, unknown, infer A, unknown, unknown>;
+}
+  ? A
+  : never;
+export type SignalsOf<P> = P extends {
+  readonly [parts]?: Parts<unknown, unknown, unknown, unknown, infer S, unknown>;
+}
+  ? S
+  : never;
+export type ChildrenOf<P> = P extends {
+  readonly [parts]?: Parts<unknown, unknown, unknown, unknown, unknown, infer C>;
+}
+  ? C
+  : never;
+
+export type PayloadOf<D> = D extends { payload: ZodType<infer P, ZodTypeDef, unknown> } ? P : never;
+type PayloadArgs<D> = Record<never, never> extends PayloadOf<D>
+  ? [payload?: PayloadOf<D>]
+  : [payload: PayloadOf<D>];
+
+/** What a prop reads of itself (and its holder of it): variables, needs, facts, children by name. */
+export type Me<V, N, F, C> = Readonly<V & N & F> & { readonly [K in keyof C]: ReaderOf<C[K]> };
+
+/** What anyone reads from a prop. */
+export type ReaderOf<P> = Me<VarsOf<P>, NeedsOf<P>, FactsOf<P>, ChildrenOf<P>>;
+
+/** A prop's actions, and its children's, as calls that build an `ask`: `t.to.places.chooseTarget({ x, y })`. */
+type Asks<P> = {
+  readonly [K in keyof ActionsOf<P>]: (...payload: PayloadArgs<ActionsOf<P>[K]>) => Out;
+} & {
+  readonly [K in keyof ChildrenOf<P>]: Asks<ChildrenOf<P>[K]>;
+};
+
+/** Every signal of the props a prop holds, by path from it: "walker.stepped", "town.walker.arrived". */
+export type HeardPaths<C, Depth extends unknown[] = []> = string extends keyof C
+  ? never // children not known yet (the prop being written generically)
+  : Depth["length"] extends 4
+    ? never
+    : {
+        [K in keyof C & string]:
+          | `${K}.${keyof SignalsOf<C[K]> & string}`
+          | `${K}.${HeardPaths<ChildrenOf<C[K]>, [...Depth, unknown]>}`;
+      }[keyof C & string];
+
+/** What the signal at a path carries. */
+type HeardPayload<C, Path> = Path extends `${infer K}.${infer Rest}`
+  ? K extends keyof C
+    ? Rest extends keyof SignalsOf<C[K]>
+      ? PayloadOf<SignalsOf<C[K]>[Rest]>
+      : HeardPayload<ChildrenOf<C[K]>, Rest>
+    : never
+  : never;
+
+/** The tools a rule is handed. Each builds an `Out`; nothing happens until the board applies them. */
+export type Tools<V, A, S, C> = {
+  /** Changes this prop's own variables. */
+  readonly set: (patch: Partial<V>) => Out;
+  /** Tells one of this prop's signals. */
+  readonly tell: { readonly [K in keyof S]: (...payload: PayloadArgs<S[K]>) => Out };
+  /** Asks this prop to do one of its own actions (one more event, after this rule). */
+  readonly self: { readonly [K in keyof A]: (...payload: PayloadArgs<A[K]>) => Out };
+  /** Asks a prop it holds: `t.to.places.chooseTarget({ x: 4, y: 5 })`. */
+  readonly to: { readonly [K in keyof C]: Asks<C[K]> };
+  /** Does `outs` (as this prop) `seconds` from now on the board's clock. */
+  readonly later: (seconds: number, ...outs: Out[]) => Out;
+  /**
+   * A planned move: `variable` goes from where it is now to `to` over `takes` seconds; reading it
+   * meanwhile gives where it is. Numbers (and objects of numbers) ease; anything else switches at
+   * the end. `atEnd` is done when it arrives. Setting the variable meanwhile stops the move.
+   */
+  readonly move: <K extends keyof V & string>(
+    variable: K,
+    to: V[K],
+    takes: number,
+    options?: { ease?: Ease; atEnd?: readonly Out[] },
+  ) => Out;
+  /** Drops everything this prop has queued, and stops its moves where they are. */
+  readonly stop: () => Out;
 };
 
 /**
- * A picture other props draw into (graph paper, an optical bench, an axis): its kind, and where
- * things go at a width. `pixels` is pure, so tests and the view use the same mapping.
+ * The board's voice bus, for the one that keeps a board's lines (the scene): not for props, whose
+ * models know nothing of sound, nor for a lesson's rules, which say lines through the scene
+ * (`t.self.say`), so what waits for a line always hears it end.
  */
-export type FrameSpec<S extends StoredState> = {
-  kind: FrameKindName;
-  pixels: (state: S, width: number) => FramePixels;
-  /** What the picture shows, for a screen reader ("Graph paper from −3 to 6 across"). */
-  label?: (state: S) => string;
+export type VoiceTools = {
+  /**
+   * Why this step runs: the student (a tap, or what one set going) or the board itself; each step
+   * its own number. What the scene decides who is heard by (platform/docs/sound.md, the two rules).
+   */
+  readonly cause: Cause;
+  /** Says a line of the board (cutting the one being said); `atEnd` is done when it ends or is cut. */
+  readonly say: (
+    line: string,
+    options?: { atEnd?: readonly Out[]; after?: number; values?: Payload },
+  ) => Out;
+  /** Stops the line being said (it is cut: its `atEnd` is done). */
+  readonly hush: () => Out;
 };
 
-/** One thing the student can see and tell apart, with what it shows them right now. */
-export type Element = {
-  /** Its name under the piece: what `point`, steps and comments take. */
-  id: string;
-  /** What it shows, typed: a number as a number, a point as { x, y }. None for an input. */
-  value?: unknown;
-  /** The value as the screen writes it ("1.40", "½"), when that isn't just the value printed. */
-  words?: string;
-  /** For an input: the action(s) touching it does (when it's on: see isOff). */
-  does?: string | readonly string[];
-  /** For an input that does an action with fixed arguments: those arguments. */
-  args?: Readonly<Record<string, unknown>>;
-  /** For an input whose own handler works out the arguments when it's used (a stepper, a typed number). */
-  isByHand?: true;
-  /** For an input: it is drawn, but turned off now. */
-  isOff?: true;
-};
+/** Why a step runs: the student, or the board itself. */
+export type Cause = { readonly byStudent: boolean; readonly step: number };
 
-/**
- * What a student sees of a prop right now, read from what its view draws (tags.ts): the only way
- * agents and Jugnu see it. Every element is drawn right now, with the value it shows. What the
- * prop knows but the screen doesn't show goes under `hidden`, labelled.
- */
-export type Observation = {
-  /** One line: what this is and where it stands. */
-  summary: string;
-  elements: readonly Element[];
-  hidden?: Readonly<Record<string, unknown>>;
-};
+export type Rule<Me, P, T> = (me: Me, payload: P, t: T) => Outs;
 
-/**
- * What a prop is for on a board. An **explainer** shows a world the student works in (a number
- * line, tiles, a race): Jugnu may bring one in to explain. A **question** asks, and is checked. A
- * **page** prop is part of the page around them (words, the board itself): never brought in.
- */
-export const PropRole = { Explainer: "explainer", Question: "question", Page: "page" } as const;
-export type PropRole = (typeof PropRole)[keyof typeof PropRole];
-
-/**
- * The prop contract. A prop is code the board never looks inside. From outside every prop is the
- * same: state (stored + derived), actions, signals. Everything else (validation, Studio,
- * Jugnu's tools and the text he reads) is generated from this.
- */
-export type PropDef<
-  S extends StoredState = StoredState,
-  /** Its action names, kept as literals so content can't name an action the prop doesn't have. */
-  A extends string = string,
-  /** Its signal names. */
-  G extends string = string,
-  /** Its derived field names. */
-  D extends string = string,
+/** Every prop's parts, as written. */
+export type PropSpec<
+  V extends Rec,
+  N extends Rec,
+  F extends Rec,
+  A extends Actions,
+  S extends Signals,
+  C extends Readonly<Record<string, AnyProp>>,
 > = {
-  type: string;
-  describe: string;
-  /** Stored fields: the few independent quantities. Validated on every change. */
-  state: ZodType<S>;
-  /** Not a source for inferring S: the state comes from `state` alone. */
-  defaults: NoInfer<S>;
-  /** Fields computed from the stored ones: read-only, never stale. */
-  derived?: Readonly<Record<D, DerivedSpec<S>>>;
-  /** Stored fields an IS may own (e.g. a text's words). An owned field can't be set by actions. */
-  inputs?: readonly (keyof S & string)[];
+  /** Its type, as the board and agents name it ("walker"). */
+  readonly type: string;
+  /** What it is for, first sentence first. */
+  readonly describe: string;
+  readonly variables?: ZodType<V, ZodTypeDef, unknown>;
+  /** Its variables before anyone sets them. */
+  readonly start?: V;
+  readonly needs?: ZodType<N, ZodTypeDef, unknown>;
+  /** Worked out from its variables, needs and children (a fact using another calls a function). */
+  readonly facts?: { readonly [K in keyof F]: (me: Me<V, N, unknown, C>) => F[K] };
+  readonly actions?: A;
+  readonly signals?: S;
+  readonly children?: C;
   /**
-   * Fields (stored or derived) the learner can't see on screen; Jugnu must not mention them as if
-   * they could. The description lists them under `hidden`.
+   * What it gives a child, one need at a time, for the needs it doesn't have under the same name:
+   * `give: { walker: { target: (me) => me.places.target } }`. Each is read only when that need is.
    */
-  offScreen?: readonly NoInfer<(keyof S & string) | D>[];
-  actions: Readonly<Record<A, ActionSpec<S>>>;
-  signals?: Readonly<Record<G, SignalSpec>>;
-  /** Its one line in the description. */
-  summary?: (view: PropView & S) => string;
-  /** Rules that span fields (e.g. from < to). Returns a message when broken. */
-  invariant?: (state: S) => string | undefined;
-  /** What this prop says when told to `say` (for audio generation and the voice check). */
-  speech?: (state: S) => Spoken | undefined;
-  role: PropRole;
-  /**
-   * How it is sized on screens wider or shorter than a phone (size.ts): by default drawn for a
-   * phone and scaled with the column; a board can override it where it places the prop.
-   */
-  size?: Size;
-  /**
-   * A frame this prop provides: in a group's frame layout, other props draw into its picture
-   * through its transform.
-   */
-  frame?: FrameSpec<S>;
-  /** The kind of frame this prop draws on, when it only draws inside one (a ray, a marker). */
-  drawsOn?: FrameKindName;
+  readonly give?: {
+    readonly [K in keyof C]?: {
+      readonly [J in keyof NeedsOf<C[K]>]?: (me: Me<V, N, F, C>) => NeedsOf<C[K]>[J];
+    };
+  };
+  readonly on?: {
+    readonly [K in keyof A]?: Rule<Me<V, N, F, C>, PayloadOf<A[K]>, Tools<V, A, S, C>>;
+  };
+  readonly hear?: {
+    readonly [K in HeardPaths<C>]?: Rule<Me<V, N, F, C>, HeardPayload<C, K>, Tools<V, A, S, C>>;
+  };
+
+  // ---- what stays as it is today: how it is drawn, sized and read ----
+
+  /** Its role: a question (the board's chrome reads its status), an explainer, … */
+  readonly role?: PropRole;
+  readonly size?: Size;
+  /** It is a frame others draw on: the plane, a number line's axis. */
+  readonly frame?: {
+    readonly kind: FrameKindName;
+    readonly pixels: (me: Me<V, N, F, C>, width: number) => FramePixels;
+    readonly label?: (me: Me<V, N, F, C>) => string;
+  };
+  /** How its children are laid out (a frame and the places round it, a column). */
+  readonly layout?: GroupLayoutSpec<keyof C & string>;
+  /** Whether a child is drawn now (a child not shown draws nothing). */
+  readonly show?: { readonly [K in keyof C]?: (me: Me<V, N, F, C>) => boolean };
+  /** One line saying what it is now, for agents. */
+  readonly summary?: (me: Me<V, N, F, C>) => string;
+  /** What must always hold of its variables beyond their types: why not, or undefined. */
+  readonly invariant?: (variables: V) => string | undefined;
+  /** Variables it knows but doesn't show (the answer): kept from the student and from agents' view of the screen. */
+  readonly offScreen?: readonly (keyof V & string)[];
+};
+
+/** A defined prop. */
+export type Prop<
+  V extends Rec = Rec,
+  N extends Rec = Rec,
+  F extends Rec = Rec,
+  A extends Actions = Actions,
+  S extends Signals = Signals,
+  C extends Readonly<Record<string, AnyProp>> = Readonly<Record<string, AnyProp>>,
+> = PropSpec<V, N, F, A, S, C> & {
+  /** Always there once defined (empty when it has none), so a view reads `prop.actions.step`. */
+  readonly actions: A;
+  readonly signals: S;
+  readonly children: C;
+  readonly [parts]?: Parts<V, N, F, A, S, C>;
+};
+
+type AnyRule = (me: never, payload: never, t: never) => Outs;
+/** Any defined prop, as the board holds it: its parts without their types. */
+export type AnyProp = {
+  readonly type: string;
+  readonly describe: string;
+  readonly variables?: ZodType;
+  readonly start?: unknown;
+  readonly needs?: ZodType;
+  readonly facts?: Readonly<Record<string, (me: never) => unknown>>;
+  readonly actions?: Actions;
+  readonly signals?: Signals;
+  readonly children?: Readonly<Record<string, AnyProp>>;
+  readonly give?: Readonly<
+    Record<string, Readonly<Record<string, ((me: never) => unknown) | undefined>> | undefined>
+  >;
+  readonly on?: Readonly<Record<string, AnyRule | undefined>>;
+  readonly hear?: Readonly<Record<string, AnyRule | undefined>>;
+  readonly role?: PropRole;
+  readonly size?: Size;
+  readonly frame?: {
+    readonly kind: FrameKindName;
+    readonly pixels: (me: never, width: number) => FramePixels;
+    readonly label?: (me: never) => string;
+  };
+  readonly layout?: GroupLayoutSpec;
+  readonly show?: Readonly<Record<string, ((me: never) => boolean) | undefined>>;
+  readonly summary?: (me: never) => string;
+  readonly invariant?: (variables: never) => string | undefined;
+  readonly offScreen?: readonly string[];
 };
 
 /**
- * Identity helper so prop files are checked against the contract. Everything is inferred from the
- * definition itself (the state from `state`, the names from the keys of `actions`, `signals` and
- * `derived`), so write `defineProp({ ... })` with no type arguments.
+ * Defines a prop. Checks what types can't: no name is used twice across its variables, needs,
+ * facts, actions and children (they share one reader and one `to`), and every need of every child
+ * is given by name or by `give`.
  */
-export function defineProp<
-  S extends StoredState,
-  const X extends Readonly<Record<string, ActionSpec<S, unknown>>>,
-  const Dv extends Readonly<Record<string, DerivedSpec<S>>> = Record<never, DerivedSpec<S>>,
-  G extends string = never,
-  const In extends readonly (keyof S & string)[] = [],
-  /** Its signals as written, so each keeps its payload's type (for `when` links and views). */
-  const Sg extends Readonly<Record<G, SignalSpec>> = Readonly<Record<G, SignalSpec>>,
->(
-  def: PropDef<S, keyof X & string, G, keyof Dv & string> & {
-    actions: X;
-    derived?: Dv;
-    inputs?: In;
-    signals?: Sg;
-  },
-): PropDef<S, keyof X & string, G, keyof Dv & string> & {
-  actions: X;
-  derived?: Dv;
-  inputs?: In;
-  signals?: Sg;
-} {
-  noteNames(def.type, def.actions);
-  noteNames(def.type, def.signals);
-  return def;
+export function prop<
+  V extends Rec = Record<never, never>,
+  N extends Rec = Record<never, never>,
+  F extends Rec = Record<never, never>,
+  A extends Actions = Record<never, never>,
+  S extends Signals = Record<never, never>,
+  C extends Readonly<Record<string, AnyProp>> = Record<never, never>,
+>(spec: PropSpec<V, N, F, A, S, C>): Prop<V, N, F, A, S, C> {
+  const where = `prop ${spec.type}`;
+  const seen = new Map<string, string>();
+  const note = (names: Iterable<string>, part: string) => {
+    for (const name of names) {
+      const before = seen.get(name);
+      if (before !== undefined)
+        throw new Error(`${where}: "${name}" is both one of its ${before} and one of its ${part}`);
+      seen.set(name, part);
+    }
+  };
+  note(keysOf(spec.variables), "variables");
+  note(keysOf(spec.needs), "needs");
+  note(Object.keys(spec.facts ?? {}), "facts");
+  note(Object.keys(spec.children ?? {}), "children");
+  const asked = new Set(Object.keys(spec.actions ?? {}));
+  for (const child of Object.keys(spec.children ?? {}))
+    if (asked.has(child))
+      throw new Error(
+        `${where}: "${child}" is both an action and a child (both are asked by name)`,
+      );
+  if (spec.variables !== undefined) {
+    if (spec.start === undefined) throw new Error(`${where}: variables need a start`);
+    const parsed = spec.variables.safeParse(spec.start);
+    if (!parsed.success)
+      throw new Error(`${where}: its start isn't its variables: ${parsed.error.message}`);
+  }
+  for (const rule of Object.keys(spec.on ?? {}))
+    if (!asked.has(rule))
+      throw new Error(`${where}: a rule for "${rule}", which isn't one of its actions`);
+  // Every child's needs: given by `give`, or by one of this prop's own names (not a child's name).
+  const values = new Set([...seen].filter(([, part]) => part !== "children").map(([n]) => n));
+  for (const [name, child] of Object.entries(spec.children ?? {}) as [string, AnyProp][]) {
+    const given = (spec.give as AnyProp["give"])?.[name] ?? {};
+    const needs = new Set(keysOf(child.needs));
+    for (const key of Object.keys(given))
+      if (!needs.has(key))
+        throw new Error(`${where}: gives ${name} "${key}", which ${child.type} doesn't need`);
+    const missing = [...needs].filter((need) => !values.has(need) && given[need] === undefined);
+    if (missing.length > 0)
+      throw new Error(
+        `${where}: its child ${name} (${child.type}) needs ${missing.join(", ")}, which ${spec.type} doesn't have: add them, or give them (give.${name})`,
+      );
+  }
+  // A frame's layout: its provider gives a frame, and its order names only parts drawn in it.
+  const layout = spec.layout;
+  if (layout?.kind === "frame") {
+    if (spec.children?.[layout.provider]?.frame === undefined)
+      throw new Error(`${spec.type}: ${layout.provider} provides no frame`);
+    const drawn = new Set([layout.provider, ...layout.children, ...(layout.below ?? [])]);
+    for (const [place, names] of Object.entries(layout.order ?? {}))
+      for (const name of names as readonly string[])
+        if (!drawn.has(name))
+          throw new Error(`${spec.type}: order.${place} names "${name}", not drawn in the frame`);
+  }
+  // Views, tags and scripts pass actions and signals as themselves: their names are noted here.
+  noteNames(spec.type, spec.actions);
+  noteNames(spec.type, spec.signals);
+  // Defined, it always has its actions, signals, parts and start (empty when it has none).
+  return {
+    ...spec,
+    actions: spec.actions ?? {},
+    signals: spec.signals ?? {},
+    children: spec.children ?? {},
+    start: spec.start ?? {},
+  } as unknown as Prop<V, N, F, A, S, C>;
 }
 
-/**
- * What a prop's view and rules read: its stored fields, and each derived value typed by what it
- * computes.
- */
-export type ViewOf<P> = (P extends { state: ZodType<infer S> } ? S : never) &
-  (P extends { derived?: infer Dv }
-    ? {
-        readonly [K in keyof NonNullable<Dv>]: NonNullable<Dv>[K] extends {
-          compute: (s: never) => infer R;
-        }
-          ? R
-          : never;
-      }
-    : unknown);
-
-/** A prop definition's action names, signal names and derived field names, as literal unions. */
-export type ActionOf<P extends { actions: object }> = keyof P["actions"] & string;
-export type SignalOf<P extends { signals?: object }> = keyof NonNullable<P["signals"]> & string;
-export type DerivedOf<P extends { derived?: object }> = keyof NonNullable<P["derived"]> & string;
-
-/** A prop of any state type, as the registry, the player and the validator hold it. */
-export type AnyPropDef = PropDef<StoredState>;
-
-/** Erases a prop's state type for the registry. */
-export function asAnyProp<
-  S extends StoredState,
-  A extends string,
-  G extends string,
-  D extends string,
->(def: PropDef<S, A, G, D>): AnyPropDef {
-  // Safe: everything that touches the state goes through the def's own schema first.
-  return def as unknown as AnyPropDef;
-}
-
-/**
- * What a prop is for: the first sentence of its `describe`, which is written to say it. Shown
- * where props are listed to be chosen from (the chalk MCP's `look` at library/props/, the
- * catalogue, Studio's library); the rest of `describe` is its world, in full.
- */
-export function purposeOf(def: { readonly describe: string }): string {
-  const text = def.describe.trim().replace(/\s+/g, " ");
-  const end = text.search(/[.!?](\s|$)/);
-  return end === -1 ? text : text.slice(0, end + 1);
+/** The keys of an object schema (variables, needs). */
+export function keysOf(schema: ZodType | undefined): string[] {
+  if (schema === undefined) return [];
+  return schema instanceof z.ZodObject ? Object.keys(schema.shape as object) : [];
 }

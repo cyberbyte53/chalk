@@ -5,9 +5,9 @@ import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import { BoardPlayer } from "@chalk/player";
 import { useWhenChanged } from "@chalk/player";
 import { PropRole, purposeOf } from "@chalk/prop";
-import type { AnyProp } from "@chalk/prop/next";
+import type { AnyProp } from "@chalk/prop";
 import type { JSX } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { aloneBoard } from "./prop-alone";
 
 /** What the build recorded each board was made from: here, which prop each piece is. */
