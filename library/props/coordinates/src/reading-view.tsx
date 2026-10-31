@@ -4,7 +4,7 @@ import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { drawing } from "./layer-view";
 import { Reading, snapped } from "./reading";
-import { reading } from "./scene/reading";
+import { reading } from "./reading";
 import { WORDS, num, pair, word } from "./words";
 
 type ReadingView = PropView<typeof reading>;

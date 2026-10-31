@@ -1,7 +1,7 @@
 import { family, place, scene, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { TOWN, scenePlane, sceneWith } from "@chalk/patterns";
-import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
+import { TOWN, check, plane } from "@chalk/patterns";
+import { coordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -16,10 +16,10 @@ export const walkToAddress = family({
     })
     .strict(),
   build: ({ street, house }) => {
-    const { isAt, walkTo, sceneTown } = scenePlane;
-    const town = place(sceneCoordinatePlane, sceneTown());
+    const { isAt, walkTo } = plane;
+    const town = place(coordinatePlane, plane.town());
     const isSwapped = street !== house && house <= TOWN.streets && street <= TOWN.houses;
-    const ask = sceneWith.check({
+    const ask = check({
       about: "town",
       prompt: t(
         `Aman lives at **Street ${street}, House ${house}**. Walk Riya there from the corner, then press Check.`,

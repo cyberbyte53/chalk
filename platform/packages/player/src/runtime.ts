@@ -48,7 +48,7 @@ import type { WordsToSay } from "./sound/voice";
  *
  * Jugnu doesn't run on these boards yet.
  */
-export class SceneRuntime {
+export class BoardRuntime {
   readonly isScene = true;
   private readonly core: Core;
   private readonly scene: AnyProp;
@@ -626,12 +626,4 @@ function actionAt(def: AnyProp, dotted: string) {
   let at: AnyProp | undefined = def;
   for (const part of parts) at = at?.children?.[part];
   return at?.actions?.[member];
-}
-
-/** A board running: on today's runtime, or on the event model. */
-export type LiveBoard = SceneRuntime;
-
-/** Whether a board runs on the event model. */
-export function isSceneBoard(board: Board): boolean {
-  return board.model !== undefined;
 }

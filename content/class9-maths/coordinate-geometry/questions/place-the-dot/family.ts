@@ -1,7 +1,7 @@
 import { family, place, scene, t, tap } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { scenePlane, sceneWith } from "@chalk/patterns";
-import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
+import { check, plane } from "@chalk/patterns";
+import { coordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -14,11 +14,11 @@ export const placeTheDot = family({
     .object({ left: z.number().int().min(1).max(13), bottom: z.number().int().min(1).max(10) })
     .strict(),
   build: ({ left, bottom }) => {
-    const { isPlaced, sceneNotebook } = scenePlane;
-    const sheet = place(sceneCoordinatePlane, sceneNotebook());
+    const { isPlaced, notebook } = plane;
+    const sheet = place(coordinatePlane, notebook());
     // The swapped spot, when it is on the page too.
     const isSwapped = left !== bottom && bottom <= 15 && left <= 12;
-    const ask = sceneWith.check({
+    const ask = check({
       about: "sheet",
       prompt: t(
         `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.`,

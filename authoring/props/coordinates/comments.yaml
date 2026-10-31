@@ -554,3 +554,36 @@
       at: 2026-10-31T17:37:43.093Z
       text: ""
       status: closed
+- id: cmvwp52tgpkp
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-10-31T17:50:07.492Z
+  prop: coordinatePlane
+  commit: 69e5188cd39b2f7df2a2747eb5fdd17ffc985cd2
+  from: chat
+  text: "The town can grow (for the-cartesian-plane's town-grows): west of Riya's corner, and south of
+    the main road, with minus numbers."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:50:07.557Z
+      text: "Decided by the town's window, no new fields. West: when the window starts left of the corner,
+        streets at −1, −2, … too. South: when it goes below the road, every street runs down as well
+        as up. The corner's own street (Riya's, the y-axis next): when the town reaches both sides
+        of the corner. Riya walks there too: south on a street, west along the road, up and down her
+        corner's street; 'nothing below the main road' only while there is no south side. Lesson 1
+        unchanged (its window starts at 0). Also: a scene prop's own page in the preview (it never
+        opened)."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:54:58.919Z
+      text: "Done. The town grows by its window: west of the corner, streets at every whole number (the
+        corner's own too); below the road, every street runs south. Riya walks there (played: ← ← ↓
+        ↓ to (−2, −2)). Lesson 1's town unchanged (looked at street-and-house). Try it:
+        ?dev&at=library/props/coordinates/coordinatePlane with a window reaching into negatives
+        and scene \"town\"."
+      status: ready
+  changed: []
+  turn: person

@@ -7,7 +7,7 @@ import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
 import { Marks, type Point, Scene } from "./plane";
 import { marksOn, unitOf } from "./plane-view";
-import { walker } from "./scene/walker";
+import { walker } from "./walker";
 import { Direction, Roads, stepFrom } from "./walker";
 import { WORDS, addressOf, num, pair, word } from "./words";
 

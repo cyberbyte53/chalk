@@ -35,7 +35,7 @@ const PATTERNS = join(contentDir, "../library/patterns/index.ts");
 const pickDecimal = (from: (file: string) => string) => `
 import { decimal, family, scene, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { sceneWith } from "${from(PATTERNS)}";
+import { choice } from "${from(PATTERNS)}";
 import { z } from "zod";
 export const pickDecimal = family({
   level: Level.Medium,
@@ -48,7 +48,7 @@ export const pickDecimal = family({
       { id: "target", label: t(String(target), String(target)) },
     ];
     const answer = options.find((o) => o.label.en === String(target))?.id ?? "target";
-    const ask = sceneWith.choice({
+    const ask = choice({
       prompt: t(\`Between \${from} and \${to}: which is \${target}?\`, \`\${from} और \${to} के बीच: \${target} कौन-सा है?\`),
       options,
       answer,
@@ -65,9 +65,9 @@ const ONE_ROW = [{ params: { target: "7.384", from: 7, to: 8 } }];
 const twoQuestions = (answered: readonly string[]) => (basics: string) =>
   `
 import { page, place, scene, t, tap } from "@chalk/author";
-import { sceneChoice } from "${basics}";
+import { choice } from "${basics}";
 const options = [{ id: "yes", label: t("Yes", "हाँ") }, { id: "no", label: t("No", "नहीं") }];
-const ask = () => place(sceneChoice, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" });
+const ask = () => place(choice, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" });
 export const overview = [
   page("two", scene({
     pieces: { first: ask(), second: ask() },

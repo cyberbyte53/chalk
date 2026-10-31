@@ -4,7 +4,7 @@ import { BOARD } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import type { PropRegistry } from "../prop-module";
-import { type LiveBoard, SceneRuntime } from "../scene-runtime";
+import type { BoardRuntime } from "../runtime";
 import { t } from "../ui-text";
 import { isMuted, setMuted } from "./engine";
 
@@ -118,9 +118,9 @@ export function hasSounds(board: Board, registry: PropRegistry): boolean {
   );
 }
 
-/** How to hear a board's screen again, when it can (a scene: today's boards have no queue to restart). */
-export function hearAgainOf(runtime: LiveBoard | undefined): (() => void) | undefined {
-  return runtime instanceof SceneRuntime
-    ? () => void runtime.call(BOARD, "hearAgain", {}, Actor.Learner)
-    : undefined;
+/** How to hear a board's screen again, once it runs. */
+export function hearAgainOf(runtime: BoardRuntime | undefined): (() => void) | undefined {
+  return runtime === undefined
+    ? undefined
+    : () => void runtime.call(BOARD, "hearAgain", {}, Actor.Learner);
 }

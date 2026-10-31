@@ -1,6 +1,6 @@
 export { type Option, type Wrong, settle } from "./choice-question";
-export { TOWN, gridOf } from "./scene-coordinates";
+export { TOWN, gridOf } from "./plane";
 
-/** For scenes (boards on the event model): words, questions, and the coordinate plane's helpers. */
-export * as sceneWith from "./scene-questions";
-export * as scenePlane from "./scene-coordinates";
+/** Words and questions for a board, and the coordinate plane's helpers (`plane.town()`, `plane.isAt`). */
+export { check, choice, type Note, words } from "./questions";
+export * as plane from "./plane";

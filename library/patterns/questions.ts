@@ -1,15 +1,7 @@
-import {
-  type Says,
-  type ScenePlaced,
-  type SceneUse,
-  type Step,
-  cue,
-  place,
-  tap,
-} from "@chalk/author";
+import { type Placed, type Says, type SceneUse, type Step, cue, place, tap } from "@chalk/author";
 import type { Localized } from "@chalk/content";
 import { AnswerStatus, type Color } from "@chalk/prop";
-import { TextStyle, sceneChoice, sceneGoal, sceneText } from "@chalk/prop-basics";
+import { TextStyle, choice as choiceProp, goal, text } from "@chalk/prop-basics";
 import { type Option, seedOf, settle, wordsOf } from "./choice-question";
 
 /**
@@ -26,18 +18,18 @@ export type { Says } from "@chalk/author";
 
 /** Words on a board: a title, a paragraph, a note, a definition set apart. */
 export const words = {
-  title: (text: Localized, s: Says = {}) => place(sceneText, { text, style: TextStyle.Title }, s),
-  body: (text: Localized, s: Says = {}) => place(sceneText, { text, style: TextStyle.Body }, s),
-  note: (text: Localized, s: Says = {}) => place(sceneText, { text, style: TextStyle.Note }, s),
-  definition: (text: Localized, color: Color | null = null, s: Says = {}) =>
-    place(sceneText, { text, style: TextStyle.Definition, color }, s),
+  title: (line: Localized, s: Says = {}) => place(text, { text: line, style: TextStyle.Title }, s),
+  body: (line: Localized, s: Says = {}) => place(text, { text: line, style: TextStyle.Body }, s),
+  note: (line: Localized, s: Says = {}) => place(text, { text: line, style: TextStyle.Note }, s),
+  definition: (line: Localized, color: Color | null = null, s: Says = {}) =>
+    place(text, { text: line, style: TextStyle.Definition, color }, s),
 };
 
 /** How a scene reads a piece: by its name. */
 type Read = (piece: string) => Readonly<Record<string, unknown>>;
 
 /** A wrong state worth a note: when it holds, what the learner is told, and how one gets there. */
-export type SceneNote = { when: (read: Read) => boolean; say: Localized; reach: readonly Step[] };
+export type Note = { when: (read: Read) => boolean; say: Localized; reach: readonly Step[] };
 
 /**
  * "Do it in the prop, then Check": the answer is the state of `about`. `isRight` reads the board;
@@ -51,11 +43,11 @@ export function check(spec: {
   says?: Localized;
   isRight: (read: Read) => boolean;
   solve: readonly Step[];
-  notes?: readonly SceneNote[];
-}): { piece: ScenePlaced<typeof sceneGoal>; use: SceneUse } {
+  notes?: readonly Note[];
+}): { piece: Placed<typeof goal>; use: SceneUse } {
   const name = spec.name ?? "ask";
   const piece = place(
-    sceneGoal,
+    goal,
     { prompt: spec.prompt, about: spec.about },
     spec.says === undefined ? {} : { says: spec.says },
   );
@@ -95,7 +87,7 @@ export function choice(spec: {
   options: readonly Option[];
   answer: string;
   keepOrder?: boolean;
-}): { piece: ScenePlaced<typeof sceneChoice>; use: SceneUse } {
+}): { piece: Placed<typeof choiceProp>; use: SceneUse } {
   const name = spec.name ?? "ask";
   if (!spec.options.some((o) => o.id === spec.answer))
     throw new Error(`choice: the answer "${spec.answer}" is not one of the options`);
@@ -112,7 +104,7 @@ export function choice(spec: {
       ? spec.options
       : settle(spec.options, seedOf(`${name}|${wordsOf(spec.prompt)}|${ids.join(",")}`));
   const piece = place(
-    sceneChoice,
+    choiceProp,
     {
       prompt: spec.prompt,
       options: shown.map((o) =>

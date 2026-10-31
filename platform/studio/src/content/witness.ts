@@ -1,6 +1,6 @@
 import type { Step } from "@chalk/author";
 import { Actor, type Board, LOCALES, type Locale, type Localized, PieceKind } from "@chalk/content";
-import { type PropModule, type RuntimeServices, SceneRuntime } from "@chalk/player";
+import { BoardRuntime, type PropModule, type RuntimeServices } from "@chalk/player";
 import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
 
 type Defs = Readonly<Record<string, PropModule>>;
@@ -44,7 +44,7 @@ function playScene(
   onCalled?: Called,
 ): Played {
   const errors: string[] = [];
-  const runtime = new SceneRuntime(board, (type) => defs[type], {
+  const runtime = new BoardRuntime(board, (type) => defs[type], {
     locale,
     now: () => 0,
     frame: () => () => undefined,

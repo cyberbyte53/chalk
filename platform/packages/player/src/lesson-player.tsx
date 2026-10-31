@@ -8,7 +8,7 @@ import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { RichText } from "./rich-text-view";
-import type { LiveBoard } from "./scene-runtime";
+import type { BoardRuntime } from "./runtime";
 import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
 import { t } from "./ui-text";
 
@@ -50,7 +50,7 @@ export function LessonPlayer({
   const [furthest, setFurthest] = useState(startBoard);
   const board = lesson.boards[index];
   // The board being played: the header's menu asks it to read its screen again.
-  const [runtime, setRuntime] = useState<LiveBoard | undefined>(undefined);
+  const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
   const onBoardRef = useRef(onBoard);
   onBoardRef.current = onBoard;
   useEffect(() => onBoardRef.current?.(index), [index]);

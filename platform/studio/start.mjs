@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
  * The one way the studio service is started (platform/studio/src/mcp/main.ts: threads, approvals,
  * the content rebuild, the chalk MCP). Whoever needs it calls `ensureStudio()`: the dev server when
  * a page asks for threads, an agent's connection (connect.ts), `pnpm dev`. Plain JavaScript, so Node
- * runs it as it is from any of them.
+ * runs it is from any of them.
  *
  * - Up: nothing to do.
  * - Restarting (its code changed): waits for it; never starts a second.

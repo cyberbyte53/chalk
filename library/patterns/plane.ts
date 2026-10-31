@@ -5,7 +5,7 @@ import {
   PlaceKind,
   Roads,
   Scene,
-  type sceneCoordinatePlane,
+  type coordinatePlane,
 } from "@chalk/prop-coordinates";
 
 /**
@@ -15,15 +15,15 @@ import {
  */
 
 /** What a scene gives the coordinate plane, part by part: `{ walker: { walkFrom } }`. */
-export type SceneSetup = GivenFor<typeof sceneCoordinatePlane>;
+export type PlaneSetup = GivenFor<typeof coordinatePlane>;
 
 /** Setups put together part by part, later ones over earlier. */
-export function sceneSetup(...setups: readonly SceneSetup[]): SceneSetup {
+export function setup(...setups: readonly PlaneSetup[]): PlaneSetup {
   const out: Record<string, Record<string, unknown>> = {};
   for (const one of setups)
     for (const [part, fields] of Object.entries(one))
       out[part] = { ...(out[part] ?? {}), ...(fields as Record<string, unknown>) };
-  return out as SceneSetup;
+  return out as PlaneSetup;
 }
 
 /** Every whole-number point from (1, 1) to (across, up): a town's houses, a classroom's desks. */
@@ -42,7 +42,7 @@ export const TOWN = { streets: 6, houses: 5 } as const;
 export const bareTown = (
   streets: number = TOWN.streets,
   houses: number = TOWN.houses,
-): SceneSetup => ({
+): PlaneSetup => ({
   plane: {
     window: { xMin: 0, xMax: streets + 0.5, yMin: 0, yMax: houses + 0.5 },
     marks: Marks.Counts,
@@ -59,7 +59,7 @@ export const bareTown = (
 });
 
 /** The classroom: `columns` × `rows` desks, numbered from the left and from the front. */
-export const bareClassroom = (columns = 10, rows = 7): SceneSetup => ({
+export const bareClassroom = (columns = 10, rows = 7): PlaneSetup => ({
   plane: {
     window: { xMin: 0, xMax: columns + 0.5, yMin: 0, yMax: rows + 0.5 },
     marks: Marks.Counts,
@@ -70,7 +70,7 @@ export const bareClassroom = (columns = 10, rows = 7): SceneSetup => ({
 });
 
 /** A notebook page squared in centimetres, measured from its left edge and its bottom; a dot to drag. */
-export const bareNotebook = (width = 15, height = 12): SceneSetup => ({
+export const bareNotebook = (width = 15, height = 12): PlaneSetup => ({
   plane: {
     window: { xMin: 0, xMax: width, yMin: 0, yMax: height },
     marks: Marks.Counts,
@@ -83,9 +83,9 @@ export const bareNotebook = (width = 15, height = 12): SceneSetup => ({
   reading: { unit: "cm", point: { x: width - 1, y: height - 1 }, pointStep: 1 },
 });
 
-export const sceneTown = bareTown;
-export const sceneClassroom = bareClassroom;
-export const sceneNotebook = bareNotebook;
+export const town = bareTown;
+export const classroom = bareClassroom;
+export const notebook = bareNotebook;
 
 /** How a scene reads a piece: by its name. */
 type Read = (piece: string) => Readonly<Record<string, unknown>>;

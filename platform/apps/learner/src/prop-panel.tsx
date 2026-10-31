@@ -1,5 +1,5 @@
 import { Actor } from "@chalk/content";
-import type { LiveBoard } from "@chalk/player";
+import type { BoardRuntime } from "@chalk/player";
 import type { AnyProp } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
@@ -83,7 +83,7 @@ export function PropPanel({
   piece,
   onStart,
 }: {
-  runtime: LiveBoard;
+  runtime: BoardRuntime;
   piece: string;
   /** Start the prop again from these fields (what differs from its start, part by part). */
   onStart: (given: Record<string, unknown>) => void;

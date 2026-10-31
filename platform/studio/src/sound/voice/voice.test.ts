@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { place, scene } from "@chalk/author";
 import { propLibrary } from "@chalk/library";
 import { scriptOf } from "@chalk/player";
-import { sceneText } from "@chalk/prop-basics";
+import { text } from "@chalk/prop-basics";
 import { describe, expect, it } from "vitest";
 import { voiceFor } from "./cast";
 import { SOUND_LIST, voiceChapter } from "./make";
@@ -21,13 +21,13 @@ const cast = {
 const t = (en: string, hi: string) => ({ en, hi });
 const built = scene({
   pieces: {
-    title: place(sceneText, { text: t("Finding **Aman's** house", "अमन का घर") }),
+    title: place(text, { text: t("Finding **Aman's** house", "अमन का घर") }),
     root: place(
-      sceneText,
+      text,
       { text: t("√2 is about 1.41", "√2 लगभग 1.41 है") },
       { says: t("The square root of 2 is about 1.41", "2 का वर्गमूल लगभग 1.41 है") },
     ),
-    reply: place(sceneText, { text: t("House 5.", "मकान 5।") }, { speaker: "aman" }),
+    reply: place(text, { text: t("House 5.", "मकान 5।") }, { speaker: "aman" }),
   },
 }).build("tiny");
 const lookup = (type: string) => propLibrary[type];
@@ -101,8 +101,8 @@ describe("voicing a chapter: cast, speak, keep, in its own folder", () => {
   it("gives no clip to a line a voice can't say as shown: it lists it, with a suggestion for maths", async () => {
     const odd = scene({
       pieces: {
-        sign: place(sceneText, { text: t("α + β", "α + β") }),
-        maths: place(sceneText, { text: t("Is $x^2$ even?", "क्या $x^2$ सम है?") }),
+        sign: place(text, { text: t("α + β", "α + β") }),
+        maths: place(text, { text: t("Is $x^2$ even?", "क्या $x^2$ सम है?") }),
       },
     }).build("odd");
     const made = await voice([

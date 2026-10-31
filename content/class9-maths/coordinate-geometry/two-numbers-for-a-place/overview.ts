@@ -1,5 +1,5 @@
 import { hidden, page, place, scene, t, tap } from "@chalk/author";
-import { gridOf, scenePlane, sceneWith } from "@chalk/patterns";
+import { choice, gridOf, plane, words } from "@chalk/patterns";
 import {
   Axes,
   Marks,
@@ -8,14 +8,13 @@ import {
   Roads,
   Tone,
   WalkerKind,
-  sceneCoordinatePlane as plane,
+  coordinatePlane,
 } from "@chalk/prop-coordinates";
 
-const { words } = sceneWith;
-const { sceneSetup: setup, sceneTown, sceneNotebook, sceneClassroom, walkTo } = scenePlane;
+const { setup, town, notebook, classroom, walkTo } = plane;
 
 /** A bus on a straight road: the number line they know, its own short story. */
-const side = sceneWith.choice({
+const side = choice({
   name: "side",
   prompt: t("The bus is at −2. Where is it?", "बस −2 पर है। वह कहाँ है?"),
   says: t("The bus is at minus 2. Where is it?", "बस माइनस 2 पर है। वह कहाँ है?"),
@@ -76,7 +75,7 @@ const busStops = page(
           ),
         },
       ),
-      line: place(plane, {
+      line: place(coordinatePlane, {
         plane: {
           window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
           axes: Axes.Horizontal,
@@ -165,8 +164,8 @@ const streetAndHouse = page(
         },
       ),
       town: place(
-        plane,
-        setup(sceneTown(), {
+        coordinatePlane,
+        setup(town(), {
           plane: { upLines: [] },
           places: { showAddress: true, canChooseTarget: true },
           walker: { showWhere: true },
@@ -257,8 +256,8 @@ const dotOnPaper = page(
         },
       ),
       sheet: place(
-        plane,
-        setup(sceneNotebook(), {
+        coordinatePlane,
+        setup(notebook(), {
           // No numbers on the edges at first: they would say where the dot is. An edge becomes a
           // ruler once a distance along it is given (the rules below).
           plane: { numbered: [] },
@@ -349,7 +348,7 @@ const dotOnPaper = page(
 );
 
 /** A desk is (column, row), column first: (5, 3) and (3, 5) are two different desks. */
-const same = sceneWith.choice({
+const same = choice({
   name: "same",
   prompt: t(
     "Are the desks (5, 3) and (3, 5) the same desk?",
@@ -389,8 +388,8 @@ const seatingPlan = page(
         ),
       ),
       room: place(
-        plane,
-        setup(sceneClassroom(), {
+        coordinatePlane,
+        setup(classroom(), {
           plane: {
             points: [
               {
@@ -467,8 +466,8 @@ const twoLines = page(
         ),
       ),
       house: place(
-        plane,
-        setup(sceneTown(5, 5), {
+        coordinatePlane,
+        setup(town(5, 5), {
           plane: { showAxisNames: false },
           places: { showAddress: true, target: { x: 4, y: 5 } },
           walker: { at: { x: 4, y: 5 }, trail: route(4, 5), canStep: false },
@@ -494,8 +493,8 @@ const twoLines = page(
         },
       ),
       spot: place(
-        plane,
-        setup(sceneNotebook(), {
+        coordinatePlane,
+        setup(notebook(), {
           reading: { point: null },
           clues: {
             // The dot as the student left it on dot-on-paper: both distances given, their lines crossing.
@@ -527,8 +526,8 @@ const twoLines = page(
         ),
       ),
       desk: place(
-        plane,
-        setup(sceneClassroom(6, 4), {
+        coordinatePlane,
+        setup(classroom(6, 4), {
           plane: {
             points: [
               { name: "(5, 3)", x: 5, y: 3, isShown: true, hasDropLines: true, tone: Tone.Accent },

@@ -1,7 +1,7 @@
 import { family, place, scene, t, tap } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { scenePlane, sceneWith } from "@chalk/patterns";
-import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
+import { check, plane } from "@chalk/patterns";
+import { coordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
@@ -14,9 +14,9 @@ export const tapTheDesk = family({
     .strict()
     .refine((p) => p.column !== p.row, "the column and the row differ, so the order shows"),
   build: ({ column, row }) => {
-    const { isChosen, sceneClassroom } = scenePlane;
-    const room = place(sceneCoordinatePlane, sceneClassroom());
-    const ask = sceneWith.check({
+    const { isChosen, classroom } = plane;
+    const room = place(coordinatePlane, classroom());
+    const ask = check({
       about: "room",
       prompt: t(
         `Tap the desk **(${column}, ${row})**, then press Check.`,

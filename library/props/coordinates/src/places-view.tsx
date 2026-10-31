@@ -6,9 +6,9 @@ import type { JSX } from "preact";
 import { drawing } from "./layer-view";
 import { PlacePicture } from "./pictures";
 import { PlaceKind } from "./places";
+import { places } from "./places";
 import type { Point } from "./plane";
 import { isRisen, unitOf } from "./plane-view";
-import { places } from "./scene/places";
 import { WORDS, addressOf, word } from "./words";
 
 type PlacesView = PropView<typeof places>;

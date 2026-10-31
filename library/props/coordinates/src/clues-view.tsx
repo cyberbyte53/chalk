@@ -4,8 +4,8 @@ import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { type Still, stillPossible } from "./clues";
+import { clues } from "./clues";
 import { PlaneTap, drawing } from "./layer-view";
-import { clues } from "./scene/clues";
 import { WORDS, num, pair, word } from "./words";
 
 type CluesView = PropView<typeof clues>;

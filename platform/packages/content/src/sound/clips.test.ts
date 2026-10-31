@@ -38,7 +38,7 @@ describe("a line said in phrases", () => {
     expect(phrasesOf(template, { x: 4 }, "en")).toBeUndefined();
   });
 
-  it("says a number by its pieces: the sign and the point in words, digits as digits", () => {
+  it("says a number by its pieces: the sign and the point in words, digits", () => {
     expect(numberPieces(0.375, "en")).toEqual(["0", "point", "3", "7", "5"]);
     expect(numberPieces(-12, "hi")).toEqual(["माइनस", "12"]);
     expect(numberPieces(0.1 + 0.2, "en")).toEqual(["0", "point", "3"]);

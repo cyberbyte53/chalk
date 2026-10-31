@@ -23,60 +23,60 @@ export const specimen: Lesson = {
   boards: [
     scene({
       pieces: {
-        title: place(def("sceneText"), {
+        title: place(def("text"), {
           text: { en: "The value of $p(x) = x^2 + 3x - 1$", hi: "$p(x) = x^2 + 3x - 1$ का मान" },
           style: "title",
         } as never),
-        body: place(def("sceneText"), {
+        body: place(def("text"), {
           text: {
             en: "Put **2** wherever $x$ is: $p(2) = 2^2 + 3 \\times 2 - 1 = 9$. *Every* term is worked out first, then added.",
             hi: "जहाँ $x$ है वहाँ **2** रखो: $p(2) = 2^2 + 3 \\times 2 - 1 = 9$। *हर* पद पहले हल करो, फिर जोड़ो।",
           },
           style: "body",
         } as never),
-        display: place(def("sceneText"), {
+        display: place(def("text"), {
           text: {
             en: "Rationalising: $$\\frac{1}{2 + \\sqrt{3}} = \\frac{2 - \\sqrt{3}}{(2 + \\sqrt{3})(2 - \\sqrt{3})} = 2 - \\sqrt{3}$$",
             hi: "परिमेयकरण: $$\\frac{1}{2 + \\sqrt{3}} = \\frac{2 - \\sqrt{3}}{(2 + \\sqrt{3})(2 - \\sqrt{3})} = 2 - \\sqrt{3}$$",
           },
           style: "body",
         } as never),
-        exponents: place(def("sceneText"), {
+        exponents: place(def("text"), {
           text: {
             en: "Laws of exponents: $x^{1/3} \\cdot x^{2/3} = x^{1/3 + 2/3} = x$, and $\\left(a^m\\right)^n = a^{mn}$.",
             hi: "घातांक के नियम: $x^{1/3} \\cdot x^{2/3} = x^{1/3 + 2/3} = x$, और $\\left(a^m\\right)^n = a^{mn}$।",
           },
           style: "body",
         } as never),
-        decimals: place(def("sceneText"), {
+        decimals: place(def("text"), {
           text: {
             en: "$\\frac{1}{3} = 0.\\overline{3}$ never ends; $2.665$ ends after three digits; $\\sqrt{2} \\approx 1.414$.",
             hi: "$\\frac{1}{3} = 0.\\overline{3}$ कभी ख़त्म नहीं होता; $2.665$ तीन अंकों पर ख़त्म; $\\sqrt{2} \\approx 1.414$।",
           },
           style: "body",
         } as never),
-        geometry: place(def("sceneText"), {
+        geometry: place(def("text"), {
           text: {
             en: "In $\\triangle ABC$, $\\angle A + \\angle B + \\angle C = 180^\\circ$ and $\\overline{AB} \\parallel \\overline{DE}$.",
             hi: "$\\triangle ABC$ में $\\angle A + \\angle B + \\angle C = 180^\\circ$ और $\\overline{AB} \\parallel \\overline{DE}$।",
           },
           style: "body",
         } as never),
-        science: place(def("sceneText"), {
+        science: place(def("text"), {
           text: {
             en: "Water: $\\ce{2H2 + O2 -> 2H2O}$. A ball falls with $g = 9.8\\,\\text{m/s}^2$.",
             hi: "पानी: $\\ce{2H2 + O2 -> 2H2O}$। गेंद $g = 9.8\\,\\text{m/s}^2$ से गिरती है।",
           },
           style: "body",
         } as never),
-        note: place(def("sceneText"), {
+        note: place(def("text"), {
           text: {
             en: "A note: smaller, softer, for asides like $\\pi \\approx 3.14$.",
             hi: "टिप्पणी: छोटी, हल्की, जैसे $\\pi \\approx 3.14$।",
           },
           style: "note",
         } as never),
-        ask: place(def("sceneChoice"), {
+        ask: place(def("choice"), {
           prompt: {
             en: "Which is $\\sqrt{50}$ in simplest form?",
             hi: "$\\sqrt{50}$ का सरलतम रूप कौन-सा है?",

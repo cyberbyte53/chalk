@@ -26,7 +26,7 @@ function formatJson(json: string, file: string): string {
   try {
     return execFileSync(process.execPath, args, { input: json, encoding: "utf8", stdio: "pipe" });
   } catch (error) {
-    // For an ignored path biome exits 1 and echoes the input: keep it as it is. Check the message, not
+    // For an ignored path biome exits 1 and echoes the input: keep it is. Check the message, not
     // the echo: biome 1.9.4's echo drops Devanagari vowel signs (पूर्ण comes back as पर).
     if (error instanceof Error && "stdout" in error && error.stdout === json) return json;
     if (error instanceof Error && /formatter is currently disabled|ignored/.test(error.message)) {

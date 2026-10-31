@@ -4,7 +4,7 @@ import { Board, type BoardEvent, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { basicProps } from "./index";
-import { sceneChoice as choice, sceneGoal as goal } from "./scene";
+import { choice, goal } from "./props";
 
 /** What the board told, in order: signal names, and payloads. */
 function hearing(board: Board) {
@@ -61,9 +61,9 @@ describe("every basic prop, used the way a lesson uses it", () => {
   ];
   const prompt = { en: "Which?", hi: "कौन-सा?" };
   it.each([
-    ["sceneText", { text: { en: "Hello", hi: "नमस्ते" } }],
-    ["sceneChoice", { prompt, options, answer: "a" }],
-    ["sceneGoal", { prompt, about: "town", isMet: false }],
+    ["text", { text: { en: "Hello", hi: "नमस्ते" } }],
+    ["choice", { prompt, options, answer: "a" }],
+    ["goal", { prompt, about: "town", isMet: false }],
   ] as const)(
     "%s: every input says what it does, and every learner's action has one",
     (type, given) => {

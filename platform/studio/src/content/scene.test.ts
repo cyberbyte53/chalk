@@ -1,10 +1,10 @@
 import { type Cue, cue, hidden, place, scene, tap } from "@chalk/author";
 import { Actor } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
-import { SceneRuntime, scriptOf } from "@chalk/player";
+import { BoardRuntime, scriptOf } from "@chalk/player";
 import { estimatedSeconds } from "@chalk/prop";
-import { sceneChoice, sceneText } from "@chalk/prop-basics";
-import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
+import { choice, text } from "@chalk/prop-basics";
+import { coordinatePlane } from "@chalk/prop-coordinates";
 import { appear, tap as tapSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
@@ -13,7 +13,7 @@ import { checkWitness, play } from "./witness";
 // any board (its witness played on the real props, the clock jumping), lines said and waited for.
 
 const t = (en: string, hi: string) => ({ en, hi });
-const ask = place(sceneChoice, {
+const ask = place(choice, {
   prompt: { en: "Which comes first?", hi: "पहले क्या आता है?" },
   options: [
     { id: "street", label: { en: "the street", hi: "गली" } },
@@ -28,9 +28,9 @@ const ask = place(sceneChoice, {
 
 const board = scene({
   pieces: {
-    title: place(sceneText, { text: { en: "Two numbers", hi: "दो संख्याएँ" } }),
+    title: place(text, { text: { en: "Two numbers", hi: "दो संख्याएँ" } }),
     ask,
-    found: hidden(place(sceneText, { text: { en: "Right: along, then up.", hi: "सही।" } })),
+    found: hidden(place(text, { text: { en: "Right: along, then up.", hi: "सही।" } })),
   },
   hear: { "ask.correct": (_, __, t) => t.self.show({ name: "found" }) },
   witness: [tap("ask", "select", { option: "street" }), tap("ask", "check")],
@@ -60,7 +60,7 @@ describe("a scene, built and checked like any board", () => {
 
   it("a line shown cuts off what is being said: the newest line wins", () => {
     const heard: string[] = [];
-    const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
       locale: "en",
       lineSeconds,
       now: () => 0,
@@ -98,16 +98,16 @@ describe("a scene, built and checked like any board", () => {
   it("a piece with nothing to say adds no pause; a line hidden while said moves on to the next", () => {
     const quiet = scene({
       pieces: {
-        first: place(sceneText, {
+        first: place(text, {
           text: { en: "One two three four five.", hi: "एक दो तीन चार पाँच।" },
         }),
-        plane: place(sceneCoordinatePlane),
-        second: place(sceneText, { text: { en: "Six.", hi: "छह।" } }),
-        third: place(sceneText, { text: { en: "Seven.", hi: "सात।" } }),
+        plane: place(coordinatePlane),
+        second: place(text, { text: { en: "Six.", hi: "छह।" } }),
+        third: place(text, { text: { en: "Seven.", hi: "सात।" } }),
       },
     }).build("quiet");
     const said: string[] = [];
-    const runtime = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(quiet.board, (type) => propLibrary[type], {
       locale: "en",
       lineSeconds,
       now: () => 0,
@@ -122,7 +122,7 @@ describe("a scene, built and checked like any board", () => {
     // "first" takes 5 / 2.5 = 2 s, then one breath (0.7): the plane says nothing, no second.
     expect(said.slice(0, 2)).toEqual(["first at 0.0", "second at 2.7"]);
 
-    const hiding = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
+    const hiding = new BoardRuntime(quiet.board, (type) => propLibrary[type], {
       locale: "en",
       lineSeconds,
       now: () => 0,
@@ -167,10 +167,10 @@ describe("a scene, built and checked like any board", () => {
   it("lines wait for real events, the board's own too, and the script shows each as one", async () => {
     const events = scene({
       pieces: {
-        title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
-        plane: place(sceneCoordinatePlane),
+        title: place(text, { text: t("Two numbers", "दो संख्याएँ") }),
+        plane: place(coordinatePlane),
         ask,
-        hint: hidden(place(sceneText, { text: t("Look along", "आगे देखो") })),
+        hint: hidden(place(text, { text: t("Look along", "आगे देखो") })),
       },
       cues: {
         afterTitle: cue(t("Now this.", "अब यह।"), {
@@ -223,9 +223,9 @@ describe("a scene, built and checked like any board", () => {
   it("the board talks in turn: a piece the lesson shows waits its turn, nothing is lost", async () => {
     const busy = scene({
       pieces: {
-        title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
+        title: place(text, { text: t("Two numbers", "दो संख्याएँ") }),
         ask,
-        hint: hidden(place(sceneText, { text: t("Look along", "आगे देखो") })),
+        hint: hidden(place(text, { text: t("Look along", "आगे देखो") })),
       },
       cues: {
         first: cue(t("First.", "पहला।"), { when: "board.said", where: { line: "title" } }),
@@ -255,14 +255,14 @@ describe("a scene, built and checked like any board", () => {
   it("a line the student cuts is still said: what waits on it happens (Aman always replies)", () => {
     const reply = scene({
       pieces: {
-        title: place(sceneText, { text: t("Where does Aman live?", "अमन कहाँ रहता है?") }),
+        title: place(text, { text: t("Where does Aman live?", "अमन कहाँ रहता है?") }),
         ask,
-        answer: hidden(place(sceneText, { text: t("Street 4.", "गली 4।") })),
+        answer: hidden(place(text, { text: t("Street 4.", "गली 4।") })),
       },
       onSaid: { title: (_, t) => t.self.show({ name: "answer" }) },
     }).build("reply");
     const said: string[] = [];
-    const runtime = new SceneRuntime(reply.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(reply.board, (type) => propLibrary[type], {
       locale: "en",
       lineSeconds,
       now: () => 0,
@@ -284,7 +284,7 @@ describe("a scene, built and checked like any board", () => {
   it("a line with blanks is said with its moment's values, as phrases", async () => {
     const walk = scene({
       pieces: {
-        plane: place(sceneCoordinatePlane, {
+        plane: place(coordinatePlane, {
           walker: { walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 } },
         }),
       },
@@ -292,7 +292,7 @@ describe("a scene, built and checked like any board", () => {
         where: cue(t("The bus is at {x}.", "बस {x} पर है।"), { when: "plane.walker.stepped" }),
       },
     }).build("walk");
-    const runtime = new SceneRuntime(walk.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(walk.board, (type) => propLibrary[type], {
       locale: "hi",
       lineSeconds,
       now: () => 0,
@@ -321,7 +321,7 @@ describe("a scene, built and checked like any board", () => {
   it("refuses blanks its moment doesn't fill", () => {
     expect(() =>
       scene({
-        pieces: { plane: place(sceneCoordinatePlane) },
+        pieces: { plane: place(coordinatePlane) },
         cues: { x: cue(t("At {z}.", "{z} पर।"), { when: "plane.walker.stepped" }) },
       }).build("bad"),
     ).toThrow(/\{z\} isn't a number plane.walker.stepped carries \(x, y\)/);
@@ -333,7 +333,7 @@ describe("a scene, built and checked like any board", () => {
   it("on a student's board, a line is over when its sound is: no length is assumed", async () => {
     const ends: (() => void)[] = [];
     const said: string[] = [];
-    const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
       locale: "en",
       lineSeconds,
       now: () => 0,
@@ -366,7 +366,7 @@ describe("a scene, built and checked like any board", () => {
     }).build("held");
     const said: string[] = [];
     let buzzEnds = (): void => undefined;
-    const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
       locale: "en",
       now: () => 0,
       frame: () => () => undefined,
@@ -404,7 +404,7 @@ describe("a scene, built and checked like any board", () => {
     const walking = (cues?: Record<string, Cue>) =>
       scene({
         pieces: {
-          plane: place(sceneCoordinatePlane, {
+          plane: place(coordinatePlane, {
             walker: { walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 } },
           }),
           ask,
@@ -413,7 +413,7 @@ describe("a scene, built and checked like any board", () => {
       }).build("walking");
     const effectsOf = async (built: ReturnType<typeof walking>, stopped: string[] = []) => {
       const played: string[] = [];
-      const runtime = new SceneRuntime(built.board, (type) => propLibrary[type], {
+      const runtime = new BoardRuntime(built.board, (type) => propLibrary[type], {
         locale: "en",
         lineSeconds,
         now: () => 0,
@@ -506,13 +506,13 @@ describe("a scene, built and checked like any board", () => {
   it("the student can hear the screen again: what is showing now, from the top", () => {
     const screen = scene({
       pieces: {
-        title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
-        found: hidden(place(sceneText, { text: t("Found it.", "मिल गया।") })),
-        later: hidden(place(sceneText, { text: t("Not yet.", "अभी नहीं।") })),
+        title: place(text, { text: t("Two numbers", "दो संख्याएँ") }),
+        found: hidden(place(text, { text: t("Found it.", "मिल गया।") })),
+        later: hidden(place(text, { text: t("Not yet.", "अभी नहीं।") })),
       },
     }).build("screen");
     const said: string[] = [];
-    const runtime = new SceneRuntime(screen.board, (type) => propLibrary[type], {
+    const runtime = new BoardRuntime(screen.board, (type) => propLibrary[type], {
       locale: "en",
       lineSeconds,
       now: () => 0,

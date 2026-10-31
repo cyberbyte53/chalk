@@ -17,9 +17,9 @@ import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
   BoardPlayer,
+  type BoardRuntime,
   BoardSpeedContext,
   SEP,
-  SceneRuntime,
   addressOf,
   findNode,
   joinPath,
@@ -29,7 +29,7 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
-import { type LiveBoard, useWhenChanged } from "@chalk/player";
+import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
@@ -596,7 +596,7 @@ export function PreviewBoard({
     [shown, isPlaying],
   );
   const phone = useRef<HTMLDivElement>(null);
-  const [runtime, setRuntime] = useState<LiveBoard | undefined>(undefined);
+  const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
   useSourceTags(phone, where, shown.path);
   // The board's script beside it, while reviewing (`&noscript`, or v, hides it): every line it can
   // say, including those only an interaction sets off, and each clip.
@@ -1204,10 +1204,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     busy.__chalkBusy = () => runningBoards().flatMap((runtime) => runtime.busyWith());
     // What the boards were heard to say, in order (the chalk MCP's play prints each step's).
     const heard = window as Window & { __chalkHeard?: () => unknown[] };
-    heard.__chalkHeard = () =>
-      runningBoards().flatMap((runtime) =>
-        runtime instanceof SceneRuntime ? runtime.heard() : [],
-      );
+    heard.__chalkHeard = () => runningBoards().flatMap((runtime) => runtime.heard());
     // One of a piece's actions, as the lesson would call it (a prop on its own page has no lesson:
     // the person or a tool stands in). Says what went wrong, or nothing.
     const call = window as Window & {

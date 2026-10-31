@@ -13,7 +13,7 @@ export const ours = (markup: string): OwnMarkup => markup as OwnMarkup;
 
 /**
  * The one place markup is put on the page as HTML (biome.json allows it in this file only). Every
- * other element gets its text as text.
+ * other element gets its text.
  */
 export function OwnHtml({
   markup,

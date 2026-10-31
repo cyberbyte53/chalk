@@ -7,7 +7,7 @@ import "@preact/signals";
 import { createContext } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import type { PropRegistry } from "./prop-module";
-import { type LiveBoard, SceneRuntime } from "./scene-runtime";
+import { BoardRuntime } from "./runtime";
 import { trackBoard } from "./snapshot";
 
 export type Speak = (line: WordsToSay) => Promise<void>;
@@ -37,11 +37,11 @@ export function useBoardRuntime(
     /** Plays a sound alongside (sound/engine.ts), lasting until stopped if it lasts; returns how to stop it. */
     playSound?: (sound: Sound, lasts?: boolean) => SoundPlaying;
   },
-): LiveBoard {
+): BoardRuntime {
   const speed = useContext(BoardSpeedContext);
   const speakRef = useRef(speak);
   speakRef.current = speak;
-  const [runtime] = useState((): LiveBoard => {
+  const [runtime] = useState((): BoardRuntime => {
     const services = {
       // A silent board says nothing: its lines only take their time.
       speak: (line: WordsToSay) =>
@@ -55,7 +55,7 @@ export function useBoardRuntime(
       onError: (message: string, error?: unknown) => console.error(message, error ?? ""),
     };
     // Every board is on the event model (platform/docs/event-model.md).
-    return new SceneRuntime(board, (type) => registry[type], {
+    return new BoardRuntime(board, (type) => registry[type], {
       ...services,
       locale: voice.locale,
       ...(voice.lineSeconds === undefined ? {} : { lineSeconds: voice.lineSeconds }),

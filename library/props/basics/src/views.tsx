@@ -9,7 +9,7 @@ import {
 } from "@chalk/player";
 import { AnswerStatus, cssColor, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { sceneChoice as choice, sceneGoal as goal, type sceneText as text } from "./scene";
+import { choice, goal, type text } from "./props";
 
 // The player hands each view what its own prop reads now, already checked against its schema.
 

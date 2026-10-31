@@ -1,7 +1,7 @@
 import type { SoundView } from "@chalk/player";
 import type { AnyProp } from "@chalk/prop";
-import { coordinatePlane } from "./scene/coordinate-plane";
-import { coordinatePlaneSound } from "./scene/sound";
+import { coordinatePlane } from "./coordinate-plane";
+import { coordinatePlaneSound } from "./sound";
 
 /** Every prop this package defines, without its drawing code: what the app needs up front. */
 export const defs: readonly AnyProp[] = [coordinatePlane];

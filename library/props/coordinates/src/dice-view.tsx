@@ -2,10 +2,10 @@ import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
 import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
+import { dice } from "./dice";
 import { drawing } from "./layer-view";
 import { Counter } from "./pictures";
 import { unitOf } from "./plane-view";
-import { dice } from "./scene/dice";
 import { WORDS, pair, word } from "./words";
 
 type DiceView = PropView<typeof dice>;

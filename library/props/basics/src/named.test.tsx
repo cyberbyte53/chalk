@@ -1,6 +1,6 @@
 import { does } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import { sceneChoice as choice } from "./scene";
+import { choice } from "./props";
 
 /**
  * In a prop view, anything a student can press says what it does (@chalk/prop's jsx-runtime): an

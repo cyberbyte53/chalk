@@ -31,8 +31,8 @@ export type TextStyle = (typeof TextStyle)[keyof typeof TextStyle];
 const UNSET = { en: "…", hi: "…" };
 
 /** Words on the board. */
-export const sceneText = prop({
-  type: "sceneText",
+export const text = prop({
+  type: "text",
   describe: "Words on the board, in the learner's language.",
   role: PropRole.Page,
   size: { fit: SizeFit.Fill },
@@ -57,8 +57,8 @@ const giveFeedback = action({ text: localizedSchema }, { describe: "Show words u
  * "Do it in the prop, then Check": the answer is another piece's state. Whether it is right is a
  * need (`isMet`) the scene gives it; Check records the attempt.
  */
-export const sceneGoal = prop({
-  type: "sceneGoal",
+export const goal = prop({
+  type: "goal",
   describe:
     "A question answered by getting another prop into the right state, then pressing Check.",
   role: PropRole.Question,
@@ -113,8 +113,8 @@ const optionSchema = z
   .strict();
 
 /** Pick one option, then Check. */
-export const sceneChoice = prop({
-  type: "sceneChoice",
+export const choice = prop({
+  type: "choice",
   describe: "A multiple-choice question.",
   role: PropRole.Question,
   size: { fit: SizeFit.Fill },

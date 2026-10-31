@@ -22,7 +22,7 @@ function pascal(name: string): string {
 
 /**
  * A chapter's concepts.gen.ts: its concepts as an enum, for question families' `tests`. Written so
- * Biome leaves it as it is.
+ * Biome leaves it is.
  */
 export function conceptsModule(concepts: readonly string[]): string {
   const entries = concepts.map((name) => `  ${pascal(name)}: "${name}",\n`).join("");

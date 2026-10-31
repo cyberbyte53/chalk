@@ -2,7 +2,7 @@ export { type BuiltBoard, type NoteCheck, type Step, StepKind, type Wait } from 
 export { type Family, family, isFamily } from "./family";
 export {
   type GivenFor,
-  type Placed as ScenePlaced,
+  type Placed,
   type Says,
   type Scene,
   type SceneSpec,

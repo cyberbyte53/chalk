@@ -1,8 +1,8 @@
 import { Board, type BoardEvent } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
-import { Marks, Scene } from "../plane";
-import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "../walker";
 import { coordinatePlane } from "./coordinate-plane";
+import { Marks, Scene } from "./plane";
+import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "./walker";
 
 // The town on the event model, played as a board plays it: taps go in, the clock jumps to what is
 // due, and what each part tells is heard. The same laws as model.test.ts's town.

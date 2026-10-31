@@ -18,7 +18,7 @@ import { heard, pressHandler } from "./does";
 import { type Door, DoorContext } from "./door";
 import { findNode, stampPaths } from "./part-paths";
 import type { PropRegistry } from "./prop-module";
-import type { LiveBoard } from "./scene-runtime";
+import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 
 /** Where a part (its address under the piece) is drawn in the piece's box, if it is tagged. */
@@ -40,7 +40,7 @@ function tagged(box: HTMLDivElement | null, part: string): Box | undefined {
 export type LayoutContext = {
   locale: Locale;
   registry: PropRegistry;
-  runtime: LiveBoard;
+  runtime: BoardRuntime;
   /** Props whose audio couldn't play; they show a small retry mark. */
   audioFailed: ReadonlyMap<string, unknown>;
   onRetryAudio: (name: string) => void;

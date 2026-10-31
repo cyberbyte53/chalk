@@ -1,8 +1,9 @@
 import { SymbolButton } from "@chalk/draw";
-import { useDrags } from "@chalk/player";
+import { groupView, useDrags } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { drawing } from "./layer-view";
+import { plane } from "./plane";
 import {
   AxesDraw,
   GridDraw,
@@ -13,8 +14,15 @@ import {
   SceneDraw,
   canNameParts,
 } from "./plane-view";
-import { plane } from "./scene/plane";
 import { WORDS, pair, word } from "./words";
+
+import { cluesDrawing } from "./clues-view";
+import { coordinatePlane } from "./coordinate-plane";
+import { diceDrawing } from "./dice-view";
+import { placesDrawing } from "./places-view";
+import { plottingDrawing } from "./plotting-view";
+import { readingDrawing } from "./reading-view";
+import { walkerDrawing } from "./walker-view";
 
 /**
  * The vertical number line's zero, a handle the learner slides; let go where the two zeroes meet
@@ -102,3 +110,20 @@ export const planeDrawing = drawing(plane, {
     );
   },
 });
+
+/**
+ * The coordinate plane: the plane and every part on it, each drawn in its places.
+ */
+export const CoordinatePlaneView = groupView(
+  coordinatePlane,
+  {
+    plane: planeDrawing,
+    reading: readingDrawing,
+    places: placesDrawing,
+    walker: walkerDrawing,
+    clues: cluesDrawing,
+    plotting: plottingDrawing,
+    dice: diceDrawing,
+  },
+  { look: () => "cp-frame" },
+);

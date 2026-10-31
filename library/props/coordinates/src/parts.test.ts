@@ -1,15 +1,15 @@
 import { Board, type BoardEvent, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { cluesReads, stillPossible } from "../clues";
-import { throwOf } from "../dice";
-import { placeOf, windowSchema } from "../plane";
-import { plottingReads } from "../plotting";
-import { readingReads } from "../reading";
+import { cluesReads, stillPossible } from "./clues";
 import { clues } from "./clues";
+import { throwOf } from "./dice";
 import { dice } from "./dice";
+import { placeOf, windowSchema } from "./plane";
 import { plane } from "./plane";
+import { plottingReads } from "./plotting";
 import { plotting } from "./plotting";
+import { readingReads } from "./reading";
 import { reading } from "./reading";
 
 // The clues, plotting, the dice and a point's reading on the event model, each held alone by a

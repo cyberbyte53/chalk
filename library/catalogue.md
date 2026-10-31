@@ -8,9 +8,9 @@ Before writing a new prop, look here: a chapter is better served by a prop that 
 
 The props every lesson uses.
 
-### `sceneText` · page
+### `text` · page
 
-`library/props/basics/sceneText` · used in no chapter yet
+`library/props/basics/text` · used in no chapter yet
 
 Words on the board, in the learner's language.
 
@@ -20,9 +20,9 @@ Words on the board, in the learner's language.
 | `style` | ["title", "body", "note", "definition"] | changed by its own rules |
 | `color` | {orNull: "text"} | changed by its own rules |
 
-### `sceneChoice` · question
+### `choice` · question
 
-`library/props/basics/sceneChoice` · used in no chapter yet
+`library/props/basics/choice` · used in no chapter yet
 
 A multiple-choice question.
 
@@ -47,9 +47,9 @@ A multiple-choice question.
 
 Signals: `checked`, `correct`, `wrong`
 
-### `sceneGoal` · question
+### `goal` · question
 
-`library/props/basics/sceneGoal` · used in no chapter yet
+`library/props/basics/goal` · used in no chapter yet
 
 A question answered by getting another prop into the right state, then pressing Check.
 
@@ -76,9 +76,9 @@ Signals: `checked`, `correct`, `wrong`
 
 The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a host whose layers a board turns on. Built for Class 9 Coordinate Geometry, but it knows only its own world.
 
-### `sceneCoordinatePlane` · explainer
+### `coordinatePlane` · explainer
 
-`library/props/coordinates/sceneCoordinatePlane` · used in no chapter yet
+`library/props/coordinates/coordinatePlane` · used in no chapter yet
 
 A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.
 

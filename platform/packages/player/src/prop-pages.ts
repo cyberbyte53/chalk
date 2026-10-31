@@ -78,7 +78,7 @@ type PageDef = {
  * needs are its holder's to give (the prop's own wiring), so only the prop's own are listed: those
  * a board gives it.
  */
-function sceneFields(def: PageDef, prefix: string): PropPage["fields"] {
+function fieldsOf(def: PageDef, prefix: string): PropPage["fields"] {
   const own = Object.entries(shapeOf(def.variables ?? ({} as ZodTypeAny)) ?? {}).map(
     ([name, schema]) => ({
       name: `${prefix}${name}`,
@@ -98,7 +98,7 @@ function sceneFields(def: PageDef, prefix: string): PropPage["fields"] {
     changedBy: [],
   }));
   const parts = Object.entries(def.children ?? {}).flatMap(([name, child]) =>
-    sceneFields(child, `${prefix}${name}.`),
+    fieldsOf(child, `${prefix}${name}.`),
   );
   return [...own, ...needs, ...parts];
 }
@@ -128,7 +128,7 @@ function pageOf(pkg: string, def: PageDef): PropPage {
     role: ROLE_WORDS[def.role ?? ""] ?? String(def.role),
     purpose: purposeOf(def),
     describe: def.describe.trim().replace(/\s+/g, " "),
-    fields: sceneFields(def, ""),
+    fields: fieldsOf(def, ""),
     actions: actions(def, ""),
     signals: signals(def, ""),
     answers: Object.keys(def.hear ?? {}),

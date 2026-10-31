@@ -9,7 +9,7 @@ import {
 import type { RecordEvent } from "@chalk/events";
 import { BOARD } from "@chalk/prop";
 import type { ActionRecord, SignalRecord } from "./board-records";
-import type { LiveBoard } from "./scene-runtime";
+import type { BoardRuntime } from "./runtime";
 
 /** A board's path in the course tree (its item's), or its name for a board made by hand. */
 export const boardPathOf = (board: Board): string => board.item?.path ?? board.name;
@@ -39,7 +39,7 @@ export type BoardRecorder = {
  * prop's own steps over time.
  */
 export function recordBoard(
-  runtime: LiveBoard,
+  runtime: BoardRuntime,
   record: RecordEvent,
   opening: string,
 ): BoardRecorder {

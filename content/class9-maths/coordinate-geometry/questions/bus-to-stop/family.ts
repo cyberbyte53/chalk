@@ -1,13 +1,13 @@
 import { family, place, scene, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { scenePlane, sceneWith } from "@chalk/patterns";
+import { check, plane } from "@chalk/patterns";
 import {
   Axes,
   Marks,
   PlaceKind,
   Roads,
   WalkerKind,
-  sceneCoordinatePlane,
+  coordinatePlane,
 } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
@@ -21,8 +21,8 @@ export const busToStop = family({
     .strict()
     .refine((p) => p.stop !== 0, "a stop, not the stand"),
   build: ({ stop }) => {
-    const { isAt, walkTo } = scenePlane;
-    const road = place(sceneCoordinatePlane, {
+    const { isAt, walkTo } = plane;
+    const road = place(coordinatePlane, {
       plane: {
         window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
         axes: Axes.Horizontal,
@@ -44,7 +44,7 @@ export const busToStop = family({
         showWhere: false,
       },
     });
-    const ask = sceneWith.check({
+    const ask = check({
       about: "road",
       prompt: t(
         `The bus starts at the stand, 0. Take it to stop **${stop < 0 ? `−${-stop}` : stop}**, then press Check.`,

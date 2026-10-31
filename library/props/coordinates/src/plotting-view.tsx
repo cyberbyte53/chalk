@@ -4,7 +4,7 @@ import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { PlaneTap, drawing } from "./layer-view";
 import { isInWindow } from "./plane";
-import { plotting } from "./scene/plotting";
+import { plotting } from "./plotting";
 import { WORDS, num, pair, word } from "./words";
 
 type PlottingView = PropView<typeof plotting>;

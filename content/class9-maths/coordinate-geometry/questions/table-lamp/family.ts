@@ -1,6 +1,6 @@
 import { family, noParams, scene, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { sceneWith } from "@chalk/patterns";
+import { choice } from "@chalk/patterns";
 import { Concept } from "../../concepts.gen";
 
 /** NCERT Ex 3.1 Q1, in the book's words: describing a lamp's place takes two distances from two edges. */
@@ -9,7 +9,7 @@ export const tableLamp = family({
   tests: [Concept.TwoNumbersForAPlace],
   params: noParams,
   build: () => {
-    const ask = sceneWith.choice({
+    const ask = choice({
       prompt: t(
         "How will you describe the position of a table lamp on your study table to another person?",
         "आप अपनी पढ़ाई की मेज़ पर रखे टेबल लैंप की स्थिति किसी अन्य व्यक्ति को कैसे बताएँगे?",

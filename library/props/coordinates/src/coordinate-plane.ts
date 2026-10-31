@@ -1,17 +1,17 @@
 import { PropRole } from "@chalk/prop";
 import { prop } from "@chalk/prop";
-import { areCluesOn } from "../clues";
-import { isDiceOn } from "../dice";
-import { arePlacesOn } from "../places";
-import { isPlottingOn } from "../plotting";
-import { isReadingOn } from "../reading";
-import { isWalkerOn } from "../walker";
+import { areCluesOn } from "./clues";
 import { clues } from "./clues";
+import { isDiceOn } from "./dice";
 import { dice } from "./dice";
+import { arePlacesOn } from "./places";
 import { places } from "./places";
 import { plane } from "./plane";
+import { isPlottingOn } from "./plotting";
 import { plotting } from "./plotting";
+import { isReadingOn } from "./reading";
 import { reading } from "./reading";
+import { isWalkerOn } from "./walker";
 import { walker } from "./walker";
 
 /**
@@ -24,7 +24,7 @@ import { walker } from "./walker";
  * - what one part does that another answers is heard here: another house sends Riya back.
  */
 export const coordinatePlane = prop({
-  type: "sceneCoordinatePlane",
+  type: "coordinatePlane",
   role: PropRole.Explainer,
   describe:
     "A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.",

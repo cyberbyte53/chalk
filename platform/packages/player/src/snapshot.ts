@@ -1,5 +1,5 @@
 import type { ZodTypeAny } from "zod";
-import type { LiveBoard } from "./scene-runtime";
+import type { BoardRuntime } from "./runtime";
 
 /**
  * The one snapshot (see @chalk/prop's snapshot.ts): every node by address, its setup, live and
@@ -7,12 +7,12 @@ import type { LiveBoard } from "./scene-runtime";
  */
 
 /** Every board running on the page, newest last (the dev preview reads it). */
-const running = new Set<LiveBoard>();
-export function trackBoard(runtime: LiveBoard): () => void {
+const running = new Set<BoardRuntime>();
+export function trackBoard(runtime: BoardRuntime): () => void {
   running.add(runtime);
   return () => running.delete(runtime);
 }
-export function runningBoards(): LiveBoard[] {
+export function runningBoards(): BoardRuntime[] {
   return [...running];
 }
 

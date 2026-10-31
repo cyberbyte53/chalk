@@ -448,7 +448,7 @@ function ThreadFold({
             </form>
           </div>
           {t.board !== undefined && (
-            <LiveBoard thread={t} bus={bus} locale={locale} isSilent={isSilent} />
+            <BoardRuntime thread={t} bus={bus} locale={locale} isSilent={isSilent} />
           )}
         </div>
       )}
@@ -457,7 +457,7 @@ function ThreadFold({
 }
 
 /** The thread's board as it is now, drawn by the real player, with the piece outlined. */
-function LiveBoard({
+function BoardRuntime({
   thread,
   bus,
   locale,

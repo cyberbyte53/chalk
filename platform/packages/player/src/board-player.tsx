@@ -17,7 +17,7 @@ import { Layout, type LayoutContext } from "./layout";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
-import type { LiveBoard } from "./scene-runtime";
+import type { BoardRuntime } from "./runtime";
 import { useBoardSound } from "./sound/board-sound";
 import { playSound } from "./sound/engine";
 import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
@@ -27,7 +27,7 @@ import { useBoardRuntime } from "./use-board-runtime";
 import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
 
 /** The props playing the question role: a board may ask any number of questions. */
-function questionsOf(runtime: LiveBoard): string[] {
+function questionsOf(runtime: BoardRuntime): string[] {
   return runtime.propNames().filter((name) => runtime.getDef(name).role === PropRole.Question);
 }
 
@@ -62,7 +62,7 @@ export type BoardPlayerProps = {
   /** Its menu is the lesson's (in the lesson's header, lesson-player.tsx), not its own. */
   isInLesson?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
-  onRuntime?: ((runtime: LiveBoard) => void) | undefined;
+  onRuntime?: ((runtime: BoardRuntime) => void) | undefined;
 };
 
 /**

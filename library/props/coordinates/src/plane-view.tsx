@@ -3,7 +3,7 @@ import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene } from "./plane";
-import { plane } from "./scene/plane";
+import { plane } from "./plane";
 import { WORDS, num, word } from "./words";
 
 export type PlaneView = PropView<typeof plane>;
