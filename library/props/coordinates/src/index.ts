@@ -1,7 +1,7 @@
 import { type PropModule, propModule } from "@chalk/player";
 import { coordinatePlane } from "./coordinate-plane";
+import { sounds } from "./defs";
 import { coordinatePlane as sceneCoordinatePlane } from "./scene/coordinate-plane";
-import { coordinatePlaneSound } from "./scene/sound";
 import { SceneCoordinatePlaneView } from "./scene/view";
 import { CoordinatePlaneView } from "./view";
 
@@ -31,5 +31,9 @@ export { sceneCoordinatePlane };
 export const coordinateProps: readonly PropModule[] = [
   coordinatePlaneProp,
   // On the event model (scene/), drawn by the same drawings.
-  propModule(sceneCoordinatePlane, SceneCoordinatePlaneView as never, coordinatePlaneSound),
+  propModule(
+    sceneCoordinatePlane,
+    SceneCoordinatePlaneView as never,
+    sounds[sceneCoordinatePlane.type],
+  ),
 ];

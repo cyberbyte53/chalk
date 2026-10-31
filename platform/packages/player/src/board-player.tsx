@@ -1,5 +1,5 @@
 /** @jsxImportSource preact */
-import { Actor, AppWhat, type Board, type Locale } from "@chalk/content";
+import { Actor, AppWhat, type Board, type Locale, propPieces } from "@chalk/content";
 import { type RecordEvent, makeId } from "@chalk/events";
 import type { JugnuPlace } from "@chalk/jugnu";
 import {
@@ -352,7 +352,7 @@ export function BoardPlayer({
               </svg>
             </button>
           )}
-          {board.model !== undefined && !isTimed && (
+          {hasEffects(board, registry) && !isTimed && (
             <button
               type="button"
               class="back mute"
@@ -405,5 +405,14 @@ export function BoardPlayer({
         </footer>
       </div>
     </PlayModeContext.Provider>
+  );
+}
+
+/** Whether a board can sound an effect: one of its lesson's, or one of its pieces' own. */
+function hasEffects(board: Board, registry: PropRegistry): boolean {
+  if (board.model === undefined) return false;
+  if (Object.values(board.model.effects ?? {}).some((effect) => effect !== null)) return true;
+  return propPieces(board.root).some(
+    (piece) => Object.keys(registry[piece.prop]?.sound?.effects ?? {}).length > 0,
   );
 }

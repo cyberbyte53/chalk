@@ -54,13 +54,27 @@ export function setEffectsMuted(isOn: boolean): void {
 let context: AudioContext | undefined;
 /** The sounds playing, by effect: a repeat stops the one before. */
 const playing = new Map<Effect, () => void>();
+/** One second of noise, made once: what a step or a tick is shaped from. */
+let noiseBuffer: AudioBuffer | undefined;
 
-/** Plays an effect now (nothing when effects are muted, or the browser has no audio). */
-export function playEffect(effect: Effect): void {
-  if (isEffectsMuted.peek() || typeof AudioContext === "undefined") return;
+/**
+ * The browser lets a page make sound only after the student has touched it. The audio is made then,
+ * on the first touch or key; until then effects are dropped, never saved up (an effect is a moment:
+ * one that couldn't sound then is old news later).
+ */
+function unlock(): void {
   context ??= new AudioContext();
+  if (context.state === "suspended") void context.resume().catch(() => undefined);
+}
+if (typeof window !== "undefined" && typeof AudioContext !== "undefined") {
+  window.addEventListener("pointerdown", unlock, { capture: true, passive: true });
+  window.addEventListener("keydown", unlock, { capture: true });
+}
+
+/** Plays an effect now: nothing when effects are muted, or the page can't sound yet. */
+export function playEffect(effect: Effect): void {
   const audio = context;
-  if (audio.state === "suspended") void audio.resume().catch(() => undefined);
+  if (isEffectsMuted.peek() || audio === undefined || audio.state !== "running") return;
   playing.get(effect)?.();
   const now = audio.currentTime;
   const stops = RECIPES[effect].map((tone) => {
@@ -72,20 +86,28 @@ export function playEffect(effect: Effect): void {
     gain.gain.linearRampToValueAtTime(tone.volume, start + 0.005);
     gain.gain.exponentialRampToValueAtTime(0.0001, end);
     gain.connect(audio.destination);
-    const source = tone.wave === "noise" ? noise(audio, tone.from) : audio.createOscillator();
-    if (source instanceof OscillatorNode) {
-      source.type = tone.wave as OscillatorType;
-      source.frequency.setValueAtTime(tone.from, start);
-      if (tone.to !== undefined) source.frequency.exponentialRampToValueAtTime(tone.to, end);
-      source.connect(gain);
-    } else source.connect(gain);
-    const node = source instanceof OscillatorNode ? source : source.input;
+    const node = tone.wave === "noise" ? noiseSource(audio) : audio.createOscillator();
+    if (node instanceof OscillatorNode) {
+      node.type = tone.wave as OscillatorType;
+      node.frequency.setValueAtTime(tone.from, start);
+      if (tone.to !== undefined) node.frequency.exponentialRampToValueAtTime(tone.to, end);
+      node.connect(gain);
+    } else {
+      const filter = audio.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.value = tone.from;
+      node.connect(filter).connect(gain);
+    }
     node.start(start);
     node.stop(end);
+    // Stopped early (a repeat): a short fade, never a click.
     return () => {
-      try {
-        node.stop();
-      } catch {}
+      const at = audio.currentTime;
+      if (at >= end) return;
+      gain.gain.cancelScheduledValues(at);
+      gain.gain.setValueAtTime(gain.gain.value, at);
+      gain.gain.linearRampToValueAtTime(0, at + 0.01);
+      node.stop(at + 0.01);
     };
   });
   playing.set(effect, () => {
@@ -93,16 +115,14 @@ export function playEffect(effect: Effect): void {
   });
 }
 
-/** A short burst of noise, shaped around `pitch` (a step, a tick). */
-function noise(audio: AudioContext, pitch: number): { input: AudioBufferSourceNode } & AudioNode {
-  const buffer = audio.createBuffer(1, Math.ceil(audio.sampleRate * 0.2), audio.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-  const input = audio.createBufferSource();
-  input.buffer = buffer;
-  const filter = audio.createBiquadFilter();
-  filter.type = "bandpass";
-  filter.frequency.value = pitch;
-  input.connect(filter);
-  return Object.assign(filter, { input });
+/** A source playing the noise (made once per page). */
+function noiseSource(audio: AudioContext): AudioBufferSourceNode {
+  if (noiseBuffer === undefined) {
+    noiseBuffer = audio.createBuffer(1, audio.sampleRate, audio.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  }
+  const source = audio.createBufferSource();
+  source.buffer = noiseBuffer;
+  return source;
 }

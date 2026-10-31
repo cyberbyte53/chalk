@@ -1206,19 +1206,21 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     busy.__chalkBusy = () => runningBoards().flatMap((runtime) => runtime.busyWith());
     // What the boards were heard to say, in order (the chalk MCP's play prints each step's).
     const heard = window as Window & { __chalkHeard?: () => unknown[] };
-    // What the boards were heard to say, and the effects they sounded, in the order they came.
+    // What each board was heard to say and the effects it sounded, in the order they came.
     heard.__chalkHeard = () =>
-      runningBoards()
-        .flatMap((runtime) =>
-          runtime instanceof SceneRuntime
-            ? [
-                // An effect sounds at its signal, before any line that signal sets off.
-                ...runtime.effects().map((e) => ({ effect: e.effect, signal: e.at, at: e.time })),
-                ...runtime.heard(),
-              ]
-            : [],
-        )
-        .sort((a, b) => a.at - b.at);
+      runningBoards().flatMap((runtime) =>
+        runtime instanceof SceneRuntime
+          ? [
+              ...runtime.effects().map((e) => ({
+                n: e.n,
+                effect: e.effect,
+                signal: e.at,
+                at: e.time,
+              })),
+              ...runtime.heard(),
+            ].sort((a, b) => a.n - b.n)
+          : [],
+      );
     // One of a piece's actions, as the lesson would call it (a prop on its own page has no lesson:
     // the person or a tool stands in). Says what went wrong, or nothing.
     const call = window as Window & {

@@ -51,6 +51,8 @@ Any other source (an AI voice agent) is one more in the list. On a student's boa
 - **A prop says its own** in its sound view, by its signal inside the piece: the coordinate plane's `walker.stepped` is a step, `plane.risen` a rise; a question's `correct` and `wrong`. Sound views come with a package's definitions, not its drawing: they are needed before any drawing loads.
 - **A lesson adds or replaces** them by signal (`effects: { "line.walker.stepped": "tap", "ask.wrong": null }`); null silences one. The build checks each is at a signal there is, and an effect there is.
 - `play` shows each: `sound · step (line.walker.stepped)`.
+- **A page can sound only once the student has touched it** (the browser's rule): the audio starts on the first touch or key, and effects before it are dropped, never saved up. An effect is a moment.
+- Effects are on scene boards (the event model); today's boards have none, and their questions are silent.
 
 ## Which line is heard: two rules
 

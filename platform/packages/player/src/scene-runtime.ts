@@ -119,6 +119,7 @@ export class SceneRuntime {
               propPieces(board.root).some((p) => p.name === call.name),
             );
             const heard: HeardLine = {
+              n: ++this.heardCount,
               line: call.name,
               ...(about === undefined ? {} : { about }),
               speaker: line.speaker,
@@ -226,11 +227,13 @@ export class SceneRuntime {
         : this.lookup(type)?.sound?.effects?.[[...inside, signal].join(".")];
     const effect = lesson !== undefined ? lesson : typeof own === "function" ? own(told) : own;
     if (effect === null || effect === undefined) return;
-    this.soundedEffects.push({ effect, at, time: this.core.now });
+    this.soundedEffects.push({ n: ++this.heardCount, effect, at, time: this.core.now });
     this.services.effect?.(effect);
   }
 
   private readonly soundedEffects: SoundedEffect[] = [];
+  /** Lines and effects heard, counted together: the order they came in. */
+  private heardCount = 0;
 
   /** Every effect heard on this board so far, in order: which, at which signal, when. */
   effects(): readonly SoundedEffect[] {
@@ -545,9 +548,11 @@ export class SceneRuntime {
 
 /** A line as it was heard on a board. */
 /** An effect heard on the board: which, at which signal ("line.walker.stepped"), when. */
-export type SoundedEffect = { effect: Effect; at: string; time: number };
+export type SoundedEffect = { n: number; effect: Effect; at: string; time: number };
 
 export type HeardLine = {
+  /** Its place among everything heard on the board (lines and effects). */
+  n: number;
   line: string;
   /** The piece it is about (its own piece for a piece's line). */
   about?: string;
