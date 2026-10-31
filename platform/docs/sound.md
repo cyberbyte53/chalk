@@ -77,7 +77,7 @@ One engine plays every cue, on every screen (a phone, the preview, the editor's 
 - **Reports** to the board when a cue started, ended or was cut; the board never knows lengths or sources.
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
 - **Logs** everything heard, in order (what `play` and `look` show).
-- **Muted, nothing is heard and every cue still takes its length,** so the board keeps its pacing. Tools, checks, tests and a board that is one of several on a review screen get the engine muted: there is no second engine.
+- **Muted is only the volume:** nothing else knows. Tools, checks, tests and a board that is one of several on a review screen are **silent** instead (`isSilent`): nothing plays, and each line keeps its length on the board's clock, so they can run faster than real time.
 
 ## Settings
 

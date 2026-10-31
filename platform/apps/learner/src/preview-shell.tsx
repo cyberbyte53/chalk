@@ -614,6 +614,9 @@ export function PreviewBoard({
       <div class="preview-body">
         <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
           <BoardPlayer
+            // Heard or silent for its whole life: a board that changes (stepping onto it, or off it)
+            // starts again, heard as when it is opened, or quiet.
+            key={isSilent || isTimed ? "silent" : "heard"}
             onRuntime={
               isProp
                 ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)

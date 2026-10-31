@@ -124,6 +124,23 @@ export type Playing = { done: Promise<Played>; stop: () => void };
 /** How loud each channel plays: sounds a little under the voice. */
 const VOLUME: Readonly<Record<Channel, number>> = { voice: 1, sounds: 0.8 };
 
+/**
+ * Each channel's volume: everything on it plays through it. Muting a channel turns it to nothing,
+ * and that is all muting is: what plays still plays, and ends when it ends, just not heard.
+ */
+const channels = new Map<Channel, GainNode>();
+function channelOf(audio: AudioContext, channel: Channel): GainNode {
+  const known = channels.get(channel);
+  if (known !== undefined) return known;
+  const gain = audio.createGain();
+  gain.connect(audio.destination);
+  isMuted[channel].subscribe((muted) => {
+    gain.gain.value = muted ? 0 : VOLUME[channel];
+  });
+  channels.set(channel, gain);
+  return gain;
+}
+
 /** Plays a clip on a channel, from its start (looping, seamlessly, until stopped, if it lasts). Refused (blocked) until the page may sound. */
 export function playClip(url: string, channel: Channel, lasts = false): Playing {
   let stopNow = (): void => undefined;
@@ -139,9 +156,9 @@ export function playClip(url: string, channel: Channel, lasts = false): Playing 
       if (isOver) return;
       const audio = audioContext();
       if (buffer === null || audio === undefined) return resolve("broken");
+      // Its own gain, for fading it out when stopped early; then its channel's.
       const gain = audio.createGain();
-      gain.gain.value = VOLUME[channel];
-      gain.connect(audio.destination);
+      gain.connect(channelOf(audio, channel));
       const source = audio.createBufferSource();
       source.buffer = buffer;
       source.loop = lasts;
@@ -170,17 +187,17 @@ const LATE_MS = 250;
 
 /**
  * Plays a sound alongside anything else, and returns how to stop it. A moment's sound plays then or
- * not at all (sounds off, or the page can't sound yet: later it is old news). A sound that lasts
- * plays whenever it can until stopped: from the first touch, and again when sounds are turned on.
+ * not at all (the page can't sound yet: later it is old news). A sound that lasts plays from the
+ * first touch until stopped.
  */
 export function playSound(sound: Sound, lasts = false): () => void {
   if (lasts) return playLasting(sound);
-  if (isMuted.sounds.peek() || !isAudible()) return () => undefined;
+  if (!isAudible()) return () => undefined;
   const asked = Date.now();
   let isStopped = false;
   let playing: Playing | undefined;
   void load(sound.url).then((buffer) => {
-    if (isStopped || buffer === null || isMuted.sounds.peek()) return;
+    if (isStopped || buffer === null) return;
     if (Date.now() - asked > LATE_MS) return;
     playingSounds.get(sound.name)?.stop();
     playing = playClip(sound.url, "sounds");
@@ -192,23 +209,15 @@ export function playSound(sound: Sound, lasts = false): () => void {
   };
 }
 
-/** A lasting sound: looping while sounds are on and the page may sound, until stopped. */
+/** A lasting sound: looping from when the page may sound until stopped. */
 function playLasting(sound: Sound): () => void {
   let isStopped = false;
   let playing: Playing | undefined;
-  const canStart = () => !isStopped && playing === undefined && !isMuted.sounds.peek();
-  const unsubscribe = isMuted.sounds.subscribe((muted) => {
-    if (muted) {
-      playing?.stop();
-      playing = undefined;
-    } else
-      void whenAudible().then(() => {
-        if (canStart()) playing = playClip(sound.url, "sounds", true);
-      });
+  void whenAudible().then(() => {
+    if (!isStopped) playing = playClip(sound.url, "sounds", true);
   });
   return () => {
     isStopped = true;
-    unsubscribe();
     playing?.stop();
   };
 }

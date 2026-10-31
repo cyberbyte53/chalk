@@ -1,5 +1,6 @@
 import type { Locale } from "@chalk/content";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { isMuted } from "./engine";
 
 /** The browser's speech recognition, as much of it as we use (not in TypeScript's DOM types). */
 type Recognition = {
@@ -90,6 +91,8 @@ export function speak(text: string, locale: Locale): Promise<boolean> {
     return Promise.resolve(false);
   return new Promise((resolve) => {
     const line = new SpeechSynthesisUtterance(text);
+    // Muted, the phone's voice speaks at no volume, as the engine's voice channel plays.
+    line.volume = isMuted.voice.peek() ? 0 : 1;
     line.lang = LANG[locale];
     line.rate = 0.95;
     line.onend = () => resolve(true);

@@ -5,6 +5,10 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 type Source = { url: string; loop: boolean; onended: (() => void) | null; isStopped: boolean };
 const started: Source[] = [];
+/** The channels' volumes, in the order the engine makes them (the voice's first, here). */
+const channelGains: { gain: { value: number } }[] = [];
+const volume = (channel: "voice" | "sounds") =>
+  channelGains[channel === "voice" ? 0 : 1]?.gain.value;
 let decoded = 0;
 let fetched: string[] = [];
 /** How each address answers: a recording, a missing file, or a network failure. */
@@ -24,10 +28,13 @@ class FakeAudioContext {
     return Promise.resolve();
   }
   createGain() {
-    return {
+    const node = {
       gain: { value: 1, setValueAtTime: () => undefined, linearRampToValueAtTime: () => undefined },
-      connect: () => undefined,
+      connect: (to: unknown) => {
+        if (to === this.destination) channelGains.push(node);
+      },
     };
+    return node;
   }
   createBufferSource() {
     const source: Source & Record<string, unknown> = {
@@ -131,7 +138,7 @@ describe("the sound engine", () => {
     expect(started).toEqual([]);
   });
 
-  it("a sound plays alongside, a repeat replacing it; nothing while sounds are off", async () => {
+  it("a sound plays alongside, a repeat replacing it", async () => {
     engine.playSound({ name: "step", url: "/step.mp3" });
     await settle();
     engine.playSound({ name: "step", url: "/step.mp3" });
@@ -140,29 +147,26 @@ describe("the sound engine", () => {
       ["/step.mp3", true],
       ["/step.mp3", false],
     ]);
-    started.length = 0;
-    engine.setMuted("sounds", true);
-    engine.playSound({ name: "step", url: "/step.mp3" });
-    await settle();
-    expect(started).toEqual([]);
-    engine.setMuted("sounds", false);
   });
 
-  it("a lasting sound loops until its cue stops it, off while sounds are off", async () => {
+  it("muting a channel turns its volume to nothing: what plays still plays, unheard", async () => {
+    const playing = engine.playClip("/d.m4a", "voice");
+    await settle();
+    expect(volume("voice")).toBe(1);
+    engine.setMuted("voice", true);
+    expect(volume("voice")).toBe(0);
+    expect(started.map((s) => [s.url, s.isStopped])).toEqual([["/d.m4a", false]]);
+    ends("/d.m4a");
+    expect(await playing.done).toBe("heard");
+    engine.setMuted("voice", false);
+    expect(volume("voice")).toBe(1);
+  });
+
+  it("a lasting sound loops until its cue stops it", async () => {
     const stop = engine.playSound({ name: "rain", url: "/rain.mp3" }, true);
     await settle();
     expect(started.map((s) => [s.url, s.loop, s.isStopped])).toEqual([["/rain.mp3", true, false]]);
-    engine.setMuted("sounds", true);
-    expect(started[0]?.isStopped).toBe(true);
-    engine.setMuted("sounds", false);
-    await settle();
-    expect(started).toHaveLength(2);
     stop();
-    expect(started[1]?.isStopped).toBe(true);
-    // Stopped, it stays stopped: turning sounds on again doesn't bring it back.
-    engine.setMuted("sounds", true);
-    engine.setMuted("sounds", false);
-    await settle();
-    expect(started).toHaveLength(2);
+    expect(started[0]?.isStopped).toBe(true);
   });
 });

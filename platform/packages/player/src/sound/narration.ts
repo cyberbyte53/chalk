@@ -1,14 +1,7 @@
 import type { Locale } from "@chalk/content";
 import { estimatedSeconds } from "@chalk/prop/next";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import {
-  type Played,
-  isAudible,
-  isMuted,
-  playClip as playOnEngine,
-  prepare,
-  whenAudible,
-} from "./engine";
+import { type Played, isAudible, playClip as playOnEngine, prepare, whenAudible } from "./engine";
 import { canSpeak, hush as phoneHush, speak as phoneSpeak } from "./speech";
 
 /** A clip to play: where it is, and how long it plays. */
@@ -79,8 +72,6 @@ export function useNarrator(
 
   /** Ends the sound playing now (a hush, a newer line). */
   const stopNow = useRef<(() => void) | undefined>(undefined);
-  /** Silences the sound playing now, its line keeping its time (muted mid-line: the board's pace). */
-  const silenceNow = useRef<(() => void) | undefined>(undefined);
 
   /**
    * Plays one sound until it ends, fails, is stopped, or runs past its own length and a margin:
@@ -93,33 +84,17 @@ export function useNarrator(
         let isOver = false;
         // How to stop the sound: known once it has started (it may be over before then).
         const sound: { halt?: () => void } = {};
-        const started = Date.now();
-        // Silenced, the sound's own end no longer ends the line: its time does.
-        let isSilenced = false;
         const done = (isHeard: boolean) => {
           if (isOver) return;
           isOver = true;
           clearTimeout(timer);
           stopNow.current = undefined;
-          silenceNow.current = undefined;
           sound.halt?.();
           resolve(isHeard);
         };
-        let timer = setTimeout(() => done(true), (seconds + MARGIN) * 1000);
+        const timer = setTimeout(() => done(true), (seconds + MARGIN) * 1000);
         stopNow.current = () => done(true);
-        silenceNow.current = () => {
-          silenceNow.current = undefined;
-          isSilenced = true;
-          const halt = sound.halt;
-          sound.halt = undefined;
-          halt?.();
-          clearTimeout(timer);
-          const left = seconds * 1000 - (Date.now() - started);
-          timer = setTimeout(() => done(true), Math.max(0, left));
-        };
-        sound.halt = start((isHeard) => {
-          if (!isSilenced) done(isHeard);
-        });
+        sound.halt = start(done);
         if (isOver) sound.halt();
       }),
     [],
@@ -194,8 +169,6 @@ export function useNarrator(
       const phrases = line.phrases[locale];
       if (phrases === undefined || phrases.length === 0) return;
       const isMine = () => saying.current === mine;
-      // Muted: nothing heard, and the line still takes its time (the board's pacing is the same).
-      if (isMuted.voice.peek()) return void (await playQuiet(phrases.join(" ")));
       // A sound the browser refuses before the page's first touch can be heard, just not yet:
       // the line waits for the touch (and the board with it), then plays.
       const whenAllowed = async (play: () => Promise<Played>): Promise<Played> => {
@@ -215,8 +188,6 @@ export function useNarrator(
       await Promise.all((clips ?? []).map((clip) => prepare(clip.url)));
       for (const clip of clips ?? []) {
         if (!isMine()) return;
-        // Muted partway: the rest of the line still takes its time.
-        if (isMuted.voice.peek()) return void (await playQuiet(phrases.slice(from).join(" ")));
         const played = await whenAllowed(() => playClip(clip));
         if (played !== "heard") {
           isBroken = played === "broken";
@@ -233,7 +204,6 @@ export function useNarrator(
       // 2. The phone's own voice. 3. Quiet, for as long as the words would take: whatever couldn't
       // be heard still takes its time.
       if (!isMine()) return;
-      if (isMuted.voice.peek()) return void (await playQuiet(rest));
       if (canSpeak() && (await whenAllowed(() => playPhone(rest))) === "heard") return;
       if (isMine()) await playQuiet(rest);
     },
@@ -248,15 +218,6 @@ export function useNarrator(
       next.delete(name);
       return next;
     });
-
-  // Muting silences the line being said; it still takes its time, so the board keeps its pace.
-  useEffect(
-    () =>
-      isMuted.voice.subscribe((muted) => {
-        if (muted) silenceNow.current?.();
-      }),
-    [],
-  );
 
   const seconds = useCallback(
     (line: WordsToSay) => clipsFor(line)?.reduce((sum, clip) => sum + clip.seconds, 0),
