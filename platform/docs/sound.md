@@ -1,117 +1,107 @@
 # Sound
 
-Status: **agreed in conversation (2026-10-30); being built.** Replaces "voice" as a special case of text.
+Status: **agreed in conversation (2026-10-31).** Replaces the clip-centred plan of 2026-10-30. Steps 1 and 2 of that plan are built (lines on the board, moments as events, the script beside the board); what changes is said under "From today's code".
 
 ## Why
 
-A board is understood through two senses. Props are drawn for the eyes; sound is the second channel: the walker's footstep, a street rising, the narrator explaining, Aman answering. Until now only text was heard (a text piece read its words), so sound was a special case of one prop. It is general: anything on a board can be heard, at any moment, and what is said needn't be what is shown.
+A board is understood through two senses. Props are drawn for the eyes; sound is the second channel: the narrator explaining, Aman answering, the walker's footstep, Jugnu helping. Anything on a board can be heard, and what is said needn't be what is shown.
 
-## What others do (and what we take)
+## Three parts that know nothing of each other's insides
 
-- **Game sound middleware (Wwise, FMOD):** the game fires events; a separate sound layer maps events to sounds. Game code never names a sound. → Props tell events (they already do); sound is its own layer.
-- **PhET:** sound effects for events, sonification (a quantity as pitch), and speech (what a thing is, its state now, what just changed, how to use it), often worked out from state. → Room for effects, state-made lines and, later, sonification.
-- **Game engines (Godot, Unity):** sound goes through buses (voice, effects, music), each mixed and muted on its own; one player plays one sound at a time. → Two buses; on the voice bus the newest line wins.
-- **E-learning timelines (Articulate):** narration on a timeline drifts from the animation once published. → No timeline: sound is cued by the board's events, timed on the board's clock with each clip's known length.
-
-## The model
-
-**A sound is something heard at a moment, attached to a thing.**
-
-- **What:** words (a line: per language, said by a character of the cast) or an effect (a named sound from the library).
-- **When:** a moment on the board: a piece appears, a signal is told (`walker.stepped`), the board opens.
-- **Attached to:** what makes it: a prop (its own sounds), a piece placed on a board (a line said when it appears), or the board (narration).
-
-### Layers
-
-| Layer | Owns | Like |
+| Part | Knows | Never knows |
 |---|---|---|
-| Prop model | its world and the events it tells | unchanged: it never names a sound |
-| Prop sound view (`<prop>-sound.ts`) | its default sounds for its events (the walker's footstep; a text's line is its words) | its drawing (`<prop>-view.tsx`) |
-| Lesson (the scene) | what is heard on this board: a piece's line (`says`), narration (`lines`, said by rules), effects added or replaced | what it places, and the words it shows |
-| Sound engine (player) | plays sounds on buses, on the board's clock | the frame loop |
-| Content | the words (reviewed, both languages); effects from a small library | text and pictures |
+| **The board** (props, the scene) | what happens (events), which line is said when | how a line becomes sound, or how long it is |
+| **The voice** (player) | how to make a line heard, from any source | why the line is said, what the board does next |
+| **The lesson** | what is heard at which moment, by whom, in what words | either part's insides |
 
-### Buses
+Sight and sound are separate systems that react to the same events. One tap is one step: the bus moves and its line is heard in that same step, so they can't drift apart. Sound comes later than the picture only when a line waits its turn, and what the student did never waits (rule 2).
 
-- **Voice:** one line at a time; a new line cuts the one being said (the newest wins). A board may wait for a line (`said`): a "later" of its clip's length.
-- **Effects:** overlap freely; never waited for.
-- Each mutes on its own, kept on the device. Muted, the board keeps its timing.
+## The board and the voice: the only things that cross
 
-### Where the audio comes from
+| Board → voice | Voice → board |
+|---|---|
+| **say** (line, words, speaker) | **started** |
+| **stop** | **ended** |
+| | **cut** |
 
-| Line | Audio | Its length |
-|---|---|---|
-| Fixed words (almost all today; a question family's row is fixed too) | a clip made at build (`pnpm voice`, the cast's voice), named by its words | measured from the clip |
-| A template with a known set of values ("Aman lives at Street {x}, House {y}", one of 30 houses) | every version made at build | measured |
-| A template with open values (a measured length, a typed number) | made by the server on first use and kept; the phone's own voice meanwhile and offline | measured, or estimated from its words |
-| Effect | a file from the sound library | measured from the file |
+The board never asks how long a line is: it waits for **ended** (or **cut**), like any other event. The voice decides what that means for its source:
 
-The source is behind one interface: clips for reachable states, or a better live voice, replace it later without touching lessons or props.
+- a clip made at build, or one the server made earlier;
+- the server making it now (streamed, so sound starts soon);
+- an AI voice agent;
+- the phone's own voice;
+- muted: nothing heard, **ended** after the time the words would take, so the board's pacing is the same;
+- a test voice (the build, `play`): **ended** after an estimate, on the jumping clock.
 
-### What is said
+**The voice promises:** every **say** ends in **ended** or **cut**, never stuck: a slow source falls back (to the phone's voice) rather than keep the board waiting. Swapping or mixing sources changes nothing on the board, in lessons or in the rules.
 
-Exactly words a person wrote, never rewritten: a line's own words, or a text's screen words when they are words already (formatting left out by the rich-text parser). Maths and signs are never turned into words: a maths reader drafts them, and the draft is written into the line.
+## What is heard: lines and effects
 
-### Who says it
+**A line** has a name (its address: `board#finally`, or `board#fiveHouses/said` for a piece's), a speaker (a character of the cast; the narrator when none is named), its words, what it is about (it glows while heard), and its moment: an event (`when`), with the values it must carry (`where`). The board's own events are moments too: `board.started`, `board.said · line title`, `board.shown · name hint`, `board.passed`.
 
-A character, never a voice (`speaker: "aman"`; the narrator when no one is named). Each book has its cast (`authoring/books/<book>/cast.json`: its characters' voices per language); the narrator is shared. A line naming someone the book's cast lacks fails the build.
+- **Words are a template**, written by a person in every language: "You're at street {x}, house {y}". A fixed line is a template with no blanks. Values are filled in when the line comes due: it says what was true at its moment.
+- **Sayers** turn a value into words, from the value's data, never from its shown text: number, point, decimal (and recurring), fraction, power, equation, surd, measure (with its unit), count (with its plural: "1 piece", "3 pieces"). Each is written once per language and lives in the library, beside the props. A factorisation is said from its primes and powers ("2 cubed times 3 squared"), not by reading "2³ × 3²".
+- **Nothing turns shown symbols into words.** A line whose screen words have maths or signs, and no spoken words, stops the build, naming the line (a maths reader may suggest a draft for a person to write in).
 
-### Lines are part of the board
+**An effect** is a named sound at a moment (a footstep on `walker.stepped`). Effects are not lines: they play at once, overlap each other, are never waited for, and are muted on their own. A repeat of the same effect replaces itself.
 
-A line is a node of the board, like a piece: it has an address, and everything that works on a piece works on it (comments and threads, `look`, `changes`, review). The build lists each board's lines in its index beside its pieces, so a comment, `look` and the gone-check resolve a line's address as they do a piece's.
+## Which line is heard: two rules
 
-- **A piece's line:** `board#fiveHouses/said`. Its words are the piece's own, or the lesson's (`says`).
-- **A declared line:** `board#finally`. Its moment is written with it **as data**, so every view shows exactly what runs:
-  ```ts
-  lines: {
-    finally: line(t("Finally, I'm here!", "आख़िरकार, पहुँच गई!"), {
-      speaker: "riya",
-      when: "town.walker.arrived",   // the signal
-      where: { x: 4, y: 5 },         // the values it must carry
-      about: "town",
-    }),
-  },
-  ```
-  The build checks the signal exists and `where` is what it carries. A condition values can't say (it depends on the board as it is) may be code (`if`), shown only as "a condition in code". A rule may still say a line (`t.self.say`), but a declared moment is the normal way: a line said from inside a rule can't be shown before it is heard.
+1. **The board talks in turn.** One line at a time, in the order they come due: the opening read top to bottom, a line after another, a reply the lesson shows, lines set off by Jugnu's actions.
+2. **When the student acts, the board stops and responds.** The line being said is cut, the lines waiting are dropped, and what the action brings is said, in order. "The action" includes what it set going: each step of a walk a tap started, the dice landing after a throw, each toss after Play.
 
-### Moments are events
+And one fact: **a line is said when it is done, heard or cut.** The board tells `said` either way, so whatever waits on a line always happens (Aman always replies).
 
-Every moment is a real event, written the way events are everywhere (`play` prints them so), and a line can be declared on any of them:
+What follows from these, with nothing more to write:
 
-- the board's own (not `board.continued`: nothing on a board is heard after it): `board.started`, `board.said · line title` (a line ended; the opening is said this way, one after another), `board.shown · name fiveHouses`, `board.passed`;
-- a piece's, or a part's inside one: `ask.checked · status correct`, `town.walker.arrived · x 4, y 5`.
+- **Old news is never said.** What the student causes never waits, so it never goes stale: tap the bus on to −5 and its line at −2 is cut, never heard late.
+- **Feedback** ("Yes!", then the next piece's read) is one action: said in order, cut only by the student's next action.
+- **Precedence** is who caused it, not a level an author sets. What the board says unprompted waits; what the student caused cuts in.
+- **Repeats** (steps, dice, tosses, a drag crossing an axis): each cuts the last; the latest is heard.
 
-One form, worked out in one place (`scriptOf`); no words written beside it that could drift from what runs.
+A lesson that puts a line on every step of a walk will be cut again and again: the writing guide says to put an effect on each step and the line on arrival.
 
-**How lines are said.** The board keeps three things: the line **in turn** (being said, or in the breath before it), the lines **due** (declared on a moment that came, in order), and the opening's **reads** still waiting. When the line in turn ends, the board tells `said`, the lesson's rules on it run, the lines due at it join the due, and the board goes on: a line due first, else the next read. A piece shown (or a line a rule says now) cuts the line in turn and drops the reads, since the student has moved on; lines due are never dropped but by hush. Lines due at a moment are added after everything the board and the lesson do at it, so nothing in the same step loses them.
+## Props announce what is worth hearing
 
-**The script's moments are what runs:** the build opens each board with a voice that only listens and records which of the board's events came last before each line began. A read the opening never reaches is shown as such.
+Anything heard is an event: a prop tells the moments a student should hear, and the sound part listens. Most props need a signal or two more: the bus passing each stop, each quadrant named during the sweep, a runner crossing the start line, a point's drag released. A drag says nothing while the finger moves: its value on release, and at most an effect or short line when it crosses a boundary (an axis, a quadrant, a tenth).
 
-### Its place: in time, and on the board
+## Jugnu is a speaker like any other
 
-| Line | Place in time (the sound track) | Place on the board (a 🔊 mark, review only) |
-|---|---|---|
-| a piece's words | when the piece appears (or as the board opens) | on that piece |
-| narration about something | its moment | on what it is `about` |
-| a character's line | its moment | on that character, else what it is about |
-| free narration | its moment | none: only on the track |
+`jugnu` is in the cast; his lines arrive while the student talks with him, sentence by sentence, each a line in turn. He speaks because the student asked (rule 2): he cuts in; lines his own actions on the board set off wait behind him; the student acting while he talks cuts him (barge-in, as voice assistants do). The model writes both what he shows and what he says, as a lesson writes `says`, so nothing turns his symbols into words either. His lines can't be reviewed one by one ahead: his rules for how he talks are, and `play` shows what he said.
 
-- **The sound track** is drawn beside the board while reviewing (the preview shows it by default; `v` hides it), grouped by moment: as the board opens…, when street 4 rises…, when Riya arrives…. It lists every line that can be said, including those only an interaction sets off. Each has its words, its speaker, its clip to play, and is picked for a comment like any part.
-- **While a line plays,** its piece (or what it is about) glows on the board, as a teacher points at what they are talking about.
-- `look` lists the track; `play` lists what each step was heard to say.
+## Who says it
 
-### Languages
+A character, never a voice. Each book has its cast (characters' voices per language); the narrator and Jugnu are shared. A line naming someone the cast lacks fails the build. Clips are made by the same engine as live speech, so a clip is saved live output: a character sounds the same from every source.
 
-A board has its language; nothing assumes one. The build plays every scene's witness and notes in every language (each line takes its own time in each) and judges each run on its own: a failure in some languages only says which; a note must be the same in every language. Agents read and write in `AGENT_LOCALE`, the one language chosen on purpose. A choice's options are shuffled by the question's name, its words in every language and its options' ids, so the order is the same in every language.
+## Review and the build
 
-### Which lines are heard: known by playing
+- **The script**, beside every board while reviewing: every line the board can say, grouped by moment, with its speaker, its words in each language (templates with examples), ▶ to hear it; picked for a comment like any part; pointing at one lights what it is about. `look` at a line's address answers with it; `play` says what each step was heard to say.
+- **The build** makes clips for every fixed line and every template whose values come from a known set (10 streets × 5 houses); plays every board in every language; checks every template fills in every language with sayers that exist and no symbols left unsaid; and notes lines no run reaches.
+- **Caching:** every source keys audio by voice and words: a line made once, at build or on the go, is kept for everyone.
 
-Which lines a board *can* say is known in advance: each is data on the board. Whether and when each *is* said depends on what the student does. The build already plays every board (its witness, each wrong-answer note); it records which lines were heard on the runs that passed, in each language, and reports lines heard on no run (or in some language only): a moment that is never true, or a path no run takes (the author says which).
+## From today's code
+
+| Today | Becomes |
+|---|---|
+| The voice answers **say** with a length; the board schedules the end itself | The board waits for **ended** / **cut** |
+| The scene keeps three lists (in turn, due, waiting) | One queue and the two rules |
+| A piece shown always cuts | A piece the student revealed cuts (rule 2); one the lesson revealed waits its turn (rule 1) |
+| `said` only when a line ends | `said` when heard or cut |
+| Fixed words only | Templates and sayers |
+| Clips as the source | Clips as one source behind the voice, a cache |
+| The engine knows a step began with a tap | It carries that through what the tap scheduled for later |
 
 ## Order of work
 
-1. **Lines on the scene; sound out of the props' models.** `says` on a placement, `lines` said by rules; a text's line is its words. The engine's voice bus. *(Done.)*
-2. **Lines are nodes:** declared moments as data (`when`, `where`, `about`); addresses; the sound track grouped by moment, picked for comments; the 🔊 marks; the glow while a line plays; heard-on-no-run in the build. *(Done but the 🔊 marks.)*
-3. **Each book's cast.**
-4. **Effects:** the library, the effects bus, sound views (the walker's footstep first).
-5. **Templates:** every version made at build for known values; the server's made-on-first-use clips and the phone's voice for open ones.
+1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going.
+2. **Templates and sayers,** with one real line in the chapter ("You're at street {x}, house {y}"); clips made at build for known sets.
+3. **Voice sources behind one door:** clip, server, phone, in order; the never-stuck promise; caching by voice and words.
+4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops).
+5. **Each book's cast.**
+6. **Jugnu as a speaker.**
+
+## Parked
+
+- **Preparing ahead:** the voice reads what is waiting and makes it while the current line plays. Needs nothing from the board beyond what it already shows.
+- **A word lit as it is said** ("House 5" glows as she says it): the voice reporting word timings, one more report back; nothing else changes.
+- **A value as sound** (pitch rising with a point), music.
