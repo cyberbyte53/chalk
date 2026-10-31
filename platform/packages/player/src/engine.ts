@@ -169,24 +169,46 @@ const playingEffects = new Map<string, Playing>();
 const LATE_MS = 250;
 
 /**
- * Plays a sound alongside anything else, and returns how to stop it. Nothing when sounds are off, or
- * the page can't sound yet: a moment's sound that couldn't sound then is old news later. A sound
- * that lasts loops until stopped, and is never late.
+ * Plays a sound alongside anything else, and returns how to stop it. A moment's sound plays then or
+ * not at all (sounds off, or the page can't sound yet: later it is old news). A sound that lasts
+ * plays whenever it can until stopped: from the first touch, and again when sounds are turned on.
  */
 export function playEffect(effect: Effect, lasts = false): () => void {
+  if (lasts) return playLasting(effect);
   if (isMuted.sounds.peek() || !isAudible()) return () => undefined;
   const asked = Date.now();
   let isStopped = false;
   let playing: Playing | undefined;
   void load(effect.url).then((buffer) => {
     if (isStopped || buffer === null || isMuted.sounds.peek()) return;
-    if (!lasts && Date.now() - asked > LATE_MS) return;
-    if (!lasts) playingEffects.get(effect.name)?.stop();
-    playing = playClip(effect.url, "sounds", lasts);
-    if (!lasts) playingEffects.set(effect.name, playing);
+    if (Date.now() - asked > LATE_MS) return;
+    playingEffects.get(effect.name)?.stop();
+    playing = playClip(effect.url, "sounds");
+    playingEffects.set(effect.name, playing);
   });
   return () => {
     isStopped = true;
+    playing?.stop();
+  };
+}
+
+/** A lasting sound: looping while sounds are on and the page may sound, until stopped. */
+function playLasting(effect: Effect): () => void {
+  let isStopped = false;
+  let playing: Playing | undefined;
+  const canStart = () => !isStopped && playing === undefined && !isMuted.sounds.peek();
+  const unsubscribe = isMuted.sounds.subscribe((muted) => {
+    if (muted) {
+      playing?.stop();
+      playing = undefined;
+    } else
+      void whenAudible().then(() => {
+        if (canStart()) playing = playClip(effect.url, "sounds", true);
+      });
+  });
+  return () => {
+    isStopped = true;
+    unsubscribe();
     playing?.stop();
   };
 }

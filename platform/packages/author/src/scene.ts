@@ -118,15 +118,19 @@ export type Placed<D extends AnyProp = AnyProp> = Says & {
  *
  * A piece's own words are its cue too, written on the piece (`says`), beside what it shows.
  */
-export type Cue = {
-  /** Words to say, or a sound to play (null: silence the props' own sound at `when`). */
-  readonly says?: Localized;
-  readonly sound?: Effect | null;
-  readonly speaker?: string;
-  /** The moment: a piece's signal, by path ("town.walker.arrived"). */
+export type Cue = WordsCue | SoundCue;
+
+/** Its moment: a piece's signal, by path ("town.walker.arrived"), and the values it must carry. */
+type Moment = {
   readonly when?: string;
   /** Which of those moments: the values the signal must carry (`{ x: 4, y: 5 }`). */
   readonly where?: Readonly<Record<string, unknown>>;
+};
+
+/** Words, said by a speaker in their turn. */
+export type WordsCue = Moment & {
+  readonly says: Localized;
+  readonly speaker?: string;
   /**
    * Which of those moments, when values can't say it (it depends on the board as it is): code,
    * which the script can only show as a condition in code. Prefer `where`.
@@ -136,25 +140,38 @@ export type Cue = {
     me: Readonly<Record<string, unknown>>,
   ) => boolean;
   readonly about?: string;
+};
+
+/** A sound (null: silence the props' own at `when`), played alongside; with `until`, it lasts. */
+export type SoundCue = Moment & {
+  readonly sound: Effect | null;
   /** A sound that lasts: the moment it stops. */
   readonly until?: string;
 };
 
 /** A line the board says with nothing on screen of its own (a cue of words). */
-export type FreeLine = Cue & { readonly says: Localized };
+export type FreeLine = WordsCue;
+
+const isSound = (what: unknown): what is Effect =>
+  typeof (what as Effect | undefined)?.url === "string";
 
 /**
  * A cue: `cues: { finally: cue(t("Finally, I'm here!", "…"), { speaker: "riya", when: "…" }) }`,
  * `cue(step, { when: "line.walker.stepped" })`, `cue(rain, { when: "board.started", until: "board.passed" })`.
  */
+export function cue(words: Localized, options?: Omit<WordsCue, "says">): WordsCue;
+export function cue(sound: Effect | null, options?: Omit<SoundCue, "sound">): SoundCue;
 export function cue(
   what: Localized | Effect | null,
-  options: Omit<Cue, "says" | "sound"> = {},
+  options: Omit<WordsCue, "says"> | Omit<SoundCue, "sound"> = {},
 ): Cue {
-  return what !== null && "en" in what ? { says: what, ...options } : { sound: what, ...options };
+  return what === null || isSound(what)
+    ? { sound: what, ...options }
+    : ({ says: what, ...options } as WordsCue);
 }
 
-const isWords = (c: Cue): c is FreeLine => c.says !== undefined;
+/** What a cue was given that its kind doesn't have (a sound with a speaker, words that last). */
+const NOT_FOR_SOUNDS = ["says", "speaker", "about", "if"] as const;
 
 /** Places a prop: `place(coordinatePlane, { plane: { upLines: [] } })`. */
 export function place<D extends AnyProp>(
@@ -364,12 +381,25 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     }
   const freeLines: Record<string, FreeLine> = {};
   const sounds: Record<string, SceneSound> = {};
-  for (const [named, given] of Object.entries(allCues)) {
-    if (isWords(given)) {
-      freeLines[named] = given;
+  for (const [named, written] of Object.entries(allCues)) {
+    const isWords = (written as WordsCue).says !== undefined;
+    if (isWords === "sound" in written)
+      throw new Error(
+        `Board ${name}, cue ${named}: give it words (cue(t(…))) or a sound (cue(step), or null), one of them`,
+      );
+    if (isWords) {
+      if ((written as { until?: string }).until !== undefined)
+        throw new Error(`Board ${name}, cue ${named}: words don't last: until is for a sound`);
+      freeLines[named] = written as WordsCue;
       continue;
     }
-    const sound = given.sound ?? null;
+    const given = written as SoundCue;
+    for (const key of NOT_FOR_SOUNDS)
+      if ((given as Record<string, unknown>)[key] !== undefined)
+        throw new Error(`Board ${name}, cue ${named}: a sound has no ${key}`);
+    const sound = given.sound;
+    if (given.until === given.when && given.when !== undefined)
+      throw new Error(`Board ${name}, cue ${named}: it can't last until the moment it starts`);
     if (given.when === undefined)
       throw new Error(`Board ${name}, cue ${named}: a sound plays at a moment: it needs a when`);
     for (const at of [given.when, ...(given.until === undefined ? [] : [given.until])])

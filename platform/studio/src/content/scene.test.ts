@@ -429,6 +429,24 @@ describe("a scene, built and checked like any board", () => {
         cues: { x: cue(tapSound, { when: "ask.checked", where: { nothing: 1 } }) },
       }).build("bad"),
     ).toThrow(/isn't what ask.checked carries/);
+    // A cue is words or a sound, one of them, with only what its kind has.
+    const bad = (x: unknown) => () =>
+      scene({ pieces: { ask }, cues: { x: x as never } }).build("bad");
+    expect(bad({ when: "ask.checked" })).toThrow(/give it words .* or a sound/);
+    expect(bad(cue(undefined as never))).toThrow(/give it words .* or a sound/);
+    expect(bad({ says: t("x", "x"), sound: tapSound })).toThrow(/one of them/);
+    expect(bad({ says: t("x", "x"), when: "ask.checked", until: "board.passed" })).toThrow(
+      /words don't last/,
+    );
+    expect(bad({ sound: tapSound, when: "ask.checked", speaker: "riya" })).toThrow(
+      /a sound has no speaker/,
+    );
+    expect(bad({ sound: tapSound, when: "ask.checked", if: () => true })).toThrow(
+      /a sound has no if/,
+    );
+    expect(bad(cue(tapSound, { when: "ask.checked", until: "ask.checked" }))).toThrow(
+      /can't last until the moment it starts/,
+    );
   });
 
   it("the student can hear the screen again: what is showing now, from the top", () => {
