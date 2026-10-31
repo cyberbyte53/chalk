@@ -103,16 +103,12 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plane.named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by plane.its own rules |
 | `plane.points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by plane.its own rules |
 | `plane.canShowPoints` | true or false | changed by plane.its own rules |
-| `plane.isAlone` | true or false | input |
-| `plane.canTapNumbers` | true or false | input |
-| `plane.lit` | {orNull: {axis: ["x", "y"], value: "number"}} | input |
 | `reading.point` | {orNull: {x: "number", y: "number"}} | changed by reading.its own rules |
 | `reading.pointStep` | number 0 to … | changed by reading.its own rules |
 | `reading.reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | changed by reading.its own rules |
 | `reading.isReadingHidden` | true or false | changed by reading.its own rules |
 | `reading.visited` | [["I", "II", "III", "IV"]] | changed by reading.its own rules |
 | `reading.unit` | text | changed by reading.its own rules |
-| `reading.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
 | `places.placeKind` | ["house", "desk", "crossing", "stall"] | changed by places.its own rules |
 | `places.places` | [{x: "number", y: "number", label: {optional: {en: "text", hi: "text"}}}] | changed by places.its own rules |
 | `places.target` | {orNull: {x: "number", y: "number"}} | changed by places.its own rules |
@@ -121,10 +117,6 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `places.lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by places.its own rules |
 | `places.isLitByTap` | true or false | changed by places.its own rules |
 | `places.showAddress` | true or false | changed by places.its own rules |
-| `places.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
-| `places.axisNames` | ZodTuple | input |
-| `places.rising` | {orNull: {at: "whole number", height: "number"}} | input |
-| `places.upLines` | {orNull: ["whole number"]} | input |
 | `walker.walkerName` | {en: "text", hi: "text"} | changed by walker.its own rules |
 | `walker.walkerKind` | ["person", "bus"] | changed by walker.its own rules |
 | `walker.showWhere` | true or false | changed by walker.its own rules |
@@ -134,31 +126,17 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `walker.trail` | [{x: "number", y: "number"}] | changed by walker.its own rules |
 | `walker.isWalking` | true or false | changed by walker.its own rules |
 | `walker.canStep` | true or false | changed by walker.its own rules |
-| `walker.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
-| `walker.upLines` | {orNull: ["whole number"]} | input |
-| `walker.axes` | ["both", "horizontal"] | input |
-| `walker.marks` | ["none", "counts", "numbers"] | input |
-| `walker.axisNames` | ZodTuple | input |
-| `walker.scene` | ["none", "paper", "town", "classroom", "fairGround"] | input |
-| `walker.target` | {orNull: {x: "number", y: "number"}} | input |
-| `walker.targetName` | {en: "text", hi: "text"} | input |
-| `walker.canChooseTarget` | true or false | input |
 | `clues.hidden` | {orNull: {x: "number", y: "number"}} | changed by clues.its own rules |
 | `clues.clueChoices` | [{words: {en: "text", hi: "text"}, region: {optional: {xMin: "number", xMax: "number", yMin: "number", yMax: "number"}}, x: {optional: "number"}, y: {optional: "number"}}] | changed by clues.its own rules |
 | `clues.given` | ["whole number 0 to 5"] | changed by clues.its own rules |
 | `clues.isHiddenShown` | true or false | changed by clues.its own rules |
 | `clues.canHide` | true or false | changed by clues.its own rules |
 | `clues.canGiveClues` | true or false | changed by clues.its own rules |
-| `clues.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
-| `clues.unit` | text | input |
-| `clues.isPlaneFree` | true or false | input |
 | `plotting.toPlot` | [{x: "number", y: "number", name: {optional: "text"}}] | changed by plotting.its own rules |
 | `plotting.plotted` | [{x: "number", y: "number", isRight: "true or false"}] | changed by plotting.its own rules |
 | `plotting.showSwaps` | true or false | changed by plotting.its own rules |
 | `plotting.showTable` | true or false | changed by plotting.its own rules |
 | `plotting.scaleChoices` | ["number 0 to …"] | changed by plotting.its own rules |
-| `plotting.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
-| `plotting.tickEvery` | number 0 to … | input |
 | `dice.counters` | [{x: "number", y: "number"}] | changed by dice.its own rules |
 | `dice.playerNames` | [{en: "text", hi: "text"}] | changed by dice.its own rules |
 | `dice.turn` | whole number 0 to 1 | changed by dice.its own rules |

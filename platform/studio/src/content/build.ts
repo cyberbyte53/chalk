@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, relative, sep } from "node:path";
+import { join, relative, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   ALL,
@@ -26,7 +26,6 @@ import {
 } from "@chalk/author";
 import { hashOf, idOf, rowKey, versionOf } from "@chalk/author/id";
 import {
-  AGENT_LOCALE,
   type BankRef,
   type Board,
   type BuildIndex,
@@ -43,7 +42,6 @@ import {
   LOCALES,
   type Locale,
   type Ref,
-  type Script,
   type Source,
   builtBookSchema,
   builtChapterSchema,
@@ -55,24 +53,16 @@ import {
   piecePath,
   propPieces,
   soundListSchema,
-  splitTarget,
   walkPieces,
 } from "@chalk/content";
 import { propPackages } from "@chalk/library";
 import { type PropModule, scriptOf } from "@chalk/player";
-import {
-  type AnyPropDef,
-  BOARD,
-  PropRole,
-  asAnyProp,
-  boardProp,
-  groupOf,
-  segment,
-} from "@chalk/prop";
+import { PropRole, segment } from "@chalk/prop";
+import type { AnyProp } from "@chalk/prop/next";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
+import type { Problem } from "../problem";
 import { SOUND_LIST, castSchema, voiceChapter, providers as voiceProviders } from "../sound/voice";
-import { type Problem, validateBoard } from "../validate";
 import { renderArt } from "./art";
 import { recordOf } from "./board-record";
 import {
@@ -89,7 +79,7 @@ import { checkNote, checkWitness } from "./witness";
 /** Where each board's record is written in build/ (board-record.ts). */
 export const REVIEW_DIR = "review";
 
-type Defs = Readonly<Record<string, AnyPropDef>>;
+type Defs = Readonly<Record<string, AnyProp>>;
 type Modules = Readonly<Record<string, PropModule>>;
 
 /** What a build makes: every output file by its path in build/, and what went wrong or was left out. */
@@ -221,43 +211,29 @@ function sitesOf(board: Board, boardSite: string | undefined): ItemSources {
   return top === undefined ? { pieces, props } : { board: top, pieces, props };
 }
 
-/** Each piece's inputs a board's rules feed, and its actions the board's scripts call. */
-function usesOf(board: Board): {
-  binds: Map<string, Set<string>>;
-  calls: Map<string, Set<string>>;
-} {
-  const binds = new Map<string, Set<string>>();
-  const calls = new Map<string, Set<string>>();
-  const note = (into: Map<string, Set<string>>, target: string) => {
-    const { prop, member } = splitTarget(target);
-    if (!into.has(prop)) into.set(prop, new Set());
-    into.get(prop)?.add(member);
-  };
-  const walk = (script: Script): void => {
-    if (Array.isArray(script)) script.forEach(walk);
-    else if ("call" in script) note(calls, script.call);
-    else if ("seq" in script) script.seq.forEach(walk);
-    else if ("par" in script) script.par.forEach(walk);
-  };
-  for (const rule of board.is) note(binds, rule.set);
-  for (const rule of board.when) walk(rule.do);
-  return { binds, calls };
-}
-
 /** The fields a placement sets: a group's part by part ("walker.walkFrom"). */
-function givenFields(
-  def: AnyPropDef | undefined,
-  given: Readonly<Record<string, unknown>>,
-): string[] {
-  const parts = def === undefined ? undefined : groupOf(def)?.children;
+function givenFields(def: AnyProp | undefined, given: Readonly<Record<string, unknown>>): string[] {
+  const parts = def?.children;
   return Object.entries(given)
     .flatMap(([name, value]) => {
-      const part = parts?.[name] as AnyPropDef | undefined;
+      const part = parts?.[name];
       return part !== undefined && value !== null && typeof value === "object"
         ? givenFields(part, value as Record<string, unknown>).map((f) => `${name}.${f}`)
         : [name];
     })
     .sort();
+}
+
+/** What the scene's `give` feeds each piece: the needs, by path inside it ("walker.target"). */
+function fedOf(board: Board): Map<string, Set<string>> {
+  const out = new Map<string, Set<string>>();
+  for (const [path, needs] of Object.entries(board.model?.scene.give ?? {})) {
+    const [piece = "", ...inside] = path.split(/[./]/);
+    const into = out.get(piece) ?? new Set<string>();
+    for (const need of Object.keys(needs as object)) into.add([...inside, need].join("."));
+    out.set(piece, into);
+  }
+  return out;
 }
 
 /** What a board was made from (see Reach), read from the board as authored. */
@@ -267,16 +243,18 @@ function reachOf(
   more: { stack?: readonly string[]; rows?: string },
   defs: Defs,
   modules: Readonly<Record<string, PropModule>>,
+  /** What the lesson's own rules were seen to do to each piece, as its runs played. */
+  called: ReadonlyMap<string, ReadonlySet<string>>,
 ): BoardReach {
   const placed = new Map(propPieces(board.root).map((p) => [p.name, p]));
-  const uses = usesOf(board);
+  const fed = fedOf(board);
   const pieces: BoardReach["pieces"] = {};
   for (const piece of walkPieces(board.root)) {
     if (piece.name === "") continue;
     const prop = placed.get(piece.name);
     const given = givenFields(prop === undefined ? undefined : defs[prop.prop], prop?.with ?? {});
-    const binds = [...(uses.binds.get(piece.name) ?? [])].sort();
-    const calls = [...(uses.calls.get(piece.name) ?? [])].sort();
+    const binds = [...(fed.get(piece.name) ?? [])].sort();
+    const calls = [...(called.get(piece.name) ?? [])].sort();
     pieces[piece.name] = {
       ...(prop === undefined ? {} : { type: prop.prop }),
       stack: stackOf(piece),
@@ -532,38 +510,47 @@ async function buildArt(c: Context, folder: string): Promise<BuiltArt | null> {
   return result.art;
 }
 
-/** Checks a built board: its wiring (the validator), its witness and its note checks. */
+/**
+ * Checks a built board: its witness and its note checks, played on the real props (a scene's
+ * wiring is its code, checked when it is defined and as it plays). What the lesson's own rules do
+ * to each piece on the way goes into `called`.
+ */
 async function checkBoard(
   c: Context,
   where: string,
   built: BuiltBoard,
   board: Board,
+  called: Map<string, Set<string>>,
 ): Promise<boolean> {
   const before = c.problems.length;
-  // A scene's wiring is its code, checked when it is defined and as it plays (its witness).
-  if (board.model === undefined)
-    for (const p of validateBoard(board, c.defs)) report(c, where, `${p.where}: ${p.message}`);
-  if (c.problems.length > before) return false;
+  const onCalled = (piece: string, action: string) =>
+    void called.set(piece, (called.get(piece) ?? new Set()).add(action));
   // Which of the board's lines its passing runs are heard to say, in each language: a line no run
   // says (in some language) is worth a look.
   const heard = new Map<Locale, Set<string>>();
   const onHeard = (line: string, locale: Locale) =>
     void heard.set(locale, (heard.get(locale) ?? new Set()).add(line));
-  for (const failure of await checkWitness(board, c.modules, built.witness, onHeard))
+  for (const failure of await checkWitness(board, c.modules, built.witness, onHeard, onCalled))
     report(c, where, failure);
   for (const note of built.noteChecks) {
-    for (const failure of await checkNote(board, c.modules, note.steps, note.feedback, onHeard)) {
+    for (const failure of await checkNote(
+      board,
+      c.modules,
+      note.steps,
+      note.feedback,
+      onHeard,
+      onCalled,
+    )) {
       report(c, where, `note "${note.feedback.en}": ${failure}`);
     }
   }
-  if (board.model !== undefined)
-    for (const { line } of scriptOf(board, (type) => c.modules[type])) {
-      const missing = LOCALES.filter((l) => heard.get(l)?.has(line) !== true);
-      if (missing.length > 0)
-        c.notices.push(
-          `${where}: no passing run says ${line}${missing.length < LOCALES.length ? ` in ${missing.join(", ")}` : ""} (a moment never true, or a path no witness or note takes)`,
-        );
-    }
+  for (const { line } of scriptOf(board, (type) => c.modules[type])) {
+    const missing = LOCALES.filter((l) => heard.get(l)?.has(line) !== true);
+    if (missing.length > 0)
+      c.notices.push(
+        `${where}: no passing run says ${line}${missing.length < LOCALES.length ? ` in ${missing.join(", ")}` : ""} (a moment never true, or a path no witness or note takes)`,
+      );
+  }
   return c.problems.length === before;
 }
 
@@ -639,7 +626,9 @@ async function buildPages(
       props: {},
     };
     const made = makeBoard(c, where, item, module, file);
-    if (made === undefined || !(await checkBoard(c, where, made.built, made.board))) continue;
+    const called = new Map<string, Set<string>>();
+    if (made === undefined || !(await checkBoard(c, where, made.built, made.board, called)))
+      continue;
     keepRecord(c, item, made.board);
     for (const type of propTypesOf(made.board)) used.add(type);
     claimId(c, item.id, where);
@@ -650,6 +639,7 @@ async function buildPages(
       { ...(p.stack === undefined ? {} : { stack: p.stack }) },
       c.defs,
       c.modules,
+      called,
     );
     refs.push(emit(c, item, builtPageSchema));
   }
@@ -736,7 +726,9 @@ async function buildFamily(
       props: {},
     };
     const made = makeBoard(c, where, item, module, familyFile);
-    if (made === undefined || !(await checkBoard(c, where, made.built, made.board))) continue;
+    const called = new Map<string, Set<string>>();
+    if (made === undefined || !(await checkBoard(c, where, made.built, made.board, called)))
+      continue;
     const { built, board } = made;
     if (built.witness.length === 0) {
       report(c, where, "a question needs a witness: how a learner gets it right");
@@ -756,6 +748,7 @@ async function buildFamily(
       },
       c.defs,
       c.modules,
+      called,
     );
     const ref = emit(c, item, builtQuestionSchema);
     banked.push({
@@ -1280,7 +1273,6 @@ export async function buildContent(options: {
     modules,
     defs: {
       ...Object.fromEntries(Object.entries(modules).map(([type, m]) => [type, m.def])),
-      [BOARD]: asAnyProp(boardProp),
     },
     propDirs: PROP_DIRS,
     imported: [],

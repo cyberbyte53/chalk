@@ -41,6 +41,7 @@ function playScene(
   steps: readonly Step[],
   onHeard: ((line: string) => void) | undefined,
   locale: Locale,
+  onCalled?: Called,
 ): Played {
   const errors: string[] = [];
   const runtime = new SceneRuntime(board, (type) => defs[type], {
@@ -55,6 +56,10 @@ function playScene(
           : message,
       ),
   });
+  if (onCalled !== undefined)
+    runtime.onAction((r) => {
+      if (r.isLessons === true && r.refused === undefined) onCalled(r.prop, r.action);
+    });
   const failures: Failure[] = [];
   runtime.start();
   runtime.settle();
@@ -86,10 +91,15 @@ export async function play(
   locale?: Locale,
   /** Each line heard on the way (a scene's). */
   onHeard?: (line: string) => void,
+  /** Each action the lesson's own rules did on the way. */
+  onCalled?: Called,
 ): Promise<Played> {
   if (locale === undefined) throw new Error(`Board ${board.name}: a board plays in a language`);
-  return playScene(board, defs, steps, onHeard, locale);
+  return playScene(board, defs, steps, onHeard, locale, onCalled);
 }
+
+/** An action the lesson's own rules did: on which piece, and its name there ("plane.raiseUpLine"). */
+export type Called = (piece: string, action: string) => void;
 
 /** The languages a board is checked in: each (its lines take different times in each). */
 const runsOf = (_board: Board): readonly (Locale | undefined)[] => LOCALES;
@@ -102,16 +112,28 @@ const runsOf = (_board: Board): readonly (Locale | undefined)[] => LOCALES;
  */
 async function inEveryLanguage(
   board: Board,
-  check: (locale: Locale | undefined, onHeard: (line: string) => void) => Promise<Failure[]>,
+  check: (
+    locale: Locale | undefined,
+    onHeard: (line: string) => void,
+    onCalled: Called,
+  ) => Promise<Failure[]>,
   onHeard?: (line: string, locale: Locale) => void,
+  onCalled?: Called,
 ): Promise<string[]> {
   const byRun: { locale: Locale | undefined; failures: Failure[] }[] = [];
   for (const locale of runsOf(board)) {
     const heard: string[] = [];
-    const failures = await check(locale, (line) => void heard.push(line));
+    const called: [string, string][] = [];
+    const failures = await check(
+      locale,
+      (line) => void heard.push(line),
+      (piece, action) => void called.push([piece, action]),
+    );
     byRun.push({ locale, failures });
-    if (failures.length === 0 && locale !== undefined)
+    if (failures.length === 0 && locale !== undefined) {
       for (const line of heard) onHeard?.(line, locale);
+      for (const [piece, action] of called) onCalled?.(piece, action);
+    }
   }
   const checks = [...new Set(byRun.flatMap((r) => r.failures.map((f) => f.check)))];
   return checks.map((check) => {
@@ -149,11 +171,12 @@ export function checkWitness(
   defs: Defs,
   steps: readonly Step[],
   onHeard?: (line: string, locale: Locale) => void,
+  onCalled?: Called,
 ): Promise<string[]> {
   return inEveryLanguage(
     board,
-    async (locale, heard) => {
-      const played = await play(board, defs, steps, locale, heard);
+    async (locale, heard, called) => {
+      const played = await play(board, defs, steps, locale, heard, called);
       const failures = [...played.failures];
       for (const question of questionsOf(board, defs))
         if (played.view(question).status !== AnswerStatus.Correct)
@@ -166,6 +189,7 @@ export function checkWitness(
       return failures;
     },
     onHeard,
+    onCalled,
   );
 }
 
@@ -176,11 +200,12 @@ export function checkNote(
   steps: readonly Step[],
   feedback: Localized,
   onHeard?: (line: string, locale: Locale) => void,
+  onCalled?: Called,
 ): Promise<string[]> {
   return inEveryLanguage(
     board,
-    async (locale, heard) => {
-      const played = await play(board, defs, steps, locale, heard);
+    async (locale, heard, called) => {
+      const played = await play(board, defs, steps, locale, heard, called);
       const failures = [...played.failures];
       const questions = questionsOf(board, defs);
       if (questions.length === 0)
@@ -202,5 +227,6 @@ export function checkNote(
       return failures;
     },
     onHeard,
+    onCalled,
   );
 }

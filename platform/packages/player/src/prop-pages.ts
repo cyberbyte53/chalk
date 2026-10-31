@@ -73,7 +73,11 @@ type PageDef = {
   hear?: Readonly<Record<string, unknown>>;
 };
 
-/** A prop's fields: its variables (changed only by its own rules), its needs, its parts'. */
+/**
+ * A prop's fields: its variables (changed only by its own rules), its needs, its parts'. A part's
+ * needs are its holder's to give (the prop's own wiring), so only the prop's own are listed: those
+ * a board gives it.
+ */
 function sceneFields(def: PageDef, prefix: string): PropPage["fields"] {
   const own = Object.entries(shapeOf(def.variables ?? ({} as ZodTypeAny)) ?? {}).map(
     ([name, schema]) => ({
@@ -84,15 +88,15 @@ function sceneFields(def: PageDef, prefix: string): PropPage["fields"] {
       changedBy: [`${prefix}its own rules`],
     }),
   );
-  const needs = Object.entries(shapeOf(def.needs ?? ({} as ZodTypeAny)) ?? {}).map(
-    ([name, schema]) => ({
-      name: `${prefix}${name}`,
-      takes: shape(schema),
-      ...(schema.description ? { meaning: schema.description } : {}),
-      isInput: true,
-      changedBy: [],
-    }),
-  );
+  const needs = Object.entries(
+    (prefix === "" ? shapeOf(def.needs ?? ({} as ZodTypeAny)) : {}) ?? {},
+  ).map(([name, schema]) => ({
+    name: `${prefix}${name}`,
+    takes: shape(schema),
+    ...(schema.description ? { meaning: schema.description } : {}),
+    isInput: true,
+    changedBy: [],
+  }));
   const parts = Object.entries(def.children ?? {}).flatMap(([name, child]) =>
     sceneFields(child, `${prefix}${name}.`),
   );

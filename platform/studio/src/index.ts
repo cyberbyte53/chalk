@@ -1,2 +1,2 @@
-export { validateBoard, validateLesson, type Problem } from "./validate";
+export type { Problem } from "./problem";
 export { findUp } from "./find-up";

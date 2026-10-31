@@ -208,6 +208,7 @@ export class SceneRuntime {
           action: name,
           args: event.payload,
           actor: event.isInput ? Actor.Learner : Actor.Lesson,
+          ...(event.by === "" ? { isLessons: true as const } : {}),
           isStep: false,
           t: this.core.now,
         };

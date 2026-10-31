@@ -45,6 +45,8 @@ export type BoardEvent =
       readonly payload: Payload;
       /** The student asked (a tap), not a rule. */
       readonly isInput: boolean;
+      /** Whose rule asked: that prop's path ("" the board's own, a scene). Absent: not a rule. */
+      readonly by?: string;
     }
   | {
       readonly kind: "tell";
@@ -326,14 +328,21 @@ export class Board {
     this.changed(() => this.ask(this.at(path), action, payload));
   }
 
-  private ask(node: Node, action: string, payload: Payload): void {
+  private ask(node: Node, action: string, payload: Payload, by?: string): void {
     const spec = node.def.actions?.[action];
     if (spec === undefined)
       throw new Error(`${where(node.path, node.def)} has no action ${action}`);
     const data = this.payload(node, action, spec.payload, payload);
     const isInput = this.inputting;
     this.inputting = false;
-    this.emit({ kind: "ask", path: node.path, action, payload: data as Payload, isInput });
+    this.emit({
+      kind: "ask",
+      path: node.path,
+      action,
+      payload: data as Payload,
+      isInput,
+      ...(by === undefined ? {} : { by }),
+    });
     const rule = node.def.on?.[action];
     this.step(`${node.path || "board"}.${action}`, () => {
       if (rule !== undefined)
@@ -415,7 +424,7 @@ export class Board {
           this.tell(node, out.signal, out.payload);
           break;
         case "ask":
-          this.ask(this.below(node, out.path), out.action, out.payload);
+          this.ask(this.below(node, out.path), out.action, out.payload, node.path);
           break;
         case "later":
           this.queue.add(this.clock + seconds(node, "later", out.seconds), node.path, {

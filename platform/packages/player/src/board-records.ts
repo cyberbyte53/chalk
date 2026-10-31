@@ -30,6 +30,8 @@ export type ActionRecord = {
    * whose consequence this is, through the lesson's rules. Undefined: it was asked directly.
    */
   cause?: number;
+  /** The lesson's own rules asked it (the scene's), not the student and not a prop's own wiring. */
+  isLessons?: true;
   /** A step of an effect already running on the prop (a tween's tick, its own `call`), not an act. */
   isStep: boolean;
   /** When, on the board's clock (seconds, not counting pauses). */
