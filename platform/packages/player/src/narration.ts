@@ -147,18 +147,33 @@ export function useNarrator(
    * A clip; `onBroken` when it couldn't be played because it is broken (it didn't load), not
    * merely because the page can't sound yet (the browser waits for the student's first touch).
    */
+  /**
+   * One audio player for every clip. A browser lets a player start only once the page is touched,
+   * and the strictest (Safari, some apps' webviews) only a player that has itself started inside a
+   * touch: once it has, it stays allowed. A new player per clip would need a touch per clip.
+   */
+  const player = useRef<HTMLAudioElement | undefined>(undefined);
+
   const playClip = useCallback(
     async (clip: PlayableClip): Promise<Played> => {
       let why: Played = "broken";
       const isHeard = await playOne(clip.seconds, (done) => {
-        const player = new Audio(clip.url);
-        player.addEventListener("ended", () => done(true));
-        player.addEventListener("error", () => done(false));
-        player.play().catch((error: unknown) => {
+        player.current ??= new Audio();
+        const audio = player.current;
+        const ended = () => done(true);
+        const failed = () => done(false);
+        audio.addEventListener("ended", ended);
+        audio.addEventListener("error", failed);
+        audio.src = clip.url;
+        audio.play().catch((error: unknown) => {
           if (error instanceof DOMException && error.name === "NotAllowedError") why = "blocked";
           done(false);
         });
-        return () => player.pause();
+        return () => {
+          audio.removeEventListener("ended", ended);
+          audio.removeEventListener("error", failed);
+          audio.pause();
+        };
       });
       return isHeard ? "heard" : why;
     },
