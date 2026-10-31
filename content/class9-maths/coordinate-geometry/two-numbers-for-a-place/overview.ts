@@ -1,4 +1,4 @@
-import { hidden, page, place, scene, t, tap } from "@chalk/author";
+import { hidden, line, page, place, scene, t, tap } from "@chalk/author";
 import { gridOf, scenePlane, sceneWith } from "@chalk/patterns";
 import {
   Axes,
@@ -121,6 +121,10 @@ const busStops = page(
       ),
     },
     standsFor: { line: "a straight road as a number line: the bus stand at 0, stops both ways" },
+    lines: {
+      // Each stop the bus reaches, said as it gets there: the number line heard as well as seen.
+      stop: line(t("Stop {x}.", "स्टॉप {x}।"), { when: "line.walker.stepped", about: "line" }),
+    },
     hear: {
       "line.walker.stepped": (_, p, t) => [
         ...(p.x === 3 ? [t.self.show({ name: "atThree" })] : []),

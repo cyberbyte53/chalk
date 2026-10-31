@@ -95,11 +95,13 @@ export type Out =
   | {
       readonly kind: "say";
       readonly line: string;
+      /** The values of its moment, for the blanks in its words. */
+      readonly values?: Payload;
       readonly atEnd: readonly Out[];
       /** Seconds of quiet first (a breath between lines); cutting the line cuts its quiet too. */
       readonly after?: number;
     }
-  /** Stops the line being said: its `atEnd` never comes. */
+  /** Stops the line being said: it is cut, and its `atEnd` is done. */
   | { readonly kind: "hush" };
 
 /** What a rule returns: one out, several, or nothing (`p.x === 4 && t.tell.arrived(p)`). */
@@ -222,7 +224,10 @@ export type VoiceTools = {
    */
   readonly cause: Cause;
   /** Says a line of the board (cutting the one being said); `atEnd` is done when it ends or is cut. */
-  readonly say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
+  readonly say: (
+    line: string,
+    options?: { atEnd?: readonly Out[]; after?: number; values?: Payload },
+  ) => Out;
   /** Stops the line being said (it is cut: its `atEnd` is done). */
   readonly hush: () => Out;
 };

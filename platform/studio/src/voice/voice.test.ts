@@ -2,6 +2,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { place, scene } from "@chalk/author";
+import { phraseKey } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
 import { scriptOf } from "@chalk/player";
 import { sceneText } from "@chalk/prop-basics";
@@ -47,12 +48,14 @@ describe("a board's script", () => {
 });
 
 describe("the voice: cast, speak, keep", () => {
-  it("makes a clip per line and language, in its lesson's folder, with its length", async () => {
+  it("makes a clip per phrase: who says it, in which language, which words, with its length", async () => {
     const dir = mkdtempSync(join(tmpdir(), "chalk-voice-"));
     const { manifest, made } = await makeVoice({ boards, cast, providers, outDir: dir });
     expect(made).toBe(6);
-    expect(manifest.files["b1.title.en"]).toMatch(/^lesson\/[0-9a-f]{16}\.wav$/);
-    expect(manifest.seconds?.["b1.reply.hi"]).toBeGreaterThan(0);
+    expect(manifest.phrases[phraseKey("narrator", "en", "Finding Aman's house")]?.file).toMatch(
+      /^clips\/[0-9a-f]{16}\.wav$/,
+    );
+    expect(manifest.phrases[phraseKey("aman", "hi", "मकान 5।")]?.seconds).toBeGreaterThan(0);
   });
 
   it("says the screen words without bold marks, or the line's own spoken words", async () => {

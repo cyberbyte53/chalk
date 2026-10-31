@@ -4,13 +4,19 @@
  * never knows how long a line is, nor where its sound comes from (a clip, a server, the phone's own
  * voice): it waits for the voice's word, as for any other event.
  */
+/** A line asked of the voice: its name, and the values of its moment for the blanks in its words. */
+export type LineCall = {
+  readonly name: string;
+  readonly values?: Readonly<Record<string, unknown>>;
+};
+
 export type Voice = {
   /**
    * Says `line` (the board has stopped any line before it). Tells `hear` "started" when sound
    * begins (never, for a line with nothing to say), then "ended" when it is over, or "cut" if the
    * voice lost it on its own (its source failed and nothing could stand in).
    */
-  say: (line: string, hear: (what: Heard) => void) => void;
+  say: (line: LineCall, hear: (what: Heard) => void) => void;
   /** Stops the line being said. The board has already taken it as cut: nothing more is told of it. */
   stop: () => void;
 };
@@ -35,7 +41,7 @@ export const silentVoice: Voice = { say: (_, hear) => hear("ended"), stop: () =>
  */
 export function timedVoice(
   clock: { after: (seconds: number, fn: () => void) => void },
-  lengthOf: (line: string) => number | undefined,
+  lengthOf: (line: LineCall) => number | undefined,
 ): Voice {
   let current: object | undefined;
   return {

@@ -23,7 +23,8 @@ export {
 export { JugnuFigure, JugnuMood } from "./jugnu-figure";
 export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
-export type { AudioSource } from "./narration";
+export type { AudioSource, PlayableClip, Utterance } from "./narration";
+export { linePhrases, spokenWords } from "./spoken-line";
 export {
   type PropModule,
   type PropRegistry,

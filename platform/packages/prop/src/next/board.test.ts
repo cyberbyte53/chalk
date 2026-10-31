@@ -480,7 +480,7 @@ describe("the voice: the board asks, the voice tells back", () => {
     const said: { line: string; hear: (what: Heard) => void }[] = [];
     let stops = 0;
     const voice: Voice = {
-      say: (line, hear) => void said.push({ line, hear }),
+      say: (line, hear) => void said.push({ line: line.name, hear }),
       stop: () => void stops++,
     };
     return { voice, said, stops: () => stops };

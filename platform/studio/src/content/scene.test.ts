@@ -232,13 +232,13 @@ describe("a scene, built and checked like any board", () => {
         heard.push(`${locale} ${l}`),
       ),
     ).toEqual([]);
-    // The lesson showed the hint, not the student: it waits its turn and drops nothing. The opening
-    // goes on when the board has nothing else to say.
+    // The lines written for the moment come first, in order; the hint the lesson shows in answer
+    // waits its turn and drops nothing. The opening goes on when the board has nothing else to say.
     expect(heard.filter((h) => h.startsWith("en ")).map((h) => h.slice(3))).toEqual([
       "title",
-      "hint",
       "first",
       "second",
+      "hint",
       "ask",
     ]);
   });
@@ -269,6 +269,54 @@ describe("a scene, built and checked like any board", () => {
     runtime.settle();
     expect(runtime.getView("board").hidden).toEqual([]);
     expect(said).toContain("answer");
+  });
+
+  it("a line with blanks is said with its moment's values, as phrases", async () => {
+    const walk = scene({
+      pieces: {
+        plane: place(sceneCoordinatePlane, {
+          walker: { walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 } },
+        }),
+      },
+      lines: {
+        where: line(t("The bus is at {x}.", "बस {x} पर है।"), { when: "plane.walker.stepped" }),
+      },
+    }).build("walk");
+    const runtime = new SceneRuntime(walk.board, (type) => propLibrary[type], {
+      locale: "hi",
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async () => undefined,
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    runtime.start();
+    // Three steps, each once the bus has arrived (it refuses a step while moving).
+    for (const _ of [1, 2, 3]) {
+      await runtime.call("plane", "walker.step", { direction: "left" }, Actor.Learner);
+      runtime.settle(1, true);
+    }
+    runtime.settle();
+    // Each step cuts the last (the student's): the newest is what is heard to the end.
+    const heard = runtime.heard().filter((h) => h.line === "where");
+    expect(heard.map((h) => `${h.words}${h.cutAt === undefined ? "" : " (cut)"}`)).toEqual([
+      "बस माइनस 1 पर है। (cut)",
+      "बस माइनस 2 पर है। (cut)",
+      "बस माइनस 3 पर है।",
+    ]);
+  });
+
+  it("refuses blanks its moment doesn't fill", () => {
+    expect(() =>
+      scene({
+        pieces: { plane: place(sceneCoordinatePlane) },
+        lines: { x: line(t("At {z}.", "{z} पर।"), { when: "plane.walker.stepped" }) },
+      }).build("bad"),
+    ).toThrow(/\{z\} isn't a number plane.walker.stepped carries \(x, y\)/);
+    expect(() =>
+      scene({ pieces: { ask }, lines: { x: line(t("At {x}.", "{x} पर।")) } }).build("bad"),
+    ).toThrow(/it needs a when/);
   });
 
   it("refuses a line on Continue (nothing is heard after it) and a piece named board", () => {

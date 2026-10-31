@@ -69,9 +69,9 @@ function openingMoments(
   let last: string | undefined;
   const core = new Core(model.scene, model.given, {
     voice: (board) =>
-      timedVoice(board, (line) => {
-        if (last !== undefined && !moments.has(line)) moments.set(line, last);
-        return hasWords(line) ? 1 : undefined;
+      timedVoice(board, ({ name }) => {
+        if (last !== undefined && !moments.has(name)) moments.set(name, last);
+        return hasWords(name) ? 1 : undefined;
       }),
   });
   core.listen((event) => {

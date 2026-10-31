@@ -4,6 +4,7 @@ import {
   type BoardAt,
   type CallArgs,
   type Locale,
+  NARRATOR,
   type SavedBoard,
   type Script,
   type WhenRule,
@@ -46,13 +47,14 @@ import {
 } from "@chalk/prop";
 import { type ReadonlySignal, type Signal, batch, computed, signal } from "@preact/signals-core";
 import { describeView } from "./describe";
+import type { Utterance } from "./narration";
 import type { PropModule } from "./prop-module";
 import { snapshotOf } from "./snapshot";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
-  /** Reads a prop's line aloud; resolves when it ends or fails (the text stays on screen either way). */
-  speak: (prop: { name: string }, line: Spoken) => Promise<void>;
+  /** Says a line; resolves when it ends or fails (the text stays on screen either way). */
+  speak: (line: Utterance) => Promise<void>;
   /** Calls back on the next frame with the time in ms; returns a function that cancels it. */
   frame: (callback: (now: number) => void) => () => void;
   now: () => number;
@@ -799,7 +801,7 @@ export class BoardRuntime {
         const spoken = piece.def.speech?.(this.fieldsOf(piece));
         return spoken === undefined || !isLive()
           ? Promise.resolve()
-          : this.services.speak({ name }, spoken);
+          : this.services.speak(utteranceOf(name, spoken));
       },
       wait: (seconds) => this.clock.wait(seconds),
       now: () => this.clock.time(),
@@ -1166,4 +1168,14 @@ export class BoardRuntime {
   private resolveArgs(args: CallArgs | undefined): Record<string, unknown> {
     return typeof args === "function" ? args(this.at) : { ...(args ?? {}) };
   }
+}
+
+/** A prop's line on today's boards, as something to say: one phrase per language, its words. */
+function utteranceOf(name: string, spoken: Spoken): Utterance {
+  const words = spoken.speak ?? spoken.say;
+  return {
+    name,
+    speaker: spoken.speaker ?? NARRATOR,
+    phrases: Object.fromEntries(Object.entries(words).map(([l, w]) => [l, [w]])),
+  };
 }

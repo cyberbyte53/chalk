@@ -35,4 +35,11 @@ export { Board, type BoardEvent, type Given, type Input } from "./board";
 export { sequence } from "./helpers";
 export { moveAt, type Move } from "./move";
 export { TimeQueue, type Entry } from "./queue";
-export { estimatedSeconds, type Heard, silentVoice, timedVoice, type Voice } from "./voice";
+export {
+  estimatedSeconds,
+  type Heard,
+  type LineCall,
+  silentVoice,
+  timedVoice,
+  type Voice,
+} from "./voice";

@@ -105,13 +105,13 @@ export function BoardPlayer({
       recorderRef.current?.app(AppWhat.AudioFailed, { reason }, segment(prop.name)),
     [],
   );
-  const narrator = useNarrator(board.item?.id ?? board.name, locale, audio, reportAudioFailure);
+  const narrator = useNarrator(locale, audio, reportAudioFailure);
   // The board reads each line's length when it says it: from the narrator as it is then.
   const narratorRef = useRef(narrator);
   narratorRef.current = narrator;
   const runtime = useBoardRuntime(board, registry, narrator.speak, {
     locale,
-    lineSeconds: (prop, line) => narratorRef.current.seconds(prop, line),
+    lineSeconds: (line) => narratorRef.current.seconds(line),
     hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).

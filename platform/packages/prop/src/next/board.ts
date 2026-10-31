@@ -14,7 +14,7 @@ import {
 } from "./define";
 import { type Move, moveAt } from "./move";
 import { type Entry, TimeQueue } from "./queue";
-import { type Heard, type Voice, silentVoice } from "./voice";
+import { type Heard, type LineCall, type Voice, silentVoice } from "./voice";
 
 /**
  * A board running: the tree of props and their variables, one door every event goes through
@@ -436,9 +436,17 @@ export class Board {
             this.cutLine();
             const id = ++this.lines;
             this.inTurn = { id, path: node.path, atEnd: out.atEnd };
-            const line = out.line;
+            const line = {
+              name: out.line,
+              ...(out.values === undefined ? {} : { values: out.values }),
+            };
             this.after(seconds(node, "say after", out.after), () => this.startLine(id, line));
-          } else this.say(node, out.line, out.atEnd);
+          } else
+            this.say(
+              node,
+              { name: out.line, ...(out.values === undefined ? {} : { values: out.values }) },
+              out.atEnd,
+            );
           break;
         case "hush":
           this.hush();
@@ -500,14 +508,14 @@ export class Board {
    * Says a line on the voice bus: the line in turn is cut, this one is asked of the voice, and its
    * `atEnd` is done, as the prop that said it, once the voice tells it ended or was cut.
    */
-  private say(node: Node, line: string, atEnd: readonly Out[]): void {
+  private say(node: Node, line: LineCall, atEnd: readonly Out[]): void {
     this.cutLine();
     const id = ++this.lines;
     this.inTurn = { id, path: node.path, atEnd };
     this.startLine(id, line);
   }
 
-  private startLine(id: number, line: string): void {
+  private startLine(id: number, line: LineCall): void {
     if (this.inTurn?.id !== id) return;
     this.lastHadWords = false;
     this.voice.say(line, (what) => this.heard(id, what));
@@ -689,6 +697,7 @@ export class Board {
         line,
         atEnd: options.atEnd ?? [],
         ...(options.after === undefined ? {} : { after: options.after }),
+        ...(options.values === undefined ? {} : { values: options.values }),
       }),
       hush: () => ({ kind: "hush" }),
     };

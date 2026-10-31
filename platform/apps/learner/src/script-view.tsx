@@ -1,4 +1,4 @@
-import type { AudioManifest, Locale } from "@chalk/content";
+import { type AudioManifest, type Locale, clipsOf } from "@chalk/content";
 import { RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
@@ -22,7 +22,10 @@ type Entry = {
   about?: string;
   shown: Readonly<Record<Locale, string | undefined>>;
   said: Readonly<Record<Locale, Said | undefined>>;
-  keys: Readonly<Record<Locale, string>>;
+  /** What is said, as phrases (a line with blanks: an example, its values given). */
+  phrases: Readonly<Record<Locale, readonly string[] | undefined>>;
+  /** For a line with blanks: the values its example is said with. */
+  example?: Readonly<Record<string, unknown>>;
 };
 type Script = { boards: { id: string; path: string; lines: Entry[] }[] };
 
@@ -74,14 +77,23 @@ function useScript(path: string): { script: Script; manifest: AudioManifest; bas
   return loaded === null ? null : { ...loaded, base };
 }
 
-/** Plays one clip at a time. */
-function usePlayer(): (url: string) => void {
+/** Plays a line's clips one after another; a new line stops the one playing. */
+function usePlayer(): (urls: readonly string[]) => void {
   const playing = useRef<HTMLAudioElement | null>(null);
+  const turn = useRef(0);
   useEffect(() => () => playing.current?.pause(), []);
-  return (url) => {
+  return (urls) => {
+    const mine = ++turn.current;
     playing.current?.pause();
-    playing.current = new Audio(url);
-    void playing.current.play().catch(() => undefined);
+    const next = (i: number) => {
+      const url = urls[i];
+      if (url === undefined || turn.current !== mine) return;
+      const player = new Audio(url);
+      playing.current = player;
+      player.addEventListener("ended", () => next(i + 1));
+      void player.play().catch(() => undefined);
+    };
+    next(0);
   };
 }
 
@@ -114,9 +126,12 @@ export function ScriptView({
           <ol>
             {lines.map((line) => {
               const said = line.said[locale];
-              const key = line.keys[locale];
-              const clip = loaded.manifest.files[key];
-              const seconds = loaded.manifest.seconds?.[key];
+              const phrases = line.phrases[locale];
+              const clips =
+                phrases === undefined
+                  ? undefined
+                  : clipsOf(loaded.manifest, line.speaker, locale, phrases);
+              const seconds = clips?.reduce((sum, c) => sum + c.seconds, 0);
               const shown = line.shown[locale];
               return (
                 <li
@@ -143,13 +158,23 @@ export function ScriptView({
                       <button
                         type="button"
                         class="script-play"
-                        disabled={clip === undefined}
-                        aria-label="Play its clip"
-                        onClick={() => clip !== undefined && play(`${loaded.base}/${clip}`)}
+                        disabled={clips === undefined}
+                        aria-label="Play its clips"
+                        onClick={() =>
+                          clips !== undefined && play(clips.map((c) => `${loaded.base}/${c.file}`))
+                        }
                       >
                         ▶
                       </button>
                       <span>{said.words}</span>
+                      {line.example !== undefined && (
+                        <span class="script-tag">
+                          e.g.{" "}
+                          {Object.entries(line.example)
+                            .map(([k, v]) => `${k} ${String(v)}`)
+                            .join(", ")}
+                        </span>
+                      )}
                       <span class="script-tag">
                         {FROM_WORDS[said.from]}
                         {seconds === undefined ? "" : ` · ${seconds.toFixed(1)} s`}

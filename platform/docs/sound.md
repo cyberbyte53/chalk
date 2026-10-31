@@ -24,12 +24,13 @@ Sight and sound are separate systems that react to the same events. One tap is o
 | **stop** | **ended** |
 | | **cut** |
 
-The board never asks how long a line is: it waits for **ended** (or **cut**), like any other event. The voice decides what that means for its source:
+The board never asks how long a line is: it waits for **ended** (or **cut**), like any other event. The voice says a line from the first source that can, in order:
 
-- a clip made at build, or one the server made earlier;
-- the server making it now (streamed, so sound starts soon);
-- an AI voice agent;
-- the phone's own voice;
+1. **clips, glued:** a line is said as phrases (its fixed words, and each value's pieces), and every phrase has a clip made at build (`pnpm voice`): a fixed line is one clip; "Stop {x}." is "Stop", then "minus", then "2". Nothing is stored per state: a template's own words, and each voice's number pieces (0 to 100, minus, point), shared by every line it says;
+2. **live from the server** (not yet): any words, made as they are needed, streamed;
+3. **the phone's own voice:** always there, offline too.
+
+Any other source (an AI voice agent) is one more in the list. Besides these, two voices for when nothing is heard:
 - muted: nothing heard, **ended** after the time the words would take, so the board's pacing is the same;
 - a test voice (the build, `play`): **ended** after an estimate, on the jumping clock.
 
@@ -39,7 +40,7 @@ The board never asks how long a line is: it waits for **ended** (or **cut**), li
 
 **A line** has a name (its address: `board#finally`, or `board#fiveHouses/said` for a piece's), a speaker (a character of the cast; the narrator when none is named), its words, what it is about (it glows while heard), and its moment: an event (`when`), with the values it must carry (`where`). The board's own events are moments too: `board.started`, `board.said · line title`, `board.shown · name hint`, `board.passed`.
 
-- **Words are a template**, written by a person in every language: "You're at street {x}, house {y}". A fixed line is a template with no blanks. Values are filled in when the line comes due: it says what was true at its moment.
+- **Words are a template**, written by a person in every language: "Stop {x}." / "स्टॉप {x}।". A fixed line is a template with no blanks. Each blank is a number its moment carries (`when`; the build checks it), filled in when the line comes due: it says what was true at its moment. A piece's line has no moment's values, so no blanks.
 - **Sayers** turn a value into words, from the value's data, never from its shown text: number, point, decimal (and recurring), fraction, power, equation, surd, measure (with its unit), count (with its plural: "1 piece", "3 pieces"). Each is written once per language and lives in the library, beside the props. A factorisation is said from its primes and powers ("2 cubed times 3 squared"), not by reading "2³ × 3²".
 - **Nothing turns shown symbols into words.** A line whose screen words have maths or signs, and no spoken words, stops the build, naming the line (a maths reader may suggest a draft for a person to write in).
 
@@ -78,8 +79,8 @@ A character, never a voice. Each book has its cast (characters' voices per langu
 ## Review and the build
 
 - **The script**, beside every board while reviewing: every line the board can say, grouped by moment, with its speaker, its words in each language (templates with examples), ▶ to hear it; picked for a comment like any part; pointing at one lights what it is about. `look` at a line's address answers with it; `play` says what each step was heard to say.
-- **The build** makes clips for every fixed line and every template whose values come from a known set (10 streets × 5 houses); plays every board in every language; checks every template fills in every language with sayers that exist and no symbols left unsaid; and notes lines no run reaches.
-- **Caching:** every source keys audio by voice and words: a line made once, at build or on the go, is kept for everyone.
+- **The build** makes a clip for every phrase (a fixed line's words; a template's own words; each voice's number pieces); plays every board in every language; checks every blank is a number its moment carries and nothing is left unsaid; and notes lines no run reaches.
+- **Phrases are the unit:** a clip is found by who says it, in which language, and its words (the manifest). Words changed since a clip was made simply find no clip, and the next source says them.
 
 ## From today's code
 
@@ -90,14 +91,14 @@ A character, never a voice. Each book has its cast (characters' voices per langu
 | A piece shown always cuts | A piece the student revealed cuts (rule 2); one the lesson revealed waits its turn (rule 1) |
 | `said` only when a line ends | `said` when heard or cut |
 | Fixed words only | Templates and sayers |
-| Clips as the source | Clips as one source behind the voice, a cache |
+| Clips as the source, one per line | Clips as the first source, one per phrase, glued; the phone's voice after |
 | The engine knows a step began with a tap | It carries that through what the tap scheduled for later |
 
 ## Order of work
 
 1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going. *(Done. Today's voice keeps time on the board's clock with each clip's length (`timedVoice`): the length lives in the voice. Real audio telling its own end comes with step 3.)*
-2. **Templates and sayers,** with one real line in the chapter ("You're at street {x}, house {y}"); clips made at build for known sets.
-3. **Voice sources behind one door:** clip, server, phone, in order; the never-stuck promise; caching by voice and words.
+2. **Templates and sayers,** with one real line in the chapter (the bus board's "Stop {x}."); clips glued from phrases; the phone's voice when a phrase has none. *(Done: numbers only, as the number sayer; others (fractions, powers, measures, counts) as lessons need them.)*
+3. **The live source and the never-stuck promise:** the server's voice between clips and the phone; real audio telling its own end (the board still keeps time by the clips' lengths).
 4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops).
 5. **Each book's cast.**
 6. **Jugnu as a speaker.**

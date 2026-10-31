@@ -7,7 +7,7 @@ import { audioSeconds } from "./length";
 
 export type GenerateResult = { manifest: AudioManifest; made: number; reused: number };
 
-/** One line to say: its audio key, its words, and the voice that says them. */
+/** One phrase to say: its key (`phraseKey`), its words, and the voice that says them. */
 export type Line = { key: string; text: string; voice: VoiceOf };
 
 /**
@@ -22,8 +22,7 @@ export async function speakLines(
   onSpeak?: (done: number, toMake: number, text: string) => void,
 ): Promise<GenerateResult> {
   mkdirSync(join(dir, folder), { recursive: true });
-  const files: Record<string, string> = {};
-  const seconds: Record<string, number> = {};
+  const phrases: AudioManifest["phrases"] = {};
   let made = 0;
   let reused = 0;
   const fileOf = (line: Line) => {
@@ -44,9 +43,11 @@ export async function speakLines(
       await line.voice.provider.synthesize(line.text, line.voice.voice, absolute);
       made++;
     }
-    files[line.key] = relative;
-    seconds[line.key] = audioSeconds(readFileSync(absolute), line.voice.provider.extension);
+    phrases[line.key] = {
+      file: relative,
+      seconds: audioSeconds(readFileSync(absolute), line.voice.provider.extension),
+    };
   }
   const used = [...new Set(lines.map((l) => l.voice.provider.id))];
-  return { manifest: { provider: used.join("+") || "none", files, seconds }, made, reused };
+  return { manifest: { provider: used.join("+") || "none", phrases }, made, reused };
 }

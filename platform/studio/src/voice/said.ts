@@ -1,4 +1,4 @@
-import type { Locale } from "@chalk/content";
+import { type Locale, blanksOf } from "@chalk/content";
 import { type MathsReader, richSpeech } from "@chalk/player";
 
 /**
@@ -37,7 +37,9 @@ export function said(
       : { needs: "it has maths" };
   }
   const words = pieces.map((p) => (p.kind === "words" ? p.text : "")).join("");
-  const odd = unspeakable(words);
+  // A template's blanks are filled by sayers (spoken.ts): only its own words are checked.
+  const own = blanksOf(words).reduce((text, blank) => text.split(`{${blank}}`).join(" "), words);
+  const odd = unspeakable(own);
   return odd.length > 0
     ? { needs: `it has "${odd.join(" ")}" outside maths: write it as maths, or write its words` }
     : { words, from };

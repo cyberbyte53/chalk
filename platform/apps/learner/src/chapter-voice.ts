@@ -1,11 +1,11 @@
-import type { AudioManifest } from "@chalk/content";
+import { type AudioManifest, clipsOf } from "@chalk/content";
 import type { AudioSource } from "@chalk/player";
 import { useEffect, useState } from "preact/hooks";
 
 /**
  * A chapter's voice in the preview: its clips, made by `pnpm voice <book>/<chapter>` into
- * public/voice/<book>/<chapter>/ (one folder per lesson, and manifest.json saying which clip says
- * which line and how long it plays). Undefined until loaded, or when the chapter has none yet.
+ * public/voice/<book>/<chapter>/ (its clips, and manifest.json saying which clip says each phrase,
+ * and how long it plays). Undefined until loaded, or when the chapter has none yet.
  */
 export function useChapterVoice(
   path: string,
@@ -30,16 +30,14 @@ export function useChapterVoice(
           setIsReady(true);
           return;
         }
-        const url = (key: string) => {
-          const file = manifest.files[key];
-          return file === undefined ? undefined : `${base}/${file}`;
+        const clips: AudioSource = {
+          clipsOf: (speaker, locale, phrases) =>
+            clipsOf(manifest, speaker, locale, phrases)?.map((clip) => ({
+              url: `${base}/${clip.file}`,
+              seconds: clip.seconds,
+            })),
         };
-        setSource(() =>
-          Object.assign(url, {
-            seconds: (key: string) => manifest.seconds?.[key],
-            words: (key: string) => manifest.words?.[key],
-          }),
-        );
+        setSource(() => clips);
         setIsReady(true);
       })
       .catch(() => isLive && setIsReady(true));

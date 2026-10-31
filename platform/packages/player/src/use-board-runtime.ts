@@ -1,5 +1,5 @@
 import type { Board, Locale } from "@chalk/content";
-import type { Spoken } from "@chalk/prop";
+import type { Utterance } from "./narration";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
 import "@preact/signals";
 import { createContext } from "preact";
@@ -9,7 +9,7 @@ import { BoardRuntime } from "./runtime";
 import { type LiveBoard, SceneRuntime } from "./scene-runtime";
 import { trackBoard } from "./snapshot";
 
-export type Speak = (prop: { name: string }, line: Spoken) => Promise<void>;
+export type Speak = (line: Utterance) => Promise<void>;
 
 /**
  * How fast boards' clocks run: 1 for a student (real time); a tool watching boards may run them
@@ -29,7 +29,7 @@ export function useBoardRuntime(
   voice: {
     /** The board's language (a scene says its lines in it). */
     locale: Locale;
-    lineSeconds?: (prop: string, line: Spoken) => number | undefined;
+    lineSeconds?: (line: Utterance) => number | undefined;
     hush?: () => void;
   },
 ): LiveBoard {
@@ -38,7 +38,7 @@ export function useBoardRuntime(
   speakRef.current = speak;
   const [runtime] = useState((): LiveBoard => {
     const services = {
-      speak: (prop: { name: string }, line: Spoken) => speakRef.current(prop, line),
+      speak: (line: Utterance) => speakRef.current(line),
       frame: (callback: (now: number) => void) => {
         const handle = requestAnimationFrame((ms) => callback(ms * speed));
         return () => cancelAnimationFrame(handle);

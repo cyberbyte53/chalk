@@ -2,6 +2,7 @@ import {
   AGENT_LOCALE,
   Actor,
   type Board,
+  LOCALES,
   type Locale,
   type Localized,
   NARRATOR,
@@ -18,7 +19,6 @@ import {
   type PartSnapshot,
   PropRole,
   type PropView,
-  type Spoken,
   segment,
   shownOf,
 } from "@chalk/prop";
@@ -26,13 +26,14 @@ import { type AnyProp, Board as Core, estimatedSeconds, timedVoice } from "@chal
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
+import type { Utterance } from "./narration";
 import { findNode } from "./part-paths";
 import type { PropModule } from "./prop-module";
 import { plainText } from "./rich-text";
-import { richSpeech } from "./rich-text-speech";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
 import { aboutOf, ownLine } from "./script";
 import { takes } from "./snapshot";
+import { linePhrases } from "./spoken-line";
 
 /**
  * A board on the event model (platform/docs/event-model.md), running: the scene and its pieces on
@@ -62,8 +63,8 @@ export class SceneRuntime {
     private readonly services: RuntimeServices & {
       /** Stops the line being said. */
       hush?: () => void;
-      /** How long a line plays, when its audio's length is known (publish); else from its words. */
-      lineSeconds?: (prop: string, line: Spoken) => number | undefined;
+      /** How long a line plays, when its clips are known; else from its words. */
+      lineSeconds?: (line: Utterance) => number | undefined;
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
     },
@@ -84,14 +85,22 @@ export class SceneRuntime {
         // sound view). Its clip plays; this voice keeps time on the board's clock, telling the line
         // ended after as long as the clip (or its words would take). The board only hears the end.
         voice: (core) => {
-          const timed = timedVoice(core, (name) => {
+          const timed = timedVoice(core, ({ name, values }) => {
             const words = this.lineWords(name);
             if (words === undefined) return undefined;
-            const line: Spoken = { say: words, speaker: model.lines[name]?.speaker ?? NARRATOR };
-            void services.speak({ name }, line);
+            const phrases = Object.fromEntries(
+              LOCALES.map((l) => [l, linePhrases(words[l], l, values)]),
+            ) as Utterance["phrases"];
+            const said = phrases[locale];
+            if (said === undefined || said.length === 0) return undefined;
+            const line: Utterance = {
+              name,
+              speaker: model.lines[name]?.speaker ?? NARRATOR,
+              phrases,
+            };
+            void services.speak(line);
             const seconds =
-              services.lineSeconds?.(name, line) ??
-              estimatedSeconds(plainText(words[locale] ?? ""));
+              services.lineSeconds?.(line) ?? estimatedSeconds(plainText(said.join(" ")));
             const about = aboutOf(
               model,
               name,
@@ -100,8 +109,8 @@ export class SceneRuntime {
             this.heardLines.push({
               line: name,
               ...(about === undefined ? {} : { about }),
-              speaker: line.speaker ?? NARRATOR,
-              words: spokenWords(words[locale] ?? "", locale),
+              speaker: line.speaker,
+              words: said.join(" "),
               at: core.now,
               seconds,
             });
@@ -476,14 +485,6 @@ export type HeardLine = {
   seconds: number;
   cutAt?: number;
 };
-
-/** A line's words as the voice gets them: its rich text read for speech, maths left as written. */
-function spokenWords(source: string, locale: Locale): string {
-  return richSpeech(source, locale)
-    .pieces.map((p) => (p.kind === "words" ? p.text : `$${p.latex}$`))
-    .join("")
-    .trim();
-}
 
 /** The action at "walker.step" under a prop. */
 function actionAt(def: AnyProp, dotted: string) {

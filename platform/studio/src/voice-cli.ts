@@ -44,5 +44,5 @@ if (result.unsaid.length > 0) {
   process.exitCode = 1;
 }
 console.log(
-  `✓ ${chapter}: ${boards.length} boards, ${Object.keys(result.manifest.files).length} lines (${result.made} made, ${result.reused} kept) → ${outDir}`,
+  `✓ ${chapter}: ${boards.length} boards, ${Object.keys(result.manifest.phrases).length} phrases (${result.made} made, ${result.reused} kept) → ${outDir}`,
 );

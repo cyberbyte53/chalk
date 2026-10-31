@@ -1,8 +1,10 @@
 export {
   type AudioManifest,
-  audioKey,
-  audioManifestSchema,
+  type Clip,
   NARRATOR,
+  audioManifestSchema,
+  clipsOf,
+  phraseKey,
 } from "./audio";
 export {
   type BoardAt,
@@ -110,3 +112,12 @@ export {
 } from "./piece";
 export { propPieces, walkPieces } from "./walk";
 export { propBoard } from "./prop-board";
+export {
+  KEPT_NUMBERS,
+  blanksOf,
+  fixedParts,
+  isTemplate,
+  numberLibrary,
+  numberPieces,
+  phrasesOf,
+} from "./spoken";
