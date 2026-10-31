@@ -185,6 +185,8 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
   );
   const [folds, setFolds] = useState<Record<string, boolean>>(readFolds);
   const isFolded = (t: Thread) => (t.id === focus ? false : (folds[t.id] ?? isFinished(t)));
+  // A device never shows two boards at once: with several open, none is heard.
+  const boardsOpen = shown.filter((t) => t.board !== undefined && !isFolded(t)).length;
   const fold = (ids: readonly string[], to: boolean) => {
     const next = { ...folds, ...Object.fromEntries(ids.map((x) => [x, to])) };
     setFolds(next);
@@ -283,6 +285,7 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
           key={t.id}
           thread={t}
           isFolded={isFolded(t)}
+          isSilent={boardsOpen > 1}
           onFold={(to) => fold([t.id], to)}
           act={act}
           bus={bus}
@@ -297,6 +300,7 @@ export function ReviewPage({ bus }: { bus: EventBus }): JSX.Element {
 function ThreadFold({
   thread: t,
   isFolded,
+  isSilent,
   onFold,
   act,
   bus,
@@ -304,6 +308,8 @@ function ThreadFold({
 }: {
   thread: Thread;
   isFolded: boolean;
+  /** One of several boards open on the page: nothing is heard from it. */
+  isSilent: boolean;
   onFold: (to: boolean) => void;
   act: (change: Record<string, unknown>) => Promise<boolean>;
   bus: EventBus;
@@ -441,7 +447,9 @@ function ThreadFold({
               </div>
             </form>
           </div>
-          {t.board !== undefined && <LiveBoard thread={t} bus={bus} locale={locale} />}
+          {t.board !== undefined && (
+            <LiveBoard thread={t} bus={bus} locale={locale} isSilent={isSilent} />
+          )}
         </div>
       )}
     </section>
@@ -453,7 +461,8 @@ function LiveBoard({
   thread,
   bus,
   locale,
-}: { thread: Thread; bus: EventBus; locale: Locale }): JSX.Element {
+  isSilent,
+}: { thread: Thread; bus: EventBus; locale: Locale; isSilent: boolean }): JSX.Element {
   const [shown, setShown] = useState<{ board: Shown; where: Sources[string] | undefined } | null>(
     null,
   );
@@ -497,7 +506,7 @@ function LiveBoard({
         where={shown.where}
         locale={locale}
         isPlaying={false}
-        isSilent={false}
+        isSilent={isSilent}
         bus={bus}
         isShot={false}
         threads={[]}
