@@ -1,0 +1,383 @@
+{
+  "$comment": "The person's verdicts on sound candidates (good or bad), by ear. Whoever shortlists sounds reads these first, to offer options closer to what was liked; each round of choosing adds to it.",
+  "votes": [
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:186669",
+      "name": "Computer Boop",
+      "by": "fordps3",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:447910",
+      "name": "Plop!",
+      "by": "Breviceps",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:221091",
+      "name": "cartoon pop or drip",
+      "by": "AlaskaRobotics",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:258193",
+      "name": "beep beep",
+      "by": "Kodack",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:401542",
+      "name": "Pop Sound",
+      "by": "ConarB13",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:218460",
+      "name": "Wood block hit",
+      "by": "thomasjaunism",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:53403",
+      "name": "wood block.wav",
+      "by": "calaudio",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:218461",
+      "name": "wood block",
+      "by": "thomasjaunism",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:618961",
+      "name": "Cute Bounce Jump.wav",
+      "by": "Hemplock",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:776443",
+      "name": "pop out, bubble, soft bursting",
+      "by": "chaferwitt",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:388958",
+      "name": "Soft Two-Finger Snap",
+      "by": "jackieAZ",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:10886",
+      "name": "pop_1.R.aif",
+      "by": "batchku",
+      "license": "CC0",
+      "for": "A thing moves one step (the bus)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:32642",
+      "name": "Step 5.wav",
+      "by": "carrigsound",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:197778",
+      "name": "Footstep on Stone",
+      "by": "sgossner",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:151238",
+      "name": "Hard Female Footstep (2)",
+      "by": "OwlStorm",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:151237",
+      "name": "Hard Female Footstep (3)",
+      "by": "OwlStorm",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:347371",
+      "name": "Soft Grass Foot Step",
+      "by": "DRFX",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:151229",
+      "name": "Grassy Footstep 2",
+      "by": "OwlStorm",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:651463",
+      "name": "DCA Cartoon Footsteps.wav",
+      "by": "darcyadam",
+      "license": "CC0",
+      "for": "Someone walks a step (Riya)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:171697",
+      "name": "Menu Selection Click",
+      "by": "NenadSimic",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:243701",
+      "name": "correct",
+      "by": "ertfelda",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:421002",
+      "name": "Correct.wav",
+      "by": "CogFireStudios",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:361263",
+      "name": "8-bit Correct Answer",
+      "by": "JapanYoshiTheGamer",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:625174",
+      "name": "[UI Sound] Approval - High Pitched Bell Synth",
+      "by": "GabFitzgerald",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:714568",
+      "name": "Like Button Click - Thumbs Up Feedback SFX",
+      "by": "LilMati",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:717771",
+      "name": "victory chime",
+      "by": "1bob",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:842513",
+      "name": "Triple_Ping_Notification_Sound_Mobile_Optimized",
+      "by": "PiesHelpfulOven",
+      "license": "CC0",
+      "for": "Right answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:648462",
+      "name": "Wrong Answer",
+      "by": "-Andreas",
+      "license": "CC0",
+      "for": "Wrong answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:331912",
+      "name": "Wrong Buzzer",
+      "by": "KevinVG207",
+      "license": "CC0",
+      "for": "Wrong answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:650842",
+      "name": "Wrong Answer Buzzer",
+      "by": "-Andreas",
+      "license": "CC0",
+      "for": "Wrong answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:478191",
+      "name": "Beep_Error_1.wav",
+      "by": "JonnyRuss01",
+      "license": "CC0",
+      "for": "Wrong answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:478188",
+      "name": "Beep_Soft_3.wav",
+      "by": "JonnyRuss01",
+      "license": "CC0",
+      "for": "Wrong answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:478189",
+      "name": "Beep_Soft_2.wav",
+      "by": "JonnyRuss01",
+      "license": "CC0",
+      "for": "Wrong answer",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:419341",
+      "name": "Swoosh.ogg",
+      "by": "WizardOZ",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:427823",
+      "name": "Whoosh #1",
+      "by": "Kinoton",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:514162",
+      "name": "Swinging axe.mp3",
+      "by": "ZHRØ",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:714257",
+      "name": "Puff of Smoke",
+      "by": "qubodup",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:824189",
+      "name": "Pop in sfx",
+      "by": "Sadiquecat",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:543641",
+      "name": "Funny Boing",
+      "by": "se2001",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "good"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:442873",
+      "name": "PuffOfSmoke.wav",
+      "by": "euanmj",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:786323",
+      "name": "Kung-Fu punch SFX (A-B) (Edited)",
+      "by": "Sadiquecat",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "bad"
+    },
+    {
+      "round": "2026-10-31 first listening",
+      "sound": "freesound:788416",
+      "name": "Whoosh -Plastic diving fin flat side - A-B 20cm - 1",
+      "by": "Sadiquecat",
+      "license": "CC0",
+      "for": "Something rises or appears (a street)",
+      "verdict": "good"
+    }
+  ]
+}
