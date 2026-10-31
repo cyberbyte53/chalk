@@ -19,8 +19,8 @@ export const tapTheDesk = family({
     const ask = sceneWith.check({
       about: "room",
       prompt: t(
-        `Tap the desk **(${column}, ${row})**, then press Check.`,
-        `डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
+        `Tap the desk **(${column}, ${row})**, then press Check.`,
+        `डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isChosen("room", column, row),
       solve: [tap("room.places", "chooseTarget", { x: column, y: row })],
@@ -28,8 +28,8 @@ export const tapTheDesk = family({
         {
           when: isChosen("room", row, column),
           say: t(
-            `That desk is (${row}, ${column}): column ${row}, row ${column}. The column comes first.`,
-            `वह डेस्क (${row}, ${column}) है: स्तंभ ${row}, पंक्ति ${column}। स्तंभ पहले आता है।`,
+            `That desk is (${row}, ${column}): column ${row}, row ${column}. The column comes first.`,
+            `वह डेस्क (${row}, ${column}) है: स्तंभ ${row}, पंक्ति ${column}। स्तंभ पहले आता है।`,
           ),
           reach: [tap("room.places", "chooseTarget", { x: row, y: column })],
         },

@@ -1,6 +1,7 @@
-/** @jsxImportSource preact */
 import type { ComponentChildren, JSX } from "preact";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
+/** @jsxImportSource preact */
+import { joinsNext, keepTogether } from "./keep-together";
 import { OwnHtml, type OwnMarkup } from "./own-markup";
 import { SpanKind, mathHtml, parseRich } from "./rich-text";
 import { useLayoutWhenChanged } from "./when-changed";
@@ -74,16 +75,19 @@ function DisplayMath({
  */
 export function RichText({ text }: { text: string }): JSX.Element {
   // The spans are a fixed split of `text`, so a span's index is a stable key for it.
+  const spans = parseRich(text).spans;
   return (
     <>
-      {parseRich(text).spans.map((span, i) => {
+      {spans.map((span, i) => {
+        // Words as written, with the screen's own rule for where a line may not break.
+        const words = () => joinsNext(keepTogether(span.text), spans[i + 1]?.text);
         switch (span.kind) {
           case SpanKind.Text:
-            return span.text;
+            return words();
           case SpanKind.Bold:
-            return <strong key={i}>{span.text}</strong>;
+            return <strong key={i}>{words()}</strong>;
           case SpanKind.Emphasis:
-            return <em key={i}>{span.text}</em>;
+            return <em key={i}>{words()}</em>;
           case SpanKind.DisplayMath:
             return (
               <DisplayMath key={i} html={mathHtml(span.text, true)} trailing={span.trailing} />

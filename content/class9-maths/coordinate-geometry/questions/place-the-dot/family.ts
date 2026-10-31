@@ -21,8 +21,8 @@ export const placeTheDot = family({
     const ask = sceneWith.check({
       about: "sheet",
       prompt: t(
-        `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1\u00a0cm. Drag it there, then press Check.`,
-        `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1\u00a0cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
+        `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.`,
+        `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       says: t(
         `Put the dot ${left} centimetres from the left edge and ${bottom} centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.`,
@@ -35,8 +35,8 @@ export const placeTheDot = family({
             {
               when: isPlaced("sheet", bottom, left),
               say: t(
-                `That spot is ${bottom} cm from the left edge and ${left} cm above the bottom: the two distances are swapped.`,
-                `वह जगह बाएँ किनारे से ${bottom} cm और नीचे के किनारे से ${left} cm ऊपर है: दोनों दूरियाँ उलट गईं।`,
+                `That spot is ${bottom} cm from the left edge and ${left} cm above the bottom: the two distances are swapped.`,
+                `वह जगह बाएँ किनारे से ${bottom} cm और नीचे के किनारे से ${left} cm ऊपर है: दोनों दूरियाँ उलट गईं।`,
               ),
               reach: [tap("sheet.reading", "movePoint", { x: bottom, y: left })],
             },
