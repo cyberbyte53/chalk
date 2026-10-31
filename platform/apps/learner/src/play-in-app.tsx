@@ -10,7 +10,6 @@ import type { ChapterContent } from "./content-store";
 import type { Course, CourseChapter } from "./course";
 import { ChapterScreen, currentConcept } from "./course-screens";
 import { toggleMuted, toggleParam } from "./editor-link";
-import { jugnuLink } from "./jugnu";
 import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen } from "./practice-screens";
 
@@ -61,7 +60,6 @@ function keepBoardInAddress(path: string | undefined): void {
   if (query !== window.location.search) history.replaceState(null, "", query);
 }
 
-const jugnu = jugnuLink();
 const prepare = (chapter: CourseChapter): Promise<void> => preloadProps(chapter.props);
 
 /**
@@ -138,7 +136,6 @@ export function PlayInApp({
                     registry={propLibrary}
                     locale={locale}
                     bus={bus}
-                    jugnu={jugnu}
                     startBoard={now.start}
                     onBoard={(index) => {
                       here.current = { now, index, count: lesson.boards.length };

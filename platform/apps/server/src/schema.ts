@@ -152,6 +152,8 @@ export const boardFacts = pgTable(
 );
 
 /**
+ * Kept while Jugnu is parked (platform/docs/move-to-event-model.md): nothing writes or reads it
+ * now; its rows are for his remake.
  * A chat with Jugnu someone flagged (wasn't happy with), whole in `body` (`JugnuFlagRequest`):
  * the board, its state, the chat as the model saw it, and what the student saw. To look at, and to
  * replay on the test bench.

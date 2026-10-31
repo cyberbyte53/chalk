@@ -15,7 +15,6 @@
     "@chalk/content": "workspace:*",
     "@chalk/draw": "workspace:*",
     "@chalk/events": "workspace:*",
-    "@chalk/jugnu": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@preact/signals": "2.11.3",
     "@preact/signals-core": "1.14.4",

@@ -2,13 +2,4 @@
 # Every path must be a built concept; the build refuses loops.
 #   - concept: class9-maths/number-systems/successive-magnification
 #     parents: [class9-maths/number-systems/place-value]
-edges:
-  # Class 10 Real Numbers: each concept's direct parents (one hop).
-  - concept: class10-maths/real-numbers/euclid-algorithm
-    parents: [class10-maths/real-numbers/division-lemma]
-  - concept: class10-maths/real-numbers/hcf-and-lcm
-    parents: [class10-maths/real-numbers/fundamental-theorem, class10-maths/real-numbers/euclid-algorithm]
-  - concept: class10-maths/real-numbers/root-two-irrational
-    parents: [class10-maths/real-numbers/fundamental-theorem, class10-maths/real-numbers/hcf-and-lcm]
-  - concept: class10-maths/real-numbers/which-fractions-end
-    parents: [class10-maths/real-numbers/fundamental-theorem]
+edges: []

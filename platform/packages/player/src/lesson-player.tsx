@@ -5,7 +5,6 @@ import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { BoardPlayer } from "./board-player";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
-import type { JugnuLink } from "./jugnu-panel";
 import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { RichText } from "./rich-text-view";
@@ -20,8 +19,6 @@ export type LessonPlayerProps = {
   locale: Locale;
   /** The app's event channel: each board records what happens on it. */
   bus: EventBus;
-  /** Jugnu (see @chalk/jugnu): where he thinks; leave out to play without Jugnu. */
-  jugnu?: JugnuLink | undefined;
   /** The board to open on (an author jumping straight to it); the first board if left out. */
   startBoard?: number;
   /** How its questions are played (play-mode.ts): a lesson's pages by default. */
@@ -42,7 +39,6 @@ export function LessonPlayer({
   registry,
   locale,
   bus,
-  jugnu,
   startBoard = 0,
   mode = PlayMode.Lesson,
   onBoard,
@@ -122,20 +118,6 @@ export function LessonPlayer({
           onBack={index === 0 ? undefined : back}
           wasPassed={index < furthest}
           mode={mode}
-          jugnu={
-            jugnu === undefined
-              ? undefined
-              : {
-                  link: jugnu,
-                  lessonId: lesson.id,
-                  place: {
-                    lessonTitle: lesson.title[locale],
-                    boardNumber: index + 1,
-                    boardCount: lesson.boards.length,
-                    locale,
-                  },
-                }
-          }
         />
       )}
     </div>

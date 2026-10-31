@@ -14,17 +14,6 @@ export const configSchema = z.object({
   CONTENT_INDEX: z.string().default("../../../build/index.json"),
   /** The built content the app fetches from /content/; by default the index's own folder. */
   CONTENT_DIR: z.string().optional(),
-  /** Jugnu's model API: "openai-compatible" (DeepSeek, Foundry) or "anthropic" (Claude). */
-  JUGNU_PROVIDER: z.enum(["openai-compatible", "anthropic", "ollama"]).default("openai-compatible"),
-  /**
-   * Jugnu's model server (base URL without /v1, e.g. https://api.anthropic.com), its key and model;
-   * without a server and a model, Jugnu is off.
-   */
-  JUGNU_MODEL_SERVER: z.string().url().optional(),
-  JUGNU_API_KEY: z.string().optional(),
-  JUGNU_MODEL: z.string().optional(),
-  /** "on": the model thinks before answering (slower, often better). */
-  JUGNU_THINK: z.enum(["on", "off"]).default("off"),
   /** "on": sign in as anyone with "dev:<id>:<name>", for trying the app on a laptop. Localhost only. */
   DEV_SIGN_IN: z.enum(["on", "off"]).default("off"),
 });

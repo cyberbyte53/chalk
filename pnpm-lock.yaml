@@ -32,12 +32,6 @@ importers:
       '@chalk/prop-coordinates':
         specifier: workspace:*
         version: link:library/props/coordinates
-      '@chalk/prop-decimal':
-        specifier: workspace:*
-        version: link:library/props/decimal
-      '@chalk/prop-primes':
-        specifier: workspace:*
-        version: link:library/props/primes
       nerdamer:
         specifier: 2.0.0
         version: 2.0.0
@@ -84,9 +78,6 @@ importers:
       '@chalk/prop-coordinates':
         specifier: workspace:*
         version: link:../props/coordinates
-      '@chalk/prop-primes':
-        specifier: workspace:*
-        version: link:../props/primes
       preact:
         specifier: 10.29.8
         version: 10.29.8(preact-render-to-string@6.5.13)
@@ -147,49 +138,6 @@ importers:
         specifier: 6.5.13
         version: 6.5.13(preact@10.29.8)
 
-  library/props/decimal:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
-  library/props/primes:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../../../platform/packages/content
-      '@chalk/draw':
-        specifier: workspace:*
-        version: link:../../../platform/packages/draw
-      '@chalk/player':
-        specifier: workspace:*
-        version: link:../../../platform/packages/player
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../../../platform/packages/prop
-      preact:
-        specifier: 10.29.8
-        version: 10.29.8(preact-render-to-string@6.5.13)
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-    devDependencies:
-      preact-render-to-string:
-        specifier: 6.5.13
-        version: 6.5.13(preact@10.29.8)
-
   library/registry:
     dependencies:
       '@chalk/author':
@@ -216,16 +164,7 @@ importers:
       '@chalk/prop-coordinates':
         specifier: workspace:*
         version: link:../props/coordinates
-      '@chalk/prop-decimal':
-        specifier: workspace:*
-        version: link:../props/decimal
-      '@chalk/prop-primes':
-        specifier: workspace:*
-        version: link:../props/primes
     devDependencies:
-      '@chalk/jugnu':
-        specifier: workspace:*
-        version: link:../../platform/packages/jugnu
       '@types/node':
         specifier: 22.10.2
         version: 22.10.2
@@ -260,9 +199,6 @@ importers:
       '@chalk/events':
         specifier: workspace:*
         version: link:../../packages/events
-      '@chalk/jugnu':
-        specifier: workspace:*
-        version: link:../../packages/jugnu
       '@chalk/library':
         specifier: workspace:*
         version: link:../../../library/registry
@@ -315,9 +251,6 @@ importers:
       '@chalk/content-source':
         specifier: workspace:*
         version: link:../../content-source
-      '@chalk/jugnu':
-        specifier: workspace:*
-        version: link:../../packages/jugnu
       '@chalk/library':
         specifier: workspace:*
         version: link:../../../library/registry
@@ -442,18 +375,6 @@ importers:
 
   platform/packages/exact: {}
 
-  platform/packages/jugnu:
-    dependencies:
-      '@chalk/content':
-        specifier: workspace:*
-        version: link:../content
-      '@chalk/prop':
-        specifier: workspace:*
-        version: link:../prop
-      zod:
-        specifier: 3.25.76
-        version: 3.25.76
-
   platform/packages/look:
     devDependencies:
       '@types/node':
@@ -474,9 +395,6 @@ importers:
       '@chalk/events':
         specifier: workspace:*
         version: link:../events
-      '@chalk/jugnu':
-        specifier: workspace:*
-        version: link:../jugnu
       '@chalk/prop':
         specifier: workspace:*
         version: link:../prop
@@ -526,9 +444,6 @@ importers:
       '@chalk/content-source':
         specifier: workspace:*
         version: link:../content-source
-      '@chalk/jugnu':
-        specifier: workspace:*
-        version: link:../packages/jugnu
       '@chalk/library':
         specifier: workspace:*
         version: link:../../library/registry

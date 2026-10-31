@@ -26,7 +26,6 @@ import { ChapterScreen, CourseScreen, currentConcept } from "./course-screens";
 import { DevShell } from "./dev-shell";
 import { devSession, stopDevSignIn } from "./dev-sign-in";
 import { HomeScreen } from "./home-screen";
-import { jugnuLink } from "./jugnu";
 import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { isPreviewAddress } from "./preview-address";
@@ -37,7 +36,6 @@ import { type Uploader, deviceStore, startUploader } from "./uploader";
 
 /** One event channel for the whole run of the app; the uploader is one subscriber. */
 const bus = createEventBus({ commit: settings.commit });
-const jugnu = jugnuLink();
 
 const LOCALE_KEY = "chalk.locale";
 const JOIN_KEY = "chalk.join";
@@ -372,7 +370,6 @@ export function App(): JSX.Element {
                 registry={propLibrary}
                 locale={locale}
                 bus={bus}
-                jugnu={jugnu}
                 onExit={() => setScreen({ kind: "chapter", ...place })}
                 onComplete={() => {
                   void uploader.current?.flush();

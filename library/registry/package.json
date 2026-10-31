@@ -6,7 +6,6 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css",
-    "./test-lesson": "./src/test-lesson.ts",
     "./modules": "./src/modules.ts"
   },
   "scripts": {
@@ -20,12 +19,9 @@
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
-    "@chalk/prop-coordinates": "workspace:*",
-    "@chalk/prop-decimal": "workspace:*",
-    "@chalk/prop-primes": "workspace:*"
+    "@chalk/prop-coordinates": "workspace:*"
   },
   "devDependencies": {
-    "@chalk/jugnu": "workspace:*",
     "@types/node": "22.10.2"
   }
 }

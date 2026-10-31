@@ -2,10 +2,8 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { conceptPlansOf } from "@chalk/api";
 import { buildIndexSchema, builtFile } from "@chalk/content";
-import { providerFrom } from "@chalk/jugnu";
 import { serve } from "@hono/node-server";
 import { createApp } from "./app";
-import { contentBoards } from "./boards";
 import { readConfig } from "./config";
 import { openDb } from "./db";
 import { googleVerifier, withDevSignIn } from "./google";
@@ -37,19 +35,8 @@ const app = createApp({
   commit: index.commit,
   plans,
   courseIds: new Set(index.books.map((book) => book.id)),
-  jugnu:
-    config.JUGNU_MODEL_SERVER === undefined || config.JUGNU_MODEL === undefined
-      ? undefined
-      : providerFrom({
-          provider: config.JUGNU_PROVIDER,
-          url: config.JUGNU_MODEL_SERVER,
-          model: config.JUGNU_MODEL,
-          ...(config.JUGNU_API_KEY !== undefined ? { apiKey: config.JUGNU_API_KEY } : {}),
-          think: config.JUGNU_THINK === "on",
-        }),
   staticDir: config.STATIC_DIR,
   contentDir,
-  boards: contentBoards(contentDir),
 });
 
 const server = serve({ fetch: app.fetch, port: config.PORT }, ({ port }) =>

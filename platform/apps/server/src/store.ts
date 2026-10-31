@@ -21,16 +21,7 @@ import type { ChalkEvent } from "@chalk/content";
 import { and, desc, eq, gt, inArray, isNull, max, sql } from "drizzle-orm";
 import type { Db } from "./db";
 import type { GoogleProfile } from "./google";
-import {
-  events,
-  accounts,
-  boardFacts,
-  groups,
-  jugnuFlags,
-  members,
-  schools,
-  signIns,
-} from "./schema";
+import { events, accounts, boardFacts, groups, members, schools, signIns } from "./schema";
 
 /** Every query the routes make. Routes check who may ask; these only read and write. */
 
@@ -500,46 +491,4 @@ export async function progressOf(
   plans: readonly ConceptPlan[],
 ): Promise<Progress> {
   return (await progressOfEach(db, [accountId], plans)).get(accountId) ?? {};
-}
-
-/** Keeps a flagged chat with Jugnu; returns its id. */
-export async function saveJugnuFlag(
-  db: Db,
-  accountId: string,
-  flag: { note: string; lessonId: string | null; body: unknown },
-): Promise<string> {
-  const [row] = await db
-    .insert(jugnuFlags)
-    .values({ accountId, note: flag.note, lessonId: flag.lessonId, body: flag.body })
-    .returning({ id: jugnuFlags.id });
-  if (row === undefined) throw new Error("jugnu_flags: the insert returned nothing");
-  return row.id;
-}
-
-/** Flagged chats, newest first: who, when, the note. */
-export async function jugnuFlagList(
-  db: Db,
-  limit: number,
-): Promise<{ id: string; createdAt: Date; name: string; note: string; lessonId: string | null }[]> {
-  return db
-    .select({
-      id: jugnuFlags.id,
-      createdAt: jugnuFlags.createdAt,
-      name: accounts.name,
-      note: jugnuFlags.note,
-      lessonId: jugnuFlags.lessonId,
-    })
-    .from(jugnuFlags)
-    .innerJoin(accounts, eq(accounts.id, jugnuFlags.accountId))
-    .orderBy(desc(jugnuFlags.createdAt))
-    .limit(limit);
-}
-
-/** One flagged chat, whole; undefined if there is none with that id. */
-export async function jugnuFlag(db: Db, id: string): Promise<unknown> {
-  const [row] = await db
-    .select({ body: jugnuFlags.body })
-    .from(jugnuFlags)
-    .where(eq(jugnuFlags.id, id));
-  return row?.body;
 }

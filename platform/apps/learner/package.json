@@ -16,7 +16,6 @@
     "@chalk/content-source": "workspace:*",
     "@chalk/draw": "workspace:*",
     "@chalk/events": "workspace:*",
-    "@chalk/jugnu": "workspace:*",
     "@chalk/library": "workspace:*",
     "@chalk/look": "workspace:*",
     "@chalk/player": "workspace:*",

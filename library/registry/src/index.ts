@@ -3,8 +3,6 @@ import { type AnyPropDef, BOARD, asAnyProp, boardProp } from "@chalk/prop";
 import { basicProps } from "@chalk/prop-basics";
 import { defs as basicsDefs } from "@chalk/prop-basics/defs";
 import { defs as coordinatesDefs, sounds as coordinatesSounds } from "@chalk/prop-coordinates/defs";
-import { defs as decimalDefs } from "@chalk/prop-decimal/defs";
-import { defs as primesDefs } from "@chalk/prop-primes/defs";
 
 /**
  * Every prop package, by what the app needs when: its definitions up front (small; boards, checks
@@ -19,8 +17,6 @@ const packs: readonly (PropPack & { name: string })[] = [
     sounds: coordinatesSounds,
     load: () => import("@chalk/prop-coordinates"),
   },
-  { name: "decimal", defs: decimalDefs, load: () => import("@chalk/prop-decimal") },
-  { name: "primes", defs: primesDefs, load: () => import("@chalk/prop-primes") },
 ];
 
 const lazy = lazyRegistry(packs, basicProps);

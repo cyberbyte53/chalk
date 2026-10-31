@@ -6,7 +6,6 @@ import type { JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 import { CourseScreen } from "./course-screens";
 import { type PlayableLesson, findLesson, otherLessons } from "./dev-lessons";
-import { devJugnuLink } from "./jugnu";
 import { courses } from "./lessons";
 import { settings } from "./settings";
 
@@ -19,21 +18,6 @@ function modeFor(lessonId: string): PlayMode {
   const modes = Object.values(PlayMode) as string[];
   if (asked !== null && modes.includes(asked)) return asked as PlayMode;
   return /^(practice|bank)\//.test(lessonId) ? PlayMode.Guided : PlayMode.Lesson;
-}
-
-/**
- * Which model Jugnu runs on: `?model=<id>`, else the last one picked, else the first. Switching
- * restarts the lesson on the same board, so the same question can be tried on each model.
- */
-const MODEL_KEY = "dev-jugnu-model";
-function modelFromUrl(): string | undefined {
-  const asked = new URLSearchParams(window.location.search).get("model");
-  let kept: string | null = null;
-  try {
-    kept = window.localStorage.getItem(MODEL_KEY);
-  } catch {}
-  const ids = settings.jugnu.devModels.map((m) => m.id);
-  return [asked, kept].find((id) => id !== null && ids.includes(id)) ?? ids[0];
 }
 
 function formatEvent(e: ChalkEvent): string {
@@ -84,22 +68,8 @@ export function DevShell({ bus }: { bus: EventBus }): JSX.Element {
   }, [jump]);
   const [events, setEvents] = useState<readonly ChalkEvent[]>([]);
   const [isLogOpen, setIsLogOpen] = useState(false);
-  const [modelId, setModelId] = useState(modelFromUrl);
-  const jugnu = useMemo(
-    () => devJugnuLink(settings.jugnu.devModels.find((m) => m.id === modelId)),
-    [modelId],
-  );
-  // The board on screen, so a model switch restarts there.
+  // The board to open the lesson on (a link straight to one: `&board=3`).
   const [boardNow, setBoardNow] = useState(0);
-  const pickModel = (id: string) => {
-    setModelId(id);
-    try {
-      window.localStorage.setItem(MODEL_KEY, id);
-    } catch {}
-    const params = new URLSearchParams(window.location.search);
-    params.set("model", id);
-    window.history.replaceState(null, "", `?${params.toString().replace(/=(?=&|$)/g, "")}`);
-  };
   // Where the learner is outside a lesson: the list, a book, or one of its chapters.
   const [screen, setScreen] = useState<Screen>({ kind: "home" });
   const course = screen.kind === "home" ? undefined : courses[screen.course];
@@ -167,31 +137,15 @@ export function DevShell({ bus }: { bus: EventBus }): JSX.Element {
         </div>
       ) : (
         <LessonPlayer
-          key={`${playing.lesson.id}-${locale}-${modelId ?? ""}`}
+          key={`${playing.lesson.id}-${locale}`}
           lesson={playing.lesson}
           mode={modeFor(playing.lesson.id)}
           registry={propLibrary}
           locale={locale}
           bus={bus}
-          jugnu={jugnu}
           startBoard={boardNow}
-          onBoard={setBoardNow}
           onExit={() => setPlaying(undefined)}
         />
-      )}
-      {settings.jugnu.devModels.length > 0 && (
-        <select
-          class="dev-model"
-          aria-label="Jugnu's model"
-          value={modelId}
-          onChange={(e) => pickModel((e.target as HTMLSelectElement).value)}
-        >
-          {settings.jugnu.devModels.map((m) => (
-            <option key={m.id} value={m.id}>
-              {`Jugnu: ${m.id}`}
-            </option>
-          ))}
-        </select>
       )}
       <button type="button" class="log-toggle" onClick={() => setIsLogOpen(!isLogOpen)}>
         events {events.length}

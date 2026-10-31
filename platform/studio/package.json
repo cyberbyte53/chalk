@@ -8,7 +8,6 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo",
-    "test-jugnu": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/cli.ts",
     "content": "tsx --tsconfig ../../tsconfig.base.json --import ./src/content/record-imports.ts src/content/cli.ts",
     "cache-check": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/cache-check.ts",
     "trace": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/trace.ts",
@@ -25,7 +24,6 @@
     "@chalk/author": "workspace:*",
     "@chalk/content": "workspace:*",
     "@chalk/content-source": "workspace:*",
-    "@chalk/jugnu": "workspace:*",
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",

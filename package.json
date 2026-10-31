@@ -16,7 +16,6 @@
     "typecheck": "pnpm -r run typecheck",
     "check": "pnpm --filter @chalk/studio --silent check",
     "format": "biome check --write .",
-    "test-jugnu": "pnpm --filter @chalk/studio test-jugnu",
     "preview": "pnpm --filter @chalk/studio content preview",
     "publish-content": "pnpm --filter @chalk/studio content publish",
     "build-content": "pnpm --filter @chalk/studio content build",
@@ -36,8 +35,6 @@
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
     "@chalk/prop-coordinates": "workspace:*",
-    "@chalk/prop-decimal": "workspace:*",
-    "@chalk/prop-primes": "workspace:*",
     "nerdamer": "2.0.0",
     "preact": "10.29.8",
     "zod": "3.25.76"

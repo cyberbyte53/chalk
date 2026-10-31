@@ -143,15 +143,15 @@ async function boardFrom(dir: string, item: BoardItem) {
 }
 
 /**
- * The real Class 10 Maths book, alone: a root manifest listing only it, the book linked in. (The
+ * The real Class 9 Maths book, alone: a root manifest listing only it, the book linked in. (The
  * whole real content is built and checked by the content step of `pnpm check`; these tests are
  * about what the builder writes, so one real book is enough.)
  */
 function realBook(): string {
   const dir = join(fixturesDir, `real${++fixtureCount}`);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "build.yaml"), "books: [class10-maths]\n");
-  symlinkSync(join(contentDir, "class10-maths"), join(dir, "class10-maths"), "dir");
+  writeFileSync(join(dir, "build.yaml"), "books: [class9-maths]\n");
+  symlinkSync(join(contentDir, "class9-maths"), join(dir, "class9-maths"), "dir");
   return withModules(dir);
 }
 
@@ -161,6 +161,8 @@ const build = (dir: string, commit = "test") =>
     modules: propModules,
     commit,
     modulesFile: join(dir, MODULES_FILE),
+    // Its boards speak: who voices them (every clip is already made, so nothing is voiced).
+    voices: join(contentDir, "..", "authoring", "voices.json"),
   });
 const messages = (result: Awaited<ReturnType<typeof build>>) =>
   result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");
@@ -170,26 +172,28 @@ describe("building content", () => {
     const result = await build(realBook());
     expect(result.problems).toEqual([]);
     const chapter = builtChapterSchema.parse(
-      result.files.get(builtFile("class10-maths/real-numbers")),
+      result.files.get(builtFile("class9-maths/coordinate-geometry")),
     );
-    expect(chapter.concepts).toHaveLength(6);
+    expect(chapter.concepts).toHaveLength(1);
     const ids = new Set(chapter.concepts.map((c) => c.id));
-    expect(chapter.questions.length).toBeGreaterThan(50);
+    expect(chapter.questions.length).toBeGreaterThan(10);
     expect(chapter.questions.every((q) => q.tests.every((id) => ids.has(id)))).toBe(true);
-    const lemma = builtConceptSchema.parse(
-      result.files.get(builtFile("class10-maths/real-numbers/division-lemma")),
+    const lesson = builtConceptSchema.parse(
+      result.files.get(builtFile("class9-maths/coordinate-geometry/two-numbers-for-a-place")),
     );
-    expect(lemma.overview.length).toBeGreaterThan(2);
-    expect(lemma.overview[0]?.path).toBe("class10-maths/real-numbers/division-lemma/story");
+    expect(lesson.overview.length).toBeGreaterThan(2);
+    expect(lesson.overview[0]?.path).toBe(
+      "class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops",
+    );
   }, 60_000);
 
   it("a page's questions are about its concept, ungraded; a bank question is graded", async () => {
     const dir = realBook();
     const result = await build(dir);
-    const hcf = "class10-maths/real-numbers/hcf-and-lcm";
-    const concept = builtConceptSchema.parse(result.files.get(builtFile(hcf)));
-    const first = builtPageSchema.parse(result.files.get(builtFile(`${hcf}/story`)));
-    expect(first.path).toBe(`${hcf}/story`);
+    const lessonPath = "class9-maths/coordinate-geometry/two-numbers-for-a-place";
+    const concept = builtConceptSchema.parse(result.files.get(builtFile(lessonPath)));
+    const first = builtPageSchema.parse(result.files.get(builtFile(`${lessonPath}/bus-stops`)));
+    expect(first.path).toBe(`${lessonPath}/bus-stops`);
     expect(JSON.stringify(await boardFrom(dir, first))).toContain(
       `"concepts":["${concept.id}"],"isGraded":false`,
     );

@@ -1,8 +1,6 @@
 import type { PropModule } from "@chalk/player";
 import { basicProps } from "@chalk/prop-basics";
 import { coordinateProps } from "@chalk/prop-coordinates";
-import { decimalExpansionProp } from "@chalk/prop-decimal";
-import { primeProps } from "@chalk/prop-primes";
 
 /**
  * Every prop with its view, loaded now: for Node (the server's copy of a board for Jugnu, the content
@@ -10,7 +8,5 @@ import { primeProps } from "@chalk/prop-primes";
  * instead (`propLibrary`).
  */
 export const propModules: Readonly<Record<string, PropModule>> = Object.fromEntries(
-  [...basicProps, ...coordinateProps, ...primeProps, decimalExpansionProp].map(
-    (m) => [m.def.type, m] as const,
-  ),
+  [...basicProps, ...coordinateProps].map((m) => [m.def.type, m] as const),
 );

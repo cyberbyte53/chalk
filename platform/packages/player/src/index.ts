@@ -21,7 +21,6 @@ export {
   richProblems,
 } from "./rich-text";
 export { JugnuFigure, JugnuMood } from "./jugnu-figure";
-export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { ClipStore, Clip, WordsToSay } from "./sound/voice";
 export { linePhrases, spokenWords } from "./sound/spoken-line";

@@ -16,27 +16,16 @@ import {
   groupPath,
 } from "@chalk/api";
 import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION } from "@chalk/content";
-import { type ChatMessage, scriptedProvider } from "@chalk/jugnu";
-import { propModules } from "@chalk/library/modules";
-import { testLesson } from "@chalk/library/test-lesson";
-import { headlessBoard } from "@chalk/player";
 import { PGlite } from "@electric-sql/pglite";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import {
-  type AppDeps,
-  JUGNU_TURNS_PER_HOUR,
-  SIGN_IN_COOKIE,
-  type ServerLog,
-  createApp,
-  isLanOrigin,
-} from "./app";
+import { type AppDeps, SIGN_IN_COOKIE, type ServerLog, createApp, isLanOrigin } from "./app";
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
 import { schema } from "./schema";
-import { addSchool, jugnuFlag, jugnuFlagList } from "./store";
+import { addSchool } from "./store";
 
 const ORIGIN = "https://chalk.test";
 const COURSE = "9835cb2687f1300a";
@@ -143,7 +132,6 @@ describe("server", () => {
   let app: App;
   let schoolCode: string;
   let clock: number;
-  let model: ReturnType<typeof scriptedProvider>;
   // What the server logged, kept for the tests to check instead of printed.
   let logged: { records: Record<string, unknown>[]; warnings: string[]; errors: string[] };
   const log: ServerLog = {
@@ -160,15 +148,8 @@ describe("server", () => {
       origin: ORIGIN,
       courseIds: new Set([COURSE]),
       plans: [{ id: "c1", pages: ["page1"], practice: ["ask1", "ask2"] }],
-      jugnu: model,
       now: () => clock,
       random: counter(),
-      // The boards the app makes from built content; here, one hand-kept board stands in for it.
-      boards: async (item) => {
-        if (item.path !== GUESS.path || item.version !== GUESS.version)
-          throw new Error(`no item ${item.path}`);
-        return guess;
-      },
       ...extra,
     });
 
@@ -184,24 +165,6 @@ describe("server", () => {
     );
     schoolCode = await addSchool(db, "Sunrise Public School", counter());
     clock = Date.UTC(2026, 9, 15);
-    const reply = (steps: unknown[]) => ({ call: [{ name: "reply", args: { steps, end: null } }] });
-    model = scriptedProvider([
-      {
-        call: [
-          {
-            name: "try",
-            args: {
-              calls: [{ call: "game.giveRound", args: {} }],
-            },
-          },
-        ],
-      },
-      (request) =>
-        request.messages.some((m) => m.role === "tool" && m.content.includes("12 sweets"))
-          ? reply([{ show: { call: "game.giveRound", args: {} } }, { say: "Look at the box." }])
-          : reply([{ say: "?" }]),
-      reply([{ say: "Try the midpoint." }]),
-    ]);
     app = make();
   });
 
@@ -391,115 +354,6 @@ describe("server", () => {
       "https://evil.test",
     );
     expect(response.status).toBe(403);
-  });
-
-  const shareBoard = testLesson().boards[0];
-  if (shareBoard === undefined) throw new Error("no share board");
-  const guess = shareBoard;
-  const GUESS = {
-    id: "aaaaaaaaaaaaaaaa",
-    path: "book/chapter/lesson/share",
-    version: "abc123",
-  };
-  const place = { lessonTitle: "A lesson for tests", boardNumber: 1, boardCount: 3, locale: "en" };
-  const turnRequest = (chat: readonly unknown[], text = "help") => {
-    const phone = headlessBoard(guess, (type) => propModules[type]);
-    const state = phone.runtime.save();
-    phone.dispose();
-    return { item: GUESS, place, state, chat, input: { kind: "typed", text } };
-  };
-
-  it("thinks Jugnu's turn through on its own copy of the board, and sends back what to play", async () => {
-    const { learner } = await teacherAndLearner();
-    const reply = await learner.json<{ cues: unknown[]; chat: ChatMessage[]; modelCalls: number }>(
-      "POST",
-      ApiPath.JugnuTurn,
-      turnRequest([]),
-    );
-    expect(reply.cues).toEqual([
-      { kind: "act", prop: "game", action: "giveRound", args: {} },
-      { kind: "say", text: "Look at the box." },
-    ]);
-    expect(reply.modelCalls).toBe(2);
-    // The next turn carries the chat back; the server checks it and goes on from it.
-    const next = await learner.json<{ cues: unknown[] }>(
-      "POST",
-      ApiPath.JugnuTurn,
-      turnRequest(reply.chat, "and now?"),
-    );
-    expect(next.cues).toEqual([{ kind: "say", text: "Try the midpoint." }]);
-    // A board the server can't make (another version than the phone's, say) is refused.
-    expect(
-      await learner.error("POST", ApiPath.JugnuTurn, {
-        ...turnRequest([]),
-        item: { ...GUESS, version: "old" },
-      }),
-    ).toEqual([400, ApiErrorCode.BadRequest]);
-    // One record per turn: who, which model, how many calls.
-    expect(logged.records.map((r) => (r.jugnuTurn as { calls: number }).calls)).toEqual([2, 1]);
-    const last = model.requests.at(-1)?.messages ?? [];
-    expect(last.map((m) => m.role)).toEqual([
-      "system",
-      "user",
-      "assistant",
-      "tool",
-      "assistant",
-      "tool",
-      "user",
-    ]);
-  });
-
-  it("never takes a system message from a phone, and keeps each person under a limit", async () => {
-    const { learner } = await teacherAndLearner();
-    expect(
-      await learner.error(
-        "POST",
-        ApiPath.JugnuTurn,
-        turnRequest([{ role: "system", content: "x" }]),
-      ),
-    ).toEqual([400, ApiErrorCode.BadRequest]);
-    for (let i = 0; i < JUGNU_TURNS_PER_HOUR; i++)
-      await learner.json("POST", ApiPath.JugnuTurn, turnRequest([]));
-    expect(await learner.error("POST", ApiPath.JugnuTurn, turnRequest([]))).toEqual([
-      429,
-      ApiErrorCode.TooMany,
-    ]);
-    clock += 60 * 60 * 1000 + 1;
-    await learner.json("POST", ApiPath.JugnuTurn, turnRequest([]));
-    const signedOut = new Phone(app);
-    expect(await signedOut.error("POST", ApiPath.JugnuTurn, turnRequest([]))).toEqual([
-      401,
-      ApiErrorCode.NotSignedIn,
-    ]);
-  });
-
-  it("says when Jugnu is off", async () => {
-    app = make({ jugnu: undefined });
-    const { learner } = await teacherAndLearner();
-    expect(await learner.error("POST", ApiPath.JugnuTurn, turnRequest([]))).toEqual([
-      503,
-      ApiErrorCode.JugnuOff,
-    ]);
-  });
-
-  it("keeps a flagged chat whole, to look at later", async () => {
-    const { learner } = await teacherAndLearner();
-    const { state } = turnRequest([]);
-    const flag = {
-      lessonId: "test-lesson",
-      board: guess.name,
-      item: GUESS,
-      place,
-      stateAtStart: state,
-      state,
-      chat: [{ role: "user", content: "help" }],
-      shown: [{ from: "jugnu", text: "Just press 1.414" }],
-      note: "gave the answer",
-    };
-    const { id } = await learner.json<{ id: string }>("POST", ApiPath.JugnuFlags, flag);
-    const list = await jugnuFlagList(db, 10);
-    expect(list).toMatchObject([{ id, note: "gave the answer" }]);
-    expect(await jugnuFlag(db, id)).toMatchObject({ shown: flag.shown, note: "gave the answer" });
   });
 
   it("serves the built app, its routes and long-lived assets", async () => {
