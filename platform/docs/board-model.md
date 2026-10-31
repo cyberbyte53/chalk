@@ -75,7 +75,6 @@ A board is a **scene**: the outermost prop, holding the board's pieces, laid out
 const streetAndHouse = page(
   "street-and-house",
   scene({
-    purpose: "The main road is a number line, and 'Street 4' is one number on it. …",
     pieces: {
       title: words.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
       town: place(coordinatePlane, setup(town(), { plane: { upLines: [] } })),
@@ -106,7 +105,6 @@ const streetAndHouse = page(
 | `passBy` | `"rules"`: the board passes only when a rule says `t.self.pass()`; else when its questions are right |
 | `witness` | how a student gets the board right, played on the real props at publish |
 | `noteChecks` | wrong answers and the note each should get, played at publish too |
-| `purpose`, `standsFor` | what the board is for, and what its pieces stand for here, in the author's words, for whoever reads the board |
 
 The step by step of that board:
 

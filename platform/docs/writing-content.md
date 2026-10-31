@@ -67,7 +67,6 @@ A page is a scene ([board-model.md](board-model.md#a-board-its-scene)): its piec
 const seatingPlan = page(
   "seating-plan",
   scene({
-    purpose: "A desk is named by two numbers: its column, then its row. …",
     pieces: {
       title: words.title(t("Desks in a classroom", "कक्षा में डेस्क")),
       tap: words.body(t("Tap the desk at (5, 3), then the one at (3, 5).", "…")),
@@ -94,7 +93,6 @@ export const overview = [busStops, streetAndHouse, dotOnPaper, seatingPlan, twoL
 - **A picture:** a prop drawn still, from the setup you give it: `place(coordinatePlane, …, { still: t("The main road and Street 4, with Aman's house", "…") })`. Nothing on it can be tapped, dragged or focused, and the sentence is what a screen reader reads.
 - **Sizes are the player's:** a board is drawn for a phone and fits any screen on its own (the column grows to 640px, text grows with it, props scale; see [making-a-prop.md](./making-a-prop.md)). A placement can override its prop's rule: `place(def, given, { size: { fit: "fill" } })`.
 - **Every interactive page has a witness:** how a student gets through it, as taps (`tap("town", "walker.step", { direction: "up" })`) and waits, played on the real props at publish.
-- **What the board is for** (`purpose`) and what a piece stands for here (`standsFor`): the author's words, for whoever reads the board.
 
 A bank question's `build` returns a scene the same way, and passes when its questions are right.
 

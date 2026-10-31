@@ -47,8 +47,6 @@ const side = choice({
 const busStops = page(
   "bus-stops",
   scene({
-    purpose:
-      "A refresher on the number line: from the bus stand at 0, the bus moves stop by stop either way, and one number (how far, and which side) fixes where it is.",
     pieces: {
       title: words.title(t("A bus on a straight road", "सीधी सड़क पर एक बस")),
       road: words.body(
@@ -123,7 +121,6 @@ const busStops = page(
         ),
       ),
     },
-    standsFor: { line: "a straight road as a number line: the bus stand at 0, stops both ways" },
     hear: {
       "line.walker.stepped": (me, p, t) => [
         ...(p.x === 3 ? [t.self.show({ name: "atThree" })] : []),
@@ -141,8 +138,6 @@ const busStops = page(
 const streetAndHouse = page(
   "street-and-house",
   scene({
-    purpose:
-      "The main road is a number line, and 'Street 4' is one number on it. Then Street 4 rises from the 4, a second number line with five houses, and one number can't say which: 'House 5' is a number on the line that rose. A pair is how far along, then how far up the line that rises there.",
     pieces: {
       title: words.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
       story: words.body(
@@ -204,9 +199,6 @@ const streetAndHouse = page(
         ),
       ),
     },
-    standsFor: {
-      town: "the town's main road, a number line from Riya's corner; the streets not risen yet",
-    },
     passBy: "rules",
     hear: {
       // At the foot of Street 4, the street rises from the road, with its houses.
@@ -239,8 +231,6 @@ const streetAndHouse = page(
 const dotOnPaper = page(
   "dot-on-paper",
   scene({
-    purpose:
-      'A dot on a notebook page, which has no roads. The book\'s ways of saying where it is, one at a time, each shading where it could still be: "upper half" half the page, "near the left edge" a patch, 5 cm from the left edge a whole line, and 9 cm above the bottom one point, where the two lines cross.',
     pieces: {
       title: words.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
       ask: words.body(
@@ -325,10 +315,6 @@ const dotOnPaper = page(
         ),
       ),
     },
-    standsFor: {
-      sheet:
-        "a notebook page squared in centimetres, with a dot on it, and the ways of saying where it is",
-    },
     passBy: "rules",
     hear: {
       "sheet.clues.clueGiven": (me, _, t) => {
@@ -371,8 +357,6 @@ const same = choice({
 const seatingPlan = page(
   "seating-plan",
   scene({
-    purpose:
-      "A desk is named by its column, then its row: (5, 3) and (3, 5) use the same numbers and are two different desks. The one place the lesson asks about the order.",
     pieces: {
       title: words.title(t("Desks in a classroom", "कक्षा में डेस्क")),
       desks: words.body(
@@ -421,9 +405,6 @@ const seatingPlan = page(
       ),
       same: hidden(same.piece),
     },
-    standsFor: {
-      room: "the classroom's 10 columns and 7 rows of desks, Sonia's at column 4, row 1",
-    },
     hear: {
       // The desk tapped is marked with its pair; once both are marked, the question.
       "room.places.targetChosen": (me, p, t) => {
@@ -454,8 +435,6 @@ const still = { size: { maxHeight: 0.35 } } as const;
 const twoLines = page(
   "two-lines",
   scene({
-    purpose:
-      "The house, the dot and the desk were each found with two lines at right angles, one across and one up, and two numbers: how far across, then how far up. That idea, Descartes', starts coordinate geometry.",
     pieces: {
       title: words.title(t("Two lines did it every time", "हर बार दो रेखाओं ने काम किया")),
       look: words.body(t("Look back at the three places:", "उन तीन जगहों को फिर देखो:")),

@@ -260,12 +260,6 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
   readonly witness?: readonly Step[];
   /** Wrong answers and the note each should get, played at publish too. */
   readonly noteChecks?: readonly NoteCheck[];
-  /**
-   * What the board is for (its scene's describe), and what its pieces stand for here: the author's
-   * words, for whoever reads the board (an agent, a reviewer).
-   */
-  readonly purpose?: string;
-  readonly standsFor?: { readonly [K in keyof P]?: string };
 };
 
 /** What a pattern adds to a scene, untyped: it names its own pieces' paths. */
@@ -529,7 +523,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
 
   const root = prop({
     type: "scene",
-    describe: spec.purpose ?? `The board ${name}.`,
+    describe: `The board ${name}.`,
     variables: sceneVariables,
     start: { hidden: names.filter(isHidden), isPassed: false, saying: [], reads: [] },
     actions: sceneActions,
@@ -663,16 +657,12 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       ...(free.if === undefined ? {} : { hasCondition: true }),
       ...(free.about === undefined ? {} : { about: free.about }),
     };
-  const standsFor = Object.fromEntries(
-    Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),
-  ) as Record<string, string>;
   const model: SceneModel = {
     scene: root,
     given,
     lines,
     freeLines: Object.keys(freeLines),
     ...(Object.keys(sounds).length === 0 ? {} : { sounds }),
-    ...(Object.keys(standsFor).length > 0 ? { standsFor } : {}),
   };
   return {
     board: {

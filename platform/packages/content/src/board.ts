@@ -49,6 +49,4 @@ export type SceneModel = {
    * pieces' own sound there; null only silences it.
    */
   readonly sounds?: Readonly<Record<string, SceneSound>>;
-  /** What each piece stands for on this board, in the author's words (`standsFor`). */
-  readonly standsFor?: Readonly<Record<string, string>>;
 };
