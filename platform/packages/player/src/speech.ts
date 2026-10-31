@@ -81,15 +81,19 @@ export function useSpeech(locale: Locale, onHeard: (text: string) => void): Spee
   };
 }
 
-/** Says the line aloud in the locale's voice; resolves when it ends (at once if it can't speak). */
-export function speak(text: string, locale: Locale): Promise<void> {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return Promise.resolve();
+/**
+ * Says the line aloud in the locale's voice; resolves when it ends: true if it was said, false if
+ * it couldn't be (no voice, or not allowed yet).
+ */
+export function speak(text: string, locale: Locale): Promise<boolean> {
+  if (typeof window === "undefined" || !("speechSynthesis" in window))
+    return Promise.resolve(false);
   return new Promise((resolve) => {
     const line = new SpeechSynthesisUtterance(text.replace(/\*\*?|__?/g, ""));
     line.lang = LANG[locale];
     line.rate = 0.95;
-    line.onend = () => resolve();
-    line.onerror = () => resolve();
+    line.onend = () => resolve(true);
+    line.onerror = () => resolve(false);
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(line);
   });

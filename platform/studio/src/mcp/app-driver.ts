@@ -542,7 +542,8 @@ export async function previewUrl(
     o.state === undefined || Object.keys(o.state).length === 0
       ? ""
       : `&state=${encodeURIComponent(JSON.stringify(o.state))}`;
-  url.search = `?dev&${previewQuery(address)}${state}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
+  // A tool's board keeps time by each line's length (`timed`): it never waits for real sound.
+  url.search = `?dev&timed&${previewQuery(address)}${state}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
   return url.toString();
 }
 

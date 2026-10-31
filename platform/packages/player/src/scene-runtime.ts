@@ -141,7 +141,7 @@ export class SceneRuntime {
                 const { heard } = begun;
                 hearing = heard;
                 hear("started");
-                void services.speak(begun.line).then(() => {
+                void services.speak(begun.line).finally(() => {
                   if (hearing !== heard) return;
                   hearing = undefined;
                   heard.seconds = core.now - heard.at;

@@ -31,6 +31,8 @@ export function useBoardRuntime(
     locale: Locale;
     lineSeconds?: (line: Utterance) => number | undefined;
     hush?: () => void;
+    /** A tool's board: lines keep their lengths; nothing waits for real sound (board-player.tsx). */
+    isTimed?: boolean;
   },
 ): LiveBoard {
   const speed = useContext(BoardSpeedContext);
@@ -38,7 +40,11 @@ export function useBoardRuntime(
   speakRef.current = speak;
   const [runtime] = useState((): LiveBoard => {
     const services = {
-      speak: (line: Utterance) => speakRef.current(line),
+      // A tool's board doesn't wait for sound: a line is said, and the board goes on.
+      speak: (line: Utterance) => {
+        const said = speakRef.current(line);
+        return voice.isTimed === true ? Promise.resolve() : said;
+      },
       frame: (callback: (now: number) => void) => {
         const handle = requestAnimationFrame((ms) => callback(ms * speed));
         return () => cancelAnimationFrame(handle);
@@ -51,9 +57,8 @@ export function useBoardRuntime(
       ? new SceneRuntime(board, (type) => registry[type], {
           ...services,
           ...voice,
-          // At a student's speed a line is over when its sound is; a faster clock (a tool's) can't
-          // wait for sound, so it keeps each line's length.
-          isHeard: speed === 1,
+          // On a student's board a line is over when its sound is; a tool's keeps each line's length.
+          isHeard: voice.isTimed !== true,
         })
       : new BoardRuntime(board, (type) => registry[type], {
           ...services,

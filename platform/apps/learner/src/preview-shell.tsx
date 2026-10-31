@@ -100,6 +100,9 @@ export async function json(path: string): Promise<unknown> {
 /** A node's built item: build/<path>.json. */
 const item = (path: string): Promise<unknown> => json(builtFile(path));
 
+/** A tool is watching (`&timed`, the tools' URLs): lines keep their lengths; nothing waits for sound. */
+const isTimed = new URLSearchParams(window.location.search).has("timed");
+
 function unhide(piece: Piece): Piece {
   const { isHidden: _, ...rest } = piece;
   return "children" in rest
@@ -623,6 +626,7 @@ export function PreviewBoard({
               record={bus.record}
               audio={voice.source}
               isPicture={isShot}
+              isTimed={isTimed}
               onPass={() => {
                 const w = window as Window & { __chalkPassed?: string[] };
                 w.__chalkPassed ??= [];

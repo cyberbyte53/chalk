@@ -62,7 +62,11 @@ const server = createServer((req, res) => {
     return;
   }
   if (path === "/dev-voice") {
-    void voiceEndpoint(ROOT, req, res);
+    voiceEndpoint(ROOT, req, res).catch((error: unknown) => {
+      if (res.headersSent) return;
+      res.statusCode = 500;
+      res.end(String(error instanceof Error ? error.message : error));
+    });
     return;
   }
   if (path !== "/mcp") {

@@ -112,6 +112,10 @@ function devContent(): Plugin {
  * A threads or reviews file that changes on disk (written by the studio service, or git) is pushed
  * to open previews at once (chalk:comments).
  */
+/** Whether a request comes from this machine. */
+const isLoopback = (address: string | undefined) =>
+  address === "127.0.0.1" || address === "::1" || address === "::ffff:127.0.0.1";
+
 function devStudio(): Plugin {
   const bodyOf = (req: IncomingMessage): Promise<string> =>
     new Promise((resolve) => {
@@ -151,7 +155,12 @@ function devStudio(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url ?? "";
-        if (
+        // The live voice makes clips on this machine for this machine only: a phone on the Wi-Fi
+        // (dev sign-in) uses its own voice.
+        if (url.startsWith("/dev-voice") && !isLoopback(req.socket.remoteAddress)) {
+          res.statusCode = 403;
+          res.end();
+        } else if (
           url.startsWith("/dev-review") ||
           url.startsWith("/dev-pipeline") ||
           url.startsWith("/dev-voice")

@@ -63,6 +63,11 @@ export type BoardPlayerProps = {
   mode?: PlayMode | undefined;
   /** Drawn as a picture of the board as it stands (a tool's): nothing passing shows on it. */
   isPicture?: boolean;
+  /**
+   * A tool's board: each line keeps its length on the board's clock, and nothing waits for real
+   * sound. A student's board (the default) waits for each line's sound to end.
+   */
+  isTimed?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
   onRuntime?: ((runtime: LiveBoard) => void) | undefined;
 };
@@ -94,6 +99,7 @@ export function BoardPlayer({
   mode,
   onRuntime,
   isPicture = false,
+  isTimed = false,
 }: BoardPlayerProps): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
@@ -112,6 +118,7 @@ export function BoardPlayer({
   const runtime = useBoardRuntime(board, registry, narrator.speak, {
     locale,
     lineSeconds: (line) => narratorRef.current.seconds(line),
+    isTimed,
     hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).

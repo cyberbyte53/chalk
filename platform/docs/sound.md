@@ -31,7 +31,7 @@ The board never asks how long a line is: it waits for **ended** (or **cut**), li
 3. **the phone's own voice:** always there, offline too;
 4. **quiet:** nothing heard, for as long as the words would take (muted, or a phone with no voice).
 
-Any other source (an AI voice agent) is one more in the list. On a student's board a line is over when its sound is: the board waits for it, whatever its length. Where the clock runs faster than sound can (a tool, a check, a test), two voices keep time instead:
+Any other source (an AI voice agent) is one more in the list. On a student's board a line is over when its sound is: the board waits for it, whatever its length, and every source says whether it was heard, so what couldn't be heard falls through to quiet (the pacing holds when nothing can play: autoplay blocked, no Hindi voice). Each sound is bounded by its own length and a margin; a live voice has a few seconds to make a line. A tool's board (its URL says `timed`), a check and a test never wait for sound; two voices keep time instead:
 - muted: nothing heard, **ended** after the time the words would take, so the board's pacing is the same;
 - a test voice (the build, `play`): **ended** after an estimate, on the jumping clock.
 

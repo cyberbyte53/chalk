@@ -55,11 +55,13 @@ async function devLive(
   speaker: string,
   locale: Locale,
   words: string,
+  signal: AbortSignal,
 ): Promise<PlayableClip | undefined> {
   const answer = await fetch("/dev-voice", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ speaker, locale, words }),
+    signal,
   });
   if (!answer.ok) return undefined;
   const clip = (await answer.json()) as { url?: string; seconds?: number };
