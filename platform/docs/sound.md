@@ -59,13 +59,13 @@ A sound ships with what uses it: a chapter's clips with the chapter (`content/<b
 
 ### Words known only when played
 
-A voiced clip is made by the speaker's voice whenever its words are known: **ahead** at build for fixed lines, or **on the go** while playing (a voice server: our hosted Piper, or an AI voice), for words known only then: Jugnu's replies, a line with an open value. The same request, the same key (voice + words), the same store; what is voiced on the go is kept for the next student. Lines with blanks can also be glued from pieces in the store (fixed words, and each value's pieces from a sayer). Which voice a speaker has is a setting; whatever review uses, the shipped app has too.
+The sound system asks one thing of a voice: **a clip for these words, in this speaker's voice.** How the voice makes it is the voice's own business: **ahead**, at build, for fixed lines (kept in the chapter's store); or **on the go**, while playing (a voice server: our hosted Piper, an AI voice), for words known only then, such as Jugnu's replies; kept or not, as that voice sees fit. Lines with blanks can also be glued from pieces in the store (fixed words, and each value's pieces from a sayer). Which voice a speaker has is a setting; whatever review uses, the shipped app has too.
 
 ## The engine
 
 One engine plays every cue, on every screen (a phone, the preview, the editor's panel): what is reviewed is what a student hears.
 
-- **Finds its clip:** for words, the store; else glued pieces; else **the speaker's voice, on the go** (a voice server: our hosted Piper, or an AI voice), kept in the store after; else the phone's own voice; else quiet for as long as the words would take. For a sound, its chosen clip (a missing one plays nothing: the build catches it).
+- **Finds its clip:** for words, the store; else glued pieces; else **the speaker's voice, on the go** (a voice server: our hosted Piper, or an AI voice); else the phone's own voice; else quiet for as long as the words would take. For a sound, its chosen clip (a missing one plays nothing: the build catches it).
 - **Two channels,** by what is played: **words are the voice; sounds are sounds**, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
 - **The browser's first-touch rule,** once: a sound refused before the page is touched waits and plays on the first touch.
 - **Reports** to the board when a cue started, ended or was cut; the board never knows lengths or sources.
