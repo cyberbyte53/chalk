@@ -647,7 +647,7 @@
   role: reviewer
   createdAt: 2026-10-29T07:59:30.263Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
-  target: town/target
+  target: town/places/target
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:50
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Taste call (the order things appear in), and it matters. Principle 4 (let them find it) and
@@ -689,7 +689,7 @@
   role: reviewer
   createdAt: 2026-10-29T07:59:30.383Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
-  target: town/target
+  target: town/places/target
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:50
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Mechanical (overflow). On a 390 phone, 'Aman's house: Street number 4, House number 5' wraps
@@ -755,7 +755,7 @@
   role: reviewer
   createdAt: 2026-10-29T07:59:30.414Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
-  target: town/clearLight
+  target: town/places/clearLight
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:50
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Mechanical (undefined term). Principle 1. When Riya reaches Street 4, a 'Clear' button
@@ -916,7 +916,7 @@
   role: reviewer
   createdAt: 2026-10-29T07:59:30.607Z
   board: class9-maths/coordinate-geometry/dot-on-paper
-  target: ground/showHidden
+  target: ground/clues/showHidden
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Mechanical (undefined term / give-away). 'Show the point' is there from the very start.
     Tapped before any clue, it drops an orange dot on the stall's spot, which skips the clues the
@@ -936,7 +936,7 @@
   role: reviewer
   createdAt: 2026-10-29T07:59:30.639Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
-  target: ground/xName
+  target: ground/plane/xName
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:115
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Mechanical (screen). 'west fence' sits at the top of the left line, which is fine. 'south
@@ -1544,7 +1544,7 @@
   role: reviewer
   createdAt: 2026-10-29T07:59:39.647Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
-  target: ground/showHidden
+  target: ground/clues/showHidden
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:115
   commit: 081d53ee0ea6aab785c0bdb1b7a83550e2b34bff
   text: "Mechanical (undefined term / give-away). 'Show the point' is there from the very start.
@@ -1638,7 +1638,7 @@
   role: reviewer
   createdAt: 2026-10-29T08:09:49.503Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
-  target: room/target
+  target: room/places/target
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:218
   commit: 19f8624247061fc2780c8a49d7cb91b194922e94
   text: "Mechanical (screen, small). Side effect of keeping two lines of room for the place header: on
@@ -2009,7 +2009,7 @@
   role: reviewer
   createdAt: 2026-10-29T09:19:38.952Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
-  target: road/whereWalker
+  target: road/walker/whereWalker
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
   text: "Mechanical (wrong value flashes, and one name per thing). Played at speed 1 with frames.
@@ -2071,7 +2071,7 @@
   role: reviewer
   createdAt: 2026-10-29T09:19:39.056Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
-  target: road/step:up
+  target: road/walker/step:up
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
   text: "Mechanical (screen). On a straight road the pad still shows ↑ and ↓, greyed, here and in
@@ -2112,7 +2112,7 @@
   role: reviewer
   createdAt: 2026-10-29T09:19:39.174Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
-  target: town/target
+  target: town/places/target
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
   text: "Mechanical (give-away). Principle: the screen mustn't give the answer away. After Aman's
@@ -2236,7 +2236,7 @@
   role: reviewer
   createdAt: 2026-10-29T09:19:39.524Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
-  target: ground/hidden
+  target: ground/clues/hidden
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
   text: "Mechanical (missing labels). Principle 1 and 'can I see what the text points at?'. The text
@@ -2325,7 +2325,7 @@
   role: reviewer
   createdAt: 2026-10-29T09:19:39.761Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
-  target: room/target
+  target: room/places/target
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:271
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
   text: "Mechanical (wording). Principle 10. Tapping a desk shows 'This desk: Column 3, Row (from the
@@ -2550,7 +2550,7 @@
       text: ""
       status: closed
 - id: cmvtc1c2j6sf
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T09:19:59.323Z
@@ -2558,7 +2558,6 @@
   target: ask/prompt
   source: content/class9-maths/coordinate-geometry/questions/tap-the-desk/family.ts:18
   commit: cb8263fd2da51164b4a2455c8b90518dec94e98b
-  turn: person
   text: "Taste call for the person. The agreed principle: the screen mustn't give the answer away. The
     question checks one thing, column first. The prompt states it: 'Desks are named (column, row):
     the column counted from the left, the row from the front. Tap the desk (5, 3)'. A student who
@@ -2587,6 +2586,11 @@
         **(5, 3)** दबाओ, फिर जाँचो दबाओ।', and the axes are still named Column and Row. Tapping (3,
         5) and pressing Check now reaches the note 'That desk is (3, 5): column 3, row 5. The column
         comes first.' Tapping (5, 3) then passes."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:27.035Z
+      text: ""
+      status: closed
 - id: cmvtcmn0pvkm
   status: closed
   by: reviewer
@@ -2749,7 +2753,7 @@
       text: ""
       status: closed
 - id: cmvtfxu06wkt
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.406Z
@@ -2757,7 +2761,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:205
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
-  turn: person
   text: "Taste call for the person. Principle 4 (let them find it) and s3.1-II. The board asks 'How
     would you say exactly where it is?', but both edges are already numbered like a ruler, and the
     dot sits on the crossing of 5 and 9. A student can read off '5 and 9' before trying any clue, so
@@ -2790,6 +2793,11 @@
         cm' and '9 cm' through the dot after the fourth. The opening still says each square is 1 cm,
         so a student can count them to check. The patch, the line and the crossing all read clearly
         without the numbers."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:28.604Z
+      text: ""
+      status: closed
 - id: cmvtfxu502ru
   status: closed
   by: reviewer
@@ -2871,7 +2879,7 @@
       text: ""
       status: closed
 - id: cmvtfxuf63j6
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:14.946Z
@@ -2879,7 +2887,6 @@
   target: ask
   source: content/class9-maths/coordinate-geometry/questions/place-the-dot/family.ts:20
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
-  turn: person
   text: "Mechanical (screen). The prompt bolds '**7 cm from the left edge**' and '**3 cm above the
     bottom**', but the question prompt is drawn bold all through, so the emphasis doesn't show in en
     or hi. The two distances, which are the whole question, don't stand out from 'Drag it there,
@@ -2933,8 +2940,13 @@
         prompts read as plain text, the KaTeX in them (HCF(225, 135), √2, fractions) sits more
         evenly with the words than before, and the option buttons stay bold, so options and prompt
         are still told apart. No regression to file."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:35.887Z
+      text: ""
+      status: closed
 - id: cmvtfxunxm6v
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T11:09:15.261Z
@@ -2942,7 +2954,6 @@
   target: spot
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:352
   commit: 0958bb6989ea1c6b9d2d28cd3e421d561d845112
-  turn: person
   text: "Small, taste. The house and the desk each have an orange caption on the picture ('Aman's
     house: Street number 4, House number 5', 'The desk: Column 5, Row 3'). The dot has none, so the
     three pictures don't read alike, and the board's claim is that they are the same idea. The dot
@@ -2975,6 +2986,11 @@
         9 cm ऊपर', and no buttons or ↺. Two small things, not blocking. The caption is all one
         colour, while the house and the desk start with an orange name ('Aman's house:', 'The
         desk:'). It also nearly repeats the sentence just above it. Fine to leave as is."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:36.860Z
+      text: ""
+      status: closed
 - id: cmvtfxushdqn
   status: closed
   by: reviewer
@@ -3020,7 +3036,7 @@
       text: ""
       status: closed
 - id: cmvtqhenv3mu
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T16:04:23.803Z
@@ -3031,7 +3047,6 @@
     is a dot on one, and each small square is 1 cm across. How would you say exactly where the dot
     is? Try these, one at a time, and watch where it could still be.
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
-  turn: agent
   text: why the first 2 sentences bro , like no real connection
   changed: []
   messages:
@@ -3069,8 +3084,17 @@
         - Hindi: 'यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है।'
 
         - The two town sentences are gone, and the 1 cm comes before any clue uses cm.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:12.980Z
+      text: Confirmed by the reviewer; back to you to close.
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:40.836Z
+      text: ""
+      status: closed
 - id: cmvtrdv76ig7
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.226Z
@@ -3078,7 +3102,6 @@
   target: spot
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:362
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
   text: >-
     Mechanical (regression from cmvtqi7psx10). Picture and the last board don't agree.
 
@@ -3121,16 +3144,24 @@
 
         - The caption, the '5 cm' and '9 cm' measures and the orange dot are unchanged, and nothing
         overlaps the numbers.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:13.048Z
+      text: Confirmed by the reviewer; back to you to close.
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:43.816Z
+      text: ""
+      status: closed
 - id: cmvtrdv8rqpu
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.283Z
   board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
-  target: town/whereWalker
+  target: town/walker/whereWalker
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:118
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
   text: >-
     Mechanical (screen, a jump). On a 390 phone in English:
 
@@ -3184,14 +3215,27 @@
         - Other boards that use the walker: bus-stops and the walk-to-address and bus-to-stop
         questions, in en and hi. Nothing moved or broke. The questions don't show the line, and no
         empty band appears there.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:13.088Z
+      text: Confirmed by the reviewer; back to you to close.
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:45.126Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:47.890Z
+      text: ""
+      status: closed
 - id: cmvtrdv9ru7w
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.319Z
   source: authoring/books/class9-maths/coordinate-geometry/flow.md:23
   commit: 91bd9a26314ba725895a3fafda7a4b2020e227b5
-  turn: agent
   quote: a notebook page squared in centimetres, with no numbers on its edges, and the dot on it
   text: >-
     Mechanical (flow and board disagree, from cmvtqi7psx10).
@@ -3228,8 +3272,17 @@
       text: Read flow.md. Fixed. dot-on-paper's Needs now says 'with no numbers on its edges at first (an
         edge is numbered once a distance along it is given)', which matches the board. It waits on
         the person's re-approval.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:13.120Z
+      text: Confirmed by the reviewer; back to you to close (flow.md waits on your re-approval).
+    - by: you
+      role: person
+      at: 2026-10-31T16:31:22.191Z
+      text: ""
+      status: closed
 - id: cmvtrdvatype
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-29T16:29:38.357Z
@@ -3273,4 +3326,705 @@
       text: Read flow.md. Fixed. street-and-house's Purpose now says the town has six streets, not eight,
         so each block is big enough to tap on a phone. P (Street 7) is gone, and H (Street 2, House
         5) keeps its numbers. This matches the board. It waits on the person's re-approval.
-  turn: agent
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:13.152Z
+      text: Confirmed by the reviewer; back to you to close (flow.md waits on your re-approval).
+    - by: you
+      role: person
+      at: 2026-10-31T16:31:36.420Z
+      text: ""
+      status: closed
+- id: cmvwil5r6v5r
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-10-31T14:46:40.483Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: road/text
+  snapshot: "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, …,
+    and the stops to the left are −1, −2, −3, …: a number line."
+  commit: ffff03d353fb8f9454d522c305754427776ef004
+  text: why is this ending with the text a number line ; reads odd
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T15:55:07.233Z
+      text: >-
+        Agreed, it reads oddly: "…the stops to the left are −1, −2, −3, …: a number line." The colon
+        tacks the name onto the end of a list, so it lands as a fragment (and spoken, "…minus 3, and
+        so on: a number line" sounds cut off).
+
+
+        Proposal: say it as its own sentence. Screen: "A bus runs on a straight road. Its stand is
+        at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3,
+        …. **The road is a number line.**" Spoken the same way ("…minus 3, and so on. The road is a
+        number line."), and in Hindi "…माइनस 3, और आगे। सड़क एक संख्या रेखा है।". OK to change it
+        like that?
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:08:35.665Z
+      text: 'Plan (agreed in chat): "The road is a number line." as its own sentence, shown and said, in
+        both languages.'
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:08:35.860Z
+      text: 'Done. Screen: "…and the stops to the left are −1, −2, −3, … **The road is a number line.**"
+        (सड़क एक संख्या रेखा है।); said the same way ("…minus 3, and so on. The road is a number
+        line."), voiced again.'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T16:44:06.406Z
+      text: "Rechecked bus-stops in en and hi, played to the end. Fixed. 'The road is a number line.' is
+        its own bold sentence on screen, and the voice says '…minus 3, and so on. The road is a
+        number line.' / '…माइनस 3, और आगे। सड़क एक संख्या रेखा है।' One small leftover is filed
+        separately: at 390 in Hindi the line breaks after '−3,', so the next line opens with '…।'."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:46.445Z
+      text: ""
+      status: closed
+- id: cmvwjl9yhg6b
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-10-31T15:14:45.545Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ask/text
+  snapshot: Here is a dot on a page of your notebook, and each small square is 1 cm across. How would
+    you say exactly where the dot is? Try these, one at a time, and watch where it could still be.
+  commit: 690671da61be86cc919b786a8b062382034d9686
+  text: shouldn't cm be pronounced as centimetre?
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T15:55:07.184Z
+      text: >-
+        You're right. I checked: both voices read "1 cm" as "one see-em", in English and in Hindi.
+        The cause: this question has no spoken words of its own, so the voice reads the screen
+        words, and "cm" is read letter by letter. The build already stops lines with maths or signs
+        until their spoken words are written, but it doesn't catch abbreviations, so this one
+        slipped through.
+
+
+        Proposal, two parts:
+
+        1. This line: write its spoken words — en "…each small square is 1 centimetre across…", hi
+        "…हर छोटा खाना 1 सेंटीमीटर चौड़ा है…" (the screen keeps "1 cm").
+
+        2. So it can't slip through again: the build treats these like maths and stops the line
+        until its spoken words are written: (a) any word in Latin letters inside a Hindi line (a
+        Hindi voice can only spell it out), and (b) a Latin word with no vowel (cm, km, kg, mm, ml),
+        which a voice can only spell. No list of units to keep up.
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:06:20.704Z
+      text: "Plan (agreed in chat): the writer's job, not a build rule. The pages guide says units,
+        abbreviations and Latin letters in a Hindi line always get their spoken words; the
+        reviewer's rubric listens for it; every line in this chapter that said \"cm\" gets its
+        spoken words."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:06:20.757Z
+      text: "Done. This line now says \"1 centimetre\" / \"1 सेंटीमीटर\" (the screen keeps \"1 cm\"). So
+        do the other lines that spelled it: this board's line and \"Two distances fixed the dot\",
+        two-lines' \"The dot\", and the place-the-dot questions; the street-plan question says
+        \"first / second\" instead of \"(i) / (ii)\". All voiced again: listen with ▶ in the script
+        beside the board."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T16:44:06.456Z
+      text: Listened to dot-on-paper and two-lines in en and hi. Fixed. ask, line and fixed on
+        dot-on-paper, and theDot on two-lines, all say 'centimetre' / 'सेंटीमीटर', while the screen
+        keeps 'cm'. Nothing else on this lesson's boards is spelled out letter by letter.
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:47.821Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:47.970Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:48.041Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:50.983Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:54.130Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:55.445Z
+      text: ""
+      status: closed
+- id: cmvwms6hv4md
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.499Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: side
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:48
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "Mechanical, a rule (pre-existing, but it shows now). The order breaks if the student goes
+    left first. Played: ← ← from the stand, and at −2 the question 'The bus is at −2. Where is it?'
+    appears before the student was ever asked to go there. Then → five times to 3 shows atThree,
+    'Now take it to −2', *below* the question that is already open. A student who explores, which is
+    what the arrows invite, reads the board out of order: an answer is asked for first, and the
+    instruction comes after it. Suggested: in hear, show side at x = −2 only once atThree has been
+    shown."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.413Z
+      text: 'Plan: show the question only once "Now take it to minus 2" has been shown, whichever way the
+        student got to −2.'
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:38.354Z
+      text: 'Done: the question is shown at −2 only once "Now take it to minus 2" has been shown. Played:
+        ← ← first, nothing is asked; then → to 3 says the instruction.'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:14.876Z
+      text: "Rechecked bus-stops by playing, in en at 390 and hi at 360. Fixed. Going ← ← first asks
+        nothing: the bus only shows 'The bus: −2'. Then → to 3 says 'Now take it to −2', and back at
+        −2 the question appears, below the instruction. In both languages, the right-hand option
+        gets its note, −2 stops gets its own note, and the left option passes and shows 'enough'."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:50.776Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:50.839Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:51.101Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:51.174Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:52.057Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:53.957Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:55.514Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:56.098Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:00.232Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:04.830Z
+      text: ""
+      status: closed
+- id: cmvwms6k332y
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.579Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: side
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:48
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "Mechanical, Hindi wording (principle 10: one name per thing). Everywhere on this board the
+    Hindi calls the sign 'माइनस' (road, atThree, side, side-minus-note). Only side-right-note, on
+    screen and spoken, says 'ऋण चिह्न बताता है कि किस ओर।'. A student meets a new word for the same
+    mark in the one note meant to help them. Suggested: 'माइनस का चिह्न बताता है कि किस ओर।' (or
+    'माइनस बताता है…', as side-minus-note does)."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.474Z
+      text: "Plan: the note says माइनस, as the rest of the board does (screen and spoken)."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:38.465Z
+      text: 'Done: "बस को देखो: वह 0 से बाईं ओर गई। माइनस का चिह्न बताता है कि किस ओर।" (shown and said).'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:14.931Z
+      text: "Rechecked in hi by choosing 'अड्डे से 2 स्टॉप, दाईं ओर'. Fixed. The note is shown and said as
+        'बस को देखो: वह 0 से बाईं ओर गई। माइनस का चिह्न बताता है कि किस ओर।'. Every Hindi line on
+        the board now calls the sign माइनस."
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:59.442Z
+      text: ""
+      status: closed
+- id: cmvwms6ljz01
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.631Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: road/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:48
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "Mechanical, screen. At 390 in Hindi the line breaks after '−3,', so the next line starts with
+    '…।' on its own: '…। सड़क एक संख्या रेखा है।'. The ellipsis reads as belonging to the new
+    sentence. Suggested: keep '−3, …।' together with no-break spaces. The same thing happens in
+    English on street-and-house#story, where the bold 'Street 4' breaks as 'Street' / '4.' at 390."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.545Z
+      text: "Plan: no-break spaces where a break strands a piece: before the । after …, and between Street
+        and its number."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:38.588Z
+      text: "Done: no-break spaces before । after … on bus-stops' road (Hindi), and between Street/House
+        (गली/मकान) and its number throughout the lesson."
+      status: ready
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:16:02.987Z
+      text: "Changed how this is fixed (agreed in chat): no special spaces in the text any more. The
+        screen keeps a word with its number (Street 4, गली 4) and … with what's before it by itself,
+        as it draws text, for every lesson."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:14.970Z
+      text: Rechecked bus-stops#road in hi at 390 and 360, and street-and-house#story in en at 390. Fixed.
+        In Hindi, '−3, …।' stays together, and the bold 'सड़क एक संख्या रेखा है।' follows it on the
+        same line. In English, 'Street 4.' moves to its own line as a whole. It no longer splits as
+        'Street' / '4.'.
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:03.491Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:13.965Z
+      text: ""
+      status: closed
+- id: cmvwms6n19t9
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.685Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: line/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:239
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "Mechanical, screen. A number gets split from its unit at the end of a line. -
+    dot-on-paper#line, hi at 360: 'बाएँ किनारे से 5' / 'cm पर है।'. - dot-on-paper#fixed, hi at 360:
+    '…से 5' / 'cm और…'. - two-lines#theDot, en at 390: '…then 9' / 'cm up from the bottom.', and hi
+    at 390: '…से 9' / 'cm ऊपर।'. The student reads '9' as the end of a line and 'cm up' as a
+    fragment. Suggested: a no-break space between each number and its unit (5 cm, 9 cm, 1 cm) in
+    these lines, and in the place-the-dot questions if they have the same text."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.628Z
+      text: "Plan: a no-break space between each number and its cm, in every line that has one."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:38.702Z
+      text: 'Done: a no-break space between every number and its cm in the lesson and the place-the-dot
+        questions. Looked at two-lines in en and hi at 390: "9 cm" stays together. (A voice is given
+        plain spaces, so this changes no clip.)'
+      status: ready
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:16:03.036Z
+      text: "Changed how this is fixed (agreed in chat): the text is plain again; the screen keeps a
+        number with its unit (5 cm), and a pair's numbers together ((2, 5)), by itself, as it draws
+        text. Looked at dot-on-paper at 360 in en and hi: every number stays with its cm."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:15.010Z
+      text: "Rechecked dot-on-paper at 360 (en and hi) and two-lines#theDot at 360 and 390 (en and hi).
+        Fixed. Each number stays on the same line as its cm: 'बाएँ किनारे से' / '5 cm पर है।', '…से'
+        / '9 cm ऊपर।', and in English 'then 9 cm up from the bottom.' The voice still says
+        'centimetre' / 'सेंटीमीटर'."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:08.062Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:18.275Z
+      text: ""
+      status: closed
+- id: cmvwms6p6mj0
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.762Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: room
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:365
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "Picture and text disagree (principle: is the picture physically right?). The text says rows
+    are 'counted from the front (row 1 is the front row)', and row 1 is drawn at the bottom. But
+    every chair is drawn *below* its desk, so each student sits facing up the page, towards row 7.
+    In that picture the front of the room is at the top, and row 1 is the back row. A careful
+    student sees 'front' and the seats pointing opposite ways. two-lines#desk has the same drawing,
+    and its line says 'row 3 up from the front'. Suggested: draw the chairs above the desks
+    (students face down, towards row 1), or mark the front (a blackboard or teacher's desk) along
+    the bottom edge. Since this is the prop's drawing, check the other classroom boards and
+    questions that use it."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:50:33.534Z
+      text: "Plan (the person's choice in chat): a blackboard along the bottom edge, the front, and each
+        chair moved to the other side of its desk, so the students face it."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:50:33.975Z
+      text: "Done, in the classroom prop's drawing (so every board and question with the classroom has
+        it): a thin dark blackboard along the bottom edge, and each chair on the far side of its
+        desk, facing the front. Looked at seating-plan at 360 and 640 (Sonia's label stays clear of
+        the board) and two-lines' desk."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:15.044Z
+      text: "Rechecked seating-plan (en 390 and 640×720, hi 360), two-lines#desk and tap-the-desk 2e01e032
+        (en and hi, 360). Half done. The chairs are now on the far side of each desk, facing row 1,
+        which is right. The blackboard is not yet read as a blackboard, or as the front. It is an
+        unnamed dark bar, and it sits on the Column axis line, from just after 3 to 7. On
+        tap-the-desk, with no Sonia label, it reads as a thick piece of the column number line: a
+        student sees 'columns 3 to 7 are marked' and may think the answer lies there. On
+        seating-plan, 'Sonia' / 'सोनिया' is printed right above it, so it reads as Sonia's label for
+        the bar. Nothing on the board names it, so 'counted from the front (row 1 is the front row)'
+        still has nothing on the picture to point at. Suggested: (1) give it its name on the
+        picture, 'Blackboard' / 'श्यामपट' (or say 'the blackboard is at the front' in desks). (2)
+        Draw it inside the room, in the gap below row 1, clear of the axis line and its ticks, so it
+        can't be read as part of the number line. (3) Keep Sonia's label off it, for example to the
+        side of her desk. This is the prop's drawing, so it reaches every classroom board and
+        question."
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:26:55.064Z
+      text: "Fixed again after the re-check (agreed in chat): the blackboard says Blackboard / श्यामपट,
+        sits inside the room just above the front wall, clear of the Column line; Sonia's name is
+        above her desk, so nothing touches. Looked at seating-plan at 360 and 640."
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:33:07.504Z
+      text: "Rechecked seating-plan (en and hi at 360 and 390, played: tapped (5, 3), (3, 5), then Sonia's
+        (4, 1) in hi at 360), two-lines#desk (en and hi at 360) and all 4 tap-the-desk boards (en
+        and hi at 360, played a4b97a8c in hi). Fixed. - The bar is named on the picture,
+        'Blackboard' / 'श्यामपट'. It sits inside the room below row 1, above the Column line, and
+        touches neither the line nor its ticks. So 'row 1 is the front row' now has something on the
+        picture to point at. - The chairs face it. - 'Sonia' / 'सोनिया' is above her desk, between
+        rows 1 and 2, and no longer sits on the board. - On tap-the-desk, with no Sonia label, the
+        bar reads as the blackboard, not as part of the number line. One thing it left is filed
+        separately: a ring on a row-1 desk covers the blackboard's name, and on seating-plan Sonia's
+        name too."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:09.527Z
+      text: ""
+      status: closed
+- id: cmvwms6qpyie
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.817Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: same
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:365
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "Small, wording. same-yes-note says 'The column comes first. Tap (5, 3), then (3, 5): they are
+    in different places.' But the question only appears after the student has already tapped both
+    desks, and both are still marked on the plan. 'Tap them' asks again for what they just did, and
+    doesn't say *why* yes is wrong. Suggested: point at what's on the screen: 'The column comes
+    first: (5, 3) is column 5, row 3, and (3, 5) is column 3, row 5. Look at the two marked desks:
+    they are in different places.' Hindi to match."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.742Z
+      text: "Plan: the note points at the two desks already marked and says which number is the column and
+        which the row, instead of asking to tap them again."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:38.817Z
+      text: 'Done: "The column comes first. Look at the two marked desks: (5, 3) is column 5, row 3, and
+        (3, 5) is column 3, row 5. They are in different places." (and in Hindi).'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:15.078Z
+      text: "Rechecked seating-plan in hi at 360 and en at 390, tapping (5, 3) and (3, 5) and then
+        choosing Yes. Fixed. The note now points at what is on the screen: 'The column comes first.
+        Look at the two marked desks: (5, 3) is column 5, row 3, and (3, 5) is column 3, row 5. They
+        are in different places.' The Hindi matches, shown and said, and both desks are still marked
+        when it plays. No then passes."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:10.972Z
+      text: ""
+      status: closed
+- id: cmvwms6s4uyr
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.868Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: desk
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:448
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "flow.md says two-lines shows each place 'with its route along, then up, drawn in colour so
+    its two lines stand out'. The house has a bold blue route and the dot has blue dashed lines. The
+    desk's two lines, though, are thin grey dashes running behind the desks, and on a phone they
+    nearly disappear into the rows. Of the three pictures, the desk's 'across, then up' is the one
+    the student can't see, even though the line above it ('column 5 across, then row 3 up from the
+    front') asks them to. Suggested: draw the desk's two lines in the same colour and weight as the
+    dot's."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.835Z
+      text: "Plan: draw the desk's two lines in colour, as the dot's are."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:38.925Z
+      text: "Done: a highlighted point's two distances are drawn in colour, as the dot's lines are (the
+        prop's style for an accent point). Looked at two-lines in en and hi."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:15.113Z
+      text: Rechecked two-lines#desk in en and hi at 390. Fixed. The desk's two lines are now dashed in
+        the same colour and weight as the dot's lines. One runs across row 3 from the Row axis, the
+        other up column 5 from the Column axis, and they meet at the ringed (5, 3). On a phone they
+        stand out from the rows. The three pictures now read alike.
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:12.497Z
+      text: ""
+      status: closed
+- id: cmvwms6tji4z
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T16:44:06.919Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines
+  target: descartes/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:448
+  commit: 0fe7cdf32ed33498568852acd85372c516f940e5
+  text: "As the listener. The script says this line is read from the screen, including '(1596–1650)' /
+    '(1596–1650)'. A dash between two numbers can be voiced as 'minus' or skipped, giving '1596
+    minus 1650' or 'fifteen ninety-six sixteen fifty', and the build doesn't stop it, the way it
+    stops lines with maths signs. Please listen with ▶. If it doesn't say 'from 1596 to 1650', give
+    the line its spoken words: '…René Descartes, who lived from 1596 to 1650, …' / '…रेने देकार्त,
+    जो 1596 से 1650 तक रहे, …'."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T16:53:33.922Z
+      text: "Plan: write the line's spoken words, saying the years as \"from 1596 to 1650\"."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:02:39.030Z
+      text: 'Done: spoken words written: "…It grew from René Descartes, who lived from 1596 to 1650, …" /
+        "…जो 1596 से 1650 तक रहे…". The screen keeps (1596–1650).'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:16:15.153Z
+      text: "Listened to two-lines#descartes in the script. Fixed. The English says '…René Descartes, who
+        lived from 1596 to 1650, …' and the Hindi '…रेने देकार्त से आया, जो 1596 से 1650 तक रहे, …'.
+        The screen keeps '(1596–1650)'. One small thing, take it or leave it: 'जो 1596 से 1650 तक
+        जीवित रहे' would say 'lived' more plainly than 'तक रहे'."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:16.443Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:20.361Z
+      text: ""
+      status: closed
+- id: cmvwnxiokr10
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T17:16:15.188Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan
+  target: desks/text
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:372
+  commit: 48dc41a043517a4ad295571d0602de7a5aa5b254
+  text: "Mechanical, screen (the same kind as cmvwms6ljz01). In Hindi at 360, Sonia's pair breaks
+    across two lines, '…उसकी डेस्क (4,' / '1) है।'. A student reads '(4,' as cut off and '1)' as
+    starting a new thought, on the very line that shows how a pair is written. Suggested: a no-break
+    space inside each pair, '(4, 1)', '(5, 3)', '(3, 5)', in the lesson's text, notes and questions,
+    en and hi."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:16:52.639Z
+      text: "Plan: covered by the screen's own rule (agreed in chat, 48dc41a): a pair's two numbers stay
+        together as text is drawn."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:16:52.711Z
+      text: "Fixed by 48dc41a: the screen keeps a pair's numbers together by itself (no special spaces in
+        the text). Looked at seating-plan#desks in Hindi at 360: \"(4, 1) है।\" is on one line."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:33:07.573Z
+      text: "Rechecked seating-plan#desks in hi at 360 and 390 and en at 360 and 390, plus two-lines,
+        tap-the-desk and street-and-house in en and hi at 360. Fixed. - Hindi at 360: '(4, 1) है।'
+        moves to its own line as a whole, no more '(4,' / '1)'. - No pair splits anywhere I looked:
+        (5, 3) and (3, 5) in tap and same, (5, 1) in the tap-the-desk note, (5, 3) on
+        two-lines#desk. - The screen also keeps (गली 4) and (मकान 5) on street-and-house#found, and
+        5 cm / 9 cm on two-lines#theDot, together. - The text has plain spaces only: the chapter's
+        content has no no-break spaces."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:21.668Z
+      text: ""
+      status: closed
+- id: cmvwnxiptjdy
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T17:16:15.233Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:142
+  commit: 48dc41a043517a4ad295571d0602de7a5aa5b254
+  text: "Mechanical, screen (a control nobody explained, and a jump). Played at real speed in en at
+    390. When Riya reaches Street 4 and its five houses light up blue, a wide 'Lights off' button
+    appears under the arrow pad for about a second, then goes when the light clears. It comes from
+    the places layer's controls (places-view.tsx, shown whenever lit is set). A student sees a
+    button nobody mentioned at the very moment the board asks 'Which one is Aman's?', and may tap
+    it. Everything below the pad, where fiveHouses is about to appear, moves down and back up as it
+    comes and goes. Suggested: when the lesson lights the houses itself, don't offer 'Lights off';
+    offer it only when the student lit something. Or keep its room reserved so nothing below moves."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:26:32.977Z
+      text: "Plan (agreed in chat): offer Lights off only when the student lit the places (tapping a
+        number), not when a lesson does."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:26:33.044Z
+      text: "Done: the places layer remembers whether a light came from the student's tap; Lights off
+        shows only then. Played street-and-house to Street 4: the houses light, no button appears,
+        nothing below moves."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-10-31T17:33:07.619Z
+      text: "Played street-and-house at real speed in en at 390 (frames every 300 ms, to Street 4) and in
+        hi at 360 (to Street 4, then up to House 5). Fixed. - When Riya reaches Street 4 the five
+        houses light blue and clear, and no 'Lights off' button appears. - The arrow pad stays at
+        the same height through the light, the caption 'Aman's house: Street number 4, House number
+        5' coming in, and the arrival line. Nothing below it moves. - In hi, arriving gives 'रिया
+        अमन का घर पहुँच गई! गली नंबर 4, मकान नंबर 5', then found and anyHouse, and the board
+        passes."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:25.198Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:25.327Z
+      text: ""
+      status: closed
+- id: cmvwoj7x8isd
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T17:33:07.676Z
+  board: class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c
+  target: room
+  source: content/class9-maths/coordinate-geometry/questions/tap-the-desk/params.yaml:5
+  commit: 06227289b234822b5af9cad2c2508c2c22274927
+  text: "Mechanical, screen (overlap, left by cmvwms6p6mj0's blackboard). On a row-1 desk, the orange
+    ring covers the blackboard's name. - tap-the-desk a4b97a8c, hi at 360: the asked desk is (1, 5),
+    so the swapped answer is (5, 1), a row-1 desk. Tap it and the ring sits over the middle of
+    'श्यामपट', so the name reads 'श्या..पट'. That happens on exactly the tap the question is built
+    to catch. The same holds on 784113c9 and the other boards for any row-1 tap. - seating-plan, hi
+    at 360: tapping Sonia's desk (4, 1), the one the text has just named, puts the ring over
+    'सोनिया' and against the blackboard. - The bar sits only a few pixels below the row-1 desks.
+    Suggested: leave a clear gap between row 1 and the blackboard that is at least the ring's radius
+    (for example, lower the window's yMin, or draw the bar lower in that gap). Also draw Sonia's
+    label where the ring can't reach it, or above the ring. This is in the classroom prop's drawing,
+    so check seating-plan, two-lines#desk and tap-the-desk at 360 with a row-1 desk ringed."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-10-31T17:36:48.050Z
+      text: "The person decided in chat to keep it as it is: the ring touching the blackboard and crossing
+        a front-row desk's name is fine. No change."
+    - by: you
+      role: person
+      at: 2026-10-31T17:38:52.381Z
+      text: ""
+      status: closed

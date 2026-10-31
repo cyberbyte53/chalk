@@ -1,5 +1,5 @@
 ---
-approved: 67038d9d46b4
+approved: 0fe7cdf32ed3
 ---
 
 The library has nothing for a plane, a map or dice (`look` at `library/props/`: basics, decimal and primes only), so this chapter adds one package, `library/props/coordinates`, with one prop: `coordinatePlane`, a host. Its core is the plane: two perpendicular lines, their marks and named points. Everything else is a layer on it that a board turns on: places (houses, desks, crossings, stalls), the walker (Riya, along then up, on the lines only), clues, plotting and the dice game. The core draws only what the lesson has defined so far: lesson 1 shows two named roads with whole numbers from 1, and no zero, origin or negatives; each later mark (0 and the negatives, O, x and y, the quadrants, the coordinates) is a part a board turns on once it is defined. One drawing, from the town map to the dice game, so the town the student walks in lesson 1 is the plane they plot on in lesson 4.

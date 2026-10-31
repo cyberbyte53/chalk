@@ -293,14 +293,13 @@
         stays where she is. Otherwise, when Aman's reply marks his house, she'd be pulled back from
         the foot of Street 4 mid-story. Tested both ways."
 - id: cmvtgqaw2s6s
-  status: ready
+  status: withdrawn
   by: you
   role: person
   createdAt: 2026-10-29T11:31:22.658Z
   prop: coordinatePlane
   source: library/props/coordinates/src/coordinate-plane.ts:16
   commit: bfc7cf2d7ca653ce96a7284be3e4172a96f790bb
-  turn: person
   from: chat
   text: A picture of clues already given (two-lines#spot) showed its clue buttons and a ↺, which
     nobody can use there.
@@ -331,8 +330,18 @@
         boards set clues, so nothing else is reached. One detail: the caption sits above the plane,
         not under it as the plan says, which matches where the house and the desk captions sit.
         Fine."
+    - by: you
+      role: person
+      at: 2026-10-29T18:16:46.708Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T18:16:46.792Z
+      text: ""
+      status: withdrawn
 - id: cmvtqe2j1wgl
-  status: ready
+  status: withdrawn
   by: you
   role: person
   createdAt: 2026-10-29T16:01:48.109Z
@@ -342,7 +351,6 @@
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:30
   snapshot: "−6−5−4−3−2−10123456bus standThe busThe bus: 0 ← → ↺ Back to the start"
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
-  turn: agent
   text: when bus is returning it's path trail is still behind , like take bus from 0 to 3 and then
     back , i am still seeing blue line to 3
   changed: []
@@ -384,8 +392,22 @@
 
         - Same rule in the town: walk-to-address, up to House 5 and back down to House 3, the line
         stops at House 3.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:12.904Z
+      text: Confirmed by the reviewer; back to you to close.
+    - by: you
+      role: person
+      at: 2026-10-29T18:16:57.516Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-29T18:16:57.569Z
+      text: ""
+      status: withdrawn
 - id: cmvtqgem9cga
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T16:03:37.089Z
@@ -396,7 +418,6 @@
   snapshot: "Aman's house: Street number 4, House number 5 1234567812345Street numberHouse
     numberRiyaRiya: Street number 4 ↑ ← → ↓ ↺ Back to the start"
   commit: 6d5478b3b1862374603b67df2113ef4a62a04e69
-  turn: agent
   text: i feel we can make the grid a bit larger no ? we are leaving so much space and it feels tiny
   changed: []
   messages:
@@ -445,8 +466,17 @@
 
         - Left over: flow.md still says P (Street 7, House 4) keeps its number, and a 6-street town
         has no Street 7. Filed on flow.md separately.
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:12.929Z
+      text: Confirmed by the reviewer; back to you to close.
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:38.702Z
+      text: ""
+      status: closed
 - id: cmvtqi7psx10
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-29T16:05:01.456Z
@@ -510,4 +540,17 @@
         - Two things it left elsewhere, filed separately: two-lines#spot still shows the page with
         no numbers, so it's no longer the picture the student left. flow.md's Needs still says 'no
         numbers on its edges'.
-  turn: agent
+    - by: fixer
+      role: fixer
+      at: 2026-10-29T16:35:13.015Z
+      text: Confirmed by the reviewer; back to you to close.
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:42.322Z
+      text: ""
+      status: closed
+    - by: you
+      role: person
+      at: 2026-10-31T17:37:43.093Z
+      text: ""
+      status: closed
