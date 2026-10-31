@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { type LibraryList, type LibrarySound, libraryIndex, libraryListSchema } from "./library";
@@ -40,6 +40,9 @@ function apiKey(): string {
 }
 
 async function add(name: string, from: string, purpose: string | undefined): Promise<void> {
+  const named = libraryListSchema.shape.sounds.element.shape.name.safeParse(name);
+  if (!named.success)
+    throw new Error(named.error.issues[0]?.message ?? `"${name}" can't name a sound`);
   const id = /^freesound:(\d+)$/.exec(from)?.[1];
   if (id === undefined) throw new Error(`a source is freesound:<id>, not "${from}"`);
   const list = read();
@@ -64,9 +67,21 @@ async function add(name: string, from: string, purpose: string | undefined): Pro
     const raw = join(work, "raw.mp3");
     const preview = info.previews["preview-hq-mp3"];
     if (preview === undefined) throw new Error(`freesound ${id} has no preview`);
-    writeFileSync(raw, Buffer.from(await (await fetch(preview)).arrayBuffer()));
+    const got = await fetch(preview);
+    if (!got.ok) throw new Error(`freesound ${id}: its recording didn't download (${got.status})`);
+    writeFileSync(raw, Buffer.from(await got.arrayBuffer()));
+    // Made in the work folder: the library changes only once the new sound is whole.
+    const made = join(work, "made.mp3");
+    try {
+      execFileSync("ffmpeg", ["-v", "error", "-y", "-i", raw, ...LEVEL, made]);
+    } catch (e) {
+      const isMissing = (e as NodeJS.ErrnoException).code === "ENOENT";
+      throw new Error(
+        isMissing ? "ffmpeg isn't installed (brew install ffmpeg)" : `ffmpeg: ${String(e)}`,
+      );
+    }
     const file = `sounds/${name}.mp3`;
-    execFileSync("ffmpeg", ["-v", "error", "-y", "-i", raw, ...LEVEL, join(dir, file)]);
+    renameSync(made, join(dir, file));
     const sound: LibrarySound = {
       name,
       file,
@@ -94,10 +109,11 @@ function remove(name: string): void {
   console.log(`removed ${name}`);
 }
 
-const [command, name, from] = process.argv.slice(2);
-const purpose = process.argv.includes("--for")
-  ? process.argv[process.argv.indexOf("--for") + 1]
-  : undefined;
+// `--for "…"` anywhere; the rest, in order: the command, the name, the source.
+const args = process.argv.slice(2);
+const at = args.indexOf("--for");
+const purpose = at === -1 ? undefined : args[at + 1];
+const [command, name, from] = at === -1 ? args : [...args.slice(0, at), ...args.slice(at + 2)];
 try {
   if (command === "add" && name !== undefined && from !== undefined) await add(name, from, purpose);
   else if (command === "remove" && name !== undefined) remove(name);

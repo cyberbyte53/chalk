@@ -49,9 +49,6 @@ export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
 export { BoardSpeedContext } from "./use-board-runtime";
 export {
-  type Heard,
-  type HeardSound,
-  type HeardWords,
   type LiveBoard,
   SceneRuntime,
   isSceneBoard,
@@ -88,3 +85,4 @@ export { t, UiText, type UiTextKey } from "./ui-text";
 /** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */
 export { setStateChecks } from "@chalk/prop";
 export { OwnHtml, type OwnMarkup, ours } from "./own-markup";
+export type { Heard, HeardSound, HeardWords } from "@chalk/content";

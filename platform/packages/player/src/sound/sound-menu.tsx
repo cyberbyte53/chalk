@@ -10,7 +10,7 @@ import { isMuted, setMuted } from "./engine";
 
 /**
  * The board's menu: what is heard (platform/docs/sound.md), each switched on its own and kept on
- * the device: the voice (every board speaks), and the sounds (effects), when it has any. Later
+ * the device: the voice (every board speaks), and the sounds, when it has any. Later
  * settings (the voice's speed, the language) go here too.
  */
 export function SoundMenu({

@@ -6,13 +6,13 @@ Every line a board shows is also said aloud. This module makes the clips; the pl
 
 - **Making** (here, when content is built, on a laptop): a chapter's lines become clips.
 - **Playing** (`@chalk/player`, on the phone): a line is said as phrases (its words, and each value's pieces), from the first source that can: its clips glued, a live voice (not yet), the phone's own voice (platform/docs/sound.md).
-- **The contract** (`@chalk/content`): a phrase's key (who says it, the language, the words: `phraseKey`), how a line becomes phrases (`spoken.ts`; split in one place for both halves, `spoken-line.ts` in the player), and the chapter's `manifest.json` (phrase → clip, and its length in seconds).
+- **The contract** (`@chalk/content`, `src/sound/`): a clip's key (the voice and the words: `clipKey`), how a line becomes phrases (`spoken.ts`; split in one place for both halves, `sound/spoken-line.ts` in the player), and the chapter's list `sound.json` (each clip: its file, voice, language, words, length).
 
 ## Making, in four steps
 
 | Step | File | What it does | Swap it by |
 |---|---|---|---|
-| Collect | `lines.ts` | every board of the chapter, made from build/ as the app makes it, read for its script (`scriptOf` in `@chalk/player`): each line, its piece, its speaker | — |
+| Collect | the content build (`content/build.ts`) | every board of the chapter, as built, read for its script (`scriptOf` in `@chalk/player`): each line, its piece, its speaker | — |
 | Cast | `cast.ts` | who says it → which voice: `authoring/voices.json`, per character and language, `provider:voice` | editing the cast |
 | Speak | `providers/` | words + voice → a clip file. Piper (on this machine), a test tone | adding a file here and a line in `index.ts` |
 | Keep | `clips.ts` | each clip named by its words and voice, so it is made once; its length measured | — |

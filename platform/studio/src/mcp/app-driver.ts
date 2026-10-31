@@ -389,20 +389,9 @@ export type Step =
   | { call: string; on: string; args?: Readonly<Record<string, unknown>> };
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
-/**
- * What was heard on the board, in order (the player's Heard): words, or a sound at a signal. What an
- * agent reviews of the sound.
- */
-export type Heard =
-  | {
-      line: string;
-      speaker: string;
-      words: string;
-      at: number;
-      seconds: number;
-      cutAt?: number;
-    }
-  | { sound: string; signal: string; at: number };
+/** What was heard on the board, in order: the player's own log (words, or a sound at a signal). */
+export type { Heard } from "@chalk/content";
+import type { Heard } from "@chalk/content";
 
 export type StepResult = {
   step: string;

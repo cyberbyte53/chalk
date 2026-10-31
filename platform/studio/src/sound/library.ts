@@ -5,11 +5,24 @@ import { z } from "zod";
  * name (the role it plays: right, step), what it is for, and where its recording came from. The list
  * is the one place a sound is defined: its index.ts is written from it.
  */
+const NOT_NAMES = new Set(
+  "sound await break case catch class const continue debugger default delete do else enum export extends false finally for function if implements import in instanceof interface let new null package private protected public return static super switch this throw true try typeof var void while with yield".split(
+    " ",
+  ),
+);
+
 export const libraryListSchema = z.object({
   $comment: z.string().optional(),
   sounds: z.array(
     z.object({
-      name: z.string().regex(/^[a-z][a-zA-Z]*$/),
+      // Its export's name: a word, not one JavaScript keeps for itself, nor the import's (sound).
+      name: z
+        .string()
+        .regex(/^[a-z][a-zA-Z]*$/)
+        .refine(
+          (n) => !NOT_NAMES.has(n),
+          (n) => ({ message: `"${n}" can't name a sound` }),
+        ),
       file: z.string(),
       for: z.string().min(1),
       source: z.string().url(),

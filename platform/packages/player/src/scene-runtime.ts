@@ -2,6 +2,8 @@ import {
   AGENT_LOCALE,
   Actor,
   type Board,
+  type Heard,
+  type HeardWords,
   LOCALES,
   type Locale,
   type Localized,
@@ -574,26 +576,6 @@ export class SceneRuntime {
     };
   }
 }
-
-/** Words as they were heard on a board. */
-export type HeardWords = {
-  line: string;
-  /** The piece it is about (its own piece for a piece's line). */
-  about?: string;
-  speaker: string;
-  /** The words the voice was given (formatting left out; maths kept as written). */
-  words: string;
-  /** When, in board seconds. */
-  at: number;
-  seconds: number;
-  cutAt?: number;
-};
-
-/** A sound as it was heard on a board: which, at which signal ("line.walker.stepped"), when. */
-export type HeardSound = { sound: string; signal: string; at: number };
-
-/** Something heard on a board: words, or a sound. */
-export type Heard = HeardWords | HeardSound;
 
 /** The action at "walker.step" under a prop. */
 function actionAt(def: AnyProp, dotted: string) {

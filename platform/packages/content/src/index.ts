@@ -8,7 +8,14 @@ export {
   sound,
   soundListSchema,
 } from "./sound/clips";
-export { type SceneSound, type SceneWords, carries } from "./sound/cue";
+export {
+  type Heard,
+  type HeardSound,
+  type HeardWords,
+  type SceneSound,
+  type SceneWords,
+  carries,
+} from "./sound/cue";
 export {
   type BoardAt,
   type CallArgs,
