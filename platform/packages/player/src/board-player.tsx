@@ -65,15 +65,11 @@ export type BoardPlayerProps = {
   /** Drawn as a picture of the board as it stands (a tool's): nothing passing shows on it. */
   isPicture?: boolean;
   /**
-   * A tool's board: each line keeps its length on the board's clock, and nothing waits for real
-   * sound. A student's board (the default) waits for each line's sound to end.
+   * Nothing heard (a tool's board, one of several on a review screen): each line keeps its length
+   * on the board's clock, and nothing plays. A student's board (the default) is heard: each line
+   * ends when its sound does.
    */
-  isTimed?: boolean;
-  /**
-   * One of several boards on one screen (a review list): none speaks or sounds, since a device
-   * never shows two at once. Its lines keep their lengths, as a tool's do.
-   */
-  isQuiet?: boolean;
+  isSilent?: boolean;
   /** Its menu is the lesson's (in the lesson's header, lesson-player.tsx), not its own. */
   isInLesson?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
@@ -117,9 +113,8 @@ function BoardPlay({
   mode,
   onRuntime,
   isPicture = false,
-  isTimed = false,
   isInLesson = false,
-  isQuiet = false,
+  isSilent = false,
 }: BoardPlayerProps & { audio: ClipStore | undefined }): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
@@ -135,14 +130,11 @@ function BoardPlay({
   // The board reads each line's length when it says it: from the narrator as it is then.
   const narratorRef = useRef(narrator);
   narratorRef.current = narrator;
-  // A tool's board, or a quiet one, keeps time by each line's length and plays no sounds; a quiet
-  // one says nothing either.
-  const keepsTime = isTimed || isQuiet;
-  const runtime = useBoardRuntime(board, registry, isQuiet ? sayNothing : narrator.speak, {
+  const runtime = useBoardRuntime(board, registry, narrator.speak, {
     locale,
     lineSeconds: (line) => narratorRef.current.seconds(line),
-    isTimed: keepsTime,
-    ...(keepsTime ? {} : { playSound }),
+    isSilent,
+    playSound,
     hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).
@@ -284,7 +276,7 @@ function BoardPlay({
           ref={body}
           onPointerDownCapture={() => recorder.gesture(true)}
         >
-          {!isPicture && !keepsTime && !isInLesson && (
+          {!isPicture && !isSilent && !isInLesson && (
             <SoundMenu
               locale={locale}
               hasSounds={hasSounds(board, registry)}
@@ -403,4 +395,3 @@ function BoardPlay({
 }
 
 /** A quiet board's voice: nothing said. */
-const sayNothing = (): Promise<void> => Promise.resolve();

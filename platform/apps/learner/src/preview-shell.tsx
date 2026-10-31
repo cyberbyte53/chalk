@@ -99,7 +99,7 @@ export async function json(path: string): Promise<unknown> {
 /** A node's built item: build/<path>.json. */
 const item = (path: string): Promise<unknown> => json(builtFile(path));
 
-/** A tool is watching (`&timed`, the tools' URLs): lines keep their lengths; nothing waits for sound. */
+/** A tool is watching (`&timed`, the tools' URLs): its boards are silent, each line keeping its length. */
 const isTimed = new URLSearchParams(window.location.search).has("timed");
 
 function unhide(piece: Piece): Piece {
@@ -559,7 +559,7 @@ export function PreviewBoard({
   isPlaying,
   bus,
   isShot,
-  isQuiet,
+  isSilent,
   threads,
   reviews,
   onThreads,
@@ -570,8 +570,8 @@ export function PreviewBoard({
   isPlaying: boolean;
   bus: EventBus;
   isShot: boolean;
-  /** One of several boards on the screen, not the one looked at: it says nothing. */
-  isQuiet: boolean;
+  /** One of several boards on the screen, not the one looked at: nothing is heard from it. */
+  isSilent: boolean;
   threads: readonly Thread[];
   reviews: readonly Review[];
   onThreads: (all: Threads) => void;
@@ -624,8 +624,7 @@ export function PreviewBoard({
             locale={locale}
             record={bus.record}
             isPicture={isShot}
-            isQuiet={isQuiet}
-            isTimed={isTimed}
+            isSilent={isSilent || isTimed}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };
               w.__chalkPassed ??= [];
@@ -1542,7 +1541,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
           >
             <PreviewBoard
               // Only the board looked at speaks: a device never shows two at once.
-              isQuiet={shown.length > 1 && !(isOne && i === at)}
+              isSilent={shown.length > 1 && !(isOne && i === at)}
               shown={s}
               where={sources[s.path]}
               threads={threadsOn(threads, s)}

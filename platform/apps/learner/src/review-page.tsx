@@ -497,7 +497,7 @@ function LiveBoard({
         where={shown.where}
         locale={locale}
         isPlaying={false}
-        isQuiet={false}
+        isSilent={false}
         bus={bus}
         isShot={false}
         threads={[]}

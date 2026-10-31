@@ -32,8 +32,8 @@ export function useBoardRuntime(
     locale: Locale;
     lineSeconds?: (line: WordsToSay) => number | undefined;
     hush?: () => void;
-    /** A tool's board: lines keep their lengths; nothing waits for real sound (board-player.tsx). */
-    isTimed?: boolean;
+    /** Nothing heard: lines keep their lengths on the board's clock; nothing plays (board-player.tsx). */
+    isSilent?: boolean;
     /** Plays a sound alongside (sound/engine.ts), lasting until stopped if it lasts; returns how to stop it. */
     playSound?: (sound: Sound, lasts?: boolean) => () => void;
   },
@@ -43,11 +43,9 @@ export function useBoardRuntime(
   speakRef.current = speak;
   const [runtime] = useState((): LiveBoard => {
     const services = {
-      // A tool's board doesn't wait for sound: a line is said, and the board goes on.
-      speak: (line: WordsToSay) => {
-        const said = speakRef.current(line);
-        return voice.isTimed === true ? Promise.resolve() : said;
-      },
+      // A silent board says nothing: its lines only take their time.
+      speak: (line: WordsToSay) =>
+        voice.isSilent === true ? Promise.resolve() : speakRef.current(line),
       frame: (callback: (now: number) => void) => {
         const handle = requestAnimationFrame((ms) => callback(ms * speed));
         return () => cancelAnimationFrame(handle);
@@ -59,9 +57,14 @@ export function useBoardRuntime(
     return board.model !== undefined
       ? new SceneRuntime(board, (type) => registry[type], {
           ...services,
-          ...voice,
-          // On a student's board a line is over when its sound is; a tool's keeps each line's length.
-          isHeard: voice.isTimed !== true,
+          locale: voice.locale,
+          ...(voice.lineSeconds === undefined ? {} : { lineSeconds: voice.lineSeconds }),
+          ...(voice.hush === undefined ? {} : { hush: voice.hush }),
+          // Heard, a line is over when its sound is; silent, it keeps its length and nothing plays.
+          ...(voice.isSilent === true || voice.playSound === undefined
+            ? {}
+            : { playSound: voice.playSound }),
+          isHeard: voice.isSilent !== true,
         })
       : new BoardRuntime(board, (type) => registry[type], {
           ...services,
