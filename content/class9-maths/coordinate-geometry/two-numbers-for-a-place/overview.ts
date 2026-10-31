@@ -248,6 +248,12 @@ const dotOnPaper = page(
           "Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
           "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
         ),
+        {
+          says: t(
+            "Here is a dot on a page of your notebook, and each small square is 1 centimetre across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+            "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 सेंटीमीटर चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
+          ),
+        },
       ),
       sheet: place(
         plane,
@@ -289,6 +295,12 @@ const dotOnPaper = page(
             "Closer, but every spot on that line is 5 cm from the left edge.",
             "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।",
           ),
+          {
+            says: t(
+              "Closer, but every spot on that line is 5 centimetres from the left edge.",
+              "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 सेंटीमीटर पर है।",
+            ),
+          },
         ),
       ),
       fixed: hidden(
@@ -297,6 +309,13 @@ const dotOnPaper = page(
             "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
             "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
           ),
+          null,
+          {
+            says: t(
+              "Two distances fixed the dot: 5 centimetres from the left edge and 9 centimetres above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+              "दो दूरियों ने बिंदु तय कर दिया: बाएँ किनारे से 5 सेंटीमीटर और नीचे के किनारे से 9 सेंटीमीटर ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
+            ),
+          },
         ),
       ),
     },
@@ -460,6 +479,12 @@ const twoLines = page(
           "**The dot:** 5 cm across from the left edge, then 9 cm up from the bottom.",
           "**बिंदु:** बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।",
         ),
+        {
+          says: t(
+            "The dot: 5 centimetres across from the left edge, then 9 centimetres up from the bottom.",
+            "बिंदु: बाएँ किनारे से 5 सेंटीमीटर आड़े, फिर नीचे के किनारे से 9 सेंटीमीटर ऊपर।",
+          ),
+        },
       ),
       spot: place(
         plane,

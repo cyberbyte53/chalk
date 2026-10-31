@@ -91,11 +91,11 @@
       "seconds": 3.495
     },
     {
-      "file": "11d9154c081958bb.m4a",
+      "file": "6b480a189907e0e3.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Closer, but every spot on that line is 5 cm from the left edge.",
-      "seconds": 3.809
+      "words": "Closer, but every spot on that line is 5 centimetres from the left edge.",
+      "seconds": 4.238
     },
     {
       "file": "ccc9072f01457dc7.m4a",
@@ -119,11 +119,11 @@
       "seconds": 18.437
     },
     {
-      "file": "2be8bd814c6f9eed.m4a",
+      "file": "69cce36f9c9e01e5.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
-      "seconds": 11.123
+      "words": "Here is a dot on a page of your notebook, and each small square is 1 centimetre across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+      "seconds": 11.587
     },
     {
       "file": "e1c366a5667986b5.m4a",
@@ -168,32 +168,32 @@
       "seconds": 8.453
     },
     {
-      "file": "fe994da98e640e72.m4a",
+      "file": "bfe17ce6583b9b8f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Put the dot 11 cm from the left edge and 5 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
-      "seconds": 8.336
+      "words": "Put the dot 11 centimetres from the left edge and 5 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.",
+      "seconds": 8.812
     },
     {
-      "file": "93bf1ae937dfc2f6.m4a",
+      "file": "acbc336cc6e3b72f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Put the dot 2 cm from the left edge and 8 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
-      "seconds": 8.429
+      "words": "Put the dot 2 centimetres from the left edge and 8 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.",
+      "seconds": 8.673
     },
     {
-      "file": "2cfefefd954a0e1b.m4a",
+      "file": "7b42f81d54d5f93c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Put the dot 4 cm from the left edge and 10 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
-      "seconds": 8.29
+      "words": "Put the dot 4 centimetres from the left edge and 10 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.",
+      "seconds": 8.627
     },
     {
-      "file": "f9cc5ce5dce0902e.m4a",
+      "file": "0940fb6301a20a48.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Put the dot 7 cm from the left edge and 3 cm above the bottom. Each small square is 1 cm. Drag it there, then press Check.",
-      "seconds": 8.093
+      "words": "Put the dot 7 centimetres from the left edge and 3 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.",
+      "seconds": 8.987
     },
     {
       "file": "8dc51a803bff5704.m4a",
@@ -217,11 +217,11 @@
       "seconds": 6.781
     },
     {
-      "file": "d622d0403331cc72.m4a",
+      "file": "c6435a6e78dd24bf.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Street plan. A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 metres apart. There are 5 streets in each direction. Using 1 centimetre for 200 metres, draw a model of the city on your notebook. Represent the roads and streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many cross-streets can be referred to as (4, 3); (ii) how many cross-streets can be referred to as (3, 4).",
-      "seconds": 50.69
+      "words": "Street plan. A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 metres apart. There are 5 streets in each direction. Using 1 centimetre for 200 metres, draw a model of the city on your notebook. Represent the roads and streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: first, how many cross-streets can be referred to as (4, 3); second, how many cross-streets can be referred to as (3, 4).",
+      "seconds": 52.617
     },
     {
       "file": "572ea53664772c80.m4a",
@@ -329,11 +329,11 @@
       "seconds": 3.878
     },
     {
-      "file": "d83343e45fa4d465.m4a",
+      "file": "0c6efdeffc656e05.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The dot: 5 cm across from the left edge, then 9 cm up from the bottom.",
-      "seconds": 4.9
+      "words": "The dot: 5 centimetres across from the left edge, then 9 centimetres up from the bottom.",
+      "seconds": 5.62
     },
     {
       "file": "18407a483c8527f4.m4a",
@@ -371,11 +371,11 @@
       "seconds": 12.145
     },
     {
-      "file": "94eccafafc453059.m4a",
+      "file": "45fb66ed007eaf6e.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Two distances fixed the dot: 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
-      "seconds": 14.165
+      "words": "Two distances fixed the dot: 5 centimetres from the left edge and 9 centimetres above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+      "seconds": 14.536
     },
     {
       "file": "b987c01cf8de0d33.m4a",
@@ -518,11 +518,11 @@
       "seconds": 5.225
     },
     {
-      "file": "d0edce569d4804fd.m4a",
+      "file": "e63100899fb04782.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "गली योजना। एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 मीटर की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 सेंटीमीटर को 200 मीटर मानकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों और गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: (i) कितने चौराहों को (4, 3) कहा जा सकता है; (ii) कितने चौराहों को (3, 4) कहा जा सकता है।",
-      "seconds": 62.729
+      "words": "गली योजना। एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 मीटर की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 सेंटीमीटर को 200 मीटर मानकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों और गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: पहला, कितने चौराहों को (4, 3) कहा जा सकता है; दूसरा, कितने चौराहों को (3, 4) कहा जा सकता है।",
+      "seconds": 64.227
     },
     {
       "file": "e24b389c409ee70d.m4a",
@@ -574,11 +574,11 @@
       "seconds": 9.683
     },
     {
-      "file": "4058b2e7cfc8a612.m4a",
+      "file": "ba9be4679f02bb1b.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "दो दूरियों ने बिंदु तय कर दिया: बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
-      "seconds": 18.333
+      "words": "दो दूरियों ने बिंदु तय कर दिया: बाएँ किनारे से 5 सेंटीमीटर और नीचे के किनारे से 9 सेंटीमीटर ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
+      "seconds": 19.97
     },
     {
       "file": "0805cb96ebc4c2e9.m4a",
@@ -595,11 +595,11 @@
       "seconds": 1.893
     },
     {
-      "file": "53ef231446852362.m4a",
+      "file": "5c685859b70b5dc9.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।",
-      "seconds": 5.155
+      "words": "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 सेंटीमीटर पर है।",
+      "seconds": 5.597
     },
     {
       "file": "dd87716a7f50950c.m4a",
@@ -672,39 +672,39 @@
       "seconds": 2.996
     },
     {
-      "file": "972e14b0bcb7cc11.m4a",
+      "file": "582a758576b2f229.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु को बाएँ किनारे से 11 cm और नीचे के किनारे से 5 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 10.542
+      "words": "बिंदु को बाएँ किनारे से 11 सेंटीमीटर और नीचे के किनारे से 5 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 13.665
     },
     {
-      "file": "8d1c2619b54a9c3c.m4a",
+      "file": "79fb00dba033bf88.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु को बाएँ किनारे से 2 cm और नीचे के किनारे से 8 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 10.844
+      "words": "बिंदु को बाएँ किनारे से 2 सेंटीमीटर और नीचे के किनारे से 8 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 13.004
     },
     {
-      "file": "87732da353027fe6.m4a",
+      "file": "fc0016f53e5c93e7.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु को बाएँ किनारे से 4 cm और नीचे के किनारे से 10 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 11.401
+      "words": "बिंदु को बाएँ किनारे से 4 सेंटीमीटर और नीचे के किनारे से 10 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 13.41
     },
     {
-      "file": "571feaff2291aa08.m4a",
+      "file": "616ad16d033b5d0b.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु को बाएँ किनारे से 7 cm और नीचे के किनारे से 3 cm ऊपर रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 10.879
+      "words": "बिंदु को बाएँ किनारे से 7 सेंटीमीटर और नीचे के किनारे से 3 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 13.491
     },
     {
-      "file": "6147774e922797fb.m4a",
+      "file": "72c1553805cff156.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु: बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।",
-      "seconds": 5.504
+      "words": "बिंदु: बाएँ किनारे से 5 सेंटीमीटर आड़े, फिर नीचे के किनारे से 9 सेंटीमीटर ऊपर।",
+      "seconds": 7.094
     },
     {
       "file": "b394d9bfdea9d244.m4a",
@@ -714,11 +714,11 @@
       "seconds": 26.622
     },
     {
-      "file": "323181be4acd1439.m4a",
+      "file": "b7ba67b134697bc5.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
-      "seconds": 14.083
+      "words": "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 सेंटीमीटर चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
+      "seconds": 14.803
     },
     {
       "file": "823f7b16ee026f5a.m4a",

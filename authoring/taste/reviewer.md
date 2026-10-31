@@ -25,6 +25,9 @@ Output per finding: board, piece, which principle, what a student would do wrong
 - Are generated values varied enough to show the general case?
 - Is the mission consistent with earlier lessons (timeline, facts, characters)?
 
+## As the listener
+- Listen to each line (the script beside the board, ▶): is anything spelled out letter by letter that a teacher would say as a word (a unit, an abbreviation, Latin letters in Hindi)? Does what's said match what's shown?
+
 ## On the screen
 - Overflow, clipping, overlap, jitter, things not contained, bold not visible on selection
 - Labels mid-paragraph; equations inside sentences; wide working not aligned

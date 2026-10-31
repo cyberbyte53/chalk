@@ -24,6 +24,10 @@ export const placeTheDot = family({
         `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1\u00a0cm. Drag it there, then press Check.`,
         `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1\u00a0cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
+      says: t(
+        `Put the dot ${left} centimetres from the left edge and ${bottom} centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.`,
+        `बिंदु को बाएँ किनारे से ${left} सेंटीमीटर और नीचे के किनारे से ${bottom} सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
+      ),
       isRight: isPlaced("sheet", left, bottom),
       solve: [tap("sheet.reading", "movePoint", { x: left, y: bottom })],
       notes: isSwapped
