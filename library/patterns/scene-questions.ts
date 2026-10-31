@@ -101,6 +101,12 @@ export function choice(spec: {
     throw new Error(`choice: the answer "${spec.answer}" is not one of the options`);
   const ids = spec.options.map((o) => o.id);
   if (new Set(ids).size !== ids.length) throw new Error("choice: two options share an id");
+  // Two options a student can't tell apart: one of them is right and wrong at once.
+  for (const locale of ["en", "hi"] as const) {
+    const labels = spec.options.map((o) => o.label[locale]);
+    const twice = labels.find((label, i) => labels.indexOf(label) !== i);
+    if (twice !== undefined) throw new Error(`choice: two options read the same ("${twice}")`);
+  }
   const shown =
     spec.keepOrder === true
       ? spec.options

@@ -19,7 +19,6 @@ import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import {
   BoardPlayer,
-  BoardRuntime,
   BoardSpeedContext,
   SEP,
   SceneRuntime,
@@ -52,7 +51,6 @@ import {
 import { courses } from "./lessons";
 import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
-import { PropPanel } from "./prop-panel";
 import { ReviewList, ReviewPage } from "./review-page";
 import { ScriptView } from "./script-view";
 import { ThreadText } from "./thread-text";
@@ -623,7 +621,6 @@ export function PreviewBoard({
   const isScript = !new URLSearchParams(window.location.search).has("noscript");
   // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
   const isProp = shown.path.startsWith(PROPS_ROOT);
-  const [runtime, setRuntime] = useState<BoardRuntime | undefined>(undefined);
   const onClick = (e: MouseEvent) => {
     if (!e.altKey) return;
     const site = (e.target as HTMLElement).closest<HTMLElement>("[data-source]")?.dataset.source;
@@ -653,11 +650,6 @@ export function PreviewBoard({
             // Heard or silent for its whole life: a board that changes (stepping onto it, or off it)
             // starts again, heard as when it is opened, or quiet.
             key={isSilent || isTimed ? "silent" : "heard"}
-            onRuntime={
-              isProp
-                ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)
-                : undefined
-            }
             board={board}
             registry={propLibrary}
             locale={locale}
@@ -671,9 +663,6 @@ export function PreviewBoard({
             }}
           />
         </div>
-        {!isShot && isProp && runtime !== undefined && (
-          <PropPanel runtime={runtime} piece={board.name} />
-        )}
         {!isShot && isScript && !isProp && (
           <ScriptView path={shown.path} boardId={board.item?.id} locale={locale} />
         )}

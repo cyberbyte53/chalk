@@ -110,7 +110,7 @@ function PropPieceView({
         heard(piece.name, path, () =>
           runtime.call(piece.name, path, { ...(args ?? {}) }, Actor.Learner),
         ),
-      signal: (path, payload) => runtime.signal(piece.name, path, payload ?? {}, Actor.Learner),
+      signal: (path) => runtime.signal(piece.name, path),
     }),
     [runtime, piece.name],
   );

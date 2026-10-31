@@ -1,45 +1,9 @@
 import { type Step, StepKind, asRuleFn } from "@chalk/author";
 import { Actor, type Board, LOCALES, type Locale, type Localized, PieceKind } from "@chalk/content";
-import { BoardRuntime, type PropModule, type RuntimeServices, SceneRuntime } from "@chalk/player";
+import { type PropModule, type RuntimeServices, SceneRuntime } from "@chalk/player";
 import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
 
 type Defs = Readonly<Record<string, PropModule>>;
-
-/** A board running on fake time: nothing moves unless `advance` moves it. */
-function startOnFakeTime(board: Board, defs: Defs) {
-  let now = 0;
-  let pending: ((now: number) => void)[] = [];
-  const errors: string[] = [];
-  const services: RuntimeServices = {
-    now: () => now,
-    frame: (callback) => {
-      pending.push(callback);
-      return () => {
-        pending = pending.filter((c) => c !== callback);
-      };
-    },
-    speak: async () => {},
-    onError: (message, error) =>
-      errors.push(error instanceof Error ? `${message}: ${error.message}` : message),
-  };
-  const runtime = new BoardRuntime(board, (type) => defs[type], services);
-  const refused: string[] = [];
-  runtime.onAction((record) => {
-    if (record.refused !== undefined && record.actor === Actor.Learner) {
-      refused.push(`${record.prop}.${record.action} was refused: ${record.refused}`);
-    }
-  });
-  const advance = async (seconds: number): Promise<void> => {
-    for (let t = 0; t < seconds * 1000; t += 16) {
-      now += 16;
-      const due = pending;
-      pending = [];
-      for (const callback of due) callback(now);
-      for (let i = 0; i < 5; i++) await Promise.resolve();
-    }
-  };
-  return { runtime, advance, errors, refused };
-}
 
 /** The board's question props (choice, goal, …), in layout order: a board may ask any number. */
 export function questionsOf(board: Board, defs: Defs): string[] {
@@ -138,48 +102,12 @@ export async function play(
   /** Each line heard on the way (a scene's). */
   onHeard?: (line: string) => void,
 ): Promise<Played> {
-  if (board.model !== undefined) {
-    if (locale === undefined) throw new Error(`Board ${board.name}: a scene plays in a language`);
-    return playScene(board, defs, steps, onHeard, locale);
-  }
-  const { runtime, advance, errors, refused } = startOnFakeTime(board, defs);
-  const failures: Failure[] = [];
-  runtime.start();
-  await advance(1);
-  for (const step of steps) {
-    if ("wait" in step) {
-      await advance(step.wait);
-      continue;
-    }
-    switch (step.kind) {
-      case StepKind.Act:
-        void runtime.call(step.prop, step.action, step.args, Actor.Learner);
-        await advance(0.05);
-        break;
-      case StepKind.Expect: {
-        const value = asRuleFn(step.that)((piece) =>
-          runtime.getView(typeof piece === "string" ? piece : piece.name),
-        );
-        if (value !== true)
-          failures.push({
-            check: `expected ${step.says}`,
-            seen: `${step.that.toString()} was ${String(value)}`,
-          });
-        break;
-      }
-    }
-  }
-  await advance(6);
-  failures.push(...[...refused, ...errors].map((check) => ({ check })));
-  const views = new Map<string, Readonly<Record<string, unknown>>>();
-  for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));
-  runtime.dispose();
-  return { failures, view: (prop) => views.get(prop) ?? {} };
+  if (locale === undefined) throw new Error(`Board ${board.name}: a board plays in a language`);
+  return playScene(board, defs, steps, onHeard, locale);
 }
 
-/** The languages a board is checked in: a scene in each (its timing differs), today's in one. */
-const runsOf = (board: Board): readonly (Locale | undefined)[] =>
-  board.model === undefined ? [undefined] : LOCALES;
+/** The languages a board is checked in: each (its lines take different times in each). */
+const runsOf = (_board: Board): readonly (Locale | undefined)[] => LOCALES;
 
 /**
  * One check, run in each language its board is checked in. Failures are matched by their check, not

@@ -61,23 +61,13 @@ export { type Change, changesBetween } from "@chalk/prop";
 export {
   fieldsRead,
   runningBoards,
-  snapshotOf,
   takes,
   trackBoard,
 } from "./snapshot";
 export { stampCodePaths } from "./code-paths";
 export { type PropPack, lazyRegistry } from "./lazy-views";
 export { type BoardRecorder, boardIdOf, boardPathOf, recordBoard } from "./recorder";
-export {
-  type ActResult,
-  type ActionRecord,
-  type BoardEvent,
-  type BoardFacts,
-  BoardRuntime,
-  type RuntimeServices,
-  type SignalRecord,
-} from "./runtime";
-export { type HeadlessBoard, headlessBoard } from "./headless";
+export type { ActionRecord, RuntimeServices, SignalRecord } from "./board-records";
 export { type PropPage, propPages } from "./prop-pages";
 export { t, UiText, type UiTextKey } from "./ui-text";
 

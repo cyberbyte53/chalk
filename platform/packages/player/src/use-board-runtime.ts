@@ -7,7 +7,6 @@ import "@preact/signals";
 import { createContext } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import type { PropRegistry } from "./prop-module";
-import { BoardRuntime } from "./runtime";
 import { type LiveBoard, SceneRuntime } from "./scene-runtime";
 import { trackBoard } from "./snapshot";
 
@@ -55,25 +54,18 @@ export function useBoardRuntime(
       // A broken rule must never fail silently, and never stop the learner.
       onError: (message: string, error?: unknown) => console.error(message, error ?? ""),
     };
-    return board.model !== undefined
-      ? new SceneRuntime(board, (type) => registry[type], {
-          ...services,
-          locale: voice.locale,
-          ...(voice.lineSeconds === undefined ? {} : { lineSeconds: voice.lineSeconds }),
-          ...(voice.hush === undefined ? {} : { hush: voice.hush }),
-          // Heard, a line is over when its sound is; silent, it keeps its length and nothing plays.
-          ...(voice.isSilent === true || voice.playSound === undefined
-            ? {}
-            : { playSound: voice.playSound }),
-          isHeard: voice.isSilent !== true,
-        })
-      : new BoardRuntime(board, (type) => registry[type], {
-          ...services,
-          frame: (callback) => {
-            const handle = requestAnimationFrame(callback);
-            return () => cancelAnimationFrame(handle);
-          },
-        });
+    // Every board is on the event model (platform/docs/event-model.md).
+    return new SceneRuntime(board, (type) => registry[type], {
+      ...services,
+      locale: voice.locale,
+      ...(voice.lineSeconds === undefined ? {} : { lineSeconds: voice.lineSeconds }),
+      ...(voice.hush === undefined ? {} : { hush: voice.hush }),
+      // Heard, a line is over when its sound is; silent, it keeps its length and nothing plays.
+      ...(voice.isSilent === true || voice.playSound === undefined
+        ? {}
+        : { playSound: voice.playSound }),
+      isHeard: voice.isSilent !== true,
+    });
   });
   useEffect(() => {
     runtime.start();

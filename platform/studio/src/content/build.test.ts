@@ -24,6 +24,7 @@ const CHAPTER = "book/chapter";
 /** The concept the fixtures' family tests. */
 const CONCEPT = `${CHAPTER}/reading-decimals`;
 const BASICS = join(contentDir, "../library/props/basics/src/index.ts");
+const PATTERNS = join(contentDir, "../library/patterns/index.ts");
 
 /**
  * A family for the fixtures: pick the option that reads the target decimal, between two whole
@@ -32,32 +33,27 @@ const BASICS = join(contentDir, "../library/props/basics/src/index.ts");
  * option that is right: the build catches it.
  */
 const pickDecimal = (from: (file: string) => string) => `
-import { decimal, family, t } from "@chalk/author";
+import { decimal, family, scene, t } from "@chalk/author";
 import { Level } from "@chalk/content";
-import { choiceDef } from "${from(BASICS)}";
+import { sceneWith } from "${from(PATTERNS)}";
 import { z } from "zod";
 export const pickDecimal = family({
   level: Level.Medium,
   tests: ["reading-decimals"],
   params: z.object({ target: decimal, from: z.number(), to: z.number() }).strict(),
-  build: ({ target, from, to }, b) => {
+  build: ({ target, from, to }) => {
     const swapped = target.swapLastTwo();
     const options = [
       { id: "swapped", label: t(String(swapped), String(swapped)), feedback: t(\`That's \${swapped}.\`, \`यह \${swapped} है।\`) },
       { id: "target", label: t(String(target), String(target)) },
     ];
     const answer = options.find((o) => o.label.en === String(target))?.id ?? "target";
-    const ask = b.prop(choiceDef, "ask", {
+    const ask = sceneWith.choice({
       prompt: t(\`Between \${from} and \${to}: which is \${target}?\`, \`\${from} और \${to} के बीच: \${target} कौन-सा है?\`),
       options,
       answer,
     });
-    b.witness(ask.learner.select({ option: answer }), ask.learner.check());
-    b.noteCheck({
-      steps: [ask.learner.select({ option: "swapped" }), ask.learner.check()],
-      feedback: options[0]!.feedback!,
-    });
-    return [ask];
+    return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });
   },
 });
 `;
@@ -68,18 +64,18 @@ const ONE_ROW = [{ params: { target: "7.384", from: 7, to: 8 } }];
 /** A page asking two yes/no questions; it passes once both are right. Its witness answers `answered`. */
 const twoQuestions = (answered: readonly string[]) => (basics: string) =>
   `
-import { page, t } from "@chalk/author";
-import { choiceDef } from "${basics}";
+import { page, place, scene, t, tap } from "@chalk/author";
+import { sceneChoice } from "${basics}";
 const options = [{ id: "yes", label: t("Yes", "हाँ") }, { id: "no", label: t("No", "नहीं") }];
+const ask = () => place(sceneChoice, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" });
 export const overview = [
-  page("two", (b) => {
-    const qs = ["first", "second"].map((name) =>
-      b.prop(choiceDef, name, { prompt: t("Ask?", "पूछो?"), options, answer: "yes" }),
-    );
-    for (const q of qs.filter((q) => ${JSON.stringify(answered)}.includes(q.name)))
-      b.witness(q.learner.select({ option: "yes" }), q.learner.check());
-    return qs;
-  }),
+  page("two", scene({
+    pieces: { first: ask(), second: ask() },
+    witness: ${JSON.stringify(answered)}.flatMap((name) => [
+      tap(name, "select", { option: "yes" }),
+      tap(name, "check"),
+    ]),
+  })),
 ];
 `;
 
@@ -250,7 +246,7 @@ describe("building content", () => {
     const result = await build(
       fixture({ rows: [{ params: { target: "7.388", from: 7, to: 8 } }] }),
     );
-    expect(messages(result)).toMatch(/row 0: note .*a wrong answer got Continue/);
+    expect(messages(result)).toMatch(/row 0.*two options read the same \("7\.388"\)/);
   }, 60_000);
 
   it("a row the family can't make, or with wrong params, is reported, and the other rows still build", async () => {

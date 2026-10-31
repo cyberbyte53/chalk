@@ -18,7 +18,6 @@ import { Layout, type LayoutContext } from "./layout";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
-import { BoardRuntime } from "./runtime";
 import type { LiveBoard } from "./scene-runtime";
 import { useBoardSound } from "./sound/board-sound";
 import { playSound } from "./sound/engine";

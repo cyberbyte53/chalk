@@ -17,7 +17,6 @@ import {
 } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
 import { findNode } from "./part-paths";
-import type { BoardRuntime } from "./runtime";
 import type { LiveBoard } from "./scene-runtime";
 
 /**
@@ -202,39 +201,5 @@ function nodeOf(
     ...(seen.hidden !== undefined ? { hidden: seen.hidden } : {}),
     ...(noControlNow.length > 0 ? { noControlNow } : {}),
     problems,
-  };
-}
-
-/** The whole board as agents read it. `page`: the board on screen, when there is one. */
-export function snapshotOf(runtime: BoardRuntime, page?: ParentNode): BoardSnapshot {
-  const board = runtime.board;
-  const ruleCalls = board.when.flatMap((r) => calls(r.do));
-  const givenOf = new Map(propPieces(board.root).map((p) => [p.name, Object.keys(p.with ?? {})]));
-  const nodes = runtime.propNames().map((name) => {
-    const def = runtime.getDef(name);
-    const prefix = `${name}.`;
-    // What each bound field's rule read when it last ran.
-    const bound = runtime.boundReads(name);
-    return nodeOf(def, runtime.getView(name), runtime.describe(name), segment(name), {
-      page,
-      rules: new Set(
-        ruleCalls.filter((c) => c.startsWith(prefix)).map((c) => c.slice(prefix.length)),
-      ),
-      bound,
-      isShown: !runtime.isHidden(name),
-      given: givenOf.get(name) ?? [],
-    });
-  });
-  const open = runtime
-    .propNames()
-    .find(
-      (n) =>
-        runtime.getDef(n).role === PropRole.Question && runtime.getView(n).status !== "correct",
-    );
-  return {
-    board: board.name,
-    isPassed: runtime.getView(BOARD).isPassed === true,
-    ...(open !== undefined ? { openQuestion: segment(open) } : {}),
-    nodes,
   };
 }

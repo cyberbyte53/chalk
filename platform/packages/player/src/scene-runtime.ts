@@ -30,10 +30,10 @@ import {
 import { type AnyProp, Board as Core, type LineCall, timedVoice } from "@chalk/prop/next";
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
+import type { ActionRecord, RuntimeServices, SignalRecord } from "./board-records";
 import { describeView } from "./describe";
 import { findNode } from "./part-paths";
 import type { PropModule } from "./prop-module";
-import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
 import { aboutOf, ownLine } from "./script";
 import { takes } from "./snapshot";
 import type { SoundPlaying } from "./sound/engine";
@@ -628,7 +628,7 @@ function actionAt(def: AnyProp, dotted: string) {
 }
 
 /** A board running: on today's runtime, or on the event model. */
-export type LiveBoard = import("./runtime").BoardRuntime | SceneRuntime;
+export type LiveBoard = SceneRuntime;
 
 /** Whether a board runs on the event model. */
 export function isSceneBoard(board: Board): boolean {
