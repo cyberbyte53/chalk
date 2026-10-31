@@ -33,6 +33,28 @@ export function installAddressReports(): void {
   report();
 }
 
+/** A view setting kept in the URL (play as the app, Hindi): the editor's panel owns it when there is one. */
+export function toggleParam(name: "play" | "locale" | "script"): void {
+  if (name === "script") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("noscript")) params.delete("noscript");
+    else params.set("noscript", "");
+    window.location.search = params.toString().replace(/=(&|$)/g, "$1");
+    return;
+  }
+  if (isInEditor) {
+    toEditor({ type: "toggle", what: name === "play" ? "play" : "hindi" });
+    return;
+  }
+  const params = new URLSearchParams(window.location.search);
+  if (name === "play") {
+    if (params.has("play")) params.delete("play");
+    else params.set("play", "");
+  } else if (params.get("locale") === "hi") params.delete("locale");
+  else params.set("locale", "hi");
+  window.location.search = params.toString().replace(/=(&|$)/g, "$1");
+}
+
 type Field = HTMLTextAreaElement | HTMLInputElement;
 
 const isField = (el: EventTarget | null): el is Field =>
