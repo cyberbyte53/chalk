@@ -1,269 +1,22 @@
-import { Level, type RuleFn } from "@chalk/content";
+import { Level } from "@chalk/content";
 import { dec } from "@chalk/exact";
-import {
-  AnswerStatus,
-  PropRole,
-  QuestionSignal,
-  actionsFor,
-  defineGroup,
-  defineProp,
-  raise,
-  set,
-  signal,
-} from "@chalk/prop";
+import { PropRole } from "@chalk/prop";
+import { action, prop } from "@chalk/prop/next";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { buildBoard, column, inOrder, theBoard, wait } from "./board";
 import { family, isFamily } from "./family";
 import { idOf, rowKey, versionOf } from "./id";
-import { page } from "./page";
 import { decimal } from "./params";
+import { place, scene, tap } from "./scene";
 
-const dialState = z.object({ at: z.number(), isOn: z.boolean() }).strict();
-type DialState = z.infer<typeof dialState>;
-const act = actionsFor<DialState>();
-const dialSignals = { turned: signal("turned to `to`", { to: z.number() }) };
-const dial = defineProp({
+const dial = prop({
   type: "dial",
   role: PropRole.Explainer,
   describe: "A dial",
-  state: dialState,
-  defaults: { at: 0, isOn: true },
-  inputs: ["isOn"],
-  derived: { double: { describe: "twice", compute: (s) => s.at * 2 } },
-  actions: {
-    turn: act({
-      describe: "turn",
-      changes: ["at"],
-      byLearner: true,
-      args: z.object({ to: z.number() }).strict(),
-      run: (_s, a) => set({ at: a.to }, raise(dialSignals.turned, { to: a.to })),
-    }),
-  },
-  signals: dialSignals,
-});
-
-describe("building a board", () => {
-  it("writes props, IS, WHEN and witnesses as plain data", () => {
-    const built = buildBoard("demo", (b) => {
-      const d = b.prop(dial, "d", { at: dec("2.50") });
-      b.is(d.input.isOn, (at) => at(d).at === 7.384);
-      b.when(
-        d.on.turned,
-        inOrder(d.call.turn({ to: dec("1.5") }), wait(1), theBoard.show(d)),
-        (at) => at(d).double > 3,
-      );
-      b.witness(d.learner.turn({ to: dec("7.384") }));
-      return [d];
-    });
-    expect(built.board.root).toEqual({
-      kind: "column",
-      name: "page",
-      children: [
-        { kind: "prop", name: "d", prop: "dial", with: { at: 2.5 } },
-        { kind: "space", name: "space1" },
-      ],
-    });
-    expect(built.board.is).toEqual([{ set: "d.isOn", to: expect.any(Function) }]);
-    expect(built.board.when).toEqual([
-      // No questions: it passes at once.
-      { on: "board.started", do: { call: "board.pass" } },
-      {
-        on: "d.turned",
-        if: expect.any(Function),
-        do: {
-          seq: [
-            { call: "d.turn", args: { to: 1.5 } },
-            { wait: 1 },
-            { call: "board.show", args: { name: "d" } },
-          ],
-        },
-      },
-    ]);
-    expect(built.witness).toEqual([
-      { kind: "act", prop: "d", action: "turn", args: { to: 7.384 } },
-    ]);
-  });
-
-  it("works a call's arguments out when it runs, from the board", () => {
-    let rule: RuleFn | undefined;
-    buildBoard("demo", (b) => {
-      const d = b.prop(dial, "d", {});
-      const script = d.call.turn((at) => ({ to: at(d).double }));
-      const args = (script as { args?: unknown }).args;
-      if (typeof args === "function") rule = (at) => (args as (a: typeof at) => unknown)(at);
-      b.when(d.on.turned, script);
-      return [d];
-    });
-    expect(rule?.(() => ({ double: 6 }))).toEqual({ to: 6 });
-  });
-
-  it("catches authoring mistakes when the board is built", () => {
-    expect(() => buildBoard("x", (b) => [b.prop(dial, "d"), b.prop(dial, "d")])).toThrow(
-      /Two props named "d"/,
-    );
-    expect(() =>
-      buildBoard("x", (b) => {
-        b.prop(dial, "d");
-        return [];
-      }),
-    ).toThrow(/not in the layout: d/);
-    expect(() => buildBoard("x", (b) => column([b.prop(dial, "d")]) as never)).toThrow(
-      /return its pieces as a list/,
-    );
-  });
-
-  it("names an action, signal or field the prop doesn't have, or gives an action the wrong arguments: a compile error, not a runtime one", () => {
-    buildBoard("x", (b) => {
-      const d = b.prop(dial, "d");
-      // Only checked by the compiler: the lines below are never run.
-      const never = () => {
-        // @ts-expect-error the dial has no action "spin"
-        d.call.spin();
-        // @ts-expect-error turn takes { to }
-        d.learner.turn({ from: 1 });
-        // @ts-expect-error turn needs its arguments
-        d.call.turn();
-        // @ts-expect-error the dial has no signal "spun"
-        d.on.spun;
-        // @ts-expect-error the dial's "at" isn't one a lesson may own (only its inputs are)
-        b.is(d.input.at, () => 1);
-        // @ts-expect-error an input is set to a value of its own type
-        b.is(d.input.isOn, () => 3);
-        // @ts-expect-error the dial has no derived field "triple"
-        b.when(d.on.turned, d.call.turn({ to: 1 }), (at) => at(d).triple > 0);
-      };
-      expect(typeof never).toBe("function");
-      return [d];
-    });
-  });
-
-  it("reaches a group's parts by name: their actions, signals and fields, typed", () => {
-    const pair = defineGroup({
-      type: "pair",
-      describe: "Two dials",
-      role: PropRole.Explainer,
-      children: { left: dial, right: dial },
-      when: { left: { turned: (_s, p, run) => [run.right.turn({ to: p.to })] } },
-      summary: () => "two dials",
-      layout: { kind: "row", children: ["left", "right"] },
-    });
-    const built = buildBoard("x", (b) => {
-      const p = b.prop(pair, "p");
-      b.when(p.on.left.turned, p.call.right.turn({ to: 2 }), (at) => at(p).left.at > 1);
-      b.witness(p.learner.left.turn({ to: 3 }));
-      const never = () => {
-        // @ts-expect-error the pair has no part "middle"
-        p.call.middle.turn({ to: 1 });
-        // @ts-expect-error a part's action takes its own arguments
-        p.call.left.turn({ from: 1 });
-        // @ts-expect-error a part's fields are under its name
-        b.when(p.on.left.turned, p.call.left.turn({ to: 1 }), (at) => at(p).at > 0);
-        // @ts-expect-error a part that can't be left out isn't null
-        b.prop(pair, "p2", { left: null });
-        // Some of a part's fields, over its defaults.
-        b.prop(pair, "p3", { left: { at: 2 } });
-      };
-      expect(typeof never).toBe("function");
-      return [p];
-    });
-    expect(built.board.when).toContainEqual(
-      expect.objectContaining({
-        on: "p.left.turned",
-        do: { call: "p.right.turn", args: { to: 2 } },
-      }),
-    );
-    expect(built.witness).toContainEqual(
-      expect.objectContaining({ prop: "p", action: "left.turn", args: { to: 3 } }),
-    );
-  });
-});
-
-const askState = z.object({ status: z.enum(["open", "correct", "wrong"]) }).strict();
-const ask = defineProp({
-  type: "ask",
-  describe: "A question",
-  role: PropRole.Question,
-  state: askState,
-  defaults: { status: "open" },
-  actions: {},
-  signals: { [QuestionSignal.Correct]: signal("right") },
-});
-
-describe("a page", () => {
-  it("is a column with room at the bottom; what comes later starts hidden and shows after", () => {
-    const built = page("later", (b) => {
-      const d = b.prop(dial, "d");
-      const q = b.prop(ask, "q");
-      const note = b.prop(dial, "note");
-      b.after(d.on.turned, q);
-      b.after(q, [note], { if: (at) => at(d).at > 2 });
-      return [d, q, note];
-    }).build().board;
-    expect(built.root).toMatchObject({
-      kind: "column",
-      children: [
-        { name: "d" },
-        { name: "q", isHidden: true },
-        { name: "note", isHidden: true },
-        { kind: "space" },
-      ],
-    });
-    expect(built.when.map((r) => [r.on, r.do, typeof r.if])).toEqual([
-      ["d.turned", [{ call: "board.show", args: { name: "q" } }], "undefined"],
-      ["q.correct", [{ call: "board.show", args: { name: "note" } }], "function"],
-      // Its one question passes it.
-      ["q.correct", { call: "board.pass" }, "undefined"],
-    ]);
-  });
-
-  it("passes when every question is right, at once with none, or by passWhen", () => {
-    const two = page("two", (b) => [b.prop(ask, "a"), b.prop(ask, "b")]).build().board;
-    const passes = two.when.filter((r) => JSON.stringify(r.do).includes("board.pass"));
-    expect(passes.map((r) => r.on)).toEqual(["a.correct", "b.correct"]);
-    const allRight = passes[0]?.if as RuleFn;
-    const statuses: Record<string, string> = { a: AnswerStatus.Correct, b: AnswerStatus.Open };
-    const at = (p: string | { name: string }) => ({
-      status: statuses[typeof p === "string" ? p : p.name],
-    });
-    expect(allRight(at)).toBe(false);
-    statuses.b = AnswerStatus.Correct;
-    expect(allRight(at)).toBe(true);
-
-    const reading = page("reading", (b) => [b.prop(dial, "d")]).build().board;
-    expect(reading.when).toEqual([{ on: "board.started", do: { call: "board.pass" } }]);
-
-    const onSignal = page("on-signal", (b) => {
-      const d = b.prop(dial, "d");
-      b.passWhen(d.on.turned, { if: (at) => at(d).at === 3 });
-      return [d, b.prop(ask, "q")];
-    }).build().board;
-    // passWhen replaces passing on the question.
-    expect(onSignal.when.map((r) => [r.on, r.do])).toEqual([["d.turned", { call: "board.pass" }]]);
-  });
-
-  it("refuses a rule that passes the board, and a piece hidden that nothing shows", () => {
-    expect(() =>
-      page("b", (b) => {
-        const d = b.prop(dial, "d");
-        b.when(d.on.turned, theBoard.pass());
-        return [d];
-      }).build(),
-    ).toThrow(/use passWhen/);
-    expect(() => page("c", (b) => [b.prop(dial, "d", {}, { isHidden: true })]).build()).toThrow(
-      /nothing shows them/,
-    );
-  });
-});
-
-describe("a prop drawn still", () => {
-  it("carries what it shows, in words, on its piece", () => {
-    const shows = { en: "The dial at 3", hi: "डायल 3 पर" };
-    const built = page("still", (b) => [b.prop(dial, "d", {}, { still: shows })]).build().board;
-    expect(built.root).toMatchObject({
-      children: [{ name: "d", still: shows }, { kind: "space" }],
-    });
-  });
+  variables: z.object({ at: z.number() }).strict(),
+  start: { at: 0 },
+  actions: { turn: action({ to: z.number() }, { from: "screen", describe: "Turn it" }) },
+  on: { turn: (_, { to }, t) => t.set({ at: to }) },
 });
 
 describe("question families", () => {
@@ -271,11 +24,8 @@ describe("question families", () => {
     level: Level.Easy,
     tests: ["dials"],
     params: z.object({ to: decimal }).strict(),
-    build: ({ to }, b) => {
-      const d = b.prop(dial, "d");
-      b.witness(d.learner.turn({ to }));
-      return [d];
-    },
+    build: ({ to }) =>
+      scene({ pieces: { d: place(dial) }, witness: [tap("d", "turn", { to: Number(to) })] }),
   });
 
   it("checks a row's params and hands the family exact decimals", () => {

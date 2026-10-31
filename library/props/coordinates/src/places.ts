@@ -1,7 +1,6 @@
 import { localizedSchema } from "@chalk/content";
-import { PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import { type Line, type PlaneCore, type Point, fromPlane, lineSchema, pointSchema } from "./plane";
+import { type Line, type PlaneCore, type Point, fromPlane } from "./plane";
 
 /** What a place is drawn as. */
 export const PlaceKind = {
@@ -34,8 +33,6 @@ export type PlacesState = Pick<PlaneCore, (typeof placesReads.keys)[number]> & {
   lit: Line | null;
   showAddress: boolean;
 };
-
-const MAX_PLACES = 120;
 
 /** The places with one number: every house on a street (x), or along a row (y). */
 export const placesOn = (

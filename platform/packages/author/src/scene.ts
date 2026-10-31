@@ -30,7 +30,6 @@ import {
   signal,
 } from "@chalk/prop/next";
 import { type ZodTypeAny, z } from "zod";
-import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
 import {
   type Cue,
   NOT_FOR_SOUNDS,
@@ -42,6 +41,7 @@ import {
   pieceHidden,
   queuedSchema,
 } from "./sound";
+import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./steps";
 
 /**
  * A board on the event model (platform/docs/event-model.md): the scene is the outermost prop. Its

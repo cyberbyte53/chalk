@@ -1,9 +1,9 @@
 import { type Board, type BuiltPage, type BuiltQuestion, Kind, propPieces } from "@chalk/content";
 import { PropRole } from "@chalk/prop";
-import type { BuiltBoard } from "./board";
 import { isFamily } from "./family";
 import { ContentFile } from "./manifest";
 import { type Page, isPage } from "./page";
+import type { BuiltBoard } from "./steps";
 
 /**
  * Chapters ship as code: a built page or question names the module that makes its board (its
@@ -64,17 +64,15 @@ export function finishBoard(item: BoardItem, built: BuiltBoard, roleOf: RoleOf):
     item.kind === Kind.Page
       ? { concepts: [item.concept], isGraded: false }
       : { concepts: [...item.tests], isGraded: true };
-  const given: Record<string, unknown> | undefined =
-    board.model === undefined ? undefined : { ...board.model.given };
+  if (board.model === undefined) throw new Error(`${item.path}: its board has no scene`);
+  const given: Record<string, unknown> = { ...board.model.given };
   for (const piece of propPieces(board.root))
     if (roleOf(piece.prop) === PropRole.Question) {
       piece.with = { ...piece.with, concepts: [...tag.concepts], isGraded: tag.isGraded };
       // A scene starts its pieces from its own setup: the same words go there.
-      if (given !== undefined) given[piece.name] = piece.with;
+      given[piece.name] = piece.with;
     }
-  return board.model === undefined || given === undefined
-    ? board
-    : { ...board, model: { ...board.model, given } };
+  return { ...board, model: { ...board.model, given } };
 }
 
 /** The item's board, made from its module: the one way any copy of it is made. */

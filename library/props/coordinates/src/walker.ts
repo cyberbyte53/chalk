@@ -1,18 +1,6 @@
-import { localizedSchema } from "@chalk/content";
-import {
-  type Effect,
-  type Emit,
-  PropRole,
-  actionsFor,
-  defineProp,
-  raise,
-  seq,
-  set,
-  signal,
-  tween,
-} from "@chalk/prop";
-import { z } from "zod";
-import { type PlaneCore, type Point, fromPlane, isInWindow, pointSchema } from "./plane";
+import type { localizedSchema } from "@chalk/content";
+import type { z } from "zod";
+import { type PlaneCore, type Point, fromPlane, isInWindow } from "./plane";
 
 /** Which lines are roads Riya can walk on. */
 export const Roads = {
@@ -32,16 +20,6 @@ export type WalkerKind = (typeof WalkerKind)[keyof typeof WalkerKind];
 
 /** The plane's fields she walks and is drawn by: its edge, its streets, its lines' names. */
 export const walkerReads = fromPlane("window", "upLines", "axes", "marks", "axisNames", "scene");
-
-/** Where she is headed, as the places say (Aman's house): passed in, never hers to change. */
-const goalFields = {
-  /** The target place, or null. */
-  target: pointSchema.nullable(),
-  /** What it is called on screen. */
-  targetName: localizedSchema,
-  /** Whether the learner can still choose one (so she may yet arrive somewhere). */
-  canChooseTarget: z.boolean(),
-};
 
 export type WalkerState = Pick<PlaneCore, (typeof walkerReads.keys)[number]> & {
   target: Point | null;

@@ -1,6 +1,6 @@
-import { type BoardKit, type BuiltBoard, type Child, buildBoard } from "./board";
-import { type Scene, isScene } from "./scene";
+import type { Scene } from "./scene";
 import { framesHere, siteFrom } from "./site";
+import type { BuiltBoard } from "./steps";
 
 const PAGE = Symbol("page");
 
@@ -23,11 +23,10 @@ export function camel(key: string): string {
 }
 
 /**
- * A theory page. `key` names it within its concept's overview (and with the concept's path decides
- * its id). It returns its pieces, top to bottom; it lets the learner go on when its questions are
- * all answered right (at once, with none), unless it says `b.passWhen(…)`.
+ * A theory page: its scene. `key` names it within its concept's overview (and with the concept's
+ * path decides its id).
  */
-export function page(key: string, build: ((b: BoardKit) => readonly Child[]) | Scene): Page {
+export function page(key: string, board: Scene): Page {
   if (!KEY.test(key)) throw new Error(`Page "${key}": use kebab-case, like decimal-zoom`);
   const stack = framesHere();
   const site = siteFrom(stack);
@@ -36,7 +35,7 @@ export function page(key: string, build: ((b: BoardKit) => readonly Child[]) | S
     key,
     ...(site === undefined ? {} : { site }),
     ...(stack.length === 0 ? {} : { stack }),
-    build: () => (isScene(build) ? build.build(camel(key)) : buildBoard(camel(key), build)),
+    build: () => board.build(camel(key)),
   };
 }
 

@@ -1,4 +1,4 @@
-import { type Step, StepKind, asRuleFn } from "@chalk/author";
+import type { Step } from "@chalk/author";
 import { Actor, type Board, LOCALES, type Locale, type Localized, PieceKind } from "@chalk/content";
 import { type PropModule, type RuntimeServices, SceneRuntime } from "@chalk/player";
 import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
@@ -63,23 +63,8 @@ function playScene(
       runtime.settle(step.wait, true);
       continue;
     }
-    switch (step.kind) {
-      case StepKind.Act:
-        void runtime.call(step.prop, step.action, step.args, Actor.Learner);
-        runtime.settle();
-        break;
-      case StepKind.Expect: {
-        const value = asRuleFn(step.that)((piece) =>
-          runtime.getView(typeof piece === "string" ? piece : piece.name),
-        );
-        if (value !== true)
-          failures.push({
-            check: `expected ${step.says}`,
-            seen: `${step.that.toString()} was ${String(value)}`,
-          });
-        break;
-      }
-    }
+    void runtime.call(step.prop, step.action, step.args, Actor.Learner);
+    runtime.settle();
   }
   runtime.settle();
   for (const heard of runtime.heard()) if ("line" in heard) onHeard?.(heard.line);

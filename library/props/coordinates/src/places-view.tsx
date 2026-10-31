@@ -9,7 +9,6 @@ import { PlaceKind } from "./places";
 import type { Point } from "./plane";
 import { isRisen, unitOf } from "./plane-view";
 import { places } from "./scene/places";
-import { walker } from "./scene/walker";
 import { WORDS, addressOf, word } from "./words";
 
 type PlacesView = PropView<typeof places>;

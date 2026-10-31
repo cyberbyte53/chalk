@@ -1,14 +1,6 @@
 import { localizedSchema } from "@chalk/content";
-import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
 import { z } from "zod";
-import {
-  type PlaneCore,
-  type PlaneWindow,
-  type Point,
-  fromPlane,
-  pointSchema,
-  windowSchema,
-} from "./plane";
+import { type PlaneCore, type PlaneWindow, type Point, fromPlane, windowSchema } from "./plane";
 
 /**
  * A clue about where a point is: words, and what they allow. A region ("upper half"), one distance

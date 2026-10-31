@@ -1,18 +1,6 @@
 import type { localizedSchema } from "@chalk/content";
-import {
-  type Effect,
-  type Emit,
-  PropRole,
-  actionsFor,
-  defineProp,
-  raise,
-  seq,
-  set,
-  signal,
-  wait,
-} from "@chalk/prop";
 import { z } from "zod";
-import type { Point, pointSchema } from "./plane";
+import type { pointSchema } from "./plane";
 
 export const throwSchema = z
   .object({ red: z.number().int().min(1).max(6), green: z.number().int().min(1).max(6) })
@@ -29,9 +17,6 @@ export type DiceState = {
   winner: number | null;
 };
 
-/** Seconds a counter takes from one line to the next. */
-const SECONDS_PER_LINE = 0.18;
-
 /** A number from 0 to 1, the same for the same seed and n (mulberry32). */
 function chance(seed: number, n: number): number {
   let t = (seed * 2654435761 + n * 40503 + 0x6d2b79f5) >>> 0;
@@ -47,11 +32,6 @@ export function throwOf(seed: number, n: number): { red: number; green: number }
     green: 1 + Math.floor(chance(seed, 2 * n + 1) * 6),
   };
 }
-
-/** Who: player 0 or 1. A die's face: 1 to 6. A counter's coordinate: a whole number from 0. */
-const player = z.number().int().min(0).max(1);
-const face = z.number().int().min(1).max(6);
-const coordinate = z.number().int().min(0);
 
 /** Whether it is drawn on the plane. */
 export const isDiceOn = (s: Pick<DiceState, "counters">) => s.counters.length > 0;

@@ -1,17 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import {
-  type Effect,
-  type FrameSpec,
-  PropRole,
-  actionsFor,
-  defineProp,
-  raise,
-  seq,
-  set,
-  signal,
-  tween,
-  wait,
-} from "@chalk/prop";
+import type { FrameSpec } from "@chalk/prop";
 import { z } from "zod";
 
 /**

@@ -1,15 +1,4 @@
-import { type Emit, PropRole, actionsFor, defineProp, raise, set, signal } from "@chalk/prop";
-import { z } from "zod";
-import {
-  type PlaneCore,
-  PlanePart,
-  type Point,
-  QUADRANTS,
-  type Quadrant,
-  fromPlane,
-  placeOf,
-  pointSchema,
-} from "./plane";
+import { type PlaneCore, type Point, type Quadrant, fromPlane } from "./plane";
 
 /** How much of a point's reading is written: each stage is defined by a board before it is used. */
 export const Reading = {
