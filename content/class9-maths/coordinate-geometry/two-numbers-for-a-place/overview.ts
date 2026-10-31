@@ -26,7 +26,7 @@ const side = sceneWith.choice({
       label: t("2 stops from the stand, to the right", "अड्डे से 2 स्टॉप, दाईं ओर"),
       feedback: t(
         "Look at the bus: it went left from 0. The minus sign says which side.",
-        "बस को देखो: वह 0 से बाईं ओर गई। ऋण चिह्न बताता है कि किस ओर।",
+        "बस को देखो: वह 0 से बाईं ओर गई। माइनस का चिह्न बताता है कि किस ओर।",
       ),
     },
     {
@@ -55,7 +55,7 @@ const busStops = page(
       road: words.body(
         t(
           "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, … **The road is a number line.**",
-          "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …। **सड़क एक संख्या रेखा है।**",
+          "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3,\u00a0…। **सड़क एक संख्या रेखा है।**",
         ),
         {
           says: t(
@@ -126,9 +126,10 @@ const busStops = page(
     },
     standsFor: { line: "a straight road as a number line: the bus stand at 0, stops both ways" },
     hear: {
-      "line.walker.stepped": (_, p, t) => [
+      "line.walker.stepped": (me, p, t) => [
         ...(p.x === 3 ? [t.self.show({ name: "atThree" })] : []),
-        ...(p.x === -2 ? [t.self.show({ name: "side" })] : []),
+        // Asked once "now take it to minus 2" has been said: whichever way the bus got to −2.
+        ...(p.x === -2 && !me.hidden.includes("atThree") ? [t.self.show({ name: "side" })] : []),
       ],
       "side.correct": (_, __, t) => t.self.show({ name: "enough" }),
     },
@@ -142,13 +143,13 @@ const streetAndHouse = page(
   "street-and-house",
   scene({
     purpose:
-      "The main road is a number line, and 'Street 4' is one number on it. Then Street 4 rises from the 4, a second number line with five houses, and one number can't say which: 'House 5' is a number on the line that rose. A pair is how far along, then how far up the line that rises there.",
+      "The main road is a number line, and 'Street\u00a04' is one number on it. Then Street\u00a04 rises from the 4, a second number line with five houses, and one number can't say which: 'House\u00a05' is a number on the line that rose. A pair is how far along, then how far up the line that rises there.",
     pieces: {
       title: words.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
       story: words.body(
         t(
-          "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. She asks him where he lives. He replies: **Street 4**.",
-          "रिया और अमन कक्षा 9 में हैं, और उनकी कक्षा एक स्टॉल मेला लगा रही है। वे अपना स्टॉल अमन के घर पर तय करेंगे, पर रिया वहाँ कभी नहीं गई। वह उससे पूछती है कि वह कहाँ रहता है। वह जवाब देता है: **गली 4**।",
+          "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. She asks him where he lives. He replies: **Street\u00a04**.",
+          "रिया और अमन कक्षा 9 में हैं, और उनकी कक्षा एक स्टॉल मेला लगा रही है। वे अपना स्टॉल अमन के घर पर तय करेंगे, पर रिया वहाँ कभी नहीं गई। वह उससे पूछती है कि वह कहाँ रहता है। वह जवाब देता है: **गली\u00a04**।",
         ),
       ),
       road: words.body(
@@ -174,24 +175,24 @@ const streetAndHouse = page(
       fiveHouses: hidden(
         words.body(
           t(
-            "Street 4 rises from the 4: a second number line, going up, with **five houses** on it. Which one is Aman's?",
-            "4 से गली 4 ऊपर उठती है: एक दूसरी संख्या रेखा, ऊपर की ओर, जिस पर **पाँच मकान** हैं। अमन का कौन-सा है?",
+            "Street\u00a04 rises from the 4: a second number line, going up, with **five houses** on it. Which one is Aman's?",
+            "4 से गली\u00a04 ऊपर उठती है: एक दूसरी संख्या रेखा, ऊपर की ओर, जिस पर **पाँच मकान** हैं। अमन का कौन-सा है?",
           ),
         ),
       ),
       reply: hidden(
         words.body(
           t(
-            "Riya messages him again. He replies: **House 5**, a number on the street that rose. Walk her up to it.",
-            "रिया उसे फिर संदेश भेजती है। वह जवाब देता है: **मकान 5**, उठी हुई गली पर एक संख्या। उसे वहाँ तक ऊपर चलाओ।",
+            "Riya messages him again. He replies: **House\u00a05**, a number on the street that rose. Walk her up to it.",
+            "रिया उसे फिर संदेश भेजती है। वह जवाब देता है: **मकान\u00a05**, उठी हुई गली पर एक संख्या। उसे वहाँ तक ऊपर चलाओ।",
           ),
         ),
       ),
       found: hidden(
         words.definition(
           t(
-            "**Aman's house isn't on one line: it's along the main road and then up a street, so one number couldn't say where it is.** It took two numbers: how far along the main road (Street 4), then how far up the street that rises there (House 5).",
-            "**अमन का घर एक रेखा पर नहीं है: वह मुख्य सड़क पर आगे और फिर एक गली में ऊपर है, इसलिए एक संख्या नहीं बता सकी कि वह कहाँ है।** इसके लिए दो संख्याएँ लगीं: मुख्य सड़क पर कितना आगे (गली 4), फिर वहाँ से उठती गली में कितना ऊपर (मकान 5)।",
+            "**Aman's house isn't on one line: it's along the main road and then up a street, so one number couldn't say where it is.** It took two numbers: how far along the main road (Street\u00a04), then how far up the street that rises there (House\u00a05).",
+            "**अमन का घर एक रेखा पर नहीं है: वह मुख्य सड़क पर आगे और फिर एक गली में ऊपर है, इसलिए एक संख्या नहीं बता सकी कि वह कहाँ है।** इसके लिए दो संख्याएँ लगीं: मुख्य सड़क पर कितना आगे (गली\u00a04), फिर वहाँ से उठती गली में कितना ऊपर (मकान\u00a05)।",
           ),
         ),
       ),
@@ -240,13 +241,13 @@ const dotOnPaper = page(
   "dot-on-paper",
   scene({
     purpose:
-      'A dot on a notebook page, which has no roads. The book\'s ways of saying where it is, one at a time, each shading where it could still be: "upper half" half the page, "near the left edge" a patch, 5 cm from the left edge a whole line, and 9 cm above the bottom one point, where the two lines cross.',
+      'A dot on a notebook page, which has no roads. The book\'s ways of saying where it is, one at a time, each shading where it could still be: "upper half" half the page, "near the left edge" a patch, 5\u00a0cm from the left edge a whole line, and 9\u00a0cm above the bottom one point, where the two lines cross.',
     pieces: {
       title: words.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
       ask: words.body(
         t(
-          "Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
-          "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
+          "Here is a dot on a page of your notebook, and each small square is 1\u00a0cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+          "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1\u00a0cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
         ),
         {
           says: t(
@@ -275,8 +276,14 @@ const dotOnPaper = page(
                 words: t("It is near the left edge", "यह बाएँ किनारे के पास है"),
                 region: { xMin: 0, xMax: 6, yMin: 0, yMax: 12 },
               },
-              { words: t("It is 5 cm from the left edge", "यह बाएँ किनारे से 5 cm पर है"), x: 5 },
-              { words: t("It is 9 cm above the bottom", "यह नीचे के किनारे से 9 cm ऊपर है"), y: 9 },
+              {
+                words: t("It is 5\u00a0cm from the left edge", "यह बाएँ किनारे से 5\u00a0cm पर है"),
+                x: 5,
+              },
+              {
+                words: t("It is 9\u00a0cm above the bottom", "यह नीचे के किनारे से 9\u00a0cm ऊपर है"),
+                y: 9,
+              },
             ],
           },
         }),
@@ -292,8 +299,8 @@ const dotOnPaper = page(
       line: hidden(
         words.body(
           t(
-            "Closer, but every spot on that line is 5 cm from the left edge.",
-            "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।",
+            "Closer, but every spot on that line is 5\u00a0cm from the left edge.",
+            "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5\u00a0cm पर है।",
           ),
           {
             says: t(
@@ -306,8 +313,8 @@ const dotOnPaper = page(
       fixed: hidden(
         words.definition(
           t(
-            "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
-            "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
+            "**Two distances fixed the dot:** 5\u00a0cm from the left edge and 9\u00a0cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+            "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5\u00a0cm और नीचे के किनारे से 9\u00a0cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
           ),
           null,
           {
@@ -354,8 +361,8 @@ const same = sceneWith.choice({
       id: "yes",
       label: t("Yes: they are the same desk", "हाँ: वे एक ही डेस्क हैं"),
       feedback: t(
-        "The column comes first. Tap (5, 3), then (3, 5): they are in different places.",
-        "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।",
+        "The column comes first. Look at the two marked desks: (5, 3) is column 5, row 3, and (3, 5) is column 3, row 5. They are in different places.",
+        "स्तंभ पहले आता है। चिह्नित दोनों डेस्क देखो: (5, 3) स्तंभ 5, पंक्ति 3 है, और (3, 5) स्तंभ 3, पंक्ति 5। वे अलग जगह हैं।",
       ),
     },
   ],
@@ -455,8 +462,8 @@ const twoLines = page(
       look: words.body(t("Look back at the three places:", "उन तीन जगहों को फिर देखो:")),
       theHouse: words.body(
         t(
-          "**The house:** along the main road to Street 4, then up Street 4 to House 5.",
-          "**घर:** मुख्य सड़क पर गली 4 तक, फिर गली 4 में मकान 5 तक।",
+          "**The house:** along the main road to Street\u00a04, then up Street\u00a04 to House\u00a05.",
+          "**घर:** मुख्य सड़क पर गली\u00a04 तक, फिर गली\u00a04 में मकान\u00a05 तक।",
         ),
       ),
       house: place(
@@ -469,15 +476,15 @@ const twoLines = page(
         {
           ...still,
           still: t(
-            "The town: Riya's route along the main road to Street 4, then up it to House 5.",
-            "शहर: रिया का रास्ता, मुख्य सड़क पर गली 4 तक, फिर उसमें मकान 5 तक।",
+            "The town: Riya's route along the main road to Street\u00a04, then up it to House\u00a05.",
+            "शहर: रिया का रास्ता, मुख्य सड़क पर गली\u00a04 तक, फिर उसमें मकान\u00a05 तक।",
           ),
         },
       ),
       theDot: words.body(
         t(
-          "**The dot:** 5 cm across from the left edge, then 9 cm up from the bottom.",
-          "**बिंदु:** बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।",
+          "**The dot:** 5\u00a0cm across from the left edge, then 9\u00a0cm up from the bottom.",
+          "**बिंदु:** बाएँ किनारे से 5\u00a0cm आड़े, फिर नीचे के किनारे से 9\u00a0cm ऊपर।",
         ),
         {
           says: t(
@@ -508,8 +515,8 @@ const twoLines = page(
         {
           ...still,
           still: t(
-            "The notebook page: the dot 5 cm from the left edge and 9 cm above the bottom, each distance drawn.",
-            "कॉपी का पन्ना: बिंदु बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर, हर दूरी खिंची हुई।",
+            "The notebook page: the dot 5\u00a0cm from the left edge and 9\u00a0cm above the bottom, each distance drawn.",
+            "कॉपी का पन्ना: बिंदु बाएँ किनारे से 5\u00a0cm और नीचे के किनारे से 9\u00a0cm ऊपर, हर दूरी खिंची हुई।",
           ),
         },
       ),
@@ -559,6 +566,12 @@ const twoLines = page(
           "This idea is the start of **coordinate geometry**. It grew from **René Descartes** (1596–1650), a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the **Cartesian system**.",
           "यही विचार **निर्देशांक ज्यामिति** की शुरुआत है। यह **रेने देकार्त** (1596–1650) से आया, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को **कार्तीय पद्धति** कहते हैं।",
         ),
+        {
+          says: t(
+            "This idea is the start of coordinate geometry. It grew from René Descartes, who lived from 1596 to 1650, a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the Cartesian system.",
+            "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त से आया, जो 1596 से 1650 तक रहे, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
+          ),
+        },
       ),
     },
   }),

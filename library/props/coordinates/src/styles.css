@@ -288,6 +288,12 @@
   stroke-width: 1.2;
   stroke-dasharray: 4 4;
 }
+/* A highlighted point's distances: in colour, as the dot's are (clues-view.tsx). */
+.cp-named-point.is-accent .cp-drop {
+  stroke: color-mix(in srgb, var(--color-primary) 70%, transparent);
+  stroke-width: 2.4;
+  stroke-dasharray: 6 5;
+}
 .cp-point {
   fill: var(--color-primary);
   stroke: var(--color-surface);

@@ -7,11 +7,11 @@
   },
   "clips": [
     {
-      "file": "c8ada71708acda47.m4a",
+      "file": "8620d9440b1a4070.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "(4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.",
-      "seconds": 9.172
+      "words": "(4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.",
+      "seconds": 9.207
     },
     {
       "file": "1312c0d36dce3b25.m4a",
@@ -224,32 +224,32 @@
       "seconds": 52.617
     },
     {
-      "file": "572ea53664772c80.m4a",
+      "file": "00c8d54c5449261c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Tap the desk (1, 5), then press Check.",
-      "seconds": 2.682
+      "words": "Tap the desk (1, 5), then press Check.",
+      "seconds": 2.938
     },
     {
-      "file": "1477e14dc2ac8ddd.m4a",
+      "file": "91bd0d7881bc5c78.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Tap the desk (2, 6), then press Check.",
-      "seconds": 2.926
+      "words": "Tap the desk (2, 6), then press Check.",
+      "seconds": 2.984
     },
     {
-      "file": "1cfe0839955edf04.m4a",
+      "file": "8f6410f29e09c977.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Tap the desk (5, 3), then press Check.",
-      "seconds": 2.694
+      "words": "Tap the desk (5, 3), then press Check.",
+      "seconds": 2.752
     },
     {
-      "file": "93e51b519ed71d98.m4a",
+      "file": "86d12899884e402a.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Tap the desk (7, 4), then press Check.",
-      "seconds": 2.845
+      "words": "Tap the desk (7, 4), then press Check.",
+      "seconds": 2.903
     },
     {
       "file": "61fde4640fc2fb30.m4a",
@@ -315,11 +315,11 @@
       "seconds": 13.375
     },
     {
-      "file": "35b9fd07b3dc6b83.m4a",
+      "file": "51579f27752a9571.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The column comes first. Tap (5, 3), then (3, 5): they are in different places.",
-      "seconds": 6.189
+      "words": "The column comes first. Look at the two marked desks: (5, 3) is column 5, row 3, and (3, 5) is column 3, row 5. They are in different places.",
+      "seconds": 10.101
     },
     {
       "file": "a6ea6b3c6b7469f1.m4a",
@@ -350,11 +350,11 @@
       "seconds": 9.683
     },
     {
-      "file": "e299392bb7dc4d2a.m4a",
+      "file": "aa97b056f648ac98.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This idea is the start of coordinate geometry. It grew from René Descartes (1596–1650), a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the Cartesian system.",
-      "seconds": 22.245
+      "words": "This idea is the start of coordinate geometry. It grew from René Descartes, who lived from 1596 to 1650, a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the Cartesian system.",
+      "seconds": 23.534
     },
     {
       "file": "712409b554b7be3b.m4a",
@@ -392,11 +392,11 @@
       "seconds": 5.898
     },
     {
-      "file": "b98a8c5bb79b8d32.m4a",
+      "file": "683eb0289a379933.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "(4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।",
-      "seconds": 11.785
+      "words": "(4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।",
+      "seconds": 12.435
     },
     {
       "file": "018758e5b26dc81f.m4a",
@@ -532,32 +532,32 @@
       "seconds": 5.329
     },
     {
-      "file": "671456616c2834e1.m4a",
+      "file": "f57e760de80cfc0d.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "डेस्क (1, 5) दबाओ, फिर जाँचो दबाओ।",
-      "seconds": 3.263
+      "words": "डेस्क (1, 5) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.658
     },
     {
-      "file": "73f2a99bcc6dbd1b.m4a",
+      "file": "54187416ed109095.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "डेस्क (2, 6) दबाओ, फिर जाँचो दबाओ।",
-      "seconds": 3.205
+      "words": "डेस्क (2, 6) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.309
     },
     {
-      "file": "a10476fead1c1a0a.m4a",
+      "file": "a7745150225e563e.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "डेस्क (5, 3) दबाओ, फिर जाँचो दबाओ।",
-      "seconds": 3.228
+      "words": "डेस्क (5, 3) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.6
     },
     {
-      "file": "cf5f9320b2477f6d.m4a",
+      "file": "4af8caf167d92a94.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "डेस्क (7, 4) दबाओ, फिर जाँचो दबाओ।",
-      "seconds": 3.228
+      "words": "डेस्क (7, 4) दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.576
     },
     {
       "file": "812dbb9e6c69da5d.m4a",
@@ -651,11 +651,11 @@
       "seconds": 9.567
     },
     {
-      "file": "0a6bbc63364b223d.m4a",
+      "file": "8c692b8d283161d8.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बस को देखो: वह 0 से बाईं ओर गई। ऋण चिह्न बताता है कि किस ओर।",
-      "seconds": 6.189
+      "words": "बस को देखो: वह 0 से बाईं ओर गई। माइनस का चिह्न बताता है कि किस ओर।",
+      "seconds": 6.107
     },
     {
       "file": "7ee5a6744877825a.m4a",
@@ -721,11 +721,11 @@
       "seconds": 14.803
     },
     {
-      "file": "823f7b16ee026f5a.m4a",
+      "file": "47d1c4f4d7e8a87c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त (1596–1650) से आया, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
-      "seconds": 27.806
+      "words": "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त से आया, जो 1596 से 1650 तक रहे, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
+      "seconds": 28.561
     },
     {
       "file": "86a9953761f41820.m4a",
@@ -763,11 +763,11 @@
       "seconds": 1.881
     },
     {
-      "file": "c082e8c9c0b4bbc4.m4a",
+      "file": "6cd9e3f221d6e089.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "स्तंभ पहले आता है। (5, 3) दबाओ, फिर (3, 5): वे अलग जगह हैं।",
-      "seconds": 6.409
+      "words": "स्तंभ पहले आता है। चिह्नित दोनों डेस्क देखो: (5, 3) स्तंभ 5, पंक्ति 3 है, और (3, 5) स्तंभ 3, पंक्ति 5। वे अलग जगह हैं।",
+      "seconds": 12.655
     },
     {
       "file": "6fb7afbf5096f780.m4a",

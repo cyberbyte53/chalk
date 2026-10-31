@@ -14,9 +14,11 @@ import { richSpeech } from "../rich-text-speech";
 export function spokenWords(source: string, locale: Locale): string | undefined {
   const { pieces } = richSpeech(source, locale);
   if (pieces.some((p) => p.kind !== "words")) return undefined;
+  // Spacing is the screen's (a no-break space keeps "5 cm" on one line): to a voice, a space.
   return pieces
     .map((p) => (p.kind === "words" ? p.text : ""))
     .join("")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
