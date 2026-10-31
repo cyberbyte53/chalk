@@ -1,5 +1,5 @@
 import { type Locale, type SoundList, clipsOf } from "@chalk/content";
-import { RichText } from "@chalk/player";
+import { RichText, playClip } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
@@ -77,23 +77,22 @@ function useScript(path: string): { script: Script; sound: SoundList; base: stri
   return loaded === null ? null : { ...loaded, base };
 }
 
-/** Plays a line's clips one after another; a new line stops the one playing. */
+/** Plays a line's clips one after another, through the engine; a new line stops the one playing. */
 function usePlayer(): (urls: readonly string[]) => void {
-  const playing = useRef<HTMLAudioElement | null>(null);
+  const playing = useRef<{ stop: () => void } | null>(null);
   const turn = useRef(0);
-  useEffect(() => () => playing.current?.pause(), []);
+  useEffect(() => () => playing.current?.stop(), []);
   return (urls) => {
     const mine = ++turn.current;
-    playing.current?.pause();
-    const next = (i: number) => {
-      const url = urls[i];
-      if (url === undefined || turn.current !== mine) return;
-      const player = new Audio(url);
-      playing.current = player;
-      player.addEventListener("ended", () => next(i + 1));
-      void player.play().catch(() => undefined);
-    };
-    next(0);
+    playing.current?.stop();
+    void (async () => {
+      for (const url of urls) {
+        if (turn.current !== mine) return;
+        const clip = playClip(url, "voice");
+        playing.current = clip;
+        if ((await clip.done) !== "heard") return;
+      }
+    })();
   };
 }
 

@@ -1,7 +1,14 @@
 import type { Locale } from "@chalk/content";
 import { estimatedSeconds } from "@chalk/prop/next";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { type Played, isMuted, playClip as playOnEngine, whenAudible } from "./engine";
+import {
+  type Played,
+  isAudible,
+  isMuted,
+  playClip as playOnEngine,
+  prepare,
+  whenAudible,
+} from "./engine";
 import { canSpeak, hush as phoneHush, speak as phoneSpeak } from "./speech";
 
 /** A clip to play: where it is, and how long it plays. */
@@ -52,12 +59,6 @@ export type Narrator = {
   /** Lines whose audio couldn't play, by name. */
   failed: ReadonlySet<string>;
 };
-
-/** Whether the page has been touched yet: until then the browser may let it make no sound. */
-const hasBeenTouched = (): boolean =>
-  typeof navigator === "undefined" ||
-  (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
-    ?.hasBeenActive !== false;
 
 /** How much longer than its length a sound may take before we stop waiting for it, in seconds. */
 const MARGIN = 2;
@@ -141,8 +142,8 @@ export function useNarrator(
         void phoneSpeak(words, locale).then(done);
         return phoneHush;
       });
-      // The phone's voice doesn't say why it couldn't: before the first touch, it is that.
-      return isHeard ? "heard" : hasBeenTouched() ? "broken" : "blocked";
+      // The phone's voice doesn't say why it couldn't: while the page may not sound, it is that.
+      return isHeard ? "heard" : isAudible() ? "broken" : "blocked";
     },
     [playOne, locale],
   );
@@ -221,6 +222,9 @@ export function useNarrator(
       let from = 0;
       let isBroken = false;
       const clips = clipsFor(line);
+      // The line's clips are fetched before it starts: its time is the clips', not the network's,
+      // and its phrases follow each other with no gaps.
+      await Promise.all((clips ?? []).map((clip) => prepare(clip.url)));
       for (const clip of clips ?? []) {
         if (!isMine()) return;
         const played = await whenAllowed(() => playClip(clip));
