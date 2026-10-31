@@ -216,11 +216,19 @@ export type Tools<V, A, S, C> = {
  * (`t.self.say`), so what waits for a line always hears it end.
  */
 export type VoiceTools = {
-  /** Says a line of the board (cutting the one being said); `atEnd` is done when it ends. */
+  /**
+   * Why this step runs: the student (a tap, or what one set going) or the board itself; each step
+   * its own number. What the scene decides who is heard by (platform/docs/sound.md, the two rules).
+   */
+  readonly cause: Cause;
+  /** Says a line of the board (cutting the one being said); `atEnd` is done when it ends or is cut. */
   readonly say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
-  /** Stops the line being said. */
+  /** Stops the line being said (it is cut: its `atEnd` is done). */
   readonly hush: () => Out;
 };
+
+/** Why a step runs: the student, or the board itself. */
+export type Cause = { readonly byStudent: boolean; readonly step: number };
 
 export type Rule<Me, P, T> = (me: Me, payload: P, t: T) => Outs;
 

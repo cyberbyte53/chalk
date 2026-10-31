@@ -27,6 +27,7 @@ export {
   type ReaderOf,
   type Rule,
   type SignalDef,
+  type Cause,
   type Tools,
   type VoiceTools,
 } from "./define";
@@ -34,4 +35,4 @@ export { Board, type BoardEvent, type Given, type Input } from "./board";
 export { sequence } from "./helpers";
 export { moveAt, type Move } from "./move";
 export { TimeQueue, type Entry } from "./queue";
-export { estimatedSeconds, silentVoice, type Voice } from "./voice";
+export { estimatedSeconds, type Heard, silentVoice, timedVoice, type Voice } from "./voice";

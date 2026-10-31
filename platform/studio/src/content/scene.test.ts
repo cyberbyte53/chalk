@@ -73,7 +73,7 @@ describe("a scene, built and checked like any board", () => {
     // waiting, is never said.
     expect(heard.filter((h) => h.startsWith("say"))).toEqual(["say title", "say found"]);
     expect(heard.slice(heard.indexOf("say found") - 1)).toEqual(["hush", "say found"]);
-    expect(runtime.getView("board").waiting).toEqual([]);
+    expect(runtime.getView("board").reads).toEqual([]);
   });
 
   it("lines are said in order and waited for: the title, the question, then what is shown", async () => {
@@ -84,8 +84,8 @@ describe("a scene, built and checked like any board", () => {
       "hi",
     );
     expect(played.view("board").hidden).toEqual([]);
-    expect(played.view("board").speaking).toBeNull();
-    expect(played.view("board").waiting).toEqual([]);
+    expect(played.view("board").saying).toEqual([]);
+    expect(played.view("board").reads).toEqual([]);
   });
 
   it("a piece with nothing to say adds no pause; a line hidden while said moves on to the next", () => {
@@ -126,8 +126,8 @@ describe("a scene, built and checked like any board", () => {
     said.length = 0;
     hiding.start();
     void hiding.call("board", "hide", { name: "first" });
-    hiding.settle(0);
-    // "first" is cut; the plane, next, has nothing to say; "second" goes on at once.
+    hiding.settle(1);
+    // "first" is cut; after a breath the plane, next, has nothing to say; "second" goes on at once.
     expect(said).toEqual(["first", "second"]);
   });
 
@@ -211,7 +211,7 @@ describe("a scene, built and checked like any board", () => {
         expect(heard).toContain(`${locale} ${l}`);
   });
 
-  it("lines due are never lost: a piece shown at the same moment goes first, they follow in order", async () => {
+  it("the board talks in turn: a piece the lesson shows waits its turn, nothing is lost", async () => {
     const busy = scene({
       pieces: {
         title: place(sceneText, { text: t("Two numbers", "दो संख्याएँ") }),
@@ -232,13 +232,43 @@ describe("a scene, built and checked like any board", () => {
         heard.push(`${locale} ${l}`),
       ),
     ).toEqual([]);
-    // The question's read was waiting: the piece shown drops it (the student has moved on).
+    // The lesson showed the hint, not the student: it waits its turn and drops nothing. The opening
+    // goes on when the board has nothing else to say.
     expect(heard.filter((h) => h.startsWith("en ")).map((h) => h.slice(3))).toEqual([
       "title",
       "hint",
       "first",
       "second",
+      "ask",
     ]);
+  });
+
+  it("a line the student cuts is still said: what waits on it happens (Aman always replies)", () => {
+    const reply = scene({
+      pieces: {
+        title: place(sceneText, { text: t("Where does Aman live?", "अमन कहाँ रहता है?") }),
+        ask,
+        answer: hidden(place(sceneText, { text: t("Street 4.", "गली 4।") })),
+      },
+      onSaid: { title: (_, t) => t.self.show({ name: "answer" }) },
+    }).build("reply");
+    const said: string[] = [];
+    const runtime = new SceneRuntime(reply.board, (type) => propLibrary[type], {
+      locale: "en",
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async (line) => void said.push(line.name),
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    runtime.start();
+    // While the title is said, the student answers: the title is cut, and the answer still comes.
+    void runtime.call("ask", "select", { option: "house" }, Actor.Learner);
+    void runtime.call("ask", "check", {}, Actor.Learner);
+    runtime.settle();
+    expect(runtime.getView("board").hidden).toEqual([]);
+    expect(said).toContain("answer");
   });
 
   it("refuses a line on Continue (nothing is heard after it) and a piece named board", () => {

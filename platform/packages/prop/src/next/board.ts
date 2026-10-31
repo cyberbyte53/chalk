@@ -3,6 +3,7 @@ import { joinPath } from "../address";
 import { withShown } from "../group";
 import {
   type AnyProp,
+  type Cause,
   Ease,
   type Out,
   type Outs,
@@ -12,7 +13,7 @@ import {
 } from "./define";
 import { type Move, moveAt } from "./move";
 import { type Entry, TimeQueue } from "./queue";
-import { type Voice, silentVoice } from "./voice";
+import { type Heard, type Voice, silentVoice } from "./voice";
 
 /**
  * A board running: the tree of props and their variables, one door every event goes through
@@ -56,9 +57,16 @@ type Later = {
   readonly outs: readonly Out[];
   /** The move this is the end of. */
   readonly move?: string;
-  /** The end of a line being said (dropped when it is hushed or cut). */
+  /** A line waiting out its quiet before it is said (dropped, as cut, when a line is stopped). */
   readonly isLine?: true;
+  /** A host's own wait on the board's clock (`after`): done as it falls due, not as a prop. */
+  readonly host?: () => void;
+  /** Queued by a step the student set going: what it does is theirs too. */
+  readonly byStudent?: true;
 };
+
+/** The line the voice is saying (or about to: in its quiet): what is done when it is. */
+type InTurn = { readonly id: number; readonly path: string; readonly atEnd: readonly Out[] };
 
 type Node = {
   readonly path: string;
@@ -96,10 +104,27 @@ export class Board {
   private readonly chain: string[] = [];
 
   private readonly voice: Voice;
+  /** Why the step being handled runs. */
+  private cause: Cause = { byStudent: false, step: 0 };
+  private steps = 0;
+  /** The line being said, if any. */
+  private inTurn: InTurn | undefined;
+  private lines = 0;
 
-  constructor(root: AnyProp, given: Given = {}, options: { voice?: Voice } = {}) {
-    this.voice = options.voice ?? silentVoice;
+  constructor(
+    root: AnyProp,
+    given: Given = {},
+    /** A voice, or one made for this board (one keeping time on its clock: `timedVoice`). */
+    options: { voice?: Voice | ((board: Board) => Voice) } = {},
+  ) {
+    const voice = options.voice ?? silentVoice;
+    this.voice = typeof voice === "function" ? voice(this) : voice;
     this.root = this.build(root, "", "", undefined, given);
+  }
+
+  /** A host waits on the board's clock: `fn` is called `seconds` from now (a timed voice's end). */
+  after(seconds: number, fn: () => void): void {
+    this.queue.add(this.clock + Math.max(0, seconds), "", { outs: [], host: fn });
   }
 
   /** The same board played again: the same props and setup, the student's taps at their times, to `until`. */
@@ -269,11 +294,13 @@ export class Board {
     this.inputs.push({ at: this.clock, path, action, payload });
     // What the props holding it queued for it is dropped, out by out; the rest of each entry stays.
     this.queue.rewrite((e) => {
-      if (isInside(e.owner, path)) return e.what;
+      // A host's wait (a voice keeping time) is no prop's: the student's tap doesn't touch it.
+      if (isInside(e.owner, path) || e.what.host !== undefined) return e.what;
       const outs = without(e.owner, e.what.outs, path);
       return outs.length === 0 && e.what.move === undefined ? undefined : { ...e.what, outs };
     });
     this.inputting = true;
+    this.cause = { byStudent: true, step: ++this.steps };
     this.changed(() => this.ask(node, action, payload));
   }
 
@@ -289,6 +316,7 @@ export class Board {
 
   /** The lesson, a test or a tool asks a prop to act (no screen check, not logged). */
   send(path: string, action: string, payload: Payload = {}): void {
+    this.cause = { byStudent: false, step: ++this.steps };
     this.changed(() => this.ask(this.at(path), action, payload));
   }
 
@@ -386,6 +414,7 @@ export class Board {
         case "later":
           this.queue.add(this.clock + seconds(node, "later", out.seconds), node.path, {
             outs: out.outs,
+            ...this.carried(),
           });
           break;
         case "move":
@@ -397,11 +426,14 @@ export class Board {
         case "say":
           // The quiet before a line follows one that said something: after nothing, no pause.
           if (out.after !== undefined && out.after > 0 && this.lastHadWords) {
-            // The quiet before it is part of the line: a line said meanwhile cuts both.
+            // The quiet before it is part of the line: it is in turn already, and a stop cuts it.
             this.cutLine();
+            const id = ++this.lines;
+            this.inTurn = { id, path: node.path, atEnd: out.atEnd };
             this.queue.add(this.clock + seconds(node, "say after", out.after), node.path, {
-              outs: [{ kind: "say", line: out.line, atEnd: out.atEnd }],
+              outs: [],
               isLine: true,
+              host: () => this.startLine(id, out.line),
             });
           } else this.say(node, out.line, out.atEnd);
           break;
@@ -457,43 +489,71 @@ export class Board {
     this.queue.add(this.clock + takes, node.path, {
       outs: [{ kind: "set", patch: { [variable]: to } }, ...atEnd],
       move: variable,
+      ...this.carried(),
     });
   }
 
   /**
-   * Says a line on the voice bus: the line being said is cut (its end never comes), the host starts
-   * this one and says how long it plays; its `atEnd` is done then, as the prop that said it.
+   * Says a line on the voice bus: the line in turn is cut, this one is asked of the voice, and its
+   * `atEnd` is done, as the prop that said it, once the voice tells it ended or was cut.
    */
   private say(node: Node, line: string, atEnd: readonly Out[]): void {
     this.cutLine();
-    const seconds = this.voice.say(line);
-    this.lastHadWords = seconds !== undefined;
-    this.queue.add(this.clock + Math.max(0, seconds ?? 0), node.path, {
-      outs: atEnd,
-      isLine: true,
-    });
+    const id = ++this.lines;
+    this.inTurn = { id, path: node.path, atEnd };
+    this.startLine(id, line);
   }
 
-  /** Stops the line being said. */
+  private startLine(id: number, line: string): void {
+    if (this.inTurn?.id !== id) return;
+    this.lastHadWords = false;
+    this.voice.say(line, (what) => this.heard(id, what));
+  }
+
+  /**
+   * What the voice tells of a line. Started: it had words. Ended or cut: it is done, and what waits
+   * on it runs (in a step of its own, the board's: a voice may tell this while asked to say it).
+   * Anything told of a line no longer in turn is old news.
+   */
+  private heard(id: number, what: Heard): void {
+    const line = this.inTurn;
+    if (line?.id !== id) return;
+    if (what === "started") {
+      this.lastHadWords = true;
+      return;
+    }
+    this.inTurn = undefined;
+    this.queue.add(this.clock, line.path, { outs: line.atEnd });
+  }
+
+  /** Stops the line in turn (in its quiet too): its audio stops, and it is done, as cut. */
   private hush(): void {
     this.cutLine();
   }
 
-  /** The line being said (or its quiet before) stops: its end never comes, its audio stops. */
   private cutLine(): void {
+    const line = this.inTurn;
+    if (line === undefined) return;
     this.queue.drop((e) => e.what.isLine === true);
-    this.voice.hush();
+    this.heard(line.id, "cut");
+    this.voice.stop();
   }
 
   /** Whether the last line said had words (a pause follows only one that did). */
   private lastHadWords = false;
+
+  /** What a queued entry carries of the step that queued it. */
+  private carried(): { byStudent?: true } {
+    return this.cause.byStudent ? { byStudent: true } : {};
+  }
 
   private stopAll(node: Node): void {
     if (node.moves.size > 0) {
       node.vars = this.settled(node);
       node.moves.clear();
     }
-    this.queue.drop((e) => e.owner === node.path);
+    // A host's wait (a voice keeping time, a line's quiet) is the voice's, not this prop's.
+    this.queue.drop((e) => e.owner === node.path && e.what.host === undefined);
   }
 
   // ---- time ----
@@ -517,6 +577,11 @@ export class Board {
   }
 
   private due(entry: Entry<Later>): void {
+    this.cause = { byStudent: entry.what.byStudent === true, step: ++this.steps };
+    if (entry.what.host !== undefined) {
+      entry.what.host();
+      return;
+    }
     const node = this.at(entry.owner);
     // A move arriving: it is no longer on the move, it is there.
     if (entry.what.move !== undefined) node.moves.delete(entry.what.move);
@@ -608,6 +673,7 @@ export class Board {
         atEnd: options.atEnd ?? [],
       }),
       stop: (): Out => ({ kind: "stop" }),
+      cause: this.cause,
       say: (line: string, options: { atEnd?: readonly Out[]; after?: number } = {}): Out => ({
         kind: "say",
         line,

@@ -22,7 +22,7 @@ import {
   segment,
   shownOf,
 } from "@chalk/prop";
-import { type AnyProp, Board as Core, estimatedSeconds } from "@chalk/prop/next";
+import { type AnyProp, Board as Core, estimatedSeconds, timedVoice } from "@chalk/prop/next";
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
@@ -81,9 +81,10 @@ export class SceneRuntime {
       { ...model.given, hidden },
       {
         // A line by its name: the lesson's words for it, else what its piece says of itself (its
-        // sound view); its clip plays, and it lasts as long as the clip (or its words would take).
-        voice: {
-          say: (name) => {
+        // sound view). Its clip plays; this voice keeps time on the board's clock, telling the line
+        // ended after as long as the clip (or its words would take). The board only hears the end.
+        voice: (core) => {
+          const timed = timedVoice(core, (name) => {
             const words = this.lineWords(name);
             if (words === undefined) return undefined;
             const line: Spoken = { say: words, speaker: model.lines[name]?.speaker ?? NARRATOR };
@@ -101,22 +102,26 @@ export class SceneRuntime {
               ...(about === undefined ? {} : { about }),
               speaker: line.speaker ?? NARRATOR,
               words: spokenWords(words[locale] ?? "", locale),
-              at: this.core.now,
+              at: core.now,
               seconds,
             });
             return seconds;
-          },
-          hush: () => {
-            // A line stopped before its end was cut: what was heard says so.
-            const last = this.heardLines.at(-1);
-            if (
-              last !== undefined &&
-              last.cutAt === undefined &&
-              this.core.now < last.at + last.seconds
-            )
-              last.cutAt = this.core.now;
-            services.hush?.();
-          },
+          });
+          return {
+            say: timed.say,
+            stop: () => {
+              timed.stop();
+              // A line stopped before its end was cut: what was heard says so.
+              const last = this.heardLines.at(-1);
+              if (
+                last !== undefined &&
+                last.cutAt === undefined &&
+                core.now < last.at + last.seconds
+              )
+                last.cutAt = core.now;
+              services.hush?.();
+            },
+          };
         },
       },
     );
@@ -180,9 +185,9 @@ export class SceneRuntime {
     void this.version.value;
     const model = this.board.model;
     if (model === undefined) return undefined;
-    // Which line is in turn is the scene's (`speaking`); whether it is heard yet is the voice's: in
+    // Which line is in turn is the scene's (the first it is saying); whether it is heard yet is the voice's: in
     // the breath before it, nothing is said, so nothing glows.
-    const line = (this.core.read("") as { speaking?: string | null }).speaking ?? undefined;
+    const line = (this.core.read("") as { saying?: readonly { line: string }[] }).saying?.[0]?.line;
     const last = this.heardLines.at(-1);
     if (line === undefined || last?.line !== line || last.cutAt !== undefined) return undefined;
     return aboutOf(

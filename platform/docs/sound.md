@@ -50,6 +50,8 @@ The board never asks how long a line is: it waits for **ended** (or **cut**), li
 1. **The board talks in turn.** One line at a time, in the order they come due: the opening read top to bottom, a line after another, a reply the lesson shows, lines set off by Jugnu's actions.
 2. **When the student acts, the board stops and responds.** The line being said is cut, the lines waiting are dropped, and what the action brings is said, in order. "The action" includes what it set going: each step of a walk a tap started, the dice landing after a throw, each toss after Play.
 
+An action that brings nothing to say leaves the board talking: rule 2 is about what the student's action *says*. The opening's reads are what the board says when it has nothing else to say: a line due at a moment comes before the next read.
+
 And one fact: **a line is said when it is done, heard or cut.** The board tells `said` either way, so whatever waits on a line always happens (Aman always replies).
 
 What follows from these, with nothing more to write:
@@ -93,7 +95,7 @@ A character, never a voice. Each book has its cast (characters' voices per langu
 
 ## Order of work
 
-1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going.
+1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going. *(Done. Today's voice keeps time on the board's clock with each clip's length (`timedVoice`): the length lives in the voice. Real audio telling its own end comes with step 3.)*
 2. **Templates and sayers,** with one real line in the chapter ("You're at street {x}, house {y}"); clips made at build for known sets.
 3. **Voice sources behind one door:** clip, server, phone, in order; the never-stuck promise; caching by voice and words.
 4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops).

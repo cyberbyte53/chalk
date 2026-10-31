@@ -1,5 +1,5 @@
 import { type Board, type Localized, NARRATOR, type SceneLine, propPieces } from "@chalk/content";
-import { Board as Core } from "@chalk/prop/next";
+import { Board as Core, timedVoice } from "@chalk/prop/next";
 import type { PropModule } from "./prop-module";
 
 /**
@@ -67,14 +67,13 @@ function openingMoments(
 ): ReadonlyMap<string, string> {
   const moments = new Map<string, string>();
   let last: string | undefined;
-  const voice = {
-    say: (line: string) => {
-      if (last !== undefined && !moments.has(line)) moments.set(line, last);
-      return hasWords(line) ? 1 : undefined;
-    },
-    hush: () => undefined,
-  };
-  const core = new Core(model.scene, model.given, { voice });
+  const core = new Core(model.scene, model.given, {
+    voice: (board) =>
+      timedVoice(board, (line) => {
+        if (last !== undefined && !moments.has(line)) moments.set(line, last);
+        return hasWords(line) ? 1 : undefined;
+      }),
+  });
   core.listen((event) => {
     if (event.kind === "tell" && event.path === "")
       last = eventText(`${BOARD_EVENTS}.${event.signal}`, event.payload);

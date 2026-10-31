@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { Board } from "./board";
-import { action, prop, signal } from "./define";
+import { type VoiceTools, action, prop, signal } from "./define";
 import { sequence } from "./helpers";
+import { type Heard, type Voice, timedVoice } from "./voice";
 
 // A small town on the event model: the plane owns which streets are up, places own the target,
 // the walker needs both and walks block by block. The board (the lesson) is the outermost prop.
@@ -444,5 +445,88 @@ describe("a board on the event model: Finding Aman's house", () => {
       },
     });
     expect(true).toBe(true);
+  });
+});
+
+describe("the voice: the board asks, the voice tells back", () => {
+  // A narrator that says one line and records what happens around it.
+  const narrator = prop({
+    type: "narrator",
+    describe: "Says a line; notes when it is done, and why each step runs.",
+    variables: z.object({ done: z.array(z.string()), causes: z.array(z.boolean()) }).strict(),
+    start: { done: [], causes: [] },
+    actions: {
+      speak: action({ line: z.string() }),
+      tap: action({}, { from: "screen" }),
+      later: action(),
+      done: action({ line: z.string() }),
+    },
+    on: {
+      speak: (_, { line }, t) =>
+        (t as unknown as VoiceTools).say(line, { atEnd: [t.self.done({ line })] }),
+      // A tap sets something going: its later step is the student's too.
+      tap: (me, _, t) => [
+        t.set({ causes: [...me.causes, (t as unknown as VoiceTools).cause.byStudent] }),
+        t.later(1, t.self.later()),
+      ],
+      later: (me, _, t) =>
+        t.set({ causes: [...me.causes, (t as unknown as VoiceTools).cause.byStudent] }),
+      done: (me, { line }, t) => t.set({ done: [...me.done, line] }),
+    },
+  });
+
+  /** A voice the test drives: it tells back only when told to. */
+  const handVoice = () => {
+    const said: { line: string; hear: (what: Heard) => void }[] = [];
+    let stops = 0;
+    const voice: Voice = {
+      say: (line, hear) => void said.push({ line, hear }),
+      stop: () => void stops++,
+    };
+    return { voice, said, stops: () => stops };
+  };
+
+  it("never knows a line's length: a line is done when the voice says it ended", () => {
+    const { voice, said } = handVoice();
+    const board = new Board(narrator, {}, { voice });
+    board.send("", "speak", { line: "hello" });
+    board.advanceTo(100);
+    expect(board.read("")).toMatchObject({ done: [] });
+    said[0]?.hear("started");
+    said[0]?.hear("ended");
+    board.advanceTo(100);
+    expect(board.read("")).toMatchObject({ done: ["hello"] });
+  });
+
+  it("a line cut is done too: what waits on it always happens, and the voice is stopped", () => {
+    const { voice, said, stops } = handVoice();
+    const board = new Board(narrator, {}, { voice });
+    board.send("", "speak", { line: "first" });
+    said[0]?.hear("started");
+    board.send("", "speak", { line: "second" });
+    board.advanceTo(0);
+    expect(board.read("")).toMatchObject({ done: ["first"] });
+    expect(stops()).toBe(1);
+    // What the voice tells late of the cut line is old news.
+    said[0]?.hear("ended");
+    board.advanceTo(0);
+    expect(board.read("")).toMatchObject({ done: ["first"] });
+  });
+
+  it("a voice keeping time on the board's clock ends a line after its length", () => {
+    const board = new Board(narrator, {}, { voice: (b) => timedVoice(b, () => 2) });
+    board.send("", "speak", { line: "hello" });
+    board.advanceTo(1.9);
+    expect(board.read("")).toMatchObject({ done: [] });
+    board.advanceTo(2);
+    expect(board.read("")).toMatchObject({ done: ["hello"] });
+  });
+
+  it("what a tap sets going is the student's; what the board does on its own is not", () => {
+    const board = new Board(narrator);
+    board.input("", "tap");
+    board.runUntilIdle();
+    board.send("", "later");
+    expect(board.read("")).toMatchObject({ causes: [true, true, false] });
   });
 });
