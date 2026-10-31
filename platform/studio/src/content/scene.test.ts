@@ -1,7 +1,7 @@
 import { type Cue, cue, hidden, place, scene, tap } from "@chalk/author";
 import { Actor } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
-import { BoardRuntime, scriptOf } from "@chalk/player";
+import { BoardRuntime, recordBoard, scriptOf } from "@chalk/player";
 import { estimatedSeconds } from "@chalk/prop";
 import { choice, text } from "@chalk/prop-basics";
 import { coordinatePlane } from "@chalk/prop-coordinates";
@@ -558,5 +558,47 @@ describe("a scene, built and checked like any board", () => {
         "bad",
       ),
     ).toThrow(/when "ask.landed" isn't a signal of a piece here/);
+  });
+});
+
+describe("what is recorded", () => {
+  it("the student's taps are causes; what the rules do follows from them, and so do signals", () => {
+    const entries: {
+      seq: number;
+      kind: string;
+      actor: string;
+      payload: Record<string, unknown>;
+    }[] = [];
+    const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
+      locale: "en",
+      lineSeconds,
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async () => {},
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    const recorder = recordBoard(
+      runtime,
+      (entry) => {
+        const seq = entries.length;
+        entries.push({ seq, ...(entry as Omit<(typeof entries)[number], "seq">) });
+        return seq;
+      },
+      "test",
+    );
+    runtime.start();
+    runtime.settle();
+    void runtime.call("ask", "select", { option: "street" }, Actor.Learner);
+    void runtime.call("ask", "check", {}, Actor.Learner);
+    runtime.settle();
+    recorder.close?.();
+    const causes = entries.filter((e) => e.kind === "cause" && e.actor === Actor.Learner);
+    expect(causes.map((e) => e.payload.action)).toEqual(["select", "check"]);
+    // The board's rule showing "found" is the check's consequence, not a cause of its own.
+    expect(entries.some((e) => e.kind === "cause" && e.payload.action === "show")).toBe(false);
+    const correct = entries.find((e) => e.kind === "signal" && e.payload.signal === "correct");
+    expect(correct?.payload.from).toBe(causes[1]?.seq);
   });
 });

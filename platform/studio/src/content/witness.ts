@@ -58,7 +58,7 @@ function playScene(
   });
   if (onCalled !== undefined)
     runtime.onAction((r) => {
-      if (r.isLessons === true && r.refused === undefined) onCalled(r.prop, r.action);
+      if (r.isLessons === true) onCalled(r.prop, r.action);
     });
   const failures: Failure[] = [];
   runtime.start();

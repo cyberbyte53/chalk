@@ -36,8 +36,6 @@ export type ActionRecord = {
   isStep: boolean;
   /** When, on the board's clock (seconds, not counting pauses). */
   t: number;
-  /** Why it was refused; absent when the board took it. */
-  refused?: string;
 };
 
 /** A signal as the runtime saw it: which prop, what, with what, and who caused it. */

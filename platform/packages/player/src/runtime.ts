@@ -56,6 +56,8 @@ export class BoardRuntime {
   private readonly version: Signal<number> = signal(0);
   private readonly signalListeners = new Set<(record: SignalRecord) => void>();
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
+  /** Each act's record number, by the board's act number. */
+  private readonly acts = new Map<number, number>();
   private readonly touched = new Set<string>();
   private count = 0;
   private startedAt: number | undefined;
@@ -199,8 +201,13 @@ export class BoardRuntime {
       const prop = piece === "" ? BOARD : piece;
       const name = [...rest, event.kind === "ask" ? event.action : event.signal].join(".");
       const n = ++this.count;
+      // An act (the student's tap, the lesson or a tool asking) is recorded as itself; what a rule
+      // asks, and every signal, as the consequence of the act it follows from.
+      const act = this.acts.get(event.act);
       if (event.kind === "ask") {
         if (event.isInput) this.touched.add(prop);
+        const isAct = event.by === undefined;
+        if (isAct) this.acts.set(event.act, n);
         const record: ActionRecord = {
           n,
           prop,
@@ -208,6 +215,7 @@ export class BoardRuntime {
           args: event.payload,
           actor: event.isInput ? Actor.Learner : Actor.Lesson,
           ...(event.by === "" ? { isLessons: true as const } : {}),
+          ...(!isAct && act !== undefined ? { cause: act } : {}),
           isStep: false,
           t: this.core.now,
         };
@@ -219,6 +227,7 @@ export class BoardRuntime {
           signal: name,
           payload: event.payload,
           actor: Actor.Lesson,
+          ...(act === undefined ? {} : { from: act }),
         };
         for (const fn of this.signalListeners) fn(record);
         this.sound(piece, rest, event.signal, event.payload);

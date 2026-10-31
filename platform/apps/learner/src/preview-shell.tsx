@@ -29,7 +29,7 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
-import { useWhenChanged } from "@chalk/player";
+import { onBoardRunning, useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
@@ -1244,13 +1244,23 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
   // event the bus carries, and each board passed. Kept on window, recent ones only.
   useEffect(() => {
     const w = window as Window & { __chalkEvents?: unknown[] };
-    const stop = bus.subscribe((event) => {
+    const keep = (event: unknown) => {
       w.__chalkEvents ??= [];
       w.__chalkEvents.push(event);
       if (w.__chalkEvents.length > 500) w.__chalkEvents.shift();
-    });
+    };
+    const stop = bus.subscribe(keep);
+    // What the lesson's rules did on the way: not recorded (each follows from the act that set it
+    // off), but a tool reading what a step did shows it, in order with the rest.
+    const stopWatching = onBoardRunning((runtime) =>
+      runtime.onAction((r) => {
+        if (r.cause !== undefined)
+          keep({ kind: "cause", actor: "lesson", payload: { action: r.action, args: r.args } });
+      }),
+    );
     return () => {
       stop();
+      stopWatching();
     };
   }, [bus]);
   const params = new URLSearchParams(search);

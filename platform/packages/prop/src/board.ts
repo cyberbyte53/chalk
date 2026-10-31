@@ -47,12 +47,16 @@ export type BoardEvent =
       readonly isInput: boolean;
       /** Whose rule asked: that prop's path ("" the board's own, a scene). Absent: not a rule. */
       readonly by?: string;
+      /** The act it follows from (an input or a send, numbered in order): a rule's ask, its consequence. */
+      readonly act: number;
     }
   | {
       readonly kind: "tell";
       readonly path: string;
       readonly signal: string;
       readonly payload: Payload;
+      /** The act it follows from. */
+      readonly act: number;
     };
 
 /** What waits in the queue: outs to do as the prop that queued them. */
@@ -64,6 +68,8 @@ type Later = {
   readonly host?: () => void;
   /** Queued by a step the student set going: what it does is theirs too. */
   readonly byStudent?: true;
+  /** The act it follows from, when it falls due. */
+  readonly act?: number;
 };
 
 /** The line the voice is saying (or about to: in its quiet): what is done when it is. */
@@ -108,6 +114,9 @@ export class Board {
   /** Why the step being handled runs. */
   private cause: Cause = { byStudent: false, step: 0 };
   private steps = 0;
+  /** The act (an input or a send) what happens now follows from, and how many there have been. */
+  private act = 0;
+  private acts = 0;
   /** The line being said, if any. */
   private inTurn: InTurn | undefined;
   private lines = 0;
@@ -125,7 +134,7 @@ export class Board {
 
   /** A host waits on the board's clock: `fn` is called `seconds` from now (a timed voice's end). */
   after(seconds: number, fn: () => void): void {
-    this.queue.add(this.clock + Math.max(0, seconds), "", { outs: [], host: fn });
+    this.queue.add(this.clock + Math.max(0, seconds), "", { outs: [], host: fn, act: this.act });
   }
 
   /** The same board played again: the same props and setup, the student's taps at their times, to `until`. */
@@ -309,6 +318,7 @@ export class Board {
     });
     this.inputting = true;
     this.cause = { byStudent: true, step: ++this.steps };
+    this.act = ++this.acts;
     this.changed(() => this.ask(node, action, payload));
   }
 
@@ -325,6 +335,7 @@ export class Board {
   /** The lesson, a test or a tool asks a prop to act (no screen check, not logged). */
   send(path: string, action: string, payload: Payload = {}): void {
     this.cause = { byStudent: false, step: ++this.steps };
+    this.act = ++this.acts;
     this.changed(() => this.ask(this.at(path), action, payload));
   }
 
@@ -342,6 +353,7 @@ export class Board {
       payload: data as Payload,
       isInput,
       ...(by === undefined ? {} : { by }),
+      act: this.act,
     });
     const rule = node.def.on?.[action];
     this.step(`${node.path || "board"}.${action}`, () => {
@@ -363,7 +375,7 @@ export class Board {
     if (spec === undefined)
       throw new Error(`${where(node.path, node.def)} has no signal ${signal}`);
     const data = this.payload(node, signal, spec.payload, payload);
-    this.emit({ kind: "tell", path: node.path, signal, payload: data as Payload });
+    this.emit({ kind: "tell", path: node.path, signal, payload: data as Payload, act: this.act });
     let heard = signal;
     let from = node;
     for (let holder = node.holder; holder !== undefined; holder = holder.holder) {
@@ -562,8 +574,8 @@ export class Board {
   private lastHadWords = false;
 
   /** What a queued entry carries of the step that queued it. */
-  private carried(): { byStudent?: true } {
-    return this.cause.byStudent ? { byStudent: true } : {};
+  private carried(): { byStudent?: true; act: number } {
+    return { ...(this.cause.byStudent ? { byStudent: true as const } : {}), act: this.act };
   }
 
   private stopAll(node: Node): void {
@@ -597,6 +609,7 @@ export class Board {
 
   private due(entry: Entry<Later>): void {
     this.cause = { byStudent: entry.what.byStudent === true, step: ++this.steps };
+    this.act = entry.what.act ?? this.act;
     if (entry.what.host !== undefined) {
       entry.what.host();
       return;

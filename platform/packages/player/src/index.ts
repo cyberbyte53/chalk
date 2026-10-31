@@ -56,6 +56,7 @@ export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-
 export { SEP, joinPath, namesOf, pathOf, segment } from "@chalk/prop";
 export { type Change, changesBetween } from "@chalk/prop";
 export {
+  onBoardRunning,
   runningBoards,
   takes,
   trackBoard,

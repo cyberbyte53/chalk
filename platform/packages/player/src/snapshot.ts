@@ -8,9 +8,16 @@ import type { BoardRuntime } from "./runtime";
 
 /** Every board running on the page, newest last (the dev preview reads it). */
 const running = new Set<BoardRuntime>();
+const watchers = new Set<(runtime: BoardRuntime) => void>();
 export function trackBoard(runtime: BoardRuntime): () => void {
   running.add(runtime);
+  for (const watch of watchers) watch(runtime);
   return () => running.delete(runtime);
+}
+/** Called with each board as it starts running (the dev preview watches what its rules do). */
+export function onBoardRunning(watch: (runtime: BoardRuntime) => void): () => void {
+  watchers.add(watch);
+  return () => watchers.delete(watch);
 }
 export function runningBoards(): BoardRuntime[] {
   return [...running];

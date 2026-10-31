@@ -101,11 +101,7 @@ export function recordBoard(
     if (isPaused || isClosed || r.isStep || r.cause !== undefined) return;
     const { node, member } = where(r.prop, r.action);
     const args = r.args !== null && typeof r.args === "object" ? { ...(r.args as object) } : {};
-    const payload: PayloadOf<"cause"> = {
-      action: member,
-      args,
-      ...(r.refused !== undefined ? { refused: r.refused } : {}),
-    };
+    const payload: PayloadOf<"cause"> = { action: member, args };
     const isSame =
       pending !== undefined &&
       isDown &&
@@ -113,9 +109,7 @@ export function recordBoard(
       pending.actor === r.actor &&
       pending.node === node &&
       "action" in pending.payload &&
-      pending.payload.action === member &&
-      r.refused === undefined &&
-      pending.payload.refused === undefined;
+      pending.payload.action === member;
     if (isSame && pending !== undefined) {
       pending.payload = payload;
       pending.n.push(r.n);
@@ -123,7 +117,7 @@ export function recordBoard(
       return;
     }
     flush();
-    if (isDown && r.actor === Actor.Learner && r.refused === undefined) {
+    if (isDown && r.actor === Actor.Learner) {
       pending = { n: [r.n], node, actor: r.actor, payload, at: Date.now(), steps: 1 };
       return;
     }

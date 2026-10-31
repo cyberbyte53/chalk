@@ -177,10 +177,8 @@ function BoardPlay({
     registry,
     runtime,
     audioFailed: voice.failed,
-    onRetryAudio: (name) => {
-      const line = voice.failed.get(name);
-      if (line !== undefined) void voice.speak(line);
-    },
+    // Through the board: said in its turn, never over the line being said.
+    onRetryAudio: (name) => void runtime.call(BOARD, "say", { line: name }, Actor.Learner),
     isPicture,
   };
 

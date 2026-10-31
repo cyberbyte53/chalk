@@ -108,8 +108,19 @@ export function checkProp(
       );
       continue;
     }
-    const view = reached.board.read(reached.at) as unknown as PropView;
-    const key = JSON.stringify(view);
+    let view: PropView;
+    let key: string;
+    try {
+      // Reading it works out every fact and need: one that throws is a problem in this state.
+      view = reached.board.read(reached.at) as unknown as PropView;
+      key = JSON.stringify(view);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      problems.add(
+        `reading it after ${presses.map((p) => p.does).join(", ") || "its start"}: ${message}`,
+      );
+      continue;
+    }
     if (seen.has(key)) continue;
     seen.add(key);
     let described: Observation;
@@ -122,18 +133,22 @@ export function checkProp(
     for (const e of described.elements) {
       if (e.does === undefined || e.isOff === true) continue;
       const actions = typeof e.does === "string" ? [e.does] : e.does;
+      let isWrong = false;
       for (const does of actions) {
         const spec = actionAt(def, does);
         if (spec === undefined) {
           problems.add(`${e.id} does ${does}, which ${def.type} doesn't have`);
+          isWrong = true;
           continue;
         }
-        if (!spec.isFromScreen)
+        if (!spec.isFromScreen) {
           problems.add(`${e.id} does ${does}, which the student can't do (mark it from: "screen")`);
+          isWrong = true;
+        }
         offered.add(does);
       }
       // Press it, when its arguments are on it (a by-hand input works them out when it's used).
-      if (e.isByHand === true || actions.length !== 1) continue;
+      if (isWrong || e.isByHand === true || actions.length !== 1) continue;
       queue.push({
         given,
         presses: [...presses, { does: actions[0] as string, args: e.args ?? {} }],
