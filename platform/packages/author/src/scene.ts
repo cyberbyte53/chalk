@@ -30,6 +30,7 @@ import {
   signal,
 } from "@chalk/prop";
 import { type ZodTypeAny, z } from "zod";
+import { framesHere, noteStack, stackOf } from "./site";
 import {
   type Cue,
   NOT_FOR_SOUNDS,
@@ -122,7 +123,7 @@ export function place<D extends AnyProp>(
   given: GivenFor<D> = {} as GivenFor<D>,
   options: { isHidden?: boolean; size?: Size; still?: Localized } & Says = {},
 ): Placed<D> {
-  return {
+  const placed: Placed<D> = {
     def,
     given: given as Given,
     isHidden: options.isHidden === true,
@@ -131,11 +132,16 @@ export function place<D extends AnyProp>(
     ...(options.says === undefined ? {} : { says: options.says }),
     ...(options.speaker === undefined ? {} : { speaker: options.speaker }),
   };
+  // Where the author placed it (through a pattern, if one), for look, the editor and Alt-click.
+  noteStack(placed, framesHere());
+  return placed;
 }
 
 /** The same piece, hidden until a rule shows it (`t.self.show({ name: "found" })`). */
 export function hidden<D extends AnyProp>(placed: Placed<D>): Placed<D> {
-  return { ...placed, isHidden: true };
+  const out = { ...placed, isHidden: true };
+  noteStack(out, stackOf(placed));
+  return out;
 }
 
 type Pieces = Readonly<Record<string, Placed>>;
@@ -626,7 +632,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   for (const n of names) given[n] = (spec.pieces[n] as Placed).given;
   const pieces: Piece[] = names.map((n) => {
     const placed = spec.pieces[n] as Placed;
-    return {
+    const piece: Piece = {
       kind: PieceKind.Prop,
       name: n,
       prop: placed.def.type,
@@ -635,6 +641,8 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       ...(placed.size === undefined ? {} : { size: placed.size }),
       ...(placed.still === undefined ? {} : { still: placed.still }),
     };
+    noteStack(piece, stackOf(placed));
+    return piece;
   });
   // What each piece says, when the lesson gives its own words, and the narration lines.
   const lines: Record<string, { says?: Localized; speaker?: string }> = {};
