@@ -15,6 +15,7 @@
     "chat-log": "tsx --tsconfig ../../tsconfig.base.json src/jugnu-eval/chat-log.ts",
     "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts",
     "catalogue": "tsx --tsconfig ../../tsconfig.base.json src/catalogue-cli.ts",
+    "sound": "tsx --tsconfig ../../tsconfig.base.json src/sound/cli.ts",
     "check": "tsx --tsconfig ../../tsconfig.base.json src/check/all.ts",
     "mcp": "node start.mjs",
     "stress-mcp": "tsx --tsconfig ../../tsconfig.base.json src/mcp/stress.ts",

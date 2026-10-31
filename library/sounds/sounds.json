@@ -2,30 +2,66 @@
   "$comment": "Every sound in the library: what it is for, where its recording came from, and its licence. `pnpm sound add <name> freesound:<id>` adds one (fetched, made as loud as the rest, its shrill top trimmed); index.ts exports it.",
   "sounds": [
     {
-      "name": "step",
-      "file": "sounds/step.mp3",
-      "for": "a thing taking one step: the bus moving a stop, Riya walking",
-      "source": "https://freesound.org/s/221091/",
-      "title": "cartoon pop or drip",
-      "author": "AlaskaRobotics",
+      "name": "right",
+      "file": "sounds/right.mp3",
+      "for": "an answer checked right",
+      "source": "https://freesound.org/s/406243/",
+      "title": "Typewriter ding_near_mono.wav",
+      "author": "_stubb",
+      "license": "CC0 1.0"
+    },
+    {
+      "name": "wrong",
+      "file": "sounds/wrong.mp3",
+      "for": "an answer checked wrong",
+      "source": "https://freesound.org/s/419023/",
+      "title": "acess denied buzz",
+      "author": "Jacco18",
       "license": "CC0 1.0"
     },
     {
       "name": "tap",
       "file": "sounds/tap.mp3",
       "for": "something pressed or chosen",
-      "source": "https://freesound.org/s/186669/",
-      "title": "Computer Boop",
-      "author": "fordps3",
+      "source": "https://freesound.org/s/467951/",
+      "title": "UI Button Click",
+      "author": "benzix2",
       "license": "CC0 1.0"
     },
     {
-      "name": "rise",
-      "file": "sounds/rise.mp3",
-      "for": "something rising or appearing: a street rising from the road",
-      "source": "https://freesound.org/s/419341/",
-      "title": "Swoosh.ogg",
-      "author": "WizardOZ",
+      "name": "step",
+      "file": "sounds/step.mp3",
+      "for": "a thing taking one step: the bus moving a stop, Riya walking",
+      "source": "https://freesound.org/s/197778/",
+      "title": "Footstep on Stone",
+      "author": "sgossner",
+      "license": "CC0 1.0"
+    },
+    {
+      "name": "blocked",
+      "file": "sounds/blocked.mp3",
+      "for": "a move that can't be made: the bus at the end of the road",
+      "source": "https://freesound.org/s/540788/",
+      "title": "Boing 1",
+      "author": "magnuswaker",
+      "license": "CC0 1.0"
+    },
+    {
+      "name": "appear",
+      "file": "sounds/appear.mp3",
+      "for": "something appearing: a street rising from the road, a point landing",
+      "source": "https://freesound.org/s/59995/",
+      "title": "swosh-08.flac - \"stick cutting air\"",
+      "author": "qubodup",
+      "license": "CC0 1.0"
+    },
+    {
+      "name": "win",
+      "file": "sounds/win.mp3",
+      "for": "a game won, a lesson finished",
+      "source": "https://freesound.org/s/456966/",
+      "title": "Success Fanfare Trumpets.mp3",
+      "author": "FunWithSound",
       "license": "CC0 1.0"
     }
   ]

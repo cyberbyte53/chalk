@@ -1,5 +1,6 @@
 import type { Localized } from "@chalk/content";
 import type { SoundView } from "@chalk/player";
+import { right, wrong } from "@chalk/sounds";
 
 /**
  * How the words and questions sound (platform/docs/sound.md), beside how they look: a text says its
@@ -9,6 +10,6 @@ import type { SoundView } from "@chalk/player";
 export const textSound: SoundView = { line: (view) => view.text as Localized };
 export const questionSound: SoundView = {
   line: (view) => view.prompt as Localized,
-  // Right and wrong, heard at the check itself (before anything said about it), come from the
-  // sound library once they are chosen.
+  // Heard at the check itself, before anything said about it.
+  cues: { correct: right, wrong },
 };

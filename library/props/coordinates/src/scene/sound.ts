@@ -1,11 +1,18 @@
 import type { SoundView } from "@chalk/player";
-import { rise, step } from "@chalk/sounds";
+import { appear, blocked, step, win } from "@chalk/sounds";
 
 /**
- * How the coordinate plane sounds (platform/docs/sound.md), beside how it looks: a step for each
- * step the walker takes, a rise as a line rises from the axis (both from the sound library). Its
- * model knows nothing of sound.
+ * How the coordinate plane sounds (platform/docs/sound.md), beside how it looks, from the sound
+ * library: a step as the walker or a counter moves, a bump when it can't, something appearing as a
+ * line rises or a point lands, a fanfare when the game is won. Its model knows nothing of sound.
  */
 export const coordinatePlaneSound: SoundView = {
-  cues: { "walker.stepped": step, "plane.risen": rise },
+  cues: {
+    "walker.stepped": step,
+    "walker.blocked": blocked,
+    "plane.risen": appear,
+    "plotting.plotted": appear,
+    "dice.counterMoved": step,
+    "dice.won": win,
+  },
 };

@@ -24,7 +24,8 @@
     "ship": "sh platform/deploy/ship.sh",
     "add-school": "sh platform/deploy/add-school.sh",
     "boundaries": "pnpm --filter @chalk/studio boundaries",
-    "catalogue": "pnpm --filter @chalk/studio catalogue"
+    "catalogue": "pnpm --filter @chalk/studio catalogue",
+    "sound": "pnpm --filter @chalk/studio --silent sound"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

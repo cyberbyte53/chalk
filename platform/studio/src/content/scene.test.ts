@@ -4,7 +4,7 @@ import { propLibrary } from "@chalk/library";
 import { SceneRuntime, scriptOf } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
 import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
-import { rise, tap as tapSound } from "@chalk/sounds";
+import { appear, tap as tapSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
 
@@ -382,15 +382,15 @@ describe("a scene, built and checked like any board", () => {
       expect(runtime.effects().map((e) => e.effect)).toEqual(played);
       return played;
     };
-    // The props' own: the walker's step (right and wrong come once chosen).
-    expect(await effectsOf(walking())).toEqual(["step"]);
-    // The lesson's: a tap for each step instead, and no sound for a wrong answer.
+    // The props' own: the walker's step, and the question's wrong.
+    expect(await effectsOf(walking())).toEqual(["step", "wrong"]);
+    // The lesson's: a tap for each step instead; silence for the step (the question's own stays).
     expect(
       await effectsOf(walking({ tap: cue(tapSound, { when: "plane.walker.stepped" }) })),
-    ).toEqual(["tap"]);
+    ).toEqual(["tap", "wrong"]);
     expect(
       await effectsOf(walking({ quiet: cue(null, { when: "plane.walker.stepped" }) })),
-    ).toEqual([]);
+    ).toEqual(["wrong"]);
     // Only at the moment it names: a step that lands elsewhere keeps the prop's own.
     expect(
       await effectsOf(
@@ -398,16 +398,16 @@ describe("a scene, built and checked like any board", () => {
           tap: cue(tapSound, { when: "plane.walker.stepped", where: { x: 5, y: 5 } }),
         }),
       ),
-    ).toEqual(["step"]);
+    ).toEqual(["step", "wrong"]);
     // A lasting sound plays from its moment until the next, and stops then.
     const stopped: string[] = [];
     expect(
       await effectsOf(
-        walking({ hum: cue(rise, { when: "board.started", until: "plane.walker.stepped" }) }),
+        walking({ hum: cue(appear, { when: "board.started", until: "plane.walker.stepped" }) }),
         stopped,
       ),
-    ).toEqual(["rise", "step"]);
-    expect(stopped).toEqual(["rise"]);
+    ).toEqual(["appear", "step", "wrong"]);
+    expect(stopped).toEqual(["appear"]);
   });
 
   it("refuses a sound cue at no signal, one that isn't a sound, or a where its signal doesn't carry", () => {
