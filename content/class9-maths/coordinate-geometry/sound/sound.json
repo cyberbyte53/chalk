@@ -21,11 +21,11 @@
       "seconds": 1.429
     },
     {
-      "file": "7448a05890f491a0.m4a",
+      "file": "6b6bb9ed236fcf92.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on: a number line.",
-      "seconds": 12.818
+      "words": "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on. The road is a number line.",
+      "seconds": 12.713
     },
     {
       "file": "d34cb0e3dc456a01.m4a",
@@ -490,11 +490,11 @@
       "seconds": 12.609
     },
     {
-      "file": "32d67f7d860e71c0.m4a",
+      "file": "1b4a7759692bde61.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे: एक संख्या रेखा।",
-      "seconds": 16.463
+      "words": "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे। सड़क एक संख्या रेखा है।",
+      "seconds": 17.009
     },
     {
       "file": "930145e19775259d.m4a",

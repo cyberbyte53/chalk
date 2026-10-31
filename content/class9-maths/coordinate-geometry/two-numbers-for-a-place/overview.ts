@@ -54,13 +54,13 @@ const busStops = page(
       title: words.title(t("A bus on a straight road", "सीधी सड़क पर एक बस")),
       road: words.body(
         t(
-          "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, …: a number line.",
-          "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …: एक संख्या रेखा।",
+          "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, … **The road is a number line.**",
+          "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …। **सड़क एक संख्या रेखा है।**",
         ),
         {
           says: t(
-            "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on: a number line.",
-            "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे: एक संख्या रेखा।",
+            "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on. The road is a number line.",
+            "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे। सड़क एक संख्या रेखा है।",
           ),
         },
       ),
