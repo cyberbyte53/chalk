@@ -1,13 +1,6 @@
 /** @jsxImportSource preact */
-import {
-  type AnyPropDef,
-  IN_PICTURE,
-  Place,
-  type StoredState,
-  groupOf,
-  shownOf,
-} from "@chalk/prop";
 import { nameOf } from "@chalk/prop";
+import { type AnyProp, IN_PICTURE, Place, shownOf } from "@chalk/prop/next";
 import { type ComponentType, type JSX, createContext } from "preact";
 import { memo } from "preact/compat";
 import { useContext } from "preact/hooks";
@@ -117,16 +110,16 @@ const isDrawing = (v: ComponentType<PropViewProps> | PartDrawing): v is PartDraw
   typeof v !== "function";
 
 export function groupView(
-  def: AnyPropDef,
+  def: AnyProp,
   views: Readonly<Record<string, ComponentType<PropViewProps> | PartDrawing>>,
   options: GroupViewOptions = {},
 ): ComponentType<PropViewProps> {
   const wide = options.wide ?? [];
-  const layout = groupOf(def);
-  if (layout === undefined) throw new Error(`${def.type} is not a group`);
-  for (const name of layout.layout.children)
+  const layout = def.layout;
+  if (layout === undefined) throw new Error(`${def.type} is not made of parts: it has no layout`);
+  const l = layout;
+  for (const name of l.children)
     if (views[name] === undefined) throw new Error(`${def.type}: no view for child ${name}`);
-  const l = layout.layout;
   const below = l.kind === "frame" ? (l.below ?? []) : [];
   /** A child's drawing in one place (a single view draws on the lines, or below if it's below). */
   const drawingOf = (name: string, place: Place): ComponentType<PropViewProps> | undefined => {
@@ -182,9 +175,9 @@ export function groupView(
         />
       );
     if (l.kind === "frame") {
-      const provider = layout?.children[l.provider] as AnyPropDef;
-      const providerState = view[l.provider] as StoredState;
-      const px = provider.frame?.pixels(providerState, width);
+      const provider = def.children?.[l.provider];
+      const providerState = view[l.provider] as never;
+      const px = provider?.frame?.pixels(providerState, width);
       if (px === undefined) throw new Error(`${def.type}: ${l.provider} provides no frame`);
       /** Each drawing inside the picture, back to front, by its key (the child, or child:place). */
       const drawings = IN_PICTURE.flatMap((place) =>
@@ -204,7 +197,7 @@ export function groupView(
             {l.backdrop !== undefined && slot(l.backdrop, drawingOf(l.backdrop, Place.On), false)}
             <FrameStage
               px={px}
-              label={provider.frame?.label?.(providerState) ?? def.describe}
+              label={provider?.frame?.label?.(providerState) ?? def.describe}
               present={drawings.map((d) => d.key)}
               look={options.look?.(view) ?? ""}
             >

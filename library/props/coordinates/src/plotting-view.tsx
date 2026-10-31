@@ -1,12 +1,13 @@
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
+import type { PropView } from "@chalk/player";
+import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { PlaneTap, drawing } from "./layer-view";
 import { isInWindow } from "./plane";
-import { plotting } from "./plotting";
+import { plotting } from "./scene/plotting";
 import { WORDS, num, pair, word } from "./words";
 
-type PlottingView = ViewOf<typeof plotting>;
+type PlottingView = PropView<typeof plotting>;
 const actions = plotting.actions;
 /** A tap that plots lands on the nearest quarter. */
 const PLOT_STEP = 0.25;

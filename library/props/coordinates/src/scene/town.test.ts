@@ -1,7 +1,7 @@
 import { Board, type BoardEvent } from "@chalk/prop/next";
 import { describe, expect, it } from "vitest";
 import { Marks, Scene } from "../plane";
-import { Direction, Roads, SECONDS_PER_BLOCK } from "../walker";
+import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "../walker";
 import { coordinatePlane } from "./coordinate-plane";
 
 // The town on the event model, played as a board plays it: taps go in, the clock jumps to what is
@@ -126,6 +126,27 @@ describe("the town: Aman's house is any house a tap makes it, and Riya walks the
     expect(read().places.lit).toEqual({ axis: "x", value: 4 });
     expect(read().places.litCount).toBe(4);
     expect(read().plane.lit).toEqual({ axis: "x", value: 4 });
+  });
+});
+
+describe("the town grown past the corner", () => {
+  // The step rule alone: where Riya may go from where she stands, in a town of this window.
+  const at = (x: number, y: number, window = { xMin: -4.5, xMax: 4.5, yMin: -3.5, yMax: 3.5 }) => ({
+    walkFrom: { x: 0, y: 0 },
+    at: { x, y },
+    roads: Roads.Town,
+    window,
+    upLines: null,
+  });
+  it("west along the road, south on a street, up her corner's street", () => {
+    expect(stepFrom(at(0, 0), Direction.Left)).toEqual({ to: { x: -1, y: 0 } });
+    expect(stepFrom(at(0, 0), Direction.Up)).toEqual({ to: { x: 0, y: 1 } });
+    expect(stepFrom(at(-2, 0), Direction.Down)).toEqual({ to: { x: -2, y: -1 } });
+  });
+  it("lesson 1's town, which starts at the corner: none of that", () => {
+    const lesson1 = { xMin: 0, xMax: 6.5, yMin: 0, yMax: 5.5 };
+    expect("blocked" in stepFrom(at(2, 0, lesson1), Direction.Down)).toBe(true);
+    expect("blocked" in stepFrom(at(0, 0, lesson1), Direction.Up)).toBe(true);
   });
 });
 

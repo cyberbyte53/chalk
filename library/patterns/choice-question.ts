@@ -1,6 +1,6 @@
-import type { BoardKit, PlacedOf } from "@chalk/author";
 import type { Localized } from "@chalk/content";
-import { choiceDef } from "@chalk/prop-basics";
+
+/** A multiple-choice question's options, and the order they come in. */
 
 /** One option of a multiple-choice question; a wrong one says what it shows the learner missed. */
 export type Option = {
@@ -11,63 +11,6 @@ export type Option = {
   /** What the voice says for the note, when it isn't the note as shown (it has maths, a sign). */
   feedbackSays?: Localized;
 };
-
-/**
- * A multiple-choice question that lets the learner go on once it is answered right: the choice prop,
- * its witness (pick the answer, Check) and a note check for every wrong option that has feedback.
- * The concepts it tests are written in by the build.
- */
-export function choiceQuestion(
-  b: BoardKit,
-  spec: {
-    name?: string;
-    prompt: Localized;
-    options: readonly Option[];
-    answer: string;
-    /** Placed hidden: a rule shows it once something else on the page is done. */
-    isHidden?: boolean;
-    /**
-     * Keep the options in the order written (for options that read as a sequence: numbers in
-     * order). By default they are shuffled, the same way every build, so the answer isn't always
-     * where the author happened to write it (usually first).
-     */
-    keepOrder?: boolean;
-  },
-): PlacedOf<typeof choiceDef> {
-  if (!spec.options.some((o) => o.id === spec.answer)) {
-    throw new Error(`choiceQuestion: the answer "${spec.answer}" is not one of the options`);
-  }
-  const ids = spec.options.map((o) => o.id);
-  if (new Set(ids).size !== ids.length) throw new Error("choiceQuestion: two options share an id");
-  const shown =
-    spec.keepOrder === true
-      ? spec.options
-      : settle(
-          spec.options,
-          seedOf(`${spec.name ?? "ask"}|${wordsOf(spec.prompt)}|${ids.join(",")}`),
-        );
-  const ask = b.prop(
-    choiceDef,
-    spec.name ?? "ask",
-    {
-      prompt: spec.prompt,
-      options: shown.map((o) =>
-        o.feedback === undefined ? { id: o.id, label: o.label } : { ...o },
-      ),
-      answer: spec.answer,
-    },
-    { isHidden: spec.isHidden === true },
-  );
-  b.witness(ask.learner.select({ option: spec.answer }), ask.learner.check());
-  for (const o of spec.options) {
-    if (o.id === spec.answer || o.feedback === undefined) continue;
-    b.noteCheck({
-      steps: [ask.learner.select({ option: o.id }), ask.learner.check()],
-      feedback: o.feedback,
-    });
-  }
-  return ask;
-}
 
 /**
  * A question's words in every language, in one fixed order: what its options' order is seeded by,
@@ -107,34 +50,3 @@ export function settle<T>(items: readonly T[], seed: number): T[] {
 
 /** A wrong option: what it reads, and what it shows the learner missed. */
 export type Wrong = { label: Localized; feedback?: Localized };
-
-/**
- * A multiple-choice question: the right option and the wrong ones by key (each key is that option's
- * id). Its options are shuffled the same way every build, unless `keepOrder` (then the right one
- * comes first, the wrong ones as written). Placed like any piece: `after(...)` shows it later.
- */
-export function choice(
-  b: BoardKit,
-  spec: {
-    name?: string;
-    prompt: Localized;
-    right: Localized;
-    wrong: Readonly<Record<string, Wrong>>;
-    keepOrder?: boolean;
-  },
-): PlacedOf<typeof choiceDef> {
-  if (RIGHT in spec.wrong) throw new Error(`choice: "${RIGHT}" is the right option's key`);
-  return choiceQuestion(b, {
-    ...(spec.name !== undefined ? { name: spec.name } : {}),
-    prompt: spec.prompt,
-    options: [
-      { id: RIGHT, label: spec.right },
-      ...Object.entries(spec.wrong).map(([id, w]) => ({ id, ...w })),
-    ],
-    answer: RIGHT,
-    ...(spec.keepOrder !== undefined ? { keepOrder: spec.keepOrder } : {}),
-  });
-}
-
-/** The right option's id. */
-const RIGHT = "right";

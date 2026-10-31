@@ -1,12 +1,14 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
+import type { PropView } from "@chalk/player";
+import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type Still, clues, stillPossible } from "./clues";
+import { type Still, stillPossible } from "./clues";
 import { PlaneTap, drawing } from "./layer-view";
+import { clues } from "./scene/clues";
 import { WORDS, num, pair, word } from "./words";
 
-type CluesView = ViewOf<typeof clues>;
+type CluesView = PropView<typeof clues>;
 const actions = clues.actions;
 
 /** The clues given so far, in their words, in the order given. */

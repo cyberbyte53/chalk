@@ -3,7 +3,7 @@
 The prop library: one registry of every prop type. The app, Studio's validator and (later) Jugnu all read it.
 
 - `propLibrary`: type → `{ def, View }`, for the player.
-- `propDefs`: type → definition (plus the board), for tools that only need the contract.
+- `propDefs`: type → definition, for tools that only need the contract.
 
 Props in it now: `text`, `line`, `choice`, `goal`, `button`, `timer` (`library/props/basics`), `numberLine` (`library/props/number-line`), `coin` (`library/props/chance`), `graph` (`library/props/plot`), `circuit` (`library/props/circuit`), `decimalExpansion`, `decimalShift` (`library/props/decimal`), `numberSorter` (`library/props/number-sets`), `exponentRoutes` (`library/props/exponents`), `rootBuilder`, `rootSpiral`, `rootSemicircle` (`library/props/roots`), `surdTiles` (`library/props/surds`), `divisionRows`, `squareCutter`, `remainderShelves`, `factorTree`, `primeBag`, `bagCompare`, `gearPair`, `squareBalance`, `tenMaker` (`library/props/primes`), `zeroPlane`, `polyBox` (`library/props/polynomials`), `planeMirror`, `sphericalMirror` (`library/props/light`).
 

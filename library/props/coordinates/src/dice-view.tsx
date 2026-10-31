@@ -1,13 +1,14 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
-import { dice } from "./dice";
+import type { PropView } from "@chalk/player";
+import { type FramePixels, does, shows } from "@chalk/prop";
 import { drawing } from "./layer-view";
 import { Counter } from "./pictures";
 import { unitOf } from "./plane-view";
+import { dice } from "./scene/dice";
 import { WORDS, pair, word } from "./words";
 
-type DiceView = ViewOf<typeof dice>;
+type DiceView = PropView<typeof dice>;
 const actions = dice.actions;
 /** Never shown: every counter has its player's name (the dice's invariant). */
 const NO_NAME = { en: "", hi: "" };

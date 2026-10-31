@@ -1,12 +1,13 @@
 import { SymbolButton } from "@chalk/draw";
-import { useDrags } from "@chalk/player";
-import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
+import { type PropView, useDrags } from "@chalk/player";
+import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { drawing } from "./layer-view";
-import { Reading, reading, snapped } from "./reading";
+import { Reading, snapped } from "./reading";
+import { reading } from "./scene/reading";
 import { WORDS, num, pair, word } from "./words";
 
-type ReadingView = ViewOf<typeof reading>;
+type ReadingView = PropView<typeof reading>;
 const actions = reading.actions;
 
 /** The point the learner drags, read off the axes as far as the board writes it. */

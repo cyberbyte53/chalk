@@ -1,12 +1,12 @@
 import { type PropPack, lazyRegistry } from "@chalk/player";
-import { type AnyPropDef, BOARD, asAnyProp, boardProp } from "@chalk/prop";
 import { basicProps } from "@chalk/prop-basics";
 import { defs as basicsDefs } from "@chalk/prop-basics/defs";
 import { defs as coordinatesDefs, sounds as coordinatesSounds } from "@chalk/prop-coordinates/defs";
+import type { AnyProp } from "@chalk/prop/next";
 
 /**
- * Every prop package, by what the app needs when: its definitions up front (small; boards, checks
- * and Jugnu run on them), its drawing code when a chapter that uses it opens. The basics (text and
+ * Every prop package, by what the app needs when: its definitions up front (small; boards and
+ * checks run on them), its drawing code when a chapter that uses it opens. The basics (text and
  * questions) are on every page, so they come with the app. Adding a prop package =
  * one line here, its `defs.ts`, and its styles.
  */
@@ -28,14 +28,13 @@ export const propLibrary = lazy.registry;
 export const preloadProps = lazy.preload;
 
 /** Every prop package by folder name under library/props, with its definitions (for the catalogue). */
-export const propPackages: ReadonlyMap<string, readonly AnyPropDef[]> = new Map([
+export const propPackages: ReadonlyMap<string, readonly AnyProp[]> = new Map([
   ["basics", basicsDefs],
   ...packs.map((pack) => [pack.name, pack.defs] as const),
 ]);
 
-/** Just the definitions, plus the board itself, for tools that only need the contract (validator, Jugnu). */
-export const propDefs: Readonly<Record<string, AnyPropDef>> = {
+/** Just the definitions, for tools that only need the contract. */
+export const propDefs: Readonly<Record<string, AnyProp>> = {
   ...Object.fromEntries(basicProps.map((module) => [module.def.type, module.def])),
   ...Object.fromEntries(packs.flatMap((pack) => pack.defs.map((def) => [def.type, def]))),
-  [BOARD]: asAnyProp(boardProp),
 };

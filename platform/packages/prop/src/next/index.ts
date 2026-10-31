@@ -43,3 +43,4 @@ export {
   timedVoice,
   type Voice,
 } from "./voice";
+export { type GroupLayoutSpec, IN_PICTURE, Place, shownOf, withShown } from "./layout";

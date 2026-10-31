@@ -1,16 +1,18 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
+import type { PropView } from "@chalk/player";
+import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { drawing } from "./layer-view";
 import { PlacePicture } from "./pictures";
-import { PlaceKind, places } from "./places";
+import { PlaceKind } from "./places";
 import type { Point } from "./plane";
 import { isRisen, unitOf } from "./plane-view";
-import { walker } from "./walker";
+import { places } from "./scene/places";
+import { walker } from "./scene/walker";
 import { WORDS, addressOf, word } from "./words";
 
-type PlacesView = ViewOf<typeof places>;
+type PlacesView = PropView<typeof places>;
 const actions = places.actions;
 
 /** The places, each a small picture; a tap makes one the target when the board allows it. */

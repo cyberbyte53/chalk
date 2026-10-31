@@ -1,6 +1,7 @@
 import { propAddress } from "@chalk/content/address";
 import { full } from "@chalk/content/words";
-import { type AnyPropDef, BOARD, PropRole, groupOf, purposeOf } from "@chalk/prop";
+import { PropRole, purposeOf } from "@chalk/prop";
+import type { AnyProp } from "@chalk/prop/next";
 import { ZodNullable, type ZodTypeAny } from "zod";
 import { takes } from "./snapshot";
 
@@ -51,44 +52,14 @@ const shape = (schema: ZodTypeAny): string => {
   return typeof t === "string" ? t : full(t);
 };
 
-/** The fields of a stored schema: a part's under its name, by path ("walker.walkFrom"). */
+/** A schema's fields, by name (a nullable object's too). */
 const shapeOf = (schema: ZodTypeAny): Record<string, ZodTypeAny> | undefined => {
   const inner = schema instanceof ZodNullable ? schema.unwrap() : schema;
   return (inner as unknown as { shape?: Record<string, ZodTypeAny> }).shape;
 };
 
-/**
- * A prop's fields, each with the actions that change it. A group's parts' fields are listed part
- * by part ("walker.walkFrom", changed by "walker.step"), each changed by its own part's actions.
- */
-function fieldsOf(
-  def: AnyPropDef,
-  stateShape: Record<string, ZodTypeAny>,
-  inputs: ReadonlySet<string>,
-  prefix: string,
-): PropPage["fields"] {
-  const parts = groupOf(def)?.children ?? {};
-  return Object.entries(stateShape).flatMap(([name, schema]) => {
-    const part = parts[name] as AnyPropDef | undefined;
-    const sub = part === undefined ? undefined : shapeOf(schema);
-    if (part !== undefined && sub !== undefined)
-      return fieldsOf(part, sub, new Set(part.inputs ?? []), `${prefix}${name}.`);
-    return [
-      {
-        name: `${prefix}${name}`,
-        takes: shape(schema),
-        ...(schema.description ? { meaning: schema.description } : {}),
-        isInput: inputs.has(name),
-        changedBy: Object.entries(def.actions)
-          .filter(([, a]) => (a as { changes?: readonly string[] }).changes?.includes(name))
-          .map(([n]) => `${prefix}${n}`),
-      },
-    ];
-  });
-}
-
-/** A prop on the event model (it has a `start`): its variables, needs, actions, signals. */
-type SceneDef = {
+/** What a page reads of a prop: its variables, needs, actions, signals, parts. */
+type PageDef = {
   type: string;
   describe: string;
   role?: string;
@@ -98,14 +69,12 @@ type SceneDef = {
     Record<string, { payload: ZodTypeAny; describe?: string; isFromScreen: boolean }>
   >;
   signals?: Readonly<Record<string, unknown>>;
-  children?: Readonly<Record<string, SceneDef>>;
+  children?: Readonly<Record<string, PageDef>>;
   hear?: Readonly<Record<string, unknown>>;
 };
-const isSceneDef = (def: unknown): def is SceneDef =>
-  typeof def === "object" && def !== null && "start" in def;
 
-/** A scene prop's fields: its variables (changed only by its own rules), its needs, its parts'. */
-function sceneFields(def: SceneDef, prefix: string): PropPage["fields"] {
+/** A prop's fields: its variables (changed only by its own rules), its needs, its parts'. */
+function sceneFields(def: PageDef, prefix: string): PropPage["fields"] {
   const own = Object.entries(shapeOf(def.variables ?? ({} as ZodTypeAny)) ?? {}).map(
     ([name, schema]) => ({
       name: `${prefix}${name}`,
@@ -130,8 +99,8 @@ function sceneFields(def: SceneDef, prefix: string): PropPage["fields"] {
   return [...own, ...needs, ...parts];
 }
 
-function scenePage(pkg: string, def: SceneDef): PropPage {
-  const actions = (d: SceneDef, prefix: string): PropPage["actions"] => [
+function pageOf(pkg: string, def: PageDef): PropPage {
+  const actions = (d: PageDef, prefix: string): PropPage["actions"] => [
     ...Object.entries(d.actions ?? {}).map(([name, a]) => {
       const args = takes(a.payload);
       const isNone = typeof args === "object" && args !== null && Object.keys(args).length === 0;
@@ -144,7 +113,7 @@ function scenePage(pkg: string, def: SceneDef): PropPage {
     }),
     ...Object.entries(d.children ?? {}).flatMap(([name, c]) => actions(c, `${prefix}${name}.`)),
   ];
-  const signals = (d: SceneDef, prefix: string): string[] => [
+  const signals = (d: PageDef, prefix: string): string[] => [
     ...Object.keys(d.signals ?? {}).map((s) => `${prefix}${s}`),
     ...Object.entries(d.children ?? {}).flatMap(([name, c]) => signals(c, `${prefix}${name}.`)),
   ];
@@ -153,7 +122,7 @@ function scenePage(pkg: string, def: SceneDef): PropPage {
     pkg,
     type: def.type,
     role: ROLE_WORDS[def.role ?? ""] ?? String(def.role),
-    purpose: purposeOf(def as unknown as AnyPropDef),
+    purpose: purposeOf(def),
     describe: def.describe.trim().replace(/\s+/g, " "),
     fields: sceneFields(def, ""),
     actions: actions(def, ""),
@@ -163,46 +132,8 @@ function scenePage(pkg: string, def: SceneDef): PropPage {
 }
 
 /** Every prop's page, package by package, in the order packages and props are declared. */
-export function propPages(defsByPackage: ReadonlyMap<string, readonly AnyPropDef[]>): PropPage[] {
-  const out: PropPage[] = [];
-  for (const [pkg, defs] of [...defsByPackage].sort(([a], [b]) => a.localeCompare(b)))
-    for (const def of defs) {
-      if (def.type === BOARD) continue;
-      if (isSceneDef(def)) {
-        out.push(scenePage(pkg, def));
-        continue;
-      }
-      const stateShape =
-        (def.state as unknown as { shape?: Record<string, ZodTypeAny> }).shape ?? {};
-      const inputs = new Set(def.inputs ?? []);
-      const actions = Object.entries(def.actions) as [
-        string,
-        { describe: string; args: ZodTypeAny; changes?: readonly string[]; byLearner?: boolean },
-      ][];
-      out.push({
-        address: propAddress(pkg, def.type),
-        pkg,
-        type: def.type,
-        role: ROLE_WORDS[def.role] ?? String(def.role),
-        purpose: purposeOf(def),
-        describe: def.describe.trim().replace(/\s+/g, " "),
-        fields: fieldsOf(def, stateShape, inputs, ""),
-        actions: actions.map(([name, a]) => {
-          const args = takes(a.args);
-          const isNone =
-            args === null ||
-            args === undefined ||
-            (typeof args === "object" && Object.keys(args).length === 0);
-          return {
-            name,
-            takes: isNone ? "" : typeof args === "string" ? args : full(args),
-            describe: a.describe,
-            isByLearner: a.byLearner === true,
-          };
-        }),
-        signals: Object.keys(def.signals ?? {}),
-        answers: [...(groupOf(def)?.answers ?? [])],
-      });
-    }
-  return out;
+export function propPages(defsByPackage: ReadonlyMap<string, readonly AnyProp[]>): PropPage[] {
+  return [...defsByPackage]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .flatMap(([pkg, defs]) => defs.map((def) => pageOf(pkg, def as unknown as PageDef)));
 }

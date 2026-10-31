@@ -218,7 +218,16 @@ export function tagsInMarkup(html: string): Tag[] {
  * each tagged part (an input with what it does, unless it's off; a shown part with its value), and
  * what it knows but doesn't show (`offScreen`), labelled hidden. Two parts with one name are refused.
  */
-export function describe(def: AnyPropDef, view: PropView, tags: readonly Tag[]): Observation {
+/** What describing a prop reads of its definition: its name, what it is, its parts. */
+export type Describable = {
+  readonly type: string;
+  readonly describe: string;
+  readonly summary?: (view: never) => string;
+  readonly offScreen?: readonly string[];
+  readonly children?: Readonly<Record<string, Describable>>;
+};
+
+export function describe(def: Describable, view: PropView, tags: readonly Tag[]): Observation {
   const elements: Element[] = [];
   const seen = new Set<string>();
   for (const t of tags) {
@@ -247,14 +256,12 @@ export function describe(def: AnyPropDef, view: PropView, tags: readonly Tag[]):
   };
 }
 
-/** What a prop knows but doesn't show: its `offScreen` fields, and each shown child's, by name. */
-function hiddenOf(def: AnyPropDef, view: PropView): Record<string, unknown> {
+/** What a prop knows but doesn't show: its `offScreen` fields, and each shown part's, by name. */
+function hiddenOf(def: Describable, view: PropView): Record<string, unknown> {
   const hidden: Record<string, unknown> = {};
   for (const field of def.offScreen ?? []) hidden[field] = view[field];
-  const group = groupOf(def);
-  if (group === undefined) return hidden;
   const shown = shownOf(view);
-  for (const [name, child] of Object.entries(group.children)) {
+  for (const [name, child] of Object.entries(def.children ?? {})) {
     const childView = view[name];
     if (childView === null || childView === undefined || shown?.[name] === false) continue;
     const inner = hiddenOf(child, childView as PropView);

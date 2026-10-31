@@ -1,6 +1,5 @@
 import type { ZodType } from "zod";
 import { joinPath } from "../address";
-import { withShown } from "../group";
 import {
   type AnyProp,
   type Cause,
@@ -12,6 +11,7 @@ import {
   type VoiceTools,
   keysOf,
 } from "./define";
+import { withShown } from "./layout";
 import { type Move, moveAt } from "./move";
 import { type Entry, TimeQueue } from "./queue";
 import { type Heard, type LineCall, type Voice, silentVoice } from "./voice";

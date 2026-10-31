@@ -1,11 +1,12 @@
 import type { Locale } from "@chalk/content";
-import type { ViewOf } from "@chalk/prop";
+import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene, plane } from "./plane";
+import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene } from "./plane";
+import { plane } from "./scene/plane";
 import { WORDS, num, word } from "./words";
 
-export type PlaneView = ViewOf<typeof plane>;
+export type PlaneView = PropView<typeof plane>;
 
 /** Px across one unit of the plane. */
 export const unitOf = (px: FramePixels): number => px.toPx(1, 0)[0] - px.toPx(0, 0)[0];

@@ -1,19 +1,21 @@
 import { checkProp } from "@chalk/player";
-import {
-  AnswerStatus,
-  EffectKind,
-  QuestionSignal,
-  asAnyProp,
-  initialState,
-  prepareAction,
-} from "@chalk/prop";
+import { AnswerStatus } from "@chalk/prop";
+import { Board, type BoardEvent, prop } from "@chalk/prop/next";
 import { describe, expect, it } from "vitest";
-import { choice } from "./choice";
-import { goal } from "./goal";
+import { z } from "zod";
 import { basicProps } from "./index";
+import { sceneChoice as choice, sceneGoal as goal } from "./scene";
 
-const choiceDef = asAnyProp(choice);
-const quiz = initialState(choiceDef, {
+/** What the board told, in order: signal names, and payloads. */
+function hearing(board: Board) {
+  const told: { signal: string; payload: unknown }[] = [];
+  board.listen((e: BoardEvent) => {
+    if (e.kind === "tell") told.push({ signal: e.signal, payload: e.payload });
+  });
+  return told;
+}
+
+const quiz = {
   prompt: { en: "Which is true about √2?", hi: "√2 के बारे में?" },
   options: [
     {
@@ -25,35 +27,30 @@ const quiz = initialState(choiceDef, {
     { id: "endless", label: { en: "Never ends", hi: "कभी नहीं रुकता" } },
   ],
   answer: "endless",
-  concepts: ["irrational-numbers"],
-});
-
-function stateOf(result: typeof quiz) {
-  if (!result.isOk) throw new Error(result.errors.join("; "));
-  return result.state;
-}
+};
 
 describe("choice", () => {
   it("checks the picked option, shows its feedback and raises the check", () => {
-    const picked = { ...stateOf(quiz), selected: "exact" };
-    const result = prepareAction(choiceDef, picked, "check");
-    if (!result.isOk || result.effect.kind !== EffectKind.Set) throw new Error("expected a set");
-    expect(result.effect.set).toMatchObject({
+    const board = new Board(choice, quiz);
+    const told = hearing(board);
+    board.input("", "select", { option: "exact" });
+    board.input("", "check", {});
+    expect(board.read<typeof choice>()).toMatchObject({
       status: AnswerStatus.Wrong,
       attempts: 1,
       feedback: { en: "Close, not exact." },
     });
-    expect(result.effect.emit).toEqual([
+    expect(told).toEqual([
       {
-        signal: QuestionSignal.Checked,
+        signal: "checked",
         payload: { status: AnswerStatus.Wrong, attempts: 1, isGraded: false, optionId: "exact" },
       },
-      { signal: QuestionSignal.Wrong },
+      { signal: "wrong", payload: {} },
     ]);
   });
 
   it("refuses an answer key that isn't an option", () => {
-    expect(initialState(choiceDef, { ...stateOf(quiz), answer: "nope" }).isOk).toBe(false);
+    expect(() => new Board(choice, { ...quiz, answer: "nope" })).toThrow(/isn't an option/);
   });
 });
 
@@ -64,9 +61,9 @@ describe("every basic prop, used the way a lesson uses it", () => {
   ];
   const prompt = { en: "Which?", hi: "कौन-सा?" };
   it.each([
-    ["text", { text: { en: "Hello", hi: "नमस्ते" } }],
-    ["choice", { prompt, options, answer: "a" }],
-    ["goal", { prompt, about: "town" }],
+    ["sceneText", { text: { en: "Hello", hi: "नमस्ते" } }],
+    ["sceneChoice", { prompt, options, answer: "a" }],
+    ["sceneGoal", { prompt, about: "town", isMet: false }],
   ] as const)(
     "%s: every input says what it does, and every learner's action has one",
     (type, given) => {
@@ -78,26 +75,33 @@ describe("every basic prop, used the way a lesson uses it", () => {
 });
 
 describe("goal: the answer is another prop's state", () => {
-  const def = asAnyProp(goal);
-  const ask = stateOf(
-    initialState(def, {
-      prompt: { en: "Walk Riya there.", hi: "रिया को वहाँ ले जाओ।" },
-      about: "town",
-    }),
-  );
-  const check = (state: typeof ask) => {
-    const prepared = prepareAction(def, state, "check", {});
-    if (!prepared.isOk || prepared.effect.kind !== EffectKind.Set) throw new Error("check refused");
-    return prepared.effect;
+  // What a board does for it: gives it whether the other prop is right now.
+  const holder = prop({
+    type: "goalHolder",
+    describe: "test",
+    variables: z.object({ isRight: z.boolean() }).strict(),
+    start: { isRight: false },
+    actions: {},
+    children: { goal },
+    give: { goal: { isMet: (me) => me.isRight } },
+  });
+  const ask = {
+    goal: { prompt: { en: "Walk Riya there.", hi: "रिया को वहाँ ले जाओ।" }, about: "town" },
   };
   it("Check reads whether the prop is right now, and records the attempt", () => {
-    const wrong = check({ ...ask, isMet: false });
-    expect(wrong.set).toMatchObject({ status: AnswerStatus.Wrong, attempts: 1 });
-    expect(wrong.emit.map((e) => e.signal)).toEqual([QuestionSignal.Checked, QuestionSignal.Wrong]);
-    const right = check({ ...ask, isMet: true, attempts: 1 });
-    expect(right.set).toMatchObject({ status: AnswerStatus.Correct, attempts: 2 });
-  });
-  it("whether it's right is known but never on screen", () => {
-    expect(goal.offScreen).toContain("isMet");
+    const wrong = new Board(holder, { isRight: false, ...ask });
+    const told = hearing(wrong);
+    wrong.input("goal", "check", {});
+    expect(wrong.read<typeof holder>().goal).toMatchObject({
+      status: AnswerStatus.Wrong,
+      attempts: 1,
+    });
+    expect(told.map((e) => e.signal)).toEqual(["checked", "wrong"]);
+    const right = new Board(holder, { isRight: true, ...ask });
+    right.input("goal", "check", {});
+    expect(right.read<typeof holder>().goal).toMatchObject({
+      status: AnswerStatus.Correct,
+      attempts: 1,
+    });
   });
 });

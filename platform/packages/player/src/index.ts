@@ -28,6 +28,7 @@ export { type Channel, isMuted, playClip, playSound, setMuted } from "./sound/en
 export {
   type PropModule,
   type PropRegistry,
+  type PropView,
   type PropViewProps,
   type SoundView,
   propModule,

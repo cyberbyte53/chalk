@@ -1,15 +1,17 @@
 import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
-import { type FramePixels, type ViewOf, does, says, shows } from "@chalk/prop";
+import type { PropView } from "@chalk/player";
+import { type FramePixels, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
 import { Marks, type Point, Scene } from "./plane";
 import { marksOn, unitOf } from "./plane-view";
-import { Direction, Roads, stepFrom, walker } from "./walker";
+import { walker } from "./scene/walker";
+import { Direction, Roads, stepFrom } from "./walker";
 import { WORDS, addressOf, num, pair, word } from "./words";
 
-type WalkerView = ViewOf<typeof walker>;
+type WalkerView = PropView<typeof walker>;
 const actions = walker.actions;
 
 /** Where Riya stands, to the block: mid-glide, the block she is leaving. */

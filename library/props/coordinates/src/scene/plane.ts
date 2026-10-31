@@ -11,6 +11,7 @@ import {
   lineSchema,
   namedPointSchema,
   planeFrame,
+  planeStart,
   pointSchema,
   scaledWindow,
   windowSchema,
@@ -81,30 +82,8 @@ export const plane = prop({
       canShowPoints: z.boolean(),
     })
     .strict(),
-  start: {
-    window: { xMin: -6, xMax: 6, yMin: -5, yMax: 5 },
-    axes: Axes.Both,
-    marks: Marks.Numbers,
-    tickEvery: 1,
-    hasGrid: false,
-    axisNames: [
-      { en: "x", hi: "x" },
-      { en: "y", hi: "y" },
-    ],
-    showAxisNames: true,
-    showOrigin: true,
-    showDirections: false,
-    quadrantsNamed: 0,
-    showQuadrantSigns: false,
-    scene: Scene.None,
-    apart: { x: 0, y: 0 },
-    upLines: null,
-    numbered: ["x", "y"],
-    rising: null,
-    named: null,
-    points: [],
-    canShowPoints: false,
-  },
+  start: planeStart,
+
   needs: z
     .object({
       /** Nothing else is drawn on it: a tap on a part of it names that part. */

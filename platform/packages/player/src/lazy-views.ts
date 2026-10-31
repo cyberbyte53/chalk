@@ -1,4 +1,4 @@
-import type { AnyPropDef } from "@chalk/prop";
+import type { AnyProp } from "@chalk/prop/next";
 import { type ComponentType, type JSX, h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import type { PropModule, PropRegistry, PropViewProps, SoundView } from "./prop-module";
@@ -10,7 +10,7 @@ import { useWhenChanged } from "./when-changed";
  * chapter that uses one of its props opens.
  */
 export type PropPack = {
-  defs: readonly AnyPropDef[];
+  defs: readonly AnyProp[];
   /**
    * How its props sound, by type (platform/docs/sound.md): small, and needed before any drawing
    * loads (the script, the build, a board's first line), so it comes with the definitions.

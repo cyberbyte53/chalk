@@ -1,5 +1,6 @@
-import { type PropModule, checkProp, describeView } from "@chalk/player";
-import { type Element, initialState, viewOf } from "@chalk/prop";
+import { type PropModule, type PropView, checkProp, describeView } from "@chalk/player";
+import type { Element } from "@chalk/prop";
+import { Board } from "@chalk/prop/next";
 import { describe, expect, it } from "vitest";
 import { coordinatePlaneProp } from "./index";
 import { Marks, Scene } from "./plane";
@@ -11,9 +12,9 @@ function seen(
   given: Readonly<Record<string, unknown>> = {},
   module: PropModule = coordinatePlaneProp,
 ) {
-  const start = initialState(module.def, given);
-  if (!start.isOk) throw new Error(start.errors.join("; "));
-  const raw = describeView(module, viewOf(module.def, start.state));
+  const board = new Board(module.def, given as never);
+  board.runUntilIdle();
+  const raw = describeView(module, board.read() as unknown as PropView);
   // A non-breaking space keeps a pair on one line; read it as the space it is.
   const described = {
     ...raw,

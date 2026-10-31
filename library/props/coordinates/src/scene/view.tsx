@@ -1,5 +1,4 @@
 import { groupView } from "@chalk/player";
-import type { AnyPropDef } from "@chalk/prop";
 import { cluesDrawing } from "../clues-view";
 import { diceDrawing } from "../dice-view";
 import { placesDrawing } from "../places-view";
@@ -14,7 +13,7 @@ import { coordinatePlane } from "./coordinate-plane";
  * its variables', facts' and actions' names, so every drawing reads and does what it did.
  */
 export const SceneCoordinatePlaneView = groupView(
-  coordinatePlane as unknown as AnyPropDef,
+  coordinatePlane,
   {
     plane: planeDrawing,
     reading: readingDrawing,

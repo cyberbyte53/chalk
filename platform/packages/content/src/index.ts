@@ -121,7 +121,6 @@ export {
   type PropPiece,
 } from "./piece";
 export { propPieces, walkPieces } from "./walk";
-export { propBoard } from "./prop-board";
 export {
   KEPT_NUMBERS,
   blanksOf,

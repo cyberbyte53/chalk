@@ -60,9 +60,6 @@ export type WalkerState = Pick<PlaneCore, (typeof walkerReads.keys)[number]> & {
 
 /** Seconds she takes from one block to the next. */
 export const SECONDS_PER_BLOCK = 0.3;
-const MAX_TRAIL = 200;
-const act = actionsFor<WalkerState>();
-const none = z.object({}).strict();
 
 const MOVE: Record<Direction, Point> = {
   up: { x: 0, y: 1 },
@@ -102,37 +99,6 @@ export function stepFrom(
 
 const isSame = (a: Point | null, b: Point) => a !== null && a.x === b.x && a.y === b.y;
 
-export const walkerSignals = {
-  stepped: signal("Riya stepped one block, to (`x`, `y`)", pointSchema.shape),
-  arrived: signal(
-    "Riya stepped onto the target place (Aman's house), at (`x`, `y`)",
-    pointSchema.shape,
-  ),
-  blocked: signal("Riya can't go `direction`: `why`", {
-    direction: z.nativeEnum(Direction),
-    why: z.string().min(1),
-  }),
-};
-
-/** One block's glide, then where she is announced (and that she has arrived, at the target). */
-function glide(s: WalkerState, from: Point, to: Point, trail: Point[]): Effect<WalkerState>[] {
-  const emit: Emit[] = [raise(walkerSignals.stepped, { x: to.x, y: to.y })];
-  if (isSame(s.target, to)) emit.push(raise(walkerSignals.arrived, { x: to.x, y: to.y }));
-  return [
-    tween(
-      SECONDS_PER_BLOCK,
-      { at: to },
-      {
-        ease: (x) => x,
-        interpolate: (_, __, t) => ({
-          at: { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t },
-        }),
-      },
-    ),
-    set({ at: to, trail: trail.slice(-MAX_TRAIL) }, ...emit),
-  ];
-}
-
 /**
  * The route after a step to `to`: the step added, or, when it goes back onto the block before this
  * one, this block taken off. So the route always runs from the start to where the walker is now.
@@ -144,107 +110,5 @@ export function routeAfter(s: Pick<WalkerState, "walkFrom" | "trail">, to: Point
     : [...s.trail, to];
 }
 
-const step = act({
-  describe:
-    "Move Riya one block up, down, left or right from where she is, on roads only (the learner's arrow; timed)",
-  byLearner: true,
-  args: z.object({ direction: z.nativeEnum(Direction) }).strict(),
-  changes: ["at", "trail", "isWalking"],
-  run: (s, { direction }) => {
-    if (s.walkFrom === null || s.isWalking) return set({});
-    const next = stepFrom(s, direction);
-    if ("blocked" in next)
-      return set({}, raise(walkerSignals.blocked, { direction, why: next.blocked }));
-    return seq(
-      set({ isWalking: true }),
-      ...glide(s, s.at, next.to, routeAfter(s, next.to)),
-      set({ isWalking: false }),
-    );
-  },
-});
-
 /** Whether she is on the plane: she has a start. */
 export const isWalkerOn = (s: Pick<WalkerState, "walkFrom">) => s.walkFrom !== null;
-
-export const walker = defineProp({
-  type: "planeWalker",
-  role: PropRole.Explainer,
-  drawsOn: "plane",
-  describe:
-    "A walker (Riya) moved one block per tap of an arrow, from wherever she is, on roads only: in a town, along the main road and up the streets; in a city or on graph paper, along any line. Her route is drawn and her address shown as she moves. A lesson can also walk her to a point, along then up.",
-  state: z
-    .object({
-      ...walkerReads.fields,
-      ...goalFields,
-      walkerName: localizedSchema,
-      /** Drawn as a person (Riya) or a bus. */
-      walkerKind: z.nativeEnum(WalkerKind),
-      /** Whether her line under the plane says where she is (off when that is the answer). */
-      showWhere: z.boolean(),
-      /** Where she starts (Riya's corner, O), or null: no walker. */
-      walkFrom: pointSchema.nullable(),
-      /** Where she stands now. */
-      at: pointSchema,
-      /** Which lines are roads: a town's main road and streets, or every grid line. */
-      roads: z.nativeEnum(Roads),
-      /** The blocks she has walked since the start, in order (her route). */
-      trail: z.array(pointSchema).max(MAX_TRAIL),
-      isWalking: z.boolean(),
-      /** Whether the learner gets the arrows. */
-      canStep: z.boolean(),
-    })
-    .strict(),
-  defaults: {
-    ...walkerReads.defaults,
-    target: null,
-    targetName: { en: "Aman's house", hi: "अमन का घर" },
-    canChooseTarget: false,
-    walkerName: { en: "Riya", hi: "रिया" },
-    walkerKind: WalkerKind.Person,
-    showWhere: true,
-    walkFrom: null,
-    at: { x: 0, y: 0 },
-    roads: Roads.Grid,
-    trail: [],
-    isWalking: false,
-    canStep: true,
-  },
-  actions: {
-    step,
-    walkTo: act({
-      describe:
-        "Walk Riya from her start to (x, y): along, then up or down, block by block (timed)",
-      reveals: true,
-      args: pointSchema,
-      changes: ["at", "trail", "isWalking"],
-      run: (s, p) => {
-        const start = s.walkFrom;
-        if (start === null || !Number.isInteger(p.x - start.x) || !Number.isInteger(p.y - start.y))
-          return set({});
-        const route: Point[] = [];
-        const dx = Math.sign(p.x - start.x);
-        const dy = Math.sign(p.y - start.y);
-        for (let x = start.x; x !== p.x; x += dx) route.push({ x: x + dx, y: start.y });
-        for (let y = start.y; y !== p.y; y += dy) route.push({ x: p.x, y: y + dy });
-        const steps: Effect<WalkerState>[] = [set({ at: start, trail: [], isWalking: true })];
-        let from = start;
-        route.forEach((to, i) => {
-          steps.push(...glide(s, from, to, route.slice(0, i + 1)));
-          from = to;
-        });
-        return seq(...steps, set({ isWalking: false }));
-      },
-    }),
-    backToStart: act({
-      describe: "Riya back to where she started, her route cleared (the learner's ↺)",
-      byLearner: true,
-      args: none,
-      changes: ["at", "trail", "isWalking"],
-      run: (s) =>
-        s.walkFrom === null ? set({}) : set({ at: s.walkFrom, trail: [], isWalking: false }),
-    }),
-  },
-  signals: walkerSignals,
-  invariant: (s) =>
-    s.walkFrom !== null && !isInWindow(s.window, s.at) ? "Riya is off the map" : undefined,
-});

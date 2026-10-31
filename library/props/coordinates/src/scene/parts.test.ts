@@ -359,3 +359,61 @@ describe("the dice game", () => {
     ]);
   });
 });
+
+describe("the plane's own parts, named when the lesson defines them", () => {
+  const board = (given: Record<string, unknown> = {}) => {
+    const b = new Board(plane, given as never);
+    return { b, ...hearing(b), read: () => b.read<typeof plane>() };
+  };
+  it("the two number lines glide until their zeroes meet: then they are the axes, and O shows", () => {
+    const { b, read, signals } = board({ apart: { x: 3, y: -2 }, showOrigin: false });
+    expect(read().isCrossed).toBe(false);
+    b.send("", "bringTogether");
+    // On the way, the line only ever comes closer.
+    const gaps: number[] = [];
+    for (let t = 0.05; t <= 4; t += 0.05) {
+      b.advanceTo(t);
+      gaps.push(Math.hypot(read().apart.x, read().apart.y));
+    }
+    for (let i = 1; i < gaps.length; i++)
+      expect(gaps[i]).toBeLessThanOrEqual((gaps[i - 1] ?? 0) + 1e-9);
+    b.runUntilIdle();
+    expect(read()).toMatchObject({ apart: { x: 0, y: 0 }, showOrigin: true });
+    expect(signals()).toContain("crossed");
+  });
+  it("the sweep names I, II, III, IV in turn", () => {
+    const { b, read, signals } = board();
+    b.send("", "numberQuadrants");
+    const named = [read().quadrantsNamed];
+    for (let t = 0.05; t <= 6; t += 0.05) {
+      b.advanceTo(t);
+      if (named.at(-1) !== read().quadrantsNamed) named.push(read().quadrantsNamed);
+    }
+    expect(named).toEqual([0, 1, 2, 3, 4]);
+    expect(signals()).toContain("quadrantsNumbered");
+  });
+  it("a figure's points come one at a time, or the one named", () => {
+    const points = ["B", "D", "L"].map((name, i) => ({
+      name,
+      x: i,
+      y: i,
+      isShown: false,
+      hasDropLines: false,
+      tone: "main" as const,
+    }));
+    const { b, read } = board({ points });
+    b.send("", "showPoint", {});
+    b.send("", "showPoint", { name: "L" });
+    expect(read().points.map((p) => p.isShown)).toEqual([true, false, true]);
+    b.send("", "showAllPoints");
+    expect(read().points.every((p) => p.isShown)).toBe(true);
+  });
+  it("a tap names the part", () => {
+    const { b, read } = board();
+    b.input("", "namePart", { part: "OX′" });
+    expect(read().named).toBe("OX′");
+  });
+  it("a window must run low to high", () => {
+    expect(() => board({ window: { xMin: 3, xMax: 3, yMin: 0, yMax: 1 } })).toThrow();
+  });
+});

@@ -1,14 +1,5 @@
-import {
-  type FramePixels,
-  PropRole,
-  actionsFor,
-  defineGroup,
-  defineProp,
-  initialState,
-  set,
-  shows,
-  viewOf,
-} from "@chalk/prop";
+import { type FramePixels, PropRole, shows } from "@chalk/prop";
+import { Board, action, prop } from "@chalk/prop/next";
 import type { JSX } from "preact";
 import { render } from "preact-render-to-string";
 import { describe, expect, it } from "vitest";
@@ -38,14 +29,13 @@ const pixels = (s: Paper, width: number): FramePixels => {
     fromPx: (px, py = 0) => [s.xMin + px / sx, s.yMin + (height - py) / sy],
   };
 };
-const paper = defineProp({
+const paper = prop({
   type: "paper",
   role: PropRole.Explainer,
   describe: "graph paper",
-  state: paperState,
-  defaults: { xMin: 0, xMax: 10, yMin: 0, yMax: 10 },
-  actions: {},
-  frame: { kind: "plane", pixels },
+  variables: paperState,
+  start: { xMin: 0, xMax: 10, yMin: 0, yMax: 10 },
+  frame: { kind: "plane", pixels: (me, width) => pixels(me as Paper, width) },
 });
 function PaperView({ view }: PropViewProps<typeof paper>): JSX.Element {
   const frame = useFrame();
@@ -59,23 +49,16 @@ function PaperView({ view }: PropViewProps<typeof paper>): JSX.Element {
 }
 
 const dotState = z.object({ x: z.number(), y: z.number(), name: z.string() }).strict();
-const onDot = actionsFor<z.infer<typeof dotState>>();
-const dot = defineProp({
+const dot = prop({
   type: "dot",
   role: PropRole.Explainer,
   describe: "a named point",
-  state: dotState,
-  defaults: { x: 1, y: 1, name: "P" },
-  drawsOn: "plane",
+  variables: dotState,
+  start: { x: 1, y: 1, name: "P" },
   actions: {
-    move: onDot({
-      describe: "",
-      byLearner: true,
-      args: z.object({ x: z.number(), y: z.number() }).strict(),
-      changes: ["x", "y"],
-      run: (_s, a) => set({ x: a.x, y: a.y }),
-    }),
+    move: action({ x: z.number(), y: z.number() }, { from: "screen", describe: "Move it" }),
   },
+  on: { move: (_, { x, y }, t) => t.set({ x, y }) },
 });
 function DotView({ view: s }: PropViewProps<typeof dot>): JSX.Element {
   const frame = useFrame();
@@ -94,28 +77,28 @@ function DotView({ view: s }: PropViewProps<typeof dot>): JSX.Element {
   );
 }
 
-const counter = defineProp({
+const counter = prop({
   type: "counter",
   role: PropRole.Explainer,
-  describe: "",
-  state: z.object({ n: z.number() }).strict(),
-  defaults: { n: 0 },
-  actions: {},
+  describe: "a count",
+  needs: z.object({ n: z.number() }).strict(),
 });
 function CounterView({ view }: PropViewProps<typeof counter>): JSX.Element {
   return <p {...shows("n", view.n)}>{String(view.n)}</p>;
 }
 
-const twoPoints = defineGroup({
+const twoPoints = prop({
   type: "twoPoints",
   role: PropRole.Explainer,
   describe: "two points on graph paper",
   children: { paper, p: dot, q: dot, count: counter },
-  defaults: { q: { x: 1.2, y: 1.1, name: "Q" } },
-  is: { count: (s) => ({ n: s.p.x + s.q.x }) },
+  give: { count: { n: (me) => me.p.x + me.q.x } },
   summary: () => "two points",
   layout: { kind: "frame", provider: "paper", children: ["p", "q"], below: ["count"] },
 });
+/** The prop placed with these fields, part by part, as the board reads it. */
+const viewOf = (def: Parameters<typeof propModule>[0], given: Record<string, unknown> = {}) =>
+  new Board(def as never, given as never).read() as never;
 
 const parts = {
   paper: PaperView,
@@ -127,11 +110,9 @@ const View = groupView(twoPoints, parts);
 const module = propModule(twoPoints, View);
 
 function draw(given: Record<string, unknown> = {}) {
-  const start = initialState(twoPoints, given);
-  if (!start.isOk) throw new Error(start.errors.join());
   return render(
     <View
-      view={viewOf(twoPoints, start.state)}
+      view={viewOf(twoPoints, { q: { x: 1.2, y: 1.1, name: "Q" }, ...given })}
       width={300}
       locale="en"
       call={() => {}}
@@ -142,9 +123,7 @@ function draw(given: Record<string, unknown> = {}) {
 
 describe("groups drawn", () => {
   it("names each child's parts under it, and its inputs do the child's action by path", () => {
-    const start = initialState(twoPoints, {});
-    if (!start.isOk) throw new Error(start.errors.join());
-    const seen = describeView(module, viewOf(twoPoints, start.state));
+    const seen = describeView(module, viewOf(twoPoints, { q: { x: 1.2, y: 1.1, name: "Q" } }));
     expect(seen.summary).toBe("two points");
     expect(seen.elements.map((e) => e.id)).toEqual([
       "paper/plane",
@@ -205,7 +184,7 @@ describe("a part drawing in several places", () => {
       go
     </button>
   );
-  const layered = defineGroup({
+  const layered = prop({
     type: "layered",
     role: PropRole.Explainer,
     describe: "a dot drawn in several places",
@@ -228,11 +207,9 @@ describe("a part drawing in several places", () => {
     typeof groupView
   >[1];
   const LayeredView = groupView(layered, views);
-  const start = initialState(layered, {});
-  if (!start.isOk) throw new Error(start.errors.join());
   const html = render(
     <LayeredView
-      view={viewOf(layered, start.state)}
+      view={viewOf(layered)}
       width={300}
       locale="en"
       call={() => {}}
@@ -260,7 +237,7 @@ describe("a part drawing in several places", () => {
   });
 
   it("names everything it draws under the part, wherever it draws it", () => {
-    const seen = describeView(propModule(layered, LayeredView), viewOf(layered, start.state));
+    const seen = describeView(propModule(layered, LayeredView), viewOf(layered));
     expect(seen.elements.map((e) => e.id)).toEqual(
       expect.arrayContaining(["p/shadow", "p/move", "p/where", "p/go", "q/move"]),
     );
@@ -272,7 +249,7 @@ describe("a part drawing in several places", () => {
     >[1];
     expect(() => groupView(layered, hidden)).not.toThrow();
     const left = { ...views, q: { on: DotView } } as unknown as Parameters<typeof groupView>[1];
-    const ordered = defineGroup({
+    const ordered = prop({
       type: "ordered",
       role: PropRole.Explainer,
       describe: "",
@@ -292,11 +269,12 @@ describe("a part drawing in several places", () => {
 
   it("refuses an order naming a child the frame doesn't draw", () => {
     expect(() =>
-      defineGroup({
+      prop({
         type: "bad",
         role: PropRole.Explainer,
         describe: "",
         children: { paper, p: dot, count: counter },
+        give: { count: { n: () => 0 } },
         summary: () => "",
         layout: { kind: "frame", provider: "paper", children: ["p"], order: { on: ["count"] } },
       }),

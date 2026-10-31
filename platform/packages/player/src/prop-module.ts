@@ -1,35 +1,29 @@
 import type { Locale, Localized, Sound } from "@chalk/content";
-import type {
-  ActionSpec,
-  AnyPropDef,
-  ArgsParam,
-  PropDef,
-  PropView,
-  SignalSpec,
-  StoredState,
-  ViewOf,
-} from "@chalk/prop";
+import type { ActionDef, AnyProp, Payload, ReaderOf, SignalDef } from "@chalk/prop/next";
 import type { ComponentType } from "preact";
 
 /**
- * What a prop's view gets. It draws the view and reports the learner's actions; it owns nothing.
- * Typed by the prop's definition (`PropViewProps<typeof sweetShare>`): the view's stored and derived
- * fields, and its own actions, passed as themselves with their arguments checked.
+ * What a view reads of its prop, as the board reads it: its variables, what it needs, what it
+ * works out, and each part's own view, by name. Any prop's, when it isn't said which.
  */
-export type PropViewProps<P = AnyPropDef> = {
-  /** The prop's state, stored and derived. */
-  view: ViewOf<P>;
+export type PropView<P = AnyProp> = Readonly<Record<string, unknown>> &
+  (AnyProp extends P ? unknown : ReaderOf<P>);
+
+/**
+ * What a prop's view gets. It draws the view and reports the student's actions; it owns nothing.
+ * Typed by the prop's definition (`PropViewProps<typeof choice>`): what the view reads, and its own
+ * actions, passed as themselves with what they carry checked.
+ */
+export type PropViewProps<P = AnyProp> = {
+  view: PropView<P>;
   locale: Locale;
   /** Width in px the view should draw at. */
   width: number;
-  /** The learner did something: runs one of the prop's actions through the one door. */
-  call: <Ar>(action: ActionSpec<StateOfDef<P>, Ar>, ...args: ArgsParam<Ar>) => void;
-  /** Raises one of the prop's signals (e.g. the learner let go of the marker). */
-  signal: (signal: SignalSpec, payload?: Readonly<Record<string, unknown>>) => void;
+  /** The student did something: runs one of the prop's actions through the one door. */
+  call: <Pa extends Payload>(action: ActionDef<Pa>, args?: Pa) => void;
+  /** Raises one of the prop's signals. */
+  signal: (signal: SignalDef, payload?: Payload) => void;
 };
-
-/** A definition's state: what its defaults are (a host's joins its layers'). */
-type StateOfDef<P> = P extends { readonly defaults: infer S extends StoredState } ? S : StoredState;
 
 /**
  * How a prop sounds (platform/docs/sound.md), beside how it looks: its auditory view. Its `line` is
@@ -52,7 +46,7 @@ export type SoundView = {
 
 /** A prop as the player knows it: the definition, how it looks, and how it sounds. */
 export type PropModule = {
-  def: AnyPropDef;
+  def: AnyProp;
   View: ComponentType<PropViewProps>;
   sound?: SoundView;
 };
@@ -64,7 +58,7 @@ export function propModule<P extends { readonly type: string }>(
   sound?: SoundView,
 ): PropModule {
   return {
-    def: def as unknown as AnyPropDef,
+    def: def as unknown as AnyProp,
     View: View as unknown as ComponentType<PropViewProps>,
     ...(sound === undefined ? {} : { sound }),
   };

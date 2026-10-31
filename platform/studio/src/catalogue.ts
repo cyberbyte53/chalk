@@ -8,7 +8,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { type PropPage, propPages } from "@chalk/player";
-import type { AnyPropDef } from "@chalk/prop";
+import type { AnyProp } from "@chalk/prop/next";
 
 type PackageRow = {
   name: string;
@@ -62,7 +62,7 @@ function usesOf(contentDir: string): Map<string, Set<string>> {
 /** The rows: one per prop package, with each prop's page (prop-pages.ts) and where it is used. */
 export function catalogueRows(
   root: string,
-  defsByPackage: ReadonlyMap<string, readonly AnyPropDef[]>,
+  defsByPackage: ReadonlyMap<string, readonly AnyProp[]>,
 ): PackageRow[] {
   const uses = usesOf(join(root, "content"));
   const pages = propPages(defsByPackage);

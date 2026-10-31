@@ -10,7 +10,6 @@ import {
 } from "@chalk/prop";
 import { action, prop, signal } from "@chalk/prop/next";
 import { z } from "zod";
-import { TextStyle } from "./text";
 
 /**
  * The words and questions every lesson uses, on the event model (platform/docs/event-model.md),
@@ -20,6 +19,15 @@ import { TextStyle } from "./text";
  */
 
 /** Words a lesson hasn't given yet (it always gives its own). */
+/** How words sit on the board. A definition is set apart in an outlined box. */
+export const TextStyle = {
+  Title: "title",
+  Body: "body",
+  Note: "note",
+  Definition: "definition",
+} as const;
+export type TextStyle = (typeof TextStyle)[keyof typeof TextStyle];
+
 const UNSET = { en: "…", hi: "…" };
 
 /** Words on the board. */
@@ -161,6 +169,8 @@ export const sceneChoice = prop({
       t.set({ status: AnswerStatus.Open, feedback: null, selected: null }),
     giveFeedback: (_, { text }, t) => t.set({ feedback: text }),
   },
+  invariant: (v) =>
+    v.options.some((o) => o.id === v.answer) ? undefined : `answer "${v.answer}" isn't an option`,
   summary: (me) =>
     `a multiple-choice question, ${me.status === AnswerStatus.Open ? "not answered yet" : me.status}: ${me.prompt[AGENT_LOCALE]}`,
 });

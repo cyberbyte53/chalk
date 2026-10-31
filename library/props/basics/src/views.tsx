@@ -9,11 +9,11 @@ import {
 } from "@chalk/player";
 import { AnswerStatus, cssColor, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { type ChoiceState, choice } from "./choice";
-import { goal } from "./goal";
-import type { text } from "./text";
+import { sceneChoice as choice, sceneGoal as goal, type sceneText as text } from "./scene";
 
-// The player hands each view its own prop's state, already checked against that prop's schema.
+// The player hands each view what its own prop reads now, already checked against its schema.
+
+type ChoiceView = PropViewProps<typeof choice>["view"];
 
 /**
  * In a play mode a wrong answer waits for Try again (the banner under the board): until then the
@@ -36,7 +36,7 @@ export function TextView({ view, locale }: PropViewProps<typeof text>): JSX.Elem
   );
 }
 
-function choiceClass(s: ChoiceState, option: string): string {
+function choiceClass(s: ChoiceView, option: string): string {
   if (s.selected !== option) return "choice";
   if (s.status === AnswerStatus.Correct) return "choice is-selected is-right";
   if (s.status === AnswerStatus.Wrong) return "choice is-selected is-wrong";

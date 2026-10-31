@@ -6,7 +6,6 @@ import {
   builtChapterSchema,
   builtConceptSchema,
   builtFile,
-  propBoard,
 } from "@chalk/content";
 import {
   PROPS_ROOT,
@@ -51,6 +50,7 @@ import {
 import { courses } from "./lessons";
 import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
+import { aloneBoard } from "./prop-alone";
 import { ReviewList, ReviewPage } from "./review-page";
 import { ScriptView } from "./script-view";
 import { ThreadText } from "./thread-text";
@@ -151,9 +151,8 @@ function atProp(params: URLSearchParams): { pkg: string; type: string } | undefi
 }
 
 /**
- * A prop on its own (its address): a board with only it on it, at its defaults or the fields in
- * `state`. Says what's wrong when the package has no such prop, the fields don't fit it, or it only
- * draws inside another prop's frame.
+ * A prop on its own (its address): a board with only it on it, at its start or the fields in
+ * `state`. Says what's wrong when the package has no such prop, or the fields don't fit it.
  */
 function propShown(at: { pkg: string; type: string }, state: string | null): Shown {
   const defs = propPackages.get(at.pkg);
@@ -166,10 +165,6 @@ function propShown(at: { pkg: string; type: string }, state: string | null): Sho
     throw new Error(
       `No prop "${at.type}" in library/props/${at.pkg} (its props: ${defs.map((d) => d.type).join(", ")})`,
     );
-  if (def.drawsOn !== undefined)
-    throw new Error(
-      `${at.type} only draws inside a ${def.drawsOn} frame: look at it in a group that provides one`,
-    );
   let given: Record<string, unknown> = {};
   if (state !== null) {
     try {
@@ -178,26 +173,13 @@ function propShown(at: { pkg: string; type: string }, state: string | null): Sho
       throw new Error(`state isn't JSON: ${state}`);
     }
   }
-  // A prop on the event model (a scene's piece) has no state schema: it is placed on a scene of its
-  // own, as a lesson places it, starting from the given fields (by layer: { plane: { … } }).
-  if (!("state" in def) || def.state === undefined) {
-    try {
-      const built = scene({
-        pieces: { [at.type]: place(def as unknown as AnyProp, given as never) },
-      }).build(at.type);
-      return { path: propAddress(at.pkg, at.type), board: built.board };
-    } catch (error) {
-      throw new Error(
-        `${at.type} can't start from that state: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    }
-  }
-  const checked = def.state.safeParse({ ...def.defaults, ...given });
-  if (!checked.success)
+  try {
+    return { path: propAddress(at.pkg, at.type), board: aloneBoard(def, given) };
+  } catch (error) {
     throw new Error(
-      `${at.type} can't start from that state: ${checked.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`,
+      `${at.type} can't start from that state: ${error instanceof Error ? error.message : String(error)}`,
     );
-  return { path: propAddress(at.pkg, at.type), board: propBoard(at.type, given) };
+  }
 }
 
 /** The boards a course path names, in order: one page or question, or a concept's. */

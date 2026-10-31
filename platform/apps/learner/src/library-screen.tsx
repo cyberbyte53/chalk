@@ -1,15 +1,26 @@
-import { type Locale, propBoard } from "@chalk/content";
+import type { Board, Locale } from "@chalk/content";
 import { previewQuery, propAddress } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
 import { BoardPlayer } from "@chalk/player";
 import { useWhenChanged } from "@chalk/player";
-import { BOARD, PropRole, purposeOf } from "@chalk/prop";
+import { PropRole, purposeOf } from "@chalk/prop";
+import type { AnyProp } from "@chalk/prop/next";
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
+import { aloneBoard } from "./prop-alone";
 
 /** What the build recorded each board was made from: here, which prop each piece is. */
 type Reach = { boards: Record<string, { pieces: Record<string, { type?: string }> }> };
+
+/** A prop alone at its start, or why it can't be. */
+function aloneOrWhy(def: AnyProp): Board | string {
+  try {
+    return aloneBoard(def);
+  } catch (error) {
+    return error instanceof Error ? error.message : String(error);
+  }
+}
 
 const ROLE_WORDS: Record<string, string> = {
   [PropRole.Explainer]: "explainer",
@@ -77,43 +88,34 @@ export function LibraryScreen({
             <a href={`?dev&at=library/props/${name}`}>library/props/{name}</a>
           </h2>
           <div class="library-grid">
-            {defs
-              .filter((def) => def.type !== BOARD)
-              .map((def) => {
-                const address = propAddress(name, def.type);
-                const n = uses?.get(def.type) ?? 0;
-                // A prop whose defaults aren't a whole prop (words it must be given) says what it needs.
-                const atDefaults = def.state.safeParse(def.defaults);
-                const needs = atDefaults.success
-                  ? undefined
-                  : [...new Set(atDefaults.error.issues.map((i) => i.path.join(".")))].join(", ");
-                return (
-                  <a key={def.type} class="library-card" href={`?dev&${previewQuery(address)}`}>
-                    <div class="library-picture lesson preview-phone">
-                      {needs !== undefined ? (
-                        <p class="library-note">
-                          Its defaults draw nothing: a board gives it {needs}.
-                        </p>
-                      ) : def.drawsOn === undefined ? (
-                        <BoardPlayer
-                          board={propBoard(def.type)}
-                          registry={propLibrary}
-                          locale={locale}
-                          record={bus.record}
-                          onPass={() => {}}
-                        />
-                      ) : (
-                        <p class="library-note">Draws inside a {def.drawsOn} frame.</p>
-                      )}
-                    </div>
-                    <div class="library-words">
-                      <b>{def.type}</b> · {ROLE_WORDS[def.role] ?? String(def.role)} · used on {n}{" "}
-                      board{n === 1 ? "" : "s"}
-                      <p>{purposeOf(def)}</p>
-                    </div>
-                  </a>
-                );
-              })}
+            {defs.map((def) => {
+              const address = propAddress(name, def.type);
+              const n = uses?.get(def.type) ?? 0;
+              // A prop that can't stand alone at its start (a board must give it something) says why.
+              const alone = aloneOrWhy(def);
+              return (
+                <a key={def.type} class="library-card" href={`?dev&${previewQuery(address)}`}>
+                  <div class="library-picture lesson preview-phone">
+                    {typeof alone === "string" ? (
+                      <p class="library-note">Its start draws nothing alone: {alone}</p>
+                    ) : (
+                      <BoardPlayer
+                        board={alone}
+                        registry={propLibrary}
+                        locale={locale}
+                        record={bus.record}
+                        onPass={() => {}}
+                      />
+                    )}
+                  </div>
+                  <div class="library-words">
+                    <b>{def.type}</b> · {ROLE_WORDS[def.role ?? ""] ?? String(def.role)} · used on{" "}
+                    {n} board{n === 1 ? "" : "s"}
+                    <p>{purposeOf(def)}</p>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </section>
       ))}

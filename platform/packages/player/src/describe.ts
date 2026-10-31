@@ -1,14 +1,8 @@
 import type { Locale } from "@chalk/content";
-import {
-  type AnyPropDef,
-  type Observation,
-  type PropView,
-  describe,
-  tagsInMarkup,
-} from "@chalk/prop";
+import { type Observation, describe, tagsInMarkup } from "@chalk/prop";
 import { h } from "preact";
 import { renderToString } from "preact-render-to-string";
-import type { PropModule, PropViewProps } from "./prop-module";
+import type { PropModule, PropView, PropViewProps } from "./prop-module";
 
 /** A width to draw at when only what is drawn matters (a phone's). */
 const DESCRIBE_WIDTH = 390;
@@ -33,9 +27,5 @@ export function describeView(
     call: nothing,
     signal: nothing,
   };
-  return describe(
-    module.def as AnyPropDef,
-    view,
-    tagsInMarkup(renderToString(h(module.View, props))),
-  );
+  return describe(module.def, view, tagsInMarkup(renderToString(h(module.View, props))));
 }

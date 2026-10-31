@@ -1,18 +1,21 @@
-import { type GivenFor, type Step, tap } from "@chalk/author";
-import { Direction, type sceneCoordinatePlane } from "@chalk/prop-coordinates";
-import { type PlaneSetup, bareClassroom, bareNotebook, bareTown } from "./coordinates";
+import { type GivenFor, type Step, t, tap } from "@chalk/author";
+import {
+  Direction,
+  Marks,
+  PlaceKind,
+  Roads,
+  Scene,
+  type sceneCoordinatePlane,
+} from "@chalk/prop-coordinates";
 
 /**
- * The coordinate plane's helpers for scenes (boards on the event model): the same setups as
- * coordinates.ts, the taps that walk Riya (a witness), and what a check reads. A scene reads a
+ * The coordinate plane's helpers for boards: its starting setups (the town, the classroom, the
+ * notebook page), the taps that walk Riya (a witness), and what a check reads. A scene reads a
  * piece by its name: `isAt("town", 4, 5)`.
  */
 
 /** What a scene gives the coordinate plane, part by part: `{ walker: { walkFrom } }`. */
 export type SceneSetup = GivenFor<typeof sceneCoordinatePlane>;
-
-/** The same places, fields and parts as today's setups: only the plane's parts' names are read. */
-const asScene = (setup: PlaneSetup): SceneSetup => setup as unknown as SceneSetup;
 
 /** Setups put together part by part, later ones over earlier. */
 export function sceneSetup(...setups: readonly SceneSetup[]): SceneSetup {
@@ -23,12 +26,66 @@ export function sceneSetup(...setups: readonly SceneSetup[]): SceneSetup {
   return out as SceneSetup;
 }
 
-export const sceneTown = (streets?: number, houses?: number): SceneSetup =>
-  asScene(bareTown(streets, houses));
-export const sceneClassroom = (columns?: number, rows?: number): SceneSetup =>
-  asScene(bareClassroom(columns, rows));
-export const sceneNotebook = (width?: number, height?: number): SceneSetup =>
-  asScene(bareNotebook(width, height));
+/** Every whole-number point from (1, 1) to (across, up): a town's houses, a classroom's desks. */
+export const gridOf = (across: number, up: number) =>
+  Array.from({ length: across }, (_, i) =>
+    Array.from({ length: up }, (_, j) => ({ x: i + 1, y: j + 1 })),
+  ).flat();
+
+/**
+ * Riya's town, its size: six streets (fewer than the book's map's eight, so each block is big enough
+ * to tap on a phone), five houses up each.
+ */
+export const TOWN = { streets: 6, houses: 5 } as const;
+
+/** Riya's town: streets 1 to `streets` from the main road, `houses` up each; she at the corner. */
+export const bareTown = (
+  streets: number = TOWN.streets,
+  houses: number = TOWN.houses,
+): SceneSetup => ({
+  plane: {
+    window: { xMin: 0, xMax: streets + 0.5, yMin: 0, yMax: houses + 0.5 },
+    marks: Marks.Counts,
+    scene: Scene.Town,
+    axisNames: [t("Street number", "गली नंबर"), t("House number", "मकान नंबर")],
+  },
+  places: {
+    places: gridOf(streets, houses),
+    placeKind: PlaceKind.House,
+    canChooseTarget: false,
+    showAddress: false,
+  },
+  walker: { showWhere: false, walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 }, roads: Roads.Town },
+});
+
+/** The classroom: `columns` × `rows` desks, numbered from the left and from the front. */
+export const bareClassroom = (columns = 10, rows = 7): SceneSetup => ({
+  plane: {
+    window: { xMin: 0, xMax: columns + 0.5, yMin: 0, yMax: rows + 0.5 },
+    marks: Marks.Counts,
+    scene: Scene.Classroom,
+    axisNames: [t("Column", "स्तंभ"), t("Row", "पंक्ति")],
+  },
+  places: { places: gridOf(columns, rows), placeKind: PlaceKind.Desk, showAddress: false },
+});
+
+/** A notebook page squared in centimetres, measured from its left edge and its bottom; a dot to drag. */
+export const bareNotebook = (width = 15, height = 12): SceneSetup => ({
+  plane: {
+    window: { xMin: 0, xMax: width, yMin: 0, yMax: height },
+    marks: Marks.Counts,
+    tickEvery: 1,
+    hasGrid: true,
+    scene: Scene.Paper,
+    axisNames: [t("left edge", "बायाँ किनारा"), t("bottom", "नीचे का किनारा")],
+    showAxisNames: false,
+  },
+  reading: { unit: "cm", point: { x: width - 1, y: height - 1 }, pointStep: 1 },
+});
+
+export const sceneTown = bareTown;
+export const sceneClassroom = bareClassroom;
+export const sceneNotebook = bareNotebook;
 
 /** How a scene reads a piece: by its name. */
 type Read = (piece: string) => Readonly<Record<string, unknown>>;

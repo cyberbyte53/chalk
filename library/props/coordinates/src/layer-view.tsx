@@ -1,12 +1,7 @@
 import type { Locale } from "@chalk/content";
-import { type PartDrawing, type PropViewProps, useFrame } from "@chalk/player";
-import {
-  type ActionSpec,
-  type FramePixels,
-  type StoredState,
-  type ViewOf,
-  says,
-} from "@chalk/prop";
+import { type PartDrawing, type PropView, type PropViewProps, useFrame } from "@chalk/player";
+import { type FramePixels, says } from "@chalk/prop";
+import type { ActionDef, AnyProp } from "@chalk/prop/next";
 import type { JSX } from "preact";
 import { type PlaneWindow, isInWindow } from "./plane";
 
@@ -24,9 +19,9 @@ import { type PlaneWindow, isInWindow } from "./plane";
  *
  * Whether a part is drawn at all is the group's `show`, not worked out again here.
  */
-type Def = { readonly actions: object; readonly state: unknown };
+type Def = AnyProp;
 export type SlotProps<P extends Def> = {
-  s: ViewOf<P>;
+  s: PropView<P>;
   call: PropViewProps<P>["call"];
   locale: Locale;
 };
@@ -54,7 +49,7 @@ export function drawing<P extends Def>(_def: P, slots: Slots<P>): PartDrawing {
       // Inside the picture a part draws through the frame; there is none when drawn alone.
       if (PICTURE.has(place) && px === undefined) return null;
       return draw({
-        s: view as ViewOf<P>,
+        s: view as PropView<P>,
         call: call as never,
         locale,
         px: px as FramePixels,
@@ -68,7 +63,7 @@ export function drawing<P extends Def>(_def: P, slots: Slots<P>): PartDrawing {
  * A tap anywhere on the plane, snapped to `step`, doing `action` there: the next pair plotted, the
  * learner's own hidden point.
  */
-export function PlaneTap<S extends StoredState>({
+export function PlaneTap({
   window: w,
   px,
   step,
@@ -78,8 +73,8 @@ export function PlaneTap<S extends StoredState>({
   window: PlaneWindow;
   px: FramePixels;
   step: number;
-  action: ActionSpec<S, { x: number; y: number }>;
-  call: (action: ActionSpec<S, { x: number; y: number }>, at: { x: number; y: number }) => void;
+  action: ActionDef<{ x: number; y: number }>;
+  call: (action: ActionDef<{ x: number; y: number }>, at: { x: number; y: number }) => void;
 }): JSX.Element {
   const frame = useFrame();
   const [x0, y0] = px.toPx(w.xMin, w.yMax);

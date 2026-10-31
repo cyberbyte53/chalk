@@ -1,7 +1,7 @@
 import { type ZodObject, type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
 import { type FrameKindName, type FramePixels, type PropRole, noteNames } from "../define";
-import type { GroupLayoutSpec } from "../group";
 import type { Size } from "../size";
+import type { GroupLayoutSpec } from "./layout";
 
 /**
  * The event model's one building block (platform/docs/event-model.md). Every prop has the same
@@ -306,7 +306,13 @@ export type Prop<
   A extends Actions = Actions,
   S extends Signals = Signals,
   C extends Readonly<Record<string, AnyProp>> = Readonly<Record<string, AnyProp>>,
-> = PropSpec<V, N, F, A, S, C> & { readonly [parts]?: Parts<V, N, F, A, S, C> };
+> = PropSpec<V, N, F, A, S, C> & {
+  /** Always there once defined (empty when it has none), so a view reads `prop.actions.step`. */
+  readonly actions: A;
+  readonly signals: S;
+  readonly children: C;
+  readonly [parts]?: Parts<V, N, F, A, S, C>;
+};
 
 type AnyRule = (me: never, payload: never, t: never) => Outs;
 /** Any defined prop, as the board holds it: its parts without their types. */
@@ -395,6 +401,17 @@ export function prop<
         `${where}: its child ${name} (${child.type}) needs ${missing.join(", ")}, which ${spec.type} doesn't have: add them, or give them (give.${name})`,
       );
   }
+  // A frame's layout: its provider gives a frame, and its order names only parts drawn in it.
+  const layout = spec.layout;
+  if (layout?.kind === "frame") {
+    if (spec.children?.[layout.provider]?.frame === undefined)
+      throw new Error(`${spec.type}: ${layout.provider} provides no frame`);
+    const drawn = new Set([layout.provider, ...layout.children, ...(layout.below ?? [])]);
+    for (const [place, names] of Object.entries(layout.order ?? {}))
+      for (const name of names as readonly string[])
+        if (!drawn.has(name))
+          throw new Error(`${spec.type}: order.${place} names "${name}", not drawn in the frame`);
+  }
   // Views, tags and scripts pass actions and signals as themselves: their names are noted here.
   noteNames(spec.type, spec.actions);
   noteNames(spec.type, spec.signals);
@@ -407,6 +424,9 @@ export function prop<
   return {
     ...spec,
     ...compat,
+    actions: spec.actions ?? {},
+    signals: spec.signals ?? {},
+    children: spec.children ?? {},
     start: spec.start ?? {},
     defaults: spec.start ?? {},
   } as unknown as Prop<V, N, F, A, S, C>;

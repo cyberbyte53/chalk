@@ -94,44 +94,6 @@ export const namedPointSchema = z
 export type NamedPoint = z.infer<typeof namedPointSchema>;
 
 const MAX_SPAN = 200;
-/** Seconds one line takes to rise, alone or in turn with the rest. */
-const RISE = 1.2;
-const RISE_EACH = 0.35;
-
-/** The whole numbers a line can rise from: those on the horizontal line, inside the window, but 0. */
-const marksUp = (s: Pick<PlaneCore, "window">): number[] => {
-  const out: number[] = [];
-  for (let x = Math.ceil(s.window.xMin); x <= s.window.xMax && out.length < MAX_SPAN; x++)
-    if (x !== 0) out.push(x);
-  return out;
-};
-
-/** Lines growing up one after another: each from 0 to full height, then counted as risen. */
-function riseSteps(
-  risen: readonly number[],
-  ats: readonly number[],
-  seconds: number,
-): Effect<PlaneCore>[] {
-  const done = [...risen];
-  return ats.flatMap((at) => {
-    done.push(at);
-    const upLines = [...done];
-    return [
-      set<PlaneCore>({ rising: { at, height: 0 } }),
-      tween<PlaneCore>(
-        seconds,
-        { rising: { at, height: 1 } },
-        {
-          interpolate: (_, __, t) => ({ rising: { at, height: t } }),
-        },
-      ),
-      set<PlaneCore>({ upLines, rising: null }, raise(planeSignals.risen, { at })),
-    ];
-  });
-}
-/** Seconds between one quadrant's name and the next in the sweep; seconds the line takes to glide. */
-const SWEEP_STEP = 0.6;
-const GLIDE = 1.2;
 const MAX_POINTS = 24;
 
 const planeFields = {
@@ -219,6 +181,32 @@ export type PlaneCore = {
   lit: Line | null;
 };
 
+/** The plane as a board first places it, before the lesson's own fields. */
+export const planeStart: Omit<PlaneCore, "isAlone" | "canTapNumbers" | "lit"> = {
+  window: { xMin: -6, xMax: 6, yMin: -5, yMax: 5 },
+  axes: Axes.Both,
+  marks: Marks.Numbers,
+  tickEvery: 1,
+  hasGrid: false,
+  axisNames: [
+    { en: "x", hi: "x" },
+    { en: "y", hi: "y" },
+  ],
+  showAxisNames: true,
+  showOrigin: true,
+  showDirections: false,
+  quadrantsNamed: 0,
+  showQuadrantSigns: false,
+  scene: Scene.None,
+  apart: { x: 0, y: 0 },
+  upLines: null,
+  numbered: ["x", "y"],
+  rising: null,
+  named: null,
+  points: [],
+  canShowPoints: false,
+};
+
 /** Where a point is: in a quadrant, on an axis, or at O. */
 export function placeOf(p: Point): Quadrant | "x-axis" | "y-axis" | "O" {
   if (p.x === 0 && p.y === 0) return PlanePart.O;
@@ -240,22 +228,6 @@ export function scaledWindow(w: PlaneWindow, from: number, to: number): PlaneWin
 /** Whether a point is inside the window. */
 export const isInWindow = (w: PlaneWindow, p: Point) =>
   p.x >= w.xMin && p.x <= w.xMax && p.y >= w.yMin && p.y <= w.yMax;
-
-const act = actionsFor<PlaneCore>();
-const none = z.object({}).strict();
-
-export const planeSignals = {
-  risen: signal("A line has risen from `at` on the horizontal line (a street, with its places)", {
-    at: z.number().int(),
-  }),
-  crossed: signal("The two number lines cross at their zeroes: they are the axes, and O is named"),
-  named: signal("A tap named a part of the plane: `part`", { part: z.nativeEnum(PlanePart) }),
-  quadrantsNumbered: signal("The sweep has named all four quadrants, I to IV"),
-  numberTapped: signal(
-    "The learner tapped the number `value` on the `axis` line",
-    lineSchema.shape,
-  ),
-};
 
 /**
  * The plane's picture: one unit across is one unit up, fitted to the width with a margin. Its height
@@ -289,187 +261,8 @@ export const planeFrame: FrameSpec<PlaneCore> = {
     }`,
 };
 
-export const plane = defineProp({
-  type: "plane",
-  role: PropRole.Explainer,
-  frame: planeFrame,
-  describe:
-    "Two perpendicular lines and their marks, drawn only as far as the lesson has defined them: plain lines, counts from 1, or number lines with O, the directions and the quadrants; and the points a figure names.",
-  state: z.object(planeFields).strict(),
-  defaults: {
-    window: { xMin: -6, xMax: 6, yMin: -5, yMax: 5 },
-    axes: Axes.Both,
-    marks: Marks.Numbers,
-    tickEvery: 1,
-    hasGrid: false,
-    axisNames: [
-      { en: "x", hi: "x" },
-      { en: "y", hi: "y" },
-    ],
-    showAxisNames: true,
-    showOrigin: true,
-    showDirections: false,
-    quadrantsNamed: 0,
-    showQuadrantSigns: false,
-    scene: Scene.None,
-    apart: { x: 0, y: 0 },
-    upLines: null,
-    numbered: ["x", "y"],
-    rising: null,
-    named: null,
-    points: [],
-    canShowPoints: false,
-    isAlone: true,
-    canTapNumbers: false,
-    lit: null,
-  },
-  actions: {
-    namePart: act({
-      describe:
-        "Name the part of the plane tapped: a half of an axis with its sign, a quadrant, or O (the learner's tap)",
-      byLearner: true,
-      args: z.object({ part: z.nativeEnum(PlanePart) }).strict(),
-      changes: ["named"],
-      run: (_, { part }) => set({ named: part }, raise(planeSignals.named, { part })),
-    }),
-    numberQuadrants: act({
-      describe:
-        "Sweep anticlockwise from OX, naming the quadrants I, II, III, IV one after another (timed)",
-      byLearner: true,
-      args: none,
-      changes: ["quadrantsNamed"],
-      run: () =>
-        seq(
-          set({ quadrantsNamed: 0 }),
-          ...[1, 2, 3, 4].flatMap((n) => [
-            wait<PlaneCore>(SWEEP_STEP),
-            n === 4
-              ? set<PlaneCore>({ quadrantsNamed: n }, raise(planeSignals.quadrantsNumbered))
-              : set<PlaneCore>({ quadrantsNamed: n }),
-          ]),
-        ),
-    }),
-    moveApart: act({
-      describe:
-        "Slide the vertical number line: its zero this far from the horizontal line's zero (the learner's drag)",
-      byLearner: true,
-      args: pointSchema,
-      changes: ["apart"],
-      run: (_, apart) =>
-        apart.x === 0 && apart.y === 0
-          ? set({ apart }, raise(planeSignals.crossed))
-          : set({ apart }),
-    }),
-    bringTogether: act({
-      describe:
-        "Glide the vertical number line until the two zeroes meet; there they are the axes, and O is named (timed)",
-      byLearner: true,
-      args: none,
-      changes: ["apart", "showOrigin"],
-      run: (s) =>
-        s.apart.x === 0 && s.apart.y === 0
-          ? set({ showOrigin: true })
-          : seq(
-              tween(
-                GLIDE,
-                { apart: { x: 0, y: 0 } },
-                {
-                  interpolate: (from, _to, t) => ({
-                    apart: { x: from.apart.x * (1 - t), y: from.apart.y * (1 - t) },
-                  }),
-                },
-              ),
-              set({ apart: { x: 0, y: 0 }, showOrigin: true }, raise(planeSignals.crossed)),
-            ),
-    }),
-    showPoint: act({
-      describe: "Show the next of a figure's points, or the one named (the learner's Next)",
-      byLearner: true,
-      args: z.object({ name: z.string().min(1).max(7).optional() }).strict(),
-      changes: ["points"],
-      run: (s, { name }) => {
-        const at =
-          name === undefined
-            ? s.points.findIndex((p) => !p.isShown)
-            : s.points.findIndex((p) => p.name === name);
-        if (at === -1) return set({});
-        return set({ points: s.points.map((p, i) => (i === at ? { ...p, isShown: true } : p)) });
-      },
-    }),
-    raiseUpLine: act({
-      describe:
-        "Raise a line from a whole number on the horizontal line: it grows upward, its places appearing on it as it grows (timed)",
-      args: z.object({ at: z.number().int() }).strict(),
-      changes: ["upLines", "rising"],
-      run: (s, { at }) =>
-        s.upLines === null || s.upLines.includes(at)
-          ? set({})
-          : seq(...riseSteps(s.upLines, [at], RISE)),
-    }),
-    numberLine: act({
-      describe:
-        "Number one line: its marks and numbers appear (a page's edge becomes a ruler once a distance along it is given)",
-      args: z.object({ axis: z.enum(["x", "y"]) }).strict(),
-      changes: ["numbered"],
-      run: (s, { axis }) =>
-        s.numbered.includes(axis) ? set({}) : set({ numbered: [...s.numbered, axis] }),
-    }),
-    raiseAllUpLines: act({
-      describe: "Raise every line not risen yet, one after another, left to right (timed)",
-      args: none,
-      changes: ["upLines", "rising"],
-      run: (s) => {
-        if (s.upLines === null) return set({});
-        const risen = s.upLines;
-        const rest = marksUp(s).filter((x) => !risen.includes(x));
-        return rest.length === 0
-          ? set({})
-          : seq(...riseSteps(risen, rest, RISE_EACH), set({ upLines: null }));
-      },
-    }),
-    setScale: act({
-      describe: "A number every this many units, the window grown to match",
-      args: z.object({ every: z.number().positive() }).strict(),
-      changes: ["tickEvery", "window"],
-      run: (s, { every }) =>
-        every === s.tickEvery
-          ? set({})
-          : set({ tickEvery: every, window: scaledWindow(s.window, s.tickEvery, every) }),
-    }),
-    tapNumber: act({
-      describe:
-        "Tap a number on a counted line (when its numbers are buttons): what it does is the places' (the learner's tap)",
-      byLearner: true,
-      args: lineSchema,
-      changes: [],
-      run: (s, line) =>
-        set({}, ...(s.canTapNumbers ? [raise(planeSignals.numberTapped, line)] : [])),
-    }),
-    showAllPoints: act({
-      describe: "Show every point the figure names",
-      args: none,
-      changes: ["points"],
-      run: (s) => set({ points: s.points.map((p) => ({ ...p, isShown: true })) }),
-    }),
-  },
-  signals: planeSignals,
-  derived: {
-    isCrossed: {
-      describe: "The two number lines cross at their zeroes",
-      compute: (s) => s.apart.x === 0 && s.apart.y === 0,
-    },
-  },
-  invariant: (s) => {
-    const w = s.window;
-    if (w.xMin >= w.xMax || w.yMin >= w.yMax)
-      return "the window must have xMin < xMax and yMin < yMax";
-    if (w.xMax - w.xMin > MAX_SPAN || w.yMax - w.yMin > MAX_SPAN)
-      return `the window is at most ${MAX_SPAN} units across and up`;
-    if (s.marks === Marks.Counts && (w.xMin < 0 || w.yMin < 0))
-      return "counts start from 1 at the corner: the window can't go below 0";
-    return undefined;
-  },
-});
+/** What a part on its own reads of the plane: its start, nothing else drawn on it. */
+const planeDefaults: PlaneCore = { ...planeStart, isAlone: true, canTapNumbers: false, lit: null };
 
 /**
  * Some of the plane's fields, for a part that draws or decides by them (where the edge is, which
@@ -482,6 +275,6 @@ export function fromPlane<const K extends keyof PlaneCore>(...keys: K[]) {
     fields: Object.fromEntries(keys.map((k) => [k, planeFields[k]])) as {
       [P in K]: (typeof planeFields)[P];
     },
-    defaults: Object.fromEntries(keys.map((k) => [k, plane.defaults[k]])) as Pick<PlaneCore, K>,
+    defaults: Object.fromEntries(keys.map((k) => [k, planeDefaults[k]])) as Pick<PlaneCore, K>,
   };
 }

@@ -203,37 +203,9 @@ export type GroupSpec<
   role: PropRole;
 };
 
-/**
- * Where a child draws around a frame's picture. A child may draw in several (a walker: herself on
- * the lines, where she is in words below, her buttons): above the picture, inside it (back, on the
- * lines, front), below it, and among the controls.
- */
-export const Place = {
-  Above: "above",
-  Back: "back",
-  On: "on",
-  Front: "front",
-  Below: "below",
-  Controls: "controls",
-} as const;
-export type Place = (typeof Place)[keyof typeof Place];
-/** The places inside the picture, back to front. */
-export const IN_PICTURE: readonly Place[] = [Place.Back, Place.On, Place.Front];
-
-export type GroupLayoutSpec<N extends string = string> =
-  | { kind: "column" | "row"; children: readonly N[] }
-  | {
-      kind: "frame";
-      provider: N;
-      children: readonly N[];
-      backdrop?: N;
-      below?: readonly N[];
-      /**
-       * Who draws first in each place, when it isn't the provider, then `children`, then `below`
-       * (`{ front: ["plotting", "clues"] }`): each list names every child drawing there.
-       */
-      order?: { readonly [P in Place]?: readonly N[] };
-    };
+export { IN_PICTURE, Place, type GroupLayoutSpec } from "./next/layout";
+import { type GroupLayoutSpec, shownOf, withShown } from "./next/layout";
+export { withShown, shownOf };
 
 /** The fields bound into a child: `true` for a leaf's field (or a child group's own field), nested for a grandchild. */
 export type BoundTree = { readonly [name: string]: true | BoundTree };
@@ -413,17 +385,6 @@ const internalsOf = (def: AnyPropDef): GroupInternals | undefined =>
 /** The stored facts a group's view was made from (and what its parent bound into it). */
 const STORED = Symbol("stored");
 const INJECTED = Symbol("injected");
-const SHOWN = Symbol("shown");
-
-/** Which children of a group are there right now, from its view (all, when it isn't a group's). */
-/** Notes on a view which children are drawn now (the event model's readers, as groups' views do). */
-export function withShown(view: object, shown: Readonly<Record<string, boolean>>): void {
-  Object.defineProperty(view, SHOWN, { value: shown });
-}
-
-export function shownOf(view: PropView): Readonly<Record<string, boolean>> | undefined {
-  return (view as Record<symbol, Record<string, boolean>>)[SHOWN];
-}
 
 /** The top-level fields that changed (unchanged slices keep their identity). */
 const diff = (before: StoredState, after: StoredState): Record<string, unknown> =>
@@ -849,7 +810,7 @@ export function defineGroup<
       shown[name] = out[name] !== null && (spec.show?.[name]?.(out) ?? true);
     Object.defineProperty(out, STORED, { value: stored });
     Object.defineProperty(out, INJECTED, { value: injected });
-    Object.defineProperty(out, SHOWN, { value: shown });
+    withShown(out, shown);
     const reading: Reading = { view: out, inputs };
     if (injected === undefined) top.set(stored, reading);
     return reading;

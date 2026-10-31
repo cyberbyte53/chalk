@@ -12,10 +12,8 @@ type Point = { x: number; y: number };
  * Any prop's action that takes a point, or one of its coordinates: what a drag runs as it moves
  * and on let-go. Checked by what its arguments accept, whatever the prop's state.
  */
-type PointAction = {
-  readonly describe: string;
-  readonly args: ZodType<{ x?: number; y?: number }, ZodTypeDef, unknown>;
-};
+/** An action a drag does: one carrying where it is now (x, y, or both). */
+type PointAction = { readonly payload: ZodType<unknown, ZodTypeDef, unknown> };
 
 /**
  * A drag: the player wires the pointer (against the frame's transform as it was when the drag
