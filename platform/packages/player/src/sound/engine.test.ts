@@ -3,14 +3,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 // The engine against a stand-in for the browser's Web Audio: what it starts and stops, what it
 // fetches and decodes. A page starts unable to sound, as a browser's does, until its first touch.
 
-type Source = {
-  url: string;
-  loop: boolean;
-  onended: (() => void) | null;
-  isStopped: boolean;
-  /** When it was told to start, on the audio clock. */
-  at: number;
-};
+type Source = { url: string; loop: boolean; onended: (() => void) | null; isStopped: boolean };
 const started: Source[] = [];
 /** The channels' volumes, in the order the engine makes them (the voice's first, here). */
 const channelGains: { gain: { value: number } }[] = [];
@@ -46,14 +39,12 @@ class FakeAudioContext {
   createBufferSource() {
     const source: Source & Record<string, unknown> = {
       url: "",
-      at: 0,
       loop: false,
       onended: null,
       isStopped: false,
       buffer: null as { url: string } | null,
       connect: () => undefined,
-      start(at = 0) {
-        source.at = at;
+      start() {
         source.url = (source.buffer as { url: string }).url;
         started.push(source);
       },
@@ -64,9 +55,9 @@ class FakeAudioContext {
     };
     return source;
   }
-  decodeAudioData(bytes: ArrayBuffer): Promise<{ url: string; duration: number }> {
+  decodeAudioData(bytes: ArrayBuffer): Promise<{ url: string }> {
     decoded++;
-    return Promise.resolve({ url: new TextDecoder().decode(bytes), duration: 0.3 });
+    return Promise.resolve({ url: new TextDecoder().decode(bytes) });
   }
 }
 
@@ -171,18 +162,8 @@ describe("the sound engine", () => {
     expect(volume("voice")).toBe(1);
   });
 
-  it("words wait for a moment's sound: the voice starts when the sound ends", async () => {
-    engine.playSound({ name: "wrong", url: "/wrong.mp3" });
-    const note = engine.playClip("/note.m4a", "voice");
-    await settle();
-    await settle();
-    const at = Object.fromEntries(started.map((s) => [s.url, s.at]));
-    expect(at["/note.m4a"]).toBe((at["/wrong.mp3"] ?? 0) + 0.3);
-    note.stop();
-  });
-
   it("a lasting sound loops until its cue stops it", async () => {
-    const stop = engine.playSound({ name: "rain", url: "/rain.mp3" }, true);
+    const { stop } = engine.playSound({ name: "rain", url: "/rain.mp3" }, true);
     await settle();
     expect(started.map((s) => [s.url, s.loop, s.isStopped])).toEqual([["/rain.mp3", true, false]]);
     stop();

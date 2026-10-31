@@ -49,7 +49,7 @@ const MARGIN = 2;
 /**
  * Says a board's lines, one at a time, from the first source that can (platform/docs/sound.md):
  * its clips glued one after another (every phrase voiced with its chapter); else the phone's own
- * voice; else quiet, for as long as the words take. Failures never block the lesson: the line is
+ * voice; else nothing (its words are on screen). Failures never block the lesson: the line is
  * marked, reported, and the board carries on. (A voice server, for words known only as they are
  * played, would be one more source here, when there is one.)
  */
@@ -191,8 +191,7 @@ export function useVoice(
         onFailure({ name: line.name }, "a clip failed to play");
       }
       const rest = phrases.slice(from).join(" ");
-      // 2. The phone's own voice. 3. Quiet, for as long as the words would take: whatever couldn't
-      // be heard still takes its time.
+      // 2. The phone's own voice. Else nothing can say it: the line is over, its words on screen.
       if (!isMine()) return;
       if (canSpeak() && (await whenAllowed(() => playPhone(rest))) === "heard") return;
       // Nothing could say it (no clip, no phone voice): the line is over, its words on screen.

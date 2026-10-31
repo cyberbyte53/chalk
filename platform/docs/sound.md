@@ -14,9 +14,9 @@ Status: **built (2026-10-31).** What is left is under "Not done yet". Words and 
 | **Until** | for a sound that lasts: the moment it stops (its clip loops, seamlessly, till then) | rain `until: "scene.hidden"`; the bus's hum until it arrives |
 | **About** | the piece it concerns: it glows while heard | the question `side` |
 
-Words take a turn and sounds play alongside, unless the cue says otherwise. Without `until` a cue plays once.
+**How a cue plays is chosen by what it does, not by what it is:** **in turn** when it says something (words; right, wrong, a win), **alongside** when it is the sound of something happening (a step, a line rising, rain), which must come the moment it is seen. Words default to in turn, sounds to alongside; a cue says otherwise with `inTurn`. Without `until` a cue plays once.
 
-**Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum). A repeat of the same sound replaces itself, so fast taps don't pile up. **Words wait for a moment's sound:** words starting while a short sound plays begin when it ends (a wrong answer's buzz, then its note), timed by the engine on the audio clock; a lasting sound never delays words.
+**Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum). A repeat of the same sound replaces itself, so fast taps don't pile up. **A sound in turn holds the voice:** words that come while it plays wait for it, then a breath (a wrong answer's buzz, then its note; a win's fanfare, then "Well done!"). It plays at once (it comes from the student's own action, which interrupts the board anyway); a lasting sound can't be in turn. Today sounds can take a turn; words alongside (two people at once) wait until a lesson needs them.
 
 **Words are said as written.** A lesson's words are never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it). Jugnu's words are his own: what is reviewed for him is his rules.
 
@@ -71,13 +71,13 @@ The sound system asks one thing of a voice: **a clip for these words, in this sp
 
 One engine plays every cue, on every screen (a phone, the preview, the editor's panel): what is reviewed is what a student hears.
 
-- **Finds its clip:** for words, the store; else glued pieces; else **the speaker's voice, on the go** (a voice server: our hosted Piper, or an AI voice); else the phone's own voice; else quiet for as long as the words would take. For a sound, its chosen clip (a missing one plays nothing: the build catches it).
+- **Finds its clip:** for words, the store; else glued pieces; else **the speaker's voice, on the go** (a voice server: our hosted Piper, or an AI voice); else the phone's own voice; else nothing (its words are on screen). For a sound, its chosen clip (a missing one plays nothing: the build catches it).
 - **Two channels,** by what is played: **words are the voice; sounds are sounds**, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
 - **The browser's first-touch rule,** once: a sound refused before the page is touched waits and plays on the first touch.
 - **Reports** to the board when a cue started, ended or was cut; the board never knows lengths or sources.
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
 - **Logs** everything heard, in order (what `play` and `look` show).
-- **Muted is only the volume:** nothing else knows. Tools, checks, tests and a board that is one of several on a review screen are **silent** instead (`isSilent`): nothing plays, and each line keeps its length on the board's clock, so they can run faster than real time.
+- **Muted is only the volume:** nothing else knows. Tools, checks, tests and a board that is one of several on a review screen are **silent** instead (`isSilent`): nothing plays, and each line keeps its clips' length on the board's clock (none without clips), so they can run faster than real time. The phone's own voice can't be turned down mid-sentence: muted, a line it is reading finishes aloud (it is only the fallback when a clip is missing).
 
 ## Settings
 

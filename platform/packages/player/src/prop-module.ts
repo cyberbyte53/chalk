@@ -46,6 +46,8 @@ export type SoundView = {
   cues?: Readonly<
     Record<string, Sound | ((told: Readonly<Record<string, unknown>>) => Sound | undefined)>
   >;
+  /** The signals among its cues whose sound takes a turn (right, wrong): words wait for it. */
+  inTurn?: readonly string[];
 };
 
 /** A prop as the player knows it: the definition, how it looks, and how it sounds. */

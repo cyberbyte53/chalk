@@ -44,6 +44,11 @@ export type SoundCue = Moment & {
   readonly sound: Sound | null;
   /** A sound that lasts: the moment it stops. */
   readonly until?: string;
+  /**
+   * It takes a turn (a sound that says something: right, wrong): words that come while it plays
+   * wait for it, then a breath. Else it plays alongside, over anything (a step, rain).
+   */
+  readonly inTurn?: boolean;
 };
 
 const isSound = (what: unknown): what is Sound =>

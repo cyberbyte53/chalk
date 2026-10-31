@@ -15,4 +15,6 @@ export const coordinatePlaneSound: SoundView = {
     "dice.counterMoved": step,
     "dice.won": win,
   },
+  // A win is said: the words after it wait for it. The rest is the sound of things moving.
+  inTurn: ["dice.won"],
 };

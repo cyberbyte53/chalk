@@ -358,6 +358,48 @@ describe("a scene, built and checked like any board", () => {
     expect(said).toEqual(["title", "ask"]);
   });
 
+  it("a sound in turn holds the voice: the words after it wait for it, then a breath", async () => {
+    // The question's own wrong takes a turn; its option's note is said after it.
+    const board = scene({
+      pieces: { ask },
+      cues: { note: cue(t("Not that one.", "वह नहीं।"), { when: "ask.checked" }) },
+    }).build("held");
+    const said: string[] = [];
+    let buzzEnds = (): void => undefined;
+    const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+      locale: "en",
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async (line) => void said.push(line.name),
+      playSound: (sound) => ({
+        done: new Promise<void>((resolve) => {
+          said.push(`(${sound.name})`);
+          buzzEnds = resolve;
+        }),
+        stop: () => undefined,
+      }),
+      isHeard: true,
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    runtime.start();
+    runtime.settle(5, true);
+    said.length = 0;
+    await runtime.call("ask", "select", { option: "house" }, Actor.Learner);
+    await runtime.call("ask", "check", {}, Actor.Learner);
+    runtime.settle(5, true);
+    // The buzz plays; the note waits, however long the board runs, until the buzz is over.
+    expect(said).toEqual(["(wrong)"]);
+    buzzEnds();
+    await Promise.resolve();
+    await Promise.resolve();
+    runtime.settle(0.5, true);
+    expect(said).toEqual(["(wrong)"]);
+    runtime.settle(1, true);
+    expect(said).toEqual(["(wrong)", "note"]);
+  });
+
   it("plays sound cues at signals: a prop's own, and the lesson's (replacing, silencing, lasting)", async () => {
     const walking = (cues?: Record<string, Cue>) =>
       scene({
@@ -379,7 +421,7 @@ describe("a scene, built and checked like any board", () => {
         speak: async () => undefined,
         playSound: (e) => {
           played.push(e.name);
-          return () => void stopped.push(e.name);
+          return { done: Promise.resolve(), stop: () => void stopped.push(e.name) };
         },
         onError: (message) => {
           throw new Error(message);

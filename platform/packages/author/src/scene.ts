@@ -1,4 +1,5 @@
 import {
+  BREATH,
   LOCALES,
   type Localized,
   type Piece,
@@ -272,7 +273,6 @@ const SCENE = Symbol("scene");
 /** How the board's own events are written: `board.said`. */
 const BOARD_EVENTS = "board";
 /** Seconds of quiet between one line and the next, as a reader takes a breath between paragraphs. */
-const BETWEEN_LINES = 0.7;
 /** A scene, ready to be built as a board (by `page` or a family). */
 export type Scene = { readonly [SCENE]: true; readonly build: (name: string) => BuiltBoard };
 
@@ -332,6 +332,10 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       if ((given as Record<string, unknown>)[key] !== undefined)
         throw new Error(`Board ${name}, cue ${named}: a sound has no ${key}`);
     const sound = given.sound;
+    if (given.inTurn === true && given.until !== undefined)
+      throw new Error(
+        `Board ${name}, cue ${named}: a lasting sound can't take a turn (it would hold the voice till ${given.until})`,
+      );
     if (given.until === given.when && given.when !== undefined)
       throw new Error(`Board ${name}, cue ${named}: it can't last until the moment it starts`);
     if (given.when === undefined)
@@ -357,6 +361,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       when: given.when,
       ...(given.where === undefined ? {} : { where: given.where }),
       ...(given.until === undefined ? {} : { until: given.until }),
+      ...(given.inTurn === true ? { inTurn: true as const } : {}),
     };
   }
   // A piece's line is said as it appears: no moment's values to fill blanks with.
@@ -441,7 +446,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   const sayAfterBreath = (t: T, { line, step, values }: Queued): Out =>
     t.say(line, {
       atEnd: [t.self.lineEnded({ line, step })],
-      after: BETWEEN_LINES,
+      after: BREATH,
       ...(values === undefined ? {} : { values }),
     });
 

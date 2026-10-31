@@ -1,6 +1,7 @@
 import {
   AGENT_LOCALE,
   Actor,
+  BREATH,
   type Board,
   type Heard,
   type HeardWords,
@@ -26,22 +27,16 @@ import {
   segment,
   shownOf,
 } from "@chalk/prop";
-import {
-  type AnyProp,
-  Board as Core,
-  type LineCall,
-  estimatedSeconds,
-  timedVoice,
-} from "@chalk/prop/next";
+import { type AnyProp, Board as Core, type LineCall, timedVoice } from "@chalk/prop/next";
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
 import { findNode } from "./part-paths";
 import type { PropModule } from "./prop-module";
-import { plainText } from "./rich-text";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
 import { aboutOf, ownLine } from "./script";
 import { takes } from "./snapshot";
+import type { SoundPlaying } from "./sound/engine";
 import { linePhrases } from "./sound/spoken-line";
 import type { WordsToSay } from "./sound/voice";
 
@@ -78,10 +73,10 @@ export class SceneRuntime {
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
       /** Plays a sound alongside (sound/engine.ts): at once, never waited for; returns how to stop it. */
-      playSound?: (sound: Sound, lasts?: boolean) => () => void;
+      playSound?: (sound: Sound, lasts?: boolean) => SoundPlaying;
       /**
        * A line is over when its sound is (`speak` resolves): a student's board, at real speed. Else
-       * it lasts as long as its clips, or its words would take, on the board's clock (a check, a
+       * it lasts as long as its clips, on the board's clock (a check, a
        * test, a tool's faster clock).
        */
       isHeard?: boolean;
@@ -140,23 +135,43 @@ export class SceneRuntime {
             hearing = undefined;
             services.hush?.();
           };
-          if (services.isHeard === true)
-            return {
-              say: (call, hear) => {
-                const begun = begin(call);
-                if (begun === undefined) return hear("ended");
-                const { heard } = begun;
-                hearing = heard;
-                hear("started");
-                void services.speak(begun.line).finally(() => {
-                  if (hearing !== heard) return;
-                  hearing = undefined;
-                  heard.seconds = core.now - heard.at;
-                  hear("ended");
-                });
-              },
-              stop,
+          if (services.isHeard === true) {
+            const say = (call: LineCall, hear: (what: "started" | "ended") => void): void => {
+              // An in-turn sound holds the voice: the line waits for it, then a breath.
+              const held = this.holding;
+              if (held !== undefined) {
+                const mine = ++this.waiting;
+                void held.done.then(() =>
+                  core.after(BREATH, () => {
+                    if (mine === this.waiting && !this.isDisposed) say(call, hear);
+                  }),
+                );
+                return;
+              }
+              const begun = begin(call);
+              if (begun === undefined) {
+                hear("ended");
+                return;
+              }
+              const { heard } = begun;
+              hearing = heard;
+              hear("started");
+              void services.speak(begun.line).finally(() => {
+                if (hearing !== heard) return;
+                hearing = undefined;
+                heard.seconds = core.now - heard.at;
+                hear("ended");
+              });
             };
+            return {
+              say,
+              // A line waiting for an in-turn sound is cut too: it never starts.
+              stop: () => {
+                this.waiting++;
+                stop();
+              },
+            };
+          }
           const timed = timedVoice(core, (call) => {
             const begun = begin(call);
             if (begun === undefined) return undefined;
@@ -223,9 +238,9 @@ export class SceneRuntime {
     told: Readonly<Record<string, unknown>>,
   ): void {
     const at = [piece === "" ? "board" : piece, ...inside, signal].join(".");
-    for (const [name, stop] of this.lasting)
+    for (const [name, playing] of this.lasting)
       if (this.board.model?.sounds?.[name]?.until === at) {
-        stop();
+        playing.stop();
         this.lasting.delete(name);
       }
     const cues = Object.entries(this.board.model?.sounds ?? {}).filter(
@@ -237,26 +252,50 @@ export class SceneRuntime {
         ? undefined
         : this.lookup(type)?.sound?.cues?.[[...inside, signal].join(".")];
     const ownSound = typeof own === "function" ? own(told) : own;
-    const playing: [string | undefined, Sound, boolean][] =
+    const isOwnInTurn =
+      type !== undefined &&
+      this.lookup(type)?.sound?.inTurn?.includes([...inside, signal].join(".")) === true;
+    const playing: { name?: string; sound: Sound; lasts: boolean; inTurn: boolean }[] =
       cues.length > 0
         ? cues.flatMap(([name, cue]) =>
-            cue.sound === null ? [] : [[name, cue.sound, cue.until !== undefined] as const],
+            cue.sound === null
+              ? []
+              : [
+                  {
+                    name,
+                    sound: cue.sound,
+                    lasts: cue.until !== undefined,
+                    inTurn: cue.inTurn === true,
+                  },
+                ],
           )
         : ownSound === undefined
           ? []
-          : [[undefined, ownSound, false]];
-    for (const [name, sound, lasts] of playing) {
+          : [{ sound: ownSound, lasts: false, inTurn: isOwnInTurn }];
+    for (const { name, sound, lasts, inTurn } of playing) {
       this.log.push({ sound: sound.name, signal: at, at: this.core.now });
-      const stop = this.services.playSound?.(sound, lasts);
-      if (lasts && name !== undefined && stop !== undefined) {
-        this.lasting.get(name)?.();
-        this.lasting.set(name, stop);
+      const played = this.services.playSound?.(sound, lasts);
+      if (played === undefined) continue;
+      if (lasts && name !== undefined) {
+        this.lasting.get(name)?.stop();
+        this.lasting.set(name, played);
+      }
+      if (inTurn) {
+        // It holds the voice until it is over.
+        this.holding = played;
+        void played.done.then(() => {
+          if (this.holding === played) this.holding = undefined;
+        });
       }
     }
   }
 
-  /** The lasting sounds playing, by cue: how to stop each. */
-  private readonly lasting = new Map<string, () => void>();
+  /** The lasting sounds playing, by cue. */
+  private readonly lasting = new Map<string, SoundPlaying>();
+  /** The in-turn sound playing, if one is: it holds the voice until it is over. */
+  private holding: SoundPlaying | undefined;
+  /** Counts lines waiting for an in-turn sound: a stop drops those waiting. */
+  private waiting = 0;
 
   /** A line's words: the lesson's own for it, else what its piece says of itself, as it is now. */
   private lineWords(name: string): Localized | undefined {
@@ -490,8 +529,9 @@ export class SceneRuntime {
   dispose(): void {
     this.isDisposed = true;
     // A board's sounds all end with it.
-    for (const stop of this.lasting.values()) stop();
+    for (const playing of this.lasting.values()) playing.stop();
     this.lasting.clear();
+    this.holding?.stop();
     this.stopFrames?.();
     this.signalListeners.clear();
     this.actionListeners.clear();

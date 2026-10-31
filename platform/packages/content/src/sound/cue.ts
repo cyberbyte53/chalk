@@ -21,9 +21,16 @@ export type SceneWords = {
   readonly about?: string;
 };
 
-/** A sound cue: a sound (null: silence) at a moment; with `until`, it lasts (looping) till then. */
+/** The breath between two things said in turn (two lines; an in-turn sound and the words after it). */
+export const BREATH = 0.7;
+
+/**
+ * A sound cue: a sound (null: silence) at a moment; with `until`, it lasts (looping) till then.
+ * In turn, it holds the voice: words that come while it plays wait for it, then a breath.
+ */
 export type SceneSound = {
   readonly sound: Sound | null;
+  readonly inTurn?: true;
   readonly when: string;
   readonly where?: Readonly<Record<string, unknown>>;
   readonly until?: string;

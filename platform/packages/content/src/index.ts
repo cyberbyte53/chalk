@@ -9,6 +9,7 @@ export {
   soundListSchema,
 } from "./sound/clips";
 export {
+  BREATH,
   type Heard,
   type HeardSound,
   type HeardWords,
