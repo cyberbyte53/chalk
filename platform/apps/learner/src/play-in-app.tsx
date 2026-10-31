@@ -9,7 +9,7 @@ import { ChapterGate } from "./chapter-gate";
 import type { ChapterContent } from "./content-store";
 import type { Course, CourseChapter } from "./course";
 import { ChapterScreen, currentConcept } from "./course-screens";
-import { toggleParam } from "./editor-link";
+import { toggleMuted, toggleParam } from "./editor-link";
 import { jugnuLink } from "./jugnu";
 import { courses, plans } from "./lessons";
 import { ChapterDoneScreen, ResultScreen } from "./practice-screens";
@@ -93,9 +93,10 @@ export function PlayInApp({
     const onKey = (e: KeyboardEvent) => {
       if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
       if ((e.target as HTMLElement).closest("input, textarea, select") !== null) return;
-      // The preview's own keys: p leaves play (at this board), l switches the language.
+      // The preview's own keys: p leaves play (at this board), l switches the language, m mutes.
       if (e.key === "p") return toggleParam("play");
       if (e.key === "l") return toggleParam("locale");
+      if (e.key === "m") return toggleMuted();
       const by = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
       const at = here.current;
       if (by === 0 || at === undefined) return;

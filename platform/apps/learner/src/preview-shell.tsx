@@ -44,6 +44,7 @@ import {
   isInEditor,
   sendKeys,
   toEditor,
+  toggleMuted,
   toggleParam,
 } from "./editor-link";
 import { courses } from "./lessons";
@@ -1360,7 +1361,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     if (query !== window.location.search) history.replaceState(null, "", query);
   }, [isOne, index, shown]);
   useEffect(() => {
-    // s: one by one · → / j next · ← / k previous · c: pick a piece · p: play · l: language ·
+    // s: one by one · → / j next · ← / k previous · c: pick a piece · p: play · l: language · m: mute ·
     // + / −: zoom · Esc: leave · ?: these keys.
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -1397,6 +1398,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       else if (e.key === "f") window.location.search = "?dev&activity";
       else if (e.key === "p") toggleParam("play");
       else if (e.key === "l") toggleParam("locale");
+      else if (e.key === "m") toggleMuted();
       else if (e.key === "v") toggleParam("script");
       else if (e.key === "+" || e.key === "=") setZoom((z) => Math.min(2, z + 0.1));
       else if (e.key === "-") setZoom((z) => Math.max(0.5, z - 0.1));
@@ -1541,8 +1543,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
           <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play as
-          the app · <b>l</b> language (English, Hindi) · <b>v</b> script beside the board (what it
-          can say) · <b>f</b> activity · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
+          the app · <b>l</b> language (English, Hindi) · <b>m</b> mute (or unmute) everything heard
+          · <b>v</b> script beside the board (what it can say) · <b>f</b> activity · <b>+ −</b> zoom
+          · <b>Esc</b> leave · <b>?</b> keys
         </div>
       )}
       <BoardSpeedContext.Provider value={speed}>

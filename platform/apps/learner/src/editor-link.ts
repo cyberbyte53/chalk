@@ -1,3 +1,5 @@
+import { isMuted, setMuted } from "@chalk/player";
+
 /**
  * Messages to and from an editor that shows this page in a panel (platform/editor): the page sits
  * in an iframe inside the editor's webview.
@@ -53,6 +55,13 @@ export function toggleParam(name: "play" | "locale" | "script"): void {
   } else if (params.get("locale") === "hi") params.delete("locale");
   else params.set("locale", "hi");
   window.location.search = params.toString().replace(/=(&|$)/g, "$1");
+}
+
+/** Mutes everything heard (the voice and sounds, as the board's ☰ menu would), or unmutes it. */
+export function toggleMuted(): void {
+  const isOn = !(isMuted.voice.peek() && isMuted.sounds.peek());
+  setMuted("voice", isOn);
+  setMuted("sounds", isOn);
 }
 
 type Field = HTMLTextAreaElement | HTMLInputElement;
