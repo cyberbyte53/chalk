@@ -1,127 +1,101 @@
 # Sound
 
-Status: **agreed in conversation (2026-10-31).** Replaces the clip-centred plan of 2026-10-30. Steps 1 and 2 of that plan are built (lines on the board, moments as events, the script beside the board); what changes is said under "From today's code".
+Status: **design agreed in conversation (2026-10-31); the code moves to it next.** What is built today and what changes is under "From today's code". Voice and effects are one system here, not two.
 
-## Why
+## The idea
 
-A board is understood through two senses. Props are drawn for the eyes; sound is the second channel: the narrator explaining, Aman answering, the walker's footstep, Jugnu helping. Anything on a board can be heard, and what is said needn't be what is shown.
+**Everything heard is a cue: when a moment comes, play something.**
 
-## One system, every screen
-
-A student's phone, the preview and the editor's panel are screens onto one system: what is heard in review is what a student hears. So no screen sets sound up: **the player finds a board's sound itself**, from the board's address (`player/board-sound.ts`), and every screen plays boards through it. The only differences are a person's choices (the menu's switches) and what a screen is: a tool's board keeps time without sound (`timed`); of several boards on one review screen, only the one looked at speaks (a device never shows two).
-
-- **The same sources everywhere:** the chapter's clips (`/voice/<book>/<chapter>/`, shipped with the app), then the phone's voice. A live voice is used only where the shipped app has one too (none yet: the studio's `/dev-voice` waits for a server), so review never sounds better than a phone.
-- **The browser's rule, on every screen:** a page can't sound until it has been touched. A sound refused for that waits, silently, and plays on the first touch anywhere: the line isn't lost (a student who refreshes mid-lesson). Where sound is allowed (a lesson opened by a tap, the editor's panel), nothing waits.
-- **Hear again** (the ☰ menu): the screen as it is now is read again from the top, pieces shown since included, as the opening is read.
-
-## Three parts that know nothing of each other's insides
-
-| Part | Knows | Never knows |
+| Part | What it says | Example |
 |---|---|---|
-| **The board** (props, the scene) | what happens (events), which line is said when | how a line becomes sound, or how long it is |
-| **The voice** (player) | how to make a line heard, from any source | why the line is said, what the board does next |
-| **The lesson** | what is heard at which moment, by whom, in what words | either part's insides |
+| **When** | a moment: an event on the board, and maybe its data | `line.walker.stepped`; `ask.checked` where `status` is `wrong` |
+| **What** | **words**, said by a speaker (their voice makes a clip), or **a file** (a recorded sound) | "The bus is at minus 2. Where is it?"; `step` |
+| **How** | **takes a turn** (one at a time, by the two rules) or **plays alongside** (at once, over anything) | words take a turn; a step plays alongside |
+| **About** | the piece it concerns: it glows while heard | the question `side` |
 
-Sight and sound are separate systems that react to the same events. One tap is one step: the bus moves and its line is heard in that same step, so they can't drift apart. Sound comes later than the picture only when a line waits its turn, and what the student did never waits (rule 2).
+Words take a turn and files play alongside, unless the cue says otherwise. Nothing is said that a person didn't write: words are a lesson's, never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it).
 
-## The board and the voice: the only things that cross
+### The two rules (cues that take a turn)
 
-| Board → voice | Voice → board |
-|---|---|
-| **say** (line, words, speaker) | **started** |
-| **stop** | **ended** |
-| | **cut** |
+1. **The board talks in turn.** One at a time, in the order they come; the opening is read top to bottom when nothing else is due.
+2. **When the student acts, the board stops and responds.** The cue being said is cut, the ones waiting are dropped, and what the action brings is said. "The action" includes what it set going (a walk's steps, the dice landing).
 
-The board never asks how long a line is: it waits for **ended** (or **cut**), like any other event. The voice says a line from the first source that can, in order:
+A cue is done when heard or cut: whatever waits on it always happens.
 
-1. **clips, glued:** a line is said as phrases (its fixed words, and each value's pieces), and every phrase has a clip made at build (`pnpm voice`): a fixed line is one clip; "Stop {x}." is "Stop", then "minus", then "2". Nothing is stored per state: a template's own words, and each voice's number pieces (0 to 100, minus, point), shared by every line it says;
-2. **live:** any words, in the speaker's voice, made when first needed and kept (by voice and words, as every clip). In development the studio serves it (`/dev-voice`, the same cast and Piper as `pnpm voice`); a server later answers the same way;
-3. **the phone's own voice:** always there, offline too;
-4. **quiet:** nothing heard, for as long as the words would take (muted, or a phone with no voice).
+### Who writes cues
 
-Any other source (an AI voice agent) is one more in the list. On a student's board a line is over when its sound is: the board waits for it, whatever its length, and every source says whether it was heard, so what couldn't be heard falls through to quiet (the pacing holds when nothing can play: autoplay blocked, no Hindi voice). Each sound is bounded by its own length and a margin; a live voice has a few seconds to make a line. A tool's board (its URL says `timed`), a check and a test never wait for sound; two voices keep time instead:
-- muted: nothing heard, **ended** after the time the words would take, so the board's pacing is the same;
-- a test voice (the build, `play`): **ended** after an estimate, on the jumping clock.
+- **A prop, for its own events**, in its sound view beside its drawing: a text says its words when shown; the walker plays a step when it steps; a question plays right or wrong when checked. Every board using the prop has them.
+- **A lesson, for its board:** adds cues (Riya says "Finally, I'm here!" when she arrives at (4, 5)), changes a prop's, or silences one.
 
-**The voice promises:** every **say** ends in **ended** or **cut**, never stuck: a slow source falls back (to the phone's voice) rather than keep the board waiting. Swapping or mixing sources changes nothing on the board, in lessons or in the rules.
+## The chapter is the unit
 
-## What is heard: lines and effects
+A student entering a chapter downloads that chapter: its lessons, its props' code, its clips. Once downloaded, it plays.
 
-**A line** has a name (its address: `board#finally`, or `board#fiveHouses/said` for a piece's), a speaker (a character of the cast; the narrator when none is named), its words, what it is about (it glows while heard), and its moment: an event (`when`), with the values it must carry (`where`). The board's own events are moments too: `board.started`, `board.said · line title`, `board.shown · name hint`, `board.passed`.
+| Level | Holds | Ships |
+|---|---|---|
+| **App** | the engine; the app's own sounds (right, wrong, tap…) | with the app |
+| **Library** | shared sounds props use (step, rise…) | with the props that use them |
+| **Chapter** | the clips for every line its boards say | with the chapter, from `content/<book>/<chapter>/sound/` |
 
-- **Words are a template**, written by a person in every language: "Stop {x}." / "स्टॉप {x}।". A fixed line is a template with no blanks. Each blank is a number its moment carries (`when`; the build checks it), filled in when the line comes due: it says what was true at its moment. A piece's line has no moment's values, so no blanks.
-- **Sayers** turn a value into words, from the value's data, never from its shown text: number, point, decimal (and recurring), fraction, power, equation, surd, measure (with its unit), count (with its plural: "1 piece", "3 pieces"). Each is written once per language and lives in the library, beside the props. A factorisation is said from its primes and powers ("2 cubed times 3 squared"), not by reading "2³ × 3²".
-- **A pattern may bring lines** with its rules (`SceneUse.lines`): a choice question says each wrong option's note when that option is checked (`when: ask.checked`, `where: { optionId, status: wrong }`), after its "wrong" sound. A note with maths or a sign gives its spoken words (`feedbackSays`).
-- **Nothing turns shown symbols into words.** A line whose screen words have maths or signs, and no spoken words, stops the build, naming the line (a maths reader may suggest a draft for a person to write in).
+## The pipeline
 
-**An effect** is a named sound at a moment (a footstep on `walker.stepped`). Effects are not lines: they play at once, overlap each other, are never waited for, and are muted on their own. A repeat of the same effect replaces itself.
+```
+ written (in git)                    built with the chapter (in git)              played
+ ──────────────────                  ──────────────────────────────              ─────────────────────
+ lessons and props: cues   ─┐
+ settings: speaker → voice  ├──►  words → phrases → store[voice + words]  ──►  review  ──►  ships  ──►  engine
+ chosen recordings (library)┘     (missing clips made; stale ones caught)
+```
 
-- **Its name** is from a short list (`Effect` in content: step, tap, correct, wrong, rise); the player makes each from a small recipe in the browser (`player/effects.ts`), nothing stored. A recipe can become a recorded file under the same name.
-- **A prop says its own** in its sound view, by its signal inside the piece: the coordinate plane's `walker.stepped` is a step, `plane.risen` a rise; a question's `correct` and `wrong`. Sound views come with a package's definitions, not its drawing: they are needed before any drawing loads.
-- **A lesson adds or replaces** them by signal (`effects: { "line.walker.stepped": "tap", "ask.wrong": null }`); null silences one. The build checks each is at a signal there is, and an effect there is.
-- `play` shows each: `sound · step (line.walker.stepped)`.
-- **A page can sound only once the student has touched it** (the browser's rule): the audio starts on the first touch or key, and effects before it are dropped, never saved up. An effect is a moment.
-- Effects are on scene boards (the event model); today's boards have none, and their questions are silent.
+- **The store** holds clips keyed by **voice and words**, with one readable list beside them (each clip's file, voice, language, words, length). Changing a voice changes the key: its clips are made again.
+- **Building content makes a chapter's missing clips** with the configured voice (Piper), only the new ones. `pnpm check` fails when a clip is missing or stale, naming the line: a lesson never ships silent.
+- **Recordings** (step, chimes) are chosen, not made: picked by ear from options, kept in the library with their source and licence (`library/sounds/`).
 
-## Which line is heard: two rules
+### Words known only when played
 
-1. **The board talks in turn.** One line at a time, in the order they come due: the opening read top to bottom, a line after another, a reply the lesson shows, lines set off by Jugnu's actions.
-2. **When the student acts, the board stops and responds.** The line being said is cut, the lines waiting are dropped, and what the action brings is said, in order. "The action" includes what it set going: each step of a walk a tap started, the dice landing after a throw, each toss after Play.
+Lines with blanks ("Stop {x}") are made from pieces in the store (fixed words, and each value's pieces from a sayer, glued). Any other words could come from a voice server, kept in the store after; none exists yet, and review uses only what the shipped app has too.
 
-An action that brings nothing to say leaves the board talking: rule 2 is about what the student's action *says*. The opening's reads are what the board says when it has nothing else to say: a line due at a moment comes before the next read.
+## The engine
 
-And one fact: **a line is said when it is done, heard or cut.** The board tells `said` either way, so whatever waits on a line always happens (Aman always replies).
+One engine plays every cue, on every screen (a phone, the preview, the editor's panel): what is reviewed is what a student hears.
 
-What follows from these, with nothing more to write:
+- **Finds its clip:** the store; else glued pieces; else the phone's own voice; else quiet for as long as the words would take.
+- **Two channels,** voice and sounds, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
+- **The browser's first-touch rule,** once: a sound refused before the page is touched waits and plays on the first touch.
+- **Reports** to the board when a cue started, ended or was cut; the board never knows lengths or sources.
+- **Logs** everything heard, in order (what `play` and `look` show).
+- **A silent engine** (no sound; a cue ends after its length) is the same engine without speakers: for tools, checks, tests, and a board that is one of several on a review screen.
 
-- **Old news is never said.** What the student causes never waits, so it never goes stale: tap the bus on to −5 and its line at −2 is cut, never heard late.
-- **Feedback** ("Yes!", then the next piece's read) is one action: said in order, cut only by the student's next action.
-- **Precedence** is who caused it, not a level an author sets. What the board says unprompted waits; what the student caused cuts in.
-- **Repeats** (steps, dice, tosses, a drag crossing an axis): each cuts the last; the latest is heard.
+## Settings
 
-A lesson that puts a line on every step of a walk will be cut again and again: the writing guide says to put an effect on each step and the line on arrival.
+Who voices whom and the app's own sounds are settings, with overrides: **app → book → chapter**, the nearest wins, each level saying only what it changes. A cue by a speaker no level defines fails the build. What goes in a book's settings (its characters) grows as books are planned.
 
-## Props announce what is worth hearing
+## Where the code lives
 
-Anything heard is an event: a prop tells the moments a student should hear, and the sound part listens. Most props need a signal or two more: the bus passing each stop, each quadrant named during the sweep, a runner crossing the start line, a point's drag released. A drag says nothing while the finger moves: its value on release, and at most an effect or short line when it crosses a boundary (an axis, a quadrant, a tenth).
+One `sound` home per layer; elsewhere code only connects to it.
 
-## Jugnu is a speaker like any other
-
-`jugnu` is in the cast; his lines arrive while the student talks with him, sentence by sentence, each a line in turn. He speaks because the student asked (rule 2): he cuts in; lines his own actions on the board set off wait behind him; the student acting while he talks cuts him (barge-in, as voice assistants do). The model writes both what he shows and what he says, as a lesson writes `says`, so nothing turns his symbols into words either. His lines can't be reviewed one by one ahead: his rules for how he talks are, and `play` shows what he said.
-
-## Who says it
-
-A character, never a voice. Each book has its cast (characters' voices per language); the narrator and Jugnu are shared. A line naming someone the cast lacks fails the build. Clips are made by the same engine as live speech, so a clip is saved live output: a character sounds the same from every source.
-
-## Review and the build
-
-- **The script**, beside every board while reviewing: every line the board can say, grouped by moment, with its speaker, its words in each language (templates with examples), ▶ to hear it; picked for a comment like any part; pointing at one lights what it is about. `look` at a line's address answers with it; `play` says what each step was heard to say.
-- **The build** makes a clip for every phrase (a fixed line's words; a template's own words; each voice's number pieces); plays every board in every language; checks every blank is a number its moment carries and nothing is left unsaid; and notes lines no run reaches.
-- **Phrases are the unit:** a clip is found by who says it, in which language, and its words (the manifest). Words changed since a clip was made simply find no clip, and the next source says them.
+| Layer | Home | Holds |
+|---|---|---|
+| Contract | `content/src/sound/` | cue, clip, the store's list; words → phrases (one function, for the build and the player) |
+| Board | `author/src/scene/sound.ts` | declaring cues; the queue and the two rules |
+| Player | `player/src/sound/` | the engine, its sources, the menu |
+| Build | `studio/src/sound/` | making and checking a chapter's clips; adding a recording |
+| Recordings | `library/sounds/` | shared and app sounds, with `sounds.json` |
+| A chapter's clips | `content/<book>/<chapter>/sound/` | its clips, with their list |
 
 ## From today's code
 
 | Today | Becomes |
 |---|---|
-| The voice answers **say** with a length; the board schedules the end itself | The board waits for **ended** / **cut** |
-| The scene keeps three lists (in turn, due, waiting) | One queue and the two rules |
-| A piece shown always cuts | A piece the student revealed cuts (rule 2); one the lesson revealed waits its turn (rule 1) |
-| `said` only when a line ends | `said` when heard or cut |
-| Fixed words only | Templates and sayers |
-| Clips as the source, one per line | Clips as the first source, one per phrase, glued; the phone's voice after |
-| The engine knows a step began with a tap | It carries that through what the tap scheduled for later |
+| Lines (`says`, `lines`, a sound view's `line`) and effects (`effects`, a sound view's `effects`): two vocabularies | cues |
+| Two players (`narration.ts`, `effects.ts`), two first-touch rules, two logs | one engine |
+| "Wait for real sound?" decided in five places (`timedVoice`, `isHeard`, `isTimed`, `keepsTime`, `isQuiet`) | which engine a board is given |
+| `LineCall`, `Utterance`, `ScriptLine`, `phraseKey`, `AudioSource`, `PlayableClip`; three word splitters | cue, clip, list; one splitter |
+| Clips keyed by speaker (a changed voice keeps playing the old clips) | keyed by voice and words |
+| `pnpm voice`, into `public/voice/` (ignored by git, never shipped) | made by the content build, into the chapter, committed |
+| Experiments: macOS and Parler voices, the dev live endpoint, the `**` regex | removed |
+| The queue inside `scene.ts` | its own file |
 
-## Order of work
+## Not now
 
-1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going. *(Done. Today's voice keeps time on the board's clock with each clip's length (`timedVoice`): the length lives in the voice. Real audio telling its own end comes with step 3.)*
-2. **Templates and sayers,** with one real line in the chapter (the bus board's "Stop {x}."); clips glued from phrases; the phone's voice when a phrase has none. *(Done: numbers only, as the number sayer; others (fractions, powers, measures, counts) as lessons need them.)*
-3. **The live source and the never-stuck promise:** a live voice between clips and the phone; real sound telling its own end; every sound bounded. *(Done, in development: the studio's `/dev-voice`. A deployed server is the same door.)*
-4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops). *(Done: the library, its channel and mute, sound views and lessons' effects. Props telling more moments come as lessons need them.)*
-5. **Each book's cast.**
-6. **Jugnu as a speaker.**
-
-## Parked
-
-- **Preparing ahead:** the voice reads what is waiting and makes it while the current line plays. Needs nothing from the board beyond what it already shows.
-- **A word lit as it is said** ("House 5" glows as she says it): the voice reporting word timings, one more report back; nothing else changes.
-- **A value as sound** (pitch rising with a point), music.
+Book-level planning (characters), choices offered in review, a voice server, captions, music. Nothing in the design blocks them.
