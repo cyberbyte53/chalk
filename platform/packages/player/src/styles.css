@@ -4,7 +4,6 @@
 @import "./styles/lesson.css";
 @import "./styles/board.css";
 @import "./styles/question.css";
-@import "./styles/jugnu.css";
 
 /* ---- groups: a prop made of props (group-view.tsx) ---- */
 .group-column {

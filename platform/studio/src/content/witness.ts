@@ -32,7 +32,7 @@ export type Played = {
 };
 
 /**
- * A scene (a board on the event model) played the same way, with no waiting at all: after each
+ * A board played the same way, with no waiting at all: after each
  * step, what it set off plays out on the board's clock (moves, waits, lines said), jumping.
  */
 function playScene(

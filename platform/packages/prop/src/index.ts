@@ -1,5 +1,5 @@
 /**
- * Props (platform/docs/event-model.md): one building block (`prop`), actions in and signals out,
+ * Props (platform/docs/board-model.md): one building block (`prop`), actions in and signals out,
  * needs, one queue for later, the board; and what every prop shares (its role, its frame, the tags
  * that say what its view shows and does).
  */

@@ -1,5 +1,5 @@
 /**
- * How a prop made of parts lays them out (platform/docs/event-model.md): in a column or row, or
+ * How a prop made of parts lays them out (platform/docs/board-model.md): in a column or row, or
  * round a frame's picture (one part provides the frame; the others draw in it, above, below or
  * among the controls), and which parts are showing now.
  */

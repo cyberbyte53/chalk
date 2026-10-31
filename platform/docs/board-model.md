@@ -1,136 +1,156 @@
 # The board model
 
-A board is a stage with **props** on it, wired together in three ways. That's the whole model: authors (and Studio, and Jugnu) only ever deal with these.
+A board is props, events between them, and one queue for time. That is the whole model: authors, Studio and agents only ever deal with these.
 
 ## Props
 
-Everything on a board is a prop: words, a character's line, a question, a number line, a circuit. The board itself is a prop too, named `board`. From outside every prop looks the same:
+Everything is a prop: words, a question, Riya, the plane. A prop that holds props (the coordinate plane: its plane, places, walker, clues…) is a prop like any other, and so is the board itself (its **scene**, below). A prop that doesn't need a part leaves it out.
 
-| | What | Example (number line) |
+| Part | What it is | Riya (`walker`) |
 |---|---|---|
-| **State** | One live view, read with `getState()`. Stored fields are the few independent quantities; derived fields follow from them and are read-only. A reader can't tell them apart. | stored `from`, `to`, `marker`; derived `between` ("1.4 and 1.5") |
-| **Actions** | The only way stored fields change. Each says what it keeps fixed. Instant, or taking time (then it finishes). Flagged if it gives an answer away. | `moveMarker`, `zoomTo` (glides), `placeMark` |
-| **Signals** | What it announces. A few are commits (logged). | `markerReleased` |
-| **What the student sees** | Read from what its view draws: one line, then each part the student can tell apart, an input with what it does or something read with its value. The only way Jugnu sees a prop; what `point` can name. See below. | "a number line from 1 to 2, dot at 1.75"; `marker: 1.75`, `tick:1.4`, `mark:√2 at 1.41` |
-| **Role** | What it is for: an explainer, a question, or part of the page. | explainer |
+| `variables` | its own data. Anyone can read them; only its own rules change them | `at`, `trail`, `walkFrom` |
+| `start` | its variables before a board gives it any | at the corner |
+| `facts` | worked out from its variables and needs; read like variables | `isWalking` |
+| `needs` | what it must be given by whatever holds it | `window`, `upLines`, `target` |
+| `actions` | **in**: what it can be asked to do; `from: "screen"` marks what the student can do | `step` (screen), `walkTo`, `backToStart` (screen) |
+| `signals` | **out**: news it tells, to whoever holds it | `stepped`, `arrived`, `blocked` |
+| `on` | a rule per action | how a step goes |
+| `children` | the props it holds | none |
+| `hear` | a rule per signal it hears from inside it | none |
+| `give` | what it gives a child for a need, where a name differs | none |
 
-A prop holds the laws of its own world; a lesson holds what is specific to the lesson. The number line knows nothing about square roots: the √2 lesson squares `at(line).marker` in its own rules. Inverse questions get their own named action (a mirror's `moveObjectSoImageIsAt`), never a vague "set the image".
+A prop holds the laws of its own world; a lesson holds what is specific to the lesson. The walker knows nothing about Aman's house: she reads `target` as a need. Code: `prop()` in `@chalk/prop`; examples in `library/props/basics` (text, choice, goal) and `library/props/coordinates`. How to make one: [making-a-prop.md](making-a-prop.md).
 
-Code: `defineProp` in `@chalk/prop`; examples in `library/props/basics` (text, choice, multi-choice, order-steps) and `library/props/primes`. Props made of props are groups and hosts ([making-a-prop.md](making-a-prop.md#0-build-from-what-exists-first)).
+### A rule
 
-## What the student sees
-
-Jugnu never reads a prop's state. He reads what the student can see right now, and it is read from the one place it is written: the view. Each part the student can tell apart is tagged on the element that draws it (`does`, `says`, `shows`: [making-a-prop.md](making-a-prop.md#4-write-the-view)); `describeView` draws the view from the state (as markup, the same code the phone runs) and reads the tags back:
-
-```ts
-{
-  summary: "a number line from 1 to 2 with a dot at 1.75",   // the prop's `summary`
-  elements: [
-    { id: "marker", value: 1.75, does: "moveMarker", isByHand: true },  // only while it is drawn
-    { id: "tick:1.4", value: 1.4 }, …,
-    { id: "mark:√2", value: 1.41, words: "√2 at 1.41" },
-  ],
-  hidden: { answer: "b" },                    // its `offScreen` fields: known, not shown
-}
-```
-
-Values are typed (`1.4`, `{ x: 2, y: 3 }`), with `words` for how the screen writes them when that differs ("1.40"; Jugnu reads the words). An input says the action(s) it does, its arguments, whether its own handler works them out (`isByHand`), and whether it is off now. In a group, a child's parts are named under it (`plane/handle`) and its inputs do its actions by path (`plane.move`). The chalk MCP's `look` returns a piece this way, with where each part is drawn (file:line) and what the student can do ([seeing-boards.md](seeing-boards.md)).
-
-It holds by construction: what is described is what is drawn, because it is read from the drawing. A part not drawn now (a hidden dot, a marker outside the window) isn't there. Two parts with one name are refused; so is a tag that says neither what it does nor what it shows. `checkProp` presses everything a view offers from some starting states and reports any learner action no input offers.
-
-Where the lesson needs to say what a prop stands for here ("the student's guess for √3"), it says so in the board's `jugnu` notes; the prop's own words stay lesson-free.
-
-**A worked example: a parallel circuit with meters.** The state holds every component, its current, voltage and brightness, and node coordinates. The student sees three meter dials, two bulbs and a switch. What the student sees:
-
-```
-summary: a parallel circuit: a cell, two branches each with an ammeter and a bulb, a switch S in bulb B's branch, a main ammeter before the branches
-elements:
-  cell        1.5 V
-  mainMeter   reads 0.45 A
-  meterA      reads 0.30 A
-  bulbA       glowing (5 Ω)
-  switchB     closed
-  meterB      reads 0.15 A
-  bulbB       glowing (10 Ω)
-```
-
-No wire currents, no brightness as a decimal, no node ids: the student can't see them. Bulb B's current is on screen only because meter B shows it, so it appears once, as the meter's reading. After `try setSwitch(switchB, open)` Jugnu gets the elements that changed: `mainMeter reads 0.30 A (was 0.45)`, `meterB reads 0 A`, `switchB open`, `bulbB dark`. He can see for himself that the main meter now shows one of the question's options, and decide, as a tutor would, whether to show it.
-
-**Evidence.** What the student has committed to is read from what the question shows: how many times they checked, the last result and its feedback, what they have picked. Moving things around is exploring, not an answer, so nothing else is kept: there is no history of moves. If he wants to know what they tried, he asks.
-
-## IS, WHEN, THEN
-
-```text
-IS     <prop>.<input> = a function of the board       always true; worked out whenever it is read
-WHEN   <prop>.<signal> [if a function of the board] → <script>
-THEN   a script: actions one after another, or together
-```
-
-- **IS** owns one of a prop's inputs (`text.text`, `goal.isMet`). One writer per field; no loops (a loop is refused, naming it).
-- **WHEN** answers signals one at a time, in order. A rule's script runs on its own; the next signal doesn't wait for it.
-- **THEN** only exists inside a WHEN. The board opening is `board.started`, so a board's opening script is `WHEN board.started → …`.
-- The learner wins: touching a prop stops anything the lesson is animating on it.
-- The player can pause everything at once (when Jugnu opens).
-
-Rules are code, typed from the props they read: `at(piece)` is a piece's view (its stored and derived fields).
+A rule gets the prop as it is now (`me`: variables, needs, facts, and each child by name), the event's payload, and its tools (`t`). It returns what happens, in order:
 
 ```ts
-const line = b.prop(numberLine, "line", { from: 1, to: 2, marker: 1.5 });
-const square = b.prop(text, "square", { style: TextStyle.Note });
-b.is(square.input.text, (at) => {
-  const m = at(line).marker;
-  return t(`${m}² = ${(m * m).toFixed(4)}`, `${m}² = ${(m * m).toFixed(4)}`);
-});
-b.when(guess.on.wrong, guess.call.giveFeedback({ text: tooBig }), (at) => at(line).marker ** 2 > 2.02);
-b.passWhen(guess.on.correct);
+on: {
+  step: (me, { direction }, t) => {
+    const next = stepFrom(me, direction); // reads me.upLines, me.window
+    if ("blocked" in next) return t.tell.blocked({ why: next.blocked });
+    return glide(me, next.to, t);         // a planned move, `stepped` at its end
+  },
+},
 ```
 
-Scripts: `x.call.action(args)`, `wait(0.8)`, `inOrder(…)` (then), `together(…)` (with). Arguments can be worked out from the board when the call runs: a function of `at` instead of values (`(at) => ({ x: at(coin).count })`). That's how one prop drives another. What each IS read when it last ran is noted (`boundReads`), for `look`'s "worked out from".
-
-### The board prop
-
-| | |
+| Tool | Does |
 |---|---|
-| Actions | `pass` (show Continue), `show { name }`, `hide { name }`, `continue` (the learner's Continue; only after `pass`) |
-| Signals | `started`, `continued` (commit) |
-
-### Questions
-
-A prop with the question role (`choice`, `goal`) has `status` (open / correct / wrong), `attempts`, `feedback`, `canCheck`, and, written in by the build, `concepts` (what it is about) and `isGraded` (whether its checks count towards mastery: bank questions yes, a page's questions no), the action `check` and the signals `checked` (commit), `correct`, `wrong`. Each answers where it sits: a choice is checked the moment an option is tapped, a goal has its own Check, and both show their feedback right below. A board may ask any number of questions; the lesson decides what happens next (`WHEN guessRoot.correct → board.pass`). The footer only ever shows Continue, once the board passes.
-
-### Student only
-
-`"studentOnly": ["circuit.takeOutBulb"]` on a board lists the actions only the learner may do there: the move the board is asking of them. Jugnu can never do these, nor anything on the question, nor `board.pass` or Continue, nor an action marked `reveals` while the question is open; the runtime refuses them, including when his actions set off the lesson's own WHEN rules. Beyond those, what a demonstration would give away is his judgement: he knows the answer, sees what the student would see, and his persona says to nudge, never tell. The validator checks each entry is a real `prop.action`.
+| `t.set({ … })` | changes its own variables |
+| `t.tell.stepped({ … })` | tells one of its signals |
+| `t.self.walkTo({ … })` | asks itself for one of its actions |
+| `t.to.places.chooseTarget({ … })` | asks a prop it holds (`t.to.town.plane.raiseUpLine` from a board) |
+| `t.later(0.3, …)` | does these 0.3 s from now, on the board's clock |
+| `t.move("at", to, 0.3, { atEnd })` | a planned move (below) |
+| `t.stop()` | drops what it has queued, and stops its moves where they are |
 
 ## Events
 
-Everything the learner does on a board is recorded on its own: each action they (or Jugnu) take, each signal the board raises and the act that set it off, with nothing written per board or prop. See [events.md](events.md).
+- **An action** asks one prop to do something. It may refuse ("this street isn't there yet"): its rule returns nothing, or tells why.
+- **A signal** is news. The prop that tells it doesn't know who listens. It goes **up**: to the prop holding it, then that one's holder, on to the board, nearest first; each with a `hear` rule for it (`"places.targetChosen"`, or from a board `"town.walker.arrived"`) hears it. Siblings never hear each other: the coordinate plane hears `places.targetChosen` and asks Riya to go back, so Riya never knows a "places" exists, and is reused as she is.
+- **Payloads are typed** and checked when sent.
+- **An event sent while handling another runs straight away**, like a function call: each finishes, with everything it causes, before the next. So a replay or a check always gives the same order. A chain that comes back on itself is stopped after a limit, naming its path.
 
-## Speech
+### Needs
 
-Speaking props (`text`, `line`, questions) have `say`: it reads the line aloud and finishes when the line ends. Nothing is spoken unless a script says so. Publish makes audio only for lines some script tells to `say`.
+A prop used in more than one place says what it needs, and any holder that can give it works. Where the holder has a variable or fact of the same name, it is given as it is; where a name differs, the holder writes one line: `give: { ask: { isMet: (me) => me.town.walker.at.x === 4 } }`. A need nothing gives fails when the prop is defined (`pnpm check`), and a need given is checked against what the child says it is as it is read. Needs are read live, never copied.
 
-What's shown and what's said can differ (√2 is said "the square root of 2", 25°C "25 degrees Celsius"): a line's spoken words are written with it, as its `speak`, when the lesson is written (guides/pages.md). The voice only ever gets letters, digits and ordinary punctuation: a line with anything else and no spoken words stops the voice, so nothing is read out wrong. Who says each line, in which voice, is the cast (`authoring/voices.json`); how the clips are made is platform/studio/src/sound/voice/README.md.
+The board system guards the boundaries: a prop changes only its own variables, payloads have their shape, time runs in order. Whether a rule is *right* is for tests, witnesses and review.
 
-## One prop driving another
+## Time: one queue
 
-A button tosses a coin, a timer tosses it 100 times, and every landing adds a point to a graph:
+- **The queue** holds only what is for later, each with the time it is due. On the student's screen the browser's frame loop moves the board clock to now and does what is due; checks, tests and the build **jump** the clock to the next entry, so a 36 s board is checked in a blink.
+- **A planned move** is a motion whose every moment is known when it starts (Riya's glide, a street rising): `t.move` stores where from, where to, when and how long, and queues its end. Reading a moving variable gives its value now, for rules, facts, checks and drawings alike. Easings are named (`"linear"`, `"smooth"`). Changing a moving variable stops its move.
+- **A tick** is for a motion where each moment depends on the last (a collision): the prop queues itself again every 1/60 s.
+- **The student wins**: an action from the screen drops what the props holding that prop had queued for it.
+- **CSS is only decoration.** If anything cares when a motion ends, it is a planned move.
+- **Replay**: `Board.replay(root, given, log, until)` plays the student's logged taps again, at their times.
+
+## A board: its scene
+
+A board is a **scene**: the outermost prop, holding the board's pieces, laid out top to bottom. Its rules are the lesson's. Written with `scene()` in `@chalk/author`:
 
 ```ts
-b.is(score.input.text, (at) => t(`Heads: ${at(coin).heads} of ${at(coin).count}`, …));
-b.is(tossOnce.input.isEnabled, (at) => !at(clock).isRunning);
-b.when(tossOnce.on.pressed, coin.call.toss());
-b.when(tossMany.on.pressed, clock.call.start({ every: 0.04, times: 100 }));
-b.when(clock.on.tick, coin.call.toss());
-b.when(coin.on.landed, chart.call.addPoint((at) => ({ x: at(coin).count, y: at(coin).headsFraction })));
+const streetAndHouse = page(
+  "street-and-house",
+  scene({
+    purpose: "The main road is a number line, and 'Street 4' is one number on it. …",
+    pieces: {
+      title: words.title(t("Finding Aman's house", "अमन का घर ढूँढना")),
+      town: place(coordinatePlane, setup(town(), { plane: { upLines: [] } })),
+      reply: hidden(words.body(t("He replies: **House 5**. …", "…"))),
+      found: hidden(words.definition(t("**Aman's house isn't on one line…**", "…"))),
+    },
+    passBy: "rules",
+    hear: {
+      "town.walker.stepped": (_, p, t) =>
+        p.x === 4 && p.y === 0 && t.to.town.plane.raiseUpLine({ at: 4 }),
+      "town.places.targetChosen": (_, p, t) => p.x === 4 && t.self.show({ name: "reply" }),
+      "town.walker.arrived": (_, p, t) =>
+        p.x === 4 && p.y === 5 && [t.self.show({ name: "found" }), t.self.pass()],
+    },
+    witness: [...walkTo("town", 4, 0), ...walkTo("town", 0, 5)],
+  }),
+);
 ```
 
-None of the props knows about the others: the coin doesn't know there's a graph, the graph doesn't know where its points come from. The lesson wires them.
+| Part | What |
+|---|---|
+| `pieces` | the props on the board, by name, top to bottom: `place(def, given)`, `hidden(…)` for one shown later |
+| `hear` | the lesson's rules: on a piece's signal, what happens |
+| `onSaid` | when a line has been said, what happens |
+| `give` | what the board gives a piece for a need (a goal's `isMet`) |
+| `cues` | what is heard besides the pieces' own words: lines and sounds at moments ([sound.md](sound.md)) |
+| `uses` | ready-made parts a pattern brings (a question with its notes and witness: `choice(…)`, `check(…)` in `@chalk/patterns`) |
+| `passBy` | `"rules"`: the board passes only when a rule says `t.self.pass()`; else when its questions are right |
+| `witness` | how a student gets the board right, played on the real props at publish |
+| `noteChecks` | wrong answers and the note each should get, played at publish too |
+| `purpose`, `standsFor` | what the board is for, and what its pieces stand for here, in the author's words, for whoever reads the board |
 
-## Time
+The step by step of that board:
 
-Anything that changes over time is a timed action (`zoomTo` over 2 s), or a `timer` whose ticks a WHEN answers (the toss-100 run above). There is no separate motion format in lessons.
+| # | Event | Who hears it | What happens |
+|---|---|---|---|
+| 1 | the student taps → (4 times) | Riya | she checks the road each time; glides to (4, 0); tells `stepped` |
+| 2 | `town.walker.stepped (4, 0)` | the board | asks the plane to raise Street 4 |
+| 3 | `raiseUpLine 4` | the plane | the street rises (a planned move); `risen` at its end |
+| 4 | Aman's house is chosen | the board | shows his reply |
+| 5 | the student taps ↑ (5 times) | Riya | reads `upLines` (Street 4 is up), walks up, tells `arrived (4, 5)` |
+| 6 | `town.walker.arrived (4, 5)` | the board | shows "found", and passes |
 
-## What the validator checks
+### The board's own actions and signals
 
-Every prop type, field, action, signal and argument named exists and type-checks (each rule, condition and worked-out argument is run on the board as it opens: a field it reads that the piece hasn't is reported, and its value checked); starting states pass each prop's schema; IS targets are inputs, one writer each, no loops; layers that exclude each other aren't both on; no answer-revealing action on a board with a question; something calls `board.pass`; every line a script says reads cleanly aloud.
+| | |
+|---|---|
+| Actions | `show { name }`, `hide { name }`, `pass` (Continue shows), `continue` (the student's, after `pass`), `say { line }`, `hush`, `hearAgain` (the student's: what is showing is read again) |
+| Signals | `started`, `shown { name }`, `said { line }`, `passed`, `continued` |
+
+Rules call them as `t.self.show(…)`; a line can be declared on them (`board.said`).
+
+### Questions
+
+A prop with the question role (`choice`, `goal`) has `status` (open, correct, wrong), `attempts`, `feedback`, and, written in by the build, `concepts` and `isGraded` (a bank question's checks count towards mastery, a page's don't); the actions `check` and `retry`; the signals `checked`, `correct`, `wrong`. A choice is checked the moment an option is tapped; a goal has its own Check and is right when the board gives it `isMet`. A board may ask any number; it passes when they are all right, unless it passes by its rules.
+
+## What the student sees
+
+Agents never read a prop's variables. They read what the student can see right now, read from the one place it is written: the view. Each part the student can tell apart is tagged on the element that draws it (`does`, `says`, `shows`: [making-a-prop.md](making-a-prop.md)); `describeView` draws the view (as markup, the same code the phone runs) and reads the tags back:
+
+```ts
+{
+  summary: "…",                                      // the prop's `summary`
+  elements: [
+    { id: "walker/step:up", does: "walker.step", args: { direction: "up" } },
+    { id: "places/target", value: { x: 4, y: 5 }, words: "Aman's house: Street number 4, House number 5" },
+  ],
+  hidden: { … },                                      // its `offScreen` variables: known, not shown
+}
+```
+
+Values are typed, with `words` for how the screen writes them when that differs. A part's elements are named under it (`walker/step:up`) and its inputs do its actions by path (`walker.step`). It holds by construction: what is described is what is drawn. Two parts with one name are refused, and so is a tag that says neither what it does nor what it shows. `checkProp` presses everything a view offers from some starting states and reports any student action no input offers.
+
+## Speech, events, checks
+
+- **Speech.** Every line on a board is said in turn, and what the student causes is said at once instead: [sound.md](sound.md).
+- **Events.** Everything the student does, and what it set off, is recorded with nothing written per board: [events.md](events.md).
+- **Checks.** A prop is checked when it is defined (its needs given, its layout's names), by its law tests and `checkProp`. A board is checked at publish by playing it: its witness gets it passed, each wrong answer gets its note, in every language, and a line no passing run says is reported.

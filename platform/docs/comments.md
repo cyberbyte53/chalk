@@ -147,7 +147,7 @@ In the preview's pick mode (`c`) a click takes the finest thing under the pointe
 
 ## Where a piece's line comes from
 
-The build records where each prop was placed, from the call stack when `b.prop(...)` runs (`platform/packages/author/src/site.ts`): the lesson's line when there is one, else the first frame inside `content/`. It writes them to `build/sources.json`, and every frame to `build/reach.json` ([reach.md](reach.md)); neither is published. The preview puts them on the page as `data-source="content/…:42"` on every piece, so an editor's browser, Cursor's design mode or an agent pointing at a piece knows the line. Alt-click a piece in the preview to open that line.
+The build records where each prop was placed, from the call stack when `place(...)` runs (`platform/packages/author/src/site.ts`): the lesson's line when there is one, else the first frame inside `content/`. It writes them to `build/sources.json`, and every frame to `build/reach.json` ([reach.md](reach.md)); neither is published. The preview puts them on the page as `data-source="content/…:42"` on every piece, so an editor's browser, Cursor's design mode or an agent pointing at a piece knows the line. Alt-click a piece in the preview to open that line.
 
 ## Moving files over
 

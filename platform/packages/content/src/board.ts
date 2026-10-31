@@ -15,7 +15,7 @@ export const itemRefSchema = z
   .strict();
 export type ItemRef = z.infer<typeof itemRefSchema>;
 
-/** One screen: its scene (the event model, platform/docs/event-model.md), and how its pieces are laid out. */
+/** One screen: its scene (platform/docs/board-model.md), and how its pieces are laid out. */
 export const boardSchema = z.object({
   /** Unique within the lesson; free to rename. */
   name: z.string().min(1),
@@ -34,7 +34,7 @@ export const boardSchema = z.object({
 export type Board = z.infer<typeof boardSchema>;
 
 /**
- * A board on the event model: its scene, what each piece starts with, and its lines
+ * A board's model: its scene, what each piece starts with, and its lines
  * (platform/docs/sound.md): the lesson's own words for a piece, and its narration lines (said by
  * rules), each with who says it. A piece without its own words says what it says itself.
  */

@@ -24,15 +24,15 @@ Every prop folder has the same shape (see [board-model.md](./board-model.md); st
 ```text
 library/props/<name>/
   README.md
-  src/index.ts        exports the prop module(s): `{ def, View }`
-  src/model.ts        the definition (`defineProp`) and pure logic (no UI)
-  src/view.tsx        draws the prop's state; reports the learner through `call`/`signal`; owns no state
+  src/index.ts        exports the prop module(s): `{ def, View, sound }`; src/defs.ts the definitions alone
+  src/<part>.ts       a part's definition (`prop()`) and its pure logic (no UI)
+  src/<part>-view.tsx draws what the part reads now; reports the student through `call`; owns no state
   src/styles.css      the view's styles, drawn only with the look's tokens (`@chalk/look`)
-  src/model.test.ts   the prop's laws against cases known by hand, actions, parts, and that its tweens pass the one door
+  src/*.test.ts       the prop's laws against cases known by hand, played on a `Board`
 ```
 
-- Store only the independent quantities; everything that follows from them is a derived field.
-- Every change is an action that says what it keeps fixed. Inverse questions get their own named action.
+- Variables are only the independent quantities; everything that follows from them is a fact.
+- A prop's variables change only by its own rules, on its actions. Inverse questions get their own named action.
 - A prop holds the laws of its own world, nothing lesson-specific. If a field's name mentions a lesson's topic, it belongs in the lesson's rules.
 - Expose what a teacher would want to show or hide. Name things in the textbook's own words.
 - Words a prop shows come from the lesson, in both languages.

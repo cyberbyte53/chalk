@@ -1,6 +1,6 @@
 # The move to the event model
 
-Status: **planned (2026-10-31).** One board system, the event model (event-model.md), everywhere: nothing runs two ways. Each step leaves `pnpm check` green and is committed on its own.
+Status: **done (2026-11-01).** Kept as the record of the move; [board-model.md](board-model.md) is the model now. One board system, the event model (event-model.md), everywhere: nothing runs two ways. Each step leaves `pnpm check` green and is committed on its own.
 
 ## Decided
 

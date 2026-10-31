@@ -64,7 +64,6 @@ export function finishBoard(item: BoardItem, built: BuiltBoard, roleOf: RoleOf):
     item.kind === Kind.Page
       ? { concepts: [item.concept], isGraded: false }
       : { concepts: [...item.tests], isGraded: true };
-  if (board.model === undefined) throw new Error(`${item.path}: its board has no scene`);
   const given: Record<string, unknown> = { ...board.model.given };
   for (const piece of propPieces(board.root))
     if (roleOf(piece.prop) === PropRole.Question) {

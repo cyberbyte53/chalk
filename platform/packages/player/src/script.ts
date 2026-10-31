@@ -110,14 +110,13 @@ export function ownLine(
 /**
  * Every line a board says: its pieces' (top to bottom; the opening's first, as the board opens),
  * then its narration lines. A piece that says nothing (a plane with no sound view, no words of the
- * lesson's) has no line. Today's boards say none.
+ * lesson's) has no line.
  */
 export function scriptOf(
   board: Board,
   lookup: (type: string) => PropModule | undefined,
 ): ScriptLine[] {
   const model = board.model;
-  if (model === undefined) return [];
   const core = new Core(model.scene, model.given);
   const pieces = propPieces(board.root).map((piece) => {
     const given = model.lines[piece.name];

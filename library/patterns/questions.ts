@@ -5,7 +5,7 @@ import { TextStyle, choice as choiceProp, goal, text } from "@chalk/prop-basics"
 import { type Option, seedOf, settle, wordsOf } from "./choice-question";
 
 /**
- * Words and questions for scenes (boards on the event model). A question comes with what it adds
+ * Words and questions for a board. A question comes with what it adds
  * to the scene (`use`): its witness, its note checks, and for a check, whether it is right (a need
  * the scene gives) and the note for each wrong state worth one.
  */

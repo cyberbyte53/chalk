@@ -15,7 +15,7 @@ import { isWalkerOn } from "./walker";
 import { walker } from "./walker";
 
 /**
- * The coordinate plane, on the event model: the plane and the parts a board puts on it (places, a
+ * The coordinate plane: the plane and the parts a board puts on it (places, a
  * walker, clues, a point to read, pairs to plot, the dice game). Each part knows nothing of the
  * others; this is where they meet:
  *

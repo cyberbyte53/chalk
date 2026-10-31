@@ -44,7 +44,7 @@ import {
 import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./steps";
 
 /**
- * A board on the event model (platform/docs/event-model.md): the scene is the outermost prop. Its
+ * A board (platform/docs/board-model.md): the scene is the outermost prop. Its
  * children are the pieces, top to bottom; its rules (`hear`) are the lesson's: on this signal,
  * do these things. It also does what every board does:
  *

@@ -41,7 +41,7 @@ import { linePhrases } from "./sound/spoken-line";
 import type { WordsToSay } from "./sound/voice";
 
 /**
- * A board on the event model (platform/docs/event-model.md), running: the scene and its pieces on
+ * A board (platform/docs/board-model.md), running: the scene and its pieces on
  * the core's `Board`, with the same outside as `BoardRuntime`, so the player, the recorder and the
  * tools (`look`, `play`) run it the same way. Its clock moves on each screen frame; the board's
  * own timing (moves, waits, lines being said) is the core's queue.
@@ -83,7 +83,6 @@ export class BoardRuntime {
     },
   ) {
     const model = board.model;
-    if (model === undefined) throw new Error(`Board ${board.name} isn't a scene`);
     this.scene = model.scene;
     const locale = services.locale;
     // What starts hidden is the board's to say (a preview shows every piece at once).
@@ -240,11 +239,11 @@ export class BoardRuntime {
   ): void {
     const at = [piece === "" ? "board" : piece, ...inside, signal].join(".");
     for (const [name, playing] of this.lasting)
-      if (this.board.model?.sounds?.[name]?.until === at) {
+      if (this.board.model.sounds?.[name]?.until === at) {
         playing.stop();
         this.lasting.delete(name);
       }
-    const cues = Object.entries(this.board.model?.sounds ?? {}).filter(
+    const cues = Object.entries(this.board.model.sounds ?? {}).filter(
       ([, cue]) => cue.when === at && carries(told, cue.where),
     );
     const type = propPieces(this.board.root).find((p) => p.name === piece)?.prop;
@@ -300,7 +299,7 @@ export class BoardRuntime {
 
   /** A line's words: the lesson's own for it, else what its piece says of itself, as it is now. */
   private lineWords(name: string): Localized | undefined {
-    const given = this.board.model?.lines[name]?.says;
+    const given = this.board.model.lines[name]?.says;
     if (given !== undefined) return given;
     const piece = propPieces(this.board.root).find((p) => p.name === name);
     return piece === undefined ? undefined : ownLine(this.lookup(piece.prop), this.core.read(name));
@@ -335,7 +334,6 @@ export class BoardRuntime {
   speakingAbout(): string | undefined {
     void this.version.value;
     const model = this.board.model;
-    if (model === undefined) return undefined;
     // Which line is in turn is the scene's (the first it is saying); whether it is heard yet is the voice's: in
     // the breath before it, nothing is said, so nothing glows.
     const line = (this.core.read("") as { saying?: readonly { line: string }[] }).saying?.[0]?.line;
@@ -508,10 +506,10 @@ export class BoardRuntime {
     }
   }
 
-  /** Views don't raise signals on the event model: what the student does is an action. */
+  /** Views don't raise signals: what the student does is an action. */
   signal(name: string, signalName: string): void {
     this.services.onError(
-      `Board ${this.board.name}: ${name}'s view raised ${signalName}; on the event model the student's acts are actions`,
+      `Board ${this.board.name}: ${name}'s view raised ${signalName}; the student's acts are actions`,
     );
   }
 
@@ -578,7 +576,7 @@ export class BoardRuntime {
         page === undefined ? undefined : findNode(page, at)?.getAttribute("data-code");
       return { ...rest, path: at, ...(drawnAt ? { drawnAt } : {}) };
     });
-    const given = (this.board.model?.given[name] ?? {}) as Readonly<Record<string, unknown>>;
+    const given = (this.board.model.given[name] ?? {}) as Readonly<Record<string, unknown>>;
     const setup: Record<string, unknown> = {};
     const live: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(view)) {

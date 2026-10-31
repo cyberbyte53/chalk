@@ -8,7 +8,7 @@ How props and art put things on screen. Read before drawing anything new.
 @chalk/look   tokens: colours, fonts, sizes. The only place a raw value lives.
 d3            the maths of drawing: scales, shapes, interpolation, arrays. Never touches the page.
 @chalk/draw   the pieces (Dot, Line, Curve, Dots…): d3 geometry + the look's tokens + the optimisations below.
-props, art    built from pieces. Preact puts them on the page; our runtime moves them (the one door).
+props, art    built from pieces. Preact puts them on the page; the board model moves them (planned moves on its clock).
 ```
 
 `@chalk/draw` is the only package that imports d3 (a lint rule enforces it). Props and art use its pieces; a prop may still draw its own SVG inside a `Stage` for what no piece covers (the number line's lens and cuts), and a piece is added once a second prop wants the same thing.
@@ -46,7 +46,7 @@ Before writing geometry, a shape, a scale, a statistic or a layout by hand, chec
 | `d3-contour` | Contour lines of a 2D function |
 | `d3-geo` | Map projections, if maps come |
 
-**Never** (a lint rule blocks them): `d3-selection`, `d3-transition`, `d3-timer`, `d3-drag`, `d3-zoom`, `d3-brush`, `d3-axis`, `d3-dispatch`, `d3-color`, `d3-fetch`, and the `d3` bundle. They change the page directly, keep their own clock or handle touches themselves, which bypasses Preact and the one door. Preact draws; our runtime moves things; prop actions handle touches; `@chalk/look` has the colours.
+**Never** (a lint rule blocks them): `d3-selection`, `d3-transition`, `d3-timer`, `d3-drag`, `d3-zoom`, `d3-brush`, `d3-axis`, `d3-dispatch`, `d3-color`, `d3-fetch`, and the `d3` bundle. They change the page directly, keep their own clock or handle touches themselves, which bypasses Preact and the board's clock. Preact draws; our runtime moves things; prop actions handle touches; `@chalk/look` has the colours.
 
 ## Extending d3
 

@@ -12,7 +12,7 @@ import { plotting } from "./plotting";
 import { readingReads } from "./reading";
 import { reading } from "./reading";
 
-// The clues, plotting, the dice and a point's reading on the event model, each held alone by a
+// The clues, plotting, the dice and a point's reading, each held alone by a
 // tiny holder that has what it needs as its own variables. The same laws as model.test.ts's.
 
 /** What the board told, in order: signal names, and payloads. */

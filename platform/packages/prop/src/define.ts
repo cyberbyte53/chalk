@@ -4,7 +4,7 @@ import type { Size } from "./size";
 import { type FrameKindName, type FramePixels, type PropRole, noteNames } from "./vocabulary";
 
 /**
- * The event model's one building block (platform/docs/event-model.md). Every prop has the same
+ * The one building block (platform/docs/board-model.md). Every prop has the same
  * parts; a prop that doesn't need one leaves it out:
  *
  * - `variables`: its own data. Anyone reads them; only its own rules change them.

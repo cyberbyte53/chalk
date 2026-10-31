@@ -50,7 +50,7 @@ The roots are the real folders. One without a root is refused. Everything takes 
 
 ## Props: the contract is the code (built)
 
-The library exists so props are **reused** across chapters and **easy to discover**. A contract serves both, and almost all of it is already declared in code (`defineProp`: the state schema, actions with argument schemas and what each `changes`, signals, the invariant, a `describe` on each). A hand-written contract would be a second writer that drifts, so:
+The library exists so props are **reused** across chapters and **easy to discover**. A contract serves both, and almost all of it is already declared in code (`prop()`: its variables, needs and facts, actions and signals with their payloads, the invariant, a `describe`). A hand-written contract would be a second writer that drifts, so:
 
 - **One writer: the definition.** Its `describe` opens with one sentence saying what it is for; that sentence is its purpose wherever props are listed (`purposeOf`). No other field.
 - **One page per prop, generated** (`@chalk/player`'s `prop-pages.ts`) from the definition and from what the build records about every board (`build/reach.json`: each piece's type, the fields its board sets, the inputs its rules feed, the actions its scripts call):

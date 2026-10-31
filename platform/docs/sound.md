@@ -106,4 +106,3 @@ The app's own sounds ship with the app and are kept for offline with it; a chapt
 
 Book-level planning (characters), choices offered in review, a voice server, captions, music, turning sounds down while someone speaks. Nothing in the design blocks them.
 
-Boards on the old runtime are out of scope: they are removed, not adapted.

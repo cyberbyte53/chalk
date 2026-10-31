@@ -9,7 +9,7 @@ import { appear, tap as tapSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
 
-// A board on the event model, end to end: written as a scene, checked the way the build checks
+// A board, end to end: written as a scene, checked the way the build checks
 // any board (its witness played on the real props, the clock jumping), lines said and waited for.
 
 const t = (en: string, hi: string) => ({ en, hi });

@@ -12,7 +12,7 @@ import { action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
 
 /**
- * The words and questions every lesson uses, on the event model (platform/docs/event-model.md),
+ * The words and questions every lesson uses (platform/docs/board-model.md),
  * for scenes: the same variables and actions as text, goal and choice, so the same views draw
  * them. How they sound (a text says its words, a question its prompt) is their sound view
  * (scene-sound.ts), beside their drawing: nothing here knows about sound.

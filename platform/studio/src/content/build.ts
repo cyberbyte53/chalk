@@ -227,7 +227,7 @@ function givenFields(def: AnyProp | undefined, given: Readonly<Record<string, un
 /** What the scene's `give` feeds each piece: the needs, by path inside it ("walker.target"). */
 function fedOf(board: Board): Map<string, Set<string>> {
   const out = new Map<string, Set<string>>();
-  for (const [path, needs] of Object.entries(board.model?.scene.give ?? {})) {
+  for (const [path, needs] of Object.entries(board.model.scene.give ?? {})) {
     const [piece = "", ...inside] = path.split(/[./]/);
     const into = out.get(piece) ?? new Set<string>();
     for (const need of Object.keys(needs as object)) into.add([...inside, need].join("."));

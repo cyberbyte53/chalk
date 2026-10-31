@@ -1,13 +1,14 @@
 # @chalk/prop
 
-The prop contract (see [docs/board-model.md](../../docs/board-model.md)). Every prop looks the same from outside: state (stored + derived), actions, signals, parts. Validation, Studio's panels and Jugnu's tools are all generated from it.
+The board model (see [docs/board-model.md](../../docs/board-model.md)): props, events between them, one queue for time.
 
-- `define.ts`: the contract (`PropDef`, `defineProp`, `actionsFor`) and effects (`set`, `tween`, `task`).
-- `state.ts`: **the one door** (`applyPatch`, `prepareAction`), `viewOf` (stored + derived), tween sampling.
-- `board.ts`: the board itself as a prop (`pass`, `show`, `hide`, `continue`; `started`, `continued`).
-- `question.ts`: the question role every question prop shares.
-- `color.ts`: `colorSchema`, a colour a prop can be drawn in: a role of the look (`Color.Primary`, follows the theme) or any `#rrggbb`. `Color` and `cssColor` are re-exported from `@chalk/look`.
-- `next/`: the event model (platform/docs/event-model.md), built beside the above until props move over (`@chalk/prop/next`): `prop`, `action`, `signal`, needs, the `Board` (one door, instant events as calls, the time queue, planned moves, replay).
-- `expression.ts`: the read-only expression language used in rules (parsed, never run as code).
+- `define.ts`: `prop()`, the one building block (variables, start, facts, needs, actions, signals, rules, parts, layout, frame), `action()`, `signal()`, the tools a rule gets.
+- `board.ts`: the `Board`: builds a prop and its parts from what a board gives, runs events (instant ones as calls, signals up to their holders), needs read live, the time queue, planned moves, `input` (the student's) and `send` (a lesson's), replay.
+- `queue.ts`, `move.ts`, `helpers.ts` (`sequence`), `voice.ts` (how long a line takes, for the queue).
+- `layout.ts`: how a prop lays out its parts (a column, a row, a frame) and which are shown.
+- `vocabulary.ts`: what every prop shares: its role, frames, what the student sees (`Element`, `Observation`), actions' names (`nameOf`), the board's own names (`BOARD`), `purposeOf`.
+- `question.ts`: what every question prop shares (status, attempts, feedback; `checked`, `correct`, `wrong`).
+- `tags.ts`: the view's tags (`does`, `says`, `shows`) and the description read back from them; `jsx-runtime.ts`: the element types that make a pressable element say what it does.
+- `size.ts`: how the player sizes a prop. `color.ts`: `colorSchema` (a role of the look, or any `#rrggbb`). `address.ts`: paths and names. `snapshot.ts`: what agents read of a board.
 
 May import: `@chalk/look` (names only), `zod`. No UI.

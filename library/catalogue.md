@@ -74,7 +74,7 @@ Signals: `checked`, `correct`, `wrong`
 
 ## `coordinates` — `@chalk/prop-coordinates`
 
-The plane, located by two perpendicular lines: one prop, `coordinatePlane`, a host whose layers a board turns on. Built for Class 9 Coordinate Geometry, but it knows only its own world.
+The plane, located by two perpendicular lines: one prop, `coordinatePlane`, holding parts a board turns on by what it gives them. Built for Class 9 Coordinate Geometry, but it knows only its own world.
 
 ### `coordinatePlane` · explainer
 

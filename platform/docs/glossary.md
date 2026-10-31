@@ -6,51 +6,41 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 |---|---|---|
 | **Chapter** | Concepts in book order, as in the NCERT book (older: lessons grouped) | `content/<book>/<chapter>/build.yaml`, `BuiltChapter` |
 | **Lesson** | An ordered run of boards. Story, walkthrough, practice and quiz are all lessons. | `Lesson` (`@chalk/content`) |
-| **Board** | One screen: a layout tree of props, plus the IS and WHEN rules that wire them | `Board` |
+| **Board** | One screen: its scene (the outermost prop, holding the pieces and the lesson's rules) and how its pieces are laid out | `Board`, `scene()` (`@chalk/author`) |
 | **Piece** | A node in a board's layout tree: layout pieces (Column, Row, Overlay, Space) arrange; a prop piece places a prop | `Piece`, `PieceKind` |
-| **Prop** | Anything placed on a board. Same shape for all: state, actions, signals, a view, a role | `PropDef`, `defineProp` (`@chalk/prop`), `library/props/<name>/` |
-| **State** | What a prop is right now: stored fields plus derived ones, read alike | `viewOf`, `PropView` |
-| **Stored field** | One of the few independent quantities a prop keeps; changed only by actions | `PropDef.state` |
-| **Derived field** | Computed from stored fields; read-only, never stale | `PropDef.derived` |
-| **Input** | A stored field an IS rule may own (e.g. a text's words) | `PropDef.inputs` |
-| **Action** | The only way a prop changes. Instant or timed; says what it keeps fixed; flagged if it reveals an answer | `ActionSpec`, `actionsFor` |
-| **Timed action** | An action that takes time (a tween, a spoken line); scripts wait for it to finish | `tween`, `seq`, `repeat` (steps, as data) |
-| **Signal** | Something a prop announces (pressed, landed, wrong) | `SignalSpec` |
-| **Part** | A named thing a prop's view draws: an input (it says what it `does`) or something the student reads (it `shows` a value). Its name is its address under the piece; what `look`, `play`, comments and Jugnu's pointing use | `does`, `says`, `shows` (`@chalk/prop` tags.ts) |
+| **Prop** | Anything on a board, and the one building block: variables, facts, needs, actions, signals, rules, parts, a view, a role. A prop that holds props is a prop like any other | `prop()` (`@chalk/prop`), `library/props/<name>/` |
+| **Variable** | A prop's own data: anyone reads it, only its own rules change it | `variables`, `start` |
+| **Fact** | Worked out from a prop's variables and needs; read like a variable | `facts` |
+| **Need** | What a prop must be given by whatever holds it, read live: given by name (a variable or fact of the holder's with that name), or by a `give` line where a name differs | `needs`, `give` |
+| **Rule** | What a prop does on an event: `on` for its actions, `hear` for its parts' signals. Gets the prop as it is now (`me`), the payload, and its tools (`t.set`, `t.tell`, `t.self`, `t.to`, `t.later`, `t.move`, `t.stop`) | `Rule`, `Tools` |
+| **Scene** | The board's outermost prop: it holds the pieces, its rules are the lesson's, and its own actions and signals are the board's (`show`, `pass`, `said`, `continued`) | `scene()`, `SceneModel` |
+| **Queue** | The one place time lives: what is for later, each with its due time. The screen's frame loop moves the board clock to now; checks jump it | `TimeQueue`, `t.later` |
+| **Planned move** | A motion whose every moment is known when it starts (a glide, a street rising): stored as from, to, start and length, read at the clock | `t.move`, `moveAt` |
+| **Tick** | A rule that queues itself again (every 1/60 s), for a motion where each moment depends on the last | `t.later(1 / 60, t.self.tick())` |
+| **Action** | An event in: asks one prop to do something; its rule (`on`) decides, and may refuse. `from: "screen"` marks the student's | `action()`, `ActionDef` |
+| **Signal** | An event out: news a prop tells, heard by the props holding it, nearest first; siblings never hear it | `signal()`, `SignalDef` |
+| **Part** (of a view) | A named thing a prop's view draws: an input (it says what it `does`) or something the student reads (it `shows` a value). Its name is its address under the piece; what `look`, `play`, comments and Jugnu's pointing use | `does`, `says`, `shows` (`@chalk/prop` tags.ts) |
 | **Description** | A prop as the student sees it: read from the tags in what its view draws (one line, each part, what it knows but doesn't show) | `describeView` (`@chalk/player`), `Observation` |
-| **Role** | What a prop is for: an explainer (Jugnu may bring it in), a question, or part of the page (words, the board) | `PropRole` |
+| **Role** | What a prop is for: an explainer (a world the student works in), a question, or part of the page (words) | `PropRole` |
 | **Drag** | A part the learner moves, inside a frame; the player wires pointer, keys and the frame's transform | `useDrags` (`@chalk/player`) |
 | **Address** | How people, agents and threads name a thing: where it lives, from one of two roots, `content/` + a path (`content/class10-maths/real-numbers/hcf-and-lcm/story`) or `library/props/<package>/<type>` (`library/props/basics/choice`), then after `#` where on it: names from the piece (or the prop) down, joined by `/` (`…/story#mirror/objectArrow/object`; on screen as `data-path`; a `/` inside a name from data is written `%2F`). One without a root is refused. What `look`, `play`, `comments`, `comment`, `affected` and the preview (`?dev&at=`) take | `parseAddress`, `contentAddress`, `propAddress` (`@chalk/content/address`); `pathOf`, `namesOf` (`@chalk/prop`), `findNode`, `addressOf` (`@chalk/player`) |
-| **Leaf** | A prop with no children: one thing, with its own state or with every field bound | `defineProp` |
-| **Group** | A prop made of other props (its children, or parts) joined by links; each part owns its fields and knows nothing of the others, the group connects them; its state is its own fields plus each child's, nested. A board works the same way | `defineGroup` (`@chalk/prop`), `groupView` (`@chalk/player`) |
-| **Link** | How a group wires its children: IS (a child's field always equals a function of the rest), WHEN (on a child's signal, run steps), ROUTE (take over a learner action on a child, or refuse it) | `GroupSpec.is`, `.when`, `.route`; steps built with `run` (`Runs`) |
-| **Bound field** | A child's field an IS link writes; the child's own actions can't change it, so a learner control on it must be routed | `GroupLayout.bound` |
+| **Part** (of a prop) | A prop held by another (`children`): the walker in the coordinate plane. It owns its variables and knows nothing of the others; its holder joins them (needs given, signals heard) | `children`, `groupView` (`@chalk/player`) |
 | **Frame** | One picture several children draw into: its provider owns the window and the transform; it places every child's labels in one pass | `FrameSpec`, `FrameStage`, `useFrame`, `useFrameLabels` |
 | **Drawing kit** | Stateless drawing pieces shared by props (labware, geometry marks, optics, circuit symbols) | `@chalk/draw` (`lab.tsx`, `marks.tsx`, `optics.tsx`, `circuit.tsx`) |
 | **Written number** | A number as Chalk writes it, the same everywhere: exact (integer, fraction, surd) or a rounded decimal, as text and TeX | `exact`, `quantity`, `formula` (`@chalk/exact`) |
-| **The one door** | The single path every change takes: an action, checked against the prop's schema | `applyPatch`, `BoardRuntime.call` |
-| **IS** | A rule that keeps a prop's input equal to a function of the board, always (`(at) => at(race).time > 36`) | `IsRule`, `b.is` |
-| **WHEN** | A rule that answers a signal (with an optional condition on the board) with a script | `WhenRule`, `b.when` |
-| **THEN / script** | Actions over time: `call`, `wait`, `seq` (then), `par` (with) | `Script` |
-| **Worked-out arguments** | A call's arguments as a function of the board, worked out when the call runs | `CallArgs` |
-| **Timer** | A prop with nothing on screen that ticks while running; how a lesson makes things repeat or happen on their own | `timer` (`library/props/basics`) |
-| **Board prop** | The board itself, named `board`: `pass`, `show`, `hide`; signals `started`, `continued` | `boardProp`, `BOARD` |
-| **Question** | A prop with the question role (`choice`, `goal`): status, attempts, feedback, `check` | `PropRole.Question`, `QuestionView` |
+| **Question** | A prop with the question role (`choice`, `goal`): status, attempts, feedback, `check`, `retry` | `PropRole.Question`, `QuestionView` |
 | **Concept** | The smallest thing a student can get wrong on its own: a folder with an overview (pages). Its id is what questions test and what learner counts hang on | `<concept>/build.yaml`, `BuiltConcept`, `concepts` on a question prop |
 | **Question bank** | A chapter's question families (`<chapter>/questions/`). Each family `tests` one or more of the chapter's concepts; a question is served once all of them are taught | `chapterManifestSchema.questions`, `BuiltChapter.questions`, `BankRef` |
 | **Concept enum** | A chapter's concepts as `Concept.X`, generated from its `build.yaml` into `concepts.gen.ts`, for a family's `tests` | `conceptsModule`, `ContentFile.Concepts` |
 | **Misconception** | Why a specific wrong answer is wrong; reported, not just "wrong" | `misconception` on an option |
-| **Line** | A cast character's speech bubble (Maya, Arjun) | `line` prop, `CharacterId` |
-| **Event** | One entry in the record of what a learner did: the same envelope, plus one kind's payload (`open`, `close`, `cause`, `signal`, `jugnu`, `app`) | `ChalkEvent`, `eventKinds` |
-| **Cause** | Something the learner or Jugnu did on a board: an action through the door, or a signal a view raised; a drag is one per gesture | `cause` entries |
+| **Event** | One entry in the record of what a learner did: the same envelope, plus one kind's payload (`open`, `close`, `cause`, `signal`, `app`) | `ChalkEvent`, `eventKinds` |
+| **Cause** | Something the student did on a board: an action from the screen; a drag is one per gesture | `cause` entries |
 | **Board recorder** | The one producer for boards: records every cause and signal, linked | `recordBoard` |
 | **Processor** | A server task that reads events as they arrive and keeps its own table (board facts, progress) | `boardFactsFrom` |
-| **Actor** | Who did it: learner, lesson (its script), app, or Jugnu. Only the learner's own actions are evidence | `Actor` |
+| **Actor** | Who did it: learner, lesson (its rules), app (or Jugnu, in old events). Only the learner's own actions are evidence | `Actor` |
 | **Event channel** | One `record()` on the phone: adds the envelope, checks the kind, hands entries to subscribers (the uploader) | `createEventBus` (`@chalk/events`) |
 | **Name** | What an author calls a board or piece; free to rename; camelCase because rules use it | `name` |
 | **Item id, address** | What events name: a board by its built item's id (a hash of where it lives in content/), a node on it by its address (`<item id>#<address>`) | `ItemRef`, `nodeMachineId`, `boardKey` |
-| **Saved board** | A board written down: each node by address, the shape of its facts (`type@hash`), its facts, whether the learner touched it; loaded back only by props of the same shape | `runtime.save()`, `runtime.load()`, `SavedBoard`, `schemaKey` |
-| **Say** | The action every speaking prop has: read its line aloud, finishing when it ends | `SAY` |
 | **Speak** | A line's spoken words, written with it when its screen words aren't how it is said ("√2" → "the square root of 2"); without it, the screen words are said (bold marks dropped) | `speak`, `spokenText` |
 | **Script** | Every line a board says, in order, with who says it: what the voice is made from, and what the preview and review show | `scriptOf`, `ScriptLine` |
 | **Cast** | Who speaks in which voice: each character (the narrator, Riya, Aman), per language, a voice named with its provider (`piper:hi_IN-rohan-medium`) | `authoring/voices.json`, `voiceFor` |
@@ -58,15 +48,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Speakable** | What a voice may be given: letters, digits, spaces, ordinary punctuation. Anything else is refused when audio is made | `unspeakable` |
 | **Voice provider** | What turns words into a clip, on this machine or a service: Piper now (a cloud or AI voice the same way: one file) | `TtsProvider`, `sound/voice/providers/` |
 | **Publish** | Build the content from a clean commit and keep that build as `published/<commit>/` | `pnpm publish-content` |
-| **Jugnu** | The AI tutor, on question boards: an agent that reads the whole board as data and works in a loop of tool calls (the board's actions, point, calculate, hand back), within limits the runtime enforces | `@chalk/jugnu`, `JugnuSession`, `JugnuPanel` |
-| **Jugnu's tools** | `try` (what actions would do, unseen) and `calculate` to think; `reply` to answer: say, show (an action for the student to watch), point, then ask (options to tap) or nothing (he goes quiet; the board is theirs). Typed from the board's own actions; strict where the board allows | `jugnuTools`, `runTool` |
-| **Cue** | One thing Jugnu's reply does on the phone, in order: say, point, act, ask (options). Only what he kept; his tries never reach the student | `Cue`, `cueSchema` |
-| **Headless board** | A board with no screen, where time jumps to the end of whatever moves: the server's copy Jugnu thinks on | `headlessBoard` |
-| **Jugnu notes** | What a lesson tells Jugnu about a board, in plain English: its purpose, what each prop stands for | `jugnu` on a board, `b.purpose`, `b.standsFor` |
-| **Flag** | A chat with Jugnu someone wasn't happy with, kept whole on the server to look at and replay | `POST /api/jugnu/flags`, `pnpm --filter @chalk/server flags` |
-| **Student only** | Actions on a board that only the learner may do (taking the bulb out, when that is the task); Jugnu can never do them | `studentOnly` on a board |
-| **Model provider** | The model Jugnu runs on, through its standard tool calling (any OpenAI-style API such as DeepSeek or Foundry, or Ollama); swapping it changes nothing else | `LlmProvider`, `providerFrom` |
-| **Slate** | Jugnu's own board, shown inside his chat; the same player as a board | (not built yet) |
+| **Jugnu** | The AI tutor and the app's character. As a tutor he is parked (`parked/`), to be remade on this board model; the character still appears in the app | `parked/platform/jugnu` |
 | **Book** | A subject for one class (Class 9 Maths): chapters in book order | `content/<book>/build.yaml`, `book.json` |
 | **Manifest** | A folder's `build.yaml`: its title and the children it includes, in order. Only what a manifest lists is built | `build.yaml`, `bookManifestSchema` … (`@chalk/author`) |
 | **Page** | One board of a concept's overview: explanation, worked example, animation or sandbox | `page()`, `overview.ts`, `BuiltPage` |
@@ -74,10 +56,10 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Params row** | One row of `params.yaml`: one question's params, and optionally its level, origin, exclude | `paramsRowSchema` |
 | **Question** | A family built with one params row: a board with a question prop | `BuiltQuestion` |
 | **Origin** | Who wrote a params row: authored (a person or an agent they asked) or generated (the question generator) | `Origin` |
-| **Witness** | How a learner gets a board right, as steps; played on the real props at build. A board whose witness fails is not built | `b.witness`, `Step` |
-| **Note check** | A known wrong answer and the note it should get; played like a witness | `b.noteCheck` |
+| **Witness** | How a student gets a board right, as taps and waits; played on the real props at build. A board whose witness fails is not built | `witness`, `tap`, `Step` (`@chalk/author`) |
+| **Note check** | A known wrong answer and the note it should get; played like a witness | `noteChecks`, `NoteCheck` |
 | **Board pattern** | A reusable piece of board-building shared by every concept | `library/patterns/` |
-| **Explainer prop** | A prop Jugnu may bring in to explain a concept (a number line, tiles). Words, questions and the board are not | `PropRole.Explainer` |
+| **Explainer prop** | A prop that is a world the student works in (a number line, the coordinate plane). Words, questions and the board are not | `PropRole.Explainer` |
 | **Rich text** | What every learner-facing string may hold: words, `**bold**`, `*emphasis*`, `$maths$`, `$$display maths$$` (KaTeX, with mhchem). Checked at build | `RichText`, `parseRich`, `richProblems` (`@chalk/player`) |
 | **Art** | A book's, chapter's or concept's picture, drawn in code with the pieces (`art.tsx`), built to checked SVG | `defineArt`, `ArtFrame`, `BuiltArt`, `pnpm art` |
 | **Stage** | A drawing: an SVG whose x (and y) ranges become d3 scales, plus layers for crowds and for what sits above them | `Stage`, `Space` (`@chalk/draw`) |
@@ -95,14 +77,14 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Source** | Where a built item came from: path, file, row | `Source` |
 | **Build** | Everything the manifests reach, checked: the course's shape as JSON in `build/`, each page and question naming the module that makes its board (chapters ship as code) | `pnpm build-content`, `pnpm preview`, `pnpm publish-content` |
 | **Player** | Plays lessons and boards; one player for everything | `@chalk/player` |
-| **Runtime** | One board, live: props' state (signals), IS kept true (one effect per rule, re-run only when what it read changes), WHEN answered, scripts run | `BoardRuntime` |
+| **Runtime** | One board, live, on the student's screen: the board model's `Board`, its clock moved each frame, the voice, the recorder | `BoardRuntime` (`@chalk/player`) |
 | **Library** | The registry of every prop type | `@chalk/library` |
-| **Studio** | Authoring: formats + validator now, a GUI later | `@chalk/studio` |
-| **Server** | The one Node process on the box: the API, Jugnu's model (key added there), and the built app | `@chalk/server`, `createApp` |
+| **Studio** | Authoring tools: the content build, the catalogue, the chalk MCP | `@chalk/studio` |
+| **Server** | The one Node process on the box: the API and the built app | `@chalk/server`, `createApp` |
 | **Account** | Someone who signed in with Google, known by Google's id (`sub`), not their email | `accounts`, `Account` (`@chalk/api`) |
 | **Sign-in** | One device's signed-in state: a random token in an HttpOnly cookie; only its hash is stored. Lasts 90 days. (Not the events' `sessionId`, which is one run of the app) | `sign_ins`, `SIGN_IN_COOKIE` |
 | **Setup** | The one-time screen after the first sign-in: name, school code, learner or teacher | `POST /api/me/setup` |
-| **Role** | Learner or teacher, chosen at setup, never changed. The screens say "student" | `Role` (`@chalk/api`) |
+| **Role** | What a prop is for: an explainer (a world the student works in), a question, or part of the page (words) | `PropRole` |
 | **School code** | The code we give a school; everyone types it at setup | `schools.code`, `pnpm add-school` |
 | **Group** | A teacher's learners for one course. No name: shown as its course and when it was made | `groups`, `TeacherGroup`, `JoinedGroup` |
 | **Join code** | Six characters (no look-alike letters) a learner types, or opens as `/join/<code>`, to join a group. A new code stops the old one | `groups.join_code`, `makeCode` |

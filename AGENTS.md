@@ -39,7 +39,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
 Read [platform/docs/glossary.md](platform/docs/glossary.md) (use its names), [board-model.md](platform/docs/board-model.md), [architecture.md](platform/docs/architecture.md) and [code-conventions.md](platform/docs/code-conventions.md).
 
-- Every change to a prop is one of its actions, through `BoardRuntime.call`.
+- A prop's variables change only by its own rules, on its actions; time is the board's queue ([board-model.md](platform/docs/board-model.md)).
 - New prop: in `library/props/<name>`, following [making-a-prop.md](platform/docs/making-a-prop.md), with one line in `library/registry/src/index.ts`.
 - A board shape used twice goes to `library/patterns/`.
 - Drawing: `@chalk/draw` only ([drawing.md](platform/docs/drawing.md)). Art: [making-art.md](platform/docs/making-art.md).

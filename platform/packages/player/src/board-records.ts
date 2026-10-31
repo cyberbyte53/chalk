@@ -1,7 +1,7 @@
 import type { Actor } from "@chalk/content";
 import type { WordsToSay } from "./sound/voice";
 
-/** What a board runs with, and what it records (the recorder reads them): the event model's. */
+/** What a board runs with, and what it records (the recorder reads them). */
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {

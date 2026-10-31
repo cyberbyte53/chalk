@@ -54,7 +54,6 @@ export function useBoardRuntime(
       // A broken rule must never fail silently, and never stop the learner.
       onError: (message: string, error?: unknown) => console.error(message, error ?? ""),
     };
-    // Every board is on the event model (platform/docs/event-model.md).
     return new BoardRuntime(board, (type) => registry[type], {
       ...services,
       locale: voice.locale,

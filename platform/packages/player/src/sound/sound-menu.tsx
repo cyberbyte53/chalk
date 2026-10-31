@@ -20,7 +20,7 @@ export function SoundMenu({
 }: {
   locale: Locale;
   hasSounds: boolean;
-  /** Reads the screen again, from the top (a board on the event model). */
+  /** Reads the screen again, from the top. */
   onHearAgain?: (() => void) | undefined;
 }): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,7 +111,6 @@ function Switch({
 
 /** Whether a board can play a sound: one of its lesson's cues, or one of its pieces' own. */
 export function hasSounds(board: Board, registry: PropRegistry): boolean {
-  if (board.model === undefined) return false;
   if (Object.values(board.model.sounds ?? {}).some((cue) => cue.sound !== null)) return true;
   return propPieces(board.root).some(
     (piece) => Object.keys(registry[piece.prop]?.sound?.cues ?? {}).length > 0,

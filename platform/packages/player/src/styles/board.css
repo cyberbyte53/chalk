@@ -154,47 +154,6 @@
 .board-body.is-settled {
   pointer-events: none;
 }
-/* While Jugnu's chat is open the screen stops scrolling as a whole: it is split into the board,
-   which scrolls on its own, the footer, and the chat sheet. Nothing then scrolls the page (a
-   focused input, a growing chat), so the board's top stays where the student left it. The page
-   is shorter by the phone's keyboard where the keyboard overlays it (iOS; set by the chat). */
-.lesson:has(.board.is-chatting) {
-  height: calc(100dvh - var(--keyboard-inset, 0px));
-  min-height: 0;
-}
-.board.is-chatting {
-  min-height: 0;
-}
-.board.is-chatting .board-body {
-  flex: 1 1 0;
-  min-height: 0;
-  overflow-y: auto;
-}
-.board.is-chatting .board-footer {
-  flex: none;
-}
-/* The banner while chatting: one slim row, the verdict and its one move (Try again, Continue).
-   Back and his own button wait until the chat closes; Ask Jugnu is already open. */
-.board.is-chatting .board-footer {
-  padding: 8px 18px;
-}
-.board.is-chatting .board-footer.has-banner {
-  flex-wrap: nowrap;
-}
-.board.is-chatting .board-footer .back,
-.board.is-chatting .board-footer .jugnu-button,
-.board.is-chatting .banner-help {
-  display: none;
-}
-.board.is-chatting .board-banner {
-  width: auto;
-  flex: 1;
-  min-width: max-content;
-}
-.board.is-chatting .board-footer.has-banner .primary {
-  width: auto;
-  flex: 1;
-}
 
 /* The piece the line being said is about: a soft light, as a teacher points at what they say. */
 .piece-prop.is-spoken {

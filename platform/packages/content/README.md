@@ -1,6 +1,6 @@
 # @chalk/content
 
-The content formats, as Zod schemas (types are inferred from them): lesson → board → a layout tree of props, plus the board's IS and WHEN rules and their scripts, and events.
+The content formats, as Zod schemas (types are inferred from them): lesson → board (its scene, and a layout tree of its pieces), sound cues, and events.
 
 - `lesson.ts`, `board.ts`, `piece.ts`: what authors write ([docs/board-model.md](../../docs/board-model.md)).
 - `event.ts`: events as an envelope (same on every event) plus one exactly-typed payload per kind, all `.strict()`. Bump `EVENT_SCHEMA_VERSION` when a payload changes shape.

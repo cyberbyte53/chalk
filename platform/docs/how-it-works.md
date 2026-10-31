@@ -1,91 +1,66 @@
 # How it works
 
-The whole loop, end to end, with "Where does √2 live?" as the running example. Parts marked *(later)* aren't built yet.
+The whole loop, end to end, with Class 9's "Two numbers for a place" (coordinate geometry, lesson 1) as the running example. Parts marked *(later)* aren't built yet.
 
 ```text
-Author ─▶ Build ──▶ CDN ─▶ Phone: lesson plays ─▶ events ─▶ Server ─▶ learner model
-   ▲                                │  ▲                                    │
-   │                                ▼  │                                    ▼
-   └──── teacher view & content fixes ◀─── Jugnu (when stuck)      practice the next day
+Author ─▶ Build ──▶ Phone: lesson plays ─▶ events ─▶ Server ─▶ progress
+   ▲                        │                                    │
+   └──── teacher view & content fixes ◀───────────────────────────┘
 ```
 
 ## 1. Write the lesson
 
-You make "Where does √2 live?": four boards, Maya and Arjun's lines, the number line, two questions.
+You make "Two numbers for a place": five boards. A bus on a straight road, Riya walking to Aman's house, a dot on a notebook page, desks in a classroom, and the two lines that did it every time.
 
-The lesson is TypeScript under `content/` (see [writing-content.md](./writing-content.md)). Each board places **props** (words, lines, the number line, a question) and wires them with rules: what is always true (IS), what reacts to a signal (`when`, `after`), scripts, and when the learner may go on (`passWhen`). Conditions are plain typed functions of the board. Boards and props have a **name** you choose (`guess`, `guessRoot`). Prop types come from the library.
+The lesson is TypeScript under `content/` (see [writing-content.md](./writing-content.md)). Each board is a **scene** ([board-model.md](./board-model.md)): its **pieces** (words, the coordinate plane, a question) top to bottom, and the lesson's **rules**: on a piece's signal, what happens (`"town.walker.arrived": … show "found", pass`). Rules are plain typed functions. Pieces have a **name** you choose (`town`, `reply`). Prop types come from the library.
 
 ## 2. Build
 
 You run `pnpm build-content` (or `pnpm preview`, which builds on every save).
 
-1. **Check:** the formats, every prop's contract (starting state, actions, arguments), the wiring, and each board's witness, played on the real props.
+1. **Check:** every prop's needs given, every piece's setup, and each board played on the real props, the clock jumped: its witness gets it passed, each wrong answer gets its note, in English and Hindi.
 2. **Name:** each page and question gets an id from where it lives (and a question's params). Events name a board by it and a piece by its address; nobody hands ids out.
 3. **Version:** each item's version is a hash of what made it, its code included, so every event says which version the learner saw.
-4. **Ship as code:** `build/` holds the course's shape and, per page or question, which module makes its board. The app and the server make each board from that same module.
-5. *(later)* **Audio:** every line a script tells a prop to `say` is spoken once per language, in the voice set for its speaker in `authoring/voices.json`. What's shown and what's said can differ: screen text is turned into words by the pronunciation rules in `authoring/pronunciations.json` ("√2" → "square root of 2", "25°C" → "25 degrees Celsius"), and an author's `speak` line wins when given. The voice only ever gets plain words: any character no rule handles is refused instead of being read out wrong. Files are named by what was said, so only new or edited lines are spoken again.
-6. *(later)* **Bundle:** everything is packaged and uploaded to the CDN. Jugnu's server gets the prop definitions and a board index.
+4. **Ship as code:** `build/` holds the course's shape and, per page or question, which module makes its board. The app makes each board from that same module.
+5. **Audio:** every line a board says is voiced once per language, in the voice set for its speaker in `authoring/voices.json` ([sound.md](./sound.md)). What's shown and what's said can differ: a line's spoken words are written with it when its screen words aren't how it is said ("→" is "the right arrow"). The voice only ever gets plain words. Clips are named by what was said, so only new or edited lines are voiced again.
+6. *(later)* **Bundle:** chapters packaged and uploaded to a CDN.
 
 ## 3. The learner opens the app
 
-A new session starts. *(later)* The app reads the chapter manifest, downloads only files that changed (lesson, prop code, audio) and caches them.
+A new session starts. The app fetches the chapter's built files and its boards' code once, and keeps them for offline.
 
-The lesson player raises `lesson start`. The event backbone adds the envelope (session, `seq` 0, `producedAt`) and hands the event to its subscribers.
+The lesson player raises `lesson start`. The event channel adds the envelope (session, `seq` 0, `producedAt`) and hands the event to its subscribers.
 
-## 4. Board 1: "Where does √2 live?"
+## 4. Board 2: "Finding Aman's house"
 
-The title and Maya's line are read aloud, then Arjun's line appears and is read **while** the line glides from 0–4 down to 1–2. She taps **Continue**.
+The board opens and tells `started`. Its words are said in turn: the title, the story ("He replies: **Street 4**"), then "Move her along it with the right arrow". The town shows the main road only: no street has risen yet.
 
-The runtime starts every prop through the **one door** and raises `board.started`. The board's rule answers it with a script: `board.pass` (Continue shows), `title.say`, `mayaSquares.say`, a short wait, `board.show arjunBetween`, then `arjunBetween.say` **with** `line.zoomTo(1, 2, over 2.5 s)`. Nothing is spoken unless the script says so. If a line's audio can't play, its text stays, a small "tap to try again" appears, and a `line audioFailed` event is raised. **Continue** is a commit: `board continue` with the number line's state at that moment.
+She taps → four times. Each tap is the walker's `step`, an action from the screen: Riya checks the road, glides one block (a planned move on the board's clock), and tells `stepped`. At (4, 0), the board's rule hears `town.walker.stepped` and asks the plane to raise Street 4. The street rises; at its end the plane tells `risen`, and the board shows "Street 4 rises from the 4…" and lights its five houses. When that line has been said, Aman's house is marked (House 5), and his reply shows.
 
-## 5. Board 2: a wrong guess
+She taps ↑ five times. Riya reads `upLines` (Street 4 is up now), walks up, and tells `arrived (4, 5)`. The board's rule shows "Aman's house isn't on one line…", raises every street, and passes: Continue shows. **Continue** is recorded: `board continue`.
 
-She drags to 1.62 and taps **Check**: "Its square is more than 2. Move left."
+Each step she took is recorded on its own: the action, what it set off (the rule, the street rising), and the signals on the way, linked ([events.md](./events.md)).
 
-Dragging calls the number line's `moveMarker` action and logs nothing. Under the line, a text prop shows "1.62 × 1.62 = 2.6244": its words are an IS rule over `line.marker`. The question's `isMet` is another IS (`1.98 <= line.marker * line.marker <= 2.02`), so **Check** judges on the phone and raises the commit `question check { submitted: the line, marker 1.62 } → { status: wrong, attempts: 1 }`. The question's `wrong` signal meets a WHEN rule (`if line.marker * line.marker > 2.02`) that shows the hint.
+## 5. Board 4: a wrong answer
 
-## 6. Stuck: Jugnu
+On "Desks in a classroom" she taps the desk at (5, 3), then the one at (3, 5), and the question asks whether they are the same desk. She picks "Yes: they are the same desk". The choice checks at once: wrong, and its note shows below it. `checked { status: wrong, attempts: 1 }` is recorded.
 
-*What exists now:* on a board with a question, an "Ask Jugnu" button opens his chat. He is an agent: each step his model (DeepSeek Flash by default; see the repo's `.env.example`) gets the whole board as data (every prop's state, the question included, the lesson's IS and WHEN rules, everything that happened) and answers in words or with tools: one of the board's actions (through the same door as the lesson), pointing at a part (it glows), the calculator, or handing the board back. He sees what each tool did and goes on, up to six steps. When he hands back, the chat shrinks and he watches; when she acts on that prop, he looks and goes on. The runtime keeps him from answering the question, passing the board or doing her `studentOnly` actions, and a move of his that would put the board into the answer is put back. Each turn is one event: `jugnu ask { text } → { reply, steps, watching, model }`. Not yet: speech, the Slate, her mastery in his context. The rest of this section is where it's going.
+She looks at the two marked desks, picks "No", and is right: the board passes.
 
-She taps Jugnu and says "why is it wrong, it's between 1 and 2". He highlights 1.4–1.5 on her line and asks what 1.5 × 1.5 is.
+## 6. Then practice
 
-- `chat open`. The phone sends the board's live state, her last attempts and her mastery; each prop's menu (generated from its definition) goes once per chat.
-- Her voice becomes text (she can fix it before sending): `chat send`.
-- On the server, the model gets tools generated from the props' definitions (point at a part, call an action), limited to what is on the board right now; answer-revealing actions are hidden while a question is open. It calls `point(board/line/tick:1.4)`; the phone draws the glow on the overlay layer.
-- His reply streams back as text and speech (`chat reply`); his face shows Thinking, then Curious.
-- While the chat is open the board is paused; she closes it (`chat close`) and the board is restored and carries on.
+After a concept's pages come its questions, from the chapter's bank (`walk-to-address`, `tap-the-desk`, …), played as their own lesson; their first tries are the score.
 
-## 7. She gets it
+## 7. Upload
 
-She drags to 1.41 and checks: correct. `question check { submitted: 1.41 } → { status: correct, attempts: 2 }`, marked as helped once Jugnu exists.
+Every few seconds the uploader (just another subscriber) takes a batch from the phone's queue and posts it. The server checks every event's shape, drops duplicates by id, appends to the event table and acknowledges; the phone then clears that batch. Offline, events wait on the phone.
 
-## 8. Boards 3 and 4, then done
+## 8. Progress and the teacher
 
-`board continue` after the zoom (the script ends by placing a labelled √2 on the line). On the quiz she picks "√2 = 1.41 exactly": wrong (the option carries the misconception `rootIsFiniteDecimal`), then right on attempt 2. `lesson complete`.
+The server's processors read the events as they arrive: which concepts a learner has played and practised, and how. The teacher sees each learner's concepts as marks (strong, shaky, weak, started).
 
-## 9. Upload *(later)*
+*(later)* A learner model that counts only first attempts across days, and schedules practice; misconceptions picked on the teacher's view.
 
-Every few seconds the uploader (just another subscriber) takes a batch from the queue on the phone, sends shared fields once, gzips it and posts it. The server checks every event's shape, drops duplicates by id, appends to the event table and acknowledges; the phone then clears that batch. Offline, events wait on the phone.
+## 9. Fixing content
 
-## 10. The learner model *(later)*
-
-On the server, the learner model reads the log and counts only the learner's own first attempts:
-
-- board 2, attempt 1 wrong → `sqrt-estimation` goes down a little;
-- board 4, attempt 1 wrong with `rootIsFiniteDecimal` → `irrational-numbers` goes down, and the misconception is noted;
-- correct second attempts are practice, not evidence.
-
-The practice queue schedules an irrational-numbers question for two days later.
-
-## 11. Two days later *(later)*
-
-Her Practice tab shows "Is 3.14 exactly π?". Right first time: mastery goes up (it counts as mastered only after correct answers on separate days).
-
-## 12. The teacher *(later)*
-
-The teacher view shows 12 of 30 picked "√2 = 1.41 exactly". You project the zoom board in class. It reads the same event log, grouping `check` events by question and misconception.
-
-## 13. Fixing content
-
-Most kids still guessed wrong on board 2 after the hint, so you rewrite it and ship again. Its id stays the same, only the wording and the version change. Old events say the old version, so you can compare whether the new hint works better.
+Many still picked "the same desk" after the note, so you rewrite the note and ship again. The board's id stays the same; only its words and version change. Old events say the old version, so you can compare whether the new note works better.

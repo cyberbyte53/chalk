@@ -50,101 +50,104 @@ exclude: [one-third-never-lands]   # optional
 
 # a concept
 title: { en: A decimal is an address, hi: दशमलव एक पता है }
-props: [decimalExpansion]          # optional: extra explainers for Jugnu
+props: [decimalExpansion]          # optional: extra explainers (Jugnu's, parked)
 ```
 
 A book has `title` and `chapters`; `content/build.yaml` has `books`. Unknown fields fail the build.
 
-**Props Jugnu may use** are worked out, not listed: a concept's are the explainers its pages place, those the questions testing it place, and its `props:` extras; a chapter's are the union of its concepts'. Write `props:` only for an explainer nothing on the concept's boards uses.
+**A concept's explainers** (for Jugnu, parked until he is remade) are worked out, not listed: a concept's are the explainers its pages place, those the questions testing it place, and its `props:` extras; a chapter's are the union of its concepts'. Write `props:` only for an explainer nothing on the concept's boards uses.
 
 **`concepts.gen.ts`** is the chapter's concepts as an enum, made from `build.yaml` by `pnpm build-content` (and `preview`). Commit it. Rename or drop a concept and every family still naming it stops compiling; the build also fails while the file is out of date.
 
 ## The overview (`overview.ts`)
 
+A page is a scene ([board-model.md](board-model.md#a-board-its-scene)): its pieces, top to bottom, and the lesson's rules.
+
 ```ts
-const story = page("story", (b) => {
-  const w = wordsOn(b);
-  const race = b.prop(lapRaceDef, "race", {});
-  b.witness(race.learner(LapRaceAction.Play), race.learner(LapRaceAction.Arrive));
-  const must = choice(b, {
-    name: "must",
-    prompt: t("So a minute when they're there together is…", "…"),
-    right: t("a multiple of both 18 and 12", "…"),
-    wrong: {
-      factor: { label: t("a factor of both", "…"), feedback: t("Their minutes only grow…", "…") },
+const seatingPlan = page(
+  "seating-plan",
+  scene({
+    purpose: "A desk is named by two numbers: its column, then its row. …",
+    pieces: {
+      title: words.title(t("Desks in a classroom", "कक्षा में डेस्क")),
+      tap: words.body(t("Tap the desk at (5, 3), then the one at (3, 5).", "…")),
+      room: place(coordinatePlane, setup(classroom(), { places: { showAddress: true } })),
+      same: hidden(same.piece),          // a question, shown once both desks are tapped
     },
-  });
-  const lcmIs = w.definition(t("…the **lowest common multiple**…", "…"), "lcmIs");
-  b.after(race.on(LapRaceSignal.Met), must);                        // appears when they meet
-  b.after(race.on(LapRaceSignal.Met), lcmIs, { if: (at) => at(race).time > 36 });
-  b.passWhen(race.on(LapRaceSignal.Met), { if: (at) => at(race).time > 36 });
-  return [w.title(t("HCF and LCM", "HCF और LCM")), race, must, lcmIs];
-});
+    uses: [same.use],
+    hear: {
+      "room.places.targetChosen": (me, p, t) => …,
+    },
+    witness: [tap("room", "places.chooseTarget", { x: 5, y: 3 }), …],
+  }),
+);
 
 /** The pages, in reading order. Leave one out to drop it from the build. */
-export const overview = [story, towers, play];
+export const overview = [busStops, streetAndHouse, dotOnPaper, seatingPlan, twoLines];
 ```
 
-- **A page returns its pieces, top to bottom.** It is laid out as a column with room at the bottom; `row(...)` and `overlay(...)` are for pieces side by side or on top of each other.
-- **What appears later:** `b.after(trigger, pieces, { if })`. The pieces start hidden and show when the trigger fires (and the condition holds). The trigger is a signal (`race.on(LapRaceSignal.Met)`) or a question (shown once it is answered right). A piece shown in steps, or hidden again, uses `b.when(signal, theBoard.show(p) / theBoard.hide(p))`. A piece that starts hidden and that nothing shows doesn't build.
-- **When the learner may go on:** when every question on the page is answered right; at once on a page with none. `b.passWhen(signal, { if })` replaces that (passing on a prop's signal, or a page whose question is a stop on the way). Nothing else passes a page.
-- **Conditions are plain functions of the board,** typed from the pieces: `(at) => at(race).time > 36`, `(at) => at(line).marker > 2 && at(ask).status === AnswerStatus.Correct`. Any condition TypeScript can compute; no strings.
-- **Questions:** `choice(b, { prompt, right, wrong: { key: { label, feedback } } })`, its options shuffled the same way every build (`keepOrder` keeps them as written, the right one first); `goal(b, { about, prompt, met: (at) => …, solve, notes })` for "get this prop into a state, then Check". Each answers where it sits. The build writes the page's concept into them, ungraded (`isGraded: false`): answering one teaches but counts towards no mastery. Bank questions are graded on the concepts they test. Jugnu is there for doubts on both.
-- **A picture:** a prop drawn still, from a state you give it: `b.prop(coordinatePlaneDef, "town", { … }, { still: t("The main road and Street 4, with Aman's house", "…") })`. Nothing on it can be tapped, dragged or focused, and the sentence is what a screen reader and Jugnu read. Use it to show again something the student has already used (the same picture, now to look at); a prop for a page's own drawing doesn't exist yet.
-- **Sizes are the player's:** a board is drawn for a phone and fits any screen on its own (the column grows to 640px, text grows with it, props scale; see [making-a-prop.md](./making-a-prop.md)). A placement can override its prop's rule when needed: `b.prop(numberLineDef, "line", { … }, { size: { fit: "fill" } })`.
-- Every interactive page has a witness: how a learner gets through it (`b.witness(...)`, with `wait(seconds)` for the board's clock).
-- Anyone may act on any piece; Jugnu's judgement (never answering an open question for the learner) is checked by his evals, not by the board. Don't write `b.studentOnly`.
+- **Pieces, top to bottom:** `place(def, given)`, part by part for a prop that holds parts (`{ plane: { window }, walker: { walkFrom } }`); words with `words.title`, `words.body`, `words.note`, `words.definition` (`@chalk/patterns`). What a piece says aloud, when not its words as shown: `{ says: t(…) }`.
+- **What appears later:** `hidden(piece)` starts it hidden; a rule shows it (`t.self.show({ name: "found" })`). A piece hidden that nothing shows doesn't build.
+- **The lesson's rules:** `hear` answers a piece's signal (`"town.walker.arrived": (me, p, t) => …`), `onSaid` a line's end. A rule reads the board as `me` (each piece by name), the payload as `p`, and acts with `t` ([board-model.md](board-model.md#a-rule)). Conditions are plain TypeScript, typed from the pieces.
+- **When the student may go on:** when every question on the page is right; at once on a page with none. `passBy: "rules"` makes it pass only when a rule says `t.self.pass()`.
+- **Questions:** `choice({ prompt, options, answer })` from `@chalk/patterns`, its options shuffled the same way every build (`keepOrder` keeps them as written); `check({ about, prompt, isRight, solve, notes })` for "get this prop into a state, then Check". Each gives a `piece` and a `use` (its rules, its witness, its note checks): place the piece, list the use in `uses`. The build writes the page's concept into them, ungraded: answering one teaches but counts towards no mastery. Bank questions are graded on the concepts they test.
+- **A picture:** a prop drawn still, from the setup you give it: `place(coordinatePlane, …, { still: t("The main road and Street 4, with Aman's house", "…") })`. Nothing on it can be tapped, dragged or focused, and the sentence is what a screen reader reads.
+- **Sizes are the player's:** a board is drawn for a phone and fits any screen on its own (the column grows to 640px, text grows with it, props scale; see [making-a-prop.md](./making-a-prop.md)). A placement can override its prop's rule: `place(def, given, { size: { fit: "fill" } })`.
+- **Every interactive page has a witness:** how a student gets through it, as taps (`tap("town", "walker.step", { direction: "up" })`) and waits, played on the real props at publish.
+- **What the board is for** (`purpose`) and what a piece stands for here (`standsFor`): the author's words, for whoever reads the board.
 
-A bank question's `build` is the same: it returns its pieces, and passes when its questions are right. The build refuses a board that returns anything but a list. Chapters still in the older shape live on the `content-pipeline` branch and come over one at a time.
+A bank question's `build` returns a scene the same way, and passes when its questions are right.
 
 ## A question family (`family.ts` + `params.yaml`)
 
 ```ts
 import { Concept } from "../../concepts.gen";
 
-export const locateOnLine = family({
-  level: Level.Medium,
-  tests: [Concept.SuccessiveMagnification],         // one or more of the chapter's concepts
-  params: z.object({ target: decimal, from: z.number(), to: z.number() }).strict(),
-  build: ({ target, from, to }, b) => {
-    const line = b.prop(numberLineDef, "line", { from, to, showMarker: true, isZoomable: true });
-    const ask = goal(b, {
-      about: line,
-      prompt: t(`Put the marker exactly on ${target}.`, "…"),
-      met: (at) => target.isAt(at(line).marker),     // exact: a Dec, never == on floats
-      solve: reach(line, target),                    // the witness
-      notes: [{ when: (at) => …, say: t("…", "…"), reach: reach(line, early) }],
+/** Given an address, walk Riya there: along the main road to the street, then up it to the house. */
+export const walkToAddress = family({
+  level: Level.Easy,
+  tests: [Concept.TwoNumbersForAPlace],             // one or more of the chapter's concepts
+  params: z.object({ street: z.number().int(), house: z.number().int() }).strict(),
+  build: ({ street, house }) => {
+    const town = place(coordinatePlane, plane.town());
+    const ask = check({
+      about: "town",
+      prompt: t(`Aman lives at **Street ${street}, House ${house}**. Walk Riya there, then press Check.`, "…"),
+      isRight: plane.isAt("town", street, house),
+      solve: plane.walkTo("town", street, house),    // the witness
+      notes: [{ when: plane.isAt("town", house, street), say: t("The street comes first…", "…"),
+                reach: plane.walkTo("town", house, street) }],
     });
-    return [line, ask];
+    return scene({ pieces: { town, ask: ask.piece }, uses: [ask.use] });
   },
 });
 ```
 
 ```yaml
-- params: { target: "2.665", from: 2, to: 3 }
-- params: { target: "7.384", from: 7, to: 8 }
-  level: hard                      # overrides the family's level
-# 4.207 reads too much like 4.27 on a small screen; kept for later
-- params: { target: "4.207", from: 4, to: 5 }
+- params: { street: 4, house: 3 }
+- params: { street: 2, house: 5 }
+  level: medium                    # overrides the family's level
+# the corner itself: too easy to tell anything
+- params: { street: 1, house: 1 }
   origin: generated
   exclude: true
 ```
 
 - `family.ts` exports exactly one `family(...)`. It never names its folder. `tests` is for the whole family: if rows would test different concepts, they are two families.
 - Each row is one question. `params` is checked against the family's `params` schema; `decimal` turns `"7.384"` into an exact `Dec`; quote it, because unquoted YAML reads a float and drops trailing zeros (`7.30` → `7.3`), so the build refuses an unquoted one. A row may set `level` (else the family's), `origin` (`authored` by default, `generated` from the question generator) and `exclude` (kept in the file, left out of the build).
-- Every question has a witness (how a learner gets it right) and a note check per note. The build plays them on the real props; a row that fails is reported and left out, the other rows still build.
+- Every question has a witness (how a student gets it right) and a note check per note. The build plays them on the real props; a row that fails is reported and left out, the other rows still build.
 - The concepts a question tests are written into its question prop by the build, as ids.
 
 ## Rules for TypeScript content
 
-- Props, actions, signals and derived fields come from the prop's definition, typed: `line.learner(NumberLineAction.ZoomIn)`, `goal.on(QuestionSignal.Wrong)`, `line.derived(NumberLineDerived.Level)`. Naming one a prop doesn't have is a compile error. Use the props' enums, never a string.
-- Numbers a learner sets are compared with an exact decimal, `dec("7.384").isAt(at(line).marker)`, never `==` on floats.
+- Pieces, their parts, actions, signals and what a rule reads come from the props' definitions, typed: `t.to.town.plane.raiseUpLine({ at: 4 })`, `"town.walker.arrived"`, `me.town.walker.at`. Naming one a prop doesn't have is a compile error.
+- Numbers a student sets are compared with an exact decimal, `dec("7.384").isAt(value)`, never `==` on floats.
 - Every learner-facing string is `t(en, hi)`.
-- When the same board-building shows up a second or third time, lift it into `library/patterns/` (`choice`, `goal`, `magnifier`, `reach`).
+- When the same board-building shows up a second or third time, lift it into `library/patterns/` (`choice`, `check`, `plane.walkTo`).
 
 ## Words and maths
 
-Every learner-facing string (text, prompts, options, feedback, notes, Jugnu's replies) is **rich text**: plain words plus a small, fixed syntax.
+Every learner-facing string (text, prompts, options, feedback, notes) is **rich text**: plain words plus a small, fixed syntax.
 
 | Write | Get |
 | --- | --- |
@@ -160,7 +163,6 @@ Every learner-facing string (text, prompts, options, feedback, notes, Jugnu's re
 - The build typesets every formula in every language; broken maths (`$\frac{1}{$`) fails it with the exact string and reason.
 - A line that is spoken needs a `speak` version in plain words; the voice can't read LaTeX.
 - Headings and lists are not rich text: layout belongs to the board.
-- **Live values** (an IS text): `{line.marker}` in words, `\live{…}` inside maths, where braces are LaTeX's own: `t("You are at {fixed(line.marker, 2)}", "…")`, `"$x = \\live{fixed(line.marker, 2)}$"`. Both re-render when the value changes. The build checks the maths with each live value as 0.
 
 ## Ids, versions, where it came from
 

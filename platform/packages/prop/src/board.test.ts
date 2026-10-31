@@ -5,7 +5,7 @@ import { type VoiceTools, action, prop, signal } from "./define";
 import { sequence } from "./helpers";
 import { type Heard, type Voice, timedVoice } from "./voice";
 
-// A small town on the event model: the plane owns which streets are up, places own the target,
+// A small town: the plane owns which streets are up, places own the target,
 // the walker needs both and walks block by block. The board (the lesson) is the outermost prop.
 
 const point = z.object({ x: z.number(), y: z.number() }).strict();
@@ -133,7 +133,7 @@ function tap(board: Board, path: string, act: string, payload = {}): void {
   board.runUntilIdle();
 }
 
-describe("a board on the event model: Finding Aman's house", () => {
+describe("a board: Finding Aman's house", () => {
   it("plays through: road, the street rises, a beat, the house, up the street, found", () => {
     heard.length = 0;
     const board = new Board(lesson);

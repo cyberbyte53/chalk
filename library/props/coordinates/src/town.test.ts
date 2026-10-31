@@ -4,7 +4,7 @@ import { coordinatePlane } from "./coordinate-plane";
 import { Marks, Scene } from "./plane";
 import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "./walker";
 
-// The town on the event model, played as a board plays it: taps go in, the clock jumps to what is
+// The town, played as a board plays it: taps go in, the clock jumps to what is
 // due, and what each part tells is heard. The same laws as model.test.ts's town.
 
 /** Lesson 1's town: streets counted from 1 along the main road, houses up each street. */

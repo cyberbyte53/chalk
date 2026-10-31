@@ -37,21 +37,6 @@
   font-weight: 700;
   cursor: pointer;
 }
-/* Dev shell: which model Jugnu runs on (`?model=`); switching reopens the lesson on the same board.
-   Top right, with the events button under it, so neither covers the board's footer or the chat. */
-.dev-model {
-  position: fixed;
-  right: 8px;
-  top: 4px;
-  z-index: 50;
-  border: none;
-  border-radius: 10px;
-  padding: 6px 8px;
-  background: var(--color-inverse-surface);
-  color: var(--color-on-inverse-surface);
-  font-size: 12px;
-  opacity: 0.75;
-}
 .log-toggle {
   position: fixed;
   right: 8px;
