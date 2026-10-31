@@ -60,7 +60,9 @@ function runPanel(page: string) {
 describe("the preview panel's page", () => {
   const page = panelHtml(BASE, "at=library/props/primes/lapRace");
   it("opens on the address it was given", () => {
-    expect(page).toContain(`<iframe id="frame" src="${BASE}?dev&at=library/props/primes/lapRace">`);
+    expect(page).toContain(
+      `<iframe id="frame" src="${BASE}?dev&at=library/props/primes/lapRace" allow="autoplay">`,
+    );
   });
   it("its script parses (a template string eats backslashes: one bad regex stops it all)", () => {
     expect(() => new Function(scriptOf(page))).not.toThrow();

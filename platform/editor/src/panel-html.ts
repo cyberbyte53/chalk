@@ -27,6 +27,6 @@ export function panelHtml(base: string, query: string): string {
   <button id="hindi" title="Hindi">हि</button>
   <button id="out" title="Open in Cursor\'s browser (design mode: ⌘⇧D, click a piece, ⌘L adds it to the chat)">↗</button>
 </div>
-<iframe id="frame" src="${src}"></iframe>
+<iframe id="frame" src="${src}" allow="autoplay"></iframe>
 <script nonce="${nonce}">(${panelMain.toString()})(${JSON.stringify({ base, query } satisfies PanelStart)});</script></body></html>`;
 }
