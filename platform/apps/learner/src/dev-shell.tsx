@@ -170,7 +170,6 @@ export function DevShell({ bus }: { bus: EventBus }): JSX.Element {
           key={`${playing.lesson.id}-${locale}-${modelId ?? ""}`}
           lesson={playing.lesson}
           mode={modeFor(playing.lesson.id)}
-          audio={playing.audio}
           registry={propLibrary}
           locale={locale}
           bus={bus}

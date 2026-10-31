@@ -100,7 +100,6 @@ export function LibraryScreen({
                           registry={propLibrary}
                           locale={locale}
                           record={bus.record}
-                          audio={undefined}
                           onPass={() => {}}
                         />
                       ) : (

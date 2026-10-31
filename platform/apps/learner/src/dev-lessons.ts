@@ -1,6 +1,5 @@
 import type { Lesson } from "@chalk/content";
 import { preloadProps } from "@chalk/library";
-import type { AudioSource } from "@chalk/player";
 import { type ChapterContent, loadChapter } from "./content-store";
 import type { CourseChapter } from "./course";
 import { courses } from "./lessons";
@@ -12,14 +11,10 @@ import { specimen } from "./specimen";
  * (the specimen) only when that list is opened.
  */
 
-/**
- * A lesson and where its spoken lines' audio is. v1 is silent: no lesson gets audio, so `say`
- * shows its text and moves on, and no retry mark appears. The player's narration and the voices
- * (platform/studio/src/voice) are kept for the audio step, later.
- */
-export type PlayableLesson = { lesson: Lesson; audio: AudioSource | undefined };
+/** A lesson to play (its sound the player finds itself, as on a student's phone: board-sound.ts). */
+export type PlayableLesson = { lesson: Lesson };
 
-const playable = (lesson: Lesson): PlayableLesson => ({ lesson, audio: undefined });
+const playable = (lesson: Lesson): PlayableLesson => ({ lesson });
 
 /** Every lesson in no book: the specimen. */
 export function otherLessons(): Promise<PlayableLesson[]> {

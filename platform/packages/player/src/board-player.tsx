@@ -16,6 +16,7 @@ import {
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type Picked, isSamePick, useHoldToAsk } from "./ask-about";
+import { useBoardSound } from "./board-sound";
 import { playEffect } from "./effects";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { type JugnuLink, JugnuPanel } from "./jugnu-panel";
@@ -45,8 +46,6 @@ export type BoardPlayerProps = {
   locale: Locale;
   /** The app's event channel: the board records what happens on it (recorder.ts). */
   record: RecordEvent;
-  /** Where each line's audio is; undefined when the lesson has no audio yet. */
-  audio: AudioSource | undefined;
   onPass: () => void;
   /** Goes back a board; left out on the first board. */
   onBack?: (() => void) | undefined;
@@ -70,6 +69,11 @@ export type BoardPlayerProps = {
    * sound. A student's board (the default) waits for each line's sound to end.
    */
   isTimed?: boolean;
+  /**
+   * One of several boards on one screen (a review list): none speaks or sounds, since a device
+   * never shows two at once. Its lines keep their lengths, as a tool's do.
+   */
+  isQuiet?: boolean;
   /** Its menu is the lesson's (in the lesson's header, lesson-player.tsx), not its own. */
   isInLesson?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
@@ -90,7 +94,17 @@ function bringIntoView(root: HTMLElement | null, prop: string): void {
  * Plays one board: its props, wired by its IS and WHEN rules. Each question answers where it sits;
  * the player only adds the chrome every board shares: Jugnu, and Continue once the board passes.
  */
-export function BoardPlayer({
+/**
+ * A board, played: on a student's phone, in the preview and in the editor's panel alike. It finds
+ * its own sound (board-sound.ts) and starts once that is known.
+ */
+export function BoardPlayer(props: BoardPlayerProps): JSX.Element {
+  const sound = useBoardSound(props.board);
+  if (!sound.isReady) return <div class="board" aria-busy="true" />;
+  return <BoardPlay {...props} audio={sound.source} />;
+}
+
+function BoardPlay({
   board,
   registry,
   locale,
@@ -105,7 +119,8 @@ export function BoardPlayer({
   isPicture = false,
   isTimed = false,
   isInLesson = false,
-}: BoardPlayerProps): JSX.Element {
+  isQuiet = false,
+}: BoardPlayerProps & { audio: AudioSource | undefined }): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
   const jugnu = policy?.hasJugnu === false || board.model !== undefined ? undefined : given;
@@ -120,12 +135,14 @@ export function BoardPlayer({
   // The board reads each line's length when it says it: from the narrator as it is then.
   const narratorRef = useRef(narrator);
   narratorRef.current = narrator;
-  const runtime = useBoardRuntime(board, registry, narrator.speak, {
+  // A tool's board, or a quiet one, keeps time by each line's length and plays no effects; a quiet
+  // one says nothing either.
+  const keepsTime = isTimed || isQuiet;
+  const runtime = useBoardRuntime(board, registry, isQuiet ? sayNothing : narrator.speak, {
     locale,
     lineSeconds: (line) => narratorRef.current.seconds(line),
-    isTimed,
-    // A tool's board keeps its effects in the log only: nothing is played.
-    ...(isTimed ? {} : { effect: playEffect }),
+    isTimed: keepsTime,
+    ...(keepsTime ? {} : { effect: playEffect }),
     hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).
@@ -267,12 +284,15 @@ export function BoardPlayer({
           ref={body}
           onPointerDownCapture={() => recorder.gesture(true)}
         >
-          {!isPicture && !isTimed && !isInLesson && (
-            <SoundMenu
-              locale={locale}
-              hasVoice={audio !== undefined}
-              hasSounds={hasEffects(board, registry)}
-            />
+          {narrator.isWaitingForTap && !isPicture && (
+            // The browser refused the board's sound until the page is touched: tapping this is that
+            // touch, and the line plays.
+            <button type="button" class="tap-to-hear">
+              {t(locale, "tapToHear")}
+            </button>
+          )}
+          {!isPicture && !keepsTime && !isInLesson && (
+            <SoundMenu locale={locale} hasSounds={hasEffects(board, registry)} />
           )}
           <Layout piece={board.root} context={context} />
           {pill !== undefined && (
@@ -384,3 +404,6 @@ export function BoardPlayer({
     </PlayModeContext.Provider>
   );
 }
+
+/** A quiet board's voice: nothing said. */
+const sayNothing = (): Promise<void> => Promise.resolve();

@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { BoardPlayer } from "./board-player";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import type { JugnuLink } from "./jugnu-panel";
-import type { AudioSource } from "./narration";
 import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { RichText } from "./rich-text-view";
@@ -20,8 +19,6 @@ export type LessonPlayerProps = {
   locale: Locale;
   /** The app's event channel: each board records what happens on it. */
   bus: EventBus;
-  /** Where each line's audio is (from publish); leave out for a silent lesson. */
-  audio?: AudioSource;
   /** Jugnu (see @chalk/jugnu): where he thinks; leave out to play without Jugnu. */
   jugnu?: JugnuLink | undefined;
   /** The board to open on (an author jumping straight to it); the first board if left out. */
@@ -44,7 +41,6 @@ export function LessonPlayer({
   registry,
   locale,
   bus,
-  audio,
   jugnu,
   startBoard = 0,
   mode = PlayMode.Lesson,
@@ -89,11 +85,7 @@ export function LessonPlayer({
         </div>
         <span class="sr-only">{`${Math.min(index + 1, lesson.boards.length)} / ${lesson.boards.length}`}</span>
         {board !== undefined && (
-          <SoundMenu
-            locale={locale}
-            hasVoice={audio !== undefined}
-            hasSounds={hasEffects(board, registry)}
-          />
+          <SoundMenu locale={locale} hasSounds={hasEffects(board, registry)} />
         )}
       </header>
       {board === undefined && onComplete !== undefined ? null : board === undefined ? (
@@ -114,7 +106,6 @@ export function LessonPlayer({
           registry={registry}
           locale={locale}
           record={bus.record}
-          audio={audio}
           isInLesson
           onPass={() => {
             setIndex(index + 1);

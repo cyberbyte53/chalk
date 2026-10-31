@@ -8,19 +8,17 @@ import type { PropRegistry } from "./prop-module";
 import { t } from "./ui-text";
 
 /**
- * The board's menu, at its top right: what is heard (platform/docs/sound.md), each switched on its
- * own and kept on the device: the voice, and the sounds (effects). Shown when the board has
- * either. Later settings (the voice's speed, the language) go here too.
+ * The board's menu: what is heard (platform/docs/sound.md), each switched on its own and kept on
+ * the device: the voice (every board speaks), and the sounds (effects), when it has any. Later
+ * settings (the voice's speed, the language) go here too.
  */
 export function SoundMenu({
   locale,
-  hasVoice,
   hasSounds,
 }: {
   locale: Locale;
-  hasVoice: boolean;
   hasSounds: boolean;
-}): JSX.Element | null {
+}): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const menu = useRef<HTMLDivElement>(null);
   // A tap anywhere else, or Escape, closes it.
@@ -37,7 +35,6 @@ export function SoundMenu({
       window.removeEventListener("keydown", onEscape);
     };
   }, [isOpen]);
-  if (!hasVoice && !hasSounds) return null;
   return (
     <div class="board-menu" ref={menu}>
       <button
@@ -53,13 +50,11 @@ export function SoundMenu({
       </button>
       {isOpen && (
         <div class="board-menu-panel" role="menu">
-          {hasVoice && (
-            <Switch
-              label={t(locale, "voice")}
-              isOn={!isMuted.value}
-              onChange={(isOn) => setMuted(!isOn)}
-            />
-          )}
+          <Switch
+            label={t(locale, "voice")}
+            isOn={!isMuted.value}
+            onChange={(isOn) => setMuted(!isOn)}
+          />
           {hasSounds && (
             <Switch
               label={t(locale, "sounds")}

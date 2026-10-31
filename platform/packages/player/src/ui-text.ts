@@ -44,6 +44,7 @@ export const UiText = {
   flagFailed: { en: "Couldn't send the flag. Try again?", hi: "भेज नहीं पाए। फिर से कोशिश करें?" },
   closeJugnu: { en: "Close Jugnu", hi: "जुगनू बंद करो" },
   menu: { en: "Settings", hi: "सेटिंग" },
+  tapToHear: { en: "🔊 Tap to hear", hi: "🔊 सुनने के लिए छुओ" },
   voice: { en: "Voice", hi: "आवाज़" },
   sounds: { en: "Sounds", hi: "ध्वनियाँ" },
   audioUnavailable: {

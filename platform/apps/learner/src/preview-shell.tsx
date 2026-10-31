@@ -35,7 +35,6 @@ import { useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
-import { useChapterVoice } from "./chapter-voice";
 import { CONTENT_ROUTE, boardOfFile } from "./content-store";
 import type { Course } from "./course";
 import { ChapterScreen, CourseScreen } from "./course-screens";
@@ -560,6 +559,7 @@ export function PreviewBoard({
   isPlaying,
   bus,
   isShot,
+  isQuiet,
   threads,
   reviews,
   onThreads,
@@ -570,6 +570,8 @@ export function PreviewBoard({
   isPlaying: boolean;
   bus: EventBus;
   isShot: boolean;
+  /** One of several boards on the screen, not the one looked at: it says nothing. */
+  isQuiet: boolean;
   threads: readonly Thread[];
   reviews: readonly Review[];
   onThreads: (all: Threads) => void;
@@ -580,8 +582,6 @@ export function PreviewBoard({
   );
   const phone = useRef<HTMLDivElement>(null);
   useSourceTags(phone, where, shown.path);
-  // Played as a student would (not a tool's picture): the chapter's voice, when it has one.
-  const voice = useChapterVoice(shown.path, isPlaying && !isShot);
   // The board's script beside it, while reviewing (`&noscript`, or v, hides it): every line it can
   // say, including those only an interaction sets off, and each clip.
   const isScript = !new URLSearchParams(window.location.search).has("noscript");
@@ -613,27 +613,25 @@ export function PreviewBoard({
       )}
       <div class="preview-body">
         <div class="lesson preview-phone" ref={phone} onClickCapture={onClick}>
-          {voice.isReady && (
-            <BoardPlayer
-              onRuntime={
-                isProp
-                  ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)
-                  : undefined
-              }
-              board={board}
-              registry={propLibrary}
-              locale={locale}
-              record={bus.record}
-              audio={voice.source}
-              isPicture={isShot}
-              isTimed={isTimed}
-              onPass={() => {
-                const w = window as Window & { __chalkPassed?: string[] };
-                w.__chalkPassed ??= [];
-                w.__chalkPassed.push(shown.path);
-              }}
-            />
-          )}
+          <BoardPlayer
+            onRuntime={
+              isProp
+                ? (live) => setRuntime(live instanceof BoardRuntime ? live : undefined)
+                : undefined
+            }
+            board={board}
+            registry={propLibrary}
+            locale={locale}
+            record={bus.record}
+            isPicture={isShot}
+            isQuiet={isQuiet}
+            isTimed={isTimed}
+            onPass={() => {
+              const w = window as Window & { __chalkPassed?: string[] };
+              w.__chalkPassed ??= [];
+              w.__chalkPassed.push(shown.path);
+            }}
+          />
         </div>
         {!isShot && isProp && runtime !== undefined && (
           <PropPanel runtime={runtime} piece={board.name} />
@@ -1554,6 +1552,8 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
             style={zoom === 1 ? undefined : { zoom }}
           >
             <PreviewBoard
+              // Only the board looked at speaks: a device never shows two at once.
+              isQuiet={shown.length > 1 && !(isOne && i === at)}
               shown={s}
               where={sources[s.path]}
               threads={threadsOn(threads, s)}
