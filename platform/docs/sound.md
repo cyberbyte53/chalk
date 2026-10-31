@@ -11,7 +11,7 @@ Status: **design agreed in conversation (2026-10-31); the code moves to it next.
 | **When** | a moment: an event on the board, and maybe its data | `line.walker.stepped`; `ask.checked` where `status` is `wrong` |
 | **What** | **words**, said by a speaker (their voice makes a clip), or **a file** (a recorded sound) | "The bus is at minus 2. Where is it?"; `step` |
 | **How** | **takes a turn** (one at a time, by the two rules), **when free** (only when nothing else is due), or **plays alongside** (at once, over anything) | words take a turn; the opening's reads are when free; a step plays alongside |
-| **Until** | for a sound that lasts: the moment it stops; it may loop, seamlessly, till then | rain `until: "scene.hidden"`; the bus's hum until it arrives |
+| **Until** | for a sound that lasts: the moment it stops (its recording loops, seamlessly, till then) | rain `until: "scene.hidden"`; the bus's hum until it arrives |
 | **About** | the piece it concerns: it glows while heard | the question `side` |
 
 Words take a turn and files play alongside, unless the cue says otherwise. Without `until` a cue plays once.
@@ -50,9 +50,9 @@ A sound ships with what uses it: a chapter's clips with the chapter (`content/<b
  cues' files (the library)  ──────────────────────────────────────────────┘
 ```
 
-- **The store** holds clips keyed by **voice and words**, with one readable list beside them (each clip's file, voice, language, words, length). Changing a voice changes the key: its clips are made again.
+- **The store** holds clips keyed by **voice and words**. Changing a voice changes the key: its clips are made again.
+- **One list per chapter** (`content/<book>/<chapter>/sound/sound.json`): each clip (its file, voice, language, words, length) and each library sound its cues use. It is the store's index, what review reads, and what the chapter's download fetches.
 - **Building content makes a chapter's missing clips** with the configured voice (Piper), only the new ones. `pnpm check` fails when a clip is missing or stale, naming the line: a lesson never ships silent.
-- **The build lists every sound a chapter can play** (its clips, the library's sounds its cues use): what the chapter's download fetches.
 - **Recordings** (step, chimes) are chosen, not made: picked by ear from options, kept in the library with their source and licence (`library/sounds/`), each brought to the same loudness with its shrill top trimmed when added.
 - **The build checks every cue:** its moment is an event there is, and its `where` is what that event carries; its words are speakable (or have their spoken words); its speaker is defined; its file exists.
 
@@ -70,8 +70,7 @@ One engine plays every cue, on every screen (a phone, the preview, the editor's 
 - **Reports** to the board when a cue started, ended or was cut; the board never knows lengths or sources.
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
 - **Logs** everything heard, in order (what `play` and `look` show).
-- **Lasting sounds** loop seamlessly till their `until`; a sound starting again within a moment of itself replaces itself (no floods from fast repeats).
-- **A silent engine** (no sound; a cue ends after its length) is the same engine without speakers: for tools, checks, tests, and a board that is one of several on a review screen.
+- **Muted, nothing is heard and every cue still takes its length,** so the board keeps its pacing. Tools, checks, tests and a board that is one of several on a review screen get the engine muted: there is no second engine.
 
 ## Settings
 
@@ -88,7 +87,7 @@ One `sound` home per layer; elsewhere code only connects to it.
 | Player | `player/src/sound/` | the engine, its sources, the menu |
 | Build | `studio/src/sound/` | making and checking a chapter's clips; adding a recording |
 | Recordings | `library/sounds/` | shared and app sounds, with `sounds.json` |
-| A chapter's clips | `content/<book>/<chapter>/sound/` | its clips, with their list |
+| A chapter's clips | `content/<book>/<chapter>/sound/` | its clips, and its one list (`sound.json`) |
 
 ## From today's code
 
@@ -96,8 +95,8 @@ One `sound` home per layer; elsewhere code only connects to it.
 |---|---|
 | Lines (`says`, `lines`, a sound view's `line`) and effects (`effects`, a sound view's `effects`): two vocabularies | cues |
 | Two players (`narration.ts`, `effects.ts`), two first-touch rules, two logs | one engine |
-| "Wait for real sound?" decided in five places (`timedVoice`, `isHeard`, `isTimed`, `keepsTime`, `isQuiet`) | which engine a board is given |
-| `LineCall`, `Utterance`, `ScriptLine`, `phraseKey`, `AudioSource`, `PlayableClip`; three word splitters | cue, clip, list; one splitter |
+| "Wait for real sound?" decided in five places (`timedVoice`, `isHeard`, `isTimed`, `keepsTime`, `isQuiet`) | the engine, muted or not |
+| `LineCall`, `Utterance`, `ScriptLine`, `phraseKey`, `AudioSource`, `PlayableClip`; a manifest and a script; three word splitters | cue, clip, one list; one splitter |
 | Clips keyed by speaker (a changed voice keeps playing the old clips) | keyed by voice and words |
 | `pnpm voice`, into `public/voice/` (ignored by git, never shipped) | made by the content build, into the chapter, committed |
 | Experiments: macOS and Parler voices, the dev live endpoint, the `**` regex | removed |
