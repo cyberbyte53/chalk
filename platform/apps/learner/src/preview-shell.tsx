@@ -30,7 +30,7 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
-import { useWhenChanged } from "@chalk/player";
+import { type LiveBoard, useWhenChanged } from "@chalk/player";
 import type { AnyProp } from "@chalk/prop/next";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -51,6 +51,7 @@ import { courses } from "./lessons";
 import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
 import { aloneBoard } from "./prop-alone";
+import { PropPanel } from "./prop-panel";
 import { ReviewList, ReviewPage } from "./review-page";
 import { ScriptView } from "./script-view";
 import { ThreadText } from "./thread-text";
@@ -597,6 +598,7 @@ export function PreviewBoard({
     [shown, isPlaying],
   );
   const phone = useRef<HTMLDivElement>(null);
+  const [runtime, setRuntime] = useState<LiveBoard | undefined>(undefined);
   useSourceTags(phone, where, shown.path);
   // The board's script beside it, while reviewing (`&noscript`, or v, hides it): every line it can
   // say, including those only an interaction sets off, and each clip.
@@ -638,6 +640,7 @@ export function PreviewBoard({
             record={bus.record}
             isPicture={isShot}
             isSilent={isSilent || isTimed}
+            onRuntime={isProp ? setRuntime : undefined}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };
               w.__chalkPassed ??= [];
@@ -645,6 +648,9 @@ export function PreviewBoard({
             }}
           />
         </div>
+        {!isShot && isProp && runtime !== undefined && (
+          <PropPanel runtime={runtime} piece={board.name} onStart={startPropAt} />
+        )}
         {!isShot && isScript && !isProp && (
           <ScriptView path={shown.path} boardId={board.item?.id} locale={locale} />
         )}
@@ -654,6 +660,15 @@ export function PreviewBoard({
       </div>
     </section>
   );
+}
+
+/** The prop on its own page, started again from these fields: its address's `state`, as a tool moves. */
+function startPropAt(given: Record<string, unknown>): void {
+  const params = new URLSearchParams(window.location.search);
+  if (Object.keys(given).length === 0) params.delete("state");
+  else params.set("state", JSON.stringify(given));
+  history.pushState(null, "", `?${params.toString().replace(/=(&|$)/g, "$1")}`);
+  window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
 /** A piece's words with its maths as TeX (`$x^2 - 4$`), not KaTeX's doubled screen text. */
