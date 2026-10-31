@@ -1,4 +1,4 @@
-import type { Effect, Locale, Localized } from "@chalk/content";
+import type { Locale, Localized, Sound } from "@chalk/content";
 import type {
   ActionSpec,
   AnyPropDef,
@@ -44,7 +44,7 @@ export type SoundView = {
    * lesson's cue at the same moment replaces it.
    */
   cues?: Readonly<
-    Record<string, Effect | ((told: Readonly<Record<string, unknown>>) => Effect | undefined)>
+    Record<string, Sound | ((told: Readonly<Record<string, unknown>>) => Sound | undefined)>
   >;
 };
 

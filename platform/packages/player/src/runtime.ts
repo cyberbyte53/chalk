@@ -48,15 +48,15 @@ import {
 } from "@chalk/prop";
 import { type ReadonlySignal, type Signal, batch, computed, signal } from "@preact/signals-core";
 import { describeView } from "./describe";
-import type { Utterance } from "./narration";
 import type { PropModule } from "./prop-module";
 import { snapshotOf } from "./snapshot";
-import { linePhrases } from "./spoken-line";
+import type { WordsToSay } from "./sound/narration";
+import { linePhrases } from "./sound/spoken-line";
 
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
   /** Says a line; resolves when it ends or fails (the text stays on screen either way). */
-  speak: (line: Utterance) => Promise<void>;
+  speak: (line: WordsToSay) => Promise<void>;
   /** Calls back on the next frame with the time in ms; returns a function that cancels it. */
   frame: (callback: (now: number) => void) => () => void;
   now: () => number;
@@ -1173,7 +1173,7 @@ export class BoardRuntime {
 }
 
 /** A prop's line on today's boards, as something to say: its words, split as every line is. */
-function utteranceOf(name: string, spoken: Spoken): Utterance {
+function utteranceOf(name: string, spoken: Spoken): WordsToSay {
   const words = spoken.speak ?? spoken.say;
   return {
     name,

@@ -304,7 +304,7 @@ export default defineConfig(({ mode }): UserConfig => {
         },
         workbox: {
           // woff2 only: every phone that runs the app reads it; .woff and .ttf are fallbacks.
-          globPatterns: ["**/*.{js,css,html,svg,png,woff2}"],
+          globPatterns: ["**/*.{js,css,html,svg,png,woff2,mp3}"],
           globIgnores: [`${CONTENT_CHUNKS}**`],
           // The app's own code only: a chapter's pages and questions come from /content/ when the
           // chapter is opened, and are kept below. A bigger main script means content or a prop's

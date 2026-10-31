@@ -1,4 +1,4 @@
-import { LOCALES, type Locale, type Localized } from "./localized";
+import { LOCALES, type Locale, type Localized } from "../localized";
 
 /**
  * How a line is said in phrases (platform/docs/sound.md). A line's words are a template written

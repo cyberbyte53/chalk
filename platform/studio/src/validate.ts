@@ -21,7 +21,7 @@ import {
   initialState,
   viewOf,
 } from "@chalk/prop";
-import { said } from "./voice/said";
+import { said } from "./sound/voice/said";
 
 export type Problem = { where: string; message: string };
 

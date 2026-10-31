@@ -89,7 +89,7 @@ export function speak(text: string, locale: Locale): Promise<boolean> {
   if (typeof window === "undefined" || !("speechSynthesis" in window))
     return Promise.resolve(false);
   return new Promise((resolve) => {
-    const line = new SpeechSynthesisUtterance(text.replace(/\*\*?|__?/g, ""));
+    const line = new SpeechSynthesisUtterance(text);
     line.lang = LANG[locale];
     line.rate = 0.95;
     line.onend = () => resolve(true);

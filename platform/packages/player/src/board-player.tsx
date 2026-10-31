@@ -16,18 +16,18 @@ import {
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type Picked, isSamePick, useHoldToAsk } from "./ask-about";
-import { useBoardSound } from "./board-sound";
-import { playEffect } from "./engine";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { type JugnuLink, JugnuPanel } from "./jugnu-panel";
 import { Layout, type LayoutContext } from "./layout";
-import { type AudioSource, type SpokenProp, useNarrator } from "./narration";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
 import { BoardRuntime } from "./runtime";
 import type { LiveBoard } from "./scene-runtime";
-import { SoundMenu, hasEffects, hearAgainOf } from "./sound-menu";
+import { useBoardSound } from "./sound/board-sound";
+import { playSound } from "./sound/engine";
+import { type ClipStore, type SpokenProp, useNarrator } from "./sound/narration";
+import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
 import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
@@ -120,7 +120,7 @@ function BoardPlay({
   isTimed = false,
   isInLesson = false,
   isQuiet = false,
-}: BoardPlayerProps & { audio: AudioSource | undefined }): JSX.Element {
+}: BoardPlayerProps & { audio: ClipStore | undefined }): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
   const jugnu = policy?.hasJugnu === false || board.model !== undefined ? undefined : given;
@@ -135,14 +135,14 @@ function BoardPlay({
   // The board reads each line's length when it says it: from the narrator as it is then.
   const narratorRef = useRef(narrator);
   narratorRef.current = narrator;
-  // A tool's board, or a quiet one, keeps time by each line's length and plays no effects; a quiet
+  // A tool's board, or a quiet one, keeps time by each line's length and plays no sounds; a quiet
   // one says nothing either.
   const keepsTime = isTimed || isQuiet;
   const runtime = useBoardRuntime(board, registry, isQuiet ? sayNothing : narrator.speak, {
     locale,
     lineSeconds: (line) => narratorRef.current.seconds(line),
     isTimed: keepsTime,
-    ...(keepsTime ? {} : { effect: playEffect }),
+    ...(keepsTime ? {} : { playSound }),
     hush: () => narratorRef.current.hush(),
   });
   // Jugnu runs on today's boards only, for now (scene-runtime.ts).
@@ -287,7 +287,7 @@ function BoardPlay({
           {!isPicture && !keepsTime && !isInLesson && (
             <SoundMenu
               locale={locale}
-              hasSounds={hasEffects(board, registry)}
+              hasSounds={hasSounds(board, registry)}
               onHearAgain={hearAgainOf(runtime)}
             />
           )}

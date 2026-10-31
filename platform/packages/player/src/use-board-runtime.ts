@@ -1,6 +1,6 @@
-import type { Effect } from "@chalk/content";
+import type { Sound } from "@chalk/content";
 import type { Board, Locale } from "@chalk/content";
-import type { Utterance } from "./narration";
+import type { WordsToSay } from "./sound/narration";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
 import "@preact/signals";
 import { createContext } from "preact";
@@ -10,7 +10,7 @@ import { BoardRuntime } from "./runtime";
 import { type LiveBoard, SceneRuntime } from "./scene-runtime";
 import { trackBoard } from "./snapshot";
 
-export type Speak = (line: Utterance) => Promise<void>;
+export type Speak = (line: WordsToSay) => Promise<void>;
 
 /**
  * How fast boards' clocks run: 1 for a student (real time); a tool watching boards may run them
@@ -30,12 +30,12 @@ export function useBoardRuntime(
   voice: {
     /** The board's language (a scene says its lines in it). */
     locale: Locale;
-    lineSeconds?: (line: Utterance) => number | undefined;
+    lineSeconds?: (line: WordsToSay) => number | undefined;
     hush?: () => void;
     /** A tool's board: lines keep their lengths; nothing waits for real sound (board-player.tsx). */
     isTimed?: boolean;
-    /** Plays a sound alongside (engine.ts), lasting until stopped if it lasts; returns how to stop it. */
-    effect?: (effect: Effect, lasts?: boolean) => () => void;
+    /** Plays a sound alongside (sound/engine.ts), lasting until stopped if it lasts; returns how to stop it. */
+    playSound?: (sound: Sound, lasts?: boolean) => () => void;
   },
 ): LiveBoard {
   const speed = useContext(BoardSpeedContext);
@@ -44,7 +44,7 @@ export function useBoardRuntime(
   const [runtime] = useState((): LiveBoard => {
     const services = {
       // A tool's board doesn't wait for sound: a line is said, and the board goes on.
-      speak: (line: Utterance) => {
+      speak: (line: WordsToSay) => {
         const said = speakRef.current(line);
         return voice.isTimed === true ? Promise.resolve() : said;
       },

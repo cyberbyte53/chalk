@@ -1,11 +1,11 @@
-import type { Effect } from "@chalk/content";
+import type { Sound } from "@chalk/content";
 import { type Signal, signal } from "@preact/signals";
 
 /**
  * The sound engine (platform/docs/sound.md): one for every clip a board plays, voiced or chosen,
  * on every screen. One audio context, so the browser's first-touch rule is met once: a page can't
- * sound until it is touched, and from then on everything may. Clips are fetched whole and decoded
- * once (a chapter's download keeps them: they play offline). Two channels, each with its switch:
+ * sound until it is touched, and from then on everything may. Clips are fetched whole and kept (a
+ * chapter's download keeps them: they play offline), decoded as they play. Two channels, each with its switch:
  * the voice (words) and sounds.
  */
 
@@ -163,9 +163,9 @@ export function playClip(url: string, channel: Channel, lasts = false): Playing 
   return { done, stop: () => stopNow() };
 }
 
-/** Effects playing, by name: a repeat of the same one replaces it (fast taps don't pile up). */
-const playingEffects = new Map<string, Playing>();
-/** How late an effect may still start, the first time it is fetched: later, its moment has passed. */
+/** Sounds playing, by name: a repeat of the same one replaces it (fast taps don't pile up). */
+const playingSounds = new Map<string, Playing>();
+/** How late a sound may still start, the first time it is fetched: later, its moment has passed. */
 const LATE_MS = 250;
 
 /**
@@ -173,18 +173,18 @@ const LATE_MS = 250;
  * not at all (sounds off, or the page can't sound yet: later it is old news). A sound that lasts
  * plays whenever it can until stopped: from the first touch, and again when sounds are turned on.
  */
-export function playEffect(effect: Effect, lasts = false): () => void {
-  if (lasts) return playLasting(effect);
+export function playSound(sound: Sound, lasts = false): () => void {
+  if (lasts) return playLasting(sound);
   if (isMuted.sounds.peek() || !isAudible()) return () => undefined;
   const asked = Date.now();
   let isStopped = false;
   let playing: Playing | undefined;
-  void load(effect.url).then((buffer) => {
+  void load(sound.url).then((buffer) => {
     if (isStopped || buffer === null || isMuted.sounds.peek()) return;
     if (Date.now() - asked > LATE_MS) return;
-    playingEffects.get(effect.name)?.stop();
-    playing = playClip(effect.url, "sounds");
-    playingEffects.set(effect.name, playing);
+    playingSounds.get(sound.name)?.stop();
+    playing = playClip(sound.url, "sounds");
+    playingSounds.set(sound.name, playing);
   });
   return () => {
     isStopped = true;
@@ -193,7 +193,7 @@ export function playEffect(effect: Effect, lasts = false): () => void {
 }
 
 /** A lasting sound: looping while sounds are on and the page may sound, until stopped. */
-function playLasting(effect: Effect): () => void {
+function playLasting(sound: Sound): () => void {
   let isStopped = false;
   let playing: Playing | undefined;
   const canStart = () => !isStopped && playing === undefined && !isMuted.sounds.peek();
@@ -203,7 +203,7 @@ function playLasting(effect: Effect): () => void {
       playing = undefined;
     } else
       void whenAudible().then(() => {
-        if (canStart()) playing = playClip(effect.url, "sounds", true);
+        if (canStart()) playing = playClip(sound.url, "sounds", true);
       });
   });
   return () => {

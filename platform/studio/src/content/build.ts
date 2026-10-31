@@ -71,8 +71,8 @@ import {
 } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
+import { SOUND_LIST, castSchema, voiceChapter, providers as voiceProviders } from "../sound/voice";
 import { type Problem, validateBoard } from "../validate";
-import { SOUND_LIST, castSchema, voiceChapter, providers as voiceProviders } from "../voice";
 import { renderArt } from "./art";
 import { recordOf } from "./board-record";
 import {

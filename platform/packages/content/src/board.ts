@@ -1,9 +1,9 @@
 import type { AnyProp, Given } from "@chalk/prop/next";
 import { z } from "zod";
-import type { Effect } from "./audio";
 import { jugnuNotesSchema } from "./jugnu";
 import type { Localized } from "./localized";
 import { pieceSchema } from "./piece";
+import type { SceneSound, SceneWords } from "./sound/cue";
 
 /**
  * A script: actions over time. `call` runs one action ("line.zoomTo") and finishes when the action
@@ -131,7 +131,7 @@ export type Board = z.infer<typeof boardSchema>;
 export type SceneModel = {
   readonly scene: AnyProp;
   readonly given: Given;
-  readonly lines: Readonly<Record<string, SceneLine>>;
+  readonly lines: Readonly<Record<string, SceneWords>>;
   /** The narration lines' names, in the order written. */
   readonly freeLines: readonly string[];
   /**
@@ -139,49 +139,6 @@ export type SceneModel = {
    * pieces' own sound there; null only silences it.
    */
   readonly sounds?: Readonly<Record<string, SceneSound>>;
-};
-
-/** A sound cue: a sound (null: silence) at a moment; with `until`, it lasts (looping) till then. */
-export type SceneSound = {
-  readonly sound: Effect | null;
-  readonly when: string;
-  readonly where?: Readonly<Record<string, unknown>>;
-  readonly until?: string;
-};
-
-/** Whether what a moment told carries the values `where` asks for: each the same, in any order. */
-export function carries(
-  told: Readonly<Record<string, unknown>>,
-  where: Readonly<Record<string, unknown>> | undefined,
-): boolean {
-  return Object.entries(where ?? {}).every(([k, v]) => sameValue(told[k], v));
-}
-
-function sameValue(a: unknown, b: unknown): boolean {
-  if (a === b) return true;
-  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
-  if (Array.isArray(a) !== Array.isArray(b)) return false;
-  const ka = Object.keys(a);
-  const kb = Object.keys(b);
-  return (
-    ka.length === kb.length &&
-    ka.every((k) => sameValue((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]))
-  );
-}
-
-/**
- * A line's words (per language) and who says them (words left out: the piece says its own); for a
- * line of its own, its moment (a piece's signal, "town.walker.arrived") and the piece it is about.
- */
-export type SceneLine = {
-  readonly says?: Localized;
-  readonly speaker?: string;
-  readonly when?: string;
-  /** The values its moment's signal must carry. */
-  readonly where?: Readonly<Record<string, unknown>>;
-  /** Its moment also has a condition in code (only shown as such). */
-  readonly hasCondition?: true;
-  readonly about?: string;
 };
 
 /** Splits "line.zoomTo" / "guess.wrong" / "line.marker" into the prop name and the member. */

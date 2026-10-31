@@ -23,9 +23,9 @@ export {
 export { JugnuFigure, JugnuMood } from "./jugnu-figure";
 export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
-export type { AudioSource, PlayableClip, Utterance } from "./narration";
-export { linePhrases, spokenWords } from "./spoken-line";
-export { type Channel, isMuted, playClip, playEffect, setMuted } from "./engine";
+export type { ClipStore, Clip, WordsToSay } from "./sound/narration";
+export { linePhrases, spokenWords } from "./sound/spoken-line";
+export { type Channel, isMuted, playClip, playSound, setMuted } from "./sound/engine";
 export {
   type PropModule,
   type PropRegistry,
@@ -49,10 +49,11 @@ export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
 export { BoardSpeedContext } from "./use-board-runtime";
 export {
-  type HeardLine,
+  type Heard,
+  type HeardSound,
+  type HeardWords,
   type LiveBoard,
   SceneRuntime,
-  type SoundedEffect,
   isSceneBoard,
 } from "./scene-runtime";
 export { type ScriptLine, scriptOf } from "./script";

@@ -12,18 +12,18 @@ import {
 import { canSpeak, hush as phoneHush, speak as phoneSpeak } from "./speech";
 
 /** A clip to play: where it is, and how long it plays. */
-export type PlayableClip = { url: string; seconds: number };
+export type Clip = { url: string; seconds: number };
 
 /**
  * A chapter's clips (voiced by the content build into its sound folder): the clips that say a speaker's phrases in a language,
  * one after another, or undefined when one has none.
  */
-export type AudioSource = {
+export type ClipStore = {
   clipsOf: (
     speaker: string,
     locale: Locale,
     phrases: readonly string[],
-  ) => readonly PlayableClip[] | undefined;
+  ) => readonly Clip[] | undefined;
   /**
    * A live voice: any words, in the speaker's voice, made as they are needed (a server's; in
    * development, the studio's Piper). Undefined when there is none, or it couldn't.
@@ -33,14 +33,14 @@ export type AudioSource = {
     locale: Locale,
     words: string,
     signal: AbortSignal,
-  ) => Promise<PlayableClip | undefined>;
+  ) => Promise<Clip | undefined>;
 };
 
 /**
  * Something to say: its name (a piece, or a line of the board), who says it, and its phrases in
  * each language (spoken.ts: a fixed line is one phrase, a line with values a few).
  */
-export type Utterance = {
+export type WordsToSay = {
   name: string;
   speaker: string;
   phrases: Readonly<Partial<Record<Locale, readonly string[]>>>;
@@ -51,9 +51,9 @@ export type SpokenProp = { name: string };
 
 export type Narrator = {
   /** Says a line and resolves when it ends (or fails; the text is on screen either way). */
-  speak: (line: Utterance) => Promise<void>;
+  speak: (line: WordsToSay) => Promise<void>;
   /** How long a line plays here, when its clips are known. */
-  seconds: (line: Utterance) => number | undefined;
+  seconds: (line: WordsToSay) => number | undefined;
   /** Stops the line being said. */
   hush: () => void;
   /** Lines whose audio couldn't play, by name. */
@@ -73,7 +73,7 @@ const LIVE_WAIT_MS = 3_000;
  */
 export function useNarrator(
   locale: Locale,
-  source: AudioSource | undefined,
+  source: ClipStore | undefined,
   onFailure: (prop: SpokenProp, reason: string) => void,
 ): Narrator {
   /** The line being said: a newer one (or a hush) ends its clips. */
@@ -81,7 +81,7 @@ export function useNarrator(
   const [failed, setFailed] = useState<ReadonlySet<string>>(new Set());
 
   const clipsFor = useCallback(
-    (line: Utterance) => {
+    (line: WordsToSay) => {
       const phrases = line.phrases[locale];
       return phrases === undefined ? undefined : source?.clipsOf(line.speaker, locale, phrases);
     },
@@ -120,7 +120,7 @@ export function useNarrator(
 
   /** A voiced clip, on the engine's voice channel. */
   const playClip = useCallback(
-    async (clip: PlayableClip): Promise<Played> => {
+    async (clip: Clip): Promise<Played> => {
       let why: Played = "heard";
       const isHeard = await playOne(clip.seconds, (done) => {
         const playing = playOnEngine(clip.url, "voice");
@@ -160,7 +160,7 @@ export function useNarrator(
 
   /** A live voice's clip for `words`, if it makes one in time (and the line isn't stopped first). */
   const makeLive = useCallback(
-    async (speaker: string, words: string): Promise<PlayableClip | undefined> => {
+    async (speaker: string, words: string): Promise<Clip | undefined> => {
       if (source?.live === undefined) return undefined;
       const abort = new AbortController();
       const timer = setTimeout(() => abort.abort(), LIVE_WAIT_MS);
@@ -200,7 +200,7 @@ export function useNarrator(
   );
 
   const speak = useCallback(
-    async (line: Utterance) => {
+    async (line: WordsToSay) => {
       stop();
       const mine = saying.current;
       const phrases = line.phrases[locale];
@@ -272,7 +272,7 @@ export function useNarrator(
   );
 
   const seconds = useCallback(
-    (line: Utterance) => clipsFor(line)?.reduce((sum, clip) => sum + clip.seconds, 0),
+    (line: WordsToSay) => clipsFor(line)?.reduce((sum, clip) => sum + clip.seconds, 0),
     [clipsFor],
   );
 

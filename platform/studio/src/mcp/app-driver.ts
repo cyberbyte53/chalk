@@ -390,8 +390,8 @@ export type Step =
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
 /**
- * What was heard on the board: a line (the player's HeardLine), or an effect at a signal (its
- * SoundedEffect). What an agent reviews of the sound.
+ * What was heard on the board, in order (the player's Heard): words, or a sound at a signal. What an
+ * agent reviews of the sound.
  */
 export type Heard =
   | {
@@ -402,7 +402,7 @@ export type Heard =
       seconds: number;
       cutAt?: number;
     }
-  | { effect: string; signal: string; at: number };
+  | { sound: string; signal: string; at: number };
 
 export type StepResult = {
   step: string;

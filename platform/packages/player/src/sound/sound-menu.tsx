@@ -3,10 +3,10 @@ import { Actor, type Board, type Locale, propPieces } from "@chalk/content";
 import { BOARD } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
+import type { PropRegistry } from "../prop-module";
+import { type LiveBoard, SceneRuntime } from "../scene-runtime";
+import { t } from "../ui-text";
 import { isMuted, setMuted } from "./engine";
-import type { PropRegistry } from "./prop-module";
-import { type LiveBoard, SceneRuntime } from "./scene-runtime";
-import { t } from "./ui-text";
 
 /**
  * The board's menu: what is heard (platform/docs/sound.md), each switched on its own and kept on
@@ -110,7 +110,7 @@ function Switch({
 }
 
 /** Whether a board can play a sound: one of its lesson's cues, or one of its pieces' own. */
-export function hasEffects(board: Board, registry: PropRegistry): boolean {
+export function hasSounds(board: Board, registry: PropRegistry): boolean {
   if (board.model === undefined) return false;
   if (Object.values(board.model.sounds ?? {}).some((cue) => cue.sound !== null)) return true;
   return propPieces(board.root).some(

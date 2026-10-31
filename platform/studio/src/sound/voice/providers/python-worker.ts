@@ -4,7 +4,7 @@ import { createInterface } from "node:readline";
 /**
  * A Python process that loads a voice model once and speaks line after line: one JSON request a
  * line on stdin, one JSON reply a line on stdout (`{"ready": true}` first, then `{"ok": true}` or
- * `{"ok": false, "error"}` per request). Parler and Piper each run one.
+ * `{"ok": false, "error"}` per request). Piper runs one.
  */
 
 type Reply = { ready?: boolean; device?: string; ok?: boolean; error?: string };
@@ -20,7 +20,7 @@ export class Worker {
   constructor(
     python: string,
     script: string,
-    /** Its name in messages ("Parler"). */
+    /** Its name in messages ("Piper"). */
     private readonly name: string,
   ) {
     this.child = spawn(python, [script], { stdio: "pipe" });

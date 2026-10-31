@@ -1,11 +1,11 @@
 import {
-  type Effect,
   LOCALES,
   type Localized,
   type Piece,
   PieceKind,
   type SceneModel,
   type SceneSound,
+  type Sound,
   blanksOf,
   carries,
   isTemplate,
@@ -30,6 +30,7 @@ import {
 } from "@chalk/prop/next";
 import { type ZodTypeAny, z } from "zod";
 import { type BuiltBoard, type NoteCheck, type Step, StepKind } from "./board";
+import { type Cue, NOT_FOR_SOUNDS, type SoundCue, type WordsCue } from "./sound";
 
 /**
  * A board on the event model (platform/docs/event-model.md): the scene is the outermost prop. Its
@@ -103,75 +104,6 @@ export type Placed<D extends AnyProp = AnyProp> = Says & {
   /** Drawn still, as a picture of what it shows (in words): nothing on it responds. */
   readonly still?: Localized;
 };
-
-/**
- * A cue (platform/docs/sound.md): when a moment comes, play something. Its moment is written with
- * it as data, so every view shows exactly what runs: `when` a piece's signal is told (or the
- * board's own, `board.started`), `where` it carries these values (`town.walker.arrived · x 4, y 5`).
- *
- * - **Words** (narration, a character's line): said by a speaker, taking their turn (the two rules).
- *   Without a moment, a rule says them (`t.self.say`). `about`: the piece they are about, which
- *   glows while they play.
- * - **A sound** (from the sound library): played alongside anything, at once; with `until`, it lasts
- *   (looping) until that moment, or the board's end. A sound cue at a signal replaces the props' own
- *   there; `cue(null, { when })` only silences them.
- *
- * A piece's own words are its cue too, written on the piece (`says`), beside what it shows.
- */
-export type Cue = WordsCue | SoundCue;
-
-/** Its moment: a piece's signal, by path ("town.walker.arrived"), and the values it must carry. */
-type Moment = {
-  readonly when?: string;
-  /** Which of those moments: the values the signal must carry (`{ x: 4, y: 5 }`). */
-  readonly where?: Readonly<Record<string, unknown>>;
-};
-
-/** Words, said by a speaker in their turn. */
-export type WordsCue = Moment & {
-  readonly says: Localized;
-  readonly speaker?: string;
-  /**
-   * Which of those moments, when values can't say it (it depends on the board as it is): code,
-   * which the script can only show as a condition in code. Prefer `where`.
-   */
-  readonly if?: (
-    payload: Readonly<Record<string, unknown>>,
-    me: Readonly<Record<string, unknown>>,
-  ) => boolean;
-  readonly about?: string;
-};
-
-/** A sound (null: silence the props' own at `when`), played alongside; with `until`, it lasts. */
-export type SoundCue = Moment & {
-  readonly sound: Effect | null;
-  /** A sound that lasts: the moment it stops. */
-  readonly until?: string;
-};
-
-/** A line the board says with nothing on screen of its own (a cue of words). */
-export type FreeLine = WordsCue;
-
-const isSound = (what: unknown): what is Effect =>
-  typeof (what as Effect | undefined)?.url === "string";
-
-/**
- * A cue: `cues: { finally: cue(t("Finally, I'm here!", "…"), { speaker: "riya", when: "…" }) }`,
- * `cue(step, { when: "line.walker.stepped" })`, `cue(rain, { when: "board.started", until: "board.passed" })`.
- */
-export function cue(words: Localized, options?: Omit<WordsCue, "says">): WordsCue;
-export function cue(sound: Effect | null, options?: Omit<SoundCue, "sound">): SoundCue;
-export function cue(
-  what: Localized | Effect | null,
-  options: Omit<WordsCue, "says"> | Omit<SoundCue, "sound"> = {},
-): Cue {
-  return what === null || isSound(what)
-    ? { sound: what, ...options }
-    : ({ says: what, ...options } as WordsCue);
-}
-
-/** What a cue was given that its kind doesn't have (a sound with a speaker, words that last). */
-const NOT_FOR_SOUNDS = ["says", "speaker", "about", "if"] as const;
 
 /** Places a prop: `place(coordinatePlane, { plane: { upLines: [] } })`. */
 export function place<D extends AnyProp>(
@@ -379,7 +311,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         throw new Error(`Board ${name}: two cues are named "${named}"`);
       allCues[named] = given;
     }
-  const freeLines: Record<string, FreeLine> = {};
+  const freeLines: Record<string, WordsCue> = {};
   const sounds: Record<string, SceneSound> = {};
   for (const [named, written] of Object.entries(allCues)) {
     const isWords = (written as WordsCue).says !== undefined;

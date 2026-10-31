@@ -1,6 +1,6 @@
 # Sound
 
-Status: **design agreed in conversation (2026-10-31); being built.** Done: the chapter owns its clips, one engine, cues. Next: the code homes. What changes is under "From today's code". Voice and effects are one system here, not two.
+Status: **built (2026-10-31).** What is left is under "Not done yet". Words and sounds are one system here, not two.
 
 ## The idea
 
@@ -85,29 +85,24 @@ Who voices whom and the app's own sounds are settings, with overrides: **app →
 
 ## Where the code lives
 
-One `sound` home per layer; elsewhere code only connects to it.
+One `sound` home per layer; elsewhere code only connects to it. One name per idea in all of them: **cue** (`Cue`, as written; `SceneWords`, `SceneSound`, as built), **sound** (`Sound`), **clip** (`Clip`, `StoredClip` in a chapter's list), and what was **heard** (`Heard`: one log of words and sounds).
 
 | Layer | Home | Holds |
 |---|---|---|
-| Contract | `content/src/sound/` | cue, clip, the store's list; words → phrases (one function, for the build and the player) |
-| Board | `author/src/scene/sound.ts` | declaring cues; the queue and the two rules |
-| Player | `player/src/sound/` | the engine, its sources, the menu |
-| Build | `studio/src/sound/` | voicing and checking a chapter's clips; adding a chosen clip to the library |
-| Chosen clips | `library/sounds/` | shared and app sounds, with `sounds.json` |
+| Contract | `content/src/sound/` | a sound, a chapter's clips and their list, a cue as built, words → phrases |
+| Lessons | `author/src/sound.ts` | `cue(…)`: writing cues (the queue and the two rules are still in `scene.ts`) |
+| Player | `player/src/sound/` | the engine, the narrator (finding a line's clips), the phone's voice, the board's store, the menu |
+| Build | `studio/src/sound/` | voicing a chapter's clips (`voice/`); the sound library's command (`pnpm sound`) |
+| Chosen clips | `library/sounds/` | the sounds, each a role, with `sounds.json` (the one definition; `index.ts` is written from it) |
 | A chapter's clips | `content/<book>/<chapter>/sound/` | its clips, and its one list (`sound.json`) |
 
-## From today's code
+The app's own sounds ship with the app and are kept for offline with it; a chapter's clips ship with the chapter.
 
-| Today | Becomes |
-|---|---|
-| ~~Lines (`lines`, `line`) and effects (`effects`, a sound view's `effects`): two vocabularies~~ | cues (`cues`, `cue`); a piece's `says` and a sound view's `line` are its cue (done) |
-| ~~Two players (`narration.ts`, `effects.ts`), two first-touch rules~~ | one engine (done; one log still to come) |
-| "Wait for real sound?" decided in five places (`timedVoice`, `isHeard`, `isTimed`, `keepsTime`, `isQuiet`) | the engine, muted or not |
-| `LineCall`, `Utterance`, `ScriptLine`, `phraseKey`, `AudioSource`, `PlayableClip`; a manifest and a script; three word splitters | cue, clip, one list; one splitter |
-| ~~Clips keyed by speaker (a changed voice keeps playing the old clips)~~ | keyed by voice and words (done) |
-| ~~`pnpm voice`, into `public/voice/` (ignored by git, never shipped)~~ | made by the content build, into the chapter, committed (done) |
-| Experiments: macOS and Parler voices, the dev live endpoint, the `**` regex | removed |
-| The queue inside `scene.ts` | its own file |
+## Not done yet
+
+- Sound cues shown in the script before they are heard (today `play` shows them as heard).
+- Settings with overrides (app → book → chapter): voices have one level today (`authoring/voices.json`); sounds need none until a book wants its own.
+- The queue in its own file.
 
 ## Not now
 

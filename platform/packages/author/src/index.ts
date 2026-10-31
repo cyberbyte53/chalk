@@ -34,9 +34,6 @@ export {
 } from "./board";
 export { type Family, family, isFamily } from "./family";
 export {
-  type Cue,
-  cue,
-  type FreeLine,
   type GivenFor,
   type Placed as ScenePlaced,
   type Says,
@@ -80,4 +77,5 @@ export {
 export { type Page, camel, isPage, page } from "./page";
 export { decimal, noParams } from "./params";
 export { framesHere, noteStack, siteFrom, siteHere, siteOf, stackOf } from "./site";
+export { type Cue, type SoundCue, type WordsCue, cue } from "./sound";
 export { t } from "./text";

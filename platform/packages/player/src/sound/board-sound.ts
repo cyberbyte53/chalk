@@ -1,6 +1,6 @@
 import { type Board, type SoundList, clipsOf } from "@chalk/content";
 import { useEffect, useState } from "preact/hooks";
-import type { AudioSource } from "./narration";
+import type { ClipStore } from "./narration";
 
 /**
  * Where a board's sound comes from (platform/docs/sound.md), found by the player itself from the
@@ -12,15 +12,15 @@ import type { AudioSource } from "./narration";
  */
 
 /** Each chapter's clips, fetched once: undefined when it has none. */
-const chapters = new Map<string, Promise<AudioSource | undefined>>();
+const chapters = new Map<string, Promise<ClipStore | undefined>>();
 
-function chapterSound(chapter: string): Promise<AudioSource | undefined> {
+function chapterSound(chapter: string): Promise<ClipStore | undefined> {
   const known = chapters.get(chapter);
   if (known !== undefined) return known;
   const base = `/content/${chapter}/sound`;
   const loading = fetch(`${base}/sound.json`)
     .then((r) => (r.ok ? (r.json() as Promise<SoundList>) : undefined))
-    .then((list): AudioSource | undefined =>
+    .then((list): ClipStore | undefined =>
       list === undefined
         ? undefined
         : {
@@ -50,11 +50,11 @@ const chapterOf = (board: Board): string | undefined => {
  * A board's sound, once known: a board must never start before it is (its first line would be the
  * phone's while its clip is on the way). Ready at once for a board with no chapter.
  */
-export function useBoardSound(board: Board): { source: AudioSource | undefined; isReady: boolean } {
+export function useBoardSound(board: Board): { source: ClipStore | undefined; isReady: boolean } {
   const chapter = chapterOf(board);
   const [known, setKnown] = useState<{
     chapter: string | undefined;
-    source: AudioSource | undefined;
+    source: ClipStore | undefined;
   }>();
   useEffect(() => {
     if (chapter === undefined) return;

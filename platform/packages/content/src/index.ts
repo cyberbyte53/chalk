@@ -1,13 +1,14 @@
 export {
-  type Clip,
-  type Effect,
+  type StoredClip,
+  type Sound,
   NARRATOR,
   type SoundList,
   clipKey,
   clipsOf,
-  effect,
+  sound,
   soundListSchema,
-} from "./audio";
+} from "./sound/clips";
+export { type SceneSound, type SceneWords, carries } from "./sound/cue";
 export {
   type BoardAt,
   type CallArgs,
@@ -24,10 +25,7 @@ export {
   splitTarget,
   whenRuleSchema,
   type Board,
-  type SceneLine,
   type SceneModel,
-  type SceneSound,
-  carries,
   type IsRule,
   type Script,
   type WhenRule,
@@ -124,4 +122,4 @@ export {
   numberLibrary,
   numberPieces,
   phrasesOf,
-} from "./spoken";
+} from "./sound/spoken";

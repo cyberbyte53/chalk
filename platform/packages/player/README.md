@@ -10,7 +10,7 @@ Plays lessons. One player runs every kind of lesson (story, walkthrough, practic
 - `jugnu-figure.tsx`: Jugnu himself (`JugnuFigure`), drawn in the look's colours, in a mood (`JugnuMood`: neutral, thinking, listening, curious, hint, proud, celebrate, …). His button shows what he is doing; the lesson's end shows him celebrating.
 - `answer-feedback.tsx`: "That's it!" / "Not quite." and the note, shown by each question under itself.
 - `layout.tsx`: renders the piece tree; each prop through its view.
-- `narration.ts`: reads a line aloud from published audio when a prop's `say` runs; a failed line shows a retry mark and raises `line audioFailed`.
+- `sound/`: everything heard (platform/docs/sound.md): the engine (every clip, two channels), the narrator (a line's clips, else the phone's voice, else quiet), the board's store, the ☰ sound menu.
 - `prop-module.ts`: what a prop gives the player: `{ def, View }`.
 - `ui-text.ts`: chrome copy (closed keys).
 - `styles.css`: the player's own screens, in parts under `styles/` (`base`, `lesson`, `board`, `question`, `jugnu`). Drawn only with `@chalk/look`'s tokens; the app loads `look.css` first. Props bring their own styles.

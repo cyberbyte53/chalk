@@ -121,7 +121,7 @@ If a lesson, a check or another prop cares when something finishes, it is a vari
 
 ## 4. Voice
 
-Lines are made into audio at publish (`platform/studio/src/voice`, `authoring/voices.json`), so their length is known.
+Lines are made into audio at publish (`platform/studio/src/sound/voice`, `authoring/voices.json`), so their length is known.
 - **Publish** saves each file's length next to it, per language.
 - **`say(line)`** plays the audio and queues `said` for now + its length. It is a normal "later", so checks jump past it, and Hindi and English simply take different times.
 - **When the audio starts late** (while loading), `said` is queued when it actually starts.

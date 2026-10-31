@@ -6,8 +6,8 @@ import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
 import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
-import type { ChapterScript, ScriptEntry } from "../voice/make";
-import type { Said } from "../voice/said";
+import type { ChapterScript, ScriptEntry } from "../sound/voice/make";
+import type { Said } from "../sound/voice/said";
 import {
   type Drawn,
   type Heard,
@@ -810,7 +810,7 @@ const pieceOfPath = (path: string) => path.split(/[./]/)[0] ?? path;
 
 /** What was heard, in words: `   said · narrator · fiveHouses: "Street 4 rises…" (6.8 s)`, `   sound · step (line.walker.stepped)`. */
 function heardLine(h: Heard): string {
-  if ("effect" in h) return `   sound · ${h.effect} (${h.signal})`;
+  if ("sound" in h) return `   sound · ${h.sound} (${h.signal})`;
   const cut = h.cutAt === undefined ? "" : `, cut after ${(h.cutAt - h.at).toFixed(1)} s`;
   return `   said · ${h.speaker} · ${h.line}: "${h.words}" (${h.seconds.toFixed(1)} s${cut})`;
 }

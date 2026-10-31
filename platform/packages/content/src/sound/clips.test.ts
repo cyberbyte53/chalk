@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { type SoundList, clipsOf } from "./audio";
+import { type SoundList, clipsOf } from "./clips";
 import { blanksOf, fixedParts, numberPieces, phrasesOf } from "./spoken";
 
 describe("a chapter's sound list", () => {

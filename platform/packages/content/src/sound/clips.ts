@@ -1,8 +1,8 @@
 import { z } from "zod";
-import type { Locale } from "./localized";
+import type { Locale } from "../localized";
 
 /**
- * The voice's contract between making clips (platform/studio/src/voice) and playing them (the
+ * The voice's contract between making clips (platform/studio/src/sound/voice) and playing them (the
  * player). A clip says one phrase: who says it, in which language, in which words. A line is said as
  * phrases (spoken.ts): a fixed line is one, a line with values a few, glued one after another. What
  * is said, and how, is the voice module's.
@@ -25,7 +25,7 @@ const clipSchema = z
     seconds: z.number().positive(),
   })
   .strict();
-export type Clip = z.infer<typeof clipSchema>;
+export type StoredClip = z.infer<typeof clipSchema>;
 
 /**
  * A chapter's sound list (`sound/sound.json`): who voices whom in it, and every clip it holds,
@@ -50,11 +50,11 @@ export function clipsOf(
   speaker: string,
   locale: Locale,
   phrases: readonly string[],
-): Clip[] | undefined {
+): StoredClip[] | undefined {
   const voice = list.speakers[speaker]?.[locale];
   if (voice === undefined) return undefined;
   const byKey = new Map(list.clips.map((c) => [clipKey(c.voice, c.words), c]));
-  const clips: Clip[] = [];
+  const clips: StoredClip[] = [];
   for (const words of phrases) {
     const clip = byKey.get(clipKey(voice, words));
     if (clip === undefined) return undefined;
@@ -64,14 +64,13 @@ export function clipsOf(
 }
 
 /**
- * A sound effect (platform/docs/sound.md): its name (what `play` and the log show) and where its
- * recording is. A package declares its own, beside its code (`new URL("./sounds/step.mp3",
- * import.meta.url)`), so a sound ships with the code that uses it: a lesson's props load theirs
- * when its chapter opens, the app's own (right, wrong) come with the app.
+ * A sound (platform/docs/sound.md): a role (right, step), by its name (what `play` and the log
+ * show), and where its recording is. The sound library defines them (library/sounds); a prop's
+ * sound view or a lesson's cue plays one by name.
  */
-export type Effect = { readonly name: string; readonly url: string };
+export type Sound = { readonly name: string; readonly url: string };
 
-/** An effect, from its name and its recording. */
-export function effect(name: string, url: URL | string): Effect {
+/** A sound, from its name and its recording. */
+export function sound(name: string, url: URL | string): Sound {
   return { name, url: String(url) };
 }

@@ -14,7 +14,7 @@ import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import type { BoardRecorder } from "./recorder";
 import { RichText } from "./rich-text-view";
 import type { BoardRuntime } from "./runtime";
-import { canSpeak, hush, speak, useSpeech } from "./speech";
+import { canSpeak, hush, speak, useSpeech } from "./sound/speech";
 import { t } from "./ui-text";
 import { useWhenChanged } from "./when-changed";
 

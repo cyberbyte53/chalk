@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
  * write into its `speak`. Read from the chapter's built content: its script, and its sound list.
  */
 
-/** What is said for a line in one language (platform/studio/src/voice/said.ts). */
+/** What is said for a line in one language (platform/studio/src/sound/voice/said.ts). */
 type Said = { words: string; from: "written" | "screen" } | { needs: string; suggested?: string };
 type Entry = {
   line: string;

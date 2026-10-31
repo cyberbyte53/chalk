@@ -1,4 +1,4 @@
-import { type Board, type Localized, NARRATOR, type SceneLine, propPieces } from "@chalk/content";
+import { type Board, type Localized, NARRATOR, type SceneWords, propPieces } from "@chalk/content";
 import { Board as Core, timedVoice } from "@chalk/prop/next";
 import type { PropModule } from "./prop-module";
 
@@ -34,7 +34,7 @@ export type ScriptLine = {
 };
 
 /** A line's own moment as an event: its signal, the values it must carry, and any condition. */
-function momentOf(line: SceneLine): string {
+function momentOf(line: SceneWords): string {
   return [
     eventText(line.when ?? "", line.where ?? {}),
     line.hasCondition === true ? "a condition in code" : "",

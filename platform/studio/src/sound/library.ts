@@ -28,9 +28,9 @@ export function libraryIndex(list: LibraryList): string {
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(
       (s) =>
-        `/** ${s.for[0]?.toUpperCase()}${s.for.slice(1)}. */\nexport const ${s.name} = effect(${JSON.stringify(s.name)}, new URL(${JSON.stringify(`./${s.file}`)}, import.meta.url));`,
+        `/** ${s.for[0]?.toUpperCase()}${s.for.slice(1)}. */\nexport const ${s.name} = sound(${JSON.stringify(s.name)}, new URL(${JSON.stringify(`./${s.file}`)}, import.meta.url));`,
     );
-  return `import { effect } from "@chalk/content";
+  return `import { sound } from "@chalk/content";
 
 /**
  * The sound library (platform/docs/sound.md): written from sounds.json by \`pnpm sound\`; don't edit.

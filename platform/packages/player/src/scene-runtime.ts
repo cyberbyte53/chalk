@@ -2,11 +2,11 @@ import {
   AGENT_LOCALE,
   Actor,
   type Board,
-  type Effect,
   LOCALES,
   type Locale,
   type Localized,
   NARRATOR,
+  type Sound,
   carries,
   propPieces,
 } from "@chalk/content";
@@ -34,14 +34,14 @@ import {
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
-import type { Utterance } from "./narration";
 import { findNode } from "./part-paths";
 import type { PropModule } from "./prop-module";
 import { plainText } from "./rich-text";
 import type { ActionRecord, RuntimeServices, SignalRecord } from "./runtime";
 import { aboutOf, ownLine } from "./script";
 import { takes } from "./snapshot";
-import { linePhrases } from "./spoken-line";
+import type { WordsToSay } from "./sound/narration";
+import { linePhrases } from "./sound/spoken-line";
 
 /**
  * A board on the event model (platform/docs/event-model.md), running: the scene and its pieces on
@@ -72,11 +72,11 @@ export class SceneRuntime {
       /** Stops the line being said. */
       hush?: () => void;
       /** How long a line plays, when its clips are known; else from its words. */
-      lineSeconds?: (line: Utterance) => number | undefined;
+      lineSeconds?: (line: WordsToSay) => number | undefined;
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
-      /** Plays a sound alongside (engine.ts): at once, never waited for; returns how to stop it. */
-      effect?: (effect: Effect, lasts?: boolean) => () => void;
+      /** Plays a sound alongside (sound/engine.ts): at once, never waited for; returns how to stop it. */
+      playSound?: (sound: Sound, lasts?: boolean) => () => void;
       /**
        * A line is over when its sound is (`speak` resolves): a student's board, at real speed. Else
        * it lasts as long as its clips, or its words would take, on the board's clock (a check, a
@@ -101,15 +101,15 @@ export class SceneRuntime {
         // sound view), with its moment's values. The board only hears that it started and ended.
         voice: (core) => {
           /** What is said for a line, logged as heard; undefined when it has nothing to say. */
-          const begin = (call: LineCall): { line: Utterance; heard: HeardLine } | undefined => {
+          const begin = (call: LineCall): { line: WordsToSay; heard: HeardWords } | undefined => {
             const words = this.lineWords(call.name);
             if (words === undefined) return undefined;
             const phrases = Object.fromEntries(
               LOCALES.map((l) => [l, linePhrases(words[l], l, call.values)]),
-            ) as Utterance["phrases"];
+            ) as WordsToSay["phrases"];
             const said = phrases[locale];
             if (said === undefined || said.length === 0) return undefined;
-            const line: Utterance = {
+            const line: WordsToSay = {
               name: call.name,
               speaker: model.lines[call.name]?.speaker ?? NARRATOR,
               phrases,
@@ -119,8 +119,7 @@ export class SceneRuntime {
               call.name,
               propPieces(board.root).some((p) => p.name === call.name),
             );
-            const heard: HeardLine = {
-              n: ++this.heardCount,
+            const heard: HeardWords = {
               line: call.name,
               ...(about === undefined ? {} : { about }),
               speaker: line.speaker,
@@ -128,11 +127,11 @@ export class SceneRuntime {
               at: core.now,
               seconds: services.lineSeconds?.(line) ?? estimatedSeconds(plainText(said.join(" "))),
             };
-            this.heardLines.push(heard);
+            this.log.push(heard);
             return { line, heard };
           };
           // The line being heard, until it ends: a stop meanwhile cut it.
-          let hearing: HeardLine | undefined;
+          let hearing: HeardWords | undefined;
           const stop = () => {
             if (hearing !== undefined) hearing.cutAt = core.now;
             hearing = undefined;
@@ -164,7 +163,7 @@ export class SceneRuntime {
           return {
             say: (call, hear) =>
               timed.say(call, (what) => {
-                hearing = what === "started" ? this.heardLines.at(-1) : undefined;
+                hearing = what === "started" ? this.lastWords() : undefined;
                 hear(what);
               }),
             stop: () => {
@@ -235,7 +234,7 @@ export class SceneRuntime {
         ? undefined
         : this.lookup(type)?.sound?.cues?.[[...inside, signal].join(".")];
     const ownSound = typeof own === "function" ? own(told) : own;
-    const playing: [string | undefined, Effect, boolean][] =
+    const playing: [string | undefined, Sound, boolean][] =
       cues.length > 0
         ? cues.flatMap(([name, cue]) =>
             cue.sound === null ? [] : [[name, cue.sound, cue.until !== undefined] as const],
@@ -243,14 +242,9 @@ export class SceneRuntime {
         : ownSound === undefined
           ? []
           : [[undefined, ownSound, false]];
-    for (const [name, effect, lasts] of playing) {
-      this.soundedEffects.push({
-        n: ++this.heardCount,
-        effect: effect.name,
-        at,
-        time: this.core.now,
-      });
-      const stop = this.services.effect?.(effect, lasts);
+    for (const [name, sound, lasts] of playing) {
+      this.log.push({ sound: sound.name, signal: at, at: this.core.now });
+      const stop = this.services.playSound?.(sound, lasts);
       if (lasts && name !== undefined && stop !== undefined) {
         this.lasting.get(name)?.();
         this.lasting.set(name, stop);
@@ -261,15 +255,6 @@ export class SceneRuntime {
   /** The lasting sounds playing, by cue: how to stop each. */
   private readonly lasting = new Map<string, () => void>();
 
-  private readonly soundedEffects: SoundedEffect[] = [];
-  /** Lines and effects heard, counted together: the order they came in. */
-  private heardCount = 0;
-
-  /** Every effect heard on this board so far, in order: which, at which signal, when. */
-  effects(): readonly SoundedEffect[] {
-    return this.soundedEffects;
-  }
-
   /** A line's words: the lesson's own for it, else what its piece says of itself, as it is now. */
   private lineWords(name: string): Localized | undefined {
     const given = this.board.model?.lines[name]?.says;
@@ -278,15 +263,26 @@ export class SceneRuntime {
     return piece === undefined ? undefined : ownLine(this.lookup(piece.prop), this.core.read(name));
   }
 
-  private readonly heardLines: HeardLine[] = [];
+  /** Everything heard on this board, in the order it came: words and sounds. */
+  private readonly log: Heard[] = [];
 
   /**
-   * Every line heard on this board so far, in order: who said it, the words the voice was given,
-   * when (board seconds), for how long, and when it was cut, if it was. What an agent reviews of the
-   * sound (`play` prints each step's), before anyone listens to the clips.
+   * Everything heard on this board so far, in order (platform/docs/sound.md): words (who said
+   * them, the words the voice was given, when, for how long, when cut) and sounds (which, at which
+   * signal, when). What an agent reviews of the sound (`play` prints each step's), before anyone
+   * listens to the clips.
    */
-  heard(): readonly HeardLine[] {
-    return this.heardLines;
+  heard(): readonly Heard[] {
+    return this.log;
+  }
+
+  /** The words heard last. */
+  private lastWords(): HeardWords | undefined {
+    for (let i = this.log.length - 1; i >= 0; i--) {
+      const heard = this.log[i];
+      if (heard !== undefined && "line" in heard) return heard;
+    }
+    return undefined;
   }
 
   /**
@@ -300,7 +296,7 @@ export class SceneRuntime {
     // Which line is in turn is the scene's (the first it is saying); whether it is heard yet is the voice's: in
     // the breath before it, nothing is said, so nothing glows.
     const line = (this.core.read("") as { saying?: readonly { line: string }[] }).saying?.[0]?.line;
-    const last = this.heardLines.at(-1);
+    const last = this.lastWords();
     if (line === undefined || last?.line !== line || last.cutAt !== undefined) return undefined;
     return aboutOf(
       model,
@@ -579,23 +575,25 @@ export class SceneRuntime {
   }
 }
 
-/** A line as it was heard on a board. */
-/** An effect heard on the board: which, at which signal ("line.walker.stepped"), when. */
-export type SoundedEffect = { n: number; effect: string; at: string; time: number };
-
-export type HeardLine = {
-  /** Its place among everything heard on the board (lines and effects). */
-  n: number;
+/** Words as they were heard on a board. */
+export type HeardWords = {
   line: string;
   /** The piece it is about (its own piece for a piece's line). */
   about?: string;
   speaker: string;
   /** The words the voice was given (formatting left out; maths kept as written). */
   words: string;
+  /** When, in board seconds. */
   at: number;
   seconds: number;
   cutAt?: number;
 };
+
+/** A sound as it was heard on a board: which, at which signal ("line.walker.stepped"), when. */
+export type HeardSound = { sound: string; signal: string; at: number };
+
+/** Something heard on a board: words, or a sound. */
+export type Heard = HeardWords | HeardSound;
 
 /** The action at "walker.step" under a prop. */
 function actionAt(def: AnyProp, dotted: string) {

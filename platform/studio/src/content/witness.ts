@@ -118,7 +118,7 @@ function playScene(
     }
   }
   runtime.settle();
-  for (const heard of runtime.heard()) onHeard?.(heard.line);
+  for (const heard of runtime.heard()) if ("line" in heard) onHeard?.(heard.line);
   failures.push(...errors.map((check) => ({ check })));
   const views = new Map<string, Readonly<Record<string, unknown>>>();
   for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));

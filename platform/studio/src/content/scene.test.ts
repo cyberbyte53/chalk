@@ -300,7 +300,7 @@ describe("a scene, built and checked like any board", () => {
     }
     runtime.settle();
     // Each step cuts the last (the student's): the newest is what is heard to the end.
-    const heard = runtime.heard().filter((h) => h.line === "where");
+    const heard = runtime.heard().flatMap((h) => ("line" in h && h.line === "where" ? [h] : []));
     expect(heard.map((h) => `${h.words}${h.cutAt === undefined ? "" : " (cut)"}`)).toEqual([
       "बस माइनस 1 पर है। (cut)",
       "बस माइनस 2 पर है। (cut)",
@@ -365,7 +365,7 @@ describe("a scene, built and checked like any board", () => {
         now: () => 0,
         frame: () => () => undefined,
         speak: async () => undefined,
-        effect: (e) => {
+        playSound: (e) => {
           played.push(e.name);
           return () => void stopped.push(e.name);
         },
@@ -379,7 +379,7 @@ describe("a scene, built and checked like any board", () => {
       await runtime.call("ask", "select", { option: "house" }, Actor.Learner);
       await runtime.call("ask", "check", {}, Actor.Learner);
       runtime.settle();
-      expect(runtime.effects().map((e) => e.effect)).toEqual(played);
+      expect(runtime.heard().flatMap((h) => ("sound" in h ? [h.sound] : []))).toEqual(played);
       return played;
     };
     // The props' own: the walker's step, and the question's wrong.

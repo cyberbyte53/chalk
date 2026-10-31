@@ -56,7 +56,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Cast** | Who speaks in which voice: each character (the narrator, Riya, Aman), per language, a voice named with its provider (`piper:hi_IN-rohan-medium`) | `authoring/voices.json`, `voiceFor` |
 | **Clip** | Audio the engine plays: **voiced** (a phrase of a line, made from its words by a speaker's voice, kept in its chapter's `sound/`, named by voice and words) or **chosen** (a sound from the library) | `sound.json`, `voiceChapter` |
 | **Speakable** | What a voice may be given: letters, digits, spaces, ordinary punctuation. Anything else is refused when audio is made | `unspeakable` |
-| **Voice provider** | What turns words into a clip, on this machine or a service: Piper now (the Mac's voices, Indic Parler, a cloud voice the same way) | `TtsProvider`, `voice/providers/` |
+| **Voice provider** | What turns words into a clip, on this machine or a service: Piper now (a cloud or AI voice the same way: one file) | `TtsProvider`, `sound/voice/providers/` |
 | **Publish** | Build the content from a clean commit and keep that build as `published/<commit>/` | `pnpm publish-content` |
 | **Jugnu** | The AI tutor, on question boards: an agent that reads the whole board as data and works in a loop of tool calls (the board's actions, point, calculate, hand back), within limits the runtime enforces | `@chalk/jugnu`, `JugnuSession`, `JugnuPanel` |
 | **Jugnu's tools** | `try` (what actions would do, unseen) and `calculate` to think; `reply` to answer: say, show (an action for the student to watch), point, then ask (options to tap) or nothing (he goes quiet; the board is theirs). Typed from the board's own actions; strict where the board allows | `jugnuTools`, `runTool` |

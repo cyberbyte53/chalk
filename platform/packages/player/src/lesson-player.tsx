@@ -10,7 +10,7 @@ import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { RichText } from "./rich-text-view";
 import type { LiveBoard } from "./scene-runtime";
-import { SoundMenu, hasEffects, hearAgainOf } from "./sound-menu";
+import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
 import { t } from "./ui-text";
 
 export type LessonPlayerProps = {
@@ -90,7 +90,7 @@ export function LessonPlayer({
         {board !== undefined && (
           <SoundMenu
             locale={locale}
-            hasSounds={hasEffects(board, registry)}
+            hasSounds={hasSounds(board, registry)}
             onHearAgain={hearAgainOf(runtime)}
           />
         )}

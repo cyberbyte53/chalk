@@ -1,5 +1,5 @@
 import { type Locale, blanksOf, phrasesOf } from "@chalk/content";
-import { richSpeech } from "./rich-text-speech";
+import { richSpeech } from "../rich-text-speech";
 
 /**
  * A line as the voice gets it, worked out in one place for the build (its clips) and the player

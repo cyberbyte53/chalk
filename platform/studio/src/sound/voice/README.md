@@ -14,7 +14,7 @@ Every line a board shows is also said aloud. This module makes the clips; the pl
 |---|---|---|---|
 | Collect | `lines.ts` | every board of the chapter, made from build/ as the app makes it, read for its script (`scriptOf` in `@chalk/player`): each line, its piece, its speaker | — |
 | Cast | `cast.ts` | who says it → which voice: `authoring/voices.json`, per character and language, `provider:voice` | editing the cast |
-| Speak | `providers/` | words + voice → a clip file. Piper (on this machine), the Mac's voices, Indic Parler, a test tone | adding a file here and a line in `index.ts` |
+| Speak | `providers/` | words + voice → a clip file. Piper (on this machine), a test tone | adding a file here and a line in `index.ts` |
 | Keep | `clips.ts` | each clip named by its words and voice, so it is made once; its length measured | — |
 
 `make.ts` voices a chapter: every fixed line's words, each template's own words, and each voice's number pieces (no clip per value). The content build runs it for each chapter it builds (`pnpm build-content`, and `pnpm check`), into the chapter's own `content/<book>/<chapter>/sound/`, with its list `sound.json`: committed, and shipped with the chapter.

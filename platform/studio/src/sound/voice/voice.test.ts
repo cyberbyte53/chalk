@@ -8,8 +8,6 @@ import { sceneText } from "@chalk/prop-basics";
 import { describe, expect, it } from "vitest";
 import { voiceFor } from "./cast";
 import { SOUND_LIST, voiceChapter } from "./make";
-import { parseSayVoices } from "./providers/macos";
-import { parlerProvider } from "./providers/parler";
 import { toneProvider } from "./providers/tone";
 
 // The voice module, end to end on a small board: collect its script, cast each line, speak it with
@@ -133,25 +131,5 @@ describe("the cast", () => {
     expect(() =>
       voiceFor({ narrator: { en: "cloud:x", hi: "cloud:x" } }, providers, undefined, "en"),
     ).toThrow(/"cloud", which isn't a voice provider/);
-  });
-});
-
-describe("parseSayVoices", () => {
-  it("reads voice names from `say -v ?`", () => {
-    const out =
-      "Lekha               hi_IN    # नमस्ते\nEddy (English (US)) en_US    # Hello\nRishi               en_IN    # Hello\n";
-    expect(parseSayVoices(out)).toEqual(["Lekha", "Eddy", "Rishi"]);
-  });
-});
-
-describe("parlerProvider", () => {
-  it("says how to set it up when its Python isn't there", async () => {
-    const before = process.env.CHALK_PARLER_PYTHON;
-    process.env.CHALK_PARLER_PYTHON = "/nowhere/python";
-    await expect(parlerProvider.missingVoices([])).rejects.toThrow(
-      /studio\/voice-parler\/README.md/,
-    );
-    if (before === undefined) Reflect.deleteProperty(process.env, "CHALK_PARLER_PYTHON");
-    else process.env.CHALK_PARLER_PYTHON = before;
   });
 });
