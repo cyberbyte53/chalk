@@ -58,8 +58,8 @@ const BOARD_EVENTS = "board";
  * When each line of the opening is said, as the board says it: the board is opened with a voice
  * that only listens (each line with words takes a second, one with none ends at once), and each
  * line's moment is the board's own event told last before the voice began it. Nothing is worked
- * out beside the board: the moments are what runs. A line the opening never reaches (a piece shown
- * first dropped it) has none.
+ * out beside the board: the moments are what runs. A read the opening never reaches (the student
+ * acted first; a lesson that hushes) has none.
  */
 function openingMoments(
   model: NonNullable<Board["model"]>,
@@ -145,7 +145,7 @@ export function scriptOf(
       moment:
         piece.isHidden === true
           ? eventText(`${BOARD_EVENTS}.shown`, { name: piece.name })
-          : (opening.get(piece.name) ?? "never: a piece shown first drops it"),
+          : (opening.get(piece.name) ?? "never: the opening is cut before it"),
       about: aboutOf(model, piece.name, true) ?? piece.name,
     });
   }

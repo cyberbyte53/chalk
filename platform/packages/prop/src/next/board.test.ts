@@ -530,3 +530,29 @@ describe("the voice: the board asks, the voice tells back", () => {
     expect(board.read("")).toMatchObject({ causes: [true, true, false] });
   });
 });
+
+describe("replay with a voice", () => {
+  const teller = prop({
+    type: "teller",
+    describe: "Says a line, then marks it said.",
+    variables: z.object({ said: z.array(z.number()) }).strict(),
+    start: { said: [] },
+    actions: { tap: action({}, { from: "screen" }), done: action() },
+    on: {
+      tap: (_, __, t) => (t as unknown as VoiceTools).say("hi", { atEnd: [t.self.done()] }),
+      done: (me, _, t) => t.set({ said: [...me.said, 1] }),
+    },
+  });
+
+  it("repeats the run, lines and all, given the same voice", () => {
+    const voice = (b: Board) => timedVoice(b, () => 2);
+    const board = new Board(teller, {}, { voice });
+    board.advanceTo(1);
+    board.input("", "tap");
+    board.advanceTo(2.5);
+    const at = (b: Board) => b.read("") as { said: number[] };
+    expect(at(board).said).toEqual([]);
+    expect(at(Board.replay(teller, {}, board.log, 2.5, { voice })).said).toEqual([]);
+    expect(at(Board.replay(teller, {}, board.log, 3, { voice })).said).toEqual([1]);
+  });
+});

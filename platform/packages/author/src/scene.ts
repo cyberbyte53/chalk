@@ -2,6 +2,7 @@ import { type Localized, type Piece, PieceKind, type SceneModel } from "@chalk/c
 import { AnswerStatus, PropRole, type Size } from "@chalk/prop";
 import {
   type AnyProp,
+  type Cause,
   type ChildrenOf,
   type Given,
   type HeardPaths,
@@ -356,7 +357,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     to: Record<string, Record<string, (payload?: object) => Out>>;
     say: (line: string, options?: { atEnd?: readonly Out[]; after?: number }) => Out;
     hush: () => Out;
-    cause: { byStudent: boolean; step: number };
+    cause: Cause;
   };
   const onSaid = (spec.onSaid ?? {}) as Record<string, AnyFn | undefined>;
   /**
@@ -490,11 +491,11 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
         const rest = isHead ? me.saying.slice(1) : me.saying;
         const tt = t as unknown as T;
         return [
+          tell(t, "said", { line }),
           ...(isHead ? [t.set({ saying: rest })] : []),
           ...(isHead && rest[0] !== undefined
             ? [sayAfterBreath(tt, rest[0].line, rest[0].step)]
             : []),
-          tell(t, "said", { line }),
           ...list(onSaid[line]?.(me as never, t as never) as Outs),
           ...dueAtBoard("said", me, { line }).map((due) => t.self.say({ line: due })),
           t.self.goOn(),

@@ -9,6 +9,7 @@ import {
   type Outs,
   type Payload,
   type ReaderOf,
+  type VoiceTools,
   keysOf,
 } from "./define";
 import { type Move, moveAt } from "./move";
@@ -57,8 +58,6 @@ type Later = {
   readonly outs: readonly Out[];
   /** The move this is the end of. */
   readonly move?: string;
-  /** A line waiting out its quiet before it is said (dropped, as cut, when a line is stopped). */
-  readonly isLine?: true;
   /** A host's own wait on the board's clock (`after`): done as it falls due, not as a prop. */
   readonly host?: () => void;
   /** Queued by a step the student set going: what it does is theirs too. */
@@ -128,8 +127,15 @@ export class Board {
   }
 
   /** The same board played again: the same props and setup, the student's taps at their times, to `until`. */
-  static replay(root: AnyProp, given: Given, log: readonly Input[], until: number): Board {
-    const board = new Board(root, given);
+  static replay(
+    root: AnyProp,
+    given: Given,
+    log: readonly Input[],
+    until: number,
+    /** The same voice as the run (one keeping time on the clock repeats it exactly). */
+    options: { voice?: Voice | ((board: Board) => Voice) } = {},
+  ): Board {
+    const board = new Board(root, given, options);
     for (const input of log) {
       board.advanceTo(input.at);
       board.input(input.path, input.action, input.payload);
@@ -430,11 +436,8 @@ export class Board {
             this.cutLine();
             const id = ++this.lines;
             this.inTurn = { id, path: node.path, atEnd: out.atEnd };
-            this.queue.add(this.clock + seconds(node, "say after", out.after), node.path, {
-              outs: [],
-              isLine: true,
-              host: () => this.startLine(id, out.line),
-            });
+            const line = out.line;
+            this.after(seconds(node, "say after", out.after), () => this.startLine(id, line));
           } else this.say(node, out.line, out.atEnd);
           break;
         case "hush":
@@ -534,7 +537,6 @@ export class Board {
   private cutLine(): void {
     const line = this.inTurn;
     if (line === undefined) return;
-    this.queue.drop((e) => e.what.isLine === true);
     this.heard(line.id, "cut");
     this.voice.stop();
   }
@@ -673,14 +675,22 @@ export class Board {
         atEnd: options.atEnd ?? [],
       }),
       stop: (): Out => ({ kind: "stop" }),
+      // The voice is the board's: only the outermost prop (the scene) says lines and knows why a
+      // step runs. A prop's model knows nothing of sound.
+      ...(node.path === "" ? this.voiceTools() : {}),
+    };
+  }
+
+  private voiceTools(): VoiceTools {
+    return {
       cause: this.cause,
-      say: (line: string, options: { atEnd?: readonly Out[]; after?: number } = {}): Out => ({
+      say: (line, options = {}) => ({
         kind: "say",
         line,
         atEnd: options.atEnd ?? [],
         ...(options.after === undefined ? {} : { after: options.after }),
       }),
-      hush: (): Out => ({ kind: "hush" }),
+      hush: () => ({ kind: "hush" }),
     };
   }
 }

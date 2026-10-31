@@ -7,10 +7,11 @@
 export type Voice = {
   /**
    * Says `line` (the board has stopped any line before it). Tells `hear` "started" when sound
-   * begins (never, for a line with nothing to say), then exactly one of "ended" or "cut".
+   * begins (never, for a line with nothing to say), then "ended" when it is over, or "cut" if the
+   * voice lost it on its own (its source failed and nothing could stand in).
    */
   say: (line: string, hear: (what: Heard) => void) => void;
-  /** Stops the line being said (the board takes it as cut). */
+  /** Stops the line being said. The board has already taken it as cut: nothing more is told of it. */
   stop: () => void;
 };
 
@@ -18,13 +19,10 @@ export type Heard = "started" | "ended" | "cut";
 
 /** Words a second a voice says, roughly: for a line with no audio of its own. */
 const WORDS_PER_SECOND = 2.5;
-/** A short breath before and after any line. */
-const LINE_PAUSE = 0.4;
 
-/** How long words would take to say, when there is no audio to measure. */
+/** How long words would take to say, when there is no audio to measure (the breath is the board's). */
 export function estimatedSeconds(text: string): number {
-  const words = text.split(/\s+/).filter((w) => w !== "").length;
-  return LINE_PAUSE + words / WORDS_PER_SECOND;
+  return text.split(/\s+/).filter((w) => w !== "").length / WORDS_PER_SECOND;
 }
 
 /** A board with no voice: every line has nothing to say, and ends at once. */

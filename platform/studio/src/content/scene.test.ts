@@ -111,8 +111,8 @@ describe("a scene, built and checked like any board", () => {
     });
     runtime.start();
     runtime.settle();
-    // "first" takes 0.4 + 5 / 2.5 = 2.4 s, then one breath (0.7): the plane says nothing, no second.
-    expect(said.slice(0, 2)).toEqual(["first at 0.0", "second at 3.1"]);
+    // "first" takes 5 / 2.5 = 2 s, then one breath (0.7): the plane says nothing, no second.
+    expect(said.slice(0, 2)).toEqual(["first at 0.0", "second at 2.7"]);
 
     const hiding = new SceneRuntime(quiet.board, (type) => propLibrary[type], {
       locale: "en",

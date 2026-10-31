@@ -107,18 +107,18 @@ export class SceneRuntime {
             });
             return seconds;
           });
+          // The line being heard, until it ends: a stop meanwhile cut it.
+          let hearing: HeardLine | undefined;
           return {
-            say: timed.say,
+            say: (name, hear) =>
+              timed.say(name, (what) => {
+                hearing = what === "started" ? this.heardLines.at(-1) : undefined;
+                hear(what);
+              }),
             stop: () => {
               timed.stop();
-              // A line stopped before its end was cut: what was heard says so.
-              const last = this.heardLines.at(-1);
-              if (
-                last !== undefined &&
-                last.cutAt === undefined &&
-                core.now < last.at + last.seconds
-              )
-                last.cutAt = core.now;
+              if (hearing !== undefined) hearing.cutAt = core.now;
+              hearing = undefined;
               services.hush?.();
             },
           };
