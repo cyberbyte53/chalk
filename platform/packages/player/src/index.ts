@@ -25,7 +25,7 @@ export type { JugnuFlag, JugnuLink, ShownMessage } from "./jugnu-panel";
 export { LessonPlayer, type LessonPlayerProps } from "./lesson-player";
 export type { AudioSource, PlayableClip, Utterance } from "./narration";
 export { linePhrases, spokenWords } from "./spoken-line";
-export { isEffectsMuted, playEffect, setEffectsMuted } from "./effects";
+export { type Channel, isMuted, playEffect, setMuted } from "./engine";
 export {
   type PropModule,
   type PropRegistry,

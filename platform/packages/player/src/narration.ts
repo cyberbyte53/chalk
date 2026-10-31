@@ -1,31 +1,8 @@
 import type { Locale } from "@chalk/content";
 import { estimatedSeconds } from "@chalk/prop/next";
-import { signal } from "@preact/signals";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { type Played, isMuted, playClip as playOnEngine, whenAudible } from "./engine";
 import { canSpeak, hush as phoneHush, speak as phoneSpeak } from "./speech";
-
-const MUTED_KEY = "chalk.isMuted";
-const remembered = (): boolean => {
-  try {
-    return localStorage.getItem(MUTED_KEY) === "1";
-  } catch {
-    return false;
-  }
-};
-
-/**
- * Whether the voice is off, for every board until the learner turns it on again (kept on this
- * device). Muted, lines aren't played, but the board keeps its timing: a line still takes as long
- * as its clip, so what waits for it comes when it would have.
- */
-export const isMuted = signal(remembered());
-
-export function setMuted(isOn: boolean): void {
-  isMuted.value = isOn;
-  try {
-    localStorage.setItem(MUTED_KEY, isOn ? "1" : "0");
-  } catch {}
-}
 
 /** A clip to play: where it is, and how long it plays. */
 export type PlayableClip = { url: string; seconds: number };
@@ -75,9 +52,6 @@ export type Narrator = {
   /** Lines whose audio couldn't play, by name. */
   failed: ReadonlySet<string>;
 };
-
-/** What became of a sound: heard, refused by the browser until the page's first touch, or broken. */
-type Played = "heard" | "blocked" | "broken";
 
 /** Whether the page has been touched yet: until then the browser may let it make no sound. */
 const hasBeenTouched = (): boolean =>
@@ -143,37 +117,17 @@ export function useNarrator(
     [],
   );
 
-  /**
-   * A clip; `onBroken` when it couldn't be played because it is broken (it didn't load), not
-   * merely because the page can't sound yet (the browser waits for the student's first touch).
-   */
-  /**
-   * One audio player for every clip. A browser lets a player start only once the page is touched,
-   * and the strictest (Safari, some apps' webviews) only a player that has itself started inside a
-   * touch: once it has, it stays allowed. A new player per clip would need a touch per clip.
-   */
-  const player = useRef<HTMLAudioElement | undefined>(undefined);
-
+  /** A voiced clip, on the engine's voice channel. */
   const playClip = useCallback(
     async (clip: PlayableClip): Promise<Played> => {
-      let why: Played = "broken";
+      let why: Played = "heard";
       const isHeard = await playOne(clip.seconds, (done) => {
-        player.current ??= new Audio();
-        const audio = player.current;
-        const ended = () => done(true);
-        const failed = () => done(false);
-        audio.addEventListener("ended", ended);
-        audio.addEventListener("error", failed);
-        audio.src = clip.url;
-        audio.play().catch((error: unknown) => {
-          if (error instanceof DOMException && error.name === "NotAllowedError") why = "blocked";
-          done(false);
+        const playing = playOnEngine(clip.url, "voice");
+        void playing.done.then((played) => {
+          why = played;
+          done(played === "heard");
         });
-        return () => {
-          audio.removeEventListener("ended", ended);
-          audio.removeEventListener("error", failed);
-          audio.pause();
-        };
+        return playing.stop;
       });
       return isHeard ? "heard" : why;
     },
@@ -230,19 +184,16 @@ export function useNarrator(
   // Gone from the screen: nothing more is said.
   useEffect(() => stop, [stop]);
 
-  /** Resolves on the page's first touch or key, or when the line is stopped. */
+  /** Resolves once the page may sound (its first touch), or when the line is stopped. */
   const firstTouch = useCallback(
     () =>
       new Promise<void>((resolve) => {
         const done = () => {
-          window.removeEventListener("pointerdown", done, true);
-          window.removeEventListener("keydown", done, true);
           stopNow.current = undefined;
           resolve();
         };
-        window.addEventListener("pointerdown", done, true);
-        window.addEventListener("keydown", done, true);
         stopNow.current = done;
+        void whenAudible().then(done);
       }),
     [],
   );
@@ -255,7 +206,7 @@ export function useNarrator(
       if (phrases === undefined || phrases.length === 0) return;
       const isMine = () => saying.current === mine;
       // Muted: nothing heard, and the line still takes its time (the board's pacing is the same).
-      if (isMuted.peek()) return void (await playQuiet(phrases.join(" ")));
+      if (isMuted.voice.peek()) return void (await playQuiet(phrases.join(" ")));
       // A sound the browser refuses before the page's first touch can be heard, just not yet:
       // the line waits for the touch (and the board with it), then plays.
       const whenAllowed = async (play: () => Promise<Played>): Promise<Played> => {
@@ -310,7 +261,7 @@ export function useNarrator(
   // Muting stops the line being said.
   useEffect(
     () =>
-      isMuted.subscribe((muted) => {
+      isMuted.voice.subscribe((muted) => {
         if (muted) stop();
       }),
     [stop],

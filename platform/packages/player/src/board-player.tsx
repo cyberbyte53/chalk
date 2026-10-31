@@ -17,7 +17,7 @@ import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type Picked, isSamePick, useHoldToAsk } from "./ask-about";
 import { useBoardSound } from "./board-sound";
-import { playEffect } from "./effects";
+import { playEffect } from "./engine";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { type JugnuLink, JugnuPanel } from "./jugnu-panel";
 import { Layout, type LayoutContext } from "./layout";

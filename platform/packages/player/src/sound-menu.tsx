@@ -3,8 +3,7 @@ import { Actor, type Board, type Locale, propPieces } from "@chalk/content";
 import { BOARD } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { isEffectsMuted, setEffectsMuted } from "./effects";
-import { isMuted, setMuted } from "./narration";
+import { isMuted, setMuted } from "./engine";
 import type { PropRegistry } from "./prop-module";
 import { type LiveBoard, SceneRuntime } from "./scene-runtime";
 import { t } from "./ui-text";
@@ -71,14 +70,14 @@ export function SoundMenu({
           )}
           <Switch
             label={t(locale, "voice")}
-            isOn={!isMuted.value}
-            onChange={(isOn) => setMuted(!isOn)}
+            isOn={!isMuted.voice.value}
+            onChange={(isOn) => setMuted("voice", !isOn)}
           />
           {hasSounds && (
             <Switch
               label={t(locale, "sounds")}
-              isOn={!isEffectsMuted.value}
-              onChange={(isOn) => setEffectsMuted(!isOn)}
+              isOn={!isMuted.sounds.value}
+              onChange={(isOn) => setMuted("sounds", !isOn)}
             />
           )}
         </div>
