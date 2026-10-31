@@ -18,6 +18,8 @@ Words take a turn and sounds play alongside, unless the cue says otherwise. With
 
 **Several at once.** One voice at a time: cues that take a turn (or when free) never talk over each other. Cues alongside play together, as many as needed, over each other and over the voice (rain, a hum, a step and Riya speaking). A repeat of the same sound replaces itself, so fast taps don't pile up. Nothing is said that a person didn't write: words are a lesson's, never rewritten; maths and signs are never turned into words (a line with them gives its spoken words, or the build stops it).
 
+**Defaults help, nothing forces.** Props bring their own cues, the app's settings bring voices and sounds, the engine a sensible order for finding a clip: a board is heard without anyone writing a cue. A lesson changes or silences any cue; a book or chapter overrides any setting; a voice makes its clips as it sees fit.
+
 ### The two rules (the voice: cues that take a turn, or when free)
 
 1. **The board talks in turn.** One at a time, in the order they come; cues when free (the opening, read top to bottom) only when nothing else is due.
