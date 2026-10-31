@@ -100,7 +100,6 @@ The app's own sounds ship with the app and are kept for offline with it; a chapt
 
 ## Not done yet
 
-- Sound cues shown in the script before they are heard (today `play` shows them as heard).
 - Settings with overrides (app → book → chapter): voices have one level today (`authoring/voices.json`); sounds need none until a book wants its own.
 
 ## Not now
