@@ -43,10 +43,9 @@ export const UiText = {
   },
   flagFailed: { en: "Couldn't send the flag. Try again?", hi: "भेज नहीं पाए। फिर से कोशिश करें?" },
   closeJugnu: { en: "Close Jugnu", hi: "जुगनू बंद करो" },
-  mute: { en: "Turn the voice off", hi: "आवाज़ बंद करो" },
-  unmute: { en: "Turn the voice on", hi: "आवाज़ चालू करो" },
-  soundsOff: { en: "Turn the sounds off", hi: "ध्वनियाँ बंद करो" },
-  soundsOn: { en: "Turn the sounds on", hi: "ध्वनियाँ चालू करो" },
+  menu: { en: "Settings", hi: "सेटिंग" },
+  voice: { en: "Voice", hi: "आवाज़" },
+  sounds: { en: "Sounds", hi: "ध्वनियाँ" },
   audioUnavailable: {
     en: "Audio unavailable · tap to try again",
     hi: "आवाज़ नहीं चली · फिर से सुनने के लिए दबाओ",

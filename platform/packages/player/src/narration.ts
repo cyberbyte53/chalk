@@ -134,13 +134,23 @@ export function useNarrator(
     [],
   );
 
+  /**
+   * A clip; `onBroken` when it couldn't be played because it is broken (it didn't load), not
+   * merely because the page can't sound yet (the browser waits for the student's first touch).
+   */
   const playClip = useCallback(
-    (clip: PlayableClip) =>
+    (clip: PlayableClip, onBroken?: () => void) =>
       playOne(clip.seconds, (done) => {
         const player = new Audio(clip.url);
         player.addEventListener("ended", () => done(true));
-        player.addEventListener("error", () => done(false));
-        player.play().catch(() => done(false));
+        player.addEventListener("error", () => {
+          onBroken?.();
+          done(false);
+        });
+        player.play().catch((error: unknown) => {
+          if (!(error instanceof DOMException && error.name === "NotAllowedError")) onBroken?.();
+          done(false);
+        });
         return () => player.pause();
       }),
     [playOne],
@@ -204,14 +214,18 @@ export function useNarrator(
       if (isMuted.peek()) return void (await playQuiet(phrases.join(" ")));
       // 1. Its clips, glued. A clip that can't play leaves the rest of the line to the next source.
       let from = 0;
+      let isBroken = false;
       const clips = clipsFor(line);
       for (const clip of clips ?? []) {
         if (!isMine()) return;
-        if (!(await playClip(clip))) break;
+        const broken = () => {
+          isBroken = true;
+        };
+        if (!(await playClip(clip, broken))) break;
         from++;
       }
       if (clips !== undefined && from === clips.length) return void forget(line.name);
-      if (clips !== undefined) {
+      if (isBroken) {
         setFailed((prev) => new Set(prev).add(line.name));
         onFailure({ name: line.name }, "a clip failed to play");
       }

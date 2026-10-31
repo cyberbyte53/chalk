@@ -16,16 +16,17 @@ import {
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type Picked, isSamePick, useHoldToAsk } from "./ask-about";
-import { isEffectsMuted, playEffect, setEffectsMuted } from "./effects";
+import { playEffect } from "./effects";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { type JugnuLink, JugnuPanel } from "./jugnu-panel";
 import { Layout, type LayoutContext } from "./layout";
-import { type AudioSource, type SpokenProp, isMuted, setMuted, useNarrator } from "./narration";
+import { type AudioSource, type SpokenProp, useNarrator } from "./narration";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
 import { BoardRuntime } from "./runtime";
 import type { LiveBoard } from "./scene-runtime";
+import { SoundMenu, hasEffects } from "./sound-menu";
 import { t } from "./ui-text";
 import { useBoardRuntime } from "./use-board-runtime";
 import { useMadeWhenChanged, useWhenChanged } from "./when-changed";
@@ -69,6 +70,8 @@ export type BoardPlayerProps = {
    * sound. A student's board (the default) waits for each line's sound to end.
    */
   isTimed?: boolean;
+  /** Its menu is the lesson's (in the lesson's header, lesson-player.tsx), not its own. */
+  isInLesson?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
   onRuntime?: ((runtime: LiveBoard) => void) | undefined;
 };
@@ -101,6 +104,7 @@ export function BoardPlayer({
   onRuntime,
   isPicture = false,
   isTimed = false,
+  isInLesson = false,
 }: BoardPlayerProps): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // A mode without Jugnu (a skill check) plays without him.
@@ -263,6 +267,13 @@ export function BoardPlayer({
           ref={body}
           onPointerDownCapture={() => recorder.gesture(true)}
         >
+          {!isPicture && !isTimed && !isInLesson && (
+            <SoundMenu
+              locale={locale}
+              hasVoice={audio !== undefined}
+              hasSounds={hasEffects(board, registry)}
+            />
+          )}
           <Layout piece={board.root} context={context} />
           {pill !== undefined && (
             <button
@@ -334,40 +345,6 @@ export function BoardPlayer({
               </svg>
             </button>
           )}
-          {audio !== undefined && (
-            <button
-              type="button"
-              class="back mute"
-              aria-label={t(locale, isMuted.value ? "unmute" : "mute")}
-              aria-pressed={isMuted.value}
-              onClick={() => setMuted(!isMuted.value)}
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path class="speaker" d="M3 8 H6 L10 4.5 V15.5 L6 12 H3 Z" />
-                {isMuted.value ? (
-                  <path d="M13 7.5 L17.5 12 M17.5 7.5 L13 12" />
-                ) : (
-                  <path d="M13 7 Q15 10 13 13 M15.5 5 Q19 10 15.5 15" />
-                )}
-              </svg>
-            </button>
-          )}
-          {hasEffects(board, registry) && !isTimed && (
-            <button
-              type="button"
-              class="back mute"
-              aria-label={t(locale, isEffectsMuted.value ? "soundsOn" : "soundsOff")}
-              aria-pressed={isEffectsMuted.value}
-              onClick={() => setEffectsMuted(!isEffectsMuted.value)}
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path class="speaker" d="M8 14.5 V5 L15 3.5 V13" />
-                <circle cx="6" cy="14.5" r="2" />
-                <circle cx="13" cy="13" r="2" />
-                {isEffectsMuted.value && <path d="M3 3 L17 17" />}
-              </svg>
-            </button>
-          )}
           {jugnu !== undefined && (
             <button
               type="button"
@@ -405,14 +382,5 @@ export function BoardPlayer({
         </footer>
       </div>
     </PlayModeContext.Provider>
-  );
-}
-
-/** Whether a board can sound an effect: one of its lesson's, or one of its pieces' own. */
-function hasEffects(board: Board, registry: PropRegistry): boolean {
-  if (board.model === undefined) return false;
-  if (Object.values(board.model.effects ?? {}).some((effect) => effect !== null)) return true;
-  return propPieces(board.root).some(
-    (piece) => Object.keys(registry[piece.prop]?.sound?.effects ?? {}).length > 0,
   );
 }

@@ -10,6 +10,7 @@ import type { AudioSource } from "./narration";
 import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
 import { RichText } from "./rich-text-view";
+import { SoundMenu, hasEffects } from "./sound-menu";
 import { t } from "./ui-text";
 
 export type LessonPlayerProps = {
@@ -87,6 +88,13 @@ export function LessonPlayer({
           />
         </div>
         <span class="sr-only">{`${Math.min(index + 1, lesson.boards.length)} / ${lesson.boards.length}`}</span>
+        {board !== undefined && (
+          <SoundMenu
+            locale={locale}
+            hasVoice={audio !== undefined}
+            hasSounds={hasEffects(board, registry)}
+          />
+        )}
       </header>
       {board === undefined && onComplete !== undefined ? null : board === undefined ? (
         <div class="lesson-complete">
@@ -107,6 +115,7 @@ export function LessonPlayer({
           locale={locale}
           record={bus.record}
           audio={audio}
+          isInLesson
           onPass={() => {
             setIndex(index + 1);
             setFurthest(Math.max(furthest, index + 1));
