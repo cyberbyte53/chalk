@@ -78,15 +78,15 @@ export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Ele
   if (s.scene === Scene.Classroom) {
     // The blackboard along the bottom edge: the front of the room, which row 1 is nearest.
     const unit = unitOf(px);
-    const thick = Math.max(3, Math.min(7, unit * 0.11));
+    const thick = Math.max(2.5, Math.min(5, unit * 0.08));
     return (
       <g class="cp-classroom">
         <rect class="cp-scene is-classroom" {...box} rx={6} />
         <rect
           class="cp-blackboard"
-          x={box.x + box.width * 0.15}
+          x={box.x + box.width * 0.3}
           y={box.y + box.height - thick - 1}
-          width={box.width * 0.7}
+          width={box.width * 0.4}
           height={thick}
           rx={2}
         />
