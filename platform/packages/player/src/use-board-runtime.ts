@@ -34,8 +34,8 @@ export function useBoardRuntime(
     hush?: () => void;
     /** A tool's board: lines keep their lengths; nothing waits for real sound (board-player.tsx). */
     isTimed?: boolean;
-    /** Plays a sound effect (effects.ts). */
-    effect?: (effect: Effect) => void;
+    /** Plays a sound alongside (engine.ts), lasting until stopped if it lasts; returns how to stop it. */
+    effect?: (effect: Effect, lasts?: boolean) => () => void;
   },
 ): LiveBoard {
   const speed = useContext(BoardSpeedContext);

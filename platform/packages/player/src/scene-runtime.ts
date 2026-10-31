@@ -7,6 +7,7 @@ import {
   type Locale,
   type Localized,
   NARRATOR,
+  carries,
   propPieces,
 } from "@chalk/content";
 import {
@@ -74,8 +75,8 @@ export class SceneRuntime {
       lineSeconds?: (line: Utterance) => number | undefined;
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
-      /** Plays a sound effect (effects.ts): at once, never waited for. */
-      effect?: (effect: Effect) => void;
+      /** Plays a sound alongside (engine.ts): at once, never waited for; returns how to stop it. */
+      effect?: (effect: Effect, lasts?: boolean) => () => void;
       /**
        * A line is over when its sound is (`speak` resolves): a student's board, at real speed. Else
        * it lasts as long as its clips, or its words would take, on the board's clock (a check, a
@@ -209,8 +210,9 @@ export class SceneRuntime {
   }
 
   /**
-   * The effect a signal sounds, if any: the lesson's for it (null: none), else its piece's sound
-   * view's. Played on the effects' own channel, and logged.
+   * The sounds a moment plays (platform/docs/sound.md): the lesson's cues at it, which replace its
+   * piece's own there (a null cue only silences it), else the piece's sound view's. A lasting
+   * sound plays until its `until` moment, or the board's end. Each is logged.
    */
   private sound(
     piece: string,
@@ -219,22 +221,45 @@ export class SceneRuntime {
     told: Readonly<Record<string, unknown>>,
   ): void {
     const at = [piece === "" ? "board" : piece, ...inside, signal].join(".");
-    const lesson = this.board.model?.effects?.[at];
+    for (const [name, stop] of this.lasting)
+      if (this.board.model?.sounds?.[name]?.until === at) {
+        stop();
+        this.lasting.delete(name);
+      }
+    const cues = Object.entries(this.board.model?.sounds ?? {}).filter(
+      ([, cue]) => cue.when === at && carries(told, cue.where),
+    );
     const type = propPieces(this.board.root).find((p) => p.name === piece)?.prop;
     const own =
       type === undefined
         ? undefined
-        : this.lookup(type)?.sound?.effects?.[[...inside, signal].join(".")];
-    const effect = lesson !== undefined ? lesson : typeof own === "function" ? own(told) : own;
-    if (effect === null || effect === undefined) return;
-    this.soundedEffects.push({
-      n: ++this.heardCount,
-      effect: effect.name,
-      at,
-      time: this.core.now,
-    });
-    this.services.effect?.(effect);
+        : this.lookup(type)?.sound?.cues?.[[...inside, signal].join(".")];
+    const ownSound = typeof own === "function" ? own(told) : own;
+    const playing: [string | undefined, Effect, boolean][] =
+      cues.length > 0
+        ? cues.flatMap(([name, cue]) =>
+            cue.sound === null ? [] : [[name, cue.sound, cue.until !== undefined] as const],
+          )
+        : ownSound === undefined
+          ? []
+          : [[undefined, ownSound, false]];
+    for (const [name, effect, lasts] of playing) {
+      this.soundedEffects.push({
+        n: ++this.heardCount,
+        effect: effect.name,
+        at,
+        time: this.core.now,
+      });
+      const stop = this.services.effect?.(effect, lasts);
+      if (lasts && name !== undefined && stop !== undefined) {
+        this.lasting.get(name)?.();
+        this.lasting.set(name, stop);
+      }
+    }
   }
+
+  /** The lasting sounds playing, by cue: how to stop each. */
+  private readonly lasting = new Map<string, () => void>();
 
   private readonly soundedEffects: SoundedEffect[] = [];
   /** Lines and effects heard, counted together: the order they came in. */
@@ -465,6 +490,9 @@ export class SceneRuntime {
 
   dispose(): void {
     this.isDisposed = true;
+    // A board's sounds all end with it.
+    for (const stop of this.lasting.values()) stop();
+    this.lasting.clear();
     this.stopFrames?.();
     this.signalListeners.clear();
     this.actionListeners.clear();

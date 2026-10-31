@@ -39,10 +39,11 @@ type StateOfDef<P> = P extends { readonly defaults: infer S extends StoredState 
 export type SoundView = {
   line?: (view: PropView) => Localized | undefined;
   /**
-   * Its own effects, by the signal they sound at, inside the piece: its own ("correct") or a part's
-   * ("walker.stepped"); from what the signal carries when the effect depends on it.
+   * Its own sound cues, by the signal they sound at, inside the piece: its own ("checked") or a
+   * part's ("walker.stepped"); from what the signal carries when the sound depends on it. A
+   * lesson's cue at the same moment replaces it.
    */
-  effects?: Readonly<
+  cues?: Readonly<
     Record<string, Effect | ((told: Readonly<Record<string, unknown>>) => Effect | undefined)>
   >;
 };

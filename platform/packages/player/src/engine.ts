@@ -124,8 +124,8 @@ export type Playing = { done: Promise<Played>; stop: () => void };
 /** How loud each channel plays: sounds a little under the voice. */
 const VOLUME: Readonly<Record<Channel, number>> = { voice: 1, sounds: 0.8 };
 
-/** Plays a clip on a channel, from its start. Refused (blocked) until the page may sound. */
-export function playClip(url: string, channel: Channel): Playing {
+/** Plays a clip on a channel, from its start (looping, seamlessly, until stopped, if it lasts). Refused (blocked) until the page may sound. */
+export function playClip(url: string, channel: Channel, lasts = false): Playing {
   let stopNow = (): void => undefined;
   const done = new Promise<Played>((resolve) => {
     if (AudioContextClass === undefined) return resolve("broken");
@@ -144,6 +144,7 @@ export function playClip(url: string, channel: Channel): Playing {
       gain.connect(audio.destination);
       const source = audio.createBufferSource();
       source.buffer = buffer;
+      source.loop = lasts;
       source.connect(gain);
       source.onended = () => resolve("heard");
       source.start();
@@ -168,16 +169,24 @@ const playingEffects = new Map<string, Playing>();
 const LATE_MS = 250;
 
 /**
- * Plays an effect alongside anything else: nothing when sounds are off, or the page can't sound yet
- * (an effect is a moment: one that couldn't sound then is old news later).
+ * Plays a sound alongside anything else, and returns how to stop it. Nothing when sounds are off, or
+ * the page can't sound yet: a moment's sound that couldn't sound then is old news later. A sound
+ * that lasts loops until stopped, and is never late.
  */
-export function playEffect(effect: Effect): void {
-  if (isMuted.sounds.peek() || !isAudible()) return;
+export function playEffect(effect: Effect, lasts = false): () => void {
+  if (isMuted.sounds.peek() || !isAudible()) return () => undefined;
   const asked = Date.now();
+  let isStopped = false;
+  let playing: Playing | undefined;
   void load(effect.url).then((buffer) => {
-    if (buffer === null || Date.now() - asked > LATE_MS || isMuted.sounds.peek()) return;
-    playingEffects.get(effect.name)?.stop();
-    const playing = playClip(effect.url, "sounds");
-    playingEffects.set(effect.name, playing);
+    if (isStopped || buffer === null || isMuted.sounds.peek()) return;
+    if (!lasts && Date.now() - asked > LATE_MS) return;
+    if (!lasts) playingEffects.get(effect.name)?.stop();
+    playing = playClip(effect.url, "sounds", lasts);
+    if (!lasts) playingEffects.set(effect.name, playing);
   });
+  return () => {
+    isStopped = true;
+    playing?.stop();
+  };
 }

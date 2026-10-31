@@ -1,10 +1,10 @@
-import { hidden, line, place, scene, tap } from "@chalk/author";
-import { Actor, type Effect } from "@chalk/content";
+import { type Cue, cue, hidden, place, scene, tap } from "@chalk/author";
+import { Actor } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
 import { SceneRuntime, scriptOf } from "@chalk/player";
 import { sceneChoice, sceneText } from "@chalk/prop-basics";
 import { sceneCoordinatePlane } from "@chalk/prop-coordinates";
-import { tap as tapSound } from "@chalk/sounds";
+import { rise, tap as tapSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
 
@@ -135,13 +135,13 @@ describe("a scene, built and checked like any board", () => {
   it("a line of its own is said at its moment, and the runs say which lines they hear", async () => {
     const moments = scene({
       pieces: { ask },
-      lines: {
-        well: line(t("Well done!", "शाबाश!"), {
+      cues: {
+        well: cue(t("Well done!", "शाबाश!"), {
           speaker: "riya",
           when: "ask.correct",
           about: "ask",
         }),
-        never: line(t("Never said.", "कभी नहीं।"), { when: "ask.wrong", if: () => false }),
+        never: cue(t("Never said.", "कभी नहीं।"), { when: "ask.wrong", if: () => false }),
       },
       witness: [tap("ask", "select", { option: "street" }), tap("ask", "check")],
     }).build("moments");
@@ -164,16 +164,16 @@ describe("a scene, built and checked like any board", () => {
         ask,
         hint: hidden(place(sceneText, { text: t("Look along", "आगे देखो") })),
       },
-      lines: {
-        afterTitle: line(t("Now this.", "अब यह।"), {
+      cues: {
+        afterTitle: cue(t("Now this.", "अब यह।"), {
           when: "board.said",
           where: { line: "title" },
         }),
-        afterPlane: line(t("See the plane.", "तल देखो।"), {
+        afterPlane: cue(t("See the plane.", "तल देखो।"), {
           when: "board.said",
           where: { line: "plane" },
         }),
-        well: line(t("Well done!", "शाबाश!"), {
+        well: cue(t("Well done!", "शाबाश!"), {
           speaker: "riya",
           when: "ask.checked",
           where: { status: "correct" },
@@ -219,9 +219,9 @@ describe("a scene, built and checked like any board", () => {
         ask,
         hint: hidden(place(sceneText, { text: t("Look along", "आगे देखो") })),
       },
-      lines: {
-        first: line(t("First.", "पहला।"), { when: "board.said", where: { line: "title" } }),
-        second: line(t("Second.", "दूसरा।"), { when: "board.said", where: { line: "title" } }),
+      cues: {
+        first: cue(t("First.", "पहला।"), { when: "board.said", where: { line: "title" } }),
+        second: cue(t("Second.", "दूसरा।"), { when: "board.said", where: { line: "title" } }),
       },
       // The lesson shows a piece the moment the title is said: it cuts in, the lines due follow.
       onSaid: { title: (_, t) => t.self.show({ name: "hint" }) },
@@ -279,8 +279,8 @@ describe("a scene, built and checked like any board", () => {
           walker: { walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 } },
         }),
       },
-      lines: {
-        where: line(t("The bus is at {x}.", "बस {x} पर है।"), { when: "plane.walker.stepped" }),
+      cues: {
+        where: cue(t("The bus is at {x}.", "बस {x} पर है।"), { when: "plane.walker.stepped" }),
       },
     }).build("walk");
     const runtime = new SceneRuntime(walk.board, (type) => propLibrary[type], {
@@ -312,11 +312,11 @@ describe("a scene, built and checked like any board", () => {
     expect(() =>
       scene({
         pieces: { plane: place(sceneCoordinatePlane) },
-        lines: { x: line(t("At {z}.", "{z} पर।"), { when: "plane.walker.stepped" }) },
+        cues: { x: cue(t("At {z}.", "{z} पर।"), { when: "plane.walker.stepped" }) },
       }).build("bad"),
     ).toThrow(/\{z\} isn't a number plane.walker.stepped carries \(x, y\)/);
     expect(() =>
-      scene({ pieces: { ask }, lines: { x: line(t("At {x}.", "{x} पर।")) } }).build("bad"),
+      scene({ pieces: { ask }, cues: { x: cue(t("At {x}.", "{x} पर।")) } }).build("bad"),
     ).toThrow(/it needs a when/);
   });
 
@@ -347,8 +347,8 @@ describe("a scene, built and checked like any board", () => {
     expect(said).toEqual(["title", "ask"]);
   });
 
-  it("sounds effects at signals: a prop's own, and the lesson's (adding, replacing, silencing)", async () => {
-    const walking = (effects?: Record<string, Effect | null>) =>
+  it("plays sound cues at signals: a prop's own, and the lesson's (replacing, silencing, lasting)", async () => {
+    const walking = (cues?: Record<string, Cue>) =>
       scene({
         pieces: {
           plane: place(sceneCoordinatePlane, {
@@ -356,16 +356,19 @@ describe("a scene, built and checked like any board", () => {
           }),
           ask,
         },
-        ...(effects === undefined ? {} : { effects: effects as never }),
+        ...(cues === undefined ? {} : { cues }),
       }).build("walking");
-    const effectsOf = async (built: ReturnType<typeof walking>) => {
+    const effectsOf = async (built: ReturnType<typeof walking>, stopped: string[] = []) => {
       const played: string[] = [];
       const runtime = new SceneRuntime(built.board, (type) => propLibrary[type], {
         locale: "en",
         now: () => 0,
         frame: () => () => undefined,
         speak: async () => undefined,
-        effect: (e) => void played.push(e.name),
+        effect: (e) => {
+          played.push(e.name);
+          return () => void stopped.push(e.name);
+        },
         onError: (message) => {
           throw new Error(message);
         },
@@ -382,17 +385,50 @@ describe("a scene, built and checked like any board", () => {
     // The props' own: the walker's step (right and wrong come once chosen).
     expect(await effectsOf(walking())).toEqual(["step"]);
     // The lesson's: a tap for each step instead, and no sound for a wrong answer.
-    expect(await effectsOf(walking({ "plane.walker.stepped": tapSound }))).toEqual(["tap"]);
-    expect(await effectsOf(walking({ "plane.walker.stepped": null }))).toEqual([]);
+    expect(
+      await effectsOf(walking({ tap: cue(tapSound, { when: "plane.walker.stepped" }) })),
+    ).toEqual(["tap"]);
+    expect(
+      await effectsOf(walking({ quiet: cue(null, { when: "plane.walker.stepped" }) })),
+    ).toEqual([]);
+    // Only at the moment it names: a step that lands elsewhere keeps the prop's own.
+    expect(
+      await effectsOf(
+        walking({
+          tap: cue(tapSound, { when: "plane.walker.stepped", where: { x: 5, y: 5 } }),
+        }),
+      ),
+    ).toEqual(["step"]);
+    // A lasting sound plays from its moment until the next, and stops then.
+    const stopped: string[] = [];
+    expect(
+      await effectsOf(
+        walking({ hum: cue(rise, { when: "board.started", until: "plane.walker.stepped" }) }),
+        stopped,
+      ),
+    ).toEqual(["rise", "step"]);
+    expect(stopped).toEqual(["rise"]);
   });
 
-  it("refuses an effect at no signal, or one there isn't", () => {
+  it("refuses a sound cue at no signal, one that isn't a sound, or a where its signal doesn't carry", () => {
     expect(() =>
-      scene({ pieces: { ask }, effects: { "ask.landed": "step" } as never }).build("bad"),
-    ).toThrow(/the effect at "ask.landed" isn't at a signal here/);
+      scene({ pieces: { ask }, cues: { x: cue(tapSound, { when: "ask.landed" }) } }).build("bad"),
+    ).toThrow(/"ask.landed" isn't a signal here/);
+    expect(() => scene({ pieces: { ask }, cues: { x: cue(tapSound) } }).build("bad")).toThrow(
+      /it needs a when/,
+    );
     expect(() =>
-      scene({ pieces: { ask }, effects: { "ask.wrong": "boom" } as never }).build("bad"),
+      scene({
+        pieces: { ask },
+        cues: { x: { sound: "boom" as never, when: "ask.checked" } },
+      }).build("bad"),
     ).toThrow(/isn't a sound/);
+    expect(() =>
+      scene({
+        pieces: { ask },
+        cues: { x: cue(tapSound, { when: "ask.checked", where: { nothing: 1 } }) },
+      }).build("bad"),
+    ).toThrow(/isn't what ask.checked carries/);
   });
 
   it("the student can hear the screen again: what is showing now, from the top", () => {
@@ -426,7 +462,7 @@ describe("a scene, built and checked like any board", () => {
     expect(() =>
       scene({
         pieces: { ask },
-        lines: { x: line(t("x", "x"), { when: "board.continued" }) },
+        cues: { x: cue(t("x", "x"), { when: "board.continued" }) },
       }).build("bad"),
     ).toThrow(/when "board.continued"/);
     expect(() => scene({ pieces: { board: ask } }).build("bad")).toThrow(/can't be named "board"/);
@@ -434,12 +470,10 @@ describe("a scene, built and checked like any board", () => {
 
   it("a line about something not on the board is refused; a part inside a piece is fine", () => {
     expect(() =>
-      scene({ pieces: { ask }, lines: { x: line(t("x", "x"), { about: "nowhere" }) } }).build(
-        "bad",
-      ),
+      scene({ pieces: { ask }, cues: { x: cue(t("x", "x"), { about: "nowhere" }) } }).build("bad"),
     ).toThrow(/about "nowhere" isn't a piece here/);
     expect(() =>
-      scene({ pieces: { ask }, lines: { x: line(t("x", "x"), { about: "ask.nothing" }) } }).build(
+      scene({ pieces: { ask }, cues: { x: cue(t("x", "x"), { about: "ask.nothing" }) } }).build(
         "bad",
       ),
     ).toThrow(/about "ask.nothing"/);
@@ -447,7 +481,7 @@ describe("a scene, built and checked like any board", () => {
 
   it("a moment that isn't a signal here is refused when the board is built", () => {
     expect(() =>
-      scene({ pieces: { ask }, lines: { x: line(t("x", "x"), { when: "ask.landed" }) } }).build(
+      scene({ pieces: { ask }, cues: { x: cue(t("x", "x"), { when: "ask.landed" }) } }).build(
         "bad",
       ),
     ).toThrow(/when "ask.landed" isn't a signal of a piece here/);

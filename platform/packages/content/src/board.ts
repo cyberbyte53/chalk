@@ -135,11 +135,39 @@ export type SceneModel = {
   /** The narration lines' names, in the order written. */
   readonly freeLines: readonly string[];
   /**
-   * The lesson's effects, by the signal they sound at ("line.walker.stepped"): added to its pieces'
-   * own, or replacing them; null silences one.
+   * The lesson's sound cues, by name (platform/docs/sound.md): at their moment they replace the
+   * pieces' own sound there; null only silences it.
    */
-  readonly effects?: Readonly<Record<string, Effect | null>>;
+  readonly sounds?: Readonly<Record<string, SceneSound>>;
 };
+
+/** A sound cue: a sound (null: silence) at a moment; with `until`, it lasts (looping) till then. */
+export type SceneSound = {
+  readonly sound: Effect | null;
+  readonly when: string;
+  readonly where?: Readonly<Record<string, unknown>>;
+  readonly until?: string;
+};
+
+/** Whether what a moment told carries the values `where` asks for: each the same, in any order. */
+export function carries(
+  told: Readonly<Record<string, unknown>>,
+  where: Readonly<Record<string, unknown>> | undefined,
+): boolean {
+  return Object.entries(where ?? {}).every(([k, v]) => sameValue(told[k], v));
+}
+
+function sameValue(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  const ka = Object.keys(a);
+  const kb = Object.keys(b);
+  return (
+    ka.length === kb.length &&
+    ka.every((k) => sameValue((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]))
+  );
+}
 
 /**
  * A line's words (per language) and who says them (words left out: the piece says its own); for a

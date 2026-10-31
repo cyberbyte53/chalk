@@ -5,7 +5,9 @@ import {
   type Piece,
   PieceKind,
   type SceneModel,
+  type SceneSound,
   blanksOf,
+  carries,
   isTemplate,
 } from "@chalk/content";
 import { AnswerStatus, PropRole, type Size } from "@chalk/prop";
@@ -80,19 +82,6 @@ function isPartAt(pieces: Pieces, path: string): boolean {
 const shapeOf = (signal: SignalDef): Readonly<Record<string, ZodTypeAny>> =>
   (signal.payload as unknown as { shape?: Record<string, ZodTypeAny> }).shape ?? {};
 
-/** Whether a told value is the one `where` asks for: the same value, field by field, in any order. */
-function sameValue(a: unknown, b: unknown): boolean {
-  if (a === b) return true;
-  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
-  if (Array.isArray(a) !== Array.isArray(b)) return false;
-  const ka = Object.keys(a);
-  const kb = Object.keys(b);
-  return (
-    ka.length === kb.length &&
-    ka.every((k) => sameValue((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k]))
-  );
-}
-
 /** What a piece starts with: some of its variables, and of its children's, by name. */
 export type GivenFor<D> = Partial<VarsOf<D>> & {
   readonly [K in keyof ChildrenOf<D>]?: GivenFor<ChildrenOf<D>[K]>;
@@ -116,13 +105,23 @@ export type Placed<D extends AnyProp = AnyProp> = Says & {
 };
 
 /**
- * A line the board says with nothing on screen of its own: narration, or a character's line. Its
- * moment is written with it as data, so every view shows exactly what runs: `when` a piece's signal
- * is told, `where` it carries these values (`town.walker.arrived · x 4, y 5`). Without a moment, a
- * rule says it (`t.self.say`). `about`: the piece it is about, which glows while it plays.
+ * A cue (platform/docs/sound.md): when a moment comes, play something. Its moment is written with
+ * it as data, so every view shows exactly what runs: `when` a piece's signal is told (or the
+ * board's own, `board.started`), `where` it carries these values (`town.walker.arrived · x 4, y 5`).
+ *
+ * - **Words** (narration, a character's line): said by a speaker, taking their turn (the two rules).
+ *   Without a moment, a rule says them (`t.self.say`). `about`: the piece they are about, which
+ *   glows while they play.
+ * - **A sound** (from the sound library): played alongside anything, at once; with `until`, it lasts
+ *   (looping) until that moment, or the board's end. A sound cue at a signal replaces the props' own
+ *   there; `cue(null, { when })` only silences them.
+ *
+ * A piece's own words are its cue too, written on the piece (`says`), beside what it shows.
  */
-export type FreeLine = {
-  readonly says: Localized;
+export type Cue = {
+  /** Words to say, or a sound to play (null: silence the props' own sound at `when`). */
+  readonly says?: Localized;
+  readonly sound?: Effect | null;
   readonly speaker?: string;
   /** The moment: a piece's signal, by path ("town.walker.arrived"). */
   readonly when?: string;
@@ -137,12 +136,25 @@ export type FreeLine = {
     me: Readonly<Record<string, unknown>>,
   ) => boolean;
   readonly about?: string;
+  /** A sound that lasts: the moment it stops. */
+  readonly until?: string;
 };
 
-/** A narration line: `lines: { watch: line(t("Watch the street…", "…")) }`. */
-export function line(says: Localized, options: Omit<FreeLine, "says"> = {}): FreeLine {
-  return { says, ...options };
+/** A line the board says with nothing on screen of its own (a cue of words). */
+export type FreeLine = Cue & { readonly says: Localized };
+
+/**
+ * A cue: `cues: { finally: cue(t("Finally, I'm here!", "…"), { speaker: "riya", when: "…" }) }`,
+ * `cue(step, { when: "line.walker.stepped" })`, `cue(rain, { when: "board.started", until: "board.passed" })`.
+ */
+export function cue(
+  what: Localized | Effect | null,
+  options: Omit<Cue, "says" | "sound"> = {},
+): Cue {
+  return what !== null && "en" in what ? { says: what, ...options } : { sound: what, ...options };
 }
+
+const isWords = (c: Cue): c is FreeLine => c.says !== undefined;
 
 /** Places a prop: `place(coordinatePlane, { plane: { upLines: [] } })`. */
 export function place<D extends AnyProp>(
@@ -239,26 +251,16 @@ type SceneTools<P extends Pieces> = Tools<
   ChildrenOfPieces<P>
 >;
 
-type Lines = Readonly<Record<string, FreeLine>>;
+type Lines = Readonly<Record<string, Cue>>;
 
 export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> = {
   /** The pieces, top to bottom. */
   readonly pieces: P;
-  /** Narration: lines with nothing on screen of their own, said by rules (`t.self.say({ line })`). */
-  readonly lines?: L;
+  /** What is heard, besides the pieces' own words: cues, by name (words, or sounds). */
+  readonly cues?: L;
   /** When a line has been said (a piece's, or a narration line), do these things. */
   readonly onSaid?: {
     readonly [K in (keyof P | keyof L) & string]?: (me: SceneMe<P>, t: SceneTools<P>) => Outs;
-  };
-  /**
-   * Sound effects at moments (platform/docs/sound.md): by a signal ("line.walker.stepped", or the
-   * board's own, "board.passed"), the effect heard then; added to its pieces' own, or replacing
-   * them; null silences one.
-   */
-  readonly effects?: {
-    readonly [K in
-      | HeardPaths<ChildrenOfPieces<P>>
-      | `board.${keyof typeof sceneSignals}`]?: Effect | null;
   };
   /** The lesson's rules: on a piece's signal ("town.walker.arrived"), do these things. */
   readonly hear?: {
@@ -308,8 +310,8 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
 /** What a pattern adds to a scene, untyped: it names its own pieces' paths. */
 export type SceneUse = {
   readonly give?: Readonly<Record<string, Readonly<Record<string, (me: never) => unknown>>>>;
-  /** Lines it brings (a question's notes, said when it is answered wrong), joined with the scene's. */
-  readonly lines?: Lines;
+  /** Cues it brings (a question's notes, said when it is answered wrong), joined with the scene's. */
+  readonly cues?: Lines;
   readonly hear?: Readonly<Record<string, (me: never, payload: never, t: never) => Outs>>;
   readonly witness?: readonly Step[];
   readonly noteChecks?: readonly NoteCheck[];
@@ -351,24 +353,47 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   if (names.includes(BOARD_EVENTS))
     throw new Error(`Board ${name}: a piece can't be named "${BOARD_EVENTS}" (the board's own)`);
   const defs = Object.fromEntries(names.map((n) => [n, (spec.pieces[n] as Placed).def]));
-  // The scene's own lines, and those its patterns bring: one set, each name once.
-  const freeLines: Record<string, FreeLine> = { ...spec.lines };
+  // The scene's own cues, and those its patterns bring: one set, each name once. Words join the
+  // board's lines (they take turns); sounds play alongside.
+  const allCues: Record<string, Cue> = { ...spec.cues };
   for (const use of spec.uses ?? [])
-    for (const [line, free] of Object.entries(use.lines ?? {})) {
-      if (Object.hasOwn(freeLines, line))
-        throw new Error(`Board ${name}: two lines are named "${line}"`);
-      freeLines[line] = free;
+    for (const [named, given] of Object.entries(use.cues ?? {})) {
+      if (Object.hasOwn(allCues, named))
+        throw new Error(`Board ${name}: two cues are named "${named}"`);
+      allCues[named] = given;
     }
-  // Each effect is at a signal there is, and is a sound (from the sound library), or null.
-  for (const [at, effect] of Object.entries(spec.effects ?? {})) {
-    if (signalAt(spec.pieces, at) === undefined)
+  const freeLines: Record<string, FreeLine> = {};
+  const sounds: Record<string, SceneSound> = {};
+  for (const [named, given] of Object.entries(allCues)) {
+    if (isWords(given)) {
+      freeLines[named] = given;
+      continue;
+    }
+    const sound = given.sound ?? null;
+    if (given.when === undefined)
+      throw new Error(`Board ${name}, cue ${named}: a sound plays at a moment: it needs a when`);
+    for (const at of [given.when, ...(given.until === undefined ? [] : [given.until])])
+      if (signalAt(spec.pieces, at) === undefined)
+        throw new Error(
+          `Board ${name}, cue ${named}: "${at}" isn't a signal here ("line.walker.stepped", "board.passed")`,
+        );
+    if (given.where !== undefined) {
+      const shape = shapeOf(signalAt(spec.pieces, given.when) as SignalDef);
+      if (!Object.entries(given.where).every(([k, v]) => shape[k]?.safeParse(v).success === true))
+        throw new Error(
+          `Board ${name}, cue ${named}: where ${JSON.stringify(given.where)} isn't what ${given.when} carries (${Object.keys(shape).join(", ")})`,
+        );
+    }
+    if (sound !== null && (typeof sound.name !== "string" || typeof sound.url !== "string"))
       throw new Error(
-        `Board ${name}: the effect at "${at}" isn't at a signal here ("line.walker.stepped", "board.passed")`,
+        `Board ${name}, cue ${named}: it isn't a sound (import one from @chalk/sounds), or null`,
       );
-    if (effect !== null && (typeof effect?.name !== "string" || typeof effect.url !== "string"))
-      throw new Error(
-        `Board ${name}: the effect at "${at}" isn't a sound (import one from @chalk/sounds), or null`,
-      );
+    sounds[named] = {
+      sound,
+      when: given.when,
+      ...(given.where === undefined ? {} : { where: given.where }),
+      ...(given.until === undefined ? {} : { until: given.until }),
+    };
   }
   // A piece's line is said as it appears: no moment's values to fill blanks with.
   for (const [piece, placed] of Object.entries(spec.pieces))
@@ -480,9 +505,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     if (free.when !== undefined)
       addLine(free.when, (me, payload) => {
         const told = payload as Readonly<Record<string, unknown>>;
-        const isThis =
-          Object.entries(free.where ?? {}).every(([k, v]) => sameValue(told[k], v)) &&
-          (free.if === undefined || free.if(told, me));
+        const isThis = carries(told, free.where) && (free.if === undefined || free.if(told, me));
         // A line with blanks takes its moment's values with it: they are what it says.
         return !isThis
           ? []
@@ -671,9 +694,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     given,
     lines,
     freeLines: Object.keys(freeLines),
-    ...(spec.effects === undefined
-      ? {}
-      : { effects: spec.effects as Record<string, Effect | null> }),
+    ...(Object.keys(sounds).length === 0 ? {} : { sounds }),
   };
   const standsFor = Object.fromEntries(
     Object.entries(spec.standsFor ?? {}).filter(([, v]) => v !== undefined),

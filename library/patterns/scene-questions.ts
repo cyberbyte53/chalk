@@ -3,7 +3,7 @@ import {
   type ScenePlaced,
   type SceneUse,
   type Step,
-  line,
+  cue,
   place,
   tap,
 } from "@chalk/author";
@@ -123,10 +123,10 @@ export function choice(spec: {
     piece,
     use: {
       // Each wrong option's note is said when that option is checked: the student hears why.
-      lines: Object.fromEntries(
+      cues: Object.fromEntries(
         notes.map((o) => [
           `${name}-${o.id}-note`,
-          line(o.feedbackSays ?? (o.feedback as Localized), {
+          cue(o.feedbackSays ?? (o.feedback as Localized), {
             when: `${name}.checked`,
             where: { optionId: o.id, status: AnswerStatus.Wrong },
             about: name,

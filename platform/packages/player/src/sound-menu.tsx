@@ -109,12 +109,12 @@ function Switch({
   );
 }
 
-/** Whether a board can sound an effect: one of its lesson's, or one of its pieces' own. */
+/** Whether a board can play a sound: one of its lesson's cues, or one of its pieces' own. */
 export function hasEffects(board: Board, registry: PropRegistry): boolean {
   if (board.model === undefined) return false;
-  if (Object.values(board.model.effects ?? {}).some((effect) => effect !== null)) return true;
+  if (Object.values(board.model.sounds ?? {}).some((cue) => cue.sound !== null)) return true;
   return propPieces(board.root).some(
-    (piece) => Object.keys(registry[piece.prop]?.sound?.effects ?? {}).length > 0,
+    (piece) => Object.keys(registry[piece.prop]?.sound?.cues ?? {}).length > 0,
   );
 }
 

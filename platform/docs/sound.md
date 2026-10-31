@@ -1,6 +1,6 @@
 # Sound
 
-Status: **design agreed in conversation (2026-10-31); the code moves to it next.** What is built today and what changes is under "From today's code". Voice and effects are one system here, not two.
+Status: **design agreed in conversation (2026-10-31); being built.** Done: the chapter owns its clips, one engine, cues. Next: the code homes. What changes is under "From today's code". Voice and effects are one system here, not two.
 
 ## The idea
 
@@ -28,6 +28,8 @@ Words take a turn and sounds play alongside, unless the cue says otherwise. With
 2. **When the student acts, the board stops and responds.** The cue being said is cut, the ones waiting are dropped, and what the action brings is said. "The action" includes what it set going (a walk's steps, the dice landing).
 
 A cue is done when heard or cut: whatever waits on it always happens. Cues alongside are outside these rules: they end at their end or their `until`. **A board's sounds all end with the board** (Continue, leaving).
+
+**Written as:** `cues: { finally: cue(t("Finally, I'm here!", "…"), { speaker: "riya", when: "town.walker.arrived", where: { x: 4, y: 5 } }), rain: cue(rain, { when: "board.started", until: "board.passed" }), quiet: cue(null, { when: "line.walker.stepped" }) }`. A piece's own words are its cue too, written on the piece beside what it shows (`says`); a prop's sound view gives its own as `cues: { "walker.stepped": step }`. A lesson's sound cue at a moment replaces the prop's own there.
 
 A piece's words, said as it appears: at the opening they are read when free; a piece shown later follows the two rules (the student revealed it: it cuts in; the lesson did: it takes its turn).
 
@@ -98,12 +100,12 @@ One `sound` home per layer; elsewhere code only connects to it.
 
 | Today | Becomes |
 |---|---|
-| Lines (`says`, `lines`, a sound view's `line`) and effects (`effects`, a sound view's `effects`): two vocabularies | cues |
-| Two players (`narration.ts`, `effects.ts`), two first-touch rules, two logs | one engine |
+| ~~Lines (`lines`, `line`) and effects (`effects`, a sound view's `effects`): two vocabularies~~ | cues (`cues`, `cue`); a piece's `says` and a sound view's `line` are its cue (done) |
+| ~~Two players (`narration.ts`, `effects.ts`), two first-touch rules~~ | one engine (done; one log still to come) |
 | "Wait for real sound?" decided in five places (`timedVoice`, `isHeard`, `isTimed`, `keepsTime`, `isQuiet`) | the engine, muted or not |
 | `LineCall`, `Utterance`, `ScriptLine`, `phraseKey`, `AudioSource`, `PlayableClip`; a manifest and a script; three word splitters | cue, clip, one list; one splitter |
-| Clips keyed by speaker (a changed voice keeps playing the old clips) | keyed by voice and words |
-| `pnpm voice`, into `public/voice/` (ignored by git, never shipped) | made by the content build, into the chapter, committed |
+| ~~Clips keyed by speaker (a changed voice keeps playing the old clips)~~ | keyed by voice and words (done) |
+| ~~`pnpm voice`, into `public/voice/` (ignored by git, never shipped)~~ | made by the content build, into the chapter, committed (done) |
 | Experiments: macOS and Parler voices, the dev live endpoint, the `**` regex | removed |
 | The queue inside `scene.ts` | its own file |
 

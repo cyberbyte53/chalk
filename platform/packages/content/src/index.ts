@@ -26,6 +26,8 @@ export {
   type Board,
   type SceneLine,
   type SceneModel,
+  type SceneSound,
+  carries,
   type IsRule,
   type Script,
   type WhenRule,

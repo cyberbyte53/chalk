@@ -7,5 +7,5 @@ import { rise, step } from "@chalk/sounds";
  * model knows nothing of sound.
  */
 export const coordinatePlaneSound: SoundView = {
-  effects: { "walker.stepped": step, "plane.risen": rise },
+  cues: { "walker.stepped": step, "plane.risen": rise },
 };

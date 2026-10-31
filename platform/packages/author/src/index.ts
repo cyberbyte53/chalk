@@ -34,6 +34,8 @@ export {
 } from "./board";
 export { type Family, family, isFamily } from "./family";
 export {
+  type Cue,
+  cue,
   type FreeLine,
   type GivenFor,
   type Placed as ScenePlaced,
@@ -43,7 +45,6 @@ export {
   type SceneUse,
   hidden,
   isScene,
-  line,
   place,
   scene,
   tap,

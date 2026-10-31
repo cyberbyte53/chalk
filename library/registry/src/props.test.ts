@@ -50,9 +50,9 @@ describe("how props sound", () => {
     return at?.signals?.[signal] !== undefined;
   };
 
-  it("says its effects at signals its prop has", () => {
+  it("plays its sound cues at signals its prop has", () => {
     const wrong = Object.values(propLibrary).flatMap((module) =>
-      Object.keys(module.sound?.effects ?? {})
+      Object.keys(module.sound?.cues ?? {})
         .filter((at) => !signalAt(module.def as unknown as AnyProp, at))
         .map((at) => `${module.def.type}: ${at}`),
     );
