@@ -535,6 +535,19 @@ describe("server", () => {
     expect((await served.request("/content/%2e%2e/app.test.ts")).status).toBe(404);
   });
 
+  it("serves a chapter's clips as audio, kept for good, and its sound list fresh", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "chalk-content-"));
+    mkdirSync(join(dir, "book", "chapter", "sound"), { recursive: true });
+    writeFileSync(join(dir, "book", "chapter", "sound", "ab12.m4a"), "clip");
+    writeFileSync(join(dir, "book", "chapter", "sound", "sound.json"), "{}");
+    const served = make({ contentDir: dir });
+    const clip = await served.request("/content/book/chapter/sound/ab12.m4a");
+    expect(clip.headers.get("content-type")).toBe("audio/mp4");
+    expect(clip.headers.get("cache-control")).toContain("immutable");
+    const list = await served.request("/content/book/chapter/sound/sound.json");
+    expect(list.headers.get("cache-control")).toBe("no-cache");
+  });
+
   it("answers health checks", async () => {
     expect(await new Phone(app).json("GET", ApiPath.Health)).toEqual({
       ok: true,

@@ -52,7 +52,7 @@ describe("voicing a chapter: cast, speak, keep, in its own folder", () => {
     folder = mkdtempSync(join(tmpdir(), "chalk-sound-")),
     p = providers,
   ) =>
-    voiceChapter({ soundDir: folder, boards: b, cast, providers: p }).then((r) => ({
+    voiceChapter({ soundDir: folder, boards: b, isWhole: true, cast, providers: p }).then((r) => ({
       ...r,
       folder,
     }));
@@ -90,6 +90,10 @@ describe("voicing a chapter: cast, speak, keep, in its own folder", () => {
     const { folder } = await voice(boards);
     expect((await voice(boards, folder)).made).toBe(0);
     const fewer = [{ id: "b1", path: "book/chapter/lesson/tiny", lines: tiny.slice(0, 1) }];
+    // Not every board voiced (one didn't build): nothing is removed.
+    const before = readdirSync(folder).length;
+    await voiceChapter({ soundDir: folder, boards: fewer, isWhole: false, cast, providers });
+    expect(readdirSync(folder)).toHaveLength(before);
     const { list } = await voice(fewer, folder);
     expect(readdirSync(folder).sort()).toEqual(
       [...list.clips.map((c) => c.file), SOUND_LIST].sort(),

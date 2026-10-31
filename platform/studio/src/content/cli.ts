@@ -11,7 +11,7 @@ import {
   watch,
   writeFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, sep } from "node:path";
 import { parseArgs } from "node:util";
 import { propModules } from "@chalk/library/modules";
 import { findUp } from "../find-up";
@@ -107,7 +107,9 @@ function write(result: BuildResult): void {
       for (const chapter of readdirSync(join(contentDir, book.name), { withFileTypes: true })) {
         const from = join(contentDir, book.name, chapter.name, "sound");
         if (!chapter.isDirectory() || !existsSync(from)) continue;
-        for (const name of readdirSync(from)) {
+        for (const file of readdirSync(from, { withFileTypes: true })) {
+          if (!file.isFile()) continue;
+          const name = file.name;
           const path = `${book.name}/${chapter.name}/sound/${name}`;
           const to = join(buildDir, path);
           if (!existsSync(to) || !readFileSync(to).equals(readFileSync(join(from, name)))) {
@@ -148,6 +150,7 @@ async function build(commit: string): Promise<BuildResult> {
     modules: propModules,
     commit,
     cache: { dir: cacheDir, root, propDirs },
+    voices: join(root, "authoring", "voices.json"),
   });
   report(result);
   return result;
@@ -181,7 +184,9 @@ function watchAndRebuild(): void {
   rebuild();
   watch(contentDir, { recursive: true }, (_event, file) => {
     // Comments aren't content: a new comment rebuilds nothing.
-    if (file === null || !/\.(tsx?|yaml|json)$/.test(file)) return;
+    // Nor is a chapter's sound folder: voicing writes it.
+    if (file === null || !/\.(tsx?|yaml|json)$/.test(file) || file.includes(`${sep}sound${sep}`))
+      return;
     clearTimeout(timer);
     timer = setTimeout(() => {
       console.log(`\n↻ ${file} changed`);

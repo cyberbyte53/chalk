@@ -54,7 +54,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Speak** | A line's spoken words, written with it when its screen words aren't how it is said ("√2" → "the square root of 2"); without it, the screen words are said (bold marks dropped) | `speak`, `spokenText` |
 | **Script** | Every line a board says, in order, with who says it: what the voice is made from, and what the preview and review show | `scriptOf`, `ScriptLine` |
 | **Cast** | Who speaks in which voice: each character (the narrator, Riya, Aman), per language, a voice named with its provider (`piper:hi_IN-rohan-medium`) | `authoring/voices.json`, `voiceFor` |
-| **Clip** | One line said in one language, kept as a file named by its words and voice (so it is made once); its length is what the board waits | `pnpm voice`, `manifest.json`, `makeVoice` |
+| **Clip** | Audio the engine plays: **voiced** (a phrase of a line, made from its words by a speaker's voice, kept in its chapter's `sound/`, named by voice and words) or **chosen** (a sound from the library) | `sound.json`, `voiceChapter` |
 | **Speakable** | What a voice may be given: letters, digits, spaces, ordinary punctuation. Anything else is refused when audio is made | `unspeakable` |
 | **Voice provider** | What turns words into a clip, on this machine or a service: Piper now (the Mac's voices, Indic Parler, a cloud voice the same way) | `TtsProvider`, `voice/providers/` |
 | **Publish** | Build the content from a clean commit and keep that build as `published/<commit>/` | `pnpm publish-content` |

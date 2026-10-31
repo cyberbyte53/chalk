@@ -17,7 +17,7 @@ Every line a board shows is also said aloud. This module makes the clips; the pl
 | Speak | `providers/` | words + voice → a clip file. Piper (on this machine), the Mac's voices, Indic Parler, a test tone | adding a file here and a line in `index.ts` |
 | Keep | `clips.ts` | each clip named by its words and voice, so it is made once; its length measured | — |
 
-`make.ts` runs them for a chapter: every fixed line's words, each template's own words, and each voice's number pieces (no clip per value). `pnpm voice <book>/<chapter>` (`../voice-cli.ts`) writes the clips, in one folder, into the learner app's `public/voice/<book>/<chapter>/` (made from the content: not kept in git).
+`make.ts` voices a chapter: every fixed line's words, each template's own words, and each voice's number pieces (no clip per value). The content build runs it for each chapter it builds (`pnpm build-content`, and `pnpm check`), into the chapter's own `content/<book>/<chapter>/sound/`, with its list `sound.json`: committed, and shipped with the chapter.
 
 ## What is said
 

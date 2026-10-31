@@ -106,9 +106,28 @@ async function fetchChapter(
     }
   };
   await Promise.all(Array.from({ length: Math.min(AT_ONCE, refs.length) }, worker));
+  await fetchSound(path);
   const boards = new Map<string, Board>();
   for (const ref of refs) boards.set(ref.path, await boardOfFile(files[ref.path]));
   return conceptLessons(files, boards);
+}
+
+/**
+ * A chapter's sound (platform/docs/sound.md): its list, and every clip it names, fetched whole, so
+ * the app's offline cache keeps them all and the chapter plays offline. A chapter with no sound has
+ * no list; a clip that can't be fetched now is fetched again when it is played.
+ */
+async function fetchSound(path: string): Promise<void> {
+  const base = `/content/${path}/sound`;
+  const reply = await fetch(`${base}/sound.json`).catch(() => undefined);
+  if (reply?.ok !== true) return;
+  const { clips } = (await reply.json()) as { clips: { file: string }[] };
+  const queue = [...new Set(clips.map((c) => c.file))];
+  const worker = async () => {
+    for (let file = queue.shift(); file !== undefined; file = queue.shift())
+      await fetch(`${base}/${file}`).catch(() => undefined);
+  };
+  await Promise.all(Array.from({ length: AT_ONCE }, worker));
 }
 
 /** A page's or question's board, made from its code (its file under build/ says which). */

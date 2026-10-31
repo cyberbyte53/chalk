@@ -31,7 +31,7 @@ export function setMuted(isOn: boolean): void {
 export type PlayableClip = { url: string; seconds: number };
 
 /**
- * A chapter's clips (made by `pnpm voice`): the clips that say a speaker's phrases in a language,
+ * A chapter's clips (voiced by the content build into its sound folder): the clips that say a speaker's phrases in a language,
  * one after another, or undefined when one has none.
  */
 export type AudioSource = {
@@ -92,7 +92,7 @@ const LIVE_WAIT_MS = 3_000;
 
 /**
  * Says a board's lines, one at a time, from the first source that can (platform/docs/sound.md):
- * its clips glued one after another (every phrase made by `pnpm voice`); a live voice from the
+ * its clips glued one after another (every phrase voiced with its chapter); a live voice from the
  * server (not yet); else the phone's own voice. Failures never block the lesson: the line is
  * marked, reported, and the board carries on.
  */

@@ -340,7 +340,9 @@ function lineText(root: string, board: string, name: string): string[] {
     `${shownAddress(board, reach?.piece === undefined ? name : `${name}/said`)}   line`,
     ...(entry !== undefined
       ? entryLines(entry)
-      : [`${reach?.moment ?? "?"}: ${name} · ${reach?.speaker ?? "?"} (no clips yet: pnpm voice)`]),
+      : [
+          `${reach?.moment ?? "?"}: ${name} · ${reach?.speaker ?? "?"} (no clips yet: pnpm build-content)`,
+        ]),
   ];
 }
 

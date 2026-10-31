@@ -63,6 +63,8 @@ export async function voiceChapter(spec: {
   /** The chapter's sound folder: content/<book>/<chapter>/sound. */
   soundDir: string;
   boards: readonly BoardLines[];
+  /** Every board of the chapter is here: clips none of them says may go. */
+  isWhole: boolean;
   cast: Cast;
   providers: Readonly<Record<string, TtsProvider>>;
   onSpeak?: (done: number, toMake: number, text: string) => void;
@@ -77,12 +79,19 @@ export async function voiceChapter(spec: {
   /** Every clip to have, by its key (voice and words). */
   const toHave = new Map<string, Line & { locale: Locale }>();
   const speakers = new Map<string, Record<Locale, string>>();
+  // A speaker said anything is listed with their voice in every language.
+  const speak = (speaker: string) => {
+    if (!speakers.has(speaker))
+      speakers.set(
+        speaker,
+        Object.fromEntries(
+          LOCALES.map((l) => [l, voiceFor(spec.cast, spec.providers, speaker, l).ref]),
+        ) as Record<Locale, string>,
+      );
+  };
   const have = (speaker: string, locale: Locale, words: string) => {
+    speak(speaker);
     const voice = voiceFor(spec.cast, spec.providers, speaker, locale);
-    speakers.set(speaker, { ...(speakers.get(speaker) ?? {}), [locale]: voice.ref } as Record<
-      Locale,
-      string
-    >);
     const key = clipKey(voice.ref, words);
     toHave.set(key, { key, text: words, voice, locale });
   };
@@ -145,11 +154,7 @@ export async function voiceChapter(spec: {
     script.boards.push({ id, path, lines: entries });
   }
   // The narrator is every chapter's, said or not.
-  for (const locale of LOCALES)
-    speakers.set(NARRATOR, {
-      ...(speakers.get(NARRATOR) ?? {}),
-      [locale]: voiceFor(spec.cast, spec.providers, NARRATOR, locale).ref,
-    } as Record<Locale, string>);
+  speak(NARRATOR);
   const all = [...toHave.values()];
   const kept = (line: Line) => existsSync(join(spec.soundDir, clipFile(line)));
   const missing = all.filter((l) => !kept(l));
@@ -187,10 +192,13 @@ export async function voiceChapter(spec: {
       })
       .sort((a, b) => a.voice.localeCompare(b.voice) || a.words.localeCompare(b.words)),
   };
-  // Clips nothing says any more go; the list is written only when it changed.
-  const wanted = new Set([SOUND_LIST, ...list.clips.map((c) => c.file)]);
-  for (const name of readdirSync(spec.soundDir))
-    if (!wanted.has(name)) rmSync(join(spec.soundDir, name));
+  // Clips nothing says any more go, but only when every board was voiced (a board that didn't
+  // build this time keeps its clips); the list is written only when it changed.
+  if (spec.isWhole) {
+    const wanted = new Set([SOUND_LIST, ...list.clips.map((c) => c.file)]);
+    for (const entry of readdirSync(spec.soundDir, { withFileTypes: true }))
+      if (entry.isFile() && !wanted.has(entry.name)) rmSync(join(spec.soundDir, entry.name));
+  }
   const text = `${JSON.stringify(list, null, 2)}\n`;
   const file = join(spec.soundDir, SOUND_LIST);
   if (!existsSync(file) || readFileSync(file, "utf8") !== text) writeFileSync(file, text);

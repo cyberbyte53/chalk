@@ -200,6 +200,8 @@ type Context = {
   boards: Map<string, Board>;
   /** Module file (absolute) → the hash of its code, and each file's hash, computed once. */
   codeHashes: Map<string, string>;
+  /** Who voices whom (authoring/voices.json): where it is, when the build is given one. */
+  voices: string | undefined;
   /** Files imported while building (content paths, relative), for a chapter's dependency list. */
   imported: string[];
   cache: ChapterCache | undefined;
@@ -900,8 +902,15 @@ function checkConceptsModule(c: Context, chapterPath: string, concepts: readonly
 }
 
 async function buildChapter(c: Context, chapterPath: string): Promise<Ref | undefined> {
+  const problemsBefore = c.problems.length;
   const manifest = readYaml(c, outPath(chapterPath, ContentFile.Manifest), chapterManifestSchema);
   if (manifest === undefined) return undefined;
+  if (manifest.concepts.includes(SOUND_DIR))
+    report(
+      c,
+      chapterPath,
+      `a lesson can't be named "${SOUND_DIR}": it is the chapter's sound folder`,
+    );
   checkConceptsModule(c, chapterPath, manifest.concepts);
   const drafts: ConceptDraft[] = [];
   for (const name of checkChildren(c, chapterPath, manifest.concepts, ContentFile.Manifest)) {
@@ -931,23 +940,26 @@ async function buildChapter(c: Context, chapterPath: string): Promise<Ref | unde
     props: explainers(c, [...drafts.flatMap((d) => [...d.used]), ...bank.flatMap((q) => q.props)]),
   };
   noteLongAnswers(c, chapterPath);
-  await voiceOf(c, chapterPath);
+  await voiceOf(c, chapterPath, c.problems.length === problemsBefore);
   return emit(c, item, builtChapterSchema);
 }
 
 /** Whether every clip a chapter's sound list names is there (a chapter reused as built must still sound). */
-function isSoundComplete(c: Context, chapterPath: string): boolean {
-  const list = join(c.contentDir, chapterPath, "sound", SOUND_LIST);
-  if (!existsSync(list)) return true;
-  const { clips } = soundListSchema.parse(JSON.parse(readFileSync(list, "utf8")));
-  return clips.every((clip) => existsSync(join(c.contentDir, chapterPath, "sound", clip.file)));
+function isSoundComplete(c: Context, chapterPath: string, entry: ChapterEntry): boolean {
+  const dir = join(c.contentDir, chapterPath, SOUND_DIR);
+  const list = join(dir, SOUND_LIST);
+  // A chapter that says lines (its script was built) has a list; one that doesn't, doesn't.
+  const saysLines = entry.files.some(([path]) => path === `${chapterPath}/${SCRIPT_FILE}`);
+  if (!existsSync(list)) return !saysLines;
+  const parsed = soundListSchema.safeParse(JSON.parse(readFileSync(list, "utf8")));
+  return parsed.success && parsed.data.clips.every((clip) => existsSync(join(dir, clip.file)));
 }
 
 /** A chapter's script beside its built content: every line its boards can say (the preview's script view, look). */
 export const SCRIPT_FILE = "script.json";
 
-/** The voices (who voices whom): the app's settings. */
-const voicesFile = (c: Context) => join(dirname(c.contentDir), "authoring", "voices.json");
+/** A chapter's sound folder: its clips and their list. */
+const SOUND_DIR = "sound";
 
 /**
  * A chapter's sound (platform/docs/sound.md): its boards' lines voiced into its own sound folder
@@ -955,7 +967,7 @@ const voicesFile = (c: Context) => join(dirname(c.contentDir), "authoring", "voi
  * beside it. A line that can't be voiced (it needs its spoken words; no voice to make it) is a
  * problem: a chapter never ships silent.
  */
-async function voiceOf(c: Context, chapterPath: string): Promise<void> {
+async function voiceOf(c: Context, chapterPath: string, isWhole: boolean): Promise<void> {
   const where = `${chapterPath}/sound`;
   const boards = [...c.boards]
     .filter(([path]) => path.startsWith(`${chapterPath}/`))
@@ -966,11 +978,21 @@ async function voiceOf(c: Context, chapterPath: string): Promise<void> {
     }));
   // A chapter whose boards say nothing has nothing to voice.
   if (boards.every((b) => b.lines.length === 0)) return;
-  const soundDir = join(c.contentDir, chapterPath, "sound");
+  if (c.voices === undefined || !existsSync(c.voices)) {
+    report(c, where, "its boards say lines, but no voices are set (authoring/voices.json)");
+    return;
+  }
+  const soundDir = join(c.contentDir, chapterPath, SOUND_DIR);
   mkdirSync(soundDir, { recursive: true });
   try {
-    const { cast } = castSchema.parse(JSON.parse(readFileSync(voicesFile(c), "utf8")));
-    const voiced = await voiceChapter({ soundDir, boards, cast, providers: voiceProviders });
+    const { cast } = castSchema.parse(JSON.parse(readFileSync(c.voices, "utf8")));
+    const voiced = await voiceChapter({
+      soundDir,
+      boards,
+      isWhole,
+      cast,
+      providers: voiceProviders,
+    });
     c.files.set(`${chapterPath}/${SCRIPT_FILE}`, voiced.script);
     for (const line of voiced.unsaid) report(c, where, line);
     if (voiced.made > 0) c.notices.push(`${where}: ${voiced.made} clips made`);
@@ -1101,15 +1123,18 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
     entry = undefined;
   }
   // Its sound folder is what voicing writes, not what the chapter is built from; the voices are.
+  const chapterDir = join(c.contentDir, chapterPath);
   const chapterFiles = [
-    ...filesUnder(join(c.contentDir, chapterPath)).filter((f) => !f.includes(`${sep}sound${sep}`)),
-    voicesFile(c),
+    ...filesUnder(chapterDir).filter(
+      (f) => !relative(chapterDir, f).startsWith(`${SOUND_DIR}${sep}`),
+    ),
+    ...(c.voices === undefined ? [] : [c.voices]),
   ];
   // The folder's own files are listed afresh: a file added or removed changes the key.
   if (
     entry !== undefined &&
     keyOf(c, [...entry.deps, ...chapterFiles]) === entry.key &&
-    isSoundComplete(c, chapterPath)
+    isSoundComplete(c, chapterPath, entry)
   ) {
     for (const [path, json] of entry.files) c.files.set(path, json);
     c.problems.push(...entry.problems);
@@ -1246,8 +1271,10 @@ export async function buildContent(options: {
   modulesFile?: string;
   /** Where built chapters are kept between runs (with what they read); no cache when absent. */
   cache?: { dir: string; root: string; propDirs: Readonly<Record<string, string>> };
+  /** Who voices whom (authoring/voices.json); without it, a chapter that says lines is a problem. */
+  voices?: string;
 }): Promise<BuildResult> {
-  const { cache, modulesFile, modules, ...rest } = options;
+  const { cache, modulesFile, modules, voices: _, ...rest } = options;
   const c: Context = {
     ...rest,
     modules,
@@ -1269,6 +1296,7 @@ export async function buildContent(options: {
     reach: { boards: {}, modules: {} },
     boards: new Map(),
     codeHashes: new Map(),
+    voices: options.voices,
   };
   const graph: GraphFile = existsSync(join(c.contentDir, ContentFile.Graph))
     ? (readYaml(c, ContentFile.Graph, graphFileSchema) ?? { edges: [] })

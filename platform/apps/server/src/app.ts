@@ -153,6 +153,13 @@ export function isLanOrigin(origin: string, app: string): boolean {
   }
 }
 
+/** The types of a chapter's clips. */
+const AUDIO_TYPES: Readonly<Record<string, string>> = {
+  m4a: "audio/mp4",
+  mp3: "audio/mpeg",
+  wav: "audio/wav",
+};
+
 /** Where the built content is served (the app fetches `/content/<path in build/>?v=<version>`). */
 export const CONTENT_ROUTE = "/content/";
 
@@ -423,10 +430,16 @@ export function createApp(deps: AppDeps): Hono<Env> {
     // it a year. Without a version, check each time.
     app.use(`${CONTENT_ROUTE}*`, async (c, next) => {
       await next();
-      if (c.res.status !== 200) return;
+      if (c.res.status !== 200 && c.res.status !== 206) return;
+      // A chapter's clips: audio (its type isn't one the static server knows), named by what they
+      // hold, so they never change; its sound list is the one that does.
+      const isClip = /\/sound\/[^/]+\.(m4a|mp3|wav)$/.test(c.req.path);
+      if (isClip) c.header("content-type", AUDIO_TYPES[c.req.path.split(".").pop() ?? ""]);
       c.header(
         "cache-control",
-        c.req.query("v") === undefined ? "no-cache" : "public, max-age=31536000, immutable",
+        c.req.query("v") === undefined && !isClip
+          ? "no-cache"
+          : "public, max-age=31536000, immutable",
       );
     });
     app.use(

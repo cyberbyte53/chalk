@@ -1,5 +1,5 @@
 """
-Piper, for `pnpm voice --voice piper`: one process that loads each voice once and speaks line after
+Piper, for voicing chapters in the content build: one process that loads each voice once and speaks line after
 line. Reads one JSON request a line on stdin ({"text", "voice", "out"}), writes an M4A file, and
 answers one JSON line on stdout ({"ok": true} or {"ok": false, "error"}). Voices are .onnx files in
 voices/ (see README.md).

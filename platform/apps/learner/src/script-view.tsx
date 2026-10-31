@@ -112,7 +112,7 @@ export function ScriptView({
   if (loaded === null)
     return (
       <div class="script-view is-empty">
-        No script yet: <code>pnpm voice {path.split("/").slice(0, 2).join("/")}</code>
+        No script yet: <code>pnpm build-content</code>
       </div>
     );
   const board = loaded.script.boards.find((b) => b.id === boardId);

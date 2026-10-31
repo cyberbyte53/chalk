@@ -325,8 +325,20 @@ export default defineConfig(({ mode }): UserConfig => {
               },
             },
             {
-              // Every content file is named by its version (?v=), so a kept copy never goes stale:
-              // a chapter opened once opens offline after; a new version is a new URL.
+              // A chapter's sound list is the one content file that changes under its own name
+              // (its clips are named by what they hold): fresh when online, kept for offline.
+              urlPattern: ({ url }) =>
+                url.pathname.startsWith("/content/") && url.pathname.endsWith("/sound/sound.json"),
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "chalk-content-sound",
+                cacheableResponse: { statuses: [200] },
+              },
+            },
+            {
+              // Every other content file is named by its version (?v=), or by what it holds (a
+              // chapter's clips), so a kept copy never goes stale: a chapter opened once opens
+              // offline after; a new version is a new URL.
               urlPattern: ({ url }) => url.pathname.startsWith("/content/"),
               handler: "CacheFirst",
               options: {
