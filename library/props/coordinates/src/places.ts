@@ -83,6 +83,8 @@ export const places = defineProp({
       canChooseTarget: z.boolean(),
       /** One number alone, and every place that has it lit, or null. */
       lit: lineSchema.nullable(),
+      /** Whether the student may turn the light off (always, here; the scene layer tells taps apart). */
+      isLitByTap: z.boolean(),
       /** Whether the target's address is written above the plane (off when it is the answer). */
       showAddress: z.boolean(),
     })
@@ -95,6 +97,7 @@ export const places = defineProp({
     targetName: { en: "Aman's house", hi: "अमन का घर" },
     canChooseTarget: true,
     lit: null,
+    isLitByTap: true,
     showAddress: true,
   },
   actions: {

@@ -4,7 +4,7 @@ import { type FramePixels, type ViewOf, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { drawing } from "./layer-view";
 import { PlacePicture } from "./pictures";
-import { places } from "./places";
+import { PlaceKind, places } from "./places";
 import type { Point } from "./plane";
 import { isRisen, unitOf } from "./plane-view";
 import { walker } from "./walker";
@@ -56,8 +56,15 @@ function PlacesDraw({
             {p.label !== undefined && (
               <text
                 class="cp-place-label"
-                // On the horizontal line, under its numbers (above it is where the walker stands).
-                y={p.y === 0 ? 34 : size * 0.62 + 10}
+                // On the horizontal line, under its numbers (above it is where the walker stands);
+                // a desk's above it, past its chair (below it is the blackboard's room).
+                y={
+                  p.y === 0
+                    ? 34
+                    : s.placeKind === PlaceKind.Desk
+                      ? -size * 0.45 - 3
+                      : size * 0.62 + 10
+                }
                 text-anchor="middle"
               >
                 {word(p.label, locale)}
@@ -105,8 +112,9 @@ export const placesDrawing = drawing(places, {
     );
   },
   on: ({ s, px, locale }) => <PlacesDraw s={s} px={px} locale={locale} />,
+  // Only a light the student turned on (tapping a number) has a way off; a lesson's light is its own.
   controls: ({ s, locale }) =>
-    s.lit === null ? null : (
+    s.lit === null || s.isLitByTap !== true ? null : (
       <SymbolButton
         symbol={word(WORDS.lightsOff, locale)}
         label={word(WORDS.lightsOff, locale)}

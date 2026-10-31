@@ -145,6 +145,11 @@
 .cp-blackboard {
   fill: color-mix(in srgb, var(--color-on-surface) 80%, var(--color-right));
 }
+.cp-frame .cp-blackboard-name {
+  font: 600 9px var(--font-body);
+  fill: var(--color-surface);
+  letter-spacing: 0.04em;
+}
 .cp-desk-chair {
   fill: var(--color-surface-container);
   stroke: var(--color-on-surface-variant);

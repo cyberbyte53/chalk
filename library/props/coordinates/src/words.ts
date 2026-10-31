@@ -11,6 +11,7 @@ export const WORDS = {
   showPoint: { en: "Show where it is", hi: "दिखाओ कहाँ है" },
   clear: { en: "Clear", hi: "हटाओ" },
   lightsOff: { en: "Lights off", hi: "रोशनी बंद" },
+  blackboard: { en: "Blackboard", hi: "श्यामपट" },
   throw: { en: "Throw", hi: "फेंको" },
   newGame: { en: "New game", hi: "नया खेल" },
   scale: { en: "A mark every", hi: "हर निशान" },

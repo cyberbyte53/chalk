@@ -3,7 +3,7 @@ import type { ViewOf } from "@chalk/prop";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene, plane } from "./plane";
-import { num } from "./words";
+import { WORDS, num, word } from "./words";
 
 export type PlaneView = ViewOf<typeof plane>;
 
@@ -69,27 +69,42 @@ export const canNameParts = (s: PlaneView): boolean =>
   (s.showDirections || s.quadrantsNamed > 0);
 
 /** What is drawn behind the plane: the paper, the town's roads, the classroom floor, the ground. */
-export function SceneDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
+export function SceneDraw({
+  s,
+  px,
+  locale,
+}: { s: PlaneView; px: FramePixels; locale: Locale }): JSX.Element | null {
   const w = s.window;
   const [x0, y0] = px.toPx(w.xMin, w.yMax);
   const [x1, y1] = px.toPx(w.xMax, w.yMin);
   const box = { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
   if (s.scene === Scene.None) return null;
   if (s.scene === Scene.Classroom) {
-    // The blackboard along the bottom edge: the front of the room, which row 1 is nearest.
-    const unit = unitOf(px);
-    const thick = Math.max(2.5, Math.min(5, unit * 0.08));
+    // The blackboard, named, in the room just above the front wall (the bottom edge): the front,
+    // which row 1 is nearest. Clear of the Column line, which it isn't part of.
+    const tall = 13;
+    const wide = Math.min(box.width * 0.4, 140);
+    const top = box.y + box.height - tall - 4;
     return (
       <g class="cp-classroom">
         <rect class="cp-scene is-classroom" {...box} rx={6} />
         <rect
           class="cp-blackboard"
-          x={box.x + box.width * 0.3}
-          y={box.y + box.height - thick - 1}
-          width={box.width * 0.4}
-          height={thick}
+          x={box.x + (box.width - wide) / 2}
+          y={top}
+          width={wide}
+          height={tall}
           rx={2}
         />
+        <text
+          class="cp-blackboard-name"
+          x={box.x + box.width / 2}
+          y={top + tall / 2}
+          text-anchor="middle"
+          dominant-baseline="central"
+        >
+          {word(WORDS.blackboard, locale)}
+        </text>
       </g>
     );
   }

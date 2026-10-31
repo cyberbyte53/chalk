@@ -55,9 +55,9 @@ function ApartHandle({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
 
 /** The plane's own drawing: its scene and grid behind, its lines and numbers, its named points. */
 export const planeDrawing = drawing(plane, {
-  back: ({ s, px }) => (
+  back: ({ s, px, locale }) => (
     <>
-      <SceneDraw s={s} px={px} />
+      <SceneDraw s={s} px={px} locale={locale} />
       <GridDraw s={s} px={px} />
     </>
   ),

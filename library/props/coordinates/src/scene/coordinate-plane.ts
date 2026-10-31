@@ -60,7 +60,8 @@ export const coordinatePlane = prop({
     // Another house, once one was chosen, is a new walk, from her start. (The first is only marked:
     // she may be on her way to it.)
     "places.targetChosen": (_, p, t) => p.isAnother && t.to.walker.backToStart(),
-    "plane.numberTapped": (_, p, t) => t.to.places.lightLine({ axis: p.axis, value: p.value }),
+    "plane.numberTapped": (_, p, t) =>
+      t.to.places.lightLine({ axis: p.axis, value: p.value, isTap: true }),
     "plotting.scaleChosen": (_, p, t) => t.to.plane.setScale({ every: p.every }),
   },
   show: {

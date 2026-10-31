@@ -30,6 +30,8 @@ export const places = prop({
       canChooseTarget: z.boolean(),
       /** One number alone, and every place that has it lit, or null. */
       lit: lineSchema.nullable(),
+      /** Whether the student lit it (tapping a number), so may turn it off; a lesson's light stays. */
+      isLitByTap: z.boolean(),
       /** Whether the target's address is written above the plane (off when it is the answer). */
       showAddress: z.boolean(),
     })
@@ -41,6 +43,7 @@ export const places = prop({
     targetName: { en: "Aman's house", hi: "अमन का घर" },
     canChooseTarget: true,
     lit: null,
+    isLitByTap: false,
     showAddress: true,
   },
   needs: z
@@ -57,7 +60,10 @@ export const places = prop({
       from: "screen",
       describe: "Make the place at (x, y) the target",
     }),
-    lightLine: action(lineSchema.shape, { describe: "Light every place with this one number" }),
+    lightLine: action(
+      { ...lineSchema.shape, isTap: z.boolean().optional() },
+      { describe: "Light every place with this one number (isTap: the student tapped the number)" },
+    ),
     clearLight: action({}, { from: "screen", describe: "Turn the lit places off" }),
   },
   signals: {
@@ -69,15 +75,15 @@ export const places = prop({
       if (!me.canChooseTarget || !me.places.some((q) => q.x === p.x && q.y === p.y)) return;
       const target = { x: p.x, y: p.y };
       return [
-        t.set({ target, lit: null }),
+        t.set({ target, lit: null, isLitByTap: false }),
         t.tell.targetChosen({ ...target, isAnother: me.target !== null }),
       ];
     },
-    lightLine: (me, line, t) => [
-      t.set({ lit: line }),
+    lightLine: (me, { isTap, ...line }, t) => [
+      t.set({ lit: line, isLitByTap: isTap === true }),
       t.tell.lineLit({ ...line, count: placesOn(me, line).length }),
     ],
-    clearLight: (_, __, t) => t.set({ lit: null }),
+    clearLight: (_, __, t) => t.set({ lit: null, isLitByTap: false }),
   },
   invariant: (s) =>
     s.target !== null && !s.places.some((p) => p.x === s.target?.x && p.y === s.target?.y)

@@ -249,6 +249,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `places.targetName` | {en: "text", hi: "text"} | setting |
 | `places.canChooseTarget` | true or false | setting |
 | `places.lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by places.chooseTarget, places.lightLine, places.clearLight |
+| `places.isLitByTap` | true or false | setting |
 | `places.showAddress` | true or false | setting |
 | `walker.walkerName` | {en: "text", hi: "text"} | setting |
 | `walker.walkerKind` | ["person", "bus"] | setting |
@@ -359,6 +360,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `places.targetName` | {en: "text", hi: "text"} | changed by places.its own rules |
 | `places.canChooseTarget` | true or false | changed by places.its own rules |
 | `places.lit` | {orNull: {axis: ["x", "y"], value: "number"}} | changed by places.its own rules |
+| `places.isLitByTap` | true or false | changed by places.its own rules |
 | `places.showAddress` | true or false | changed by places.its own rules |
 | `places.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | input |
 | `places.axisNames` | ZodTuple | input |
@@ -425,7 +427,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `reading.showReading` | — | learner · Show the reading kept hidden in a guessing round (the learner's Show) |
 | `reading.askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
 | `places.chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target |
-| `places.lightLine` | {axis: ["x", "y"], value: "number"} | Light every place with this one number |
+| `places.lightLine` | {axis: ["x", "y"], value: "number", isTap: {optional: "true or false"}} | Light every place with this one number (isTap: the student tapped the number) |
 | `places.clearLight` | — | learner · Turn the lit places off |
 | `walker.step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right, on roads only |
 | `walker.walkTo` | {x: "number", y: "number"} | Walk Riya from her start to (x, y): along, then up |
