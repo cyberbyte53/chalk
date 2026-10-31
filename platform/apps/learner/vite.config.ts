@@ -151,7 +151,11 @@ function devStudio(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url ?? "";
-        if (url.startsWith("/dev-review") || url.startsWith("/dev-pipeline"))
+        if (
+          url.startsWith("/dev-review") ||
+          url.startsWith("/dev-pipeline") ||
+          url.startsWith("/dev-voice")
+        )
           void forward(req, res);
         else next();
       });

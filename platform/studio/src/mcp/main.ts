@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
 import { findUp } from "../find-up";
+import { voiceEndpoint } from "../voice/live";
 import { previewBase } from "./app-driver";
 import { mcpMiddleware } from "./http";
 
@@ -14,6 +15,8 @@ import { mcpMiddleware } from "./http";
  *
  * - /dev-review and /dev-pipeline: threads, approvals and plan state (dev-endpoints.ts), reached by
  *   the editor and the preview through the dev server, which passes /dev-* on.
+ * - /dev-voice: the live voice in development (voice/live.ts): words made into a clip when first
+ *   needed.
  * - /mcp: the chalk MCP's tools, for agents.
  * - On start, the dev server (the app and its preview pages) is made sure of, and the content
  *   rebuild on save runs as a child process (in this process, every saved lesson would restart it).
@@ -56,6 +59,10 @@ const server = createServer((req, res) => {
   }
   if (path?.startsWith("/dev-pipeline")) {
     void pipelineEndpoint(ROOT, req, res);
+    return;
+  }
+  if (path === "/dev-voice") {
+    void voiceEndpoint(ROOT, req, res);
     return;
   }
   if (path !== "/mcp") {

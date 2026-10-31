@@ -27,10 +27,11 @@ Sight and sound are separate systems that react to the same events. One tap is o
 The board never asks how long a line is: it waits for **ended** (or **cut**), like any other event. The voice says a line from the first source that can, in order:
 
 1. **clips, glued:** a line is said as phrases (its fixed words, and each value's pieces), and every phrase has a clip made at build (`pnpm voice`): a fixed line is one clip; "Stop {x}." is "Stop", then "minus", then "2". Nothing is stored per state: a template's own words, and each voice's number pieces (0 to 100, minus, point), shared by every line it says;
-2. **live from the server** (not yet): any words, made as they are needed, streamed;
-3. **the phone's own voice:** always there, offline too.
+2. **live:** any words, in the speaker's voice, made when first needed and kept (by voice and words, as every clip). In development the studio serves it (`/dev-voice`, the same cast and Piper as `pnpm voice`); a server later answers the same way;
+3. **the phone's own voice:** always there, offline too;
+4. **quiet:** nothing heard, for as long as the words would take (muted, or a phone with no voice).
 
-Any other source (an AI voice agent) is one more in the list. Besides these, two voices for when nothing is heard:
+Any other source (an AI voice agent) is one more in the list. On a student's board a line is over when its sound is: the board waits for it, whatever its length. Where the clock runs faster than sound can (a tool, a check, a test), two voices keep time instead:
 - muted: nothing heard, **ended** after the time the words would take, so the board's pacing is the same;
 - a test voice (the build, `play`): **ended** after an estimate, on the jumping clock.
 
@@ -98,7 +99,7 @@ A character, never a voice. Each book has its cast (characters' voices per langu
 
 1. **The voice reports started, ended and cut;** the board never sees a length. The two rules and one queue in the scene; `said` on a cut; the student's cause carried through what a tap set going. *(Done. Today's voice keeps time on the board's clock with each clip's length (`timedVoice`): the length lives in the voice. Real audio telling its own end comes with step 3.)*
 2. **Templates and sayers,** with one real line in the chapter (the bus board's "Stop {x}."); clips glued from phrases; the phone's voice when a phrase has none. *(Done: numbers only, as the number sayer; others (fractions, powers, measures, counts) as lessons need them.)*
-3. **The live source and the never-stuck promise:** the server's voice between clips and the phone; real audio telling its own end (the board still keeps time by the clips' lengths).
+3. **The live source and the never-stuck promise:** a live voice between clips and the phone; real sound telling its own end; every sound bounded. *(Done, in development: the studio's `/dev-voice`. A deployed server is the same door.)*
 4. **Effects:** the library, the effects bus, the walker's footstep; props telling the moments worth hearing (the bus passing stops).
 5. **Each book's cast.**
 6. **Jugnu as a speaker.**

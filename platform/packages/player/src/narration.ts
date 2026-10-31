@@ -1,7 +1,8 @@
 import type { Locale } from "@chalk/content";
+import { estimatedSeconds } from "@chalk/prop/next";
 import { signal } from "@preact/signals";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { hush as phoneHush, speak as phoneSpeak } from "./speech";
+import { canSpeak, hush as phoneHush, speak as phoneSpeak } from "./speech";
 
 const MUTED_KEY = "chalk.isMuted";
 const remembered = (): boolean => {
@@ -39,6 +40,11 @@ export type AudioSource = {
     locale: Locale,
     phrases: readonly string[],
   ) => readonly PlayableClip[] | undefined;
+  /**
+   * A live voice: any words, in the speaker's voice, made as they are needed (a server's; in
+   * development, the studio's Piper). Undefined when there is none, or it couldn't.
+   */
+  live?: (speaker: string, locale: Locale, words: string) => Promise<PlayableClip | undefined>;
 };
 
 /**
@@ -141,6 +147,16 @@ export function useNarrator(
     [playOne, locale],
   );
 
+  /** Nothing heard, for as long as `words` would take to say. */
+  const playQuiet = useCallback(
+    (words: string) =>
+      playOne((done) => {
+        const timer = setTimeout(() => done(true), estimatedSeconds(words) * 1000);
+        return () => clearTimeout(timer);
+      }),
+    [playOne],
+  );
+
   const stop = useCallback(() => {
     saying.current++;
     stopNow.current?.();
@@ -153,9 +169,10 @@ export function useNarrator(
     async (line: Utterance) => {
       stop();
       const mine = saying.current;
-      if (isMuted.peek()) return;
       const phrases = line.phrases[locale];
       if (phrases === undefined || phrases.length === 0) return;
+      // Muted: nothing heard, and the line still takes its time (the board's pacing is the same).
+      if (isMuted.peek()) return void (await playQuiet(phrases.join(" ")));
       // 1. Its clips, glued. A clip that fails leaves the rest of the line to the next source.
       let from = 0;
       const clips = clipsFor(line);
@@ -177,10 +194,17 @@ export function useNarrator(
         setFailed((prev) => new Set(prev).add(line.name));
         onFailure({ name: line.name }, "a clip failed to play");
       }
-      // 2. A live voice from the server: not yet. 3. The phone's own voice, for what is left.
-      if (saying.current === mine) await playPhone(phrases.slice(from).join(" "));
+      const rest = phrases.slice(from).join(" ");
+      // 2. A live voice, for what is left.
+      if (saying.current !== mine) return;
+      const made = await source?.live?.(line.speaker, locale, rest).catch(() => undefined);
+      if (saying.current !== mine) return;
+      if (made !== undefined && (await playClip(made.url))) return;
+      // 3. The phone's own voice. 4. None: quiet, for as long as the words would take.
+      if (saying.current !== mine) return;
+      await (canSpeak() ? playPhone(rest) : playQuiet(rest));
     },
-    [locale, clipsFor, playClip, playPhone, stop, onFailure],
+    [locale, source, clipsFor, playClip, playPhone, playQuiet, stop, onFailure],
   );
 
   // Muting stops the line being said.

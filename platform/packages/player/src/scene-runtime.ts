@@ -22,7 +22,13 @@ import {
   segment,
   shownOf,
 } from "@chalk/prop";
-import { type AnyProp, Board as Core, estimatedSeconds, timedVoice } from "@chalk/prop/next";
+import {
+  type AnyProp,
+  Board as Core,
+  type LineCall,
+  estimatedSeconds,
+  timedVoice,
+} from "@chalk/prop/next";
 import { type Signal, signal } from "@preact/signals-core";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
@@ -67,6 +73,12 @@ export class SceneRuntime {
       lineSeconds?: (line: Utterance) => number | undefined;
       /** The board's language: what it says, and how long each line takes. */
       locale: Locale;
+      /**
+       * A line is over when its sound is (`speak` resolves): a student's board, at real speed. Else
+       * it lasts as long as its clips, or its words would take, on the board's clock (a check, a
+       * test, a tool's faster clock).
+       */
+      isHeard?: boolean;
     },
   ) {
     const model = board.model;
@@ -82,53 +94,77 @@ export class SceneRuntime {
       { ...model.given, hidden },
       {
         // A line by its name: the lesson's words for it, else what its piece says of itself (its
-        // sound view). Its clip plays; this voice keeps time on the board's clock, telling the line
-        // ended after as long as the clip (or its words would take). The board only hears the end.
+        // sound view), with its moment's values. The board only hears that it started and ended.
         voice: (core) => {
-          const timed = timedVoice(core, ({ name, values }) => {
-            const words = this.lineWords(name);
+          /** What is said for a line, logged as heard; undefined when it has nothing to say. */
+          const begin = (call: LineCall): { line: Utterance; heard: HeardLine } | undefined => {
+            const words = this.lineWords(call.name);
             if (words === undefined) return undefined;
             const phrases = Object.fromEntries(
-              LOCALES.map((l) => [l, linePhrases(words[l], l, values)]),
+              LOCALES.map((l) => [l, linePhrases(words[l], l, call.values)]),
             ) as Utterance["phrases"];
             const said = phrases[locale];
             if (said === undefined || said.length === 0) return undefined;
             const line: Utterance = {
-              name,
-              speaker: model.lines[name]?.speaker ?? NARRATOR,
+              name: call.name,
+              speaker: model.lines[call.name]?.speaker ?? NARRATOR,
               phrases,
             };
-            void services.speak(line);
-            const seconds =
-              services.lineSeconds?.(line) ?? estimatedSeconds(plainText(said.join(" ")));
             const about = aboutOf(
               model,
-              name,
-              propPieces(board.root).some((p) => p.name === name),
+              call.name,
+              propPieces(board.root).some((p) => p.name === call.name),
             );
-            this.heardLines.push({
-              line: name,
+            const heard: HeardLine = {
+              line: call.name,
               ...(about === undefined ? {} : { about }),
               speaker: line.speaker,
               words: said.join(" "),
               at: core.now,
-              seconds,
-            });
-            return seconds;
-          });
+              seconds: services.lineSeconds?.(line) ?? estimatedSeconds(plainText(said.join(" "))),
+            };
+            this.heardLines.push(heard);
+            return { line, heard };
+          };
           // The line being heard, until it ends: a stop meanwhile cut it.
           let hearing: HeardLine | undefined;
+          const stop = () => {
+            if (hearing !== undefined) hearing.cutAt = core.now;
+            hearing = undefined;
+            services.hush?.();
+          };
+          if (services.isHeard === true)
+            return {
+              say: (call, hear) => {
+                const begun = begin(call);
+                if (begun === undefined) return hear("ended");
+                const { heard } = begun;
+                hearing = heard;
+                hear("started");
+                void services.speak(begun.line).then(() => {
+                  if (hearing !== heard) return;
+                  hearing = undefined;
+                  heard.seconds = core.now - heard.at;
+                  hear("ended");
+                });
+              },
+              stop,
+            };
+          const timed = timedVoice(core, (call) => {
+            const begun = begin(call);
+            if (begun === undefined) return undefined;
+            void services.speak(begun.line);
+            return begun.heard.seconds;
+          });
           return {
-            say: (name, hear) =>
-              timed.say(name, (what) => {
+            say: (call, hear) =>
+              timed.say(call, (what) => {
                 hearing = what === "started" ? this.heardLines.at(-1) : undefined;
                 hear(what);
               }),
             stop: () => {
               timed.stop();
-              if (hearing !== undefined) hearing.cutAt = core.now;
-              hearing = undefined;
-              services.hush?.();
+              stop();
             },
           };
         },

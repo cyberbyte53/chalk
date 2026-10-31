@@ -319,6 +319,33 @@ describe("a scene, built and checked like any board", () => {
     ).toThrow(/it needs a when/);
   });
 
+  it("on a student's board, a line is over when its sound is: no length is assumed", async () => {
+    const ends: (() => void)[] = [];
+    const said: string[] = [];
+    const runtime = new SceneRuntime(board.board, (type) => propLibrary[type], {
+      locale: "en",
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: (line) =>
+        new Promise<void>((resolve) => {
+          said.push(line.name);
+          ends.push(resolve);
+        }),
+      isHeard: true,
+      onError: (message) => {
+        throw new Error(message);
+      },
+    });
+    runtime.start();
+    runtime.settle(600, true);
+    // Ten minutes on, the title is still being said: its sound hasn't ended.
+    expect(said).toEqual(["title"]);
+    ends[0]?.();
+    await Promise.resolve();
+    runtime.settle(5, true);
+    expect(said).toEqual(["title", "ask"]);
+  });
+
   it("refuses a line on Continue (nothing is heard after it) and a piece named board", () => {
     expect(() =>
       scene({

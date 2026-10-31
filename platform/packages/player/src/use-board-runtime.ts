@@ -48,7 +48,13 @@ export function useBoardRuntime(
       onError: (message: string, error?: unknown) => console.error(message, error ?? ""),
     };
     return board.model !== undefined
-      ? new SceneRuntime(board, (type) => registry[type], { ...services, ...voice })
+      ? new SceneRuntime(board, (type) => registry[type], {
+          ...services,
+          ...voice,
+          // At a student's speed a line is over when its sound is; a faster clock (a tool's) can't
+          // wait for sound, so it keeps each line's length.
+          isHeard: speed === 1,
+        })
       : new BoardRuntime(board, (type) => registry[type], {
           ...services,
           frame: (callback) => {

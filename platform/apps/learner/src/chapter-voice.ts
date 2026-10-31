@@ -1,5 +1,5 @@
-import { type AudioManifest, clipsOf } from "@chalk/content";
-import type { AudioSource } from "@chalk/player";
+import { type AudioManifest, type Locale, clipsOf } from "@chalk/content";
+import type { AudioSource, PlayableClip } from "@chalk/player";
 import { useEffect, useState } from "preact/hooks";
 
 /**
@@ -26,18 +26,17 @@ export function useChapterVoice(
       .then((manifest) => {
         if (!isLive) return;
         // The clips first, then ready: a board must never start before its voice is known.
-        if (manifest === undefined) {
-          setIsReady(true);
-          return;
-        }
         const clips: AudioSource = {
           clipsOf: (speaker, locale, phrases) =>
-            clipsOf(manifest, speaker, locale, phrases)?.map((clip) => ({
-              url: `${base}/${clip.file}`,
-              seconds: clip.seconds,
-            })),
+            manifest === undefined
+              ? undefined
+              : clipsOf(manifest, speaker, locale, phrases)?.map((clip) => ({
+                  url: `${base}/${clip.file}`,
+                  seconds: clip.seconds,
+                })),
+          ...(import.meta.env.DEV ? { live: devLive } : {}),
         };
-        setSource(() => clips);
+        if (manifest !== undefined || import.meta.env.DEV) setSource(() => clips);
         setIsReady(true);
       })
       .catch(() => isLive && setIsReady(true));
@@ -46,4 +45,25 @@ export function useChapterVoice(
     };
   }, [base, isOn]);
   return { source, isReady };
+}
+
+/**
+ * The live voice in development: the studio makes the words into a clip in the speaker's voice,
+ * when first needed, and keeps it (studio/src/voice/live.ts). Undefined when it can't.
+ */
+async function devLive(
+  speaker: string,
+  locale: Locale,
+  words: string,
+): Promise<PlayableClip | undefined> {
+  const answer = await fetch("/dev-voice", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ speaker, locale, words }),
+  });
+  if (!answer.ok) return undefined;
+  const clip = (await answer.json()) as { url?: string; seconds?: number };
+  return clip.url === undefined || clip.seconds === undefined
+    ? undefined
+    : { url: clip.url, seconds: clip.seconds };
 }
