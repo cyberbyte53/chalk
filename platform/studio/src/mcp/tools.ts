@@ -515,7 +515,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             : "drag" in s
               ? { ...s, drag: under(s.drag) }
               : "call" in s
-                ? { call: s.call, on: a.type, ...(s.args ? { args: s.args } : {}) }
+                ? {
+                    call: s.call,
+                    on: a.type,
+                    ...(s.args ? { args: s.args } : {}),
+                    ...(s.during === undefined ? {} : { during: s.during }),
+                  }
                 : s,
         ),
     };

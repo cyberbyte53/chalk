@@ -5,7 +5,7 @@ description: Match a chapter's needs to props and build or extend the props it n
 
 # Match and build the props
 
-Props come first: lessons are written against their actions and fields. A prop's contract is its definition in code (the one writer); everything a person reads about it is generated from that (`look` at its address, `library/catalogue.md`).
+Props come first: lessons are written against their actions and fields. A prop's contract is its definition in code (the one writer); everything a person reads about it is generated from that (`show` its address, `library/catalogue.md`).
 
 ## Read first
 

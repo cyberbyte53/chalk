@@ -611,7 +611,7 @@ const firstLine = (error: unknown): string =>
  * A lane: one agent connection's own page, kept open between its calls. Moving it to another board
  * inside the app (history.pushState, which the preview listens for) skips a page load, the slow
  * part. Each connection draws on its own page, so agents draw at the same time and one agent's
- * board (what `continue` goes on from) is never moved by another's call. A lane's calls run one
+ * board is never moved by another's call. A lane's calls run one
  * at a time. Errors the page logs go to whichever call is drawing.
  */
 type Lane = {
@@ -754,8 +754,8 @@ export function onComposer<T>(fn: (page: Page) => Promise<T>): Promise<T> {
 
 /** Closes a lane's page (its connection ended). */
 export async function closeLane(lane: string): Promise<void> {
-  // Its helpers too: the pages a look drew its other versions on (`<lane>:look:1`, …).
-  for (const one of [...lanes.keys()].filter((l) => l === lane || l.startsWith(`${lane}:look:`))) {
+  // Its helpers too: the pages its other versions were drawn on (`<lane>:v:1`, …).
+  for (const one of [...lanes.keys()].filter((l) => l === lane || l.startsWith(`${lane}:v:`))) {
     const open = lanes.get(one);
     lanes.delete(one);
     ranReaders.delete(one);
@@ -1250,6 +1250,10 @@ async function shootNow(
       });
       seen = now;
     }
+    // Steps stopped short (a name not there, a line that never came): the board where they stopped.
+    const last = steps.at(-1);
+    if (last !== undefined && last.picture === undefined && act.shots !== "none")
+      last.picture = await pictureOf(page.locator(".preview-card").first());
   } else await timed("wait: fonts, images, frames", () => settle(page));
   const cards = await page.locator(".preview-card").all();
   const shots: Shot[] = [];

@@ -22,8 +22,8 @@ import { ensureStudio } from "../../start.mjs";
  *   looks; a write says it may or may not have been saved. A service not running is started.
  * - This agent gets an id, made once when this process starts and sent with every call
  *   (`x-chalk-agent`). The service keys the agent's page by it (app-driver.ts), so two agents
- *   with the same token never share a board. After a restart the page is gone, so `continue`
- *   fails, saying why.
+ *   with the same token never share a board. Every call draws its board from the start, so a
+ *   restart loses nothing a call needs.
  * - The role comes from the token: CHALK_TOKEN (default chalk-dev-fixer). CHALK_NAME names the
  *   agent in threads. CHALK_MCP_URL points at another service (then nothing is started here).
  */

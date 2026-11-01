@@ -83,7 +83,7 @@ export const walker = prop({
 
 `src/<part>-view.tsx`: draws `view` (its variables, needs and facts, and each part's, as the board reads them now) at the `width` it's given, typed `PropViewProps<typeof def>`. It owns nothing: what the student does goes through `call(def.actions.x, args)`. Words come from the lesson (`{ en, hi }`), not the prop.
 
-**What's on screen is written once, in the view.** Each part the student can tell apart is tagged on the element that draws it (`@chalk/prop`'s tags.ts), and the prop's description (for `look`, `play`, agents, tests) is read from those tags in what the view draws: there is no second copy.
+**What's on screen is written once, in the view.** Each part the student can tell apart is tagged on the element that draws it (`@chalk/prop`'s tags.ts), and the prop's description (for `show`, agents, tests) is read from those tags in what the view draws: there is no second copy.
 
 ```tsx
 <button {...does(choice.actions.check)} />                                      // a button
@@ -92,7 +92,7 @@ export const walker = prop({
 <div {...shows("box", s.box, "17 sweets")}>…</div>                              // something read
 ```
 
-- **Everything a student can press or drag has a name**, its address under the piece (`ask/check`, `room/places/chooseTarget:5,3`), and is pointed at by that name only, never by its words: `play` taps by name, comments point by name. The type checker keeps it while you write: a prop package's views use `@chalk/prop`'s element types (`jsxImportSource` in its tsconfig), where an element with an event handler must also carry `does(…)` or `says(…)`. The framework's own files (`@chalk/draw`, `@chalk/player`) start with `/** @jsxImportSource preact */`.
+- **Everything a student can press or drag has a name**, its address under the piece (`ask/check`, `room/places/chooseTarget:5,3`), and is pointed at by that name only, never by its words: `show`'s steps tap by name, comments point by name. The type checker keeps it while you write: a prop package's views use `@chalk/prop`'s element types (`jsxImportSource` in its tsconfig), where an element with an event handler must also carry `does(…)` or `says(…)`. The framework's own files (`@chalk/draw`, `@chalk/player`) start with `/** @jsxImportSource preact */`.
 - `does(action, args, key)`: the player presses it, by click, or by Enter or Space for an element the browser doesn't press itself. Named by the action and its key; an input that sends arguments must give a key (a type error otherwise), so its name never changes with what it sends.
 - `says(action, key?)`: an input whose own handler works the arguments out when it's used (a stepper, a typed number).
 - `shows(name, value, words?)`: anything else the student reads. A part inside something `disabled` is off.
@@ -100,7 +100,7 @@ export const walker = prop({
 - **Drags**: inside a frame, `const drag = useDrags()` (`@chalk/player`), then `<circle {...shows("marker", x)} {...drag({ axis: "x", at: { x, y: 0 }, move: line.actions.moveMarker, step: 0.1, release: { action: line.actions.letGo } })} />`. The player wires pointer, arrow keys, focus and the slider's words; the drag says its action like any input. Letting go is an action from the screen, never a signal from the drawing. A drag turns the finger's pixels into the prop's units, so it is drawn inside a frame; drawn outside one it is refused as the view draws, so `checkProp` reports it.
 - **Frames**: a part drawn on a frame draws with `useFrame()` (`px.toPx`, `px.fromPx`) and hands its labels to the frame's one placing pass with `useFrameLabels` (a label with a `part` is something read).
 
-`checkProp(module, starts)` (`@chalk/player`) plays a prop from some starting states (part by part, as a board places it), presses what its view offers, and reports any input that doesn't say what it does and any student action no input offers; `describeView` reads one state's description. In the dev preview, a press that runs a student action from an input not tagged for it is reported (`look` shows page errors).
+`checkProp(module, starts)` (`@chalk/player`) plays a prop from some starting states (part by part, as a board places it), presses what its view offers, and reports any input that doesn't say what it does and any student action no input offers; `describeView` reads one state's description. In the dev preview, a press that runs a student action from an input not tagged for it is reported (`show` shows page errors).
 
 Draw with `@chalk/draw`'s pieces inside a `Stage` (read [drawing.md](./drawing.md) first, including the list of d3 modules to check before writing geometry by hand); draw your own SVG inside the stage only for what no piece covers. Styles go in the prop's own `src/styles.css`, exported as `@chalk/prop-<folder>/styles.css`; class names start with the prop's short prefix (`.cp-`). Draw only with the look's tokens (`var(--color-on-surface)`, `var(--font-display)`, `var(--text-note)`; see `platform/packages/look`), never a raw colour: a test checks. A colour the content picks (a `colorSchema` field) reaches the view as a role or a hex; set it as `--tone` with `cssColor` and mix tints from it. The player wraps each prop in `class="piece-prop prop-<type>"`, so don't reuse `prop-<type>` for an inner element.
 

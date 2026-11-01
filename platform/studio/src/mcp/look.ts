@@ -555,13 +555,7 @@ export async function look(
   const worker = async (k: number) => {
     for (let i = next++; i < versions.length; i = next++) {
       const v = versions[i] as Version;
-      const d = await shoot(
-        root,
-        board,
-        options(v),
-        undefined,
-        k === 0 ? lane : `${lane}:look:${k}`,
-      );
+      const d = await shoot(root, board, options(v), undefined, k === 0 ? lane : `${lane}:v:${k}`);
       for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
       drawn[i] = d;
     }
@@ -998,13 +992,14 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
       problems: problemsByPiece(shot?.overflow ?? []),
       ...(crop !== undefined && has(after, crop) ? { crop } : {}),
     });
-    images.push(...(await compose(tiles, { kind: "row" })));
+    // Before, then after: each a picture of its own, so neither is shrunk to fit beside the other.
+    for (const tile of tiles) images.push(...(await compose([tile], { kind: "row" })));
   }
   if (images.length > 0 && crop !== undefined)
     lines.push(
       motions.length > 0
         ? `picture: the frames that differed, in order, cut to ${crop.join(", ")} (full: true for the whole board)`
-        : `picture: before | after, cut to ${crop.join(", ")} (full: true for the whole board)`,
+        : `pictures: before, after, cut to ${crop.join(", ")} (full: true for the whole board)`,
     );
   return {
     text: lines.join("\n"),

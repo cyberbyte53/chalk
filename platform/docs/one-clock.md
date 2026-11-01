@@ -36,7 +36,7 @@ The clock starts when the board starts, as now. A board starts after a tap: open
 
 ## Tools jump
 
-The page runs the clock to the end (`runtime.settle()`, which exists), then draws once and is read once. No ×10, no 30 s cap, no polling (`__chalkBusy`). `play` steps can wait (board time) or act while a named line is being said ("advance until this line is in turn").
+The page runs the clock to the end (`runtime.settle()`, which exists), then draws once and is read once. No ×10, no 30 s cap, no polling (`__chalkBusy`). A tool's step is done once the board has come to its end, or while a named line is said (`during`: the clock runs until the line starts and holds there; [show.md](show.md)).
 
 ## Steps
 
