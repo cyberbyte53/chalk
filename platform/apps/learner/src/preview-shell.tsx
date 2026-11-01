@@ -1300,6 +1300,11 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   // `speed=jump`: a tool reading the boards, their clocks jumping to where they end.
   const speed =
     params.get("speed") === "jump" ? Number.POSITIVE_INFINITY : Number(params.get("speed")) || 1;
+  // A tool reading where boards end: the screen's own animations end at once too (app.css), at
+  // the same end state, so it needn't wait for them.
+  useLayoutEffect(() => {
+    document.documentElement.toggleAttribute("data-jump", speed === Number.POSITIVE_INFINITY);
+  }, [speed]);
   // The column's width, to see the board as another device draws it (a phone by default).
   const width = Number(params.get("width")) || undefined;
   const locale = params.get("locale") === "hi" ? Locale.Hi : Locale.En;

@@ -9,8 +9,8 @@ import { findUp } from "../find-up";
 
 /**
  * How long a reviewer's look at one board takes: both languages on the three check screens (six
- * drawings), from a fresh connection, through the running chalk service (`pnpm mcp`), the way an
- * agent calls it. Its answer (the text, the picture) is kept, so a faster tool (`look2`) can be
+ * drawings), through the running chalk service (`pnpm mcp`), the way an agent calls it: on a fresh
+ * connection, then again on the same one (the time kept). Its answer (the text, the picture) is kept, so a faster tool (`look2`) can be
  * held to it: the same words, the same pixels.
  *
  *   pnpm bench-look                        look
@@ -53,24 +53,35 @@ async function bench(tool: string, as: string): Promise<void> {
   const dir = join(OUT, as);
   mkdirSync(dir, { recursive: true });
   const client = await connect();
-  const t = performance.now();
-  const r = (await client.callTool({ name: tool, arguments: WORKLOAD }, undefined, {
-    timeout: 600_000,
-  })) as { isError?: boolean; content?: Content[] };
-  const ms = performance.now() - t;
+  // A reviewer keeps one connection for a pass: its first call, then the next on the same pages.
+  const call = async () => {
+    const t = performance.now();
+    const r = (await client.callTool({ name: tool, arguments: WORKLOAD }, undefined, {
+      timeout: 600_000,
+    })) as { isError?: boolean; content?: Content[] };
+    return { r, ms: performance.now() - t };
+  };
+  const first = await call();
+  const { r, ms } = await call();
   await client.close();
   const content = r.content ?? [];
   const text = content
     .filter((x) => x.type === "text")
     .map((x) => x.text ?? "")
     .join("\n");
-  if (r.isError === true) throw new Error(`${tool} failed: ${text.slice(0, 300)}`);
+  if (first.r.isError === true || r.isError === true)
+    throw new Error(`${tool} failed: ${text.slice(0, 300)}`);
   writeFileSync(join(dir, "answer.txt"), text);
   content
     .filter((x) => x.type === "image" && x.data !== undefined)
     .forEach((x, k) => writeFileSync(join(dir, `${k}.png`), Buffer.from(x.data ?? "", "base64")));
-  writeFileSync(join(dir, "time.json"), `${JSON.stringify({ ms: Math.round(ms) })}\n`);
-  console.log(`${tool}: ${(ms / 1000).toFixed(1)}s for one board, en + hi on 3 screens`);
+  writeFileSync(
+    join(dir, "time.json"),
+    `${JSON.stringify({ ms: Math.round(ms), first: Math.round(first.ms) })}\n`,
+  );
+  console.log(
+    `${tool}: one board, en + hi on 3 screens: ${(first.ms / 1000).toFixed(1)}s on a fresh connection, then ${(ms / 1000).toFixed(1)}s`,
+  );
 }
 
 /** The same words, and the same pictures to the pixel. */

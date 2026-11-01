@@ -11,6 +11,7 @@ import type { Said } from "../sound/voice/said";
 import {
   type Drawn,
   type Heard,
+  LOOK_PAGES,
   type Picture,
   type Shot,
   type ShotOptions,
@@ -18,6 +19,7 @@ import {
   closeLane,
   shoot,
   stillRunning,
+  timing,
 } from "./app-driver";
 import type { NodeShape } from "./model-schema";
 import { type Labels, type Tile, compose } from "./picture";
@@ -489,12 +491,6 @@ function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }, isMany: boole
   return locales.flatMap((locale) => screens.map((screen) => ({ ...screen, locale })));
 }
 
-/**
- * How many pages one look draws its versions on at once: one per version (two languages, three
- * screens). Measured on a lesson pass: 15.4s on 3 pages, 12.7s on 6; about 0.4 GB a page.
- */
-export const LOOK_PAGES = 6;
-
 const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${screenWords(v)}` : "");
 
 /** `look` at a piece, a board or a group. A chapter or book goes to `check`. */
@@ -632,20 +628,36 @@ export async function look(
             ...s.overflow.map((p) => `  ${p}`),
           ],
     );
-  const image = await compose(
-    shots.map((s, i) => ({
-      picture: pictureOf(s),
-      ...(target.kind === "piece" ? { crop: [target.address] } : {}),
-      labels,
-      problems: problemsByPiece(s.overflow),
-      caption: captionOf(versions[i] as Version, shots.length),
-    })),
-    { kind: "row" },
+  const image = await timedCompose(() =>
+    compose(
+      shots.map((s, i) => ({
+        picture: pictureOf(s),
+        ...(target.kind === "piece" ? { crop: [target.address] } : {}),
+        labels,
+        problems: problemsByPiece(s.overflow),
+        caption: captionOf(versions[i] as Version, shots.length),
+      })),
+      { kind: "row" },
+    ),
   );
   return {
     text: [text, ...otherProblems].join("\n"),
     image,
   };
+}
+
+/** The pictures put together, timed when something measures (timing in app-driver.ts). */
+async function timedCompose<T>(fn: () => Promise<T>): Promise<T> {
+  if (!timing.isOn) return fn();
+  const t = performance.now();
+  try {
+    return await fn();
+  } finally {
+    timing.spent.set(
+      "compose",
+      (timing.spent.get("compose") ?? 0) + (performance.now() - t) / 1000,
+    );
+  }
 }
 
 const pictureOf = (s: Shot): Picture => ({ png: s.png, width: s.width, boxes: s.boxes });

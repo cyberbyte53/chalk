@@ -144,6 +144,21 @@ export type Shot = {
   running?: string[];
 };
 
+/**
+ * Where a drawing's time goes, phase by phase, when something is measuring it (`timing.isOn`): the
+ * seconds spent in each, summed over every drawing since it was switched on. Off, it costs nothing.
+ */
+export const timing = { isOn: false, spent: new Map<string, number>() };
+async function timed<T>(phase: string, fn: () => Promise<T>): Promise<T> {
+  if (!timing.isOn) return fn();
+  const t = performance.now();
+  try {
+    return await fn();
+  } finally {
+    timing.spent.set(phase, (timing.spent.get(phase) ?? 0) + (performance.now() - t) / 1000);
+  }
+}
+
 /** How long a board may take to settle after it opens or after a step, in its own seconds. */
 export const SETTLE_CAP = 30;
 
@@ -561,6 +576,11 @@ type Lane = {
   lastBoard?: string;
   /** Content was rebuilt since this page last loaded: load it afresh, don't move it. */
   isStale: boolean;
+  /**
+   * What ran on it was last taken at the end of its own drawing: nothing since is another call's,
+   * so the next drawing needn't take it again before it starts.
+   */
+  isTaken?: boolean;
 };
 const lanes = new Map<string, Lane>();
 const queues = new Map<string, Promise<unknown>>();
@@ -568,10 +588,15 @@ const used = new Map<string, number>();
 /** Pages kept open at once; the one used longest ago (and idle) is closed for a new one. */
 const MAX_LANES = 16;
 /**
+ * How many pages one look draws its versions on at once: one per version (two languages, three
+ * screens). Measured on a lesson pass: 15.4s on 3 pages, 12.7s on 6; about 0.4 GB a page.
+ */
+export const LOOK_PAGES = 6;
+/**
  * Pages kept loaded with the app, ready for a lane's first call: loading the app is the slow part
  * of a first drawing (seconds); a page already on it only moves to the board.
  */
-const SPARES = 3;
+const SPARES = LOOK_PAGES;
 const spares: Lane[] = [];
 let toppingUp: Promise<void> | undefined;
 /** The lane of a caller that doesn't name one (scripts, tests). */
@@ -620,7 +645,7 @@ async function newPage(base: string): Promise<Lane> {
 
 /**
  * Keeps SPARES pages loaded with the app (a tool's page, no board yet), dropping any a rebuild left
- * stale. One top-up at a time; never in a drawing's way (a spare is only loaded, not drawn on).
+ * stale. One top-up at a time, loading only while nothing is drawn.
  */
 function topUp(base: string): Promise<void> {
   toppingUp ??= (async () => {
@@ -630,6 +655,8 @@ function topUp(base: string): Promise<void> {
         await stale.page.close().catch(() => {});
       }
       while (spares.length < SPARES) {
+        // Loaded only while nothing is drawn: a spare is for later, never in a drawing's way.
+        while (drawing.size > 0) await Promise.all([...drawing]);
         const spare = await newPage(base);
         await spare.page
           // The preview (an `at=` address; a short one is its light tree view), which moves to a
@@ -763,9 +790,12 @@ export function shoot(
 ): Promise<Drawn> {
   const once = async () => {
     // What ran before this call isn't this board's, but what loaded then is under it.
-    readerOf(lane, root).see(await takeRan(lane));
+    // What ran before this call (a page just loaded, another board) is set aside, unless it was
+    // taken already at the end of this page's last drawing.
+    if (lanes.get(lane)?.isTaken !== true)
+      readerOf(lane, root).see(await timed("coverage: taken before", () => takeRan(lane)));
     const drawn = await shootNow(root, board, o, act, lane);
-    await recordRan(root, board, lane);
+    await timed("coverage: recorded after", () => recordRan(root, board, lane));
     return drawn;
   };
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
@@ -827,7 +857,10 @@ async function takeRan(lane: string) {
  */
 async function recordRan(root: string, board: string, lane: string): Promise<void> {
   const coverage = await takeRan(lane);
+  const at = lanes.get(lane);
+  if (at !== undefined) at.isTaken = true;
   const path = board.replace(/^content\//, "");
+  // Either way, the scripts it saw are read (linesOf reads them too), for what runs next here.
   if (!existsSync(join(root, "build", "review", `${path}.json`))) {
     readerOf(lane, root).see(coverage);
     return;
@@ -1002,63 +1035,67 @@ async function shootNow(
       );
   }
   at.errors.length = 0;
-  await page.setViewportSize({
-    width: (o.width ?? PHONE_WIDTH) + 48,
-    height: o.height ?? PHONE_HEIGHT,
-  });
-  const isOnApp = page.url().startsWith(base) && !at.isStale;
-  at.isStale = false;
-  try {
-    if (isContinued) {
-      // The board as the last call left it.
-    } else if (isOnApp)
-      await page.evaluate((q) => {
-        history.pushState(null, "", q);
-        dispatchEvent(new PopStateEvent("popstate"));
-      }, `${target.pathname}${target.search}`);
-    else await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
-  } catch (error) {
-    // The page was reloaded under us (the dev server after a code or style edit): the retry
-    // around every drawing handles that, so it must see the error as it is.
-    if (isPulledAway(error)) throw error;
-    await closeLane(lane);
-    throw new Error(
-      `The preview server didn't answer at ${url} (${firstLine(error)}). Start it with \`pnpm dev\` in platform/apps/learner (or set CHALK_PREVIEW_URL), then retry.`,
-    );
-  }
-  try {
-    if (!isContinued)
-      await page.waitForFunction(
-        (q) =>
-          document.body.dataset.previewReady === q ||
-          (document.body.dataset.previewShown === q &&
-            document.querySelector(".preview-empty") !== null),
-        target.search,
-        { timeout: READY_TIMEOUT },
+  await timed("move to the board", async () => {
+    await page.setViewportSize({
+      width: (o.width ?? PHONE_WIDTH) + 48,
+      height: o.height ?? PHONE_HEIGHT,
+    });
+    const isOnApp = page.url().startsWith(base) && !at.isStale;
+    at.isStale = false;
+    try {
+      if (isContinued) {
+        // The board as the last call left it.
+      } else if (isOnApp)
+        await page.evaluate((q) => {
+          history.pushState(null, "", q);
+          dispatchEvent(new PopStateEvent("popstate"));
+        }, `${target.pathname}${target.search}`);
+      else await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
+    } catch (error) {
+      // The page was reloaded under us (the dev server after a code or style edit): the retry
+      // around every drawing handles that, so it must see the error as it is.
+      if (isPulledAway(error)) throw error;
+      await closeLane(lane);
+      throw new Error(
+        `The preview server didn't answer at ${url} (${firstLine(error)}). Start it with \`pnpm dev\` in platform/apps/learner (or set CHALK_PREVIEW_URL), then retry.`,
       );
-  } catch {
-    const shown = ((await page.textContent("body").catch(() => "")) ?? "").trim().slice(0, 200);
-    await closeLane(lane);
-    throw new Error(
-      [
-        `The board didn't finish drawing within ${READY_TIMEOUT / 1000}s at ${url}.`,
-        `The page shows: ${shown === "" ? "(nothing)" : JSON.stringify(shown)}`,
-        at.errors.length > 0 ? `Page errors:\n${at.errors.join("\n")}` : "No page errors.",
-        "If it's still loading, content may be rebuilding: retry. Otherwise open the URL to see it.",
-      ].join("\n"),
-    );
-  }
+    }
+    try {
+      if (!isContinued)
+        await page.waitForFunction(
+          (q) =>
+            document.body.dataset.previewReady === q ||
+            (document.body.dataset.previewShown === q &&
+              document.querySelector(".preview-empty") !== null),
+          target.search,
+          { timeout: READY_TIMEOUT },
+        );
+    } catch {
+      const shown = ((await page.textContent("body").catch(() => "")) ?? "").trim().slice(0, 200);
+      await closeLane(lane);
+      throw new Error(
+        [
+          `The board didn't finish drawing within ${READY_TIMEOUT / 1000}s at ${url}.`,
+          `The page shows: ${shown === "" ? "(nothing)" : JSON.stringify(shown)}`,
+          at.errors.length > 0 ? `Page errors:\n${at.errors.join("\n")}` : "No page errors.",
+          "If it's still loading, content may be rebuilding: retry. Otherwise open the URL to see it.",
+        ].join("\n"),
+      );
+    }
+  });
   const empty = await page.$(".preview-empty");
   if (empty !== null)
     throw new Error(`${(await empty.textContent()) ?? "Nothing to show"} (at ${url}).`);
   // Which build the page is drawing: a rebuild redraws its boards from the start (preview-shell.tsx),
   // and what was read across it would mix two boards.
   const buildAt = () => page.evaluate(() => document.body.dataset.previewBuild ?? "");
-  const drawnFrom = await buildAt();
+  const drawnFrom = await timed("read: which build", buildAt);
   // The board as it opens has settled: its opening script done, anything it set going finished.
   const speed = o.speed ?? 1;
-  const runningAtOpen = isContinued ? [] : await untilIdle(page, speed);
-  await settle(page);
+  const runningAtOpen = isContinued
+    ? []
+    : await timed("wait: board idle", () => untilIdle(page, speed));
+  await timed("wait: fonts, images, frames", () => settle(page));
   at.lastBoard = board;
   const steps: StepResult[] = [];
   let before: Picture | undefined;
@@ -1169,24 +1206,29 @@ async function shootNow(
   }
   const cards = await page.locator(".preview-card").all();
   const shots: Shot[] = [];
-  const models = await readModels(page);
+  const models = await timed("read: board state", () => readModels(page));
   for (const card of cards) {
     const name = (await card.getAttribute("data-board")) ?? board;
-    const overflow = await card.evaluate(layoutProblems);
-    const parts = await card.evaluate((c) => {
-      const out: Record<string, string[]> = {};
-      for (const piece of c.querySelectorAll<HTMLElement>("[data-piece]")) {
-        const names = [...piece.querySelectorAll<HTMLElement>("[data-part]")].map(
-          (p) => p.dataset.path ?? p.dataset.part ?? "",
-        );
-        if (names.length > 0) out[piece.dataset.piece ?? "?"] = [...new Set(names)];
-      }
-      return out;
-    });
+    const overflow = await timed("read: layout problems", () => card.evaluate(layoutProblems));
+    const parts = await timed("read: parts", () =>
+      card.evaluate((c) => {
+        const out: Record<string, string[]> = {};
+        for (const piece of c.querySelectorAll<HTMLElement>("[data-piece]")) {
+          const names = [...piece.querySelectorAll<HTMLElement>("[data-part]")].map(
+            (p) => p.dataset.path ?? p.dataset.part ?? "",
+          );
+          if (names.length > 0) out[piece.dataset.piece ?? "?"] = [...new Set(names)];
+        }
+        return out;
+      }),
+    );
     // After steps, the picture is the steps' to give (or not): don't take another.
     const isActed = act !== undefined && act.steps.length > 0;
     const pictures = o.pictures ?? "full";
-    const picture = isActed || pictures === "none" ? undefined : await pictureOf(card, pictures);
+    const picture =
+      isActed || pictures === "none"
+        ? undefined
+        : await timed("screenshot", () => pictureOf(card, pictures));
     shots.push({
       board: name.replace(/\.json$/, ""),
       png: picture?.png ?? Buffer.alloc(0),
@@ -1209,7 +1251,7 @@ async function shootNow(
       : undefined;
   // Redrawn by a rebuild while it was read: what was read is from two boards. The same as a page
   // pulled away (a reload): drawn again from the start, by the retry around every drawing.
-  if (!isContinued && (await buildAt()) !== drawnFrom)
+  if (!isContinued && (await timed("read: which build", buildAt)) !== drawnFrom)
     throw new Error("navigation: a rebuild redrew the board while it was read");
   return {
     shots,

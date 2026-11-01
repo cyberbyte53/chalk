@@ -2220,3 +2220,14 @@ body.is-selecting .is-pick-target {
   color: var(--color-on-surface-variant);
   cursor: default;
 }
+
+/* A tool reading where boards end (preview-shell.tsx, speed=jump): every animation and transition
+   takes no time, so it is at once where it would end (its fill kept), and nothing is waited for. */
+:root[data-jump] *,
+:root[data-jump] *::before,
+:root[data-jump] *::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
