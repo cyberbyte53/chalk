@@ -82,6 +82,11 @@ export class BoardRuntime {
        * test, a tool's faster clock).
        */
       isHeard?: boolean;
+      /**
+       * A tool reading the board: each line ends as soon as it starts, never played or waited for.
+       * What is said is recorded as ever (the script, its clips' length); only the wait is gone.
+       */
+      isSkipping?: boolean;
     },
   ) {
     const model = board.model;
@@ -177,7 +182,7 @@ export class BoardRuntime {
             const begun = begin(call);
             if (begun === undefined) return undefined;
             void services.speak(begun.line);
-            return begun.heard.seconds;
+            return services.isSkipping === true ? 0 : begun.heard.seconds;
           });
           return {
             say: (call, hear) =>

@@ -638,6 +638,8 @@ export function PreviewBoard({
             record={bus.record}
             isPicture={isShot}
             isSilent={isSilent || isTimed}
+            // A tool's page: lines aren't waited for, only recorded.
+            isSkipping={isTimed}
             onRuntime={isProp ? setRuntime : undefined}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };

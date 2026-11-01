@@ -34,6 +34,8 @@ export function useBoardRuntime(
     hush?: () => void;
     /** Nothing heard: lines keep their lengths on the board's clock; nothing plays (board-player.tsx). */
     isSilent?: boolean;
+    /** A tool reading the board: each line ends as it starts (runtime.ts). */
+    isSkipping?: boolean;
     /** Plays a sound alongside (sound/engine.ts), lasting until stopped if it lasts; returns how to stop it. */
     playSound?: (sound: Sound, lasts?: boolean) => SoundPlaying;
   },
@@ -64,6 +66,7 @@ export function useBoardRuntime(
         ? {}
         : { playSound: voice.playSound }),
       isHeard: voice.isSilent !== true,
+      ...(voice.isSkipping === true ? { isSkipping: true } : {}),
     });
   });
   useEffect(() => {
