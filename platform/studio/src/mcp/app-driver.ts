@@ -566,7 +566,14 @@ const lanes = new Map<string, Lane>();
 const queues = new Map<string, Promise<unknown>>();
 const used = new Map<string, number>();
 /** Pages kept open at once; the one used longest ago (and idle) is closed for a new one. */
-const MAX_LANES = 8;
+const MAX_LANES = 16;
+/**
+ * Pages kept loaded with the app, ready for a lane's first call: loading the app is the slow part
+ * of a first drawing (seconds); a page already on it only moves to the board.
+ */
+const SPARES = 3;
+const spares: Lane[] = [];
+let toppingUp: Promise<void> | undefined;
 /** The lane of a caller that doesn't name one (scripts, tests). */
 export const DEFAULT_LANE = "default";
 
@@ -579,6 +586,20 @@ async function openPage(lane: string, base: string): Promise<Lane> {
       .sort((a, b) => (used.get(a) ?? 0) - (used.get(b) ?? 0))[0];
     if (idle !== undefined) await closeLane(idle);
   }
+  // A page already loaded with the app, if one is ready; another is loaded meanwhile.
+  const i = spares.findIndex((s) => s.base === base && !s.isStale && !s.page.isClosed());
+  const opened = i === -1 ? await newPage(base) : (spares.splice(i, 1)[0] as Lane);
+  void topUp(base);
+  ranReaders.delete(lane); // a new page loads its scripts afresh
+  opened.page.on("crash", () => {
+    if (lanes.get(lane) === opened) lanes.delete(lane);
+  });
+  lanes.set(lane, opened);
+  return opened;
+}
+
+/** A page of the app's, not yet any lane's. */
+async function newPage(base: string): Promise<Lane> {
   browser ??= launch();
   const page = await (await browser).newPage({
     viewport: { width: PHONE_WIDTH + 48, height: 900 },
@@ -589,17 +610,46 @@ async function openPage(lane: string, base: string): Promise<Lane> {
   // What runs on it, for what a review saw (recordRan).
   await page.coverage.startJSCoverage({ resetOnNavigation: false }).catch(() => {});
   const opened: Lane = { page, base, errors: [], isStale: false };
-  ranReaders.delete(lane); // a new page loads its scripts afresh
   page.on("console", (m) => {
     // The app asks the API who is signed in; previews don't need a server, so that one is noise.
     if (m.type() === "error" && !m.location().url.includes("/api/")) opened.errors.push(m.text());
   });
   page.on("pageerror", (e) => opened.errors.push(e.message));
-  page.on("crash", () => {
-    if (lanes.get(lane) === opened) lanes.delete(lane);
-  });
-  lanes.set(lane, opened);
   return opened;
+}
+
+/**
+ * Keeps SPARES pages loaded with the app (a tool's page, no board yet), dropping any a rebuild left
+ * stale. One top-up at a time; never in a drawing's way (a spare is only loaded, not drawn on).
+ */
+function topUp(base: string): Promise<void> {
+  toppingUp ??= (async () => {
+    try {
+      for (const stale of spares.filter((s) => s.isStale || s.page.isClosed())) {
+        spares.splice(spares.indexOf(stale), 1);
+        await stale.page.close().catch(() => {});
+      }
+      while (spares.length < SPARES) {
+        const spare = await newPage(base);
+        await spare.page
+          // The preview (an `at=` address; a short one is its light tree view), which moves to a
+          // board in place: the app's home doesn't.
+          .goto(`${base}/?dev&timed&at=content`, { waitUntil: "load", timeout: 30000 })
+          .catch(() => {});
+        if (spare.page.isClosed()) continue;
+        spare.errors.length = 0;
+        spares.push(spare);
+      }
+    } finally {
+      toppingUp = undefined;
+    }
+  })();
+  return toppingUp;
+}
+
+/** Loads the spare pages, so the first drawing doesn't wait for the app (the service, at start). */
+export async function warmPages(root: string): Promise<void> {
+  await topUp(await previewBase(root));
 }
 
 /**
@@ -633,12 +683,15 @@ export function onComposer<T>(fn: (page: Page) => Promise<T>): Promise<T> {
 
 /** Closes a lane's page (its connection ended). */
 export async function closeLane(lane: string): Promise<void> {
-  const open = lanes.get(lane);
-  lanes.delete(lane);
-  ranReaders.delete(lane);
-  queues.delete(lane);
-  used.delete(lane);
-  await open?.page.close().catch(() => {});
+  // Its helpers too: the pages a look drew its other versions on (`<lane>:look:1`, …).
+  for (const one of [...lanes.keys()].filter((l) => l === lane || l.startsWith(`${lane}:look:`))) {
+    const open = lanes.get(one);
+    lanes.delete(one);
+    ranReaders.delete(one);
+    queues.delete(one);
+    used.delete(one);
+    await open?.page.close().catch(() => {});
+  }
 }
 
 /**
@@ -668,7 +721,9 @@ export function withNothingDrawing<T>(fn: () => Promise<T>): Promise<T> {
     try {
       return await fn();
     } finally {
-      for (const lane of lanes.values()) lane.isStale = true;
+      for (const lane of [...lanes.values(), ...spares]) lane.isStale = true;
+      const base = spares[0]?.base;
+      if (base !== undefined) void topUp(base);
     }
   });
   gate = run.catch(() => {});

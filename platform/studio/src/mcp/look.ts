@@ -487,6 +487,9 @@ function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }, isMany: boole
   return locales.flatMap((locale) => screens.map((screen) => ({ ...screen, locale })));
 }
 
+/** How many pages one look draws its versions on at once (the machine's fast cores, roughly). */
+const LOOK_PAGES = 3;
+
 const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${screenWords(v)}` : "");
 
 /** `look` at a piece, a board or a group. A chapter or book goes to `check`. */
@@ -536,18 +539,27 @@ export async function look(
     pictures: target.kind === "group" ? "thumb" : "full",
   });
   const board = target.kind === "group" ? target.unit : target.board;
-  const drawn: Drawn[] = [];
-  for (const v of versions) {
-    const d = await shoot(
-      root,
-      board,
-      options(v),
-      a.continue === true ? { steps: [], shots: "last", isContinued: true } : undefined,
-      lane,
-    );
-    for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
-    drawn.push(d);
-  }
+  // The versions are drawn at once, on up to LOOK_PAGES pages: the caller's own (the first, which
+  // `continue` goes on from) and pages of its own for the rest.
+  const drawn: Drawn[] = new Array(versions.length);
+  let next = 0;
+  const worker = async (k: number) => {
+    for (let i = next++; i < versions.length; i = next++) {
+      const v = versions[i] as Version;
+      const d = await shoot(
+        root,
+        board,
+        options(v),
+        a.continue === true ? { steps: [], shots: "last", isContinued: true } : undefined,
+        k === 0 ? lane : `${lane}:look:${k}`,
+      );
+      for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
+      drawn[i] = d;
+    }
+  };
+  await Promise.all(
+    Array.from({ length: Math.min(LOOK_PAGES, versions.length) }, (_, k) => worker(k)),
+  );
   if (target.kind === "group") {
     const wanted = new Set(target.boards);
     const tiles: Tile[] = [];

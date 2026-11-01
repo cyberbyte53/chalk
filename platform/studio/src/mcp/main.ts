@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
 import { findUp } from "../find-up";
-import { previewBase } from "./app-driver";
+import { previewBase, warmPages } from "./app-driver";
 import { mcpMiddleware } from "./http";
 
 /**
@@ -107,7 +107,8 @@ server.listen(PORT, HOST, () => {
   console.error(`studio service on http://${HOST}:${PORT} (the chalk MCP at /mcp)`);
   rebuild = startRebuild();
   // The app and its preview pages: the person's editor and look/play need them.
-  previewBase(ROOT).catch((error: unknown) => console.error(String(error)));
+  // Pages loaded with it, so an agent's first look doesn't wait for the app to load.
+  warmPages(ROOT).catch((error: unknown) => console.error(String(error)));
 });
 
 const stop = () => {
