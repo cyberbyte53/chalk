@@ -2383,7 +2383,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
           isPassed: false
           reads: []
           saying: []
-        type: scene
     name: busStops
     root:
       children:
@@ -2525,9 +2524,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: f42db9bc038b
-  at: 2026-11-01T05:45:33.626Z
-  code: 938bf2e5c8d2f2f9
+  commit: ed0d765a64f1
+  at: 2026-11-01T18:04:30.135Z
+  code: 89707b8a0d216202
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -2605,13 +2604,18 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
           reading:
             point: null
             pointStep: 1
-            reading: none
+            reading: distances
             unit: cm
         title:
           style: title
           text:
             en: A dot on a page
             hi: पन्ने पर एक बिंदु
+        yours:
+          style: body
+          text:
+            en: "Now the dot is yours: **drag it** anywhere on the page, and read how far it is from the left edge and from the bottom."
+            hi: "अब बिंदु तुम्हारा है: उसे पन्ने पर कहीं भी **खींचो**, और पढ़ो कि वह बाएँ किनारे से और नीचे के किनारे से कितनी दूर है।"
       lines:
         ask:
           says:
@@ -2648,10 +2652,10 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
             - patch
             - line
             - fixed
+            - yours
           isPassed: false
           reads: []
           saying: []
-        type: scene
     name: dotOnPaper
     root:
       children:
@@ -2725,7 +2729,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
             reading:
               point: null
               pointStep: 1
-              reading: none
+              reading: distances
               unit: cm
         - isHidden: true
           kind: prop
@@ -2755,14 +2759,23 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
             text:
               en: "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom."
               hi: "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।"
+        - isHidden: true
+          kind: prop
+          name: yours
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Now the dot is yours: **drag it** anywhere on the page, and read how far it is from the left edge and from the bottom."
+              hi: "अब बिंदु तुम्हारा है: उसे पन्ने पर कहीं भी **खींचो**, और पढ़ो कि वह बाएँ किनारे से और नीचे के किनारे से कितनी दूर है।"
         - kind: space
           name: space1
       kind: column
       name: page
   by: reviewer
-  commit: dcf9f28fcbcc
-  at: 2026-11-01T05:17:30.535Z
-  code: 70650f1a26541c14
+  commit: ed0d765a64f1
+  at: 2026-11-01T18:04:30.135Z
+  code: db495bd6dd237aa1
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -3016,7 +3029,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
           isPassed: false
           reads: []
           saying: []
-        type: scene
     name: seatingPlan
     root:
       children:
@@ -3253,9 +3265,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: f42db9bc038b
-  at: 2026-11-01T05:47:02.064Z
-  code: c8b695ff0803dca9
+  commit: ed0d765a64f1
+  at: 2026-11-01T18:04:30.135Z
+  code: 24b6ba69181f849a
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -3420,7 +3432,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
           isPassed: false
           reads: []
           saying: []
-        type: scene
     name: streetAndHouse
     root:
       children:
@@ -3582,9 +3593,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: f42db9bc038b
-  at: 2026-11-01T05:46:25.591Z
-  code: ff844a241d63c16e
+  commit: ed0d765a64f1
+  at: 2026-11-01T18:04:30.135Z
+  code: 2cb08e3034651053
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -3882,7 +3893,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
           isPassed: false
           reads: []
           saying: []
-        type: scene
     name: twoLines
     root:
       children:
@@ -4201,6 +4211,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: f42db9bc038b
-  at: 2026-11-01T05:47:38.438Z
-  code: 87ae8c40a1fdcd60
+  commit: ed0d765a64f1
+  at: 2026-11-01T18:04:30.135Z
+  code: 91a21ff926bbf50b
