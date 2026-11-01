@@ -46,7 +46,7 @@ library/props/coordinates/coordinatePlane#readout                               
 library/props/coordinates, library/props/                                         a package, the library
 ```
 
-The roots are the real folders. One without a root is refused. Everything takes addresses: the preview (`?dev&at=<address>`), the chalk MCP (`look`, `play`, `affected`, `comments`, `comment`) and threads. Read and written in one place: `@chalk/content/address`.
+The roots are the real folders. One without a root is refused. Everything takes addresses: the preview (`?dev&at=<address>`), the chalk MCP (`show`, `affected`, `comments`, `comment`) and threads. Read and written in one place: `@chalk/content/address`.
 
 ## Props: the contract is the code (built)
 
@@ -62,8 +62,8 @@ The library exists so props are **reused** across chapters and **easy to discove
 
 ### Finding props: list, then look (built)
 
-1. **`look` at `library/props/`** (or one package): a line per prop, `address · role · purpose · used on N boards`. No ranking: matching a need to a purpose is the agent's judgement; the MCP reports facts.
-2. **`look` at a prop's address:** everything about it as for a piece (where it is defined, setup, state, what can be done, its parts), then its page: what it is for, every board that uses it, field use.
+1. **`show` `library/props/`** (or one package): a line per prop, `address · role · purpose · used on N boards`. No ranking: matching a need to a purpose is the agent's judgement; the MCP reports facts.
+2. **`show` a prop's address:** everything about it as for a piece (where it is defined, setup, state, what can be done, its parts), then its page: what it is for, every board that uses it, field use.
 3. **The preview's library, `?dev&at=library/props/`:** every prop drawn live at its defaults (or what it needs, when its defaults draw nothing), with role, purpose and use count; a click opens it.
 4. **`library/catalogue.md`:** the same pages as a file, for a plain checkout without the MCP.
 
@@ -75,7 +75,7 @@ A prop's address opens a board with only that prop on it, at its defaults or fro
 
 **The panel** beside it stands in for the lesson: its inputs (what a board's rules feed), its fields, and a button per action with its arguments. Built from the definition's schemas, one control per schema type all the way down (toggle, number with a slider when bounded, list to pick from, text, two boxes for both languages, objects, lists and choices of these), so nothing is written per prop. A field is set on the live prop as a rule would set it, checked first; Run does an action as a lesson would; the fields show the live values.
 
-**The MCP** takes the same: `look`/`play` at a prop's address take `state`, steps name its parts as its address does (`drag: "movePoint"`), and `play` has `{ call: "setX", args: { value: -3 } }` for its actions as a lesson would call them (refused on a board, where the lesson calls them). A package without that prop, fields that don't fit, an unknown action or arguments that don't fit are refused, saying what there is.
+**The MCP** takes the same: `show` at a prop's address takes `state`, steps name its parts as its address does (`drag: "movePoint"`), and its steps have `{ call: "setX", args: { value: -3 } }` for its actions as a lesson would call them (refused on a board, where the lesson calls them). A package without that prop, fields that don't fit, an unknown action or arguments that don't fit are refused, saying what there is.
 
 A prop that only draws inside another's frame (`drawsOn`) is shown as needing one; none does yet.
 
@@ -110,7 +110,7 @@ approved: 1a2b3c4
 - Must keep: every NCERT example and figure
 ```
 
-It shapes the objectives and flow. Screens are not the chapter's: every check that draws boards or props (`look`, layout, `play`) runs at the platform's check screens (360×640 phone, 640 column, 640×720 projector).
+It shapes the objectives and flow. Screens are not the chapter's: every check that draws boards or props (`show`, layout, steps) runs at the platform's check screens (360×640 phone, 640 column, 640×720 projector).
 
 ### 2. Source
 
@@ -155,7 +155,7 @@ Needs are words, never prop names. Board ids are the ids used in `content/` late
 
 ### 6. Build props
 
-Run bodies and the view, to the definition ([making-a-prop.md](making-a-prop.md)). **Gate (machine):** tests, `checkProp`, `look` at the prop's address at the check screens, `play` over its actions (the learner's gestures and `call`s) with frames to show nothing jumps. **Then person:** opens `?dev&at=library/props/<package>/<type>`, plays with it and its panel, and comments on it there, before any lesson uses it.
+Run bodies and the view, to the definition ([making-a-prop.md](making-a-prop.md)). **Gate (machine):** tests, `checkProp`, `show` the prop's address at the check screens, with `steps` over its actions (the learner's gestures and `call`s) with frames to show nothing jumps. **Then person:** opens `?dev&at=library/props/<package>/<type>`, plays with it and its panel, and comments on it there, before any lesson uses it.
 
 ### 7. Boards
 
@@ -203,7 +203,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 | Today | Proposed |
 |---|---|
 | `plan-chapter` | `plan-chapter`: steps 1–4, one gate at a time |
-| `build-props` | `build-props`: steps 5–6 (match via `look` at the library, definitions, build) |
+| `build-props` | `build-props`: steps 5–6 (match via `show` the library, definitions, build) |
 | `build-lesson` | `build-lesson`: step 7 |
 | `self-review`, `apply-review`, `wrap-up` | as today; `apply-review` adds before → after, re-points threads, and routes prop changes through the definition first |
 
@@ -220,8 +220,8 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 ## Build order
 
 1. ~~Addresses with roots, everywhere.~~
-2. ~~A prop at its address: the one-prop board, the preview, `look`/`play` with `state` and `call`.~~
+2. ~~A prop at its address: the one-prop board, the preview, `show` with `state` and `call`.~~
 3. ~~The panel, from the schemas.~~
-4. ~~Purpose (the first sentence of `describe`), the one generator: prop pages, `look` at the library, the preview's library, the catalogue.~~
+4. ~~Purpose (the first sentence of `describe`), the one generator: prop pages, `show` the library, the preview's library, the catalogue.~~
 5. ~~Comments on props; this board or the prop everywhere; threads and reviews under `authoring/`.~~
 6. ~~The pipeline: the files (moving `plan.md`, `runs/`, `source/`), gates and staleness (`pnpm check`'s pipeline step, the editor's Chalk tree), threads on planning files, the check on threads whose place is gone, before → after, the skills.~~

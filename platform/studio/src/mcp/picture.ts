@@ -1,9 +1,11 @@
 import { type Box, type Picture, onComposer } from "./app-driver";
 
 /**
- * Puts the pictures of one answer together, so each answer is one image: a board with its pieces
- * named, a piece cut out with its parts named, versions side by side (languages, widths, before
- * and after), a lesson's boards as thumbnails.
+ * Puts pictures together: a board with its pieces named, a piece cut out with its parts named,
+ * before and after side by side, a lesson's boards as thumbnails. What comes back arrives at the
+ * size it is seen: a picture with a side over MAX_EDGE or more than MAX_PIXELS is shrunk on its
+ * way to the model, so a tall one is cut into parts, top to bottom, each overlapping the last a
+ * little (a line of words cut by one is whole in the next), and one too wide is made narrower.
  *
  * Everything is drawn on a copy of a screenshot already taken, on a page of its own: the app's
  * page is never touched, so what was measured is what is shown, and the clean picture
@@ -30,8 +32,12 @@ export type Arrangement = { kind: "row" } | { kind: "grid"; columns: number; wid
 /** The space around a cut-out piece, in CSS pixels. */
 const PAD = 12;
 
-/** The tiles as one PNG. */
-export function compose(tiles: readonly Tile[], arrangement: Arrangement): Promise<Buffer> {
+/** The most a picture can be and still reach the model as it is (measured: larger ones are shrunk). */
+export const MAX_EDGE = 2000;
+export const MAX_PIXELS = 3_700_000;
+
+/** The tiles as PNGs: one picture, or its parts when it is too big to arrive whole. */
+export function compose(tiles: readonly Tile[], arrangement: Arrangement): Promise<Buffer[]> {
   const input = tiles.map((t) => {
     const crop = t.crop === undefined ? undefined : cropOf(t.picture, t.crop);
     return {
@@ -43,8 +49,12 @@ export function compose(tiles: readonly Tile[], arrangement: Arrangement): Promi
     };
   });
   return onComposer(async (page) => {
-    const data = await page.evaluate(draw, { tiles: input, arrangement });
-    return Buffer.from(data.replace(/^data:image\/png;base64,/, ""), "base64");
+    const parts = await page.evaluate(draw, {
+      tiles: input,
+      arrangement,
+      fit: { edge: MAX_EDGE, pixels: MAX_PIXELS },
+    });
+    return parts.map((data) => Buffer.from(data.replace(/^data:image\/png;base64,/, ""), "base64"));
   });
 }
 
@@ -100,7 +110,8 @@ async function draw(arg: {
     }[];
   }[];
   arrangement: { kind: "row" } | { kind: "grid"; columns: number; width: number };
-}): Promise<string> {
+  fit: { edge: number; pixels: number };
+}): Promise<string[]> {
   const COLORS = ["#2f6fed", "#0f9d76", "#b4570b", "#8a3ffc", "#c2185b", "#00838f", "#5d4037"];
   const RED = "#d93025";
   const load = (src: string) =>
@@ -233,5 +244,38 @@ async function draw(arg: {
       y += (rowH[r] ?? 0) + captionH + gap;
     }
   }
-  return out.toDataURL("image/png");
+  // Made to arrive as it is: narrower if too wide, then cut into parts no taller than allowed.
+  let whole = out;
+  if (out.width > arg.fit.edge) {
+    whole = document.createElement("canvas");
+    whole.width = arg.fit.edge;
+    whole.height = Math.round((out.height * arg.fit.edge) / out.width);
+    const w = whole.getContext("2d") as CanvasRenderingContext2D;
+    w.imageSmoothingQuality = "high";
+    w.drawImage(out, 0, 0, whole.width, whole.height);
+  }
+  const partH = Math.floor(Math.min(arg.fit.edge, arg.fit.pixels / whole.width));
+  if (whole.height <= partH) return [whole.toDataURL("image/png")];
+  const overlap = Math.round(40 * scale);
+  const parts: string[] = [];
+  for (let top = 0; ; top += partH - overlap) {
+    const h = Math.min(partH, whole.height - top);
+    const part = document.createElement("canvas");
+    part.width = whole.width;
+    part.height = h;
+    (part.getContext("2d") as CanvasRenderingContext2D).drawImage(
+      whole,
+      0,
+      top,
+      whole.width,
+      h,
+      0,
+      0,
+      whole.width,
+      h,
+    );
+    parts.push(part.toDataURL("image/png"));
+    if (top + h >= whole.height) break;
+  }
+  return parts;
 }

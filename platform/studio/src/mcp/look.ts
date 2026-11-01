@@ -26,7 +26,7 @@ import { type Labels, type Tile, compose } from "./picture";
 import { actionSites, defaultsSite, typeSite } from "./sites";
 
 /**
- * What `look` and `play` answer (platform/docs/seeing-boards.md). The rule: return what only the
+ * What `show` answers (platform/docs/seeing-boards.md, platform/docs/show.md). The rule: return what only the
  * running board knows (its state, what can be done now, how it looks), and point at the code for
  * what the code says (full repo paths and lines). Nothing is shortened; how much comes back is
  * decided by what was pointed at.
@@ -245,7 +245,10 @@ export const screenWords = (s: { width: number; height?: number }) =>
 const versionWords = (shot: Shot, o: Version & { play?: boolean }) =>
   `${shot.overflow.length === 0 ? "ok" : `${shot.overflow.length} problem${shot.overflow.length === 1 ? "" : "s"}`} · ${screenWords(o)} · ${o.locale}${o.play ? " · played" : ""}`;
 
-/** The board's answer: one line per piece, with its current state. */
+/**
+ * The board's answer: one line per piece, written where (its file once, at the top; each piece
+ * by its line in it), with its state where it isn't as the prop starts it.
+ */
 export function boardText(
   shot: Shot,
   where: Where,
@@ -261,12 +264,18 @@ export function boardText(
     `${pad("board", width)}${pad("", typeWidth)}→ ${site?.board ?? "?"}`,
   ];
   if (nodes.length === 0) out.push("(no board model: the page couldn't describe this board)");
+  const boardFile = site?.board?.slice(0, site.board.lastIndexOf(":"));
   for (const n of nodes) {
     const source = site?.pieces[n.path];
+    const at =
+      source !== undefined && boardFile !== undefined && source.startsWith(`${boardFile}:`)
+        ? shortLine(boardFile, Number(source.slice(boardFile.length + 1)))
+        : source;
     out.push(
-      `${pad(n.path, width)}${pad(n.prop, typeWidth)}→ ${source ?? "?"}${n.isShown ? "" : "   [hidden now]"}`,
+      `${pad(n.path, width)}${pad(n.prop, typeWidth)}→ ${at ?? "?"}${n.isShown ? "" : "   [hidden now]"}`,
     );
-    const live = { ...n.live };
+    const atStart = new Set(n.atStart ?? []);
+    const live = Object.fromEntries(Object.entries(n.live).filter(([k]) => !atStart.has(k)));
     for (const [k, b] of Object.entries(n.bound)) live[k] = b.value;
     if (Object.keys(live).length > 0)
       out.push(`${" ".repeat(width)}now: ${boardFields(live, shownAddress(shot.board, n.path))}`);
@@ -276,7 +285,7 @@ export function boardText(
   if (extra.errors.length > 0) out.push("page errors:", ...extra.errors.map((e) => `  ${e}`));
   if (nodes.length > 0)
     out.push(
-      `A piece's setup, parts and what can be done to it: look at ${shownAddress(shot.board, nodes[0]?.path)}.`,
+      `A piece's setup, its whole state, its parts and what can be done to it: show ${shownAddress(shot.board, nodes[0]?.path)}.`,
     );
   return out.join("\n");
 }
@@ -468,32 +477,33 @@ export type LookArgs = {
   screens?: Screen[];
   play?: boolean;
   labels?: boolean;
-  continue?: boolean;
   /** A prop on its own page: the fields it starts from, over its defaults. */
   state?: Readonly<Record<string, unknown>>;
   /** How many pages to draw the versions on at once (LOOK_PAGES); for measuring it. */
   pages?: number;
 };
 
-/** What a tool answers: text, and a picture. Nothing else: the text is the whole answer. */
+/** What a tool answers: text, and pictures, each arriving at the size it is seen (picture.ts). */
 export type Answer = {
   text: string;
-  image?: Buffer;
+  images?: Buffer[];
 };
 
-const PHONE = 390;
+/** The phone: the first of the check screens, where steps are done unless another is named. */
+const PHONE = CHECK_SCREENS[0] as Screen;
 
 type Version = Screen & { locale: Locale };
 
-function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }, isMany: boolean): Version[] {
-  const locales = a.locales ?? (isMany ? (["en", "hi"] as Locale[]) : (["en"] as Locale[]));
-  const screens = a.screens ?? (isMany ? CHECK_SCREENS : [{ width: PHONE }]);
+/** The versions to draw: both languages on the check screens, unless fewer are asked for. */
+function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }): Version[] {
+  const locales = a.locales ?? (["en", "hi"] as Locale[]);
+  const screens = a.screens ?? CHECK_SCREENS;
   return locales.flatMap((locale) => screens.map((screen) => ({ ...screen, locale })));
 }
 
 const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${screenWords(v)}` : "");
 
-/** `look` at a piece, a board or a group. A chapter or book goes to `check`. */
+/** `show` without steps, at a piece, a board or a group. A chapter or book goes to `check`. */
 export async function look(
   root: string,
   target: Exclude<Target, { kind: "many" }>,
@@ -520,9 +530,7 @@ export async function look(
       text: [...lineText(root, target.board, line.name), "", shown.text].join("\n"),
     };
   }
-  const versions = versionsOf(a, false);
-  if (a.continue === true && versions.length > 1)
-    throw new Error("continue looks at the board as you left it: one language and one width.");
+  const versions = versionsOf(a);
   const labels: Labels = a.labels === false ? "none" : target.kind === "piece" ? "parts" : "pieces";
   const isWholeProp =
     target.kind === "piece" && target.board.startsWith(PROPS_ROOT) && !target.address.includes("/");
@@ -540,8 +548,8 @@ export async function look(
     pictures: target.kind === "group" ? "thumb" : "full",
   });
   const board = target.kind === "group" ? target.unit : target.board;
-  // The versions are drawn at once, on up to LOOK_PAGES pages: the caller's own (the first, which
-  // `continue` goes on from) and pages of its own for the rest.
+  // The versions are drawn at once, on up to LOOK_PAGES pages: the caller's own and pages of its
+  // own for the rest.
   const drawn: Drawn[] = new Array(versions.length);
   let next = 0;
   const worker = async (k: number) => {
@@ -551,7 +559,7 @@ export async function look(
         root,
         board,
         options(v),
-        a.continue === true ? { steps: [], shots: "last", isContinued: true } : undefined,
+        undefined,
         k === 0 ? lane : `${lane}:look:${k}`,
       );
       for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
@@ -576,25 +584,26 @@ export async function look(
             ...s.overflow.map((p) => `  ${p}`),
           );
         }
-        if (i === 0 || versions.length > 1)
+        // Thumbnails of the first version: the others are checked, and their problems listed.
+        if (i === 0)
           tiles.push({
             picture: pictureOf(s),
             labels: "none",
-            caption: `${s.board.split("/").at(-1)}${versions.length > 1 ? ` · ${v.locale} ${screenWords(v)}` : ""}`,
+            caption: s.board.split("/").at(-1) ?? s.board,
           });
       }
     }
     const count = target.boards.length * versions.length;
-    const image =
-      tiles.length > 0 ? await compose(tiles, { kind: "grid", columns: 5, width: 160 }) : undefined;
+    const images =
+      tiles.length > 0 ? await compose(tiles, { kind: "grid", columns: 5, width: 160 }) : [];
     return {
       text: [
-        `${contentAddress(target.path)}: ${target.boards.length} board${target.boards.length === 1 ? "" : "s"}${versions.length > 1 ? `, ${count} drawings` : ""} · ${count - problems} ok · ${problems} with problems`,
+        `${contentAddress(target.path)}: ${target.boards.length} board${target.boards.length === 1 ? "" : "s"}${versions.length > 1 ? `, ${count} drawings` : ""} · ${count - problems} ok · ${problems} with problems${versions.length > 1 ? ` (thumbnails: ${captionOf(versions[0] as Version, 2)})` : ""}`,
         `boards: ${target.boards.map((b) => b.split("/").at(-1)).join(", ")}`,
         ...lines,
-        `Look at a board for its pieces: ${contentAddress(target.path)}/<board>.`,
+        `Show a board for its pieces: ${contentAddress(target.path)}/<board>.`,
       ].join("\n"),
-      ...(image === undefined ? {} : { image }),
+      images,
     };
   }
   const shots = drawn.map((d) => d.shots[0]).filter((s): s is Shot => s !== undefined);
@@ -628,21 +637,28 @@ export async function look(
             ...s.overflow.map((p) => `  ${p}`),
           ],
     );
-  const image = await timedCompose(() =>
-    compose(
-      shots.map((s, i) => ({
-        picture: pictureOf(s),
-        ...(target.kind === "piece" ? { crop: [target.address] } : {}),
-        labels,
-        problems: problemsByPiece(s.overflow),
-        caption: captionOf(versions[i] as Version, shots.length),
-      })),
-      { kind: "row" },
-    ),
-  );
+  // Each version a picture of its own, so each arrives at the size it was drawn.
+  const images: Buffer[] = [];
+  for (const [i, s] of shots.entries())
+    images.push(
+      ...(await timedCompose(() =>
+        compose(
+          [
+            {
+              picture: pictureOf(s),
+              ...(target.kind === "piece" ? { crop: [target.address] } : {}),
+              labels,
+              problems: problemsByPiece(s.overflow),
+              caption: captionOf(versions[i] as Version, shots.length),
+            },
+          ],
+          { kind: "row" },
+        ),
+      )),
+    );
   return {
     text: [text, ...otherProblems].join("\n"),
-    image,
+    images,
   };
 }
 
@@ -675,7 +691,7 @@ export async function check(
   progress: (message: string) => Promise<void>,
   signal: AbortSignal,
 ): Promise<Answer> {
-  const versions = versionsOf(a, true);
+  const versions = versionsOf(a);
   const jobs = target.units.flatMap((unit) => versions.map((v) => ({ unit, v })));
   const wanted = new Set(target.boards);
   const found: { board: string; v: Version; problems: string[] }[] = [];
@@ -729,14 +745,14 @@ export async function check(
   ];
   if (missing > 0 && !isCancelled)
     lines.push(
-      `${missing} drawings didn't come back (a board its lesson's page doesn't show): look at them one by one.`,
+      `${missing} drawings didn't come back (a board its lesson's page doesn't show): show them one by one.`,
     );
   for (const board of badBoards) {
     lines.push(shownAddress(board));
     for (const f of found.filter((x) => x.board === board))
       lines.push(...f.problems.map((p) => `  ${f.v.locale} · ${screenWords(f.v)}: ${p}`));
   }
-  if (badBoards.size > 0) lines.push("Look at a board to see it: look at its address.");
+  if (badBoards.size > 0) lines.push("Show a board to see it: show its address.");
   return {
     text: lines.join("\n"),
   };
@@ -751,16 +767,14 @@ export type PlayArgs = {
    * `most` kept (those that differ). The clock runs at real speed unless `speed` says otherwise.
    */
   frames?: { every?: number; most?: number };
-  /** The screen's height in px (default a phone's). */
-  height?: number;
+  /** The screen the steps are done on (default the phone: 360×640). */
+  screen?: Screen;
   /** How fast the board's clock runs (1: real time; default DEFAULT_SPEED). */
   speed?: number;
   steps: Step[];
-  continue?: boolean;
   shots?: "each" | "last" | "none";
   full?: boolean;
   locale?: Locale;
-  width?: number;
   labels?: boolean;
   /** A prop on its own page: the fields it starts from, over its defaults. */
   state?: Readonly<Record<string, unknown>>;
@@ -826,8 +840,8 @@ const FRAMES_PER_ROW = 4;
 const FRAME_WIDTH = 320;
 
 /**
- * A value for reading in play's lines: numbers to 3 decimals (a glide caught midway is
- * 1.0198540144593176). Only what is written; values sent to actions and look's state stay exact.
+ * A value for reading in the steps' lines: numbers to 3 decimals (a glide caught midway is
+ * 1.0198540144593176). Only what is written; values sent to actions and a board's state stay exact.
  */
 function rounded(v: unknown): unknown {
   if (typeof v === "number") return Number.isInteger(v) ? v : Number(v.toFixed(3));
@@ -849,10 +863,11 @@ function heardLine(h: Heard): string {
 
 export async function play(root: string, a: PlayArgs, lane: string): Promise<Answer> {
   const shots = a.shots ?? "last";
+  const screen = a.screen ?? PHONE;
   const o: ShotOptions = {
     locale: a.locale ?? "en",
-    width: a.width ?? PHONE,
-    ...(a.height === undefined ? {} : { height: a.height }),
+    width: screen.width,
+    ...(screen.height === undefined ? {} : { height: screen.height }),
     play: true,
     // Motion is watched at real speed: at 10× there would be nothing to see.
     speed: a.speed ?? (a.frames === undefined ? DEFAULT_SPEED : 1),
@@ -860,7 +875,11 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   };
   // A prop on its own page: its parts are named under it, without the piece (which is the prop).
   const isProp = a.board.startsWith(PROPS_ROOT);
-  const local = (path: string) => (isProp ? path.split("/").slice(1).join("/") || path : path);
+  // A part's name as steps write it: "town/walker/walker", not its encoded segment (walker%2Fwalker).
+  const local = (encoded: string) => {
+    const path = decodeURIComponent(encoded);
+    return isProp ? path.split("/").slice(1).join("/") || path : path;
+  };
   const piece = `${a.board.split("/").at(-1)}/`;
   const stepAsked = (words: string) => (isProp ? words.replace(` ${piece}`, " ") : words);
   const frames =
@@ -869,7 +888,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     root,
     a.board,
     o,
-    { steps: a.steps, shots, isContinued: a.continue === true, ...(frames ? { frames } : {}) },
+    { steps: a.steps, shots, ...(frames ? { frames } : {}) },
     lane,
   );
   const locale = o.locale ?? "en";
@@ -877,7 +896,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   for (const r of d.steps)
     if (r.changed !== undefined) r.changed = rounded(shown(r.changed, locale)) as typeof r.changed;
   const lines = [
-    `${shownAddress(a.board)}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed === 1 ? "" : Number.isFinite(o.speed) ? ` · clock ×${o.speed}` : " · clock jumps"}${a.continue ? " · continued" : ""}`,
+    `${shownAddress(a.board)}   ${a.steps.length} step${a.steps.length === 1 ? "" : "s"} · ${screenWords(screen)} · ${o.locale}${o.speed === 1 ? " · real time" : Number.isFinite(o.speed) ? ` · clock ×${o.speed}` : ""}`,
   ];
   if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
   if (d.heardAtOpen !== undefined) lines.push("as it opened:", ...d.heardAtOpen.map(heardLine));
@@ -926,7 +945,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   const labels: Labels = a.labels === false ? "none" : "pieces";
   const crop = a.full === true || changedPieces.size === 0 ? undefined : [...changedPieces];
   const after = [...d.steps].reverse().find((r) => r.picture !== undefined)?.picture;
-  let image: Buffer | undefined;
+  const images: Buffer[] = [];
   const has = (p: Picture, names: string[] | undefined) =>
     names === undefined || names.some((n) => p.boxes.some((b) => b.name === n));
   const motions = d.steps.filter((r) => r.motion !== undefined);
@@ -943,11 +962,13 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
         });
     // A grid, four to a row, so each frame stays big enough to read.
     if (tiles.length > 0)
-      image = await compose(tiles, {
-        kind: "grid",
-        columns: Math.min(FRAMES_PER_ROW, tiles.length),
-        width: FRAME_WIDTH,
-      });
+      images.push(
+        ...(await compose(tiles, {
+          kind: "grid",
+          columns: Math.min(FRAMES_PER_ROW, tiles.length),
+          width: FRAME_WIDTH,
+        })),
+      );
   } else if (shots === "each") {
     const tiles: Tile[] = [];
     if (d.before !== undefined) tiles.push({ picture: d.before, labels, caption: "before" });
@@ -959,7 +980,8 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
           caption: `${i + 1}. ${r.step}`,
           ...(crop !== undefined && has(r.picture, crop) ? { crop } : {}),
         });
-    if (tiles.length > 0) image = await compose(tiles, { kind: "row" });
+    // Each step a picture of its own: a row of them would be shrunk to fit.
+    for (const tile of tiles) images.push(...(await compose([tile], { kind: "row" })));
   } else if (shots === "last" && after !== undefined) {
     const tiles: Tile[] = [];
     if (d.before !== undefined)
@@ -976,9 +998,9 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
       problems: problemsByPiece(shot?.overflow ?? []),
       ...(crop !== undefined && has(after, crop) ? { crop } : {}),
     });
-    image = await compose(tiles, { kind: "row" });
+    images.push(...(await compose(tiles, { kind: "row" })));
   }
-  if (image !== undefined && crop !== undefined)
+  if (images.length > 0 && crop !== undefined)
     lines.push(
       motions.length > 0
         ? `picture: the frames that differed, in order, cut to ${crop.join(", ")} (full: true for the whole board)`
@@ -986,6 +1008,6 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     );
   return {
     text: lines.join("\n"),
-    ...(image === undefined ? {} : { image }),
+    images,
   };
 }

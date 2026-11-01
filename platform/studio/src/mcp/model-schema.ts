@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * The board's snapshot as the page gives it: what the preview's
  * `__chalkModel` is read as (made by @chalk/player's snapshot.ts, in the page). The same snapshot
- * Jugnu and tests read; look and play add where things are written (file:line).
+ * Jugnu and tests read; show adds where things are written (file:line).
  */
 const partSchema = z.object({
   path: z.string().describe("Its address: what steps, comments and Jugnu call it."),
@@ -33,6 +33,7 @@ export type NodeShape = {
   setup: Record<string, unknown>;
   given: string[];
   live: Record<string, unknown>;
+  atStart?: string[];
   bound: Record<string, { value?: unknown; from: string[] }>;
   parts: z.infer<typeof partSchema>[];
   can: z.infer<typeof canSchema>[];
@@ -55,6 +56,10 @@ export const nodeSchema: z.ZodType<NodeShape> = z.lazy(() =>
     live: z
       .record(z.unknown())
       .describe("Can change on this board (learner, rules), and derived values that follow."),
+    atStart: z
+      .array(z.string())
+      .optional()
+      .describe("The fields of live still at the prop's own start."),
     bound: z
       .record(z.object({ value: z.unknown().optional(), from: z.array(z.string()) }))
       .describe(

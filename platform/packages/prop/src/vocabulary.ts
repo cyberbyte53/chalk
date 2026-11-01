@@ -103,7 +103,7 @@ export type PropRole = (typeof PropRole)[keyof typeof PropRole];
 
 /**
  * What a prop is for: the first sentence of its `describe`, which is written to say it. Shown
- * where props are listed to be chosen from (the chalk MCP's `look` at library/props/, the
+ * where props are listed to be chosen from (the chalk MCP's `show` at library/props/, the
  * catalogue, Studio's library); the rest of `describe` is its world, in full.
  */
 export function purposeOf(def: { readonly describe: string }): string {

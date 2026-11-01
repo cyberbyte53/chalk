@@ -41,9 +41,20 @@ import { linePhrases } from "./sound/spoken-line";
 import type { WordsToSay } from "./sound/voice";
 
 /**
+ * Where a tool's jumping clock goes (platform/docs/show.md): to the board's end; to a line by its
+ * name, held there while it is said (a step done while it is said); or nowhere, held where it is.
+ */
+export type JumpTo = { kind: "end" } | { kind: "line"; line: string } | { kind: "here" };
+
+/** The page's setting, for every board on it: a tool acts on one board at a time. */
+export const toolClock: { to: JumpTo } = { to: { kind: "end" } };
+
+const JUMP_LIMIT = 100_000;
+
+/**
  * A board (platform/docs/board-model.md), running: the scene and its pieces on
  * the core's `Board`, with the same outside as `BoardRuntime`, so the player, the recorder and the
- * tools (`look`, `play`) run it the same way. Its clock moves on each screen frame; the board's
+ * tools (`show`) run it the same way. Its clock moves on each screen frame; the board's
  * own timing (moves, waits, lines being said) is the core's queue.
  *
  * Jugnu doesn't run on these boards yet.
@@ -305,7 +316,7 @@ export class BoardRuntime {
   /**
    * Everything heard on this board so far, in order (platform/docs/sound.md): words (who said
    * them, the words the voice was given, when, for how long, when cut) and sounds (which, at which
-   * signal, when). What an agent reviews of the sound (`play` prints each step's), before anyone
+   * signal, when). What an agent reviews of the sound (`show` prints each step's), before anyone
    * listens to the clips.
    */
   heard(): readonly Heard[] {
@@ -440,7 +451,7 @@ export class BoardRuntime {
       // screen then shows where it ends (platform/docs/one-clock.md).
       if (this.services.isJumping === true)
         try {
-          this.core.runUntilIdle();
+          this.jump(toolClock.to);
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
           this.services.onError(`Board ${this.board.name}: ${message}`, error);
@@ -486,6 +497,29 @@ export class BoardRuntime {
       this.services.onError(`Board ${this.board.name}: ${message}`, error);
     }
     return Promise.resolve();
+  }
+
+  /** A jumping clock goes where the tool says: to the end, to a line (held while it is said), or nowhere. */
+  private jump(to: JumpTo): void {
+    if (to.kind === "here") return;
+    if (to.kind === "end") {
+      this.core.runUntilIdle();
+      return;
+    }
+    for (let n = 0; this.core.lineInTurn !== to.line; n++) {
+      const next = this.core.queued[0]?.at;
+      if (next === undefined) return;
+      if (n >= JUMP_LIMIT)
+        throw new Error(
+          `still busy after ${JUMP_LIMIT} queued events (a repeat that never stops?)`,
+        );
+      this.core.advanceTo(next);
+    }
+  }
+
+  /** The line being said now, by its name. */
+  lineInTurn(): string | undefined {
+    return this.core.lineInTurn;
   }
 
   /**
@@ -543,7 +577,7 @@ export class BoardRuntime {
     return {};
   }
 
-  // ---- what agents read (look, play) ----
+  // ---- what agents read (show) ----
 
   snapshot(page?: ParentNode): BoardSnapshot {
     const nodes = this.propNames().map((name) => this.nodeSnapshot(name, page));
@@ -585,6 +619,10 @@ export class BoardRuntime {
       if (shown?.[key] === false) continue;
       (key in given ? setup : live)[key] = value;
     }
+    const start = (def.start ?? {}) as Readonly<Record<string, unknown>>;
+    const atStart = Object.keys(live).filter(
+      (k) => k in start && JSON.stringify(live[k]) === JSON.stringify(start[k]),
+    );
     const problems: string[] = [];
     const can: CanSnapshot[] = [];
     for (const [action, via] of fromControls) {
@@ -610,6 +648,7 @@ export class BoardRuntime {
       setup,
       given: Object.keys(given).filter((f) => f in setup),
       live,
+      ...(atStart.length > 0 ? { atStart } : {}),
       bound: {},
       parts,
       can,

@@ -15,7 +15,7 @@ These left the prose because `pnpm build-content` / `pnpm check` can catch them.
 **Proposed (from the 44 comments)**
 | Check | Catches | Comments it would have caught |
 |---|---|---|
-| Visual: render every board at phone width, flag maths past the edge, text spilling out of buttons, overlapping buttons, pieces outside the phone. **`look` reports these now**, for a board or, pointed at a chapter, for every board in both languages at two widths | Nothing draws outside its stage | "equations not contained in the button", rendering issues ×6 |
+| Visual: render every board at phone width, flag maths past the edge, text spilling out of buttons, overlapping buttons, pieces outside the phone. **`show` reports these now**, for a board or, pointed at a chapter, for every board in both languages at two widths | Nothing draws outside its stage | "equations not contained in the button", rendering issues ×6 |
 | Visual: frame-diff a static board twice; flag pixels that move | Jitter | the shaking axis numbers |
 | `Q.` / `A.` / bold label not at the start of a text piece | Labels start their own paragraph | "Q should be on new line" |
 | Inline maths longer than N tokens inside a sentence | Maths on its own line | "why use words to describe maths" (partly) |

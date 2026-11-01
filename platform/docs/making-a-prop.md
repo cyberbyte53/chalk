@@ -4,7 +4,7 @@ How to add a prop, step by step. Written so a person or an AI agent can follow i
 
 ## 0. Build from what exists first
 
-Before writing a new prop, `look` at `library/props/` (a line per prop: its address, role, what it is for, how many boards use it), then at the address of any that might fit (everything about it, and every board that uses it), or open `?dev&at=library/props/` in the preview to see them all and play with each. Then check whether it is:
+Before writing a new prop, `show` `library/props/` (a line per prop: its address, role, what it is for, how many boards use it), then the address of any that might fit (everything about it, and every board that uses it), or open `?dev&at=library/props/` in the preview to see them all and play with each. Then check whether it is:
 
 - **one more part on a prop that exists** (a walker on the coordinate plane): write the part as a prop of its own and add it to that prop's `children`;
 - **existing props together**, each with its own laws (a stepper, a line of maths and a plane showing one polynomial): write a prop that holds them;

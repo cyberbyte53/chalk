@@ -144,7 +144,7 @@ export type BoardReach = {
    * Each line it says (platform/docs/sound.md), by its name: a piece's line is its piece's name
    * (addressed `board#piece/said`), a line of its own its own (`board#name`). Its piece, what it is
    * about, who says it, and its moment as the event it waits for. Lines are part of the board, so
-   * comments on them, `look` at them and gone-checks resolve them as they do pieces.
+   * comments on them, `show` them and gone-checks resolve them as they do pieces.
    */
   lines?: Record<string, { piece?: string; about?: string; speaker: string; moment: string }>;
 };

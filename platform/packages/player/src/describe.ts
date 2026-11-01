@@ -12,7 +12,7 @@ const nothing = () => undefined;
 /**
  * A prop as the student sees it right now: its view drawn from this state (as markup, the same
  * code the phone runs), and read for its tags (`does`, `says`, `shows`). The one way anything
- * describes a prop: the snapshot, `look` and `play`, Jugnu on the phone and on the server, tests.
+ * describes a prop: the snapshot, `show`, Jugnu on the phone and on the server, tests.
  * Words are read in `locale`.
  */
 export function describeView(

@@ -15,7 +15,7 @@ Most corrections are one-offs, already fixed in the files. A few are patterns: t
    - **Pattern:** the same mistake could come up on another board, lesson or chapter.
    - **Unsure:** ask the person.
 3. **For each pattern, find its smallest home**, in this order. Take the first that works:
-   1. a **check** the build or `look` can run (write it, or add it to the Proposed table in `authoring/taste/checks.md`);
+   1. a **check** the build or `show` can run (write it, or add it to the Proposed table in `authoring/taste/checks.md`);
    2. an **exemplar**: the board or file you just fixed becomes the example in `authoring/taste/exemplars.md`;
    3. an **edit to an existing line** in the stage guide for that step (`authoring/taste/guides/…`);
    4. a **new line** in that guide, one sentence, naming the case it came from;

@@ -15,8 +15,8 @@ import { type Element, type Observation, type PropView, nameOf } from "./vocabul
  *   typed (a number as a number), with the words the screen writes when they aren't the value.
  *
  * Each is named: an input by its action (and a key, when several inputs do one action), a shown part
- * by the name given. The name is its address under the piece (`game/giveRound`): what `look`,
- * `play`, comments and Jugnu's pointing use. The description of a prop (for agents, Jugnu, tests)
+ * by the name given. The name is its address under the piece (`game/giveRound`): what `show`,
+ * its steps, comments and Jugnu's pointing use. The description of a prop (for agents, Jugnu, tests)
  * is read from these tags in the view drawn from its state: there is no second copy to keep in step.
  */
 

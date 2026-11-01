@@ -64,7 +64,7 @@ export function clipsOf(
 }
 
 /**
- * A sound (platform/docs/sound.md): a role (right, step), by its name (what `play` and the log
+ * A sound (platform/docs/sound.md): a role (right, step), by its name (what `show` and the log
  * show), where its recording is, and how long it plays (a line waiting on it knows when it may
  * start: one-clock.md). The sound library defines them (library/sounds); a prop's sound view or a
  * lesson's cue plays one by name.

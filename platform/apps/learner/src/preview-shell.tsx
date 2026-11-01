@@ -29,7 +29,7 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
-import { onBoardRunning, useWhenChanged } from "@chalk/player";
+import { type JumpTo, onBoardRunning, toolClock, useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
@@ -1202,7 +1202,17 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     // have settled. A tool acting on a board waits for this before reading it.
     const busy = window as Window & { __chalkBusy?: () => string[] };
     busy.__chalkBusy = () => runningBoards().flatMap((runtime) => runtime.busyWith());
-    // What the boards were heard to say, in order (the chalk MCP's play prints each step's).
+    // Where a tool's jumping clock goes next (the chalk MCP's show: a step done while a line is
+    // said), and the lines being said now.
+    const jump = window as Window & {
+      __chalkJumpTo?: (to: JumpTo) => void;
+      __chalkLines?: () => string[];
+    };
+    jump.__chalkJumpTo = (to) => {
+      toolClock.to = to;
+    };
+    jump.__chalkLines = () => runningBoards().flatMap((runtime) => runtime.lineInTurn() ?? []);
+    // What the boards were heard to say, in order (the chalk MCP's show prints each step's).
     const heard = window as Window & { __chalkHeard?: () => unknown[] };
     heard.__chalkHeard = () => runningBoards().flatMap((runtime) => runtime.heard());
     // One of a piece's actions, as the lesson would call it (a prop on its own page has no lesson:
@@ -1235,6 +1245,8 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     return () => {
       w.__chalkModel = undefined;
       busy.__chalkBusy = undefined;
+      jump.__chalkJumpTo = undefined;
+      jump.__chalkLines = undefined;
       heard.__chalkHeard = undefined;
       call.__chalkCall = undefined;
       props.__chalkProps = undefined;
@@ -1302,9 +1314,12 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     params.get("speed") === "jump" ? Number.POSITIVE_INFINITY : Number(params.get("speed")) || 1;
   // A tool reading where boards end: the screen's own animations end at once too (app.css), at
   // the same end state, so it needn't wait for them.
+  // `&hold`: a tool acting on the board holds its clock until it says where to go (__chalkJumpTo).
+  const isHeld = params.has("hold");
   useLayoutEffect(() => {
     document.documentElement.toggleAttribute("data-jump", speed === Number.POSITIVE_INFINITY);
-  }, [speed]);
+    toolClock.to = isHeld ? { kind: "here" } : { kind: "end" };
+  }, [speed, isHeld]);
   // The column's width, to see the board as another device draws it (a phone by default).
   const width = Number(params.get("width")) || undefined;
   const locale = params.get("locale") === "hi" ? Locale.Hi : Locale.En;

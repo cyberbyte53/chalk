@@ -48,7 +48,7 @@ export { type DragAttrs, type DragSpec, useDrags } from "./drag";
 export { describeView } from "./describe";
 export { BoardClockContext, useBoardTween, type BoardClock } from "./board-clock";
 export { BoardSpeedContext } from "./use-board-runtime";
-export { BoardRuntime } from "./runtime";
+export { BoardRuntime, type JumpTo, toolClock } from "./runtime";
 export { type ScriptLine, scriptOf } from "./script";
 export { type MathsReader, type RichSpeech, type SaidPiece, richSpeech } from "./rich-text-speech";
 export { addressOf, findNode, partPaths, partPathsIn, stampPaths } from "./part-paths";

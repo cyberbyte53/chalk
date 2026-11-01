@@ -6,7 +6,7 @@ import { join } from "node:path";
  * Everything a content build could read, as one hash: every file under content/, library/ and
  * platform/ (paths and bytes) and the repo's root files. A superset of what any build reads, so
  * when it is unchanged since the last good build, build/ is already what a build would write and
- * the build can be skipped (look and play do). A long-lived process (the MCP server) asks often:
+ * the build can be skipped (show does). A long-lived process (the MCP server) asks often:
  * the files are hashed again only when one's time or size moved (an edit moves both, so edits are
  * always seen); otherwise the last hash stands.
  */

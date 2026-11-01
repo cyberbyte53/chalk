@@ -185,6 +185,48 @@ async function untilIdle(page: Page, speed: number): Promise<string[]> {
   }
 }
 
+/** Each call's board is a new run of it (`&run=`): the preview draws it afresh. */
+let runs = 0;
+
+type JumpTo = { kind: "end" } | { kind: "line"; line: string } | { kind: "here" };
+
+/** Where a held board's clock goes next (the preview's __chalkJumpTo; player's runtime.ts). */
+const jumpTo = (page: Page, to: JumpTo) =>
+  page.evaluate(
+    (x) => (window as { __chalkJumpTo?: (to: unknown) => void }).__chalkJumpTo?.(x),
+    to,
+  );
+
+/**
+ * Runs a held board's clock to where a step is done: while its line is said, or (no line) the
+ * board's end. Says what went wrong, if anything: the line never came, or the board didn't settle.
+ */
+async function reach(page: Page, line: string | undefined): Promise<string | undefined> {
+  if (line === undefined) {
+    await jumpTo(page, { kind: "end" });
+    const running = await untilIdle(page, Number.POSITIVE_INFINITY);
+    return running.length > 0 ? stillRunning(running) : undefined;
+  }
+  await jumpTo(page, { kind: "line", line });
+  const got = await page
+    .waitForFunction(
+      (name) => {
+        const w = window as { __chalkLines?: () => string[]; __chalkBusy?: () => string[] };
+        if ((w.__chalkLines?.() ?? []).includes(name)) return "said";
+        return (w.__chalkBusy?.() ?? []).length === 0 ? "ended" : false;
+      },
+      line,
+      { timeout: 10_000, polling: "raf" },
+    )
+    .then((h) => h.jsonValue())
+    .catch(() => "busy");
+  if (got === "said") return undefined;
+  const said = ((await recorded(page)).heard ?? []).flatMap((h) => ("line" in h ? [h.line] : []));
+  return got === "ended"
+    ? `✗ ${line} isn't said from here: the board came to its end (said so far: ${said.join(", ") || "nothing"})`
+    : `✗ ${line} didn't come within 10s: the board is still busy (${(await busyNow(page)).join(", ")})`;
+}
+
 /** The line for a board still busy at the cap. */
 export const stillRunning = (running: readonly string[]) =>
   `still running after ${SETTLE_CAP}s of board time: ${running.join(", ")}`;
@@ -397,12 +439,15 @@ export type ShotOptions = {
 /** A point in a prop's own units, inside a frame (a plane's (x, y), a number line's x). */
 export type Point = { x: number; y?: number };
 
-export type Step =
+export type Step = (
   | { tap: string; at?: Point }
-  | { drag: string; by?: [number, number]; to?: Point }
-  | { wait: number }
+  | { drag: string; to: Point }
   /** One of a piece's actions, as a lesson would call it (on a prop's own page, which has none). */
-  | { call: string; on: string; args?: Readonly<Record<string, unknown>> };
+  | { call: string; on: string; args?: Readonly<Record<string, unknown>> }
+) & {
+  /** Done while this line is being said (its name), not after the board has come to its end. */
+  during?: string;
+};
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
 /** What was heard on the board, in order: the player's own log (words, or a sound at a signal). */
@@ -573,7 +618,6 @@ type Lane = {
   page: Page;
   base: string;
   errors: string[];
-  lastBoard?: string;
   /** Content was rebuilt since this page last loaded: load it afresh, don't move it. */
   isStale: boolean;
   /**
@@ -766,20 +810,20 @@ const isPulledAway = (error: unknown): boolean =>
     firstLine(error),
   );
 
-/**
- * Each board at `board` (one board, or a whole lesson) drawn at phone width; with `steps`, a
- * single board acted on first, a picture after each step if asked. A lane's calls run one at a
- * time; different lanes (agent connections) draw at once, each on its own page. A call that the
- * page is pulled away from (content reloaded under it) is tried again from a fresh load, a few
- * times at most, unless it continued a board, whose state is then gone.
- */
-/** What play asks of a board: its steps, which pictures, whether it goes on from the last call, and frames over time. */
+/** What steps ask of a board: the steps, which pictures, and frames over time. */
 export type Act = {
   steps: Step[];
   shots: "each" | "last" | "none";
-  isContinued: boolean;
   frames?: FramesSpec;
 };
+
+/**
+ * Each board at `board` (one board, or a whole lesson) drawn, from its start: every call opens it
+ * afresh, so the same call always draws the same. With `steps`, a single board acted on first, a
+ * picture after each step if asked. A lane's calls run one at a time; different lanes (agent
+ * connections) draw at once, each on its own page. A call that the page is pulled away from
+ * (content reloaded under it) is tried again from a fresh load, a few times at most.
+ */
 
 export function shoot(
   root: string,
@@ -809,8 +853,7 @@ export function shoot(
           try {
             return await once();
           } catch (error) {
-            if (act?.isContinued === true || !isPulledAway(error) || attempt >= PULLED_AWAY_TRIES)
-              throw error;
+            if (!isPulledAway(error) || attempt >= PULLED_AWAY_TRIES) throw error;
             const at = lanes.get(lane);
             if (at !== undefined) {
               at.isStale = true;
@@ -938,13 +981,13 @@ const recorded = (page: Page): Promise<Recorded> =>
   });
 
 const stepWords = (step: Step): string =>
-  "tap" in step
-    ? `tap ${step.tap}`
-    : "drag" in step
-      ? `drag ${step.drag} ${step.to !== undefined ? `to ${pointWords(step.to)}` : `by ${(step.by ?? [0, 0]).join(", ")}`}`
-      : "call" in step
-        ? `call ${step.call}${step.args !== undefined && Object.keys(step.args).length > 0 ? ` ${JSON.stringify(step.args)}` : ""}`
-        : `wait ${step.wait}ms`;
+  `${
+    "tap" in step
+      ? `tap ${step.tap}${step.at === undefined ? "" : ` at ${pointWords(step.at)}`}`
+      : "drag" in step
+        ? `drag ${step.drag} to ${pointWords(step.to)}`
+        : `call ${step.call}${step.args !== undefined && Object.keys(step.args).length > 0 ? ` ${JSON.stringify(step.args)}` : ""}`
+  }${step.during === undefined ? "" : ` while ${step.during} is said`}`;
 const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y})`);
 
 /**
@@ -1011,29 +1054,18 @@ async function shootNow(
   act: Act | undefined,
   lane: string,
 ): Promise<Drawn> {
-  // Acting starts from a fresh board (a new run) unless it continues this lane's last board.
-  const isContinued = act?.isContinued === true;
-  const run = act !== undefined && !isContinued ? `&run=${Date.now()}` : "";
-  const url = `${await previewUrl(root, shownAddress(board), o)}&shot${run}`;
+  // Every call draws the board from its start (a new run: the preview remounts it), so the same
+  // call always draws the same. Steps hold the board's clock until each says where it is done.
+  const isActed = act !== undefined && act.steps.length > 0;
+  const speed = o.speed ?? 1;
+  const isJumping = speed === Number.POSITIVE_INFINITY;
+  if (isActed && !isJumping && act.steps.some((s) => s.during !== undefined))
+    throw new Error("`during` needs the board's clock to jump: drop `speed` and `frames`.");
+  const url = `${await previewUrl(root, shownAddress(board), o)}&shot&run=${++runs}${isActed && isJumping ? "&hold" : ""}`;
   const target = new URL(url);
   const base = target.origin;
   const at = await openPage(lane, base);
   const { page } = at;
-  if (isContinued) {
-    // Going on from a board that isn't there would act on a fresh one and look like it worked.
-    const why =
-      at.lastBoard === undefined
-        ? "nothing was drawn on this connection yet"
-        : at.lastBoard !== board
-          ? `this connection's last board is ${at.lastBoard}`
-          : at.isStale
-            ? "content was rebuilt since, so the board was reloaded"
-            : undefined;
-    if (why !== undefined)
-      throw new Error(
-        `Can't continue ${shownAddress(board)}: ${why}. Run the steps again without continue.`,
-      );
-  }
   at.errors.length = 0;
   await timed("move to the board", async () => {
     await page.setViewportSize({
@@ -1043,9 +1075,7 @@ async function shootNow(
     const isOnApp = page.url().startsWith(base) && !at.isStale;
     at.isStale = false;
     try {
-      if (isContinued) {
-        // The board as the last call left it.
-      } else if (isOnApp)
+      if (isOnApp)
         await page.evaluate((q) => {
           history.pushState(null, "", q);
           dispatchEvent(new PopStateEvent("popstate"));
@@ -1061,15 +1091,14 @@ async function shootNow(
       );
     }
     try {
-      if (!isContinued)
-        await page.waitForFunction(
-          (q) =>
-            document.body.dataset.previewReady === q ||
-            (document.body.dataset.previewShown === q &&
-              document.querySelector(".preview-empty") !== null),
-          target.search,
-          { timeout: READY_TIMEOUT },
-        );
+      await page.waitForFunction(
+        (q) =>
+          document.body.dataset.previewReady === q ||
+          (document.body.dataset.previewShown === q &&
+            document.querySelector(".preview-empty") !== null),
+        target.search,
+        { timeout: READY_TIMEOUT },
+      );
     } catch {
       const shown = ((await page.textContent("body").catch(() => "")) ?? "").trim().slice(0, 200);
       await closeLane(lane);
@@ -1090,28 +1119,38 @@ async function shootNow(
   // and what was read across it would mix two boards.
   const buildAt = () => page.evaluate(() => document.body.dataset.previewBuild ?? "");
   const drawnFrom = await timed("read: which build", buildAt);
-  // The board as it opens has settled: its opening script done, anything it set going finished.
-  const speed = o.speed ?? 1;
-  const runningAtOpen = isContinued
-    ? []
-    : await timed("wait: board idle", () => untilIdle(page, speed));
-  await timed("wait: fonts, images, frames", () => settle(page));
-  at.lastBoard = board;
+  // The board as it opens has played to its end (its opening script done, anything it set going
+  // finished); with steps, to where the first step is done.
+  const first = act?.steps[0];
+  const runningAtOpen =
+    isActed && isJumping ? [] : await timed("wait: board idle", () => untilIdle(page, speed));
   const steps: StepResult[] = [];
   let before: Picture | undefined;
   let heardAtOpen: Heard[] = [];
-  if (act !== undefined && act.steps.length > 0) {
+  if (isActed) {
     if ((await page.$$(".preview-card")).length !== 1)
       throw new Error("Steps act on one board: name a board, not a lesson.");
+    // A step whose line never comes can't be done as asked: it says so, and nothing after it runs.
+    const missed = isJumping ? await reach(page, first?.during) : undefined;
+    await settle(page, act.shots !== "none");
     if (act.shots !== "none") before = await pictureOf(page.locator(".preview-card").first());
     let seen = await recorded(page);
     heardAtOpen = seen.heard;
     let modelWas = [...(await readModels(page)).values()][0];
+    let unreached = first?.during === undefined ? undefined : missed;
+    // The board still busy when the first step comes (no line asked for): said with that step.
+    const busyAtFirst = first?.during === undefined ? missed : undefined;
     for (const [i, step] of act.steps.entries()) {
-      at.errors.length = 0;
       const words = stepWords(step);
-      if ("wait" in step) await page.waitForTimeout(Math.min(step.wait, 10000));
-      else if ("call" in step) {
+      if (unreached !== undefined) {
+        steps.push({ step: words, events: [], passed: false, errors: [unreached] });
+        break;
+      }
+      at.errors.length = 0;
+      if (i === 0 && busyAtFirst !== undefined) at.errors.push(busyAtFirst);
+      // Nothing moves while the step is done: the clock goes on once it says where to.
+      if (isJumping) await jumpTo(page, { kind: "here" });
+      if ("call" in step) {
         const refused = await page.evaluate(
           ([on, action, args]) =>
             (
@@ -1160,7 +1199,7 @@ async function shootNow(
           if (box === null) throw new Error(`${step.drag} isn't on screen`);
           const x = box.x + box.width / 2;
           const y = box.y + box.height / 2;
-          const to = aimed ?? { x: x + (step.by?.[0] ?? 0), y: y + (step.by?.[1] ?? 0) };
+          const to = aimed ?? { x, y };
           await page.mouse.move(x, y);
           await page.mouse.down();
           await page.mouse.move(to.x, to.y, { steps: 12 });
@@ -1169,6 +1208,8 @@ async function shootNow(
       }
       const isLast = i === act.steps.length - 1;
       const isPictured = act.shots === "each" || (act.shots === "last" && isLast);
+      // What the step did runs to where the next step is done (its line, or the board's end).
+      const next = act.steps[i + 1];
       // With frames asked for, the board is watched as it moves; else read once it has settled.
       const motion =
         act.frames === undefined
@@ -1179,11 +1220,17 @@ async function shootNow(
               act.frames,
               async () => (await busyNow(page)).length === 0,
             );
-      const running = motion === undefined ? await untilIdle(page, speed) : await busyNow(page);
-      if (running.length > 0)
-        at.errors.push(
-          motion === undefined ? stillRunning(running) : `still running: ${running.join(", ")}`,
-        );
+      if (isJumping) {
+        const why = await reach(page, next?.during);
+        if (why !== undefined && next?.during !== undefined) unreached = why;
+        else if (why !== undefined) at.errors.push(why);
+      } else {
+        const running = motion === undefined ? await untilIdle(page, speed) : await busyNow(page);
+        if (running.length > 0)
+          at.errors.push(
+            motion === undefined ? stillRunning(running) : `still running: ${running.join(", ")}`,
+          );
+      }
       await settle(page, isPictured);
       const now = await recorded(page);
       const modelNow = [...(await readModels(page)).values()][0];
@@ -1203,7 +1250,7 @@ async function shootNow(
       });
       seen = now;
     }
-  }
+  } else await timed("wait: fonts, images, frames", () => settle(page));
   const cards = await page.locator(".preview-card").all();
   const shots: Shot[] = [];
   const models = await timed("read: board state", () => readModels(page));
@@ -1223,7 +1270,6 @@ async function shootNow(
       }),
     );
     // After steps, the picture is the steps' to give (or not): don't take another.
-    const isActed = act !== undefined && act.steps.length > 0;
     const pictures = o.pictures ?? "full";
     const picture =
       isActed || pictures === "none"
@@ -1251,7 +1297,7 @@ async function shootNow(
       : undefined;
   // Redrawn by a rebuild while it was read: what was read is from two boards. The same as a page
   // pulled away (a reload): drawn again from the start, by the retry around every drawing.
-  if (!isContinued && (await timed("read: which build", buildAt)) !== drawnFrom)
+  if ((await timed("read: which build", buildAt)) !== drawnFrom)
     throw new Error("navigation: a rebuild redrew the board while it was read");
   return {
     shots,

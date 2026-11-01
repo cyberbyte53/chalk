@@ -57,8 +57,8 @@ function sameValue(a: unknown, b: unknown): boolean {
 }
 
 /**
- * What a board was heard to say and play, in order: the player's log, which the tools read (`play`,
- * `look`) through the preview.
+ * What a board was heard to say and play, in order: the player's log, which the tools read (`show`)
+ * through the preview.
  */
 /** Words as they were heard on a board. */
 export type HeardWords = {

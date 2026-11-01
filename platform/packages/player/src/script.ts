@@ -5,7 +5,7 @@ import type { PropModule } from "./prop-module";
 /**
  * A board's script (platform/docs/sound.md): every line it says, in the order it can be heard, with
  * who says it, what the piece shows and the lesson's own words for it. The one place lines are read
- * from a board: the voice is made from it, the player says it, the preview and `look` show it.
+ * from a board: the voice is made from it, the player says it, the preview and `show` show it.
  */
 export type ScriptLine = {
   /** Its name: the piece that says it, or a narration line's own. */

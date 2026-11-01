@@ -9,7 +9,7 @@ import { takes } from "./snapshot";
  * A prop's page: everything about it a person or an agent needs to choose it and use it, read from
  * its definition (its contract: the code is the one writer) and from what the build recorded about
  * every board that places it. One generator for every place props are listed or shown: the chalk
- * MCP's `look` at library/props/ (a line each) and at a prop's address (its page), read through
+ * MCP's `show` at library/props/ (a line each) and at a prop's address (its page), read through
  * the preview (`__chalkProps`), Studio's library, and library/catalogue.md. Nothing here is
  * written by hand.
  */

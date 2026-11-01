@@ -3,7 +3,7 @@ import type { BoardRuntime } from "./runtime";
 
 /**
  * The one snapshot (see @chalk/prop's snapshot.ts): every node by address, its setup, live and
- * bound values, its parts and what can be done to it. The chalk MCP (look, play), Jugnu and tests read this.
+ * bound values, its parts and what can be done to it. The chalk MCP (show), Jugnu and tests read this.
  */
 
 /** Every board running on the page, newest last (the dev preview reads it). */

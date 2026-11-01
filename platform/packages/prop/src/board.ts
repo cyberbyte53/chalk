@@ -703,6 +703,11 @@ export class Board {
     return this.queue.nextAt !== undefined;
   }
 
+  /** The line being said now, by its name (a tool acts while it is said). */
+  get lineInTurn(): string | undefined {
+    return this.inTurn?.name;
+  }
+
   /** What waits, in order: when, and who queued it. */
   get queued(): readonly { at: number; owner: string; outs: readonly Out[] }[] {
     return this.queue.all.map((e) => ({ at: e.at, owner: e.owner, outs: e.what.outs }));

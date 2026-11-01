@@ -106,7 +106,7 @@ let rebuild: ChildProcess | undefined;
 server.listen(PORT, HOST, () => {
   console.error(`studio service on http://${HOST}:${PORT} (the chalk MCP at /mcp)`);
   rebuild = startRebuild();
-  // The app and its preview pages: the person's editor and look/play need them.
+  // The app and its preview pages: the person's editor and show need them.
   // Pages loaded with it, so an agent's first look doesn't wait for the app to load.
   warmPages(ROOT).catch((error: unknown) => console.error(String(error)));
 });

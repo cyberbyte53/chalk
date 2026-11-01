@@ -1,5 +1,5 @@
 /**
- * The board as agents read it: one snapshot, the same for the chalk MCP's look and play, Jugnu and
+ * The board as agents read it: one snapshot, the same for the chalk MCP's show, Jugnu and
  * tests. Each placed prop by address, with what was fixed where it was placed (setup), what can
  * change here (live), what is worked out from other values (bound, with where from), what is on
  * screen (parts, read from what its view draws), and what can be done to it (can). The types live here so every
@@ -50,6 +50,8 @@ export type NodeSnapshot = {
   given: readonly string[];
   /** Can change on this board, and derived values that follow them. */
   live: Readonly<Record<string, unknown>>;
+  /** The fields of `live` still as the prop starts them (its own start): nothing has moved them. */
+  atStart?: readonly string[];
   /** Worked out from other values (by its group, or the board's rules): never set directly. */
   bound: Readonly<Record<string, BoundSnapshot>>;
   parts: readonly PartSnapshot[];

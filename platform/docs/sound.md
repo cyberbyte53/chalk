@@ -76,7 +76,7 @@ One engine plays every cue, on every screen (a phone, the preview, the editor's 
 - **The browser's first-touch rule:** a page may sound only once it is touched. A student reaches a board by a tap (opening a lesson, Continue); a board opened without one (a link, a refresh) is shown held, and the first touch on it starts it (and presses nothing).
 - **A line's length is known when it starts:** its clips' (an estimate from its words without clips). The board puts its end on its clock at that length + 5 s (`GRACE`); the engine **tells the line ended** when its sound really does, and the board goes on then. A line that couldn't be heard (its clips failed, no phone voice) ends at its length. The board never knows where the sound comes from ([one-clock.md](one-clock.md)).
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
-- **Logs** everything heard, in order (what `play` and `look` show).
+- **Logs** everything heard, in order (what `show` shows).
 - **A sound in turn** (one a line waits for: a question's buzz) holds the voice for its own length (each library sound carries it), then a breath.
 - **Muted is only the volume:** nothing else knows. Tools, checks, tests and a board that is one of several on a review screen are **silent** instead (`isSilent`): nothing plays, and a stand-in tells each line ended at its length, on the board's clock, so the board does what a phone's would, in the same order. Tools **jump** that clock: everything due is done at once, each at its own time. The phone's own voice can't be turned down mid-sentence: muted, a line it is reading finishes aloud (it is only the fallback when a clip is missing).
 

@@ -6,7 +6,7 @@ export type { PropPage };
 /**
  * Props in words, from their pages (@chalk/player's prop-pages.ts) and what the build recorded
  * about every board (build/reach.json): a line each to choose from, and how each is used. What the
- * chalk MCP's `look` answers at library/props/ and at a prop's address.
+ * chalk MCP's `show` answers at library/props/ and at a prop's address.
  */
 
 /** How one board uses a prop where it places it. */

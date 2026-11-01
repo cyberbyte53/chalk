@@ -3,7 +3,7 @@ import { dirname, join, relative, resolve } from "node:path";
 
 /**
  * Where a prop's code is: its package (from library/catalogue.md) and the line each of its actions
- * is written at. Read from the package's source, for the answers of `look` and `play`.
+ * is written at. Read from the package's source, for the answers of `show`.
  */
 
 /** The package folder a prop type is defined in (library/props/<name>), from its address in the catalogue. */

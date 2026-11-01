@@ -217,7 +217,7 @@ export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string
  */
 /**
  * The tools for one connection. `lane` is the connection's own page for drawing boards
- * (app-driver.ts): its `continue` goes on from its own last board, and connections draw at once.
+ * (app-driver.ts): connections draw at once.
  */
 export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const server = createServer();
@@ -229,8 +229,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
    * sees; the writer still checks every call.
    */
   const SEES: Readonly<Record<Who["role"], readonly string[]>> = {
-    [Role.Fixer]: ["look", "play", "affected", "comments", "comment", "pipeline", "changes"],
-    [Role.Reviewer]: ["look", "play", "affected", "comments", "comment", "pipeline", "changes"],
+    [Role.Fixer]: ["show", "affected", "comments", "comment", "pipeline", "changes"],
+    [Role.Reviewer]: ["show", "affected", "comments", "comment", "pipeline", "changes"],
   };
   const MY_MOVES = [...new Set(MOVES[ROLE].map((m) => m.to))] as Status[];
 
@@ -456,6 +456,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   );
 
   const point = z.object({ x: z.number(), y: z.number().optional() }).strict();
+  const during = z
+    .string()
+    .optional()
+    .describe(
+      'Done while this line is said (its name, as in the script: "fiveHouses"), not once the board has come to its end.',
+    );
   const step = z.union([
     z
       .object({
@@ -469,25 +475,16 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           .describe(
             "A point in the prop's own units to tap, inside its frame: { x: -4, y: 2 } on a plane, { x: 1.5 } on a number line.",
           ),
+        during,
       })
       .strict(),
     z
       .object({
         drag: z.string().describe('A piece or part to drag, by address: "graph/point".'),
-        by: z
-          .tuple([z.number(), z.number()])
-          .optional()
-          .describe("How far, in pixels: [right, down]."),
-        to: point
-          .optional()
-          .describe("Where to, in the prop's own units, inside its frame: { x: -4, y: 2 }."),
+        to: point.describe("Where to, in the prop's own units, inside its frame: { x: -4, y: 2 }."),
+        during,
       })
-      .strict()
-      .refine((s) => (s.by === undefined) !== (s.to === undefined), {
-        message:
-          "a drag says where to: `to` (in the prop's units) or `by` (in pixels), one of them",
-      }),
-    z.object({ wait: z.number().int().min(0).max(10000).describe("Milliseconds.") }).strict(),
+      .strict(),
     z
       .object({
         call: z
@@ -496,6 +493,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             "On a prop's own page: one of its actions, as a lesson would call it (zoomTo, walkBoth).",
           ),
         args: z.record(z.unknown()).optional().describe("Its arguments: { at: 2 }."),
+        during,
       })
       .strict(),
   ]);
@@ -550,9 +548,11 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const answer = (a: Answer, notes: readonly string[]) => ({
     content: [
       text([a.text, ...notes].join("\n")),
-      ...(a.image === undefined
-        ? []
-        : [{ type: "image" as const, data: a.image.toString("base64"), mimeType: "image/png" }]),
+      ...(a.images ?? []).map((png) => ({
+        type: "image" as const,
+        data: png.toString("base64"),
+        mimeType: "image/png",
+      })),
     ],
   });
 
@@ -569,18 +569,24 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
 
   offer(
     server.registerTool(
-      "look",
+      "show",
       {
-        title: "Look at boards",
+        title: "Show a board",
         description:
-          "What a board looks like and whether anything is broken, drawn by the real learner app in Chrome. What you point at decides how much comes back. A piece or part (`content/…/<board>#game`, `…#game/plates`): a picture of just it, its parts named, ok or its problems, and everything about it: where it's written (full path:line, every helper it went through, a question's params.yaml row), its setup as the running app has it (options in the order shown, each with its line), its current state, values worked out from others, what can be done to it now (with each action's line) and where each part is drawn. The library (`library/props/`, or one package, `library/props/basics`): a line per prop, its address, role, what it is for, and how many boards use it. A prop on its own (`library/props/primes/stickMeasure`, from its defaults or `state`): everything about it, as for a piece, then what it is for, every board that uses it with the fields it sets, the inputs it feeds and the actions it calls, and what no board or only one board uses. A board (`content/class10-maths/real-numbers/division-lemma/story`): its picture with each piece named, ok or its problems, and one line per piece (type, full path:line, current state). A lesson or a question family: thumbnails of its boards, and only the boards with problems. A chapter or a book: no pictures, a check of every board (English and Hindi on a small phone, a laptop column and a projector by default): how many were drawn, how many are ok, and the problems; it reports progress and can be cancelled. `locales` and `screens` show versions side by side in one picture. `play: true` shows the board as a student meets it (pieces not earned yet hidden). `continue: true` looks at the board as your last `play` left it. `labels: false` gives the clean picture, exactly the student's screen. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
+          "A board as the real learner app draws it in Chrome, from its start, after the steps if any: every call opens it afresh, so the same call always answers the same. Without steps, it plays on its own to its end (its lines said, its moves done) and is checked in English and Hindi on a small phone (360×640), a laptop column (640) and a projector (640×720), unless `locales`/`screens` ask for fewer: a picture of each version, ok or its problems, and what you pointed at. A board: one line per piece (type, line, its state where it isn't as it started) and its script. A piece or part (`…/<board>#game`, `…#game/plates`): just it, and everything about it: where it's written (path:line, every helper it went through, a question's params.yaml row), its setup (options in the order shown, each with its line), its state, values worked out from others, what can be done to it now (each action's line) and where each part is drawn. A lesson or a question family: thumbnails of its boards, and the boards with problems in any version. A chapter or a book: no pictures, a check of every board in every version, with progress (it can be cancelled). The library (`library/props/`, or one package): a line per prop: address, role, what it is for, how many boards use it. A prop on its own (`library/props/primes/stickMeasure`, from its defaults or `state`): as for a piece, then every board that uses it, the fields it sets, and what no board or only one uses. With `steps` (one board, or a prop on its own page): what a student does, in order, on one version (the phone in English unless one language and one screen are named): each step, unless `during` names a line, is done once the board has come to its end, and says what it set off and everything the student sees that changed (was → now, + appeared, − gone), what was said, and whether the board passed; then a picture before | after, cut to what changed (`full`, `shots`). A prop on its own page also takes `call` steps (its actions, as a lesson would). To go on from where a call left off, send its steps again with more. Rebuilds content first if anything changed. Use it after every content or prop change, before saying something looks right.",
         inputSchema: {
           at: z
             .string()
             .min(1)
             .describe(
-              'An address: a piece ("content/<book>/<chapter>/<lesson>/<board>#piece", or #piece/part), a board, a lesson, a chapter or a book; or a prop on its own ("library/props/<package>/<type>", or #part).',
+              'An address: a piece ("content/<book>/<chapter>/<lesson>/<board>#piece", or #piece/part), a board, a lesson, a chapter or a book; the library ("library/props/"); or a prop on its own ("library/props/<package>/<type>", or #part).',
             ),
+          steps: z
+            .array(step)
+            .min(1)
+            .max(40)
+            .optional()
+            .describe("What a finger does, in order, from the board's start."),
           state: z
             .record(z.unknown())
             .optional()
@@ -589,37 +595,103 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             ),
           locales: locales
             .optional()
-            .describe('Languages, side by side: ["en", "hi"]. Default en.'),
+            .describe('Languages: ["en"] for English only. Default both; with steps, en.'),
           screens: screens
             .optional()
             .describe(
-              "Screens, side by side: the column's width (360 small phone, 390 phone, 640 tablet or laptop column) and the screen's height when it matters (a projector: { width: 640, height: 720 }). Default a phone (390, 844 tall). A chapter check draws 360×640, 640, and 640×720.",
+              "Screens: the column's width (360 small phone, 640 laptop column) and the screen's height when it matters ({ width: 640, height: 720 }: a projector). Default the three check screens; with steps, the phone (360×640).",
             ),
           play: z
             .boolean()
             .optional()
-            .describe("As a student meets it: pieces not earned yet hidden."),
-          continue: z.boolean().optional().describe("The board as your last `play` left it."),
+            .describe(
+              "Without steps: as a student meets it, pieces not earned yet hidden (steps always are).",
+            ),
           labels: z
             .boolean()
             .optional()
             .describe("Name the pieces (or parts) on the picture. Default true."),
+          shots: z
+            .enum(["last", "each", "none"])
+            .optional()
+            .describe("With steps: before | after (default), after every step, or none."),
+          full: z
+            .boolean()
+            .optional()
+            .describe("With steps: whole boards in the picture, not cut to what changed."),
+          frames: z
+            .object({
+              every: z.number().int().min(50).max(2000).optional(),
+              most: z.number().int().min(1).max(24).optional(),
+            })
+            .strict()
+            .optional()
+            .describe(
+              "With steps: watch the board move after each step, at real speed: a picture about every `every` ms (default 100), keeping the ones that differ, at most `most` (default 6), four to a row with each one's time; each step says `still after 1.2s` or `still changing at 3s`. For when the motion is the point (a walk, a glide).",
+            ),
           speed: z
             .number()
             .min(1)
             .max(100)
             .optional()
             .describe(
-              "By default the board's clock jumps: everything due (lines, which last their clips' length; glides; waits) is done at once, each at its own board time, and the board is read where it ends. A number runs the clock at that speed in real time instead (1: real time), for watching it; then a board is read once it has settled, at most 30s of board time (what's still running is named).",
+              "By default the board's clock jumps: everything due (lines, which last their clips' length; glides; waits) is done at once, each at its own board time. A number runs it at that speed in real time instead (1: real time), for watching it; then a board is read once it has settled, at most 30s of board time.",
             ),
         },
         // Rebuilding writes build/, which is generated: nothing the person wrote changes.
         annotations: { readOnlyHint: true, openWorldHint: false },
       },
       async (args, extra: Extra) => {
-        const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
+        const notes = await rebuildIfChanged(extra);
         const address = parseAddress(args.at);
         const given = stateOf(args, address.root === "props");
+        if (args.steps !== undefined) {
+          const { steps, locales, screens, at: _, play: __, ...rest } = args;
+          if ((locales?.length ?? 1) > 1 || (screens?.length ?? 1) > 1)
+            throw new Error(
+              "Steps are done on one version: name one language and one screen, or none (the phone in English). What the board does is the same in every version; without steps, show checks how every version looks.",
+            );
+          const one = {
+            ...rest,
+            ...given,
+            ...(locales?.[0] === undefined ? {} : { locale: locales[0] }),
+            ...(screens?.[0] === undefined ? {} : { screen: screens[0] }),
+          };
+          if (address.root === "props") {
+            if (address.part !== undefined)
+              throw new Error("Steps act on the whole prop: its address without #part.");
+            const prop = onProp(address);
+            await progressOf(extra)("playing");
+            return answer(
+              await play(root, { ...one, board: prop.board, steps: prop.steps(steps) }, lane),
+              notes,
+            );
+          }
+          if (steps.some((s) => "call" in s))
+            throw new Error(
+              "call is for a prop on its own page (library/props/…); on a board the lesson calls actions",
+            );
+          const at = contentPath(args.at);
+          const board = at.path;
+          const all = listBoards(root);
+          if (at.part !== undefined || !all.some((b) => b.board === board)) {
+            const target = targetOf(board, all);
+            throw new Error(
+              target !== undefined
+                ? "Steps act on one board: name a board, not a lesson, chapter or piece."
+                : (unknownBoard(board) ?? `No board "${board}".`),
+            );
+          }
+          await progressOf(extra)("playing");
+          return answer(
+            await play(
+              root,
+              { ...one, board, steps: steps.filter((s): s is Step => !("call" in s)) },
+              lane,
+            ),
+            notes,
+          );
+        }
         if (address.root === "library") {
           // Props are read through the app, the one place their definitions are loaded.
           const d = await shoot(
@@ -631,7 +703,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           );
           return answer(
             { text: libraryText(d.props ?? [], usesOf(readReach(root)), address.pkg) },
-            [],
+            notes,
           );
         }
         if (address.root === "props") {
@@ -644,7 +716,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           };
           return answer(
             await look(root, target, { ...args, ...given }, { sources: readSources(root) }, lane),
-            [],
+            notes,
           );
         }
         const all = listBoards(root);
@@ -654,131 +726,14 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           throw new Error(unknownBoard(at.path) ?? `Nothing built at "${args.at}".`);
         const where = { sources: readSources(root) };
         if (target.kind === "many") {
-          if (args.continue === true) throw new Error("continue looks at one board.");
-          // A chapter is checked on the platform's screens, unless screens are asked for.
-          const screens = args.screens ?? [...CHECK_SCREENS];
-          const a = await check(
-            root,
-            target,
-            { ...args, screens },
-            lane,
-            progressOf(extra),
-            extra.signal,
-          );
+          const a = await check(root, target, args, lane, progressOf(extra), extra.signal);
           return answer(a, notes);
         }
         await progressOf(extra)("drawing");
         return answer(await look(root, target, args, where, lane), notes);
       },
     ),
-    "look",
-  );
-
-  offer(
-    server.registerTool(
-      "play",
-      {
-        title: "Play a board",
-        description:
-          'Use a board the way a student does, in the real learner app: taps and drags on the page, in order. A prop on its own page (`library/props/<package>/<type>`) takes the same steps, its parts named as in its address ("handle"), and `call` steps that do its actions as a lesson would (targets by address: a piece, or piece/part, e.g. game/giveRound, qr with text "q = 5"). The app\'s own player decides what happens; nothing is simulated. Starts from a fresh board as a student meets it, unless `continue: true` goes on from where your last call left it (it fails, saying why, when that board isn\'t there). Returns one line per step: what it set off, everything the student sees that changed (each part was → now in full, + appeared, − gone, an input off → on, and hidden facts), signals, whether the board was passed, errors in full; then whether the board is passed. One picture: before | after, cut to the pieces that changed (`full: true` for the whole board; `shots: "each"` for a strip of every step, `"none"` for none).',
-        inputSchema: {
-          at: z
-            .string()
-            .min(1)
-            .describe(
-              'A board, by address ("content/class10-maths/real-numbers/division-lemma/story"), or a prop on its own ("library/props/primes/stickMeasure").',
-            ),
-          state: z
-            .record(z.unknown())
-            .optional()
-            .describe("A prop on its own: the fields it starts from, over its defaults."),
-          steps: z.array(step).min(1).max(40).describe("What a finger does, in order."),
-          continue: z
-            .boolean()
-            .optional()
-            .describe("Go on from where your last call left this board."),
-          shots: z
-            .enum(["last", "each", "none"])
-            .optional()
-            .describe("Before | after (default), every step, or none."),
-          full: z
-            .boolean()
-            .optional()
-            .describe("Whole boards in the picture, not cut to what changed."),
-          locale: z.enum(["en", "hi"]).optional(),
-          width: width.optional().describe("Column width in px (default 390)."),
-          height: height
-            .optional()
-            .describe("Screen height in px (default 844, a phone; a projector is 720)."),
-          labels: z.boolean().optional().describe("Name the pieces on the picture. Default true."),
-          frames: z
-            .object({
-              every: z.number().int().min(50).max(2000).optional(),
-              most: z.number().int().min(1).max(24).optional(),
-            })
-            .strict()
-            .optional()
-            .describe(
-              "Watch the board move after each step, at real speed: a picture about every `every` ms (default 100), keeping the ones that differ, at most `most` (default 6); the frames come back in order, four to a row, with each frame's time, and each step says `still after 1.2s` or `still changing at 3s`. Ask for it when the motion is the point (a walk, a glide), or something should stay still; the default is the settled board only.",
-            ),
-          speed: z
-            .number()
-            .min(1)
-            .max(100)
-            .optional()
-            .describe(
-              "By default the board's clock jumps: everything due (lines, which last their clips' length; glides; waits) is done at once, each at its own board time, and the board is read where it ends. A number runs the clock at that speed in real time instead (1: real time), for watching it; then a board is read once it has settled, at most 30s of board time (what's still running is named).",
-            ),
-        },
-        annotations: { readOnlyHint: true, openWorldHint: false },
-      },
-      async (args, extra: Extra) => {
-        const notes = args.continue === true ? [] : await rebuildIfChanged(extra);
-        const address = parseAddress(args.at);
-        const given = stateOf(args, address.root === "props");
-        if (address.root === "props") {
-          if (address.part !== undefined)
-            throw new Error("Steps act on the whole prop: its address without #part.");
-          const prop = onProp(address);
-          await progressOf(extra)("playing");
-          const { at: _, steps, ...rest } = args;
-          return answer(
-            await play(
-              root,
-              { ...rest, ...given, board: prop.board, steps: prop.steps(steps) },
-              lane,
-            ),
-            [],
-          );
-        }
-        if (args.steps.some((s) => "call" in s))
-          throw new Error(
-            "call is for a prop on its own page (library/props/…); on a board the lesson calls actions",
-          );
-        const at = contentPath(args.at);
-        const board = at.path;
-        const all = listBoards(root);
-        if (at.part !== undefined || !all.some((b) => b.board === board)) {
-          const target = targetOf(board, all);
-          throw new Error(
-            target !== undefined
-              ? "Steps act on one board: name a board, not a lesson, chapter or piece."
-              : (unknownBoard(board) ?? `No board "${board}".`),
-          );
-        }
-        await progressOf(extra)("playing");
-        const { at: _, steps, ...rest } = args;
-        return answer(
-          await play(
-            root,
-            { ...rest, board, steps: steps.filter((s): s is Step => !("call" in s)) },
-            lane,
-          ),
-          notes,
-        );
-      },
-    ),
-    "play",
+    "show",
   );
 
   offer(

@@ -564,6 +564,15 @@ describe("the voice: the board asks, the voice tells back", () => {
     expect(board.read("")).toMatchObject({ done: ["hello"] });
   });
 
+  it("names the line being said, until it ends", () => {
+    const board = new Board(narrator, {}, { voice: (b) => timedVoice(b, () => 2) });
+    expect(board.lineInTurn).toBeUndefined();
+    board.send("", "speak", { line: "hello" });
+    expect(board.lineInTurn).toBe("hello");
+    board.advanceTo(2);
+    expect(board.lineInTurn).toBeUndefined();
+  });
+
   it("what a tap sets going is the student's; what the board does on its own is not", () => {
     const board = new Board(narrator);
     board.input("", "tap");

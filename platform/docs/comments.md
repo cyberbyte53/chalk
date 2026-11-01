@@ -41,7 +41,7 @@ They are versioned with the content they are about. **One writer** (`platform/st
 ```
 
 - **`by`, `role`**: who started it: the person (a comment), a reviewer (a finding), a fixer (a question, a decision, a proposal; or, `from: chat`, the person's words filed in their name).
-- **`board`**: the board, by its build path. Its address is `content/<board>` (with `#<target>` for what on it): open it at `?dev&at=content/<board>`, or `look` at it. Absent for a thread on a planning file (then `source` points at the file and line, `authoring/books/<book>/<chapter>/flow.md:12`, and `quote` has the exact words).
+- **`board`**: the board, by its build path. Its address is `content/<board>` (with `#<target>` for what on it): open it at `?dev&at=content/<board>`, or `show` it. Absent for a thread on a planning file (then `source` points at the file and line, `authoring/books/<book>/<chapter>/flow.md:12`, and `quote` has the exact words).
 - **`target`**: what was picked on the board, by address: the piece's name, then the groups and the part, joined by `/` (`which/option`). Absent for the whole board. If the board changes and the address no longer finds anything, the preview shows the thread as detached.
 - **`prop`**: the prop's type, for a thread on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`.

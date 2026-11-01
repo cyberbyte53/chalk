@@ -8,15 +8,15 @@ import { PNG } from "pngjs";
 import { findUp } from "../find-up";
 
 /**
- * How long a reviewer's look at one board takes: both languages on the three check screens (six
- * drawings), through the running chalk service (`pnpm mcp`), the way an agent calls it: on a fresh
- * connection, then again on the same one (the time kept). Its answer (the text, the picture) is kept, so a faster tool (`look2`) can be
- * held to it: the same words, the same pixels.
+ * How long a reviewer's call at one board takes, through the running chalk service (`pnpm mcp`),
+ * the way an agent calls it: `show` at a board (both languages on the three check screens: six
+ * drawings), on a fresh connection, then again on the same one (the time kept); then the board
+ * played (steps, one of them while a line is said). Its answers (the text, the pictures) are kept,
+ * so a faster tool can be held to them: the same words, the same pixels.
  *
- *   pnpm bench-look                        look
- *   pnpm bench-look look2                  the same, through look2
- *   pnpm bench-look look --as look-again   kept under another name (is look steady?)
- *   pnpm bench-look --compare look look2   the same words and pixels?
+ *   pnpm bench-look                        show
+ *   pnpm bench-look show --as again        kept under another name (is it steady?)
+ *   pnpm bench-look --compare show again   the same words and pixels?
  *
  * Answers go to node_modules/.cache/bench-look/<name>/.
  */
@@ -24,10 +24,12 @@ import { findUp } from "../find-up";
 const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
 const OUT = join(root, "platform/studio/node_modules/.cache/bench-look");
 const URL_ = new URL(process.env.CHALK_MCP_URL ?? "http://127.0.0.1:5174/mcp");
-const WORKLOAD = {
-  at: "content/class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house",
-  locales: ["en", "hi"],
-  screens: [{ width: 360, height: 640 }, { width: 640 }, { width: 640, height: 720 }],
+const BOARD = "content/class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house";
+const WORKLOAD = { at: BOARD };
+const RIGHT = { tap: "town/walker/step:right" };
+const PLAYED = {
+  at: BOARD,
+  steps: [{ ...RIGHT, during: "story" }, RIGHT, RIGHT, RIGHT],
 };
 
 type Content = { type: string; text?: string; data?: string };
@@ -63,24 +65,33 @@ async function bench(tool: string, as: string): Promise<void> {
   };
   const first = await call();
   const { r, ms } = await call();
+  const t = performance.now();
+  const played = (await client.callTool({ name: tool, arguments: PLAYED }, undefined, {
+    timeout: 600_000,
+  })) as { isError?: boolean; content?: Content[] };
+  const playedMs = performance.now() - t;
   await client.close();
   const content = r.content ?? [];
   const text = content
     .filter((x) => x.type === "text")
     .map((x) => x.text ?? "")
     .join("\n");
-  if (first.r.isError === true || r.isError === true)
-    throw new Error(`${tool} failed: ${text.slice(0, 300)}`);
-  writeFileSync(join(dir, "answer.txt"), text);
+  const playedText = (played.content ?? [])
+    .filter((x) => x.type === "text")
+    .map((x) => x.text ?? "")
+    .join("\n");
+  if (first.r.isError === true || r.isError === true || played.isError === true)
+    throw new Error(`${tool} failed: ${(text + playedText).slice(0, 300)}`);
+  writeFileSync(join(dir, "answer.txt"), `${text}\n\n${playedText}`);
   content
     .filter((x) => x.type === "image" && x.data !== undefined)
     .forEach((x, k) => writeFileSync(join(dir, `${k}.png`), Buffer.from(x.data ?? "", "base64")));
   writeFileSync(
     join(dir, "time.json"),
-    `${JSON.stringify({ ms: Math.round(ms), first: Math.round(first.ms) })}\n`,
+    `${JSON.stringify({ ms: Math.round(ms), first: Math.round(first.ms), played: Math.round(playedMs) })}\n`,
   );
   console.log(
-    `${tool}: one board, en + hi on 3 screens: ${(first.ms / 1000).toFixed(1)}s on a fresh connection, then ${(ms / 1000).toFixed(1)}s`,
+    `${tool}: one board, en + hi on 3 screens: ${(first.ms / 1000).toFixed(1)}s on a fresh connection, then ${(ms / 1000).toFixed(1)}s; played (4 steps): ${(playedMs / 1000).toFixed(1)}s`,
   );
 }
 
@@ -142,7 +153,7 @@ const flag = (name: string) => {
 const c = flag("compare");
 if (c !== undefined) compare(args[c + 1] ?? "", args[c + 2] ?? "");
 else {
-  const tool = args.find((x, i) => !x.startsWith("--") && args[i - 1] !== "--as") ?? "look";
+  const tool = args.find((x, i) => !x.startsWith("--") && args[i - 1] !== "--as") ?? "show";
   const a = flag("as");
   await bench(tool, a === undefined ? tool : (args[a + 1] ?? tool));
 }

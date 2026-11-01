@@ -7,11 +7,12 @@ import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/
 import { findUp } from "../find-up";
 
 /**
- * Stress test for the chalk MCP's read side (look, play, affected, comments), against the running
- * service (`pnpm mcp`), the way agents call it: looks at once from one agent and from several,
- * mixed widths and languages, reads during drawing, content changing mid-drawing, `continue`
- * across agents, the snapshot of played and question boards, labels that don't change the
- * picture, a piece cut out, a chapter checked, bad names, and the stdio relay across a restart
+ * Stress test for the chalk MCP's read side (show, affected, comments), against the running
+ * service (`pnpm mcp`), the way agents call it: calls at once from one agent and from several,
+ * mixed widths and languages, reads during drawing, content changing mid-drawing, agents' steps
+ * not reaching each other's boards, the snapshot of played and question boards, labels that
+ * don't change the picture, a piece cut out, a chapter checked, bad names, and the stdio relay
+ * across a restart
  * (platform/docs/seeing-boards.md). Each case says what must hold; any that doesn't fails the run.
  * Writes no comments. Briefly appends a comment line to one content file (restored after).
  *
@@ -37,10 +38,7 @@ const LEMMA = `${R}/division-lemma/lemma`;
 const QUESTION = `${R}/questions/which-is-irrational/a3543885`;
 const EDITED = join(root, R, "which-fractions-end", "overview.ts");
 
-/**
- * An agent's connection. It says who it is with every request (its id, as the relay sends), which is
- * what keeps its page, so `continue` goes on from its own board.
- */
+/** An agent's connection. It says who it is with every request (its id, as the relay sends), which is what keeps its page. */
 type Agent = { name: string; client: Client };
 
 async function connectAs(name: string): Promise<Client> {
@@ -151,7 +149,7 @@ const piecesListed = (c: Call) => textOf(c).match(/→ content\//g)?.length ?? 0
 const cases: Record<string, () => Promise<void>> = {
   async parallel() {
     const c = await agent("stress-parallel");
-    const cs = await Promise.all(BOARDS.map((b) => call(c, "look", { at: b })));
+    const cs = await Promise.all(BOARDS.map((b) => call(c, "show", { at: b })));
     expect("8 looks at once from one agent all succeed", allOk(cs), firstError(cs));
     expect(
       "each returns the board it asked for",
@@ -166,7 +164,7 @@ const cases: Record<string, () => Promise<void>> = {
     );
     const cs = await Promise.all(
       combos.map((o) =>
-        call(c, "look", {
+        call(c, "show", {
           at: `${R}/which-fractions-end/bill`,
           screens: [o.screen],
           locales: [o.locale],
@@ -189,7 +187,7 @@ const cases: Record<string, () => Promise<void>> = {
           Promise.all(
             [0, 1, 2].map((k) => {
               const board = BOARDS[(i * 3 + k) % BOARDS.length] ?? "";
-              return call(c, "look", { at: board }).then((r) => ({ r, board }));
+              return call(c, "show", { at: board }).then((r) => ({ r, board }));
             }),
           ),
         ),
@@ -209,40 +207,37 @@ const cases: Record<string, () => Promise<void>> = {
   async lanes() {
     const a = await agent("stress-laneA");
     const b = await agent("stress-laneB");
-    const tap = await call(a, "play", {
+    // The choice is the learner's: it is listed with what changed, not with the setup.
+    const [mine, theirs] = await Promise.all([
+      call(a, "show", { at: LEMMA, steps: [{ tap: "qr/option:right" }], shots: "none" }),
+      call(b, "show", { at: LEMMA, steps: [{ tap: "qr/option:swap" }], shots: "none" }),
+    ]);
+    expect(
+      "A and B tap the same board at once: each sees only its own choice",
+      mine.ok &&
+        theirs.ok &&
+        /"right"/.test(textOf(mine)) &&
+        !/"swap"/.test(textOf(mine)) &&
+        /"swap"/.test(textOf(theirs)),
+      mine.error ?? theirs.error ?? "",
+    );
+    const again = await call(a, "show", {
       at: LEMMA,
       steps: [{ tap: "qr/option:right" }],
       shots: "none",
     });
-    // The choice is the learner's: it is listed with what changed now, not with the setup.
-    const chosen = /now:[\s\S]*selected "right"/;
-    const mine = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
     expect(
-      "A taps an option, and sees it chosen, as now",
-      tap.ok && mine.ok && chosen.test(textOf(mine)),
-      tap.error ?? mine.error ?? "",
-    );
-    await call(b, "play", { at: LEMMA, steps: [{ tap: "qr/option:swap" }], shots: "none" });
-    const on = await call(a, "look", { at: `${LEMMA}#qr`, continue: true });
-    expect(
-      "B tapping the same board doesn't reach A's: A sees its own choice",
-      on.ok && chosen.test(textOf(on)),
-      on.error ?? "",
-    );
-    await call(a, "look", { at: BOARDS[2] });
-    const lost = await call(a, "play", { at: LEMMA, steps: [{ wait: 10 }], continue: true });
-    expect(
-      "continuing a board this agent left fails, saying why",
-      !lost.ok && /Can't continue/.test(lost.error ?? ""),
-      lost.error?.slice(0, 120) ?? "went ahead",
+      "the same steps answer the same: every call starts from the board's start",
+      again.ok && textOf(again) === textOf(mine),
+      again.error ?? "",
     );
   },
   async frames() {
     const c = await agent("stress-frames");
-    // Nothing moves after a wait on a settled board, on every kind of screen: it must say still.
+    // Nothing moves after a tap that does nothing, on every kind of screen: it must say still.
     const quiet = await Promise.all(
-      [{}, { width: 640, height: 720 }, { width: 360, height: 640 }].map((screen) =>
-        call(c, "play", { at: STORY, ...screen, steps: [{ wait: 10 }], frames: {} }),
+      [{ width: 390 }, { width: 640, height: 720 }, { width: 360, height: 640 }].map((screen) =>
+        call(c, "show", { at: STORY, screens: [screen], steps: [{ tap: "game" }], frames: {} }),
       ),
     );
     expect(
@@ -251,7 +246,7 @@ const cases: Record<string, () => Promise<void>> = {
       quiet.map((r) => r.error ?? textOf(r).split("\n")[1]).join(" | "),
     );
     // The race's Play glides the clock: its frames show it moving, in order.
-    const race = await call(c, "play", {
+    const race = await call(c, "show", {
       at: `${R}/hcf-and-lcm/story`,
       steps: [{ tap: "race/play" }],
       frames: { every: 300, most: 4 },
@@ -264,14 +259,14 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async snapshot() {
     const c = await agent("stress-snapshot");
-    for (const [name, tool, args] of [
-      ["a story, played", "look", { at: STORY, play: true }],
-      ["a story, with steps", "play", { at: STORY, steps: [{ wait: 10 }], shots: "none" }],
-      ["a question", "look", { at: QUESTION }],
+    for (const [name, args] of [
+      ["a story, played", { at: STORY, play: true }],
+      ["a story, with steps", { at: STORY, steps: [{ tap: "game" }], shots: "none" }],
+      ["a question", { at: QUESTION }],
     ] as const) {
-      const r = await call(c, tool, args);
-      // A look lists the pieces; play says whether the board is passed (read from its snapshot).
-      const isRead = tool === "look" ? piecesListed(r) > 0 : /\n(not )?passed/.test(textOf(r));
+      const r = await call(c, "show", args);
+      // Without steps the pieces are listed; with steps, whether the board is passed (its snapshot).
+      const isRead = !("steps" in args) ? piecesListed(r) > 0 : /\n(not )?passed/.test(textOf(r));
       expect(
         `the snapshot of ${name} is read, as text only`,
         r.ok && isRead && isTextOnly(r),
@@ -281,9 +276,9 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async pictures() {
     const c = await agent("stress-pictures");
-    const clean = await call(c, "look", { at: STORY, labels: false });
-    const again = await call(c, "look", { at: STORY, labels: false });
-    const named = await call(c, "look", { at: STORY });
+    const clean = await call(c, "show", { at: STORY, labels: false });
+    const again = await call(c, "show", { at: STORY, labels: false });
+    const named = await call(c, "show", { at: STORY });
     const [a, b, n] = [pngs(clean)[0], pngs(again)[0], pngs(named)[0]];
     expect(
       "the clean picture is the same every time",
@@ -294,7 +289,7 @@ const cases: Record<string, () => Promise<void>> = {
       (n?.readUInt32BE(16) ?? 0) > (a?.readUInt32BE(16) ?? 0) && textOf(named) === textOf(clean),
       `${a?.readUInt32BE(16)} → ${n?.readUInt32BE(16)}`,
     );
-    const piece = await call(c, "look", { at: `${STORY}#game`, labels: false });
+    const piece = await call(c, "show", { at: `${STORY}#game`, labels: false });
     expect(
       "a piece is cut out of its board, and says where it's written",
       piece.ok &&
@@ -307,7 +302,7 @@ const cases: Record<string, () => Promise<void>> = {
   async reads() {
     const c = await agent("stress-reads");
     const lookFrom = Date.now();
-    const lesson = call(c, "look", { at: `${R}/which-fractions-end` });
+    const lesson = call(c, "show", { at: `${R}/which-fractions-end` });
     await new Promise((r) => setTimeout(r, 200));
     const readsFrom = Date.now();
     const quick = await Promise.all([
@@ -339,7 +334,7 @@ const cases: Record<string, () => Promise<void>> = {
     const wave = () =>
       Promise.all(
         BOARDS.slice(0, 6).map((board) =>
-          call(c, "look", { at: board }).then((r) => ({ r, board })),
+          call(c, "show", { at: board }).then((r) => ({ r, board })),
         ),
       );
     try {
@@ -362,31 +357,31 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async names() {
     const c = await agent("stress-names");
-    const typo = await call(c, "look", { at: `${R}/divison-lemma/story` });
+    const typo = await call(c, "show", { at: `${R}/divison-lemma/story` });
     expect(
       "a misspelt board fails, naming the nearest boards",
       !typo.ok && /Nearest: .*division-lemma/.test(typo.error ?? ""),
       typo.error?.slice(0, 120) ?? "went ahead",
     );
-    const bare = await call(c, "look", { at: STORY.slice("content/".length) });
+    const bare = await call(c, "show", { at: STORY.slice("content/".length) });
     expect(
       "an address without its root is refused, naming the roots",
       !bare.ok && /starts with content\/ or library\/props\//.test(bare.error ?? ""),
       bare.error?.slice(0, 120) ?? "went ahead",
     );
-    const lessonSteps = await call(c, "play", {
+    const lessonSteps = await call(c, "show", {
       at: `${R}/division-lemma`,
-      steps: [{ wait: 10 }],
+      steps: [{ tap: "game" }],
     });
-    expect("play on a lesson fails, saying so", !lessonSteps.ok, lessonSteps.error ?? "");
-    const missing = await call(c, "play", {
+    expect("steps on a lesson fail, saying so", !lessonSteps.ok, lessonSteps.error ?? "");
+    const missing = await call(c, "show", {
       at: STORY,
       steps: [{ tap: "nothing-here" }],
       shots: "none",
     });
     const said = `${textOf(missing)} ${missing.error ?? ""}`;
     expect("a step on a missing piece says what's there", said.includes("no piece"), "");
-    const noPiece = await call(c, "look", { at: `${STORY}#nothing-here` });
+    const noPiece = await call(c, "show", { at: `${STORY}#nothing-here` });
     expect(
       "a missing piece fails, naming the pieces",
       !noPiece.ok && /pieces: /.test(noPiece.error ?? ""),
@@ -397,7 +392,7 @@ const cases: Record<string, () => Promise<void>> = {
     // A prop on its own, at its address: seen, played and called like any board.
     const c = await agent("stress-props");
     const STICKS = "library/props/primes/stickMeasure";
-    const bare = await call(c, "look", { at: STICKS });
+    const bare = await call(c, "show", { at: STICKS });
     const first = textOf(bare).split("\n")[0] ?? "";
     expect(
       "a prop opens at its address, alone, saying where it is defined",
@@ -406,25 +401,25 @@ const cases: Record<string, () => Promise<void>> = {
         /written: library\/props\/primes\/src\/stick-measure\.ts:\d+/.test(textOf(bare)),
       bare.error ?? first,
     );
-    const set = await call(c, "look", { at: STICKS, state: { stickA: 20, stickB: 8 } });
+    const set = await call(c, "show", { at: STICKS, state: { stickA: 20, stickB: 8 } });
     expect(
       "it starts from the fields given, over its defaults",
       set.ok && /\bstickA 20\b/.test(textOf(set)) && /\bstickB 8\b/.test(textOf(set)),
       set.error ?? textOf(set).slice(0, 200),
     );
-    const wrong = await call(c, "look", { at: "library/props/primes/nothing" });
+    const wrong = await call(c, "show", { at: "library/props/primes/nothing" });
     expect(
       "a prop its package hasn't fails, naming the package's props",
       !wrong.ok && /its props: .*stickMeasure/.test(wrong.error ?? ""),
       wrong.error?.slice(0, 120) ?? "went ahead",
     );
-    const badState = await call(c, "look", { at: STICKS, state: { stickA: "far" } });
+    const badState = await call(c, "show", { at: STICKS, state: { stickA: "far" } });
     expect(
       "fields that don't fit the prop fail, saying which",
       !badState.ok && /can't start from that state: stickA/.test(badState.error ?? ""),
       badState.error?.slice(0, 120) ?? "went ahead",
     );
-    const called = await call(c, "play", {
+    const called = await call(c, "show", {
       at: STICKS,
       steps: [{ call: "setSticks", args: { stickA: 9, stickB: 6 } }, { call: "nothing" }],
       shots: "none",
@@ -437,7 +432,7 @@ const cases: Record<string, () => Promise<void>> = {
         /has no action "nothing" \(its actions: lay/.test(lines),
       called.error ?? lines.slice(0, 300),
     );
-    const library = await call(c, "look", { at: "library/props/" });
+    const library = await call(c, "show", { at: "library/props/" });
     expect(
       "the library is a line per prop: its address, role, what it is for, how many boards use it",
       library.ok &&
@@ -452,7 +447,7 @@ const cases: Record<string, () => Promise<void>> = {
         /content\/class10-maths\/.*#\w+ {2}sets /.test(textOf(bare)),
       textOf(bare).split("\n").slice(-6).join(" | "),
     );
-    const onBoard = await call(c, "play", { at: STORY, steps: [{ call: "giveRound" }] });
+    const onBoard = await call(c, "show", { at: STORY, steps: [{ call: "giveRound" }] });
     expect(
       "a call step on a board is refused: there the lesson calls actions",
       !onBoard.ok && /call is for a prop on its own page/.test(onBoard.error ?? ""),
@@ -462,7 +457,7 @@ const cases: Record<string, () => Promise<void>> = {
   async inputs() {
     // Inputs say what they do (does / says): read off the page, without pressing anything.
     const c = await agent("stress-inputs");
-    const r = await call(c, "look", { at: `${STORY}#game`, play: true });
+    const r = await call(c, "show", { at: `${STORY}#game`, play: true });
     expect(
       "a piece's inputs say what they do: what can be done, by which input",
       r.ok && /giveRound\s+\(learner, via game\/giveRound\)/.test(textOf(r)),
@@ -472,7 +467,7 @@ const cases: Record<string, () => Promise<void>> = {
           .find((l) => l.startsWith("can:")) ??
         "no can line",
     );
-    const p = await call(c, "play", {
+    const p = await call(c, "show", {
       at: STORY,
       steps: [{ tap: "game/giveRound" }],
       shots: "none",
@@ -500,9 +495,8 @@ const cases: Record<string, () => Promise<void>> = {
       }),
     );
     try {
-      const first = await call(relay, "look", { at: STORY });
+      const first = await call(relay, "show", { at: STORY });
       expect("the relay reaches the service", first.ok && asked(first, STORY), first.error ?? "");
-      await call(relay, "play", { at: STORY, steps: [{ wait: 10 }], shots: "none" });
       const main = join(root, "platform", "studio", "src", "mcp", "main.ts");
       const health = new URL("/health", URL_);
       const isUp = () =>
@@ -518,13 +512,7 @@ const cases: Record<string, () => Promise<void>> = {
         wentDown = !(await isUp());
       }
       expect("touching the service's code restarts it (tsx watch)", wentDown);
-      const lost = await call(relay, "look", { at: STORY, continue: true });
-      expect(
-        "after a restart, continue fails, saying why",
-        !lost.ok && /Can't continue/.test(lost.error ?? ""),
-        lost.error?.slice(0, 120) ?? "went ahead",
-      );
-      const again = await call(relay, "look", { at: STORY });
+      const again = await call(relay, "show", { at: STORY });
       expect(
         "and the next call just works: the relay connected again",
         again.ok,
@@ -532,7 +520,7 @@ const cases: Record<string, () => Promise<void>> = {
       );
       // A call in flight when the service restarts is answered, not left waiting: the relay sees
       // the service's run change, connects again and sends it once more.
-      const inFlight = call(relay, "look", { at: `${R}/which-fractions-end` });
+      const inFlight = call(relay, "show", { at: `${R}/which-fractions-end` });
       await new Promise((r) => setTimeout(r, 1500));
       const t2 = new Date();
       utimesSync(main, t2, t2);
@@ -548,7 +536,7 @@ const cases: Record<string, () => Promise<void>> = {
   },
   async check() {
     const c = await agent("stress-check");
-    const r = await call(c, "look", { at: R });
+    const r = await call(c, "show", { at: R });
     const m = /(\d+) boards · (\d+) drawings/.exec(textOf(r));
     const [boards, drawings] = [Number(m?.[1] ?? 0), Number(m?.[2] ?? 0)];
     expect(
