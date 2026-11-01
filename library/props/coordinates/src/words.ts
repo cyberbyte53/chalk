@@ -30,7 +30,7 @@ export function addressOf(
   locale: Locale,
 ): string {
   // Each number stays on the line with its word.
-  return `${names[0][locale]}\u00a0${p.x}, ${names[1][locale]}\u00a0${p.y}`;
+  return `${names[0][locale]}\u00a0${num(p.x)}, ${names[1][locale]}\u00a0${num(p.y)}`;
 }
 
 /** A number as the book writes it: a true minus sign, and no trailing zeros. */

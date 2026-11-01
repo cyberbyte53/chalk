@@ -35,6 +35,20 @@
       "seconds": 1.266
     },
     {
+      "file": "a5e9e129bd9c6b2b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A number line has a fixed point, the origin, marked 0. Equal units are marked from it: 1, 2, 3, and so on, on one side, the positive side, and minus 1, minus 2, minus 3, and so on, on the other, the negative side.",
+      "seconds": 15.813
+    },
+    {
+      "file": "81773e09b429a8c4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A quadrant is one of the four parts the two lines divide the plane into.",
+      "seconds": 3.797
+    },
+    {
       "file": "4de3580c8540155f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -70,6 +84,13 @@
       "seconds": 5.376
     },
     {
+      "file": "7c8f6beb6577bb6a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman's aunt lives at Street minus 2, House minus 3. Walk Riya there.",
+      "seconds": 4.749
+    },
+    {
       "file": "8af3e620e577aeba.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -82,6 +103,13 @@
       "locale": "en",
       "words": "Are the desks (5, 3) and (3, 5) the same desk?",
       "seconds": 3.518
+    },
+    {
+      "file": "0b2fb3cf53491302.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Back to the number line",
+      "seconds": 1.498
     },
     {
       "file": "f3db11c33e8205b2.m4a",
@@ -98,11 +126,25 @@
       "seconds": 4.238
     },
     {
+      "file": "f509316b050fac1e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Descartes located points with two perpendicular lines. Lines at right angles can point any way: both tilted, or one across and one up. In this chapter, we take one horizontal and one vertical.",
+      "seconds": 11.854
+    },
+    {
       "file": "ccc9072f01457dc7.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "Desks in a classroom",
       "seconds": 1.312
+    },
+    {
+      "file": "76d61f8c01451f23.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Each road is a number line now. Her corner is 0 on both. Going west, the streets are minus 1, minus 2, minus 3; going south, the houses are minus 1, minus 2, minus 3. The minus sign says which way: west along the main road, south down a street.",
+      "seconds": 17.624
     },
     {
       "file": "ad45b4f598d344de.m4a",
@@ -119,6 +161,20 @@
       "seconds": 18.437
     },
     {
+      "file": "0162deae3f4c4fe2.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Four quadrants",
+      "seconds": 0.918
+    },
+    {
+      "file": "0285081d89f532c8.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Here are two number lines: X dash X across and Y dash Y up. Their zeroes are apart. Bring them together so the lines cross at their zeroes.",
+      "seconds": 8.65
+    },
+    {
       "file": "69cce36f9c9e01e5.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -131,6 +187,27 @@
       "locale": "en",
       "words": "How will you describe the position of a table lamp on your study table to another person?",
       "seconds": 4.621
+    },
+    {
+      "file": "ab1b686b773b1446.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "In Riya's town, the quadrants are its four parts around her corner. Aman's house, at Street 4, House 5, is in quadrant one; his aunt's, at Street minus 2, House minus 3, is in quadrant three. Tap a quadrant to see its name.",
+      "seconds": 14.292
+    },
+    {
+      "file": "a973f6e6b53c8c3c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. O is the corner she started from, 0 on both.",
+      "seconds": 8.383
+    },
+    {
+      "file": "0e0db8c2106ea736.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "In short: a point in a plane is located with two perpendicular lines, the coordinate axes. The x-axis is horizontal and the y-axis is vertical. They cross at the origin, O, and divide the Cartesian plane into four quadrants.",
+      "seconds": 13.491
     },
     {
       "file": "c301a630c292d29a.m4a",
@@ -154,6 +231,13 @@
       "seconds": 1.812
     },
     {
+      "file": "e6d5251e2547786f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Minus 3 is 3 units from 0, on the negative side. So a point at distance r from 0 is the number r on the positive side, and minus r on the negative side: the sign says which side.",
+      "seconds": 11.576
+    },
+    {
       "file": "8dfc456d5f7ee8db.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -173,6 +257,20 @@
       "locale": "en",
       "words": "Now the dot is yours: drag it anywhere on the page, and read how far it is from the left edge and from the bottom.",
       "seconds": 6.305
+    },
+    {
+      "file": "6ddc763159ffbf53.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "O X and O Y are the positive directions of the x-axis and the y-axis: the positive numbers lie along them. O X dash and O Y dash are the negative directions: the negative numbers lie along them.",
+      "seconds": 12.005
+    },
+    {
+      "file": "238b5ba7470c8f32.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Positive and negative directions",
+      "seconds": 2.102
     },
     {
       "file": "bfe17ce6583b9b8f.m4a",
@@ -217,6 +315,20 @@
       "seconds": 6.409
     },
     {
+      "file": "1490de7ec916179f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Riya's town has grown. New streets were built west of her corner, and new houses south of the main road. Riya counted the streets and houses from her corner. How should these new ones be numbered?",
+      "seconds": 10.693
+    },
+    {
+      "file": "e20c538df6997f39.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Riya's town, the dot on the page and the seats in class each took two numbers, along two lines at right angles. To give the place of any point that way, each line will be a number line. First, what a number line says.",
+      "seconds": 12.806
+    },
+    {
       "file": "3ad304767bf5bc1a.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -224,11 +336,60 @@
       "seconds": 6.781
     },
     {
+      "file": "8f235146f782f2e2.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Street minus 2, House minus 3: 2 streets west along the main road, then 3 houses south. Each number says how far from her corner; its sign says which way.",
+      "seconds": 9.648
+    },
+    {
       "file": "c6435a6e78dd24bf.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "Street plan. A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 metres apart. There are 5 streets in each direction. Using 1 centimetre for 200 metres, draw a model of the city on your notebook. Represent the roads and streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: first, how many cross-streets can be referred to as (4, 3); second, how many cross-streets can be referred to as (3, 4).",
       "seconds": 52.617
+    },
+    {
+      "file": "d0bfd13a0f4bcdf8.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap any house to see its address, in the new town or the old.",
+      "seconds": 3.727
+    },
+    {
+      "file": "fc8942c43e31fbab.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap each half of each axis, and O, to see its name.",
+      "seconds": 3.077
+    },
+    {
+      "file": "f9baaa01c7c6c8c4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap O X dash, the negative direction of the x-axis, then press Check.",
+      "seconds": 4.621
+    },
+    {
+      "file": "8523c2a4087aa954.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap O Y dash, the negative direction of the y-axis, then press Check.",
+      "seconds": 4.389
+    },
+    {
+      "file": "9f375c4e6ba9d944.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap quadrant four, then press Check.",
+      "seconds": 2.485
+    },
+    {
+      "file": "149e5878495e75ae.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap quadrant two, then press Check.",
+      "seconds": 2.485
     },
     {
       "file": "00c8d54c5449261c.m4a",
@@ -264,6 +425,20 @@
       "locale": "en",
       "words": "Tap the desk at (5, 3), then the one at (3, 5).",
       "seconds": 3.379
+    },
+    {
+      "file": "5ee6c20585ee012a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Tap the origin, O, then press Check.",
+      "seconds": 2.508
+    },
+    {
+      "file": "c3ce80a87e41bb66.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The axes divide the plane into four parts. Each is called a quadrant: one fourth part. They are numbered one, two, three and four, going anticlockwise from O X. Press the button to number them.",
+      "seconds": 10.96
     },
     {
       "file": "3fc3af2b6d011d61.m4a",
@@ -336,6 +511,13 @@
       "seconds": 3.878
     },
     {
+      "file": "3eea103df00c1081.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The directions are the halves of each axis, O X and O X dash, O Y and O Y dash, not the lines or the parts.",
+      "seconds": 6.769
+    },
+    {
       "file": "0c6efdeffc656e05.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -343,11 +525,53 @@
       "seconds": 5.62
     },
     {
+      "file": "2252c6afddf4de68.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The horizontal line X dash X is the x-axis, and the vertical line Y Y dash is the y-axis. The point where they cross is the origin, O.",
+      "seconds": 8.789
+    },
+    {
       "file": "18407a483c8527f4.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "The house: along the main road to Street 4, then up Street 4 to House 5.",
       "seconds": 4.726
+    },
+    {
+      "file": "36280a684cdca0cd.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The origin, O, is the one point where the two lines cross.",
+      "seconds": 3.692
+    },
+    {
+      "file": "a2448c9cb96a77e3.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the x y plane. The axes are called the coordinate axes.",
+      "seconds": 9.219
+    },
+    {
+      "file": "83b77aa6d2d8f35f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The point is at 2: 2 units from 0, on the positive side. Drag it to minus 3.",
+      "seconds": 5.631
+    },
+    {
+      "file": "59646e7d34cd2598.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The town grows",
+      "seconds": 1.034
+    },
+    {
+      "file": "9d789f451eff9dd9.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The x-axis and the y-axis are the two lines themselves: X dash X across and Y dash Y up.",
+      "seconds": 6.119
     },
     {
       "file": "c0f1407e1417b182.m4a",
@@ -392,11 +616,39 @@
       "seconds": 1.614
     },
     {
+      "file": "00dac767e58bec72.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Two number lines",
+      "seconds": 1.092
+    },
+    {
       "file": "0904dd6061fc4a49.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "Two streets cross only once. The 4th North-South street and the 3rd East-West street meet at one crossing.",
       "seconds": 5.898
+    },
+    {
+      "file": "368f0c44af1e5e90.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "What is the name of each part of the plane formed by these two lines?",
+      "seconds": 3.576
+    },
+    {
+      "file": "4e560cec95bd544c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "What is the name of the horizontal and the vertical lines drawn to determine the position of any point in the Cartesian plane?",
+      "seconds": 6.456
+    },
+    {
+      "file": "efcfc330461c2b9a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Write the name of the point where these two lines intersect.",
+      "seconds": 2.799
     },
     {
       "file": "683eb0289a379933.m4a",
@@ -420,6 +672,41 @@
       "seconds": 9.172
     },
     {
+      "file": "17dc508b8c185df2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "O X और O Y, एक्स-अक्ष और वाई-अक्ष की धनात्मक दिशाएँ हैं: धनात्मक संख्याएँ इन पर होती हैं। O X डैश और O Y डैश ऋणात्मक दिशाएँ हैं: ऋणात्मक संख्याएँ इन पर होती हैं।",
+      "seconds": 13.561
+    },
+    {
+      "file": "a4071bfc1dcd6376.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "O X डैश, एक्स-अक्ष की ऋणात्मक दिशा को दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 5.388
+    },
+    {
+      "file": "3d39cd37f76a1e49.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "O Y डैश, वाई-अक्ष की ऋणात्मक दिशा को दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 5.155
+    },
+    {
+      "file": "37554c4109f6ec07.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। इन्हें गिनने के लिए बटन दबाओ।",
+      "seconds": 19.505
+    },
+    {
+      "file": "94a402e50afc20b9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या एक्स वाई तल कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।",
+      "seconds": 11.343
+    },
+    {
       "file": "c8812ce703346aea.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -434,6 +721,13 @@
       "seconds": 13.782
     },
     {
+      "file": "ca7cf6a30302dbe2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अब हर सड़क एक संख्या रेखा है। उसका कोना दोनों पर 0 है। पश्चिम की ओर गलियाँ माइनस 1, माइनस 2, माइनस 3 हैं; दक्षिण की ओर मकान माइनस 1, माइनस 2, माइनस 3 हैं। माइनस का चिह्न बताता है कि किस ओर: मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
+      "seconds": 21.897
+    },
+    {
       "file": "2e34629bcd418d2d.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -446,6 +740,13 @@
       "locale": "hi",
       "words": "अमन का घर ढूँढना",
       "seconds": 1.696
+    },
+    {
+      "file": "de622e6ac1602e61.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन की मौसी गली माइनस 2, मकान माइनस 3 में रहती हैं। रिया को वहाँ ले चलो।",
+      "seconds": 6.305
     },
     {
       "file": "55d11bf70dcfdfc4.m4a",
@@ -490,6 +791,13 @@
       "seconds": 6.723
     },
     {
+      "file": "3eff73766994795d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "इन दोनों रेखाओं से बने तल के प्रत्येक भाग का क्या नाम है?",
+      "seconds": 4.087
+    },
+    {
       "file": "70e52824e67c057b.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -504,11 +812,25 @@
       "seconds": 12.609
     },
     {
+      "file": "efdd92073f294861.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "उस बिंदु का नाम लिखिए जहाँ ये दोनों रेखाएँ प्रतिच्छेद करती हैं।",
+      "seconds": 4.656
+    },
+    {
       "file": "1b4a7759692bde61.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे। सड़क एक संख्या रेखा है।",
       "seconds": 17.009
+    },
+    {
+      "file": "171414da13926cb2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक्स-अक्ष और वाई-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X डैश X और खड़ी Y डैश Y।",
+      "seconds": 6.955
     },
     {
       "file": "930145e19775259d.m4a",
@@ -518,6 +840,13 @@
       "seconds": 1.429
     },
     {
+      "file": "17c76d2611336b09.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "कार्तीय तल में किसी बिंदु की स्थिति निर्धारित करने के लिए खींची गई क्षैतिज और ऊर्ध्वाधर रेखाओं का क्या नाम है?",
+      "seconds": 8.116
+    },
+    {
       "file": "f8bde418bc7e036d.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -525,11 +854,32 @@
       "seconds": 15.651
     },
     {
+      "file": "01c87f87551d244a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "किसी भी मकान का पता देखने के लिए उसे दबाओ, नए शहर में या पुराने में।",
+      "seconds": 5.144
+    },
+    {
       "file": "9f1f3dce47dddfdd.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?",
       "seconds": 5.225
+    },
+    {
+      "file": "209b4413281119ae.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "क्षैतिज रेखा X डैश X, एक्स-अक्ष है, और ऊर्ध्वाधर रेखा Y Y डैश, वाई-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।",
+      "seconds": 11.297
+    },
+    {
+      "file": "678c91f385e563fc.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "गली माइनस 2, मकान माइनस 3: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण। हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।",
+      "seconds": 13.851
     },
     {
       "file": "e63100899fb04782.m4a",
@@ -544,6 +894,27 @@
       "locale": "hi",
       "words": "घर: मुख्य सड़क पर गली 4 तक, फिर गली 4 में मकान 5 तक।",
       "seconds": 5.329
+    },
+    {
+      "file": "1d0fbf8688a4c86a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चतुर्थांश उन चार भागों में से एक है जिनमें दोनों रेखाएँ तल को बाँटती हैं।",
+      "seconds": 5.469
+    },
+    {
+      "file": "3aa7c89094904d63.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चार चतुर्थांश",
+      "seconds": 1.823
+    },
+    {
+      "file": "4deb64428b874237.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चौथे चतुर्थांश को दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.832
     },
     {
       "file": "f57e760de80cfc0d.m4a",
@@ -581,6 +952,27 @@
       "seconds": 4.586
     },
     {
+      "file": "59b84395f9073d11.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दिशाएँ हर अक्ष के आधे भाग हैं, O X और O X डैश, O Y और O Y डैश, न कि रेखाएँ या भाग।",
+      "seconds": 8.418
+    },
+    {
+      "file": "f2cdce9d6508c41c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दूसरे चतुर्थांश को दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.483
+    },
+    {
+      "file": "5f44075abbd1578f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "देकार्त ने दो लंब रेखाओं से बिंदुओं का स्थान बताया। समकोण पर मिलने वाली रेखाएँ किसी भी ओर हो सकती हैं: दोनों तिरछी, या एक आड़ी और एक खड़ी। इस अध्याय में, हम एक क्षैतिज और एक ऊर्ध्वाधर रेखा लेते हैं।",
+      "seconds": 16.533
+    },
+    {
       "file": "f8b871e442e05a77.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -595,11 +987,25 @@
       "seconds": 19.97
     },
     {
+      "file": "c099e3141d87a42e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दो संख्या रेखाएँ",
+      "seconds": 1.603
+    },
+    {
       "file": "0805cb96ebc4c2e9.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "दोनों सही हैं, और बिंदु अब भी उस हिस्से में कहीं भी हो सकता है।",
       "seconds": 4.494
+    },
+    {
+      "file": "63985a27b98afd1d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "धनात्मक और ऋणात्मक दिशाएँ",
+      "seconds": 2.508
     },
     {
       "file": "353811e64b11efd1.m4a",
@@ -614,6 +1020,13 @@
       "locale": "hi",
       "words": "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 सेंटीमीटर पर है।",
       "seconds": 5.597
+    },
+    {
+      "file": "f61adb77d323d21b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "फिर से संख्या रेखा",
+      "seconds": 1.777
     },
     {
       "file": "dd87716a7f50950c.m4a",
@@ -686,6 +1099,13 @@
       "seconds": 2.996
     },
     {
+      "file": "93ed7a9d46abf1e9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 2 पर है: 0 से 2 इकाई, धनात्मक ओर। उसे माइनस 3 पर खींचो।",
+      "seconds": 6.665
+    },
+    {
       "file": "582a758576b2f229.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -721,6 +1141,27 @@
       "seconds": 7.094
     },
     {
+      "file": "e2565ef389086ff3.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "माइनस 3, 0 से 3 इकाई दूर है, ऋणात्मक ओर। इसलिए 0 से आर दूरी पर एक बिंदु धनात्मक ओर संख्या आर है, और ऋणात्मक ओर माइनस आर: चिह्न बताता है कि किस ओर।",
+      "seconds": 14.641
+    },
+    {
+      "file": "f1f3b9e5ea856299.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "मूल बिंदु O को दबाओ, फिर जाँचो दबाओ।",
+      "seconds": 3.077
+    },
+    {
+      "file": "8909ba374004a496.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।",
+      "seconds": 4.819
+    },
+    {
       "file": "b394d9bfdea9d244.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -740,6 +1181,13 @@
       "locale": "hi",
       "words": "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त से आया, जो 1596 से 1650 तक रहे, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
       "seconds": 28.561
+    },
+    {
+      "file": "a11dc88f2fa77bc0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "ये दो संख्या रेखाएँ हैं: X डैश X आड़ी और Y डैश Y खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।",
+      "seconds": 13.085
     },
     {
       "file": "86a9953761f41820.m4a",
@@ -763,11 +1211,60 @@
       "seconds": 16.881
     },
     {
+      "file": "44ea95535ea93936.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया का शहर बढ़ गया है। उसके कोने के पश्चिम में नई गलियाँ बनीं, और मुख्य सड़क के दक्षिण में नए मकान। रिया ने गलियाँ और मकान अपने कोने से गिने थे। इन नए वालों को कौन-सी संख्याएँ मिलें?",
+      "seconds": 14.501
+    },
+    {
+      "file": "6909ee9b84df51c9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया का शहर, पन्ने पर बिंदु और कक्षा की सीटें, हर एक के लिए दो समकोण रेखाओं के साथ दो संख्याएँ लगीं। किसी भी बिंदु का स्थान इस तरह बताने के लिए, हर रेखा एक संख्या रेखा होगी। पहले देखें कि संख्या रेखा क्या बताती है।",
+      "seconds": 16.8
+    },
+    {
+      "file": "34b3c9f7f445b51e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया के शहर में, एक्स-अक्ष मुख्य सड़क है और वाई-अक्ष उसके कोने से गुज़रती गली। O वही कोना है जहाँ से वह चली थी, दोनों पर 0।",
+      "seconds": 10.113
+    },
+    {
+      "file": "402a0f1f74ee20ac.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, गली 4, मकान 5 पर, पहले चतुर्थांश में है; उसकी मौसी का, गली माइनस 2, मकान माइनस 3 पर, तीसरे चतुर्थांश में। उसका नाम देखने के लिए किसी चतुर्थांश को दबाओ।",
+      "seconds": 21.049
+    },
+    {
       "file": "02f46a764e29fb8b.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "वह 2 स्टॉप दूर है; माइनस केवल दिशा बताता है, बाईं ओर।",
       "seconds": 5.062
+    },
+    {
+      "file": "cad9e7c339a2a830.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "शहर बढ़ता है",
+      "seconds": 1.452
+    },
+    {
+      "file": "6f080d729670dfbf.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "संक्षेप में: तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। एक्स-अक्ष क्षैतिज है और वाई-अक्ष ऊर्ध्वाधर। ये मूल बिंदु O पर काटते हैं, और कार्तीय तल को चार चतुर्थांशों में बाँटते हैं।",
+      "seconds": 17.729
+    },
+    {
+      "file": "11cd79d1e0624537.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "संख्या रेखा पर एक निश्चित बिंदु होता है, मूल बिंदु, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, और आगे, और दूसरी ओर, ऋणात्मक ओर, माइनस 1, माइनस 2, माइनस 3, और आगे।",
+      "seconds": 21.909
     },
     {
       "file": "ed09f2ef043c4fa9.m4a",
@@ -782,6 +1279,13 @@
       "locale": "hi",
       "words": "स्तंभ पहले आता है। चिह्नित दोनों डेस्क देखो: (5, 3) स्तंभ 5, पंक्ति 3 है, और (3, 5) स्तंभ 3, पंक्ति 5। वे अलग जगह हैं।",
       "seconds": 12.655
+    },
+    {
+      "file": "203826b210a6417c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "हर अक्ष के हर आधे भाग को, और O को, उसका नाम देखने के लिए दबाओ।",
+      "seconds": 5.701
     },
     {
       "file": "6fb7afbf5096f780.m4a",

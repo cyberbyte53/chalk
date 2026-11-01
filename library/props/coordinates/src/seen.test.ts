@@ -64,7 +64,11 @@ const inTown = (
   walker: { ...town.walker, ...walkerGiven },
 });
 const axes = {
-  plane: { showDirections: true, window: { xMin: -3, xMax: 3, yMin: -3, yMax: 3 } },
+  plane: {
+    showDirections: true,
+    canNumberQuadrants: true,
+    window: { xMin: -3, xMax: 3, yMin: -3, yMax: 3 },
+  },
 };
 const apart = { plane: { apart: { x: 2, y: 1 }, showOrigin: false } };
 const reading = { reading: { point: { x: 2, y: -1 }, reading: Reading.Pair } };

@@ -1,0 +1,6 @@
+# A half of each axis, the two quadrants counted wrongly clockwise, and the origin.
+- params: { part: "OY′" }
+- params: { part: "OX′" }
+- params: { part: "II" }
+- params: { part: "IV" }
+- params: { part: "O" }

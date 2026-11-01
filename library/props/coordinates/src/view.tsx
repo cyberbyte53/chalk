@@ -90,7 +90,7 @@ export const planeDrawing = drawing(plane, {
             {...does(plane.actions.bringTogether)}
           />
         )}
-        {isNaming && s.showDirections && s.quadrantsNamed < 4 && (
+        {isNaming && s.canNumberQuadrants && s.quadrantsNamed < 4 && (
           <SymbolButton
             symbol={word(WORDS.nameQuadrants, locale)}
             label={word(WORDS.nameQuadrants, locale)}

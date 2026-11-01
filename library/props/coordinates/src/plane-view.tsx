@@ -268,7 +268,11 @@ export function AxesDraw({
       {hasUp(s) &&
         yMarks.map((v, i) => {
           const [, y] = px.toPx(s.apart.x, v + s.apart.y);
-          const text = label(v, i);
+          // While the lines are apart, a number that would sit on the horizontal line's numbers
+          // isn't written: its mark stays.
+          const isApart = s.apart.x !== 0 || s.apart.y !== 0;
+          const isOnRow = isApart && y > base - 12 && y < base + 28;
+          const text = isOnRow ? "" : label(v, i);
           const isButton = canLight && isCounted && text !== "";
           return (
             <g key={`y${v}`} class="cp-mark">

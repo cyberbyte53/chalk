@@ -30,8 +30,8 @@ function walkWords(s: WalkerView, locale: Locale): string {
   const isOnMainRoad = s.roads === "town" && from !== null && now.y === from.y;
   // Counted streets start at 1: a 0 means she is on a main road, so that part isn't said.
   const counted = [
-    now.x === 0 ? "" : `${s.axisNames[0][locale]} ${now.x}`,
-    now.y === 0 ? "" : `${s.axisNames[1][locale]} ${now.y}`,
+    now.x === 0 ? "" : `${s.axisNames[0][locale]} ${num(now.x)}`,
+    now.y === 0 ? "" : `${s.axisNames[1][locale]} ${num(now.y)}`,
   ]
     .filter(Boolean)
     .join(", ");
@@ -39,11 +39,13 @@ function walkWords(s: WalkerView, locale: Locale): string {
     // On a single line (a number line), one number says where.
     s.axes === "horizontal"
       ? num(now.x)
-      : s.marks === "numbers"
+      : // In a town she walks streets: her place in their words, signed once the town grows past
+        // her corner. On open lines (graph paper, a city of crossings), the pair.
+        s.marks === "numbers" && s.roads !== "town"
         ? pair(now)
         : isOnMainRoad
-          ? `${s.axisNames[0][locale]} ${now.x}`
-          : s.marks === "counts"
+          ? `${s.axisNames[0][locale]} ${num(now.x)}`
+          : s.marks === "counts" || s.roads === "town"
             ? counted
             : addressOf(s.axisNames, now, locale);
   const isThere = s.target !== null && now.x === s.target.x && now.y === s.target.y;

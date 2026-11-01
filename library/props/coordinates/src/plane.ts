@@ -136,6 +136,11 @@ const planeFields = {
    * shows them itself (a crossing marked when Riya reaches it).
    */
   canShowPoints: z.boolean(),
+  /**
+   * Whether the learner gets a button numbering the quadrants I to IV. Off until the lesson
+   * defines quadrants: before that, the axes are named without them.
+   */
+  canNumberQuadrants: z.boolean(),
   /** Nothing else is drawn on it: a tap on a part of it names that part. */
   isAlone: z.boolean(),
   /** A counted line's numbers are buttons (each lights the places with that number). */
@@ -164,6 +169,7 @@ export type PlaneCore = {
   named: PlanePart | null;
   points: NamedPoint[];
   canShowPoints: boolean;
+  canNumberQuadrants: boolean;
   isAlone: boolean;
   canTapNumbers: boolean;
   lit: Line | null;
@@ -193,6 +199,7 @@ export const planeStart: Omit<PlaneCore, "isAlone" | "canTapNumbers" | "lit"> = 
   named: null,
   points: [],
   canShowPoints: false,
+  canNumberQuadrants: false,
 };
 
 /** Where a point is: in a quadrant, on an axis, or at O. */
@@ -327,6 +334,8 @@ export const plane = prop({
       points: z.array(namedPointSchema).max(MAX_POINTS),
       /** The learner gets a Next point button for a figure's hidden points. */
       canShowPoints: z.boolean(),
+      /** The learner gets a button numbering the quadrants I to IV. */
+      canNumberQuadrants: z.boolean(),
     })
     .strict(),
   start: planeStart,

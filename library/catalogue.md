@@ -104,6 +104,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plane.named` | {orNull: ["O", "OX", "OX′", "OY", "OY′", "I", "II", "III", "IV"]} | changed by plane.its own rules |
 | `plane.points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by plane.its own rules |
 | `plane.canShowPoints` | true or false | changed by plane.its own rules |
+| `plane.canNumberQuadrants` | true or false | changed by plane.its own rules |
 | `reading.point` | {orNull: {x: "number", y: "number"}} | changed by reading.its own rules |
 | `reading.pointStep` | number 0 to … | changed by reading.its own rules |
 | `reading.reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | changed by reading.its own rules |

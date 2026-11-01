@@ -170,7 +170,8 @@ describe("building content", () => {
     const chapter = builtChapterSchema.parse(
       result.files.get(builtFile("class9-maths/coordinate-geometry")),
     );
-    expect(chapter.concepts).toHaveLength(1);
+    // Its lessons, however many are built so far.
+    expect(chapter.concepts.length).toBeGreaterThan(0);
     const ids = new Set(chapter.concepts.map((c) => c.id));
     expect(chapter.questions.length).toBeGreaterThan(10);
     expect(chapter.questions.every((q) => q.tests.every((id) => ids.has(id)))).toBe(true);

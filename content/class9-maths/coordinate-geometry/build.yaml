@@ -2,5 +2,6 @@ title: { en: Coordinate Geometry, hi: निर्देशांक ज्य�
 # Concepts in book order (NCERT Class 9, Chapter 3, the 2020-21 edition). Each is added as it is built.
 concepts:
   - two-numbers-for-a-place
+  - the-cartesian-plane
 # The question bank: every family folder under questions/. Each family says which concepts it tests.
 questions: all

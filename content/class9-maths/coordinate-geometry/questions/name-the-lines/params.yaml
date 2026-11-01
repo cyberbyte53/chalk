@@ -1,0 +1,4 @@
+# Ex 3.2 Q1's three parts, each its own question.
+- params: { ask: lines }
+- params: { ask: parts }
+- params: { ask: point }

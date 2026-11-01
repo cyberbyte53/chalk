@@ -91,6 +91,7 @@ export const notebook = bareNotebook;
 /** How a scene reads a piece: by its name. */
 type Read = (piece: string) => Readonly<Record<string, unknown>>;
 type PlaneRead = {
+  plane: { named: string | null };
   walker: { at: { x: number; y: number } };
   places: { target: { x: number; y: number } | null };
   reading: { point: { x: number; y: number } | null };
@@ -112,6 +113,12 @@ export const isChosen =
     const target = planeOf(read, plane).places.target;
     return target !== null && target.x === x && target.y === y;
   };
+
+/** The part of the plane tapped last is `part` (`"OY′"`, `"III"`, `"O"`). */
+export const isNamed =
+  (plane: string, part: string) =>
+  (read: Read): boolean =>
+    planeOf(read, plane).plane.named === part;
 
 /** The point dragged (the dot) is at (x, y). */
 export const isPlaced =
