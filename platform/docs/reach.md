@@ -10,7 +10,7 @@ Before changing shared code, an agent asks what the change can make look or beha
 A change reaches a piece when it touches:
 - **A line the piece was made through, in its scope**: the whole function if that function places pieces on one line only (a kit's or a pattern's helper), else just the call on that line (a page's builder places many pieces, one per call).
 - **Code that scope uses**, directly or not, in any file: a top-level value two pieces' calls use reaches those two.
-- **Its prop type's definition or view** (paired in each package's `{ def, View }`), or code they use: `MultiChoiceView` reaches multiple-choice pieces only, though every basic prop's view is in one file.
+- **Its prop type's definition or view** (paired in each package's `propModule(def, View, sound)`), or its package's stylesheet, or code they use: `MultiChoiceView` reaches multiple-choice pieces only, though every basic prop's view is in one file.
 - **The player's code that draws every board** (`BoardPlayer`, `LessonPlayer`), or the code that builds every board: then it reaches everything, and says why.
 
 A change in a page's builder outside every piece's call, or to a question's row, reaches the whole board. A change only to comments, blank lines or types reaches nothing. A helper that places pieces is followed through the lines it placed them on, not wherever it is called from.
@@ -19,7 +19,7 @@ It errs on the side of more: a name shadowed locally still counts as a use, and 
 
 ## Using it
 
-- **`affected`** (chalk MCP): `changes` (files, `file:40-52`, or `file#declaration`), `props` (types), or `diff: true` (git, since HEAD, or a ref); `depth` (book, chapter, lesson, board, piece) and `under` (one branch). The fixer puts its answer in the plan for anything beyond one lesson.
+- **`affected`** (chalk MCP): `changes` (files, `file:40-52`, or `file#declaration`), `props` (types), or `diff: true` (git, since HEAD, or a ref); `depth` (book, chapter, lesson, board, piece) and `under` (one branch). The fixer's tool: it puts its answer in the plan for anything beyond one lesson. The reviewer asks `changes` instead: each board against what it was when passed, its code taken the same way, with the player and the stylesheets every board is drawn with ([changes.md](changes.md)).
 - **On a thread**: when it becomes ready, the writer records what its changed files reach (`reaches`: pieces, boards, the lessons; or every board and why). The review page and the cards under each board show it.
 
 ## Cost

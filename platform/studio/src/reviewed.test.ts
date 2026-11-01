@@ -46,6 +46,14 @@ function repo(boards: Record<string, unknown>) {
   put(`${SRC}/text.ts`, 'export const text = () => "t";\n');
   put(`${SRC}/styles.css`, ".plane {}\n");
   put(`content/${LESSON}/overview.ts`, "export const overview = 1;\n");
+  // What draws every board: the player, and the app's stylesheet.
+  put(
+    "platform/packages/player/src/board-player.tsx",
+    'import { frame } from "./frame";\nexport function BoardPlayer() {\n  return frame();\n}\n',
+  );
+  put("platform/packages/player/src/lesson-player.tsx", "export function LessonPlayer() {}\n");
+  put("platform/packages/player/src/frame.ts", "export const frame = () => 1;\n");
+  put("platform/apps/learner/src/app.css", ".board {}\n");
   put("authoring/books/class9-maths/geometry/.keep", "");
   execFileSync("git", ["init", "-q"], { cwd: root });
   execFileSync("git", ["add", "-A"], { cwd: root });
@@ -92,7 +100,7 @@ describe("what changed since a board was passed", () => {
     build(root, { dot: board("Here is a dot", "none"), desk: board("A desk", "counts") });
     const words = changesWords(changesUnder(root, LESSON));
     expect(words).toContain(`${LESSON}/dot   changed since passed by reviewer`);
-    expect(words).toContain("sheet › with › marks: counts → none");
+    expect(words).toContain('  sheet: marks "counts" → "none"');
     expect(words).toContain("1 unchanged since passed: desk");
   });
 
@@ -143,6 +151,23 @@ describe("what changed since a board was passed", () => {
     expect(changesUnder(root, LESSON)[0]).toMatchObject({
       code: [{ node: `${SRC}/plane.ts#plane` }, { node: `${SRC}/styles.css#` }],
     });
+  });
+
+  it("what draws every board reaches every board: the player's code, the app's stylesheets", () => {
+    const root = repo({ town: board("A town", "counts"), dot: board("Here is a dot", "counts") });
+    passUnder(root, LESSON, "reviewer");
+    edit(root, "platform/packages/player/src/frame.ts", "export const frame = () => 2;\n");
+    edit(root, "platform/apps/learner/src/app.css", ".board { color: red }\n");
+    const changes = changesUnder(root, LESSON);
+    expect(changes).toHaveLength(2);
+    for (const c of changes)
+      expect(c).toMatchObject({
+        status: "changed",
+        code: expect.arrayContaining([
+          { node: "platform/apps/learner/src/app.css#" },
+          { node: "platform/packages/player/src/frame.ts#frame" },
+        ]),
+      });
   });
 
   it("counts a board as changed when its code can't be told", () => {

@@ -60,8 +60,9 @@ function repo(): string {
     [
       'import { bar, dot } from "./defs";',
       'import { BarView, DotView } from "./views";',
-      "export const dotProp = { def: asAnyProp(dot), View: DotView };",
-      "export const barProp = { def: asAnyProp(bar), View: BarView };",
+      'import { sounds } from "./sounds";',
+      "export const dotProp = propModule(dot, DotView);",
+      "export const barProp = propModule(bar, BarView, sounds[bar.type]);",
       "",
     ].join("\n"),
   );
@@ -171,6 +172,10 @@ describe("what a change reaches", () => {
       "b/c/l/one#b",
       "b/c/l/two#c",
     ]);
+  });
+
+  it("a package's stylesheet: the pieces of its props", () => {
+    expect(reached("library/props/shapes/src/styles.css")).toHaveLength(6);
   });
 
   it("code a view uses, through a package's index", () => {

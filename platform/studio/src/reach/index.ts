@@ -40,7 +40,7 @@ export type Reached = {
 };
 
 /** What draws every board: a change reaching these reaches everything. */
-const DRAWS_EVERY_BOARD = [
+export const DRAWS_EVERY_BOARD = [
   "platform/packages/player/src/board-player.tsx#BoardPlayer",
   "platform/packages/player/src/lesson-player.tsx#LessonPlayer",
 ];
@@ -250,36 +250,40 @@ export class ReachIndex {
 
   private rootsCache: Map<string, string[]> | undefined;
 
-  /** Each prop type → its definition's and its view's nodes, from each package's `{ def, View }` pairs. */
+  /**
+   * Each prop type → its definition's, its view's and its sounds' nodes, from each package's
+   * `propModule(def, View, sound)` (the player finds a prop by its type, never by an import).
+   */
   typeRoots(): Map<string, string[]> {
     if (this.rootsCache !== undefined) return this.rootsCache;
     const out = new Map<string, string[]>();
+    const MODULE = /propModule\(\s*(\w+)\s*,\s*(\w+)\s*(?:,\s*(\w+))?/g;
     for (const file of this.graph.facts.keys()) {
       if (!file.startsWith("library/props/")) continue;
       const text = safeRead(join(this.root, file));
-      const PAIR = /def:\s*(?:asAnyProp\()?\s*(\w+)\s*\)?\s*,\s*View:\s*(\w+)/g;
-      const pairLines = [...text.matchAll(PAIR)].map(
-        (m) => text.slice(0, m.index).split("\n").length,
-      );
-      for (const m of text.matchAll(/def:\s*(?:asAnyProp\()?\s*(\w+)\s*\)?\s*,\s*View:\s*(\w+)/g)) {
+      const found = [...text.matchAll(MODULE)];
+      const lines = found.map((m) => text.slice(0, m.index).split("\n").length);
+      for (const [k, m] of found.entries()) {
         const [defNode] = this.graph.nodesFor(file, m[1] ?? "");
-        const [viewNode] = this.graph.nodesFor(file, m[2] ?? "");
         if (defNode === undefined) continue;
         const type = this.typeOfNode(defNode);
         if (type === undefined) continue;
-        // The declaration pairing them (`export const fooProp = { def, View }`) is part of it too,
-        // when it pairs only this one (a list of every pair would join them all).
-        const line = text.slice(0, m.index).split("\n").length;
-        const pair = Object.entries(this.graph.facts.get(file)?.decls ?? {}).find(
+        const [viewNode] = this.graph.nodesFor(file, m[2] ?? "");
+        const [soundNode] = m[3] === undefined ? [] : this.graph.nodesFor(file, m[3]);
+        // The declaration making it (`export const fooProp = propModule(…)`) is part of it too,
+        // when it makes only this one (a list of every prop would join them all).
+        const line = lines[k] ?? 0;
+        const own = Object.entries(this.graph.facts.get(file)?.decls ?? {}).find(
           ([, d]) =>
             d.lines[0] <= line &&
             line <= d.lines[1] &&
-            pairLines.filter((l) => d.lines[0] <= l && l <= d.lines[1]).length === 1,
+            lines.filter((l) => d.lines[0] <= l && l <= d.lines[1]).length === 1,
         );
         out.set(type, [
           defNode,
           ...(viewNode === undefined ? [] : [viewNode]),
-          ...(pair === undefined ? [] : [`${file}#${pair[0]}`]),
+          ...(soundNode === undefined ? [] : [soundNode]),
+          ...(own === undefined ? [] : [`${file}#${own[0]}`]),
         ]);
       }
     }

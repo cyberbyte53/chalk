@@ -267,33 +267,98 @@ export function passUnder(root: string, under: string, by: string): number {
   return now.size;
 }
 
-/** Where a change is, by piece names only: "sheet › with › marks", not "root › children › …". */
-const placeOf = (at: string) => at.replace(/^root › /, "").replace(/(^| › )children › /g, "$1");
-
-/** A change in words: "sheet › with › marks: counts → none". */
-function changeWords(c: Change): string {
+/**
+ * A board's content changes, as a reviewer reads them: one line per piece (its setup and words),
+ * per line said, and for the board's rules, each field once with was → now. A prop's definition
+ * copied into the record (the scene's children, its schemas) is its code: said with the code.
+ */
+export function contentLines(changes: readonly Change[], isAll = false): string[] {
   const short = (v: unknown) => {
-    const text = typeof v === "string" ? v : JSON.stringify(v);
-    return text.length > 80 ? `${text.slice(0, 77)}…` : text;
+    if (v === undefined) return "nothing";
+    const text = typeof v === "string" ? `"${v}"` : JSON.stringify(v);
+    return text.length > 70 ? `${text.slice(0, 67)}…` : text;
   };
-  const at = placeOf(c.at);
-  if (c.was === undefined) return `${at}: added ${short(c.now)}`;
-  if (c.now === undefined) return `${at}: removed (was ${short(c.was)})`;
-  return `${at}: ${short(c.was)} → ${short(c.now)}`;
+  const groups = new Map<string, Map<string, Change>>();
+  const add = (group: string, field: string, c: Change) => {
+    const fields = groups.get(group) ?? new Map<string, Change>();
+    // The same field met twice (the setup in the layout and in what the board gives): once.
+    if (!fields.has(field)) fields.set(field, c);
+    groups.set(group, fields);
+  };
+  for (const c of changes) {
+    const segs = c.at.split(" › ");
+    const [top, kind, name, ...rest] = segs;
+    if (top === "model" && kind === "given" && name !== undefined) add(name, rest.join("."), c);
+    else if (top === "model" && kind === "lines" && name !== undefined)
+      add(`line ${name}`, rest.join("."), c);
+    else if (top === "model" && kind === "scene") {
+      // The board's own rules (what it hears, what it does on its own); not its props' code.
+      if (name === "on" || name === "hear" || name === "facts" || name === "when")
+        add("rules", [name, ...rest].join("."), c);
+    } else if (top === "model") add("rules", segs.slice(1).join("."), c);
+    else if (top === "root") {
+      const path = segs.slice(1).filter((x) => x !== "children");
+      const at = path.indexOf("with");
+      if (at > 0) add(path[at - 1] as string, path.slice(at + 1).join("."), c);
+      else add(path[0] ?? "layout", path.length > 1 ? path.slice(1).join(".") : "placed", c);
+    } else add("rules", segs.join("."), c);
+  }
+  return [...groups].map(([group, fields]) => {
+    // A piece placed or taken away: that alone.
+    const placed = fields.get("placed");
+    if (placed !== undefined && (placed.was === undefined || placed.now === undefined))
+      return `  ${group}: ${placed.was === undefined ? "added" : "removed"}`;
+    // Words in English as was → now (the Hindi said to have changed too); other fields as was →
+    // now when there are few, else by name (all of them when asked about one board).
+    const isHindi = (f: string) => f.endsWith(".hi") || f === "hi";
+    const isWords = (f: string) => f.endsWith(".en") || f === "en";
+    const hindi = [...fields].some(([f]) => isHindi(f));
+    const words = [...fields].filter(([f]) => isWords(f));
+    const rest = [...fields].filter(([f]) => !isWords(f) && !isHindi(f));
+    const each = ([f, c]: [string, Change]) =>
+      `${f.replace(/\.en$|^en$/, "") || "words"} ${short(c.was)} → ${short(c.now)}`;
+    const said = [
+      ...words.map(each),
+      ...(isAll || rest.length <= FIELDS_SHOWN
+        ? rest.map(each)
+        : [`${rest.length} fields: ${rest.map(([f]) => f).join(", ")}`]),
+      ...(hindi ? ["its Hindi too"] : []),
+    ];
+    return `  ${group}: ${said.join(" · ")}`;
+  });
 }
 
+/** How many of a piece's fields are said as was → now among others, before only their names. */
+const FIELDS_SHOWN = 3;
+
+/** How many changed functions a board lists among others before counting the rest (alone: all). */
+const CODE_SHOWN = 8;
+
 /** The changes, as the reviewer reads them: changed boards first, with what changed on each. */
-export function changesWords(changes: readonly BoardChange[]): string {
+export function changesWords(
+  changes: readonly BoardChange[],
+  /** What a changed board shows now against when it was passed, a line each (`changes` draws it). */
+  shows: ReadonlyMap<string, readonly string[]> = new Map(),
+): string {
   const of = (s: BoardChange["status"]) => changes.filter((c) => c.status === s);
   const lines: string[] = [];
   for (const c of of("changed")) {
     if (c.status !== "changed") continue;
     lines.push(`${c.board}   changed since passed by ${c.passed.by} at ${c.passed.commit}`);
-    for (const change of c.content) lines.push(`  ${changeWords(change)}`);
-    for (const { node, inReview } of c.code)
+    lines.push(...contentLines(c.content, changes.length === 1));
+    for (const line of shows.get(c.board) ?? []) lines.push(`  ${line}`);
+    // What ran in the review first: that is where to look.
+    const order = { ran: 0, new: 1, "didn't run": 2 } as const;
+    const code = [...c.code].sort(
+      (a, b) => (order[a.inReview ?? "didn't run"] ?? 3) - (order[b.inReview ?? "didn't run"] ?? 3),
+    );
+    const shown = changes.length === 1 ? code.length : CODE_SHOWN;
+    for (const { node, inReview } of code.slice(0, shown))
       lines.push(
         `  code: ${node}${inReview === undefined ? "" : ` (${IN_REVIEW_WORDS[inReview]})`}`,
       );
+    if (code.length > shown)
+      lines.push(`  code: ${code.length - shown} more changed (changes at the board for all)`);
   }
   for (const c of of("new")) lines.push(`${c.board}   new: never passed`);
   for (const c of of("gone")) lines.push(`${c.board}   gone: passed once, no longer built`);

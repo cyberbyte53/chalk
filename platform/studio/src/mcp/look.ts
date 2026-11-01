@@ -4,8 +4,10 @@ import { PROPS_ROOT, contentAddress, shownAddress } from "@chalk/content/address
 import { full } from "@chalk/content/words";
 import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
+import { buildInputsKey } from "../content/inputs";
 import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
+import { type Shown, keepShown } from "../reach/shown";
 import type { ChapterScript, ScriptEntry } from "../sound/voice/make";
 import type { Said } from "../sound/voice/said";
 import {
@@ -548,21 +550,20 @@ export async function look(
     pictures: target.kind === "group" ? "thumb" : "full",
   });
   const board = target.kind === "group" ? target.unit : target.board;
-  // The versions are drawn at once, on up to LOOK_PAGES pages: the caller's own and pages of its
-  // own for the rest.
-  const drawn: Drawn[] = new Array(versions.length);
-  let next = 0;
-  const worker = async (k: number) => {
-    for (let i = next++; i < versions.length; i = next++) {
-      const v = versions[i] as Version;
-      const d = await shoot(root, board, options(v), undefined, k === 0 ? lane : `${lane}:v:${k}`);
-      for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
-      drawn[i] = d;
-    }
-  };
-  await Promise.all(
-    Array.from({ length: Math.min(a.pages ?? LOOK_PAGES, versions.length) }, (_, k) => worker(k)),
-  );
+  // What a board shows in every version, kept for `changes` (reach/shown.ts): only a whole built
+  // board, drawn as it is (every version, nothing hidden, no state given).
+  const isWhole =
+    target.kind === "board" &&
+    !board.startsWith(PROPS_ROOT) &&
+    a.locales === undefined &&
+    a.screens === undefined &&
+    a.play !== true &&
+    a.state === undefined &&
+    a.speed === undefined;
+  const inputs = isWhole ? buildInputsKey(root) : "";
+  const drawn = await drawVersions(root, board, versions, options, lane, a.pages);
+  if (isWhole)
+    keepShown(root, "open", shownBoard(board), { inputs, versions: shownOf(drawn, versions) });
   if (target.kind === "group") {
     const wanted = new Set(target.boards);
     const tiles: Tile[] = [];
@@ -654,6 +655,87 @@ export async function look(
     text: [text, ...otherProblems].join("\n"),
     images,
   };
+}
+
+/** Each version drawn, at once, on up to LOOK_PAGES pages: the caller's own and pages of its own. */
+async function drawVersions(
+  root: string,
+  board: string,
+  versions: readonly Version[],
+  options: (v: Version) => ShotOptions,
+  lane: string,
+  pages = LOOK_PAGES,
+): Promise<Drawn[]> {
+  const drawn: Drawn[] = new Array(versions.length);
+  let next = 0;
+  const worker = async (k: number) => {
+    for (let i = next++; i < versions.length; i = next++) {
+      const v = versions[i] as Version;
+      const d = await shoot(root, board, options(v), undefined, k === 0 ? lane : `${lane}:v:${k}`);
+      for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
+      drawn[i] = d;
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(pages, versions.length) }, (_, k) => worker(k)));
+  return drawn;
+}
+
+/** A board's path as `changes` keeps it: "class9-maths/…", without content/. */
+const shownBoard = (board: string) => board.replace(/^content\//, "");
+
+/** What each version showed: its picture, where each piece is, and each piece's state and problems. */
+function shownOf(drawn: readonly Drawn[], versions: readonly Version[]): Shown["versions"] {
+  return drawn.flatMap((d, i) => {
+    const s = d.shots[0];
+    const v = versions[i];
+    if (s === undefined || v === undefined) return [];
+    const problems = problemsByPiece(s.overflow);
+    const read = (s.model?.nodes ?? [])
+      .map((n) => {
+        const bound = Object.fromEntries(Object.entries(n.bound).map(([k, b]) => [k, b.value]));
+        // A part's words are read in English whatever the version (the agents' language): each
+        // version's own words are in its state and its picture.
+        const parts = n.parts.map((p) =>
+          v.locale === "en"
+            ? [p.path, p.words ?? p.value ?? null, p.isOff === true]
+            : [p.path, p.isOff === true],
+        );
+        return `${n.path}: ${JSON.stringify({ isShown: n.isShown, setup: n.setup, live: n.live, bound, parts, problem: problems.get(n.path) ?? null })}`;
+      })
+      .join("\n");
+    return [
+      {
+        version: `${v.locale} · ${screenWords(v)}`,
+        read,
+        boxes: s.boxes.filter((b) => b.kind === "piece"),
+        scale: s.png.length > 0 ? s.png.readUInt32BE(16) / s.width : 2,
+        png: s.png,
+      },
+    ];
+  });
+}
+
+/**
+ * A board drawn as `show` draws it without steps, every version, as `changes` keeps it: for a
+ * board whose make-up changed, or one passed without a drawing from its review.
+ */
+export async function drawShown(root: string, board: string, lane: string): Promise<Shown> {
+  const inputs = buildInputsKey(root);
+  const versions = versionsOf({});
+  const drawn = await drawVersions(
+    root,
+    shownBoard(board),
+    versions,
+    (v) => ({
+      locale: v.locale,
+      width: v.width,
+      ...(v.height === undefined ? {} : { height: v.height }),
+      speed: DEFAULT_SPEED,
+      pictures: "full",
+    }),
+    lane,
+  );
+  return { inputs, versions: shownOf(drawn, versions) };
 }
 
 /** The pictures put together, timed when something measures (timing in app-driver.ts). */

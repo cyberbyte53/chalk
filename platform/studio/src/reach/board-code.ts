@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join, relative } from "node:path";
 import type { BoardReach } from "../content/build";
 import type { CodeGraph } from "./graph";
-import { splitFrame } from "./index";
+import { DRAWS_EVERY_BOARD, splitFrame } from "./index";
 
 /**
  * The code a board runs: every declaration (and file's own statements, and stylesheet) it can
@@ -12,9 +12,10 @@ import { splitFrame } from "./index";
  *
  * Sound before precise: it may name more than the board runs, never less; undefined when that
  * can't be told (a prop whose package isn't known).
- * - Roots: the lines that made the board and its pieces (they reach the helpers they call), and,
- *   for each prop it places, everything that prop's package exports (the player finds a prop by
- *   its type, not by an import).
+ * - Roots: the lines that made the board and its pieces (they reach the helpers they call); for
+ *   each prop it places, everything that prop's package exports (the player finds a prop by its
+ *   type, not by an import); and what draws every board: the player, and the stylesheets the app
+ *   draws every board with (EVERY_BOARD_STYLES).
  */
 /**
  * A board's code: one fingerprint of all of it (its roots' deep fingerprints, graph.ts), and, to
@@ -27,7 +28,8 @@ export function boardCode(
   reach: BoardReach,
   homes: ReadonlyMap<string, string>,
 ): BoardCode | undefined {
-  const roots = new Set<string>([`${reach.module}#`]);
+  const roots = new Set<string>([`${reach.module}#`, ...DRAWS_EVERY_BOARD]);
+  for (const sheet of everyBoardStyles(graph.root)) roots.add(`${sheet}#`);
   const frames = [...(reach.stack ?? []), ...Object.values(reach.pieces).flatMap((p) => p.stack)];
   for (const frame of frames) {
     const [file, line] = splitFrame(frame);
@@ -58,6 +60,29 @@ export function boardCode(
         [...graph.dependenciesOf(sorted)].sort().map((n) => [n, graph.fingerprintOf(n) ?? "-"]),
       ),
   };
+}
+
+/** Where the stylesheets every board is drawn with are: the look, the pieces, the player, the app. */
+const EVERY_BOARD_STYLES = [
+  "platform/packages/look/src",
+  "platform/packages/draw/src",
+  "platform/packages/player/src",
+  "platform/apps/learner/src",
+];
+
+let styles: { root: string; files: string[] } | undefined;
+function everyBoardStyles(root: string): string[] {
+  if (styles?.root === root) return styles.files;
+  const files: string[] = [];
+  const walk = (dir: string) => {
+    if (!existsSync(dir)) return;
+    for (const e of readdirSync(dir, { withFileTypes: true }))
+      if (e.isDirectory()) walk(join(dir, e.name));
+      else if (e.name.endsWith(".css")) files.push(relative(root, join(dir, e.name)));
+  };
+  for (const d of EVERY_BOARD_STYLES) walk(join(root, d));
+  styles = { root, files: files.sort() };
+  return styles.files;
 }
 
 /** The files a prop package offers (its package.json `exports`), from the repo root. */
