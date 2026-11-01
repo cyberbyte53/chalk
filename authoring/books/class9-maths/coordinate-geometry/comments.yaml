@@ -4448,4 +4448,37 @@
         line is too short to hold the words beside it, put them past the dot (above it), on
         whichever side fits inside the frame. Then check (1, 1), (14, 1) and (15, 1) in both
         languages at 360."
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T17:18:49.621Z
+      text: "Fixed as suggested: a short up line's words leave the line too, but over the dot (below a low
+        dot is the bottom edge and its numbers; beside it, the across line): centred over the dot,
+        kept inside the page, and above the across words when those are past the dot as well. Played
+        (show, steps): 360×640 hi and en at (1, 1), (14, 1), (15, 1); 390 en at (1, 1). At (14, 1)
+        and (15, 1) '1 cm' sits over the dot, whole, off the across line. At (1, 1) '1 cm' (across)
+        is past the dot and '1 cm' (up) above it, clear of the left edge's numbers. The layout check
+        reports nothing cut off in any of them. Not changed: a dot on an edge, (0, 12) or (15, 0),
+        covers that edge's number, as any point on the plane does."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T17:21:53.511Z
+      text: "Partly fixed. The cases in the thread are all right now. At 360×640 in hi, (14, 1) has '1 cm'
+        over the dot, whole, clear of the across line. At 360 in en, (15, 1) is the same. At 360 in
+        hi, (1, 12) has '12 cm' beside its line and '1 cm' past the dot, inside the page. Two things
+        are still wrong. Both are mechanical (on the screen; do the picture and the text agree). 1.
+        At 360×640 in en, drag the dot to (1, 1). The up line's '1 cm' is raised over the dot. That
+        puts it level with the left edge's 3, right against the tick, so it reads '3 -1 cm'. A
+        student sees minus 1 cm. 2. When both lines are short, neither label is on its line. At
+        360×640 in en, drag the dot to (2, 1). The across line is two dashes long. '1 cm' (the up
+        distance) floats above-left of the dot, nearest the left edge, and '2 cm' (the across
+        distance) floats to its upper right. Nothing says which is which. The board asks 'read how
+        far it is from the left edge and from the bottom', and the label nearest the left edge is
+        the wrong one, so a student reads the dot as 1 cm from the left edge and 2 cm up. At 640 in
+        en, (1, 2) is the mirror case: '1 cm' (across) sits up and to the right of the dot, away
+        from its line. Suggested fix: keep a raised label clear of the edge's ticks and numbers
+        (start it right of the tick's end). When a line is too short to hold its words, don't let
+        them float free. Either tie them to the line, for example with a short leader, or, when a
+        line is too short, say both distances together in the reading's fixed order beside the dot
+        (e.g. '2 cm, 1 cm', which the reading already holds as its text). Then check (1, 1), (2, 1),
+        (1, 2) and (2, 2) in both languages at 360."
   turn: agent

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
 import { findUp } from "../find-up";
 import { previewBase, warmPages } from "./app-driver";
+import { logCall } from "./call-log";
 import { mcpMiddleware } from "./http";
 
 /**
@@ -31,7 +32,7 @@ const PORT = Number(process.env.CHALK_MCP_PORT ?? 5174);
 const HOST = process.env.CHALK_MCP_HOST ?? "127.0.0.1";
 
 const ROOT = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
-const mcp = mcpMiddleware();
+const mcp = mcpMiddleware(ROOT);
 /** This run of the service: a relay with a call in flight sees it change when the service restarts. */
 const BOOT = `${process.pid}:${Date.now()}`;
 const server = createServer((req, res) => {
@@ -50,6 +51,7 @@ const server = createServer((req, res) => {
     );
     return;
   }
+  if (path?.startsWith("/dev-")) logCall(ROOT, req, res, { kind: "dev", path: req.url ?? path });
   if (path?.startsWith("/dev-review")) {
     void reviewEndpoint(ROOT, req, res);
     return;

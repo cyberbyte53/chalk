@@ -24,7 +24,8 @@
     "add-school": "sh platform/deploy/add-school.sh",
     "boundaries": "pnpm --filter @chalk/studio boundaries",
     "catalogue": "pnpm --filter @chalk/studio catalogue",
-    "sound": "pnpm --filter @chalk/studio --silent sound"
+    "sound": "pnpm --filter @chalk/studio --silent sound",
+    "tool-times": "pnpm --filter @chalk/studio tool-times"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

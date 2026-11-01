@@ -72,4 +72,6 @@ The layout check runs first on the untouched page, and the screenshot is taken c
 
 ## Held to it
 
+**Every call is timed.** The service logs each tool call and each `/dev-*` request (the editor's, the preview's) to `node_modules/.cache/chalk-calls.jsonl` (`platform/studio/src/mcp/call-log.ts`): what was asked and by whom, how long it took, how long it waited on the way (the relay stamps when it sent it), how long the service's one thread was held while it was open, and how big the answer was (words, pictures). `pnpm tool-times` (`--since 2h`, `--slow 20`) sums it up per tool and lists the slowest calls: what is slow is seen, not guessed.
+
 `pnpm bench-look` measures a reviewer's call (a board in six versions, and the same board after steps) and keeps its answer, so a faster tool is held to the same words and pixels. `pnpm stress-mcp` (`platform/studio/src/mcp/stress.ts`) runs the tool the way agents call it, against the running service: many calls at once from one agent and from several, every width and language, content changing mid-drawing, agents not reaching each other's boards, played and question boards, labels not changing the picture, pieces cut out, a chapter checked, bad names. Run it with `pnpm check` before committing a change to the tool.

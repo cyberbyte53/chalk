@@ -66,7 +66,20 @@ function current(): Promise<Client> {
   connecting ??= (async () => {
     await ensureService();
     const c = new Client({ name: "chalk-connect", version: "1" });
-    await c.connect(new StreamableHTTPClientTransport(URL_, { requestInit: { headers } }));
+    await c.connect(
+      new StreamableHTTPClientTransport(URL_, {
+        requestInit: { headers },
+        // When each call left here: the service sets it against when it arrived (call-log.ts).
+        fetch: (url, init) =>
+          fetch(url, {
+            ...init,
+            headers: {
+              ...Object.fromEntries(new Headers(init?.headers)),
+              "x-chalk-sent": String(Date.now()),
+            },
+          }),
+      }),
+    );
     return c;
   })().catch((e: unknown) => {
     connecting = undefined; // the next call tries again

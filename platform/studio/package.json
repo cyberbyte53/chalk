@@ -16,7 +16,8 @@
     "mcp": "node start.mjs",
     "stress-mcp": "tsx --tsconfig ../../tsconfig.base.json src/mcp/stress.ts",
     "bench-look": "tsx --tsconfig ../../tsconfig.base.json src/mcp/bench-look.ts",
-    "dev": "node start.mjs"
+    "dev": "node start.mjs",
+    "tool-times": "tsx --tsconfig ../../tsconfig.base.json src/mcp/tool-times.ts"
   },
   "dependencies": {
     "@chalk/author": "workspace:*",

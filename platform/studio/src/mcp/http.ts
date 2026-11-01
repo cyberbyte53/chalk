@@ -3,6 +3,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { Role } from "../comments";
 import { closeBrowser, closeLane } from "./app-driver";
+import { logCall } from "./call-log";
 import { type Who, chalkMcp } from "./tools";
 
 /**
@@ -67,7 +68,7 @@ export function whoOf(req: IncomingMessage): Who | null {
  * who it is comes with every request (its token), and its page for drawing boards too (the agent
  * id its relay, connect.ts, sends).
  */
-export function mcpMiddleware(): {
+export function mcpMiddleware(root: string): {
   handle: (req: IncomingMessage, res: ServerResponse) => Promise<void>;
   close: () => Promise<void>;
 } {
@@ -103,6 +104,15 @@ export function mcpMiddleware(): {
       return refuse(res, 401, "a chalk token is needed: Authorization: Bearer <token>");
     const body = req.method === "POST" ? await readBody(req).catch(() => null) : undefined;
     if (body === null) return refuse(res, 400, "not JSON");
+    // A tool call is timed and logged (call-log.ts); the protocol's own messages aren't.
+    const call = body as { method?: string; params?: { name?: string; arguments?: unknown } };
+    if (call?.method === "tools/call")
+      logCall(root, req, res, {
+        kind: "tool",
+        tool: call.params?.name ?? "?",
+        args: call.params?.arguments,
+        who: `${who.role}:${who.name}`,
+      });
     // The agent's own page for drawing boards (app-driver.ts), by the id its relay sends with every
     // call; without one, a page for this request alone (nothing to go on from).
     const agent = String(req.headers["x-chalk-agent"] ?? "").trim();
