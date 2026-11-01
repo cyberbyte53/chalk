@@ -1297,7 +1297,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   const isPlaying = params.has("earned");
   const isShot = params.has("shot");
   // How fast the boards' clocks run (`&speed=10`): a tool watching boards runs them faster.
-  const speed = Number(params.get("speed")) || 1;
+  // `speed=jump`: a tool reading the boards, their clocks jumping to where they end.
+  const speed =
+    params.get("speed") === "jump" ? Number.POSITIVE_INFINITY : Number(params.get("speed")) || 1;
   // The column's width, to see the board as another device draws it (a phone by default).
   const width = Number(params.get("width")) || undefined;
   const locale = params.get("locale") === "hi" ? Locale.Hi : Locale.En;

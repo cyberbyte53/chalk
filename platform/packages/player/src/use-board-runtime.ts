@@ -14,8 +14,8 @@ export type Speak = (line: WordsToSay) => Promise<boolean>;
 
 /**
  * How fast boards' clocks run: 1 for a student (real time); a tool watching boards may run them
- * faster (the chalk MCP's play), so waits and glides end sooner, in the same order, with the same
- * values.
+ * faster, so waits and glides end sooner, in the same order, with the same values. Infinity: a
+ * tool reading boards, whose clocks jump to where they end (runtime.ts, isJumping).
  */
 export const BoardSpeedContext = createContext(1);
 
@@ -38,7 +38,9 @@ export function useBoardRuntime(
     playSound?: (sound: Sound, lasts?: boolean) => SoundPlaying;
   },
 ): BoardRuntime {
-  const speed = useContext(BoardSpeedContext);
+  const given = useContext(BoardSpeedContext);
+  const isJumping = given === Number.POSITIVE_INFINITY;
+  const speed = isJumping ? 1 : given;
   const speakRef = useRef(speak);
   speakRef.current = speak;
   const [runtime] = useState((): BoardRuntime => {
@@ -64,6 +66,7 @@ export function useBoardRuntime(
         ? {}
         : { playSound: voice.playSound }),
       isHeard: voice.isSilent !== true,
+      ...(isJumping ? { isJumping: true } : {}),
     });
   });
   useEffect(() => {

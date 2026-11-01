@@ -19,7 +19,7 @@ import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
 import type { BoardRuntime } from "./runtime";
 import { useBoardSound } from "./sound/board-sound";
-import { playSound } from "./sound/engine";
+import { isAudible, playSound, whenAudible } from "./sound/engine";
 import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
 import { type ClipStore, type SpokenProp, useVoice } from "./sound/voice";
 import { t } from "./ui-text";
@@ -75,7 +75,31 @@ export type BoardPlayerProps = {
  */
 export function BoardPlayer(props: BoardPlayerProps): JSX.Element {
   const sound = useBoardSound(props.board);
+  // A board that sounds starts once the page may sound: a browser allows it from the first touch,
+  // which a student gives in reaching a board (opening a lesson, Continue). One opened without it
+  // (a link, a refresh) asks for it, so its opening is heard: its clock starts with the board.
+  const [mayStart, setMayStart] = useState(() => props.isSilent === true || isAudible());
+  useEffect(() => {
+    if (mayStart) return;
+    let isGone = false;
+    void whenAudible().then(() => {
+      if (!isGone) setMayStart(true);
+    });
+    return () => {
+      isGone = true;
+    };
+  }, [mayStart]);
   if (!sound.isReady) return <div class="board" aria-busy="true" />;
+  if (!mayStart)
+    return (
+      <div class="board is-waiting">
+        <footer class="board-footer">
+          <button type="button" class="primary" onClick={() => setMayStart(true)}>
+            {t(props.locale, "start")}
+          </button>
+        </footer>
+      </div>
+    );
   return <BoardPlay {...props} audio={sound.source} />;
 }
 

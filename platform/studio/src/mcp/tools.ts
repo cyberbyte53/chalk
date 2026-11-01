@@ -610,7 +610,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .max(100)
             .optional()
             .describe(
-              "How fast the board's clock runs: waits, glides and timers end sooner, in the same order with the same values. Default 10; 1 for real time. Boards are read once they've settled (at most 30s of board time; what's still running then is named).",
+              "By default the board's clock jumps: everything due (lines, which last their clips' length; glides; waits) is done at once, each at its own board time, and the board is read where it ends. A number runs the clock at that speed in real time instead (1: real time), for watching it; then a board is read once it has settled, at most 30s of board time (what's still running is named).",
             ),
         },
         // Rebuilding writes build/, which is generated: nothing the person wrote changes.
@@ -727,7 +727,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .max(100)
             .optional()
             .describe(
-              "How fast the board's clock runs: waits, glides and timers end sooner, in the same order with the same values. Default 10; 1 for real time. Boards are read once they've settled (at most 30s of board time; what's still running then is named).",
+              "By default the board's clock jumps: everything due (lines, which last their clips' length; glides; waits) is done at once, each at its own board time, and the board is read where it ends. A number runs the clock at that speed in real time instead (1: real time), for watching it; then a board is read once it has settled, at most 30s of board time (what's still running is named).",
             ),
         },
         annotations: { readOnlyHint: true, openWorldHint: false },

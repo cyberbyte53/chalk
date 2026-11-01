@@ -81,6 +81,11 @@ export class BoardRuntime {
        * stand-in ends it at its length, on the board's clock (a tool, a check, a test).
        */
       isHeard?: boolean;
+      /**
+       * A tool reading the board: each frame, the clock jumps through everything due, so the board
+       * is where it ends at once (its lines, moves and waits each at their own time).
+       */
+      isJumping?: boolean;
     },
   ) {
     const model = board.model;
@@ -431,7 +436,16 @@ export class BoardRuntime {
     const tick = (ms: number) => {
       if (this.isDisposed) return;
       this.startedAt ??= ms;
-      this.core.advanceTo(Math.max(this.core.now, (ms - this.startedAt) / 1000));
+      // A tool reading the board: everything due is done now, in order, each at its own time; the
+      // screen then shows where it ends (platform/docs/one-clock.md).
+      if (this.services.isJumping === true)
+        try {
+          this.core.runUntilIdle();
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          this.services.onError(`Board ${this.board.name}: ${message}`, error);
+        }
+      else this.core.advanceTo(Math.max(this.core.now, (ms - this.startedAt) / 1000));
       // A move redraws each frame (where it is now is a value of the clock).
       if (this.core.isBusy) this.version.value++;
       this.stopFrames = this.services.frame(tick);

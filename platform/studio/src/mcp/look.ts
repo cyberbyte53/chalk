@@ -443,8 +443,11 @@ export function pieceText(
 
 // ---- Drawing ----
 
-/** How fast boards' clocks run when looked at or played, unless asked otherwise. */
-export const DEFAULT_SPEED = 10;
+/**
+ * How fast boards' clocks run when looked at or played, unless asked otherwise: they jump to where
+ * they end, each thing at its own time (platform/docs/one-clock.md).
+ */
+export const DEFAULT_SPEED = Number.POSITIVE_INFINITY;
 
 /** A screen to draw on: the column's width, and the screen's height when it matters. */
 export type Screen = { width: number; height?: number };
@@ -845,7 +848,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   for (const r of d.steps)
     if (r.changed !== undefined) r.changed = rounded(shown(r.changed, locale)) as typeof r.changed;
   const lines = [
-    `${shownAddress(a.board)}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed !== 1 ? ` · clock ×${o.speed}` : ""}${a.continue ? " · continued" : ""}`,
+    `${shownAddress(a.board)}   play · ${screenWords({ width: o.width ?? PHONE, ...(o.height === undefined ? {} : { height: o.height }) })} · ${o.locale}${o.speed === 1 ? "" : Number.isFinite(o.speed) ? ` · clock ×${o.speed}` : " · clock jumps"}${a.continue ? " · continued" : ""}`,
   ];
   if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
   if (d.heardAtOpen !== undefined) lines.push("as it opened:", ...d.heardAtOpen.map(heardLine));

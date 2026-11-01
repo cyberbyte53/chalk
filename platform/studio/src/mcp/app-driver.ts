@@ -161,7 +161,8 @@ async function untilIdle(page: Page, speed: number): Promise<string[]> {
     await page.waitForFunction(
       () => ((window as { __chalkBusy?: () => string[] }).__chalkBusy?.() ?? []).length === 0,
       undefined,
-      { timeout: (SETTLE_CAP / speed) * 1000, polling: "raf" },
+      // A jumping clock is done in a frame or two; the wait is only a guard.
+      { timeout: Number.isFinite(speed) ? (SETTLE_CAP / speed) * 1000 : 10_000, polling: "raf" },
     );
     return [];
   } catch {
@@ -537,7 +538,7 @@ export async function previewUrl(
       ? ""
       : `&state=${encodeURIComponent(JSON.stringify(o.state))}`;
   // A tool's board keeps time by each line's length (`timed`): it never waits for real sound.
-  url.search = `?dev&timed&${previewQuery(address)}${state}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed !== undefined && o.speed !== 1 ? `&speed=${o.speed}` : ""}`;
+  url.search = `?dev&timed&${previewQuery(address)}${state}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed === undefined || o.speed === 1 ? "" : `&speed=${Number.isFinite(o.speed) ? o.speed : "jump"}`}`;
   return url.toString();
 }
 
