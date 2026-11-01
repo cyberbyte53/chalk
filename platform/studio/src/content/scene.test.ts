@@ -1,11 +1,11 @@
 import { type Cue, cue, hidden, place, scene, tap } from "@chalk/author";
-import { Actor } from "@chalk/content";
+import { Actor, BREATH } from "@chalk/content";
 import { propLibrary } from "@chalk/library";
 import { BoardRuntime, recordBoard, scriptOf } from "@chalk/player";
-import { estimatedSeconds } from "@chalk/prop";
+import { GRACE, estimatedSeconds } from "@chalk/prop";
 import { choice, text } from "@chalk/prop-basics";
 import { coordinatePlane } from "@chalk/prop-coordinates";
-import { appear, tap as tapSound } from "@chalk/sounds";
+import { appear, tap as tapSound, wrong as wrongSound } from "@chalk/sounds";
 import { describe, expect, it } from "vitest";
 import { checkWitness, play } from "./witness";
 
@@ -65,7 +65,10 @@ describe("a scene, built and checked like any board", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async (line) => void heard.push(`say ${line.name}`),
+      speak: async (line) => {
+        heard.push(`say ${line.name}`);
+        return true;
+      },
       hush: () => void heard.push("hush"),
       onError: (message) => {
         throw new Error(message);
@@ -112,7 +115,10 @@ describe("a scene, built and checked like any board", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async (line) => void said.push(`${line.name} at ${runtime.time().toFixed(1)}`),
+      speak: async (line) => {
+        said.push(`${line.name} at ${runtime.time().toFixed(1)}`);
+        return true;
+      },
       onError: (message) => {
         throw new Error(message);
       },
@@ -127,7 +133,10 @@ describe("a scene, built and checked like any board", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async (line) => void said.push(line.name),
+      speak: async (line) => {
+        said.push(line.name);
+        return true;
+      },
       onError: (message) => {
         throw new Error(message);
       },
@@ -267,7 +276,10 @@ describe("a scene, built and checked like any board", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async (line) => void said.push(line.name),
+      speak: async (line) => {
+        said.push(line.name);
+        return true;
+      },
       onError: (message) => {
         throw new Error(message);
       },
@@ -297,7 +309,7 @@ describe("a scene, built and checked like any board", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async () => undefined,
+      speak: async () => true,
       onError: (message) => {
         throw new Error(message);
       },
@@ -330,54 +342,62 @@ describe("a scene, built and checked like any board", () => {
     ).toThrow(/it needs a when/);
   });
 
-  it("on a student's board, a line is over when its sound is: no length is assumed", async () => {
-    const ends: (() => void)[] = [];
-    const said: string[] = [];
-    const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
-      locale: "en",
-      lineSeconds,
-      now: () => 0,
-      frame: () => () => undefined,
-      speak: (line) =>
-        new Promise<void>((resolve) => {
-          said.push(line.name);
-          ends.push(resolve);
-        }),
-      isHeard: true,
-      onError: (message) => {
-        throw new Error(message);
-      },
-    });
-    runtime.start();
-    runtime.settle(600, true);
-    // Ten minutes on, the title is still being said: its sound hasn't ended.
-    expect(said).toEqual(["title"]);
-    ends[0]?.();
+  it("on a student's board, a line is over when its sound tells it is, at the latest its length + GRACE", async () => {
+    const heard = (isEver: boolean) => {
+      const ends: (() => void)[] = [];
+      const said: string[] = [];
+      const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
+        locale: "en",
+        lineSeconds,
+        now: () => 0,
+        frame: () => () => undefined,
+        speak: (line) =>
+          new Promise<boolean>((resolve) => {
+            said.push(line.name);
+            if (isEver) ends.push(() => resolve(true));
+          }),
+        isHeard: true,
+        onError: (message) => {
+          throw new Error(message);
+        },
+      });
+      runtime.start();
+      return { runtime, said, ends };
+    };
+    const title = lineSeconds({ phrases: { en: ["Two numbers"] } });
+    // Its sound tells it ended, sooner or later than its length: the next line follows.
+    const told = heard(true);
+    told.runtime.settle(title + GRACE - 0.1, true);
+    expect(told.said).toEqual(["title"]);
+    told.ends[0]?.();
     await Promise.resolve();
-    runtime.settle(5, true);
-    expect(said).toEqual(["title", "ask"]);
+    told.runtime.settle(5, true);
+    expect(told.said).toEqual(["title", "ask"]);
+    // A sound that never tells (it hung): the board ends the line at its length + GRACE.
+    const hung = heard(false);
+    hung.runtime.settle(title + GRACE + BREATH + 0.1, true);
+    expect(hung.said).toEqual(["title", "ask"]);
   });
 
-  it("a sound in turn holds the voice: the words after it wait for it, then a breath", async () => {
+  it("a sound in turn holds the voice: the words after it wait its length, then a breath", async () => {
     // The question's own wrong takes a turn; its option's note is said after it.
     const board = scene({
       pieces: { ask },
       cues: { note: cue(t("Not that one.", "वह नहीं।"), { when: "ask.checked" }) },
     }).build("held");
     const said: string[] = [];
-    let buzzEnds = (): void => undefined;
     const runtime = new BoardRuntime(board.board, (type) => propLibrary[type], {
       locale: "en",
       now: () => 0,
       frame: () => () => undefined,
-      speak: async (line) => void said.push(line.name),
-      playSound: (sound) => ({
-        done: new Promise<void>((resolve) => {
-          said.push(`(${sound.name})`);
-          buzzEnds = resolve;
-        }),
-        stop: () => undefined,
-      }),
+      speak: async (line) => {
+        said.push(line.name);
+        return true;
+      },
+      playSound: (sound) => {
+        said.push(`(${sound.name})`);
+        return { done: Promise.resolve(), stop: () => undefined };
+      },
       isHeard: true,
       onError: (message) => {
         throw new Error(message);
@@ -388,15 +408,10 @@ describe("a scene, built and checked like any board", () => {
     said.length = 0;
     await runtime.call("ask", "select", { option: "house" }, Actor.Learner);
     await runtime.call("ask", "check", {}, Actor.Learner);
-    runtime.settle(5, true);
-    // The buzz plays; the note waits, however long the board runs, until the buzz is over.
+    // The buzz plays; the note waits for the buzz's length (its file's), then a breath.
+    runtime.settle(wrongSound.seconds + BREATH - 0.05, true);
     expect(said).toEqual(["(wrong)"]);
-    buzzEnds();
-    await Promise.resolve();
-    await Promise.resolve();
-    runtime.settle(0.5, true);
-    expect(said).toEqual(["(wrong)"]);
-    runtime.settle(1, true);
+    runtime.settle(0.1, true);
     expect(said).toEqual(["(wrong)", "note"]);
   });
 
@@ -418,7 +433,7 @@ describe("a scene, built and checked like any board", () => {
         lineSeconds,
         now: () => 0,
         frame: () => () => undefined,
-        speak: async () => undefined,
+        speak: async () => true,
         playSound: (e) => {
           played.push(e.name);
           return { done: Promise.resolve(), stop: () => void stopped.push(e.name) };
@@ -517,7 +532,10 @@ describe("a scene, built and checked like any board", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async (line) => void said.push(line.name),
+      speak: async (line) => {
+        said.push(line.name);
+        return true;
+      },
       onError: (message) => {
         throw new Error(message);
       },
@@ -574,7 +592,7 @@ describe("what is recorded", () => {
       lineSeconds,
       now: () => 0,
       frame: () => () => undefined,
-      speak: async () => {},
+      speak: async () => true,
       onError: (message) => {
         throw new Error(message);
       },

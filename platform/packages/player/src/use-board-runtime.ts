@@ -10,7 +10,7 @@ import type { PropRegistry } from "./prop-module";
 import { BoardRuntime } from "./runtime";
 import { trackBoard } from "./snapshot";
 
-export type Speak = (line: WordsToSay) => Promise<void>;
+export type Speak = (line: WordsToSay) => Promise<boolean>;
 
 /**
  * How fast boards' clocks run: 1 for a student (real time); a tool watching boards may run them
@@ -34,8 +34,6 @@ export function useBoardRuntime(
     hush?: () => void;
     /** Nothing heard: lines keep their lengths on the board's clock; nothing plays (board-player.tsx). */
     isSilent?: boolean;
-    /** A tool reading the board: each line ends as it starts (runtime.ts). */
-    isSkipping?: boolean;
     /** Plays a sound alongside (sound/engine.ts), lasting until stopped if it lasts; returns how to stop it. */
     playSound?: (sound: Sound, lasts?: boolean) => SoundPlaying;
   },
@@ -47,7 +45,7 @@ export function useBoardRuntime(
     const services = {
       // A silent board says nothing: its lines only take their time.
       speak: (line: WordsToSay) =>
-        voice.isSilent === true ? Promise.resolve() : speakRef.current(line),
+        voice.isSilent === true ? Promise.resolve(false) : speakRef.current(line),
       frame: (callback: (now: number) => void) => {
         const handle = requestAnimationFrame((ms) => callback(ms * speed));
         return () => cancelAnimationFrame(handle);
@@ -66,7 +64,6 @@ export function useBoardRuntime(
         ? {}
         : { playSound: voice.playSound }),
       isHeard: voice.isSilent !== true,
-      ...(voice.isSkipping === true ? { isSkipping: true } : {}),
     });
   });
   useEffect(() => {

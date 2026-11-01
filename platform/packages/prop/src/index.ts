@@ -97,7 +97,7 @@ export {
   type Tools,
   type VoiceTools,
 } from "./define";
-export { Board, type BoardEvent, type Given, type Input } from "./board";
+export { Board, type BoardEvent, GRACE, type Given, type Input } from "./board";
 export { sequence } from "./helpers";
 export { moveAt, type Move } from "./move";
 export { TimeQueue, type Entry } from "./queue";

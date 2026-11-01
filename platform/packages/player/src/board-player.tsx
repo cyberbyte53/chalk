@@ -59,8 +59,6 @@ export type BoardPlayerProps = {
    * ends when its sound does.
    */
   isSilent?: boolean;
-  /** A tool reading the board (silent too): each line ends as it starts; what is said is recorded. */
-  isSkipping?: boolean;
   /** Its menu is the lesson's (in the lesson's header, lesson-player.tsx), not its own. */
   isInLesson?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
@@ -95,7 +93,6 @@ function BoardPlay({
   isPicture = false,
   isInLesson = false,
   isSilent = false,
-  isSkipping = false,
 }: BoardPlayerProps & { audio: ClipStore | undefined }): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // Set once the recorder exists (the voice is made first, and reports through it).
@@ -112,8 +109,7 @@ function BoardPlay({
   const runtime = useBoardRuntime(board, registry, voice.speak, {
     locale,
     lineSeconds: (line) => voiceRef.current.seconds(line),
-    isSilent: isSilent || isSkipping,
-    isSkipping,
+    isSilent,
     playSound,
     hush: () => voiceRef.current.hush(),
   });

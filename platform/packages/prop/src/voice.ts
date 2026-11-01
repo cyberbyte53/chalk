@@ -1,8 +1,9 @@
 /**
- * How a board is heard (platform/docs/sound.md). The board asks the voice to say a line, by its
- * name, or to stop; the voice tells back what happened to it: started, then ended or cut. The board
- * never knows how long a line is, nor where its sound comes from (a clip, a server, the phone's own
- * voice): it waits for the voice's word, as for any other event.
+ * How a board is heard (platform/docs/sound.md, one-clock.md). The board asks the voice to say a
+ * line, by its name, or to stop. The voice says how long the line will take (its clips', or an
+ * estimate), and tells back when it ended (or that it lost it). The board never knows where the sound
+ * comes from (a clip, a server, the phone's own voice); it ends the line itself at its length + GRACE
+ * if the voice never tells.
  */
 /** A line asked of the voice: its name, and the values of its moment for the blanks in its words. */
 export type LineCall = {
@@ -12,16 +13,17 @@ export type LineCall = {
 
 export type Voice = {
   /**
-   * Says `line` (the board has stopped any line before it). Tells `hear` "started" when sound
-   * begins (never, for a line with nothing to say), then "ended" when it is over, or "cut" if the
-   * voice lost it on its own (its source failed and nothing could stand in).
+   * Says `line` (the board has stopped any line before it), and returns how long it will take, in
+   * seconds; undefined for a line with nothing to say (it is over at once). Then tells `hear`
+   * "ended" when it is over, or "cut" if the voice lost it on its own (its source failed and
+   * nothing could stand in): never while asked to say it.
    */
-  say: (line: LineCall, hear: (what: Heard) => void) => void;
+  say: (line: LineCall, hear: (what: Heard) => void) => number | undefined;
   /** Stops the line being said. The board has already taken it as cut: nothing more is told of it. */
   stop: () => void;
 };
 
-export type Heard = "started" | "ended" | "cut";
+export type Heard = "ended" | "cut";
 
 /** Words a second a voice says, roughly: for a line with no audio of its own. */
 const WORDS_PER_SECOND = 2.5;
@@ -32,12 +34,12 @@ export function estimatedSeconds(text: string): number {
 }
 
 /** A board with no voice: every line has nothing to say, and ends at once. */
-export const silentVoice: Voice = { say: (_, hear) => hear("ended"), stop: () => undefined };
+export const silentVoice: Voice = { say: () => undefined, stop: () => undefined };
 
 /**
  * A voice that keeps time on the board's own clock: each line lasts as long as `lengthOf` says
- * (undefined: it has nothing to say, and ends at once). What a check, a test or a muted student
- * hears: the board's pacing is the same, its clock may jump.
+ * (undefined: it has nothing to say, and ends at once), and it tells the line ended then. What a
+ * tool, a check or a test hears in place of a phone's sound: the same events, its clock may jump.
  */
 export function timedVoice(
   clock: { after: (seconds: number, fn: () => void) => void },
@@ -47,15 +49,15 @@ export function timedVoice(
   return {
     say: (line, hear) => {
       const seconds = lengthOf(line);
-      if (seconds === undefined) return hear("ended");
+      if (seconds === undefined) return undefined;
       const mine = {};
       current = mine;
-      hear("started");
       clock.after(seconds, () => {
         if (current !== mine) return;
         current = undefined;
         hear("ended");
       });
+      return seconds;
     },
     stop: () => {
       current = undefined;

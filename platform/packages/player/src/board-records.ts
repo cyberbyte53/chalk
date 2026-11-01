@@ -6,7 +6,8 @@ import type { WordsToSay } from "./sound/voice";
 /** What the runtime needs from outside: the voice and the screen's frames. Fakes in tests. */
 export type RuntimeServices = {
   /** Says a line; resolves when it ends or fails (the text stays on screen either way). */
-  speak: (line: WordsToSay) => Promise<void>;
+  /** Says a line; resolves when it is over: true if it was heard, false if nothing could say it. */
+  speak: (line: WordsToSay) => Promise<boolean>;
   /** Calls back on the next frame with the time in ms; returns a function that cancels it. */
   frame: (callback: (now: number) => void) => () => void;
   now: () => number;

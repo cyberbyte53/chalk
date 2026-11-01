@@ -65,12 +65,13 @@ export function clipsOf(
 
 /**
  * A sound (platform/docs/sound.md): a role (right, step), by its name (what `play` and the log
- * show), and where its recording is. The sound library defines them (library/sounds); a prop's
- * sound view or a lesson's cue plays one by name.
+ * show), where its recording is, and how long it plays (a line waiting on it knows when it may
+ * start: one-clock.md). The sound library defines them (library/sounds); a prop's sound view or a
+ * lesson's cue plays one by name.
  */
-export type Sound = { readonly name: string; readonly url: string };
+export type Sound = { readonly name: string; readonly url: string; readonly seconds: number };
 
-/** A sound, from its name and its recording. */
-export function sound(name: string, url: URL | string): Sound {
-  return { name, url: String(url) };
+/** A sound, from its name, its recording and how long it plays. */
+export function sound(name: string, url: URL | string, seconds: number): Sound {
+  return { name, url: String(url), seconds };
 }

@@ -4,6 +4,7 @@
     {
       "name": "right",
       "file": "sounds/right.mp3",
+      "seconds": 1.056,
       "for": "an answer checked right",
       "source": "https://freesound.org/s/406243/",
       "title": "Typewriter ding_near_mono.wav",
@@ -13,6 +14,7 @@
     {
       "name": "wrong",
       "file": "sounds/wrong.mp3",
+      "seconds": 0.309,
       "for": "an answer checked wrong",
       "source": "https://freesound.org/s/419023/",
       "title": "acess denied buzz",
@@ -22,6 +24,7 @@
     {
       "name": "tap",
       "file": "sounds/tap.mp3",
+      "seconds": 0.123,
       "for": "something pressed or chosen",
       "source": "https://freesound.org/s/467951/",
       "title": "UI Button Click",
@@ -31,6 +34,7 @@
     {
       "name": "step",
       "file": "sounds/step.mp3",
+      "seconds": 0.467,
       "for": "a thing taking one step: the bus moving a stop, Riya walking",
       "source": "https://freesound.org/s/197778/",
       "title": "Footstep on Stone",
@@ -40,6 +44,7 @@
     {
       "name": "blocked",
       "file": "sounds/blocked.mp3",
+      "seconds": 0.724,
       "for": "a move that can't be made: the bus at the end of the road",
       "source": "https://freesound.org/s/540788/",
       "title": "Boing 1",
@@ -49,6 +54,7 @@
     {
       "name": "appear",
       "file": "sounds/appear.mp3",
+      "seconds": 0.33,
       "for": "something appearing: a street rising from the road, a point landing",
       "source": "https://freesound.org/s/59995/",
       "title": "swosh-08.flac - \"stick cutting air\"",
@@ -58,6 +64,7 @@
     {
       "name": "win",
       "file": "sounds/win.mp3",
+      "seconds": 4.437,
       "for": "a game won, a lesson finished",
       "source": "https://freesound.org/s/456966/",
       "title": "Success Fanfare Trumpets.mp3",

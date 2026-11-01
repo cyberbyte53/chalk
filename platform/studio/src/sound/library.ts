@@ -24,6 +24,8 @@ export const libraryListSchema = z.object({
           (n) => ({ message: `"${n}" can't name a sound` }),
         ),
       file: z.string(),
+      /** How long it plays, measured when it was added (ffprobe). */
+      seconds: z.number().positive(),
       for: z.string().min(1),
       source: z.string().url(),
       title: z.string(),
@@ -41,7 +43,7 @@ export function libraryIndex(list: LibraryList): string {
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(
       (s) =>
-        `/** ${s.for[0]?.toUpperCase()}${s.for.slice(1)}. */\nexport const ${s.name} = sound(${JSON.stringify(s.name)}, new URL(${JSON.stringify(`./${s.file}`)}, import.meta.url));`,
+        `/** ${s.for[0]?.toUpperCase()}${s.for.slice(1)}. */\nexport const ${s.name} = sound(${JSON.stringify(s.name)}, new URL(${JSON.stringify(`./${s.file}`)}, import.meta.url), ${s.seconds});`,
     );
   return `import { sound } from "@chalk/content";
 

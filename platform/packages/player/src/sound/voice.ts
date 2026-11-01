@@ -34,7 +34,8 @@ export type SpokenProp = { name: string };
 
 export type Voice = {
   /** Says a line and resolves when it ends (or fails; the text is on screen either way). */
-  speak: (line: WordsToSay) => Promise<void>;
+  /** Says a line; resolves when it is over: true if it was heard, false if nothing could say it. */
+  speak: (line: WordsToSay) => Promise<boolean>;
   /** How long a line plays here, when its clips are known. */
   seconds: (line: WordsToSay) => number | undefined;
   /** Stops the line being said. */
@@ -153,11 +154,11 @@ export function useVoice(
   );
 
   const speak = useCallback(
-    async (line: WordsToSay) => {
+    async (line: WordsToSay): Promise<boolean> => {
       stop();
       const mine = saying.current;
       const phrases = line.phrases[locale];
-      if (phrases === undefined || phrases.length === 0) return;
+      if (phrases === undefined || phrases.length === 0) return false;
       const isMine = () => saying.current === mine;
       // A sound the browser refuses before the page's first touch can be heard, just not yet:
       // the line waits for the touch (and the board with it), then plays.
@@ -177,7 +178,7 @@ export function useVoice(
       // and its phrases follow each other with no gaps.
       await Promise.all((clips ?? []).map((clip) => prepare(clip.url)));
       for (const clip of clips ?? []) {
-        if (!isMine()) return;
+        if (!isMine()) return false;
         const played = await whenAllowed(() => playClip(clip));
         if (played !== "heard") {
           isBroken = played === "broken";
@@ -185,16 +186,20 @@ export function useVoice(
         }
         from++;
       }
-      if (clips !== undefined && from === clips.length) return void forget(line.name);
+      if (clips !== undefined && from === clips.length) {
+        forget(line.name);
+        return true;
+      }
       if (isBroken) {
         setFailed((prev) => new Set(prev).add(line.name));
         onFailure({ name: line.name }, "a clip failed to play");
       }
       const rest = phrases.slice(from).join(" ");
       // 2. The phone's own voice. Else nothing can say it: the line is over, its words on screen.
-      if (!isMine()) return;
-      if (canSpeak() && (await whenAllowed(() => playPhone(rest))) === "heard") return;
+      if (!isMine()) return false;
+      if (canSpeak() && (await whenAllowed(() => playPhone(rest))) === "heard") return true;
       // Nothing could say it (no clip, no phone voice): the line is over, its words on screen.
+      return false;
     },
     [locale, clipsFor, playClip, playPhone, firstTouch, stop, onFailure],
   );

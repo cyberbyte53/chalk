@@ -42,6 +42,12 @@ export class TimeQueue<T> {
     return this.entries[0]?.at;
   }
 
+  /** Drops one entry, by the entry `add` gave (none if it is gone already). */
+  remove(entry: Entry<T>): void {
+    const i = this.entries.indexOf(entry);
+    if (i !== -1) this.entries.splice(i, 1);
+  }
+
   /** Drops the entries that pass `test`. */
   drop(test: (entry: Entry<T>) => boolean): void {
     this.entries = this.entries.filter((e) => !test(e));

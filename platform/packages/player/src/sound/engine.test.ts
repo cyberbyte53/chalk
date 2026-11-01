@@ -139,9 +139,9 @@ describe("the sound engine", () => {
   });
 
   it("a sound plays alongside, a repeat replacing it", async () => {
-    engine.playSound({ name: "step", url: "/step.mp3" });
+    engine.playSound({ name: "step", url: "/step.mp3", seconds: 0.5 });
     await settle();
-    engine.playSound({ name: "step", url: "/step.mp3" });
+    engine.playSound({ name: "step", url: "/step.mp3", seconds: 0.5 });
     await settle();
     expect(started.map((s) => [s.url, s.isStopped])).toEqual([
       ["/step.mp3", true],
@@ -163,7 +163,7 @@ describe("the sound engine", () => {
   });
 
   it("a lasting sound loops until its cue stops it", async () => {
-    const { stop } = engine.playSound({ name: "rain", url: "/rain.mp3" }, true);
+    const { stop } = engine.playSound({ name: "rain", url: "/rain.mp3", seconds: 3 }, true);
     await settle();
     expect(started.map((s) => [s.url, s.loop, s.isStopped])).toEqual([["/rain.mp3", true, false]]);
     stop();

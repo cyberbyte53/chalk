@@ -28,13 +28,23 @@ import { type Heard, type LineCall, type Voice, silentVoice } from "./voice";
  *   reads real time: the screen moves the clock each frame, a check jumps it (`runUntilIdle`).
  */
 
-/** What the student did, and when on the board's clock: replaying these gives the same board. */
-export type Input = {
-  readonly at: number;
-  readonly path: string;
-  readonly action: string;
-  readonly payload: Payload;
-};
+/**
+ * What came from outside, and when on the board's clock: replaying these gives the same board. The
+ * student's taps, and what a voice told of a line (it ended, or lost it), which no clock can know.
+ */
+export type Input =
+  | {
+      readonly at: number;
+      readonly path: string;
+      readonly action: string;
+      readonly payload: Payload;
+    }
+  | {
+      readonly at: number;
+      /** The line (numbered in the order said) the voice told of. */
+      readonly line: number;
+      readonly voice: "ended" | "cut";
+    };
 
 /** Something that happened on the board, for whoever watches it (the recorder, the player's chrome). */
 export type BoardEvent =
@@ -72,8 +82,17 @@ type Later = {
   readonly act?: number;
 };
 
-/** The line the voice is saying (or about to: in its quiet): what is done when it is. */
-type InTurn = { readonly id: number; readonly path: string; readonly atEnd: readonly Out[] };
+/**
+ * The line the voice is saying (or about to: in its quiet): what is done when it is, and its
+ * timeout once it is said (dropped when it ends).
+ */
+type InTurn = {
+  readonly id: number;
+  readonly name: string;
+  readonly path: string;
+  readonly atEnd: readonly Out[];
+  timeout?: Entry<Later>;
+};
 
 type Node = {
   readonly path: string;
@@ -92,6 +111,11 @@ export type Given = Readonly<Record<string, unknown>>;
 
 /** How deep one event may set off others before it is taken for a loop. */
 const MAX_DEPTH = 64;
+/**
+ * How long past its length a line may go before the board ends it itself, in seconds. The voice is
+ * expected to tell it ended first; this is for a voice that never does (platform/docs/one-clock.md).
+ */
+export const GRACE = 5;
 /** How many queued events one move of the clock may deliver before it is taken for a loop. */
 const MAX_AT_ONCE = 10_000;
 
@@ -149,7 +173,8 @@ export class Board {
     const board = new Board(root, given, options);
     for (const input of log) {
       board.advanceTo(input.at);
-      board.input(input.path, input.action, input.payload);
+      if ("voice" in input) board.voiceTold(input.line, input.voice);
+      else board.input(input.path, input.action, input.payload);
     }
     board.advanceTo(until);
     return board;
@@ -456,7 +481,7 @@ export class Board {
             // The quiet before it is part of the line: it is in turn already, and a stop cuts it.
             this.cutLine();
             const id = ++this.lines;
-            this.inTurn = { id, path: node.path, atEnd: out.atEnd };
+            this.inTurn = { id, name: out.line, path: node.path, atEnd: out.atEnd };
             const line = {
               name: out.line,
               ...(out.values === undefined ? {} : { values: out.values }),
@@ -532,15 +557,58 @@ export class Board {
   private say(node: Node, line: LineCall, atEnd: readonly Out[]): void {
     this.cutLine();
     const id = ++this.lines;
-    this.inTurn = { id, path: node.path, atEnd };
+    this.inTurn = { id, name: line.name, path: node.path, atEnd };
     this.startLine(id, line);
   }
 
+  /**
+   * Asks the voice to say the line. One with nothing to say is over at once. Else the voice says how
+   * long it will take, and the board ends it itself at that + GRACE if the voice never tells it did.
+   */
   private startLine(id: number, line: LineCall): void {
     if (this.inTurn?.id !== id) return;
     this.lastHadWords = false;
-    this.voice.say(line, (what) => this.heard(id, what));
+    const seconds = this.voice.say(line, (what) => this.fromVoice(id, what));
+    const turn = this.inTurn;
+    if (turn?.id !== id) return;
+    if (seconds === undefined) {
+      this.heard(id, "ended");
+      return;
+    }
+    this.lastHadWords = true;
+    turn.timeout = this.queue.add(this.clock + Math.max(0, seconds) + GRACE, "", {
+      outs: [],
+      host: () => this.timedOut(id),
+    });
   }
+
+  /**
+   * What the voice told of a line, from outside the clock: logged at its time (a replay tells it
+   * again, `voiceTold`), then done. Anything told of a line no longer in turn is old news.
+   */
+  private fromVoice(id: number, what: Heard): void {
+    if (this.inTurn?.id !== id) return;
+    this.voiceTold(id, what);
+  }
+
+  /** A voice told that line `id` ended or was lost: logged, and the line is done. */
+  voiceTold(id: number, what: "ended" | "cut"): void {
+    if (this.inTurn?.id !== id) return;
+    this.inputs.push({ at: this.clock, line: id, voice: what });
+    this.heard(id, what);
+  }
+
+  /** The voice never told the line ended: it is over all the same, its sound stopped. */
+  private timedOut(id: number): void {
+    const line = this.inTurn;
+    if (line?.id !== id) return;
+    this.timedOutLines.push(line.name);
+    this.heard(id, "ended");
+    this.voice.stop();
+  }
+
+  /** The lines the board had to end itself (their voice never told): a voice or a length to fix. */
+  readonly timedOutLines: string[] = [];
 
   /**
    * What the voice tells of a line. Started: it had words. Ended or cut: it is done, and what waits
@@ -550,10 +618,7 @@ export class Board {
   private heard(id: number, what: Heard): void {
     const line = this.inTurn;
     if (line?.id !== id) return;
-    if (what === "started") {
-      this.lastHadWords = true;
-      return;
-    }
+    if (line.timeout !== undefined) this.queue.remove(line.timeout);
     this.inTurn = undefined;
     this.queue.add(this.clock, line.path, { outs: line.atEnd });
   }

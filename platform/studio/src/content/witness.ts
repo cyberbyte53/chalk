@@ -48,7 +48,7 @@ function playScene(
     locale,
     now: () => 0,
     frame: () => () => undefined,
-    speak: async () => {},
+    speak: async () => false,
     onError: (message, error) =>
       errors.push(
         error instanceof Error && !message.includes(error.message)

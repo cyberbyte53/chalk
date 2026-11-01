@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { Board } from "./board";
+import { Board, GRACE } from "./board";
 import { type VoiceTools, action, prop, signal } from "./define";
 import { sequence } from "./helpers";
 import { type Heard, type Voice, timedVoice } from "./voice";
@@ -475,34 +475,76 @@ describe("the voice: the board asks, the voice tells back", () => {
     },
   });
 
-  /** A voice the test drives: it tells back only when told to. */
+  /** A voice the test drives: each line takes 3 s, and it tells back only when told to. */
   const handVoice = () => {
     const said: { line: string; hear: (what: Heard) => void }[] = [];
     let stops = 0;
     const voice: Voice = {
-      say: (line, hear) => void said.push({ line: line.name, hear }),
+      say: (line, hear) => {
+        said.push({ line: line.name, hear });
+        return 3;
+      },
       stop: () => void stops++,
     };
     return { voice, said, stops: () => stops };
   };
 
-  it("never knows a line's length: a line is done when the voice says it ended", () => {
+  it("a line is done when the voice says it ended, early or late, before its timeout", () => {
     const { voice, said } = handVoice();
     const board = new Board(narrator, {}, { voice });
     board.send("", "speak", { line: "hello" });
-    board.advanceTo(100);
+    board.advanceTo(1);
     expect(board.read("")).toMatchObject({ done: [] });
-    said[0]?.hear("started");
     said[0]?.hear("ended");
-    board.advanceTo(100);
+    board.advanceTo(1);
     expect(board.read("")).toMatchObject({ done: ["hello"] });
+    // Its timeout was dropped: nothing more happens at 3 + GRACE.
+    board.advanceTo(3 + GRACE + 1);
+    expect(board.read("")).toMatchObject({ done: ["hello"] });
+    expect(board.timedOutLines).toEqual([]);
+  });
+
+  it("a voice that never tells: the board ends the line at its length + GRACE, its sound stopped", () => {
+    const { voice, said, stops } = handVoice();
+    const board = new Board(narrator, {}, { voice });
+    board.send("", "speak", { line: "hello" });
+    board.advanceTo(3 + GRACE - 0.1);
+    expect(board.read("")).toMatchObject({ done: [] });
+    board.advanceTo(3 + GRACE);
+    expect(board.read("")).toMatchObject({ done: ["hello"] });
+    expect(board.timedOutLines).toEqual(["hello"]);
+    expect(stops()).toBe(1);
+    // Told late: old news.
+    said[0]?.hear("ended");
+    board.advanceTo(20);
+    expect(board.read("")).toMatchObject({ done: ["hello"] });
+  });
+
+  it("what the voice tells is logged at its time, and a replay tells it again", () => {
+    const { voice, said } = handVoice();
+    const board = new Board(narrator, {}, { voice });
+    board.send("", "speak", { line: "hello" });
+    board.advanceTo(2.25);
+    said[0]?.hear("ended");
+    board.advanceTo(4);
+    expect(board.log).toEqual([{ at: 2.25, line: 1, voice: "ended" }]);
+    // A replay hears no sound: a voice that knows lengths and tells nothing, and the log.
+    const quiet: Voice = { say: () => 3, stop: () => undefined };
+    const again = new Board(narrator, {}, { voice: quiet });
+    again.send("", "speak", { line: "hello" });
+    for (const entry of board.log) {
+      again.advanceTo(entry.at);
+      if ("voice" in entry) again.voiceTold(entry.line, entry.voice);
+    }
+    again.advanceTo(4);
+    expect(again.read("")).toMatchObject({ done: ["hello"] });
+    expect(again.timedOutLines).toEqual([]);
   });
 
   it("a line cut is done too: what waits on it always happens, and the voice is stopped", () => {
     const { voice, said, stops } = handVoice();
     const board = new Board(narrator, {}, { voice });
     board.send("", "speak", { line: "first" });
-    said[0]?.hear("started");
     board.send("", "speak", { line: "second" });
     board.advanceTo(0);
     expect(board.read("")).toMatchObject({ done: ["first"] });

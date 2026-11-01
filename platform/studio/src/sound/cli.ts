@@ -80,11 +80,26 @@ async function add(name: string, from: string, purpose: string | undefined): Pro
         isMissing ? "ffmpeg isn't installed (brew install ffmpeg)" : `ffmpeg: ${String(e)}`,
       );
     }
+    const seconds = Number(
+      execFileSync("ffprobe", [
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "csv=p=0",
+        made,
+      ])
+        .toString()
+        .trim(),
+    );
+    if (!(seconds > 0)) throw new Error(`ffprobe couldn't tell how long ${name} plays`);
     const file = `sounds/${name}.mp3`;
     renameSync(made, join(dir, file));
     const sound: LibrarySound = {
       name,
       file,
+      seconds: Math.round(seconds * 1000) / 1000,
       for: what,
       source: `https://freesound.org/s/${id}/`,
       title: info.name,
