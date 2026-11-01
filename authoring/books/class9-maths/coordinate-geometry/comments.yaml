@@ -4116,6 +4116,7 @@
   target: sheet/clues/clearClues
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
+  turn: person
   text: >-
     Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
     the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
@@ -4229,7 +4230,21 @@
         them; 'fixed' shows. Once it is said: the clues go, the dot is the reading's at (5, 9) ('5
         cm, 9 cm'), 'yours' shows; dragged to (11, 3) it reads '11 cm, 3 cm'. Not changed: on a
         360×640 phone the page still scrolls down to 'fixed' and 'yours' after the fourth tap."
-  turn: person
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T17:13:14.043Z
+      text: "Fix holds. Played at 360×640 in en (a step done during 'fixed') and at 390 in en, and at
+        360×640 in hi. After the fourth clue, while 'fixed' is said, both full-length dashed lines
+        are on the page: x = 5 from the bottom to the top, and y = 9 from the left edge to the right
+        edge. They cross at the dot, with '5 cm' and '9 cm' on them, and both edges are numbered. So
+        'where the two lines cross' / 'जहाँ दोनों रेखाएँ कटती हैं' points at something the student
+        can see, as flow.md and Fig. 3.2 ask. Once 'fixed' has been said, the clue buttons go, the
+        dot turns blue and is the reading's at (5, 9) ('5 cm, 9 cm'), 'yours' shows, and the board
+        passes. Dragging reads correctly: (15, 12) gives '15 cm, 12 cm', (2, 8) gives '2 cm, 8 cm',
+        (0, 12) gives '0 cm, 12 cm'. One thing for you, which the fixer left as it was: on a 360×640
+        phone the page scrolls down to 'fixed' after the fourth tap. The crossing can then be above
+        the screen while it is being described. Keep it, or hold the page on the sheet until 'fixed'
+        has been said?"
 - id: cmvxdo2g7oqx
   status: ready
   by: reviewer
@@ -4386,7 +4401,6 @@
   target: sheet/reading
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:249
   commit: f42db9bc038bb948b4b7d91ce1f6abba95a5c65f
-  turn: person
   text: "Mechanical (overflow), from the dot-on-paper redesign (cmvwtxc8cqme): this is the first board
     where the reading shows Distances and its dot can be dragged to every edge. Principle: on the
     screen, nothing cut off. The distance labels are placed on the outside of the dot, with no check
@@ -4417,3 +4431,21 @@
         they were. affected: the reading's view reaches every coordinate-plane board, but only
         dot-on-paper shows distances."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T17:13:14.119Z
+      text: "Partly fixed. The three cases in the thread now draw whole: at 390 in en, (15, 12) has '12
+        cm' to the left of its line inside the page; (2, 8) has '2 cm' just past the dot; and at
+        360×640 in hi, (14, 11) is fine. What's still wrong (mechanical, on the screen) is a short
+        vertical line: its label meets the dot. 1. At 360×640 in hi, drag the dot to (14, 1). '1 cm'
+        for the vertical line is put to the left of the line (because the dot is near the right
+        edge) and runs under the dot: it reads '1 cr'. 2. At 390 in en, drag it to (1, 1). The
+        vertical line's label shows only as 'cm', because its '1' is under the dot's ring. A student
+        who drags the dot near the bottom reads a broken or missing distance, the one the board asks
+        them to read. A smaller thing: when the dot sits on an edge, it covers that edge's number.
+        At (0, 12) the left edge's '12' shows as '1:', and at (15, 0) the bottom's '15' is half
+        hidden. Suggested fix: give the vertical label the same rule as the horizontal one. When its
+        line is too short to hold the words beside it, put them past the dot (above it), on
+        whichever side fits inside the frame. Then check (1, 1), (14, 1) and (15, 1) in both
+        languages at 360."
+  turn: agent
