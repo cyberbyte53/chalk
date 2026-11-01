@@ -60,11 +60,12 @@ The board system guards the boundaries: a prop changes only its own variables, p
 
 ## Time: one queue
 
-- **The queue** holds only what is for later, each with the time it is due. On the student's screen the browser's frame loop moves the board clock to now and does what is due; checks, tests and the build **jump** the clock to the next entry, so a 36 s board is checked in a blink.
+- **The queue** holds only what is for later, each with the time it is due. On the student's screen the browser's frame loop moves the board clock to now and does what is due; tools, checks, tests and the build **jump** the clock from entry to entry, each done at its own time, so a 36 s board is checked in a blink.
 - **A planned move** is a motion whose every moment is known when it starts (Riya's glide, a street rising): `t.move` stores where from, where to, when and how long, and queues its end. Reading a moving variable gives its value now, for rules, facts, checks and drawings alike. Easings are named (`"linear"`, `"smooth"`). Changing a moving variable stops its move.
 - **A tick** is for a motion where each moment depends on the last (a collision): the prop queues itself again every 1/60 s.
 - **The student wins**: an action from the screen drops what the props holding that prop had queued for it.
 - **CSS is only decoration.** If anything cares when a motion ends, it is a planned move.
+- **A line is on the clock too.** It lasts its clips' length: its end is queued at that + 5 s, and the voice telling it ended (when its sound does) ends it first. That telling is logged like a tap (never the student's) and replays. So a phone, a tool and a replay do the same things in the same order ([one-clock.md](one-clock.md)).
 - **Replay**: `Board.replay(root, given, log, until)` plays the student's logged taps again, at their times.
 
 ## A board: its scene

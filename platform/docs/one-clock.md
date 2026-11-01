@@ -1,4 +1,6 @@
-# One clock (plan)
+# One clock
+
+Done (2026-11-01): steps 1-6 below, commits 8b8aad0 and 45194a3. What follows is the plan as built.
 
 **Goal:** a board means the same thing on a phone and in a tool. Everything that takes time is on the board's one clock; tools run that clock without waiting.
 
