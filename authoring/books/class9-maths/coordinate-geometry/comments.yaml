@@ -4116,6 +4116,7 @@
   target: sheet/clues/clearClues
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
+  turn: agent
   text: >-
     Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
     the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
@@ -4187,7 +4188,37 @@
         it anywhere…\", invites the drag. ↺ is gone. flow.md's dot-on-paper says this now. Played in
         hi at 360×640: dragged to (11, 3), it reads 11 cm, 3 cm. The edge-numbers question is moot:
         the reading's lengths are what the student reads."
-  turn: person
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T05:45:21.817Z
+      text: >-
+        The redesign mostly works. Played in en (390, and 360×640) and hi (390, and 360×640). Before
+        the pin there's no ↺. The fourth clue pins the dot at (5, 9): the clues are put away, the
+        dot becomes the reading's ('5 cm, 9 cm'), and 'yours' shows ('Now the dot is yours: drag
+        it…' / 'अब बिंदु तुम्हारा है…'). Dragging reads correctly: (11, 3) → '11 cm, 3 cm', (0, 0) →
+        '0 cm, 0 cm', (15, 12) → '15 cm, 12 cm', a drag to (2.4, 7.6) snaps to (2, 8). One thing
+        isn't right yet. It's mechanical: the picture and the text disagree, and the board misses
+        flow.md.
+
+
+        The fourth clue's line is never drawn, so the student never sees the two lines cross. On '9
+        cm above the bottom', the same rule that pins the dot also puts the clues away, at the same
+        moment. The x = 5 line from clue 3 goes, and the y = 9 line never appears. What's left is
+        the reading's two dashed segments, which meet at the dot as an L. 'fixed' says 'Only one
+        point is at both distances: **where the two lines cross**' / 'जहाँ दोनों रेखाएँ कटती हैं',
+        and nothing on the page crosses. flow.md (as it now reads) still asks for 'each distance
+        drawn as a full-length line', and for the Purpose's 'one point, the dot, where the two lines
+        cross' before the dot is handed over. This crossing is Fig. 3.2's point, and the student is
+        told it without being shown it. Suggested fix: let the fourth clue draw its line, so both
+        full lines cross at the dot. Put the clues away when the student first drags the dot, not
+        when it is pinned. Or hand the dot over a beat later, after 'fixed' has been read with both
+        lines showing.
+
+
+        A smaller thing: on a 360×640 phone, the fourth tap scrolls the page to 'fixed' and 'yours',
+        and the dot ends up above the top of the screen. 'drag it' invites a dot the student can't
+        see until they scroll back up. Drawing the crossing lines first, as above, would give a
+        reason to look back up at the page.
 - id: cmvxdo2g7oqx
   status: ready
   by: reviewer
@@ -4233,6 +4264,13 @@
       text: "Places now have choosing: never, always, or once the board is open. bus-stops' line is never,
         so its stops stay untappable after it passes. Only street-and-house's town is once-open."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T05:45:21.461Z
+      text: "Fix holds. Played at 390 in en: walked the bus to 3, then to −2, and answered '2 stops from
+        the stand, to the left'. The board passes and 'enough' shows. After that, line/places has no
+        chooseTarget part, so no stop can be tapped. No 'Aman's house: x 4, y 0' line appears and
+        the road doesn't move."
 - id: cmvxdo2hm2ru
   status: ready
   by: reviewer
@@ -4271,6 +4309,13 @@
       at: 2026-11-01T05:35:46.174Z
       text: "bus-to-stop's road is choosing: never, so nothing opens after Check."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T05:45:21.539Z
+      text: "Fix holds. Played bus-to-stop/6b9180ad at 390: drove the bus to 4 and pressed Check ('That's
+        it!', passed). After Check the road has no chooseTarget part, so stop −3 can't be tapped,
+        and no 'Aman's house' line appears. The road is set as choosing: never in family.ts, which
+        all four boards share."
 - id: cmvxdo2j7ntl
   status: ready
   by: reviewer
@@ -4312,3 +4357,34 @@
       text: "Played walk-to-address/18c614e0: walk to (3, 5), Check, then tap (1, 2). There's no such
         part: the houses stay untappable. town() is choosing: never."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T05:45:21.717Z
+      text: "Fix holds. Played walk-to-address/18c614e0 at 390: walked Riya to (3, 5) and pressed Check
+        ('That's it!', passed). After Check the town's parts are only the number taps and the
+        walker. No house can be tapped, so the ring stays on Street 3, House 5 as the prompt says.
+        town() is choosing: never, and only street-and-house sets onceOpen. I replayed
+        street-and-house too: at (4, 5) it passes and all 30 houses open, and tapping (2, 3) makes
+        that house Aman's and sends Riya back to the corner."
+- id: cmvxeovsdb3f
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T05:45:21.901Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet/reading
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:249
+  commit: f42db9bc038bb948b4b7d91ce1f6abba95a5c65f
+  turn: agent
+  text: "Mechanical (overflow), from the dot-on-paper redesign (cmvwtxc8cqme): this is the first board
+    where the reading shows Distances and its dot can be dragged to every edge. Principle: on the
+    screen, nothing cut off. The distance labels are placed on the outside of the dot, with no check
+    against the page's frame. 1. At 390 in en, drag the dot to (15, 12). The vertical label '12 cm'
+    is cut off at the right of the sheet (the check reports text cut off by 27px). 2. At 360×640 in
+    hi, drag it to (14, 11). '11 cm' shows as '11 cn' (cut off by 6px). 3. At 390, drag it to (2,
+    8). The horizontal label '2 cm' doesn't fit between the left edge and the dot, and its 'm' sits
+    under the dot. A student dragging the dot to a far corner reads a broken distance just where the
+    board asks them to read it. Suggested fix: in the reading's distances drawing, flip a label to
+    the inside (the left of the vertical line, or below the horizontal one) when it would leave the
+    frame or meet the dot."
+  messages: []

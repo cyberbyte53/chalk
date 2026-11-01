@@ -2225,7 +2225,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
             hi: "**बस केवल सड़क के साथ-साथ चल सकती है, इसलिए एक संख्या ठीक-ठीक बता देती है कि वह कहाँ है:** अड्डे से कितनी दूर, और किस ओर।"
         line:
           places:
-            canChooseTarget: false
+            choosing: never
             placeKind: crossing
             places:
               - label:
@@ -4387,91 +4387,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
             children:
               clues:
                 actions:
-                  clearClues:
-                    describe: Take back every clue (the learner's ↺)
-                    isFromScreen: true
-                    payload:
-                      _cached: null
-                      _def:
-                        catchall:
-                          _def:
-                            typeName: ZodNever
-                          and: ƒ function () { [native code] }
-                          array: ƒ function () { [native code] }
-                          brand: ƒ function () { [native code] }
-                          catch: ƒ function () { [native code] }
-                          default: ƒ function () { [native code] }
-                          describe: ƒ function () { [native code] }
-                          isNullable: ƒ function () { [native code] }
-                          isOptional: ƒ function () { [native code] }
-                          nullable: ƒ function () { [native code] }
-                          nullish: ƒ function () { [native code] }
-                          optional: ƒ function () { [native code] }
-                          or: ƒ function () { [native code] }
-                          parse: ƒ function () { [native code] }
-                          parseAsync: ƒ function () { [native code] }
-                          pipe: ƒ function () { [native code] }
-                          promise: ƒ function () { [native code] }
-                          readonly: ƒ function () { [native code] }
-                          refine: ƒ function () { [native code] }
-                          refinement: ƒ function () { [native code] }
-                          safeParse: ƒ function () { [native code] }
-                          safeParseAsync: ƒ function () { [native code] }
-                          spa: ƒ function () { [native code] }
-                          superRefine: ƒ function () { [native code] }
-                          transform: ƒ function () { [native code] }
-                          ~standard:
-                            validate: ƒ (data) => this["~validate"](data)
-                            vendor: zod
-                            version: 1
-                        shape: ƒ () => shape
-                        typeName: ZodObject
-                        unknownKeys: strict
-                      and: ƒ function () { [native code] }
-                      array: ƒ function () { [native code] }
-                      augment: |-
-                        ƒ extend(augmentation) {
-                                return new ZodObject({
-                                    ...this._def,
-                                    shape: () => ({
-                                        ...this._def.shape(),
-                                        ...augmentation,
-                                    }),
-                                });
-                            }
-                      brand: ƒ function () { [native code] }
-                      catch: ƒ function () { [native code] }
-                      default: ƒ function () { [native code] }
-                      describe: ƒ function () { [native code] }
-                      isNullable: ƒ function () { [native code] }
-                      isOptional: ƒ function () { [native code] }
-                      nonstrict: |-
-                        ƒ passthrough() {
-                                return new ZodObject({
-                                    ...this._def,
-                                    unknownKeys: "passthrough",
-                                });
-                            }
-                      nullable: ƒ function () { [native code] }
-                      nullish: ƒ function () { [native code] }
-                      optional: ƒ function () { [native code] }
-                      or: ƒ function () { [native code] }
-                      parse: ƒ function () { [native code] }
-                      parseAsync: ƒ function () { [native code] }
-                      pipe: ƒ function () { [native code] }
-                      promise: ƒ function () { [native code] }
-                      readonly: ƒ function () { [native code] }
-                      refine: ƒ function () { [native code] }
-                      refinement: ƒ function () { [native code] }
-                      safeParse: ƒ function () { [native code] }
-                      safeParseAsync: ƒ function () { [native code] }
-                      spa: ƒ function () { [native code] }
-                      superRefine: ƒ function () { [native code] }
-                      transform: ƒ function () { [native code] }
-                      ~standard:
-                        validate: ƒ (data) => this["~validate"](data)
-                        vendor: zod
-                        version: 1
                   giveClue:
                     describe: Give a clue, by its place among the choices; where the point could be narrows (the learner's button)
                     isFromScreen: true
@@ -4560,6 +4475,91 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                   hideAt:
                     describe: Hide a point of the learner's own at (x, y), for the others to find (the learner's tap)
                     isFromScreen: true
+                    payload:
+                      _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
+                  putAway:
+                    describe: "Take the clues off the plane, their point with them: their work is done"
+                    isFromScreen: false
                     payload:
                       _cached: null
                       _def:
@@ -4817,9 +4817,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                 offScreen:
                   - hidden
                 on:
-                  clearClues: ƒ (_,__,t)=>t.set({given:[],isHiddenShown:false})
                   giveClue: ƒ (me,{clue},t)=>{if(clue>=me.clueChoices.length||me.given.includes(clue))return;const given=[...me.given,clue];const still=stillPossible(me,given);return[t.set({given}),t.tell.clueGiven({still:still.kind}),...still.kind==="point"?[t.tell.pinned({x:still.x,y:still.y})]:[]]}
                   hideAt: ƒ (me,p,t)=>me.canHide&&t.set({hidden:{x:p.x,y:p.y},given:[],isHiddenShown:false})
+                  putAway: ƒ (_,__,t)=>t.set({clueChoices:[],given:[],hidden:null,isHiddenShown:false})
                   showHidden: ƒ (me,_,t)=>me.hidden!==null&&t.set({isHiddenShown:true})
                 role: explainer
                 signals:
@@ -7179,7 +7179,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
               places:
                 actions:
                   chooseTarget:
-                    describe: Make the place at (x, y) the target
+                    describe: Make the place at (x, y) the target (the student's tap)
                     isFromScreen: true
                     payload:
                       _cached: null
@@ -7433,9 +7433,95 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                         validate: ƒ (data) => this["~validate"](data)
                         vendor: zod
                         version: 1
+                  markTarget:
+                    describe: "Mark the place at (x, y) as the target (the lesson: Aman says which house)"
+                    isFromScreen: false
+                    payload:
+                      _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
                 children: {}
-                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target, whose address (its two numbers) is shown; showing one number alone lights every place that has it."
+                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
                 facts:
+                  canChoose: ƒ me=>me.choosing===Choosing.Always||me.choosing===Choosing.OnceOpen&&me.isOpen
                   litCount: ƒ me=>me.lit===null?0:placesOn(me,me.lit).length
                 invariant: ƒ s=>s.target!==null&&!s.places.some(p=>p.x===s.target?.x&&p.y===s.target?.y)?`the target (${s.target.x}, ${s.target.y}) is not one of the places`:void 0
                 needs:
@@ -7521,9 +7607,10 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                     vendor: zod
                     version: 1
                 on:
-                  chooseTarget: ƒ (me,p,t)=>{if(!me.canChooseTarget||!me.places.some(q=>q.x===p.x&&q.y===p.y))return;const target={x:p.x,y:p.y};return[t.set({target,lit:null,isLitByTap:false}),t.tell.targetChosen({...target,isAnother:me.target!==null})]}
+                  chooseTarget: ƒ (me,p,t)=>me.canChoose&&t.self.markTarget(p)
                   clearLight: ƒ (_,__,t)=>t.set({lit:null,isLitByTap:false})
                   lightLine: ƒ (me,{isTap,...line},t)=>[t.set({lit:line,isLitByTap:isTap===true}),t.tell.lineLit({...line,count:placesOn(me,line).length})]
+                  markTarget: ƒ (me,p,t)=>{if(!me.places.some(q=>q.x===p.x&&q.y===p.y))return;const target={x:p.x,y:p.y};return[t.set({target,lit:null,isLitByTap:false}),t.tell.targetChosen({...target,isAnother:me.target!==null})]}
                 role: explainer
                 signals:
                   lineLit:
@@ -7693,7 +7780,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                         vendor: zod
                         version: 1
                 start:
-                  canChooseTarget: true
+                  choosing: always
                   isLitByTap: false
                   lit: null
                   placeKind: house
@@ -7711,15 +7798,22 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                       - places
                       - target
                       - targetName
-                      - canChooseTarget
+                      - choosing
                       - lit
                       - isLitByTap
                       - showAddress
                     shape:
-                      canChooseTarget:
+                      choosing:
+                        _cache:
+                          - never
+                          - always
+                          - onceOpen
                         _def:
-                          coerce: false
-                          typeName: ZodBoolean
+                          typeName: ZodNativeEnum
+                          values:
+                            Always: always
+                            Never: never
+                            OnceOpen: onceOpen
                         and: ƒ function () { [native code] }
                         array: ƒ function () { [native code] }
                         brand: ƒ function () { [native code] }
@@ -16437,7 +16531,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
             facts:
               axes: ƒ me=>me.plane.axes
               axisNames: ƒ me=>me.plane.axisNames
-              canChooseTarget: ƒ me=>arePlacesOn(me.places)&&me.places.canChooseTarget
+              canChooseTarget: ƒ me=>arePlacesOn(me.places)&&me.places.canChoose
               canTapNumbers: ƒ me=>arePlacesOn(me.places)
               isAlone: ƒ me=>!arePlacesOn(me.places)&&!isPlottingOn(me.plotting)&&!areCluesOn(me.clues)&&!isDiceOn(me.dice)
               isPlaneFree: ƒ me=>!isPlottingOn(me.plotting)||me.plotting.plotted.length>=me.plotting.toPlot.length
@@ -16499,6 +16593,88 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                   - places
                   - walker
               provider: plane
+            needs:
+              _cached: null
+              _def:
+                catchall:
+                  _def:
+                    typeName: ZodNever
+                  and: ƒ function () { [native code] }
+                  array: ƒ function () { [native code] }
+                  brand: ƒ function () { [native code] }
+                  catch: ƒ function () { [native code] }
+                  default: ƒ function () { [native code] }
+                  describe: ƒ function () { [native code] }
+                  isNullable: ƒ function () { [native code] }
+                  isOptional: ƒ function () { [native code] }
+                  nullable: ƒ function () { [native code] }
+                  nullish: ƒ function () { [native code] }
+                  optional: ƒ function () { [native code] }
+                  or: ƒ function () { [native code] }
+                  parse: ƒ function () { [native code] }
+                  parseAsync: ƒ function () { [native code] }
+                  pipe: ƒ function () { [native code] }
+                  promise: ƒ function () { [native code] }
+                  readonly: ƒ function () { [native code] }
+                  refine: ƒ function () { [native code] }
+                  refinement: ƒ function () { [native code] }
+                  safeParse: ƒ function () { [native code] }
+                  safeParseAsync: ƒ function () { [native code] }
+                  spa: ƒ function () { [native code] }
+                  superRefine: ƒ function () { [native code] }
+                  transform: ƒ function () { [native code] }
+                  ~standard:
+                    validate: ƒ (data) => this["~validate"](data)
+                    vendor: zod
+                    version: 1
+                shape: ƒ () => shape
+                typeName: ZodObject
+                unknownKeys: strict
+              and: ƒ function () { [native code] }
+              array: ƒ function () { [native code] }
+              augment: |-
+                ƒ extend(augmentation) {
+                        return new ZodObject({
+                            ...this._def,
+                            shape: () => ({
+                                ...this._def.shape(),
+                                ...augmentation,
+                            }),
+                        });
+                    }
+              brand: ƒ function () { [native code] }
+              catch: ƒ function () { [native code] }
+              default: ƒ function () { [native code] }
+              describe: ƒ function () { [native code] }
+              isNullable: ƒ function () { [native code] }
+              isOptional: ƒ function () { [native code] }
+              nonstrict: |-
+                ƒ passthrough() {
+                        return new ZodObject({
+                            ...this._def,
+                            unknownKeys: "passthrough",
+                        });
+                    }
+              nullable: ƒ function () { [native code] }
+              nullish: ƒ function () { [native code] }
+              optional: ƒ function () { [native code] }
+              or: ƒ function () { [native code] }
+              parse: ƒ function () { [native code] }
+              parseAsync: ƒ function () { [native code] }
+              pipe: ƒ function () { [native code] }
+              promise: ƒ function () { [native code] }
+              readonly: ƒ function () { [native code] }
+              refine: ƒ function () { [native code] }
+              refinement: ƒ function () { [native code] }
+              safeParse: ƒ function () { [native code] }
+              safeParseAsync: ƒ function () { [native code] }
+              spa: ƒ function () { [native code] }
+              superRefine: ƒ function () { [native code] }
+              transform: ƒ function () { [native code] }
+              ~standard:
+                validate: ƒ (data) => this["~validate"](data)
+                vendor: zod
+                version: 1
             role: explainer
             show:
               clues: ƒ me=>areCluesOn(me.clues)
@@ -19936,6 +20112,8 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
                 vendor: zod
                 version: 1
         describe: The board busStops.
+        facts:
+          isOpen: ƒ me=>me.isPassed
         hear:
           line.walker.stepped: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
           side.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
@@ -21087,7 +21265,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
           prop: coordinatePlane
           with:
             places:
-              canChooseTarget: false
+              choosing: never
               placeKind: crossing
               places:
                 - label:
@@ -21196,9 +21374,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: cb2f8dbd61a1
-  at: 2026-10-31T20:04:09.685Z
-  code: 075ecf9a4394a001
+  commit: f42db9bc038b
+  at: 2026-11-01T05:45:33.626Z
+  code: 938bf2e5c8d2f2f9
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -42036,91 +42214,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
             children:
               clues:
                 actions:
-                  clearClues:
-                    describe: Take back every clue, once the board is open (the learner's ↺)
-                    isFromScreen: true
-                    payload:
-                      _cached: null
-                      _def:
-                        catchall:
-                          _def:
-                            typeName: ZodNever
-                          and: ƒ function () { [native code] }
-                          array: ƒ function () { [native code] }
-                          brand: ƒ function () { [native code] }
-                          catch: ƒ function () { [native code] }
-                          default: ƒ function () { [native code] }
-                          describe: ƒ function () { [native code] }
-                          isNullable: ƒ function () { [native code] }
-                          isOptional: ƒ function () { [native code] }
-                          nullable: ƒ function () { [native code] }
-                          nullish: ƒ function () { [native code] }
-                          optional: ƒ function () { [native code] }
-                          or: ƒ function () { [native code] }
-                          parse: ƒ function () { [native code] }
-                          parseAsync: ƒ function () { [native code] }
-                          pipe: ƒ function () { [native code] }
-                          promise: ƒ function () { [native code] }
-                          readonly: ƒ function () { [native code] }
-                          refine: ƒ function () { [native code] }
-                          refinement: ƒ function () { [native code] }
-                          safeParse: ƒ function () { [native code] }
-                          safeParseAsync: ƒ function () { [native code] }
-                          spa: ƒ function () { [native code] }
-                          superRefine: ƒ function () { [native code] }
-                          transform: ƒ function () { [native code] }
-                          ~standard:
-                            validate: ƒ (data) => this["~validate"](data)
-                            vendor: zod
-                            version: 1
-                        shape: ƒ () => shape
-                        typeName: ZodObject
-                        unknownKeys: strict
-                      and: ƒ function () { [native code] }
-                      array: ƒ function () { [native code] }
-                      augment: |-
-                        ƒ extend(augmentation) {
-                                return new ZodObject({
-                                    ...this._def,
-                                    shape: () => ({
-                                        ...this._def.shape(),
-                                        ...augmentation,
-                                    }),
-                                });
-                            }
-                      brand: ƒ function () { [native code] }
-                      catch: ƒ function () { [native code] }
-                      default: ƒ function () { [native code] }
-                      describe: ƒ function () { [native code] }
-                      isNullable: ƒ function () { [native code] }
-                      isOptional: ƒ function () { [native code] }
-                      nonstrict: |-
-                        ƒ passthrough() {
-                                return new ZodObject({
-                                    ...this._def,
-                                    unknownKeys: "passthrough",
-                                });
-                            }
-                      nullable: ƒ function () { [native code] }
-                      nullish: ƒ function () { [native code] }
-                      optional: ƒ function () { [native code] }
-                      or: ƒ function () { [native code] }
-                      parse: ƒ function () { [native code] }
-                      parseAsync: ƒ function () { [native code] }
-                      pipe: ƒ function () { [native code] }
-                      promise: ƒ function () { [native code] }
-                      readonly: ƒ function () { [native code] }
-                      refine: ƒ function () { [native code] }
-                      refinement: ƒ function () { [native code] }
-                      safeParse: ƒ function () { [native code] }
-                      safeParseAsync: ƒ function () { [native code] }
-                      spa: ƒ function () { [native code] }
-                      superRefine: ƒ function () { [native code] }
-                      transform: ƒ function () { [native code] }
-                      ~standard:
-                        validate: ƒ (data) => this["~validate"](data)
-                        vendor: zod
-                        version: 1
                   giveClue:
                     describe: Give a clue, by its place among the choices; where the point could be narrows (the learner's button)
                     isFromScreen: true
@@ -42270,6 +42363,93 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                     isFromScreen: true
                     payload:
                       _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
+                  putAway:
+                    describe: "Take the clues off the plane, their point with them: their work is done"
+                    isFromScreen: false
+                    payload:
+                      _cached:
+                        keys: []
+                        shape: {}
                       _def:
                         catchall:
                           _def:
@@ -42525,9 +42705,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                 offScreen:
                   - hidden
                 on:
-                  clearClues: ƒ (me,_,t)=>me.isOpen&&t.set({given:[]})
                   giveClue: ƒ (me,{clue},t)=>{if(clue>=me.clueChoices.length||me.given.includes(clue))return;const given=[...me.given,clue];const still=stillPossible(me,given);return[t.set({given}),t.tell.clueGiven({still:still.kind}),...still.kind==="point"?[t.tell.pinned({x:still.x,y:still.y})]:[]]}
                   hideAt: ƒ (me,p,t)=>me.canHide&&t.set({hidden:{x:p.x,y:p.y},given:[],isHiddenShown:false})
+                  putAway: ƒ (_,__,t)=>t.set({clueChoices:[],given:[],hidden:null,isHiddenShown:false})
                   showHidden: ƒ (me,_,t)=>me.hidden!==null&&t.set({isHiddenShown:true})
                 role: explainer
                 signals:
@@ -46422,9 +46602,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                         vendor: zod
                         version: 1
                 children: {}
-                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
+                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
                 facts:
-                  canChoose: ƒ me=>me.canChooseTarget||me.isOpen
+                  canChoose: ƒ me=>me.choosing===Choosing.Always||me.choosing===Choosing.OnceOpen&&me.isOpen
                   litCount: ƒ me=>me.lit===null?0:placesOn(me,me.lit).length
                 invariant: ƒ s=>s.target!==null&&!s.places.some(p=>p.x===s.target?.x&&p.y===s.target?.y)?`the target (${s.target.x}, ${s.target.y}) is not one of the places`:void 0
                 needs:
@@ -46962,7 +47142,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                         vendor: zod
                         version: 1
                 start:
-                  canChooseTarget: true
+                  choosing: always
                   isLitByTap: false
                   lit: null
                   placeKind: house
@@ -46980,15 +47160,22 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                       - places
                       - target
                       - targetName
-                      - canChooseTarget
+                      - choosing
                       - lit
                       - isLitByTap
                       - showAddress
                     shape:
-                      canChooseTarget:
+                      choosing:
+                        _cache:
+                          - never
+                          - always
+                          - onceOpen
                         _def:
-                          coerce: false
-                          typeName: ZodBoolean
+                          typeName: ZodNativeEnum
+                          values:
+                            Always: always
+                            Never: never
+                            OnceOpen: onceOpen
                         and: ƒ function () { [native code] }
                         array: ƒ function () { [native code] }
                         brand: ƒ function () { [native code] }
@@ -53677,7 +53864,109 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                     describe: Put the point at (x, y), snapped to the step (the learner's drag or tap)
                     isFromScreen: true
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                        shape:
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -53939,7 +54228,51 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                 signals:
                   enteredQuadrant:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - quadrant
+                        shape:
+                          quadrant:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -54022,7 +54355,157 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                         version: 1
                   moved:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                          - place
+                        shape:
+                          place:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                              - x-axis
+                              - y-axis
+                              - O
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                                - x-axis
+                                - y-axis
+                                - O
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -54601,6 +55084,11 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                             value: 4
                           minLength: null
                           type:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
                             _def:
                               typeName: ZodEnum
                               values:
@@ -61160,9 +61648,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: dcf9f28fcbcc
-  at: 2026-11-01T05:18:07.083Z
-  code: f995a718d135e095
+  commit: f42db9bc038b
+  at: 2026-11-01T05:47:02.064Z
+  code: c8b695ff0803dca9
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -61206,7 +61694,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
             hi: अमन का घर ढूँढना
         town:
           places:
-            canChooseTarget: false
+            choosing: onceOpen
             placeKind: house
             places:
               - x: 1
@@ -65509,91 +65997,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
             children:
               clues:
                 actions:
-                  clearClues:
-                    describe: Take back every clue, once the board is open (the learner's ↺)
-                    isFromScreen: true
-                    payload:
-                      _cached: null
-                      _def:
-                        catchall:
-                          _def:
-                            typeName: ZodNever
-                          and: ƒ function () { [native code] }
-                          array: ƒ function () { [native code] }
-                          brand: ƒ function () { [native code] }
-                          catch: ƒ function () { [native code] }
-                          default: ƒ function () { [native code] }
-                          describe: ƒ function () { [native code] }
-                          isNullable: ƒ function () { [native code] }
-                          isOptional: ƒ function () { [native code] }
-                          nullable: ƒ function () { [native code] }
-                          nullish: ƒ function () { [native code] }
-                          optional: ƒ function () { [native code] }
-                          or: ƒ function () { [native code] }
-                          parse: ƒ function () { [native code] }
-                          parseAsync: ƒ function () { [native code] }
-                          pipe: ƒ function () { [native code] }
-                          promise: ƒ function () { [native code] }
-                          readonly: ƒ function () { [native code] }
-                          refine: ƒ function () { [native code] }
-                          refinement: ƒ function () { [native code] }
-                          safeParse: ƒ function () { [native code] }
-                          safeParseAsync: ƒ function () { [native code] }
-                          spa: ƒ function () { [native code] }
-                          superRefine: ƒ function () { [native code] }
-                          transform: ƒ function () { [native code] }
-                          ~standard:
-                            validate: ƒ (data) => this["~validate"](data)
-                            vendor: zod
-                            version: 1
-                        shape: ƒ () => shape
-                        typeName: ZodObject
-                        unknownKeys: strict
-                      and: ƒ function () { [native code] }
-                      array: ƒ function () { [native code] }
-                      augment: |-
-                        ƒ extend(augmentation) {
-                                return new ZodObject({
-                                    ...this._def,
-                                    shape: () => ({
-                                        ...this._def.shape(),
-                                        ...augmentation,
-                                    }),
-                                });
-                            }
-                      brand: ƒ function () { [native code] }
-                      catch: ƒ function () { [native code] }
-                      default: ƒ function () { [native code] }
-                      describe: ƒ function () { [native code] }
-                      isNullable: ƒ function () { [native code] }
-                      isOptional: ƒ function () { [native code] }
-                      nonstrict: |-
-                        ƒ passthrough() {
-                                return new ZodObject({
-                                    ...this._def,
-                                    unknownKeys: "passthrough",
-                                });
-                            }
-                      nullable: ƒ function () { [native code] }
-                      nullish: ƒ function () { [native code] }
-                      optional: ƒ function () { [native code] }
-                      or: ƒ function () { [native code] }
-                      parse: ƒ function () { [native code] }
-                      parseAsync: ƒ function () { [native code] }
-                      pipe: ƒ function () { [native code] }
-                      promise: ƒ function () { [native code] }
-                      readonly: ƒ function () { [native code] }
-                      refine: ƒ function () { [native code] }
-                      refinement: ƒ function () { [native code] }
-                      safeParse: ƒ function () { [native code] }
-                      safeParseAsync: ƒ function () { [native code] }
-                      spa: ƒ function () { [native code] }
-                      superRefine: ƒ function () { [native code] }
-                      transform: ƒ function () { [native code] }
-                      ~standard:
-                        validate: ƒ (data) => this["~validate"](data)
-                        vendor: zod
-                        version: 1
                   giveClue:
                     describe: Give a clue, by its place among the choices; where the point could be narrows (the learner's button)
                     isFromScreen: true
@@ -65682,6 +66085,91 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
                   hideAt:
                     describe: Hide a point of the learner's own at (x, y), for the others to find (the learner's tap)
                     isFromScreen: true
+                    payload:
+                      _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
+                  putAway:
+                    describe: "Take the clues off the plane, their point with them: their work is done"
+                    isFromScreen: false
                     payload:
                       _cached: null
                       _def:
@@ -65939,9 +66427,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
                 offScreen:
                   - hidden
                 on:
-                  clearClues: ƒ (me,_,t)=>me.isOpen&&t.set({given:[]})
                   giveClue: ƒ (me,{clue},t)=>{if(clue>=me.clueChoices.length||me.given.includes(clue))return;const given=[...me.given,clue];const still=stillPossible(me,given);return[t.set({given}),t.tell.clueGiven({still:still.kind}),...still.kind==="point"?[t.tell.pinned({x:still.x,y:still.y})]:[]]}
                   hideAt: ƒ (me,p,t)=>me.canHide&&t.set({hidden:{x:p.x,y:p.y},given:[],isHiddenShown:false})
+                  putAway: ƒ (_,__,t)=>t.set({clueChoices:[],given:[],hidden:null,isHiddenShown:false})
                   showHidden: ƒ (me,_,t)=>me.hidden!==null&&t.set({isHiddenShown:true})
                 role: explainer
                 signals:
@@ -68910,9 +69398,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
                         vendor: zod
                         version: 1
                 children: {}
-                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
+                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
                 facts:
-                  canChoose: ƒ me=>me.canChooseTarget||me.isOpen
+                  canChoose: ƒ me=>me.choosing===Choosing.Always||me.choosing===Choosing.OnceOpen&&me.isOpen
                   litCount: ƒ me=>me.lit===null?0:placesOn(me,me.lit).length
                 invariant: ƒ s=>s.target!==null&&!s.places.some(p=>p.x===s.target?.x&&p.y===s.target?.y)?`the target (${s.target.x}, ${s.target.y}) is not one of the places`:void 0
                 needs:
@@ -69450,7 +69938,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
                         vendor: zod
                         version: 1
                 start:
-                  canChooseTarget: true
+                  choosing: always
                   isLitByTap: false
                   lit: null
                   placeKind: house
@@ -69468,15 +69956,22 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
                       - places
                       - target
                       - targetName
-                      - canChooseTarget
+                      - choosing
                       - lit
                       - isLitByTap
                       - showAddress
                     shape:
-                      canChooseTarget:
+                      choosing:
+                        _cache:
+                          - never
+                          - always
+                          - onceOpen
                         _def:
-                          coerce: false
-                          typeName: ZodBoolean
+                          typeName: ZodNativeEnum
+                          values:
+                            Always: always
+                            Never: never
+                            OnceOpen: onceOpen
                         and: ƒ function () { [native code] }
                         array: ƒ function () { [native code] }
                         brand: ƒ function () { [native code] }
@@ -80088,7 +80583,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
           prop: coordinatePlane
           with:
             places:
-              canChooseTarget: false
+              choosing: onceOpen
               placeKind: house
               places:
                 - x: 1
@@ -80217,9 +80712,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: dcf9f28fcbcc
-  at: 2026-11-01T05:16:55.486Z
-  code: 4d0580d74ca9a6bf
+  commit: f42db9bc038b
+  at: 2026-11-01T05:46:25.591Z
+  code: ff844a241d63c16e
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -80232,7 +80727,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
             hi: यही विचार **निर्देशांक ज्यामिति** की शुरुआत है। यह **रेने देकार्त** (1596–1650) से आया, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को **कार्तीय पद्धति** कहते हैं।
         desk:
           places:
-            canChooseTarget: false
+            choosing: never
             placeKind: desk
             places:
               - x: 1
@@ -80312,7 +80807,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
               yMin: 0
         house:
           places:
-            canChooseTarget: false
+            choosing: never
             placeKind: house
             places:
               - x: 1
@@ -82091,91 +82586,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
             children:
               clues:
                 actions:
-                  clearClues:
-                    describe: Take back every clue, once the board is open (the learner's ↺)
-                    isFromScreen: true
-                    payload:
-                      _cached: null
-                      _def:
-                        catchall:
-                          _def:
-                            typeName: ZodNever
-                          and: ƒ function () { [native code] }
-                          array: ƒ function () { [native code] }
-                          brand: ƒ function () { [native code] }
-                          catch: ƒ function () { [native code] }
-                          default: ƒ function () { [native code] }
-                          describe: ƒ function () { [native code] }
-                          isNullable: ƒ function () { [native code] }
-                          isOptional: ƒ function () { [native code] }
-                          nullable: ƒ function () { [native code] }
-                          nullish: ƒ function () { [native code] }
-                          optional: ƒ function () { [native code] }
-                          or: ƒ function () { [native code] }
-                          parse: ƒ function () { [native code] }
-                          parseAsync: ƒ function () { [native code] }
-                          pipe: ƒ function () { [native code] }
-                          promise: ƒ function () { [native code] }
-                          readonly: ƒ function () { [native code] }
-                          refine: ƒ function () { [native code] }
-                          refinement: ƒ function () { [native code] }
-                          safeParse: ƒ function () { [native code] }
-                          safeParseAsync: ƒ function () { [native code] }
-                          spa: ƒ function () { [native code] }
-                          superRefine: ƒ function () { [native code] }
-                          transform: ƒ function () { [native code] }
-                          ~standard:
-                            validate: ƒ (data) => this["~validate"](data)
-                            vendor: zod
-                            version: 1
-                        shape: ƒ () => shape
-                        typeName: ZodObject
-                        unknownKeys: strict
-                      and: ƒ function () { [native code] }
-                      array: ƒ function () { [native code] }
-                      augment: |-
-                        ƒ extend(augmentation) {
-                                return new ZodObject({
-                                    ...this._def,
-                                    shape: () => ({
-                                        ...this._def.shape(),
-                                        ...augmentation,
-                                    }),
-                                });
-                            }
-                      brand: ƒ function () { [native code] }
-                      catch: ƒ function () { [native code] }
-                      default: ƒ function () { [native code] }
-                      describe: ƒ function () { [native code] }
-                      isNullable: ƒ function () { [native code] }
-                      isOptional: ƒ function () { [native code] }
-                      nonstrict: |-
-                        ƒ passthrough() {
-                                return new ZodObject({
-                                    ...this._def,
-                                    unknownKeys: "passthrough",
-                                });
-                            }
-                      nullable: ƒ function () { [native code] }
-                      nullish: ƒ function () { [native code] }
-                      optional: ƒ function () { [native code] }
-                      or: ƒ function () { [native code] }
-                      parse: ƒ function () { [native code] }
-                      parseAsync: ƒ function () { [native code] }
-                      pipe: ƒ function () { [native code] }
-                      promise: ƒ function () { [native code] }
-                      readonly: ƒ function () { [native code] }
-                      refine: ƒ function () { [native code] }
-                      refinement: ƒ function () { [native code] }
-                      safeParse: ƒ function () { [native code] }
-                      safeParseAsync: ƒ function () { [native code] }
-                      spa: ƒ function () { [native code] }
-                      superRefine: ƒ function () { [native code] }
-                      transform: ƒ function () { [native code] }
-                      ~standard:
-                        validate: ƒ (data) => this["~validate"](data)
-                        vendor: zod
-                        version: 1
                   giveClue:
                     describe: Give a clue, by its place among the choices; where the point could be narrows (the learner's button)
                     isFromScreen: true
@@ -82325,6 +82735,93 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                     isFromScreen: true
                     payload:
                       _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
+                  putAway:
+                    describe: "Take the clues off the plane, their point with them: their work is done"
+                    isFromScreen: false
+                    payload:
+                      _cached:
+                        keys: []
+                        shape: {}
                       _def:
                         catchall:
                           _def:
@@ -82580,9 +83077,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                 offScreen:
                   - hidden
                 on:
-                  clearClues: ƒ (me,_,t)=>me.isOpen&&t.set({given:[]})
                   giveClue: ƒ (me,{clue},t)=>{if(clue>=me.clueChoices.length||me.given.includes(clue))return;const given=[...me.given,clue];const still=stillPossible(me,given);return[t.set({given}),t.tell.clueGiven({still:still.kind}),...still.kind==="point"?[t.tell.pinned({x:still.x,y:still.y})]:[]]}
                   hideAt: ƒ (me,p,t)=>me.canHide&&t.set({hidden:{x:p.x,y:p.y},given:[],isHiddenShown:false})
+                  putAway: ƒ (_,__,t)=>t.set({clueChoices:[],given:[],hidden:null,isHiddenShown:false})
                   showHidden: ƒ (me,_,t)=>me.hidden!==null&&t.set({isHiddenShown:true})
                 role: explainer
                 signals:
@@ -86477,9 +86974,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         vendor: zod
                         version: 1
                 children: {}
-                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
+                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
                 facts:
-                  canChoose: ƒ me=>me.canChooseTarget||me.isOpen
+                  canChoose: ƒ me=>me.choosing===Choosing.Always||me.choosing===Choosing.OnceOpen&&me.isOpen
                   litCount: ƒ me=>me.lit===null?0:placesOn(me,me.lit).length
                 invariant: ƒ s=>s.target!==null&&!s.places.some(p=>p.x===s.target?.x&&p.y===s.target?.y)?`the target (${s.target.x}, ${s.target.y}) is not one of the places`:void 0
                 needs:
@@ -87017,7 +87514,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         vendor: zod
                         version: 1
                 start:
-                  canChooseTarget: true
+                  choosing: always
                   isLitByTap: false
                   lit: null
                   placeKind: house
@@ -87035,15 +87532,22 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                       - places
                       - target
                       - targetName
-                      - canChooseTarget
+                      - choosing
                       - lit
                       - isLitByTap
                       - showAddress
                     shape:
-                      canChooseTarget:
+                      choosing:
+                        _cache:
+                          - never
+                          - always
+                          - onceOpen
                         _def:
-                          coerce: false
-                          typeName: ZodBoolean
+                          typeName: ZodNativeEnum
+                          values:
+                            Always: always
+                            Never: never
+                            OnceOpen: onceOpen
                         and: ƒ function () { [native code] }
                         array: ƒ function () { [native code] }
                         brand: ƒ function () { [native code] }
@@ -93732,7 +94236,109 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                     describe: Put the point at (x, y), snapped to the step (the learner's drag or tap)
                     isFromScreen: true
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                        shape:
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -93994,7 +94600,51 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                 signals:
                   enteredQuadrant:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - quadrant
+                        shape:
+                          quadrant:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -94077,7 +94727,157 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         version: 1
                   moved:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                          - place
+                        shape:
+                          place:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                              - x-axis
+                              - y-axis
+                              - O
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                                - x-axis
+                                - y-axis
+                                - O
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -94656,6 +95456,11 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                             value: 4
                           minLength: null
                           type:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
                             _def:
                               typeName: ZodEnum
                               values:
@@ -96876,91 +97681,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
             children:
               clues:
                 actions:
-                  clearClues:
-                    describe: Take back every clue, once the board is open (the learner's ↺)
-                    isFromScreen: true
-                    payload:
-                      _cached: null
-                      _def:
-                        catchall:
-                          _def:
-                            typeName: ZodNever
-                          and: ƒ function () { [native code] }
-                          array: ƒ function () { [native code] }
-                          brand: ƒ function () { [native code] }
-                          catch: ƒ function () { [native code] }
-                          default: ƒ function () { [native code] }
-                          describe: ƒ function () { [native code] }
-                          isNullable: ƒ function () { [native code] }
-                          isOptional: ƒ function () { [native code] }
-                          nullable: ƒ function () { [native code] }
-                          nullish: ƒ function () { [native code] }
-                          optional: ƒ function () { [native code] }
-                          or: ƒ function () { [native code] }
-                          parse: ƒ function () { [native code] }
-                          parseAsync: ƒ function () { [native code] }
-                          pipe: ƒ function () { [native code] }
-                          promise: ƒ function () { [native code] }
-                          readonly: ƒ function () { [native code] }
-                          refine: ƒ function () { [native code] }
-                          refinement: ƒ function () { [native code] }
-                          safeParse: ƒ function () { [native code] }
-                          safeParseAsync: ƒ function () { [native code] }
-                          spa: ƒ function () { [native code] }
-                          superRefine: ƒ function () { [native code] }
-                          transform: ƒ function () { [native code] }
-                          ~standard:
-                            validate: ƒ (data) => this["~validate"](data)
-                            vendor: zod
-                            version: 1
-                        shape: ƒ () => shape
-                        typeName: ZodObject
-                        unknownKeys: strict
-                      and: ƒ function () { [native code] }
-                      array: ƒ function () { [native code] }
-                      augment: |-
-                        ƒ extend(augmentation) {
-                                return new ZodObject({
-                                    ...this._def,
-                                    shape: () => ({
-                                        ...this._def.shape(),
-                                        ...augmentation,
-                                    }),
-                                });
-                            }
-                      brand: ƒ function () { [native code] }
-                      catch: ƒ function () { [native code] }
-                      default: ƒ function () { [native code] }
-                      describe: ƒ function () { [native code] }
-                      isNullable: ƒ function () { [native code] }
-                      isOptional: ƒ function () { [native code] }
-                      nonstrict: |-
-                        ƒ passthrough() {
-                                return new ZodObject({
-                                    ...this._def,
-                                    unknownKeys: "passthrough",
-                                });
-                            }
-                      nullable: ƒ function () { [native code] }
-                      nullish: ƒ function () { [native code] }
-                      optional: ƒ function () { [native code] }
-                      or: ƒ function () { [native code] }
-                      parse: ƒ function () { [native code] }
-                      parseAsync: ƒ function () { [native code] }
-                      pipe: ƒ function () { [native code] }
-                      promise: ƒ function () { [native code] }
-                      readonly: ƒ function () { [native code] }
-                      refine: ƒ function () { [native code] }
-                      refinement: ƒ function () { [native code] }
-                      safeParse: ƒ function () { [native code] }
-                      safeParseAsync: ƒ function () { [native code] }
-                      spa: ƒ function () { [native code] }
-                      superRefine: ƒ function () { [native code] }
-                      transform: ƒ function () { [native code] }
-                      ~standard:
-                        validate: ƒ (data) => this["~validate"](data)
-                        vendor: zod
-                        version: 1
                   giveClue:
                     describe: Give a clue, by its place among the choices; where the point could be narrows (the learner's button)
                     isFromScreen: true
@@ -97110,6 +97830,93 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                     isFromScreen: true
                     payload:
                       _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
+                  putAway:
+                    describe: "Take the clues off the plane, their point with them: their work is done"
+                    isFromScreen: false
+                    payload:
+                      _cached:
+                        keys: []
+                        shape: {}
                       _def:
                         catchall:
                           _def:
@@ -97365,9 +98172,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                 offScreen:
                   - hidden
                 on:
-                  clearClues: ƒ (me,_,t)=>me.isOpen&&t.set({given:[]})
                   giveClue: ƒ (me,{clue},t)=>{if(clue>=me.clueChoices.length||me.given.includes(clue))return;const given=[...me.given,clue];const still=stillPossible(me,given);return[t.set({given}),t.tell.clueGiven({still:still.kind}),...still.kind==="point"?[t.tell.pinned({x:still.x,y:still.y})]:[]]}
                   hideAt: ƒ (me,p,t)=>me.canHide&&t.set({hidden:{x:p.x,y:p.y},given:[],isHiddenShown:false})
+                  putAway: ƒ (_,__,t)=>t.set({clueChoices:[],given:[],hidden:null,isHiddenShown:false})
                   showHidden: ƒ (me,_,t)=>me.hidden!==null&&t.set({isHiddenShown:true})
                 role: explainer
                 signals:
@@ -101262,9 +102069,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         vendor: zod
                         version: 1
                 children: {}
-                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
+                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
                 facts:
-                  canChoose: ƒ me=>me.canChooseTarget||me.isOpen
+                  canChoose: ƒ me=>me.choosing===Choosing.Always||me.choosing===Choosing.OnceOpen&&me.isOpen
                   litCount: ƒ me=>me.lit===null?0:placesOn(me,me.lit).length
                 invariant: ƒ s=>s.target!==null&&!s.places.some(p=>p.x===s.target?.x&&p.y===s.target?.y)?`the target (${s.target.x}, ${s.target.y}) is not one of the places`:void 0
                 needs:
@@ -101802,7 +102609,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         vendor: zod
                         version: 1
                 start:
-                  canChooseTarget: true
+                  choosing: always
                   isLitByTap: false
                   lit: null
                   placeKind: house
@@ -101820,15 +102627,22 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                       - places
                       - target
                       - targetName
-                      - canChooseTarget
+                      - choosing
                       - lit
                       - isLitByTap
                       - showAddress
                     shape:
-                      canChooseTarget:
+                      choosing:
+                        _cache:
+                          - never
+                          - always
+                          - onceOpen
                         _def:
-                          coerce: false
-                          typeName: ZodBoolean
+                          typeName: ZodNativeEnum
+                          values:
+                            Always: always
+                            Never: never
+                            OnceOpen: onceOpen
                         and: ƒ function () { [native code] }
                         array: ƒ function () { [native code] }
                         brand: ƒ function () { [native code] }
@@ -108517,7 +109331,109 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                     describe: Put the point at (x, y), snapped to the step (the learner's drag or tap)
                     isFromScreen: true
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                        shape:
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -108779,7 +109695,51 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                 signals:
                   enteredQuadrant:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - quadrant
+                        shape:
+                          quadrant:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -108862,7 +109822,157 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         version: 1
                   moved:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                          - place
+                        shape:
+                          place:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                              - x-axis
+                              - y-axis
+                              - O
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                                - x-axis
+                                - y-axis
+                                - O
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -109441,6 +110551,11 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                             value: 4
                           minLength: null
                           type:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
                             _def:
                               typeName: ZodEnum
                               values:
@@ -112969,91 +114084,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
             children:
               clues:
                 actions:
-                  clearClues:
-                    describe: Take back every clue, once the board is open (the learner's ↺)
-                    isFromScreen: true
-                    payload:
-                      _cached: null
-                      _def:
-                        catchall:
-                          _def:
-                            typeName: ZodNever
-                          and: ƒ function () { [native code] }
-                          array: ƒ function () { [native code] }
-                          brand: ƒ function () { [native code] }
-                          catch: ƒ function () { [native code] }
-                          default: ƒ function () { [native code] }
-                          describe: ƒ function () { [native code] }
-                          isNullable: ƒ function () { [native code] }
-                          isOptional: ƒ function () { [native code] }
-                          nullable: ƒ function () { [native code] }
-                          nullish: ƒ function () { [native code] }
-                          optional: ƒ function () { [native code] }
-                          or: ƒ function () { [native code] }
-                          parse: ƒ function () { [native code] }
-                          parseAsync: ƒ function () { [native code] }
-                          pipe: ƒ function () { [native code] }
-                          promise: ƒ function () { [native code] }
-                          readonly: ƒ function () { [native code] }
-                          refine: ƒ function () { [native code] }
-                          refinement: ƒ function () { [native code] }
-                          safeParse: ƒ function () { [native code] }
-                          safeParseAsync: ƒ function () { [native code] }
-                          spa: ƒ function () { [native code] }
-                          superRefine: ƒ function () { [native code] }
-                          transform: ƒ function () { [native code] }
-                          ~standard:
-                            validate: ƒ (data) => this["~validate"](data)
-                            vendor: zod
-                            version: 1
-                        shape: ƒ () => shape
-                        typeName: ZodObject
-                        unknownKeys: strict
-                      and: ƒ function () { [native code] }
-                      array: ƒ function () { [native code] }
-                      augment: |-
-                        ƒ extend(augmentation) {
-                                return new ZodObject({
-                                    ...this._def,
-                                    shape: () => ({
-                                        ...this._def.shape(),
-                                        ...augmentation,
-                                    }),
-                                });
-                            }
-                      brand: ƒ function () { [native code] }
-                      catch: ƒ function () { [native code] }
-                      default: ƒ function () { [native code] }
-                      describe: ƒ function () { [native code] }
-                      isNullable: ƒ function () { [native code] }
-                      isOptional: ƒ function () { [native code] }
-                      nonstrict: |-
-                        ƒ passthrough() {
-                                return new ZodObject({
-                                    ...this._def,
-                                    unknownKeys: "passthrough",
-                                });
-                            }
-                      nullable: ƒ function () { [native code] }
-                      nullish: ƒ function () { [native code] }
-                      optional: ƒ function () { [native code] }
-                      or: ƒ function () { [native code] }
-                      parse: ƒ function () { [native code] }
-                      parseAsync: ƒ function () { [native code] }
-                      pipe: ƒ function () { [native code] }
-                      promise: ƒ function () { [native code] }
-                      readonly: ƒ function () { [native code] }
-                      refine: ƒ function () { [native code] }
-                      refinement: ƒ function () { [native code] }
-                      safeParse: ƒ function () { [native code] }
-                      safeParseAsync: ƒ function () { [native code] }
-                      spa: ƒ function () { [native code] }
-                      superRefine: ƒ function () { [native code] }
-                      transform: ƒ function () { [native code] }
-                      ~standard:
-                        validate: ƒ (data) => this["~validate"](data)
-                        vendor: zod
-                        version: 1
                   giveClue:
                     describe: Give a clue, by its place among the choices; where the point could be narrows (the learner's button)
                     isFromScreen: true
@@ -113203,6 +114233,93 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                     isFromScreen: true
                     payload:
                       _cached: null
+                      _def:
+                        catchall:
+                          _def:
+                            typeName: ZodNever
+                          and: ƒ function () { [native code] }
+                          array: ƒ function () { [native code] }
+                          brand: ƒ function () { [native code] }
+                          catch: ƒ function () { [native code] }
+                          default: ƒ function () { [native code] }
+                          describe: ƒ function () { [native code] }
+                          isNullable: ƒ function () { [native code] }
+                          isOptional: ƒ function () { [native code] }
+                          nullable: ƒ function () { [native code] }
+                          nullish: ƒ function () { [native code] }
+                          optional: ƒ function () { [native code] }
+                          or: ƒ function () { [native code] }
+                          parse: ƒ function () { [native code] }
+                          parseAsync: ƒ function () { [native code] }
+                          pipe: ƒ function () { [native code] }
+                          promise: ƒ function () { [native code] }
+                          readonly: ƒ function () { [native code] }
+                          refine: ƒ function () { [native code] }
+                          refinement: ƒ function () { [native code] }
+                          safeParse: ƒ function () { [native code] }
+                          safeParseAsync: ƒ function () { [native code] }
+                          spa: ƒ function () { [native code] }
+                          superRefine: ƒ function () { [native code] }
+                          transform: ƒ function () { [native code] }
+                          ~standard:
+                            validate: ƒ (data) => this["~validate"](data)
+                            vendor: zod
+                            version: 1
+                        shape: ƒ () => shape
+                        typeName: ZodObject
+                        unknownKeys: strict
+                      and: ƒ function () { [native code] }
+                      array: ƒ function () { [native code] }
+                      augment: |-
+                        ƒ extend(augmentation) {
+                                return new ZodObject({
+                                    ...this._def,
+                                    shape: () => ({
+                                        ...this._def.shape(),
+                                        ...augmentation,
+                                    }),
+                                });
+                            }
+                      brand: ƒ function () { [native code] }
+                      catch: ƒ function () { [native code] }
+                      default: ƒ function () { [native code] }
+                      describe: ƒ function () { [native code] }
+                      isNullable: ƒ function () { [native code] }
+                      isOptional: ƒ function () { [native code] }
+                      nonstrict: |-
+                        ƒ passthrough() {
+                                return new ZodObject({
+                                    ...this._def,
+                                    unknownKeys: "passthrough",
+                                });
+                            }
+                      nullable: ƒ function () { [native code] }
+                      nullish: ƒ function () { [native code] }
+                      optional: ƒ function () { [native code] }
+                      or: ƒ function () { [native code] }
+                      parse: ƒ function () { [native code] }
+                      parseAsync: ƒ function () { [native code] }
+                      pipe: ƒ function () { [native code] }
+                      promise: ƒ function () { [native code] }
+                      readonly: ƒ function () { [native code] }
+                      refine: ƒ function () { [native code] }
+                      refinement: ƒ function () { [native code] }
+                      safeParse: ƒ function () { [native code] }
+                      safeParseAsync: ƒ function () { [native code] }
+                      spa: ƒ function () { [native code] }
+                      superRefine: ƒ function () { [native code] }
+                      transform: ƒ function () { [native code] }
+                      ~standard:
+                        validate: ƒ (data) => this["~validate"](data)
+                        vendor: zod
+                        version: 1
+                  putAway:
+                    describe: "Take the clues off the plane, their point with them: their work is done"
+                    isFromScreen: false
+                    payload:
+                      _cached:
+                        keys: []
+                        shape: {}
                       _def:
                         catchall:
                           _def:
@@ -113458,9 +114575,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                 offScreen:
                   - hidden
                 on:
-                  clearClues: ƒ (me,_,t)=>me.isOpen&&t.set({given:[]})
                   giveClue: ƒ (me,{clue},t)=>{if(clue>=me.clueChoices.length||me.given.includes(clue))return;const given=[...me.given,clue];const still=stillPossible(me,given);return[t.set({given}),t.tell.clueGiven({still:still.kind}),...still.kind==="point"?[t.tell.pinned({x:still.x,y:still.y})]:[]]}
                   hideAt: ƒ (me,p,t)=>me.canHide&&t.set({hidden:{x:p.x,y:p.y},given:[],isHiddenShown:false})
+                  putAway: ƒ (_,__,t)=>t.set({clueChoices:[],given:[],hidden:null,isHiddenShown:false})
                   showHidden: ƒ (me,_,t)=>me.hidden!==null&&t.set({isHiddenShown:true})
                 role: explainer
                 signals:
@@ -117355,9 +118472,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         vendor: zod
                         version: 1
                 children: {}
-                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
+                describe: "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it."
                 facts:
-                  canChoose: ƒ me=>me.canChooseTarget||me.isOpen
+                  canChoose: ƒ me=>me.choosing===Choosing.Always||me.choosing===Choosing.OnceOpen&&me.isOpen
                   litCount: ƒ me=>me.lit===null?0:placesOn(me,me.lit).length
                 invariant: ƒ s=>s.target!==null&&!s.places.some(p=>p.x===s.target?.x&&p.y===s.target?.y)?`the target (${s.target.x}, ${s.target.y}) is not one of the places`:void 0
                 needs:
@@ -117895,7 +119012,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         vendor: zod
                         version: 1
                 start:
-                  canChooseTarget: true
+                  choosing: always
                   isLitByTap: false
                   lit: null
                   placeKind: house
@@ -117913,15 +119030,22 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                       - places
                       - target
                       - targetName
-                      - canChooseTarget
+                      - choosing
                       - lit
                       - isLitByTap
                       - showAddress
                     shape:
-                      canChooseTarget:
+                      choosing:
+                        _cache:
+                          - never
+                          - always
+                          - onceOpen
                         _def:
-                          coerce: false
-                          typeName: ZodBoolean
+                          typeName: ZodNativeEnum
+                          values:
+                            Always: always
+                            Never: never
+                            OnceOpen: onceOpen
                         and: ƒ function () { [native code] }
                         array: ƒ function () { [native code] }
                         brand: ƒ function () { [native code] }
@@ -124610,7 +125734,109 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                     describe: Put the point at (x, y), snapped to the step (the learner's drag or tap)
                     isFromScreen: true
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                        shape:
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -124872,7 +126098,51 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                 signals:
                   enteredQuadrant:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - quadrant
+                        shape:
+                          quadrant:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -124955,7 +126225,157 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                         version: 1
                   moved:
                     payload:
-                      _cached: null
+                      _cached:
+                        keys:
+                          - x
+                          - y
+                          - place
+                        shape:
+                          place:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
+                              - x-axis
+                              - y-axis
+                              - O
+                            _def:
+                              typeName: ZodEnum
+                              values:
+                                - I
+                                - II
+                                - III
+                                - IV
+                                - x-axis
+                                - y-axis
+                                - O
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          x:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
+                          y:
+                            _def:
+                              checks: []
+                              coerce: false
+                              typeName: ZodNumber
+                            and: ƒ function () { [native code] }
+                            array: ƒ function () { [native code] }
+                            brand: ƒ function () { [native code] }
+                            catch: ƒ function () { [native code] }
+                            default: ƒ function () { [native code] }
+                            describe: ƒ function () { [native code] }
+                            isNullable: ƒ function () { [native code] }
+                            isOptional: ƒ function () { [native code] }
+                            max: |-
+                              ƒ lte(value, message) {
+                                      return this.setLimit("max", value, true, errorUtil.toString(message));
+                                  }
+                            min: |-
+                              ƒ gte(value, message) {
+                                      return this.setLimit("min", value, true, errorUtil.toString(message));
+                                  }
+                            nullable: ƒ function () { [native code] }
+                            nullish: ƒ function () { [native code] }
+                            optional: ƒ function () { [native code] }
+                            or: ƒ function () { [native code] }
+                            parse: ƒ function () { [native code] }
+                            parseAsync: ƒ function () { [native code] }
+                            pipe: ƒ function () { [native code] }
+                            promise: ƒ function () { [native code] }
+                            readonly: ƒ function () { [native code] }
+                            refine: ƒ function () { [native code] }
+                            refinement: ƒ function () { [native code] }
+                            safeParse: ƒ function () { [native code] }
+                            safeParseAsync: ƒ function () { [native code] }
+                            spa: ƒ function () { [native code] }
+                            step: |-
+                              ƒ multipleOf(value, message) {
+                                      return this._addCheck({
+                                          kind: "multipleOf",
+                                          value: value,
+                                          message: errorUtil.toString(message),
+                                      });
+                                  }
+                            superRefine: ƒ function () { [native code] }
+                            transform: ƒ function () { [native code] }
+                            ~standard:
+                              validate: ƒ (data) => this["~validate"](data)
+                              vendor: zod
+                              version: 1
                       _def:
                         catchall:
                           _def:
@@ -125534,6 +126954,11 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
                             value: 4
                           minLength: null
                           type:
+                            _cache:
+                              - I
+                              - II
+                              - III
+                              - IV
                             _def:
                               typeName: ZodEnum
                               values:
@@ -130646,7 +132071,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
             hi: "शहर: रिया का रास्ता, मुख्य सड़क पर गली 4 तक, फिर उसमें मकान 5 तक।"
           with:
             places:
-              canChooseTarget: false
+              choosing: never
               placeKind: house
               places:
                 - x: 1
@@ -130819,7 +132244,7 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
             hi: "कक्षा: स्तंभ 5, पंक्ति 3 वाली डेस्क, आगे की पंक्ति और पहले स्तंभ से उसकी दूरियाँ खिंची हुई।"
           with:
             places:
-              canChooseTarget: false
+              choosing: never
               placeKind: desk
               places:
                 - x: 1
@@ -130927,6 +132352,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: dcf9f28fcbcc
-  at: 2026-11-01T05:18:43.166Z
-  code: a9c5a8fcc74cfa2b
+  commit: f42db9bc038b
+  at: 2026-11-01T05:47:38.438Z
+  code: 87ae8c40a1fdcd60
