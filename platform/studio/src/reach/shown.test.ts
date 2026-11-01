@@ -3,7 +3,18 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PNG } from "pngjs";
 import { describe, expect, it } from "vitest";
-import { type Shown, keepShown, passShown, shownDiffs, shownOf } from "./shown";
+import {
+  type Played,
+  type Shown,
+  keepPlayed,
+  keepShown,
+  passShown,
+  playAnswer,
+  playDiff,
+  playsOf,
+  shownDiffs,
+  shownOf,
+} from "./shown";
 
 /** A white picture, `w`×`h`, with black squares where given. */
 function picture(w: number, h: number, squares: [number, number, number][] = []): Buffer {
@@ -76,5 +87,54 @@ describe("what a board shows, against what it showed when passed", () => {
     passShown(root, "b/c/l/one");
     expect(shownOf(root, "open", "b/c/l/one")).toBeUndefined();
     expect(shownOf(root, "passed", "b/c/l/one")?.versions[1]?.png.equals(a)).toBe(true);
+  });
+});
+
+describe("the review's plays", () => {
+  const play = (steps: string[], answer: string): Played => ({
+    steps: steps.map((tap) => ({ tap })),
+    answer,
+    inputs: "k",
+  });
+
+  it("are kept beside the drawing, the same steps again replacing the last, and pass with it", () => {
+    const root = mkdtempSync(join(tmpdir(), "chalk-played-"));
+    const a = picture(10, 10);
+    keepPlayed(root, "open", "b/one", play(["x"], "1. tap x → one"));
+    keepPlayed(root, "open", "b/one", play(["y"], "1. tap y → two"));
+    keepPlayed(root, "open", "b/one", play(["x"], "1. tap x → three"));
+    // A drawing after them leaves them where they are.
+    keepShown(root, "open", "b/one", shown([a, a]));
+    expect(playsOf(root, "open", "b/one").map((p) => p.answer)).toEqual([
+      "1. tap y → two",
+      "1. tap x → three",
+    ]);
+    passShown(root, "b/one");
+    expect(playsOf(root, "passed", "b/one")).toHaveLength(2);
+  });
+
+  it("keep each step's lines, not the header or the pictures", () => {
+    expect(
+      playAnswer(
+        "board   2 steps · 360×640 · en\n1. tap a → x\n2. tap b → y\npictures: before, after",
+      ),
+    ).toBe("1. tap a → x\n2. tap b → y");
+  });
+
+  it("say the first step that answers differently, and only what differs in it", () => {
+    const then =
+      'as it opened:\n   said · title\n1. tap a → x · signal moved · b "1" → "2"\n   said · reply: "one"\n2. tap b → y';
+    expect(playDiff(then, then)).toBeUndefined();
+    const now = then.replace('"one"', '"two"').replace('"2"', '"3"');
+    expect(playDiff(then, now)).toBe(
+      [
+        "1. tap a",
+        'then: b "1" → "2"',
+        'then: said · reply: "one"',
+        'now: b "1" → "3"',
+        'now: said · reply: "two"',
+      ].join("\n"),
+    );
+    expect(playDiff(then, then.split("\n2.")[0] ?? "")).toBe("2. tap b: not done now\nthen: y");
   });
 });

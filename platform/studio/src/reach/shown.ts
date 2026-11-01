@@ -1,4 +1,12 @@
-import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
@@ -11,6 +19,10 @@ import { PNG } from "pngjs";
  * was drawn from (every file a build or a board could read: content/inputs.ts), and passing moves
  * it to `passed/`. `changes` draws a board whose make-up changed again and holds it to what it
  * showed when passed: the same every time, since a board is drawn the same every time.
+ *
+ * Its plays are kept beside it: each `show` with steps made on it since it was passed, and what
+ * each step answered. `changes` plays them again on a board whose make-up changed and says which
+ * step now answers differently: what the board does, on the paths someone reviewed.
  */
 
 export type ShownVersion = {
@@ -36,7 +48,9 @@ const dirOf = (root: string, kind: Kind, board: string) =>
 /** Keeps a board's drawing: the last since it was passed (open), or as passed. */
 export function keepShown(root: string, kind: Kind, board: string, shown: Shown): void {
   const dir = dirOf(root, kind, board);
-  rmSync(dir, { recursive: true, force: true });
+  // A drawing replaces the last one; the plays beside it stay.
+  for (const old of existsSync(dir) ? readdirSync(dir) : [])
+    if (old !== PLAYS) rmSync(join(dir, old), { force: true });
   mkdirSync(dir, { recursive: true });
   shown.versions.forEach((v, i) => writeFileSync(join(dir, `${i}.png`), v.png));
   const meta = { inputs: shown.inputs, versions: shown.versions.map(({ png: _, ...v }) => v) };
@@ -56,6 +70,86 @@ export function shownOf(root: string, kind: Kind, board: string): Shown | undefi
     inputs: meta.inputs,
     versions: meta.versions.map((v, i) => ({ ...v, png: readFileSync(join(dir, `${i}.png`)) })),
   };
+}
+
+/** A play: the steps as asked (one version), and what each step answered, from these inputs. */
+export type Played = {
+  steps: readonly unknown[];
+  locale?: string;
+  screen?: { width: number; height?: number };
+  /** Each step's lines, as `show` answered them (its header and pictures left out). */
+  answer: string;
+  inputs: string;
+};
+
+const PLAYS = "plays.json";
+const sameCall = (a: Played, b: Played) =>
+  JSON.stringify([a.steps, a.locale, a.screen]) === JSON.stringify([b.steps, b.locale, b.screen]);
+
+/** Keeps a play of a board since it was passed: the same steps again replace the last. */
+export function keepPlayed(root: string, kind: Kind, board: string, played: Played): void {
+  const dir = dirOf(root, kind, board);
+  mkdirSync(dir, { recursive: true });
+  const plays = playsOf(root, kind, board).filter((p) => !sameCall(p, played));
+  writeFileSync(join(dir, PLAYS), JSON.stringify([...plays, played]));
+}
+
+/** A board's plays: since it was passed (open), or as passed. */
+export function playsOf(root: string, kind: Kind, board: string): Played[] {
+  const file = join(dirOf(root, kind, board), PLAYS);
+  return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Played[]) : [];
+}
+
+/** A play's answer as kept and compared: each step's lines, without its header or pictures. */
+export function playAnswer(text: string): string {
+  return text
+    .split("\n")
+    .slice(1)
+    .filter((l) => !/^pictures?:/.test(l))
+    .join("\n");
+}
+
+/**
+ * The first step that answers differently now: the step, and only what differs in it (what it
+ * set off and changed, what was said), as then and now; undefined when every step answers the same.
+ */
+export function playDiff(was: string, now: string): string | undefined {
+  const steps = (text: string) => {
+    const out: string[] = [];
+    for (const line of text.split("\n"))
+      if (/^\d+\. /.test(line) || out.length === 0) out.push(line);
+      else out[out.length - 1] += `\n${line}`;
+    return out;
+  };
+  // A step's items: what follows its arrow, one by one, and each line under it.
+  const items = (step: string | undefined) => {
+    if (step === undefined) return [];
+    const [first = "", ...under] = step.split("\n");
+    const at = first.indexOf(" → ");
+    return [
+      ...(at === -1 ? [first] : first.slice(at + 3).split(" · ")),
+      ...under.map((l) => l.trim()),
+    ];
+  };
+  const [a, b] = [steps(was), steps(now)];
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    if (a[i] === b[i]) continue;
+    const head = (b[i] ?? a[i] ?? "").split("\n")[0] ?? "";
+    const step = head.includes(" → ") ? head.slice(0, head.indexOf(" → ")) : head;
+    const [then, nowItems] = [items(a[i]), items(b[i])];
+    const gone = then.filter((x) => !nowItems.includes(x));
+    const added = nowItems.filter((x) => !then.includes(x));
+    return [
+      a[i] === undefined
+        ? `${step}: not done then`
+        : b[i] === undefined
+          ? `${step}: not done now`
+          : step,
+      ...gone.map((x) => `then: ${x}`),
+      ...added.map((x) => `now: ${x}`),
+    ].join("\n");
+  }
+  return undefined;
 }
 
 /** Passing a board: its last drawing becomes what it showed when passed. */

@@ -1,6 +1,6 @@
 # What could have changed: `changes` for the reviewer, `affected` for the fixer
 
-Plan (2026-11-01). Steps 1–4 built; 5 (replaying the review's steps) next.
+Built (2026-11-01), steps 1–5. What follows is the plan as built, with what was measured.
 
 **Goal:** each role asks the one question it has about what changed, gets a right answer that fits in one reply, in seconds; nothing is drawn unless something could have changed.
 
@@ -44,19 +44,25 @@ A board is its content (the board record) and the code it runs. The code graph's
 - **An edit, planned or done:** files, lines or declarations, props by address; or `diff` (since a commit) after the edit. Its pieces and boards, rolled up by `depth`, as today, on the complete base.
 - Short: a line per board, the count when there are many.
 
-## To decide
+## Decided
 
-- **Replay the review's steps.** If the service keeps each `show` call with steps made in a review, `changes` can call them again on a board whose make-up changed and say which step now answers differently ("step 3: readout was (4, 7), now (7, 4)"): behaviour, on the paths someone reviewed. Recommended; a few seconds per changed board.
-- **Room.** What a board showed when reviewed, every version, comes to a few MB per board, on this machine (`node_modules/.cache`), made again by the next review.
+- **The review's steps are played again** on a board whose make-up changed: every `show` with steps on the jumping clock is kept beside the board's drawing, and a pass keeps this review's plays and the last review's it didn't play again, each as built now. `changes` says each play that answers differently: the first step that does, and only what differs in it, then and now.
+- **Room:** a board's drawings (every version) and its plays are kept on this machine only (`node_modules/.cache/chalk-shown`), made again by the next review. A drawing counts at a pass only if nothing a build or a board could read changed since it was drawn (content/inputs.ts); else the board is drawn then.
 
-## Steps
+## Measured (lesson 1, `two-numbers-for-a-place`)
 
-1. **The base, right.** Why the views and the player aren't reached; make them roots. Tests: an edit to a prop's view reaches every board placing it; a player edit, every board; a lesson edit, only its boards.
-2. **`changes` draws with the jumping clock, only where the make-up changed,** every version, against what the review drew. `pass` instant. The old one-picture comparison goes.
-3. **Answers that fit:** changed boards in the student's terms; `affected` a line per board.
-4. **Roles:** the reviewer sees `changes`, the fixer `affected`; only the reviewer passes. The self-review skill drops its `affected` step; apply-review keeps it.
-5. If agreed: the review's steps kept and replayed.
-6. Measure, on lesson 1: nothing changed; one board's words changed; a prop's view changed; a player change.
+- `changes` at the lesson, nothing kept from earlier reviews (nothing drawn): 5.6 s, about 4,800 characters (was 150 s, and up to 120,000 characters). Most of the time is reading the code graph, not drawing.
+- `pass` at a board the review had shown: 2–3 s, nothing drawn.
+- `changes` at a board whose reply's words changed: 14–19 s: its six versions drawn and compared (the three English ones differ, each with its pictures as passed and now, cut to the reply), and the review's walk played again ("4. tap town/walker/step:right" then and now: the reply said in other words).
+- A player edit and a prop's view edit: covered by tests (every board placing it changes); on the real chapter, today's player changes show as changed on every board.
+
+## Steps (all done)
+
+1. **The base, right.** The views were missed because every package now registers a prop as `propModule(def, View, sound)`, which `affected` didn't read; a board's code lacked the player and the stylesheets every board is drawn with. Both in, with tests.
+2. **`changes` draws with the jumping clock, only where the make-up changed,** every version, against what the review drew. `pass` keeps the review's drawings. The old one-picture comparison is gone.
+3. **Answers that fit:** a changed board's content said per piece in plain words (a prop's definition copied into the record is said with the code), at most eight functions among many boards, pictures cut to what differs. `affected` already answers a line per board.
+4. **Roles:** the reviewer sees `changes`, the fixer `affected`; only the reviewer passes. The self-review skill's `affected` step is gone; apply-review keeps it.
+5. The review's steps kept and played again.
 
 ## Not here
 

@@ -35,10 +35,15 @@ import { pipelineLines, readChapters } from "../pipeline";
 import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
 import {
+  type Played,
   type Shown,
   type VersionDiff,
+  keepPlayed,
   keepShown,
   passShown,
+  playAnswer,
+  playDiff,
+  playsOf,
   shownDiffs,
   shownOf,
 } from "../reach/shown";
@@ -342,6 +347,26 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     return now;
   };
 
+  /** A kept play, played again as built now: what each step answers. */
+  const playAgain = async (board: string, p: Played): Promise<string> => {
+    const a = await play(
+      root,
+      {
+        board,
+        steps: p.steps as Step[],
+        shots: "none",
+        ...(p.locale === undefined ? {} : { locale: p.locale as "en" | "hi" }),
+        ...(p.screen === undefined ? {} : { screen: p.screen }),
+      },
+      lane,
+    );
+    return playAnswer(a.text);
+  };
+
+  /** A play in a line: its steps as asked. */
+  const playWords = (p: Played) =>
+    `${(p.steps as Step[]).map((s) => ("tap" in s ? `tap ${s.tap}` : "drag" in s ? `drag ${s.drag}` : "call")).join(", ")}${p.locale === undefined ? "" : ` (${p.locale})`}`;
+
   /** A version's two pictures, as passed and now (what differs in red), each arriving unshrunk. */
   const diffPictures = async (board: string, d: VersionDiff): Promise<Content[]> => {
     // Only what it reads differs: its pictures are the same.
@@ -383,7 +408,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "What changed since it was reviewed",
         description:
-          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name, with whether it ran in the review), new (never passed), or gone. A changed board is also drawn now in every version, as `show` draws it, against what it showed when passed: \"shows the same in every version\", or each version that differs (which pieces, how much), with its pictures as passed and now, cut to what differs (in red). Nothing is drawn for a board that hasn't changed. Start a review here: show and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you, with what each showed (its last drawing in your review; a board you didn't show is drawn then).",
+          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name, with whether it ran in the review), new (never passed), or gone. A changed board is also drawn now in every version, as `show` draws it, against what it showed when passed: \"shows the same in every version\", or each version that differs (which pieces, how much), with its pictures as passed and now, cut to what differs (in red); and the review's plays (each `show` with steps made in it) played again, each step that now answers differently said as then and now. Nothing is drawn for a board that hasn't changed. Start a review here: show and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you, with what each showed (its last drawing in your review; a board you didn't show is drawn then).",
         inputSchema: {
           at: z
             .string()
@@ -416,7 +441,19 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             keepShown(root, "open", board, await drawShown(root, board, lane));
             drawn++;
           }
-          for (const board of boards) passShown(root, board);
+          // Its plays: this review's, and the last review's it didn't play again; each as built now.
+          for (const board of boards) {
+            const mine = playsOf(root, "open", board);
+            const before = playsOf(root, "passed", board).filter(
+              (p) => !mine.some((m) => JSON.stringify(m.steps) === JSON.stringify(p.steps)),
+            );
+            for (const p of [...mine, ...before])
+              keepPlayed(root, "open", board, {
+                ...p,
+                ...(p.inputs === inputs ? {} : { answer: await playAgain(board, p), inputs }),
+              });
+            passShown(root, board);
+          }
           const n = passUnder(root, under, NAME);
           return result([
             text(
@@ -439,13 +476,28 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           }
           await progress(`drawing (${i + 1} of ${changed.length}): ${c.board}`);
           const diffs = shownDiffs(passed, await shownNow(c.board, inputs));
+          // The review's plays, played again: the first step of each that answers differently.
+          const plays: string[] = [];
+          const kept = playsOf(root, "passed", c.board);
+          for (const p of kept) {
+            const differs = playDiff(p.answer, await playAgain(c.board, p));
+            if (differs !== undefined)
+              plays.push(`plays differently: ${playWords(p)}\n${differs.replace(/^/gm, "    ")}`);
+          }
+          const playLine =
+            kept.length === 0
+              ? []
+              : plays.length === 0
+                ? [
+                    `plays the same: the review's ${kept.length} play${kept.length === 1 ? "" : "s"}`,
+                  ]
+                : plays;
           if (diffs.length === 0) {
-            seen.set(c.board, ["shows: the same in every version"]);
+            seen.set(c.board, ["shows: the same in every version", ...playLine]);
             continue;
           }
-          seen.set(
-            c.board,
-            diffs.map(
+          seen.set(c.board, [
+            ...diffs.map(
               (d) =>
                 `shows, ${d.version}: ${[
                   ...(d.read.length > 0 ? [`reads differently: ${d.read.join(", ")}`] : []),
@@ -456,7 +508,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
                     : []),
                 ].join("; ")}`,
             ),
-          );
+            ...playLine,
+          ]);
           for (const d of diffs) images.push(...(await diffPictures(c.board, d)));
         }
         return result([text([changesWords(changes, seen), ...notes].join("\n")), ...images]);
@@ -698,14 +751,18 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             );
           }
           await progressOf(extra)("playing");
-          return answer(
-            await play(
-              root,
-              { ...one, board, steps: steps.filter((s): s is Step => !("call" in s)) },
-              lane,
-            ),
-            notes,
-          );
+          const onBoard = steps.filter((s): s is Step => !("call" in s));
+          const played = await play(root, { ...one, board, steps: onBoard }, lane);
+          // A play on the jumping clock is kept for `changes` to play again (reach/shown.ts).
+          if (args.speed === undefined && args.frames === undefined)
+            keepPlayed(root, "open", board, {
+              steps: onBoard,
+              ...(one.locale === undefined ? {} : { locale: one.locale }),
+              ...(one.screen === undefined ? {} : { screen: one.screen }),
+              answer: playAnswer(played.text),
+              inputs: buildInputsKey(root),
+            });
+          return answer(played, notes);
         }
         if (address.root === "library") {
           // Props are read through the app, the one place their definitions are loaded.
