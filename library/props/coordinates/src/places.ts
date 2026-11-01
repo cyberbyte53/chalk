@@ -11,6 +11,17 @@ import {
   windowSchema,
 } from "./plane";
 
+/** When a tap on a place makes it the target. */
+export const Choosing = {
+  /** Never: the target is the lesson's (a question's answer, a picture). */
+  Never: "never",
+  /** Always: choosing is what the board asks for (tap a desk). */
+  Always: "always",
+  /** Once the board is open, its point made: free play after the story (any house is Aman's). */
+  OnceOpen: "onceOpen",
+} as const;
+export type Choosing = (typeof Choosing)[keyof typeof Choosing];
+
 /** What a place is drawn as. */
 export const PlaceKind = {
   House: "house",
@@ -38,7 +49,7 @@ export type PlacesState = Pick<PlaneCore, (typeof placesReads.keys)[number]> & {
   places: Place[];
   target: Point | null;
   targetName: z.infer<typeof localizedSchema>;
-  canChooseTarget: boolean;
+  choosing: Choosing;
   isOpen: boolean;
   lit: Line | null;
   showAddress: boolean;
@@ -64,7 +75,7 @@ export const places = prop({
   type: "places",
   role: PropRole.Explainer,
   describe:
-    "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it.",
+    "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board lets it: always, never, or once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it.",
   variables: z
     .object({
       placeKind: z.nativeEnum(PlaceKind),
@@ -73,8 +84,8 @@ export const places = prop({
       target: pointSchema.nullable(),
       /** What the target is called on screen ("Aman's house"). */
       targetName: localizedSchema,
-      /** Whether a tap on a place makes it the target while the board is at work (once it is open, a tap always does). */
-      canChooseTarget: z.boolean(),
+      /** When a tap on a place makes it the target. */
+      choosing: z.nativeEnum(Choosing),
       /** One number alone, and every place that has it lit, or null. */
       lit: lineSchema.nullable(),
       /** Whether the student lit it (tapping a number), so may turn it off; a lesson's light stays. */
@@ -88,7 +99,7 @@ export const places = prop({
     places: [],
     target: null,
     targetName: { en: "Aman's house", hi: "अमन का घर" },
-    canChooseTarget: true,
+    choosing: Choosing.Always,
     lit: null,
     isLitByTap: false,
     showAddress: true,
@@ -99,13 +110,14 @@ export const places = prop({
       axisNames: z.tuple([localizedSchema, localizedSchema]),
       rising: z.object({ at: z.number().int(), height: z.number() }).strict().nullable(),
       upLines: z.array(z.number().int()).nullable(),
-      /** Whether the board is open for play (its point made): any place can be chosen. */
+      /** Whether the board is open for play (its point made). */
       isOpen: z.boolean(),
     })
     .strict(),
   facts: {
     litCount: (me) => (me.lit === null ? 0 : placesOn(me, me.lit).length),
-    canChoose: (me) => me.canChooseTarget || me.isOpen,
+    canChoose: (me) =>
+      me.choosing === Choosing.Always || (me.choosing === Choosing.OnceOpen && me.isOpen),
   },
   actions: {
     chooseTarget: action(pointSchema.shape, {

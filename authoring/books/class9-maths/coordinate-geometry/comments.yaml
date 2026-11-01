@@ -4116,7 +4116,6 @@
   target: sheet/clues/clearClues
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
-  turn: person
   text: >-
     Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
     the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
@@ -4179,8 +4178,18 @@
         they say. One question is left for you, the one the fixer raised: both edges stay numbered
         1–15 and 1–12 after Start again, so a second try can read the distances off the ruler. Keep
         the numbers, or take them back with the clues?"
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:35:46.323Z
+      text: "Redesigned with the person, so the earlier fix is replaced: free play here is choosing your
+        own dot. When the fourth clue pins the dot, the clues are put away and the dot becomes the
+        reading's at (5, 9), with its two distances drawn. A new line, \"Now the dot is yours: drag
+        it anywhere…\", invites the drag. ↺ is gone. flow.md's dot-on-paper says this now. Played in
+        hi at 360×640: dragged to (11, 3), it reads 11 cm, 3 cm. The edge-numbers question is moot:
+        the reading's lengths are what the student reads."
+  turn: person
 - id: cmvxdo2g7oqx
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:16:44.263Z
@@ -4188,7 +4197,7 @@
   target: line/places
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:76
   commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
-  turn: agent
+  turn: person
   text: "Regression from the fix to cmvwtxc66n4r (a board opens for play once it passes: places can be
     chosen whenever isOpen). Mechanical. Principle: do the picture and the text agree; no symbol
     before it is taught. Played at 390 in en: walk the bus to 3, then to −2, and answer '2 stops
@@ -4200,9 +4209,32 @@
     tapped (canChooseTarget: false). Suggested fix: make opening for play something a board turns on
     (a places setting the town on street-and-house sets), not something every places gets when its
     board passes."
-  messages: []
+  changed:
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/49aa1292442bf826.m4a
+    - content/class9-maths/coordinate-geometry/sound/c8812ce703346aea.m4a
+  reaches:
+    pieces: 11
+    boards: 4
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:26:57.824Z
+      text: "As suggested: what opens is the board's choice. Places get one setting, choosing: never,
+        always, or once the board is open. Only street-and-house's town is placed with once-open;
+        bus-stops' line stays never, so its stops can't be tapped after it passes."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:35:46.055Z
+      text: "Places now have choosing: never, always, or once the board is open. bus-stops' line is never,
+        so its stops stay untappable after it passes. Only street-and-house's town is once-open."
+      status: ready
 - id: cmvxdo2hm2ru
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:16:44.314Z
@@ -4210,16 +4242,37 @@
   target: road/places
   source: content/class9-maths/coordinate-geometry/questions/bus-to-stop/family.ts:25
   commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
-  turn: agent
+  turn: person
   text: "Regression from the fix to cmvwtxc66n4r, the same cause as on bus-stops#line/places. It
     reaches all four bus-to-stop boards. Mechanical. Played at 390: drive the bus to stop 4 and
     press Check ('That's it!'). Every stop then becomes tappable. Tapping −3 rings it and adds
     'Aman's house: x -3, y 0' above the road, and the road moves down. A question about a bus now
     names Aman's house, uses x and y, and writes −3 with a hyphen. Before the fix the stops couldn't
     be tapped. The same fix as bus-stops: places open only where the board turns it on."
-  messages: []
+  changed:
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/49aa1292442bf826.m4a
+    - content/class9-maths/coordinate-geometry/sound/c8812ce703346aea.m4a
+  reaches:
+    pieces: 11
+    boards: 4
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:27:00.588Z
+      text: "The same change: bus-to-stop's road is placed with choosing: never, so nothing opens after
+        Check."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:35:46.174Z
+      text: "bus-to-stop's road is choosing: never, so nothing opens after Check."
+      status: ready
 - id: cmvxdo2j7ntl
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:16:44.371Z
@@ -4227,7 +4280,7 @@
   target: town/places
   source: content/class9-maths/coordinate-geometry/questions/walk-to-address/family.ts:20
   commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
-  turn: agent
+  turn: person
   text: "Regression from the fix to cmvwtxc66n4r. It reaches all five walk-to-address boards.
     Mechanical. Principle: do the picture and the text agree (the same contradiction that thread
     fixed on street-and-house). Played at 390: the prompt says 'Aman lives at Street 3, House 5'.
@@ -4236,4 +4289,26 @@
     House 5, and Riya stands there. No text invites the tap, and nothing explains it. Before the fix
     houses couldn't be tapped here (canChooseTarget: false in bareTown). Same fix: only a board that
     offers free play after it passes (street-and-house's 'Tap any house') should open its places."
-  messages: []
+  changed:
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/49aa1292442bf826.m4a
+    - content/class9-maths/coordinate-geometry/sound/c8812ce703346aea.m4a
+  reaches:
+    pieces: 11
+    boards: 4
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:27:03.290Z
+      text: "The same change: the town pattern (town()) is choosing: never, so walk-to-address's houses
+        stay untappable after Check. Only street-and-house sets once-open."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:35:46.276Z
+      text: "Played walk-to-address/18c614e0: walk to (3, 5), Check, then tap (1, 2). There's no such
+        part: the houses stay untappable. town() is choosing: never."
+      status: ready

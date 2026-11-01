@@ -2,6 +2,7 @@ import { Board, type BoardEvent, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { coordinatePlane } from "./coordinate-plane";
+import { Choosing } from "./places";
 import { Marks, Scene } from "./plane";
 import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "./walker";
 
@@ -50,8 +51,8 @@ function town(plane: Record<string, unknown> = {}) {
 
 const { Up, Down, Left, Right } = Direction;
 
-describe("the town on a board that tells its own story: a house is chosen only once it is open", () => {
-  /** The town held by a board, at work or open for play, its houses not for choosing until then. */
+describe("the town where any house opens once the story is told: a house is chosen only once the board is open", () => {
+  /** The town held by a board, at work or open for play, its houses for choosing once it is open. */
   const held = (isOpen: boolean) => {
     const holder = prop({
       type: "townHolder",
@@ -63,7 +64,7 @@ describe("the town on a board that tells its own story: a house is chosen only o
     const board = new Board(holder, {
       town: {
         plane: townPlane,
-        places: { places: houses, canChooseTarget: false },
+        places: { places: houses, choosing: Choosing.OnceOpen },
         walker: { walkFrom: { x: 0, y: 0 }, roads: Roads.Town },
       },
     });

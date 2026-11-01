@@ -2,6 +2,7 @@ import { hidden, page, place, scene, t, tap } from "@chalk/author";
 import { choice, gridOf, plane, words } from "@chalk/patterns";
 import {
   Axes,
+  Choosing,
   Marks,
   PlaceKind,
   Reading,
@@ -87,7 +88,7 @@ const busStops = page(
             ...[-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
           ],
           placeKind: PlaceKind.Crossing,
-          canChooseTarget: false,
+          choosing: Choosing.Never,
         },
         walker: {
           walkFrom: { x: 0, y: 0 },
@@ -162,7 +163,7 @@ const streetAndHouse = page(
         coordinatePlane,
         setup(town(), {
           plane: { upLines: [] },
-          places: { showAddress: true },
+          places: { showAddress: true, choosing: Choosing.OnceOpen },
           walker: { showWhere: true },
         }),
       ),
@@ -251,7 +252,8 @@ const dotOnPaper = page(
           // No numbers on the edges at first: they would say where the dot is. An edge becomes a
           // ruler once a distance along it is given (the rules below).
           plane: { numbered: [] },
-          reading: { point: null, reading: Reading.None },
+          // The dot is the student's once it is found: dragged anywhere, its two distances read.
+          reading: { point: null, reading: Reading.Distances },
           clues: {
             // The dot is on the page from the start: the question is how to say where it is.
             hidden: { x: 5, y: 9 },
@@ -314,6 +316,14 @@ const dotOnPaper = page(
           },
         ),
       ),
+      yours: hidden(
+        words.body(
+          t(
+            "Now the dot is yours: **drag it** anywhere on the page, and read how far it is from the left edge and from the bottom.",
+            "अब बिंदु तुम्हारा है: उसे पन्ने पर कहीं भी **खींचो**, और पढ़ो कि वह बाएँ किनारे से और नीचे के किनारे से कितनी दूर है।",
+          ),
+        ),
+      ),
     },
     passBy: "rules",
     hear: {
@@ -327,7 +337,14 @@ const dotOnPaper = page(
           ...(given.includes(3) ? [t.to.sheet.plane.numberLine({ axis: "y" })] : []),
         ];
       },
-      "sheet.clues.pinned": (_, __, t) => [t.self.show({ name: "fixed" }), t.self.pass()],
+      // Fixed: the clues' work is done, and the dot is handed to the student, its distances shown.
+      "sheet.clues.pinned": (_, p, t) => [
+        t.self.show({ name: "fixed" }),
+        t.self.show({ name: "yours" }),
+        t.to.sheet.clues.putAway(),
+        t.to.sheet.reading.movePoint({ x: p.x, y: p.y }),
+        t.self.pass(),
+      ],
     },
     witness: [0, 1, 2, 3].map((clue) => tap("sheet.clues", "giveClue", { clue })),
   }),
@@ -516,7 +533,7 @@ const twoLines = page(
             showAddress: true,
             targetName: t("The desk", "डेस्क"),
             target: { x: 5, y: 3 },
-            canChooseTarget: false,
+            choosing: Choosing.Never,
           },
         }),
         {

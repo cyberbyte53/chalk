@@ -1,5 +1,6 @@
 import { type GivenFor, type Step, t, tap } from "@chalk/author";
 import {
+  Choosing,
   Direction,
   Marks,
   PlaceKind,
@@ -52,7 +53,7 @@ export const bareTown = (
   places: {
     places: gridOf(streets, houses),
     placeKind: PlaceKind.House,
-    canChooseTarget: false,
+    choosing: Choosing.Never,
     showAddress: false,
   },
   walker: { showWhere: false, walkFrom: { x: 0, y: 0 }, at: { x: 0, y: 0 }, roads: Roads.Town },

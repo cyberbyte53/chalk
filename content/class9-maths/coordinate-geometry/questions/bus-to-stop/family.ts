@@ -3,6 +3,7 @@ import { Level } from "@chalk/content";
 import { check, plane } from "@chalk/patterns";
 import {
   Axes,
+  Choosing,
   Marks,
   PlaceKind,
   Roads,
@@ -33,7 +34,7 @@ export const busToStop = family({
       places: {
         places: [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].map((x) => ({ x, y: 0 })),
         placeKind: PlaceKind.Crossing,
-        canChooseTarget: false,
+        choosing: Choosing.Never,
       },
       walker: {
         walkFrom: { x: 0, y: 0 },

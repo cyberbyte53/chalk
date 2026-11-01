@@ -5,7 +5,7 @@ import { CoordinatePlaneView } from "./view";
 
 export { type Clue, type Still, stillPossible } from "./clues";
 export { throwOf } from "./dice";
-export { PlaceKind, type Place } from "./places";
+export { Choosing, PlaceKind, type Place } from "./places";
 export {
   Axes,
   Marks,

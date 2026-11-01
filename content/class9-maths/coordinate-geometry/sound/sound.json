@@ -168,6 +168,13 @@
       "seconds": 8.453
     },
     {
+      "file": "49aa1292442bf826.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Now the dot is yours: drag it anywhere on the page, and read how far it is from the left edge and from the bottom.",
+      "seconds": 6.305
+    },
+    {
       "file": "bfe17ce6583b9b8f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -411,6 +418,13 @@
       "locale": "hi",
       "words": "4 से गली 4 ऊपर उठती है: एक दूसरी संख्या रेखा, ऊपर की ओर, जिस पर पाँच मकान हैं। अमन का कौन-सा है?",
       "seconds": 9.172
+    },
+    {
+      "file": "c8812ce703346aea.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अब बिंदु तुम्हारा है: उसे पन्ने पर कहीं भी खींचो, और पढ़ो कि वह बाएँ किनारे से और नीचे के किनारे से कितनी दूर है।",
+      "seconds": 8.418
     },
     {
       "file": "dce7c532f69ffe86.m4a",

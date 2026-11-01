@@ -156,14 +156,6 @@ export const cluesDrawing = drawing(clues, {
             {...does(actions.showHidden)}
           />
         )}
-        {s.isOpen && s.given.length > 0 && (
-          <SymbolButton
-            symbol={`↺ ${word(WORDS.startAgain, locale)}`}
-            label={word(WORDS.startAgain, locale)}
-            isWide
-            {...does(actions.clearClues)}
-          />
-        )}
       </>
     );
   },

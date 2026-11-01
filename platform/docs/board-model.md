@@ -126,7 +126,7 @@ The step by step of that board:
 
 Rules call them as `t.self.show(…)`; a line can be declared on them (`board.said`).
 
-**Show first, then play.** A board shows its idea first: the story's own point (Aman's house, the hidden dot), with only the controls the story needs. Once it passes, its point is made and it is **open** (its fact `isOpen`): the student may play with it freely. A prop whose play would break the story while it is being shown (choosing any house, taking the clues back) needs `isOpen` and opens that play only then; every holder passes it down by name. A prop on its own page is a board that passes at once, so it is always open there.
+**Show first, then play.** A board shows its idea first: the story's own point (Aman's house, the hidden dot), with only the controls the story needs. Once it passes, its point is made and it is **open** (its fact `isOpen`). What opens then is the board's choice, never every prop's: a prop that offers play after the story needs `isOpen` and is placed to open it (the places' `choosing: Choosing.OnceOpen`: any house is Aman's), or the board's rule hands the student something when it passes (dot-on-paper: the clues are put away and the dot becomes the reading's, to drag, its distances shown). A question board doesn't open: after Check, its answer stays as it was.
 
 ### Questions
 

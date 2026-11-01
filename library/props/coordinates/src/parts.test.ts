@@ -1,7 +1,7 @@
 import { Board, type BoardEvent, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { cluesReads, stillPossible } from "./clues";
+import { areCluesOn, cluesReads, stillPossible } from "./clues";
 import { clues } from "./clues";
 import { throwOf } from "./dice";
 import { dice } from "./dice";
@@ -119,15 +119,13 @@ describe("clues: each narrows where the hidden point can be", () => {
         window: windowSchema,
         unit: z.string().max(4),
         isPlaneFree: z.boolean(),
-        isOpen: z.boolean(),
       })
       .strict(),
-    start: { ...cluesReads.defaults, unit: "", isPlaneFree: true, isOpen: true },
+    start: { ...cluesReads.defaults, unit: "", isPlaneFree: true },
     children: { clues },
   });
-  const board = (given: Record<string, unknown> = {}, isOpen = true) => {
+  const board = (given: Record<string, unknown> = {}) => {
     const b = new Board(holder, {
-      isOpen,
       clues: { clueChoices: choices, hidden: { x: 5, y: 2 }, ...given },
     });
     return { b, ...hearing(b), read: () => b.read<typeof holder>().clues };
@@ -152,13 +150,12 @@ describe("clues: each narrows where the hidden point can be", () => {
     b.input("clues", "giveClue", { clue: 2 });
     expect(snapshot(read())).toEqual(before);
   });
-  it("the clues are taken back only once the board is open, and the point stays as it was", () => {
-    const atWork = board({ given: [0, 1], isHiddenShown: true }, false);
-    atWork.b.input("clues", "clearClues");
-    expect(atWork.read().given).toEqual([0, 1]);
-    const open = board({ given: [0, 1], isHiddenShown: true });
-    open.b.input("clues", "clearClues");
-    expect(open.read()).toMatchObject({ given: [], hidden: { x: 5, y: 2 }, isHiddenShown: true });
+  it("put away, the clues and their point leave the plane", () => {
+    const { b, read } = board({ given: [1, 2], isHiddenShown: true });
+    b.send("clues", "putAway", {});
+    b.runUntilIdle();
+    expect(read()).toMatchObject({ clueChoices: [], given: [], hidden: null });
+    expect(areCluesOn(read())).toBe(false);
   });
   it("a learner hides a point only when allowed, and it shows when asked", () => {
     // The hidden point is known, but off the screen.
