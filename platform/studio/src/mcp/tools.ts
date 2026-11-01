@@ -44,6 +44,8 @@ import {
   playAnswer,
   playDiff,
   playsOf,
+  sameCall,
+  setPlays,
   shownDiffs,
   shownOf,
 } from "../reach/shown";
@@ -430,29 +432,43 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const progress = progressOf(extra);
         const inputs = buildInputsKey(root);
         if (pass === true) {
-          const boards = changesUnder(root, under).flatMap((c) =>
-            c.status === "gone" ? [] : [c.board],
-          );
+          // Everything a pass keeps is worked out first, and written only once all of it is: a
+          // drawing or play that fails leaves the last pass as it was.
+          const kept: { board: string; drawing?: Shown; plays: Played[] }[] = [];
           let drawn = 0;
-          for (const [i, board] of boards.entries()) {
-            const last = shownOf(root, "open", board);
-            if (last !== undefined && last.inputs === inputs) continue;
-            await progress(`drawing what it shows (${i + 1} of ${boards.length}): ${board}`);
-            keepShown(root, "open", board, await drawShown(root, board, lane));
-            drawn++;
-          }
-          // Its plays: this review's, and the last review's it didn't play again; each as built now.
-          for (const board of boards) {
-            const mine = playsOf(root, "open", board);
-            const before = playsOf(root, "passed", board).filter(
-              (p) => !mine.some((m) => JSON.stringify(m.steps) === JSON.stringify(p.steps)),
+          const boards = changesUnder(root, under).filter((c) => c.status !== "gone");
+          for (const [i, c] of boards.entries()) {
+            const isSame = c.status === "unchanged";
+            const last = shownOf(root, "open", c.board);
+            // What it shows: the review's own drawing; unchanged since its last pass, what it
+            // showed then; else drawn now.
+            let drawing: Shown | undefined;
+            if (last === undefined || last.inputs !== inputs) {
+              if (!isSame || shownOf(root, "passed", c.board) === undefined) {
+                await progress(`drawing what it shows (${i + 1} of ${boards.length}): ${c.board}`);
+                drawing = await drawShown(root, c.board, lane);
+                drawn++;
+              } else drawing = shownOf(root, "passed", c.board);
+            }
+            // Its plays: this review's, and the last review's it didn't play again (on the same
+            // version); each as built now, played again only where it could answer differently.
+            const mine = playsOf(root, "open", c.board);
+            const before = playsOf(root, "passed", c.board).filter(
+              (p) => !mine.some((m) => sameCall(m, p)),
             );
-            for (const p of [...mine, ...before])
-              keepPlayed(root, "open", board, {
-                ...p,
-                ...(p.inputs === inputs ? {} : { answer: await playAgain(board, p), inputs }),
-              });
-            passShown(root, board);
+            const plays: Played[] = [];
+            for (const p of mine)
+              plays.push(
+                p.inputs === inputs ? p : { ...p, answer: await playAgain(c.board, p), inputs },
+              );
+            for (const p of before)
+              plays.push(isSame ? p : { ...p, answer: await playAgain(c.board, p), inputs });
+            kept.push({ board: c.board, ...(drawing === undefined ? {} : { drawing }), plays });
+          }
+          for (const k of kept) {
+            if (k.drawing !== undefined) keepShown(root, "open", k.board, k.drawing);
+            setPlays(root, "open", k.board, k.plays);
+            passShown(root, k.board);
           }
           const n = passUnder(root, under, NAME);
           return result([

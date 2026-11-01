@@ -194,8 +194,8 @@ export function reviewedContent(content: unknown): unknown {
   const c = content as { model?: { scene?: Record<string, unknown> } } | null;
   const scene = c?.model?.scene;
   if (scene === undefined) return content;
-  const { children: _, variables: __, actions: ___, signals: ____, ...rules } = scene;
-  return { ...c, model: { ...c?.model, scene: rules } };
+  const own = Object.fromEntries(Object.entries(scene).filter(([k]) => !SCENE_CODE.has(k)));
+  return { ...c, model: { ...c?.model, scene: own } };
 }
 
 /** What changed on every board at or under `under` since each was passed. */
@@ -287,6 +287,9 @@ export function passUnder(root: string, under: string, by: string): number {
   return now.size;
 }
 
+/** What a board's scene carries that is code, not the board's own: its props, its schemas. */
+const SCENE_CODE = new Set(["children", "variables", "actions", "signals", "type"]);
+
 /**
  * A board's content changes, as a reviewer reads them: one line per piece (its setup and words),
  * per line said, and for the board's rules, each field once with was → now. A prop's definition
@@ -312,9 +315,8 @@ export function contentLines(changes: readonly Change[], isAll = false): string[
     else if (top === "model" && kind === "lines" && name !== undefined)
       add(`line ${name}`, rest.join("."), c);
     else if (top === "model" && kind === "scene") {
-      // The board's own rules (what it hears, what it does on its own); not its props' code.
-      if (name === "on" || name === "hear" || name === "facts" || name === "when")
-        add("rules", [name, ...rest].join("."), c);
+      // The board's own (what it hears, does on its own, starts as); not its props' code.
+      if (!SCENE_CODE.has(name ?? "")) add("rules", [name, ...rest].join("."), c);
     } else if (top === "model") add("rules", segs.slice(1).join("."), c);
     else if (top === "root") {
       const path = segs.slice(1).filter((x) => x !== "children");

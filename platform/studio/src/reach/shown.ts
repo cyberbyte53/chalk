@@ -83,7 +83,8 @@ export type Played = {
 };
 
 const PLAYS = "plays.json";
-const sameCall = (a: Played, b: Played) =>
+/** The same play: the same steps, on the same version. */
+export const sameCall = (a: Played, b: Played) =>
   JSON.stringify([a.steps, a.locale, a.screen]) === JSON.stringify([b.steps, b.locale, b.screen]);
 
 /** Keeps a play of a board since it was passed: the same steps again replace the last. */
@@ -92,6 +93,13 @@ export function keepPlayed(root: string, kind: Kind, board: string, played: Play
   mkdirSync(dir, { recursive: true });
   const plays = playsOf(root, kind, board).filter((p) => !sameCall(p, played));
   writeFileSync(join(dir, PLAYS), JSON.stringify([...plays, played]));
+}
+
+/** Sets a board's plays (a pass: this review's, and the last review's it didn't play again). */
+export function setPlays(root: string, kind: Kind, board: string, plays: readonly Played[]): void {
+  const dir = dirOf(root, kind, board);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, PLAYS), JSON.stringify(plays));
 }
 
 /** A board's plays: since it was passed (open), or as passed. */

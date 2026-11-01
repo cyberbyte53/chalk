@@ -122,10 +122,15 @@ describe("what changed since a board was passed", () => {
   });
 
   it("keeps a board's own content, not its props' definitions copied into it (they are code)", () => {
-    const withScene = (describe: string, hear: string) => ({
+    const withScene = (describe: string, hear: string, hidden = ["fixed"]) => ({
       ...board("Here is a dot", "counts"),
       model: {
-        scene: { children: { sheet: { describe } }, variables: { x: 1 }, hear: { [hear]: 1 } },
+        scene: {
+          children: { sheet: { describe } },
+          variables: { x: 1 },
+          hear: { [hear]: 1 },
+          start: { hidden },
+        },
       },
     });
     const root = repo({ dot: withScene("A plane.", "sheet.pinned") });
@@ -139,6 +144,10 @@ describe("what changed since a board was passed", () => {
     expect(changesUnder(root, LESSON)[0]?.status).toBe("unchanged");
     build(root, { dot: withScene("A plane.", "sheet.moved") });
     expect(changesUnder(root, LESSON)[0]).toMatchObject({ status: "changed" });
+    expect(changesWords(changesUnder(root, LESSON))).toContain("hear.sheet.moved nothing → 1");
+    // What the board starts as is its own too.
+    build(root, { dot: withScene("A plane.", "sheet.pinned", ["fixed", "yours"]) });
+    expect(changesWords(changesUnder(root, LESSON))).toContain("rules: start.hidden");
   });
 
   it("names pieces by their names, so one moving in its list isn't every later one changing", () => {
