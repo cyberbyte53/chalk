@@ -1,5 +1,6 @@
-import { Board, type BoardEvent } from "@chalk/prop";
+import { Board, type BoardEvent, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
 import { coordinatePlane } from "./coordinate-plane";
 import { Marks, Scene } from "./plane";
 import { Direction, Roads, SECONDS_PER_BLOCK, stepFrom } from "./walker";
@@ -48,6 +49,40 @@ function town(plane: Record<string, unknown> = {}) {
 }
 
 const { Up, Down, Left, Right } = Direction;
+
+describe("the town on a board that tells its own story: a house is chosen only once it is open", () => {
+  /** The town held by a board, at work or open for play, its houses not for choosing until then. */
+  const held = (isOpen: boolean) => {
+    const holder = prop({
+      type: "townHolder",
+      describe: "test",
+      variables: z.object({ isOpen: z.boolean() }).strict(),
+      start: { isOpen },
+      children: { town: coordinatePlane },
+    });
+    const board = new Board(holder, {
+      town: {
+        plane: townPlane,
+        places: { places: houses, canChooseTarget: false },
+        walker: { walkFrom: { x: 0, y: 0 }, roads: Roads.Town },
+      },
+    });
+    return { board, read: () => board.read<typeof holder>().town.places };
+  };
+  it("at work, a tap on a house does nothing; the lesson can still mark one", () => {
+    const { board, read } = held(false);
+    board.input("town/places", "chooseTarget", { x: 2, y: 3 });
+    expect(read().target).toBeNull();
+    board.send("town/places", "markTarget", { x: 4, y: 3 });
+    board.runUntilIdle();
+    expect(read().target).toEqual({ x: 4, y: 3 });
+  });
+  it("once open, a tap on a house makes it the target", () => {
+    const { board, read } = held(true);
+    board.input("town/places", "chooseTarget", { x: 2, y: 3 });
+    expect(read().target).toEqual({ x: 2, y: 3 });
+  });
+});
 
 describe("the town: Aman's house is any house a tap makes it, and Riya walks there on the roads", () => {
   it("a tap on Street 4, House 3 makes it Aman's house; a tap off the houses does nothing", () => {

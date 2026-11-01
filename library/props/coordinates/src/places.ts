@@ -39,6 +39,7 @@ export type PlacesState = Pick<PlaneCore, (typeof placesReads.keys)[number]> & {
   target: Point | null;
   targetName: z.infer<typeof localizedSchema>;
   canChooseTarget: boolean;
+  isOpen: boolean;
   lit: Line | null;
   showAddress: boolean;
 };
@@ -63,7 +64,7 @@ export const places = prop({
   type: "places",
   role: PropRole.Explainer,
   describe:
-    "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target, whose address (its two numbers) is shown; showing one number alone lights every place that has it.",
+    "Places at points, each drawn as a small picture: houses along streets, desks in rows, street crossings, stalls on a ground. Tapping a place makes it the target (where the board asks for it, and always once the board is open), whose address (its two numbers) is shown; showing one number alone lights every place that has it.",
   variables: z
     .object({
       placeKind: z.nativeEnum(PlaceKind),
@@ -72,7 +73,7 @@ export const places = prop({
       target: pointSchema.nullable(),
       /** What the target is called on screen ("Aman's house"). */
       targetName: localizedSchema,
-      /** Whether a tap on a place makes it the target. */
+      /** Whether a tap on a place makes it the target while the board is at work (once it is open, a tap always does). */
       canChooseTarget: z.boolean(),
       /** One number alone, and every place that has it lit, or null. */
       lit: lineSchema.nullable(),
@@ -98,13 +99,21 @@ export const places = prop({
       axisNames: z.tuple([localizedSchema, localizedSchema]),
       rising: z.object({ at: z.number().int(), height: z.number() }).strict().nullable(),
       upLines: z.array(z.number().int()).nullable(),
+      /** Whether the board is open for play (its point made): any place can be chosen. */
+      isOpen: z.boolean(),
     })
     .strict(),
-  facts: { litCount: (me) => (me.lit === null ? 0 : placesOn(me, me.lit).length) },
+  facts: {
+    litCount: (me) => (me.lit === null ? 0 : placesOn(me, me.lit).length),
+    canChoose: (me) => me.canChooseTarget || me.isOpen,
+  },
   actions: {
     chooseTarget: action(pointSchema.shape, {
       from: "screen",
-      describe: "Make the place at (x, y) the target",
+      describe: "Make the place at (x, y) the target (the student's tap)",
+    }),
+    markTarget: action(pointSchema.shape, {
+      describe: "Mark the place at (x, y) as the target (the lesson: Aman says which house)",
     }),
     lightLine: action(
       { ...lineSchema.shape, isTap: z.boolean().optional() },
@@ -117,8 +126,9 @@ export const places = prop({
     lineLit: signal({ ...lineSchema.shape, count: z.number().int().min(0) }),
   },
   on: {
-    chooseTarget: (me, p, t) => {
-      if (!me.canChooseTarget || !me.places.some((q) => q.x === p.x && q.y === p.y)) return;
+    chooseTarget: (me, p, t) => me.canChoose && t.self.markTarget(p),
+    markTarget: (me, p, t) => {
+      if (!me.places.some((q) => q.x === p.x && q.y === p.y)) return;
       const target = { x: p.x, y: p.y };
       return [
         t.set({ target, lit: null, isLitByTap: false }),

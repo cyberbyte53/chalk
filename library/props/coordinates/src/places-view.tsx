@@ -43,7 +43,7 @@ function PlacesDraw({
             key={key}
             class={classes.join(" ")}
             transform={`translate(${x}, ${y})`}
-            {...(s.canChooseTarget ? does(actions.chooseTarget, { x: p.x, y: p.y }, key) : {})}
+            {...(s.canChoose ? does(actions.chooseTarget, { x: p.x, y: p.y }, key) : {})}
           >
             <rect
               class="cp-hit"
@@ -97,7 +97,7 @@ export const placesDrawing = drawing(places, {
       );
     // Room for the address before there is one, so the map doesn't move when it appears: an
     // unseen copy of the longest address this board can show (its farthest place).
-    if (!s.canChooseTarget) return null;
+    if (!s.canChoose) return null;
     return (
       <p class="cp-line cp-address is-room" aria-hidden="true">
         <strong>{word(s.targetName, locale)}</strong>:{" "}

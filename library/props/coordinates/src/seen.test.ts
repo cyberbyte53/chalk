@@ -1,7 +1,8 @@
 import { type PropModule, type PropView, checkProp, describeView } from "@chalk/player";
 import type { Element } from "@chalk/prop";
-import { Board } from "@chalk/prop";
+import { Board, prop } from "@chalk/prop";
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
 import { coordinatePlaneProp } from "./index";
 import { Marks, Scene } from "./plane";
 import { Reading } from "./reading";
@@ -11,10 +12,19 @@ import { Roads } from "./walker";
 function seen(
   given: Readonly<Record<string, unknown>> = {},
   module: PropModule = coordinatePlaneProp,
+  isOpen = false,
 ) {
-  const board = new Board(module.def, given as never);
+  // What holds it on a board: whether the board is open for play (its point made).
+  const holder = prop({
+    type: "planeHolder",
+    describe: "test",
+    variables: z.object({ isOpen: z.boolean() }).strict(),
+    start: { isOpen },
+    children: { it: module.def },
+  });
+  const board = new Board(holder, { it: given } as never);
   board.runUntilIdle();
-  const raw = describeView(module, board.read() as unknown as PropView);
+  const raw = describeView(module, board.read("it") as unknown as PropView);
   // A non-breaking space keeps a pair on one line; read it as the space it is.
   const described = {
     ...raw,
@@ -99,29 +109,34 @@ const figure = { plane: figurePlane };
 
 describe("coordinatePlane, used the way the boards use it", () => {
   it("every input says what it does, and every learner's action has one", () => {
+    // Each start as the board is at work, and once it is open for play.
+    const starts = [
+      town,
+      inTown(
+        {},
+        {
+          at: { x: 2, y: 0 },
+          trail: [
+            { x: 1, y: 0 },
+            { x: 2, y: 0 },
+          ],
+        },
+      ),
+      axes,
+      apart,
+      reading,
+      guessing,
+      clues,
+      plotting,
+      { plotting: { ...plottingGiven, plotted: [{ x: 1, y: 2, isRight: true }] } },
+      dice,
+      figure,
+    ];
     expect(
-      checkProp(coordinatePlaneProp, [
-        town,
-        inTown(
-          {},
-          {
-            at: { x: 2, y: 0 },
-            trail: [
-              { x: 1, y: 0 },
-              { x: 2, y: 0 },
-            ],
-          },
-        ),
-        axes,
-        apart,
-        reading,
-        guessing,
-        clues,
-        plotting,
-        { plotting: { ...plottingGiven, plotted: [{ x: 1, y: 2, isRight: true }] } },
-        dice,
-        figure,
-      ]),
+      checkProp(
+        coordinatePlaneProp,
+        [false, true].flatMap((isOpen) => starts.map((start) => ({ ...start, isOpen }))),
+      ),
     ).toEqual([]);
   });
 });

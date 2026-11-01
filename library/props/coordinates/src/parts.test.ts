@@ -115,13 +115,19 @@ describe("clues: each narrows where the hidden point can be", () => {
     type: "cluesHolder",
     describe: "test",
     variables: z
-      .object({ window: windowSchema, unit: z.string().max(4), isPlaneFree: z.boolean() })
+      .object({
+        window: windowSchema,
+        unit: z.string().max(4),
+        isPlaneFree: z.boolean(),
+        isOpen: z.boolean(),
+      })
       .strict(),
-    start: { ...cluesReads.defaults, unit: "", isPlaneFree: true },
+    start: { ...cluesReads.defaults, unit: "", isPlaneFree: true, isOpen: true },
     children: { clues },
   });
-  const board = (given: Record<string, unknown> = {}) => {
+  const board = (given: Record<string, unknown> = {}, isOpen = true) => {
     const b = new Board(holder, {
+      isOpen,
       clues: { clueChoices: choices, hidden: { x: 5, y: 2 }, ...given },
     });
     return { b, ...hearing(b), read: () => b.read<typeof holder>().clues };
@@ -145,6 +151,14 @@ describe("clues: each narrows where the hidden point can be", () => {
     const before = snapshot(read());
     b.input("clues", "giveClue", { clue: 2 });
     expect(snapshot(read())).toEqual(before);
+  });
+  it("the clues are taken back only once the board is open, and the point stays as it was", () => {
+    const atWork = board({ given: [0, 1], isHiddenShown: true }, false);
+    atWork.b.input("clues", "clearClues");
+    expect(atWork.read().given).toEqual([0, 1]);
+    const open = board({ given: [0, 1], isHiddenShown: true });
+    open.b.input("clues", "clearClues");
+    expect(open.read()).toMatchObject({ given: [], hidden: { x: 5, y: 2 }, isHiddenShown: true });
   });
   it("a learner hides a point only when allowed, and it shows when asked", () => {
     // The hidden point is known, but off the screen.

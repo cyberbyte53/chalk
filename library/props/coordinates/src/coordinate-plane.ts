@@ -1,5 +1,6 @@
 import { PropRole } from "@chalk/prop";
 import { prop } from "@chalk/prop";
+import { z } from "zod";
 import { areCluesOn } from "./clues";
 import { clues } from "./clues";
 import { isDiceOn } from "./dice";
@@ -29,6 +30,8 @@ export const coordinatePlane = prop({
   describe:
     "A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.",
   children: { plane, reading, places, walker, clues, plotting, dice },
+  // Whether the board is open for play (its point made), for the parts whose play opens then.
+  needs: z.object({ isOpen: z.boolean() }).strict(),
   facts: {
     // The plane's, for every part that draws or decides by them.
     window: (me) => me.plane.window,
@@ -42,7 +45,7 @@ export const coordinatePlane = prop({
     // Where Riya is headed: the places'.
     target: (me) => me.places.target,
     targetName: (me) => me.places.targetName,
-    canChooseTarget: (me) => arePlacesOn(me.places) && me.places.canChooseTarget,
+    canChooseTarget: (me) => arePlacesOn(me.places) && me.places.canChoose,
     // The plane's: nothing else on it, so a tap names its parts; its numbers light the places.
     isAlone: (me) =>
       !arePlacesOn(me.places) &&

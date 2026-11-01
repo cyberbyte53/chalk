@@ -10,6 +10,7 @@ export const WORDS = {
   show: { en: "Show", hi: "दिखाओ" },
   showPoint: { en: "Show where it is", hi: "दिखाओ कहाँ है" },
   clear: { en: "Clear", hi: "हटाओ" },
+  startAgain: { en: "Start again", hi: "फिर से शुरू करो" },
   lightsOff: { en: "Lights off", hi: "रोशनी बंद" },
   blackboard: { en: "Blackboard", hi: "श्यामपट" },
   throw: { en: "Throw", hi: "फेंको" },

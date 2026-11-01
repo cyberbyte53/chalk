@@ -25,18 +25,18 @@ Props come first: lessons are written against their actions and fields. A prop's
 
 For each **extend** or **new**, before any view or run body:
 
-1. **Extend:** ask `affected` what the change reaches (`props: ["library/props/<package>/<type>"]`, or the file and declaration): those are the boards it can break. A group's new feature is a new part (a prop of its own, joined in the group); otherwise a field or action.
-2. **New:** `making-a-prop.md` § 0 first (a new part in an existing group, or a group of existing props, before a prop of its own). It goes in `library/props/`, never in a chapter.
-3. Write or change the **definition**: state (each field and what it means), actions with their arguments and what each `changes`, signals, invariant, and a `describe` whose first sentence says what it is for. Leave run bodies and the view for later; it must type-check.
+1. **Extend:** ask `affected` what the change reaches (`props: ["library/props/<package>/<type>"]`, or the file and declaration): those are the boards it can break. A holder's new feature is a new part (a prop of its own, held by it); otherwise a variable or action.
+2. **New:** `making-a-prop.md` § 0 first (a new part in a prop that exists, or a prop holding existing ones, before a prop of its own). It goes in `library/props/`, never in a chapter.
+3. Write or change the **definition**: variables (each and what it means) and their start, needs, facts, actions with their payloads (`from: "screen"` for the student's), signals with theirs, invariant, and a `describe` whose first sentence says what it is for. Leave the rules and the view for later; it must type-check.
 4. Start **one thread on the prop** (`comment` with `at: "library/props/<package>/<type>"`): what changes and why, its page before and after (`look` at its address, before your change and after), and for an extension what `affected` lists and why nothing there changes. The person approves by closing it. Wait.
 
 ## 3. The build
 
-1. Run bodies and the view, to the definition (`making-a-prop.md`): law tests, the view tagging what the student sees, `checkProp`. Register a new package in `library/registry/src/index.ts`.
-2. **Look at it and play it, on its own.** `look` at its address from its defaults and from the `state`s the boards will give it, at the check screens (360×640, 640, 640×720): everything about it comes back, as for a piece. Every part drawn where it says, setup and state as you expect, no problems listed. Then `play` at its address as a student would (tap its parts, drag, try wrong things) and as a lesson would (`{ call: "zoomTo", args: { … } }`), with `frames` where it moves. Fix what doesn't respond, jumps or doesn't make sense.
+1. Rules and the view, to the definition (`making-a-prop.md`): law tests, the view tagging what the student sees, `checkProp`. Register a new package in `library/registry/src/index.ts`.
+2. **Look at it and play it, on its own.** `look` at its address from its start and from the `state`s the boards will give it, at the check screens (360×640, 640, 640×720): everything about it comes back, as for a piece. Every part drawn where it says, setup and state as you expect, no problems listed. Then `play` at its address as a student would (tap its parts, drag, try wrong things) and as a lesson would (`{ call: "zoomTo", args: { … } }`), with `frames` where it moves. Fix what doesn't respond, jumps or doesn't make sense.
 3. `pnpm catalogue`, then `pnpm check`. It must pass.
 4. Append to the run note: reused, extended, built, the tests. Tell the person to play with it at `?dev&at=library/props/<package>/<type>` (its panel sets every field and runs every action) before any lesson uses it.
 
 **A prop change later** (a review asking for a walker, a board that wants a scene) is the same: its definition and a thread first, then code. No prop grows one request at a time without a thread showing it.
 
-Rules that bite: every state change is an action through the one door; no `Math.random`; draw with `@chalk/draw` and the look's tokens; styles scoped to the prop's prefix; the view tags what the student sees (`does`, `says`, `shows`), and `checkProp` passes.
+Rules that bite: a prop's variables change only by its own rules; time is the board's queue (no timers, no timing in CSS anything waits on); no `Math.random`; draw with `@chalk/draw` and the look's tokens; styles scoped to the prop's prefix; the view tags what the student sees (`does`, `says`, `shows`), and `checkProp` passes.

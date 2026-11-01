@@ -528,6 +528,9 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     start: { hidden: names.filter(isHidden), isPassed: false, saying: [], reads: [] },
     actions: sceneActions,
     signals: sceneSignals,
+    // Once the board has passed, its point is made: it is open, and a piece that needs `isOpen`
+    // lets the student play with it freely (any house, the clues again).
+    facts: { isOpen: (me) => me.isPassed },
     children: defs as Readonly<Record<string, AnyProp>>,
     ...(Object.keys(give).length === 0 ? {} : { give: give as never }),
     on: {

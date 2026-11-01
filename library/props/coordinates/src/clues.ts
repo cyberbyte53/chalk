@@ -36,6 +36,7 @@ export type CluesState = Pick<PlaneCore, (typeof cluesReads.keys)[number]> & {
   isHiddenShown: boolean;
   canHide: boolean;
   canGiveClues: boolean;
+  isOpen: boolean;
 };
 
 /**
@@ -135,6 +136,8 @@ export const clues = prop({
       unit: z.string().max(4),
       /** A tap on the plane is the clues' to take (on the coordinate plane, unless pairs are being plotted). */
       isPlaneFree: z.boolean(),
+      /** Whether the board is open for play (its point made): the clues can be taken back and tried again. */
+      isOpen: z.boolean(),
     })
     .strict(),
   facts: { still: (me) => stillPossible(me, me.given) },
@@ -147,7 +150,13 @@ export const clues = prop({
           "Give a clue, by its place among the choices; where the point could be narrows (the learner's button)",
       },
     ),
-    clearClues: action({}, { from: "screen", describe: "Take back every clue (the learner's ↺)" }),
+    clearClues: action(
+      {},
+      {
+        from: "screen",
+        describe: "Take back every clue, once the board is open (the learner's ↺)",
+      },
+    ),
     hideAt: action(pointSchema.shape, {
       from: "screen",
       describe:
@@ -170,7 +179,8 @@ export const clues = prop({
         ...(still.kind === "point" ? [t.tell.pinned({ x: still.x, y: still.y })] : []),
       ];
     },
-    clearClues: (_, __, t) => t.set({ given: [], isHiddenShown: false }),
+    // The point stays where it is, shown or not: only the clues go, to be tried again.
+    clearClues: (me, _, t) => me.isOpen && t.set({ given: [] }),
     hideAt: (me, p, t) =>
       me.canHide && t.set({ hidden: { x: p.x, y: p.y }, given: [], isHiddenShown: false }),
     showHidden: (me, _, t) => me.hidden !== null && t.set({ isHiddenShown: true }),

@@ -84,6 +84,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 
 | Field | Takes | |
 |---|---|---|
+| `isOpen` | true or false | input |
 | `plane.window` | {xMin: "number", xMax: "number", yMin: "number", yMax: "number"} | changed by plane.its own rules |
 | `plane.axes` | ["both", "horizontal"] | changed by plane.its own rules |
 | `plane.marks` | ["none", "counts", "numbers"] | changed by plane.its own rules |
@@ -163,14 +164,15 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `reading.movePoint` | {x: "number", y: "number"} | learner · Put the point at (x, y), snapped to the step (the learner's drag or tap) |
 | `reading.showReading` | — | learner · Show the reading kept hidden in a guessing round (the learner's Show) |
 | `reading.askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
-| `places.chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target |
+| `places.chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target (the student's tap) |
+| `places.markTarget` | {x: "number", y: "number"} | Mark the place at (x, y) as the target (the lesson: Aman says which house) |
 | `places.lightLine` | {axis: ["x", "y"], value: "number", isTap: {optional: "true or false"}} | Light every place with this one number (isTap: the student tapped the number) |
 | `places.clearLight` | — | learner · Turn the lit places off |
 | `walker.step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right, on roads only |
 | `walker.walkTo` | {x: "number", y: "number"} | Walk Riya from her start to (x, y): along, then up |
 | `walker.backToStart` | — | learner · Riya back to where she started |
 | `clues.giveClue` | {clue: "whole number 0 to 5"} | learner · Give a clue, by its place among the choices; where the point could be narrows (the learner's button) |
-| `clues.clearClues` | — | learner · Take back every clue (the learner's ↺) |
+| `clues.clearClues` | — | learner · Take back every clue, once the board is open (the learner's ↺) |
 | `clues.hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |
 | `clues.showHidden` | — | learner · Show the hidden point |
 | `plotting.plotAt` | {x: "number", y: "number"} | learner · Put the next pair's dot at (x, y) (the learner's tap); it is right if that is where the pair says |

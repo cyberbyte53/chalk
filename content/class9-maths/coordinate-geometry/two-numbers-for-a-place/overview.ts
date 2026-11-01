@@ -162,7 +162,7 @@ const streetAndHouse = page(
         coordinatePlane,
         setup(town(), {
           plane: { upLines: [] },
-          places: { showAddress: true, canChooseTarget: true },
+          places: { showAddress: true },
           walker: { showWhere: true },
         }),
       ),
@@ -222,7 +222,7 @@ const streetAndHouse = page(
         ],
     },
     // Once the five houses are said, Aman's reply marks his house.
-    onSaid: { fiveHouses: (_, t) => t.to.town.places.chooseTarget({ x: 4, y: 5 }) },
+    onSaid: { fiveHouses: (_, t) => t.to.town.places.markTarget({ x: 4, y: 5 }) },
     witness: [...walkTo("town", 4, 0), ...walkTo("town", 0, 5)],
   }),
 );

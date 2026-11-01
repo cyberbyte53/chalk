@@ -40,7 +40,7 @@ on: {
 | `t.set({ … })` | changes its own variables |
 | `t.tell.stepped({ … })` | tells one of its signals |
 | `t.self.walkTo({ … })` | asks itself for one of its actions |
-| `t.to.places.chooseTarget({ … })` | asks a prop it holds (`t.to.town.plane.raiseUpLine` from a board) |
+| `t.to.places.markTarget({ … })` | asks a prop it holds (`t.to.town.plane.raiseUpLine` from a board) |
 | `t.later(0.3, …)` | does these 0.3 s from now, on the board's clock |
 | `t.move("at", to, 0.3, { atEnd })` | a planned move (below) |
 | `t.stop()` | drops what it has queued, and stops its moves where they are |
@@ -125,6 +125,8 @@ The step by step of that board:
 | Signals | `started`, `shown { name }`, `said { line }`, `passed`, `continued` |
 
 Rules call them as `t.self.show(…)`; a line can be declared on them (`board.said`).
+
+**Show first, then play.** A board shows its idea first: the story's own point (Aman's house, the hidden dot), with only the controls the story needs. Once it passes, its point is made and it is **open** (its fact `isOpen`): the student may play with it freely. A prop whose play would break the story while it is being shown (choosing any house, taking the clues back) needs `isOpen` and opens that play only then; every holder passes it down by name. A prop on its own page is a board that passes at once, so it is always open there.
 
 ### Questions
 

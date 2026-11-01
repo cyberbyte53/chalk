@@ -4028,3 +4028,132 @@
       at: 2026-10-31T17:38:52.381Z
       text: ""
       status: closed
+- id: cmvwtxc66n4r
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T20:04:04.446Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town/places
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:161
+  commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
+  turn: person
+  text: >-
+    Mechanical (a dead end while playing). This is not a regression: the setup was the same before
+    the move (canChooseTarget: true from the start). Principle 12, and do the picture and the text
+    agree.
+
+
+    Played at 390 in en:
+
+    1. Walk Riya → to Street 4. The five houses rise and Aman replies 'House 5'.
+
+    2. Before walking up, tap a house on Street 4, e.g. House 2. The houses on Street 4 can already
+    be tapped at this point.
+
+    3. Aman's house becomes 'Street number 4, House number 2'. Riya is sent back to the corner, but
+    the reply still says 'House 5. Walk her up to it.'
+
+    4. Walk her to Street 4, House 5 as the text says. Nothing happens: the board doesn't pass, and
+    found and anyHouse never appear. At House 2 she gets 'Riya is at Aman's house!', and that
+    doesn't pass the board either.
+
+
+    The only way on is to tap House 5 again, and nothing on the board says so. A curious student, or
+    one who taps the house to answer 'Which one is Aman's?', gets stuck. The story also contradicts
+    itself: Aman said House 5, and the map says House 2.
+
+
+    Suggested fix: on this board, leave choosing a house off until anyHouse ('Tap any house to make
+    it Aman's') is shown. The rule on arriving at (4, 5) can switch it on, so tapping starts where
+    the text invites it.
+  changed:
+    - library/props/coordinates/README.md
+    - platform/docs/board-model.md
+    - platform/docs/writing-content.md
+  reaches:
+    pieces: 0
+    boards: 0
+    lessons: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:03:35.941Z
+      text: "The board opens for play once its point is made: when it passes, the scene's fact isOpen is
+        true, and pieces that need it open their play. The places need isOpen: a tap chooses a house
+        only where the board asks for it (canChooseTarget) or once the board is open. Aman's reply
+        marks his house through a lesson action (markTarget), not the student's tap. On this board
+        canChooseTarget is off, so houses become tappable when Riya arrives at (4, 5) and the board
+        passes, as \"Tap any house\" shows."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:06:00.308Z
+      text: "Played: before the board passes, no house can be tapped (Street 4's five houses aren't
+        tappable while Riya walks up). Aman's reply marks House 5 through markTarget. At (4, 5) the
+        board passes, every house becomes tappable, and tapping (2, 3) makes it Aman's and sends
+        Riya back to the corner. The scene's isOpen is in board-model.md and writing-content.md as
+        \"show first, then play\"."
+      status: ready
+- id: cmvwtxc8cqme
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-10-31T20:04:04.524Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet/clues/clearClues
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
+  commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
+  text: >-
+    Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
+    the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
+
+
+    Played at 390:
+
+    1. Give all four clues. The board passes and 'fixed' shows.
+
+    2. Tap ↺.
+
+    3. The dot disappears from the page. The left edge keeps its numbers 1–12. patch, line and fixed
+    stay shown.
+
+    4. Give the clues again. 'It is in the upper half' and the rest now narrow down a dot that isn't
+    on the page. 'It is 5 cm from the left edge' measures to the top of the page instead of to the
+    dot.
+
+
+    The board opens with 'Here is a dot on a page of your notebook'. A student who taps ↺ to try
+    again loses the dot the board is about. ↺ is also the only unlabelled button left in the lesson:
+    the walker's button says '↺ Back to the start'.
+
+
+    Suggested fix: here ↺ should take back the clues and keep the dot shown (a clues setting, or a
+    rule on this board that shows it again). Or don't offer ↺ on this board. If it stays, give it
+    words like the walker's, e.g. '↺ Start again'.
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:03:35.992Z
+      text: 'The same opening as the town: ↺ is free play, so it shows and works only once the board is
+        open (the dot is pinned and the board has passed). It takes back the clues only; the dot
+        stays as it was. It gets words: "↺ Start again" / "↺ फिर से शुरू करो".'
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T05:06:00.401Z
+      text: "Played: no ↺ while the clues are being given. Once the fourth clue pins the dot and the board
+        passes, \"↺ Start again\" shows; it takes back the clues and the dot stays shown, so the
+        clues can be tried again. Left as it was: both edges stay numbered after Start again (the
+        lesson numbers them as distances are given and doesn't take the numbers back). It's the
+        page's ruler now that the point is made, but say if it should go."
+      status: ready
+  changed:
+    - library/props/coordinates/README.md
+    - platform/docs/board-model.md
+    - platform/docs/writing-content.md
+  reaches:
+    pieces: 0
+    boards: 0
+    lessons: []
+  turn: person
