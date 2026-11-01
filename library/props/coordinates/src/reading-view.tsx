@@ -14,6 +14,8 @@ const actions = reading.actions;
 const GAP = 6;
 const DOT = 10;
 const CHAR = 9;
+/** A line of a length's words, high. */
+const LINE = 18;
 
 /** The point the learner drags, read off the axes as far as the board writes it. */
 function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Element | null {
@@ -36,6 +38,20 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
   const wide = (text: string) => text.length * CHAR;
   const isRightTight = ax + GAP + wide(yWords) > px.width;
   const isAcrossShort = Math.abs(x - vx) - 2 * DOT < wide(xWords);
+  const isUpShort = Math.abs(base - y) - 2 * DOT < LINE;
+  // Across words past the dot, when their line can't hold them: to its right, or its left by the
+  // frame's right edge. Up words too short for their line go over the dot, where nothing is
+  // drawn: clear of both lines and the edges' numbers, inside the frame.
+  const pastX = isRightTight ? x - DOT - GAP : x + DOT + GAP;
+  const pastAnchor = isRightTight ? "end" : "start";
+  const upWide = wide(yWords);
+  const upAt = isUpShort
+    ? {
+        x: Math.min(Math.max(x, upWide / 2 + DOT), px.width - upWide / 2 - DOT),
+        y: y - DOT - LINE / 2 - (isAcrossShort ? LINE : 0),
+        anchor: "middle",
+      }
+    : { x: isRightTight ? ax - GAP : ax + GAP, y: (y + base) / 2, anchor: pastAnchor };
   const words = isHidden
     ? "?"
     : stage === Reading.Pair
@@ -54,11 +70,12 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
       {hasLengths && p.y !== 0 && (
         <text
           class="cp-length"
-          // Beside the line, on the side with room for it inside the frame.
-          x={isRightTight ? ax - GAP : ax + GAP}
-          y={(y + base) / 2}
+          // Beside the line, on the side with room for it inside the frame; over the dot when the
+          // line is too short to hold it.
+          x={upAt.x}
+          y={upAt.y}
           dominant-baseline="central"
-          text-anchor={isRightTight ? "end" : "start"}
+          text-anchor={upAt.anchor}
         >
           {yWords}
         </text>
@@ -67,9 +84,9 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
         <text
           class="cp-length"
           // Over the line's middle; past the dot when the line is too short to hold it.
-          x={isAcrossShort ? x + DOT + GAP : (x + vx) / 2}
+          x={isAcrossShort ? pastX : (x + vx) / 2}
           y={ay - 8}
-          text-anchor={isAcrossShort ? "start" : "middle"}
+          text-anchor={isAcrossShort ? pastAnchor : "middle"}
         >
           {xWords}
         </text>
