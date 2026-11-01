@@ -92,7 +92,13 @@ function startRebuild(): ChildProcess {
       "src/content/cli.ts",
       "preview",
     ],
-    { cwd: studio, stdio: ["ignore", "inherit", "inherit"] },
+    {
+      cwd: studio,
+      // Its stdin is a pipe from this process: when this one goes, it closes, and the builder
+      // stops (cli.ts), so a restart never leaves one behind.
+      stdio: ["pipe", "inherit", "inherit"],
+      env: { ...process.env, CHALK_BUILDER_OF_SERVICE: "1" },
+    },
   );
 }
 

@@ -20,7 +20,7 @@ import { type BuildResult, PROP_DIRS, REACH_FILE, SOURCES_FILE, buildContent } f
 import { MODULES_FILE, writeConceptModules, writeModulesModule } from "./concepts";
 import { buildInputsKey, inputsKeyFile } from "./inputs";
 
-/** In build/, rewritten at the end of every build: what a dev server watches to redraw. */
+/** In build/, rewritten at the end of a build that changed something: what a dev server watches to redraw. */
 export const BUILT_FILE = ".built";
 
 /**
@@ -89,16 +89,17 @@ function write(result: BuildResult): void {
   wanted.set(SOURCES_FILE, `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`);
   // What each board was made from, for tracing a change to what it reaches; not part of the content.
   wanted.set(REACH_FILE, `${JSON.stringify(result.reach)}\n`);
-  // Written last, every time (only changed files are written, so nothing else always changes):
-  // the dev server watches it to tell open previews to redraw.
-  wanted.set(BUILT_FILE, `${new Date().toISOString()}\n`);
-  for (const [path, text] of [...wanted].sort(
-    ([a], [b]) => Number(a === BUILT_FILE) - Number(b === BUILT_FILE),
-  )) {
+  // Kept: written last, and only when something in build/ changed (below).
+  wanted.set(BUILT_FILE, "");
+  /** Whether this build wrote, copied or removed anything in build/. */
+  let isChanged = false;
+  for (const [path, text] of wanted) {
+    if (path === BUILT_FILE) continue;
     const file = join(buildDir, path);
     if (existsSync(file) && readFileSync(file, "utf8") === text) continue;
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, text);
+    isChanged = true;
   }
   // Each chapter's sound folder (its clips and their list, content/<book>/<chapter>/sound), as it
   // is: served and shipped with the chapter, beside its built content.
@@ -115,6 +116,7 @@ function write(result: BuildResult): void {
           if (!existsSync(to) || !readFileSync(to).equals(readFileSync(join(from, name)))) {
             mkdirSync(dirname(to), { recursive: true });
             copyFileSync(join(from, name), to);
+            isChanged = true;
           }
           wanted.set(path, "");
         }
@@ -129,11 +131,21 @@ function write(result: BuildResult): void {
         if (prune(full, path)) rmdirSync(full);
         else isEmpty = false;
       } else if (wanted.has(path)) isEmpty = false;
-      else rmSync(full);
+      else {
+        rmSync(full);
+        isChanged = true;
+      }
     }
     return isEmpty;
   };
   if (existsSync(buildDir)) prune(buildDir, "");
+  // The dev server watches this file to tell open previews to redraw: rewritten only when what
+  // they show changed. A build that changed nothing must not restart every board on screen.
+  const built = join(buildDir, BUILT_FILE);
+  if (isChanged || !existsSync(built)) {
+    mkdirSync(dirname(built), { recursive: true });
+    writeFileSync(built, `${new Date().toISOString()}\n`);
+  }
 }
 
 /**
@@ -263,6 +275,12 @@ if (command === Command.Build) {
     writeFileSync(inputsKeyFile(root), inputs);
   }
 } else if (command === Command.Preview) {
+  // Started by the studio service: its pipe to us closes when it goes, however it goes (a restart
+  // that kills it outright included), and a builder left behind would rebuild on every save, alone.
+  if (process.env.CHALK_BUILDER_OF_SERVICE === "1") {
+    process.stdin.on("close", () => process.exit(0));
+    process.stdin.resume();
+  }
   watchAndRebuild();
 } else if (command === Command.Publish) {
   await publish();

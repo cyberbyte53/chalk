@@ -995,6 +995,10 @@ async function shootNow(
   const empty = await page.$(".preview-empty");
   if (empty !== null)
     throw new Error(`${(await empty.textContent()) ?? "Nothing to show"} (at ${url}).`);
+  // Which build the page is drawing: a rebuild redraws its boards from the start (preview-shell.tsx),
+  // and what was read across it would mix two boards.
+  const buildAt = () => page.evaluate(() => document.body.dataset.previewBuild ?? "");
+  const drawnFrom = await buildAt();
   // The board as it opens has settled: its opening script done, anything it set going finished.
   const speed = o.speed ?? 1;
   const runningAtOpen = isContinued ? [] : await untilIdle(page, speed);
@@ -1147,6 +1151,10 @@ async function shootNow(
           () => (window as { __chalkProps?: () => unknown }).__chalkProps?.() as PropPage[],
         )
       : undefined;
+  // Redrawn by a rebuild while it was read: what was read is from two boards. The same as a page
+  // pulled away (a reload): drawn again from the start, by the retry around every drawing.
+  if (!isContinued && (await buildAt()) !== drawnFrom)
+    throw new Error("navigation: a rebuild redrew the board while it was read");
   return {
     shots,
     steps,

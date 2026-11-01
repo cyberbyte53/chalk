@@ -1469,6 +1469,12 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       document.body.dataset.previewReady = search;
   }, [isTree, library, shown, search]);
 
+  // Which build is on screen, for tools: what they read across a redraw would mix two boards. Set
+  // as the redraw is committed, so a stamp never names boards that are gone.
+  useLayoutEffect(() => {
+    document.body.dataset.previewBuild = String(build);
+  }, [build]);
+
   // A rebuild (pnpm preview / build-content) redraws the boards without a reload.
   useEffect(() => {
     const hot = import.meta.hot;
