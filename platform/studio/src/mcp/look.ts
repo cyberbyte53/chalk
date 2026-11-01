@@ -483,6 +483,8 @@ export type LookArgs = {
   state?: Readonly<Record<string, unknown>>;
   /** How many pages to draw the versions on at once (LOOK_PAGES); for measuring it. */
   pages?: number;
+  /** Drawn by a reviewer: what it saw of the board, kept for `changes` (reach/shown.ts). */
+  isSeen?: boolean;
 };
 
 /** What a tool answers: text, and pictures, each arriving at the size it is seen (picture.ts). */
@@ -562,8 +564,11 @@ export async function look(
     a.speed === undefined;
   const inputs = isWhole ? buildInputsKey(root) : "";
   const drawn = await drawVersions(root, board, versions, options, lane, a.pages);
-  if (isWhole)
-    keepShown(root, "open", shownBoard(board), { inputs, versions: shownOf(drawn, versions) });
+  if (isWhole) {
+    const kept = { inputs, versions: shownOf(drawn, versions) };
+    keepShown(root, "now", shownBoard(board), kept);
+    if (a.isSeen === true) keepShown(root, "seen", shownBoard(board), kept);
+  }
   if (target.kind === "group") {
     const wanted = new Set(target.boards);
     const tiles: Tile[] = [];

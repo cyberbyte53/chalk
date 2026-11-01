@@ -2,6 +2,8 @@
 
 Built (2026-11-01), steps 1–5. What follows is the plan as built, with what was measured.
 
+**Changed since, on the person's word: what a reviewer saw is kept as it sees it, not at a pass.** Every `show` a reviewer makes (a board without steps: its drawing in every version; with steps: its play) is kept as what it saw, at once, whether or not the lesson is passed then; a fixer's never is, so it can't hide a change. `changes` holds a changed board to what a reviewer last saw: a review that found problems still keeps what it saw, and the next one is told what changed since. Passing only records that the boards are approved (`reviewed.yaml`): it draws and plays nothing. (Measured before this: lesson 1's pass took 56 s, drawing four boards the review hadn't shown on their own.)
+
 **Goal:** each role asks the one question it has about what changed, gets a right answer that fits in one reply, in seconds; nothing is drawn unless something could have changed.
 
 ## How they are used (every saved session: 33 `changes` calls, 25 `affected`)

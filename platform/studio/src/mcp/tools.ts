@@ -39,12 +39,10 @@ import {
   type VersionDiff,
   keepPlayed,
   keepShown,
-  passShown,
   playAnswer,
   playDiff,
   playsOf,
   sameCall,
-  setPlays,
   shownDiffs,
   shownOf,
 } from "../reach/shown";
@@ -305,10 +303,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
    * anything could read has changed since; else drawn again, and kept as the last.
    */
   const shownNow = async (board: string, inputs: string): Promise<Shown> => {
-    const last = shownOf(root, "open", board);
+    const last = shownOf(root, "now", board);
     if (last !== undefined && last.inputs === inputs) return last;
     const now = await drawShown(root, board, lane);
-    keepShown(root, "open", board, now);
+    keepShown(root, "now", board, now);
     return now;
   };
 
@@ -373,7 +371,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "What changed since it was reviewed",
         description:
-          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name, with whether it ran in the review), new (never passed), or gone. A changed board is also drawn now in every version, as `show` draws it, against what it showed when passed: \"shows the same in every version\", or each version that differs (which pieces, how much), with its pictures as passed and now, cut to what differs (in red); and the review's plays (each `show` with steps made in it) played again, each step that now answers differently said as then and now. Nothing is drawn for a board that hasn't changed. Start a review here: show and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed, as built now, by you, with what each showed (its last drawing in your review; a board you didn't show is drawn then).",
+          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name, with whether it ran in the review), new (never passed), or gone. A changed board is also drawn now in every version, as `show` draws it, against what a reviewer last saw of it (a reviewer's `show` without steps, kept as it is drawn): \"shows the same in every version\", or each version that differs (which pieces, how much), with its pictures as seen and now, cut to what differs (in red); and a reviewer's plays on it (each `show` with steps, kept as it is made) played again, each step that now answers differently said as then and now. Nothing is drawn for a board that hasn't changed. Start a review here: show and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed (approved), as built now, by you. What you saw is kept as you show and play, whether or not you pass.",
         inputSchema: {
           at: z
             .string()
@@ -395,51 +393,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const progress = progressOf(extra);
         const inputs = buildInputsKey(root);
         if (pass === true) {
-          // Everything a pass keeps is worked out first, and written only once all of it is: a
-          // drawing or play that fails leaves the last pass as it was.
-          const kept: { board: string; drawing?: Shown; plays: Played[] }[] = [];
-          let drawn = 0;
-          const boards = changesUnder(root, under).filter((c) => c.status !== "gone");
-          for (const [i, c] of boards.entries()) {
-            const isSame = c.status === "unchanged";
-            const last = shownOf(root, "open", c.board);
-            // What it shows: the review's own drawing; unchanged since its last pass, what it
-            // showed then; else drawn now.
-            let drawing: Shown | undefined;
-            if (last === undefined || last.inputs !== inputs) {
-              if (!isSame || shownOf(root, "passed", c.board) === undefined) {
-                await progress(`drawing what it shows (${i + 1} of ${boards.length}): ${c.board}`);
-                drawing = await drawShown(root, c.board, lane);
-                drawn++;
-              } else drawing = shownOf(root, "passed", c.board);
-            }
-            // Its plays: this review's, and the last review's it didn't play again (on the same
-            // version); each as built now, played again only where it could answer differently.
-            const mine = playsOf(root, "open", c.board);
-            const before = playsOf(root, "passed", c.board).filter(
-              (p) => !mine.some((m) => sameCall(m, p)),
-            );
-            const plays: Played[] = [];
-            for (const p of mine)
-              plays.push(
-                p.inputs === inputs ? p : { ...p, answer: await playAgain(c.board, p), inputs },
-              );
-            for (const p of before)
-              plays.push(isSame ? p : { ...p, answer: await playAgain(c.board, p), inputs });
-            kept.push({ board: c.board, ...(drawing === undefined ? {} : { drawing }), plays });
-          }
-          for (const k of kept) {
-            if (k.drawing !== undefined) keepShown(root, "open", k.board, k.drawing);
-            setPlays(root, "open", k.board, k.plays);
-            passShown(root, k.board);
-          }
           const n = passUnder(root, under, NAME);
           return result([
             text(
-              [
-                `✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now, with what each shows in every version${drawn > 0 ? ` (${drawn} not shown in the review, drawn now)` : ""}.`,
-                ...notes,
-              ].join("\n"),
+              [`✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now.`, ...notes].join(
+                "\n",
+              ),
             ),
           ]);
         }
@@ -448,16 +407,17 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const seen = new Map<string, string[]>();
         const changed = changes.filter((c) => c.status === "changed");
         for (const [i, c] of changed.entries()) {
-          const passed = shownOf(root, "passed", c.board);
+          // What a reviewer last saw of it: its drawing (shown without steps) and its plays.
+          const passed = shownOf(root, "seen", c.board);
           if (passed === undefined) {
-            seen.set(c.board, ["shows: nothing kept from its review on this machine: show it"]);
+            seen.set(c.board, ["shows: no reviewer has shown it on this machine yet: show it"]);
             continue;
           }
           await progress(`drawing (${i + 1} of ${changed.length}): ${c.board}`);
           const diffs = shownDiffs(passed, await shownNow(c.board, inputs));
-          // The review's plays, played again: the first step of each that answers differently.
+          // A reviewer's plays on it, played again: the first step of each that answers differently.
           const plays: string[] = [];
-          const kept = playsOf(root, "passed", c.board);
+          const kept = playsOf(root, "seen", c.board);
           for (const p of kept) {
             const differs = playDiff(p.answer, await playAgain(c.board, p));
             if (differs !== undefined)
@@ -732,9 +692,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           await progressOf(extra)("playing");
           const onBoard = steps.filter((s): s is Step => !("call" in s));
           const played = await play(root, { ...one, board, steps: onBoard }, lane);
-          // A play on the jumping clock is kept for `changes` to play again (reach/shown.ts).
-          if (args.speed === undefined && args.frames === undefined)
-            keepPlayed(root, "open", board, {
+          // A reviewer's play on the jumping clock is what it saw: kept for `changes` to play again
+          // once the board changes (reach/shown.ts). A fixer's isn't: it would hide a change.
+          if (ROLE === Role.Reviewer && args.speed === undefined && args.frames === undefined)
+            keepPlayed(root, "seen", board, {
               steps: onBoard,
               ...(one.locale === undefined ? {} : { locale: one.locale }),
               ...(one.screen === undefined ? {} : { screen: one.screen }),
@@ -781,7 +742,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           return answer(a, notes);
         }
         await progressOf(extra)("drawing");
-        return answer(await look(root, target, args, where, lane), notes);
+        return answer(
+          await look(root, target, { ...args, isSeen: ROLE === Role.Reviewer }, where, lane),
+          notes,
+        );
       },
     ),
     "show",

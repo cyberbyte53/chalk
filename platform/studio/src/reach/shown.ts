@@ -15,12 +15,14 @@ import { PNG } from "pngjs";
  * What a board showed, in every version: each version's screen (its picture at double resolution,
  * where each piece is) and what it read (each piece's state, its problems), as `show` drew it
  * without steps. Kept on this machine only (node_modules/.cache/chalk-shown), as what ran is
- * (ran.ts): `open/` holds the last drawing of each board since it was passed, with the inputs it
- * was drawn from (every file a build or a board could read: content/inputs.ts), and passing moves
- * it to `passed/`. `changes` draws a board whose make-up changed again and holds it to what it
- * showed when passed: the same every time, since a board is drawn the same every time.
+ * (ran.ts): `now/` holds the latest drawing of each board, with the inputs it was drawn from
+ * (every file a build or a board could read: content/inputs.ts), so it is drawn again only when
+ * something changed; `seen/` holds what a reviewer last saw, kept as the reviewer draws it,
+ * whether or not the lesson is passed then (passing only records that it is approved).
+ * `changes` holds a board whose make-up changed to what a reviewer last saw: the same every time,
+ * since a board is drawn the same every time.
  *
- * Its plays are kept beside it: each `show` with steps made on it since it was passed, and what
+ * Its plays are kept beside it: each `show` with steps a reviewer made on it, and what
  * each step answered. `changes` plays them again on a board whose make-up changed and says which
  * step now answers differently: what the board does, on the paths someone reviewed.
  */
@@ -41,11 +43,12 @@ export type Shown = {
   versions: (ShownVersion & { png: Buffer })[];
 };
 
-type Kind = "open" | "passed";
+/** The latest drawing of a board as built (anyone's: what it shows now), or what a reviewer last saw. */
+type Kind = "now" | "seen";
 const dirOf = (root: string, kind: Kind, board: string) =>
   join(root, "node_modules", ".cache", "chalk-shown", kind, board);
 
-/** Keeps a board's drawing: the last since it was passed (open), or as passed. */
+/** Keeps a board's drawing: the latest (now), or what a reviewer saw (seen). */
 export function keepShown(root: string, kind: Kind, board: string, shown: Shown): void {
   const dir = dirOf(root, kind, board);
   // A drawing replaces the last one; the plays beside it stay.
@@ -87,7 +90,7 @@ const PLAYS = "plays.json";
 export const sameCall = (a: Played, b: Played) =>
   JSON.stringify([a.steps, a.locale, a.screen]) === JSON.stringify([b.steps, b.locale, b.screen]);
 
-/** Keeps a play of a board since it was passed: the same steps again replace the last. */
+/** Keeps a reviewer's play of a board: the same steps again replace the last. */
 export function keepPlayed(root: string, kind: Kind, board: string, played: Played): void {
   const dir = dirOf(root, kind, board);
   mkdirSync(dir, { recursive: true });
@@ -95,14 +98,7 @@ export function keepPlayed(root: string, kind: Kind, board: string, played: Play
   writeFileSync(join(dir, PLAYS), JSON.stringify([...plays, played]));
 }
 
-/** Sets a board's plays (a pass: this review's, and the last review's it didn't play again). */
-export function setPlays(root: string, kind: Kind, board: string, plays: readonly Played[]): void {
-  const dir = dirOf(root, kind, board);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, PLAYS), JSON.stringify(plays));
-}
-
-/** A board's plays: since it was passed (open), or as passed. */
+/** The plays a reviewer last made on a board. */
 export function playsOf(root: string, kind: Kind, board: string): Played[] {
   const file = join(dirOf(root, kind, board), PLAYS);
   return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Played[]) : [];
@@ -158,16 +154,6 @@ export function playDiff(was: string, now: string): string | undefined {
     ].join("\n");
   }
   return undefined;
-}
-
-/** Passing a board: its last drawing becomes what it showed when passed. */
-export function passShown(root: string, board: string): void {
-  const open = dirOf(root, "open", board);
-  const passed = dirOf(root, "passed", board);
-  rmSync(passed, { recursive: true, force: true });
-  if (!existsSync(open)) return;
-  mkdirSync(dirname(passed), { recursive: true });
-  renameSync(open, passed);
 }
 
 /** How one version differs from what it showed when passed. */

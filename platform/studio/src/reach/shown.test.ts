@@ -8,7 +8,6 @@ import {
   type Shown,
   keepPlayed,
   keepShown,
-  passShown,
   playAnswer,
   playDiff,
   playsOf,
@@ -79,14 +78,13 @@ describe("what a board shows, against what it showed when passed", () => {
     expect(d.map((x) => x.version)).toEqual(["en · 360×640"]);
   });
 
-  it("is kept on this machine: the last drawing, then as passed", () => {
+  it("is kept on this machine: the latest drawing, and apart from it what a reviewer saw", () => {
     const root = mkdtempSync(join(tmpdir(), "chalk-shown-"));
-    const a = picture(10, 10);
-    keepShown(root, "open", "b/c/l/one", shown([a, a]));
-    expect(shownOf(root, "passed", "b/c/l/one")).toBeUndefined();
-    passShown(root, "b/c/l/one");
-    expect(shownOf(root, "open", "b/c/l/one")).toBeUndefined();
-    expect(shownOf(root, "passed", "b/c/l/one")?.versions[1]?.png.equals(a)).toBe(true);
+    const [a, b] = [picture(10, 10), picture(10, 20)];
+    keepShown(root, "seen", "b/c/l/one", shown([a, a]));
+    keepShown(root, "now", "b/c/l/one", shown([b, b]));
+    expect(shownOf(root, "seen", "b/c/l/one")?.versions[1]?.png.equals(a)).toBe(true);
+    expect(shownOf(root, "now", "b/c/l/one")?.versions[1]?.png.equals(b)).toBe(true);
   });
 });
 
@@ -97,20 +95,18 @@ describe("the review's plays", () => {
     inputs: "k",
   });
 
-  it("are kept beside the drawing, the same steps again replacing the last, and pass with it", () => {
+  it("are kept beside what a reviewer saw, the same steps again replacing the last", () => {
     const root = mkdtempSync(join(tmpdir(), "chalk-played-"));
     const a = picture(10, 10);
-    keepPlayed(root, "open", "b/one", play(["x"], "1. tap x → one"));
-    keepPlayed(root, "open", "b/one", play(["y"], "1. tap y → two"));
-    keepPlayed(root, "open", "b/one", play(["x"], "1. tap x → three"));
+    keepPlayed(root, "seen", "b/one", play(["x"], "1. tap x → one"));
+    keepPlayed(root, "seen", "b/one", play(["y"], "1. tap y → two"));
+    keepPlayed(root, "seen", "b/one", play(["x"], "1. tap x → three"));
     // A drawing after them leaves them where they are.
-    keepShown(root, "open", "b/one", shown([a, a]));
-    expect(playsOf(root, "open", "b/one").map((p) => p.answer)).toEqual([
+    keepShown(root, "seen", "b/one", shown([a, a]));
+    expect(playsOf(root, "seen", "b/one").map((p) => p.answer)).toEqual([
       "1. tap y → two",
       "1. tap x → three",
     ]);
-    passShown(root, "b/one");
-    expect(playsOf(root, "passed", "b/one")).toHaveLength(2);
   });
 
   it("keep each step's lines, not the header or the pictures", () => {
