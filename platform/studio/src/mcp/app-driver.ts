@@ -76,7 +76,9 @@ export async function closeBrowser(): Promise<void> {
   browser = undefined;
   lanes.clear();
   queues.clear();
-  used.clear();
+  idle.length = 0;
+  pages = 0;
+  for (const done of waiting.splice(0)) done();
   composer = undefined;
   if (open !== undefined) await (await open.catch(() => undefined))?.close().catch(() => {});
 }
@@ -608,11 +610,13 @@ const firstLine = (error: unknown): string =>
   (error instanceof Error ? error.message : String(error)).split("\n")[0] ?? "";
 
 /**
- * A lane: one agent connection's own page, kept open between its calls. Moving it to another board
- * inside the app (history.pushState, which the preview listens for) skips a page load, the slow
- * part. Each connection draws on its own page, so agents draw at the same time and one agent's
- * board is never moved by another's call. A lane's calls run one
- * at a time. Errors the page logs go to whichever call is drawing.
+ * The pages: one pool for the whole service, POOL pages at most, each loaded with the app. A call
+ * borrows a page for as long as it draws and gives it back: nothing a call leaves on a page is
+ * another's to rely on (every call opens its board afresh), so no page belongs to anyone, and the
+ * pages open never grow past the pool. Moving a page to another board inside the app
+ * (history.pushState, which the preview listens for) skips a page load, the slow part. A lane is
+ * who is drawing (an agent's connection, a version's helper): its calls run one at a time. Errors
+ * the page logs go to whichever call is drawing.
  */
 type Lane = {
   page: Page;
@@ -625,46 +629,92 @@ type Lane = {
    * so the next drawing needn't take it again before it starts.
    */
   isTaken?: boolean;
+  /** What ran on it, read from its scripts (coverage is the page's, whoever drew on it). */
+  reader?: RanReader;
 };
+/** The pages lent out, by the lane drawing on each. */
 const lanes = new Map<string, Lane>();
 const queues = new Map<string, Promise<unknown>>();
-const used = new Map<string, number>();
-/** Pages kept open at once; the one used longest ago (and idle) is closed for a new one. */
-const MAX_LANES = 16;
 /**
  * How many pages one look draws its versions on at once: one per version (two languages, three
  * screens). Measured on a lesson pass: 15.4s on 3 pages, 12.7s on 6; about 0.4 GB a page.
  */
 export const LOOK_PAGES = 6;
 /**
- * Pages kept loaded with the app, ready for a lane's first call: loading the app is the slow part
- * of a first drawing (seconds); a page already on it only moves to the board.
+ * How many pages there are at most, lent or not: one look's versions at once. About 0.4 GB a page
+ * (the machine this runs on has 16 GB, and is full).
  */
-const SPARES = LOOK_PAGES;
-const spares: Lane[] = [];
+const POOL = LOOK_PAGES;
+/** The pages not lent out, loaded with the app: a page already on it only moves to the board. */
+const idle: Lane[] = [];
+/** How many pages there are (idle, lent, or being opened). */
+let pages = 0;
+/** Calls waiting for a page to be given back. */
+const waiting: (() => void)[] = [];
 let toppingUp: Promise<void> | undefined;
 /** The lane of a caller that doesn't name one (scripts, tests). */
 export const DEFAULT_LANE = "default";
 
+/**
+ * A page for this lane to draw on: the one it already has in this call, else an idle one (a fresh
+ * one first), else a new one while the pool has room, else the next one given back.
+ */
 async function openPage(lane: string, base: string): Promise<Lane> {
   const kept = lanes.get(lane);
   if (kept !== undefined && kept.base === base && !kept.page.isClosed()) return kept;
-  if (lanes.size >= MAX_LANES) {
-    const idle = [...lanes.keys()]
-      .filter((l) => l !== lane && !busy.has(l))
-      .sort((a, b) => (used.get(a) ?? 0) - (used.get(b) ?? 0))[0];
-    if (idle !== undefined) await closeLane(idle);
+  for (;;) {
+    for (const gone of idle.filter((l) => l.page.isClosed())) {
+      idle.splice(idle.indexOf(gone), 1);
+      pages--;
+    }
+    const fresh = idle.findIndex((l) => l.base === base && !l.isStale);
+    const any = fresh !== -1 ? fresh : idle.findIndex((l) => l.base === base);
+    if (any !== -1) {
+      const lent = idle.splice(any, 1)[0] as Lane;
+      lanes.set(lane, lent);
+      return lent;
+    }
+    if (pages < POOL) {
+      pages++;
+      try {
+        const opened = await newPage(base);
+        lanes.set(lane, opened);
+        return opened;
+      } catch (error) {
+        pages--;
+        throw error;
+      }
+    }
+    // A page of another base (the dev server moved) is closed for one of this one.
+    const other = idle.findIndex((l) => l.base !== base);
+    if (other !== -1) {
+      const old = idle.splice(other, 1)[0] as Lane;
+      pages--;
+      await old.page.close().catch(() => {});
+      continue;
+    }
+    await new Promise<void>((done) => waiting.push(done));
   }
-  // A page already loaded with the app, if one is ready; another is loaded meanwhile.
-  const i = spares.findIndex((s) => s.base === base && !s.isStale && !s.page.isClosed());
-  const opened = i === -1 ? await newPage(base) : (spares.splice(i, 1)[0] as Lane);
-  void topUp(base);
-  ranReaders.delete(lane); // a new page loads its scripts afresh
-  opened.page.on("crash", () => {
-    if (lanes.get(lane) === opened) lanes.delete(lane);
-  });
-  lanes.set(lane, opened);
-  return opened;
+}
+
+/** The pool as it stands: how many pages, idle and lent (to whom), and calls waiting (/health). */
+export const poolState = () => ({
+  pages,
+  max: POOL,
+  idle: idle.length,
+  lent: [...lanes.keys()],
+  waiting: waiting.length,
+});
+
+/** A lane's page given back to the pool, for the next call (the one waiting longest first). */
+function givePageBack(lane: string): void {
+  const lent = lanes.get(lane);
+  lanes.delete(lane);
+  if (lent !== undefined) {
+    if (lent.page.isClosed()) pages--;
+    else idle.push(lent);
+  }
+  waiting.shift()?.();
 }
 
 /** A page of the app's, not yet any lane's. */
@@ -684,32 +734,49 @@ async function newPage(base: string): Promise<Lane> {
     if (m.type() === "error" && !m.location().url.includes("/api/")) opened.errors.push(m.text());
   });
   page.on("pageerror", (e) => opened.errors.push(e.message));
+  page.on("crash", () => void page.close().catch(() => {}));
   return opened;
 }
 
 /**
- * Keeps SPARES pages loaded with the app (a tool's page, no board yet), dropping any a rebuild left
- * stale. One top-up at a time, loading only while nothing is drawn.
+ * Fills the pool with pages loaded with the app (a tool's page, no board yet), and loads again the
+ * idle ones a rebuild left stale. One top-up at a time, loading only while nothing is drawn.
  */
 function topUp(base: string): Promise<void> {
   toppingUp ??= (async () => {
+    // The preview (an `at=` address; a short one is its light tree view), which moves to a board
+    // in place: the app's home doesn't.
+    const load = async (l: Lane) => {
+      await l.page
+        .goto(`${base}/?dev&timed&at=content`, { waitUntil: "load", timeout: 30000 })
+        .catch(() => {});
+      l.isStale = false;
+      l.errors.length = 0;
+      // What loading it ran is set aside by the next drawing on it.
+      l.isTaken = false;
+    };
     try {
-      for (const stale of spares.filter((s) => s.isStale || s.page.isClosed())) {
-        spares.splice(spares.indexOf(stale), 1);
-        await stale.page.close().catch(() => {});
-      }
-      while (spares.length < SPARES) {
-        // Loaded only while nothing is drawn: a spare is for later, never in a drawing's way.
+      for (;;) {
+        // Loaded only while nothing is drawn: a page for later is never in a drawing's way.
         while (drawing.size > 0) await Promise.all([...drawing]);
-        const spare = await newPage(base);
-        await spare.page
-          // The preview (an `at=` address; a short one is its light tree view), which moves to a
-          // board in place: the app's home doesn't.
-          .goto(`${base}/?dev&timed&at=content`, { waitUntil: "load", timeout: 30000 })
-          .catch(() => {});
-        if (spare.page.isClosed()) continue;
-        spare.errors.length = 0;
-        spares.push(spare);
+        const stale = idle.find((l) => l.isStale && l.base === base && !l.page.isClosed());
+        if (stale !== undefined) {
+          idle.splice(idle.indexOf(stale), 1);
+          await load(stale);
+          idle.push(stale);
+          waiting.shift()?.();
+          continue;
+        }
+        if (pages >= POOL) break;
+        pages++;
+        const page = await newPage(base).catch(() => undefined);
+        if (page === undefined) {
+          pages--;
+          break;
+        }
+        await load(page);
+        idle.push(page);
+        waiting.shift()?.();
       }
     } finally {
       toppingUp = undefined;
@@ -718,7 +785,7 @@ function topUp(base: string): Promise<void> {
   return toppingUp;
 }
 
-/** Loads the spare pages, so the first drawing doesn't wait for the app (the service, at start). */
+/** Fills the pool, so the first drawing doesn't wait for the app (the service, at start). */
 export async function warmPages(root: string): Promise<void> {
   await topUp(await previewBase(root));
 }
@@ -752,16 +819,20 @@ export function onComposer<T>(fn: (page: Page) => Promise<T>): Promise<T> {
   return next;
 }
 
-/** Closes a lane's page (its connection ended). */
+/**
+ * Closes the page a lane has in this call (it broke: the preview didn't answer), and its helpers'
+ * (`<lane>:v:1`, …); a lane with none (its call ended, its page given back) leaves nothing to do.
+ */
 export async function closeLane(lane: string): Promise<void> {
-  // Its helpers too: the pages its other versions were drawn on (`<lane>:v:1`, …).
   for (const one of [...lanes.keys()].filter((l) => l === lane || l.startsWith(`${lane}:v:`))) {
-    const open = lanes.get(one);
+    const lent = lanes.get(one);
     lanes.delete(one);
-    ranReaders.delete(one);
     queues.delete(one);
-    used.delete(one);
-    await open?.page.close().catch(() => {});
+    if (lent !== undefined) {
+      pages--;
+      await lent.page.close().catch(() => {});
+    }
+    waiting.shift()?.();
   }
 }
 
@@ -792,8 +863,8 @@ export function withNothingDrawing<T>(fn: () => Promise<T>): Promise<T> {
     try {
       return await fn();
     } finally {
-      for (const lane of [...lanes.values(), ...spares]) lane.isStale = true;
-      const base = spares[0]?.base;
+      for (const lane of [...lanes.values(), ...idle]) lane.isStale = true;
+      const base = idle[0]?.base ?? [...lanes.values()][0]?.base;
       if (base !== undefined) void topUp(base);
     }
   });
@@ -833,11 +904,6 @@ export function shoot(
   lane: string = DEFAULT_LANE,
 ): Promise<Drawn> {
   const once = async () => {
-    // What ran before this call isn't this board's, but what loaded then is under it.
-    // What ran before this call (a page just loaded, another board) is set aside, unless it was
-    // taken already at the end of this page's last drawing.
-    if (lanes.get(lane)?.isTaken !== true)
-      readerOf(lane, root).see(await timed("coverage: taken before", () => takeRan(lane)));
     const drawn = await shootNow(root, board, o, act, lane);
     await timed("coverage: recorded after", () => recordRan(root, board, lane));
     return drawn;
@@ -845,7 +911,6 @@ export function shoot(
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
     asDraw(async () => {
       busy.add(lane);
-      used.set(lane, Date.now());
       try {
         // A page pulled away (the dev server reloading it after a rebuild or an edit, which can
         // land more than once) is tried again from a fresh load, a few times at most.
@@ -863,6 +928,8 @@ export function shoot(
         }
       } finally {
         busy.delete(lane);
+        // The page goes back to the pool: the next call, anyone's, draws on it.
+        givePageBack(lane);
       }
     }),
   );
@@ -873,12 +940,10 @@ export function shoot(
   return next;
 }
 
-const ranReaders = new Map<string, RanReader>();
-/** A lane's reader: one per page, as what loaded is the page's. */
-function readerOf(lane: string, root: string): RanReader {
-  const reader = ranReaders.get(lane) ?? new RanReader(root);
-  ranReaders.set(lane, reader);
-  return reader;
+/** A page's reader: what loaded is the page's, whoever drew on it. */
+function readerOf(at: Lane, root: string): RanReader {
+  at.reader ??= new RanReader(root);
+  return at.reader;
 }
 
 /** What ran on a lane's page since this was last asked (coverage taken and started again). */
@@ -901,15 +966,16 @@ async function takeRan(lane: string) {
 async function recordRan(root: string, board: string, lane: string): Promise<void> {
   const coverage = await takeRan(lane);
   const at = lanes.get(lane);
-  if (at !== undefined) at.isTaken = true;
+  if (at === undefined) return;
+  at.isTaken = true;
   const path = board.replace(/^content\//, "");
   // Either way, the scripts it saw are read (linesOf reads them too), for what runs next here.
   if (!existsSync(join(root, "build", "review", `${path}.json`))) {
-    readerOf(lane, root).see(coverage);
+    readerOf(at, root).see(coverage);
     return;
   }
   try {
-    addRan(root, path, readerOf(lane, root).linesOf(coverage));
+    addRan(root, path, readerOf(at, root).linesOf(coverage));
   } catch {
     // only a hint
   }
@@ -1070,6 +1136,10 @@ async function shootNow(
   const base = target.origin;
   const at = await openPage(lane, base);
   const { page } = at;
+  // What ran on this page before this call (it loading, another board) isn't this board's: set
+  // aside, unless it was taken already at the end of the page's last drawing.
+  if (at.isTaken !== true)
+    readerOf(at, root).see(await timed("coverage: taken before", () => takeRan(lane)));
   at.errors.length = 0;
   await timed("move to the board", async () => {
     await page.setViewportSize({

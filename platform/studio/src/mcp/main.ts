@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
 import { findUp } from "../find-up";
-import { previewBase, warmPages } from "./app-driver";
+import { poolState, previewBase, warmPages } from "./app-driver";
 import { logCall } from "./call-log";
 import { mcpMiddleware } from "./http";
 
@@ -39,7 +39,7 @@ const server = createServer((req, res) => {
   const path = (req.url ?? "").split("?")[0];
   if (path === "/health") {
     res.setHeader("content-type", "application/json");
-    const answer = { ok: true, service: "chalk-studio", boot: BOOT };
+    const answer = { ok: true, service: "chalk-studio", boot: BOOT, pool: poolState() };
     // ?app: the dev server too (started again if it stopped), for whoever needs the app's pages.
     if (!(req.url ?? "").includes("app")) return void res.end(JSON.stringify(answer));
     previewBase(ROOT).then(

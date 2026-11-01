@@ -64,7 +64,7 @@ The layout check runs first on the untouched page, and the screenshot is taken c
 
 ## Underneath
 
-- **Pages.** Each connection draws on its own browser page, and on helper pages for the other versions, taken from pages kept loaded with the app; agents draw at once and never reach each other's boards.
+- **Pages: one pool.** The service keeps at most six pages, each loaded with the app; a call borrows the pages it draws on and gives them back. No page belongs to an agent (every call opens its board afresh), so pages never pile up: about 2.3 GB in all. `/health` says how the pool stands (pages, idle, lent, calls waiting).
 - **Rebuilds never land mid-drawing.** A content rebuild waits for the drawings running, and drawings asked for after it wait for it; pages load afresh after. A drawing the page is pulled away from is drawn again from the start.
 - **Settled pictures.** Fonts, images and finite animations finish before anything is measured or taken; on a jumping clock the screen's own animations take no time.
 - Content is rebuilt first when anything changed.
