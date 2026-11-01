@@ -469,6 +469,8 @@ export type LookArgs = {
   continue?: boolean;
   /** A prop on its own page: the fields it starts from, over its defaults. */
   state?: Readonly<Record<string, unknown>>;
+  /** How many pages to draw the versions on at once (LOOK_PAGES); for measuring it. */
+  pages?: number;
 };
 
 /** What a tool answers: text, and a picture. Nothing else: the text is the whole answer. */
@@ -487,8 +489,11 @@ function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }, isMany: boole
   return locales.flatMap((locale) => screens.map((screen) => ({ ...screen, locale })));
 }
 
-/** How many pages one look draws its versions on at once (the machine's fast cores, roughly). */
-const LOOK_PAGES = 3;
+/**
+ * How many pages one look draws its versions on at once: one per version (two languages, three
+ * screens). Measured on a lesson pass: 15.4s on 3 pages, 12.7s on 6; about 0.4 GB a page.
+ */
+export const LOOK_PAGES = 6;
 
 const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${screenWords(v)}` : "");
 
@@ -558,7 +563,7 @@ export async function look(
     }
   };
   await Promise.all(
-    Array.from({ length: Math.min(LOOK_PAGES, versions.length) }, (_, k) => worker(k)),
+    Array.from({ length: Math.min(a.pages ?? LOOK_PAGES, versions.length) }, (_, k) => worker(k)),
   );
   if (target.kind === "group") {
     const wanted = new Set(target.boards);
