@@ -34,6 +34,8 @@ export function useBoardRuntime(
     hush?: () => void;
     /** Nothing heard: lines keep their lengths on the board's clock; nothing plays (board-player.tsx). */
     isSilent?: boolean;
+    /** Not started yet: shown, its clock still (a board waiting for its first touch). */
+    isHeld?: boolean;
     /** Plays a sound alongside (sound/engine.ts), lasting until stopped if it lasts; returns how to stop it. */
     playSound?: (sound: Sound, lasts?: boolean) => SoundPlaying;
   },
@@ -69,13 +71,15 @@ export function useBoardRuntime(
       ...(isJumping ? { isJumping: true } : {}),
     });
   });
+  const isHeld = voice.isHeld === true;
   useEffect(() => {
+    if (isHeld) return;
     runtime.start();
     const untrack = trackBoard(runtime);
     return () => {
       untrack();
       runtime.dispose();
     };
-  }, [runtime]);
+  }, [runtime, isHeld]);
   return runtime;
 }

@@ -19,7 +19,7 @@ import type { PropRegistry } from "./prop-module";
 import { recordBoard } from "./recorder";
 import type { BoardRuntime } from "./runtime";
 import { useBoardSound } from "./sound/board-sound";
-import { isAudible, playSound, whenAudible } from "./sound/engine";
+import { isAudible, playSound } from "./sound/engine";
 import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
 import { type ClipStore, type SpokenProp, useVoice } from "./sound/voice";
 import { t } from "./ui-text";
@@ -77,30 +77,25 @@ export function BoardPlayer(props: BoardPlayerProps): JSX.Element {
   const sound = useBoardSound(props.board);
   // A board that sounds starts once the page may sound: a browser allows it from the first touch,
   // which a student gives in reaching a board (opening a lesson, Continue). One opened without it
-  // (a link, a refresh) asks for it, so its opening is heard: its clock starts with the board.
-  const [mayStart, setMayStart] = useState(() => props.isSilent === true || isAudible());
+  // (a link, a refresh) is shown held, its clock not started; the first touch on it starts it (and
+  // does nothing else), so its opening is heard from the start.
+  const [isHeld, setHeld] = useState(() => props.isSilent !== true && !isAudible());
+  // A first key starts it too (a keyboard's first touch).
   useEffect(() => {
-    if (mayStart) return;
-    let isGone = false;
-    void whenAudible().then(() => {
-      if (!isGone) setMayStart(true);
-    });
-    return () => {
-      isGone = true;
-    };
-  }, [mayStart]);
+    if (!isHeld) return;
+    const start = () => setHeld(false);
+    window.addEventListener("keydown", start, { once: true });
+    return () => window.removeEventListener("keydown", start);
+  }, [isHeld]);
   if (!sound.isReady) return <div class="board" aria-busy="true" />;
-  if (!mayStart)
-    return (
-      <div class="board is-waiting">
-        <footer class="board-footer">
-          <button type="button" class="primary" onClick={() => setMayStart(true)}>
-            {t(props.locale, "start")}
-          </button>
-        </footer>
-      </div>
-    );
-  return <BoardPlay {...props} audio={sound.source} />;
+  return (
+    <BoardPlay
+      {...props}
+      audio={sound.source}
+      isHeld={isHeld}
+      onFirstTouch={() => setHeld(false)}
+    />
+  );
 }
 
 function BoardPlay({
@@ -117,7 +112,14 @@ function BoardPlay({
   isPicture = false,
   isInLesson = false,
   isSilent = false,
-}: BoardPlayerProps & { audio: ClipStore | undefined }): JSX.Element {
+  isHeld,
+  onFirstTouch,
+}: BoardPlayerProps & {
+  audio: ClipStore | undefined;
+  /** Shown, its clock not started, until the first touch on it (BoardPlayer). */
+  isHeld: boolean;
+  onFirstTouch: () => void;
+}): JSX.Element {
   const policy = mode === undefined ? undefined : modePolicy[mode];
   // Set once the recorder exists (the voice is made first, and reports through it).
   const recorderRef = useRef<ReturnType<typeof recordBoard> | undefined>(undefined);
@@ -134,6 +136,7 @@ function BoardPlay({
     locale,
     lineSeconds: (line) => voiceRef.current.seconds(line),
     isSilent,
+    isHeld,
     playSound,
     hush: () => voiceRef.current.hush(),
   });
@@ -213,7 +216,18 @@ function BoardPlay({
 
   return (
     <PlayModeContext.Provider value={mode}>
-      <div class={`board${banner !== undefined ? ` has-banner is-${banner}` : ""}`}>
+      <div
+        class={`board${banner !== undefined ? ` has-banner is-${banner}` : ""}${isHeld ? " is-held" : ""}`}
+      >
+        {/* The first touch starts the board, and only that: what it lands on isn't pressed. */}
+        {isHeld && (
+          <div
+            class="board-hold"
+            aria-hidden="true"
+            onClick={onFirstTouch}
+            onKeyDown={onFirstTouch}
+          />
+        )}
         <main
           class={`board-body${isSettled ? " is-settled" : ""}`}
           ref={body}

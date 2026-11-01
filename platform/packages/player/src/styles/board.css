@@ -5,6 +5,16 @@
   display: flex;
   flex-direction: column;
 }
+/* Opened without a touch: shown, held; the first touch on it starts it (board-player.tsx). */
+.board.is-held {
+  position: relative;
+}
+.board-hold {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: pointer;
+}
 .board-body {
   flex: 1;
   display: flex;

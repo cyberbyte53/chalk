@@ -32,7 +32,7 @@ Anything told of a line no longer in turn does nothing (the id check the board h
 
 ## Starting a board
 
-The clock starts when the board starts, as now. A board starts after a tap: opening a lesson, Continue. A page loaded without one (a preview link, a refresh) shows "Tap to start", since a browser plays no sound before a touch. Tools, which play no sound, start at once.
+The clock starts when the board starts, as now. A board starts after a tap: opening a lesson, Continue. A page loaded without one (a preview link, a refresh) shows the board held, its clock not started, since a browser plays no sound before a touch; the first touch on it starts it and presses nothing. Tools, which play no sound, start at once.
 
 ## Tools jump
 
@@ -43,7 +43,7 @@ The page runs the clock to the end (`runtime.settle()`, which exists), then draw
 1. **Sound lengths:** the build measures each library sound and ships its length with it (`Sound` has none today).
 2. **Board:** the line's timeout with id, the voice event (its log entry, `replay`, the recorder), drop by entry. Law tests: same events with any frame timing; voice ends early; cut; timeout; stale end ignored; replay of a session with voice events.
 3. **Runtime:** one voice path: lines timed as above; the phone's audio reports its end; the tool's stand-in reports at the length; in-turn sounds timed, the promise gone.
-4. **Starting:** "Tap to start" for a board loaded without a tap.
+4. **Starting:** a board loaded without a tap is shown held; the first touch on it starts it.
 5. **Tools:** jump with `settle()`, read once; remove ×10, the cap and polling; undo the skip (54ffcba). `pnpm bench-look`: the same answer as before 54ffcba, faster.
 6. **Docs:** `sound.md`, `board-model.md` and `prop/src/voice.ts` say the board knows a line's length and ends it by the voice's word or its timeout; tests to match.
 

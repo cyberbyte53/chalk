@@ -73,7 +73,7 @@ One engine plays every cue, on every screen (a phone, the preview, the editor's 
 
 - **Finds its clip:** for words, the store; else glued pieces; else **the speaker's voice, on the go** (a voice server: our hosted Piper, or an AI voice); else the phone's own voice; else nothing (its words are on screen). For a sound, its chosen clip (a missing one plays nothing: the build catches it).
 - **Two channels,** by what is played: **words are the voice; sounds are sounds**, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
-- **The browser's first-touch rule:** a page may sound only once it is touched. A student reaches a board by a tap (opening a lesson, Continue); a board opened without one (a link, a refresh) shows *Tap to start*, and starts on it.
+- **The browser's first-touch rule:** a page may sound only once it is touched. A student reaches a board by a tap (opening a lesson, Continue); a board opened without one (a link, a refresh) is shown held, and the first touch on it starts it (and presses nothing).
 - **A line's length is known when it starts:** its clips' (an estimate from its words without clips). The board puts its end on its clock at that length + 5 s (`GRACE`); the engine **tells the line ended** when its sound really does, and the board goes on then. A line that couldn't be heard (its clips failed, no phone voice) ends at its length. The board never knows where the sound comes from ([one-clock.md](one-clock.md)).
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
 - **Logs** everything heard, in order (what `play` and `look` show).
