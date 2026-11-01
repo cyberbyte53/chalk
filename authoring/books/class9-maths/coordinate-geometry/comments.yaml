@@ -4095,6 +4095,18 @@
         Riya back to the corner. The scene's isOpen is in board-model.md and writing-content.md as
         \"show first, then play\"."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T05:16:44.165Z
+      text: "Fix holds. Played in en and hi at 390. Riya walked → to Street 4, Street 4 rose, and Aman's
+        reply marked House 5 (markTarget). At that point no house can be tapped: town/places has no
+        chooseTarget parts until the board passes. I walked her up to (4, 5): the board passed,
+        found and anyHouse showed, every street rose, and all 30 houses became tappable. Tapping (2,
+        3) made it Aman's ('Street number 2, House number 3') and sent Riya back to the corner.
+        Walking her → → ↑ ↑ ↑ gave 'Riya is at Aman's house!'. In hi, tapping (6, 1) gave 'गली नंबर
+        6, मकान नंबर 1'. The story no longer contradicts itself, and nothing on this board can get
+        stuck. The same opening reaches other boards, where it is not right yet: see the regression
+        threads on bus-stops, bus-to-stop and walk-to-address."
 - id: cmvwtxc8cqme
   status: ready
   by: reviewer
@@ -4104,6 +4116,7 @@
   target: sheet/clues/clearClues
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
+  turn: person
   text: >-
     Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
     the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
@@ -4131,6 +4144,14 @@
     Suggested fix: here ↺ should take back the clues and keep the dot shown (a clues setting, or a
     rule on this board that shows it again). Or don't offer ↺ on this board. If it stays, give it
     words like the walker's, e.g. '↺ Start again'.
+  changed:
+    - library/props/coordinates/README.md
+    - platform/docs/board-model.md
+    - platform/docs/writing-content.md
+  reaches:
+    pieces: 0
+    boards: 0
+    lessons: []
   messages:
     - by: fixer
       role: fixer
@@ -4148,12 +4169,71 @@
         lesson numbers them as distances are given and doesn't take the numbers back). It's the
         page's ruler now that the point is made, but say if it should go."
       status: ready
-  changed:
-    - library/props/coordinates/README.md
-    - platform/docs/board-model.md
-    - platform/docs/writing-content.md
-  reaches:
-    pieces: 0
-    boards: 0
-    lessons: []
-  turn: person
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T05:16:44.216Z
+      text: "Fix holds. Played in en and hi at 390. There is no ↺ while the clues are being given. After
+        the fourth clue pins the dot and the board passes, '↺ Start again' / '↺ फिर से शुरू करो'
+        shows. Tapping it takes back the four clues and the dot stays on the page at (5, 9). Giving
+        'It is in the upper half' again shades the upper half around the dot, so the clues mean what
+        they say. One question is left for you, the one the fixer raised: both edges stay numbered
+        1–15 and 1–12 after Start again, so a second try can read the distances off the ruler. Keep
+        the numbers, or take them back with the clues?"
+- id: cmvxdo2g7oqx
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T05:16:44.263Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: line/places
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:76
+  commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
+  turn: agent
+  text: "Regression from the fix to cmvwtxc66n4r (a board opens for play once it passes: places can be
+    chosen whenever isOpen). Mechanical. Principle: do the picture and the text agree; no symbol
+    before it is taught. Played at 390 in en: walk the bus to 3, then to −2, and answer '2 stops
+    from the stand, to the left'. The board passes, and all 13 stops become tappable. Tap stop 4. A
+    ring appears on 4, and above the road a new line reads 'Aman's house: x 4, y 0'. The map also
+    moves down to make room for it. This board is about a bus. Aman's house isn't in it, and nothing
+    asks for a target. 'x 4, y 0' uses x and y, which this lesson hasn't taught, and a second number
+    on a board whose point is that one number is enough. Before the fix these stops couldn't be
+    tapped (canChooseTarget: false). Suggested fix: make opening for play something a board turns on
+    (a places setting the town on street-and-house sets), not something every places gets when its
+    board passes."
+  messages: []
+- id: cmvxdo2hm2ru
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T05:16:44.314Z
+  board: class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad
+  target: road/places
+  source: content/class9-maths/coordinate-geometry/questions/bus-to-stop/family.ts:25
+  commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
+  turn: agent
+  text: "Regression from the fix to cmvwtxc66n4r, the same cause as on bus-stops#line/places. It
+    reaches all four bus-to-stop boards. Mechanical. Played at 390: drive the bus to stop 4 and
+    press Check ('That's it!'). Every stop then becomes tappable. Tapping −3 rings it and adds
+    'Aman's house: x -3, y 0' above the road, and the road moves down. A question about a bus now
+    names Aman's house, uses x and y, and writes −3 with a hyphen. Before the fix the stops couldn't
+    be tapped. The same fix as bus-stops: places open only where the board turns it on."
+  messages: []
+- id: cmvxdo2j7ntl
+  status: open
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T05:16:44.371Z
+  board: class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0
+  target: town/places
+  source: content/class9-maths/coordinate-geometry/questions/walk-to-address/family.ts:20
+  commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
+  turn: agent
+  text: "Regression from the fix to cmvwtxc66n4r. It reaches all five walk-to-address boards.
+    Mechanical. Principle: do the picture and the text agree (the same contradiction that thread
+    fixed on street-and-house). Played at 390: the prompt says 'Aman lives at Street 3, House 5'.
+    Walk Riya to (3, 5) and press Check ('That's it!'). Every house then becomes tappable. Tapping
+    (1, 2) puts the orange 'Aman's house' ring on Street 1, House 2. The prompt still says Street 3,
+    House 5, and Riya stands there. No text invites the tap, and nothing explains it. Before the fix
+    houses couldn't be tapped here (canChooseTarget: false in bareTown). Same fix: only a board that
+    offers free play after it passes (street-and-house's 'Tap any house') should open its places."
+  messages: []
