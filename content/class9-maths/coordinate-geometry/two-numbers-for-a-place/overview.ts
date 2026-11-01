@@ -337,14 +337,20 @@ const dotOnPaper = page(
           ...(given.includes(3) ? [t.to.sheet.plane.numberLine({ axis: "y" })] : []),
         ];
       },
-      // Fixed: the clues' work is done, and the dot is handed to the student, its distances shown.
-      "sheet.clues.pinned": (_, p, t) => [
-        t.self.show({ name: "fixed" }),
-        t.self.show({ name: "yours" }),
-        t.to.sheet.clues.putAway(),
-        t.to.sheet.reading.movePoint({ x: p.x, y: p.y }),
-        t.self.pass(),
-      ],
+      // Fixed: the two lines cross at the dot while that is said.
+      "sheet.clues.pinned": (_, __, t) => t.self.show({ name: "fixed" }),
+    },
+    // Then the clues' work is done, and the dot is handed to the student, its distances shown.
+    onSaid: {
+      fixed: (me, t) => {
+        const dot = me.sheet.clues.hidden;
+        return [
+          t.self.show({ name: "yours" }),
+          t.to.sheet.clues.putAway(),
+          ...(dot === null ? [] : [t.to.sheet.reading.movePoint({ x: dot.x, y: dot.y })]),
+          t.self.pass(),
+        ];
+      },
     },
     witness: [0, 1, 2, 3].map((clue) => tap("sheet.clues", "giveClue", { clue })),
   }),

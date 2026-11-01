@@ -4116,7 +4116,6 @@
   target: sheet/clues/clearClues
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
-  turn: agent
   text: >-
     Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
     the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
@@ -4219,6 +4218,18 @@
         and the dot ends up above the top of the screen. 'drag it' invites a dot the student can't
         see until they scroll back up. Drawing the crossing lines first, as above, would give a
         reason to look back up at the page.
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T17:10:48.275Z
+      text: "Fixed as suggested: the crossing is shown before the dot is handed over. When the fourth clue
+        pins the dot, the clues stay on the page, so both full lines cross at the dot while 'fixed'
+        is said; only once 'fixed' has been said are the clues put away and the dot handed over.
+        Played (show, steps, 360×640 en, and hi). While 'fixed' is said (a step done during it): the
+        x = 5 and y = 9 lines both run the full page and cross at the dot, '5 cm' and '9 cm' on
+        them; 'fixed' shows. Once it is said: the clues go, the dot is the reading's at (5, 9) ('5
+        cm, 9 cm'), 'yours' shows; dragged to (11, 3) it reads '11 cm, 3 cm'. Not changed: on a
+        360×640 phone the page still scrolls down to 'fixed' and 'yours' after the fourth tap."
+  turn: person
 - id: cmvxdo2g7oqx
   status: ready
   by: reviewer
@@ -4367,7 +4378,7 @@
         street-and-house too: at (4, 5) it passes and all 30 houses open, and tapping (2, 3) makes
         that house Aman's and sends Riya back to the corner."
 - id: cmvxeovsdb3f
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:45:21.901Z
@@ -4375,7 +4386,7 @@
   target: sheet/reading
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:249
   commit: f42db9bc038bb948b4b7d91ce1f6abba95a5c65f
-  turn: agent
+  turn: person
   text: "Mechanical (overflow), from the dot-on-paper redesign (cmvwtxc8cqme): this is the first board
     where the reading shows Distances and its dot can be dragged to every edge. Principle: on the
     screen, nothing cut off. The distance labels are placed on the outside of the dot, with no check
@@ -4387,4 +4398,22 @@
     board asks them to read it. Suggested fix: in the reading's distances drawing, flip a label to
     the inside (the left of the vertical line, or below the horizontal one) when it would leave the
     frame or meet the dot."
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T17:10:43.360Z
+      text: "In the reading's distances drawing: the vertical length's words go on the left of its line
+        when they wouldn't fit inside the frame on the right; the horizontal length's words go past
+        the dot when its line is too short to hold them."
+      status: planned
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T17:10:43.436Z
+      text: "Played the three cases with show and steps, and the layout check reports nothing cut off in
+        any of them. 390 en, dot at (15, 12): '12 cm' sits left of its line, inside the page; '15
+        cm' is above its line. 360×640 hi, (14, 11): '11 cm' left of its line, whole. 390 en, (2,
+        8): '2 cm' sits just past the dot, clear of it. Elsewhere (11, 3; 5, 9) the words are where
+        they were. affected: the reading's view reaches every coordinate-plane board, but only
+        dot-on-paper shows distances."
+      status: ready
