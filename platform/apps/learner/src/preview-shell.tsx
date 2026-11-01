@@ -1255,10 +1255,13 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
   // What the app did, for a tool acting on the board (the chalk MCP's play): every
   // event the bus carries, and each board passed. Kept on window, recent ones only.
   useEffect(() => {
-    const w = window as Window & { __chalkEvents?: unknown[] };
+    // The recent ones, and how many there have been in all: a tool takes a step's events by that
+    // count, as the list itself stops growing once it is full.
+    const w = window as Window & { __chalkEvents?: unknown[]; __chalkEventCount?: number };
     const keep = (event: unknown) => {
       w.__chalkEvents ??= [];
       w.__chalkEvents.push(event);
+      w.__chalkEventCount = (w.__chalkEventCount ?? 0) + 1;
       if (w.__chalkEvents.length > 500) w.__chalkEvents.shift();
     };
     const stop = bus.subscribe(keep);

@@ -962,6 +962,8 @@ async function settle(page: Page, isForPicture = true): Promise<void> {
 /** What the app recorded so far (the preview keeps it on window; see preview-shell.tsx). */
 type Recorded = {
   events: { kind?: string; actor?: string; payload?: unknown }[];
+  /** How many events there have been in all (the list keeps the recent ones only). */
+  eventCount: number;
   passed: string[];
   heard: Heard[];
 };
@@ -969,11 +971,13 @@ const recorded = (page: Page): Promise<Recorded> =>
   page.evaluate(() => {
     const w = window as unknown as {
       __chalkEvents?: unknown[];
+      __chalkEventCount?: number;
       __chalkPassed?: string[];
       __chalkHeard?: () => unknown[];
     };
     return {
       events: [...(w.__chalkEvents ?? [])],
+      eventCount: w.__chalkEventCount ?? 0,
       passed: [...(w.__chalkPassed ?? [])],
       // Copies: a line cut later is marked on the board's own record, not on this one.
       heard: JSON.parse(JSON.stringify(w.__chalkHeard?.() ?? [])),
@@ -1240,8 +1244,10 @@ async function shootNow(
         step: words,
         changed,
         ...(motion === undefined ? {} : { motion }),
+        // The events since the last read, by how many there have been: the list stops growing
+        // once full, so its length can't say.
         events: now.events
-          .slice(seen.events.length)
+          .slice(Math.max(0, now.events.length - (now.eventCount - seen.eventCount)))
           .map((e) => `${e.kind ?? "?"} ${e.actor ?? "?"} ${JSON.stringify(e.payload ?? null)}`),
         heard: now.heard.slice(seen.heard.length),
         passed: now.passed.length > seen.passed.length,
