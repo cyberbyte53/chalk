@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -119,6 +119,26 @@ describe("what changed since a board was passed", () => {
     expect(changesBetween({ do: "ƒ () => 1" }, { do: "ƒ () => 2" })).toEqual([
       { at: "do", was: "ƒ () => 1", now: "ƒ () => 2" },
     ]);
+  });
+
+  it("keeps a board's own content, not its props' definitions copied into it (they are code)", () => {
+    const withScene = (describe: string, hear: string) => ({
+      ...board("Here is a dot", "counts"),
+      model: {
+        scene: { children: { sheet: { describe } }, variables: { x: 1 }, hear: { [hear]: 1 } },
+      },
+    });
+    const root = repo({ dot: withScene("A plane.", "sheet.pinned") });
+    passUnder(root, LESSON, "reviewer");
+    const kept = readFileSync(
+      join(root, "authoring/books/class9-maths/geometry/reviewed.yaml"),
+      "utf8",
+    );
+    expect(kept).not.toContain("A plane.");
+    build(root, { dot: withScene("A plane, changed.", "sheet.pinned") });
+    expect(changesUnder(root, LESSON)[0]?.status).toBe("unchanged");
+    build(root, { dot: withScene("A plane.", "sheet.moved") });
+    expect(changesUnder(root, LESSON)[0]).toMatchObject({ status: "changed" });
   });
 
   it("names pieces by their names, so one moving in its list isn't every later one changing", () => {

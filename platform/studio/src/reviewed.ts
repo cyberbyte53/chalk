@@ -184,6 +184,20 @@ const IN_REVIEW_WORDS: Record<InReview, string> = {
   new: "new since the review",
 };
 
+/**
+ * What of a board's record a review keeps: its layout, its pieces' setup, its words, its own
+ * rules. Its props' definitions (the scene's children) and the schemas of what a scene takes and
+ * tells (its variables, actions, signals), copied into the record by the build, are code: the
+ * board's code fingerprint already holds them, and they are nearly all of the record.
+ */
+export function reviewedContent(content: unknown): unknown {
+  const c = content as { model?: { scene?: Record<string, unknown> } } | null;
+  const scene = c?.model?.scene;
+  if (scene === undefined) return content;
+  const { children: _, variables: __, actions: ___, signals: ____, ...rules } = scene;
+  return { ...c, model: { ...c?.model, scene: rules } };
+}
+
 /** What changed on every board at or under `under` since each was passed. */
 export function changesUnder(root: string, under: string): BoardChange[] {
   const now = builtUnder(root, under);
@@ -197,7 +211,7 @@ export function changesUnder(root: string, under: string): BoardChange[] {
       out.push({ board, status: "new" });
       continue;
     }
-    const content = changesBetween(was.content, record.content);
+    const content = changesBetween(reviewedContent(was.content), reviewedContent(record.content));
     const code = codeOf(board, record);
     const isSameCode = code !== undefined && was.code === code.digest;
     if (content.length === 0 && isSameCode) {
@@ -256,7 +270,13 @@ export function passUnder(root: string, under: string, by: string): number {
     passRan(root, board);
     return [
       board,
-      { ...record, by, commit, at, ...(code === undefined ? {} : { code: code.digest }) },
+      {
+        content: reviewedContent(record.content),
+        by,
+        commit,
+        at,
+        ...(code === undefined ? {} : { code: code.digest }),
+      },
     ];
   });
   const sorted = Object.fromEntries([...kept, ...fresh].sort(([a], [b]) => a.localeCompare(b)));
