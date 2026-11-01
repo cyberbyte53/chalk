@@ -160,6 +160,9 @@ type Applied = {
   count?: number;
 };
 
+/** How many plays are played again at once (changes); CHALK_PLAY_PAGES to measure another. */
+const PLAY_PAGES = Number(process.env.CHALK_PLAY_PAGES ?? 3);
+
 /** One change, as the caller's role: the writer (comments.ts) says what it did or why not. */
 async function changeComments(who: Who, change: Record<string, unknown>): Promise<Applied> {
   return applyChange(root, change as Change, who);
@@ -311,7 +314,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   };
 
   /** A kept play, played again as built now: what each step answers. */
-  const playAgain = async (board: string, p: Played): Promise<string> => {
+  const playAgain = async (board: string, p: Played, on: string = lane): Promise<string> => {
     const a = await play(
       root,
       {
@@ -321,9 +324,27 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         ...(p.locale === undefined ? {} : { locale: p.locale as "en" | "hi" }),
         ...(p.screen === undefined ? {} : { screen: p.screen }),
       },
-      lane,
+      on,
     );
     return playAnswer(a.text);
+  };
+
+  /**
+   * Plays played again a few at once, on PLAY_PAGES pages (this connection's own and its
+   * helpers): each play's answer, in order. More at once isn't faster: each play taps and drags
+   * the real page, and they share one machine.
+   */
+  const playAllAgain = async (board: string, plays: readonly Played[]): Promise<string[]> => {
+    const out: string[] = new Array(plays.length);
+    let next = 0;
+    const worker = async (k: number) => {
+      for (let i = next++; i < plays.length; i = next++)
+        out[i] = await playAgain(board, plays[i] as Played, k === 0 ? lane : `${lane}:v:${k}`);
+    };
+    await Promise.all(
+      Array.from({ length: Math.min(PLAY_PAGES, plays.length) }, (_, k) => worker(k)),
+    );
+    return out;
   };
 
   /** A play in a line: its steps as asked. */
@@ -418,8 +439,9 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           // A reviewer's plays on it, played again: the first step of each that answers differently.
           const plays: string[] = [];
           const kept = playsOf(root, "seen", c.board);
-          for (const p of kept) {
-            const differs = playDiff(p.answer, await playAgain(c.board, p));
+          const again = await playAllAgain(c.board, kept);
+          for (const [i, p] of kept.entries()) {
+            const differs = playDiff(p.answer, again[i] ?? "");
             if (differs !== undefined)
               plays.push(`plays differently: ${playWords(p)}\n${differs.replace(/^/gm, "    ")}`);
           }
