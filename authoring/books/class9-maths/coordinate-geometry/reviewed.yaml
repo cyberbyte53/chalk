@@ -2524,9 +2524,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: 49e4d05886a5
-  at: 2026-11-01T18:53:03.767Z
-  code: 89707b8a0d216202
+  commit: 09a35e81d80e
+  at: 2026-11-01T19:35:22.207Z
+  code: ccf3659cff8678d8
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -2773,9 +2773,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
       kind: column
       name: page
   by: reviewer
-  commit: 49e4d05886a5
-  at: 2026-11-01T18:53:03.767Z
-  code: db495bd6dd237aa1
+  commit: 09a35e81d80e
+  at: 2026-11-01T19:35:22.207Z
+  code: dc80a12861a11566
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -3265,9 +3265,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: 49e4d05886a5
-  at: 2026-11-01T18:53:03.767Z
-  code: 24b6ba69181f849a
+  commit: 09a35e81d80e
+  at: 2026-11-01T19:35:22.207Z
+  code: a5f512fe91822da1
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -3593,9 +3593,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: 49e4d05886a5
-  at: 2026-11-01T18:53:03.767Z
-  code: 2cb08e3034651053
+  commit: 09a35e81d80e
+  at: 2026-11-01T19:35:22.207Z
+  code: 813ac6900b5172e2
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -4211,6 +4211,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: 49e4d05886a5
-  at: 2026-11-01T18:53:03.767Z
-  code: 91a21ff926bbf50b
+  commit: 09a35e81d80e
+  at: 2026-11-01T19:35:22.207Z
+  code: 58c53c5bebe62055
