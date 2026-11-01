@@ -38,16 +38,23 @@ const SIGNS: Record<Quadrant, string> = {
 
 /** What each part of the plane is, in words, when a tap names it. */
 export const PART_WORDS: Record<PlanePart, { en: string; hi: string }> = {
-  O: { en: "O, the origin: (0, 0)", hi: "O, मूल बिंदु: (0, 0)" },
+  O: { en: "O, the origin", hi: "O, मूल बिंदु" },
   OX: { en: "OX: the positive x-axis", hi: "OX: धनात्मक x-अक्ष" },
   "OX′": { en: "OX′: the negative x-axis", hi: "OX′: ऋणात्मक x-अक्ष" },
   OY: { en: "OY: the positive y-axis", hi: "OY: धनात्मक y-अक्ष" },
   "OY′": { en: "OY′: the negative y-axis", hi: "OY′: ऋणात्मक y-अक्ष" },
-  I: { en: "Quadrant I: (+, +)", hi: "चतुर्थांश I: (+, +)" },
-  II: { en: "Quadrant II: (−, +)", hi: "चतुर्थांश II: (−, +)" },
-  III: { en: "Quadrant III: (−, −)", hi: "चतुर्थांश III: (−, −)" },
-  IV: { en: "Quadrant IV: (+, −)", hi: "चतुर्थांश IV: (+, −)" },
+  I: { en: "Quadrant I", hi: "चतुर्थांश I" },
+  II: { en: "Quadrant II", hi: "चतुर्थांश II" },
+  III: { en: "Quadrant III", hi: "चतुर्थांश III" },
+  IV: { en: "Quadrant IV", hi: "चतुर्थांश IV" },
 };
+
+/** A tapped part's words: its name, and a quadrant's signs once they are defined. */
+export function partWords(s: PlaneView, part: PlanePart, locale: "en" | "hi"): string {
+  const name = PART_WORDS[part][locale];
+  // A quadrant's signs, once the lesson shows them in the quadrants (showQuadrantSigns).
+  return s.showQuadrantSigns && part in SIGNS ? `${name}: ${SIGNS[part as Quadrant]}` : name;
+}
 
 /** A quadrant's corner of the window, in units: where it is drawn and tapped. */
 function quadrantBox(s: PlaneView, q: Quadrant) {
@@ -61,6 +68,8 @@ function quadrantBox(s: PlaneView, q: Quadrant) {
     y1: top ? w.yMax : Math.min(0, w.yMax),
   };
 }
+
+const isNumbersOf = (s: PlaneView) => s.marks === Marks.Numbers;
 
 /** Whether the plane is set up to name its parts: the axes crossing at O, with directions or quadrants. */
 export const canNameParts = (s: PlaneView): boolean =>
@@ -211,8 +220,14 @@ export function AxesDraw({
   const hasZeroMark = (v: number) => Math.abs(v) < 1e-9;
   const isCounted = s.marks === Marks.Counts;
   const named = s.named;
+  const hasO = isNumbersOf(s) && s.showOrigin && s.isCrossed === true;
+  // Where a unit is too short for "−1" and "O" side by side, O keeps the corner: the −1s go
+  // (their marks stay).
+  const isCrowded = hasO && unit * s.tickEvery < 40;
   const label = (v: number, i: number) =>
-    i % every === 0 && !(hasZeroMark(v) && s.showOrigin && s.isCrossed === true) ? num(v) : "";
+    i % every === 0 && !(hasZeroMark(v) && hasO) && !(isCrowded && Math.abs(v + s.tickEvery) < 1e-9)
+      ? num(v)
+      : "";
   return (
     <g class="cp-axes">
       <line
@@ -309,10 +324,11 @@ export function AxesDraw({
       )}
       {s.showDirections && s.axes === Axes.Both && (
         <g class="cp-directions">
-          <text x={right - 2} y={base + 30} text-anchor="end">
+          {/* At the line's ends, a row below its numbers, clear of them. */}
+          <text x={right - 2} y={base + 42} text-anchor="end">
             X
           </text>
-          <text x={left + 2} y={base + 30}>
+          <text x={left + 2} y={base + 42}>
             X′
           </text>
           <text x={vx + 10} y={top + 14}>

@@ -8,11 +8,11 @@ import {
   AxesDraw,
   GridDraw,
   NamedPointsDraw,
-  PART_WORDS,
   PartTaps,
   type PlaneView,
   SceneDraw,
   canNameParts,
+  partWords,
 } from "./plane-view";
 import { WORDS, pair, word } from "./words";
 
@@ -73,8 +73,8 @@ export const planeDrawing = drawing(plane, {
   front: ({ s, px }) => <NamedPointsDraw s={s} px={px} />,
   below: ({ s, locale }) =>
     s.named === null || !(canNameParts(s) && s.isAlone) ? null : (
-      <p class="cp-line" {...shows("named", s.named, PART_WORDS[s.named][locale])}>
-        {PART_WORDS[s.named][locale]}
+      <p class="cp-line" {...shows("named", s.named, partWords(s, s.named, locale))}>
+        {partWords(s, s.named, locale)}
       </p>
     ),
   controls: ({ s, locale }) => {

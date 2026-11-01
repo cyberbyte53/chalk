@@ -1265,8 +1265,17 @@ async function shootNow(
           break;
         }
         if ("tap" in step) {
-          if (aimed === undefined) await target.click({ timeout: 5000 });
-          else await page.mouse.click(aimed.x, aimed.y);
+          if (aimed !== undefined) await page.mouse.click(aimed.x, aimed.y);
+          else
+            await target.click({ timeout: 5000 }).catch(async (error: unknown) => {
+              // A target with no area (a line with a wide, clear stroke: an axis's half) reads as
+              // not visible: a finger taps its middle all the same, through the page's own hit test.
+              if (!/not visible/.test(firstLine(error) + String(error))) throw error;
+              await target.scrollIntoViewIfNeeded({ timeout: 5000 });
+              const box = await target.boundingBox();
+              if (box === null) throw error;
+              await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+            });
         } else {
           await target.scrollIntoViewIfNeeded({ timeout: 5000 });
           const box = await target.boundingBox();

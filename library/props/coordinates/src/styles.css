@@ -66,6 +66,14 @@
   stroke-width: 4;
   stroke-linecap: round;
 }
+/* The axes' lines, marks and words are to see: a tap goes through to the part under them (O, a
+   half, a quadrant). Their number buttons are the only taps of their own. */
+.cp-axes {
+  pointer-events: none;
+}
+.cp-axes .cp-mark-button {
+  pointer-events: auto;
+}
 .cp-mark line {
   stroke: var(--color-on-surface);
   stroke-width: 1.2;
