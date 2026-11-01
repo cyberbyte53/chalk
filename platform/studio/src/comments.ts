@@ -59,7 +59,8 @@ export const YOU: Who = { name: "you", role: Role.Person };
 // ---- What each role may do ----
 
 /** A status move: to `to`, from any of `from` (all when absent), on threads it started only if `own`. */
-type Move = { to: Status; from?: readonly Status[]; own?: boolean };
+/** A move a role may make: to a status, from some, maybe only on its own threads or on its turn. */
+type Move = { to: Status; from?: readonly Status[]; own?: boolean; onTurn?: Turn };
 
 /** The status moves each role may make. A message with no move is open to everyone. */
 export const MOVES: Readonly<Record<Role, readonly Move[]>> = {
@@ -67,6 +68,8 @@ export const MOVES: Readonly<Record<Role, readonly Move[]>> = {
   // An agent takes back a thread of its own that became moot (a question settled in chat).
   [Role.Fixer]: [
     { to: Status.Planned, from: [Status.Open, Status.Planned] },
+    // A fix someone sent back ("not yet": the agent's turn) is planned again, then made ready again.
+    { to: Status.Planned, from: [Status.Ready], onTurn: "agent" },
     { to: Status.Ready, from: [Status.Planned] },
     { to: Status.Withdrawn, from: [Status.Open, Status.Planned], own: true },
   ],
@@ -95,6 +98,8 @@ export const messageSchema = z
     text: z.string(),
     /** The status the thread moved to with this message; absent when it didn't move. */
     status: z.nativeEnum(Status).optional(),
+    /** A plan's commit (HEAD when it was written): what its fix is counted from. */
+    commit: z.string().optional(),
   })
   .strict();
 export type Message = z.infer<typeof messageSchema>;
@@ -509,6 +514,40 @@ function changedSince(root: string, since: string): string[] {
   });
 }
 
+/**
+ * Files in content/, library/ and platform/ changed since a plan's commit, committed or not (and
+ * new ones made since the plan); never a comments file.
+ */
+function changedFrom(root: string, commit: string, since: string): string[] {
+  const t = Date.parse(since);
+  const tracked = new Set(
+    git(root, "diff", "--name-only", "--no-renames", commit, "--", "content", "library", "platform")
+      .split("\n")
+      .filter((f) => f !== ""),
+  );
+  const fresh = git(
+    root,
+    "ls-files",
+    "--others",
+    "--exclude-standard",
+    "--",
+    "content",
+    "library",
+    "platform",
+  )
+    .split("\n")
+    .filter((f) => {
+      if (f === "") return false;
+      try {
+        // File times come from a coarse clock: allow for it.
+        return statSync(join(root, f)).mtimeMs >= t - 20;
+      } catch {
+        return false;
+      }
+    });
+  return [...tracked, ...fresh].filter((f) => !f.endsWith(COMMENTS_FILE)).sort();
+}
+
 /** What a new thread says: where it is, its words. The writer adds the rest. */
 export type NewThread = Pick<
   Thread,
@@ -671,7 +710,8 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       (m) =>
         m.to === to &&
         (m.from === undefined || m.from.includes(t.status)) &&
-        (m.own !== true || isOwn),
+        (m.own !== true || isOwn) &&
+        (m.onTurn === undefined || t.turn === m.onTurn),
     );
   let to = change.status;
   const isAnswered =
@@ -679,6 +719,12 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   if (to === undefined && who.role === Role.Person && isAnswered && change.text !== "")
     if (mayMove(Status.Open)) to = Status.Open;
   if (to === undefined && change.text === "") return refuse("say something, or move its status");
+  if (to !== undefined && !mayMove(to) && t.status === Status.Closed) {
+    const closing = [...t.messages].reverse().find((m) => m.status === Status.Closed);
+    return refuse(
+      `it was closed${closing ? ` by ${closing.by} on ${closing.at.slice(0, 10)}` : ""}: nothing to do; start a new thread if it needs more`,
+    );
+  }
   if (to !== undefined && !mayMove(to))
     return refuse(
       to === t.status
@@ -692,17 +738,25 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       return refuse(
         `answer the reviewer first (${last.by}: "${last.text.slice(0, 80)}"): write a message or a new plan, then mark it ready`,
       );
-    const since = lastMove(t, Status.Planned)?.at ?? t.createdAt;
-    t.changed = changedSince(root, since);
+    // What this fix changed: since its plan's commit, committed or not; a plan from before plans
+    // kept their commit, by the files' times.
+    const plan = lastMove(t, Status.Planned);
+    const since = plan?.at ?? t.createdAt;
+    t.changed =
+      plan?.commit !== undefined
+        ? changedFrom(root, plan.commit, since)
+        : changedSince(root, since);
     // Undefined fields aren't written to the file.
-    t.reaches = reachOf(root, t.changed);
+    t.reaches = reachOf(root, t.changed, plan?.commit);
   }
+  const head = to === Status.Planned ? git(root, "rev-parse", "HEAD").trim() : "";
   t.messages.push({
     by: who.name,
     role: who.role,
     at: now(),
     text: change.text,
     ...(to !== undefined ? { status: to } : {}),
+    ...(head !== "" ? { commit: head } : {}),
   });
   if (to !== undefined) t.status = to;
   const turn =
@@ -722,11 +776,13 @@ function placeWords(t: Pick<Thread, "board" | "target" | "prop" | "source" | "qu
 }
 
 /** What changed files reach, from git's lines for them; undefined when nothing changed or it can't tell. */
-function reachOf(root: string, files: readonly string[]): Thread["reaches"] {
+function reachOf(root: string, files: readonly string[], since = "HEAD"): Thread["reaches"] {
   if (files.length === 0) return undefined;
   try {
     const wanted = new Set(files);
-    const changes = changesFromGit(root).filter((c) => wanted.has(c.file));
+    // Each file's changed lines, against where the fix started (a committed fix is in neither
+    // HEAD's diff nor the working tree's).
+    const changes = changesFromGit(root, since).filter((c) => wanted.has(c.file));
     const reached = reachIndex(root).reach(changes);
     const boards = new Set(reached.hits.map((h) => h.board));
     return {

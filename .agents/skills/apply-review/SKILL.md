@@ -24,4 +24,4 @@ A thread on a prop (`library/props/…`) is about that prop wherever it is used,
 8. **Hand back, and wait.** Only after step 5's review is in. Say it's ready, what to look at, and the reviewer's verdict. The person checks the boards in the preview and the diff, and replies on a thread (it reopens, and goes in their next review) or closes it. **Never commit until the person says they're happy.** Then run `pnpm check` and commit with the message `review <id>: <one line>`, with the review file.
 9. **Patterns:** if the same kind of thread could come back elsewhere, say so and suggest the `wrap-up` step (a check, an example, or a guide line).
 
-Without a review ("handle the comments on Light"), do the same with `comments` filtered by the chapter's board prefix and `unanswered: true`.
+Without a review ("handle the comments on Light"), do the same with `comments` filtered by the chapter's board prefix and `unanswered: true`. A fix a reviewer sends back (its words on a ready thread make it your turn): plan it again (`status: "planned"`), fix, and mark it ready again; each fix records its own files.

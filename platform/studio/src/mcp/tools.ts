@@ -22,7 +22,6 @@ import {
   Status,
   applyChange,
   isUnanswered,
-  lastMove,
   latestReview,
   readComments,
   standing,
@@ -55,6 +54,7 @@ import { type Answer, check, drawShown, look, play, readReach, targetOf } from "
 import { compose } from "./picture";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
 import { typeSite } from "./sites";
+import { settledHere, threadAt, threadsAnswer } from "./threads-text";
 
 /**
  * `chalk` MCP server: what an agent in any harness (Cursor, VS Code, Claude Code, Codex…) needs to
@@ -172,48 +172,11 @@ async function readAll(): Promise<{ threads: Filed[]; reviews: Review[] }> {
   return { threads, reviews };
 }
 
-/** Words on one line, in full: never cut. */
-const oneLine = (t: string) => t.replace(/\s+/g, " ");
-
-/** Where a thread is, as an address: its board or prop, and what on it; a plan's thread by its home. */
-export function threadAt(c: Filed): string {
-  if (c.board !== undefined) return contentAddress(c.board, c.target);
-  // A prop's thread is on the prop wherever it is used: its part comes after # (target is
-  // "piece/part" as seen, the piece being whichever placed the prop).
-  if (c.prop !== undefined)
-    return shownAddress(propAddress(c.home.split("/").at(-1) ?? "", c.prop), c.target);
-  // A thread on a planning file: the file (its words are under quote).
-  return (c.source ?? c.home).replace(/:\d+(-\d+)?$/, "");
-}
-
 /** A write's result: the thread's status and whose turn it is now. */
 function turnOf(t: Filed | undefined): string {
   if (t === undefined) return "";
   const on = waitsOn(t);
   return ` [${t.status}${on === undefined ? "" : `, ${on === "person" ? "the person's turn" : "the agent's turn"}`}]`;
-}
-
-/** Whose turn it is, in words. */
-function turnWords(c: Filed): string {
-  const on = waitsOn(c);
-  return on === undefined ? "" : ` waits on the ${on} ·`;
-}
-
-function threadLine(c: Filed): string {
-  const where = threadAt(c);
-  const plan = lastMove(c, Status.Planned);
-  return [
-    `• ${c.id} [${c.status}]${turnWords(c)} ${c.by}${c.by === c.role ? "" : ` (${c.role})`}${c.from ? ` (from ${c.from})` : ""} ${where}`,
-    `  source: ${c.source ?? "?"}`,
-    ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot)}`] : []),
-    `  ${c.by}: “${oneLine(c.text)}”`,
-    ...(c.quote ? [`  quote: ${oneLine(c.quote)}`] : []),
-    ...(plan ? [`  plan: ${oneLine(plan.text)}`] : []),
-    ...c.messages.map(
-      (m) => `  ${m.by}${m.status ? ` → ${m.status}` : ""}: ${oneLine(m.text) || "(no words)"}`,
-    ),
-    ...(c.changed?.length ? [`  changed: ${c.changed.join(", ")}`] : []),
-  ].join("\n");
 }
 
 /** Who is calling: an agent's role (fixer, reviewer) and its name in threads. */
@@ -830,7 +793,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Read comments",
         description:
-          "Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' and fixers' (questions, decisions, proposals). Each says whose turn it is. `review`: a review's id (\"apply review 20261026-1734\"), or \"latest\": exactly the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). `unanswered: true`: only what waits on the agent. Each shows its address, source line, what it showed, its plan and every message.",
+          "Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' and fixers' (questions, decisions, proposals). Each says whose turn it is. `review`: a review's id (\"apply review 20261026-1734\"), or \"latest\": the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). The threads still open (open, planned, ready) come in full: address, source line, what it showed, every message (a plan is its planned message); settled ones (closed, withdrawn) are counted, `closed: true` to read them too. `id`: one thread in full, settled or not. `unanswered: true`: only what waits on the agent.",
         inputSchema: {
           review: z.string().optional().describe('A review id, or "latest".'),
           at: z
@@ -840,6 +803,11 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a planning file or folder ("authoring/books/class9-maths/coordinate-geometry/flow.md").',
             ),
           unanswered: z.boolean().optional(),
+          closed: z
+            .boolean()
+            .optional()
+            .describe("Settled threads (closed, withdrawn) in full too: what was decided."),
+          id: z.string().optional().describe("One thread, in full, settled or not."),
         },
         annotations: { readOnlyHint: true, openWorldHint: false },
       },
@@ -876,13 +844,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           review !== undefined
             ? `Review ${review.id} by ${review.by} (${review.role}), ${review.threads.length} thread${review.threads.length === 1 ? "" : "s"}: ${standing(threadsOf(review, threads)).text}\n\n`
             : "";
-        return result([
-          text(
-            found.length === 0
-              ? `${head}No threads match.`
-              : head + found.map(threadLine).join("\n\n"),
-          ),
-        ]);
+        return result([text(threadsAnswer(threads, found, args, head))]);
       },
     ),
     "comments",
@@ -893,7 +855,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     [Status.Planned]:
       "planned: what you will do, after the person's go in chat (again to revise it)",
     [Status.Ready]:
-      "ready: what you did; needs a plan first, an answer to any reviewer's words on it, and no open regression it caused; the files you changed are recorded from git",
+      "ready: what you did; needs a plan first and an answer to any reviewer's words on it; the files changed since its plan are recorded",
     [Status.Open]: "open: reopen it",
     [Status.Closed]: "closed: done",
     [Status.Withdrawn]: "withdrawn: take back a thread you started that became moot (say why)",
@@ -1103,8 +1065,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             lines.push(`✗ ${done.error}`);
             continue;
           }
+          // What was settled on the same thing before: said now, when it may be raised again.
+          const settled = settledHere((await readAll()).threads, done.thread);
           if (item.plan === undefined) {
-            lines.push(`✓ ${done.thread.id} on ${on}${turnOf(done.thread)}`);
+            lines.push(`✓ ${done.thread.id} on ${on}${turnOf(done.thread)}`, ...settled);
             continue;
           }
           const planned = await changeComments(who, {
@@ -1117,6 +1081,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             planned.ok
               ? `✓ ${done.thread.id} on ${on} [planned]`
               : `✓ ${done.thread.id} on ${on}, but its plan wasn't written: ${planned.error}`,
+            ...settled,
           );
         }
         if (handover) {

@@ -48,7 +48,7 @@ They are versioned with the content they are about. **One writer** (`platform/st
 - **`snapshot`**: what the piece showed when the thread was started. **`commit`**: the commit it was started on.
 - **`turn`**: whose turn it is while it is open, planned or ready: `person` or `agent`. Absent once closed or withdrawn.
 - **`from`**: `chat` for feedback the person gave in an agent's chat, filed in their name.
-- **`changed`**: the files changed for it, recorded from git when it became ready.
+- **`changed`**: the files its fix changed, recorded when it became ready: what git says differs from the commit its plan was written at (each `planned` message keeps that commit), committed or not, and files made since. A second fix, planned again, records its own.
 - **`reaches`**: what those changes reach, worked out at the same time: how many pieces and boards, and the lessons they are in, or every board and why ([reach.md](reach.md)).
 - **`messages`**: everything written on it since, oldest first. A message may move the thread's **`status`**; the last message that moved it to `planned` is its plan.
 
@@ -75,6 +75,7 @@ Status moves:
 | no move (just a message) | ✅ | ✅ | ✅ |
 | → open (reopen) | ✅ | | |
 | open or planned → planned | | ✅ | |
+| ready → planned (a fix sent back: the agent's turn) | | ✅ | |
 | planned → ready | | ✅ | |
 | → closed | ✅ | | |
 | → withdrawn | ✅ | own, open or planned | own, open |
@@ -130,8 +131,8 @@ Reviews point to threads; threads don't point back. How a review stands is worke
 
 ## The tools (chalk MCP)
 
-- **`comments`** reads. `review` (an id, or `"latest"`): exactly the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop, or a planning file or folder, `authoring/books/…`) and `unanswered` (what waits on the agent) filter. Each thread says whose turn it is.
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `from`, `turn`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Agents never see file paths; the writer finds the file from the id or the address.
+- **`comments`** reads. `review` (an id, or `"latest"`): the threads it handed over, in order, with how it stands. `at` (threads at or under an address: a chapter, a board, a prop, or a planning file or folder, `authoring/books/…`) and `unanswered` (what waits on the agent) filter. The threads still open (open, planned, ready) come in full, each saying whose turn it is; settled ones (closed, withdrawn) are counted, read with `closed: true`, and `id` reads any one thread in full. An answer grows with the work open, not with history (lesson 1's: 129 KB before, 18 KB now).
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `from`, `turn`: start a thread; a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. `handover: true` hands the connection's sitting over. Starting a thread where one was settled (the same board and target, or prop and target), the answer names it with its last words, at most three: what was decided comes up when the point may be raised again. Agents never see file paths; the writer finds the file from the id or the address.
 
 ## A thread whose place is gone
 

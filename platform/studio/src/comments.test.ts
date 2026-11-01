@@ -238,7 +238,42 @@ describe("threads", () => {
     expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({ ok: true });
   });
 
-  it("records the files changed since the plan, not deletions or comment files", () => {
+  it("a fix sent back after it was ready is planned again and made ready again", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, FIXER, "bigger", Status.Planned);
+    write(root, t.id, FIXER, "done", Status.Ready);
+    // "Fix holds", handed to the person: not the agent's turn, so nothing to plan again.
+    write(root, t.id, REVIEWER, "holds");
+    // The reviewer's "not yet": the agent's turn.
+    write(root, t.id, REVIEWER, "still clipped at 360");
+    expect(write(root, t.id, FIXER, "wrap it at 360", Status.Planned)).toMatchObject({
+      thread: { status: Status.Planned },
+    });
+    expect(write(root, t.id, FIXER, "wrapped", Status.Ready)).toMatchObject({
+      thread: { status: Status.Ready, turn: "person" },
+    });
+  });
+
+  it("a ready fix the person's turn is on isn't planned again by the fixer", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, FIXER, "bigger", Status.Planned);
+    write(root, t.id, FIXER, "done", Status.Ready);
+    expect(write(root, t.id, FIXER, "again", Status.Planned)).toMatchObject({ ok: false });
+  });
+
+  it("a closed thread says it is closed, and by whom", () => {
+    const root = repo();
+    const t = start(root);
+    write(root, t.id, YOU, "fine", Status.Closed);
+    expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
+      ok: false,
+      error: expect.stringMatching(/it was closed by you on \d{4}-\d\d-\d\d: nothing to do/),
+    });
+  });
+
+  it("records the files changed since the plan, a file taken away too, not comment files", () => {
     const root = repo();
     execFileSync("git", ["init", "-q"], { cwd: root });
     const old = join(root, "content", "class10-maths", "polynomials", "old.yaml");
@@ -252,7 +287,42 @@ describe("threads", () => {
     rmSync(old);
     writeFileSync(join(root, "library", "props", "polynomials", "view.tsx"), "y\n");
     expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
+      thread: {
+        changed: [
+          "content/class10-maths/polynomials/old.yaml",
+          "library/props/polynomials/view.tsx",
+        ],
+      },
+    });
+  });
+
+  it("records a fix's files when it was committed before it was ready, and a second fix its own", () => {
+    const root = repo();
+    const commit = (message: string) => {
+      execFileSync("git", ["add", "."], { cwd: root });
+      execFileSync("git", ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", message], {
+        cwd: root,
+      });
+    };
+    execFileSync("git", ["init", "-q"], { cwd: root });
+    const view = join(root, "library", "props", "polynomials", "view.tsx");
+    const words = join(root, "library", "props", "polynomials", "words.ts");
+    writeFileSync(view, "a\n");
+    writeFileSync(words, "a\n");
+    commit("start");
+    const t = start(root);
+    write(root, t.id, FIXER, "bigger", Status.Planned);
+    writeFileSync(view, "b\n");
+    commit("the fix");
+    expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({
       thread: { changed: ["library/props/polynomials/view.tsx"] },
+    });
+    write(root, t.id, REVIEWER, "the words are wrong now");
+    write(root, t.id, FIXER, "fix the words", Status.Planned);
+    writeFileSync(words, "b\n");
+    commit("the second fix");
+    expect(write(root, t.id, FIXER, "done again", Status.Ready)).toMatchObject({
+      thread: { changed: ["library/props/polynomials/words.ts"] },
     });
   });
 

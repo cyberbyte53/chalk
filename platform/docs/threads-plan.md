@@ -1,6 +1,6 @@
 # Threads: what each role reads, and a fix after "not yet"
 
-Plan (2026-11-01), not built. Reviewed once (below); to be agreed before building.
+Built (2026-11-01): items 1–5 and 7 as below; 6 is the call log (`pnpm tool-times`); 8 wasn't built, as nothing shows it happening. The evidence for each item is above.
 
 **Goal:** an agent reads exactly the threads that need it, in one answer that arrives whole; it hears of a settled decision when it is about to raise the same point; a fixer can fix a thread again after a reviewer's "not yet", and every fix records what it changed.
 
@@ -34,7 +34,7 @@ Plan (2026-11-01), not built. Reviewed once (below); to be agreed before buildin
    - the tree's refresh waits a beat after the last change (debounced);
    - the code graph and what each lesson's changes are kept for the build and commit they were worked out from (cached), so asking again is cheap;
    - measured, not guessed: each request's run time (tools and `/dev-*`), the event loop's delay, and the relay's send time against the service's receipt. **Built first (`pnpm tool-times`).** Checked since: the two 158 s reads were at 10:36 and 11:06 in the morning, not after the evening's handovers; today the same review read takes 0.1 s and `/dev-pipeline` 0.6 s (2.1 s just after a rebuild). Nothing shows the editor's tree caused them: the cause is unknown until the log catches one.
-7. **Promised but not checked:** ready's words say "no open regression it caused"; the writer doesn't check it. Check it (a thread with an open `about` thread pointing at it can't go ready).
+7. **Promised but not checked:** ready's words said "no open regression it caused"; the writer can't check it, as regressions no longer point at the thread that caused them (`about` was dropped). The words go.
 8. **One service, one checkout:** the service reads threads and git from the checkout it started in, and one service serves the machine. A fixer in another worktree must not get another checkout's threads, files or reaches: the relay sends its checkout's root, and the service refuses a call from another one, saying which it serves.
 
 ## Steps
