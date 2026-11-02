@@ -311,12 +311,27 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
    * What a board shows now, every version (reach/shown.ts): the last drawing of it, if nothing
    * anything could read has changed since; else drawn again, and kept as the last.
    */
-  const shownNow = async (board: string, inputs: string): Promise<Shown> => {
-    const last = shownOf(root, "now", board);
-    if (last !== undefined && last.inputs === inputs) return last;
-    const now = await drawShown(root, board, lane);
-    keepShown(root, "now", board, now);
-    return now;
+  /**
+   * What boards show now, every version (reach/shown.ts): each board's last drawing, if nothing
+   * anything could read has changed since; the rest drawn together, at once, and kept as the last.
+   */
+  const shownNow = async (
+    boards: readonly string[],
+    inputs: string,
+  ): Promise<Map<string, Shown>> => {
+    const out = new Map<string, Shown>();
+    const toDraw: string[] = [];
+    for (const board of boards) {
+      const last = shownOf(root, "now", board);
+      if (last !== undefined && last.inputs === inputs) out.set(board, last);
+      else toDraw.push(board);
+    }
+    if (toDraw.length > 0)
+      for (const [board, now] of await drawShown(root, toDraw, lane)) {
+        keepShown(root, "now", board, now);
+        out.set(board, now);
+      }
+    return out;
   };
 
   /** A kept play, played again as built now: what each step answers. */
@@ -434,15 +449,24 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const leftOut: string[] = [];
         const seen = new Map<string, string[]>();
         const changed = changes.filter((c) => c.status === "changed");
-        for (const [i, c] of changed.entries()) {
+        // Every changed board a reviewer has seen, drawn now, all together (show's engine).
+        const toCompare = changed.filter((c) => shownOf(root, "seen", c.board) !== undefined);
+        await progress(
+          `drawing ${toCompare.length} changed board${toCompare.length === 1 ? "" : "s"}`,
+        );
+        const now = await shownNow(
+          toCompare.map((c) => c.board),
+          inputs,
+        );
+        for (const c of changed) {
           // What a reviewer last saw of it: its drawing (shown without steps) and its plays.
           const passed = shownOf(root, "seen", c.board);
-          if (passed === undefined) {
+          const drawnNow = now.get(c.board);
+          if (passed === undefined || drawnNow === undefined) {
             seen.set(c.board, ["shows: no reviewer has shown it on this machine yet: show it"]);
             continue;
           }
-          await progress(`drawing (${i + 1} of ${changed.length}): ${c.board}`);
-          const diffs = shownDiffs(passed, await shownNow(c.board, inputs));
+          const diffs = shownDiffs(passed, drawnNow);
           // A reviewer's plays on it, played again: the first step of each that answers differently.
           const plays: string[] = [];
           const kept = playsOf(root, "seen", c.board);

@@ -757,12 +757,21 @@ function shownOf(drawn: readonly Drawn[], versions: readonly Version[]): Shown["
  * A board drawn as `show` draws it without steps, every version, as `changes` keeps it: for a
  * board whose make-up changed, or one passed without a drawing from its review.
  */
-export async function drawShown(root: string, board: string, lane: string): Promise<Shown> {
+/**
+ * What boards show in every version, as `changes` keeps it: each board drawn alone, at full size,
+ * on the same engine as `show` (drawBoards: every board × version at once, on up to `pages` pages).
+ */
+export async function drawShown(
+  root: string,
+  boards: readonly string[],
+  lane: string,
+  pages = LOOK_PAGES,
+): Promise<Map<string, Shown>> {
   const inputs = buildInputsKey(root);
   const versions = versionsOf({});
-  const drawn = await drawVersions(
+  const each = await drawBoards(
     root,
-    shownBoard(board),
+    boards.map(shownBoard),
     versions,
     (v) => ({
       locale: v.locale,
@@ -772,8 +781,11 @@ export async function drawShown(root: string, board: string, lane: string): Prom
       pictures: "full",
     }),
     lane,
+    pages,
   );
-  return { inputs, versions: shownOf(drawn, versions) };
+  return new Map(
+    each.map((one, i) => [boards[i] as string, { inputs, versions: shownOf(one.drawn, versions) }]),
+  );
 }
 
 /** The pictures put together, timed when something measures (timing in app-driver.ts). */
