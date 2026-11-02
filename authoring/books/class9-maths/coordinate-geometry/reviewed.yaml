@@ -173,9 +173,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:40.889Z
-  code: e7dcc2a23398ca69
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 5bd5c6a0f6af3dd0
 class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
   content:
     model:
@@ -350,9 +350,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:40.889Z
-  code: e7dcc2a23398ca69
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 5bd5c6a0f6af3dd0
 class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
   content:
     model:
@@ -527,9 +527,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:40.889Z
-  code: e7dcc2a23398ca69
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 5bd5c6a0f6af3dd0
 class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
   content:
     model:
@@ -704,9 +704,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:40.889Z
-  code: e7dcc2a23398ca69
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 5bd5c6a0f6af3dd0
 class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
   content:
     model:
@@ -825,8 +825,8 @@ class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:18.163Z
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
   code: 161ae46562aac06a
 class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96:
   content:
@@ -1023,9 +1023,9 @@ class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:47.010Z
-  code: b7f03f9dfba5e543
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 1fed6b55c7dd4607
 class9-maths/coordinate-geometry/questions/name-the-lines/a6dfeb17:
   content:
     model:
@@ -1221,9 +1221,9 @@ class9-maths/coordinate-geometry/questions/name-the-lines/a6dfeb17:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:47.010Z
-  code: b7f03f9dfba5e543
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 1fed6b55c7dd4607
 class9-maths/coordinate-geometry/questions/name-the-lines/bfaeb756:
   content:
     model:
@@ -1419,9 +1419,9 @@ class9-maths/coordinate-geometry/questions/name-the-lines/bfaeb756:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:47.010Z
-  code: b7f03f9dfba5e543
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 1fed6b55c7dd4607
 class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
   content:
     model:
@@ -1534,9 +1534,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:42.464Z
-  code: 1b384945efa56692
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: e6a5416d15d08ddd
 class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
   content:
     model:
@@ -1649,9 +1649,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:42.464Z
-  code: 1b384945efa56692
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: e6a5416d15d08ddd
 class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
   content:
     model:
@@ -1764,9 +1764,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:42.464Z
-  code: 1b384945efa56692
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: e6a5416d15d08ddd
 class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
   content:
     model:
@@ -1879,9 +1879,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:42.464Z
-  code: 1b384945efa56692
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: e6a5416d15d08ddd
 class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
   content:
     model:
@@ -1988,8 +1988,8 @@ class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:19.300Z
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
   code: aacb406bf00bcd61
 class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
   content:
@@ -2369,9 +2369,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:44.081Z
-  code: 2f27fb2e91b8d693
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 299580f66c9ae7e9
 class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
   content:
     model:
@@ -2750,9 +2750,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:44.081Z
-  code: 2f27fb2e91b8d693
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 299580f66c9ae7e9
 class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
   content:
     model:
@@ -3131,9 +3131,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:44.081Z
-  code: 2f27fb2e91b8d693
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 299580f66c9ae7e9
 class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
   content:
     model:
@@ -3512,9 +3512,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:44.081Z
-  code: 2f27fb2e91b8d693
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 299580f66c9ae7e9
 class9-maths/coordinate-geometry/questions/tap-the-part/790ad375:
   content:
     model:
@@ -3621,9 +3621,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/790ad375:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:48.683Z
-  code: c9ea3b90d277d4c7
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 4325bb04555d0087
 class9-maths/coordinate-geometry/questions/tap-the-part/929971e6:
   content:
     model:
@@ -3730,9 +3730,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/929971e6:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:48.683Z
-  code: c9ea3b90d277d4c7
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 4325bb04555d0087
 class9-maths/coordinate-geometry/questions/tap-the-part/9a79e9c6:
   content:
     model:
@@ -3839,9 +3839,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/9a79e9c6:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:48.683Z
-  code: c9ea3b90d277d4c7
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 4325bb04555d0087
 class9-maths/coordinate-geometry/questions/tap-the-part/f3e7f310:
   content:
     model:
@@ -3948,9 +3948,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/f3e7f310:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:48.683Z
-  code: c9ea3b90d277d4c7
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 4325bb04555d0087
 class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
   content:
     model:
@@ -4189,9 +4189,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:45.288Z
-  code: a2767e241cced97f
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 953790d3bbf09a6f
 class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
   content:
     model:
@@ -4430,9 +4430,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:45.288Z
-  code: a2767e241cced97f
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 953790d3bbf09a6f
 class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
   content:
     model:
@@ -4671,9 +4671,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:45.288Z
-  code: a2767e241cced97f
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 953790d3bbf09a6f
 class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
   content:
     model:
@@ -4912,9 +4912,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:45.288Z
-  code: a2767e241cced97f
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 953790d3bbf09a6f
 class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
   content:
     model:
@@ -5153,9 +5153,2661 @@ class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:45.288Z
-  code: a2767e241cced97f
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 953790d3bbf09a6f
+class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions:
+  content:
+    model:
+      freeLines: []
+      given:
+        directions:
+          color: null
+          style: definition
+          text:
+            en: "**OX and OY are the positive directions** of the x-axis and the y-axis: the positive numbers lie along them. **OX′ and OY′ are the negative directions:** the negative numbers lie along them."
+            hi: "**OX और OY, x-अक्ष और y-अक्ष की धनात्मक दिशाएँ हैं:** धनात्मक संख्याएँ इन पर होती हैं। **OX′ और OY′ ऋणात्मक दिशाएँ हैं:** ऋणात्मक संख्याएँ इन पर होती हैं।"
+        sheet:
+          plane:
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            marks: numbers
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+        tapHalves:
+          style: body
+          text:
+            en: "**Tap each half of each axis**, and O, to see its name."
+            hi: हर अक्ष के हर आधे भाग को, और O को, उसका नाम देखने के लिए **दबाओ**।
+        title:
+          style: title
+          text:
+            en: Positive and negative directions
+            hi: धनात्मक और ऋणात्मक दिशाएँ
+      lines:
+        directions:
+          says:
+            en: "O X and O Y are the positive directions of the x-axis and the y-axis: the positive numbers lie along them. O X dash and O Y dash are the negative directions: the negative numbers lie along them."
+            hi: "O X और O Y, एक्स-अक्ष और वाई-अक्ष की धनात्मक दिशाएँ हैं: धनात्मक संख्याएँ इन पर होती हैं। O X डैश और O Y डैश ऋणात्मक दिशाएँ हैं: ऋणात्मक संख्याएँ इन पर होती हैं।"
+      scene:
+        describe: The board axesAndDirections.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear: {}
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: axesAndDirections
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Positive and negative directions
+              hi: धनात्मक और ऋणात्मक दिशाएँ
+        - kind: prop
+          name: directions
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**OX and OY are the positive directions** of the x-axis and the y-axis: the positive numbers lie along them. **OX′ and OY′ are the negative directions:** the negative numbers lie along them."
+              hi: "**OX और OY, x-अक्ष और y-अक्ष की धनात्मक दिशाएँ हैं:** धनात्मक संख्याएँ इन पर होती हैं। **OX′ और OY′ ऋणात्मक दिशाएँ हैं:** ऋणात्मक संख्याएँ इन पर होती हैं।"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              marks: numbers
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: tapHalves
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Tap each half of each axis**, and O, to see its name."
+              hi: हर अक्ष के हर आधे भाग को, और O को, उसका नाम देखने के लिए **दबाओ**।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 2a0ccabc472f7c4e
+class9-maths/coordinate-geometry/the-cartesian-plane/number-line:
+  content:
+    model:
+      freeLines: []
+      given:
+        ask:
+          style: body
+          text:
+            en: "The point is at 2: **2 units from 0**, on the positive side. Drag it to **−3**."
+            hi: "बिंदु 2 पर है: **0 से 2 इकाई**, धनात्मक ओर। उसे **−3** पर खींचो।"
+        line:
+          plane:
+            axes: horizontal
+            marks: numbers
+            numbered:
+              - x
+            showAxisNames: false
+            showOrigin: false
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 0.5
+              yMin: -0.5
+          reading:
+            point:
+              x: 2
+              y: 0
+            pointStep: 1
+            reading: none
+            unit: ""
+        link:
+          style: body
+          text:
+            en: Riya's town, the dot on the page and the desks in class each took two numbers, along two lines at right angles. To give the place of **any** point that way, each line will be a **number line**. First, what a number line says.
+            hi: रिया का शहर, पन्ने पर बिंदु और कक्षा के डेस्क, हर एक के लिए दो समकोण रेखाओं के साथ दो संख्याएँ लगीं। **किसी भी** बिंदु का स्थान इस तरह बताने के लिए, हर रेखा एक **संख्या रेखा** होगी। पहले देखें कि संख्या रेखा क्या बताती है।
+        recap:
+          style: body
+          text:
+            en: "A number line has a fixed point, the **origin**, marked 0. Equal units are marked from it: 1, 2, 3, … on one side, the positive side, and −1, −2, −3, … on the other, the negative side."
+            hi: "संख्या रेखा पर एक निश्चित बिंदु होता है, **मूल बिंदु**, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, … और दूसरी ओर, ऋणात्मक ओर, −1, −2, −3, …।"
+        rule:
+          color: null
+          style: definition
+          text:
+            en: "**−3 is 3 units from 0, on the negative side.** So a point at distance $r$ from 0 is the number $r$ on the positive side, and $-r$ on the negative side: the sign says which side."
+            hi: "**−3, 0 से 3 इकाई दूर है, ऋणात्मक ओर।** इसलिए 0 से $r$ दूरी पर एक बिंदु धनात्मक ओर संख्या $r$ है, और ऋणात्मक ओर $-r$: चिह्न बताता है कि किस ओर।"
+        title:
+          style: title
+          text:
+            en: Back to the number line
+            hi: फिर से संख्या रेखा
+      lines:
+        ask:
+          says:
+            en: "The point is at 2: 2 units from 0, on the positive side. Drag it to minus 3."
+            hi: "बिंदु 2 पर है: 0 से 2 इकाई, धनात्मक ओर। उसे माइनस 3 पर खींचो।"
+        recap:
+          says:
+            en: "A number line has a fixed point, the origin, marked 0. Equal units are marked from it: 1, 2, 3, and so on, on one side, the positive side, and minus 1, minus 2, minus 3, and so on, on the other, the negative side."
+            hi: "संख्या रेखा पर एक निश्चित बिंदु होता है, मूल बिंदु, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, और आगे, और दूसरी ओर, ऋणात्मक ओर, माइनस 1, माइनस 2, माइनस 3, और आगे।"
+        rule:
+          says:
+            en: "Minus 3 is 3 units from 0, on the negative side. So a point at distance r from 0 is the number r on the positive side, and minus r on the negative side: the sign says which side."
+            hi: "माइनस 3, 0 से 3 इकाई दूर है, ऋणात्मक ओर। इसलिए 0 से आर दूरी पर एक बिंदु धनात्मक ओर संख्या आर है, और ऋणात्मक ओर माइनस आर: चिह्न बताता है कि किस ओर।"
+      scene:
+        describe: The board numberLine.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          line.reading.moved: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - rule
+          isPassed: false
+          reads: []
+          saying: []
+    name: numberLine
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Back to the number line
+              hi: फिर से संख्या रेखा
+        - kind: prop
+          name: link
+          prop: text
+          with:
+            style: body
+            text:
+              en: Riya's town, the dot on the page and the desks in class each took two numbers, along two lines at right angles. To give the place of **any** point that way, each line will be a **number line**. First, what a number line says.
+              hi: रिया का शहर, पन्ने पर बिंदु और कक्षा के डेस्क, हर एक के लिए दो समकोण रेखाओं के साथ दो संख्याएँ लगीं। **किसी भी** बिंदु का स्थान इस तरह बताने के लिए, हर रेखा एक **संख्या रेखा** होगी। पहले देखें कि संख्या रेखा क्या बताती है।
+        - kind: prop
+          name: recap
+          prop: text
+          with:
+            style: body
+            text:
+              en: "A number line has a fixed point, the **origin**, marked 0. Equal units are marked from it: 1, 2, 3, … on one side, the positive side, and −1, −2, −3, … on the other, the negative side."
+              hi: "संख्या रेखा पर एक निश्चित बिंदु होता है, **मूल बिंदु**, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, … और दूसरी ओर, ऋणात्मक ओर, −1, −2, −3, …।"
+        - kind: prop
+          name: line
+          prop: coordinatePlane
+          with:
+            plane:
+              axes: horizontal
+              marks: numbers
+              numbered:
+                - x
+              showAxisNames: false
+              showOrigin: false
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 0.5
+                yMin: -0.5
+            reading:
+              point:
+                x: 2
+                y: 0
+              pointStep: 1
+              reading: none
+              unit: ""
+        - kind: prop
+          name: ask
+          prop: text
+          with:
+            style: body
+            text:
+              en: "The point is at 2: **2 units from 0**, on the positive side. Drag it to **−3**."
+              hi: "बिंदु 2 पर है: **0 से 2 इकाई**, धनात्मक ओर। उसे **−3** पर खींचो।"
+        - isHidden: true
+          kind: prop
+          name: rule
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**−3 is 3 units from 0, on the negative side.** So a point at distance $r$ from 0 is the number $r$ on the positive side, and $-r$ on the negative side: the sign says which side."
+              hi: "**−3, 0 से 3 इकाई दूर है, ऋणात्मक ओर।** इसलिए 0 से $r$ दूरी पर एक बिंदु धनात्मक ओर संख्या $r$ है, और ऋणात्मक ओर $-r$: चिह्न बताता है कि किस ओर।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 70e19d4128d78bf3
+class9-maths/coordinate-geometry/the-cartesian-plane/quadrants:
+  content:
+    model:
+      freeLines: []
+      given:
+        parts:
+          style: body
+          text:
+            en: "The axes divide the plane into four parts. Each is called a **quadrant**: one fourth part. They are numbered I, II, III and IV, going **anticlockwise** from OX. Press **Number the quadrants**."
+            hi: "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को **चतुर्थांश** कहते हैं: एक चौथाई भाग। इन्हें OX से **वामावर्त** (घड़ी की सुइयों की उलटी दिशा में) चलते हुए पहला (I), दूसरा (II), तीसरा (III) और चौथा (IV) गिना जाता है। **चतुर्थांशों को गिनो** दबाओ।"
+        plane:
+          color: null
+          style: definition
+          text:
+            en: "**The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the xy-plane. The axes are called the coordinate axes.**"
+            hi: "**अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या xy-तल कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।**"
+        sheet:
+          places:
+            choosing: never
+            placeKind: house
+            places:
+              - x: -5
+                y: -5
+              - x: -5
+                y: -4
+              - x: -5
+                y: -3
+              - x: -5
+                y: -2
+              - x: -5
+                y: -1
+              - x: -5
+                y: 1
+              - x: -5
+                y: 2
+              - x: -5
+                y: 3
+              - x: -5
+                y: 4
+              - x: -5
+                y: 5
+              - x: -4
+                y: -5
+              - x: -4
+                y: -4
+              - x: -4
+                y: -3
+              - x: -4
+                y: -2
+              - x: -4
+                y: -1
+              - x: -4
+                y: 1
+              - x: -4
+                y: 2
+              - x: -4
+                y: 3
+              - x: -4
+                y: 4
+              - x: -4
+                y: 5
+              - x: -3
+                y: -5
+              - x: -3
+                y: -4
+              - x: -3
+                y: -3
+              - x: -3
+                y: -2
+              - x: -3
+                y: -1
+              - x: -3
+                y: 1
+              - x: -3
+                y: 2
+              - x: -3
+                y: 3
+              - x: -3
+                y: 4
+              - x: -3
+                y: 5
+              - x: -2
+                y: -5
+              - x: -2
+                y: -4
+              - x: -2
+                y: -3
+              - x: -2
+                y: -2
+              - x: -2
+                y: -1
+              - x: -2
+                y: 1
+              - x: -2
+                y: 2
+              - x: -2
+                y: 3
+              - x: -2
+                y: 4
+              - x: -2
+                y: 5
+              - x: -1
+                y: -5
+              - x: -1
+                y: -4
+              - x: -1
+                y: -3
+              - x: -1
+                y: -2
+              - x: -1
+                y: -1
+              - x: -1
+                y: 1
+              - x: -1
+                y: 2
+              - x: -1
+                y: 3
+              - x: -1
+                y: 4
+              - x: -1
+                y: 5
+              - x: 1
+                y: -5
+              - x: 1
+                y: -4
+              - x: 1
+                y: -3
+              - x: 1
+                y: -2
+              - x: 1
+                y: -1
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: -5
+              - x: 2
+                y: -4
+              - x: 2
+                y: -3
+              - x: 2
+                y: -2
+              - x: 2
+                y: -1
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: -5
+              - x: 3
+                y: -4
+              - x: 3
+                y: -3
+              - x: 3
+                y: -2
+              - x: 3
+                y: -1
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: -5
+              - x: 4
+                y: -4
+              - x: 4
+                y: -3
+              - x: 4
+                y: -2
+              - x: 4
+                y: -1
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: -5
+              - x: 5
+                y: -4
+              - x: 5
+                y: -3
+              - x: 5
+                y: -2
+              - x: 5
+                y: -1
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+          plane:
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            backdrop: 0
+            canNumberQuadrants: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            points:
+              - hasDropLines: false
+                isShown: false
+                name: A
+                tone: main
+                x: 4
+                y: 5
+              - hasDropLines: false
+                isShown: false
+                name: B
+                tone: main
+                x: -2
+                y: -3
+            scene: town
+            showAxisNames: false
+            showDirections: true
+            tintsQuadrants: true
+            upLines: null
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+        summary:
+          style: body
+          text:
+            en: "**In short:** a point in a plane is located with two perpendicular lines, the coordinate axes. The **x-axis** is horizontal and the **y-axis** is vertical. They cross at the **origin**, O, and divide the **Cartesian plane** into four **quadrants**."
+            hi: "**संक्षेप में:** तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। **x-अक्ष** क्षैतिज है और **y-अक्ष** ऊर्ध्वाधर। ये **मूल बिंदु** O पर काटते हैं, और **कार्तीय तल** को चार **चतुर्थांशों** में बाँटते हैं।"
+        title:
+          style: title
+          text:
+            en: Four quadrants
+            hi: चार चतुर्थांश
+        town:
+          style: body
+          text:
+            en: In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant I; his aunt's, B, at Street −2, House −3, is in quadrant III. **Tap a quadrant** to see its name.
+            hi: रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश (I) में है; उसकी मौसी का, B, गली −2, मकान −3 पर, तीसरे चतुर्थांश (III) में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।
+      lines:
+        parts:
+          says:
+            en: "The axes divide the plane into four parts. Each is called a quadrant: one fourth part. They are numbered one, two, three and four, going anticlockwise from O X. Press Number the quadrants."
+            hi: "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। चतुर्थांशों को गिनो दबाओ।"
+        plane:
+          says:
+            en: The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the x y plane. The axes are called the coordinate axes.
+            hi: अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या एक्स वाई तल कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।
+        summary:
+          says:
+            en: "In short: a point in a plane is located with two perpendicular lines, the coordinate axes. The x-axis is horizontal and the y-axis is vertical. They cross at the origin, O, and divide the Cartesian plane into four quadrants."
+            hi: "संक्षेप में: तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। एक्स-अक्ष क्षैतिज है और वाई-अक्ष ऊर्ध्वाधर। ये मूल बिंदु O पर काटते हैं, और कार्तीय तल को चार चतुर्थांशों में बाँटते हैं।"
+        town:
+          says:
+            en: In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant one; his aunt's, B, at Street minus 2, House minus 3, is in quadrant three. Tap a quadrant to see its name.
+            hi: रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश में है; उसकी मौसी का, B, गली माइनस 2, मकान माइनस 3 पर, तीसरे चतुर्थांश में। उसका नाम देखने के लिए किसी चतुर्थांश को दबाओ।
+      scene:
+        describe: The board quadrants.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          sheet.plane.quadrantsNumbered: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - town
+            - plane
+            - summary
+          isPassed: false
+          reads: []
+          saying: []
+    name: quadrants
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Four quadrants
+              hi: चार चतुर्थांश
+        - kind: prop
+          name: parts
+          prop: text
+          with:
+            style: body
+            text:
+              en: "The axes divide the plane into four parts. Each is called a **quadrant**: one fourth part. They are numbered I, II, III and IV, going **anticlockwise** from OX. Press **Number the quadrants**."
+              hi: "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को **चतुर्थांश** कहते हैं: एक चौथाई भाग। इन्हें OX से **वामावर्त** (घड़ी की सुइयों की उलटी दिशा में) चलते हुए पहला (I), दूसरा (II), तीसरा (III) और चौथा (IV) गिना जाता है। **चतुर्थांशों को गिनो** दबाओ।"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: -5
+                  y: -5
+                - x: -5
+                  y: -4
+                - x: -5
+                  y: -3
+                - x: -5
+                  y: -2
+                - x: -5
+                  y: -1
+                - x: -5
+                  y: 1
+                - x: -5
+                  y: 2
+                - x: -5
+                  y: 3
+                - x: -5
+                  y: 4
+                - x: -5
+                  y: 5
+                - x: -4
+                  y: -5
+                - x: -4
+                  y: -4
+                - x: -4
+                  y: -3
+                - x: -4
+                  y: -2
+                - x: -4
+                  y: -1
+                - x: -4
+                  y: 1
+                - x: -4
+                  y: 2
+                - x: -4
+                  y: 3
+                - x: -4
+                  y: 4
+                - x: -4
+                  y: 5
+                - x: -3
+                  y: -5
+                - x: -3
+                  y: -4
+                - x: -3
+                  y: -3
+                - x: -3
+                  y: -2
+                - x: -3
+                  y: -1
+                - x: -3
+                  y: 1
+                - x: -3
+                  y: 2
+                - x: -3
+                  y: 3
+                - x: -3
+                  y: 4
+                - x: -3
+                  y: 5
+                - x: -2
+                  y: -5
+                - x: -2
+                  y: -4
+                - x: -2
+                  y: -3
+                - x: -2
+                  y: -2
+                - x: -2
+                  y: -1
+                - x: -2
+                  y: 1
+                - x: -2
+                  y: 2
+                - x: -2
+                  y: 3
+                - x: -2
+                  y: 4
+                - x: -2
+                  y: 5
+                - x: -1
+                  y: -5
+                - x: -1
+                  y: -4
+                - x: -1
+                  y: -3
+                - x: -1
+                  y: -2
+                - x: -1
+                  y: -1
+                - x: -1
+                  y: 1
+                - x: -1
+                  y: 2
+                - x: -1
+                  y: 3
+                - x: -1
+                  y: 4
+                - x: -1
+                  y: 5
+                - x: 1
+                  y: -5
+                - x: 1
+                  y: -4
+                - x: 1
+                  y: -3
+                - x: 1
+                  y: -2
+                - x: 1
+                  y: -1
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: -5
+                - x: 2
+                  y: -4
+                - x: 2
+                  y: -3
+                - x: 2
+                  y: -2
+                - x: 2
+                  y: -1
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: -5
+                - x: 3
+                  y: -4
+                - x: 3
+                  y: -3
+                - x: 3
+                  y: -2
+                - x: 3
+                  y: -1
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: -5
+                - x: 4
+                  y: -4
+                - x: 4
+                  y: -3
+                - x: 4
+                  y: -2
+                - x: 4
+                  y: -1
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: -5
+                - x: 5
+                  y: -4
+                - x: 5
+                  y: -3
+                - x: 5
+                  y: -2
+                - x: 5
+                  y: -1
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+            plane:
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              backdrop: 0
+              canNumberQuadrants: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              points:
+                - hasDropLines: false
+                  isShown: false
+                  name: A
+                  tone: main
+                  x: 4
+                  y: 5
+                - hasDropLines: false
+                  isShown: false
+                  name: B
+                  tone: main
+                  x: -2
+                  y: -3
+              scene: town
+              showAxisNames: false
+              showDirections: true
+              tintsQuadrants: true
+              upLines: null
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - isHidden: true
+          kind: prop
+          name: town
+          prop: text
+          with:
+            style: body
+            text:
+              en: In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant I; his aunt's, B, at Street −2, House −3, is in quadrant III. **Tap a quadrant** to see its name.
+              hi: रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश (I) में है; उसकी मौसी का, B, गली −2, मकान −3 पर, तीसरे चतुर्थांश (III) में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।
+        - isHidden: true
+          kind: prop
+          name: plane
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the xy-plane. The axes are called the coordinate axes.**"
+              hi: "**अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या xy-तल कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।**"
+        - isHidden: true
+          kind: prop
+          name: summary
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**In short:** a point in a plane is located with two perpendicular lines, the coordinate axes. The **x-axis** is horizontal and the **y-axis** is vertical. They cross at the **origin**, O, and divide the **Cartesian plane** into four **quadrants**."
+              hi: "**संक्षेप में:** तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। **x-अक्ष** क्षैतिज है और **y-अक्ष** ऊर्ध्वाधर। ये **मूल बिंदु** O पर काटते हैं, और **कार्तीय तल** को चार **चतुर्थांशों** में बाँटते हैं।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 722d0d6a334d448c
+class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
+  content:
+    model:
+      freeLines:
+        - firstWest-next-note
+        - firstWest-one-note
+        - firstWest-zero-note
+      given:
+        anyHouse:
+          style: body
+          text:
+            en: "**Tap any house** to see its address, in the new town or the old: Aman's own house is at Street 4, House 5."
+            hi: "किसी भी मकान का पता देखने के लिए उसे **दबाओ**, नए शहर में या पुराने में: अमन का अपना घर गली 4, मकान 5 पर है।"
+        aunt:
+          style: body
+          text:
+            en: For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at **Street −2, House −3**. Walk Riya there to fetch it.
+            hi: मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, **गली −2, मकान −3** पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।
+        before:
+          places:
+            choosing: never
+            placeKind: house
+            places:
+              - x: -5
+                y: -5
+              - x: -5
+                y: -4
+              - x: -5
+                y: -3
+              - x: -5
+                y: -2
+              - x: -5
+                y: -1
+              - x: -5
+                y: 1
+              - x: -5
+                y: 2
+              - x: -5
+                y: 3
+              - x: -5
+                y: 4
+              - x: -5
+                y: 5
+              - x: -4
+                y: -5
+              - x: -4
+                y: -4
+              - x: -4
+                y: -3
+              - x: -4
+                y: -2
+              - x: -4
+                y: -1
+              - x: -4
+                y: 1
+              - x: -4
+                y: 2
+              - x: -4
+                y: 3
+              - x: -4
+                y: 4
+              - x: -4
+                y: 5
+              - x: -3
+                y: -5
+              - x: -3
+                y: -4
+              - x: -3
+                y: -3
+              - x: -3
+                y: -2
+              - x: -3
+                y: -1
+              - x: -3
+                y: 1
+              - x: -3
+                y: 2
+              - x: -3
+                y: 3
+              - x: -3
+                y: 4
+              - x: -3
+                y: 5
+              - x: -2
+                y: -5
+              - x: -2
+                y: -4
+              - x: -2
+                y: -3
+              - x: -2
+                y: -2
+              - x: -2
+                y: -1
+              - x: -2
+                y: 1
+              - x: -2
+                y: 2
+              - x: -2
+                y: 3
+              - x: -2
+                y: 4
+              - x: -2
+                y: 5
+              - x: -1
+                y: -5
+              - x: -1
+                y: -4
+              - x: -1
+                y: -3
+              - x: -1
+                y: -2
+              - x: -1
+                y: -1
+              - x: -1
+                y: 1
+              - x: -1
+                y: 2
+              - x: -1
+                y: 3
+              - x: -1
+                y: 4
+              - x: -1
+                y: 5
+              - x: 1
+                y: -5
+              - x: 1
+                y: -4
+              - x: 1
+                y: -3
+              - x: 1
+                y: -2
+              - x: 1
+                y: -1
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: -5
+              - x: 2
+                y: -4
+              - x: 2
+                y: -3
+              - x: 2
+                y: -2
+              - x: 2
+                y: -1
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: -5
+              - x: 3
+                y: -4
+              - x: 3
+                y: -3
+              - x: 3
+                y: -2
+              - x: 3
+                y: -1
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: -5
+              - x: 4
+                y: -4
+              - x: 4
+                y: -3
+              - x: 4
+                y: -2
+              - x: 4
+                y: -1
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: -5
+              - x: 5
+                y: -4
+              - x: 5
+                y: -3
+              - x: 5
+                y: -2
+              - x: 5
+                y: -1
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+          plane:
+            marks: numbers
+            numbered: []
+            scene: town
+            showAxisNames: false
+            showOrigin: false
+            upLines: null
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+          walker:
+            at:
+              x: 0
+              y: 0
+            canStep: false
+            roads: town
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+        firstWest:
+          answer: minus
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: false
+          options:
+            - feedback:
+                en: "Street 1 is already there, 1 street east. Two streets can't have one number: this one is 1 street west."
+                hi: "गली 1 पहले से है, 1 गली पूर्व में। दो गलियों का एक ही नंबर नहीं हो सकता: यह 1 गली पश्चिम में है।"
+              id: one
+              label:
+                en: "1"
+                hi: "1"
+            - feedback:
+                en: 0 is the street through her corner itself, 0 streets from it. This one is 1 street away.
+                hi: 0 तो उसके कोने से गुज़रने वाली गली है, उससे 0 गली दूर। यह गली 1 गली दूर है।
+              id: zero
+              label:
+                en: "0"
+                hi: "0"
+            - feedback:
+                en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
+                hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
+              id: next
+              label:
+                en: 6, the next number
+                hi: 6, अगली संख्या
+            - id: minus
+              label:
+                en: −1
+                hi: −1
+          prompt:
+            en: Riya numbered the old streets 1, 2, 3, … going **east** from her corner. Counting from her corner the same way, what number should the first new street **west** of it get?
+            hi: रिया ने पुरानी गलियाँ अपने कोने से **पूर्व** की ओर 1, 2, 3, … गिनी थीं। अपने कोने से उसी तरह गिनते हुए, उसके **पश्चिम** में पहली नई गली को कौन-सी संख्या मिलनी चाहिए?
+        signs:
+          style: body
+          text:
+            en: Each road is a number line now. Her corner is **0 on both**, and the street through it is Street 0. Going west, the streets are −1, −2, −3; going south, the houses are −1, −2, −3. **The minus sign says which way:** west along the main road, south down a street.
+            hi: अब हर सड़क एक संख्या रेखा है। उसका कोना **दोनों पर 0** है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ −1, −2, −3 हैं; दक्षिण की ओर मकान −1, −2, −3 हैं। **माइनस का चिह्न बताता है कि किस ओर:** मुख्य सड़क पर पश्चिम, गली में दक्षिण।
+        story:
+          style: body
+          text:
+            en: Riya's town has grown. New streets were built **west** of her corner (to the left on the map), and new houses **south** of the main road (down the map). A new street also runs through her corner, with no houses on it.
+            hi: रिया का शहर बढ़ गया है। उसके कोने के **पश्चिम** में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के **दक्षिण** में (नक्शे पर नीचे) नए मकान। उसके कोने से होकर भी एक नई गली जाती है, जिस पर कोई मकान नहीं है।
+        there:
+          color: null
+          style: definition
+          text:
+            en: "**Street −2, House −3: 2 streets west along the main road, then 3 houses south.** Each number says how far from her corner; its sign says which way."
+            hi: "**गली −2, मकान −3: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण।** हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।"
+        title:
+          style: title
+          text:
+            en: The town grows
+            hi: शहर बढ़ता है
+        town:
+          places:
+            choosing: onceOpen
+            placeKind: house
+            places:
+              - x: -5
+                y: -5
+              - x: -5
+                y: -4
+              - x: -5
+                y: -3
+              - x: -5
+                y: -2
+              - x: -5
+                y: -1
+              - x: -5
+                y: 1
+              - x: -5
+                y: 2
+              - x: -5
+                y: 3
+              - x: -5
+                y: 4
+              - x: -5
+                y: 5
+              - x: -4
+                y: -5
+              - x: -4
+                y: -4
+              - x: -4
+                y: -3
+              - x: -4
+                y: -2
+              - x: -4
+                y: -1
+              - x: -4
+                y: 1
+              - x: -4
+                y: 2
+              - x: -4
+                y: 3
+              - x: -4
+                y: 4
+              - x: -4
+                y: 5
+              - x: -3
+                y: -5
+              - x: -3
+                y: -4
+              - x: -3
+                y: -3
+              - x: -3
+                y: -2
+              - x: -3
+                y: -1
+              - x: -3
+                y: 1
+              - x: -3
+                y: 2
+              - x: -3
+                y: 3
+              - x: -3
+                y: 4
+              - x: -3
+                y: 5
+              - x: -2
+                y: -5
+              - x: -2
+                y: -4
+              - x: -2
+                y: -3
+              - x: -2
+                y: -2
+              - x: -2
+                y: -1
+              - x: -2
+                y: 1
+              - x: -2
+                y: 2
+              - x: -2
+                y: 3
+              - x: -2
+                y: 4
+              - x: -2
+                y: 5
+              - x: -1
+                y: -5
+              - x: -1
+                y: -4
+              - x: -1
+                y: -3
+              - x: -1
+                y: -2
+              - x: -1
+                y: -1
+              - x: -1
+                y: 1
+              - x: -1
+                y: 2
+              - x: -1
+                y: 3
+              - x: -1
+                y: 4
+              - x: -1
+                y: 5
+              - x: 1
+                y: -5
+              - x: 1
+                y: -4
+              - x: 1
+                y: -3
+              - x: 1
+                y: -2
+              - x: 1
+                y: -1
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: -5
+              - x: 2
+                y: -4
+              - x: 2
+                y: -3
+              - x: 2
+                y: -2
+              - x: 2
+                y: -1
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: -5
+              - x: 3
+                y: -4
+              - x: 3
+                y: -3
+              - x: 3
+                y: -2
+              - x: 3
+                y: -1
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: -5
+              - x: 4
+                y: -4
+              - x: 4
+                y: -3
+              - x: 4
+                y: -2
+              - x: 4
+                y: -1
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: -5
+              - x: 5
+                y: -4
+              - x: 5
+                y: -3
+              - x: 5
+                y: -2
+              - x: 5
+                y: -1
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+            showAddress: true
+            target: null
+            targetName:
+              en: Aman's aunt's house
+              hi: अमन की मौसी का घर
+          plane:
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            marks: numbers
+            scene: town
+            showOrigin: false
+            upLines: null
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: town
+            showWhere: true
+            walkFrom:
+              x: 0
+              y: 0
+      lines:
+        aunt:
+          says:
+            en: For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at Street minus 2, House minus 3. Walk Riya there to fetch it.
+            hi: मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, गली माइनस 2, मकान माइनस 3 पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।
+        firstWest-next-note:
+          about: firstWest
+          says:
+            en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
+            hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
+          when: firstWest.checked
+          where:
+            optionId: next
+            status: wrong
+        firstWest-one-note:
+          about: firstWest
+          says:
+            en: "Street 1 is already there, 1 street east. Two streets can't have one number: this one is 1 street west."
+            hi: "गली 1 पहले से है, 1 गली पूर्व में। दो गलियों का एक ही नंबर नहीं हो सकता: यह 1 गली पश्चिम में है।"
+          when: firstWest.checked
+          where:
+            optionId: one
+            status: wrong
+        firstWest-zero-note:
+          about: firstWest
+          says:
+            en: 0 is the street through her corner itself, 0 streets from it. This one is 1 street away.
+            hi: 0 तो उसके कोने से गुज़रने वाली गली है, उससे 0 गली दूर। यह गली 1 गली दूर है।
+          when: firstWest.checked
+          where:
+            optionId: zero
+            status: wrong
+        signs:
+          says:
+            en: "Each road is a number line now. Her corner is 0 on both, and the street through it is Street 0. Going west, the streets are minus 1, minus 2, minus 3; going south, the houses are minus 1, minus 2, minus 3. The minus sign says which way: west along the main road, south down a street."
+            hi: "अब हर सड़क एक संख्या रेखा है। उसका कोना दोनों पर 0 है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ माइनस 1, माइनस 2, माइनस 3 हैं; दक्षिण की ओर मकान माइनस 1, माइनस 2, माइनस 3 हैं। माइनस का चिह्न बताता है कि किस ओर: मुख्य सड़क पर पश्चिम, गली में दक्षिण।"
+        there:
+          says:
+            en: "Street minus 2, House minus 3: 2 streets west along the main road, then 3 houses south. Each number says how far from her corner; its sign says which way."
+            hi: "गली माइनस 2, मकान माइनस 3: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण। हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।"
+      scene:
+        describe: The board townGrows.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          firstWest.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          firstWest.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          town.places.targetChosen: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          town.walker.arrived: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - town
+            - signs
+            - aunt
+            - there
+            - anyHouse
+          isPassed: false
+          reads: []
+          saying: []
+    name: townGrows
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: The town grows
+              hi: शहर बढ़ता है
+        - kind: prop
+          name: story
+          prop: text
+          with:
+            style: body
+            text:
+              en: Riya's town has grown. New streets were built **west** of her corner (to the left on the map), and new houses **south** of the main road (down the map). A new street also runs through her corner, with no houses on it.
+              hi: रिया का शहर बढ़ गया है। उसके कोने के **पश्चिम** में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के **दक्षिण** में (नक्शे पर नीचे) नए मकान। उसके कोने से होकर भी एक नई गली जाती है, जिस पर कोई मकान नहीं है।
+        - kind: prop
+          name: before
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: -5
+                  y: -5
+                - x: -5
+                  y: -4
+                - x: -5
+                  y: -3
+                - x: -5
+                  y: -2
+                - x: -5
+                  y: -1
+                - x: -5
+                  y: 1
+                - x: -5
+                  y: 2
+                - x: -5
+                  y: 3
+                - x: -5
+                  y: 4
+                - x: -5
+                  y: 5
+                - x: -4
+                  y: -5
+                - x: -4
+                  y: -4
+                - x: -4
+                  y: -3
+                - x: -4
+                  y: -2
+                - x: -4
+                  y: -1
+                - x: -4
+                  y: 1
+                - x: -4
+                  y: 2
+                - x: -4
+                  y: 3
+                - x: -4
+                  y: 4
+                - x: -4
+                  y: 5
+                - x: -3
+                  y: -5
+                - x: -3
+                  y: -4
+                - x: -3
+                  y: -3
+                - x: -3
+                  y: -2
+                - x: -3
+                  y: -1
+                - x: -3
+                  y: 1
+                - x: -3
+                  y: 2
+                - x: -3
+                  y: 3
+                - x: -3
+                  y: 4
+                - x: -3
+                  y: 5
+                - x: -2
+                  y: -5
+                - x: -2
+                  y: -4
+                - x: -2
+                  y: -3
+                - x: -2
+                  y: -2
+                - x: -2
+                  y: -1
+                - x: -2
+                  y: 1
+                - x: -2
+                  y: 2
+                - x: -2
+                  y: 3
+                - x: -2
+                  y: 4
+                - x: -2
+                  y: 5
+                - x: -1
+                  y: -5
+                - x: -1
+                  y: -4
+                - x: -1
+                  y: -3
+                - x: -1
+                  y: -2
+                - x: -1
+                  y: -1
+                - x: -1
+                  y: 1
+                - x: -1
+                  y: 2
+                - x: -1
+                  y: 3
+                - x: -1
+                  y: 4
+                - x: -1
+                  y: 5
+                - x: 1
+                  y: -5
+                - x: 1
+                  y: -4
+                - x: 1
+                  y: -3
+                - x: 1
+                  y: -2
+                - x: 1
+                  y: -1
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: -5
+                - x: 2
+                  y: -4
+                - x: 2
+                  y: -3
+                - x: 2
+                  y: -2
+                - x: 2
+                  y: -1
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: -5
+                - x: 3
+                  y: -4
+                - x: 3
+                  y: -3
+                - x: 3
+                  y: -2
+                - x: 3
+                  y: -1
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: -5
+                - x: 4
+                  y: -4
+                - x: 4
+                  y: -3
+                - x: 4
+                  y: -2
+                - x: 4
+                  y: -1
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: -5
+                - x: 5
+                  y: -4
+                - x: 5
+                  y: -3
+                - x: 5
+                  y: -2
+                - x: 5
+                  y: -1
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+            plane:
+              marks: numbers
+              numbered: []
+              scene: town
+              showAxisNames: false
+              showOrigin: false
+              upLines: null
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+            walker:
+              at:
+                x: 0
+                y: 0
+              canStep: false
+              roads: town
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
+        - kind: prop
+          name: firstWest
+          prop: choice
+          with:
+            answer: minus
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: false
+            options:
+              - feedback:
+                  en: "Street 1 is already there, 1 street east. Two streets can't have one number: this one is 1 street west."
+                  hi: "गली 1 पहले से है, 1 गली पूर्व में। दो गलियों का एक ही नंबर नहीं हो सकता: यह 1 गली पश्चिम में है।"
+                id: one
+                label:
+                  en: "1"
+                  hi: "1"
+              - feedback:
+                  en: 0 is the street through her corner itself, 0 streets from it. This one is 1 street away.
+                  hi: 0 तो उसके कोने से गुज़रने वाली गली है, उससे 0 गली दूर। यह गली 1 गली दूर है।
+                id: zero
+                label:
+                  en: "0"
+                  hi: "0"
+              - feedback:
+                  en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
+                  hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
+                id: next
+                label:
+                  en: 6, the next number
+                  hi: 6, अगली संख्या
+              - id: minus
+                label:
+                  en: −1
+                  hi: −1
+            prompt:
+              en: Riya numbered the old streets 1, 2, 3, … going **east** from her corner. Counting from her corner the same way, what number should the first new street **west** of it get?
+              hi: रिया ने पुरानी गलियाँ अपने कोने से **पूर्व** की ओर 1, 2, 3, … गिनी थीं। अपने कोने से उसी तरह गिनते हुए, उसके **पश्चिम** में पहली नई गली को कौन-सी संख्या मिलनी चाहिए?
+        - isHidden: true
+          kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: onceOpen
+              placeKind: house
+              places:
+                - x: -5
+                  y: -5
+                - x: -5
+                  y: -4
+                - x: -5
+                  y: -3
+                - x: -5
+                  y: -2
+                - x: -5
+                  y: -1
+                - x: -5
+                  y: 1
+                - x: -5
+                  y: 2
+                - x: -5
+                  y: 3
+                - x: -5
+                  y: 4
+                - x: -5
+                  y: 5
+                - x: -4
+                  y: -5
+                - x: -4
+                  y: -4
+                - x: -4
+                  y: -3
+                - x: -4
+                  y: -2
+                - x: -4
+                  y: -1
+                - x: -4
+                  y: 1
+                - x: -4
+                  y: 2
+                - x: -4
+                  y: 3
+                - x: -4
+                  y: 4
+                - x: -4
+                  y: 5
+                - x: -3
+                  y: -5
+                - x: -3
+                  y: -4
+                - x: -3
+                  y: -3
+                - x: -3
+                  y: -2
+                - x: -3
+                  y: -1
+                - x: -3
+                  y: 1
+                - x: -3
+                  y: 2
+                - x: -3
+                  y: 3
+                - x: -3
+                  y: 4
+                - x: -3
+                  y: 5
+                - x: -2
+                  y: -5
+                - x: -2
+                  y: -4
+                - x: -2
+                  y: -3
+                - x: -2
+                  y: -2
+                - x: -2
+                  y: -1
+                - x: -2
+                  y: 1
+                - x: -2
+                  y: 2
+                - x: -2
+                  y: 3
+                - x: -2
+                  y: 4
+                - x: -2
+                  y: 5
+                - x: -1
+                  y: -5
+                - x: -1
+                  y: -4
+                - x: -1
+                  y: -3
+                - x: -1
+                  y: -2
+                - x: -1
+                  y: -1
+                - x: -1
+                  y: 1
+                - x: -1
+                  y: 2
+                - x: -1
+                  y: 3
+                - x: -1
+                  y: 4
+                - x: -1
+                  y: 5
+                - x: 1
+                  y: -5
+                - x: 1
+                  y: -4
+                - x: 1
+                  y: -3
+                - x: 1
+                  y: -2
+                - x: 1
+                  y: -1
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: -5
+                - x: 2
+                  y: -4
+                - x: 2
+                  y: -3
+                - x: 2
+                  y: -2
+                - x: 2
+                  y: -1
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: -5
+                - x: 3
+                  y: -4
+                - x: 3
+                  y: -3
+                - x: 3
+                  y: -2
+                - x: 3
+                  y: -1
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: -5
+                - x: 4
+                  y: -4
+                - x: 4
+                  y: -3
+                - x: 4
+                  y: -2
+                - x: 4
+                  y: -1
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: -5
+                - x: 5
+                  y: -4
+                - x: 5
+                  y: -3
+                - x: 5
+                  y: -2
+                - x: 5
+                  y: -1
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+              showAddress: true
+              target: null
+              targetName:
+                en: Aman's aunt's house
+                hi: अमन की मौसी का घर
+            plane:
+              axisNames:
+                - en: Street number
+                  hi: गली नंबर
+                - en: House number
+                  hi: मकान नंबर
+              marks: numbers
+              scene: town
+              showOrigin: false
+              upLines: null
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: town
+              showWhere: true
+              walkFrom:
+                x: 0
+                y: 0
+        - isHidden: true
+          kind: prop
+          name: signs
+          prop: text
+          with:
+            style: body
+            text:
+              en: Each road is a number line now. Her corner is **0 on both**, and the street through it is Street 0. Going west, the streets are −1, −2, −3; going south, the houses are −1, −2, −3. **The minus sign says which way:** west along the main road, south down a street.
+              hi: अब हर सड़क एक संख्या रेखा है। उसका कोना **दोनों पर 0** है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ −1, −2, −3 हैं; दक्षिण की ओर मकान −1, −2, −3 हैं। **माइनस का चिह्न बताता है कि किस ओर:** मुख्य सड़क पर पश्चिम, गली में दक्षिण।
+        - isHidden: true
+          kind: prop
+          name: aunt
+          prop: text
+          with:
+            style: body
+            text:
+              en: For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at **Street −2, House −3**. Walk Riya there to fetch it.
+              hi: मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, **गली −2, मकान −3** पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।
+        - isHidden: true
+          kind: prop
+          name: there
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**Street −2, House −3: 2 streets west along the main road, then 3 houses south.** Each number says how far from her corner; its sign says which way."
+              hi: "**गली −2, मकान −3: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण।** हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।"
+        - isHidden: true
+          kind: prop
+          name: anyHouse
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Tap any house** to see its address, in the new town or the old: Aman's own house is at Street 4, House 5."
+              hi: "किसी भी मकान का पता देखने के लिए उसे **दबाओ**, नए शहर में या पुराने में: अमन का अपना घर गली 4, मकान 5 पर है।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 20bee594724a3495
+class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines:
+  content:
+    model:
+      freeLines: []
+      given:
+        any:
+          style: body
+          text:
+            en: "Descartes located points with two perpendicular lines. Lines at right angles can point any way: both tilted, or one across and one up. **In this chapter, we take one horizontal and one vertical.**"
+            hi: "देकार्त ने दो लंब रेखाओं से बिंदुओं का स्थान बताया। समकोण पर मिलने वाली रेखाएँ किसी भी ओर हो सकती हैं: दोनों तिरछी, या एक आड़ी और एक खड़ी। **इस अध्याय में, हम एक क्षैतिज और एक ऊर्ध्वाधर रेखा लेते हैं।**"
+        axes:
+          color: null
+          style: definition
+          text:
+            en: "**The horizontal line X′X is the x-axis, and the vertical line Y′Y is the y-axis. The point where they cross is the origin, O.**"
+            hi: "**क्षैतिज रेखा X′X, x-अक्ष है, और ऊर्ध्वाधर रेखा Y′Y, y-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।**"
+        lines:
+          style: body
+          text:
+            en: "Here are two number lines: **X′X** across and **Y′Y** up. Their zeroes are apart. Bring them together so the lines cross at their zeroes."
+            hi: "ये दो संख्या रेखाएँ हैं: **X′X** आड़ी और **Y′Y** खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।"
+        sheet:
+          places:
+            choosing: never
+            placeKind: house
+            places:
+              - x: -5
+                y: -5
+              - x: -5
+                y: -4
+              - x: -5
+                y: -3
+              - x: -5
+                y: -2
+              - x: -5
+                y: -1
+              - x: -5
+                y: 1
+              - x: -5
+                y: 2
+              - x: -5
+                y: 3
+              - x: -5
+                y: 4
+              - x: -5
+                y: 5
+              - x: -4
+                y: -5
+              - x: -4
+                y: -4
+              - x: -4
+                y: -3
+              - x: -4
+                y: -2
+              - x: -4
+                y: -1
+              - x: -4
+                y: 1
+              - x: -4
+                y: 2
+              - x: -4
+                y: 3
+              - x: -4
+                y: 4
+              - x: -4
+                y: 5
+              - x: -3
+                y: -5
+              - x: -3
+                y: -4
+              - x: -3
+                y: -3
+              - x: -3
+                y: -2
+              - x: -3
+                y: -1
+              - x: -3
+                y: 1
+              - x: -3
+                y: 2
+              - x: -3
+                y: 3
+              - x: -3
+                y: 4
+              - x: -3
+                y: 5
+              - x: -2
+                y: -5
+              - x: -2
+                y: -4
+              - x: -2
+                y: -3
+              - x: -2
+                y: -2
+              - x: -2
+                y: -1
+              - x: -2
+                y: 1
+              - x: -2
+                y: 2
+              - x: -2
+                y: 3
+              - x: -2
+                y: 4
+              - x: -2
+                y: 5
+              - x: -1
+                y: -5
+              - x: -1
+                y: -4
+              - x: -1
+                y: -3
+              - x: -1
+                y: -2
+              - x: -1
+                y: -1
+              - x: -1
+                y: 1
+              - x: -1
+                y: 2
+              - x: -1
+                y: 3
+              - x: -1
+                y: 4
+              - x: -1
+                y: 5
+              - x: 1
+                y: -5
+              - x: 1
+                y: -4
+              - x: 1
+                y: -3
+              - x: 1
+                y: -2
+              - x: 1
+                y: -1
+              - x: 1
+                y: 1
+              - x: 1
+                y: 2
+              - x: 1
+                y: 3
+              - x: 1
+                y: 4
+              - x: 1
+                y: 5
+              - x: 2
+                y: -5
+              - x: 2
+                y: -4
+              - x: 2
+                y: -3
+              - x: 2
+                y: -2
+              - x: 2
+                y: -1
+              - x: 2
+                y: 1
+              - x: 2
+                y: 2
+              - x: 2
+                y: 3
+              - x: 2
+                y: 4
+              - x: 2
+                y: 5
+              - x: 3
+                y: -5
+              - x: 3
+                y: -4
+              - x: 3
+                y: -3
+              - x: 3
+                y: -2
+              - x: 3
+                y: -1
+              - x: 3
+                y: 1
+              - x: 3
+                y: 2
+              - x: 3
+                y: 3
+              - x: 3
+                y: 4
+              - x: 3
+                y: 5
+              - x: 4
+                y: -5
+              - x: 4
+                y: -4
+              - x: 4
+                y: -3
+              - x: 4
+                y: -2
+              - x: 4
+                y: -1
+              - x: 4
+                y: 1
+              - x: 4
+                y: 2
+              - x: 4
+                y: 3
+              - x: 4
+                y: 4
+              - x: 4
+                y: 5
+              - x: 5
+                y: -5
+              - x: 5
+                y: -4
+              - x: 5
+                y: -3
+              - x: 5
+                y: -2
+              - x: 5
+                y: -1
+              - x: 5
+                y: 1
+              - x: 5
+                y: 2
+              - x: 5
+                y: 3
+              - x: 5
+                y: 4
+              - x: 5
+                y: 5
+          plane:
+            apart:
+              x: 2.5
+              y: 2.5
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            backdrop: 0
+            marks: numbers
+            numbered:
+              - x
+              - y
+            scene: town
+            showAxisNames: false
+            showDirections: true
+            showOrigin: false
+            upLines: null
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+        title:
+          style: title
+          text:
+            en: Two number lines
+            hi: दो संख्या रेखाएँ
+        town:
+          style: body
+          text:
+            en: In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. **O is the corner she started from**, 0 on both.
+            hi: रिया के शहर में, x-अक्ष मुख्य सड़क है और y-अक्ष उसके कोने से गुज़रती गली। **O वही कोना है जहाँ से वह चली थी**, दोनों पर 0।
+      lines:
+        axes:
+          says:
+            en: The horizontal line X dash X is the x-axis, and the vertical line Y dash Y is the y-axis. The point where they cross is the origin, O.
+            hi: क्षैतिज रेखा X डैश X, एक्स-अक्ष है, और ऊर्ध्वाधर रेखा Y डैश Y, वाई-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।
+        lines:
+          says:
+            en: "Here are two number lines: X dash X across and Y dash Y up. Their zeroes are apart. Bring them together so the lines cross at their zeroes."
+            hi: "ये दो संख्या रेखाएँ हैं: X डैश X आड़ी और Y डैश Y खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।"
+        town:
+          says:
+            en: In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. O is the corner she started from, 0 on both.
+            hi: रिया के शहर में, एक्स-अक्ष मुख्य सड़क है और वाई-अक्ष उसके कोने से गुज़रती गली। O वही कोना है जहाँ से वह चली थी, दोनों पर 0।
+      scene:
+        describe: The board twoNumberLines.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          sheet.plane.crossed: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - axes
+            - town
+          isPassed: false
+          reads: []
+          saying: []
+    name: twoNumberLines
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Two number lines
+              hi: दो संख्या रेखाएँ
+        - kind: prop
+          name: any
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Descartes located points with two perpendicular lines. Lines at right angles can point any way: both tilted, or one across and one up. **In this chapter, we take one horizontal and one vertical.**"
+              hi: "देकार्त ने दो लंब रेखाओं से बिंदुओं का स्थान बताया। समकोण पर मिलने वाली रेखाएँ किसी भी ओर हो सकती हैं: दोनों तिरछी, या एक आड़ी और एक खड़ी। **इस अध्याय में, हम एक क्षैतिज और एक ऊर्ध्वाधर रेखा लेते हैं।**"
+        - kind: prop
+          name: lines
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Here are two number lines: **X′X** across and **Y′Y** up. Their zeroes are apart. Bring them together so the lines cross at their zeroes."
+              hi: "ये दो संख्या रेखाएँ हैं: **X′X** आड़ी और **Y′Y** खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: -5
+                  y: -5
+                - x: -5
+                  y: -4
+                - x: -5
+                  y: -3
+                - x: -5
+                  y: -2
+                - x: -5
+                  y: -1
+                - x: -5
+                  y: 1
+                - x: -5
+                  y: 2
+                - x: -5
+                  y: 3
+                - x: -5
+                  y: 4
+                - x: -5
+                  y: 5
+                - x: -4
+                  y: -5
+                - x: -4
+                  y: -4
+                - x: -4
+                  y: -3
+                - x: -4
+                  y: -2
+                - x: -4
+                  y: -1
+                - x: -4
+                  y: 1
+                - x: -4
+                  y: 2
+                - x: -4
+                  y: 3
+                - x: -4
+                  y: 4
+                - x: -4
+                  y: 5
+                - x: -3
+                  y: -5
+                - x: -3
+                  y: -4
+                - x: -3
+                  y: -3
+                - x: -3
+                  y: -2
+                - x: -3
+                  y: -1
+                - x: -3
+                  y: 1
+                - x: -3
+                  y: 2
+                - x: -3
+                  y: 3
+                - x: -3
+                  y: 4
+                - x: -3
+                  y: 5
+                - x: -2
+                  y: -5
+                - x: -2
+                  y: -4
+                - x: -2
+                  y: -3
+                - x: -2
+                  y: -2
+                - x: -2
+                  y: -1
+                - x: -2
+                  y: 1
+                - x: -2
+                  y: 2
+                - x: -2
+                  y: 3
+                - x: -2
+                  y: 4
+                - x: -2
+                  y: 5
+                - x: -1
+                  y: -5
+                - x: -1
+                  y: -4
+                - x: -1
+                  y: -3
+                - x: -1
+                  y: -2
+                - x: -1
+                  y: -1
+                - x: -1
+                  y: 1
+                - x: -1
+                  y: 2
+                - x: -1
+                  y: 3
+                - x: -1
+                  y: 4
+                - x: -1
+                  y: 5
+                - x: 1
+                  y: -5
+                - x: 1
+                  y: -4
+                - x: 1
+                  y: -3
+                - x: 1
+                  y: -2
+                - x: 1
+                  y: -1
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: -5
+                - x: 2
+                  y: -4
+                - x: 2
+                  y: -3
+                - x: 2
+                  y: -2
+                - x: 2
+                  y: -1
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: -5
+                - x: 3
+                  y: -4
+                - x: 3
+                  y: -3
+                - x: 3
+                  y: -2
+                - x: 3
+                  y: -1
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: -5
+                - x: 4
+                  y: -4
+                - x: 4
+                  y: -3
+                - x: 4
+                  y: -2
+                - x: 4
+                  y: -1
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: -5
+                - x: 5
+                  y: -4
+                - x: 5
+                  y: -3
+                - x: 5
+                  y: -2
+                - x: 5
+                  y: -1
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+            plane:
+              apart:
+                x: 2.5
+                y: 2.5
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              backdrop: 0
+              marks: numbers
+              numbered:
+                - x
+                - y
+              scene: town
+              showAxisNames: false
+              showDirections: true
+              showOrigin: false
+              upLines: null
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - isHidden: true
+          kind: prop
+          name: axes
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**The horizontal line X′X is the x-axis, and the vertical line Y′Y is the y-axis. The point where they cross is the origin, O.**"
+              hi: "**क्षैतिज रेखा X′X, x-अक्ष है, और ऊर्ध्वाधर रेखा Y′Y, y-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।**"
+        - isHidden: true
+          kind: prop
+          name: town
+          prop: text
+          with:
+            style: body
+            text:
+              en: In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. **O is the corner she started from**, 0 on both.
+              hi: रिया के शहर में, x-अक्ष मुख्य सड़क है और y-अक्ष उसके कोने से गुज़रती गली। **O वही कोना है जहाँ से वह चली थी**, दोनों पर 0।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 461f34fe691946b2
 class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
   content:
     model:
@@ -5475,9 +8127,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:39.216Z
-  code: 2980cd1bdb005f67
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: cce680b0946c32ae
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -5724,9 +8376,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:39.216Z
-  code: d71b1617ddc2bfa8
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: f4a060f6141dfe13
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -6216,9 +8868,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:39.216Z
-  code: 8675408a70e54a45
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 28ba432a501dfeda
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -6544,9 +9196,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:39.216Z
-  code: 0976eef3c2bc5b5a
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 6af2b1b7351ace45
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -7162,6 +9814,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: ea33f92d6407
-  at: 2026-11-02T04:38:39.216Z
-  code: 114df66d556d89ff
+  commit: dd762d69c7e8
+  at: 2026-11-02T04:49:48.793Z
+  code: 43767b67f5835d56
