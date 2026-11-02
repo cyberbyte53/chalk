@@ -16,6 +16,7 @@ export function placeClear(
   places: readonly WordPlace[],
   avoid: string,
   ignore: readonly Element[] = [],
+  gap = GAP_PX,
 ): number {
   const svg = el.ownerSVGElement;
   if (svg === null || places.length === 0) return 0;
@@ -34,10 +35,10 @@ export function placeClear(
       others
         .filter(
           ({ r: o }) =>
-            r.left - GAP_PX < o.right &&
-            o.left < r.right + GAP_PX &&
-            r.top - GAP_PX < o.bottom &&
-            o.top < r.bottom + GAP_PX,
+            r.left - gap < o.right &&
+            o.left < r.right + gap &&
+            r.top - gap < o.bottom &&
+            o.top < r.bottom + gap,
         )
         .reduce((sum, o) => sum + o.weight, 0)
     );

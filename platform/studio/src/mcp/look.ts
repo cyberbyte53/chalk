@@ -673,7 +673,7 @@ export async function look(
         ...lines,
         cant.length === 0
           ? "Witnesses on the screen (en · 360): every step a student can take."
-          : `Witnesses on the screen (en · 360): ${cant.length} board${cant.length === 1 ? "" : "s"} with a step a student can't take:`,
+          : `Witnesses on the screen (en · 360): ${cant.length} board${cant.length === 1 ? "" : "s"} with a problem (a step a student can't take, or the board at the end):`,
         ...cant.flatMap((c) => [shownAddress(c.board), ...c.lines.map((l) => `  ${l}`)]),
         `To see a board, show it on its own: ${contentAddress(target.path)}/<board>.`,
       ].join("\n"),
@@ -983,7 +983,7 @@ export async function check(
     lines.push(
       cant.length === 0
         ? "Witnesses on the screen (en · 360): every step a student can take."
-        : `Witnesses on the screen (en · 360): ${cant.length} board${cant.length === 1 ? "" : "s"} with a step a student can't take:`,
+        : `Witnesses on the screen (en · 360): ${cant.length} board${cant.length === 1 ? "" : "s"} with a problem (a step a student can't take, or the board at the end):`,
     );
     for (const c of cant) lines.push(`${shownAddress(c.board)}`, ...c.lines.map((l) => `  ${l}`));
   }
@@ -1031,14 +1031,19 @@ async function witnessesOnScreen(
         `${lane}:witness:${k}`,
       );
       const text = played.text;
-      const wrong = text.split("\n").filter((l) => l.includes("✗"));
+      const all = text.split("\n");
+      const wrong = all.filter((l) => l.includes("✗"));
       const isPassed = /\npassed\b/.test(text);
-      if (wrong.length > 0 || !isPassed)
+      // The board as the witness leaves it (every dot plotted, every clue opened): its layout too.
+      const from = all.findIndex((l) => l.startsWith("problems now"));
+      const atEnd = from < 0 ? [] : all.slice(from + 1).filter((l) => l.startsWith("  "));
+      if (wrong.length > 0 || !isPassed || atEnd.length > 0)
         out.push({
           board,
           lines: [
             ...wrong.map((l) => l.trim()),
             ...(isPassed ? [] : ["the board isn't passed at the end"]),
+            ...atEnd.map((l) => `at the end: ${l.trim()}`),
           ],
         });
       done += 1;

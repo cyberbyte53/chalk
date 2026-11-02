@@ -373,7 +373,22 @@ function layoutProblems(card: Element): string[] {
     for (const b of words.slice(i + 1))
       if (overlap(a.r, b.r))
         found.push(`${labelOf(a.t)}: "${a.said}" drawn over "${b.said}", neither can be read`);
-  const dots = [...card.querySelectorAll("svg circle.cp-point")].filter(isSeen);
+  // A dot: any small filled circle drawn (a point to read, a plotted dot, a counter), whichever
+  // prop drew it; a ring (no fill) isn't one.
+  const dots = [...card.querySelectorAll("svg circle")].filter((c) => {
+    // What the student moves or presses (a point to drag, a desk) may cover a word as it is moved;
+    // a dot that stays put on a word may not.
+    if (!isSeen(c) || c.closest("[data-does]") !== null) return false;
+    const r = c.getBoundingClientRect();
+    const fill = getComputedStyle(c).fill;
+    return (
+      r.width > 4 &&
+      r.width <= 26 &&
+      fill !== "none" &&
+      fill !== "transparent" &&
+      !/rgba\(.*,\s*0\)$/.test(fill)
+    );
+  });
   for (const w of words)
     for (const d of dots) {
       const r = d.getBoundingClientRect();

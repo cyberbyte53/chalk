@@ -571,8 +571,9 @@ function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; 
     if (el === null) return;
     // Where it always is, unless a counter or a dot stands on it; then wherever is clear of those
     // and of every other word (the axes' numbers beside it).
-    const onIt = ".cp-counters circle, .cp-counters text, circle.cp-point";
-    if (placeClear(el, [[x, y, "end"]], onIt) === 0) return;
+    const onIt = ".cp-counters text, circle";
+    // It moves only when something is really on it, not merely near (a gap of 0).
+    if (placeClear(el, [[x, y, "end"]], onIt, [], 0) === 0) return;
     placeClear(
       el,
       [
@@ -581,6 +582,9 @@ function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; 
         [x - 12, y + 12, "end"],
         [x - 12, y - 14, "end"],
         [x + 16, y + 12, "start"],
+        [x - 24, y, "end"],
+        [x - 24, y - 14, "end"],
+        [x - 24, y + 12, "end"],
       ],
       `${onIt}, text`,
     );

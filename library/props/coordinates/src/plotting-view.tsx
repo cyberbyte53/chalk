@@ -43,7 +43,8 @@ function DotLabel({
       [x + 14, y + 30, "start"],
       [x - 14, y + 30, "end"],
     ];
-    placeClear(el, places, "text, line.cp-axis, circle", own === null ? [] : [own]);
+    // A wider gap than words keep: a pair right against another dot reads as that dot's.
+    placeClear(el, places, "text, line.cp-axis, circle", own === null ? [] : [own], 8);
   });
   return (
     <text ref={ref} class={cls} x={x + 9} y={y - 9}>
