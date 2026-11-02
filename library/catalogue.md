@@ -147,6 +147,8 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plotting.toPlot` | [{x: "number", y: "number", name: {optional: "text"}}] | changed by plotting.its own rules |
 | `plotting.plotted` | [{x: "number", y: "number", isRight: "true or false"}] | changed by plotting.its own rules |
 | `plotting.showSwaps` | true or false | changed by plotting.its own rules |
+| `plotting.dot` | {x: "number", y: "number"} | changed by plotting.its own rules |
+| `plotting.step` | number 0 to … | changed by plotting.its own rules |
 | `plotting.showTable` | true or false | changed by plotting.its own rules |
 | `plotting.scaleChoices` | ["number 0 to …"] | changed by plotting.its own rules |
 | `dice.counters` | [{x: "number", y: "number"}] | changed by dice.its own rules |
@@ -191,13 +193,14 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `clues.putAway` | — | Take the clues off the plane, their point with them: their work is done |
 | `clues.hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |
 | `clues.showHidden` | — | learner · Show the hidden point |
-| `plotting.plotAt` | {x: "number", y: "number"} | learner · Put the next pair's dot at (x, y) (the learner's tap); it is right if that is where the pair says |
+| `plotting.moveDot` | {x: "number", y: "number"} | learner · Move the next pair's dot to (x, y) (the learner's drag) |
+| `plotting.plotAt` | {x: "number", y: "number"} | learner · Drop the next pair's dot at (x, y) (the learner lets go): where the pair says, it is kept and the next dot waits at O; anywhere else it stays there, `missed` |
 | `plotting.plotNext` | — | Put the next pair's dot where it goes |
 | `plotting.chooseScale` | {every: "number 0 to …"} | learner · Ask for a scale: a number every this many units (the learner's choice); the plane changes its own scale, and the pairs off it then are `offPlane` |
 | `plotting.clearPlotted` | — | learner · Take every dot off (the learner's ↺) |
 | `dice.throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `dice.startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 
-Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `plane.turned`, `plane.axesMoved`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
+Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `plane.turned`, `plane.axesMoved`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.missed`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
 
 The group answers (each with another part's actions, which change that part): `places.targetChosen`, `plane.numberTapped`, `plotting.scaleChosen`

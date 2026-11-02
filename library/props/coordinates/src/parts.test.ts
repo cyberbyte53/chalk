@@ -194,7 +194,7 @@ describe("plotting: Exercise 3.3's table", () => {
   const holder = prop({
     type: "plottingHolder",
     describe: "test",
-    variables: z.object({ window: windowSchema, tickEvery: z.number().positive() }).strict(),
+    variables: z.object(plottingReads.fields).strict(),
     start: plottingReads.defaults,
     children: { plotting },
   });
@@ -202,13 +202,17 @@ describe("plotting: Exercise 3.3's table", () => {
     const b = new Board(holder, { window, plotting: { toPlot: table } });
     return { b, ...hearing(b), read: () => b.read<typeof holder>().plotting };
   };
-  it("a dot where the pair says is right; the pair swapped is wrong", () => {
-    const { b, read } = board();
+  it("a dot dropped where the pair says is kept, and the next waits at O; a swapped drop isn't", () => {
+    const { b, read, signals } = board();
+    b.input("plotting", "moveDot", { x: -2, y: 8 });
     b.input("plotting", "plotAt", { x: -2, y: 8 });
     expect(read().plotted).toEqual([{ x: -2, y: 8, isRight: true }]);
+    expect(read().dot).toEqual({ x: 0, y: 0 });
     b.input("plotting", "plotAt", { x: 7, y: -1 });
-    expect(read().plotted[1]).toEqual({ x: 7, y: -1, isRight: false });
-    expect(read().next).toEqual({ x: 0, y: -1.25 });
+    expect(signals().at(-1)).toBe("missed");
+    expect(read().plotted).toHaveLength(1);
+    expect(read().dot).toEqual({ x: 7, y: -1 });
+    expect(read().next).toEqual({ x: -1, y: 7 });
   });
   it("a decimal between the marks: (0, −1.25)", () => {
     const { b, read } = board();
@@ -234,7 +238,11 @@ describe("plotting: Exercise 3.3's table", () => {
       children: { plane, plotting },
       give: {
         plane: { isAlone: () => false, canTapNumbers: () => false, lit: () => null },
-        plotting: { window: (me) => me.plane.window, tickEvery: (me) => me.plane.tickEvery },
+        plotting: {
+          window: (me) => me.plane.window,
+          tickEvery: (me) => me.plane.tickEvery,
+          axisNames: (me) => me.plane.axisNames,
+        },
       },
       hear: { "plotting.scaleChosen": (_, p, t) => t.to.plane.setScale({ every: p.every }) },
     });

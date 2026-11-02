@@ -1,9 +1,9 @@
 import { SymbolButton } from "@chalk/draw";
-import type { PropView } from "@chalk/player";
+import { type PropView, useDrags } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
-import { PlaneTap, drawing } from "./layer-view";
+import { drawing } from "./layer-view";
 import { type WordPlace, placeClear } from "./place-clear";
 import { isInWindow } from "./plane";
 import { plotting } from "./plotting";
@@ -11,8 +11,6 @@ import { WORDS, num, pair, word } from "./words";
 
 type PlottingView = PropView<typeof plotting>;
 const actions = plotting.actions;
-/** A tap that plots lands on the nearest quarter. */
-const PLOT_STEP = 0.25;
 
 /**
  * A dot's pair, beside it where it is clear of every other word, dot and axis: above right first,
@@ -77,14 +75,48 @@ function PlottedDraw({ s, px }: { s: PlottingView; px: FramePixels }): JSX.Eleme
   );
 }
 
+/**
+ * The next pair's dot, at O until dragged: let go, it is dropped (`plotAt`), snapped to the step and
+ * kept inside the plane. The dot is the part pressed; it is drawn over the kept dots.
+ */
+function NextDot({ s, px }: { s: PlottingView; px: FramePixels }): JSX.Element | null {
+  const drag = useDrags();
+  const next = s.toPlot[s.plotted.length];
+  if (next === undefined) return null;
+  const [x, y] = px.toPx(s.dot.x, s.dot.y);
+  const snap = (v: number) => Number((Math.round(v / s.step) * s.step).toFixed(6));
+  const inside = (v: number, lo: number, hi: number) =>
+    Math.min(Math.floor(hi / s.step) * s.step, Math.max(Math.ceil(lo / s.step) * s.step, v));
+  return (
+    <circle
+      class="cp-point cp-plot-dot"
+      {...drag({
+        axis: "xy",
+        at: s.dot,
+        place: (to) => ({
+          x: inside(snap(to.x), s.window.xMin, s.window.xMax),
+          y: inside(snap(to.y), s.window.yMin, s.window.yMax),
+        }),
+        move: actions.moveDot,
+        release: { action: actions.plotAt },
+        step: s.step,
+        words: pair(next),
+      })}
+      cx={x}
+      cy={y}
+      r={9}
+    />
+  );
+}
+
 /** The plotting layer's drawing: the table, the dots plotted, the next pair, the scales. */
 export const plottingDrawing = drawing(plotting, {
-  above: ({ s }) =>
+  above: ({ s, locale }) =>
     !s.showTable ? null : (
       <table class="cp-table" {...shows("table", s.toPlot)}>
         <tbody>
           <tr>
-            <th>x</th>
+            <th>{word(s.axisNames[0], locale)}</th>
             {s.toPlot.map((p, i) => (
               <td key={i} class={i === s.plotted.length ? "is-next" : undefined}>
                 {num(p.x)}
@@ -92,7 +124,7 @@ export const plottingDrawing = drawing(plotting, {
             ))}
           </tr>
           <tr>
-            <th>y</th>
+            <th>{word(s.axisNames[1], locale)}</th>
             {s.toPlot.map((p, i) => (
               <td key={i} class={i === s.plotted.length ? "is-next" : undefined}>
                 {num(p.y)}
@@ -102,12 +134,12 @@ export const plottingDrawing = drawing(plotting, {
         </tbody>
       </table>
     ),
-  // A tap on the plane puts the next pair's dot down, on the nearest quarter (the book's pairs go to 1.25).
-  on: ({ s, px, call }) =>
-    s.plotted.length >= s.toPlot.length ? null : (
-      <PlaneTap window={s.window} px={px} step={PLOT_STEP} action={actions.plotAt} call={call} />
-    ),
-  front: ({ s, px }) => <PlottedDraw s={s} px={px} />,
+  front: ({ s, px }) => (
+    <>
+      <PlottedDraw s={s} px={px} />
+      <NextDot s={s} px={px} />
+    </>
+  ),
   below: ({ s }) => {
     const next = s.toPlot[s.plotted.length];
     return next === undefined ? null : (
