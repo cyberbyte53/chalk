@@ -190,19 +190,20 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
           cy={y}
           r={DOT}
         />
-        {/* A point that stays has its pair written under the plane instead (below). */}
-        {(stage === Reading.Pair || isHidden) && !isPairBelow(s) && (
-          <text
-            class="cp-pair"
-            x={pairAt.x}
-            text-anchor={pairAt.anchor}
-            y={pairAt.y}
-            dominant-baseline={pairAt.baseline}
-          >
-            {words}
-          </text>
-        )}
       </g>
+      {/* Beside the point, not part of it: the point (its part, what is pressed and dragged) is
+          the dot alone. A point that stays has its pair written under the plane instead. */}
+      {(stage === Reading.Pair || isHidden) && !isPairBelow(s) && (
+        <text
+          class="cp-pair"
+          x={pairAt.x}
+          text-anchor={pairAt.anchor}
+          y={pairAt.y}
+          dominant-baseline={pairAt.baseline}
+        >
+          {words}
+        </text>
+      )}
     </g>
   );
 }

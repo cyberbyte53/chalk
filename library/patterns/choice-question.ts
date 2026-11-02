@@ -34,15 +34,26 @@ export function seedOf(text: string): number {
   return h;
 }
 
-/** Options shuffled the same way every build (so a question's id never changes), answer anywhere. */
+/**
+ * Options shuffled the same way every build (the same seed, the same order), the answer equally
+ * likely anywhere. A question's id is its params' (author/id.ts), so the order never renames it.
+ *
+ * mulberry32, a generator whose every output bit depends on the seed: the old linear one took its
+ * index from the low bits, which barely depend on the seed, and put the first-written option (every
+ * question's answer) last in nearly every 4-option question.
+ */
 export function settle<T>(items: readonly T[], seed: number): T[] {
   const out = [...items];
-  // A negative seed (from signed coefficients) would make a negative index; positive seeds shuffle
-  // exactly as before.
-  let s = Math.abs(Math.trunc(seed));
+  let s = Math.trunc(seed) >>> 0;
+  const next = () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
   for (let i = out.length - 1; i > 0; i--) {
-    s = (s * 1103515245 + 12345) % 2147483648;
-    const j = s % (i + 1);
+    const j = Math.floor(next() * (i + 1));
     [out[i], out[j]] = [out[j] as T, out[i] as T];
   }
   return out;

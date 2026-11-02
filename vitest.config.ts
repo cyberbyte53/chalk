@@ -9,6 +9,7 @@ export default defineConfig({
       "library/props/*/src/**/*.test.tsx",
       "platform/studio/src/**/*.test.ts",
       "library/registry/src/**/*.test.ts",
+      "library/patterns/**/*.test.ts",
       "platform/apps/*/src/**/*.test.ts",
       "platform/editor/src/**/*.test.ts",
     ],

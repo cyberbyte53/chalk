@@ -67,8 +67,11 @@ const onSheet =
     return x >= w.xMin + 0.5 && x <= w.xMax - 0.5 && y >= w.yMin + 0.5 && y <= w.yMax - 0.5;
   };
 
-/** How far along OX the turning handle sits from O, in units: past the middle, between marks. */
-const HANDLE_AT = 4.5;
+/**
+ * How far along OX the turning handle sits from O, in units: between marks, and nearer O than a
+ * board's point usually is, so turning sweeps it clear of the point and its name.
+ */
+const HANDLE_AT = 2.5;
 
 /**
  * The learner moves the axes: O, dragged anywhere on the sheet (to the half unit); and a handle

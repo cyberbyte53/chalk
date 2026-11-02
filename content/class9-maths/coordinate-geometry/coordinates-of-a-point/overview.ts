@@ -242,20 +242,20 @@ const abscissaAndOrdinate = page(
       sheet: place(
         coordinatePlane,
         setup({
-          // Q marked where the point is to go; P is where it starts.
-          plane: { window: GRAPH, ...AXES, points: [point("Q", -6, -2, false)] },
+          // No marker at Q: the words say where it is, and the point's own labels say when it is there.
+          plane: { window: GRAPH, ...AXES },
           reading: { point: { x: 4, y: 3 }, pointStep: 1, reading: Reading.Abscissa, unit: "" },
         }),
       ),
       ask: words.body(
         t(
-          "The point is at P. **Drag it to Q**, where x = −6 and y = −2, and watch each sign change as it crosses an axis.",
-          "बिंदु P पर है। **उसे Q तक खींचो**, जहाँ x = −6 और y = −2 है, और देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
+          "The point is at P. **Drag it to where x = −6 and y = −2**: that is Q. Watch each sign change as it crosses an axis.",
+          "बिंदु P पर है। **उसे वहाँ खींचो जहाँ x = −6 और y = −2 है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
         ),
         {
           says: t(
-            "The point is at P. Drag it to Q, where x is minus 6 and y is minus 2, and watch each sign change as it crosses an axis.",
-            "बिंदु P पर है। उसे Q तक खींचो, जहाँ एक्स माइनस 6 और वाई माइनस 2 है, और देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
+            "The point is at P. Drag it to where x is minus 6 and y is minus 2: that is Q. Watch each sign change as it crosses an axis.",
+            "बिंदु P पर है। उसे वहाँ खींचो जहाँ एक्स माइनस 6 और वाई माइनस 2 है: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
           ),
         },
       ),
@@ -1185,13 +1185,46 @@ const findThePoint = page(
       summary: hidden(
         words.body(
           t(
-            "**In short:**\n- The **x-coordinate** (abscissa) of a point is its distance from the y-axis; the **y-coordinate** (ordinate), its distance from the x-axis; each with a sign for its side.\n- A point is written (x, y), x first.\n- On the x-axis: (x, 0). On the y-axis: (0, y). The origin: (0, 0).\n- Quadrant I: (+, +). II: (−, +). III: (−, −). IV: (+, −).",
-            "**संक्षेप में:**\n- किसी बिंदु का **x-निर्देशांक** (भुज) y-अक्ष से उसकी दूरी है; **y-निर्देशांक** (कोटि) x-अक्ष से उसकी दूरी; हर एक अपनी ओर बताने वाले चिह्न के साथ।\n- बिंदु (x, y) लिखा जाता है, x पहले।\n- x-अक्ष पर: (x, 0)। y-अक्ष पर: (0, y)। मूल बिंदु: (0, 0)।\n- पहला चतुर्थांश: (+, +)। दूसरा: (−, +)। तीसरा: (−, −)। चौथा: (+, −)।",
+            "**In short:** the x-coordinate (abscissa) of a point is its distance from the y-axis, and the y-coordinate (ordinate) its distance from the x-axis, each with a sign for its side.",
+            "**संक्षेप में:** किसी बिंदु का x-निर्देशांक (भुज) y-अक्ष से उसकी दूरी है, और y-निर्देशांक (कोटि) x-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।",
           ),
           {
             says: t(
-              "In short: the x-coordinate, the abscissa, of a point is its distance from the y-axis, and the y-coordinate, the ordinate, its distance from the x-axis, each with a sign for its side. A point is written x, y, x first. On the x-axis it is x, 0; on the y-axis, 0, y; and the origin is 0, 0. In quadrant one a point is plus, plus; in two, minus, plus; in three, minus, minus; and in four, plus, minus.",
-              "संक्षेप में: किसी बिंदु का एक्स-निर्देशांक, यानी भुज, वाई-अक्ष से उसकी दूरी है, और वाई-निर्देशांक, यानी कोटि, एक्स-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ। बिंदु एक्स, वाई लिखा जाता है, एक्स पहले। एक्स-अक्ष पर वह एक्स, 0 है; वाई-अक्ष पर 0, वाई; और मूल बिंदु 0, 0 है। पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; और चौथे में धन, ऋण।",
+              "In short: the x-coordinate, the abscissa, of a point is its distance from the y-axis, and the y-coordinate, the ordinate, its distance from the x-axis, each with a sign for its side.",
+              "संक्षेप में: किसी बिंदु का एक्स-निर्देशांक, यानी भुज, वाई-अक्ष से उसकी दूरी है, और वाई-निर्देशांक, यानी कोटि, एक्स-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।",
+            ),
+          },
+        ),
+      ),
+      summaryPair: hidden(
+        words.body(t("A point is written (x, y), x first.", "बिंदु (x, y) लिखा जाता है, x पहले।"), {
+          says: t("A point is written x, y, x first.", "बिंदु एक्स, वाई लिखा जाता है, एक्स पहले।"),
+        }),
+      ),
+      summaryAxes: hidden(
+        words.body(
+          t(
+            "On the x-axis a point is (x, 0); on the y-axis, (0, y); the origin is (0, 0).",
+            "x-अक्ष पर बिंदु (x, 0) होता है; y-अक्ष पर (0, y); मूल बिंदु (0, 0) है।",
+          ),
+          {
+            says: t(
+              "On the x-axis a point is x, 0; on the y-axis, 0, y; the origin is 0, 0.",
+              "एक्स-अक्ष पर बिंदु एक्स, 0 होता है; वाई-अक्ष पर 0, वाई; मूल बिंदु 0, 0 है।",
+            ),
+          },
+        ),
+      ),
+      summarySigns: hidden(
+        words.body(
+          t(
+            "In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).",
+            "पहले चतुर्थांश में बिंदु (+, +) होता है; दूसरे में (−, +); तीसरे में (−, −); चौथे में (+, −)।",
+          ),
+          {
+            says: t(
+              "In quadrant one a point is plus, plus; in two, minus, plus; in three, minus, minus; in four, plus, minus.",
+              "पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; चौथे में धन, ऋण।",
             ),
           },
         ),
@@ -1200,7 +1233,12 @@ const findThePoint = page(
     passBy: "rules",
     hear: {
       "coordinatesOfH.correct": (_, __, t) => t.self.show({ name: "pointAt" }),
-      "pointAt.correct": (_, __, t) => [t.self.show({ name: "summary" }), t.self.pass()],
+      "pointAt.correct": (_, __, t) => [
+        ...(["summary", "summaryPair", "summaryAxes", "summarySigns"] as const).map((name) =>
+          t.self.show({ name }),
+        ),
+        t.self.pass(),
+      ],
     },
     uses: [coordinatesOfH.use, pointAt.use],
     witness: [

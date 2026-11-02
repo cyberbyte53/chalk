@@ -921,22 +921,6 @@
     student reading off −1 can't tell which axis a number belongs to. Mechanical (overlap): offset
     the y-axis −1 label or skip it when it collides with the x-axis −1, as the 640 column already
     manages."
-  messages:
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T11:36:00.271Z
-      text: At 360, where marks are close, the y-axis −1 isn't written when it would sit on the x-axis −1,
-        and O is drawn below and left of the crossing, clear of the y-axis 1. The 640 column stays
-        as it is.
-      status: planned
-      commit: f4e50f7d0131f51f703e2fb93b55eff06b3149ac
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T11:45:26.514Z
-      text: Where marks are close (the 360 phone), the y-axis's −1 isn't written (its mark stays), so it
-        no longer sits on the x-axis's −1. O moved 2 px lower, clear of the y-axis's 1. Seen on
-        abscissa-and-ordinate, signs-and-quadrants and any-axes at 360.
-      status: ready
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
     - content/class9-maths/coordinate-geometry/questions/fig-3-14/family.ts
@@ -1138,4 +1122,27 @@
       - class9-maths/coordinate-geometry/questions/tap-the-desk
       - class9-maths/coordinate-geometry/questions/tap-the-part
       - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:36:00.271Z
+      text: At 360, where marks are close, the y-axis −1 isn't written when it would sit on the x-axis −1,
+        and O is drawn below and left of the crossing, clear of the y-axis 1. The 640 column stays
+        as it is.
+      status: planned
+      commit: f4e50f7d0131f51f703e2fb93b55eff06b3149ac
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:45:26.514Z
+      text: Where marks are close (the 360 phone), the y-axis's −1 isn't written (its mark stays), so it
+        no longer sits on the x-axis's −1. O moved 2 px lower, clear of the y-axis's 1. Seen on
+        abscissa-and-ordinate, signs-and-quadrants and any-axes at 360.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T12:00:09.996Z
+      text: Confirmed fixed. On the 360 phone the y-axis −1 is no longer written (its mark stays), so
+        nothing sits on the x-axis −1, and O is clear of the y-axis 1. Seen on distances-from-axes,
+        abscissa-and-ordinate, writing-coordinates, points-on-axes, signs-and-quadrants and
+        any-axes. At 640 every number is still written.
   turn: person

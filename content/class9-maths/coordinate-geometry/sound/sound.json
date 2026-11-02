@@ -56,6 +56,13 @@
       "seconds": 15.813
     },
     {
+      "file": "5286cfe4700a6a96.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point is written x, y, x first.",
+      "seconds": 3.135
+    },
+    {
       "file": "9fa6960e01a5b3a0.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -476,6 +483,13 @@
       "seconds": 18.611
     },
     {
+      "file": "9409f6fde092aec5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "In quadrant one a point is plus, plus; in two, minus, plus; in three, minus, minus; in four, plus, minus.",
+      "seconds": 8.673
+    },
+    {
       "file": "6eeb4555062b350c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -511,11 +525,11 @@
       "seconds": 13.491
     },
     {
-      "file": "231f6652995bebec.m4a",
+      "file": "d93ee1a534c75e2b.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "In short: the x-coordinate, the abscissa, of a point is its distance from the y-axis, and the y-coordinate, the ordinate, its distance from the x-axis, each with a sign for its side. A point is written x, y, x first. On the x-axis it is x, 0; on the y-axis, 0, y; and the origin is 0, 0. In quadrant one a point is plus, plus; in two, minus, plus; in three, minus, minus; and in four, plus, minus.",
-      "seconds": 29.896
+      "words": "In short: the x-coordinate, the abscissa, of a point is its distance from the y-axis, and the y-coordinate, the ordinate, its distance from the x-axis, each with a sign for its side.",
+      "seconds": 11.796
     },
     {
       "file": "7e813fa1ee11b981.m4a",
@@ -663,6 +677,13 @@
       "locale": "en",
       "words": "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: snacks at the point 3, 2, books at the point minus 4, 1. Tap a stall to see its coordinates.",
       "seconds": 13.456
+    },
+    {
+      "file": "8828e37cff2ee1e8.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "On the x-axis a point is x, 0; on the y-axis, 0, y; the origin is 0, 0.",
+      "seconds": 6.978
     },
     {
       "file": "b823468bfc9117f0.m4a",
@@ -1652,11 +1673,11 @@
       "seconds": 5.631
     },
     {
-      "file": "45c83fba965be462.m4a",
+      "file": "20ecde979b54e857.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The point is at P. Drag it to Q, where x is minus 6 and y is minus 2, and watch each sign change as it crosses an axis.",
-      "seconds": 8.232
+      "words": "The point is at P. Drag it to where x is minus 6 and y is minus 2: that is Q. Watch each sign change as it crosses an axis.",
+      "seconds": 8.929
     },
     {
       "file": "562153c8bd2444ab.m4a",
@@ -2443,6 +2464,13 @@
       "seconds": 24.474
     },
     {
+      "file": "4157a35c2ca70bac.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक्स-अक्ष पर बिंदु एक्स, 0 होता है; वाई-अक्ष पर 0, वाई; मूल बिंदु 0, 0 है।",
+      "seconds": 8.035
+    },
+    {
       "file": "b4e7d2bc35c13c44.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2947,6 +2975,13 @@
       "seconds": 6.096
     },
     {
+      "file": "d447585b09602c30.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; चौथे में धन, ऋण।",
+      "seconds": 8.662
+    },
+    {
       "file": "ec145c0ba4e5fa72.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3108,11 +3143,18 @@
       "seconds": 2.462
     },
     {
-      "file": "2f37673af0196a2b.m4a",
+      "file": "4275c5635699aba7.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु P पर है। उसे Q तक खींचो, जहाँ एक्स माइनस 6 और वाई माइनस 2 है, और देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
-      "seconds": 10.194
+      "words": "बिंदु P पर है। उसे वहाँ खींचो जहाँ एक्स माइनस 6 और वाई माइनस 2 है: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
+      "seconds": 11.448
+    },
+    {
+      "file": "ac7f282da42bd724.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु एक्स, वाई लिखा जाता है, एक्स पहले।",
+      "seconds": 3.901
     },
     {
       "file": "fb63ebe9a2c10763.m4a",
@@ -3724,11 +3766,11 @@
       "seconds": 1.452
     },
     {
-      "file": "e80ff335c711ec86.m4a",
+      "file": "5ec69b77aee2d8a8.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "संक्षेप में: किसी बिंदु का एक्स-निर्देशांक, यानी भुज, वाई-अक्ष से उसकी दूरी है, और वाई-निर्देशांक, यानी कोटि, एक्स-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ। बिंदु एक्स, वाई लिखा जाता है, एक्स पहले। एक्स-अक्ष पर वह एक्स, 0 है; वाई-अक्ष पर 0, वाई; और मूल बिंदु 0, 0 है। पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; और चौथे में धन, ऋण।",
-      "seconds": 36.166
+      "words": "संक्षेप में: किसी बिंदु का एक्स-निर्देशांक, यानी भुज, वाई-अक्ष से उसकी दूरी है, और वाई-निर्देशांक, यानी कोटि, एक्स-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।",
+      "seconds": 14.652
     },
     {
       "file": "6f080d729670dfbf.m4a",
