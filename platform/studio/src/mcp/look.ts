@@ -547,9 +547,9 @@ export async function look(
     ...(a.state === undefined ? {} : { state: a.state }),
     // A whole prop on its own page: its page too (what it is for, every board that uses it).
     ...(isWholeProp ? { withProps: true } : {}),
-    // A lesson's boards are thumbnails: no need for double resolution. A reviewer's are drawn whole
-    // all the same: each board is kept as what it saw (below), which `changes` compares against.
-    pictures: target.kind === "group" && a.isSeen !== true ? "thumb" : "full",
+    // A lesson's boards are measured, not pictured (its answer is words). A reviewer's are drawn
+    // whole: each board is kept as what it saw (below), which `changes` compares against.
+    pictures: target.kind === "group" && a.isSeen !== true ? "none" : "full",
   });
   const board = target.kind === "group" ? target.unit : target.board;
   // What a board shows in every version, kept for `changes` (reach/shown.ts): only a whole built
@@ -578,8 +578,9 @@ export async function look(
       if (a.isSeen === true) keepShown(root, "seen", shownBoard(one.board), kept);
     }
   const drawn = each[0]?.drawn ?? [];
+  // A lesson or a family answers in words: its boards and what each drew. A board is looked at
+  // whole, shown on its own: a grid of small pictures can't be read.
   if (target.kind === "group") {
-    const tiles: Tile[] = [];
     const lines: string[] = [];
     let problems = 0;
     for (const one of each)
@@ -593,26 +594,16 @@ export async function look(
               ...s.overflow.map((p) => `  ${p}`),
             );
           }
-          // Thumbnails of the first version: the others are checked, and their problems listed.
-          if (i === 0)
-            tiles.push({
-              picture: pictureOf(s),
-              labels: "none",
-              caption: s.board.split("/").at(-1) ?? s.board,
-            });
         }
       }
     const count = target.boards.length * versions.length;
-    const images =
-      tiles.length > 0 ? await compose(tiles, { kind: "grid", columns: 5, width: 160 }) : [];
     return {
       text: [
-        `${contentAddress(target.path)}: ${target.boards.length} board${target.boards.length === 1 ? "" : "s"}${versions.length > 1 ? `, ${count} drawings` : ""} · ${count - problems} ok · ${problems} with problems${versions.length > 1 ? ` (thumbnails: ${captionOf(versions[0] as Version, 2)})` : ""}`,
+        `${contentAddress(target.path)}: ${target.boards.length} board${target.boards.length === 1 ? "" : "s"}${versions.length > 1 ? `, ${count} drawings` : ""} · ${count - problems} ok · ${problems} with problems`,
         `boards: ${target.boards.map((b) => b.split("/").at(-1)).join(", ")}`,
         ...lines,
-        `Show a board for its pieces: ${contentAddress(target.path)}/<board>.`,
+        `To see a board, show it on its own: ${contentAddress(target.path)}/<board>.`,
       ].join("\n"),
-      images,
     };
   }
   const shots = drawn.map((d) => d.shots[0]).filter((s): s is Shot => s !== undefined);

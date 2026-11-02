@@ -2,7 +2,7 @@ import { type Box, type Picture, onComposer } from "./app-driver";
 
 /**
  * Puts pictures together: a board with its pieces named, a piece cut out with its parts named,
- * before and after side by side, a lesson's boards as thumbnails. What comes back arrives at the
+ * before and after side by side. What comes back arrives at the
  * size it is seen: a picture with a side over MAX_EDGE or more than MAX_PIXELS is shrunk on its
  * way to the model, so a tall one is cut into parts, top to bottom, each overlapping the last a
  * little (a line of words cut by one is whole in the next), and one too wide is made narrower.
