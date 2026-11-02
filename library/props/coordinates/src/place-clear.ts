@@ -8,16 +8,17 @@ const GAP_PX = 4;
  * Puts a word drawn on a plane at the first of `places` where it is clear: inside the plane and a
  * few pixels from every word and every thing `avoid` names; else where it clashes least (off the
  * plane worst, then each word or mark it touches, then each line). Measured as drawn, so it holds
- * in every language and at every size. `ignore`: things it may touch (its own dot).
+ * in every language and at every size. `ignore`: things it may touch (its own dot). Says how badly
+ * the place it took clashes: 0, clear.
  */
 export function placeClear(
   el: SVGTextElement,
   places: readonly WordPlace[],
   avoid: string,
   ignore: readonly Element[] = [],
-): void {
+): number {
   const svg = el.ownerSVGElement;
-  if (svg === null || places.length === 0) return;
+  if (svg === null || places.length === 0) return 0;
   const frame = svg.getBoundingClientRect();
   const others = [...svg.querySelectorAll(avoid)]
     .filter((t) => t !== el && !ignore.includes(t))
@@ -51,8 +52,9 @@ export function placeClear(
   for (const place of places) {
     put(place);
     const score = clash(el.getBoundingClientRect());
-    if (score === 0) return;
+    if (score === 0) return 0;
     if (best === undefined || score < best.score) best = { place, score };
   }
   put(best?.place ?? places[0]!);
+  return best?.score ?? 0;
 }

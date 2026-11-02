@@ -36,9 +36,10 @@ export const plotThePoint = family({
           showAxisNames: false,
           showDirections: true,
         },
-        // A dot to drag from the corner, its coordinates not written: where it goes is the answer.
+        // A dot to drag from O, as on every plotting board; its coordinates not written: where
+        // it goes is the answer.
         reading: {
-          point: { x: -5, y: -5 },
+          point: { x: 0, y: 0 },
           pointStep: 0.5,
           canMovePoint: true,
         },
@@ -72,10 +73,22 @@ export const plotThePoint = family({
               {
                 when: isPlaced("sheet", -x, y),
                 say: t(
-                  `That dot is on the wrong side of the y-axis: x = ${shown(x)} is ${x > 0 ? "to the right" : "to the left"}. Drag it again.`,
-                  `वह बिंदु y-अक्ष की ग़लत ओर है: x = ${shown(x)} ${x > 0 ? "दाईं ओर" : "बाईं ओर"} है। उसे फिर से खींचो।`,
+                  `That dot is on the wrong side of the y-axis: x\u00a0=\u00a0${shown(x)} is ${x > 0 ? "to the right" : "to the left"}. Drag it again.`,
+                  `वह बिंदु y-अक्ष की ग़लत ओर है: x\u00a0=\u00a0${shown(x)} ${x > 0 ? "दाईं ओर" : "बाईं ओर"} है। उसे फिर से खींचो।`,
                 ),
                 reach: [tap("sheet.reading", "movePoint", { x: -x, y })],
+              },
+            ]),
+        ...(y === 0
+          ? []
+          : [
+              {
+                when: isPlaced("sheet", x, -y),
+                say: t(
+                  `That dot is on the wrong side of the x-axis: y\u00a0=\u00a0${shown(y)} is ${y > 0 ? "up" : "down"}. Drag it again.`,
+                  `वह बिंदु x-अक्ष की ग़लत ओर है: y\u00a0=\u00a0${shown(y)} ${y > 0 ? "ऊपर" : "नीचे"} है। उसे फिर से खींचो।`,
+                ),
+                reach: [tap("sheet.reading", "movePoint", { x, y: -y })],
               },
             ]),
       ],

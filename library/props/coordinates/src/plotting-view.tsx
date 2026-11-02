@@ -37,6 +37,11 @@ function DotLabel({
       [x, y + 22, "middle"],
       [x + 11, y + 4, "start"],
       [x - 11, y + 4, "end"],
+      // Further out, past a tick's number or the axis beside it.
+      [x + 14, y - 22, "start"],
+      [x - 14, y - 22, "end"],
+      [x + 14, y + 30, "start"],
+      [x - 14, y + 30, "end"],
     ];
     placeClear(el, places, "text, line.cp-axis, circle", own === null ? [] : [own]);
   });
@@ -57,16 +62,24 @@ function PlottedDraw({ s, px }: { s: PlottingView; px: FramePixels }): JSX.Eleme
         const [x, y] = px.toPx(d.x, d.y);
         const swap = { x: d.y, y: d.x };
         const isSwapShown = s.showSwaps && d.isRight && d.x !== d.y && isInWindow(s.window, swap);
+        // A swap already plotted is only joined: drawn twice, its name would be written twice.
+        const isSwapPlotted = s.plotted.some((q) => q.x === swap.x && q.y === swap.y);
         const [sx, sy] = px.toPx(swap.x, swap.y);
         return (
           <g key={i} class={`cp-dot${d.isRight ? " is-right" : " is-wrong"}`}>
             {isSwapShown && (
               <>
                 <line class="cp-swap-line" x1={x} y1={y} x2={sx} y2={sy} />
-                <circle class="cp-swap" cx={sx} cy={sy} r={5} />
-                <DotLabel class="cp-swap-label" x={sx} y={sy} said={pair(swap)} />
+                {!isSwapPlotted && (
+                  <>
+                    <circle class="cp-swap" cx={sx} cy={sy} r={5} />
+                    <DotLabel class="cp-swap-label" x={sx} y={sy} said={pair(swap)} />
+                  </>
+                )}
               </>
             )}
+            {/* Equal numbers: the swap is the same point, a ring round the dot itself. */}
+            {s.showSwaps && d.x === d.y && <circle class="cp-swap-self" cx={x} cy={y} r={11} />}
             <circle cx={x} cy={y} r={6} />
             <DotLabel x={x} y={y} said={pair(d)} />
           </g>
@@ -145,11 +158,11 @@ export const plottingDrawing = drawing(plotting, {
       <NextDot s={s} px={px} />
     </>
   ),
-  below: ({ s }) => {
+  below: ({ s, locale }) => {
     const next = s.toPlot[s.plotted.length];
     return next === undefined ? null : (
       <p class="cp-line" {...shows("next", next, pair(next))}>
-        {pair(next)}
+        {word(WORDS.next, locale)} <strong>{pair(next)}</strong>
       </p>
     );
   },
@@ -165,13 +178,6 @@ export const plottingDrawing = drawing(plotting, {
           {...does(actions.chooseScale, { every }, i)}
         />
       ))}
-      {s.plotted.length > 0 && (
-        <SymbolButton
-          symbol="↺"
-          label={word(WORDS.clear, locale)}
-          {...does(actions.clearPlotted)}
-        />
-      )}
     </>
   ),
 });

@@ -10667,3 +10667,2383 @@
       at: 2026-11-02T15:08:34.010Z
       text: ""
       status: closed
+- id: cmvzemxhwhm0
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-11-02T15:19:23.158Z
+  board: class9-maths/coordinate-geometry/plotting-points/treasure-trail
+  target: ground
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:566
+  snapshot: SnacksBooksBalloonsToysKitesBanglesShoesTeaMasksJuiceRiya−5−4−3−2−112345−5−4−3−212345O ↑ ←
+    → ↓ ↺ Back to the start
+  commit: 27477d3d2e998bebe08191c192a6649d8109d3f5
+  turn: person
+  text: while i am following the clues, if i pass through a stall different from the clue it is
+    accepting and saying some things ; this should not happen right?
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:32:13.728Z
+      text: "Agreed in chat (option A): walking past a stall says nothing; a stall opens only when the
+        student taps it while Riya stands there."
+      status: planned
+      commit: 79bbcc69a92057154fd9b848a8c510ceb3456b45
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:32:13.959Z
+      text: "Done. Walking is only walking now. Tapping the stall Riya stands on opens it: the clue's
+        stall gives the next clue, and any other says what it is and where. Tapping a stall she
+        isn't at says to walk her there first. Two fixes came with it: tapping a second stall used
+        to send Riya back to O (a lesson 1 rule, now kept to the town's free play), and the grid
+        lines no longer swallow a tap on a stall."
+      status: ready
+- id: cmvzeq4iv81c
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-11-02T15:21:52.231Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-from-a-table
+  target: second
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:405
+  snapshot: x−2−1013y87−1.253−1 −4−3−2−11234−4−3−2−11234OXX′YY′ (−2, 8) A mark every 1 A mark every 2
+  commit: 27477d3d2e998bebe08191c192a6649d8109d3f5
+  turn: agent
+  text: why don't we allow scrolling so that entrie plane can be covered (A mark every 2 is not cool )
+    , we should be able to do this no (like normal coordinate planes out there)
+  messages: []
+- id: cmvzg5dj6b3m
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:43.362Z
+  board: class9-maths/coordinate-geometry/plotting-points/treasure-trail
+  target: ground/places
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "The trail can't be finished by tapping the stall itself (blocks the board). Once Riya stands
+    on a stall, she and the end of her blue route sit on top of the stall's icon and catch the tap.
+    Tapping the stall at its point does nothing, and so does tapping Riya; only the small name label
+    under the stall opens it. I found this by playing: walk to (4, 1) and tap the stall: nothing;
+    tap at (4, 1.2): nothing; tap the 'Snacks' label: it opens. A student does what the rules say
+    ('when she stands at the stall you want, tap it'), gets no answer and is stuck on the first
+    clue. This is the same kind of bug as the grid-lines one fixed under cmvzemxhwhm0, now caused by
+    the walker. Suggested fix: let the route and Riya pass taps through (pointer-events none on
+    cp-route-done and the walker figure), or make a tap on Riya open the stall she stands on. Then
+    play the whole route again by tapping each stall's point, not its label."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:45.628Z
+      text: Let taps pass through Riya and her route to the stall under her.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:46.136Z
+      text: "Fixed in the prop: Riya and her route take no taps (.cp-walk pointer-events none), so a tap
+        on the stall she stands on reaches it. Played: walked to (3, 2), tapped at the stall's point
+        under Riya, and it opened. The grid lines got the same fix earlier."
+      status: ready
+- id: cmvzg5dprhws
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:43.599Z
+  board: class9-maths/coordinate-geometry/plotting-points/treasure-trail
+  target: ground
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "The fair contradicts lesson 3 (principle 9: facts never contradict). In
+    coordinates-of-a-point#plan, Riya's plan of the same fair ground puts snacks at (3, 2) and books
+    at (−4, 1). Here Snacks stands at (4, 1) and Books at (−3, 4). A student who remembers the plan
+    will ask why the stalls moved, or doubt which address is right, on the very board about finding
+    stalls from their addresses. Suggested fix: keep snacks (3, 2) and books (−4, 1) and build the
+    trail's clues and decoys around them, or rename these two stalls so no stall from lesson 3
+    stands somewhere else."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:46.350Z
+      text: Snacks at (3, 2) and books at (−4, 1), as in lesson 3, and the trail built round them.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:46.695Z
+      text: "Snacks stand at (3, 2) and books at (−4, 1), where Riya's plan put them. The rest: balloons
+        (−2, −4), toys (2, 0) on the x-axis, prizes (4, −4). The decoys are at the swapped
+        addresses, or sign-flipped where a swap would stand right beside its stall (snacks' and the
+        axis stop's)."
+      status: ready
+- id: cmvzg5dv9f4m
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:43.797Z
+  board: class9-maths/coordinate-geometry/plotting-points/treasure-trail
+  target: ground
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "On screen (mechanical): (1) The blue route is never cleared between legs. By the kite stall
+    it is drawn through the names Books, Juice, Snacks and Masks ('Bo|ks', 'Sn|cks'), and Riya
+    standing on a stall hides its name ('चू..याँ' at Bangles in Hindi). Draw the route under the
+    labels, or keep only the current leg. (2) At 360 in English, the 'Back to the start' button runs
+    past the piece into the right gutter, to about 355 px of 360. plot-a-point#sheet has the same
+    problem. Shorten it or let the controls wrap."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:46.881Z
+      text: Draw only the current leg of the route; let ↺'s words wrap at 360.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:47.223Z
+      text: "(1) Each opened stall starts the next leg: a new walker action, startHere, clears the route
+        so far, and stall names have a halo. (2) The pad's last column can shrink, so 'Back to the
+        start' wraps onto two lines inside the page at 360 (plot-a-point too)."
+      status: ready
+- id: cmvzg5e0fvdq
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:43.983Z
+  board: class9-maths/coordinate-geometry/plotting-points/treasure-trail
+  target: ground
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Taste call: the treasure is on the map from the start. The rules say 'Aman has lost his kite'
+    and a stall labelled 'Kites' (पतंगें) is drawn at (2, −3) before the first clue. Many students
+    will walk straight to it, and the five clues feel like a detour to somewhere they can already
+    see. Options: (a) give the last stall a name that doesn't give the ending away (say, Aman's
+    friend's 'Toys and games'); (b) keep 'Kites' as it is (a lost kite turning up at the kite stall
+    is a nice ending); (c) leave that stall's sign blank until Riya reaches it. I'd go with (a)."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:47.407Z
+      text: "The person chose (a) in chat: rename the last stall."
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:47.783Z
+      text: "Renamed to 'Prizes' / 'इनाम'. The kite is found among the prizes when that stall opens: 'The
+        prize stall! And there, among the prizes, is Aman's lost kite.'"
+      status: ready
+- id: cmvzg5kxlof1
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:52.953Z
+  board: class9-maths/coordinate-geometry/plotting-points/swap-the-numbers
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:315
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "flow.md's swap-the-numbers asks for things the board doesn't show. Purpose: Aman's stall
+    'stands in the wrong place'. Needs: 'each pair and its swap shown together; a pair with equal
+    numbers, swapped, stays put'. What the board does: the story only tells that the stall went up
+    at 2 along, 5 up; no stall is ever drawn in the wrong place. The nine dots all end the same
+    green, with nothing linking (5, 2) to (2, 5), and (3, 3) is plotted once, so its swap landing on
+    the same spot is never seen. The ordered line then states all three facts. A student takes 'the
+    order matters' on trust instead of seeing two dots apart and one pair on the same spot
+    (principles 4 and 6). Suggested fix: turn on the plotting prop's showSwaps (it is off here), so
+    each pair and its swap are joined or coloured as a pair and (3, 3)'s swap visibly lands on
+    itself. Draw the games stall at (2, 5) where the volunteers put it, and at (5, 2) where it
+    belongs, when those two are plotted. The story line also says 'a pair and its swap come one
+    after the other', which isn't true of (−3, −5), (6, 1) and (3, 3). Reword it."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:47.972Z
+      text: showSwaps on, without the duplicates that made it unreadable; (3, 3)'s swap shown landing on
+        itself; the story reworded.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:48.329Z
+      text: "Each dot's swap is drawn and joined by a dashed line. When the swap is itself one of the
+        pairs, only the line is drawn, so nothing is written twice. (3, 3) gets a dashed ring: its
+        swap is the same point. The story now says 'its swap is drawn with it, joined by a dashed
+        line'. I didn't draw the games stall: the dashed line between (2, 5) and (5, 2) shows the
+        wrong place and the right one, and stall pictures on this already busy plane would cover the
+        dots."
+      status: ready
+- id: cmvzg5l2jigi
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:53.131Z
+  board: class9-maths/coordinate-geometry/plotting-points/swap-the-numbers
+  target: miss
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:40
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "A wrong drop gets the same line every time: 'Not there. x first…'. On this board the likely
+    wrong drop is the swap itself. I dropped (5, 0) at (0, 5) and was told only 'Not there'.
+    plot-a-point (Riya's address beside her) and treasure-trail ('This is the bangle stall, at (1,
+    4)') both answer a wrong stop with its own address; here a student isn't told they plotted the
+    swap, which is the whole point of the board. Suggested fix: say where the dot landed, and when
+    that is the swap, say so: 'That's (0, 5): the numbers swapped. 5 along first, then 0 up.' The
+    same generic line is used on plot-from-a-table (missFirst, missSecond) and graphs-you-know
+    (miss)."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:48.517Z
+      text: A drop at the swapped pair names the swap; on the graph board the hints say t and d.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:48.858Z
+      text: "On all four plotting boards, a drop at the pair swapped now says: 'That is the pair swapped:
+        you went along by y and up by x. x first, along; then y.' Any other miss keeps the plain
+        line. Played: (5, 0) dropped at (0, 5) gives the swap line."
+      status: ready
+- id: cmvzg5l7j2jf
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:53.311Z
+  board: class9-maths/coordinate-geometry/plotting-points/swap-the-numbers
+  target: ordered
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:324
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Hindi wording (mechanical): the swapped pair is 'उलटी जोड़ी' in the story and 'उलटा जोड़ा'
+    here. plot-from-a-table also says 'हर जोड़ा'. Use one name for the thing everywhere (principle
+    10)."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:49.055Z
+      text: "One Hindi name: उलटी जोड़ी."
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:49.509Z
+      text: उलटी जोड़ी everywhere now, including the ordered line.
+      status: ready
+- id: cmvzg5p2fzbg
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:58.311Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-a-point
+  target: toQ
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:134
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Undefined label (mechanical): when Riya reaches (5, 0) on the way to Q, a point named B
+    appears on the plane, and B stays on the check plane. No line names B: toP says 'to A', but toQ
+    says only '5 along, then 4 down'. Write 'walk 5 units along the x-axis to B, then 4 down', as
+    the source does for Fig. 3.15."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:49.719Z
+      text: Name B in toQ.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:50.033Z
+      text: "toQ: 'Now plot Q (5, −4): 5 along to B, then 4 down' (Hindi: B तक 5 आगे)."
+      status: ready
+- id: cmvzg5p7gcoz
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:58.492Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-a-point
+  target: check/plotting/next
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:178
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "The pair to plot stands alone, unlabelled, under every plotting plane (mechanical). '(−4, 2)'
+    sits about 70 px below the plane at the left edge, with no word saying what it is, and the same
+    holds on all four plotting boards. On a phone, the plane and that pair are often not on screen
+    together. Suggested fix: put it right under the plane with a word ('Next: (−4, 2)' / 'अगला: (−4,
+    2)'), or beside the waiting dot at O."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:50.211Z
+      text: Say what the pair is.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:50.505Z
+      text: It now reads 'Now plot (−4, 2)' / 'अब आलेखित करो (−4, 2)', with the pair in bold, on every
+        plotting board. It stays where the layer writes its line, under the plane.
+      status: ready
+- id: cmvzg5pcc170
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:01:58.668Z
+  board: class9-maths/coordinate-geometry/plotting-points/graphs-you-know
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:794
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "The icon-only ↺ under every plotting plane wipes a finished board (mechanical). It appears
+    after the first right drop and stays after the board has passed. Tapped on graphs-you-know after
+    the last dot, all four green dots disappear and the dot waits at O again, while 'This is the
+    time-distance graph…' and the summary still point at a graph that is gone. The same happens on
+    plot-a-point, swap-the-numbers and plot-from-a-table. It has no words, so a student can't tell
+    what it will do. Under cmvzd3t7ahqc the fixer wrote 'no redo', but the ↺ is still there.
+    Suggested fix: hide it once every pair is plotted, or drop it, since wrong drops are no longer
+    kept."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:50.654Z
+      text: "moved from
+        content/class9-maths/coordinate-geometry/plotting-points/graphs-you-know#sheet/plotting/cle\
+        arPlotted to content/class9-maths/coordinate-geometry/plotting-points/graphs-you-know#sheet:
+        Drop the ↺: wrong drops aren't kept any more (this thread moves to the plane, since the ↺
+        part is gone)."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:50.821Z
+      text: ""
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:51.112Z
+      text: Removed from the plotting layer. clearPlotted is now a lesson action only, so nothing can wipe
+        a finished board.
+      status: ready
+- id: cmvzg68ept2b
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:23.377Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-from-a-table
+  target: second
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:406
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: Labels drawn over the plane (mechanical). At 1 square = 4 units, show reports the tick '4'
+    drawn over '(0, −1.25)', so neither can be read. At 1 square = 2 units, '(3, −1)' sits on the
+    x-axis line between the ticks 2 and 4. On the first plane, '(0, −3.5)' ends right against the
+    (2, −3) dot, so it reads as that dot's label. Place each pair label away from axes, ticks and
+    other dots.
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:51.275Z
+      text: More places for a pair's label, further out.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:51.575Z
+      text: A pair's label now also tries places further out, past a tick's number or the axis. The
+        chapter check (75 boards, 450 drawings) reports no words over words, and the board played at
+        4 units reports none.
+      status: ready
+- id: cmvzg68jxzet
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:23.565Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-from-a-table
+  target: crowded
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:430
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Maths inside a sentence (mechanical, principle 6). crowded has '8 has to fit in 4 squares: 8
+    ÷ 4 = 2 units is enough', and fits starts with the same working again: '8 in 4 squares: 8 ÷ 4 =
+    2 units to a square'. Give the working once, on its own line (8 ÷ 4 = 2), with the sentence
+    around it, and don't repeat it in fits."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:51.743Z
+      text: The working once, on its own line.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:52.120Z
+      text: "crowded: '…Try 1 square = 2 units: 8 has to fit in 4 squares, and', then $$8 \\div 4 = 2$$ on
+        its own line. fits no longer repeats it."
+      status: ready
+- id: cmvzg68pb9ui
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:23.759Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-from-a-table
+  target: fits
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:444
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: fits says 'The dots kept their numbers at every scale; only the drawing changed.' That is only
+    true on one path. A student who picks 1 square = 2 units straight after the notebook line (I
+    did) plots once, at one scale, and has seen no other scale with dots on it. Say it only when the
+    scale changed after dots were plotted (the crowded path), or cut it.
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:52.289Z
+      text: Say it as true on every path.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:52.651Z
+      text: fits now says 'Whatever the units, a dot keeps its numbers; only where it is drawn changes.'
+        That is a fact about scales, true on every path, and the student switching scales is free to
+        see it.
+      status: ready
+- id: cmvzg68ue75z
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:23.942Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-from-a-table
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:365
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Part of flow.md's purpose for this board is missing: 'a point's quadrant or axis can be told
+    from its signs, then checked by plotting' (Ex 3.3 Q1: '…Verify your answer by locating them on
+    the Cartesian plane'). quadrant-or-axis (lesson 3) asks Q1's signs half, but no board or
+    question here has the student plot (−2, 4), (3, −1), (−1, 0), (1, 2), (−3, −5) to check. The
+    checking half of Q1 (principle 11) and an objective named for this board (o9) are left out.
+    Suggested fix: a short third table of Q1's five points on this board, each dot's quadrant or
+    axis said once it turns green."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:52.856Z
+      text: Ex 3.3 Q1's five points plotted, in the question family.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:53.194Z
+      text: plot-the-point now uses Q1's own five points, (−2, 4), (3, −1), (−1, 0), (1, 2) and (−3, −5),
+        plus three with halves. That is the verify-by-locating half, as practice. This board already
+        carries two tables and the units, so I kept it there rather than adding a third table.
+      status: ready
+- id: cmvzg69mdv59
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:24.950Z
+  board: class9-maths/coordinate-geometry/plotting-points/graphs-you-know
+  target: miss
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:40
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Wrong axis names (mechanical). The whole point of this board is that the axes here are called
+    t and d, yet a wrong drop says 'x first: along the x-axis; then y: up or down'. There is no
+    x-axis on this plane. I dropped (2, 1) for (1, 2) and was told to go along an x-axis I couldn't
+    find. Say 't first: along the t-axis; then d: up' (हि: 't पहले: t-अक्ष के साथ; फिर d: ऊपर')."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:53.361Z
+      text: Hints in t and d on this board.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:53.649Z
+      text: "graphs-you-know's hints say 't first: along the t-axis; then d: up or down', and the swap
+        line uses t and d too."
+      status: ready
+- id: cmvzg69rmo33
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:25.138Z
+  board: class9-maths/coordinate-geometry/plotting-points/graphs-you-know
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:740
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: The axis names are too small to see (mechanical). The board is about the axes being called t
+    and d, but 't' and 'd' are tiny grey letters at the ends of the axes, smaller and paler than the
+    tick numbers, and the axis lines carry no other name. Draw them at least as large as the X/Y
+    names on the other planes in this lesson, in the axis colour.
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:53.817Z
+      text: Draw one-letter axis names as variables.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:54.105Z
+      text: An axis name of one letter (t, d) is drawn large, italic and in the axes' colour. Word names
+        (Street number) are as before.
+      status: ready
+- id: cmvzg69x7h1n
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:25.339Z
+  board: class9-maths/coordinate-geometry/plotting-points/graphs-you-know
+  target: same
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:755
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Part of the source is missing (principle 11). The remark (remark-graphs) names time-distance
+    and side-perimeter graphs, with the axes called t, d, s or p, and o14 says 'a time-distance or
+    side-perimeter graph'. same mentions only t and d. Add one clause: 'and a side-perimeter graph
+    names them s and p'."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:54.284Z
+      text: Add the side-perimeter graph.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:54.572Z
+      text: "same: '…A side-perimeter graph is the same again, its axes called s and p.' (Hindi too.)"
+      status: ready
+- id: cmvzg6a2mwkw
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:25.534Z
+  board: class9-maths/coordinate-geometry/plotting-points/graphs-you-know
+  target: summary
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:763
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Maths inside a sentence (mechanical). 'If x ≠ y, then (x, y) ≠ (y, x); if x = y, they are the
+    same point.' is a statement in symbols run into prose. In Hindi at 360 the pair also breaks
+    across lines: '(y,' at the end of one line and 'x);' at the start of the next. Put the statement
+    on its own line, (x, y) ≠ (y, x) when x ≠ y, and keep each pair from breaking."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:54.780Z
+      text: The statement on its own line.
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:55.085Z
+      text: "summary: 'Swapping the numbers moves the point, unless they are equal:' then $$(x,\\ y) \\neq
+        (y,\\ x) \\quad \\text{if} \\quad x \\neq y$$ on its own line (Hindi: x ≠ y: (x, y) ≠ (y,
+        x)). A display line can't break a pair."
+      status: ready
+- id: cmvzg6bu8c2w
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:27.824Z
+  board: class9-maths/coordinate-geometry/questions/plot-the-point
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "Most of the values are the lesson's own worked points. Rows 1–3 are P (3, 5), Q (5, −4) and R
+    (−4, 2) from plot-a-point, and row 5 is (0, −3.5) from Example 4 on plot-from-a-table. A student
+    who has just walked Riya to them can answer from memory, so the question doesn't show whether
+    they can plot a new pair (rubric: values varied enough to show the general case). Replace those
+    four with fresh pairs, keeping one in each quadrant, one on each axis and two halves."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:55.247Z
+      text: "moved from content/class9-maths/coordinate-geometry/questions/plot-the-point to
+        content/class9-maths/coordinate-geometry/questions/plot-the-point: Fresh values."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:55.421Z
+      text: ""
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:55.705Z
+      text: "The values are now Ex 3.3 Q1's five points plus (4.5, 1), (−1.5, −3) and (2, −3.5): all four
+        quadrants, the x-axis, and three halves. None is a point the lesson plotted."
+      status: ready
+- id: cmvzg6bzmjeb
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:28.018Z
+  board: class9-maths/coordinate-geometry/questions/plot-the-point
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
+  text: "A common slip gets no answer. The notes cover the swap and x's sign, but not y's sign (up
+    instead of down). For (−2, −3) I dropped the dot at (−2, 3) and got only 'wrong' with no note,
+    though 'up or down' is the step students most often get backwards (Q in plot-a-point was there
+    for exactly this). Add the note: 'That dot is on the wrong side of the x-axis: y = −3 is down.'
+    Skip it when y = 0."
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:55.869Z
+      text: "moved from content/class9-maths/coordinate-geometry/questions/plot-the-point to
+        content/class9-maths/coordinate-geometry/questions/plot-the-point: A note for y's sign."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.041Z
+      text: ""
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.340Z
+      text: "Added, skipped when y = 0: 'That dot is on the wrong side of the x-axis: y = −3 is down. Drag
+        it again.'"
+      status: ready
+- id: cmvzg6c50bkd
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T16:02:28.212Z
+  board: class9-maths/coordinate-geometry/questions/plot-the-point
+  commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  text: "The question works differently from the lesson. In the lesson every plotting board has the
+    dot waiting at O; a drop answers at once, and a right drop turns green. The person asked for
+    this under cmvzd3t7ahqc ('a point starting from origin and dragging… this applies for all the
+    boards of this flavor'). Here the dot starts in a corner at (−5, −5), a point of quadrant III,
+    and needs a Check button. A student who has learnt 'from O, x along, then y' starts from
+    somewhere else, and for a quadrant III pair the start already looks nearly right. Suggested fix:
+    start the dot at O, as the plotting boards do."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.500Z
+      text: "moved from content/class9-maths/coordinate-geometry/questions/plot-the-point to
+        content/class9-maths/coordinate-geometry/questions/plot-the-point: Start the dot at O."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.690Z
+      text: ""
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.986Z
+      text: "The dot starts at O. O's name moves clear when a dot stands on it. Check stays: a question is
+        judged when the student says they're done, and a dot that turned green on the drop would
+        give the answer away."
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
+    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
+    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
+    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
+    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
+    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
+    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
+    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
+    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
+    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
+    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
+    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
+    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
+    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
+    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
+    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
+    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
+    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
+    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
+    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
+    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
+    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
+    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
+    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
+    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
+    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
+    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
+    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
+    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
+    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
+    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
+    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/catalogue.md
+    - library/props/coordinates/src/place-clear.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plotting-view.tsx
+    - library/props/coordinates/src/plotting.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/walker.ts
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 168
+    boards: 68
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/plotting-points
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/plot-the-point
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  turn: person

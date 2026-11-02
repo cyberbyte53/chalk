@@ -28,18 +28,18 @@
       "seconds": 6.212
     },
     {
+      "file": "42d281549e802de3.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "2 units to a square is the smallest that fits every point. That is choosing suitable units: the page is used, and every point is easy to place. Whatever the units, a dot keeps its numbers; only where it is drawn changes.",
+      "seconds": 13.131
+    },
+    {
       "file": "421a7a740de22c8c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "5, 0 and 0, 5; 5, 2 and 2, 5; minus 3, 5 and 5, minus 3 are at different places. If x is not equal to y, x, y and y, x are different points: the order matters, so x, y is called an ordered pair. Only when x equals y, as in 3, 3, is the swap the same point.",
       "seconds": 23.07
-    },
-    {
-      "file": "03ab1a8e300592f2.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "8 in 4 squares: 8 divided by 4 is 2 units to a square, the smallest that fits every point. That is choosing suitable units: the page is used, and every point is easy to place. The dots kept their numbers at every scale; only the drawing changed.",
-      "seconds": 15.233
     },
     {
       "file": "1312c0d36dce3b25.m4a",
@@ -210,11 +210,11 @@
       "seconds": 5.376
     },
     {
-      "file": "d6c9e8ee215e0358.m4a",
+      "file": "9b867d18329bfaed.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Aman wrote the games stall's place as 2, 5. The volunteers set it up 2 along and 5 up, but Riya's plan says 5, 2: 5 along and 2 up. Does the order matter? Plot each point in turn: a pair and its swap come one after the other.",
-      "seconds": 14.292
+      "words": "Aman wrote the games stall's place as 2, 5. The volunteers set it up 2 along and 5 up, but Riya's plan says 5, 2: 5 along and 2 up. Does the order matter? Plot each point in turn: its swap is drawn with it, joined by a dashed line.",
+      "seconds": 14.548
     },
     {
       "file": "8af3e620e577aeba.m4a",
@@ -406,11 +406,11 @@
       "seconds": 19.134
     },
     {
-      "file": "a8da2b3ed64f3d64.m4a",
+      "file": "e495db762f2e6b04.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Every point fits, but at 4 units to a square they crowd near O, and minus 1.25 is hard to place. 8 has to fit in 4 squares: 8 divided by 4 is 2 units, enough. Try 1 square equal to 2 units.",
-      "seconds": 13.422
+      "words": "Every point fits, but at 4 units to a square they crowd near O, and minus 1.25 is hard to place. Try 1 square equal to 2 units: 8 has to fit in 4 squares, and 8 divided by 4 is 2.",
+      "seconds": 12.504
     },
     {
       "file": "ad45b4f598d344de.m4a",
@@ -588,11 +588,11 @@
       "seconds": 11.796
     },
     {
-      "file": "3718a80480c05951.m4a",
+      "file": "872be18299d5f46c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "In short: to plot x, y, go x along the x-axis, then y up or down. If x is not equal to y, then x, y is not equal to y, x; if x equals y, they are the same point.",
-      "seconds": 12.864
+      "words": "In short: to plot x, y, go x along the x-axis, then y up or down. Swapping the numbers moves the point, unless they are equal: if x is not equal to y, then x, y is not equal to y, x.",
+      "seconds": 13.758
     },
     {
       "file": "7e813fa1ee11b981.m4a",
@@ -712,6 +712,13 @@
       "locale": "en",
       "words": "Move the bus one stop at a time with the left and right arrows. Take it to stop 3.",
       "seconds": 4.691
+    },
+    {
+      "file": "1d5041ef7f95b10a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Not there. t first: along the t-axis; then d: up or down. Drag the dot again.",
+      "seconds": 6.003
     },
     {
       "file": "fd4bb95748ea203f.m4a",
@@ -868,18 +875,25 @@
       "seconds": 15.152
     },
     {
-      "file": "4ee9ae68d76407b5.m4a",
+      "file": "4601a0546e403158.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Plot the point 0, minus 3.5: drag the dot there, then press Check.",
-      "seconds": 5.492
+      "words": "Plot the point 1, 2: drag the dot there, then press Check.",
+      "seconds": 4.261
     },
     {
-      "file": "5b8b848d5306add9.m4a",
+      "file": "314d308e3f414f14.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Plot the point 3, 5: drag the dot there, then press Check.",
-      "seconds": 4.389
+      "words": "Plot the point 2, minus 3.5: drag the dot there, then press Check.",
+      "seconds": 5.364
+    },
+    {
+      "file": "ce13c38e5dd89a39.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Plot the point 3, minus 1: drag the dot there, then press Check.",
+      "seconds": 4.935
     },
     {
       "file": "a6c6e2d6eaffb4d3.m4a",
@@ -889,39 +903,32 @@
       "seconds": 5.004
     },
     {
-      "file": "a39037453c2114f3.m4a",
+      "file": "e7d35ba74ba25064.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Plot the point 5, minus 4: drag the dot there, then press Check.",
-      "seconds": 4.528
+      "words": "Plot the point minus 1, 0: drag the dot there, then press Check.",
+      "seconds": 4.865
     },
     {
-      "file": "9c1e21c41b772b55.m4a",
+      "file": "b9df48b45b25f8c5.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Plot the point minus 1.5, 4: drag the dot there, then press Check.",
-      "seconds": 4.9
+      "words": "Plot the point minus 1.5, minus 3: drag the dot there, then press Check.",
+      "seconds": 5.527
     },
     {
-      "file": "bd64c7d8ce35ad7e.m4a",
+      "file": "41385dfcca6afdae.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Plot the point minus 2, minus 3: drag the dot there, then press Check.",
-      "seconds": 5.004
-    },
-    {
-      "file": "f2d74cb69ba0b304.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Plot the point minus 3, 0: drag the dot there, then press Check.",
+      "words": "Plot the point minus 2, 4: drag the dot there, then press Check.",
       "seconds": 4.668
     },
     {
-      "file": "0110cacbd2e1d68d.m4a",
+      "file": "74d7fd8fceb481e1.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Plot the point minus 4, 2: drag the dot there, then press Check.",
-      "seconds": 4.621
+      "words": "Plot the point minus 3, minus 5: drag the dot there, then press Check.",
+      "seconds": 4.935
     },
     {
       "file": "69f0b15cb9280f09.m4a",
@@ -1330,11 +1337,11 @@
       "seconds": 4.436
     },
     {
-      "file": "7132a504cce8e5eb.m4a",
+      "file": "57c43e6a447c984d.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "She is back at O. Now plot Q, the point 5, minus 4: 5 along, then 4 down, since minus 4 is below the x-axis.",
-      "seconds": 8.603
+      "words": "She is back at O. Now plot Q, the point 5, minus 4: 5 along to B, then 4 down, since minus 4 is below the x-axis.",
+      "seconds": 8.766
     },
     {
       "file": "b43067ea0a4312e6.m4a",
@@ -1489,6 +1496,20 @@
       "locale": "en",
       "words": "That is H's pair. The ordinate is one number: the second.",
       "seconds": 3.46
+    },
+    {
+      "file": "402bfd002f00bee0.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is the pair swapped: you went along by d and up by t. t first, along; then d. Drag the dot again.",
+      "seconds": 6.676
+    },
+    {
+      "file": "e6c46643012929ad.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is the pair swapped: you went along by y and up by x. x first, along; then y. Drag the dot again.",
+      "seconds": 7.268
     },
     {
       "file": "dd6727d7c6a3f76e.m4a",
@@ -1722,11 +1743,11 @@
       "seconds": 11.1
     },
     {
-      "file": "454f7ed521fd7063.m4a",
+      "file": "62a279d96c9ab39f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The balloon stall! Its clue: the next stall is at the point minus 2, 0.",
-      "seconds": 5.039
+      "words": "The balloon stall! Its clue: the next stall is at the point 2, 0.",
+      "seconds": 4.575
     },
     {
       "file": "a6d5ccb0a9136047.m4a",
@@ -1827,11 +1848,11 @@
       "seconds": 5.62
     },
     {
-      "file": "4c0cf14e82ca40b3.m4a",
+      "file": "b236a7b3dd596dc7.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The first clue: go to the stall at the point 4, 1.",
-      "seconds": 3.402
+      "words": "The first clue: go to the stall at the point 3, 2.",
+      "seconds": 3.414
     },
     {
       "file": "a077b2c48a9ed6aa.m4a",
@@ -1846,13 +1867,6 @@
       "locale": "en",
       "words": "The house: along the main road to Street 4, then up Street 4 to House 5.",
       "seconds": 4.726
-    },
-    {
-      "file": "f895dde8b25b297e.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "The kite stall! Aman's lost kite is here. You found every stall from its address alone: x along, then y up or down.",
-      "seconds": 7.303
     },
     {
       "file": "75a6517baffd9b32.m4a",
@@ -1946,6 +1960,13 @@
       "seconds": 6.99
     },
     {
+      "file": "003250ee6b6829ca.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The prize stall! And there, among the prizes, is Aman's lost kite. You found every stall from its address alone: x along, then y up or down.",
+      "seconds": 8.929
+    },
+    {
       "file": "bedf53e76d08eba8.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -1953,11 +1974,11 @@
       "seconds": 3.588
     },
     {
-      "file": "03b4dcfd094af87e.m4a",
+      "file": "961d358762c304bd.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The snack stall! Its clue: the next stall is at the point minus 3, 4.",
-      "seconds": 5.202
+      "words": "The snack stall! Its clue: the next stall is at the point minus 4, 1.",
+      "seconds": 4.865
     },
     {
       "file": "59646e7d34cd2598.m4a",
@@ -1967,11 +1988,11 @@
       "seconds": 1.034
     },
     {
-      "file": "972ae1ab1cceae87.m4a",
+      "file": "a4ba39a5dcf082dc.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The toy stall! Its clue: the next stall is at the point 2, minus 3.",
-      "seconds": 4.842
+      "words": "The toy stall! Its clue: the next stall is at the point 4, minus 4.",
+      "seconds": 4.807
     },
     {
       "file": "39837ff468136449.m4a",
@@ -2030,46 +2051,46 @@
       "seconds": 10.635
     },
     {
-      "file": "618fbf602c38bdd3.m4a",
+      "file": "148d4764dd561b88.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the bangle stall, at the point 1, 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.23
+      "words": "This is the bangle stall, at the point 3, minus 2: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.532
     },
     {
-      "file": "15ab377228893754.m4a",
+      "file": "f44fdfc8441d3400.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the book stall, at the point minus 3, 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.648
+      "words": "This is the book stall, at the point minus 4, 1: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.718
     },
     {
-      "file": "a450032c9b39ecda.m4a",
+      "file": "33b1e19e30501325.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the juice stall, at the point minus 3, 2: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.637
+      "words": "This is the juice stall, at the point minus 4, 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.823
     },
     {
-      "file": "04e0a8224ada5423.m4a",
+      "file": "c1afe1c8bb72a508.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the kite stall, at the point 2, minus 3: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.463
+      "words": "This is the mask stall, at the point minus 2, 0: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.962
     },
     {
-      "file": "a5e7d77c83c87ac6.m4a",
+      "file": "d62f045fa0c87919.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the mask stall, at the point 2, 0: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.556
+      "words": "This is the prize stall, at the point 4, minus 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.579
     },
     {
-      "file": "ff5f1f57fd14c624.m4a",
+      "file": "a5d6dc396ddc76b9.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the shoe stall, at the point 4, minus 3: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.834
+      "words": "This is the shoe stall, at the point 1, minus 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.881
     },
     {
       "file": "5f565ff67fd4fb40.m4a",
@@ -2079,18 +2100,18 @@
       "seconds": 9.915
     },
     {
-      "file": "6cfcc18b4ef3869f.m4a",
+      "file": "49a53ed4d538d738.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the time-distance graph of earlier classes: the same plotting, with the axes called t and d instead of x and y.",
-      "seconds": 6.955
+      "words": "This is the time-distance graph of earlier classes: the same plotting, with the axes called t and d instead of x and y. A side-perimeter graph is the same again, its axes called s and p.",
+      "seconds": 12.063
     },
     {
-      "file": "988e38b97861a092.m4a",
+      "file": "a8bf7f72634f4ede.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "This is the toy stall, at the point minus 2, 0: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
-      "seconds": 9.95
+      "words": "This is the toy stall, at the point 2, 0: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.474
     },
     {
       "file": "82d0209ae173a531.m4a",
@@ -2289,13 +2310,6 @@
       "seconds": 6.502
     },
     {
-      "file": "5b80692c6efc81cb.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "4 खानों में 8: 8 भाग 4 बराबर 2 इकाई एक खाने में, वह सबसे छोटी जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है: पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। हर पैमाने पर बिंदुओं की संख्याएँ वही रहीं; केवल चित्र बदला।",
-      "seconds": 19.842
-    },
-    {
       "file": "f58ebe06498f2bca.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2303,11 +2317,11 @@
       "seconds": 9.172
     },
     {
-      "file": "0c7a2641267e0cb6.m4a",
+      "file": "f3cd03aff1bd5c9f.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "5, 0 और 0, 5; 5, 2 और 2, 5; माइनस 3, 5 और 5, माइनस 3 अलग-अलग जगहों पर हैं। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स अलग बिंदु हैं: क्रम मायने रखता है, इसलिए एक्स, वाई को क्रमित युग्म कहते हैं। केवल जब एक्स बराबर वाई, जैसे 3, 3 में, तब उलटा जोड़ा वही बिंदु है।",
-      "seconds": 31.255
+      "words": "5, 0 और 0, 5; 5, 2 और 2, 5; माइनस 3, 5 और 5, माइनस 3 अलग-अलग जगहों पर हैं। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स अलग बिंदु हैं: क्रम मायने रखता है, इसलिए एक्स, वाई को क्रमित युग्म कहते हैं। केवल जब एक्स बराबर वाई, जैसे 3, 3 में, तब उलटी जोड़ी वही बिंदु है।",
+      "seconds": 31.464
     },
     {
       "file": "240d4f79852d18a1.m4a",
@@ -2709,11 +2723,11 @@
       "seconds": 6.386
     },
     {
-      "file": "dee4261a4ff18893.m4a",
+      "file": "b71384fc1d7a9365.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "अमन ने खेल वाले स्टॉल की जगह 2, 5 लिखी। स्वयंसेवकों ने उसे 2 आगे और 5 ऊपर लगाया, पर रिया का नक्शा 5, 2 कहता है: 5 आगे और 2 ऊपर। क्या क्रम मायने रखता है? हर बिंदु बारी-बारी से आलेखित करो: हर जोड़ी के ठीक बाद उसकी उलटी जोड़ी आती है।",
-      "seconds": 20.782
+      "words": "अमन ने खेल वाले स्टॉल की जगह 2, 5 लिखी। स्वयंसेवकों ने उसे 2 आगे और 5 ऊपर लगाया, पर रिया का नक्शा 5, 2 कहता है: 5 आगे और 2 ऊपर। क्या क्रम मायने रखता है? हर बिंदु बारी-बारी से आलेखित करो: उसकी उलटी जोड़ी भी उसके साथ बनती है, टूटी रेखा से जुड़ी।",
+      "seconds": 21.676
     },
     {
       "file": "003de38e8d6d6eca.m4a",
@@ -2786,6 +2800,13 @@
       "seconds": 6.723
     },
     {
+      "file": "86d886eabcf0b8a7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "इनामों का स्टॉल! और वहाँ, इनामों के बीच, अमन की खोई पतंग है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: एक्स आगे, फिर वाई ऊपर या नीचे।",
+      "seconds": 11.831
+    },
+    {
       "file": "795e6256e133596e.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2819,6 +2840,13 @@
       "locale": "hi",
       "words": "उसकी चाल, 4 बाईं ओर और 2 ऊपर, तुम्हारे बिंदु पर ख़त्म होती है: R है बिंदु माइनस 4, 2, दूसरे चतुर्थांश में।",
       "seconds": 10.38
+    },
+    {
+      "file": "1dc96f60129204f3.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक खाने में 2 इकाई वह सबसे छोटी इकाई है जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है: पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। इकाई कोई भी हो, बिंदु की संख्याएँ वही रहती हैं; केवल वह कहाँ बनता है, यह बदलता है।",
+      "seconds": 18.762
     },
     {
       "file": "1b4a7759692bde61.m4a",
@@ -3017,11 +3045,11 @@
       "seconds": 1.521
     },
     {
-      "file": "2e5fcd6d922a99c7.m4a",
+      "file": "dfcd3a99880e7d38.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "खिलौनों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु 2, माइनस 3 पर है।",
-      "seconds": 6.177
+      "words": "खिलौनों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु 4, माइनस 4 पर है।",
+      "seconds": 6.247
     },
     {
       "file": "c358b52f1e8f88fc.m4a",
@@ -3052,11 +3080,11 @@
       "seconds": 64.227
     },
     {
-      "file": "57d85f883621dc9f.m4a",
+      "file": "d75ff81cd6fe1469.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "गुब्बारों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु माइनस 2, 0 पर है।",
-      "seconds": 6.165
+      "words": "गुब्बारों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु 2, 0 पर है।",
+      "seconds": 5.875
     },
     {
       "file": "bf681ce27eda3388.m4a",
@@ -3332,11 +3360,11 @@
       "seconds": 2.508
     },
     {
-      "file": "09ba7fca0fc224af.m4a",
+      "file": "49c389d9a6731b24.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "नाश्ते का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु माइनस 3, 4 पर है।",
-      "seconds": 6.212
+      "words": "नाश्ते का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु माइनस 4, 1 पर है।",
+      "seconds": 6.096
     },
     {
       "file": "378a41f930f07ba6.m4a",
@@ -3358,13 +3386,6 @@
       "locale": "hi",
       "words": "निर्देशांक लिखना",
       "seconds": 1.649
-    },
-    {
-      "file": "c62f6ed331e8e2e6.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "पतंगों का स्टॉल! अमन की खोई पतंग यहीं है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: एक्स आगे, फिर वाई ऊपर या नीचे।",
-      "seconds": 9.95
     },
     {
       "file": "353811e64b11efd1.m4a",
@@ -3430,11 +3451,11 @@
       "seconds": 6.096
     },
     {
-      "file": "e3bd5e1bed1f8aa6.m4a",
+      "file": "16516faef6d7c1fd.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "पहला सुराग: बिंदु 4, 1 वाले स्टॉल पर जाओ।",
-      "seconds": 4.11
+      "words": "पहला सुराग: बिंदु 3, 2 वाले स्टॉल पर जाओ।",
+      "seconds": 4.145
     },
     {
       "file": "d447585b09602c30.m4a",
@@ -3535,18 +3556,18 @@
       "seconds": 2.996
     },
     {
-      "file": "c7d63fcf90879cc4.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "बिंदु 0, माइनस 3.5 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 6.955
-    },
-    {
       "file": "9176885e7cf6c470.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "बिंदु 0, माइनस 5 दूसरी ओर है। L, एक्स-अक्ष के ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।",
       "seconds": 8.812
+    },
+    {
+      "file": "bbc29fa7bc7fa1b6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 1, 2 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 5.643
     },
     {
       "file": "4d051e829ff2e1e1.m4a",
@@ -3563,6 +3584,13 @@
       "seconds": 6.665
     },
     {
+      "file": "0d0110a63c635ad4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 2, माइनस 3.5 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 6.839
+    },
+    {
       "file": "3ee0288c75206ef0.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3577,11 +3605,11 @@
       "seconds": 15.36
     },
     {
-      "file": "5ec333a0cc9f4240.m4a",
+      "file": "631d3f94b60dbad9.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु 3, 5 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 5.585
+      "words": "बिंदु 3, माइनस 1 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 6.34
     },
     {
       "file": "865f74b0557faeab.m4a",
@@ -3610,13 +3638,6 @@
       "locale": "hi",
       "words": "बिंदु 5, 5 दूसरी ओर है। C, एक्स-अक्ष के नीचे है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।",
       "seconds": 8.232
-    },
-    {
-      "file": "0967a26e55c70d65.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "बिंदु 5, माइनस 4 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 6.374
     },
     {
       "file": "8a39c7b2cd4ddf06.m4a",
@@ -3724,6 +3745,13 @@
       "seconds": 13.491
     },
     {
+      "file": "2484dcaeebc3054e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु माइनस 1, 0 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 6.131
+    },
+    {
       "file": "649510018babe761.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3731,11 +3759,18 @@
       "seconds": 5.538
     },
     {
-      "file": "81086c8cd43ef390.m4a",
+      "file": "809cef3740e230e6.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु माइनस 1.5, 4 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 6.862
+      "words": "बिंदु माइनस 1.5, माइनस 3 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 7.512
+    },
+    {
+      "file": "ed2f07482f71af7b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु माइनस 2, 4 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 5.991
     },
     {
       "file": "20c41685a23872f9.m4a",
@@ -3745,18 +3780,11 @@
       "seconds": 5.341
     },
     {
-      "file": "1616fd0245ee8686.m4a",
+      "file": "1e37ed6630d8aedb.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु माइनस 2, माइनस 3 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 6.398
-    },
-    {
-      "file": "edf9876de116ce9d.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "बिंदु माइनस 3, 0 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 6.189
+      "words": "बिंदु माइनस 3, माइनस 5 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
+      "seconds": 6.549
     },
     {
       "file": "96c8a684ffe9d74c.m4a",
@@ -3764,13 +3792,6 @@
       "locale": "hi",
       "words": "बिंदु माइनस 3, माइनस 5 किस चतुर्थांश में, या किस अक्ष पर स्थित है?",
       "seconds": 5.887
-    },
-    {
-      "file": "afa8006a434cfb50.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "बिंदु माइनस 4, 2 आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।",
-      "seconds": 5.991
     },
     {
       "file": "3f814162392b827a.m4a",
@@ -3899,18 +3920,39 @@
       "seconds": 4.319
     },
     {
-      "file": "3aec1e6f3e773c49.m4a",
+      "file": "920d91aa8be1a18a.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह किताबों का स्टॉल है, बिंदु माइनस 3, 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.888
+      "words": "यह इनामों का स्टॉल है, बिंदु 4, माइनस 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.934
     },
     {
-      "file": "8e747085c3e112a1.m4a",
+      "file": "48a859e9cf254602.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह खिलौनों का स्टॉल है, बिंदु माइनस 2, 0 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.748
+      "words": "यह उलटी जोड़ी है: तुम d जितना आगे और t जितना ऊपर गए। पहले t, आगे; फिर d। बिंदु को फिर से खींचो।",
+      "seconds": 10.275
+    },
+    {
+      "file": "dba3fd7eb03e0bc9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह उलटी जोड़ी है: तुम वाई जितना आगे और एक्स जितना ऊपर गए। पहले एक्स, आगे; फिर वाई। बिंदु को फिर से खींचो।",
+      "seconds": 9.985
+    },
+    {
+      "file": "9d7987d5020668e9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह किताबों का स्टॉल है, बिंदु माइनस 4, 1 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.737
+    },
+    {
+      "file": "9b3db2e0fa535bc0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह खिलौनों का स्टॉल है, बिंदु 2, 0 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.632
     },
     {
       "file": "087e5831a58ae079.m4a",
@@ -3927,25 +3969,25 @@
       "seconds": 13.236
     },
     {
-      "file": "c74ba215656799a1.m4a",
+      "file": "8a4fa80960198c6f.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह चूड़ियों का स्टॉल है, बिंदु 1, 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.249
+      "words": "यह चूड़ियों का स्टॉल है, बिंदु 3, माइनस 2 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.377
     },
     {
-      "file": "bc0c7db0f2775573.m4a",
+      "file": "ea22632cbf88594c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह जूतों का स्टॉल है, बिंदु 4, माइनस 3 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.632
+      "words": "यह जूतों का स्टॉल है, बिंदु 1, माइनस 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.655
     },
     {
-      "file": "7d8a6a2098dc70ca.m4a",
+      "file": "dd06d7385e30fb3c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह जूस का स्टॉल है, बिंदु माइनस 3, 2 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.597
+      "words": "यह जूस का स्टॉल है, बिंदु माइनस 4, 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.655
     },
     {
       "file": "b7ba67b134697bc5.m4a",
@@ -3955,25 +3997,18 @@
       "seconds": 14.803
     },
     {
-      "file": "a8e5866e713d59b5.m4a",
+      "file": "d3f6f03b1168a754.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह पतंगों का स्टॉल है, बिंदु 2, माइनस 3 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.946
+      "words": "यह पिछली कक्षाओं का समय-दूरी ग्राफ़ है: वही आलेखन, बस अक्षों के नाम x और y की जगह t और d। भुजा-परिमाप ग्राफ़ भी यही है, उसके अक्षों के नाम s और p।",
+      "seconds": 12.992
     },
     {
-      "file": "41d41d0b75142c4c.m4a",
+      "file": "65b2961c98008568.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "यह पिछली कक्षाओं का समय-दूरी ग्राफ़ है: वही आलेखन, बस अक्षों के नाम x और y की जगह t और d।",
-      "seconds": 7.942
-    },
-    {
-      "file": "a1ea7a9fa3b9f3e3.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "यह मुखौटों का स्टॉल है, बिंदु 2, 0 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
-      "seconds": 12.423
+      "words": "यह मुखौटों का स्टॉल है, बिंदु माइनस 2, 0 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.725
     },
     {
       "file": "435f0052aeed12f2.m4a",
@@ -4221,11 +4256,11 @@
       "seconds": 5.062
     },
     {
-      "file": "d559479e94cd24ad.m4a",
+      "file": "d1212fae97dfebb0.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "वह फिर O पर है। अब Q, बिंदु 5, माइनस 4 आलेखित करो: 5 आगे, फिर 4 नीचे, क्योंकि माइनस 4, एक्स-अक्ष के नीचे है।",
-      "seconds": 11.669
+      "words": "वह फिर O पर है। अब Q, बिंदु 5, माइनस 4 आलेखित करो: B तक 5 आगे, फिर 4 नीचे, क्योंकि माइनस 4, एक्स-अक्ष के नीचे है।",
+      "seconds": 12.481
     },
     {
       "file": "93ef5588ab33954c.m4a",
@@ -4340,6 +4375,13 @@
       "seconds": 7.977
     },
     {
+      "file": "861990456424c337.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वहाँ नहीं। पहले t: t-अक्ष के साथ; फिर d: ऊपर या नीचे। बिंदु को फिर से खींचो।",
+      "seconds": 7.28
+    },
+    {
       "file": "3e9f212b60b4d391.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -4424,11 +4466,11 @@
       "seconds": 1.452
     },
     {
-      "file": "942e51ac339a3202.m4a",
+      "file": "6a2fa1e9affdc799.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "संक्षेप में: एक्स, वाई आलेखित करने के लिए एक्स-अक्ष के साथ एक्स चलो, फिर वाई ऊपर या नीचे। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स बराबर नहीं; यदि एक्स बराबर वाई, तो दोनों एक ही बिंदु हैं।",
-      "seconds": 17.404
+      "words": "संक्षेप में: एक्स, वाई आलेखित करने के लिए एक्स-अक्ष के साथ एक्स चलो, फिर वाई ऊपर या नीचे। संख्याएँ उलटने से बिंदु बदल जाता है, जब तक वे बराबर न हों: यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स बराबर नहीं।",
+      "seconds": 18.495
     },
     {
       "file": "5ec69b77aee2d8a8.m4a",
@@ -4508,11 +4550,11 @@
       "seconds": 2.508
     },
     {
-      "file": "e830e68e87b2c886.m4a",
+      "file": "85e234a0dfacdb89.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे O के पास भिड़ जाते हैं, और माइनस 1.25 को रखना कठिन है। 8 को 4 खानों में आना है: 8 भाग 4 बराबर 2 इकाई काफ़ी है। 1 खाना बराबर 2 इकाई आज़माओ।",
-      "seconds": 16.545
+      "words": "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे O के पास भिड़ जाते हैं, और माइनस 1.25 को रखना कठिन है। 1 खाना बराबर 2 इकाई आज़माओ: 8 को 4 खानों में आना है, और 8 भाग 4 बराबर 2।",
+      "seconds": 15.871
     }
   ]
 }

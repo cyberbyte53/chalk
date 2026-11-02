@@ -167,6 +167,13 @@ export const walker = prop({
       describe: "Walk Riya from her start to (x, y): along, then up",
     }),
     backToStart: action({}, { from: "screen", describe: "Riya back to where she started" }),
+    startHere: action(
+      {},
+      {
+        describe:
+          "Riya starts again from where she stands: her route so far is cleared (a trail's next leg)",
+      },
+    ),
   },
   signals: {
     stepped: signal(pointSchema.shape),
@@ -200,6 +207,7 @@ export const walker = prop({
     },
     backToStart: (me, _, t) =>
       me.walkFrom !== null && [t.stop(), t.set({ at: me.walkFrom, trail: [], isWalking: false })],
+    startHere: (me, _, t) => !me.isWalking && t.set({ walkFrom: me.at, trail: [] }),
   },
 });
 

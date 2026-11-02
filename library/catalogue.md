@@ -189,6 +189,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `walker.step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right, on roads only |
 | `walker.walkTo` | {x: "number", y: "number"} | Walk Riya from her start to (x, y): along, then up |
 | `walker.backToStart` | — | learner · Riya back to where she started |
+| `walker.startHere` | — | Riya starts again from where she stands: her route so far is cleared (a trail's next leg) |
 | `clues.giveClue` | {clue: "whole number 0 to 5"} | learner · Give a clue, by its place among the choices; where the point could be narrows (the learner's button) |
 | `clues.putAway` | — | Take the clues off the plane, their point with them: their work is done |
 | `clues.hideAt` | {x: "number", y: "number"} | learner · Hide a point of the learner's own at (x, y), for the others to find (the learner's tap) |
@@ -197,7 +198,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plotting.plotAt` | {x: "number", y: "number"} | learner · Drop the next pair's dot at (x, y) (the learner lets go): where the pair says, it is kept and the next dot waits at O; anywhere else it stays there, `missed` |
 | `plotting.plotNext` | — | Put the next pair's dot where it goes |
 | `plotting.chooseScale` | {every: "number 0 to …"} | learner · Ask for a scale: a number every this many units (the learner's choice); the plane changes its own scale, and the pairs off it then are `offPlane` |
-| `plotting.clearPlotted` | — | learner · Take every dot off (the learner's ↺) |
+| `plotting.clearPlotted` | — | Take every dot off, the next dot back at O |
 | `dice.throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `dice.startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 

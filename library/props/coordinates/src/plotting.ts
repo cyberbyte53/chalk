@@ -100,7 +100,7 @@ export const plotting = prop({
           "Ask for a scale: a number every this many units (the learner's choice); the plane changes its own scale, and the pairs off it then are `offPlane`",
       },
     ),
-    clearPlotted: action({}, { from: "screen", describe: "Take every dot off (the learner's ↺)" }),
+    clearPlotted: action({}, { describe: "Take every dot off, the next dot back at O" }),
   },
   signals: {
     plotted: signal({

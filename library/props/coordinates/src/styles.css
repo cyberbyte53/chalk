@@ -131,9 +131,15 @@
   font: 700 var(--text-caption) var(--font-body);
   fill: var(--color-on-surface-variant);
 }
+/* A name that is one letter (t, d) is a variable: as large and dark as the axes' own x and y. */
+.cp-frame .cp-axis-name.is-letter {
+  font: italic 700 15px var(--font-body);
+  fill: var(--color-on-surface);
+}
 /* A name over a town's houses stays readable: a halo of the page's colour under its letters. */
 .cp-frame .cp-axis-name,
 .cp-frame .cp-walker-name,
+.cp-frame .cp-place-label,
 .cp-frame .cp-dot text {
   paint-order: stroke;
   stroke: var(--color-surface);
@@ -262,6 +268,10 @@
 }
 
 /* ---- Riya's walk ---- */
+/* Riya and her route are to see: a tap goes through to the stall or house she stands on. */
+.cp-walk {
+  pointer-events: none;
+}
 .cp-walk-start {
   fill: var(--color-primary);
 }
@@ -306,7 +316,8 @@
 /* Riya's arrows: a cross, with ↺ beside it. */
 .cp-pad {
   display: grid;
-  grid-template-columns: repeat(3, auto) 1fr;
+  /* The last column may shrink: on a small phone ↺'s words wrap rather than run off the page. */
+  grid-template-columns: repeat(3, auto) minmax(0, 1fr);
   grid-template-areas:
     ". up . back"
     "left . right back"
@@ -331,6 +342,12 @@
   grid-area: back;
   justify-self: start;
   margin-left: 12px;
+  min-width: 0;
+  max-width: calc(100% - 12px);
+}
+.cp-pad-back button {
+  max-width: 100%;
+  white-space: normal;
 }
 
 /* ---- points: a figure's, the one to read, clues, plotted dots ---- */
@@ -431,6 +448,13 @@
 }
 .cp-dot.is-wrong text {
   fill: var(--color-wrong);
+}
+.cp-dot .cp-swap-self,
+.cp-dot.is-right .cp-swap-self {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
 }
 .cp-swap {
   fill: var(--color-on-surface-variant);

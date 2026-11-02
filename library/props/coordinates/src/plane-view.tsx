@@ -378,7 +378,7 @@ export function AxesDraw({
       {!isLines && s.showAxisNames && (
         <>
           <text
-            class="cp-axis-name"
+            class={nameClass(s.axisNames[0][locale])}
             {...shows("xName", s.axisNames[0][locale])}
             x={right}
             // Along the bottom, under the numbers; through the middle, just above its right end.
@@ -390,7 +390,7 @@ export function AxesDraw({
           </text>
           {hasUp(s) && (
             <text
-              class="cp-axis-name"
+              class={nameClass(s.axisNames[1][locale])}
               {...shows("yName", s.axisNames[1][locale])}
               x={vx + 8}
               y={top - 8}
@@ -561,23 +561,28 @@ export function NamedPointsDraw({ s, px }: { s: PlaneView; px: FramePixels }): J
 }
 
 /**
- * O (or 0) at the crossing, below and left of it; when a game's counter stands on the crossing, it
- * moves clear of the counters (below them, or left), so it is never half under one.
+ * O (or 0) at the crossing, below and left of it; when a game's counter or a point to drag stands on
+ * the crossing, it moves clear of it (below, or left), so it is never half under one.
  */
 function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; y: number }) {
   const ref = useRef<SVGTextElement>(null);
   useLayoutEffect(() => {
     const el = ref.current;
     if (el === null) return;
+    // Where it always is, unless a counter or a dot stands on it; then wherever is clear of those
+    // and of every other word (the axes' numbers beside it).
+    const onIt = ".cp-counters circle, .cp-counters text, circle.cp-point";
+    if (placeClear(el, [[x, y, "end"]], onIt) === 0) return;
     placeClear(
       el,
       [
-        [x, y, "end"],
         [x, y + 12, "end"],
         [x - 12, y, "end"],
         [x - 12, y + 12, "end"],
+        [x - 12, y - 14, "end"],
+        [x + 16, y + 12, "start"],
       ],
-      ".cp-counters circle, .cp-counters text",
+      `${onIt}, text`,
     );
   });
   return (
@@ -593,3 +598,6 @@ function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; 
     </text>
   );
 }
+
+/** An axis's name: a word (Street number), or one letter (t, d), drawn as a variable is. */
+const nameClass = (name: string) => (name.length === 1 ? "cp-axis-name is-letter" : "cp-axis-name");

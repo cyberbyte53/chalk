@@ -35,42 +35,78 @@ const marker = (name: string, x: number, y: number) => ({
 const FIG_3_15 = { xMin: -5.5, xMax: 6.5, yMin: -5.5, yMax: 6.5 };
 
 /** Said when a dot is dropped where its pair doesn't say; gone once one is placed right. */
-const miss = () =>
+const miss = (x = "x", y = "y") =>
   hidden(
     words.body(
       t(
-        "Not there. x first: along the x-axis; then y: up or down. Drag the dot again.",
-        "वहाँ नहीं। पहले x: x-अक्ष के साथ; फिर y: ऊपर या नीचे। बिंदु को फिर से खींचो।",
+        `Not there. ${x} first: along the ${x}-axis; then ${y}: up or down. Drag the dot again.`,
+        `वहाँ नहीं। पहले ${x}: ${x}-अक्ष के साथ; फिर ${y}: ऊपर या नीचे। बिंदु को फिर से खींचो।`,
       ),
       {
         says: t(
-          "Not there. x first: along the x-axis; then y: up or down. Drag the dot again.",
-          "वहाँ नहीं। पहले एक्स: एक्स-अक्ष के साथ; फिर वाई: ऊपर या नीचे। बिंदु को फिर से खींचो।",
+          `Not there. ${x} first: along the ${x}-axis; then ${y}: up or down. Drag the dot again.`,
+          `वहाँ नहीं। पहले ${x === "x" ? "एक्स" : x}: ${x === "x" ? "एक्स" : x}-अक्ष के साथ; फिर ${y === "y" ? "वाई" : y}: ऊपर या नीचे। बिंदु को फिर से खींचो।`,
         ),
       },
     ),
   );
 
-/** A plotting piece's rules for its hint: shown on a miss, gone on a right drop. */
+/** Said when the dot is dropped at the pair swapped: the slip named. */
+const missSwap = (x = "x", y = "y") =>
+  hidden(
+    words.body(
+      t(
+        `That is the pair **swapped**: you went along by ${y} and up by ${x}. ${x} first, along; then ${y}. Drag the dot again.`,
+        `यह **उलटी जोड़ी** है: तुम ${y} जितना आगे और ${x} जितना ऊपर गए। पहले ${x}, आगे; फिर ${y}। बिंदु को फिर से खींचो।`,
+      ),
+      {
+        says: t(
+          `That is the pair swapped: you went along by ${y} and up by ${x}. ${x} first, along; then ${y}. Drag the dot again.`,
+          `यह उलटी जोड़ी है: तुम ${y === "y" ? "वाई" : y} जितना आगे और ${x === "x" ? "एक्स" : x} जितना ऊपर गए। पहले ${x === "x" ? "एक्स" : x}, आगे; फिर ${y === "y" ? "वाई" : y}। बिंदु को फिर से खींचो।`,
+        ),
+      },
+    ),
+  );
+
+type Hints = {
+  self: { show: (p: { name: string }) => unknown; hide: (p: { name: string }) => unknown };
+};
+type Plotting = { hidden: readonly string[] } & Record<
+  string,
+  { plotting: { toPlot: readonly { x: number; y: number }[] } } | readonly string[]
+>;
+
+/** A drop at the pair swapped (a pair with two different numbers). */
+const isSwapOf = (pair: { x: number; y: number } | undefined, at: { x: number; y: number }) =>
+  pair !== undefined && pair.x !== pair.y && at.x === pair.y && at.y === pair.x;
+
+/** A plotting piece's hints: a miss at the pair swapped names the swap; any other, the plain one. */
 const missRules = (piece: string, hint: string) => ({
   [`${piece}.plotting.missed`]: (
-    _: unknown,
-    __: unknown,
-    t: { self: { show: (p: { name: string }) => unknown } },
-  ) => t.self.show({ name: hint }),
-  [`${piece}.plotting.plotted`]: (
-    me: { hidden: readonly string[] },
-    __: unknown,
-    t: { self: { hide: (p: { name: string }) => unknown } },
-  ) => (me.hidden.includes(hint) ? undefined : t.self.hide({ name: hint })),
+    me: Plotting,
+    p: { n: number; x: number; y: number },
+    t: Hints,
+  ) => {
+    const at = me[piece] as { plotting: { toPlot: readonly { x: number; y: number }[] } };
+    const isSwap = isSwapOf(at.plotting.toPlot[p.n], p);
+    return [
+      t.self.hide({ name: isSwap ? hint : `${hint}Swap` }),
+      t.self.show({ name: isSwap ? `${hint}Swap` : hint }),
+    ];
+  },
+  [`${piece}.plotting.plotted`]: (_: unknown, __: unknown, t: Hints) => [
+    t.self.hide({ name: hint }),
+    t.self.hide({ name: `${hint}Swap` }),
+  ],
 });
 
-/** The first pair dropped swapped (a miss), then every pair right: the path a student who slips takes. */
+/** The first pair dropped swapped, then one square off, then every pair right: the slips students make. */
 const slipThenRight = (piece: string, pairs: readonly { x: number; y: number }[]) => {
   const [first] = pairs;
   if (first === undefined) return [];
   return [
-    tap(`${piece}.plotting`, "plotAt", { x: first.y, y: first.x + 1 }),
+    tap(`${piece}.plotting`, "plotAt", { x: first.y, y: first.x }),
+    tap(`${piece}.plotting`, "plotAt", { x: first.x + 1, y: first.y }),
     ...pairs.map((p) => tap(`${piece}.plotting`, "plotAt", p)),
   ];
 };
@@ -133,13 +169,13 @@ const plotAPoint = page(
       toQ: hidden(
         words.body(
           t(
-            "She is back at O. Now plot Q (5, −4): **5 along**, then **4 down**, since −4 is below the x-axis.",
-            "वह फिर O पर है। अब Q (5, −4) आलेखित करो: **5 आगे**, फिर **4 नीचे**, क्योंकि −4, x-अक्ष के नीचे है।",
+            "She is back at O. Now plot Q (5, −4): **5 along** to B, then **4 down**, since −4 is below the x-axis.",
+            "वह फिर O पर है। अब Q (5, −4) आलेखित करो: B तक **5 आगे**, फिर **4 नीचे**, क्योंकि −4, x-अक्ष के नीचे है।",
           ),
           {
             says: t(
-              "She is back at O. Now plot Q, the point 5, minus 4: 5 along, then 4 down, since minus 4 is below the x-axis.",
-              "वह फिर O पर है। अब Q, बिंदु 5, माइनस 4 आलेखित करो: 5 आगे, फिर 4 नीचे, क्योंकि माइनस 4, एक्स-अक्ष के नीचे है।",
+              "She is back at O. Now plot Q, the point 5, minus 4: 5 along to B, then 4 down, since minus 4 is below the x-axis.",
+              "वह फिर O पर है। अब Q, बिंदु 5, माइनस 4 आलेखित करो: B तक 5 आगे, फिर 4 नीचे, क्योंकि माइनस 4, एक्स-अक्ष के नीचे है।",
             ),
           },
         ),
@@ -302,13 +338,13 @@ const swapTheNumbers = page(
       title: words.title(t("Swap the numbers", "संख्याएँ उलटो")),
       story: words.body(
         t(
-          "Aman wrote the games stall's place as (2, 5). The volunteers set it up **2 along and 5 up**, but Riya's plan says (5, 2): **5 along and 2 up**. Does the order matter? Plot each point in turn: a pair and its swap come one after the other.",
-          "अमन ने खेल वाले स्टॉल की जगह (2, 5) लिखी। स्वयंसेवकों ने उसे **2 आगे और 5 ऊपर** लगाया, पर रिया का नक्शा (5, 2) कहता है: **5 आगे और 2 ऊपर**। क्या क्रम मायने रखता है? हर बिंदु बारी-बारी से आलेखित करो: हर जोड़ी के ठीक बाद उसकी उलटी जोड़ी आती है।",
+          "Aman wrote the games stall's place as (2, 5). The volunteers set it up **2 along and 5 up**, but Riya's plan says (5, 2): **5 along and 2 up**. Does the order matter? Plot each point in turn: its swap is drawn with it, joined by a dashed line.",
+          "अमन ने खेल वाले स्टॉल की जगह (2, 5) लिखी। स्वयंसेवकों ने उसे **2 आगे और 5 ऊपर** लगाया, पर रिया का नक्शा (5, 2) कहता है: **5 आगे और 2 ऊपर**। क्या क्रम मायने रखता है? हर बिंदु बारी-बारी से आलेखित करो: उसकी उलटी जोड़ी भी उसके साथ बनती है, टूटी रेखा से जुड़ी।",
         ),
         {
           says: t(
-            "Aman wrote the games stall's place as 2, 5. The volunteers set it up 2 along and 5 up, but Riya's plan says 5, 2: 5 along and 2 up. Does the order matter? Plot each point in turn: a pair and its swap come one after the other.",
-            "अमन ने खेल वाले स्टॉल की जगह 2, 5 लिखी। स्वयंसेवकों ने उसे 2 आगे और 5 ऊपर लगाया, पर रिया का नक्शा 5, 2 कहता है: 5 आगे और 2 ऊपर। क्या क्रम मायने रखता है? हर बिंदु बारी-बारी से आलेखित करो: हर जोड़ी के ठीक बाद उसकी उलटी जोड़ी आती है।",
+            "Aman wrote the games stall's place as 2, 5. The volunteers set it up 2 along and 5 up, but Riya's plan says 5, 2: 5 along and 2 up. Does the order matter? Plot each point in turn: its swap is drawn with it, joined by a dashed line.",
+            "अमन ने खेल वाले स्टॉल की जगह 2, 5 लिखी। स्वयंसेवकों ने उसे 2 आगे और 5 ऊपर लगाया, पर रिया का नक्शा 5, 2 कहता है: 5 आगे और 2 ऊपर। क्या क्रम मायने रखता है? हर बिंदु बारी-बारी से आलेखित करो: उसकी उलटी जोड़ी भी उसके साथ बनती है, टूटी रेखा से जुड़ी।",
           ),
         },
       ),
@@ -316,21 +352,22 @@ const swapTheNumbers = page(
         coordinatePlane,
         setup({
           plane: { window: { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 }, ...AXES },
-          plotting: { toPlot: EXAMPLE_3, showTable: true },
+          plotting: { toPlot: EXAMPLE_3, showTable: true, showSwaps: true },
         }),
       ),
       miss: miss(),
+      missSwap: missSwap(),
       ordered: hidden(
         words.definition(
           t(
             "**(5, 0) and (0, 5), (5, 2) and (2, 5), (−3, 5) and (5, −3) are at different places. If x\u00a0≠\u00a0y, (x, y) and (y, x) are different points: the order matters, so (x, y) is called an ordered pair.** Only when x\u00a0=\u00a0y, as in (3, 3), is the swap the same point.",
-            "**(5, 0) और (0, 5), (5, 2) और (2, 5), (−3, 5) और (5, −3) अलग-अलग जगहों पर हैं। यदि x\u00a0≠\u00a0y, तो (x, y) और (y, x) अलग बिंदु हैं: क्रम मायने रखता है, इसलिए (x, y) को क्रमित युग्म कहते हैं।** केवल जब x\u00a0=\u00a0y, जैसे (3, 3) में, तब उलटा जोड़ा वही बिंदु है।",
+            "**(5, 0) और (0, 5), (5, 2) और (2, 5), (−3, 5) और (5, −3) अलग-अलग जगहों पर हैं। यदि x\u00a0≠\u00a0y, तो (x, y) और (y, x) अलग बिंदु हैं: क्रम मायने रखता है, इसलिए (x, y) को क्रमित युग्म कहते हैं।** केवल जब x\u00a0=\u00a0y, जैसे (3, 3) में, तब उलटी जोड़ी वही बिंदु है।",
           ),
           null,
           {
             says: t(
               "5, 0 and 0, 5; 5, 2 and 2, 5; minus 3, 5 and 5, minus 3 are at different places. If x is not equal to y, x, y and y, x are different points: the order matters, so x, y is called an ordered pair. Only when x equals y, as in 3, 3, is the swap the same point.",
-              "5, 0 और 0, 5; 5, 2 और 2, 5; माइनस 3, 5 और 5, माइनस 3 अलग-अलग जगहों पर हैं। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स अलग बिंदु हैं: क्रम मायने रखता है, इसलिए एक्स, वाई को क्रमित युग्म कहते हैं। केवल जब एक्स बराबर वाई, जैसे 3, 3 में, तब उलटा जोड़ा वही बिंदु है।",
+              "5, 0 और 0, 5; 5, 2 और 2, 5; माइनस 3, 5 और 5, माइनस 3 अलग-अलग जगहों पर हैं। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स अलग बिंदु हैं: क्रम मायने रखता है, इसलिए एक्स, वाई को क्रमित युग्म कहते हैं। केवल जब एक्स बराबर वाई, जैसे 3, 3 में, तब उलटी जोड़ी वही बिंदु है।",
             ),
           },
         ),
@@ -387,6 +424,7 @@ const plotFromATable = page(
         }),
       ),
       missFirst: miss(),
+      missFirstSwap: missSwap(),
       notebook: hidden(
         words.body(
           t(
@@ -426,16 +464,17 @@ const plotFromATable = page(
         ),
       ),
       missSecond: miss(),
+      missSecondSwap: missSwap(),
       crowded: hidden(
         words.body(
           t(
-            "Every point fits, but at 4 units to a square they **crowd near O**, and −1.25 is hard to place. 8 has to fit in 4 squares: 8 ÷ 4 = 2 units is enough. Try **1 square = 2 units**.",
-            "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे **O के पास भिड़ जाते हैं**, और −1.25 को रखना कठिन है। 8 को 4 खानों में आना है: 8 ÷ 4 = 2 इकाई काफ़ी है। **1 खाना = 2 इकाई** आज़माओ।",
+            "Every point fits, but at 4 units to a square they **crowd near O**, and −1.25 is hard to place. Try **1 square = 2 units**: 8 has to fit in 4 squares, and\n$$8 \\div 4 = 2$$",
+            "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे **O के पास भिड़ जाते हैं**, और −1.25 को रखना कठिन है। **1 खाना = 2 इकाई** आज़माओ: 8 को 4 खानों में आना है, और\n$$8 \\div 4 = 2$$",
           ),
           {
             says: t(
-              "Every point fits, but at 4 units to a square they crowd near O, and minus 1.25 is hard to place. 8 has to fit in 4 squares: 8 divided by 4 is 2 units, enough. Try 1 square equal to 2 units.",
-              "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे O के पास भिड़ जाते हैं, और माइनस 1.25 को रखना कठिन है। 8 को 4 खानों में आना है: 8 भाग 4 बराबर 2 इकाई काफ़ी है। 1 खाना बराबर 2 इकाई आज़माओ।",
+              "Every point fits, but at 4 units to a square they crowd near O, and minus 1.25 is hard to place. Try 1 square equal to 2 units: 8 has to fit in 4 squares, and 8 divided by 4 is 2.",
+              "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे O के पास भिड़ जाते हैं, और माइनस 1.25 को रखना कठिन है। 1 खाना बराबर 2 इकाई आज़माओ: 8 को 4 खानों में आना है, और 8 भाग 4 बराबर 2।",
             ),
           },
         ),
@@ -443,14 +482,14 @@ const plotFromATable = page(
       fits: hidden(
         words.definition(
           t(
-            "**8 in 4 squares: 8 ÷ 4 = 2 units to a square, the smallest that fits every point. That is choosing suitable units:** the page is used, and every point is easy to place. The dots kept their numbers at every scale; only the drawing changed.",
-            "**4 खानों में 8: 8 ÷ 4 = 2 इकाई एक खाने में, वह सबसे छोटी जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है:** पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। हर पैमाने पर बिंदुओं की संख्याएँ वही रहीं; केवल चित्र बदला।",
+            "**2 units to a square is the smallest that fits every point. That is choosing suitable units:** the page is used, and every point is easy to place. Whatever the units, a dot keeps its numbers; only where it is drawn changes.",
+            "**एक खाने में 2 इकाई वह सबसे छोटी इकाई है जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है:** पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। इकाई कोई भी हो, बिंदु की संख्याएँ वही रहती हैं; केवल वह कहाँ बनता है, यह बदलता है।",
           ),
           null,
           {
             says: t(
-              "8 in 4 squares: 8 divided by 4 is 2 units to a square, the smallest that fits every point. That is choosing suitable units: the page is used, and every point is easy to place. The dots kept their numbers at every scale; only the drawing changed.",
-              "4 खानों में 8: 8 भाग 4 बराबर 2 इकाई एक खाने में, वह सबसे छोटी जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है: पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। हर पैमाने पर बिंदुओं की संख्याएँ वही रहीं; केवल चित्र बदला।",
+              "2 units to a square is the smallest that fits every point. That is choosing suitable units: the page is used, and every point is easy to place. Whatever the units, a dot keeps its numbers; only where it is drawn changes.",
+              "एक खाने में 2 इकाई वह सबसे छोटी इकाई है जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है: पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। इकाई कोई भी हो, बिंदु की संख्याएँ वही रहती हैं; केवल वह कहाँ बनता है, यह बदलता है।",
             ),
           },
         ),
@@ -465,12 +504,19 @@ const plotFromATable = page(
       ],
       // A drop short of a pair that isn't on the page (at 1 unit, (−2, 8) stops at its top edge):
       // there is no room, so the units are to choose; any other miss is an ordinary one.
-      "second.plotting.missed": (me, p, t) =>
-        me.second.plotting.offPlane.some((o) => o.n === p.n)
-          ? t.self.show({ name: "noRoom" })
-          : t.self.show({ name: "missSecond" }),
-      "second.plotting.plotted": (me, _, t) =>
-        !me.hidden.includes("missSecond") && t.self.hide({ name: "missSecond" }),
+      "second.plotting.missed": (me, p, t) => {
+        if (me.second.plotting.offPlane.some((o) => o.n === p.n))
+          return t.self.show({ name: "noRoom" });
+        const isSwap = isSwapOf(me.second.plotting.toPlot[p.n], p);
+        return [
+          t.self.hide({ name: isSwap ? "missSecond" : "missSecondSwap" }),
+          t.self.show({ name: isSwap ? "missSecondSwap" : "missSecond" }),
+        ];
+      },
+      "second.plotting.plotted": (_, __, t) => [
+        t.self.hide({ name: "missSecond" }),
+        t.self.hide({ name: "missSecondSwap" }),
+      ],
       // Every point plotted: at 2 units, the point is made; at 4, too crowded, so try 2.
       "second.plotting.allPlotted": (me, _, t) =>
         me.second.plotting.tickEvery === 2
@@ -506,21 +552,27 @@ type Stall = {
   hiOf: string;
 };
 
-/** The trail, in order: one stall in each quadrant, one on the x-axis, the kite last. */
+/**
+ * The trail, in order: one stall in each quadrant, one on the x-axis, the prizes last. Snacks and
+ * books stand where Riya's plan put them in lesson 3.
+ */
 const ROUTE: Stall[] = [
-  { key: "snacks", x: 4, y: 1, sign: ["Snacks", "नाश्ता"], en: "snack", hiOf: "नाश्ते का" },
-  { key: "books", x: -3, y: 4, sign: ["Books", "किताबें"], en: "book", hiOf: "किताबों का" },
+  { key: "snacks", x: 3, y: 2, sign: ["Snacks", "नाश्ता"], en: "snack", hiOf: "नाश्ते का" },
+  { key: "books", x: -4, y: 1, sign: ["Books", "किताबें"], en: "book", hiOf: "किताबों का" },
   { key: "balloons", x: -2, y: -4, sign: ["Balloons", "गुब्बारे"], en: "balloon", hiOf: "गुब्बारों का" },
-  { key: "toys", x: -2, y: 0, sign: ["Toys", "खिलौने"], en: "toy", hiOf: "खिलौनों का" },
-  { key: "kites", x: 2, y: -3, sign: ["Kites", "पतंगें"], en: "kite", hiOf: "पतंगों का" },
+  { key: "toys", x: 2, y: 0, sign: ["Toys", "खिलौने"], en: "toy", hiOf: "खिलौनों का" },
+  { key: "prizes", x: 4, y: -4, sign: ["Prizes", "इनाम"], en: "prize", hiOf: "इनामों का" },
 ];
-/** Where a slip lands: each clue's address swapped, and the axis stop's sign flipped. */
+/**
+ * Where a slip lands: each clue's address swapped, or a sign flipped where the swap would stand on
+ * the stall beside it (the first clue's, and the axis stop's).
+ */
 const DECOYS: Stall[] = [
-  { key: "bangles", x: 1, y: 4, sign: ["Bangles", "चूड़ियाँ"], en: "bangle", hiOf: "चूड़ियों का" },
-  { key: "shoes", x: 4, y: -3, sign: ["Shoes", "जूते"], en: "shoe", hiOf: "जूतों का" },
+  { key: "bangles", x: 3, y: -2, sign: ["Bangles", "चूड़ियाँ"], en: "bangle", hiOf: "चूड़ियों का" },
+  { key: "shoes", x: 1, y: -4, sign: ["Shoes", "जूते"], en: "shoe", hiOf: "जूतों का" },
   { key: "tea", x: -4, y: -2, sign: ["Tea", "चाय"], en: "tea", hiOf: "चाय का" },
-  { key: "masks", x: 2, y: 0, sign: ["Masks", "मुखौटे"], en: "mask", hiOf: "मुखौटों का" },
-  { key: "juice", x: -3, y: 2, sign: ["Juice", "जूस"], en: "juice", hiOf: "जूस का" },
+  { key: "masks", x: -2, y: 0, sign: ["Masks", "मुखौटे"], en: "mask", hiOf: "मुखौटों का" },
+  { key: "juice", x: -4, y: 4, sign: ["Juice", "जूस"], en: "juice", hiOf: "जूस का" },
 ];
 const STALLS = [...ROUTE, ...DECOYS];
 
@@ -541,14 +593,14 @@ const clueAt = (i: number) => {
     next === undefined
       ? words.definition(
           t(
-            "**The kite stall!** Aman's lost kite is here. You found every stall from its address alone: x along, then y up or down.",
-            "**पतंगों का स्टॉल!** अमन की खोई पतंग यहीं है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: x आगे, फिर y ऊपर या नीचे।",
+            "**The prize stall!** And there, among the prizes, is Aman's lost kite. You found every stall from its address alone: x along, then y up or down.",
+            "**इनामों का स्टॉल!** और वहाँ, इनामों के बीच, अमन की खोई पतंग है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: x आगे, फिर y ऊपर या नीचे।",
           ),
           null,
           {
             says: t(
-              "The kite stall! Aman's lost kite is here. You found every stall from its address alone: x along, then y up or down.",
-              "पतंगों का स्टॉल! अमन की खोई पतंग यहीं है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: एक्स आगे, फिर वाई ऊपर या नीचे।",
+              "The prize stall! And there, among the prizes, is Aman's lost kite. You found every stall from its address alone: x along, then y up or down.",
+              "इनामों का स्टॉल! और वहाँ, इनामों के बीच, अमन की खोई पतंग है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: एक्स आगे, फिर वाई ऊपर या नीचे।",
             ),
           },
         )
@@ -680,6 +732,8 @@ const treasureTrail = page(
             ...notes,
             t.self.hide({ name: before }),
             t.self.show({ name: `at${capital(target.key)}` }),
+            // The next leg starts here: only the walk to the next stall is drawn.
+            t.to.ground.walker.startHere({}),
             ...(k === ROUTE.length - 1 ? [t.self.pass()] : []),
           ];
         }
@@ -691,26 +745,26 @@ const treasureTrail = page(
     // A student who slips: a stall tapped from afar, stalls opened too early, and each clue's
     // swapped address before its own.
     witness: [
-      [-3, 4],
-      [1, 4],
-      [4, 1],
-      [-2, -4],
-      [-2, 0],
-      [4, -3],
-      [-3, 4],
-      [2, -3],
-      [-4, -2],
+      [-4, 1],
+      [3, -2],
+      [3, 2],
       [-2, -4],
       [2, 0],
+      [1, -4],
+      [-4, 1],
+      [4, -4],
+      [-4, -2],
+      [-2, -4],
       [-2, 0],
-      [-3, 2],
-      [2, -3],
+      [2, 0],
+      [-4, 4],
+      [4, -4],
     ].flatMap(([x, y], i, all) => {
       const [fx, fy] = all[i - 1] ?? [0, 0];
       const here = { x: x ?? 0, y: y ?? 0 };
       return [
         // A stall tapped from the gate, before walking there.
-        ...(i === 0 ? [tap("ground.places", "chooseTarget", { x: 4, y: 1 })] : []),
+        ...(i === 0 ? [tap("ground.places", "chooseTarget", { x: 3, y: 2 })] : []),
         ...stepsBetween({ x: fx ?? 0, y: fy ?? 0 }, here),
         tap("ground.places", "chooseTarget", here),
       ];
@@ -750,25 +804,26 @@ const graphsYouKnow = page(
           plotting: { toPlot: WALK, showTable: true },
         }),
       ),
-      miss: miss(),
+      miss: miss("t", "d"),
+      missSwap: missSwap("t", "d"),
       same: hidden(
         words.body(
           t(
-            "This is the time-distance graph of earlier classes: the same plotting, with the axes called t and d instead of x and y.",
-            "यह पिछली कक्षाओं का समय-दूरी ग्राफ़ है: वही आलेखन, बस अक्षों के नाम x और y की जगह t और d।",
+            "This is the time-distance graph of earlier classes: the same plotting, with the axes called t and d instead of x and y. A side-perimeter graph is the same again, its axes called s and p.",
+            "यह पिछली कक्षाओं का समय-दूरी ग्राफ़ है: वही आलेखन, बस अक्षों के नाम x और y की जगह t और d। भुजा-परिमाप ग्राफ़ भी यही है, उसके अक्षों के नाम s और p।",
           ),
         ),
       ),
       summary: hidden(
         words.body(
           t(
-            "**In short:** to plot (x, y), go x along the x-axis, then y up or down. If x\u00a0≠\u00a0y, then (x, y) ≠ (y, x); if x\u00a0=\u00a0y, they are the same point.",
-            "**संक्षेप में:** (x, y) आलेखित करने के लिए x-अक्ष के साथ x चलो, फिर y ऊपर या नीचे। यदि x\u00a0≠\u00a0y, तो (x, y) ≠ (y, x); यदि x\u00a0=\u00a0y, तो दोनों एक ही बिंदु हैं।",
+            "**In short:** to plot (x, y), go x along the x-axis, then y up or down. Swapping the numbers moves the point, unless they are equal:\n$$(x,\\ y) \\neq (y,\\ x) \\quad \\text{if} \\quad x \\neq y$$",
+            "**संक्षेप में:** (x, y) आलेखित करने के लिए x-अक्ष के साथ x चलो, फिर y ऊपर या नीचे। संख्याएँ उलटने से बिंदु बदल जाता है, जब तक वे बराबर न हों:\n$$x \\neq y: \\quad (x,\\ y) \\neq (y,\\ x)$$",
           ),
           {
             says: t(
-              "In short: to plot x, y, go x along the x-axis, then y up or down. If x is not equal to y, then x, y is not equal to y, x; if x equals y, they are the same point.",
-              "संक्षेप में: एक्स, वाई आलेखित करने के लिए एक्स-अक्ष के साथ एक्स चलो, फिर वाई ऊपर या नीचे। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स बराबर नहीं; यदि एक्स बराबर वाई, तो दोनों एक ही बिंदु हैं।",
+              "In short: to plot x, y, go x along the x-axis, then y up or down. Swapping the numbers moves the point, unless they are equal: if x is not equal to y, then x, y is not equal to y, x.",
+              "संक्षेप में: एक्स, वाई आलेखित करने के लिए एक्स-अक्ष के साथ एक्स चलो, फिर वाई ऊपर या नीचे। संख्याएँ उलटने से बिंदु बदल जाता है, जब तक वे बराबर न हों: यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स बराबर नहीं।",
             ),
           },
         ),

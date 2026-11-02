@@ -11,6 +11,8 @@ export const WORDS = {
   thePoint: { en: "The point", hi: "बिंदु" },
   showPoint: { en: "Show where it is", hi: "दिखाओ कहाँ है" },
   clear: { en: "Clear", hi: "हटाओ" },
+  /** Before the pair whose dot is to drag now. */
+  next: { en: "Now plot", hi: "अब आलेखित करो" },
   lightsOff: { en: "Lights off", hi: "रोशनी बंद" },
   blackboard: { en: "Blackboard", hi: "श्यामपट" },
   throw: { en: "Throw", hi: "फेंको" },

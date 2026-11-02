@@ -1,8 +1,10 @@
-- params: { x: 3, y: 5 }
-- params: { x: 5, y: -4 }
-- params: { x: -4, y: 2 }
-- params: { x: -2, y: -3 }
-- params: { x: 0, y: -3.5 }
+# The book's own points to place (Ex 3.3 Q1: name the quadrant or axis, then verify by locating),
+# then three with a half, between the marks.
+- params: { x: -2, y: 4 }
+- params: { x: 3, y: -1 }
+- params: { x: -1, y: 0 }
+- params: { x: 1, y: 2 }
+- params: { x: -3, y: -5 }
 - params: { x: 4.5, y: 1 }
-- params: { x: -3, y: 0 }
-- params: { x: -1.5, y: 4 }
+- params: { x: -1.5, y: -3 }
+- params: { x: 2, y: -3.5 }
