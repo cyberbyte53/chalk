@@ -64,7 +64,8 @@ const numberLine = page(
             // 0, not O: the letter is the axes' name for their crossing, a page on.
             showOrigin: false,
           },
-          reading: { point: { x: 2, y: 0 }, pointStep: 1, reading: Reading.Distances, unit: "" },
+          // The point alone: where it stands on the line says its number.
+          reading: { point: { x: 2, y: 0 }, pointStep: 1, reading: Reading.None, unit: "" },
         }),
       ),
       ask: words.body(
@@ -201,7 +202,8 @@ const townGrows = page(
               placeKind: PlaceKind.House,
               choosing: Choosing.OnceOpen,
               showAddress: true,
-              target: { x: -2, y: -3 },
+              // Marked once the rule is said and her line comes (onSaid below).
+              target: null,
               targetName: t("Aman's aunt's house", "अमन की मौसी का घर"),
             },
             walker: {
@@ -230,13 +232,13 @@ const townGrows = page(
       aunt: hidden(
         words.body(
           t(
-            "Aman's aunt lives at **Street −2, House −3**. Walk Riya there.",
-            "अमन की मौसी **गली −2, मकान −3** में रहती हैं। रिया को वहाँ ले चलो।",
+            "For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at **Street −2, House −3**. Walk Riya there to fetch it.",
+            "मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, **गली −2, मकान −3** पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।",
           ),
           {
             says: t(
-              "Aman's aunt lives at Street minus 2, House minus 3. Walk Riya there.",
-              "अमन की मौसी गली माइनस 2, मकान माइनस 3 में रहती हैं। रिया को वहाँ ले चलो।",
+              "For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at Street minus 2, House minus 3. Walk Riya there to fetch it.",
+              "मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, गली माइनस 2, मकान माइनस 3 पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।",
             ),
           },
         ),
@@ -265,13 +267,19 @@ const townGrows = page(
         ),
       ),
     },
+    // The situation first (the rule), then the errand: her address, marked on the map.
+    onSaid: {
+      signs: (_, t) => [
+        t.self.show({ name: "aunt" }),
+        t.to.town.places.markTarget({ x: -2, y: -3 }),
+      ],
+    },
     passBy: "rules",
     hear: {
       "firstWest.correct": (_, __, t) => [
         t.self.hide({ name: "before" }),
         t.self.show({ name: "town" }),
         t.self.show({ name: "signs" }),
-        t.self.show({ name: "aunt" }),
       ],
       "town.walker.arrived": (_, p, t) =>
         p.x === -2 &&
@@ -281,7 +289,9 @@ const townGrows = page(
           t.self.pass(),
         ],
       // A house tapped once she has arrived is any house, not his aunt's.
-      "town.places.targetChosen": (_, __, t) => t.to.town.places.nameTarget({ name: TAPPED }),
+      // (The lesson's own marking of her house comes first, with no house before it.)
+      "town.places.targetChosen": (_, p, t) =>
+        p.isAnother && t.to.town.places.nameTarget({ name: TAPPED }),
     },
     uses: [firstWest.use],
     witness: [

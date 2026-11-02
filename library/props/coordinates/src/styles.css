@@ -93,6 +93,18 @@
 .cp-frame .cp-directions text {
   font: 700 var(--text-note) var(--font-display);
 }
+/* Before the crossing is named O, it is written once as a number, like the others. */
+.cp-frame .cp-origin.is-zero {
+  font: 600 var(--text-caption) var(--font-body);
+}
+/* The numbers and the crossing read over a town's houses: a halo of the page's colour. */
+.cp-frame .cp-mark text,
+.cp-frame .cp-origin {
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
 .cp-frame .cp-axis-name {
   font: 700 var(--text-caption) var(--font-body);
   fill: var(--color-on-surface-variant);

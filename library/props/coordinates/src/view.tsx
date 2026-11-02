@@ -27,12 +27,19 @@ import { readingDrawing } from "./reading-view";
 import { walkerDrawing } from "./walker-view";
 
 /**
+ * Where the zero may rest while apart: halfway between marks, so no number of one line lies on the
+ * other or on its row of numbers; or 0, where the lines become the axes.
+ */
+const offMarks = (v: number): number => (Math.abs(v) < 0.5 ? 0 : Math.round(v - 0.5) + 0.5);
+
+/**
  * The vertical number line's zero, a handle the learner slides; let go where the two zeroes meet
  * and the lines are the axes.
  */
 function ApartHandle({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
   const drag = useDrags();
-  if (s.axes !== "both" || s.isCrossed === true) return null;
+  // Not while the pair is still turning upright: the zeroes are brought together upright.
+  if (s.axes !== "both" || s.isCrossed === true || s.turn !== 0) return null;
   const [x, y] = px.toPx(s.apart.x, s.apart.y);
   const w = s.window;
   return (
@@ -42,8 +49,8 @@ function ApartHandle({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
         axis: "xy",
         at: s.apart,
         place: (to) => ({
-          x: Math.min(w.xMax, Math.max(w.xMin, Math.round(to.x))),
-          y: Math.min(w.yMax, Math.max(w.yMin, Math.round(to.y))),
+          x: Math.min(w.xMax, Math.max(w.xMin, offMarks(to.x))),
+          y: Math.min(w.yMax, Math.max(w.yMin, offMarks(to.y))),
         }),
         move: plane.actions.moveApart,
         step: 1,

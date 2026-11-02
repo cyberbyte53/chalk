@@ -84,13 +84,6 @@
       "seconds": 5.376
     },
     {
-      "file": "7c8f6beb6577bb6a.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Aman's aunt lives at Street minus 2, House minus 3. Walk Riya there.",
-      "seconds": 4.749
-    },
-    {
       "file": "8af3e620e577aeba.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -166,6 +159,13 @@
       "locale": "en",
       "words": "For the fair, the class plans who sits where to make the posters. Their classroom has 10 columns of desks and 7 rows. A desk is named by two numbers: its column, counted from the left, then its row, counted from the front (row 1 is the front row). Sonia sits in column 4, row 1, so her desk is (4, 1).",
       "seconds": 18.437
+    },
+    {
+      "file": "efd68b9d96d12d22.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at Street minus 2, House minus 3. Walk Riya there to fetch it.",
+      "seconds": 9.23
     },
     {
       "file": "0162deae3f4c4fe2.m4a",
@@ -784,13 +784,6 @@
       "seconds": 1.696
     },
     {
-      "file": "de622e6ac1602e61.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "अमन की मौसी गली माइनस 2, मकान माइनस 3 में रहती हैं। रिया को वहाँ ले चलो।",
-      "seconds": 6.305
-    },
-    {
       "file": "55d11bf70dcfdfc4.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -1216,6 +1209,13 @@
       "locale": "hi",
       "words": "मेले के लिए कक्षा तय करती है कि पोस्टर बनाने कौन कहाँ बैठेगा। उनकी कक्षा में डेस्क के 10 स्तंभ और 7 पंक्तियाँ हैं। एक डेस्क दो संख्याओं से पहचानी जाती है: पहले उसका स्तंभ, बाईं ओर से गिना हुआ, फिर उसकी पंक्ति, आगे से गिनी हुई (पंक्ति 1 सबसे आगे की है)। सोनिया स्तंभ 4, पंक्ति 1 में बैठती है, तो उसकी डेस्क (4, 1) है।",
       "seconds": 26.622
+    },
+    {
+      "file": "94012e85adddd285.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, गली माइनस 2, मकान माइनस 3 पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।",
+      "seconds": 13.155
     },
     {
       "file": "b7ba67b134697bc5.m4a",

@@ -245,7 +245,14 @@ export function AxesDraw({
   const hasZeroMark = (v: number) => Math.abs(v) < 1e-9;
   const isCounted = s.marks === Marks.Counts;
   const named = s.named;
-  const hasO = isNumbersOf(s) && s.showOrigin && s.isCrossed === true;
+  // Two number lines crossing at their zeroes: the crossing is written once, not as each line's 0:
+  // O once the lesson has named it, 0 before.
+  const hasO =
+    isNumbersOf(s) &&
+    s.isCrossed === true &&
+    hasUp(s) &&
+    s.numbered.includes("x") &&
+    s.numbered.includes("y");
   // Where a unit is too short for O between the two −1s, O goes above the horizontal line, in the
   // corner no number uses: every number stays written.
   const isCrowded = hasO && unit * s.tickEvery < 30;
@@ -327,9 +334,14 @@ export function AxesDraw({
             </g>
           );
         })}
-      {isNumbers && s.showOrigin && s.isCrossed === true && (
-        <text class="cp-origin" x={vx - 7} y={isCrowded ? base - 6 : base + 14} text-anchor="end">
-          O
+      {hasO && (
+        <text
+          class={s.showOrigin ? "cp-origin" : "cp-origin is-zero"}
+          x={vx - 7}
+          y={isCrowded ? base - 6 : base + 14}
+          text-anchor="end"
+        >
+          {s.showOrigin ? "O" : "0"}
         </text>
       )}
       {s.showAxisNames && (
