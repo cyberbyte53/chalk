@@ -319,12 +319,57 @@ function entryLines(e: ScriptEntry): string[] {
 /** A board's script: each line in order, its moment, who says it, and what the voice says. */
 export function scriptText(root: string, board: string): string[] {
   const entries = scriptEntries(root, board);
-  return entries.length === 0
-    ? []
-    : [
-        "script (what the voice says, in order):",
-        ...entries.flatMap((e) => entryLines(e).map((l) => `  ${l}`)),
-      ];
+  return [
+    ...reasonsText(root, board),
+    ...(entries.length === 0
+      ? []
+      : [
+          "script (what the voice says, in order):",
+          ...entries.flatMap((e) => entryLines(e).map((l) => `  ${l}`)),
+        ]),
+  ];
+}
+
+/**
+ * What a board is for, from its chapter's plan (flow.md: its Purpose and Needs) and the source
+ * passages its heading cites (source/outline.yaml), so it is held to them without opening them.
+ */
+function reasonsText(root: string, board: string): string[] {
+  const [book, chapter, , id] = board.replace(/^content\//, "").split("/");
+  if (book === undefined || chapter === undefined || id === undefined) return [];
+  const dir = join(root, "authoring", "books", book, chapter);
+  const flowFile = join(dir, "flow.md");
+  if (!existsSync(flowFile)) return [];
+  const flow = readFileSync(flowFile, "utf8").split("\n");
+  const at = flow.findIndex((l) => new RegExp(`^### ${id}\\b`).test(l));
+  if (at < 0) return [];
+  const heading = flow[at] ?? "";
+  const body: string[] = [];
+  for (const l of flow.slice(at + 1)) {
+    if (l.startsWith("#")) break;
+    if (l.trim() !== "") body.push(`  ${l.trim()}`);
+  }
+  // The source ids its heading cites (after the objectives' "o9;"), with what each says.
+  const cited = (heading.match(/\(([^)]*)\)/)?.[1] ?? "")
+    .split(/[;,]/)
+    .map((x) => x.trim())
+    .filter((x) => x !== "" && !/^o\d+$/.test(x));
+  const outlineFile = join(dir, "source", "outline.yaml");
+  const source: string[] = [];
+  if (existsSync(outlineFile) && cited.length > 0) {
+    const lines = readFileSync(outlineFile, "utf8").split("\n");
+    for (const c of cited) {
+      const line = lines.find((l) => l.includes(`id: ${c},`) || l.includes(`id: ${c} }`));
+      const words =
+        line?.match(/(?:says|text): "([^"]*)"/)?.[1] ?? line?.match(/title: ([^,}]*)/)?.[1];
+      if (words !== undefined) source.push(`  ${c}: ${words.trim()}`);
+    }
+  }
+  return [
+    `for (flow.md): ${heading.replace(/^### /, "")}`,
+    ...body,
+    ...(source.length === 0 ? [] : ["source:", ...source]),
+  ];
 }
 
 /**

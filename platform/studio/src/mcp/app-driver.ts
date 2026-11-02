@@ -255,6 +255,9 @@ function seenChanges(was: BoardModel | undefined, now: BoardModel | undefined) {
  * scrolling is still reported.
  */
 function layoutProblems(card: Element): string[] {
+  // An input smaller than this (CSS pixels squared, about a fingertip's reach twice over) is aimed
+  // at its middle; written here, as this runs in the page.
+  const AIM_AREA = 80 * 80;
   const found: string[] = [];
   const labelOf = (node: Element) => {
     const piece = node.closest<HTMLElement>("[data-piece]");
@@ -377,6 +380,72 @@ function layoutProblems(card: Element): string[] {
       if (overlap(w.r, r) && !(w.r.left >= r.left && w.r.right <= r.right))
         found.push(`${labelOf(w.t)}: "${w.said}" drawn under a dot`);
     }
+  // Every input that is on can be reached by a finger somewhere on its own picture: brought into
+  // view, the page is asked what is on top at a few points of it (its middle, and around), and at
+  // least one must be the input. A drawing's marks never take a press (only inputs do), so what
+  // covers an input is another input, or something drawn outside the drawings.
+  const scrolled = { x: window.scrollX, y: window.scrollY };
+  for (const input of card.querySelectorAll("[data-does]")) {
+    if (input.closest("[disabled], [aria-disabled='true'], [inert]") !== null) continue;
+    const style = getComputedStyle(input);
+    if (style.visibility === "hidden" || style.display === "none") continue;
+    if (input.getBoundingClientRect().width === 0 && input.getBoundingClientRect().height === 0)
+      continue;
+    input.scrollIntoView({ block: "center", inline: "center" });
+    // Its own picture, measured where it is now: its shapes without its words, or its box.
+    const shapes =
+      input instanceof SVGGraphicsElement
+        ? [input, ...input.querySelectorAll("*")]
+            .filter(
+              (e) =>
+                e instanceof SVGGraphicsElement &&
+                !(e instanceof SVGTextContentElement) &&
+                !(e instanceof SVGGElement),
+            )
+            .map((e) => e.getBoundingClientRect())
+            .filter((r) => r.width > 0 || r.height > 0)
+        : [input.getBoundingClientRect()];
+    if (shapes.length === 0) continue;
+    const left = Math.min(...shapes.map((r) => r.left));
+    const right = Math.max(...shapes.map((r) => r.right));
+    const top = Math.min(...shapes.map((r) => r.top));
+    const bottom = Math.max(...shapes.map((r) => r.bottom));
+    // A small input (a stall, a dot, a button) is aimed at its middle, so its middle must be
+    // reachable; a large one (tap anywhere on a plane) is reachable if any of a few points is.
+    const isSmall = (right - left) * (bottom - top) < AIM_AREA;
+    const points = (
+      isSmall
+        ? [[0.5, 0.5]]
+        : [
+            [0.5, 0.5],
+            [0.3, 0.3],
+            [0.7, 0.3],
+            [0.3, 0.7],
+            [0.7, 0.7],
+          ]
+    ).map(([fx = 0.5, fy = 0.5]) => ({
+      x: left + (right - left) * fx,
+      y: top + (bottom - top) * fy,
+    }));
+    // Reached: the input itself, or another input (see below).
+    let cover: Element | null = null;
+    const isReached = points.some((p) => {
+      const hit = document.elementFromPoint(p.x, p.y);
+      if (hit !== null && (hit === input || input.contains(hit))) return true;
+      // Another input on top (a dot placed on O): a choice of design, which a play shows when a
+      // step can't be taken; this check is for what isn't an input taking the press.
+      if (hit?.closest("[data-does]") != null) return true;
+      cover ??= hit;
+      return false;
+    });
+    if (!isReached) {
+      const by = cover as Element | null;
+      found.push(
+        `${labelOf(input)}: ${input.getAttribute("data-path") ?? "an input"} can't be pressed by a finger: covered by ${by?.closest("[data-path]")?.getAttribute("data-path") ?? by?.tagName.toLowerCase() ?? "nothing on screen"}`,
+      );
+    }
+  }
+  window.scrollTo(scrolled.x, scrolled.y);
   const box = card.getBoundingClientRect();
   for (const node of card.querySelectorAll("[data-piece]")) {
     const r = visible(node, card);
