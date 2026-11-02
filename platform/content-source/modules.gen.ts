@@ -9,6 +9,8 @@ export const modules: ContentModules = {
     import("../../content/class9-maths/coordinate-geometry/the-cartesian-plane/overview"),
   "class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview"),
+  "class9-maths/coordinate-geometry/plotting-points/overview.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/plotting-points/overview"),
   "class9-maths/coordinate-geometry/questions/bus-to-stop/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/bus-to-stop/family"),
   "class9-maths/coordinate-geometry/questions/cross-street-count/family.ts": () =>
@@ -19,6 +21,8 @@ export const modules: ContentModules = {
     import("../../content/class9-maths/coordinate-geometry/questions/name-the-lines/family"),
   "class9-maths/coordinate-geometry/questions/place-the-dot/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/place-the-dot/family"),
+  "class9-maths/coordinate-geometry/questions/plot-the-point/family.ts": () =>
+    import("../../content/class9-maths/coordinate-geometry/questions/plot-the-point/family"),
   "class9-maths/coordinate-geometry/questions/quadrant-or-axis/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/quadrant-or-axis/family"),
   "class9-maths/coordinate-geometry/questions/read-a-point/family.ts": () =>

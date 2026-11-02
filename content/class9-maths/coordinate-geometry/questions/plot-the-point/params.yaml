@@ -1,0 +1,8 @@
+- params: { x: 3, y: 5 }
+- params: { x: 5, y: -4 }
+- params: { x: -4, y: 2 }
+- params: { x: -2, y: -3 }
+- params: { x: 0, y: -3.5 }
+- params: { x: 4.5, y: 1 }
+- params: { x: -3, y: 0 }
+- params: { x: -1.5, y: 4 }

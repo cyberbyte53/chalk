@@ -4,5 +4,6 @@ concepts:
   - two-numbers-for-a-place
   - the-cartesian-plane
   - coordinates-of-a-point
+  - plotting-points
 # The question bank: every family folder under questions/. Each family says which concepts it tests.
 questions: all
