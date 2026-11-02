@@ -47,6 +47,10 @@
   stroke: color-mix(in srgb, var(--color-on-surface-variant) 30%, var(--color-surface));
   stroke-linecap: round;
 }
+/* The grid is to see: a tap goes through it to a place or the plane under it. */
+.cp-grid {
+  pointer-events: none;
+}
 .cp-grid line {
   stroke: var(--color-outline-variant);
   stroke-width: 0.6;

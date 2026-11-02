@@ -223,20 +223,52 @@ describe("streets rise from the road: the number line first, then the town", () 
   });
 });
 
-describe("a new house is a new walk", () => {
+describe("a new house is a new walk, in free play", () => {
+  /** The town on an open board, any house Aman's (lesson 1's street-and-house). */
+  const freePlay = () => {
+    const holder = prop({
+      type: "townHolder",
+      describe: "test",
+      variables: z.object({ isOpen: z.boolean() }).strict(),
+      start: { isOpen: true },
+      children: { town: coordinatePlane },
+    });
+    const board = new Board(holder, {
+      town: {
+        plane: townPlane,
+        places: { places: houses, choosing: Choosing.OnceOpen },
+        walker: { walkFrom: { x: 0, y: 0 }, roads: Roads.Town },
+      },
+    });
+    const walk = (...directions: Direction[]) => {
+      for (const direction of directions) {
+        board.input("town/walker", "step", { direction });
+        board.runUntilIdle();
+      }
+    };
+    return { board, walk, read: () => board.read<typeof holder>().town };
+  };
   it("the first house is only marked: Riya stays where she is", () => {
-    const { board, read, walk } = town();
+    const { board, read, walk } = freePlay();
     walk(Right, Right);
-    board.input("places", "chooseTarget", { x: 4, y: 3 });
+    board.input("town/places", "chooseTarget", { x: 4, y: 3 });
+    board.runUntilIdle();
     expect(read().walker.at).toEqual({ x: 2, y: 0 });
   });
-
   it("making another house Aman's sends Riya back to the corner", () => {
+    const { board, read, walk } = freePlay();
+    board.input("town/places", "chooseTarget", { x: 4, y: 3 });
+    walk(Right, Right);
+    board.input("town/places", "chooseTarget", { x: 2, y: 1 });
+    board.runUntilIdle();
+    expect(read().walker.at).toEqual({ x: 0, y: 0 });
+    expect(read().walker.target).toEqual({ x: 2, y: 1 });
+  });
+  it("where a tap only marks a place (a stall opened where she stands), she stays", () => {
     const { board, read, walk } = town();
     board.input("places", "chooseTarget", { x: 4, y: 3 });
     walk(Right, Right);
     board.input("places", "chooseTarget", { x: 2, y: 1 });
-    expect(read().walker.at).toEqual({ x: 0, y: 0 });
-    expect(read().walker.target).toEqual({ x: 2, y: 1 });
+    expect(read().walker.at).toEqual({ x: 2, y: 0 });
   });
 });
