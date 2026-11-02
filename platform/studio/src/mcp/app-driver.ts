@@ -360,6 +360,36 @@ function layoutProblems(card: Element): string[] {
       const h = Math.min(r.bottom, q.bottom) - Math.max(r.top, q.top);
       if (w > 2 && h > 2) found.push(`${labelOf(a)}: two buttons overlap`);
     }
+  // Words drawn over other words in a drawing (a walker's name on a point's letter, a label on an
+  // axis's numbers), or under a dot drawn over them: neither can be read. Each word's own box, in
+  // every drawing on the card; a word hidden on purpose (not visible) isn't counted.
+  const isSeen = (el: Element) => {
+    const st = getComputedStyle(el);
+    return st.visibility !== "hidden" && st.display !== "none" && Number(st.opacity) !== 0;
+  };
+  // A word's box is its line's height, room above capitals and below the baseline included: the
+  // letters themselves fill about its middle three fifths, which is what two words can't share.
+  const words = [...card.querySelectorAll("svg text")].flatMap((t) => {
+    const said = (t.textContent ?? "").trim();
+    const box = t.getBoundingClientRect();
+    if (said === "" || box.width < 1 || !isSeen(t)) return [];
+    const r = new DOMRect(box.left, box.top + box.height * 0.2, box.width, box.height * 0.6);
+    return [{ t, said, r }];
+  });
+  const overlap = (a: DOMRect, b: DOMRect) =>
+    Math.min(a.right, b.right) - Math.max(a.left, b.left) > 2 &&
+    Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 3;
+  for (const [i, a] of words.entries())
+    for (const b of words.slice(i + 1))
+      if (overlap(a.r, b.r))
+        found.push(`${labelOf(a.t)}: "${a.said}" drawn over "${b.said}", neither can be read`);
+  const dots = [...card.querySelectorAll("svg circle.cp-point")].filter(isSeen);
+  for (const w of words)
+    for (const d of dots) {
+      const r = d.getBoundingClientRect();
+      if (overlap(w.r, r) && !(w.r.left >= r.left && w.r.right <= r.right))
+        found.push(`${labelOf(w.t)}: "${w.said}" drawn under a dot`);
+    }
   const box = card.getBoundingClientRect();
   for (const node of card.querySelectorAll("[data-piece]")) {
     const r = visible(node, card);
