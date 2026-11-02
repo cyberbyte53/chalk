@@ -110,6 +110,21 @@ const figurePlane = {
   ],
 };
 const figure = { plane: figurePlane };
+/** any-axes: the axes the learner moves and turns under a point that stays. */
+const movingAxes = {
+  plane: { canMoveAxes: true, showDirections: false, shift: { x: 1, y: 0.5 }, turn: 30 },
+  reading: { point: { x: 3, y: 2 }, reading: "pair", decimals: 2, canMovePoint: false },
+};
+/** signs-and-quadrants: each quadrant visited shows its signs. */
+const visitedSigns = {
+  plane: { quadrantsNamed: 4 },
+  reading: {
+    point: { x: -3, y: 2 },
+    reading: "pair",
+    visited: ["I", "II"],
+    showsVisitedSigns: true,
+  },
+};
 
 describe("coordinatePlane, used the way the boards use it", () => {
   it("every input says what it does, and every learner's action has one", () => {
@@ -135,6 +150,8 @@ describe("coordinatePlane, used the way the boards use it", () => {
       { plotting: { ...plottingGiven, plotted: [{ x: 1, y: 2, isRight: true }] } },
       dice,
       figure,
+      movingAxes,
+      visitedSigns,
     ];
     expect(
       checkProp(

@@ -107,7 +107,9 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plane.canNumberQuadrants` | true or false | changed by plane.its own rules |
 | `plane.canTapQuadrants` | true or false | changed by plane.its own rules |
 | `plane.namesTapped` | true or false | changed by plane.its own rules |
-| `plane.turn` | number -90 to 90 | changed by plane.its own rules |
+| `plane.turn` | number -180 to 180 | changed by plane.its own rules |
+| `plane.shift` | {x: "number", y: "number"} | changed by plane.its own rules |
+| `plane.canMoveAxes` | true or false | changed by plane.its own rules |
 | `plane.backdrop` | number 0 to 1 | changed by plane.its own rules |
 | `plane.tintsQuadrants` | true or false | changed by plane.its own rules |
 | `reading.point` | {orNull: {x: "number", y: "number"}} | changed by reading.its own rules |
@@ -116,6 +118,9 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `reading.isReadingHidden` | true or false | changed by reading.its own rules |
 | `reading.visited` | [["I", "II", "III", "IV"]] | changed by reading.its own rules |
 | `reading.unit` | text | changed by reading.its own rules |
+| `reading.decimals` | whole number 0 to 2 | changed by reading.its own rules |
+| `reading.canMovePoint` | true or false | changed by reading.its own rules |
+| `reading.showsVisitedSigns` | true or false | changed by reading.its own rules |
 | `places.placeKind` | ["house", "desk", "crossing", "stall"] | changed by places.its own rules |
 | `places.places` | [{x: "number", y: "number", label: {optional: {en: "text", hi: "text"}}}] | changed by places.its own rules |
 | `places.target` | {orNull: {x: "number", y: "number"}} | changed by places.its own rules |
@@ -167,8 +172,10 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plane.setScale` | {every: "number 0 to …"} | A number every this many units |
 | `plane.tapNumber` | {axis: ["x", "y"], value: "number"} | learner · Tap a number on a counted line |
 | `plane.showAllPoints` | — | Show every point |
-| `plane.turnTo` | {degrees: "number -90 to 90", seconds: "number 0 to …"} | Turn the two lines, gliding, to this many degrees (0: upright) |
+| `plane.turnTo` | {degrees: "number -180 to 180", seconds: "number 0 to …"} | Turn the two lines, gliding, to this many degrees (0: upright) |
 | `plane.fadeBackdrop` | {to: "number 0 to 1", seconds: "number 0 to …"} | Fade what is drawn behind the lines (the town) in or out |
+| `plane.moveAxes` | {x: "number", y: "number"} | learner · Move the axes so they cross at (x, y) on the sheet (the learner's drag of O) |
+| `plane.turnAxes` | {x: "number", y: "number"} | learner · Turn the axes about O so OX points toward (x, y), to the whole degree (the learner's drag of the handle) |
 | `reading.movePoint` | {x: "number", y: "number"} | learner · Put the point at (x, y), snapped to the step (the learner's drag or tap) |
 | `reading.showReading` | — | learner · Show the reading kept hidden in a guessing round (the learner's Show) |
 | `reading.askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
@@ -191,6 +198,6 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `dice.throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `dice.startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
 
-Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `plane.turned`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
+Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `plane.turned`, `plane.axesMoved`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
 
 The group answers (each with another part's actions, which change that part): `places.targetChosen`, `plane.numberTapped`, `plotting.scaleChosen`

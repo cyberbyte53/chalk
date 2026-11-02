@@ -790,6 +790,7 @@
   source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:55
   snapshot: −5−4−3−2−1012345
   commit: a6b5f4f8676a328abfbbd43833e7c454a1a3390c
+  turn: person
   text: when i am selecting a number ,because of the dot it number is getting shifted down and number
     is not visible
   changed: []
@@ -822,4 +823,86 @@
         whole and nothing is drawn around it after the drag. Holds on number-line. The extra 6 px it
         gave lone number lines also reaches lesson 1's bus-stops. There, in Hindi, the stop's label
         बस अड्डा now touches the 0 above it. I've filed that as its own thread on bus-stops#line."
-  turn: person
+- id: cmvz236xgc1u
+  status: closed
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-02T09:28:06.868Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:28
+  commit: 025d12e90192d105586cfee2e7d03216d591b287
+  text: >-
+    Lesson 3 (coordinates-of-a-point) needs two things the plane can't do yet. Both are in the
+    approved props.md; this is their definition, for your approval. Close this thread to approve. No
+    drawing code is written until you do.
+
+
+    1. any-axes (props.md: "extend: shift and turn, set by a learner drag; the reading layer reads
+    its point through them; two decimal places")
+
+    - plane.shift {x, y}: where the axes cross, in the sheet's units. (0, 0) as usual.
+
+    - plane.turn: widened from ±90° to ±180°, so the pair can point any way.
+
+    - plane.canMoveAxes: the learner drags O to move the axes, and a handle at the end of OX to turn
+    them about O.
+
+    - Actions (learner): moveAxes {x, y} and turnAxes {degrees}. Signal: axesMoved {x, y, degrees}.
+
+    - reading: its point stays where it is on the sheet. Its abscissa and ordinate are read in the
+    moved and turned axes (readIn). Put the axes back, and the numbers are what they were.
+
+    - reading.decimals (0 to 2): how its coordinates are written. any-axes uses 2.
+
+    - reading.canMovePoint: off, P is fixed. Only the axes move.
+
+    - The drawing: the graph paper and P stay still. The axes, their numbers, O and P's
+    perpendiculars move and turn with the frame.
+
+
+    2. signs-and-quadrants (props.md, the core: "each quadrant's sign pattern filled in once
+    visited")
+
+    - reading.showsVisitedSigns: each quadrant the point has been in shows its sign pattern, (+, +)
+    in I and so on. The layer already remembers `visited`; nothing drew from it, and a lesson had no
+    way to turn signs on one quadrant at a time.
+
+
+    Also a fix to the drawing only, no new field: at 360 px, the readout `y = −2` sits on the x-axis
+    numbers (show the prop with the point at (−6, −2)).
+
+
+    What it reaches: `affected` lists every board that uses the plane, 34 boards in lessons 1–2 and
+    6 question families. Nothing there changes. Each new field's default is today's behaviour: shift
+    (0, 0), turn 0, canMoveAxes off, decimals 0, canMovePoint on, showsVisitedSigns off. Read in
+    axes not moved or turned, a point's coordinates are itself. It type-checks.
+
+
+    Meanwhile I'm building lesson 3's other 6 boards, which need none of this.
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T10:01:57.493Z
+      text: >-
+        Added since, found while building lesson 3. None is a new field.
+
+        - The host gives the reading layer the plane's shift and turn, as it gives the window (two
+        lines in coordinate-plane.ts). The definition needed it; the build said so.
+
+        - Reading labels below the x-axis go under the point, not between it and the axis numbers.
+        They also get the page-coloured halo every other label on the plane has, so they read over a
+        quadrant's name.
+
+        - On x- and y-axes, a place's address is written as the book writes it, (3, 2), not "x 3, y
+        2". Lessons 1–2's town and classroom use their own names and are unchanged.
+
+        - A clue distance of 0 (y = 0) draws no zero-length measure, so there's no stray "0" on the
+        lit axis. Lesson 1's clue distances are all nonzero.
+
+        The 6 boards that need nothing new are built and played through. any-axes and the quadrant
+        signs wait on this thread.
+    - by: you
+      role: person
+      at: 2026-11-02T10:10:14.473Z
+      text: ""
+      status: closed

@@ -61,6 +61,24 @@
   stroke-width: 3;
   cursor: grab;
 }
+/* Turning the axes: a handle out along OX, joined to O, dragged round it. */
+.cp-turn-handle {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 3;
+  cursor: grab;
+}
+/* The arrow inside the turning handle: drawn over it, the press goes to the ring under it. */
+.cp-frame .cp-turn-glyph {
+  font: 700 16px var(--font-body);
+  fill: var(--color-primary);
+  pointer-events: none;
+}
+.cp-turn-arm {
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
 .cp-axis-half {
   stroke: var(--color-primary);
   stroke-width: 4;
@@ -349,10 +367,16 @@
   stroke: var(--color-primary-press);
   stroke-width: 4;
 }
+/* A point's reading goes wherever the point is dragged: a halo of the page's colour keeps it
+   readable over the axes' numbers and a quadrant's name. */
 .cp-frame .cp-length,
 .cp-frame .cp-pair {
   font: 700 var(--text-note) var(--font-display);
   fill: var(--color-primary);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
 }
 .cp-still-region {
   fill: color-mix(in srgb, var(--color-primary) 14%, transparent);

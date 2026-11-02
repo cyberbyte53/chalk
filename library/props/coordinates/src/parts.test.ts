@@ -9,7 +9,7 @@ import { placeOf, windowSchema } from "./plane";
 import { plane } from "./plane";
 import { plottingReads } from "./plotting";
 import { plotting } from "./plotting";
-import { readingReads } from "./reading";
+import { readIn, readingReads } from "./reading";
 import { reading } from "./reading";
 
 // The clues, plotting, the dice and a point's reading, each held alone by a
@@ -35,7 +35,7 @@ describe("reading a point: its quadrant follows its signs", () => {
   const holder = prop({
     type: "readingHolder",
     describe: "test",
-    variables: z.object({ window: windowSchema }).strict(),
+    variables: z.object(readingReads.fields).strict(),
     start: readingReads.defaults,
     children: { reading },
   });
@@ -43,6 +43,17 @@ describe("reading a point: its quadrant follows its signs", () => {
     const b = new Board(holder, { reading: given });
     return { b, ...hearing(b), read: () => b.read<typeof holder>().reading };
   };
+  it("a point stays where it is on the sheet: read in moved and turned axes, only its numbers change", () => {
+    const p = { x: 3, y: 2 };
+    expect(readIn({ shift: { x: 0, y: 0 }, turn: 0 }, p)).toEqual(p);
+    // O moved to (1, 1): P is 2 along and 1 up from it.
+    expect(readIn({ shift: { x: 1, y: 1 }, turn: 0 }, p)).toEqual({ x: 2, y: 1 });
+    // Turned a quarter anticlockwise: the new x-axis points up the sheet, so P's x is its old y.
+    expect(readIn({ shift: { x: 0, y: 0 }, turn: 90 }, p)).toEqual({ x: 2, y: -3 });
+    // Its distance from O doesn't depend on how the axes are turned.
+    const q = readIn({ shift: { x: 0, y: 0 }, turn: 30 }, p);
+    expect(Math.hypot(q.x, q.y)).toBeCloseTo(Math.hypot(p.x, p.y), 6);
+  });
   it("each sign pattern is its quadrant; a 0 puts it on an axis", () => {
     expect(placeOf({ x: 2, y: 3 })).toBe("I");
     expect(placeOf({ x: -2, y: 3 })).toBe("II");

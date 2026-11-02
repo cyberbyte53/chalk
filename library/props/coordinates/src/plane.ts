@@ -155,7 +155,14 @@ const planeFields = {
    * How far the two lines are drawn turned, in degrees anticlockwise, about the horizontal line's
    * zero: a pair at right angles that points any way. 0 as usual: one across, one up.
    */
-  turn: z.number().min(-90).max(90),
+  turn: z.number().min(-180).max(180),
+  /**
+   * Where the axes cross, in the sheet's units: the axes moved over a sheet that stays (graph
+   * paper, a point on it). (0, 0) as usual. With `turn`, the frame every point is read in.
+   */
+  shift: pointSchema,
+  /** The learner can drag O to move the axes, and a handle at OX's end to turn them about O. */
+  canMoveAxes: z.boolean(),
   /**
    * How strongly what is drawn behind the lines (the scene, and the places on it) shows, from 0
    * (not at all) to 1 (as usual): a lesson fades the town in behind the axes, and out again.
@@ -195,6 +202,8 @@ export type PlaneCore = {
   canTapQuadrants: boolean;
   namesTapped: boolean;
   turn: number;
+  shift: Point;
+  canMoveAxes: boolean;
   backdrop: number;
   tintsQuadrants: boolean;
   isAlone: boolean;
@@ -230,6 +239,8 @@ export const planeStart: Omit<PlaneCore, "isAlone" | "canTapNumbers" | "lit"> = 
   canTapQuadrants: false,
   namesTapped: true,
   turn: 0,
+  shift: { x: 0, y: 0 },
+  canMoveAxes: false,
   backdrop: 1,
   tintsQuadrants: false,
 };
@@ -373,7 +384,11 @@ export const plane = prop({
       /** A tapped part's name is written under the plane. */
       namesTapped: z.boolean(),
       /** The lines drawn turned this many degrees anticlockwise; 0: one across, one up. */
-      turn: z.number().min(-90).max(90),
+      turn: z.number().min(-180).max(180),
+      /** Where the axes cross, in the sheet's units; (0, 0) as usual. */
+      shift: pointSchema,
+      /** The learner can drag O to move the axes, and turn them about O by a handle. */
+      canMoveAxes: z.boolean(),
       /** How strongly the scene and its places show behind the lines, 0 to 1. */
       backdrop: z.number().min(0).max(1),
       /** Each numbered quadrant tinted its own colour. */
@@ -433,13 +448,22 @@ export const plane = prop({
     }),
     showAllPoints: action({}, { describe: "Show every point" }),
     turnTo: action(
-      { degrees: z.number().min(-90).max(90), seconds: z.number().positive() },
+      { degrees: z.number().min(-180).max(180), seconds: z.number().positive() },
       { describe: "Turn the two lines, gliding, to this many degrees (0: upright)" },
     ),
     fadeBackdrop: action(
       { to: z.number().min(0).max(1), seconds: z.number().positive() },
       { describe: "Fade what is drawn behind the lines (the town) in or out" },
     ),
+    moveAxes: action(pointSchema.shape, {
+      from: "screen",
+      describe: "Move the axes so they cross at (x, y) on the sheet (the learner's drag of O)",
+    }),
+    turnAxes: action(pointSchema.shape, {
+      from: "screen",
+      describe:
+        "Turn the axes about O so OX points toward (x, y), to the whole degree (the learner's drag of the handle)",
+    }),
   },
   signals: {
     risen: signal({ at: z.number().int() }),
@@ -448,6 +472,8 @@ export const plane = prop({
     quadrantsNumbered: signal(),
     numberTapped: signal(lineSchema.shape),
     turned: signal({ degrees: z.number() }),
+    /** The learner moved or turned the axes: where they cross now, and how far they are turned. */
+    axesMoved: signal({ x: z.number(), y: z.number(), degrees: z.number() }),
   },
   on: {
     namePart: (_, { part }, t) => [t.set({ named: part }), t.tell.named({ part })],
@@ -516,6 +542,22 @@ export const plane = prop({
     turnTo: (_, { degrees, seconds }, t) =>
       t.move("turn", degrees, seconds, { atEnd: [t.tell.turned({ degrees })] }),
     fadeBackdrop: (_, { to, seconds }, t) => t.move("backdrop", to, seconds),
+    moveAxes: (me, shift, t) =>
+      me.canMoveAxes && [
+        t.set({ shift }),
+        t.tell.axesMoved({ x: shift.x, y: shift.y, degrees: me.turn }),
+      ],
+    turnAxes: (me, toward, t) => {
+      const [dx, dy] = [toward.x - me.shift.x, toward.y - me.shift.y];
+      if (!me.canMoveAxes || (dx === 0 && dy === 0)) return;
+      const degrees = Math.round((Math.atan2(dy, dx) * 180) / Math.PI);
+      return (
+        degrees !== me.turn && [
+          t.set({ turn: degrees }),
+          t.tell.axesMoved({ x: me.shift.x, y: me.shift.y, degrees }),
+        ]
+      );
+    },
   },
   frame: {
     kind: planeFrame.kind,

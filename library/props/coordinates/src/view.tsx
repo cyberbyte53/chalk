@@ -26,12 +26,101 @@ import { plottingDrawing } from "./plotting-view";
 import { readingDrawing } from "./reading-view";
 import { walkerDrawing } from "./walker-view";
 
-/** The lines turned about the horizontal line's zero (a pair at right angles, any way round). */
+/**
+ * The lines turned about the horizontal line's zero (a pair at right angles, any way round), and
+ * moved so they cross at `shift` on the sheet: the axes, moved over a sheet that stays.
+ */
 const turned = (s: PlaneView, px: FramePixels): string | undefined => {
-  if (s.turn === 0) return undefined;
+  if (s.turn === 0 && s.shift.x === 0 && s.shift.y === 0) return undefined;
   const [ox, oy] = px.toPx(0, 0);
-  return `rotate(${-s.turn} ${ox} ${oy})`;
+  const [sx, sy] = px.toPx(s.shift.x, s.shift.y);
+  return `translate(${sx - ox} ${sy - oy}) rotate(${-s.turn} ${ox} ${oy})`;
 };
+
+/**
+ * The axes a learner moves are drawn long enough to cross the whole sheet wherever O is and
+ * however they are turned (the frame cuts them at its edges): the window, grown by its diagonal.
+ */
+const axesOf = (s: PlaneView): PlaneView => {
+  if (!s.canMoveAxes) return s;
+  const w = s.window;
+  const d = Math.ceil(Math.hypot(w.xMax - w.xMin, w.yMax - w.yMin));
+  return {
+    ...s,
+    window: { xMin: w.xMin - d, xMax: w.xMax + d, yMin: w.yMin - d, yMax: w.yMax + d },
+  };
+};
+
+/**
+ * On axes the learner moves, a mark is drawn only where it lands on the sheet (a half unit in from
+ * its edge): the lines run on past it, their numbers don't.
+ */
+const onSheet =
+  (s: PlaneView) =>
+  (axis: "x" | "y", v: number): boolean => {
+    if (!s.canMoveAxes) return true;
+    const a = (s.turn * Math.PI) / 180;
+    const [c, sn] = [Math.cos(a), Math.sin(a)];
+    const [dx, dy] = axis === "x" ? [v * c, v * sn] : [-v * sn, v * c];
+    const w = s.window;
+    const [x, y] = [s.shift.x + dx, s.shift.y + dy];
+    return x >= w.xMin + 0.5 && x <= w.xMax - 0.5 && y >= w.yMin + 0.5 && y <= w.yMax - 0.5;
+  };
+
+/** How far along OX the turning handle sits from O, in units: past the middle, between marks. */
+const HANDLE_AT = 4.5;
+
+/**
+ * The learner moves the axes: O, dragged anywhere on the sheet (to the half unit); and a handle
+ * along OX, dragged round O to turn them.
+ */
+function AxesHandles({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
+  const drag = useDrags();
+  if (!s.canMoveAxes) return null;
+  const w = s.window;
+  const a = (s.turn * Math.PI) / 180;
+  const handle = { x: s.shift.x + HANDLE_AT * Math.cos(a), y: s.shift.y + HANDLE_AT * Math.sin(a) };
+  const [ox, oy] = px.toPx(s.shift.x, s.shift.y);
+  const [hx, hy] = px.toPx(handle.x, handle.y);
+  const half = (v: number, lo: number, hi: number) =>
+    Math.min(hi, Math.max(lo, Math.round(v * 2) / 2));
+  return (
+    <g class="cp-axes-handles">
+      <line class="cp-turn-arm" x1={ox} y1={oy} x2={hx} y2={hy} />
+      <circle
+        class="cp-apart"
+        {...drag({
+          axis: "xy",
+          at: s.shift,
+          place: (to) => ({ x: half(to.x, w.xMin, w.xMax), y: half(to.y, w.yMin, w.yMax) }),
+          move: plane.actions.moveAxes,
+          step: 0.5,
+          words: pair(s.shift),
+        })}
+        cx={ox}
+        cy={oy}
+        r={10}
+      />
+      <circle
+        class="cp-turn-handle"
+        {...drag({
+          axis: "xy",
+          at: handle,
+          move: plane.actions.turnAxes,
+          step: 0.5,
+          words: `${s.turn}°`,
+        })}
+        cx={hx}
+        cy={hy}
+        r={12}
+      />
+      {/* Turning, not a point: a ring with a turning arrow. */}
+      <text class="cp-turn-glyph" x={hx} y={hy} text-anchor="middle" dominant-baseline="central">
+        ↻
+      </text>
+    </g>
+  );
+}
 
 /**
  * Where the zero may rest while apart: halfway between marks, so no number of one line lies on the
@@ -87,9 +176,17 @@ export const planeDrawing = drawing(plane, {
       <>
         {canNameParts(s) && s.isAlone && <PartTaps s={s} px={px} />}
         <g transform={turned(s, px)}>
-          <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} layer="lines" />
+          <AxesDraw
+            s={axesOf(s)}
+            px={px}
+            locale={locale}
+            canLight={s.canTapNumbers}
+            layer="lines"
+            isMarkShown={onSheet(s)}
+          />
           <ApartHandle s={s} px={px} />
         </g>
+        <AxesHandles s={s} px={px} />
       </>
     );
   },
@@ -98,7 +195,14 @@ export const planeDrawing = drawing(plane, {
   front: ({ s, px, locale }) => (
     <>
       <g transform={turned(s, px)}>
-        <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} layer="labels" />
+        <AxesDraw
+          s={axesOf(s)}
+          px={px}
+          locale={locale}
+          canLight={s.canTapNumbers}
+          layer="labels"
+          isMarkShown={onSheet(s)}
+        />
       </g>
       <QuadrantNumerals s={s} px={px} />
       <NamedPointsDraw s={s} px={px} />

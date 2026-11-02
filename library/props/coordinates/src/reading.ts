@@ -27,8 +27,8 @@ export const Reading = {
 } as const;
 export type Reading = (typeof Reading)[keyof typeof Reading];
 
-/** The plane's fields it draws or decides by. */
-export const readingReads = fromPlane("window");
+/** The plane's fields it draws or decides by: the window, and the frame its point is read in. */
+export const readingReads = fromPlane("window", "shift", "turn");
 
 export type ReadingState = Pick<PlaneCore, (typeof readingReads.keys)[number]> & {
   point: Point | null;
@@ -37,7 +37,24 @@ export type ReadingState = Pick<PlaneCore, (typeof readingReads.keys)[number]> &
   isReadingHidden: boolean;
   visited: Quadrant[];
   unit: string;
+  decimals: number;
+  canMovePoint: boolean;
+  showsVisitedSigns: boolean;
 };
+
+/**
+ * A point of the sheet read in the axes' frame: moved by `shift`, turned by `turn` about O. The
+ * point stays where it is on the sheet; only its coordinates depend on the axes.
+ */
+export function readIn(s: Pick<ReadingState, "shift" | "turn">, p: Point): Point {
+  const a = (s.turn * Math.PI) / 180;
+  const [dx, dy] = [p.x - s.shift.x, p.y - s.shift.y];
+  const round = (v: number) => Number(v.toFixed(6));
+  return {
+    x: round(dx * Math.cos(a) + dy * Math.sin(a)),
+    y: round(-dx * Math.sin(a) + dy * Math.cos(a)),
+  };
+}
 
 /** A point snapped to the step and kept inside the window. */
 export function snapped(s: Pick<ReadingState, "pointStep" | "window">, p: Point): Point {
@@ -59,7 +76,7 @@ export const reading = prop({
   type: "reading",
   role: PropRole.Explainer,
   describe:
-    "A point the learner drags or taps, read off the axes: its perpendiculars to both axes, their lengths and directions, its abscissa and ordinate, and (x, y), as far as the board writes them. A crossed axis flips a sign; on an axis one coordinate is 0. The quadrants it has been in are remembered. In a guessing round the reading stays hidden until shown.",
+    "A point the learner drags or taps, read off the axes: its perpendiculars to both axes, their lengths and directions, its abscissa and ordinate, and (x, y), as far as the board writes them. A crossed axis flips a sign; on an axis one coordinate is 0. The quadrants it has been in are remembered, and can show their sign patterns. In a guessing round the reading stays hidden until shown. With the axes moved or turned, a point that stays is read in them: only its coordinates change.",
   variables: z
     .object({
       /** The point, or null when there is none. */
@@ -73,6 +90,12 @@ export const reading = prop({
       visited: z.array(z.enum(QUADRANTS)).max(4),
       /** Written after a measured distance ("30 m"); empty for none. The same in both languages. */
       unit: z.string().max(4),
+      /** How many decimal places its coordinates are written to: 0 as usual, 2 under turned axes. */
+      decimals: z.number().int().min(0).max(2),
+      /** The learner can drag or tap the point. Off: it stays (the axes move under it). */
+      canMovePoint: z.boolean(),
+      /** Each quadrant the point has been in shows its sign pattern, (+, +) in I and so on. */
+      showsVisitedSigns: z.boolean(),
     })
     .strict(),
   start: {
@@ -82,12 +105,15 @@ export const reading = prop({
     isReadingHidden: false,
     visited: [],
     unit: "",
+    decimals: 0,
+    canMovePoint: true,
+    showsVisitedSigns: false,
   },
   needs: z.object(readingReads.fields).strict(),
   facts: {
-    abscissa: (me) => me.point?.x ?? null,
-    ordinate: (me) => me.point?.y ?? null,
-    place: (me) => (me.point === null ? null : placeOf(me.point)),
+    abscissa: (me) => (me.point === null ? null : readIn(me, me.point).x),
+    ordinate: (me) => (me.point === null ? null : readIn(me, me.point).y),
+    place: (me) => (me.point === null ? null : placeOf(readIn(me, me.point))),
   },
   actions: {
     movePoint: action(pointSchema.shape, {
@@ -111,7 +137,7 @@ export const reading = prop({
     readingShown: signal(pointSchema.shape),
   },
   on: {
-    movePoint: (me, p, t) => putAt(me, p, false, t),
+    movePoint: (me, p, t) => me.canMovePoint && putAt(me, p, false, t),
     showReading: (me, _, t) =>
       me.point !== null &&
       me.isReadingHidden && [
@@ -133,13 +159,19 @@ type ReadingTools = {
 
 /** The point put down at p (snapped), the quadrants it has now been in, and what it tells. */
 function putAt(
-  me: { pointStep: number; window: PlaneWindow; visited: Quadrant[] },
+  me: {
+    pointStep: number;
+    window: PlaneWindow;
+    visited: Quadrant[];
+    shift: Point;
+    turn: number;
+  },
   p: Point,
   isHidden: boolean,
   t: ReadingTools,
 ): Out[] {
   const point = snapped(me, p);
-  const place = placeOf(point);
+  const place = placeOf(readIn(me, point));
   const quadrant = (QUADRANTS as readonly string[]).includes(place) ? (place as Quadrant) : null;
   const isNew = quadrant !== null && !me.visited.includes(quadrant);
   const visited = isNew && quadrant !== null ? [...me.visited, quadrant] : me.visited;

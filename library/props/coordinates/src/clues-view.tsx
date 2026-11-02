@@ -36,7 +36,8 @@ function StillDraw({
   const knownY = given.find((c) => c.y !== undefined)?.y;
   const measured = given.flatMap((c) => {
     const out: JSX.Element[] = [];
-    if (c.x !== undefined) {
+    // A distance of 0 has no length to measure: the line it leaves is drawn below, alone.
+    if (c.x !== undefined && c.x !== 0) {
       const y = knownY ?? Math.round(w.yMin + (w.yMax - w.yMin) * 0.85);
       const [x0, py] = px.toPx(0, y);
       const [x1] = px.toPx(c.x, y);
@@ -49,7 +50,7 @@ function StillDraw({
         </g>,
       );
     }
-    if (c.y !== undefined) {
+    if (c.y !== undefined && c.y !== 0) {
       const x = knownX ?? Math.round(w.xMin + (w.xMax - w.xMin) * 0.85);
       const [px0, y0] = px.toPx(x, 0);
       const [, y1] = px.toPx(x, c.y);

@@ -8,6 +8,7 @@ export const WORDS = {
   nameQuadrants: { en: "Number the quadrants", hi: "चतुर्थांशों को गिनो" },
   bringTogether: { en: "Bring the zeroes together", hi: "दोनों शून्य मिलाओ" },
   show: { en: "Show", hi: "दिखाओ" },
+  thePoint: { en: "The point", hi: "बिंदु" },
   showPoint: { en: "Show where it is", hi: "दिखाओ कहाँ है" },
   clear: { en: "Clear", hi: "हटाओ" },
   lightsOff: { en: "Lights off", hi: "रोशनी बंद" },
@@ -29,6 +30,8 @@ export function addressOf(
   p: { x: number; y: number },
   locale: Locale,
 ): string {
+  // On the x- and y-axes, a place is its coordinates, as the book writes them: (3, 2).
+  if (names[0].en === "x" && names[1].en === "y") return pair(p);
   // Each number stays on the line with its word.
   return `${names[0][locale]}\u00a0${num(p.x)}, ${names[1][locale]}\u00a0${num(p.y)}`;
 }
@@ -39,3 +42,13 @@ export const num = (v: number): string =>
 
 /** A pair as the book writes it: (−3, 2). */
 export const pair = (p: { x: number; y: number }): string => `(${num(p.x)},\u00a0${num(p.y)})`;
+
+/** A number to so many decimal places (0: as `num`): 2.13, −0.70. */
+export const numTo = (v: number, decimals: number): string =>
+  decimals === 0
+    ? num(v)
+    : (Math.abs(v) < 0.5 * 10 ** -decimals ? 0 : v).toFixed(decimals).replace("-", "−");
+
+/** A pair to so many decimal places: (2.13, −0.70). */
+export const pairTo = (p: { x: number; y: number }, decimals: number): string =>
+  decimals === 0 ? pair(p) : `(${numTo(p.x, decimals)},\u00a0${numTo(p.y, decimals)})`;

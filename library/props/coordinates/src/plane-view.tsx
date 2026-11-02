@@ -29,7 +29,7 @@ export const hasUp = (s: PlaneView): boolean =>
   s.axes === Axes.Both && (s.upLines === null || s.upLines.length > 0 || s.rising !== null);
 
 /** Each quadrant's corner sign pattern, as the book writes it. */
-const SIGNS: Record<Quadrant, string> = {
+export const SIGNS: Record<Quadrant, string> = {
   I: "(+, +)",
   II: "(−, +)",
   III: "(−, −)",
@@ -82,7 +82,7 @@ export function QuadrantTints({ s, px }: { s: PlaneView; px: FramePixels }): JSX
 }
 
 /** A quadrant's corner of the window, in units: where it is drawn and tapped. */
-function quadrantBox(s: PlaneView, q: Quadrant) {
+export function quadrantBox(s: { window: PlaneView["window"] }, q: Quadrant) {
   const w = s.window;
   const right = q === "I" || q === "IV";
   const top = q === "I" || q === "II";
@@ -211,6 +211,13 @@ export function GridDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
 }
 
 /**
+ * A number on lines drawn turned stays upright: turned back about where it is written by as much
+ * as the lines are turned (they are drawn in a group turned the other way).
+ */
+const upright = (s: PlaneView, x: number, y: number): string | undefined =>
+  s.turn === 0 ? undefined : `rotate(${s.turn} ${x} ${y})`;
+
+/**
  * The two lines with only the marks defined so far: plain, counted from 1, or numbered with 0 and
  * negatives; their names; O, the directions, and the quadrants as the lesson names them. In the town,
  * a street's number is a button that lights every house on it.
@@ -221,10 +228,13 @@ export function AxesDraw({
   locale,
   canLight,
   layer,
+  isMarkShown = () => true,
 }: {
   s: PlaneView;
   px: FramePixels;
   locale: Locale;
+  /** Which marks are drawn, by line and value: on axes the learner moves, those on the sheet. */
+  isMarkShown?: (axis: "x" | "y", v: number) => boolean;
   /** Whether a number on a line lights every place with it (the places layer is on). */
   canLight: boolean;
   /**
@@ -242,10 +252,14 @@ export function AxesDraw({
   // Numbers every mark when there's room, else every other.
   const every = unit * s.tickEvery >= 18 ? 1 : 2;
   // Only the lines numbered so far carry their marks (a page's edge, once a distance along it is given).
-  const xMarks = s.numbered.includes("x") ? marksOn(s.marks, w.xMin, w.xMax, s.tickEvery) : [];
+  const xMarks = s.numbered.includes("x")
+    ? marksOn(s.marks, w.xMin, w.xMax, s.tickEvery).filter((v) => isMarkShown("x", v))
+    : [];
   // The vertical line's zero is `apart` from the horizontal one's: it reads y − apart.y.
   const yMarks = s.numbered.includes("y")
-    ? marksOn(s.marks, w.yMin - s.apart.y, w.yMax - s.apart.y, s.tickEvery)
+    ? marksOn(s.marks, w.yMin - s.apart.y, w.yMax - s.apart.y, s.tickEvery).filter((v) =>
+        isMarkShown("y", v),
+      )
     : [];
   const [left, base] = px.toPx(w.xMin, 0);
   const [right] = px.toPx(w.xMax, 0);
@@ -303,7 +317,13 @@ export function AxesDraw({
                 </text>
               </g>
             ) : (
-              <text x={x} y={base + numbersBelow} text-anchor="middle" dominant-baseline="central">
+              <text
+                x={x}
+                y={base + numbersBelow}
+                transform={upright(s, x, base + numbersBelow)}
+                text-anchor="middle"
+                dominant-baseline="central"
+              >
                 {text}
               </text>
             )}
@@ -339,6 +359,7 @@ export function AxesDraw({
                 <text
                   x={vx - (isApart && hasZeroMark(v) ? 14 : 8)}
                   y={y}
+                  transform={upright(s, vx - (isApart && hasZeroMark(v) ? 14 : 8), y)}
                   text-anchor="end"
                   dominant-baseline="central"
                 >
@@ -353,6 +374,7 @@ export function AxesDraw({
           class={s.showOrigin ? "cp-origin" : "cp-origin is-zero"}
           x={vx - 7}
           y={isCrowded ? base - 6 : base + 14}
+          transform={upright(s, vx - 7, isCrowded ? base - 6 : base + 14)}
           text-anchor="end"
         >
           {s.showOrigin ? "O" : "0"}

@@ -43,6 +43,9 @@ export const coordinatePlane = prop({
     scene: (me) => me.plane.scene,
     tickEvery: (me) => me.plane.tickEvery,
     backdrop: (me) => me.plane.backdrop,
+    // The frame a point is read in: where the axes cross on the sheet, and how far they are turned.
+    shift: (me) => me.plane.shift,
+    turn: (me) => me.plane.turn,
     // Where Riya is headed: the places'.
     target: (me) => me.places.target,
     targetName: (me) => me.places.targetName,
@@ -89,7 +92,7 @@ export const coordinatePlane = prop({
       on: ["plane", "clues", "plotting", "places", "walker"],
       // The plane's named points over Riya, so the mark she has just made stays in view.
       front: ["plane", "plotting", "clues", "dice", "reading"],
-      below: ["plane", "walker", "plotting", "dice"],
+      below: ["plane", "reading", "walker", "plotting", "dice"],
       controls: ["walker", "places", "plane", "reading", "clues", "plotting", "dice"],
     },
   },
