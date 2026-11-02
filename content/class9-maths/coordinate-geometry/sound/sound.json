@@ -154,6 +154,13 @@
       "seconds": 1.44
     },
     {
+      "file": "3ebec2225c693d60.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman has lost his kite at the fair. The stalls hold clues: each one gives the address of the next stall. Walk Riya with the arrows from the gate at O.",
+      "seconds": 8.603
+    },
+    {
       "file": "4de3580c8540155f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -208,13 +215,6 @@
       "locale": "en",
       "words": "Are the desks (5, 3) and (3, 5) the same desk?",
       "seconds": 3.518
-    },
-    {
-      "file": "3d777c69dc43bfb0.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "At the fair's game stall, Riya and Aman play. Both counters start at 0, 0. Each throw of a red and a green die: the red number is added to x, the green to y. First to 10, 10 wins. A die that would take a coordinate past 10 isn't used, and landing on the other counter sends it back to 0, 0.",
-      "seconds": 18.878
     },
     {
       "file": "d7f8c7a68498a62c.m4a",
@@ -383,13 +383,6 @@
       "locale": "en",
       "words": "E is the point minus 3, minus 5: 3 units left of the y-axis. The point 5, minus 5 is 5 units right of it.",
       "seconds": 7.675
-    },
-    {
-      "file": "e7950841403f002c.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Each move is a plot: along by red, then up by green. Play on to 10, 10.",
-      "seconds": 5.155
     },
     {
       "file": "d2f8373a341ada0e.m4a",
@@ -1701,6 +1694,20 @@
       "seconds": 11.1
     },
     {
+      "file": "454f7ed521fd7063.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The balloon stall! Its clue: the next stall is at the point minus 2, 0.",
+      "seconds": 5.039
+    },
+    {
+      "file": "a6d5ccb0a9136047.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The book stall! Its clue: the next stall is at the point minus 2, minus 4.",
+      "seconds": 5.109
+    },
+    {
       "file": "3fc3af2b6d011d61.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -1778,13 +1785,6 @@
       "seconds": 3.878
     },
     {
-      "file": "48818f8e4a680a22.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "The dice game",
-      "seconds": 0.953
-    },
-    {
       "file": "3eea103df00c1081.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -1799,6 +1799,13 @@
       "seconds": 5.62
     },
     {
+      "file": "4c0cf14e82ca40b3.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The first clue: go to the stall at the point 4, 1.",
+      "seconds": 3.402
+    },
+    {
       "file": "a077b2c48a9ed6aa.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -1811,6 +1818,13 @@
       "locale": "en",
       "words": "The house: along the main road to Street 4, then up Street 4 to House 5.",
       "seconds": 4.726
+    },
+    {
+      "file": "f895dde8b25b297e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The kite stall! Aman's lost kite is here. You found every stall from its address alone: x along, then y up or down.",
+      "seconds": 7.303
     },
     {
       "file": "75a6517baffd9b32.m4a",
@@ -1918,11 +1932,32 @@
       "seconds": 5.016
     },
     {
+      "file": "03b4dcfd094af87e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The snack stall! Its clue: the next stall is at the point minus 3, 4.",
+      "seconds": 5.202
+    },
+    {
       "file": "59646e7d34cd2598.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "The town grows",
       "seconds": 1.034
+    },
+    {
+      "file": "972ae1ab1cceae87.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The toy stall! Its clue: the next stall is at the point 2, minus 3.",
+      "seconds": 4.842
+    },
+    {
+      "file": "39837ff468136449.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The treasure trail",
+      "seconds": 1.092
     },
     {
       "file": "9d789f451eff9dd9.m4a",
@@ -1967,11 +2002,74 @@
       "seconds": 23.534
     },
     {
+      "file": "531f2b550d6c33b7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the balloon stall, at the point minus 2, minus 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 10.635
+    },
+    {
+      "file": "618fbf602c38bdd3.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the bangle stall, at the point 1, 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.23
+    },
+    {
+      "file": "15ab377228893754.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the book stall, at the point minus 3, 4: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.648
+    },
+    {
+      "file": "a450032c9b39ecda.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the juice stall, at the point minus 3, 2: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.637
+    },
+    {
+      "file": "04e0a8224ada5423.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the kite stall, at the point 2, minus 3: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.463
+    },
+    {
+      "file": "a5e7d77c83c87ac6.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the mask stall, at the point 2, 0: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.556
+    },
+    {
+      "file": "ff5f1f57fd14c624.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the shoe stall, at the point 4, minus 3: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.834
+    },
+    {
+      "file": "5f565ff67fd4fb40.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the tea stall, at the point minus 4, minus 2: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.915
+    },
+    {
       "file": "6cfcc18b4ef3869f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "This is the time-distance graph of earlier classes: the same plotting, with the axes called t and d instead of x and y.",
       "seconds": 6.955
+    },
+    {
+      "file": "988e38b97861a092.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This is the toy stall, at the point minus 2, 0: not the stall your clue names. Read the clue again: x first, along; then y, up or down.",
+      "seconds": 9.95
     },
     {
       "file": "82d0209ae173a531.m4a",
@@ -2534,6 +2632,13 @@
       "seconds": 1.696
     },
     {
+      "file": "07db100f932e9653.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन की पतंग मेले में खो गई है। स्टॉलों पर सुराग हैं: हर सुराग अगले स्टॉल का पता बताता है। रिया को तीरों से O वाले फाटक से ले चलो।",
+      "seconds": 11.227
+    },
+    {
       "file": "3915581192d56c50.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2786,6 +2891,13 @@
       "seconds": 8.116
     },
     {
+      "file": "248425ad308e8cf4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "किताबों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु माइनस 2, माइनस 4 पर है।",
+      "seconds": 6.212
+    },
+    {
       "file": "f8bde418bc7e036d.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2870,6 +2982,20 @@
       "seconds": 11.111
     },
     {
+      "file": "6d086d0747d0b9a6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "ख़ज़ाने की खोज",
+      "seconds": 1.521
+    },
+    {
+      "file": "2e5fcd6d922a99c7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "खिलौनों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु 2, माइनस 3 पर है।",
+      "seconds": 6.177
+    },
+    {
       "file": "c358b52f1e8f88fc.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2896,6 +3022,13 @@
       "locale": "hi",
       "words": "गली योजना। एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 मीटर की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 सेंटीमीटर को 200 मीटर मानकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों और गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: पहला, कितने चौराहों को (4, 3) कहा जा सकता है; दूसरा, कितने चौराहों को (3, 4) कहा जा सकता है।",
       "seconds": 64.227
+    },
+    {
+      "file": "57d85f883621dc9f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "गुब्बारों का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु माइनस 2, 0 पर है।",
+      "seconds": 6.165
     },
     {
       "file": "bf681ce27eda3388.m4a",
@@ -3171,6 +3304,13 @@
       "seconds": 2.508
     },
     {
+      "file": "09ba7fca0fc224af.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "नाश्ते का स्टॉल! उसका सुराग: अगला स्टॉल बिंदु माइनस 3, 4 पर है।",
+      "seconds": 6.212
+    },
+    {
       "file": "378a41f930f07ba6.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3190,6 +3330,13 @@
       "locale": "hi",
       "words": "निर्देशांक लिखना",
       "seconds": 1.649
+    },
+    {
+      "file": "c62f6ed331e8e2e6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पतंगों का स्टॉल! अमन की खोई पतंग यहीं है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: एक्स आगे, फिर वाई ऊपर या नीचे।",
+      "seconds": 9.95
     },
     {
       "file": "353811e64b11efd1.m4a",
@@ -3255,6 +3402,13 @@
       "seconds": 6.096
     },
     {
+      "file": "e3bd5e1bed1f8aa6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पहला सुराग: बिंदु 4, 1 वाले स्टॉल पर जाओ।",
+      "seconds": 4.11
+    },
+    {
       "file": "d447585b09602c30.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3274,13 +3428,6 @@
       "locale": "hi",
       "words": "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 सेंटीमीटर पर है।",
       "seconds": 5.597
-    },
-    {
-      "file": "a7247b78e8ee0a34.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "पासों का खेल",
-      "seconds": 1.301
     },
     {
       "file": "f61adb77d323d21b.m4a",
@@ -3675,13 +3822,6 @@
       "seconds": 12.783
     },
     {
-      "file": "8aad89d3dae7e9f6.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "मेले के खेल वाले स्टॉल पर रिया और अमन खेलते हैं। दोनों गोटियाँ 0, 0 से शुरू होती हैं। हर बार लाल और हरा पासा फेंकने पर: लाल संख्या एक्स में जुड़ती है, हरी वाई में। जो पहले 10, 10 पहुँचे, वह जीतता है। जो पासा किसी निर्देशांक को 10 से आगे ले जाए, वह काम नहीं आता, और दूसरी गोटी पर उतरने से वह 0, 0 पर वापस चली जाती है।",
-      "seconds": 29.072
-    },
-    {
       "file": "ef2298354863f934.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3724,6 +3864,55 @@
       "seconds": 4.319
     },
     {
+      "file": "3aec1e6f3e773c49.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह किताबों का स्टॉल है, बिंदु माइनस 3, 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.888
+    },
+    {
+      "file": "8e747085c3e112a1.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह खिलौनों का स्टॉल है, बिंदु माइनस 2, 0 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.748
+    },
+    {
+      "file": "087e5831a58ae079.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह गुब्बारों का स्टॉल है, बिंदु माइनस 2, माइनस 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.888
+    },
+    {
+      "file": "6cca16becb9c5aae.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह चाय का स्टॉल है, बिंदु माइनस 4, माइनस 2 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 13.236
+    },
+    {
+      "file": "c74ba215656799a1.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह चूड़ियों का स्टॉल है, बिंदु 1, 4 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.249
+    },
+    {
+      "file": "bc0c7db0f2775573.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह जूतों का स्टॉल है, बिंदु 4, माइनस 3 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.632
+    },
+    {
+      "file": "7d8a6a2098dc70ca.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह जूस का स्टॉल है, बिंदु माइनस 3, 2 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.597
+    },
+    {
       "file": "b7ba67b134697bc5.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3731,11 +3920,25 @@
       "seconds": 14.803
     },
     {
+      "file": "a8e5866e713d59b5.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह पतंगों का स्टॉल है, बिंदु 2, माइनस 3 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.946
+    },
+    {
       "file": "41d41d0b75142c4c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "यह पिछली कक्षाओं का समय-दूरी ग्राफ़ है: वही आलेखन, बस अक्षों के नाम x और y की जगह t और d।",
       "seconds": 7.942
+    },
+    {
+      "file": "a1ea7a9fa3b9f3e3.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह मुखौटों का स्टॉल है, बिंदु 2, 0 पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।",
+      "seconds": 12.423
     },
     {
       "file": "435f0052aeed12f2.m4a",
@@ -4254,13 +4457,6 @@
       "locale": "hi",
       "words": "हर चतुर्थांश में चिह्न",
       "seconds": 2.322
-    },
-    {
-      "file": "60a6de1de5473d1a.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "हर चाल एक आलेखन है: लाल से आगे, फिर हरे से ऊपर। 10, 10 तक खेलते रहो।",
-      "seconds": 7.106
     },
     {
       "file": "d5e76ae792ce365d.m4a",

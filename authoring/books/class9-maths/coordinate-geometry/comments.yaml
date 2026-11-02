@@ -10539,3 +10539,91 @@
     walk already shows the turn. I'd go with (b): the turn is what matters here, and the walk shows
     it."
   messages: []
+- id: cmvzczgdqqpi
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-11-02T14:33:08.270Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-a-point
+  target: check/plotting/plotAt
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:161
+  commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
+  turn: agent
+  text: when we are allowed to tap anywhere we should also be able to go there no , even if that is
+    not (-4,2)
+  messages: []
+- id: cmvzd3t7ahqc
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-11-02T14:36:31.510Z
+  board: class9-maths/coordinate-geometry/plotting-points/swap-the-numbers
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:294
+  snapshot: x5025−35−363y05525−3−513 −6−5−4−3−2−1123456−6−5−4−3−2123456OXX′YY′(−4, 5)(−4, 2.75)(−6,
+    5.25) (5, 2) ↺
+  commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
+  turn: agent
+  text: i accidenlty tapped so many wrong points and then they are there permanently , better way to
+    do will br a point starting from origin and dragging to desired place and it changes color to
+    green and our job is done
+  messages:
+    - by: you
+      role: person
+      at: 2026-11-02T14:37:49.056Z
+      text: this applies for all the boards of this flavor
+- id: cmvzd9hby456
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-11-02T14:40:56.062Z
+  board: class9-maths/coordinate-geometry/plotting-points/treasure-trail
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:536
+  snapshot: "The dice game At the fair's game stall, Riya and Aman play. Both counters start at (0,
+    0). Each throw of a red and a green die: the red number is added to x, the green to y. First to
+    (10, 10) wins. A die that would take a coordinate past 10 isn't used, and landing on the other
+    counter sends it back to (0, 0). 1234567891012345678910ORA 23Riya 🏁 Throw New game Each move is
+    a plot: along by red, the"
+  commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
+  text: i like the game , but true learning will come when we make the students play the game ,they
+    see the throw and they move to the next position ; we would have to work on explaiing the game ;
+    and only one player will be there and target is to reach 10,10
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:01:33.320Z
+      text: "moved from content/class9-maths/coordinate-geometry/plotting-points/dice-game to
+        content/class9-maths/coordinate-geometry/plotting-points/treasure-trail: Agreed in chat: no
+        dice. A deterministic game anyone can finish: a treasure trail at the fair, Riya walked with
+        the arrows from stall to stall, each stall's clue giving the next stall's address. The board
+        is now treasure-trail (this thread moves there; dice-game is gone)."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:01:33.446Z
+      text: ""
+      status: planned
+      commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:01:33.763Z
+      text: "Built. Five clues: one stall in each quadrant and one on the x-axis, with Aman's kite last.
+        Five decoy stalls stand at each clue's swapped (or sign-flipped) address. A wrong stop says
+        which stall it is and its address, and tells the student to read the clue again (x first).
+        The right stall gives the next clue. The route is fixed, so everyone finishes. objectives.md
+        (o13), flow.md and props.md are updated to match and need your approval again."
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/3d777c69dc43bfb0.m4a
+    - content/class9-maths/coordinate-geometry/sound/48818f8e4a680a22.m4a
+    - content/class9-maths/coordinate-geometry/sound/60a6de1de5473d1a.m4a
+    - content/class9-maths/coordinate-geometry/sound/8aad89d3dae7e9f6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a7247b78e8ee0a34.m4a
+    - content/class9-maths/coordinate-geometry/sound/e7950841403f002c.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+  reaches:
+    pieces: 30
+    boards: 5
+    lessons:
+      - class9-maths/coordinate-geometry/plotting-points
+  turn: person

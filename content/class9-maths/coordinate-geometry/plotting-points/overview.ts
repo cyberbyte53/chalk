@@ -1,6 +1,14 @@
 import { hidden, page, place, scene, t, tap } from "@chalk/author";
 import { plane, words } from "@chalk/patterns";
-import { Marks, Roads, Tone, coordinatePlane } from "@chalk/prop-coordinates";
+import {
+  Choosing,
+  Marks,
+  PlaceKind,
+  Roads,
+  Scene,
+  Tone,
+  coordinatePlane,
+} from "@chalk/prop-coordinates";
 
 const { setup, walkTo } = plane;
 
@@ -426,69 +434,202 @@ const plotFromATable = page(
   }),
 );
 
-/** Activity 2 at the fair's game stall: red along, green up, first to (10, 10). */
-const diceGame = page(
-  "dice-game",
-  scene({
-    pieces: {
-      title: words.title(t("The dice game", "पासों का खेल")),
-      rules: words.body(
-        t(
-          "At the fair's game stall, Riya and Aman play. Both counters start at (0, 0). Each throw of a **red** and a **green** die: the red number is added to **x**, the green to **y**. First to **(10, 10)** wins. A die that would take a coordinate past 10 isn't used, and landing on the other counter sends it back to (0, 0).",
-          "मेले के खेल वाले स्टॉल पर रिया और अमन खेलते हैं। दोनों गोटियाँ (0, 0) से शुरू होती हैं। हर बार **लाल** और **हरा** पासा फेंकने पर: लाल संख्या **x** में जुड़ती है, हरी **y** में। जो पहले **(10, 10)** पहुँचे, वह जीतता है। जो पासा किसी निर्देशांक को 10 से आगे ले जाए, वह काम नहीं आता, और दूसरी गोटी पर उतरने से वह (0, 0) पर वापस चली जाती है।",
-        ),
-        {
-          says: t(
-            "At the fair's game stall, Riya and Aman play. Both counters start at 0, 0. Each throw of a red and a green die: the red number is added to x, the green to y. First to 10, 10 wins. A die that would take a coordinate past 10 isn't used, and landing on the other counter sends it back to 0, 0.",
-            "मेले के खेल वाले स्टॉल पर रिया और अमन खेलते हैं। दोनों गोटियाँ 0, 0 से शुरू होती हैं। हर बार लाल और हरा पासा फेंकने पर: लाल संख्या एक्स में जुड़ती है, हरी वाई में। जो पहले 10, 10 पहुँचे, वह जीतता है। जो पासा किसी निर्देशांक को 10 से आगे ले जाए, वह काम नहीं आता, और दूसरी गोटी पर उतरने से वह 0, 0 पर वापस चली जाती है।",
-          ),
-        },
-      ),
-      game: place(
-        coordinatePlane,
-        setup({
-          plane: {
-            window: { xMin: -0.5, xMax: 10.5, yMin: -0.5, yMax: 10.5 },
-            ...AXES,
-            showDirections: false,
-          },
-          dice: {
-            counters: [
-              { x: 0, y: 0 },
-              { x: 0, y: 0 },
-            ],
-            playerNames: [t("Riya", "रिया"), t("Aman", "अमन")],
-            goal: 10,
-          },
-        }),
-      ),
-      playOn: hidden(
-        words.body(
+/** A stall on the trail's fair ground: where it stands, its sign, and its name in a sentence. */
+type Stall = {
+  key: string;
+  x: number;
+  y: number;
+  sign: [string, string];
+  en: string;
+  hiOf: string;
+};
+
+/** The trail, in order: one stall in each quadrant, one on the x-axis, the kite last. */
+const ROUTE: Stall[] = [
+  { key: "snacks", x: 4, y: 1, sign: ["Snacks", "नाश्ता"], en: "snack", hiOf: "नाश्ते का" },
+  { key: "books", x: -3, y: 4, sign: ["Books", "किताबें"], en: "book", hiOf: "किताबों का" },
+  { key: "balloons", x: -2, y: -4, sign: ["Balloons", "गुब्बारे"], en: "balloon", hiOf: "गुब्बारों का" },
+  { key: "toys", x: -2, y: 0, sign: ["Toys", "खिलौने"], en: "toy", hiOf: "खिलौनों का" },
+  { key: "kites", x: 2, y: -3, sign: ["Kites", "पतंगें"], en: "kite", hiOf: "पतंगों का" },
+];
+/** Where a slip lands: each clue's address swapped, and the axis stop's sign flipped. */
+const DECOYS: Stall[] = [
+  { key: "bangles", x: 1, y: 4, sign: ["Bangles", "चूड़ियाँ"], en: "bangle", hiOf: "चूड़ियों का" },
+  { key: "shoes", x: 4, y: -3, sign: ["Shoes", "जूते"], en: "shoe", hiOf: "जूतों का" },
+  { key: "tea", x: -4, y: -2, sign: ["Tea", "चाय"], en: "tea", hiOf: "चाय का" },
+  { key: "masks", x: 2, y: 0, sign: ["Masks", "मुखौटे"], en: "mask", hiOf: "मुखौटों का" },
+  { key: "juice", x: -3, y: 2, sign: ["Juice", "जूस"], en: "juice", hiOf: "जूस का" },
+];
+const STALLS = [...ROUTE, ...DECOYS];
+
+const signed = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
+const pairOf = (s: { x: number; y: number }) => `(${signed(s.x)}, ${signed(s.y)})`;
+const saidEn = (s: { x: number; y: number }) =>
+  [s.x, s.y].map((n) => (n < 0 ? `minus ${-n}` : `${n}`)).join(", ");
+const saidHi = (s: { x: number; y: number }) =>
+  [s.x, s.y].map((n) => (n < 0 ? `माइनस ${-n}` : `${n}`)).join(", ");
+const capital = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
+
+/** The clue a route stall gives: the next stall's address, or, at the last, the kite. */
+const clueAt = (i: number) => {
+  const here = ROUTE[i];
+  const next = ROUTE[i + 1];
+  if (here === undefined) throw new Error("no such stall on the route");
+  return hidden(
+    next === undefined
+      ? words.definition(
           t(
-            "Each move is a plot: along by red, then up by green. **Play on** to (10, 10).",
-            "हर चाल एक आलेखन है: लाल से आगे, फिर हरे से ऊपर। (10, 10) तक **खेलते रहो**।",
+            "**The kite stall!** Aman's lost kite is here. You found every stall from its address alone: x along, then y up or down.",
+            "**पतंगों का स्टॉल!** अमन की खोई पतंग यहीं है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: x आगे, फिर y ऊपर या नीचे।",
+          ),
+          null,
+          {
+            says: t(
+              "The kite stall! Aman's lost kite is here. You found every stall from its address alone: x along, then y up or down.",
+              "पतंगों का स्टॉल! अमन की खोई पतंग यहीं है। तुमने हर स्टॉल केवल उसके पते से ढूँढा: एक्स आगे, फिर वाई ऊपर या नीचे।",
+            ),
+          },
+        )
+      : words.body(
+          t(
+            `**The ${here.en} stall!** Its clue: the next stall is at **${pairOf(next)}**.`,
+            `**${here.hiOf} स्टॉल!** उसका सुराग: अगला स्टॉल **${pairOf(next)}** पर है।`,
           ),
           {
             says: t(
-              "Each move is a plot: along by red, then up by green. Play on to 10, 10.",
-              "हर चाल एक आलेखन है: लाल से आगे, फिर हरे से ऊपर। 10, 10 तक खेलते रहो।",
+              `The ${here.en} stall! Its clue: the next stall is at the point ${saidEn(next)}.`,
+              `${here.hiOf} स्टॉल! उसका सुराग: अगला स्टॉल बिंदु ${saidHi(next)} पर है।`,
             ),
           },
         ),
+  );
+};
+
+/** At a stall that isn't the clue's: what it is and where, and to read the clue again. */
+const wrongStop = (s: Stall) =>
+  hidden(
+    words.body(
+      t(
+        `This is the ${s.en} stall, at **${pairOf(s)}**: not the stall your clue names. Read the clue again: x first, along; then y, up or down.`,
+        `यह ${s.hiOf} स्टॉल है, **${pairOf(s)}** पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले x, आगे; फिर y, ऊपर या नीचे।`,
+      ),
+      {
+        says: t(
+          `This is the ${s.en} stall, at the point ${saidEn(s)}: not the stall your clue names. Read the clue again: x first, along; then y, up or down.`,
+          `यह ${s.hiOf} स्टॉल है, बिंदु ${saidHi(s)} पर: वह स्टॉल नहीं जो तुम्हारा सुराग बताता है। सुराग फिर पढ़ो: पहले एक्स, आगे; फिर वाई, ऊपर या नीचे।`,
+        ),
+      },
+    ),
+  );
+
+/** The arrow taps that walk Riya from one point to another: along, then up or down. */
+const stepsBetween = (from: { x: number; y: number }, to: { x: number; y: number }) => [
+  ...Array.from({ length: Math.abs(to.x - from.x) }, () =>
+    tap("ground.walker", "step", { direction: to.x > from.x ? "right" : "left" }),
+  ),
+  ...Array.from({ length: Math.abs(to.y - from.y) }, () =>
+    tap("ground.walker", "step", { direction: to.y > from.y ? "up" : "down" }),
+  ),
+];
+
+/** A treasure trail at the fair: each stall's clue is the next stall's address. */
+const treasureTrail = page(
+  "treasure-trail",
+  scene({
+    pieces: {
+      title: words.title(t("The treasure trail", "ख़ज़ाने की खोज")),
+      rules: words.body(
+        t(
+          "Aman has lost his kite at the fair. The stalls hold clues: each one gives the **address of the next stall**. Walk Riya with the arrows from the gate at O.",
+          "अमन की पतंग मेले में खो गई है। स्टॉलों पर सुराग हैं: हर सुराग **अगले स्टॉल का पता** बताता है। रिया को तीरों से O वाले फाटक से ले चलो।",
+        ),
+      ),
+      first: words.body(
+        t(
+          `**The first clue:** go to the stall at **${pairOf(ROUTE[0] ?? { x: 0, y: 0 })}**.`,
+          `**पहला सुराग:** **${pairOf(ROUTE[0] ?? { x: 0, y: 0 })}** वाले स्टॉल पर जाओ।`,
+        ),
+        {
+          says: t(
+            `The first clue: go to the stall at the point ${saidEn(ROUTE[0] ?? { x: 0, y: 0 })}.`,
+            `पहला सुराग: बिंदु ${saidHi(ROUTE[0] ?? { x: 0, y: 0 })} वाले स्टॉल पर जाओ।`,
+          ),
+        },
+      ),
+      ...Object.fromEntries(ROUTE.map((s, i) => [`at${capital(s.key)}`, clueAt(i)])),
+      // Every stall but the first clue's, which can't be reached too early.
+      ...Object.fromEntries(STALLS.slice(1).map((s) => [`not${capital(s.key)}`, wrongStop(s)])),
+      ground: place(
+        coordinatePlane,
+        setup({
+          plane: {
+            window: { xMin: -5.5, xMax: 5.5, yMin: -5.5, yMax: 5.5 },
+            ...AXES,
+            scene: Scene.FairGround,
+            showDirections: false,
+          },
+          places: {
+            placeKind: PlaceKind.Stall,
+            places: STALLS.map((s) => ({ x: s.x, y: s.y, label: t(...s.sign) })),
+            choosing: Choosing.Never,
+            showAddress: false,
+          },
+          walker: {
+            walkFrom: { x: 0, y: 0 },
+            at: { x: 0, y: 0 },
+            roads: Roads.Grid,
+            showWhere: false,
+          },
+        }),
       ),
     },
     passBy: "rules",
     hear: {
-      // A few throws make the rule plain; the game goes on as long as they like.
-      "game.dice.thrown": (me, _, t) =>
-        me.game.dice.throwsMade >= 3 &&
-        me.hidden.includes("playOn") && [t.self.show({ name: "playOn" }), t.self.pass()],
+      // Where she stops: the clue's stall gives the next clue; any other says what it is.
+      "ground.walker.stepped": (me, p, t) => {
+        const shown = (name: string) => !me.hidden.includes(name);
+        const hideNotes = STALLS.slice(1)
+          .map((s) => `not${capital(s.key)}`)
+          .filter(shown)
+          .map((name) => t.self.hide({ name }));
+        // How far along: the clue showing is the last stall reached (none yet: the first clue).
+        const k = ROUTE.findIndex((s) => shown(`at${capital(s.key)}`)) + 1;
+        const target = ROUTE[k];
+        const stall = STALLS.find((s) => s.x === p.x && s.y === p.y);
+        if (target !== undefined && stall === target) {
+          const before = k === 0 ? "first" : `at${capital(ROUTE[k - 1]?.key ?? "")}`;
+          return [
+            ...hideNotes,
+            t.self.hide({ name: before }),
+            t.self.show({ name: `at${capital(target.key)}` }),
+            ...(k === ROUTE.length - 1 ? [t.self.pass()] : []),
+          ];
+        }
+        const isPassed = stall !== undefined && ROUTE.slice(0, Math.max(k, 0)).includes(stall);
+        if (stall === undefined || isPassed || target === undefined) return hideNotes;
+        return [...hideNotes, t.self.show({ name: `not${capital(stall.key)}` })];
+      },
     },
+    // A student who slips: stalls reached too early, and each clue's swapped address before its own.
     witness: [
-      tap("game.dice", "throwDice", {}),
-      tap("game.dice", "throwDice", {}),
-      tap("game.dice", "throwDice", {}),
-    ],
+      [-3, 4],
+      [1, 4],
+      [4, 1],
+      [-2, -4],
+      [-2, 0],
+      [4, -3],
+      [-3, 4],
+      [2, -3],
+      [-4, -2],
+      [-2, -4],
+      [2, 0],
+      [-2, 0],
+      [-3, 2],
+      [2, -3],
+    ].flatMap(([x, y], i, all) => {
+      const [fx, fy] = all[i - 1] ?? [0, 0];
+      return stepsBetween({ x: fx ?? 0, y: fy ?? 0 }, { x: x ?? 0, y: y ?? 0 });
+    }),
   }),
 );
 
@@ -565,4 +706,4 @@ const graphsYouKnow = page(
 );
 
 /** The pages, in reading order. */
-export const overview = [plotAPoint, swapTheNumbers, plotFromATable, diceGame, graphsYouKnow];
+export const overview = [plotAPoint, swapTheNumbers, plotFromATable, treasureTrail, graphsYouKnow];
