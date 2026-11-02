@@ -56,6 +56,16 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+/* Only an input takes a press. Everything else in a drawing (lines, labels, a walker, a route, a
+   grid) is there to be seen, so a finger goes through it to the input under it. Every input is
+   tagged (data-does; an untagged handler is a type error), so this is exact for every prop. */
+.frame-svg * {
+  pointer-events: none;
+}
+.frame-svg [data-does],
+.frame-svg [data-does] * {
+  pointer-events: auto;
+}
 /* A child that draws nothing right now takes no room (no gap for it in a row or column). */
 .group-child:empty {
   display: none;

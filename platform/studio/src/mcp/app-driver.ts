@@ -1092,6 +1092,78 @@ const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y
  * placed through the frame the target is drawn in (the frame's picture carries its map); the
  * answer is then where that point is on the page, in CSS pixels.
  */
+/**
+ * Where a finger aims at the marked target (data-chalk-target), and whether it would reach it: the
+ * middle of the target's own drawn shapes, its words left out (a stall's picture, not its name under
+ * it), or its own box when it has none (a button); or `at`, a point on the page already worked out.
+ * The target is scrolled to the middle of the screen first, as a person scrolls to what they tap.
+ * Then the page is asked what is on top there: the target or something inside it, and the aim is
+ * given; anything else, and it is named, as the cover. For a drag, `to` (its end) must lie in the
+ * target's drawing.
+ */
+export function aimAt(arg: {
+  at?: { x: number; y: number };
+  to?: { x: number; y: number };
+}): { x: number; y: number } | { cover: string } | { outside: true } {
+  const el = document.querySelector("[data-chalk-target]");
+  if (el === null) return { cover: "nothing: the target is gone" };
+  // Only an input is pressed; touching anything else (a mark, a label) is allowed and does nothing
+  // of its own, so there is nothing to reach.
+  const isInput = el.closest("[data-does]") !== null || el.querySelector("[data-does]") !== null;
+  const shapes = (el instanceof SVGGraphicsElement ? [el, ...el.querySelectorAll("*")] : [])
+    .filter(
+      (e): e is SVGGraphicsElement =>
+        e instanceof SVGGraphicsElement &&
+        !(e instanceof SVGTextContentElement) &&
+        !(e instanceof SVGGElement) &&
+        getComputedStyle(e).visibility !== "hidden" &&
+        getComputedStyle(e).display !== "none",
+    )
+    .map((e) => e.getBoundingClientRect())
+    .filter((r) => r.width > 0 || r.height > 0);
+  const middle = () => {
+    if (shapes.length === 0) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+    const left = Math.min(...shapes.map((r) => r.left));
+    const right = Math.max(...shapes.map((r) => r.right));
+    const top = Math.min(...shapes.map((r) => r.top));
+    const bottom = Math.max(...shapes.map((r) => r.bottom));
+    return { x: (left + right) / 2, y: (top + bottom) / 2 };
+  };
+  const aim = arg.at ?? middle();
+  const top = document.elementFromPoint(aim.x, aim.y);
+  if (!isInput || (top !== null && (top === el || el.contains(top)))) {
+    if (arg.to !== undefined) {
+      const frame = (
+        el.closest("[data-frame]") ?? el.querySelector("[data-frame]")
+      )?.getBoundingClientRect();
+      if (
+        frame !== undefined &&
+        (arg.to.x < frame.left ||
+          arg.to.x > frame.right ||
+          arg.to.y < frame.top ||
+          arg.to.y > frame.bottom)
+      )
+        return { outside: true };
+    }
+    return aim;
+  }
+  if (top === null) return { cover: "nothing on the screen there: it is off the page" };
+  // The cover by its part's address and what it shows, else its piece, else what it is.
+  const named = top.closest("[data-path]");
+  const words = named?.getAttribute("data-words") ?? "";
+  if (named !== null)
+    return { cover: `${named.getAttribute("data-path")}${words === "" ? "" : ` "${words}"`}` };
+  const piece = top.closest("[data-piece]");
+  if (piece !== null) return { cover: `piece ${piece.getAttribute("data-piece")}` };
+  const cls = top.getAttribute("class");
+  return {
+    cover: `${top.tagName.toLowerCase()}${cls === null || cls === "" ? "" : `.${cls.split(" ")[0]}`}`,
+  };
+}
+
 export function markTarget(arg: {
   target: string;
   at?: { x: number; y?: number };
@@ -1287,24 +1359,10 @@ async function shootNow(
           target: "tap" in step ? step.tap : step.drag,
           at: "tap" in step ? step.at : step.to,
         };
-        let found = await page.evaluate(markTarget, mark);
+        const found = await page.evaluate(markTarget, mark);
         if (typeof found === "string") {
           steps.push({ step: words, events: [], passed: false, errors: [`✗ ${found}`] });
           break;
-        }
-        // A point is found where it is on the screen now: a target below the fold is scrolled to
-        // first, else the finger would land off the screen and tap nothing.
-        if (found !== undefined && found !== null) {
-          await page
-            .locator("[data-chalk-target]")
-            .first()
-            .scrollIntoViewIfNeeded({ timeout: 5000 })
-            .catch(() => {});
-          found = await page.evaluate(markTarget, mark);
-          if (typeof found === "string") {
-            steps.push({ step: words, events: [], passed: false, errors: [`✗ ${found}`] });
-            break;
-          }
         }
         // Where the step is aimed, when it names a point: on the page, in CSS pixels.
         const aimed = found ?? undefined;
@@ -1323,26 +1381,38 @@ async function shootNow(
           });
           break;
         }
+        // Where a finger aims, and whether it reaches the target: scrolled to the middle of the
+        // screen, the target's own picture (or the point named), nothing else on top.
+        const name = "tap" in step ? step.tap : step.drag;
+        await target.evaluate((el) => el.scrollIntoView({ block: "center", inline: "center" }));
+        // A point named is found again where it is now, after the scroll.
+        const point = aimed === undefined ? undefined : await page.evaluate(markTarget, mark);
+        const reached = await page.evaluate(aimAt, {
+          ...("tap" in step && point !== null && typeof point === "object" ? { at: point } : {}),
+          ...("drag" in step && point !== null && typeof point === "object" ? { to: point } : {}),
+        });
+        if ("cover" in reached || "outside" in reached) {
+          steps.push({
+            step: words,
+            events: [],
+            passed: false,
+            errors: [
+              "cover" in reached
+                ? `✗ ${name} can't be reached by a finger: covered by ${reached.cover}`
+                : `✗ ${name}: the point to drag to is outside its drawing`,
+            ],
+          });
+          break;
+        }
+        // A tap goes through the tag, to exactly the element the step named; a tap at a point (on a
+        // plane, anywhere) is the one press that is a place, worked out by the board's own frame.
         if ("tap" in step) {
-          if (aimed !== undefined) await page.mouse.click(aimed.x, aimed.y);
-          else
-            await target.click({ timeout: 5000 }).catch(async (error: unknown) => {
-              // A target with no area (a line with a wide, clear stroke: an axis's half) reads as
-              // not visible: a finger taps its middle all the same, through the page's own hit test.
-              if (!/not visible/.test(firstLine(error) + String(error))) throw error;
-              await target.scrollIntoViewIfNeeded({ timeout: 5000 });
-              const box = await target.boundingBox();
-              if (box === null) throw error;
-              await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-            });
+          if (point !== null && typeof point === "object")
+            await page.mouse.click(reached.x, reached.y);
+          else await target.dispatchEvent("click");
         } else {
-          await target.scrollIntoViewIfNeeded({ timeout: 5000 });
-          const box = await target.boundingBox();
-          if (box === null) throw new Error(`${step.drag} isn't on screen`);
-          const x = box.x + box.width / 2;
-          const y = box.y + box.height / 2;
-          const to = aimed ?? { x, y };
-          await page.mouse.move(x, y);
+          const to = point !== null && typeof point === "object" ? point : reached;
+          await page.mouse.move(reached.x, reached.y);
           await page.mouse.down();
           await page.mouse.move(to.x, to.y, { steps: 12 });
           await page.mouse.up();
