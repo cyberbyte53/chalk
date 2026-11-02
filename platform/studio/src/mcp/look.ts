@@ -779,6 +779,8 @@ export async function drawShown(
     boards.map(shownBoard),
     versions,
     (v) => ({
+      // The lines that ran are kept with the drawing: a reviewer's look at it later adds them.
+      keepsRan: true,
       locale: v.locale,
       width: v.width,
       ...(v.height === undefined ? {} : { height: v.height }),

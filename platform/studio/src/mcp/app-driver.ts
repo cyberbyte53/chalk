@@ -4,8 +4,10 @@ import { join } from "node:path";
 import { previewQuery, shownAddress } from "@chalk/content/address";
 import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
+import { buildInputsKey } from "../content/inputs";
 import type { PropPage } from "../prop-text";
-import { RanReader, addRan } from "../reach/ran";
+import { type Ran, RanReader, addRan } from "../reach/ran";
+import { codeKey, contentKey, isDrawCacheOn, keep, keyOf, readKept } from "./draw-cache";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
@@ -421,6 +423,11 @@ export type ShotOptions = {
    * reviewer's own look records: it is what a review saw, and costs most of a drawing's time.
    */
   recordsRan?: boolean;
+  /**
+   * Work out which lines ran and keep them with the drawing, without adding them to a review's
+   * record (changes' drawings: a reviewer's later look at the same drawing adds them then).
+   */
+  keepsRan?: boolean;
   locale?: "en" | "hi";
   play?: boolean;
   /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
@@ -628,6 +635,8 @@ type Lane = {
   errors: string[];
   /** Content was rebuilt since this page last loaded: load it afresh, don't move it. */
   isStale: boolean;
+  /** The code and content it was loaded under (content/inputs.ts): another, and it loads afresh. */
+  loadedUnder?: string;
   /**
    * What ran on it was last taken at the end of its own drawing: nothing since is another call's,
    * so the next drawing needn't take it again before it starts.
@@ -892,6 +901,20 @@ export type Act = {
   frames?: FramesSpec;
 };
 
+/** The browser's version: text is drawn by it, and it updates itself. */
+async function browserVersion(): Promise<string> {
+  browser ??= launch();
+  return (await browser).version();
+}
+
+/** A drawing the same every time: the board settled, and the page logged no errors. */
+function isSettledClean(d: Drawn): boolean {
+  return (
+    d.runningAtOpen === undefined &&
+    d.shots.every((s) => s.errors.length === 0 && s.running === undefined)
+  );
+}
+
 /**
  * Each board at `board` (one board, or a whole lesson) drawn, from its start: every call opens it
  * afresh, so the same call always draws the same. With `steps`, a single board acted on first, a
@@ -907,26 +930,54 @@ export function shoot(
   act?: Act,
   lane: string = DEFAULT_LANE,
 ): Promise<Drawn> {
-  const once = async () => {
+  const once = async (): Promise<{ drawn: Drawn; ran?: Ran }> => {
     const drawn = await shootNow(root, board, o, act, lane);
     // Not recorded, what ran stays on the page, set aside before the next drawing that records.
-    if (o.recordsRan === true)
-      await timed("coverage: recorded after", () => recordRan(root, board, lane));
-    else {
-      const at = lanes.get(lane);
-      if (at !== undefined) at.isTaken = false;
+    if (o.recordsRan === true || o.keepsRan === true) {
+      const ran = await timed("coverage: recorded after", () =>
+        recordRan(root, board, lane, o.recordsRan === true),
+      );
+      return ran === undefined ? { drawn } : { drawn, ran };
     }
-    return drawn;
+    const at = lanes.get(lane);
+    if (at !== undefined) at.isTaken = false;
+    return { drawn };
   };
+  // Drawn once per set of inputs (draw-cache.ts): the same inputs give the same drawing.
+  const isKeepable =
+    isDrawCacheOn() && (o.speed ?? 1) === Number.POSITIVE_INFINITY && act?.frames === undefined;
+  const wants = o.recordsRan === true || o.keepsRan === true;
+  const ask = keyOf({ o: { ...o, recordsRan: undefined, keepsRan: undefined }, act });
+  const inputs = async () =>
+    keyOf({
+      code: codeKey(root),
+      content: contentKey(root, board),
+      browser: await browserVersion(),
+    });
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
     asDraw(async () => {
       busy.add(lane);
       try {
         // A page pulled away (the dev server reloading it after a rebuild or an edit, which can
         // land more than once) is tried again from a fresh load, a few times at most.
+        // Worked out after the gate: never halfway through a rebuild.
+        const before = isKeepable ? await inputs() : "";
+        if (isKeepable) {
+          const kept = readKept<Drawn>(root, board, ask, before);
+          // A look that records what ran needs the lines kept with it; without them, drawn again.
+          if (kept !== undefined && (!wants || kept.ran !== undefined)) {
+            if (o.recordsRan === true && kept.ran !== undefined) addRanTo(root, board, kept.ran);
+            return kept.drawn;
+          }
+        }
         for (let attempt = 1; ; attempt++) {
           try {
-            return await once();
+            const made = await once();
+            // Kept only if it is what these inputs always give: nothing changed under it, nothing
+            // still running, no errors the page logged.
+            if (isKeepable && isSettledClean(made.drawn) && (await inputs()) === before)
+              keep(root, board, ask, before, made);
+            return made.drawn;
           } catch (error) {
             if (!isPulledAway(error) || attempt >= PULLED_AWAY_TRIES) throw error;
             const at = lanes.get(lane);
@@ -973,22 +1024,33 @@ async function takeRan(lane: string) {
  * Keeps what ran while one built board was looked at or played (reach/ran.ts): a hint for the
  * next review, so never a reason for a call to fail.
  */
-async function recordRan(root: string, board: string, lane: string): Promise<void> {
+async function recordRan(
+  root: string,
+  board: string,
+  lane: string,
+  isAdded: boolean,
+): Promise<Ran | undefined> {
   const coverage = await timed("coverage: take", () => takeRan(lane));
   const at = lanes.get(lane);
-  if (at === undefined) return;
+  if (at === undefined) return undefined;
   at.isTaken = true;
-  const path = board.replace(/^content\//, "");
-  // Either way, the scripts it saw are read (linesOf reads them too), for what runs next here.
-  if (!existsSync(join(root, "build", "review", `${path}.json`))) {
-    readerOf(at, root).see(coverage);
-    return;
-  }
   try {
     const lines = await timed("coverage: to lines", async () =>
       readerOf(at, root).linesOf(coverage),
     );
-    await timed("coverage: write", async () => addRan(root, path, lines));
+    if (isAdded) addRanTo(root, board, lines);
+    return lines;
+  } catch {
+    return undefined; // only a hint
+  }
+}
+
+/** Lines that ran, added to what the review saw of a built board (reach/ran.ts). */
+function addRanTo(root: string, board: string, lines: Ran): void {
+  const path = board.replace(/^content\//, "");
+  if (!existsSync(join(root, "build", "review", `${path}.json`))) return;
+  try {
+    addRan(root, path, lines);
   } catch {
     // only a hint
   }
@@ -1154,7 +1216,7 @@ async function shootNow(
   // aside before a drawing that records, unless the page's last drawing took it already. A drawing
   // that doesn't record touches no coverage: taking it costs most of a drawing (the browser sends
   // every script's text again).
-  if (o.recordsRan === true && at.isTaken !== true)
+  if ((o.recordsRan === true || o.keepsRan === true) && at.isTaken !== true)
     readerOf(at, root).see(await timed("coverage: taken before", () => takeRan(lane)));
   at.errors.length = 0;
   await timed("move to the board", async () => {
@@ -1162,8 +1224,12 @@ async function shootNow(
       width: (o.width ?? PHONE_WIDTH) + 48,
       height: o.height ?? PHONE_HEIGHT,
     });
-    const isOnApp = page.url().startsWith(base) && !at.isStale;
+    // A page loaded under other code or content keeps what it loaded then (a chapter's sound
+    // lengths, modules): it loads afresh, so what it draws is what these inputs give.
+    const loadKey = buildInputsKey(root);
+    const isOnApp = page.url().startsWith(base) && !at.isStale && at.loadedUnder === loadKey;
     at.isStale = false;
+    at.loadedUnder = loadKey;
     try {
       if (isOnApp)
         await page.evaluate((q) => {
