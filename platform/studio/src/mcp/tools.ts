@@ -1,5 +1,14 @@
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { randomUUID } from "node:crypto";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -225,6 +234,28 @@ export type Who = { role: typeof Role.Fixer | typeof Role.Reviewer; name: string
  * The tools for one connection. `lane` is the connection's own page for drawing boards
  * (app-driver.ts): connections draw at once.
  */
+/** Where an answer's pictures go. */
+type Pictures = "inline" | "files" | "none";
+/** Pictures an answer carries inline at most: more, and an answer is cut off by the client. */
+const MAX_INLINE = 6;
+/** How many written pictures are kept (.chalk-shots/, ignored by git): the oldest go first. */
+const KEEP_SHOTS = 200;
+
+/** Writes a picture to .chalk-shots/, keeping the newest KEEP_SHOTS; gives its path. */
+function writeShot(root: string, png: Buffer): string {
+  const dir = join(root, ".chalk-shots");
+  mkdirSync(dir, { recursive: true });
+  const old = readdirSync(dir).sort();
+  for (const name of old.slice(0, Math.max(0, old.length - KEEP_SHOTS + 1)))
+    rmSync(join(dir, name));
+  const path = join(
+    dir,
+    `${new Date().toISOString().replace(/[:.]/g, "-")}-${randomUUID().slice(0, 6)}.png`,
+  );
+  writeFileSync(path, png);
+  return path;
+}
+
 export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const server = createServer();
   const ROLE = who.role;
@@ -726,8 +757,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     if (isBuildCurrent(root)) return [];
     await progressOf(extra)("building content");
     // Once for calls that ask together: the check is made again when it's this call's turn.
-    const built = await withNothingDrawing(() =>
-      isBuildCurrent(root) ? Promise.resolve(undefined) : buildContent(extra.signal),
+    const built = await timed("build content", () =>
+      withNothingDrawing(() =>
+        isBuildCurrent(root) ? Promise.resolve(undefined) : buildContent(extra.signal),
+      ),
     );
     if (built === undefined || built.code === 0) return [];
     return [
@@ -738,16 +771,38 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     ];
   };
 
-  const answer = (a: Answer, notes: readonly string[]) => ({
-    content: [
-      text([a.text, ...notes].join("\n")),
-      ...(a.images ?? []).map((png) => ({
-        type: "image" as const,
-        data: png.toString("base64"),
-        mimeType: "image/png",
-      })),
-    ],
-  });
+  /**
+   * An answer: its words, then its pictures, inline (at most MAX_INLINE: the rest are written to
+   * files, said in the answer, never left out unsaid), all to files, or none.
+   */
+  const answer = (a: Answer, notes: readonly string[], pictures: Pictures = "inline") => {
+    const images = a.images ?? [];
+    const inline = pictures === "inline" ? images.slice(0, MAX_INLINE) : [];
+    const written = (
+      pictures === "files" ? images : pictures === "inline" ? images.slice(MAX_INLINE) : []
+    ).map((png) => writeShot(root, png));
+    const said = [
+      ...(written.length === 0
+        ? []
+        : [
+            `${written.length} picture${written.length === 1 ? "" : "s"} written to files (Read opens one):`,
+            ...written.map((path) => `  ${path}`),
+          ]),
+      ...(pictures === "none" && images.length > 0
+        ? [`${images.length} picture${images.length === 1 ? "" : "s"} left out (pictures: "none").`]
+        : []),
+    ];
+    return {
+      content: [
+        text([a.text, ...notes, ...said].join("\n")),
+        ...inline.map((png) => ({
+          type: "image" as const,
+          data: png.toString("base64"),
+          mimeType: "image/png",
+        })),
+      ],
+    };
+  };
 
   const locales = z
     .array(z.enum(["en", "hi"]))
@@ -822,6 +877,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .describe(
               "With steps: watch the board move after each step, at real speed: a picture about every `every` ms (default 100), keeping the ones that differ, at most `most` (default 6), four to a row with each one's time; each step says `still after 1.2s` or `still changing at 3s`. For when the motion is the point (a walk, a glide).",
             ),
+          pictures: z
+            .enum(["inline", "files", "none"])
+            .optional()
+            .describe(
+              `Where pictures go: in the answer (default; more than ${MAX_INLINE} and the rest are written to files), all written to files (paths in the answer, opened one at a time), or none.`,
+            ),
           speed: z
             .number()
             .min(1)
@@ -836,6 +897,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       },
       async (args, extra: Extra) => {
         const notes = await rebuildIfChanged(extra);
+        const say = (a: Answer, n: readonly string[]) => answer(a, n, args.pictures);
         const address = parseAddress(args.at);
         const given = stateOf(args, address.root === "props");
         if (args.steps !== undefined) {
@@ -855,7 +917,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               throw new Error("Steps act on the whole prop: its address without #part.");
             const prop = onProp(address);
             await progressOf(extra)("playing");
-            return answer(
+            return say(
               await play(root, { ...one, board: prop.board, steps: prop.steps(steps) }, lane),
               notes,
             );
@@ -900,7 +962,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
               ...(played.played === undefined ? {} : { drawn: played.played }),
               inputs: buildInputsKey(root),
             });
-          return answer(played, notes);
+          return say(played, notes);
         }
         if (address.root === "library") {
           // Props are read through the app, the one place their definitions are loaded.
@@ -911,7 +973,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             undefined,
             lane,
           );
-          return answer(
+          return say(
             { text: libraryText(d.props ?? [], usesOf(readReach(root)), address.pkg) },
             notes,
           );
@@ -924,7 +986,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             board: prop.board,
             address: address.part === undefined ? address.type : `${address.type}/${address.part}`,
           };
-          return answer(
+          return say(
             await look(root, target, { ...args, ...given }, { sources: readSources(root) }, lane),
             notes,
           );
@@ -937,10 +999,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const where = { sources: readSources(root) };
         if (target.kind === "many") {
           const a = await check(root, target, args, lane, progressOf(extra), extra.signal);
-          return answer(a, notes);
+          return say(a, notes);
         }
         await progressOf(extra)("drawing");
-        return answer(
+        return say(
           await look(root, target, { ...args, isSeen: ROLE === Role.Reviewer }, where, lane),
           notes,
         );

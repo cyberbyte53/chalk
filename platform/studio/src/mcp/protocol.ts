@@ -5,6 +5,7 @@ import type {
   ServerNotification,
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
+import { withTally } from "./call-timing";
 
 /**
  * The Model Context Protocol, through its official SDK: the server (version negotiation, input
@@ -38,6 +39,23 @@ export function progressOf(extra: Extra): (message: string) => Promise<void> {
   };
 }
 
+/**
+ * The server, with every tool's answer ending in where its time went (call-timing.ts): each call
+ * runs in its own tally, and its one line is the answer's last text.
+ */
 export function createServer(): McpServer {
-  return new McpServer({ name: "chalk", version: "0.2.0" });
+  const server = new McpServer({ name: "chalk", version: "0.2.0" });
+  const register = server.registerTool.bind(server);
+  server.registerTool = ((name: string, config: unknown, handler: Handler) =>
+    register(
+      name,
+      config as never,
+      (async (...args: unknown[]) => {
+        const { value, line } = await withTally(() => Promise.resolve(handler(...args)));
+        return { ...value, content: [...(value.content ?? []), { type: "text", text: line }] };
+      }) as never,
+    )) as typeof server.registerTool;
+  return server;
 }
+
+type Handler = (...args: unknown[]) => CallToolResult | Promise<CallToolResult>;

@@ -6,6 +6,7 @@ import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import { buildInputsKey } from "../content/inputs";
 import type { PropPage } from "../prop-text";
+import { count, spend, timed } from "./call-timing";
 import { codeKey, contentKey, isDrawCacheOn, keep, keyOf, readKept } from "./draw-cache";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
@@ -147,22 +148,8 @@ export type Shot = {
   running?: string[];
 };
 
-/**
- * Where a drawing's time goes, phase by phase, when something is measuring it (`timing.isOn`): the
- * seconds spent in each, summed over every drawing since it was switched on. Off, it costs nothing.
- */
-export const timing = { isOn: false, spent: new Map<string, number>() };
-export async function timed<T>(phase: string, fn: () => Promise<T>): Promise<T> {
-  if (!timing.isOn) return fn();
-  const t = performance.now();
-  try {
-    return await fn();
-  } finally {
-    timing.spent.set(phase, (timing.spent.get(phase) ?? 0) + (performance.now() - t) / 1000);
-    // How many times, beside how long: many loads and slow loads are different problems.
-    timing.spent.set(`${phase} (times)`, (timing.spent.get(`${phase} (times)`) ?? 0) + 1);
-  }
-}
+// Where a call's time goes: each tool call's own tally (call-timing.ts); `timing` across calls.
+export { timed, timing } from "./call-timing";
 
 /** How long a board may take to settle after it opens or after a step, in its own seconds. */
 export const SETTLE_CAP = 30;
@@ -962,12 +949,14 @@ export function shoot(
   const isKeepable =
     isDrawCacheOn() && (o.speed ?? 1) === Number.POSITIVE_INFINITY && act?.frames === undefined;
   const ask = askKey(o, act);
-  const inputs = async () =>
-    keyOf({
-      code: codeKey(root),
-      content: contentKey(root, board),
-      browser: await browserVersion(),
-    });
+  const inputs = () =>
+    timed("cache: work out the key", async () =>
+      keyOf({
+        code: codeKey(root),
+        content: contentKey(root, board),
+        browser: await browserVersion(),
+      }),
+    );
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
     asDraw(async () => {
       busy.add(lane);
@@ -977,9 +966,15 @@ export function shoot(
         // Worked out after the gate: never halfway through a rebuild.
         const before = isKeepable ? await inputs() : "";
         if (isKeepable) {
-          const kept = readKept<Drawn>(root, board, ask, before);
-          if (kept !== undefined) return kept.drawn;
+          const kept = await timed("cache: read", async () =>
+            readKept<Drawn>(root, board, ask, before),
+          );
+          if (kept !== undefined) {
+            count("drawings reused");
+            return kept.drawn;
+          }
         }
+        count("drawings made");
         for (let attempt = 1; ; attempt++) {
           try {
             const drawn = await shootNow(root, board, o, act, lane);
@@ -1262,6 +1257,7 @@ async function shootNow(
     let unreached = first?.during === undefined ? undefined : missed;
     // The board still busy when the first step comes (no line asked for): said with that step.
     const busyAtFirst = first?.during === undefined ? missed : undefined;
+    const stepsFrom = performance.now();
     for (const [i, step] of act.steps.entries()) {
       const words = stepWords(step);
       if (unreached !== undefined) {
@@ -1398,6 +1394,7 @@ async function shootNow(
       });
       seen = now;
     }
+    spend("play: the steps", (performance.now() - stepsFrom) / 1000);
     // Steps stopped short (a name not there, a line that never came): the board where they stopped.
     const last = steps.at(-1);
     if (last !== undefined && last.picture === undefined && act.shots !== "none")
