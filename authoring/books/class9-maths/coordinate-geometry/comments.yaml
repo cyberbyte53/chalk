@@ -10828,6 +10828,12 @@
         on the stall she stands on reaches it. Played: walked to (3, 2), tapped at the stall's point
         under Riya, and it opened. The grid lines got the same fix earlier."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:07.558Z
+      text: "Confirmed. I played the whole trail by tapping each stall at its own point while Riya stood
+        on it: (3, 2), (−4, 1), (−2, −4), (2, 0), (4, −4). Each one opened, and the board passed at
+        the prize stall."
 - id: cmvzg5dprhws
   status: ready
   by: reviewer
@@ -10941,6 +10947,12 @@
         addresses, or sign-flipped where a swap would stand right beside its stall (snacks' and the
         axis stop's)."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:07.680Z
+      text: "Confirmed. Snacks is at (3, 2) and Books at (−4, 1), as on Riya's plan in lesson 3. Each
+        decoy stands at a swapped or sign-flipped address of a clue: Bangles (3, −2), Shoes (1, −4),
+        Tea (−4, −2), Masks (−2, 0), Juice (−4, 4)."
 - id: cmvzg5dv9f4m
   status: ready
   by: reviewer
@@ -11052,6 +11064,12 @@
         so far, and stall names have a halo. (2) The pad's last column can shrink, so 'Back to the
         start' wraps onto two lines inside the page at 360 (plot-a-point too)."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:07.801Z
+      text: Confirmed. The route is cleared at each opened stall, so by the prize stall only the last leg
+        is drawn. No stall name is crossed, and 'Prizes' stays readable under Riya. 'Back to the
+        start' wraps onto two lines inside the page at 360 in English and Hindi.
 - id: cmvzg5e0fvdq
   status: ready
   by: reviewer
@@ -11162,6 +11180,11 @@
       text: "Renamed to 'Prizes' / 'इनाम'. The kite is found among the prizes when that stall opens: 'The
         prize stall! And there, among the prizes, is Aman's lost kite.'"
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:07.911Z
+      text: Confirmed. The last stall is now 'Prizes' / 'इनाम', so nothing on the map gives the ending
+        away. atPrizes finds the kite among the prizes.
 - id: cmvzg5kxlof1
   status: ready
   by: reviewer
@@ -11171,7 +11194,7 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:315
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
+  turn: agent
   text: "flow.md's swap-the-numbers asks for things the board doesn't show. Purpose: Aman's stall
     'stands in the wrong place'. Needs: 'each pair and its swap shown together; a pair with equal
     numbers, swapped, stays put'. What the board does: the story only tells that the stall went up
@@ -11283,6 +11306,18 @@
         wrong place and the right one, and stall pictures on this already busy plane would cover the
         dots."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.495Z
+      text: Still wrong on the phone (mechanical); the idea is right. At 640 the dashed swap lines and the
+        ring on (3, 3) read well. At 360 in English, once all nine are plotted, the labels sit next
+        to the wrong dots. '(6, 1)' touches the (5, 2) dot, while '(5, 2)' floats up and to the
+        right with no dot under it. '(5, 0)' sits on the (0, 5)–(5, 0) dashed line, well away from
+        its dot, and '(3, 3)' sits on the (2, 5)–(5, 2) line. The swap dot (1, 6) covers the 'Y'
+        axis name. A student checking 'which dot is (6, 1)?' reads the wrong one, on the very board
+        about which pair is which. Each label needs to sit against its own dot, off the dashed lines
+        and the axis names. Play the nine drops at 360 and read each label against its dot. The
+        games-stall part of the reply (the dashed line stands in for the stall) is fine by me.
 - id: cmvzg5l2jigi
   status: ready
   by: reviewer
@@ -11396,6 +11431,11 @@
         you went along by y and up by x. x first, along; then y.' Any other miss keeps the plain
         line. Played: (5, 0) dropped at (0, 5) gives the swap line."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.016Z
+      text: Confirmed. Dropping (5, 0) at (0, 5) on swap-the-numbers gives 'That is the pair swapped…'. I
+        checked the same line on plot-from-a-table, and on graphs-you-know in t and d.
 - id: cmvzg5l7j2jf
   status: ready
   by: reviewer
@@ -11405,7 +11445,7 @@
   target: ordered
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:324
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
+  turn: agent
   text: "Hindi wording (mechanical): the swapped pair is 'उलटी जोड़ी' in the story and 'उलटा जोड़ा'
     here. plot-from-a-table also says 'हर जोड़ा'. Use one name for the thing everywhere (principle
     10)."
@@ -11502,6 +11542,13 @@
       at: 2026-11-02T16:27:49.509Z
       text: उलटी जोड़ी everywhere now, including the ordered line.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.603Z
+      text: "Still wrong (mechanical). The swap is उलटी जोड़ी everywhere now, but the plain pair is still
+        'जोड़ा' on two boards: plot-from-a-table#table ('हर जोड़ा आलेखित करो') and graphs-you-know's
+        opening line ('हर जोड़ा आलेखित करो: t आगे, d ऊपर'). Within a few boards, a student meets
+        जोड़ा and जोड़ी for the same thing. Make it 'हर जोड़ी' in both."
 - id: cmvzg5p2fzbg
   status: ready
   by: reviewer
@@ -11609,6 +11656,10 @@
       at: 2026-11-02T16:27:50.033Z
       text: "toQ: 'Now plot Q (5, −4): 5 along to B, then 4 down' (Hindi: B तक 5 आगे)."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.122Z
+      text: "Confirmed. toQ says '5 along to B' (Hindi: 'B तक 5 आगे'), so the B on the plane is named."
 - id: cmvzg5p7gcoz
   status: ready
   by: reviewer
@@ -11718,6 +11769,11 @@
       text: It now reads 'Now plot (−4, 2)' / 'अब आलेखित करो (−4, 2)', with the pair in bold, on every
         plotting board. It stays where the layer writes its line, under the plane.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.228Z
+      text: Confirmed. The line reads 'Now plot (−4, 2)' / 'अब आलेखित करो (−4, 2)' on all four plotting
+        boards. At 360 it still sits about 90 px below the plane, but it now says what it is.
 - id: cmvzg5pcc170
   status: ready
   by: reviewer
@@ -11838,6 +11894,11 @@
       text: Removed from the plotting layer. clearPlotted is now a lesson action only, so nothing can wipe
         a finished board.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.332Z
+      text: "Confirmed. The ↺ is gone from every plotting board: the part list no longer has clearPlotted,
+        and nothing can wipe a finished board."
 - id: cmvzg68ept2b
   status: ready
   by: reviewer
@@ -11847,7 +11908,6 @@
   target: second
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:406
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: Labels drawn over the plane (mechanical). At 1 square = 4 units, show reports the tick '4'
     drawn over '(0, −1.25)', so neither can be read. At 1 square = 2 units, '(3, −1)' sits on the
     x-axis line between the ticks 2 and 4. On the first plane, '(0, −3.5)' ends right against the
@@ -11948,6 +12008,18 @@
         chapter check (75 boards, 450 drawings) reports no words over words, and the board played at
         4 units reports none.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.716Z
+      text: "Still wrong (mechanical). The tick '4' over '(0, −1.25)' is gone, but labels still sit
+        against other dots. First plane, at 360 in English: '(0, −3.5)' still ends right against the
+        (2, −3) dot ('(0, −3.5)●'), the very case this thread named, and the (−1, −3) dot covers
+        half of the tick '−3'. Second plane at 1 square = 2 units: '(0, −1.25)' is drawn down and to
+        the right, next to the (3, −1) dot, while '(3, −1)' sits above the x-axis by the tick 4, on
+        the other side of the axis from its dot. So the two labels read as swapped. Each label
+        should stand nearest its own dot: when the nearest free place is nearer another dot, pick a
+        place on the far side. Play the board at 360 and read each label against its dot."
+  turn: agent
 - id: cmvzg68jxzet
   status: ready
   by: reviewer
@@ -12056,6 +12128,10 @@
       text: "crowded: '…Try 1 square = 2 units: 8 has to fit in 4 squares, and', then $$8 \\div 4 = 2$$ on
         its own line. fits no longer repeats it."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.436Z
+      text: Confirmed. crowded ends with 8 ÷ 4 = 2 on its own line, and fits doesn't repeat it.
 - id: cmvzg68pb9ui
   status: ready
   by: reviewer
@@ -12165,6 +12241,11 @@
         That is a fact about scales, true on every path, and the student switching scales is free to
         see it.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.543Z
+      text: Confirmed. fits now states a fact about scales ('Whatever the units, a dot keeps its
+        numbers…'), which is true on every path.
 - id: cmvzg68ue75z
   status: ready
   by: reviewer
@@ -12276,6 +12357,14 @@
         plus three with halves. That is the verify-by-locating half, as practice. This board already
         carries two tables and the units, so I kept it there rather than adding a third table.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.646Z
+      text: "The fix answers the gap: Q1's five points are now the first five values of plot-the-point, so
+        the verify-by-locating half is practised. One thing for the person: this puts it in the
+        questions, not on the board, as I had suggested. The board itself still never asks for a
+        quadrant to be checked by plotting. The fixer's reason is that the board is already full; I
+        think that's a fair call, but it is yours to make."
 - id: cmvzg69mdv59
   status: ready
   by: reviewer
@@ -12384,6 +12473,11 @@
       text: "graphs-you-know's hints say 't first: along the t-axis; then d: up or down', and the swap
         line uses t and d too."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.749Z
+      text: "Confirmed. On graphs-you-know, miss says 't first: along the t-axis; then d: up or down', and
+        missSwap uses t and d, in English and Hindi."
 - id: cmvzg69rmo33
   status: ready
   by: reviewer
@@ -12492,6 +12586,11 @@
       text: An axis name of one letter (t, d) is drawn large, italic and in the axes' colour. Word names
         (Street number) are as before.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.854Z
+      text: Confirmed. t and d are now italic and in the axis colour, about as large as X/Y on the other
+        planes.
 - id: cmvzg69x7h1n
   status: ready
   by: reviewer
@@ -12599,6 +12698,10 @@
       at: 2026-11-02T16:27:54.572Z
       text: "same: '…A side-perimeter graph is the same again, its axes called s and p.' (Hindi too.)"
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:08.958Z
+      text: Confirmed. same adds the side-perimeter graph with axes s and p, in English and Hindi.
 - id: cmvzg6a2mwkw
   status: ready
   by: reviewer
@@ -12708,6 +12811,11 @@
         (y,\\ x) \\quad \\text{if} \\quad x \\neq y$$ on its own line (Hindi: x ≠ y: (x, y) ≠ (y,
         x)). A display line can't break a pair."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.064Z
+      text: Confirmed. The statement is on its own display line in both languages, so no pair breaks
+        across lines.
 - id: cmvzg6bu8c2w
   status: ready
   by: reviewer
@@ -12820,6 +12928,11 @@
       text: "The values are now Ex 3.3 Q1's five points plus (4.5, 1), (−1.5, −3) and (2, −3.5): all four
         quadrants, the x-axis, and three halves. None is a point the lesson plotted."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.169Z
+      text: Confirmed. The values are Q1's five points plus (4.5, 1), (−1.5, −3) and (2, −3.5). None of
+        them is a point the lesson plots.
 - id: cmvzg6bzmjeb
   status: ready
   by: reviewer
@@ -12932,6 +13045,11 @@
       text: "Added, skipped when y = 0: 'That dot is on the wrong side of the x-axis: y = −3 is down. Drag
         it again.'"
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.286Z
+      text: "Confirmed. Asked for (−2, 4), I dropped the dot at (−2, −4) and pressed Check. The note was:
+        'That dot is on the wrong side of the x-axis: y = 4 is up. Drag it again.'"
 - id: cmvzg6c50bkd
   status: ready
   by: reviewer
@@ -12939,6 +13057,7 @@
   createdAt: 2026-11-02T16:02:28.212Z
   board: class9-maths/coordinate-geometry/questions/plot-the-point
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+  turn: person
   text: "The question works differently from the lesson. In the lesson every plotting board has the
     dot waiting at O; a drop answers at once, and a right drop turns green. The person asked for
     this under cmvzd3t7ahqc ('a point starting from origin and dragging… this applies for all the
@@ -12946,25 +13065,6 @@
     and needs a Check button. A student who has learnt 'from O, x along, then y' starts from
     somewhere else, and for a quadrant III pair the start already looks nearly right. Suggested fix:
     start the dot at O, as the plotting boards do."
-  messages:
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T16:27:56.500Z
-      text: "moved from content/class9-maths/coordinate-geometry/questions/plot-the-point to
-        content/class9-maths/coordinate-geometry/questions/plot-the-point: Start the dot at O."
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T16:27:56.690Z
-      text: ""
-      status: planned
-      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T16:27:56.986Z
-      text: "The dot starts at O. O's name moves clear when a dot stands on it. Check stays: a question is
-        judged when the student says they're done, and a dot that turned green on the drop would
-        give the answer away."
-      status: ready
   changed:
     - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
     - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
@@ -13046,4 +13146,26 @@
       - class9-maths/coordinate-geometry/questions/tap-the-desk
       - class9-maths/coordinate-geometry/questions/tap-the-part
       - class9-maths/coordinate-geometry/questions/walk-to-address
-  turn: person
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.500Z
+      text: "moved from content/class9-maths/coordinate-geometry/questions/plot-the-point to
+        content/class9-maths/coordinate-geometry/questions/plot-the-point: Start the dot at O."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.690Z
+      text: ""
+      status: planned
+      commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T16:27:56.986Z
+      text: "The dot starts at O. O's name moves clear when a dot stands on it. Check stays: a question is
+        judged when the student says they're done, and a dot that turned green on the drop would
+        give the answer away."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T18:52:09.390Z
+      text: Confirmed. The dot starts at O. Keeping Check is reasonable for a graded question.
