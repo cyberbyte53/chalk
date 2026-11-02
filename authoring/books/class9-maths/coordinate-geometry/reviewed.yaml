@@ -1,26 +1,20 @@
 # Written only by the chalk MCP's changes tool (platform/studio/src/reviewed.ts). Don't edit by hand.
 class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
-  stamp: 667e41c0168cc557
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: busToStop
-    root:
-      children:
-        - kind: prop
-          name: road
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axes: horizontal
-            canChooseTarget: false
-            marks: numbers
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: road
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: The bus starts at the stand, 0. Take it to stop **−3**, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **−3** पर ले जाओ, फिर जाँचो दबाओ।
+        road:
+          places:
+            choosing: never
             placeKind: crossing
             places:
               - x: -6
@@ -49,9 +43,21 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
                 y: 0
               - x: 6
                 y: 0
-            roads: grid
+          plane:
+            axes: horizontal
+            marks: numbers
             showAxisNames: false
             showOrigin: false
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: grid
             showWhere: false
             walkFrom:
               x: 0
@@ -60,11 +66,97 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
             walkerName:
               en: The bus
               hi: बस
-            window:
-              xMax: 6
-              xMin: -6
-              yMax: 0.5
-              yMin: 0
+      lines:
+        ask:
+          says:
+            en: The bus starts at the stand, 0. Take it to stop minus 3, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप माइनस 3 पर ले जाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board busToStop.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: crossing
+              places:
+                - x: -6
+                  y: 0
+                - x: -5
+                  y: 0
+                - x: -4
+                  y: 0
+                - x: -3
+                  y: 0
+                - x: -2
+                  y: 0
+                - x: -1
+                  y: 0
+                - x: 0
+                  y: 0
+                - x: 1
+                  y: 0
+                - x: 2
+                  y: 0
+                - x: 3
+                  y: 0
+                - x: 4
+                  y: 0
+                - x: 5
+                  y: 0
+                - x: 6
+                  y: 0
+            plane:
+              axes: horizontal
+              marks: numbers
+              showAxisNames: false
+              showOrigin: false
+              window:
+                xMax: 6
+                xMin: -6
+                yMax: 0.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: grid
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
+              walkerKind: bus
+              walkerName:
+                en: The bus
+                hi: बस
         - kind: prop
           name: ask
           prop: goal
@@ -80,44 +172,26 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's stop 3: the right distance, on the wrong side. The sign says which side of 0."
-              hi: "यह स्टॉप 3 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:14.572Z
+  code: f1e764c9cbc8ce8c
 class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
-  stamp: 4104dc077705254e
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: busToStop
-    root:
-      children:
-        - kind: prop
-          name: road
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axes: horizontal
-            canChooseTarget: false
-            marks: numbers
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: road
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: The bus starts at the stand, 0. Take it to stop **4**, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **4** पर ले जाओ, फिर जाँचो दबाओ।
+        road:
+          places:
+            choosing: never
             placeKind: crossing
             places:
               - x: -6
@@ -146,9 +220,21 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
                 y: 0
               - x: 6
                 y: 0
-            roads: grid
+          plane:
+            axes: horizontal
+            marks: numbers
             showAxisNames: false
             showOrigin: false
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: grid
             showWhere: false
             walkFrom:
               x: 0
@@ -157,11 +243,97 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
             walkerName:
               en: The bus
               hi: बस
-            window:
-              xMax: 6
-              xMin: -6
-              yMax: 0.5
-              yMin: 0
+      lines:
+        ask:
+          says:
+            en: The bus starts at the stand, 0. Take it to stop 4, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप 4 पर ले जाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board busToStop.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: crossing
+              places:
+                - x: -6
+                  y: 0
+                - x: -5
+                  y: 0
+                - x: -4
+                  y: 0
+                - x: -3
+                  y: 0
+                - x: -2
+                  y: 0
+                - x: -1
+                  y: 0
+                - x: 0
+                  y: 0
+                - x: 1
+                  y: 0
+                - x: 2
+                  y: 0
+                - x: 3
+                  y: 0
+                - x: 4
+                  y: 0
+                - x: 5
+                  y: 0
+                - x: 6
+                  y: 0
+            plane:
+              axes: horizontal
+              marks: numbers
+              showAxisNames: false
+              showOrigin: false
+              window:
+                xMax: 6
+                xMin: -6
+                yMax: 0.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: grid
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
+              walkerKind: bus
+              walkerName:
+                en: The bus
+                hi: बस
         - kind: prop
           name: ask
           prop: goal
@@ -177,44 +349,26 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's stop −4: the right distance, on the wrong side. The sign says which side of 0."
-              hi: "यह स्टॉप −4 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:14.572Z
+  code: f1e764c9cbc8ce8c
 class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
-  stamp: 413c8032a0c489f7
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: busToStop
-    root:
-      children:
-        - kind: prop
-          name: road
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axes: horizontal
-            canChooseTarget: false
-            marks: numbers
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: road
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: The bus starts at the stand, 0. Take it to stop **−5**, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **−5** पर ले जाओ, फिर जाँचो दबाओ।
+        road:
+          places:
+            choosing: never
             placeKind: crossing
             places:
               - x: -6
@@ -243,9 +397,21 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
                 y: 0
               - x: 6
                 y: 0
-            roads: grid
+          plane:
+            axes: horizontal
+            marks: numbers
             showAxisNames: false
             showOrigin: false
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: grid
             showWhere: false
             walkFrom:
               x: 0
@@ -254,11 +420,97 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
             walkerName:
               en: The bus
               hi: बस
-            window:
-              xMax: 6
-              xMin: -6
-              yMax: 0.5
-              yMin: 0
+      lines:
+        ask:
+          says:
+            en: The bus starts at the stand, 0. Take it to stop minus 5, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप माइनस 5 पर ले जाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board busToStop.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: crossing
+              places:
+                - x: -6
+                  y: 0
+                - x: -5
+                  y: 0
+                - x: -4
+                  y: 0
+                - x: -3
+                  y: 0
+                - x: -2
+                  y: 0
+                - x: -1
+                  y: 0
+                - x: 0
+                  y: 0
+                - x: 1
+                  y: 0
+                - x: 2
+                  y: 0
+                - x: 3
+                  y: 0
+                - x: 4
+                  y: 0
+                - x: 5
+                  y: 0
+                - x: 6
+                  y: 0
+            plane:
+              axes: horizontal
+              marks: numbers
+              showAxisNames: false
+              showOrigin: false
+              window:
+                xMax: 6
+                xMin: -6
+                yMax: 0.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: grid
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
+              walkerKind: bus
+              walkerName:
+                en: The bus
+                hi: बस
         - kind: prop
           name: ask
           prop: goal
@@ -274,44 +526,26 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's stop 5: the right distance, on the wrong side. The sign says which side of 0."
-              hi: "यह स्टॉप 5 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:14.572Z
+  code: f1e764c9cbc8ce8c
 class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
-  stamp: a80f84997656e73e
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: busToStop
-    root:
-      children:
-        - kind: prop
-          name: road
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axes: horizontal
-            canChooseTarget: false
-            marks: numbers
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: road
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: The bus starts at the stand, 0. Take it to stop **2**, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप **2** पर ले जाओ, फिर जाँचो दबाओ।
+        road:
+          places:
+            choosing: never
             placeKind: crossing
             places:
               - x: -6
@@ -340,9 +574,21 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
                 y: 0
               - x: 6
                 y: 0
-            roads: grid
+          plane:
+            axes: horizontal
+            marks: numbers
             showAxisNames: false
             showOrigin: false
+            window:
+              xMax: 6
+              xMin: -6
+              yMax: 0.5
+              yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: grid
             showWhere: false
             walkFrom:
               x: 0
@@ -351,11 +597,97 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
             walkerName:
               en: The bus
               hi: बस
-            window:
-              xMax: 6
-              xMin: -6
-              yMax: 0.5
-              yMin: 0
+      lines:
+        ask:
+          says:
+            en: The bus starts at the stand, 0. Take it to stop 2, then press Check.
+            hi: बस अड्डे, 0, से चलती है। इसे स्टॉप 2 पर ले जाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board busToStop.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: busToStop
+    root:
+      children:
+        - kind: prop
+          name: road
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: crossing
+              places:
+                - x: -6
+                  y: 0
+                - x: -5
+                  y: 0
+                - x: -4
+                  y: 0
+                - x: -3
+                  y: 0
+                - x: -2
+                  y: 0
+                - x: -1
+                  y: 0
+                - x: 0
+                  y: 0
+                - x: 1
+                  y: 0
+                - x: 2
+                  y: 0
+                - x: 3
+                  y: 0
+                - x: 4
+                  y: 0
+                - x: 5
+                  y: 0
+                - x: 6
+                  y: 0
+            plane:
+              axes: horizontal
+              marks: numbers
+              showAxisNames: false
+              showOrigin: false
+              window:
+                xMax: 6
+                xMin: -6
+                yMax: 0.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: grid
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
+              walkerKind: bus
+              walkerName:
+                en: The bus
+                hi: बस
         - kind: prop
           name: ask
           prop: goal
@@ -371,28 +703,90 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's stop −2: the right distance, on the wrong side. The sign says which side of 0."
-              hi: "यह स्टॉप −2 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:14.572Z
+  code: f1e764c9cbc8ce8c
 class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
-  stamp: 03e3e317d8b10bd4
-  props:
-    choice: 79b6e0fab9e596c9
   content:
-    is: []
+    model:
+      freeLines:
+        - ask-sameOne-note
+        - ask-twoEach-note
+      given:
+        ask:
+          answer: oneEach
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          options:
+            - feedback:
+                en: (4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.
+                hi: (4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।
+              id: sameOne
+              label:
+                en: (i) one; (ii) the same one as (i)
+                hi: (i) एक; (ii) वही जो (i) में है
+            - feedback:
+                en: Two streets cross only once. The 4th North-South street and the 3rd East-West street meet at one crossing.
+                hi: दो गलियाँ केवल एक बार मिलती हैं। चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली एक ही चौराहे पर मिलती हैं।
+              id: twoEach
+              label:
+                en: (i) two; (ii) two
+                hi: (i) दो; (ii) दो
+            - id: oneEach
+              label:
+                en: (i) one; (ii) one, a different crossing
+                hi: (i) एक; (ii) एक, अलग चौराहा
+          prompt:
+            en: "(Street Plan): A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 m apart. There are 5 streets in each direction. Using 1 cm = 200 m, draw a model of the city on your notebook. Represent the roads/streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many cross-streets can be referred to as (4, 3); (ii) how many cross-streets can be referred to as (3, 4)."
+            hi: "(गली योजना): एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 m की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 cm = 200 m लेकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों/गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: (i) कितने चौराहों को (4, 3) कहा जा सकता है; (ii) कितने चौराहों को (3, 4) कहा जा सकता है।"
+      lines:
+        ask:
+          says:
+            en: "Street plan. A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 metres apart. There are 5 streets in each direction. Using 1 centimetre for 200 metres, draw a model of the city on your notebook. Represent the roads and streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: first, how many cross-streets can be referred to as (4, 3); second, how many cross-streets can be referred to as (3, 4)."
+            hi: "गली योजना। एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 मीटर की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 सेंटीमीटर को 200 मीटर मानकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों और गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: पहला, कितने चौराहों को (4, 3) कहा जा सकता है; दूसरा, कितने चौराहों को (3, 4) कहा जा सकता है।"
+        ask-sameOne-note:
+          about: ask
+          says:
+            en: (4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.
+            hi: (4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।
+          when: ask.checked
+          where:
+            optionId: sameOne
+            status: wrong
+        ask-twoEach-note:
+          about: ask
+          says:
+            en: Two streets cross only once. The 4th North-South street and the 3rd East-West street meet at one crossing.
+            hi: दो गलियाँ केवल एक बार मिलती हैं। चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली एक ही चौराहे पर मिलती हैं।
+          when: ask.checked
+          where:
+            optionId: twoEach
+            status: wrong
+      scene:
+        describe: The board crossStreetCount.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          ask.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
     name: crossStreetCount
     root:
       children:
@@ -406,8 +800,8 @@ class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
             isGraded: true
             options:
               - feedback:
-                  en: (4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.
-                  hi: (4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।
+                  en: (4, 3) is the 4th North-South street with the 3rd East-West one; (3, 4) is the 3rd North-South street with the 4th East-West one. Those are different crossings.
+                  hi: (4, 3) चौथी उत्तर-दक्षिण गली और तीसरी पूर्व-पश्चिम गली है; (3, 4) तीसरी उत्तर-दक्षिण गली और चौथी पूर्व-पश्चिम गली। ये अलग चौराहे हैं।
                 id: sameOne
                 label:
                   en: (i) one; (ii) the same one as (i)
@@ -424,36 +818,31 @@ class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
                   en: (i) one; (ii) one, a different crossing
                   hi: (i) एक; (ii) एक, अलग चौराहा
             prompt:
-              en: "(Street Plan): A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 m apart. There are 5 streets in each direction. Using 1 cm = 200 m, draw a model of the city on your notebook. Represent the roads/streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many cross-streets can be referred to as (4, 3); (ii) how many cross-streets can be referred to as (3, 4)."
-              hi: "(गली योजना): एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 m की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 cm = 200 m लेकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों/गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: (i) कितने चौराहों को (4, 3) कहा जा सकता है; (ii) कितने चौराहों को (3, 4) कहा जा सकता है।"
+              en: "(Street Plan): A city has two main roads which cross each other at the centre of the city. These two roads are along the North-South direction and East-West direction. All the other streets of the city run parallel to these roads and are 200 m apart. There are 5 streets in each direction. Using 1 cm = 200 m, draw a model of the city on your notebook. Represent the roads/streets by single lines. There are many cross-streets in your model. A particular cross-street is made by two streets, one running in the North-South direction and another in the East-West direction. Each cross-street is referred to in the following manner: If the 2nd street running in the North-South direction and 5th in the East-West direction meet at some crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many cross-streets can be referred to as (4, 3); (ii) how many cross-streets can be referred to as (3, 4)."
+              hi: "(गली योजना): एक शहर में दो मुख्य सड़कें हैं, जो शहर के केंद्र पर एक-दूसरे को काटती हैं। ये दोनों सड़कें उत्तर-दक्षिण दिशा और पूर्व-पश्चिम दिशा में हैं। शहर की अन्य सभी गलियाँ इन सड़कों के समांतर हैं और 200 m की दूरी पर हैं। हर दिशा में 5 गलियाँ हैं। 1 cm = 200 m लेकर अपनी कॉपी में शहर का एक मॉडल बनाइए। सड़कों/गलियों को एक-एक रेखा से दर्शाइए। आपके मॉडल में कई चौराहे हैं। एक चौराहा दो गलियों से बनता है, एक उत्तर-दक्षिण दिशा में चलने वाली और दूसरी पूर्व-पश्चिम दिशा में। हर चौराहे को इस तरह कहा जाता है: अगर उत्तर-दक्षिण दिशा की दूसरी गली और पूर्व-पश्चिम दिशा की पाँचवीं गली किसी चौराहे पर मिलती हैं, तो इस चौराहे को (2, 5) कहेंगे। इस परिपाटी से ज्ञात कीजिए: (i) कितने चौराहों को (4, 3) कहा जा सकता है; (ii) कितने चौराहों को (3, 4) कहा जा सकता है।"
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:18.163Z
+  code: 161ae46562aac06a
 class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
-  stamp: ec7e624b0d013d86
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-    name: placeTheDot
-    root:
-      children:
-        - kind: prop
-          name: sheet
-          prop: coordinatePlane
-          with:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Put the dot **7 cm from the left edge** and **3 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+            hi: बिंदु को **बाएँ किनारे से 7 cm** और **नीचे के किनारे से 3 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        sheet:
+          plane:
             axisNames:
               - en: left edge
                 hi: बायाँ किनारा
@@ -461,19 +850,80 @@ class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
                 hi: नीचे का किनारा
             hasGrid: true
             marks: counts
-            point:
-              x: 14
-              y: 11
-            pointStep: 1
             scene: paper
             showAxisNames: false
             tickEvery: 1
-            unit: cm
             window:
               xMax: 15
               xMin: 0
               yMax: 12
               yMin: 0
+          reading:
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            unit: cm
+      lines:
+        ask:
+          says:
+            en: Put the dot 7 centimetres from the left edge and 3 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.
+            hi: बिंदु को बाएँ किनारे से 7 सेंटीमीटर और नीचे के किनारे से 3 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+      scene:
+        describe: The board placeTheDot.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: left edge
+                  hi: बायाँ किनारा
+                - en: bottom
+                  hi: नीचे का किनारा
+              hasGrid: true
+              marks: counts
+              scene: paper
+              showAxisNames: false
+              tickEvery: 1
+              window:
+                xMax: 15
+                xMin: 0
+                yMax: 12
+                yMin: 0
+            reading:
+              point:
+                x: 14
+                y: 11
+              pointStep: 1
+              unit: cm
         - kind: prop
           name: ask
           prop: goal
@@ -483,44 +933,31 @@ class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Put the dot **7 cm from the left edge** and **3 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
-              hi: बिंदु को **बाएँ किनारे से 7 cm** और **नीचे के किनारे से 3 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+              en: Put the dot **7 cm from the left edge** and **3 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 7 cm** और **नीचे के किनारे से 3 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That spot is 3 cm from the left edge and 7 cm above the bottom: the two distances are swapped."
-              hi: "वह जगह बाएँ किनारे से 3 cm और नीचे के किनारे से 7 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:16.981Z
+  code: ed9cc1e1264193af
 class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
-  stamp: d92e758e21490ea4
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-    name: placeTheDot
-    root:
-      children:
-        - kind: prop
-          name: sheet
-          prop: coordinatePlane
-          with:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Put the dot **4 cm from the left edge** and **10 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+            hi: बिंदु को **बाएँ किनारे से 4 cm** और **नीचे के किनारे से 10 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        sheet:
+          plane:
             axisNames:
               - en: left edge
                 hi: बायाँ किनारा
@@ -528,19 +965,80 @@ class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
                 hi: नीचे का किनारा
             hasGrid: true
             marks: counts
-            point:
-              x: 14
-              y: 11
-            pointStep: 1
             scene: paper
             showAxisNames: false
             tickEvery: 1
-            unit: cm
             window:
               xMax: 15
               xMin: 0
               yMax: 12
               yMin: 0
+          reading:
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            unit: cm
+      lines:
+        ask:
+          says:
+            en: Put the dot 4 centimetres from the left edge and 10 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.
+            hi: बिंदु को बाएँ किनारे से 4 सेंटीमीटर और नीचे के किनारे से 10 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+      scene:
+        describe: The board placeTheDot.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: left edge
+                  hi: बायाँ किनारा
+                - en: bottom
+                  hi: नीचे का किनारा
+              hasGrid: true
+              marks: counts
+              scene: paper
+              showAxisNames: false
+              tickEvery: 1
+              window:
+                xMax: 15
+                xMin: 0
+                yMax: 12
+                yMin: 0
+            reading:
+              point:
+                x: 14
+                y: 11
+              pointStep: 1
+              unit: cm
         - kind: prop
           name: ask
           prop: goal
@@ -550,44 +1048,31 @@ class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Put the dot **4 cm from the left edge** and **10 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
-              hi: बिंदु को **बाएँ किनारे से 4 cm** और **नीचे के किनारे से 10 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+              en: Put the dot **4 cm from the left edge** and **10 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 4 cm** और **नीचे के किनारे से 10 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That spot is 10 cm from the left edge and 4 cm above the bottom: the two distances are swapped."
-              hi: "वह जगह बाएँ किनारे से 10 cm और नीचे के किनारे से 4 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:16.981Z
+  code: ed9cc1e1264193af
 class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
-  stamp: 98eb86c5f0395821
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-    name: placeTheDot
-    root:
-      children:
-        - kind: prop
-          name: sheet
-          prop: coordinatePlane
-          with:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Put the dot **2 cm from the left edge** and **8 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+            hi: बिंदु को **बाएँ किनारे से 2 cm** और **नीचे के किनारे से 8 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        sheet:
+          plane:
             axisNames:
               - en: left edge
                 hi: बायाँ किनारा
@@ -595,19 +1080,80 @@ class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
                 hi: नीचे का किनारा
             hasGrid: true
             marks: counts
-            point:
-              x: 14
-              y: 11
-            pointStep: 1
             scene: paper
             showAxisNames: false
             tickEvery: 1
-            unit: cm
             window:
               xMax: 15
               xMin: 0
               yMax: 12
               yMin: 0
+          reading:
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            unit: cm
+      lines:
+        ask:
+          says:
+            en: Put the dot 2 centimetres from the left edge and 8 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.
+            hi: बिंदु को बाएँ किनारे से 2 सेंटीमीटर और नीचे के किनारे से 8 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+      scene:
+        describe: The board placeTheDot.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: left edge
+                  hi: बायाँ किनारा
+                - en: bottom
+                  hi: नीचे का किनारा
+              hasGrid: true
+              marks: counts
+              scene: paper
+              showAxisNames: false
+              tickEvery: 1
+              window:
+                xMax: 15
+                xMin: 0
+                yMax: 12
+                yMin: 0
+            reading:
+              point:
+                x: 14
+                y: 11
+              pointStep: 1
+              unit: cm
         - kind: prop
           name: ask
           prop: goal
@@ -617,44 +1163,31 @@ class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Put the dot **2 cm from the left edge** and **8 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
-              hi: बिंदु को **बाएँ किनारे से 2 cm** और **नीचे के किनारे से 8 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+              en: Put the dot **2 cm from the left edge** and **8 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 2 cm** और **नीचे के किनारे से 8 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That spot is 8 cm from the left edge and 2 cm above the bottom: the two distances are swapped."
-              hi: "वह जगह बाएँ किनारे से 8 cm और नीचे के किनारे से 2 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:16.981Z
+  code: ed9cc1e1264193af
 class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
-  stamp: 7aa036d5a6a59014
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-    name: placeTheDot
-    root:
-      children:
-        - kind: prop
-          name: sheet
-          prop: coordinatePlane
-          with:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Put the dot **11 cm from the left edge** and **5 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+            hi: बिंदु को **बाएँ किनारे से 11 cm** और **नीचे के किनारे से 5 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+        sheet:
+          plane:
             axisNames:
               - en: left edge
                 hi: बायाँ किनारा
@@ -662,19 +1195,80 @@ class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
                 hi: नीचे का किनारा
             hasGrid: true
             marks: counts
-            point:
-              x: 14
-              y: 11
-            pointStep: 1
             scene: paper
             showAxisNames: false
             tickEvery: 1
-            unit: cm
             window:
               xMax: 15
               xMin: 0
               yMax: 12
               yMin: 0
+          reading:
+            point:
+              x: 14
+              y: 11
+            pointStep: 1
+            unit: cm
+      lines:
+        ask:
+          says:
+            en: Put the dot 11 centimetres from the left edge and 5 centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.
+            hi: बिंदु को बाएँ किनारे से 11 सेंटीमीटर और नीचे के किनारे से 5 सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+      scene:
+        describe: The board placeTheDot.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: placeTheDot
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: left edge
+                  hi: बायाँ किनारा
+                - en: bottom
+                  hi: नीचे का किनारा
+              hasGrid: true
+              marks: counts
+              scene: paper
+              showAxisNames: false
+              tickEvery: 1
+              window:
+                xMax: 15
+                xMin: 0
+                yMax: 12
+                yMin: 0
+            reading:
+              point:
+                x: 14
+                y: 11
+              pointStep: 1
+              unit: cm
         - kind: prop
           name: ask
           prop: goal
@@ -684,34 +1278,83 @@ class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Put the dot **11 cm from the left edge** and **5 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
-              hi: बिंदु को **बाएँ किनारे से 11 cm** और **नीचे के किनारे से 5 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
+              en: Put the dot **11 cm from the left edge** and **5 cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.
+              hi: बिंदु को **बाएँ किनारे से 11 cm** और **नीचे के किनारे से 5 cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That spot is 5 cm from the left edge and 11 cm above the bottom: the two distances are swapped."
-              hi: "वह जगह बाएँ किनारे से 5 cm और नीचे के किनारे से 11 cm ऊपर है: दोनों दूरियाँ उलट गईं।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).point;return p!==null&&p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:16.981Z
+  code: ed9cc1e1264193af
 class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
-  stamp: ae83557f14015018
-  props:
-    choice: 79b6e0fab9e596c9
   content:
-    is: []
+    model:
+      freeLines:
+        - ask-facing-note
+      given:
+        ask:
+          answer: two
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          options:
+            - id: one
+              label:
+                en: Its distance from the left edge of the table
+                hi: मेज़ के बाएँ किनारे से उसकी दूरी
+            - id: side
+              label:
+                en: Which side of the table it is on, and that it is near the back
+                hi: वह मेज़ की किस तरफ़ है, और यह कि वह पीछे की ओर है
+            - feedback:
+                en: "Those two edges face each other, so the second distance adds nothing: every spot the same distance from the left edge is the same distance from the right. The two edges must meet at a corner."
+                hi: "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से बराबर दूरी पर हर जगह दाएँ से भी बराबर दूरी पर है। दोनों किनारे एक कोने पर मिलने चाहिए।"
+              id: facing
+              label:
+                en: Its distance from the left edge of the table and its distance from the right edge
+                hi: मेज़ के बाएँ किनारे से उसकी दूरी और दाएँ किनारे से उसकी दूरी
+            - id: two
+              label:
+                en: Its distance from the left edge of the table and its distance from the front edge
+                hi: मेज़ के बाएँ किनारे से उसकी दूरी और आगे के किनारे से उसकी दूरी
+          prompt:
+            en: How will you describe the position of a table lamp on your study table to another person?
+            hi: आप अपनी पढ़ाई की मेज़ पर रखे टेबल लैंप की स्थिति किसी अन्य व्यक्ति को कैसे बताएँगे?
+      lines:
+        ask-facing-note:
+          about: ask
+          says:
+            en: "Those two edges face each other, so the second distance adds nothing: every spot the same distance from the left edge is the same distance from the right. The two edges must meet at a corner."
+            hi: "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से बराबर दूरी पर हर जगह दाएँ से भी बराबर दूरी पर है। दोनों किनारे एक कोने पर मिलने चाहिए।"
+          when: ask.checked
+          where:
+            optionId: facing
+            status: wrong
+      scene:
+        describe: The board tableLamp.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          ask.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
     name: tableLamp
     root:
       children:
@@ -750,36 +1393,25 @@ class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:19.300Z
+  code: aacb406bf00bcd61
 class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
-  stamp: 229d48223f6f61ef
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-    name: tapTheDesk
-    root:
-      children:
-        - kind: prop
-          name: room
-          prop: coordinatePlane
-          with:
-            axisNames:
-              - en: Column
-                hi: स्तंभ
-              - en: Row
-                hi: पंक्ति
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: room
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Tap the desk **(5, 3)**, then press Check.
+            hi: डेस्क **(5, 3)** दबाओ, फिर जाँचो दबाओ।
+        room:
+          places:
             placeKind: desk
             places:
               - x: 1
@@ -922,13 +1554,211 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
                 y: 6
               - x: 10
                 y: 7
-            scene: classroom
             showAddress: false
+          plane:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            scene: classroom
             window:
               xMax: 10.5
               xMin: 0
               yMax: 7.5
               yMin: 0
+      lines: {}
+      scene:
+        describe: The board tapTheDesk.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            places:
+              placeKind: desk
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 1
+                  y: 6
+                - x: 1
+                  y: 7
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 2
+                  y: 6
+                - x: 2
+                  y: 7
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 3
+                  y: 6
+                - x: 3
+                  y: 7
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 4
+                  y: 6
+                - x: 4
+                  y: 7
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 5
+                  y: 6
+                - x: 5
+                  y: 7
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+                - x: 6
+                  y: 6
+                - x: 6
+                  y: 7
+                - x: 7
+                  y: 1
+                - x: 7
+                  y: 2
+                - x: 7
+                  y: 3
+                - x: 7
+                  y: 4
+                - x: 7
+                  y: 5
+                - x: 7
+                  y: 6
+                - x: 7
+                  y: 7
+                - x: 8
+                  y: 1
+                - x: 8
+                  y: 2
+                - x: 8
+                  y: 3
+                - x: 8
+                  y: 4
+                - x: 8
+                  y: 5
+                - x: 8
+                  y: 6
+                - x: 8
+                  y: 7
+                - x: 9
+                  y: 1
+                - x: 9
+                  y: 2
+                - x: 9
+                  y: 3
+                - x: 9
+                  y: 4
+                - x: 9
+                  y: 5
+                - x: 9
+                  y: 6
+                - x: 9
+                  y: 7
+                - x: 10
+                  y: 1
+                - x: 10
+                  y: 2
+                - x: 10
+                  y: 3
+                - x: 10
+                  y: 4
+                - x: 10
+                  y: 5
+                - x: 10
+                  y: 6
+                - x: 10
+                  y: 7
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Column
+                  hi: स्तंभ
+                - en: Row
+                  hi: पंक्ति
+              marks: counts
+              scene: classroom
+              window:
+                xMax: 10.5
+                xMin: 0
+                yMax: 7.5
+                yMin: 0
         - kind: prop
           name: ask
           prop: goal
@@ -938,50 +1768,31 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Tap the desk **(5, 3)**, then press Check.
-              hi: डेस्क **(5, 3)** दबाओ, फिर जाँचो दबाओ।
+              en: Tap the desk **(5, 3)**, then press Check.
+              hi: डेस्क **(5, 3)** दबाओ, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That desk is (3, 5): column 3, row 5. The column comes first."
-              hi: "वह डेस्क (3, 5) है: स्तंभ 3, पंक्ति 5। स्तंभ पहले आता है।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:15.881Z
+  code: 984021ad8b4b5da5
 class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
-  stamp: 96231219469ce591
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-    name: tapTheDesk
-    root:
-      children:
-        - kind: prop
-          name: room
-          prop: coordinatePlane
-          with:
-            axisNames:
-              - en: Column
-                hi: स्तंभ
-              - en: Row
-                hi: पंक्ति
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: room
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Tap the desk **(7, 4)**, then press Check.
+            hi: डेस्क **(7, 4)** दबाओ, फिर जाँचो दबाओ।
+        room:
+          places:
             placeKind: desk
             places:
               - x: 1
@@ -1124,13 +1935,211 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
                 y: 6
               - x: 10
                 y: 7
-            scene: classroom
             showAddress: false
+          plane:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            scene: classroom
             window:
               xMax: 10.5
               xMin: 0
               yMax: 7.5
               yMin: 0
+      lines: {}
+      scene:
+        describe: The board tapTheDesk.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            places:
+              placeKind: desk
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 1
+                  y: 6
+                - x: 1
+                  y: 7
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 2
+                  y: 6
+                - x: 2
+                  y: 7
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 3
+                  y: 6
+                - x: 3
+                  y: 7
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 4
+                  y: 6
+                - x: 4
+                  y: 7
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 5
+                  y: 6
+                - x: 5
+                  y: 7
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+                - x: 6
+                  y: 6
+                - x: 6
+                  y: 7
+                - x: 7
+                  y: 1
+                - x: 7
+                  y: 2
+                - x: 7
+                  y: 3
+                - x: 7
+                  y: 4
+                - x: 7
+                  y: 5
+                - x: 7
+                  y: 6
+                - x: 7
+                  y: 7
+                - x: 8
+                  y: 1
+                - x: 8
+                  y: 2
+                - x: 8
+                  y: 3
+                - x: 8
+                  y: 4
+                - x: 8
+                  y: 5
+                - x: 8
+                  y: 6
+                - x: 8
+                  y: 7
+                - x: 9
+                  y: 1
+                - x: 9
+                  y: 2
+                - x: 9
+                  y: 3
+                - x: 9
+                  y: 4
+                - x: 9
+                  y: 5
+                - x: 9
+                  y: 6
+                - x: 9
+                  y: 7
+                - x: 10
+                  y: 1
+                - x: 10
+                  y: 2
+                - x: 10
+                  y: 3
+                - x: 10
+                  y: 4
+                - x: 10
+                  y: 5
+                - x: 10
+                  y: 6
+                - x: 10
+                  y: 7
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Column
+                  hi: स्तंभ
+                - en: Row
+                  hi: पंक्ति
+              marks: counts
+              scene: classroom
+              window:
+                xMax: 10.5
+                xMin: 0
+                yMax: 7.5
+                yMin: 0
         - kind: prop
           name: ask
           prop: goal
@@ -1140,50 +2149,31 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Tap the desk **(7, 4)**, then press Check.
-              hi: डेस्क **(7, 4)** दबाओ, फिर जाँचो दबाओ।
+              en: Tap the desk **(7, 4)**, then press Check.
+              hi: डेस्क **(7, 4)** दबाओ, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That desk is (4, 7): column 4, row 7. The column comes first."
-              hi: "वह डेस्क (4, 7) है: स्तंभ 4, पंक्ति 7। स्तंभ पहले आता है।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:15.881Z
+  code: 984021ad8b4b5da5
 class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
-  stamp: 437602b958a52da5
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-    name: tapTheDesk
-    root:
-      children:
-        - kind: prop
-          name: room
-          prop: coordinatePlane
-          with:
-            axisNames:
-              - en: Column
-                hi: स्तंभ
-              - en: Row
-                hi: पंक्ति
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: room
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Tap the desk **(1, 5)**, then press Check.
+            hi: डेस्क **(1, 5)** दबाओ, फिर जाँचो दबाओ।
+        room:
+          places:
             placeKind: desk
             places:
               - x: 1
@@ -1326,13 +2316,211 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
                 y: 6
               - x: 10
                 y: 7
-            scene: classroom
             showAddress: false
+          plane:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            scene: classroom
             window:
               xMax: 10.5
               xMin: 0
               yMax: 7.5
               yMin: 0
+      lines: {}
+      scene:
+        describe: The board tapTheDesk.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            places:
+              placeKind: desk
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 1
+                  y: 6
+                - x: 1
+                  y: 7
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 2
+                  y: 6
+                - x: 2
+                  y: 7
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 3
+                  y: 6
+                - x: 3
+                  y: 7
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 4
+                  y: 6
+                - x: 4
+                  y: 7
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 5
+                  y: 6
+                - x: 5
+                  y: 7
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+                - x: 6
+                  y: 6
+                - x: 6
+                  y: 7
+                - x: 7
+                  y: 1
+                - x: 7
+                  y: 2
+                - x: 7
+                  y: 3
+                - x: 7
+                  y: 4
+                - x: 7
+                  y: 5
+                - x: 7
+                  y: 6
+                - x: 7
+                  y: 7
+                - x: 8
+                  y: 1
+                - x: 8
+                  y: 2
+                - x: 8
+                  y: 3
+                - x: 8
+                  y: 4
+                - x: 8
+                  y: 5
+                - x: 8
+                  y: 6
+                - x: 8
+                  y: 7
+                - x: 9
+                  y: 1
+                - x: 9
+                  y: 2
+                - x: 9
+                  y: 3
+                - x: 9
+                  y: 4
+                - x: 9
+                  y: 5
+                - x: 9
+                  y: 6
+                - x: 9
+                  y: 7
+                - x: 10
+                  y: 1
+                - x: 10
+                  y: 2
+                - x: 10
+                  y: 3
+                - x: 10
+                  y: 4
+                - x: 10
+                  y: 5
+                - x: 10
+                  y: 6
+                - x: 10
+                  y: 7
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Column
+                  hi: स्तंभ
+                - en: Row
+                  hi: पंक्ति
+              marks: counts
+              scene: classroom
+              window:
+                xMax: 10.5
+                xMin: 0
+                yMax: 7.5
+                yMin: 0
         - kind: prop
           name: ask
           prop: goal
@@ -1342,50 +2530,31 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Tap the desk **(1, 5)**, then press Check.
-              hi: डेस्क **(1, 5)** दबाओ, फिर जाँचो दबाओ।
+              en: Tap the desk **(1, 5)**, then press Check.
+              hi: डेस्क **(1, 5)** दबाओ, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That desk is (5, 1): column 5, row 1. The column comes first."
-              hi: "वह डेस्क (5, 1) है: स्तंभ 5, पंक्ति 1। स्तंभ पहले आता है।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:15.881Z
+  code: 984021ad8b4b5da5
 class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
-  stamp: a1737516b6f7488a
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-    name: tapTheDesk
-    root:
-      children:
-        - kind: prop
-          name: room
-          prop: coordinatePlane
-          with:
-            axisNames:
-              - en: Column
-                hi: स्तंभ
-              - en: Row
-                hi: पंक्ति
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: room
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Tap the desk **(2, 6)**, then press Check.
+            hi: डेस्क **(2, 6)** दबाओ, फिर जाँचो दबाओ।
+        room:
+          places:
             placeKind: desk
             places:
               - x: 1
@@ -1528,13 +2697,211 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
                 y: 6
               - x: 10
                 y: 7
-            scene: classroom
             showAddress: false
+          plane:
+            axisNames:
+              - en: Column
+                hi: स्तंभ
+              - en: Row
+                hi: पंक्ति
+            marks: counts
+            scene: classroom
             window:
               xMax: 10.5
               xMin: 0
               yMax: 7.5
               yMin: 0
+      lines: {}
+      scene:
+        describe: The board tapTheDesk.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapTheDesk
+    root:
+      children:
+        - kind: prop
+          name: room
+          prop: coordinatePlane
+          with:
+            places:
+              placeKind: desk
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 1
+                  y: 6
+                - x: 1
+                  y: 7
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 2
+                  y: 6
+                - x: 2
+                  y: 7
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 3
+                  y: 6
+                - x: 3
+                  y: 7
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 4
+                  y: 6
+                - x: 4
+                  y: 7
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 5
+                  y: 6
+                - x: 5
+                  y: 7
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+                - x: 6
+                  y: 6
+                - x: 6
+                  y: 7
+                - x: 7
+                  y: 1
+                - x: 7
+                  y: 2
+                - x: 7
+                  y: 3
+                - x: 7
+                  y: 4
+                - x: 7
+                  y: 5
+                - x: 7
+                  y: 6
+                - x: 7
+                  y: 7
+                - x: 8
+                  y: 1
+                - x: 8
+                  y: 2
+                - x: 8
+                  y: 3
+                - x: 8
+                  y: 4
+                - x: 8
+                  y: 5
+                - x: 8
+                  y: 6
+                - x: 8
+                  y: 7
+                - x: 9
+                  y: 1
+                - x: 9
+                  y: 2
+                - x: 9
+                  y: 3
+                - x: 9
+                  y: 4
+                - x: 9
+                  y: 5
+                - x: 9
+                  y: 6
+                - x: 9
+                  y: 7
+                - x: 10
+                  y: 1
+                - x: 10
+                  y: 2
+                - x: 10
+                  y: 3
+                - x: 10
+                  y: 4
+                - x: 10
+                  y: 5
+                - x: 10
+                  y: 6
+                - x: 10
+                  y: 7
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Column
+                  hi: स्तंभ
+                - en: Row
+                  hi: पंक्ति
+              marks: counts
+              scene: classroom
+              window:
+                xMax: 10.5
+                xMin: 0
+                yMax: 7.5
+                yMin: 0
         - kind: prop
           name: ask
           prop: goal
@@ -1544,54 +2911,32 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
               - fab4d618fc2c9277
             isGraded: true
             prompt:
-              en: Tap the desk **(2, 6)**, then press Check.
-              hi: डेस्क **(2, 6)** दबाओ, फिर जाँचो दबाओ।
+              en: Tap the desk **(2, 6)**, then press Check.
+              hi: डेस्क **(2, 6)** दबाओ, फिर जाँचो दबाओ।
         - kind: space
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That desk is (6, 2): column 6, row 2. The column comes first."
-              hi: "वह डेस्क (6, 2) है: स्तंभ 6, पंक्ति 2। स्तंभ पहले आता है।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const target=at(plane).target;return target!==null&&target.x===x&&target.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:15.881Z
+  code: 984021ad8b4b5da5
 class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
-  stamp: e0eaa5abb91f250d
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: walkToAddress
-    root:
-      children:
-        - kind: prop
-          name: town
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axisNames:
-              - en: Street number
-                hi: गली नंबर
-              - en: House number
-                hi: मकान नंबर
-            canChooseTarget: false
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: town
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Aman lives at **Street 3, House 5**. Walk Riya there from the corner, then press Check.
+            hi: अमन **गली 3, मकान 5** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        town:
+          places:
+            choosing: never
             placeKind: house
             places:
               - x: 1
@@ -1654,18 +2999,150 @@ class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
                 y: 4
               - x: 6
                 y: 5
-            roads: town
-            scene: town
             showAddress: false
-            showWhere: false
-            walkFrom:
-              x: 0
-              y: 0
+          plane:
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            marks: counts
+            scene: town
             window:
               xMax: 6.5
               xMin: 0
               yMax: 5.5
               yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: town
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+      lines: {}
+      scene:
+        describe: The board walkToAddress.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Street number
+                  hi: गली नंबर
+                - en: House number
+                  hi: मकान नंबर
+              marks: counts
+              scene: town
+              window:
+                xMax: 6.5
+                xMin: 0
+                yMax: 5.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: town
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
         - kind: prop
           name: ask
           prop: goal
@@ -1681,48 +3158,26 @@ class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's Street 5, House 3. The street comes first: how far along the main road."
-              hi: "यह गली 5, मकान 3 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:13.484Z
+  code: b294ae57149e83e3
 class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
-  stamp: 5022e0a0a10125b4
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: walkToAddress
-    root:
-      children:
-        - kind: prop
-          name: town
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axisNames:
-              - en: Street number
-                hi: गली नंबर
-              - en: House number
-                hi: मकान नंबर
-            canChooseTarget: false
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: town
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Aman lives at **Street 1, House 4**. Walk Riya there from the corner, then press Check.
+            hi: अमन **गली 1, मकान 4** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        town:
+          places:
+            choosing: never
             placeKind: house
             places:
               - x: 1
@@ -1785,18 +3240,150 @@ class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
                 y: 4
               - x: 6
                 y: 5
-            roads: town
-            scene: town
             showAddress: false
-            showWhere: false
-            walkFrom:
-              x: 0
-              y: 0
+          plane:
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            marks: counts
+            scene: town
             window:
               xMax: 6.5
               xMin: 0
               yMax: 5.5
               yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: town
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+      lines: {}
+      scene:
+        describe: The board walkToAddress.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Street number
+                  hi: गली नंबर
+                - en: House number
+                  hi: मकान नंबर
+              marks: counts
+              scene: town
+              window:
+                xMax: 6.5
+                xMin: 0
+                yMax: 5.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: town
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
         - kind: prop
           name: ask
           prop: goal
@@ -1812,48 +3399,26 @@ class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's Street 4, House 1. The street comes first: how far along the main road."
-              hi: "यह गली 4, मकान 1 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:13.484Z
+  code: b294ae57149e83e3
 class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
-  stamp: 44eea1b2e5618de9
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: walkToAddress
-    root:
-      children:
-        - kind: prop
-          name: town
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axisNames:
-              - en: Street number
-                hi: गली नंबर
-              - en: House number
-                hi: मकान नंबर
-            canChooseTarget: false
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: town
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Aman lives at **Street 5, House 5**. Walk Riya there from the corner, then press Check.
+            hi: अमन **गली 5, मकान 5** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        town:
+          places:
+            choosing: never
             placeKind: house
             places:
               - x: 1
@@ -1916,18 +3481,150 @@ class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
                 y: 4
               - x: 6
                 y: 5
-            roads: town
-            scene: town
             showAddress: false
-            showWhere: false
-            walkFrom:
-              x: 0
-              y: 0
+          plane:
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            marks: counts
+            scene: town
             window:
               xMax: 6.5
               xMin: 0
               yMax: 5.5
               yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: town
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+      lines: {}
+      scene:
+        describe: The board walkToAddress.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Street number
+                  hi: गली नंबर
+                - en: House number
+                  hi: मकान नंबर
+              marks: counts
+              scene: town
+              window:
+                xMax: 6.5
+                xMin: 0
+                yMax: 5.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: town
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
         - kind: prop
           name: ask
           prop: goal
@@ -1943,40 +3640,26 @@ class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:13.484Z
+  code: b294ae57149e83e3
 class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
-  stamp: 341ee13416c18670
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: walkToAddress
-    root:
-      children:
-        - kind: prop
-          name: town
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axisNames:
-              - en: Street number
-                hi: गली नंबर
-              - en: House number
-                hi: मकान नंबर
-            canChooseTarget: false
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: town
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Aman lives at **Street 6, House 2**. Walk Riya there from the corner, then press Check.
+            hi: अमन **गली 6, मकान 2** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        town:
+          places:
+            choosing: never
             placeKind: house
             places:
               - x: 1
@@ -2039,18 +3722,150 @@ class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
                 y: 4
               - x: 6
                 y: 5
-            roads: town
-            scene: town
             showAddress: false
-            showWhere: false
-            walkFrom:
-              x: 0
-              y: 0
+          plane:
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            marks: counts
+            scene: town
             window:
               xMax: 6.5
               xMin: 0
               yMax: 5.5
               yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: town
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+      lines: {}
+      scene:
+        describe: The board walkToAddress.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Street number
+                  hi: गली नंबर
+                - en: House number
+                  hi: मकान नंबर
+              marks: counts
+              scene: town
+              window:
+                xMax: 6.5
+                xMin: 0
+                yMax: 5.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: town
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
         - kind: prop
           name: ask
           prop: goal
@@ -2066,40 +3881,26 @@ class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:13.484Z
+  code: b294ae57149e83e3
 class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
-  stamp: 262f988e89435294
-  props:
-    coordinatePlane: 70e1c5edb94b96be
-    goal: 79b6e0fab9e596c9
   content:
-    is:
-      - set: ask.isMet
-        to: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-    name: walkToAddress
-    root:
-      children:
-        - kind: prop
-          name: town
-          prop: coordinatePlane
-          with:
-            at:
-              x: 0
-              y: 0
-            axisNames:
-              - en: Street number
-                hi: गली नंबर
-              - en: House number
-                hi: मकान नंबर
-            canChooseTarget: false
-            marks: counts
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: town
+          concepts:
+            - fab4d618fc2c9277
+          isGraded: true
+          prompt:
+            en: Aman lives at **Street 2, House 4**. Walk Riya there from the corner, then press Check.
+            hi: अमन **गली 2, मकान 4** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।
+        town:
+          places:
+            choosing: never
             placeKind: house
             places:
               - x: 1
@@ -2162,18 +3963,150 @@ class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
                 y: 4
               - x: 6
                 y: 5
-            roads: town
-            scene: town
             showAddress: false
-            showWhere: false
-            walkFrom:
-              x: 0
-              y: 0
+          plane:
+            axisNames:
+              - en: Street number
+                hi: गली नंबर
+              - en: House number
+                hi: मकान नंबर
+            marks: counts
+            scene: town
             window:
               xMax: 6.5
               xMin: 0
               yMax: 5.5
               yMin: 0
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: town
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+      lines: {}
+      scene:
+        describe: The board walkToAddress.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: walkToAddress
+    root:
+      children:
+        - kind: prop
+          name: town
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: never
+              placeKind: house
+              places:
+                - x: 1
+                  y: 1
+                - x: 1
+                  y: 2
+                - x: 1
+                  y: 3
+                - x: 1
+                  y: 4
+                - x: 1
+                  y: 5
+                - x: 2
+                  y: 1
+                - x: 2
+                  y: 2
+                - x: 2
+                  y: 3
+                - x: 2
+                  y: 4
+                - x: 2
+                  y: 5
+                - x: 3
+                  y: 1
+                - x: 3
+                  y: 2
+                - x: 3
+                  y: 3
+                - x: 3
+                  y: 4
+                - x: 3
+                  y: 5
+                - x: 4
+                  y: 1
+                - x: 4
+                  y: 2
+                - x: 4
+                  y: 3
+                - x: 4
+                  y: 4
+                - x: 4
+                  y: 5
+                - x: 5
+                  y: 1
+                - x: 5
+                  y: 2
+                - x: 5
+                  y: 3
+                - x: 5
+                  y: 4
+                - x: 5
+                  y: 5
+                - x: 6
+                  y: 1
+                - x: 6
+                  y: 2
+                - x: 6
+                  y: 3
+                - x: 6
+                  y: 4
+                - x: 6
+                  y: 5
+              showAddress: false
+            plane:
+              axisNames:
+                - en: Street number
+                  hi: गली नंबर
+                - en: House number
+                  hi: मकान नंबर
+              marks: counts
+              scene: town
+              window:
+                xMax: 6.5
+                xMin: 0
+                yMax: 5.5
+                yMin: 0
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: town
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
         - kind: prop
           name: ask
           prop: goal
@@ -2189,22 +4122,10 @@ class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
           name: space1
       kind: column
       name: page
-    studentOnly: []
-    when:
-      - do:
-          args:
-            text:
-              en: "That's Street 4, House 2. The street comes first: how far along the main road."
-              hi: "यह गली 4, मकान 2 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।"
-          call: ask.giveFeedback
-        if: ƒ at=>{const p=at(plane).at;return p.x===x&&p.y===y}
-        on: ask.wrong
-      - do:
-          call: board.pass
-        on: ask.correct
   by: reviewer
-  commit: c83ba8052ce2
-  at: 2026-10-29T16:34:42.028Z
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:13.484Z
+  code: b294ae57149e83e3
 class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
   content:
     model:
@@ -2524,9 +4445,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: 09a35e81d80e
-  at: 2026-11-01T19:35:22.207Z
-  code: ccf3659cff8678d8
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:12.248Z
+  code: 1be88e6bf2973336
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -2773,9 +4694,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
       kind: column
       name: page
   by: reviewer
-  commit: 09a35e81d80e
-  at: 2026-11-01T19:35:22.207Z
-  code: dc80a12861a11566
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:12.248Z
+  code: 99329bea2de49db1
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -3265,9 +5186,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: 09a35e81d80e
-  at: 2026-11-01T19:35:22.207Z
-  code: a5f512fe91822da1
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:12.248Z
+  code: 4e491717a3c2f942
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -3593,9 +5514,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: 09a35e81d80e
-  at: 2026-11-01T19:35:22.207Z
-  code: 813ac6900b5172e2
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:12.248Z
+  code: ce3e5f8129f3d4a6
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -4211,6 +6132,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: 09a35e81d80e
-  at: 2026-11-01T19:35:22.207Z
-  code: 58c53c5bebe62055
+  commit: f7badfe1418f
+  at: 2026-11-02T04:09:12.248Z
+  code: d609f007121e6a8c
