@@ -418,7 +418,6 @@ export type Drawn = {
 export type ShotOptions = {
   locale?: "en" | "hi";
   play?: boolean;
-  questions?: boolean;
   /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
   width?: number;
   /** The screen's height in px: what a prop may take 60% of (a phone ~840, a projector 720). */
@@ -600,7 +599,7 @@ export async function previewUrl(
       ? ""
       : `&state=${encodeURIComponent(JSON.stringify(o.state))}`;
   // A tool's board keeps time by each line's length (`timed`): it never waits for real sound.
-  url.search = `?dev&timed&${previewQuery(address)}${state}${o.questions ? "&show=questions" : ""}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed === undefined || o.speed === 1 ? "" : `&speed=${Number.isFinite(o.speed) ? o.speed : "jump"}`}`;
+  url.search = `?dev&timed&${previewQuery(address)}${state}${o.play ? "&earned" : ""}${o.locale === "hi" ? "&locale=hi" : ""}${o.width !== undefined && o.width !== PHONE_WIDTH ? `&width=${o.width}` : ""}${o.speed === undefined || o.speed === 1 ? "" : `&speed=${Number.isFinite(o.speed) ? o.speed : "jump"}`}`;
   return url.toString();
 }
 

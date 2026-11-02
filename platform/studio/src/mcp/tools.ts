@@ -161,6 +161,12 @@ type Applied = {
 };
 
 /** How many plays are played again at once (changes); CHALK_PLAY_PAGES to measure another. */
+/**
+ * At most this many pictures in a `changes` answer. Seen: everything changed at once made one of
+ * 39.5 MB (201 pictures), and the connection closed before it arrived.
+ */
+const CHANGES_PICTURES = 12;
+
 const PLAY_PAGES = Number(process.env.CHALK_PLAY_PAGES ?? 3);
 
 /** One change, as the caller's role: the writer (comments.ts) says what it did or why not. */
@@ -425,6 +431,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         }
         const changes = changesUnder(root, under);
         const images: Content[] = [];
+        const leftOut: string[] = [];
         const seen = new Map<string, string[]>();
         const changed = changes.filter((c) => c.status === "changed");
         for (const [i, c] of changed.entries()) {
@@ -471,9 +478,24 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             ),
             ...playLine,
           ]);
+          // The pictures of what differs, while the answer stays small enough to arrive whole: past
+          // the cap, a board's differences are said in words, and its pictures are a `show` away.
+          if (images.length >= CHANGES_PICTURES) {
+            leftOut.push(c.board);
+            continue;
+          }
           for (const d of diffs) images.push(...(await diffPictures(c.board, d)));
         }
-        return result([text([changesWords(changes, seen), ...notes].join("\n")), ...images]);
+        const cut =
+          leftOut.length === 0
+            ? []
+            : [
+                `Pictures left out (the answer keeps to ${CHANGES_PICTURES}): ${leftOut.length} more board${leftOut.length === 1 ? "" : "s"} look different, said above; show each to see it: ${leftOut.map((b) => contentAddress(b)).join(", ")}`,
+              ];
+        return result([
+          text([changesWords(changes, seen), ...cut, ...notes].join("\n")),
+          ...images,
+        ]);
       },
     ),
     "changes",

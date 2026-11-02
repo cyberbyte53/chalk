@@ -40,7 +40,7 @@ export type Locale = "en" | "hi";
 export type Target =
   | { kind: "piece"; board: string; address: string }
   | { kind: "board"; board: string }
-  /** A lesson's pages, or a question family's questions: drawn by the lesson's page. */
+  /** A lesson's pages, or a question family's questions: each drawn alone, one at a time. */
   | { kind: "group"; path: string; unit: string; boards: string[] }
   /** A chapter or a book: checked, not pictured. */
   | { kind: "many"; path: string; units: string[]; boards: string[] };
@@ -543,7 +543,6 @@ export async function look(
     width: v.width,
     ...(v.height === undefined ? {} : { height: v.height }),
     play: a.play === true,
-    questions: target.kind === "group",
     speed: a.speed ?? DEFAULT_SPEED,
     ...(a.state === undefined ? {} : { state: a.state }),
     // A whole prop on its own page: its page too (what it is for, every board that uses it).
@@ -554,9 +553,9 @@ export async function look(
   });
   const board = target.kind === "group" ? target.unit : target.board;
   // What a board shows in every version, kept for `changes` (reach/shown.ts): only a whole built
-  // board, drawn as it is (every version, nothing hidden, no state given).
+  // board, drawn as it is (every version, nothing hidden, no state given). A lesson's or a family's
+  // boards only when a reviewer shows them: then they are drawn at full size (above).
   const isWhole =
-    // A lesson or a family only when a reviewer shows it: then its boards are drawn whole (above).
     (target.kind === "board" || (target.kind === "group" && a.isSeen === true)) &&
     !board.startsWith(PROPS_ROOT) &&
     a.locales === undefined &&
@@ -565,47 +564,44 @@ export async function look(
     a.state === undefined &&
     a.speed === undefined;
   const inputs = isWhole ? buildInputsKey(root) : "";
-  const drawn = await drawVersions(root, board, versions, options, lane, a.pages);
-  if (isWhole) {
-    // A lesson's or a family's boards are drawn together, a page each version: each kept as its own.
-    const each =
-      target.kind === "group"
-        ? target.boards.map((b) => ({
-            board: b,
-            drawn: drawn.map((d) => ({ ...d, shots: d.shots.filter((x) => x.board === b) })),
-          }))
-        : [{ board, drawn }];
+  // One board on one screen, always: a lesson's or a family's boards are each drawn alone, in each
+  // version, never stacked on one page, so each is the drawing `changes` makes of it.
+  const each =
+    target.kind === "group"
+      ? await drawBoards(root, target.boards, versions, options, lane, a.pages)
+      : [{ board, drawn: await drawVersions(root, board, versions, options, lane, a.pages) }];
+  if (isWhole)
     for (const one of each) {
       if (one.drawn.some((d) => d.shots.length === 0)) continue;
       const kept = { inputs, versions: shownOf(one.drawn, versions) };
       keepShown(root, "now", shownBoard(one.board), kept);
       if (a.isSeen === true) keepShown(root, "seen", shownBoard(one.board), kept);
     }
-  }
+  const drawn = each[0]?.drawn ?? [];
   if (target.kind === "group") {
-    const wanted = new Set(target.boards);
     const tiles: Tile[] = [];
     const lines: string[] = [];
     let problems = 0;
-    for (const [i, d] of drawn.entries()) {
-      const v = versions[i] as Version;
-      for (const s of d.shots.filter((x) => wanted.has(x.board))) {
-        if (s.overflow.length > 0) {
-          problems += 1;
-          lines.push(
-            `${shownAddress(s.board)}${versions.length > 1 ? ` (${v.locale} · ${screenWords(v)})` : ""}`,
-            ...s.overflow.map((p) => `  ${p}`),
-          );
+    for (const one of each)
+      for (const [i, d] of one.drawn.entries()) {
+        const v = versions[i] as Version;
+        for (const s of d.shots) {
+          if (s.overflow.length > 0) {
+            problems += 1;
+            lines.push(
+              `${shownAddress(s.board)}${versions.length > 1 ? ` (${v.locale} · ${screenWords(v)})` : ""}`,
+              ...s.overflow.map((p) => `  ${p}`),
+            );
+          }
+          // Thumbnails of the first version: the others are checked, and their problems listed.
+          if (i === 0)
+            tiles.push({
+              picture: pictureOf(s),
+              labels: "none",
+              caption: s.board.split("/").at(-1) ?? s.board,
+            });
         }
-        // Thumbnails of the first version: the others are checked, and their problems listed.
-        if (i === 0)
-          tiles.push({
-            picture: pictureOf(s),
-            labels: "none",
-            caption: s.board.split("/").at(-1) ?? s.board,
-          });
       }
-    }
     const count = target.boards.length * versions.length;
     const images =
       tiles.length > 0 ? await compose(tiles, { kind: "grid", columns: 5, width: 160 }) : [];
@@ -673,6 +669,39 @@ export async function look(
     text: [text, ...otherProblems].join("\n"),
     images,
   };
+}
+
+/**
+ * Boards drawn one at a time, each alone on its screen, in each version: every board × version a
+ * drawing of its own, on up to `pages` pages at once. In the boards' order, each its versions'.
+ */
+async function drawBoards(
+  root: string,
+  boards: readonly string[],
+  versions: readonly Version[],
+  options: (v: Version) => ShotOptions,
+  lane: string,
+  pages = LOOK_PAGES,
+): Promise<{ board: string; drawn: Drawn[] }[]> {
+  const out = boards.map((board) => ({ board, drawn: new Array<Drawn>(versions.length) }));
+  const jobs = out.flatMap((o) => versions.map((v, i) => ({ o, v, i })));
+  let next = 0;
+  const worker = async (k: number) => {
+    for (let j = next++; j < jobs.length; j = next++) {
+      const { o, v, i } = jobs[j] as (typeof jobs)[number];
+      const d = await shoot(
+        root,
+        o.board,
+        options(v),
+        undefined,
+        k === 0 ? lane : `${lane}:b:${k}`,
+      );
+      for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
+      o.drawn[i] = d;
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(pages, jobs.length) }, (_, k) => worker(k)));
+  return out;
 }
 
 /** Each version drawn, at once, on up to LOOK_PAGES pages: the caller's own and pages of its own. */
@@ -786,7 +815,8 @@ export async function check(
   signal: AbortSignal,
 ): Promise<Answer> {
   const versions = versionsOf(a);
-  const jobs = target.units.flatMap((unit) => versions.map((v) => ({ unit, v })));
+  // One board on one screen: each board alone, in each version (never a lesson's boards stacked).
+  const jobs = target.boards.flatMap((board) => versions.map((v) => ({ board, v })));
   const wanted = new Set(target.boards);
   const found: { board: string; v: Version; problems: string[] }[] = [];
   const seen = new Set<string>();
@@ -804,12 +834,11 @@ export async function check(
         if (job === undefined) return;
         const d = await shoot(
           root,
-          job.unit,
+          job.board,
           {
             locale: job.v.locale,
             width: job.v.width,
             ...(job.v.height === undefined ? {} : { height: job.v.height }),
-            questions: true,
             play: a.play === true,
             speed: a.speed ?? DEFAULT_SPEED,
             // A check reads the layout; it shows no pictures.
@@ -835,7 +864,7 @@ export async function check(
   const badBoards = new Set(found.map((f) => f.board));
   const missing = total - seen.size;
   const lines = [
-    `${contentAddress(target.path)}: ${target.boards.length} boards · ${seen.size} drawings (${[...new Set(versions.map((v) => v.locale))].join(", ")} × ${[...new Set(versions.map((v) => screenWords(v)))].join(", ")}) · ${target.boards.length - badBoards.size} ok · ${badBoards.size} with problems${isCancelled ? ` · cancelled after ${done} of ${done + jobs.length} lessons` : ""}`,
+    `${contentAddress(target.path)}: ${target.boards.length} boards · ${seen.size} drawings (${[...new Set(versions.map((v) => v.locale))].join(", ")} × ${[...new Set(versions.map((v) => screenWords(v)))].join(", ")}) · ${target.boards.length - badBoards.size} ok · ${badBoards.size} with problems${isCancelled ? ` · cancelled after ${done} of ${done + jobs.length} drawings` : ""}`,
   ];
   if (missing > 0 && !isCancelled)
     lines.push(
