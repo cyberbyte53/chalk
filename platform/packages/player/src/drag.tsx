@@ -107,7 +107,11 @@ export function useDrags(): (spec: DragSpec, key?: Key) => DragAttrs {
   };
 
   return (spec, key) => {
-    const tags = says(spec.move, key);
+    // What it does: its move, and what letting go does (a drop), so both are the student's own.
+    const tags = says(
+      spec.release?.action === undefined ? spec.move : [spec.move, spec.release.action],
+      key,
+    );
     const id = tags["data-part"];
     if (spec.isOn === false) return { ...tags, "aria-disabled": "true" };
     return {
