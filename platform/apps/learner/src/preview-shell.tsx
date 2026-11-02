@@ -1275,12 +1275,20 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     const stop = bus.subscribe(keep);
     // What the lesson's rules did on the way: not recorded (each follows from the act that set it
     // off), but a tool reading what a step did shows it, in order with the rest.
-    const stopWatching = onBoardRunning((runtime) =>
-      runtime.onAction((r) => {
+    const stopWatching = onBoardRunning((runtime) => {
+      const offAction = runtime.onAction((r) => {
         if (r.cause !== undefined)
           keep({ kind: "cause", actor: "lesson", payload: { action: r.action, args: r.args } });
-      }),
-    );
+      });
+      // Which rule heard each signal, and what it chose: "nothing" is said too.
+      const offRule = runtime.onRule((r) =>
+        keep({ kind: "rule", actor: "lesson", payload: { rule: r.rule, did: r.did } }),
+      );
+      return () => {
+        offAction();
+        offRule();
+      };
+    });
     return () => {
       stop();
       stopWatching();

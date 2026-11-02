@@ -66,6 +66,9 @@ export class BoardRuntime {
   /** Bumped on every change: what views read, so they redraw. */
   private readonly version: Signal<number> = signal(0);
   private readonly signalListeners = new Set<(record: SignalRecord) => void>();
+  private readonly ruleListeners = new Set<
+    (record: { rule: string; did: readonly string[] }) => void
+  >();
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
   /** Each act's record number, by the board's act number. */
   private readonly acts = new Map<number, number>();
@@ -200,6 +203,10 @@ export class BoardRuntime {
       this.version.value++;
     });
     this.core.listen((event) => {
+      if (event.kind === "rule") {
+        for (const fn of this.ruleListeners) fn({ rule: event.rule, did: event.did });
+        return;
+      }
       const [piece = "", ...rest] = event.path.split("/");
       const prop = piece === "" ? BOARD : piece;
       const name = [...rest, event.kind === "ask" ? event.action : event.signal].join(".");
@@ -432,6 +439,12 @@ export class BoardRuntime {
   onSignal(listener: (record: SignalRecord) => void): () => void {
     this.signalListeners.add(listener);
     return () => this.signalListeners.delete(listener);
+  }
+
+  /** Each rule that heard a signal and ran, with what it asked for (none: it chose nothing). */
+  onRule(listener: (record: { rule: string; did: readonly string[] }) => void): () => void {
+    this.ruleListeners.add(listener);
+    return () => this.ruleListeners.delete(listener);
   }
 
   onAction(listener: (record: ActionRecord) => void): () => void {

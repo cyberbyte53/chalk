@@ -67,6 +67,18 @@ export type BoardEvent =
       readonly payload: Payload;
       /** The act it follows from. */
       readonly act: number;
+    }
+  | {
+      /**
+       * A rule that heard a signal ran (`board hears town.walker.stepped`): what it asked for, by
+       * kind, none when it decided to do nothing. So a step that "did nothing" says which rule heard
+       * it and chose nothing.
+       */
+      readonly kind: "rule";
+      readonly path: string;
+      readonly rule: string;
+      readonly did: readonly string[];
+      readonly act: number;
     };
 
 /** What waits in the queue: outs to do as the prop that queued them. */
@@ -409,12 +421,25 @@ export class Board {
       const rule = holder.def.hear?.[heard];
       if (rule === undefined) continue;
       const by = holder;
-      this.step(`${by.path || "board"} hears ${heard}`, () =>
-        this.apply(
-          by,
-          (rule as AnyFn)(this.reader(by) as never, data as never, this.tools(by) as never) as Outs,
-        ),
-      );
+      const name = `${by.path || "board"} hears ${heard}`;
+      this.step(name, () => {
+        const outs = (rule as AnyFn)(
+          this.reader(by) as never,
+          data as never,
+          this.tools(by) as never,
+        ) as Outs;
+        const list = outs === undefined || outs === false || outs === null ? [] : [outs].flat();
+        this.emit({
+          kind: "rule",
+          path: by.path,
+          rule: name,
+          did: (list as Out[]).map((o) =>
+            o.kind === "ask" ? o.action : o.kind === "tell" ? `tell ${o.signal}` : o.kind,
+          ),
+          act: this.act,
+        });
+        this.apply(by, outs);
+      });
     }
   }
 

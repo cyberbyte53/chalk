@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join, relative } from "node:path";
 import { PROPS_ROOT, contentAddress, shownAddress } from "@chalk/content/address";
 import { full } from "@chalk/content/words";
 import type { PartSnapshot } from "@chalk/prop";
@@ -1006,6 +1006,42 @@ async function witnessesOnScreen(
 
 // ---- play ----
 
+/**
+ * Where a rule hearing `heard` is written: the board's own (`board hears …`) in its lesson's or
+ * family's files; a prop's (`town hears …`) in the props' code. Found by the signal it hears, as the
+ * rule is keyed by it ("ground.walker.stepped": …); the first match, or nothing.
+ */
+function ruleSite(root: string, board: string, holder: string, heard: string): string | undefined {
+  const dirs =
+    holder === "board"
+      ? [
+          join(
+            root,
+            board.startsWith("content/") ? "" : "content",
+            board.split("/").slice(0, -1).join("/"),
+          ),
+        ]
+      : [join(root, "library", "props")];
+  const files: string[] = [];
+  const walk = (d: string) => {
+    if (!existsSync(d)) return;
+    for (const name of readdirSync(d)) {
+      const full = join(d, name);
+      if (name === "node_modules" || name.startsWith(".")) continue;
+      if (statSync(full).isDirectory()) walk(full);
+      else if (/\.tsx?$/.test(name) && !name.includes(".test.")) files.push(full);
+    }
+  };
+  for (const d of dirs) walk(d);
+  for (const file of files) {
+    const at = readFileSync(file, "utf8")
+      .split("\n")
+      .findIndex((l) => l.includes(`"${heard}"`));
+    if (at >= 0) return `${relative(root, file)}:${at + 1}`;
+  }
+  return undefined;
+}
+
 export type PlayArgs = {
   board: string;
   /** A reviewer's own play: what ran is recorded as seen in a review (not a replay by `changes`). */
@@ -1051,6 +1087,17 @@ function readEvent(e: string, locale: Locale): Event {
       extra: actor === "learner" ? "" : ` (${actor})`,
     };
   }
+  // A rule that heard a signal and chose to do nothing: said, so "nothing changed" has its reason.
+  if (kind === "rule" && typeof p.rule === "string") {
+    const did = Array.isArray(p.did) ? (p.did as string[]) : [];
+    return {
+      kind,
+      actor,
+      name: did.length === 0 ? `${p.rule} → nothing` : `${p.rule} → ${did.join(", ")}`,
+      data: undefined,
+      extra: "",
+    };
+  }
   if (kind === "signal" && typeof p.signal === "string")
     return { kind, actor, name: `signal ${p.signal}`, data: p.payload, extra: "" };
   return { kind, actor, name: `${kind} ${actor}`, data: payload, extra: "" };
@@ -1064,7 +1111,10 @@ const eventWords = (e: Event) =>
  * `movePoint ×7: {x: 4, y: 3} → {x: -2, y: 4}` and `signal moved ×7`, not fourteen lines.
  */
 export function eventLines(events: readonly string[], locale: Locale): string[] {
-  const read = events.map((e) => readEvent(e, locale));
+  // A rule that did something shows in what it did ("(lesson)"); only one that chose nothing is said.
+  const read = events
+    .map((e) => readEvent(e, locale))
+    .filter((e) => e.kind !== "rule" || e.name.endsWith("→ nothing"));
   // Actions and signals interleave (move, moved, move, moved…): fold each name's run on its own.
   const runs: { first: Event; last: Event; count: number }[] = [];
   for (const e of read) {
@@ -1147,7 +1197,18 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
     `${shownAddress(a.board)}   ${a.steps.length} step${a.steps.length === 1 ? "" : "s"} · ${screenWords(screen)} · ${o.locale}${o.speed === 1 ? " · real time" : Number.isFinite(o.speed) ? ` · clock ×${o.speed}` : ""}`,
   ];
   const drawnPlay = playDrawnOf(d);
-  lines.push(...playLines(a, drawnPlay));
+  // A rule that chose nothing, with where it is written, to open it.
+  const sites = new Map<string, string>();
+  lines.push(
+    ...playLines(a, drawnPlay).map((l) =>
+      l.replace(/(\S+) hears (\S+) → nothing/g, (whole, holder: string, heard: string) => {
+        const key = `${holder} ${heard}`;
+        if (!sites.has(key)) sites.set(key, ruleSite(root, a.board, holder, heard) ?? "");
+        const at = sites.get(key);
+        return at === "" ? whole : `${whole} (${at})`;
+      }),
+    ),
+  );
   const changedPieces = new Set(
     d.steps.flatMap((r) => Object.keys(r.changed ?? {}).map(pieceOfPath)),
   );
