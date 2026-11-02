@@ -47,7 +47,14 @@ import {
   shownOf,
 } from "../reach/shown";
 import { changesUnder, changesWords, passUnder } from "../reviewed";
-import { DEFAULT_LANE, type Step, previewBase, shoot, withNothingDrawing } from "./app-driver";
+import {
+  DEFAULT_LANE,
+  type Step,
+  previewBase,
+  shoot,
+  timed,
+  withNothingDrawing,
+} from "./app-driver";
 import { type Answer, check, drawShown, look, play, readReach, targetOf } from "./look";
 import { compose } from "./picture";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
@@ -362,20 +369,42 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     return playAnswer(a.text);
   };
 
+  /** A play whose first step didn't run (a part that isn't there): it shows nothing, now or ever. */
+  const isStale = (p: Played) => /^1\. .*didn't run/m.test(p.answer);
+
   /**
-   * Plays played again a few at once, on PLAY_PAGES pages (this connection's own and its
-   * helpers): each play's answer, in order. More at once isn't faster: each play taps and drags
-   * the real page, and they share one machine.
+   * Each board's plays as built now: a play's last answer is reused when nothing anything could
+   * read has changed since it was made (kept as "now", by the build's inputs); the rest are played
+   * again all together, on PLAY_PAGES pages, whatever board they are on, and kept.
    */
-  const playAllAgain = async (board: string, plays: readonly Played[]): Promise<string[]> => {
-    const out: string[] = new Array(plays.length);
+  const playsNow = async (
+    boards: readonly string[],
+    inputs: string,
+  ): Promise<Map<string, string[]>> => {
+    const out = new Map<string, string[]>();
+    const todo: { board: string; p: Played; i: number }[] = [];
+    for (const board of boards) {
+      const kept = playsOf(root, "seen", board).filter((p) => !isStale(p));
+      const last = playsOf(root, "now", board);
+      const answers: string[] = new Array(kept.length);
+      for (const [i, p] of kept.entries()) {
+        const reused = last.find((q) => sameCall(q, p) && q.inputs === inputs);
+        if (reused !== undefined) answers[i] = reused.answer;
+        else todo.push({ board, p, i });
+      }
+      out.set(board, answers);
+    }
     let next = 0;
     const worker = async (k: number) => {
-      for (let i = next++; i < plays.length; i = next++)
-        out[i] = await playAgain(board, plays[i] as Played, k === 0 ? lane : `${lane}:v:${k}`);
+      for (let j = next++; j < todo.length; j = next++) {
+        const { board, p, i } = todo[j] as (typeof todo)[number];
+        const answer = await playAgain(board, p, k === 0 ? lane : `${lane}:v:${k}`);
+        (out.get(board) as string[])[i] = answer;
+        keepPlayed(root, "now", board, { ...p, answer, inputs });
+      }
     };
     await Promise.all(
-      Array.from({ length: Math.min(PLAY_PAGES, plays.length) }, (_, k) => worker(k)),
+      Array.from({ length: Math.min(PLAY_PAGES, todo.length) }, (_, k) => worker(k)),
     );
     return out;
   };
@@ -469,6 +498,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           toCompare.map((c) => c.board),
           inputs,
         );
+        await progress("playing the review's plays again");
+        const playedNow = await timed("changes: replay plays", () =>
+          playsNow(
+            toCompare.map((c) => c.board),
+            inputs,
+          ),
+        );
         for (const c of changed) {
           // What a reviewer last saw of it: its drawing (shown without steps) and its plays.
           const passed = shownOf(root, "seen", c.board);
@@ -477,11 +513,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             seen.set(c.board, ["shows: no reviewer has shown it on this machine yet: show it"]);
             continue;
           }
-          const diffs = shownDiffs(passed, drawnNow);
+          const diffs = await timed("changes: compare pictures", async () =>
+            shownDiffs(passed, drawnNow),
+          );
           // A reviewer's plays on it, played again: the first step of each that answers differently.
           const plays: string[] = [];
-          const kept = playsOf(root, "seen", c.board);
-          const again = await playAllAgain(c.board, kept);
+          const kept = playsOf(root, "seen", c.board).filter((p) => !isStale(p));
+          const again = playedNow.get(c.board) ?? [];
           for (const [i, p] of kept.entries()) {
             const differs = playDiff(p.answer, again[i] ?? "");
             if (differs !== undefined)
@@ -786,12 +824,19 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           );
           // A reviewer's play on the jumping clock is what it saw: kept for `changes` to play again
           // once the board changes (reach/shown.ts). A fixer's isn't: it would hide a change.
-          if (ROLE === Role.Reviewer && args.speed === undefined && args.frames === undefined)
+          // A play whose first step didn't run (a part that isn't there) shows nothing: not kept.
+          const playedAnswer = playAnswer(played.text);
+          if (
+            ROLE === Role.Reviewer &&
+            args.speed === undefined &&
+            args.frames === undefined &&
+            !/^1\. .*didn't run/m.test(playedAnswer)
+          )
             keepPlayed(root, "seen", board, {
               steps: onBoard,
               ...(one.locale === undefined ? {} : { locale: one.locale }),
               ...(one.screen === undefined ? {} : { screen: one.screen }),
-              answer: playAnswer(played.text),
+              answer: playedAnswer,
               inputs: buildInputsKey(root),
             });
           return answer(played, notes);

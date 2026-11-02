@@ -151,7 +151,7 @@ export type Shot = {
  * seconds spent in each, summed over every drawing since it was switched on. Off, it costs nothing.
  */
 export const timing = { isOn: false, spent: new Map<string, number>() };
-async function timed<T>(phase: string, fn: () => Promise<T>): Promise<T> {
+export async function timed<T>(phase: string, fn: () => Promise<T>): Promise<T> {
   if (!timing.isOn) return fn();
   const t = performance.now();
   try {
@@ -974,7 +974,7 @@ async function takeRan(lane: string) {
  * next review, so never a reason for a call to fail.
  */
 async function recordRan(root: string, board: string, lane: string): Promise<void> {
-  const coverage = await takeRan(lane);
+  const coverage = await timed("coverage: take", () => takeRan(lane));
   const at = lanes.get(lane);
   if (at === undefined) return;
   at.isTaken = true;
@@ -985,7 +985,10 @@ async function recordRan(root: string, board: string, lane: string): Promise<voi
     return;
   }
   try {
-    addRan(root, path, readerOf(at, root).linesOf(coverage));
+    const lines = await timed("coverage: to lines", async () =>
+      readerOf(at, root).linesOf(coverage),
+    );
+    await timed("coverage: write", async () => addRan(root, path, lines));
   } catch {
     // only a hint
   }

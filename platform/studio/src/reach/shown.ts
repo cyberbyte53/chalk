@@ -191,7 +191,10 @@ export function shownDiffs(passed: Shown, now: Shown): VersionDiff[] {
     if (was === undefined) continue;
     const [a, b] = [linesOf(was.read), linesOf(v.read)];
     const read = [...new Set([...a.keys(), ...b.keys()])].filter((k) => a.get(k) !== b.get(k));
-    const picture = comparePngs(was.png, v.png, v.boxes, v.scale);
+    // The same bytes are the same picture: nothing to compare pixel by pixel.
+    const picture = was.png.equals(v.png)
+      ? undefined
+      : comparePngs(was.png, v.png, v.boxes, v.scale);
     if (read.length === 0 && picture === undefined) continue;
     out.push({
       version: v.version,
