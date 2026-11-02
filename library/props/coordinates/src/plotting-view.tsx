@@ -1,3 +1,4 @@
+import type { Locale } from "@chalk/content";
 import { SymbolButton } from "@chalk/draw";
 import { type PropView, useDrags } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
@@ -109,6 +110,10 @@ function NextDot({ s, px }: { s: PlottingView; px: FramePixels }): JSX.Element |
   );
 }
 
+/** A scale in the book's words: "1 square = 2 units". */
+const scaleWords = (every: number, locale: Locale) =>
+  `${word(WORDS.oneSquare, locale)} ${num(every)} ${word(every === 1 ? WORDS.unit : WORDS.units, locale)}`;
+
 /** The plotting layer's drawing: the table, the dots plotted, the next pair, the scales. */
 export const plottingDrawing = drawing(plotting, {
   above: ({ s, locale }) =>
@@ -153,8 +158,8 @@ export const plottingDrawing = drawing(plotting, {
       {s.scaleChoices.map((every, i) => (
         <SymbolButton
           key={i}
-          symbol={`${word(WORDS.scale, locale)} ${num(every)}`}
-          label={`${word(WORDS.scale, locale)} ${num(every)}`}
+          symbol={scaleWords(every, locale)}
+          label={scaleWords(every, locale)}
           isWide
           isOn={s.tickEvery === every}
           {...does(actions.chooseScale, { every }, i)}

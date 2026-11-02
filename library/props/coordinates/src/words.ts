@@ -15,7 +15,10 @@ export const WORDS = {
   blackboard: { en: "Blackboard", hi: "श्यामपट" },
   throw: { en: "Throw", hi: "फेंको" },
   newGame: { en: "New game", hi: "नया खेल" },
-  scale: { en: "A mark every", hi: "हर निशान" },
+  /** A scale, as the book writes it (1 cm = 1 unit): one square of the paper, and what it stands for. */
+  oneSquare: { en: "1 square =", hi: "1 खाना =" },
+  unit: { en: "unit", hi: "इकाई" },
+  units: { en: "units", hi: "इकाई" },
   up: { en: "Up", hi: "ऊपर" },
   down: { en: "Down", hi: "नीचे" },
   left: { en: "Left", hi: "बाएँ" },

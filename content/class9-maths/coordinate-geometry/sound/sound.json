@@ -21,6 +21,13 @@
       "seconds": 5.805
     },
     {
+      "file": "eba72f85cb891dde.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "1 unit to a square: minus 2, 8 and minus 1, 7 are off the paper. Too small a unit.",
+      "seconds": 6.258
+    },
+    {
       "file": "0c30256d645827dc.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -28,11 +35,25 @@
       "seconds": 6.212
     },
     {
+      "file": "07c879d80f08053d.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "4 units to a square: everything fits, but the dots crowd near O and minus 1.25 is hard to place. Too big a unit.",
+      "seconds": 7.721
+    },
+    {
       "file": "421a7a740de22c8c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "5, 0 and 0, 5; 5, 2 and 2, 5; minus 3, 5 and 5, minus 3 are at different places. If x is not equal to y, x, y and y, x are different points: the order matters, so x, y is called an ordered pair. Only when x equals y, as in 3, 3, is the swap the same point.",
       "seconds": 23.07
+    },
+    {
+      "file": "ebd2e67a2c18c62f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "8 units in 4 squares: 8 divided by 4 is 2 units to a square. Tap 1 square equals 2 units, then plot the table.",
+      "seconds": 8.127
     },
     {
       "file": "1312c0d36dce3b25.m4a",
@@ -217,6 +238,13 @@
       "seconds": 3.518
     },
     {
+      "file": "c645802920f603f5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "At least how many units must one square stand for, so that 8 fits in the 4 squares above O?",
+      "seconds": 5.55
+    },
+    {
       "file": "d7f8c7a68498a62c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -392,11 +420,18 @@
       "seconds": 19.134
     },
     {
-      "file": "0096fa8b07aefb7e.m4a",
+      "file": "2cae5f239dbdea31.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Every point fits once each mark stands for 2 units. A scale is chosen from the table: the largest number has to fit on the plane.",
-      "seconds": 7.559
+      "words": "Every point fits. Now tap 1 square equals 1 unit, then 1 square equals 4 units, and watch the dots.",
+      "seconds": 7.117
+    },
+    {
+      "file": "f63b6bc772bb95c7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Everything would fit, but that isn't the least: 8 units would take only 2 of the 4 squares.",
+      "seconds": 5.329
     },
     {
       "file": "ad45b4f598d344de.m4a",
@@ -707,6 +742,13 @@
       "seconds": 8.453
     },
     {
+      "file": "4af758c9ba468918.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Now Exercise 3.3's table, on a paper with 4 squares above O. Its highest point, minus 2, 8, is 8 up. Before plotting, choose the units.",
+      "seconds": 9.939
+    },
+    {
       "file": "0a80437d3bf07550.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -726,13 +768,6 @@
       "locale": "en",
       "words": "Now the dot is yours: drag it anywhere on the page, and read how far it is from the left edge and from the bottom.",
       "seconds": 6.305
-    },
-    {
-      "file": "a2fe7a498126c6c2.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Now this table. With one unit to each mark, minus 2, 8 and minus 1, 7 don't fit on the plane. Choose a scale where each mark stands for more units, so every point fits; then plot them.",
-      "seconds": 11.448
     },
     {
       "file": "6ddc763159ffbf53.m4a",
@@ -1813,6 +1848,13 @@
       "seconds": 5.62
     },
     {
+      "file": "924a1e889c7aa91c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The dots never moved: minus 2, 8 is minus 2, 8 at every scale; only the drawing changed. A suitable unit is the smallest one that fits every point: here, 1 square equals 2 units.",
+      "seconds": 11.808
+    },
+    {
       "file": "4c0cf14e82ca40b3.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -2000,6 +2042,13 @@
       "locale": "en",
       "words": "Their town has a main road, and the streets leave it numbered 1, 2, 3, and so on, from Riya's corner: like a number line. Move her along it with the right arrow.",
       "seconds": 9.683
+    },
+    {
+      "file": "75b7421f10e98ff7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Then 8 units need 8 squares, and the paper has only 4 above O: minus 2, 8 and minus 1, 7 would fall off it.",
+      "seconds": 7.419
     },
     {
       "file": "aa97b056f648ac98.m4a",
@@ -2275,6 +2324,13 @@
       "seconds": 6.502
     },
     {
+      "file": "464ac493ea70c51a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "4 खानों में 8 इकाई: 8 भाग 4 बराबर 2 इकाई एक खाने में। 1 खाना बराबर 2 इकाई दबाओ, फिर सारणी आलेखित करो।",
+      "seconds": 9.857
+    },
+    {
       "file": "f58ebe06498f2bca.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2287,6 +2343,13 @@
       "locale": "hi",
       "words": "5, 0 और 0, 5; 5, 2 और 2, 5; माइनस 3, 5 और 5, माइनस 3 अलग-अलग जगहों पर हैं। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स अलग बिंदु हैं: क्रम मायने रखता है, इसलिए एक्स, वाई को क्रमित युग्म कहते हैं। केवल जब एक्स बराबर वाई, जैसे 3, 3 में, तब उलटा जोड़ा वही बिंदु है।",
       "seconds": 31.255
+    },
+    {
+      "file": "fdcce41c078c7b26.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "8 को O के ऊपर के 4 खानों में लाने के लिए एक खाना कम से कम कितनी इकाई का होना चाहिए?",
+      "seconds": 7.025
     },
     {
       "file": "240d4f79852d18a1.m4a",
@@ -2597,18 +2660,18 @@
       "seconds": 7.593
     },
     {
+      "file": "6277aa5ccb678175.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अब प्रश्नावली 3.3 की सारणी, ऐसे कागज़ पर जिसमें O के ऊपर 4 खाने हैं। उसका सबसे ऊँचा बिंदु, माइनस 2, 8, 8 ऊपर है। आलेखित करने से पहले इकाई चुनो।",
+      "seconds": 14.85
+    },
+    {
       "file": "c8812ce703346aea.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "अब बिंदु तुम्हारा है: उसे पन्ने पर कहीं भी खींचो, और पढ़ो कि वह बाएँ किनारे से और नीचे के किनारे से कितनी दूर है।",
       "seconds": 8.418
-    },
-    {
-      "file": "6d92c10a7ffdc8c6.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "अब यह सारणी। हर निशान पर एक इकाई से माइनस 2, 8 और माइनस 1, 7 तल पर नहीं आते। ऐसा पैमाना चुनो जिसमें हर निशान ज़्यादा इकाइयों का हो, ताकि हर बिंदु आ जाए; फिर उन्हें आलेखित करो।",
-      "seconds": 15.674
     },
     {
       "file": "dce7c532f69ffe86.m4a",
@@ -2798,6 +2861,20 @@
       "locale": "hi",
       "words": "उसकी चाल, 4 बाईं ओर और 2 ऊपर, तुम्हारे बिंदु पर ख़त्म होती है: R है बिंदु माइनस 4, 2, दूसरे चतुर्थांश में।",
       "seconds": 10.38
+    },
+    {
+      "file": "670d73a3e6273c8c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक खाने में 1 इकाई: माइनस 2, 8 और माइनस 1, 7 कागज़ से बाहर हैं। इकाई बहुत छोटी।",
+      "seconds": 8.673
+    },
+    {
+      "file": "bb5ad84a09c1f4c2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक खाने में 4 इकाई: सब आ जाता है, पर बिंदु O के पास भिड़ जाते हैं और माइनस 1.25 को रखना कठिन है। इकाई बहुत बड़ी।",
+      "seconds": 10.229
     },
     {
       "file": "1b4a7759692bde61.m4a",
@@ -3155,6 +3232,13 @@
       "locale": "hi",
       "words": "डेस्क: स्तंभ 5 आड़े, फिर आगे से पंक्ति 3 ऊपर।",
       "seconds": 4.586
+    },
+    {
+      "file": "1ee1d52400564c31.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "तब 8 इकाई को 8 खाने चाहिए, और कागज़ पर O के ऊपर केवल 4 हैं: माइनस 2, 8 और माइनस 1, 7 उससे बाहर गिर जाएँगे।",
+      "seconds": 10.798
     },
     {
       "file": "16fa589e2726540d.m4a",
@@ -3645,6 +3729,13 @@
       "locale": "hi",
       "words": "बिंदु एक्स, वाई लिखा जाता है, एक्स पहले।",
       "seconds": 3.901
+    },
+    {
+      "file": "ef9b94de3e89bdf6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु कभी नहीं हिले: हर पैमाने पर माइनस 2, 8, माइनस 2, 8 ही है; केवल चित्र बदला। उचित इकाई वह सबसे छोटी इकाई है जिसमें हर बिंदु आ जाए: यहाँ, 1 खाना बराबर 2 इकाई।",
+      "seconds": 14.908
     },
     {
       "file": "fb63ebe9a2c10763.m4a",
@@ -4431,6 +4522,13 @@
       "seconds": 1.579
     },
     {
+      "file": "e1ff4b413efb997c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "सब आ जाएगा, पर यह सबसे कम नहीं: 8 इकाई 4 में से केवल 2 खाने लेगी।",
+      "seconds": 6.119
+    },
+    {
       "file": "32af33f9364d0062.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -4473,18 +4571,18 @@
       "seconds": 2.322
     },
     {
-      "file": "d5e76ae792ce365d.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "हर निशान 2 इकाई का होते ही हर बिंदु आ जाता है। पैमाना सारणी देखकर चुना जाता है: सबसे बड़ी संख्या तल पर आनी चाहिए।",
-      "seconds": 9.381
-    },
-    {
       "file": "6fb7afbf5096f780.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "हर बार दो रेखाओं ने काम किया",
       "seconds": 2.508
+    },
+    {
+      "file": "4acb5af4cfa2c1be.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "हर बिंदु आ गया। अब 1 खाना बराबर 1 इकाई दबाओ, फिर 1 खाना बराबर 4 इकाई, और बिंदुओं को देखो।",
+      "seconds": 8.557
     }
   ]
 }
