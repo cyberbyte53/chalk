@@ -10149,7 +10149,7 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:122
   commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
-  turn: person
+  turn: agent
   text: "Overlap reached by the cmvz6l85s5pk fix (Riya's name now drawn at her feet below the x-axis).
     Played at 360: down 1, then left 6 to (−6, −1), a natural way to walk toward Q. Her name at her
     feet lands right on the x-axis number row and runs into −5 and −4, so it can't be read (\"Riya\"
@@ -10213,6 +10213,28 @@
         that clashes with no other words on the plane (points' names, the axes' end names and
         numbers) and stays inside the frame. Drawn at (−4, −1), (−5, −1) and (−6, −1) on the 360
         phone: \"Riya\" over her head each time, clear of Q, X′ and the numbers, inside the plane."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:39:53.016Z
+      text: >-
+        Mostly fixed, still wrong in two places on the 360 phone. Played down 1, then left 6 to (−6,
+        −1), then down to Q, in English and Hindi: at (−4, −1), (−5, −1) and (−6, −1) her name is
+        over her head, clear of Q, X′ and the numbers, and at Q it sits below her. That part is
+        confirmed. Then I played up 3 and right 4 to P (English), and right 4 and up 3 to P (Hindi):
+
+        1. English, at (3, 3): the name is pushed up against the y-axis's end name and reads as one
+        word, "YRiya". The overlap test lets two words touch: they need a gap of a few pixels
+        between them.
+
+        2. Hindi, at (−1, −1): "रिया" is drawn right of her, over where the axes cross, between O
+        and the y-axis. It hides the origin and the start of her trail. (English at the same spot
+        puts the name below-left, which is clear.) The places tried need to keep off the axis lines
+        near O as well as off other words, and fall back to the next place when they don't.
+
+        A smaller one, Hindi at (4, 2): the name sits on P's dashed guide line with the dashes
+        running through it. It can still be read. A gap from lines would fix it too.
+
+        Mechanical (overlap).
 - id: cmvzag9gyyrr
   status: ready
   by: reviewer
@@ -10286,20 +10308,6 @@
     button answers. Mechanical: keep each equation from breaking (no-break spaces round \"=\" in y =
     0 and x = 0), as was done for the sign patterns in cmvzag9gyyrr. Worth doing in all the lesson's
     text, not just this box."
-  messages:
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T13:34:48.307Z
-      text: No-break spaces around "=" in every x = … and y = … in the lesson's text and its three
-        question families.
-      status: planned
-      commit: a96880b18229aebe02f554977dd8b66a64d3d4b0
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T13:34:48.732Z
-      text: "40 of them joined: 28 in the lesson, 12 in the families' notes and prompts. \"y = 0\" and
-        \"x = 0\" can no longer split across a line."
-      status: ready
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
     - content/class9-maths/coordinate-geometry/questions/fig-3-14/family.ts
@@ -10322,4 +10330,33 @@
       - class9-maths/coordinate-geometry/questions/tap-the-desk
       - class9-maths/coordinate-geometry/questions/tap-the-part
       - class9-maths/coordinate-geometry/questions/walk-to-address
-  turn: person
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:34:48.307Z
+      text: No-break spaces around "=" in every x = … and y = … in the lesson's text and its three
+        question families.
+      status: planned
+      commit: a96880b18229aebe02f554977dd8b66a64d3d4b0
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:34:48.732Z
+      text: "40 of them joined: 28 in the lesson, 12 in the families' notes and prompts. \"y = 0\" and
+        \"x = 0\" can no longer split across a line."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:39:53.141Z
+      text: >-
+        The box this thread was about is fixed. In English and Hindi at 360, onY ends "which points
+        have both / y = 0 and x = 0?" with each equation whole. onX and atO are whole too. The "x =
+        −6 और y = −2" in abscissa-and-ordinate's ask now stays together in Hindi.
+
+        Not every equation was joined, though. The two helpers that write the wrong-answer notes
+        still use plain spaces: overview.ts:64–65 (slipsOf, "so x = ${shown(x)}, written first") and
+        overview.ts:527–528 (onAxis, "so ${zero} = 0"). They write the "y first" note for every
+        point on reading-points (B, M, L, S), find-the-point (H…) and points-on-axes (B, C, E). None
+        of these broke on the notes I played at 360, but which ones break depends on each point's
+        name and number, and the fix said every one was joined. Mechanical: the same no-break spaces
+        in those four template lines.
+  turn: agent

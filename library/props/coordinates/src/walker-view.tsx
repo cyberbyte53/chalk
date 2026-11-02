@@ -141,10 +141,13 @@ function WalkerShown({
     const svg = el?.ownerSVGElement;
     if (el === null || svg === null || svg === undefined) return;
     const frame = svg.getBoundingClientRect();
-    const others = [...svg.querySelectorAll("text")]
+    // Every other word on the plane, and the axes' lines and a point's dashed guides: her name
+    // keeps a few pixels from each, so it neither touches a word nor sits on a line.
+    const others = [...svg.querySelectorAll("text, line.cp-axis, line.cp-drop")]
       .filter((t) => t !== el)
       .map((t) => t.getBoundingClientRect())
-      .filter((r) => r.width > 0);
+      .filter((r) => r.width > 0 || r.height > 0);
+    const GAP_PX = 4;
     const side = size * 0.55;
     const first: [number, number, string] = [
       nameLeft ? -side : side,
@@ -168,7 +171,11 @@ function WalkerShown({
       r.top < frame.top ||
       r.bottom > frame.bottom ||
       others.some(
-        (o) => r.left < o.right && o.left < r.right && r.top < o.bottom && o.top < r.bottom,
+        (o) =>
+          r.left - GAP_PX < o.right &&
+          o.left < r.right + GAP_PX &&
+          r.top - GAP_PX < o.bottom &&
+          o.top < r.bottom + GAP_PX,
       );
     for (const [px_, py, anchor] of places) {
       el.setAttribute("x", `${px_}`);

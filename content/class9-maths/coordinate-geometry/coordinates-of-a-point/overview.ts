@@ -61,8 +61,8 @@ function slipsOf(name: string, x: number, y: number): Slip[] {
   return [
     {
       pair: pairOf(y, x),
-      en: `That is y first. ${name} is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x = ${shown(x)}, written first.`,
-      hi: `यह y पहले है। ${name}, y-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए x = ${shown(x)}, जो पहले लिखा जाता है।`,
+      en: `That is y first. ${name} is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x\u00a0=\u00a0${shown(x)}, written first.`,
+      hi: `यह y पहले है। ${name}, y-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए x\u00a0=\u00a0${shown(x)}, जो पहले लिखा जाता है।`,
       enSays: `That is y first. ${name} is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x is ${said(x, "minus")}, written first.`,
       hiSays: `यह वाई पहले है। ${name}, वाई-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए एक्स ${said(x, "माइनस")} है, जो पहले लिखा जाता है।`,
     },
@@ -524,7 +524,7 @@ const onAxis = (
   return [
     {
       pair: swappedPair,
-      en: `That is y first. ${name} is on the ${axis}-axis, so ${zero} = 0, written ${zero === "x" ? "first" : "second"}.`,
+      en: `That is y first. ${name} is on the ${axis}-axis, so ${zero}\u00a0=\u00a00, written ${zero === "x" ? "first" : "second"}.`,
       hi: `यह y पहले है। ${name}, ${axis}-अक्ष पर है, इसलिए ${zero} = 0, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
       enSays: `That is y first. ${name} is on the ${axis}-axis, so ${zero} is 0, written ${zero === "x" ? "first" : "second"}.`,
       hiSays: `यह वाई पहले है। ${name}, ${axis === "x" ? "एक्स" : "वाई"}-अक्ष पर है, इसलिए ${zeroSaid} 0 है, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
