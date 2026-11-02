@@ -232,7 +232,7 @@ export const fig314 = family({
       plane.setup({
         plane: {
           // L at y\u00a0=\u00a05 and E, C at y\u00a0=\u00a0−5 a unit clear of the axes' ends.
-          window: { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 },
+          window: { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 7.5 },
           marks: Marks.Numbers,
           numbered: ["x", "y"],
           hasGrid: true,

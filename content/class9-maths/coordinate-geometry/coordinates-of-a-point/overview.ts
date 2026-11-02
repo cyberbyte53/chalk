@@ -21,7 +21,7 @@ const GRAPH = { xMin: -7.5, xMax: 6.5, yMin: -4.5, yMax: 4.5 };
 /** Fig. 3.11 and 3.12: −5 to 5 each way. */
 const FIVE = { xMin: -5.5, xMax: 5.5, yMin: -5.5, yMax: 5.5 };
 /** Fig. 3.14: D at x = 6, L at y = 5, E and C at y = −5, each a unit clear of the axes' end names. */
-const FIG_3_14 = { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 };
+const FIG_3_14 = { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 7.5 };
 
 /** The axes as the last lesson left them: numbered, O at the crossing, the directions named. */
 const AXES = {
@@ -525,7 +525,7 @@ const onAxis = (
     {
       pair: swappedPair,
       en: `That is y first. ${name} is on the ${axis}-axis, so ${zero}\u00a0=\u00a00, written ${zero === "x" ? "first" : "second"}.`,
-      hi: `यह y पहले है। ${name}, ${axis}-अक्ष पर है, इसलिए ${zero} = 0, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
+      hi: `यह y पहले है। ${name}, ${axis}-अक्ष पर है, इसलिए ${zero}\u00a0=\u00a00, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
       enSays: `That is y first. ${name} is on the ${axis}-axis, so ${zero} is 0, written ${zero === "x" ? "first" : "second"}.`,
       hiSays: `यह वाई पहले है। ${name}, ${axis === "x" ? "एक्स" : "वाई"}-अक्ष पर है, इसलिए ${zeroSaid} 0 है, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
     },

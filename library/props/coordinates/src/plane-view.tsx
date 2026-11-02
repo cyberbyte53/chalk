@@ -445,7 +445,7 @@ export function QuadrantNumerals({ s, px }: { s: PlaneView; px: FramePixels }): 
               {q}
             </text>
             {s.showQuadrantSigns && (
-              <text class="cp-signs" x={cx} y={cy + 20} text-anchor="middle">
+              <text class="cp-signs" x={cx} y={cy + 24} text-anchor="middle">
                 {SIGNS[q]}
               </text>
             )}

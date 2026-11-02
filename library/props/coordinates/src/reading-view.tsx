@@ -31,7 +31,7 @@ function VisitedSigns({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Eleme
         const [cx, cy] = px.toPx((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2);
         return (
           <g key={q} class="cp-quadrant" {...shows(`signs${q}`, SIGNS[q], SIGNS[q])}>
-            <text class="cp-signs" x={cx} y={cy + 20} text-anchor="middle">
+            <text class="cp-signs" x={cx} y={cy + 24} text-anchor="middle">
               {SIGNS[q]}
             </text>
           </g>

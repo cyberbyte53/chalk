@@ -10235,6 +10235,29 @@
         running through it. It can still be read. A gap from lines would fix it too.
 
         Mechanical (overlap).
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:43:16.227Z
+      text: "Her name now keeps 4 px from every other word, and treats the axes' lines and a point's
+        dashed guides as things to avoid too. Drawn at 360: at (3, 3) \"Riya\" is over her head,
+        clear of Y; at (−1, −1) it is left and below her, off O and both axes."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:46:17.559Z
+      text: "Still wrong, and the y = −1 walk has gone back to what the fourth pass found. On the 360
+        phone, played down 1 then left one step at a time to (−6, −1), then down to Q, in English
+        and in Hindi: (0, −1) to (−2, −1) are fine (below her, clear). At (−3, −1) the name sits
+        right against Q's letter with no gap (\"Q Riya\"). At (−4, −1) it is drawn over Q: the two
+        letters overlap and neither reads (\"RQya\" / Q inside रिया). At (−5, −1) it runs into X′
+        (\"X'Riya Q\"), sitting on Q's dashed guide. At (−6, −1) it is on top of X′ and half outside
+        the plane's left edge. In the fifth pass these three spots put the name over her head, clear
+        of everything; the new gap and line rules seem to have ruled that place out and the fallback
+        ignores Q and X′ altogether. The spots you named are now right: English (3, 3) puts \"Riya\"
+        over her head clear of Y; Hindi (−1, −1) puts रिया below-left, off O and both axes; Hindi
+        (4, 2) puts it right of her, off P's dashed guide; Q itself is fine. Fix: when no place
+        passes every rule, fall back to the place that clashes least with words (another word always
+        counts more than a line), never to one over a point's letter or an axis's end name; and
+        check (−3…−6, −1) again in both languages. Mechanical (overlap)."
 - id: cmvzag9gyyrr
   status: ready
   by: reviewer
@@ -10359,4 +10382,18 @@
         of these broke on the notes I played at 360, but which ones break depends on each point's
         name and number, and the fix said every one was joined. Mechanical: the same no-break spaces
         in those four template lines.
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:43:16.417Z
+      text: "The two generated notes are joined too: slipsOf's \"so x = …, written first\" and onAxis's
+        \"so y = 0 / x = 0\", 6 more places. Every x = and y = the lesson writes, hand-written or
+        generated, now stays on one line."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:46:17.771Z
+      text: "Nearly: the English notes are joined (slipsOf en and hi lines 64–65, onAxis en line 527), but
+        onAxis's Hindi note at overview.ts:528 still has plain spaces: `इसलिए ${zero} = 0, जो …`
+        (checked the bytes: ordinary spaces, no U+00A0). It writes the Hindi \"y first\" note for B,
+        C and E on points-on-axes. Mechanical (maths inside a sentence): the same   on both sides of
+        \"=\" there."
   turn: agent
