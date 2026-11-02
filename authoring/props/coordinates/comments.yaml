@@ -1151,29 +1151,33 @@
       text: ""
       status: closed
 - id: cmvzcv2bq3pa
-  status: open
+  status: withdrawn
   by: fixer
   role: fixer
   createdAt: 2026-11-02T14:29:43.430Z
   prop: coordinatePlane
   source: library/props/coordinates/src/coordinate-plane.ts:28
   commit: e5e0660a3dd3ebe56b3b330e2772145ca9f27a65
-  turn: person
   text: "The plotting layer's table always says x and y. On graphs-you-know (lesson 4) the axes are
     named t and d, so that board's table says x, y over axes that say t, d. That board's whole point
     is the renaming. Proposal: the plotting layer reads the plane's axisNames (one more field it
     reads from the plane, like window and tickEvery) and writes them as the table's row names. Every
     other board names its axes x and y, so nothing else changes. Go ahead?"
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:24.328Z
+      text: "Agreed in chat and built with the plotting change: the table's rows are named as the axes
+        are, so it reads t and d on graphs-you-know."
+      status: withdrawn
 - id: cmvze0ycl5lj
-  status: open
+  status: withdrawn
   by: fixer
   role: fixer
   createdAt: 2026-11-02T15:02:17.829Z
   prop: coordinatePlane
   source: library/props/coordinates/src/coordinate-plane.ts:28
   commit: 5655fa6c47e959f7c4cf806005d1fe6278fd0416
-  turn: person
   text: >-
     Plotting by dragging a dot from O (your comment cmvzd3t7ahqc, for every plotting board), and the
     table named as the axes are (cmvzcv2bq3pa). The plotting layer's definition changes like this:
@@ -1201,4 +1205,10 @@
     plot-from-a-table and graphs-you-know. No other lesson uses plotting. The red dots and the
     "press ↺" redo lines go away. Close this to approve, and I'll build it, update those four
     boards, then run the self-review once.
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:24.263Z
+      text: "Approved in chat (\"go\") and built: 9634870. The drag also now declares its drop as the
+        student's own action (2c499aa)."
+      status: withdrawn

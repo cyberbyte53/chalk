@@ -10523,7 +10523,7 @@
       text: ""
       status: closed
 - id: cmvzcuyktt3z
-  status: open
+  status: withdrawn
   by: fixer
   role: fixer
   createdAt: 2026-11-02T14:29:38.573Z
@@ -10531,16 +10531,21 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:85
   commit: e5e0660a3dd3ebe56b3b330e2772145ca9f27a65
-  turn: person
   text: "flow.md says this board marks the right angle at A (and at B, as in Fig. 3.15). The plane
     can't draw a right-angle mark yet. Riya's walk shows the turn, and A and B are named, but there
     is no little square at the corner. Options: (a) add a right-angle mark to the plane, as a
     point's option (needs a prop thread and change), or (b) drop it from flow.md's Needs, since the
     walk already shows the turn. I'd go with (b): the turn is what matters here, and the walk shows
     it."
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:24.394Z
+      text: "Agreed in chat: option (b). flow.md no longer asks for the right-angle mark (approved
+        again)."
+      status: withdrawn
 - id: cmvzczgdqqpi
-  status: open
+  status: ready
   by: you
   role: person
   createdAt: 2026-11-02T14:33:08.270Z
@@ -10548,12 +10553,27 @@
   target: check/plotting/plotAt
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:161
   commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
-  turn: agent
+  turn: person
   text: when we are allowed to tap anywhere we should also be able to go there no , even if that is
     not (-4,2)
-  messages: []
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:23.843Z
+      text: "Agreed in chat: Riya walks to wherever R is dropped, and where she stands is written, so a
+        wrong drop shows its own address."
+      status: planned
+      commit: 7e3daad1fbd8da2743f9a76a5bf322c8836f6361
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:23.958Z
+      text: "Done. R snaps to whole squares on this board. A drop anywhere makes Riya walk there from O,
+        with 'Riya: (2, −4)' written beside her, and the line says that isn't R and how to reach R.
+        Dropped on (−4, 2), she walks there and the board passes."
+      status: ready
 - id: cmvzd3t7ahqc
-  status: open
+  status: ready
   by: you
   role: person
   createdAt: 2026-11-02T14:36:31.510Z
@@ -10563,15 +10583,31 @@
   snapshot: x5025−35−363y05525−3−513 −6−5−4−3−2−1123456−6−5−4−3−2123456OXX′YY′(−4, 5)(−4, 2.75)(−6,
     5.25) (5, 2) ↺
   commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
-  turn: agent
+  turn: person
   text: i accidenlty tapped so many wrong points and then they are there permanently , better way to
     do will br a point starting from origin and dragging to desired place and it changes color to
     green and our job is done
+  changed: []
   messages:
     - by: you
       role: person
       at: 2026-11-02T14:37:49.056Z
       text: this applies for all the boards of this flavor
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:24.069Z
+      text: "Agreed in chat: a dot dragged from O on every plotting board; green and kept when right;
+        nothing kept when wrong."
+      status: planned
+      commit: 7e3daad1fbd8da2743f9a76a5bf322c8836f6361
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T15:16:24.176Z
+      text: Done on all four plotting boards (the prop change is cmvze0ycl5lj). The next pair's dot waits
+        at O. Dropped where the pair says, it turns green and stays, and the next dot appears at O.
+        Dropped anywhere else, it stays there to be dragged again, nothing is kept, and a hint says
+        x first, then y. No more red dots and no redo.
+      status: ready
 - id: cmvzd9hby456
   status: closed
   by: you
