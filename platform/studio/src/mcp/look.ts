@@ -704,7 +704,9 @@ async function drawBoards(
 ): Promise<{ board: string; drawn: Drawn[] }[]> {
   // Stopped by `signal`, a drawing not made is a hole here: only a check stops, and reads around it.
   const out = boards.map((board) => ({ board, drawn: new Array<Drawn>(versions.length) }));
-  const jobs = out.flatMap((o) => versions.map((v, i) => ({ o, v, i })));
+  // Version by version (every board on the phone, then every board on the column…): a page keeps
+  // its screen's size from one drawing to the next, and resizing is the dearest part of a move.
+  const jobs = versions.flatMap((v, i) => out.map((o) => ({ o, v, i })));
   let next = 0;
   let done = 0;
   const worker = async (k: number) => {

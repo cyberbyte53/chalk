@@ -159,6 +159,8 @@ export async function timed<T>(phase: string, fn: () => Promise<T>): Promise<T> 
     return await fn();
   } finally {
     timing.spent.set(phase, (timing.spent.get(phase) ?? 0) + (performance.now() - t) / 1000);
+    // How many times, beside how long: many loads and slow loads are different problems.
+    timing.spent.set(`${phase} (times)`, (timing.spent.get(`${phase} (times)`) ?? 0) + 1);
   }
 }
 
@@ -626,6 +628,8 @@ type Lane = {
   isStale: boolean;
   /** The code and content it was loaded under (content/inputs.ts): another, and it loads afresh. */
   loadedUnder?: string;
+  /** Its screen's size now: resizing costs a relayout, so a page already that size isn't. */
+  size?: string;
 };
 /** The pages lent out, by the lane drawing on each. */
 const lanes = new Map<string, Lane>();
@@ -654,7 +658,7 @@ export const DEFAULT_LANE = "default";
  * A page for this lane to draw on: the one it already has in this call, else an idle one (a fresh
  * one first), else a new one while the pool has room, else the next one given back.
  */
-async function openPage(lane: string, base: string): Promise<Lane> {
+async function openPage(lane: string, base: string, size?: string): Promise<Lane> {
   const kept = lanes.get(lane);
   if (kept !== undefined && kept.base === base && !kept.page.isClosed()) return kept;
   for (;;) {
@@ -662,7 +666,10 @@ async function openPage(lane: string, base: string): Promise<Lane> {
       idle.splice(idle.indexOf(gone), 1);
       pages--;
     }
-    const fresh = idle.findIndex((l) => l.base === base && !l.isStale);
+    // A page already this size first (resizing is the dearest part of a move), then any current
+    // page, then any.
+    const sized = idle.findIndex((l) => l.base === base && !l.isStale && l.size === size);
+    const fresh = sized !== -1 ? sized : idle.findIndex((l) => l.base === base && !l.isStale);
     const any = fresh !== -1 ? fresh : idle.findIndex((l) => l.base === base);
     if (any !== -1) {
       const lent = idle.splice(any, 1)[0] as Lane;
@@ -1128,27 +1135,42 @@ async function shootNow(
   const url = `${await previewUrl(root, shownAddress(board), o)}&shot&run=${++runs}${isActed && isJumping ? "&hold" : ""}`;
   const target = new URL(url);
   const base = target.origin;
-  const at = await openPage(lane, base);
+  const at = await openPage(
+    lane,
+    base,
+    `${(o.width ?? PHONE_WIDTH) + 48}×${o.height ?? PHONE_HEIGHT}`,
+  );
   const { page } = at;
   at.errors.length = 0;
   await timed("move to the board", async () => {
-    await page.setViewportSize({
-      width: (o.width ?? PHONE_WIDTH) + 48,
-      height: o.height ?? PHONE_HEIGHT,
-    });
+    const size = { width: (o.width ?? PHONE_WIDTH) + 48, height: o.height ?? PHONE_HEIGHT };
+    if (at.size !== `${size.width}×${size.height}`) {
+      // A new page's first resize waits for its renderer to start: said apart, it isn't a move's.
+      await timed(at.size === undefined ? "move: new page's first size" : "move: screen size", () =>
+        page.setViewportSize(size),
+      );
+      at.size = `${size.width}×${size.height}`;
+    }
     // A page loaded under other code or content keeps what it loaded then (a chapter's sound
     // lengths, modules): it loads afresh, so what it draws is what these inputs give.
-    const loadKey = buildInputsKey(root);
+    const loadKey = await timed("move: what the page loaded under", async () =>
+      buildInputsKey(root),
+    );
     const isOnApp = page.url().startsWith(base) && !at.isStale && at.loadedUnder === loadKey;
     at.isStale = false;
     at.loadedUnder = loadKey;
     try {
       if (isOnApp)
-        await page.evaluate((q) => {
-          history.pushState(null, "", q);
-          dispatchEvent(new PopStateEvent("popstate"));
-        }, `${target.pathname}${target.search}`);
-      else await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
+        await timed("move: within the app", () =>
+          page.evaluate((q) => {
+            history.pushState(null, "", q);
+            dispatchEvent(new PopStateEvent("popstate"));
+          }, `${target.pathname}${target.search}`),
+        );
+      else
+        await timed("move: page loaded afresh", () =>
+          page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 }),
+        );
     } catch (error) {
       // The page was reloaded under us (the dev server after a code or style edit): the retry
       // around every drawing handles that, so it must see the error as it is.
@@ -1159,13 +1181,15 @@ async function shootNow(
       );
     }
     try {
-      await page.waitForFunction(
-        (q) =>
-          document.body.dataset.previewReady === q ||
-          (document.body.dataset.previewShown === q &&
-            document.querySelector(".preview-empty") !== null),
-        target.search,
-        { timeout: READY_TIMEOUT },
+      await timed(isOnApp ? "move: drawn, after within" : "move: drawn, after afresh", () =>
+        page.waitForFunction(
+          (q) =>
+            document.body.dataset.previewReady === q ||
+            (document.body.dataset.previewShown === q &&
+              document.querySelector(".preview-empty") !== null),
+          target.search,
+          { timeout: READY_TIMEOUT },
+        ),
       );
     } catch {
       const shown = ((await page.textContent("body").catch(() => "")) ?? "").trim().slice(0, 200);
