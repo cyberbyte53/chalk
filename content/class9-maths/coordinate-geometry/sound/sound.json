@@ -21,25 +21,11 @@
       "seconds": 5.805
     },
     {
-      "file": "eba72f85cb891dde.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "1 unit to a square: minus 2, 8 and minus 1, 7 are off the paper. Too small a unit.",
-      "seconds": 6.258
-    },
-    {
       "file": "0c30256d645827dc.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "2 is D's ordinate: its distance from the x-axis. The abscissa is its distance from the y-axis.",
       "seconds": 6.212
-    },
-    {
-      "file": "07c879d80f08053d.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "4 units to a square: everything fits, but the dots crowd near O and minus 1.25 is hard to place. Too big a unit.",
-      "seconds": 7.721
     },
     {
       "file": "421a7a740de22c8c.m4a",
@@ -49,11 +35,11 @@
       "seconds": 23.07
     },
     {
-      "file": "ebd2e67a2c18c62f.m4a",
+      "file": "123f8600dffe25cd.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "8 units in 4 squares: 8 divided by 4 is 2 units to a square. Tap 1 square equals 2 units, then plot the table.",
-      "seconds": 8.127
+      "words": "8 units in 4 squares: 8 divided by 4 is 2 units to a square. The page is now numbered 2, 4, 6, 8: plot the table.",
+      "seconds": 8.882
     },
     {
       "file": "1312c0d36dce3b25.m4a",
@@ -173,6 +159,13 @@
       "locale": "en",
       "words": "Abscissa and ordinate",
       "seconds": 1.44
+    },
+    {
+      "file": "a138a835ea2a40df.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Aman copies the next table into his notebook. Its page has room for 4 squares above O and 4 below, with 1 square equal to 1 unit. Plot the table on it.",
+      "seconds": 9.439
     },
     {
       "file": "daa7193e94c04af8.m4a",
@@ -420,11 +413,11 @@
       "seconds": 19.134
     },
     {
-      "file": "2cae5f239dbdea31.m4a",
+      "file": "9016ce75eeff6d39.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Every point fits. Now tap 1 square equals 1 unit, then 1 square equals 4 units, and watch the dots.",
-      "seconds": 7.117
+      "words": "Every point fits. Choosing the units means choosing how many units one square stands for: the smallest number that fits every point, so the page is used and the points are easy to place.",
+      "seconds": 10.426
     },
     {
       "file": "f63b6bc772bb95c7.m4a",
@@ -707,6 +700,13 @@
       "seconds": 2.45
     },
     {
+      "file": "8a1348346e58cffd.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Minus 2, 8 is 8 up, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units.",
+      "seconds": 8.743
+    },
+    {
       "file": "e6d5251e2547786f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -740,13 +740,6 @@
       "locale": "en",
       "words": "Now every street rises, and the town is there. Tap any house to make it Aman's: Riya goes back to the corner. Say how she gets there, then walk her and check.",
       "seconds": 8.453
-    },
-    {
-      "file": "4af758c9ba468918.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Now Exercise 3.3's table, on a paper with 4 squares above O. Its highest point, minus 2, 8, is 8 up. Before plotting, choose the units.",
-      "seconds": 9.939
     },
     {
       "file": "0a80437d3bf07550.m4a",
@@ -1848,13 +1841,6 @@
       "seconds": 5.62
     },
     {
-      "file": "924a1e889c7aa91c.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "The dots never moved: minus 2, 8 is minus 2, 8 at every scale; only the drawing changed. A suitable unit is the smallest one that fits every point: here, 1 square equals 2 units.",
-      "seconds": 11.808
-    },
-    {
       "file": "4c0cf14e82ca40b3.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -2044,11 +2030,11 @@
       "seconds": 9.683
     },
     {
-      "file": "75b7421f10e98ff7.m4a",
+      "file": "f49fbc4f73d79738.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Then 8 units need 8 squares, and the paper has only 4 above O: minus 2, 8 and minus 1, 7 would fall off it.",
-      "seconds": 7.419
+      "words": "Then 8 units need 8 squares, and the page has only 4 above O: minus 2, 8 and minus 1, 7 would fall off it.",
+      "seconds": 7.187
     },
     {
       "file": "aa97b056f648ac98.m4a",
@@ -2324,11 +2310,11 @@
       "seconds": 6.502
     },
     {
-      "file": "464ac493ea70c51a.m4a",
+      "file": "589c94e71368aed6.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "4 खानों में 8 इकाई: 8 भाग 4 बराबर 2 इकाई एक खाने में। 1 खाना बराबर 2 इकाई दबाओ, फिर सारणी आलेखित करो।",
-      "seconds": 9.857
+      "words": "4 खानों में 8 इकाई: 8 भाग 4 बराबर 2 इकाई एक खाने में। पन्ने पर अब 2, 4, 6, 8 लिखा है: सारणी आलेखित करो।",
+      "seconds": 11.343
     },
     {
       "file": "f58ebe06498f2bca.m4a",
@@ -2660,13 +2646,6 @@
       "seconds": 7.593
     },
     {
-      "file": "6277aa5ccb678175.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "अब प्रश्नावली 3.3 की सारणी, ऐसे कागज़ पर जिसमें O के ऊपर 4 खाने हैं। उसका सबसे ऊँचा बिंदु, माइनस 2, 8, 8 ऊपर है। आलेखित करने से पहले इकाई चुनो।",
-      "seconds": 14.85
-    },
-    {
       "file": "c8812ce703346aea.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2686,6 +2665,13 @@
       "locale": "hi",
       "words": "अब हर सड़क एक संख्या रेखा है। उसका कोना दोनों पर 0 है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ माइनस 1, माइनस 2, माइनस 3 हैं; दक्षिण की ओर मकान माइनस 1, माइनस 2, माइनस 3 हैं। माइनस का चिह्न बताता है कि किस ओर: मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
       "seconds": 25.682
+    },
+    {
+      "file": "4231fee482d55c34.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अमन अगली सारणी अपनी कॉपी में उतारता है। उसके पन्ने पर O के ऊपर 4 खाने और नीचे 4 की जगह है, और 1 खाना बराबर 1 इकाई। सारणी उस पर आलेखित करो।",
+      "seconds": 12.481
     },
     {
       "file": "2e34629bcd418d2d.m4a",
@@ -2861,20 +2847,6 @@
       "locale": "hi",
       "words": "उसकी चाल, 4 बाईं ओर और 2 ऊपर, तुम्हारे बिंदु पर ख़त्म होती है: R है बिंदु माइनस 4, 2, दूसरे चतुर्थांश में।",
       "seconds": 10.38
-    },
-    {
-      "file": "670d73a3e6273c8c.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "एक खाने में 1 इकाई: माइनस 2, 8 और माइनस 1, 7 कागज़ से बाहर हैं। इकाई बहुत छोटी।",
-      "seconds": 8.673
-    },
-    {
-      "file": "bb5ad84a09c1f4c2.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "एक खाने में 4 इकाई: सब आ जाता है, पर बिंदु O के पास भिड़ जाते हैं और माइनस 1.25 को रखना कठिन है। इकाई बहुत बड़ी।",
-      "seconds": 10.229
     },
     {
       "file": "1b4a7759692bde61.m4a",
@@ -3234,11 +3206,11 @@
       "seconds": 4.586
     },
     {
-      "file": "1ee1d52400564c31.m4a",
+      "file": "b08a55f9f916c322.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "तब 8 इकाई को 8 खाने चाहिए, और कागज़ पर O के ऊपर केवल 4 हैं: माइनस 2, 8 और माइनस 1, 7 उससे बाहर गिर जाएँगे।",
-      "seconds": 10.798
+      "words": "तब 8 इकाई को 8 खाने चाहिए, और पन्ने पर O के ऊपर केवल 4 हैं: माइनस 2, 8 और माइनस 1, 7 उससे बाहर गिर जाएँगे।",
+      "seconds": 10.531
     },
     {
       "file": "16fa589e2726540d.m4a",
@@ -3731,13 +3703,6 @@
       "seconds": 3.901
     },
     {
-      "file": "ef9b94de3e89bdf6.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "बिंदु कभी नहीं हिले: हर पैमाने पर माइनस 2, 8, माइनस 2, 8 ही है; केवल चित्र बदला। उचित इकाई वह सबसे छोटी इकाई है जिसमें हर बिंदु आ जाए: यहाँ, 1 खाना बराबर 2 इकाई।",
-      "seconds": 14.908
-    },
-    {
       "file": "fb63ebe9a2c10763.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3876,6 +3841,13 @@
       "locale": "hi",
       "words": "भुज और कोटि",
       "seconds": 1.8
+    },
+    {
+      "file": "bd1295ae73160aa7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "माइनस 2, 8, 8 ऊपर है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए।",
+      "seconds": 12.621
     },
     {
       "file": "e2565ef389086ff3.m4a",
@@ -4578,11 +4550,11 @@
       "seconds": 2.508
     },
     {
-      "file": "4acb5af4cfa2c1be.m4a",
+      "file": "02159dfbd36045ca.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "हर बिंदु आ गया। अब 1 खाना बराबर 1 इकाई दबाओ, फिर 1 खाना बराबर 4 इकाई, और बिंदुओं को देखो।",
-      "seconds": 8.557
+      "words": "हर बिंदु आ गया। इकाई चुनने का मतलब है चुनना कि एक खाना कितनी इकाइयों का हो: वह सबसे छोटी संख्या जिसमें हर बिंदु आ जाए, ताकि पन्ना काम आए और बिंदु आसानी से रखे जा सकें।",
+      "seconds": 14.176
     }
   ]
 }
