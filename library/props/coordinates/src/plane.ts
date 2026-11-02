@@ -458,9 +458,10 @@ export const plane = prop({
       t.later(SWEEP_STEP * 3, t.set({ quadrantsNamed: 3 })),
       t.later(SWEEP_STEP * 4, t.set({ quadrantsNamed: 4 }), t.tell.quadrantsNumbered()),
     ],
+    // Slid until the zeroes meet: the axes, named O, as when brought together by the button.
     moveApart: (_, apart, t) => [
       t.set({ apart }),
-      ...(apart.x === 0 && apart.y === 0 ? [t.tell.crossed()] : []),
+      ...(apart.x === 0 && apart.y === 0 ? [t.set({ showOrigin: true }), t.tell.crossed()] : []),
     ],
     bringTogether: (me, _, t) =>
       me.isCrossed

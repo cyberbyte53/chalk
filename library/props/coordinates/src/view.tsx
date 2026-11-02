@@ -26,6 +26,13 @@ import { plottingDrawing } from "./plotting-view";
 import { readingDrawing } from "./reading-view";
 import { walkerDrawing } from "./walker-view";
 
+/** The lines turned about the horizontal line's zero (a pair at right angles, any way round). */
+const turned = (s: PlaneView, px: FramePixels): string | undefined => {
+  if (s.turn === 0) return undefined;
+  const [ox, oy] = px.toPx(0, 0);
+  return `rotate(${-s.turn} ${ox} ${oy})`;
+};
+
 /**
  * Where the zero may rest while apart: halfway between marks, so no number of one line lies on the
  * other or on its row of numbers; or 0, where the lines become the axes.
@@ -76,21 +83,23 @@ export const planeDrawing = drawing(plane, {
     </>
   ),
   on: ({ s, px, locale }) => {
-    // The lines turned about the horizontal line's zero (a pair at right angles, any way round).
-    const [ox, oy] = px.toPx(0, 0);
     return (
       <>
         {canNameParts(s) && s.isAlone && <PartTaps s={s} px={px} />}
-        <g transform={s.turn === 0 ? undefined : `rotate(${-s.turn} ${ox} ${oy})`}>
-          <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} />
+        <g transform={turned(s, px)}>
+          <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} layer="lines" />
           <ApartHandle s={s} px={px} />
         </g>
       </>
     );
   },
   // Over Riya, so the mark she has just made stays in view.
-  front: ({ s, px }) => (
+  // The lines' numbers and names over everything placed on the plane (a town's houses, Riya).
+  front: ({ s, px, locale }) => (
     <>
+      <g transform={turned(s, px)}>
+        <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} layer="labels" />
+      </g>
       <QuadrantNumerals s={s} px={px} />
       <NamedPointsDraw s={s} px={px} />
     </>

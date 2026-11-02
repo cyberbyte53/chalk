@@ -220,13 +220,20 @@ export function AxesDraw({
   px,
   locale,
   canLight,
+  layer,
 }: {
   s: PlaneView;
   px: FramePixels;
   locale: Locale;
   /** Whether a number on a line lights every place with it (the places layer is on). */
   canLight: boolean;
+  /**
+   * Which half: the lines and their marks (under what is placed on the plane), or their numbers and
+   * names (over it, so a town's houses never cover a number).
+   */
+  layer: "lines" | "labels";
 }): JSX.Element {
+  const isLines = layer === "lines";
   const w = s.window;
   const unit = unitOf(px);
   // Numbers every mark when there's room, else every other.
@@ -260,23 +267,28 @@ export function AxesDraw({
     i % every === 0 && !(hasZeroMark(v) && hasO) ? num(v) : "";
   return (
     <g class="cp-axes">
-      <line
-        class={`cp-axis${named === PlanePart.OX || named === PlanePart.OXDash ? " is-named" : ""}`}
-        x1={left}
-        y1={base}
-        x2={right}
-        y2={base}
-      />
-      {hasUp(s) && <line class="cp-axis" x1={vx} y1={top} x2={vx} y2={bottom} />}
-      {named?.startsWith("O") && named !== "O" && <NamedHalf s={s} px={px} part={named} />}
+      {isLines && (
+        <line
+          class={`cp-axis${named === PlanePart.OX || named === PlanePart.OXDash ? " is-named" : ""}`}
+          x1={left}
+          y1={base}
+          x2={right}
+          y2={base}
+        />
+      )}
+      {isLines && hasUp(s) && <line class="cp-axis" x1={vx} y1={top} x2={vx} y2={bottom} />}
+      {isLines && named?.startsWith("O") && named !== "O" && (
+        <NamedHalf s={s} px={px} part={named} />
+      )}
       {xMarks.map((v, i) => {
         const [x] = px.toPx(v, 0);
         const text = label(v, i);
         const isButton = canLight && isCounted && text !== "";
         return (
           <g key={`x${v}`} class="cp-mark">
-            <line x1={x} y1={base - 4} x2={x} y2={base + 4} />
-            {isButton ? (
+            {isLines ? (
+              <line x1={x} y1={base - 4} x2={x} y2={base + 4} />
+            ) : isButton ? (
               <g
                 class={`cp-mark-button${s.lit?.axis === "x" && s.lit.value === v ? " is-lit" : ""}`}
                 {...does(plane.actions.tapNumber, { axis: "x", value: v }, `x${v}`)}
@@ -298,8 +310,6 @@ export function AxesDraw({
       {hasUp(s) &&
         yMarks.map((v, i) => {
           const [, y] = px.toPx(s.apart.x, v + s.apart.y);
-          // While the lines are apart, a number that would sit on the horizontal line's numbers
-          // isn't written: its mark stays.
           // While the lines are apart, a number of the vertical line on the horizontal line, or on
           // its row of numbers, isn't written: its mark stays.
           const isApart = s.apart.x !== 0 || s.apart.y !== 0;
@@ -308,8 +318,9 @@ export function AxesDraw({
           const isButton = canLight && isCounted && text !== "";
           return (
             <g key={`y${v}`} class="cp-mark">
-              <line x1={vx - 4} y1={y} x2={vx + 4} y2={y} />
-              {isButton ? (
+              {isLines ? (
+                <line x1={vx - 4} y1={y} x2={vx + 4} y2={y} />
+              ) : isButton ? (
                 <g
                   class={`cp-mark-button${s.lit?.axis === "y" && s.lit.value === v ? " is-lit" : ""}`}
                   {...does(plane.actions.tapNumber, { axis: "y", value: v }, `y${v}`)}
@@ -334,7 +345,7 @@ export function AxesDraw({
             </g>
           );
         })}
-      {hasO && (
+      {!isLines && hasO && (
         <text
           class={s.showOrigin ? "cp-origin" : "cp-origin is-zero"}
           x={vx - 7}
@@ -344,7 +355,7 @@ export function AxesDraw({
           {s.showOrigin ? "O" : "0"}
         </text>
       )}
-      {s.showAxisNames && (
+      {!isLines && s.showAxisNames && (
         <>
           <text
             class="cp-axis-name"
@@ -369,7 +380,7 @@ export function AxesDraw({
           )}
         </>
       )}
-      {s.showDirections && s.axes === Axes.Both && (
+      {!isLines && s.showDirections && s.axes === Axes.Both && (
         <g class="cp-directions">
           {/* At the line's ends, a row below its numbers, clear of them. */}
           <text x={right - 2} y={base + 42} text-anchor="end">

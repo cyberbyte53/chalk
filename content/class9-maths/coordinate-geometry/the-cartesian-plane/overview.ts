@@ -83,8 +83,8 @@ const numberLine = page(
       rule: hidden(
         words.definition(
           t(
-            "**−3 is 3 units from 0, on the negative side.** So a point at distance r from 0 is the number r on the positive side, and −r on the negative side: the sign says which side.",
-            "**−3, 0 से 3 इकाई दूर है, ऋणात्मक ओर।** इसलिए 0 से r दूरी पर एक बिंदु धनात्मक ओर संख्या r है, और ऋणात्मक ओर −r: चिह्न बताता है कि किस ओर।",
+            "**−3 is 3 units from 0, on the negative side.** So a point at distance $r$ from 0 is the number $r$ on the positive side, and $-r$ on the negative side: the sign says which side.",
+            "**−3, 0 से 3 इकाई दूर है, ऋणात्मक ओर।** इसलिए 0 से $r$ दूरी पर एक बिंदु धनात्मक ओर संख्या $r$ है, और ऋणात्मक ओर $-r$: चिह्न बताता है कि किस ओर।",
           ),
           null,
           {
