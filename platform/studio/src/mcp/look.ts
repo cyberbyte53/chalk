@@ -663,8 +663,13 @@ export async function look(
 }
 
 /**
- * Boards drawn one at a time, each alone on its screen, in each version: every board × version a
- * drawing of its own, on up to `pages` pages at once. In the boards' order, each its versions'.
+ * The one drawing engine: any boards, any versions, each board × version drawn alone on its
+ * screen (one board on one screen), on up to `pages` pages at once. In the boards' order, each its
+ * versions'. `show`, `changes` and a chapter's check all draw with it, each with its own options.
+ *
+ * - `onDrawn`: after each drawing (a check's progress).
+ * - `signal`: stop taking new drawings; those not drawn are left out (holes in `drawn`).
+ * - `ownLanes`: every page its own, none the caller's (a check leaves an agent's pages alone).
  */
 async function drawBoards(
   root: string,
@@ -673,29 +678,37 @@ async function drawBoards(
   options: (v: Version) => ShotOptions,
   lane: string,
   pages = LOOK_PAGES,
+  more: {
+    onDrawn?: (done: number, total: number) => Promise<void>;
+    signal?: AbortSignal;
+    ownLanes?: boolean;
+  } = {},
 ): Promise<{ board: string; drawn: Drawn[] }[]> {
+  // Stopped by `signal`, a drawing not made is a hole here: only a check stops, and reads around it.
   const out = boards.map((board) => ({ board, drawn: new Array<Drawn>(versions.length) }));
   const jobs = out.flatMap((o) => versions.map((v, i) => ({ o, v, i })));
   let next = 0;
+  let done = 0;
   const worker = async (k: number) => {
-    for (let j = next++; j < jobs.length; j = next++) {
-      const { o, v, i } = jobs[j] as (typeof jobs)[number];
-      const d = await shoot(
-        root,
-        o.board,
-        options(v),
-        undefined,
-        k === 0 ? lane : `${lane}:b:${k}`,
-      );
-      for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
-      o.drawn[i] = d;
+    const myLane = more.ownLanes === true || k > 0 ? `${lane}:b:${k}` : lane;
+    try {
+      for (let j = next++; j < jobs.length; j = next++) {
+        if (more.signal?.aborted === true) return;
+        const { o, v, i } = jobs[j] as (typeof jobs)[number];
+        const d = await shoot(root, o.board, options(v), undefined, myLane);
+        for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
+        o.drawn[i] = d;
+        done += 1;
+        await more.onDrawn?.(done, jobs.length);
+      }
+    } finally {
+      if (more.ownLanes === true) await closeLane(myLane);
     }
   };
   await Promise.all(Array.from({ length: Math.min(pages, jobs.length) }, (_, k) => worker(k)));
   return out;
 }
 
-/** Each version drawn, at once, on up to LOOK_PAGES pages: the caller's own and pages of its own. */
 async function drawVersions(
   root: string,
   board: string,
@@ -704,18 +717,8 @@ async function drawVersions(
   lane: string,
   pages = LOOK_PAGES,
 ): Promise<Drawn[]> {
-  const drawn: Drawn[] = new Array(versions.length);
-  let next = 0;
-  const worker = async (k: number) => {
-    for (let i = next++; i < versions.length; i = next++) {
-      const v = versions[i] as Version;
-      const d = await shoot(root, board, options(v), undefined, k === 0 ? lane : `${lane}:v:${k}`);
-      for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
-      drawn[i] = d;
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(pages, versions.length) }, (_, k) => worker(k)));
-  return drawn;
+  const [one] = await drawBoards(root, [board], versions, options, lane, pages);
+  return one?.drawn ?? [];
 }
 
 /** A board's path as `changes` keeps it: "class9-maths/…", without content/. */
@@ -818,56 +821,45 @@ export async function check(
   signal: AbortSignal,
 ): Promise<Answer> {
   const versions = versionsOf(a);
-  // One board on one screen: each board alone, in each version (never a lesson's boards stacked).
-  const jobs = target.boards.flatMap((board) => versions.map((v) => ({ board, v })));
-  const wanted = new Set(target.boards);
   const found: { board: string; v: Version; problems: string[] }[] = [];
-  const seen = new Set<string>();
-  let done = 0;
-  let isCancelled = false;
-  const worker = async (k: number) => {
-    const myLane = `${lane}:check:${k}`;
-    try {
-      for (;;) {
-        if (signal.aborted) {
-          isCancelled = true;
-          return;
-        }
-        const job = jobs.shift();
-        if (job === undefined) return;
-        const d = await shoot(
-          root,
-          job.board,
-          {
-            locale: job.v.locale,
-            width: job.v.width,
-            ...(job.v.height === undefined ? {} : { height: job.v.height }),
-            play: a.play === true,
-            speed: a.speed ?? DEFAULT_SPEED,
-            // A check reads the layout; it shows no pictures.
-            pictures: "none",
-          },
-          undefined,
-          myLane,
-        );
-        for (const s of d.shots) {
-          if (!wanted.has(s.board)) continue;
-          seen.add(`${s.board}@${job.v.locale}${screenWords(job.v)}`);
-          if (s.overflow.length > 0) found.push({ board: s.board, v: job.v, problems: s.overflow });
-        }
-        done += 1;
-        await progress(`drawn ${seen.size} of ${target.boards.length * versions.length}`);
+  let seen = 0;
+  // Every board alone, in each version, on pages of its own (an agent's are left alone).
+  const each = await drawBoards(
+    root,
+    target.boards,
+    versions,
+    (v) => ({
+      locale: v.locale,
+      width: v.width,
+      ...(v.height === undefined ? {} : { height: v.height }),
+      play: a.play === true,
+      speed: a.speed ?? DEFAULT_SPEED,
+      // A check reads the layout; it shows no pictures.
+      pictures: "none",
+    }),
+    `${lane}:check`,
+    CHECK_PAGES,
+    {
+      ownLanes: true,
+      signal,
+      onDrawn: (done, total) => progress(`drawn ${done} of ${total}`),
+    },
+  );
+  for (const one of each)
+    for (const [i, d] of one.drawn.entries()) {
+      if (d === undefined) continue;
+      const v = versions[i] as Version;
+      for (const s of d.shots) {
+        seen += 1;
+        if (s.overflow.length > 0) found.push({ board: s.board, v, problems: s.overflow });
       }
-    } finally {
-      await closeLane(myLane);
     }
-  };
-  await Promise.all(Array.from({ length: CHECK_PAGES }, (_, k) => worker(k)));
+  const isCancelled = signal.aborted;
   const total = target.boards.length * versions.length;
   const badBoards = new Set(found.map((f) => f.board));
-  const missing = total - seen.size;
+  const missing = total - seen;
   const lines = [
-    `${contentAddress(target.path)}: ${target.boards.length} boards · ${seen.size} drawings (${[...new Set(versions.map((v) => v.locale))].join(", ")} × ${[...new Set(versions.map((v) => screenWords(v)))].join(", ")}) · ${target.boards.length - badBoards.size} ok · ${badBoards.size} with problems${isCancelled ? ` · cancelled after ${done} of ${done + jobs.length} drawings` : ""}`,
+    `${contentAddress(target.path)}: ${target.boards.length} boards · ${seen} drawings (${[...new Set(versions.map((v) => v.locale))].join(", ")} × ${[...new Set(versions.map((v) => screenWords(v)))].join(", ")}) · ${target.boards.length - badBoards.size} ok · ${badBoards.size} with problems${isCancelled ? ` · cancelled after ${seen} of ${total} drawings` : ""}`,
   ];
   if (missing > 0 && !isCancelled)
     lines.push(

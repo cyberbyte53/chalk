@@ -1092,7 +1092,8 @@ export function markTarget(arg: {
     const paths = [...pieceEl.querySelectorAll<HTMLElement>("[data-part]")].map(
       (e) => e.dataset.path ?? "",
     );
-    return `no part "${arg.target}" (parts: ${[...new Set(paths)].join(", ") || "none"})`;
+    // Sorted: the same parts read the same, whatever order the page draws them in.
+    return `no part "${arg.target}" (parts: ${[...new Set(paths)].sort().join(", ") || "none"})`;
   }
   (el as HTMLElement).setAttribute("data-chalk-target", "");
   if (arg.at === undefined) return null;

@@ -162,10 +162,22 @@ type Applied = {
 
 /** How many plays are played again at once (changes); CHALK_PLAY_PAGES to measure another. */
 /**
- * At most this many pictures in a `changes` answer. Seen: everything changed at once made one of
- * 39.5 MB (201 pictures), and the connection closed before it arrived.
+ * What a `changes` answer's pictures may cost the agent reading it, in tokens: the answer must
+ * arrive whole, words first. Seen: 201 pictures (39.5 MB) closed the connection; 12 large ones
+ * (4.8 MB) passed an agent's 25,000-token limit, and all but one were cut off.
  */
-const CHANGES_PICTURES = 12;
+const CHANGES_PICTURE_TOKENS = 12_000;
+
+/**
+ * A picture's cost to the model reading it, from its size: its long side is brought to 1,568 px at
+ * most, then about one token for each 750 pixels.
+ */
+function pictureTokens(png: Buffer): number {
+  const width = png.readUInt32BE(16);
+  const height = png.readUInt32BE(20);
+  const fit = Math.min(1, 1568 / Math.max(width, height));
+  return Math.ceil((width * fit * (height * fit)) / 750);
+}
 
 const PLAY_PAGES = Number(process.env.CHALK_PLAY_PAGES ?? 3);
 
@@ -373,7 +385,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     `${(p.steps as Step[]).map((s) => ("tap" in s ? `tap ${s.tap}` : "drag" in s ? `drag ${s.drag}` : "call")).join(", ")}${p.locale === undefined ? "" : ` (${p.locale})`}`;
 
   /** A version's two pictures, as passed and now (what differs in red), each arriving unshrunk. */
-  const diffPictures = async (board: string, d: VersionDiff): Promise<Content[]> => {
+  const diffPictures = async (board: string, d: VersionDiff): Promise<Buffer[]> => {
     // Only what it reads differs: its pictures are the same.
     if (d.share === 0) return [];
     const name = board.split("/").at(-1) ?? board;
@@ -402,9 +414,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         `${name} · ${d.version} · now (what differs in red)`,
       )),
     ];
-    return pngs.map(
-      (png) => ({ type: "image", data: png.toString("base64"), mimeType: "image/png" }) as Content,
-    );
+    return pngs;
   };
 
   offer(
@@ -447,6 +457,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const changes = changesUnder(root, under);
         const images: Content[] = [];
         const leftOut: string[] = [];
+        let spent = 0;
         const seen = new Map<string, string[]>();
         const changed = changes.filter((c) => c.status === "changed");
         // Every changed board a reviewer has seen, drawn now, all together (show's engine).
@@ -502,19 +513,28 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             ),
             ...playLine,
           ]);
-          // The pictures of what differs, while the answer stays small enough to arrive whole: past
-          // the cap, a board's differences are said in words, and its pictures are a `show` away.
-          if (images.length >= CHANGES_PICTURES) {
+          // The pictures of what looks different, while the answer stays small enough to arrive
+          // whole: past the budget, a board's differences are said in words, its pictures a `show`
+          // away. (A board that only reads differently has no pictures to leave out.)
+          // One version pictured (the first that looks different, as passed and now): the rest are
+          // said in words above, and a `show` of that version brings its pictures.
+          const first = diffs.find((d) => d.share > 0);
+          const pngs = first === undefined ? [] : await diffPictures(c.board, first);
+          const cost = pngs.reduce((sum, png) => sum + pictureTokens(png), 0);
+          if (pngs.length === 0) continue;
+          if (spent + cost > CHANGES_PICTURE_TOKENS) {
             leftOut.push(c.board);
             continue;
           }
-          for (const d of diffs) images.push(...(await diffPictures(c.board, d)));
+          spent += cost;
+          for (const png of pngs)
+            images.push({ type: "image", data: png.toString("base64"), mimeType: "image/png" });
         }
         const cut =
           leftOut.length === 0
             ? []
             : [
-                `Pictures left out (the answer keeps to ${CHANGES_PICTURES}): ${leftOut.length} more board${leftOut.length === 1 ? "" : "s"} look different, said above; show each to see it: ${leftOut.map((b) => contentAddress(b)).join(", ")}`,
+                `Pictures left out, to keep the answer whole: ${leftOut.length} more board${leftOut.length === 1 ? "" : "s"} look different, said above; show each to see it: ${leftOut.map((b) => contentAddress(b)).join(", ")}`,
               ];
         return result([
           text([changesWords(changes, seen), ...cut, ...notes].join("\n")),

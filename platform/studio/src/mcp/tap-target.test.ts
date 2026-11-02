@@ -41,7 +41,7 @@ describe("a tap by name", () => {
   it.skipIf(!hasBrowser)("says which names there are when it's wrong", async () => {
     if (browser === undefined) return;
     expect(await tapLands(QUESTION, "ask/Check")).toBe(
-      'no part "ask/Check" (parts: ask/prompt, ask/check)',
+      'no part "ask/Check" (parts: ask/check, ask/prompt)',
     );
   });
 
