@@ -1,5 +1,5 @@
 ---
-approved: 0998c8404390
+approved: bf528dbbd76a
 ---
 
 Story: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and their class runs a stall fair on the school ground. It starts at Aman's house, where the two plan their stall: Riya has to get there. Their mission: a plan of the fair ground, so that a message like "the snacks stall goes at (3, 2)" puts every stall in exactly the right spot, with no one walking over to point. Each lesson is a stop on it: Riya walks to Aman's house by his address, two numbers (1); the town grows past the corner she started from, and the two roads she walked become the axes (2); they write down where every stall stands (3); volunteers set the stalls up from the numbers alone, and Aman's swapped pair puts the snacks in the wrong place (4). The fair's game stall is the dice game. Each lesson ends with the summary points it taught.
@@ -44,8 +44,8 @@ Needs: a number line from −5 to 5 with the origin and one unit marked; tap a p
 Purpose: the town grows past Riya's corner: new streets to the west of where she started, and houses south of the main road. Counting from her corner, those go the other way, so they get negative numbers, and her corner is 0 on both roads. Not in the source; it is why the axes are number lines, with a zero and both signs.
 Needs: lesson 1's town, whose map extends west and south of Riya's corner; new houses appear there; numbering them from the corner gives −1, −2, … west along the road and south down a street; tap one to see its address, both numbers signed; Riya walks to one, going west or south as a sign says.
 
-### two-number-lines  (o4; s3.2-perpendicular, fig3.6, fig3.7, def-axes, def-origin)
-Purpose: two perpendicular lines can face any way; we take one horizontal and one vertical, two number lines crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from. (Why the choice matters is shown once coordinates are defined: any-axes.)
+### two-number-lines  (o4; s3.2-perpendicular, fig3.7, def-axes, def-origin)
+Purpose: as the town's two roads at right angles were number lines, any point in a plane is located with two number lines at right angles, one horizontal and one vertical, crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from. (That the pair could face any way, and why one pair is agreed on, is shown once coordinates are defined: any-axes.)
 Needs: two number lines, one horizontal (X′X) and one vertical (Y′Y), brought together until their zeroes meet; the crossing named O; the town map fading in behind and out again.
 
 ### axes-and-directions  (o4; def-directions, fig3.8)
@@ -84,7 +84,7 @@ Needs: a point dragged onto an axis, one coordinate becoming 0, and onto O for (
 Purpose: every point in quadrant I is (+, +), II (−, +), III (−, −) and IV (+, −), because each quadrant is bounded by those halves of the axes.
 Needs: a point dragged through all four quadrants, the signs of its coordinates shown; each quadrant's pattern filled in once the point has been there. Then a guessing round: a point appears, the class calls its quadrant from its signs before it is shown.
 
-### any-axes  (o7; s3.2-perpendicular, remark-convention)
+### any-axes  (o7; s3.2-perpendicular, fig3.6, remark-convention)
 Purpose: the axes are a choice we make. Move O anywhere, turn the pair any way: a point stays where it is, and only its coordinates change. So everyone uses the same pair, the agreed x- and y-axes, just as everyone writes x first. Not in the source as a picture; it is what "they can point any way" and "only a convention" mean.
 Needs: a fixed point P with its perpendiculars to both axes and its coordinates, signed, to two decimal places; the student drags O to move the axes and turns them about O with a handle; P's coordinates change as they do and P doesn't move; put back, its coordinates are what they were.
 

@@ -1,6 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
+import { Axes } from "./plane";
 import {
   type Line,
   type PlaneCore,
@@ -114,6 +115,8 @@ export const places = prop({
       isOpen: z.boolean(),
       /** How strongly the places show: behind a plane's lines, a lesson may fade them in (0 to 1). */
       backdrop: z.number().min(0).max(1),
+      /** The plane's lines: on a lone number line its numbers sit lower, and a label under them. */
+      axes: z.nativeEnum(Axes),
     })
     .strict(),
   facts: {

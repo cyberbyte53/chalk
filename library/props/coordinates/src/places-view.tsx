@@ -63,7 +63,10 @@ function PlacesDraw({
                 // a desk's above it, past its chair (below it is the blackboard's room).
                 y={
                   p.y === 0
-                    ? 34
+                    ? // Under the numbers: lower on a lone number line, as its numbers are (plane-view).
+                      s.axes === "horizontal"
+                      ? 40
+                      : 34
                     : s.placeKind === PlaceKind.Desk
                       ? -size * 0.45 - 3
                       : size * 0.62 + 10
