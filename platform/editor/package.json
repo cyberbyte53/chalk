@@ -107,6 +107,11 @@
         "command": "chalk.fileComment.close",
         "title": "Close",
         "icon": "$(check)"
+      },
+      {
+        "command": "chalk.chapter.closeReady",
+        "title": "Close all ready",
+        "icon": "$(check-all)"
       }
     ],
     "configuration": {
@@ -244,6 +249,16 @@
           "command": "chalk.planning.takeBack",
           "when": "view == chalk.tree && viewItem == planfile-approved-approvable",
           "group": "inline@1"
+        },
+        {
+          "command": "chalk.chapter.closeReady",
+          "when": "view == chalk.tree && viewItem == chapter-ready",
+          "group": "inline@1"
+        },
+        {
+          "command": "chalk.chapter.closeReady",
+          "when": "view == chalk.tree && viewItem == chapter-ready",
+          "group": "1_chapter@1"
         }
       ],
       "commandPalette": [

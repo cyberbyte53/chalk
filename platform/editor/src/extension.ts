@@ -405,15 +405,21 @@ const dirsIn = (dir: string): string[] =>
     : [];
 
 /** A chapter's threads not yet settled, as the dev server gives them: how many are whose turn. */
-function openComments(chapter: string): { yours: number; agents: number } {
+/** The threads on a chapter: on its boards, its planning files or its content's code. */
+function chapterThreads(chapter: string) {
   const on = (t: { board?: string; source?: string }) =>
     (t.board ?? "").startsWith(`${chapter}/`) ||
     (t.source ?? "").startsWith(`authoring/books/${chapter}/`) ||
     (t.source ?? "").startsWith(`content/${chapter}/`);
-  const mine = reviews.allThreads.filter(on);
+  return reviews.allThreads.filter(on);
+}
+
+function openComments(chapter: string): { yours: number; agents: number; ready: number } {
+  const mine = chapterThreads(chapter);
   return {
     yours: mine.filter((t) => t.waitsOn === "person").length,
     agents: mine.filter((t) => t.waitsOn === "agent").length,
+    ready: mine.filter((t) => t.status === "ready").length,
   };
 }
 
@@ -529,6 +535,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       ]
         .filter(Boolean)
         .join(" · ");
+      // Fixes ready to check on it: a button closes them all (open questions stay).
+      if (n.ready > 0) item.contextValue = "chapter-ready";
     }
     if (node.kind === "planfile" && node.plan !== undefined) {
       const f = node.plan;
@@ -574,7 +582,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       title: "Preview",
       arguments: [vscode.Uri.file(node.file)],
     };
-    item.contextValue = node.kind;
+    // A chapter with fixes ready to check keeps its own tag (its Close all ready button).
+    item.contextValue = item.contextValue === "chapter-ready" ? "chapter-ready" : node.kind;
     return item;
   }
 
@@ -836,6 +845,14 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
       for (const t of ready) if (await writeThread(t.id, "", "closed")) closed++;
       void vscode.window.showInformationMessage(
         `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${r.name}.`,
+      );
+    }),
+    vscode.commands.registerCommand("chalk.chapter.closeReady", async (node: Node) => {
+      const ready = chapterThreads(node.path).filter((t) => t.status === "ready");
+      let closed = 0;
+      for (const t of ready) if (await writeThread(t.id, "", "closed")) closed++;
+      void vscode.window.showInformationMessage(
+        `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${node.label}.`,
       );
     }),
     vscode.commands.registerCommand("chalk.review.activity", async (item: unknown) => {
