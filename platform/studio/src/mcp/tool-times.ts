@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkLogFile } from "../check/shared";
 import { findUp } from "../find-up";
 import { callLogFile } from "./call-log";
 
@@ -8,7 +9,7 @@ import { callLogFile } from "./call-log";
  * How the chalk tools have been doing, from every call the service logged (call-log.ts): per tool
  * (and per /dev-* request), how many calls, how long they took, how long the service's thread was
  * held while they waited, how big their answers were; then the slowest calls, each with what it
- * was asked.
+ * was asked. Then `pnpm check`'s runs (check/all.ts): each step's time, and the slowest test files.
  *
  *   pnpm tool-times                 the last 24 hours
  *   pnpm tool-times --since 2h      the last two hours (m, h, d)
@@ -48,11 +49,7 @@ const since = (() => {
 const slowest = Number(option("slow") ?? 10);
 
 const file = callLogFile(root);
-if (!existsSync(file)) {
-  console.log("No calls logged yet (the service logs them once it runs call-log.ts).");
-  process.exit(0);
-}
-const lines = readFileSync(file, "utf8")
+const lines = (existsSync(file) ? readFileSync(file, "utf8") : "")
   .split("\n")
   .filter((l) => l !== "")
   .map((l) => JSON.parse(l) as Line)
@@ -98,3 +95,45 @@ for (const l of [...lines].sort((a, b) => b.ms - a.ms).slice(0, slowest))
   console.log(
     `${sec(l.ms).padStart(7)}  ${new Date(l.at).toLocaleTimeString()}  ${l.tool ?? l.dev}  ${l.who ?? ""}  held ${sec(l.blockedMs)}${l.queuedMs !== undefined ? `, on the way ${sec(l.queuedMs)}` : ""}  ${l.args ?? ""}`,
   );
+
+type CheckRun = {
+  at: string;
+  ms: number;
+  failed?: string;
+  steps: Record<string, number>;
+  testsRun: number;
+  slowestTest?: { file: string; ms: number };
+};
+
+const checkFile = checkLogFile(root);
+const runs = (existsSync(checkFile) ? readFileSync(checkFile, "utf8") : "")
+  .split("\n")
+  .filter((l) => l !== "")
+  .map((l) => JSON.parse(l) as CheckRun)
+  .filter((r) => Date.parse(r.at) >= since && !Array.isArray(r.steps));
+console.log(
+  `\npnpm check: ${runs.length} runs, median ${sec(
+    q(
+      runs.map((r) => r.ms),
+      0.5,
+    ),
+  )}, max ${sec(Math.max(0, ...runs.map((r) => r.ms)))}, ${runs.filter((r) => r.failed !== undefined).length} failed`,
+);
+if (runs.length > 0) {
+  console.log("step                 median     max");
+  for (const name of [...new Set(runs.flatMap((r) => Object.keys(r.steps)))]) {
+    const ms = runs.flatMap((r) => (r.steps[name] === undefined ? [] : [r.steps[name] as number]));
+    console.log(
+      `${name.padEnd(18)} ${sec(q(ms, 0.5)).padStart(8)} ${sec(Math.max(...ms)).padStart(7)}`,
+    );
+  }
+  // The test file that was slowest in each run: the one to look at when the tests step is slow.
+  console.log("\nslowest test file, per run:");
+  for (const r of [...runs]
+    .sort((a, b) => (b.slowestTest?.ms ?? 0) - (a.slowestTest?.ms ?? 0))
+    .slice(0, slowest))
+    if (r.slowestTest !== undefined)
+      console.log(
+        `${sec(r.slowestTest.ms).padStart(7)}  ${new Date(r.at).toLocaleTimeString()}  ${r.testsRun} run  ${r.slowestTest.file}`,
+      );
+}

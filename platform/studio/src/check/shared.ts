@@ -12,3 +12,7 @@ export function rootFiles(root: string): string[] {
     .map((name) => join(root, name))
     .filter((f) => statSync(f).isFile());
 }
+
+/** Where `pnpm check` logs each run (all.ts); `pnpm tool-times` reads it. */
+export const checkLogFile = (root: string): string =>
+  join(root, "node_modules", ".cache", "chalk-checks.jsonl");

@@ -1,9 +1,11 @@
 import { spawn } from "node:child_process";
+import { appendFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { findUp } from "../find-up";
 import { lint } from "./lint";
+import { checkLogFile } from "./shared";
 import { stampedStep } from "./steps";
-import { test } from "./test";
+import { type TestReport, test } from "./test";
 import { typecheck } from "./typecheck";
 
 /**
@@ -34,9 +36,12 @@ const stamped = (name: string, args: string[]) => () => {
   return stampedStep(root, name, { cwd: studio, tsx: [tsx, ...tsconfig], args, force });
 };
 
+/** What the tests step ran, for the log. */
+const tests: TestReport = { run: 0, unchanged: 0, files: [] };
+
 const steps: [string, () => Promise<boolean>][] = [
   ["typecheck", () => typecheck(root, { force })],
-  ["tests", () => test(root, { force })],
+  ["tests", () => test(root, { force, report: tests })],
   ["boundaries", stamped("boundaries", ["src/boundaries-cli.ts"])],
   // Not stamped: it reads every source file, and is fast.
   [
@@ -69,17 +74,48 @@ const steps: [string, () => Promise<boolean>][] = [
   ["lint", () => lint(root, { force })],
 ];
 
+/**
+ * Every run, timed, so what makes a check slow is seen, not guessed: one short JSON line per run in
+ * node_modules/.cache/chalk-checks.jsonl: its time, each step's, how many test files ran, and the
+ * slowest of them. `pnpm tool-times` sums it up.
+ */
+function logRun(ms: number, steps: { name: string; ms: number }[], failed: string | null): void {
+  try {
+    const file = checkLogFile(root);
+    mkdirSync(dirname(file), { recursive: true });
+    const slowest = [...tests.files].sort((a, b) => b.ms - a.ms)[0];
+    const line = {
+      at: new Date(started).toISOString(),
+      ms,
+      ...(force ? { force } : {}),
+      ...(failed === null ? {} : { failed }),
+      steps: Object.fromEntries(steps.map((s) => [s.name, s.ms])),
+      testsRun: tests.run,
+      ...(slowest === undefined ? {} : { slowestTest: { file: slowest.file, ms: slowest.ms } }),
+      ...(tests.files.some((f) => !f.ok)
+        ? { failedTests: tests.files.filter((f) => !f.ok).map((f) => f.file) }
+        : {}),
+    };
+    appendFileSync(file, `${JSON.stringify(line)}\n`);
+  } catch {
+    // A log that can't be written never fails a check.
+  }
+}
+
 const started = Date.now();
-const times: string[] = [];
-const seconds = (since: number) => `${((Date.now() - since) / 1000).toFixed(1)}s`;
+const timed: { name: string; ms: number }[] = [];
+const seconds = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
+const times = () => timed.map((t) => `${t.name} ${seconds(t.ms)}`).join(" · ");
 for (const [name, step] of steps) {
   if (name === "typecheck" || name === "tests" || name === "lint") console.log(`\n▸ ${name}`);
   const at = Date.now();
   const ok = await step();
-  times.push(`${name} ${seconds(at)}`);
+  timed.push({ name, ms: Date.now() - at });
   if (!ok) {
-    console.error(`\n✗ ${name} failed (${times.join(" · ")})`);
+    logRun(Date.now() - started, timed, name);
+    console.error(`\n✗ ${name} failed (${times()})`);
     process.exit(1);
   }
 }
-console.log(`\n✓ every check passed in ${seconds(started)}: ${times.join(" · ")}`);
+logRun(Date.now() - started, timed, null);
+console.log(`\n✓ every check passed in ${seconds(Date.now() - started)}: ${times()}`);

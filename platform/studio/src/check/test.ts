@@ -15,6 +15,13 @@ import { rootFiles } from "./shared";
 
 type Stamp = { key: string; files: string[] };
 
+/** What a test step did, for the check's log: how many files ran or were skipped, each one run's time. */
+export type TestReport = {
+  run: number;
+  unchanged: number;
+  files: { file: string; ms: number; ok: boolean }[];
+};
+
 type Graph = {
   getModuleById(id: string): ModuleNode | undefined;
   getModulesByFile(file: string): Set<ModuleNode> | undefined;
@@ -52,7 +59,10 @@ function importsOf(graph: Graph | undefined, file: string): string[] {
     .filter((f): f is string => f !== null && !f.includes("/node_modules/"));
 }
 
-export async function test(root: string, options: { force: boolean }): Promise<boolean> {
+export async function test(
+  root: string,
+  options: { force: boolean; report?: TestReport },
+): Promise<boolean> {
   const cache = join(root, "node_modules", ".cache", "chalk-check");
   const stamps = join(cache, "tests");
   if (options.force) rmSync(stamps, { recursive: true, force: true });
@@ -70,6 +80,10 @@ export async function test(root: string, options: { force: boolean }): Promise<b
     }
   });
   console.log(`test: ${stale.length} to run, ${files.length - stale.length} unchanged`);
+  if (options.report !== undefined) {
+    options.report.run = stale.length;
+    options.report.unchanged = files.length - stale.length;
+  }
   if (stale.length === 0) return true;
 
   const { startVitest } = await import("vitest/node");
@@ -82,6 +96,11 @@ export async function test(root: string, options: { force: boolean }): Promise<b
   const graph = project.vitenode?.server?.moduleGraph ?? project.server?.moduleGraph;
   let ok = true;
   for (const result of vitest.state.getFiles()) {
+    options.report?.files.push({
+      file: relative(root, result.filepath),
+      ms: Math.round(result.result?.duration ?? 0),
+      ok: result.result?.state === "pass",
+    });
     if (result.result?.state !== "pass") {
       ok = false;
       continue;

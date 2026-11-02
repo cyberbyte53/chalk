@@ -35,7 +35,8 @@ describe("the editor's loader", () => {
     expect(log).toEqual(["activate 1"]);
 
     writeFileSync(join(out, "extension.js"), extensionCode(2));
-    await vi.waitFor(() => expect(log).toContain("activate 2"), { timeout: 3000 });
+    // Up to 10 s: with every test file running at once, the rebuild can take more than 3 (seen).
+    await vi.waitFor(() => expect(log).toContain("activate 2"), { timeout: 10_000 });
     expect(log).toEqual(["activate 1", "unload 1", "dispose 1", "activate 2"]);
 
     // The editor closing: the running code is unloaded and deactivated once.
