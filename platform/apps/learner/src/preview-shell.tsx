@@ -339,7 +339,8 @@ function BoardThreads({
       <li
         key={t.id}
         data-id={t.id}
-        class={`preview-thread is-${t.status}${isOpen ? " is-open" : ""}`}
+        // The person's own threads stand apart from the agents' at a glance.
+        class={`preview-thread is-${t.status}${isOpen ? " is-open" : ""}${t.role === "person" ? " is-mine" : ""}`}
         onMouseEnter={() => reveal(t, true)}
         onMouseLeave={() => reveal(t, false)}
       >

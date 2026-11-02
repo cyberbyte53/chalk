@@ -1631,6 +1631,11 @@ body.is-selecting .is-pick-target {
   border-radius: 10px;
   padding: 8px 10px;
 }
+/* A thread the person started: a warm tint and edge, apart from the reviewers' and fixers'. */
+.preview-thread.is-mine {
+  background: #33302a;
+  box-shadow: inset 3px 0 0 #e0a84f;
+}
 .preview-turn {
   display: block;
   font-size: 11px;
