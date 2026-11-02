@@ -16,6 +16,7 @@ import {
   readLessons,
   readMatch,
   readObjectives,
+  stampProblems,
 } from "./pipeline";
 import { passUnder } from "./reviewed";
 
@@ -221,5 +222,30 @@ describe("a lesson waits on a self-review", () => {
     expect(first(root)).toEqual({ slug: "first", isToSelfReview: false });
     built(root, "story", "In the town, the roads told Riya where to go");
     expect(first(root)).toMatchObject({ isToSelfReview: true, why: "story (changed)" });
+  });
+});
+
+describe("an approval's commit", () => {
+  it("holds when it is committed alone; fails when committed together with an edit", () => {
+    const root = chapter();
+    approve(root, "b", "c", Step.Brief);
+    commit(root, "brief approved");
+    const chapters = () => [readChapter(root, "b", "c")];
+    expect(stampProblems(root, chapters())).toEqual([]);
+    // An edit to the text, committed with the approval it came with: which text was approved?
+    approve(root, "b", "c", Step.Objectives);
+    writeFileSync(
+      file(root, "objectives.md"),
+      `${readFileSync(file(root, "objectives.md"), "utf8")}- **o2** Plot a point. (fig3.2)\n`,
+    );
+    commit(root, "objectives approved, and an objective added");
+    expect(stampProblems(root, chapters())).toEqual([
+      expect.stringMatching(
+        /objectives\.md: its approval .* committed together with changes to its text/,
+      ),
+    ]);
+    // An approval not yet committed isn't checked: it is committed alone, next.
+    approve(root, "b", "c", Step.Brief);
+    expect(stampProblems(root, chapters()).length).toBe(1);
   });
 });

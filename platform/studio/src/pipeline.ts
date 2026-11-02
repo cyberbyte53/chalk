@@ -252,6 +252,33 @@ function content(text: string | undefined): string | undefined {
   return text === undefined ? undefined : splitFront(text).body.trim();
 }
 
+/**
+ * Approvals committed together with edits: an `approved:` line is the person's word on the text
+ * they read, so the commit that brings it changes nothing else in the file. Committed alongside an
+ * edit, history can't say which text was approved. Only approvals already committed are checked.
+ */
+export function stampProblems(root: string, chapters: readonly Chapter[]): string[] {
+  const out: string[] = [];
+  for (const c of chapters)
+    for (const f of c.files) {
+      const rel = join(c.dir, f.file);
+      const committed = atCommit(root, "HEAD", rel);
+      const stamp = committed === undefined ? undefined : splitFront(committed).front.approved;
+      if (stamp === undefined || stamp === "") continue;
+      // The oldest commit whose file has this line: the one that brought it.
+      const brought = (git(root, "log", "--format=%H", "-S", `approved: ${stamp}`, "--", rel) ?? "")
+        .trim()
+        .split("\n")
+        .at(-1);
+      if (brought === undefined || brought === "") continue;
+      if (content(atCommit(root, brought, rel)) !== content(atCommit(root, `${brought}^`, rel)))
+        out.push(
+          `${rel}: its approval (approved: ${stamp}) was committed together with changes to its text, in ${brought.slice(0, 12)}: an approval is committed alone`,
+        );
+    }
+  return out;
+}
+
 /** Everything about one chapter's planning files. */
 export function readChapter(root: string, book: string, chapter: string): Chapter {
   const dir = join("authoring", "books", book, chapter);
