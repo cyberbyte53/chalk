@@ -112,6 +112,17 @@ describe("what a board shows, against what it showed when passed", () => {
     expect(existsSync(join(root, ".chalk-seen", "b/c/l/one", "plays.json"))).toBe(true);
   });
 
+  it("a prop's new fields alone are not a difference; with another, they are named apart", () => {
+    const a = picture(10, 10);
+    const then = 'town: {"setup":{"plane":{"window":1}},"live":{}}';
+    const added = 'town: {"setup":{"plane":{"window":1,"shift":0}},"live":{}}';
+    const moved = 'town: {"setup":{"plane":{"window":2,"shift":0}},"live":{}}';
+    expect(shownDiffs(shown([a, a], [then, then]), shown([a, a], [added, added]))).toEqual([]);
+    expect(shownDiffs(shown([a, a], [then, then]), shown([a, a], [moved, added]))).toMatchObject([
+      { version: "en · 360×640", read: ["town"] },
+    ]);
+  });
+
   it("a version drawn on one side only differs: never the same", () => {
     const a = picture(10, 10);
     const both = shown([a, a]);

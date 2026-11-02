@@ -191,6 +191,11 @@ export type VersionDiff = {
   missing?: { side: "then" | "now"; why?: string };
   /** The pieces whose state or problems read differently. */
   read: string[];
+  /**
+   * Fields a prop has gained since, read only now, each at whatever it is (piece.path): a prop's
+   * new field is in every board's state, so it is said apart from what reads differently.
+   */
+  newFields?: string[];
   /** The share of its pixels that differ, 0 to 1, and the pieces they fall in. */
   share: number;
   pieces: string[];
@@ -213,6 +218,36 @@ const linesOf = (read: string) =>
       .map((l) => [l.slice(0, l.indexOf(":")), l] as const),
   );
 
+/** A piece's state as read: the JSON after "piece: ", or undefined. */
+function stateOf(line: string | undefined): unknown {
+  if (line === undefined) return undefined;
+  try {
+    return JSON.parse(line.slice(line.indexOf(":") + 1));
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * The fields `now` has that `then` didn't, when that is all that differs (each by its path,
+ * "setup.plane.shift"); undefined when anything that was there reads differently.
+ */
+function onlyAdded(then: unknown, now: unknown, at = ""): string[] | undefined {
+  const isObject = (v: unknown): v is Record<string, unknown> =>
+    v !== null && typeof v === "object" && !Array.isArray(v);
+  if (!isObject(then) || !isObject(now))
+    return JSON.stringify(then) === JSON.stringify(now) ? [] : undefined;
+  const out: string[] = [];
+  for (const k of Object.keys(then)) {
+    if (!(k in now)) return undefined;
+    const inner = onlyAdded(then[k], now[k], `${at}${k}.`);
+    if (inner === undefined) return undefined;
+    out.push(...inner);
+  }
+  for (const k of Object.keys(now)) if (!(k in then)) out.push(`${at}${k}`);
+  return out;
+}
+
 /** The versions of a board now that differ from what it showed when passed. */
 export function shownDiffs(passed: Shown, now: Shown): VersionDiff[] {
   const out: VersionDiff[] = [];
@@ -234,7 +269,19 @@ export function shownDiffs(passed: Shown, now: Shown): VersionDiff[] {
       continue;
     }
     const [a, b] = [linesOf(was.read), linesOf(v.read)];
-    const read = [...new Set([...a.keys(), ...b.keys()])].filter((k) => a.get(k) !== b.get(k));
+    const differing = [...new Set([...a.keys(), ...b.keys()])].filter((k) => a.get(k) !== b.get(k));
+    // A piece whose state differs only by fields it didn't have then: those are new fields, not a
+    // change in what it reads.
+    const newFields: string[] = [];
+    const read = differing.filter((k) => {
+      // A piece there on one side only, or a state that isn't fields, reads differently.
+      const [then, now] = [stateOf(a.get(k)), stateOf(b.get(k))];
+      if (then === undefined || now === undefined) return true;
+      const added = onlyAdded(then, now);
+      if (added === undefined) return true;
+      newFields.push(...added.map((f) => `${k}.${f}`));
+      return false;
+    });
     // The same bytes are the same picture: nothing to compare pixel by pixel.
     const picture = was.png.equals(v.png)
       ? undefined
@@ -243,6 +290,7 @@ export function shownDiffs(passed: Shown, now: Shown): VersionDiff[] {
     out.push({
       version: v.version,
       read,
+      ...(newFields.length === 0 ? {} : { newFields }),
       share: picture?.share ?? 0,
       pieces: picture?.pieces ?? [],
       pictures: {

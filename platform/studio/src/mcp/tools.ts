@@ -410,7 +410,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     });
     if (again === undefined) return undoable("not played");
     if ("failed" in again) return undoable(again.failed);
-    const differs = playDiff(then, again.lines);
+    // A refused step lists the parts there are; their order isn't what the play did.
+    const sorted = (text: string) =>
+      text.replace(
+        /\(parts: ([^)]*)\)/g,
+        (_, list: string) => `(parts: ${list.split(", ").sort().join(", ")})`,
+      );
+    const differs = playDiff(sorted(then), sorted(again.lines));
     if (differs === undefined) return undefined;
     const failsNow = (text: string) =>
       new Set(
@@ -593,6 +599,9 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
                 ? `shows, ${d.version}: ${d.missing.side === "now" ? `couldn't draw it now${d.missing.why === undefined ? "" : `: ${d.missing.why}`}` : "not seen in the review (show it)"}`
                 : `shows, ${d.version}: ${[
                     ...(d.read.length > 0 ? [`reads differently: ${d.read.join(", ")}`] : []),
+                    ...(d.newFields !== undefined
+                      ? [`new fields, not there then: ${d.newFields.join(", ")}`]
+                      : []),
                     ...(d.share > 0
                       ? [
                           `${d.share < 0.001 ? "under 0.1%" : `${(d.share * 100).toFixed(1)}%`} of it looks different${d.pieces.length > 0 ? `, in ${d.pieces.join(", ")}` : ""}`,
