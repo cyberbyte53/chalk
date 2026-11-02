@@ -154,11 +154,11 @@
       "seconds": 1.44
     },
     {
-      "file": "3ebec2225c693d60.m4a",
+      "file": "daa7193e94c04af8.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Aman has lost his kite at the fair. The stalls hold clues: each one gives the address of the next stall. Walk Riya with the arrows from the gate at O.",
-      "seconds": 8.603
+      "words": "Aman has lost his kite at the fair. The stalls hold clues: each one gives the address of the next stall. Walk Riya with the arrows from the gate at O; when she stands at the stall you want, tap it to open it.",
+      "seconds": 11.413
     },
     {
       "file": "4de3580c8540155f.m4a",
@@ -1209,6 +1209,13 @@
       "locale": "en",
       "words": "Riya and Aman are in class 9, and their class is holding a stall fair. They will plan their stall at Aman's house, but Riya has never been there. She asks him where he lives. He replies: Street 4.",
       "seconds": 11.703
+    },
+    {
+      "file": "0a857586ba7b8578.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Riya isn't at that stall. Walk her there first, then tap it.",
+      "seconds": 3.623
     },
     {
       "file": "af0448c79f2220b1.m4a",
@@ -2632,11 +2639,11 @@
       "seconds": 1.696
     },
     {
-      "file": "07db100f932e9653.m4a",
+      "file": "032b2a8c1191a04c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "अमन की पतंग मेले में खो गई है। स्टॉलों पर सुराग हैं: हर सुराग अगले स्टॉल का पता बताता है। रिया को तीरों से O वाले फाटक से ले चलो।",
-      "seconds": 11.227
+      "words": "अमन की पतंग मेले में खो गई है। स्टॉलों पर सुराग हैं: हर सुराग अगले स्टॉल का पता बताता है। रिया को तीरों से O वाले फाटक से ले चलो; जब वह तुम्हारे चुने स्टॉल पर खड़ी हो, उसे खोलने के लिए उस पर दबाओ।",
+      "seconds": 15.732
     },
     {
       "file": "3915581192d56c50.m4a",
@@ -4093,6 +4100,13 @@
       "locale": "hi",
       "words": "ये दोनों किनारे आमने-सामने हैं, तो दूसरी दूरी कुछ नहीं जोड़ती: बाएँ किनारे से बराबर दूरी पर हर जगह दाएँ से भी बराबर दूरी पर है। दोनों किनारे एक कोने पर मिलने चाहिए।",
       "seconds": 13.05
+    },
+    {
+      "file": "e6af181f70d54f27.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया उस स्टॉल पर नहीं है। पहले उसे वहाँ ले चलो, फिर उस पर दबाओ।",
+      "seconds": 5.353
     },
     {
       "file": "d3a692bc0feb5259.m4a",

@@ -544,8 +544,8 @@ const treasureTrail = page(
       title: words.title(t("The treasure trail", "ख़ज़ाने की खोज")),
       rules: words.body(
         t(
-          "Aman has lost his kite at the fair. The stalls hold clues: each one gives the **address of the next stall**. Walk Riya with the arrows from the gate at O.",
-          "अमन की पतंग मेले में खो गई है। स्टॉलों पर सुराग हैं: हर सुराग **अगले स्टॉल का पता** बताता है। रिया को तीरों से O वाले फाटक से ले चलो।",
+          "Aman has lost his kite at the fair. The stalls hold clues: each one gives the **address of the next stall**. Walk Riya with the arrows from the gate at O; when she stands at the stall you want, **tap it** to open it.",
+          "अमन की पतंग मेले में खो गई है। स्टॉलों पर सुराग हैं: हर सुराग **अगले स्टॉल का पता** बताता है। रिया को तीरों से O वाले फाटक से ले चलो; जब वह तुम्हारे चुने स्टॉल पर खड़ी हो, उसे खोलने के लिए उस पर **दबाओ**।",
         ),
       ),
       first: words.body(
@@ -563,6 +563,14 @@ const treasureTrail = page(
       ...Object.fromEntries(ROUTE.map((s, i) => [`at${capital(s.key)}`, clueAt(i)])),
       // Every stall but the first clue's, which can't be reached too early.
       ...Object.fromEntries(STALLS.slice(1).map((s) => [`not${capital(s.key)}`, wrongStop(s)])),
+      notThere: hidden(
+        words.body(
+          t(
+            "Riya isn't at that stall. Walk her there first, then tap it.",
+            "रिया उस स्टॉल पर नहीं है। पहले उसे वहाँ ले चलो, फिर उस पर दबाओ।",
+          ),
+        ),
+      ),
       ground: place(
         coordinatePlane,
         setup({
@@ -575,7 +583,8 @@ const treasureTrail = page(
           places: {
             placeKind: PlaceKind.Stall,
             places: STALLS.map((s) => ({ x: s.x, y: s.y, label: t(...s.sign) })),
-            choosing: Choosing.Never,
+            // A stall is opened by a tap, where Riya stands: walking past one opens nothing.
+            choosing: Choosing.Always,
             showAddress: false,
           },
           walker: {
@@ -589,32 +598,40 @@ const treasureTrail = page(
     },
     passBy: "rules",
     hear: {
-      // Where she stops: the clue's stall gives the next clue; any other says what it is.
-      "ground.walker.stepped": (me, p, t) => {
+      // A step on: what the last stall said goes.
+      "ground.walker.stepped": (me, _, t) =>
+        [...STALLS.slice(1).map((s) => `not${capital(s.key)}`), "notThere"]
+          .filter((name) => !me.hidden.includes(name))
+          .map((name) => t.self.hide({ name })),
+      // A stall tapped: only where Riya stands. The clue's stall gives the next clue; any other
+      // says what it is and where.
+      "ground.places.targetChosen": (me, p, t) => {
         const shown = (name: string) => !me.hidden.includes(name);
-        const hideNotes = STALLS.slice(1)
-          .map((s) => `not${capital(s.key)}`)
+        const notes = [...STALLS.slice(1).map((s) => `not${capital(s.key)}`), "notThere"]
           .filter(shown)
           .map((name) => t.self.hide({ name }));
-        // How far along: the clue showing is the last stall reached (none yet: the first clue).
+        const at = me.ground.walker.at;
+        if (at.x !== p.x || at.y !== p.y) return [...notes, t.self.show({ name: "notThere" })];
+        // How far along: the clue showing is the last stall opened (none yet: the first clue).
         const k = ROUTE.findIndex((s) => shown(`at${capital(s.key)}`)) + 1;
         const target = ROUTE[k];
         const stall = STALLS.find((s) => s.x === p.x && s.y === p.y);
         if (target !== undefined && stall === target) {
           const before = k === 0 ? "first" : `at${capital(ROUTE[k - 1]?.key ?? "")}`;
           return [
-            ...hideNotes,
+            ...notes,
             t.self.hide({ name: before }),
             t.self.show({ name: `at${capital(target.key)}` }),
             ...(k === ROUTE.length - 1 ? [t.self.pass()] : []),
           ];
         }
-        const isPassed = stall !== undefined && ROUTE.slice(0, Math.max(k, 0)).includes(stall);
-        if (stall === undefined || isPassed || target === undefined) return hideNotes;
-        return [...hideNotes, t.self.show({ name: `not${capital(stall.key)}` })];
+        const isOpened = stall !== undefined && ROUTE.slice(0, k).includes(stall);
+        if (stall === undefined || isOpened || target === undefined) return notes;
+        return [...notes, t.self.show({ name: `not${capital(stall.key)}` })];
       },
     },
-    // A student who slips: stalls reached too early, and each clue's swapped address before its own.
+    // A student who slips: a stall tapped from afar, stalls opened too early, and each clue's
+    // swapped address before its own.
     witness: [
       [-3, 4],
       [1, 4],
@@ -632,7 +649,13 @@ const treasureTrail = page(
       [2, -3],
     ].flatMap(([x, y], i, all) => {
       const [fx, fy] = all[i - 1] ?? [0, 0];
-      return stepsBetween({ x: fx ?? 0, y: fy ?? 0 }, { x: x ?? 0, y: y ?? 0 });
+      const here = { x: x ?? 0, y: y ?? 0 };
+      return [
+        // A stall tapped from the gate, before walking there.
+        ...(i === 0 ? [tap("ground.places", "chooseTarget", { x: 4, y: 1 })] : []),
+        ...stepsBetween({ x: fx ?? 0, y: fy ?? 0 }, here),
+        tap("ground.places", "chooseTarget", here),
+      ];
     }),
   }),
 );
