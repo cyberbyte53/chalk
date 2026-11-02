@@ -148,8 +148,23 @@ function realBook(): string {
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "build.yaml"), "books: [class9-maths]\n");
   symlinkSync(join(contentDir, "class9-maths"), join(dir, "class9-maths"), "dir");
+  realBooks.add(dir);
   return withModules(dir);
 }
+
+/** The real books: built with the real cast (every clip is already made, so nothing is voiced). */
+const realBooks = new Set<string>();
+
+/**
+ * The made-up chapters' cast: every voice a tone, so their lines are voiced at once. With the real
+ * cast, each build would start Piper and record real speech for clips thrown away after the test.
+ */
+const toneVoices = (dir: string) => {
+  const file = join(dir, "voices.json");
+  const voice = { en: "tone:test", hi: "tone:test" };
+  writeFileSync(file, JSON.stringify({ cast: { narrator: voice, riya: voice, aman: voice } }));
+  return file;
+};
 
 const build = (dir: string, commit = "test") =>
   buildContent({
@@ -157,8 +172,9 @@ const build = (dir: string, commit = "test") =>
     modules: propModules,
     commit,
     modulesFile: join(dir, MODULES_FILE),
-    // Its boards speak: who voices them (every clip is already made, so nothing is voiced).
-    voices: join(contentDir, "..", "authoring", "voices.json"),
+    voices: realBooks.has(dir)
+      ? join(contentDir, "..", "authoring", "voices.json")
+      : toneVoices(dir),
   });
 const messages = (result: Awaited<ReturnType<typeof build>>) =>
   result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");
