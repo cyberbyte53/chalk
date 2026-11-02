@@ -907,7 +907,7 @@
       text: ""
       status: closed
 - id: cmvz6l89d74b
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:06.865Z
@@ -1145,4 +1145,8 @@
         nothing sits on the x-axis −1, and O is clear of the y-axis 1. Seen on distances-from-axes,
         abscissa-and-ordinate, writing-coordinates, points-on-axes, signs-and-quadrants and
         any-axes. At 640 every number is still written.
-  turn: person
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:04.977Z
+      text: ""
+      status: closed

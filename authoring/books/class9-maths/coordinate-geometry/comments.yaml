@@ -6560,7 +6560,7 @@
       text: ""
       status: closed
 - id: cmvz6l85s5pk
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:06.736Z
@@ -6568,7 +6568,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:63
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "Played: walking 3 up first and then 4 right reaches P and passes, and the box then says
     \"That is Riya's walk: 4 along, then 3 up\". That is not what she just did (the same goes for Q,
     \"6 to the left, then 2 down\"). Principle 12 (read it literally): the student sees the text
@@ -6801,8 +6800,13 @@
         went, the distances are the same\", and Q says \"in either order\" (Hindi matches). At Q
         (and one step past it) Riya's name is at her feet, clear of the axis numbers. Seen in
         English and Hindi on the 360 phone, the 640 column and 640×720."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:04.359Z
+      text: ""
+      status: closed
 - id: cmvz6l8c1494
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:06.961Z
@@ -6810,7 +6814,6 @@
   target: link
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:139
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: '"P and Q were each 4 or 6 units from the y-axis, but on opposite sides" is hard to parse
     ("each 4 or 6"), and the Hindi already says "4 और 6". Principle 10 (plain, exact). Mechanical:
     "P is 4 units from the y-axis and Q is 6, on opposite sides of it. A sign tells the sides apart,
@@ -7035,8 +7038,13 @@
       at: 2026-11-02T12:00:10.057Z
       text: 'Confirmed fixed: "P is 4 units from the y-axis and Q is 6, on opposite sides of it. A sign
         tells the sides apart, as on a number line." The Hindi matches. Read on every check screen.'
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:08.184Z
+      text: ""
+      status: closed
 - id: cmvz6l8f5qod
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.073Z
@@ -7044,7 +7052,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:183
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "Played on the phone, dragging the point to Q. (1) With the point near the y-axis, e.g. at
     (−2, 3), the \"x = −2\" and \"y = 3\" labels sit on the y-axis numbers 3, 4 and on Y, so they
     can't be read (overlap, mechanical). (2) At Q the two labels end up side by side under the point
@@ -7315,8 +7322,13 @@
       text: 'Confirmed fixed. Played P → (−2, 3) → (−6, 3) → Q in English on the 360 phone: at Q, "y = −2"
         sits right of its short line, above the dashed line and clear of the dot; "x = −6" is under
         its line. Nothing covers either label. Same in Hindi at 360 (straight drag to Q).'
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:11.346Z
+      text: ""
+      status: closed
 - id: cmvz6l8i8ofh
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.184Z
@@ -7324,7 +7336,6 @@
   target: plan
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:313
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "Once the point is at (3, 4), the fair-ground plan appears and only then, below it, the text
     that introduces it (\"On the fair ground's plan, the two main paths are the axes…\"). A student
     scrolling down meets an unexplained green square with two stalls before reading what it is.
@@ -7551,15 +7562,19 @@
         in English and Hindi at 360. I couldn't check the minor point, the tapped stall's ring
         against its label: the review tool can't drag the point to (3, 4) on this board now (see the
         new thread on writing-coordinates#sheet), so the ground never appears in play."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:14.786Z
+      text: ""
+      status: closed
 - id: cmvz6l8l9911
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.293Z
   board: class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:344
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "This board has nothing to do: it passes on opening, and under the question all four answers
     (B, M, L, S, each with its abscissa, ordinate and pair) are already printed. The flow says
     \"read one at a time\", and principle 4 says the student does something with it before moving
@@ -7632,8 +7647,13 @@
         points-on-axes does the same for B, C and E (drawn; not played, see the points-on-axes#sheet
         thread). One new problem the fix exposed is filed separately: on every one of these
         questions the right pair is the last option."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:18.433Z
+      text: ""
+      status: closed
 - id: cmvz6l8ob5vf
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.403Z
@@ -7641,7 +7661,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:441
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: 'Played: dragging the point straight from (3, 2) down onto O (it crosses the x-axis on the
     way) shows onX, cuts its voice off at 0 s, then shows atO, the example and passes. The rule for
     the y-axis (onY, (0, y)) is never shown. Principle 1/11: the student leaves without ever seeing
@@ -7908,8 +7927,13 @@
       text: "Confirmed fixed. Played in Hindi at 640: drag (3, 2) → (−3, 0), passing the y-axis at (0, 1).
         Only onX appears, and its voice runs in full (24.5 s); onY waits. Then on to (0, 3): onY
         appears after onX, as the ask orders. Straight to O from (3, 2) still shows onX only."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:21.252Z
+      text: ""
+      status: closed
 - id: cmvz6l8rbmzf
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.511Z
@@ -7917,7 +7941,6 @@
   target: atO
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:488
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: 'The town sentence, "a house on the main road would need no walk up the street: its second
     number is 0", is about points on the x-axis (y = 0), but it sits in the box about the origin. A
     student reads it as explaining why O is (0, 0). Mechanical: move it into onX.'
@@ -8139,8 +8162,13 @@
       at: 2026-11-02T12:00:10.471Z
       text: 'Confirmed fixed: the town sentence is now in onX, after "Press y = 0", and atO says only "The
         origin is 0 units from both axes, so its coordinates are (0, 0)." Both languages.'
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:25.569Z
+      text: ""
+      status: closed
 - id: cmvz6l8ubdei
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.619Z
@@ -8148,7 +8176,6 @@
   target: whyE
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:585
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "E's answer puts typeset fractions inside the sentence (\"2/3 of a unit… E is (2/3, 0)\"). On
     the phone the stacked 2/3 is tiny and in a different font from the pair around it. Mechanical
     (maths inside a sentence): end the sentence and put E = (2/3, 0) on its own line, or write the
@@ -8373,8 +8400,13 @@
       at: 2026-11-02T12:00:10.549Z
       text: 'Confirmed fixed: "E is on the x-axis, two-thirds of a unit from the y-axis along OX. So E
         is", then (2/3, 0) on its own line as display maths. Same in Hindi at 360.'
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:26.969Z
+      text: ""
+      status: closed
 - id: cmvz6l8xg6c1
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.732Z
@@ -8382,7 +8414,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:689
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "On the phone, the moving point's coordinate label collides with the quadrant names and their
     sign patterns. At the start \"(4, 1)\" sits on top of quadrant I's \"(+, +)\" (the comment in
     the code says the start was chosen to avoid this, but at 360 it doesn't). At (−3, 2) the label
@@ -8612,8 +8643,13 @@
       text: "Confirmed fixed. The pair is written under the plane (\"The point: (4, 1)\", \"बिंदु: (4,
         1)\"). Played through II, III and IV at 360: (−, +), (−, −) and (+, −) each appear readable,
         and nothing beside the point covers a quadrant's name or signs."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:32.623Z
+      text: ""
+      status: closed
 - id: cmvz6l90ksot
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.844Z
@@ -8621,7 +8657,6 @@
   target: round1
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:840
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: The guessing round is one question, (−3, 5), asked directly under the box that lists all four
     patterns, so a student can answer by looking up "(−, +)" in the line above rather than from the
     signs. The flow describes "a point appears, the class calls its quadrant from its signs before
@@ -8686,8 +8721,13 @@
         +). This point is (−3, 5).\" / \"On the x-axis, y = 0. This point is (0, −3).\"), each right
         pick brings the next round, and round 4 passes the board. The rule stays above, as you
         chose."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:36.223Z
+      text: ""
+      status: closed
 - id: cmvz6l93mltx
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.954Z
@@ -8695,7 +8735,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:759
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "Played: the board passes, and \"The point never moved, yet its coordinates changed\" appears,
     on the first half-unit nudge of O. Turning isn't needed. Against the flow: (1) there's no way to
     put the axes back (\"put back, its coordinates are what they were\"), so the student never sees
@@ -8933,8 +8972,13 @@
         to 0°, P read (3.00, 2.00), and \"Back on the agreed axes, P is (3, 2) again\" appeared. The
         moving axes carry x by the ↻ handle and y along OY, and P is named. One new overlap is filed
         separately: the handle can sit on P's name."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:38.338Z
+      text: ""
+      status: closed
 - id: cmvz6l96slvf
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:08.068Z
@@ -8942,7 +8986,6 @@
   target: summary
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:919
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "The summary of points 6 to 10 is one dense paragraph with (x, y), (x, 0), (0, y), (0, 0) and
     four sign patterns inside the running text. On the phone it's 8 lines of mixed words and
     brackets. Principles 6/10: one fact per line, maths on its own line. Mechanical (maths inside a
@@ -9187,14 +9230,18 @@
         y-coordinate (abscissa, ordinate) with their signs; (x, y), x first; (x, 0), (0, y), (0, 0);
         the four quadrants' signs. It reads cleanly in English and Hindi at 360. The minor point
         stays: L's name still sits just under Y at the top of the y-axis. Both letters can be read."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:39.965Z
+      text: ""
+      status: closed
 - id: cmvz6l99zqiz
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:08.183Z
   board: class9-maths/coordinate-geometry/questions/fig-3-14
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "Three new families (fig-3-14, quadrant-or-axis, read-a-point) give no note on a wrong option.
     Played fig-3-14 (B): tapping (2, −5) just says wrong. The chapter's earlier families
     (cross-street-count, name-the-lines, table-lamp) and this lesson's own choices do give one. Each
@@ -9433,14 +9480,18 @@
         which point is (5, −5), so the exercise doesn't repeat it. Part g's options are the figure's
         other points, each saying where it is. One problem remains across these families and the
         lesson, filed separately: the right option is always the last one."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:45.667Z
+      text: ""
+      status: closed
 - id: cmvz6l9d6qqf
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:08.298Z
   board: class9-maths/coordinate-geometry/questions/quadrant-or-axis
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: "The options change with the answer, which gives the answer away. A point in a quadrant gets
     the four quadrants. A point on an axis, (−1, 0), gets \"On the x-axis\", \"On the y-axis\" and
     two quadrants. So whenever the axis options appear, the answer is an axis, and it's a 50/50
@@ -9667,8 +9718,13 @@
       text: "Confirmed fixed: every board offers the same six in the same order (Quadrant I–IV, on the
         x-axis, on the y-axis), and each wrong one says its sign pattern and the point. Checked
         689a8f1d, (1, 2), in English and Hindi."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:46.662Z
+      text: ""
+      status: closed
 - id: cmvz7j6fyhq2
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T12:00:30.814Z
@@ -9676,7 +9732,6 @@
   target: pairOfB
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:88
   commit: d9db43c67c344f5ee5c59eaeec9338135facc822
-  turn: person
   text: "Give-away option (principle 8): the right answer is always the last option. On reading-points
     it is last for B, M, L and S. On points-on-axes it is last for B, C and E. On find-the-point it
     is last for H's pair and for (5, −5) → C. In the fig-3-14 family it is last too (board 0ca66388:
@@ -9747,8 +9802,13 @@
         option last, which is chance (1 in 4) and not a pattern now. quadrant-or-axis and the
         signs-and-quadrants rounds keep their fixed six on purpose. Seen in English and Hindi at
         360."
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:47.601Z
+      text: ""
+      status: closed
 - id: cmvz7j6kqbs6
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T12:00:30.986Z
@@ -9756,7 +9816,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:305
   commit: d9db43c67c344f5ee5c59eaeec9338135facc822
-  turn: person
   text: "The point can't be dragged here in the review tool now. show with steps: drag
     sheet/reading/point to (3, 4), to (1, 1) or to (−2, 2): \"nothing changed\", at 360 and at 640.
     The same happens on points-on-axes#sheet. The same drag works on abscissa-and-ordinate and
@@ -9818,8 +9877,13 @@
         passes. Tapping Books then gives "The stall you tapped: (−4, 1)", with the ring readable
         around the stall. points-on-axes: x-axis, y-axis, O, then B, C, E asked, wrong then right
         each, and it passes.'
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:49.815Z
+      text: ""
+      status: closed
 - id: cmvz7j6ouka4
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T12:00:31.134Z
@@ -9827,7 +9891,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:969
   commit: d9db43c67c344f5ee5c59eaeec9338135facc822
-  turn: person
   text: "Overlap, reached by the cmvz6l93mltx fix. Played at 360: move O to (1, 1), turn the handle
     toward (4, 3), then drag O back to (0, 0). The turned x-axis now runs through P, and the ↻
     handle sits on P's name, so the \"P\" is drawn inside the handle. Just after the turn, the
@@ -9903,8 +9966,13 @@
         0). No name is there for the turned axis or its numbers to land on; the dot is drawn above
         the handle and the axis numbers, and its pair reads under the plane. A turned-axis number
         can still sit half under the dot, but nothing a student needs is lost.'
+    - by: you
+      role: person
+      at: 2026-11-02T14:06:57.244Z
+      text: ""
+      status: closed
 - id: cmvz7j6syrci
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T12:00:31.282Z
@@ -9912,7 +9980,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:122
   commit: d9db43c67c344f5ee5c59eaeec9338135facc822
-  turn: person
   text: "Minor overlap, 360 phone. A student who walks to Q by going 1 down first and then 6 left
     draws Riya's blue trail along y = −1. On the phone that row is where the x-axis numbers are
     written, so the trail strikes through −6, −5, −4, −3, −2 and −1. It's a natural route: down,
@@ -9967,8 +10034,13 @@
         runs along the number row, and −6 to −1 stay readable over it with their halo. Something
         else there is not fine: Riya's own name, now drawn at her feet, lands on the same number
         row. That one is filed as a new thread on distances-from-axes#sheet."
+    - by: you
+      role: person
+      at: 2026-11-02T14:07:02.477Z
+      text: ""
+      status: closed
 - id: cmvz9dmvje8b
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T12:52:11.407Z
@@ -9978,7 +10050,6 @@
   snapshot: "Put the axes back: O at the crossing of the paper's lines it started on, and the x-axis
     level again."
   commit: 44752f896d45a18cd823a1c57a67771e7826e0df
-  turn: person
   text: we should let know what was original coordinates as we might not know what it was before we
     translated and rotated
   changed:
@@ -10031,6 +10102,11 @@
         the agreed axes P was (3, 2). Put the axes back and see…". Played: O to (1, 1), turned 45°
         (P read (2.12, −0.71)), O home, turned level. It snapped, P read (3.00, 2.00), and "Back on
         the agreed axes, P is (3, 2) again" appeared. The Hindi matches on all three screens.'
+    - by: you
+      role: person
+      at: 2026-11-02T14:07:05.292Z
+      text: ""
+      status: closed
 - id: cmvz9gd2rul5
   status: open
   by: you
@@ -10053,7 +10129,7 @@
       text: "Taken back by the person in chat: the board already asks one of each type, and the fig-3-14
         family adds eight more. No change."
 - id: cmvz9n69vg5s
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T12:59:36.451Z
@@ -10064,7 +10140,6 @@
     Press y = 0: every point with y = 0 lights up, and they make the whole x-axis. In Riya's town, a
     house on the main road needs no walk up the street: its second number is 0."
   commit: 44752f896d45a18cd823a1c57a67771e7826e0df
-  turn: person
   text: why not add about x=0 also , why we are partial to y axis??
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
@@ -10140,8 +10215,13 @@
         its own. That is option (b) as you chose it, so the y-axis rule gets words where the x-axis
         gets a picture. Close this if that is what you want. (New, small: in onY on the phone, \"y =
         0\" breaks across two lines; filed apart.)"
+    - by: you
+      role: person
+      at: 2026-11-02T14:07:08.290Z
+      text: ""
+      status: closed
 - id: cmvzag98jcdo
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T13:22:13.315Z
@@ -10149,7 +10229,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:122
   commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
-  turn: person
   text: "Overlap reached by the cmvz6l85s5pk fix (Riya's name now drawn at her feet below the x-axis).
     Played at 360: down 1, then left 6 to (−6, −1), a natural way to walk toward Q. Her name at her
     feet lands right on the x-axis number row and runs into −5 and −4, so it can't be read (\"Riya\"
@@ -10279,8 +10358,13 @@
         right of her, under Q's guide line. At (−6, −1) and at Q in Hindi, \"रिया\" sits in the
         margin left of the −7 tick, outside the grid. Both read, and she is the only walker, so it
         isn't misleading."
+    - by: you
+      role: person
+      at: 2026-11-02T14:07:09.214Z
+      text: ""
+      status: closed
 - id: cmvzag9gyyrr
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T13:22:13.618Z
@@ -10288,7 +10372,6 @@
   target: rule
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:909
   commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
-  turn: person
   text: 'Maths broken inside a sentence (on the screen). On the 360 phone in English, the rule box
     wraps a sign pattern across two lines: "in II, (−," / "+); in III, (−, −)". This is the box the
     four rounds below are answered from, and a student reads "(−," and "+)" as two pieces.
@@ -10337,8 +10420,13 @@
       at: 2026-11-02T13:30:49.548Z
       text: Confirmed fixed. On the 360 phone, the rule box keeps each pattern whole in English, "(−, +)"
         and the rest, and in Hindi. So does the summary on find-the-point.
+    - by: you
+      role: person
+      at: 2026-11-02T14:07:10.516Z
+      text: ""
+      status: closed
 - id: cmvzarboy19b
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T13:30:49.714Z
@@ -10429,4 +10517,8 @@
         chose B's swapped option (3, 0). The note reads "यह y पहले है। B, y-अक्ष पर है, इसलिए x = 0,
         जो पहले लिखा जाता है।" with "x = 0" whole on one line. overview.ts:528 now has   on both
         sides of "=".
-  turn: person
+    - by: you
+      role: person
+      at: 2026-11-02T14:07:14.716Z
+      text: ""
+      status: closed
