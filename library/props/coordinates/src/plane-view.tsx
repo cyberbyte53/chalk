@@ -222,13 +222,11 @@ export function AxesDraw({
   const isCounted = s.marks === Marks.Counts;
   const named = s.named;
   const hasO = isNumbersOf(s) && s.showOrigin && s.isCrossed === true;
-  // Where a unit is too short for "−1" and "O" side by side, O keeps the corner: the −1s go
-  // (their marks stay).
+  // Where a unit is too short for O between the two −1s, O goes above the horizontal line, in the
+  // corner no number uses: every number stays written.
   const isCrowded = hasO && unit * s.tickEvery < 30;
   const label = (v: number, i: number) =>
-    i % every === 0 && !(hasZeroMark(v) && hasO) && !(isCrowded && Math.abs(v + s.tickEvery) < 1e-9)
-      ? num(v)
-      : "";
+    i % every === 0 && !(hasZeroMark(v) && hasO) ? num(v) : "";
   return (
     <g class="cp-axes">
       <line
@@ -274,7 +272,7 @@ export function AxesDraw({
           // While the lines are apart, a number of the vertical line on the horizontal line, or on
           // its row of numbers, isn't written: its mark stays.
           const isApart = s.apart.x !== 0 || s.apart.y !== 0;
-          const isOnRow = isApart && y > base - 8 && y < base + 26;
+          const isOnRow = isApart && y > base - 8 && y < base + 30;
           const text = isOnRow ? "" : label(v, i);
           const isButton = canLight && isCounted && text !== "";
           return (
@@ -306,7 +304,7 @@ export function AxesDraw({
           );
         })}
       {isNumbers && s.showOrigin && s.isCrossed === true && (
-        <text class="cp-origin" x={vx - 7} y={base + 14} text-anchor="end">
+        <text class="cp-origin" x={vx - 7} y={isCrowded ? base - 6 : base + 14} text-anchor="end">
           O
         </text>
       )}

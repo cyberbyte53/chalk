@@ -17,10 +17,13 @@ const { setup, walkTo } = plane;
 const XY: [ReturnType<typeof t>, ReturnType<typeof t>] = [t("x", "x"), t("y", "y")];
 
 /**
- * The two number lines as one picture (Fig. 3.7, 3.8): from −4 to 4 each way, so a unit is wide
- * enough on a phone for −1 to be written beside O.
+ * The grown town: from −5 to 5 each way around Riya's corner, the same size in every direction
+ * (lesson 1's Streets 1–5 and Houses 1–5, Aman's at (4, 5), and as many new ones west and south),
+ * on the same window as the axes it becomes.
  */
-const AXES = { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 };
+const GROWN = { xMin: -5.5, xMax: 5.5, yMin: -5.5, yMax: 5.5 };
+/** The two number lines as one picture (Fig. 3.7, 3.8), on the grown town's window: −5 to 5. */
+const AXES = GROWN;
 
 /** The recap the lesson builds on: a number line, its origin, and a distance either side of it. */
 const numberLine = page(
@@ -98,8 +101,6 @@ const numberLine = page(
   }),
 );
 
-/** The grown town: lesson 1's town, and 3 streets west and 3 houses south of Riya's corner. */
-const GROWN = { xMin: -3.5, xMax: 6.5, yMin: -3.5, yMax: 5.5 };
 const STREETS: [ReturnType<typeof t>, ReturnType<typeof t>] = [
   t("Street number", "गली नंबर"),
   t("House number", "मकान नंबर"),
@@ -318,8 +319,9 @@ const twoNumberLines = page(
           plane: {
             window: AXES,
             marks: Marks.Numbers,
-            // The vertical line's zero starts off the horizontal one's: between 2 and 3, two up.
-            apart: { x: 2.5, y: 2 },
+            // The vertical line's zero starts off the horizontal one's, between marks each way, so
+            // none of its numbers lies on the horizontal line.
+            apart: { x: 2.5, y: 2.5 },
             numbered: ["x", "y"],
             axisNames: XY,
             showAxisNames: false,

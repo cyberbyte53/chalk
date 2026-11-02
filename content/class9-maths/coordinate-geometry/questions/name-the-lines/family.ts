@@ -99,7 +99,7 @@ export const nameTheLines = family({
       coordinatePlane,
       plane.setup({
         plane: {
-          window: { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 },
+          window: { xMin: -5.5, xMax: 5.5, yMin: -5.5, yMax: 5.5 },
           marks: Marks.Numbers,
           numbered: ["x", "y"],
           showAxisNames: false,
