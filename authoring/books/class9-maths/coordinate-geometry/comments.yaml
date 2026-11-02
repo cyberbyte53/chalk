@@ -10149,7 +10149,7 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:122
   commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
-  turn: agent
+  turn: person
   text: "Overlap reached by the cmvz6l85s5pk fix (Riya's name now drawn at her feet below the x-axis).
     Played at 360: down 1, then left 6 to (−6, −1), a natural way to walk toward Q. Her name at her
     feet lands right on the x-axis number row and runs into −5 and −4, so it can't be read (\"Riya\"
@@ -10258,6 +10258,27 @@
         passes every rule, fall back to the place that clashes least with words (another word always
         counts more than a line), never to one over a point's letter or an axis's end name; and
         check (−3…−6, −1) again in both languages. Mechanical (overlap)."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:59:08.779Z
+      text: "Fixed at the root, and proven across every position rather than spot by spot. The layout
+        check now reports words drawn over words (and words under a dot) in any drawing. Her name
+        falls back to the place that clashes least (words weigh most), with places further out past
+        an axis's numbers or end name. A sweep walked Riya to all 125 squares of the board, in
+        English and in Hindi: 0 squares with words over words. Before the last change it found
+        exactly one, (0, −4), her name on Y′, and that's how it was found and fixed."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T14:01:13.590Z
+      text: "Confirmed. On the 360 phone I walked down 1, then left one step at a time to (−6, −1), then
+        down to Q, in English and in Hindi. I also walked straight down to (0, −4) in both
+        languages. At every step her name is clear of Q, X′, Y′, O and the numbers, and show reports
+        no layout problems. From (−2, −1) to (−6, −1) the name sits over her head; at (0, −4) it
+        sits right of the y-axis, off Y′. One taste call for you, not a fault: where every nearby
+        place clashes, the name now goes further out. At Q in English, \"Riya\" sits about 2½ units
+        right of her, under Q's guide line. At (−6, −1) and at Q in Hindi, \"रिया\" sits in the
+        margin left of the −7 tick, outside the grid. Both read, and she is the only walker, so it
+        isn't misleading."
 - id: cmvzag9gyyrr
   status: ready
   by: reviewer
@@ -10396,4 +10417,16 @@
         (checked the bytes: ordinary spaces, no U+00A0). It writes the Hindi \"y first\" note for B,
         C and E on points-on-axes. Mechanical (maths inside a sentence): the same   on both sides of
         \"=\" there."
-  turn: agent
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:59:08.882Z
+      text: The Hindi axis-point note (onAxis, इसलिए ${zero} = 0) is joined too. That was the last
+        plain-spaced "=" in the lesson's source.
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T14:01:13.694Z
+      text: Confirmed. On points-on-axes in Hindi at 360, I dragged to the x-axis, the y-axis and O, then
+        chose B's swapped option (3, 0). The note reads "यह y पहले है। B, y-अक्ष पर है, इसलिए x = 0,
+        जो पहले लिखा जाता है।" with "x = 0" whole on one line. overview.ts:528 now has   on both
+        sides of "=".
+  turn: person
