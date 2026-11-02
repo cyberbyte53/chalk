@@ -906,3 +906,236 @@
       at: 2026-11-02T10:10:14.473Z
       text: ""
       status: closed
+- id: cmvz6l89d74b
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T11:34:06.865Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:28
+  commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
+  text: "On the 360 phone, the numbers near O run into each other on every board of this lesson
+    (distances-from-axes, abscissa-and-ordinate, writing-coordinates, points-on-axes,
+    signs-and-quadrants, find-the-point). The x-axis \"−1\" and the y-axis \"−1\" overlap into
+    something like \"−1₁\", and the y-axis \"1\" touches O (and Riya on distances-from-axes). A
+    student reading off −1 can't tell which axis a number belongs to. Mechanical (overlap): offset
+    the y-axis −1 label or skip it when it collides with the x-axis −1, as the 640 column already
+    manages."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:36:00.271Z
+      text: At 360, where marks are close, the y-axis −1 isn't written when it would sit on the x-axis −1,
+        and O is drawn below and left of the crossing, clear of the y-axis 1. The 640 column stays
+        as it is.
+      status: planned
+      commit: f4e50f7d0131f51f703e2fb93b55eff06b3149ac
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:45:26.514Z
+      text: Where marks are close (the 360 phone), the y-axis's −1 isn't written (its mark stays), so it
+        no longer sits on the x-axis's −1. O moved 2 px lower, clear of the y-axis's 1. Seen on
+        abscissa-and-ordinate, signs-and-quadrants and any-axes at 360.
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/fig-3-14/family.ts
+    - content/class9-maths/coordinate-geometry/questions/quadrant-or-axis/family.ts
+    - content/class9-maths/coordinate-geometry/questions/read-a-point/family.ts
+    - content/class9-maths/coordinate-geometry/sound/000122401be2eb45.m4a
+    - content/class9-maths/coordinate-geometry/sound/019d55309154a3d8.m4a
+    - content/class9-maths/coordinate-geometry/sound/03a14509c4666da0.m4a
+    - content/class9-maths/coordinate-geometry/sound/0411b44c9490465b.m4a
+    - content/class9-maths/coordinate-geometry/sound/058576dfea07fe33.m4a
+    - content/class9-maths/coordinate-geometry/sound/0633b50683fc4a47.m4a
+    - content/class9-maths/coordinate-geometry/sound/070881bf8191b664.m4a
+    - content/class9-maths/coordinate-geometry/sound/07689c1c0d899b11.m4a
+    - content/class9-maths/coordinate-geometry/sound/08f14e15936d8b78.m4a
+    - content/class9-maths/coordinate-geometry/sound/0a8cc1c1676ec2fd.m4a
+    - content/class9-maths/coordinate-geometry/sound/0abe86da16a49bd7.m4a
+    - content/class9-maths/coordinate-geometry/sound/0b7a8d23415c0575.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c30256d645827dc.m4a
+    - content/class9-maths/coordinate-geometry/sound/0c30c9975ca92891.m4a
+    - content/class9-maths/coordinate-geometry/sound/10c6362a18531412.m4a
+    - content/class9-maths/coordinate-geometry/sound/11f51771dc541773.m4a
+    - content/class9-maths/coordinate-geometry/sound/1242f7d7eb2d01b3.m4a
+    - content/class9-maths/coordinate-geometry/sound/12cac0e233c0d6bd.m4a
+    - content/class9-maths/coordinate-geometry/sound/138426857a2b911c.m4a
+    - content/class9-maths/coordinate-geometry/sound/145027066222d1c0.m4a
+    - content/class9-maths/coordinate-geometry/sound/16c23eb7c73ec79a.m4a
+    - content/class9-maths/coordinate-geometry/sound/16fa589e2726540d.m4a
+    - content/class9-maths/coordinate-geometry/sound/19ef135198733ff6.m4a
+    - content/class9-maths/coordinate-geometry/sound/1c547a2efdf042b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/1ded17e5355cc839.m4a
+    - content/class9-maths/coordinate-geometry/sound/1f29d9238f97dd90.m4a
+    - content/class9-maths/coordinate-geometry/sound/1f70663dfcc1c67e.m4a
+    - content/class9-maths/coordinate-geometry/sound/228e7e67cad83e96.m4a
+    - content/class9-maths/coordinate-geometry/sound/240d4f79852d18a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/2626402d480f4139.m4a
+    - content/class9-maths/coordinate-geometry/sound/26b458c095580fb9.m4a
+    - content/class9-maths/coordinate-geometry/sound/275b4345a96ab9c3.m4a
+    - content/class9-maths/coordinate-geometry/sound/286f1fdb07a7b854.m4a
+    - content/class9-maths/coordinate-geometry/sound/28cec478d6df0653.m4a
+    - content/class9-maths/coordinate-geometry/sound/2b26c05927869078.m4a
+    - content/class9-maths/coordinate-geometry/sound/2f6ed4b6db61fedd.m4a
+    - content/class9-maths/coordinate-geometry/sound/336376f2185280d9.m4a
+    - content/class9-maths/coordinate-geometry/sound/3467bca730643cb5.m4a
+    - content/class9-maths/coordinate-geometry/sound/35bac5dc3180bfe6.m4a
+    - content/class9-maths/coordinate-geometry/sound/37c3e5bff7e903be.m4a
+    - content/class9-maths/coordinate-geometry/sound/37d24902d79c4ff9.m4a
+    - content/class9-maths/coordinate-geometry/sound/388ac810e34eef72.m4a
+    - content/class9-maths/coordinate-geometry/sound/3a9dd06dfd9fda13.m4a
+    - content/class9-maths/coordinate-geometry/sound/3b7026053b5d3566.m4a
+    - content/class9-maths/coordinate-geometry/sound/3cbd3468208e1b3d.m4a
+    - content/class9-maths/coordinate-geometry/sound/3cd5209d862e031b.m4a
+    - content/class9-maths/coordinate-geometry/sound/3ee0288c75206ef0.m4a
+    - content/class9-maths/coordinate-geometry/sound/3f0199b5faef611b.m4a
+    - content/class9-maths/coordinate-geometry/sound/3f0329f6a4c19437.m4a
+    - content/class9-maths/coordinate-geometry/sound/3f24d58ff456c83e.m4a
+    - content/class9-maths/coordinate-geometry/sound/3f814162392b827a.m4a
+    - content/class9-maths/coordinate-geometry/sound/43182385e3b60e16.m4a
+    - content/class9-maths/coordinate-geometry/sound/435f0052aeed12f2.m4a
+    - content/class9-maths/coordinate-geometry/sound/45107868ed5a9b2d.m4a
+    - content/class9-maths/coordinate-geometry/sound/46df337784321d09.m4a
+    - content/class9-maths/coordinate-geometry/sound/46feef259992200b.m4a
+    - content/class9-maths/coordinate-geometry/sound/4720d31051e410ac.m4a
+    - content/class9-maths/coordinate-geometry/sound/480e594434b26ba4.m4a
+    - content/class9-maths/coordinate-geometry/sound/4bb1e26e97d902af.m4a
+    - content/class9-maths/coordinate-geometry/sound/4c834657f0297a3d.m4a
+    - content/class9-maths/coordinate-geometry/sound/4cddd3d07b8e4679.m4a
+    - content/class9-maths/coordinate-geometry/sound/4ea6be6a03a5186b.m4a
+    - content/class9-maths/coordinate-geometry/sound/5482c4002a1a4021.m4a
+    - content/class9-maths/coordinate-geometry/sound/5500aefdc52c1722.m4a
+    - content/class9-maths/coordinate-geometry/sound/55a438b7162bcb13.m4a
+    - content/class9-maths/coordinate-geometry/sound/562153c8bd2444ab.m4a
+    - content/class9-maths/coordinate-geometry/sound/57cf17cf36365872.m4a
+    - content/class9-maths/coordinate-geometry/sound/58b0b26ad7a74559.m4a
+    - content/class9-maths/coordinate-geometry/sound/5956f62156dbfb13.m4a
+    - content/class9-maths/coordinate-geometry/sound/5c1ab13b66e5b54e.m4a
+    - content/class9-maths/coordinate-geometry/sound/5dc3ccbe1b7670ba.m4a
+    - content/class9-maths/coordinate-geometry/sound/5e4685d6909b6092.m4a
+    - content/class9-maths/coordinate-geometry/sound/652ae3124332380b.m4a
+    - content/class9-maths/coordinate-geometry/sound/6671d7c71eed41ce.m4a
+    - content/class9-maths/coordinate-geometry/sound/695d5e8e741cf034.m4a
+    - content/class9-maths/coordinate-geometry/sound/69ce37821f0bb8b4.m4a
+    - content/class9-maths/coordinate-geometry/sound/6e481e58bbf348a4.m4a
+    - content/class9-maths/coordinate-geometry/sound/6f0419f2e32a3616.m4a
+    - content/class9-maths/coordinate-geometry/sound/6ffd6476d27d4a1c.m4a
+    - content/class9-maths/coordinate-geometry/sound/725494c1a40c469c.m4a
+    - content/class9-maths/coordinate-geometry/sound/7393f157b0047325.m4a
+    - content/class9-maths/coordinate-geometry/sound/74aa3017eb8a2f2a.m4a
+    - content/class9-maths/coordinate-geometry/sound/750b2e7ed96167b2.m4a
+    - content/class9-maths/coordinate-geometry/sound/76275029200c88fd.m4a
+    - content/class9-maths/coordinate-geometry/sound/76e2cd545a2b032d.m4a
+    - content/class9-maths/coordinate-geometry/sound/76f2cb139ecf6cdf.m4a
+    - content/class9-maths/coordinate-geometry/sound/77a93269ad48c6f7.m4a
+    - content/class9-maths/coordinate-geometry/sound/77e94b31c5083b18.m4a
+    - content/class9-maths/coordinate-geometry/sound/79c103e6328c6513.m4a
+    - content/class9-maths/coordinate-geometry/sound/7aa8bf98f0abbe3f.m4a
+    - content/class9-maths/coordinate-geometry/sound/7c91217493879879.m4a
+    - content/class9-maths/coordinate-geometry/sound/7dcaa744fcf19704.m4a
+    - content/class9-maths/coordinate-geometry/sound/7efc7882906cdc78.m4a
+    - content/class9-maths/coordinate-geometry/sound/811e5c1ad3e364e4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8297418a6bc7f66c.m4a
+    - content/class9-maths/coordinate-geometry/sound/82d0209ae173a531.m4a
+    - content/class9-maths/coordinate-geometry/sound/85e6a2c30b2cd7a0.m4a
+    - content/class9-maths/coordinate-geometry/sound/8a39c7b2cd4ddf06.m4a
+    - content/class9-maths/coordinate-geometry/sound/8a7edf24a97bcdb7.m4a
+    - content/class9-maths/coordinate-geometry/sound/8d9fcc9efd933f0e.m4a
+    - content/class9-maths/coordinate-geometry/sound/8e85fbd9d7c28f26.m4a
+    - content/class9-maths/coordinate-geometry/sound/907451217fdd359c.m4a
+    - content/class9-maths/coordinate-geometry/sound/9176885e7cf6c470.m4a
+    - content/class9-maths/coordinate-geometry/sound/92442c449f5c4469.m4a
+    - content/class9-maths/coordinate-geometry/sound/92988ea23ec07f91.m4a
+    - content/class9-maths/coordinate-geometry/sound/929ac1c815eba079.m4a
+    - content/class9-maths/coordinate-geometry/sound/939e6339f1aee0e9.m4a
+    - content/class9-maths/coordinate-geometry/sound/948ca7abd2dbe714.m4a
+    - content/class9-maths/coordinate-geometry/sound/9bf7b78c1fe3c285.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c34b4f25a94e912.m4a
+    - content/class9-maths/coordinate-geometry/sound/9c6bf84dd7d0022f.m4a
+    - content/class9-maths/coordinate-geometry/sound/9d25f093d2f61067.m4a
+    - content/class9-maths/coordinate-geometry/sound/9da3402890e4ec93.m4a
+    - content/class9-maths/coordinate-geometry/sound/9ef757848cdbc157.m4a
+    - content/class9-maths/coordinate-geometry/sound/9f78cda6ca774d35.m4a
+    - content/class9-maths/coordinate-geometry/sound/9fa6960e01a5b3a0.m4a
+    - content/class9-maths/coordinate-geometry/sound/a3acbb796f584e71.m4a
+    - content/class9-maths/coordinate-geometry/sound/a69d7f2da1743768.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8fbff8eca660b96.m4a
+    - content/class9-maths/coordinate-geometry/sound/aaa60c5e41908e17.m4a
+    - content/class9-maths/coordinate-geometry/sound/ad307eb997941d76.m4a
+    - content/class9-maths/coordinate-geometry/sound/ae45fad4a69fc4a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/afc5ddbf3eb78b60.m4a
+    - content/class9-maths/coordinate-geometry/sound/afd199aadc450f04.m4a
+    - content/class9-maths/coordinate-geometry/sound/b1e73d1b420c0d44.m4a
+    - content/class9-maths/coordinate-geometry/sound/b3d3c90f1581fd86.m4a
+    - content/class9-maths/coordinate-geometry/sound/b5f76e039e87a450.m4a
+    - content/class9-maths/coordinate-geometry/sound/b63b911b13cb8e48.m4a
+    - content/class9-maths/coordinate-geometry/sound/b6aa1e496a23cf2a.m4a
+    - content/class9-maths/coordinate-geometry/sound/b6e8d87fe101b989.m4a
+    - content/class9-maths/coordinate-geometry/sound/b8832f116f08f2a2.m4a
+    - content/class9-maths/coordinate-geometry/sound/b980bba8aedd47c7.m4a
+    - content/class9-maths/coordinate-geometry/sound/ba08609703cbd4e9.m4a
+    - content/class9-maths/coordinate-geometry/sound/bbc0f462360547ed.m4a
+    - content/class9-maths/coordinate-geometry/sound/be40d782b3a2005f.m4a
+    - content/class9-maths/coordinate-geometry/sound/c24398d835d250a7.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ef89cb6d4a89f1.m4a
+    - content/class9-maths/coordinate-geometry/sound/c54bfbb3e17b0266.m4a
+    - content/class9-maths/coordinate-geometry/sound/c60d1de19dceb3c8.m4a
+    - content/class9-maths/coordinate-geometry/sound/c96b8892da0d079b.m4a
+    - content/class9-maths/coordinate-geometry/sound/cc6b01a6fb290a40.m4a
+    - content/class9-maths/coordinate-geometry/sound/cd3f59ccef5ce784.m4a
+    - content/class9-maths/coordinate-geometry/sound/cf618d6e96ad0889.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0c46611f3d2e17e.m4a
+    - content/class9-maths/coordinate-geometry/sound/d2d0b5212e3f7729.m4a
+    - content/class9-maths/coordinate-geometry/sound/d31b34d0ae4e9835.m4a
+    - content/class9-maths/coordinate-geometry/sound/d4b05e8422194453.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6b6957bc1b2cd59.m4a
+    - content/class9-maths/coordinate-geometry/sound/d6ea1e732f715fd5.m4a
+    - content/class9-maths/coordinate-geometry/sound/d7a1a87ec8f89c8e.m4a
+    - content/class9-maths/coordinate-geometry/sound/d84ebf853c8c8ca2.m4a
+    - content/class9-maths/coordinate-geometry/sound/dd6727d7c6a3f76e.m4a
+    - content/class9-maths/coordinate-geometry/sound/de2b8a012ec66289.m4a
+    - content/class9-maths/coordinate-geometry/sound/e0295fa15f765ea0.m4a
+    - content/class9-maths/coordinate-geometry/sound/e142aa8666c6bb35.m4a
+    - content/class9-maths/coordinate-geometry/sound/e309b7c790744dad.m4a
+    - content/class9-maths/coordinate-geometry/sound/e43db52033622034.m4a
+    - content/class9-maths/coordinate-geometry/sound/e5d5e319bf8aae5f.m4a
+    - content/class9-maths/coordinate-geometry/sound/e68211dcdac1ca37.m4a
+    - content/class9-maths/coordinate-geometry/sound/e7dec199c732e0e8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e824c733c05f1189.m4a
+    - content/class9-maths/coordinate-geometry/sound/edf5adc6844095ab.m4a
+    - content/class9-maths/coordinate-geometry/sound/f01d551edb9b2077.m4a
+    - content/class9-maths/coordinate-geometry/sound/f25ef30329bc98f9.m4a
+    - content/class9-maths/coordinate-geometry/sound/f27ebb0fde9e7bf5.m4a
+    - content/class9-maths/coordinate-geometry/sound/f2c865a2f7151ab7.m4a
+    - content/class9-maths/coordinate-geometry/sound/f4ca32f42a2b4dce.m4a
+    - content/class9-maths/coordinate-geometry/sound/f78687c4b972f71a.m4a
+    - content/class9-maths/coordinate-geometry/sound/fa3c2b02d9da1c80.m4a
+    - content/class9-maths/coordinate-geometry/sound/fb3b5d12ee7bed81.m4a
+    - content/class9-maths/coordinate-geometry/sound/fbd6b95ff362116c.m4a
+    - content/class9-maths/coordinate-geometry/sound/fc0c9361e1f86b6c.m4a
+    - content/class9-maths/coordinate-geometry/sound/fc2acb59495171d7.m4a
+    - content/class9-maths/coordinate-geometry/sound/fe53ae200b4be37a.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/reading-view.tsx
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+  reaches:
+    pieces: 132
+    boards: 60
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/quadrant-or-axis
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  turn: person

@@ -131,9 +131,10 @@ function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale:
         {s.walkerKind === "bus" ? <Bus size={size} /> : <Walker size={size} />}
         <text
           class="cp-walker-name"
-          // Beside her, not above: above, her name would leave the map at the top row.
+          // Beside her, not above: above, her name would leave the map at the top row. Below the
+          // x-axis, at her feet: away from the axis and the numbers drawn under it.
           x={x > px.width * 0.7 ? -size * 0.55 : size * 0.55}
-          y={-size * 0.2}
+          y={s.at.y < 0 ? size * 0.55 : -size * 0.2}
           text-anchor={x > px.width * 0.7 ? "end" : "start"}
         >
           {name}

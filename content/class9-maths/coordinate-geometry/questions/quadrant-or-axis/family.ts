@@ -23,16 +23,49 @@ function whereOf(x: number, y: number): Where {
   return y > 0 ? "II" : "III";
 }
 
-/**
- * The slips a student makes: for a point in a quadrant, the other three (one sign read wrong, or
- * both); for a point on an axis, the other axis and the two quadrants either side of it.
- */
-function slipsOf(x: number, y: number): Where[] {
-  const at = whereOf(x, y);
-  if (at === "xAxis") return ["yAxis", x > 0 ? "I" : "II", x > 0 ? "IV" : "III"];
-  if (at === "yAxis") return ["xAxis", y > 0 ? "I" : "IV", y > 0 ? "II" : "III"];
-  return (["I", "II", "III", "IV"] as const).filter((q) => q !== at);
-}
+/** Where each place is, by the signs of its coordinates: what a wrong choice is told. */
+const SIGNS_OF: Record<Where, Localized> = {
+  I: t(
+    "Quadrant I is (+, +): both coordinates positive.",
+    "पहला चतुर्थांश (+, +) है: दोनों निर्देशांक धनात्मक।",
+  ),
+  II: t(
+    "Quadrant II is (−, +): x negative, y positive.",
+    "दूसरा चतुर्थांश (−, +) है: x ऋणात्मक, y धनात्मक।",
+  ),
+  III: t(
+    "Quadrant III is (−, −): both coordinates negative.",
+    "तीसरा चतुर्थांश (−, −) है: दोनों निर्देशांक ऋणात्मक।",
+  ),
+  IV: t(
+    "Quadrant IV is (+, −): x positive, y negative.",
+    "चौथा चतुर्थांश (+, −) है: x धनात्मक, y ऋणात्मक।",
+  ),
+  xAxis: t("A point on the x-axis has y = 0.", "x-अक्ष पर एक बिंदु का y = 0 होता है।"),
+  yAxis: t("A point on the y-axis has x = 0.", "y-अक्ष पर एक बिंदु का x = 0 होता है।"),
+};
+const SIGNS_SAID: Record<Where, Localized> = {
+  I: t(
+    "Quadrant one is plus, plus: both coordinates positive.",
+    "पहला चतुर्थांश धन, धन है: दोनों निर्देशांक धनात्मक।",
+  ),
+  II: t(
+    "Quadrant two is minus, plus: x negative, y positive.",
+    "दूसरा चतुर्थांश ऋण, धन है: एक्स ऋणात्मक, वाई धनात्मक।",
+  ),
+  III: t(
+    "Quadrant three is minus, minus: both coordinates negative.",
+    "तीसरा चतुर्थांश ऋण, ऋण है: दोनों निर्देशांक ऋणात्मक।",
+  ),
+  IV: t(
+    "Quadrant four is plus, minus: x positive, y negative.",
+    "चौथा चतुर्थांश धन, ऋण है: एक्स धनात्मक, वाई ऋणात्मक।",
+  ),
+  xAxis: t("A point on the x-axis has y equal to 0.", "एक्स-अक्ष पर एक बिंदु का वाई बराबर 0 होता है।"),
+  yAxis: t("A point on the y-axis has x equal to 0.", "वाई-अक्ष पर एक बिंदु का एक्स बराबर 0 होता है।"),
+};
+/** Every question offers the same six: none stands out by which kinds are offered. */
+const ALL: Where[] = ["I", "II", "III", "IV", "xAxis", "yAxis"];
 
 /** A number as said: "minus 2". */
 const said = (n: number, minus: string) => (n < 0 ? `${minus} ${-n}` : `${n}`);
@@ -54,7 +87,23 @@ export const quadrantOrAxis = family({
         `In which quadrant, or on which axis, does the point ${said(x, "minus")}, ${said(y, "minus")} lie?`,
         `बिंदु ${said(x, "माइनस")}, ${said(y, "माइनस")} किस चतुर्थांश में, या किस अक्ष पर स्थित है?`,
       ),
-      options: [whereOf(x, y), ...slipsOf(x, y)].map((id) => ({ id, label: WHERE[id] })),
+      options: ALL.map((id) =>
+        id === whereOf(x, y)
+          ? { id, label: WHERE[id] }
+          : {
+              id,
+              label: WHERE[id],
+              feedback: t(
+                `${SIGNS_OF[id].en} This point is ${pair}.`,
+                `${SIGNS_OF[id].hi} यह बिंदु ${pair} है।`,
+              ),
+              feedbackSays: t(
+                `${SIGNS_SAID[id].en} This point is ${said(x, "minus")}, ${said(y, "minus")}.`,
+                `${SIGNS_SAID[id].hi} यह बिंदु ${said(x, "माइनस")}, ${said(y, "माइनस")} है।`,
+              ),
+            },
+      ),
+      keepOrder: true,
       answer: whereOf(x, y),
     });
     return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });

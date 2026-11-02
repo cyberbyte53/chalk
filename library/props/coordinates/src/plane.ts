@@ -317,6 +317,9 @@ export function fromPlane<const K extends keyof PlaneCore>(...keys: K[]) {
   };
 }
 
+/** Degrees from level within which a turn by hand comes to rest level. */
+const LEVEL_WITHIN = 4;
+
 /** Seconds one line takes to rise, alone or in turn with the rest. */
 const RISE = 1.2;
 const RISE_EACH = 0.35;
@@ -550,7 +553,9 @@ export const plane = prop({
     turnAxes: (me, toward, t) => {
       const [dx, dy] = [toward.x - me.shift.x, toward.y - me.shift.y];
       if (!me.canMoveAxes || (dx === 0 && dy === 0)) return;
-      const degrees = Math.round((Math.atan2(dy, dx) * 180) / Math.PI);
+      const turned = Math.round((Math.atan2(dy, dx) * 180) / Math.PI);
+      // Near level it is level: the axes can be put back exactly by hand.
+      const degrees = Math.abs(turned) <= LEVEL_WITHIN ? 0 : turned;
       return (
         degrees !== me.turn && [
           t.set({ turn: degrees }),

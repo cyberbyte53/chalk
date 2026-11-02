@@ -41,6 +41,13 @@ function VisitedSigns({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Eleme
   );
 }
 
+/**
+ * Whether the point's pair is written under the plane rather than beside the point: a point that
+ * stays while the axes move under it, and a board filling in the quadrants' signs, whose names and
+ * patterns the pair would cover wherever the point is dragged.
+ */
+const isPairBelow = (s: ReadingView) => !s.canMovePoint || s.showsVisitedSigns;
+
 /** The point the learner drags, read off the axes as far as the board writes it. */
 function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Element | null {
   const drag = useDrags();
@@ -67,27 +74,49 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
   // Where a length's words go so nothing is cut off by the frame or sits under the dot (the words'
   // width estimated from their letters: the frame is drawn before any text can be measured).
   const wide = (text: string) => text.length * CHAR;
-  const isRightTight = ax + GAP + wide(yWords) > px.width;
   const isAcrossShort = Math.abs(x - vx) - 2 * DOT < wide(xWords);
   const isUpShort = Math.abs(base - y) - 2 * DOT < LINE;
-  // Below the x-axis, words go below the point: the x-axis's numbers are drawn under the axis, so
-  // words between the point and the axis would sit on them.
+  // Each length beside its own line, on the side away from the axes and their numbers: x's along
+  // the line to the y-axis, above it (below it under the x-axis); y's beside the line to the
+  // x-axis, on its side away from the y-axis. A line too short to hold its words has them past
+  // the point, away from the axes. Kept inside the frame.
   const isBelow = q.y < 0;
-  const away = isBelow ? 1 : -1;
-  // Across words past the dot, when their line can't hold them: to its right, or its left by the
-  // frame's right edge. Up words too short for their line go over the dot, where nothing is
-  // drawn: clear of both lines and the edges' numbers, inside the frame.
-  const pastX = isRightTight ? x - DOT - GAP : x + DOT + GAP;
-  const pastAnchor = isRightTight ? "end" : "start";
-  const upWide = wide(yWords);
-  const upAt =
-    isUpShort || isBelow
-      ? {
-          x: Math.min(Math.max(x, upWide / 2 + DOT), px.width - upWide / 2 - DOT),
-          y: y + away * (DOT + LINE / 2 + (isAcrossShort ? LINE : 0)),
-          anchor: "middle",
-        }
-      : { x: isRightTight ? ax - GAP : ax + GAP, y: (y + base) / 2, anchor: pastAnchor };
+  const isLeft = q.x < 0;
+  const inside = (cx: number, w: number, anchor: string) =>
+    anchor === "start"
+      ? Math.min(cx, px.width - w)
+      : anchor === "end"
+        ? Math.max(cx, w)
+        : Math.min(Math.max(cx, w / 2), px.width - w / 2);
+  const xAnchor = isAcrossShort ? (isLeft ? "end" : "start") : "middle";
+  const xAt = {
+    x: inside(
+      isAcrossShort ? x + (isLeft ? -1 : 1) * (DOT + GAP) : (x + vx) / 2,
+      wide(xWords),
+      xAnchor,
+    ),
+    y: isAcrossShort ? y : isBelow ? ay + 8 : ay - 8,
+    anchor: xAnchor,
+    baseline: isAcrossShort ? "central" : isBelow ? "hanging" : "auto",
+  };
+  // Near the y-axis, on the side away from it (off its numbers); far from it, on the side toward
+  // it, the open middle of the plane (off the frame's edge and the axes' end names). Either way,
+  // the other side if this one has no room.
+  const isNearYAxis = Math.abs(ax - vx) < (3 * wide(yWords)) / 2;
+  const leftOfLine = isNearYAxis === isLeft;
+  const yLeft = leftOfLine ? ax - GAP - wide(yWords) >= 0 : !(ax + GAP + wide(yWords) <= px.width);
+  const yAnchor = isUpShort ? "middle" : yLeft ? "end" : "start";
+  // Below the x-axis, under its numbers' row (they are drawn just under the axis).
+  const NUMBERS_ROW = 28;
+  const yAt = {
+    x: inside(isUpShort ? x : ax + (yLeft ? -GAP : GAP), wide(yWords), yAnchor),
+    y: isUpShort
+      ? y + (isBelow ? 1 : -1) * (DOT + LINE / 2)
+      : isBelow
+        ? Math.min(Math.max((y + base) / 2, base + NUMBERS_ROW), y - DOT)
+        : (y + base) / 2,
+    anchor: yAnchor,
+  };
   // The pair goes on the side of the point away from both axes, along the axes' own directions
   // (up and right in quadrant I, turned with them when they are turned): clear of their lines and
   // numbers. Mirrored across the point where the frame's edge would cut it.
@@ -127,12 +156,10 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
       {hasLengths && q.y !== 0 && (
         <text
           class="cp-length"
-          // Beside the line, on the side with room for it inside the frame; over the dot when the
-          // line is too short to hold it.
-          x={upAt.x}
-          y={upAt.y}
+          x={yAt.x}
+          y={yAt.y}
           dominant-baseline="central"
-          text-anchor={upAt.anchor}
+          text-anchor={yAt.anchor}
         >
           {yWords}
         </text>
@@ -140,11 +167,10 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
       {hasLengths && q.x !== 0 && (
         <text
           class="cp-length"
-          // Over the line's middle; past the dot when the line is too short to hold it.
-          x={isAcrossShort ? pastX : (x + vx) / 2}
-          y={isBelow ? ay + 8 : ay - 8}
-          dominant-baseline={isBelow ? "hanging" : "auto"}
-          text-anchor={isAcrossShort ? pastAnchor : "middle"}
+          x={xAt.x}
+          y={xAt.y}
+          dominant-baseline={xAt.baseline}
+          text-anchor={xAt.anchor}
         >
           {xWords}
         </text>
@@ -165,7 +191,7 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
           r={DOT}
         />
         {/* A point that stays has its pair written under the plane instead (below). */}
-        {(stage === Reading.Pair || isHidden) && s.canMovePoint && (
+        {(stage === Reading.Pair || isHidden) && !isPairBelow(s) && (
           <text
             class="cp-pair"
             x={pairAt.x}
@@ -184,10 +210,9 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
 /** The reading layer's drawing: the point read off the axes, and Show when it is hidden. */
 export const readingDrawing = drawing(reading, {
   front: ({ s, px }) => <ReadingDraw s={s} px={px} />,
-  // A point that stays while the axes move under it: its pair in one place, under the plane, not
-  // beside the point, where the moving axes would keep crossing it.
+  // The pair in one place, under the plane (isPairBelow), not beside the point.
   below: ({ s, locale }) => {
-    if (s.point === null || s.canMovePoint || s.reading !== Reading.Pair || s.isReadingHidden)
+    if (s.point === null || !isPairBelow(s) || s.reading !== Reading.Pair || s.isReadingHidden)
       return null;
     const words = `${word(WORDS.thePoint, locale)}: ${pairTo(readIn(s, s.point), s.decimals)}`;
     return (

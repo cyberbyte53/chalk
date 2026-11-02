@@ -118,6 +118,35 @@ function AxesHandles({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
       <text class="cp-turn-glyph" x={hx} y={hy} text-anchor="middle" dominant-baseline="central">
         ↻
       </text>
+      {/* Which line is which, however they are turned: x by the handle on OX, y as far along OY. */}
+      {(
+        [
+          [
+            "x",
+            HANDLE_AT * Math.cos(a) - 0.7 * Math.sin(a),
+            HANDLE_AT * Math.sin(a) + 0.7 * Math.cos(a),
+          ],
+          [
+            "y",
+            -HANDLE_AT * Math.sin(a) + 0.5 * Math.cos(a),
+            HANDLE_AT * Math.cos(a) + 0.5 * Math.sin(a),
+          ],
+        ] as const
+      ).map(([name, dx, dy]) => {
+        const [nx, ny] = px.toPx(s.shift.x + dx, s.shift.y + dy);
+        return (
+          <text
+            key={name}
+            class="cp-axis-name"
+            x={nx}
+            y={ny}
+            text-anchor="middle"
+            dominant-baseline="central"
+          >
+            {name}
+          </text>
+        );
+      })}
     </g>
   );
 }

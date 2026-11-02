@@ -34,15 +34,48 @@ export const readAPoint = family({
         },
       }),
     );
-    const options = [
-      { id: "right", pair: pairOf(x, y) },
-      { id: "swapped", pair: pairOf(y, x) },
-      { id: "xSign", pair: pairOf(-x, y) },
-      { id: "ySign", pair: pairOf(x, -y) },
+    const said = (n: number, minus: string) => (n < 0 ? `${minus} ${-n}` : `${n}`);
+    const lr = x < 0 ? ["left", "बाईं"] : ["right", "दाईं"];
+    const ud = y < 0 ? ["below", "नीचे"] : ["above", "ऊपर"];
+    const sign = (v: number) => (v < 0 ? ["negative", "ऋणात्मक"] : ["positive", "धनात्मक"]);
+    // Each slip and its note: y written first, or one sign the wrong way.
+    const wrong = [
+      {
+        id: "swapped",
+        pair: pairOf(y, x),
+        en: `That is y first. P is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x = ${shown(x)}, written first.`,
+        hi: `यह y पहले है। P, y-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए x = ${shown(x)}, जो पहले लिखा जाता है।`,
+        enSays: `That is y first. P is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x is ${said(x, "minus")}, written first.`,
+        hiSays: `यह वाई पहले है। P, वाई-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए एक्स ${said(x, "माइनस")} है, जो पहले लिखा जाता है।`,
+      },
+      {
+        id: "xSign",
+        pair: pairOf(-x, y),
+        en: `That point is on the other side of the y-axis. P is ${lr[0]} of it, so its x-coordinate is ${sign(x)[0]}.`,
+        hi: `वह बिंदु y-अक्ष की दूसरी ओर है। P उसके ${lr[1]} ओर है, इसलिए उसका x-निर्देशांक ${sign(x)[1]} है।`,
+        enSays: `That point is on the other side of the y-axis. P is ${lr[0]} of it, so its x-coordinate is ${sign(x)[0]}.`,
+        hiSays: `वह बिंदु वाई-अक्ष की दूसरी ओर है। P उसके ${lr[1]} ओर है, इसलिए उसका एक्स-निर्देशांक ${sign(x)[1]} है।`,
+      },
+      {
+        id: "ySign",
+        pair: pairOf(x, -y),
+        en: `That point is on the other side of the x-axis. P is ${ud[0]} it, so its y-coordinate is ${sign(y)[0]}.`,
+        hi: `वह बिंदु x-अक्ष की दूसरी ओर है। P उसके ${ud[1]} है, इसलिए उसका y-निर्देशांक ${sign(y)[1]} है।`,
+        enSays: `That point is on the other side of the x-axis. P is ${ud[0]} it, so its y-coordinate is ${sign(y)[0]}.`,
+        hiSays: `वह बिंदु एक्स-अक्ष की दूसरी ओर है। P उसके ${ud[1]} है, इसलिए उसका वाई-निर्देशांक ${sign(y)[1]} है।`,
+      },
     ];
     const ask = choice({
       prompt: t("What are the coordinates of the point P?", "बिंदु P के निर्देशांक क्या हैं?"),
-      options: options.map((o) => ({ id: o.id, label: t(o.pair, o.pair) })),
+      options: [
+        { id: "right", label: t(pairOf(x, y), pairOf(x, y)) },
+        ...wrong.map((w) => ({
+          id: w.id,
+          label: t(w.pair, w.pair),
+          feedback: t(w.en, w.hi),
+          feedbackSays: t(w.enSays, w.hiSays),
+        })),
+      ],
       answer: "right",
     });
     return scene({ pieces: { figure, ask: ask.piece }, uses: [ask.use] });

@@ -278,7 +278,7 @@ export function AxesDraw({
     s.numbered.includes("x") &&
     s.numbered.includes("y");
   // Where a unit is too short for O between the two −1s, O goes above the horizontal line, in the
-  // corner no number uses: every number stays written.
+  // corner no number uses, low, clear of the y-axis's 1; the y-axis's −1 isn't written (below).
   const isCrowded = hasO && unit * s.tickEvery < 30;
   const label = (v: number, i: number) =>
     i % every === 0 && !(hasZeroMark(v) && hasO) ? num(v) : "";
@@ -337,7 +337,10 @@ export function AxesDraw({
           // its row of numbers, isn't written: its mark stays.
           const isApart = s.apart.x !== 0 || s.apart.y !== 0;
           const isOnRow = isApart && y > base - 8 && y < base + 30;
-          const text = isOnRow ? "" : label(v, i);
+          // Where marks are close, the y-axis's first mark below O is on the x-axis's −1 and its
+          // numbers' row: its mark stays, its number isn't written.
+          const isOnXNumbers = isCrowded && !isApart && Math.abs(v + s.tickEvery) < 1e-9;
+          const text = isOnRow || isOnXNumbers ? "" : label(v, i);
           const isButton = canLight && isCounted && text !== "";
           return (
             <g key={`y${v}`} class="cp-mark">
@@ -373,8 +376,8 @@ export function AxesDraw({
         <text
           class={s.showOrigin ? "cp-origin" : "cp-origin is-zero"}
           x={vx - 7}
-          y={isCrowded ? base - 6 : base + 14}
-          transform={upright(s, vx - 7, isCrowded ? base - 6 : base + 14)}
+          y={isCrowded ? base - 4 : base + 14}
+          transform={upright(s, vx - 7, isCrowded ? base - 4 : base + 14)}
           text-anchor="end"
         >
           {s.showOrigin ? "O" : "0"}

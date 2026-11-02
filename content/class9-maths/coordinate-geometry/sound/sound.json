@@ -21,6 +21,13 @@
       "seconds": 5.805
     },
     {
+      "file": "0c30256d645827dc.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "2 is D's ordinate: its distance from the x-axis. The abscissa is its distance from the y-axis.",
+      "seconds": 6.212
+    },
+    {
       "file": "1312c0d36dce3b25.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -56,11 +63,74 @@
       "seconds": 15.813
     },
     {
-      "file": "695d5e8e741cf034.m4a",
+      "file": "9fa6960e01a5b3a0.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is the point x, 0. Press y equals 0: every point with y equal to 0 lights up, and they make the whole x-axis.",
-      "seconds": 13.538
+      "words": "A point on the x-axis has y equal to 0. This point is 1, 2.",
+      "seconds": 4.366
+    },
+    {
+      "file": "afc5ddbf3eb78b60.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the x-axis has y equal to 0. This point is 3, minus 1.",
+      "seconds": 4.853
+    },
+    {
+      "file": "92988ea23ec07f91.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the x-axis has y equal to 0. This point is minus 2, 4.",
+      "seconds": 4.9
+    },
+    {
+      "file": "138426857a2b911c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the x-axis has y equal to 0. This point is minus 3, minus 5.",
+      "seconds": 5.341
+    },
+    {
+      "file": "d6ea1e732f715fd5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is the point x, 0. Press y equals 0: every point with y equal to 0 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0.",
+      "seconds": 18.716
+    },
+    {
+      "file": "76e2cd545a2b032d.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the y-axis has x equal to 0. This point is 1, 2.",
+      "seconds": 4.18
+    },
+    {
+      "file": "8e85fbd9d7c28f26.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the y-axis has x equal to 0. This point is 3, minus 1.",
+      "seconds": 4.761
+    },
+    {
+      "file": "19ef135198733ff6.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the y-axis has x equal to 0. This point is minus 1, 0.",
+      "seconds": 5.132
+    },
+    {
+      "file": "cc6b01a6fb290a40.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the y-axis has x equal to 0. This point is minus 2, 4.",
+      "seconds": 4.772
+    },
+    {
+      "file": "4cddd3d07b8e4679.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A point on the y-axis has x equal to 0. This point is minus 3, minus 5.",
+      "seconds": 5.341
     },
     {
       "file": "c8c48857d73c0e10.m4a",
@@ -147,6 +217,13 @@
       "seconds": 6.119
     },
     {
+      "file": "388ac810e34eef72.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Back on the agreed axes, P is the point 3, 2 again, the same for everyone.",
+      "seconds": 5.051
+    },
+    {
       "file": "0b2fb3cf53491302.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -168,11 +245,11 @@
       "seconds": 6.769
     },
     {
-      "file": "e0295fa15f765ea0.m4a",
+      "file": "fbd6b95ff362116c.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "C is the point 5, minus 5: 5 units right of the y-axis, not 3 left.",
-      "seconds": 5.213
+      "words": "C is the point 5, minus 5.",
+      "seconds": 2.45
     },
     {
       "file": "b2201aff1fe8f488.m4a",
@@ -217,6 +294,27 @@
       "seconds": 6.711
     },
     {
+      "file": "f27ebb0fde9e7bf5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "D is right of the y-axis, so its abscissa is positive.",
+      "seconds": 3.507
+    },
+    {
+      "file": "000122401be2eb45.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "D is the point 6, 2, above the x-axis. The point 5, minus 5 is below it: its y-coordinate is negative.",
+      "seconds": 7.895
+    },
+    {
+      "file": "4ea6be6a03a5186b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "D is the point 6, 2.",
+      "seconds": 2.055
+    },
+    {
       "file": "ccc9072f01457dc7.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -250,6 +348,13 @@
       "locale": "en",
       "words": "E is on the x-axis, two thirds of a unit from the y-axis along O X: E is the point two thirds, 0.",
       "seconds": 6.966
+    },
+    {
+      "file": "286f1fdb07a7b854.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "E is the point minus 3, minus 5: 3 units left of the y-axis. The point 5, minus 5 is 5 units right of it.",
+      "seconds": 7.675
     },
     {
       "file": "d2f8373a341ada0e.m4a",
@@ -294,11 +399,25 @@
       "seconds": 4.447
     },
     {
-      "file": "1ded17e5355cc839.m4a",
+      "file": "e7dec199c732e0e8.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "H is the point minus 5, minus 3: the same numbers, the other way round.",
-      "seconds": 5.039
+      "words": "G is the point 2, minus 4: 2 units right and 4 down. The point 5, minus 5 is further right and lower.",
+      "seconds": 7.303
+    },
+    {
+      "file": "ba08609703cbd4e9.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "H is below the x-axis, so its ordinate is negative.",
+      "seconds": 3.483
+    },
+    {
+      "file": "9c34b4f25a94e912.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "H is the point minus 5, minus 3.",
+      "seconds": 2.787
     },
     {
       "file": "0285081d89f532c8.m4a",
@@ -441,6 +560,13 @@
       "seconds": 11.007
     },
     {
+      "file": "c24398d835d250a7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "L is on the y-axis: 0 units from it, so its x-coordinate is 0.",
+      "seconds": 4.888
+    },
+    {
       "file": "d18be6f61cd47f09.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -462,11 +588,18 @@
       "seconds": 9.892
     },
     {
-      "file": "d7a1a87ec8f89c8e.m4a",
+      "file": "9d25f093d2f61067.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "M is the point minus 3, 0, on the x-axis. The point minus 3, minus 5 is 5 units below it.",
-      "seconds": 7.036
+      "words": "M is on the x-axis: 0 units from it, so its y-coordinate is 0.",
+      "seconds": 4.703
+    },
+    {
+      "file": "c3ef89cb6d4a89f1.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "M is the point minus 3, 0.",
+      "seconds": 2.45
     },
     {
       "file": "e6d5251e2547786f.m4a",
@@ -474,6 +607,13 @@
       "locale": "en",
       "words": "Minus 3 is 3 units from 0, on the negative side. So a point at distance r from 0 is the number r on the positive side, and minus r on the negative side: the sign says which side.",
       "seconds": 11.576
+    },
+    {
+      "file": "b3d3c90f1581fd86.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Minus 5 is H's abscissa: its distance from the y-axis. The ordinate is its distance from the x-axis.",
+      "seconds": 6.816
     },
     {
       "file": "8dfc456d5f7ee8db.m4a",
@@ -511,18 +651,25 @@
       "seconds": 13.456
     },
     {
-      "file": "d6b6957bc1b2cd59.m4a",
+      "file": "46df337784321d09.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "P and Q were each 4 or 6 units from the y-axis, but on opposite sides. A sign tells the sides apart, as on a number line.",
-      "seconds": 8.325
+      "words": "P is 4 units from the y-axis and Q is 6, on opposite sides of it. A sign tells the sides apart, as on a number line.",
+      "seconds": 7.547
     },
     {
-      "file": "8a7edf24a97bcdb7.m4a",
+      "file": "afd199aadc450f04.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "P is 4 units from the y-axis, measured along the x-axis, in the positive direction O X. It is 3 units from the x-axis, measured along the y-axis, in the positive direction O Y. That is Riya's walk: 4 along, then 3 up.",
-      "seconds": 14.35
+      "words": "P is 4 units from the y-axis, measured along the x-axis, in the positive direction O X. It is 3 units from the x-axis, measured along the y-axis, in the positive direction O Y. Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same.",
+      "seconds": 17.172
+    },
+    {
+      "file": "7aa8bf98f0abbe3f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "P never moved, yet its coordinates changed: coordinates depend on the axes we choose. So everyone uses the same pair, the agreed x-axis across and y-axis up, just as everyone writes x first. Then a pair of numbers means one point to everyone.",
+      "seconds": 15.152
     },
     {
       "file": "8f2696255c15c77b.m4a",
@@ -537,6 +684,13 @@
       "locale": "en",
       "words": "Positive and negative directions",
       "seconds": 2.102
+    },
+    {
+      "file": "69ce37821f0bb8b4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Put the axes back: O at the crossing it started on, and the x-axis level again.",
+      "seconds": 4.912
     },
     {
       "file": "bfe17ce6583b9b8f.m4a",
@@ -567,11 +721,11 @@
       "seconds": 8.987
     },
     {
-      "file": "019d55309154a3d8.m4a",
+      "file": "16c23eb7c73ec79a.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Q is 6 units from the y-axis, measured along the negative direction O X dash, and 2 units from the x-axis, measured along the negative direction O Y dash. Her walk: 6 to the left, then 2 down.",
-      "seconds": 12.922
+      "words": "Q is 6 units from the y-axis, measured along the negative direction O X dash, and 2 units from the x-axis, measured along the negative direction O Y dash. Her walk: 6 to the left and 2 down, in either order.",
+      "seconds": 13.108
     },
     {
       "file": "0def65ef4d5e112c.m4a",
@@ -593,6 +747,118 @@
       "locale": "en",
       "words": "Quadrant four is plus, minus: x positive, y negative. Here it is the other way round, minus, plus.",
       "seconds": 7.292
+    },
+    {
+      "file": "f25ef30329bc98f9.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant four is plus, minus: x positive, y negative. This point is 1, 2.",
+      "seconds": 5.573
+    },
+    {
+      "file": "0c30c9975ca92891.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant four is plus, minus: x positive, y negative. This point is minus 1, 0.",
+      "seconds": 6.444
+    },
+    {
+      "file": "058576dfea07fe33.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant four is plus, minus: x positive, y negative. This point is minus 2, 4.",
+      "seconds": 6.119
+    },
+    {
+      "file": "9ef757848cdbc157.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant four is plus, minus: x positive, y negative. This point is minus 3, minus 5.",
+      "seconds": 6.56
+    },
+    {
+      "file": "85e6a2c30b2cd7a0.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant one is plus, plus: both coordinates positive. This point is 3, minus 1.",
+      "seconds": 5.48
+    },
+    {
+      "file": "3cd5209d862e031b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant one is plus, plus: both coordinates positive. This point is minus 1, 0.",
+      "seconds": 5.887
+    },
+    {
+      "file": "6e481e58bbf348a4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant one is plus, plus: both coordinates positive. This point is minus 2, 4.",
+      "seconds": 5.655
+    },
+    {
+      "file": "2b26c05927869078.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant one is plus, plus: both coordinates positive. This point is minus 3, minus 5.",
+      "seconds": 6.142
+    },
+    {
+      "file": "aaa60c5e41908e17.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant three is minus, minus: both coordinates negative. This point is 1, 2.",
+      "seconds": 5.237
+    },
+    {
+      "file": "8297418a6bc7f66c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant three is minus, minus: both coordinates negative. This point is 3, minus 1.",
+      "seconds": 5.655
+    },
+    {
+      "file": "9f78cda6ca774d35.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant three is minus, minus: both coordinates negative. This point is minus 1, 0.",
+      "seconds": 6.177
+    },
+    {
+      "file": "77a93269ad48c6f7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant three is minus, minus: both coordinates negative. This point is minus 2, 4.",
+      "seconds": 5.527
+    },
+    {
+      "file": "480e594434b26ba4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant two is minus, plus: x negative, y positive. This point is 1, 2.",
+      "seconds": 5.666
+    },
+    {
+      "file": "e68211dcdac1ca37.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant two is minus, plus: x negative, y positive. This point is 3, minus 1.",
+      "seconds": 6.003
+    },
+    {
+      "file": "1f29d9238f97dd90.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant two is minus, plus: x negative, y positive. This point is minus 1, 0.",
+      "seconds": 6.653
+    },
+    {
+      "file": "275b4345a96ab9c3.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Quadrant two is minus, plus: x negative, y positive. This point is minus 3, minus 5.",
+      "seconds": 6.525
     },
     {
       "file": "e1e6f963efc635f0.m4a",
@@ -833,11 +1099,116 @@
       "seconds": 3.379
     },
     {
+      "file": "070881bf8191b664.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is D's pair. The abscissa is one number: the first.",
+      "seconds": 3.565
+    },
+    {
+      "file": "929ac1c815eba079.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is H's pair. The ordinate is one number: the second.",
+      "seconds": 3.46
+    },
+    {
+      "file": "dd6727d7c6a3f76e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first: minus 3, minus 5 is E. H is 5 units left of the y-axis, so x is minus 5, written first.",
+      "seconds": 8.232
+    },
+    {
       "file": "45107868ed5a9b2d.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
       "words": "That is y first. B is 5 units left of the y-axis, so x is minus 5, written first.",
-      "seconds": 6.177
+      "seconds": 6.27
+    },
+    {
+      "file": "26b458c095580fb9.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. C is 5 units right of the y-axis, so x is 5, written first.",
+      "seconds": 5.736
+    },
+    {
+      "file": "1c547a2efdf042b5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. L is on the y-axis, 0 units from it, so x is 0, written first.",
+      "seconds": 6.096
+    },
+    {
+      "file": "b5f76e039e87a450.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. M is on the x-axis, 0 units from it, so y is 0, written second.",
+      "seconds": 6.165
+    },
+    {
+      "file": "b980bba8aedd47c7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. P is 1 units left of the y-axis, so x is minus 1, written first.",
+      "seconds": 6.154
+    },
+    {
+      "file": "0abe86da16a49bd7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. P is 2 units right of the y-axis, so x is 2, written first.",
+      "seconds": 5.724
+    },
+    {
+      "file": "5dc3ccbe1b7670ba.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. P is 3 units left of the y-axis, so x is minus 3, written first.",
+      "seconds": 5.968
+    },
+    {
+      "file": "bbc0f462360547ed.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. P is 4 units left of the y-axis, so x is minus 4, written first.",
+      "seconds": 6.2
+    },
+    {
+      "file": "57cf17cf36365872.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is y first. P is 5 units right of the y-axis, so x is 5, written first.",
+      "seconds": 5.678
+    },
+    {
+      "file": "0b7a8d23415c0575.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That point is on the other side of the x-axis. P is above it, so its y-coordinate is positive.",
+      "seconds": 5.968
+    },
+    {
+      "file": "b8832f116f08f2a2.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That point is on the other side of the x-axis. P is below it, so its y-coordinate is negative.",
+      "seconds": 6.003
+    },
+    {
+      "file": "811e5c1ad3e364e4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That point is on the other side of the y-axis. P is left of it, so its x-coordinate is negative.",
+      "seconds": 5.968
+    },
+    {
+      "file": "74aa3017eb8a2f2a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That point is on the other side of the y-axis. P is right of it, so its x-coordinate is positive.",
+      "seconds": 5.747
     },
     {
       "file": "a37afbdb07eaa5ef.m4a",
@@ -952,11 +1323,11 @@
       "seconds": 4.726
     },
     {
-      "file": "e824c733c05f1189.m4a",
+      "file": "a8fbff8eca660b96.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The origin is 0 units from both axes, so its coordinates are 0, 0. In Riya's town, a house on the main road would need no walk up the street: its second number is 0.",
-      "seconds": 10.809
+      "words": "The origin is 0 units from both axes, so its coordinates are 0, 0.",
+      "seconds": 5.086
     },
     {
       "file": "36280a684cdca0cd.m4a",
@@ -973,6 +1344,20 @@
       "seconds": 9.219
     },
     {
+      "file": "edf5adc6844095ab.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The point 0, minus 5 is on the other side. L is above the x-axis, so its y-coordinate is positive.",
+      "seconds": 6.711
+    },
+    {
+      "file": "7efc7882906cdc78.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The point 3, 0 is on the other side. M is left of the y-axis, so its x-coordinate is negative.",
+      "seconds": 6.456
+    },
+    {
       "file": "0e223a8c87aa2fd0.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -980,11 +1365,18 @@
       "seconds": 10.449
     },
     {
-      "file": "c54bfbb3e17b0266.m4a",
+      "file": "4bb1e26e97d902af.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The point 5, 2 is right of the y-axis. B is on the left, along O X dash, so its x-coordinate is negative.",
-      "seconds": 7.048
+      "words": "The point 5, 2 is on the other side. B is left of the y-axis, so its x-coordinate is negative.",
+      "seconds": 6.177
+    },
+    {
+      "file": "43182385e3b60e16.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The point 5, 5 is on the other side. C is below the x-axis, so its y-coordinate is negative.",
+      "seconds": 6.235
     },
     {
       "file": "83b77aa6d2d8f35f.m4a",
@@ -1001,18 +1393,25 @@
       "seconds": 8.232
     },
     {
-      "file": "5482c4002a1a4021.m4a",
+      "file": "562153c8bd2444ab.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The point minus 5, minus 2 is below the x-axis. B is above it, so its y-coordinate is positive.",
-      "seconds": 6.549
+      "words": "The point minus 5, 3 is above the x-axis. H is below it, along O Y dash, so its y-coordinate is negative.",
+      "seconds": 7.733
     },
     {
-      "file": "76f2cb139ecf6cdf.m4a",
+      "file": "58b0b26ad7a74559.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The point never moved, yet its coordinates changed: coordinates depend on the axes we choose. So everyone uses the same pair, the agreed x-axis across and y-axis up, just as everyone writes x first. Then a pair of numbers means one point to everyone.",
-      "seconds": 15.163
+      "words": "The point minus 5, minus 2 is on the other side. B is above the x-axis, so its y-coordinate is positive.",
+      "seconds": 6.723
+    },
+    {
+      "file": "28cec478d6df0653.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "The point minus 5, minus 5 is on the other side. C is right of the y-axis, so its x-coordinate is positive.",
+      "seconds": 6.99
     },
     {
       "file": "bedf53e76d08eba8.m4a",
@@ -1071,6 +1470,13 @@
       "seconds": 23.534
     },
     {
+      "file": "82d0209ae173a531.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Those are H's distances without their signs. H is left of the y-axis and below the x-axis: both coordinates are negative.",
+      "seconds": 7.501
+    },
+    {
       "file": "712409b554b7be3b.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -1106,11 +1512,11 @@
       "seconds": 1.092
     },
     {
-      "file": "a3acbb796f584e71.m4a",
+      "file": "5956f62156dbfb13.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Two perpendicular lines can be drawn anywhere, pointing any way. The point below stays where it is. Drag O to move the axes, and turn them by the turning handle on O X. Watch the point's coordinates.",
-      "seconds": 12.028
+      "words": "Two perpendicular lines can be drawn anywhere, pointing any way. The point P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
+      "seconds": 12.33
     },
     {
       "file": "0904dd6061fc4a49.m4a",
@@ -1127,11 +1533,11 @@
       "seconds": 3.367
     },
     {
-      "file": "f4ca32f42a2b4dce.m4a",
+      "file": "3b7026053b5d3566.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "What are the coordinates of B?",
-      "seconds": 1.521
+      "words": "What are the coordinates of H?",
+      "seconds": 1.463
     },
     {
       "file": "523a3b89eb910d83.m4a",
@@ -1155,11 +1561,11 @@
       "seconds": 4.482
     },
     {
-      "file": "725494c1a40c469c.m4a",
+      "file": "79c103e6328c6513.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Which point is the point minus 3, minus 5?",
-      "seconds": 2.926
+      "words": "Which point is the point 5, minus 5?",
+      "seconds": 2.648
     },
     {
       "file": "fb34d959035d3b9f.m4a",
@@ -1204,6 +1610,13 @@
       "seconds": 7.988
     },
     {
+      "file": "d31b34d0ae4e9835.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "2, D की कोटि है: x-अक्ष से उसकी दूरी। भुज, y-अक्ष से उसकी दूरी है।",
+      "seconds": 6.502
+    },
+    {
       "file": "f58ebe06498f2bca.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -1216,13 +1629,6 @@
       "locale": "hi",
       "words": "A, एक्स-अक्ष पर है, वाई-अक्ष से O X की ओर 4 इकाई: A है बिंदु 4, 0।",
       "seconds": 6.816
-    },
-    {
-      "file": "240d4f79852d18a1.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "B के निर्देशांक क्या हैं?",
-      "seconds": 2.114
     },
     {
       "file": "dae2b919319415ec.m4a",
@@ -1239,11 +1645,11 @@
       "seconds": 11.076
     },
     {
-      "file": "3f24d58ff456c83e.m4a",
+      "file": "6ffd6476d27d4a1c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "C है बिंदु 5, माइनस 5: वाई-अक्ष से 5 इकाई दाईं ओर, 3 बाईं ओर नहीं।",
-      "seconds": 7.303
+      "words": "C है बिंदु 5, माइनस 5।",
+      "seconds": 2.996
     },
     {
       "file": "9479e8d94b88c288.m4a",
@@ -1253,11 +1659,39 @@
       "seconds": 8.22
     },
     {
+      "file": "e5d5e319bf8aae5f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "D है बिंदु 6, 2, एक्स-अक्ष के ऊपर। बिंदु 5, माइनस 5 उसके नीचे है: उसका वाई-निर्देशांक ऋणात्मक है।",
+      "seconds": 9.741
+    },
+    {
+      "file": "0411b44c9490465b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "D है बिंदु 6, 2।",
+      "seconds": 2.427
+    },
+    {
+      "file": "652ae3124332380b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "D, y-अक्ष के दाईं ओर है, इसलिए उसका भुज धनात्मक है।",
+      "seconds": 5.074
+    },
+    {
       "file": "51580444edacf9b8.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "D, वाई-अक्ष पर है, एक्स-अक्ष से O Y डैश की ओर 4 इकाई: D है बिंदु 0, माइनस 4।",
       "seconds": 8.383
+    },
+    {
+      "file": "de2b8a012ec66289.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "E है बिंदु माइनस 3, माइनस 5: वाई-अक्ष से 3 इकाई बाईं ओर। बिंदु 5, माइनस 5 उससे 5 इकाई दाईं ओर है।",
+      "seconds": 10.67
     },
     {
       "file": "ffbd20571190086c.m4a",
@@ -1267,11 +1701,39 @@
       "seconds": 8.104
     },
     {
-      "file": "e309b7c790744dad.m4a",
+      "file": "08f14e15936d8b78.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "H है बिंदु माइनस 5, माइनस 3: वही संख्याएँ, उलटे क्रम में।",
-      "seconds": 5.852
+      "words": "G है बिंदु 2, माइनस 4: 2 इकाई दाईं ओर और 4 नीचे। बिंदु 5, माइनस 5 और दाईं ओर और और नीचे है।",
+      "seconds": 11.274
+    },
+    {
+      "file": "76275029200c88fd.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "H के निर्देशांक क्या हैं?",
+      "seconds": 2.137
+    },
+    {
+      "file": "fc2acb59495171d7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "H है बिंदु माइनस 5, माइनस 3।",
+      "seconds": 3.298
+    },
+    {
+      "file": "4720d31051e410ac.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "H, x-अक्ष के नीचे है, इसलिए उसकी कोटि ऋणात्मक है।",
+      "seconds": 4.528
+    },
+    {
+      "file": "be40d782b3a2005f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "L, y-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका x-निर्देशांक 0 है।",
+      "seconds": 6.676
     },
     {
       "file": "c6c753c8cbf424f3.m4a",
@@ -1281,11 +1743,18 @@
       "seconds": 13.526
     },
     {
-      "file": "77e94b31c5083b18.m4a",
+      "file": "3467bca730643cb5.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "M है बिंदु माइनस 3, 0, एक्स-अक्ष पर। बिंदु माइनस 3, माइनस 5 उससे 5 इकाई नीचे है।",
-      "seconds": 8.29
+      "words": "M है बिंदु माइनस 3, 0।",
+      "seconds": 2.59
+    },
+    {
+      "file": "0633b50683fc4a47.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "M, x-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका y-निर्देशांक 0 है।",
+      "seconds": 6.2
     },
     {
       "file": "54b9cdf64185fea0.m4a",
@@ -1316,25 +1785,32 @@
       "seconds": 3.1
     },
     {
-      "file": "3a9dd06dfd9fda13.m4a",
+      "file": "a69d7f2da1743768.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "P और Q, y-अक्ष से 4 और 6 इकाई दूर थे, पर उलटी ओर। एक चिह्न दोनों ओर को अलग बताता है, जैसे संख्या रेखा पर।",
-      "seconds": 10.299
+      "words": "P कभी नहीं हिला, फिर भी उसके निर्देशांक बदल गए: निर्देशांक उन अक्षों पर निर्भर करते हैं जो हम चुनते हैं। इसलिए सब एक ही जोड़ा लेते हैं, माना हुआ आड़ा x-अक्ष और खड़ा y-अक्ष, जैसे सब x पहले लिखते हैं। तब संख्याओं का एक जोड़ा सबके लिए एक ही बिंदु बताता है।",
+      "seconds": 19.935
     },
     {
-      "file": "f01d551edb9b2077.m4a",
+      "file": "d84ebf853c8c8ca2.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "P, वाई-अक्ष से 4 इकाई दूर है, जो एक्स-अक्ष के साथ धनात्मक दिशा O X में मापी जाती है। वह एक्स-अक्ष से 3 इकाई दूर है, जो वाई-अक्ष के साथ धनात्मक दिशा O Y में मापी जाती है। यही रिया की चाल है: 4 आगे, फिर 3 ऊपर।",
-      "seconds": 17.497
+      "words": "P, y-अक्ष से 4 इकाई दूर है और Q 6 इकाई, उसकी उलटी ओर। एक चिह्न दोनों ओर को अलग बताता है, जैसे संख्या रेखा पर।",
+      "seconds": 10.566
     },
     {
-      "file": "9da3402890e4ec93.m4a",
+      "file": "7dcaa744fcf19704.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "Q, वाई-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा O X डैश में मापी जाती है, और एक्स-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा O Y डैश में मापी जाती है। उसकी चाल: 6 बाईं ओर, फिर 2 नीचे।",
-      "seconds": 15.546
+      "words": "P, वाई-अक्ष से 4 इकाई दूर है, जो एक्स-अक्ष के साथ धनात्मक दिशा O X में मापी जाती है। वह एक्स-अक्ष से 3 इकाई दूर है, जो वाई-अक्ष के साथ धनात्मक दिशा O Y में मापी जाती है। रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।",
+      "seconds": 20.782
+    },
+    {
+      "file": "2626402d480f4139.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "Q, वाई-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा O X डैश में मापी जाती है, और एक्स-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा O Y डैश में मापी जाती है। उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।",
+      "seconds": 16.301
     },
     {
       "file": "65c589309cb48365.m4a",
@@ -1363,6 +1839,13 @@
       "locale": "hi",
       "words": "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। चतुर्थांशों को गिनो दबाओ।",
       "seconds": 18.867
+    },
+    {
+      "file": "e43db52033622034.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अक्षों को वापस रखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।",
+      "seconds": 5.469
     },
     {
       "file": "1d5c1793ff6f57a8.m4a",
@@ -1561,11 +2044,39 @@
       "seconds": 6.955
     },
     {
-      "file": "5e4685d6909b6092.m4a",
+      "file": "ad307eb997941d76.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "एक्स-अक्ष पर कोई बिंदु एक्स-अक्ष से 0 इकाई दूर है, इसलिए उसका वाई-निर्देशांक 0 है: वह बिंदु एक्स, 0 है। वाई बराबर 0 दबाओ: वाई बराबर 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा एक्स-अक्ष बनाते हैं।",
-      "seconds": 16.928
+      "words": "एक्स-अक्ष पर एक बिंदु का वाई बराबर 0 होता है। यह बिंदु 1, 2 है।",
+      "seconds": 6.607
+    },
+    {
+      "file": "b1e73d1b420c0d44.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक्स-अक्ष पर एक बिंदु का वाई बराबर 0 होता है। यह बिंदु 3, माइनस 1 है।",
+      "seconds": 6.641
+    },
+    {
+      "file": "939e6339f1aee0e9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक्स-अक्ष पर एक बिंदु का वाई बराबर 0 होता है। यह बिंदु माइनस 2, 4 है।",
+      "seconds": 7.025
+    },
+    {
+      "file": "948ca7abd2dbe714.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक्स-अक्ष पर एक बिंदु का वाई बराबर 0 होता है। यह बिंदु माइनस 3, माइनस 5 है।",
+      "seconds": 7.501
+    },
+    {
+      "file": "cd3f59ccef5ce784.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक्स-अक्ष पर कोई बिंदु एक्स-अक्ष से 0 इकाई दूर है, इसलिए उसका वाई-निर्देशांक 0 है: वह बिंदु एक्स, 0 है। वाई बराबर 0 दबाओ: वाई बराबर 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा एक्स-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
+      "seconds": 24.474
     },
     {
       "file": "930145e19775259d.m4a",
@@ -1694,6 +2205,34 @@
       "seconds": 1.823
     },
     {
+      "file": "907451217fdd359c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चौथा चतुर्थांश धन, ऋण है: एक्स धनात्मक, वाई ऋणात्मक। यह बिंदु 1, 2 है।",
+      "seconds": 7.837
+    },
+    {
+      "file": "55a438b7162bcb13.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चौथा चतुर्थांश धन, ऋण है: एक्स धनात्मक, वाई ऋणात्मक। यह बिंदु माइनस 1, 0 है।",
+      "seconds": 8.569
+    },
+    {
+      "file": "1242f7d7eb2d01b3.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चौथा चतुर्थांश धन, ऋण है: एक्स धनात्मक, वाई ऋणात्मक। यह बिंदु माइनस 2, 4 है।",
+      "seconds": 8.197
+    },
+    {
+      "file": "d0c46611f3d2e17e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चौथा चतुर्थांश धन, ऋण है: एक्स धनात्मक, वाई ऋणात्मक। यह बिंदु माइनस 3, माइनस 5 है।",
+      "seconds": 8.638
+    },
+    {
       "file": "7f56170f07e81a7a.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -1743,6 +2282,34 @@
       "seconds": 4.586
     },
     {
+      "file": "16fa589e2726540d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "तीसरा चतुर्थांश ऋण, ऋण है: दोनों निर्देशांक ऋणात्मक। यह बिंदु 1, 2 है।",
+      "seconds": 7.338
+    },
+    {
+      "file": "3f0199b5faef611b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "तीसरा चतुर्थांश ऋण, ऋण है: दोनों निर्देशांक ऋणात्मक। यह बिंदु 3, माइनस 1 है।",
+      "seconds": 7.814
+    },
+    {
+      "file": "9bf7b78c1fe3c285.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "तीसरा चतुर्थांश ऋण, ऋण है: दोनों निर्देशांक ऋणात्मक। यह बिंदु माइनस 1, 0 है।",
+      "seconds": 7.651
+    },
+    {
+      "file": "10c6362a18531412.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "तीसरा चतुर्थांश ऋण, ऋण है: दोनों निर्देशांक ऋणात्मक। यह बिंदु माइनस 2, 4 है।",
+      "seconds": 7.35
+    },
+    {
       "file": "3caff0b904e92d83.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -1755,6 +2322,34 @@
       "locale": "hi",
       "words": "दिशाएँ हर अक्ष के आधे भाग हैं, O X और O X डैश, O Y और O Y डैश, न कि रेखाएँ या भाग।",
       "seconds": 8.418
+    },
+    {
+      "file": "fb3b5d12ee7bed81.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दूसरा चतुर्थांश ऋण, धन है: एक्स ऋणात्मक, वाई धनात्मक। यह बिंदु 1, 2 है।",
+      "seconds": 7.884
+    },
+    {
+      "file": "2f6ed4b6db61fedd.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दूसरा चतुर्थांश ऋण, धन है: एक्स ऋणात्मक, वाई धनात्मक। यह बिंदु 3, माइनस 1 है।",
+      "seconds": 8.313
+    },
+    {
+      "file": "7393f157b0047325.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दूसरा चतुर्थांश ऋण, धन है: एक्स ऋणात्मक, वाई धनात्मक। यह बिंदु माइनस 1, 0 है।",
+      "seconds": 8.429
+    },
+    {
+      "file": "46feef259992200b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दूसरा चतुर्थांश ऋण, धन है: एक्स ऋणात्मक, वाई धनात्मक। यह बिंदु माइनस 3, माइनस 5 है।",
+      "seconds": 8.975
     },
     {
       "file": "f2cdce9d6508c41c.m4a",
@@ -1778,11 +2373,11 @@
       "seconds": 19.97
     },
     {
-      "file": "f78687c4b972f71a.m4a",
+      "file": "cf618d6e96ad0889.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। नीचे का बिंदु अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और O X पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। बिंदु के निर्देशांक देखो।",
-      "seconds": 16.301
+      "words": "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। बिंदु P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
+      "seconds": 15.5
     },
     {
       "file": "c099e3141d87a42e.m4a",
@@ -1832,6 +2427,34 @@
       "locale": "hi",
       "words": "पन्ने पर एक बिंदु",
       "seconds": 1.893
+    },
+    {
+      "file": "3cbd3468208e1b3d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पहला चतुर्थांश धन, धन है: दोनों निर्देशांक धनात्मक। यह बिंदु 3, माइनस 1 है।",
+      "seconds": 7.501
+    },
+    {
+      "file": "ae45fad4a69fc4a1.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पहला चतुर्थांश धन, धन है: दोनों निर्देशांक धनात्मक। यह बिंदु माइनस 1, 0 है।",
+      "seconds": 7.524
+    },
+    {
+      "file": "03a14509c4666da0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पहला चतुर्थांश धन, धन है: दोनों निर्देशांक धनात्मक। यह बिंदु माइनस 2, 4 है।",
+      "seconds": 7.268
+    },
+    {
+      "file": "e142aa8666c6bb35.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पहला चतुर्थांश धन, धन है: दोनों निर्देशांक धनात्मक। यह बिंदु माइनस 3, माइनस 5 है।",
+      "seconds": 7.86
     },
     {
       "file": "8a0162b53bacba01.m4a",
@@ -1946,6 +2569,13 @@
       "seconds": 2.996
     },
     {
+      "file": "9176885e7cf6c470.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 0, माइनस 5 दूसरी ओर है। L, एक्स-अक्ष के ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।",
+      "seconds": 8.812
+    },
+    {
       "file": "4d051e829ff2e1e1.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -1958,6 +2588,13 @@
       "locale": "hi",
       "words": "बिंदु 2 पर है: 0 से 2 इकाई, धनात्मक ओर। उसे माइनस 3 पर खींचो।",
       "seconds": 6.665
+    },
+    {
+      "file": "3ee0288c75206ef0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 3, 0 दूसरी ओर है। M, वाई-अक्ष के बाईं ओर है, इसलिए उसका एक्स-निर्देशांक ऋणात्मक है।",
+      "seconds": 8.696
     },
     {
       "file": "38540de09024c4ae.m4a",
@@ -1974,11 +2611,25 @@
       "seconds": 5.492
     },
     {
-      "file": "4c834657f0297a3d.m4a",
+      "file": "6f0419f2e32a3616.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु 5, 2, वाई-अक्ष के दाईं ओर है। B बाईं ओर, O X डैश की ओर है, इसलिए उसका एक्स-निर्देशांक ऋणात्मक है।",
-      "seconds": 10.032
+      "words": "बिंदु 5, 2 दूसरी ओर है। B, वाई-अक्ष के बाईं ओर है, इसलिए उसका एक्स-निर्देशांक ऋणात्मक है।",
+      "seconds": 8.603
+    },
+    {
+      "file": "5500aefdc52c1722.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 5, 5 दूसरी ओर है। C, एक्स-अक्ष के नीचे है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।",
+      "seconds": 8.232
+    },
+    {
+      "file": "8a39c7b2cd4ddf06.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु 5, माइनस 5 कौन-सा है?",
+      "seconds": 3.228
     },
     {
       "file": "a0dd376f50b72adf.m4a",
@@ -1993,13 +2644,6 @@
       "locale": "hi",
       "words": "बिंदु P पर है। उसे Q तक खींचो, जहाँ एक्स माइनस 6 और वाई माइनस 2 है, और देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
       "seconds": 10.194
-    },
-    {
-      "file": "b6e8d87fe101b989.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "बिंदु कभी नहीं हिला, फिर भी उसके निर्देशांक बदल गए: निर्देशांक उन अक्षों पर निर्भर करते हैं जो हम चुनते हैं। इसलिए सब एक ही जोड़ा लेते हैं, माना हुआ आड़ा x-अक्ष और खड़ा y-अक्ष, जैसे सब x पहले लिखते हैं। तब संख्याओं का एक जोड़ा सबके लिए एक ही बिंदु बताता है।",
-      "seconds": 20.132
     },
     {
       "file": "fb63ebe9a2c10763.m4a",
@@ -2079,18 +2723,25 @@
       "seconds": 5.887
     },
     {
-      "file": "9c6bf84dd7d0022f.m4a",
+      "file": "3f814162392b827a.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु माइनस 3, माइनस 5 कौन-सा है?",
-      "seconds": 3.437
+      "words": "बिंदु माइनस 5, 3, एक्स-अक्ष के ऊपर है। H उसके नीचे, O Y डैश की ओर है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।",
+      "seconds": 10.6
     },
     {
-      "file": "336376f2185280d9.m4a",
+      "file": "228e7e67cad83e96.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "बिंदु माइनस 5, माइनस 2, एक्स-अक्ष के नीचे है। B उसके ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।",
-      "seconds": 9.265
+      "words": "बिंदु माइनस 5, माइनस 2 दूसरी ओर है। B, एक्स-अक्ष के ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।",
+      "seconds": 9.37
+    },
+    {
+      "file": "37d24902d79c4ff9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "बिंदु माइनस 5, माइनस 5 दूसरी ओर है। C, वाई-अक्ष के दाईं ओर है, इसलिए उसका एक्स-निर्देशांक धनात्मक है।",
+      "seconds": 9.532
     },
     {
       "file": "72c1553805cff156.m4a",
@@ -2114,6 +2765,20 @@
       "seconds": 14.641
     },
     {
+      "file": "3f0329f6a4c19437.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "माइनस 5, H का भुज है: वाई-अक्ष से उसकी दूरी। कोटि, एक्स-अक्ष से उसकी दूरी है।",
+      "seconds": 7.501
+    },
+    {
+      "file": "b6aa1e496a23cf2a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "माने हुए अक्षों पर लौटकर P फिर बिंदु 3, 2 है, सबके लिए एक जैसा।",
+      "seconds": 6.096
+    },
+    {
       "file": "8909ba374004a496.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2121,11 +2786,11 @@
       "seconds": 4.819
     },
     {
-      "file": "6671d7c71eed41ce.m4a",
+      "file": "92442c449f5c4469.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
-      "seconds": 13.991
+      "words": "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं।",
+      "seconds": 6.711
     },
     {
       "file": "da8d492167603e52.m4a",
@@ -2149,6 +2814,20 @@
       "seconds": 13.155
     },
     {
+      "file": "12cac0e233c0d6bd.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह D का जोड़ा है। भुज एक संख्या है: पहली।",
+      "seconds": 4.064
+    },
+    {
+      "file": "c96b8892da0d079b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह H का जोड़ा है। कोटि एक संख्या है: दूसरी।",
+      "seconds": 4.319
+    },
+    {
       "file": "b7ba67b134697bc5.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -2156,11 +2835,74 @@
       "seconds": 14.803
     },
     {
+      "file": "435f0052aeed12f2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है: माइनस 3, माइनस 5 तो E है। H, वाई-अक्ष से 5 इकाई बाईं ओर है, इसलिए एक्स माइनस 5 है, जो पहले लिखा जाता है।",
+      "seconds": 11.97
+    },
+    {
       "file": "b63b911b13cb8e48.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "यह वाई पहले है। B, वाई-अक्ष से 5 इकाई बाईं ओर है, इसलिए एक्स माइनस 5 है, जो पहले लिखा जाता है।",
-      "seconds": 9.242
+      "seconds": 9.126
+    },
+    {
+      "file": "d2d0b5212e3f7729.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। C, वाई-अक्ष से 5 इकाई दाईं ओर है, इसलिए एक्स 5 है, जो पहले लिखा जाता है।",
+      "seconds": 8.778
+    },
+    {
+      "file": "145027066222d1c0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। L, वाई-अक्ष पर है, उससे 0 इकाई दूर, इसलिए एक्स 0 है, जो पहले लिखा जाता है।",
+      "seconds": 9.068
+    },
+    {
+      "file": "7c91217493879879.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। M, एक्स-अक्ष पर है, उससे 0 इकाई दूर, इसलिए वाई 0 है, जो दूसरा लिखा जाता है।",
+      "seconds": 8.975
+    },
+    {
+      "file": "37c3e5bff7e903be.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। P, वाई-अक्ष से 1 इकाई बाईं ओर है, इसलिए एक्स माइनस 1 है, जो पहले लिखा जाता है।",
+      "seconds": 9.114
+    },
+    {
+      "file": "07689c1c0d899b11.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। P, वाई-अक्ष से 2 इकाई दाईं ओर है, इसलिए एक्स 2 है, जो पहले लिखा जाता है।",
+      "seconds": 8.348
+    },
+    {
+      "file": "c60d1de19dceb3c8.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। P, वाई-अक्ष से 3 इकाई बाईं ओर है, इसलिए एक्स माइनस 3 है, जो पहले लिखा जाता है।",
+      "seconds": 8.905
+    },
+    {
+      "file": "d4b05e8422194453.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। P, वाई-अक्ष से 4 इकाई बाईं ओर है, इसलिए एक्स माइनस 4 है, जो पहले लिखा जाता है।",
+      "seconds": 8.975
+    },
+    {
+      "file": "5c1ab13b66e5b54e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वाई पहले है। P, वाई-अक्ष से 5 इकाई दाईं ओर है, इसलिए एक्स 5 है, जो पहले लिखा जाता है।",
+      "seconds": 8.534
     },
     {
       "file": "dbc9b4da7a82e68c.m4a",
@@ -2175,6 +2917,13 @@
       "locale": "hi",
       "words": "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त से आया, जो 1596 से 1650 तक रहे, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
       "seconds": 28.561
+    },
+    {
+      "file": "35bac5dc3180bfe6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "ये H की दूरियाँ हैं, बिना चिह्न के। H, वाई-अक्ष के बाईं ओर और एक्स-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।",
+      "seconds": 10.229
     },
     {
       "file": "a11dc88f2fa77bc0.m4a",
@@ -2273,6 +3022,69 @@
       "locale": "hi",
       "words": "वह फिर O पर है। अब उसे Q तक ले चलो।",
       "seconds": 3.751
+    },
+    {
+      "file": "fc0c9361e1f86b6c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु एक्स-अक्ष की दूसरी ओर है। P उसके ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।",
+      "seconds": 7.152
+    },
+    {
+      "file": "8d9fcc9efd933f0e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु एक्स-अक्ष की दूसरी ओर है। P उसके नीचे है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।",
+      "seconds": 7.512
+    },
+    {
+      "file": "11f51771dc541773.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु वाई-अक्ष की दूसरी ओर है। P उसके दाईं ओर है, इसलिए उसका एक्स-निर्देशांक धनात्मक है।",
+      "seconds": 7.884
+    },
+    {
+      "file": "1f70663dfcc1c67e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु वाई-अक्ष की दूसरी ओर है। P उसके बाईं ओर है, इसलिए उसका एक्स-निर्देशांक ऋणात्मक है।",
+      "seconds": 8.011
+    },
+    {
+      "file": "fa3c2b02d9da1c80.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वाई-अक्ष पर एक बिंदु का एक्स बराबर 0 होता है। यह बिंदु 1, 2 है।",
+      "seconds": 6.723
+    },
+    {
+      "file": "750b2e7ed96167b2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वाई-अक्ष पर एक बिंदु का एक्स बराबर 0 होता है। यह बिंदु 3, माइनस 1 है।",
+      "seconds": 7.431
+    },
+    {
+      "file": "fe53ae200b4be37a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वाई-अक्ष पर एक बिंदु का एक्स बराबर 0 होता है। यह बिंदु माइनस 1, 0 है।",
+      "seconds": 7.141
+    },
+    {
+      "file": "0a8cc1c1676ec2fd.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वाई-अक्ष पर एक बिंदु का एक्स बराबर 0 होता है। यह बिंदु माइनस 2, 4 है।",
+      "seconds": 6.804
+    },
+    {
+      "file": "f2c865a2f7151ab7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वाई-अक्ष पर एक बिंदु का एक्स बराबर 0 होता है। यह बिंदु माइनस 3, माइनस 5 है।",
+      "seconds": 7.466
     },
     {
       "file": "c2644e3f9d81ee88.m4a",
