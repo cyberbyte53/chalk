@@ -694,6 +694,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           .describe(
             "A point in the prop's own units to tap, inside its frame: { x: -4, y: 2 } on a plane, { x: 1.5 } on a number line.",
           ),
+        repeat: z
+          .number()
+          .int()
+          .min(1)
+          .max(20)
+          .optional()
+          .describe("Tap it this many times, each played to its end (→ three blocks: repeat 3)."),
         during,
       })
       .strict(),
@@ -835,6 +842,14 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .max(40)
             .optional()
             .describe("What a finger does, in order, from the board's start."),
+          plays: z
+            .array(z.array(step).min(1).max(40))
+            .min(1)
+            .max(200)
+            .optional()
+            .describe(
+              "Many plays on one board at once (a sweep: Riya to every square, each scale), each from the board's start, a few side by side: only the plays with a problem (a step that couldn't be taken, layout problems at the end) come back, each with its steps. No pictures.",
+            ),
           state: z
             .record(z.unknown())
             .optional()
@@ -900,8 +915,62 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const say = (a: Answer, n: readonly string[]) => answer(a, n, args.pictures);
         const address = parseAddress(args.at);
         const given = stateOf(args, address.root === "props");
+        // A tap repeated is that tap that many times.
+        const unrepeat = (list: readonly GivenStep[]): GivenStep[] =>
+          list.flatMap((s) => {
+            if (!("tap" in s) || s.repeat === undefined) return [s];
+            const { repeat, ...one } = s;
+            return Array.from({ length: repeat }, () => one);
+          });
+        if (args.plays !== undefined) {
+          const at = contentPath(args.at);
+          if (at.part !== undefined || !listBoards(root).some((b) => b.board === at.path))
+            throw new Error("Plays act on one board: name a board.");
+          const plays = args.plays.map(unrepeat);
+          const bad: string[] = [];
+          let next = 0;
+          const worker = async (k: number) => {
+            for (let i = next++; i < plays.length && !extra.signal.aborted; i = next++) {
+              const steps = (plays[i] ?? []).filter((s) => !("call" in s)) as Step[];
+              const played = await play(
+                root,
+                {
+                  board: at.path,
+                  steps,
+                  shots: "none",
+                  ...(args.locales?.[0] === undefined ? {} : { locale: args.locales[0] }),
+                },
+                `${lane}:plays:${k}`,
+              );
+              const lines = played.text.split("\n");
+              const wrong = lines.filter((l) => l.includes("✗")).map((l) => l.trim());
+              const from = lines.findIndex((l) => l.startsWith("problems now"));
+              const problems =
+                from < 0 ? [] : lines.slice(from + 1).filter((l) => l.startsWith("  "));
+              if (wrong.length > 0 || problems.length > 0)
+                bad.push(
+                  `play ${i + 1}: ${steps.map((s) => ("tap" in s ? s.tap.split("/").at(-1) : "drag" in s ? `${s.drag.split("/").at(-1)}→(${s.to.x}, ${s.to.y ?? ""})` : "")).join(", ")}`,
+                  ...wrong.map((w) => `  ${w}`),
+                  ...problems.map((p) => `  ${p.trim()}`),
+                );
+              await progressOf(extra)(`played ${i + 1} of ${plays.length}`);
+            }
+          };
+          await Promise.all([0, 1, 2].map(worker));
+          const badCount = bad.filter((l) => l.startsWith("play ")).length;
+          return say(
+            {
+              text: [
+                `${args.at}: ${plays.length} plays · ${plays.length - badCount} ok · ${badCount} with problems`,
+                ...bad,
+              ].join("\n"),
+            },
+            notes,
+          );
+        }
         if (args.steps !== undefined) {
-          const { steps, locales, screens, at: _, play: __, ...rest } = args;
+          const { steps: asked, plays: _p, locales, screens, at: _, play: __, ...rest } = args;
+          const steps = unrepeat(asked);
           if ((locales?.length ?? 1) > 1 || (screens?.length ?? 1) > 1)
             throw new Error(
               "Steps are done on one version: name one language and one screen, or none (the phone in English). What the board does is the same in every version; without steps, show checks how every version looks.",
