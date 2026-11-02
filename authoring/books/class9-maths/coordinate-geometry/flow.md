@@ -98,7 +98,7 @@ Order: state → see it hold for plotting (a method: Riya's walk); discover → 
 
 ### plot-a-point  (o11; s3.3, def-plotting, s3.3-method, fig3.15)
 Purpose: to plot (3, 5), walk 3 units along the x-axis from O to A, then 5 units in the y direction to P; Q (5, −4) the same way, downward. P is in quadrant I and Q in quadrant IV, from their signs. Volunteers set up the stalls from Riya's numbers.
-Needs: empty axes; the student gives a pair and Riya walks it from O, counting along the x-axis and then up or down, and marks the point; the right angle at A is marked. Then the student plots by tapping, and the walk checks it.
+Needs: empty axes; the student walks Riya from O along the x-axis and then up or down, and each point is marked as she reaches it. Then the student places R themselves, and Riya walks to wherever it was placed: right, she is at R; wrong, the board says where she is instead.
 
 ### swap-the-numbers  (o12; example3, fig3.16, note-ordered-pair)
 Purpose: Aman writes the snacks stall as (2, 5) instead of (5, 2), and it stands in the wrong place. Plotting (5, 0) and (0, 5), (5, 2) and (2, 5), (−3, 5) and (5, −3) shows that swapping the numbers moves the point unless they are equal; so (x, y) is an ordered pair.
@@ -108,9 +108,9 @@ Needs: the student plots Example 3's eight points; each pair and its swap shown 
 Purpose: points can come from a table and fall between grid lines, like (0, −3.5); the scale is chosen so every point fits, as with y = 8 in Exercise 3.3; a point's quadrant or axis can be told from its signs, then checked by plotting.
 Needs: a table of x and y; the student plots each pair, including a decimal one between the marks; a choice of scale, first too small (a point falls off), then right.
 
-### dice-game  (o13; activity2)
-Purpose: the fair's game stall: each throw adds the red die to x and the green die to y; first to (10, 10) wins, with no coordinate over 10.
-Needs: two counters at (0, 0) on a 0-to-10 grid; red and green dice; each counter walks its throw, along then up; an overshooting move is missed; landing on the other counter sends it back to (0, 0).
+### treasure-trail  (o13; s3.3-method, example3)
+Purpose: a treasure trail at the fair: each stall's clue gives the next stall's address, through all four quadrants and onto an axis, until the stall with Aman's lost kite. Every move is a plot, from where Riya stands; a wrong stop is told by its own address. The route is fixed, so every student finishes. (It takes the place of the textbook's dice game, Activity 2: a game anyone can finish, with nothing left to luck.)
+Needs: the fair ground with about eight stalls, some at a swapped or sign-flipped address of a clue's; Riya walked with arrows from the gate at O; the clue shown, and the next one when she reaches its stall; at any other stall, its goods and address, and that it is not the clue's.
 
 ### graphs-you-know  (o14; remark-graphs, s3.4, summary)
 Purpose: a time-distance graph from earlier classes is the same plotting, with the axes called t and d instead of x and y: Riya's walk to Aman's house, a point each minute. The lesson ends with summary point 11.

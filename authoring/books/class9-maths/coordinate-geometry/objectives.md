@@ -14,5 +14,5 @@ approved: 9406618dfcc5
 - **o10** Explain that x first is a convention the whole world agrees on, not a fact, and why one agreed order avoids confusion. (remark-convention, epigraph)
 - **o11** Plot a point from its coordinates, including fractions and decimals, by counting along the x-axis and then parallel to the y-axis, on a scale they choose. (s3.3, def-plotting, s3.3-method, fig3.15, example4, fig3.17, ex3.3-q2)
 - **o12** Show that (x, y) and (y, x) are different points when x ≠ y and the same point when x = y, and so call (x, y) an ordered pair. (example3, fig3.16, note-ordered-pair)
-- **o13** Play the dice game: move a counter by adding the throw to its coordinates and stay within (10, 10). (activity2)
+- **o13** Follow a trail of addresses across all four quadrants, walking to each point from the last, and tell a wrong stop from its address. (s3.3-method, example3)
 - **o14** Recognise a time-distance or side-perimeter graph as points plotted on axes with other names. (remark-graphs)
