@@ -613,11 +613,23 @@ export async function look(
         }
       }
     const count = target.boards.length * versions.length;
+    // Each board's witness, done as a student does it (as in a chapter's check).
+    const cant = await witnessesOnScreen(
+      root,
+      target.boards,
+      lane,
+      new AbortController().signal,
+      async () => {},
+    );
     return {
       text: [
         `${contentAddress(target.path)}: ${target.boards.length} board${target.boards.length === 1 ? "" : "s"}${versions.length > 1 ? `, ${count} drawings` : ""} · ${count - problems} ok · ${problems} with problems`,
         `boards: ${target.boards.map((b) => b.split("/").at(-1)).join(", ")}`,
         ...lines,
+        cant.length === 0
+          ? "Witnesses on the screen (en · 360): every step a student can take."
+          : `Witnesses on the screen (en · 360): ${cant.length} board${cant.length === 1 ? "" : "s"} with a step a student can't take:`,
+        ...cant.flatMap((c) => [shownAddress(c.board), ...c.lines.map((l) => `  ${l}`)]),
         `To see a board, show it on its own: ${contentAddress(target.path)}/<board>.`,
       ].join("\n"),
     };
@@ -920,9 +932,76 @@ export async function check(
       lines.push(...f.problems.map((p) => `  ${f.v.locale} · ${screenWords(f.v)}: ${p}`));
   }
   if (badBoards.size > 0) lines.push("Show a board to see it: show its address.");
+  // Each board's witness, done as a student does it: a step no finger can take is listed.
+  if (!isCancelled) {
+    const cant = await witnessesOnScreen(root, target.boards, lane, signal, progress);
+    lines.push(
+      cant.length === 0
+        ? "Witnesses on the screen (en · 360): every step a student can take."
+        : `Witnesses on the screen (en · 360): ${cant.length} board${cant.length === 1 ? "" : "s"} with a step a student can't take:`,
+    );
+    for (const c of cant) lines.push(`${shownAddress(c.board)}`, ...c.lines.map((l) => `  ${l}`));
+  }
   return {
     text: lines.join("\n"),
   };
+}
+
+/** A built board's witness steps (build/witness/<board>.json), as steps a student does. */
+function witnessSteps(root: string, board: string): Step[] | undefined {
+  const file = join(root, "build", "witness", `${board.replace(/^content\//, "")}.json`);
+  if (!existsSync(file)) return undefined;
+  const { witness } = JSON.parse(readFileSync(file, "utf8")) as {
+    witness: { kind?: string; prop?: string; action?: string; args?: Record<string, unknown> }[];
+  };
+  return witness.flatMap((w) =>
+    w.kind === "act" && w.prop !== undefined && w.action !== undefined
+      ? [{ act: { prop: w.prop, action: w.action, args: w.args ?? {} } }]
+      : [],
+  );
+}
+
+/**
+ * Plays every board's witness on the screen (English, the phone), through the inputs a student
+ * would use, a few boards side by side. Gives the boards where a step couldn't be taken, or where the
+ * board didn't pass, with what was said.
+ */
+async function witnessesOnScreen(
+  root: string,
+  boards: readonly string[],
+  lane: string,
+  signal: AbortSignal,
+  progress: (message: string) => Promise<void>,
+): Promise<{ board: string; lines: string[] }[]> {
+  const out: { board: string; lines: string[] }[] = [];
+  const queue = [...boards];
+  let done = 0;
+  const worker = async (k: number) => {
+    for (let board = queue.shift(); board !== undefined && !signal.aborted; board = queue.shift()) {
+      const steps = witnessSteps(root, board);
+      if (steps === undefined || steps.length === 0) continue;
+      const played = await play(
+        root,
+        { board, steps, shots: "none", locale: "en" },
+        `${lane}:witness:${k}`,
+      );
+      const text = played.text;
+      const wrong = text.split("\n").filter((l) => l.includes("✗"));
+      const isPassed = /\npassed\b/.test(text);
+      if (wrong.length > 0 || !isPassed)
+        out.push({
+          board,
+          lines: [
+            ...wrong.map((l) => l.trim()),
+            ...(isPassed ? [] : ["the board isn't passed at the end"]),
+          ],
+        });
+      done += 1;
+      await progress(`witnesses played ${done} of ${boards.length}`);
+    }
+  };
+  await Promise.all(Array.from({ length: CHECK_PAGES }, (_, k) => worker(k)));
+  return out.sort((a, b) => a.board.localeCompare(b.board));
 }
 
 // ---- play ----

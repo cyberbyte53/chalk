@@ -938,7 +938,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             );
           }
           await progressOf(extra)("playing");
-          const onBoard = steps.filter((s): s is Step => !("call" in s));
+          const onBoard: Step[] = steps.filter((s) => !("call" in s)) as Step[];
           const played = await play(
             root,
             { ...one, board, steps: onBoard, isSeen: ROLE === Role.Reviewer },

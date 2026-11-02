@@ -677,10 +677,22 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
       },
       model,
     },
-    witness: [...(spec.witness ?? []), ...uses.flatMap((u) => u.witness ?? [])],
+    // A pattern's own way through (a question's answer) is added unless the board's witness
+    // already takes every step of it: a learner answers a question once.
+    witness: [
+      ...(spec.witness ?? []),
+      ...uses.flatMap((u) =>
+        (u.witness ?? []).every((step) => (spec.witness ?? []).some((own) => isSameStep(own, step)))
+          ? []
+          : (u.witness ?? []),
+      ),
+    ],
     noteChecks: [...(spec.noteChecks ?? []), ...uses.flatMap((u) => u.noteChecks ?? [])],
   };
 }
+
+/** Two steps that do the same: the same action on the same prop with the same values, or one wait. */
+const isSameStep = (a: Step, b: Step): boolean => JSON.stringify(a) === JSON.stringify(b);
 
 /** A witness step: the learner does `action` on the prop at `path` ("town.walker"). */
 export function tap(

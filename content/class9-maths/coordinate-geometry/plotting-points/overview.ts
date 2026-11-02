@@ -100,15 +100,26 @@ const missRules = (piece: string, hint: string) => ({
   ],
 });
 
-/** The first pair dropped swapped, then one square off, then every pair right: the slips students make. */
-const slipThenRight = (piece: string, pairs: readonly { x: number; y: number }[]) => {
-  const [first] = pairs;
-  if (first === undefined) return [];
-  return [
-    tap(`${piece}.plotting`, "plotAt", { x: first.y, y: first.x }),
-    tap(`${piece}.plotting`, "plotAt", { x: first.x + 1, y: first.y }),
-    ...pairs.map((p) => tap(`${piece}.plotting`, "plotAt", p)),
-  ];
+/**
+ * The slips a student makes, then every pair right: at the first pair whose swap is on the plane
+ * (so a finger could drop it there), the dot dropped swapped, then one square off, then right.
+ */
+const slipThenRight = (
+  piece: string,
+  pairs: readonly { x: number; y: number }[],
+  w: { xMin: number; xMax: number; yMin: number; yMax: number },
+) => {
+  const on = (x: number, y: number) => x >= w.xMin && x <= w.xMax && y >= w.yMin && y <= w.yMax;
+  const at = pairs.findIndex((p) => p.x !== p.y && on(p.y, p.x) && on(p.x + 1, p.y));
+  return pairs.flatMap((p, i) => [
+    ...(i === at
+      ? [
+          tap(`${piece}.plotting`, "plotAt", { x: p.y, y: p.x }),
+          tap(`${piece}.plotting`, "plotAt", { x: p.x + 1, y: p.y }),
+        ]
+      : []),
+    tap(`${piece}.plotting`, "plotAt", p),
+  ]);
 };
 
 /** Plotting, as Riya's walk: along the x-axis, then up or down; then the student plots, and her walk checks. */
@@ -378,7 +389,7 @@ const swapTheNumbers = page(
       ...missRules("sheet", "miss"),
       "sheet.plotting.allPlotted": (_, __, t) => [t.self.show({ name: "ordered" }), t.self.pass()],
     },
-    witness: slipThenRight("sheet", EXAMPLE_3),
+    witness: slipThenRight("sheet", EXAMPLE_3, { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 }),
   }),
 );
 
@@ -532,11 +543,11 @@ const plotFromATable = page(
         ],
     },
     witness: [
-      ...slipThenRight("first", EXAMPLE_4),
+      ...slipThenRight("first", EXAMPLE_4, { xMin: -4.5, xMax: 5.5, yMin: -4.5, yMax: 7.5 }),
       // (−2, 8) dragged as high as the page goes; then 4 units chosen, too crowded; then 2.
       tap("second.plotting", "plotAt", { x: -2, y: 4.5 }),
       tap("second.plotting", "chooseScale", { every: 4 }),
-      ...slipThenRight("second", EX_3_3_Q2),
+      ...slipThenRight("second", EX_3_3_Q2, { xMin: -18, xMax: 18, yMin: -18, yMax: 18 }),
       tap("second.plotting", "chooseScale", { every: 2 }),
     ],
   }),
@@ -838,7 +849,7 @@ const graphsYouKnow = page(
         t.self.pass(),
       ],
     },
-    witness: slipThenRight("sheet", WALK),
+    witness: slipThenRight("sheet", WALK, { xMin: -0.5, xMax: 5.5, yMin: -0.5, yMax: 9.5 }),
   }),
 );
 

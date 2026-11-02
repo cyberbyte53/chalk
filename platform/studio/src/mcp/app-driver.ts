@@ -465,10 +465,18 @@ export type Step = (
   | { drag: string; to: Point }
   /** One of a piece's actions, as a lesson would call it (on a prop's own page, which has none). */
   | { call: string; on: string; args?: Readonly<Record<string, unknown>> }
+  /**
+   * A witness's step (a piece, its action, the values), done as a student would: through the input
+   * whose tags say it does that, checked for reach like any tap or drag.
+   */
+  | { act: { prop: string; action: string; args: Readonly<Record<string, unknown>> } }
 ) & {
   /** Done while this line is being said (its name), not after the board has come to its end. */
   during?: string;
 };
+
+/** A step as the page does it: a witness's step becomes the tap or drag of its input first. */
+type PlainStep = Exclude<Step, { act: unknown }>;
 
 /** What a step did: the events the app raised, whether the board was passed, page errors. */
 /** What was heard on the board, in order: the player's own log (words, or a sound at a signal). */
@@ -1081,7 +1089,9 @@ const stepWords = (step: Step): string =>
       ? `tap ${step.tap}${step.at === undefined ? "" : ` at ${pointWords(step.at)}`}`
       : "drag" in step
         ? `drag ${step.drag} to ${pointWords(step.to)}`
-        : `call ${step.call}${step.args !== undefined && Object.keys(step.args).length > 0 ? ` ${JSON.stringify(step.args)}` : ""}`
+        : "act" in step
+          ? `${step.act.prop} ${step.act.action}${Object.keys(step.act.args).length > 0 ? ` ${JSON.stringify(step.act.args)}` : ""}`
+          : `call ${step.call}${step.args !== undefined && Object.keys(step.args).length > 0 ? ` ${JSON.stringify(step.args)}` : ""}`
   }${step.during === undefined ? "" : ` while ${step.during} is said`}`;
 const pointWords = (p: Point) => (p.y === undefined ? `${p.x}` : `(${p.x}, ${p.y})`);
 
@@ -1162,6 +1172,65 @@ export function aimAt(arg: {
   return {
     cover: `${top.tagName.toLowerCase()}${cls === null || cls === "" ? "" : `.${cls.split(" ")[0]}`}`,
   };
+}
+
+/**
+ * The input a witness's step is done through, from the tags alone: under the piece and child the
+ * action names (`places.chooseTarget` on `ground`: ground/places/…), one whose data-does includes the
+ * action, matched by its values (data-with), else by its key (`option:two` for `{option: "two"}`),
+ * else the only one. Values that are a point on an input moved by hand make the step a drag there.
+ * A step the input pressed just before already did (a choice option's tap selects and checks) is
+ * absorbed.
+ */
+export function findInput(arg: {
+  prop: string;
+  action: string;
+  args: Readonly<Record<string, unknown>>;
+  last?: { path: string; action: string };
+}): { path: string; to?: { x: number; y: number } } | { absorbed: true } | { error: string } {
+  const parts = arg.action.split(".");
+  const name = parts.at(-1) ?? arg.action;
+  const prefix = `${[arg.prop, ...parts.slice(0, -1)].join("/")}/`;
+  const doesIt = (el: Element) => (el.getAttribute("data-does") ?? "").split(" ").includes(name);
+  if (
+    arg.last !== undefined &&
+    arg.last.action !== arg.action &&
+    Object.keys(arg.args).length === 0
+  ) {
+    const was = document.querySelector(`[data-path="${CSS.escape(arg.last.path)}"]`);
+    if (was !== null && doesIt(was)) return { absorbed: true };
+  }
+  const all = [...document.querySelectorAll("[data-does][data-path]")].filter(
+    (el) => (el.getAttribute("data-path") ?? "").startsWith(prefix) && doesIt(el),
+  );
+  if (all.length === 0) return { error: `no input on screen does ${arg.prop} ${arg.action}` };
+  const sorted = (v: unknown) =>
+    JSON.stringify(v, (_, x) =>
+      x !== null && typeof x === "object" && !Array.isArray(x)
+        ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => a.localeCompare(b)))
+        : x,
+    );
+  const want = sorted(arg.args);
+  const withArgs = all.filter((el) => {
+    const w = el.getAttribute("data-with");
+    return w !== null && sorted(JSON.parse(w)) === want;
+  });
+  const values = Object.values(arg.args);
+  const byKey =
+    values.length === 1
+      ? all.filter((el) => (el.getAttribute("data-path") ?? "").endsWith(`:${String(values[0])}`))
+      : [];
+  const pick = withArgs[0] ?? byKey[0] ?? (all.length === 1 ? all[0] : undefined);
+  if (pick === undefined)
+    return {
+      error: `${all.length} inputs do ${arg.prop} ${arg.action}, none with ${JSON.stringify(arg.args)}: ${all.map((e) => e.getAttribute("data-path")).join(", ")}`,
+    };
+  const path = pick.getAttribute("data-path") ?? "";
+  const { x, y } = arg.args as { x?: unknown; y?: unknown };
+  const isByHand = pick.hasAttribute("data-by-hand") && pick.getAttribute("data-with") === null;
+  return typeof x === "number" && isByHand
+    ? { path, to: { x, ...(typeof y === "number" ? { y } : {}) } as { x: number; y: number } }
+    : { path };
 }
 
 export function markTarget(arg: {
@@ -1330,8 +1399,40 @@ async function shootNow(
     // The board still busy when the first step comes (no line asked for): said with that step.
     const busyAtFirst = first?.during === undefined ? missed : undefined;
     const stepsFrom = performance.now();
-    for (const [i, step] of act.steps.entries()) {
-      const words = stepWords(step);
+    // The input the last witness step pressed: a step it already did is absorbed.
+    let lastPress: { path: string; action: string } | undefined;
+    for (const [i, given] of act.steps.entries()) {
+      const words = stepWords(given);
+      let step: PlainStep;
+      if (!("act" in given)) step = given;
+      else {
+        const input = await page.evaluate(findInput, {
+          ...given.act,
+          ...(lastPress === undefined ? {} : { last: lastPress }),
+        });
+        if ("absorbed" in input) {
+          steps.push({
+            step: `${words} (done by the press before)`,
+            events: [],
+            passed: steps.at(-1)?.passed ?? false,
+            errors: [],
+          });
+          continue;
+        }
+        if ("error" in input) {
+          steps.push({ step: words, events: [], passed: false, errors: [`✗ ${input.error}`] });
+          break;
+        }
+        lastPress = { path: input.path, action: given.act.action };
+        step =
+          input.to === undefined
+            ? { tap: input.path, ...(given.during === undefined ? {} : { during: given.during }) }
+            : {
+                drag: input.path,
+                to: input.to,
+                ...(given.during === undefined ? {} : { during: given.during }),
+              };
+      }
       if (unreached !== undefined) {
         steps.push({ step: words, events: [], passed: false, errors: [unreached] });
         break;

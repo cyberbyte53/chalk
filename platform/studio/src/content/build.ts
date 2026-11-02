@@ -78,6 +78,8 @@ import { checkNote, checkWitness } from "./witness";
 
 /** Where each board's record is written in build/ (board-record.ts). */
 export const REVIEW_DIR = "review";
+/** Each board's witness and note checks, as steps (build/witness/<board>.json). */
+export const WITNESS_DIR = "witness";
 
 type Defs = Readonly<Record<string, AnyProp>>;
 type Modules = Readonly<Record<string, PropModule>>;
@@ -578,8 +580,14 @@ function makeBoard(
 }
 
 /** A good board's record, for knowing what changed since it was reviewed (the changes tool). */
-function keepRecord(c: Context, item: BuiltPage | BuiltQuestion, board: Board): void {
-  c.files.set(`${REVIEW_DIR}/${item.path}.json`, recordOf(board));
+function keepRecord(c: Context, item: BuiltPage | BuiltQuestion, built: BuiltBoard): void {
+  c.files.set(`${REVIEW_DIR}/${item.path}.json`, recordOf(built.board));
+  // How a learner gets through it, and each note's way there: replayed on the screen by the chapter
+  // check (a step a finger can't take is found there, not here, where no screen is drawn).
+  c.files.set(`${WITNESS_DIR}/${item.path}.json`, {
+    witness: built.witness,
+    noteChecks: built.noteChecks.map((n) => n.steps),
+  });
 }
 
 function propTypesOf(board: Board): string[] {
@@ -629,7 +637,7 @@ async function buildPages(
     const called = new Map<string, Set<string>>();
     if (made === undefined || !(await checkBoard(c, where, made.built, made.board, called)))
       continue;
-    keepRecord(c, item, made.board);
+    keepRecord(c, item, made.built);
     for (const type of propTypesOf(made.board)) used.add(type);
     claimId(c, item.id, where);
     c.sources.set(path, sitesOf(made.built.board, p.site));
@@ -734,7 +742,7 @@ async function buildFamily(
       report(c, where, "a question needs a witness: how a learner gets it right");
       continue;
     }
-    keepRecord(c, item, board);
+    keepRecord(c, item, built);
     claimId(c, id, where);
     c.sources.set(path, {
       ...sitesOf(built.board, undefined),
