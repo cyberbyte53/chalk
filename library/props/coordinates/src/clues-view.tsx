@@ -82,8 +82,14 @@ function StillDraw({
     }
     return out;
   });
-  // One point left: the two full lines stay, crossing there; nothing else marks it.
+  // One point left: the two full lines stay, crossing there. With a hidden point to find, nothing
+  // else marks it (finding it is the learner's); with clues alone (every point with y = 0 and
+  // x = 0), a ring shows the one point they leave, which a crossing on the axes themselves hides.
   let shape: JSX.Element | null = null;
+  if (still.kind === "point" && s.hidden === null) {
+    const [cx, cy] = px.toPx(still.x, still.y);
+    shape = <circle class="cp-still-point" cx={cx} cy={cy} r={11} />;
+  }
   if (still.kind === "region") {
     const r = still.region;
     const [x0, y0] = px.toPx(r.xMin, r.yMax);

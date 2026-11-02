@@ -614,11 +614,14 @@ const pointsOnAxes = page(
         setup({
           plane: { window: FIVE, ...AXES },
           reading: { point: { x: 3, y: 2 }, pointStep: 1, reading: Reading.Pair, unit: "" },
-          // y = 0, a button: every point it describes is lit, the whole x-axis.
+          // y = 0 and x = 0, each a button: one alone lights its whole axis; both leave one point, O.
           clues: {
             hidden: null,
             canGiveClues: true,
-            clueChoices: [{ words: t("y = 0", "y = 0"), y: 0 }],
+            clueChoices: [
+              { words: t("y = 0", "y = 0"), y: 0 },
+              { words: t("x = 0", "x = 0"), x: 0 },
+            ],
           },
         }),
       ),
@@ -640,14 +643,14 @@ const pointsOnAxes = page(
       onY: hidden(
         words.definition(
           t(
-            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).**",
-            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।**",
+            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x = 0 makes the whole y-axis. Press **x = 0** too: which points have both y = 0 and x = 0?",
+            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। अब **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?",
           ),
           null,
           {
             says: t(
-              "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y.",
-              "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है।",
+              "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. Press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
+              "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। अब एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
             ),
           },
         ),
@@ -655,14 +658,14 @@ const pointsOnAxes = page(
       atO: hidden(
         words.definition(
           t(
-            "**The origin is 0 units from both axes, so its coordinates are (0, 0).**",
-            "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।**",
+            "**The origin is 0 units from both axes, so its coordinates are (0, 0).** It is the one point with both y = 0 and x = 0.",
+            "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।** यही वह एक बिंदु है जिसका y = 0 और x = 0 दोनों हैं।",
           ),
           null,
           {
             says: t(
-              "The origin is 0 units from both axes, so its coordinates are 0, 0.",
-              "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं।",
+              "The origin is 0 units from both axes, so its coordinates are 0, 0. It is the one point with both y equal to 0 and x equal to 0.",
+              "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं। यही वह एक बिंदु है जिसका वाई बराबर 0 और एक्स बराबर 0 दोनों हैं।",
             ),
           },
         ),
@@ -956,13 +959,13 @@ const anyAxes = page(
       title: words.title(t("Why these axes?", "यही अक्ष क्यों?")),
       link: words.body(
         t(
-          "Two perpendicular lines can be drawn anywhere, pointing any way. The point P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.",
-          "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। बिंदु P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।",
+          "Two perpendicular lines can be drawn anywhere, pointing any way. On the agreed axes, P is **(3, 2)**, and P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.",
+          "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। माने हुए अक्षों पर P **(3, 2)** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।",
         ),
         {
           says: t(
-            "Two perpendicular lines can be drawn anywhere, pointing any way. The point P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
-            "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। बिंदु P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
+            "Two perpendicular lines can be drawn anywhere, pointing any way. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
+            "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
           ),
         },
       ),
@@ -997,13 +1000,13 @@ const anyAxes = page(
       putBack: hidden(
         words.body(
           t(
-            "**Put the axes back**: O at the crossing of the paper's lines it started on, and the x-axis level again.",
-            "**अक्षों को वापस रखो**: O फिर उन्हीं रेखाओं के मिलने की जगह पर, और x-अक्ष फिर से आड़ा।",
+            "On the agreed axes P was (3, 2). **Put the axes back** and see: O at the crossing it started on, and the x-axis level again.",
+            "माने हुए अक्षों पर P (3, 2) था। **अक्षों को वापस रखो** और देखो: O फिर उसी जगह पर, और x-अक्ष फिर से आड़ा।",
           ),
           {
             says: t(
-              "Put the axes back: O at the crossing it started on, and the x-axis level again.",
-              "अक्षों को वापस रखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।",
+              "On the agreed axes P was the point 3, 2. Put the axes back and see: O at the crossing it started on, and the x-axis level again.",
+              "माने हुए अक्षों पर P बिंदु 3, 2 था। अक्षों को वापस रखो और देखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।",
             ),
           },
         ),

@@ -133,11 +133,11 @@
       "seconds": 5.341
     },
     {
-      "file": "c8c48857d73c0e10.m4a",
+      "file": "cfd08aaac3d01985.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y.",
-      "seconds": 7.21
+      "words": "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. Press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
+      "seconds": 16.858
     },
     {
       "file": "89f496ff64d60fbc.m4a",
@@ -672,6 +672,13 @@
       "seconds": 12.005
     },
     {
+      "file": "de95237f518c299c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "On the agreed axes P was the point 3, 2. Put the axes back and see: O at the crossing it started on, and the x-axis level again.",
+      "seconds": 8.662
+    },
+    {
       "file": "f6cc8eb071fc6f92.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -768,13 +775,6 @@
       "locale": "en",
       "words": "Positive and negative directions",
       "seconds": 2.102
-    },
-    {
-      "file": "69ce37821f0bb8b4.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Put the axes back: O at the crossing it started on, and the x-axis level again.",
-      "seconds": 4.912
     },
     {
       "file": "bfe17ce6583b9b8f.m4a",
@@ -1610,11 +1610,11 @@
       "seconds": 4.726
     },
     {
-      "file": "a8fbff8eca660b96.m4a",
+      "file": "75a6517baffd9b32.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "The origin is 0 units from both axes, so its coordinates are 0, 0.",
-      "seconds": 5.086
+      "words": "The origin is 0 units from both axes, so its coordinates are 0, 0. It is the one point with both y equal to 0 and x equal to 0.",
+      "seconds": 9.068
     },
     {
       "file": "36280a684cdca0cd.m4a",
@@ -1799,11 +1799,11 @@
       "seconds": 1.092
     },
     {
-      "file": "5956f62156dbfb13.m4a",
+      "file": "1f1e0011579c6369.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Two perpendicular lines can be drawn anywhere, pointing any way. The point P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
-      "seconds": 12.33
+      "words": "Two perpendicular lines can be drawn anywhere, pointing any way. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
+      "seconds": 15.152
     },
     {
       "file": "0904dd6061fc4a49.m4a",
@@ -2217,13 +2217,6 @@
       "locale": "hi",
       "words": "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। चतुर्थांशों को गिनो दबाओ।",
       "seconds": 18.867
-    },
-    {
-      "file": "e43db52033622034.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "अक्षों को वापस रखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।",
-      "seconds": 5.469
     },
     {
       "file": "1d5c1793ff6f57a8.m4a",
@@ -2863,11 +2856,11 @@
       "seconds": 19.97
     },
     {
-      "file": "cf618d6e96ad0889.m4a",
+      "file": "6d16b8daf3ba689b.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। बिंदु P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
-      "seconds": 15.5
+      "words": "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
+      "seconds": 18.611
     },
     {
       "file": "c099e3141d87a42e.m4a",
@@ -3283,6 +3276,13 @@
       "seconds": 7.501
     },
     {
+      "file": "40ec764c9e2d74e1.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "माने हुए अक्षों पर P बिंदु 3, 2 था। अक्षों को वापस रखो और देखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।",
+      "seconds": 9.381
+    },
+    {
       "file": "b6aa1e496a23cf2a.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -3297,11 +3297,11 @@
       "seconds": 4.819
     },
     {
-      "file": "92442c449f5c4469.m4a",
+      "file": "e29582edb46bf288.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं।",
-      "seconds": 6.711
+      "words": "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं। यही वह एक बिंदु है जिसका वाई बराबर 0 और एक्स बराबर 0 दोनों हैं।",
+      "seconds": 12.783
     },
     {
       "file": "da8d492167603e52.m4a",
@@ -3745,11 +3745,11 @@
       "seconds": 6.398
     },
     {
-      "file": "c2644e3f9d81ee88.m4a",
+      "file": "4f0d46bce3524578.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है।",
-      "seconds": 9.021
+      "words": "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। अब एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
+      "seconds": 22.628
     },
     {
       "file": "b11bc0a33571c55a.m4a",

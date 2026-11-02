@@ -9817,25 +9817,12 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:122
   commit: d9db43c67c344f5ee5c59eaeec9338135facc822
+  turn: person
   text: "Minor overlap, 360 phone. A student who walks to Q by going 1 down first and then 6 left
     draws Riya's blue trail along y = −1. On the phone that row is where the x-axis numbers are
     written, so the trail strikes through −6, −5, −4, −3, −2 and −1. It's a natural route: down,
     then along. Mechanical: draw the trail under the numbers, or give the numbers a white halo so
     they stay readable over the trail."
-  messages:
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T12:04:54.527Z
-      text: "No change planned: the axes' numbers are drawn above Riya's trail with the page-coloured
-        halo, so they stay readable over it."
-      status: planned
-      commit: d9db43c67c344f5ee5c59eaeec9338135facc822
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T12:04:54.680Z
-      text: "No change: a trail along y = −1 passes behind the numbers, drawn over it with their halo.
-        Walking there is the student's choice; the board asks for P and Q."
-      status: ready
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
     - content/class9-maths/coordinate-geometry/sound/231f6652995bebec.m4a
@@ -9861,6 +9848,157 @@
       - class9-maths/coordinate-geometry/questions/quadrant-or-axis
       - class9-maths/coordinate-geometry/questions/read-a-point
       - class9-maths/coordinate-geometry/questions/table-lamp
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T12:04:54.527Z
+      text: "No change planned: the axes' numbers are drawn above Riya's trail with the page-coloured
+        halo, so they stay readable over it."
+      status: planned
+      commit: d9db43c67c344f5ee5c59eaeec9338135facc822
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T12:04:54.680Z
+      text: "No change: a trail along y = −1 passes behind the numbers, drawn over it with their halo.
+        Walking there is the student's choice; the board asks for P and Q."
+      status: ready
+- id: cmvz9dmvje8b
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-11-02T12:52:11.407Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/any-axes
+  target: putBack/text
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:998
+  snapshot: "Put the axes back: O at the crossing of the paper's lines it started on, and the x-axis
+    level again."
+  commit: 44752f896d45a18cd823a1c57a67771e7826e0df
+  turn: person
+  text: we should let know what was original coordinates as we might not know what it was before we
+    translated and rotated
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/5956f62156dbfb13.m4a
+    - content/class9-maths/coordinate-geometry/sound/69ce37821f0bb8b4.m4a
+    - content/class9-maths/coordinate-geometry/sound/92442c449f5c4469.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8fbff8eca660b96.m4a
+    - content/class9-maths/coordinate-geometry/sound/c2644e3f9d81ee88.m4a
+    - content/class9-maths/coordinate-geometry/sound/c8c48857d73c0e10.m4a
+    - content/class9-maths/coordinate-geometry/sound/cf618d6e96ad0889.m4a
+    - content/class9-maths/coordinate-geometry/sound/e43db52033622034.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/props/coordinates/src/clues-view.tsx
+    - library/props/coordinates/src/styles.css
+  reaches:
+    pieces: 77
+    boards: 55
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:05:50.665Z
+      text: Say P's coordinates on the agreed axes up front, and again in the put-back line, so the
+        student knows what "back" means.
+      status: planned
+      commit: 44752f896d45a18cd823a1c57a67771e7826e0df
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:05:50.986Z
+      text: "The board now opens with \"On the agreed axes, P is (3, 2)\". The put-back line says \"On the
+        agreed axes P was (3, 2). Put the axes back and see\", and when they're back: \"P is (3, 2)
+        again\"."
+      status: ready
+- id: cmvz9gd2rul5
+  status: open
+  by: you
+  role: person
+  createdAt: 2026-11-02T12:54:18.675Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:1153
+  snapshot: "Coordinates both ways Coordinates are read two ways: from a point to its pair, and from a
+    pair to its point. Each point in the figure has dashed lines to the axes.
+    −6−5−4−3−2−1123456−6−5−4−3−2123456OXX′YY′BDLMHGEC What are the coordinates of H? (−3, −5) (−5,
+    −3) (5, 3) (−5, 3) Which point is (5, −5)? G C E D In short: the x-coordinate (abscissa) of a
+    point is its distance from the y-axis, and the "
+  commit: 44752f896d45a18cd823a1c57a67771e7826e0df
+  turn: person
+  text: we can ask more questions no ?? of both types , it would be a good learning opportunity
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:02:37.830Z
+      text: "Taken back by the person in chat: the board already asks one of each type, and the fig-3-14
+        family adds eight more. No change."
+- id: cmvz9n69vg5s
+  status: ready
+  by: you
+  role: person
+  createdAt: 2026-11-02T12:59:36.451Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes
+  target: onX/text
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:626
+  snapshot: "A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is (x, 0).
+    Press y = 0: every point with y = 0 lights up, and they make the whole x-axis. In Riya's town, a
+    house on the main road needs no walk up the street: its second number is 0."
+  commit: 44752f896d45a18cd823a1c57a67771e7826e0df
+  text: why not add about x=0 also , why we are partial to y axis??
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:05:51.133Z
+      text: 'As decided in chat, option (b): both buttons. y = 0 lights the whole x-axis; x = 0 after it
+        leaves only one point, ringed: the origin. The y-axis box asks "which points have both y = 0
+        and x = 0?", and the origin box answers it.'
+      status: planned
+      commit: 44752f896d45a18cd823a1c57a67771e7826e0df
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:05:51.430Z
+      text: "Played: on the x-axis, y = 0 lights the whole x-axis. On the y-axis, the box says every point
+        with x = 0 makes the y-axis and asks which points have both; pressing x = 0 rings the one
+        point left, O. The origin box says it is the one point with both y = 0 and x = 0. The ring
+        is new in the clues layer and shows only when no hidden point is in play, so lesson 1's
+        dot-on-paper is unchanged."
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/5956f62156dbfb13.m4a
+    - content/class9-maths/coordinate-geometry/sound/69ce37821f0bb8b4.m4a
+    - content/class9-maths/coordinate-geometry/sound/92442c449f5c4469.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8fbff8eca660b96.m4a
+    - content/class9-maths/coordinate-geometry/sound/c2644e3f9d81ee88.m4a
+    - content/class9-maths/coordinate-geometry/sound/c8c48857d73c0e10.m4a
+    - content/class9-maths/coordinate-geometry/sound/cf618d6e96ad0889.m4a
+    - content/class9-maths/coordinate-geometry/sound/e43db52033622034.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/props/coordinates/src/clues-view.tsx
+    - library/props/coordinates/src/styles.css
+  reaches:
+    pieces: 77
+    boards: 55
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/read-a-point
       - class9-maths/coordinate-geometry/questions/tap-the-desk
       - class9-maths/coordinate-geometry/questions/tap-the-part
       - class9-maths/coordinate-geometry/questions/walk-to-address
