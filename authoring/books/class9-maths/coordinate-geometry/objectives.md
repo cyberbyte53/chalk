@@ -1,5 +1,5 @@
 ---
-approved: 9406618dfcc5
+approved: 5655fa6c47e9
 ---
 
 - **o1** Explain why one number fixes a point on a line but not in a plane, and give a position in a plane with two independent pieces of information (street and house, distances from two edges). (s3.1, s3.1-number-line, s3.1-I, fig3.1, s3.1-II, fig3.2, ex3.1, ex3.1-q1)
