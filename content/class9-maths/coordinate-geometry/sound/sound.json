@@ -693,11 +693,11 @@
       "seconds": 4.691
     },
     {
-      "file": "4d8b3685d03910db.m4a",
+      "file": "fd4bb95748ea203f.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Not there: R is 4 to the left of the y-axis, x is minus 4, and 2 up, y is 2. Tap again.",
-      "seconds": 7.025
+      "words": "Not there. x first: along the x-axis; then y: up or down. Drag the dot again.",
+      "seconds": 6.096
     },
     {
       "file": "2d6c261eea907cc8.m4a",
@@ -707,11 +707,11 @@
       "seconds": 8.453
     },
     {
-      "file": "d282f0971dfdea65.m4a",
+      "file": "0a80437d3bf07550.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Now plot R, the point minus 4, 2, yourself: tap where it goes. Riya will walk there to check.",
-      "seconds": 6.966
+      "words": "Now plot R, the point minus 4, 2, yourself: drag the dot from O to where it goes. Riya will walk to it to check.",
+      "seconds": 7.837
     },
     {
       "file": "96ab9fcc8eadf80d.m4a",
@@ -1223,6 +1223,13 @@
       "locale": "en",
       "words": "Riya numbered the old streets 1, 2, 3, … going east from her corner. Counting from her corner the same way, what number should the first new street west of it get?",
       "seconds": 9.416
+    },
+    {
+      "file": "d33d8bb85087473e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Riya walked to your dot: where she stands is written beside her, and it isn't R. R is 4 to the left of the y-axis, x is minus 4, and 2 up, y is 2. Drag the dot again.",
+      "seconds": 11.715
     },
     {
       "file": "5b986c9b9e8b1ca6.m4a",
@@ -1925,13 +1932,6 @@
       "seconds": 3.588
     },
     {
-      "file": "f83353c093649dd1.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "The red dots aren't where their pairs say. Press the start-again button and plot them again.",
-      "seconds": 5.016
-    },
-    {
       "file": "03b4dcfd094af87e.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -2576,11 +2576,11 @@
       "seconds": 11.343
     },
     {
-      "file": "7b02959b459e9205.m4a",
+      "file": "718dd4d7708ba62f.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "अब R, बिंदु माइनस 4, 2, खुद आलेखित करो: जहाँ वह है वहाँ दबाओ। जाँचने के लिए रिया वहाँ चलेगी।",
-      "seconds": 9.532
+      "words": "अब R, बिंदु माइनस 4, 2, खुद आलेखित करो: बिंदु को O से उसकी जगह तक खींचो। जाँचने के लिए रिया उस तक चलेगी।",
+      "seconds": 10.531
     },
     {
       "file": "4bb98d20298eece5.m4a",
@@ -4158,18 +4158,18 @@
       "seconds": 4.54
     },
     {
+      "file": "8c45426a596006df.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, उसके पास लिखा है, और वह R नहीं है। R, वाई-अक्ष के 4 बाईं ओर, एक्स माइनस 4, और 2 ऊपर, वाई 2 है। बिंदु को फिर से खींचो।",
+      "seconds": 15.465
+    },
+    {
       "file": "5df84bf245bbc7ea.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
       "words": "रिया ने पुरानी गलियाँ अपने कोने से पूर्व की ओर 1, 2, 3, … गिनी थीं। अपने कोने से उसी तरह गिनते हुए, उसके पश्चिम में पहली नई गली को कौन-सी संख्या मिलनी चाहिए?",
       "seconds": 12.922
-    },
-    {
-      "file": "9a41f1080a6128ac.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "लाल बिंदु अपनी जोड़ी वाली जगह पर नहीं हैं। फिर से शुरू वाला बटन दबाओ और उन्हें फिर से आलेखित करो।",
-      "seconds": 8.476
     },
     {
       "file": "02f46a764e29fb8b.m4a",
@@ -4298,11 +4298,11 @@
       "seconds": 7.977
     },
     {
-      "file": "903ebcdbb63dcb46.m4a",
+      "file": "3e9f212b60b4d391.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "वहाँ नहीं: R, वाई-अक्ष के 4 बाईं ओर, एक्स माइनस 4, और 2 ऊपर, वाई 2 है। फिर से दबाओ।",
-      "seconds": 9.056
+      "words": "वहाँ नहीं। पहले एक्स: एक्स-अक्ष के साथ; फिर वाई: ऊपर या नीचे। बिंदु को फिर से खींचो।",
+      "seconds": 8.104
     },
     {
       "file": "fa3c2b02d9da1c80.m4a",

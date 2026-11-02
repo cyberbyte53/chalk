@@ -34,34 +34,43 @@ const marker = (name: string, x: number, y: number) => ({
 /** Fig. 3.15: P (3, 5) by way of A, Q (5, −4) by way of B, and room for R (−4, 2). */
 const FIG_3_15 = { xMin: -5.5, xMax: 6.5, yMin: -5.5, yMax: 6.5 };
 
-/** Every dot where its pair says. */
-const allRight = (dots: readonly { isRight: boolean }[]) => dots.every((d) => d.isRight);
-
-/** Said when every pair has a dot but some are red: they plot the lot again. */
-const redo = () =>
+/** Said when a dot is dropped where its pair doesn't say; gone once one is placed right. */
+const miss = () =>
   hidden(
     words.body(
       t(
-        "The red dots aren't where their pairs say. Press ↺ and plot them again.",
-        "लाल बिंदु अपनी जोड़ी वाली जगह पर नहीं हैं। ↺ दबाओ और उन्हें फिर से आलेखित करो।",
+        "Not there. x first: along the x-axis; then y: up or down. Drag the dot again.",
+        "वहाँ नहीं। पहले x: x-अक्ष के साथ; फिर y: ऊपर या नीचे। बिंदु को फिर से खींचो।",
       ),
       {
         says: t(
-          "The red dots aren't where their pairs say. Press the start-again button and plot them again.",
-          "लाल बिंदु अपनी जोड़ी वाली जगह पर नहीं हैं। फिर से शुरू वाला बटन दबाओ और उन्हें फिर से आलेखित करो।",
+          "Not there. x first: along the x-axis; then y: up or down. Drag the dot again.",
+          "वहाँ नहीं। पहले एक्स: एक्स-अक्ष के साथ; फिर वाई: ऊपर या नीचे। बिंदु को फिर से खींचो।",
         ),
       },
     ),
   );
 
-/** A wrong first dot, all of them again from ↺, right: the path a student who slips takes. */
+/** A plotting piece's rules for its hint: shown on a miss, gone on a right drop. */
+const missRules = (piece: string, hint: string) => ({
+  [`${piece}.plotting.missed`]: (
+    _: unknown,
+    __: unknown,
+    t: { self: { show: (p: { name: string }) => unknown } },
+  ) => t.self.show({ name: hint }),
+  [`${piece}.plotting.plotted`]: (
+    me: { hidden: readonly string[] },
+    __: unknown,
+    t: { self: { hide: (p: { name: string }) => unknown } },
+  ) => (me.hidden.includes(hint) ? undefined : t.self.hide({ name: hint })),
+});
+
+/** The first pair dropped swapped (a miss), then every pair right: the path a student who slips takes. */
 const slipThenRight = (piece: string, pairs: readonly { x: number; y: number }[]) => {
-  const [first, ...rest] = pairs;
+  const [first] = pairs;
   if (first === undefined) return [];
   return [
     tap(`${piece}.plotting`, "plotAt", { x: first.y, y: first.x + 1 }),
-    ...rest.map((p) => tap(`${piece}.plotting`, "plotAt", p)),
-    tap(`${piece}.plotting`, "clearPlotted", {}),
     ...pairs.map((p) => tap(`${piece}.plotting`, "plotAt", p)),
   ];
 };
@@ -153,13 +162,13 @@ const plotAPoint = page(
       toR: hidden(
         words.body(
           t(
-            "Now plot **R (−4, 2)** yourself: **tap** where it goes. Riya will walk there to check.",
-            "अब **R (−4, 2)** खुद आलेखित करो: जहाँ वह है वहाँ **दबाओ**। जाँचने के लिए रिया वहाँ चलेगी।",
+            "Now plot **R (−4, 2)** yourself: **drag** the dot from O to where it goes. Riya will walk to it to check.",
+            "अब **R (−4, 2)** खुद आलेखित करो: बिंदु को O से उसकी जगह तक **खींचो**। जाँचने के लिए रिया उस तक चलेगी।",
           ),
           {
             says: t(
-              "Now plot R, the point minus 4, 2, yourself: tap where it goes. Riya will walk there to check.",
-              "अब R, बिंदु माइनस 4, 2, खुद आलेखित करो: जहाँ वह है वहाँ दबाओ। जाँचने के लिए रिया वहाँ चलेगी।",
+              "Now plot R, the point minus 4, 2, yourself: drag the dot from O to where it goes. Riya will walk to it to check.",
+              "अब R, बिंदु माइनस 4, 2, खुद आलेखित करो: बिंदु को O से उसकी जगह तक खींचो। जाँचने के लिए रिया उस तक चलेगी।",
             ),
           },
         ),
@@ -183,10 +192,12 @@ const plotAPoint = page(
               walkFrom: { x: 0, y: 0 },
               at: { x: 0, y: 0 },
               roads: Roads.Grid,
-              showWhere: false,
+              // Where she stands is written: after a miss, it says where the dot really was.
+              showWhere: true,
               canStep: false,
             },
-            plotting: { toPlot: [{ x: -4, y: 2, name: "R" }] },
+            // Whole squares, so Riya can walk to any drop.
+            plotting: { toPlot: [{ x: -4, y: 2, name: "R" }], step: 1 },
           }),
         ),
       ),
@@ -207,13 +218,13 @@ const plotAPoint = page(
       notR: hidden(
         words.body(
           t(
-            "Not there: R is 4 to the **left** of the y-axis (x\u00a0=\u00a0−4) and 2 **up** (y\u00a0=\u00a02). Tap again.",
-            "वहाँ नहीं: R, y-अक्ष के 4 **बाईं ओर** (x\u00a0=\u00a0−4) और 2 **ऊपर** (y\u00a0=\u00a02) है। फिर से दबाओ।",
+            "Riya walked to your dot: where she stands is written beside her, and it isn't R. R is 4 to the **left** of the y-axis (x\u00a0=\u00a0−4) and 2 **up** (y\u00a0=\u00a02). Drag the dot again.",
+            "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, उसके पास लिखा है, और वह R नहीं है। R, y-अक्ष के 4 **बाईं ओर** (x\u00a0=\u00a0−4) और 2 **ऊपर** (y\u00a0=\u00a02) है। बिंदु को फिर से खींचो।",
           ),
           {
             says: t(
-              "Not there: R is 4 to the left of the y-axis, x is minus 4, and 2 up, y is 2. Tap again.",
-              "वहाँ नहीं: R, वाई-अक्ष के 4 बाईं ओर, एक्स माइनस 4, और 2 ऊपर, वाई 2 है। फिर से दबाओ।",
+              "Riya walked to your dot: where she stands is written beside her, and it isn't R. R is 4 to the left of the y-axis, x is minus 4, and 2 up, y is 2. Drag the dot again.",
+              "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, उसके पास लिखा है, और वह R नहीं है। R, वाई-अक्ष के 4 बाईं ओर, एक्स माइनस 4, और 2 ऊपर, वाई 2 है। बिंदु को फिर से खींचो।",
             ),
           },
         ),
@@ -248,21 +259,23 @@ const plotAPoint = page(
           ]
         );
       },
-      // The student's dot for R: right, and Riya walks to it; wrong, it comes off to try again.
-      "check.plotting.plotted": (_, p, t) =>
-        p.isRight
-          ? [
-              t.self.hide({ name: "notR" }),
-              t.to.check.walker.walkTo({ x: -4, y: 2 }),
-              t.self.show({ name: "atR" }),
-              t.self.pass(),
-            ]
-          : [t.to.check.plotting.clearPlotted(), t.self.show({ name: "notR" })],
+      // Wherever R is dropped, Riya walks there from O: on R, it is right; anywhere else, where
+      // she stands says where the dot was.
+      "check.plotting.missed": (_, p, t) => [
+        t.to.check.walker.walkTo({ x: p.x, y: p.y }),
+        t.self.show({ name: "notR" }),
+      ],
+      "check.plotting.plotted": (_, __, t) => [
+        t.self.hide({ name: "notR" }),
+        t.to.check.walker.walkTo({ x: -4, y: 2 }),
+        t.self.show({ name: "atR" }),
+        t.self.pass(),
+      ],
     },
     witness: [
       ...walkTo("sheet", 3, 5),
       ...walkTo("sheet", 5, -4),
-      // A swapped tap first: the dot comes off and the hint shows; then the right one.
+      // A swapped drop first: Riya walks there and the hint shows; then the right one.
       tap("check.plotting", "plotAt", { x: 2, y: -4 }),
       tap("check.plotting", "plotAt", { x: -4, y: 2 }),
     ],
@@ -306,7 +319,7 @@ const swapTheNumbers = page(
           plotting: { toPlot: EXAMPLE_3, showTable: true },
         }),
       ),
-      redo: redo(),
+      miss: miss(),
       ordered: hidden(
         words.definition(
           t(
@@ -325,10 +338,8 @@ const swapTheNumbers = page(
     },
     passBy: "rules",
     hear: {
-      "sheet.plotting.allPlotted": (me, _, t) =>
-        allRight(me.sheet.plotting.plotted)
-          ? [t.self.hide({ name: "redo" }), t.self.show({ name: "ordered" }), t.self.pass()]
-          : t.self.show({ name: "redo" }),
+      ...missRules("sheet", "miss"),
+      "sheet.plotting.allPlotted": (_, __, t) => [t.self.show({ name: "ordered" }), t.self.pass()],
     },
     witness: slipThenRight("sheet", EXAMPLE_3),
   }),
@@ -375,7 +386,7 @@ const plotFromATable = page(
           plotting: { toPlot: EXAMPLE_4, showTable: true },
         }),
       ),
-      redoFirst: redo(),
+      missFirst: miss(),
       scale: hidden(
         words.body(
           t(
@@ -399,7 +410,7 @@ const plotFromATable = page(
           }),
         ),
       ),
-      redoSecond: redo(),
+      missSecond: miss(),
       fits: hidden(
         words.body(
           t(
@@ -411,20 +422,13 @@ const plotFromATable = page(
     },
     passBy: "rules",
     hear: {
-      "first.plotting.allPlotted": (me, _, t) =>
-        allRight(me.first.plotting.plotted)
-          ? [
-              t.self.hide({ name: "redoFirst" }),
-              t.self.show({ name: "scale" }),
-              t.self.show({ name: "second" }),
-            ]
-          : t.self.show({ name: "redoFirst" }),
-      // The scale they choose is the plane's: its marks, and the window with them.
-      "second.plotting.scaleChosen": (_, { every }, t) => t.to.second.plane.setScale({ every }),
-      "second.plotting.allPlotted": (me, _, t) =>
-        allRight(me.second.plotting.plotted)
-          ? [t.self.hide({ name: "redoSecond" }), t.self.show({ name: "fits" }), t.self.pass()]
-          : t.self.show({ name: "redoSecond" }),
+      ...missRules("first", "missFirst"),
+      ...missRules("second", "missSecond"),
+      "first.plotting.allPlotted": (_, __, t) => [
+        t.self.show({ name: "scale" }),
+        t.self.show({ name: "second" }),
+      ],
+      "second.plotting.allPlotted": (_, __, t) => [t.self.show({ name: "fits" }), t.self.pass()],
     },
     witness: [
       ...slipThenRight("first", EXAMPLE_4),
@@ -665,7 +669,7 @@ const graphsYouKnow = page(
           plotting: { toPlot: WALK, showTable: true },
         }),
       ),
-      redo: redo(),
+      miss: miss(),
       same: hidden(
         words.body(
           t(
@@ -691,15 +695,12 @@ const graphsYouKnow = page(
     },
     passBy: "rules",
     hear: {
-      "sheet.plotting.allPlotted": (me, _, t) =>
-        allRight(me.sheet.plotting.plotted)
-          ? [
-              t.self.hide({ name: "redo" }),
-              t.self.show({ name: "same" }),
-              t.self.show({ name: "summary" }),
-              t.self.pass(),
-            ]
-          : t.self.show({ name: "redo" }),
+      ...missRules("sheet", "miss"),
+      "sheet.plotting.allPlotted": (_, __, t) => [
+        t.self.show({ name: "same" }),
+        t.self.show({ name: "summary" }),
+        t.self.pass(),
+      ],
     },
     witness: slipThenRight("sheet", WALK),
   }),
