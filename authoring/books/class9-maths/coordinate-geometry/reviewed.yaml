@@ -1,4 +1,3435 @@
 # Written only by the chalk MCP's changes tool (platform/studio/src/reviewed.ts). Don't edit by hand.
+class9-maths/coordinate-geometry/coordinates-of-a-point/abscissa-and-ordinate:
+  content:
+    model:
+      freeLines: []
+      given:
+        abscissa:
+          color: null
+          style: definition
+          text:
+            en: "**The x-coordinate of a point is its perpendicular distance from the y-axis, measured along the x-axis: positive along OX, negative along OX′. It is also called the abscissa.**"
+            hi: "**किसी बिंदु का x-निर्देशांक, y-अक्ष से उसकी लंब दूरी है, जो x-अक्ष के साथ मापी जाती है: OX की ओर धनात्मक, OX′ की ओर ऋणात्मक। इसे भुज भी कहते हैं।**"
+        ask:
+          style: body
+          text:
+            en: "The point is at P. **Drag it to where x = −6 and y = −2**: that is Q. Watch each sign change as it crosses an axis."
+            hi: "बिंदु P पर है। **उसे वहाँ खींचो जहाँ x = −6 और y = −2 है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।"
+        crossing:
+          style: body
+          text:
+            en: "**Crossing the y-axis changes the sign of x; crossing the x-axis changes the sign of y.** The distances stay distances: the sign says which side."
+            hi: "**y-अक्ष पार करने पर x का चिह्न बदलता है; x-अक्ष पार करने पर y का।** दूरियाँ दूरियाँ ही रहती हैं: चिह्न बताता है कि किस ओर।"
+        link:
+          style: body
+          text:
+            en: P is 4 units from the y-axis and Q is 6, on opposite sides of it. A sign tells the sides apart, as on a number line.
+            hi: P, y-अक्ष से 4 इकाई दूर है और Q 6 इकाई, उसकी उलटी ओर। एक चिह्न दोनों ओर को अलग बताता है, जैसे संख्या रेखा पर।
+        ofPQ:
+          style: body
+          text:
+            en: So P has x-coordinate +4 and y-coordinate +3. Q has x-coordinate −6 and y-coordinate −2.
+            hi: इसलिए P का x-निर्देशांक +4 और y-निर्देशांक +3 है। Q का x-निर्देशांक −6 और y-निर्देशांक −2 है।
+        ordinate:
+          color: null
+          style: definition
+          text:
+            en: "**The y-coordinate of a point is its perpendicular distance from the x-axis, measured along the y-axis: positive along OY, negative along OY′. It is also called the ordinate.**"
+            hi: "**किसी बिंदु का y-निर्देशांक, x-अक्ष से उसकी लंब दूरी है, जो y-अक्ष के साथ मापी जाती है: OY की ओर धनात्मक, OY′ की ओर ऋणात्मक। इसे कोटि भी कहते हैं।**"
+        sheet:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 6.5
+              xMin: -7.5
+              yMax: 4.5
+              yMin: -4.5
+          reading:
+            point:
+              x: 4
+              y: 3
+            pointStep: 1
+            reading: abscissa
+            unit: ""
+        title:
+          style: title
+          text:
+            en: Abscissa and ordinate
+            hi: भुज और कोटि
+      lines:
+        abscissa:
+          says:
+            en: "The x-coordinate of a point is its perpendicular distance from the y-axis, measured along the x-axis: positive along O X, negative along O X dash. It is also called the abscissa."
+            hi: "किसी बिंदु का एक्स-निर्देशांक, वाई-अक्ष से उसकी लंब दूरी है, जो एक्स-अक्ष के साथ मापी जाती है: O X की ओर धनात्मक, O X डैश की ओर ऋणात्मक। इसे भुज भी कहते हैं।"
+        ask:
+          says:
+            en: "The point is at P. Drag it to where x is minus 6 and y is minus 2: that is Q. Watch each sign change as it crosses an axis."
+            hi: "बिंदु P पर है। उसे वहाँ खींचो जहाँ एक्स माइनस 6 और वाई माइनस 2 है: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।"
+        crossing:
+          says:
+            en: "Crossing the y-axis changes the sign of x; crossing the x-axis changes the sign of y. The distances stay distances: the sign says which side."
+            hi: "वाई-अक्ष पार करने पर एक्स का चिह्न बदलता है; एक्स-अक्ष पार करने पर वाई का। दूरियाँ दूरियाँ ही रहती हैं: चिह्न बताता है कि किस ओर।"
+        ofPQ:
+          says:
+            en: So P has x-coordinate plus 4 and y-coordinate plus 3. Q has x-coordinate minus 6 and y-coordinate minus 2.
+            hi: इसलिए P का एक्स-निर्देशांक धन 4 और वाई-निर्देशांक धन 3 है। Q का एक्स-निर्देशांक माइनस 6 और वाई-निर्देशांक माइनस 2 है।
+        ordinate:
+          says:
+            en: "The y-coordinate of a point is its perpendicular distance from the x-axis, measured along the y-axis: positive along O Y, negative along O Y dash. It is also called the ordinate."
+            hi: "किसी बिंदु का वाई-निर्देशांक, एक्स-अक्ष से उसकी लंब दूरी है, जो वाई-अक्ष के साथ मापी जाती है: O Y की ओर धनात्मक, O Y डैश की ओर ऋणात्मक। इसे कोटि भी कहते हैं।"
+      scene:
+        describe: The board abscissaAndOrdinate.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          sheet.reading.moved: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - crossing
+          isPassed: false
+          reads: []
+          saying: []
+    name: abscissaAndOrdinate
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Abscissa and ordinate
+              hi: भुज और कोटि
+        - kind: prop
+          name: link
+          prop: text
+          with:
+            style: body
+            text:
+              en: P is 4 units from the y-axis and Q is 6, on opposite sides of it. A sign tells the sides apart, as on a number line.
+              hi: P, y-अक्ष से 4 इकाई दूर है और Q 6 इकाई, उसकी उलटी ओर। एक चिह्न दोनों ओर को अलग बताता है, जैसे संख्या रेखा पर।
+        - kind: prop
+          name: abscissa
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**The x-coordinate of a point is its perpendicular distance from the y-axis, measured along the x-axis: positive along OX, negative along OX′. It is also called the abscissa.**"
+              hi: "**किसी बिंदु का x-निर्देशांक, y-अक्ष से उसकी लंब दूरी है, जो x-अक्ष के साथ मापी जाती है: OX की ओर धनात्मक, OX′ की ओर ऋणात्मक। इसे भुज भी कहते हैं।**"
+        - kind: prop
+          name: ordinate
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**The y-coordinate of a point is its perpendicular distance from the x-axis, measured along the y-axis: positive along OY, negative along OY′. It is also called the ordinate.**"
+              hi: "**किसी बिंदु का y-निर्देशांक, x-अक्ष से उसकी लंब दूरी है, जो y-अक्ष के साथ मापी जाती है: OY की ओर धनात्मक, OY′ की ओर ऋणात्मक। इसे कोटि भी कहते हैं।**"
+        - kind: prop
+          name: ofPQ
+          prop: text
+          with:
+            style: body
+            text:
+              en: So P has x-coordinate +4 and y-coordinate +3. Q has x-coordinate −6 and y-coordinate −2.
+              hi: इसलिए P का x-निर्देशांक +4 और y-निर्देशांक +3 है। Q का x-निर्देशांक −6 और y-निर्देशांक −2 है।
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 6.5
+                xMin: -7.5
+                yMax: 4.5
+                yMin: -4.5
+            reading:
+              point:
+                x: 4
+                y: 3
+              pointStep: 1
+              reading: abscissa
+              unit: ""
+        - kind: prop
+          name: ask
+          prop: text
+          with:
+            style: body
+            text:
+              en: "The point is at P. **Drag it to where x = −6 and y = −2**: that is Q. Watch each sign change as it crosses an axis."
+              hi: "बिंदु P पर है। **उसे वहाँ खींचो जहाँ x = −6 और y = −2 है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।"
+        - isHidden: true
+          kind: prop
+          name: crossing
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Crossing the y-axis changes the sign of x; crossing the x-axis changes the sign of y.** The distances stay distances: the sign says which side."
+              hi: "**y-अक्ष पार करने पर x का चिह्न बदलता है; x-अक्ष पार करने पर y का।** दूरियाँ दूरियाँ ही रहती हैं: चिह्न बताता है कि किस ओर।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: d65e795c9bb41891
+class9-maths/coordinate-geometry/coordinates-of-a-point/any-axes:
+  content:
+    model:
+      freeLines: []
+      given:
+        back:
+          style: body
+          text:
+            en: Back on the agreed axes, P is (3, 2) again, the same for everyone.
+            hi: माने हुए अक्षों पर लौटकर P फिर (3, 2) है, सबके लिए एक जैसा।
+        choice:
+          style: body
+          text:
+            en: "P never moved, yet its coordinates changed: **coordinates depend on the axes we choose.** So everyone uses the same pair, the agreed x-axis across and y-axis up, just as everyone writes x first. Then a pair of numbers means one point to everyone."
+            hi: "P कभी नहीं हिला, फिर भी उसके निर्देशांक बदल गए: **निर्देशांक उन अक्षों पर निर्भर करते हैं जो हम चुनते हैं।** इसलिए सब एक ही जोड़ा लेते हैं, माना हुआ आड़ा x-अक्ष और खड़ा y-अक्ष, जैसे सब x पहले लिखते हैं। तब संख्याओं का एक जोड़ा सबके लिए एक ही बिंदु बताता है।"
+        link:
+          style: body
+          text:
+            en: Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is **(3, 2)**, and P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.
+            hi: दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P **(3, 2)** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।
+        putBack:
+          style: body
+          text:
+            en: "On the agreed axes P was (3, 2). **Put the axes back** and see: O at the crossing it started on, and the x-axis level again."
+            hi: "माने हुए अक्षों पर P (3, 2) था। **अक्षों को वापस रखो** और देखो: O फिर उसी जगह पर, और x-अक्ष फिर से आड़ा।"
+        sheet:
+          plane:
+            canMoveAxes: true
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: false
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+          reading:
+            canMovePoint: false
+            decimals: 2
+            point:
+              x: 3
+              y: 2
+            reading: pair
+            unit: ""
+        title:
+          style: title
+          text:
+            en: Why these axes?
+            hi: यही अक्ष क्यों?
+      lines:
+        back:
+          says:
+            en: Back on the agreed axes, P is the point 3, 2 again, the same for everyone.
+            hi: माने हुए अक्षों पर लौटकर P फिर बिंदु 3, 2 है, सबके लिए एक जैसा।
+        link:
+          says:
+            en: Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.
+            hi: दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।
+        putBack:
+          says:
+            en: "On the agreed axes P was the point 3, 2. Put the axes back and see: O at the crossing it started on, and the x-axis level again."
+            hi: "माने हुए अक्षों पर P बिंदु 3, 2 था। अक्षों को वापस रखो और देखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।"
+      scene:
+        describe: The board anyAxes.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          sheet.plane.axesMoved: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - choice
+            - putBack
+            - back
+          isPassed: false
+          reads: []
+          saying: []
+    name: anyAxes
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Why these axes?
+              hi: यही अक्ष क्यों?
+        - kind: prop
+          name: link
+          prop: text
+          with:
+            style: body
+            text:
+              en: Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is **(3, 2)**, and P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.
+              hi: दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P **(3, 2)** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              canMoveAxes: true
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: false
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+            reading:
+              canMovePoint: false
+              decimals: 2
+              point:
+                x: 3
+                y: 2
+              reading: pair
+              unit: ""
+        - isHidden: true
+          kind: prop
+          name: choice
+          prop: text
+          with:
+            style: body
+            text:
+              en: "P never moved, yet its coordinates changed: **coordinates depend on the axes we choose.** So everyone uses the same pair, the agreed x-axis across and y-axis up, just as everyone writes x first. Then a pair of numbers means one point to everyone."
+              hi: "P कभी नहीं हिला, फिर भी उसके निर्देशांक बदल गए: **निर्देशांक उन अक्षों पर निर्भर करते हैं जो हम चुनते हैं।** इसलिए सब एक ही जोड़ा लेते हैं, माना हुआ आड़ा x-अक्ष और खड़ा y-अक्ष, जैसे सब x पहले लिखते हैं। तब संख्याओं का एक जोड़ा सबके लिए एक ही बिंदु बताता है।"
+        - isHidden: true
+          kind: prop
+          name: putBack
+          prop: text
+          with:
+            style: body
+            text:
+              en: "On the agreed axes P was (3, 2). **Put the axes back** and see: O at the crossing it started on, and the x-axis level again."
+              hi: "माने हुए अक्षों पर P (3, 2) था। **अक्षों को वापस रखो** और देखो: O फिर उसी जगह पर, और x-अक्ष फिर से आड़ा।"
+        - isHidden: true
+          kind: prop
+          name: back
+          prop: text
+          with:
+            style: body
+            text:
+              en: Back on the agreed axes, P is (3, 2) again, the same for everyone.
+              hi: माने हुए अक्षों पर लौटकर P फिर (3, 2) है, सबके लिए एक जैसा।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: 8a80fa4761447e4f
+class9-maths/coordinate-geometry/coordinates-of-a-point/distances-from-axes:
+  content:
+    model:
+      freeLines: []
+      given:
+        atP:
+          color: null
+          style: definition
+          text:
+            en: "**P is 4 units from the y-axis, measured along the x-axis, in the positive direction OX. It is 3 units from the x-axis, measured along the y-axis, in the positive direction OY.** Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same."
+            hi: "**P, y-अक्ष से 4 इकाई दूर है, जो x-अक्ष के साथ धनात्मक दिशा OX में मापी जाती है। वह x-अक्ष से 3 इकाई दूर है, जो y-अक्ष के साथ धनात्मक दिशा OY में मापी जाती है।** रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।"
+        atQ:
+          color: null
+          style: definition
+          text:
+            en: "**Q is 6 units from the y-axis, measured along the negative direction OX′, and 2 units from the x-axis, measured along the negative direction OY′.** Her walk: 6 to the left and 2 down, in either order."
+            hi: "**Q, y-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा OX′ में मापी जाती है, और x-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा OY′ में मापी जाती है।** उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।"
+        link:
+          style: body
+          text:
+            en: "In Riya's town, a house was found by walking: along the main road, then up or down a street. Riya and Aman now plan the fair ground on graph paper, with the axes drawn on it. Any point on it is found the same way: by **how far it is from each axis**."
+            hi: "रिया के शहर में, मकान चलकर मिलता था: मुख्य सड़क के साथ, फिर गली में ऊपर या नीचे। रिया और अमन अब ग्राफ़ पेपर पर मेले के मैदान का नक्शा बना रहे हैं, जिस पर अक्ष खिंचे हैं। उस पर हर बिंदु इसी तरह मिलता है: **हर अक्ष से वह कितनी दूर है**, इससे।"
+        sheet:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            points:
+              - hasDropLines: true
+                isShown: true
+                name: P
+                tone: main
+                x: 4
+                y: 3
+              - hasDropLines: true
+                isShown: true
+                name: Q
+                tone: main
+                x: -6
+                y: -2
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 6.5
+              xMin: -7.5
+              yMax: 4.5
+              yMin: -4.5
+          walker:
+            at:
+              x: 0
+              y: 0
+            roads: grid
+            showWhere: false
+            walkFrom:
+              x: 0
+              y: 0
+        title:
+          style: title
+          text:
+            en: How far from each axis
+            hi: हर अक्ष से कितनी दूर
+        toP:
+          style: body
+          text:
+            en: "**Walk Riya from O to P**, along the lines of the graph paper."
+            hi: "**रिया को O से P तक ले चलो**, ग्राफ़ पेपर की रेखाओं पर।"
+        toQ:
+          style: body
+          text:
+            en: She is back at O. **Now walk her to Q.**
+            hi: वह फिर O पर है। **अब उसे Q तक ले चलो।**
+      lines:
+        atP:
+          says:
+            en: "P is 4 units from the y-axis, measured along the x-axis, in the positive direction O X. It is 3 units from the x-axis, measured along the y-axis, in the positive direction O Y. Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same."
+            hi: "P, वाई-अक्ष से 4 इकाई दूर है, जो एक्स-अक्ष के साथ धनात्मक दिशा O X में मापी जाती है। वह एक्स-अक्ष से 3 इकाई दूर है, जो वाई-अक्ष के साथ धनात्मक दिशा O Y में मापी जाती है। रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।"
+        atQ:
+          says:
+            en: "Q is 6 units from the y-axis, measured along the negative direction O X dash, and 2 units from the x-axis, measured along the negative direction O Y dash. Her walk: 6 to the left and 2 down, in either order."
+            hi: "Q, वाई-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा O X डैश में मापी जाती है, और एक्स-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा O Y डैश में मापी जाती है। उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।"
+      scene:
+        describe: The board distancesFromAxes.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          sheet.walker.stepped: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - atP
+            - toQ
+            - atQ
+          isPassed: false
+          reads: []
+          saying: []
+    name: distancesFromAxes
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: How far from each axis
+              hi: हर अक्ष से कितनी दूर
+        - kind: prop
+          name: link
+          prop: text
+          with:
+            style: body
+            text:
+              en: "In Riya's town, a house was found by walking: along the main road, then up or down a street. Riya and Aman now plan the fair ground on graph paper, with the axes drawn on it. Any point on it is found the same way: by **how far it is from each axis**."
+              hi: "रिया के शहर में, मकान चलकर मिलता था: मुख्य सड़क के साथ, फिर गली में ऊपर या नीचे। रिया और अमन अब ग्राफ़ पेपर पर मेले के मैदान का नक्शा बना रहे हैं, जिस पर अक्ष खिंचे हैं। उस पर हर बिंदु इसी तरह मिलता है: **हर अक्ष से वह कितनी दूर है**, इससे।"
+        - kind: prop
+          name: toP
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Walk Riya from O to P**, along the lines of the graph paper."
+              hi: "**रिया को O से P तक ले चलो**, ग्राफ़ पेपर की रेखाओं पर।"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              points:
+                - hasDropLines: true
+                  isShown: true
+                  name: P
+                  tone: main
+                  x: 4
+                  y: 3
+                - hasDropLines: true
+                  isShown: true
+                  name: Q
+                  tone: main
+                  x: -6
+                  y: -2
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 6.5
+                xMin: -7.5
+                yMax: 4.5
+                yMin: -4.5
+            walker:
+              at:
+                x: 0
+                y: 0
+              roads: grid
+              showWhere: false
+              walkFrom:
+                x: 0
+                y: 0
+        - isHidden: true
+          kind: prop
+          name: atP
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**P is 4 units from the y-axis, measured along the x-axis, in the positive direction OX. It is 3 units from the x-axis, measured along the y-axis, in the positive direction OY.** Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same."
+              hi: "**P, y-अक्ष से 4 इकाई दूर है, जो x-अक्ष के साथ धनात्मक दिशा OX में मापी जाती है। वह x-अक्ष से 3 इकाई दूर है, जो y-अक्ष के साथ धनात्मक दिशा OY में मापी जाती है।** रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।"
+        - isHidden: true
+          kind: prop
+          name: toQ
+          prop: text
+          with:
+            style: body
+            text:
+              en: She is back at O. **Now walk her to Q.**
+              hi: वह फिर O पर है। **अब उसे Q तक ले चलो।**
+        - isHidden: true
+          kind: prop
+          name: atQ
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**Q is 6 units from the y-axis, measured along the negative direction OX′, and 2 units from the x-axis, measured along the negative direction OY′.** Her walk: 6 to the left and 2 down, in either order."
+              hi: "**Q, y-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा OX′ में मापी जाती है, और x-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा OY′ में मापी जाती है।** उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: 36d86ef410177521
+class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
+  content:
+    model:
+      freeLines:
+        - coordinatesOfH-swapped-note
+        - coordinatesOfH-ySign-note
+        - coordinatesOfH-unsigned-note
+        - pointAt-e-note
+        - pointAt-g-note
+        - pointAt-d-note
+      given:
+        coordinatesOfH:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x = −5, written first."
+                hi: "यह y पहले है: (−3, −5) तो E है। H, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x = −5, जो पहले लिखा जाता है।"
+              id: swapped
+              label:
+                en: (−3, −5)
+                hi: (−3, −5)
+            - id: right
+              label:
+                en: (−5, −3)
+                hi: (−5, −3)
+            - feedback:
+                en: "Those are H's distances without their signs. H is left of the y-axis and below the x-axis: both coordinates are negative."
+                hi: "ये H की दूरियाँ हैं, बिना चिह्न के। H, y-अक्ष के बाईं ओर और x-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।"
+              id: unsigned
+              label:
+                en: (5, 3)
+                hi: (5, 3)
+            - feedback:
+                en: (−5, 3) is above the x-axis. H is below it, along OY′, so its y-coordinate is negative.
+                hi: (−5, 3), x-अक्ष के ऊपर है। H उसके नीचे, OY′ की ओर है, इसलिए उसका y-निर्देशांक ऋणात्मक है।
+              id: ySign
+              label:
+                en: (−5, 3)
+                hi: (−5, 3)
+          prompt:
+            en: What are the coordinates of H?
+            hi: H के निर्देशांक क्या हैं?
+        figure:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            points:
+              - hasDropLines: true
+                isShown: true
+                name: B
+                tone: main
+                x: -5
+                y: 2
+              - hasDropLines: true
+                isShown: true
+                name: D
+                tone: main
+                x: 6
+                y: 2
+              - hasDropLines: false
+                isShown: true
+                name: L
+                tone: main
+                x: 0
+                y: 5
+              - hasDropLines: false
+                isShown: true
+                name: M
+                tone: main
+                x: -3
+                y: 0
+              - hasDropLines: true
+                isShown: true
+                name: H
+                tone: main
+                x: -5
+                y: -3
+              - hasDropLines: true
+                isShown: true
+                name: G
+                tone: main
+                x: 2
+                y: -4
+              - hasDropLines: true
+                isShown: true
+                name: E
+                tone: main
+                x: -3
+                y: -5
+              - hasDropLines: true
+                isShown: true
+                name: C
+                tone: main
+                x: 5
+                y: -5
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 6.5
+              xMin: -6.5
+              yMax: 7.5
+              yMin: -6.5
+        link:
+          style: body
+          text:
+            en: "Coordinates are read two ways: from a point to its pair, and from a pair to its point. Each point in the figure has dashed lines to the axes."
+            hi: "निर्देशांक दो तरह पढ़े जाते हैं: बिंदु से उसका जोड़ा, और जोड़े से उसका बिंदु। आकृति में हर बिंदु से अक्षों तक बिंदीदार रेखाएँ हैं।"
+        pointAt:
+          answer: c
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: "G is (2, −4): 2 units right and 4 down. (5, −5) is further right and lower."
+                hi: "G है (2, −4): 2 इकाई दाईं ओर और 4 नीचे। (5, −5) और दाईं ओर और और नीचे है।"
+              id: g
+              label:
+                en: G
+                hi: G
+            - id: c
+              label:
+                en: C
+                hi: C
+            - feedback:
+                en: "E is (−3, −5): 3 units left of the y-axis. (5, −5) is 5 units right of it."
+                hi: "E है (−3, −5): y-अक्ष से 3 इकाई बाईं ओर। (5, −5) उससे 5 इकाई दाईं ओर है।"
+              id: e
+              label:
+                en: E
+                hi: E
+            - feedback:
+                en: "D is (6, 2), above the x-axis. (5, −5) is below it: its y-coordinate is negative."
+                hi: "D है (6, 2), x-अक्ष के ऊपर। (5, −5) उसके नीचे है: उसका y-निर्देशांक ऋणात्मक है।"
+              id: d
+              label:
+                en: D
+                hi: D
+          prompt:
+            en: Which point is (5, −5)?
+            hi: बिंदु (5, −5) कौन-सा है?
+        summary:
+          style: body
+          text:
+            en: "**In short:** the x-coordinate (abscissa) of a point is its distance from the y-axis, and the y-coordinate (ordinate) its distance from the x-axis, each with a sign for its side."
+            hi: "**संक्षेप में:** किसी बिंदु का x-निर्देशांक (भुज) y-अक्ष से उसकी दूरी है, और y-निर्देशांक (कोटि) x-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।"
+        summaryAxes:
+          style: body
+          text:
+            en: On the x-axis a point is (x, 0); on the y-axis, (0, y); the origin is (0, 0).
+            hi: x-अक्ष पर बिंदु (x, 0) होता है; y-अक्ष पर (0, y); मूल बिंदु (0, 0) है।
+        summaryPair:
+          style: body
+          text:
+            en: A point is written (x, y), x first.
+            hi: बिंदु (x, y) लिखा जाता है, x पहले।
+        summarySigns:
+          style: body
+          text:
+            en: In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).
+            hi: पहले चतुर्थांश में बिंदु (+, +) होता है; दूसरे में (−, +); तीसरे में (−, −); चौथे में (+, −)।
+        title:
+          style: title
+          text:
+            en: Coordinates both ways
+            hi: निर्देशांक दोनों ओर से
+      lines:
+        coordinatesOfH-swapped-note:
+          about: coordinatesOfH
+          says:
+            en: "That is y first: minus 3, minus 5 is E. H is 5 units left of the y-axis, so x is minus 5, written first."
+            hi: "यह वाई पहले है: माइनस 3, माइनस 5 तो E है। H, वाई-अक्ष से 5 इकाई बाईं ओर है, इसलिए एक्स माइनस 5 है, जो पहले लिखा जाता है।"
+          when: coordinatesOfH.checked
+          where:
+            optionId: swapped
+            status: wrong
+        coordinatesOfH-unsigned-note:
+          about: coordinatesOfH
+          says:
+            en: "Those are H's distances without their signs. H is left of the y-axis and below the x-axis: both coordinates are negative."
+            hi: "ये H की दूरियाँ हैं, बिना चिह्न के। H, वाई-अक्ष के बाईं ओर और एक्स-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।"
+          when: coordinatesOfH.checked
+          where:
+            optionId: unsigned
+            status: wrong
+        coordinatesOfH-ySign-note:
+          about: coordinatesOfH
+          says:
+            en: The point minus 5, 3 is above the x-axis. H is below it, along O Y dash, so its y-coordinate is negative.
+            hi: बिंदु माइनस 5, 3, एक्स-अक्ष के ऊपर है। H उसके नीचे, O Y डैश की ओर है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।
+          when: coordinatesOfH.checked
+          where:
+            optionId: ySign
+            status: wrong
+        pointAt:
+          says:
+            en: Which point is the point 5, minus 5?
+            hi: बिंदु 5, माइनस 5 कौन-सा है?
+        pointAt-d-note:
+          about: pointAt
+          says:
+            en: "D is the point 6, 2, above the x-axis. The point 5, minus 5 is below it: its y-coordinate is negative."
+            hi: "D है बिंदु 6, 2, एक्स-अक्ष के ऊपर। बिंदु 5, माइनस 5 उसके नीचे है: उसका वाई-निर्देशांक ऋणात्मक है।"
+          when: pointAt.checked
+          where:
+            optionId: d
+            status: wrong
+        pointAt-e-note:
+          about: pointAt
+          says:
+            en: "E is the point minus 3, minus 5: 3 units left of the y-axis. The point 5, minus 5 is 5 units right of it."
+            hi: "E है बिंदु माइनस 3, माइनस 5: वाई-अक्ष से 3 इकाई बाईं ओर। बिंदु 5, माइनस 5 उससे 5 इकाई दाईं ओर है।"
+          when: pointAt.checked
+          where:
+            optionId: e
+            status: wrong
+        pointAt-g-note:
+          about: pointAt
+          says:
+            en: "G is the point 2, minus 4: 2 units right and 4 down. The point 5, minus 5 is further right and lower."
+            hi: "G है बिंदु 2, माइनस 4: 2 इकाई दाईं ओर और 4 नीचे। बिंदु 5, माइनस 5 और दाईं ओर और और नीचे है।"
+          when: pointAt.checked
+          where:
+            optionId: g
+            status: wrong
+        summary:
+          says:
+            en: "In short: the x-coordinate, the abscissa, of a point is its distance from the y-axis, and the y-coordinate, the ordinate, its distance from the x-axis, each with a sign for its side."
+            hi: "संक्षेप में: किसी बिंदु का एक्स-निर्देशांक, यानी भुज, वाई-अक्ष से उसकी दूरी है, और वाई-निर्देशांक, यानी कोटि, एक्स-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।"
+        summaryAxes:
+          says:
+            en: On the x-axis a point is x, 0; on the y-axis, 0, y; the origin is 0, 0.
+            hi: एक्स-अक्ष पर बिंदु एक्स, 0 होता है; वाई-अक्ष पर 0, वाई; मूल बिंदु 0, 0 है।
+        summaryPair:
+          says:
+            en: A point is written x, y, x first.
+            hi: बिंदु एक्स, वाई लिखा जाता है, एक्स पहले।
+        summarySigns:
+          says:
+            en: In quadrant one a point is plus, plus; in two, minus, plus; in three, minus, minus; in four, plus, minus.
+            hi: पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; चौथे में धन, ऋण।
+      scene:
+        describe: The board findThePoint.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          coordinatesOfH.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          coordinatesOfH.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pointAt.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pointAt.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - pointAt
+            - summary
+            - summaryPair
+            - summaryAxes
+            - summarySigns
+          isPassed: false
+          reads: []
+          saying: []
+    name: findThePoint
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Coordinates both ways
+              hi: निर्देशांक दोनों ओर से
+        - kind: prop
+          name: link
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Coordinates are read two ways: from a point to its pair, and from a pair to its point. Each point in the figure has dashed lines to the axes."
+              hi: "निर्देशांक दो तरह पढ़े जाते हैं: बिंदु से उसका जोड़ा, और जोड़े से उसका बिंदु। आकृति में हर बिंदु से अक्षों तक बिंदीदार रेखाएँ हैं।"
+        - kind: prop
+          name: figure
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              points:
+                - hasDropLines: true
+                  isShown: true
+                  name: B
+                  tone: main
+                  x: -5
+                  y: 2
+                - hasDropLines: true
+                  isShown: true
+                  name: D
+                  tone: main
+                  x: 6
+                  y: 2
+                - hasDropLines: false
+                  isShown: true
+                  name: L
+                  tone: main
+                  x: 0
+                  y: 5
+                - hasDropLines: false
+                  isShown: true
+                  name: M
+                  tone: main
+                  x: -3
+                  y: 0
+                - hasDropLines: true
+                  isShown: true
+                  name: H
+                  tone: main
+                  x: -5
+                  y: -3
+                - hasDropLines: true
+                  isShown: true
+                  name: G
+                  tone: main
+                  x: 2
+                  y: -4
+                - hasDropLines: true
+                  isShown: true
+                  name: E
+                  tone: main
+                  x: -3
+                  y: -5
+                - hasDropLines: true
+                  isShown: true
+                  name: C
+                  tone: main
+                  x: 5
+                  y: -5
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 6.5
+                xMin: -6.5
+                yMax: 7.5
+                yMin: -6.5
+        - kind: prop
+          name: coordinatesOfH
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x = −5, written first."
+                  hi: "यह y पहले है: (−3, −5) तो E है। H, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x = −5, जो पहले लिखा जाता है।"
+                id: swapped
+                label:
+                  en: (−3, −5)
+                  hi: (−3, −5)
+              - id: right
+                label:
+                  en: (−5, −3)
+                  hi: (−5, −3)
+              - feedback:
+                  en: "Those are H's distances without their signs. H is left of the y-axis and below the x-axis: both coordinates are negative."
+                  hi: "ये H की दूरियाँ हैं, बिना चिह्न के। H, y-अक्ष के बाईं ओर और x-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।"
+                id: unsigned
+                label:
+                  en: (5, 3)
+                  hi: (5, 3)
+              - feedback:
+                  en: (−5, 3) is above the x-axis. H is below it, along OY′, so its y-coordinate is negative.
+                  hi: (−5, 3), x-अक्ष के ऊपर है। H उसके नीचे, OY′ की ओर है, इसलिए उसका y-निर्देशांक ऋणात्मक है।
+                id: ySign
+                label:
+                  en: (−5, 3)
+                  hi: (−5, 3)
+            prompt:
+              en: What are the coordinates of H?
+              hi: H के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: pointAt
+          prop: choice
+          with:
+            answer: c
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: "G is (2, −4): 2 units right and 4 down. (5, −5) is further right and lower."
+                  hi: "G है (2, −4): 2 इकाई दाईं ओर और 4 नीचे। (5, −5) और दाईं ओर और और नीचे है।"
+                id: g
+                label:
+                  en: G
+                  hi: G
+              - id: c
+                label:
+                  en: C
+                  hi: C
+              - feedback:
+                  en: "E is (−3, −5): 3 units left of the y-axis. (5, −5) is 5 units right of it."
+                  hi: "E है (−3, −5): y-अक्ष से 3 इकाई बाईं ओर। (5, −5) उससे 5 इकाई दाईं ओर है।"
+                id: e
+                label:
+                  en: E
+                  hi: E
+              - feedback:
+                  en: "D is (6, 2), above the x-axis. (5, −5) is below it: its y-coordinate is negative."
+                  hi: "D है (6, 2), x-अक्ष के ऊपर। (5, −5) उसके नीचे है: उसका y-निर्देशांक ऋणात्मक है।"
+                id: d
+                label:
+                  en: D
+                  hi: D
+            prompt:
+              en: Which point is (5, −5)?
+              hi: बिंदु (5, −5) कौन-सा है?
+        - isHidden: true
+          kind: prop
+          name: summary
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**In short:** the x-coordinate (abscissa) of a point is its distance from the y-axis, and the y-coordinate (ordinate) its distance from the x-axis, each with a sign for its side."
+              hi: "**संक्षेप में:** किसी बिंदु का x-निर्देशांक (भुज) y-अक्ष से उसकी दूरी है, और y-निर्देशांक (कोटि) x-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।"
+        - isHidden: true
+          kind: prop
+          name: summaryPair
+          prop: text
+          with:
+            style: body
+            text:
+              en: A point is written (x, y), x first.
+              hi: बिंदु (x, y) लिखा जाता है, x पहले।
+        - isHidden: true
+          kind: prop
+          name: summaryAxes
+          prop: text
+          with:
+            style: body
+            text:
+              en: On the x-axis a point is (x, 0); on the y-axis, (0, y); the origin is (0, 0).
+              hi: x-अक्ष पर बिंदु (x, 0) होता है; y-अक्ष पर (0, y); मूल बिंदु (0, 0) है।
+        - isHidden: true
+          kind: prop
+          name: summarySigns
+          prop: text
+          with:
+            style: body
+            text:
+              en: In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).
+              hi: पहले चतुर्थांश में बिंदु (+, +) होता है; दूसरे में (−, +); तीसरे में (−, −); चौथे में (+, −)।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: 4875bf607671b881
+class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
+  content:
+    model:
+      freeLines:
+        - pairOfB-slip0-note
+        - pairOfB-slip1-note
+        - pairOfB-slip2-note
+        - pairOfC-slip0-note
+        - pairOfC-slip1-note
+        - pairOfC-slip2-note
+        - pairOfE-slip0-note
+        - pairOfE-slip1-note
+        - pairOfE-slip2-note
+      given:
+        ask:
+          style: body
+          text:
+            en: "**Drag the point onto the x-axis**, then onto the y-axis, then onto O, and watch its coordinates."
+            hi: "**बिंदु को x-अक्ष पर खींचो**, फिर y-अक्ष पर, फिर O पर, और उसके निर्देशांक देखो।"
+        atO:
+          color: null
+          style: definition
+          text:
+            en: "**The origin is 0 units from both axes, so its coordinates are (0, 0).** It is the one point with both y = 0 and x = 0."
+            hi: "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।** यही वह एक बिंदु है जिसका y = 0 और x = 0 दोनों हैं।"
+        figure:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            points:
+              - hasDropLines: false
+                isShown: true
+                name: A
+                tone: main
+                x: 4
+                y: 0
+              - hasDropLines: false
+                isShown: true
+                name: B
+                tone: main
+                x: 0
+                y: 3
+              - hasDropLines: false
+                isShown: true
+                name: C
+                tone: main
+                x: -5
+                y: 0
+              - hasDropLines: false
+                isShown: true
+                name: D
+                tone: main
+                x: 0
+                y: -4
+              - hasDropLines: false
+                isShown: true
+                name: E
+                tone: main
+                x: 0.6666666666666666
+                y: 0
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+        onX:
+          color: null
+          style: definition
+          text:
+            en: "**A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is (x, 0).** Press **y = 0**: every point with y = 0 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0."
+            hi: "**x-अक्ष पर कोई बिंदु x-अक्ष से 0 इकाई दूर है, इसलिए उसका y-निर्देशांक 0 है: वह (x, 0) है।** **y = 0** दबाओ: y = 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा x-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।"
+        onY:
+          color: null
+          style: definition
+          text:
+            en: "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x = 0 makes the whole y-axis. With **y = 0** pressed, press **x = 0** too: which points have both y = 0 and x = 0?"
+            hi: "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y = 0** दबाने के बाद **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?"
+        pairOfB:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: "B is on the y-axis: 0 units from it, so its x-coordinate is 0. Only its y-coordinate isn't."
+                hi: "B, y-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका x-निर्देशांक 0 है। केवल y-निर्देशांक 0 नहीं है।"
+              id: slip2
+              label:
+                en: (3, 3)
+                hi: (3, 3)
+            - id: right
+              label:
+                en: (0, 3)
+                hi: (0, 3)
+            - feedback:
+                en: That is y first. B is on the y-axis, so x = 0, written first.
+                hi: यह y पहले है। B, y-अक्ष पर है, इसलिए x = 0, जो पहले लिखा जाता है।
+              id: slip0
+              label:
+                en: (3, 0)
+                hi: (3, 0)
+            - feedback:
+                en: That point is on the other side of O. B is 3 units above O, along OY.
+                hi: वह बिंदु O की दूसरी ओर है। B, O से OY की ओर 3 इकाई ऊपर है।
+              id: slip1
+              label:
+                en: (0, −3)
+                hi: (0, −3)
+          prompt:
+            en: What are the coordinates of B?
+            hi: B के निर्देशांक क्या हैं?
+        pairOfC:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: "C is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
+                hi: "C, x-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका y-निर्देशांक 0 है। केवल x-निर्देशांक 0 नहीं है।"
+              id: slip2
+              label:
+                en: (−5, −5)
+                hi: (−5, −5)
+            - feedback:
+                en: That point is on the other side of O. C is 5 units left of O, along OX′.
+                hi: वह बिंदु O की दूसरी ओर है। C, O से OX′ की ओर 5 इकाई बाईं ओर है।
+              id: slip1
+              label:
+                en: (5, 0)
+                hi: (5, 0)
+            - feedback:
+                en: That is y first. C is on the x-axis, so y = 0, written second.
+                hi: यह y पहले है। C, x-अक्ष पर है, इसलिए y = 0, जो दूसरा लिखा जाता है।
+              id: slip0
+              label:
+                en: (0, −5)
+                hi: (0, −5)
+            - id: right
+              label:
+                en: (−5, 0)
+                hi: (−5, 0)
+          prompt:
+            en: What are the coordinates of C?
+            hi: C के निर्देशांक क्या हैं?
+        pairOfE:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - id: right
+              label:
+                en: (⅔, 0)
+                hi: (⅔, 0)
+            - feedback:
+                en: That point is on the other side of O. E is two-thirds of a unit right of O, along OX.
+                hi: वह बिंदु O की दूसरी ओर है। E, O से OX की ओर दो-तिहाई इकाई दाईं ओर है।
+              id: slip1
+              label:
+                en: (−⅔, 0)
+                hi: (−⅔, 0)
+            - feedback:
+                en: "E is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
+                hi: "E, x-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका y-निर्देशांक 0 है। केवल x-निर्देशांक 0 नहीं है।"
+              id: slip2
+              label:
+                en: (⅔, ⅔)
+                hi: (⅔, ⅔)
+            - feedback:
+                en: That is y first. E is on the x-axis, so y = 0, written second.
+                hi: यह y पहले है। E, x-अक्ष पर है, इसलिए y = 0, जो दूसरा लिखा जाता है।
+              id: slip0
+              label:
+                en: (0, ⅔)
+                hi: (0, ⅔)
+          prompt:
+            en: What are the coordinates of E?
+            hi: E के निर्देशांक क्या हैं?
+        q:
+          style: body
+          text:
+            en: "Now read the points on the axes in the figure: A, C and E on the x-axis, B and D on the y-axis."
+            hi: "अब आकृति में अक्षों पर बने बिंदु पढ़ो: A, C और E x-अक्ष पर, B और D y-अक्ष पर।"
+        sheet:
+          clues:
+            canGiveClues: true
+            clueChoices:
+              - words:
+                  en: y = 0
+                  hi: y = 0
+                y: 0
+              - words:
+                  en: x = 0
+                  hi: x = 0
+                x: 0
+            hidden: null
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+          reading:
+            point:
+              x: 3
+              y: 2
+            pointStep: 1
+            reading: pair
+            unit: ""
+        title:
+          style: title
+          text:
+            en: Points on the axes
+            hi: अक्षों पर बिंदु
+        whyB:
+          style: body
+          text:
+            en: "B is on the y-axis, 3 units from the x-axis along OY: **B is (0, 3)**."
+            hi: "B, y-अक्ष पर है, x-अक्ष से OY की ओर 3 इकाई: **B है (0, 3)**।"
+        whyC:
+          style: body
+          text:
+            en: "C is on the x-axis, 5 units from the y-axis along OX′: **C is (−5, 0)**."
+            hi: "C, x-अक्ष पर है, y-अक्ष से OX′ की ओर 5 इकाई: **C है (−5, 0)**।"
+        whyE:
+          style: body
+          text:
+            en: |-
+              E is on the x-axis, two-thirds of a unit from the y-axis along OX. So E is
+              $$\left(\tfrac{2}{3},\ 0\right)$$
+            hi: |-
+              E, x-अक्ष पर है, y-अक्ष से OX की ओर दो-तिहाई इकाई। इसलिए E है
+              $$\left(\tfrac{2}{3},\ 0\right)$$
+      lines:
+        ask:
+          says:
+            en: Drag the point onto the x-axis, then onto the y-axis, then onto O, and watch its coordinates.
+            hi: बिंदु को एक्स-अक्ष पर खींचो, फिर वाई-अक्ष पर, फिर O पर, और उसके निर्देशांक देखो।
+        atO:
+          says:
+            en: The origin is 0 units from both axes, so its coordinates are 0, 0. It is the one point with both y equal to 0 and x equal to 0.
+            hi: मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं। यही वह एक बिंदु है जिसका वाई बराबर 0 और एक्स बराबर 0 दोनों हैं।
+        onX:
+          says:
+            en: "A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is the point x, 0. Press y equals 0: every point with y equal to 0 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0."
+            hi: "एक्स-अक्ष पर कोई बिंदु एक्स-अक्ष से 0 इकाई दूर है, इसलिए उसका वाई-निर्देशांक 0 है: वह बिंदु एक्स, 0 है। वाई बराबर 0 दबाओ: वाई बराबर 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा एक्स-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।"
+        onY:
+          says:
+            en: "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. With y equals 0 pressed, press x equals 0 too: which points have both y equal to 0 and x equal to 0?"
+            hi: "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। वाई बराबर 0 दबाने के बाद एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?"
+        pairOfB-slip0-note:
+          about: pairOfB
+          says:
+            en: That is y first. B is on the y-axis, so x is 0, written first.
+            hi: यह वाई पहले है। B, वाई-अक्ष पर है, इसलिए एक्स 0 है, जो पहले लिखा जाता है।
+          when: pairOfB.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfB-slip1-note:
+          about: pairOfB
+          says:
+            en: That point is on the other side of O. B is 3 units above O, along O Y.
+            hi: वह बिंदु O की दूसरी ओर है। B, O से O Y की ओर 3 इकाई ऊपर है।
+          when: pairOfB.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfB-slip2-note:
+          about: pairOfB
+          says:
+            en: "B is on the y-axis: 0 units from it, so its x-coordinate is 0. Only its y-coordinate isn't."
+            hi: "B, वाई-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका एक्स-निर्देशांक 0 है। केवल वाई-निर्देशांक 0 नहीं है।"
+          when: pairOfB.checked
+          where:
+            optionId: slip2
+            status: wrong
+        pairOfC-slip0-note:
+          about: pairOfC
+          says:
+            en: That is y first. C is on the x-axis, so y is 0, written second.
+            hi: यह वाई पहले है। C, एक्स-अक्ष पर है, इसलिए वाई 0 है, जो दूसरा लिखा जाता है।
+          when: pairOfC.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfC-slip1-note:
+          about: pairOfC
+          says:
+            en: That point is on the other side of O. C is 5 units left of O, along O X dash.
+            hi: वह बिंदु O की दूसरी ओर है। C, O से O X डैश की ओर 5 इकाई बाईं ओर है।
+          when: pairOfC.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfC-slip2-note:
+          about: pairOfC
+          says:
+            en: "C is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
+            hi: "C, एक्स-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका वाई-निर्देशांक 0 है। केवल एक्स-निर्देशांक 0 नहीं है।"
+          when: pairOfC.checked
+          where:
+            optionId: slip2
+            status: wrong
+        pairOfE-slip0-note:
+          about: pairOfE
+          says:
+            en: That is y first. E is on the x-axis, so y is 0, written second.
+            hi: यह वाई पहले है। E, एक्स-अक्ष पर है, इसलिए वाई 0 है, जो दूसरा लिखा जाता है।
+          when: pairOfE.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfE-slip1-note:
+          about: pairOfE
+          says:
+            en: That point is on the other side of O. E is two-thirds of a unit right of O, along O X.
+            hi: वह बिंदु O की दूसरी ओर है। E, O से O X की ओर दो-तिहाई इकाई दाईं ओर है।
+          when: pairOfE.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfE-slip2-note:
+          about: pairOfE
+          says:
+            en: "E is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
+            hi: "E, एक्स-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका वाई-निर्देशांक 0 है। केवल एक्स-निर्देशांक 0 नहीं है।"
+          when: pairOfE.checked
+          where:
+            optionId: slip2
+            status: wrong
+        whyB:
+          says:
+            en: "B is on the y-axis, 3 units from the x-axis along O Y: B is the point 0, 3."
+            hi: "B, वाई-अक्ष पर है, एक्स-अक्ष से O Y की ओर 3 इकाई: B है बिंदु 0, 3।"
+        whyC:
+          says:
+            en: "C is on the x-axis, 5 units from the y-axis along O X dash: C is the point minus 5, 0."
+            hi: "C, एक्स-अक्ष पर है, वाई-अक्ष से O X डैश की ओर 5 इकाई: C है बिंदु माइनस 5, 0।"
+        whyE:
+          says:
+            en: "E is on the x-axis, two thirds of a unit from the y-axis along O X: E is the point two thirds, 0."
+            hi: "E, एक्स-अक्ष पर है, वाई-अक्ष से O X की ओर दो तिहाई इकाई: E है बिंदु दो तिहाई, 0।"
+      scene:
+        describe: The board pointsOnAxes.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          pairOfB.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfB.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfC.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfC.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfE.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfE.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          sheet.reading.moved: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - onX
+            - onY
+            - atO
+            - q
+            - figure
+            - pairOfB
+            - whyB
+            - pairOfC
+            - whyC
+            - pairOfE
+            - whyE
+          isPassed: false
+          reads: []
+          saying: []
+    name: pointsOnAxes
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Points on the axes
+              hi: अक्षों पर बिंदु
+        - kind: prop
+          name: ask
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Drag the point onto the x-axis**, then onto the y-axis, then onto O, and watch its coordinates."
+              hi: "**बिंदु को x-अक्ष पर खींचो**, फिर y-अक्ष पर, फिर O पर, और उसके निर्देशांक देखो।"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            clues:
+              canGiveClues: true
+              clueChoices:
+                - words:
+                    en: y = 0
+                    hi: y = 0
+                  y: 0
+                - words:
+                    en: x = 0
+                    hi: x = 0
+                  x: 0
+              hidden: null
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+            reading:
+              point:
+                x: 3
+                y: 2
+              pointStep: 1
+              reading: pair
+              unit: ""
+        - isHidden: true
+          kind: prop
+          name: onX
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is (x, 0).** Press **y = 0**: every point with y = 0 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0."
+              hi: "**x-अक्ष पर कोई बिंदु x-अक्ष से 0 इकाई दूर है, इसलिए उसका y-निर्देशांक 0 है: वह (x, 0) है।** **y = 0** दबाओ: y = 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा x-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।"
+        - isHidden: true
+          kind: prop
+          name: onY
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x = 0 makes the whole y-axis. With **y = 0** pressed, press **x = 0** too: which points have both y = 0 and x = 0?"
+              hi: "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y = 0** दबाने के बाद **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?"
+        - isHidden: true
+          kind: prop
+          name: atO
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**The origin is 0 units from both axes, so its coordinates are (0, 0).** It is the one point with both y = 0 and x = 0."
+              hi: "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।** यही वह एक बिंदु है जिसका y = 0 और x = 0 दोनों हैं।"
+        - isHidden: true
+          kind: prop
+          name: q
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Now read the points on the axes in the figure: A, C and E on the x-axis, B and D on the y-axis."
+              hi: "अब आकृति में अक्षों पर बने बिंदु पढ़ो: A, C और E x-अक्ष पर, B और D y-अक्ष पर।"
+        - isHidden: true
+          kind: prop
+          name: figure
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              points:
+                - hasDropLines: false
+                  isShown: true
+                  name: A
+                  tone: main
+                  x: 4
+                  y: 0
+                - hasDropLines: false
+                  isShown: true
+                  name: B
+                  tone: main
+                  x: 0
+                  y: 3
+                - hasDropLines: false
+                  isShown: true
+                  name: C
+                  tone: main
+                  x: -5
+                  y: 0
+                - hasDropLines: false
+                  isShown: true
+                  name: D
+                  tone: main
+                  x: 0
+                  y: -4
+                - hasDropLines: false
+                  isShown: true
+                  name: E
+                  tone: main
+                  x: 0.6666666666666666
+                  y: 0
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - isHidden: true
+          kind: prop
+          name: pairOfB
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: "B is on the y-axis: 0 units from it, so its x-coordinate is 0. Only its y-coordinate isn't."
+                  hi: "B, y-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका x-निर्देशांक 0 है। केवल y-निर्देशांक 0 नहीं है।"
+                id: slip2
+                label:
+                  en: (3, 3)
+                  hi: (3, 3)
+              - id: right
+                label:
+                  en: (0, 3)
+                  hi: (0, 3)
+              - feedback:
+                  en: That is y first. B is on the y-axis, so x = 0, written first.
+                  hi: यह y पहले है। B, y-अक्ष पर है, इसलिए x = 0, जो पहले लिखा जाता है।
+                id: slip0
+                label:
+                  en: (3, 0)
+                  hi: (3, 0)
+              - feedback:
+                  en: That point is on the other side of O. B is 3 units above O, along OY.
+                  hi: वह बिंदु O की दूसरी ओर है। B, O से OY की ओर 3 इकाई ऊपर है।
+                id: slip1
+                label:
+                  en: (0, −3)
+                  hi: (0, −3)
+            prompt:
+              en: What are the coordinates of B?
+              hi: B के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: whyB
+          prop: text
+          with:
+            style: body
+            text:
+              en: "B is on the y-axis, 3 units from the x-axis along OY: **B is (0, 3)**."
+              hi: "B, y-अक्ष पर है, x-अक्ष से OY की ओर 3 इकाई: **B है (0, 3)**।"
+        - isHidden: true
+          kind: prop
+          name: pairOfC
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: "C is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
+                  hi: "C, x-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका y-निर्देशांक 0 है। केवल x-निर्देशांक 0 नहीं है।"
+                id: slip2
+                label:
+                  en: (−5, −5)
+                  hi: (−5, −5)
+              - feedback:
+                  en: That point is on the other side of O. C is 5 units left of O, along OX′.
+                  hi: वह बिंदु O की दूसरी ओर है। C, O से OX′ की ओर 5 इकाई बाईं ओर है।
+                id: slip1
+                label:
+                  en: (5, 0)
+                  hi: (5, 0)
+              - feedback:
+                  en: That is y first. C is on the x-axis, so y = 0, written second.
+                  hi: यह y पहले है। C, x-अक्ष पर है, इसलिए y = 0, जो दूसरा लिखा जाता है।
+                id: slip0
+                label:
+                  en: (0, −5)
+                  hi: (0, −5)
+              - id: right
+                label:
+                  en: (−5, 0)
+                  hi: (−5, 0)
+            prompt:
+              en: What are the coordinates of C?
+              hi: C के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: whyC
+          prop: text
+          with:
+            style: body
+            text:
+              en: "C is on the x-axis, 5 units from the y-axis along OX′: **C is (−5, 0)**."
+              hi: "C, x-अक्ष पर है, y-अक्ष से OX′ की ओर 5 इकाई: **C है (−5, 0)**।"
+        - isHidden: true
+          kind: prop
+          name: pairOfE
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - id: right
+                label:
+                  en: (⅔, 0)
+                  hi: (⅔, 0)
+              - feedback:
+                  en: That point is on the other side of O. E is two-thirds of a unit right of O, along OX.
+                  hi: वह बिंदु O की दूसरी ओर है। E, O से OX की ओर दो-तिहाई इकाई दाईं ओर है।
+                id: slip1
+                label:
+                  en: (−⅔, 0)
+                  hi: (−⅔, 0)
+              - feedback:
+                  en: "E is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
+                  hi: "E, x-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका y-निर्देशांक 0 है। केवल x-निर्देशांक 0 नहीं है।"
+                id: slip2
+                label:
+                  en: (⅔, ⅔)
+                  hi: (⅔, ⅔)
+              - feedback:
+                  en: That is y first. E is on the x-axis, so y = 0, written second.
+                  hi: यह y पहले है। E, x-अक्ष पर है, इसलिए y = 0, जो दूसरा लिखा जाता है।
+                id: slip0
+                label:
+                  en: (0, ⅔)
+                  hi: (0, ⅔)
+            prompt:
+              en: What are the coordinates of E?
+              hi: E के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: whyE
+          prop: text
+          with:
+            style: body
+            text:
+              en: |-
+                E is on the x-axis, two-thirds of a unit from the y-axis along OX. So E is
+                $$\left(\tfrac{2}{3},\ 0\right)$$
+              hi: |-
+                E, x-अक्ष पर है, y-अक्ष से OX की ओर दो-तिहाई इकाई। इसलिए E है
+                $$\left(\tfrac{2}{3},\ 0\right)$$
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: 18239fb1d922e9c4
+class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
+  content:
+    model:
+      freeLines:
+        - pairOfB-slip0-note
+        - pairOfB-slip1-note
+        - pairOfB-slip2-note
+        - pairOfM-slip0-note
+        - pairOfM-slip1-note
+        - pairOfM-slip2-note
+        - pairOfL-slip0-note
+        - pairOfL-slip1-note
+        - pairOfL-slip2-note
+        - pairOfS-slip0-note
+        - pairOfS-slip1-note
+        - pairOfS-slip2-note
+      given:
+        b:
+          style: body
+          text:
+            en: "B is 4 units from the y-axis along OX and 3 units from the x-axis along OY: abscissa 4, ordinate 3, coordinates (4, 3)."
+            hi: "B, y-अक्ष से OX की ओर 4 इकाई और x-अक्ष से OY की ओर 3 इकाई दूर है: भुज 4, कोटि 3, निर्देशांक (4, 3)।"
+        figure:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            points:
+              - hasDropLines: true
+                isShown: true
+                name: B
+                tone: main
+                x: 4
+                y: 3
+              - hasDropLines: true
+                isShown: true
+                name: M
+                tone: main
+                x: -3
+                y: 4
+              - hasDropLines: true
+                isShown: true
+                name: L
+                tone: main
+                x: -5
+                y: -4
+              - hasDropLines: true
+                isShown: true
+                name: S
+                tone: main
+                x: 3
+                y: -4
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+        l:
+          style: body
+          text:
+            en: "L is 5 units from the y-axis along OX′ and 4 units from the x-axis along OY′: abscissa −5, ordinate −4, coordinates (−5, −4)."
+            hi: "L, y-अक्ष से OX′ की ओर 5 इकाई और x-अक्ष से OY′ की ओर 4 इकाई दूर है: भुज −5, कोटि −4, निर्देशांक (−5, −4)।"
+        m:
+          style: body
+          text:
+            en: "M is 3 units from the y-axis along OX′ and 4 units from the x-axis along OY: abscissa −3, ordinate 4, coordinates (−3, 4)."
+            hi: "M, y-अक्ष से OX′ की ओर 3 इकाई और x-अक्ष से OY की ओर 4 इकाई दूर है: भुज −3, कोटि 4, निर्देशांक (−3, 4)।"
+        pairOfB:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: That point is on the other side of the x-axis. B is above it, so its y-coordinate is positive.
+                hi: वह बिंदु x-अक्ष की दूसरी ओर है। B उसके ऊपर है, इसलिए उसका y-निर्देशांक धनात्मक है।
+              id: slip2
+              label:
+                en: (4, −3)
+                hi: (4, −3)
+            - id: right
+              label:
+                en: (4, 3)
+                hi: (4, 3)
+            - feedback:
+                en: That is y first. B is 4 units right of the y-axis, so x = 4, written first.
+                hi: यह y पहले है। B, y-अक्ष से 4 इकाई दाईं ओर है, इसलिए x = 4, जो पहले लिखा जाता है।
+              id: slip0
+              label:
+                en: (3, 4)
+                hi: (3, 4)
+            - feedback:
+                en: That point is on the other side of the y-axis. B is right of it, so its x-coordinate is positive.
+                hi: वह बिंदु y-अक्ष की दूसरी ओर है। B उसके दाईं ओर है, इसलिए उसका x-निर्देशांक धनात्मक है।
+              id: slip1
+              label:
+                en: (−4, 3)
+                hi: (−4, 3)
+          prompt:
+            en: What are the coordinates of B?
+            hi: B के निर्देशांक क्या हैं?
+        pairOfL:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: That is y first. L is 5 units left of the y-axis, so x = −5, written first.
+                hi: यह y पहले है। L, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x = −5, जो पहले लिखा जाता है।
+              id: slip0
+              label:
+                en: (−4, −5)
+                hi: (−4, −5)
+            - feedback:
+                en: That point is on the other side of the y-axis. L is left of it, so its x-coordinate is negative.
+                hi: वह बिंदु y-अक्ष की दूसरी ओर है। L उसके बाईं ओर है, इसलिए उसका x-निर्देशांक ऋणात्मक है।
+              id: slip1
+              label:
+                en: (5, −4)
+                hi: (5, −4)
+            - id: right
+              label:
+                en: (−5, −4)
+                hi: (−5, −4)
+            - feedback:
+                en: That point is on the other side of the x-axis. L is below it, so its y-coordinate is negative.
+                hi: वह बिंदु x-अक्ष की दूसरी ओर है। L उसके नीचे है, इसलिए उसका y-निर्देशांक ऋणात्मक है।
+              id: slip2
+              label:
+                en: (−5, 4)
+                hi: (−5, 4)
+          prompt:
+            en: What are the coordinates of L?
+            hi: L के निर्देशांक क्या हैं?
+        pairOfM:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - id: right
+              label:
+                en: (−3, 4)
+                hi: (−3, 4)
+            - feedback:
+                en: That is y first. M is 3 units left of the y-axis, so x = −3, written first.
+                hi: यह y पहले है। M, y-अक्ष से 3 इकाई बाईं ओर है, इसलिए x = −3, जो पहले लिखा जाता है।
+              id: slip0
+              label:
+                en: (4, −3)
+                hi: (4, −3)
+            - feedback:
+                en: That point is on the other side of the y-axis. M is left of it, so its x-coordinate is negative.
+                hi: वह बिंदु y-अक्ष की दूसरी ओर है। M उसके बाईं ओर है, इसलिए उसका x-निर्देशांक ऋणात्मक है।
+              id: slip1
+              label:
+                en: (3, 4)
+                hi: (3, 4)
+            - feedback:
+                en: That point is on the other side of the x-axis. M is above it, so its y-coordinate is positive.
+                hi: वह बिंदु x-अक्ष की दूसरी ओर है। M उसके ऊपर है, इसलिए उसका y-निर्देशांक धनात्मक है।
+              id: slip2
+              label:
+                en: (−3, −4)
+                hi: (−3, −4)
+          prompt:
+            en: What are the coordinates of M?
+            hi: M के निर्देशांक क्या हैं?
+        pairOfS:
+          answer: right
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: That is y first. S is 3 units right of the y-axis, so x = 3, written first.
+                hi: यह y पहले है। S, y-अक्ष से 3 इकाई दाईं ओर है, इसलिए x = 3, जो पहले लिखा जाता है।
+              id: slip0
+              label:
+                en: (−4, 3)
+                hi: (−4, 3)
+            - id: right
+              label:
+                en: (3, −4)
+                hi: (3, −4)
+            - feedback:
+                en: That point is on the other side of the y-axis. S is right of it, so its x-coordinate is positive.
+                hi: वह बिंदु y-अक्ष की दूसरी ओर है। S उसके दाईं ओर है, इसलिए उसका x-निर्देशांक धनात्मक है।
+              id: slip1
+              label:
+                en: (−3, −4)
+                hi: (−3, −4)
+            - feedback:
+                en: That point is on the other side of the x-axis. S is below it, so its y-coordinate is negative.
+                hi: वह बिंदु x-अक्ष की दूसरी ओर है। S उसके नीचे है, इसलिए उसका y-निर्देशांक ऋणात्मक है।
+              id: slip2
+              label:
+                en: (3, 4)
+                hi: (3, 4)
+          prompt:
+            en: What are the coordinates of S?
+            hi: S के निर्देशांक क्या हैं?
+        q:
+          style: body
+          text:
+            en: "Read the coordinates of B, M, L and S in the figure, one at a time: follow each point's dashed lines to the axes."
+            hi: "आकृति में B, M, L और S के निर्देशांक एक-एक करके पढ़ो: हर बिंदु की बिंदीदार रेखाओं को अक्षों तक देखो।"
+        s:
+          style: body
+          text:
+            en: "S is 3 units from the y-axis along OX and 4 units from the x-axis along OY′: abscissa 3, ordinate −4, coordinates (3, −4)."
+            hi: "S, y-अक्ष से OX की ओर 3 इकाई और x-अक्ष से OY′ की ओर 4 इकाई दूर है: भुज 3, कोटि −4, निर्देशांक (3, −4)।"
+        title:
+          style: title
+          text:
+            en: Reading a point's coordinates
+            hi: बिंदु के निर्देशांक पढ़ना
+      lines:
+        b:
+          says:
+            en: "B is 4 units from the y-axis along O X and 3 units from the x-axis along O Y: abscissa 4, ordinate 3, coordinates 4, 3."
+            hi: "B, वाई-अक्ष से O X की ओर 4 इकाई और एक्स-अक्ष से O Y की ओर 3 इकाई दूर है: भुज 4, कोटि 3, निर्देशांक 4, 3।"
+        l:
+          says:
+            en: "L is 5 units from the y-axis along O X dash and 4 units from the x-axis along O Y dash: abscissa minus 5, ordinate minus 4, coordinates minus 5, minus 4."
+            hi: "L, वाई-अक्ष से O X डैश की ओर 5 इकाई और एक्स-अक्ष से O Y डैश की ओर 4 इकाई दूर है: भुज माइनस 5, कोटि माइनस 4, निर्देशांक माइनस 5, माइनस 4।"
+        m:
+          says:
+            en: "M is 3 units from the y-axis along O X dash and 4 units from the x-axis along O Y: abscissa minus 3, ordinate 4, coordinates minus 3, 4."
+            hi: "M, वाई-अक्ष से O X डैश की ओर 3 इकाई और एक्स-अक्ष से O Y की ओर 4 इकाई दूर है: भुज माइनस 3, कोटि 4, निर्देशांक माइनस 3, 4।"
+        pairOfB-slip0-note:
+          about: pairOfB
+          says:
+            en: That is y first. B is 4 units right of the y-axis, so x is 4, written first.
+            hi: यह वाई पहले है। B, वाई-अक्ष से 4 इकाई दाईं ओर है, इसलिए एक्स 4 है, जो पहले लिखा जाता है।
+          when: pairOfB.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfB-slip1-note:
+          about: pairOfB
+          says:
+            en: That point is on the other side of the y-axis. B is right of it, so its x-coordinate is positive.
+            hi: वह बिंदु वाई-अक्ष की दूसरी ओर है। B उसके दाईं ओर है, इसलिए उसका एक्स-निर्देशांक धनात्मक है।
+          when: pairOfB.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfB-slip2-note:
+          about: pairOfB
+          says:
+            en: That point is on the other side of the x-axis. B is above it, so its y-coordinate is positive.
+            hi: वह बिंदु एक्स-अक्ष की दूसरी ओर है। B उसके ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।
+          when: pairOfB.checked
+          where:
+            optionId: slip2
+            status: wrong
+        pairOfL-slip0-note:
+          about: pairOfL
+          says:
+            en: That is y first. L is 5 units left of the y-axis, so x is minus 5, written first.
+            hi: यह वाई पहले है। L, वाई-अक्ष से 5 इकाई बाईं ओर है, इसलिए एक्स माइनस 5 है, जो पहले लिखा जाता है।
+          when: pairOfL.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfL-slip1-note:
+          about: pairOfL
+          says:
+            en: That point is on the other side of the y-axis. L is left of it, so its x-coordinate is negative.
+            hi: वह बिंदु वाई-अक्ष की दूसरी ओर है। L उसके बाईं ओर है, इसलिए उसका एक्स-निर्देशांक ऋणात्मक है।
+          when: pairOfL.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfL-slip2-note:
+          about: pairOfL
+          says:
+            en: That point is on the other side of the x-axis. L is below it, so its y-coordinate is negative.
+            hi: वह बिंदु एक्स-अक्ष की दूसरी ओर है। L उसके नीचे है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।
+          when: pairOfL.checked
+          where:
+            optionId: slip2
+            status: wrong
+        pairOfM-slip0-note:
+          about: pairOfM
+          says:
+            en: That is y first. M is 3 units left of the y-axis, so x is minus 3, written first.
+            hi: यह वाई पहले है। M, वाई-अक्ष से 3 इकाई बाईं ओर है, इसलिए एक्स माइनस 3 है, जो पहले लिखा जाता है।
+          when: pairOfM.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfM-slip1-note:
+          about: pairOfM
+          says:
+            en: That point is on the other side of the y-axis. M is left of it, so its x-coordinate is negative.
+            hi: वह बिंदु वाई-अक्ष की दूसरी ओर है। M उसके बाईं ओर है, इसलिए उसका एक्स-निर्देशांक ऋणात्मक है।
+          when: pairOfM.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfM-slip2-note:
+          about: pairOfM
+          says:
+            en: That point is on the other side of the x-axis. M is above it, so its y-coordinate is positive.
+            hi: वह बिंदु एक्स-अक्ष की दूसरी ओर है। M उसके ऊपर है, इसलिए उसका वाई-निर्देशांक धनात्मक है।
+          when: pairOfM.checked
+          where:
+            optionId: slip2
+            status: wrong
+        pairOfS-slip0-note:
+          about: pairOfS
+          says:
+            en: That is y first. S is 3 units right of the y-axis, so x is 3, written first.
+            hi: यह वाई पहले है। S, वाई-अक्ष से 3 इकाई दाईं ओर है, इसलिए एक्स 3 है, जो पहले लिखा जाता है।
+          when: pairOfS.checked
+          where:
+            optionId: slip0
+            status: wrong
+        pairOfS-slip1-note:
+          about: pairOfS
+          says:
+            en: That point is on the other side of the y-axis. S is right of it, so its x-coordinate is positive.
+            hi: वह बिंदु वाई-अक्ष की दूसरी ओर है। S उसके दाईं ओर है, इसलिए उसका एक्स-निर्देशांक धनात्मक है।
+          when: pairOfS.checked
+          where:
+            optionId: slip1
+            status: wrong
+        pairOfS-slip2-note:
+          about: pairOfS
+          says:
+            en: That point is on the other side of the x-axis. S is below it, so its y-coordinate is negative.
+            hi: वह बिंदु एक्स-अक्ष की दूसरी ओर है। S उसके नीचे है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।
+          when: pairOfS.checked
+          where:
+            optionId: slip2
+            status: wrong
+        s:
+          says:
+            en: "S is 3 units from the y-axis along O X and 4 units from the x-axis along O Y dash: abscissa 3, ordinate minus 4, coordinates 3, minus 4."
+            hi: "S, वाई-अक्ष से O X की ओर 3 इकाई और एक्स-अक्ष से O Y डैश की ओर 4 इकाई दूर है: भुज 3, कोटि माइनस 4, निर्देशांक 3, माइनस 4।"
+      scene:
+        describe: The board readingPoints.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          pairOfB.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfB.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfL.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfL.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfM.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfM.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfS.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          pairOfS.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - b
+            - pairOfM
+            - m
+            - pairOfL
+            - l
+            - pairOfS
+            - s
+          isPassed: false
+          reads: []
+          saying: []
+    name: readingPoints
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Reading a point's coordinates
+              hi: बिंदु के निर्देशांक पढ़ना
+        - kind: prop
+          name: q
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Read the coordinates of B, M, L and S in the figure, one at a time: follow each point's dashed lines to the axes."
+              hi: "आकृति में B, M, L और S के निर्देशांक एक-एक करके पढ़ो: हर बिंदु की बिंदीदार रेखाओं को अक्षों तक देखो।"
+        - kind: prop
+          name: figure
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              points:
+                - hasDropLines: true
+                  isShown: true
+                  name: B
+                  tone: main
+                  x: 4
+                  y: 3
+                - hasDropLines: true
+                  isShown: true
+                  name: M
+                  tone: main
+                  x: -3
+                  y: 4
+                - hasDropLines: true
+                  isShown: true
+                  name: L
+                  tone: main
+                  x: -5
+                  y: -4
+                - hasDropLines: true
+                  isShown: true
+                  name: S
+                  tone: main
+                  x: 3
+                  y: -4
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: pairOfB
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: That point is on the other side of the x-axis. B is above it, so its y-coordinate is positive.
+                  hi: वह बिंदु x-अक्ष की दूसरी ओर है। B उसके ऊपर है, इसलिए उसका y-निर्देशांक धनात्मक है।
+                id: slip2
+                label:
+                  en: (4, −3)
+                  hi: (4, −3)
+              - id: right
+                label:
+                  en: (4, 3)
+                  hi: (4, 3)
+              - feedback:
+                  en: That is y first. B is 4 units right of the y-axis, so x = 4, written first.
+                  hi: यह y पहले है। B, y-अक्ष से 4 इकाई दाईं ओर है, इसलिए x = 4, जो पहले लिखा जाता है।
+                id: slip0
+                label:
+                  en: (3, 4)
+                  hi: (3, 4)
+              - feedback:
+                  en: That point is on the other side of the y-axis. B is right of it, so its x-coordinate is positive.
+                  hi: वह बिंदु y-अक्ष की दूसरी ओर है। B उसके दाईं ओर है, इसलिए उसका x-निर्देशांक धनात्मक है।
+                id: slip1
+                label:
+                  en: (−4, 3)
+                  hi: (−4, 3)
+            prompt:
+              en: What are the coordinates of B?
+              hi: B के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: b
+          prop: text
+          with:
+            style: body
+            text:
+              en: "B is 4 units from the y-axis along OX and 3 units from the x-axis along OY: abscissa 4, ordinate 3, coordinates (4, 3)."
+              hi: "B, y-अक्ष से OX की ओर 4 इकाई और x-अक्ष से OY की ओर 3 इकाई दूर है: भुज 4, कोटि 3, निर्देशांक (4, 3)।"
+        - isHidden: true
+          kind: prop
+          name: pairOfM
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - id: right
+                label:
+                  en: (−3, 4)
+                  hi: (−3, 4)
+              - feedback:
+                  en: That is y first. M is 3 units left of the y-axis, so x = −3, written first.
+                  hi: यह y पहले है। M, y-अक्ष से 3 इकाई बाईं ओर है, इसलिए x = −3, जो पहले लिखा जाता है।
+                id: slip0
+                label:
+                  en: (4, −3)
+                  hi: (4, −3)
+              - feedback:
+                  en: That point is on the other side of the y-axis. M is left of it, so its x-coordinate is negative.
+                  hi: वह बिंदु y-अक्ष की दूसरी ओर है। M उसके बाईं ओर है, इसलिए उसका x-निर्देशांक ऋणात्मक है।
+                id: slip1
+                label:
+                  en: (3, 4)
+                  hi: (3, 4)
+              - feedback:
+                  en: That point is on the other side of the x-axis. M is above it, so its y-coordinate is positive.
+                  hi: वह बिंदु x-अक्ष की दूसरी ओर है। M उसके ऊपर है, इसलिए उसका y-निर्देशांक धनात्मक है।
+                id: slip2
+                label:
+                  en: (−3, −4)
+                  hi: (−3, −4)
+            prompt:
+              en: What are the coordinates of M?
+              hi: M के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: m
+          prop: text
+          with:
+            style: body
+            text:
+              en: "M is 3 units from the y-axis along OX′ and 4 units from the x-axis along OY: abscissa −3, ordinate 4, coordinates (−3, 4)."
+              hi: "M, y-अक्ष से OX′ की ओर 3 इकाई और x-अक्ष से OY की ओर 4 इकाई दूर है: भुज −3, कोटि 4, निर्देशांक (−3, 4)।"
+        - isHidden: true
+          kind: prop
+          name: pairOfL
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: That is y first. L is 5 units left of the y-axis, so x = −5, written first.
+                  hi: यह y पहले है। L, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x = −5, जो पहले लिखा जाता है।
+                id: slip0
+                label:
+                  en: (−4, −5)
+                  hi: (−4, −5)
+              - feedback:
+                  en: That point is on the other side of the y-axis. L is left of it, so its x-coordinate is negative.
+                  hi: वह बिंदु y-अक्ष की दूसरी ओर है। L उसके बाईं ओर है, इसलिए उसका x-निर्देशांक ऋणात्मक है।
+                id: slip1
+                label:
+                  en: (5, −4)
+                  hi: (5, −4)
+              - id: right
+                label:
+                  en: (−5, −4)
+                  hi: (−5, −4)
+              - feedback:
+                  en: That point is on the other side of the x-axis. L is below it, so its y-coordinate is negative.
+                  hi: वह बिंदु x-अक्ष की दूसरी ओर है। L उसके नीचे है, इसलिए उसका y-निर्देशांक ऋणात्मक है।
+                id: slip2
+                label:
+                  en: (−5, 4)
+                  hi: (−5, 4)
+            prompt:
+              en: What are the coordinates of L?
+              hi: L के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: l
+          prop: text
+          with:
+            style: body
+            text:
+              en: "L is 5 units from the y-axis along OX′ and 4 units from the x-axis along OY′: abscissa −5, ordinate −4, coordinates (−5, −4)."
+              hi: "L, y-अक्ष से OX′ की ओर 5 इकाई और x-अक्ष से OY′ की ओर 4 इकाई दूर है: भुज −5, कोटि −4, निर्देशांक (−5, −4)।"
+        - isHidden: true
+          kind: prop
+          name: pairOfS
+          prop: choice
+          with:
+            answer: right
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: That is y first. S is 3 units right of the y-axis, so x = 3, written first.
+                  hi: यह y पहले है। S, y-अक्ष से 3 इकाई दाईं ओर है, इसलिए x = 3, जो पहले लिखा जाता है।
+                id: slip0
+                label:
+                  en: (−4, 3)
+                  hi: (−4, 3)
+              - id: right
+                label:
+                  en: (3, −4)
+                  hi: (3, −4)
+              - feedback:
+                  en: That point is on the other side of the y-axis. S is right of it, so its x-coordinate is positive.
+                  hi: वह बिंदु y-अक्ष की दूसरी ओर है। S उसके दाईं ओर है, इसलिए उसका x-निर्देशांक धनात्मक है।
+                id: slip1
+                label:
+                  en: (−3, −4)
+                  hi: (−3, −4)
+              - feedback:
+                  en: That point is on the other side of the x-axis. S is below it, so its y-coordinate is negative.
+                  hi: वह बिंदु x-अक्ष की दूसरी ओर है। S उसके नीचे है, इसलिए उसका y-निर्देशांक ऋणात्मक है।
+                id: slip2
+                label:
+                  en: (3, 4)
+                  hi: (3, 4)
+            prompt:
+              en: What are the coordinates of S?
+              hi: S के निर्देशांक क्या हैं?
+        - isHidden: true
+          kind: prop
+          name: s
+          prop: text
+          with:
+            style: body
+            text:
+              en: "S is 3 units from the y-axis along OX and 4 units from the x-axis along OY′: abscissa 3, ordinate −4, coordinates (3, −4)."
+              hi: "S, y-अक्ष से OX की ओर 3 इकाई और x-अक्ष से OY′ की ओर 4 इकाई दूर है: भुज 3, कोटि −4, निर्देशांक (3, −4)।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: f4e32f5588581f46
+class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
+  content:
+    model:
+      freeLines:
+        - round1-I-note
+        - round1-III-note
+        - round1-IV-note
+        - round1-xAxis-note
+        - round1-yAxis-note
+        - round2-I-note
+        - round2-II-note
+        - round2-III-note
+        - round2-xAxis-note
+        - round2-yAxis-note
+        - round3-I-note
+        - round3-II-note
+        - round3-IV-note
+        - round3-xAxis-note
+        - round3-yAxis-note
+        - round4-I-note
+        - round4-II-note
+        - round4-III-note
+        - round4-IV-note
+        - round4-xAxis-note
+      given:
+        ask:
+          style: body
+          text:
+            en: "**Drag the point into each of the four quadrants.** Watch the signs of its coordinates: each quadrant shows its pattern once the point has been there."
+            hi: "**बिंदु को चारों चतुर्थांशों में बारी-बारी खींचो।** उसके निर्देशांकों के चिह्न देखो: बिंदु के वहाँ पहुँचते ही हर चतुर्थांश अपने चिह्न दिखाता है।"
+        round1:
+          answer: II
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: Quadrant I is (+, +). This point is (−3, 5).
+                hi: पहला चतुर्थांश (+, +) है। यह बिंदु (−3, 5) है।
+              id: I
+              label:
+                en: Quadrant I
+                hi: पहला चतुर्थांश (I)
+            - id: II
+              label:
+                en: Quadrant II
+                hi: दूसरा चतुर्थांश (II)
+            - feedback:
+                en: Quadrant III is (−, −). This point is (−3, 5).
+                hi: तीसरा चतुर्थांश (−, −) है। यह बिंदु (−3, 5) है।
+              id: III
+              label:
+                en: Quadrant III
+                hi: तीसरा चतुर्थांश (III)
+            - feedback:
+                en: Quadrant IV is (+, −). This point is (−3, 5).
+                hi: चौथा चतुर्थांश (+, −) है। यह बिंदु (−3, 5) है।
+              id: IV
+              label:
+                en: Quadrant IV
+                hi: चौथा चतुर्थांश (IV)
+            - feedback:
+                en: On the x-axis, y = 0. This point is (−3, 5).
+                hi: x-अक्ष पर y = 0 होता है। यह बिंदु (−3, 5) है।
+              id: xAxis
+              label:
+                en: On the x-axis
+                hi: x-अक्ष पर
+            - feedback:
+                en: On the y-axis, x = 0. This point is (−3, 5).
+                hi: y-अक्ष पर x = 0 होता है। यह बिंदु (−3, 5) है।
+              id: yAxis
+              label:
+                en: On the y-axis
+                hi: y-अक्ष पर
+          prompt:
+            en: "From the signs alone: where is the point (−3, 5)?"
+            hi: "केवल चिह्नों से बताओ: बिंदु (−3, 5) कहाँ है?"
+        round2:
+          answer: IV
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: Quadrant I is (+, +). This point is (2, −4).
+                hi: पहला चतुर्थांश (+, +) है। यह बिंदु (2, −4) है।
+              id: I
+              label:
+                en: Quadrant I
+                hi: पहला चतुर्थांश (I)
+            - feedback:
+                en: Quadrant II is (−, +). This point is (2, −4).
+                hi: दूसरा चतुर्थांश (−, +) है। यह बिंदु (2, −4) है।
+              id: II
+              label:
+                en: Quadrant II
+                hi: दूसरा चतुर्थांश (II)
+            - feedback:
+                en: Quadrant III is (−, −). This point is (2, −4).
+                hi: तीसरा चतुर्थांश (−, −) है। यह बिंदु (2, −4) है।
+              id: III
+              label:
+                en: Quadrant III
+                hi: तीसरा चतुर्थांश (III)
+            - id: IV
+              label:
+                en: Quadrant IV
+                hi: चौथा चतुर्थांश (IV)
+            - feedback:
+                en: On the x-axis, y = 0. This point is (2, −4).
+                hi: x-अक्ष पर y = 0 होता है। यह बिंदु (2, −4) है।
+              id: xAxis
+              label:
+                en: On the x-axis
+                hi: x-अक्ष पर
+            - feedback:
+                en: On the y-axis, x = 0. This point is (2, −4).
+                hi: y-अक्ष पर x = 0 होता है। यह बिंदु (2, −4) है।
+              id: yAxis
+              label:
+                en: On the y-axis
+                hi: y-अक्ष पर
+          prompt:
+            en: "From the signs alone: where is the point (2, −4)?"
+            hi: "केवल चिह्नों से बताओ: बिंदु (2, −4) कहाँ है?"
+        round3:
+          answer: III
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: Quadrant I is (+, +). This point is (−4, −1).
+                hi: पहला चतुर्थांश (+, +) है। यह बिंदु (−4, −1) है।
+              id: I
+              label:
+                en: Quadrant I
+                hi: पहला चतुर्थांश (I)
+            - feedback:
+                en: Quadrant II is (−, +). This point is (−4, −1).
+                hi: दूसरा चतुर्थांश (−, +) है। यह बिंदु (−4, −1) है।
+              id: II
+              label:
+                en: Quadrant II
+                hi: दूसरा चतुर्थांश (II)
+            - id: III
+              label:
+                en: Quadrant III
+                hi: तीसरा चतुर्थांश (III)
+            - feedback:
+                en: Quadrant IV is (+, −). This point is (−4, −1).
+                hi: चौथा चतुर्थांश (+, −) है। यह बिंदु (−4, −1) है।
+              id: IV
+              label:
+                en: Quadrant IV
+                hi: चौथा चतुर्थांश (IV)
+            - feedback:
+                en: On the x-axis, y = 0. This point is (−4, −1).
+                hi: x-अक्ष पर y = 0 होता है। यह बिंदु (−4, −1) है।
+              id: xAxis
+              label:
+                en: On the x-axis
+                hi: x-अक्ष पर
+            - feedback:
+                en: On the y-axis, x = 0. This point is (−4, −1).
+                hi: y-अक्ष पर x = 0 होता है। यह बिंदु (−4, −1) है।
+              id: yAxis
+              label:
+                en: On the y-axis
+                hi: y-अक्ष पर
+          prompt:
+            en: "From the signs alone: where is the point (−4, −1)?"
+            hi: "केवल चिह्नों से बताओ: बिंदु (−4, −1) कहाँ है?"
+        round4:
+          answer: yAxis
+          concepts:
+            - b2d39983f229deec
+          isGraded: false
+          options:
+            - feedback:
+                en: Quadrant I is (+, +). This point is (0, −3).
+                hi: पहला चतुर्थांश (+, +) है। यह बिंदु (0, −3) है।
+              id: I
+              label:
+                en: Quadrant I
+                hi: पहला चतुर्थांश (I)
+            - feedback:
+                en: Quadrant II is (−, +). This point is (0, −3).
+                hi: दूसरा चतुर्थांश (−, +) है। यह बिंदु (0, −3) है।
+              id: II
+              label:
+                en: Quadrant II
+                hi: दूसरा चतुर्थांश (II)
+            - feedback:
+                en: Quadrant III is (−, −). This point is (0, −3).
+                hi: तीसरा चतुर्थांश (−, −) है। यह बिंदु (0, −3) है।
+              id: III
+              label:
+                en: Quadrant III
+                hi: तीसरा चतुर्थांश (III)
+            - feedback:
+                en: Quadrant IV is (+, −). This point is (0, −3).
+                hi: चौथा चतुर्थांश (+, −) है। यह बिंदु (0, −3) है।
+              id: IV
+              label:
+                en: Quadrant IV
+                hi: चौथा चतुर्थांश (IV)
+            - feedback:
+                en: On the x-axis, y = 0. This point is (0, −3).
+                hi: x-अक्ष पर y = 0 होता है। यह बिंदु (0, −3) है।
+              id: xAxis
+              label:
+                en: On the x-axis
+                hi: x-अक्ष पर
+            - id: yAxis
+              label:
+                en: On the y-axis
+                hi: y-अक्ष पर
+          prompt:
+            en: "From the signs alone: where is the point (0, −3)?"
+            hi: "केवल चिह्नों से बताओ: बिंदु (0, −3) कहाँ है?"
+        rule:
+          color: null
+          style: definition
+          text:
+            en: "**In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).** Each quadrant lies between two halves of the axes: quadrant II between OX′ and OY, so x is negative and y positive there."
+            hi: "**पहले चतुर्थांश (I) में बिंदु (+, +) होता है; दूसरे (II) में (−, +); तीसरे (III) में (−, −); चौथे (IV) में (+, −)।** हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश OX′ और OY के बीच है, इसलिए वहाँ x ऋणात्मक और y धनात्मक है।"
+        sheet:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            quadrantsNamed: 4
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+          reading:
+            point:
+              x: 4
+              y: 1
+            pointStep: 1
+            reading: pair
+            showsVisitedSigns: true
+            unit: ""
+            visited:
+              - I
+        title:
+          style: title
+          text:
+            en: Signs in each quadrant
+            hi: हर चतुर्थांश में चिह्न
+      lines:
+        round1:
+          says:
+            en: "From the signs alone: where is the point minus 3, 5?"
+            hi: "केवल चिह्नों से बताओ: बिंदु माइनस 3, 5 कहाँ है?"
+        round1-I-note:
+          about: round1
+          says:
+            en: Quadrant one is plus, plus. This point is minus 3, 5.
+            hi: पहला चतुर्थांश धन, धन है। यह बिंदु माइनस 3, 5 है।
+          when: round1.checked
+          where:
+            optionId: I
+            status: wrong
+        round1-III-note:
+          about: round1
+          says:
+            en: Quadrant three is minus, minus. This point is minus 3, 5.
+            hi: तीसरा चतुर्थांश ऋण, ऋण है। यह बिंदु माइनस 3, 5 है।
+          when: round1.checked
+          where:
+            optionId: III
+            status: wrong
+        round1-IV-note:
+          about: round1
+          says:
+            en: Quadrant four is plus, minus. This point is minus 3, 5.
+            hi: चौथा चतुर्थांश धन, ऋण है। यह बिंदु माइनस 3, 5 है।
+          when: round1.checked
+          where:
+            optionId: IV
+            status: wrong
+        round1-xAxis-note:
+          about: round1
+          says:
+            en: On the x-axis, y is 0. This point is minus 3, 5.
+            hi: एक्स-अक्ष पर वाई 0 होता है। यह बिंदु माइनस 3, 5 है।
+          when: round1.checked
+          where:
+            optionId: xAxis
+            status: wrong
+        round1-yAxis-note:
+          about: round1
+          says:
+            en: On the y-axis, x is 0. This point is minus 3, 5.
+            hi: वाई-अक्ष पर एक्स 0 होता है। यह बिंदु माइनस 3, 5 है।
+          when: round1.checked
+          where:
+            optionId: yAxis
+            status: wrong
+        round2:
+          says:
+            en: "From the signs alone: where is the point 2, minus 4?"
+            hi: "केवल चिह्नों से बताओ: बिंदु 2, माइनस 4 कहाँ है?"
+        round2-I-note:
+          about: round2
+          says:
+            en: Quadrant one is plus, plus. This point is 2, minus 4.
+            hi: पहला चतुर्थांश धन, धन है। यह बिंदु 2, माइनस 4 है।
+          when: round2.checked
+          where:
+            optionId: I
+            status: wrong
+        round2-II-note:
+          about: round2
+          says:
+            en: Quadrant two is minus, plus. This point is 2, minus 4.
+            hi: दूसरा चतुर्थांश ऋण, धन है। यह बिंदु 2, माइनस 4 है।
+          when: round2.checked
+          where:
+            optionId: II
+            status: wrong
+        round2-III-note:
+          about: round2
+          says:
+            en: Quadrant three is minus, minus. This point is 2, minus 4.
+            hi: तीसरा चतुर्थांश ऋण, ऋण है। यह बिंदु 2, माइनस 4 है।
+          when: round2.checked
+          where:
+            optionId: III
+            status: wrong
+        round2-xAxis-note:
+          about: round2
+          says:
+            en: On the x-axis, y is 0. This point is 2, minus 4.
+            hi: एक्स-अक्ष पर वाई 0 होता है। यह बिंदु 2, माइनस 4 है।
+          when: round2.checked
+          where:
+            optionId: xAxis
+            status: wrong
+        round2-yAxis-note:
+          about: round2
+          says:
+            en: On the y-axis, x is 0. This point is 2, minus 4.
+            hi: वाई-अक्ष पर एक्स 0 होता है। यह बिंदु 2, माइनस 4 है।
+          when: round2.checked
+          where:
+            optionId: yAxis
+            status: wrong
+        round3:
+          says:
+            en: "From the signs alone: where is the point minus 4, minus 1?"
+            hi: "केवल चिह्नों से बताओ: बिंदु माइनस 4, माइनस 1 कहाँ है?"
+        round3-I-note:
+          about: round3
+          says:
+            en: Quadrant one is plus, plus. This point is minus 4, minus 1.
+            hi: पहला चतुर्थांश धन, धन है। यह बिंदु माइनस 4, माइनस 1 है।
+          when: round3.checked
+          where:
+            optionId: I
+            status: wrong
+        round3-II-note:
+          about: round3
+          says:
+            en: Quadrant two is minus, plus. This point is minus 4, minus 1.
+            hi: दूसरा चतुर्थांश ऋण, धन है। यह बिंदु माइनस 4, माइनस 1 है।
+          when: round3.checked
+          where:
+            optionId: II
+            status: wrong
+        round3-IV-note:
+          about: round3
+          says:
+            en: Quadrant four is plus, minus. This point is minus 4, minus 1.
+            hi: चौथा चतुर्थांश धन, ऋण है। यह बिंदु माइनस 4, माइनस 1 है।
+          when: round3.checked
+          where:
+            optionId: IV
+            status: wrong
+        round3-xAxis-note:
+          about: round3
+          says:
+            en: On the x-axis, y is 0. This point is minus 4, minus 1.
+            hi: एक्स-अक्ष पर वाई 0 होता है। यह बिंदु माइनस 4, माइनस 1 है।
+          when: round3.checked
+          where:
+            optionId: xAxis
+            status: wrong
+        round3-yAxis-note:
+          about: round3
+          says:
+            en: On the y-axis, x is 0. This point is minus 4, minus 1.
+            hi: वाई-अक्ष पर एक्स 0 होता है। यह बिंदु माइनस 4, माइनस 1 है।
+          when: round3.checked
+          where:
+            optionId: yAxis
+            status: wrong
+        round4:
+          says:
+            en: "From the signs alone: where is the point 0, minus 3?"
+            hi: "केवल चिह्नों से बताओ: बिंदु 0, माइनस 3 कहाँ है?"
+        round4-I-note:
+          about: round4
+          says:
+            en: Quadrant one is plus, plus. This point is 0, minus 3.
+            hi: पहला चतुर्थांश धन, धन है। यह बिंदु 0, माइनस 3 है।
+          when: round4.checked
+          where:
+            optionId: I
+            status: wrong
+        round4-II-note:
+          about: round4
+          says:
+            en: Quadrant two is minus, plus. This point is 0, minus 3.
+            hi: दूसरा चतुर्थांश ऋण, धन है। यह बिंदु 0, माइनस 3 है।
+          when: round4.checked
+          where:
+            optionId: II
+            status: wrong
+        round4-III-note:
+          about: round4
+          says:
+            en: Quadrant three is minus, minus. This point is 0, minus 3.
+            hi: तीसरा चतुर्थांश ऋण, ऋण है। यह बिंदु 0, माइनस 3 है।
+          when: round4.checked
+          where:
+            optionId: III
+            status: wrong
+        round4-IV-note:
+          about: round4
+          says:
+            en: Quadrant four is plus, minus. This point is 0, minus 3.
+            hi: चौथा चतुर्थांश धन, ऋण है। यह बिंदु 0, माइनस 3 है।
+          when: round4.checked
+          where:
+            optionId: IV
+            status: wrong
+        round4-xAxis-note:
+          about: round4
+          says:
+            en: On the x-axis, y is 0. This point is 0, minus 3.
+            hi: एक्स-अक्ष पर वाई 0 होता है। यह बिंदु 0, माइनस 3 है।
+          when: round4.checked
+          where:
+            optionId: xAxis
+            status: wrong
+        rule:
+          says:
+            en: "In quadrant one a point is plus, plus; in quadrant two, minus, plus; in quadrant three, minus, minus; in quadrant four, plus, minus. Each quadrant lies between two halves of the axes: quadrant two between O X dash and O Y, so x is negative and y positive there."
+            hi: "पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; चौथे में धन, ऋण। हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश O X डैश और O Y के बीच है, इसलिए वहाँ एक्स ऋणात्मक और वाई धनात्मक है।"
+      scene:
+        describe: The board signsAndQuadrants.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          round1.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round1.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round2.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round2.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round3.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round3.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round4.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          round4.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          sheet.reading.enteredQuadrant: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - rule
+            - round1
+            - round2
+            - round3
+            - round4
+          isPassed: false
+          reads: []
+          saying: []
+    name: signsAndQuadrants
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Signs in each quadrant
+              hi: हर चतुर्थांश में चिह्न
+        - kind: prop
+          name: ask
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Drag the point into each of the four quadrants.** Watch the signs of its coordinates: each quadrant shows its pattern once the point has been there."
+              hi: "**बिंदु को चारों चतुर्थांशों में बारी-बारी खींचो।** उसके निर्देशांकों के चिह्न देखो: बिंदु के वहाँ पहुँचते ही हर चतुर्थांश अपने चिह्न दिखाता है।"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              quadrantsNamed: 4
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+            reading:
+              point:
+                x: 4
+                y: 1
+              pointStep: 1
+              reading: pair
+              showsVisitedSigns: true
+              unit: ""
+              visited:
+                - I
+        - isHidden: true
+          kind: prop
+          name: rule
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).** Each quadrant lies between two halves of the axes: quadrant II between OX′ and OY, so x is negative and y positive there."
+              hi: "**पहले चतुर्थांश (I) में बिंदु (+, +) होता है; दूसरे (II) में (−, +); तीसरे (III) में (−, −); चौथे (IV) में (+, −)।** हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश OX′ और OY के बीच है, इसलिए वहाँ x ऋणात्मक और y धनात्मक है।"
+        - isHidden: true
+          kind: prop
+          name: round1
+          prop: choice
+          with:
+            answer: II
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: Quadrant I is (+, +). This point is (−3, 5).
+                  hi: पहला चतुर्थांश (+, +) है। यह बिंदु (−3, 5) है।
+                id: I
+                label:
+                  en: Quadrant I
+                  hi: पहला चतुर्थांश (I)
+              - id: II
+                label:
+                  en: Quadrant II
+                  hi: दूसरा चतुर्थांश (II)
+              - feedback:
+                  en: Quadrant III is (−, −). This point is (−3, 5).
+                  hi: तीसरा चतुर्थांश (−, −) है। यह बिंदु (−3, 5) है।
+                id: III
+                label:
+                  en: Quadrant III
+                  hi: तीसरा चतुर्थांश (III)
+              - feedback:
+                  en: Quadrant IV is (+, −). This point is (−3, 5).
+                  hi: चौथा चतुर्थांश (+, −) है। यह बिंदु (−3, 5) है।
+                id: IV
+                label:
+                  en: Quadrant IV
+                  hi: चौथा चतुर्थांश (IV)
+              - feedback:
+                  en: On the x-axis, y = 0. This point is (−3, 5).
+                  hi: x-अक्ष पर y = 0 होता है। यह बिंदु (−3, 5) है।
+                id: xAxis
+                label:
+                  en: On the x-axis
+                  hi: x-अक्ष पर
+              - feedback:
+                  en: On the y-axis, x = 0. This point is (−3, 5).
+                  hi: y-अक्ष पर x = 0 होता है। यह बिंदु (−3, 5) है।
+                id: yAxis
+                label:
+                  en: On the y-axis
+                  hi: y-अक्ष पर
+            prompt:
+              en: "From the signs alone: where is the point (−3, 5)?"
+              hi: "केवल चिह्नों से बताओ: बिंदु (−3, 5) कहाँ है?"
+        - isHidden: true
+          kind: prop
+          name: round2
+          prop: choice
+          with:
+            answer: IV
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: Quadrant I is (+, +). This point is (2, −4).
+                  hi: पहला चतुर्थांश (+, +) है। यह बिंदु (2, −4) है।
+                id: I
+                label:
+                  en: Quadrant I
+                  hi: पहला चतुर्थांश (I)
+              - feedback:
+                  en: Quadrant II is (−, +). This point is (2, −4).
+                  hi: दूसरा चतुर्थांश (−, +) है। यह बिंदु (2, −4) है।
+                id: II
+                label:
+                  en: Quadrant II
+                  hi: दूसरा चतुर्थांश (II)
+              - feedback:
+                  en: Quadrant III is (−, −). This point is (2, −4).
+                  hi: तीसरा चतुर्थांश (−, −) है। यह बिंदु (2, −4) है।
+                id: III
+                label:
+                  en: Quadrant III
+                  hi: तीसरा चतुर्थांश (III)
+              - id: IV
+                label:
+                  en: Quadrant IV
+                  hi: चौथा चतुर्थांश (IV)
+              - feedback:
+                  en: On the x-axis, y = 0. This point is (2, −4).
+                  hi: x-अक्ष पर y = 0 होता है। यह बिंदु (2, −4) है।
+                id: xAxis
+                label:
+                  en: On the x-axis
+                  hi: x-अक्ष पर
+              - feedback:
+                  en: On the y-axis, x = 0. This point is (2, −4).
+                  hi: y-अक्ष पर x = 0 होता है। यह बिंदु (2, −4) है।
+                id: yAxis
+                label:
+                  en: On the y-axis
+                  hi: y-अक्ष पर
+            prompt:
+              en: "From the signs alone: where is the point (2, −4)?"
+              hi: "केवल चिह्नों से बताओ: बिंदु (2, −4) कहाँ है?"
+        - isHidden: true
+          kind: prop
+          name: round3
+          prop: choice
+          with:
+            answer: III
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: Quadrant I is (+, +). This point is (−4, −1).
+                  hi: पहला चतुर्थांश (+, +) है। यह बिंदु (−4, −1) है।
+                id: I
+                label:
+                  en: Quadrant I
+                  hi: पहला चतुर्थांश (I)
+              - feedback:
+                  en: Quadrant II is (−, +). This point is (−4, −1).
+                  hi: दूसरा चतुर्थांश (−, +) है। यह बिंदु (−4, −1) है।
+                id: II
+                label:
+                  en: Quadrant II
+                  hi: दूसरा चतुर्थांश (II)
+              - id: III
+                label:
+                  en: Quadrant III
+                  hi: तीसरा चतुर्थांश (III)
+              - feedback:
+                  en: Quadrant IV is (+, −). This point is (−4, −1).
+                  hi: चौथा चतुर्थांश (+, −) है। यह बिंदु (−4, −1) है।
+                id: IV
+                label:
+                  en: Quadrant IV
+                  hi: चौथा चतुर्थांश (IV)
+              - feedback:
+                  en: On the x-axis, y = 0. This point is (−4, −1).
+                  hi: x-अक्ष पर y = 0 होता है। यह बिंदु (−4, −1) है।
+                id: xAxis
+                label:
+                  en: On the x-axis
+                  hi: x-अक्ष पर
+              - feedback:
+                  en: On the y-axis, x = 0. This point is (−4, −1).
+                  hi: y-अक्ष पर x = 0 होता है। यह बिंदु (−4, −1) है।
+                id: yAxis
+                label:
+                  en: On the y-axis
+                  hi: y-अक्ष पर
+            prompt:
+              en: "From the signs alone: where is the point (−4, −1)?"
+              hi: "केवल चिह्नों से बताओ: बिंदु (−4, −1) कहाँ है?"
+        - isHidden: true
+          kind: prop
+          name: round4
+          prop: choice
+          with:
+            answer: yAxis
+            concepts:
+              - b2d39983f229deec
+            isGraded: false
+            options:
+              - feedback:
+                  en: Quadrant I is (+, +). This point is (0, −3).
+                  hi: पहला चतुर्थांश (+, +) है। यह बिंदु (0, −3) है।
+                id: I
+                label:
+                  en: Quadrant I
+                  hi: पहला चतुर्थांश (I)
+              - feedback:
+                  en: Quadrant II is (−, +). This point is (0, −3).
+                  hi: दूसरा चतुर्थांश (−, +) है। यह बिंदु (0, −3) है।
+                id: II
+                label:
+                  en: Quadrant II
+                  hi: दूसरा चतुर्थांश (II)
+              - feedback:
+                  en: Quadrant III is (−, −). This point is (0, −3).
+                  hi: तीसरा चतुर्थांश (−, −) है। यह बिंदु (0, −3) है।
+                id: III
+                label:
+                  en: Quadrant III
+                  hi: तीसरा चतुर्थांश (III)
+              - feedback:
+                  en: Quadrant IV is (+, −). This point is (0, −3).
+                  hi: चौथा चतुर्थांश (+, −) है। यह बिंदु (0, −3) है।
+                id: IV
+                label:
+                  en: Quadrant IV
+                  hi: चौथा चतुर्थांश (IV)
+              - feedback:
+                  en: On the x-axis, y = 0. This point is (0, −3).
+                  hi: x-अक्ष पर y = 0 होता है। यह बिंदु (0, −3) है।
+                id: xAxis
+                label:
+                  en: On the x-axis
+                  hi: x-अक्ष पर
+              - id: yAxis
+                label:
+                  en: On the y-axis
+                  hi: y-अक्ष पर
+            prompt:
+              en: "From the signs alone: where is the point (0, −3)?"
+              hi: "केवल चिह्नों से बताओ: बिंदु (0, −3) कहाँ है?"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: b7001b6aa1bd5357
+class9-maths/coordinate-geometry/coordinates-of-a-point/writing-coordinates:
+  content:
+    model:
+      freeLines: []
+      given:
+        agreement:
+          style: body
+          text:
+            en: "Why x first? Nothing in mathematics makes it so. It is an **agreement** kept all over the world, so a pair means the same point to everyone, as Aman's address did: Street 4, House 5, the street first. Lewis Carroll once joked that the lines on a map \"are merely conventional signs\": agreed, not discovered."
+            hi: 'x पहले क्यों? गणित में ऐसा कुछ नहीं जो इसे ज़रूरी बनाए। यह पूरी दुनिया में माना गया एक **समझौता** है, ताकि एक जोड़ा सबके लिए एक ही बिंदु बताए, जैसे अमन का पता बताता था: गली 4, मकान 5, गली पहले। लुईस कैरल ने एक बार मज़ाक में कहा था कि नक्शे की रेखाएँ "बस माने हुए चिह्न हैं": तय की गई, खोजी नहीं गई।'
+        ask:
+          style: body
+          text:
+            en: "**Drag the point anywhere on the plane:** its coordinates go with it. Then put it at **(3, 4)**."
+            hi: "**बिंदु को तल पर कहीं भी खींचो:** उसके निर्देशांक उसके साथ चलते हैं। फिर उसे **(3, 4)** पर रखो।"
+        ground:
+          places:
+            choosing: always
+            placeKind: stall
+            places:
+              - label:
+                  en: Snacks
+                  hi: नाश्ता
+                x: 3
+                y: 2
+              - label:
+                  en: Books
+                  hi: किताबें
+                x: -4
+                y: 1
+            showAddress: true
+            targetName:
+              en: The stall you tapped
+              hi: तुम्हारा चुना स्टॉल
+          plane:
+            hasGrid: false
+            marks: numbers
+            numbered:
+              - x
+              - y
+            scene: fairGround
+            showAxisNames: false
+            showDirections: false
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+        notP:
+          style: body
+          text:
+            en: "**(3, 4) is not P.** The same two numbers in the other order are another point: 3 along and 4 up, not 4 along and 3 up. The coordinates name exactly one point."
+            hi: "**(3, 4), P नहीं है।** वही दो संख्याएँ उलटे क्रम में एक दूसरा बिंदु हैं: 3 आगे और 4 ऊपर, न कि 4 आगे और 3 ऊपर। निर्देशांक ठीक एक ही बिंदु बताते हैं।"
+        pair:
+          color: null
+          style: definition
+          text:
+            en: "**The coordinates of a point are written x-coordinate first, then y-coordinate, in brackets: P is (4, 3) and Q is (−6, −2).**"
+            hi: "**किसी बिंदु के निर्देशांक पहले x-निर्देशांक, फिर y-निर्देशांक, कोष्ठक में लिखे जाते हैं: P है (4, 3) और Q है (−6, −2)।**"
+        plan:
+          style: body
+          text:
+            en: "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: **snacks at (3, 2), books at (−4, 1)**. **Tap a stall** to see its coordinates."
+            hi: "मेले के मैदान के नक्शे पर दो मुख्य रास्ते अक्ष हैं, जो O पर काटते हैं। रिया पहले स्टॉल की जगहें लिखती है: **नाश्ता (3, 2) पर, किताबें (−4, 1) पर**। उसके निर्देशांक देखने के लिए **किसी स्टॉल को दबाओ**।"
+        sheet:
+          plane:
+            hasGrid: true
+            marks: numbers
+            numbered:
+              - x
+              - y
+            points:
+              - hasDropLines: false
+                isShown: true
+                name: P
+                tone: main
+                x: 4
+                y: 3
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+          reading:
+            point:
+              x: -3
+              y: 2
+            pointStep: 1
+            reading: pair
+            unit: ""
+        title:
+          style: title
+          text:
+            en: Writing the coordinates
+            hi: निर्देशांक लिखना
+      lines:
+        ask:
+          says:
+            en: "Drag the point anywhere on the plane: its coordinates go with it. Then put it at the point 3, 4."
+            hi: "बिंदु को तल पर कहीं भी खींचो: उसके निर्देशांक उसके साथ चलते हैं। फिर उसे बिंदु 3, 4 पर रखो।"
+        notP:
+          says:
+            en: "The point 3, 4 is not P. The same two numbers in the other order are another point: 3 along and 4 up, not 4 along and 3 up. The coordinates name exactly one point."
+            hi: "बिंदु 3, 4, P नहीं है। वही दो संख्याएँ उलटे क्रम में एक दूसरा बिंदु हैं: 3 आगे और 4 ऊपर, न कि 4 आगे और 3 ऊपर। निर्देशांक ठीक एक ही बिंदु बताते हैं।"
+        pair:
+          says:
+            en: "The coordinates of a point are written x-coordinate first, then y-coordinate, in brackets: P is the point 4, 3, and Q is the point minus 6, minus 2."
+            hi: "किसी बिंदु के निर्देशांक पहले एक्स-निर्देशांक, फिर वाई-निर्देशांक, कोष्ठक में लिखे जाते हैं: P है बिंदु 4, 3, और Q है बिंदु माइनस 6, माइनस 2।"
+        plan:
+          says:
+            en: "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: snacks at the point 3, 2, books at the point minus 4, 1. Tap a stall to see its coordinates."
+            hi: "मेले के मैदान के नक्शे पर दो मुख्य रास्ते अक्ष हैं, जो O पर काटते हैं। रिया पहले स्टॉल की जगहें लिखती है: नाश्ता बिंदु 3, 2 पर, किताबें बिंदु माइनस 4, 1 पर। उसके निर्देशांक देखने के लिए किसी स्टॉल को दबाओ।"
+      scene:
+        describe: The board writingCoordinates.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          sheet.reading.moved: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden:
+            - notP
+            - agreement
+            - plan
+            - ground
+          isPassed: false
+          reads: []
+          saying: []
+    name: writingCoordinates
+    root:
+      children:
+        - kind: prop
+          name: title
+          prop: text
+          with:
+            style: title
+            text:
+              en: Writing the coordinates
+              hi: निर्देशांक लिखना
+        - kind: prop
+          name: pair
+          prop: text
+          with:
+            color: null
+            style: definition
+            text:
+              en: "**The coordinates of a point are written x-coordinate first, then y-coordinate, in brackets: P is (4, 3) and Q is (−6, −2).**"
+              hi: "**किसी बिंदु के निर्देशांक पहले x-निर्देशांक, फिर y-निर्देशांक, कोष्ठक में लिखे जाते हैं: P है (4, 3) और Q है (−6, −2)।**"
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              hasGrid: true
+              marks: numbers
+              numbered:
+                - x
+                - y
+              points:
+                - hasDropLines: false
+                  isShown: true
+                  name: P
+                  tone: main
+                  x: 4
+                  y: 3
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+            reading:
+              point:
+                x: -3
+                y: 2
+              pointStep: 1
+              reading: pair
+              unit: ""
+        - kind: prop
+          name: ask
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**Drag the point anywhere on the plane:** its coordinates go with it. Then put it at **(3, 4)**."
+              hi: "**बिंदु को तल पर कहीं भी खींचो:** उसके निर्देशांक उसके साथ चलते हैं। फिर उसे **(3, 4)** पर रखो।"
+        - isHidden: true
+          kind: prop
+          name: notP
+          prop: text
+          with:
+            style: body
+            text:
+              en: "**(3, 4) is not P.** The same two numbers in the other order are another point: 3 along and 4 up, not 4 along and 3 up. The coordinates name exactly one point."
+              hi: "**(3, 4), P नहीं है।** वही दो संख्याएँ उलटे क्रम में एक दूसरा बिंदु हैं: 3 आगे और 4 ऊपर, न कि 4 आगे और 3 ऊपर। निर्देशांक ठीक एक ही बिंदु बताते हैं।"
+        - isHidden: true
+          kind: prop
+          name: agreement
+          prop: text
+          with:
+            style: body
+            text:
+              en: "Why x first? Nothing in mathematics makes it so. It is an **agreement** kept all over the world, so a pair means the same point to everyone, as Aman's address did: Street 4, House 5, the street first. Lewis Carroll once joked that the lines on a map \"are merely conventional signs\": agreed, not discovered."
+              hi: 'x पहले क्यों? गणित में ऐसा कुछ नहीं जो इसे ज़रूरी बनाए। यह पूरी दुनिया में माना गया एक **समझौता** है, ताकि एक जोड़ा सबके लिए एक ही बिंदु बताए, जैसे अमन का पता बताता था: गली 4, मकान 5, गली पहले। लुईस कैरल ने एक बार मज़ाक में कहा था कि नक्शे की रेखाएँ "बस माने हुए चिह्न हैं": तय की गई, खोजी नहीं गई।'
+        - isHidden: true
+          kind: prop
+          name: plan
+          prop: text
+          with:
+            style: body
+            text:
+              en: "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: **snacks at (3, 2), books at (−4, 1)**. **Tap a stall** to see its coordinates."
+              hi: "मेले के मैदान के नक्शे पर दो मुख्य रास्ते अक्ष हैं, जो O पर काटते हैं। रिया पहले स्टॉल की जगहें लिखती है: **नाश्ता (3, 2) पर, किताबें (−4, 1) पर**। उसके निर्देशांक देखने के लिए **किसी स्टॉल को दबाओ**।"
+        - isHidden: true
+          kind: prop
+          name: ground
+          prop: coordinatePlane
+          with:
+            places:
+              choosing: always
+              placeKind: stall
+              places:
+                - label:
+                    en: Snacks
+                    hi: नाश्ता
+                  x: 3
+                  y: 2
+                - label:
+                    en: Books
+                    hi: किताबें
+                  x: -4
+                  y: 1
+              showAddress: true
+              targetName:
+                en: The stall you tapped
+                hi: तुम्हारा चुना स्टॉल
+            plane:
+              hasGrid: false
+              marks: numbers
+              numbered:
+                - x
+                - y
+              scene: fairGround
+              showAxisNames: false
+              showDirections: false
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: babd4a4b8ed9
+  at: 2026-11-02T14:01:22.326Z
+  code: c27ec1165772a80f
 class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
   content:
     model:
