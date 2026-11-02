@@ -7293,6 +7293,22 @@
       text: "At Q the clash was with the target marker's letter. The board no longer marks Q: the words
         say \"Drag it to where x = −6 and y = −2: that is Q\", and the point's own labels show when
         it's there. Nothing else is drawn at Q."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:47.426Z
+      text: "Still wrong on the 360 phone, at Q. The Q marker is gone, but now \"y = −2\" sits tight
+        against the top-right of the moving point, and the dot is drawn over the tail of the y, so
+        it reads \"v = −2\" (English, P → Q at 360, step 3). At 640 (Hindi) it's fine: \"y = −2\"
+        sits beside its line, clear of the dot. At (−2, 3) and (−6, 3) on the phone both labels read
+        well. Fix: at Q on the phone, keep y's words clear of the dot. They could go on the far side
+        of its vertical line, or below the x-axis's number row with a gap above the dot. Or draw the
+        label over the point."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:42.555Z
+      text: "The y-label now keeps clear of the dot when it sits at the dot's height (a dot's width plus a
+        gap, not just a gap from the line). At Q on the 360 phone: \"y = −2\" right of its line,
+        above the dashed line, nothing over its letters."
 - id: cmvz6l8i8ofh
   status: ready
   by: reviewer
@@ -7864,6 +7880,22 @@
         axes. The y = 0 button stays under the plane from the start, as the clues layer's buttons
         always are; the x-axis box says what it does when the student gets there. Say if you want it
         hidden until then."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:48.105Z
+      text: "Partly fixed. Dragging straight from (3, 2) to O now shows only onX, and the full path
+        (x-axis, y-axis, O) plays in order. Still wrong when the drag crosses the other axis on the
+        way. Played in Hindi at 640: drag (3, 2) → (−3, 0). The point passes (0, 1) on the y-axis,
+        so onY appears and its voice is cut after 0.0 s, then onX. That is the same voice cut this
+        thread began with, now on onY. On that path onY (\"Press x = 0 too…\") also comes before onX
+        has said what y = 0 is, and before any x = 0 button exists. Fix: show onY only once onX has
+        been shown (the order the ask gives), or don't cut a box's voice when the point moves on."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:42.982Z
+      text: "The y-axis box now waits for the x-axis one: a drag that crosses the y-axis first shows
+        nothing until the point has been on the x-axis, as the ask says (x-axis, then y-axis, then
+        O)."
 - id: cmvz6l8rbmzf
   status: ready
   by: reviewer
@@ -9136,6 +9168,13 @@
       text: "Text pieces don't draw lists, so the summary is now four short pieces, one fact each: the
         abscissa and ordinate; (x, y), x first; (x, 0), (0, y) and (0, 0); the four quadrants'
         signs."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:47.598Z
+      text: "Confirmed fixed. The summary is now four short pieces with no typed hyphens: the x- and
+        y-coordinate (abscissa, ordinate) with their signs; (x, y), x first; (x, 0), (0, y), (0, 0);
+        the four quadrants' signs. It reads cleanly in English and Hindi at 360. The minor point
+        stays: L's name still sits just under Y at the top of the y-axis. Both letters can be read."
 - id: cmvz6l99zqiz
   status: ready
   by: reviewer
@@ -9687,6 +9726,15 @@
         1/6 each. library/patterns/choice-question.test.ts checks it; it fails on the old shuffle
         and passes now. Question ids are unchanged: they hash the params only."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:47.083Z
+      text: "Confirmed fixed. The right option now lands in different places. reading-points: B 2nd, M
+        1st, L 3rd, S 2nd. points-on-axes: B 2nd, C 4th, E 1st. find-the-point: H 2nd, (5, −5) → C
+        2nd. fig-3-14 0d9334e9 3rd, read-a-point f5aecab1 2nd. fig-3-14 0ca66388 still has its right
+        option last, which is chance (1 in 4) and not a pattern now. quadrant-or-axis and the
+        signs-and-quadrants rounds keep their fixed six on purpose. Seen in English and Hindi at
+        360."
 - id: cmvz7j6kqbs6
   status: ready
   by: reviewer
@@ -9750,6 +9798,14 @@
         that did nothing: writing-coordinates passes at (3, 4), and points-on-axes goes x-axis,
         y-axis, O and on to its questions."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:47.259Z
+      text: 'Confirmed fixed. drag sheet/reading/point works on both boards. writing-coordinates: (−3, 2)
+        → (4, 3) does not pass (it sits on P), → (3, 4) shows notP, agreement, plan and ground and
+        passes. Tapping Books then gives "The stall you tapped: (−4, 1)", with the ring readable
+        around the stall. points-on-axes: x-axis, y-axis, O, then B, C, E asked, wrong then right
+        each, and it passes.'
 - id: cmvz7j6ouka4
   status: ready
   by: reviewer
@@ -9808,6 +9864,25 @@
       text: The ↻ handle and its x now sit 2.5 units along OX, between marks and nearer O than P (3.6
         units away), so turning sweeps them clear of P and its name.
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:47.763Z
+      text: "Still wrong: P's name is now hit by the turned axis instead of the handle. Played at 360,
+        step by step. (1) Move O to (1, 1), then turn toward (4, 4) (45°). The ↻ handle sits right
+        against P, and the turned x-axis's number 3 is drawn on top of P's name, so it reads \"ᴾ3\".
+        (2) Then drag O back to (0, 0), still at 45°. A tick of the turned x-axis crosses the letter
+        P, and the number 3 sits on P's dashed line. Moving O first and then turning is the order
+        the words give, so most students will see this. At the start (unturned), the handle at 2.5
+        also touches the x-axis numbers 2 and 3 on the phone, and the x name sits on P's dashed
+        line. Fix: draw P's name above the axes, ticks and numbers, with a halo, on the side away
+        from the turned x-axis. Or skip axis numbers within half a unit of P."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:42.795Z
+      text: "P is now the reading's dot alone, unnamed on the plane: the turned axes' numbers sweep across
+        wherever a name would sit. The words say \"The dot is the point P\", and its pair is written
+        under the plane. The ↻ handle can still pass near the dot while being dragged; that's the
+        student's own turning, and the dot is drawn above it."
 - id: cmvz7j6syrci
   status: ready
   by: reviewer
@@ -9865,6 +9940,13 @@
       text: "No change: a trail along y = −1 passes behind the numbers, drawn over it with their halo.
         Walking there is the student's choice; the board asks for P and Q."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:47.938Z
+      text: "Confirmed: no change needed for the numbers. Played down 1, then left 6 at 360. The trail
+        runs along the number row, and −6 to −1 stay readable over it with their halo. Something
+        else there is not fine: Riya's own name, now drawn at her feet, lands on the same number
+        row. That one is filed as a new thread on distances-from-axes#sheet."
 - id: cmvz9dmvje8b
   status: ready
   by: you
@@ -9922,6 +10004,13 @@
         agreed axes P was (3, 2). Put the axes back and see\", and when they're back: \"P is (3, 2)
         again\"."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:48.267Z
+      text: 'Confirmed. The board opens with "On the agreed axes, P is (3, 2)". The put-back line says "On
+        the agreed axes P was (3, 2). Put the axes back and see…". Played: O to (1, 1), turned 45°
+        (P read (2.12, −0.71)), O home, turned level. It snapped, P read (3.00, 2.00), and "Back on
+        the agreed axes, P is (3, 2) again" appeared. The Hindi matches on all three screens.'
 - id: cmvz9gd2rul5
   status: open
   by: you
@@ -9955,7 +10044,36 @@
     Press y = 0: every point with y = 0 lights up, and they make the whole x-axis. In Riya's town, a
     house on the main road needs no walk up the street: its second number is 0."
   commit: 44752f896d45a18cd823a1c57a67771e7826e0df
+  turn: person
   text: why not add about x=0 also , why we are partial to y axis??
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/5956f62156dbfb13.m4a
+    - content/class9-maths/coordinate-geometry/sound/69ce37821f0bb8b4.m4a
+    - content/class9-maths/coordinate-geometry/sound/92442c449f5c4469.m4a
+    - content/class9-maths/coordinate-geometry/sound/a8fbff8eca660b96.m4a
+    - content/class9-maths/coordinate-geometry/sound/c2644e3f9d81ee88.m4a
+    - content/class9-maths/coordinate-geometry/sound/c8c48857d73c0e10.m4a
+    - content/class9-maths/coordinate-geometry/sound/cf618d6e96ad0889.m4a
+    - content/class9-maths/coordinate-geometry/sound/e43db52033622034.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/props/coordinates/src/clues-view.tsx
+    - library/props/coordinates/src/styles.css
+  reaches:
+    pieces: 77
+    boards: 55
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
   messages:
     - by: fixer
       role: fixer
@@ -9974,21 +10092,117 @@
         is new in the clues layer and shows only when no hidden point is in play, so lesson 1's
         dot-on-paper is unchanged."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:21:48.439Z
+      text: "Still wrong. The x = 0 button only appears after y = 0 has been pressed. A student who drags
+        x-axis → y-axis without pressing y = 0 reads onY's \"Press x = 0 too\", and there is no x =
+        0 button on screen (played at 360: only y = 0 is there). Pressed in order, it works: y = 0
+        lights the x-axis, x = 0 then rings O, and atO says it is the one point with both. For the
+        person's point (\"why are we partial to the y-axis\"): x = 0 never lights the y-axis on its
+        own, so the y-axis still gets words where the x-axis gets a picture. Mechanical part: show x
+        = 0 together with onY (or from the start beside y = 0). Pressed alone, it lights the y-axis;
+        pressed with y = 0, it leaves O ringed."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:43.161Z
+      text: "The y-axis box now says \"With y = 0 pressed, press x = 0 too\", since its button appears
+        only after y = 0. x = 0 doesn't light the y-axis on its own: that is option (b) as the
+        person chose it (with y = 0, the two leave the origin); the box says in words that every
+        point with x = 0 makes the y-axis."
+- id: cmvzag98jcdo
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T13:22:13.315Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/distances-from-axes
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:122
+  commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
+  turn: person
+  text: "Overlap reached by the cmvz6l85s5pk fix (Riya's name now drawn at her feet below the x-axis).
+    Played at 360: down 1, then left 6 to (−6, −1), a natural way to walk toward Q. Her name at her
+    feet lands right on the x-axis number row and runs into −5 and −4, so it can't be read (\"Riya\"
+    mixed with \"−5 −4\"). The same happens at any point with y = −1. Mechanical (overlap): when her
+    feet are within a unit below the x-axis, put her name on the side away from the number row (to
+    her left or right), or keep it above her as before."
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
-    - content/class9-maths/coordinate-geometry/sound/5956f62156dbfb13.m4a
-    - content/class9-maths/coordinate-geometry/sound/69ce37821f0bb8b4.m4a
-    - content/class9-maths/coordinate-geometry/sound/92442c449f5c4469.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8fbff8eca660b96.m4a
-    - content/class9-maths/coordinate-geometry/sound/c2644e3f9d81ee88.m4a
-    - content/class9-maths/coordinate-geometry/sound/c8c48857d73c0e10.m4a
-    - content/class9-maths/coordinate-geometry/sound/cf618d6e96ad0889.m4a
-    - content/class9-maths/coordinate-geometry/sound/e43db52033622034.m4a
+    - content/class9-maths/coordinate-geometry/sound/1f1e0011579c6369.m4a
+    - content/class9-maths/coordinate-geometry/sound/4f0d46bce3524578.m4a
+    - content/class9-maths/coordinate-geometry/sound/6d16b8daf3ba689b.m4a
+    - content/class9-maths/coordinate-geometry/sound/cfd08aaac3d01985.m4a
     - content/class9-maths/coordinate-geometry/sound/sound.json
-    - library/props/coordinates/src/clues-view.tsx
-    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/reading-view.tsx
+    - library/props/coordinates/src/walker-view.tsx
   reaches:
-    pieces: 77
+    pieces: 79
+    boards: 55
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:43.354Z
+      text: "Riya's name on her side away from both axes, as the reading's pair is: left of her left of
+        the y-axis, below her under the x-axis, the other side where the frame would cut it."
+      status: planned
+      commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:43.762Z
+      text: "Drawn on the phone: at (−2, −1) \"Riya\" sits left of her, off the x-axis numbers and the
+        y-axis's −2; at Q it sits below-left, apart from X′."
+      status: ready
+- id: cmvzag9gyyrr
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T13:22:13.618Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants
+  target: rule
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:909
+  commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
+  text: 'Maths broken inside a sentence (on the screen). On the 360 phone in English, the rule box
+    wraps a sign pattern across two lines: "in II, (−," / "+); in III, (−, −)". This is the box the
+    four rounds below are answered from, and a student reads "(−," and "+)" as two pieces.
+    Mechanical: keep each pattern from breaking (a non-breaking space inside the brackets), or give
+    the four patterns their own line, I (+, +) · II (−, +) · III (−, −) · IV (+, −), with the reason
+    sentence after it.'
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:43.937Z
+      text: A no-break space inside every sign pattern in the lesson, so (−, +) never splits across lines.
+      status: planned
+      commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:44.295Z
+      text: All 24 sign patterns in the lesson (the rule, the rounds' notes, the summary) now keep their
+        two signs together.
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/1f1e0011579c6369.m4a
+    - content/class9-maths/coordinate-geometry/sound/4f0d46bce3524578.m4a
+    - content/class9-maths/coordinate-geometry/sound/6d16b8daf3ba689b.m4a
+    - content/class9-maths/coordinate-geometry/sound/cfd08aaac3d01985.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - library/props/coordinates/src/reading-view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+  reaches:
+    pieces: 79
     boards: 55
     lessons:
       - class9-maths/coordinate-geometry/two-numbers-for-a-place

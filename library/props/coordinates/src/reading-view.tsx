@@ -108,13 +108,16 @@ function ReadingDraw({ s, px }: { s: ReadingView; px: FramePixels }): JSX.Elemen
   const yAnchor = isUpShort ? "middle" : yLeft ? "end" : "start";
   // Below the x-axis, under its numbers' row (they are drawn just under the axis).
   const NUMBERS_ROW = 28;
+  // Beside its line, and clear of the dot when it sits at the dot's height.
+  const yRow = isUpShort
+    ? y + (isBelow ? 1 : -1) * (DOT + LINE / 2)
+    : isBelow
+      ? Math.min(Math.max((y + base) / 2, base + NUMBERS_ROW), y - DOT)
+      : (y + base) / 2;
+  const yGap = Math.abs(yRow - y) < DOT + LINE / 2 ? DOT + GAP : GAP;
   const yAt = {
-    x: inside(isUpShort ? x : ax + (yLeft ? -GAP : GAP), wide(yWords), yAnchor),
-    y: isUpShort
-      ? y + (isBelow ? 1 : -1) * (DOT + LINE / 2)
-      : isBelow
-        ? Math.min(Math.max((y + base) / 2, base + NUMBERS_ROW), y - DOT)
-        : (y + base) / 2,
+    x: inside(isUpShort ? x : ax + (yLeft ? -yGap : yGap), wide(yWords), yAnchor),
+    y: yRow,
     anchor: yAnchor,
   };
   // The pair goes on the side of the point away from both axes, along the axes' own directions

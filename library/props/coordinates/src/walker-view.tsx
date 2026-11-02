@@ -119,6 +119,9 @@ function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale:
   const [sx, sy] = px.toPx(from.x, from.y);
   const name = word(s.walkerName, locale);
   const now = blockOf(s);
+  const nameWide = name.length * 9;
+  const nameLeft =
+    s.at.x < 0 ? x - size * 0.55 - nameWide >= 0 : x + size * 0.55 + nameWide > px.width;
   return (
     <g class="cp-walk">
       <circle class="cp-walk-start" cx={sx} cy={sy} r={5} />
@@ -131,11 +134,11 @@ function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale:
         {s.walkerKind === "bus" ? <Bus size={size} /> : <Walker size={size} />}
         <text
           class="cp-walker-name"
-          // Beside her, not above: above, her name would leave the map at the top row. Below the
-          // x-axis, at her feet: away from the axis and the numbers drawn under it.
-          x={x > px.width * 0.7 ? -size * 0.55 : size * 0.55}
-          y={s.at.y < 0 ? size * 0.55 : -size * 0.2}
-          text-anchor={x > px.width * 0.7 ? "end" : "start"}
+          // On her side away from both axes, so off their numbers: left of her left of the y-axis,
+          // below her under the x-axis; the other side where the frame's edge would cut it.
+          x={nameLeft ? -size * 0.55 : size * 0.55}
+          y={s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2}
+          text-anchor={nameLeft ? "end" : "start"}
         >
           {name}
         </text>

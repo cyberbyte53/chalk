@@ -3,6 +3,9 @@ id: 20261102-1134
 by: reviewer
 role: reviewer
 at: 2026-11-02T11:34:12.128Z
+added:
+  - 2026-11-02T12:00:34.698Z
+  - 2026-11-02T13:22:17.476Z
 threads:
   - file: authoring/books/class9-maths/coordinate-geometry/comments.yaml
     id: cmvz6l85s5pk
@@ -42,5 +45,11 @@ threads:
     id: cmvz7j6ouka4
   - file: authoring/books/class9-maths/coordinate-geometry/comments.yaml
     id: cmvz7j6syrci
-added:
-  - 2026-11-02T12:00:34.698Z
+  - file: authoring/books/class9-maths/coordinate-geometry/comments.yaml
+    id: cmvz9dmvje8b
+  - file: authoring/books/class9-maths/coordinate-geometry/comments.yaml
+    id: cmvz9n69vg5s
+  - file: authoring/books/class9-maths/coordinate-geometry/comments.yaml
+    id: cmvzag98jcdo
+  - file: authoring/books/class9-maths/coordinate-geometry/comments.yaml
+    id: cmvzag9gyyrr

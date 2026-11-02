@@ -133,11 +133,11 @@
       "seconds": 5.341
     },
     {
-      "file": "cfd08aaac3d01985.m4a",
+      "file": "33b56bfdd9ef1244.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. Press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
-      "seconds": 16.858
+      "words": "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. With y equals 0 pressed, press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
+      "seconds": 18.159
     },
     {
       "file": "89f496ff64d60fbc.m4a",
@@ -1799,11 +1799,11 @@
       "seconds": 1.092
     },
     {
-      "file": "1f1e0011579c6369.m4a",
+      "file": "b4bf42e976e86aa9.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Two perpendicular lines can be drawn anywhere, pointing any way. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
-      "seconds": 15.152
+      "words": "Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
+      "seconds": 17.195
     },
     {
       "file": "0904dd6061fc4a49.m4a",
@@ -2856,11 +2856,11 @@
       "seconds": 19.97
     },
     {
-      "file": "6d16b8daf3ba689b.m4a",
+      "file": "7f3135f2589f2948.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
-      "seconds": 18.611
+      "words": "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
+      "seconds": 20.306
     },
     {
       "file": "c099e3141d87a42e.m4a",
@@ -3745,11 +3745,11 @@
       "seconds": 6.398
     },
     {
-      "file": "4f0d46bce3524578.m4a",
+      "file": "0cc2650d60d4fb2a.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। अब एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
-      "seconds": 22.628
+      "words": "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। वाई बराबर 0 दबाने के बाद एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
+      "seconds": 23.371
     },
     {
       "file": "b11bc0a33571c55a.m4a",

@@ -643,14 +643,14 @@ const pointsOnAxes = page(
       onY: hidden(
         words.definition(
           t(
-            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x = 0 makes the whole y-axis. Press **x = 0** too: which points have both y = 0 and x = 0?",
-            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। अब **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?",
+            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x = 0 makes the whole y-axis. With **y = 0** pressed, press **x = 0** too: which points have both y = 0 and x = 0?",
+            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y = 0** दबाने के बाद **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?",
           ),
           null,
           {
             says: t(
-              "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. Press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
-              "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। अब एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
+              "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. With y equals 0 pressed, press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
+              "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। वाई बराबर 0 दबाने के बाद एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
             ),
           },
         ),
@@ -759,7 +759,7 @@ const pointsOnAxes = page(
         p.place === "x-axis"
           ? t.self.show({ name: "onX" })
           : p.place === "y-axis"
-            ? t.self.show({ name: "onY" })
+            ? !me.hidden.includes("onX") && t.self.show({ name: "onY" })
             : p.place === "O" &&
               !me.hidden.includes("onX") &&
               !me.hidden.includes("onY") && [
@@ -795,26 +795,26 @@ const WHERE: Record<Where, ReturnType<typeof t>> = {
 /** What each place's coordinates are, as a wrong choice is told: shown, and said. */
 const PATTERN: Record<Where, [string, string, string, string]> = {
   I: [
-    "Quadrant I is (+, +).",
-    "पहला चतुर्थांश (+, +) है।",
+    "Quadrant I is (+,\u00a0+).",
+    "पहला चतुर्थांश (+,\u00a0+) है।",
     "Quadrant one is plus, plus.",
     "पहला चतुर्थांश धन, धन है।",
   ],
   II: [
-    "Quadrant II is (−, +).",
-    "दूसरा चतुर्थांश (−, +) है।",
+    "Quadrant II is (−,\u00a0+).",
+    "दूसरा चतुर्थांश (−,\u00a0+) है।",
     "Quadrant two is minus, plus.",
     "दूसरा चतुर्थांश ऋण, धन है।",
   ],
   III: [
-    "Quadrant III is (−, −).",
-    "तीसरा चतुर्थांश (−, −) है।",
+    "Quadrant III is (−,\u00a0−).",
+    "तीसरा चतुर्थांश (−,\u00a0−) है।",
     "Quadrant three is minus, minus.",
     "तीसरा चतुर्थांश ऋण, ऋण है।",
   ],
   IV: [
-    "Quadrant IV is (+, −).",
-    "चौथा चतुर्थांश (+, −) है।",
+    "Quadrant IV is (+,\u00a0−).",
+    "चौथा चतुर्थांश (+,\u00a0−) है।",
     "Quadrant four is plus, minus.",
     "चौथा चतुर्थांश धन, ऋण है।",
   ],
@@ -908,8 +908,8 @@ const signsAndQuadrants = page(
       rule: hidden(
         words.definition(
           t(
-            "**In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).** Each quadrant lies between two halves of the axes: quadrant II between OX′ and OY, so x is negative and y positive there.",
-            "**पहले चतुर्थांश (I) में बिंदु (+, +) होता है; दूसरे (II) में (−, +); तीसरे (III) में (−, −); चौथे (IV) में (+, −)।** हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश OX′ और OY के बीच है, इसलिए वहाँ x ऋणात्मक और y धनात्मक है।",
+            "**In quadrant I a point is (+,\u00a0+); in II, (−,\u00a0+); in III, (−,\u00a0−); in IV, (+,\u00a0−).** Each quadrant lies between two halves of the axes: quadrant II between OX′ and OY, so x is negative and y positive there.",
+            "**पहले चतुर्थांश (I) में बिंदु (+,\u00a0+) होता है; दूसरे (II) में (−,\u00a0+); तीसरे (III) में (−,\u00a0−); चौथे (IV) में (+,\u00a0−)।** हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश OX′ और OY के बीच है, इसलिए वहाँ x ऋणात्मक और y धनात्मक है।",
           ),
           null,
           {
@@ -959,13 +959,13 @@ const anyAxes = page(
       title: words.title(t("Why these axes?", "यही अक्ष क्यों?")),
       link: words.body(
         t(
-          "Two perpendicular lines can be drawn anywhere, pointing any way. On the agreed axes, P is **(3, 2)**, and P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.",
-          "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। माने हुए अक्षों पर P **(3, 2)** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।",
+          "Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is **(3, 2)**, and P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.",
+          "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P **(3, 2)** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।",
         ),
         {
           says: t(
-            "Two perpendicular lines can be drawn anywhere, pointing any way. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
-            "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
+            "Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
+            "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
           ),
         },
       ),
@@ -977,8 +977,9 @@ const anyAxes = page(
             window: FIVE,
             ...AXES,
             showDirections: false,
+            // P is the reading's dot, unnamed on the plane: the turned axes' numbers sweep across
+            // wherever a name would sit. Its pair is written under the plane.
             canMoveAxes: true,
-            points: [point("P", 3, 2, false)],
           },
           reading: {
             point: { x: 3, y: 2 },
@@ -1221,8 +1222,8 @@ const findThePoint = page(
       summarySigns: hidden(
         words.body(
           t(
-            "In quadrant I a point is (+, +); in II, (−, +); in III, (−, −); in IV, (+, −).",
-            "पहले चतुर्थांश में बिंदु (+, +) होता है; दूसरे में (−, +); तीसरे में (−, −); चौथे में (+, −)।",
+            "In quadrant I a point is (+,\u00a0+); in II, (−,\u00a0+); in III, (−,\u00a0−); in IV, (+,\u00a0−).",
+            "पहले चतुर्थांश में बिंदु (+,\u00a0+) होता है; दूसरे में (−,\u00a0+); तीसरे में (−,\u00a0−); चौथे में (+,\u00a0−)।",
           ),
           {
             says: t(
