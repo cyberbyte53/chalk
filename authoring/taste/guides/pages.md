@@ -7,7 +7,7 @@ Read by `build-lesson` when writing `overview.ts`. Look at the exemplars before 
 - **State → see it hold** (a law best said plainly; laws of reflection): basics first, the law stated with its why, then the prop handed over so the student checks it themselves; the story shows where it matters.
 
 Then:
-- **Worked examples:** plain methods, no props. They read straight through and give the answer, each step with its reason; never posed as a quiz. Figures where the source has them.
+- **Worked examples:** plain methods, no props, figures where the source has them. Once the lesson has taught everything an example needs, pose it as questions, one part at a time: each wrong option says its slip, and each right answer brings the step's reason, so nothing the worked example would have said is lost. An example that needs a method not yet taught reads straight through instead, each step with its reason.
 - **Applications** of the idea come as worked examples, not a new build-up.
 
 **Writing on the page**

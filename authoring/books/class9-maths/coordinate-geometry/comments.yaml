@@ -7494,7 +7494,7 @@
       text: "`plan` now comes before `ground`: the words introduce the fair ground's plan, then the plan."
       status: ready
 - id: cmvz6l8l9911
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.293Z
@@ -7509,6 +7509,32 @@
     points-on-axes (the figure appears together with all five whys at once). Suggest: show the
     figure and the question, then reveal each point's reading on a tap of that point (or ask for one
     point's pair before showing it), one at a time."
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/0b5775b6435d779c.m4a
+    - content/class9-maths/coordinate-geometry/sound/0def65ef4d5e112c.m4a
+    - content/class9-maths/coordinate-geometry/sound/3caff0b904e92d83.m4a
+    - content/class9-maths/coordinate-geometry/sound/445c2e8efde658f8.m4a
+    - content/class9-maths/coordinate-geometry/sound/51580444edacf9b8.m4a
+    - content/class9-maths/coordinate-geometry/sound/5671bcdc8e8d3125.m4a
+    - content/class9-maths/coordinate-geometry/sound/58a66da505472aaa.m4a
+    - content/class9-maths/coordinate-geometry/sound/5de6c9ef126a41a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/686c4b8b5ed33e11.m4a
+    - content/class9-maths/coordinate-geometry/sound/7f56170f07e81a7a.m4a
+    - content/class9-maths/coordinate-geometry/sound/8a0162b53bacba01.m4a
+    - content/class9-maths/coordinate-geometry/sound/96c79e339a0bdae2.m4a
+    - content/class9-maths/coordinate-geometry/sound/9ff757d2d7414e70.m4a
+    - content/class9-maths/coordinate-geometry/sound/ac16af1aedc35efa.m4a
+    - content/class9-maths/coordinate-geometry/sound/cb9e251ec731c0b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/d45ff2c13b217c05.m4a
+    - content/class9-maths/coordinate-geometry/sound/de5b1de407b479af.m4a
+    - content/class9-maths/coordinate-geometry/sound/e0daaa7696262bfb.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+  reaches:
+    pieces: 41
+    boards: 4
+    lessons:
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
   messages:
     - by: fixer
       role: fixer
@@ -7519,6 +7545,26 @@
         lesson's questions (read-a-point, fig-3-14) and on find-the-point. If you want each point's
         reading revealed one at a time (a Next point button, its why appearing with it), that's a
         small change: say so."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:54:05.029Z
+      text: "The person decided in chat: pose the worked examples as questions, since the lesson has
+        taught all they need. Example 1 becomes four questions in turn (B, M, L, S), Example 2 three
+        (B on the y-axis, C and E on the x-axis), each wrong option with its slip's note, each right
+        answer bringing that point's reason. pages.md is updated to say so."
+      status: planned
+      commit: 3b80eca51256a54b8fc7edf47ae7d88bd0c8a663
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:54:05.244Z
+      text: "Built and played, English and Hindi. reading-points: B, M, L, S asked one at a time, wrong
+        answers say their slip (\"That is y first…\", \"on the other side of the y-axis…\"), each
+        right one shows its reason and the next point, and the last passes. points-on-axes: after O,
+        the figure and B (0, 3), C (−5, 0), E (⅔, 0), with an axis point's own slips (y first; the
+        other side of O; \"on the x-axis, so its y-coordinate is 0\").
+        authoring/taste/guides/pages.md now says worked examples are posed as questions once the
+        lesson has taught what they need."
+      status: ready
 - id: cmvz6l8ob5vf
   status: ready
   by: reviewer
@@ -8443,21 +8489,70 @@
         +), (−, −), (+, −) fill in, each readable.'
       status: ready
 - id: cmvz6l90ksot
-  status: open
+  status: ready
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T11:34:07.844Z
   board: class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants
-  target: whichQuadrant
-  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:625
+  target: round1
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:840
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
-  turn: person
   text: The guessing round is one question, (−3, 5), asked directly under the box that lists all four
     patterns, so a student can answer by looking up "(−, +)" in the line above rather than from the
     signs. The flow describes "a point appears, the class calls its quadrant from its signs before
     it is shown". It's a taste call how many rounds there should be and whether the rule should stay
     in view, so it goes to you.
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:54:05.347Z
+      text: "The person decided in chat: make it a test, several rounds. Four rounds, one at a time, the
+        rule kept above: (−3, 5), (2, −4), (−4, −1) and (0, −3) on an axis. The same six choices
+        every round, each wrong one saying its pattern."
+      status: planned
+      commit: 3b80eca51256a54b8fc7edf47ae7d88bd0c8a663
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:54:05.430Z
+      text: 'moved from
+        content/class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants#whichQuadrant
+        to
+        content/class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants#round1:
+        Built and played: the single question became four rounds (round1 to round4), so this thread
+        now points at the first. A wrong choice says its pattern ("Quadrant I is (+, +). This point
+        is (2, −4)."), a right one brings the next, and the last passes the board.'
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:54:05.593Z
+      text: ""
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/0b5775b6435d779c.m4a
+    - content/class9-maths/coordinate-geometry/sound/0def65ef4d5e112c.m4a
+    - content/class9-maths/coordinate-geometry/sound/3caff0b904e92d83.m4a
+    - content/class9-maths/coordinate-geometry/sound/445c2e8efde658f8.m4a
+    - content/class9-maths/coordinate-geometry/sound/51580444edacf9b8.m4a
+    - content/class9-maths/coordinate-geometry/sound/5671bcdc8e8d3125.m4a
+    - content/class9-maths/coordinate-geometry/sound/58a66da505472aaa.m4a
+    - content/class9-maths/coordinate-geometry/sound/5de6c9ef126a41a1.m4a
+    - content/class9-maths/coordinate-geometry/sound/686c4b8b5ed33e11.m4a
+    - content/class9-maths/coordinate-geometry/sound/7f56170f07e81a7a.m4a
+    - content/class9-maths/coordinate-geometry/sound/8a0162b53bacba01.m4a
+    - content/class9-maths/coordinate-geometry/sound/96c79e339a0bdae2.m4a
+    - content/class9-maths/coordinate-geometry/sound/9ff757d2d7414e70.m4a
+    - content/class9-maths/coordinate-geometry/sound/ac16af1aedc35efa.m4a
+    - content/class9-maths/coordinate-geometry/sound/cb9e251ec731c0b5.m4a
+    - content/class9-maths/coordinate-geometry/sound/d45ff2c13b217c05.m4a
+    - content/class9-maths/coordinate-geometry/sound/de5b1de407b479af.m4a
+    - content/class9-maths/coordinate-geometry/sound/e0daaa7696262bfb.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+  reaches:
+    pieces: 41
+    boards: 4
+    lessons:
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+  turn: person
 - id: cmvz6l93mltx
   status: ready
   by: reviewer
@@ -9173,25 +9268,13 @@
   createdAt: 2026-11-02T11:34:08.298Z
   board: class9-maths/coordinate-geometry/questions/quadrant-or-axis
   commit: 66c339f1b3893cf25d65653e561b158dce0d3a96
+  turn: person
   text: "The options change with the answer, which gives the answer away. A point in a quadrant gets
     the four quadrants. A point on an axis, (−1, 0), gets \"On the x-axis\", \"On the y-axis\" and
     two quadrants. So whenever the axis options appear, the answer is an axis, and it's a 50/50
     between them. Principle 8: the right option must not stand out. Mechanical (give-away option):
     give every question the same set (all six: I, II, III, IV, on the x-axis, on the y-axis), or a
     fixed four that always includes an axis."
-  messages:
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T11:36:01.178Z
-      text: "Every question gets the same six options: quadrants I to IV, on the x-axis, on the y-axis."
-      status: planned
-      commit: f4e50f7d0131f51f703e2fb93b55eff06b3149ac
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T11:45:28.060Z
-      text: "Every question offers the same six, in the same order: quadrants I to IV, on the x-axis, on
-        the y-axis. Each wrong one says its sign pattern and the point's coordinates."
-      status: ready
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
     - content/class9-maths/coordinate-geometry/questions/fig-3-14/family.ts
@@ -9393,4 +9476,16 @@
       - class9-maths/coordinate-geometry/questions/tap-the-desk
       - class9-maths/coordinate-geometry/questions/tap-the-part
       - class9-maths/coordinate-geometry/questions/walk-to-address
-  turn: person
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:36:01.178Z
+      text: "Every question gets the same six options: quadrants I to IV, on the x-axis, on the y-axis."
+      status: planned
+      commit: f4e50f7d0131f51f703e2fb93b55eff06b3149ac
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T11:45:28.060Z
+      text: "Every question offers the same six, in the same order: quadrants I to IV, on the x-axis, on
+        the y-axis. Each wrong one says its sign pattern and the point's coordinates."
+      status: ready
