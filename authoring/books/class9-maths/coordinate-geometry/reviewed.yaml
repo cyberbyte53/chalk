@@ -173,9 +173,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 9ab8fa022218e91c
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: ae587b087687a921
 class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
   content:
     model:
@@ -350,9 +350,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 9ab8fa022218e91c
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: ae587b087687a921
 class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
   content:
     model:
@@ -527,9 +527,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 9ab8fa022218e91c
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: ae587b087687a921
 class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
   content:
     model:
@@ -704,9 +704,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 9ab8fa022218e91c
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: ae587b087687a921
 class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
   content:
     model:
@@ -825,8 +825,8 @@ class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
   code: 161ae46562aac06a
 class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96:
   content:
@@ -1023,9 +1023,9 @@ class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 4e5a8d1506a7822e
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 73d18d74c34e24c2
 class9-maths/coordinate-geometry/questions/name-the-lines/a6dfeb17:
   content:
     model:
@@ -1221,9 +1221,9 @@ class9-maths/coordinate-geometry/questions/name-the-lines/a6dfeb17:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 4e5a8d1506a7822e
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 73d18d74c34e24c2
 class9-maths/coordinate-geometry/questions/name-the-lines/bfaeb756:
   content:
     model:
@@ -1419,9 +1419,9 @@ class9-maths/coordinate-geometry/questions/name-the-lines/bfaeb756:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 4e5a8d1506a7822e
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 73d18d74c34e24c2
 class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
   content:
     model:
@@ -1534,9 +1534,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 94b807f34fa96657
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 6e39158eb5aea7e1
 class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
   content:
     model:
@@ -1649,9 +1649,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 94b807f34fa96657
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 6e39158eb5aea7e1
 class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
   content:
     model:
@@ -1764,9 +1764,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 94b807f34fa96657
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 6e39158eb5aea7e1
 class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
   content:
     model:
@@ -1879,9 +1879,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 94b807f34fa96657
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 6e39158eb5aea7e1
 class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
   content:
     model:
@@ -1988,8 +1988,8 @@ class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
   code: aacb406bf00bcd61
 class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
   content:
@@ -2369,9 +2369,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: a285dcbf54415399
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 44e2de7421a4aa6a
 class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
   content:
     model:
@@ -2750,9 +2750,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: a285dcbf54415399
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 44e2de7421a4aa6a
 class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
   content:
     model:
@@ -3131,9 +3131,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: a285dcbf54415399
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 44e2de7421a4aa6a
 class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
   content:
     model:
@@ -3512,9 +3512,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: a285dcbf54415399
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 44e2de7421a4aa6a
 class9-maths/coordinate-geometry/questions/tap-the-part/790ad375:
   content:
     model:
@@ -3621,9 +3621,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/790ad375:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 344cd6ec46d87f1b
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 8213e33f84b1b831
 class9-maths/coordinate-geometry/questions/tap-the-part/929971e6:
   content:
     model:
@@ -3730,9 +3730,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/929971e6:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 344cd6ec46d87f1b
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 8213e33f84b1b831
 class9-maths/coordinate-geometry/questions/tap-the-part/9a79e9c6:
   content:
     model:
@@ -3839,9 +3839,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/9a79e9c6:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 344cd6ec46d87f1b
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 8213e33f84b1b831
 class9-maths/coordinate-geometry/questions/tap-the-part/f3e7f310:
   content:
     model:
@@ -3948,9 +3948,9 @@ class9-maths/coordinate-geometry/questions/tap-the-part/f3e7f310:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: 344cd6ec46d87f1b
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 8213e33f84b1b831
 class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
   content:
     model:
@@ -4189,9 +4189,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: b03663fbcfedce47
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: fd370ff5f4658979
 class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
   content:
     model:
@@ -4430,9 +4430,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: b03663fbcfedce47
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: fd370ff5f4658979
 class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
   content:
     model:
@@ -4671,9 +4671,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: b03663fbcfedce47
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: fd370ff5f4658979
 class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
   content:
     model:
@@ -4912,9 +4912,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: b03663fbcfedce47
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: fd370ff5f4658979
 class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
   content:
     model:
@@ -5153,9 +5153,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:35.386Z
-  code: b03663fbcfedce47
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: fd370ff5f4658979
 class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions:
   content:
     model:
@@ -5275,9 +5275,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:34.439Z
-  code: e0d6bb7e35c4edc9
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 8945d7a661fb7ccc
 class9-maths/coordinate-geometry/the-cartesian-plane/number-line:
   content:
     model:
@@ -5438,9 +5438,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/number-line:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:34.439Z
-  code: 66d2a4b6d8007a3b
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 7f927f1c98498178
 class9-maths/coordinate-geometry/the-cartesian-plane/quadrants:
   content:
     model:
@@ -6049,9 +6049,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/quadrants:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:34.439Z
-  code: a699c642144b6c39
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 0910a16f0c5fe926
 class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
   content:
     model:
@@ -7222,9 +7222,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:34.439Z
-  code: 7525c30ca4ca294d
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: be5ff3b27129b8f9
 class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines:
   content:
     model:
@@ -7805,9 +7805,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines:
       kind: column
       name: page
   by: reviewer
-  commit: 6f810a9ab7cb
-  at: 2026-11-02T07:15:34.439Z
-  code: c26d31ea9a366bdd
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 735de9322678b0f4
 class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
   content:
     model:
@@ -8127,9 +8127,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: dd762d69c7e8
-  at: 2026-11-02T04:49:48.793Z
-  code: cce680b0946c32ae
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: cd966b6dccae1e7d
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -8376,9 +8376,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
       kind: column
       name: page
   by: reviewer
-  commit: dd762d69c7e8
-  at: 2026-11-02T04:49:48.793Z
-  code: f4a060f6141dfe13
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 12914499e4ccb420
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -8868,9 +8868,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: dd762d69c7e8
-  at: 2026-11-02T04:49:48.793Z
-  code: 28ba432a501dfeda
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 26198efe7a26caaa
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -9196,9 +9196,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: dd762d69c7e8
-  at: 2026-11-02T04:49:48.793Z
-  code: 6af2b1b7351ace45
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: 4a6a887b220a3cb4
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -9814,6 +9814,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: dd762d69c7e8
-  at: 2026-11-02T04:49:48.793Z
-  code: 43767b67f5835d56
+  commit: e32373ff047c
+  at: 2026-11-02T07:22:36.821Z
+  code: f131f0a084edf765
