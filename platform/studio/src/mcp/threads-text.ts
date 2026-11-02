@@ -37,8 +37,22 @@ export function threadLine(c: Filed): string {
     ...c.messages.map(
       (m) => `  ${m.by}${m.status ? ` → ${m.status}` : ""}: ${oneLine(m.text) || "(no words)"}`,
     ),
-    ...(c.changed?.length ? [`  changed: ${c.changed.join(", ")}`] : []),
+    ...(c.changed?.length ? [`  changed: ${changedWords(c.changed)}`] : []),
   ].join("\n");
+}
+
+/**
+ * The files a thread's change touched, as a reviewer checks it: the source files by name, and the
+ * voice clips (made from the words, one file per line said) only counted.
+ */
+export function changedWords(files: readonly string[]): string {
+  const isClip = (f: string) => /\/sound\/[^/]+\.(m4a|wav)$/.test(f);
+  const clips = files.filter(isClip).length;
+  const named = files.filter((f) => !isClip(f));
+  return [
+    ...named,
+    ...(clips > 0 ? [`and ${clips} voice clip${clips === 1 ? "" : "s"}`] : []),
+  ].join(", ");
 }
 
 const isSettled = (c: Filed) => c.status === Status.Closed || c.status === Status.Withdrawn;

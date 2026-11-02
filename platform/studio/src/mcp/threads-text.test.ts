@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Filed } from "../comments";
-import { settledHere, threadsAnswer } from "./threads-text";
+import { changedWords, settledHere, threadsAnswer } from "./threads-text";
 
 /** A thread on a board's piece, with how it stands and its messages. */
 const thread = (id: string, status: Filed["status"], messages: Filed["messages"] = []): Filed =>
@@ -77,5 +77,18 @@ describe("a new thread where one was settled", () => {
       '  settled here before: a, closed (last, nsr): "Keep the numbers."',
     ]);
     expect(settledHere([fresh], fresh)).toEqual([]);
+  });
+});
+
+describe("changedWords", () => {
+  it("names the source files and counts the voice clips", () => {
+    expect(
+      changedWords([
+        "content/b/c/l/overview.ts",
+        "content/b/c/sound/0a1b.m4a",
+        "content/b/c/sound/sound.json",
+        "content/b/c/sound/2c3d.m4a",
+      ]),
+    ).toBe("content/b/c/l/overview.ts, content/b/c/sound/sound.json, and 2 voice clips");
   });
 });
