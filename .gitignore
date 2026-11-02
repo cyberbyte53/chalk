@@ -21,3 +21,6 @@ _to_delete/
 /build/
 studio/src/content/.fixtures/
 .chalk-*
+
+# Each person's own Claude Code settings.
+.claude/settings.local.json
