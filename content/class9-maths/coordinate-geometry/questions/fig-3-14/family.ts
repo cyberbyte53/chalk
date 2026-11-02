@@ -36,8 +36,8 @@ function swapped(name: Name): Wrong {
   return {
     label: pairOf(q),
     feedback: t(
-      `That is y first. ${name} is ${Math.abs(p.x)} units ${side[0]} of the y-axis, so x = ${shown(p.x)}, written first.`,
-      `यह y पहले है। ${name}, y-अक्ष से ${Math.abs(p.x)} इकाई ${side[1]} ओर है, इसलिए x = ${shown(p.x)}, जो पहले लिखा जाता है।`,
+      `That is y first. ${name} is ${Math.abs(p.x)} units ${side[0]} of the y-axis, so x\u00a0=\u00a0${shown(p.x)}, written first.`,
+      `यह y पहले है। ${name}, y-अक्ष से ${Math.abs(p.x)} इकाई ${side[1]} ओर है, इसलिए x\u00a0=\u00a0${shown(p.x)}, जो पहले लिखा जाता है।`,
     ),
     feedbackSays: t(
       `That is y first. ${name} is ${Math.abs(p.x)} units ${side[0]} of the y-axis, so x is ${said(p.x, "minus")}, written first.`,
@@ -186,8 +186,8 @@ const PARTS: Record<
     wrong: [
       note(
         "(5, 0)",
-        "That is y first. L is on the y-axis, 0 units from it, so x = 0, written first.",
-        "यह y पहले है। L, y-अक्ष पर है, उससे 0 इकाई दूर, इसलिए x = 0, जो पहले लिखा जाता है।",
+        "That is y first. L is on the y-axis, 0 units from it, so x\u00a0=\u00a00, written first.",
+        "यह y पहले है। L, y-अक्ष पर है, उससे 0 इकाई दूर, इसलिए x\u00a0=\u00a00, जो पहले लिखा जाता है।",
         "That is y first. L is on the y-axis, 0 units from it, so x is 0, written first.",
         "यह वाई पहले है। L, वाई-अक्ष पर है, उससे 0 इकाई दूर, इसलिए एक्स 0 है, जो पहले लिखा जाता है।",
       ),
@@ -205,8 +205,8 @@ const PARTS: Record<
     wrong: [
       note(
         "(0, −3)",
-        "That is y first. M is on the x-axis, 0 units from it, so y = 0, written second.",
-        "यह y पहले है। M, x-अक्ष पर है, उससे 0 इकाई दूर, इसलिए y = 0, जो दूसरा लिखा जाता है।",
+        "That is y first. M is on the x-axis, 0 units from it, so y\u00a0=\u00a00, written second.",
+        "यह y पहले है। M, x-अक्ष पर है, उससे 0 इकाई दूर, इसलिए y\u00a0=\u00a00, जो दूसरा लिखा जाता है।",
         "That is y first. M is on the x-axis, 0 units from it, so y is 0, written second.",
         "यह वाई पहले है। M, एक्स-अक्ष पर है, उससे 0 इकाई दूर, इसलिए वाई 0 है, जो दूसरा लिखा जाता है।",
       ),
@@ -231,7 +231,7 @@ export const fig314 = family({
       coordinatePlane,
       plane.setup({
         plane: {
-          // L at y = 5 and E, C at y = −5 a unit clear of the axes' ends.
+          // L at y\u00a0=\u00a05 and E, C at y\u00a0=\u00a0−5 a unit clear of the axes' ends.
           window: { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 },
           marks: Marks.Numbers,
           numbered: ["x", "y"],

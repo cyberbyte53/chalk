@@ -7309,6 +7309,12 @@
       text: "The y-label now keeps clear of the dot when it sits at the dot's height (a dot's width plus a
         gap, not just a gap from the line). At Q on the 360 phone: \"y = −2\" right of its line,
         above the dashed line, nothing over its letters."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:30:48.737Z
+      text: 'Confirmed fixed. Played P → (−2, 3) → (−6, 3) → Q in English on the 360 phone: at Q, "y = −2"
+        sits right of its short line, above the dashed line and clear of the dot; "x = −6" is under
+        its line. Nothing covers either label. Same in Hindi at 360 (straight drag to Q).'
 - id: cmvz6l8i8ofh
   status: ready
   by: reviewer
@@ -7896,6 +7902,12 @@
       text: "The y-axis box now waits for the x-axis one: a drag that crosses the y-axis first shows
         nothing until the point has been on the x-axis, as the ask says (x-axis, then y-axis, then
         O)."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:30:49.044Z
+      text: "Confirmed fixed. Played in Hindi at 640: drag (3, 2) → (−3, 0), passing the y-axis at (0, 1).
+        Only onX appears, and its voice runs in full (24.5 s); onY waits. Then on to (0, 3): onY
+        appears after onX, as the ask orders. Straight to O from (3, 2) still shows onX only."
 - id: cmvz6l8rbmzf
   status: ready
   by: reviewer
@@ -9883,6 +9895,14 @@
         wherever a name would sit. The words say \"The dot is the point P\", and its pair is written
         under the plane. The ↻ handle can still pass near the dot while being dragged; that's the
         student's own turning, and the dot is drawn above it."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:30:48.890Z
+      text: 'Confirmed fixed. P is now the only filled dot and the link says "The dot is the point P"
+        (English and Hindi, 360). Played at 360: move O to (1, 1), turn to 45°, then O back to (0,
+        0). No name is there for the turned axis or its numbers to land on; the dot is drawn above
+        the handle and the axis numbers, and its pair reads under the plane. A turned-axis number
+        can still sit half under the dot, but nothing a student needs is lost.'
 - id: cmvz7j6syrci
   status: ready
   by: reviewer
@@ -10110,6 +10130,16 @@
         only after y = 0. x = 0 doesn't light the y-axis on its own: that is option (b) as the
         person chose it (with y = 0, the two leave the origin); the box says in words that every
         point with x = 0 makes the y-axis."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:30:49.200Z
+      text: "Mechanical part confirmed. Played at 360: x-axis, then y-axis without pressing anything. onY
+        now says \"With y = 0 pressed, press x = 0 too\", so it no longer points at a button that
+        isn't there. Pressed in order: y = 0 lights the x-axis and brings x = 0; x = 0 then rings O;
+        atO says it is the one point with both. Left for you: x = 0 still never lights the y-axis on
+        its own. That is option (b) as you chose it, so the y-axis rule gets words where the x-axis
+        gets a picture. Close this if that is what you want. (New, small: in onY on the phone, \"y =
+        0\" breaks across two lines; filed apart.)"
 - id: cmvzag98jcdo
   status: ready
   by: reviewer
@@ -10164,6 +10194,25 @@
       text: "Drawn on the phone: at (−2, −1) \"Riya\" sits left of her, off the x-axis numbers and the
         y-axis's −2; at Q it sits below-left, apart from X′."
       status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:30:49.372Z
+      text: "Still wrong on the 360 phone (English). Played down 1, then left one step at a time to (−6,
+        −1), then down to Q. At (−1, −1) to (−3, −1) \"Riya\" sits below-left of her and reads. At
+        (−4, −1) her name lands on Q's letter: \"Q\" and \"Riya\" are drawn over each other and
+        neither reads. At (−5, −1) it runs into X′ (\"X'Riya\"), and at (−6, −1) it sits on X′, half
+        outside the plane's left edge. At Q itself it is fine (below-left, apart from X′). These are
+        the steps of the natural walk to Q. Fix: keep her name off the other labels on the plane (Q,
+        P, X′, Y′) as well as off the axes, e.g. try below-left, below-right, left, right in turn
+        and take the first that clashes with nothing and stays inside the frame."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:34:48.103Z
+      text: "Root fix, as you suggested: once drawn, her name tries the places around her in order (beside
+        her each side, above and below her feet, over her head, under her feet) and keeps the first
+        that clashes with no other words on the plane (points' names, the axes' end names and
+        numbers) and stays inside the frame. Drawn at (−4, −1), (−5, −1) and (−6, −1) on the 360
+        phone: \"Riya\" over her head each time, clear of Q, X′ and the numbers, inside the plane."
 - id: cmvzag9gyyrr
   status: ready
   by: reviewer
@@ -10173,25 +10222,13 @@
   target: rule
   source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:909
   commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
+  turn: person
   text: 'Maths broken inside a sentence (on the screen). On the 360 phone in English, the rule box
     wraps a sign pattern across two lines: "in II, (−," / "+); in III, (−, −)". This is the box the
     four rounds below are answered from, and a student reads "(−," and "+)" as two pieces.
     Mechanical: keep each pattern from breaking (a non-breaking space inside the brackets), or give
     the four patterns their own line, I (+, +) · II (−, +) · III (−, −) · IV (+, −), with the reason
     sentence after it.'
-  messages:
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T13:27:43.937Z
-      text: A no-break space inside every sign pattern in the lesson, so (−, +) never splits across lines.
-      status: planned
-      commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
-    - by: fixer
-      role: fixer
-      at: 2026-11-02T13:27:44.295Z
-      text: All 24 sign patterns in the lesson (the rule, the rounds' notes, the summary) now keep their
-        two signs together.
-      status: ready
   changed:
     - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
     - content/class9-maths/coordinate-geometry/sound/1f1e0011579c6369.m4a
@@ -10212,6 +10249,75 @@
       - class9-maths/coordinate-geometry/questions/fig-3-14
       - class9-maths/coordinate-geometry/questions/name-the-lines
       - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/read-a-point
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:43.937Z
+      text: A no-break space inside every sign pattern in the lesson, so (−, +) never splits across lines.
+      status: planned
+      commit: e9acef9827d86db8b7b8b5e7c20b344172bc3539
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:27:44.295Z
+      text: All 24 sign patterns in the lesson (the rule, the rounds' notes, the summary) now keep their
+        two signs together.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T13:30:49.548Z
+      text: Confirmed fixed. On the 360 phone, the rule box keeps each pattern whole in English, "(−, +)"
+        and the rest, and in Hindi. So does the summary on find-the-point.
+- id: cmvzarboy19b
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T13:30:49.714Z
+  board: class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes
+  target: onY/text
+  source: content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts:644
+  commit: a96880b18229aebe02f554977dd8b66a64d3d4b0
+  text: "Maths broken inside a sentence, reached by the cmvz9n69vg5s fix. On the 360 phone in English,
+    onY's last line wraps as \"which points have both y =\" / \"0 and x = 0?\", so a student reads
+    \"y =\" with nothing after it and a stray \"0\" on the next line. This is the question the x = 0
+    button answers. Mechanical: keep each equation from breaking (no-break spaces round \"=\" in y =
+    0 and x = 0), as was done for the sign patterns in cmvzag9gyyrr. Worth doing in all the lesson's
+    text, not just this box."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:34:48.307Z
+      text: No-break spaces around "=" in every x = … and y = … in the lesson's text and its three
+        question families.
+      status: planned
+      commit: a96880b18229aebe02f554977dd8b66a64d3d4b0
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T13:34:48.732Z
+      text: "40 of them joined: 28 in the lesson, 12 in the families' notes and prompts. \"y = 0\" and
+        \"x = 0\" can no longer split across a line."
+      status: ready
+  changed:
+    - content/class9-maths/coordinate-geometry/coordinates-of-a-point/overview.ts
+    - content/class9-maths/coordinate-geometry/questions/fig-3-14/family.ts
+    - content/class9-maths/coordinate-geometry/questions/quadrant-or-axis/family.ts
+    - content/class9-maths/coordinate-geometry/questions/read-a-point/family.ts
+    - library/props/coordinates/src/walker-view.tsx
+  reaches:
+    pieces: 87
+    boards: 60
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/coordinates-of-a-point
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/fig-3-14
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/quadrant-or-axis
       - class9-maths/coordinate-geometry/questions/read-a-point
       - class9-maths/coordinate-geometry/questions/tap-the-desk
       - class9-maths/coordinate-geometry/questions/tap-the-part

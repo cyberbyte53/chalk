@@ -3,6 +3,7 @@ import { SymbolButton } from "@chalk/draw";
 import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
+import { useLayoutEffect, useRef } from "preact/hooks";
 import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
 import { Marks, type Point, Scene } from "./plane";
@@ -106,8 +107,18 @@ function StreetsAcross({ s, px }: { s: WalkerView; px: FramePixels }): JSX.Eleme
 
 /** Riya's route so far and Riya where she stands now. */
 function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale: Locale }) {
-  const from = s.walkFrom;
-  if (from === null) return null;
+  return s.walkFrom === null ? null : (
+    <WalkerShown s={s} from={s.walkFrom} px={px} locale={locale} />
+  );
+}
+
+/** The walker drawn: her route, and her, with her name where it clashes with nothing. */
+function WalkerShown({
+  s,
+  from,
+  px,
+  locale,
+}: { s: WalkerView; from: Point; px: FramePixels; locale: Locale }) {
   const path = [from, ...s.trail.slice(0, s.isWalking ? -1 : undefined), s.at]
     .map((p, i) => {
       const [x, y] = px.toPx(p.x, p.y);
@@ -119,9 +130,57 @@ function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale:
   const [sx, sy] = px.toPx(from.x, from.y);
   const name = word(s.walkerName, locale);
   const now = blockOf(s);
+  const nameRef = useRef<SVGTextElement>(null);
   const nameWide = name.length * 9;
   const nameLeft =
     s.at.x < 0 ? x - size * 0.55 - nameWide >= 0 : x + size * 0.55 + nameWide > px.width;
+  // Every place her name can go, nearest first: beside her (each side, at her middle, above and
+  // below her feet), then over her head and under her feet.
+  useLayoutEffect(() => {
+    const el = nameRef.current;
+    const svg = el?.ownerSVGElement;
+    if (el === null || svg === null || svg === undefined) return;
+    const frame = svg.getBoundingClientRect();
+    const others = [...svg.querySelectorAll("text")]
+      .filter((t) => t !== el)
+      .map((t) => t.getBoundingClientRect())
+      .filter((r) => r.width > 0);
+    const side = size * 0.55;
+    const first: [number, number, string] = [
+      nameLeft ? -side : side,
+      s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2,
+      nameLeft ? "end" : "start",
+    ];
+    const places: [number, number, string][] = [
+      first,
+      [side, -size * 0.2, "start"],
+      [-side, -size * 0.2, "end"],
+      [side, size * 0.45 + 16, "start"],
+      [-side, size * 0.45 + 16, "end"],
+      [side, size * 0.25, "start"],
+      [-side, size * 0.25, "end"],
+      [0, -size * 0.75, "middle"],
+      [0, size * 0.45 + 18, "middle"],
+    ];
+    const clashes = (r: DOMRect) =>
+      r.left < frame.left ||
+      r.right > frame.right ||
+      r.top < frame.top ||
+      r.bottom > frame.bottom ||
+      others.some(
+        (o) => r.left < o.right && o.left < r.right && r.top < o.bottom && o.top < r.bottom,
+      );
+    for (const [px_, py, anchor] of places) {
+      el.setAttribute("x", `${px_}`);
+      el.setAttribute("y", `${py}`);
+      el.setAttribute("text-anchor", anchor);
+      if (!clashes(el.getBoundingClientRect())) return;
+    }
+    // Nowhere clear: the first, where the rule puts it.
+    el.setAttribute("x", `${first[0]}`);
+    el.setAttribute("y", `${first[1]}`);
+    el.setAttribute("text-anchor", first[2]);
+  });
   return (
     <g class="cp-walk">
       <circle class="cp-walk-start" cx={sx} cy={sy} r={5} />
@@ -133,9 +192,12 @@ function WalkerDraw({ s, px, locale }: { s: WalkerView; px: FramePixels; locale:
       >
         {s.walkerKind === "bus" ? <Bus size={size} /> : <Walker size={size} />}
         <text
+          ref={nameRef}
           class="cp-walker-name"
           // On her side away from both axes, so off their numbers: left of her left of the y-axis,
-          // below her under the x-axis; the other side where the frame's edge would cut it.
+          // below her under the x-axis; the other side where the frame's edge would cut it. Then
+          // moved, once drawn, to the first place around her that clashes with no other words
+          // (a point's name, an axis's end, its numbers) and stays inside the frame (below).
           x={nameLeft ? -size * 0.55 : size * 0.55}
           y={s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2}
           text-anchor={nameLeft ? "end" : "start"}

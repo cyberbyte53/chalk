@@ -41,8 +41,14 @@ const SIGNS_OF: Record<Where, Localized> = {
     "Quadrant IV is (+, −): x positive, y negative.",
     "चौथा चतुर्थांश (+, −) है: x धनात्मक, y ऋणात्मक।",
   ),
-  xAxis: t("A point on the x-axis has y = 0.", "x-अक्ष पर एक बिंदु का y = 0 होता है।"),
-  yAxis: t("A point on the y-axis has x = 0.", "y-अक्ष पर एक बिंदु का x = 0 होता है।"),
+  xAxis: t(
+    "A point on the x-axis has y\u00a0=\u00a00.",
+    "x-अक्ष पर एक बिंदु का y\u00a0=\u00a00 होता है।",
+  ),
+  yAxis: t(
+    "A point on the y-axis has x\u00a0=\u00a00.",
+    "y-अक्ष पर एक बिंदु का x\u00a0=\u00a00 होता है।",
+  ),
 };
 const SIGNS_SAID: Record<Where, Localized> = {
   I: t(

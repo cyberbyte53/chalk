@@ -43,8 +43,8 @@ export const readAPoint = family({
       {
         id: "swapped",
         pair: pairOf(y, x),
-        en: `That is y first. P is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x = ${shown(x)}, written first.`,
-        hi: `यह y पहले है। P, y-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए x = ${shown(x)}, जो पहले लिखा जाता है।`,
+        en: `That is y first. P is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x\u00a0=\u00a0${shown(x)}, written first.`,
+        hi: `यह y पहले है। P, y-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए x\u00a0=\u00a0${shown(x)}, जो पहले लिखा जाता है।`,
         enSays: `That is y first. P is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x is ${said(x, "minus")}, written first.`,
         hiSays: `यह वाई पहले है। P, वाई-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए एक्स ${said(x, "माइनस")} है, जो पहले लिखा जाता है।`,
       },

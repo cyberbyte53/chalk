@@ -249,8 +249,8 @@ const abscissaAndOrdinate = page(
       ),
       ask: words.body(
         t(
-          "The point is at P. **Drag it to where x = −6 and y = −2**: that is Q. Watch each sign change as it crosses an axis.",
-          "बिंदु P पर है। **उसे वहाँ खींचो जहाँ x = −6 और y = −2 है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
+          "The point is at P. **Drag it to where x\u00a0=\u00a0−6 and y\u00a0=\u00a0−2**: that is Q. Watch each sign change as it crosses an axis.",
+          "बिंदु P पर है। **उसे वहाँ खींचो जहाँ x\u00a0=\u00a0−6 और y\u00a0=\u00a0−2 है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
         ),
         {
           says: t(
@@ -628,8 +628,8 @@ const pointsOnAxes = page(
       onX: hidden(
         words.definition(
           t(
-            "**A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is (x, 0).** Press **y = 0**: every point with y = 0 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0.",
-            "**x-अक्ष पर कोई बिंदु x-अक्ष से 0 इकाई दूर है, इसलिए उसका y-निर्देशांक 0 है: वह (x, 0) है।** **y = 0** दबाओ: y = 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा x-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
+            "**A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is (x, 0).** Press **y\u00a0=\u00a00**: every point with y\u00a0=\u00a00 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0.",
+            "**x-अक्ष पर कोई बिंदु x-अक्ष से 0 इकाई दूर है, इसलिए उसका y-निर्देशांक 0 है: वह (x, 0) है।** **y\u00a0=\u00a00** दबाओ: y\u00a0=\u00a00 वाले सारे बिंदु चमक उठते हैं, और वे पूरा x-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
           ),
           null,
           {
@@ -643,8 +643,8 @@ const pointsOnAxes = page(
       onY: hidden(
         words.definition(
           t(
-            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x = 0 makes the whole y-axis. With **y = 0** pressed, press **x = 0** too: which points have both y = 0 and x = 0?",
-            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y = 0** दबाने के बाद **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?",
+            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x\u00a0=\u00a00 makes the whole y-axis. With **y\u00a0=\u00a00** pressed, press **x\u00a0=\u00a00** too: which points have both y\u00a0=\u00a00 and x\u00a0=\u00a00?",
+            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x\u00a0=\u00a00 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y\u00a0=\u00a00** दबाने के बाद **x\u00a0=\u00a00** भी दबाओ: किन बिंदुओं का y\u00a0=\u00a00 और x\u00a0=\u00a00 दोनों है?",
           ),
           null,
           {
@@ -658,8 +658,8 @@ const pointsOnAxes = page(
       atO: hidden(
         words.definition(
           t(
-            "**The origin is 0 units from both axes, so its coordinates are (0, 0).** It is the one point with both y = 0 and x = 0.",
-            "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।** यही वह एक बिंदु है जिसका y = 0 और x = 0 दोनों हैं।",
+            "**The origin is 0 units from both axes, so its coordinates are (0, 0).** It is the one point with both y\u00a0=\u00a00 and x\u00a0=\u00a00.",
+            "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।** यही वह एक बिंदु है जिसका y\u00a0=\u00a00 और x\u00a0=\u00a00 दोनों हैं।",
           ),
           null,
           {
@@ -819,14 +819,14 @@ const PATTERN: Record<Where, [string, string, string, string]> = {
     "चौथा चतुर्थांश धन, ऋण है।",
   ],
   xAxis: [
-    "On the x-axis, y = 0.",
-    "x-अक्ष पर y = 0 होता है।",
+    "On the x-axis, y\u00a0=\u00a00.",
+    "x-अक्ष पर y\u00a0=\u00a00 होता है।",
     "On the x-axis, y is 0.",
     "एक्स-अक्ष पर वाई 0 होता है।",
   ],
   yAxis: [
-    "On the y-axis, x = 0.",
-    "y-अक्ष पर x = 0 होता है।",
+    "On the y-axis, x\u00a0=\u00a00.",
+    "y-अक्ष पर x\u00a0=\u00a00 होता है।",
     "On the y-axis, x is 0.",
     "वाई-अक्ष पर एक्स 0 होता है।",
   ],
@@ -1073,8 +1073,8 @@ const coordinatesOfH = choice({
       id: "swapped",
       label: t("(−3, −5)", "(−3, −5)"),
       feedback: t(
-        "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x = −5, written first.",
-        "यह y पहले है: (−3, −5) तो E है। H, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x = −5, जो पहले लिखा जाता है।",
+        "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x\u00a0=\u00a0−5, written first.",
+        "यह y पहले है: (−3, −5) तो E है। H, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x\u00a0=\u00a0−5, जो पहले लिखा जाता है।",
       ),
       feedbackSays: t(
         "That is y first: minus 3, minus 5 is E. H is 5 units left of the y-axis, so x is minus 5, written first.",
