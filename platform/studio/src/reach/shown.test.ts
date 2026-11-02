@@ -1,4 +1,4 @@
-import { mkdtempSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PNG } from "pngjs";
@@ -38,14 +38,23 @@ const boxes = [
 
 /** A board shown in two versions, each with its picture and what it read. */
 const shown = (
-  pngs: [Buffer, Buffer],
+  pngs: [Buffer] | [Buffer, Buffer],
   reads: [string, string] = ["town: a", "town: a"],
 ): Shown => ({
   inputs: "k",
-  versions: [
-    { version: "en · 360×640", read: reads[0], boxes, scale: 2, png: pngs[0] },
-    { version: "hi · 360×640", read: reads[1], boxes, scale: 2, png: pngs[1] },
-  ],
+  versions: pngs.map((png, i) => ({
+    version: i === 0 ? "en · 360×640" : "hi · 360×640",
+    read: reads[i] as string,
+    boxes,
+    scale: 2,
+    png,
+  })),
+});
+
+const play = (steps: string[], answer: string): Played => ({
+  steps: steps.map((tap) => ({ tap })),
+  answer,
+  inputs: "k",
 });
 
 describe("what a board shows, against what it showed when passed", () => {
@@ -78,32 +87,57 @@ describe("what a board shows, against what it showed when passed", () => {
     expect(d.map((x) => x.version)).toEqual(["en · 360×640"]);
   });
 
-  it("is kept on this machine: the latest drawing, and apart from it what a reviewer saw", () => {
+  it("is kept beside the repo, out of node_modules: what a reviewer last saw", () => {
     const root = mkdtempSync(join(tmpdir(), "chalk-shown-"));
     const [a, b] = [picture(10, 10), picture(10, 20)];
-    keepShown(root, "seen", "b/c/l/one", shown([a, a]));
-    keepShown(root, "now", "b/c/l/one", shown([b, b]));
-    expect(shownOf(root, "seen", "b/c/l/one")?.versions[1]?.png.equals(a)).toBe(true);
-    expect(shownOf(root, "now", "b/c/l/one")?.versions[1]?.png.equals(b)).toBe(true);
+    keepShown(root, "b/c/l/one", shown([a, a]));
+    keepShown(root, "b/c/l/one", shown([b, b]));
+    expect(shownOf(root, "b/c/l/one")?.versions[1]?.png.equals(b)).toBe(true);
+    expect(existsSync(join(root, ".chalk-seen", "b/c/l/one", "shown.json"))).toBe(true);
+    expect(shownOf(root, "b/c/l/two")).toBeUndefined();
+  });
+
+  it("kept the old way (node_modules, a picture per file), is read and moved over", () => {
+    const root = mkdtempSync(join(tmpdir(), "chalk-shown-"));
+    const legacy = join(root, "node_modules", ".cache", "chalk-shown", "seen", "b/c/l/one");
+    mkdirSync(legacy, { recursive: true });
+    const a = picture(10, 10);
+    const versions = shown([a]).versions.map(({ png: _, ...v }) => v);
+    writeFileSync(join(legacy, "shown.json"), JSON.stringify({ inputs: "k", versions }));
+    writeFileSync(join(legacy, "0.png"), a);
+    writeFileSync(join(legacy, "plays.json"), JSON.stringify([play(["x"], "1. tap x → one")]));
+    expect(shownOf(root, "b/c/l/one")?.versions[0]?.png.equals(a)).toBe(true);
+    expect(playsOf(root, "b/c/l/one").map((p) => p.answer)).toEqual(["1. tap x → one"]);
+    expect(existsSync(join(root, ".chalk-seen", "b/c/l/one", "shown.json"))).toBe(true);
+    expect(existsSync(join(root, ".chalk-seen", "b/c/l/one", "plays.json"))).toBe(true);
+  });
+
+  it("a version drawn on one side only differs: never the same", () => {
+    const a = picture(10, 10);
+    const both = shown([a, a]);
+    const one = {
+      ...shown([a]),
+      failed: [{ version: "hi · 360×640", why: "the board didn't open" }],
+    };
+    expect(shownDiffs(both, one)).toMatchObject([
+      { version: "hi · 360×640", missing: { side: "now", why: "the board didn't open" } },
+    ]);
+    expect(shownDiffs(shown([a]), both)).toMatchObject([
+      { version: "hi · 360×640", missing: { side: "then" } },
+    ]);
   });
 });
 
 describe("the review's plays", () => {
-  const play = (steps: string[], answer: string): Played => ({
-    steps: steps.map((tap) => ({ tap })),
-    answer,
-    inputs: "k",
-  });
-
   it("are kept beside what a reviewer saw, the same steps again replacing the last", () => {
     const root = mkdtempSync(join(tmpdir(), "chalk-played-"));
     const a = picture(10, 10);
-    keepPlayed(root, "seen", "b/one", play(["x"], "1. tap x → one"));
-    keepPlayed(root, "seen", "b/one", play(["y"], "1. tap y → two"));
-    keepPlayed(root, "seen", "b/one", play(["x"], "1. tap x → three"));
+    keepPlayed(root, "b/one", play(["x"], "1. tap x → one"));
+    keepPlayed(root, "b/one", play(["y"], "1. tap y → two"));
+    keepPlayed(root, "b/one", play(["x"], "1. tap x → three"));
     // A drawing after them leaves them where they are.
-    keepShown(root, "seen", "b/one", shown([a, a]));
-    expect(playsOf(root, "seen", "b/one").map((p) => p.answer)).toEqual([
+    keepShown(root, "b/one", shown([a, a]));
+    expect(playsOf(root, "b/one").map((p) => p.answer)).toEqual([
       "1. tap y → two",
       "1. tap x → three",
     ]);

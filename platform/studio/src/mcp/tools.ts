@@ -35,14 +35,12 @@ import { libraryText, usesOf } from "../prop-text";
 import { DEPTHS, changesFrom, changesFromGit, describeReach, reachIndex } from "../reach";
 import {
   type Played,
-  type Shown,
   type VersionDiff,
   keepPlayed,
-  keepShown,
+  keepPlays,
   playAnswer,
   playDiff,
   playsOf,
-  sameCall,
   shownDiffs,
   shownOf,
 } from "../reach/shown";
@@ -55,7 +53,17 @@ import {
   timed,
   withNothingDrawing,
 } from "./app-driver";
-import { type Answer, check, drawShown, look, play, readReach, targetOf } from "./look";
+import {
+  type Answer,
+  type PlayDrawn,
+  check,
+  drawShown,
+  look,
+  play,
+  playLines,
+  readReach,
+  targetOf,
+} from "./look";
 import { compose } from "./picture";
 import { type Content, type Extra, createServer, progressOf, result } from "./protocol";
 import { typeSite } from "./sites";
@@ -326,81 +334,59 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     "pipeline",
   );
 
-  /**
-   * What a board shows now, every version (reach/shown.ts): the last drawing of it, if nothing
-   * anything could read has changed since; else drawn again, and kept as the last.
-   */
-  /**
-   * What boards show now, every version (reach/shown.ts): each board's last drawing, if nothing
-   * anything could read has changed since; the rest drawn together, at once, and kept as the last.
-   */
-  const shownNow = async (
-    boards: readonly string[],
-    inputs: string,
-  ): Promise<Map<string, Shown>> => {
-    const out = new Map<string, Shown>();
-    const toDraw: string[] = [];
-    for (const board of boards) {
-      const last = shownOf(root, "now", board);
-      if (last !== undefined && last.inputs === inputs) out.set(board, last);
-      else toDraw.push(board);
-    }
-    if (toDraw.length > 0)
-      for (const [board, now] of await drawShown(root, toDraw, lane)) {
-        keepShown(root, "now", board, now);
-        out.set(board, now);
-      }
-    return out;
-  };
+  /** A reviewer's play, asked again: the same steps, on the same version. */
+  const playArgsOf = (board: string, p: Played) => ({
+    board,
+    steps: p.steps as Step[],
+    ...(p.locale === undefined ? {} : { locale: p.locale as "en" | "hi" }),
+    ...(p.screen === undefined ? {} : { screen: p.screen }),
+  });
 
-  /** A kept play, played again as built now: what each step answers. */
-  const playAgain = async (board: string, p: Played, on: string = lane): Promise<string> => {
-    const a = await play(
-      root,
-      {
-        board,
-        steps: p.steps as Step[],
-        shots: "none",
-        ...(p.locale === undefined ? {} : { locale: p.locale as "en" | "hi" }),
-        ...(p.screen === undefined ? {} : { screen: p.screen }),
-      },
-      on,
-    );
-    return playAnswer(a.text);
-  };
+  /** What a reviewer's play did then, said in today's words (an older play: as it was kept). */
+  const thenLines = (board: string, p: Played) =>
+    p.drawn === undefined
+      ? p.answer
+      : playLines(playArgsOf(board, p), p.drawn as PlayDrawn).join("\n");
 
-  /** A play whose first step didn't run (a part that isn't there): it shows nothing, now or ever. */
+  /** A play whose first step didn't run when it was made (a part that wasn't there): it showed nothing. */
   const isStale = (p: Played) => /^1\. .*didn't run/m.test(p.answer);
 
+  /** A play done again now: what it did, or why it couldn't be done at all. */
+  type Again = { lines: string } | { failed: string };
+
   /**
-   * Each board's plays as built now: a play's last answer is reused when nothing anything could
-   * read has changed since it was made (kept as "now", by the build's inputs); the rest are played
-   * again all together, on PLAY_PAGES pages, whatever board they are on, and kept.
+   * Each board's reviewer plays, done again as built now: all together, on PLAY_PAGES pages,
+   * whatever board they are on, as the reviewer asked them (the drawing engine's cache answers a
+   * play nothing it is made from changed under). One that can't be done says why; the rest go on.
    */
-  const playsNow = async (
-    boards: readonly string[],
-    inputs: string,
-  ): Promise<Map<string, string[]>> => {
-    const out = new Map<string, string[]>();
+  const playsNow = async (boards: readonly string[]): Promise<Map<string, Again[]>> => {
+    const out = new Map<string, Again[]>();
     const todo: { board: string; p: Played; i: number }[] = [];
     for (const board of boards) {
-      const kept = playsOf(root, "seen", board).filter((p) => !isStale(p));
-      const last = playsOf(root, "now", board);
-      const answers: string[] = new Array(kept.length);
-      for (const [i, p] of kept.entries()) {
-        const reused = last.find((q) => sameCall(q, p) && q.inputs === inputs);
-        if (reused !== undefined) answers[i] = reused.answer;
-        else todo.push({ board, p, i });
-      }
-      out.set(board, answers);
+      const kept = playsOf(root, board).filter((p) => !isStale(p));
+      out.set(board, new Array<Again>(kept.length));
+      for (const [i, p] of kept.entries()) todo.push({ board, p, i });
     }
     let next = 0;
     const worker = async (k: number) => {
       for (let j = next++; j < todo.length; j = next++) {
         const { board, p, i } = todo[j] as (typeof todo)[number];
-        const answer = await playAgain(board, p, k === 0 ? lane : `${lane}:v:${k}`);
-        (out.get(board) as string[])[i] = answer;
-        keepPlayed(root, "now", board, { ...p, answer, inputs });
+        const on = k === 0 ? lane : `${lane}:v:${k}`;
+        let again: Again;
+        try {
+          const a = await play(root, { ...playArgsOf(board, p), keepsRan: true }, on);
+          again = {
+            lines:
+              a.played === undefined
+                ? playAnswer(a.text)
+                : playLines(playArgsOf(board, p), a.played).join("\n"),
+          };
+        } catch (error) {
+          again = {
+            failed: error instanceof Error ? (error.message.split("\n")[0] ?? "") : String(error),
+          };
+        }
+        (out.get(board) as Again[])[i] = again;
       }
     };
     await Promise.all(
@@ -409,19 +395,62 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     return out;
   };
 
+  /**
+   * How a play does now against then: undefined when every step does the same; else the first step
+   * that differs, as then and now, led by "couldn't redo" when a step now fails that ran then.
+   */
+  const playNow = (
+    p: Played,
+    then: string,
+    again: Again | undefined,
+  ): { line: string; isUndoable: boolean } | undefined => {
+    const undoable = (why: string) => ({
+      line: `couldn't redo this play: ${playWords(p)}: ${why}`,
+      isUndoable: true,
+    });
+    if (again === undefined) return undoable("not played");
+    if ("failed" in again) return undoable(again.failed);
+    const differs = playDiff(then, again.lines);
+    if (differs === undefined) return undefined;
+    const failsNow = (text: string) =>
+      new Set(
+        text
+          .split("\n")
+          .map((l) => /^(\d+)\. .*→ didn't run$/.exec(l)?.[1])
+          .filter((n): n is string => n !== undefined),
+      );
+    const ranThen = failsNow(then);
+    const failing = [...failsNow(again.lines)].find((n) => !ranThen.has(n));
+    if (failing !== undefined) {
+      const lines = again.lines.split("\n");
+      const at = lines.findIndex((l) => l.startsWith(`${failing}. `));
+      const why = lines
+        .slice(at + 1)
+        .filter((l) => l.trimStart().startsWith("✗"))
+        .map((l) => l.trim())[0];
+      // Why it stopped is the difference: what it did before that step is not worth reading.
+      return undoable(`step ${failing}${why === undefined ? " didn't run" : `: ${why}`}`);
+    }
+    return {
+      line: `plays differently: ${playWords(p)}\n${differs.replace(/^/gm, "    ")}`,
+      isUndoable: false,
+    };
+  };
+
   /** A play in a line: its steps as asked. */
   const playWords = (p: Played) =>
     `${(p.steps as Step[]).map((s) => ("tap" in s ? `tap ${s.tap}` : "drag" in s ? `drag ${s.drag}` : "call")).join(", ")}${p.locale === undefined ? "" : ` (${p.locale})`}`;
 
   /** A version's two pictures, as passed and now (what differs in red), each arriving unshrunk. */
   const diffPictures = async (board: string, d: VersionDiff): Promise<Buffer[]> => {
-    // Only what it reads differs: its pictures are the same.
-    if (d.share === 0) return [];
+    // Only what it reads differs (or one side wasn't drawn): no pictures to put side by side.
+    const pictures = d.pictures;
+    if (d.share === 0 || pictures === undefined) return [];
     const name = board.split("/").at(-1) ?? board;
-    const one = (png: Buffer, boxes: VersionDiff["pictures"]["boxes"], caption: string) => {
+    const one = (png: Buffer, boxes: typeof pictures.boxes, caption: string) => {
       const picture = {
         png,
-        width: d.pictures.width,
+        width: pictures.width,
         boxes: boxes.map((b) => ({ ...b, kind: "piece" as const })),
       };
       // Cut to the pieces that differ, when each is on this picture.
@@ -433,13 +462,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     };
     const pngs = [
       ...(await one(
-        d.pictures.passed,
-        d.pictures.passedBoxes,
-        `${name} · ${d.version} · as passed`,
+        pictures.passed,
+        pictures.passedBoxes,
+        `${name} · ${d.version} · as seen in the review`,
       )),
       ...(await one(
-        d.pictures.now,
-        d.pictures.boxes,
+        pictures.now,
+        pictures.boxes,
         `${name} · ${d.version} · now (what differs in red)`,
       )),
     ];
@@ -452,7 +481,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "What changed since it was reviewed",
         description:
-          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name, with whether it ran in the review), new (never passed), or gone. A changed board is also drawn now in every version, as `show` draws it, against what a reviewer last saw of it (a reviewer's `show` without steps, kept as it is drawn): \"shows the same in every version\", or each version that differs (which pieces, how much), with its pictures as seen and now, cut to what differs (in red); and a reviewer's plays on it (each `show` with steps, kept as it is made) played again, each step that now answers differently said as then and now. Nothing is drawn for a board that hasn't changed. Start a review here: show and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed (approved), as built now, by you. What you saw is kept as you show and play, whether or not you pass.",
+          "Every board at or under an address (a lesson, a chapter, its questions, one board) against what was reviewed: unchanged since passed (nothing to look at), changed (which pieces' setup, words or rules changed, and each function of the code it runs that changed, as file#name, with whether it ran in the review), new (never passed), or gone. A changed board, or a new one a reviewer has seen, is also drawn now in every version, as `show` draws it, against what a reviewer last saw of it (a reviewer's `show` without steps, kept as it is drawn): \"shows the same in every version\", or each version that differs (which pieces, how much; a version drawn on one side only), with its pictures as seen and now, cut to what differs (in red); and a reviewer's plays on it (each `show` with steps, kept as it is made) done again, each step that now answers differently said as then and now, a step that can't be done now as \"couldn't redo\". Nothing is drawn for a board that hasn't changed. Start a review here: show and play only what changed. When a review is done and nothing is left open, `pass: true` records every board there as passed (approved), as built now, by you. What you saw is kept as you show and play, whether or not you pass.",
         inputSchema: {
           at: z
             .string()
@@ -472,14 +501,39 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           return result([text("Give a chapter, a lesson or a board: content/<book>/<chapter>/…")]);
         const notes = await rebuildIfChanged(extra);
         const progress = progressOf(extra);
-        const inputs = buildInputsKey(root);
         if (pass === true) {
+          // A pass takes the boards as they are now: a kept play that can't be done on them now
+          // (a part since gone) is no longer part of what was seen, and goes.
+          const boards = changesUnder(root, under)
+            .filter((c) => c.status !== "gone")
+            .map((c) => c.board)
+            .filter((b) => playsOf(root, b).some((p) => !isStale(p)));
+          await progress("playing the review's plays again");
+          const playedNow = await playsNow(boards);
+          let dropped = 0;
+          for (const board of boards) {
+            // Those whose first step didn't run even then go too: they never showed anything.
+            const all = playsOf(root, board);
+            const kept = all.filter((p) => !isStale(p));
+            const again = playedNow.get(board) ?? [];
+            const keep = kept.filter(
+              (p, i) => playNow(p, thenLines(board, p), again[i])?.isUndoable !== true,
+            );
+            dropped += all.length - keep.length;
+            if (keep.length !== all.length) keepPlays(root, board, keep);
+          }
           const n = passUnder(root, under, NAME);
           return result([
             text(
-              [`✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now.`, ...notes].join(
-                "\n",
-              ),
+              [
+                `✓ ${n} board${n === 1 ? "" : "s"} passed by ${NAME}, as built now.`,
+                ...(dropped === 0
+                  ? []
+                  : [
+                      `${dropped} kept play${dropped === 1 ? "" : "s"} that can't be done on the board now let go: not checked again.`,
+                    ]),
+                ...notes,
+              ].join("\n"),
             ),
           ]);
         }
@@ -488,26 +542,23 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const leftOut: string[] = [];
         let spent = 0;
         const seen = new Map<string, string[]>();
-        const changed = changes.filter((c) => c.status === "changed");
-        // Every changed board a reviewer has seen, drawn now, all together (show's engine).
-        const toCompare = changed.filter((c) => shownOf(root, "seen", c.board) !== undefined);
-        await progress(
-          `drawing ${toCompare.length} changed board${toCompare.length === 1 ? "" : "s"}`,
-        );
-        const now = await shownNow(
+        // Every board changed since passed, or never passed, that a reviewer has seen (the old
+        // side), against the board now (the new side): drawn, or the engine's cache answering.
+        const changed = changes.filter((c) => c.status === "changed" || c.status === "new");
+        const toCompare = changed.filter((c) => shownOf(root, c.board) !== undefined);
+        await progress(`drawing ${toCompare.length} board${toCompare.length === 1 ? "" : "s"}`);
+        const now = await drawShown(
+          root,
           toCompare.map((c) => c.board),
-          inputs,
+          lane,
         );
         await progress("playing the review's plays again");
         const playedNow = await timed("changes: replay plays", () =>
-          playsNow(
-            toCompare.map((c) => c.board),
-            inputs,
-          ),
+          playsNow(toCompare.map((c) => c.board)),
         );
         for (const c of changed) {
           // What a reviewer last saw of it: its drawing (shown without steps) and its plays.
-          const passed = shownOf(root, "seen", c.board);
+          const passed = shownOf(root, c.board);
           const drawnNow = now.get(c.board);
           if (passed === undefined || drawnNow === undefined) {
             seen.set(c.board, ["shows: no reviewer has shown it on this machine yet: show it"]);
@@ -516,14 +567,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           const diffs = await timed("changes: compare pictures", async () =>
             shownDiffs(passed, drawnNow),
           );
-          // A reviewer's plays on it, played again: the first step of each that answers differently.
+          // A reviewer's plays on it, done again: the first step of each that does differently.
           const plays: string[] = [];
-          const kept = playsOf(root, "seen", c.board).filter((p) => !isStale(p));
+          const kept = playsOf(root, c.board).filter((p) => !isStale(p));
           const again = playedNow.get(c.board) ?? [];
           for (const [i, p] of kept.entries()) {
-            const differs = playDiff(p.answer, again[i] ?? "");
-            if (differs !== undefined)
-              plays.push(`plays differently: ${playWords(p)}\n${differs.replace(/^/gm, "    ")}`);
+            const now = playNow(p, thenLines(c.board, p), again[i]);
+            if (now !== undefined) plays.push(now.line);
           }
           const playLine =
             kept.length === 0
@@ -538,16 +588,17 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             continue;
           }
           seen.set(c.board, [
-            ...diffs.map(
-              (d) =>
-                `shows, ${d.version}: ${[
-                  ...(d.read.length > 0 ? [`reads differently: ${d.read.join(", ")}`] : []),
-                  ...(d.share > 0
-                    ? [
-                        `${d.share < 0.001 ? "under 0.1%" : `${(d.share * 100).toFixed(1)}%`} of it looks different${d.pieces.length > 0 ? `, in ${d.pieces.join(", ")}` : ""}`,
-                      ]
-                    : []),
-                ].join("; ")}`,
+            ...diffs.map((d) =>
+              d.missing !== undefined
+                ? `shows, ${d.version}: ${d.missing.side === "now" ? `couldn't draw it now${d.missing.why === undefined ? "" : `: ${d.missing.why}`}` : "not seen in the review (show it)"}`
+                : `shows, ${d.version}: ${[
+                    ...(d.read.length > 0 ? [`reads differently: ${d.read.join(", ")}`] : []),
+                    ...(d.share > 0
+                      ? [
+                          `${d.share < 0.001 ? "under 0.1%" : `${(d.share * 100).toFixed(1)}%`} of it looks different${d.pieces.length > 0 ? `, in ${d.pieces.join(", ")}` : ""}`,
+                        ]
+                      : []),
+                  ].join("; ")}`,
             ),
             ...playLine,
           ]);
@@ -832,11 +883,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             args.frames === undefined &&
             !/^1\. .*didn't run/m.test(playedAnswer)
           )
-            keepPlayed(root, "seen", board, {
+            keepPlayed(root, board, {
               steps: onBoard,
               ...(one.locale === undefined ? {} : { locale: one.locale }),
               ...(one.screen === undefined ? {} : { screen: one.screen }),
               answer: playedAnswer,
+              ...(played.played === undefined ? {} : { drawn: played.played }),
               inputs: buildInputsKey(root),
             });
           return answer(played, notes);

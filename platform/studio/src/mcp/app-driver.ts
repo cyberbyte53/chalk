@@ -901,6 +901,20 @@ export type Act = {
   frames?: FramesSpec;
 };
 
+/**
+ * One drawing, one key, whichever tool asks: what doesn't change the drawing left out (whether
+ * what ran is recorded; an option given as its default), the rest in one order.
+ */
+function askKey(o: ShotOptions, act: Act | undefined): string {
+  const { recordsRan: _r, keepsRan: _k, ...rest } = o;
+  const given = Object.fromEntries(
+    Object.entries(rest)
+      .filter(([k, v]) => v !== undefined && !(k === "play" && v === false))
+      .sort(([a], [b]) => a.localeCompare(b)),
+  );
+  return keyOf({ o: given, act: act ?? null });
+}
+
 /** The browser's version: text is drawn by it, and it updates itself. */
 async function browserVersion(): Promise<string> {
   browser ??= launch();
@@ -947,7 +961,7 @@ export function shoot(
   const isKeepable =
     isDrawCacheOn() && (o.speed ?? 1) === Number.POSITIVE_INFINITY && act?.frames === undefined;
   const wants = o.recordsRan === true || o.keepsRan === true;
-  const ask = keyOf({ o: { ...o, recordsRan: undefined, keepsRan: undefined }, act });
+  const ask = askKey(o, act);
   const inputs = async () =>
     keyOf({
       code: codeKey(root),

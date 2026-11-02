@@ -38,7 +38,9 @@ A board is its content (the board record) and the code it runs. The code graph's
 
 - **At an address, since each board's review.** Each board: unchanged, new, gone, or changed.
 - **Changed, said short:** which pieces, and what about them in the student's terms (its words, its setup, a rule), and which functions changed (`file#name`, whether they ran in the review). Never the internal model's paths. The full detail is one call away (`at` the board).
-- **Drawn only where the make-up changed:** each such board drawn with `show`'s engine (the clock jumps, every version) against what it showed when reviewed: each version's text (pieces' state, problems, script) and pictures. "Its code changed; it shows the same in every version" is said so. Nothing changed: nothing drawn, an answer in well under a second.
+- **Old and new.** The old side is what a reviewer last saw of each board: its last `show` without steps (every version) and its plays, kept as the reviewer drew them, whether or not it passed. A review can't change a board, so what it saw is the board at the review's end. The new side is the board as built now, asked of the drawing engine when `changes` runs; its cache (`draw-cache.ts`) answers when nothing the drawing is made from changed, so a board drawn since costs nothing. Nothing else is kept.
+- **Drawn only where the make-up changed:** each board changed since passed, or never passed yet (a board in its first fixer↔reviewer rounds), that a reviewer has seen, drawn with `show`'s engine (the clock jumps, every version) against what the reviewer last saw: each version's text (pieces' state, problems, script) and pictures. "Its code changed; it shows the same in every version" is said so. A version drawn on one side only is a difference ("couldn't draw it now: why", "not seen in the review"), never "the same". Nothing changed: nothing drawn, an answer in well under a second.
+- **Honest replays.** Each of the reviewer's plays is done again, as the reviewer asked it; its lines then and now are both written from what each drew, by today's words, so a change in wording is never a change in what it does. A step that ran then and can't now is said so: "couldn't redo this play: …: step 2: ✗ no part …". A play that can't be done at all says why; the rest go on.
 - **`pass: true` is instant.** What it showed when reviewed is what the review drew: the last `show` without steps of each board in the review (the service sees them, as it sees what ran). A board passed but never shown in the review is drawn then.
 
 ## `affected` (the fixer)
@@ -49,7 +51,7 @@ A board is its content (the board record) and the code it runs. The code graph's
 ## Decided
 
 - **The review's steps are played again** on a board whose make-up changed: every `show` with steps on the jumping clock is kept beside the board's drawing, and a pass keeps this review's plays and the last review's it didn't play again, each as built now. `changes` says each play that answers differently: the first step that does, and only what differs in it, then and now.
-- **Room:** a board's drawings (every version) and its plays are kept on this machine only (`node_modules/.cache/chalk-shown`), made again by the next review. A drawing counts at a pass only if nothing a build or a board could read changed since it was drawn (content/inputs.ts); else the board is drawn then.
+- **Room:** what a reviewer saw (a board's drawing in every version, one file, and its plays, one file) is kept on this machine only, in `.chalk-seen/` (ignored by git, outside node_modules: a reinstall keeps it). Each file is written whole, then moved into place. The old `node_modules/.cache/chalk-shown/seen` store is read once and moved over.
 
 ## Measured (lesson 1, `two-numbers-for-a-place`)
 

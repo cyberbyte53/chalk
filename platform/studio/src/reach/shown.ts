@@ -1,12 +1,4 @@
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
@@ -14,17 +6,16 @@ import { PNG } from "pngjs";
 /**
  * What a board showed, in every version: each version's screen (its picture at double resolution,
  * where each piece is) and what it read (each piece's state, its problems), as `show` drew it
- * without steps. Kept on this machine only (node_modules/.cache/chalk-shown), as what ran is
- * (ran.ts): `now/` holds the latest drawing of each board, with the inputs it was drawn from
- * (every file a build or a board could read: content/inputs.ts), so it is drawn again only when
- * something changed; `seen/` holds what a reviewer last saw, kept as the reviewer draws it,
- * whether or not the lesson is passed then (passing only records that it is approved).
- * `changes` holds a board whose make-up changed to what a reviewer last saw: the same every time,
- * since a board is drawn the same every time.
+ * without steps. This is the old side of a review: what a reviewer last saw of each board, kept as
+ * the reviewer drew it, whether or not the lesson is passed then (passing only records that it is
+ * approved). A review can't change a board, so what it saw of a board is the board at its end.
+ * The new side is the board as built now: asked of the drawing engine when `changes` runs (its
+ * cache, draw-cache.ts, answers when nothing it is made from changed), never kept here.
  *
  * Its plays are kept beside it: each `show` with steps a reviewer made on it, and what
  * each step answered. `changes` plays them again on a board whose make-up changed and says which
- * step now answers differently: what the board does, on the paths someone reviewed.
+ * step now answers differently, or that it can't be done now: what the board does, on the paths
+ * someone reviewed.
  */
 
 export type ShownVersion = {
@@ -38,41 +29,63 @@ export type ShownVersion = {
 };
 
 export type Shown = {
-  /** The inputs it was drawn from (content/inputs.ts): a drawing of other inputs isn't this one. */
+  /** The inputs it was drawn from (content/inputs.ts), for reading only. */
   inputs: string;
   versions: (ShownVersion & { png: Buffer })[];
+  /** Versions that couldn't be drawn, and why (a drawing now: none is kept with one). */
+  failed?: { version: string; why: string }[];
 };
 
-/** The latest drawing of a board as built (anyone's: what it shows now), or what a reviewer last saw. */
-type Kind = "now" | "seen";
-const dirOf = (root: string, kind: Kind, board: string) =>
-  join(root, "node_modules", ".cache", "chalk-shown", kind, board);
+/**
+ * What a reviewer last saw of each board, kept beside the repo (.chalk-seen/, ignored), not in
+ * node_modules: a reinstall doesn't wipe a review. One file per board's drawing and one for its
+ * plays, each written whole, then moved into place.
+ */
+const dirOf = (root: string, board: string) => join(root, ".chalk-seen", board);
+/** Where it was kept before: read once, moved over. */
+const legacyDirOf = (root: string, board: string) =>
+  join(root, "node_modules", ".cache", "chalk-shown", "seen", board);
 
-/** Keeps a board's drawing: the latest (now), or what a reviewer saw (seen). */
-export function keepShown(root: string, kind: Kind, board: string, shown: Shown): void {
-  const dir = dirOf(root, kind, board);
-  // A drawing replaces the last one; the plays beside it stay.
-  for (const old of existsSync(dir) ? readdirSync(dir) : [])
-    if (old !== PLAYS) rmSync(join(dir, old), { force: true });
-  mkdirSync(dir, { recursive: true });
-  shown.versions.forEach((v, i) => writeFileSync(join(dir, `${i}.png`), v.png));
-  const meta = { inputs: shown.inputs, versions: shown.versions.map(({ png: _, ...v }) => v) };
-  writeFileSync(join(dir, "shown.json"), JSON.stringify(meta));
+function writeWhole(file: string, text: string): void {
+  mkdirSync(dirname(file), { recursive: true });
+  const tmp = `${file}.${process.pid}.tmp`;
+  writeFileSync(tmp, text);
+  renameSync(tmp, file);
 }
 
-/** A board's drawing, or undefined if this machine has none. */
-export function shownOf(root: string, kind: Kind, board: string): Shown | undefined {
-  const dir = dirOf(root, kind, board);
-  const file = join(dir, "shown.json");
-  if (!existsSync(file)) return undefined;
-  const meta = JSON.parse(readFileSync(file, "utf8")) as {
+/** Keeps what a reviewer saw of a board, in every version: it replaces the last. */
+export function keepShown(root: string, board: string, shown: Shown): void {
+  const versions = shown.versions.map((v) => ({ ...v, png: v.png.toString("base64") }));
+  writeWhole(join(dirOf(root, board), SHOWN), JSON.stringify({ inputs: shown.inputs, versions }));
+}
+
+/** What a reviewer last saw of a board, or undefined if no reviewer has shown it on this machine. */
+export function shownOf(root: string, board: string): Shown | undefined {
+  const file = join(dirOf(root, board), SHOWN);
+  if (existsSync(file)) {
+    const kept = JSON.parse(readFileSync(file, "utf8")) as {
+      inputs: string;
+      versions: (ShownVersion & { png: string })[];
+    };
+    return {
+      inputs: kept.inputs,
+      versions: kept.versions.map((v) => ({ ...v, png: Buffer.from(v.png, "base64") })),
+    };
+  }
+  // Kept the old way (a picture per file): read, and moved over.
+  const legacy = legacyDirOf(root, board);
+  const meta = join(legacy, SHOWN);
+  if (!existsSync(meta)) return undefined;
+  const was = JSON.parse(readFileSync(meta, "utf8")) as {
     inputs: string;
     versions: ShownVersion[];
   };
-  return {
-    inputs: meta.inputs,
-    versions: meta.versions.map((v, i) => ({ ...v, png: readFileSync(join(dir, `${i}.png`)) })),
+  const shown: Shown = {
+    inputs: was.inputs,
+    versions: was.versions.map((v, i) => ({ ...v, png: readFileSync(join(legacy, `${i}.png`)) })),
   };
+  keepShown(root, board, shown);
+  return shown;
 }
 
 /** A play: the steps as asked (one version), and what each step answered, from these inputs. */
@@ -82,26 +95,41 @@ export type Played = {
   screen?: { width: number; height?: number };
   /** Each step's lines, as `show` answered them (its header and pictures left out). */
   answer: string;
+  /**
+   * What the play drew (look.ts's PlayDrawn: each step's result, the board at its end), without its
+   * pictures: its lines are written from it by today's words, as the play now is, so a change in
+   * how a step is worded is never a change in what it does. Older plays have only `answer`.
+   */
+  drawn?: unknown;
   inputs: string;
 };
 
+const SHOWN = "shown.json";
 const PLAYS = "plays.json";
 /** The same play: the same steps, on the same version. */
 export const sameCall = (a: Played, b: Played) =>
   JSON.stringify([a.steps, a.locale, a.screen]) === JSON.stringify([b.steps, b.locale, b.screen]);
 
 /** Keeps a reviewer's play of a board: the same steps again replace the last. */
-export function keepPlayed(root: string, kind: Kind, board: string, played: Played): void {
-  const dir = dirOf(root, kind, board);
-  mkdirSync(dir, { recursive: true });
-  const plays = playsOf(root, kind, board).filter((p) => !sameCall(p, played));
-  writeFileSync(join(dir, PLAYS), JSON.stringify([...plays, played]));
+export function keepPlayed(root: string, board: string, played: Played): void {
+  const plays = playsOf(root, board).filter((p) => !sameCall(p, played));
+  writeWhole(join(dirOf(root, board), PLAYS), JSON.stringify([...plays, played]));
+}
+
+/** A board's plays, as given (a pass letting go of those that can't be done now). */
+export function keepPlays(root: string, board: string, plays: readonly Played[]): void {
+  writeWhole(join(dirOf(root, board), PLAYS), JSON.stringify(plays));
 }
 
 /** The plays a reviewer last made on a board. */
-export function playsOf(root: string, kind: Kind, board: string): Played[] {
-  const file = join(dirOf(root, kind, board), PLAYS);
-  return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as Played[]) : [];
+export function playsOf(root: string, board: string): Played[] {
+  const file = join(dirOf(root, board), PLAYS);
+  if (existsSync(file)) return JSON.parse(readFileSync(file, "utf8")) as Played[];
+  const legacy = join(legacyDirOf(root, board), PLAYS);
+  if (!existsSync(legacy)) return [];
+  const plays = JSON.parse(readFileSync(legacy, "utf8")) as Played[];
+  writeWhole(file, JSON.stringify(plays));
+  return plays;
 }
 
 /** A play's answer as kept and compared: each step's lines, without its header or pictures. */
@@ -159,13 +187,15 @@ export function playDiff(was: string, now: string): string | undefined {
 /** How one version differs from what it showed when passed. */
 export type VersionDiff = {
   version: string;
+  /** Drawn on one side only: not seen in the review, or not drawn now (why, if it failed). */
+  missing?: { side: "then" | "now"; why?: string };
   /** The pieces whose state or problems read differently. */
   read: string[];
   /** The share of its pixels that differ, 0 to 1, and the pieces they fall in. */
   share: number;
   pieces: string[];
   /** As passed, and now with each differing pixel marked red: two pictures, with their pieces. */
-  pictures: {
+  pictures?: {
     passed: Buffer;
     now: Buffer;
     width: number;
@@ -186,9 +216,23 @@ const linesOf = (read: string) =>
 /** The versions of a board now that differ from what it showed when passed. */
 export function shownDiffs(passed: Shown, now: Shown): VersionDiff[] {
   const out: VersionDiff[] = [];
+  // A version on one side only is a difference, never "the same".
+  const side = (version: string, missing: "then" | "now", why?: string): VersionDiff => ({
+    version,
+    missing: { side: missing, ...(why === undefined ? {} : { why }) },
+    read: [],
+    share: 0,
+    pieces: [],
+  });
+  for (const v of passed.versions)
+    if (!now.versions.some((n) => n.version === v.version))
+      out.push(side(v.version, "now", now.failed?.find((f) => f.version === v.version)?.why));
   for (const v of now.versions) {
     const was = passed.versions.find((p) => p.version === v.version);
-    if (was === undefined) continue;
+    if (was === undefined) {
+      out.push(side(v.version, "then"));
+      continue;
+    }
     const [a, b] = [linesOf(was.read), linesOf(v.read)];
     const read = [...new Set([...a.keys(), ...b.keys()])].filter((k) => a.get(k) !== b.get(k));
     // The same bytes are the same picture: nothing to compare pixel by pixel.

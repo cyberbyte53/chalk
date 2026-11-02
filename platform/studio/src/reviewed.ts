@@ -359,7 +359,7 @@ const CODE_SHOWN = 8;
 /** The changes, as the reviewer reads them: changed boards first, with what changed on each. */
 export function changesWords(
   changes: readonly BoardChange[],
-  /** What a changed board shows now against when it was passed, a line each (`changes` draws it). */
+  /** What a board shows now against what a reviewer last saw, a line each (`changes` draws it). */
   shows: ReadonlyMap<string, readonly string[]> = new Map(),
 ): string {
   const of = (s: BoardChange["status"]) => changes.filter((c) => c.status === s);
@@ -382,7 +382,11 @@ export function changesWords(
     if (code.length > shown)
       lines.push(`  code: ${code.length - shown} more changed (changes at the board for all)`);
   }
-  for (const c of of("new")) lines.push(`${c.board}   new: never passed`);
+  for (const c of of("new")) {
+    lines.push(`${c.board}   new: never passed`);
+    // A board in review before its first pass: against what a reviewer last saw of it.
+    for (const line of shows.get(c.board) ?? []) lines.push(`  ${line}`);
+  }
   for (const c of of("gone")) lines.push(`${c.board}   gone: passed once, no longer built`);
   const same = of("unchanged");
   if (same.length > 0)

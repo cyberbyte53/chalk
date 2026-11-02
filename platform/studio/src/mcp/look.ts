@@ -18,6 +18,7 @@ import {
   type Shot,
   type ShotOptions,
   type Step,
+  type StepResult,
   closeLane,
   shoot,
   stillRunning,
@@ -491,6 +492,8 @@ export type LookArgs = {
 export type Answer = {
   text: string;
   images?: Buffer[];
+  /** A play's: what it drew, without pictures (reach/shown.ts keeps a reviewer's). */
+  played?: PlayDrawn;
 };
 
 /** The phone: the first of the check screens, where steps are done unless another is named. */
@@ -506,6 +509,20 @@ function versionsOf(a: { locales?: Locale[]; screens?: Screen[] }): Version[] {
 }
 
 const captionOf = (v: Version, n: number) => (n > 1 ? `${v.locale} · ${screenWords(v)}` : "");
+
+/**
+ * How a board is drawn in one version, as `show` draws a whole board and `changes` draws it now:
+ * one ask, so the drawing engine's cache (draw-cache.ts) answers each with the other's drawing.
+ */
+function lookOptions(v: Version): ShotOptions {
+  return {
+    locale: v.locale,
+    width: v.width,
+    ...(v.height === undefined ? {} : { height: v.height }),
+    speed: DEFAULT_SPEED,
+    pictures: "full",
+  };
+}
 
 /** `show` without steps, at a piece, a board or a group. A chapter or book goes to `check`. */
 export async function look(
@@ -565,19 +582,18 @@ export async function look(
     a.play !== true &&
     a.state === undefined &&
     a.speed === undefined;
-  const inputs = isWhole ? buildInputsKey(root) : "";
+  const inputs = isWhole && a.isSeen === true ? buildInputsKey(root) : "";
   // One board on one screen, always: a lesson's or a family's boards are each drawn alone, in each
   // version, never stacked on one page, so each is the drawing `changes` makes of it.
   const each =
     target.kind === "group"
       ? await drawBoards(root, target.boards, versions, options, lane, a.pages)
       : [{ board, drawn: await drawVersions(root, board, versions, options, lane, a.pages) }];
-  if (isWhole)
+  // What a reviewer saw is the old side of the next review (reach/shown.ts).
+  if (isWhole && a.isSeen === true)
     for (const one of each) {
       if (one.drawn.some((d) => d.shots.length === 0)) continue;
-      const kept = { inputs, versions: shownOf(one.drawn, versions) };
-      keepShown(root, "now", shownBoard(one.board), kept);
-      if (a.isSeen === true) keepShown(root, "seen", shownBoard(one.board), kept);
+      keepShown(root, shownBoard(one.board), { inputs, versions: shownOf(one.drawn, versions) });
     }
   const drawn = each[0]?.drawn ?? [];
   // A lesson or a family answers in words: its boards and what each drew. A board is looked at
@@ -684,6 +700,8 @@ async function drawBoards(
     onDrawn?: (done: number, total: number) => Promise<void>;
     signal?: AbortSignal;
     ownLanes?: boolean;
+    /** A drawing that throws is said here, and the rest go on (else it throws for all). */
+    onFailed?: (board: string, version: number, error: unknown) => void;
   } = {},
 ): Promise<{ board: string; drawn: Drawn[] }[]> {
   // Stopped by `signal`, a drawing not made is a hole here: only a check stops, and reads around it.
@@ -697,7 +715,15 @@ async function drawBoards(
       for (let j = next++; j < jobs.length; j = next++) {
         if (more.signal?.aborted === true) return;
         const { o, v, i } = jobs[j] as (typeof jobs)[number];
-        const d = await shoot(root, o.board, options(v), undefined, myLane);
+        let d: Drawn;
+        try {
+          d = await shoot(root, o.board, options(v), undefined, myLane);
+        } catch (error) {
+          if (more.onFailed === undefined) throw error;
+          more.onFailed(o.board, i, error);
+          done += 1;
+          continue;
+        }
         for (const s of d.shots) if (s.model !== undefined) s.model = shown(s.model, v.locale);
         o.drawn[i] = d;
         done += 1;
@@ -774,24 +800,43 @@ export async function drawShown(
 ): Promise<Map<string, Shown>> {
   const inputs = buildInputsKey(root);
   const versions = versionsOf({});
+  const failed = new Map<string, { version: string; why: string }[]>();
   const each = await drawBoards(
     root,
     boards.map(shownBoard),
     versions,
-    (v) => ({
-      // The lines that ran are kept with the drawing: a reviewer's look at it later adds them.
-      keepsRan: true,
-      locale: v.locale,
-      width: v.width,
-      ...(v.height === undefined ? {} : { height: v.height }),
-      speed: DEFAULT_SPEED,
-      pictures: "full",
-    }),
+    // The same ask as a reviewer's show of the board (lookOptions), so each answers the other.
+    (v) => ({ ...lookOptions(v), keepsRan: true }),
     lane,
     pages,
+    {
+      // A version that can't be drawn is said, not dropped: the rest are compared.
+      onFailed: (board, i, error) => {
+        const v = versions[i] as Version;
+        const list = failed.get(board) ?? [];
+        list.push({
+          version: `${v.locale} · ${screenWords(v)}`,
+          why: error instanceof Error ? (error.message.split("\n")[0] ?? "") : String(error),
+        });
+        failed.set(board, list);
+      },
+    },
   );
   return new Map(
-    each.map((one, i) => [boards[i] as string, { inputs, versions: shownOf(one.drawn, versions) }]),
+    each.map((one, i) => {
+      const board = boards[i] as string;
+      // A drawing that failed is a hole: no version for it (said in `failed`).
+      const drawn = Array.from(one.drawn, (d): Drawn => d ?? ({ shots: [], steps: [] } as Drawn));
+      const fails = failed.get(one.board);
+      return [
+        board,
+        {
+          inputs,
+          versions: shownOf(drawn, versions),
+          ...(fails === undefined ? {} : { failed: fails }),
+        },
+      ];
+    }),
   );
 }
 
@@ -886,6 +931,8 @@ export type PlayArgs = {
   board: string;
   /** A reviewer's own play: what ran is recorded as seen in a review (not a replay by `changes`). */
   isSeen?: boolean;
+  /** Work out what ran and keep it with the drawing, unrecorded (`changes` playing it again). */
+  keepsRan?: boolean;
   /**
    * Watch the board move after each step: a frame about every `every` ms (real time), at most
    * `most` kept (those that differ). The clock runs at real speed unless `speed` says otherwise.
@@ -989,7 +1036,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   const shots = a.shots ?? "last";
   const screen = a.screen ?? PHONE;
   const o: ShotOptions = {
-    ...(a.isSeen === true ? { recordsRan: true } : {}),
+    ...(a.isSeen === true ? { recordsRan: true } : a.keepsRan === true ? { keepsRan: true } : {}),
     locale: a.locale ?? "en",
     width: screen.width,
     ...(screen.height === undefined ? {} : { height: screen.height }),
@@ -1023,50 +1070,12 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   const lines = [
     `${shownAddress(a.board)}   ${a.steps.length} step${a.steps.length === 1 ? "" : "s"} · ${screenWords(screen)} · ${o.locale}${o.speed === 1 ? " · real time" : Number.isFinite(o.speed) ? ` · clock ×${o.speed}` : ""}`,
   ];
-  if (d.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(d.runningAtOpen)}`);
-  if (d.heardAtOpen !== undefined) lines.push("as it opened:", ...d.heardAtOpen.map(heardLine));
-  const changedPieces = new Set<string>();
-  for (const [i, r] of d.steps.entries()) {
-    const changed = Object.entries(r.changed ?? {});
-    for (const [path] of changed) changedPieces.add(pieceOfPath(path));
-    const parts = [
-      ...eventLines(r.events, locale),
-      ...changed.map(([path, c]) =>
-        c.was === undefined
-          ? `+ ${local(path)} ${full(c.now)}`
-          : c.now === undefined
-            ? `− ${local(path)}`
-            : `${local(path)} ${full(c.was)} → ${full(c.now)}`,
-      ),
-    ];
-    if (r.motion !== undefined)
-      parts.push(
-        r.motion.stillAfter !== undefined
-          ? r.motion.frames.length === 1
-            ? `still after ${r.motion.stillAfter}s (nothing moved)`
-            : `still after ${r.motion.stillAfter}s (${r.motion.frames.length} different frames)`
-          : r.motion.stoppedBy === "most"
-            ? `${r.motion.frames.length} different frames by ${r.motion.stillChangingAt}s, the most asked for: not watched to the end (ask for more frames)`
-            : `still changing after ${r.motion.stillChangingAt}s`,
-      );
-    lines.push(
-      // A step that failed says only that: "nothing changed" would read as a step that ran.
-      `${i + 1}. ${stepAsked(r.step)}${parts.length > 0 ? ` → ${parts.join(" · ")}` : r.errors.length > 0 ? " → didn't run" : " → nothing changed"}`,
-    );
-    for (const h of r.heard ?? []) lines.push(heardLine(h));
-    if (r.passed) lines.push("   ✓ board passed");
-    for (const e of r.errors) lines.push(`   ${e}`);
-  }
+  const drawnPlay = playDrawnOf(d);
+  lines.push(...playLines(a, drawnPlay));
+  const changedPieces = new Set(
+    d.steps.flatMap((r) => Object.keys(r.changed ?? {}).map(pieceOfPath)),
+  );
   const shot = d.shots[0];
-  const model = shot?.model;
-  if (model !== undefined && !isProp)
-    lines.push(
-      model.isPassed
-        ? "passed"
-        : `not passed${model.openQuestion ? `: ${model.openQuestion} is still open` : ""}`,
-    );
-  if (shot !== undefined && shot.overflow.length > 0)
-    lines.push("problems now:", ...shot.overflow.map((p) => `  ${p}`));
   const labels: Labels = a.labels === false ? "none" : "pieces";
   const crop = a.full === true || changedPieces.size === 0 ? undefined : [...changedPieces];
   const after = [...d.steps].reverse().find((r) => r.picture !== undefined)?.picture;
@@ -1135,5 +1144,92 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   return {
     text: lines.join("\n"),
     images,
+    played: drawnPlay,
   };
+}
+
+/** What a play drew, without its pictures: what its lines are written from (playLines). */
+export type PlayDrawn = {
+  runningAtOpen?: string[];
+  heardAtOpen?: Heard[];
+  steps: Omit<StepResult, "picture">[];
+  /** The board at its end: passed or not, its problems. */
+  end?: { isPassed: boolean; openQuestion?: string; overflow: string[] };
+};
+
+function playDrawnOf(d: Drawn): PlayDrawn {
+  const model = d.shots[0]?.model;
+  return {
+    ...(d.runningAtOpen === undefined ? {} : { runningAtOpen: d.runningAtOpen }),
+    ...(d.heardAtOpen === undefined ? {} : { heardAtOpen: d.heardAtOpen }),
+    steps: d.steps.map(({ picture: _, ...r }) => r),
+    ...(d.shots[0] === undefined
+      ? {}
+      : {
+          end: {
+            isPassed: model?.isPassed === true,
+            ...(model?.openQuestion ? { openQuestion: model.openQuestion } : {}),
+            overflow: d.shots[0].overflow,
+          },
+        }),
+  };
+}
+
+/**
+ * A play's lines (all but its header and pictures): how it opened, each step and what it did, and
+ * the board at its end. Written from what it drew, by today's words: a reviewer's play kept from
+ * before and the same play now are said alike, so only what they did can differ.
+ */
+export function playLines(a: Pick<PlayArgs, "board" | "locale">, p: PlayDrawn): string[] {
+  const locale = a.locale ?? "en";
+  const isProp = a.board.startsWith(PROPS_ROOT);
+  const local = (encoded: string) => {
+    const path = decodeURIComponent(encoded);
+    return isProp ? path.split("/").slice(1).join("/") || path : path;
+  };
+  const piece = `${a.board.split("/").at(-1)}/`;
+  const stepAsked = (words: string) => (isProp ? words.replace(` ${piece}`, " ") : words);
+  const lines: string[] = [];
+  if (p.runningAtOpen !== undefined) lines.push(`as it opened: ${stillRunning(p.runningAtOpen)}`);
+  if (p.heardAtOpen !== undefined) lines.push("as it opened:", ...p.heardAtOpen.map(heardLine));
+  for (const [i, r] of p.steps.entries()) {
+    const changed = Object.entries(r.changed ?? {});
+    const parts = [
+      ...eventLines(r.events, locale),
+      ...changed.map(([path, c]) =>
+        c.was === undefined
+          ? `+ ${local(path)} ${full(c.now)}`
+          : c.now === undefined
+            ? `− ${local(path)}`
+            : `${local(path)} ${full(c.was)} → ${full(c.now)}`,
+      ),
+    ];
+    if (r.motion !== undefined)
+      parts.push(
+        r.motion.stillAfter !== undefined
+          ? r.motion.frames.length === 1
+            ? `still after ${r.motion.stillAfter}s (nothing moved)`
+            : `still after ${r.motion.stillAfter}s (${r.motion.frames.length} different frames)`
+          : r.motion.stoppedBy === "most"
+            ? `${r.motion.frames.length} different frames by ${r.motion.stillChangingAt}s, the most asked for: not watched to the end (ask for more frames)`
+            : `still changing after ${r.motion.stillChangingAt}s`,
+      );
+    lines.push(
+      // A step that failed says only that: "nothing changed" would read as a step that ran.
+      `${i + 1}. ${stepAsked(r.step)}${parts.length > 0 ? ` → ${parts.join(" · ")}` : r.errors.length > 0 ? " → didn't run" : " → nothing changed"}`,
+    );
+    for (const h of r.heard ?? []) lines.push(heardLine(h));
+    if (r.passed) lines.push("   ✓ board passed");
+    for (const e of r.errors) lines.push(`   ${e}`);
+  }
+  const end = p.end;
+  if (end !== undefined && !isProp)
+    lines.push(
+      end.isPassed
+        ? "passed"
+        : `not passed${end.openQuestion ? `: ${end.openQuestion} is still open` : ""}`,
+    );
+  if (end !== undefined && end.overflow.length > 0)
+    lines.push("problems now:", ...end.overflow.map((o) => `  ${o}`));
+  return lines;
 }
