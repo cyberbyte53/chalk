@@ -141,6 +141,16 @@ const planeFields = {
    * defines quadrants: before that, the axes are named without them.
    */
   canNumberQuadrants: z.boolean(),
+  /**
+   * Whether a quadrant can be tapped before all four are numbered. Off: a quadrant is tapped only
+   * once the lesson has numbered them, so the word isn't met before it is taught.
+   */
+  canTapQuadrants: z.boolean(),
+  /**
+   * Whether a tapped part's name is written under the plane. Off in a question that asks for a
+   * part by its name: the tap only marks it, and Check says if it is the one.
+   */
+  namesTapped: z.boolean(),
   /** Nothing else is drawn on it: a tap on a part of it names that part. */
   isAlone: z.boolean(),
   /** A counted line's numbers are buttons (each lights the places with that number). */
@@ -170,6 +180,8 @@ export type PlaneCore = {
   points: NamedPoint[];
   canShowPoints: boolean;
   canNumberQuadrants: boolean;
+  canTapQuadrants: boolean;
+  namesTapped: boolean;
   isAlone: boolean;
   canTapNumbers: boolean;
   lit: Line | null;
@@ -200,6 +212,8 @@ export const planeStart: Omit<PlaneCore, "isAlone" | "canTapNumbers" | "lit"> = 
   points: [],
   canShowPoints: false,
   canNumberQuadrants: false,
+  canTapQuadrants: false,
+  namesTapped: true,
 };
 
 /** Where a point is: in a quadrant, on an axis, or at O. */
@@ -336,6 +350,10 @@ export const plane = prop({
       canShowPoints: z.boolean(),
       /** The learner gets a button numbering the quadrants I to IV. */
       canNumberQuadrants: z.boolean(),
+      /** A quadrant can be tapped before all four are numbered. */
+      canTapQuadrants: z.boolean(),
+      /** A tapped part's name is written under the plane. */
+      namesTapped: z.boolean(),
     })
     .strict(),
   start: planeStart,

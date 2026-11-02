@@ -127,6 +127,10 @@ export const places = prop({
     markTarget: action(pointSchema.shape, {
       describe: "Mark the place at (x, y) as the target (the lesson: Aman says which house)",
     }),
+    nameTarget: action(
+      { name: localizedSchema },
+      { describe: "Call the target something else (the lesson: once any house may be tapped)" },
+    ),
     lightLine: action(
       { ...lineSchema.shape, isTap: z.boolean().optional() },
       { describe: "Light every place with this one number (isTap: the student tapped the number)" },
@@ -152,6 +156,7 @@ export const places = prop({
       t.tell.lineLit({ ...line, count: placesOn(me, line).length }),
     ],
     clearLight: (_, __, t) => t.set({ lit: null, isLitByTap: false }),
+    nameTarget: (_, { name }, t) => t.set({ targetName: name }),
   },
   invariant: (s) =>
     s.target !== null && !s.places.some((p) => p.x === s.target?.x && p.y === s.target?.y)

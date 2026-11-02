@@ -1,5 +1,5 @@
 import { hidden, page, place, scene, t, tap } from "@chalk/author";
-import { plane, words } from "@chalk/patterns";
+import { choice, plane, words } from "@chalk/patterns";
 import {
   Axes,
   Choosing,
@@ -16,8 +16,11 @@ const { setup, walkTo } = plane;
 /** The x- and y-axes' names, as the lesson gives them once they are defined. */
 const XY: [ReturnType<typeof t>, ReturnType<typeof t>] = [t("x", "x"), t("y", "y")];
 
-/** The two number lines as one picture: from −5 to 5 across, −4 to 4 up (Fig. 3.7, 3.8). */
-const AXES = { xMin: -5.5, xMax: 5.5, yMin: -4.5, yMax: 4.5 };
+/**
+ * The two number lines as one picture (Fig. 3.7, 3.8): from −4 to 4 each way, so a unit is wide
+ * enough on a phone for −1 to be written beside O.
+ */
+const AXES = { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 };
 
 /** The recap the lesson builds on: a number line, its origin, and a distance either side of it. */
 const numberLine = page(
@@ -27,8 +30,8 @@ const numberLine = page(
       title: words.title(t("Back to the number line", "फिर से संख्या रेखा")),
       link: words.body(
         t(
-          "Riya's town, the dot on the page and the seats in class each took two numbers, along two lines at right angles. To give the place of **any** point that way, each line will be a **number line**. First, what a number line says.",
-          "रिया का शहर, पन्ने पर बिंदु और कक्षा की सीटें, हर एक के लिए दो समकोण रेखाओं के साथ दो संख्याएँ लगीं। **किसी भी** बिंदु का स्थान इस तरह बताने के लिए, हर रेखा एक **संख्या रेखा** होगी। पहले देखें कि संख्या रेखा क्या बताती है।",
+          "Riya's town, the dot on the page and the desks in class each took two numbers, along two lines at right angles. To give the place of **any** point that way, each line will be a **number line**. First, what a number line says.",
+          "रिया का शहर, पन्ने पर बिंदु और कक्षा के डेस्क, हर एक के लिए दो समकोण रेखाओं के साथ दो संख्याएँ लगीं। **किसी भी** बिंदु का स्थान इस तरह बताने के लिए, हर रेखा एक **संख्या रेखा** होगी। पहले देखें कि संख्या रेखा क्या बताती है।",
         ),
       ),
       recap: words.body(
@@ -95,6 +98,52 @@ const numberLine = page(
   }),
 );
 
+/** The grown town: lesson 1's town, and 3 streets west and 3 houses south of Riya's corner. */
+const GROWN = { xMin: -3.5, xMax: 6.5, yMin: -3.5, yMax: 5.5 };
+const STREETS: [ReturnType<typeof t>, ReturnType<typeof t>] = [
+  t("Street number", "गली नंबर"),
+  t("House number", "मकान नंबर"),
+];
+/** What a tapped house is called once any house may be tapped: not his aunt's. */
+const TAPPED = t("The house you tapped", "तुम्हारा चुना मकान");
+
+/** Counting the new streets from her corner, as she counted the old: the other way, so −1. */
+const firstWest = choice({
+  name: "firstWest",
+  prompt: t(
+    "Riya numbered the old streets 1, 2, 3, … going **east** from her corner. Counting from her corner the same way, what number should the first new street **west** of it get?",
+    "रिया ने पुरानी गलियाँ अपने कोने से **पूर्व** की ओर 1, 2, 3, … गिनी थीं। अपने कोने से उसी तरह गिनते हुए, उसके **पश्चिम** में पहली नई गली को कौन-सी संख्या मिलनी चाहिए?",
+  ),
+  options: [
+    { id: "minus", label: t("−1", "−1") },
+    {
+      id: "next",
+      label: t("6, the next number", "6, अगली संख्या"),
+      feedback: t(
+        "Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.",
+        "गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।",
+      ),
+    },
+    {
+      id: "one",
+      label: t("1", "1"),
+      feedback: t(
+        "Street 1 is already there, 1 street east. Two streets can't have one number: this one is 1 street west.",
+        "गली 1 पहले से है, 1 गली पूर्व में। दो गलियों का एक ही नंबर नहीं हो सकता: यह 1 गली पश्चिम में है।",
+      ),
+    },
+    {
+      id: "zero",
+      label: t("0", "0"),
+      feedback: t(
+        "0 is the street through her corner itself, 0 streets from it. This one is 1 street away.",
+        "0 तो उसके कोने से गुज़रने वाली गली है, उससे 0 गली दूर। यह गली 1 गली दूर है।",
+      ),
+    },
+  ],
+  answer: "minus",
+});
+
 /** Riya's town past her corner: the streets west and the houses south get negative numbers. */
 const townGrows = page(
   "town-grows",
@@ -103,60 +152,90 @@ const townGrows = page(
       title: words.title(t("The town grows", "शहर बढ़ता है")),
       story: words.body(
         t(
-          "Riya's town has grown. New streets were built **west** of her corner, and new houses **south** of the main road. Riya counted the streets and houses from her corner. How should these new ones be numbered?",
-          "रिया का शहर बढ़ गया है। उसके कोने के **पश्चिम** में नई गलियाँ बनीं, और मुख्य सड़क के **दक्षिण** में नए मकान। रिया ने गलियाँ और मकान अपने कोने से गिने थे। इन नए वालों को कौन-सी संख्याएँ मिलें?",
+          "Riya's town has grown. New streets were built **west** of her corner (to the left on the map), and new houses **south** of the main road (down the map). A new street also runs through her corner, with no houses on it.",
+          "रिया का शहर बढ़ गया है। उसके कोने के **पश्चिम** में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के **दक्षिण** में (नक्शे पर नीचे) नए मकान। उसके कोने से होकर भी एक नई गली जाती है, जिस पर कोई मकान नहीं है।",
         ),
       ),
-      town: place(
+      before: place(
         coordinatePlane,
         setup({
           plane: {
-            window: { xMin: -3.5, xMax: 5.5, yMin: -3.5, yMax: 4.5 },
+            window: GROWN,
             marks: Marks.Numbers,
             scene: Scene.Town,
             upLines: null,
             showOrigin: false,
-            axisNames: [t("Street number", "गली नंबर"), t("House number", "मकान नंबर")],
+            numbered: [],
+            showAxisNames: false,
           },
-          places: {
-            places: houses(-3, 5, -3, 4),
-            placeKind: PlaceKind.House,
-            choosing: Choosing.OnceOpen,
-            showAddress: true,
-            target: { x: -2, y: -3 },
-            targetName: t("Aman's aunt's house", "अमन की मौसी का घर"),
-          },
+          places: { places: houses(GROWN), placeKind: PlaceKind.House, choosing: Choosing.Never },
+          // Riya at her corner, where the counting starts; she walks once the town is numbered.
           walker: {
-            showWhere: true,
             walkFrom: { x: 0, y: 0 },
             at: { x: 0, y: 0 },
             roads: Roads.Town,
+            canStep: false,
+            showWhere: false,
           },
         }),
       ),
-      signs: words.body(
-        t(
-          "Each road is a number line now. Her corner is **0 on both**. Going west, the streets are −1, −2, −3; going south, the houses are −1, −2, −3. **The minus sign says which way:** west along the main road, south down a street.",
-          "अब हर सड़क एक संख्या रेखा है। उसका कोना **दोनों पर 0** है। पश्चिम की ओर गलियाँ −1, −2, −3 हैं; दक्षिण की ओर मकान −1, −2, −3 हैं। **माइनस का चिह्न बताता है कि किस ओर:** मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
+      firstWest: firstWest.piece,
+      town: hidden(
+        place(
+          coordinatePlane,
+          setup({
+            plane: {
+              window: GROWN,
+              marks: Marks.Numbers,
+              scene: Scene.Town,
+              upLines: null,
+              showOrigin: false,
+              axisNames: STREETS,
+            },
+            places: {
+              places: houses(GROWN),
+              placeKind: PlaceKind.House,
+              choosing: Choosing.OnceOpen,
+              showAddress: true,
+              target: { x: -2, y: -3 },
+              targetName: t("Aman's aunt's house", "अमन की मौसी का घर"),
+            },
+            walker: {
+              showWhere: true,
+              walkFrom: { x: 0, y: 0 },
+              at: { x: 0, y: 0 },
+              roads: Roads.Town,
+            },
+          }),
         ),
-        {
-          says: t(
-            "Each road is a number line now. Her corner is 0 on both. Going west, the streets are minus 1, minus 2, minus 3; going south, the houses are minus 1, minus 2, minus 3. The minus sign says which way: west along the main road, south down a street.",
-            "अब हर सड़क एक संख्या रेखा है। उसका कोना दोनों पर 0 है। पश्चिम की ओर गलियाँ माइनस 1, माइनस 2, माइनस 3 हैं; दक्षिण की ओर मकान माइनस 1, माइनस 2, माइनस 3 हैं। माइनस का चिह्न बताता है कि किस ओर: मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
-          ),
-        },
       ),
-      aunt: words.body(
-        t(
-          "Aman's aunt lives at **Street −2, House −3**. Walk Riya there.",
-          "अमन की मौसी **गली −2, मकान −3** में रहती हैं। रिया को वहाँ ले चलो।",
-        ),
-        {
-          says: t(
-            "Aman's aunt lives at Street minus 2, House minus 3. Walk Riya there.",
-            "अमन की मौसी गली माइनस 2, मकान माइनस 3 में रहती हैं। रिया को वहाँ ले चलो।",
+      signs: hidden(
+        words.body(
+          t(
+            "Each road is a number line now. Her corner is **0 on both**, and the street through it is Street 0. Going west, the streets are −1, −2, −3; going south, the houses are −1, −2, −3. **The minus sign says which way:** west along the main road, south down a street.",
+            "अब हर सड़क एक संख्या रेखा है। उसका कोना **दोनों पर 0** है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ −1, −2, −3 हैं; दक्षिण की ओर मकान −1, −2, −3 हैं। **माइनस का चिह्न बताता है कि किस ओर:** मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
           ),
-        },
+          {
+            says: t(
+              "Each road is a number line now. Her corner is 0 on both, and the street through it is Street 0. Going west, the streets are minus 1, minus 2, minus 3; going south, the houses are minus 1, minus 2, minus 3. The minus sign says which way: west along the main road, south down a street.",
+              "अब हर सड़क एक संख्या रेखा है। उसका कोना दोनों पर 0 है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ माइनस 1, माइनस 2, माइनस 3 हैं; दक्षिण की ओर मकान माइनस 1, माइनस 2, माइनस 3 हैं। माइनस का चिह्न बताता है कि किस ओर: मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
+            ),
+          },
+        ),
+      ),
+      aunt: hidden(
+        words.body(
+          t(
+            "Aman's aunt lives at **Street −2, House −3**. Walk Riya there.",
+            "अमन की मौसी **गली −2, मकान −3** में रहती हैं। रिया को वहाँ ले चलो।",
+          ),
+          {
+            says: t(
+              "Aman's aunt lives at Street minus 2, House minus 3. Walk Riya there.",
+              "अमन की मौसी गली माइनस 2, मकान माइनस 3 में रहती हैं। रिया को वहाँ ले चलो।",
+            ),
+          },
+        ),
       ),
       there: hidden(
         words.definition(
@@ -176,14 +255,20 @@ const townGrows = page(
       anyHouse: hidden(
         words.body(
           t(
-            "**Tap any house** to see its address, in the new town or the old.",
-            "किसी भी मकान का पता देखने के लिए उसे **दबाओ**, नए शहर में या पुराने में।",
+            "**Tap any house** to see its address, in the new town or the old: Aman's own house is at Street 4, House 5.",
+            "किसी भी मकान का पता देखने के लिए उसे **दबाओ**, नए शहर में या पुराने में: अमन का अपना घर गली 4, मकान 5 पर है।",
           ),
         ),
       ),
     },
     passBy: "rules",
     hear: {
+      "firstWest.correct": (_, __, t) => [
+        t.self.hide({ name: "before" }),
+        t.self.show({ name: "town" }),
+        t.self.show({ name: "signs" }),
+        t.self.show({ name: "aunt" }),
+      ],
       "town.walker.arrived": (_, p, t) =>
         p.x === -2 &&
         p.y === -3 && [
@@ -191,8 +276,15 @@ const townGrows = page(
           t.self.show({ name: "anyHouse" }),
           t.self.pass(),
         ],
+      // A house tapped once she has arrived is any house, not his aunt's.
+      "town.places.targetChosen": (_, __, t) => t.to.town.places.nameTarget({ name: TAPPED }),
     },
-    witness: walkTo("town", -2, -3),
+    uses: [firstWest.use],
+    witness: [
+      tap("firstWest", "select", { option: "minus" }),
+      tap("firstWest", "check"),
+      ...walkTo("town", -2, -3),
+    ],
   }),
 );
 
@@ -239,14 +331,14 @@ const twoNumberLines = page(
       axes: hidden(
         words.definition(
           t(
-            "**The horizontal line X′X is the x-axis, and the vertical line YY′ is the y-axis. The point where they cross is the origin, O.**",
-            "**क्षैतिज रेखा X′X, x-अक्ष है, और ऊर्ध्वाधर रेखा YY′, y-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।**",
+            "**The horizontal line X′X is the x-axis, and the vertical line Y′Y is the y-axis. The point where they cross is the origin, O.**",
+            "**क्षैतिज रेखा X′X, x-अक्ष है, और ऊर्ध्वाधर रेखा Y′Y, y-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।**",
           ),
           null,
           {
             says: t(
-              "The horizontal line X dash X is the x-axis, and the vertical line Y Y dash is the y-axis. The point where they cross is the origin, O.",
-              "क्षैतिज रेखा X डैश X, एक्स-अक्ष है, और ऊर्ध्वाधर रेखा Y Y डैश, वाई-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।",
+              "The horizontal line X dash X is the x-axis, and the vertical line Y dash Y is the y-axis. The point where they cross is the origin, O.",
+              "क्षैतिज रेखा X डैश X, एक्स-अक्ष है, और ऊर्ध्वाधर रेखा Y डैश Y, वाई-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।",
             ),
           },
         ),
@@ -305,6 +397,8 @@ const axesAndDirections = page(
             marks: Marks.Numbers,
             numbered: ["x", "y"],
             axisNames: XY,
+            // X, X′, Y, Y′ name the ends, as in Fig. 3.8: the small x and y would be a second name.
+            showAxisNames: false,
             showDirections: true,
           },
         }),
@@ -327,13 +421,13 @@ const quadrants = page(
       title: words.title(t("Four quadrants", "चार चतुर्थांश")),
       parts: words.body(
         t(
-          "The axes divide the plane into four parts. Each is called a **quadrant**: one fourth part. They are numbered I, II, III and IV, going **anticlockwise** from OX. Press the button to number them.",
-          "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को **चतुर्थांश** कहते हैं: एक चौथाई भाग। इन्हें OX से **वामावर्त** (घड़ी की सुइयों की उलटी दिशा में) चलते हुए I, II, III और IV से गिना जाता है। इन्हें गिनने के लिए बटन दबाओ।",
+          "The axes divide the plane into four parts. Each is called a **quadrant**: one fourth part. They are numbered I, II, III and IV, going **anticlockwise** from OX. Press **Number the quadrants**.",
+          "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को **चतुर्थांश** कहते हैं: एक चौथाई भाग। इन्हें OX से **वामावर्त** (घड़ी की सुइयों की उलटी दिशा में) चलते हुए पहला (I), दूसरा (II), तीसरा (III) और चौथा (IV) गिना जाता है। **चतुर्थांशों को गिनो** दबाओ।",
         ),
         {
           says: t(
-            "The axes divide the plane into four parts. Each is called a quadrant: one fourth part. They are numbered one, two, three and four, going anticlockwise from O X. Press the button to number them.",
-            "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। इन्हें गिनने के लिए बटन दबाओ।",
+            "The axes divide the plane into four parts. Each is called a quadrant: one fourth part. They are numbered one, two, three and four, going anticlockwise from O X. Press Number the quadrants.",
+            "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। चतुर्थांशों को गिनो दबाओ।",
           ),
         },
       ),
@@ -345,6 +439,8 @@ const quadrants = page(
             marks: Marks.Numbers,
             numbered: ["x", "y"],
             axisNames: XY,
+            // X, X′, Y, Y′ name the ends, as in Fig. 3.8: the small x and y would be a second name.
+            showAxisNames: false,
             showDirections: true,
             canNumberQuadrants: true,
           },
@@ -354,7 +450,7 @@ const quadrants = page(
         words.body(
           t(
             "In Riya's town, the quadrants are its four parts around her corner. Aman's house, at Street 4, House 5, is in quadrant I; his aunt's, at Street −2, House −3, is in quadrant III. **Tap a quadrant** to see its name.",
-            "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, गली 4, मकान 5 पर, चतुर्थांश I में है; उसकी मौसी का, गली −2, मकान −3 पर, चतुर्थांश III में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।",
+            "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, गली 4, मकान 5 पर, पहले चतुर्थांश (I) में है; उसकी मौसी का, गली −2, मकान −3 पर, तीसरे चतुर्थांश (III) में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।",
           ),
           {
             says: t(
@@ -409,12 +505,12 @@ const quadrants = page(
 
 /**
  * The grown town's houses: every whole-number point in the window but those on the main road, and
- * none on Riya's own street, which carries the house numbers.
+ * none on the street through Riya's corner, which carries the house numbers.
  */
-function houses(xMin: number, xMax: number, yMin: number, yMax: number) {
+function houses(w: typeof GROWN) {
   const out: { x: number; y: number }[] = [];
-  for (let x = xMin; x <= xMax; x++)
-    for (let y = yMin; y <= yMax; y++) if (x !== 0 && y !== 0) out.push({ x, y });
+  for (let x = Math.ceil(w.xMin); x <= w.xMax; x++)
+    for (let y = Math.ceil(w.yMin); y <= w.yMax; y++) if (x !== 0 && y !== 0) out.push({ x, y });
   return out;
 }
 

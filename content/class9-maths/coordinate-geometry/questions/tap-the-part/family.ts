@@ -5,29 +5,21 @@ import { Marks, PlanePart, coordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
-/** What each part is called in a prompt, and what it is: as shown, and as said. */
+/** What each part is called in a prompt: its name only, as shown and as said. */
 const PARTS = {
-  [PlanePart.O]: [t("**the origin, O**", "**मूल बिंदु O**"), t("the origin, O", "मूल बिंदु O")],
-  [PlanePart.OX]: [
-    t("**OX**, the positive direction of the x-axis", "**OX**, x-अक्ष की धनात्मक दिशा"),
-    t("O X, the positive direction of the x-axis", "O X, एक्स-अक्ष की धनात्मक दिशा"),
+  [PlanePart.O]: [t("**O**", "**O**"), t("O", "O")],
+  [PlanePart.OX]: [t("**OX**", "**OX**"), t("O X", "O X")],
+  [PlanePart.OXDash]: [t("**OX′**", "**OX′**"), t("O X dash", "O X डैश")],
+  [PlanePart.OY]: [t("**OY**", "**OY**"), t("O Y", "O Y")],
+  [PlanePart.OYDash]: [t("**OY′**", "**OY′**"), t("O Y dash", "O Y डैश")],
+  // In Devanagari a Roman I reads as a danda (।): the ordinal comes first.
+  [PlanePart.I]: [t("**quadrant I**", "**पहले चतुर्थांश (I)**"), t("quadrant one", "पहले चतुर्थांश")],
+  [PlanePart.II]: [t("**quadrant II**", "**दूसरे चतुर्थांश (II)**"), t("quadrant two", "दूसरे चतुर्थांश")],
+  [PlanePart.III]: [
+    t("**quadrant III**", "**तीसरे चतुर्थांश (III)**"),
+    t("quadrant three", "तीसरे चतुर्थांश"),
   ],
-  [PlanePart.OXDash]: [
-    t("**OX′**, the negative direction of the x-axis", "**OX′**, x-अक्ष की ऋणात्मक दिशा"),
-    t("O X dash, the negative direction of the x-axis", "O X डैश, एक्स-अक्ष की ऋणात्मक दिशा"),
-  ],
-  [PlanePart.OY]: [
-    t("**OY**, the positive direction of the y-axis", "**OY**, y-अक्ष की धनात्मक दिशा"),
-    t("O Y, the positive direction of the y-axis", "O Y, वाई-अक्ष की धनात्मक दिशा"),
-  ],
-  [PlanePart.OYDash]: [
-    t("**OY′**, the negative direction of the y-axis", "**OY′**, y-अक्ष की ऋणात्मक दिशा"),
-    t("O Y dash, the negative direction of the y-axis", "O Y डैश, वाई-अक्ष की ऋणात्मक दिशा"),
-  ],
-  [PlanePart.I]: [t("**quadrant I**", "**चतुर्थांश I**"), t("quadrant one", "पहले चतुर्थांश")],
-  [PlanePart.II]: [t("**quadrant II**", "**चतुर्थांश II**"), t("quadrant two", "दूसरे चतुर्थांश")],
-  [PlanePart.III]: [t("**quadrant III**", "**चतुर्थांश III**"), t("quadrant three", "तीसरे चतुर्थांश")],
-  [PlanePart.IV]: [t("**quadrant IV**", "**चतुर्थांश IV**"), t("quadrant four", "चौथे चतुर्थांश")],
+  [PlanePart.IV]: [t("**quadrant IV**", "**चौथे चतुर्थांश (IV)**"), t("quadrant four", "चौथे चतुर्थांश")],
 } as const;
 
 /** The wrong tap a student makes for a part, and why, where there is one to name. */
@@ -64,34 +56,42 @@ const MISTAKES: Partial<Record<PlanePart, { part: PlanePart; say: ReturnType<typ
     part: PlanePart.IV,
     say: t(
       "That is quadrant IV: you counted clockwise. The quadrants are numbered anticlockwise from OX: I, then II above OX′.",
-      "वह चतुर्थांश IV है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: I, फिर OX′ के ऊपर II।",
+      "वह चौथा चतुर्थांश (IV) है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: पहला (I), फिर OX′ के ऊपर दूसरा (II)।",
     ),
   },
   [PlanePart.IV]: {
     part: PlanePart.II,
     say: t(
       "That is quadrant II: you counted clockwise. The quadrants are numbered anticlockwise from OX: I, II, III, then IV below OX.",
-      "वह चतुर्थांश II है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: I, II, III, फिर OX के नीचे IV।",
+      "वह दूसरा चतुर्थांश (II) है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: पहला, दूसरा, तीसरा, फिर OX के नीचे चौथा (IV)।",
     ),
   },
 };
 
-/** Ex 3.2 Q1 in the prop: the axes' halves, the quadrants and the origin, each found by a tap. */
+/** Ex 3.2 Q1 in the prop: the axes' halves and the quadrants, each found by its name alone. */
 export const tapThePart = family({
   level: Level.Easy,
   tests: [Concept.TheCartesianPlane],
-  params: z.object({ part: z.nativeEnum(PlanePart) }).strict(),
+  params: z
+    .object({ part: z.nativeEnum(PlanePart) })
+    .strict()
+    // O is printed on the picture: asking for it would ask the student to read a label.
+    .refine((p) => p.part !== PlanePart.O, "the origin is labelled O on the picture"),
   build: ({ part }) => {
     const { isNamed, setup } = plane;
     const sheet = place(
       coordinatePlane,
       setup({
         plane: {
-          window: { xMin: -5.5, xMax: 5.5, yMin: -4.5, yMax: 4.5 },
+          window: { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 },
           marks: Marks.Numbers,
           numbered: ["x", "y"],
           axisNames: [t("x", "x"), t("y", "y")],
+          showAxisNames: false,
           showDirections: true,
+          // A tap marks a part without naming it: Check says whether it is the one asked for.
+          namesTapped: false,
+          canTapQuadrants: true,
         },
       }),
     );

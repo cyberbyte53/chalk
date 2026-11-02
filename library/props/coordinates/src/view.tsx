@@ -72,7 +72,7 @@ export const planeDrawing = drawing(plane, {
   // Over Riya, so the mark she has just made stays in view.
   front: ({ s, px }) => <NamedPointsDraw s={s} px={px} />,
   below: ({ s, locale }) =>
-    s.named === null || !(canNameParts(s) && s.isAlone) ? null : (
+    s.named === null || !s.namesTapped || !(canNameParts(s) && s.isAlone) ? null : (
       <p class="cp-line" {...shows("named", s.named, partWords(s, s.named, locale))}>
         {partWords(s, s.named, locale)}
       </p>

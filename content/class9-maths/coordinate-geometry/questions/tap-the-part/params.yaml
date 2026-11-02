@@ -1,6 +1,5 @@
-# A half of each axis, the two quadrants counted wrongly clockwise, and the origin.
+# A half of each axis, and the two quadrants a clockwise count swaps. Not O: it is labelled.
 - params: { part: "OY′" }
 - params: { part: "OX′" }
 - params: { part: "II" }
 - params: { part: "IV" }
-- params: { part: "O" }

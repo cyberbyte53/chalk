@@ -5,7 +5,7 @@ export const WORDS = {
   walk: { en: "Walk", hi: "चलो" },
   back: { en: "Back to the start", hi: "शुरू पर वापस" },
   nextPoint: { en: "Next point", hi: "अगला बिंदु" },
-  nameQuadrants: { en: "Name the quadrants", hi: "चतुर्थांशों के नाम" },
+  nameQuadrants: { en: "Number the quadrants", hi: "चतुर्थांशों को गिनो" },
   bringTogether: { en: "Bring the zeroes together", hi: "दोनों शून्य मिलाओ" },
   show: { en: "Show", hi: "दिखाओ" },
   showPoint: { en: "Show where it is", hi: "दिखाओ कहाँ है" },

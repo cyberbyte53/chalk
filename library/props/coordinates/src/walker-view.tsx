@@ -30,7 +30,8 @@ function walkWords(s: WalkerView, locale: Locale): string {
   const isOnMainRoad = s.roads === "town" && from !== null && now.y === from.y;
   // Counted streets start at 1: a 0 means she is on a main road, so that part isn't said.
   const counted = [
-    now.x === 0 ? "" : `${s.axisNames[0][locale]} ${num(now.x)}`,
+    // Once the town is numbered both ways, the street through her corner is Street 0.
+    now.x === 0 && s.marks !== "numbers" ? "" : `${s.axisNames[0][locale]} ${num(now.x)}`,
     now.y === 0 ? "" : `${s.axisNames[1][locale]} ${num(now.y)}`,
   ]
     .filter(Boolean)

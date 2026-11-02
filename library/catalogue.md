@@ -105,6 +105,8 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plane.points` | [{name: "text", x: "number", y: "number", isShown: "true or false", hasDropLines: "true or false", tone: ["main", "accent", "muted"]}] | changed by plane.its own rules |
 | `plane.canShowPoints` | true or false | changed by plane.its own rules |
 | `plane.canNumberQuadrants` | true or false | changed by plane.its own rules |
+| `plane.canTapQuadrants` | true or false | changed by plane.its own rules |
+| `plane.namesTapped` | true or false | changed by plane.its own rules |
 | `reading.point` | {orNull: {x: "number", y: "number"}} | changed by reading.its own rules |
 | `reading.pointStep` | number 0 to … | changed by reading.its own rules |
 | `reading.reading` | ["none", "perpendiculars", "distances", "abscissa", "pair"] | changed by reading.its own rules |
@@ -167,6 +169,7 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `reading.askAt` | {x: "number", y: "number"} | Put the point at (x, y) with its reading hidden: a guessing round |
 | `places.chooseTarget` | {x: "number", y: "number"} | learner · Make the place at (x, y) the target (the student's tap) |
 | `places.markTarget` | {x: "number", y: "number"} | Mark the place at (x, y) as the target (the lesson: Aman says which house) |
+| `places.nameTarget` | {name: {en: "text", hi: "text"}} | Call the target something else (the lesson: once any house may be tapped) |
 | `places.lightLine` | {axis: ["x", "y"], value: "number", isTap: {optional: "true or false"}} | Light every place with this one number (isTap: the student tapped the number) |
 | `places.clearLight` | — | learner · Turn the lit places off |
 | `walker.step` | {direction: ["up", "down", "left", "right"]} | learner · Move Riya one block up, down, left or right, on roads only |

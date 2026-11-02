@@ -38,15 +38,16 @@ const SIGNS: Record<Quadrant, string> = {
 
 /** What each part of the plane is, in words, when a tap names it. */
 export const PART_WORDS: Record<PlanePart, { en: string; hi: string }> = {
-  O: { en: "O, the origin", hi: "O, मूल बिंदु" },
-  OX: { en: "OX: the positive x-axis", hi: "OX: धनात्मक x-अक्ष" },
-  "OX′": { en: "OX′: the negative x-axis", hi: "OX′: ऋणात्मक x-अक्ष" },
-  OY: { en: "OY: the positive y-axis", hi: "OY: धनात्मक y-अक्ष" },
-  "OY′": { en: "OY′: the negative y-axis", hi: "OY′: ऋणात्मक y-अक्ष" },
-  I: { en: "Quadrant I", hi: "चतुर्थांश I" },
-  II: { en: "Quadrant II", hi: "चतुर्थांश II" },
-  III: { en: "Quadrant III", hi: "चतुर्थांश III" },
-  IV: { en: "Quadrant IV", hi: "चतुर्थांश IV" },
+  O: { en: "O: the origin", hi: "O: मूल बिंदु" },
+  OX: { en: "OX: the positive direction of the x-axis", hi: "OX: x-अक्ष की धनात्मक दिशा" },
+  "OX′": { en: "OX′: the negative direction of the x-axis", hi: "OX′: x-अक्ष की ऋणात्मक दिशा" },
+  OY: { en: "OY: the positive direction of the y-axis", hi: "OY: y-अक्ष की धनात्मक दिशा" },
+  "OY′": { en: "OY′: the negative direction of the y-axis", hi: "OY′: y-अक्ष की ऋणात्मक दिशा" },
+  // In Devanagari a Roman I reads as a danda (।): the ordinal comes first, the numeral after it.
+  I: { en: "Quadrant I", hi: "पहला चतुर्थांश (I)" },
+  II: { en: "Quadrant II", hi: "दूसरा चतुर्थांश (II)" },
+  III: { en: "Quadrant III", hi: "तीसरा चतुर्थांश (III)" },
+  IV: { en: "Quadrant IV", hi: "चौथा चतुर्थांश (IV)" },
 };
 
 /** A tapped part's words: its name, and a quadrant's signs once they are defined. */
@@ -223,7 +224,7 @@ export function AxesDraw({
   const hasO = isNumbersOf(s) && s.showOrigin && s.isCrossed === true;
   // Where a unit is too short for "−1" and "O" side by side, O keeps the corner: the −1s go
   // (their marks stay).
-  const isCrowded = hasO && unit * s.tickEvery < 40;
+  const isCrowded = hasO && unit * s.tickEvery < 30;
   const label = (v: number, i: number) =>
     i % every === 0 && !(hasZeroMark(v) && hasO) && !(isCrowded && Math.abs(v + s.tickEvery) < 1e-9)
       ? num(v)
@@ -270,8 +271,10 @@ export function AxesDraw({
           const [, y] = px.toPx(s.apart.x, v + s.apart.y);
           // While the lines are apart, a number that would sit on the horizontal line's numbers
           // isn't written: its mark stays.
+          // While the lines are apart, a number of the vertical line on the horizontal line, or on
+          // its row of numbers, isn't written: its mark stays.
           const isApart = s.apart.x !== 0 || s.apart.y !== 0;
-          const isOnRow = isApart && y > base - 12 && y < base + 28;
+          const isOnRow = isApart && y > base - 8 && y < base + 26;
           const text = isOnRow ? "" : label(v, i);
           const isButton = canLight && isCounted && text !== "";
           return (
@@ -289,7 +292,13 @@ export function AxesDraw({
                   </text>
                 </g>
               ) : (
-                <text x={vx - 8} y={y} text-anchor="end" dominant-baseline="central">
+                // The zero, under the ring that slides it while apart, is written clear of it.
+                <text
+                  x={vx - (isApart && hasZeroMark(v) ? 14 : 8)}
+                  y={y}
+                  text-anchor="end"
+                  dominant-baseline="central"
+                >
                   {text}
                 </text>
               )}
@@ -393,9 +402,12 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
     [PlanePart.OYDash, 0, s.window.yMin, 0, 0],
   ];
   const [ox, oy] = px.toPx(0, 0);
+  // A quadrant is tapped once the lesson has numbered them, or where it says they can be.
+  const canTapQuadrant = s.canTapQuadrants || s.quadrantsNamed === 4;
   return (
     <g class="cp-part-taps">
       {QUADRANTS.map((q) => {
+        if (!canTapQuadrant) return null;
         const b = quadrantBox(s, q);
         if (b.x1 - b.x0 < 0.5 || b.y1 - b.y0 < 0.5) return null;
         const [x0, y0] = px.toPx(b.x0, b.y1);

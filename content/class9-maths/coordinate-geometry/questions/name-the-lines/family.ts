@@ -1,12 +1,16 @@
-import { family, scene, t } from "@chalk/author";
+import { family, place, scene, t } from "@chalk/author";
 import { Level, type Localized } from "@chalk/content";
-import { choice } from "@chalk/patterns";
+import { choice, plane } from "@chalk/patterns";
+import { Marks, coordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
-/** The three names Ex 3.2 Q1 asks for, and the fourth the lesson gives: each an option. */
+/**
+ * The names a student could give, each an option, worded alike (each with "The") so the grammar
+ * doesn't pick the answer: the three Ex 3.2 Q1 asks for, the directions, and one axis alone.
+ */
 const NAMES: Record<
-  "axes" | "quadrant" | "origin" | "directions",
+  "axes" | "axis" | "quadrants" | "origin" | "directions",
   { label: Localized; feedback: Localized; feedbackSays?: Localized }
 > = {
   axes: {
@@ -20,11 +24,18 @@ const NAMES: Record<
       "एक्स-अक्ष और वाई-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X डैश X और खड़ी Y डैश Y।",
     ),
   },
-  quadrant: {
-    label: t("A quadrant", "एक चतुर्थांश"),
+  axis: {
+    label: t("The x-axis", "x-अक्ष"),
     feedback: t(
-      "A quadrant is one of the four parts the two lines divide the plane into.",
-      "चतुर्थांश उन चार भागों में से एक है जिनमें दोनों रेखाएँ तल को बाँटती हैं।",
+      "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point.",
+      "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।",
+    ),
+  },
+  quadrants: {
+    label: t("The quadrants", "चतुर्थांश"),
+    feedback: t(
+      "The quadrants are the four parts the two lines divide the plane into.",
+      "चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।",
     ),
   },
   origin: {
@@ -48,7 +59,10 @@ const NAMES: Record<
 };
 type Name = keyof typeof NAMES;
 
-/** Each part of the question, in the book's words, and the name that answers it. */
+/**
+ * Each part of the question, in the book's words, each standing alone: "these two lines" said as
+ * the lines they are, and "write" as choose (the answer is chosen, not written).
+ */
 const ASKS = {
   lines: {
     answer: "axes",
@@ -58,20 +72,20 @@ const ASKS = {
     ),
   },
   parts: {
-    answer: "quadrant",
+    answer: "quadrants",
     prompt: t(
-      "What is the name of each part of the plane formed by these two lines?",
-      "इन दोनों रेखाओं से बने तल के प्रत्येक भाग का क्या नाम है?",
+      "What is the name of the parts of the plane formed by the horizontal and the vertical lines?",
+      "क्षैतिज और ऊर्ध्वाधर रेखाओं से बने तल के भागों का क्या नाम है?",
     ),
   },
   point: {
     answer: "origin",
     prompt: t(
-      "Write the name of the point where these two lines intersect.",
-      "उस बिंदु का नाम लिखिए जहाँ ये दोनों रेखाएँ प्रतिच्छेद करती हैं।",
+      "Choose the name of the point where the horizontal and the vertical lines intersect.",
+      "उस बिंदु का नाम चुनिए जहाँ क्षैतिज और ऊर्ध्वाधर रेखाएँ प्रतिच्छेद करती हैं।",
     ),
   },
-} as const satisfies Record<string, { answer: Name; prompt: ReturnType<typeof t> }>;
+} as const satisfies Record<string, { answer: Name; prompt: Localized }>;
 
 /** NCERT Ex 3.2 Q1, in the book's words: the names of the axes, the quadrants and the origin. */
 export const nameTheLines = family({
@@ -80,6 +94,21 @@ export const nameTheLines = family({
   params: z.object({ ask: z.enum(["lines", "parts", "point"]) }).strict(),
   build: ({ ask: which }) => {
     const { answer, prompt } = ASKS[which];
+    // The lines the question is about, drawn as in Fig. 3.8: a tap on them names nothing.
+    const sheet = place(
+      coordinatePlane,
+      plane.setup({
+        plane: {
+          window: { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 },
+          marks: Marks.Numbers,
+          numbered: ["x", "y"],
+          showAxisNames: false,
+          showOrigin: false,
+          showDirections: true,
+          namesTapped: false,
+        },
+      }),
+    );
     const ask = choice({
       prompt,
       options: (Object.keys(NAMES) as Name[]).map((id) => ({
@@ -91,6 +120,6 @@ export const nameTheLines = family({
       })),
       answer,
     });
-    return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { sheet, ask: ask.piece }, uses: [ask.use] });
   },
 });

@@ -97,6 +97,14 @@
   font: 700 var(--text-caption) var(--font-body);
   fill: var(--color-on-surface-variant);
 }
+/* A name over a town's houses stays readable: a halo of the page's colour under its letters. */
+.cp-frame .cp-axis-name,
+.cp-frame .cp-walker-name {
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
 .cp-frame .cp-quadrant text {
   font: 800 var(--text-title) var(--font-display);
   fill: color-mix(in srgb, var(--color-on-surface) 45%, transparent);
