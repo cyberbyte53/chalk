@@ -328,8 +328,10 @@ function BoardThreads({
     const el = phone.current === null ? null : anchorOf(phone.current, t);
     el?.classList.toggle("is-revealed", on);
   };
-  const isDetached = (t: Thread) =>
-    t.target !== undefined && phone.current !== null && anchorOf(phone.current, t) === null;
+  // Which threads' pieces aren't on the board: worked out as the board draws (below), not once
+  // when the list first draws, before the board has drawn its pieces.
+  const [detached, setDetached] = useState<ReadonlySet<string>>(new Set());
+  const isDetached = (t: Thread) => detached.has(t.id);
   const one = (t: Thread) => {
     const isOpen = openId === t.id || replyingTo === t.id;
     const latest = [...t.messages].reverse().find((m) => m.text !== "");
@@ -482,6 +484,11 @@ function BoardThreads({
     };
     let frame = 0;
     const place = () => {
+      const gone = new Set(
+        threads.filter((t) => t.target !== undefined && anchorOf(ph, t) === null).map((t) => t.id),
+      );
+      if (gone.size !== detached.size || [...gone].some((id) => !detached.has(id)))
+        setDetached(gone);
       const items = [...ul.children] as HTMLElement[];
       if (getComputedStyle(ul).position === "static") {
         for (const li of items) li.style.top = "";
