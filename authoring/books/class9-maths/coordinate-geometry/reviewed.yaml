@@ -173,9 +173,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:14.572Z
-  code: f1e764c9cbc8ce8c
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:40.889Z
+  code: e7dcc2a23398ca69
 class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
   content:
     model:
@@ -350,9 +350,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:14.572Z
-  code: f1e764c9cbc8ce8c
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:40.889Z
+  code: e7dcc2a23398ca69
 class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
   content:
     model:
@@ -527,9 +527,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:14.572Z
-  code: f1e764c9cbc8ce8c
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:40.889Z
+  code: e7dcc2a23398ca69
 class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
   content:
     model:
@@ -704,9 +704,9 @@ class9-maths/coordinate-geometry/questions/bus-to-stop/b21ff4e6:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:14.572Z
-  code: f1e764c9cbc8ce8c
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:40.889Z
+  code: e7dcc2a23398ca69
 class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
   content:
     model:
@@ -828,6 +828,600 @@ class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3:
   commit: f7badfe1418f
   at: 2026-11-02T04:09:18.163Z
   code: 161ae46562aac06a
+class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96:
+  content:
+    model:
+      freeLines:
+        - ask-axis-note
+        - ask-quadrants-note
+        - ask-origin-note
+        - ask-directions-note
+      given:
+        ask:
+          answer: axes
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          options:
+            - feedback:
+                en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+                hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+              id: axis
+              label:
+                en: The x-axis
+                hi: x-अक्ष
+            - feedback:
+                en: The origin, O, is the one point where the two lines cross.
+                hi: मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।
+              id: origin
+              label:
+                en: The origin
+                hi: मूल बिंदु
+            - feedback:
+                en: The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.
+                hi: दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।
+              id: directions
+              label:
+                en: The positive and negative directions
+                hi: धनात्मक और ऋणात्मक दिशाएँ
+            - id: axes
+              label:
+                en: The x-axis and the y-axis
+                hi: x-अक्ष और y-अक्ष
+            - feedback:
+                en: The quadrants are the four parts the two lines divide the plane into.
+                hi: चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।
+              id: quadrants
+              label:
+                en: The quadrants
+                hi: चतुर्थांश
+          prompt:
+            en: What is the name of the horizontal and the vertical lines drawn to determine the position of any point in the Cartesian plane?
+            hi: कार्तीय तल में किसी बिंदु की स्थिति निर्धारित करने के लिए खींची गई क्षैतिज और ऊर्ध्वाधर रेखाओं का क्या नाम है?
+        sheet:
+          plane:
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            showOrigin: false
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask-axis-note:
+          about: ask
+          says:
+            en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+            hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+          when: ask.checked
+          where:
+            optionId: axis
+            status: wrong
+        ask-directions-note:
+          about: ask
+          says:
+            en: The directions are the halves of each axis, O X and O X dash, O Y and O Y dash, not the lines or the parts.
+            hi: दिशाएँ हर अक्ष के आधे भाग हैं, O X और O X डैश, O Y और O Y डैश, न कि रेखाएँ या भाग।
+          when: ask.checked
+          where:
+            optionId: directions
+            status: wrong
+        ask-origin-note:
+          about: ask
+          says:
+            en: The origin, O, is the one point where the two lines cross.
+            hi: मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।
+          when: ask.checked
+          where:
+            optionId: origin
+            status: wrong
+        ask-quadrants-note:
+          about: ask
+          says:
+            en: The quadrants are the four parts the two lines divide the plane into.
+            hi: चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।
+          when: ask.checked
+          where:
+            optionId: quadrants
+            status: wrong
+      scene:
+        describe: The board nameTheLines.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          ask.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: nameTheLines
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              showOrigin: false
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: choice
+          with:
+            answer: axes
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            options:
+              - feedback:
+                  en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+                  hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+                id: axis
+                label:
+                  en: The x-axis
+                  hi: x-अक्ष
+              - feedback:
+                  en: The origin, O, is the one point where the two lines cross.
+                  hi: मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।
+                id: origin
+                label:
+                  en: The origin
+                  hi: मूल बिंदु
+              - feedback:
+                  en: The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.
+                  hi: दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।
+                id: directions
+                label:
+                  en: The positive and negative directions
+                  hi: धनात्मक और ऋणात्मक दिशाएँ
+              - id: axes
+                label:
+                  en: The x-axis and the y-axis
+                  hi: x-अक्ष और y-अक्ष
+              - feedback:
+                  en: The quadrants are the four parts the two lines divide the plane into.
+                  hi: चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।
+                id: quadrants
+                label:
+                  en: The quadrants
+                  hi: चतुर्थांश
+            prompt:
+              en: What is the name of the horizontal and the vertical lines drawn to determine the position of any point in the Cartesian plane?
+              hi: कार्तीय तल में किसी बिंदु की स्थिति निर्धारित करने के लिए खींची गई क्षैतिज और ऊर्ध्वाधर रेखाओं का क्या नाम है?
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:47.010Z
+  code: b7f03f9dfba5e543
+class9-maths/coordinate-geometry/questions/name-the-lines/a6dfeb17:
+  content:
+    model:
+      freeLines:
+        - ask-axes-note
+        - ask-axis-note
+        - ask-quadrants-note
+        - ask-directions-note
+      given:
+        ask:
+          answer: origin
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          options:
+            - feedback:
+                en: The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.
+                hi: दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।
+              id: directions
+              label:
+                en: The positive and negative directions
+                hi: धनात्मक और ऋणात्मक दिशाएँ
+            - feedback:
+                en: The quadrants are the four parts the two lines divide the plane into.
+                hi: चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।
+              id: quadrants
+              label:
+                en: The quadrants
+                hi: चतुर्थांश
+            - id: origin
+              label:
+                en: The origin
+                hi: मूल बिंदु
+            - feedback:
+                en: "The x-axis and the y-axis are the two lines themselves: X′X across and Y′Y up."
+                hi: "x-अक्ष और y-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X′X और खड़ी Y′Y।"
+              id: axes
+              label:
+                en: The x-axis and the y-axis
+                hi: x-अक्ष और y-अक्ष
+            - feedback:
+                en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+                hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+              id: axis
+              label:
+                en: The x-axis
+                hi: x-अक्ष
+          prompt:
+            en: Choose the name of the point where the horizontal and the vertical lines intersect.
+            hi: उस बिंदु का नाम चुनिए जहाँ क्षैतिज और ऊर्ध्वाधर रेखाएँ प्रतिच्छेद करती हैं।
+        sheet:
+          plane:
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            showOrigin: false
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask-axes-note:
+          about: ask
+          says:
+            en: "The x-axis and the y-axis are the two lines themselves: X dash X across and Y dash Y up."
+            hi: "एक्स-अक्ष और वाई-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X डैश X और खड़ी Y डैश Y।"
+          when: ask.checked
+          where:
+            optionId: axes
+            status: wrong
+        ask-axis-note:
+          about: ask
+          says:
+            en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+            hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+          when: ask.checked
+          where:
+            optionId: axis
+            status: wrong
+        ask-directions-note:
+          about: ask
+          says:
+            en: The directions are the halves of each axis, O X and O X dash, O Y and O Y dash, not the lines or the parts.
+            hi: दिशाएँ हर अक्ष के आधे भाग हैं, O X और O X डैश, O Y और O Y डैश, न कि रेखाएँ या भाग।
+          when: ask.checked
+          where:
+            optionId: directions
+            status: wrong
+        ask-quadrants-note:
+          about: ask
+          says:
+            en: The quadrants are the four parts the two lines divide the plane into.
+            hi: चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।
+          when: ask.checked
+          where:
+            optionId: quadrants
+            status: wrong
+      scene:
+        describe: The board nameTheLines.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          ask.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: nameTheLines
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              showOrigin: false
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: choice
+          with:
+            answer: origin
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            options:
+              - feedback:
+                  en: The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.
+                  hi: दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।
+                id: directions
+                label:
+                  en: The positive and negative directions
+                  hi: धनात्मक और ऋणात्मक दिशाएँ
+              - feedback:
+                  en: The quadrants are the four parts the two lines divide the plane into.
+                  hi: चतुर्थांश वे चार भाग हैं जिनमें दोनों रेखाएँ तल को बाँटती हैं।
+                id: quadrants
+                label:
+                  en: The quadrants
+                  hi: चतुर्थांश
+              - id: origin
+                label:
+                  en: The origin
+                  hi: मूल बिंदु
+              - feedback:
+                  en: "The x-axis and the y-axis are the two lines themselves: X′X across and Y′Y up."
+                  hi: "x-अक्ष और y-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X′X और खड़ी Y′Y।"
+                id: axes
+                label:
+                  en: The x-axis and the y-axis
+                  hi: x-अक्ष और y-अक्ष
+              - feedback:
+                  en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+                  hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+                id: axis
+                label:
+                  en: The x-axis
+                  hi: x-अक्ष
+            prompt:
+              en: Choose the name of the point where the horizontal and the vertical lines intersect.
+              hi: उस बिंदु का नाम चुनिए जहाँ क्षैतिज और ऊर्ध्वाधर रेखाएँ प्रतिच्छेद करती हैं।
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:47.010Z
+  code: b7f03f9dfba5e543
+class9-maths/coordinate-geometry/questions/name-the-lines/bfaeb756:
+  content:
+    model:
+      freeLines:
+        - ask-axes-note
+        - ask-axis-note
+        - ask-origin-note
+        - ask-directions-note
+      given:
+        ask:
+          answer: quadrants
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          options:
+            - id: quadrants
+              label:
+                en: The quadrants
+                hi: चतुर्थांश
+            - feedback:
+                en: The origin, O, is the one point where the two lines cross.
+                hi: मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।
+              id: origin
+              label:
+                en: The origin
+                hi: मूल बिंदु
+            - feedback:
+                en: The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.
+                hi: दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।
+              id: directions
+              label:
+                en: The positive and negative directions
+                hi: धनात्मक और ऋणात्मक दिशाएँ
+            - feedback:
+                en: "The x-axis and the y-axis are the two lines themselves: X′X across and Y′Y up."
+                hi: "x-अक्ष और y-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X′X और खड़ी Y′Y।"
+              id: axes
+              label:
+                en: The x-axis and the y-axis
+                hi: x-अक्ष और y-अक्ष
+            - feedback:
+                en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+                hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+              id: axis
+              label:
+                en: The x-axis
+                hi: x-अक्ष
+          prompt:
+            en: What is the name of the parts of the plane formed by the horizontal and the vertical lines?
+            hi: क्षैतिज और ऊर्ध्वाधर रेखाओं से बने तल के भागों का क्या नाम है?
+        sheet:
+          plane:
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            showOrigin: false
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask-axes-note:
+          about: ask
+          says:
+            en: "The x-axis and the y-axis are the two lines themselves: X dash X across and Y dash Y up."
+            hi: "एक्स-अक्ष और वाई-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X डैश X और खड़ी Y डैश Y।"
+          when: ask.checked
+          where:
+            optionId: axes
+            status: wrong
+        ask-axis-note:
+          about: ask
+          says:
+            en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+            hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+          when: ask.checked
+          where:
+            optionId: axis
+            status: wrong
+        ask-directions-note:
+          about: ask
+          says:
+            en: The directions are the halves of each axis, O X and O X dash, O Y and O Y dash, not the lines or the parts.
+            hi: दिशाएँ हर अक्ष के आधे भाग हैं, O X और O X डैश, O Y और O Y डैश, न कि रेखाएँ या भाग।
+          when: ask.checked
+          where:
+            optionId: directions
+            status: wrong
+        ask-origin-note:
+          about: ask
+          says:
+            en: The origin, O, is the one point where the two lines cross.
+            hi: मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।
+          when: ask.checked
+          where:
+            optionId: origin
+            status: wrong
+      scene:
+        describe: The board nameTheLines.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        hear:
+          ask.checked: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: nameTheLines
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              showOrigin: false
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: choice
+          with:
+            answer: quadrants
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            options:
+              - id: quadrants
+                label:
+                  en: The quadrants
+                  hi: चतुर्थांश
+              - feedback:
+                  en: The origin, O, is the one point where the two lines cross.
+                  hi: मूल बिंदु O वह एक बिंदु है जहाँ दोनों रेखाएँ काटती हैं।
+                id: origin
+                label:
+                  en: The origin
+                  hi: मूल बिंदु
+              - feedback:
+                  en: The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.
+                  hi: दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।
+                id: directions
+                label:
+                  en: The positive and negative directions
+                  hi: धनात्मक और ऋणात्मक दिशाएँ
+              - feedback:
+                  en: "The x-axis and the y-axis are the two lines themselves: X′X across and Y′Y up."
+                  hi: "x-अक्ष और y-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X′X और खड़ी Y′Y।"
+                id: axes
+                label:
+                  en: The x-axis and the y-axis
+                  hi: x-अक्ष और y-अक्ष
+              - feedback:
+                  en: "The x-axis is one line, the horizontal one: not a part of the plane, and not a single point."
+                  hi: "x-अक्ष एक रेखा है, क्षैतिज वाली: न तल का कोई भाग, न कोई एक बिंदु।"
+                id: axis
+                label:
+                  en: The x-axis
+                  hi: x-अक्ष
+            prompt:
+              en: What is the name of the parts of the plane formed by the horizontal and the vertical lines?
+              hi: क्षैतिज और ऊर्ध्वाधर रेखाओं से बने तल के भागों का क्या नाम है?
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:47.010Z
+  code: b7f03f9dfba5e543
 class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
   content:
     model:
@@ -940,9 +1534,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:16.981Z
-  code: ed9cc1e1264193af
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:42.464Z
+  code: 1b384945efa56692
 class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
   content:
     model:
@@ -1055,9 +1649,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/7a88de39:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:16.981Z
-  code: ed9cc1e1264193af
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:42.464Z
+  code: 1b384945efa56692
 class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
   content:
     model:
@@ -1170,9 +1764,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/d71b269b:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:16.981Z
-  code: ed9cc1e1264193af
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:42.464Z
+  code: 1b384945efa56692
 class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
   content:
     model:
@@ -1285,9 +1879,9 @@ class9-maths/coordinate-geometry/questions/place-the-dot/f68b6eb5:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:16.981Z
-  code: ed9cc1e1264193af
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:42.464Z
+  code: 1b384945efa56692
 class9-maths/coordinate-geometry/questions/table-lamp/44136fa3:
   content:
     model:
@@ -1775,9 +2369,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:15.881Z
-  code: 984021ad8b4b5da5
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:44.081Z
+  code: 2f27fb2e91b8d693
 class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
   content:
     model:
@@ -2156,9 +2750,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/784113c9:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:15.881Z
-  code: 984021ad8b4b5da5
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:44.081Z
+  code: 2f27fb2e91b8d693
 class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
   content:
     model:
@@ -2537,9 +3131,9 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/a4b97a8c:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:15.881Z
-  code: 984021ad8b4b5da5
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:44.081Z
+  code: 2f27fb2e91b8d693
 class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
   content:
     model:
@@ -2918,9 +3512,445 @@ class9-maths/coordinate-geometry/questions/tap-the-desk/fecd278a:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:15.881Z
-  code: 984021ad8b4b5da5
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:44.081Z
+  code: 2f27fb2e91b8d693
+class9-maths/coordinate-geometry/questions/tap-the-part/790ad375:
+  content:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          prompt:
+            en: Tap **quadrant IV**, then press Check.
+            hi: "**चौथे चतुर्थांश (IV)** को दबाओ, फिर जाँचो दबाओ।"
+        sheet:
+          plane:
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            canTapQuadrants: true
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask:
+          says:
+            en: Tap quadrant four, then press Check.
+            hi: चौथे चतुर्थांश को दबाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board tapThePart.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapThePart
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              canTapQuadrants: true
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            prompt:
+              en: Tap **quadrant IV**, then press Check.
+              hi: "**चौथे चतुर्थांश (IV)** को दबाओ, फिर जाँचो दबाओ।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:48.683Z
+  code: c9ea3b90d277d4c7
+class9-maths/coordinate-geometry/questions/tap-the-part/929971e6:
+  content:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          prompt:
+            en: Tap **OX′**, then press Check.
+            hi: "**OX′** को दबाओ, फिर जाँचो दबाओ।"
+        sheet:
+          plane:
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            canTapQuadrants: true
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask:
+          says:
+            en: Tap O X dash, then press Check.
+            hi: O X डैश को दबाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board tapThePart.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapThePart
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              canTapQuadrants: true
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            prompt:
+              en: Tap **OX′**, then press Check.
+              hi: "**OX′** को दबाओ, फिर जाँचो दबाओ।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:48.683Z
+  code: c9ea3b90d277d4c7
+class9-maths/coordinate-geometry/questions/tap-the-part/9a79e9c6:
+  content:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          prompt:
+            en: Tap **quadrant II**, then press Check.
+            hi: "**दूसरे चतुर्थांश (II)** को दबाओ, फिर जाँचो दबाओ।"
+        sheet:
+          plane:
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            canTapQuadrants: true
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask:
+          says:
+            en: Tap quadrant two, then press Check.
+            hi: दूसरे चतुर्थांश को दबाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board tapThePart.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapThePart
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              canTapQuadrants: true
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            prompt:
+              en: Tap **quadrant II**, then press Check.
+              hi: "**दूसरे चतुर्थांश (II)** को दबाओ, फिर जाँचो दबाओ।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:48.683Z
+  code: c9ea3b90d277d4c7
+class9-maths/coordinate-geometry/questions/tap-the-part/f3e7f310:
+  content:
+    model:
+      freeLines: []
+      given:
+        ask:
+          about: sheet
+          concepts:
+            - 87e47e6e3464ea4f
+          isGraded: true
+          prompt:
+            en: Tap **OY′**, then press Check.
+            hi: "**OY′** को दबाओ, फिर जाँचो दबाओ।"
+        sheet:
+          plane:
+            axisNames:
+              - en: x
+                hi: x
+              - en: y
+                hi: y
+            canTapQuadrants: true
+            marks: numbers
+            namesTapped: false
+            numbered:
+              - x
+              - y
+            showAxisNames: false
+            showDirections: true
+            window:
+              xMax: 5.5
+              xMin: -5.5
+              yMax: 5.5
+              yMin: -5.5
+      lines:
+        ask:
+          says:
+            en: Tap O Y dash, then press Check.
+            hi: O Y डैश को दबाओ, फिर जाँचो दबाओ।
+      scene:
+        describe: The board tapThePart.
+        facts:
+          isOpen: ƒ me=>me.isPassed
+        give:
+          ask:
+            isMet: ƒ me=>spec.isRight(reader(me))
+        hear:
+          ask.correct: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+          ask.wrong: ƒ (me,payload,t)=>[...(own[key]??[]).flatMap(rule=>rule(me,payload,t)),...dueAt(key,me,payload).map(due=>t.self.say(due)),...rulesFrom.flatMap(r=>list(r[key]?.(me,payload,t)))]
+        on:
+          continue: ƒ (me,_,t)=>me.isPassed&&t.tell.continued()
+          goOn: ƒ (me,_,t)=>{const[read,...reads]=me.reads;if(me.saying.length>0||read===void 0)return;const step=t.cause.step;return[t.set({saying:[{line:read,step}],reads}),sayAfterBreath(t,{line:read,step})]}
+          hearAgain: ƒ (me,_,t)=>[t.set({saying:[],reads:names.filter(n=>!me.hidden.includes(n))}),t.hush(),t.self.goOn()]
+          hide: ƒ (me,{name:piece},t)=>{if(me.hidden.includes(piece))return;const{saying,isCut,next}=pieceHidden(me.saying,piece);const tt=t;return[t.set({hidden:[...me.hidden,piece],saying,reads:me.reads.filter(n=>n!==piece)}),...isCut?[tt.hush(),next===void 0?t.self.goOn():sayNow(tt,next)]:[]]}
+          hush: ƒ (_,__,t)=>[t.set({saying:[],reads:[]}),t.hush()]
+          lineEnded: ƒ (me,{line,step},t)=>{const after=lineEnded(me.saying,line,step);const tt=t;return[tell(t,"said",{line}),...after===void 0?[]:[t.set({saying:after.saying})],...after?.next===void 0?[]:[sayAfterBreath(tt,after.next)],...dueAtBoard("said",me,{line}).map(due=>t.self.say(due)),...list(onSaid[line]?.(me,t)),t.self.goOn()]}
+          pass: ƒ (me,_,t)=>!me.isPassed&&[t.set({isPassed:true}),tell(t,"passed",{}),...dueAtBoard("passed",me,{}).map(due=>t.self.say(due))]
+          say: "ƒ (me,{line,values},t)=>{if(!Object.hasOwn(spec.pieces,line)&&!Object.hasOwn(freeLines,line))throw new Error(`Board ${name}: no line \"${line}\" (a piece's name, or one of its lines)`);const tt=t;const{byStudent,step}=tt.cause;const mine={line,step,...values===void 0?{}:{values}};const next=lineDue(me.saying,mine,byStudent);return[t.set({saying:next.saying,...next.isCut?{reads:[]}:{}}),...next.say===void 0?[]:[sayNow(tt,next.say)]]}"
+          show: ƒ (me,{name:piece},t)=>me.hidden.includes(piece)&&[t.set({hidden:me.hidden.filter(n=>n!==piece)}),t.self.say({line:piece}),tell(t,"shown",{name:piece}),...dueAtBoard("shown",me,{name:piece}).map(due=>t.self.say(due))]
+          start: ƒ (me,_,t)=>{const atOnce=spec.passBy!=="rules"&&questions.length===0;return[t.set({reads:names.filter(n=>!me.hidden.includes(n))}),tell(t,"started",{}),...dueAtBoard("started",me,{}).map(due=>t.self.say(due)),...atOnce?[t.self.pass()]:[],t.self.goOn()]}
+        start:
+          hidden: []
+          isPassed: false
+          reads: []
+          saying: []
+    name: tapThePart
+    root:
+      children:
+        - kind: prop
+          name: sheet
+          prop: coordinatePlane
+          with:
+            plane:
+              axisNames:
+                - en: x
+                  hi: x
+                - en: y
+                  hi: y
+              canTapQuadrants: true
+              marks: numbers
+              namesTapped: false
+              numbered:
+                - x
+                - y
+              showAxisNames: false
+              showDirections: true
+              window:
+                xMax: 5.5
+                xMin: -5.5
+                yMax: 5.5
+                yMin: -5.5
+        - kind: prop
+          name: ask
+          prop: goal
+          with:
+            about: sheet
+            concepts:
+              - 87e47e6e3464ea4f
+            isGraded: true
+            prompt:
+              en: Tap **OY′**, then press Check.
+              hi: "**OY′** को दबाओ, फिर जाँचो दबाओ।"
+        - kind: space
+          name: space1
+      kind: column
+      name: page
+  by: reviewer
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:48.683Z
+  code: c9ea3b90d277d4c7
 class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
   content:
     model:
@@ -3159,9 +4189,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:13.484Z
-  code: b294ae57149e83e3
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:45.288Z
+  code: a2767e241cced97f
 class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
   content:
     model:
@@ -3400,9 +4430,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/1db36b52:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:13.484Z
-  code: b294ae57149e83e3
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:45.288Z
+  code: a2767e241cced97f
 class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
   content:
     model:
@@ -3641,9 +4671,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/4d9be804:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:13.484Z
-  code: b294ae57149e83e3
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:45.288Z
+  code: a2767e241cced97f
 class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
   content:
     model:
@@ -3882,9 +4912,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/54958a9b:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:13.484Z
-  code: b294ae57149e83e3
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:45.288Z
+  code: a2767e241cced97f
 class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
   content:
     model:
@@ -4123,9 +5153,9 @@ class9-maths/coordinate-geometry/questions/walk-to-address/c6794127:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:13.484Z
-  code: b294ae57149e83e3
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:45.288Z
+  code: a2767e241cced97f
 class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
   content:
     model:
@@ -4445,9 +5475,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:12.248Z
-  code: 1be88e6bf2973336
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:39.216Z
+  code: 2980cd1bdb005f67
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -4694,9 +5724,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:12.248Z
-  code: 99329bea2de49db1
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:39.216Z
+  code: d71b1617ddc2bfa8
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -5186,9 +6216,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:12.248Z
-  code: 4e491717a3c2f942
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:39.216Z
+  code: 8675408a70e54a45
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -5514,9 +6544,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:12.248Z
-  code: ce3e5f8129f3d4a6
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:39.216Z
+  code: 0976eef3c2bc5b5a
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -6132,6 +7162,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: f7badfe1418f
-  at: 2026-11-02T04:09:12.248Z
-  code: d609f007121e6a8c
+  commit: ea33f92d6407
+  at: 2026-11-02T04:38:39.216Z
+  code: 114df66d556d89ff
