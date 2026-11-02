@@ -548,14 +548,16 @@ export async function look(
     ...(a.state === undefined ? {} : { state: a.state }),
     // A whole prop on its own page: its page too (what it is for, every board that uses it).
     ...(isWholeProp ? { withProps: true } : {}),
-    // A lesson's boards are thumbnails: no need for double resolution.
-    pictures: target.kind === "group" ? "thumb" : "full",
+    // A lesson's boards are thumbnails: no need for double resolution. A reviewer's are drawn whole
+    // all the same: each board is kept as what it saw (below), which `changes` compares against.
+    pictures: target.kind === "group" && a.isSeen !== true ? "thumb" : "full",
   });
   const board = target.kind === "group" ? target.unit : target.board;
   // What a board shows in every version, kept for `changes` (reach/shown.ts): only a whole built
   // board, drawn as it is (every version, nothing hidden, no state given).
   const isWhole =
-    target.kind === "board" &&
+    // A lesson or a family only when a reviewer shows it: then its boards are drawn whole (above).
+    (target.kind === "board" || (target.kind === "group" && a.isSeen === true)) &&
     !board.startsWith(PROPS_ROOT) &&
     a.locales === undefined &&
     a.screens === undefined &&
@@ -565,9 +567,20 @@ export async function look(
   const inputs = isWhole ? buildInputsKey(root) : "";
   const drawn = await drawVersions(root, board, versions, options, lane, a.pages);
   if (isWhole) {
-    const kept = { inputs, versions: shownOf(drawn, versions) };
-    keepShown(root, "now", shownBoard(board), kept);
-    if (a.isSeen === true) keepShown(root, "seen", shownBoard(board), kept);
+    // A lesson's or a family's boards are drawn together, a page each version: each kept as its own.
+    const each =
+      target.kind === "group"
+        ? target.boards.map((b) => ({
+            board: b,
+            drawn: drawn.map((d) => ({ ...d, shots: d.shots.filter((x) => x.board === b) })),
+          }))
+        : [{ board, drawn }];
+    for (const one of each) {
+      if (one.drawn.some((d) => d.shots.length === 0)) continue;
+      const kept = { inputs, versions: shownOf(one.drawn, versions) };
+      keepShown(root, "now", shownBoard(one.board), kept);
+      if (a.isSeen === true) keepShown(root, "seen", shownBoard(one.board), kept);
+    }
   }
   if (target.kind === "group") {
     const wanted = new Set(target.boards);
