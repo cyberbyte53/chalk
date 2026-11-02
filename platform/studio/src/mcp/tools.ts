@@ -779,7 +779,11 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           }
           await progressOf(extra)("playing");
           const onBoard = steps.filter((s): s is Step => !("call" in s));
-          const played = await play(root, { ...one, board, steps: onBoard }, lane);
+          const played = await play(
+            root,
+            { ...one, board, steps: onBoard, isSeen: ROLE === Role.Reviewer },
+            lane,
+          );
           // A reviewer's play on the jumping clock is what it saw: kept for `changes` to play again
           // once the board changes (reach/shown.ts). A fixer's isn't: it would hide a change.
           if (ROLE === Role.Reviewer && args.speed === undefined && args.frames === undefined)

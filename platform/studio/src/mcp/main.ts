@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
 import { findUp } from "../find-up";
-import { poolState, previewBase, warmPages } from "./app-driver";
+import { poolState, previewBase, timing, warmPages } from "./app-driver";
 import { logCall } from "./call-log";
 import { mcpMiddleware } from "./http";
 
@@ -49,6 +49,20 @@ const server = createServer((req, res) => {
         res.end(JSON.stringify({ ok: false, error: String(error) }));
       },
     );
+    return;
+  }
+  // /dev-timing: where drawings' time goes, phase by phase (app-driver.ts `timing`). `?on` starts
+  // measuring from nothing; plain, the seconds per phase since then; `?off` stops.
+  if (path === "/dev-timing") {
+    const q = req.url ?? "";
+    if (q.includes("on")) {
+      timing.isOn = true;
+      timing.spent.clear();
+    }
+    if (q.includes("off")) timing.isOn = false;
+    res.setHeader("content-type", "application/json");
+    const spent = [...timing.spent].sort((a, b) => b[1] - a[1]);
+    res.end(JSON.stringify({ isOn: timing.isOn, seconds: Object.fromEntries(spent) }));
     return;
   }
   if (path?.startsWith("/dev-")) logCall(ROOT, req, res, { kind: "dev", path: req.url ?? path });

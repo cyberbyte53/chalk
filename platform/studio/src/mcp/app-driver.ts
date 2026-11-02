@@ -416,6 +416,11 @@ export type Drawn = {
 };
 
 export type ShotOptions = {
+  /**
+   * Record which lines of the board's code ran (for `changes`: "ran in the review"). Only a
+   * reviewer's own look records: it is what a review saw, and costs most of a drawing's time.
+   */
+  recordsRan?: boolean;
   locale?: "en" | "hi";
   play?: boolean;
   /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
@@ -904,7 +909,13 @@ export function shoot(
 ): Promise<Drawn> {
   const once = async () => {
     const drawn = await shootNow(root, board, o, act, lane);
-    await timed("coverage: recorded after", () => recordRan(root, board, lane));
+    // Not recorded, what ran stays on the page, set aside before the next drawing that records.
+    if (o.recordsRan === true)
+      await timed("coverage: recorded after", () => recordRan(root, board, lane));
+    else {
+      const at = lanes.get(lane);
+      if (at !== undefined) at.isTaken = false;
+    }
     return drawn;
   };
   const next = (queues.get(lane) ?? Promise.resolve()).then(() =>
@@ -1136,9 +1147,11 @@ async function shootNow(
   const base = target.origin;
   const at = await openPage(lane, base);
   const { page } = at;
-  // What ran on this page before this call (it loading, another board) isn't this board's: set
-  // aside, unless it was taken already at the end of the page's last drawing.
-  if (at.isTaken !== true)
+  // What ran on this page before this call (it loading, other boards) isn't this board's: set
+  // aside before a drawing that records, unless the page's last drawing took it already. A drawing
+  // that doesn't record touches no coverage: taking it costs most of a drawing (the browser sends
+  // every script's text again).
+  if (o.recordsRan === true && at.isTaken !== true)
     readerOf(at, root).see(await timed("coverage: taken before", () => takeRan(lane)));
   at.errors.length = 0;
   await timed("move to the board", async () => {

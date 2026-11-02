@@ -46,31 +46,46 @@ export class RanReader {
 
   /** Takes in coverage that belongs to no board (before a call): its maps and what ran on load. */
   see(coverage: readonly Coverage[]): void {
-    this.read(coverage);
+    this.read(coverage, false);
   }
 
   /** The lines that ran: in this coverage, and everything that ran as the page's scripts loaded. */
   linesOf(coverage: readonly Coverage[]): Ran {
-    const out = this.read(coverage);
+    const out = this.read(coverage, true);
     for (const [file, lines] of Object.entries(this.loaded))
       out[file] = merged([...(out[file] ?? []), ...lines]);
     return out;
   }
 
-  private read(coverage: readonly Coverage[]): Ran {
-    const out: Ran = {};
+  /**
+   * Reads coverage: each script's map, and what ran as it loaded (kept); with `isWanted`, the lines
+   * that ran in it too. Lines are gathered per file and merged once at the end: merging at every
+   * line made it grow with the square of the lines that ran (seen: most of a drawing's time).
+   */
+  private read(coverage: readonly Coverage[], isWanted: boolean): Ran {
+    const out = new Map<string, Range[]>();
+    const loaded = new Map<string, Range[]>();
+    const add = (
+      to: Map<string, Range[]>,
+      known: Known,
+      ranges: Coverage["functions"][number]["ranges"],
+    ) => {
+      for (const [from, end] of ranSegments(ranges))
+        for (const [file, line] of linesIn(known, from, end)) {
+          const lines = to.get(file);
+          if (lines === undefined) to.set(file, [[line, line]]);
+          else lines.push([line, line]);
+        }
+    };
     for (const script of coverage) {
       const known = this.mapOf(script);
       if (known === null) continue;
-      const add = (to: Ran, ranges: Coverage["functions"][number]["ranges"]) => {
-        for (const [from, end] of ranSegments(ranges))
-          for (const [file, line] of linesIn(known, from, end))
-            to[file] = merged([...(to[file] ?? []), [line, line]]);
-      };
-      add(
-        out,
-        script.functions.flatMap((f) => f.ranges),
-      );
+      if (isWanted)
+        add(
+          out,
+          known,
+          script.functions.flatMap((f) => f.ranges),
+        );
       // The script's own top level ran (it loaded now): its lines, every function's body aside.
       const [top, ...inner] = [...script.functions].sort(
         (x, y) =>
@@ -78,14 +93,16 @@ export class RanReader {
           (y.ranges[0]?.endOffset ?? 0) - (x.ranges[0]?.endOffset ?? 0),
       );
       if (top !== undefined && (top.ranges[0]?.count ?? 0) > 0)
-        add(this.loaded, [
+        add(loaded, known, [
           ...top.ranges,
           ...inner.flatMap((f) =>
             f.ranges[0] === undefined ? [] : [{ ...f.ranges[0], count: 0 }],
           ),
         ]);
     }
-    return out;
+    for (const [file, lines] of loaded)
+      this.loaded[file] = merged([...(this.loaded[file] ?? []), ...lines]);
+    return Object.fromEntries([...out].map(([file, lines]) => [file, merged(lines)]));
   }
 
   private mapOf(script: Coverage): Known | null {

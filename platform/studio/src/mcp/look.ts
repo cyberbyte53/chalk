@@ -539,6 +539,8 @@ export async function look(
   const isWholeProp =
     target.kind === "piece" && target.board.startsWith(PROPS_ROOT) && !target.address.includes("/");
   const options = (v: Version): ShotOptions => ({
+    // Only a reviewer's look records what ran (what a review saw).
+    ...(a.isSeen === true ? { recordsRan: true } : {}),
     locale: v.locale,
     width: v.width,
     ...(v.height === undefined ? {} : { height: v.height }),
@@ -880,6 +882,8 @@ export async function check(
 
 export type PlayArgs = {
   board: string;
+  /** A reviewer's own play: what ran is recorded as seen in a review (not a replay by `changes`). */
+  isSeen?: boolean;
   /**
    * Watch the board move after each step: a frame about every `every` ms (real time), at most
    * `most` kept (those that differ). The clock runs at real speed unless `speed` says otherwise.
@@ -983,6 +987,7 @@ export async function play(root: string, a: PlayArgs, lane: string): Promise<Ans
   const shots = a.shots ?? "last";
   const screen = a.screen ?? PHONE;
   const o: ShotOptions = {
+    ...(a.isSeen === true ? { recordsRan: true } : {}),
     locale: a.locale ?? "en",
     width: screen.width,
     ...(screen.height === undefined ? {} : { height: screen.height }),
