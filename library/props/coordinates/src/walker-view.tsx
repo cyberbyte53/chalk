@@ -6,6 +6,7 @@ import type { JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
 import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
+import { type WordPlace, placeClear } from "./place-clear";
 import { Marks, type Point, Scene } from "./plane";
 import { marksOn, unitOf } from "./plane-view";
 import { walker } from "./walker";
@@ -138,71 +139,35 @@ function WalkerShown({
   // below her feet), then over her head and under her feet.
   useLayoutEffect(() => {
     const el = nameRef.current;
-    const svg = el?.ownerSVGElement;
-    if (el === null || svg === null || svg === undefined) return;
-    const frame = svg.getBoundingClientRect();
-    // Every other word on the plane (weighing most), and the axes' lines and a point's dashed
-    // guides: her name keeps a few pixels from each, so it neither touches a word nor sits on a line.
-    const others = [...svg.querySelectorAll("text, line.cp-axis, line.cp-drop")]
-      .filter((t) => t !== el)
-      .map((t) => ({ r: t.getBoundingClientRect(), weight: t.tagName === "text" ? 10 : 1 }))
-      .filter(({ r }) => r.width > 0 || r.height > 0);
-    const GAP_PX = 4;
+    if (el === null) return;
     const side = size * 0.55;
-    const first: [number, number, string] = [
+    const first: WordPlace = [
       nameLeft ? -side : side,
       s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2,
       nameLeft ? "end" : "start",
     ];
-    const places: [number, number, string][] = [
-      first,
-      [side, -size * 0.2, "start"],
-      [-side, -size * 0.2, "end"],
-      [side, size * 0.45 + 16, "start"],
-      [-side, size * 0.45 + 16, "end"],
-      [side, size * 0.25, "start"],
-      [-side, size * 0.25, "end"],
-      [0, -size * 0.75, "middle"],
-      [0, size * 0.45 + 18, "middle"],
-      // Further out, past an axis's numbers or end name beside her.
-      [side + 30, -size * 0.2, "start"],
-      [-side - 30, -size * 0.2, "end"],
-      [side + 30, size * 0.45 + 16, "start"],
-      [-side - 30, size * 0.45 + 16, "end"],
-    ];
-    // How badly a place clashes: off the frame worst, then each word it touches, then each line.
-    const clash = (r: DOMRect) => {
-      const off =
-        r.left < frame.left || r.right > frame.right || r.top < frame.top || r.bottom > frame.bottom
-          ? 1000
-          : 0;
-      return (
-        off +
-        others
-          .filter(
-            ({ r: o }) =>
-              r.left - GAP_PX < o.right &&
-              o.left < r.right + GAP_PX &&
-              r.top - GAP_PX < o.bottom &&
-              o.top < r.bottom + GAP_PX,
-          )
-          .reduce((sum, o) => sum + o.weight, 0)
-      );
-    };
-    // The first place that clashes with nothing; else the one that clashes least.
-    let best: { place: (typeof places)[number]; score: number } | undefined;
-    for (const place of places) {
-      el.setAttribute("x", `${place[0]}`);
-      el.setAttribute("y", `${place[1]}`);
-      el.setAttribute("text-anchor", place[2]);
-      const score = clash(el.getBoundingClientRect());
-      if (score === 0) return;
-      if (best === undefined || score < best.score) best = { place, score };
-    }
-    const [bx, by, anchor] = best?.place ?? first;
-    el.setAttribute("x", `${bx}`);
-    el.setAttribute("y", `${by}`);
-    el.setAttribute("text-anchor", anchor);
+    // Every other word on the plane, and the axes' lines and a point's dashed guides: her name
+    // keeps a few pixels from each, so it neither touches a word nor sits on a line.
+    placeClear(
+      el,
+      [
+        first,
+        [side, -size * 0.2, "start"],
+        [-side, -size * 0.2, "end"],
+        [side, size * 0.45 + 16, "start"],
+        [-side, size * 0.45 + 16, "end"],
+        [side, size * 0.25, "start"],
+        [-side, size * 0.25, "end"],
+        [0, -size * 0.75, "middle"],
+        [0, size * 0.45 + 18, "middle"],
+        // Further out, past an axis's numbers or end name beside her.
+        [side + 30, -size * 0.2, "start"],
+        [-side - 30, -size * 0.2, "end"],
+        [side + 30, size * 0.45 + 16, "start"],
+        [-side - 30, size * 0.45 + 16, "end"],
+      ],
+      "text, line.cp-axis, line.cp-drop",
+    );
   });
   return (
     <g class="cp-walk">

@@ -2,6 +2,8 @@ import type { Locale } from "@chalk/content";
 import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
+import { useLayoutEffect, useRef } from "preact/hooks";
+import { placeClear } from "./place-clear";
 import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene } from "./plane";
 import { plane } from "./plane";
 import { WORDS, num, word } from "./words";
@@ -372,17 +374,7 @@ export function AxesDraw({
             </g>
           );
         })}
-      {!isLines && hasO && (
-        <text
-          class={s.showOrigin ? "cp-origin" : "cp-origin is-zero"}
-          x={vx - 7}
-          y={isCrowded ? base - 4 : base + 14}
-          transform={upright(s, vx - 7, isCrowded ? base - 4 : base + 14)}
-          text-anchor="end"
-        >
-          {s.showOrigin ? "O" : "0"}
-        </text>
-      )}
+      {!isLines && hasO && <OriginName s={s} x={vx - 7} y={isCrowded ? base - 4 : base + 14} />}
       {!isLines && s.showAxisNames && (
         <>
           <text
@@ -565,5 +557,39 @@ export function NamedPointsDraw({ s, px }: { s: PlaneView; px: FramePixels }): J
           );
         })}
     </g>
+  );
+}
+
+/**
+ * O (or 0) at the crossing, below and left of it; when a game's counter stands on the crossing, it
+ * moves clear of the counters (below them, or left), so it is never half under one.
+ */
+function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; y: number }) {
+  const ref = useRef<SVGTextElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (el === null) return;
+    placeClear(
+      el,
+      [
+        [x, y, "end"],
+        [x, y + 12, "end"],
+        [x - 12, y, "end"],
+        [x - 12, y + 12, "end"],
+      ],
+      ".cp-counters circle, .cp-counters text",
+    );
+  });
+  return (
+    <text
+      ref={ref}
+      class={s.showOrigin ? "cp-origin" : "cp-origin is-zero"}
+      x={x}
+      y={y}
+      transform={upright(s, x, y)}
+      text-anchor="end"
+    >
+      {s.showOrigin ? "O" : "0"}
+    </text>
   );
 }
