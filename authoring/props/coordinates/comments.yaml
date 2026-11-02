@@ -1150,3 +1150,18 @@
       at: 2026-11-02T14:06:04.977Z
       text: ""
       status: closed
+- id: cmvzcv2bq3pa
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-02T14:29:43.430Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:28
+  commit: e5e0660a3dd3ebe56b3b330e2772145ca9f27a65
+  turn: person
+  text: "The plotting layer's table always says x and y. On graphs-you-know (lesson 4) the axes are
+    named t and d, so that board's table says x, y over axes that say t, d. That board's whole point
+    is the renaming. Proposal: the plotting layer reads the plane's axisNames (one more field it
+    reads from the plane, like window and tickEvery) and writes them as the table's row names. Every
+    other board names its axes x and y, so nothing else changes. Go ahead?"
+  messages: []

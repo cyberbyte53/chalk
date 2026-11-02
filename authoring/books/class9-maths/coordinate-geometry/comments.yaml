@@ -10522,3 +10522,20 @@
       at: 2026-11-02T14:07:14.716Z
       text: ""
       status: closed
+- id: cmvzcuyktt3z
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-02T14:29:38.573Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-a-point
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:85
+  commit: e5e0660a3dd3ebe56b3b330e2772145ca9f27a65
+  turn: person
+  text: "flow.md says this board marks the right angle at A (and at B, as in Fig. 3.15). The plane
+    can't draw a right-angle mark yet. Riya's walk shows the turn, and A and B are named, but there
+    is no little square at the corner. Options: (a) add a right-angle mark to the plane, as a
+    point's option (needs a prop thread and change), or (b) drop it from flow.md's Needs, since the
+    walk already shows the turn. I'd go with (b): the turn is what matters here, and the walk shows
+    it."
+  messages: []
