@@ -1165,3 +1165,40 @@
     reads from the plane, like window and tickEvery) and writes them as the table's row names. Every
     other board names its axes x and y, so nothing else changes. Go ahead?"
   messages: []
+- id: cmvze0ycl5lj
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-02T15:02:17.829Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:28
+  commit: 5655fa6c47e959f7c4cf806005d1fe6278fd0416
+  turn: person
+  text: >-
+    Plotting by dragging a dot from O (your comment cmvzd3t7ahqc, for every plotting board), and the
+    table named as the axes are (cmvzcv2bq3pa). The plotting layer's definition changes like this:
+
+
+    - New field **dot**: where the next pair's dot is. It starts at O and is dragged by the student.
+
+    - New field **step**: what a drop snaps to (0.25 now, which stays the default). plot-a-point
+    uses 1, so Riya can walk to any drop.
+
+    - **plotAt (the drop)**: right: the dot turns green, is kept, and the next pair's dot appears at
+    O. Wrong: the dot stays neutral where it was dropped, nothing is kept, and it can be dragged
+    again.
+
+    - New signal **missed {x, y}** for a wrong drop. The board can answer it: on plot-a-point Riya
+    walks there and the board says where she is; elsewhere a hint can name a swap.
+
+    - **plotted** keeps only right dots. clearPlotted (↺) stays.
+
+    - The layer reads the plane's **axisNames**, and the table's rows are named by them (t and d on
+    graphs-you-know).
+
+
+    The boards it reaches are lesson 4's four plotting boards: plot-a-point, swap-the-numbers,
+    plot-from-a-table and graphs-you-know. No other lesson uses plotting. The red dots and the
+    "press ↺" redo lines go away. Close this to approve, and I'll build it, update those four
+    boards, then run the self-review once.
+  messages: []

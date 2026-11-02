@@ -10573,7 +10573,7 @@
       at: 2026-11-02T14:37:49.056Z
       text: this applies for all the boards of this flavor
 - id: cmvzd9hby456
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T14:40:56.062Z
@@ -10588,6 +10588,20 @@
   text: i like the game , but true learning will come when we make the students play the game ,they
     see the throw and they move to the next position ; we would have to work on explaiing the game ;
     and only one player will be there and target is to reach 10,10
+  changed:
+    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
+    - content/class9-maths/coordinate-geometry/sound/3d777c69dc43bfb0.m4a
+    - content/class9-maths/coordinate-geometry/sound/48818f8e4a680a22.m4a
+    - content/class9-maths/coordinate-geometry/sound/60a6de1de5473d1a.m4a
+    - content/class9-maths/coordinate-geometry/sound/8aad89d3dae7e9f6.m4a
+    - content/class9-maths/coordinate-geometry/sound/a7247b78e8ee0a34.m4a
+    - content/class9-maths/coordinate-geometry/sound/e7950841403f002c.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+  reaches:
+    pieces: 30
+    boards: 5
+    lessons:
+      - class9-maths/coordinate-geometry/plotting-points
   messages:
     - by: fixer
       role: fixer
@@ -10612,18 +10626,8 @@
         The right stall gives the next clue. The route is fixed, so everyone finishes. objectives.md
         (o13), flow.md and props.md are updated to match and need your approval again."
       status: ready
-  changed:
-    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
-    - content/class9-maths/coordinate-geometry/sound/3d777c69dc43bfb0.m4a
-    - content/class9-maths/coordinate-geometry/sound/48818f8e4a680a22.m4a
-    - content/class9-maths/coordinate-geometry/sound/60a6de1de5473d1a.m4a
-    - content/class9-maths/coordinate-geometry/sound/8aad89d3dae7e9f6.m4a
-    - content/class9-maths/coordinate-geometry/sound/a7247b78e8ee0a34.m4a
-    - content/class9-maths/coordinate-geometry/sound/e7950841403f002c.m4a
-    - content/class9-maths/coordinate-geometry/sound/sound.json
-  reaches:
-    pieces: 30
-    boards: 5
-    lessons:
-      - class9-maths/coordinate-geometry/plotting-points
-  turn: person
+    - by: you
+      role: person
+      at: 2026-11-02T15:08:34.010Z
+      text: ""
+      status: closed
