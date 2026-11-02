@@ -1,5 +1,5 @@
 ---
-approved: bf528dbbd76a
+approved: bcafa9ca3b0a
 ---
 
 Story: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and their class runs a stall fair on the school ground. It starts at Aman's house, where the two plan their stall: Riya has to get there. Their mission: a plan of the fair ground, so that a message like "the snacks stall goes at (3, 2)" puts every stall in exactly the right spot, with no one walking over to point. Each lesson is a stop on it: Riya walks to Aman's house by his address, two numbers (1); the town grows past the corner she started from, and the two roads she walked become the axes (2); they write down where every stall stands (3); volunteers set the stalls up from the numbers alone, and Aman's swapped pair puts the snacks in the wrong place (4). The fair's game stall is the dice game. Each lesson ends with the summary points it taught.
