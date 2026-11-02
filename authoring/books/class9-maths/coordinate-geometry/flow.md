@@ -1,5 +1,5 @@
 ---
-approved: 0fe7cdf32ed3
+approved: 0998c8404390
 ---
 
 Story: Riya and Aman (the friends of class 10 Real Numbers, a year earlier) are in class 9, and their class runs a stall fair on the school ground. It starts at Aman's house, where the two plan their stall: Riya has to get there. Their mission: a plan of the fair ground, so that a message like "the snacks stall goes at (3, 2)" puts every stall in exactly the right spot, with no one walking over to point. Each lesson is a stop on it: Riya walks to Aman's house by his address, two numbers (1); the town grows past the corner she started from, and the two roads she walked become the axes (2); they write down where every stall stands (3); volunteers set the stalls up from the numbers alone, and Aman's swapped pair puts the snacks in the wrong place (4). The fair's game stall is the dice game. Each lesson ends with the summary points it taught.
@@ -45,8 +45,8 @@ Purpose: the town grows past Riya's corner: new streets to the west of where she
 Needs: lesson 1's town, whose map extends west and south of Riya's corner; new houses appear there; numbering them from the corner gives −1, −2, … west along the road and south down a street; tap one to see its address, both numbers signed; Riya walks to one, going west or south as a sign says.
 
 ### two-number-lines  (o4; s3.2-perpendicular, fig3.6, fig3.7, def-axes, def-origin)
-Purpose: two perpendicular lines can face any way; we take one horizontal and one vertical, two number lines crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from.
-Needs: tilted perpendicular pairs, then the upright one; two number lines, one horizontal (X′X) and one vertical (Y′Y), brought together until their zeroes meet; the crossing named O; the town map fading in behind and out again.
+Purpose: two number lines, one horizontal and one vertical, crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from. Two perpendicular lines could face any way, but a point's two numbers depend on which way they face: the point stays where it is, its numbers change. So everyone takes the same pair: in this chapter, one horizontal and one vertical.
+Needs: two number lines, one horizontal (X′X) and one vertical (Y′Y), brought together until their zeroes meet; the crossing named O; the town map fading in behind and out again. Then a point P, with its two numbers read the walk's way (along the first line, then along the second), to two decimal places; the student turns the pair of axes about O, P stays put and its numbers change as they turn; upright again, they are what they were.
 
 ### axes-and-directions  (o4; def-directions, fig3.8)
 Purpose: OX and OY are the positive directions of the axes, OX′ and OY′ the negative ones.
