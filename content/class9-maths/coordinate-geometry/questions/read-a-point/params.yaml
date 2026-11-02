@@ -1,0 +1,6 @@
+# One point in each quadrant, with distances that differ, so a pair written y first is wrong.
+- params: { x: 2, y: -3 }
+- params: { x: -4, y: 1 }
+- params: { x: -1, y: -5 }
+- params: { x: 5, y: 3 }
+- params: { x: -3, y: 4 }

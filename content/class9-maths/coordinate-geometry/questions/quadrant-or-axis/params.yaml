@@ -1,0 +1,6 @@
+# Ex 3.3 Q1's five points, each its own question.
+- params: { x: -2, y: 4 }
+- params: { x: 3, y: -1 }
+- params: { x: -1, y: 0 }
+- params: { x: 1, y: 2 }
+- params: { x: -3, y: -5 }

@@ -3,5 +3,6 @@ title: { en: Coordinate Geometry, hi: निर्देशांक ज्य�
 concepts:
   - two-numbers-for-a-place
   - the-cartesian-plane
+  - coordinates-of-a-point
 # The question bank: every family folder under questions/. Each family says which concepts it tests.
 questions: all

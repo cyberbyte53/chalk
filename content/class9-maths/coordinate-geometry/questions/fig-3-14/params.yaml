@@ -1,0 +1,10 @@
+# Ex 3.2 Q2's eight parts, each its own question: (i) B, (ii) C, (iii) the point at (−3, −5),
+# (iv) the point at (2, −4), (v) D's abscissa, (vi) H's ordinate, (vii) L, (viii) M.
+- params: { part: b }
+- params: { part: c }
+- params: { part: e }
+- params: { part: g }
+- params: { part: d }
+- params: { part: h }
+- params: { part: l }
+- params: { part: m }

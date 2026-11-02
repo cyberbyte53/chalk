@@ -4,5 +4,6 @@
 export const Concept = {
   TwoNumbersForAPlace: "two-numbers-for-a-place",
   TheCartesianPlane: "the-cartesian-plane",
+  CoordinatesOfAPoint: "coordinates-of-a-point",
 } as const;
 export type Concept = (typeof Concept)[keyof typeof Concept];
