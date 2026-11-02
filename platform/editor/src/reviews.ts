@@ -174,6 +174,8 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
         ? new vscode.ThemeIcon("bell", new vscode.ThemeColor("charts.yellow"))
         : new vscode.ThemeIcon("sync");
       t.command = { command: "chalk.review.open", title: "Open", arguments: [item] };
+      // Your turn with fixes ready to check: a button closes them all (open questions stay).
+      if (isMine && item.threads.some((x) => x.status === "ready")) t.contextValue = "yours-ready";
       t.tooltip = isMine
         ? "An agent's question, decision or proposal to answer, or a fix ready to check: reply on it (it goes back to the agent) or close it."
         : "Threads an agent is answering or fixing.";
@@ -269,6 +271,15 @@ export class ReviewsTree implements vscode.TreeDataProvider<Item> {
   static reviewOf(item: unknown): { review: Review; threads: Thread[] } | undefined {
     const i = item as Item | undefined;
     return i?.kind === "review" ? { review: i.review, threads: i.threads } : undefined;
+  }
+
+  /** The threads a group holds that "Close all ready" acts on: a review's, or your turn's. */
+  static readyOf(item: unknown): { name: string; threads: Thread[] } | undefined {
+    const i = item as Item | undefined;
+    if (i?.kind === "review") return { name: i.review.id, threads: i.threads };
+    if (i?.kind === "yours" && i.turn === "person")
+      return { name: "your turn", threads: i.threads };
+    return undefined;
   }
 
   /** The preview's page a group opens: what waits on you, or your sitting. */

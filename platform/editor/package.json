@@ -207,7 +207,7 @@
         },
         {
           "command": "chalk.review.closeReady",
-          "when": "view == chalk.tree && viewItem == review-ready",
+          "when": "view == chalk.tree && viewItem =~ /^(review|yours)-ready$/",
           "group": "inline@2"
         },
         {
@@ -222,7 +222,7 @@
         },
         {
           "command": "chalk.review.closeReady",
-          "when": "view == chalk.tree && viewItem == review-ready",
+          "when": "view == chalk.tree && viewItem =~ /^(review|yours)-ready$/",
           "group": "1_review@3"
         },
         {

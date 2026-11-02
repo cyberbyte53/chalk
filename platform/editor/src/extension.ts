@@ -829,13 +829,13 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
       void vscode.window.showInformationMessage("Chalk: copied. Paste it into the agent's chat.");
     }),
     vscode.commands.registerCommand("chalk.review.closeReady", async (item: unknown) => {
-      const r = ReviewsTree.reviewOf(item);
+      const r = ReviewsTree.readyOf(item);
       if (r === undefined) return;
       const ready = r.threads.filter((t) => t.status === "ready");
       let closed = 0;
       for (const t of ready) if (await writeThread(t.id, "", "closed")) closed++;
       void vscode.window.showInformationMessage(
-        `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${r.review.id}.`,
+        `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${r.name}.`,
       );
     }),
     vscode.commands.registerCommand("chalk.review.activity", async (item: unknown) => {
