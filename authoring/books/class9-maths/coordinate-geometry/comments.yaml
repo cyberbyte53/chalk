@@ -6444,7 +6444,7 @@
         straight into `lines`. Holds. One loose end is on flow.md: its Purpose for this board still
         says \"two perpendicular lines can face any way\". I've filed that on the flow."
 - id: cmvyxcmziad8
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T07:15:29.502Z
@@ -6452,7 +6452,6 @@
   target: line
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:77
   commit: 6f810a9ab7cb41d74ba545c582201f44672e927c
-  turn: person
   text: Regression from cmvywu7fxhb5 (a lone number line's numbers now sit 22 px under the line
     instead of 16). On bus-stops the numbers moved down but the stop's label under 0 did not. In
     Hindi, at 360, 640 and 640×720, the top bar of "बस अड्डा" now touches the bottom of the 0 above
@@ -6496,8 +6495,13 @@
         stand" also clears it in English. The label moves with the numbers only on a lone number
         line (axes "horizontal"), and the bus-to-stop questions have no label there. The chapter
         check is 36/36 ok in every version. The fix holds.
+    - by: you
+      role: person
+      at: 2026-11-02T09:13:50.512Z
+      text: ""
+      status: closed
 - id: cmvyxcn2ob09
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T07:15:29.616Z
@@ -6550,4 +6554,8 @@
         you: the same commit (e32373f) also changed the file's `approved:` stamp (0998c8404390 →
         bf528dbbd76a). So flow.md may now read as approved before you have read the new Purpose.
         Please approve it or send it back."
-  turn: person
+    - by: you
+      role: person
+      at: 2026-11-02T09:13:50.947Z
+      text: ""
+      status: closed
