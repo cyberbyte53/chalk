@@ -7,7 +7,7 @@ import type { Browser, Locator, Page } from "playwright-core";
 import { buildInputsKey } from "../content/inputs";
 import type { PropPage } from "../prop-text";
 import { count, spend, timed } from "./call-timing";
-import { codeKey, contentKey, isDrawCacheOn, keep, keyOf, readKept } from "./draw-cache";
+import { boardCodeKey, contentKey, isDrawCacheOn, keep, keyOf, readKept } from "./draw-cache";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
@@ -960,7 +960,7 @@ export function shoot(
   const inputs = () =>
     timed("cache: work out the key", async () =>
       keyOf({
-        code: codeKey(root),
+        code: boardCodeKey(root, board),
         content: contentKey(root, board),
         browser: await browserVersion(),
       }),

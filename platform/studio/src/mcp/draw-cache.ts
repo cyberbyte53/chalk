@@ -10,6 +10,10 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
+import { propHomes } from "../comments";
+import type { Reach } from "../content/build";
+import { boardCode } from "../reach/board-code";
+import { type CodeGraph, codeGraph } from "../reach/graph";
 
 /**
  * Drawings made once per set of inputs (platform/docs/seeing-boards.md, "Drawn once"). A drawing is
@@ -85,6 +89,63 @@ export function codeKey(root: string): string {
     join(studio, "src", "mcp", "model-schema.ts"),
   );
   return hashOf("code", files);
+}
+
+/**
+ * What every drawing goes through, whatever the board: the repo's root files (the lockfile, so every
+ * package's version), the app the preview is (its page, styles, fonts, config, shell), and the two
+ * studio files a drawing passes through.
+ */
+export function shellKey(root: string): string {
+  const files: string[] = [];
+  for (const name of readdirSync(root).sort()) {
+    const full = join(root, name);
+    if (statSync(full).isFile()) files.push(full);
+  }
+  walk(join(root, "platform", "apps", "learner"), files, () => false);
+  const studio = join(root, "platform", "studio");
+  files.push(
+    join(studio, "src", "mcp", "app-driver.ts"),
+    join(studio, "src", "mcp", "model-schema.ts"),
+  );
+  return hashOf("shell", files);
+}
+
+/** The code graph and the props' homes, made again only when some code changed. */
+let known: { code: string; graph: CodeGraph; homes: ReadonlyMap<string, string> } | undefined;
+function graphNow(root: string) {
+  const code = codeKey(root);
+  if (known?.code !== code) known = { code, graph: codeGraph(root), homes: propHomes(root) };
+  return known;
+}
+
+/** The build's record of what made each board (build/reach.json), read again when it changes. */
+let reachAt: { stamp: string; reach: Reach } | undefined;
+function reachNow(root: string): Reach | undefined {
+  const file = join(root, "build", "reach.json");
+  if (!existsSync(file)) return undefined;
+  const s = statSync(file);
+  const stamp = `${s.mtimeMs}:${s.size}`;
+  if (reachAt?.stamp !== stamp)
+    reachAt = { stamp, reach: JSON.parse(readFileSync(file, "utf8")) as Reach };
+  return reachAt.reach;
+}
+
+/**
+ * The code a board's drawing depends on: the code that board runs (its fingerprint, reach/
+ * board-code.ts: the lines that made it, every prop package it places, the player and every board's
+ * styles) and what every drawing goes through (shellKey). An edit to a prop no board here places
+ * leaves it alone. When the board's code can't be told (a prop's own page, a board not in the
+ * build's record), all the code, as before.
+ */
+export function boardCodeKey(root: string, board: string): string {
+  const made = reachNow(root)?.boards[board.replace(/^content\//, "")];
+  if (made !== undefined) {
+    const { graph, homes } = graphNow(root);
+    const code = boardCode(graph, made, homes);
+    if (code !== undefined) return `board:${code.digest}:${shellKey(root)}`;
+  }
+  return `all:${codeKey(root)}`;
 }
 
 /** What the page loads for a board: its chapter's built files (a prop's page loads only code). */
