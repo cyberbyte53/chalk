@@ -555,7 +555,7 @@
       text: ""
       status: closed
 - id: cmvwp52tgpkp
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-10-31T17:50:07.492Z
@@ -564,6 +564,7 @@
   from: chat
   text: "The town can grow (for the-cartesian-plane's town-grows): west of Riya's corner, and south of
     the main road, with minus numbers."
+  changed: []
   messages:
     - by: fixer
       role: fixer
@@ -582,8 +583,243 @@
       text: "Done. The town grows by its window: west of the corner, streets at every whole number (the
         corner's own too); below the road, every street runs south. Riya walks there (played: ← ← ↓
         ↓ to (−2, −2)). Lesson 1's town unchanged (looked at street-and-house). Try it:
-        ?dev&at=library/props/coordinates/coordinatePlane with a window reaching into negatives
-        and scene \"town\"."
+        ?dev&at=library/props/coordinates/coordinatePlane with a window reaching into negatives and
+        scene \"town\"."
       status: ready
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:12.829Z
+      text: ""
+      status: closed
+- id: cmvy82p7kng6
+  status: closed
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-01T19:27:55.424Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:28
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  turn: person
+  text: >-
+    New field `plane.canNumberQuadrants` (boolean, default off), for lesson 2.
+
+
+    Why: the "Name the quadrants" button showed on every plane with X/X′/Y/Y′ shown
+    (`showDirections`). That includes two-number-lines and axes-and-directions, which come before
+    quadrants are taught. Now the button needs `canNumberQuadrants: true`, which only the quadrants
+    board sets.
+
+
+    What it reaches (`affected`): 34 pieces on 32 boards. No lesson 1 board or question uses
+    `showDirections`, so none of them had the button and nothing changes there. Only lesson 2's
+    boards change, as intended.
+
+
+    In the same commit (09a35e8), view-only:
+
+    - while the lines are apart, a number of the vertical line that falls on the horizontal line's
+    row isn't written (its mark stays);
+
+    - in a town, the walker says her place in street words with true minus signs ("Street number −2,
+    House number −1").
+
+
+    Close this thread to approve the field.
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:46:42.755Z
+      text: >-
+        Two more fields from the review fixes (08618ea), same reason (nothing shown or tappable
+        before the lesson defines it):
+
+        - `canTapQuadrants` (default off): a quadrant can be tapped only once all four are numbered,
+        or where a board turns this on (the tap-the-part questions).
+
+        - `namesTapped` (default on): whether a tapped part's name is written under the plane; off
+        in tap-the-part, so a tap marks a part without giving its name away.
+
+        And a lesson action on the places layer, `nameTarget`, so a house tapped after town-grows
+        passes isn't called the aunt's. No lesson 1 board sets any of these; lesson 1's boards draw
+        as before.
+    - by: you
+      role: person
+      at: 2026-11-02T03:48:27.742Z
+      text: ""
+      status: closed
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:58:38.177Z
+      text: "And for the pictures props.md now names (f7badfe): `turn` (degrees the lines are drawn
+        turned; 0 as before) with lesson action `turnTo({ degrees, seconds })` and signal `turned`;
+        `backdrop` (0–1, how strongly the scene and its places show; 1 as before) with
+        `fadeBackdrop({ to, seconds })`; `tintsQuadrants` (default off). Also: houses that can't be
+        chosen no longer take taps, and the quadrant numerals are drawn in front, solid. Lesson 1
+        sets none of these; its boards draw as before (all 216 drawings ok)."
+- id: cmvyqgbed2d1
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T04:02:23.797Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/number-line
+  target: line
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:55
+  snapshot: −5−4−3−2−10123452
+  commit: f7badfe1418f373a271f37c678eab96eb3feca5c
+  text: i don't think we need to show the number as a seperate floating number also ; the dot on
+    numberline is doing the job
   changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.244Z
+      text: "Show the point alone (Reading.None): its place on the line says its number."
+      status: planned
+      commit: a94ede71aee9b23f085ef6ab25e3701471ffbfdc
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.315Z
+      text: 'Done (a94ede7): the dot alone, no floating number and no dashed distance; the text still says
+        "The point is at 2".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:22.039Z
+      text: "Reviewer: played (en, 360). The point is drawn alone at 2, with no floating number and no
+        dashed distance. The number under it is fully readable. Drag it to −3 and `rule` follows;
+        the board passes. Holds. One small thing for you to judge: after the drag, the test browser
+        draws a focus box around the dot, and its lower edge touches the −3 label. A finger drag
+        shouldn't show it, so I'd leave it."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:26.235Z
+      text: ""
+      status: closed
+- id: cmvyqos1d6ij
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T04:08:58.609Z
+  prop: coordinatePlane
+  source: library/props/coordinates/src/coordinate-plane.ts:28
+  commit: f7badfe1418f373a271f37c678eab96eb3feca5c
+  text: "Mechanical (overlap), and a regression from 00f9fbc (the fix for cmvy8c2zlp4v: \"where a unit
+    is short, O goes above the line\"). On a phone (360, en and hi), when the plane doesn't print O
+    (showOrigin: false), both axes still write their 0, and each 0 now lands on a line. The y-axis 0
+    sits on the horizontal axis, struck through, left of the origin, and the x-axis 0 sits under the
+    origin, struck through by the vertical axis. Seen on all three name-the-lines questions (the
+    axes above each one) and on town-grows' numbered town, where the struck 0 is also under Riya. A
+    student sees a crossed-out 0 twice at the very point a6dfeb17 asks about. Suggested: when O
+    isn't printed, write one 0 at the origin (below-left, as O goes), not one per axis, or print O
+    on name-the-lines, as tap-the-part does."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.654Z
+      text: "Same fix as cmvyqryouhts (the person asked for it too): one 0 at the crossing when O isn't
+        printed."
+      status: planned
+      commit: a94ede71aee9b23f085ef6ab25e3701471ffbfdc
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.718Z
+      text: "Done (a94ede7): no struck-through 0s; one 0 at the crossing, placed as O would be."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:21.811Z
+      text: "Checked at 360 and 640, en and hi: on all three name-the-lines questions there's one 0 at the
+        crossing (above-left at 360, below-left at 640), with nothing struck through. The x −1 and y
+        −1 sit apart and read cleanly. On town-grows' numbered town there's one 0, left of Riya, and
+        no 0 under her. Holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:28.498Z
+      text: ""
+      status: closed
+- id: cmvyqryouhts
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T04:11:27.198Z
+  board: class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96
+  target: sheet
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts:98
+  snapshot: −5−4−3−2−1012345−5−4−3−2−1012345XX′YY′
+  commit: 6d9e6d8262c4b97bfbf5e01478e0c3e7596fa05c
+  text: the origin can be just represdented with a single 0 , no need to have 2 0s
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.531Z
+      text: "Where both number lines cross at their zeroes, write the crossing once: O once the lesson has
+        named it, a single 0 before that (as on name-the-lines and the town map), not a 0 for each
+        line."
+      status: planned
+      commit: a94ede71aee9b23f085ef6ab25e3701471ffbfdc
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.600Z
+      text: "Done (a94ede7): one 0 at the crossing on name-the-lines and on town-grows' numbered map; O
+        where it is named."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:21.874Z
+      text: "Reviewer: checked in the running boards. name-the-lines shows a single 0 at the crossing on
+        all three questions (en and hi, 360 and 640), and town-grows' numbered map shows the same.
+        axes-and-directions, quadrants and tap-the-part show O. Holds. One place where the crossing
+        is named but still drawn as 0 is filed separately, on two-number-lines#sheet."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:29.601Z
+      text: ""
+      status: closed
+- id: cmvywu7fxhb5
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T07:01:09.549Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/number-line
+  target: line
+  prop: coordinatePlane
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:55
+  snapshot: −5−4−3−2−1012345
+  commit: a6b5f4f8676a328abfbbd43833e7c454a1a3390c
+  text: when i am selecting a number ,because of the dot it number is getting shifted down and number
+    is not visible
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:08:56.815Z
+      text: "Two causes, both seen in the board: after a drag the browser drew its square focus box around
+        the dot, over the number below; and the dot (r 10 + its 3 px edge) reached into the numbers'
+        row. Plan: the dot's focus becomes a ring, for the keyboard only; a lone number line's
+        numbers sit 22 px under it instead of 16."
+      status: planned
+      commit: 6f810a9ab7cb41d74ba545c582201f44672e927c
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:08:56.886Z
+      text: "Done. Played: drag the point to −3; −3 is whole under the dot, no box. bus-stops (the other
+        lone number line) checked too: its numbers clear of the bus stand label."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-11-02T07:11:55.676Z
+      text: ""
+      status: closed
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T07:15:29.336Z
+      text: "Checked in the running board, en and hi at 360. The dot starts on 2 with every number
+        readable under it. Dragged to −3 (en), and 1 then −5 (hi): the number under the dot stays
+        whole and nothing is drawn around it after the drag. Holds on number-line. The extra 6 px it
+        gave lone number lines also reaches lesson 1's bus-stops. There, in Hindi, the stop's label
+        बस अड्डा now touches the 0 above it. I've filed that as its own thread on bus-stops#line."
   turn: person

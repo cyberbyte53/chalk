@@ -4029,7 +4029,7 @@
       text: ""
       status: closed
 - id: cmvwtxc66n4r
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-31T20:04:04.446Z
@@ -4037,7 +4037,6 @@
   target: town/places
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:161
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
-  turn: person
   text: >-
     Mechanical (a dead end while playing). This is not a regression: the setup was the same before
     the move (canChooseTarget: true from the start). Principle 12, and do the picture and the text
@@ -4107,8 +4106,13 @@
         6, मकान नंबर 1'. The story no longer contradicts itself, and nothing on this board can get
         stuck. The same opening reaches other boards, where it is not right yet: see the regression
         threads on bus-stops, bus-to-stop and walk-to-address."
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:09.802Z
+      text: ""
+      status: closed
 - id: cmvwtxc8cqme
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-10-31T20:04:04.524Z
@@ -4116,7 +4120,6 @@
   target: sheet/clues/clearClues
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:248
   commit: cb2f8dbd61a1657c44202ef31f873c87a49b8550
-  turn: person
   text: >-
     Mechanical (a control that undoes the board's premise). This is not a regression: clearClues did
     the same before the move (it sets isHiddenShown: false). Principles 1 and 12.
@@ -4245,8 +4248,13 @@
         phone the page scrolls down to 'fixed' after the fourth tap. The crossing can then be above
         the screen while it is being described. Keep it, or hold the page on the sheet until 'fixed'
         has been said?"
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:05.224Z
+      text: ""
+      status: closed
 - id: cmvxdo2g7oqx
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:16:44.263Z
@@ -4254,7 +4262,6 @@
   target: line/places
   source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:76
   commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
-  turn: person
   text: "Regression from the fix to cmvwtxc66n4r (a board opens for play once it passes: places can be
     chosen whenever isOpen). Mechanical. Principle: do the picture and the text agree; no symbol
     before it is taught. Played at 390 in en: walk the bus to 3, then to −2, and answer '2 stops
@@ -4297,8 +4304,13 @@
         the stand, to the left'. The board passes and 'enough' shows. After that, line/places has no
         chooseTarget part, so no stop can be tapped. No 'Aman's house: x 4, y 0' line appears and
         the road doesn't move."
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:14.481Z
+      text: ""
+      status: closed
 - id: cmvxdo2hm2ru
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:16:44.314Z
@@ -4306,7 +4318,6 @@
   target: road/places
   source: content/class9-maths/coordinate-geometry/questions/bus-to-stop/family.ts:25
   commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
-  turn: person
   text: "Regression from the fix to cmvwtxc66n4r, the same cause as on bus-stops#line/places. It
     reaches all four bus-to-stop boards. Mechanical. Played at 390: drive the bus to stop 4 and
     press Check ('That's it!'). Every stop then becomes tappable. Tapping −3 rings it and adds
@@ -4342,8 +4353,13 @@
         it!', passed). After Check the road has no chooseTarget part, so stop −3 can't be tapped,
         and no 'Aman's house' line appears. The road is set as choosing: never in family.ts, which
         all four boards share."
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:17.650Z
+      text: ""
+      status: closed
 - id: cmvxdo2j7ntl
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:16:44.371Z
@@ -4351,7 +4367,6 @@
   target: town/places
   source: content/class9-maths/coordinate-geometry/questions/walk-to-address/family.ts:20
   commit: dcf9f28fcbccf362ee894627d5633d2cacab65a3
-  turn: person
   text: "Regression from the fix to cmvwtxc66n4r. It reaches all five walk-to-address boards.
     Mechanical. Principle: do the picture and the text agree (the same contradiction that thread
     fixed on street-and-house). Played at 390: the prompt says 'Aman lives at Street 3, House 5'.
@@ -4392,8 +4407,13 @@
         town() is choosing: never, and only street-and-house sets onceOpen. I replayed
         street-and-house too: at (4, 5) it passes and all 30 houses open, and tapping (2, 3) makes
         that house Aman's and sends Riya back to the corner."
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:20.341Z
+      text: ""
+      status: closed
 - id: cmvxeovsdb3f
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-01T05:45:21.901Z
@@ -4481,4 +4501,2053 @@
         line is too short, say both distances together in the reading's fixed order beside the dot
         (e.g. '2 cm, 1 cm', which the reading already holds as its text). Then check (1, 1), (2, 1),
         (1, 2) and (2, 2) in both languages at 360."
-  turn: agent
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T17:58:30.730Z
+      text: "The person decided in chat: leave it. What's left only shows on a 360 phone with the dot in
+        the bottom-left corner: at (2, 1) the two labels aren't beside their own lines, and at (1,
+        1) the up label touches the left edge's tick at 3. Nothing is cut off anywhere. Close it
+        when you agree."
+    - by: you
+      role: person
+      at: 2026-11-01T17:59:24.304Z
+      text: ""
+      status: closed
+- id: cmvy5lm63o97
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T18:18:39.099Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: ask
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:237
+  commit: 20f0e6074e1ff2e27019335fca5752ab93edeefd
+  text: "Mechanical (what's said doesn't match what's shown). The uncommitted edit changed the written
+    English line to '1 cm wide', but its `says` (overview.ts:244) still reads '1 centimetre across',
+    and the sound clip in sound/sound.json:125 is still for 'across'. So a student reads 'wide'
+    while the voice says 'across'. The Hindi already says चौड़ा on screen and in the voice, so only
+    English is out of step. Principle: As the listener, does what's said match what's shown (10: one
+    name per thing). Fix: change the English `says` to '1 centimetre wide', then remake the clip and
+    check that the ask line plays with the new words."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T18:22:33.034Z
+      text: 'Right catch, and moot now: "1 cm wide" was a test edit (to check that a repeat review looks
+        only at what changed), and it is undone; the screen says "1 cm across" again, matching the
+        voice. Close it when you agree.'
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-01T18:50:31.618Z
+      text: "Checked: the ask line reads '1 cm across' on screen and the voice says '1 centimetre across',
+        in all three screens; Hindi is चौड़ा in both. Fixed."
+    - by: you
+      role: person
+      at: 2026-11-01T18:52:16.516Z
+      text: ""
+      status: closed
+- id: cmvy6qlx2cie
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T18:50:31.670Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:249
+  commit: 4d1683be0fc7464606c47e895c5f9a8576469f28
+  text: "The only other change since the pass is not explained anywhere: the 'It is near the left
+    edge' patch now runs to xMax 7 (it was 6). On a page 15 cm wide, that shades 7 of the 15 cm,
+    almost the left half. Taken literally, a spot 7 cm in is near the middle, not near the left edge
+    (principle 12: read it as the student; 'does the picture agree with the text?'). With 'upper
+    half' tapped just before, a student reads the patch as 'the left half' and misses what the clue
+    is for: a vague word still leaves a patch. The dot at 5 cm now sits 2 cm inside the patch's
+    right side instead of 1, so nothing gains from the change. Fix: put xMax back to 6, or say why 7
+    is wanted. If this was a second test edit, like the 'wide' one, undo it."
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-01T18:51:05.106Z
+      text: "Right, and undone: xMax 7 was a test edit (to time a re-review after one small change); it is
+        back to 6, so the patch is near the left edge again. Close it when you agree."
+    - by: you
+      role: person
+      at: 2026-11-01T18:52:18.143Z
+      text: ""
+      status: closed
+- id: cmvy8c2jj6k2
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:12.607Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:110
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Principle 4 (and flow.md: discover → state for why the lines need negatives). The story asks
+    \"How should these new ones be numbered?\", but the map already prints −1, −2, −3 on both roads
+    and the header above it already says \"Aman's aunt's house: Street number −2, House number −3\";
+    `signs` then states the rule straight away. The student never gets to think about it: the
+    picture answers the question before it is read. Suggested: open with the west streets and south
+    houses unnumbered (and no address header), let the student count from the corner (tap the first
+    new street / house and see −1 appear, or choose between 4, 5, 6 and −1, −2, −3), then show
+    `signs`."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.395Z
+      text: Open town-grows on the grown town without numbers (Riya at her corner, no address), ask what
+        the first new street west should be numbered (−1, 6, 1, 0, each wrong one with a note), and
+        only on the right answer show the numbered town, the rule and the aunt's address.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.364Z
+      text: "Done as planned. Played: the map opens unnumbered with Riya at her corner; \"6\" gets its
+        note; \"−1\" hides that map and shows the numbered town, the rule and the aunt's address."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.528Z
+      text: 'Checked in the running board (en, 360): the map opens with no numbers, Riya at her corner and
+        no address; "6, the next number" gets its note; "−1" hides that map and brings in the
+        numbered town, `signs` and the aunt. The student now answers the question before the rule is
+        shown. Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:56:57.758Z
+      text: ""
+      status: closed
+- id: cmvy8c2lzyjf
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:12.695Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town/places
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:110
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Wrong words after the board passes. `anyHouse` says \"Tap any house to see its address\", but
+    a tap makes that house the target and the header reads \"Aman's aunt's house: Street number −3,
+    House number 2\" (played: walk to (−2, −3), then tap (−3, 2)). The story fixed his aunt at
+    Street −2, House −3 (principle 9); a student now reads that she lives somewhere else, or that
+    every house is hers. Suggested: on this board a tapped house shows just its address (no name),
+    or the target name changes to something neutral such as \"This house\"."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.455Z
+      text: Add a lesson action places.nameTarget; once she has arrived, a tapped house is named "The
+        house you tapped", not his aunt's.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.464Z
+      text: "Done. Played: walk to (−2, −3), she arrives at \"Aman's aunt's house\"; tap (−3, 2) and the
+        header reads \"The house you tapped: Street number −3, House number 2\"."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.583Z
+      text: "Played: walk to (−2, −3), she arrives at \"Aman's aunt's house\"; tap (−3, 2) and the header
+        reads \"The house you tapped: Street number −3, House number 2\". Holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:56:58.658Z
+      text: ""
+      status: closed
+- id: cmvy8c2o84nd
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:12.776Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:110
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (an undefined mark). The text leans on west and south (\"streets west of her
+    corner\", \"going south, the houses are −1…\", \"2 streets west, then 3 houses south\"), but the
+    map shows no compass and nothing says left is west. A student who doesn't assume a north-up map
+    can't tell which way −2 is. Suggested: a small N/E/S/W rose on the map, or \"west (to the
+    left)\" / \"south (down)\" the first time each is used."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.513Z
+      text: "Say the map's directions where they are first used: west \"(to the left on the map)\", south
+        \"(down the map)\"."
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.565Z
+      text: 'Done: "west of her corner (to the left on the map)", "south of the main road (down the map)",
+        in both languages.'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.636Z
+      text: 'Seen in both languages: "west of her corner (to the left on the map)" / "(नक्शे पर बाईं ओर)",
+        "south of the main road (down the map)" / "(नक्शे पर नीचे)". Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:56:59.746Z
+      text: ""
+      status: closed
+- id: cmvy8c2qzrv9
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:12.875Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:110
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Principle 9 (the story stays consistent). The window stops at Street 5 and House 4, so the
+    old town has lost Street 6 and its whole top row of houses, Aman's house (Street 4, House 5)
+    among them. Yet `anyHouse` says \"in the new town or the old\", and the quadrants board names
+    Aman's house at Street 4, House 5. A student looking for Aman's house on the grown town won't
+    find it. Suggested: widen the window to xMax 6.5, yMax 5.5 (check it still fits a phone), or at
+    least keep yMax 5.5 so House 5 is there."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.570Z
+      text: Widen the window to Street 6 and House 5 (xMax 6.5, yMax 5.5), and say where Aman's house is
+        in anyHouse.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.667Z
+      text: "Done: the window runs to Street 6 and House 5; Aman's house (4, 5) is on the map, and
+        anyHouse says where it is."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.694Z
+      text: "Partly holds. House 5 is back, so Aman's house (4, 5) is on the map, and `anyHouse` says
+        where it is. But the ready note says the window runs to Street 6, and it doesn't: commit
+        00f9fbc squared the town to −5…5, so the board has Streets −5 to 5. Lesson 1's town had six
+        streets, and `anyHouse` says \"in the new town or the old\", so a student who remembers
+        Street 6 won't find it. Your call: keep the square town (and accept that Street 6 is gone),
+        or run x to 6.5."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:20:05.121Z
+      text: "The person decided in chat: keep the square town (−5 to 5). No house in the story is on
+        Street 6, so nothing is lost; my ready note's \"runs to Street 6\" was wrong since 00f9fbc,
+        and the square town is what holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:01.329Z
+      text: ""
+      status: closed
+- id: cmvy8c2t7bow
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:12.955Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town/walker
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:110
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: 'Principle 2/9. Riya can now walk up and down a street at 0 (the vertical line through her
+    corner), which lesson 1 never had (its streets were 1 to 6 and the corner was the end of the
+    main road). Walking down it, she reads "Riya: House number −1" with no street and no house
+    there. Then two-number-lines says "the y-axis is the street through her corner", a street the
+    student never met. Suggested: say in `story` that a new street was also built through her corner
+    (Street 0, with no houses on it yet), or stop Riya stepping onto it; and have the readout name
+    Street 0 when she is on it.'
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.627Z
+      text: The story says a new street runs through her corner with no houses; `signs` names it Street 0;
+        the readout says "Street number 0, House number 1" there.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.770Z
+      text: 'Done. Played: one step up from the corner reads "Riya: Street number 0, House number 1".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.752Z
+      text: "Played: one step up from the corner reads \"Riya: Street number 0, House number 1\", and down
+        reads \"Street number 0, House number −1\". `story` and `signs` now name the street through
+        her corner. Holds. One small oddity for you to judge: the readout says \"House number −1\"
+        on a street the story says has no houses on it. It reads as a place on a number line, so I'd
+        leave it."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:03.116Z
+      text: ""
+      status: closed
+- id: cmvy8c2vbllm
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.031Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:110
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (overlap). On the phone (360): the \"Riya\" label sits over the house at (1, 1) at
+    the start and over the house at (−1, −2) and the −2 at the end of the walk; \"Street number\"
+    overlaps the houses at (4, 1) and (5, 1); the 0 by the corner is under Riya. Also about 150 px
+    of empty space between the map and the arrow keys before Riya moves (the space held for her
+    address line). Move the axis name off the houses (below the numbers, as \"House number\" is
+    above), keep the walker's name clear of houses, and let the empty space close."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.680Z
+      text: Give Riya's name and the axis names a halo in the page's colour, so they read over a house.
+        Keep the room held for her readout (it is what keeps the arrows still as she walks).
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.874Z
+      text: "Names now carry a halo and read over the houses. The space above the arrows is the room kept
+        for her longest readout (\"Riya is at Aman's aunt's house! Street number −2, House number
+        −3\", two lines): keeping it is what stops the arrows moving under her finger as she walks,
+        so it stays."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.810Z
+      text: "The halos hold: \"Riya\" and \"Street number\" read clearly over the houses. A new overlap
+        from the new south houses is still open, on the phone (360, en and hi). The street numbers
+        −5 … 5 under the main road sit on the roofs of the houses at House −1, and the minus signs
+        of the House numbers −1 … −5 on the y-axis touch the houses on Street −1, so −3 can be read
+        as 3. On a board about the minus sign, that is the one thing that mustn't be lost. 640 is
+        fine. Suggested: give the numbers a halo like the names, or leave a row's clearance below
+        the main road and beside Street 0 at this size. The kept space above the arrows has its
+        reason; I accept it."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.765Z
+      text: "Your follow-up: the axis numbers (and the crossing) now carry the same halo as the names
+        (a94ede7), so −1 … −5 and the street numbers read over the roofs at 360."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:21.538Z
+      text: "Still open. The halo doesn't reach the numbers on the town map. Seen in the running board
+        (town-grows#town, 360, en and hi): the houses are drawn over the axis numbers, not under
+        them. The roofs of the House −1 row cover the lower half of the street numbers −5 … −1 under
+        the main road. On the y-axis, the minus signs of House −2 … −5 are hidden under the houses
+        on Street −1, so those labels read \"2\", \"3\", \"4\", \"5\" (−3 sits right beside the
+        aunt's ringed house). On the one board that teaches the minus sign, the student reads the
+        south houses as positive. The names (\"Riya\", \"Street number\") do read over the houses,
+        and 640 is fine. Suggested: draw the axis numbers above the houses (later in the drawing, so
+        the halo shows), or at narrow units leave the House −1 row and Street −1 a little further
+        from the axes so the labels sit clear."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:42:08.347Z
+      text: Draw the plane's lines under what is placed on it, and their numbers, O and the X/Y names over
+        it, so the houses can't cover a number.
+      status: planned
+      commit: dd762d69c7e826df042bde2f5c853cf959b9eaca
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:42:08.432Z
+      text: "Done. Played at 360 in Hindi: the street numbers −5 … 5 sit over the roofs, and the minus
+        signs of House −1 … −5 are whole beside Street −1."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:49:42.947Z
+      text: "Checked in the running board (town-grows#town, 360, en and hi, after choosing −1): the axis
+        numbers are now drawn over the houses. The street numbers −5 … −1 sit whole over the House
+        −1 roofs, and on the y-axis −1 … −5 keep their minus signs beside Street −1, so −3 next to
+        the aunt's ringed house reads −3. Played in Hindi to the end and tapped (−1, −1): its ring
+        sits by the −1s and both still read. Holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:04.945Z
+      text: ""
+      status: closed
+- id: cmvy8c2xg2b7
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.108Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:223
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (labels dropped). While the lines are apart, the vertical line's numbers that fall
+    on the horizontal line are left out, so on every screen it reads 2, 1, 0, −1, (gap), (gap), −4,
+    −5, −6, and its 0 is half hidden under the blue ring. This is the board that says each line is a
+    number line; a student sees one with numbers missing, and can't check that the zeroes are apart
+    by reading them. Suggested: start the vertical line far enough off (e.g. apart y: 2 with x: 3.5,
+    or write its labels on the other side of the line) that none of its numbers meet the horizontal
+    numbers, and keep the 0 visible beside the ring."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.734Z
+      text: Narrow the axes to −4…4 and leave unwritten only the vertical line's number that lies on the
+        horizontal line (its −2); write the 0 clear of the ring.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:25.976Z
+      text: "Done. At 360: the vertical line reads 2, 1, 0, −1, then −3 … −6; only its −2, lying on the
+        horizontal line itself, is left unwritten (its mark stays). The 0 sits clear of the ring."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.867Z
+      text: "It holds at the start: the vertical line sits at 2.5, only its −3 (on the horizontal line)
+        goes unwritten, and the 0 is clear of the ring. But the ring can be dragged, and it snaps to
+        whole units. Played: drag sheet/plane/moveApart to (1, 2). The vertical line then runs
+        through the horizontal line's \"1\", and its −2 and −3 both disappear, so the student sees
+        the number line with numbers missing again. A drag to (3, 3) does the same (−3 and −4 gone,
+        the line through \"3\"). The drag also works while the pair is still tilted during `any`.
+        Suggested: while apart, snap the zero to half units (x.5, y.5) only, or don't let the ring
+        be dragged and leave \"Bring the zeroes together\" as the only move."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.825Z
+      text: "Your follow-up: the ring now rests only halfway between marks (x.5, y.5) or at 0, where the
+        lines become the axes, so a drag can't put a number of one line on the other; and it isn't
+        there while the pair is tilted (a94ede7)."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:21.633Z
+      text: "Played (en, 360): the ring opens at (2.5, 2.5). Dragged to (1, 2), it rests at (1.5, 2.5);
+        dragged to (3, 3), it rests at (3.5, 3.5). Each time only the one vertical number lying on
+        the horizontal line goes unwritten (−3, then −4), the 0 stays clear of the ring, and no line
+        runs through a horizontal number. Dragged to (0.2, 0.2), it snaps to 0, the lines cross and
+        the board passes. The tilt is gone, so there's no drag during it. Holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:06.749Z
+      text: ""
+      status: closed
+- id: cmvy8c2zlp4v
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.185Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:300
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (labels dropped). On the phone (360) the −1 is missing on both axes (x: −5 −4 −3
+    −2 O 1…, y: 1 O −2 −3…); at 640 they are there. It is the number this board's definition points
+    at (\"the negative numbers lie along OX′ and OY′\"). Same on the crossed axes of
+    two-number-lines, quadrants, and every tap-the-part question. Suggested: shift the O label so it
+    doesn't collide with −1, or give the axes a little more room on a phone, so −1 stays written."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.787Z
+      text: Hide a −1 beside O only below 30 px a unit (where the two −1s actually meet), and narrow the
+        lesson's axes to −4…4 so a phone has the room.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.080Z
+      text: Done. At 360 both axes read −4 −3 −2 −1 O 1 2 3 4, with −1 beside O on each; the same on
+        quadrants and the tap-the-part questions.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.927Z
+      text: Holds where O is printed. At 360 the axes read −5 … −1 O 1 … 5 with −1 beside O on each axis,
+        on axes-and-directions, quadrants, two-number-lines once crossed, and the tap-the-part
+        questions. (The ready note says −4…4. The axes are now −5…5 after 00f9fbc, and −1 still
+        stays.) Where no O is printed, the same change draws two 0s on the lines. I've filed that as
+        its own thread on the prop.
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:08.533Z
+      text: ""
+      status: closed
+- id: cmvy8c31pgbo
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.261Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:200
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Principle 6 (show, don't describe), against flow.md's Needs. \"Lines at right angles can
+    point any way: both tilted, or one across and one up\" is said in words only: no tilted
+    perpendicular pair is drawn before the upright one. The town map is meant to fade in behind the
+    axes and out again, but `town` only says it in words. The student has to picture both.
+    Suggested: show a tilted pair, then turn it upright, before the two number lines; when the lines
+    cross, fade the grown town in behind them (main road on the x-axis, her corner on O), then out."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:58:37.883Z
+      text: "The person chose in chat to build them; props.md approved with: plane fields turn (+ turnTo)
+        and backdrop (+ fadeBackdrop). The tilted pair rocks upright while `any` is said; the grown
+        town fades in behind the crossed axes and out after `town`."
+      status: planned
+      commit: f7badfe1418f373a271f37c678eab96eb3feca5c
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:58:38.041Z
+      text: "Done (f7badfe). Played: the pair opens at 30°, turns to −25°, then upright; \"Bring the
+        zeroes together\" appears only once upright; on crossing the town fades in at 0.4 (the axes'
+        numbers stay readable over it) and fades out when `town` has been said."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:57.984Z
+      text: 'Played with frames: the pair opens tilted, rocks to −25°, then turns upright; "Bring the
+        zeroes together" appears only once upright; on crossing, the town fades in at 0.4 behind the
+        axes (numbers readable) and out after `town`. Holds. (A drag of the ring during the tilted
+        part is noted on cmvy8c2xg2b7.)'
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:21.722Z
+      text: "Since your flow.md change (approved at bf528db), the tilted pair is gone from this board:
+        `any` says in words that the lines can point any way, and any-axes in lesson 3 will show it.
+        That's your call and I don't reopen it. What's left of this thread holds. Played with
+        frames: on crossing, the town fades in to 0.4 behind the axes, with the numbers readable
+        over it, and fades out once `town` has been said."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:10.322Z
+      text: ""
+      status: closed
+- id: cmvy8c33xi4p
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.341Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines
+  target: axes
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:240
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: Mechanical (one name per thing). `lines` calls the vertical line Y′Y ("Y dash Y"), and two
+    sentences later `axes` calls it YY′ ("Y Y dash"), in both languages. A student may think these
+    are two different lines or that the order matters. Use Y′Y in both (as X′X is), on screen and in
+    the said line.
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.839Z
+      text: Y′Y everywhere, shown and said.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.183Z
+      text: "Done: Y′Y in `lines` and `axes`, shown and said, both languages."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.040Z
+      text: Y′Y in `lines` and `axes`, shown and said ("Y dash Y" / "Y डैश Y"), both languages. Holds.
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:12.105Z
+      text: ""
+      status: closed
+- id: cmvy8c361m8m
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.417Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:300
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (an undefined term). The quadrants can be tapped here, and a tap reads \"Quadrant
+    II\", but quadrants are defined on the next board. The same holds on two-number-lines once the
+    lines cross, and on quadrants before the button is pressed (tapping shows \"Quadrant I\" before
+    the numbering is done). A student who taps a part meets the word before it's taught, and on
+    quadrants can read the numbering off before doing it. Suggested: let quadrants be tapped only
+    once they are numbered (on two-number-lines and here, only the halves and O)."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.895Z
+      text: "New plane field canTapQuadrants (default off): a quadrant is tapped only once all four are
+        numbered, or where a board turns it on (the tap-the-part questions)."
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.286Z
+      text: 'Done. Played: on axes-and-directions the parts are OX, OX′, OY, OY′ and O only; on quadrants
+        the four quadrant taps appear once "Number the quadrants" has run.'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.093Z
+      text: 'Played: on axes-and-directions the only taps are OX, OX′, OY, OY′ and O. On quadrants,
+        namePart:I…IV appear only after "Number the quadrants". Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:13.883Z
+      text: ""
+      status: closed
+- id: cmvy8c388zbz
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.496Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:300
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (one name per thing). A tapped half reads \"OX′: the negative x-axis\" / \"OY: the
+    positive y-axis\", but the lesson's definition (and the book) calls them \"the negative
+    direction of the x-axis\" / \"the positive direction of the y-axis\". The prop brings in a
+    second name the lesson never gives. Same readout in tap-the-part. Suggested: \"OX′: the negative
+    direction of the x-axis\"."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:09.948Z
+      text: 'Readout: "OX′: the negative direction of the x-axis" (and the other three), in both
+        languages.'
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.391Z
+      text: 'Done: "OX′: the negative direction of the x-axis" / "OX′: x-अक्ष की ऋणात्मक दिशा", and the
+        same for the other halves.'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.149Z
+      text: 'Played in Hindi: tapping OX′ reads "OX′: x-अक्ष की ऋणात्मक दिशा" (en: "OX′: the negative
+        direction of the x-axis"). Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:15.636Z
+      text: ""
+      status: closed
+- id: cmvy8c3ag5zk
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.576Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:300
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: 'A taste call on the figure. Each axis carries two letters at its end: a small grey x beside
+    X, and a small y above Y (the axis names), with X′, Y′ at the other ends. Fig. 3.8 shows only X,
+    X′, Y, Y′. A student may read x and X as two different things at the same end of the line. Keep
+    both (the lesson has said "the x-axis" and "X′X"), or drop the small x / y on these boards?'
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:10.001Z
+      text: "The person chose in chat: drop the small x and y on these boards (showAxisNames: false), as
+        Fig. 3.8."
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.497Z
+      text: "Done: the small x and y are gone from two-number-lines, axes-and-directions, quadrants and
+        both question families; X, X′, Y, Y′ stay."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.204Z
+      text: The small x and y are gone on two-number-lines, axes-and-directions, quadrants, name-the-lines
+        and tap-the-part; X, X′, Y, Y′ remain. Holds.
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:16.640Z
+      text: ""
+      status: closed
+- id: cmvy8c3cm86o
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.654Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/quadrants
+  target: parts
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:328
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: 'Mechanical. The text says "Press the button to number them", but the button says "Name the
+    quadrants" (Hindi: "गिनने के लिए बटन दबाओ" vs "चतुर्थांशों के नाम"). A student looks for a
+    button that numbers. Use one wording in both: e.g. the button "Number the quadrants".'
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:10.055Z
+      text: Button "Number the quadrants" / "चतुर्थांशों को गिनो", and the text names it.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.604Z
+      text: 'Done: the button is "Number the quadrants", and the text says "Press **Number the
+        quadrants**" (Hindi: "**चतुर्थांशों को गिनो** दबाओ").'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.264Z
+      text: Button "Number the quadrants" / "चतुर्थांशों को गिनो", and the text names it in bold in both
+        languages. Holds.
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:18.474Z
+      text: ""
+      status: closed
+- id: cmvy8c3ev9vo
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.735Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/quadrants
+  target: town
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:354
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (in Hindi). In Devanagari text the Roman numeral I looks just like the danda (।):
+    \"चतुर्थांश । में है\", \"।, ।।, ।।। और ।V से गिना जाता है\" read as full stops in the middle of
+    a sentence (`parts`, `town`, and the tap readout \"Quadrant I\"). A Hindi reader loses quadrant
+    I altogether. Suggested: keep the numerals in the Latin face, with a space, and add the ordinal
+    the first time (\"चतुर्थांश I (पहला)\"), or set them apart (bold or boxed) so they don't read as
+    dandas."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:10.108Z
+      text: 'In Hindi the ordinal first, numeral after in brackets: पहला (I), तीसरे चतुर्थांश (III); the
+        readout "पहला चतुर्थांश (I)".'
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.712Z
+      text: 'Done in `parts`, `town`, the readout and the tap-the-part prompts and notes. Played in Hindi:
+        tapping I reads "पहला चतुर्थांश (I)".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.320Z
+      text: 'In Hindi: `parts` reads "पहला (I), दूसरा (II), तीसरा (III) और चौथा (IV)", `town` reads "पहले
+        चतुर्थांश (I)" and "तीसरे चतुर्थांश (III)", and a tap on III reads "तीसरा चतुर्थांश (III)".
+        The ordinal carries the meaning even where the numeral looks like a danda. Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:20.214Z
+      text: ""
+      status: closed
+- id: cmvy8c3h2b3y
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.814Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/quadrants
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:323
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Principle 6, against flow.md's Needs (\"the town's four parts shaded to match, the corner at
+    O\"). The link to Riya's town is only a sentence; nothing shows the town's four parts over the
+    quadrants, or Aman's house in I and his aunt's in III. The student has to picture it. Suggested:
+    after numbering, fade in the grown town behind the axes, shade the quadrants, and mark the two
+    houses."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:58:37.955Z
+      text: "As props.md approved: tintsQuadrants, the town faded in behind after numbering, Aman's house
+        (A) and his aunt's (B) marked as the plane's named points."
+      status: planned
+      commit: f7badfe1418f373a271f37c678eab96eb3feca5c
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:58:38.119Z
+      text: 'Done (f7badfe). Played in English and Hindi: after "Number the quadrants", the four quadrants
+        tinted, the town at 0.4 behind, A at (4, 5) and B at (−2, −3) marked, the text names A and
+        B; tapping a quadrant through the houses names it (houses no one can choose no longer take
+        taps).'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.381Z
+      text: 'Played in Hindi at 360: after "Number the quadrants" the four quadrants are tinted, the town
+        is at 0.4 behind them, A at (4, 5) and B at (−2, −3) are marked, and `town` names A and B. A
+        tap on III, through the houses, names the quadrant. Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:20.429Z
+      text: ""
+      status: closed
+- id: cmvy8c3jbhnf
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.895Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/number-line
+  target: link
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:28
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: 'Mechanical (one name per thing). "the seats in class" (Hindi "कक्षा की सीटें"): lesson 1 and
+    its questions call them desks (seating-plan, tap-the-desk). Use "the desks in class".'
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:10.162Z
+      text: '"the desks in class" / "कक्षा के डेस्क".'
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.821Z
+      text: Done.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.440Z
+      text: '"the desks in class" / "कक्षा के डेस्क". Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:23.398Z
+      text: ""
+      status: closed
+- id: cmvy8c3lkvxj
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:13.976Z
+  board: class9-maths/coordinate-geometry/questions/name-the-lines/bfaeb756
+  target: ask
+  source: content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts:83
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: 'Mechanical (makes sense alone, and a give-away). Principle 8. Ex 3.2 Q1 is split into three
+    questions, but two of them (this one and the point, a6dfeb17) still say "these two lines", and
+    nothing is drawn or named before them: on its own the question points at nothing. Also, the
+    grammar picks the answer: "each part" is answered by the only singular-with-"A" option ("A
+    quadrant"), "the point" by the only single thing ("The origin"), and "lines" by the only pair of
+    lines ("The x-axis and the y-axis"). And "Write the name…" asks for writing in a tap question.
+    Suggested: draw the axes above each question (as tap-the-part does), say "the horizontal and
+    vertical lines" instead of "these two lines", make the labels match in form ("Quadrants", "The
+    origin", "The axes", "The directions", or all with "The"), and "Choose the name…".'
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:10.216Z
+      text: Draw the axes above each question (a tap names nothing); "the horizontal and the vertical
+        lines" for "these two lines"; "Choose" for "Write"; options all with "The", plus a fifth,
+        "The x-axis", so neither number nor article picks the answer.
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:26.928Z
+      text: Done as planned; all three questions show the axes above them.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.496Z
+      text: All three questions show the axes; the prompts say "the horizontal and the vertical lines";
+        a6dfeb17 says "Choose". There are five options, all with "The", and two singular and three
+        plural ones fit each question, so the grammar no longer gives the answer. Holds. (The origin
+        on these axes is drawn badly on a phone. That's filed separately on the prop.)
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:23.610Z
+      text: ""
+      status: closed
+- id: cmvy8c3nwwi0
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-01T19:35:14.060Z
+  board: class9-maths/coordinate-geometry/questions/tap-the-part/929971e6
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts:86
+  commit: 09a35e81d80ee1db0914086d5ee88123ede04530
+  text: "Mechanical (a give-away). Principle 8. Each tap names the part before Check: tap OX and it
+    reads \"OX: the positive x-axis\", so the student taps halves until the readout says the asked
+    name, then presses Check, without knowing anything. The prompt also gives the meaning with the
+    name (\"Tap OX′, the negative direction of the x-axis\"), so even without the readout the
+    question is \"find the negative numbers\". And \"Tap the origin, O\" (128c5d7d) asks for the
+    point already labelled O on the picture. Same for the quadrant questions (\"Quadrant II\" shows
+    on tap). Suggested: in these questions a tap highlights the part but doesn't name it; the prompt
+    gives only the name (\"Tap OX′\", \"Tap quadrant II\"); and for the origin either drop the O
+    label or drop that question."
+  changed:
+    - content/class9-maths/coordinate-geometry/questions/name-the-lines/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/family.ts
+    - content/class9-maths/coordinate-geometry/questions/tap-the-part/params.yaml
+    - content/class9-maths/coordinate-geometry/sound/01c87f87551d244a.m4a
+    - content/class9-maths/coordinate-geometry/sound/1490de7ec916179f.m4a
+    - content/class9-maths/coordinate-geometry/sound/1d0fbf8688a4c86a.m4a
+    - content/class9-maths/coordinate-geometry/sound/209b4413281119ae.m4a
+    - content/class9-maths/coordinate-geometry/sound/2252c6afddf4de68.m4a
+    - content/class9-maths/coordinate-geometry/sound/368f0c44af1e5e90.m4a
+    - content/class9-maths/coordinate-geometry/sound/37554c4109f6ec07.m4a
+    - content/class9-maths/coordinate-geometry/sound/3d39cd37f76a1e49.m4a
+    - content/class9-maths/coordinate-geometry/sound/3eff73766994795d.m4a
+    - content/class9-maths/coordinate-geometry/sound/44ea95535ea93936.m4a
+    - content/class9-maths/coordinate-geometry/sound/5ee6c20585ee012a.m4a
+    - content/class9-maths/coordinate-geometry/sound/6909ee9b84df51c9.m4a
+    - content/class9-maths/coordinate-geometry/sound/76d61f8c01451f23.m4a
+    - content/class9-maths/coordinate-geometry/sound/81773e09b429a8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/8523c2a4087aa954.m4a
+    - content/class9-maths/coordinate-geometry/sound/a4071bfc1dcd6376.m4a
+    - content/class9-maths/coordinate-geometry/sound/c3ce80a87e41bb66.m4a
+    - content/class9-maths/coordinate-geometry/sound/ca7cf6a30302dbe2.m4a
+    - content/class9-maths/coordinate-geometry/sound/d0bfd13a0f4bcdf8.m4a
+    - content/class9-maths/coordinate-geometry/sound/e20c538df6997f39.m4a
+    - content/class9-maths/coordinate-geometry/sound/efcfc330461c2b9a.m4a
+    - content/class9-maths/coordinate-geometry/sound/efdd92073f294861.m4a
+    - content/class9-maths/coordinate-geometry/sound/f1f3b9e5ea856299.m4a
+    - content/class9-maths/coordinate-geometry/sound/f9baaa01c7c6c8c4.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+    - content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts
+    - library/props/coordinates/src/places.ts
+    - library/props/coordinates/src/plane-view.tsx
+    - library/props/coordinates/src/plane.ts
+    - library/props/coordinates/src/styles.css
+    - library/props/coordinates/src/view.tsx
+    - library/props/coordinates/src/walker-view.tsx
+    - library/props/coordinates/src/words.ts
+  reaches:
+    pieces: 86
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:10.267Z
+      text: 'New plane field namesTapped (default on), off in these questions: a tap marks the part, Check
+        says. Prompts give the name only ("Tap OX′"). The origin question goes: O is printed.'
+      status: planned
+      commit: cce24e14912d3e8b065dfab2c40a8b876eb612a7
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T03:16:27.039Z
+      text: 'Done. Played (Hindi, OX′ asked): the prompt is "OX′ को दबाओ"; tapping OX writes no name;
+        Check gives the OX note. Four questions left: OY′, OX′, II, IV.'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:08:58.551Z
+      text: 'Played: on 9a79e9c6, a tap on I tints it with no name; on 929971e6 (Hindi) the prompt is "OX′
+        को दबाओ", a tap on OX shows nothing named, and Check gives the OX note; with OX′ tapped,
+        Check passes. Four questions are left, and the origin one is gone. Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:26.067Z
+      text: ""
+      status: closed
+- id: cmvyql5v84bn
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T04:06:09.908Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: town
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:188
+  snapshot: "Aman's aunt's house: Street number −2, House number −3
+    −5−4−3−2−1012345−5−4−3−2−1012345Street numberHouse numberRiya Riya is at Aman's aunt's house!
+    Street number −2, House number −3 ↑ ← → ↓ ↺ Back to the start"
+  commit: f7badfe1418f373a271f37c678eab96eb3feca5c
+  text: i feel that the ordering is somewhat wrong ; Aman's aunt's hoouse should be after we desrbed
+    the situation no and why aman's aunt house we are going ??
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.367Z
+      text: "The numbered map and the rule first; then, once the rule has been said, the aunt's line and
+        her house marked on the map. Give the errand a reason in the story: for their stall at the
+        fair, Aman's aunt is lending them a table, and Riya goes to fetch it."
+      status: planned
+      commit: a94ede71aee9b23f085ef6ab25e3701471ffbfdc
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.459Z
+      text: "Done (a94ede7). Played in Hindi: after −1, the map shows with no address; the rule is said;
+        then \"For their stall at the fair, Aman's aunt is lending them a table. She lives in the
+        new part of town, at Street −2, House −3. Walk Riya there to fetch it.\" and her house is
+        marked."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:38:21.938Z
+      text: "Reviewer: played (en, 360). Before −1 is chosen there's no address and no marked house. On
+        −1, the numbered map comes in with no target, and `signs` (the rule) is said. Only after
+        that does `aunt` appear (\"For their stall at the fair, Aman's aunt is lending them a table
+        … Walk Riya there to fetch it.\"), and her house is marked and named above the map. The
+        errand fits the fair story. Holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:27.867Z
+      text: ""
+      status: closed
+- id: cmvyqohdgu6g
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T04:08:44.788Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:319
+  snapshot: −5−4−3−2−1012345−8−7−6−5−4−2−10123XX′YY′
+  commit: f7badfe1418f373a271f37c678eab96eb3feca5c
+  text: what is the reason for these tilting perpendicualr lines? what are they helping us to
+    understand??
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:16:27.886Z
+      text: "The book's reason (s3.2, Fig. 3.6): Descartes needed only two lines at right angles; which
+        way they point is a choice, and the book shows tilted pairs to say that the right angle is
+        what matters, then takes one horizontal and one vertical as the convention. Honestly, for a
+        student it teaches little: nothing later uses a tilted pair, and the town already shows why
+        one road across and one up. My recommendation: drop the tilt (the board opens upright), keep
+        the sentence \"In this chapter, we take one horizontal and one vertical\". Your call: keep
+        or drop?"
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:28:43.648Z
+      text: "Decided in chat: the tilt goes from this board (it now opens upright; the book's sentence
+        stays in words). The idea behind it becomes a board of its own in coordinates-of-a-point,
+        any-axes: once coordinates are signed, the student moves O and turns the axes, a fixed point
+        P stays put and its coordinates (two decimals) change, which is why everyone uses the same
+        axes. In flow.md and props.md for approval."
+    - by: you
+      role: person
+      at: 2026-11-02T07:11:53.645Z
+      text: ""
+      status: closed
+- id: cmvyrqqkh9fb
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T04:38:29.633Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines
+  target: sheet
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:329
+  commit: ea33f92d6407f0e70c34f183f04dbe8b2cd0c292
+  text: "Mechanical (a named mark not drawn). Principle 1/10. After the zeroes meet, `axes` says \"The
+    point where they cross is the origin, O\", and `town` says \"O is the corner she started from\".
+    But the crossing on the plane still reads 0, not O, until the end of the board (played with
+    frames, en, 360). A student looks for the O the text names and finds a 0; the next board,
+    axes-and-directions, prints O at the same point. The plan on cmvyqryouhts says \"O once the
+    lesson has named it\". Suggested: when `axes` is shown, turn the crossing's label from 0 to O
+    (showOrigin on), as axes-and-directions draws it."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:42:08.498Z
+      text: Sliding the ring until the zeroes meet names O, as the button does.
+      status: planned
+      commit: dd762d69c7e826df042bde2f5c853cf959b9eaca
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:42:08.573Z
+      text: 'Done. Played: drag the ring to (0.1, 0.1); it rests at (0, 0), the crossing reads O, and
+        `axes` says "the origin, O".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:49:43.016Z
+      text: "Played (en and hi, 360, with frames in hi): drag the ring to (0.1, 0.1); it rests at (0, 0)
+        and the crossing reads O from the first frame (0.07 s), before `axes` says \"the origin,
+        O\", and stays O through the town's fade in and out. The button path (Bring the zeroes
+        together) also crosses and names O. Holds."
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:30.322Z
+      text: ""
+      status: closed
+- id: cmvyrqqpte6d
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T04:38:29.825Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/number-line
+  target: rule
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:84
+  commit: ea33f92d6407f0e70c34f183f04dbe8b2cd0c292
+  text: 'Mechanical (maths inside a sentence). Principle 6/10. `rule` uses the letter r inside the
+    sentence in the running text face: "a point at distance r from 0 is the number r … and −r". In
+    English it reads as a stray word. In Hindi the same Latin r, set in the Devanagari face, is a
+    tiny hook that reads like a vowel sign: "0 से r दूरी पर", "−r:". A Hindi student can miss that
+    there is a letter there at all. Suggested: set r as a maths letter (italic, Latin face) in both
+    languages, or put the general statement on its own line ("distance r from 0: r on the positive
+    side, −r on the negative side").'
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:42:08.640Z
+      text: Write r and −r as maths ($r$, $-r$), in both languages.
+      status: planned
+      commit: dd762d69c7e826df042bde2f5c853cf959b9eaca
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T04:42:08.717Z
+      text: "Done: in Hindi the rule reads … से r दूरी … with r in the maths face, and −r likewise."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T04:49:43.085Z
+      text: 'Seen at 360 in both languages: `rule` sets r, r and −r in the italic maths face. In Hindi "0
+        से r दूरी पर … ऋणात्मक ओर −r" the r reads as a Latin letter, not a vowel sign. Holds.'
+    - by: you
+      role: person
+      at: 2026-11-02T04:57:30.964Z
+      text: ""
+      status: closed
+- id: cmvyww2w2120
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T07:02:36.962Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  target: story/text
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:158
+  snapshot: Riya's town has grown. New streets were built west of her corner (to the left on the map),
+    and new houses south of the main road (down the map). A new street also runs through her corner,
+    with no houses on it.
+  commit: a6b5f4f8676a328abfbbd43833e7c454a1a3390c
+  turn: person
+  text: we can just say that she is on the main intersection (which it is that way it will be more clean)
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:08:56.939Z
+      text: Say her corner is now the main crossroads (the main road and a street cross there), and drop
+        the separate sentence about a new street.
+      status: planned
+      commit: 6f810a9ab7cb41d74ba545c582201f44672e927c
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:08:57.026Z
+      text: "Done: \"Riya's town has grown, and her corner is now the main crossroads: the main road and a
+        street cross there. New streets were built west of it (to the left on the map), and new
+        houses south of the main road (down the map).\" Hindi: \"…उसका कोना अब मुख्य चौराहा है:
+        मुख्य सड़क और एक गली वहाँ एक-दूसरे को काटती हैं।…\""
+      status: ready
+    - by: you
+      role: person
+      at: 2026-11-02T07:11:59.775Z
+      text: ""
+      status: closed
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T07:15:29.381Z
+      text: 'Seen at 360, en and hi. The story now reads: her corner is the main crossroads, where the
+        main road and a street cross, with new streets to the west and new houses to the south. It
+        matches the map (the dark vertical road through Riya, with no houses on it) and `signs`
+        ("the street through it is Street 0"). The separate sentence is gone, and the Hindi says the
+        same. Holds.'
+- id: cmvywzqx1hte
+  status: closed
+  by: you
+  role: person
+  createdAt: 2026-11-02T07:05:28.069Z
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines
+  target: any/text
+  source: content/class9-maths/coordinate-geometry/the-cartesian-plane/overview.ts:311
+  snapshot: "Descartes located points with two perpendicular lines. Lines at right angles can point
+    any way: both tilted, or one across and one up. In this chapter, we take one horizontal and one
+    vertical."
+  commit: a6b5f4f8676a328abfbbd43833e7c454a1a3390c
+  turn: person
+  text: this is not looking very revalnt and not going in the flow ; don't u think?
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:08:57.096Z
+      text: "Agreed: with the tilt gone (it is lesson 3's any-axes now), Descartes and tilted lines don't
+        lead anywhere. Open from the town instead: its two roads at right angles were number lines;
+        any plane gets the same pair, one horizontal and one vertical."
+      status: planned
+      commit: 6f810a9ab7cb41d74ba545c582201f44672e927c
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:08:57.183Z
+      text: "Done: \"In Riya's town, two roads at right angles, each a number line, told where every house
+        is. To give the place of any point in a plane, we do the same: two number lines at right
+        angles, one horizontal and one vertical.\" Then `lines` brings in X′X and Y′Y as before.
+        Both languages seen at 360."
+      status: ready
+    - by: you
+      role: person
+      at: 2026-11-02T07:12:01.538Z
+      text: ""
+      status: closed
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T07:15:29.440Z
+      text: "Seen at 360 in en and hi, and played (tap Bring the zeroes together, hi): the board still
+        passes, with `axes` and `town` after it. `any` now opens from the town's two roads, each a
+        number line, and moves on to two number lines at right angles for any point. That leads
+        straight into `lines`. Holds. One loose end is on flow.md: its Purpose for this board still
+        says \"two perpendicular lines can face any way\". I've filed that on the flow."
+- id: cmvyxcmziad8
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T07:15:29.502Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops
+  target: line
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:77
+  commit: 6f810a9ab7cb41d74ba545c582201f44672e927c
+  turn: person
+  text: Regression from cmvywu7fxhb5 (a lone number line's numbers now sit 22 px under the line
+    instead of 16). On bus-stops the numbers moved down but the stop's label under 0 did not. In
+    Hindi, at 360, 640 and 640×720, the top bar of "बस अड्डा" now touches the bottom of the 0 above
+    it, with no gap. In English "bus stand" just clears it. A student reads the 0 and its label as
+    one blob, and this is the stop the whole board counts from. Mechanical (overlap). Move the place
+    label down by the same 6 px on a lone number line, or put it at numbers' offset plus a fixed
+    gap, so it follows the numbers wherever they go.
+  changed:
+    - library/props/coordinates/src/places-view.tsx
+    - library/props/coordinates/src/places.ts
+  reaches:
+    pieces: 61
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:17:49.714Z
+      text: On a lone number line, move the label under a place on the line down with the numbers (34 → 40
+        px), the places layer reading the plane's axes.
+      status: planned
+      commit: 05cbaefaf95192e82dd3306733139bba4ec9a98f
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:17:51.963Z
+      text: Done. In Hindi at 360, 640 and 640×720, "बस अड्डा" sits clear under the 0.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T07:22:31.713Z
+      text: Checked in the running board at 360, 640 and 640×720, in en and hi. "बस अड्डा" now sits
+        clearly under the 0, with a gap about as wide as the one under the other numbers. "bus
+        stand" also clears it in English. The label moves with the numbers only on a lone number
+        line (axes "horizontal"), and the bus-to-stop questions have no label there. The chapter
+        check is 36/36 ok in every version. The fix holds.
+- id: cmvyxcn2ob09
+  status: ready
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T07:15:29.616Z
+  source: authoring/books/class9-maths/coordinate-geometry/flow.md:48
+  commit: 6f810a9ab7cb41d74ba545c582201f44672e927c
+  quote: two perpendicular lines can face any way; we take one horizontal and one vertical
+  text: "After cmvywzqx1hte, two-number-lines no longer shows or says that perpendicular lines can
+    face any way. It opens from the town and takes one horizontal and one vertical line directly.
+    Its Purpose here, and its fig3.6 tag, still promise that. Nothing built now teaches the source's
+    \"the perpendicular lines may be in any direction (Fig 3.6)\". The flow says any-axes (lesson 3)
+    will, and it already carries s3.2-perpendicular. Bring the flow in step: drop \"can face any
+    way\" from this Purpose, and move fig3.6 to any-axes. That way the source line has one clear
+    home and the next review holds the board to what it really does."
+  changed:
+    - library/props/coordinates/src/places-view.tsx
+    - library/props/coordinates/src/places.ts
+  reaches:
+    pieces: 61
+    boards: 34
+    lessons:
+      - class9-maths/coordinate-geometry/two-numbers-for-a-place
+      - class9-maths/coordinate-geometry/the-cartesian-plane
+      - class9-maths/coordinate-geometry/questions/bus-to-stop
+      - class9-maths/coordinate-geometry/questions/name-the-lines
+      - class9-maths/coordinate-geometry/questions/place-the-dot
+      - class9-maths/coordinate-geometry/questions/tap-the-desk
+      - class9-maths/coordinate-geometry/questions/tap-the-part
+      - class9-maths/coordinate-geometry/questions/walk-to-address
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:17:45.926Z
+      text: Drop "two perpendicular lines can face any way" from two-number-lines' Purpose and move fig3.6
+        to any-axes, which already cites s3.2-perpendicular.
+      status: planned
+      commit: 05cbaefaf95192e82dd3306733139bba4ec9a98f
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T07:17:48.560Z
+      text: "Done in flow.md: two-number-lines now says the town's two roads at right angles were number
+        lines, so any point in a plane is located with two at right angles, one horizontal and one
+        vertical; that the pair could face any way is any-axes' (lesson 3), which now cites fig3.6.
+        flow.md needs the person's approval again."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T07:22:31.833Z
+      text: "The flow.md change matches the board. two-number-lines now starts from the town's two roads
+        and no longer cites fig3.6. any-axes cites fig3.6 next to s3.2-perpendicular. One thing for
+        you: the same commit (e32373f) also changed the file's `approved:` stamp (0998c8404390 →
+        bf528dbbd76a). So flow.md may now read as approved before you have read the new Purpose.
+        Please approve it or send it back."
+  turn: person
