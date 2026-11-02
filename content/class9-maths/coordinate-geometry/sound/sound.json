@@ -126,13 +126,6 @@
       "seconds": 4.238
     },
     {
-      "file": "f509316b050fac1e.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Descartes located points with two perpendicular lines. Lines at right angles can point any way: both tilted, or one across and one up. In this chapter, we take one horizontal and one vertical.",
-      "seconds": 11.854
-    },
-    {
       "file": "ccc9072f01457dc7.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -208,6 +201,13 @@
       "locale": "en",
       "words": "In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. O is the corner she started from, 0 on both.",
       "seconds": 8.383
+    },
+    {
+      "file": "0ff132d1f8294f08.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "In Riya's town, two roads at right angles, each a number line, told where every house is. To give the place of any point in a plane, we do the same: two number lines at right angles, one horizontal and one vertical.",
+      "seconds": 12.435
     },
     {
       "file": "0e0db8c2106ea736.m4a",
@@ -329,10 +329,10 @@
       "seconds": 9.416
     },
     {
-      "file": "aec314952a0fbfed.m4a",
+      "file": "5b986c9b9e8b1ca6.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Riya's town has grown. New streets were built west of her corner (to the left on the map), and new houses south of the main road (down the map). A new street also runs through her corner, with no houses on it.",
+      "words": "Riya's town has grown, and her corner is now the main crossroads: the main road and a street cross there. New streets were built west of it (to the left on the map), and new houses south of the main road (down the map).",
       "seconds": 11.042
     },
     {
@@ -1015,13 +1015,6 @@
       "seconds": 3.483
     },
     {
-      "file": "5f44075abbd1578f.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "देकार्त ने दो लंब रेखाओं से बिंदुओं का स्थान बताया। समकोण पर मिलने वाली रेखाएँ किसी भी ओर हो सकती हैं: दोनों तिरछी, या एक आड़ी और एक खड़ी। इस अध्याय में, हम एक क्षैतिज और एक ऊर्ध्वाधर रेखा लेते हैं।",
-      "seconds": 16.533
-    },
-    {
       "file": "f8b871e442e05a77.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -1260,11 +1253,11 @@
       "seconds": 16.881
     },
     {
-      "file": "d03da57dbe654dec.m4a",
+      "file": "f142ab7400278842.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "रिया का शहर बढ़ गया है। उसके कोने के पश्चिम में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के दक्षिण में (नक्शे पर नीचे) नए मकान। उसके कोने से होकर भी एक नई गली जाती है, जिस पर कोई मकान नहीं है।",
-      "seconds": 14.42
+      "words": "रिया का शहर बढ़ गया है, और उसका कोना अब मुख्य चौराहा है: मुख्य सड़क और एक गली वहाँ एक-दूसरे को काटती हैं। उसके पश्चिम में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के दक्षिण में (नक्शे पर नीचे) नए मकान।",
+      "seconds": 15.999
     },
     {
       "file": "f80d9c368cbab250.m4a",
@@ -1286,6 +1279,13 @@
       "locale": "hi",
       "words": "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश में है; उसकी मौसी का, B, गली माइनस 2, मकान माइनस 3 पर, तीसरे चतुर्थांश में। उसका नाम देखने के लिए किसी चतुर्थांश को दबाओ।",
       "seconds": 22.292
+    },
+    {
+      "file": "dd9662dfe7fc056f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रिया के शहर में, समकोण पर मिलती दो सड़कों ने, जिनमें हर एक संख्या रेखा थी, हर मकान की जगह बताई। तल में किसी भी बिंदु की जगह बताने के लिए हम यही करते हैं: समकोण पर दो संख्या रेखाएँ, एक क्षैतिज और एक ऊर्ध्वाधर।",
+      "seconds": 16.916
     },
     {
       "file": "5df84bf245bbc7ea.m4a",

@@ -234,6 +234,9 @@ export function AxesDraw({
   layer: "lines" | "labels";
 }): JSX.Element {
   const isLines = layer === "lines";
+  // How far under the horizontal line its numbers sit: on a lone number line a little further,
+  // clear of the point dragged along it (it sits on the line, over its marks).
+  const numbersBelow = s.axes === Axes.Horizontal ? 22 : 16;
   const w = s.window;
   const unit = unitOf(px);
   // Numbers every mark when there's room, else every other.
@@ -292,7 +295,7 @@ export function AxesDraw({
               <g
                 class={`cp-mark-button${s.lit?.axis === "x" && s.lit.value === v ? " is-lit" : ""}`}
                 {...does(plane.actions.tapNumber, { axis: "x", value: v }, `x${v}`)}
-                transform={`translate(${x}, ${base + 16})`}
+                transform={`translate(${x}, ${base + numbersBelow})`}
               >
                 <circle r={11} />
                 <text text-anchor="middle" dominant-baseline="central">
@@ -300,7 +303,7 @@ export function AxesDraw({
                 </text>
               </g>
             ) : (
-              <text x={x} y={base + 16} text-anchor="middle" dominant-baseline="central">
+              <text x={x} y={base + numbersBelow} text-anchor="middle" dominant-baseline="central">
                 {text}
               </text>
             )}

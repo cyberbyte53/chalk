@@ -341,6 +341,14 @@
   stroke-width: 3;
   cursor: grab;
 }
+/* Focus is a ring around the dot, and only for the keyboard: not a box over the numbers after a drag. */
+.cp-point:focus {
+  outline: none;
+}
+.cp-point:focus-visible {
+  stroke: var(--color-primary-press);
+  stroke-width: 4;
+}
 .cp-frame .cp-length,
 .cp-frame .cp-pair {
   font: 700 var(--text-note) var(--font-display);

@@ -157,8 +157,8 @@ const townGrows = page(
       title: words.title(t("The town grows", "शहर बढ़ता है")),
       story: words.body(
         t(
-          "Riya's town has grown. New streets were built **west** of her corner (to the left on the map), and new houses **south** of the main road (down the map). A new street also runs through her corner, with no houses on it.",
-          "रिया का शहर बढ़ गया है। उसके कोने के **पश्चिम** में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के **दक्षिण** में (नक्शे पर नीचे) नए मकान। उसके कोने से होकर भी एक नई गली जाती है, जिस पर कोई मकान नहीं है।",
+          "Riya's town has grown, and her corner is now the main crossroads: the main road and a street cross there. New streets were built **west** of it (to the left on the map), and new houses **south** of the main road (down the map).",
+          "रिया का शहर बढ़ गया है, और उसका कोना अब मुख्य चौराहा है: मुख्य सड़क और एक गली वहाँ एक-दूसरे को काटती हैं। उसके **पश्चिम** में (नक्शे पर बाईं ओर) नई गलियाँ बनीं, और मुख्य सड़क के **दक्षिण** में (नक्शे पर नीचे) नए मकान।",
         ),
       ),
       before: place(
@@ -310,8 +310,8 @@ const twoNumberLines = page(
       title: words.title(t("Two number lines", "दो संख्या रेखाएँ")),
       any: words.body(
         t(
-          "Descartes located points with two perpendicular lines. Lines at right angles can point any way: both tilted, or one across and one up. **In this chapter, we take one horizontal and one vertical.**",
-          "देकार्त ने दो लंब रेखाओं से बिंदुओं का स्थान बताया। समकोण पर मिलने वाली रेखाएँ किसी भी ओर हो सकती हैं: दोनों तिरछी, या एक आड़ी और एक खड़ी। **इस अध्याय में, हम एक क्षैतिज और एक ऊर्ध्वाधर रेखा लेते हैं।**",
+          "In Riya's town, two roads at right angles, each a number line, told where every house is. To give the place of any point in a plane, we do the same: **two number lines at right angles, one horizontal and one vertical.**",
+          "रिया के शहर में, समकोण पर मिलती दो सड़कों ने, जिनमें हर एक संख्या रेखा थी, हर मकान की जगह बताई। तल में किसी भी बिंदु की जगह बताने के लिए हम यही करते हैं: **समकोण पर दो संख्या रेखाएँ, एक क्षैतिज और एक ऊर्ध्वाधर।**",
         ),
       ),
       lines: words.body(
