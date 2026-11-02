@@ -45,8 +45,8 @@ Purpose: the town grows past Riya's corner: new streets to the west of where she
 Needs: lesson 1's town, whose map extends west and south of Riya's corner; new houses appear there; numbering them from the corner gives −1, −2, … west along the road and south down a street; tap one to see its address, both numbers signed; Riya walks to one, going west or south as a sign says.
 
 ### two-number-lines  (o4; s3.2-perpendicular, fig3.6, fig3.7, def-axes, def-origin)
-Purpose: two number lines, one horizontal and one vertical, crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from. Two perpendicular lines could face any way, but a point's two numbers depend on which way they face: the point stays where it is, its numbers change. So everyone takes the same pair: in this chapter, one horizontal and one vertical.
-Needs: two number lines, one horizontal (X′X) and one vertical (Y′Y), brought together until their zeroes meet; the crossing named O; the town map fading in behind and out again. Then a point P, with its two numbers read the walk's way (along the first line, then along the second), to two decimal places; the student turns the pair of axes about O, P stays put and its numbers change as they turn; upright again, they are what they were.
+Purpose: two perpendicular lines can face any way; we take one horizontal and one vertical, two number lines crossing at their zeroes: the x-axis, the y-axis and the origin O. They are the town's main road and Riya's street, and O is the corner she started from. (Why the choice matters is shown once coordinates are defined: any-axes.)
+Needs: two number lines, one horizontal (X′X) and one vertical (Y′Y), brought together until their zeroes meet; the crossing named O; the town map fading in behind and out again.
 
 ### axes-and-directions  (o4; def-directions, fig3.8)
 Purpose: OX and OY are the positive directions of the axes, OX′ and OY′ the negative ones.
@@ -83,6 +83,10 @@ Needs: a point dragged onto an axis, one coordinate becoming 0, and onto O for (
 ### signs-and-quadrants  (o9; rule-signs, fig3.13)
 Purpose: every point in quadrant I is (+, +), II (−, +), III (−, −) and IV (+, −), because each quadrant is bounded by those halves of the axes.
 Needs: a point dragged through all four quadrants, the signs of its coordinates shown; each quadrant's pattern filled in once the point has been there. Then a guessing round: a point appears, the class calls its quadrant from its signs before it is shown.
+
+### any-axes  (o7; s3.2-perpendicular, remark-convention)
+Purpose: the axes are a choice we make. Move O anywhere, turn the pair any way: a point stays where it is, and only its coordinates change. So everyone uses the same pair, the agreed x- and y-axes, just as everyone writes x first. Not in the source as a picture; it is what "they can point any way" and "only a convention" mean.
+Needs: a fixed point P with its perpendiculars to both axes and its coordinates, signed, to two decimal places; the student drags O to move the axes and turns them about O with a handle; P's coordinates change as they do and P doesn't move; put back, its coordinates are what they were.
 
 ### find-the-point  (o7; ex3.2-q2, fig3.14, s3.4, summary)
 Purpose: read coordinates from a figure, and find the point with given coordinates, including points on the axes (L, M). The lesson ends with summary points 6 to 10.

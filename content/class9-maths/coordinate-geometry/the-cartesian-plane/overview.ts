@@ -340,8 +340,6 @@ const twoNumberLines = page(
             showAxisNames: false,
             showOrigin: false,
             showDirections: true,
-            // At right angles, but tilted: turned upright while `any` is said.
-            turn: 30,
             // The grown town, behind and unseen until the lines cross.
             scene: Scene.Town,
             upLines: null,
@@ -381,15 +379,9 @@ const twoNumberLines = page(
       ),
     },
     passBy: "rules",
-    // The pair rocks one way, then the other, then stands upright: any pair at right angles will do.
-    onSaid: {
-      any: (_, t) => t.to.sheet.plane.turnTo({ degrees: -25, seconds: 1.2 }),
-      // The town fades in behind the axes it was walked on (below), and out once that is said.
-      town: (_, t) => t.to.sheet.plane.fadeBackdrop({ to: 0, seconds: 1 }),
-    },
+    // The town fades in behind the axes it was walked on (below), and out once that is said.
+    onSaid: { town: (_, t) => t.to.sheet.plane.fadeBackdrop({ to: 0, seconds: 1 }) },
     hear: {
-      "sheet.plane.turned": (_, p, t) =>
-        p.degrees === -25 && t.to.sheet.plane.turnTo({ degrees: 0, seconds: 1.2 }),
       "sheet.plane.crossed": (_, __, t) => [
         t.to.sheet.plane.fadeBackdrop({ to: TOWN_BEHIND, seconds: 1 }),
         t.self.show({ name: "axes" }),
