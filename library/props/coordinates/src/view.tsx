@@ -10,6 +10,8 @@ import {
   NamedPointsDraw,
   PartTaps,
   type PlaneView,
+  QuadrantNumerals,
+  QuadrantTints,
   SceneDraw,
   canNameParts,
   partWords,
@@ -58,19 +60,34 @@ function ApartHandle({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element 
 export const planeDrawing = drawing(plane, {
   back: ({ s, px, locale }) => (
     <>
-      <SceneDraw s={s} px={px} locale={locale} />
+      <QuadrantTints s={s} px={px} />
+      {/* The scene shows as strongly as the lesson has faded it in. */}
+      <g opacity={s.backdrop}>
+        <SceneDraw s={s} px={px} locale={locale} />
+      </g>
       <GridDraw s={s} px={px} />
     </>
   ),
-  on: ({ s, px, locale }) => (
+  on: ({ s, px, locale }) => {
+    // The lines turned about the horizontal line's zero (a pair at right angles, any way round).
+    const [ox, oy] = px.toPx(0, 0);
+    return (
+      <>
+        {canNameParts(s) && s.isAlone && <PartTaps s={s} px={px} />}
+        <g transform={s.turn === 0 ? undefined : `rotate(${-s.turn} ${ox} ${oy})`}>
+          <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} />
+          <ApartHandle s={s} px={px} />
+        </g>
+      </>
+    );
+  },
+  // Over Riya, so the mark she has just made stays in view.
+  front: ({ s, px }) => (
     <>
-      {canNameParts(s) && s.isAlone && <PartTaps s={s} px={px} />}
-      <AxesDraw s={s} px={px} locale={locale} canLight={s.canTapNumbers} />
-      <ApartHandle s={s} px={px} />
+      <QuadrantNumerals s={s} px={px} />
+      <NamedPointsDraw s={s} px={px} />
     </>
   ),
-  // Over Riya, so the mark she has just made stays in view.
-  front: ({ s, px }) => <NamedPointsDraw s={s} px={px} />,
   below: ({ s, locale }) =>
     s.named === null || !s.namesTapped || !(canNameParts(s) && s.isAlone) ? null : (
       <p class="cp-line" {...shows("named", s.named, partWords(s, s.named, locale))}>
@@ -82,7 +99,7 @@ export const planeDrawing = drawing(plane, {
     const unshown = s.canShowPoints && s.points.some((pt) => !pt.isShown);
     return (
       <>
-        {!(s.isCrossed === true) && s.axes === "both" && (
+        {!(s.isCrossed === true) && s.axes === "both" && s.turn === 0 && (
           <SymbolButton
             symbol={word(WORDS.bringTogether, locale)}
             label={word(WORDS.bringTogether, locale)}

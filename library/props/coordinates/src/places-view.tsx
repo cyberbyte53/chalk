@@ -37,6 +37,8 @@ function PlacesDraw({
         const classes = ["cp-place", `is-${s.placeKind}`];
         if (isTarget) classes.push("is-target");
         if (isLit(p)) classes.push("is-lit");
+        // A place no one can choose takes no tap: it goes to what is under it (a quadrant).
+        if (!s.canChoose) classes.push("is-inert");
         const key = `${p.x},${p.y}`;
         return (
           <g
@@ -112,7 +114,12 @@ export const placesDrawing = drawing(places, {
       </p>
     );
   },
-  on: ({ s, px, locale }) => <PlacesDraw s={s} px={px} locale={locale} />,
+  // As strongly as the plane's backdrop: behind the axes, a lesson fades the town in and out.
+  on: ({ s, px, locale }) => (
+    <g opacity={s.backdrop}>
+      <PlacesDraw s={s} px={px} locale={locale} />
+    </g>
+  ),
   // Only a light the student turned on (tapping a number) has a way off; a lesson's light is its own.
   controls: ({ s, locale }) =>
     s.lit === null || s.isLitByTap !== true ? null : (

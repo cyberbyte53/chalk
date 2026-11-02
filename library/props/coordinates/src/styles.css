@@ -105,9 +105,14 @@
   stroke-width: 4px;
   stroke-linejoin: round;
 }
+/* Solid, with a halo of the page's colour: readable over a town drawn behind. */
 .cp-frame .cp-quadrant text {
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 5px;
+  stroke-linejoin: round;
   font: 800 var(--text-title) var(--font-display);
-  fill: color-mix(in srgb, var(--color-on-surface) 45%, transparent);
+  fill: var(--color-on-surface-variant);
 }
 .cp-frame .cp-quadrant .cp-signs {
   font: 600 var(--text-caption) var(--font-body);
@@ -139,6 +144,9 @@
 }
 .cp-hit {
   fill: transparent;
+}
+.cp-place.is-inert {
+  pointer-events: none;
 }
 .cp-house-wall {
   fill: var(--color-surface);
@@ -423,4 +431,18 @@
 }
 .cp-die.is-green {
   background: var(--color-right);
+}
+
+/* The four quadrants, each its own light tint (tintsQuadrants). */
+.cp-frame .cp-quadrant-tint.is-1 {
+  fill: color-mix(in srgb, var(--color-category-1) 14%, transparent);
+}
+.cp-frame .cp-quadrant-tint.is-2 {
+  fill: color-mix(in srgb, var(--color-category-2) 12%, transparent);
+}
+.cp-frame .cp-quadrant-tint.is-3 {
+  fill: color-mix(in srgb, var(--color-category-3) 12%, transparent);
+}
+.cp-frame .cp-quadrant-tint.is-4 {
+  fill: color-mix(in srgb, var(--color-category-4) 12%, transparent);
 }

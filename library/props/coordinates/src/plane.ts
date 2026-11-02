@@ -151,6 +151,18 @@ const planeFields = {
    * part by its name: the tap only marks it, and Check says if it is the one.
    */
   namesTapped: z.boolean(),
+  /**
+   * How far the two lines are drawn turned, in degrees anticlockwise, about the horizontal line's
+   * zero: a pair at right angles that points any way. 0 as usual: one across, one up.
+   */
+  turn: z.number().min(-90).max(90),
+  /**
+   * How strongly what is drawn behind the lines (the scene, and the places on it) shows, from 0
+   * (not at all) to 1 (as usual): a lesson fades the town in behind the axes, and out again.
+   */
+  backdrop: z.number().min(0).max(1),
+  /** Each numbered quadrant tinted its own colour, so the four parts read as four. */
+  tintsQuadrants: z.boolean(),
   /** Nothing else is drawn on it: a tap on a part of it names that part. */
   isAlone: z.boolean(),
   /** A counted line's numbers are buttons (each lights the places with that number). */
@@ -182,6 +194,9 @@ export type PlaneCore = {
   canNumberQuadrants: boolean;
   canTapQuadrants: boolean;
   namesTapped: boolean;
+  turn: number;
+  backdrop: number;
+  tintsQuadrants: boolean;
   isAlone: boolean;
   canTapNumbers: boolean;
   lit: Line | null;
@@ -214,6 +229,9 @@ export const planeStart: Omit<PlaneCore, "isAlone" | "canTapNumbers" | "lit"> = 
   canNumberQuadrants: false,
   canTapQuadrants: false,
   namesTapped: true,
+  turn: 0,
+  backdrop: 1,
+  tintsQuadrants: false,
 };
 
 /** Where a point is: in a quadrant, on an axis, or at O. */
@@ -354,6 +372,12 @@ export const plane = prop({
       canTapQuadrants: z.boolean(),
       /** A tapped part's name is written under the plane. */
       namesTapped: z.boolean(),
+      /** The lines drawn turned this many degrees anticlockwise; 0: one across, one up. */
+      turn: z.number().min(-90).max(90),
+      /** How strongly the scene and its places show behind the lines, 0 to 1. */
+      backdrop: z.number().min(0).max(1),
+      /** Each numbered quadrant tinted its own colour. */
+      tintsQuadrants: z.boolean(),
     })
     .strict(),
   start: planeStart,
@@ -408,6 +432,14 @@ export const plane = prop({
       describe: "Tap a number on a counted line",
     }),
     showAllPoints: action({}, { describe: "Show every point" }),
+    turnTo: action(
+      { degrees: z.number().min(-90).max(90), seconds: z.number().positive() },
+      { describe: "Turn the two lines, gliding, to this many degrees (0: upright)" },
+    ),
+    fadeBackdrop: action(
+      { to: z.number().min(0).max(1), seconds: z.number().positive() },
+      { describe: "Fade what is drawn behind the lines (the town) in or out" },
+    ),
   },
   signals: {
     risen: signal({ at: z.number().int() }),
@@ -415,6 +447,7 @@ export const plane = prop({
     named: signal({ part: z.nativeEnum(PlanePart) }),
     quadrantsNumbered: signal(),
     numberTapped: signal(lineSchema.shape),
+    turned: signal({ degrees: z.number() }),
   },
   on: {
     namePart: (_, { part }, t) => [t.set({ named: part }), t.tell.named({ part })],
@@ -479,6 +512,9 @@ export const plane = prop({
       t.set({ tickEvery: every, window: scaledWindow(me.window, me.tickEvery, every) }),
     tapNumber: (me, line, t) => me.canTapNumbers && t.tell.numberTapped(line),
     showAllPoints: (me, _, t) => t.set({ points: me.points.map((p) => ({ ...p, isShown: true })) }),
+    turnTo: (_, { degrees, seconds }, t) =>
+      t.move("turn", degrees, seconds, { atEnd: [t.tell.turned({ degrees })] }),
+    fadeBackdrop: (_, { to, seconds }, t) => t.move("backdrop", to, seconds),
   },
   frame: {
     kind: planeFrame.kind,

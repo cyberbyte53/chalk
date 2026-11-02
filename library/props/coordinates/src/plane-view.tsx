@@ -57,6 +57,30 @@ export function partWords(s: PlaneView, part: PlanePart, locale: "en" | "hi"): s
   return s.showQuadrantSigns && part in SIGNS ? `${name}: ${SIGNS[part as Quadrant]}` : name;
 }
 
+/** Each numbered quadrant tinted its own colour (tintsQuadrants), behind everything else. */
+export function QuadrantTints({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
+  if (!s.tintsQuadrants || s.axes !== Axes.Both) return null;
+  return (
+    <g class="cp-quadrant-tints">
+      {QUADRANTS.slice(0, s.quadrantsNamed).map((q, i) => {
+        const b = quadrantBox(s, q);
+        const [x0, y0] = px.toPx(b.x0, b.y1);
+        const [x1, y1] = px.toPx(b.x1, b.y0);
+        return (
+          <rect
+            key={q}
+            class={`cp-quadrant-tint is-${i + 1}`}
+            x={x0}
+            y={y0}
+            width={x1 - x0}
+            height={y1 - y0}
+          />
+        );
+      })}
+    </g>
+  );
+}
+
 /** A quadrant's corner of the window, in units: where it is drawn and tapped. */
 function quadrantBox(s: PlaneView, q: Quadrant) {
   const w = s.window;
@@ -350,24 +374,33 @@ export function AxesDraw({
           </text>
         </g>
       )}
-      {s.axes === Axes.Both &&
-        QUADRANTS.slice(0, s.quadrantsNamed).map((q) => {
-          const b = quadrantBox(s, q);
-          if (b.x1 - b.x0 < 1 || b.y1 - b.y0 < 1) return null;
-          const [cx, cy] = px.toPx((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2);
-          return (
-            <g key={q} class={`cp-quadrant${named === q ? " is-named" : ""}`}>
-              <text x={cx} y={cy} text-anchor="middle" dominant-baseline="central">
-                {q}
+    </g>
+  );
+}
+
+/** The quadrants' numerals, I to IV, as many as are numbered: over everything, so a town behind leaves them whole. */
+export function QuadrantNumerals({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
+  if (s.axes !== Axes.Both) return null;
+  const named = s.named;
+  return (
+    <g class="cp-axes">
+      {QUADRANTS.slice(0, s.quadrantsNamed).map((q) => {
+        const b = quadrantBox(s, q);
+        if (b.x1 - b.x0 < 1 || b.y1 - b.y0 < 1) return null;
+        const [cx, cy] = px.toPx((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2);
+        return (
+          <g key={q} class={`cp-quadrant${named === q ? " is-named" : ""}`}>
+            <text x={cx} y={cy} text-anchor="middle" dominant-baseline="central">
+              {q}
+            </text>
+            {s.showQuadrantSigns && (
+              <text class="cp-signs" x={cx} y={cy + 20} text-anchor="middle">
+                {SIGNS[q]}
               </text>
-              {s.showQuadrantSigns && (
-                <text class="cp-signs" x={cx} y={cy + 20} text-anchor="middle">
-                  {SIGNS[q]}
-                </text>
-              )}
-            </g>
-          );
-        })}
+            )}
+          </g>
+        );
+      })}
     </g>
   );
 }

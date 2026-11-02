@@ -8,6 +8,7 @@ import {
   Reading,
   Roads,
   Scene,
+  Tone,
   coordinatePlane,
 } from "@chalk/prop-coordinates";
 
@@ -22,6 +23,8 @@ const XY: [ReturnType<typeof t>, ReturnType<typeof t>] = [t("x", "x"), t("y", "y
  * on the same window as the axes it becomes.
  */
 const GROWN = { xMin: -5.5, xMax: 5.5, yMin: -5.5, yMax: 5.5 };
+/** How strongly the town shows behind the axes: there, but the axes' numbers still read over it. */
+const TOWN_BEHIND = 0.4;
 /** The two number lines as one picture (Fig. 3.7, 3.8), on the grown town's window: −5 to 5. */
 const AXES = GROWN;
 
@@ -327,7 +330,14 @@ const twoNumberLines = page(
             showAxisNames: false,
             showOrigin: false,
             showDirections: true,
+            // At right angles, but tilted: turned upright while `any` is said.
+            turn: 30,
+            // The grown town, behind and unseen until the lines cross.
+            scene: Scene.Town,
+            upLines: null,
+            backdrop: 0,
           },
+          places: { places: houses(GROWN), placeKind: PlaceKind.House, choosing: Choosing.Never },
         }),
       ),
       axes: hidden(
@@ -361,8 +371,17 @@ const twoNumberLines = page(
       ),
     },
     passBy: "rules",
+    // The pair rocks one way, then the other, then stands upright: any pair at right angles will do.
+    onSaid: {
+      any: (_, t) => t.to.sheet.plane.turnTo({ degrees: -25, seconds: 1.2 }),
+      // The town fades in behind the axes it was walked on (below), and out once that is said.
+      town: (_, t) => t.to.sheet.plane.fadeBackdrop({ to: 0, seconds: 1 }),
+    },
     hear: {
+      "sheet.plane.turned": (_, p, t) =>
+        p.degrees === -25 && t.to.sheet.plane.turnTo({ degrees: 0, seconds: 1.2 }),
       "sheet.plane.crossed": (_, __, t) => [
+        t.to.sheet.plane.fadeBackdrop({ to: TOWN_BEHIND, seconds: 1 }),
         t.self.show({ name: "axes" }),
         t.self.show({ name: "town" }),
         t.self.pass(),
@@ -445,19 +464,29 @@ const quadrants = page(
             showAxisNames: false,
             showDirections: true,
             canNumberQuadrants: true,
+            // Once numbered: each quadrant tinted, the town fading in behind, two houses marked.
+            tintsQuadrants: true,
+            scene: Scene.Town,
+            upLines: null,
+            backdrop: 0,
+            points: [
+              { name: "A", x: 4, y: 5, isShown: false, hasDropLines: false, tone: Tone.Main },
+              { name: "B", x: -2, y: -3, isShown: false, hasDropLines: false, tone: Tone.Main },
+            ],
           },
+          places: { places: houses(GROWN), placeKind: PlaceKind.House, choosing: Choosing.Never },
         }),
       ),
       town: hidden(
         words.body(
           t(
-            "In Riya's town, the quadrants are its four parts around her corner. Aman's house, at Street 4, House 5, is in quadrant I; his aunt's, at Street −2, House −3, is in quadrant III. **Tap a quadrant** to see its name.",
-            "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, गली 4, मकान 5 पर, पहले चतुर्थांश (I) में है; उसकी मौसी का, गली −2, मकान −3 पर, तीसरे चतुर्थांश (III) में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।",
+            "In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant I; his aunt's, B, at Street −2, House −3, is in quadrant III. **Tap a quadrant** to see its name.",
+            "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश (I) में है; उसकी मौसी का, B, गली −2, मकान −3 पर, तीसरे चतुर्थांश (III) में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।",
           ),
           {
             says: t(
-              "In Riya's town, the quadrants are its four parts around her corner. Aman's house, at Street 4, House 5, is in quadrant one; his aunt's, at Street minus 2, House minus 3, is in quadrant three. Tap a quadrant to see its name.",
-              "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, गली 4, मकान 5 पर, पहले चतुर्थांश में है; उसकी मौसी का, गली माइनस 2, मकान माइनस 3 पर, तीसरे चतुर्थांश में। उसका नाम देखने के लिए किसी चतुर्थांश को दबाओ।",
+              "In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant one; his aunt's, B, at Street minus 2, House minus 3, is in quadrant three. Tap a quadrant to see its name.",
+              "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश में है; उसकी मौसी का, B, गली माइनस 2, मकान माइनस 3 पर, तीसरे चतुर्थांश में। उसका नाम देखने के लिए किसी चतुर्थांश को दबाओ।",
             ),
           },
         ),
@@ -495,6 +524,9 @@ const quadrants = page(
     passBy: "rules",
     hear: {
       "sheet.plane.quadrantsNumbered": (_, __, t) => [
+        t.to.sheet.plane.fadeBackdrop({ to: TOWN_BEHIND, seconds: 1 }),
+        t.to.sheet.plane.showPoint({ name: "A" }),
+        t.to.sheet.plane.showPoint({ name: "B" }),
         t.self.show({ name: "town" }),
         t.self.show({ name: "plane" }),
         t.self.show({ name: "summary" }),

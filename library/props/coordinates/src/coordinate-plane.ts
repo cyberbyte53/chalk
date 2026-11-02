@@ -5,7 +5,7 @@ import { areCluesOn } from "./clues";
 import { clues } from "./clues";
 import { isDiceOn } from "./dice";
 import { dice } from "./dice";
-import { arePlacesOn } from "./places";
+import { Choosing, arePlacesOn } from "./places";
 import { places } from "./places";
 import { plane } from "./plane";
 import { isPlottingOn } from "./plotting";
@@ -42,13 +42,15 @@ export const coordinatePlane = prop({
     axisNames: (me) => me.plane.axisNames,
     scene: (me) => me.plane.scene,
     tickEvery: (me) => me.plane.tickEvery,
+    backdrop: (me) => me.plane.backdrop,
     // Where Riya is headed: the places'.
     target: (me) => me.places.target,
     targetName: (me) => me.places.targetName,
     canChooseTarget: (me) => arePlacesOn(me.places) && me.places.canChoose,
     // The plane's: nothing else on it, so a tap names its parts; its numbers light the places.
+    // Places no one can choose (a town drawn behind the axes) leave the taps to the plane.
     isAlone: (me) =>
-      !arePlacesOn(me.places) &&
+      !(arePlacesOn(me.places) && me.places.choosing !== Choosing.Never) &&
       !isPlottingOn(me.plotting) &&
       !areCluesOn(me.clues) &&
       !isDiceOn(me.dice),

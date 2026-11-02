@@ -112,6 +112,8 @@ export const places = prop({
       upLines: z.array(z.number().int()).nullable(),
       /** Whether the board is open for play (its point made). */
       isOpen: z.boolean(),
+      /** How strongly the places show: behind a plane's lines, a lesson may fade them in (0 to 1). */
+      backdrop: z.number().min(0).max(1),
     })
     .strict(),
   facts: {
