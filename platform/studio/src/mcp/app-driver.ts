@@ -1287,13 +1287,28 @@ async function shootNow(
           break;
         }
       } else {
-        const found = await page.evaluate(markTarget, {
+        const mark = {
           target: "tap" in step ? step.tap : step.drag,
           at: "tap" in step ? step.at : step.to,
-        });
+        };
+        let found = await page.evaluate(markTarget, mark);
         if (typeof found === "string") {
           steps.push({ step: words, events: [], passed: false, errors: [`✗ ${found}`] });
           break;
+        }
+        // A point is found where it is on the screen now: a target below the fold is scrolled to
+        // first, else the finger would land off the screen and tap nothing.
+        if (found !== undefined && found !== null) {
+          await page
+            .locator("[data-chalk-target]")
+            .first()
+            .scrollIntoViewIfNeeded({ timeout: 5000 })
+            .catch(() => {});
+          found = await page.evaluate(markTarget, mark);
+          if (typeof found === "string") {
+            steps.push({ step: words, events: [], passed: false, errors: [`✗ ${found}`] });
+            break;
+          }
         }
         // Where the step is aimed, when it names a point: on the page, in CSS pixels.
         const aimed = found ?? undefined;
