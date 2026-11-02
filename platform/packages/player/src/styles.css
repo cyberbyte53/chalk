@@ -48,6 +48,13 @@
   display: block;
   overflow: hidden;
   touch-action: none;
+  /* A drawing isn't text to select: a press that misses a handle, or a long press on a phone,
+     doesn't highlight the numbers and labels or open the copy menu. The lesson's words around it
+     stay selectable. (Asking Jugnu about a part of a drawing picks the part by its tag, not by
+     its letters.) */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 /* A child that draws nothing right now takes no room (no gap for it in a row or column). */
 .group-child:empty {
