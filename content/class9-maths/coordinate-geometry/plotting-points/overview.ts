@@ -1,5 +1,5 @@
 import { hidden, page, place, scene, t, tap } from "@chalk/author";
-import { choice, plane, words } from "@chalk/patterns";
+import { plane, words } from "@chalk/patterns";
 import {
   Choosing,
   Marks,
@@ -362,39 +362,6 @@ const EX_3_3_Q2 = [
   { x: 3, y: -1 },
 ];
 
-/** Once (−2, 8) won't fit on Aman's page: how many units one square must stand for, so 8 fits in 4 squares. */
-const unitsPerSquare = choice({
-  name: "unitsPerSquare",
-  prompt: t(
-    "At least how many units must one square stand for, so that 8 fits in the 4 squares above O?",
-    "8 को O के ऊपर के 4 खानों में लाने के लिए एक खाना कम से कम कितनी इकाई का होना चाहिए?",
-  ),
-  options: [
-    { id: "two", label: t("2 units", "2 इकाई") },
-    {
-      id: "one",
-      label: t("1 unit", "1 इकाई"),
-      feedback: t(
-        "Then 8 units need 8 squares, and the page has only 4 above O: (−2, 8) and (−1, 7) would fall off it.",
-        "तब 8 इकाई को 8 खाने चाहिए, और पन्ने पर O के ऊपर केवल 4 हैं: (−2, 8) और (−1, 7) उससे बाहर गिर जाएँगे।",
-      ),
-      feedbackSays: t(
-        "Then 8 units need 8 squares, and the page has only 4 above O: minus 2, 8 and minus 1, 7 would fall off it.",
-        "तब 8 इकाई को 8 खाने चाहिए, और पन्ने पर O के ऊपर केवल 4 हैं: माइनस 2, 8 और माइनस 1, 7 उससे बाहर गिर जाएँगे।",
-      ),
-    },
-    {
-      id: "four",
-      label: t("4 units", "4 इकाई"),
-      feedback: t(
-        "Everything would fit, but that isn't the least: 8 units would take only 2 of the 4 squares.",
-        "सब आ जाएगा, पर यह सबसे कम नहीं: 8 इकाई 4 में से केवल 2 खाने लेगी।",
-      ),
-    },
-  ],
-  answer: "two",
-});
-
 const plotFromATable = page(
   "plot-from-a-table",
   scene({
@@ -423,63 +390,69 @@ const plotFromATable = page(
       notebook: hidden(
         words.body(
           t(
-            "Aman copies the next table into his **notebook**. Its page has room for **4 squares above O** and 4 below, with **1 square = 1 unit**. Plot the table on it.",
-            "अमन अगली सारणी अपनी **कॉपी** में उतारता है। उसके पन्ने पर **O के ऊपर 4 खाने** और नीचे 4 की जगह है, और **1 खाना = 1 इकाई**। सारणी उस पर आलेखित करो।",
+            "Aman copies the next table into his **notebook**. Its page has room for **4 squares above O** and 4 below. How many units one square stands for is his to choose: it starts at **1 square = 1 unit**. Plot the table on it.",
+            "अमन अगली सारणी अपनी **कॉपी** में उतारता है। उसके पन्ने पर **O के ऊपर 4 खाने** और नीचे 4 की जगह है। एक खाना कितनी इकाइयों का हो, यह वह चुनता है: शुरू में **1 खाना = 1 इकाई**। सारणी उस पर आलेखित करो।",
           ),
           {
             says: t(
-              "Aman copies the next table into his notebook. Its page has room for 4 squares above O and 4 below, with 1 square equal to 1 unit. Plot the table on it.",
-              "अमन अगली सारणी अपनी कॉपी में उतारता है। उसके पन्ने पर O के ऊपर 4 खाने और नीचे 4 की जगह है, और 1 खाना बराबर 1 इकाई। सारणी उस पर आलेखित करो।",
+              "Aman copies the next table into his notebook. Its page has room for 4 squares above O and 4 below. How many units one square stands for is his to choose: it starts at 1 square equal to 1 unit. Plot the table on it.",
+              "अमन अगली सारणी अपनी कॉपी में उतारता है। उसके पन्ने पर O के ऊपर 4 खाने और नीचे 4 की जगह है। एक खाना कितनी इकाइयों का हो, यह वह चुनता है: शुरू में 1 खाना बराबर 1 इकाई। सारणी उस पर आलेखित करो।",
             ),
           },
         ),
       ),
-      // Aman's page: 4 squares each way at 1 unit; (−2, 8) has no room on it.
+      // Aman's page: 4 squares each way, at 1 unit to start; the units are the student's to choose.
       second: hidden(
         place(
           coordinatePlane,
           setup({
             plane: { window: { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 }, ...AXES },
-            plotting: { toPlot: EX_3_3_Q2, showTable: true },
+            plotting: { toPlot: EX_3_3_Q2, showTable: true, scaleChoices: [1, 2, 4] },
           }),
         ),
       ),
       noRoom: hidden(
         words.body(
           t(
-            "(−2, 8) is **8 up**, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units.",
-            "(−2, 8) **8 ऊपर** है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए।",
+            "(−2, 8) is **8 up**, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units: **choose the units** with the buttons under the page.",
+            "(−2, 8) **8 ऊपर** है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए: पन्ने के नीचे के बटनों से **इकाई चुनो**।",
           ),
           {
             says: t(
-              "Minus 2, 8 is 8 up, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units.",
-              "माइनस 2, 8, 8 ऊपर है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए।",
-            ),
-          },
-        ),
-      ),
-      unitsPerSquare: hidden(unitsPerSquare.piece),
-      unitsWhy: hidden(
-        words.body(
-          t(
-            "8 units in 4 squares: 8 ÷ 4 = 2 units to a square. The page is now numbered **2, 4, 6, 8**: plot the table.",
-            "4 खानों में 8 इकाई: 8 ÷ 4 = 2 इकाई एक खाने में। पन्ने पर अब **2, 4, 6, 8** लिखा है: सारणी आलेखित करो।",
-          ),
-          {
-            says: t(
-              "8 units in 4 squares: 8 divided by 4 is 2 units to a square. The page is now numbered 2, 4, 6, 8: plot the table.",
-              "4 खानों में 8 इकाई: 8 भाग 4 बराबर 2 इकाई एक खाने में। पन्ने पर अब 2, 4, 6, 8 लिखा है: सारणी आलेखित करो।",
+              "Minus 2, 8 is 8 up, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units: choose the units with the buttons under the page.",
+              "माइनस 2, 8, 8 ऊपर है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए: पन्ने के नीचे के बटनों से इकाई चुनो।",
             ),
           },
         ),
       ),
       missSecond: miss(),
+      crowded: hidden(
+        words.body(
+          t(
+            "Every point fits, but at 4 units to a square they **crowd near O**, and −1.25 is hard to place. 8 has to fit in 4 squares: 8 ÷ 4 = 2 units is enough. Try **1 square = 2 units**.",
+            "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे **O के पास भिड़ जाते हैं**, और −1.25 को रखना कठिन है। 8 को 4 खानों में आना है: 8 ÷ 4 = 2 इकाई काफ़ी है। **1 खाना = 2 इकाई** आज़माओ।",
+          ),
+          {
+            says: t(
+              "Every point fits, but at 4 units to a square they crowd near O, and minus 1.25 is hard to place. 8 has to fit in 4 squares: 8 divided by 4 is 2 units, enough. Try 1 square equal to 2 units.",
+              "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे O के पास भिड़ जाते हैं, और माइनस 1.25 को रखना कठिन है। 8 को 4 खानों में आना है: 8 भाग 4 बराबर 2 इकाई काफ़ी है। 1 खाना बराबर 2 इकाई आज़माओ।",
+            ),
+          },
+        ),
+      ),
       fits: hidden(
         words.definition(
           t(
-            "**Every point fits. Choosing the units means choosing how many units one square stands for: the smallest number that fits every point**, so the page is used and the points are easy to place.",
-            "**हर बिंदु आ गया। इकाई चुनने का मतलब है चुनना कि एक खाना कितनी इकाइयों का हो: वह सबसे छोटी संख्या जिसमें हर बिंदु आ जाए**, ताकि पन्ना काम आए और बिंदु आसानी से रखे जा सकें।",
+            "**8 in 4 squares: 8 ÷ 4 = 2 units to a square, the smallest that fits every point. That is choosing suitable units:** the page is used, and every point is easy to place. The dots kept their numbers at every scale; only the drawing changed.",
+            "**4 खानों में 8: 8 ÷ 4 = 2 इकाई एक खाने में, वह सबसे छोटी जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है:** पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। हर पैमाने पर बिंदुओं की संख्याएँ वही रहीं; केवल चित्र बदला।",
           ),
+          null,
+          {
+            says: t(
+              "8 in 4 squares: 8 divided by 4 is 2 units to a square, the smallest that fits every point. That is choosing suitable units: the page is used, and every point is easy to place. The dots kept their numbers at every scale; only the drawing changed.",
+              "4 खानों में 8: 8 भाग 4 बराबर 2 इकाई एक खाने में, वह सबसे छोटी जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है: पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। हर पैमाने पर बिंदुओं की संख्याएँ वही रहीं; केवल चित्र बदला।",
+            ),
+          },
         ),
       ),
     },
@@ -490,32 +463,35 @@ const plotFromATable = page(
         t.self.show({ name: "notebook" }),
         t.self.show({ name: "second" }),
       ],
-      // A drop on Aman's page: at 1 unit to a square, (−2, 8) can only stop at its top edge, and
-      // that is the question; once the units are chosen, a miss is an ordinary one.
-      "second.plotting.missed": (me, _, t) =>
-        me.second.plotting.tickEvery === 1
-          ? me.hidden.includes("noRoom") && [
-              t.self.show({ name: "noRoom" }),
-              t.self.show({ name: "unitsPerSquare" }),
-            ]
+      // A drop short of a pair that isn't on the page (at 1 unit, (−2, 8) stops at its top edge):
+      // there is no room, so the units are to choose; any other miss is an ordinary one.
+      "second.plotting.missed": (me, p, t) =>
+        me.second.plotting.offPlane.some((o) => o.n === p.n)
+          ? t.self.show({ name: "noRoom" })
           : t.self.show({ name: "missSecond" }),
       "second.plotting.plotted": (me, _, t) =>
         !me.hidden.includes("missSecond") && t.self.hide({ name: "missSecond" }),
-      // Reasoned, then the page renumbered before their eyes.
-      "unitsPerSquare.correct": (_, __, t) => [
-        t.to.second.plane.setScale({ every: 2 }),
-        t.self.show({ name: "unitsWhy" }),
-      ],
-      "second.plotting.allPlotted": (_, __, t) => [t.self.show({ name: "fits" }), t.self.pass()],
+      // Every point plotted: at 2 units, the point is made; at 4, too crowded, so try 2.
+      "second.plotting.allPlotted": (me, _, t) =>
+        me.second.plotting.tickEvery === 2
+          ? [t.self.show({ name: "fits" }), t.self.pass()]
+          : t.self.show({ name: "crowded" }),
+      "second.plotting.scaleChosen": (me, { every }, t) =>
+        every === 2 &&
+        me.second.plotting.next === null &&
+        me.hidden.includes("fits") && [
+          t.self.hide({ name: "crowded" }),
+          t.self.show({ name: "fits" }),
+          t.self.pass(),
+        ],
     },
-    uses: [unitsPerSquare.use],
     witness: [
       ...slipThenRight("first", EXAMPLE_4),
-      // (−2, 8) dragged as high as the page goes.
+      // (−2, 8) dragged as high as the page goes; then 4 units chosen, too crowded; then 2.
       tap("second.plotting", "plotAt", { x: -2, y: 4.5 }),
-      tap("unitsPerSquare", "select", { option: "two" }),
-      tap("unitsPerSquare", "check"),
+      tap("second.plotting", "chooseScale", { every: 4 }),
       ...slipThenRight("second", EX_3_3_Q2),
+      tap("second.plotting", "chooseScale", { every: 2 }),
     ],
   }),
 );

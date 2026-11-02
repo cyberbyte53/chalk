@@ -35,11 +35,11 @@
       "seconds": 23.07
     },
     {
-      "file": "123f8600dffe25cd.m4a",
+      "file": "03ab1a8e300592f2.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "8 units in 4 squares: 8 divided by 4 is 2 units to a square. The page is now numbered 2, 4, 6, 8: plot the table.",
-      "seconds": 8.882
+      "words": "8 in 4 squares: 8 divided by 4 is 2 units to a square, the smallest that fits every point. That is choosing suitable units: the page is used, and every point is easy to place. The dots kept their numbers at every scale; only the drawing changed.",
+      "seconds": 15.233
     },
     {
       "file": "1312c0d36dce3b25.m4a",
@@ -161,11 +161,11 @@
       "seconds": 1.44
     },
     {
-      "file": "a138a835ea2a40df.m4a",
+      "file": "9a61a56d76abc846.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Aman copies the next table into his notebook. Its page has room for 4 squares above O and 4 below, with 1 square equal to 1 unit. Plot the table on it.",
-      "seconds": 9.439
+      "words": "Aman copies the next table into his notebook. Its page has room for 4 squares above O and 4 below. How many units one square stands for is his to choose: it starts at 1 square equal to 1 unit. Plot the table on it.",
+      "seconds": 13.143
     },
     {
       "file": "daa7193e94c04af8.m4a",
@@ -229,13 +229,6 @@
       "locale": "en",
       "words": "Are the desks (5, 3) and (3, 5) the same desk?",
       "seconds": 3.518
-    },
-    {
-      "file": "c645802920f603f5.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "At least how many units must one square stand for, so that 8 fits in the 4 squares above O?",
-      "seconds": 5.55
     },
     {
       "file": "d7f8c7a68498a62c.m4a",
@@ -413,18 +406,11 @@
       "seconds": 19.134
     },
     {
-      "file": "9016ce75eeff6d39.m4a",
+      "file": "a8da2b3ed64f3d64.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Every point fits. Choosing the units means choosing how many units one square stands for: the smallest number that fits every point, so the page is used and the points are easy to place.",
-      "seconds": 10.426
-    },
-    {
-      "file": "f63b6bc772bb95c7.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Everything would fit, but that isn't the least: 8 units would take only 2 of the 4 squares.",
-      "seconds": 5.329
+      "words": "Every point fits, but at 4 units to a square they crowd near O, and minus 1.25 is hard to place. 8 has to fit in 4 squares: 8 divided by 4 is 2 units, enough. Try 1 square equal to 2 units.",
+      "seconds": 13.422
     },
     {
       "file": "ad45b4f598d344de.m4a",
@@ -700,11 +686,11 @@
       "seconds": 2.45
     },
     {
-      "file": "8a1348346e58cffd.m4a",
+      "file": "c5d79312f8648e52.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
-      "words": "Minus 2, 8 is 8 up, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units.",
-      "seconds": 8.743
+      "words": "Minus 2, 8 is 8 up, but the page has only 4 squares above O: no room. The page can't grow, so each square must stand for more units: choose the units with the buttons under the page.",
+      "seconds": 11.715
     },
     {
       "file": "e6d5251e2547786f.m4a",
@@ -2030,13 +2016,6 @@
       "seconds": 9.683
     },
     {
-      "file": "f49fbc4f73d79738.m4a",
-      "voice": "piper:en_US-lessac-high",
-      "locale": "en",
-      "words": "Then 8 units need 8 squares, and the page has only 4 above O: minus 2, 8 and minus 1, 7 would fall off it.",
-      "seconds": 7.187
-    },
-    {
       "file": "aa97b056f648ac98.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -2310,11 +2289,11 @@
       "seconds": 6.502
     },
     {
-      "file": "589c94e71368aed6.m4a",
+      "file": "5b80692c6efc81cb.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "4 खानों में 8 इकाई: 8 भाग 4 बराबर 2 इकाई एक खाने में। पन्ने पर अब 2, 4, 6, 8 लिखा है: सारणी आलेखित करो।",
-      "seconds": 11.343
+      "words": "4 खानों में 8: 8 भाग 4 बराबर 2 इकाई एक खाने में, वह सबसे छोटी जिसमें हर बिंदु आ जाए। यही उचित इकाई चुनना है: पन्ना काम आता है, और हर बिंदु आसानी से रखा जा सकता है। हर पैमाने पर बिंदुओं की संख्याएँ वही रहीं; केवल चित्र बदला।",
+      "seconds": 19.842
     },
     {
       "file": "f58ebe06498f2bca.m4a",
@@ -2329,13 +2308,6 @@
       "locale": "hi",
       "words": "5, 0 और 0, 5; 5, 2 और 2, 5; माइनस 3, 5 और 5, माइनस 3 अलग-अलग जगहों पर हैं। यदि एक्स, वाई के बराबर नहीं है, तो एक्स, वाई और वाई, एक्स अलग बिंदु हैं: क्रम मायने रखता है, इसलिए एक्स, वाई को क्रमित युग्म कहते हैं। केवल जब एक्स बराबर वाई, जैसे 3, 3 में, तब उलटा जोड़ा वही बिंदु है।",
       "seconds": 31.255
-    },
-    {
-      "file": "fdcce41c078c7b26.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "8 को O के ऊपर के 4 खानों में लाने के लिए एक खाना कम से कम कितनी इकाई का होना चाहिए?",
-      "seconds": 7.025
     },
     {
       "file": "240d4f79852d18a1.m4a",
@@ -2667,11 +2639,11 @@
       "seconds": 25.682
     },
     {
-      "file": "4231fee482d55c34.m4a",
+      "file": "daae95d0c6dedb76.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "अमन अगली सारणी अपनी कॉपी में उतारता है। उसके पन्ने पर O के ऊपर 4 खाने और नीचे 4 की जगह है, और 1 खाना बराबर 1 इकाई। सारणी उस पर आलेखित करो।",
-      "seconds": 12.481
+      "words": "अमन अगली सारणी अपनी कॉपी में उतारता है। उसके पन्ने पर O के ऊपर 4 खाने और नीचे 4 की जगह है। एक खाना कितनी इकाइयों का हो, यह वह चुनता है: शुरू में 1 खाना बराबर 1 इकाई। सारणी उस पर आलेखित करो।",
+      "seconds": 17.369
     },
     {
       "file": "2e34629bcd418d2d.m4a",
@@ -3204,13 +3176,6 @@
       "locale": "hi",
       "words": "डेस्क: स्तंभ 5 आड़े, फिर आगे से पंक्ति 3 ऊपर।",
       "seconds": 4.586
-    },
-    {
-      "file": "b08a55f9f916c322.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "तब 8 इकाई को 8 खाने चाहिए, और पन्ने पर O के ऊपर केवल 4 हैं: माइनस 2, 8 और माइनस 1, 7 उससे बाहर गिर जाएँगे।",
-      "seconds": 10.531
     },
     {
       "file": "16fa589e2726540d.m4a",
@@ -3843,11 +3808,11 @@
       "seconds": 1.8
     },
     {
-      "file": "bd1295ae73160aa7.m4a",
+      "file": "b520b692c86ed5dd.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "माइनस 2, 8, 8 ऊपर है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए।",
-      "seconds": 12.621
+      "words": "माइनस 2, 8, 8 ऊपर है, पर पन्ने पर O के ऊपर केवल 4 खाने हैं: जगह नहीं। पन्ना बड़ा नहीं हो सकता, इसलिए हर खाना ज़्यादा इकाइयों का होना चाहिए: पन्ने के नीचे के बटनों से इकाई चुनो।",
+      "seconds": 14.943
     },
     {
       "file": "e2565ef389086ff3.m4a",
@@ -4494,13 +4459,6 @@
       "seconds": 1.579
     },
     {
-      "file": "e1ff4b413efb997c.m4a",
-      "voice": "piper:hi_IN-rohan-medium",
-      "locale": "hi",
-      "words": "सब आ जाएगा, पर यह सबसे कम नहीं: 8 इकाई 4 में से केवल 2 खाने लेगी।",
-      "seconds": 6.119
-    },
-    {
       "file": "32af33f9364d0062.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -4550,11 +4508,11 @@
       "seconds": 2.508
     },
     {
-      "file": "02159dfbd36045ca.m4a",
+      "file": "e830e68e87b2c886.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
-      "words": "हर बिंदु आ गया। इकाई चुनने का मतलब है चुनना कि एक खाना कितनी इकाइयों का हो: वह सबसे छोटी संख्या जिसमें हर बिंदु आ जाए, ताकि पन्ना काम आए और बिंदु आसानी से रखे जा सकें।",
-      "seconds": 14.176
+      "words": "हर बिंदु आ गया, पर एक खाने में 4 इकाई पर वे O के पास भिड़ जाते हैं, और माइनस 1.25 को रखना कठिन है। 8 को 4 खानों में आना है: 8 भाग 4 बराबर 2 इकाई काफ़ी है। 1 खाना बराबर 2 इकाई आज़माओ।",
+      "seconds": 16.545
     }
   ]
 }
