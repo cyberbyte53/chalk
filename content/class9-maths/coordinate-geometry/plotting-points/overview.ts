@@ -362,7 +362,7 @@ const swapTheNumbers = page(
       sheet: place(
         coordinatePlane,
         setup({
-          plane: { window: { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 }, ...AXES },
+          plane: { window: { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 7.5 }, ...AXES },
           plotting: { toPlot: EXAMPLE_3, showTable: true, showSwaps: true },
         }),
       ),
@@ -389,7 +389,7 @@ const swapTheNumbers = page(
       ...missRules("sheet", "miss"),
       "sheet.plotting.allPlotted": (_, __, t) => [t.self.show({ name: "ordered" }), t.self.pass()],
     },
-    witness: slipThenRight("sheet", EXAMPLE_3, { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 }),
+    witness: slipThenRight("sheet", EXAMPLE_3, { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 7.5 }),
   }),
 );
 
@@ -418,19 +418,19 @@ const plotFromATable = page(
       table: words.body(
         t(
           "Points often come as a table: each column is one point, x on top, y below. Plot each pair; (0, −3.5) falls **halfway between** −3 and −4.",
-          "बिंदु अक्सर सारणी में आते हैं: हर स्तंभ एक बिंदु है, ऊपर x, नीचे y। हर जोड़ा आलेखित करो; (0, −3.5), −3 और −4 के **ठीक बीच** में आता है।",
+          "बिंदु अक्सर सारणी में आते हैं: हर स्तंभ एक बिंदु है, ऊपर x, नीचे y। हर जोड़ी आलेखित करो; (0, −3.5), −3 और −4 के **ठीक बीच** में आता है।",
         ),
         {
           says: t(
             "Points often come as a table: each column is one point, x on top, y below. Plot each pair; 0, minus 3.5 falls halfway between minus 3 and minus 4.",
-            "बिंदु अक्सर सारणी में आते हैं: हर स्तंभ एक बिंदु है, ऊपर एक्स, नीचे वाई। हर जोड़ा आलेखित करो; 0, माइनस 3.5, माइनस 3 और माइनस 4 के ठीक बीच में आता है।",
+            "बिंदु अक्सर सारणी में आते हैं: हर स्तंभ एक बिंदु है, ऊपर एक्स, नीचे वाई। हर जोड़ी आलेखित करो; 0, माइनस 3.5, माइनस 3 और माइनस 4 के ठीक बीच में आता है।",
           ),
         },
       ),
       first: place(
         coordinatePlane,
         setup({
-          plane: { window: { xMin: -4.5, xMax: 5.5, yMin: -4.5, yMax: 7.5 }, ...AXES },
+          plane: { window: { xMin: -4.5, xMax: 5.5, yMin: -5.5, yMax: 7.5 }, ...AXES },
           plotting: { toPlot: EXAMPLE_4, showTable: true },
         }),
       ),
@@ -543,7 +543,7 @@ const plotFromATable = page(
         ],
     },
     witness: [
-      ...slipThenRight("first", EXAMPLE_4, { xMin: -4.5, xMax: 5.5, yMin: -4.5, yMax: 7.5 }),
+      ...slipThenRight("first", EXAMPLE_4, { xMin: -4.5, xMax: 5.5, yMin: -5.5, yMax: 7.5 }),
       // (−2, 8) dragged as high as the page goes; then 4 units chosen, too crowded; then 2.
       tap("second.plotting", "plotAt", { x: -2, y: 4.5 }),
       tap("second.plotting", "chooseScale", { every: 4 }),
@@ -799,7 +799,7 @@ const graphsYouKnow = page(
       walk: words.body(
         t(
           "On her way to Aman's house, Riya walks 2 blocks every minute. Her time t (in minutes) and her distance d (in blocks) make a table. Plot each pair: **t along, d up**.",
-          "अमन के घर जाते हुए रिया हर मिनट 2 ब्लॉक चलती है। उसका समय t (मिनट में) और दूरी d (ब्लॉक में) एक सारणी बनाते हैं। हर जोड़ा आलेखित करो: **t आगे, d ऊपर**।",
+          "अमन के घर जाते हुए रिया हर मिनट 2 ब्लॉक चलती है। उसका समय t (मिनट में) और दूरी d (ब्लॉक में) एक सारणी बनाते हैं। हर जोड़ी आलेखित करो: **t आगे, d ऊपर**।",
         ),
       ),
       sheet: place(
