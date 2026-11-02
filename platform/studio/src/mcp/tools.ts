@@ -374,7 +374,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const on = k === 0 ? lane : `${lane}:v:${k}`;
         let again: Again;
         try {
-          const a = await play(root, { ...playArgsOf(board, p), keepsRan: true }, on);
+          const a = await play(root, playArgsOf(board, p), on);
           again = {
             lines:
               a.played === undefined

@@ -10,12 +10,11 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
-import type { Ran } from "../reach/ran";
 
 /**
  * Drawings made once per set of inputs (platform/docs/seeing-boards.md, "Drawn once"). A drawing is
  * a function of what it is made from; the same inputs give the same pixels, state, problems, lines
- * said, step answers and lines of code that ran. So a drawing is kept under a key of exactly those
+ * said and step answers. So a drawing is kept under a key of exactly those
  * inputs and handed to every later ask: a board's show, changes, a check, a replayed play.
  *
  * The inputs, and only these:
@@ -102,8 +101,8 @@ export function contentKey(root: string, board: string): string {
   return hashOf(`content:${book}/${chapter}`, files);
 }
 
-/** A kept drawing: what `shoot` answered, and the lines of code that ran while it was drawn. */
-export type Kept<T> = { drawn: T; ran?: Ran };
+/** A kept drawing: what `shoot` answered. */
+export type Kept<T> = { drawn: T };
 
 const dirOf = (root: string) => join(root, "node_modules", ".cache", "chalk-drawn");
 /** One folder per board and ask: its drawings under each set of inputs, the newest few kept. */

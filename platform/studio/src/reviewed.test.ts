@@ -4,7 +4,6 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { changesBetween, recordOf } from "./content/board-record";
-import { addRan } from "./reach/ran";
 import { changesUnder, changesWords, passUnder } from "./reviewed";
 
 const LESSON = "class9-maths/geometry/a-lesson";
@@ -206,45 +205,15 @@ describe("what changed since a board was passed", () => {
     expect(changesUnder(root, LESSON)[0]?.status).toBe("changed");
   });
 
-  it("says whether a change's lines ran in the review, when this machine saw it", () => {
+  it("lists each function of its code that changed, plainly: one there at the pass isn't new", () => {
     const root = repo({ town: board("A town", "counts") });
-    edit(
-      root,
-      `${SRC}/text.ts`,
-      'export const text = () => {\n  if (Math.PI > 4) return "never";\n  return "t";\n};\n',
-    );
-    execFileSync("git", ["commit", "-qam", "text"], { cwd: root, env: ENV });
-    // The review played it: lines 1 and 3 ran, not 2 (its branch never taken).
-    addRan(root, `${LESSON}/town`, {
-      [`${SRC}/text.ts`]: [
-        [1, 1],
-        [3, 4],
-      ],
-    });
-    passUnder(root, LESSON, "reviewer");
-    edit(
-      root,
-      `${SRC}/text.ts`,
-      'export const text = () => {\n  if (Math.PI > 4) return "not ever";\n  return "t";\n};\n',
-    );
-    expect(changesUnder(root, LESSON)[0]).toMatchObject({
-      code: [{ node: `${SRC}/text.ts#text`, inReview: "didn't run" }],
-    });
-    edit(
-      root,
-      `${SRC}/text.ts`,
-      'export const text = () => {\n  if (Math.PI > 4) return "never";\n  return "u";\n};\n',
-    );
-    expect(changesUnder(root, LESSON)[0]).toMatchObject({
-      code: [{ node: `${SRC}/text.ts#text`, inReview: "ran" }],
-    });
-    // Passed again without being played here: nothing is known, so no hint.
     passUnder(root, LESSON, "reviewer");
     edit(root, `${SRC}/text.ts`, 'export const text = () => "v";\n');
-    expect(changesUnder(root, LESSON)[0]).toMatchObject({
-      code: [{ node: `${SRC}/text.ts#text` }],
-    });
     const [change] = changesUnder(root, LESSON);
-    expect(change?.status === "changed" && change.code[0]?.inReview).toBe(undefined);
+    expect(change).toMatchObject({ code: [{ node: `${SRC}/text.ts#text` }] });
+    expect(change?.status === "changed" && change.code[0]?.isNew).toBe(undefined);
+    const words = changesWords(changesUnder(root, LESSON));
+    expect(words).toContain(`  code: ${SRC}/text.ts#text`);
+    expect(words).not.toMatch(/ran in the review|didn't run/);
   });
 });

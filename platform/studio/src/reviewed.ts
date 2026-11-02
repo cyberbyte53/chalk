@@ -9,7 +9,6 @@ import { type BoardCode, boardCode } from "./reach/board-code";
 import { type Range, factsOf } from "./reach/facts";
 import { codeGraph, fingerprintIn } from "./reach/graph";
 import { parseDiff } from "./reach/index";
-import { type Ran, anyRan, passRan, ranAtPass } from "./reach/ran";
 
 /**
  * What was reviewed, so a review is never done twice. When a reviewer (or the person) passes a
@@ -29,7 +28,6 @@ export const REVIEWED_FILE = "reviewed.yaml";
 export type Passed = BoardRecord & { by: string; commit: string; at: string; code?: string };
 
 /** Whether a change's lines ran while the board was reviewed: a hint, never a reason to skip it. */
-export type InReview = "ran" | "didn't run" | "new";
 
 export type BoardChange =
   | { board: string; status: "unchanged"; passed: Passed }
@@ -42,10 +40,10 @@ export type BoardChange =
       content: Change[];
       /**
        * The code it runs that changed since (`file#name`; `file#` is a file's own statements), or
-       * one line saying the code changed when which part can't be told. `inReview`, when this
-       * machine saw the review (reach/ran.ts): whether the changed lines ran in it, or are new.
+       * one line saying the code changed when which part can't be told. `isNew`: it wasn't there
+       * at the passed commit.
        */
-      code: { node: string; inReview?: InReview }[];
+      code: { node: string; isNew?: true }[];
     }
   /** Passed once, and no longer built. */
   | { board: string; status: "gone"; passed: Passed };
@@ -146,43 +144,13 @@ function changedSince(root: string, commit: string, code: ReadonlyMap<string, st
     .map(([node]) => node);
 }
 
-/**
- * Whether a changed node's changed lines ran in the review: its lines at the review's commit that
- * git says changed (all of them if none do: an import it uses changed), against what ran then.
- * Undefined when that can't be told (a stylesheet: the browser's coverage is of scripts).
- */
-function inReview(
-  root: string,
-  commit: string,
-  ran: Ran,
-  node: string,
-  diffs: Map<string, Range[]>,
-): InReview | undefined {
+/** Whether a changed node wasn't there at the passed commit (its file, or its declaration). */
+function isNewSince(root: string, commit: string, node: string): boolean {
   const [file = "", name = ""] = node.split("#");
   const then = fileAt(root, commit, file);
-  if (then.text === undefined) return "new";
-  if (then.facts === undefined) return undefined;
-  const lines = name === "" ? then.facts.module.lines : [then.facts.decls[name]?.lines];
-  const own = lines.filter((r): r is Range => r !== undefined);
-  if (own.length === 0) return "new";
-  let changed = diffs.get(`${commit}\0${file}`);
-  if (changed === undefined) {
-    changed = parseDiff(git(root, "diff", "-U0", commit, "--", file))[0]?.was ?? [];
-    diffs.set(`${commit}\0${file}`, changed);
-  }
-  const hits = own.flatMap(([a, b]) =>
-    (changed ?? [])
-      .filter(([c, d]) => c <= b && a <= d)
-      .map(([c, d]): Range => [Math.max(a, c), Math.min(b, d)]),
-  );
-  return anyRan(ran, file, hits.length > 0 ? hits : own) ? "ran" : "didn't run";
+  if (then.text === undefined) return true;
+  return name !== "" && then.facts !== undefined && then.facts.decls[name] === undefined;
 }
-
-const IN_REVIEW_WORDS: Record<InReview, string> = {
-  ran: "ran in the review: look here",
-  "didn't run": "didn't run in the review: none of what was looked at used it",
-  new: "new since the review",
-};
 
 /**
  * What of a board's record a review keeps: its layout, its pieces' setup, its words, its own
@@ -203,7 +171,6 @@ export function changesUnder(root: string, under: string): BoardChange[] {
   const now = builtUnder(root, under);
   const passed = readPassed(root, chapterOf(under));
   const codeOf = codeNow(root);
-  const diffs = new Map<string, Range[]>();
   const out: BoardChange[] = [];
   for (const [board, record] of now) {
     const was = passed[board];
@@ -220,11 +187,9 @@ export function changesUnder(root: string, under: string): BoardChange[] {
     }
     const named =
       code === undefined || isSameCode ? [] : changedSince(root, was.commit, code.nodes());
-    const ran = ranAtPass(root, board);
-    const hinted = named.map((node) => {
-      const seen = ran === undefined ? undefined : inReview(root, was.commit, ran, node, diffs);
-      return seen === undefined ? { node } : { node, inReview: seen };
-    });
+    const hinted = named.map((node) =>
+      isNewSince(root, was.commit, node) ? { node, isNew: true as const } : { node },
+    );
     out.push({
       board,
       status: "changed",
@@ -267,7 +232,6 @@ export function passUnder(root: string, under: string, by: string): number {
   const codeOf = codeNow(root);
   const fresh = [...now].map(([board, record]): [string, Passed] => {
     const code = codeOf(board, record);
-    passRan(root, board);
     return [
       board,
       {
@@ -369,16 +333,10 @@ export function changesWords(
     lines.push(`${c.board}   changed since passed by ${c.passed.by} at ${c.passed.commit}`);
     lines.push(...contentLines(c.content, changes.length === 1));
     for (const line of shows.get(c.board) ?? []) lines.push(`  ${line}`);
-    // What ran in the review first: that is where to look.
-    const order = { ran: 0, new: 1, "didn't run": 2 } as const;
-    const code = [...c.code].sort(
-      (a, b) => (order[a.inReview ?? "didn't run"] ?? 3) - (order[b.inReview ?? "didn't run"] ?? 3),
-    );
+    const code = c.code;
     const shown = changes.length === 1 ? code.length : CODE_SHOWN;
-    for (const { node, inReview } of code.slice(0, shown))
-      lines.push(
-        `  code: ${node}${inReview === undefined ? "" : ` (${IN_REVIEW_WORDS[inReview]})`}`,
-      );
+    for (const { node, isNew } of code.slice(0, shown))
+      lines.push(`  code: ${node}${isNew === true ? " (new since the review)" : ""}`);
     if (code.length > shown)
       lines.push(`  code: ${code.length - shown} more changed (changes at the board for all)`);
   }

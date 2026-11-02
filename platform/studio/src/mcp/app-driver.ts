@@ -6,7 +6,6 @@ import { type BoardSnapshot, seenBetween } from "@chalk/prop";
 import type { Browser, Locator, Page } from "playwright-core";
 import { buildInputsKey } from "../content/inputs";
 import type { PropPage } from "../prop-text";
-import { type Ran, RanReader, addRan } from "../reach/ran";
 import { codeKey, contentKey, isDrawCacheOn, keep, keyOf, readKept } from "./draw-cache";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
@@ -418,16 +417,6 @@ export type Drawn = {
 };
 
 export type ShotOptions = {
-  /**
-   * Record which lines of the board's code ran (for `changes`: "ran in the review"). Only a
-   * reviewer's own look records: it is what a review saw, and costs most of a drawing's time.
-   */
-  recordsRan?: boolean;
-  /**
-   * Work out which lines ran and keep them with the drawing, without adding them to a review's
-   * record (changes' drawings: a reviewer's later look at the same drawing adds them then).
-   */
-  keepsRan?: boolean;
   locale?: "en" | "hi";
   play?: boolean;
   /** The column's width in px (a phone is 360 to 430; a tablet or laptop column up to 640). */
@@ -637,13 +626,6 @@ type Lane = {
   isStale: boolean;
   /** The code and content it was loaded under (content/inputs.ts): another, and it loads afresh. */
   loadedUnder?: string;
-  /**
-   * What ran on it was last taken at the end of its own drawing: nothing since is another call's,
-   * so the next drawing needn't take it again before it starts.
-   */
-  isTaken?: boolean;
-  /** What ran on it, read from its scripts (coverage is the page's, whoever drew on it). */
-  reader?: RanReader;
 };
 /** The pages lent out, by the lane drawing on each. */
 const lanes = new Map<string, Lane>();
@@ -739,8 +721,6 @@ async function newPage(base: string): Promise<Lane> {
   });
   // tsx keeps function names with a helper the page doesn't have; give it one.
   await page.addInitScript("globalThis.__name = (f) => f;");
-  // What runs on it, for what a review saw (recordRan).
-  await page.coverage.startJSCoverage({ resetOnNavigation: false }).catch(() => {});
   const opened: Lane = { page, base, errors: [], isStale: false };
   page.on("console", (m) => {
     // The app asks the API who is signed in; previews don't need a server, so that one is noise.
@@ -765,8 +745,6 @@ function topUp(base: string): Promise<void> {
         .catch(() => {});
       l.isStale = false;
       l.errors.length = 0;
-      // What loading it ran is set aside by the next drawing on it.
-      l.isTaken = false;
     };
     try {
       for (;;) {
@@ -906,9 +884,8 @@ export type Act = {
  * what ran is recorded; an option given as its default), the rest in one order.
  */
 function askKey(o: ShotOptions, act: Act | undefined): string {
-  const { recordsRan: _r, keepsRan: _k, ...rest } = o;
   const given = Object.fromEntries(
-    Object.entries(rest)
+    Object.entries(o)
       .filter(([k, v]) => v !== undefined && !(k === "play" && v === false))
       .sort(([a], [b]) => a.localeCompare(b)),
   );
@@ -944,23 +921,9 @@ export function shoot(
   act?: Act,
   lane: string = DEFAULT_LANE,
 ): Promise<Drawn> {
-  const once = async (): Promise<{ drawn: Drawn; ran?: Ran }> => {
-    const drawn = await shootNow(root, board, o, act, lane);
-    // Not recorded, what ran stays on the page, set aside before the next drawing that records.
-    if (o.recordsRan === true || o.keepsRan === true) {
-      const ran = await timed("coverage: recorded after", () =>
-        recordRan(root, board, lane, o.recordsRan === true),
-      );
-      return ran === undefined ? { drawn } : { drawn, ran };
-    }
-    const at = lanes.get(lane);
-    if (at !== undefined) at.isTaken = false;
-    return { drawn };
-  };
   // Drawn once per set of inputs (draw-cache.ts): the same inputs give the same drawing.
   const isKeepable =
     isDrawCacheOn() && (o.speed ?? 1) === Number.POSITIVE_INFINITY && act?.frames === undefined;
-  const wants = o.recordsRan === true || o.keepsRan === true;
   const ask = askKey(o, act);
   const inputs = async () =>
     keyOf({
@@ -978,20 +941,16 @@ export function shoot(
         const before = isKeepable ? await inputs() : "";
         if (isKeepable) {
           const kept = readKept<Drawn>(root, board, ask, before);
-          // A look that records what ran needs the lines kept with it; without them, drawn again.
-          if (kept !== undefined && (!wants || kept.ran !== undefined)) {
-            if (o.recordsRan === true && kept.ran !== undefined) addRanTo(root, board, kept.ran);
-            return kept.drawn;
-          }
+          if (kept !== undefined) return kept.drawn;
         }
         for (let attempt = 1; ; attempt++) {
           try {
-            const made = await once();
+            const drawn = await shootNow(root, board, o, act, lane);
             // Kept only if it is what these inputs always give: nothing changed under it, nothing
             // still running, no errors the page logged.
-            if (isKeepable && isSettledClean(made.drawn) && (await inputs()) === before)
-              keep(root, board, ask, before, made);
-            return made.drawn;
+            if (isKeepable && isSettledClean(drawn) && (await inputs()) === before)
+              keep(root, board, ask, before, { drawn });
+            return drawn;
           } catch (error) {
             if (!isPulledAway(error) || attempt >= PULLED_AWAY_TRIES) throw error;
             const at = lanes.get(lane);
@@ -1013,61 +972,6 @@ export function shoot(
     next.catch(() => {}),
   );
   return next;
-}
-
-/** A page's reader: what loaded is the page's, whoever drew on it. */
-function readerOf(at: Lane, root: string): RanReader {
-  at.reader ??= new RanReader(root);
-  return at.reader;
-}
-
-/** What ran on a lane's page since this was last asked (coverage taken and started again). */
-async function takeRan(lane: string) {
-  const page = lanes.get(lane)?.page;
-  if (page === undefined || page.isClosed()) return [];
-  try {
-    const coverage = await page.coverage.stopJSCoverage();
-    await page.coverage.startJSCoverage({ resetOnNavigation: false });
-    return coverage;
-  } catch {
-    return [];
-  }
-}
-
-/**
- * Keeps what ran while one built board was looked at or played (reach/ran.ts): a hint for the
- * next review, so never a reason for a call to fail.
- */
-async function recordRan(
-  root: string,
-  board: string,
-  lane: string,
-  isAdded: boolean,
-): Promise<Ran | undefined> {
-  const coverage = await timed("coverage: take", () => takeRan(lane));
-  const at = lanes.get(lane);
-  if (at === undefined) return undefined;
-  at.isTaken = true;
-  try {
-    const lines = await timed("coverage: to lines", async () =>
-      readerOf(at, root).linesOf(coverage),
-    );
-    if (isAdded) addRanTo(root, board, lines);
-    return lines;
-  } catch {
-    return undefined; // only a hint
-  }
-}
-
-/** Lines that ran, added to what the review saw of a built board (reach/ran.ts). */
-function addRanTo(root: string, board: string, lines: Ran): void {
-  const path = board.replace(/^content\//, "");
-  if (!existsSync(join(root, "build", "review", `${path}.json`))) return;
-  try {
-    addRan(root, path, lines);
-  } catch {
-    // only a hint
-  }
 }
 
 /**
@@ -1226,12 +1130,6 @@ async function shootNow(
   const base = target.origin;
   const at = await openPage(lane, base);
   const { page } = at;
-  // What ran on this page before this call (it loading, other boards) isn't this board's: set
-  // aside before a drawing that records, unless the page's last drawing took it already. A drawing
-  // that doesn't record touches no coverage: taking it costs most of a drawing (the browser sends
-  // every script's text again).
-  if ((o.recordsRan === true || o.keepsRan === true) && at.isTaken !== true)
-    readerOf(at, root).see(await timed("coverage: taken before", () => takeRan(lane)));
   at.errors.length = 0;
   await timed("move to the board", async () => {
     await page.setViewportSize({
