@@ -1,4 +1,5 @@
 import type { BuiltArt, Locale } from "@chalk/content";
+import { NodePart } from "@chalk/content/address";
 import { Stage, Trail } from "@chalk/draw";
 import { type Progress, isConceptDone } from "@chalk/learning";
 import { OwnHtml, RichText, ours } from "@chalk/player";
@@ -10,8 +11,18 @@ import type { Course, CourseChapter } from "./course";
 /** Art from the build: checked SVG (see studio's art checks), so it is inlined as it is. */
 export function ArtView({ art }: { art: BuiltArt | null }): JSX.Element | null {
   if (art === null) return null;
-  return <OwnHtml tag="div" class={`art is-${art.frame}`} markup={ours(art.svg)} />;
+  return (
+    <div data-piece={NodePart.Art}>
+      <OwnHtml tag="div" class={`art is-${art.frame}`} markup={ours(art.svg)} />
+    </div>
+  );
 }
+
+/*
+ * What these screens draw of a book, chapter or lesson is tagged as a board's pieces are: the
+ * node's tile or stop carries `data-board` (its path), each thing on it `data-piece` (a NodePart),
+ * so the preview can name, point at and comment on it (platform/docs/plans/comment-on-screens.md).
+ */
 
 function BackButton({ label, onBack }: { label: string; onBack: () => void }): JSX.Element {
   return (
@@ -40,7 +51,7 @@ export function CourseScreen({
       <header class="screen-header">
         <BackButton label="Back" onBack={onBack} />
       </header>
-      <h1 class="screen-title">
+      <h1 class="screen-title" data-piece={NodePart.Title}>
         <RichText text={course.title[locale]} />
       </h1>
       {course.art !== null && (
@@ -55,11 +66,12 @@ export function CourseScreen({
             key={chapter.title.en}
             type="button"
             class="chapter-tile"
+            data-board={chapter.path}
             onClick={() => onChapter(i)}
           >
             <ArtView art={chapter.art} />
             <span class="chapter-number">Chapter {i + 1}</span>
-            <span class="chapter-name">
+            <span class="chapter-name" data-piece={NodePart.Title}>
               <RichText text={chapter.title[locale]} />
             </span>
           </button>
@@ -133,6 +145,8 @@ export function ChapterScreen({
   progress,
   onConcept,
   onBack,
+  current: chosen,
+  onStop,
 }: {
   chapter: CourseChapter;
   number: number;
@@ -140,8 +154,12 @@ export function ChapterScreen({
   progress: Progress;
   onConcept: (conceptId: string) => void;
   onBack: () => void;
+  /** The preview's: the lesson shown as current (its card and art), whatever the progress. */
+  current?: number;
+  /** The preview's: a tap on a lesson's circle makes it the current one (its card opens it). */
+  onStop?: (index: number) => void;
 }): JSX.Element {
-  const current = currentConcept(chapter, progress);
+  const current = chosen ?? currentConcept(chapter, progress);
   const [measured, width] = useWidth();
   const { stops, height } = layoutStops(chapter.concepts.length, current);
   const count = chapter.concepts.length;
@@ -152,7 +170,7 @@ export function ChapterScreen({
         <BackButton label="Back to chapters" onBack={onBack} />
       </header>
       <div class="screen-kicker">{say(locale, "chapterOf", { n: number })}</div>
-      <h1 class="screen-title">
+      <h1 class="screen-title" data-piece={NodePart.Title}>
         <RichText text={chapter.title[locale]} />
       </h1>
       <div class="screen-kicker">{say(locale, "conceptsThenPractice", { n: count })}</div>
@@ -174,13 +192,19 @@ export function ChapterScreen({
               : say(locale, "learnt")
             : undefined;
           return (
-            <div key={concept.id} class="stop" style={{ top: `${stop.top}px` }}>
+            <div
+              key={concept.id}
+              class="stop"
+              style={{ top: `${stop.top}px` }}
+              data-board={concept.path}
+            >
               <button
                 type="button"
                 class={`stop-node${stop.isCurrent ? " is-current" : ""}${isDone ? " is-done" : ""}`}
                 style={{ left: `calc(${stop.x * 100}% - 32px)`, top: `${NODE_Y - 32}px` }}
                 aria-label={concept.title[locale]}
-                onClick={() => onConcept(concept.id)}
+                data-piece={NodePart.Glyph}
+                onClick={() => (onStop === undefined ? onConcept(concept.id) : onStop(i))}
               >
                 {isDone ? (
                   <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
@@ -195,7 +219,9 @@ export function ChapterScreen({
                   class={isLeft ? "stop-name is-right-of" : "stop-name is-left-of"}
                   style={{ top: `${NODE_Y - (status === undefined ? 14 : 22)}px` }}
                 >
-                  <RichText text={concept.title[locale]} />
+                  <span data-piece={NodePart.Title}>
+                    <RichText text={concept.title[locale]} />
+                  </span>
                   {status !== undefined && <div class="stop-status">{status}</div>}
                 </div>
               )}
@@ -207,7 +233,7 @@ export function ChapterScreen({
                   onClick={() => onConcept(concept.id)}
                 >
                   <ArtView art={concept.art} />
-                  <span class="concept-name">
+                  <span class="concept-name" data-piece={NodePart.Title}>
                     <RichText text={concept.title[locale]} />
                   </span>
                   <span class="stop-go">

@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  NodePart,
   contentAddress,
   formatAddress,
+  isAboveBoard,
   parseAddress,
   previewQuery,
   propAddress,
+  screenOf,
   shownAddress,
 } from "./address";
 
@@ -60,5 +63,29 @@ describe("addresses", () => {
     expect(shownAddress(plane, "coordinatePlane/handle")).toBe(`${plane}#handle`);
     expect(shownAddress(plane, "coordinatePlane")).toBe(plane);
     expect(shownAddress(plane)).toBe(plane);
+  });
+});
+
+describe("what the book and chapter screens draw", () => {
+  it("tells a book, chapter or lesson from a board by how deep it is", () => {
+    expect(isAboveBoard("class9-maths")).toBe(true);
+    expect(isAboveBoard("class9-maths/coordinate-geometry/plotting-points")).toBe(true);
+    expect(isAboveBoard("class9-maths/coordinate-geometry/plotting-points/plot-a-point")).toBe(
+      false,
+    );
+    expect(isAboveBoard("class9-maths/coordinate-geometry/questions/read-a-point/1a2b")).toBe(
+      false,
+    );
+  });
+
+  it("names the screen each thing is drawn on", () => {
+    const lesson = "class9-maths/coordinate-geometry/plotting-points";
+    expect(screenOf(lesson, NodePart.Art)).toBe("class9-maths/coordinate-geometry");
+    expect(screenOf(lesson, NodePart.Glyph)).toBe("class9-maths/coordinate-geometry");
+    expect(screenOf("class9-maths/coordinate-geometry", NodePart.Art)).toBe("class9-maths");
+    expect(screenOf("class9-maths/coordinate-geometry", NodePart.Title)).toBe(
+      "class9-maths/coordinate-geometry",
+    );
+    expect(screenOf("class9-maths", NodePart.Title)).toBe("class9-maths");
   });
 });

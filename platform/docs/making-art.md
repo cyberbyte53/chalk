@@ -44,5 +44,6 @@ Frames: `ArtFrame.Card` (320 × 140, wide: books and concepts) and `ArtFrame.Til
 ## Checking it
 
 - `pnpm art` builds everything and writes `build/art.html`: every piece of art on its card, as the app shows it. Open it, look, fix, run again.
+- In the preview, the book's screen (`?dev&at=content/<book>`) shows each chapter's tile, and the chapter's (`?dev&at=content/<book>/<chapter>`) each lesson's circle and name; tap a circle to bring up its card and art. In Cursor, pick any of them (a title, a glyph, a picture) and comment, as on a board: the thread is at `content/<node>#<title|glyph|art>` and names its line. `show` on a book or chapter draws its screen too.
 - The build refuses art that: has no `art` export or fails to draw; uses a raw colour (use a look role, or give the colour to a piece); has a script, a link, an event handler, or an element outside the allowed shapes; weighs more than 16 KB.
 - Art in a crowd (`Dots` with more than 200) isn't drawn: the build has no screen to paint a crowd on. Keep art to a few things.

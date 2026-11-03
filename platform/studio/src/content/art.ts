@@ -74,7 +74,10 @@ export function renderArt(exported: unknown): { art: BuiltArt } | { problems: st
 }
 
 /** The stylesheets art is drawn with, from the repo root: the look's tokens and the pieces'. */
-export const ARTS_CSS = ["packages/look/src/tokens.gen.css", "packages/draw/src/styles.css"];
+export const ARTS_CSS = [
+  "platform/packages/look/src/tokens.gen.css",
+  "platform/packages/draw/src/styles.css",
+];
 
 type GalleryItem = { path: string; title: string; art: BuiltArt };
 

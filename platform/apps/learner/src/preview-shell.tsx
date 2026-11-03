@@ -9,9 +9,11 @@ import {
 import {
   PROPS_ROOT,
   contentAddress,
+  isAboveBoard,
   parseAddress,
   previewQuery,
   propAddress,
+  screenOf,
 } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps, propLibrary, propPackages } from "@chalk/library";
@@ -553,7 +555,14 @@ function BoardThreads({
  * What a comment is about, on the drawn board: the part of the prop picked, else its piece (for a
  * prop comment, that prop where this board places it); null for a comment on the whole board.
  */
-export function anchorOf(phone: HTMLElement, t: Thread): HTMLElement | null {
+export function anchorOf(screen: HTMLElement, t: Thread): HTMLElement | null {
+  // On a book or chapter screen, what a thread is at is under its node (each lesson has its own
+  // title and art); on a board, the board is the whole screen.
+  const phone =
+    (t.board === undefined
+      ? null
+      : screen.querySelector<HTMLElement>(`[data-board="${CSS.escape(t.board)}"]`)) ?? screen;
+  if (phone !== screen && t.target === undefined) return phone;
   const target = t.target ?? "";
   const [pieceName] = namesOf(target);
   // The part's address under its piece ("objectArrow/object"), if the comment is on a part.
@@ -730,9 +739,82 @@ async function lessonBeside(lesson: string, by: 1 | -1): Promise<string | undefi
   return lessons[i];
 }
 
-/** Books and chapters, drawn by the app's own screens. */
-function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Element {
+/** Where a book, chapter or lesson's screen things are written (build/screens.json). */
+type Screens = Record<string, { board?: string; pieces: Record<string, string> }>;
+
+/**
+ * Puts `data-source` on what the book and chapter screens draw: each node (`data-board`) its line,
+ * each thing on it (`data-piece`: title, glyph, art) its own; Alt-click opens it, a comment names it.
+ */
+function useScreenSources(phone: { current: HTMLElement | null }, screens: Screens): void {
+  useEffect(() => {
+    const el = phone.current;
+    if (el === null) return;
+    const tag = () => {
+      // Each thing by the node it belongs to: its nearest tile or stop, else the screen's own
+      // (whose tag is on the card around the phone).
+      for (const part of el.querySelectorAll<HTMLElement>("[data-piece]")) {
+        const node = part.closest<HTMLElement>("[data-board]");
+        const where = screens[node?.dataset.board ?? ""];
+        const site = where?.pieces[part.dataset.piece ?? ""];
+        if (site !== undefined) part.dataset.source = site;
+      }
+      for (const node of el.querySelectorAll<HTMLElement>("[data-board]")) {
+        const site = screens[node.dataset.board ?? ""]?.board;
+        if (site !== undefined) node.dataset.source = site;
+      }
+    };
+    tag();
+    const watch = new MutationObserver(tag);
+    watch.observe(el, { childList: true, subtree: true });
+    return () => watch.disconnect();
+  }, [phone, screens]);
+}
+
+/** The threads at what a book or chapter screen shows (screenOf: where each thing is drawn). */
+function threadsOnScreen(threads: readonly Thread[], path: string): Thread[] {
+  return threads.filter((t) => {
+    if (t.board === undefined || !isAboveBoard(t.board)) return false;
+    const screen = screenOf(t.board, t.target);
+    // Every book's screen at once: each book's own.
+    return path === "" ? !screen.includes("/") : screen === path;
+  });
+}
+
+/** Books and chapters, drawn by the app's own screens; what they show can be commented on. */
+function TreeScreen({
+  path,
+  locale,
+  threads,
+  reviews,
+  onThreads,
+}: {
+  path: string;
+  locale: Locale;
+  threads: readonly Thread[];
+  reviews: readonly Review[];
+  onThreads: (all: Threads) => void;
+}): JSX.Element {
   const [book, chapter] = path === "" ? [] : path.split("/");
+  const phone = useRef<HTMLDivElement>(null);
+  const [screens, setScreens] = useState<Screens>({});
+  useEffect(() => {
+    void json("screens.json")
+      .then((s) => setScreens(s as Screens))
+      .catch(() => setScreens({}));
+  }, []);
+  useScreenSources(phone, screens);
+  // The preview's current lesson on a chapter's path: a tap on a circle makes it current.
+  const [current, setCurrent] = useState(0);
+  const onScreen = threadsOnScreen(threads, path);
+  const comments = (
+    <>
+      {isInEditor && <PickComposer />}
+      {onScreen.length > 0 && (
+        <BoardThreads threads={onScreen} reviews={reviews} onChange={onThreads} phone={phone} />
+      )}
+    </>
+  );
   const shown: readonly Course[] =
     book === undefined
       ? courses
@@ -742,6 +824,7 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
   if (chapter === undefined)
     return (
       <main class="preview">
+        {comments}
         {shown.map((course) => {
           const bookSlug = (course.chapters[0]?.path ?? "").split("/")[0] ?? "";
           return (
@@ -749,7 +832,11 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
               <div class="preview-tag">
                 <a href={`?dev&${previewQuery(contentAddress(bookSlug))}`}>{bookSlug}</a>
               </div>
-              <div class="preview-phone" data-source={`content/${bookSlug}/build.yaml:1`}>
+              <div
+                class="preview-phone"
+                ref={shown.length === 1 ? phone : undefined}
+                data-source={`content/${bookSlug}/build.yaml:1`}
+              >
                 <CourseScreen
                   course={course}
                   locale={locale}
@@ -771,17 +858,20 @@ function TreeScreen({ path, locale }: { path: string; locale: Locale }): JSX.Ele
   if (found === undefined) return <div class="preview-empty">No chapter {path} in build/</div>;
   return (
     <main class="preview">
+      {comments}
       <section class="preview-card" data-board={path}>
         <div class="preview-tag">
           <a href={`?dev&${previewQuery(contentAddress(book ?? ""))}`}>{book}</a>
           <span>{chapter}</span>
         </div>
-        <div class="preview-phone" data-source={`content/${path}/build.yaml:1`}>
+        <div class="preview-phone" ref={phone} data-source={`content/${path}/build.yaml:1`}>
           <ChapterScreen
             chapter={found}
             number={index + 1}
             locale={locale}
             progress={{}}
+            current={current}
+            onStop={setCurrent}
             onConcept={(id) => {
               void item(found.path).then((raw) => {
                 const ref = (raw as { concepts: { id: string; path: string }[] }).concepts.find(
@@ -975,7 +1065,11 @@ function picksAt(target: HTMLElement): PickTarget[] {
   const phone = target.closest<HTMLElement>(".preview-phone");
   if (card === null || phone === null) return [];
   const board = card.dataset.board;
-  const whole: PickTarget = { el: phone, board, words: "board" };
+  // On a book or chapter screen a tile or a lesson is a node of its own: its whole is it.
+  const isNode = phone.contains(card);
+  const whole: PickTarget = isNode
+    ? { el: card, board, words: board?.split("/").at(-1) ?? "this" }
+    : { el: phone, board, words: "board" };
   const pieceEl = target.closest<HTMLElement>("[data-piece]") ?? undefined;
   if (pieceEl === undefined) return [whole];
   const prop = /(?:^|\s)prop-(\S+)/.exec(pieceEl.className)?.[1];
@@ -1529,7 +1623,16 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     return (
       <LibraryScreen pkg={library.pkg} locale={locale} bus={bus} reach={() => json("reach.json")} />
     );
-  if (isTree) return <TreeScreen path={path} locale={locale} />;
+  if (isTree)
+    return (
+      <TreeScreen
+        path={path}
+        locale={locale}
+        threads={threads}
+        reviews={reviews}
+        onThreads={setThreads}
+      />
+    );
   if (error !== null) return <div class="preview-empty">{error}</div>;
   // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.
   if (shown === null)

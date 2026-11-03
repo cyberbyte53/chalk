@@ -16,7 +16,14 @@ import { parseArgs } from "node:util";
 import { propModules } from "@chalk/library/modules";
 import { findUp } from "../find-up";
 import { ARTS_CSS, artGallery, collectArt } from "./art";
-import { type BuildResult, PROP_DIRS, REACH_FILE, SOURCES_FILE, buildContent } from "./build";
+import {
+  type BuildResult,
+  PROP_DIRS,
+  REACH_FILE,
+  SCREENS_FILE,
+  SOURCES_FILE,
+  buildContent,
+} from "./build";
 import { MODULES_FILE, writeConceptModules, writeModulesModule } from "./concepts";
 import { buildInputsKey, inputsKeyFile } from "./inputs";
 
@@ -86,7 +93,15 @@ function write(result: BuildResult): void {
   const wanted = new Map<string, string>();
   for (const [path, json] of result.files) wanted.set(path, `${JSON.stringify(json, null, 2)}\n`);
   // Where each board was written, for the preview's "open in editor"; not part of the content.
-  wanted.set(SOURCES_FILE, `${JSON.stringify(Object.fromEntries(result.sources), null, 2)}\n`);
+  const all = [...result.sources];
+  const boards = all.filter(([, where]) => where.screen !== true);
+  const screens = all.flatMap(([path, where]) =>
+    where.screen === true
+      ? [[path, { ...(where.board ? { board: where.board } : {}), pieces: where.pieces }] as const]
+      : [],
+  );
+  wanted.set(SOURCES_FILE, `${JSON.stringify(Object.fromEntries(boards), null, 2)}\n`);
+  wanted.set(SCREENS_FILE, `${JSON.stringify(Object.fromEntries(screens), null, 2)}\n`);
   // What each board was made from, for tracing a change to what it reaches; not part of the content.
   wanted.set(REACH_FILE, `${JSON.stringify(result.reach)}\n`);
   // Kept: written last, and only when something in build/ changed (below).
@@ -257,6 +272,7 @@ async function publish(): Promise<void> {
   rmSync(kept, { recursive: true, force: true });
   cpSync(buildDir, kept, { recursive: true });
   rmSync(join(kept, SOURCES_FILE), { force: true });
+  rmSync(join(kept, SCREENS_FILE), { force: true });
   rmSync(join(kept, REACH_FILE), { force: true });
   console.log(`✓ published ${commit.slice(0, 7)} → ${kept}`);
 }

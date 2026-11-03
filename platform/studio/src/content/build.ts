@@ -55,6 +55,7 @@ import {
   soundListSchema,
   walkPieces,
 } from "@chalk/content";
+import { CONTENT_ROOT, NodePart } from "@chalk/content/address";
 import { propPackages } from "@chalk/library";
 import { type PropModule, scriptOf } from "@chalk/player";
 import { PropRole, segment } from "@chalk/prop";
@@ -102,8 +103,11 @@ export type BuildResult = {
   chapters: { built: string[]; reused: number };
 };
 
-/** build/sources.json: node path → where its board was written. */
+/** build/sources.json: board path → where its board was written. */
 export const SOURCES_FILE = "sources.json";
+
+/** build/screens.json: book, chapter or lesson path → where its title, glyph and art are written. */
+export const SCREENS_FILE = "screens.json";
 
 /** build/reach.json: what each board was made from (see Reach). Never shipped. */
 export const REACH_FILE = "reach.json";
@@ -156,6 +160,8 @@ export type ItemSources = {
   board?: string;
   pieces: Record<string, string>;
   props: Record<string, string>;
+  /** A book, chapter or lesson (its screen things), not a board: written to screens.json instead. */
+  screen?: true;
 };
 
 /** The repo's root: prop packages are under library/props/ there. */
@@ -498,8 +504,34 @@ async function importModule(
   }
 }
 
+/**
+ * Where a book, chapter or lesson's screen things are written (platform/docs/plans/
+ * comment-on-screens.md): its title and glyph on their build.yaml lines, its art in its art.tsx.
+ * Into build/screens.json (split from the boards' at writing), so a comment on one names its line.
+ */
+function noteNodeSources(c: Context, folder: string): void {
+  const manifest = outPath(folder, ContentFile.Manifest);
+  const lines = existsSync(join(c.contentDir, manifest))
+    ? readFileSync(join(c.contentDir, manifest), "utf8").split("\n")
+    : [];
+  const lineOf = (key: string) => {
+    const at = lines.findIndex((line) => line.startsWith(`${key}:`));
+    return at === -1 ? undefined : `${CONTENT_ROOT}${manifest}:${at + 1}`;
+  };
+  const pieces: Record<string, string> = {};
+  for (const part of [NodePart.Title, NodePart.Glyph]) {
+    const site = lineOf(part);
+    if (site !== undefined) pieces[part] = site;
+  }
+  const art = outPath(folder, ContentFile.Art);
+  if (existsSync(join(c.contentDir, art))) pieces[NodePart.Art] = `${CONTENT_ROOT}${art}:1`;
+  const board = lineOf(NodePart.Title) ?? `${CONTENT_ROOT}${manifest}:1`;
+  c.sources.set(folder, { board, pieces, props: {}, screen: true });
+}
+
 /** A folder's art (its art.tsx), drawn and checked; null when it has none. */
 async function buildArt(c: Context, folder: string): Promise<BuiltArt | null> {
+  noteNodeSources(c, folder);
   const file = outPath(folder, ContentFile.Art);
   if (!existsSync(join(c.contentDir, file))) return null;
   const module = await importModule(c, file);

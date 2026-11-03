@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { NodePart } from "@chalk/content/address";
 import { type Filed, Status, propHomes } from "./comments";
 import type { Reach } from "./content/build";
 
@@ -10,6 +11,8 @@ import type { Reach } from "./content/build";
  * answered (ready, saying what happened to it); a thread is never left pointing at nothing.
  * Closed and withdrawn threads are history and need nothing. Parts of a piece are not checked
  * (only drawing a board says what parts it has), but its line is: a board knows what it says.
+ * A thread on a book, chapter or lesson's screen is there while the node is built and has what
+ * it is at (its art: an art.tsx).
  */
 export function goneThreads(root: string, threads: readonly Filed[], reach: Reach): string[] {
   const props = propHomes(root);
@@ -20,7 +23,17 @@ export function goneThreads(root: string, threads: readonly Filed[], reach: Reac
         return props.has(t.prop) ? undefined : `prop ${t.prop} is no longer in the library`;
       if (t.board !== undefined) {
         const board = reach.boards[t.board];
-        if (board === undefined) return `board ${t.board} is no longer built`;
+        if (board === undefined) {
+          if (!existsSync(join(root, "build", `${t.board}.json`)))
+            return `${t.board} is no longer built`;
+          // Not a board: a book, chapter or lesson, on its screen.
+          if (t.target === undefined) return undefined;
+          if (!(Object.values(NodePart) as string[]).includes(t.target))
+            return `${t.board}'s screen shows no ${t.target}`;
+          if (t.target === NodePart.Art && !existsSync(join(root, "content", t.board, "art.tsx")))
+            return `${t.board} has no art now`;
+          return undefined;
+        }
         const target = t.target;
         if (target === undefined) return undefined;
         const [piece, part] = target.split("/");

@@ -186,18 +186,27 @@ export function propHomes(root: string): Map<string, string> {
   return out;
 }
 
-/** Where a thread is filed: its prop's package, else its board's (or source's) chapter. */
+/**
+ * Where a thread is filed: its prop's package, else its board's (or source's) chapter, else (a
+ * thread at a book itself, on the book's screen) its book.
+ */
 export function homeOf(
   root: string,
   c: Pick<Thread, "prop" | "board" | "source">,
 ): string | undefined {
   if (c.prop !== undefined) return propHomes(root).get(c.prop);
+  // A chapter, or a book, is a folder under content/ or its planning under authoring/books/ (a
+  // source line's file, build.yaml:1, is neither).
+  const isFolder = (...parts: string[]) =>
+    existsSync(join(root, "content", ...parts)) ||
+    existsSync(join(root, "authoring", "books", ...parts));
   for (const value of [c.board, c.source]) {
     if (value === undefined) continue;
     const [book, chapter] = value.replace(/^content\/|^authoring\/books\//, "").split("/");
-    if (book && chapter) return `content/${book}/${chapter}`;
+    if (book && chapter && isFolder(book, chapter)) return `content/${book}/${chapter}`;
   }
-  return undefined;
+  const [book, ...rest] = (c.board ?? "").replace(/^content\//, "").split("/");
+  return book && rest.length === 0 && isFolder(book) ? `content/${book}` : undefined;
 }
 
 const dirsIn = (dir: string): string[] =>
@@ -208,11 +217,12 @@ const dirsIn = (dir: string): string[] =>
     : [];
 
 /**
- * Every home a thread can be about: each chapter and prop package there is, and any that still has
- * threads kept under authoring/ (its folder since removed: its threads are still read).
+ * Every home a thread can be about: each book, chapter and prop package there is, and any that
+ * still has threads kept under authoring/ (its folder since removed: its threads are still read).
  */
 function homes(root: string): string[] {
   const kept = [
+    ...dirsIn(join(root, "authoring", "books")).map((book) => `content/${book}`),
     ...dirsIn(join(root, "authoring", "books")).flatMap((book) =>
       dirsIn(join(root, "authoring", "books", book)).map((chapter) => `content/${book}/${chapter}`),
     ),
@@ -220,9 +230,10 @@ function homes(root: string): string[] {
   ];
   return [
     ...new Set([
-      ...dirsIn(join(root, "content")).flatMap((book) =>
-        dirsIn(join(root, "content", book)).map((chapter) => `content/${book}/${chapter}`),
-      ),
+      ...dirsIn(join(root, "content")).flatMap((book) => [
+        `content/${book}`,
+        ...dirsIn(join(root, "content", book)).map((chapter) => `content/${book}/${chapter}`),
+      ]),
       ...dirsIn(join(root, "library", "props")).map((name) => `library/props/${name}`),
       ...kept,
     ]),
@@ -238,7 +249,7 @@ export function fileOf(home: string): string {
     return `authoring/books/${home.slice("content/".length)}/${COMMENTS_FILE}`;
   if (home.startsWith("library/props/"))
     return `authoring/props/${home.slice("library/props/".length)}/${COMMENTS_FILE}`;
-  throw new Error(`no home ${home}: threads are about a chapter or a prop package`);
+  throw new Error(`no home ${home}: threads are about a book, a chapter or a prop package`);
 }
 
 // ---- Reading ----
@@ -617,7 +628,7 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     if (!checked.success) return { ok: false, error: issues(checked.error) };
     const home = homeOf(root, checked.data);
     if (home === undefined)
-      return { ok: false, error: "can't tell which chapter or prop this is about" };
+      return { ok: false, error: "can't tell which book, chapter or prop this is about" };
     return save({ ...checked.data, home });
   }
 

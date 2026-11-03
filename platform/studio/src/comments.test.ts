@@ -75,6 +75,28 @@ describe("threads", () => {
     expect(read.threads.map((c) => c.id).sort()).toEqual([onBoard.id, onProp.id].sort());
   });
 
+  it("files a thread on a book or chapter screen: a lesson's with its chapter, a book's with the book", () => {
+    const root = repo();
+    const onLesson = start(root, {
+      board: "class10-maths/polynomials/zeroes",
+      target: "art",
+      source: "content/class10-maths/polynomials/zeroes/art.tsx:1",
+    });
+    const onBook = start(root, {
+      board: "class10-maths",
+      target: "title",
+      source: "content/class10-maths/build.yaml:1",
+    });
+    expect(onLesson.home).toBe("content/class10-maths/polynomials");
+    expect(onBook.home).toBe("content/class10-maths");
+    expect(
+      readFileSync(join(root, "authoring/books/class10-maths/comments.yaml"), "utf8"),
+    ).toContain("title");
+    const read = readComments(root);
+    expect(read.problems).toEqual([]);
+    expect(read.threads.map((c) => c.id)).toEqual(expect.arrayContaining([onLesson.id, onBook.id]));
+  });
+
   it("moves only as each role may: the fixer plans and readies, only the person closes", () => {
     const root = repo();
     const t = start(root);
@@ -481,6 +503,24 @@ describe("threads whose place is gone", () => {
       [BOARD]: { module: "m", pieces: Object.fromEntries(pieces.map((p) => [p, { stack: [] }])) },
     },
     modules: {},
+  });
+
+  it("on a book or chapter screen: there while the node is built and has what it is at", () => {
+    const root = repo();
+    const lesson = "class10-maths/polynomials/zeroes";
+    const onTitle = start(root, { board: lesson, target: "title" });
+    const onArt = start(root, { board: lesson, target: "art" });
+    const gone = () => goneThreads(root, readComments(root).threads, reach([]));
+    expect(gone()).toEqual([
+      `${onTitle.id} [open]: ${lesson} is no longer built`,
+      `${onArt.id} [open]: ${lesson} is no longer built`,
+    ]);
+    mkdirSync(join(root, "build", lesson), { recursive: true });
+    writeFileSync(join(root, "build", `${lesson}.json`), "{}");
+    expect(gone()).toEqual([`${onArt.id} [open]: ${lesson} has no art now`]);
+    mkdirSync(join(root, "content", lesson), { recursive: true });
+    writeFileSync(join(root, "content", lesson, "art.tsx"), "");
+    expect(gone()).toEqual([]);
   });
 
   it("are listed while open, until re-pointed by a fixer saying where they went", () => {

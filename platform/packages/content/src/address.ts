@@ -4,6 +4,7 @@
  *
  *   content/<book>/<chapter>/<lesson>/<board>#piece/part     a board, or something on it
  *   content/<book>/<chapter>                                  anything above a board
+ *   content/<book>/<chapter>/<lesson>#art                     what a book or chapter screen draws of it
  *   content/                                                  every book
  *   library/props/<package>/<type>#part                       a prop, or a part of it
  *   library/props/<package>, library/props/                   a package's props, every prop
@@ -14,6 +15,36 @@
  */
 
 export const CONTENT_ROOT = "content/";
+
+/**
+ * What the book and chapter screens draw of a node above a board, by the built field it shows: its
+ * title, its glyph (a lesson's circle on the chapter's path), its art. The node itself is its tile
+ * or its card. A thread on one is at `content/<node>#<part>`.
+ */
+export const NodePart = { Title: "title", Glyph: "glyph", Art: "art" } as const;
+export type NodePart = (typeof NodePart)[keyof typeof NodePart];
+
+/**
+ * Whether a node path (below `content/`) is a book, chapter or lesson rather than a board: a board
+ * is always at least four deep (book/chapter/lesson/board, or a question's
+ * book/chapter/questions/family/id).
+ */
+export function isAboveBoard(path: string): boolean {
+  return path !== "" && path.split("/").length <= 3;
+}
+
+/**
+ * The screen a book, chapter or lesson's thing is drawn on: a lesson's circle, name and card are on
+ * its chapter's path; a chapter's tile (its art) on its book's screen, its title on its own; a
+ * book's on its own.
+ */
+export function screenOf(path: string, part: string | undefined): string {
+  const up = path.split("/").slice(0, -1).join("/");
+  const depth = path.split("/").length;
+  if (depth === 3) return up;
+  if (depth === 2 && part === NodePart.Art) return up;
+  return path;
+}
 export const PROPS_ROOT = "library/props/";
 
 export type Address =

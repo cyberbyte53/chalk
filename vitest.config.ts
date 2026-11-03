@@ -1,6 +1,8 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  // JSX is Preact's everywhere, as tsconfig.base.json says (content/ has no tsconfig of its own).
+  esbuild: { jsx: "automatic", jsxImportSource: "preact" },
   test: {
     include: [
       "platform/packages/*/src/**/*.test.ts",

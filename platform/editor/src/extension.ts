@@ -408,14 +408,23 @@ const dirsIn = (dir: string): string[] =>
 /** The threads on a chapter: on its boards, its planning files or its content's code. */
 function chapterThreads(chapter: string) {
   const on = (t: { board?: string; source?: string }) =>
+    t.board === chapter ||
     (t.board ?? "").startsWith(`${chapter}/`) ||
     (t.source ?? "").startsWith(`authoring/books/${chapter}/`) ||
     (t.source ?? "").startsWith(`content/${chapter}/`);
   return reviews.allThreads.filter(on);
 }
 
-function openComments(chapter: string): { yours: number; agents: number; ready: number } {
-  const mine = chapterThreads(chapter);
+/** A book's own threads: on its screen (its title, art), not its chapters'. */
+function bookThreads(book: string) {
+  return reviews.allThreads.filter((t) => t.board === book);
+}
+
+function openComments(
+  node: string,
+  isBook = false,
+): { yours: number; agents: number; ready: number } {
+  const mine = isBook ? bookThreads(node) : chapterThreads(node);
   return {
     yours: mine.filter((t) => t.waitsOn === "person").length,
     agents: mine.filter((t) => t.waitsOn === "agent").length,
@@ -527,8 +536,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       isLeaf ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
     );
     item.tooltip = node.path;
-    if (node.kind === "chapter") {
-      const n = openComments(node.path);
+    if (node.kind === "chapter" || node.kind === "book") {
+      const n = openComments(node.path, node.kind === "book");
       item.description = [
         n.yours > 0 ? `${n.yours} your turn` : "",
         n.agents > 0 ? `${n.agents} agent's turn` : "",
@@ -848,7 +857,8 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
       );
     }),
     vscode.commands.registerCommand("chalk.chapter.closeReady", async (node: Node) => {
-      const ready = chapterThreads(node.path).filter((t) => t.status === "ready");
+      const mine = node.kind === "book" ? bookThreads(node.path) : chapterThreads(node.path);
+      const ready = mine.filter((t) => t.status === "ready");
       let closed = 0;
       for (const t of ready) if (await writeThread(t.id, "", "closed")) closed++;
       void vscode.window.showInformationMessage(

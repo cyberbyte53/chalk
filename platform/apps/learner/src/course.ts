@@ -12,6 +12,8 @@ import {
 export type CourseConcept = {
   /** The concept's id in the build: what progress and events hang on. */
   id: string;
+  /** Its path in the course tree ("class9-maths/coordinate-geometry/plotting-points"). */
+  path: string;
   version: string;
   /** Whether its chapter's bank has questions testing it (then it ends with practice). */
   hasPractice: boolean;
@@ -36,6 +38,8 @@ export type CourseChapter = {
 export type Course = {
   /** The book's id in the build; a group is for one. */
   id: string;
+  /** Its path in the course tree ("class9-maths"). */
+  path: string;
   version: string;
   title: Localized;
   art: BuiltArt | null;
@@ -59,6 +63,7 @@ export function readCourses(files: Readonly<Record<string, unknown>>, prefix: st
     const book = builtBookSchema.parse(read(bookRef.path));
     return {
       id: book.id,
+      path: bookRef.path,
       version: book.version,
       title: book.title,
       art: book.art,
@@ -75,6 +80,7 @@ export function readCourses(files: Readonly<Record<string, unknown>>, prefix: st
             const concept = builtConceptSchema.parse(read(conceptRef.path));
             return {
               id: concept.id,
+              path: conceptRef.path,
               version: concept.version,
               hasPractice: chapter.questions.some((q) => q.tests.includes(concept.id)),
               title: concept.title,

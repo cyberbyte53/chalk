@@ -1068,6 +1068,21 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const where = { sources: readSources(root) };
         if (target.kind === "many") {
           const a = await check(root, target, args, lane, progressOf(extra), extra.signal);
+          // A book or chapter: its screen too (titles, art, each lesson's circle, the first card),
+          // as a child meets it, so its art and names are looked at with its boards.
+          if (at.part === undefined && at.path !== "" && at.path.split("/").length <= 2) {
+            const drawn = await shoot(root, at.path, { pictures: "full" }, undefined, lane);
+            const screen = drawn.shots[0];
+            if (screen !== undefined)
+              return say(
+                {
+                  ...a,
+                  text: `${a.text}\n\nIts screen, as a child meets it (each lesson's art: pnpm art, or tap its circle in the preview):`,
+                  images: [...(a.images ?? []), screen.png],
+                },
+                notes,
+              );
+          }
           return say(a, notes);
         }
         await progressOf(extra)("drawing");

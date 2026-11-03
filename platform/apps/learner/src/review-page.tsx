@@ -1,5 +1,5 @@
 import { Locale } from "@chalk/content";
-import { contentAddress, previewQuery } from "@chalk/content/address";
+import { contentAddress, isAboveBoard, previewQuery, screenOf } from "@chalk/content/address";
 import type { EventBus } from "@chalk/events";
 import { preloadProps } from "@chalk/library";
 import { useWhenChanged } from "@chalk/player";
@@ -440,14 +440,17 @@ function ThreadFold({
                   </button>
                 )}
                 {t.board !== undefined && (
-                  <a href={`?dev&${previewQuery(contentAddress(t.board))}&back=${back}`}>
-                    Open board ↗
+                  <a
+                    href={`?dev&${previewQuery(contentAddress(isAboveBoard(t.board) ? screenOf(t.board, t.target) : t.board))}&back=${back}`}
+                  >
+                    {isAboveBoard(t.board) ? "Open its screen ↗" : "Open board ↗"}
                   </a>
                 )}
               </div>
             </form>
           </div>
-          {t.board !== undefined && (
+          {/* A book's, chapter's or lesson's screen isn't a board: "Open its screen" shows it. */}
+          {t.board !== undefined && !isAboveBoard(t.board) && (
             <BoardRuntime thread={t} bus={bus} locale={locale} isSilent={isSilent} />
           )}
         </div>
