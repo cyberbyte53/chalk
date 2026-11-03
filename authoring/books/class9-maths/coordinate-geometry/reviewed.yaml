@@ -11241,9 +11241,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
             hi: एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …। **सड़क एक संख्या रेखा है।**
         side:
           answer: left
-          concepts:
-            - fab4d618fc2c9277
-          isGraded: false
           options:
             - feedback:
                 en: "Look at the bus: it went left from 0. The minus sign says which side."
@@ -11434,9 +11431,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
           prop: choice
           with:
             answer: left
-            concepts:
-              - fab4d618fc2c9277
-            isGraded: false
             options:
               - feedback:
                   en: "Look at the bus: it went left from 0. The minus sign says which side."
@@ -11474,9 +11468,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: cd966b6dccae1e7d
+  commit: 4f485ac47c02
+  at: 2026-11-03T10:09:35.742Z
+  code: e4b6fe521e3dc58e
 class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
   content:
     model:
@@ -11723,9 +11717,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 12914499e4ccb420
+  commit: 4f485ac47c02
+  at: 2026-11-03T10:09:35.742Z
+  code: a021a411f2f93650
 class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
   content:
     model:
@@ -11916,10 +11910,11 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
               yMin: 0
         same:
           answer: no
-          concepts:
-            - fab4d618fc2c9277
-          isGraded: false
           options:
+            - id: no
+              label:
+                en: "No: they are two different desks"
+                hi: "नहीं: वे दो अलग डेस्क हैं"
             - feedback:
                 en: "The column comes first. Look at the two marked desks: (5, 3) is column 5, row 3, and (3, 5) is column 3, row 5. They are in different places."
                 hi: "स्तंभ पहले आता है। चिह्नित दोनों डेस्क देखो: (5, 3) स्तंभ 5, पंक्ति 3 है, और (3, 5) स्तंभ 3, पंक्ति 5। वे अलग जगह हैं।"
@@ -11927,10 +11922,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
               label:
                 en: "Yes: they are the same desk"
                 hi: "हाँ: वे एक ही डेस्क हैं"
-            - id: no
-              label:
-                en: "No: they are two different desks"
-                hi: "नहीं: वे दो अलग डेस्क हैं"
           prompt:
             en: Are the desks (5, 3) and (3, 5) the same desk?
             hi: क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?
@@ -12192,10 +12183,11 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
           prop: choice
           with:
             answer: no
-            concepts:
-              - fab4d618fc2c9277
-            isGraded: false
             options:
+              - id: no
+                label:
+                  en: "No: they are two different desks"
+                  hi: "नहीं: वे दो अलग डेस्क हैं"
               - feedback:
                   en: "The column comes first. Look at the two marked desks: (5, 3) is column 5, row 3, and (3, 5) is column 3, row 5. They are in different places."
                   hi: "स्तंभ पहले आता है। चिह्नित दोनों डेस्क देखो: (5, 3) स्तंभ 5, पंक्ति 3 है, और (3, 5) स्तंभ 3, पंक्ति 5। वे अलग जगह हैं।"
@@ -12203,10 +12195,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
                 label:
                   en: "Yes: they are the same desk"
                   hi: "हाँ: वे एक ही डेस्क हैं"
-              - id: no
-                label:
-                  en: "No: they are two different desks"
-                  hi: "नहीं: वे दो अलग डेस्क हैं"
             prompt:
               en: Are the desks (5, 3) and (3, 5) the same desk?
               hi: क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?
@@ -12215,9 +12203,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/seating-plan:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 26198efe7a26caaa
+  commit: 4f485ac47c02
+  at: 2026-11-03T10:09:35.742Z
+  code: e6506e70842f9a5a
 class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
   content:
     model:
@@ -12543,9 +12531,9 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 4a6a887b220a3cb4
+  commit: 4f485ac47c02
+  at: 2026-11-03T10:09:35.742Z
+  code: 2dd3d96ad50f6702
 class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
   content:
     model:
@@ -13161,6 +13149,6 @@ class9-maths/coordinate-geometry/two-numbers-for-a-place/two-lines:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: f131f0a084edf765
+  commit: 4f485ac47c02
+  at: 2026-11-03T10:09:35.742Z
+  code: 88e6fd23dd391351
