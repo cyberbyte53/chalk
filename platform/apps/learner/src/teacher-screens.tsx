@@ -1,12 +1,6 @@
-import {
-  type GroupLearner,
-  type GroupReply,
-  type MeReply,
-  type Progress,
-  type TeacherGroup,
-  isConceptDone,
-} from "@chalk/api";
+import type { GroupLearner, GroupReply, MeReply, TeacherGroup } from "@chalk/api";
 import type { Locale } from "@chalk/content";
+import { Band, type Progress, isConceptDone } from "@chalk/learning";
 import { RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
@@ -262,20 +256,13 @@ function GroupScreen({
     (l) => concepts.length > 0 && doneCount(concepts, l.progress) === concepts.length,
   ).length;
   const notStarted = learners.filter((l) => Object.keys(l.progress).length === 0).length;
-  // The concept with the lowest share right in practice, over everyone who practised it.
-  let weakest: { concept: CourseConcept; share: number } | undefined;
+  // The concept most of the class is weak on (the learner model's band); none while no one is.
+  let weakest: { concept: CourseConcept; weak: number } | undefined;
   for (const concept of concepts) {
-    let right = 0;
-    let of = 0;
-    for (const learner of learners) {
-      const practice = learner.progress[concept.id]?.practice;
-      if (practice != null) {
-        right += practice.right;
-        of += practice.of;
-      }
-    }
-    if (of > 0 && (weakest === undefined || right / of < weakest.share))
-      weakest = { concept, share: right / of };
+    const weak = learners.filter((l) =>
+      l.mastery.some((m) => m.concept === concept.id && m.band === Band.Weak),
+    ).length;
+    if (weak > 0 && (weakest === undefined || weak > weakest.weak)) weakest = { concept, weak };
   }
 
   return (
@@ -354,7 +341,11 @@ function GroupScreen({
                     {concepts.map((concept) => (
                       <Square
                         key={concept.id}
-                        mark={conceptMark(concept, learner.progress[concept.id])}
+                        mark={conceptMark(
+                          concept,
+                          learner.progress[concept.id],
+                          learner.mastery.find((m) => m.concept === concept.id),
+                        )}
                         label={concept.title[locale]}
                       />
                     ))}
@@ -406,11 +397,15 @@ function LearnerScreen({
         <div class="learners">
           {concepts.map((concept) => {
             const mine = learner.progress[concept.id];
-            const mark = conceptMark(concept, mine);
+            const mark = conceptMark(
+              concept,
+              mine,
+              learner.mastery.find((m) => m.concept === concept.id),
+            );
             const status =
               mine?.practice != null
                 ? `${mine.practice.right}/${mine.practice.of}`
-                : mark === ConceptMark.Strong
+                : mark === ConceptMark.Done
                   ? say(locale, "learnt")
                   : mark === ConceptMark.Started
                     ? say(locale, "pagesOnly")

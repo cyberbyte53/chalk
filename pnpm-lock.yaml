@@ -199,6 +199,9 @@ importers:
       '@chalk/events':
         specifier: workspace:*
         version: link:../../packages/events
+      '@chalk/learning':
+        specifier: workspace:*
+        version: link:../../packages/learning
       '@chalk/library':
         specifier: workspace:*
         version: link:../../../library/registry
@@ -251,6 +254,9 @@ importers:
       '@chalk/content-source':
         specifier: workspace:*
         version: link:../../content-source
+      '@chalk/learning':
+        specifier: workspace:*
+        version: link:../../packages/learning
       '@chalk/library':
         specifier: workspace:*
         version: link:../../../library/registry
@@ -304,6 +310,9 @@ importers:
       '@chalk/content':
         specifier: workspace:*
         version: link:../content
+      '@chalk/learning':
+        specifier: workspace:*
+        version: link:../learning
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -374,6 +383,15 @@ importers:
         version: link:../content
 
   platform/packages/exact: {}
+
+  platform/packages/learning:
+    dependencies:
+      '@chalk/content':
+        specifier: workspace:*
+        version: link:../content
+      zod:
+        specifier: 3.25.76
+        version: 3.25.76
 
   platform/packages/look:
     devDependencies:

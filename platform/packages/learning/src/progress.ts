@@ -8,14 +8,13 @@ import {
   isKind,
 } from "@chalk/content";
 import { z } from "zod";
+import type { Attempt } from "./attempts";
 
 /**
- * How far a learner is, worked out from their events and the course tree, nothing else
- * (docs/events.md). Events are facts about boards; progress is read per board, then rolled up to
- * concepts by the tree: a concept is learnt once every one of its pages has been passed (the
- * learner pressed Continue), and practised once every question of its first practice has a first
- * try. The same functions run on the phone (from its own events) and on the server (from its
- * index of board facts, kept as events arrive), so they always agree.
+ * How far a learner is: which pages they passed and which practice they did, rolled up to concepts
+ * by the course tree. A concept is learnt once every one of its pages has been passed (the learner
+ * pressed Continue), and practised once every question of its first practice has a first try. How
+ * well they understand it is mastery's, not this. The phone and the server run the same code.
  */
 
 /** The lessons the app plays for a concept: its pages, its practice, the rest of its bank. */
@@ -91,81 +90,42 @@ export function conceptPlansOf(index: BuildIndex, read: (path: string) => unknow
   );
 }
 
-/** One learner's facts about one board: passed (when, first), and its first graded check. */
-export type BoardFact = {
-  passedAt: number | null;
-  first: { isRight: boolean; at: number } | null;
-};
-export type BoardFacts = ReadonlyMap<string, BoardFact>;
+/** When a learner first passed each board (their Continue), by board id. */
+export type Passes = ReadonlyMap<string, number>;
 
-/**
- * The processor (docs/events.md): one learner's board facts from their events, in any order.
- * Passed is the learner's Continue; a first try is the earliest graded check.
- */
-export function boardFactsFrom(events: readonly ChalkEvent[]): Map<string, BoardFact> {
-  const facts = new Map<string, BoardFact>();
-  const fact = (board: string): BoardFact => {
-    const found = facts.get(board);
-    if (found !== undefined) return found;
-    const made: BoardFact = { passedAt: null, first: null };
-    facts.set(board, made);
-    return made;
-  };
-  for (const event of events) {
-    if (!isKind(event, "signal") || event.actor !== Actor.Learner || event.board === null) continue;
-    const { signal, payload } = event.payload;
-    if (signal === "continued" && event.node === null) {
-      const f = fact(event.board);
-      if (f.passedAt === null || event.at < f.passedAt) f.passedAt = event.at;
-    } else if (signal === "checked" && payload.isGraded === true) {
-      const f = fact(event.board);
-      if (f.first === null || event.at < f.first.at)
-        f.first = { isRight: payload.status === "correct", at: event.at };
-    }
+export function passesFrom(events: readonly ChalkEvent[]): Map<string, number> {
+  const passes = new Map<string, number>();
+  for (const e of events) {
+    if (!isKind(e, "signal") || e.actor !== Actor.Learner || e.board === null) continue;
+    if (e.payload.signal !== "continued" || e.node !== null) continue;
+    passes.set(e.board, Math.min(passes.get(e.board) ?? e.at, e.at));
   }
-  return facts;
+  return passes;
 }
 
-/** Two sets of board facts in one (the server's, and the phone's since): the earlier of each. */
-export function mergeBoardFacts(a: BoardFacts, b: BoardFacts): Map<string, BoardFact> {
-  const merged = new Map(a);
-  for (const [board, theirs] of b) {
-    const ours = merged.get(board);
-    if (ours === undefined) {
-      merged.set(board, theirs);
-      continue;
-    }
-    const earlier = (x: number | null, y: number | null) =>
-      x === null ? y : y === null ? x : Math.min(x, y);
-    merged.set(board, {
-      passedAt: earlier(ours.passedAt, theirs.passedAt),
-      first:
-        ours.first === null
-          ? theirs.first
-          : theirs.first === null || ours.first.at <= theirs.first.at
-            ? ours.first
-            : theirs.first,
-    });
+/** Progress by concept, from passes, attempts and the tree. */
+export function progressFrom(
+  passes: Passes,
+  attempts: readonly Attempt[],
+  plans: readonly ConceptPlan[],
+): Progress {
+  // Each board's first graded try ever (the earliest, when it asks more than one question).
+  const first = new Map<string, { isRight: boolean; at: number }>();
+  for (const a of attempts) {
+    if (!a.isGraded || a.nth !== 1) continue;
+    const was = first.get(a.board);
+    if (was === undefined || a.at < was.at) first.set(a.board, { isRight: a.isRight, at: a.at });
   }
-  return merged;
-}
-
-/** Progress by concept, from board facts and the tree. */
-export function progressFrom(facts: BoardFacts, plans: readonly ConceptPlan[]): Progress {
   const progress: Progress = {};
   for (const plan of plans) {
-    const isLearnt =
-      plan.pages.length > 0 && plan.pages.every((id) => (facts.get(id)?.passedAt ?? null) !== null);
-    const firsts = plan.practice.map((id) => facts.get(id)?.first ?? null);
+    const isLearnt = plan.pages.length > 0 && plan.pages.every((id) => passes.has(id));
+    const firsts = plan.practice.map((id) => first.get(id) ?? null);
     const tries = firsts.filter((f): f is NonNullable<typeof f> => f !== null);
     const practice =
       plan.practice.length > 0 && tries.length === plan.practice.length
         ? scoreOf([...tries].sort((x, y) => x.at - y.at))
         : null;
-    const isTouched =
-      isLearnt ||
-      tries.length > 0 ||
-      plan.pages.some((id) => (facts.get(id)?.passedAt ?? null) !== null);
+    const isTouched = isLearnt || tries.length > 0 || plan.pages.some((id) => passes.has(id));
     if (isTouched) progress[plan.id] = { isLearnt, practice };
   }
   return progress;

@@ -1,5 +1,6 @@
-import { type JoinedGroup, type MeReply, type Progress, isConceptDone } from "@chalk/api";
+import type { JoinedGroup, MeReply } from "@chalk/api";
 import type { Locale } from "@chalk/content";
+import { type Progress, isConceptDone } from "@chalk/learning";
 import { RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { LocaleToggle } from "./account-screens";

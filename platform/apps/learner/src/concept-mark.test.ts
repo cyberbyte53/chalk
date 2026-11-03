@@ -1,4 +1,4 @@
-import { Mark } from "@chalk/api";
+import { Band, type Mastery, MasteryModel } from "@chalk/learning";
 import { describe, expect, it } from "vitest";
 import { ConceptMark, conceptMark } from "./concept-mark";
 import type { CourseConcept } from "./course";
@@ -12,30 +12,28 @@ const concept = (hasPractice: boolean): CourseConcept => ({
   glyph: null,
   prereqs: [],
 });
-const practice = (right: number, of: number) => ({
-  right,
-  of,
-  marks: Array.from({ length: of }, (_, i) => (i < right ? Mark.Right : Mark.Wrong)),
-  at: 1,
+const mastery = (band: Band): Mastery => ({
+  concept: "c",
+  model: MasteryModel.Beta1,
+  estimate: 0.5,
+  low: 0.3,
+  high: 0.7,
+  band,
+  tries: 3,
+  lastAt: 1,
 });
 
 describe("conceptMark", () => {
-  it("shows how a concept went, from its practice", () => {
-    expect(conceptMark(concept(true), undefined)).toBe(ConceptMark.None);
-    expect(conceptMark(concept(true), { isLearnt: true, practice: null })).toBe(
-      ConceptMark.Started,
-    );
-    expect(conceptMark(concept(false), { isLearnt: true, practice: null })).toBe(
-      ConceptMark.Strong,
-    );
-    expect(conceptMark(concept(true), { isLearnt: true, practice: practice(8, 10) })).toBe(
-      ConceptMark.Strong,
-    );
-    expect(conceptMark(concept(true), { isLearnt: true, practice: practice(5, 10) })).toBe(
-      ConceptMark.Shaky,
-    );
-    expect(conceptMark(concept(true), { isLearnt: true, practice: practice(2, 10) })).toBe(
-      ConceptMark.Weak,
-    );
+  it("is the learner model's band whenever there is evidence", () => {
+    expect(conceptMark(concept(true), undefined, mastery(Band.Strong))).toBe(ConceptMark.Strong);
+    expect(conceptMark(concept(true), undefined, mastery(Band.Unsure))).toBe(ConceptMark.Unsure);
+    expect(conceptMark(concept(true), undefined, mastery(Band.Weak))).toBe(ConceptMark.Weak);
+  });
+
+  it("without evidence, says only how far", () => {
+    expect(conceptMark(concept(true), undefined, undefined)).toBe(ConceptMark.None);
+    const pagesOnly = { isLearnt: true, practice: null };
+    expect(conceptMark(concept(true), pagesOnly, undefined)).toBe(ConceptMark.Started);
+    expect(conceptMark(concept(false), pagesOnly, undefined)).toBe(ConceptMark.Done);
   });
 });

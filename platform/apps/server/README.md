@@ -1,6 +1,6 @@
 # @chalk/server
 
-The one server: the API the app talks to, Jugnu (each turn thought through here on a copy of the board; the model's key never reaches a phone), and the built app. Hono on Node, Postgres through Drizzle.
+The one server: the API the app talks to, and the built app. Hono on Node, Postgres through Drizzle.
 
 May import: `@chalk/api`, `@chalk/content`, Node, `hono`, `@hono/node-server`, `drizzle-orm`, `postgres`, `google-auth-library`, `zod`.
 
@@ -16,11 +16,9 @@ May import: `@chalk/api`, `@chalk/content`, Node, `hono`, `@hono/node-server`, `
 | `POST /api/events` | set up | a batch of events (up to 200); each checked on its own; one sent twice is kept once |
 | `GET /api/groups`, `POST /api/groups` | teacher | their groups; a new one for `{ courseId }` (a book id in `build/index.json`) |
 | `GET /api/progress` | learner | their progress, from their events (`progressFrom`) |
-| `GET /api/groups/:id` | its teacher | the group and its learners: when each was last active, and their progress |
+| `GET /api/groups/:id` | its teacher | the group and its learners: when each was last active, their progress, and their mastery |
 | `POST /api/groups/:id/code` | its teacher | a new join code; the old one stops working |
 | `DELETE /api/groups/:id/learners/:id` | its teacher | removes a learner (their history stays) |
-| `POST /api/jugnu/turn` | set up | one of Jugnu's turns: the board, its state, the chat, what happened, what the student did → the cues to play and the chat to keep; at most `JUGNU_TURNS_PER_HOUR` per person; each turn's model use (cached tokens included) is logged |
-| `POST /api/jugnu/flags` | set up | keeps a chat someone flagged; `pnpm --filter @chalk/server flags [id]` lists them or writes one to a file |
 | `GET /api/health` | anyone | the database answers |
 
 Errors are `{ error, message }` with an `ApiErrorCode`. Anything but GET must come from `ORIGIN`. Another teacher's group is simply not found.

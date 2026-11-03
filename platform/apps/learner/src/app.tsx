@@ -1,17 +1,7 @@
-import {
-  type MeReply,
-  type Progress,
-  Role,
-  boardFactsFrom,
-  isConceptDone,
-  meReplySchema,
-  mergeProgress,
-  normalizeCode,
-  progressFrom,
-  progressSchema,
-} from "@chalk/api";
+import { type MeReply, Role, meReplySchema, normalizeCode } from "@chalk/api";
 import { Actor, type ChalkEvent, Locale } from "@chalk/content";
 import { createEventBus } from "@chalk/events";
+import { type Progress, isConceptDone, mergeProgress, progressSchema } from "@chalk/learning";
 import { preloadProps, propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode } from "@chalk/player";
 import type { JSX } from "preact";
@@ -26,7 +16,7 @@ import { ChapterScreen, CourseScreen, currentConcept } from "./course-screens";
 import { DevShell } from "./dev-shell";
 import { devSession, stopDevSignIn } from "./dev-sign-in";
 import { HomeScreen } from "./home-screen";
-import { courses, plans } from "./lessons";
+import { courses, progressFromRecord } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { isPreviewAddress } from "./preview-address";
 import { PreviewShell } from "./preview-shell";
@@ -126,7 +116,7 @@ export function App(): JSX.Element {
   const uploader = useRef<Uploader | undefined>();
 
   const progress = useMemo(
-    () => mergeProgress(serverProgress, progressFrom(boardFactsFrom(localEvents), plans)),
+    () => mergeProgress(serverProgress, progressFromRecord(localEvents)),
     [serverProgress, localEvents],
   );
 

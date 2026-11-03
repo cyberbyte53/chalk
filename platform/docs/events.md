@@ -1,6 +1,6 @@
 # Events
 
-Content is public: anyone can open a chapter and solve it. What the server can't know is **what this child did**. Events are the channel that carries that from the phone to the server: everything the learner (or Jugnu) does is recorded, automatically, as entries on nodes of the course tree. Progress, the teacher view, content and prop statistics, and later the scheduler are all worked out from that stream and the tree. The design is in the project doc `plans/events-and-names.md`.
+Content is public: anyone can open a chapter and solve it. What the server can't know is **what this child did**. Events are the channel that carries that from the phone to the server: everything the learner (or Jugnu) does is recorded, automatically, as entries on nodes of the course tree. Progress, the teacher view, content and prop statistics, and later the scheduler are all worked out from that stream and the tree. What is worked out from the stream, and how, is in [plans/learner-contracts.md](plans/learner-contracts.md).
 
 ## What is recorded
 
@@ -80,10 +80,14 @@ A drag on a number line is one entry: `cause { action: moveMarker, args: { to: 6
 
 ## On the server
 
-Each downstream task is a **processor**: it reads entries as they arrive and keeps its own table, which can be dropped and made again from the stream (`pnpm --filter @chalk/server rebuild-facts`).
+What a learner's record says about them is worked out in steps, each a pure function of the one before, in `@chalk/learning` (the phone runs the same code on its own entries):
 
-- **Board facts** (`board_facts`, `boardFactsFrom` in `@chalk/api`): per learner and board, when they first passed it (their Continue) and their first graded check.
-- **Progress** (`progressFrom`) rolls board facts up through the tree: a concept is learnt once every one of its pages is passed, and practised once every question of its first practice (`firstTry`, else all testing it) has a first try. The phone works out the same from its own entries, so the two agree.
+- **Catalogue** (`question_versions`): every question version the server has served, what it tests and its level. Filled at boot from the build; a row is added, never changed. So an answer names only its board and version.
+- **Attempts** (`attempts`): every check of a question, with the learner's nth try at it ever, the mode, whether Jugnu had helped on that opening, and the catalogue's concepts and level. Worked out again from the learner's whole record on each upload, so a late, offline batch is numbered right.
+- **Mastery** (`mastery`): how well they understand each concept, by model (Beta1: graded first tries ever, weighted by level). Written with the attempts, so it is ready before the child next opens the app. The teacher's squares read only this.
+- **Progress** (worked out on read, as it depends on the course tree): a concept is learnt once every one of its pages is passed (their Continue), and practised once every question of its first practice has a first try.
+
+All of it can be dropped and made again from the events: `pnpm --filter @chalk/server work-out`.
 
 ## Care
 

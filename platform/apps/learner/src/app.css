@@ -783,13 +783,16 @@
   background: var(--color-right);
   border-color: var(--color-right);
 }
-.square.is-shaky {
+.square.is-unsure {
   background: var(--color-secondary);
   border-color: var(--color-secondary);
 }
 .square.is-weak {
   background: var(--color-wrong);
   border-color: var(--color-wrong);
+}
+.square.is-done {
+  border-color: var(--color-right);
 }
 .square.is-started {
   border-color: var(--color-primary);

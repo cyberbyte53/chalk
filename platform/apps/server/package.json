@@ -8,12 +8,13 @@
     "start": "tsx --tsconfig ../../../tsconfig.base.json src/main.ts",
     "add-school": "tsx --env-file-if-exists=../../../.env --tsconfig ../../../tsconfig.base.json src/cli.ts add-school",
     "flags": "tsx --env-file-if-exists=../../../.env --tsconfig ../../../tsconfig.base.json src/cli.ts flags",
-    "rebuild-facts": "tsx --env-file-if-exists=../../../.env --tsconfig ../../../tsconfig.base.json src/cli.ts rebuild-facts",
+    "work-out": "tsx --env-file-if-exists=../../../.env --tsconfig ../../../tsconfig.base.json src/cli.ts work-out",
     "migration": "drizzle-kit generate",
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
   },
   "dependencies": {
     "@chalk/api": "workspace:*",
+    "@chalk/learning": "workspace:*",
     "@chalk/author": "workspace:*",
     "@chalk/content": "workspace:*",
     "@chalk/content-source": "workspace:*",

@@ -1,5 +1,5 @@
+import { masterySchema, progressSchema } from "@chalk/learning";
 import { z } from "zod";
-import { progressSchema } from "./progress";
 
 /**
  * What the app and the server say to each other, as Zod schemas both sides parse with. Times are
@@ -106,8 +106,10 @@ export const groupLearnerSchema = z.object({
   joinedAt: z.number(),
   /** When their last event was produced; null if none yet. */
   lastActiveAt: z.number().nullable(),
-  /** Worked out from their events, as on their own phone. */
+  /** Pages passed and practice done, as on their own phone. */
   progress: progressSchema,
+  /** How well they understand each concept with evidence (the server's model). */
+  mastery: z.array(masterySchema),
 });
 export type GroupLearner = z.infer<typeof groupLearnerSchema>;
 

@@ -618,5 +618,9 @@ describe("what is recorded", () => {
     expect(entries.some((e) => e.kind === "cause" && e.payload.action === "show")).toBe(false);
     const correct = entries.find((e) => e.kind === "signal" && e.payload.signal === "correct");
     expect(correct?.payload.from).toBe(causes[1]?.seq);
+    // What the child's tap set off is the child's; what the board did by itself, the lesson's.
+    expect(correct?.actor).toBe(Actor.Learner);
+    const started = entries.find((e) => e.kind === "signal" && e.payload.signal === "started");
+    expect(started?.actor).toBe(Actor.Lesson);
   });
 });

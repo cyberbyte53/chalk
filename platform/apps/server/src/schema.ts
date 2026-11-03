@@ -1,4 +1,5 @@
-import type { ChalkEvent } from "@chalk/content";
+import type { ChalkEvent, Level, PlayMode } from "@chalk/content";
+import type { Band, MasteryModel } from "@chalk/learning";
 import { sql } from "drizzle-orm";
 import {
   boolean,
@@ -8,6 +9,7 @@ import {
   jsonb,
   pgTable,
   primaryKey,
+  real,
   text,
   timestamp,
   uuid,
@@ -15,8 +17,8 @@ import {
 
 /**
  * The database. Content is not in it (it ships with the app as built JSON); only the people, their
- * groups, the events they recorded, and tables processors derive from those events (any of them
- * can be dropped and made again from the events).
+ * groups, the events they recorded, the catalogue of question versions, and what is worked out
+ * from those (attempts, mastery: dropped and made again from them at will).
  * A change here needs a migration: `pnpm --filter @chalk/server migration`.
  */
 
@@ -133,44 +135,68 @@ export const events = pgTable(
 );
 
 /**
- * A processor's table (docs/events.md): each learner's facts about each board, kept as entries
- * arrive (store.ts, `boardFactsFrom`): when they first passed it, and their first graded check.
- * Progress is read from it and the course tree.
+ * Every question version the server has served (`@chalk/learning` catalogue.ts): what it tests and
+ * how hard it is. Filled at boot from the build, a row added and never changed, so an old answer
+ * keeps its meaning after a new build.
  */
-export const boardFacts = pgTable(
-  "board_facts",
+export const questionVersions = pgTable(
+  "question_versions",
+  {
+    board: text("board").notNull(),
+    version: text("version").notNull(),
+    tests: text("tests").array().notNull(),
+    level: text("level").$type<Level>().notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.board, t.version] })],
+);
+
+/**
+ * Every try a learner made at a question (`@chalk/learning` attempts.ts), worked out again from
+ * their whole record on each upload. Rebuildable from events and the catalogue.
+ */
+export const attempts = pgTable(
+  "attempts",
   {
     accountId: uuid("account_id")
       .notNull()
       .references(() => accounts.id),
     board: text("board").notNull(),
-    passedAt: timestamp("passed_at", { withTimezone: true }),
-    firstAt: timestamp("first_at", { withTimezone: true }),
-    firstIsRight: boolean("first_is_right"),
+    node: text("node").notNull(),
+    nth: integer("nth").notNull(),
+    version: text("version").notNull(),
+    at: timestamp("at", { withTimezone: true }).notNull(),
+    isRight: boolean("is_right").notNull(),
+    isGraded: boolean("is_graded").notNull(),
+    chosen: text("chosen"),
+    tests: text("tests").array().notNull(),
+    level: text("level").$type<Level>(),
+    mode: text("mode").$type<PlayMode>(),
+    helped: boolean("helped").notNull(),
   },
-  (t) => [primaryKey({ columns: [t.accountId, t.board] })],
+  (t) => [primaryKey({ columns: [t.accountId, t.board, t.node, t.nth] })],
 );
 
 /**
- * Kept while Jugnu is parked (platform/docs/move-to-event-model.md): nothing writes or reads it
- * now; its rows are for his remake.
- * A chat with Jugnu someone flagged (wasn't happy with), whole in `body` (`JugnuFlagRequest`):
- * the board, its state, the chat as the model saw it, and what the student saw. To look at, and to
- * replay on the test bench.
+ * How well each learner understands each concept, by model (`@chalk/learning` mastery.ts):
+ * written with their attempts on each upload, so it is ready before they next open the app.
  */
-export const jugnuFlags = pgTable(
-  "jugnu_flags",
+export const mastery = pgTable(
+  "mastery",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
     accountId: uuid("account_id")
       .notNull()
       .references(() => accounts.id),
-    note: text("note").notNull(),
-    lessonId: text("lesson_id"),
-    body: jsonb("body").notNull(),
-    createdAt: createdAt(),
+    concept: text("concept").notNull(),
+    model: text("model").$type<MasteryModel>().notNull(),
+    estimate: real("estimate").notNull(),
+    low: real("low").notNull(),
+    high: real("high").notNull(),
+    band: text("band").$type<Band>().notNull(),
+    tries: integer("tries").notNull(),
+    lastAt: timestamp("last_at", { withTimezone: true }).notNull(),
   },
-  (t) => [index("jugnu_flags_time").on(t.createdAt)],
+  (t) => [primaryKey({ columns: [t.accountId, t.concept, t.model] })],
 );
 
 export const schema = {
@@ -180,6 +206,7 @@ export const schema = {
   groups,
   members,
   events,
-  boardFacts,
-  jugnuFlags,
+  questionVersions,
+  attempts,
+  mastery,
 };

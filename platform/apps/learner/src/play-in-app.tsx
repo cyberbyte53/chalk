@@ -1,6 +1,6 @@
-import { type Progress, boardFactsFrom, isConceptDone, progressFrom } from "@chalk/api";
 import type { ChalkEvent, Locale } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
+import { type Progress, isConceptDone } from "@chalk/learning";
 import { preloadProps, propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode } from "@chalk/player";
 import type { JSX } from "preact";
@@ -10,7 +10,7 @@ import type { ChapterContent } from "./content-store";
 import type { Course, CourseChapter } from "./course";
 import { ChapterScreen, currentConcept } from "./course-screens";
 import { toggleMuted, toggleParam } from "./editor-link";
-import { courses, plans } from "./lessons";
+import { courses, progressFromRecord } from "./lessons";
 import { ChapterDoneScreen, ResultScreen } from "./practice-screens";
 
 type Found = { course: Course; chapter: CourseChapter; number: number };
@@ -83,7 +83,7 @@ export function PlayInApp({
   const [screen, setScreen] = useState<Screen | null>(null);
   const [events, setEvents] = useState<readonly ChalkEvent[]>([]);
   useEffect(() => bus.subscribe((e) => setEvents((was) => [...was, e])), [bus]);
-  const progress: Progress = useMemo(() => progressFrom(boardFactsFrom(events), plans), [events]);
+  const progress: Progress = useMemo(() => progressFromRecord(events), [events]);
   // The lesson being played and its board: ← / → open the board before or after it, fresh, as a
   // student meets it (an author's way round, which a student doesn't have).
   const here = useRef<{ now: LessonScreen; index: number; count: number } | undefined>(undefined);

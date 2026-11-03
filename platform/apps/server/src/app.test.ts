@@ -8,14 +8,14 @@ import {
   type GroupReply,
   type JoinedGroup,
   type MeReply,
-  type Progress,
   Role,
   type TeacherGroup,
   groupCodePath,
   groupLearnerPath,
   groupPath,
 } from "@chalk/api";
-import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION } from "@chalk/content";
+import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, Level } from "@chalk/content";
+import { Band, type Progress } from "@chalk/learning";
 import { PGlite } from "@electric-sql/pglite";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
@@ -25,7 +25,7 @@ import { type AppDeps, SIGN_IN_COOKIE, type ServerLog, createApp, isLanOrigin } 
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
 import { schema } from "./schema";
-import { addSchool } from "./store";
+import { addQuestionVersions, addSchool } from "./store";
 
 const ORIGIN = "https://chalk.test";
 const COURSE = "9835cb2687f1300a";
@@ -161,7 +161,7 @@ describe("server", () => {
   beforeEach(async () => {
     logged = { records: [], warnings: [], errors: [] };
     await db.execute(
-      sql`truncate jugnu_flags, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
+      sql`truncate mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
     );
     schoolCode = await addSchool(db, "Sunrise Public School", counter());
     clock = Date.UTC(2026, 9, 15);
@@ -326,8 +326,20 @@ describe("server", () => {
     expect(view.learners[0]?.lastActiveAt).toBe(at + 1000);
   });
 
-  it("works out a learner's progress from their events", async () => {
+  it("works out a learner's progress and mastery from their events", async () => {
     const { teacher, learner, group } = await teacherAndLearner();
+    const asks = ["ask1", "ask2"].map((board) => ({
+      board,
+      version: "v",
+      tests: ["c1"],
+      level: Level.Medium,
+    }));
+    await addQuestionVersions(db, asks);
+    // A build's versions are added once; adding them again changes nothing.
+    await addQuestionVersions(
+      db,
+      asks.map((a) => ({ ...a, level: Level.Hard })),
+    );
     const events = [
       signalOn("p0", 0, "page1", "continued"),
       signalOn("p1", 1, "ask1", "checked", { status: "wrong", isGraded: true }),
@@ -343,6 +355,10 @@ describe("server", () => {
     await learner.json("POST", ApiPath.Join, { code: group.joinCode });
     const view = await teacher.json<GroupReply>("GET", groupPath(group.id));
     expect(view.learners[0]?.progress).toEqual(progress);
+    // Mastery: the first tries only (ask1 wrong, ask2 right), medium: Beta(2, 2).
+    expect(view.learners[0]?.mastery).toEqual([
+      expect.objectContaining({ concept: "c1", estimate: 0.5, tries: 2, band: Band.Unsure }),
+    ]);
   });
 
   it("only takes changes from the app's own page", async () => {

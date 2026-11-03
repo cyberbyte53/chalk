@@ -1,13 +1,13 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { conceptPlansOf } from "@chalk/api";
 import { buildIndexSchema, builtFile } from "@chalk/content";
+import { conceptPlansOf, questionVersionsOf } from "@chalk/learning";
 import { serve } from "@hono/node-server";
 import { createApp } from "./app";
 import { readConfig } from "./config";
 import { openDb } from "./db";
 import { googleVerifier, withDevSignIn } from "./google";
-import { ensureDevClass } from "./store";
+import { addQuestionVersions, ensureDevClass } from "./store";
 
 const config = readConfig(process.env);
 const { db, close } = await openDb(config.DATABASE_URL);
@@ -21,9 +21,11 @@ if (config.DEV_SIGN_IN === "on")
 
 const contentDir = config.CONTENT_DIR ?? dirname(config.CONTENT_INDEX);
 // The course tree's plans, for progress: read once, from the same build the app was made with.
-const plans = conceptPlansOf(index, (path) =>
-  JSON.parse(readFileSync(join(contentDir, builtFile(path)), "utf8")),
-);
+const read = (path: string): unknown =>
+  JSON.parse(readFileSync(join(contentDir, builtFile(path)), "utf8"));
+const plans = conceptPlansOf(index, read);
+// The catalogue keeps every question version ever served: this build's are added, none replaced.
+await addQuestionVersions(db, questionVersionsOf(index, read));
 const app = createApp({
   db,
   verifyGoogle:

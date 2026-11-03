@@ -1,4 +1,3 @@
-import { bankLessonId, conceptLessonId, practiceLessonId, practiceOf } from "@chalk/api";
 import {
   type Board,
   Kind,
@@ -6,6 +5,7 @@ import {
   builtChapterSchema,
   builtConceptSchema,
 } from "@chalk/content";
+import { bankLessonId, conceptLessonId, practiceLessonId, practiceOf } from "@chalk/learning";
 
 /**
  * A concept as the app plays it: its pages, then practice right after them (null if it has no

@@ -1,27 +1,43 @@
 import { createHash, randomBytes } from "node:crypto";
 import {
   type Account,
-  type BoardFact,
-  type ConceptPlan,
   DEV_SCHOOL_CODE,
   type GroupLearner,
   JOIN_CODE_LENGTH,
   type JoinedGroup,
   type MeReply,
-  type Progress,
   Role,
   SCHOOL_CODE_LENGTH,
   type TeacherGroup,
-  boardFactsFrom,
   devJoinCode,
   makeCode,
-  progressFrom,
 } from "@chalk/api";
-import type { ChalkEvent } from "@chalk/content";
-import { and, desc, eq, gt, inArray, isNull, max, sql } from "drizzle-orm";
+import { Actor, type ChalkEvent } from "@chalk/content";
+import {
+  type ConceptPlan,
+  type Mastery,
+  MasteryModel,
+  type Progress,
+  type QuestionVersion,
+  attemptsFrom,
+  catalogueOf,
+  masteryFrom,
+  progressFrom,
+} from "@chalk/learning";
+import { and, desc, eq, gt, inArray, isNull, max, min, sql } from "drizzle-orm";
 import type { Db } from "./db";
 import type { GoogleProfile } from "./google";
-import { events, accounts, boardFacts, groups, members, schools, signIns } from "./schema";
+import {
+  events,
+  accounts,
+  attempts,
+  groups,
+  mastery,
+  members,
+  questionVersions,
+  schools,
+  signIns,
+} from "./schema";
 
 /** Every query the routes make. Routes check who may ask; these only read and write. */
 
@@ -266,16 +282,15 @@ export async function groupLearners(
     .where(and(eq(members.groupId, groupId), isNull(members.removedAt)))
     .groupBy(accounts.id, members.joinedAt)
     .orderBy(accounts.name);
-  const progress = await progressOfEach(
-    db,
-    rows.map((row) => row.id),
-    plans,
-  );
+  const ids = rows.map((row) => row.id);
+  const progress = await progressOfEach(db, ids, plans);
+  const masteries = await masteryOfEach(db, ids);
   return rows.map((row) => ({
     ...row,
     joinedAt: row.joinedAt.getTime(),
     lastActiveAt: row.lastActiveAt === null ? null : new Date(row.lastActiveAt).getTime(),
     progress: progress.get(row.id) ?? {},
+    mastery: masteries.get(row.id) ?? [],
   }));
 }
 
@@ -377,8 +392,8 @@ export async function removeLearner(db: Db, groupId: string, learnerId: string, 
 // ---- events ----
 
 /**
- * Stores the entries; one already stored (sent again after a lost reply) is skipped. Then the
- * processors read what was new: each keeps its own table (docs/events.md).
+ * Stores the entries; one already stored (sent again after a lost reply) is skipped. If any was
+ * new, the learner's attempts and mastery are worked out again from their whole record.
  */
 export async function saveEvents(
   db: Db,
@@ -408,81 +423,97 @@ export async function saveEvents(
     )
     .onConflictDoNothing({ target: [events.accountId, events.id] })
     .returning({ id: events.id });
-  const isNew = new Set(saved.map((row) => row.id));
-  await keepBoardFacts(db, accountId, boardFactsFrom(batch.filter((event) => isNew.has(event.id))));
+  if (saved.length > 0) await workOut(db, accountId);
   return saved.length;
 }
 
-/** The board-facts processor: folds new facts in, keeping the earlier of each. */
-async function keepBoardFacts(
+/** Adds the build's question versions to the catalogue; one already there is left as it is. */
+export async function addQuestionVersions(
   db: Db,
-  accountId: string,
-  facts: ReadonlyMap<string, BoardFact>,
+  versions: readonly QuestionVersion[],
 ): Promise<void> {
-  if (facts.size === 0) return;
-  await db
-    .insert(boardFacts)
-    .values(
-      [...facts].map(([board, fact]) => ({
-        accountId,
-        board,
-        passedAt: fact.passedAt === null ? null : new Date(fact.passedAt),
-        firstAt: fact.first === null ? null : new Date(fact.first.at),
-        firstIsRight: fact.first?.isRight ?? null,
-      })),
-    )
-    .onConflictDoUpdate({
-      target: [boardFacts.accountId, boardFacts.board],
-      set: {
-        passedAt: sql`least(${boardFacts.passedAt}, excluded.passed_at)`,
-        firstIsRight: sql`case when ${boardFacts.firstAt} is null or (excluded.first_at is not null and excluded.first_at < ${boardFacts.firstAt}) then excluded.first_is_right else ${boardFacts.firstIsRight} end`,
-        firstAt: sql`least(${boardFacts.firstAt}, excluded.first_at)`,
-      },
-    });
+  for (let i = 0; i < versions.length; i += 500)
+    await db
+      .insert(questionVersions)
+      .values(versions.slice(i, i + 500).map((v) => ({ ...v, tests: [...v.tests] })))
+      .onConflictDoNothing();
 }
 
-/** Makes the board-facts table again from every stored entry (after the processor changed). */
-export async function rebuildBoardFacts(db: Db): Promise<void> {
-  await db.delete(boardFacts);
-  const rows = await db.select().from(events).orderBy(events.accountId, events.session, events.seq);
-  const byAccount = new Map<string, ChalkEvent[]>();
-  for (const row of rows) {
-    const list = byAccount.get(row.accountId) ?? [];
-    list.push({
-      ...row,
-      at: row.at.getTime(),
-      schemaVersion: row.schemaVersion as ChalkEvent["schemaVersion"],
-      actor: row.actor as ChalkEvent["actor"],
-    } as unknown as ChalkEvent);
-    byAccount.set(row.accountId, list);
-  }
-  for (const [accountId, list] of byAccount)
-    await keepBoardFacts(db, accountId, boardFactsFrom(list));
+/** One learner's attempts and mastery, worked out again from their record, replacing the old. */
+async function workOut(db: Db, accountId: string): Promise<void> {
+  const record = (await db.select().from(events).where(eq(events.accountId, accountId))).map(
+    eventOf,
+  );
+  const boards = [...new Set(record.flatMap((e) => (e.board === null ? [] : [e.board])))];
+  const versions =
+    boards.length === 0
+      ? []
+      : await db.select().from(questionVersions).where(inArray(questionVersions.board, boards));
+  const tries = attemptsFrom(record, catalogueOf(versions));
+  const rows = masteryFrom(tries);
+  await db.transaction(async (tx) => {
+    await tx.delete(attempts).where(eq(attempts.accountId, accountId));
+    await tx.delete(mastery).where(eq(mastery.accountId, accountId));
+    for (let i = 0; i < tries.length; i += 500)
+      await tx
+        .insert(attempts)
+        .values(tries.slice(i, i + 500).map((a) => ({ ...a, accountId, at: new Date(a.at) })));
+    if (rows.length > 0)
+      await tx
+        .insert(mastery)
+        .values(rows.map((m) => ({ ...m, accountId, lastAt: new Date(m.lastAt) })));
+  });
 }
 
-/** Each learner's progress: their board facts, rolled up through the course tree. */
+/** A stored entry as the phone sent it. */
+function eventOf(row: typeof events.$inferSelect): ChalkEvent {
+  const { accountId: _, receivedAt: __, ...entry } = row;
+  return { ...entry, at: row.at.getTime() } as unknown as ChalkEvent;
+}
+
+/** Works out every learner's attempts and mastery again (after the code that does it changed). */
+export async function workOutAll(db: Db): Promise<void> {
+  const ids = await db.selectDistinct({ id: events.accountId }).from(events);
+  for (const { id } of ids) await workOut(db, id);
+}
+
+/** Each learner's progress: their passes and attempts, rolled up through the course tree. */
 export async function progressOfEach(
   db: Db,
   accountIds: readonly string[],
   plans: readonly ConceptPlan[],
 ): Promise<Map<string, Progress>> {
   if (accountIds.length === 0) return new Map();
-  const rows = await db
-    .select()
-    .from(boardFacts)
-    .where(inArray(boardFacts.accountId, [...accountIds]));
-  const byAccount = new Map<string, Map<string, BoardFact>>(
-    accountIds.map((id) => [id, new Map()]),
+  const ids = [...accountIds];
+  const passRows = await db
+    .select({ accountId: events.accountId, board: events.board, at: min(events.at) })
+    .from(events)
+    .where(
+      and(
+        inArray(events.accountId, ids),
+        eq(events.kind, "signal"),
+        eq(events.actor, Actor.Learner),
+        isNull(events.node),
+        sql`${events.payload}->>'signal' = 'continued'`,
+      ),
+    )
+    .groupBy(events.accountId, events.board);
+  const tryRows = await db.select().from(attempts).where(inArray(attempts.accountId, ids));
+  return new Map(
+    ids.map((id) => {
+      const passes = new Map(
+        passRows.flatMap((r) =>
+          r.accountId === id && r.board !== null && r.at !== null
+            ? [[r.board, new Date(r.at).getTime()] as const]
+            : [],
+        ),
+      );
+      const tries = tryRows
+        .filter((r) => r.accountId === id)
+        .map(({ accountId: _, ...a }) => ({ ...a, at: a.at.getTime() }));
+      return [id, progressFrom(passes, tries, plans)];
+    }),
   );
-  for (const row of rows)
-    byAccount.get(row.accountId)?.set(row.board, {
-      passedAt: row.passedAt?.getTime() ?? null,
-      first:
-        row.firstAt === null
-          ? null
-          : { isRight: row.firstIsRight === true, at: row.firstAt.getTime() },
-    });
-  return new Map([...byAccount].map(([id, facts]) => [id, progressFrom(facts, plans)]));
 }
 
 export async function progressOf(
@@ -491,4 +522,20 @@ export async function progressOf(
   plans: readonly ConceptPlan[],
 ): Promise<Progress> {
   return (await progressOfEach(db, [accountId], plans)).get(accountId) ?? {};
+}
+
+/** Each learner's mastery rows, by the current model. */
+export async function masteryOfEach(
+  db: Db,
+  accountIds: readonly string[],
+): Promise<Map<string, Mastery[]>> {
+  if (accountIds.length === 0) return new Map();
+  const rows = await db
+    .select()
+    .from(mastery)
+    .where(and(inArray(mastery.accountId, [...accountIds]), eq(mastery.model, MasteryModel.Beta1)));
+  const byAccount = new Map<string, Mastery[]>(accountIds.map((id) => [id, []]));
+  for (const { accountId, ...m } of rows)
+    byAccount.get(accountId)?.push({ ...m, lastAt: m.lastAt.getTime() });
+  return byAccount;
 }

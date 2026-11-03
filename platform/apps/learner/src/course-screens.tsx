@@ -1,6 +1,6 @@
-import { type Progress, isConceptDone } from "@chalk/api";
 import type { BuiltArt, Locale } from "@chalk/content";
 import { Stage, Trail } from "@chalk/draw";
+import { type Progress, isConceptDone } from "@chalk/learning";
 import { OwnHtml, RichText, ours } from "@chalk/player";
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";

@@ -72,6 +72,8 @@ export class BoardRuntime {
   private readonly actionListeners = new Set<(record: ActionRecord) => void>();
   /** Each act's record number, by the board's act number. */
   private readonly acts = new Map<number, number>();
+  /** Who did each act, by its `n`: what it sets off is theirs too. */
+  private readonly actorOf = new Map<number, Actor>();
   private readonly touched = new Set<string>();
   private count = 0;
   private startedAt: number | undefined;
@@ -229,6 +231,7 @@ export class BoardRuntime {
           isStep: false,
           t: this.core.now,
         };
+        if (isAct) this.actorOf.set(n, record.actor);
         for (const fn of this.actionListeners) fn(record);
       } else {
         const record: SignalRecord = {
@@ -236,7 +239,8 @@ export class BoardRuntime {
           prop,
           signal: name,
           payload: event.payload,
-          actor: Actor.Lesson,
+          // The child's tap is the child's, through every rule it sets off; else the lesson's.
+          actor: (act === undefined ? undefined : this.actorOf.get(act)) ?? Actor.Lesson,
           ...(act === undefined ? {} : { from: act }),
         };
         for (const fn of this.signalListeners) fn(record);

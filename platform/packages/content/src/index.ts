@@ -33,6 +33,7 @@ export {
   eventKinds,
   eventSchema,
   isKind,
+  PlayMode,
   type ChalkEvent,
   type EventEntry,
   type EventEnvelope,

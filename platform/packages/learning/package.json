@@ -1,0 +1,16 @@
+{
+  "name": "@chalk/learning",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo"
+  },
+  "dependencies": {
+    "@chalk/content": "workspace:*",
+    "zod": "3.25.76"
+  }
+}

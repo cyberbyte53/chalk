@@ -1,43 +1,22 @@
-import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION } from "@chalk/content";
+import { Level } from "@chalk/content";
 import { describe, expect, it } from "vitest";
+import { attemptsFrom } from "./attempts";
+import { catalogueOf } from "./catalogue";
 import {
   Mark,
-  boardFactsFrom,
   isConceptDone,
-  mergeBoardFacts,
   mergeProgress,
+  passesFrom,
   practiceOf,
   progressFrom,
 } from "./progress";
+import { session } from "./testing";
 
-/** Entries of one app session, numbered in order, as the bus would. */
-function session(id: string, start = 1000) {
-  let seq = 0;
-  const signal = (
-    board: string,
-    node: string | null,
-    name: string,
-    payload: Record<string, unknown> = {},
-  ): ChalkEvent => ({
-    id: `${id}-${seq}`,
-    schemaVersion: EVENT_SCHEMA_VERSION,
-    session: id,
-    seq,
-    at: start + seq++,
-    commit: "abc",
-    actor: Actor.Learner,
-    opening: "o",
-    board,
-    version: "v",
-    node,
-    kind: "signal",
-    payload: { signal: name, payload, from: null },
-  });
-  const pass = (board: string) => signal(board, null, "continued");
-  const check = (board: string, isRight: boolean, isGraded = true) =>
-    signal(board, "q", "checked", { status: isRight ? "correct" : "wrong", isGraded });
-  return { pass, check };
-}
+const catalogue = catalogueOf(
+  ["q2", "q3", "q4"].map((board) => ({ board, version: "v1", tests: ["c1"], level: Level.Medium })),
+);
+const progressOf = (events: Parameters<typeof passesFrom>[0]) =>
+  progressFrom(passesFrom(events), attemptsFrom(events, catalogue), [plan]);
 
 const plan = { id: "c1", pages: ["p1", "p2"], practice: ["q2", "q3", "q4"] };
 
@@ -52,42 +31,34 @@ describe("progress", () => {
       s.check("q3", true),
       s.check("q4", true),
     ];
-    const progress = progressFrom(boardFactsFrom(events), [plan]);
+    const progress = progressOf(events);
     expect(progress.c1).toMatchObject({
       isLearnt: true,
       practice: { right: 2, of: 3, marks: [Mark.Right, Mark.Wrong, Mark.Right] },
     });
     expect(isConceptDone(progress.c1, true)).toBe(true);
     // Order of arrival doesn't matter.
-    expect(progressFrom(boardFactsFrom([...events].reverse()), [plan])).toEqual(progress);
+    expect(progressOf([...events].reverse())).toEqual(progress);
   });
 
   it("a first try is the earliest graded check, ever; a page's own question doesn't count", () => {
     const early = session("a", 1000);
     const late = session("b", 5000);
-    const facts = boardFactsFrom([
+    const progress = progressOf([
       late.check("q2", true),
       early.check("q2", false),
-      early.check("p1", true, false),
+      early.check("p1", true, { isGraded: false }),
+      early.check("q3", true),
+      late.check("q4", true),
     ]);
-    expect(facts.get("q2")?.first).toEqual({ isRight: false, at: 1000 });
-    expect(facts.get("p1")).toBeUndefined();
-    // Half a practice: touched, not practised.
-    const progress = progressFrom(facts, [plan]);
-    expect(progress.c1).toEqual({ isLearnt: false, practice: null });
-    expect(isConceptDone(progress.c1, true)).toBe(false);
-    expect(progressFrom(new Map(), [plan]).c1).toBeUndefined();
+    expect(progress.c1?.practice?.marks).toEqual([Mark.Wrong, Mark.Right, Mark.Right]);
   });
 
-  it("board facts from two places merge to the earlier of each", () => {
-    const a = boardFactsFrom([session("a", 3000).check("q2", true)]);
-    const b = boardFactsFrom([
-      session("b", 1000).check("q2", false),
-      session("b", 2000).pass("p1"),
-    ]);
-    const merged = mergeBoardFacts(a, b);
-    expect(merged.get("q2")?.first).toEqual({ isRight: false, at: 1000 });
-    expect(merged.get("p1")?.passedAt).toBe(2000);
+  it("half a practice: touched, not practised; nothing done: not there", () => {
+    const progress = progressOf([session("a").check("q2", true)]);
+    expect(progress.c1).toEqual({ isLearnt: false, practice: null });
+    expect(isConceptDone(progress.c1, true)).toBe(false);
+    expect(progressOf([]).c1).toBeUndefined();
   });
 
   it("practice is the questions marked firstTry, in order, else every question testing it", () => {

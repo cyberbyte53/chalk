@@ -4,7 +4,6 @@ import { join as joinPath } from "node:path";
 import {
   ApiErrorCode,
   ApiPath,
-  type ConceptPlan,
   type EventsReply,
   Role,
   eventsRequestSchema,
@@ -17,6 +16,7 @@ import {
   signInGoogleRequestSchema,
 } from "@chalk/api";
 import { type Board, type ChalkEvent, type ItemRef, eventSchema } from "@chalk/content";
+import type { ConceptPlan } from "@chalk/learning";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { sql } from "drizzle-orm";
 import { type Context, Hono, type MiddlewareHandler } from "hono";

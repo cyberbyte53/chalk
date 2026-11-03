@@ -5,7 +5,6 @@ import {
   type GroupReply,
   type JoinedGroup,
   type MeReply,
-  type Progress,
   type Role,
   type TeacherGroup,
   apiErrorSchema,
@@ -16,10 +15,10 @@ import {
   groupReplySchema,
   joinedGroupSchema,
   meReplySchema,
-  progressSchema,
   teacherGroupSchema,
 } from "@chalk/api";
 import type { ChalkEvent } from "@chalk/content";
+import { type Progress, progressSchema } from "@chalk/learning";
 import type { z } from "zod";
 
 /** A request that didn't work: the server's code when it answered, or offline (status 0). */

@@ -9,6 +9,25 @@ import { z } from "zod";
  */
 export const EVENT_SCHEMA_VERSION = 2;
 
+/**
+ * How a board is played. A question is only content (prompt, interaction, answer); the mode
+ * decides what happens around it: whether Jugnu is there, whether a wrong answer can be tried
+ * again, and what the banner under the board says. The same question plays in every mode.
+ * See plans/play-modes.md. Here because
+ * the record says it (`open`'s `mode`).
+ */
+export const PlayMode = {
+  /** A question inside a lesson's pages. */
+  Lesson: "lesson",
+  /** Practice after a lesson: Jugnu any time, try again until right. */
+  Guided: "guided",
+  /** A test: no Jugnu, one try, only right or wrong. */
+  SkillCheck: "skillCheck",
+  /** A skill check's mistakes again, with Jugnu. */
+  Review: "review",
+} as const;
+export type PlayMode = (typeof PlayMode)[keyof typeof PlayMode];
+
 /** Who did it. Only the learner's own entries are evidence. */
 export const Actor = { Learner: "learner", Lesson: "lesson", App: "app", Jugnu: "jugnu" } as const;
 export type Actor = (typeof Actor)[keyof typeof Actor];
@@ -22,7 +41,7 @@ export const eventKinds = {
   open: z
     .object({
       /** How a board is played (play-mode.ts). */
-      mode: z.string().optional(),
+      mode: z.nativeEnum(PlayMode).optional(),
       /** The learner had passed this board before; it opened fresh, Continue showing. */
       wasPassed: z.boolean().optional(),
       locale: z.string().optional(),

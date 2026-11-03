@@ -1,5 +1,5 @@
-import { Mark, type PracticeScore, type Progress } from "@chalk/api";
 import type { Locale } from "@chalk/content";
+import { Mark, type PracticeScore, type Progress } from "@chalk/learning";
 import { JugnuFigure, JugnuMood, RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { say } from "./app-text";
