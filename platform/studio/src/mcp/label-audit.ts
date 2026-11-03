@@ -17,7 +17,11 @@ export type AuditedLabel = {
   onMarks: number;
   /** Lines it crosses: the axes, a swap's dashed line, a point's guides. */
   onLines: number;
-  /** Its middle is nearer another dot than its own (a pair only). */
+  /**
+   * It reads as another thing's: another thing of the kind labels name (another label's dot or
+   * figure, a marked point such as the crossing; not a word, a line or a picture) is within its own thing's gap plus 4 px of its box. The same
+   * rule as the placer's (@chalk/draw place-labels.ts, CLEARLY_NEARER).
+   */
   isNearerOther: boolean;
   /** Outside the plane's drawing. */
   isOff: boolean;
@@ -104,6 +108,10 @@ export function labelAudit(card: Element): LabelAudit {
     }));
     if (found.length === 0) continue;
     const frame = svg.getBoundingClientRect();
+    const isShownBox = (e: Element) => {
+      const b = e.getBoundingClientRect();
+      return b.width > 0 || b.height > 0;
+    };
     const isShown = (e: Element) => {
       const r = e.getBoundingClientRect();
       return (
@@ -113,6 +121,33 @@ export function labelAudit(card: Element): LabelAudit {
       );
     };
     const labelEls = new Set<Element>(found.map((f) => f.el));
+    // Things a label could be read as naming: what is marked a thing, and every label's own.
+    const things = [...new Set([...svg.querySelectorAll("[data-thing], [data-label-of]")])].filter(
+      isShownBox,
+    );
+    /** A thing's box, but the label itself when the label is drawn inside it (Riya's name). */
+    const boxOf = (thing: Element, label: Element): DOMRect => {
+      if (!thing.contains(label)) return thing.getBoundingClientRect();
+      const parts = [...thing.children]
+        .filter((c) => !c.contains(label))
+        .map((c) => c.getBoundingClientRect())
+        .filter((b) => b.width > 0 || b.height > 0);
+      if (parts.length === 0) return thing.getBoundingClientRect();
+      const l = Math.min(...parts.map((b) => b.left));
+      const t = Math.min(...parts.map((b) => b.top));
+      return new DOMRect(
+        l,
+        t,
+        Math.max(...parts.map((b) => b.right)) - l,
+        Math.max(...parts.map((b) => b.bottom)) - t,
+      );
+    };
+    /** The gap between two boxes, 0 when they meet. */
+    const gapOf = (a: DOMRect, b: DOMRect) =>
+      Math.hypot(
+        Math.max(0, b.left - a.right, a.left - b.right),
+        Math.max(0, b.top - a.bottom, a.top - b.bottom),
+      );
     const dots = [
       ...svg.querySelectorAll(".cp-dot > circle:not(.cp-swap-self), .cp-dot > .cp-swap"),
     ];
@@ -162,7 +197,33 @@ export function labelAudit(card: Element): LabelAudit {
       const isHidden = !isShown(el);
       const mine = (e: Element) => e === own || own?.contains(e) === true;
       const others = found.filter((f) => f.el !== el && isShown(f.el));
-      const ownAt = own?.getBoundingClientRect();
+      const ownAt = own === null ? undefined : boxOf(own, el);
+      const ownGap = ownAt === undefined ? 0 : gapOf(r, ownAt);
+      const readsAsAnother =
+        !isHidden &&
+        ownAt !== undefined &&
+        things.some(
+          (t) =>
+            t !== own &&
+            !t.contains(el) &&
+            own?.contains(t) !== true &&
+            gapOf(r, t.getBoundingClientRect()) < ownGap + 4,
+        );
+      const onThings = isHidden
+        ? []
+        : things.filter(
+            (t) =>
+              t !== own &&
+              !t.contains(el) &&
+              own?.contains(t) !== true &&
+              touch(r, t.getBoundingClientRect()),
+          );
+      // Pictures: what a label may not cover, though no label names them.
+      const onPictures = isHidden
+        ? []
+        : [...svg.querySelectorAll("[data-picture]")].filter((p) =>
+            touch(r, p.getBoundingClientRect()),
+          );
       const m = middle(r);
       const o = ownAt === undefined ? undefined : middle(ownAt);
       const dx = o === undefined ? 0 : m.x - o.x;
@@ -186,7 +247,9 @@ export function labelAudit(card: Element): LabelAudit {
         onLabels: isHidden ? 0 : others.filter((f) => touch(r, ink(f.el))).length,
         onMarks: isHidden
           ? 0
-          : [...dots, ...words].filter((d) => !mine(d) && touch(r, ink(d))).length,
+          : [...dots, ...words].filter((d) => !mine(d) && touch(r, ink(d))).length +
+            onThings.filter((t) => t.hasAttribute("data-thing")).length +
+            onPictures.length,
         onLines: isHidden ? 0 : lines.filter((l) => crosses(r, l)).length,
         hits: isHidden
           ? []
@@ -200,12 +263,12 @@ export function labelAudit(card: Element): LabelAudit {
               ...lineEls
                 .filter((_, i) => crosses(r, lines[i] as never))
                 .map((l) => `line.${[...l.classList].join(".")}`),
+              ...onThings
+                .filter((t) => t.hasAttribute("data-thing"))
+                .map((t) => `thing ${t.getAttribute("class") ?? t.tagName}`),
+              ...onPictures.map((p) => `picture ${p.parentElement?.getAttribute("class") ?? ""}`),
             ],
-        isNearerOther:
-          !isHidden &&
-          (kind === "pair" || kind === "swap") &&
-          ownAt !== undefined &&
-          dots.some((d) => d !== own && far(r, d.getBoundingClientRect()) < far(r, ownAt)),
+        isNearerOther: readsAsAnother,
         isOff:
           !isHidden &&
           (r.left < frame.left - 0.5 ||

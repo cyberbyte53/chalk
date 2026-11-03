@@ -26,10 +26,11 @@ export type LabelSpec = {
   avoid?: (spot: number) => { what: string; gap: number };
   /** How far it keeps from other labels, px. */
   gap: number;
-  /** The thing it names (a dot, a figure): it may touch it. */
+  /**
+   * The thing it names (a dot, a figure): it may touch it, and it sits clearly nearer it than any
+   * other thing it could be read as naming.
+   */
   own?: Element | null;
-  /** It must be nearer its own thing than any other label's own thing. */
-  isNearOwn?: boolean;
   /** Its transform at a place (kept upright on a turned plane). */
   transform?: (x: number, y: number) => string | undefined;
 };
@@ -135,6 +136,31 @@ export function inPictureOrder(a: Node, b: Node): number {
   return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
 }
 
+/** How much nearer its own thing a label must be than any other, px (the label audit's too). */
+export const CLEARLY_NEARER = 4;
+
+/** The gap between two boxes, 0 when they meet. */
+function gapOf(a: Box, b: Box): number {
+  return Math.hypot(Math.max(0, b.l - a.r, a.l - b.r), Math.max(0, b.t - a.b, a.t - b.b));
+}
+
+/** A thing's box on the page, but the label itself when it is drawn inside the thing (Riya's name). */
+function thingBox(thing: Element, label: Element): Box {
+  const parts = thing.contains(label)
+    ? [...thing.children].filter((c) => !c.contains(label))
+    : [thing];
+  const boxes = parts
+    .map((p) => p.getBoundingClientRect())
+    .filter((b) => b.width > 0 || b.height > 0);
+  if (boxes.length === 0) return boxOf(thing.getBoundingClientRect());
+  return {
+    l: Math.min(...boxes.map((b) => b.left)),
+    t: Math.min(...boxes.map((b) => b.top)),
+    r: Math.max(...boxes.map((b) => b.right)),
+    b: Math.max(...boxes.map((b) => b.bottom)),
+  };
+}
+
 /** How far a label sits from its thing's edge, px: next to it, then a little further out. */
 const DISTANCES = [3, 12] as const;
 /** The directions round a thing, in the order a label prefers them: the diagonals first. */
@@ -229,10 +255,14 @@ function place(svg: SVGSVGElement, placer: Placer): void {
     .sort(([a], [b]) => inPictureOrder(a, b));
   const frame = boxOf(svg.getBoundingClientRect());
   const labelEls = new Set<Element>(entries.map(([el]) => el));
-  // The things labels name: a label must be nearer its own than any other's.
-  const named = [
-    ...new Set(entries.flatMap(([, l]) => (l.own === undefined || l.own === null ? [] : [l.own]))),
-  ].map((d) => ({ el: d, box: boxOf(d.getBoundingClientRect()) }));
+  // Things a label could be read as naming, of the kind labels name: every label's own thing
+  // (a dot, a figure), and what is marked a thing (a point, as the crossing). Not pictures or words.
+  const things = [
+    ...new Set([
+      ...svg.querySelectorAll("[data-thing]"),
+      ...entries.flatMap(([, l]) => (l.own === undefined || l.own === null ? [] : [l.own])),
+    ]),
+  ];
   // Each set of things kept clear of, read once: boxes, and lines (a line, an unfilled path) as
   // the segments they are drawn along.
   type Mark = { el: Element; box: Box; ink: Box; lines?: [DOMPoint, DOMPoint][] };
@@ -281,9 +311,18 @@ function place(svg: SVGSVGElement, placer: Placer): void {
     if (found === undefined) {
       found = (
         what === undefined
-          ? [...svg.querySelectorAll(INKED)].filter(
-              (e) => e.closest("[data-coverable]") === null && hasInk(e),
-            )
+          ? [
+              // A picture is one obstacle, not one per piece (a roof, a wall, a door).
+              ...[...svg.querySelectorAll("[data-picture]")].filter((g) =>
+                [...g.querySelectorAll(INKED)].some(hasInk),
+              ),
+              ...[...svg.querySelectorAll(INKED)].filter(
+                (e) =>
+                  e.closest("[data-coverable]") === null &&
+                  e.closest("[data-picture]") === null &&
+                  hasInk(e),
+              ),
+            ]
           : [...svg.querySelectorAll(what)]
       )
         .filter((e) => !labelEls.has(e))
@@ -305,7 +344,11 @@ function place(svg: SVGSVGElement, placer: Placer): void {
       const parent = el.parentNode as SVGGraphicsElement;
       const m = parent.getScreenCTM() ?? new DOMMatrix();
       const scale = Math.hypot(m.a, m.b);
-      const ownBox = label.own?.getBoundingClientRect();
+      const own =
+        label.own === null || label.own === undefined ? undefined : thingBox(label.own, el);
+      const others = things
+        .filter((t) => t !== label.own && !t.contains(el) && label.own?.contains(t) !== true)
+        .map((t) => thingBox(t, el));
       const mine = (e: Element) => e === el || e === label.own || label.own?.contains(e) === true;
       return {
         gap: label.gap,
@@ -333,12 +376,10 @@ function place(svg: SVGSVGElement, placer: Placer): void {
                 : boxesClash(box, mark.box, gap) && lines.some((line) => crosses(box, line, gap));
             cost += isOn ? weight : isNear ? weight * NEAR : 0;
           }
-          if (label.isNearOwn === true && ownBox !== undefined) {
-            const mx = (box.l + box.r) / 2;
-            const my = (box.t + box.b) / 2;
-            const far = (b: Box) => Math.hypot(mx - (b.l + b.r) / 2, my - (b.t + b.b) / 2);
-            const toOwn = far(boxOf(ownBox));
-            if (named.some((d) => !mine(d.el) && far(d.box) < toOwn)) cost += NEARER_OTHER;
+          // Read as naming the thing nearest its edge: that must clearly be its own.
+          if (own !== undefined) {
+            const toOwn = gapOf(ink, own);
+            if (others.some((o) => gapOf(ink, o) < toOwn + CLEARLY_NEARER)) cost += NEARER_OTHER;
           }
           return { box, ink, cost };
         }),

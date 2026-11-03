@@ -528,3 +528,8 @@
 .cp-frame .cp-quadrant-tint.is-4 {
   fill: color-mix(in srgb, var(--color-category-4) 12%, transparent);
 }
+
+/* The crossing as a thing labels keep clear of naming: drawn as nothing. */
+.cp-frame .cp-crossing-point {
+  fill: none;
+}

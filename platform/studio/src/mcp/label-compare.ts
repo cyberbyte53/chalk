@@ -216,7 +216,7 @@ function numbers(drawings: Drawing[]) {
     "label on label": shown.reduce((s, l) => s + l.onLabels, 0),
     "label on a dot or word": shown.reduce((s, l) => s + l.onMarks, 0),
     "label on a line": shown.reduce((s, l) => s + l.onLines, 0),
-    "nearer another dot": shown.filter((l) => l.isNearerOther).length,
+    "reads as another's": shown.filter((l) => l.isNearerOther).length,
     "off the plane": shown.filter((l) => l.isOff).length,
     "hidden labels": all.filter((l) => l.isHidden).length,
     "drawings with any problem": drawings.filter(isBad).length,

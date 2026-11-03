@@ -62,12 +62,7 @@ function Stall({ size }: { size: number }): JSX.Element {
   );
 }
 
-/** A place's picture: decoration a label may sit over (its name, drawn apart, is kept clear of). */
 export function PlacePicture({ kind, size }: { kind: PlaceKind; size: number }): JSX.Element {
-  return <g data-coverable>{pictureOf(kind, size)}</g>;
-}
-
-function pictureOf(kind: PlaceKind, size: number): JSX.Element {
   switch (kind) {
     case PlaceKind.Desk:
       return <Desk size={size} />;

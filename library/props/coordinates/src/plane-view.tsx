@@ -375,6 +375,10 @@ export function AxesDraw({
             </g>
           );
         })}
+      {/* The crossing: a thing a label could be read as naming (not O, its name). Unseen. */}
+      {!isLines && hasO && (
+        <rect class="cp-crossing-point" data-thing x={vx - 1} y={base - 1} width={2} height={2} />
+      )}
       {!isLines && hasO && <OriginName s={s} x={vx - 7} y={isCrowded ? base - 4 : base + 14} />}
       {!isLines && s.showAxisNames && (
         <>

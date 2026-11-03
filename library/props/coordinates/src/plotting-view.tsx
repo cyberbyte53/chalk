@@ -26,10 +26,9 @@ function DotLabel({
   const ref = useRef<SVGTextElement>(null);
   useLabel(ref, () => ({
     // Clear of everything drawn but what is coverable and its own dot, by a wider gap than words
-    // keep; and nearer its own dot than any other, as the pair would read as that dot's.
+    // keep; and clearly nearer its own dot than any other thing, or it reads as that one's.
     gap: 8,
     own: ref.current?.previousElementSibling ?? null,
-    isNearOwn: true,
   }));
   return (
     <text ref={ref} class={cls} x={x + 9} y={y - 9}>

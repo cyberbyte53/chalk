@@ -149,3 +149,17 @@ it could be naming.**
 - **Riya's own box** leaves out her name (it is drawn inside her group), in the placer and the
   audit.
 - **No third distance**: her upper spots clear the ring already; measure first.
+
+### Built (2026-11-03)
+
+One refinement after measuring: **a label is read as naming the nearest thing of the kind labels
+name** (another label's dot or figure, a marked point such as the crossing), not a picture or a
+word: with pictures as things, "Riya" in a town read as every house's (80 cases). Pictures are
+`data-picture`: one obstacle each, not coverable, not named.
+
+The audit, 618 drawings with placed labels (the new measure; before = the rule as first written):
+reads as another's 80 → 0; on a dot, word or picture 76 → 57; on a line 18; drawings with a
+problem 114 → 64. The recheck's cases: "(6, 1)" and "(−1, 7)" clear. Still on something, with no
+clear spot round them: "(0, 5)" (on the y-axis's 5), "(0, −1.25)" (on −4), and Riya's name at
+Aman's house (top row; under her, over the target house). Most of the rest: Riya's name crossing
+an axis in the walk questions and the town.
