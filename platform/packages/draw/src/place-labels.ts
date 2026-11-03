@@ -10,7 +10,19 @@ import { LABEL_WEIGHTS } from "./label-weights";
  */
 
 /** A place for a label's words: x, y and its anchor, in the units of the group it is drawn in. */
-export type LabelSpot = readonly [number, number, "start" | "middle" | "end"];
+export const TextAnchor = { Start: "start", Middle: "middle", End: "end" } as const;
+export type TextAnchor = (typeof TextAnchor)[keyof typeof TextAnchor];
+
+/** Which side of its thing a label tries first. */
+export const LabelSide = {
+  /** A point's name: up and to the right, as on maps. */
+  UpperRight: "upper-right",
+  /** A person's name: above their head. */
+  Above: "above",
+} as const;
+export type LabelSide = (typeof LabelSide)[keyof typeof LabelSide];
+
+export type LabelSpot = readonly [number, number, TextAnchor];
 
 export type LabelSpec = {
   /**
@@ -31,6 +43,11 @@ export type LabelSpec = {
    * other thing it could be read as naming.
    */
   own?: Element | null;
+  /**
+   * Which side of its thing it tries first: a point's name up and to the right (the default, as
+   * on maps), a person's above their head.
+   */
+  prefer?: LabelSide;
   /** Its transform at a place (kept upright on a turned plane). */
   transform?: (x: number, y: number) => string | undefined;
 };
@@ -40,6 +57,7 @@ const OFF = LABEL_WEIGHTS.offPicture;
 const ON_MARK = LABEL_WEIGHTS.onMark;
 const ON_LINE = LABEL_WEIGHTS.onLine;
 const NEARER_OTHER = LABEL_WEIGHTS.nearerAnother;
+const FAR = LABEL_WEIGHTS.farAtOuterRing;
 
 type Placer = {
   labels: Map<SVGTextElement, LabelSpec>;
@@ -128,7 +146,7 @@ const inkOf = (b: Box): Box => ({
   b: b.b - (b.b - b.t) * 0.15,
 });
 const shift = (anchor: string | null, width: number) =>
-  anchor === "middle" ? width / 2 : anchor === "end" ? width : 0;
+  anchor === TextAnchor.Middle ? width / 2 : anchor === TextAnchor.End ? width : 0;
 
 /** Two elements in the order they stand in the document. */
 export function inPictureOrder(a: Node, b: Node): number {
@@ -163,6 +181,8 @@ function thingBox(thing: Element, label: Element): Box {
 
 /** How far a label sits from its thing's edge, px: next to it, then a little further out. */
 const DISTANCES = [3, 12, 28] as const;
+const NEAREST = DISTANCES[0];
+const FARTHEST = DISTANCES[DISTANCES.length - 1] ?? NEAREST + 1;
 /** The directions round a thing, in the order a label prefers them: the diagonals first. */
 const DIRECTIONS = [
   [1, -1],
@@ -174,13 +194,28 @@ const DIRECTIONS = [
   [1, 0],
   [-1, 0],
 ] as const;
+/** A person's name: above their head, then beside it, then at their sides, below last. */
+const ABOVE_FIRST = [
+  [0, -1],
+  [1, -1],
+  [-1, -1],
+  [1, 0],
+  [-1, 0],
+  [1, 1],
+  [-1, 1],
+  [0, 1],
+] as const;
 
 /**
  * A label's places round its thing, in the units of the label's group: each direction at each
  * distance from the thing's edge, nearest first. Its words' size, measured where they are now,
  * says where its baseline and anchor go so that its box keeps that distance.
  */
-function spotsRound(el: SVGTextElement, own: Element | null | undefined): LabelSpot[] {
+function spotsRound(
+  el: SVGTextElement,
+  own: Element | null | undefined,
+  prefer: LabelSide = LabelSide.UpperRight,
+): LabelSpot[] {
   const parent = el.parentNode as SVGGraphicsElement;
   const m = parent.getScreenCTM();
   if (own === null || own === undefined || m === null) return [];
@@ -204,7 +239,7 @@ function spotsRound(el: SVGTextElement, own: Element | null | undefined): LabelS
   const above = y - bb.y;
   const below = bb.y + bb.height - y;
   return DISTANCES.flatMap((d) =>
-    DIRECTIONS.map(([dx, dy]): LabelSpot => {
+    (prefer === LabelSide.Above ? ABOVE_FIRST : DIRECTIONS).map(([dx, dy]): LabelSpot => {
       const x = dx > 0 ? box.r + d : dx < 0 ? box.l - d : (box.l + box.r) / 2;
       const baseline =
         dy < 0
@@ -212,7 +247,7 @@ function spotsRound(el: SVGTextElement, own: Element | null | undefined): LabelS
           : dy > 0
             ? box.b + d + above
             : (box.t + box.b) / 2 + (above - below) / 2;
-      return [x, baseline, dx > 0 ? "start" : dx < 0 ? "end" : "middle"];
+      return [x, baseline, dx > 0 ? TextAnchor.Start : dx < 0 ? TextAnchor.End : TextAnchor.Middle];
     }),
   );
 }
@@ -311,18 +346,9 @@ function place(svg: SVGSVGElement, placer: Placer): void {
     if (found === undefined) {
       found = (
         what === undefined
-          ? [
-              // A picture is one obstacle, not one per piece (a roof, a wall, a door).
-              ...[...svg.querySelectorAll("[data-picture]")].filter((g) =>
-                [...g.querySelectorAll(INKED)].some(hasInk),
-              ),
-              ...[...svg.querySelectorAll(INKED)].filter(
-                (e) =>
-                  e.closest("[data-coverable]") === null &&
-                  e.closest("[data-picture]") === null &&
-                  hasInk(e),
-              ),
-            ]
+          ? [...svg.querySelectorAll(INKED)].filter(
+              (e) => e.closest("[data-coverable]") === null && hasInk(e),
+            )
           : [...svg.querySelectorAll(what)]
       )
         .filter((e) => !labelEls.has(e))
@@ -332,7 +358,9 @@ function place(svg: SVGSVGElement, placer: Placer): void {
     return found;
   };
   // Each label's places: its own, or round its thing.
-  const spotsOf = entries.map(([el, label]) => label.spots ?? spotsRound(el, label.own));
+  const spotsOf = entries.map(
+    ([el, label]) => label.spots ?? spotsRound(el, label.own, label.prefer),
+  );
   // Each label's box at each of its places, worked out from one measure where it is now.
   const problem: LabelProblem = {
     labels: entries.map(([el, label], i) => {
@@ -376,10 +404,14 @@ function place(svg: SVGSVGElement, placer: Placer): void {
                 : boxesClash(box, mark.box, gap) && lines.some((line) => crosses(box, line, gap));
             cost += isOn ? weight : isNear ? weight * NEAR : 0;
           }
-          // Read as naming the thing nearest its edge: that must clearly be its own.
+          // Read as naming the thing nearest its edge: that must clearly be its own; and the
+          // farther from it, the dearer, evenly from the nearest ring to the farthest.
           if (own !== undefined) {
             const toOwn = gapOf(ink, own);
             if (others.some((o) => gapOf(ink, o) < toOwn + CLEARLY_NEARER)) cost += NEARER_OTHER;
+            // Measured from its box, as its spots are made: its ink box would make spots above and
+            // below seem farther than those beside at the same distance.
+            cost += (FAR * Math.max(0, gapOf(box, own) - NEAREST)) / (FARTHEST - NEAREST);
           }
           return { box, ink, cost };
         }),

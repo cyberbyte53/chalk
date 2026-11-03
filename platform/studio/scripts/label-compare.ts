@@ -1,13 +1,16 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { findUp } from "../find-up";
-import { type Drawn, type Step, closeBrowser, shoot } from "./app-driver";
-import type { LabelAudit } from "./label-audit";
+import { findUp } from "../src/find-up";
+import { type Drawn, type Step, closeBrowser, shoot } from "../src/mcp/app-driver";
+import { type LabelAudit, LabelKind } from "../src/mcp/label-audit";
 
 /**
  * Every plane's labels in a chapter, read by the label audit (label-audit.ts), so two placings can
  * be compared on the same drawings (platform/docs/plans/label-placement.md):
+ *
+ * Run from platform/studio as `pnpm label-compare …` (here, outside src/, so editing it doesn't
+ * restart the chalk service, which watches src/):
  *
  *   tsx label-compare.ts run before        every board's start (en, hi; 360, 640) and its witness
  *                                          played (en, hi; 360), each step read
@@ -178,7 +181,8 @@ function numbers(drawings: Drawing[]) {
         l.onMarks > 0 ||
         l.onLines > 0 ||
         l.isNearerOther ||
-        l.isOff,
+        l.isOff ||
+        l.isFar === true,
     );
   // Labels moved when one step was taken: the same label (by kind and words) at another place.
   const moved: number[] = [];
@@ -197,7 +201,7 @@ function numbers(drawings: Drawing[]) {
           .map((l) => [`${l.kind} ${l.text}`, l.at]),
       );
       const now = (ordered[i]?.audit.labels ?? []).filter(
-        (l) => !l.isHidden && l.kind !== "walker",
+        (l) => !l.isHidden && l.kind !== LabelKind.Walker,
       );
       moved.push(
         now.filter((l) => {
@@ -217,6 +221,7 @@ function numbers(drawings: Drawing[]) {
     "label on a dot or word": shown.reduce((s, l) => s + l.onMarks, 0),
     "label on a line": shown.reduce((s, l) => s + l.onLines, 0),
     "reads as another's": shown.filter((l) => l.isNearerOther).length,
+    "far from its own (over 16 px)": shown.filter((l) => l.isFar === true).length,
     "off the plane": shown.filter((l) => l.isOff).length,
     "hidden labels": all.filter((l) => l.isHidden).length,
     "drawings with any problem": drawings.filter(isBad).length,
@@ -269,11 +274,18 @@ function compare(names: string[]): void {
   const problems = (d: Drawing) =>
     d.audit.labels
       .filter(
-        (l) => l.isHidden || l.onLabels || l.onMarks || l.onLines || l.isNearerOther || l.isOff,
+        (l) =>
+          l.isHidden ||
+          l.onLabels ||
+          l.onMarks ||
+          l.onLines ||
+          l.isNearerOther ||
+          l.isOff ||
+          l.isFar === true,
       )
       .map(
         (l) =>
-          `${l.kind} ${l.text}${l.isHidden ? " hidden" : ""}${l.onLabels ? " on-label" : ""}${l.onMarks ? " on-mark" : ""}${l.onLines ? " on-line" : ""}${l.isNearerOther ? " nearer-other" : ""}${l.isOff ? " off" : ""}`,
+          `${l.kind} ${l.text}${l.isHidden ? " hidden" : ""}${l.onLabels ? " on-label" : ""}${l.onMarks ? " on-mark" : ""}${l.onLines ? " on-line" : ""}${l.isNearerOther ? " nearer-other" : ""}${l.isFar === true ? " far" : ""}${l.isOff ? " off" : ""}`,
       );
   for (const [n, ds] of rest) {
     const there = new Map(ds.map((d) => [`${d.board} ${d.what}`, d]));

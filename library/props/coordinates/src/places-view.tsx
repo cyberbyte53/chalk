@@ -55,9 +55,9 @@ function PlacesDraw({
               width={size * 1.4}
               height={size * 1.4}
             />
-            {/* The place's picture, with its highlight when it is the target: one obstacle a label
-                keeps off (data-picture); not a thing a label is read as naming. */}
-            <g data-picture>
+            {/* The place's picture, with its highlight when it is the target: a label may sit over
+                it, as over buildings on a map (its name, drawn apart, is kept clear of). */}
+            <g data-coverable>
               {isTarget && <circle class="cp-target-halo" r={size * 0.8} />}
               <PlacePicture kind={s.placeKind} size={size} />
             </g>

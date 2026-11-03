@@ -4,10 +4,22 @@
  * fairly. Run in the page (`card.evaluate(labelAudit)`): self-contained.
  */
 
+/** What a label names, as the audit tells them apart. */
+export const LabelKind = {
+  /** A plotted dot's pair. */
+  Pair: "pair",
+  /** Its swap's pair. */
+  Swap: "swap",
+  /** The walker's name. */
+  Walker: "walker",
+  /** Any other prop's label. */
+  Other: "label",
+} as const;
+export type LabelKind = (typeof LabelKind)[keyof typeof LabelKind];
+
 /** One label as drawn. */
 export type AuditedLabel = {
-  /** "pair" (a dot's), "swap" (its swap's), "walker", or "label" (any other prop's). */
-  kind: string;
+  kind: LabelKind;
   text: string;
   /** Not drawn: hidden, or an empty box. */
   isHidden: boolean;
@@ -25,6 +37,8 @@ export type AuditedLabel = {
   isNearerOther: boolean;
   /** Outside the plane's drawing. */
   isOff: boolean;
+  /** Its edge more than 16 px from its own thing's: it reads as floating, no one's. */
+  isFar: boolean;
   /** From its middle to its own dot's middle, px (-1: no own dot). */
   distance: number;
   /** Which side of its own dot: "ur", "ul", "dr", "dl", "u", "d", "l", "r" (or ""). */
@@ -63,6 +77,14 @@ export const COUNT_BOX_READS = `(() => {
 })();`;
 
 export function labelAudit(card: Element): LabelAudit {
+  // Run in the page, where nothing outside this function exists: the kinds again, held to the
+  // enum's values by the type checker.
+  const Kind = {
+    Pair: "pair",
+    Swap: "swap",
+    Walker: "walker",
+    Other: "label",
+  } as const satisfies typeof LabelKind;
   const w = globalThis as { __chalkBoxReads?: number };
   const measures = performance.getEntriesByName("chalk:labels");
   const placingMs = measures.reduce((sum, m) => sum + m.duration, 0);
@@ -98,12 +120,12 @@ export function labelAudit(card: Element): LabelAudit {
     const found = [...svg.querySelectorAll<SVGTextElement>("text[data-label]")].map((el) => ({
       el,
       kind: el.classList.contains("cp-swap-label")
-        ? "swap"
+        ? Kind.Swap
         : el.closest(".cp-dot") !== null
-          ? "pair"
+          ? Kind.Pair
           : el.classList.contains("cp-walker-name")
-            ? "walker"
-            : "label",
+            ? Kind.Walker
+            : Kind.Other,
       own: svg.querySelector(`[data-label-of="${el.dataset.label}"]`),
     }));
     if (found.length === 0) continue;
@@ -218,12 +240,6 @@ export function labelAudit(card: Element): LabelAudit {
               own?.contains(t) !== true &&
               touch(r, t.getBoundingClientRect()),
           );
-      // Pictures: what a label may not cover, though no label names them.
-      const onPictures = isHidden
-        ? []
-        : [...svg.querySelectorAll("[data-picture]")].filter((p) =>
-            touch(r, p.getBoundingClientRect()),
-          );
       const m = middle(r);
       const o = ownAt === undefined ? undefined : middle(ownAt);
       const dx = o === undefined ? 0 : m.x - o.x;
@@ -248,8 +264,7 @@ export function labelAudit(card: Element): LabelAudit {
         onMarks: isHidden
           ? 0
           : [...dots, ...words].filter((d) => !mine(d) && touch(r, ink(d))).length +
-            onThings.filter((t) => t.hasAttribute("data-thing")).length +
-            onPictures.length,
+            onThings.filter((t) => t.hasAttribute("data-thing")).length,
         onLines: isHidden ? 0 : lines.filter((l) => crosses(r, l)).length,
         hits: isHidden
           ? []
@@ -266,9 +281,9 @@ export function labelAudit(card: Element): LabelAudit {
               ...onThings
                 .filter((t) => t.hasAttribute("data-thing"))
                 .map((t) => `thing ${t.getAttribute("class") ?? t.tagName}`),
-              ...onPictures.map((p) => `picture ${p.parentElement?.getAttribute("class") ?? ""}`),
             ],
         isNearerOther: readsAsAnother,
+        isFar: !isHidden && ownAt !== undefined && ownGap > 16,
         isOff:
           !isHidden &&
           (r.left < frame.left - 0.5 ||

@@ -2,7 +2,7 @@
  * What a label's place costs: every weight the placing uses, in one place
  * (platform/docs/plans/label-placement.md). The numbers are not free knobs: what matters is their
  * order, and `weightRules` says it (a test holds the weights to it). Change one, then run the label
- * audit over a chapter before and after (platform/studio/src/mcp/label-compare.ts): a weight that
+ * audit over a chapter before and after (platform/studio/scripts/label-compare.ts, `pnpm label-compare`): a weight that
  * breaks an order once put Riya's name across an axis to keep it off a word it only came near.
  */
 export const LABEL_WEIGHTS = {
@@ -16,6 +16,11 @@ export const LABEL_WEIGHTS = {
   nearerAnother: 2,
   /** Any part of it outside the picture: cut off. */
   offPicture: 100,
+  /**
+   * Away from its own thing, at the farthest ring of spots (the cost grows evenly from the
+   * nearest ring to it): far enough to read as no one's, as bad as covering a word.
+   */
+  farAtOuterRing: 1,
   /**
    * Only near a thing (within the label's gap, not on it), as a share of being on it: a little
    * worse than clear, always better than on anything.
@@ -45,6 +50,14 @@ export function weightRules(w: { readonly [K in keyof LabelWeights]: number }): 
   rule(
     w.offPicture > 10 * (w.onLabel + w.onMark + w.nearerAnother),
     "off the picture costs more than any likely pile of clashes",
+  );
+  rule(
+    w.farAtOuterRing >= w.onMark * 0.9 && w.farAtOuterRing <= w.onMark * 1.1,
+    "the farthest ring costs about as much as covering a word (it is only for escaping one)",
+  );
+  rule(
+    w.farAtOuterRing / 3 > w.onLine,
+    "a ring out costs more than crossing a line (a label stays by its dot across a dashed line)",
   );
   return broken;
 }
