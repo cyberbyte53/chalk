@@ -148,6 +148,28 @@ const inkOf = (b: Box): Box => ({
 const shift = (anchor: string | null, width: number) =>
   anchor === TextAnchor.Middle ? width / 2 : anchor === TextAnchor.End ? width : 0;
 
+/**
+ * From an element's own units to the page's, as getBoundingClientRect measures it: its matrix
+ * within its picture (getCTM, pure SVG), then the picture's box on the page. Not getScreenCTM,
+ * which can disagree with the boxes inside an embedded frame or a zoomed page (an editor's
+ * preview), and put a label where its spot isn't.
+ */
+function toPage(el: SVGGraphicsElement): DOMMatrix | null {
+  const svg = el instanceof SVGSVGElement && el.ownerSVGElement === null ? el : el.ownerSVGElement;
+  const inner = el.getCTM();
+  if (svg === null || inner === null) return null;
+  const box = svg.getBoundingClientRect();
+  const view = svg.viewBox.baseVal;
+  const hasView = view !== null && view.width > 0 && view.height > 0;
+  const width = hasView ? view.width : svg.width.baseVal.value || box.width;
+  const height = hasView ? view.height : svg.height.baseVal.value || box.height;
+  const sx = box.width / width;
+  const sy = box.height / height;
+  const x0 = hasView ? view.x : 0;
+  const y0 = hasView ? view.y : 0;
+  return new DOMMatrix([sx, 0, 0, sy, box.left - x0 * sx, box.top - y0 * sy]).multiply(inner);
+}
+
 /** Two elements in the order they stand in the document. */
 export function inPictureOrder(a: Node, b: Node): number {
   if (a === b) return 0;
@@ -217,7 +239,7 @@ function spotsRound(
   prefer: LabelSide = LabelSide.UpperRight,
 ): LabelSpot[] {
   const parent = el.parentNode as SVGGraphicsElement;
-  const m = parent.getScreenCTM();
+  const m = toPage(parent);
   if (own === null || own === undefined || m === null) return [];
   const toLocal = m.inverse();
   // The thing as drawn, but the label itself when the label is drawn inside it.
@@ -306,7 +328,7 @@ function place(svg: SVGSVGElement, placer: Placer): void {
     const r = e.getBoundingClientRect();
     if (r.width === 0 && r.height === 0) return [];
     const box = boxOf(r);
-    const m = e instanceof SVGGraphicsElement ? e.getScreenCTM() : null;
+    const m = e instanceof SVGGraphicsElement ? toPage(e) : null;
     const on = (p: { x: number; y: number }) =>
       new DOMPoint(p.x, p.y).matrixTransform(m ?? undefined);
     if (e instanceof SVGLineElement && m !== null)
@@ -370,7 +392,7 @@ function place(svg: SVGSVGElement, placer: Placer): void {
       const left = bb.x - x + shift(el.getAttribute("text-anchor"), bb.width);
       const top = bb.y - y;
       const parent = el.parentNode as SVGGraphicsElement;
-      const m = parent.getScreenCTM() ?? new DOMMatrix();
+      const m = toPage(parent) ?? new DOMMatrix();
       const scale = Math.hypot(m.a, m.b);
       const own =
         label.own === null || label.own === undefined ? undefined : thingBox(label.own, el);
