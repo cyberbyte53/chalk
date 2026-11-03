@@ -26,7 +26,7 @@ export type LabelProblem = {
 };
 
 /** What two things only near each other (within a gap, not overlapping) cost, against overlapping. */
-export const NEAR = 0.25;
+export const NEAR = 0.05;
 
 /** Labels in a group of at most this many are solved exactly. */
 const EXACT_UP_TO = 9;
