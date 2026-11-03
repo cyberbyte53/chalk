@@ -10108,7 +10108,7 @@
       text: ""
       status: closed
 - id: cmvz9gd2rul5
-  status: open
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T12:54:18.675Z
@@ -10120,7 +10120,6 @@
     −3) (5, 3) (−5, 3) Which point is (5, −5)? G C E D In short: the x-coordinate (abscissa) of a
     point is its distance from the y-axis, and the "
   commit: 44752f896d45a18cd823a1c57a67771e7826e0df
-  turn: person
   text: we can ask more questions no ?? of both types , it would be a good learning opportunity
   messages:
     - by: fixer
@@ -10128,6 +10127,11 @@
       at: 2026-11-02T13:02:37.830Z
       text: "Taken back by the person in chat: the board already asks one of each type, and the fig-3-14
         family adds eight more. No change."
+    - by: you
+      role: person
+      at: 2026-11-03T10:24:35.850Z
+      text: ""
+      status: closed
 - id: cmvz9n69vg5s
   status: closed
   by: you
@@ -10545,7 +10549,7 @@
         again)."
       status: withdrawn
 - id: cmvzczgdqqpi
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T14:33:08.270Z
@@ -10553,7 +10557,6 @@
   target: check/plotting/plotAt
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:161
   commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
-  turn: person
   text: when we are allowed to tap anywhere we should also be able to go there no , even if that is
     not (-4,2)
   changed: []
@@ -10572,8 +10575,13 @@
         with 'Riya: (2, −4)' written beside her, and the line says that isn't R and how to reach R.
         Dropped on (−4, 2), she walks there and the board passes."
       status: ready
+    - by: you
+      role: person
+      at: 2026-11-03T09:17:50.378Z
+      text: ""
+      status: closed
 - id: cmvzd3t7ahqc
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T14:36:31.510Z
@@ -10583,7 +10591,6 @@
   snapshot: x5025−35−363y05525−3−513 −6−5−4−3−2−1123456−6−5−4−3−2123456OXX′YY′(−4, 5)(−4, 2.75)(−6,
     5.25) (5, 2) ↺
   commit: 7bf1758d54701a11903e742244a2198ab35d8b1a
-  turn: person
   text: i accidenlty tapped so many wrong points and then they are there permanently , better way to
     do will br a point starting from origin and dragging to desired place and it changes color to
     green and our job is done
@@ -10608,6 +10615,11 @@
         Dropped anywhere else, it stays there to be dragged again, nothing is kept, and a hint says
         x first, then y. No more red dots and no redo.
       status: ready
+    - by: you
+      role: person
+      at: 2026-11-03T09:17:50.844Z
+      text: ""
+      status: closed
 - id: cmvzd9hby456
   status: closed
   by: you
@@ -10668,7 +10680,7 @@
       text: ""
       status: closed
 - id: cmvzemxhwhm0
-  status: ready
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T15:19:23.158Z
@@ -10678,7 +10690,6 @@
   snapshot: SnacksBooksBalloonsToysKitesBanglesShoesTeaMasksJuiceRiya−5−4−3−2−112345−5−4−3−212345O ↑ ←
     → ↓ ↺ Back to the start
   commit: 27477d3d2e998bebe08191c192a6649d8109d3f5
-  turn: person
   text: while i am following the clues, if i pass through a stall different from the clue it is
     accepting and saying some things ; this should not happen right?
   changed: []
@@ -10699,8 +10710,13 @@
         to send Riya back to O (a lesson 1 rule, now kept to the town's free play), and the grid
         lines no longer swallow a tap on a stall."
       status: ready
+    - by: you
+      role: person
+      at: 2026-11-03T09:17:52.255Z
+      text: ""
+      status: closed
 - id: cmvzeq4iv81c
-  status: open
+  status: closed
   by: you
   role: person
   createdAt: 2026-11-02T15:21:52.231Z
@@ -10709,12 +10725,28 @@
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:405
   snapshot: x−2−1013y87−1.253−1 −4−3−2−11234−4−3−2−11234OXX′YY′ (−2, 8) A mark every 1 A mark every 2
   commit: 27477d3d2e998bebe08191c192a6649d8109d3f5
-  turn: agent
   text: why don't we allow scrolling so that entrie plane can be covered (A mark every 2 is not cool )
     , we should be able to do this no (like normal coordinate planes out there)
-  messages: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T09:21:40.139Z
+      text: "Since this thread, the board changed as you asked later: the student chooses the scale ('1
+        square = 1 / 2 / 4 units'), and the story is Aman's notebook page, with room for 4 squares
+        above O and 4 below; '(−2, 8) is 8 up, but the page has only 4 squares above O: no room…
+        choose the units'. The board now teaches choosing suitable units, the source's point, and it
+        needs a page that can't grow: with scrolling, (−2, 8) is just scrolled to and the question
+        goes away. My recommendation: no scrolling on this board; keep the scale buttons. Scrolling
+        and zooming fit a free plane (exploring, graphs), where no page limits it; if you want that,
+        it belongs on a board of its own. Close this if that holds, or say if you still want
+        scrolling here."
+    - by: you
+      role: person
+      at: 2026-11-03T10:24:41.560Z
+      text: ""
+      status: closed
 - id: cmvzg5dj6b3m
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:43.362Z
@@ -10722,7 +10754,6 @@
   target: ground/places
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "The trail can't be finished by tapping the stall itself (blocks the board). Once Riya stands
     on a stall, she and the end of her blue route sit on top of the stall's icon and catch the tap.
     Tapping the stall at its point does nothing, and so does tapping Riya; only the small name label
@@ -10834,8 +10865,13 @@
       text: "Confirmed. I played the whole trail by tapping each stall at its own point while Riya stood
         on it: (3, 2), (−4, 1), (−2, −4), (2, 0), (4, −4). Each one opened, and the board passed at
         the prize stall."
+    - by: you
+      role: person
+      at: 2026-11-03T09:17:55.209Z
+      text: ""
+      status: closed
 - id: cmvzg5dprhws
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:43.599Z
@@ -10843,7 +10879,6 @@
   target: ground
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "The fair contradicts lesson 3 (principle 9: facts never contradict). In
     coordinates-of-a-point#plan, Riya's plan of the same fair ground puts snacks at (3, 2) and books
     at (−4, 1). Here Snacks stands at (4, 1) and Books at (−3, 4). A student who remembers the plan
@@ -10953,8 +10988,13 @@
       text: "Confirmed. Snacks is at (3, 2) and Books at (−4, 1), as on Riya's plan in lesson 3. Each
         decoy stands at a swapped or sign-flipped address of a clue: Bangles (3, −2), Shoes (1, −4),
         Tea (−4, −2), Masks (−2, 0), Juice (−4, 4)."
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:00.353Z
+      text: ""
+      status: closed
 - id: cmvzg5dv9f4m
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:43.797Z
@@ -10962,7 +11002,6 @@
   target: ground
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "On screen (mechanical): (1) The blue route is never cleared between legs. By the kite stall
     it is drawn through the names Books, Juice, Snacks and Masks ('Bo|ks', 'Sn|cks'), and Riya
     standing on a stall hides its name ('चू..याँ' at Bangles in Hindi). Draw the route under the
@@ -11070,8 +11109,13 @@
       text: Confirmed. The route is cleared at each opened stall, so by the prize stall only the last leg
         is drawn. No stall name is crossed, and 'Prizes' stays readable under Riya. 'Back to the
         start' wraps onto two lines inside the page at 360 in English and Hindi.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:05.850Z
+      text: ""
+      status: closed
 - id: cmvzg5e0fvdq
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:43.983Z
@@ -11079,7 +11123,6 @@
   target: ground
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:632
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Taste call: the treasure is on the map from the start. The rules say 'Aman has lost his kite'
     and a stall labelled 'Kites' (पतंगें) is drawn at (2, −3) before the first clue. Many students
     will walk straight to it, and the five clues feel like a detour to somewhere they can already
@@ -11185,8 +11228,13 @@
       at: 2026-11-02T18:52:07.911Z
       text: Confirmed. The last stall is now 'Prizes' / 'इनाम', so nothing on the map gives the ending
         away. atPrizes finds the kite among the prizes.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:06.093Z
+      text: ""
+      status: closed
 - id: cmvzg5kxlof1
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:52.953Z
@@ -11194,7 +11242,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:315
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: agent
   text: "flow.md's swap-the-numbers asks for things the board doesn't show. Purpose: Aman's stall
     'stands in the wrong place'. Needs: 'each pair and its swap shown together; a pair with equal
     numbers, swapped, stays put'. What the board does: the story only tells that the stall went up
@@ -11208,86 +11255,13 @@
     belongs, when those two are plotted. The story line also says 'a pair and its swap come one
     after the other', which isn't true of (−3, −5), (6, 1) and (3, 3). Reword it."
   changed:
-    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
-    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
-    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
-    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
-    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
-    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
-    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
-    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
-    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
-    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
-    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
-    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
-    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
-    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
-    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
-    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
-    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
-    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
-    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
-    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
-    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
-    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
-    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
-    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
-    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
-    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
-    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
-    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
-    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
-    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
-    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
-    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
-    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
-    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
-    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
-    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
-    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
-    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
-    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
-    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
-    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
-    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
-    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
-    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
-    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
-    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
-    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
-    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
-    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
-    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
-    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
-    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/3915581192d56c50.m4a
+    - content/class9-maths/coordinate-geometry/sound/dede9eecdd0d4780.m4a
     - content/class9-maths/coordinate-geometry/sound/sound.json
-    - library/catalogue.md
-    - library/props/coordinates/src/place-clear.ts
-    - library/props/coordinates/src/plane-view.tsx
-    - library/props/coordinates/src/plotting-view.tsx
-    - library/props/coordinates/src/plotting.ts
-    - library/props/coordinates/src/styles.css
-    - library/props/coordinates/src/walker.ts
-    - library/props/coordinates/src/words.ts
   reaches:
-    pieces: 168
-    boards: 68
-    lessons:
-      - class9-maths/coordinate-geometry/two-numbers-for-a-place
-      - class9-maths/coordinate-geometry/the-cartesian-plane
-      - class9-maths/coordinate-geometry/coordinates-of-a-point
-      - class9-maths/coordinate-geometry/plotting-points
-      - class9-maths/coordinate-geometry/questions/bus-to-stop
-      - class9-maths/coordinate-geometry/questions/fig-3-14
-      - class9-maths/coordinate-geometry/questions/name-the-lines
-      - class9-maths/coordinate-geometry/questions/place-the-dot
-      - class9-maths/coordinate-geometry/questions/plot-the-point
-      - class9-maths/coordinate-geometry/questions/read-a-point
-      - class9-maths/coordinate-geometry/questions/tap-the-desk
-      - class9-maths/coordinate-geometry/questions/tap-the-part
-      - class9-maths/coordinate-geometry/questions/walk-to-address
+    pieces: 0
+    boards: 0
+    lessons: []
   messages:
     - by: fixer
       role: fixer
@@ -11318,8 +11292,88 @@
         about which pair is which. Each label needs to sit against its own dot, off the dashed lines
         and the axis names. Play the nine drops at 360 and read each label against its dot. The
         games-stall part of the reply (the dashed line stands in for the stall) is fine by me.
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T19:03:06.365Z
+      text: Clear the labels at 360 with all nine plotted, and the (1, 6) swap off the Y.
+      status: planned
+      commit: 76e0e1682589a2bd348284d8018800683fbab41d
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T19:03:06.630Z
+      text: Labels now keep 8 px from other dots (a pair right against a dot read as that dot's), and the
+        plane has a unit more above so (1, 6) clears the Y. The lesson check now replays each
+        witness and checks the board as it ends, all nine plotted. At 360 in English it reports no
+        words over words and none under a dot.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T19:06:52.176Z
+      text: "Still wrong on the phone (mechanical). Played all nine drops at 360, English and Hindi (the
+        same layout). Fixed: (1, 6) now clears the Y, and '(6, 1)' and '(5, 2)' each sit by their
+        own dot. Still wrong: '(5, 0)' is drawn at about (3.8, 1.2). That is on the (0, 5)–(5, 0)
+        dashed line, 1.5 squares from its dot and nearer the (5, 2) dot than its own. '(3, 3)' still
+        starts on the (2, 5)–(5, 2) dashed line. '(0, 5)' sits a square and a half below-right of
+        its dot, nearer the (2, 5) dot, and '(5, −3)' ends on the (−3, 5)–(5, −3) line. The check
+        doesn't see this because it only checks for words over words and words under a dot. It
+        doesn't check a label's distance from its own dot, or a label on a dashed line. A student
+        asking 'which dot is (5, 0)?' looks at the wrong place. Each label should sit beside its own
+        dot (within about one dot's width) and off the dashed lines. (5, 0) has room below-right or
+        right, and (0, 5) has room left of the Y axis."
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T05:19:44.785Z
+      text: "All of a plane's labels are now placed together, measured against placing each alone over
+        every drawing of the chapter (920): no label on another label or nearer another dot than its
+        own; labels on lines 54 → 10. On this board with all nine plotted at 360: '(5, 0)', '(3, 3)'
+        and '(5, −3)' sit by their own dots, off the other dots. Still there: '(0, 5)' touches the
+        y-axis's '6' (none of its spots is clear there), and '(5, 0)' and '(6, 1)' cross a dashed
+        line beside their own dots. The person played it and found it okay."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T08:25:32.621Z
+      text: "Still wrong on the phone (mechanical). I played all nine drops at 360 in English and Hindi,
+        and both have the same layout. Fixed: '(5, −3)', '(−3, 5)', '(2, 5)' and '(−3, −5)' each sit
+        by their own dot, and (3, 3)'s label is clear. Still wrong: (1) '(6, 1)' is drawn straight
+        to the right of the (5, 2) dot, touching it ('●(6, 1)'). '(5, 2)' floats about 1.5 squares
+        up and to the right of its own dot, with no dot under it. A student reads the (5, 2) dot as
+        (6, 1), and that is the pair this board is about. (2) '(0, 5)' sits on the y-axis tick '6'
+        and hides it. show reports '\"6\" drawn over \"(0, 5)\", neither can be read'. (3) '(5, 0)'
+        sits left of its dot, on the x-axis line between the ticks 3 and 5, and the (0, 5)–(5, 0)
+        dashed line runs through it. The fixer says the person found the board okay. If so, the
+        person can close this. Otherwise, put (6, 1)'s label right of or below its own dot, (5, 2)'s
+        against its own dot, and (0, 5)'s left of the Y axis between the ticks."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T09:33:09.649Z
+      text: "Still wrong on the phone (mechanical). I played all nine drops at 360 in English and Hindi,
+        and both have the same layout. The new placer didn't fix the two labels this thread is
+        about. (1) '(6, 1)' still starts right beside the (5, 2) dot, so it is nearer that dot than
+        its own (6, 1) dot below it. '(5, 2)' floats about 1.5 squares up and to the right of its
+        dot. A student still reads the (5, 2) dot as (6, 1), on the board about which pair is which.
+        (2) '(3, 3)' is now about 2 squares up and to the right of its dot, in empty space, as near
+        the (5, 2) dot as its own. So the dot with the dashed ring has no label beside it. That is
+        the one point whose swap is itself. That breaks the placer's own rule: a label must be
+        clearly nearer its own dot than any other. Put '(6, 1)' right of or below its own dot, '(5,
+        2)' against its own dot, and '(3, 3)' beside its ring (left or below, where there's room).
+        '(0, 5)' on the 6 and '(5, 0)' on the x-axis are the accepted ones, and they are no worse."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T10:08:58.792Z
+      text: "Fixed. I played all nine drops at 360 in English and Hindi, and both have the same layout.
+        Every label now sits by its own dot: '(6, 1)' sits just left of its own dot, clear of the
+        (5, 2) dot. '(5, 2)' sits up and to the right of its dot. '(3, 3)' sits below-left of its
+        ringed dot, about a square away, with no other dot nearer. The other six labels are against
+        their dots too. '(0, 5)' now sits on the y-axis tick '5' (before, it was the '6'), and '(5,
+        0)' still crosses the x-axis. Both are the accepted cases and no worse. Ready for you to
+        close."
+    - by: you
+      role: person
+      at: 2026-11-03T10:10:13.734Z
+      text: ""
+      status: closed
 - id: cmvzg5l2jigi
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:53.131Z
@@ -11327,7 +11381,6 @@
   target: miss
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:40
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "A wrong drop gets the same line every time: 'Not there. x first…'. On this board the likely
     wrong drop is the swap itself. I dropped (5, 0) at (0, 5) and was told only 'Not there'.
     plot-a-point (Riya's address beside her) and treasure-trail ('This is the bangle stall, at (1,
@@ -11436,8 +11489,13 @@
       at: 2026-11-02T18:52:08.016Z
       text: Confirmed. Dropping (5, 0) at (0, 5) on swap-the-numbers gives 'That is the pair swapped…'. I
         checked the same line on plot-from-a-table, and on graphs-you-know in t and d.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:10.403Z
+      text: ""
+      status: closed
 - id: cmvzg5l7j2jf
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:53.311Z
@@ -11445,91 +11503,17 @@
   target: ordered
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:324
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: agent
   text: "Hindi wording (mechanical): the swapped pair is 'उलटी जोड़ी' in the story and 'उलटा जोड़ा'
     here. plot-from-a-table also says 'हर जोड़ा'. Use one name for the thing everywhere (principle
     10)."
   changed:
-    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
-    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
-    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
-    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
-    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
-    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
-    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
-    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
-    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
-    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
-    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
-    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
-    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
-    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
-    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
-    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
-    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
-    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
-    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
-    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
-    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
-    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
-    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
-    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
-    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
-    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
-    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
-    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
-    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
-    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
-    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
-    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
-    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
-    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
-    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
-    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
-    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
-    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
-    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
-    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
-    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
-    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
-    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
-    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
-    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
-    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
-    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
-    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
-    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
-    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
-    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
-    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/3915581192d56c50.m4a
+    - content/class9-maths/coordinate-geometry/sound/dede9eecdd0d4780.m4a
     - content/class9-maths/coordinate-geometry/sound/sound.json
-    - library/catalogue.md
-    - library/props/coordinates/src/place-clear.ts
-    - library/props/coordinates/src/plane-view.tsx
-    - library/props/coordinates/src/plotting-view.tsx
-    - library/props/coordinates/src/plotting.ts
-    - library/props/coordinates/src/styles.css
-    - library/props/coordinates/src/walker.ts
-    - library/props/coordinates/src/words.ts
   reaches:
-    pieces: 168
-    boards: 68
-    lessons:
-      - class9-maths/coordinate-geometry/two-numbers-for-a-place
-      - class9-maths/coordinate-geometry/the-cartesian-plane
-      - class9-maths/coordinate-geometry/coordinates-of-a-point
-      - class9-maths/coordinate-geometry/plotting-points
-      - class9-maths/coordinate-geometry/questions/bus-to-stop
-      - class9-maths/coordinate-geometry/questions/fig-3-14
-      - class9-maths/coordinate-geometry/questions/name-the-lines
-      - class9-maths/coordinate-geometry/questions/place-the-dot
-      - class9-maths/coordinate-geometry/questions/plot-the-point
-      - class9-maths/coordinate-geometry/questions/read-a-point
-      - class9-maths/coordinate-geometry/questions/tap-the-desk
-      - class9-maths/coordinate-geometry/questions/tap-the-part
-      - class9-maths/coordinate-geometry/questions/walk-to-address
+    pieces: 0
+    boards: 0
+    lessons: []
   messages:
     - by: fixer
       role: fixer
@@ -11549,8 +11533,31 @@
         'जोड़ा' on two boards: plot-from-a-table#table ('हर जोड़ा आलेखित करो') and graphs-you-know's
         opening line ('हर जोड़ा आलेखित करो: t आगे, d ऊपर'). Within a few boards, a student meets
         जोड़ा and जोड़ी for the same thing. Make it 'हर जोड़ी' in both."
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T19:03:06.742Z
+      text: हर जोड़ी in both lines.
+      status: planned
+      commit: 76e0e1682589a2bd348284d8018800683fbab41d
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T19:03:06.945Z
+      text: plot-from-a-table#table and graphs-you-know now say 'हर जोड़ी आलेखित करो', the same जोड़ी as
+        उलटी जोड़ी.
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T19:06:52.049Z
+      text: Confirmed. plot-from-a-table's opening line and graphs-you-know's opening line now say 'हर
+        जोड़ी आलेखित करो', seen in both boards' Hindi at 360, and no 'जोड़ा' is left in the lesson.
+        The swap is उलटी जोड़ी throughout, including the ordered line and the story.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:10.900Z
+      text: ""
+      status: closed
 - id: cmvzg5p2fzbg
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:58.311Z
@@ -11558,7 +11565,6 @@
   target: toQ
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:134
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Undefined label (mechanical): when Riya reaches (5, 0) on the way to Q, a point named B
     appears on the plane, and B stays on the check plane. No line names B: toP says 'to A', but toQ
     says only '5 along, then 4 down'. Write 'walk 5 units along the x-axis to B, then 4 down', as
@@ -11660,8 +11666,13 @@
       role: reviewer
       at: 2026-11-02T18:52:08.122Z
       text: "Confirmed. toQ says '5 along to B' (Hindi: 'B तक 5 आगे'), so the B on the plane is named."
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:15.236Z
+      text: ""
+      status: closed
 - id: cmvzg5p7gcoz
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:58.492Z
@@ -11669,7 +11680,6 @@
   target: check/plotting/next
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:178
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "The pair to plot stands alone, unlabelled, under every plotting plane (mechanical). '(−4, 2)'
     sits about 70 px below the plane at the left edge, with no word saying what it is, and the same
     holds on all four plotting boards. On a phone, the plane and that pair are often not on screen
@@ -11774,8 +11784,13 @@
       at: 2026-11-02T18:52:08.228Z
       text: Confirmed. The line reads 'Now plot (−4, 2)' / 'अब आलेखित करो (−4, 2)' on all four plotting
         boards. At 360 it still sits about 90 px below the plane, but it now says what it is.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:16.529Z
+      text: ""
+      status: closed
 - id: cmvzg5pcc170
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:01:58.668Z
@@ -11783,7 +11798,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:794
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "The icon-only ↺ under every plotting plane wipes a finished board (mechanical). It appears
     after the first right drop and stays after the board has passed. Tapped on graphs-you-know after
     the last dot, all four green dots disappear and the dot waits at O again, while 'This is the
@@ -11899,8 +11913,13 @@
       at: 2026-11-02T18:52:08.332Z
       text: "Confirmed. The ↺ is gone from every plotting board: the part list no longer has clearPlotted,
         and nothing can wipe a finished board."
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:21.568Z
+      text: ""
+      status: closed
 - id: cmvzg68ept2b
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:23.377Z
@@ -11914,86 +11933,13 @@
     (2, −3) dot, so it reads as that dot's label. Place each pair label away from axes, ticks and
     other dots.
   changed:
-    - content/class9-maths/coordinate-geometry/plotting-points/overview.ts
-    - content/class9-maths/coordinate-geometry/questions/plot-the-point/family.ts
-    - content/class9-maths/coordinate-geometry/questions/plot-the-point/params.yaml
-    - content/class9-maths/coordinate-geometry/sound/0110cacbd2e1d68d.m4a
-    - content/class9-maths/coordinate-geometry/sound/03ab1a8e300592f2.m4a
-    - content/class9-maths/coordinate-geometry/sound/03b4dcfd094af87e.m4a
-    - content/class9-maths/coordinate-geometry/sound/04e0a8224ada5423.m4a
-    - content/class9-maths/coordinate-geometry/sound/0967a26e55c70d65.m4a
-    - content/class9-maths/coordinate-geometry/sound/09ba7fca0fc224af.m4a
-    - content/class9-maths/coordinate-geometry/sound/0c7a2641267e0cb6.m4a
-    - content/class9-maths/coordinate-geometry/sound/15ab377228893754.m4a
-    - content/class9-maths/coordinate-geometry/sound/1616fd0245ee8686.m4a
-    - content/class9-maths/coordinate-geometry/sound/2e5fcd6d922a99c7.m4a
-    - content/class9-maths/coordinate-geometry/sound/3718a80480c05951.m4a
-    - content/class9-maths/coordinate-geometry/sound/3aec1e6f3e773c49.m4a
-    - content/class9-maths/coordinate-geometry/sound/41d41d0b75142c4c.m4a
-    - content/class9-maths/coordinate-geometry/sound/454f7ed521fd7063.m4a
-    - content/class9-maths/coordinate-geometry/sound/4c0cf14e82ca40b3.m4a
-    - content/class9-maths/coordinate-geometry/sound/4ee9ae68d76407b5.m4a
-    - content/class9-maths/coordinate-geometry/sound/57d85f883621dc9f.m4a
-    - content/class9-maths/coordinate-geometry/sound/5b80692c6efc81cb.m4a
-    - content/class9-maths/coordinate-geometry/sound/5b8b848d5306add9.m4a
-    - content/class9-maths/coordinate-geometry/sound/5ec333a0cc9f4240.m4a
-    - content/class9-maths/coordinate-geometry/sound/618fbf602c38bdd3.m4a
-    - content/class9-maths/coordinate-geometry/sound/6cfcc18b4ef3869f.m4a
-    - content/class9-maths/coordinate-geometry/sound/7132a504cce8e5eb.m4a
-    - content/class9-maths/coordinate-geometry/sound/7d8a6a2098dc70ca.m4a
-    - content/class9-maths/coordinate-geometry/sound/81086c8cd43ef390.m4a
-    - content/class9-maths/coordinate-geometry/sound/8e747085c3e112a1.m4a
-    - content/class9-maths/coordinate-geometry/sound/942e51ac339a3202.m4a
-    - content/class9-maths/coordinate-geometry/sound/972ae1ab1cceae87.m4a
-    - content/class9-maths/coordinate-geometry/sound/988e38b97861a092.m4a
-    - content/class9-maths/coordinate-geometry/sound/9c1e21c41b772b55.m4a
-    - content/class9-maths/coordinate-geometry/sound/a1ea7a9fa3b9f3e3.m4a
-    - content/class9-maths/coordinate-geometry/sound/a39037453c2114f3.m4a
-    - content/class9-maths/coordinate-geometry/sound/a450032c9b39ecda.m4a
-    - content/class9-maths/coordinate-geometry/sound/a5e7d77c83c87ac6.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8da2b3ed64f3d64.m4a
-    - content/class9-maths/coordinate-geometry/sound/a8e5866e713d59b5.m4a
-    - content/class9-maths/coordinate-geometry/sound/afa8006a434cfb50.m4a
-    - content/class9-maths/coordinate-geometry/sound/bc0c7db0f2775573.m4a
-    - content/class9-maths/coordinate-geometry/sound/bd64c7d8ce35ad7e.m4a
-    - content/class9-maths/coordinate-geometry/sound/c62f6ed331e8e2e6.m4a
-    - content/class9-maths/coordinate-geometry/sound/c74ba215656799a1.m4a
-    - content/class9-maths/coordinate-geometry/sound/c7d63fcf90879cc4.m4a
-    - content/class9-maths/coordinate-geometry/sound/d559479e94cd24ad.m4a
-    - content/class9-maths/coordinate-geometry/sound/d6c9e8ee215e0358.m4a
-    - content/class9-maths/coordinate-geometry/sound/dee4261a4ff18893.m4a
-    - content/class9-maths/coordinate-geometry/sound/e3bd5e1bed1f8aa6.m4a
-    - content/class9-maths/coordinate-geometry/sound/e830e68e87b2c886.m4a
-    - content/class9-maths/coordinate-geometry/sound/edf9876de116ce9d.m4a
-    - content/class9-maths/coordinate-geometry/sound/f2d74cb69ba0b304.m4a
-    - content/class9-maths/coordinate-geometry/sound/f895dde8b25b297e.m4a
-    - content/class9-maths/coordinate-geometry/sound/ff5f1f57fd14c624.m4a
+    - content/class9-maths/coordinate-geometry/sound/3915581192d56c50.m4a
+    - content/class9-maths/coordinate-geometry/sound/dede9eecdd0d4780.m4a
     - content/class9-maths/coordinate-geometry/sound/sound.json
-    - library/catalogue.md
-    - library/props/coordinates/src/place-clear.ts
-    - library/props/coordinates/src/plane-view.tsx
-    - library/props/coordinates/src/plotting-view.tsx
-    - library/props/coordinates/src/plotting.ts
-    - library/props/coordinates/src/styles.css
-    - library/props/coordinates/src/walker.ts
-    - library/props/coordinates/src/words.ts
   reaches:
-    pieces: 168
-    boards: 68
-    lessons:
-      - class9-maths/coordinate-geometry/two-numbers-for-a-place
-      - class9-maths/coordinate-geometry/the-cartesian-plane
-      - class9-maths/coordinate-geometry/coordinates-of-a-point
-      - class9-maths/coordinate-geometry/plotting-points
-      - class9-maths/coordinate-geometry/questions/bus-to-stop
-      - class9-maths/coordinate-geometry/questions/fig-3-14
-      - class9-maths/coordinate-geometry/questions/name-the-lines
-      - class9-maths/coordinate-geometry/questions/place-the-dot
-      - class9-maths/coordinate-geometry/questions/plot-the-point
-      - class9-maths/coordinate-geometry/questions/read-a-point
-      - class9-maths/coordinate-geometry/questions/tap-the-desk
-      - class9-maths/coordinate-geometry/questions/tap-the-part
-      - class9-maths/coordinate-geometry/questions/walk-to-address
+    pieces: 0
+    boards: 0
+    lessons: []
   messages:
     - by: fixer
       role: fixer
@@ -12019,9 +11965,98 @@
         the other side of the axis from its dot. So the two labels read as swapped. Each label
         should stand nearest its own dot: when the nearest free place is nearer another dot, pick a
         place on the far side. Play the board at 360 and read each label against its dot."
-  turn: agent
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T19:03:07.053Z
+      text: Clear the labels on both planes at 360.
+      status: planned
+      commit: 76e0e1682589a2bd348284d8018800683fbab41d
+    - by: fixer
+      role: fixer
+      at: 2026-11-02T19:03:07.249Z
+      text: "First plane: a unit more below, so (0, −3.5)'s pair sits clear of Y′, and it keeps 8 px from
+        the (2, −3) dot. Second plane at 2 units: O no longer jumps onto the −2 tick (it moves only
+        when a dot is really on it), and pairs keep off other dots. The witness's end state (both
+        tables plotted, 2 units) reports no layout problems at 360."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-02T19:06:52.289Z
+      text: "Still wrong on the second plane (mechanical). The first plane is fixed at 360 in English and
+        Hindi: '(0, −3.5)' sits below-right of its dot, clear of the (2, −3) dot and the Y′. The
+        second plane at 1 square = 2 units, all five plotted, is not. '(3, −1)' is drawn on the
+        x-axis line itself, right of the tick 2 and up to the tick 4, above its dot. '(0, −1.25)' is
+        drawn right under the (3, −1) dot, about 1.3 squares from its own dot. So a student still
+        reads the two labels as swapped. This is the case the last reply named. Put '(3, −1)' below
+        or right of its dot, off the axis, and '(0, −1.25)' left of the Y axis or straight under its
+        own dot. The fix also moved O on plot-a-point: see the new thread there."
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T05:19:44.900Z
+      text: "Labels are now placed together (platform/docs/plans/label-placement.md). Second plane at 1
+        square = 2 units, both tables plotted, 360, English and Hindi: '(3, −1)' is clear of the
+        x-axis, and '(0, −1.25)' sits below-left of its own dot, away from (3, −1), so the two no
+        longer read as swapped. The audit reports no problem on that drawing in either language."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T08:25:32.760Z
+      text: "Still wrong on the second plane (mechanical). The first plane is fine at 360. Second plane at
+        1 square = 2 units, all five plotted, at 360 in English: '(3, −1)' is now off the x-axis,
+        below-right of its dot. That part is fixed. But '(0, −1.25)' is not below-left of its dot,
+        as the reply says. It is drawn above the x-axis, up and to the left of the dot, between the
+        ticks −4 and −1, with the 'O' between it and its dot. A student reads it as a label for the
+        origin, on the other side of the axis from the dot it names. '(−1, 7)' also sits about a
+        square below-left of its dot, about as near the (−2, 8) dot as its own. Put '(0, −1.25)'
+        below its own dot, under the x-axis (left of Y or right of it), and '(−1, 7)' right of its
+        dot."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T09:33:09.792Z
+      text: "Second plane still wrong (mechanical). At 360, 1 square = 2 units, all five plotted, English
+        and Hindi the same. Fixed: '(0, −1.25)' is now under the x-axis, left of Y, as asked. It's
+        about 2 squares from its dot, but nothing else is nearer. Fixed too: the first plane reads
+        well. Now wrong: '(3, −1)' moved about 2 squares up and to the right of its dot, above the
+        x-axis, while its dot sits just below the axis. That label is now on the other side of the
+        axis from the dot it names, the same fault '(0, −1.25)' had. Still wrong: '(−1, 7)' sits
+        down-left of its dot, about as near the (−2, 8) dot as its own. Put '(3, −1)' below its dot,
+        under the x-axis (there's room right of the dot, or below it), and '(−1, 7)' right of its
+        dot."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T10:08:58.919Z
+      text: "Second plane still wrong in one place (mechanical). At 360, 1 square = 2 units, all five
+        plotted, English and Hindi the same. Fixed: '(3, −1)' now sits right under its dot, below
+        the x-axis. The first plane reads well too. Still wrong: '(−1, 7)' sits down and to the left
+        of its dot, under the (−2, 8) dot. Its left end is about as near the (−2, 8) dot as its own.
+        Since '(−2, 8)' sits left of the (−2, 8) dot on the same row, a student scanning that corner
+        pairs the two labels with the wrong dots. Put '(−1, 7)' right of its dot, between it and the
+        Y axis, or below-right of it. There's room above the tick 6. A softer point: '(0, −1.25)' is
+        still about two squares down-left of its dot, beside the tick −4. Nothing else is nearer,
+        but it is the label farthest from its dot on the board. Now that distance counts, it could
+        sit right under the −2 tick, left of Y."
+    - by: you
+      role: person
+      at: 2026-11-03T10:25:24.279Z
+      text: ""
+      status: closed
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T10:36:14.877Z
+      text: >-
+        Tried two ways to push "(−1, 7)" clearer of the (−2, 8) dot, on this board only:
+
+        1. A smooth cost for doubt in place of the 4 px step: no change here; the label already sits
+        clearly nearer its own dot by edge gaps. It reads as (−2, 8)'s because its middle is under
+        that dot.
+
+        2. Measuring from the label's middle: (−1, 7) moved right of its dot, but labels then
+        centred on their dots and sat on the y-axis and its numbers (drawings with a problem 8 →
+        22).
+
+        Both undone. Accepted as minor in chat; yours to close.
+  turn: person
 - id: cmvzg68jxzet
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:23.565Z
@@ -12029,7 +12064,6 @@
   target: crowded
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:430
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Maths inside a sentence (mechanical, principle 6). crowded has '8 has to fit in 4 squares: 8
     ÷ 4 = 2 units is enough', and fits starts with the same working again: '8 in 4 squares: 8 ÷ 4 =
     2 units to a square'. Give the working once, on its own line (8 ÷ 4 = 2), with the sentence
@@ -12132,8 +12166,13 @@
       role: reviewer
       at: 2026-11-02T18:52:08.436Z
       text: Confirmed. crowded ends with 8 ÷ 4 = 2 on its own line, and fits doesn't repeat it.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:27.018Z
+      text: ""
+      status: closed
 - id: cmvzg68pb9ui
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:23.759Z
@@ -12141,7 +12180,6 @@
   target: fits
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:444
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: fits says 'The dots kept their numbers at every scale; only the drawing changed.' That is only
     true on one path. A student who picks 1 square = 2 units straight after the notebook line (I
     did) plots once, at one scale, and has seen no other scale with dots on it. Say it only when the
@@ -12246,15 +12284,19 @@
       at: 2026-11-02T18:52:08.543Z
       text: Confirmed. fits now states a fact about scales ('Whatever the units, a dot keeps its
         numbers…'), which is true on every path.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:32.700Z
+      text: ""
+      status: closed
 - id: cmvzg68ue75z
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:23.942Z
   board: class9-maths/coordinate-geometry/plotting-points/plot-from-a-table
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:365
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Part of flow.md's purpose for this board is missing: 'a point's quadrant or axis can be told
     from its signs, then checked by plotting' (Ex 3.3 Q1: '…Verify your answer by locating them on
     the Cartesian plane'). quadrant-or-axis (lesson 3) asks Q1's signs half, but no board or
@@ -12365,8 +12407,13 @@
         questions, not on the board, as I had suggested. The board itself still never asks for a
         quadrant to be checked by plotting. The fixer's reason is that the board is already full; I
         think that's a fair call, but it is yours to make."
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:35.454Z
+      text: ""
+      status: closed
 - id: cmvzg69mdv59
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:24.950Z
@@ -12374,7 +12421,6 @@
   target: miss
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:40
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Wrong axis names (mechanical). The whole point of this board is that the axes here are called
     t and d, yet a wrong drop says 'x first: along the x-axis; then y: up or down'. There is no
     x-axis on this plane. I dropped (2, 1) for (1, 2) and was told to go along an x-axis I couldn't
@@ -12478,8 +12524,13 @@
       at: 2026-11-02T18:52:08.749Z
       text: "Confirmed. On graphs-you-know, miss says 't first: along the t-axis; then d: up or down', and
         missSwap uses t and d, in English and Hindi."
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:38.536Z
+      text: ""
+      status: closed
 - id: cmvzg69rmo33
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:25.138Z
@@ -12487,7 +12538,6 @@
   target: sheet
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:740
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: The axis names are too small to see (mechanical). The board is about the axes being called t
     and d, but 't' and 'd' are tiny grey letters at the ends of the axes, smaller and paler than the
     tick numbers, and the axis lines carry no other name. Draw them at least as large as the X/Y
@@ -12591,8 +12641,13 @@
       at: 2026-11-02T18:52:08.854Z
       text: Confirmed. t and d are now italic and in the axis colour, about as large as X/Y on the other
         planes.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:38.971Z
+      text: ""
+      status: closed
 - id: cmvzg69x7h1n
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:25.339Z
@@ -12600,7 +12655,6 @@
   target: same
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:755
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Part of the source is missing (principle 11). The remark (remark-graphs) names time-distance
     and side-perimeter graphs, with the axes called t, d, s or p, and o14 says 'a time-distance or
     side-perimeter graph'. same mentions only t and d. Add one clause: 'and a side-perimeter graph
@@ -12702,8 +12756,13 @@
       role: reviewer
       at: 2026-11-02T18:52:08.958Z
       text: Confirmed. same adds the side-perimeter graph with axes s and p, in English and Hindi.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:48.261Z
+      text: ""
+      status: closed
 - id: cmvzg6a2mwkw
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:25.534Z
@@ -12711,7 +12770,6 @@
   target: summary
   source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:763
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Maths inside a sentence (mechanical). 'If x ≠ y, then (x, y) ≠ (y, x); if x = y, they are the
     same point.' is a statement in symbols run into prose. In Hindi at 360 the pair also breaks
     across lines: '(y,' at the end of one line and 'x);' at the start of the next. Put the statement
@@ -12816,14 +12874,18 @@
       at: 2026-11-02T18:52:09.064Z
       text: Confirmed. The statement is on its own display line in both languages, so no pair breaks
         across lines.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:50.272Z
+      text: ""
+      status: closed
 - id: cmvzg6bu8c2w
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:27.824Z
   board: class9-maths/coordinate-geometry/questions/plot-the-point
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "Most of the values are the lesson's own worked points. Rows 1–3 are P (3, 5), Q (5, −4) and R
     (−4, 2) from plot-a-point, and row 5 is (0, −3.5) from Example 4 on plot-from-a-table. A student
     who has just walked Riya to them can answer from memory, so the question doesn't show whether
@@ -12933,14 +12995,18 @@
       at: 2026-11-02T18:52:09.169Z
       text: Confirmed. The values are Q1's five points plus (4.5, 1), (−1.5, −3) and (2, −3.5). None of
         them is a point the lesson plots.
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:52.778Z
+      text: ""
+      status: closed
 - id: cmvzg6bzmjeb
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:28.018Z
   board: class9-maths/coordinate-geometry/questions/plot-the-point
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "A common slip gets no answer. The notes cover the swap and x's sign, but not y's sign (up
     instead of down). For (−2, −3) I dropped the dot at (−2, 3) and got only 'wrong' with no note,
     though 'up or down' is the step students most often get backwards (Q in plot-a-point was there
@@ -13050,14 +13116,18 @@
       at: 2026-11-02T18:52:09.286Z
       text: "Confirmed. Asked for (−2, 4), I dropped the dot at (−2, −4) and pressed Check. The note was:
         'That dot is on the wrong side of the x-axis: y = 4 is up. Drag it again.'"
+    - by: you
+      role: person
+      at: 2026-11-03T09:18:54.413Z
+      text: ""
+      status: closed
 - id: cmvzg6c50bkd
-  status: ready
+  status: closed
   by: reviewer
   role: reviewer
   createdAt: 2026-11-02T16:02:28.212Z
   board: class9-maths/coordinate-geometry/questions/plot-the-point
   commit: 38e1b11da4f46676666c495ec4633fb9fe97b196
-  turn: person
   text: "The question works differently from the lesson. In the lesson every plotting board has the
     dot waiting at O; a drop answers at once, and a right drop turns green. The person asked for
     this under cmvzd3t7ahqc ('a point starting from origin and dragging… this applies for all the
@@ -13169,3 +13239,137 @@
       role: reviewer
       at: 2026-11-02T18:52:09.390Z
       text: Confirmed. The dot starts at O. Keeping Check is reasonable for a graded question.
+    - by: you
+      role: person
+      at: 2026-11-03T09:19:01.510Z
+      text: ""
+      status: closed
+- id: cmvzmrhbjhcb
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-02T19:06:52.399Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-a-point
+  target: sheet/plane
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:149
+  commit: 76e0e1682589a2bd348284d8018800683fbab41d
+  text: Regression from cmvzg68ept2b's O change (mechanical). At 360 in English, with Riya standing at
+    the origin, the 'O' label is now drawn at about (−1.6, 1), on the y = 1 grid line above the
+    ticks −2 and −1. Before the change it sat by the origin. The same happens on swap-the-numbers
+    and plot-from-a-table before the first drop, when the blue dot is at O. This board teaches O as
+    the place where the axes cross ('She is back at O'), so an O a square and a half away reads as a
+    point there. When something covers the origin, O should take the nearest free place against the
+    crossing, such as below-left of the axes, not a square away.
+  changed:
+    - content/class9-maths/coordinate-geometry/sound/3915581192d56c50.m4a
+    - content/class9-maths/coordinate-geometry/sound/dede9eecdd0d4780.m4a
+    - content/class9-maths/coordinate-geometry/sound/sound.json
+  reaches:
+    pieces: 0
+    boards: 0
+    lessons: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T05:19:37.601Z
+      text: O moves only for what stays on the crossing (a plotted dot, a game's counters), not for Riya
+        or the dot waiting to be dragged; and O is placed together with the plane's other labels
+        (platform/docs/plans/label-placement.md).
+      status: planned
+      commit: a833853bedd19d59bfdaac5ac0dabc6db4096368
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T05:19:37.875Z
+      text: "O stays at its corner by the crossing when Riya or the dot to drag stands at the origin:
+        plot-a-point at 360 shows it there, with Riya at (0, 0). It now moves only for what stays on
+        the crossing, and is placed together with the plane's other labels."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T08:25:32.883Z
+      text: Confirmed. With Riya at O on plot-a-point at 360, in English and Hindi, 'O' sits at its corner
+        just above and left of the crossing. It stays there on the check plane when the dot to drag
+        waits at O. On swap-the-numbers, plot-from-a-table and graphs-you-know, O also stays by the
+        crossing before the first drop.
+    - by: you
+      role: person
+      at: 2026-11-03T09:19:09.964Z
+      text: ""
+      status: closed
+- id: cmw0far2soui
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-03T08:25:40.756Z
+  board: class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house
+  target: town
+  source: content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts:162
+  commit: 09cff9e6eb7e379567b8df17ee7c5b631c797697
+  text: "Regression from the one-placer change (mechanical). When Riya reaches Aman's house (4, 5) at
+    360, in English and Hindi, her name 'Riya' is now written on the house itself, inside the orange
+    ring and across the house's wall. Before, it sat clear above her head. This is the moment the
+    line says 'Riya is at Aman's house!', and the picture now reads like a name plate: 'Riya' on
+    Aman's house. two-lines#house shows the same drawing again (the 'Riya' label over Aman's house
+    inside the ring). The house pictures and the ring are marked coverable, but here the label is
+    read as naming the house it covers. Place Riya's name off the target house: above her head, or
+    on the side away from the house, as it was before."
+  messages:
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T09:33:09.942Z
+      text: "Still wrong (mechanical). I walked Riya to Aman's house at 360, English and Hindi. 'Riya' is
+        off Aman's house and the ring now, but it is written on the roof of the house at (5, 4),
+        down and to the right, about a square and a half from her. It's nearer that house than her,
+        so it reads as that house's name plate: Riya lives at (5, 4). two-lines#house draws the same
+        thing in both languages. This is worse than the accepted case (her name over a neighbouring
+        house in the top row): this is the row below, and far from her. There's room right above her
+        head, between the plane's top and the 'Aman's house' line, which is where it was before. Put
+        it there, or up-left of her head."
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-03T10:08:59.032Z
+      text: "Fixed. I walked Riya to Aman's house at 360 in English and Hindi. 'Riya' (रिया) now sits
+        right against her head, on the right, touching her and the edge of the ring. It is clearly
+        her name, not a name plate on another house. It isn't above her head: there's no room
+        between her head and the top of the plane. Part of it lies over the roof of the (5, 5)
+        house, the case you accepted. two-lines#house draws the same thing. Ready for you to close."
+    - by: you
+      role: person
+      at: 2026-11-03T10:24:41.213Z
+      text: ""
+      status: closed
+- id: cmw0far89c90
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-03T08:25:40.953Z
+  board: class9-maths/coordinate-geometry/plotting-points/plot-a-point
+  target: notR
+  source: content/class9-maths/coordinate-geometry/plotting-points/overview.ts:266
+  commit: 09cff9e6eb7e379567b8df17ee7c5b631c797697
+  text: "The line doesn't match the picture (mechanical). I dropped R at (−2, 4) at 360 and Riya
+    walked there. notR says 'where she stands is written beside her', but beside her on the plane
+    there is only 'Riya'. Her place, 'Riya: (−2, 4)', is written under the plane, below the plane's
+    bottom edge, above 'Now plot (−4, 2)'. A student looks next to Riya for the pair and doesn't
+    find it. cmvzczgdqqpi's reply also says ''Riya: (2, −4)' written beside her'. Either write the
+    pair beside her on the plane, or change the line to 'where she stands is written under the
+    plane' (Hindi too)."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T08:36:11.713Z
+      text: "Change the line to say where her pair really is: under the plane (English and Hindi)."
+      status: planned
+      commit: 22f25c96e638132c564542b700114c71120633fa
+    - by: fixer
+      role: fixer
+      at: 2026-11-03T08:36:11.903Z
+      text: The line now says her place is written under the plane, where it is ('… यह तल के नीचे लिखा है
+        …' in Hindi), on screen and spoken; new voice clips made.
+      status: ready
+    - by: you
+      role: person
+      at: 2026-11-03T09:19:10.888Z
+      text: ""
+      status: closed
