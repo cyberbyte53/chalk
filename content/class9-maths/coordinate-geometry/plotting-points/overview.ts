@@ -265,13 +265,13 @@ const plotAPoint = page(
       notR: hidden(
         words.body(
           t(
-            "Riya walked to your dot: where she stands is written beside her, and it isn't R. R is 4 to the **left** of the y-axis (x\u00a0=\u00a0−4) and 2 **up** (y\u00a0=\u00a02). Drag the dot again.",
-            "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, उसके पास लिखा है, और वह R नहीं है। R, y-अक्ष के 4 **बाईं ओर** (x\u00a0=\u00a0−4) और 2 **ऊपर** (y\u00a0=\u00a02) है। बिंदु को फिर से खींचो।",
+            "Riya walked to your dot: where she stands is written under the plane, and it isn't R. R is 4 to the **left** of the y-axis (x\u00a0=\u00a0−4) and 2 **up** (y\u00a0=\u00a02). Drag the dot again.",
+            "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, यह तल के नीचे लिखा है, और वह R नहीं है। R, y-अक्ष के 4 **बाईं ओर** (x\u00a0=\u00a0−4) और 2 **ऊपर** (y\u00a0=\u00a02) है। बिंदु को फिर से खींचो।",
           ),
           {
             says: t(
-              "Riya walked to your dot: where she stands is written beside her, and it isn't R. R is 4 to the left of the y-axis, x is minus 4, and 2 up, y is 2. Drag the dot again.",
-              "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, उसके पास लिखा है, और वह R नहीं है। R, वाई-अक्ष के 4 बाईं ओर, एक्स माइनस 4, और 2 ऊपर, वाई 2 है। बिंदु को फिर से खींचो।",
+              "Riya walked to your dot: where she stands is written under the plane, and it isn't R. R is 4 to the left of the y-axis, x is minus 4, and 2 up, y is 2. Drag the dot again.",
+              "रिया तुम्हारे बिंदु तक चली: वह कहाँ खड़ी है, यह तल के नीचे लिखा है, और वह R नहीं है। R, वाई-अक्ष के 4 बाईं ओर, एक्स माइनस 4, और 2 ऊपर, वाई 2 है। बिंदु को फिर से खींचो।",
             ),
           },
         ),
