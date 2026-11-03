@@ -197,9 +197,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/abscissa-and-ordinate:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: d65e795c9bb41891
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: 49c2b9c475531ca7
 class9-maths/coordinate-geometry/coordinates-of-a-point/any-axes:
   content:
     model:
@@ -368,9 +368,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/any-axes:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: 8a80fa4761447e4f
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: fb9f9dea7f21e728
 class9-maths/coordinate-geometry/coordinates-of-a-point/distances-from-axes:
   content:
     model:
@@ -578,9 +578,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/distances-from-axes:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: 36d86ef410177521
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: c0d9a6220a18b9f9
 class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
   content:
     model:
@@ -594,9 +594,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
       given:
         coordinatesOfH:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x = −5, written first."
@@ -696,9 +693,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
             hi: "निर्देशांक दो तरह पढ़े जाते हैं: बिंदु से उसका जोड़ा, और जोड़े से उसका बिंदु। आकृति में हर बिंदु से अक्षों तक बिंदीदार रेखाएँ हैं।"
         pointAt:
           answer: c
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: "G is (2, −4): 2 units right and 4 down. (5, −5) is further right and lower."
@@ -948,9 +942,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x = −5, written first."
@@ -986,9 +977,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
           prop: choice
           with:
             answer: c
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: "G is (2, −4): 2 units right and 4 down. (5, −5) is further right and lower."
@@ -1059,9 +1047,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/find-the-point:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: 4875bf607671b881
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: 1a72a1b85d2fb617
 class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
   content:
     model:
@@ -1146,9 +1134,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
             hi: "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x = 0 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y = 0** दबाने के बाद **x = 0** भी दबाओ: किन बिंदुओं का y = 0 और x = 0 दोनों है?"
         pairOfB:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: "B is on the y-axis: 0 units from it, so its x-coordinate is 0. Only its y-coordinate isn't."
@@ -1180,9 +1165,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
             hi: B के निर्देशांक क्या हैं?
         pairOfC:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: "C is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
@@ -1214,9 +1196,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
             hi: C के निर्देशांक क्या हैं?
         pairOfE:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - id: right
               label:
@@ -1606,9 +1585,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: "B is on the y-axis: 0 units from it, so its x-coordinate is 0. Only its y-coordinate isn't."
@@ -1653,9 +1629,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: "C is on the x-axis: 0 units from it, so its y-coordinate is 0. Only its x-coordinate isn't."
@@ -1700,9 +1673,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - id: right
                 label:
@@ -1750,9 +1720,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/points-on-axes:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: 18239fb1d922e9c4
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: b2ba4809f2964f08
 class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
   content:
     model:
@@ -1826,9 +1796,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
             hi: "M, y-अक्ष से OX′ की ओर 3 इकाई और x-अक्ष से OY की ओर 4 इकाई दूर है: भुज −3, कोटि 4, निर्देशांक (−3, 4)।"
         pairOfB:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: That point is on the other side of the x-axis. B is above it, so its y-coordinate is positive.
@@ -1860,9 +1827,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
             hi: B के निर्देशांक क्या हैं?
         pairOfL:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: That is y first. L is 5 units left of the y-axis, so x = −5, written first.
@@ -1894,9 +1858,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
             hi: L के निर्देशांक क्या हैं?
         pairOfM:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - id: right
               label:
@@ -1928,9 +1889,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
             hi: M के निर्देशांक क्या हैं?
         pairOfS:
           answer: right
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: That is y first. S is 3 units right of the y-axis, so x = 3, written first.
@@ -2202,9 +2160,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: That point is on the other side of the x-axis. B is above it, so its y-coordinate is positive.
@@ -2249,9 +2204,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - id: right
                 label:
@@ -2296,9 +2248,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: That is y first. L is 5 units left of the y-axis, so x = −5, written first.
@@ -2343,9 +2292,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
           prop: choice
           with:
             answer: right
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: That is y first. S is 3 units right of the y-axis, so x = 3, written first.
@@ -2389,9 +2335,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/reading-points:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: f4e32f5588581f46
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: 6ee5455bc03d41e3
 class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
   content:
     model:
@@ -2424,9 +2370,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
             hi: "**बिंदु को चारों चतुर्थांशों में बारी-बारी खींचो।** उसके निर्देशांकों के चिह्न देखो: बिंदु के वहाँ पहुँचते ही हर चतुर्थांश अपने चिह्न दिखाता है।"
         round1:
           answer: II
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: Quadrant I is (+, +). This point is (−3, 5).
@@ -2472,9 +2415,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
             hi: "केवल चिह्नों से बताओ: बिंदु (−3, 5) कहाँ है?"
         round2:
           answer: IV
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: Quadrant I is (+, +). This point is (2, −4).
@@ -2520,9 +2460,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
             hi: "केवल चिह्नों से बताओ: बिंदु (2, −4) कहाँ है?"
         round3:
           answer: III
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: Quadrant I is (+, +). This point is (−4, −1).
@@ -2568,9 +2505,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
             hi: "केवल चिह्नों से बताओ: बिंदु (−4, −1) कहाँ है?"
         round4:
           answer: yAxis
-          concepts:
-            - b2d39983f229deec
-          isGraded: false
           options:
             - feedback:
                 en: Quadrant I is (+, +). This point is (0, −3).
@@ -2949,9 +2883,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
           prop: choice
           with:
             answer: II
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: Quadrant I is (+, +). This point is (−3, 5).
@@ -3001,9 +2932,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
           prop: choice
           with:
             answer: IV
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: Quadrant I is (+, +). This point is (2, −4).
@@ -3053,9 +2981,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
           prop: choice
           with:
             answer: III
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: Quadrant I is (+, +). This point is (−4, −1).
@@ -3105,9 +3030,6 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
           prop: choice
           with:
             answer: yAxis
-            concepts:
-              - b2d39983f229deec
-            isGraded: false
             options:
               - feedback:
                   en: Quadrant I is (+, +). This point is (0, −3).
@@ -3156,9 +3078,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/signs-and-quadrants:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: b7001b6aa1bd5357
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: cd1fd3b47e0ca1c5
 class9-maths/coordinate-geometry/coordinates-of-a-point/writing-coordinates:
   content:
     model:
@@ -3427,9 +3349,9 @@ class9-maths/coordinate-geometry/coordinates-of-a-point/writing-coordinates:
       kind: column
       name: page
   by: reviewer
-  commit: babd4a4b8ed9
-  at: 2026-11-02T14:01:22.326Z
-  code: c27ec1165772a80f
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:14.024Z
+  code: 40e6c1476dc3ffce
 class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9:
   content:
     model:
@@ -8706,9 +8628,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/axes-and-directions:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 8945d7a661fb7ccc
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:07.115Z
+  code: ae5d24fa0c23e953
 class9-maths/coordinate-geometry/the-cartesian-plane/number-line:
   content:
     model:
@@ -8869,9 +8791,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/number-line:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 7f927f1c98498178
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:07.115Z
+  code: 715afc01dc782930
 class9-maths/coordinate-geometry/the-cartesian-plane/quadrants:
   content:
     model:
@@ -9480,9 +9402,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/quadrants:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 0910a16f0c5fe926
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:07.115Z
+  code: 4b61fa9d3a18dd2d
 class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
   content:
     model:
@@ -9730,10 +9652,14 @@ class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
               y: 0
         firstWest:
           answer: minus
-          concepts:
-            - 87e47e6e3464ea4f
-          isGraded: false
           options:
+            - feedback:
+                en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
+                hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
+              id: next
+              label:
+                en: 6, the next number
+                hi: 6, अगली संख्या
             - feedback:
                 en: "Street 1 is already there, 1 street east. Two streets can't have one number: this one is 1 street west."
                 hi: "गली 1 पहले से है, 1 गली पूर्व में। दो गलियों का एक ही नंबर नहीं हो सकता: यह 1 गली पश्चिम में है।"
@@ -9748,13 +9674,6 @@ class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
               label:
                 en: "0"
                 hi: "0"
-            - feedback:
-                en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
-                hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
-              id: next
-              label:
-                en: 6, the next number
-                hi: 6, अगली संख्या
             - id: minus
               label:
                 en: −1
@@ -10341,10 +10260,14 @@ class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
           prop: choice
           with:
             answer: minus
-            concepts:
-              - 87e47e6e3464ea4f
-            isGraded: false
             options:
+              - feedback:
+                  en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
+                  hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
+                id: next
+                label:
+                  en: 6, the next number
+                  hi: 6, अगली संख्या
               - feedback:
                   en: "Street 1 is already there, 1 street east. Two streets can't have one number: this one is 1 street west."
                   hi: "गली 1 पहले से है, 1 गली पूर्व में। दो गलियों का एक ही नंबर नहीं हो सकता: यह 1 गली पश्चिम में है।"
@@ -10359,13 +10282,6 @@ class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
                 label:
                   en: "0"
                   hi: "0"
-              - feedback:
-                  en: Street 6 would come after Street 5, on the east side. This street is 1 street from her corner, the other way.
-                  hi: गली 6 तो गली 5 के बाद, पूर्व की ओर आती। यह गली उसके कोने से 1 गली दूर है, दूसरी ओर।
-                id: next
-                label:
-                  en: 6, the next number
-                  hi: 6, अगली संख्या
               - id: minus
                 label:
                   en: −1
@@ -10653,9 +10569,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/town-grows:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: be5ff3b27129b8f9
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:07.115Z
+  code: d3d09b616509f8d2
 class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines:
   content:
     model:
@@ -11236,9 +11152,9 @@ class9-maths/coordinate-geometry/the-cartesian-plane/two-number-lines:
       kind: column
       name: page
   by: reviewer
-  commit: e32373ff047c
-  at: 2026-11-02T07:22:36.821Z
-  code: 735de9322678b0f4
+  commit: 09cff9e6eb7e
+  at: 2026-11-03T08:26:07.115Z
+  code: e4becb390f06b2c8
 class9-maths/coordinate-geometry/two-numbers-for-a-place/bus-stops:
   content:
     model:
