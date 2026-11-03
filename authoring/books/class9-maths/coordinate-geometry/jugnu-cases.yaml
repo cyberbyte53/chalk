@@ -1,0 +1,184 @@
+# Jugnu's stuck children (platform/docs/plans/jugnu.md): what he is tested on before any child
+# meets him. Each case: the board, the steps the child took (played on the real board, so her
+# state is the board's own), what she asks (a button, or her own words), and what a good nudge is
+# about. Read them with `pnpm jugnu-cases` in platform/studio.
+#
+# The person approves these, and the five points a good reply meets: true about the board, about
+# her actual mistake, in the lesson's terms, a nudge she then does herself, short.
+
+# ---- Saying where (two-numbers-for-a-place) ----
+
+- name: bus-wrong-side
+  board: class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9
+  steps:
+    - { prop: road, action: walker.step, args: { direction: right } }
+    - { prop: road, action: walker.step, args: { direction: right } }
+    - { prop: road, action: walker.step, args: { direction: right } }
+    - { prop: ask, action: check }
+  asks: "Why is it wrong?"
+  about: "She took the bus to +3: minus stops are on the other side of the stand, to the left."
+
+- name: bus-one-short
+  board: class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad
+  steps:
+    - { prop: road, action: walker.step, args: { direction: right } }
+    - { prop: road, action: walker.step, args: { direction: right } }
+    - { prop: road, action: walker.step, args: { direction: right } }
+    - { prop: ask, action: check }
+  asks: "I went 3, 4 is next na?"
+  about: "She stopped at 3 for stop 4: one more stop to the right; count the stops from 0."
+
+- name: walk-swapped
+  board: class9-maths/coordinate-geometry/questions/walk-to-address/18c614e0
+  steps:
+    - { prop: town, action: walker.step, args: { direction: right } }
+    - { prop: town, action: walker.step, args: { direction: right } }
+    - { prop: town, action: walker.step, args: { direction: right } }
+    - { prop: town, action: walker.step, args: { direction: right } }
+    - { prop: town, action: walker.step, args: { direction: right } }
+    - { prop: town, action: walker.step, args: { direction: up } }
+    - { prop: town, action: walker.step, args: { direction: up } }
+    - { prop: town, action: walker.step, args: { direction: up } }
+    - { prop: ask, action: check }
+  asks: "maine sahi kiya na?"
+  about: "She walked to Street 5, House 3 for Street 3, House 5: the street comes first, along the road; the house is up the street."
+
+- name: desk-swapped
+  board: class9-maths/coordinate-geometry/questions/tap-the-desk/2e01e032
+  steps:
+    - { prop: room, action: places.chooseTarget, args: { x: 3, y: 5 } }
+    - { prop: ask, action: check }
+  asks: "A hint"
+  about: "She tapped (3, 5) for (5, 3): the first number is the column, counted across; the second the row."
+
+- name: dot-swapped-distances
+  board: class9-maths/coordinate-geometry/questions/place-the-dot/2128bc63
+  steps:
+    - { prop: sheet, action: reading.movePoint, args: { x: 3, y: 7 } }
+    - { prop: ask, action: check }
+  asks: "Why is it wrong?"
+  about: "She put the dot 3 cm from the left and 7 cm up, for 7 from the left and 3 up: the two distances swapped."
+
+- name: crossings-same
+  board: class9-maths/coordinate-geometry/questions/cross-street-count/44136fa3
+  steps:
+    - { prop: ask, action: select, args: { option: sameOne } }
+    - { prop: ask, action: check }
+  asks: "why are (4,3) and (3,4) not the same?"
+  about: "Order matters: (4, 3) is the 4th North-South with the 3rd East-West; (3, 4) is another crossing."
+
+- name: lamp-one-distance
+  board: class9-maths/coordinate-geometry/questions/table-lamp/44136fa3
+  steps:
+    - { prop: ask, action: select, args: { option: one } }
+    - { prop: ask, action: check }
+  asks: "A hint"
+  about: "One distance leaves the lamp anywhere on a line: it takes two, from two edges at right angles (as the dot on the page)."
+
+# ---- The Cartesian plane ----
+
+- name: quadrant-wrong-part
+  board: class9-maths/coordinate-geometry/questions/tap-the-part/790ad375
+  steps:
+    - { prop: sheet, action: plane.namePart, args: { part: II } }
+    - { prop: ask, action: check }
+  asks: "Why is it wrong?"
+  about: "She tapped quadrant II for IV: the quadrants are numbered anticlockwise from the top right."
+
+- name: negative-x-axis
+  board: class9-maths/coordinate-geometry/questions/tap-the-part/929971e6
+  steps:
+    - { prop: sheet, action: plane.namePart, args: { part: OX } }
+    - { prop: ask, action: check }
+  asks: "what is X dash?"
+  about: "OX′ is the x-axis to the left of O, the negative side; she tapped OX, the right side."
+
+- name: axes-just-x
+  board: class9-maths/coordinate-geometry/questions/name-the-lines/8bbe4a96
+  steps:
+    - { prop: ask, action: select, args: { option: axis } }
+    - { prop: ask, action: check }
+  asks: "A hint"
+  about: "Two lines are asked for, the horizontal and the vertical: the x-axis and the y-axis."
+
+- name: west-street-number
+  board: class9-maths/coordinate-geometry/the-cartesian-plane/town-grows
+  steps:
+    - { prop: firstWest, action: select, args: { option: next } }
+    - { prop: firstWest, action: check }
+  asks: "Why is it wrong?"
+  about: "Going west from the corner is the other way from east: counting from the corner, it is −1, as on the bus road."
+
+# ---- Coordinates of a point ----
+
+- name: read-swapped
+  board: class9-maths/coordinate-geometry/questions/read-a-point/459923b0
+  steps:
+    - { prop: ask, action: select, args: { option: swapped } }
+    - { prop: ask, action: check }
+  asks: "Why is it wrong?"
+  about: "She chose (3, 5) for (5, 3): the x-coordinate, along, comes first."
+
+- name: read-sign
+  board: class9-maths/coordinate-geometry/questions/read-a-point/b11bc5d9
+  steps:
+    - { prop: ask, action: select, args: { option: xSign } }
+    - { prop: ask, action: check }
+  asks: "P is 4 away so 4 na?"
+  about: "P is 4 to the left of the y-axis: its x-coordinate is −4, not 4."
+
+- name: quadrant-of-negative
+  board: class9-maths/coordinate-geometry/questions/quadrant-or-axis/333b027e
+  steps:
+    - { prop: ask, action: select, args: { option: I } }
+    - { prop: ask, action: check }
+  asks: "Why is it wrong?"
+  about: "(−2, 4): x is negative, so it is left of the y-axis, and y positive, up: quadrant II."
+
+- name: quadrant-both-negative
+  board: class9-maths/coordinate-geometry/questions/quadrant-or-axis/54c4e72e
+  steps:
+    - { prop: ask, action: select, args: { option: IV } }
+    - { prop: ask, action: check }
+  asks: "A hint"
+  about: "(−3, −5): both negative, left and down: quadrant III."
+
+- name: figure-swapped
+  board: class9-maths/coordinate-geometry/questions/fig-3-14/0ca66388
+  steps:
+    - { prop: ask, action: select, args: { option: slip0 } }
+    - { prop: ask, action: check }
+  asks: "यह गलत क्यों है?"
+  about: "She chose (2, −5) for B at (−5, 2): x comes first, and its signs follow the sides of the axes. (In Hindi.)"
+
+# ---- Plotting points ----
+
+- name: plot-swapped
+  board: class9-maths/coordinate-geometry/questions/plot-the-point/333b027e
+  steps:
+    - { prop: sheet, action: reading.movePoint, args: { x: 4, y: -2 } }
+    - { prop: ask, action: check }
+  asks: "Why is it wrong?"
+  about: "She plotted (4, −2) for (−2, 4): go along the x-axis by the first number, then up by the second."
+
+- name: plot-sign
+  board: class9-maths/coordinate-geometry/questions/plot-the-point/54c4e72e
+  steps:
+    - { prop: sheet, action: reading.movePoint, args: { x: 3, y: -5 } }
+    - { prop: ask, action: check }
+  asks: "A hint"
+  about: "She plotted (3, −5) for (−3, −5): −3 is to the left of the y-axis."
+
+- name: plot-swapped-small
+  board: class9-maths/coordinate-geometry/questions/plot-the-point/689a8f1d
+  steps:
+    - { prop: sheet, action: reading.movePoint, args: { x: 2, y: 1 } }
+    - { prop: ask, action: check }
+  asks: "mera dot sahi jagah pe hai?"
+  about: "She plotted (2, 1) for (1, 2): first along by 1, then up by 2."
+
+- name: plot-not-yet
+  board: class9-maths/coordinate-geometry/questions/plot-the-point/689a8f1d
+  steps: []
+  asks: "how do I start?"
+  about: "Nothing done yet: start at O, go along the x-axis by the first number, then up by the second."
