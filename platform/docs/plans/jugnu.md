@@ -1,197 +1,55 @@
 # Jugnu, the tutor
 
-Status: reviewed once; decided (2026-11-03). Designed afresh; nothing is ported.
+Status: decided, rewritten to the minimum (2026-11-03). Designed afresh; nothing is ported.
 
-## What he is, in four sentences
+## What he is
 
-Jugnu is an agent the child calls on one board, who helps by **nudging**: a question that leads one
-step on, in the lesson's own words, while pointing at the part he means. He sees everything about
-the board (what the child sees, what they did, how it is solved) and what the lesson taught, read
-from the built boards themselves, and he is trusted to use it well: nothing is hidden from him,
-and nothing in code stops him; he works out the child's mistake himself.
-His one door to the app is an **MCP server** for that board: he gets the board and the lesson with
-the child's question, and has tools to try things on a copy, point at a part, and reply. Every turn
-is recorded on the phone like any other act, so the learner pipeline sees his help and his chats
-can be read back.
+A stuck child calls Jugnu on a board. He looks at the board, what she did and what the lesson
+taught, checks what would happen by trying it on a copy of the board, and replies with a nudge
+in the lesson's words, maybe pointing at one part. That is all, until evidence asks for more.
 
-```
-child asks ─► phone ─► server: the board rebuilt from the child's record (exact replay)
-                                   │
-                 Jugnu (model) ◄──► board MCP: given at the start: board · what they did ·
-                                   │            how it's solved · lesson (cached)
-                                   │            tools: try · point · say · lesson · props · make
-phone ◄── his words (streamed) and pointers
-  └─► records the turn (`jugnu` entry): the pipeline marks later tries "helped"
-```
+## What a good reply is (the spec)
 
-## The needs
+1. **True about the board**: what is on it, and what would happen if she did something.
+2. **About her actual mistake**, not a general hint.
+3. **In the lesson's terms**: its words, its examples.
+4. **A nudge**: one step, which she then does herself.
+5. **Short and quick.**
 
-1. A child stuck on a board gets a nudge, not the answer: a question, a "look here", a smaller
-   case to try.
-2. What he says is what the lesson taught: its words, its pictures, its examples, its order. A
-   model knows maths already; what it doesn't know is *this* lesson.
-3. He can point at a part of the board the child sees.
-4. He is right about the board: what is on it, what the child did, what would happen if.
-5. A reply comes quickly enough that a child keeps waiting (first words within about 2 s).
-6. A teacher, the person, or a reviewer can read what he said, and judge whether he helped.
+## The minimum that meets it
 
-## Grounding: the built boards
-
-The model's maths isn't the problem; staying inside the lesson is. The lesson is read from the
-**built boards only**, never from planning files (they say what was planned, the boards what is
-taught). Each built board already carries: its words (title, story, instructions, and what it
-reveals later: definitions, "found" boxes), its spoken lines in English and Hindi, what each prop
-shows (by `describeView`, at its start and once its witness has played it), how it is solved (the
-witness), and its place among the concept's pages and questions. The build plays every board with
-its witness already; it writes this per concept as it goes (`taught.json`). Nothing is written by
-hand, and it stays true whenever a board changes.
-
-His instructions: the lesson's words and examples first; point back to a page the child passed
-("remember the bus at stop 3?"); a new example (or a board he makes) only when the lesson's own
-won't do.
-
-## Context, in three rings
-
-Each turn asks: what does he need for this child, on this board, now?
-
-1. **In his first message, changing each turn (a few hundred words)**: the board as the child sees
-   it, what they did on it, how it is solved.
-2. **In his first message, the same for every turn on the concept (a few thousand words,
-   prompt-cached)**: the concept's boards as taught, in order.
-3. **Behind tools, only when he reaches for them**: an earlier concept, the prop library, making a
-   board.
-
-Kept right by watching him: what he fetches on most turns moves into the first message; what sits
-in the first message unused moves behind a tool. Each change is judged on the stuck-children set.
-
-## The board MCP: his one door
-
-**Why MCP, not plain tool calls**: one definition of what Jugnu can see and do, used by three
-callers: the server's agent loop (in memory, no network), Claude Code in development (over HTTP:
-"be Jugnu on this board"), and the evals. Changing a tool changes it for all three. It is separate
-from the authoring MCP (`show`, `comment`…), which writes content and threads and which he never has.
-
-**Given at the start of a turn** (one message, so no round trips; the lesson part is the same for
-every turn on that concept and is prompt-cached):
-
-| Part | What |
+| | |
 |---|---|
-| board | each piece's `describeView` now: parts by name, words, values, what each part can do |
-| what they did | their acts on this board and what each set off; their checks (chosen, right or wrong, nth try ever); earlier turns with him on it |
-| how it's solved | the board's witness (the steps that pass it, from `build/witness/`) |
-| lesson | the concept's boards as taught (above), in the child's language |
+| **In** | the board's state (every prop's variables: a settled board is its variables), what she did on this board, and the lesson as its built boards teach it |
+| **One tool** | `try`: plays steps (a tap, a drag, Check) on a copy of the board, built from its state on the server, and says what changed. From where she is, or from the start. As often as he likes |
+| **Out** | his words, and optionally one part of the board to glow |
 
-**Tools**:
+He runs on the server (the model's key stays there): the phone sends the board, its version, its
+state, what she did and her question; it gets back his words and the part to glow. If the phone's
+board version isn't the server's (just after a deploy), the phone reloads.
 
-| Tool | Does |
-|---|---|
-| `try` | plays steps on a **copy** of the board and says what changed (`seenBetween` over two snapshots, as `show` reports it, without Chrome): the same steps a finger does (tap, drag, Check), through the props' own rules, so what he learns is true. From where the child is (the default), or from the board's start (to replay how it is solved and find where she went off). As many as he likes, each from a fresh copy; the child's board never moves |
-| `point` | glows one part on the child's screen (by its name), with a few words beside it |
-| `say` | his reply; its words stream to the phone as they come; ends the turn |
-| `watch` | ends his turn watching one part he names: his sheet shrinks to his last line, and the next time the child acts on that part (or presses Check) the phone sends him a follow-up turn (what she did, what the board shows now). He answers, watches again, stays quiet, or ends it. A watch ends when she leaves the board or closes his sheet, when he ends it, or after 5 acts. Each follow-up is a turn like any other, recorded |
-| `lesson` | an earlier concept as taught |
-| `props` | the prop library as data: what each prop is for (its `describe`), its setup fields and their types, what it can do; the concept's own props first |
-| `make` | a board from data: words and props with their setup, no rule code (props bring their own behaviour). Checked against each prop's types, drawn, and described back (or what is wrong, to fix); then shown to the child in his sheet, where `point` and `try` work on it |
+The lesson comes from the built boards only: each board's words, spoken lines, what its props
+show at the start and once played, in order, in both languages (written by the build per
+concept, from its witness play).
 
-In development the same server adds `open` (a board, and a child's record or a made-up one), so
-Claude Code can start a turn without a phone.
+Model: Claude Haiku 5.5 at low effort, behind one setting. Asking: buttons ("Why is it wrong?",
+"A hint"), hold a part to ask, and a box to type. Chats are kept, for us to analyse, apart from
+the teacher view.
 
-A board he makes is recorded whole in his turn, so it can be replayed and read back; tries on it
-are not graded. No one reviews it before the child sees it: his own look at it, drawn, is the check,
-and reading a sample after is the other.
+## Evidence first, tools second
 
-Not in the first version: acting on the child's board; the child's mastery; earlier openings of
-the board. Each is a tool or a part later, with nothing else changing.
+1. **The test before the tutor**: about 20 stuck children on coordinate geometry (real wrong
+   states, from the mistakes children make), generated, and read and approved by the person with
+   the five points above.
+2. **The minimum Jugnu**, run on them in Node with Haiku: no phone yet.
+3. **Read every reply against the five points.** Each failure gets its cause. A new capability is
+   added only to fix a failure seen there (candidates, none built until then: following up on
+   what she does next; making a smaller board; looking up an earlier lesson).
+4. **Then the phone and the server**: the button, hold, typing box, the glow; the turn on the
+   server, streamed.
 
-Closed sets are const-object enums: the tool names (`JugnuTool`), and the `steps` kinds of a
-`jugnu` entry (`JugnuStep`: point, say, try, make, watch), replacing today's `kind: z.string()`.
+## What it stands on
 
-## Exact replay: what the record must carry
-
-The server rebuilds the child's board with `Board.replay`, which needs each input at its time **on
-the board's clock**, and each line the voice finished. Today a `cause` entry has only the phone's
-wall time (`at`), and lines told aren't inputs in the record. So, in the record:
-
-- every `cause` entry gains `t`: the board's clock when it was done (`ActionRecord.t` already has
-  it);
-- a voice finishing a line is recorded (it is an input to the board, per `one-clock.md`), with its
-  `t`.
-
-Then one `BoardRuntime.replay(entries)` (in the player, used by the server and tests) maps each
-entry's node id back to its part (through `build/ids.json`) and plays it at its `t`. This also
-makes `events.md`'s "replay is best-effort" exact.
-
-**Version**: a turn names the board's version. If the server's build has another version of that
-board (only between a ship and the phone's reload), the server answers "update the app" and the
-phone reloads; no turn runs on a board the server can't rebuild.
-
-## His instructions (the prompt), in short
-
-Who he is (a firefly friend, warm, brief); who he talks to (a class 9 child); in their language
-(the app's locale; if the child writes Hinglish, he may answer in it); how he helps: work out what the
-child is missing from what they did and how the board is solved, then the smallest nudge that moves them: a
-question, a pointer, a smaller case with `try`; say more only when nudges haven't worked; never
-more than three short sentences. He judges when to say the answer outright (rarely: nudges failed,
-the child is stuck); the instructions say why holding back helps, and trust him with the rest.
-He stays on the board and the lesson; anything else, he turns back to the board kindly.
-
-## Running a turn
-
-1. The phone sends: the board and its version, the child's entries for this opening, the chat so
-   far, what they asked and what they held a finger on.
-2. The server checks the version, replays the board, opens the board MCP on it (in memory), and
-   runs the agent loop: the first message holds board, what they did, answer and lesson; tool
-   calls until `say`.
-3. `point`s and `say`'s words stream to the phone as they happen.
-4. The phone shows them and records one `jugnu` entry (asked, about, reply, steps, model), on this
-   opening, as the learner's (the child asked). The learner pipeline already marks later tries on
-   this opening `helped`.
-
-The model's key stays on the server. Limits: tool calls and seconds per turn; turns per child per
-day.
-
-## Children's words
-
-What a child types, and Jugnu's replies, are kept apart from the rest of the record, with their own
-retention and out of the teacher view, as `events.md` ("Care") already says. How long, and who
-reads them, is the person's call (below).
-
-## What changes in the code
-
-- **Record**: `t` on `cause` entries; the voice's finished lines as inputs; `JugnuStep` enum.
-- **Player**: `BoardRuntime.replay(entries)`; a glow for `point` on a named part.
-- **Build**: `taught.json` per concept, from the built boards and their witness play, in both
-  languages.
-- **`@chalk/jugnu`** (new): the board MCP over one replayed board, and the agent loop. The server
-  mounts it at `POST /api/jugnu/turn` (streamed).
-- **The phone**: Jugnu's button on each board, hold-a-part-to-ask, the chat sheet, the glow.
-- **Leftovers from the old Jugnu go**: `whyNotJugnu` (runtime.ts), the recorder's `pause` comment,
-  events.md's "what Jugnu tries on the phone's own board".
-
-## Checking he helps
-
-A set of stuck children per board, **generated**: a model plays a class 9 child who goes wrong on
-the board (as a child would, from the board and the lesson), and each record is run as a turn.
-Nothing is written per board. Each reply is judged on: grounded in the
-lesson, a nudge rather than the answer, right about the board, short, pointed at the right part.
-First by the person reading them, with one model; a model judge and a second model come once the
-set is worth automating.
-
-## Order
-
-1. Exact replay: `t` and voice in the record, `BoardRuntime.replay`, tested on coordinate geometry's
-   witnesses (replayed board = played board).
-2. The board MCP over a replayed board, in development: Claude Code plays Jugnu through it on
-   coordinate geometry's boards. This proves the door before any model is wired.
-3. `taught.json` in the build, from the built boards.
-4. The server turn and the agent loop, with one model, streamed.
-5. The phone: button, hold-to-ask, sheet, glow.
-6. The generated stuck-children set, read by the person.
-7. `props` and `make`: boards he makes, after the basics work (the same door).
-
-## Decided
-
-- **Asking**: buttons ("Why is it wrong?", "A hint") and hold-a-part-to-ask first, and a small box to type a question.
-- **Model**: Claude Haiku 5.5 at low effort to start, behind one setting so it can be swapped; compared with Claude Sonnet 5.5 on the generated stuck-children set.
-- **`watch`**: on one part he names (not everything the child does), so he sees whether his nudge worked.
-- **Children's chats**: kept, for us to analyse; apart from the teacher view.
+- **Board snapshot and restore** (`@chalk/prop`): every prop's variables out, a board built back
+  from them; tested so that, on every coordinate geometry board, restored equals original.
+- **The lesson as taught**, in the build.
