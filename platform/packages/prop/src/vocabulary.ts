@@ -65,7 +65,7 @@ export type FrameSpec<S extends StoredState> = {
 
 /** One thing the student can see and tell apart, with what it shows them right now. */
 export type Element = {
-  /** Its name under the piece: what `point`, steps and comments take. */
+  /** Its address under the piece (its child's names, then its own, each a segment): what `point`, steps and comments take. */
   id: string;
   /** What it shows, typed: a number as a number, a point as { x, y }. None for an input. */
   value?: unknown;

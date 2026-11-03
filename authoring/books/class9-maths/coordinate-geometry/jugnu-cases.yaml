@@ -160,6 +160,15 @@
     - { prop: ask, action: check }
   asks: "Why is it wrong?"
   about: "She plotted (4, −2) for (−2, 4): go along the x-axis by the first number, then up by the second."
+  students:
+    - name: up-first
+      believes: "In a pair like (−2, 4), the first number tells you how far to go up or down, and the second how far to go along."
+    - name: axes-mixed
+      believes: "The first number goes along the x-axis, but the x-axis is the line going up and down; the y-axis is the flat one."
+    - name: minus-is-down
+      believes: "Order is: first along, then up. But a minus number always means go down, and a plus number means go right or up."
+    - name: just-a-slip
+      believes: "You know it well: the first number is along the x-axis (left for minus, right for plus), the second up or down. You dragged the dot carelessly, without reading the pair again."
 
 - name: plot-sign
   board: class9-maths/coordinate-geometry/questions/plot-the-point/54c4e72e

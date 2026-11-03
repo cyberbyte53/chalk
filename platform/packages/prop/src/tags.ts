@@ -1,4 +1,4 @@
-import { SEP } from "./address";
+import { SEP, pathOf } from "./address";
 import type { ActionDef, Payload } from "./define";
 import { shownOf } from "./layout";
 import { type Element, type Observation, type PropView, nameOf } from "./vocabulary";
@@ -172,10 +172,12 @@ const unescapeHtml = (s: string) =>
  * doing the child's action by its path in the group ("dial.move").
  */
 function underChildren(tag: Tag, children: readonly string[]): Tag {
-  if (children.length === 0) return tag;
+  // Its address under the piece: each name written as a segment (a "/" in a name is escaped).
+  const part = pathOf(...children, tag.part);
+  if (children.length === 0) return { ...tag, part };
   return {
     ...tag,
-    part: [...children, tag.part].join(SEP),
+    part,
     ...(tag.does !== undefined ? { does: tag.does.map((a) => [...children, a].join(".")) } : {}),
   };
 }

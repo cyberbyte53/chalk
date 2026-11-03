@@ -683,7 +683,7 @@ export class BoardRuntime {
     const shown = shownOf(view);
     const fromControls = new Map<string, string[]>();
     const parts: PartSnapshot[] = seen.elements.map((e) => {
-      const at = `${path}/${segment(e.id)}`;
+      const at = `${path}/${e.id}`;
       const does = e.does === undefined ? [] : typeof e.does === "string" ? [e.does] : e.does;
       if (e.isOff !== true)
         for (const action of does)

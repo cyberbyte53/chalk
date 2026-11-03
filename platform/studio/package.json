@@ -20,6 +20,7 @@
     "tool-times": "tsx --tsconfig ../../tsconfig.base.json src/mcp/tool-times.ts",
     "brand-icons": "tsx --tsconfig ../../tsconfig.base.json scripts/brand-icons.ts",
     "jugnu-one": "tsx --env-file=../../.env --tsconfig ../../tsconfig.base.json scripts/jugnu-one.ts",
+    "jugnu-talk": "tsx --tsconfig ../../tsconfig.base.json scripts/jugnu-talk.ts",
     "jugnu-cases": "tsx --tsconfig ../../tsconfig.base.json scripts/jugnu-cases.ts",
     "label-compare": "tsx --tsconfig ../../tsconfig.base.json scripts/label-compare.ts"
   },

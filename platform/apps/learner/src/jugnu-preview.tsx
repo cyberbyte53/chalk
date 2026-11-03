@@ -14,33 +14,62 @@ import { useEffect, useState } from "preact/hooks";
 import { shownAt } from "./preview-shell";
 
 /**
- * `?dev&jugnu=<case>`: Jugnu on one of his stuck children (platform/docs/plans/jugnu.md), both
- * sides at once. Left, what she sees: her board at her state (her steps played again on the real
- * player: a board is deterministic), her question, his reply in his sheet, the part he points at
- * glowing. Right, what he did: what he was given, each thought, each try (the copy drawn after
- * it), his reply and what it cost. The run is the studio's (/dev-jugnu): the model's key stays there.
+ * `?dev&jugnu=<experiment>`: Jugnu's experiments (platform/docs/plans/jugnu.md), each a back and
+ * forth between Jugnu and a simulated child on one real board, kept by the studio (/dev-jugnu) and
+ * opened here turn by turn. Left, what she sees: each line said, his choices, her board at that
+ * moment (her steps played again on the real player: a board is deterministic) with his glow.
+ * Right, what is behind it: each side's thinking, his diagnosis and tries on copies, what she did,
+ * and exactly what each was given. New experiments run from here too; the model's key stays there.
  */
 
 type Step = { prop: string; action: string; args?: Record<string, unknown> };
-type Case = { name: string; board: string; steps: Step[]; asks: string; about: string };
-type Move =
-  | { kind: "thought" | "words"; text: string }
-  | { kind: "try"; steps: Step[]; from: "now" | "start"; saw: unknown };
-type Run = {
-  case: Case;
-  model: string;
-  given: { system: string; message: string };
-  moves: Move[];
-  reply: { words: string; glow: string | null };
-  usage: { requests: number; ms: number; input: number; output: number };
+type Case = {
+  name: string;
+  board: string;
+  steps: Step[];
+  asks: string;
+  about: string;
+  students?: { name: string; believes: string }[];
 };
+type JugnuTurn = {
+  who: "jugnu";
+  given: string;
+  thinking: string[];
+  tries: { steps: Step[]; from: "now" | "start"; saw: unknown }[];
+  diagnosis: string;
+  says: string;
+  choices: string[];
+  glow: string | null;
+  isGlowOnList?: boolean;
+};
+type HerTurn = {
+  who: "her";
+  given: string;
+  thinking: string[];
+  did: Step[];
+  says: string;
+  stepsSoFar: Step[];
+  isRight: boolean;
+};
+type Dialogue = {
+  id: string;
+  note: string;
+  case: Case;
+  student: { name: string; believes: string };
+  models: { jugnu: string; student: string };
+  instructions: { jugnu: string; student: string };
+  turns: (JugnuTurn | HerTurn)[];
+  isRight: boolean;
+  usage: { ms: number; input: number; output: number };
+};
+type Listed = { id: string; note: string; isRight: boolean; turns: number };
 
 const nothing: RecordEvent = () => 0;
 
 /** A glow's name ("sheet/plane/namePart:OX") as the board's: its piece, and the part in it. */
 function pointedOf(glow: string | null): { prop: string; part?: string } | undefined {
   if (glow === null || glow === "") return undefined;
-  const [prop = "", ...rest] = decodeURIComponent(glow).split("/");
+  const [prop = "", ...rest] = glow.split("/");
   return rest.length === 0 ? { prop } : { prop, part: rest.join("/") };
 }
 
@@ -97,74 +126,137 @@ function BoardAt({
   );
 }
 
-/** What she sees: her board, her question, his sheet, his glow. */
-function HerSide({ one, run }: { one: Case; run: Run | null }): JSX.Element {
+const stepText = (steps: readonly Step[]) =>
+  steps
+    .map((x) => `${x.prop}.${x.action}${x.args ? ` ${JSON.stringify(x.args)}` : ""}`)
+    .join(" → ");
+
+/** One turn: what she sees on the left, what is behind it on the right. */
+function Turn({
+  one,
+  turn,
+  stepsNow,
+  n,
+}: {
+  one: Case;
+  turn: JugnuTurn | HerTurn;
+  stepsNow: readonly Step[];
+  n: number;
+}): JSX.Element {
+  const isJugnu = turn.who === "jugnu";
+  const showsBoard = isJugnu || turn.did.length > 0;
   return (
-    <section class="jg-her">
-      <h2>What she sees</h2>
-      <div class="jg-phone-stack">
-        <BoardAt
-          path={one.board}
-          steps={one.steps}
-          pointed={run === null ? undefined : pointedOf(run.reply.glow)}
-          width={360}
-        />
-        <div class="jg-ask">She asks: “{one.asks}”</div>
-        {run !== null && (
-          <div class="jg-sheet">
-            <JugnuFigure mood={JugnuMood.Hint} size={54} />
-            <p>{run.reply.words}</p>
+    <div class="jg-row">
+      <div class="jg-seen">
+        <div class={isJugnu ? "jg-sheet" : "jg-ask"}>
+          {isJugnu && <JugnuFigure mood={JugnuMood.Hint} size={40} />}
+          <p>
+            <b>
+              {n}. {isJugnu ? "Jugnu" : "She"}:
+            </b>{" "}
+            {turn.says}
+          </p>
+        </div>
+        {isJugnu && turn.choices.length > 0 && (
+          <div class="jg-choices">
+            {turn.choices.map((c) => (
+              <span key={c}>{c}</span>
+            ))}
           </div>
         )}
+        {!isJugnu && turn.did.length > 0 && (
+          <p class="jg-small">
+            <b>She does on her board:</b> {stepText(turn.did)}
+            {turn.isRight ? " ✓ right" : ""}
+          </p>
+        )}
+        {showsBoard && (
+          <BoardAt
+            path={one.board}
+            steps={stepsNow}
+            pointed={isJugnu ? pointedOf(turn.glow) : undefined}
+            width={300}
+          />
+        )}
+        {isJugnu && (
+          <p class={turn.isGlowOnList === false ? "jg-problem" : "jg-small"}>
+            glows: {turn.glow ?? "nothing"}
+            {turn.isGlowOnList === false ? " (not a part on her board: nothing glows)" : ""}
+          </p>
+        )}
       </div>
-    </section>
+      <div class="jg-why">
+        {isJugnu && (
+          <p class="jg-diag">
+            <b>His diagnosis:</b> {turn.diagnosis}
+          </p>
+        )}
+        {turn.thinking.map((t, i) => (
+          <p key={i} class="jg-thought">
+            <b>{isJugnu ? "He thinks" : "She thinks"}</b> {t}
+          </p>
+        ))}
+        {isJugnu && turn.tries.length === 0 && <p class="jg-small">He tried nothing on a copy.</p>}
+        {isJugnu &&
+          turn.tries.map((t, i) => (
+            <details key={i} class="jg-try">
+              <summary>
+                Tries on a copy (from {t.from === "now" ? "where she is" : "the start"}):{" "}
+                {stepText(t.steps)}
+              </summary>
+              <BoardAt
+                path={one.board}
+                steps={t.from === "now" ? [...stepsNow, ...t.steps] : t.steps}
+                width={260}
+              />
+              <pre>{JSON.stringify(t.saw, null, 1)}</pre>
+            </details>
+          ))}
+        {turn.given !== "" && (
+          <details>
+            <summary>
+              What {isJugnu ? "he" : "she"} was given ({turn.given.length} characters)
+            </summary>
+            <pre>{turn.given}</pre>
+          </details>
+        )}
+      </div>
+    </div>
   );
 }
 
-/** What he did: given, thought, tried (each copy drawn), said. */
-function HisSide({ one, run }: { one: Case; run: Run }): JSX.Element {
+/** One experiment, turn by turn. */
+function Experiment({ run }: { run: Dialogue }): JSX.Element {
+  let steps: readonly Step[] = run.case.steps;
   return (
-    <section class="jg-his">
-      <h2>What Jugnu does</h2>
-      <details>
-        <summary>His instructions</summary>
-        <pre>{run.given.system}</pre>
-      </details>
-      <details>
-        <summary>What he was given ({run.given.message.length} characters)</summary>
-        <pre>{run.given.message}</pre>
-      </details>
-      <ol class="jg-moves">
-        {run.moves.map((move, i) =>
-          move.kind === "try" ? (
-            <li key={i} class="jg-try">
-              <b>Tries on a copy</b> (from {move.from === "now" ? "where she is" : "the start"})
-              <pre>{JSON.stringify(move.steps, null, 1)}</pre>
-              <BoardAt
-                path={one.board}
-                steps={move.from === "now" ? [...one.steps, ...move.steps] : move.steps}
-                width={280}
-              />
-              <b>What came back to him</b>
-              <pre>{JSON.stringify(move.saw, null, 1)}</pre>
-            </li>
-          ) : (
-            <li key={i} class={move.kind === "thought" ? "jg-thought" : "jg-words"}>
-              <b>{move.kind === "thought" ? "Thinks" : "Writes"}</b>
-              <p>{move.text}</p>
-            </li>
-          ),
+    <section class="jg-run">
+      <div class="jg-about">
+        <p>
+          <b>{run.case.name}</b> · child <b>{run.student.name}</b> · {run.models.jugnu} /{" "}
+          {run.models.student} · {(run.usage.ms / 1000).toFixed(1)} s, {run.usage.input} in,{" "}
+          {run.usage.output} out · <b>{run.isRight ? "she got it" : "not solved"}</b>
+        </p>
+        <p>
+          <b>She believes</b> (hidden from Jugnu): {run.student.believes}
+        </p>
+        {run.note !== "" && (
+          <p>
+            <b>This experiment:</b> {run.note}
+          </p>
         )}
-      </ol>
-      <div class="jg-reply">
-        <b>His reply</b>
-        <p>{run.reply.words}</p>
-        <p class="jg-small">glows: {run.reply.glow ?? "nothing"}</p>
+        <details>
+          <summary>Jugnu's instructions</summary>
+          <pre>{run.instructions.jugnu}</pre>
+        </details>
+        <details>
+          <summary>The child's instructions</summary>
+          <pre>{run.instructions.student}</pre>
+        </details>
       </div>
-      <p class="jg-small">
-        {run.model}: {run.usage.requests} requests, {(run.usage.ms / 1000).toFixed(1)} s,{" "}
-        {run.usage.input} tokens in, {run.usage.output} out
-      </p>
+      {run.turns.map((turn, i) => {
+        if (turn.who === "her") steps = turn.stepsSoFar;
+        return <Turn key={i} one={run.case} turn={turn} stepsNow={steps} n={i + 1} />;
+      })}
     </section>
   );
 }
@@ -172,32 +264,59 @@ function HisSide({ one, run }: { one: Case; run: Run }): JSX.Element {
 export function JugnuPreview(): JSX.Element {
   const params = new URLSearchParams(window.location.search);
   const [cases, setCases] = useState<Case[]>([]);
-  const [name, setName] = useState(params.get("jugnu") || "plot-swapped");
-  const [run, setRun] = useState<Run | null>(null);
+  const [runs, setRuns] = useState<Listed[]>([]);
+  const [id, setId] = useState(params.get("jugnu") ?? "");
+  const [run, setRun] = useState<Dialogue | null>(null);
+  const [caseName, setCaseName] = useState("plot-swapped");
+  const [studentName, setStudentName] = useState("up-first");
+  const [note, setNote] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
-  useEffect(() => {
-    void fetch("/dev-jugnu")
-      .then((r) => r.json() as Promise<{ cases?: Case[]; error?: string }>)
-      .then((d) => (d.cases === undefined ? setProblem(d.error ?? "no cases") : setCases(d.cases)));
-  }, []);
-  const one = cases.find((c) => c.name === name);
-  const choose = (next: string) => {
-    setName(next);
-    setRun(null);
-    const url = new URL(window.location.href);
-    url.searchParams.set("jugnu", next);
-    window.history.replaceState(null, "", url);
+  const load = async (): Promise<Listed[]> => {
+    const d = (await (await fetch("/dev-jugnu")).json()) as {
+      cases?: Case[];
+      runs?: Listed[];
+      error?: string;
+    };
+    if (d.cases === undefined) {
+      setProblem(d.error ?? "no cases");
+      return [];
+    }
+    setCases(d.cases);
+    setRuns(d.runs ?? []);
+    return d.runs ?? [];
   };
+  // The list once; the newest experiment opens when the page names none it knows.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: once, on opening the page
+  useEffect(() => {
+    void load().then((listed) =>
+      setId((now) => (listed.some((r) => r.id === now) ? now : (listed[0]?.id ?? now))),
+    );
+  }, []);
+  useEffect(() => {
+    if (id === "") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("jugnu", id);
+    window.history.replaceState(null, "", url);
+    setRun(null);
+    void fetch(`/dev-jugnu?show=${encodeURIComponent(id)}`)
+      .then((r) => r.json() as Promise<Dialogue | { error: string }>)
+      .then((d) => ("error" in d ? setProblem(d.error) : setRun(d)));
+  }, [id]);
+  const students = cases.find((c) => c.name === caseName)?.students ?? [];
   const runIt = async () => {
     setIsRunning(true);
     setProblem(null);
     try {
-      const answer = (await (await fetch(`/dev-jugnu?run=${encodeURIComponent(name)}`)).json()) as
-        | Run
+      const q = new URLSearchParams({ talk: caseName, student: studentName, note });
+      const answer = (await (await fetch(`/dev-jugnu?${q}`)).json()) as
+        | Dialogue
         | { error: string };
       if ("error" in answer) setProblem(answer.error);
-      else setRun(answer);
+      else {
+        await load();
+        setId(answer.id);
+      }
     } finally {
       setIsRunning(false);
     }
@@ -206,38 +325,50 @@ export function JugnuPreview(): JSX.Element {
     <main class="jg">
       <header class="jg-head">
         <b>Jugnu</b>
-        <select value={name} onChange={(e) => choose((e.target as HTMLSelectElement).value)}>
-          {cases.map((c) => (
-            <option key={c.name} value={c.name}>
-              {c.name}
+        <select value={id} onChange={(e) => setId((e.target as HTMLSelectElement).value)}>
+          {runs.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.isRight ? "✓" : "✗"} {r.id}
             </option>
           ))}
         </select>
-        <button
-          type="button"
-          onClick={() => void runIt()}
-          disabled={isRunning || one === undefined}
+        <span class="jg-small">New:</span>
+        <select
+          value={caseName}
+          onChange={(e) => setCaseName((e.target as HTMLSelectElement).value)}
         >
-          {isRunning ? "Jugnu is thinking…" : run === null ? "Run Jugnu" : "Run again"}
+          {cases
+            .filter((c) => (c.students ?? []).length > 0)
+            .map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+        </select>
+        <select
+          value={studentName}
+          onChange={(e) => setStudentName((e.target as HTMLSelectElement).value)}
+        >
+          {students.map((x) => (
+            <option key={x.name} value={x.name}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+        <input
+          placeholder="What this experiment changes"
+          value={note}
+          onInput={(e) => setNote((e.target as HTMLInputElement).value)}
+        />
+        <button type="button" onClick={() => void runIt()} disabled={isRunning}>
+          {isRunning ? "Running (about a minute)…" : "Run"}
         </button>
-        {one !== undefined && <span class="jg-small">A good nudge is about: {one.about}</span>}
       </header>
       {problem !== null && <div class="jg-problem">{problem}</div>}
-      {one === undefined ? (
-        <div class="jg-empty">Loading the cases…</div>
+      {run === null ? (
+        <div class="jg-empty">{runs.length === 0 ? "No experiments yet." : "Opening…"}</div>
       ) : (
-        <div class="jg-sides">
-          <HerSide one={one} run={run} />
-          {run === null ? (
-            <section class="jg-his jg-empty">
-              {isRunning
-                ? "Jugnu is looking at her board…"
-                : "Press Run Jugnu to see what he does."}
-            </section>
-          ) : (
-            <HisSide one={one} run={run} />
-          )}
-        </div>
+        <Experiment run={run} />
       )}
     </main>
   );

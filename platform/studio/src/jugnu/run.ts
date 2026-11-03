@@ -30,14 +30,16 @@ export type JugnuRun = {
   usage: { requests: number; ms: number; input: number; output: number };
 };
 
-const MODEL = "claude-haiku-5-5";
-const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
+/** The model, swappable here: what runs Jugnu. */
+export const MODEL = "claude-haiku-5-5";
+/** The repo. */
+export const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
 const build = join(root, "build");
 const readBuilt = (path: string): unknown =>
   JSON.parse(readFileSync(join(build, `${path}.json`), "utf8"));
 
 /** What she sees, read off the board: each shown piece's summary, its parts and what it can do. */
-function seen(runtime: BoardRuntime): unknown {
+export function seen(runtime: BoardRuntime): unknown {
   const snap = runtime.snapshot();
   return {
     isPassed: snap.isPassed,
@@ -48,7 +50,7 @@ function seen(runtime: BoardRuntime): unknown {
         prop: n.prop,
         shows: n.summary,
         parts: n.parts.map((p) => ({
-          part: decodeURIComponent(p.path),
+          part: p.path,
           ...(p.value === undefined ? {} : { value: p.value }),
           ...(p.words === undefined ? {} : { words: p.words }),
           ...(p.does === undefined ? {} : { does: p.does }),
@@ -88,7 +90,13 @@ function barOf(runtime: BoardRuntime): string[] {
 }
 
 /** Where two values differ, leaf by leaf ("sheet.reading.point.x: 4 → -2"), at most `most`. */
-function changes(a: unknown, b: unknown, path = "", out: string[] = [], most = 20): string[] {
+export function changes(
+  a: unknown,
+  b: unknown,
+  path = "",
+  out: string[] = [],
+  most = 20,
+): string[] {
   if (out.length >= most || JSON.stringify(a) === JSON.stringify(b)) return out;
   if (typeof a === "object" && a !== null && typeof b === "object" && b !== null) {
     for (const key of new Set([...Object.keys(a), ...Object.keys(b)]))
@@ -106,7 +114,7 @@ function changes(a: unknown, b: unknown, path = "", out: string[] = [], most = 2
 }
 
 /** The lesson as its built boards teach it: each page's pieces, as shown once its witness is done. */
-async function lessonOf(boardPath: string): Promise<string> {
+export async function lessonOf(boardPath: string): Promise<string> {
   const question = readBuilt(boardPath) as { tests?: string[] };
   const chapter = builtChapterSchema.parse(readBuilt(boardPath.split("/").slice(0, 2).join("/")));
   const pages: string[] = [];

@@ -2378,3 +2378,64 @@ body.is-selecting .is-pick-target {
   border-radius: 8px;
   margin-bottom: 12px;
 }
+
+.jg-run {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 16px 40px;
+}
+.jg-about p {
+  margin: 4px 0;
+}
+.jg-row {
+  display: grid;
+  grid-template-columns: minmax(0, 330px) minmax(0, 1fr);
+  gap: 18px;
+  border-top: 1px solid var(--line, #ddd);
+  padding-top: 12px;
+}
+.jg-seen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.jg-why {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.jg-why pre {
+  white-space: pre-wrap;
+  font-size: 12px;
+  max-height: 420px;
+  overflow: auto;
+}
+.jg-diag {
+  margin: 0;
+  padding: 6px 8px;
+  border-left: 3px solid #e0a800;
+}
+.jg-why .jg-thought {
+  margin: 0;
+}
+.jg-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.jg-choices span {
+  border: 1px solid currentColor;
+  border-radius: 14px;
+  padding: 3px 10px;
+  font-size: 13px;
+}
+.jg-head input {
+  min-width: 220px;
+}
+@media (max-width: 720px) {
+  .jg-row {
+    grid-template-columns: 1fr;
+  }
+}

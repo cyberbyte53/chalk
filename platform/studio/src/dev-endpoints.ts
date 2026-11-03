@@ -118,20 +118,28 @@ export async function pipelineEndpoint(
 }
 
 /**
- * /dev-jugnu (jugnu/run.ts): GET the stuck children (jugnu/cases.ts); `?run=<case>` runs Jugnu on
- * one and answers his whole run, for the preview's ?dev&jugnu to show beside her board.
+ * /dev-jugnu (jugnu/dialogue.ts): GET the stuck children and every experiment kept;
+ * `?show=<experiment>` one of them; `?talk=<case>&student=<child>&note=…` runs a new one (Jugnu and
+ * a simulated child, back and forth), keeps it and answers it. The preview's ?dev&jugnu shows them.
  */
 export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
   res.setHeader("content-type", "application/json");
   try {
-    const run = new URL(req.url ?? "/", "http://x").searchParams.get("run");
-    if (run === null) {
+    const q = new URL(req.url ?? "/", "http://x").searchParams;
+    const dialogue = await import("./jugnu/dialogue");
+    const show = q.get("show");
+    const talk = q.get("talk");
+    if (show !== null) res.end(JSON.stringify(dialogue.readRun(show)));
+    else if (talk !== null)
+      res.end(
+        JSON.stringify(
+          await dialogue.runDialogue(talk, q.get("student") ?? "", q.get("note") ?? ""),
+        ),
+      );
+    else {
       const { readCases } = await import("./jugnu/cases");
-      res.end(JSON.stringify({ cases: readCases() }));
-      return;
+      res.end(JSON.stringify({ cases: readCases(), runs: dialogue.listRuns() }));
     }
-    const { runJugnu } = await import("./jugnu/run");
-    res.end(JSON.stringify(await runJugnu(run)));
   } catch (error) {
     res.statusCode = 500;
     res.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));

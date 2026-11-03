@@ -76,26 +76,30 @@ export function partPathsIn(root: Element): Map<string, Element> {
 
 /**
  * The element at an address on a board ("mirror", "mirror/objectArrow/object"): the piece, then
- * each group's child, then the part. Exact: a name matches only that name at that level. The one
- * way anything finds a node on screen (pointing, picks, comment pins, steps, tests).
+ * each group's child, then the part. Exact: a name matches only that name at that level. A child
+ * can be drawn in several layers (a picture under, its taps over: each tagged with its name), so
+ * every layer by that name is looked in. The one way anything finds a node on screen (pointing,
+ * picks, comment pins, steps, tests).
  */
 export function findNode(board: ParentNode, path: string): Element | undefined {
   const [piece, ...rest] = namesOf(path);
   if (piece === undefined) return undefined;
-  let at: Element | null = board.querySelector(`[data-piece="${CSS.escape(piece)}"]`);
+  const top = board.querySelector(`[data-piece="${CSS.escape(piece)}"]`);
+  if (top === null) return undefined;
+  // Only the nearest level counts: a child inside another child is not this one's.
+  const direct = (scope: Element, selector: string) =>
+    [...scope.querySelectorAll(selector)].filter((el) => childNamesBetween(scope, el).length === 0);
+  let at: Element[] = [top];
   for (const [i, name] of rest.entries()) {
-    if (at === null) return undefined;
-    const isLast = i === rest.length - 1;
-    const scope: Element = at;
-    // Only the nearest level counts: a child inside another child is not this one's.
-    const direct = (selector: string) =>
-      [...scope.querySelectorAll(selector)].find(
-        (el) => childNamesBetween(scope, el).length === 0,
-      ) ?? null;
-    const child = direct(`[data-child="${CSS.escape(name)}"]`);
-    at = isLast ? (direct(`[data-part="${CSS.escape(name)}"]`) ?? child) : child;
+    const children = at.flatMap((scope) => direct(scope, `[data-child="${CSS.escape(name)}"]`));
+    if (i === rest.length - 1) {
+      const part = at.flatMap((scope) => direct(scope, `[data-part="${CSS.escape(name)}"]`))[0];
+      return part ?? children[0];
+    }
+    if (children.length === 0) return undefined;
+    at = children;
   }
-  return at ?? undefined;
+  return top;
 }
 
 /** The address of the node an element is in (its part, the groups around it, its piece). */

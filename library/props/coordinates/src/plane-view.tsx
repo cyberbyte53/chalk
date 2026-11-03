@@ -289,13 +289,23 @@ export function AxesDraw({
       {isLines && (
         <line
           class={`cp-axis${named === PlanePart.OX || named === PlanePart.OXDash ? " is-named" : ""}`}
+          {...shows("xLine", s.axisNames[0][locale])}
           x1={left}
           y1={base}
           x2={right}
           y2={base}
         />
       )}
-      {isLines && hasUp(s) && <line class="cp-axis" x1={vx} y1={top} x2={vx} y2={bottom} />}
+      {isLines && hasUp(s) && (
+        <line
+          class="cp-axis"
+          {...shows("yLine", s.axisNames[1][locale])}
+          x1={vx}
+          y1={top}
+          x2={vx}
+          y2={bottom}
+        />
+      )}
       {isLines && named?.startsWith("O") && named !== "O" && (
         <NamedHalf s={s} px={px} part={named} />
       )}
@@ -321,6 +331,7 @@ export function AxesDraw({
               </g>
             ) : (
               <text
+                {...(text === "" ? {} : shows(`x=${v}`, v))}
                 x={x}
                 y={base + numbersBelow}
                 transform={upright(s, x, base + numbersBelow)}
@@ -363,6 +374,7 @@ export function AxesDraw({
               ) : (
                 // The zero, under the ring that slides it while apart, is written clear of it.
                 <text
+                  {...(text === "" ? {} : shows(`y=${v}`, v))}
                   x={vx - (isApart && hasZeroMark(v) ? 14 : 8)}
                   y={y}
                   transform={upright(s, vx - (isApart && hasZeroMark(v) ? 14 : 8), y)}
@@ -469,6 +481,19 @@ function NamedHalf({ s, px, part }: { s: PlaneView; px: FramePixels; part: Plane
   return <line class="cp-axis-half" x1={a} y1={b} x2={c} y2={d} />;
 }
 
+/** What each part a tap names is, as data: the side of an axis, a quadrant's signs, O. */
+const PART_IS: Record<PlanePart, Readonly<Record<string, unknown>>> = {
+  O: { x: 0, y: 0 },
+  OX: { axis: "x", side: "positive" },
+  "OX′": { axis: "x", side: "negative" },
+  OY: { axis: "y", side: "positive" },
+  "OY′": { axis: "y", side: "negative" },
+  I: { x: "positive", y: "positive" },
+  II: { x: "negative", y: "positive" },
+  III: { x: "negative", y: "negative" },
+  IV: { x: "positive", y: "negative" },
+};
+
 /**
  * Taps that name the parts of the plane: each quadrant, each half of an axis, O. Drawn under
  * everything else, so a place or a point on top takes its own tap.
@@ -496,6 +521,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
             key={q}
             class={`cp-part-tap${s.named === q ? " is-named" : ""}`}
             {...does(plane.actions.namePart, { part: q }, q)}
+            data-shows={JSON.stringify(PART_IS[q])}
             x={x0}
             y={y0}
             width={x1 - x0}
@@ -512,6 +538,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
             key={part}
             class="cp-part-tap-line"
             {...does(plane.actions.namePart, { part }, part)}
+            data-shows={JSON.stringify(PART_IS[part])}
             x1={x0}
             y1={y0}
             x2={x1}
@@ -522,6 +549,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
       <circle
         class="cp-part-tap-o"
         {...does(plane.actions.namePart, { part: PlanePart.O }, "O")}
+        data-shows={JSON.stringify(PART_IS.O)}
         cx={ox}
         cy={oy}
         r={12}

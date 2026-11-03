@@ -21,6 +21,43 @@ import type { PropRegistry } from "./prop-module";
 import type { BoardRuntime } from "./runtime";
 import { t } from "./ui-text";
 
+type Rings = { pointed: Box | undefined; picks: (Box | undefined)[] };
+
+/**
+ * Where the pointed part and the picked parts are drawn in the piece's box, measured once the piece
+ * is drawn and again whenever what is drawn in it changes or moves (a view draws after the piece
+ * does, in layers, and lays out later): a part looked for while the piece is still being drawn
+ * isn't there yet.
+ */
+function useRings(
+  box: { current: HTMLDivElement | null },
+  part: string | undefined,
+  picks: readonly { part?: string | undefined }[],
+): Rings {
+  const [rings, setRings] = useState<Rings>({ pointed: undefined, picks: [] });
+  const key = JSON.stringify([part, picks.map((p) => p.part ?? null)]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` stands for `part` and `picks`
+  useLayoutEffect(() => {
+    const element = box.current;
+    const ringOf = (at: string | undefined) => (at === undefined ? undefined : tagged(element, at));
+    const measure = () => {
+      const next = { pointed: ringOf(part), picks: picks.map((p) => ringOf(p.part)) };
+      setRings((was) => (JSON.stringify(was) === JSON.stringify(next) ? was : next));
+    };
+    measure();
+    if (element === null || (part === undefined && picks.length === 0)) return;
+    const changes = new MutationObserver(measure);
+    changes.observe(element, { childList: true, subtree: true, attributes: true });
+    const sizes = new ResizeObserver(measure);
+    sizes.observe(element);
+    return () => {
+      changes.disconnect();
+      sizes.disconnect();
+    };
+  }, [key]);
+  return rings;
+}
+
 /** Where a part (its address under the piece) is drawn in the piece's box, if it is tagged. */
 function tagged(box: HTMLDivElement | null, part: string): Box | undefined {
   if (box === null) return undefined;
@@ -120,16 +157,12 @@ function PropPieceView({
   const about = context.isPicture === true ? undefined : runtime.speakingAbout();
   const isSpoken = about !== undefined && about.split(".")[0] === piece.name;
   // A part is ringed where the view tagged it (`data-part`); without that, the whole prop glows.
-  const ringOf = (part: string | undefined): Box | undefined =>
-    part === undefined ? undefined : tagged(box.current, part);
-  const ring = ringOf(pointed?.part);
-  const isWholeGlow = pointed !== undefined && ring === undefined;
   const picks = (context.picked ?? []).filter((p) => p.prop === piece.name);
-  const pickRings = picks.flatMap((p) => {
-    const at = ringOf(p.part);
-    return at === undefined ? [] : [at];
-  });
-  const isWholePicked = picks.some((p) => ringOf(p.part) === undefined);
+  const rings = useRings(box, pointed?.part, picks);
+  const ring = rings.pointed;
+  const isWholeGlow = pointed !== undefined && ring === undefined;
+  const pickRings = rings.picks.flatMap((at) => (at === undefined ? [] : [at]));
+  const isWholePicked = rings.picks.some((at) => at === undefined);
   return (
     <div
       class={`piece-prop prop-${piece.prop}${isWholeGlow ? " is-pointed" : ""}${isSpoken ? " is-spoken" : ""}${isWholePicked ? " is-picked" : ""}${piece.still !== undefined ? " is-still" : ""}`}

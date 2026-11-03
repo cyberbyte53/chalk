@@ -23,6 +23,8 @@ export type Case = {
   steps: Step[];
   asks: string;
   about: string;
+  /** Simulated children on it, each with one genuine misconception (dialogue.ts). */
+  students?: { name: string; believes: string }[];
 };
 
 const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
