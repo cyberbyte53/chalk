@@ -19,8 +19,23 @@ type Stamp = { key: string; files: string[] };
 export type TestReport = {
   run: number;
   unchanged: number;
-  files: { file: string; ms: number; ok: boolean }[];
+  files: { file: string; ms: number; ok: boolean; failures?: string[] }[];
 };
+
+type TaskResult = { state?: string; errors?: readonly { message?: string }[] };
+type Task = { name: string; result?: TaskResult; tasks?: readonly Task[] };
+
+/** Each failed test in a file, by name, with the first line of its error: what a log keeps. */
+function failuresOf(task: Task, path: readonly string[] = []): string[] {
+  const here = [...path, task.name];
+  const own =
+    task.result?.state === "fail" && (task.tasks === undefined || task.tasks.length === 0)
+      ? [
+          `${here.slice(1).join(" > ")}: ${(task.result.errors?.[0]?.message ?? "failed").split("\n")[0]}`,
+        ]
+      : [];
+  return [...own, ...(task.tasks ?? []).flatMap((t) => failuresOf(t, here))];
+}
 
 type Graph = {
   getModuleById(id: string): ModuleNode | undefined;
@@ -96,10 +111,12 @@ export async function test(
   const graph = project.vitenode?.server?.moduleGraph ?? project.server?.moduleGraph;
   let ok = true;
   for (const result of vitest.state.getFiles()) {
+    const isPass = result.result?.state === "pass";
     options.report?.files.push({
       file: relative(root, result.filepath),
       ms: Math.round(result.result?.duration ?? 0),
-      ok: result.result?.state === "pass",
+      ok: isPass,
+      ...(isPass ? {} : { failures: failuresOf(result as unknown as Task) }),
     });
     if (result.result?.state !== "pass") {
       ok = false;

@@ -93,7 +93,11 @@ function logRun(ms: number, steps: { name: string; ms: number }[], failed: strin
       testsRun: tests.run,
       ...(slowest === undefined ? {} : { slowestTest: { file: slowest.file, ms: slowest.ms } }),
       ...(tests.files.some((f) => !f.ok)
-        ? { failedTests: tests.files.filter((f) => !f.ok).map((f) => f.file) }
+        ? {
+            failedTests: tests.files.filter((f) => !f.ok).map((f) => f.file),
+            // Why: each failed test and its error's first line, so a failure seen once can be read later.
+            failures: tests.files.flatMap((f) => (f.ok ? [] : (f.failures ?? []))),
+          }
         : {}),
     };
     appendFileSync(file, `${JSON.stringify(line)}\n`);
