@@ -47,6 +47,7 @@ export {
   solveLabels,
 } from "./label-solver";
 export { type LabelSpec, type LabelSpot, timedPlacing, useLabel } from "./place-labels";
+export { LABEL_WEIGHTS, type LabelWeights, weightRules } from "./label-weights";
 export {
   type LabelRequest,
   type Obstacles,

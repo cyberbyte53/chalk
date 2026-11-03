@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "preact/hooks";
 import { type Box, type LabelProblem, NEAR, boxesClash, solveLabels } from "./label-solver";
+import { LABEL_WEIGHTS } from "./label-weights";
 
 /**
  * A picture's labels placed together (platform/docs/plans/label-placement.md,
@@ -30,14 +31,11 @@ export type LabelSpec = {
   transform?: (x: number, y: number) => string | undefined;
 };
 
-/**
- * What a place's clash costs, as one placed alone weighed them (a word or dot 10, a line 1, nearer
- * another dot 20, off the picture 1000), with another label as a word: a clash between labels is 1.
- */
-const OFF = 100;
-const ON_MARK = 1;
-const ON_LINE = 0.1;
-const NEARER_OTHER = 2;
+// What a place's clash costs (label-weights.ts).
+const OFF = LABEL_WEIGHTS.offPicture;
+const ON_MARK = LABEL_WEIGHTS.onMark;
+const ON_LINE = LABEL_WEIGHTS.onLine;
+const NEARER_OTHER = LABEL_WEIGHTS.nearerAnother;
 
 type Placer = {
   labels: Map<SVGTextElement, LabelSpec>;
@@ -123,6 +121,12 @@ const inkOf = (b: Box): Box => ({
 const shift = (anchor: string | null, width: number) =>
   anchor === "middle" ? width / 2 : anchor === "end" ? width : 0;
 
+/** Two elements in the order they stand in the document. */
+export function inPictureOrder(a: Node, b: Node): number {
+  if (a === b) return 0;
+  return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+}
+
 /** What is drawn, of the kinds a label can sit on. */
 const INKED = "text, line, circle, ellipse, rect, path, polygon, polyline";
 
@@ -153,7 +157,12 @@ function isLineLike(e: SVGGeometryElement): boolean {
 }
 
 function place(svg: SVGSVGElement, placer: Placer): void {
-  const entries = [...placer.labels].filter(([el]) => el.isConnected);
+  // In the order they stand in the picture, not the order they were registered in: a board opened
+  // at a state and the same board played there register their labels in different orders, and
+  // the solver must be given the same problem to give the same answer.
+  const entries = [...placer.labels]
+    .filter(([el]) => el.isConnected)
+    .sort(([a], [b]) => inPictureOrder(a, b));
   const frame = boxOf(svg.getBoundingClientRect());
   const labelEls = new Set<Element>(entries.map(([el]) => el));
   // The things labels name: a label must be nearer its own than any other's.

@@ -14,6 +14,8 @@
  * simulated annealing as Christensen, Marks and Shieber (1995) give it, from fixed seeds.
  */
 
+import { LABEL_WEIGHTS } from "./label-weights";
+
 /** A box on the page, px. */
 export type Box = { l: number; t: number; r: number; b: number };
 
@@ -26,7 +28,7 @@ export type LabelProblem = {
 };
 
 /** What two things only near each other (within a gap, not overlapping) cost, against overlapping. */
-export const NEAR = 0.05;
+export const NEAR = LABEL_WEIGHTS.near;
 
 /** Labels in a group of at most this many are solved exactly. */
 const EXACT_UP_TO = 9;
@@ -63,9 +65,9 @@ function prepare(problem: LabelProblem) {
           ? []
           : m.spots.flatMap((o, k) =>
               boxesClash(s.ink, o.ink, 0)
-                ? [{ j, k, cost: 1 }]
+                ? [{ j, k, cost: LABEL_WEIGHTS.onLabel }]
                 : boxesClash(s.box, o.box, Math.max(l.gap, m.gap))
-                  ? [{ j, k, cost: NEAR }]
+                  ? [{ j, k, cost: LABEL_WEIGHTS.onLabel * NEAR }]
                   : [],
             ),
       ),

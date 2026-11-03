@@ -7,6 +7,7 @@ import {
   boxesClash,
   solveLabels,
 } from "./label-solver";
+import { LABEL_WEIGHTS, weightRules } from "./label-weights";
 
 /** A seeded random number, for boards made up the same every run. */
 function seeded(seed: number): () => number {
@@ -117,5 +118,17 @@ describe("placing labels together", () => {
       );
       expect(shared).toEqual(solveLabels(problem));
     }
+  });
+});
+
+describe("the weights", () => {
+  it("keep their order", () => {
+    expect(weightRules(LABEL_WEIGHTS)).toEqual([]);
+  });
+  it("say which order a change breaks", () => {
+    // Near a word at a quarter cost more than across a line: Riya's name crossed an axis.
+    expect(weightRules({ ...LABEL_WEIGHTS, near: 0.25 })).toEqual([
+      "near a word or label costs less than across a line (else a label crosses an axis to keep off a word it only comes near)",
+    ]);
   });
 });
