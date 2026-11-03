@@ -130,3 +130,22 @@ at a target); then the reviewer rechecks lessons 2 and 4.
 saw); 2. the placer's rule and the ring; 3. the third distance; each audited.
 
 (The narration on plot-a-point#notR, "written beside her", is fixed apart: words, not labels.)
+
+### Reviewed: the rule, corrected
+
+**A label may cover only ground. It must sit clearly nearer its own thing than any other thing
+it could be naming.**
+
+- **Things** a label could name: what the prop marks `data-thing` (a place's picture with its
+  ring, one box for the group; the crossing point), and every label's own thing (dots, swap
+  circles, Riya). **Not words**: a dot on an axis has its own number 2 px away, so words would rule
+  out every spot near an axis; they stay obstacles. Not lines.
+- **Clearly nearer**: no other thing's gap to the label's box is less than its own thing's gap
+  plus 4 px. Gaps between boxes; words by their ink. One definition, used by the placer and the
+  audit.
+- **Coverable is ground only**: grid, tints, scene, roads, tap areas, ticks. Pictures stop being
+  coverable; a `data-thing` group counts once as an obstacle (one box), not once per roof, wall
+  and door: that triple count, not the house, was what pushed Riya's name onto the axis.
+- **Riya's own box** leaves out her name (it is drawn inside her group), in the placer and the
+  audit.
+- **No third distance**: her upper spots clear the ring already; measure first.
