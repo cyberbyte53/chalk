@@ -23,9 +23,9 @@ import { type CodeGraph, codeGraph } from "../reach/graph";
  *
  * The inputs, and only these:
  * - the code the page runs: the app and everything it bundles (platform/ but the studio and the
- *   editor; library/; the repo's root files, the lockfile among them), and the two studio files
- *   a drawing passes through (app-driver.ts, which drives the page and takes the picture, and
- *   model-schema.ts, which reads every board's state);
+ *   editor; library/; the repo's root files, the lockfile among them), and the studio files
+ *   a drawing passes through (app-driver.ts, which drives the page and takes the picture,
+ *   label-audit.ts, which reads its labels, and model-schema.ts, which reads every board's state);
  * - the content the page loads for the board: its chapter's built files (build/), which the
  *   preview fetches together, sound lengths included;
  * - the browser (its version: text is drawn by it);
@@ -73,7 +73,7 @@ function walk(dir: string, out: string[], skip: (path: string) => boolean): void
   }
 }
 
-/** The code the page runs, and the two studio files a drawing passes through. */
+/** The code the page runs, and the studio files a drawing passes through. */
 export function codeKey(root: string): string {
   const files: string[] = [];
   for (const name of readdirSync(root).sort()) {
@@ -86,6 +86,7 @@ export function codeKey(root: string): string {
   walk(join(root, "library"), files, () => false);
   files.push(
     join(studio, "src", "mcp", "app-driver.ts"),
+    join(studio, "src", "mcp", "label-audit.ts"),
     join(studio, "src", "mcp", "model-schema.ts"),
   );
   return hashOf("code", files);
@@ -93,8 +94,8 @@ export function codeKey(root: string): string {
 
 /**
  * What every drawing goes through, whatever the board: the repo's root files (the lockfile, so every
- * package's version), the app the preview is (its page, styles, fonts, config, shell), and the two
- * studio files a drawing passes through.
+ * package's version), the app the preview is (its page, styles, fonts, config, shell), and the
+ * studio files a drawing passes through (the driver, its label audit, the model's schema).
  */
 export function shellKey(root: string): string {
   const files: string[] = [];
@@ -106,6 +107,7 @@ export function shellKey(root: string): string {
   const studio = join(root, "platform", "studio");
   files.push(
     join(studio, "src", "mcp", "app-driver.ts"),
+    join(studio, "src", "mcp", "label-audit.ts"),
     join(studio, "src", "mcp", "model-schema.ts"),
   );
   return hashOf("shell", files);

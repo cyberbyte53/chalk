@@ -8,6 +8,7 @@ import { buildInputsKey } from "../content/inputs";
 import type { PropPage } from "../prop-text";
 import { count, spend, timed } from "./call-timing";
 import { boardCodeKey, contentKey, isDrawCacheOn, keep, keyOf, readKept } from "./draw-cache";
+import { COUNT_BOX_READS, type LabelAudit, labelAudit } from "./label-audit";
 import { type BoardModel, boardModelSchema } from "./model-schema";
 
 /**
@@ -146,6 +147,8 @@ export type Shot = {
   model?: BoardModel;
   /** What was still going on when it was read, if the board hadn't settled by the cap. */
   running?: string[];
+  /** Its planes' labels as drawn (label-audit.ts). */
+  labels?: LabelAudit;
 };
 
 // Where a call's time goes: each tool call's own tally (call-timing.ts); `timing` across calls.
@@ -580,6 +583,8 @@ export type StepResult = {
   changed?: Record<string, { was: unknown; now: unknown }>;
   /** The board over time after the step, when frames were asked for. */
   motion?: Motion;
+  /** Its planes' labels after the step (label-audit.ts). */
+  labels?: LabelAudit;
 };
 
 /** How the board moved after a step: the frames that differed, and when it went still (if it did). */
@@ -837,6 +842,7 @@ async function newPage(base: string): Promise<Lane> {
   });
   // tsx keeps function names with a helper the page doesn't have; give it one.
   await page.addInitScript("globalThis.__name = (f) => f;");
+  await page.addInitScript(COUNT_BOX_READS);
   const opened: Lane = { page, base, errors: [], isStale: false };
   page.on("console", (m) => {
     // The app asks the API who is signed in; previews don't need a server, so that one is noise.
@@ -1646,6 +1652,9 @@ async function shootNow(
         passed: now.passed.length > seen.passed.length,
         errors: [...at.errors],
         ...(isPictured ? { picture: await pictureOf(page.locator(".preview-card").first()) } : {}),
+        labels: await timed("read: labels", () =>
+          page.locator(".preview-card").first().evaluate(labelAudit),
+        ),
       });
       seen = now;
     }
@@ -1661,6 +1670,7 @@ async function shootNow(
   for (const card of cards) {
     const name = (await card.getAttribute("data-board")) ?? board;
     const overflow = await timed("read: layout problems", () => card.evaluate(layoutProblems));
+    const labels = await timed("read: labels", () => card.evaluate(labelAudit));
     const parts = await timed("read: parts", () =>
       card.evaluate((c) => {
         const out: Record<string, string[]> = {};
@@ -1686,6 +1696,7 @@ async function shootNow(
       boxes: picture?.boxes ?? (await card.evaluate(boxesIn)).boxes,
       parts,
       overflow,
+      ...(labels.labels.length > 0 ? { labels } : {}),
       errors: [...at.errors],
       ...(models.has(name.replace(/\.json$/, ""))
         ? { model: models.get(name.replace(/\.json$/, "")) }
