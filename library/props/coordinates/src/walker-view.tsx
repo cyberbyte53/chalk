@@ -131,34 +131,9 @@ function WalkerShown({
   const name = word(s.walkerName, locale);
   const now = blockOf(s);
   const nameRef = useRef<SVGTextElement>(null);
-  const nameWide = name.length * 9;
-  const nameLeft =
-    s.at.x < 0 ? x - size * 0.55 - nameWide >= 0 : x + size * 0.55 + nameWide > px.width;
-  // Every place her name can go, nearest first: beside her (each side, at her middle, above and
-  // below her feet), then over her head and under her feet.
-  const side = size * 0.55;
+  // Her name, placed round her figure with the plane's other labels (useLabel): clear of
+  // everything drawn but what is coverable and her own figure.
   useLabel(nameRef, () => ({
-    spots: [
-      [
-        nameLeft ? -side : side,
-        s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2,
-        nameLeft ? "end" : "start",
-      ],
-      [side, -size * 0.2, "start"],
-      [-side, -size * 0.2, "end"],
-      [side, size * 0.45 + 16, "start"],
-      [-side, size * 0.45 + 16, "end"],
-      [side, size * 0.25, "start"],
-      [-side, size * 0.25, "end"],
-      [0, -size * 0.75, "middle"],
-      [0, size * 0.45 + 18, "middle"],
-      // Further out, past an axis's numbers or end name beside her.
-      [side + 30, -size * 0.2, "start"],
-      [-side - 30, -size * 0.2, "end"],
-      [side + 30, size * 0.45 + 16, "start"],
-      [-side - 30, size * 0.45 + 16, "end"],
-    ],
-    // Clear of everything drawn but what is coverable and her own figure.
     own: nameRef.current?.closest(".cp-walker") ?? null,
     gap: 4,
   }));
@@ -175,13 +150,9 @@ function WalkerShown({
         <text
           ref={nameRef}
           class="cp-walker-name"
-          // On her side away from both axes, so off their numbers: left of her left of the y-axis,
-          // below her under the x-axis; the other side where the frame's edge would cut it. Then
-          // moved, once drawn, to the first place around her that clashes with no other words
-          // (a point's name, an axis's end, its numbers) and stays inside the frame (below).
-          x={nameLeft ? -size * 0.55 : size * 0.55}
-          y={s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2}
-          text-anchor={nameLeft ? "end" : "start"}
+          // Beside her until placed (useLabel, above).
+          x={size * 0.55}
+          y={-size * 0.2}
         >
           {name}
         </text>

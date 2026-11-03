@@ -13,8 +13,11 @@ import { LABEL_WEIGHTS } from "./label-weights";
 export type LabelSpot = readonly [number, number, "start" | "middle" | "end"];
 
 export type LabelSpec = {
-  /** Its places, in its order of preference. */
-  spots: readonly LabelSpot[];
+  /**
+   * Its places, in its order of preference. Left out: round its own thing, at two distances from
+   * its edge, upper-right first (`spotsRound`).
+   */
+  spots?: readonly LabelSpot[];
   /**
    * What a place keeps clear of (a selector in the picture), and how far, px. Left out: everything
    * inked in the picture (words, lines, shapes that show) but labels and what is tagged
@@ -132,6 +135,62 @@ export function inPictureOrder(a: Node, b: Node): number {
   return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
 }
 
+/** How far a label sits from its thing's edge, px: next to it, then a little further out. */
+const DISTANCES = [3, 12] as const;
+/** The directions round a thing, in the order a label prefers them: the diagonals first. */
+const DIRECTIONS = [
+  [1, -1],
+  [-1, -1],
+  [1, 1],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, 0],
+  [-1, 0],
+] as const;
+
+/**
+ * A label's places round its thing, in the units of the label's group: each direction at each
+ * distance from the thing's edge, nearest first. Its words' size, measured where they are now,
+ * says where its baseline and anchor go so that its box keeps that distance.
+ */
+function spotsRound(el: SVGTextElement, own: Element | null | undefined): LabelSpot[] {
+  const parent = el.parentNode as SVGGraphicsElement;
+  const m = parent.getScreenCTM();
+  if (own === null || own === undefined || m === null) return [];
+  const toLocal = m.inverse();
+  // The thing as drawn, but the label itself when the label is drawn inside it.
+  const parts = own.contains(el) ? [...own.children].filter((c) => !c.contains(el)) : [own];
+  const corners = parts.flatMap((p) => {
+    const r = p.getBoundingClientRect();
+    return r.width === 0 && r.height === 0
+      ? []
+      : [new DOMPoint(r.left, r.top), new DOMPoint(r.right, r.bottom)].map((c) =>
+          c.matrixTransform(toLocal),
+        );
+  });
+  if (corners.length === 0) return [];
+  const xs = corners.map((c) => c.x);
+  const ys = corners.map((c) => c.y);
+  const box = { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys), b: Math.max(...ys) };
+  const bb = el.getBBox();
+  const y = Number(el.getAttribute("y") ?? 0);
+  const above = y - bb.y;
+  const below = bb.y + bb.height - y;
+  return DISTANCES.flatMap((d) =>
+    DIRECTIONS.map(([dx, dy]): LabelSpot => {
+      const x = dx > 0 ? box.r + d : dx < 0 ? box.l - d : (box.l + box.r) / 2;
+      const baseline =
+        dy < 0
+          ? box.t - d - below
+          : dy > 0
+            ? box.b + d + above
+            : (box.t + box.b) / 2 + (above - below) / 2;
+      return [x, baseline, dx > 0 ? "start" : dx < 0 ? "end" : "middle"];
+    }),
+  );
+}
+
 /** What is drawn, of the kinds a label can sit on. */
 const INKED = "text, line, circle, ellipse, rect, path, polygon, polyline";
 
@@ -233,9 +292,11 @@ function place(svg: SVGSVGElement, placer: Placer): void {
     }
     return found;
   };
+  // Each label's places: its own, or round its thing.
+  const spotsOf = entries.map(([el, label]) => label.spots ?? spotsRound(el, label.own));
   // Each label's box at each of its places, worked out from one measure where it is now.
   const problem: LabelProblem = {
-    labels: entries.map(([el, label]) => {
+    labels: entries.map(([el, label], i) => {
       const bb = el.getBBox();
       const x = Number(el.getAttribute("x") ?? 0);
       const y = Number(el.getAttribute("y") ?? 0);
@@ -248,7 +309,7 @@ function place(svg: SVGSVGElement, placer: Placer): void {
       const mine = (e: Element) => e === el || e === label.own || label.own?.contains(e) === true;
       return {
         gap: label.gap,
-        spots: label.spots.map(([sx, sy, anchor], k) => {
+        spots: (spotsOf[i] ?? []).map(([sx, sy, anchor], k) => {
           const p = new DOMPoint(sx, sy).matrixTransform(m);
           const l = p.x + scale * (left - shift(anchor, bb.width));
           const t = p.y + scale * top;
@@ -294,7 +355,7 @@ function place(svg: SVGSVGElement, placer: Placer): void {
   if (isNew) performance.measure("chalk:label-solve", { start: solvingFrom, detail: asked });
   placer.last = { problem: asked, at };
   for (const [i, [el, label]] of entries.entries()) {
-    const spot = label.spots[at[i] ?? 0];
+    const spot = spotsOf[i]?.[at[i] ?? 0];
     if (spot === undefined) continue;
     const [x, y, anchor] = spot;
     el.setAttribute("x", `${x}`);

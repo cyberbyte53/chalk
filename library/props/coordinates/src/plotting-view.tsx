@@ -25,21 +25,6 @@ function DotLabel({
 }: { x: number; y: number; said: string; class?: string }) {
   const ref = useRef<SVGTextElement>(null);
   useLabel(ref, () => ({
-    spots: [
-      [x + 9, y - 9, "start"],
-      [x - 9, y - 9, "end"],
-      [x + 9, y + 18, "start"],
-      [x - 9, y + 18, "end"],
-      [x, y - 13, "middle"],
-      [x, y + 22, "middle"],
-      [x + 11, y + 4, "start"],
-      [x - 11, y + 4, "end"],
-      // Further out, past a tick's number or the axis beside it.
-      [x + 14, y - 22, "start"],
-      [x - 14, y - 22, "end"],
-      [x + 14, y + 30, "start"],
-      [x - 14, y + 30, "end"],
-    ],
     // Clear of everything drawn but what is coverable and its own dot, by a wider gap than words
     // keep; and nearer its own dot than any other, as the pair would read as that dot's.
     gap: 8,
