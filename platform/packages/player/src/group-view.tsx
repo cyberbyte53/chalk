@@ -198,7 +198,6 @@ export function groupView(
             <FrameStage
               px={px}
               label={provider?.frame?.label?.(providerState) ?? def.describe}
-              present={drawings.map((d) => d.key)}
               look={options.look?.(view) ?? ""}
             >
               {drawings.map(({ name, place, key }) => (

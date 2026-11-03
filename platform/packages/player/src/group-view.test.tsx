@@ -7,7 +7,7 @@ import { z } from "zod";
 import { checkProp } from "./check-prop";
 import { describeView } from "./describe";
 import { useDrags } from "./drag";
-import { useFrame, useFrameLabels } from "./frame";
+import { useFrame } from "./frame";
 import { type PartDrawing, groupView } from "./group-view";
 import { type PropViewProps, propModule } from "./prop-module";
 
@@ -63,17 +63,21 @@ const dot = prop({
 function DotView({ view: s }: PropViewProps<typeof dot>): JSX.Element {
   const frame = useFrame();
   const drag = useDrags();
-  // Its label goes to the frame's one pass, not drawn here.
-  useFrameLabels([{ id: "name", at: [s.x, s.y], text: s.name, part: "name" }]);
   const [x, y] = frame?.px.toPx(s.x, s.y) ?? [0, 0];
+  // Its name is its own words, drawn beside it (a real prop places them with useLabel).
   return (
-    <circle
-      {...shows("dot", { x: s.x, y: s.y })}
-      {...drag({ axis: "xy", at: { x: s.x, y: s.y }, move: dot.actions.move, step: 0.1 })}
-      cx={x}
-      cy={y}
-      r={6}
-    />
+    <g>
+      <circle
+        {...shows("dot", { x: s.x, y: s.y })}
+        {...drag({ axis: "xy", at: { x: s.x, y: s.y }, move: dot.actions.move, step: 0.1 })}
+        cx={x}
+        cy={y}
+        r={6}
+      />
+      <text {...shows("name", s.name)} x={x + 9} y={y - 9}>
+        {s.name}
+      </text>
+    </g>
   );
 }
 
@@ -128,8 +132,8 @@ describe("groups drawn", () => {
     expect(seen.elements.map((e) => e.id)).toEqual([
       "paper/plane",
       "p/move",
-      "q/move",
       "p/name",
+      "q/move",
       "q/name",
       "count/n",
     ]);
@@ -155,45 +159,6 @@ describe("frames", () => {
     const html = draw();
     expect(html.match(/<svg/g)).toHaveLength(1);
     expect(html.indexOf('data-child="count"')).toBeGreaterThan(html.indexOf("</svg>"));
-  });
-
-  it("places every child's labels in one pass, under the child's name, apart from each other", () => {
-    const html = draw();
-    const spots = [...html.matchAll(/<text[^>]*x="([\d.]+)" y="([\d.]+)"/g)].map((m) => [
-      Number(m[1]),
-      Number(m[2]),
-    ]);
-    expect(spots).toHaveLength(2);
-    const [a, b] = spots as [number[], number[]];
-    // P and Q are close together; their labels still don't sit on each other.
-    expect(Math.hypot((a[0] ?? 0) - (b[0] ?? 0), (a[1] ?? 0) - (b[1] ?? 0))).toBeGreaterThan(12);
-  });
-});
-
-describe("labels from several labellers in one part", () => {
-  // A part with a label for each of its things: every labeller's labels are placed, not the last's.
-  function TwoNames({ view: s }: PropViewProps<typeof dot>): JSX.Element {
-    useFrameLabels([{ id: "first", at: [s.x, s.y], text: `${s.name}1` }]);
-    useFrameLabels([{ id: "second", at: [s.x + 2, s.y], text: `${s.name}2` }]);
-    return <g />;
-  }
-  const two = prop({
-    type: "two",
-    role: PropRole.Explainer,
-    describe: "two labels in one part",
-    children: { paper, p: dot },
-    summary: () => "two",
-    layout: { kind: "frame", provider: "paper", children: ["p"] },
-  });
-  const TwoView = groupView(two, { paper: PaperView, p: TwoNames } as unknown as Parameters<
-    typeof groupView
-  >[1]);
-  it("places each labeller's labels", () => {
-    const html = render(
-      <TwoView view={viewOf(two)} width={300} locale="en" call={() => {}} signal={() => {}} />,
-    );
-    expect(html).toContain(">P1</text>");
-    expect(html).toContain(">P2</text>");
   });
 });
 
@@ -248,14 +213,11 @@ describe("a part drawing in several places", () => {
     const at = (s: string) => html.indexOf(s);
     expect(at('class="shadow"')).toBeGreaterThan(-1);
     expect(at('class="shadow"')).toBeLessThan(at('data-child="paper"'));
-    // Inside the picture: p's back, then on the lines in the layout's order (paper, q, p), then
-    // the frame's labels (each under its child).
+    // Inside the picture: p's back, then on the lines in the layout's order (paper, q, p).
     const picture = html.slice(at("<svg"), at("</svg>"));
     expect([...picture.matchAll(/data-child="(\w+)"/g)].map((m) => m[1])).toEqual([
       "p",
       "paper",
-      "q",
-      "p",
       "q",
       "p",
     ]);

@@ -1,7 +1,7 @@
 /** @jsxImportSource preact */
 import type { ComponentChildren, JSX } from "preact";
 import { type KitProps, fx, kitClass } from "./kit";
-import type { Pt } from "./labels";
+import type { Pt } from "./point";
 
 /**
  * Geometry marks, in px: angle arcs, right-angle squares, equal-length ticks, parallel arrows, a

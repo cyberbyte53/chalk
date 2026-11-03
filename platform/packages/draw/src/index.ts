@@ -46,16 +46,9 @@ export {
   boxesClash,
   solveLabels,
 } from "./label-solver";
+export type { Pt as PixelPoint } from "./point";
 export { type LabelSpec, type LabelSpot, timedPlacing, useLabel } from "./place-labels";
 export { LABEL_WEIGHTS, type LabelWeights, weightRules } from "./label-weights";
-export {
-  type LabelRequest,
-  type Obstacles,
-  type Placed,
-  type Pt as PixelPoint,
-  placeLabels,
-  textWidth,
-} from "./labels";
 export type { KitProps } from "./kit";
 export {
   Beaker,

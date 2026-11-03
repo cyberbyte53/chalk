@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
-import { type Obstacles, type PixelPoint, Stage, placeLabels } from "@chalk/draw";
-import { type FramePixels, shows } from "@chalk/prop";
+import { Stage } from "@chalk/draw";
+import type { FramePixels } from "@chalk/prop";
 import { type ComponentChildren, type JSX, createContext } from "preact";
 import { useContext, useLayoutEffect, useRef } from "preact/hooks";
 
@@ -13,38 +13,10 @@ import { useContext, useLayoutEffect, useRef } from "preact/hooks";
  * - `drag`: a drag measured against the transform as it was when the drag began, so a window that
  *   refits while dragging (optics) doesn't fight the finger; the part under the finger takes the
  *   pointer (the browser's hit test is the arbiter, topmost first) and keeps it until let go;
- * - `labels`: children hand in their labels; the frame places them all in one pass, off each other
- *   and off the lines children report, so labels from different children never collide.
+ *
+ * Labels are not the frame's: a child draws its own words and places them with `useLabel`
+ * (@chalk/draw), which places every label in the picture together, whichever child drew it.
  */
-
-/** A label a child asks the frame to place, in model coordinates. */
-export type FrameLabel = {
-  id: string;
-  /** The point it names (model units). */
-  at: readonly [number, number];
-  text: string;
-  /** Higher places first, so it gets the best spot. Default 0. */
-  priority?: number;
-  /** Font size in px (default 13). */
-  size?: number;
-  /** A direction to try first, degrees on screen (0 right, 90 down). */
-  prefer?: number;
-  /** A point to push away from (model units). */
-  away?: readonly [number, number];
-  /** Extra class for its look (e.g. "is-length"). */
-  class?: string;
-  /** Its name, when the student reads it as a part (it then shows its text, tags.ts). */
-  part?: string;
-};
-
-/**
- * By the hook that gave them (`<drawing>\u0000<hook>`: a drawing, a child or one of its places, may
- * have several labellers), with the child they belong to.
- */
-type LabelStore = Map<
-  string,
-  { owner: string; labels: readonly FrameLabel[]; obstacles: Obstacles }
->;
 
 export type FrameContextValue = {
   px: FramePixels;
@@ -54,14 +26,6 @@ export type FrameContextValue = {
     move: (at: readonly [number, number]) => void,
     end?: (at: readonly [number, number]) => void,
   ) => void;
-  /** One labeller's labels and the lines they keep off (replaces what that labeller gave before). */
-  labels: (
-    key: string,
-    owner: string,
-    labels: readonly FrameLabel[],
-    obstacles?: Obstacles,
-  ) => void;
-  store: LabelStore;
   /** The child drawing now (set by the frame around each child). */
   owner: string;
   /** Its drawing now: the child, or the child in one place (a child may draw in several). */
@@ -84,40 +48,19 @@ export function useFrame(): FrameContextValue | null {
   return useContext(FrameContext);
 }
 
-let labellers = 0;
-
-/**
- * Hands these labels to the frame for the one placing pass. Each call of the hook is its own
- * labeller (a part may have several: a label each); its labels go when it does.
- */
-export function useFrameLabels(labels: readonly FrameLabel[], obstacles: Obstacles = {}): void {
-  const frame = useContext(FrameContext);
-  const me = useRef(0);
-  if (me.current === 0) me.current = ++labellers;
-  const key = frame === null ? "" : `${frame.key}\u0000${me.current}`;
-  frame?.labels(key, frame.owner, labels, obstacles);
-  // The store stays for the frame's life (its context is a new object every drawing).
-  const store = frame?.store;
-  useLayoutEffect(() => () => void store?.delete(key), [store, key]);
-}
-
 /** Draws one picture for a frame and gives its children the frame's services. */
 export function FrameStage({
   px,
   label,
-  present,
   look,
   children,
 }: {
   px: FramePixels;
   label: string;
-  /** The drawings there now (by `InFrame` key): labels of any other are dropped (a child left out, or hidden). */
-  present: readonly string[];
   /** Extra classes on the picture's SVG. */
   look?: string;
   children: ComponentChildren;
 }): JSX.Element {
-  const store = useRef<LabelStore>(new Map()).current;
   const svg = useRef<SVGSVGElement>(null);
   // The frame's map, on its own element: a tool outside the app (the chalk MCP's play) aims a tap
   // or a drag at a point in the prop's units ("put P at (−4, 2)") by asking the picture where it is.
@@ -136,8 +79,6 @@ export function FrameStage({
   };
   const base: Omit<FrameContextValue, "owner" | "key"> = {
     px,
-    store,
-    labels: (key, owner, labels, obstacles = {}) => store.set(key, { owner, labels, obstacles }),
     drag: (event, move, end) => {
       const target = event.currentTarget as Element;
       // The transform as it is now: a window that refits during the drag doesn't move the finger.
@@ -160,7 +101,6 @@ export function FrameStage({
   const inside = (
     <FrameContext.Provider value={{ ...base, owner: "", key: "" }}>
       {children}
-      <LabelLayer present={present} />
     </FrameContext.Provider>
   );
   const svgClass = `frame-svg${look ? ` ${look}` : ""}`;
@@ -222,59 +162,5 @@ export function InFrame({
     >
       {children}
     </FrameContext.Provider>
-  );
-}
-
-/** Places every child's labels together, highest priority first, and draws them. */
-function LabelLayer({ present }: { present: readonly string[] }): JSX.Element | null {
-  const frame = useContext(FrameContext);
-  if (frame === null) return null;
-  for (const key of [...frame.store.keys()])
-    if (!present.includes(key.split("\u0000")[0] ?? key)) frame.store.delete(key);
-  const all = [...frame.store.values()].flatMap(({ owner, labels }) =>
-    labels.map((l) => ({ ...l, owner })),
-  );
-  if (all.length === 0) return null;
-  const sorted = all.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-  const obstacles: Obstacles = {
-    segments: [...frame.store.values()].flatMap((v) => v.obstacles.segments ?? []),
-    circles: [...frame.store.values()].flatMap((v) => v.obstacles.circles ?? []),
-    boxes: [...frame.store.values()].flatMap((v) => v.obstacles.boxes ?? []),
-  };
-  const toPx = (p: readonly [number, number]): PixelPoint => frame.px.toPx(p[0], p[1]);
-  const placed = placeLabels(
-    sorted.map((l) => ({
-      id: `${l.owner}:${l.id}`,
-      at: toPx(l.at),
-      text: l.text,
-      ...(l.size !== undefined ? { size: l.size } : {}),
-      ...(l.prefer !== undefined ? { prefer: l.prefer } : {}),
-      ...(l.away !== undefined ? { away: toPx(l.away) } : {}),
-    })),
-    { width: frame.px.width, height: frame.px.height },
-    obstacles,
-  );
-  return (
-    <g class="frame-labels">
-      {placed.map((p, i) => {
-        const l = sorted[i];
-        if (l === undefined) return null;
-        // Under its child's name, so a label's part is found as "<child>/<part>".
-        return (
-          <g key={p.id} data-child={l.owner}>
-            <text
-              class={`frame-label${l.class ? ` ${l.class}` : ""}`}
-              {...(l.part === undefined ? {} : shows(l.part, l.text))}
-              x={(p.x + p.width / 2).toFixed(1)}
-              y={(p.y + p.height * 0.78).toFixed(1)}
-              text-anchor="middle"
-              font-size={l.size ?? 13}
-            >
-              {l.text}
-            </text>
-          </g>
-        );
-      })}
-    </g>
   );
 }

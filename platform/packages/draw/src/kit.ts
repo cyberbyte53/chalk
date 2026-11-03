@@ -1,4 +1,4 @@
-import type { Pt } from "./labels";
+import type { Pt } from "./point";
 
 /**
  * What every drawing-kit piece (lab, marks, optics, circuit) takes besides its geometry. Kit pieces

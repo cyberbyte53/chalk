@@ -1,7 +1,7 @@
 /** @jsxImportSource preact */
 import type { JSX } from "preact";
 import { type KitProps, kitClass, placeAt } from "./kit";
-import type { Pt } from "./labels";
+import type { Pt } from "./point";
 
 /**
  * The textbook's circuit symbols (NCERT Table 12.1) and an analogue meter, in px. Each symbol is

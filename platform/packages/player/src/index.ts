@@ -39,10 +39,8 @@ export {
   FRAME_MAP,
   type FrameMap,
   type FrameContextValue,
-  type FrameLabel,
   FrameStage,
   useFrame,
-  useFrameLabels,
 } from "./frame";
 export { type DragAttrs, type DragSpec, useDrags } from "./drag";
 export { describeView } from "./describe";

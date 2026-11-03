@@ -67,3 +67,27 @@ table and town boards in English and Hindi at 360. It replaces today's only if n
 3. O out of the placer, drawn by the plane; the audit by `data-label`. Audit.
 4. Generated spots instead of lists. Audit, and `changes` for passed boards.
 5. Remove the unused layer and the old placer, with their exports, tests and doc line.
+
+## Done (2026-11-03)
+
+Steps 0–5 built, each measured by the label audit over the chapter (618 drawings with placed
+labels, en and hi, 360 and 640, every witness step):
+
+| | Lists (before) | Now |
+|---|---|---|
+| Label on label | 0 | 0 |
+| On a dot or word | 14 | 10 |
+| On a line | 10 | 4 |
+| Nearer another dot | 0 | 0 |
+| Drawings with a problem | 16 | 10 |
+
+(Placed labels only: O is fixed text now, not judged as a label.) Placing 1.3 ms a drawing
+(median).
+
+Found on the way: house and stall pictures, the axes' ticks and the target's ring are coverable
+(each was the one cause of a regression). Covering a word by share (all of it worse than its
+corner) was tried and made lines worse (4 → 14): not taken. Still there: "(0, 5)" covers the
+y-axis's 6 on swap-the-numbers, where no spot round it is clear.
+
+What a prop writes now: `useLabel(ref, () => ({ own: thing }))` on its label's `<text>`, and
+`data-coverable` on what labels may sit over. making-a-prop.md says so.

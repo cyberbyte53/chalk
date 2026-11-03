@@ -1,8 +1,8 @@
 /** @jsxImportSource preact */
 import type { JSX } from "preact";
 import { type KitProps, kitClass } from "./kit";
-import type { Pt } from "./labels";
 import { Arrowhead, type ArrowheadShape, HEAD_TIP } from "./marks";
+import type { Pt } from "./point";
 
 /**
  * Ray-diagram pieces, in px: the object and image arrows, a ray with its mid-arrow, the principal
