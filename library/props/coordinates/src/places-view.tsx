@@ -49,6 +49,7 @@ function PlacesDraw({
           >
             <rect
               class="cp-hit"
+              data-backdrop
               x={-size * 0.7}
               y={-size * 0.7}
               width={size * 1.4}

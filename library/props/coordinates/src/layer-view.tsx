@@ -83,6 +83,7 @@ export function PlaneTap({
   return (
     <rect
       class="cp-plane-tap"
+      data-backdrop
       {...says(action)}
       x={x0}
       y={y0}

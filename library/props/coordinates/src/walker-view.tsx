@@ -86,7 +86,7 @@ function StreetsAcross({ s, px }: { s: WalkerView; px: FramePixels }): JSX.Eleme
   const [x1] = px.toPx(w.xMax, 0);
   const road = Math.max(6, Math.min(16, unitOf(px) * 0.32));
   return (
-    <g class="cp-town">
+    <g class="cp-town" data-backdrop>
       {marksOn(Marks.Counts, w.yMin, w.yMax, 1).map((y) => {
         const [, sy] = px.toPx(0, y);
         return (
@@ -159,7 +159,9 @@ function WalkerShown({
       [-side - 30, size * 0.45 + 16, "end"],
     ],
     // Every other word on the plane, and the axes' lines and a point's dashed guides: her name
-    // keeps a few pixels from each, so it neither touches a word nor sits on a line.
+    // keeps a few pixels from each, so it neither touches a word nor sits on a line. Not
+    // everything drawn: then a town's houses cost as much as a word, and her name goes across an
+    // axis instead (platform/docs/plans/generic-labels.md, results).
     avoid: () => ({ what: "text, line.cp-axis, line.cp-drop", gap: 4 }),
     gap: 4,
   }));

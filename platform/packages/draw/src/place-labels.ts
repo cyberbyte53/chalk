@@ -14,8 +14,12 @@ export type LabelSpot = readonly [number, number, "start" | "middle" | "end"];
 export type LabelSpec = {
   /** Its places, in its order of preference. */
   spots: readonly LabelSpot[];
-  /** What a place keeps clear of (a selector in the picture), and how far, px. */
-  avoid: (spot: number) => { what: string; gap: number };
+  /**
+   * What a place keeps clear of (a selector in the picture), and how far, px. Left out: everything
+   * inked in the picture (words, lines, shapes that show) but labels and what is tagged
+   * `data-backdrop` (a grid, a tint, a tap area), `gap` away.
+   */
+  avoid?: (spot: number) => { what: string; gap: number };
   /** How far it keeps from other labels, px. */
   gap: number;
   /** The thing it names (a dot, a figure): it may touch it. */
@@ -119,6 +123,35 @@ const inkOf = (b: Box): Box => ({
 const shift = (anchor: string | null, width: number) =>
   anchor === "middle" ? width / 2 : anchor === "end" ? width : 0;
 
+/** What is drawn, of the kinds a label can sit on. */
+const INKED = "text, line, circle, ellipse, rect, path, polygon, polyline";
+
+/** Whether a thing shows: visible, and with a fill or a stroke that isn't clear. */
+function hasInk(e: Element): boolean {
+  if (!e.checkVisibility({ opacityProperty: true, visibilityProperty: true })) return false;
+  const style = getComputedStyle(e);
+  const isClear = (paint: string) =>
+    paint === "none" || paint === "transparent" || /rgba\([^)]*,\s*0\)$/.test(paint);
+  const isFilled = !isClear(style.fill) && Number(style.fillOpacity) > 0;
+  const isStroked =
+    !isClear(style.stroke) &&
+    Number(style.strokeOpacity) > 0 &&
+    Number.parseFloat(style.strokeWidth) > 0;
+  return isFilled || isStroked;
+}
+
+/** A path or polyline drawn as a line (no fill): kept clear of along its length, not its box. */
+function isLineLike(e: SVGGeometryElement): boolean {
+  if (
+    e instanceof SVGRectElement ||
+    e instanceof SVGCircleElement ||
+    e instanceof SVGEllipseElement
+  )
+    return false;
+  const fill = getComputedStyle(e).fill;
+  return fill === "none" || fill === "transparent" || /rgba\([^)]*,\s*0\)$/.test(fill);
+}
+
 function place(svg: SVGSVGElement, placer: Placer): void {
   const entries = [...placer.labels].filter(([el]) => el.isConnected);
   const frame = boxOf(svg.getBoundingClientRect());
@@ -127,37 +160,62 @@ function place(svg: SVGSVGElement, placer: Placer): void {
   const named = [
     ...new Set(entries.flatMap(([, l]) => (l.own === undefined || l.own === null ? [] : [l.own]))),
   ].map((d) => ({ el: d, box: boxOf(d.getBoundingClientRect()) }));
-  // Each set of things kept clear of, read once: boxes, and lines as their two ends.
-  type Mark = { el: Element; box: Box; ink: Box; line?: [DOMPoint, DOMPoint] };
+  // Each set of things kept clear of, read once: boxes, and lines (a line, an unfilled path) as
+  // the segments they are drawn along.
+  type Mark = { el: Element; box: Box; ink: Box; lines?: [DOMPoint, DOMPoint][] };
   const marks = new Map<string, Mark[]>();
-  const marksOf = (what: string) => {
-    let found = marks.get(what);
+  const markOf = (e: Element): Mark[] => {
+    const r = e.getBoundingClientRect();
+    if (r.width === 0 && r.height === 0) return [];
+    const box = boxOf(r);
+    const m = e instanceof SVGGraphicsElement ? e.getScreenCTM() : null;
+    const on = (p: { x: number; y: number }) =>
+      new DOMPoint(p.x, p.y).matrixTransform(m ?? undefined);
+    if (e instanceof SVGLineElement && m !== null)
+      return [
+        {
+          el: e,
+          box,
+          ink: box,
+          lines: [
+            [
+              on({ x: e.x1.baseVal.value, y: e.y1.baseVal.value }),
+              on({ x: e.x2.baseVal.value, y: e.y2.baseVal.value }),
+            ],
+          ],
+        },
+      ];
+    if (e instanceof SVGGeometryElement && m !== null && isLineLike(e)) {
+      const length = e.getTotalLength();
+      const steps = Math.max(1, Math.min(64, Math.ceil(length / 12)));
+      const points = Array.from({ length: steps + 1 }, (_, i) =>
+        on(e.getPointAtLength((length * i) / steps)),
+      );
+      return [
+        {
+          el: e,
+          box,
+          ink: box,
+          lines: points.slice(1).map((p, i) => [points[i] ?? p, p] as [DOMPoint, DOMPoint]),
+        },
+      ];
+    }
+    return [{ el: e, box, ink: e.tagName === "text" ? inkOf(box) : box }];
+  };
+  const marksOf = (what: string | undefined) => {
+    const key = what ?? "";
+    let found = marks.get(key);
     if (found === undefined) {
-      found = [...svg.querySelectorAll(what)]
+      found = (
+        what === undefined
+          ? [...svg.querySelectorAll(INKED)].filter(
+              (e) => e.closest("[data-backdrop]") === null && hasInk(e),
+            )
+          : [...svg.querySelectorAll(what)]
+      )
         .filter((e) => !labelEls.has(e))
-        .flatMap((e): Mark[] => {
-          const r = e.getBoundingClientRect();
-          if (r.width === 0 && r.height === 0) return [];
-          if (e instanceof SVGLineElement) {
-            const m = e.getScreenCTM();
-            if (m === null) return [];
-            const end = (x: number, y: number) => new DOMPoint(x, y).matrixTransform(m);
-            return [
-              {
-                el: e,
-                box: boxOf(r),
-                ink: boxOf(r),
-                line: [
-                  end(e.x1.baseVal.value, e.y1.baseVal.value),
-                  end(e.x2.baseVal.value, e.y2.baseVal.value),
-                ] as [DOMPoint, DOMPoint],
-              },
-            ];
-          }
-          const box = boxOf(r);
-          return [{ el: e, box, ink: e.tagName === "text" ? inkOf(box) : box }];
-        });
-      marks.set(what, found);
+        .flatMap(markOf);
+      marks.set(key, found);
     }
     return found;
   };
@@ -182,19 +240,22 @@ function place(svg: SVGSVGElement, placer: Placer): void {
           const t = p.y + scale * top;
           const box = { l, t, r: l + scale * bb.width, b: t + scale * bb.height };
           const ink = inkOf(box);
-          const { what, gap } = label.avoid(k);
+          const { what, gap } = label.avoid?.(k) ?? { what: undefined, gap: label.gap };
           let cost =
             box.l < frame.l || box.r > frame.r || box.t < frame.t || box.b > frame.b ? OFF : 0;
           // On a thing costs in full; only within the gap of it, a quarter (NEAR).
           for (const mark of marksOf(what)) {
             if (mine(mark.el)) continue;
-            const weight = mark.line === undefined ? ON_MARK : ON_LINE;
+            const lines = mark.lines;
+            const weight = lines === undefined ? ON_MARK : ON_LINE;
             const isOn =
-              mark.line === undefined ? boxesClash(ink, mark.ink, 0) : crosses(ink, mark.line, 0);
+              lines === undefined
+                ? boxesClash(ink, mark.ink, 0)
+                : lines.some((line) => crosses(ink, line, 0));
             const isNear =
-              mark.line === undefined
+              lines === undefined
                 ? boxesClash(box, mark.box, gap)
-                : crosses(box, mark.line, gap);
+                : boxesClash(box, mark.box, gap) && lines.some((line) => crosses(box, line, gap));
             cost += isOn ? weight : isNear ? weight * NEAR : 0;
           }
           if (label.isNearOwn === true && ownBox !== undefined) {

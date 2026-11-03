@@ -94,7 +94,9 @@ function StillDraw({
     const r = still.region;
     const [x0, y0] = px.toPx(r.xMin, r.yMax);
     const [x1, y1] = px.toPx(r.xMax, r.yMin);
-    shape = <rect class="cp-still-region" x={x0} y={y0} width={x1 - x0} height={y1 - y0} />;
+    shape = (
+      <rect class="cp-still-region" data-backdrop x={x0} y={y0} width={x1 - x0} height={y1 - y0} />
+    );
   } else if (still.kind === "line") {
     // Bold where the patch given before still allows it.
     const r = still.region;

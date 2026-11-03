@@ -171,3 +171,20 @@ lines and marks by kind, not by the plane's classes.
 5. Spot generators for a point, then "beside a box" (Riya), each measured against the presets.
 6. Circles, with labels on a segment, in a bare `Stage`.
 7. `making-a-prop.md`, and the audit by `data-label`.
+
+## Results so far (2026-11-03)
+
+- **Steps 1–3 done.** The frame keeps each labeller's labels apart (`useFrameLabels`, tested);
+  the solver and the placer are in `@chalk/draw` (`useLabel`, `solveLabels`, tested: the fewest
+  clashes on crowded small boards, the same answer every time, runs shared out the same as all
+  at once); the pair, O and Riya's name use them. The chapter's audit after the move: the same
+  in every one of 920 drawings.
+- **Step 4, obstacles read from the drawing, tried and not taken yet.** `useLabel` can do it (a
+  label without `avoid` keeps clear of everything inked, but what is tagged `data-backdrop`: the
+  plane's grid, tints, scene, town roads and tap areas are tagged). With the pair and Riya's name
+  on it, the audit got worse: labels on lines 10 → 26, drawings with a problem 100 → 112. On
+  town-grows, Riya's name kept off the house pictures (each costing as much as a word) and went
+  across the y-axis between −1 and 1, where it reads as a number. Everything drawn isn't equal:
+  a word, a dot and an axis are read; a house picture is decoration under a label with a halo.
+  Reading obstacles from the drawing needs that told apart (kinds, or decoration tagged) before
+  it replaces the lists. The two labels keep their lists.
