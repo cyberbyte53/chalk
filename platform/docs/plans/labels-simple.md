@@ -54,10 +54,13 @@ table and town boards in English and Hindi at 360. It replaces today's only if n
 
 ## Steps
 
-0. **Diagnose the earlier try first**: obstacles from the drawing put labels on lines 26 times, not
-   10, and town-grows was only one case. Likely the pair now kept off untagged tick marks, the
-   target halo, the walk start and the route, and landed on lines the audit counts. Name each of
-   the 26 before building.
+0. **Diagnose the earlier try first.** Done: 12 labels landed on a line only with obstacles from
+   the drawing, every one Riya's name (town-grows 9, treasure-trail 3); no pair changed. Each of
+   her spots on town-grows touched a house, and a house counted three times (roof, wall, door:
+   three words' worth), so crossing the axis (a tenth of a word) won. On the trail, the stall
+   pictures (awning, stripes, counter) did the same. Marking the pictures coverable (step 1) takes
+   the cause away. Noted: a picture's pieces each count; once pictures are coverable it doesn't
+   matter here, but a thing should count once if it ever does.
 1. Rename `data-backdrop` to `data-coverable` and mark the pictures: no change on screen (audit
    identical).
 2. Obstacles from the drawing for the pair and Riya's name. Audit.
