@@ -1,5 +1,4 @@
 import type { Locale } from "@chalk/content";
-import { useLabel } from "@chalk/draw";
 import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
@@ -568,26 +567,24 @@ export function NamedPointsDraw({ s, px }: { s: PlaneView; px: FramePixels }): J
  */
 function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; y: number }) {
   const ref = useRef<SVGTextElement>(null);
-  // Where it always is, unless something that stays on it (a plotted dot, a game's counters) is
-  // really on it, not merely near (a gap of 0); Riya and a dot waiting to be dragged pass over it.
-  // Elsewhere, it keeps clear of those and of every other word (the axes' numbers beside it).
-  const onIt = ".cp-counters circle, .cp-counters text, .cp-dot > circle";
-  useLabel(ref, () => ({
-    spots: [
-      [x, y, "end"],
-      [x, y + 12, "end"],
-      [x - 12, y, "end"],
-      [x - 12, y + 12, "end"],
-      [x - 12, y - 14, "end"],
-      [x + 16, y + 12, "start"],
-      [x - 24, y, "end"],
-      [x - 24, y - 14, "end"],
-      [x - 24, y + 12, "end"],
-    ],
-    avoid: (spot) => (spot === 0 ? { what: onIt, gap: 0 } : { what: `${onIt}, text`, gap: 4 }),
-    gap: 4,
-    transform: (at, to) => upright(s, at, to),
-  }));
+  // Fixed text, not a placed label: at its corner, unless something that stays on the crossing (a
+  // plotted dot, a game's counter) is really on it; then just below. Riya and the dot waiting to
+  // be dragged pass over it and don't move it.
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const svg = el?.ownerSVGElement;
+    if (el === null || svg === null || svg === undefined) return;
+    el.setAttribute("y", `${y}`);
+    el.setAttribute("transform", upright(s, x, y) ?? "");
+    const box = el.getBoundingClientRect();
+    const isUnder = [...svg.querySelectorAll(".cp-counters circle, .cp-dot > circle")].some((c) => {
+      const r = c.getBoundingClientRect();
+      return box.left < r.right && r.left < box.right && box.top < r.bottom && r.top < box.bottom;
+    });
+    const at = isUnder ? y + 12 : y;
+    el.setAttribute("y", `${at}`);
+    el.setAttribute("transform", upright(s, x, at) ?? "");
+  });
   return (
     <text
       ref={ref}

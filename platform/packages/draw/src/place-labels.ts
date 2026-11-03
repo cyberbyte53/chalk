@@ -44,6 +44,7 @@ type Placer = {
   last?: { problem: string; at: number[] };
 };
 const placers = new Map<SVGSVGElement, Placer>();
+let labelIds = 0;
 
 /**
  * Runs a placing, timed: every placing on the page is summed under one name, which the drawing
@@ -76,12 +77,16 @@ export function useLabel(ref: { current: SVGTextElement | null }, label: () => L
       placer = { labels: new Map(), isDue: false };
       placers.set(svg, placer);
     }
-    placer.labels.set(el, label());
-    // Placed labels are found by this (the label audit), whichever prop drew them.
-    el.setAttribute("data-label", "");
+    const spec = label();
+    placer.labels.set(el, spec);
+    // Placed labels, and what each names, are found by these (the label audit), whichever prop
+    // drew them.
+    el.dataset.label ??= `${++labelIds}`;
+    spec.own?.setAttribute("data-label-of", el.dataset.label);
     due(svg, placer);
     return () => {
       placer.labels.delete(el);
+      el.removeAttribute("data-label");
       if (placer.labels.size === 0) placers.delete(svg);
       else due(svg, placer);
     };

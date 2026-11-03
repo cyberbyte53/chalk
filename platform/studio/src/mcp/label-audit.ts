@@ -1,12 +1,12 @@
 /**
- * The label audit (platform/docs/plans/label-placement.md): reads a drawn board's labels on its
- * planes as they are on the page, knowing nothing of how they were placed, so placings compare
+ * The label audit (platform/docs/plans/label-placement.md, labels-simple.md): reads a drawn
+ * board's placed labels (data-label) as they are on the page, knowing nothing of how they were placed, so placings compare
  * fairly. Run in the page (`card.evaluate(labelAudit)`): self-contained.
  */
 
 /** One label as drawn. */
 export type AuditedLabel = {
-  /** "pair" (a dot's), "swap" (its swap's), "origin", "walker". */
+  /** "pair" (a dot's), "swap" (its swap's), "walker", or "label" (any other prop's). */
   kind: string;
   text: string;
   /** Not drawn: hidden, or an empty box. */
@@ -89,19 +89,19 @@ export function labelAudit(card: Element): LabelAudit {
   const far = (a: DOMRect, b: DOMRect) =>
     Math.hypot(middle(a).x - middle(b).x, middle(a).y - middle(b).y);
   for (const svg of card.querySelectorAll("svg")) {
-    const found: { el: SVGTextElement; kind: string; own: Element | null }[] = [];
-    for (const el of svg.querySelectorAll<SVGTextElement>(".cp-dot > text")) {
-      const own = el.previousElementSibling;
-      found.push({
-        el,
-        kind: el.classList.contains("cp-swap-label") ? "swap" : "pair",
-        own: own?.tagName === "circle" ? own : null,
-      });
-    }
-    for (const el of svg.querySelectorAll<SVGTextElement>("text.cp-origin"))
-      found.push({ el, kind: "origin", own: null });
-    for (const el of svg.querySelectorAll<SVGTextElement>("text.cp-walker-name"))
-      found.push({ el, kind: "walker", own: el.closest(".cp-walker") });
+    // Every label the placer placed (data-label), with the thing it names (data-label-of); text it
+    // didn't place is fixed, the prop's own layout, and not judged here.
+    const found = [...svg.querySelectorAll<SVGTextElement>("text[data-label]")].map((el) => ({
+      el,
+      kind: el.classList.contains("cp-swap-label")
+        ? "swap"
+        : el.closest(".cp-dot") !== null
+          ? "pair"
+          : el.classList.contains("cp-walker-name")
+            ? "walker"
+            : "label",
+      own: svg.querySelector(`[data-label-of="${el.dataset.label}"]`),
+    }));
     if (found.length === 0) continue;
     const frame = svg.getBoundingClientRect();
     const isShown = (e: Element) => {
