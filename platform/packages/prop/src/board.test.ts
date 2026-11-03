@@ -666,3 +666,103 @@ describe("a voice that is off: every line is over as it starts", () => {
     expect(said(Board.replay(pair, {}, board.log, 0, { voice }))).toEqual(["one", "two"]);
   });
 });
+
+describe("a board's state: restored, it is the same board, and goes on the same", () => {
+  /** A student's session on the lesson: taps at times, some while a glide or a wait is under way. */
+  const taps: { at: number; path: string; action: string; payload: Record<string, unknown> }[] = [
+    ...[0, 1, 2, 3].map((i) => ({
+      at: 0.1 + i * 0.25,
+      path: "town/walker",
+      action: "step",
+      payload: { direction: "right" },
+    })),
+    ...[0, 1, 2, 3, 4].map((i) => ({
+      at: 6 + i * 0.3,
+      path: "town/walker",
+      action: "step",
+      payload: { direction: "up" },
+    })),
+  ];
+  const until = 12;
+  const tick = 0.05;
+  /** Plays the session from `from` to `to`: its taps in that window, the clock in small steps. */
+  const round = (t: number) => Math.round(t * 1000) / 1000;
+  const play = (board: Board, from: number, to: number) => {
+    for (let k = Math.round(from / tick); round(k * tick) < to; k++) {
+      const t = Math.max(from, round(k * tick));
+      const next = Math.min(to, round((k + 1) * tick));
+      for (const tapAt of taps.filter((x) => x.at >= t && x.at < next)) {
+        board.advanceTo(tapAt.at);
+        board.input(tapAt.path, tapAt.action, tapAt.payload);
+      }
+      board.advanceTo(next);
+    }
+  };
+  const voice = (b: Board) => timedVoice(b, () => 0.6);
+
+  it("at every moment of a session (gliding, waiting, between taps): equal now, and equal after", () => {
+    let checked = 0;
+    for (let at = 0; at <= until; at = Math.round((at + 0.35) * 100) / 100) {
+      const original = new Board(lesson, {}, { voice });
+      play(original, 0, at);
+      const restored = Board.restore(lesson, original.state(), { voice });
+      expect(restored.state()).toEqual(original.state());
+      expect(restored.read("")).toEqual(original.read(""));
+      // The same future: the rest of the session on both.
+      play(original, at, until);
+      play(restored, at, until);
+      expect(restored.state()).toEqual(original.state());
+      checked++;
+    }
+    expect(checked).toBeGreaterThan(30);
+  });
+
+  it("is plain data: what it holds survives being written out and read back", () => {
+    const board = new Board(lesson, {}, { voice });
+    play(board, 0, 6.5);
+    const state = board.state();
+    const again = Board.restore(lesson, JSON.parse(JSON.stringify(state)), { voice });
+    expect(again.state()).toEqual(state);
+  });
+
+  it("in the middle of a line, and in the quiet between two: the lines go on the same", () => {
+    // Two lines a breath apart (as a lesson says them), each 1 s long on a voice keeping time.
+    const pair = prop({
+      type: "pair",
+      describe: "Says one line, then another after a breath; marks each said.",
+      variables: z.object({ said: z.array(z.string()) }).strict(),
+      start: { said: [] },
+      actions: { tap: action({}, { from: "screen" }), done: action({ line: z.string() }) },
+      on: {
+        tap: (_, __, t) =>
+          (t as unknown as VoiceTools).say("one", {
+            atEnd: [
+              t.self.done({ line: "one" }),
+              (t as unknown as VoiceTools).say("two", {
+                after: 0.7,
+                atEnd: [t.self.done({ line: "two" })],
+              }),
+            ],
+          }),
+        done: (me, { line }, t) => t.set({ said: [...me.said, line] }),
+      },
+    });
+    const timed = (b: Board) => timedVoice(b, () => 1);
+    for (const at of [0, 0.5, 0.99, 1, 1.3, 1.69, 1.7, 2.2, 2.7, 3]) {
+      const original = new Board(pair, {}, { voice: timed });
+      original.input("", "tap");
+      original.advanceTo(at);
+      const restored = Board.restore(pair, original.state(), { voice: timed });
+      expect(restored.state()).toEqual(original.state());
+      original.advanceTo(4);
+      restored.advanceTo(4);
+      expect(restored.read("")).toEqual(original.read(""));
+      expect(restored.state()).toEqual(original.state());
+    }
+  });
+
+  it("refuses a state for another board", () => {
+    const state = new Board(lesson).state();
+    expect(() => Board.restore(town, state)).toThrow(/snapshot has|this board has/);
+  });
+});

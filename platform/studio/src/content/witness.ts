@@ -1,6 +1,11 @@
 import type { Step } from "@chalk/author";
 import { Actor, type Board, LOCALES, type Locale, type Localized, PieceKind } from "@chalk/content";
-import { BoardRuntime, type PropModule, type RuntimeServices } from "@chalk/player";
+import {
+  BoardRuntime,
+  type PropModule,
+  type RuntimeServices,
+  type RuntimeState,
+} from "@chalk/player";
 import { AnswerStatus, BOARD, PropRole } from "@chalk/prop";
 
 type Defs = Readonly<Record<string, PropModule>>;
@@ -44,40 +49,94 @@ function playScene(
   onCalled?: Called,
 ): Played {
   const errors: string[] = [];
-  const runtime = new BoardRuntime(board, (type) => defs[type], {
+  const services = {
     locale,
     now: () => 0,
     frame: () => () => undefined,
     speak: async () => false,
-    onError: (message, error) =>
+    onError: (message: string, error?: unknown) =>
       errors.push(
         error instanceof Error && !message.includes(error.message)
           ? `${message}: ${error.message}`
           : message,
       ),
-  });
+  };
+  const runtime = new BoardRuntime(board, (type) => defs[type], services);
   if (onCalled !== undefined)
     runtime.onAction((r) => {
       if (r.isLessons === true) onCalled(r.prop, r.action);
     });
   const failures: Failure[] = [];
+  /** One step of the witness, played out on the board's clock. */
+  const doStep = (on: BoardRuntime, step: Step) => {
+    if ("wait" in step) on.settle(step.wait, true);
+    else {
+      void on.call(step.prop, step.action, step.args, Actor.Learner);
+      on.settle();
+    }
+  };
   runtime.start();
   runtime.settle();
+  // The board's state before each step: a copy made from one must go on exactly as the board did
+  // (its state is all of it: platform/docs/plans/jugnu.md, "what it stands on").
+  const states: RuntimeState[] = [runtime.state()];
   for (const step of steps) {
-    if ("wait" in step) {
-      runtime.settle(step.wait, true);
-      continue;
-    }
-    void runtime.call(step.prop, step.action, step.args, Actor.Learner);
-    runtime.settle();
+    doStep(runtime, step);
+    states.push(runtime.state());
   }
   runtime.settle();
+  const end = JSON.stringify(runtime.state());
+  states.forEach((state, k) => {
+    const copy = new BoardRuntime(board, (type) => defs[type], { ...services, from: state });
+    copy.start();
+    const fail = (seen: string) =>
+      failures.push({
+        check: `restored from its state ${whenOf(k)}, the board goes on differently`,
+        seen,
+      });
+    if (JSON.stringify(copy.state()) !== JSON.stringify(state))
+      fail(`at once, ${firstDifference(state, copy.state())}`);
+    else {
+      let isSame = true;
+      // Step by step beside the original: the first step after which they differ, and where.
+      for (let j = k; j < steps.length && isSame; j++) {
+        doStep(copy, steps[j] as Step);
+        const was = states[j + 1] as RuntimeState;
+        if (JSON.stringify(copy.state()) !== JSON.stringify(was)) {
+          fail(`after step ${j + 1}, ${firstDifference(was, copy.state())}`);
+          isSame = false;
+        }
+      }
+      copy.settle();
+      if (isSame && JSON.stringify(copy.state()) !== end)
+        fail(`at its end, ${firstDifference(JSON.parse(end), copy.state())}`);
+    }
+    copy.dispose();
+  });
   for (const heard of runtime.heard()) if ("line" in heard) onHeard?.(heard.line);
   failures.push(...errors.map((check) => ({ check })));
   const views = new Map<string, Readonly<Record<string, unknown>>>();
   for (const name of [...runtime.propNames(), BOARD]) views.set(name, runtime.getView(name));
   runtime.dispose();
   return { failures, view: (prop) => views.get(prop) ?? {} };
+}
+
+/** A moment of a witness, in words. */
+const whenOf = (k: number): string => (k === 0 ? "at its start" : `after step ${k}`);
+
+/** Where two states first differ ("core.nodes.town/walker.vars.at: …"), for a failure to name. */
+function firstDifference(a: unknown, b: unknown, path = ""): string {
+  if (JSON.stringify(a) === JSON.stringify(b)) return "";
+  if (typeof a === "object" && a !== null && typeof b === "object" && b !== null)
+    for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
+      const inner = firstDifference(
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+        path === "" ? key : `${path}.${key}`,
+      );
+      if (inner !== "") return inner;
+    }
+  return `${path}: ${JSON.stringify(a)?.slice(0, 80)} → ${JSON.stringify(b)?.slice(0, 80)}`;
 }
 
 /**

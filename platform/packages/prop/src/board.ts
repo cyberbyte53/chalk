@@ -106,6 +106,47 @@ type InTurn = {
   timeout?: Entry<Later>;
   /** When the voice was asked to say it, on the board's clock. */
   startedAt?: number;
+  /** When its voice said it would end (its length from then); undefined: not yet asked. */
+  endsAt?: number;
+  /** In the quiet before it: when it is asked of the voice, and what (its name and values). */
+  startsAt?: number;
+  call?: LineCall;
+  /** Waits a restored board put back for it (its end, its start): gone with it when it ends. */
+  waits?: Entry<Later>[];
+};
+
+/**
+ * Everything a board is at one moment, as plain data: every prop's variables and its moves under
+ * way, what is queued for later, the line being said, the clock and its counters. A board restored
+ * from it (`Board.restore`) is the same board, and goes on the same: given the same steps it does
+ * the same things. A settled board's snapshot is, in effect, its props' variables.
+ */
+/** A wait on the clock the line being said has: kept by when it is due and its place in order. */
+const LineWait = {
+  /** The board ends the line itself if its voice never tells (its length + GRACE). */
+  Timeout: "timeout",
+  /** Its voice tells it ended (a voice keeping time on the clock). */
+  End: "end",
+  /** In the quiet before it: it is asked of the voice. */
+  Start: "start",
+} as const;
+type LineWait = (typeof LineWait)[keyof typeof LineWait];
+
+export type BoardState = {
+  readonly clock: number;
+  readonly nodes: Readonly<
+    Record<
+      string,
+      { vars: Readonly<Record<string, unknown>>; moves: Readonly<Record<string, Move>> }
+    >
+  >;
+  readonly queue: readonly Entry<Omit<Later, "host">>[];
+  readonly nextSeq: number;
+  readonly inTurn?: Omit<InTurn, "timeout" | "waits">;
+  /** The line's waits on the clock, each where it was in the queue. */
+  readonly lineWaits: readonly { kind: LineWait; at: number; seq: number; act?: number }[];
+  readonly counters: { steps: number; act: number; acts: number; lines: number };
+  readonly lastTookTime: boolean;
 };
 
 type Node = {
@@ -170,9 +211,160 @@ export class Board {
     this.root = this.build(root, "", "", undefined, given);
   }
 
-  /** A host waits on the board's clock: `fn` is called `seconds` from now (a timed voice's end). */
-  after(seconds: number, fn: () => void): void {
-    this.queue.add(this.clock + Math.max(0, seconds), "", { outs: [], host: fn, act: this.act });
+  /**
+   * A host waits on the board's clock: `fn` is called `seconds` from now (a timed voice's end).
+   * Returns how to call it off.
+   */
+  after(seconds: number, fn: () => void): () => void {
+    const entry = this.queue.add(this.clock + Math.max(0, seconds), "", {
+      outs: [],
+      host: fn,
+      act: this.act,
+    });
+    // Called off: the wait leaves the clock (a cut line's end, which would only move the clock on).
+    return () => this.queue.remove(entry);
+  }
+
+  /**
+   * This board as it is now, as data (`BoardState`): taken between steps, never during one.
+   * What a host queued on the clock (a voice's own wait) is the host's, not the board's: the line
+   * being said keeps when it ends instead.
+   */
+  state(): BoardState {
+    if (this.chain.length > 0) throw new Error("Board: a snapshot is taken between steps");
+    const nodes: Record<string, BoardState["nodes"][string]> = {};
+    for (const [path, node] of this.nodes)
+      nodes[path] = {
+        vars: structuredClone(node.vars),
+        moves: structuredClone(Object.fromEntries(node.moves)),
+      };
+    const queue = this.queue.all
+      .filter((e) => e.what.host === undefined)
+      .map((e) => structuredClone(e) as Entry<Omit<Later, "host">>);
+    const turn = this.inTurn;
+    // A host's waits: the line's (its timeout, its voice's end, its start after the quiet), kept
+    // by time and place; any other is the host's own and isn't the board's.
+    const lineWaits = this.queue.all.flatMap((e) => {
+      if (e.what.host === undefined || turn === undefined) return [];
+      const kind =
+        e === turn.timeout
+          ? LineWait.Timeout
+          : turn.startedAt === undefined && turn.startsAt === e.at
+            ? LineWait.Start
+            : turn.endsAt === e.at
+              ? LineWait.End
+              : undefined;
+      return kind === undefined
+        ? []
+        : [
+            {
+              kind,
+              at: e.at,
+              seq: e.seq,
+              ...(e.what.act === undefined ? {} : { act: e.what.act }),
+            },
+          ];
+    });
+    return {
+      clock: this.clock,
+      nodes,
+      queue,
+      nextSeq: this.queue.nextSeq,
+      ...(turn === undefined
+        ? {}
+        : {
+            inTurn: structuredClone({
+              id: turn.id,
+              name: turn.name,
+              path: turn.path,
+              atEnd: turn.atEnd,
+              ...(turn.startedAt === undefined ? {} : { startedAt: turn.startedAt }),
+              ...(turn.endsAt === undefined ? {} : { endsAt: turn.endsAt }),
+              ...(turn.startsAt === undefined ? {} : { startsAt: turn.startsAt }),
+              ...(turn.call === undefined ? {} : { call: turn.call }),
+            }),
+          }),
+      lineWaits,
+      counters: { steps: this.steps, act: this.act, acts: this.acts, lines: this.lines },
+      lastTookTime: this.lastTookTime,
+    };
+  }
+
+  /**
+   * The board a snapshot was taken of: the same props, every variable and move, what is queued,
+   * the clock. A line being said ends when its voice said it would (as a voice keeping time on the
+   * clock does), so the restored board goes on as the original did.
+   */
+  static restore(
+    root: AnyProp,
+    snapshot: BoardState,
+    options: { voice?: Voice | ((board: Board) => Voice) } = {},
+  ): Board {
+    const board = new Board(root, {}, options);
+    for (const [path, saved] of Object.entries(snapshot.nodes)) {
+      const node = board.nodes.get(path);
+      if (node === undefined)
+        throw new Error(`Board: the snapshot has ${path}, this board doesn't`);
+      node.vars = structuredClone(saved.vars);
+      node.moves.clear();
+      for (const [name, move] of Object.entries(saved.moves))
+        node.moves.set(name, structuredClone(move));
+    }
+    for (const path of board.nodes.keys())
+      if (snapshot.nodes[path] === undefined)
+        throw new Error(`Board: this board has ${path}, the snapshot doesn't`);
+    board.clock = snapshot.clock;
+    ({
+      steps: board.steps,
+      act: board.act,
+      acts: board.acts,
+      lines: board.lines,
+    } = snapshot.counters);
+    board.lastTookTime = snapshot.lastTookTime;
+    const entries = structuredClone(snapshot.queue) as Entry<Later>[];
+    const turn = snapshot.inTurn;
+    if (turn !== undefined) {
+      const id = turn.id;
+      board.inTurn = { ...structuredClone(turn) };
+      // The line's waits, each back in its place: what happens at the same moment, in the same order.
+      for (const wait of snapshot.lineWaits) {
+        const host =
+          wait.kind === LineWait.Timeout
+            ? () => board.timedOut(id)
+            : wait.kind === LineWait.End
+              ? () => board.voiceTold(id, "ended")
+              : () => board.startLine(id, turn.call as LineCall);
+        entries.push({
+          at: wait.at,
+          seq: wait.seq,
+          owner: "",
+          what: { outs: [], host, ...(wait.act === undefined ? {} : { act: wait.act }) },
+        });
+      }
+    }
+    // A line heard on a phone has no end on the clock (its sound tells it): the copy ends it at
+    // its length, as a voice keeping time would.
+    let nextSeq = snapshot.nextSeq;
+    if (turn?.endsAt !== undefined && !snapshot.lineWaits.some((w) => w.kind === LineWait.End)) {
+      const id = turn.id;
+      entries.push({
+        at: turn.endsAt,
+        seq: nextSeq++,
+        owner: "",
+        what: { outs: [], host: () => board.voiceTold(id, "ended") },
+      });
+    }
+    board.queue.load(entries, nextSeq);
+    const timeout = snapshot.lineWaits.find((w) => w.kind === LineWait.Timeout);
+    if (board.inTurn !== undefined) {
+      board.inTurn.timeout =
+        timeout === undefined ? undefined : board.queue.all.find((e) => e.seq === timeout.seq);
+      // Its other waits (end, start) go with it if it is cut, as a voice's would.
+      board.inTurn.waits = board.queue.all.filter(
+        (e) => e.what.host !== undefined && e !== board.inTurn?.timeout,
+      );
+    }
+    return board;
   }
 
   /** The same board played again: the same props and setup, the student's taps at their times, to `until`. */
@@ -508,12 +700,20 @@ export class Board {
             // The quiet before it is part of the line: it is in turn already, and a stop cuts it.
             this.cutLine();
             const id = ++this.lines;
-            this.inTurn = { id, name: out.line, path: node.path, atEnd: out.atEnd };
             const line = {
               name: out.line,
               ...(out.values === undefined ? {} : { values: out.values }),
             };
-            this.after(seconds(node, "say after", out.after), () => this.startLine(id, line));
+            const quiet = seconds(node, "say after", out.after);
+            this.inTurn = {
+              id,
+              name: out.line,
+              path: node.path,
+              atEnd: out.atEnd,
+              startsAt: this.clock + Math.max(0, quiet),
+              call: line,
+            };
+            this.after(quiet, () => this.startLine(id, line));
           } else
             this.say(
               node,
@@ -602,6 +802,7 @@ export class Board {
       this.heard(id, "ended");
       return;
     }
+    turn.endsAt = this.clock + Math.max(0, seconds);
     turn.timeout = this.queue.add(this.clock + Math.max(0, seconds) + GRACE, "", {
       outs: [],
       host: () => this.timedOut(id),
@@ -645,6 +846,7 @@ export class Board {
     const line = this.inTurn;
     if (line?.id !== id) return;
     if (line.timeout !== undefined) this.queue.remove(line.timeout);
+    for (const wait of line.waits ?? []) this.queue.remove(wait);
     // Over at once (nothing to say, or a voice that is off) leaves no quiet after it.
     this.lastTookTime = line.startedAt !== undefined && this.clock > line.startedAt;
     this.inTurn = undefined;

@@ -67,4 +67,15 @@ export class TimeQueue<T> {
   get all(): readonly Entry<T>[] {
     return this.entries;
   }
+
+  /** The number the next entry will be queued with (a snapshot keeps it, so order is kept too). */
+  get nextSeq(): number {
+    return this.next;
+  }
+
+  /** Puts back what a snapshot held: these entries, in order, and the next number to give. */
+  load(entries: readonly Entry<T>[], nextSeq: number): void {
+    this.entries = [...entries].sort((a, b) => a.at - b.at || a.seq - b.seq);
+    this.next = nextSeq;
+  }
 }
