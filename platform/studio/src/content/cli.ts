@@ -36,9 +36,13 @@ export const BUILT_FILE = ".built";
  * `pnpm preview`: the same on every save (the learner app shows build/ in development).
  * `pnpm publish-content`: the same from a clean git commit only; build/ is also kept as
  * published/<commit>/, the copy that ships.
- * `pnpm art`: builds, then writes build/art.html, every piece of art side by side, to look at.
+ * `pnpm art`: builds, and says where build/art.html is: every piece of art side by side, to look at
+ * (every build writes it, so it is always current and never pruned as a stray).
  */
 const Command = { Build: "build", Preview: "preview", Publish: "publish", Art: "art" } as const;
+
+/** build/art.html: every piece of art on its card (`pnpm art`); written by every build. */
+const ART_PAGE = "art.html";
 
 const { positionals, values } = parseArgs({
   // `pnpm build-content -- --force` hands the script a bare "--": skip it.
@@ -104,6 +108,9 @@ function write(result: BuildResult): void {
   wanted.set(SCREENS_FILE, `${JSON.stringify(Object.fromEntries(screens), null, 2)}\n`);
   // What each board was made from, for tracing a change to what it reaches; not part of the content.
   wanted.set(REACH_FILE, `${JSON.stringify(result.reach)}\n`);
+  // Every piece of art on its card, to look at; not part of the content.
+  const css = ARTS_CSS.map((file) => readFileSync(join(root, file), "utf8")).join("\n");
+  wanted.set(ART_PAGE, artGallery(collectArt(result.files), css));
   // Kept: written last, and only when something in build/ changed (below).
   wanted.set(BUILT_FILE, "");
   /** Whether this build wrote, copied or removed anything in build/. */
@@ -274,6 +281,7 @@ async function publish(): Promise<void> {
   rmSync(join(kept, SOURCES_FILE), { force: true });
   rmSync(join(kept, SCREENS_FILE), { force: true });
   rmSync(join(kept, REACH_FILE), { force: true });
+  rmSync(join(kept, ART_PAGE), { force: true });
   console.log(`✓ published ${commit.slice(0, 7)} → ${kept}`);
 }
 
@@ -303,10 +311,7 @@ if (command === Command.Build) {
 } else if (command === Command.Art) {
   const result = await build(currentCommit());
   write(result);
-  const css = ARTS_CSS.map((file) => readFileSync(join(root, file), "utf8")).join("\n");
-  const page = artGallery(collectArt(result.files), css);
-  writeFileSync(join(buildDir, "art.html"), page);
-  console.log(`✓ ${join(buildDir, "art.html")}: open it in a browser`);
+  console.log(`✓ ${join(buildDir, ART_PAGE)}: open it in a browser`);
   if (result.problems.length > 0) process.exitCode = 1;
 } else {
   console.error("Usage: pnpm build-content | pnpm preview | pnpm publish-content | pnpm art");
