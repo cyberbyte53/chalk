@@ -16,6 +16,7 @@ import { type LabelAudit, LabelKind } from "../src/mcp/label-audit";
  *                                          played (en, hi; 360), each step read
  *   tsx label-compare.ts run try --quick   only QUICK's boards: where labels meet (a minute less;
  *                                          the whole run is still the check before a commit)
+ *   tsx label-compare.ts run try --only=plotting-points/plot-from-a-table   one board
  *   tsx label-compare.ts compare before after
  *
  * Kept in node_modules/.cache/label-compare/<name>/: audits.json, and pictures of each witness's end.
@@ -102,7 +103,9 @@ async function run(name: string, isQuick: boolean): Promise<void> {
   mkdirSync(join(dir, "pictures"), { recursive: true });
   const drawings: Drawing[] = [];
   const jobs: (() => Promise<void>)[] = [];
-  for (const board of isQuick ? quick(boards()) : boards()) {
+  const only = process.argv.find((a) => a.startsWith("--only="))?.slice("--only=".length);
+  const chosen = isQuick ? quick(boards()) : boards();
+  for (const board of only === undefined ? chosen : chosen.filter((b) => b.endsWith(`/${only}`))) {
     for (const locale of ["en", "hi"] as const)
       for (const width of [360, 640])
         jobs.push(async () => {
