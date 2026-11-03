@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { loadBoard } from "@chalk/author";
 import { Actor, builtPageSchema, builtQuestionSchema } from "@chalk/content";
 import { modules } from "@chalk/content-source/modules";
-import { propLibrary } from "@chalk/library";
+import { propModules } from "@chalk/library/modules";
 import { BoardRuntime, type RuntimeState } from "@chalk/player";
 import { parse } from "yaml";
 import { findUp } from "../src/find-up";
@@ -38,7 +38,7 @@ export async function played(board: string, steps: readonly Step[]): Promise<Boa
   const item = json.kind === "page" ? builtPageSchema.parse(json) : builtQuestionSchema.parse(json);
   const runtime = new BoardRuntime(
     await loadBoard(modules, item, () => undefined),
-    (t) => propLibrary[t],
+    (t) => propModules[t],
     {
       locale: "en",
       now: () => 0,
@@ -55,6 +55,28 @@ export async function played(board: string, steps: readonly Step[]): Promise<Boa
     await runtime.call(step.prop, step.action, step.args ?? {}, Actor.Learner);
     runtime.settle();
   }
+  return runtime;
+}
+
+/** A copy of a board from her state (what Jugnu tries things on): the same board, going on the same. */
+export async function restored(board: string, state: RuntimeState): Promise<BoardRuntime> {
+  const json = JSON.parse(readFileSync(join(build, `${board}.json`), "utf8"));
+  const item = json.kind === "page" ? builtPageSchema.parse(json) : builtQuestionSchema.parse(json);
+  const runtime = new BoardRuntime(
+    await loadBoard(modules, item, () => undefined),
+    (t) => propModules[t],
+    {
+      locale: "en",
+      now: () => 0,
+      frame: () => () => undefined,
+      speak: async () => false,
+      onError: (message) => {
+        throw new Error(message);
+      },
+      from: state,
+    },
+  );
+  runtime.start();
   return runtime;
 }
 
