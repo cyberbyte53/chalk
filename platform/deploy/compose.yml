@@ -30,7 +30,7 @@ services:
         - COMMIT
     image: chalk-app
     restart: unless-stopped
-    env_file: ../.env
+    env_file: ../../.env
     environment:
       DATABASE_URL: postgres://chalk:${POSTGRES_PASSWORD}@postgres:5432/chalk
       PORT: "8080"
@@ -62,7 +62,8 @@ services:
     environment:
       PGPASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ../../chalk-backups:/backups
+      # Beside the repo on the box (~/chalk-backups), so a ship's rsync --delete never reaches it.
+      - ../../../chalk-backups:/backups
     entrypoint:
       - sh
       - -c

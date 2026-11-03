@@ -1,9 +1,8 @@
 # The app and the server in one image, built on the box (x86), from the repo root:
 #   docker compose --env-file .env -f platform/deploy/compose.yml build
 FROM node:22-slim AS build
-# The pnpm that wrote pnpm-lock.yaml (lockfile 6.0); corepack would fetch package.json's pnpm 10,
-# which can't read it.
-RUN npm install -g pnpm@8.8.0
+# The pnpm package.json pins (packageManager), which wrote pnpm-lock.yaml.
+RUN npm install -g pnpm@10.28.0
 WORKDIR /repo
 COPY . .
 RUN pnpm install --frozen-lockfile
