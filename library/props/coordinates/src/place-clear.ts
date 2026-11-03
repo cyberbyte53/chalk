@@ -17,6 +17,8 @@ export function placeClear(
   avoid: string,
   ignore: readonly Element[] = [],
   gap = GAP_PX,
+  /** A place's own cost beside what it touches (a pair nearer another dot than its own). */
+  extra: (r: DOMRect) => number = () => 0,
 ): number {
   const svg = el.ownerSVGElement;
   if (svg === null || places.length === 0) return 0;
@@ -52,10 +54,24 @@ export function placeClear(
   let best: { place: WordPlace; score: number } | undefined;
   for (const place of places) {
     put(place);
-    const score = clash(el.getBoundingClientRect());
+    const box = el.getBoundingClientRect();
+    const score = clash(box) + extra(box);
     if (score === 0) return 0;
     if (best === undefined || score < best.score) best = { place, score };
   }
   put(best?.place ?? places[0]!);
   return best?.score ?? 0;
+}
+
+/**
+ * Runs a label's placing, timed: every placing on the page is summed under one name, which the
+ * drawing tool's label audit reads (platform/docs/plans/label-placement.md).
+ */
+export function timedPlacing(fn: () => void): void {
+  const from = performance.now();
+  try {
+    fn();
+  } finally {
+    performance.measure("chalk:labels", { start: from });
+  }
 }

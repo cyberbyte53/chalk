@@ -3,7 +3,7 @@ import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
-import { placeClear } from "./place-clear";
+import { placeClear, timedPlacing } from "./place-clear";
 import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene } from "./plane";
 import { plane } from "./plane";
 import { WORDS, num, word } from "./words";
@@ -566,29 +566,33 @@ export function NamedPointsDraw({ s, px }: { s: PlaneView; px: FramePixels }): J
  */
 function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; y: number }) {
   const ref = useRef<SVGTextElement>(null);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (el === null) return;
-    // Where it always is, unless a counter or a dot stands on it; then wherever is clear of those
-    // and of every other word (the axes' numbers beside it).
-    const onIt = ".cp-counters text, circle";
-    // It moves only when something is really on it, not merely near (a gap of 0).
-    if (placeClear(el, [[x, y, "end"]], onIt, [], 0) === 0) return;
-    placeClear(
-      el,
-      [
-        [x, y + 12, "end"],
-        [x - 12, y, "end"],
-        [x - 12, y + 12, "end"],
-        [x - 12, y - 14, "end"],
-        [x + 16, y + 12, "start"],
-        [x - 24, y, "end"],
-        [x - 24, y - 14, "end"],
-        [x - 24, y + 12, "end"],
-      ],
-      `${onIt}, text`,
-    );
-  });
+  useLayoutEffect(() =>
+    timedPlacing(() => {
+      const el = ref.current;
+      if (el === null) return;
+      // Where it always is, unless a counter or a dot stands on it; then wherever is clear of those
+      // and of every other word (the axes' numbers beside it).
+      // Only what stays on it moves it (a plotted dot, a game's counters); Riya and a dot waiting to
+      // be dragged pass over it, and O stays where it always is.
+      const onIt = ".cp-counters circle, .cp-counters text, .cp-dot > circle";
+      // It moves only when something is really on it, not merely near (a gap of 0).
+      if (placeClear(el, [[x, y, "end"]], onIt, [], 0) === 0) return;
+      placeClear(
+        el,
+        [
+          [x, y + 12, "end"],
+          [x - 12, y, "end"],
+          [x - 12, y + 12, "end"],
+          [x - 12, y - 14, "end"],
+          [x + 16, y + 12, "start"],
+          [x - 24, y, "end"],
+          [x - 24, y - 14, "end"],
+          [x - 24, y + 12, "end"],
+        ],
+        `${onIt}, text`,
+      );
+    }),
+  );
   return (
     <text
       ref={ref}
