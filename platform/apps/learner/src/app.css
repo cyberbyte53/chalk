@@ -1235,9 +1235,6 @@
   border-radius: 0;
   border: 0;
 }
-.preview-phone .board-footer {
-  display: none;
-}
 .preview-empty,
 .preview-loading {
   padding: 24px;

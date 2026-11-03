@@ -316,6 +316,7 @@ function BoardPlay({
                   class="primary"
                   data-part={QuestionAction.Check}
                   data-does={QuestionAction.Check}
+                  data-path={`${toCheck}/${QuestionAction.Check}`}
                   onClick={() =>
                     void runtime.call(toCheck, QuestionAction.Check, {}, Actor.Learner)
                   }
