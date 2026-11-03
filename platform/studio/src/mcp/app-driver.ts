@@ -1106,12 +1106,15 @@ export function shoot(
 
 /**
  * Waits until the page has drawn: fonts, images, finite animations, then two frames. Without
- * `isForPicture`, only the frames: what the page says doesn't wait for an animation to end.
+ * `isForPicture`, fonts and the frames: what the page says doesn't wait for an animation to end,
+ * but anything measured (layout problems, labels) is measured in the fonts it is drawn in, never a
+ * fallback's (instant once they have loaded).
  */
 async function settle(page: Page, isForPicture = true): Promise<void> {
   if (!isForPicture) {
     await page.evaluate(async () => {
       const frame = () => new Promise((done) => requestAnimationFrame(() => done(null)));
+      await document.fonts.ready;
       await frame();
       await frame();
     });
