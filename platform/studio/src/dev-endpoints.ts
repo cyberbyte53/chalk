@@ -116,3 +116,24 @@ export async function pipelineEndpoint(
     return fail(e);
   }
 }
+
+/**
+ * /dev-jugnu (jugnu/run.ts): GET the stuck children (jugnu/cases.ts); `?run=<case>` runs Jugnu on
+ * one and answers his whole run, for the preview's ?dev&jugnu to show beside her board.
+ */
+export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  res.setHeader("content-type", "application/json");
+  try {
+    const run = new URL(req.url ?? "/", "http://x").searchParams.get("run");
+    if (run === null) {
+      const { readCases } = await import("./jugnu/cases");
+      res.end(JSON.stringify({ cases: readCases() }));
+      return;
+    }
+    const { runJugnu } = await import("./jugnu/run");
+    res.end(JSON.stringify(await runJugnu(run)));
+  } catch (error) {
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));
+  }
+}

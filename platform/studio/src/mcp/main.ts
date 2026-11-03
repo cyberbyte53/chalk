@@ -2,7 +2,7 @@ import { type ChildProcess, spawn } from "node:child_process";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
+import { jugnuEndpoint, pipelineEndpoint, reviewEndpoint } from "../dev-endpoints";
 import { findUp } from "../find-up";
 import { poolState, previewBase, timing, warmPages } from "./app-driver";
 import { logCall } from "./call-log";
@@ -72,6 +72,10 @@ const server = createServer((req, res) => {
   }
   if (path?.startsWith("/dev-pipeline")) {
     void pipelineEndpoint(ROOT, req, res);
+    return;
+  }
+  if (path?.startsWith("/dev-jugnu")) {
+    void jugnuEndpoint(req, res);
     return;
   }
   if (path !== "/mcp") {

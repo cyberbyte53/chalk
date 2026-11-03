@@ -281,3 +281,40 @@
   background: var(--color-surface-container);
   color: var(--color-on-surface-variant);
 }
+
+/* What Jugnu points at: one part ringed in his glow (layout.tsx's `pointed`), or the whole piece;
+   what the child held to ask about, ringed until asked. Over the drawing, never in its way. */
+.piece-prop {
+  position: relative;
+}
+.jugnu-point,
+.ask-pick {
+  position: absolute;
+  z-index: 3;
+  border-radius: 12px;
+  pointer-events: none;
+}
+.jugnu-point,
+.piece-prop.is-pointed {
+  box-shadow: 0 0 0 3px var(--brand-jugnu-glow), 0 0 18px
+    color-mix(in srgb, var(--brand-jugnu-glow) 60%, transparent);
+  animation: jugnu-glow 1.6s ease-in-out infinite;
+}
+.piece-prop.is-pointed {
+  border-radius: 14px;
+}
+.ask-pick {
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+@keyframes jugnu-glow {
+  50% {
+    box-shadow: 0 0 0 3px var(--brand-jugnu-glow), 0 0 4px
+      color-mix(in srgb, var(--brand-jugnu-glow) 30%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jugnu-point,
+  .piece-prop.is-pointed {
+    animation: none;
+  }
+}

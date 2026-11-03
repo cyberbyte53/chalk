@@ -64,6 +64,8 @@ export type BoardPlayerProps = {
   isInLesson?: boolean;
   /** The board's runtime, once it runs: for a tool beside the board (a prop page's panel). */
   onRuntime?: ((runtime: BoardRuntime) => void) | undefined;
+  /** What Jugnu is pointing at: one piece, or one part of it, glows. */
+  pointed?: { prop: string; part?: string | undefined } | undefined;
 };
 
 /**
@@ -110,6 +112,7 @@ function BoardPlay({
   wasPassed = false,
   mode,
   onRuntime,
+  pointed,
   isPicture = false,
   isInLesson = false,
   isSilent = false,
@@ -231,6 +234,7 @@ function BoardPlay({
     // Through the board: said in its turn, never over the line being said.
     onRetryAudio: (name) => void runtime.call(BOARD, "say", { line: name }, Actor.Learner),
     isPicture,
+    pointed,
   };
 
   const banner =

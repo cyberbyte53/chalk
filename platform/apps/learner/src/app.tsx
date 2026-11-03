@@ -17,6 +17,7 @@ import { ChapterScreen, CourseScreen, currentConcept } from "./course-screens";
 import { DevShell } from "./dev-shell";
 import { devSession, stopDevSignIn } from "./dev-sign-in";
 import { HomeScreen } from "./home-screen";
+import { JugnuPreview } from "./jugnu-preview";
 import { courses, progressFromRecord } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
 import { isPreviewAddress } from "./preview-address";
@@ -232,6 +233,8 @@ export function App(): JSX.Element {
     if (next !== undefined) setSession({ kind: "signedIn", me: next });
   };
 
+  if (isDevShell && new URLSearchParams(window.location.search).has("jugnu"))
+    return <JugnuPreview />;
   if (isDevShell && isPreviewAddress(new URLSearchParams(window.location.search)))
     return <PreviewShell bus={bus} />;
   if (isDevShell && new URLSearchParams(window.location.search).has("activity"))
