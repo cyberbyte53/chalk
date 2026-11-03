@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 120 120" role="img" aria-label="Chalk loading">
+<defs><filter id="chk" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency="3" numOctaves="1" seed="12" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.5 1.35" result="m"/><feComposite in="d" in2="m" operator="in"/></filter></defs>
+<rect width="120" height="120" rx="27" fill="#A8703F"/>
+<rect x="11" y="11" width="98" height="98" rx="13" fill="#2B3431"/>
+<path d="M20 94 C25 78 28 40 34 40 C40 40 43 86 50 88 C58 90 72 70 90 52" fill="none" stroke="#F4F1E8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#chk)" pathLength="100" stroke-dasharray="100 101" stroke-dashoffset="100">
+<animate attributeName="stroke-dashoffset" values="100;0;0" keyTimes="0;0.65;1" dur="3.4s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="1;1;0" keyTimes="0;0.9;1" dur="3.4s" repeatCount="indefinite"/>
+</path>
+<g><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.9;1" dur="3.4s" repeatCount="indefinite"/>
+<animateMotion dur="3.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.65;1" keyPoints="0;1;1" path="M20 94 C25 78 28 40 34 40 C40 40 43 86 50 88 C58 90 72 70 90 52"/>
+<g transform="rotate(-35)"><ellipse cx="14" cy="8" rx="13" ry="2.6" fill="#000" opacity="0.3"/><rect x="0" y="-5" width="26" height="10" rx="4.5" fill="#F4F1E8"/><ellipse cx="1.5" cy="0" rx="2" ry="4" fill="#DCD7CB"/></g></g>
+</svg>

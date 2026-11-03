@@ -18,6 +18,7 @@
     "bench-look": "tsx --tsconfig ../../tsconfig.base.json src/mcp/bench-look.ts",
     "dev": "node start.mjs",
     "tool-times": "tsx --tsconfig ../../tsconfig.base.json src/mcp/tool-times.ts",
+    "brand-icons": "tsx --tsconfig ../../tsconfig.base.json scripts/brand-icons.ts",
     "label-compare": "tsx --tsconfig ../../tsconfig.base.json scripts/label-compare.ts"
   },
   "dependencies": {
