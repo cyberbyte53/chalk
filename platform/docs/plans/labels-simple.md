@@ -91,3 +91,42 @@ y-axis's 6 on swap-the-numbers, where no spot round it is clear.
 
 What a prop writes now: `useLabel(ref, () => ({ own: thing }))` on its label's `<text>`, and
 `data-coverable` on what labels may sit over. making-a-prop.md says so.
+
+## After the recheck: a label reads as the nearest thing's (2026-11-03)
+
+The recheck (runs/2026-11-03-1356-self-review.md) found labels that read as something else's:
+"(6, 1)" against the (5, 2) dot; "(0, −1.25)" above the axis by O, read as O's; Riya's name on
+the target house, inside its ring. The audit counted none of them: need 2 (unambiguous) was
+built narrowly, as "its middle nearer its own dot than any other labelled dot", and measured the
+same way.
+
+**The rule, from need 2**: a reader takes a label to name the thing nearest it, measured from
+the label's edge. So for a label at a spot: the nearest thing to its box must be its own.
+
+- **A thing** is anything drawn a label could name: a dot, a shape, a picture that isn't coverable,
+  a word (O, an axis's name). Not a line (an axis, a dashed guide: a label beside a line doesn't
+  read as naming it), not coverable things, not other placed labels (they are labels).
+- **Nearest** is by the gap between boxes (words by their ink), not middle to middle: "(6, 1)"
+  has its middle nearer its own dot but its edge against the (5, 2) dot.
+- **Cost**: a spot where another thing is as near as its own, or nearer, costs `nearerAnother`
+  (as now, 2: worse than covering a word). It replaces today's middle-to-middle check, and
+  `isNearOwn` (on for every label: a label always names its thing).
+
+**Undoing a patch**: the target's ring was made coverable to clear one trail regression; but a
+label may cover only what the student needn't see, and the target is what she looks for. It is a
+thing again. Her name then needs a spot outside the ring: **a third distance** (28 px from her
+figure's edge) is added to the spots round a thing.
+
+**The audit measures the same need**: "reads as another's" (the nearest thing to the label's
+edge, among dots, shapes, words and pictures not coverable, isn't its own) replaces "nearer
+another dot". It is checked by the audit's own code, not the placer's.
+
+**Proof**: the full audit, before and after (reads as another's, on a dot or word, on a line,
+drawings with a problem); the recheck's four boards looked at in English and Hindi at 360
+(swap-the-numbers end, plot-from-a-table at 2 units, street-and-house at Aman's house, the trail
+at a target); then the reviewer rechecks lessons 2 and 4.
+
+**Steps**: 1. the audit's new measure, run on today (a baseline that counts what the reviewer
+saw); 2. the placer's rule and the ring; 3. the third distance; each audited.
+
+(The narration on plot-a-point#notR, "written beside her", is fixed apart: words, not labels.)
