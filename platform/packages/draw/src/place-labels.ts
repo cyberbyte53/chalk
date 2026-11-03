@@ -162,7 +162,7 @@ function thingBox(thing: Element, label: Element): Box {
 }
 
 /** How far a label sits from its thing's edge, px: next to it, then a little further out. */
-const DISTANCES = [3, 12] as const;
+const DISTANCES = [3, 12, 28] as const;
 /** The directions round a thing, in the order a label prefers them: the diagonals first. */
 const DIRECTIONS = [
   [1, -1],

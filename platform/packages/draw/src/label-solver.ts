@@ -56,29 +56,57 @@ function prepare(problem: LabelProblem) {
   const most = Math.max(1, ...labels.map((l) => l.spots.length));
   const rankWeight = NEAR / (n * most + 1);
   const own = labels.map((l) => l.spots.map((s, k) => s.cost + k * rankWeight));
-  // For each label's spot, the other labels' spots that clash with it (its neighbours), and what
-  // each costs: 1 on it, NEAR near it. A move looks only at these, not at every label.
-  const near: { j: number; k: number; cost: number }[][][] = labels.map((l, i) =>
-    l.spots.map((s) =>
-      labels.flatMap((m, j) =>
-        j === i
-          ? []
-          : m.spots.flatMap((o, k) =>
-              boxesClash(s.ink, o.ink, 0)
-                ? [{ j, k, cost: LABEL_WEIGHTS.onLabel }]
-                : boxesClash(s.box, o.box, Math.max(l.gap, m.gap))
-                  ? [{ j, k, cost: LABEL_WEIGHTS.onLabel * NEAR }]
-                  : [],
-            ),
-      ),
-    ),
-  );
+  /** What label i at spot k and label j at spot m cost together: 1 on, NEAR near, else 0. */
+  const clash = (i: number, k: number, j: number, m: number) => {
+    const l = labels[i];
+    const o = labels[j];
+    const a = l?.spots[k];
+    const b = o?.spots[m];
+    if (l === undefined || o === undefined || a === undefined || b === undefined) return 0;
+    return boxesClash(a.ink, b.ink, 0)
+      ? LABEL_WEIGHTS.onLabel
+      : boxesClash(a.box, b.box, Math.max(l.gap, o.gap))
+        ? LABEL_WEIGHTS.onLabel * NEAR
+        : 0;
+  };
   const cheapest = (i: number) => {
     const c = own[i] ?? [];
     let best = 0;
     for (let k = 1; k < c.length; k++) if ((c[k] ?? 0) < (c[best] ?? 0)) best = k;
     return best;
   };
+  // A spot that can't be in a best layout is dropped: one costing, on its own, at least what the
+  // label's cheapest spot costs plus the most that spot could pay in clashes. Moving the label
+  // from it to the cheapest never costs more, wherever the others are. Exact, not a guess.
+  const keep: number[][] = own.map((cs, i) => {
+    const b = cheapest(i);
+    let most = 0;
+    for (let j = 0; j < n; j++) {
+      if (j === i) continue;
+      let worst = 0;
+      for (let m = 0; m < (labels[j]?.spots.length ?? 0); m++)
+        worst = Math.max(worst, clash(i, b, j, m));
+      most += worst;
+    }
+    const bound = (cs[b] ?? 0) + most;
+    return cs.flatMap((c, k) => (k === b || c < bound ? [k] : []));
+  });
+  // For each kept spot, the other labels' kept spots that clash with it (its neighbours), and what
+  // each costs. A move looks only at these, not at every label.
+  const near: { j: number; k: number; cost: number }[][][] = own.map((cs, i) =>
+    cs.map((_, k) =>
+      (keep[i] ?? []).includes(k)
+        ? keep.flatMap((ms, j) =>
+            j === i
+              ? []
+              : ms.flatMap((m) => {
+                  const cost = clash(i, k, j, m);
+                  return cost > 0 ? [{ j, k: m, cost }] : [];
+                }),
+          )
+        : [],
+    ),
+  );
   // Groups: labels joined when any of their spots clash.
   const parent = [...Array(n).keys()];
   const root = (x: number): number => {
@@ -99,7 +127,7 @@ function prepare(problem: LabelProblem) {
     }
     return c;
   };
-  return { n, own, near, cheapest, groups: [...byRoot.values()], groupCost };
+  return { n, own, near, keep, cheapest, groups: [...byRoot.values()], groupCost };
 }
 
 /** The annealing's seeds, one run each. */
@@ -110,7 +138,7 @@ export const SEEDS: readonly number[] = [1, 2, 3, 4, 5];
  * when the runs are shared between workers and put together by `bestOf`).
  */
 export function solveLabels(problem: LabelProblem, seeds: readonly number[] = SEEDS): number[] {
-  const { n, own, near, cheapest, groups, groupCost: costOf } = prepare(problem);
+  const { n, own, near, keep, cheapest, groups, groupCost: costOf } = prepare(problem);
   const at = new Array<number>(n).fill(0);
   const groupCost = (g: readonly number[]) => costOf(at, g);
 
@@ -153,7 +181,8 @@ export function solveLabels(problem: LabelProblem, seeds: readonly number[] = SE
       }
       const i = g[a] ?? 0;
       let isOn = true;
-      for (let k = 0; k < (own[i]?.length ?? 0) && isOn; k++) {
+      for (const k of keep[i] ?? []) {
+        if (!isOn) break;
         at[i] = k;
         const cost = costAt(i, k);
         isIn[i] = true;
@@ -181,17 +210,19 @@ export function solveLabels(problem: LabelProblem, seeds: readonly number[] = SE
     for (const seed of seeds) {
       if (best <= floor + 1e-9) break;
       const random = seeded(seed);
-      for (const i of g) at[i] = Math.floor(random() * (own[i]?.length ?? 1));
+      for (const i of g) at[i] = keep[i]?.[Math.floor(random() * (keep[i]?.length ?? 1))] ?? 0;
       let temperature = -1 / Math.log(2 / 3);
       for (let stage = 0; stage < 50; stage++) {
         let kept = 0;
         for (let move = 0; move < 20 * m && kept <= 5 * m; move++) {
           const i = g[Math.floor(random() * m)] ?? 0;
-          const spots = own[i]?.length ?? 1;
-          if (spots < 2) continue;
+          const choices = keep[i] ?? [];
+          if (choices.length < 2) continue;
           const was = at[i] ?? 0;
-          let k = Math.floor(random() * (spots - 1));
-          if (k >= was) k += 1;
+          const from = choices.indexOf(was);
+          let pick = Math.floor(random() * (choices.length - 1));
+          if (pick >= from) pick += 1;
+          const k = choices[pick] ?? was;
           const rise = costAt(i, k) - costAt(i, was);
           if (rise <= 0 || random() < Math.exp(-rise / temperature)) {
             at[i] = k;

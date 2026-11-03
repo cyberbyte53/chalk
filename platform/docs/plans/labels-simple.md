@@ -163,3 +163,19 @@ problem 114 → 64. The recheck's cases: "(6, 1)" and "(−1, 7)" clear. Still o
 clear spot round them: "(0, 5)" (on the y-axis's 5), "(0, −1.25)" (on −4), and Riya's name at
 Aman's house (top row; under her, over the target house). Most of the rest: Riya's name crossing
 an axis in the walk questions and the town.
+
+### A third ring of spots, and pruning (2026-11-03)
+
+A third distance (28 px) for labels with nothing clear nearby: drawings with a problem 64 → 28
+(36 better, none worse); the slowest solve 43 → 81 ms (swap-the-numbers' 11 labels, 24 spots each).
+
+Is that time expected? No: the solver searched spots that can never win. **Pruning** drops a spot
+whose own cost is at least its label's cheapest spot's plus the most that one could pay in
+clashes (moving to the cheapest never costs more: exact), and the clash table is built for the
+kept spots only. Measured on the audit's 866 real problems: p99 7.2 → 0.8 ms, the same answers to
+within the side preference (no clash gained or lost). In the browser the slowest solve 81 → 26 ms.
+
+**Exact search for every group was tried and not taken**: with pruning, ordering and a greedy
+bound it was optimal and under 1 ms on our boards, but on made-up crowded boards (20 labels) it
+took up to 4 minutes, and it only improved the side preference (by under 0.02). The solver stays:
+exact for small groups within a step budget, annealing otherwise, both over the kept spots.
