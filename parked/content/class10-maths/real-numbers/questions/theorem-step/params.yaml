@@ -1,5 +1,0 @@
-# Where the proof leans on Theorem 1.3 (if a prime divides a², it divides a).
-- params: { p: 5 }
-- params: { p: 3 }
-  level: easy
-- params: { p: 7 }

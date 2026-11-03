@@ -5,7 +5,7 @@ Everything runs on one box (chalk1, Ubuntu on Azure) in Docker Compose (`compose
 | Service | What |
 |---|---|
 | `postgres` | Postgres 17; its data in the `pgdata` volume, never exposed outside the box |
-| `app` | The server (`platform/apps/server`) serving the API, Jugnu's model and the built PWA, on :8080 inside |
+| `app` | The server (`platform/apps/server`) serving the API and the built PWA, on :8080 inside |
 | `caddy` | HTTPS for `ORIGIN` on 80/443: a free Let's Encrypt certificate, renewed by itself; compresses everything |
 | `backup` | A `pg_dump` every night into `~/chalk-backups` on the box, kept 30 days |
 
@@ -18,7 +18,7 @@ pnpm ship                         # copy HEAD to chalk1, build, start (only what
 pnpm add-school "Sunrise School"  # prints the school's code
 ```
 
-The first `pnpm ship` also installs Docker on the box (`setup-box.sh`) and makes the box's `.env` from yours: `ORIGIN` set to the box's address, a new random `POSTGRES_PASSWORD`, `DEV_SIGN_IN=off`, your Google client id and Jugnu settings. After that the box's `.env` is never overwritten: change it there (`ssh chalk1`, `nano chalk/.env`) and `pnpm ship` again.
+The first `pnpm ship` also installs Docker on the box (`setup-box.sh`) and makes the box's `.env` from yours: `ORIGIN` set to the box's address, a new random `POSTGRES_PASSWORD`, `DEV_SIGN_IN=off` and your Google client id. After that the box's `.env` is never overwritten: change it there (`ssh chalk1`, `nano chalk/.env`) and `pnpm ship` again.
 
 Needs: `ssh chalk1` working, ports 80 and 443 open in Azure, and `ORIGIN`'s name pointing at the box.
 

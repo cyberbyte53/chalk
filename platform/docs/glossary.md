@@ -49,7 +49,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Speakable** | What a voice may be given: letters, digits, spaces, ordinary punctuation. Anything else is refused when audio is made | `unspeakable` |
 | **Voice provider** | What turns words into a clip, on this machine or a service: Piper now (a cloud or AI voice the same way: one file) | `TtsProvider`, `sound/voice/providers/` |
 | **Publish** | Build the content from a clean commit and keep that build as `published/<commit>/` | `pnpm publish-content` |
-| **Jugnu** | The AI tutor and the app's character. As a tutor he is parked (`parked/`), to be remade on this board model; the character still appears in the app | `parked/platform/jugnu` |
+| **Jugnu** | The app's character; the AI tutor he will be is not built yet (to be designed on this board model) | `JugnuFigure` in `@chalk/player` |
 | **Book** | A subject for one class (Class 9 Maths): chapters in book order | `content/<book>/build.yaml`, `book.json` |
 | **Manifest** | A folder's `build.yaml`: its title and the children it includes, in order. Only what a manifest lists is built | `build.yaml`, `bookManifestSchema` … (`@chalk/author`) |
 | **Page** | One board of a concept's overview: explanation, worked example, animation or sandbox | `page()`, `overview.ts`, `BuiltPage` |

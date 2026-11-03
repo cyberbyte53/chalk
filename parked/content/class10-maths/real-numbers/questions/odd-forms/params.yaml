@@ -1,8 +1,0 @@
-# Odd integers by their remainder: NCERT Example 3 (b = 2), Example 4 (b = 4), Ex 1.1 Q2 (b = 6).
-- params: { divisor: 2 }
-  level: easy
-- params: { divisor: 4 }
-- params: { divisor: 6 }
-  firstTry: 4
-- params: { divisor: 8 }
-  level: hard

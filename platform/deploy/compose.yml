@@ -24,9 +24,6 @@ services:
       dockerfile: platform/deploy/Dockerfile
       args:
         - GOOGLE_CLIENT_ID
-        - JUGNU_PROVIDER
-        - JUGNU_MODEL
-        - JUGNU_THINK
         - COMMIT
     image: chalk-app
     restart: unless-stopped

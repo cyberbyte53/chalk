@@ -1,8 +1,0 @@
-# Squares and cubes on b shelves: NCERT Ex 1.1 Q4 (squares, 3) and Q5 (cubes, 9).
-- params: { divisor: 3, power: 2 }
-  firstTry: 5
-- params: { divisor: 4, power: 2 }
-- params: { divisor: 9, power: 3 }
-  level: hard
-- params: { divisor: 5, power: 2 }
-  level: hard

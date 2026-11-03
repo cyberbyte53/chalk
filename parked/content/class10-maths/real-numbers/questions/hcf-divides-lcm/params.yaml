@@ -1,5 +1,0 @@
-# Can these be the HCF and LCM of two numbers? Only if the HCF divides the LCM.
-- params: { hcf: 18, lcm: 380 }
-- params: { hcf: 12, lcm: 72 }
-- params: { hcf: 15, lcm: 175 }
-- params: { hcf: 8, lcm: 120 }

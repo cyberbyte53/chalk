@@ -25,7 +25,7 @@ Errors are `{ error, message }` with an `ApiErrorCode`. Anything but GET must co
 
 ## Running it
 
-Settings come from the environment (see `src/config.ts`): `DATABASE_URL`, `GOOGLE_CLIENT_ID`, `ORIGIN`, and optionally `PORT`, `STATIC_DIR`, `CONTENT_INDEX`, `JUGNU_MODEL_SERVER`, `JUGNU_API_KEY`, `JUGNU_MODEL`.
+Settings come from the environment (see `src/config.ts`): `DATABASE_URL`, `GOOGLE_CLIENT_ID`, `ORIGIN`, and optionally `PORT`, `STATIC_DIR`, `CONTENT_INDEX`, `CONTENT_DIR`, `DEV_SIGN_IN`.
 
 ```sh
 pnpm --filter @chalk/server dev                       # watches src/

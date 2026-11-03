@@ -50,12 +50,12 @@ exclude: [one-third-never-lands]   # optional
 
 # a concept
 title: { en: A decimal is an address, hi: दशमलव एक पता है }
-props: [decimalExpansion]          # optional: extra explainers (Jugnu's, parked)
+props: [decimalExpansion]          # optional: extra explainers (for Jugnu, when he is built)
 ```
 
 A book has `title` and `chapters`; `content/build.yaml` has `books`. Unknown fields fail the build.
 
-**A concept's explainers** (for Jugnu, parked until he is remade) are worked out, not listed: a concept's are the explainers its pages place, those the questions testing it place, and its `props:` extras; a chapter's are the union of its concepts'. Write `props:` only for an explainer nothing on the concept's boards uses.
+**A concept's explainers** (for Jugnu, when he is built) are worked out, not listed: a concept's are the explainers its pages place, those the questions testing it place, and its `props:` extras; a chapter's are the union of its concepts'. Write `props:` only for an explainer nothing on the concept's boards uses.
 
 **`concepts.gen.ts`** is the chapter's concepts as an enum, made from `build.yaml` by `pnpm build-content` (and `preview`). Commit it. Rename or drop a concept and every family still naming it stops compiling; the build also fails while the file is out of date.
 

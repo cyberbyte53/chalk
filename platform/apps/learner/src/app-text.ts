@@ -61,10 +61,7 @@ export const AppText = {
   practice: { en: "Practice", hi: "अभ्यास" },
   practiceOf: { en: "{concept} · practice", hi: "{concept} · अभ्यास" },
   worthAnotherLook: { en: "Worth another look", hi: "एक बार और देखो" },
-  questionsToLook: {
-    en: "Questions {list}. Jugnu can go over them with you.",
-    hi: "सवाल {list}। जुगनू उन्हें तुम्हारे साथ देख सकता है।",
-  },
+  questionsToLook: { en: "Questions {list}.", hi: "सवाल {list}।" },
   allRight: { en: "Every one right on the first try.", hi: "हर सवाल पहली बार में सही।" },
   goOver: { en: "Go over them", hi: "फिर से करो" },
   nextConcept: { en: "Next concept", hi: "अगला विषय" },

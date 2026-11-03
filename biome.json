@@ -10,8 +10,7 @@
       "content/**/published/**",
       "build/**",
       "platform/editor/out/**",
-      "published/**",
-      "library/props-later/**"
+      "published/**"
     ]
   },
   "formatter": {

@@ -19,12 +19,6 @@ Fonts (Baloo 2) are bundled; styles load in order: `@chalk/look`, the player's, 
 
 1. Copy the repo's `.env.example` to `.env` (one file for the app and the server) and fill it in.
 2. A local Postgres matching `DATABASE_URL`, and a school: `pnpm --filter @chalk/server add-school "Test School"` prints its code.
-3. `pnpm dev` from the repo root runs the server and Vite together; open http://localhost:5173 (phone width works best). Vite passes `/api` and `/jugnu-model` on to the server.
+3. `pnpm dev` from the repo root runs the server and Vite together; open http://localhost:5173 (phone width works best). Vite passes `/api` on to the server.
 
 With `DEV_SIGN_IN=on` (localhost only) the welcome screen also signs in by name, without Google. In development, `?dev` opens the old shell (every published lesson, the events as they happen) and `?screens` shows the result and chapter-end screens with made-up scores.
-
-## Jugnu
-
-Jugnu's button sits in every board's footer, left of Continue. He runs on a hosted model that can call tools (DeepSeek Flash by default; `.env` shows Microsoft Foundry and Ollama). The app only ever calls `/jugnu-model` on its own server, which adds the key and the model, so neither reaches a phone. `JUGNU_PROVIDER=off` hides the button.
-
-In the chat he can act on the board, make part of it glow, and hand it back ("your turn"): the chat shrinks to his last words, and when you act on the prop he's watching he looks and goes on by himself.

@@ -72,4 +72,4 @@ Styles: the app loads `@chalk/look/look.css`, then `@chalk/player/styles.css` (t
 
 ## Not built yet
 
-Jugnu (parked, to be remade on the board model), chapter bundles and the CDN, the learner model, what stood out (misconceptions) on the teacher's view, the Studio GUI. The system design doc is the reference for all of these.
+Jugnu the tutor (to be designed on the board model), chapter bundles and the CDN, what stood out (misconceptions) on the teacher's view, the Studio GUI. The system design doc is the reference for all of these.

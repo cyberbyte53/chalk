@@ -4,8 +4,7 @@ import { dirname, join } from "node:path";
 /**
  * `pnpm check`'s suppressions step: a lint rule is met, never skipped line by line. Any
  * `biome-ignore` in the code fails it; a rule that is wrong for our code is turned off once in
- * biome.json, with its reason in platform/docs/code-conventions.md. Parked code (library/props-later)
- * is outside the build and meets the rules when it comes back.
+ * biome.json, with its reason in platform/docs/code-conventions.md.
  */
 const root = join(dirname(new URL(import.meta.url).pathname), "../../..");
 let found = "";
@@ -22,7 +21,6 @@ try {
       "platform",
       "library",
       "content",
-      ":!library/props-later",
       ":!platform/docs",
     ],
     { cwd: root, encoding: "utf8" },

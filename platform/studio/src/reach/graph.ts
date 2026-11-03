@@ -332,12 +332,8 @@ export class CodeGraph {
 
 /** The folders the graph reads: everything whose code can change what a board is or shows. */
 export const GRAPH_FOLDERS = ["content", "library", "platform/packages"];
-/** Code no board uses: the props parked until they're moved to the contract. */
-export const GRAPH_SKIPS = ["library/props-later"];
-
 /** The source files the graph reads. */
-export const graphSources = (root: string): string[] =>
-  sourcesUnder(root, GRAPH_FOLDERS, GRAPH_SKIPS);
+export const graphSources = (root: string): string[] => sourcesUnder(root, GRAPH_FOLDERS);
 
 export function codeGraph(root: string, files: readonly string[] = graphSources(root)): CodeGraph {
   const cache = new FactsCache(join(root, "node_modules", ".cache", "chalk-reach", "facts.json"));

@@ -1,7 +1,0 @@
-/* @chalk/prop-eye: drawn only with the look's tokens (@chalk/look). */
-@import "./base.css";
-@import "./eye.css";
-@import "./prism.css";
-@import "./atmosphere.css";
-@import "./scattering.css";
-@import "./scene.css";

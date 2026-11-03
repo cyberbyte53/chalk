@@ -25,4 +25,4 @@ Done (2026-11-01). How it works: [seeing-boards.md](seeing-boards.md). What foll
 
 - `changes` (67 s a call: it redraws every reviewed board) and `comments` (16 s to read threads, answers too long): next.
 - Whether the reviewer still runs `pnpm check`: the service knows whether the build passes.
-- `pnpm stress-mcp` names boards of `class10-maths/real-numbers`, which is parked: it needs boards that are built before it can run.
+- `pnpm stress-mcp` still names boards of `class10-maths/real-numbers`, which is gone: it needs pointing at coordinate-geometry's boards before it can run.

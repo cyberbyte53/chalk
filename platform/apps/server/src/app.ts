@@ -146,7 +146,7 @@ const AUDIO_TYPES: Readonly<Record<string, string>> = {
 /** Where the built content is served (the app fetches `/content/<path in build/>?v=<version>`). */
 export const CONTENT_ROUTE = "/content/";
 
-/** The Hono app: every /api route, Jugnu's model, and the built app when `staticDir` is set. */
+/** The Hono app: every /api route, and the built app when `staticDir` is set. */
 export function createApp(deps: AppDeps): Hono<Env> {
   const { db } = deps;
   const now = deps.now ?? Date.now;
