@@ -1,6 +1,6 @@
 # Jugnu, the tutor
 
-Status: reviewed once; the person's changes folded in (2026-11-03). Designed afresh; nothing is ported.
+Status: reviewed once; decided (2026-11-03). Designed afresh; nothing is ported.
 
 ## What he is, in four sentences
 
@@ -85,9 +85,10 @@ every turn on that concept and is prompt-cached):
 
 | Tool | Does |
 |---|---|
-| `try` | plays steps on a **copy** (a second board replayed to the same point) and says what changed (`seenBetween` over two snapshots, as `show` reports it, without Chrome) |
+| `try` | plays steps on a **copy** of the board and says what changed (`seenBetween` over two snapshots, as `show` reports it, without Chrome): the same steps a finger does (tap, drag, Check), through the props' own rules, so what he learns is true. From where the child is (the default), or from the board's start (to replay how it is solved and find where she went off). As many as he likes, each from a fresh copy; the child's board never moves |
 | `point` | glows one part on the child's screen (by its name), with a few words beside it |
 | `say` | his reply; its words stream to the phone as they come; ends the turn |
+| `watch` | ends his turn watching one part he names: his sheet shrinks to his last line, and the next time the child acts on that part (or presses Check) the phone sends him a follow-up turn (what she did, what the board shows now). He answers, watches again, stays quiet, or ends it. A watch ends when she leaves the board or closes his sheet, when he ends it, or after 5 acts. Each follow-up is a turn like any other, recorded |
 | `lesson` | an earlier concept as taught |
 | `props` | the prop library as data: what each prop is for (its `describe`), its setup fields and their types, what it can do; the concept's own props first |
 | `make` | a board from data: words and props with their setup, no rule code (props bring their own behaviour). Checked against each prop's types, drawn, and described back (or what is wrong, to fix); then shown to the child in his sheet, where `point` and `try` work on it |
@@ -103,7 +104,7 @@ Not in the first version: acting on the child's board; the child's mastery; earl
 the board. Each is a tool or a part later, with nothing else changing.
 
 Closed sets are const-object enums: the tool names (`JugnuTool`), and the `steps` kinds of a
-`jugnu` entry (`JugnuStep`: point, say, try, make), replacing today's `kind: z.string()`.
+`jugnu` entry (`JugnuStep`: point, say, try, make, watch), replacing today's `kind: z.string()`.
 
 ## Exact replay: what the record must carry
 
@@ -188,10 +189,9 @@ set is worth automating.
 6. The generated stuck-children set, read by the person.
 7. `props` and `make`: boards he makes, after the basics work (the same door).
 
-## For the person
+## Decided
 
-1. **Model**: recommended: Claude Haiku 5.5 to start (fast), compared later with Claude Sonnet 5.5
-   on the stuck-children set.
-2. **Children's chats**: kept how long, and who reads them (the teacher? only us?).
-3. **Typed questions**, or only buttons and hold-a-part (typing invites anything; buttons keep it on
-   the board)?
+- **Asking**: buttons ("Why is it wrong?", "A hint") and hold-a-part-to-ask first, and a small box to type a question.
+- **Model**: Claude Haiku 5.5 at low effort to start, behind one setting so it can be swapped; compared with Claude Sonnet 5.5 on the generated stuck-children set.
+- **`watch`**: on one part he names (not everything the child does), so he sees whether his nudge worked.
+- **Children's chats**: kept, for us to analyse; apart from the teacher view.
