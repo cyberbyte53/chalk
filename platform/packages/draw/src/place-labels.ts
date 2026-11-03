@@ -18,7 +18,7 @@ export type LabelSpec = {
   /**
    * What a place keeps clear of (a selector in the picture), and how far, px. Left out: everything
    * inked in the picture (words, lines, shapes that show) but labels and what is tagged
-   * `data-backdrop` (a grid, a tint, a tap area), `gap` away.
+   * `data-coverable` (a grid, a tint, a tap area), `gap` away.
    */
   avoid?: (spot: number) => { what: string; gap: number };
   /** How far it keeps from other labels, px. */
@@ -218,7 +218,7 @@ function place(svg: SVGSVGElement, placer: Placer): void {
       found = (
         what === undefined
           ? [...svg.querySelectorAll(INKED)].filter(
-              (e) => e.closest("[data-backdrop]") === null && hasInk(e),
+              (e) => e.closest("[data-coverable]") === null && hasInk(e),
             )
           : [...svg.querySelectorAll(what)]
       )

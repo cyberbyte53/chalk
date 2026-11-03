@@ -63,7 +63,7 @@ export function partWords(s: PlaneView, part: PlanePart, locale: "en" | "hi"): s
 export function QuadrantTints({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Element | null {
   if (!s.tintsQuadrants || s.axes !== Axes.Both) return null;
   return (
-    <g class="cp-quadrant-tints" data-backdrop>
+    <g class="cp-quadrant-tints" data-coverable>
       {QUADRANTS.slice(0, s.quadrantsNamed).map((q, i) => {
         const b = quadrantBox(s, q);
         const [x0, y0] = px.toPx(b.x0, b.y1);
@@ -124,7 +124,7 @@ export function SceneDraw({
     const top = box.y + box.height - tall - 4;
     return (
       <g class="cp-classroom">
-        <rect class="cp-scene is-classroom" data-backdrop {...box} rx={6} />
+        <rect class="cp-scene is-classroom" data-coverable {...box} rx={6} />
         <rect
           class="cp-blackboard"
           x={box.x + (box.width - wide) / 2}
@@ -146,7 +146,7 @@ export function SceneDraw({
     );
   }
   if (s.scene !== Scene.Town)
-    return <rect class={`cp-scene is-${s.scene}`} data-backdrop {...box} rx={6} />;
+    return <rect class={`cp-scene is-${s.scene}`} data-coverable {...box} rx={6} />;
   // The town: the main road, a street up from it at every count. Grown past Riya's corner (its
   // window reaching west of 0, or south of the road), its streets are at every whole number, the
   // corner's own included, and run south of the road as well.
@@ -160,8 +160,8 @@ export function SceneDraw({
   const foot = w.yMin < 0 ? y1 : base;
   const rise = s.rising;
   return (
-    <g class="cp-town" data-backdrop>
-      <rect class="cp-scene is-town" data-backdrop {...box} rx={6} />
+    <g class="cp-town" data-coverable>
+      <rect class="cp-scene is-town" data-coverable {...box} rx={6} />
       {streets.map((x) => {
         const [sx] = px.toPx(x, 0);
         return (
@@ -198,7 +198,7 @@ export function GridDraw({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
   const xs = marksOn(Marks.Numbers, w.xMin, w.xMax, s.tickEvery);
   const ys = marksOn(Marks.Numbers, w.yMin, w.yMax, s.tickEvery);
   return (
-    <g class="cp-grid" data-backdrop>
+    <g class="cp-grid" data-coverable>
       {xs.map((x) => {
         const [a, top] = px.toPx(x, w.yMax);
         const [, bottom] = px.toPx(x, w.yMin);
@@ -480,7 +480,7 @@ export function PartTaps({ s, px }: { s: PlaneView; px: FramePixels }): JSX.Elem
   // A quadrant is tapped once the lesson has numbered them, or where it says they can be.
   const canTapQuadrant = s.canTapQuadrants || s.quadrantsNamed === 4;
   return (
-    <g class="cp-part-taps" data-backdrop>
+    <g class="cp-part-taps" data-coverable>
       {QUADRANTS.map((q) => {
         if (!canTapQuadrant) return null;
         const b = quadrantBox(s, q);

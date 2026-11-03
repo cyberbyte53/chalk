@@ -86,7 +86,7 @@ function StreetsAcross({ s, px }: { s: WalkerView; px: FramePixels }): JSX.Eleme
   const [x1] = px.toPx(w.xMax, 0);
   const road = Math.max(6, Math.min(16, unitOf(px) * 0.32));
   return (
-    <g class="cp-town" data-backdrop>
+    <g class="cp-town" data-coverable>
       {marksOn(Marks.Counts, w.yMin, w.yMax, 1).map((y) => {
         const [, sy] = px.toPx(0, y);
         return (
