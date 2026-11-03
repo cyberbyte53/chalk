@@ -87,7 +87,9 @@ function playScene(
   runtime.settle();
   const end = JSON.stringify(runtime.state());
   states.forEach((state, k) => {
-    const copy = new BoardRuntime(board, (type) => defs[type], { ...services, from: state });
+    // Through JSON, as it is sent: what a phone sends Jugnu is what is restored.
+    const sent = JSON.parse(JSON.stringify(state)) as RuntimeState;
+    const copy = new BoardRuntime(board, (type) => defs[type], { ...services, from: sent });
     copy.start();
     const fail = (seen: string) =>
       failures.push({

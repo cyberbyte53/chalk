@@ -43,6 +43,7 @@ const steps: [string, () => Promise<boolean>][] = [
   ["typecheck", () => typecheck(root, { force })],
   ["tests", () => test(root, { force, report: tests })],
   ["boundaries", stamped("boundaries", ["src/boundaries-cli.ts"])],
+  ["purity", stamped("purity", ["src/purity-cli.ts"])],
   // Not stamped: it reads every source file, and is fast.
   [
     "suppressions",
