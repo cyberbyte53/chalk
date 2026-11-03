@@ -200,3 +200,51 @@ numbers are given, saying so.
   blob:`), and the studio's and learner's builds must bundle the worker file.
 - **Hidden labels:** a label hidden for good has no tap to show it yet. The audit reports each.
 - **Cost on a phone:** see 6.
+
+## Results (2026-11-03)
+
+Built as above, with two changes found while measuring:
+- **Each label keeps today's spots and today's weights** (a word or dot 10, a line 1, nearer
+  another dot 20, off the plane 1000; another label counts as a word). Only the algorithm differs,
+  so the comparison measures the algorithm. The cartographers' order is not used yet.
+- **Near is not on.** At first the solver counted "within the gap" the same as "on top", and came out
+  worse than today (8 labels on labels, 149 on words): when every spot was near something, it chose
+  by rank and took a real overlap. Now overlapping letters (their ink) cost in full and only near
+  costs a quarter.
+
+The audit, every plane board of coordinate-geometry (lessons 1–4 and the questions; each board's
+start in en and hi at 360 and 640, each witness step in en and hi at 360): 920 drawings, 1632
+labels.
+
+| | Before (greedy) | After (together) |
+|---|---|---|
+| Label on label | 4 | **0** |
+| Label on a dot or word | 134 | **112** |
+| Label on a line | 54 | **40** |
+| Nearer another dot | 4 | **0** |
+| Off the plane, hidden | 0, 0 | 0, 0 |
+| Drawings with any problem | 104 | 104 |
+| Distance to own dot, px (median / worst) | 13 / 42 | 13 / 43 |
+| Steps where a label moved | 42 of 586 | 44 of 586 |
+| Placing per drawing, ms (median / worst) | 2.4 / 157 | 3.2 / 177 |
+| … of which solving (median / worst) | – | 0.1 / 79 |
+
+Drawings with a problem stay at 104: most are O beside an axis's number at its own corner (O's
+home spot keeps clear only of what stands on it, as before), the same before and after. Riya's
+name in Hindi crosses the axis at 3 trail steps where it didn't before; at 2 others it is clear
+where it wasn't.
+
+**Time is the page's, not the solver's.** Placing time is mostly the browser laying the page out
+when the first box is read; the solving itself is a tenth of a millisecond for most drawings.
+
+**Workers (B)**, timed in Chrome on this Mac on the 938 problems the drawings solved, one thread
+against a warm pool of 5 workers sharing the 5 seeds, put together by `bestOf`:
+
+| Labels | Problems | One thread (median / p95 / worst) | 5 workers (median / p95 / worst) |
+|---|---|---|---|
+| 1–2 | 777 | 0.0 / 0.1 / 0.2 ms | 0.1 / 0.2 / 6.7 ms |
+| 3–8 | 149 | 0.1 / 0.2 / 2.0 ms | 0.3 / 0.7 / 2.6 ms |
+| 9–12 | 12 | 5.8 / 17.8 / 17.8 ms | 5.3 / 10.3 / 10.3 ms |
+
+The same answer on 938 of 938. Workers help only on the 12 problems with 9–12 labels, and only
+their worst case.

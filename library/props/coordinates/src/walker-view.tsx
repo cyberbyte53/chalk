@@ -6,7 +6,7 @@ import type { JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
 import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
-import { type WordPlace, placeClear, timedPlacing } from "./place-clear";
+import { usePlaneLabel } from "./place-labels";
 import { Marks, type Point, Scene } from "./plane";
 import { marksOn, unitOf } from "./plane-view";
 import { walker } from "./walker";
@@ -137,40 +137,33 @@ function WalkerShown({
     s.at.x < 0 ? x - size * 0.55 - nameWide >= 0 : x + size * 0.55 + nameWide > px.width;
   // Every place her name can go, nearest first: beside her (each side, at her middle, above and
   // below her feet), then over her head and under her feet.
-  useLayoutEffect(() =>
-    timedPlacing(() => {
-      const el = nameRef.current;
-      if (el === null) return;
-      const side = size * 0.55;
-      const first: WordPlace = [
+  const side = size * 0.55;
+  usePlaneLabel(nameRef, () => ({
+    spots: [
+      [
         nameLeft ? -side : side,
         s.at.y < 0 ? size * 0.45 + 16 : -size * 0.2,
         nameLeft ? "end" : "start",
-      ];
-      // Every other word on the plane, and the axes' lines and a point's dashed guides: her name
-      // keeps a few pixels from each, so it neither touches a word nor sits on a line.
-      placeClear(
-        el,
-        [
-          first,
-          [side, -size * 0.2, "start"],
-          [-side, -size * 0.2, "end"],
-          [side, size * 0.45 + 16, "start"],
-          [-side, size * 0.45 + 16, "end"],
-          [side, size * 0.25, "start"],
-          [-side, size * 0.25, "end"],
-          [0, -size * 0.75, "middle"],
-          [0, size * 0.45 + 18, "middle"],
-          // Further out, past an axis's numbers or end name beside her.
-          [side + 30, -size * 0.2, "start"],
-          [-side - 30, -size * 0.2, "end"],
-          [side + 30, size * 0.45 + 16, "start"],
-          [-side - 30, size * 0.45 + 16, "end"],
-        ],
-        "text, line.cp-axis, line.cp-drop",
-      );
-    }),
-  );
+      ],
+      [side, -size * 0.2, "start"],
+      [-side, -size * 0.2, "end"],
+      [side, size * 0.45 + 16, "start"],
+      [-side, size * 0.45 + 16, "end"],
+      [side, size * 0.25, "start"],
+      [-side, size * 0.25, "end"],
+      [0, -size * 0.75, "middle"],
+      [0, size * 0.45 + 18, "middle"],
+      // Further out, past an axis's numbers or end name beside her.
+      [side + 30, -size * 0.2, "start"],
+      [-side - 30, -size * 0.2, "end"],
+      [side + 30, size * 0.45 + 16, "start"],
+      [-side - 30, size * 0.45 + 16, "end"],
+    ],
+    // Every other word on the plane, and the axes' lines and a point's dashed guides: her name
+    // keeps a few pixels from each, so it neither touches a word nor sits on a line.
+    avoid: () => ({ what: "text, line.cp-axis, line.cp-drop", gap: 4 }),
+    gap: 4,
+  }));
   return (
     <g class="cp-walk">
       <circle class="cp-walk-start" cx={sx} cy={sy} r={5} />

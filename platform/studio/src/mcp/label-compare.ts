@@ -116,6 +116,10 @@ async function run(name: string): Promise<void> {
   drawings.sort((a, b) =>
     (a.board + a.what).localeCompare(b.board + b.what, "en", { numeric: true }),
   );
+  // The problems solved, apart (each once): to time the solver on its own (main thread, workers).
+  const problems = new Set(drawings.flatMap((d) => d.audit.problems ?? []));
+  for (const d of drawings) d.audit.problems = [];
+  writeFileSync(join(dir, "problems.json"), JSON.stringify([...problems]));
   writeFileSync(join(dir, "audits.json"), JSON.stringify(drawings, null, 1));
   console.log(`${drawings.length} drawings with labels, kept in ${dir}`);
   await closeBrowser();
@@ -184,6 +188,7 @@ function numbers(drawings: Drawing[]) {
     "labels moved per step (median / worst)": `${median(moved)} / ${worst(moved)}`,
     "steps where a label moved": `${moved.filter((m) => m > 0).length} of ${moved.length}`,
     "placing per drawing, ms (median / worst)": `${median(placing).toFixed(2)} / ${worst(placing).toFixed(2)}`,
+    "of which solving, ms (median / worst)": `${median(drawings.map((d) => d.audit.solvingMs ?? 0)).toFixed(2)} / ${worst(drawings.map((d) => d.audit.solvingMs ?? 0)).toFixed(2)}`,
     "boxes read per drawing (median / worst)": `${median(reads)} / ${worst(reads)}`,
   };
 }

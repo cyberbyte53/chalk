@@ -37,6 +37,10 @@ export type LabelAudit = {
   placingMs: number;
   /** Boxes read while placing since the last audit (each can force a layout). */
   boxReads: number;
+  /** Of the placing, the time spent solving where labels go (placing them together only), ms. */
+  solvingMs: number;
+  /** The problems solved (placing them together only), as given to the solver. */
+  problems: string[];
 };
 
 /** Counts the boxes read while a placing runs (`__chalkPlacing`, set by the props' timer). */
@@ -59,6 +63,10 @@ export function labelAudit(card: Element): LabelAudit {
   const measures = performance.getEntriesByName("chalk:labels");
   const placingMs = measures.reduce((sum, m) => sum + m.duration, 0);
   performance.clearMeasures("chalk:labels");
+  const solves = performance.getEntriesByName("chalk:label-solve") as PerformanceMeasure[];
+  const solvingMs = solves.reduce((sum, m) => sum + m.duration, 0);
+  const problems = solves.map((m) => String(m.detail));
+  performance.clearMeasures("chalk:label-solve");
   const boxReads = w.__chalkBoxReads ?? 0;
   w.__chalkBoxReads = 0;
   const labels: AuditedLabel[] = [];
@@ -210,5 +218,5 @@ export function labelAudit(card: Element): LabelAudit {
       });
     }
   }
-  return { labels, placingMs, boxReads };
+  return { labels, placingMs, boxReads, solvingMs, problems };
 }

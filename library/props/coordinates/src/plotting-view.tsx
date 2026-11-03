@@ -3,9 +3,9 @@ import { SymbolButton } from "@chalk/draw";
 import { type PropView, useDrags } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { useLayoutEffect, useRef } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import { drawing } from "./layer-view";
-import { type WordPlace, placeClear, timedPlacing } from "./place-clear";
+import { usePlaneLabel } from "./place-labels";
 import { isInWindow } from "./plane";
 import { plotting } from "./plotting";
 import { WORDS, num, pair, word } from "./words";
@@ -15,7 +15,8 @@ const actions = plotting.actions;
 
 /**
  * A dot's pair, beside it where it is clear of every other word, dot and axis: above right first,
- * then round the dot. Its own dot (the element just before it) it may touch.
+ * then round the dot, placed with the plane's other labels. Its own dot (the element just before
+ * it) it may touch.
  */
 function DotLabel({
   x,
@@ -24,51 +25,29 @@ function DotLabel({
   class: cls,
 }: { x: number; y: number; said: string; class?: string }) {
   const ref = useRef<SVGTextElement>(null);
-  useLayoutEffect(() =>
-    timedPlacing(() => {
-      const el = ref.current;
-      if (el === null) return;
-      const own = el.previousElementSibling;
-      const places: WordPlace[] = [
-        [x + 9, y - 9, "start"],
-        [x - 9, y - 9, "end"],
-        [x + 9, y + 18, "start"],
-        [x - 9, y + 18, "end"],
-        [x, y - 13, "middle"],
-        [x, y + 22, "middle"],
-        [x + 11, y + 4, "start"],
-        [x - 11, y + 4, "end"],
-        // Further out, past a tick's number or the axis beside it.
-        [x + 14, y - 22, "start"],
-        [x - 14, y - 22, "end"],
-        [x + 14, y + 30, "start"],
-        [x - 14, y + 30, "end"],
-      ];
-      // A wider gap than words keep, off the axes and the swaps' dashed lines; and a place nearer
-      // another dot than its own costs most, as the pair would read as that dot's.
-      const dotsBut = [
-        ...(el.ownerSVGElement?.querySelectorAll(".cp-dot > circle, .cp-swap") ?? []),
-      ]
-        .filter((d) => d !== own)
-        .map((d) => d.getBoundingClientRect());
-      const ownAt = own?.getBoundingClientRect();
-      const middle = (r: DOMRect) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
-      const far = (a: { x: number; y: number }, b: DOMRect) =>
-        Math.hypot(a.x - middle(b).x, a.y - middle(b).y);
-      placeClear(
-        el,
-        places,
-        "text, line.cp-axis, line.cp-swap-line, circle",
-        own === null ? [] : [own],
-        8,
-        (r) => {
-          if (ownAt === undefined) return 0;
-          const m = middle(r);
-          return dotsBut.some((d) => far(m, d) < far(m, ownAt)) ? 20 : 0;
-        },
-      );
-    }),
-  );
+  usePlaneLabel(ref, () => ({
+    spots: [
+      [x + 9, y - 9, "start"],
+      [x - 9, y - 9, "end"],
+      [x + 9, y + 18, "start"],
+      [x - 9, y + 18, "end"],
+      [x, y - 13, "middle"],
+      [x, y + 22, "middle"],
+      [x + 11, y + 4, "start"],
+      [x - 11, y + 4, "end"],
+      // Further out, past a tick's number or the axis beside it.
+      [x + 14, y - 22, "start"],
+      [x - 14, y - 22, "end"],
+      [x + 14, y + 30, "start"],
+      [x - 14, y + 30, "end"],
+    ],
+    // A wider gap than words keep, off the axes and the swaps' dashed lines; and nearer its own dot
+    // than any other, as the pair would read as that dot's.
+    avoid: () => ({ what: "text, line.cp-axis, line.cp-swap-line, circle", gap: 8 }),
+    gap: 8,
+    own: ref.current?.previousElementSibling ?? null,
+    isNearOwn: true,
+  }));
   return (
     <text ref={ref} class={cls} x={x + 9} y={y - 9}>
       {said}
