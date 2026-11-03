@@ -158,11 +158,8 @@ function WalkerShown({
       [side + 30, size * 0.45 + 16, "start"],
       [-side - 30, size * 0.45 + 16, "end"],
     ],
-    // Every other word on the plane, and the axes' lines and a point's dashed guides: her name
-    // keeps a few pixels from each, so it neither touches a word nor sits on a line. Not
-    // everything drawn: then a town's houses cost as much as a word, and her name goes across an
-    // axis instead (platform/docs/plans/generic-labels.md, results).
-    avoid: () => ({ what: "text, line.cp-axis, line.cp-drop", gap: 4 }),
+    // Clear of everything drawn but what is coverable and her own figure.
+    own: nameRef.current?.closest(".cp-walker") ?? null,
     gap: 4,
   }));
   return (

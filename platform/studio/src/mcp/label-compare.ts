@@ -11,6 +11,8 @@ import type { LabelAudit } from "./label-audit";
  *
  *   tsx label-compare.ts run before        every board's start (en, hi; 360, 640) and its witness
  *                                          played (en, hi; 360), each step read
+ *   tsx label-compare.ts run try --quick   only QUICK's boards: where labels meet (a minute less;
+ *                                          the whole run is still the check before a commit)
  *   tsx label-compare.ts compare before after
  *
  * Kept in node_modules/.cache/label-compare/<name>/: audits.json, and pictures of each witness's end.
@@ -27,6 +29,40 @@ type Drawing = {
   what: string;
   audit: LabelAudit;
 };
+
+/**
+ * The boards where labels meet: every board with two or more at once, the turned plane, the
+ * walker in her town, and one question of each family. Compared with a whole run, only the
+ * drawings both have are counted.
+ */
+const QUICK = [
+  "plotting-points/plot-from-a-table",
+  "plotting-points/swap-the-numbers",
+  "plotting-points/graphs-you-know",
+  "plotting-points/plot-a-point",
+  "plotting-points/treasure-trail",
+  "the-cartesian-plane/town-grows",
+  "coordinates-of-a-point/distances-from-axes",
+  "coordinates-of-a-point/points-on-axes",
+  "coordinates-of-a-point/writing-coordinates",
+  "coordinates-of-a-point/any-axes",
+  "two-numbers-for-a-place/street-and-house",
+];
+const QUICK_FAMILIES = [
+  "bus-to-stop",
+  "fig-3-14",
+  "place-the-dot",
+  "plot-the-point",
+  "read-a-point",
+];
+
+function quick(all: string[]): string[] {
+  const one = (family: string) => all.find((b) => b.includes(`/questions/${family}/`));
+  return [
+    ...all.filter((b) => QUICK.some((q) => b.endsWith(`/${q}`))),
+    ...QUICK_FAMILIES.flatMap((f) => one(f) ?? []),
+  ];
+}
 
 function boards(): string[] {
   const base = join(root, "build/witness");
@@ -58,12 +94,12 @@ function witnessSteps(board: string): Step[] {
   );
 }
 
-async function run(name: string): Promise<void> {
+async function run(name: string, isQuick: boolean): Promise<void> {
   const dir = join(OUT, name);
   mkdirSync(join(dir, "pictures"), { recursive: true });
   const drawings: Drawing[] = [];
   const jobs: (() => Promise<void>)[] = [];
-  for (const board of boards()) {
+  for (const board of isQuick ? quick(boards()) : boards()) {
     for (const locale of ["en", "hi"] as const)
       for (const width of [360, 640])
         jobs.push(async () => {
@@ -197,9 +233,15 @@ const order = (what: string) =>
   what.endsWith("end") ? Number.POSITIVE_INFINITY : Number(what.split(" ").at(-1));
 
 function compare(names: string[]): void {
-  const runs = names.map(
+  const read = names.map(
     (n) => [n, JSON.parse(readFileSync(join(OUT, n, "audits.json"), "utf8")) as Drawing[]] as const,
   );
+  // Only the drawings every run has (a quick run against a whole one).
+  const keyOf = (d: Drawing) => `${d.board} ${d.what}`;
+  const shared = read
+    .map(([, ds]) => new Set(ds.map(keyOf)))
+    .reduce((a, b) => new Set([...a].filter((k) => b.has(k))));
+  const runs = read.map(([n, ds]) => [n, ds.filter((d) => shared.has(keyOf(d)))] as const);
   const groups: [string, (d: Drawing) => boolean][] = [
     ["every drawing", () => true],
     ...[
@@ -251,6 +293,7 @@ function compare(names: string[]): void {
 }
 
 const [command, ...names] = process.argv.slice(2);
-if (command === "run" && names[0] !== undefined) await run(names[0]);
+if (command === "run" && names[0] !== undefined)
+  await run(names[0], process.argv.includes("--quick"));
 else if (command === "compare" && names.length >= 2) compare(names);
 else console.error("tsx label-compare.ts run <name> | compare <name> <name>…");

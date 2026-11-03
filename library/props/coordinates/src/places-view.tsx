@@ -55,7 +55,8 @@ function PlacesDraw({
               width={size * 1.4}
               height={size * 1.4}
             />
-            {isTarget && <circle class="cp-target-halo" r={size * 0.8} />}
+            {/* The target's highlight: a label may sit over it, as over the picture. */}
+            {isTarget && <circle class="cp-target-halo" data-coverable r={size * 0.8} />}
             <PlacePicture kind={s.placeKind} size={size} />
             {p.label !== undefined && (
               <text

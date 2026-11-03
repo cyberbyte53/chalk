@@ -306,8 +306,9 @@ export function AxesDraw({
         const isButton = canLight && isCounted && text !== "";
         return (
           <g key={`x${v}`} class="cp-mark">
+            {/* A tick: a label may cross it, as it may the axis; not its number. */}
             {isLines ? (
-              <line x1={x} y1={base - 4} x2={x} y2={base + 4} />
+              <line data-coverable x1={x} y1={base - 4} x2={x} y2={base + 4} />
             ) : isButton ? (
               <g
                 class={`cp-mark-button${s.lit?.axis === "x" && s.lit.value === v ? " is-lit" : ""}`}
@@ -348,7 +349,7 @@ export function AxesDraw({
           return (
             <g key={`y${v}`} class="cp-mark">
               {isLines ? (
-                <line x1={vx - 4} y1={y} x2={vx + 4} y2={y} />
+                <line data-coverable x1={vx - 4} y1={y} x2={vx + 4} y2={y} />
               ) : isButton ? (
                 <g
                   class={`cp-mark-button${s.lit?.axis === "y" && s.lit.value === v ? " is-lit" : ""}`}

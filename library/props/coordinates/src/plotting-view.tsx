@@ -40,9 +40,8 @@ function DotLabel({
       [x + 14, y + 30, "start"],
       [x - 14, y + 30, "end"],
     ],
-    // A wider gap than words keep, off the axes and the swaps' dashed lines; and nearer its own dot
-    // than any other, as the pair would read as that dot's.
-    avoid: () => ({ what: "text, line.cp-axis, line.cp-swap-line, circle", gap: 8 }),
+    // Clear of everything drawn but what is coverable and its own dot, by a wider gap than words
+    // keep; and nearer its own dot than any other, as the pair would read as that dot's.
     gap: 8,
     own: ref.current?.previousElementSibling ?? null,
     isNearOwn: true,
