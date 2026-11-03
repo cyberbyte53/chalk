@@ -96,7 +96,9 @@ export function useFrameLabels(labels: readonly FrameLabel[], obstacles: Obstacl
   if (me.current === 0) me.current = ++labellers;
   const key = frame === null ? "" : `${frame.key}\u0000${me.current}`;
   frame?.labels(key, frame.owner, labels, obstacles);
-  useLayoutEffect(() => () => void frame?.store.delete(key), [frame, key]);
+  // The store stays for the frame's life (its context is a new object every drawing).
+  const store = frame?.store;
+  useLayoutEffect(() => () => void store?.delete(key), [store, key]);
 }
 
 /** Draws one picture for a frame and gives its children the frame's services. */
