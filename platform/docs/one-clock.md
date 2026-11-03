@@ -25,6 +25,7 @@ Anything told of a line no longer in turn does nothing (the id check the board h
 **Who reports "ended":**
 
 - **A phone:** the audio, when it really finishes: its clips, or the phone's own voice standing in for a clip that failed (it finishes the line, as today).
+- **A phone with the voice off:** at once, while asked to say the line: it is over as it starts, and no breath follows it.
 - **A tool:** a stand-in voice that reports "ended" at exactly the line's length, on the board's clock. Phone and tool take the same path; they differ only by the device's own delay.
 - **A replay:** the voice events in the log, at their board times: a student's session replays as it happened.
 

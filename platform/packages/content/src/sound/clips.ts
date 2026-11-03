@@ -23,6 +23,11 @@ const clipSchema = z
     words: z.string(),
     /** How long it plays. */
     seconds: z.number().positive(),
+    /**
+     * The boards that say it (their ids), in the chapter's order: so a lesson's clips can be
+     * fetched as it is opened, the first board's first. A clip several boards say names each.
+     */
+    boards: z.array(z.string().min(1)),
   })
   .strict();
 export type StoredClip = z.infer<typeof clipSchema>;
@@ -30,7 +35,7 @@ export type StoredClip = z.infer<typeof clipSchema>;
 /**
  * A chapter's sound list (`sound/sound.json`): who voices whom in it, and every clip it holds,
  * each saying what it says. Made by the content build, committed with the chapter, shipped with
- * it; the store's index, what review reads, and what the chapter's download fetches.
+ * it; the store's index, what review reads, and what a lesson's download fetches (by board).
  */
 export const soundListSchema = z
   .object({

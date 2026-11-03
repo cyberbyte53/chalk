@@ -1,6 +1,7 @@
 import { AGENT_LOCALE, localizedSchema } from "@chalk/content";
 import {
   AnswerStatus,
+  CheckedBy,
   PropRole,
   SizeFit,
   checkedFields,
@@ -62,6 +63,7 @@ export const goal = prop({
   describe:
     "A question answered by getting another prop into the right state, then pressing Check.",
   role: PropRole.Question,
+  checkedBy: CheckedBy.Bar,
   size: { fit: SizeFit.Fill },
   variables: z
     .object({

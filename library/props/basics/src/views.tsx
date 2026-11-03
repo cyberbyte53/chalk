@@ -9,7 +9,7 @@ import {
 } from "@chalk/player";
 import { AnswerStatus, cssColor, does, says, shows } from "@chalk/prop";
 import type { JSX } from "preact";
-import { choice, goal, type text } from "./props";
+import { choice, type goal, type text } from "./props";
 
 // The player hands each view what its own prop reads now, already checked against its schema.
 
@@ -92,30 +92,17 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
 }
 
 /**
- * A question answered in another prop: its prompt, then Check (or Try again), then the result. The
- * prop the learner works in is drawn beside it on the board; this only says "this is my answer".
+ * A question answered in another prop: its prompt, then the result. The prop the learner works in
+ * is drawn beside it on the board; its Check is the bar's (`checkedBy: CheckedBy.Bar`), always in
+ * reach under the board.
  */
 export function GoalView({ view, locale }: PropViewProps<typeof goal>): JSX.Element {
   const s = view;
-  const isHeld = useIsHeld(s.status);
-  const isLocked = s.status === AnswerStatus.Correct || isHeld;
   return (
     <div class="piece-question">
       <p class="question-prompt" {...shows("prompt", s.prompt[locale])}>
         <RichText text={s.prompt[locale]} />
       </p>
-      {/* Check stays after a wrong answer: change the prop, then check again (the new result
-          replaces the old note). */}
-      {!isLocked && (
-        <button
-          type="button"
-          class="question-check"
-          disabled={isHeld}
-          {...does(goal.actions.check)}
-        >
-          {t(locale, "check")}
-        </button>
-      )}
       <AnswerFeedback status={s.status} feedback={s.feedback} locale={locale} />
     </div>
   );

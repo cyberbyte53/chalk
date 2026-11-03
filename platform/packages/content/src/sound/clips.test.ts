@@ -7,8 +7,22 @@ describe("a chapter's sound list", () => {
     const list: SoundList = {
       speakers: { riya: { en: "piper:amy", hi: "piper:priyamvada" } },
       clips: [
-        { file: "a.m4a", voice: "piper:amy", locale: "en", words: "You're at street", seconds: 1 },
-        { file: "b.m4a", voice: "piper:amy", locale: "en", words: "4", seconds: 0.4 },
+        {
+          file: "a.m4a",
+          voice: "piper:amy",
+          locale: "en",
+          words: "You're at street",
+          seconds: 1,
+          boards: ["b1"],
+        },
+        {
+          file: "b.m4a",
+          voice: "piper:amy",
+          locale: "en",
+          words: "4",
+          seconds: 0.4,
+          boards: ["b1"],
+        },
       ],
     };
     expect(clipsOf(list, "riya", "en", ["You're at street", "4"])).toHaveLength(2);

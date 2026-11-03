@@ -131,7 +131,7 @@ Rules call them as `t.self.show(…)`; a line can be declared on them (`board.sa
 
 ### Questions
 
-A prop with the question role (`choice`, `goal`) has `status` (open, correct, wrong), `attempts`, `feedback`, and, written in by the build, `concepts` and `isGraded` (a bank question's checks count towards mastery, a page's don't); the actions `check` and `retry`; the signals `checked`, `correct`, `wrong`. A choice is checked the moment an option is tapped; a goal has its own Check and is right when the board gives it `isMet`. A board may ask any number; it passes when they are all right, unless it passes by its rules.
+A prop with the question role (`choice`, `goal`) has `status` (open, correct, wrong), `attempts`, `feedback`, and, written in by the build, `concepts` and `isGraded` (a bank question's checks count towards mastery, a page's don't); the actions `check` and `retry`; the signals `checked`, `correct`, `wrong`. A choice is checked the moment an option is tapped; a goal is checked with the Check in the board's bar (`checkedBy: CheckedBy.Bar`), beside Try again and Continue, and is right when the board gives it `isMet`. A board may ask any number; it passes when they are all right, unless it passes by its rules.
 
 ## What the student sees
 

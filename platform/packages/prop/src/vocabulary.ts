@@ -115,7 +115,7 @@ export function purposeOf(def: { readonly describe: string }): string {
 /** The board itself, by name: what its own actions and signals are called. */
 export const BOARD = "board";
 
-export const BoardSignal = { Started: "started", Continued: "continued" } as const;
+export const BoardSignal = { Started: "started", Shown: "shown", Continued: "continued" } as const;
 export type BoardSignal = (typeof BoardSignal)[keyof typeof BoardSignal];
 
 export const BoardAction = {

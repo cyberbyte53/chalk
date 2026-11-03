@@ -1,4 +1,4 @@
-import { type Observation, PropRole, QuestionAction } from "@chalk/prop";
+import { CheckedBy, type Observation, PropRole, QuestionAction } from "@chalk/prop";
 import { type AnyProp, Board, prop } from "@chalk/prop";
 import type { ZodTypeAny } from "zod";
 import { describeView } from "./describe";
@@ -155,8 +155,11 @@ export function checkProp(
       });
     }
   }
-  // A question's Try again is the player's own button, under the board.
+  // A question's Try again is the player's own button, in the bar; so is Check, for a question
+  // checked with it.
   if (def.role === PropRole.Question) offered.add(QuestionAction.Retry);
+  if (def.role === PropRole.Question && def.checkedBy === CheckedBy.Bar)
+    offered.add(QuestionAction.Check);
   for (const does of screenActions(def))
     if (!offered.has(does))
       problems.add(`${does} is the student's, but no input does it in any state reached`);

@@ -16,7 +16,8 @@ export type Voice = {
    * Says `line` (the board has stopped any line before it), and returns how long it will take, in
    * seconds; undefined for a line with nothing to say (it is over at once). Then tells `hear`
    * "ended" when it is over, or "cut" if the voice lost it on its own (its source failed and
-   * nothing could stand in): never while asked to say it.
+   * nothing could stand in). A voice that is off tells "ended" while asked to say it: the line
+   * is over the moment it starts, recorded so (a replay ends it then too).
    */
   say: (line: LineCall, hear: (what: Heard) => void) => number | undefined;
   /** Stops the line being said. The board has already taken it as cut: nothing more is told of it. */

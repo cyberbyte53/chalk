@@ -14,6 +14,14 @@ export const QuestionAction = {
   Retry: "retry",
 } as const;
 
+/**
+ * How a question is checked: on the answer itself (a choice: tapping an option checks it), or with
+ * Check, which the player draws in the board's bar beside Try again and Continue (a goal: get the
+ * prop right, then Check), so it is always in reach however tall the board.
+ */
+export const CheckedBy = { Answer: "answer", Bar: "bar" } as const;
+export type CheckedBy = (typeof CheckedBy)[keyof typeof CheckedBy];
+
 export const QuestionSignal = { Checked: "checked", Correct: "correct", Wrong: "wrong" } as const;
 export type QuestionSignal = (typeof QuestionSignal)[keyof typeof QuestionSignal];
 

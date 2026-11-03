@@ -1,5 +1,6 @@
 import { type ZodObject, type ZodRawShape, type ZodType, type ZodTypeDef, z } from "zod";
 import type { GroupLayoutSpec } from "./layout";
+import type { CheckedBy } from "./question";
 import type { Size } from "./size";
 import { type FrameKindName, type FramePixels, type PropRole, noteNames } from "./vocabulary";
 
@@ -279,6 +280,8 @@ export type PropSpec<
 
   /** Its role: a question (the board's chrome reads its status), an explainer, … */
   readonly role?: PropRole;
+  /** A question: checked on its answer, or with the bar's Check (question.ts). */
+  readonly checkedBy?: CheckedBy;
   readonly size?: Size;
   /** It is a frame others draw on: the plane, a number line's axis. */
   readonly frame?: {
@@ -332,6 +335,7 @@ export type AnyProp = {
   readonly on?: Readonly<Record<string, AnyRule | undefined>>;
   readonly hear?: Readonly<Record<string, AnyRule | undefined>>;
   readonly role?: PropRole;
+  readonly checkedBy?: CheckedBy;
   readonly size?: Size;
   readonly frame?: {
     readonly kind: FrameKindName;

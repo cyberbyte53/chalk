@@ -36,6 +36,7 @@ export { Color, cssColor } from "@chalk/look";
 export { colorSchema } from "./color";
 export {
   AnswerStatus,
+  CheckedBy,
   QuestionAction,
   checkedFields,
   questionDefaults,

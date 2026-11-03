@@ -24,13 +24,25 @@
 .board-body > .layout-column {
   flex: 1;
 }
-/* Back, Jugnu, Continue: one row, always in the same place. */
+/* The bar: back, Jugnu, Check, Try again, Continue, in one row, always in the same place: pinned
+   to the bottom of the screen while it has something in it, the board scrolling above it. */
 .board-footer {
   order: 1;
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: var(--color-surface);
   padding: 14px 18px calc(26px + env(safe-area-inset-bottom, 0px));
   display: flex;
   align-items: center;
   gap: 10px;
+}
+.board-footer:empty {
+  display: none;
+}
+/* A question's own Check, drawn in the bar: its tags' box, not a box of its own. */
+.bar-part {
+  display: contents;
 }
 .board-footer .primary {
   flex: 1;

@@ -1,6 +1,6 @@
 import type { Sound } from "@chalk/content";
 import type { Board, Locale } from "@chalk/content";
-import type { SoundPlaying } from "./sound/engine";
+import { type SoundPlaying, isMuted } from "./sound/engine";
 import type { WordsToSay } from "./sound/voice";
 // Makes every component re-render when a signal it read while rendering changes, and only then.
 import "@preact/signals";
@@ -68,6 +68,13 @@ export function useBoardRuntime(
         ? {}
         : { playSound: voice.playSound }),
       isHeard: voice.isSilent !== true,
+      // The child's switches (a heard board only: a tool's boards keep every line's length).
+      ...(voice.isSilent === true
+        ? {}
+        : {
+            isVoiceOff: () => isMuted.voice.peek(),
+            isSoundsOff: () => isMuted.sounds.peek(),
+          }),
       ...(isJumping ? { isJumping: true } : {}),
     });
   });
@@ -81,5 +88,11 @@ export function useBoardRuntime(
       runtime.dispose();
     };
   }, [runtime, isHeld]);
+  // The voice turned off mid-line: that line is over now.
+  const isSilent = voice.isSilent === true;
+  useEffect(
+    () => (isSilent ? undefined : isMuted.voice.subscribe((off) => off && runtime.voiceOff())),
+    [runtime, isSilent],
+  );
   return runtime;
 }

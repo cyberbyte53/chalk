@@ -8,6 +8,7 @@
       "**/node_modules/**",
       "content/**/lessons/*.json",
       "content/**/published/**",
+      "content/**/sound/sound.json",
       "build/**",
       "platform/editor/out/**",
       "published/**"

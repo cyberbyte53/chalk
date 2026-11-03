@@ -11,6 +11,7 @@ import { JoinScreen, SetupScreen, WelcomeScreen } from "./account-screens";
 import { ActivityFeed } from "./activity";
 import { api } from "./api-client";
 import { ChapterGate } from "./chapter-gate";
+import { soundAhead } from "./content-store";
 import type { Course, CourseChapter } from "./course";
 import { ChapterScreen, CourseScreen, currentConcept } from "./course-screens";
 import { DevShell } from "./dev-shell";
@@ -119,6 +120,20 @@ export function App(): JSX.Element {
     () => mergeProgress(serverProgress, progressFromRecord(localEvents)),
     [serverProgress, localEvents],
   );
+
+  // A lesson on screen: its sound (and the next lesson's) comes ahead, in the child's language.
+  const lessonKey =
+    screen.kind === "lesson"
+      ? JSON.stringify([
+          courses.find((c) => c.id === screen.course)?.chapters[screen.chapter]?.path,
+          screen.concept,
+        ])
+      : null;
+  useEffect(() => {
+    if (lessonKey === null) return;
+    const [chapterPath, concept] = JSON.parse(lessonKey) as [string | undefined, string];
+    if (chapterPath !== undefined) soundAhead(chapterPath, concept, locale);
+  }, [lessonKey, locale]);
 
   // The node of the course on screen (a book, a chapter, a concept being played) is opened and
   // closed in the record, like a board.

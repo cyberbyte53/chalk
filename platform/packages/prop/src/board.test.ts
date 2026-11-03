@@ -607,3 +607,62 @@ describe("replay with a voice", () => {
     expect(at(Board.replay(teller, {}, board.log, 3, { voice })).said).toEqual([1]);
   });
 });
+
+describe("a voice that is off: every line is over as it starts", () => {
+  // Two lines in a row, a breath between them, as a lesson says them.
+  const pair = prop({
+    type: "pair",
+    describe: "Says one line, then another after a breath; marks each said.",
+    variables: z.object({ said: z.array(z.string()) }).strict(),
+    start: { said: [] },
+    actions: { tap: action({}, { from: "screen" }), done: action({ line: z.string() }) },
+    on: {
+      tap: (_, __, t) =>
+        (t as unknown as VoiceTools).say("one", {
+          atEnd: [
+            t.self.done({ line: "one" }),
+            (t as unknown as VoiceTools).say("two", {
+              after: 0.7,
+              atEnd: [t.self.done({ line: "two" })],
+            }),
+          ],
+        }),
+      done: (me, { line }, t) => t.set({ said: [...me.said, line] }),
+    },
+  });
+  /** Off: tells each line ended while asked to say it. */
+  const off: Voice = {
+    say: (_, hear) => {
+      hear("ended");
+      return 0;
+    },
+    stop: () => undefined,
+  };
+  const said = (b: Board) => (b.read("") as { said: string[] }).said;
+
+  it("takes no time: no line's length, no breath between them", () => {
+    const board = new Board(pair, {}, { voice: off });
+    board.input("", "tap");
+    board.advanceTo(0);
+    expect(said(board)).toEqual(["one", "two"]);
+  });
+
+  it("a voice that takes time still leaves the breath", () => {
+    const board = new Board(pair, {}, { voice: (b) => timedVoice(b, () => 1) });
+    board.input("", "tap");
+    board.advanceTo(1);
+    expect(said(board)).toEqual(["one"]);
+    board.advanceTo(1.69);
+    expect(said(board)).toEqual(["one"]);
+    board.advanceTo(2.7);
+    expect(said(board)).toEqual(["one", "two"]);
+  });
+
+  it("is recorded so: replayed with a voice that would take time, it is the same board", () => {
+    const board = new Board(pair, {}, { voice: off });
+    board.input("", "tap");
+    board.advanceTo(0);
+    const voice = (b: Board) => timedVoice(b, () => 1);
+    expect(said(Board.replay(pair, {}, board.log, 0, { voice }))).toEqual(["one", "two"]);
+  });
+});

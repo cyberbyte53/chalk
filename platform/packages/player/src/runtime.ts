@@ -98,6 +98,13 @@ export class BoardRuntime {
        */
       isHeard?: boolean;
       /**
+       * The child turned the voice off (a heard board): each line is over the moment it starts,
+       * since they read it at their own pace. Off mid-line ends that line (`voiceOff`).
+       */
+      isVoiceOff?: () => boolean;
+      /** The child turned the sounds off: an in-turn sound no one hears holds no line back. */
+      isSoundsOff?: () => boolean;
+      /**
        * A tool reading the board: each frame, the clock jumps through everything due, so the board
        * is where it ends at once (its lines, moves and waits each at their own time).
        */
@@ -159,11 +166,18 @@ export class BoardRuntime {
           let hearing: HeardWords | undefined;
           return {
             say: (call, hear) => {
+              const isOff = services.isVoiceOff?.() === true;
               // An in-turn sound holds the voice: the line starts after it, and a breath.
-              const wait = this.heldUntil > core.now ? this.heldUntil - core.now + BREATH : 0;
+              const wait =
+                !isOff && this.heldUntil > core.now ? this.heldUntil - core.now + BREATH : 0;
               const begun = begin(call, wait);
               if (begun === undefined) return undefined;
               const { line, heard } = begun;
+              // The voice is off: the line is on screen, and over now.
+              if (isOff) {
+                hear("ended");
+                return 0;
+              }
               hearing = heard;
               const isMine = () => hearing === heard && !this.isDisposed;
               const end = () => {
@@ -171,6 +185,7 @@ export class BoardRuntime {
                 hearing = undefined;
                 hear("ended");
               };
+              this.endLineNow = end;
               const start = () => {
                 if (!isMine()) return;
                 if (services.isHeard !== true) {
@@ -195,6 +210,7 @@ export class BoardRuntime {
             stop: () => {
               if (hearing !== undefined) hearing.cutAt = core.now;
               hearing = undefined;
+              this.endLineNow = undefined;
               services.hush?.();
             },
           };
@@ -297,8 +313,10 @@ export class BoardRuntime {
           : [{ sound: ownSound, lasts: false, inTurn: isOwnInTurn }];
     for (const { name, sound, lasts, inTurn } of playing) {
       this.log.push({ sound: sound.name, signal: at, at: this.core.now });
-      // It holds the voice until it is over: by its length, the same heard or silent.
-      if (inTurn) this.heldUntil = Math.max(this.heldUntil, this.core.now + sound.seconds);
+      // It holds the voice until it is over: by its length, the same heard or silent; unheard
+      // (the sounds off), it holds nothing.
+      if (inTurn && this.services.isSoundsOff?.() !== true)
+        this.heldUntil = Math.max(this.heldUntil, this.core.now + sound.seconds);
       const played = this.services.playSound?.(sound, lasts);
       if (played === undefined) continue;
       if (lasts && name !== undefined) {
@@ -312,6 +330,20 @@ export class BoardRuntime {
   private readonly lasting = new Map<string, SoundPlaying>();
   /** When the in-turn sounds playing are over, on the board's clock: a line waits for that. */
   private heldUntil = 0;
+  /** Ends the line being said, as its voice would: set while one is said. */
+  private endLineNow: (() => void) | undefined;
+
+  /**
+   * The child turned the voice off: the line being said is over now (recorded as ended, as its
+   * voice would tell), then its sound stops. Lines after it are over as they start.
+   */
+  voiceOff(): void {
+    const end = this.endLineNow;
+    this.endLineNow = undefined;
+    if (end === undefined) return;
+    end();
+    this.services.hush?.();
+  }
 
   /** A line's words: the lesson's own for it, else what its piece says of itself, as it is now. */
   private lineWords(name: string): Localized | undefined {

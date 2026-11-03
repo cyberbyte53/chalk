@@ -2,7 +2,9 @@ import { loadBoard } from "@chalk/author";
 import {
   type Board,
   Kind,
+  type Locale,
   type Ref,
+  type SoundList,
   builtChapterSchema,
   builtConceptSchema,
   builtFile,
@@ -10,6 +12,7 @@ import {
   builtQuestionSchema,
 } from "@chalk/content";
 import { modules } from "@chalk/content-source/modules";
+import { practiceOf } from "@chalk/learning";
 import { propDefs } from "@chalk/library";
 import { type ConceptLessons, conceptLessons } from "./built-content";
 import type { CourseChapter } from "./course";
@@ -21,7 +24,8 @@ import { SKELETON_PREFIX, skeleton } from "./lessons";
  * named by its version, so a file is fetched once, kept by the service worker for offline, and a
  * new version is a new file. The file says which module makes its board, and with what: chapters
  * ship as code, and the board is made from it here (its module is a chunk of the app, loaded once).
- * Kept in memory while the app is open.
+ * Kept in memory while the app is open. Its sound is fetched lesson by lesson, ahead of the
+ * child (`soundAhead`), never waited for.
  */
 export type ChapterContent = ReadonlyMap<string, ConceptLessons>;
 
@@ -106,28 +110,72 @@ async function fetchChapter(
     }
   };
   await Promise.all(Array.from({ length: Math.min(AT_ONCE, refs.length) }, worker));
-  await fetchSound(path);
   const boards = new Map<string, Board>();
   for (const ref of refs) boards.set(ref.path, await boardOfFile(files[ref.path]));
   return conceptLessons(files, boards);
 }
 
+/** How many clips are fetched ahead at once: few, so a line the child is waiting on comes first. */
+const AHEAD_AT_ONCE = 2;
+
+/** Each chapter's sound list, fetched once. */
+const soundLists = new Map<string, Promise<SoundList | undefined>>();
+/** Clips already fetched (or being fetched) this session: the service worker keeps them after. */
+const fetchedClips = new Set<string>();
+/** The clips still to fetch ahead, in order; a newer plan (another lesson, another language) replaces it. */
+let ahead: string[] = [];
+let aheadRunning = 0;
+
 /**
- * A chapter's sound (platform/docs/sound.md): its list, and every clip it names, fetched whole, so
- * the app's offline cache keeps them all and the chapter plays offline. A chapter with no sound has
- * no list; a clip that can't be fetched now is fetched again when it is played.
+ * A lesson's sound, fetched ahead of the child in their language (platform/docs/sound.md): its
+ * boards' clips in the order the boards come (pages, then practice, then the bank), then the next
+ * lesson's. A line whose clip hasn't come yet fetches it as it plays; a chapter with no sound has
+ * no list. Called when a lesson opens, and when the language changes.
  */
-async function fetchSound(path: string): Promise<void> {
-  const base = `/content/${path}/sound`;
-  const reply = await fetch(`${base}/sound.json`).catch(() => undefined);
-  if (reply?.ok !== true) return;
-  const { clips } = (await reply.json()) as { clips: { file: string }[] };
-  const queue = [...new Set(clips.map((c) => c.file))];
-  const worker = async () => {
-    for (let file = queue.shift(); file !== undefined; file = queue.shift())
-      await fetch(`${base}/${file}`).catch(() => undefined);
-  };
-  await Promise.all(Array.from({ length: AT_ONCE }, worker));
+export function soundAhead(chapterPath: string, conceptId: string, locale: Locale): void {
+  const list =
+    soundLists.get(chapterPath) ??
+    fetch(`${CONTENT_ROUTE}${chapterPath}/sound/sound.json`)
+      .then((reply) => (reply.ok ? (reply.json() as Promise<SoundList>) : undefined))
+      .catch(() => undefined);
+  soundLists.set(chapterPath, list);
+  void list.then((sound) => {
+    if (sound === undefined) return;
+    const base = `${CONTENT_ROUTE}${chapterPath}/sound/`;
+    const order = boardsInOrder(chapterPath, conceptId);
+    const files = order.flatMap((board) =>
+      sound.clips
+        .filter((clip) => clip.locale === locale && clip.boards.includes(board))
+        .map((clip) => `${base}${clip.file}`),
+    );
+    ahead = [...new Set(files)].filter((url) => !fetchedClips.has(url));
+    while (aheadRunning < AHEAD_AT_ONCE) void fetchAhead();
+  });
+}
+
+async function fetchAhead(): Promise<void> {
+  aheadRunning += 1;
+  for (let url = ahead.shift(); url !== undefined; url = ahead.shift()) {
+    if (fetchedClips.has(url)) continue;
+    fetchedClips.add(url);
+    await fetch(url).catch(() => fetchedClips.delete(url));
+  }
+  aheadRunning -= 1;
+}
+
+/** The boards of a lesson and of the one after it, in the order a child meets them. */
+function boardsInOrder(chapterPath: string, conceptId: string): string[] {
+  const read = (path: string): unknown => skeleton[SKELETON_PREFIX + builtFile(path)];
+  const chapter = builtChapterSchema.parse(read(chapterPath));
+  const at = chapter.concepts.findIndex((ref) => ref.id === conceptId);
+  return chapter.concepts.slice(Math.max(0, at), at + 2).flatMap((ref) => {
+    const concept = builtConceptSchema.parse(read(ref.path));
+    const practice = practiceOf(chapter.questions, concept.id);
+    const rest = chapter.questions.filter(
+      (q) => q.tests.includes(concept.id) && !practice.includes(q),
+    );
+    return [...concept.overview, ...practice, ...rest].map((board) => board.id);
+  });
 }
 
 /** A page's or question's board, made from its code (its file under build/ says which). */

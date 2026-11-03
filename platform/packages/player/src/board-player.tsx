@@ -6,6 +6,7 @@ import {
   BOARD,
   BoardAction,
   BoardSignal,
+  CheckedBy,
   PropRole,
   QuestionAction,
   QuestionSignal,
@@ -166,6 +167,17 @@ function BoardPlay({
   }, [recorder]);
 
   const questions = useMemo(() => questionsOf(runtime), [runtime]);
+  const body = useRef<HTMLElement>(null);
+  const bar = useRef<HTMLElement>(null);
+  // Brings a piece into sight above the bar once it is drawn: no further than it must.
+  const inSight = useCallback((piece: string) => {
+    requestAnimationFrame(() => {
+      const el = body.current?.querySelector<HTMLElement>(`[data-piece="${CSS.escape(piece)}"]`);
+      if (el === null || el === undefined) return;
+      el.style.scrollMarginBottom = `${(bar.current?.offsetHeight ?? 0) + 12}px`;
+      el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+  }, []);
   useEffect(() => {
     if (wasPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, wasPassed]);
@@ -180,11 +192,24 @@ function BoardPlay({
         }
         if (questions.includes(signal.prop) && signal.signal === QuestionSignal.Checked)
           setLastChecked(signal.prop);
+        // What the child's own act brings, and the answer they just checked, are kept in sight
+        // above the bar: a box shown below the fold, or an answer under the banner.
+        if (signal.actor !== Actor.Learner) return;
+        if (signal.prop === BOARD && signal.signal === BoardSignal.Shown)
+          inSight(String(signal.payload.name));
+        else if (questions.includes(signal.prop) && signal.signal === QuestionSignal.Checked)
+          inSight(signal.prop);
       }),
-    [runtime, questions, onPass],
+    [runtime, questions, onPass, inSight],
   );
 
   const isPassed = runtime.getView(BOARD).isPassed === true;
+  // The question the bar's Check is for: the first on the board checked with it, not yet right.
+  const toCheck = questions.find(
+    (name) =>
+      runtime.getDef(name).checkedBy === CheckedBy.Bar &&
+      runtime.getView(name).status !== AnswerStatus.Correct,
+  );
 
   // The question checked last, for the banner: its result shows until the learner answers again.
   const [lastChecked, setLastChecked] = useState<string | undefined>(undefined);
@@ -197,7 +222,6 @@ function BoardPlay({
   useEffect(() => {
     if (isSettled && !isPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, isSettled, isPassed]);
-  const body = useRef<HTMLElement>(null);
 
   const context: LayoutContext = {
     locale,
@@ -242,7 +266,10 @@ function BoardPlay({
           )}
           <Layout piece={board.root} context={context} />
         </main>
-        <footer class={`board-footer${banner !== undefined ? ` has-banner is-${banner}` : ""}`}>
+        <footer
+          ref={bar}
+          class={`board-footer${banner !== undefined ? ` has-banner is-${banner}` : ""}`}
+        >
           {policy !== undefined && banner !== undefined && (
             <div class="board-banner">
               <strong>
@@ -271,15 +298,31 @@ function BoardPlay({
             >
               {t(locale, "tryAgain")}
             </button>
+          ) : isPassed ? (
+            <button
+              type="button"
+              class="primary"
+              onClick={() => void runtime.call(BOARD, BoardAction.Continue, {}, Actor.Learner)}
+            >
+              {t(locale, "continue")}
+            </button>
           ) : (
-            isPassed && (
-              <button
-                type="button"
-                class="primary"
-                onClick={() => void runtime.call(BOARD, BoardAction.Continue, {}, Actor.Learner)}
-              >
-                {t(locale, "continue")}
-              </button>
+            toCheck !== undefined && (
+              // The question's own Check, drawn in the bar: tagged as its part, so tools press it
+              // by name ("ask/check") as a finger does.
+              <span class="bar-part" data-piece={toCheck}>
+                <button
+                  type="button"
+                  class="primary"
+                  data-part={QuestionAction.Check}
+                  data-does={QuestionAction.Check}
+                  onClick={() =>
+                    void runtime.call(toCheck, QuestionAction.Check, {}, Actor.Learner)
+                  }
+                >
+                  {t(locale, "check")}
+                </button>
+              </span>
             )
           )}
         </footer>

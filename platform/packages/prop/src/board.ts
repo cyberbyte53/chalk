@@ -104,6 +104,8 @@ type InTurn = {
   readonly path: string;
   readonly atEnd: readonly Out[];
   timeout?: Entry<Later>;
+  /** When the voice was asked to say it, on the board's clock. */
+  startedAt?: number;
 };
 
 type Node = {
@@ -501,8 +503,8 @@ export class Board {
           this.stopAll(node);
           break;
         case "say":
-          // The quiet before a line follows one that said something: after nothing, no pause.
-          if (out.after !== undefined && out.after > 0 && this.lastHadWords) {
+          // The quiet before a line follows one that took time: after one over at once, no pause.
+          if (out.after !== undefined && out.after > 0 && this.lastTookTime) {
             // The quiet before it is part of the line: it is in turn already, and a stop cuts it.
             this.cutLine();
             const id = ++this.lines;
@@ -591,8 +593,8 @@ export class Board {
    * long it will take, and the board ends it itself at that + GRACE if the voice never tells it did.
    */
   private startLine(id: number, line: LineCall): void {
-    if (this.inTurn?.id !== id) return;
-    this.lastHadWords = false;
+    if (this.inTurn === undefined || this.inTurn.id !== id) return;
+    this.inTurn.startedAt = this.clock;
     const seconds = this.voice.say(line, (what) => this.fromVoice(id, what));
     const turn = this.inTurn;
     if (turn?.id !== id) return;
@@ -600,7 +602,6 @@ export class Board {
       this.heard(id, "ended");
       return;
     }
-    this.lastHadWords = true;
     turn.timeout = this.queue.add(this.clock + Math.max(0, seconds) + GRACE, "", {
       outs: [],
       host: () => this.timedOut(id),
@@ -644,6 +645,8 @@ export class Board {
     const line = this.inTurn;
     if (line?.id !== id) return;
     if (line.timeout !== undefined) this.queue.remove(line.timeout);
+    // Over at once (nothing to say, or a voice that is off) leaves no quiet after it.
+    this.lastTookTime = line.startedAt !== undefined && this.clock > line.startedAt;
     this.inTurn = undefined;
     this.queue.add(this.clock, line.path, { outs: line.atEnd });
   }
@@ -660,8 +663,8 @@ export class Board {
     this.voice.stop();
   }
 
-  /** Whether the last line said had words (a pause follows only one that did). */
-  private lastHadWords = false;
+  /** Whether the last line took time to say (a pause follows only one that did). */
+  private lastTookTime = false;
 
   /** What a queued entry carries of the step that queued it. */
   private carried(): { byStudent?: true; act: number } {

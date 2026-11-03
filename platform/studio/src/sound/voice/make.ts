@@ -78,6 +78,8 @@ export async function voiceChapter(spec: {
   const readMaths = await mathsReader();
   /** Every clip to have, by its key (voice and words). */
   const toHave = new Map<string, Line & { locale: Locale }>();
+  /** The boards that say each clip, by its key, in the order they are voiced. */
+  const saidOn = new Map<string, Set<string>>();
   const speakers = new Map<string, Record<Locale, string>>();
   // A speaker said anything is listed with their voice in every language.
   const speak = (speaker: string) => {
@@ -89,11 +91,12 @@ export async function voiceChapter(spec: {
         ) as Record<Locale, string>,
       );
   };
-  const have = (speaker: string, locale: Locale, words: string) => {
+  const have = (board: string, speaker: string, locale: Locale, words: string) => {
     speak(speaker);
     const voice = voiceFor(spec.cast, spec.providers, speaker, locale);
     const key = clipKey(voice.ref, words);
     toHave.set(key, { key, text: words, voice, locale });
+    saidOn.set(key, (saidOn.get(key) ?? new Set()).add(board));
   };
   const unsaid: string[] = [];
   const script: ChapterScript = { boards: [] };
@@ -142,13 +145,13 @@ export async function voiceChapter(spec: {
         }
         if (example === undefined) {
           for (const words of linePhrases(written(locale), locale) ?? [])
-            have(speaker, locale, words);
+            have(id, speaker, locale, words);
           continue;
         }
         // A line with blanks: its own words, and the pieces any value is said with.
         for (const words of fixedParts(spokenWords(written(locale), locale) ?? ""))
-          have(speaker, locale, words);
-        for (const words of numberLibrary(locale)) have(speaker, locale, words);
+          have(id, speaker, locale, words);
+        for (const words of numberLibrary(locale)) have(id, speaker, locale, words);
       }
     }
     script.boards.push({ id, path, lines: entries });
@@ -188,6 +191,7 @@ export async function voiceChapter(spec: {
           locale: l.locale,
           words: l.text,
           seconds: clip.seconds,
+          boards: [...(saidOn.get(l.key) ?? [])],
         };
       })
       .sort((a, b) => a.voice.localeCompare(b.voice) || a.words.localeCompare(b.words)),

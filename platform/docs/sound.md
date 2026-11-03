@@ -40,9 +40,9 @@ A piece's words, said as it appears: at the opening they are read when free; a p
   - **a lesson, for its board:** adds cues (Riya says "Finally, I'm here!" when she arrives at (4, 5)), changes a prop's, or silences one.
 - **Issued while playing:** Jugnu's replies (sentence by sentence), a lesson's rule saying something, *Hear again*. The same rules, the same engine; what is reviewed for them is what issues them (Jugnu's rules, the lesson's rule).
 
-## The chapter is the unit
+## Downloads: the lessons the child opens, in their language, as they use them
 
-A student entering a chapter downloads that chapter: its lessons, its props' code, and **every sound it can play** (its clips, and the library's sounds its props and lessons use), listed by the build. Once downloaded, it plays, online or not.
+A student entering a chapter downloads its boards and its props' code (small) and it opens. Its sound comes **lesson by lesson, ahead of the child**: when a lesson opens, its clips in the child's language are fetched in the background, in the order its boards come, then the next lesson's; changing the language does the same in the new one. A line whose clip hasn't come yet fetches it as it plays. Everything fetched is kept, so a lesson opened once plays offline. The chapter's list tags each clip with the boards that say it (the build does it).
 
 A sound ships with what uses it: a chapter's clips with the chapter (`content/<book>/<chapter>/sound/`), a library sound with every chapter that uses it, the app's own sounds (right, wrong, tap) with the app, since every chapter uses them.
 
@@ -58,7 +58,7 @@ A sound ships with what uses it: a chapter's clips with the chapter (`content/<b
 ```
 
 - **The store** holds clips keyed by **voice and words**. Changing a voice changes the key: its clips are made again.
-- **One list per chapter** (`content/<book>/<chapter>/sound/sound.json`): each clip (its file, voice, language, words, length) and each library sound its cues use. It is the store's index, what review reads, and what the chapter's download fetches.
+- **One list per chapter** (`content/<book>/<chapter>/sound/sound.json`): each clip (its file, voice, language, words, length, the boards that say it) and each library sound its cues use. It is the store's index, what review reads, and what a lesson's download fetches.
 - **Building content makes a chapter's missing clips** with each speaker's voice, only the new ones. `pnpm check` fails when a clip is missing or stale, naming the line: a lesson never ships silent.
 - **Chosen clips** (step, chimes) are picked, not voiced: chosen by ear from options, kept in the library with their source and licence (`library/sounds/`), each brought to the same loudness with its shrill top trimmed when added.
 - **The build checks every cue:** its moment is an event there is, and its `where` is what that event carries; its words are speakable (or have their spoken words); its speaker is defined; its sound exists.
@@ -72,13 +72,13 @@ The sound system asks one thing of a voice: **a clip for these words, in this sp
 One engine plays every cue, on every screen (a phone, the preview, the editor's panel): what is reviewed is what a student hears.
 
 - **Finds its clip:** for words, the store; else glued pieces; else **the speaker's voice, on the go** (a voice server: our hosted Piper, or an AI voice); else the phone's own voice; else nothing (its words are on screen). For a sound, its chosen clip (a missing one plays nothing: the build catches it).
-- **Two channels,** by what is played: **words are the voice; sounds are sounds**, each with its switch in the ☰ menu (with *Hear again*). Muted, the board keeps its pacing.
+- **Two channels,** by what is played: **words are the voice; sounds are sounds**, each with its switch in the ☰ menu (with *Hear again*). **The voice off, a line is over the moment it starts** (the child reads it at their own pace): what waits on it happens at once, nothing glows, and a line being said when it is switched off ends then. The sounds off, an in-turn sound holds no line back.
 - **The browser's first-touch rule:** a page may sound only once it is touched. A student reaches a board by a tap (opening a lesson, Continue); a board opened without one (a link, a refresh) is shown held, and the first touch on it starts it (and presses nothing).
 - **A line's length is known when it starts:** its clips' (an estimate from its words without clips). The board puts its end on its clock at that length + 5 s (`GRACE`); the engine **tells the line ended** when its sound really does, and the board goes on then. A line that couldn't be heard (its clips failed, no phone voice) ends at its length. The board never knows where the sound comes from ([one-clock.md](one-clock.md)).
 - **The board's language** decides the words: switching it cuts the cue being said, and the next speaks in the new language.
 - **Logs** everything heard, in order (what `show` shows).
 - **A sound in turn** (one a line waits for: a question's buzz) holds the voice for its own length (each library sound carries it), then a breath.
-- **Muted is only the volume:** nothing else knows. Tools, checks, tests and a board that is one of several on a review screen are **silent** instead (`isSilent`): nothing plays, and a stand-in tells each line ended at its length, on the board's clock, so the board does what a phone's would, in the same order. Tools **jump** that clock: everything due is done at once, each at its own time. The phone's own voice can't be turned down mid-sentence: muted, a line it is reading finishes aloud (it is only the fallback when a clip is missing).
+- **The voice off is a voice that ends each line as it starts** (it tells "ended" while asked to say it), recorded so: a replay ends it then too. A breath follows only a line that took time. Tools, checks, tests and a board that is one of several on a review screen are **silent** instead (`isSilent`): nothing plays, and a stand-in tells each line ended at its length, on the board's clock, so the board does what a phone's would, in the same order. Tools **jump** that clock: everything due is done at once, each at its own time. The phone's own voice can't be turned down mid-sentence: switched off, its line ends on the board at once, though the phone may finish the words aloud (it is only the fallback when a clip is missing).
 
 ## Settings
 
